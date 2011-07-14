@@ -3310,8 +3310,9 @@ public class FooBar {
           further in <xref linkend="sec.ManuallyDeploySnapshot" />.</para>
 
           <para>In addition, the snapshot version of the site may be deployed
-          to the website. This is discussed further in <xref
-          linkend="sec.ManuallyDeploySite" />.</para>
+          to the website. This process for this is the same as for staging the
+          website during a formal release, see (7) below and also<xref
+          linkend="sec.StageTheWebsite" />.</para>
         </listitem>
 
         <listitem>
@@ -3355,8 +3356,15 @@ public class FooBar {
         <listitem>
           <para>next, , the <code>mvn release:prepare</code> command is used
           to upload the signed versions of the artifacts (which includes the
-          source release ZIP) to the Apache staging repository. See <xref
+          source release <acronym>ZIP</acronym>) to the Apache staging
+          repository. See <xref
           linkend="sec.UploadReleaseForVoting" />.</para>
+        </listitem>
+
+        <listitem>
+          <para>also in preparation for the release, the website is staged so
+          that it can be reviewed. See <xref
+          linkend="sec.StageTheWebsite" />.</para>
         </listitem>
 
         <listitem>
@@ -3364,36 +3372,41 @@ public class FooBar {
           incubator a vote must also be performed by the Incubator PMC (ie on
           mailto:incubator@apache.org). It is permissible to perform these in
           parallel if required. See <xref linkend="sec.Voting" /></para>
-
-          <para>If the vote is rejected, then the branch, tag and staging repo
-          are deleted/dropped, the necessary fixes are made and then the above
-          steps are performed again.</para>
         </listitem>
+      </orderedlist>
 
-        <listitem>
-          <para>once the vote is passed, the source release should be copied
-          from the staging repo to the "dist" folder, where it will be
-          mirrored. It can also be referenced as a download at this point. See
-          <xref linkend="sec.PromotingReleaseToDistribution" /></para>
-        </listitem>
+      <para>Assuming that the vote passes:</para>
 
+      <orderedlist continuation="continues">
         <listitem>
-          <para>once the vote is passed, the Maven artifacts should be
-          promoted from the staging repository to release repository (again,
-          see <xref linkend="sec.PromotingReleaseToDistribution" />), after
+          <para>the Maven artifacts should be promoted from the staging
+          repository to release repository (again, see <xref
+          linkend="sec.PromotingReleaseToDistribution" />), from
           which...</para>
         </listitem>
 
         <listitem>
-          <para>... it will be automatically be replicated up to Maven central
-          repo</para>
+          <para>... the artifacts will automatically be replicated up to Maven
+          central repo</para>
         </listitem>
 
         <listitem>
-          <para>Finally, the website should be deployed manually. See <xref
-          linkend="sec.ManuallyDeployReleaseSite" />.</para>
+          <para>the source release should be copied from the release
+          repository to the "dist" folder, where it will be mirrored. It can
+          also be referenced as a download at this point. See <xref
+          linkend="sec.PromotingReleaseToDistribution" /></para>
+        </listitem>
+
+        <listitem>
+          <para>The website should be promoted, and checked that download
+          links etc. are correct; see <xref
+          linkend="sec.PromoteAndUpdateWebsite" />.</para>
         </listitem>
       </orderedlist>
+
+      <para>If the vote is rejected, then the branch, tag and staging repo are
+      deleted/dropped, the necessary fixes are made and then the above steps
+      are performed again.</para>
 
       <para>The following chapters provide detail on the above steps.</para>
     </chapter>
@@ -3858,6 +3871,17 @@ licenses to remove from supplemental-models.xml (are spurious):
           <para>The trunk holds a <filename>STATUS</filename> file which is a
           brief summary of the current status of the project. Update this file
           prior to cutting the release.</para>
+        </sect2>
+
+        <sect2>
+          <title>Update downloads.apt</title>
+
+          <para>The website's <filename>src/site/apt/downloads.apt</filename>
+          file lists (what will be) the current release, along with any
+          archived releases. Update this to reflect how things will be once
+          the release is complete. (We also double-check it at the end of the
+          release process, see <xref
+          linkend="sec.PromoteAndUpdateWebsite" />).</para>
         </sect2>
       </sect1>
 
@@ -4432,6 +4456,89 @@ svn: No such revision 1126567</programlisting>
             more details.</para>
           </note>
         </sect2>
+
+        <sect2 id="sec.StageTheWebsite">
+          <title>Stage the Website</title>
+
+          <para>The release process above will result in a branch workspace
+          set to 0.x.y-incubating-SNAPSHOT, in readiness for the next release.
+          It therefore isn't correct to build the website from the branch
+          workspace: the version numbers will be incorrect.</para>
+
+          <para>Instead, go to the directory where you unzipped and checked
+          the source <acronym>ZIP</acronym> (see <xref
+          linkend="sec.ReleasePostPrepareSanityCheck" />), and build the site
+          from there. The steps for building the site are documented in <xref
+          linkend="sec.BuildingSiteAndDocs" />; it should generate the current
+          site in <filename>/tmp/m2-sites/isis</filename>.</para>
+
+          <para>To make the site accessible from the web, first upload the
+          site (as a <acronym>ZIP</acronym>) to your local account on
+          <code>people.apache.org</code>:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>cd <filename>/tmp/m2-sites</filename></para>
+            </listitem>
+
+            <listitem>
+              <para>zip up isis to <filename>isis.zip</filename></para>
+            </listitem>
+
+            <listitem>
+              <para>scp the <filename>isis.zip</filename> to
+              <filename>people.apache.org/~</filename></para>
+            </listitem>
+
+            <listitem>
+              <para>login to <code>people.apache.org</code> using ssh:</para>
+
+              <programlisting>$ ssh -l xxxxxxxx people.apache.org</programlisting>
+
+              <para>where xxxxxxx is your apache user Id</para>
+            </listitem>
+
+            <listitem>
+              <para>unzip <filename>isis.zip</filename></para>
+
+              <para>This should leave you with the same directory, isis, as
+              was previously in /tmp/m2-sites.</para>
+            </listitem>
+          </itemizedlist>
+
+          <para>Then, copy the exploded <acronym>ZIP</acronym> into
+          /www/incubator.apache.org:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>Switch to the destination directory:</para>
+
+              <programlisting>$ cd /www/incubator.apache.org</programlisting>
+            </listitem>
+
+            <listitem>
+              <para>move the new site into the distribution location:</para>
+
+              <programlisting>$ mv ~/isis isis-0.x.x-incubating</programlisting>
+
+              <para>where <emphasis>0.x.x</emphasis> should be replaced with
+              the appropriate version number, eg 0.2.0 or 0.3.0-RC1,
+              etc.</para>
+            </listitem>
+
+            <listitem>
+              <para>make the new site readable by all:</para>
+
+              <programlisting>$ chmod -R g+w isis-0.x.x-incubating
+$ chgrp -R incubator isis-0.x.x-incubating
+$ for a in `find isis-0.x.x-incubating -type d -print` ; do chmod g+s $a ; done</programlisting>
+            </listitem>
+          </itemizedlist>
+
+          <para>In a couple of hours this site will be distributed and
+          available, allowing it to be referenced from the vote email (<xref
+          linkend="sec.Voting" />).</para>
+        </sect2>
       </sect1>
 
       <sect1 id="sec.Voting">
@@ -4444,8 +4551,8 @@ svn: No such revision 1126567</programlisting>
         isis-dev@incubator.apache.org mailing list, and then repeated on the
         incubator@apache.org mailing list.</para>
 
-        <para>In all cases, votes last for 72 hours and require a +3 vote from
-        members.</para>
+        <para>In all cases, votes last for 72 hours and require a +3 (binding)
+        vote from members.</para>
 
         <sect2 id="sec.VotingThread">
           <title>Start voting thread on isis-dev@incubator.a.o</title>
@@ -4631,7 +4738,7 @@ Please verify the release and cast your vote.  The vote will be open for 72 hour
           <programlisting>I will now copy this release to Isis' dist directory and promote the artifacts to the central Maven repository.</programlisting>
 
           <para>At this stage the release can be promoted for distribution
-          (see next section).</para>
+          (see <xref linkend="sec.PromotingReleaseToDistribution" />).</para>
 
           <para>If the vote has been unsuccessful, then delete the branches
           and <acronym>SVN</acronym> tag, drop the staging repository, address
@@ -4676,15 +4783,56 @@ Please verify the release and cast your vote.  The vote will be open for 72 hour
           <programlisting>scp isis-x.x.x-incubating-source-release.* people.apache.org:/www/www.apache.org/dist/incubator/isis/.</programlisting>
         </sect2>
 
-        <sect2>
+        <sect2 id="sec.PromoteAndUpdateWebsite">
           <title>Promote and update the Website</title>
 
-          <para>The mechanics of deploying the release site is the same as
-          deploying a snapshot site, however there is the complication of
-          deploying from the relevant
-          <filename>tags/x.x.x-incubating</filename> tag (rather than
-          <filename>trunk</filename>) as well as ensuring that the released
-          binaries are correctly referenced on the downloads page.</para>
+          <para>To promote the site, first log onto people.apache.org.
+          Then:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>switch to the website directory:</para>
+
+              <programlisting>$ cd /www/incubator.apache.org</programlisting>
+            </listitem>
+
+            <listitem>
+              <para>Either:</para>
+
+              <itemizedlist>
+                <listitem>
+                  <para>move the previous site to one side:</para>
+
+                  <programlisting>$ mv isis isis-0.x.w-incubating</programlisting>
+
+                  <para>where <emphasis>0.x.w</emphasis> is the previous
+                  version was uploaded</para>
+                </listitem>
+
+                <listitem>
+                  <para>or simply delete the site:</para>
+
+                  <programlisting>$ rm -rf isis</programlisting>
+                </listitem>
+              </itemizedlist>
+            </listitem>
+
+            <listitem>
+              <para>Move the new site into place, and for good measure touch
+              every file to ensure it is picked up:</para>
+
+              <programlisting>$ mv isis-0.x.x-incubating isis
+$ find isis -exec touch {} \;</programlisting>
+            </listitem>
+          </itemizedlist>
+
+          <para>Finally, check that the download links are valid, as specified
+          in <filename>downloads.html</filename>. If there are any errors or
+          adjustments, make them directly, but remember to apply the same
+          changes back to the source tree for the next iteration.</para>
+
+          <para>The new site should become available within a couple of
+          hours.</para>
         </sect2>
 
         <sect2>
@@ -4697,7 +4845,8 @@ Please verify the release and cast your vote.  The vote will be open for 72 hour
 
           <programlisting>Subject: [ANN] Apache Isis version 0.x.x-incubating Released</programlisting>
 
-          <para>And use the following body:</para>
+          <para>And use the following body (summarizing the main points as
+          required):</para>
 
           <programlisting>The Isis team is pleased to announce the release of Apache Isis version 0.x.x-incubating
 
@@ -4729,25 +4878,36 @@ Enjoy!
           <para>Because we release from a branch, the changes made in the
           branch (changes to <filename>pom.xml</filename> made automatically
           by the release-plugin, or any manual edits) should be merged back
-          from the release branch back into trunk.</para>
+          from the release branch back into trunk. There are two ways to do
+          this:</para>
 
-          <para>You can if you wish use <acronym>SVN</acronym>'s
-          <code>merge</code> command for this (using the "reintegrate"
-          flag):</para>
+          <itemizedlist>
+            <listitem>
+              <para>The "official" way is to use <acronym>SVN</acronym>'s
+              <code>merge</code> command for this (using the "reintegrate"
+              flag):</para>
 
-          <programlisting>$ cd .../trunk/framework
+              <programlisting>$ cd .../trunk/framework
 $ svn merge --reintegrate https://svn.apache.org/repos/asf/incubator/isis/branches/0.x.x-incubating/framework .
 $ svn commit -m "reintegrating release branch 0.x.x-incubating ready for next iteration"</programlisting>
 
-          <para>Alternatively, you may well find it easy just to use a
-          directory comparison tool such as <emphasis>Beyond
-          Compare</emphasis> or <emphasis>WinMerge</emphasis>.</para>
+              <para>However, you will find that this is very slow (the merge
+              command alone takes something like ~1 hour) and will generate a
+              massive change set which also will take an age to commit.</para>
+            </listitem>
 
-          <para>Finally, remember that the version in the
-          <filename>pom.xml</filename> for any modules that are not part of
-          the release (in particular, the <filename>examples</filename> and
-          <filename>domain-libs</filename> modules) should be manually updated
-          also.</para>
+            <listitem>
+              <para>Alternatively, then, you may well find it easy just to use
+              a directory comparison tool such as <emphasis>Beyond
+              Compare</emphasis> or <emphasis>WinMerge</emphasis> to compare
+              the branch workspace with the trunk workspace.</para>
+
+              <para>Set the tool's filters to compare only
+              <filename>pom.xml</filename> files, because these are the only
+              files that the release process in the branch will have updated
+              and require merging in.</para>
+            </listitem>
+          </itemizedlist>
         </sect2>
 
         <sect2>
@@ -4788,170 +4948,17 @@ $ svn commit -m "reintegrating release branch 0.x.x-incubating ready for next it
             <para>Then commit the <filename>site.xml</filename> file.</para>
           </sect3>
         </sect2>
-      </sect1>
-    </chapter>
-
-    <chapter>
-      <title>Deploying the Site</title>
-
-      <abstract>
-        <para>This chapter describes the steps that for uploading a new
-        version of the website.</para>
-      </abstract>
-
-      <sect1 id="sec.ManuallyDeploySite">
-        <title>Manually Uploading the Website</title>
 
         <sect2>
-          <title>Update <filename>archetype-catalog.xml</filename> (if
-          required)</title>
+          <title>Update examples etc (source code outside of
+          trunk/framework)</title>
 
-          <para>The <emphasis>Isis</emphasis> site comes with its own
-          <filename>archetype-catalog.xml</filename> so that the quickstart
-          archetype can be used from the snapshot repository by those who want
-          to use the "latest-and-greatest". This file lives in
-          <filename>.../trunk/framework/src/main/site/resources</filename>,
-          and looks something like:</para>
-
-          <programlisting>&lt;archetype-catalog&gt;
-  &lt;archetypes&gt;
-    &lt;archetype&gt;
-       &lt;groupId&gt;org.apache.isis&lt;/groupId&gt;
-       &lt;artifactId&gt;quickstart-archetype&lt;/artifactId&gt;
-       &lt;version&gt;x.x.x-incubating-SNAPSHOT&lt;/version&gt;
-       &lt;repository&gt;http://repository.apache.org/content/groups/snapshots-group/&lt;/repository&gt;
-       &lt;description&gt;Isis Quickstart Archetype&lt;/description&gt;
-    &lt;/archetype&gt;
-    ...
-  &lt;/archetypes&gt;
-&lt;/archetype-catalog&gt;</programlisting>
-
-          <para>Where <code>x.x.x-incubating-SNAPSHOT</code> is the current
-          release. It may also have entries for previous SNAPSHOT
-          releases.</para>
-
-          <para>If it missing an entry for the current snapshot, then update
-          it and commit.</para>
-        </sect2>
-
-        <sect2>
-          <title>Build the site</title>
-
-          <para>Next, build the site, as per <xref
-          linkend="sec.BuildingSiteAndDocs" />.</para>
-
-          <para>This should generate the current site in
-          <filename>/tmp/m2-sites/isis</filename>.</para>
-        </sect2>
-
-        <sect2>
-          <title>Upload the site</title>
-
-          <para>Finally, upload the site (as a <acronym>ZIP</acronym>) to your
-          local account on <code>people.apache.org</code>:</para>
-
-          <itemizedlist>
-            <listitem>
-              <para>cd <filename>/tmp/m2-sites</filename></para>
-            </listitem>
-
-            <listitem>
-              <para>zip up isis to <filename>isis.zip</filename></para>
-            </listitem>
-
-            <listitem>
-              <para>scp the <filename>isis.zip</filename> to
-              <filename>people.apache.org/~</filename></para>
-            </listitem>
-
-            <listitem>
-              <para>login to <code>people.apache.org</code> using ssh:</para>
-
-              <programlisting>ssh -l xxxxxxxx people.apache.org</programlisting>
-
-              <para>where xxxxxxx is your apache user Id</para>
-            </listitem>
-
-            <listitem>
-              <para>unzip <filename>isis.zip</filename></para>
-
-              <para>This should leave you with the same directory, isis, as
-              was previously in /tmp/m2-sites.</para>
-            </listitem>
-          </itemizedlist>
-
-          <para>Then, copy the exploded ZIP into
-          /www/incubator.apache.org:</para>
-
-          <itemizedlist>
-            <listitem>
-              <para>Switch to the destination directory:</para>
-
-              <programlisting>cd /www/incubator.apache.org</programlisting>
-            </listitem>
-
-            <listitem>
-              <para>move the new site into the distribution location:</para>
-
-              <programlisting>mv ~/isis isis-0.x.x-incubating</programlisting>
-
-              <para>where <emphasis>0.x.x</emphasis> should be replaced with
-              the appropriate version number, eg 0.2.0 or 0.3.0-RC1,
-              etc.</para>
-            </listitem>
-
-            <listitem>
-              <para>make the new site readable by all:</para>
-
-              <programlisting>chmod -R g+w isis-0.x.x-incubating
-chgrp -R incubator isis-0.x.x-incubating
-for a in `find isis-0.x.x-incubating -type d -print` ; do chmod g+s $a ; done</programlisting>
-            </listitem>
-          </itemizedlist>
-        </sect2>
-
-        <sect2>
-          <title>Promote the site</title>
-
-          <para>When the new site is ready to be made current:</para>
-
-          <itemizedlist>
-            <listitem>
-              <para>If necessary, switch to the destination directory:</para>
-
-              <programlisting>cd /www/incubator.apache.org</programlisting>
-            </listitem>
-
-            <listitem>
-              <para>Either:</para>
-
-              <itemizedlist>
-                <listitem>
-                  <para>move the previous site to one side:</para>
-
-                  <programlisting>mv isis isis-0.x.w-incubating</programlisting>
-
-                  <para>where <emphasis>0.x.w</emphasis> is the previous
-                  version was uploaded</para>
-                </listitem>
-
-                <listitem>
-                  <para>or simply delete the site:</para>
-
-                  <programlisting>rm -rf isis</programlisting>
-                </listitem>
-              </itemizedlist>
-            </listitem>
-
-            <listitem>
-              <para>Move the new site into place:</para>
-
-              <programlisting>mv isis-0.x.x-incubating isis</programlisting>
-            </listitem>
-          </itemizedlist>
-
-          <para>The new site should become available within a couple of
-          hours.</para>
+          <para>Finally, remember that the version in the
+          <filename>pom.xml</filename> for any modules that are not in the
+          release - specifically those outside of
+          <filename>trunk/framework</filename>, such as the
+          <filename>examples</filename> and <filename>domain-libs</filename>
+          modules - should be manually updated also.</para>
         </sect2>
       </sect1>
     </chapter>

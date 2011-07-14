@@ -27,37 +27,21 @@ Release
  <Apache Isis> is distributed in both source and binary form:
  
  * the source can be downloaded from 
-   {{{http://www.apache.org/dyn/closer.cgi/incubator/isis/isis-parent-${project.version}-source-release.zip}here}} 
-   ({{{http://www.apache.org/dist/incubator/isis/isis-parent-${project.version}-source-release.zip.asc}asc}}, {{{http://www.apache.org/dist/incubator/isis/isis-parent-${project.version}-source-release.zip.md5}md5}}, {{{http://www.apache.org/dist/incubator/isis/isis-parent-${project.version}-source-release.zip.sha1}sha1}})
+   {{{http://www.apache.org/dyn/closer.cgi/incubator/isis/${project.version}/isis-${project.version}-source-release.zip}here}} 
+   ({{{http://www.apache.org/dist/incubator/isis/${project.version}/isis-${project.version}-source-release.zip.asc}asc}}, {{{http://www.apache.org/dist/incubator/isis/${project.version}/isis-${project.version}-source-release.zip.md5}md5}}, {{{http://www.apache.org/dist/incubator/isis/${project.version}/isis-${project.version}-source-release.zip.sha1}sha1}})
    
    Details of building <Isis> from source can be found in the contributors guide ({{{./docbkx/html/guide/isis-contributors-guide.html}HTML}} or {{{./docbkx/pdf/isis-contributors-guide.pdf}PDF}})
    for further details.
  
- * the binaries can be downloaded from {{{http://repo1.maven.org}Maven central repo}}, typically by using the <Isis> quickstart archetype.
+ * the binaries can be downloaded from {{{http://search.maven.org}Maven central repo}}, typically by using the <Isis> quickstart archetype.
  
    See the {{{./quickstart-app.html}quickstart page}} for details on how to using the quickstart archetype.
    
  []
  
- In both cases, you can use the {{{http://www.apache.org/incubator/dist/isis/KEYS}KEYS}} to verify the archives.
+ In both cases, you can use the {{{http://www.apache.org/dist/incubator/isis/KEYS}KEYS}} to verify the archives.
 
  A list of JIRA issues addressed in this release can be found {{{./release-notes-${project.version}.html}here}}.  
- 
- 
-Snapshot Releases
-
-  We occasionally release snapshots of the current codebase through the 
-  {{{https://repository.apache.org/index.html#view-repositories;snapshots-group~browsestorage/}Apache Snapshot repository}}.  
-  We also have a quickstart app to get up and running quickly, also uploaded
-  to the snapshot repo.  You can generate a running app using:
-
-+------------------------------------------------------------
-mvn archetype:generate  \
-    -D archetypeCatalog=http://incubator.apache.org/isis \
-    -D archetypeGroupId=org.apache.isis.support \
-    -D archetypeArtifactId=quickstart-archetype
-
-+------------------------------------------------------------
 
 
 Building Isis yourself
@@ -70,12 +54,12 @@ svn co https://svn.apache.org/repos/asf/incubator/isis/trunk .
 mvn clean install
 ----
 
-  Again, see the contributors guide (({{{./docbkx/html/guide/isis-contributors-guide.html}HTML}} or {{{./docbkx/pdf/isis-contributors-guide.pdf}PDF}}) 
+  Again, see the contributors guide ({{{./docbkx/html/guide/isis-contributors-guide.html}HTML}} or {{{./docbkx/pdf/isis-contributors-guide.pdf}PDF}}) 
   for more details.
    
 
 Icons
   
- In addition to the source and binary releases, there are also a number of {{{./icons.html}icon sets}} you can use in your own applicatoins.
+ In addition to the source and binary releases, there are also a number of {{{./icons.html}icon sets}} you can use in your own applications.
  
    
