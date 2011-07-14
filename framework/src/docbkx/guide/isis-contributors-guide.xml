@@ -4856,16 +4856,17 @@ $ find isis -exec touch {} \;</programlisting>
 
 Full release notes are available at [1] on the Isis website.
 
-You can access this release directly from the Maven central repo, for example using
-the Maven archetype [2], or by downloading and building from source [3].
+You can access this release directly from the Maven central repo [2], use the Maven archetype to configure an initial project [3],
+or download the release and build it from source [4].
 
 Enjoy!
 
 -The Isis team
 
 [1] http://incubator.apache.org/isis/release-notes-0.x.x-incubating.html
-[2] http://incubator.apache.org/isis/quickstart-app.html
-[3] http://incubator.apache.org/isis/downloads.html</programlisting>
+[2] http://search.maven.org
+[3] http://incubator.apache.org/isis/quickstart-app.html
+[4] http://incubator.apache.org/isis/downloads.html</programlisting>
         </sect2>
       </sect1>
 
