@@ -23,14 +23,14 @@
     <name>Examples</name>
 	<groupId>org.apache.isis</groupId>
 	<artifactId>service</artifactId>
-    <version>0.1.2-incubating-SNAPSHOT</version>
+    <version>0.2.0-incubating-SNAPSHOT</version>
     <packaging>pom</packaging>
 
 
     <parent>
       <groupId>org.apache.isis</groupId>
       <artifactId>isis-parent</artifactId>
-      <version>0.1.2-incubating-SNAPSHOT</version>
+      <version>0.2.0-incubating-SNAPSHOT</version>
     </parent>
 
     <properties>
