@@ -50,7 +50,7 @@ Building Isis yourself
   yourself:
   
 ----
-svn co https://svn.apache.org/repos/asf/incubator/isis/trunk .
+svn co https://svn.apache.org/repos/asf/incubator/isis/trunk/framework .
 mvn clean install
 ----
 
