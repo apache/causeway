@@ -97,7 +97,7 @@ li {
 }
 
 a #externalLink {
-    after: "EXT" url('images/external.png');
+    after: "EXT" url('../images/external.png');
 }
 
 img {

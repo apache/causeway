@@ -34,7 +34,7 @@ MetaModel
  * by {{{../../runtimes/dflt/remoting/index.html}remoting}}, to marshall
    domain objects automatically between different tiers; 
  
- * by the {{{../core/runtime/index.html}core runtime}}, to provide the ability to provide
+ * by the {{{../runtime/index.html}core runtime}}, to provide the ability to provide
    XML Snapshots (through the <<<XmlSnapshot>>> utility class).
  
  []

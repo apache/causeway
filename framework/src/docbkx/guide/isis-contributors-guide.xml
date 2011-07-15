@@ -247,9 +247,10 @@
 
             <itemizedlist>
               <listitem>
-                <para><ulink url="???">EasyShell</ulink>, to provide easy
-                integration with the operating system shell and command
-                line.</para>
+                <para><ulink
+                url="http://sourceforge.net/projects/pluginbox/">EasyShell</ulink>,
+                to provide easy integration with the operating system shell
+                and command line.</para>
               </listitem>
 
               <listitem>
@@ -1725,7 +1726,7 @@ protected IsisConfiguration getConfiguration() {
           within the Problems view of the Eclipse IDE. To associate
           <emphasis>eclipse-cs</emphasis> with the Checkstyle config file, use
           Windows &gt; Preferences, and specify the config file as <ulink
-          url="???">http://incubator.apache.org/isis/codequality/checkstyle.xml</ulink>.
+          url="../../../codequality/checkstyle.xml">http://incubator.apache.org/isis/codequality/checkstyle.xml</ulink>.
           Alternatively, the file is available locally in
           <filename>trunk/framework/src/site/resources/codequality/checkstyle.xml</filename>.</para>
 
@@ -4291,7 +4292,7 @@ svn: No such revision 1126567</programlisting>
               <para>This should be in the root of the extracted
               <acronym>ZIP</acronym>. In particular, check that there are no
               <ulink
-              url="www.apache.org/legal/resolved.html#category-x">category-x</ulink>
+              url="http://www.apache.org/legal/resolved.html#category-x">category-x</ulink>
               dependencies.</para>
             </listitem>
 
