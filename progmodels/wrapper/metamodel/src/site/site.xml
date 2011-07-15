@@ -30,8 +30,8 @@
 		</menu>
 
         <menu name="Wrapper Modules">
-            <item name="Applib" href="../applib/index.html" />
-            <item name="Metamodel" href="../metamodel/index.html" />
+            <item name="Applib" href="../wrapper-applib/index.html" />
+            <item name="Metamodel" href="../wrapper-metamodel/index.html" />
         </menu>
 
         <menu name="Maven Reports" ref="reports" />

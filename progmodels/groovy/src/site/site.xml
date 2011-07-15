@@ -36,8 +36,8 @@
         </menu>
 		
         <menu name="Groovy Modules">
-            <item name="Applib" href="./applib/index.html" />
-            <item name="Metamodel" href="./metamodel/index.html" />
+            <item name="Applib" href="./groovy-applib/index.html" />
+            <item name="Metamodel" href="./groovy-metamodel/index.html" />
         </menu>
 
 		<menu name="Maven Reports" ref="reports" />

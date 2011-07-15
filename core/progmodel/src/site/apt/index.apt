@@ -24,7 +24,7 @@ ProgModel
  
  Most of those within <this> module are in fact used in the
  default programming model, defined by the 
- {{{../../defaults/progmodel/index.html}default progmodel}} module.  They are
+ {{{../../progmodels/dflt/index.html}default progmodel}} module.  They are
  defined within core, however, to allow custom programming models (perhaps
  extending or trimming back the default programming model) to be defined.
  

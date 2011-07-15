@@ -2763,9 +2763,9 @@ Element customerAsXml = snapshot.toXml(); </programlisting></para>
         <title>Log4J snapshot appenders</title>
 
         <para><emphasis>Apache Isis</emphasis> uses <ulink
-        url="logging.apache.org">Apache log4j</ulink> as its mechanism, and
-        provides a number of log4j appender implementations which can be used
-        in your application if you require.</para>
+        url="http://logging.apache.org">Apache log4j</ulink> as its mechanism,
+        and provides a number of log4j appender implementations which can be
+        used in your application if you require.</para>
 
         <para>Specifically, the framework provides a number of appenders that
         create a snapshot of the recently logged events instead of capturing
