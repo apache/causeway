@@ -21,22 +21,22 @@
 "http://maven.apache.org/dtd/xdoc_1_0.dtd">
 <document>
 	<properties>
-		<title>Introduction to [[NAME]]</title>
-		<author email="isis-contributors@lists.sourceforge.net">[[NAME]] Contributors</author>
+		<title>Introduction to Naked Objects</title>
+		<author email="isis-dev@incubator.apache.org">Apache Isis Contributors</author>
 	</properties>
 
 	<body>
 		<section name="">
 
-			<h3>[[NAME]]</h3>
+			<h3>Naked Objects</h3>
 
 			<p>
 				<i>Richard Pawson and Robert Matthews, Wiley 2002</i>
 			</p>
 
-			<img align="left" alt="[[NAME]]" class="wrap-left"
-				src="images/isis-book.jpg" style="margin:0 20px 20px 0; border-style:solid; border-width:1px;" />
-			<p>This book describes the original ideas of [[NAME]]. Although
+			<img align="left" alt="Naked Objects" class="wrap-left"
+				src="images/nakedobjects-book.jpg" style="margin:0 20px 20px 0; border-style:solid; border-width:1px;" />
+			<p>This book describes the original ideas of Naked Objects. Although
 				based on a very early version of the framework, it's still
 				definitely worth a read (and beautifully produced).</p>
 
@@ -63,25 +63,25 @@
 					href="http://eu.wiley.com/WileyCDA/WileyTitle/productCd-0470844205.html">Wiley (publisher)</a>
 				and
 				<a
-					href="http://www.amazon.com/[[NAME]]-Objects-Richard-Pawson/dp/0470844205">Amazon</a>
+					href="http://www.amazon.com/Naked-Objects-Richard-Pawson/dp/0470844205">Amazon</a>
 				.
 			</p>
 
 			<p>&nbsp;</p>
 			<p>&nbsp;</p>
 			
-			<h3>Domain Driven Design using [[NAME]]</h3>
+			<h3>Domain Driven Design using Naked Objects</h3>
 
 			<p>
 				<i>Dan Haywood, Pragmatic Bookshelf 2009</i>
 			</p>
 
-			<img align="left" alt="Domain Driven Design using [[NAME]]"
+			<img align="left" alt="Domain Driven Design using Naked Objects"
 				class="wrap-left" src="images/dhnako.jpg"
 				style="margin:0 20px 20px 0; border-style:solid; border-width:1px;" />
 
 			<p>This more recent book draws the parallel between domain-driven
-				design and [[NAME]] (4.0). In the spirit of the Pragmatic
+				design and Naked Objects (4.0). In the spirit of the Pragmatic
 				Bookshelf, it's a practical, hands-on
 				sort of book, building up a
 				case study as it goes and encouraging you to
@@ -94,7 +94,7 @@
 					<cite>Important Contribution to Domain-Driven Design</cite>
 				</li>
 				<li>
-					<cite>The easy-to-learn [[NAME]] Framework .. provide[s] a
+					<cite>The easy-to-learn Naked Objects Framework .. provide[s] a
 						masterful exposition on DDD</cite>
 				</li>
 				<li>
@@ -108,7 +108,7 @@
 			<p>
 				You can find the book at
 				<a
-					href="http://www.pragprog.com/titles/dhnako/domain-driven-design-using-isis">Pragmatic Bookshelf (publisher)</a>
+					href="http://www.pragprog.com/titles/dhnako/domain-driven-design-using-naked-objects">Pragmatic Bookshelf (publisher)</a>
 				and
 				<a
 					href="http://www.amazon.com/Domain-Driven-Design-Objects-Pragmatic-Programmers/dp/1934356441">Amazon.com</a>

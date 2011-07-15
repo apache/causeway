@@ -28,14 +28,13 @@ MetaModel
    domain objects, so that they can be rendered in a generic object-oriented 
    user interface;
    
- * by object stores (the {{{../../defaults/objectstore/index.html}default}} and
-   some of the {{{../../alternatives/objectstore/index.html}alternatives}})
+ * by the {{{../../runtimes/dflt/objectstores/index.html}object stores}} 
    to determine which data is to be persisted;
    
- * by {{{../../alternatives/remoting/index.html}remoting}}, to marshall
+ * by {{{../../runtimes/dflt/remoting/index.html}remoting}}, to marshall
    domain objects automatically between different tiers; 
  
- * by the {{{../runtime/index.html}core runtime}}, to provide the ability to provide
+ * by the {{{../core/runtime/index.html}core runtime}}, to provide the ability to provide
    XML Snapshots (through the <<<XmlSnapshot>>> utility class).
  
  []
