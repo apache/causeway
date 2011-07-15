@@ -191,7 +191,7 @@
 
       <para>This chapter introduces the Apache Isis and the naked objects
       pattern by way of a series of questions and answers. It is adapted from
-      an <ulink url="www.infoq.com/articles/haywood-ddd-no">interview
+      an <ulink url="http://www.infoq.com/articles/haywood-ddd-no">interview
       originally published on InfoQ</ulink>.</para>
 
       <sect1>
@@ -2824,7 +2824,7 @@ public class Department {
         <para>The recommended way of maintaining a bidirectional relationship
         is to use the 'mutual registration pattern', a write-up of which can
         be found at <ulink
-        url="???">http://www.two-sdg.demon.co.uk/curbralan/papers/MutualRegistration.pdf</ulink>.
+        url="http://www.two-sdg.demon.co.uk/curbralan/papers/MutualRegistration.pdf">http://www.two-sdg.demon.co.uk/curbralan/papers/MutualRegistration.pdf</ulink>.
         The general idea is that one side of the relationship is responsible
         for maintaining the associations, while the other side simply
         delegates.</para>

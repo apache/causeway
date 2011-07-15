@@ -24,7 +24,7 @@ Default Programming Model (Java)
  
  This programming model is defined by specifying a collection of <<<FacetFactory>>>s, which are
  used to build up the metamodel.  The actual <<<FacetFactory>>>s are defined within the
- {{{../../../core/index.html}core}} framework (in the <<<progmodel>>> module).
+ {{{../../core/index.html}core}} framework (in the <<<progmodel>>> module).
  
 Alternatives
 
