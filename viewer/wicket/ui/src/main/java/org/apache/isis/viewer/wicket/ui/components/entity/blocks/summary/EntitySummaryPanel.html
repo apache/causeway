@@ -20,20 +20,22 @@
 <html>
 	<body>
 		<wicket:panel>
-			<div class="entitySummary panel">
-				<img wicket:id="entityImage" class="entityImage"/>
-				<label wicket:id=entityTitle" class="entityTitle">[title]</label>
-				
-				<table style="display:inline;">
-	   			<tbody>
-	      			<tr>
-						<td>
-			      			<span class="entityActions" wicket:id="entityActions"/>
-		      			</td>
-	     			</tr>
-     			</tbody>
-  			</table>
-				
+			<div class="entitySummary">
+			     <div class="iconAndTitle panel">
+    				<img wicket:id="entityImage" class="entityImage"/>
+    				<label wicket:id=entityTitle" class="entityTitle">[title]</label>
+                 </div>
+                <div class="actions panel">				
+    				<table>
+        	   			<tbody>
+        	      			<tr>
+        						<td>
+        			      			<span class="entityActions" wicket:id="entityActions"/>
+        		      			</td>
+        	     			</tr>
+             			</tbody>
+      			   </table>
+  			   </div>
 			</div>
 		</wicket:panel>
 	</body>

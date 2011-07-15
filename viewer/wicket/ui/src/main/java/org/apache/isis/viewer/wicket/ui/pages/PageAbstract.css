@@ -78,7 +78,7 @@ body {
 }
 
 .panel, fieldset {
-	background-color: #D7E7F5;
+	/* background-color: #D7E7F5; */
 	margin: 3px 0px;
 }
 .panel {
@@ -235,7 +235,7 @@ tr.section td {
 fieldset.propertiesAndOrCollections {
 	padding-top: 1em;
 	padding-bottom: 1em;
-	background-color: #D7E7F5;
+	/* background-color: #D7E7F5; */
 }
 
 

@@ -4898,15 +4898,35 @@ $ svn commit -m "reintegrating release branch 0.x.x-incubating ready for next it
             </listitem>
 
             <listitem>
-              <para>Alternatively, then, you may well find it easy just to use
-              a directory comparison tool such as <emphasis>Beyond
-              Compare</emphasis> or <emphasis>WinMerge</emphasis> to compare
-              the branch workspace with the trunk workspace.</para>
+              <para>Alternatively, then, you may well find it easy to perform
+              the edits manually:<itemizedlist>
+                  <listitem>
+                    <para>one option is to use a directory comparison tool
+                    such as <emphasis>Beyond Compare</emphasis> or
+                    <emphasis>WinMerge</emphasis> to compare the branch
+                    workspace with the trunk workspace.</para>
 
-              <para>Set the tool's filters to compare only
-              <filename>pom.xml</filename> files, because these are the only
-              files that the release process in the branch will have updated
-              and require merging in.</para>
+                    <para>Set the tool's filters to compare only
+                    <filename>pom.xml</filename> files, because these are the
+                    only files that the release process in the branch will
+                    have updated and require merging in.</para>
+                  </listitem>
+
+                  <listitem>
+                    <para>or, you could use UNIX command line tools to perform
+                    an update.</para>
+
+                    <para>The following command will locate every pom.xml and
+                    perform in place updates, saving the original file to
+                    pom.xml.bak:</para>
+
+                    <programlisting>find . -name pom.xml -exec sed -i.bak -e 's/0\.1\.0/0\.2\.0/g' {} \;</programlisting>
+
+                    <para>The above works on Cygwin, too (though you may need
+                    to fully qualified the <filename>find</filename> command
+                    as <filename>/usr/bin/find</filename>).</para>
+                  </listitem>
+                </itemizedlist></para>
             </listitem>
           </itemizedlist>
         </sect2>

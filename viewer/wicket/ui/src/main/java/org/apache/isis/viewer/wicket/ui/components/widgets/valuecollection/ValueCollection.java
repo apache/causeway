@@ -14,7 +14,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.apache.isis.viewer.wicket.ui.components.widgets.valuechoices;
+package org.apache.isis.viewer.wicket.ui.components.widgets.valuecollection;
 
 import java.util.List;
 
@@ -42,8 +42,8 @@ import com.google.common.collect.Lists;
 /**
  * Initial skeleton - trying to add support for value choices.
  */
-public class ValueChoicesPanel extends ScalarPanelAbstract { // ScalarPanelTextFieldAbstract
-    private static final Logger LOG = Logger.getLogger(ValueChoicesPanel.class);
+public class ValueCollection extends ScalarPanelAbstract { // ScalarPanelTextFieldAbstract
+    private static final Logger LOG = Logger.getLogger(ValueCollection.class);
 
     private static final long serialVersionUID = 1L;
 
@@ -58,7 +58,7 @@ public class ValueChoicesPanel extends ScalarPanelAbstract { // ScalarPanelTextF
     private FormComponent<ObjectAdapterMemento> valueField;
     private ObjectAdapterMemento pending;
 
-    public ValueChoicesPanel(final String id, final ScalarModel scalarModel) {
+    public ValueCollection(final String id, final ScalarModel scalarModel) {
         super(id, scalarModel);
         pending = scalarModel.getObjectAdapterMemento();
     }
@@ -92,7 +92,7 @@ public class ValueChoicesPanel extends ScalarPanelAbstract { // ScalarPanelTextF
                     return pending;
                 }
                 LOG.info("TextField: pending is null");
-                final ObjectAdapter adapter = ValueChoicesPanel.this.getModelValue();
+                final ObjectAdapter adapter = ValueCollection.this.getModelValue();
                 return ObjectAdapterMemento.createOrNull(adapter);
             }
 
