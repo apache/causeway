@@ -44,8 +44,8 @@
     <url>http://incubator.apache.org/isis/${relativeUrl}</url>
 
 	<modules>
-		<module>applib</module>
-		<module>metamodel</module>
+		<module>wrapper-applib</module>
+		<module>wrapper-metamodel</module>
 	</modules>
 
     <reporting>
