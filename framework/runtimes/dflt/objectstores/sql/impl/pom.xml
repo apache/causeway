@@ -20,6 +20,7 @@
 
     <artifactId>sql-impl</artifactId>
     <name>Default Runtime SQL ObjectStore Implementation</name>
+    <description>SQL Objectstire Implementation. Uses jdbc for maximum compatibility.</description>
 
     <properties>
         <siteBaseDir>../../../../..</siteBaseDir>

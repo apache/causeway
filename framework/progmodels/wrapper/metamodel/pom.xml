@@ -29,6 +29,7 @@
 	<artifactId>wrapper-metamodel</artifactId>
 
 	<name>Wrapper ProgModel MetaModel</name>
+	<description>Wrapper Metamodel</description>
 
 
 	<properties>
