@@ -2583,12 +2583,12 @@ isis.setObjectPersistor(persistor);</programlisting>
           Code. These codes are the lower-case, two-letter codes as defined by
           ISO-639. You can find a full list of these codes at a number of
           sites, such as: <ulink
-          url="???">http://www.loc.gov/standards/iso639-2/php/English_list.php</ulink>
+          url="http://www.loc.gov/standards/iso639-2/php/English_list.php">http://www.loc.gov/standards/iso639-2/php/English_list.php</ulink>
           The second part is the country and is a valid ISO Country Code.
           These codes are the upper-case, two-letter codes as defined by
           ISO-3166. You can find a full list of these codes at a number of
           sites, such as: <ulink
-          url="???">http://www.iso.ch/iso/en/prods-services/iso3166ma/02iso-3166-code-lists/list-en1.html</ulink></para>
+          url="http://www.iso.ch/iso/en/prods-services/iso3166ma/02iso-3166-code-lists/list-en1.html">http://www.iso.ch/iso/en/prods-services/iso3166ma/02iso-3166-code-lists/list-en1.html</ulink></para>
 
           <para>If no underscore is used then the setting is deemed to be the
           language.</para>
