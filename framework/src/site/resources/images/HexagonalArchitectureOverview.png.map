@@ -49,10 +49,10 @@
 <area shape="rect" coords="582,203,683,226" alt="XML" href="./runtimes/dflt/objectstores/xml/index.html" />
 <area shape="rect" coords="582,177,683,198" alt="Dflt (in-mem)" href="./runtimes/dflt/objectstores/dflt/index.html" />
 
-<area shape="rect" coords="88,112,189,135" alt="Sockets" href="./runtimes/dflt/remoting/sockets/index.html" />
-<area shape="rect" coords="88,138,189,160" alt="Http" href="./runtimes/dflt/remoting/http/index.html" />
-<area shape="rect" coords="516,139,618,161" alt="Sockets" href="./runtimes/dflt/remoting/sockets/index.html" />
-<area shape="rect" coords="517,112,618,135" alt="Http" href="./runtimes/dflt/remoting/http/index.html" />
+<area shape="rect" coords="88,112,189,135" alt="Sockets" href="./runtimes/dflt/remoting/transport-sockets/index.html" />
+<area shape="rect" coords="88,138,189,160" alt="Http" href="./runtimes/dflt/remoting/transport-http/index.html" />
+<area shape="rect" coords="516,139,618,161" alt="Sockets" href="./runtimes/dflt/remoting/transport-sockets/index.html" />
+<area shape="rect" coords="517,112,618,135" alt="Http" href="./runtimes/dflt/remoting/transport-http/index.html" />
 
 <area shape="rect" coords="533,293,633,314" alt="Dflt (in-mem)" href="./runtimes/dflt/profilestores/dflt/index.html" />
 <area shape="rect" coords="533,319,633,340" alt="XML" href="./runtimes/dflt/profilestores/xml/index.html" />

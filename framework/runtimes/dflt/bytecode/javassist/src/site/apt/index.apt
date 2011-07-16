@@ -28,7 +28,8 @@ Alternatives
  * {{{../dflt/index.html}CGLib}}
 
    The <dflt> implementation is similar to the javassist implementation, but uses the
-   {{{../../defaults/bytecode/index.html}CGLib}} library.
+   {{{../../bytecode/dflt/index.html}CGLib}} library.
+
  
  * {{{../identity/index.html}Identity}}
   

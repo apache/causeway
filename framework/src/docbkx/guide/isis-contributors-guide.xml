@@ -1705,7 +1705,7 @@ protected IsisConfiguration getConfiguration() {
       <sect1 id="sec.Checkstyle">
         <title>Checkstyle</title>
 
-        <para><ulink url="checkstyle.sourceforge.net">Checkstyle</ulink> is
+        <para><ulink url="http://checkstyle.sourceforge.net">Checkstyle</ulink> is
         the first of three powerful tools (the others being <ulink
         url="http://pmd.sourceforge.net">PMD</ulink> and <ulink
         url="http://findbugs.sourceforge.net/">FindBugs) for </ulink>enforcing

@@ -32,7 +32,7 @@
         <menu name="Profile Stores">
             <item name="Default (In-mem)" href="../dflt/index.html" />
             <item name="XML" href="../xml/index.html" />
-            <item name="SQL (jdbc)" href="./sql/index.html" />
+            <item name="SQL (jdbc)" href="../sql/index.html" />
         </menu>
         
 		<menu name="Maven Reports" ref="reports"/>
