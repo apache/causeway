@@ -21,8 +21,10 @@ Documentation
   
   * helper classes for writing fixtures
 
-  * a transitive dependency to the <Naked Objects> applib
+  * a transitive dependency to the <Isis> applib
  
   []
    
-  See the {{{../gdocumentation}user guide}} for more information.
+  See the {{{../docbkx/html/guide/isis-progmodels.html}Isis Programming Model user guide}} for more information.
+
+

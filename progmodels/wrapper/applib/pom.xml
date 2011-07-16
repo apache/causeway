@@ -34,7 +34,7 @@
 
 	<properties>
         <siteBaseDir>../../..</siteBaseDir>
-		<relativeUrl>progmodels/wrapper/applib/</relativeUrl>
+		<relativeUrl>progmodels/wrapper/wrapper-applib/</relativeUrl>
 	</properties>
 
     <!-- used in Site generation for relative references. -->

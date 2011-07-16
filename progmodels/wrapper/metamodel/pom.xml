@@ -33,7 +33,7 @@
 
 	<properties>
         <siteBaseDir>../../..</siteBaseDir>
-		<relativeUrl>progmodels/wrapper/metamodel/</relativeUrl>
+		<relativeUrl>progmodels/wrapper/wrapper-metamodel/</relativeUrl>
 	</properties>
 
     <!-- used in Site generation for relative references. -->

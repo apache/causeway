@@ -23,7 +23,7 @@
 
     <properties>
         <siteBaseDir>../../../../..</siteBaseDir>
-        <relativeUrl>runtimes/dflt/objectstores/sql/impl/</relativeUrl>
+        <relativeUrl>runtimes/dflt/objectstores/sql/sql-impl/</relativeUrl>
     </properties>
 
     <!-- used in Site generation for relative references. -->

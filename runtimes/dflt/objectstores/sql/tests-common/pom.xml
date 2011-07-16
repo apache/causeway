@@ -33,7 +33,7 @@
 
     <properties>
 	    <siteBaseDir>../../../../..</siteBaseDir>
-		<relativeUrl>runtimes/dflt/objecstores/sql/tests-common/</relativeUrl>
+		<relativeUrl>runtimes/dflt/objecstores/sql/sql-tests-common/</relativeUrl>
 
         <xml-objectstore.version>0.2.0-incubating-SNAPSHOT</xml-objectstore.version>
         <hsqldb.version>1.8.0.10</hsqldb.version>
