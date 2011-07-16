@@ -28,6 +28,8 @@
 
 	<artifactId>wrapper-applib</artifactId>
 	<name>Wrapper ProgModel Applib</name>
+	<description>Wrapper Applib</description>
+
 
     <!-- shouldn't be needed, but was being built as a pom for some reason -->
     <packaging>jar</packaging>

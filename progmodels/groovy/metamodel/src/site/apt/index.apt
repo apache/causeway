@@ -17,10 +17,12 @@
 
 Documentation
 
-  The <Groovy Objects> metamodel provides the customization required for <Naked Objects> so that it can build the metamodel from
+  The <Groovy Objects> metamodel provides the customization required for <Isis> so that it can build the metamodel from
   domain objects written in Groovy. 
  
   []
+
+  See the {{{../../docbkx/html/guide/isis-progmodels.html}Isis Programming Model user guide}} for more information.
    
-  See the {{{../gdocumentation}user guide}} for more information as to how this is configured.
+~~  See the {{{../gdocumentation}user guide}} for more information as to how this is configured.
   
