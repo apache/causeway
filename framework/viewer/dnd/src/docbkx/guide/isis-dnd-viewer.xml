@@ -616,7 +616,7 @@ isis.viewer.dnd.color.text.edit=0xFFFFFF</screen>
 
             <mediaobject>
               <imageobject>
-                <imagedata fileref="images/degug-graphics.png" />
+                <imagedata fileref="images/debug-graphics.png" />
               </imageobject>
             </mediaobject>
           </listitem>
