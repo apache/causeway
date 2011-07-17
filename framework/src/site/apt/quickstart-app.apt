@@ -100,10 +100,10 @@ App Structure
 |                      | using any of the                                        |
 |                      | {{{./viewer/dnd/index.html}drag-n-drop viewer}},  the   |
 |                      | {{{./viewer/html/index.html}HTML viewer}} or the        |
-|                      | {{{./viewer/restful/index.html}RESTful viewer}}.        |
+|                      | {{{./viewer/scimpi/index.html}Scimpi viewer}}.          |
 *----------------------+---------------------------------------------------------+
 | myapp-tests-bdd      | Run domain object tests using Isis'                     |
-|                      | {{{./viewer/bdd/concordion/index.html}integration}}     |
+|                      | {{{./viewer/bdd/index.html}integration}}                |
 |                      | with the {{{http://concordion.org}Concordion}} BDD      |
 |                      | framework.                                              |
 *----------------------+---------------------------------------------------------+

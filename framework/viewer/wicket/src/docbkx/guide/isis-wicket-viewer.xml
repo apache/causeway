@@ -63,7 +63,7 @@
     understand how the wicket viewer fits together, but is essential unless
     you want to start customizing the <acronym>UI</acronym>. If you're
     interested in learning more about <emphasis>Wicket</emphasis> itself, then
-    <ulink url="TODO">Wicket In Action</ulink> (Martijn Dashort &amp; Eelco
+    <ulink url="http://www.manning.com/dashorst/">Wicket In Action</ulink> (Martijn Dashort &amp; Eelco
     Hillenius) is definitely worth reading.</para>
   </preface>
 
@@ -165,7 +165,7 @@
         url="http://wicketstuff.org/confluence/display/STUFFWIKI/Wicket-Iolite">IoLite</ulink>,
         that do some of the wiring for back-end technologies like <ulink
         url="http://springframework.org">Spring</ulink> and <ulink
-        url="hibernate.org">Hibernate</ulink>. So, how does <emphasis>Wicket
+        url="http://hibernate.org">Hibernate</ulink>. So, how does <emphasis>Wicket
         Viewer</emphasis> for <emphasis>Apache Isis</emphasis> compare to
         them?</para>
 

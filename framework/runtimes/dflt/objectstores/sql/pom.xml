@@ -82,16 +82,16 @@
                 <activeByDefault>true</activeByDefault>
             </activation>
             <modules>
-                <module>impl</module>
-                <module>tests-common</module>
+                <module>sql-impl</module>
+                <module>sql-tests-common</module>
             </modules>
         </profile>
         <profile>
             <id>integration-tests</id>
             <modules>
-                <module>impl</module>
-                <module>tests-common</module>
-                <module>tests-served</module>
+                <module>sql-impl</module>
+                <module>sql-tests-common</module>
+                <module>sql-tests-served</module>
             </modules>
         </profile>
 

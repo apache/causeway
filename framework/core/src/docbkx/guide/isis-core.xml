@@ -174,7 +174,7 @@
 
       <mediaobject>
         <imageobject>
-          <imagedata fileref="../../../../src/site/resources/images/HexagonalArchitectureOverview.png"
+          <imagedata fileref="images/HexagonalArchitectureOverview.png"
                      scale="55" />
         </imageobject>
       </mediaobject>

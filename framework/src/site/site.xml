@@ -91,7 +91,7 @@
 
 		<menu name="Community and Help">
 			<item name="IRC" href="http://webchat.freenode.net/?channels=apache-isis&amp;uio=d4" />
-            <item name="Mailing List">
+            <item name="Mailing List" href="mail-lists.html" >
                 <item name="Post to"
                     href="mailto:isis-dev@incubator.apache.org" />
                 <item name="Archives"
@@ -108,7 +108,7 @@
             -->
             <item name="Wiki" href="https://cwiki.apache.org/confluence/display/ISIS/Index" />
             <item name="JIRA" href="https://issues.apache.org/jira/browse/ISIS" />
-            <item name="CI" href="https://builds.apache.org/hudson/job/isis-trunk-windows" />
+            <item name="CI" href="https://builds.apache.org/job/isis-framework-ubuntu/" />
             <item name="Isis Extras" href="http://code.google.com/a/apache-extras.org/p/isis-extras/" />
         </menu>
 
