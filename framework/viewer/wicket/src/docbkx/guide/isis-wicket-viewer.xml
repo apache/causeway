@@ -2643,7 +2643,7 @@ isis.xmlos.dir=/tmp/xml</programlisting>
     <sect1>
       <title>Security</title>
 
-      <para>By default, <email>Wicket Objects</email> is configured to use
+      <para>By default, <emphasis>Wicket Objects</emphasis> is configured to use
       <emphasis>Apache Isis</emphasis>' default authentication and
       authorization. This are both file-based, with a simple passwords file to
       define users, and a similar file to define authorization.
