@@ -27,5 +27,6 @@ BDD Common
     
 Further Info
   
-  See this module's {{{./apidocs/index.html}Javadoc}} and the {{{../docbkx/html/guide/isis-bdd-viewer.html}user guide}} for more information.
+  See this module's {{{./apidocs/index.html}Javadoc}} and the 
+  {{{../docbkx/html/guide/isis-bdd-integration.html}user guide}} for more information.
  
