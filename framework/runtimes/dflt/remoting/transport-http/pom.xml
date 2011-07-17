@@ -65,8 +65,8 @@
     </reporting>
 
 	<modules>
-		<module>client</module>
-		<module>server</module>
+		<module>transport-http-client</module>
+		<module>transport-http-server</module>
 	</modules>
 	
 	<dependencyManagement>
