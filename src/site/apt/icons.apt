@@ -23,27 +23,21 @@ Icons
   We provide three different icon sets that you are free to use in your 
   own applications.
 
-  * icons donated by the Naked Objects Group Ltd (download 
-    {{{./images/icons/nogl.zip}zip}})
-   
   * icons donated by Dan Haywood (download
     {{{./images/icons/haywood.zip}zip}})
- 
+
   * icons developed by the 
     {{{http://tango.freedesktop.org/}Tango Desktop Project}}, released 
     to the public domain (download {{{./images/icons/tango.zip}zip}})
 
+  * icons donated by the Naked Objects Group Ltd (download 
+    {{{./images/icons/nogl.zip}zip}})
+ 
   []
 
   You can either download the ZIPs, or simply download individual icons
   directly from this page.
 
-NOGL Icons
-
-%{snippet|id=icon-table|verbatim=false|file=src/site/resources/icons/nogl.html}
-
-  []
- 
 Haywood Icons
 
 %{snippet|id=icon-table|verbatim=false|file=src/site/resources/icons/haywood.html}
@@ -54,5 +48,11 @@ Tango Icons
 
 %{snippet|id=icon-table|verbatim=false|file=src/site/resources/icons/tango.html}
  
+  []
+ 
+NOGL Icons
+
+%{snippet|id=icon-table|verbatim=false|file=src/site/resources/icons/nogl.html}
+
   []
  
