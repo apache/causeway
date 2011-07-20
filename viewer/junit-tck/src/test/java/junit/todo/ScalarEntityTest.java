@@ -24,6 +24,7 @@ import junit.AbstractTest;
 import org.apache.isis.viewer.junit.Fixture;
 import org.apache.isis.viewer.junit.Fixtures;
 import org.junit.Before;
+import org.junit.Test;
 
 import dom.scalars.PrimitiveValuesEntity;
 import fixture.scalars.PrimitiveValuesEntityFixture;
@@ -38,6 +39,9 @@ public class ScalarEntityTest extends AbstractTest {
     public void setUp() {
         firstItem = wrapped(primitivesEntityRepository.list().get(0));
     }
-    
 
+    @Test
+    public void dummy(){}
+
+    
 }

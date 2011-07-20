@@ -36,7 +36,7 @@ import org.apache.isis.viewer.junit.Service;
 import org.apache.isis.viewer.junit.Services;
 
 @RunWith(IsisTestRunner.class)
-@ConfigDir("../quickrun/src/main/resources")
+@ConfigDir("../../viewer/dnd-tck/src/main/resources")
 @Services({ @Service(PrimitiveValuesEntityRepositoryDefault.class) })
 public abstract class AbstractTest {
 

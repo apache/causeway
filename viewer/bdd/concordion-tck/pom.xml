@@ -23,63 +23,49 @@
         <groupId>org.apache.isis.tck</groupId>
         <artifactId>tck</artifactId>
         <version>0.2.0-incubating-SNAPSHOT</version>
+        <relativePath>../../../tck/pom.xml</relativePath>
     </parent>
 
-    <groupId>org.apache.isis.viewer.wicket</groupId>
-	<name>Wicket Viewer for TCK</name>
-	<artifactId>wicket-tck</artifactId>
+    <groupId>org.apache.isis.viewer</groupId>
+	<artifactId>bdd-concordion-tck</artifactId>
+
+	<name>BDD (Concordion) Tests against TCK</name>
+
+    <properties>
+        <maven.test.skip>true</maven.test.skip>
+    </properties>
     
-    <packaging>war</packaging>
-
-	<properties>
-		<jetty.version>6.1.4</jetty.version>
-	</properties>
-
-	<build>
-	  <resources>
-	    <resource>
-	         <directory>src/main/resources</directory>
-	    </resource>
-	    <resource>
-	       <directory>src/main/java</directory>
-	       <includes>
-	          <include>**</include>
-	       </includes>
-	       <excludes>
-	           <exclude>**/*.java</exclude>
-	       </excludes>
-	    </resource>
-	  </resources>
-      <plugins>
-        <plugin>
-            <groupId>org.mortbay.jetty</groupId>
-            <artifactId>maven-jetty-plugin</artifactId>
-        </plugin>
-      </plugins>
-	</build>
-
-	<dependencies>
+    <build>
+		<plugins>
+            <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <systemPropertyVariables>
+                        <concordion.output.dir>${project.build.directory}/concordion</concordion.output.dir>
+                    </systemPropertyVariables>
+                    <includes>
+                         <include>**/AllStories.java</include>
+                    </includes>
+                </configuration>
+            </plugin>
+		</plugins>
+    </build>
 	
-		<!-- other modules in this project -->
-		<dependency>
-            <groupId>org.apache.isis.tck</groupId>
-			<artifactId>tck-dom</artifactId>
-            <version>0.2.0-incubating-SNAPSHOT</version>
-		</dependency>
-        
+	<dependencies>
+
+		<!-- this project's dependencies -->
         <dependency>
             <groupId>org.apache.isis.tck</groupId>
             <artifactId>tck-fixture</artifactId>
             <version>0.2.0-incubating-SNAPSHOT</version>
         </dependency>
 
-        <!-- isis viewer -->
-		<dependency>
-			<groupId>org.apache.isis.viewer</groupId>
-			<artifactId>wicket-viewer</artifactId>
-		</dependency>
+        <dependency>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>runtime</artifactId>
+        </dependency>
 
-        <!-- isis runtime -->
+        <!-- isis default runtime -->
         <dependency>
             <groupId>org.apache.isis.runtimes.dflt.bytecode</groupId>
             <artifactId>dflt</artifactId>
@@ -89,38 +75,34 @@
             <artifactId>dflt</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
-            <artifactId>xml</artifactId>
-        </dependency>
-        <dependency>
             <groupId>org.apache.isis.runtimes.dflt.profilestores</groupId>
             <artifactId>dflt</artifactId>
         </dependency>
         
-        <!-- isis progmodel -->
+        <!-- isis defaults (other) -->
         <dependency>
             <groupId>org.apache.isis.progmodels</groupId>
             <artifactId>dflt</artifactId>
         </dependency>
-
-        <!-- isis security implementations -->        
-        <dependency>
-            <groupId>org.apache.isis.security</groupId>
-            <artifactId>file</artifactId>
-        </dependency>
         <dependency>
             <groupId>org.apache.isis.security</groupId>
             <artifactId>dflt</artifactId>
         </dependency>
-        
-        <!-- to run using WebServer -->
-        <dependency>
-            <groupId>org.apache.isis.runtimes.dflt</groupId>
-            <artifactId>webserver</artifactId>
-            <scope>runtime</scope>
-            <optional>true</optional>
-        </dependency>
-        
-	</dependencies>
 
+
+		<!-- BDD Viewers concordion dependencies -->
+		<dependency>
+			<groupId>org.apache.isis.viewer</groupId>
+            <artifactId>bdd-concordion</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <!--  direct dependency required because is LGPL licensed -->
+        <dependency>
+            <groupId>xom</groupId>
+            <artifactId>xom</artifactId>
+            <version>1.2.5</version>
+        </dependency>
+
+	</dependencies>
 </project>

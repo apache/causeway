@@ -27,7 +27,7 @@
 
     <groupId>org.apache.isis.tck</groupId>
 	<artifactId>tck-objstore-dflt</artifactId>
-	<name>Quickstart Repositories (for ObjectStore Default)</name>
+	<name>Quickstart Repositories (for ObjectStore Default) for TCK</name>
 
 	<dependencies>
 	

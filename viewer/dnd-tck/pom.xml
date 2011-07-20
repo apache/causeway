@@ -28,9 +28,10 @@
         <groupId>org.apache.isis.tck</groupId>
         <artifactId>tck</artifactId>
         <version>0.2.0-incubating-SNAPSHOT</version>
+        <relativePath>../../tck/pom.xml</relativePath>
     </parent>
 
-    <groupId>org.apache.isis.viewer.dnd</groupId>
+    <groupId>org.apache.isis.viewer</groupId>
     <artifactId>dnd-tck</artifactId>
     <name>Viewer DnD for TCK</name>
 
