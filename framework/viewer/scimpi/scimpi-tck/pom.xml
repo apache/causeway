@@ -23,44 +23,46 @@
         <groupId>org.apache.isis.tck</groupId>
         <artifactId>tck</artifactId>
         <version>0.2.0-incubating-SNAPSHOT</version>
+        <relativePath>../../../tck/pom.xml</relativePath>
     </parent>
 
-    <groupId>org.apache.isis.viewer.bdd</groupId>
-	<artifactId>bdd-concordion-tck</artifactId>
+    <groupId>org.apache.isis.viewer</groupId>
+	<artifactId>scimpi-tck</artifactId>
+	<name>Scimpi Viewer for TCK</name>
+	
+	<packaging>war</packaging>
 
-	<name>BDD (Concordion) Tests against TCK</name>
-
-    <build>
+	<build>
 		<plugins>
             <plugin>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <configuration>
-                    <systemPropertyVariables>
-                        <concordion.output.dir>${project.build.directory}/concordion</concordion.output.dir>
-                    </systemPropertyVariables>
-                    <includes>
-                         <include>**/AllStories.java</include>
-                    </includes>
-                </configuration>
+                <groupId>org.mortbay.jetty</groupId>
+                <artifactId>maven-jetty-plugin</artifactId>
             </plugin>
 		</plugins>
-    </build>
-	
-	<dependencies>
+	</build>
 
-		<!-- this project's dependencies -->
+	<dependencies>
+	
+        <!-- other modules in this project -->
+        <dependency>
+            <groupId>org.apache.isis.tck</groupId>
+            <artifactId>tck-dom</artifactId>
+            <version>0.2.0-incubating-SNAPSHOT</version>
+        </dependency>
+        
         <dependency>
             <groupId>org.apache.isis.tck</groupId>
             <artifactId>tck-fixture</artifactId>
             <version>0.2.0-incubating-SNAPSHOT</version>
         </dependency>
 
-        <dependency>
-            <groupId>org.apache.isis.core</groupId>
-            <artifactId>runtime</artifactId>
-        </dependency>
+		<!-- isis viewer -->
+		<dependency>
+	        <groupId>org.apache.isis.viewer</groupId>
+			<artifactId>scimpi-servlet</artifactId>
+		</dependency>
 
-        <!-- isis default runtime -->
+        <!-- isis runtime -->
         <dependency>
             <groupId>org.apache.isis.runtimes.dflt.bytecode</groupId>
             <artifactId>dflt</artifactId>
@@ -70,34 +72,42 @@
             <artifactId>dflt</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
+            <artifactId>xml</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.apache.isis.runtimes.dflt.profilestores</groupId>
             <artifactId>dflt</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.apache.isis.runtimes.dflt.profilestores</groupId>
+            <artifactId>xml</artifactId>
+        </dependency>
         
-        <!-- isis defaults (other) -->
+        <!-- isis progmodel -->
         <dependency>
             <groupId>org.apache.isis.progmodels</groupId>
             <artifactId>dflt</artifactId>
+        </dependency>
+
+        <!-- isis security implementations -->        
+        <dependency>
+            <groupId>org.apache.isis.security</groupId>
+            <artifactId>file</artifactId>
         </dependency>
         <dependency>
             <groupId>org.apache.isis.security</groupId>
             <artifactId>dflt</artifactId>
         </dependency>
-
-
-		<!-- BDD Viewers concordion dependencies -->
-		<dependency>
-			<groupId>org.apache.isis.viewer</groupId>
-            <artifactId>bdd-concordion</artifactId>
-            <scope>test</scope>
-        </dependency>
-
-        <!--  direct dependency required because is LGPL licensed -->
+        
+        <!-- to run using WebServer -->
         <dependency>
-            <groupId>xom</groupId>
-            <artifactId>xom</artifactId>
-            <version>1.2.5</version>
+            <groupId>org.apache.isis.runtimes.dflt</groupId>
+            <artifactId>webserver</artifactId>
+            <scope>runtime</scope>
+            <optional>true</optional>
         </dependency>
 
 	</dependencies>
+
 </project>

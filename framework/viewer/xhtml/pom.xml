@@ -118,8 +118,9 @@
 
     <!-- USE -pl xxx TO SELECT A SINGLE MODULE -->
     <modules>
-	    <module>applib</module>
-	    <module>viewer</module>
+	    <module>xhtml-applib</module>
+	    <module>xhtml-viewer</module>
+	    <module>xhtml-tck</module>
     </modules>
 
 </project>

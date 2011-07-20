@@ -51,11 +51,12 @@
     <url>http://incubator.apache.org/isis/${relativeUrl}</url>
 
 	<modules>
-		<module>applib</module>
-		<module>model</module>
-		<module>metamodel</module>
-		<module>ui</module>
-		<module>viewer</module>
+		<module>wicket-applib</module>
+		<module>wicket-model</module>
+		<module>wicket-metamodel</module>
+		<module>wicket-ui</module>
+		<module>wicket-viewer</module>
+		<module>wicket-tck</module>
 	</modules>
 
 	<build>

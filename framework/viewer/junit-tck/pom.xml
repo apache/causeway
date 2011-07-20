@@ -19,50 +19,32 @@
 --><project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-    <parent>
-        <groupId>org.apache.isis.tck</groupId>
-        <artifactId>tck</artifactId>
-        <version>0.2.0-incubating-SNAPSHOT</version>
-    </parent>
+	<parent>
+    	<groupId>org.apache.isis.tck</groupId>
+    	<artifactId>tck</artifactId>
+		<version>0.2.0-incubating-SNAPSHOT</version>
+        <relativePath>../../tck/pom.xml</relativePath>
+	</parent>
 
-    <groupId>org.apache.isis.viewer.json</groupId>
-	<artifactId>json-tck</artifactId>
-	<name>JSON Viewer for TCK</name>
-	
-	<packaging>war</packaging>
-
-	<build>
-		<plugins>
-            <plugin>
-                <groupId>org.mortbay.jetty</groupId>
-                <artifactId>maven-jetty-plugin</artifactId>
-            </plugin>
-		</plugins>
-	</build>
+    <groupId>org.apache.isis.viewer</groupId>
+	<artifactId>junit-tck</artifactId>
+	<name>JUnit Tests for TCK</name>
 
 	<dependencies>
-	
-        <!-- other modules in this project -->
-        <dependency>
-            <groupId>org.apache.isis.tck</groupId>
-            <artifactId>tck-dom</artifactId>
-            <version>0.2.0-incubating-SNAPSHOT</version>
-        </dependency>
-        
-        <dependency>
+
+		<!-- this project's dependencies -->
+		<dependency>
             <groupId>org.apache.isis.tck</groupId>
             <artifactId>tck-fixture</artifactId>
             <version>0.2.0-incubating-SNAPSHOT</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>runtime</artifactId>
+        </dependency>
 
-        <!-- isis viewer -->
-		<dependency>
-	        <groupId>org.apache.isis.viewer</groupId>
-			<artifactId>json-viewer</artifactId>
-		</dependency>
-
-        <!-- isis runtime -->
+        <!-- isis default runtime -->
         <dependency>
             <groupId>org.apache.isis.runtimes.dflt.bytecode</groupId>
             <artifactId>dflt</artifactId>
@@ -72,36 +54,25 @@
             <artifactId>dflt</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
-            <artifactId>xml</artifactId>
-        </dependency>
-        <dependency>
             <groupId>org.apache.isis.runtimes.dflt.profilestores</groupId>
             <artifactId>dflt</artifactId>
         </dependency>
         
-        <!-- isis progmodel -->
+        <!-- isis defaults (other) -->
         <dependency>
             <groupId>org.apache.isis.progmodels</groupId>
             <artifactId>dflt</artifactId>
         </dependency>
-
-        <!-- isis security implementations -->        
-        <dependency>
-            <groupId>org.apache.isis.security</groupId>
-            <artifactId>file</artifactId>
-        </dependency>
         <dependency>
             <groupId>org.apache.isis.security</groupId>
             <artifactId>dflt</artifactId>
         </dependency>
-        
-        <!-- to run using WebServer -->
+
+        <!-- isis viewers -->
         <dependency>
-            <groupId>org.apache.isis.runtimes.dflt</groupId>
-            <artifactId>webserver</artifactId>
-            <scope>runtime</scope>
-            <optional>true</optional>
+            <groupId>org.apache.isis.viewer</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
         </dependency>
 
 	</dependencies>

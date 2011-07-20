@@ -118,8 +118,9 @@
 
     <!-- USE -pl xxx TO SELECT A SINGLE MODULE -->
     <modules>
-	    <module>applib</module>
-	    <module>viewer</module>
+	    <module>json-applib</module>
+	    <module>json-viewer</module>
+	    <module>json-tck</module>
     </modules>
 
 </project>
