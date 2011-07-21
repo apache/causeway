@@ -16,11 +16,12 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.json.applib.resources;
+package org.apache.isis.viewer.json.applib.domain;
 
 import java.io.InputStream;
 import java.util.List;
 
+import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -32,39 +33,46 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.jboss.resteasy.annotations.ClientResponseType;
+
 // under /objects
 public interface DomainObjectResource {
 
     @GET
     @Path("/{oid}")
     @Produces({ MediaType.APPLICATION_JSON })
-    public String object(@PathParam("oid") final String oidStr);
+    @ClientResponseType(entityType=String.class)
+    public Response object(@PathParam("oid") final String oidStr);
 
     @GET
     @Path("/{oid}/properties{propertyId}")
     @Produces({ MediaType.APPLICATION_JSON })
-    public String propertyDetails(
+    @ClientResponseType(entityType=String.class)
+    public Response propertyDetails(
         @PathParam("oid") final String oidStr,
         @PathParam("propertyId") final String propertyId);
 
     @GET
     @Path("/{oid}/collections/{collectionId}")
     @Produces({ MediaType.APPLICATION_JSON })
-    public String accessCollection(
+    @ClientResponseType(entityType=String.class)
+    public Response accessCollection(
         @PathParam("oid") final String oidStr,
         @PathParam("collectionId") final String collectionId);
 
     @GET
     @Path("/{oid}/actions/{actionId}")
     @Produces({ MediaType.APPLICATION_JSON })
-    public String actionPrompt(
+    @ClientResponseType(entityType=String.class)
+    public Response actionPrompt(
         @PathParam("oid") final String oidStr, 
         @PathParam("actionId") final String actionId);
 
     @GET
     @Path("/{oid}/actions/{actionId}/invoke")
     @Produces({ MediaType.APPLICATION_JSON })
-    public Object invokeActionIdempotent(
+    @ClientResponseType(entityType=String.class)
+    public Response invokeActionIdempotent(
         @PathParam("oid") final String oidStr, 
         @PathParam("actionId") final String actionId,
         @QueryParam("arg") final List<String> arguments);
@@ -72,6 +80,8 @@ public interface DomainObjectResource {
     @PUT
     @Path("/{oid}/properties{propertyId}")
     @Produces({ MediaType.APPLICATION_JSON })
+    @Consumes({ MediaType.APPLICATION_JSON })
+    @ClientResponseType(entityType=String.class)
     public Response modifyProperty(
         @PathParam("oid") final String oidStr,
         @PathParam("propertyId") final String propertyId, 
@@ -79,6 +89,7 @@ public interface DomainObjectResource {
 
     @PUT
     @Path("/{oid}/collections/{collectionId}")
+    @Consumes({ MediaType.APPLICATION_JSON })
     @Produces({ MediaType.APPLICATION_JSON })
     public Response addToSet(
         @PathParam("oid") final String oidStr,
@@ -88,6 +99,7 @@ public interface DomainObjectResource {
     @DELETE
     @Path("/{oid}/properties/{propertyId}")
     @Produces({ MediaType.APPLICATION_JSON })
+    @ClientResponseType(entityType=String.class)
     public Response clearProperty(
         @PathParam("oid") final String oidStr, 
         @PathParam("propertyId") final String propertyId);
@@ -95,6 +107,8 @@ public interface DomainObjectResource {
     @DELETE
     @Path("/{oid}/collections/{collectionId}")
     @Produces({ MediaType.APPLICATION_JSON })
+    @Consumes({ MediaType.APPLICATION_JSON })
+    @ClientResponseType(entityType=String.class)
     public Response removeFromCollection(
         @PathParam("oid") final String oidStr,
         @PathParam("collectionId") final String collectionId,
@@ -103,6 +117,8 @@ public interface DomainObjectResource {
     @POST
     @Path("/{oid}/collections/{collectionId}")
     @Produces({ MediaType.APPLICATION_JSON })
+    @Consumes({ MediaType.APPLICATION_JSON })
+    @ClientResponseType(entityType=String.class)
     public Response addToList(
         @PathParam("oid") final String oidStr,
         @PathParam("collectionId") final String collectionId,
@@ -111,7 +127,9 @@ public interface DomainObjectResource {
     @POST
     @Path("/{oid}/actions/{actionId}/invoke")
     @Produces({ MediaType.APPLICATION_JSON })
-    public Object invokeAction(
+    @Consumes({ MediaType.APPLICATION_JSON })
+    @ClientResponseType(entityType=String.class)
+    public Response invokeAction(
         @PathParam("oid") final String oidStr, 
         @PathParam("actionId") final String actionId,
         final InputStream body);

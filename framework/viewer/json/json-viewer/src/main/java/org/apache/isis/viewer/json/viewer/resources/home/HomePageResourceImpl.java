@@ -21,11 +21,13 @@ package org.apache.isis.viewer.json.viewer.resources.home;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
-import org.apache.isis.viewer.json.applib.resources.HomePageResource;
+import org.apache.isis.viewer.json.applib.homepage.HomePageResource;
 import org.apache.isis.viewer.json.viewer.representations.LinkRepBuilder;
 import org.apache.isis.viewer.json.viewer.representations.Representation;
 import org.apache.isis.viewer.json.viewer.resources.ResourceAbstract;
+import org.jboss.resteasy.annotations.ClientResponseType;
 
 /**
  * Implementation note: it seems to be necessary to annotate the implementation with {@link Path} rather than the
@@ -37,14 +39,14 @@ public class HomePageResourceImpl extends ResourceAbstract implements HomePageRe
 
     @Override
     @Produces(MediaType.APPLICATION_JSON)
-    public String resources() {
+    public Response resources() {
         init();
         
         Representation representation = new Representation();
         representation.put("user", linkTo("user"));
         representation.put("services", linkTo("services"));
         
-        return asJson(representation);
+        return responseOfOk(asJson(representation));
     }
 
     protected Representation linkTo(String url) {

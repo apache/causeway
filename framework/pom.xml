@@ -194,7 +194,12 @@
             <id>Maven Central Repository (UK Mirror)</id>
             <url>http://uk.maven.org/maven2</url>
         </repository>
+        <repository>
+            <id>JBoss Public Release</id>
+            <url>https://repository.jboss.org/nexus/content/groups/public-jboss/</url>
+        </repository>
     </repositories>
+
 
     <build>
         <extensions>
@@ -1085,7 +1090,7 @@ archetype includes this explicit dependency.
             <dependency>
                 <groupId>org.jboss.resteasy</groupId>
                 <artifactId>resteasy-jaxrs</artifactId>
-                <version>2.2.0.GA</version>
+                <version>2.2.1.GA</version>
                 <exclusions>
                     <!-- instead use org.apache.geronimo.specs:geronimo-servlet_2.5_spec -->
                     <exclusion>
@@ -1103,6 +1108,11 @@ archetype includes this explicit dependency.
                         <artifactId>activation</artifactId>
                     </exclusion>
                 </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>org.jboss.resteasy</groupId>
+                <artifactId>resteasy-client</artifactId>
+                <version>1.0-beta-8</version>
             </dependency>
 
 
