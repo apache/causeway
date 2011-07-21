@@ -17,16 +17,20 @@
  *  under the License.
  */
 
-package objstore.dflt.scalars;
+package org.apache.isis.tck.dom.scalars;
 
-import dom.scalars.AbstractValuesEntityRepository;
-import dom.scalars.WrapperValuesEntity;
-import dom.scalars.WrapperValuesEntityRepository;
+import java.util.List;
 
-public class WrapperValuesEntityRepositoryDefault extends AbstractValuesEntityRepository<WrapperValuesEntity> implements WrapperValuesEntityRepository {
+import org.apache.isis.applib.annotation.MemberOrder;
+import org.apache.isis.applib.annotation.Named;
 
-    public WrapperValuesEntityRepositoryDefault() {
-        super(WrapperValuesEntity.class);
-    }
+@Named("WrapperValues")
+public interface WrapperValuesEntityRepository {
+
+    @MemberOrder(sequence="1")
+    public List<WrapperValuesEntity> list();
+
+    @MemberOrder(sequence="2")
+    public WrapperValuesEntity newEntity();
 
 }

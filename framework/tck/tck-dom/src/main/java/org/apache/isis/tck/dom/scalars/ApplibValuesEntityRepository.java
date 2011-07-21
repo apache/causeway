@@ -17,20 +17,20 @@
  *  under the License.
  */
 
-package dom.scalars;
+package org.apache.isis.tck.dom.scalars;
 
 import java.util.List;
 
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Named;
 
-@Named("PrimitiveValues")
-public interface PrimitiveValuesEntityRepository {
+@Named("ApplibValues")
+public interface ApplibValuesEntityRepository {
 
     @MemberOrder(sequence="1")
-    public List<PrimitiveValuesEntity> list();
+    public List<ApplibValuesEntity> list();
 
     @MemberOrder(sequence="2")
-    public PrimitiveValuesEntity newEntity();
+    public ApplibValuesEntity newEntity();
 
 }

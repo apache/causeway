@@ -17,15 +17,16 @@
  *  under the License.
  */
 
+package org.apache.isis.tck.objstore.dflt.scalars;
 
-package fixture;
+import org.apache.isis.tck.dom.scalars.AbstractValuesEntityRepository;
+import org.apache.isis.tck.dom.scalars.JdkValuesEntity;
+import org.apache.isis.tck.dom.scalars.JdkValuesEntityRepository;
 
-import org.apache.isis.applib.fixtures.LogonFixture;
+public class JdkValuesEntityRepositoryDefault extends AbstractValuesEntityRepository<JdkValuesEntity> implements JdkValuesEntityRepository {
 
-public class LogonAsSvenFixture extends LogonFixture {
-
-	public LogonAsSvenFixture() {
-		super("sven");
-	}
+    public JdkValuesEntityRepositoryDefault() {
+        super(JdkValuesEntity.class);
+    }
 
 }

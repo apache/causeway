@@ -18,15 +18,15 @@
  */
 
 
-package fixture.scalars;
+package org.apache.isis.tck.fixture.scalars;
 
 import org.apache.isis.applib.fixtures.AbstractFixture;
+import org.apache.isis.tck.dom.scalars.ApplibValuesEntity;
+import org.apache.isis.tck.dom.scalars.ApplibValuesEntityRepository;
 
-import dom.scalars.JdkValuesEntity;
-import dom.scalars.JdkValuesEntityRepository;
 
 
-public class JdkValuesEntityFixture extends AbstractFixture {
+public class ApplibValuesEntityFixture extends AbstractFixture {
 
     @Override
     public void install() {
@@ -37,14 +37,14 @@ public class JdkValuesEntityFixture extends AbstractFixture {
         createEntity();
     }
     
-    private JdkValuesEntity createEntity() {
-        return jdkValuesEntityRepository.newEntity();
+    private ApplibValuesEntity createEntity() {
+        return applibValuesEntityRepository.newEntity();
     }
 
     
-    private JdkValuesEntityRepository jdkValuesEntityRepository;
-    public void setJdkValuesEntityRepository(JdkValuesEntityRepository jdkValuesEntityRepository) {
-        this.jdkValuesEntityRepository = jdkValuesEntityRepository;
+    private ApplibValuesEntityRepository applibValuesEntityRepository;
+    public void setApplibValuesEntityRepository(ApplibValuesEntityRepository applibValuesEntityRepository) {
+        this.applibValuesEntityRepository = applibValuesEntityRepository;
     }
     
 }

@@ -10,5 +10,5 @@
 <stringAttribute key="org.eclipse.debug.core.source_locator_id" value="org.eclipse.jdt.launching.sourceLocator.JavaSourceLookupDirector"/>
 <booleanAttribute key="org.eclipse.jdt.debug.ui.INCLUDE_EXTERNAL_JARS" value="true"/>
 <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="org.apache.isis.WebServer"/>
-<stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="tck-viewer-wicket"/>
+<stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="org.apache.isis.viewer.wicket-tck"/>
 </launchConfiguration>

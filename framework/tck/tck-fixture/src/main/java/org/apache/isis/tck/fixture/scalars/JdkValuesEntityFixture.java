@@ -17,16 +17,34 @@
  *  under the License.
  */
 
-package objstore.dflt.scalars;
 
-import dom.scalars.AbstractValuesEntityRepository;
-import dom.scalars.ApplibValuesEntity;
-import dom.scalars.ApplibValuesEntityRepository;
+package org.apache.isis.tck.fixture.scalars;
 
-public class ApplibValuesEntityRepositoryDefault extends AbstractValuesEntityRepository<ApplibValuesEntity> implements ApplibValuesEntityRepository {
+import org.apache.isis.applib.fixtures.AbstractFixture;
+import org.apache.isis.tck.dom.scalars.JdkValuesEntity;
+import org.apache.isis.tck.dom.scalars.JdkValuesEntityRepository;
 
-    public ApplibValuesEntityRepositoryDefault() {
-        super(ApplibValuesEntity.class);
+
+
+public class JdkValuesEntityFixture extends AbstractFixture {
+
+    @Override
+    public void install() {
+        createEntity();
+        createEntity();
+        createEntity();
+        createEntity();
+        createEntity();
+    }
+    
+    private JdkValuesEntity createEntity() {
+        return jdkValuesEntityRepository.newEntity();
     }
 
+    
+    private JdkValuesEntityRepository jdkValuesEntityRepository;
+    public void setJdkValuesEntityRepository(JdkValuesEntityRepository jdkValuesEntityRepository) {
+        this.jdkValuesEntityRepository = jdkValuesEntityRepository;
+    }
+    
 }

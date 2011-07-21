@@ -17,32 +17,16 @@
  *  under the License.
  */
 
-package dom.scalars;
+package org.apache.isis.tck.objstore.dflt.scalars;
 
-import java.util.List;
+import org.apache.isis.tck.dom.scalars.AbstractValuesEntityRepository;
+import org.apache.isis.tck.dom.scalars.WrapperValuesEntity;
+import org.apache.isis.tck.dom.scalars.WrapperValuesEntityRepository;
 
-import org.apache.isis.applib.AbstractFactoryAndRepository;
+public class WrapperValuesEntityRepositoryDefault extends AbstractValuesEntityRepository<WrapperValuesEntity> implements WrapperValuesEntityRepository {
 
-public abstract class AbstractValuesEntityRepository<T> extends AbstractFactoryAndRepository {
-    
-    private Class<T> cls;
-
-    public AbstractValuesEntityRepository(Class<T> cls) {
-        super();
-        this.cls = cls;
+    public WrapperValuesEntityRepositoryDefault() {
+        super(WrapperValuesEntity.class);
     }
-
-
-    public List<T> list() {
-        return allInstances(cls);
-    }
-
-    
-    public T newEntity() {
-        T entity = newTransientInstance(cls);
-        persist(entity);
-        return entity;
-    }
-
 
 }

@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package dom.scalars;
+package org.apache.isis.tck.dom.scalars;
 
 import java.awt.Image;
 import java.math.BigDecimal;

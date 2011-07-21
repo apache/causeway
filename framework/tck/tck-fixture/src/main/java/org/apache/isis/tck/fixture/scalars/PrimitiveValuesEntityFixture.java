@@ -18,12 +18,12 @@
  */
 
 
-package fixture.scalars;
+package org.apache.isis.tck.fixture.scalars;
 
-import dom.scalars.PrimitiveValuesEntity;
-import dom.scalars.PrimitiveValuesEntityRepository;
 
 import org.apache.isis.applib.fixtures.AbstractFixture;
+import org.apache.isis.tck.dom.scalars.PrimitiveValuesEntity;
+import org.apache.isis.tck.dom.scalars.PrimitiveValuesEntityRepository;
 
 
 public class PrimitiveValuesEntityFixture extends AbstractFixture {

@@ -17,34 +17,20 @@
  *  under the License.
  */
 
+package org.apache.isis.tck.dom.scalars;
 
-package fixture.scalars;
+import java.util.List;
 
-import org.apache.isis.applib.fixtures.AbstractFixture;
+import org.apache.isis.applib.annotation.MemberOrder;
+import org.apache.isis.applib.annotation.Named;
 
-import dom.scalars.WrapperValuesEntity;
-import dom.scalars.WrapperValuesEntityRepository;
+@Named("JdkValues")
+public interface JdkValuesEntityRepository {
 
+    @MemberOrder(sequence="1")
+    public List<JdkValuesEntity> list();
 
-public class WrapperValuesEntityFixture extends AbstractFixture {
+    @MemberOrder(sequence="2")
+    public JdkValuesEntity newEntity();
 
-    @Override
-    public void install() {
-        createEntity();
-        createEntity();
-        createEntity();
-        createEntity();
-        createEntity();
-    }
-    
-    private WrapperValuesEntity createEntity() {
-        return wrapperValuesEntityRepository.newEntity();
-    }
-
-    
-    private WrapperValuesEntityRepository wrapperValuesEntityRepository;
-    public void setPrimitiveValuesEntityRepository(WrapperValuesEntityRepository wrapperValuesEntityRepository) {
-        this.wrapperValuesEntityRepository = wrapperValuesEntityRepository;
-    }
-    
 }
