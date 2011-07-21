@@ -498,8 +498,8 @@
     </dependencyManagement>
 
   <modules>
-    <module>dom</module>
-    <module>fixture</module>
-    <module>objstore-dflt</module>
+    <module>tck-dom</module>
+    <module>tck-fixture</module>
+    <module>tck-objstore-dflt</module>
   </modules>
 </project>
