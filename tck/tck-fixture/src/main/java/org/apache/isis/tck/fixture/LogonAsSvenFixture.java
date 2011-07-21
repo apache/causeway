@@ -17,20 +17,15 @@
  *  under the License.
  */
 
-package dom.scalars;
 
-import java.util.List;
+package org.apache.isis.tck.fixture;
 
-import org.apache.isis.applib.annotation.MemberOrder;
-import org.apache.isis.applib.annotation.Named;
+import org.apache.isis.applib.fixtures.LogonFixture;
 
-@Named("JdkValues")
-public interface JdkValuesEntityRepository {
+public class LogonAsSvenFixture extends LogonFixture {
 
-    @MemberOrder(sequence="1")
-    public List<JdkValuesEntity> list();
-
-    @MemberOrder(sequence="2")
-    public JdkValuesEntity newEntity();
+	public LogonAsSvenFixture() {
+		super("sven");
+	}
 
 }

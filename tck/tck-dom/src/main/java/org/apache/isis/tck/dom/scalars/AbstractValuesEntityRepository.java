@@ -17,16 +17,32 @@
  *  under the License.
  */
 
-package objstore.dflt.scalars;
+package org.apache.isis.tck.dom.scalars;
 
-import dom.scalars.AbstractValuesEntityRepository;
-import dom.scalars.PrimitiveValuesEntity;
-import dom.scalars.PrimitiveValuesEntityRepository;
+import java.util.List;
 
-public class PrimitiveValuesEntityRepositoryDefault extends AbstractValuesEntityRepository<PrimitiveValuesEntity> implements PrimitiveValuesEntityRepository {
+import org.apache.isis.applib.AbstractFactoryAndRepository;
 
-    public PrimitiveValuesEntityRepositoryDefault() {
-        super(PrimitiveValuesEntity.class);
+public abstract class AbstractValuesEntityRepository<T> extends AbstractFactoryAndRepository {
+    
+    private Class<T> cls;
+
+    public AbstractValuesEntityRepository(Class<T> cls) {
+        super();
+        this.cls = cls;
     }
+
+
+    public List<T> list() {
+        return allInstances(cls);
+    }
+
+    
+    public T newEntity() {
+        T entity = newTransientInstance(cls);
+        persist(entity);
+        return entity;
+    }
+
 
 }

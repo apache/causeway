@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package dom.scalars;
+package org.apache.isis.tck.dom.scalars;
 
 import org.apache.isis.applib.AbstractDomainObject;
 import org.apache.isis.applib.annotation.MemberOrder;

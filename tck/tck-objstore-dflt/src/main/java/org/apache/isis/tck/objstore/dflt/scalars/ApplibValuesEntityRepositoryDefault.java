@@ -17,20 +17,16 @@
  *  under the License.
  */
 
-package dom.scalars;
+package org.apache.isis.tck.objstore.dflt.scalars;
 
-import java.util.List;
+import org.apache.isis.tck.dom.scalars.AbstractValuesEntityRepository;
+import org.apache.isis.tck.dom.scalars.ApplibValuesEntity;
+import org.apache.isis.tck.dom.scalars.ApplibValuesEntityRepository;
 
-import org.apache.isis.applib.annotation.MemberOrder;
-import org.apache.isis.applib.annotation.Named;
+public class ApplibValuesEntityRepositoryDefault extends AbstractValuesEntityRepository<ApplibValuesEntity> implements ApplibValuesEntityRepository {
 
-@Named("ApplibValues")
-public interface ApplibValuesEntityRepository {
-
-    @MemberOrder(sequence="1")
-    public List<ApplibValuesEntity> list();
-
-    @MemberOrder(sequence="2")
-    public ApplibValuesEntity newEntity();
+    public ApplibValuesEntityRepositoryDefault() {
+        super(ApplibValuesEntity.class);
+    }
 
 }

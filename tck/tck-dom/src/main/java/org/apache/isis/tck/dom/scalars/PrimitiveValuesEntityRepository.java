@@ -17,16 +17,20 @@
  *  under the License.
  */
 
-package objstore.dflt.scalars;
+package org.apache.isis.tck.dom.scalars;
 
-import dom.scalars.AbstractValuesEntityRepository;
-import dom.scalars.JdkValuesEntity;
-import dom.scalars.JdkValuesEntityRepository;
+import java.util.List;
 
-public class JdkValuesEntityRepositoryDefault extends AbstractValuesEntityRepository<JdkValuesEntity> implements JdkValuesEntityRepository {
+import org.apache.isis.applib.annotation.MemberOrder;
+import org.apache.isis.applib.annotation.Named;
 
-    public JdkValuesEntityRepositoryDefault() {
-        super(JdkValuesEntity.class);
-    }
+@Named("PrimitiveValues")
+public interface PrimitiveValuesEntityRepository {
+
+    @MemberOrder(sequence="1")
+    public List<PrimitiveValuesEntity> list();
+
+    @MemberOrder(sequence="2")
+    public PrimitiveValuesEntity newEntity();
 
 }
