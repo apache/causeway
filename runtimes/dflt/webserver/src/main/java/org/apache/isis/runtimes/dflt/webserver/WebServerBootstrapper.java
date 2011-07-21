@@ -23,6 +23,8 @@ import static org.apache.isis.runtimes.dflt.webserver.WebServerConstants.EMBEDDE
 import static org.apache.isis.runtimes.dflt.webserver.WebServerConstants.EMBEDDED_WEB_SERVER_PORT_KEY;
 import static org.apache.isis.runtimes.dflt.webserver.WebServerConstants.EMBEDDED_WEB_SERVER_RESOURCE_BASE_DEFAULT;
 import static org.apache.isis.runtimes.dflt.webserver.WebServerConstants.EMBEDDED_WEB_SERVER_RESOURCE_BASE_KEY;
+import static org.apache.isis.runtimes.dflt.webserver.WebServerConstants.EMBEDDED_WEB_SERVER_STARTUP_MODE_KEY;
+import static org.apache.isis.runtimes.dflt.webserver.WebServerConstants.EMBEDDED_WEB_SERVER_STARTUP_MODE_DEFAULT;
 
 import java.util.HashMap;
 import java.util.List;
@@ -36,14 +38,20 @@ import org.apache.isis.core.commons.lang.CastUtils;
 import org.apache.isis.runtimes.dflt.runtime.runner.IsisBootstrapper;
 import org.apache.isis.runtimes.dflt.runtime.runner.IsisRunner;
 import org.apache.isis.runtimes.dflt.webapp.WebAppConstants;
+import org.apache.isis.runtimes.dflt.webserver.WebServer.StartupMode;
 import org.mortbay.jetty.Server;
 import org.mortbay.jetty.webapp.WebAppContext;
 
 import com.google.inject.Injector;
 
 final class WebServerBootstrapper implements IsisBootstrapper {
+    
     private static final String SRC_MAIN_WEBAPP = "src/main/webapp";
+    
     private final IsisRunner runner;
+    
+    private Server jettyServer;
+
 
     WebServerBootstrapper(final IsisRunner runner) {
         this.runner = runner;
@@ -63,19 +71,27 @@ final class WebServerBootstrapper implements IsisBootstrapper {
         final int port = configuration.getInteger(EMBEDDED_WEB_SERVER_PORT_KEY, EMBEDDED_WEB_SERVER_PORT_DEFAULT);
         final String webappContextPath =
             configuration.getString(EMBEDDED_WEB_SERVER_RESOURCE_BASE_KEY, EMBEDDED_WEB_SERVER_RESOURCE_BASE_DEFAULT);
+        StartupMode startupMode = StartupMode.lookup(
+                configuration.getString(EMBEDDED_WEB_SERVER_STARTUP_MODE_KEY, EMBEDDED_WEB_SERVER_STARTUP_MODE_DEFAULT));
 
-        final Server server = new Server(port);
+        jettyServer = new Server(port);
         final WebAppContext context = new WebAppContext(SRC_MAIN_WEBAPP, webappContextPath);
 
         copyConfigurationPrimersIntoServletContext(context);
 
-        server.setHandler(context);
+        jettyServer.setHandler(context);
         try {
-            server.start();
-            server.join();
+            jettyServer.start();
+            if(startupMode.isForeground()) {
+                jettyServer.join();
+            }
         } catch (final Exception ex) {
             throw new IsisException("Unable to start Jetty server", ex);
         }
+    }
+    
+    public Server getJettyServer() {
+        return jettyServer;
     }
 
     /**

@@ -16,16 +16,22 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.json.applib.resources;
+package org.apache.isis.viewer.json.applib.user;
 
 import javax.ws.rs.GET;
+import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
-public interface BootstrapResource {
+import org.jboss.resteasy.annotations.ClientResponseType;
+
+@Path("/user")
+public interface UserResource {
 
     @GET
-    @Produces({ MediaType.TEXT_HTML })
-    public String bootstrap();
+    @Produces({ MediaType.APPLICATION_JSON })
+    @ClientResponseType(entityType=String.class)
+    public Response user();
 
 }

@@ -17,9 +17,6 @@
  *  under the License.
  */
 
-/**
- * 
- */
 package org.apache.isis.runtimes.dflt.webserver.internal;
 
 import org.apache.commons.cli.CommandLine;
@@ -30,41 +27,41 @@ import org.apache.isis.core.commons.config.IsisConfigurationBuilder;
 import org.apache.isis.core.commons.lang.ArrayUtils;
 import org.apache.isis.core.runtime.optionhandler.BootPrinter;
 import org.apache.isis.core.runtime.optionhandler.OptionHandler;
+import org.apache.isis.runtimes.dflt.webserver.WebServer.StartupMode;
 import org.apache.isis.runtimes.dflt.webserver.WebServerConstants;
 
-public final class OptionHandlerPort implements OptionHandler {
-    private Integer port;
-    static final String PORT_LONG_OPT = "port";
-    static final String PORT_OPT = "p";
+public final class OptionHandlerStartupMode implements OptionHandler {
+    
+    static final String STARTUP_MODE_LONG_OPT = "startup";
+    static final String STARTUP_MODE_BASE_OPT = "a";
 
-    public static String[] appendArg(String[] args, int port) {
-        return ArrayUtils.append(args, "--" + PORT_LONG_OPT, "" + port);
+    public static String[] appendArg(String[] args, StartupMode startupMode) {
+        return ArrayUtils.append(args, "--" + STARTUP_MODE_LONG_OPT, "" + startupMode.name());
     }
+
+    private StartupMode startupMode;
 
     @Override
     @SuppressWarnings("static-access")
     public void addOption(final Options options) {
-        OptionBuilder.withArgName("port");
         final Option option =
-            OptionBuilder.hasArg().withLongOpt(OptionHandlerPort.PORT_LONG_OPT).withDescription("port to listen on")
-                .create(OptionHandlerPort.PORT_OPT);
+            OptionBuilder.withArgName("startup mode").hasArg()
+                .withLongOpt(OptionHandlerStartupMode.STARTUP_MODE_LONG_OPT)
+                .withDescription("start in foreground (sync) or background (async)").create(OptionHandlerStartupMode.STARTUP_MODE_BASE_OPT);
         options.addOption(option);
     }
 
     @Override
     public boolean handle(final CommandLine commandLine, final BootPrinter bootPrinter, final Options options) {
-        final String portStr = commandLine.getOptionValue(OptionHandlerPort.PORT_OPT);
-        if (portStr != null) {
-            port = Integer.parseInt(portStr);
-        }
+        startupMode = StartupMode.lookup(commandLine.getOptionValue(OptionHandlerStartupMode.STARTUP_MODE_BASE_OPT));
         return true;
     }
 
     @Override
     public void primeConfigurationBuilder(final IsisConfigurationBuilder isisConfigurationBuilder) {
-        if (port == null) {
-            return;
+        if(startupMode != null) {
+            isisConfigurationBuilder.add(WebServerConstants.EMBEDDED_WEB_SERVER_STARTUP_MODE_KEY, startupMode.name());
         }
-        isisConfigurationBuilder.add(WebServerConstants.EMBEDDED_WEB_SERVER_PORT_KEY, "" + port);
     }
+
 }

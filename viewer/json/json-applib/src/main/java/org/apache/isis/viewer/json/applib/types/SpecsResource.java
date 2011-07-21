@@ -16,66 +16,79 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.json.applib.resources;
+package org.apache.isis.viewer.json.applib.types;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
+import org.jboss.resteasy.annotations.ClientResponseType;
+
+@Path("/types")
 public interface SpecsResource {
 
     @GET
     @Path("/")
     @Produces({ MediaType.APPLICATION_JSON })
-    public abstract String specs();
+    @ClientResponseType(entityType=String.class)
+    public abstract Response specs();
 
     @GET
     @Path("/{specFullName}")
     @Produces({ MediaType.APPLICATION_JSON })
-    public abstract String spec(@PathParam("specFullName") final String specFullName);
+    @ClientResponseType(entityType=String.class)
+    public abstract Response spec(@PathParam("specFullName") final String specFullName);
 
     @GET
     @Path("/{specFullName}/facet/{facetType}")
     @Produces({ MediaType.APPLICATION_JSON })
-    public abstract String specFacet(@PathParam("specFullName") final String specFullName,
+    @ClientResponseType(entityType=String.class)
+    public abstract Response specFacet(@PathParam("specFullName") final String specFullName,
         @PathParam("facetType") final String facetTypeName);
 
     @GET
     @Path("/{specFullName}/property/{propertyName}")
     @Produces({ MediaType.APPLICATION_JSON })
-    public abstract String specProperty(@PathParam("specFullName") final String specFullName,
+    @ClientResponseType(entityType=String.class)
+    public abstract Response specProperty(@PathParam("specFullName") final String specFullName,
         @PathParam("propertyName") final String propertyName);
 
     @GET
     @Path("/{specFullName}/collection/{collectionName}")
     @Produces({ MediaType.APPLICATION_JSON })
-    public abstract String specCollection(@PathParam("specFullName") final String specFullName,
+    @ClientResponseType(entityType=String.class)
+    public abstract Response specCollection(@PathParam("specFullName") final String specFullName,
         @PathParam("collectionName") final String collectionName);
 
     @GET
     @Path("/{specFullName}/action/{actionId}")
     @Produces({ MediaType.APPLICATION_JSON })
-    public abstract String specAction(@PathParam("specFullName") final String specFullName,
+    @ClientResponseType(entityType=String.class)
+    public abstract Response specAction(@PathParam("specFullName") final String specFullName,
         @PathParam("actionId") final String actionId);
 
     @GET
     @Path("/{specFullName}/property/{propertyName}/facet/{facetType}")
     @Produces({ MediaType.APPLICATION_JSON })
-    public abstract String specPropertyFacet(@PathParam("specFullName") final String specFullName,
+    @ClientResponseType(entityType=String.class)
+    public abstract Response specPropertyFacet(@PathParam("specFullName") final String specFullName,
         @PathParam("propertyName") final String propertyName, @PathParam("facetType") final String facetTypeName);
 
     @GET
     @Path("/{specFullName}/collection/{collectionName}/facet/{facetType}")
     @Produces({ MediaType.APPLICATION_JSON })
-    public abstract String specCollectionFacet(@PathParam("specFullName") final String specFullName,
+    @ClientResponseType(entityType=String.class)
+    public abstract Response specCollectionFacet(@PathParam("specFullName") final String specFullName,
         @PathParam("collectionName") final String collectionName, @PathParam("facetType") final String facetTypeName);
 
     @GET
     @Path("/{specFullName}/action/{actionId}/facet/{facetType}")
     @Produces({ MediaType.APPLICATION_JSON })
-    public abstract String specActionFacet(@PathParam("specFullName") final String specFullName,
+    @ClientResponseType(entityType=String.class)
+    public abstract Response specActionFacet(@PathParam("specFullName") final String specFullName,
         @PathParam("actionId") final String actionId, @PathParam("facetType") final String facetTypeName);
 
 }

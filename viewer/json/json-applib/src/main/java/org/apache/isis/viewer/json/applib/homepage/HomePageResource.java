@@ -16,16 +16,20 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.json.applib.resources;
+package org.apache.isis.viewer.json.applib.homepage;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+
+import org.jboss.resteasy.annotations.ClientResponseType;
 
 public interface HomePageResource {
 
     @GET
     @Produces({ MediaType.APPLICATION_JSON })
-    public String resources();
+    @ClientResponseType(entityType=String.class)
+    public Response resources();
 
 }

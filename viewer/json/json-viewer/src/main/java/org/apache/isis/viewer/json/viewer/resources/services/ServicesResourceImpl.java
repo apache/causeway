@@ -23,18 +23,11 @@ import java.util.List;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.viewer.json.applib.resources.ServicesResource;
-import org.apache.isis.viewer.json.viewer.RepContext;
-import org.apache.isis.viewer.json.viewer.representations.Representation;
+import org.apache.isis.viewer.json.applib.domain.ServicesResource;
 import org.apache.isis.viewer.json.viewer.resources.ResourceAbstract;
-import org.apache.isis.viewer.json.viewer.resources.objects.DomainObjectRepBuilder;
-
-import com.google.common.base.Function;
-import com.google.common.base.Functions;
-import com.google.common.collect.Collections2;
-import com.google.common.collect.Lists;
 
 /**
  * Implementation note: it seems to be necessary to annotate the implementation with {@link Path} rather than the
@@ -45,12 +38,11 @@ public class ServicesResourceImpl extends ResourceAbstract implements ServicesRe
 
     @Override
     @Produces({ MediaType.APPLICATION_JSON })
-    public String services() {
+    public Response services() {
         init();
 
         final List<ObjectAdapter> serviceAdapters = getPersistenceSession().getServices();
-		return jsonRepresentationOf(serviceAdapters);
+		return responseOfOk(jsonRepresentationOf(serviceAdapters));
     }
-
 
 }

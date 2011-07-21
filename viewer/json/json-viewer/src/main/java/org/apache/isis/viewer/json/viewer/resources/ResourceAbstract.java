@@ -45,6 +45,7 @@ import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.OidGenerator;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
+import org.apache.isis.viewer.json.applib.util.JsonMapper;
 import org.apache.isis.viewer.json.viewer.RepContext;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
 import org.apache.isis.viewer.json.viewer.representations.Representation;
@@ -68,10 +69,7 @@ public abstract class ResourceAbstract {
     private static final String HEADER_X_RESTFUL_OBJECTS_REASON = "X-RestfulObjects-Reason";
 
 
-	protected final static ObjectMapper objectMapper = new ObjectMapper();
-    static {
-        objectMapper.configure(SerializationConfig.Feature.INDENT_OUTPUT, true);
-    }
+	protected final static JsonMapper jsonMapper = new JsonMapper();
 
 	public final static ActionType[] ACTION_TYPES = { ActionType.USER, ActionType.DEBUG, ActionType.EXPLORATION,
     // SET is excluded; we simply flatten contributed actions.
@@ -132,7 +130,7 @@ public abstract class ResourceAbstract {
 
     protected String asJson(final Object object) {
         try {
-            return objectMapper.writeValueAsString(object);
+            return jsonMapper.write(object);
         } catch (JsonGenerationException e) {
             throw new RuntimeException(e);
         } catch (JsonMappingException e) {
@@ -237,6 +235,10 @@ public abstract class ResourceAbstract {
 
     protected static Response responseOfOk() {
         return Response.ok().build();
+    }
+
+    protected static Response responseOfOk(String entity) {
+        return Response.ok().entity(entity).build();
     }
 
     protected static Response responseOfGone(final String reason) {

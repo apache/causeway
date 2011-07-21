@@ -21,6 +21,7 @@ package org.apache.isis.runtimes.dflt.webserver;
 
 import org.apache.isis.core.commons.config.ConfigurationConstants;
 import org.apache.isis.runtimes.dflt.runtime.installerregistry.installerapi.EmbeddedWebServerInstaller;
+import org.apache.isis.runtimes.dflt.webserver.WebServer.StartupMode;
 
 public final class WebServerConstants {
 
@@ -34,6 +35,9 @@ public final class WebServerConstants {
 
     public static final String EMBEDDED_WEB_SERVER_RESOURCE_BASE_KEY = ROOT + "webapp";
     public static final String EMBEDDED_WEB_SERVER_RESOURCE_BASE_DEFAULT = ""; // or "webapp" ??
+
+    public static final String EMBEDDED_WEB_SERVER_STARTUP_MODE_KEY = ROOT + "startupMode";
+    public static final String EMBEDDED_WEB_SERVER_STARTUP_MODE_DEFAULT = StartupMode.FOREGROUND.name(); 
 
     private WebServerConstants() {
     }

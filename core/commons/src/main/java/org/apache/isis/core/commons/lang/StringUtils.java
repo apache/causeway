@@ -329,4 +329,13 @@ public final class StringUtils {
         }
     }
 
+    public static String coalesce(String... strings) {
+        for(String str: strings) {
+            if(str != null) {
+                return str;
+            }
+        }
+        return null;
+    }
+
 }

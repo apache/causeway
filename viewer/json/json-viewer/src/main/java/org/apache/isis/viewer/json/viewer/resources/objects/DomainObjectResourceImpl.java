@@ -49,7 +49,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.isis.viewer.json.applib.resources.DomainObjectResource;
+import org.apache.isis.viewer.json.applib.domain.DomainObjectResource;
 import org.apache.isis.viewer.json.viewer.resources.ResourceAbstract;
 import org.apache.isis.viewer.json.viewer.util.UrlDecoderUtils;
 import org.codehaus.jackson.JsonParseException;
@@ -66,18 +66,18 @@ public class DomainObjectResourceImpl extends ResourceAbstract implements
     @GET
     @Path("/{oid}")
     @Produces({ MediaType.APPLICATION_JSON })
-    public String object(@PathParam("oid") final String oidStr) {
+    public Response object(@PathParam("oid") final String oidStr) {
 
         final ObjectAdapter objectAdapter = getObjectAdapter(oidStr);
         final DomainObjectRepBuilder builder = DomainObjectRepBuilder
                 .newBuilder(getResourceContext().repContext(), objectAdapter);
-        return jsonRepresentionFrom(builder);
+        return responseOfOk(jsonRepresentionFrom(builder));
     }
 
     @GET
     @Path("/{oid}/properties/{propertyId}")
     @Produces({ MediaType.APPLICATION_JSON })
-    public String propertyDetails(
+    public Response propertyDetails(
         @PathParam("oid") final String oidStr,
         @PathParam("propertyId") final String propertyId) {
 
@@ -87,13 +87,13 @@ public class DomainObjectResourceImpl extends ResourceAbstract implements
 
         final PropertyRepBuilder builder = PropertyRepBuilder.newBuilder(
                 getResourceContext().repContext(), objectAdapter, property);
-        return jsonRepresentionFrom(builder);
+        return responseOfOk(jsonRepresentionFrom(builder));
     }
 
     @GET
     @Path("/{oid}/collections/{collectionId}")
     @Produces({ MediaType.APPLICATION_JSON })
-    public String accessCollection(
+    public Response accessCollection(
         @PathParam("oid") final String oidStr,
         @PathParam("collectionId") final String collectionId) {
 
@@ -103,13 +103,13 @@ public class DomainObjectResourceImpl extends ResourceAbstract implements
 
         final CollectionRepBuilder builder = CollectionRepBuilder.newBuilder(
                 getResourceContext().repContext(), objectAdapter, collection);
-        return jsonRepresentionFrom(builder);
+        return responseOfOk(jsonRepresentionFrom(builder));
     }
 
     @GET
     @Path("/{oid}/actions/{actionId}")
     @Produces({ MediaType.APPLICATION_JSON })
-    public String actionPrompt(
+    public Response actionPrompt(
         @PathParam("oid") final String oidStr,
         @PathParam("actionId") final String actionId) {
 
@@ -119,13 +119,13 @@ public class DomainObjectResourceImpl extends ResourceAbstract implements
 
         ActionRepBuilder builder = ActionRepBuilder.newBuilder(
                 getResourceContext().repContext(), objectAdapter, action);
-        return jsonRepresentionFrom(builder);
+        return responseOfOk(jsonRepresentionFrom(builder));
     }
 
     @GET
     @Path("/{oid}/actions/{actionId}/invoke")
     @Produces({ MediaType.APPLICATION_JSON })
-    public Object invokeActionIdempotent(
+    public Response invokeActionIdempotent(
         @PathParam("oid") final String oidStr,
         @PathParam("actionId") final String actionId,
         @QueryParam("arg") final List<String> arguments) {
@@ -178,15 +178,13 @@ public class DomainObjectResourceImpl extends ResourceAbstract implements
      * (rather than having already been parsed into a List/Map representation).
      */
     private ObjectAdapter objectAdapterFor(ObjectSpecification spec,
-        String urlEncodedJson) {
+        String urlEncodedJson)  {
         final String json = UrlDecoderUtils.urlDecode(urlEncodedJson);
         if (spec.containsFacet(EncodableFacet.class)) {
             EncodableFacet encodableFacet = spec.getFacet(EncodableFacet.class);
             return encodableFacet.fromEncodedString(json);
         } else {
-            @SuppressWarnings("unchecked")
-            Map<String, Object> representation = objectMapper.convertValue(
-                    json, LinkedHashMap.class);
+            Map<String, Object> representation = jsonMapper.readAsMap(json);
             return objectAdapterFor(spec, representation);
         }
     }
@@ -337,7 +335,7 @@ public class DomainObjectResourceImpl extends ResourceAbstract implements
     @POST
     @Path("/{oid}/actions/{actionId}/invoke")
     @Produces({ MediaType.APPLICATION_JSON })
-    public Object invokeAction(
+    public Response invokeAction(
         @PathParam("oid") final String oidStr,
         @PathParam("actionId") final String actionId,
         final InputStream body) {
@@ -412,7 +410,7 @@ public class DomainObjectResourceImpl extends ResourceAbstract implements
     // helpers
     // ///////////////////////////////////////////////////////////////////
 
-    private Object invokeActionUsingAdapters(final ObjectAction action,
+    private Response invokeActionUsingAdapters(final ObjectAction action,
         final ObjectAdapter objectAdapter,
         final List<ObjectAdapter> argAdapters) {
 
@@ -447,9 +445,9 @@ public class DomainObjectResourceImpl extends ResourceAbstract implements
         if (facet != null) {
             final Collection<ObjectAdapter> collectionAdapters = facet
                     .collection(returnedAdapter);
-            return jsonRepresentationOf(collectionAdapters);
+            return responseOfOk(jsonRepresentationOf(collectionAdapters));
         } else {
-            return jsonRepresentationOf(returnedAdapter);
+            return responseOfOk(jsonRepresentationOf(returnedAdapter));
         }
     }
 
@@ -470,7 +468,7 @@ public class DomainObjectResourceImpl extends ResourceAbstract implements
             byte[] byteArray = ByteStreams.toByteArray(body);
             String bodyAsString = new String(byteArray, Charsets.UTF_8);
 
-            List<?> arguments = objectMapper.readValue(bodyAsString, ArrayList.class);
+            List<?> arguments = jsonMapper.readAsList(bodyAsString);
             return arguments;
         } catch (JsonParseException e) {
             throw new WebApplicationException(e,
