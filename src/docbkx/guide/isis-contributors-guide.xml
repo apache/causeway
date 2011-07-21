@@ -178,8 +178,8 @@
           </listitem>
 
           <listitem>
-            <para><ulink url="http://maven.apache.org">Maven
-            2.2.1</ulink>,</para>
+            <para><ulink url="http://maven.apache.org">Maven</ulink> either
+            v2.2.1 or 3.0.x</para>
 
             <para>and setup the <varname>MAVEN_HOME</varname> environment
             variable.</para>
@@ -190,9 +190,9 @@
             <programlisting>-Xms512m -Xmx2048m -XX:PermSize=256m -XX:MaxPermSize=512m</programlisting>
 
             <para><note>
-                <para>At the time of writing, Maven 3.0 was not currently
-                supported; see <ulink
-                url="https://issues.apache.org/jira/browse/ISIS-11">ISIS-11</ulink>.</para>
+                <para>Although building Isis with both Maven 2 and Maven 3 is
+                supported, the site documentation may only be built using
+                Maven 3.</para>
               </note></para>
           </listitem>
         </itemizedlist>
@@ -681,6 +681,10 @@
       <sect1 id="sec.BuildingSiteAndDocs">
         <title>Building the site and documentation</title>
 
+        <note>
+          <para>The site documentation can only be built using Maven 3.</para>
+        </note>
+
         <sect2>
           <title>Prerequisites</title>
 
@@ -828,7 +832,7 @@ done</programlisting>
         <para>This chapter describes the principles of the main coding
         standards adopted within the <emphasis>Isis</emphasis> codebase. The
         enforcement of these coding standards is through plugins to both the
-        IDE and Maven,</para>
+        <acronym>IDE</acronym> and Maven,</para>
       </abstract>
 
       <para>This chapter describes the principles of the main coding standards
@@ -1705,8 +1709,9 @@ protected IsisConfiguration getConfiguration() {
       <sect1 id="sec.Checkstyle">
         <title>Checkstyle</title>
 
-        <para><ulink url="http://checkstyle.sourceforge.net">Checkstyle</ulink> is
-        the first of three powerful tools (the others being <ulink
+        <para><ulink
+        url="http://checkstyle.sourceforge.net">Checkstyle</ulink> is the
+        first of three powerful tools (the others being <ulink
         url="http://pmd.sourceforge.net">PMD</ulink> and <ulink
         url="http://findbugs.sourceforge.net/">FindBugs) for </ulink>enforcing
         coding standards and detecting certain classes of likely errors. The
@@ -2304,6 +2309,18 @@ protected IsisConfiguration getConfiguration() {
               <row>
                 <entry></entry>
 
+                <entry></entry>
+
+                <entry nameend="_6" namest="_3">sql</entry>
+
+                <entry></entry>
+
+                <entry>Simple SQL-based implementation</entry>
+              </row>
+
+              <row>
+                <entry></entry>
+
                 <entry nameend="_6" namest="_2">runtimes</entry>
 
                 <entry></entry>
@@ -2463,6 +2480,22 @@ protected IsisConfiguration getConfiguration() {
 
                 <entry>Default (in-memory) profile store; documentation
                 included in default runtime's, see above</entry>
+              </row>
+
+              <row>
+                <entry></entry>
+
+                <entry></entry>
+
+                <entry nameend="_4" namest="_3"></entry>
+
+                <entry></entry>
+
+                <entry>sql</entry>
+
+                <entry></entry>
+
+                <entry>SQL-based Profile Store</entry>
               </row>
 
               <row>
