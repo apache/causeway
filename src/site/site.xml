@@ -108,7 +108,8 @@
             -->
             <item name="Wiki" href="https://cwiki.apache.org/confluence/display/ISIS/Index" />
             <item name="JIRA" href="https://issues.apache.org/jira/browse/ISIS" />
-            <item name="CI" href="https://builds.apache.org/job/isis-framework-ubuntu/" />
+            <item name="CI" href="https://builds.apache.org/job/isis-framework-ubuntu" />
+            <item name="Fisheye" href="http://fisheye6.atlassian.com/browse/isis" />
             <item name="Isis Extras" href="http://code.google.com/a/apache-extras.org/p/isis-extras/" />
         </menu>
 
