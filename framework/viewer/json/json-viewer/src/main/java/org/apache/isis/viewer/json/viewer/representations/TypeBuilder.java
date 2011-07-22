@@ -45,7 +45,7 @@ public class TypeBuilder extends LinkRepBuilder {
     }
     
     private static String urlFor(ObjectSpecification objectSpec) {
-        return "types/application/vnd+" + map(objectSpec.getFullIdentifier());
+        return "types/application/vnd." + map(objectSpec.getFullIdentifier()) + "+json";
     }
 
     private static String map(String className) {
