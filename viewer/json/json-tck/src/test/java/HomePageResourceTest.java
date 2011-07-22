@@ -3,6 +3,7 @@ import static org.junit.Assert.assertThat;
 
 import java.io.IOException;
 import java.net.URI;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import javax.ws.rs.core.Response;
@@ -17,6 +18,7 @@ import org.apache.isis.viewer.json.applib.user.UserResource;
 import org.apache.isis.viewer.json.applib.util.JsonMapper;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.jboss.resteasy.client.ClientRequestFactory;
 import org.jboss.resteasy.client.ProxyFactory;
 import org.junit.AfterClass;
@@ -30,7 +32,7 @@ public class HomePageResourceTest {
     @BeforeClass
     public static void setUpClass() throws Exception {
         webServer = new WebServer();
-        webServer.run(8080);
+        webServer.run(39393);
     }
 
     @AfterClass
@@ -62,18 +64,11 @@ public class HomePageResourceTest {
     public void homePageResources() throws JsonParseException, JsonMappingException, IOException {
         Response resources = homePageResource.resources();
         assertThat(resources.getStatus(), is(200));
-        Object entity = resources.getEntity();
+        String entity = (String) resources.getEntity();
         assertThat(entity, is(not(nullValue())));
 
-        // not yet working...
-        
-        //HomePage homePage = jsonMapper.read(entity, HomePage.class);
-        //assertThat(homePage.getUser().getMethod(), is(Method.GET));
-        
-//        Map<String, Object> readAsMap = jsonMapper.readAsMap((String) entity);
-//        assertThat(((Map<?,?>)readAsMap.get("user")).get("method"), is((Object)Method.GET));
-        
-        
+        HomePage homePage = jsonMapper.read(entity, HomePage.class);
+        assertThat(homePage.getUser().getMethod(), is(Method.GET));
     }
 
 }

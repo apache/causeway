@@ -23,12 +23,12 @@ public class JsonMapper {
     }
 
     @SuppressWarnings("unchecked")
-    public Map<String, Object> readAsMap(String json) {
-        return objectMapper.convertValue(json, LinkedHashMap.class);
+    public Map<String, Object> readAsMap(String json) throws JsonParseException, JsonMappingException, IOException {
+        return read(json, LinkedHashMap.class);
     }
 
-    public List<?> readAsList(String json) {
-        return objectMapper.convertValue(json, ArrayList.class);
+    public List<?> readAsList(String json) throws JsonParseException, JsonMappingException, IOException {
+        return read(json, ArrayList.class);
     }
 
     public <T> T read(String json, Class<T> expectedType) throws JsonParseException, JsonMappingException, IOException {

@@ -27,12 +27,15 @@ import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.core.UriInfo;
 
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.stringable.OidStringifier;
@@ -257,6 +260,16 @@ public abstract class ResourceAbstract {
         return Response.status(Status.BAD_REQUEST).header(HEADER_X_RESTFUL_OBJECTS_REASON, reason).build();
     }
 
+    protected static Response responseOfBadRequest(final String reason, Exception ex) {
+        ResponseBuilder builder = Response.status(Status.BAD_REQUEST).header(HEADER_X_RESTFUL_OBJECTS_REASON, reason);
+        return withStackTrace(builder,ex).build();
+    }
+
+    protected static Response responseOfBadRequest(final Exception ex) {
+        ResponseBuilder builder = Response.status(Status.BAD_REQUEST).header(HEADER_X_RESTFUL_OBJECTS_REASON, ex.getMessage());
+        return withStackTrace(builder,ex).build();
+    }
+
     protected static Response responseOfNotFound(final IllegalArgumentException e) {
         return responseOfNotFound(e.getMessage());
     }
@@ -274,7 +287,12 @@ public abstract class ResourceAbstract {
     }
 
     protected static Response responseOfInternalServerError(final Exception ex) {
-        return responseOfInternalServerError(ex.getMessage());
+        ResponseBuilder builder = Response.status(Status.INTERNAL_SERVER_ERROR).header(HEADER_X_RESTFUL_OBJECTS_REASON, ex.getMessage());
+        return withStackTrace(builder, ex).build();
+    }
+
+    private static ResponseBuilder withStackTrace(ResponseBuilder builder, final Exception ex) {
+        return builder.type(MediaType.TEXT_PLAIN_TYPE).entity(ExceptionUtils.getFullStackTrace(ex));
     }
 
     protected static Response responseOfInternalServerError(final String reason) {

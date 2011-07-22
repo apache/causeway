@@ -148,8 +148,13 @@ public class DomainObjectResourceImpl extends ResourceAbstract implements
                             + numArguments + " arguments"));
         }
 
-        final List<ObjectAdapter> parameters = argumentAdaptersFor(action,
-                arguments);
+        List<ObjectAdapter> parameters;
+        try {
+            parameters = argumentAdaptersFor(action, arguments);
+        } catch (IOException e) {
+            throw new WebApplicationException(
+                    responseOfBadRequest("Action '" + action.getId() +"' has body that cannot be parsed as JSON", e));
+        }
         return invokeActionUsingAdapters(action, objectAdapter, parameters);
     }
 
@@ -159,7 +164,7 @@ public class DomainObjectResourceImpl extends ResourceAbstract implements
     }
 
     private List<ObjectAdapter> argumentAdaptersFor(ObjectAction action,
-        List<String> arguments) {
+        List<String> arguments) throws JsonParseException, JsonMappingException, IOException {
         List<ObjectActionParameter> parameters = action.getParameters();
         List<ObjectAdapter> argumentAdapters = Lists.newArrayList();
         for (int i = 0; i < parameters.size(); i++) {
@@ -178,7 +183,7 @@ public class DomainObjectResourceImpl extends ResourceAbstract implements
      * (rather than having already been parsed into a List/Map representation).
      */
     private ObjectAdapter objectAdapterFor(ObjectSpecification spec,
-        String urlEncodedJson)  {
+        String urlEncodedJson) throws JsonParseException, JsonMappingException, IOException  {
         final String json = UrlDecoderUtils.urlDecode(urlEncodedJson);
         if (spec.containsFacet(EncodableFacet.class)) {
             EncodableFacet encodableFacet = spec.getFacet(EncodableFacet.class);
