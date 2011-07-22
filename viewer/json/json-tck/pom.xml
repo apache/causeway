@@ -31,6 +31,11 @@
 	<name>JSON Viewer for TCK</name>
 	
 	<packaging>war</packaging>
+	
+    <properties>
+        <maven.test.skip>true</maven.test.skip>
+    </properties>
+	
 
 	<build>
 		<plugins>

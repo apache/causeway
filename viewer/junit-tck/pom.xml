@@ -30,6 +30,10 @@
 	<artifactId>junit-tck</artifactId>
 	<name>JUnit Tests for TCK</name>
 
+    <properties>
+        <maven.test.skip>true</maven.test.skip>
+    </properties>
+
 	<dependencies>
 
 		<!-- this project's dependencies -->

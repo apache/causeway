@@ -5,7 +5,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.isis.viewer.json.applib.homepage.HomePage;
+import javax.ws.rs.core.Response;
+
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.DeserializationConfig;
@@ -31,22 +32,30 @@ public class JsonMapper {
         return read(json, ArrayList.class);
     }
 
-    public <T> T read(String json, Class<T> expectedType) throws JsonParseException, JsonMappingException, IOException {
-        return (T) objectMapper.readValue(json, expectedType);        
+    public <T> T read(String json, Class<T> requiredType) throws JsonParseException, JsonMappingException, IOException {
+        return (T) objectMapper.readValue(json, requiredType);        
     }
 
     public String write(Object object) throws JsonGenerationException, JsonMappingException, IOException {
         return objectMapper.writeValueAsString(object);
     }
-    
 
-    /**
-     * @deprecated
-     * @return
-     */
-    @Deprecated
-    public ObjectMapper getObjectMapper() {
-        return objectMapper;
+    public <T> T read(Response response, Class<T> requiredType) throws JsonParseException, JsonMappingException, IOException {
+        
+        int status = response.getStatus();
+        if(status >= 200 && status < 300) {
+            throw new IllegalArgumentException("response status must be in 2xx range (was " + status + ")");
+        }
+        Object entityObj = response.getEntity();
+        if(entityObj == null) {
+            return null;
+        }
+        if(!(entityObj instanceof String)) {
+            throw new IllegalArgumentException("response entity must be a String (was " + entityObj.getClass().getName() + ")");
+        }
+        String entity = (String) entityObj;
+
+        return read(entity, requiredType);
     }
 
 }

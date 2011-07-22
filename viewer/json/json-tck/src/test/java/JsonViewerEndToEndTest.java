@@ -27,7 +27,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 
-public class HomePageResourceTest {
+public class JsonViewerEndToEndTest {
 
     @BeforeClass
     public static void setUpClass() throws Exception {
@@ -62,12 +62,10 @@ public class HomePageResourceTest {
     
     @Test
     public void homePageResources() throws JsonParseException, JsonMappingException, IOException {
-        Response resources = homePageResource.resources();
-        assertThat(resources.getStatus(), is(200));
-        String entity = (String) resources.getEntity();
-        assertThat(entity, is(not(nullValue())));
-
-        HomePage homePage = jsonMapper.read(entity, HomePage.class);
+        Response response = homePageResource.resources();
+        assertThat(response.getStatus(), is(200));
+        HomePage homePage = jsonMapper.read(response, HomePage.class);
+        assertThat(homePage, is(not(nullValue())));
         assertThat(homePage.getUser().getMethod(), is(Method.GET));
     }
 
