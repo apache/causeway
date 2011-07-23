@@ -22,4 +22,6 @@ HTTP Remoting Server-side
  This module contains the server-side code for the {{{../index.html}http remoting}} support.
  
  Specifically, it provides a <<<javax.servlet.HttpServlet>>> implementation that can be deployed in a webapp
- and which will act as the back-end for corresponding {{{../client/index.html}client}} deployment.
+ and which will act as the back-end for corresponding {{{../transport-http-client/index.html}client}} deployment.
+
+
