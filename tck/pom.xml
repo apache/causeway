@@ -497,6 +497,31 @@
         </dependencies>
     </dependencyManagement>
 
+
+    <distributionManagement>
+        <site>
+            <id>isis-site</id>
+            <name>Apache Isis Site</name>
+            <url>${distMgmtSiteUrl}</url>
+        </site>
+    </distributionManagement>
+    <profiles>
+        <profile>
+            <id>deploy-local</id>
+            <activation>
+                <property>
+                    <name>deploy</name>
+                    <value>local</value>
+                </property>
+            </activation>
+            <!-- to deploy locally -->
+            <properties>
+                <distMgmtSiteUrl>file:///tmp/m2-sites/isis</distMgmtSiteUrl>
+            </properties>
+        </profile>
+    </profiles>
+
+
   <modules>
     <module>tck-dom</module>
     <module>tck-fixture</module>
