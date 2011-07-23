@@ -31,7 +31,7 @@
 
 	<properties>
 		<siteBaseDir>../../..</siteBaseDir>
-		<relativeUrl>viewer/wicket/applib/</relativeUrl>
+		<relativeUrl>viewer/wicket/wicket-applib/</relativeUrl>
 	</properties>
 
     <!-- used in Site generation for relative references. -->

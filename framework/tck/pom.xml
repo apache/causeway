@@ -516,7 +516,7 @@
             </activation>
             <!-- to deploy locally -->
             <properties>
-                <distMgmtSiteUrl>file:///tmp/m2-sites/isis</distMgmtSiteUrl>
+<!--                <distMgmtSiteUrl>file:///tmp/m2-sites/isis</distMgmtSiteUrl> -->
             </properties>
         </profile>
     </profiles>

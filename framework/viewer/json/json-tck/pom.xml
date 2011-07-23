@@ -34,6 +34,10 @@
 	
     <properties>
         <maven.test.skip>true</maven.test.skip>
+		<siteBaseDir>../../..</siteBaseDir>
+		<relativeUrl>viewer/json/json-tck/</relativeUrl>
+		<!-- until someone comes up with a better solution -->
+                <distMgmtSiteUrl>file:///tmp/m2-sites/isis/viewer/json</distMgmtSiteUrl>
     </properties>
 	
 
