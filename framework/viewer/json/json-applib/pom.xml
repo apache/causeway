@@ -64,6 +64,9 @@
         <repository>
           <id>java.net</id>
           <url>http://download.java.net/maven/1</url>
+            <snapshots>
+              <enabled>false</enabled>
+            </snapshots>
         </repository>
     </repositories>
 
