@@ -31,7 +31,7 @@
 
 	<properties>
 		<siteBaseDir>../../..</siteBaseDir>
-		<relativeUrl>viewer/xhtml/viewer/</relativeUrl>
+		<relativeUrl>viewer/xhtml/xhtml-viewer/</relativeUrl>
 	</properties>
 
     <!-- used in Site generation for relative references. -->

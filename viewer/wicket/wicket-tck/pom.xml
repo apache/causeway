@@ -16,7 +16,8 @@
   KIND, either express or implied.  See the License for the
   specific language governing permissions and limitations
   under the License.
---><project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
     <parent>
@@ -26,15 +27,19 @@
         <relativePath>../../../tck/pom.xml</relativePath>
     </parent>
 
-    <groupId>org.apache.isis.viewer</groupId>
-	<name>Wicket Viewer for TCK</name>
+        <groupId>org.apache.isis.viewer</groupId>
 	<artifactId>wicket-tck</artifactId>
-    
-    <packaging>war</packaging>
+	<name>Wicket Viewer for TCK</name>
 
 	<properties>
 		<jetty.version>6.1.4</jetty.version>
+		<siteBaseDir>../../..</siteBaseDir>
+		<relativeUrl>viewer/wicket/wicket-tck/</relativeUrl>
+		<!-- until someone comes up with a better solution -->
+                <distMgmtSiteUrl>file:///tmp/m2-sites/isis/viewer/wicket</distMgmtSiteUrl>
 	</properties>
+
+	<packaging>war</packaging>
 
 	<build>
 	  <resources>

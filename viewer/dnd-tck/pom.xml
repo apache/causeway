@@ -35,6 +35,13 @@
     <artifactId>dnd-tck</artifactId>
     <name>Viewer DnD for TCK</name>
 
+	<properties>
+		<siteBaseDir>../../..</siteBaseDir>
+		<relativeUrl>viewer/dnd/dnd-tck/</relativeUrl>
+		<!-- until someone comes up with a better solution -->
+                <distMgmtSiteUrl>file:///tmp/m2-sites/isis/viewer/dnd</distMgmtSiteUrl>
+	</properties>
+
     <build>
         <plugins>
             <!-- mvn package -->

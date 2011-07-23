@@ -29,6 +29,14 @@
     <groupId>org.apache.isis.viewer</groupId>
 	<artifactId>html-tck</artifactId>
 	<name>HTML Viewer for TCK</name>
+
+    <properties>
+		<siteBaseDir>../../..</siteBaseDir>
+		<relativeUrl>viewer/html/html-tck/</relativeUrl>
+		<!-- until someone comes up with a better solution -->
+                <distMgmtSiteUrl>file:///tmp/m2-sites/isis/viewer/html</distMgmtSiteUrl>
+    </properties>
+
 	
 	<packaging>war</packaging>
 

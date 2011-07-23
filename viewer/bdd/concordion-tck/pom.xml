@@ -33,6 +33,10 @@
 
     <properties>
         <maven.test.skip>true</maven.test.skip>
+
+		<!-- until someone comes up with a better solution -->
+                <distMgmtSiteUrl>file:///tmp/m2-sites/isis/viewer/bdd</distMgmtSiteUrl>
+
     </properties>
     
     <build>
