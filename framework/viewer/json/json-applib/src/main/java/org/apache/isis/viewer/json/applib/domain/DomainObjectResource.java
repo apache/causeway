@@ -35,7 +35,7 @@ import javax.ws.rs.core.Response;
 
 import org.jboss.resteasy.annotations.ClientResponseType;
 
-// under /objects
+@Path("/objects")
 public interface DomainObjectResource {
 
     @GET

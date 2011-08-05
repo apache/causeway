@@ -26,6 +26,7 @@ import javax.ws.rs.core.Response;
 
 import org.jboss.resteasy.annotations.ClientResponseType;
 
+@Path("/services")
 public interface ServicesResource {
 
     @GET
