@@ -2,9 +2,7 @@ package org.apache.isis.viewer.json.applib;
 
 import static org.apache.isis.viewer.json.applib.JsonUtils.readJson;
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.fail;
 
 import java.io.IOException;
 
@@ -13,7 +11,6 @@ import org.apache.isis.viewer.json.applib.blocks.Method;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 public class JsonRepresentationTest_getLink {
