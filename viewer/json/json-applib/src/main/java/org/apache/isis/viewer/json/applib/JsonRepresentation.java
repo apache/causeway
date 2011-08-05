@@ -2,7 +2,6 @@ package org.apache.isis.viewer.json.applib;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 
 import net.sf.json.JSON;
 import net.sf.json.JSONSerializer;
@@ -23,11 +22,9 @@ import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 
-import com.google.common.base.Charsets;
-
 /**
  * A wrapper around {@link JsonNode} that provides some additional helper
- * methods.
+ * methods, including searching using xpath (requires optional XOM dependency).
  */
 public class JsonRepresentation {
 
@@ -71,20 +68,18 @@ public class JsonRepresentation {
         }
     }
 
+    public JsonRepresentation getRepresentation(String key) {
+        JsonNode subNode = jsonNode.get(key);
+        // TODO: extra checking here required
+
+        return as(subNode, JsonRepresentation.class);
+    }
+
     public Link getLink(String key) throws JsonMappingException {
         JsonNode subNode = jsonNode.get(key);
         // TODO: extra checking here required
 
-        try {
-            // TODO: review, rather heavyweight
-            return JsonMapper.instance().read(subNode.toString(), Link.class);
-        } catch (JsonParseException e) {
-            // shouldn't happen
-            throw new RuntimeException(e);
-        } catch (IOException e) {
-            // shouldn't happen
-            throw new RuntimeException(e);
-        }
+        return as(subNode, Link.class);
     }
 
     /**
@@ -153,6 +148,21 @@ public class JsonRepresentation {
     public String toString() {
         return jsonNode.toString();
     }
-    
+
+
+    private static <T> T as(JsonNode subNode, Class<T> requiredType) {
+        try {
+            // TODO: review, rather heavyweight
+            return JsonMapper.instance().read(subNode.toString(), requiredType);
+        } catch (JsonParseException e) {
+            // shouldn't happen
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            // shouldn't happen
+            throw new RuntimeException(e);
+        }
+    }
+
+
 
 }
