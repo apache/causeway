@@ -27,13 +27,11 @@ import org.apache.isis.viewer.json.applib.homepage.HomePageResource;
 import org.apache.isis.viewer.json.viewer.representations.LinkRepBuilder;
 import org.apache.isis.viewer.json.viewer.representations.Representation;
 import org.apache.isis.viewer.json.viewer.resources.ResourceAbstract;
-import org.jboss.resteasy.annotations.ClientResponseType;
 
 /**
  * Implementation note: it seems to be necessary to annotate the implementation with {@link Path} rather than the
  * interface (at least under RestEasy 1.0.2 and 1.1-RC2).
  */
-@Path("/")
 public class HomePageResourceImpl extends ResourceAbstract implements HomePageResource {
 
 

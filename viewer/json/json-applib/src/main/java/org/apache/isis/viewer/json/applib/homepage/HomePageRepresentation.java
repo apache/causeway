@@ -2,7 +2,7 @@ package org.apache.isis.viewer.json.applib.homepage;
 
 import org.apache.isis.viewer.json.applib.blocks.Link;
 
-public class HomePage {
+public class HomePageRepresentation {
 
     private Link user;
     private Link services;
@@ -23,6 +23,5 @@ public class HomePage {
     public String toString() {
         return "HomePage [user=" + user + ", services=" + services + "]";
     }
-    
     
 }

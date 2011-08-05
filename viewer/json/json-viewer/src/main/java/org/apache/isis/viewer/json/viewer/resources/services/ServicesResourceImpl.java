@@ -20,7 +20,6 @@ package org.apache.isis.viewer.json.viewer.resources.services;
 
 import java.util.List;
 
-import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -29,11 +28,6 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.viewer.json.applib.domain.ServicesResource;
 import org.apache.isis.viewer.json.viewer.resources.ResourceAbstract;
 
-/**
- * Implementation note: it seems to be necessary to annotate the implementation with {@link Path} rather than the
- * interface (at least under RestEasy 1.0.2 and 1.1-RC2).
- */
-@Path("/services")
 public class ServicesResourceImpl extends ResourceAbstract implements ServicesResource {
 
     @Override

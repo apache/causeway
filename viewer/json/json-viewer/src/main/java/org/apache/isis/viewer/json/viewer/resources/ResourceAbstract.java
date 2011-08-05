@@ -49,6 +49,7 @@ import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.OidGenerator;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.viewer.json.applib.util.JsonMapper;
+import org.apache.isis.viewer.json.applib.util.JsonResponse;
 import org.apache.isis.viewer.json.viewer.RepContext;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
 import org.apache.isis.viewer.json.viewer.representations.Representation;
@@ -59,8 +60,6 @@ import org.apache.isis.viewer.json.viewer.util.UrlDecoderUtils;
 import org.apache.isis.viewer.json.viewer.util.UrlParserUtils;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.map.SerializationConfig;
 
 import com.google.common.base.Function;
 import com.google.common.base.Functions;
@@ -69,10 +68,7 @@ import com.google.common.collect.Lists;
 
 public abstract class ResourceAbstract {
 
-    private static final String HEADER_X_RESTFUL_OBJECTS_REASON = "X-RestfulObjects-Reason";
-
-
-	protected final static JsonMapper jsonMapper = new JsonMapper();
+    protected final static JsonMapper jsonMapper = JsonMapper.instance();
 
 	public final static ActionType[] ACTION_TYPES = { ActionType.USER, ActionType.DEBUG, ActionType.EXPLORATION,
     // SET is excluded; we simply flatten contributed actions.
@@ -245,7 +241,7 @@ public abstract class ResourceAbstract {
     }
 
     protected static Response responseOfGone(final String reason) {
-        return Response.status(Status.GONE).header(HEADER_X_RESTFUL_OBJECTS_REASON, reason).build();
+        return Response.status(Status.GONE).header(JsonResponse.HEADER_X_RESTFUL_OBJECTS_REASON, reason).build();
     }
 
     protected static Response responseOfBadRequest(final Consent consent) {
@@ -253,20 +249,20 @@ public abstract class ResourceAbstract {
     }
 
     protected static Response responseOfNoContent(final String reason) {
-        return Response.status(Status.NO_CONTENT).header(HEADER_X_RESTFUL_OBJECTS_REASON, reason).build();
+        return Response.status(Status.NO_CONTENT).header(JsonResponse.HEADER_X_RESTFUL_OBJECTS_REASON, reason).build();
     }
 
     protected static Response responseOfBadRequest(final String reason) {
-        return Response.status(Status.BAD_REQUEST).header(HEADER_X_RESTFUL_OBJECTS_REASON, reason).build();
+        return Response.status(Status.BAD_REQUEST).header(JsonResponse.HEADER_X_RESTFUL_OBJECTS_REASON, reason).build();
     }
 
     protected static Response responseOfBadRequest(final String reason, Exception ex) {
-        ResponseBuilder builder = Response.status(Status.BAD_REQUEST).header(HEADER_X_RESTFUL_OBJECTS_REASON, reason);
+        ResponseBuilder builder = Response.status(Status.BAD_REQUEST).header(JsonResponse.HEADER_X_RESTFUL_OBJECTS_REASON, reason);
         return withStackTrace(builder,ex).build();
     }
 
     protected static Response responseOfBadRequest(final Exception ex) {
-        ResponseBuilder builder = Response.status(Status.BAD_REQUEST).header(HEADER_X_RESTFUL_OBJECTS_REASON, ex.getMessage());
+        ResponseBuilder builder = Response.status(Status.BAD_REQUEST).header(JsonResponse.HEADER_X_RESTFUL_OBJECTS_REASON, ex.getMessage());
         return withStackTrace(builder,ex).build();
     }
 
@@ -275,19 +271,19 @@ public abstract class ResourceAbstract {
     }
 
     protected static Response responseOfNotFound(final String reason) {
-        return Response.status(Status.NOT_FOUND).header(HEADER_X_RESTFUL_OBJECTS_REASON, reason).build();
+        return Response.status(Status.NOT_FOUND).header(JsonResponse.HEADER_X_RESTFUL_OBJECTS_REASON, reason).build();
     }
 
     protected static Response responseOfPreconditionFailed(final String reason) {
-        return Response.status(StatusTypes.PRECONDITION_FAILED).header(HEADER_X_RESTFUL_OBJECTS_REASON, reason).build();
+        return Response.status(StatusTypes.PRECONDITION_FAILED).header(JsonResponse.HEADER_X_RESTFUL_OBJECTS_REASON, reason).build();
     }
 
     protected static Response responseOfMethodNotAllowed(final String reason) {
-        return Response.status(StatusTypes.METHOD_NOT_ALLOWED).header(HEADER_X_RESTFUL_OBJECTS_REASON, reason).build();
+        return Response.status(StatusTypes.METHOD_NOT_ALLOWED).header(JsonResponse.HEADER_X_RESTFUL_OBJECTS_REASON, reason).build();
     }
 
     protected static Response responseOfInternalServerError(final Exception ex) {
-        ResponseBuilder builder = Response.status(Status.INTERNAL_SERVER_ERROR).header(HEADER_X_RESTFUL_OBJECTS_REASON, ex.getMessage());
+        ResponseBuilder builder = Response.status(Status.INTERNAL_SERVER_ERROR).header(JsonResponse.HEADER_X_RESTFUL_OBJECTS_REASON, ex.getMessage());
         return withStackTrace(builder, ex).build();
     }
 
@@ -296,7 +292,7 @@ public abstract class ResourceAbstract {
     }
 
     protected static Response responseOfInternalServerError(final String reason) {
-        return Response.status(Status.INTERNAL_SERVER_ERROR).header(HEADER_X_RESTFUL_OBJECTS_REASON, reason).build();
+        return Response.status(Status.INTERNAL_SERVER_ERROR).header(JsonResponse.HEADER_X_RESTFUL_OBJECTS_REASON, reason).build();
     }
 
     // //////////////////////////////////////////////////////////////
