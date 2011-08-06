@@ -13,7 +13,7 @@ import org.codehaus.jackson.map.JsonMappingException;
 import org.junit.Before;
 import org.junit.Test;
 
-public class JsonRepresentationTest_getString {
+public class JsonRepresentationTest_getLong {
 
     private JsonRepresentation jsonRepresentation;
 
@@ -24,47 +24,47 @@ public class JsonRepresentationTest_getString {
     
     @Test
     public void happyCase() throws JsonParseException, JsonMappingException, IOException {
-        assertThat(jsonRepresentation.getString("aString"), is("aStringValue"));
+        assertThat(jsonRepresentation.getLong("aLong"), is(1234567890123L));
     }
 
     @Test
     public void forNonExistent() throws JsonParseException, JsonMappingException, IOException {
-        assertThat(jsonRepresentation.getString("doesNotExist"), is(nullValue()));
+        assertThat(jsonRepresentation.getLong("doesNotExist"), is(nullValue()));
     }
 
     @Test
-    public void forValueButNotAString() throws JsonParseException, JsonMappingException, IOException {
+    public void forValueButNotAnLong() throws JsonParseException, JsonMappingException, IOException {
         try {
-            jsonRepresentation.getString("anInt");
+            jsonRepresentation.getLong("aString");
             fail();
         } catch (IllegalArgumentException e) {
-            assertThat(e.getMessage(), is("'anInt' (123) is not a string"));
+            assertThat(e.getMessage(), is("'aString' (\"aStringValue\") is not a long"));
         }
     }
 
     @Test
     public void forMap() throws JsonParseException, JsonMappingException, IOException {
         try {
-            jsonRepresentation.getString("aSubMap");
+            jsonRepresentation.getLong("aSubMap");
             fail();
         } catch (IllegalArgumentException e) {
-            assertThat(e.getMessage(), is("'aSubMap' (a map) is not a string"));
+            assertThat(e.getMessage(), is("'aSubMap' (a map) is not a long"));
         }
     }
 
     @Test
     public void forList() throws JsonParseException, JsonMappingException, IOException {
         try {
-            jsonRepresentation.getString("aSubList");
+            jsonRepresentation.getLong("aSubList");
             fail();
         } catch (IllegalArgumentException e) {
-            assertThat(e.getMessage(), is("'aSubList' (a list) is not a string"));
+            assertThat(e.getMessage(), is("'aSubList' (a list) is not a long"));
         }
     }
 
     @Test
     public void forMultipartKey() throws JsonParseException, JsonMappingException, IOException {
-        assertThat(jsonRepresentation.getString("aSubMap.aString"), is("aSubMapStringValue"));
+        assertThat(jsonRepresentation.getLong("aSubMap.aLong"), is(1234567890456L));
     }
     
 }

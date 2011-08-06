@@ -1,7 +1,9 @@
 package org.apache.isis.viewer.json.applib;
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.math.BigDecimal;
 
 import net.sf.json.JSON;
 import net.sf.json.JSONSerializer;
@@ -15,7 +17,6 @@ import nu.xom.ParsingException;
 import nu.xom.Serializer;
 import nu.xom.ValidityException;
 
-import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.apache.isis.viewer.json.applib.blocks.Link;
 import org.apache.isis.viewer.json.applib.util.JsonMapper;
 import org.codehaus.jackson.JsonNode;
@@ -45,41 +46,108 @@ public class JsonRepresentation {
         return jsonNode.size();
     }
 
-    public String getString(String key) {
-        JsonNode subNode = jsonNode.get(key);
-        if (subNode == null) {
+
+    public boolean isArray() {
+        return jsonNode.isArray();
+    }
+
+    public boolean isValue() {
+        return jsonNode.isValueNode();
+    }
+
+    public boolean isMap() {
+        return !isArray() && !isValue();
+    }
+
+    public Link getLink(String path) throws JsonMappingException {
+        JsonNode node = getNode(path);
+        if (node == null || node.isMissingNode()) {
             return null;
         }
-        ensureValue(key, subNode, "string");
-        if (!subNode.isTextual()) {
-            throw new IllegalArgumentException("'" + key + "' (" + subNode.toString() + ") is not a string");
+
+        if (node.isArray()) {
+            throw new IllegalArgumentException("'" + path + "' (a list) does not represent a link");
         }
-        return subNode.getTextValue();
+        if (node.isValueNode()) {
+            throw new IllegalArgumentException("'" + path + "' (a value) does not represent a link");
+        }
+
+        Link link = JsonNodeUtils.convert(node, Link.class);
+        if(link.getHref() == null || link.getRel() == null) {
+            throw new IllegalArgumentException("'" + path + "' (a map) does not fully represent a link");
+        }
+        return link;
     }
 
-    private void ensureValue(String key, JsonNode subNode, String requiredType) {
-        if (subNode.isValueNode()) {
+    public JsonRepresentation getRepresentation(String path) {
+        JsonNode node = getNode(path);
+        if (node == null || node.isMissingNode()) {
+            return null;
+        }
+
+        return new JsonRepresentation(node);
+    }
+
+
+
+    public Integer getInt(String path) {
+        JsonNode node = getNode(path);
+        if (node == null || node.isMissingNode()) {
+            return null;
+        }
+        checkValue(path, node, "an int");
+        if (!node.isInt()) {
+            throw new IllegalArgumentException("'" + path + "' (" + node.toString() + ") is not an int");
+        }
+        return node.getIntValue();
+    }
+
+    public Long getLong(String path) {
+        JsonNode node = getNode(path);
+        if (node == null || node.isMissingNode()) {
+            return null;
+        }
+        checkValue(path, node, "a long");
+        if (!node.isLong()) {
+            throw new IllegalArgumentException("'" + path + "' (" + node.toString() + ") is not a long");
+        }
+        return node.getLongValue();
+    }
+    
+    public Double getDouble(String path) {
+        JsonNode node = getNode(path);
+        if (node == null || node.isMissingNode()) {
+            return null;
+        }
+        checkValue(path, node, "a double");
+        if (!node.isDouble()) {
+            throw new IllegalArgumentException("'" + path + "' (" + node.toString() + ") is not a double");
+        }
+        return node.getDoubleValue();
+    }
+
+    public String getString(String path) {
+        JsonNode node = getNode(path);
+        if (node == null || node.isMissingNode()) {
+            return null;
+        }
+        checkValue(path, node, "a string");
+        if (!node.isTextual()) {
+            throw new IllegalArgumentException("'" + path + "' (" + node.toString() + ") is not a string");
+        }
+        return node.getTextValue();
+    }
+
+
+    private static void checkValue(String path, JsonNode node, String requiredType) {
+        if (node.isValueNode()) {
             return;
         }
-        if (subNode.isArray()) {
-            throw new IllegalArgumentException("'" + key + "' (a list) is not a " + requiredType);
+        if (node.isArray()) {
+            throw new IllegalArgumentException("'" + path + "' (a list) is not " + requiredType);
         } else {
-            throw new IllegalArgumentException("'" + key + "' (a map) is not a " + requiredType);
+            throw new IllegalArgumentException("'" + path + "' (a map) is not " + requiredType);
         }
-    }
-
-    public JsonRepresentation getRepresentation(String key) {
-        JsonNode subNode = jsonNode.get(key);
-        // TODO: extra checking here required
-
-        return as(subNode, JsonRepresentation.class);
-    }
-
-    public Link getLink(String key) throws JsonMappingException {
-        JsonNode subNode = jsonNode.get(key);
-        // TODO: extra checking here required
-
-        return as(subNode, Link.class);
     }
 
     /**
@@ -125,10 +193,10 @@ public class JsonRepresentation {
         }
     }
 
-    private JsonRepresentation asJsonRepresentation(nu.xom.Document document2) throws IOException, JsonParseException, JsonMappingException {
+    private static JsonRepresentation asJsonRepresentation(nu.xom.Document xmlDoc) throws IOException, JsonParseException, JsonMappingException {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         Serializer serializer = new nu.xom.Serializer(baos);
-        serializer.write(document2);
+        serializer.write(xmlDoc);
 
         ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
         XMLSerializer xmlSerializer = new XMLSerializer();
@@ -138,31 +206,18 @@ public class JsonRepresentation {
         return JsonMapper.instance().read(jsonStr, JsonRepresentation.class);
     }
 
-    public boolean isArray() {
-        return jsonNode.isArray();
+    private JsonNode getNode(String path) {
+        String[] keys = path.split("\\.");
+        JsonNode node = jsonNode;
+        for(String key: keys) {
+            node = node.path(key);
+        }
+        return node;
     }
 
-    
-    
     @Override
     public String toString() {
         return jsonNode.toString();
     }
-
-
-    private static <T> T as(JsonNode subNode, Class<T> requiredType) {
-        try {
-            // TODO: review, rather heavyweight
-            return JsonMapper.instance().read(subNode.toString(), requiredType);
-        } catch (JsonParseException e) {
-            // shouldn't happen
-            throw new RuntimeException(e);
-        } catch (IOException e) {
-            // shouldn't happen
-            throw new RuntimeException(e);
-        }
-    }
-
-
 
 }

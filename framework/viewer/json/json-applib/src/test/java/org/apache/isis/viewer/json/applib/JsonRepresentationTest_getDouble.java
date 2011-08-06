@@ -7,13 +7,14 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.junit.Before;
 import org.junit.Test;
 
-public class JsonRepresentationTest_getString {
+public class JsonRepresentationTest_getDouble {
 
     private JsonRepresentation jsonRepresentation;
 
@@ -24,47 +25,47 @@ public class JsonRepresentationTest_getString {
     
     @Test
     public void happyCase() throws JsonParseException, JsonMappingException, IOException {
-        assertThat(jsonRepresentation.getString("aString"), is("aStringValue"));
+        assertThat(jsonRepresentation.getDouble("aDouble"), is(12345678901234534.3242));
     }
 
     @Test
     public void forNonExistent() throws JsonParseException, JsonMappingException, IOException {
-        assertThat(jsonRepresentation.getString("doesNotExist"), is(nullValue()));
+        assertThat(jsonRepresentation.getDouble("doesNotExist"), is(nullValue()));
     }
 
     @Test
-    public void forValueButNotAString() throws JsonParseException, JsonMappingException, IOException {
+    public void forValueButNotAnLong() throws JsonParseException, JsonMappingException, IOException {
         try {
-            jsonRepresentation.getString("anInt");
+            jsonRepresentation.getDouble("aString");
             fail();
         } catch (IllegalArgumentException e) {
-            assertThat(e.getMessage(), is("'anInt' (123) is not a string"));
+            assertThat(e.getMessage(), is("'aString' (\"aStringValue\") is not a double"));
         }
     }
 
     @Test
     public void forMap() throws JsonParseException, JsonMappingException, IOException {
         try {
-            jsonRepresentation.getString("aSubMap");
+            jsonRepresentation.getDouble("aSubMap");
             fail();
         } catch (IllegalArgumentException e) {
-            assertThat(e.getMessage(), is("'aSubMap' (a map) is not a string"));
+            assertThat(e.getMessage(), is("'aSubMap' (a map) is not a double"));
         }
     }
 
     @Test
     public void forList() throws JsonParseException, JsonMappingException, IOException {
         try {
-            jsonRepresentation.getString("aSubList");
+            jsonRepresentation.getDouble("aSubList");
             fail();
         } catch (IllegalArgumentException e) {
-            assertThat(e.getMessage(), is("'aSubList' (a list) is not a string"));
+            assertThat(e.getMessage(), is("'aSubList' (a list) is not a double"));
         }
     }
 
     @Test
     public void forMultipartKey() throws JsonParseException, JsonMappingException, IOException {
-        assertThat(jsonRepresentation.getString("aSubMap.aString"), is("aSubMapStringValue"));
+        assertThat(jsonRepresentation.getDouble("aSubMap.aDouble"), is(12345678901234534.4567));
     }
     
 }

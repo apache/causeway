@@ -13,25 +13,27 @@ import org.junit.Test;
 
 public class JsonRepresentationTest_size {
 
+    private JsonRepresentation jsonRepresentation;
+
     @Before
     public void setUp() throws Exception {
     }
 
     @Test
     public void size_forEmptyList() throws JsonParseException, JsonMappingException, IOException {
-        JsonRepresentation jsonRepresentation = new JsonRepresentation(readJson("emptyList.json"));
+        jsonRepresentation = new JsonRepresentation(readJson("emptyList.json"));
         assertThat(jsonRepresentation.size(), is(0));
     }
 
     @Test
     public void size_forNonEmptyList() throws JsonParseException, JsonMappingException, IOException {
-        JsonRepresentation jsonRepresentation = new JsonRepresentation(readJson("list.json"));
+        jsonRepresentation = new JsonRepresentation(readJson("list.json"));
         assertThat(jsonRepresentation.size(), is(2));
     }
 
     @Test(expected=IllegalStateException.class)
     public void size_forMap() throws JsonParseException, JsonMappingException, IOException {
-        JsonRepresentation jsonRepresentation = new JsonRepresentation(readJson("emptyMap.json"));
+        jsonRepresentation = new JsonRepresentation(readJson("emptyMap.json"));
         jsonRepresentation.size();
     }
 

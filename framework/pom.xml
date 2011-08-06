@@ -1057,6 +1057,16 @@ archetype includes this explicit dependency.
                 <artifactId>jdom</artifactId>
                 <version>1.1</version>
             </dependency>
+            <dependency>
+                <!-- dependency of net.sf.json-lib -->
+                <groupId>xom</groupId>
+                <artifactId>xom</artifactId>
+                <version>1.1</version>
+                <!-- dependency is optional because XOM is under LGPL, so not compatible with ASF licensing-->
+                <!-- it is required for XML/xpath support in the JSON viewer, and only used in the json applib tests -->
+                <optional>true</optional>
+                <scope>test</scope>
+            </dependency>   
 
 
             <!-- JSON libraries -->
@@ -1075,7 +1085,13 @@ archetype includes this explicit dependency.
                 <artifactId>jackson-mapper-asl</artifactId>
                 <version>1.8.2</version>
             </dependency>
-
+	        <dependency>
+	            <groupId>net.sf.json-lib</groupId>
+	            <artifactId>json-lib</artifactId>
+	            <version>2.4</version>
+	            <classifier>jdk15</classifier>
+	        </dependency>
+            
 
 			<!-- Databases -->
 			<dependency>
