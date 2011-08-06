@@ -1,7 +1,7 @@
 { "aString": "aStringValue",
   "anInt": 123,
   "aLong": 1234567890123,
-  "aDecimal": 12345678901234534.3242,
+  "aDouble": 12345678901234534.3242,
   "aBoolean": true,
   "aLink": {
     "href": "http://foo/bar",
@@ -10,7 +10,14 @@
   },
   "aSubMap": {
     "aString": "aSubMapStringValue",
-    "anInt": 456
+    "anInt": 456,
+    "aLong": 1234567890456,
+    "aDouble": 12345678901234534.4567,
+    "aLink": {
+      "href": "http://foo/bar",
+      "method": "GET",
+      "rel": "someSubRel"
+    }
   },
   "aSubList": [
     "a", "b", "c"
