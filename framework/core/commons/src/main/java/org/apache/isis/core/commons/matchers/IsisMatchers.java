@@ -210,4 +210,19 @@ public final class IsisMatchers {
         };
     }
 
+    public static Matcher<String> matches(final String regex) {
+        return new TypeSafeMatcher<String>() {
+    
+            @Override
+            public void describeTo(Description description) {
+                description.appendText("string matching " + regex);
+            }
+    
+            @Override
+            public boolean matchesSafely(String str) {
+                return str.matches(regex);
+            }
+        };
+    }
+
 }

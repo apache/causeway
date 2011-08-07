@@ -1,14 +1,16 @@
 package org.apache.isis.viewer.json.tck;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
+
+import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
+import static org.apache.isis.core.commons.matchers.IsisMatchers.*;
 
 import javax.ws.rs.core.Response;
 
 import org.apache.isis.runtimes.dflt.webserver.WebServer;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.applib.RestfulClient;
+import org.apache.isis.viewer.json.applib.blocks.Link;
 import org.apache.isis.viewer.json.applib.blocks.Method;
 import org.apache.isis.viewer.json.applib.domain.DomainObjectRepresentation;
 import org.apache.isis.viewer.json.applib.domain.DomainObjectResource;
@@ -16,11 +18,13 @@ import org.apache.isis.viewer.json.applib.domain.ServicesRepresentation;
 import org.apache.isis.viewer.json.applib.domain.ServicesResource;
 import org.apache.isis.viewer.json.applib.homepage.HomePageRepresentation;
 import org.apache.isis.viewer.json.applib.homepage.HomePageResource;
+import org.apache.isis.viewer.json.applib.user.UserRepresentation;
 import org.apache.isis.viewer.json.applib.util.HttpStatusCode;
 import org.apache.isis.viewer.json.applib.util.JsonResponse;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 
@@ -60,6 +64,9 @@ public class ResourceRepresentationTest {
         
         HomePageRepresentation homePageRepr = homePageJsonResp.getEntity();
         assertThat(homePageRepr, is(not(nullValue())));
+        assertThat(homePageRepr.isMap(), is(true));
+        
+        assertThat(homePageRepr.getUser(), is(not(nullValue())));
         assertThat(homePageRepr.getUser().getMethod(), is(Method.GET));
         
         assertThat(homePageRepr.getServices(), is(not(nullValue())));
@@ -90,8 +97,35 @@ public class ResourceRepresentationTest {
         assertThat(applibValuesEntityRepoRep, is(not(nullValue())));
     }
 
+    @Ignore("not yet implemented")
+    @Test
+    public void homePageResource_linksToUserResource() throws Exception {
+        
+        // given
+        HomePageResource homePageResource = client.getHomePageResource();
+
+        // when
+        Response resourcesResp = homePageResource.resources();
+        JsonResponse<HomePageRepresentation> homePageJsonResp = JsonResponse.of(resourcesResp, HomePageRepresentation.class);
+        
+        // then
+        HomePageRepresentation homePageRepr = homePageJsonResp.getEntity();
+
+        // and when
+        Response userResp = client.follow(homePageRepr.getUser());
+        JsonResponse<UserRepresentation> userJsonResp = JsonResponse.of(userResp, UserRepresentation.class);
+        
+        // then
+        UserRepresentation userRepr = userJsonResp.getEntity();
+
+        assertThat(userRepr, is(not(nullValue())));
+        assertThat(userRepr.isMap(), is(true));
+    }
+
+    
     @Test
     public void servicesResource_returnsServicesRepresentation() throws Exception {
+        
         // given
         ServicesResource servicesResource = client.getServicesResource();
         
@@ -101,10 +135,56 @@ public class ResourceRepresentationTest {
         
         // then
         ServicesRepresentation servicesRepr = servicesJsonResp.getEntity();
+
+        assertThat(servicesRepr, is(not(nullValue())));
+        assertThat(servicesRepr.isArray(), is(true));
+        assertThat(servicesRepr.size(), is(4));
+
+        JsonRepresentation repoRepr = servicesRepr.elementAt(0);
+        assertThat(repoRepr, is(not(nullValue())));
         
-        JsonRepresentation applibValuesEntityRepoRep = servicesRepr.elementAt(0);
-        assertThat(applibValuesEntityRepoRep, is(not(nullValue())));
+        assertThat(repoRepr.getString("title"), is("ApplibValues"));
+        
+        Link repoObjLink = repoRepr.getLink("link");
+        assertThat(repoObjLink.getRel(), is("object"));
+        assertThat(repoObjLink.getHref(), matches("http://localhost:\\d+/objects/OID:1"));
+        
+        Link repoTypeLink = repoRepr.getLink("type");
+        assertThat(repoTypeLink.getRel(), is("type"));
+        assertThat(repoTypeLink.getHref(), matches("http://localhost:\\d+/types/application/vnd.org.apache.isis.tck.objstore.dflt.scalars.ApplibValuesEntityRepositoryDefault\\+json"));
+
+        Link repoIconLink = repoRepr.getLink("icon");
+        assertThat(repoIconLink.getRel(), is("icon"));
+        assertThat(repoIconLink.getHref(), matches("http://localhost:\\d+/images/null.png"));
     }
+
+
+    @Test
+    public void servicesResource_linksToDomainObjectResourceForService() throws Exception {
+        
+        // given
+        ServicesResource servicesResource = client.getServicesResource();
+        
+        // when
+        Response servicesResp = servicesResource.services();
+        JsonResponse<ServicesRepresentation> servicesJsonResp = JsonResponse.of(servicesResp, ServicesRepresentation.class);
+        
+        // then
+        ServicesRepresentation servicesRepr = servicesJsonResp.getEntity();
+
+        JsonRepresentation repoRepr = servicesRepr.elementAt(0);
+        Link repoObjLink = repoRepr.getLink("link");
+
+        // and when
+        Response repoFollowResp = client.follow(repoObjLink);
+        JsonResponse<DomainObjectRepresentation> repoFollowJsonResp = JsonResponse.of(repoFollowResp, DomainObjectRepresentation.class);
+        
+        // then
+        DomainObjectRepresentation domainObjectRepr = repoFollowJsonResp.getEntity();
+        Link domainObjectReprLink = domainObjectRepr.getLink("_self.link");
+        assertThat(domainObjectReprLink, is(repoObjLink));
+    }
+
 
     @Test
     public void domainObjectResource_returnsDomainObjectRepresentation() throws Exception {
@@ -117,12 +197,13 @@ public class ResourceRepresentationTest {
         
         // then
         DomainObjectRepresentation domainObjectRepr = domainObjectJsonResp.getEntity();
+        Link link = domainObjectRepr.getLink("_self.link");
+        assertThat(link.getRel(), is("object"));
+        assertThat(link.getHref(), matches(".+objects/OID:1"));
     }
 
+
     
-    
-    
-}
 //{
 //    "_self" : {
 //      "link" : {
@@ -188,3 +269,7 @@ public class ResourceRepresentationTest {
 //      }
 //    }
 //  }
+
+    
+}
+    
