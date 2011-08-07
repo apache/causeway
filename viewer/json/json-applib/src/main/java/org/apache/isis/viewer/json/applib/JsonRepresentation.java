@@ -3,7 +3,6 @@ package org.apache.isis.viewer.json.applib;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.math.BigDecimal;
 
 import net.sf.json.JSON;
 import net.sf.json.JSONSerializer;
@@ -41,11 +40,20 @@ public class JsonRepresentation {
 
     public int size() {
         if (!jsonNode.isArray()) {
-            throw new IllegalStateException("Is an array");
+            throw new IllegalStateException("Is not an array");
         }
         return jsonNode.size();
     }
 
+    public JsonRepresentation elementAt(int i) {
+        if (!jsonNode.isArray()) {
+            throw new IllegalStateException("Is not an array");
+        }
+        if(i >= size()) {
+            throw new IndexOutOfBoundsException("array has " + size() + " elements"); 
+        }
+        return new JsonRepresentation(jsonNode.get(i));
+    }
 
     public boolean isArray() {
         return jsonNode.isArray();
@@ -59,7 +67,7 @@ public class JsonRepresentation {
         return !isArray() && !isValue();
     }
 
-    public Link getLink(String path) throws JsonMappingException {
+    public Link getLink(String path) {
         JsonNode node = getNode(path);
         if (node == null || node.isMissingNode()) {
             return null;
@@ -219,5 +227,6 @@ public class JsonRepresentation {
     public String toString() {
         return jsonNode.toString();
     }
+
 
 }

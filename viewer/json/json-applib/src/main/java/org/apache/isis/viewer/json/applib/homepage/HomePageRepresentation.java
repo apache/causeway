@@ -1,27 +1,20 @@
 package org.apache.isis.viewer.json.applib.homepage;
 
+import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.applib.blocks.Link;
+import org.codehaus.jackson.JsonNode;
 
-public class HomePageRepresentation {
+public class HomePageRepresentation extends JsonRepresentation {
 
-    private Link user;
-    private Link services;
-    public Link getUser() {
-        return user;
+    public HomePageRepresentation(JsonNode jsonNode) {
+        super(jsonNode);
     }
-    public void setUser(Link user) {
-        this.user = user;
+
+    public Link getUser() {
+        return getLink("user");
     }
     public Link getServices() {
-        return services;
-    }
-    public void setServices(Link services) {
-        this.services = services;
-    }
-    
-    @Override
-    public String toString() {
-        return "HomePage [user=" + user + ", services=" + services + "]";
+        return getLink("services");
     }
     
 }

@@ -41,14 +41,14 @@ public class HomePageResourceImpl extends ResourceAbstract implements HomePageRe
         init();
         
         Representation representation = new Representation();
-        representation.put("user", linkTo("user"));
-        representation.put("services", linkTo("services"));
+        representation.put("user", linkTo("user", "user"));
+        representation.put("services", linkTo("services", "services"));
         
         return responseOfOk(asJson(representation));
     }
 
-    protected Representation linkTo(String url) {
-        return LinkRepBuilder.newBuilder(getResourceContext().repContext(url), null, url).build();
+    protected Representation linkTo(String url, String rel) {
+        return LinkRepBuilder.newBuilder(getResourceContext().repContext(url), rel, url).build();
     }
 
 

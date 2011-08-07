@@ -1,5 +1,7 @@
 package org.apache.isis.viewer.json.applib.util;
 import java.io.IOException;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -13,22 +15,75 @@ import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.JsonParser;
 import org.codehaus.jackson.JsonProcessingException;
+import org.codehaus.jackson.map.BeanDescription;
+import org.codehaus.jackson.map.BeanProperty;
 import org.codehaus.jackson.map.DeserializationConfig;
 import org.codehaus.jackson.map.DeserializationContext;
-import org.codehaus.jackson.map.DeserializerFactory;
 import org.codehaus.jackson.map.DeserializerProvider;
 import org.codehaus.jackson.map.Deserializers;
 import org.codehaus.jackson.map.JsonDeserializer;
 import org.codehaus.jackson.map.JsonMappingException;
+import org.codehaus.jackson.map.KeyDeserializer;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.SerializationConfig;
+import org.codehaus.jackson.map.TypeDeserializer;
+import org.codehaus.jackson.map.deser.BeanDeserializerFactory;
 import org.codehaus.jackson.map.deser.JsonNodeDeserializer;
 import org.codehaus.jackson.map.deser.StdDeserializerProvider;
+import org.codehaus.jackson.map.introspect.BasicBeanDescription;
 import org.codehaus.jackson.map.module.SimpleDeserializers;
+import org.codehaus.jackson.map.type.ArrayType;
+import org.codehaus.jackson.map.type.CollectionLikeType;
+import org.codehaus.jackson.map.type.CollectionType;
+import org.codehaus.jackson.map.type.MapLikeType;
+import org.codehaus.jackson.map.type.MapType;
+import org.codehaus.jackson.type.JavaType;
 
 
 public final class JsonMapper {
     
+    @SuppressWarnings("deprecation")
+    private static final class JsonRepresentationDeserializerFactory extends BeanDeserializerFactory {
+
+
+        @Override
+        public JsonDeserializer<Object> createBeanDeserializer(DeserializationConfig config, DeserializerProvider p, JavaType type, BeanProperty property) throws JsonMappingException {
+            Class<?> rawClass = type.getRawClass();
+            if (JsonRepresentation.class.isAssignableFrom(rawClass)) {
+                try {
+                    // ensure has a constructor taking a JsonNode
+                    Constructor<?> rawClassConstructor = rawClass.getConstructor(JsonNode.class);
+                    return new JsonRepresentationDeserializer(rawClassConstructor);
+                } catch (SecurityException e) {
+                    // fall through
+                } catch (NoSuchMethodException e) {
+                    // fall through
+                }
+            } 
+            return super.createBeanDeserializer(config, p, type, property);
+        }
+    }
+
+    private static final class JsonRepresentationDeserializer extends JsonDeserializer<Object> {
+        private JsonDeserializer<? extends JsonNode> jsonNodeDeser = 
+            JsonNodeDeserializer.getDeserializer(JsonNode.class);
+        
+        private final Constructor<?> rawClassConstructor;
+        public JsonRepresentationDeserializer(Constructor<?> rawClassConstructor) {
+            this.rawClassConstructor = rawClassConstructor;
+        }
+
+        @Override
+        public JsonRepresentation deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException, JsonProcessingException {
+            JsonNode jsonNode = jsonNodeDeser.deserialize(jp, ctxt);
+            try {
+                return (JsonRepresentation) rawClassConstructor.newInstance(jsonNode);
+            } catch (Exception e) {
+                throw new IllegalStateException(e); 
+            }
+        }
+    }
+
     private static JsonMapper instance = new JsonMapper();
 
     // threadsafe
@@ -39,19 +94,7 @@ public final class JsonMapper {
     private final ObjectMapper objectMapper;
 
     private JsonMapper() {
-        DeserializerProvider deserializerProvider = new StdDeserializerProvider();
-        SimpleDeserializers d = new SimpleDeserializers();
-        d.addDeserializer(JsonRepresentation.class, new JsonDeserializer<JsonRepresentation>() {
-            
-            private JsonDeserializer<? extends JsonNode> jsonNodeDeser = 
-                JsonNodeDeserializer.getDeserializer(JsonNode.class);
-            
-            @Override
-            public JsonRepresentation deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException, JsonProcessingException {
-                return new JsonRepresentation(jsonNodeDeser.deserialize(jp, ctxt));
-            }
-        });
-        deserializerProvider.withAdditionalDeserializers(d);
+        DeserializerProvider deserializerProvider = new StdDeserializerProvider(new JsonRepresentationDeserializerFactory());
         objectMapper = new ObjectMapper(null, null, deserializerProvider);
         objectMapper.configure(SerializationConfig.Feature.INDENT_OUTPUT, true);
         objectMapper.configure(DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
