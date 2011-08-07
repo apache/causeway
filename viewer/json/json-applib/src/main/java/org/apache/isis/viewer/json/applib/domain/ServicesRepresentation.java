@@ -8,7 +8,6 @@ public class ServicesRepresentation extends JsonRepresentation {
 
     public ServicesRepresentation(JsonNode jsonNode) {
         super(jsonNode);
-        // TODO Auto-generated constructor stub
     }
     
 }
