@@ -1,10 +1,14 @@
 package org.apache.isis.viewer.json.applib.domain;
 
-import java.util.ArrayList;
+import org.apache.isis.viewer.json.applib.JsonRepresentation;
+import org.codehaus.jackson.JsonNode;
 
 
-public class ServicesRepresentation extends ArrayList<DomainObjectRepresentation> {
+public class ServicesRepresentation extends JsonRepresentation {
 
-    private static final long serialVersionUID = 1L;
+    public ServicesRepresentation(JsonNode jsonNode) {
+        super(jsonNode);
+        // TODO Auto-generated constructor stub
+    }
     
 }

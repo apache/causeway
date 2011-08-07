@@ -7,9 +7,11 @@ import static org.junit.Assert.assertThat;
 import javax.ws.rs.core.Response;
 
 import org.apache.isis.runtimes.dflt.webserver.WebServer;
+import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.applib.RestfulClient;
 import org.apache.isis.viewer.json.applib.blocks.Method;
 import org.apache.isis.viewer.json.applib.domain.DomainObjectRepresentation;
+import org.apache.isis.viewer.json.applib.domain.DomainObjectResource;
 import org.apache.isis.viewer.json.applib.domain.ServicesRepresentation;
 import org.apache.isis.viewer.json.applib.domain.ServicesResource;
 import org.apache.isis.viewer.json.applib.homepage.HomePageRepresentation;
@@ -56,12 +58,12 @@ public class ResourceRepresentationTest {
         // then
         assertThat(homePageJsonResp.getStatus(), is(HttpStatusCode.OK));
         
-        HomePageRepresentation homePageRep = homePageJsonResp.getEntity();
-        assertThat(homePageRep, is(not(nullValue())));
-        assertThat(homePageRep.getUser().getMethod(), is(Method.GET));
+        HomePageRepresentation homePageRepr = homePageJsonResp.getEntity();
+        assertThat(homePageRepr, is(not(nullValue())));
+        assertThat(homePageRepr.getUser().getMethod(), is(Method.GET));
         
-        assertThat(homePageRep.getServices(), is(not(nullValue())));
-        assertThat(homePageRep.getServices().getMethod(), is(Method.GET));
+        assertThat(homePageRepr.getServices(), is(not(nullValue())));
+        assertThat(homePageRepr.getServices().getMethod(), is(Method.GET));
     }
 
     @Test
@@ -84,7 +86,7 @@ public class ResourceRepresentationTest {
         // then
         ServicesRepresentation servicesRepr = servicesJsonResp.getEntity();
         
-        DomainObjectRepresentation applibValuesEntityRepoRep = servicesRepr.get(0);
+        JsonRepresentation applibValuesEntityRepoRep = servicesRepr.elementAt(0);
         assertThat(applibValuesEntityRepoRep, is(not(nullValue())));
     }
 
@@ -98,11 +100,91 @@ public class ResourceRepresentationTest {
         JsonResponse<ServicesRepresentation> servicesJsonResp = JsonResponse.of(servicesResp, ServicesRepresentation.class);
         
         // then
-        ServicesRepresentation servicesRep = servicesJsonResp.getEntity();
+        ServicesRepresentation servicesRepr = servicesJsonResp.getEntity();
         
-        DomainObjectRepresentation applibValuesEntityRepoRep = servicesRep.get(0);
+        JsonRepresentation applibValuesEntityRepoRep = servicesRepr.elementAt(0);
         assertThat(applibValuesEntityRepoRep, is(not(nullValue())));
     }
 
+    @Test
+    public void domainObjectResource_returnsDomainObjectRepresentation() throws Exception {
+        // given
+        DomainObjectResource domainObjectResource = client.getDomainObjectResource();
+        
+        // when
+        Response domainObjectResp = domainObjectResource.object("OID:1");
+        JsonResponse<DomainObjectRepresentation> domainObjectJsonResp = JsonResponse.of(domainObjectResp, DomainObjectRepresentation.class);
+        
+        // then
+        DomainObjectRepresentation domainObjectRepr = domainObjectJsonResp.getEntity();
+    }
 
+    
+    
+    
 }
+//{
+//    "_self" : {
+//      "link" : {
+//        "rel" : "object",
+//        "href" : "http://localhost:8080/objects/OID:1",
+//        "method" : "GET"
+//      },
+//      "type" : {
+//        "rel" : "type",
+//        "href" : "http://localhost:8080/types/application/vnd.org.apache.isis.tck.objstore.dflt.scalars.ApplibValuesEntityRepositoryDefault+json",
+//        "method" : "GET"
+//      },
+//      "title" : "ApplibValues",
+//      "icon" : {
+//        "rel" : "icon",
+//        "href" : "http://localhost:8080/images/null.png",
+//        "method" : "GET"
+//      }
+//    },
+//    "id" : {
+//      "type" : {
+//        "rel" : "type",
+//        "href" : "http://localhost:8080/types/application/vnd.string+json",
+//        "method" : "GET"
+//      },
+//      "memberType" : "property",
+//      "value" : "org.apache.isis.tck.objstore.dflt.scalars.ApplibValuesEntityRepositoryDefault",
+//      "disabledReason" : "Always disabled; Derived",
+//      "details" : {
+//        "rel" : "property",
+//        "href" : "http://localhost:8080/objects/OID:1/properties/id",
+//        "method" : "GET"
+//      }
+//    },
+//    "list" : {
+//      "type" : {
+//        "rel" : "type",
+//        "href" : "http://localhost:8080/types/application/vnd.java.util.List+json",
+//        "method" : "GET"
+//      },
+//      "memberType" : "action",
+//      "actionType" : "USER",
+//      "numParameters" : 0,
+//      "details" : {
+//        "rel" : "action",
+//        "href" : "http://localhost:8080/objects/OID:1/actions/list",
+//        "method" : "GET"
+//      }
+//    },
+//    "newEntity" : {
+//      "type" : {
+//        "rel" : "type",
+//        "href" : "http://localhost:8080/types/application/vnd.java.lang.Object+json",
+//        "method" : "GET"
+//      },
+//      "memberType" : "action",
+//      "actionType" : "USER",
+//      "numParameters" : 0,
+//      "details" : {
+//        "rel" : "action",
+//        "href" : "http://localhost:8080/objects/OID:1/actions/newEntity",
+//        "method" : "GET"
+//      }
+//    }
+//  }
