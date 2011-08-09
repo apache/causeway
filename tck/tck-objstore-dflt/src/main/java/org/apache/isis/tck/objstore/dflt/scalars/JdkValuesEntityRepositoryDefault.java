@@ -28,5 +28,13 @@ public class JdkValuesEntityRepositoryDefault extends AbstractValuesEntityReposi
     public JdkValuesEntityRepositoryDefault() {
         super(JdkValuesEntity.class);
     }
+    
+    /**
+     * Required otherwise return type is erased
+     */
+    @Override
+    public JdkValuesEntity newEntity() {
+        return super.newEntity();
+    }
 
 }

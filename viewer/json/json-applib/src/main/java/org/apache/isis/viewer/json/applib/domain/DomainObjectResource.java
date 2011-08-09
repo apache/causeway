@@ -45,7 +45,7 @@ public interface DomainObjectResource {
     public Response object(@PathParam("oid") final String oidStr);
 
     @GET
-    @Path("/{oid}/properties{propertyId}")
+    @Path("/{oid}/properties/{propertyId}")
     @Produces({ MediaType.APPLICATION_JSON })
     @ClientResponseType(entityType=String.class)
     public Response propertyDetails(

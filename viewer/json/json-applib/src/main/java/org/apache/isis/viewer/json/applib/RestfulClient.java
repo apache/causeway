@@ -86,6 +86,10 @@ public class RestfulClient {
         return executor;
     }
 
+    public RepresentationWalker createWalker(Response response) {
+        return new RepresentationWalker(this, response);
+    }
+
     public Response follow(Link link) throws Exception {
         Response response = link.follow(executor);
         // this is a bit hacky

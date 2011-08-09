@@ -74,7 +74,7 @@ public class JsonRepresentationTest_getLink {
             jsonRepresentation.getLink("aSubList");
             fail();
         } catch (IllegalArgumentException e) {
-            assertThat(e.getMessage(), is("'aSubList' (a list) does not represent a link"));
+            assertThat(e.getMessage(), is("'aSubList' (an array) does not represent a link"));
         }
     }
 

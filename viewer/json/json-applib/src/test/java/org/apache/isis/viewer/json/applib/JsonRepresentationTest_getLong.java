@@ -58,7 +58,7 @@ public class JsonRepresentationTest_getLong {
             jsonRepresentation.getLong("aSubList");
             fail();
         } catch (IllegalArgumentException e) {
-            assertThat(e.getMessage(), is("'aSubList' (a list) is not a long"));
+            assertThat(e.getMessage(), is("'aSubList' (an array) is not a long"));
         }
     }
 

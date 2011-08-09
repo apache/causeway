@@ -59,6 +59,7 @@ import com.google.common.base.Charsets;
 import com.google.common.collect.Lists;
 import com.google.common.io.ByteStreams;
 
+@Path("/objects")
 public class DomainObjectResourceImpl extends ResourceAbstract implements
         DomainObjectResource {
 

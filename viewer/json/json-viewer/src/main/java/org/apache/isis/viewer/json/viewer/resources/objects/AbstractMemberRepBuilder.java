@@ -50,7 +50,7 @@ public abstract class AbstractMemberRepBuilder<T extends ObjectMember> extends R
     protected void putSelfIfRequired() {
         if(memberRepType.isStandalone()) {
             Representation selfRep = MemberSelfRepBuilder.newBuilder(repContext, objectAdapter, memberType, objectMember).build();
-            representation.put("self", selfRep);
+            representation.put("_self", selfRep);
         }
     }
 

@@ -29,4 +29,12 @@ public class ApplibValuesEntityRepositoryDefault extends AbstractValuesEntityRep
         super(ApplibValuesEntity.class);
     }
 
+    /**
+     * Required otherwise return type is erased
+     */
+    @Override
+    public ApplibValuesEntity newEntity() {
+        return super.newEntity();
+    }
+
 }
