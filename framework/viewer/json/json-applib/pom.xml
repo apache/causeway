@@ -70,8 +70,13 @@
 	        <!-- This dependency is optional because XOM is under LGPL, so not compatible with ASF licensing-->
 	        <!-- it is required for XML/xpath support -->
 	        <optional>true</optional>
-	        <scope>test</scope>
-	    </dependency>	
+	    </dependency>
+	    
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+        </dependency>
+	    	
 	</dependencies>
 
 

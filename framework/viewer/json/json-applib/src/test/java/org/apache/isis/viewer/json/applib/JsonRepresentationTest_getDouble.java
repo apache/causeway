@@ -59,7 +59,7 @@ public class JsonRepresentationTest_getDouble {
             jsonRepresentation.getDouble("aSubList");
             fail();
         } catch (IllegalArgumentException e) {
-            assertThat(e.getMessage(), is("'aSubList' (a list) is not a double"));
+            assertThat(e.getMessage(), is("'aSubList' (an array) is not a double"));
         }
     }
 

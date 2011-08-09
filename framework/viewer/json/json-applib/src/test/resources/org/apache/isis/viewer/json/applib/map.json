@@ -1,5 +1,6 @@
 { "aString": "aStringValue",
   "anInt": 123,
+  "aNull": null,
   "aLong": 1234567890123,
   "aDouble": 12345678901234534.3242,
   "aBoolean": true,
@@ -8,6 +9,9 @@
     "method": "GET",
     "rel": "someRel"
   },
+  "aMixedArray" : [ "a", "b", 123, { "foo": "bar"} ],
+  "aStringArray" : [ "a", "b", "c" ],
+  "anEmptyArray" : [  ],
   "aSubMap": {
     "aString": "aSubMapStringValue",
     "anInt": 456,

@@ -28,5 +28,13 @@ public class WrapperValuesEntityRepositoryDefault extends AbstractValuesEntityRe
     public WrapperValuesEntityRepositoryDefault() {
         super(WrapperValuesEntity.class);
     }
+    
+    /**
+     * Required otherwise return type is erased
+     */
+    @Override
+    public WrapperValuesEntity newEntity() {
+        return super.newEntity();
+    }    
 
 }

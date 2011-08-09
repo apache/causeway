@@ -38,7 +38,7 @@ public abstract class AbstractValuesEntityRepository<T> extends AbstractFactoryA
     }
 
     
-    public T newEntity() {
+    protected T newEntity() {
         T entity = newTransientInstance(cls);
         persist(entity);
         return entity;

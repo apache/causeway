@@ -58,7 +58,7 @@ public class JsonRepresentationTest_getInt {
             jsonRepresentation.getInt("aSubList");
             fail();
         } catch (IllegalArgumentException e) {
-            assertThat(e.getMessage(), is("'aSubList' (a list) is not an int"));
+            assertThat(e.getMessage(), is("'aSubList' (an array) is not an int"));
         }
     }
 

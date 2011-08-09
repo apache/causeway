@@ -37,7 +37,9 @@ public class TypeBuilder extends LinkRepBuilder {
             java.lang.Float.class.getName(), "float",
             java.lang.Double.class.getName(), "double",
             java.math.BigInteger.class.getName(), "bigint",
-            java.math.BigDecimal.class.getName(), "bigdec"
+            java.math.BigDecimal.class.getName(), "bigdec",
+            java.util.List.class.getName(), "list",
+            java.util.Set.class.getName(), "set"
             );
 
     public TypeBuilder(RepContext repContext, ObjectSpecification objectSpec) {

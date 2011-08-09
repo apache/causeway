@@ -28,5 +28,13 @@ public class PrimitiveValuesEntityRepositoryDefault extends AbstractValuesEntity
     public PrimitiveValuesEntityRepositoryDefault() {
         super(PrimitiveValuesEntity.class);
     }
+    
+    /**
+     * Required otherwise return type is erased
+     */
+    @Override
+    public PrimitiveValuesEntity newEntity() {
+        return super.newEntity();
+    }
 
 }

@@ -1,7 +1,6 @@
 package org.apache.isis.viewer.json.applib.util;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -10,33 +9,23 @@ import java.util.Map;
 import javax.ws.rs.core.Response;
 
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
+import org.apache.isis.viewer.json.applib.util.HttpStatusCode.Range;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.JsonParser;
 import org.codehaus.jackson.JsonProcessingException;
-import org.codehaus.jackson.map.BeanDescription;
 import org.codehaus.jackson.map.BeanProperty;
 import org.codehaus.jackson.map.DeserializationConfig;
 import org.codehaus.jackson.map.DeserializationContext;
 import org.codehaus.jackson.map.DeserializerProvider;
-import org.codehaus.jackson.map.Deserializers;
 import org.codehaus.jackson.map.JsonDeserializer;
 import org.codehaus.jackson.map.JsonMappingException;
-import org.codehaus.jackson.map.KeyDeserializer;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.SerializationConfig;
-import org.codehaus.jackson.map.TypeDeserializer;
 import org.codehaus.jackson.map.deser.BeanDeserializerFactory;
 import org.codehaus.jackson.map.deser.JsonNodeDeserializer;
 import org.codehaus.jackson.map.deser.StdDeserializerProvider;
-import org.codehaus.jackson.map.introspect.BasicBeanDescription;
-import org.codehaus.jackson.map.module.SimpleDeserializers;
-import org.codehaus.jackson.map.type.ArrayType;
-import org.codehaus.jackson.map.type.CollectionLikeType;
-import org.codehaus.jackson.map.type.CollectionType;
-import org.codehaus.jackson.map.type.MapLikeType;
-import org.codehaus.jackson.map.type.MapType;
 import org.codehaus.jackson.type.JavaType;
 
 
@@ -119,7 +108,7 @@ public final class JsonMapper {
 
     public <T> T read(Response response, Class<T> requiredType) throws JsonParseException, JsonMappingException, IOException {
         int status = response.getStatus();
-        if(!(status >= 200 && status < 300)) {
+        if(Range.lookup(status) != Range.SUCCESS) {
             throw new IllegalArgumentException("response status must be in 2xx range (was " + status + ")");
         }
         Object entityObj = response.getEntity();

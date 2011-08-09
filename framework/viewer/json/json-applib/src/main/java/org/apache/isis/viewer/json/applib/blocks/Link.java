@@ -3,6 +3,8 @@ package org.apache.isis.viewer.json.applib.blocks;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.apache.isis.viewer.json.applib.JsonRepresentation;
+import org.codehaus.jackson.JsonNode;
 import org.jboss.resteasy.client.ClientExecutor;
 import org.jboss.resteasy.client.ClientRequest;
 import org.jboss.resteasy.client.ClientResponse;
@@ -12,6 +14,7 @@ public class Link {
     private String rel;
     private String href;
     private Method method = Method.GET;
+    private JsonRepresentation body;
     
     public String getRel() {
         return rel;
@@ -31,7 +34,19 @@ public class Link {
     public void setMethod(Method method) {
         this.method = method;
     }
+
+    /**
+     * @return a {@link JsonRepresentation} that is an {@link JsonRepresentation#isArray() array}
+     */
+    public JsonRepresentation getBody() {
+        return body;
+    }
     
+    public void setBody(final JsonNode body) {
+        this.body = new JsonRepresentation(body);
+    }
+    
+
     public <T> Response follow(ClientExecutor executor) throws Exception {
         ClientRequest restEasyRequest = executor.createRequest(href);
         restEasyRequest.setHttpMethod(method.name());
