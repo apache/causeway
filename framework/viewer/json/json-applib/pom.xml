@@ -64,6 +64,11 @@
 	        <classifier>jdk15</classifier>
 	        <scope>compile</scope>
 	    </dependency>
+        <dependency>
+            <groupId>org.jdom</groupId>
+            <artifactId>jdom</artifactId>
+        </dependency>
+	    
 	    <dependency>
 	        <groupId>xom</groupId>
 	        <artifactId>xom</artifactId>

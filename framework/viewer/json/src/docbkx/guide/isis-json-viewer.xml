@@ -46,12 +46,31 @@
     <para><emphasis>Isis</emphasis>' <emphasis>json</emphasis> viewer
     <package>[oai.viewer:json]</package> renders each domain objects as <ulink
     url="http://en.wikipedia.org/wiki/Representational_State_Transfer">RESTful</ulink>
-    resources. Each domain object is exposed as an (<acronym>JSON</acronym>)
-    resource through <acronym>HTTP GET</acronym> and can be used to access
-    other related objects by following links that represent the associations
-    of the domain object. The domain object can be interacted with by
-    modifying its state (through <acronym>HTTP PUT</acronym>) or by invoking
-    its actions (through <acronym>HTTP POST</acronym>).</para>
+    resources. Each domain object is exposed as an <acronym>JSON</acronym>
+    (<emphasis>J</emphasis>ava<emphasis>S</emphasis>cript
+    <emphasis>O</emphasis>bject <emphasis>N</emphasis>otation) resource
+    through <acronym>HTTP GET</acronym> and can be used to access other
+    related objects by following links that represent the associations of the
+    domain object. The domain object can be interacted with by modifying its
+    state (through <acronym>HTTP PUT</acronym>) or by invoking its actions
+    (through <acronym>HTTP POST</acronym>).</para>
+
+    <para>One of the appeals of <acronym>JSON</acronym> is that it is
+    increasingly being used as a data exchange protocol independent of any
+    particular technology. A JSON string is directly serializable as a graph
+    of <acronym>JSON</acronym> objects, but there are also libraries for all
+    the main stream platforms (Java, .NET, Ruby, Python) to consume and create
+    JSON. The JSON viewer therefore opens up a domain objects model for
+    consumption in other languages.</para>
+
+    <para>Conversely, it is feasible for frameworks other than
+    <emphasis>Isis</emphasis> to generate <acronym>JSON</acronym>
+    representations (so long as they have a similar concept of what makes up a
+    domain object model). To support this, the <ulink
+    url="http://restfulobjects.org">Restful Objects</ulink> specification
+    (hosted at <ulink
+    url="http://restfulobjects.org">http://restfulobjects.org</ulink>) has
+    been created. </para>
 
     <sect1>
       <title>Who this Guide is For</title>
@@ -126,9 +145,27 @@
 
     <para></para>
 
-    <para>for now, see the <ulink
-    url="https://cwiki.apache.org/confluence/display/ISIS/Restful+Json+Protocol">specification
-    on the Isis wiki</ulink>.</para>
+    <para>Topics to discuss:</para>
+
+    <para>* configuring the json viewer to run (no-op ... use the maven
+    archetype)</para>
+
+    <para>* templated URIs vs walker representations</para>
+
+    <para>* following links (format of body)</para>
+
+    <para>* use of annotation to indicate whether an action returns a
+    persisted object or not (and configuration of corresponding
+    FacetFactory)</para>
+
+    <para>* requirement of nu.xom in order to use XPATH support of
+    JsonRepresentation</para>
+
+    <para></para>
+
+    <para></para>
+
+    <para></para>
 
     <para></para>
   </chapter>
