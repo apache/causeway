@@ -225,6 +225,7 @@ public class ResourceRepresentationTest {
         assertThat(selfType.getMethod(), is(Method.GET));
         
         assertThat(domainObjectRepr.getString("_self.title"), is("ApplibValues"));
+        assertThat(domainObjectRepr.getString("_self.oid"), is("OID:1"));
 
         // _self.icon
         Link selfIcon = domainObjectRepr.getLink("_self.icon");
@@ -239,6 +240,7 @@ public class ResourceRepresentationTest {
         // id property
         JsonRepresentation idProperty = properties.getRepresentation("id");
         assertThat(idProperty.getString("memberType"), is("property"));
+        assertThat(idProperty.getString("propertyId"), is("id"));
         assertThat(idProperty.getString("value"), is(org.apache.isis.tck.objstore.dflt.scalars.ApplibValuesEntityRepositoryDefault.class.getName()));
         assertThat(idProperty.getString("disabledReason"), is(not(nullValue())));
 
@@ -258,6 +260,7 @@ public class ResourceRepresentationTest {
 
         JsonRepresentation listAction = actions.getRepresentation("list");
         assertThat(listAction.getString("memberType"), is("action"));
+        assertThat(listAction.getString("actionId"), is("list"));
         assertThat(listAction.getString("actionType"), is("USER"));
         assertThat(listAction.getInt("numParameters"), is(0));
 

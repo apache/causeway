@@ -72,6 +72,10 @@ public enum MemberType {
         this.mutators = mutators;
     }
 
+    public String key() {
+        return name().toLowerCase() + "Id";
+    }
+
     public String urlPart() {
         return urlPart;
     }
@@ -105,4 +109,5 @@ public enum MemberType {
 						PROPERTY:
 						COLLECTION;
 	}
+
 }

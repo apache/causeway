@@ -37,6 +37,7 @@ import org.apache.isis.viewer.json.viewer.RepContext;
 import org.apache.isis.viewer.json.viewer.representations.LinkRepBuilder;
 import org.apache.isis.viewer.json.viewer.representations.Representation;
 import org.apache.isis.viewer.json.viewer.representations.RepresentationBuilder;
+import org.apache.isis.viewer.json.viewer.util.OidUtils;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Maps;
@@ -64,6 +65,7 @@ public class DomainObjectRepBuilder extends RepresentationBuilder {
         Representation self = new Representation();
         self.put("link", selfLink);
         self.put("type", selfType);
+        self.put("oid", OidUtils.getOidStr(objectAdapter, getOidStringifier()));
         self.put("title", title);
         self.put("icon", iconLink);
         representation.put("_self", self);
