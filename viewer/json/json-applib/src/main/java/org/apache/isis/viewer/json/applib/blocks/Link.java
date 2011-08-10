@@ -45,12 +45,18 @@ public class Link {
     public void setBody(final JsonNode body) {
         this.body = new JsonRepresentation(body);
     }
-    
 
     public <T> Response follow(ClientExecutor executor) throws Exception {
+        return follow(executor, null);
+    }
+
+    public <T> Response follow(ClientExecutor executor, JsonRepresentation requestBody) throws Exception {
         ClientRequest restEasyRequest = executor.createRequest(href);
         restEasyRequest.setHttpMethod(method.name());
         restEasyRequest.accept(MediaType.APPLICATION_JSON_TYPE);
+        if(requestBody != null) {
+            restEasyRequest.body(MediaType.APPLICATION_JSON, requestBody.toString());
+        }
         @SuppressWarnings("unchecked")
         ClientResponse<T> restEasyResponse = executor.execute(restEasyRequest);
         return restEasyResponse;

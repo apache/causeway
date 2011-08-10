@@ -79,7 +79,7 @@ public class RepresentationWalker {
     }
 
     public void walk(String key) {
-        Step previousStep = previousStep();
+        Step previousStep = currentStep();
         if(previousStep.error!=null) {
             return;
         }
@@ -117,62 +117,110 @@ public class RepresentationWalker {
     }
 
     public void walkXpath(String linkXpath) {
-        JsonRepresentation entity;
-        try {
-            entity = getEntity();
-        } catch (Exception e) {
-            Step previousStep = previousStep();
-            previousStep.error = "exception: " + e.getMessage();
-            previousStep.exception = e;
-            return;
-        }
+        walkXpath(linkXpath, null);
+    }
 
+    public void walkXpath(String linkXpath, JsonRepresentation invokeBody) {
+        JsonRepresentation entity = getEntityElseMarkStepInError();
         if(entity == null) {
             return;
         }
         
-        JsonRepresentation matching;
+        Link link = null;
         try {
-            matching = entity.xpath(linkXpath);
+            JsonRepresentation matching = entity.xpath(linkXpath);
+            if (matching == null) {
+                addStep(linkXpath, null, null, null, "no such link '" + linkXpath + "'", null);
+                return;
+            }
+
+            link = matching.asLink();
+            if(link.getHref() == null) {
+                addStep(linkXpath, link, null, null, "key does not identify a link '" + linkXpath + "'", null);
+                return;
+            }
+
+            Response response;
+            if(invokeBody != null) {
+                response = restfulClient.follow(link, invokeBody);
+            } else {
+                response = restfulClient.follow(link);
+            }
+            addStep(linkXpath, link, null, JsonResponse.of(response, JsonRepresentation.class), null, null);
             
-        } catch (Exception e) {
+        } catch (RuntimeException e) {
+            // if xpath fails
             addStep(linkXpath, null, null, null, "exception: " + e.getMessage(), e);
             return;
-        }
-
-        if (matching == null) {
-            addStep(linkXpath, null, null, null, "no such link '" + linkXpath + "'", null);
-            return;
-        }
-
-        Link link = matching.asLink();
-        if(link.getHref() == null) {
-            addStep(linkXpath, link, null, null, "key does not identify a link '" + linkXpath + "'", null);
-            return;
-        }
-        
-        Response response;
-        try {
-            response = restfulClient.follow(link);
         } catch (Exception e) {
+            // if follow fails
             addStep(linkXpath, link, null, null, "failed to follow link: " + e.getMessage(), e);
             return;
         }
-        
-        addStep(linkXpath, link, null, JsonResponse.of(response, JsonRepresentation.class), null, null);
     }
 
-    public JsonRepresentation getEntity() throws JsonParseException, JsonMappingException, IOException {
-        Step previousStep = previousStep();
-        if (previousStep.response == null || previousStep.error != null) {
+    private JsonRepresentation getEntityElseMarkStepInError() {
+        try {
+            return getEntity();
+        } catch (Exception e) {
+            Step previousStep = currentStep();
+            previousStep.error = "exception: " + e.getMessage();
+            previousStep.exception = e;
             return null;
         }
-        return previousStep.response.getEntity();
     }
 
-    private Step previousStep() {
+    /**
+     * The entity returned from the previous walk.
+     * 
+     * <p>
+     * Will return null if the previous walk returned an error.
+     */
+    public JsonRepresentation getEntity() throws JsonParseException, JsonMappingException, IOException {
+        Step currentStep = currentStep();
+        if (currentStep.response == null || currentStep.error != null) {
+            return null;
+        }
+        return currentStep.response.getEntity();
+    }
+
+    /**
+     * The response returned from the previous walk.
+     * 
+     * <p>
+     * Once a walk/performed has been attempted, is guaranteed to return a non-null value.
+     * (Conversely, will return <tt>null</tt> immediately after instantiation and prior 
+     * to a walk being attempted/performed).  
+     */
+    public JsonResponse<?> getResponse()  {
+        Step currentStep = currentStep();
+        return currentStep != null? currentStep.response: null;
+    }
+
+    /**
+     * The error (if any) that occurred from the previous walk.
+     */
+    public String getError()  {
+        Step currentStep = currentStep();
+        return currentStep != null? currentStep.error: null;
+    }
+
+    /**
+     * The exception (if any) that occurred from the previous walk.
+     * 
+     * <p>
+     * Will only ever be populated if {@link #getError()} is non-null.
+     */
+    public Exception getException()  {
+        Step currentStep = currentStep();
+        return currentStep != null? currentStep.exception: null;
+    }
+
+    /**
+     * The step that has just been walked.
+     */
+    private Step currentStep() {
         return steps.get(0);
     }
-
 
 }
