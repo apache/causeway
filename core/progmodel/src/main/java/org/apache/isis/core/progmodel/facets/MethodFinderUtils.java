@@ -16,8 +16,11 @@
  */
 package org.apache.isis.core.progmodel.facets;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.isis.core.metamodel.facetapi.MethodRemover;
 import org.apache.isis.core.metamodel.methodutils.MethodScope;
@@ -132,6 +135,30 @@ public final class MethodFinderUtils {
             return null;
         }
         return null;
+    }
+
+    public static List<Method> findMethodsWithAnnotation(final Class<?> type, final MethodScope methodScope,
+    		Class<? extends Annotation> annotationClass) {
+
+    	List<Method> methods = new ArrayList<Method>();
+
+    	// Validate arguments
+    	if ( (type == null) || (methodScope == null) || (annotationClass == null)) {
+    		throw new IllegalArgumentException("One or more arguments are 'null' valued");
+    	}
+
+    	// Find methods annotated with the specified annotation
+    	for (Method method : type.getMethods()) {
+            if (!methodScope.matchesScopeOf(method)) {
+                continue;
+            }
+
+    		if (method.isAnnotationPresent(annotationClass)) {
+    			methods.add(method);
+    		}
+    	}
+
+    	return methods;
     }
 
     public static void removeMethod(final MethodRemover methodRemover, final Method method) {
