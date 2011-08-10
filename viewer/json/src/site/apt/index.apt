@@ -24,7 +24,10 @@ JSON Viewer
  Each domain object (or part of object) is exposed as a RESTful resource, in
  a JSON representation.
 
- See the {{{https://cwiki.apache.org/confluence/display/ISIS/Restful+Json+Protocol}Isis wiki}} for more details.
+ The viewer is an implementation of the {{{http://restfulobjects.org}Restful Objects}}
+ specification, intended to allow other server-side frameworks to be implemented
+ to support the same protocol.
+
 
 Further Info
   
