@@ -44,7 +44,8 @@ Eclipse
   <<<\}\}>>> being used to define custom regions.
   
   Unfortunately, though the original code-folding plugin stopped working somewhere around Eclipse 3.3.  
-  All is not lost though; Kevin Meyer has helpfully recompiled it against Eclipse 3.5.  To use it:
+  All is not lost though; Kevin Meyer has helpfully recompiled it against Eclipse 3.5 (tested through to Eclipse 3.7).
+  To use it:
   
   * download this {{{./com.cb.eclipse.folding.KAM-3.5.zip}zip}}
   
@@ -55,7 +56,11 @@ Eclipse
   []
   
   Then, use <<Windows > Preferences > Java > Editor > Folding>> and specify user-defined regions.
-    
+
+* Other Plugins
+
+  The {{{./docbkx/html/guide/ch01.html}Contributors Guide}} also has suggestions for a number of other plugins
+  that you might wish to use.
   
 IntelliJ IDEA
 
