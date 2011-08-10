@@ -91,7 +91,11 @@ public class RestfulClient {
     }
 
     public Response follow(Link link) throws Exception {
-        Response response = link.follow(executor);
+        return follow(link, null);
+    }
+
+    public Response follow(Link link, JsonRepresentation requestBody) throws Exception {
+        Response response = link.follow(executor, requestBody);
         // this is a bit hacky
         @SuppressWarnings("unchecked")
         BaseClientResponse<String> restEasy = (BaseClientResponse<String>)response;

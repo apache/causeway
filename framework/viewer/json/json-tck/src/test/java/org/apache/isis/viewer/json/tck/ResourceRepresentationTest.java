@@ -420,16 +420,33 @@ public class ResourceRepresentationTest {
     @Test
     public void walkResources() throws Exception {
     
-        // given an initial representation
+        // given a response for an initial resource
         HomePageResource homePageResource = client.getHomePageResource();
-
-        RepresentationWalker walker = client.createWalker(homePageResource.resources());
-        walker.walk("services");
-        walker.walkXpath("/*[title='ApplibValues']/link[rel='object']");
-        walker.walkXpath("/newEntity[memberType='action']/details");
-        JsonRepresentation jsonRepresentation = walker.getEntity();
+        Response homePageResp = homePageResource.resources();
         
-        assertThat(jsonRepresentation.getString("_self.link.href"), matches(".+/objects/OID:1/actions/newEntity")); 
+        // and given a walker starting from this response
+        RepresentationWalker walker = client.createWalker(homePageResp);
+        
+        // when walk the home pages' 'services' link
+        walker.walk("services");
+        
+        // and when locate the ApplibValues repo and walk the its 'object' link
+        walker.walkXpath("/*[title='ApplibValues']/link[rel='object']");
+        
+        // and when locate the AppLibValues repo's "newEntity" action and walk to its details
+        walker.walkXpath("/newEntity[memberType='action']/details");
+        
+        // and when find the invoke body for the "newEntity" action and then walk the action using the body 
+        JsonRepresentation newEntityActionDetails = walker.getEntity();
+        JsonRepresentation newEntityActionInvokeBody = newEntityActionDetails.getArray("invoke.body");
+        walker.walkXpath("/invoke", newEntityActionInvokeBody);
+        
+        // and when walk the link to the returned object
+        walker.walk("link");
+        
+        // then the returned object is created with its OID
+        JsonRepresentation newEntityDomainObject = walker.getEntity();
+        assertThat(newEntityDomainObject.getString("_self.link.href"), matches(".+/objects/OID:[\\d]+$")); 
     }
 
 }
