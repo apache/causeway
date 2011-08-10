@@ -4,16 +4,13 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.StringReader;
+import java.util.List;
 
 import net.sf.json.JSON;
 import net.sf.json.JSONNull;
 import net.sf.json.JSONSerializer;
 import net.sf.json.xml.XMLSerializer;
-import nu.xom.Builder;
-import nu.xom.Document;
-import nu.xom.Node;
-import nu.xom.Nodes;
-import nu.xom.Serializer;
 
 import org.apache.isis.viewer.json.applib.blocks.Link;
 import org.apache.isis.viewer.json.applib.util.JsonMapper;
@@ -23,6 +20,11 @@ import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.node.ArrayNode;
 import org.codehaus.jackson.node.JsonNodeFactory;
 import org.codehaus.jackson.node.ObjectNode;
+import org.jdom.Element;
+import org.jdom.JDOMException;
+import org.jdom.input.SAXBuilder;
+import org.jdom.output.XMLOutputter;
+import org.jdom.xpath.XPath;
 
 
 /**
@@ -302,35 +304,33 @@ public class JsonRepresentation {
      * Requires xom:xom:1.1 (LGPL) to be added as a dependency.
      */
     public JsonRepresentation xpath(String xpathExpression) {
-        // puts object structure under a <o>
-        Document document = toXomDoc();
-        
-        String prefix = jsonNode.isArray()?"a":"o";
-        Nodes matchingNodes = document.query("/" + prefix + xpathExpression);
-        Document doc = new Document(new nu.xom.Element(prefix));
-        for (int i = 0; i < matchingNodes.size(); i++) {
-            Node matchingNode = matchingNodes.get(i);
-            matchingNode.detach();
-            doc.getRootElement().appendChild(matchingNode);
-        }
-        JsonRepresentation matchedRepresentation = asJsonRepresentation(doc);
-        if(matchedRepresentation == null) {
-            return null;
-        }
-        return matchedRepresentation;
-    }
-
-    private Document toXomDoc() {
-        String xml = toXml();
-        Builder builder = new nu.xom.Builder();
-        Document document;
         try {
-            document = builder.build(xml, ".");
-        } catch (Exception e) {
-            // shouldn't occur
+            // puts object structure under a <o>
+            org.jdom.Document jdomDoc = new SAXBuilder().build(new StringReader(toXml()));
+
+            String prefix = jsonNode.isArray()?"a":"o";
+            XPath xpath = XPath.newInstance("/" + prefix + xpathExpression);
+            
+            @SuppressWarnings("unchecked")
+            List<Element> matchingElements = xpath.selectNodes(jdomDoc);
+            
+            org.jdom.Document doc = new org.jdom.Document(new org.jdom.Element(prefix));
+            for (Element el: matchingElements) {
+                el.detach();
+                doc.getRootElement().addContent(el);
+            }
+            JsonRepresentation matchedRepresentation = asJsonRepresentation(doc);
+            if(matchedRepresentation == null) {
+                return null;
+            }
+            return matchedRepresentation;
+
+        } catch (JDOMException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        return document;
+        
     }
 
     private String toXml() {
@@ -341,9 +341,9 @@ public class JsonRepresentation {
     }
     
 
-    private static JsonRepresentation asJsonRepresentation(nu.xom.Document xmlDoc) {
+    private static JsonRepresentation asJsonRepresentation(org.jdom.Document doc) {
         try {
-            return asJsonRepresentation(asJson(asInputStream(xmlDoc)));
+            return asJsonRepresentation(asJson(asInputStream(doc)));
         } catch (IOException e) {
             // shouldn't occur
             throw new RuntimeException(e);
@@ -351,10 +351,11 @@ public class JsonRepresentation {
     }
 
 
-    private static InputStream asInputStream(nu.xom.Document xmlDoc) throws IOException {
+    private static InputStream asInputStream(org.jdom.Document doc) throws IOException {
+        XMLOutputter outputter = new XMLOutputter();
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        Serializer serializer = new nu.xom.Serializer(baos);
-        serializer.write(xmlDoc);
+        
+        outputter.output(doc, baos);
 
         @SuppressWarnings("unused")
         String xml = new String(baos.toByteArray());
