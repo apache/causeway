@@ -165,12 +165,6 @@
 
             <dependency>
                 <groupId>${project.groupId}</groupId>
-                <artifactId>quickstart-domsvc</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>${project.groupId}</groupId>
                 <artifactId>quickstart-fixture</artifactId>
                 <version>${project.version}</version>
             </dependency>

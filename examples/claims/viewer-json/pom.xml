@@ -26,8 +26,8 @@
         <version>0.2.0-incubating-SNAPSHOT</version>
     </parent>
 
-	<artifactId>claims-viewer-restful</artifactId>
-	<name>Example Claims App Restful Viewer</name>
+	<artifactId>claims-viewer-json</artifactId>
+	<name>Claims JSON Viewer</name>
 	
 	<packaging>war</packaging>
 
@@ -51,12 +51,10 @@
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>claims-fixture</artifactId>
-            <scope>runtime</scope>
-            <optional>true</optional>
         </dependency>
 
 
-		<!-- Isis -->
+        <!-- isis viewer -->
 		<dependency>
 	        <groupId>org.apache.isis.viewer</groupId>
 			<artifactId>json-viewer</artifactId>
@@ -78,10 +76,6 @@
         <dependency>
             <groupId>org.apache.isis.runtimes.dflt.profilestores</groupId>
             <artifactId>dflt</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.isis.runtimes.dflt.profilestores</groupId>
-            <artifactId>xml</artifactId>
         </dependency>
         
         <!-- isis progmodel -->
