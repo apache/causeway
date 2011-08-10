@@ -42,6 +42,7 @@ public class ActionRepBuilder extends AbstractMemberRepBuilder<ObjectAction> {
         putSelfIfRequired();
         putContributedByIfRequired();
         putTypeRep();
+        putIdRep();
         putMemberTypeRep();
         representation.put("actionType", objectMember.getType());
         representation.put("numParameters", objectMember.getParameterCount());

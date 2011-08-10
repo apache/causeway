@@ -39,6 +39,7 @@ public class PropertyRepBuilder extends AbstractMemberRepBuilder<OneToOneAssocia
     public Representation build() {
         putSelfIfRequired();
         putTypeRep();
+        putIdRep();
         putMemberTypeRep();
         putValueIfRequired();
         putDisabledReason();

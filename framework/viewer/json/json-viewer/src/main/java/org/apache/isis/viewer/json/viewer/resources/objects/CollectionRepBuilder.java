@@ -41,6 +41,7 @@ public class CollectionRepBuilder extends AbstractMemberRepBuilder<OneToManyAsso
     public Representation build() {
         putSelfIfRequired();
         putTypeRep();
+        putIdRep();
         putMemberTypeRep();
         putValueIfRequired();
         putDisabledReason();

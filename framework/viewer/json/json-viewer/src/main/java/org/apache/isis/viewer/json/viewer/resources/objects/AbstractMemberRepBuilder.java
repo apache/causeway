@@ -63,6 +63,10 @@ public abstract class AbstractMemberRepBuilder<T extends ObjectMember> extends R
         representation.put("type", typeRep);
     }
 
+    protected void putIdRep() {
+        representation.put(memberType.key(), objectMember.getId());
+    }
+
     protected void putMutatorsIfRequired() {
         if(!memberRepType.isStandalone() || usability().isVetoed()) {
             return;
