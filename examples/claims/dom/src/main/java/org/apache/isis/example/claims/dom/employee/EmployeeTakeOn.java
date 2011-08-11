@@ -100,7 +100,7 @@ public class EmployeeTakeOn extends AbstractDomainObject {
     public Employee finish() {
         Employee employee = newTransientInstance(Employee.class);
         employee.setName(getName());
-        employee.setApprover(approver);
+        employee.setDefaultApprover(approver);
         persist(employee);
         return employee;
     }

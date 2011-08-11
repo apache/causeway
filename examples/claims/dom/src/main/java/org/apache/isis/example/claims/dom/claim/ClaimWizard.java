@@ -162,7 +162,7 @@ public class ClaimWizard extends AbstractDomainObject {
 
     protected void onModifyClaimant(final Claimant oldClaimant,
             final Claimant newClaimant) {
-        setApprover(newClaimant.getApprover());
+        setApprover(newClaimant.getDefaultApprover());
     }
 
     protected void onClearClaimant(final Claimant oldClaimant) {

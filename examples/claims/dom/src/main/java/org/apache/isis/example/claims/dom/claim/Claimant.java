@@ -22,7 +22,7 @@ package org.apache.isis.example.claims.dom.claim;
 
 public interface Claimant {
 
-    Approver getApprover();
+    Approver getDefaultApprover();
 
     String title();
 

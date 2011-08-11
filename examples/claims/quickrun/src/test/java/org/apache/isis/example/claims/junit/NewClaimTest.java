@@ -36,7 +36,7 @@ public class NewClaimTest extends AbstractTest {
         Claim newClaim = claimRepository.newClaim(tomEmployee);
         assertThat(newClaim.getDescription(), is("enter a description here"));
         assertThat(newClaim.getStatus(), is("New"));
-        assertThat(newClaim.getApprover(), is(tomEmployee.getApprover()));
+        assertThat(newClaim.getApprover(), is(tomEmployee.getDefaultApprover()));
         assertThat(newClaim.getItems().size(), is(0));
     }
 

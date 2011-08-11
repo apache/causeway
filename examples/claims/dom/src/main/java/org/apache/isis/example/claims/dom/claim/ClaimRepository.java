@@ -45,11 +45,11 @@ public interface ClaimRepository {
 
     public ClaimWizard newClaimUsingWizard(Claimant claimant);
 
-    @NotContributed
     public List<ClaimantExpenseSummary> analyseClaimantExpenses();
 
+    @NotContributed
     int countClaimsFor(Claimant claimant);
 
+    @NotContributed
     Claim mostRecentClaim(Claimant claimant);
-
 }

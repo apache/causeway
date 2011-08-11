@@ -19,11 +19,7 @@
 
 package org.apache.isis.example.claims.dom.employee;
 
-import java.util.Arrays;
-import java.util.List;
-
 import org.apache.isis.applib.AbstractDomainObject;
-import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Optional;
 import org.apache.isis.example.claims.dom.claim.Approver;
@@ -51,27 +47,27 @@ public class Employee extends AbstractDomainObject implements Claimant, Approver
 
     @MemberOrder(sequence = "1")
     public String getName() {
-        return name;
-    }
+		return name;
+	}
 
     public void setName(String lastName) {
-        this.name = lastName;
-    }
+		this.name = lastName;
+	}
 
     // }}
 
     // {{ Approver
-    private Approver approver;
+    private Approver defaultApprover;
 
     @Override
     @MemberOrder(sequence = "2")
-    public Approver getApprover() {
-        return approver;
-    }
+    public Approver getDefaultApprover() {
+		return defaultApprover;
+	}
 
-    public void setApprover(Approver approver) {
-        this.approver = approver;
-    }
+    public void setDefaultApprover(Approver approver) {
+		this.defaultApprover = approver;
+	}
 
     public String validateApprover(final Approver approver) {
         if (approver == null)
@@ -84,91 +80,18 @@ public class Employee extends AbstractDomainObject implements Claimant, Approver
 
     // }}
 
-    // // {{ Location
-    // private Location location;
-    //
-    // @Disabled
-    // @MemberOrder(sequence = "1")
-    // public Location getLocation() {
-    // return location;
-    // }
-    //
-    // public void setLocation(final Location location) {
-    // this.location = location;
-    // }
-    // // }}
-
-    // {{ SomeHiddenProperty
-    private String someHiddenProperty;
-
-    @Hidden
-    @MemberOrder(sequence = "1")
-    public String getSomeHiddenProperty() {
-        return someHiddenProperty;
-    }
-
-    public void setSomeHiddenProperty(final String someHiddenProperty) {
-        this.someHiddenProperty = someHiddenProperty;
-    }
-
-    // }}
-
-    // {{ SomePropertyWithDefault
-    private String somePropertyWithDefault;
-
-    @MemberOrder(sequence = "1")
-    public String getSomePropertyWithDefault() {
-        return somePropertyWithDefault;
-    }
-
-    public void setSomePropertyWithDefault(final String somePropertyWithDefault) {
-        this.somePropertyWithDefault = somePropertyWithDefault;
-    }
-
-    public String defaultSomePropertyWithDefault() {
-        return "Foo";
-    }
-
-    // }}
-
-    // {{ SomeActionWithParameterDefaults
-    @MemberOrder(sequence = "1")
-    public Employee someActionWithParameterDefaults(final int param0, final int param1) {
-        setLimit(param0 + param1);
-        return this;
-    }
-
-    public int default0SomeActionWithParameterDefaults() {
-        return 5;
-    }
-
-    // }}
-
-    // {{ someActionWithParameterChoices
-    @MemberOrder(sequence = "1")
-    public Employee someActionWithParameterChoices(final Integer param0, final Integer param1) {
-        setLimit(param0 - param1);
-        return this;
-    }
-
-    public List<Integer> choices0SomeActionWithParameterChoices() {
-        return Arrays.asList(1, 2, 3);
-    }
-
-    // }}
-
     // {{ Limit
-    private int limit;
+    private Integer limit;
 
     @Optional
     @MemberOrder(sequence = "1")
-    public int getLimit() {
-        return limit;
-    }
-
-    public void setLimit(final int limit) {
-        this.limit = limit;
-    }
+    public Integer getLimit() {
+		return limit;
+	}
+    public void setLimit(final Integer limit) {
+		this.limit = limit;
+	}
     // }}
+
 
 }

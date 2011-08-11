@@ -60,7 +60,7 @@ public class ClaimsFixture extends AbstractFixture {
         Employee claimant;
         claimant = newTransientInstance(Employee.class);
         claimant.setName(name);
-        claimant.setApprover(approver);
+        claimant.setDefaultApprover(approver);
         //claimant.setLocation(location);
         persist(claimant);
         return claimant;

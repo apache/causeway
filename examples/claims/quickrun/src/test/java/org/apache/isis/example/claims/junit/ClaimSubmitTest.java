@@ -40,7 +40,7 @@ public class ClaimSubmitTest extends AbstractTest {
     public void cannotSubmitTwice() throws Exception {
         Claim tomsSubmittedClaim = tomsSubmittedClaim();
         try {
-            Approver approver = tomEmployee.getApprover();
+            Approver approver = tomEmployee.getDefaultApprover();
             tomsSubmittedClaim.submit(approver);
             fail("Should not be able to submit again");
         } catch (DisabledException e) {
@@ -51,7 +51,7 @@ public class ClaimSubmitTest extends AbstractTest {
     private Claim tomsSubmittedClaim() {
         List<Claim> tomsClaims = claimRepository.claimsFor(tomEmployee);
         Claim tomsClaim1 = tomsClaims.get(0);
-        tomsClaim1.submit(tomEmployee.getApprover());
+        tomsClaim1.submit(tomEmployee.getDefaultApprover());
         assertThat(tomsClaim1.getStatus(), is("Submitted"));
         return wrapped(tomsClaim1);
     }

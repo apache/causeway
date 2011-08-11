@@ -39,13 +39,12 @@ public class ClaimItem extends AbstractDomainObject {
 
     @MemberOrder(sequence = "1")
     public Date getDateIncurred() {
-        return dateIncurred;
-    }
+		return dateIncurred;
+	}
 
     public void setDateIncurred(Date dateIncurred) {
-        this.dateIncurred = dateIncurred;
-    }
-
+		this.dateIncurred = dateIncurred;
+	}
     // }}
 
     // {{ Description
@@ -53,13 +52,12 @@ public class ClaimItem extends AbstractDomainObject {
 
     @MemberOrder(sequence = "2")
     public String getDescription() {
-        return description;
-    }
+		return description;
+	}
 
     public void setDescription(String description) {
-        this.description = description;
-    }
-
+		this.description = description;
+	}
     // }}
 
     // {{ Amount
@@ -67,12 +65,13 @@ public class ClaimItem extends AbstractDomainObject {
 
     @MemberOrder(sequence = "3")
     public Money getAmount() {
-        return amount;
-    }
+		return amount;
+	}
 
     public void setAmount(Money price) {
-        this.amount = price;
-    }
+		this.amount = price;
+	}
     // }}
+
 
 }

@@ -98,7 +98,7 @@ public class ClaimRepositoryDefault extends AbstractFactoryAndRepository impleme
         Claim claim = newTransientInstance(Claim.class);
         if (claimant != null) {
             claim.setClaimant(claimant);
-            claim.setApprover(claimant.getApprover());
+            claim.setApprover(claimant.getDefaultApprover());
         }
         return claim;
     }

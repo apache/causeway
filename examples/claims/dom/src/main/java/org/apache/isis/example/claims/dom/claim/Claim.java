@@ -36,13 +36,15 @@ import org.apache.isis.applib.util.Reasons;
 import org.apache.isis.applib.value.Date;
 import org.apache.isis.applib.value.Money;
 
+/**
+ * @author  danhaywood
+ */
 public class Claim extends AbstractDomainObject /* implements Calendarable */{
 
     // {{ Title
     public String title() {
         return getStatus() + " - " + getDate();
     }
-
     // }}
 
     // {{ Lifecycle
@@ -58,12 +60,12 @@ public class Claim extends AbstractDomainObject /* implements Calendarable */{
 
     @MemberOrder(sequence = "1.2")
     public boolean getRush() {
-        return rush;
-    }
+		return rush;
+	}
 
     public void setRush(final boolean flag) {
-        this.rush = flag;
-    }
+		this.rush = flag;
+	}
 
     // }}
 
@@ -72,12 +74,12 @@ public class Claim extends AbstractDomainObject /* implements Calendarable */{
 
     @MemberOrder(sequence = "1")
     public String getDescription() {
-        return description;
-    }
+		return description;
+	}
 
     public void setDescription(String description) {
-        this.description = description;
-    }
+		this.description = description;
+	}
 
     public String defaultDescription() {
         return "enter a description here";
@@ -99,28 +101,39 @@ public class Claim extends AbstractDomainObject /* implements Calendarable */{
 
     @MemberOrder(sequence = "2")
     public Date getDate() {
-        return date;
-    }
+		return date;
+	}
 
     public void setDate(Date date) {
-        this.date = date;
-    }
+		this.date = date;
+	}
 
     // }}
 
     // {{ Status
+    /**
+     * @uml.property  name="status"
+     */
     private String status;
 
+    /**
+     * @return
+     * @uml.property  name="status"
+     */
     @Disabled
     @MemberOrder(sequence = "3")
     @MaxLength(5)
     public String getStatus() {
-        return status;
-    }
+		return status;
+	}
 
+    /**
+     * @param status
+     * @uml.property  name="status"
+     */
     public void setStatus(String status) {
-        this.status = status;
-    }
+		this.status = status;
+	}
 
     // }}
 
@@ -143,17 +156,29 @@ public class Claim extends AbstractDomainObject /* implements Calendarable */{
     // }}
 
     // {{ Claimant
+    /**
+     * @uml.property  name="claimant"
+     * @uml.associationEnd  
+     */
     private Claimant claimant;
 
+    /**
+     * @return
+     * @uml.property  name="claimant"
+     */
     @Disabled
     @MemberOrder(sequence = "4")
     public Claimant getClaimant() {
-        return claimant;
-    }
+		return claimant;
+	}
 
+    /**
+     * @param claimant
+     * @uml.property  name="claimant"
+     */
     public void setClaimant(Claimant claimant) {
-        this.claimant = claimant;
-    }
+		this.claimant = claimant;
+	}
 
     // }}
 
@@ -164,12 +189,12 @@ public class Claim extends AbstractDomainObject /* implements Calendarable */{
     @MemberOrder(sequence = "5")
     @Optional
     public Approver getApprover() {
-        return approver;
-    }
+		return approver;
+	}
 
     public void setApprover(Approver approver) {
-        this.approver = approver;
-    }
+		this.approver = approver;
+	}
 
     public String disableApprover() {
         return getDescription().contains("baz") ? "desc contains baz" : null;
@@ -188,8 +213,8 @@ public class Claim extends AbstractDomainObject /* implements Calendarable */{
 
     @MemberOrder(sequence = "6")
     public List<ClaimItem> getItems() {
-        return items;
-    }
+		return items;
+	}
 
     public void addToItems(ClaimItem item) {
         items.add(item);
@@ -198,8 +223,6 @@ public class Claim extends AbstractDomainObject /* implements Calendarable */{
     public void removeFromItems(ClaimItem item) {
         items.remove(item);
     }
-
-    // }}
 
     // }}
 
@@ -214,7 +237,7 @@ public class Claim extends AbstractDomainObject /* implements Calendarable */{
     }
 
     public Approver default0Submit() {
-        return getClaimant().getApprover();
+        return getClaimant().getDefaultApprover();
     }
 
     // }}
@@ -273,12 +296,6 @@ public class Claim extends AbstractDomainObject /* implements Calendarable */{
         return null;
     }
 
-    // @Ignore
-    // @Override
-    // public CalendarEvent getCalendarEvent() {
-    // return CalendarEvent.newAllDayEvent(getDate().dateValue());
-    // }
-
     public static class ClaimStatus {
 
         private static final String NEW = "New";
@@ -300,7 +317,6 @@ public class Claim extends AbstractDomainObject /* implements Calendarable */{
                 return "Must be one of " + ALL;
             }
         }
-
     }
 
 
