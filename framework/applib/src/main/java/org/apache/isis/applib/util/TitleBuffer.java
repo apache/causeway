@@ -282,6 +282,26 @@ public class TitleBuffer {
         return this;
     }
 
+    /**
+     * Concatenate the joiner text and the text to the text of this TitleString object. If no text yet exists in
+     * the object then the joiner text is omitted.
+     * 
+     * @return a reference to the called object (itself).
+     */
+    public TitleBuffer concat(final String joiner, final String text) {
+        if (!isEmpty(text)) {
+            appendJoiner(joiner);
+            title.append(text);
+        }
+        return this;
+    }
+
+    /**
+     * Concatenate the joiner text and the title of the object to the text of this TitleString object. If no object yet exists in
+     * the object then the joiner text is omitted.
+     * 
+     * @return a reference to the called object (itself).
+     */
     public final TitleBuffer concat(final String joiner, final Object object) {
         if (!isEmpty(object)) {
             appendJoiner(joiner);
@@ -290,6 +310,12 @@ public class TitleBuffer {
         return this;
     }
 
+    /**
+     * Concatenate the joiner text and the title of the object to the text of this TitleString object. If no object yet exists in
+     * the object then defaultValue is used instead.
+     * 
+     * @return a reference to the called object (itself).
+     */
     public final TitleBuffer concat(final String joiner, final Object object, final String defaultValue) {
         if (isEmpty(object)) {
             appendJoiner(joiner);
