@@ -1,13 +1,22 @@
 package org.apache.isis.viewer.json.applib.blocks;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
+import org.codehaus.jackson.JsonFactory;
 import org.codehaus.jackson.JsonNode;
+import org.codehaus.jackson.node.JsonNodeFactory;
+import org.codehaus.jackson.node.ObjectNode;
 import org.jboss.resteasy.client.ClientExecutor;
 import org.jboss.resteasy.client.ClientRequest;
 import org.jboss.resteasy.client.ClientResponse;
+
+import com.google.common.base.Charsets;
 
 public class Link {
     
@@ -62,6 +71,24 @@ public class Link {
         return restEasyResponse;
     }
 
+    public String asUrlEncoded() {
+        ObjectNode jsonRep = new ObjectNode(JsonNodeFactory.instance);
+        jsonRep.put("rel", getRel());
+        jsonRep.put("href", getHref());
+        if(getMethod() != null) {
+            jsonRep.put("method", getMethod().name());
+        }
+        if(getBody() != null) {
+            jsonRep.put("body", getBody().getJsonNode());
+        }
+        try {
+            return URLEncoder.encode(jsonRep.toString(), Charsets.UTF_16.name());
+        } catch (UnsupportedEncodingException e) {
+            // shouldn't happen
+            throw new RuntimeException(e);
+        }
+    }
+
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -94,6 +121,7 @@ public class Link {
             return false;
         return true;
     }
+
     @Override
     public String toString() {
         return "Link [rel=" + rel + ", href=" + href + ", method=" + method + "]";
