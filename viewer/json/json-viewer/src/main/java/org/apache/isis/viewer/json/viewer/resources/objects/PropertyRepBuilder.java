@@ -21,8 +21,8 @@ import java.util.List;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.viewer.RepContext;
-import org.apache.isis.viewer.json.viewer.representations.Representation;
 
 import com.google.common.collect.Lists;
 
@@ -36,7 +36,7 @@ public class PropertyRepBuilder extends AbstractMemberRepBuilder<OneToOneAssocia
         super(repContext, objectAdapter, MemberType.PROPERTY, otoa);
     }
 
-    public Representation build() {
+    public JsonRepresentation build() {
         putSelfIfRequired();
         putTypeRep();
         putIdRep();

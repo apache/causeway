@@ -18,16 +18,17 @@
  */
 package org.apache.isis.viewer.json.viewer.util;
 
-import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import org.apache.isis.viewer.json.applib.JsonRepresentation;
 
 public final class UrlParserUtils {
 
     private final static Pattern OBJECT_OID = Pattern.compile(".*objects\\/(.+)");;
 
-	public final static String oidFromHref(final Map<String,Object> link) {
-		String href = (String) link.get("href");
+	public final static String oidFromHref(final JsonRepresentation link) {
+		String href = link.getString("href");
 		Matcher matcher = OBJECT_OID.matcher(href);
 		if(!matcher.matches()) {
 			return null;

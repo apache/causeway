@@ -5,6 +5,10 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import net.sf.json.JSON;
@@ -20,11 +24,16 @@ import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.node.ArrayNode;
 import org.codehaus.jackson.node.JsonNodeFactory;
 import org.codehaus.jackson.node.ObjectNode;
+import org.codehaus.jackson.node.POJONode;
 import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
 import org.jdom.output.XMLOutputter;
 import org.jdom.xpath.XPath;
+
+import com.google.common.base.Splitter;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
 
 
 /**
@@ -33,7 +42,7 @@ import org.jdom.xpath.XPath;
  */
 public class JsonRepresentation {
 
-    public static JsonRepresentation newObject() {
+    public static JsonRepresentation newMap() {
         return new JsonRepresentation(new ObjectNode(JsonNodeFactory.instance));
     }
 
@@ -131,6 +140,30 @@ public class JsonRepresentation {
     // getInt, getLong, getDouble, getString
     /////////////////////////////////////////////////////////////////////////
 
+
+    public Boolean getBoolean(String path) {
+        JsonNode node = getNode(path);
+        if (node == null || node.isMissingNode()) {
+            return null;
+        }
+        checkValue(path, node, "a boolean");
+        if (!node.isBoolean()) {
+            throw new IllegalArgumentException("'" + path + "' (" + node.toString() + ") is not a boolean");
+        }
+        return node.getBooleanValue();
+    }
+
+    public BigInteger getBigInteger(String path) {
+        JsonNode node = getNode(path);
+        if (node == null || node.isMissingNode()) {
+            return null;
+        }
+        checkValue(path, node, "a biginteger");
+        if (!node.isBigInteger()) {
+            throw new IllegalArgumentException("'" + path + "' (" + node.toString() + ") is not a biginteger");
+        }
+        return node.getBigIntegerValue();
+    }
 
     public Integer getInt(String path) {
         JsonNode node = getNode(path);
@@ -267,7 +300,7 @@ public class JsonRepresentation {
             throw new IllegalArgumentException("'" + path + "' (a value) does not represent a link");
         }
 
-        Link link = JsonNodeUtils.convert(node, Link.class);
+        Link link = new Link(node);
         if(link.getHref() == null || link.getRel() == null) {
             throw new IllegalArgumentException("'" + path + "' (a map) does not fully represent a link");
         }
@@ -284,6 +317,27 @@ public class JsonRepresentation {
         }
         String linkPropertyName = getJsonNode().getFieldNames().next();
         return getLink(linkPropertyName);
+    }
+
+
+    /**
+     * Convert underlying representation into an array.
+     */
+    protected ArrayNode nodeAsArray() {
+        if(!isArray()) {
+            throw new IllegalStateException("does not represent array");
+        }
+        return (ArrayNode) getJsonNode();
+    }
+
+    /**
+     * Convert underlying representation into an object (map).
+     */
+    protected ObjectNode nodeAsMap() {
+        if(!isMap()) {
+            throw new IllegalStateException("does not represent map");
+        }
+        return (ObjectNode) getJsonNode();
     }
 
 
@@ -375,11 +429,140 @@ public class JsonRepresentation {
             return null;
         }
         String jsonStr = json.toString();
-        JsonRepresentation jsonRepresentation = JsonMapper.instance().read(jsonStr, JsonRepresentation.class);
-        return jsonRepresentation;
+        return JsonMapper.instance().read(jsonStr, JsonRepresentation.class);
+    }
+
+
+    public String asUrlEncoded() {
+        return JsonNodeUtils.asUrlEncoded(getJsonNode());
     }
 
     
+    /////////////////////////////////////////////////////////////////////////
+    // mutable
+    /////////////////////////////////////////////////////////////////////////
+
+    public void put(String key, Object value) {
+        if(!isMap()) {
+            throw new IllegalStateException("does not represent map");
+        }
+        if(value == null) {
+            return;
+        }
+        Path path = Path.parse(key);
+        ObjectNode node = JsonNodeUtils.walkNodeUpTo(nodeAsMap(), path.getHead());
+        node.put(path.getTail(), new POJONode(value));
+    }
+
+    public void put(String key, JsonRepresentation value) {
+        if(!isMap()) {
+            throw new IllegalStateException("does not represent map");
+        }
+        if(value == null) {
+            return;
+        }
+        Path path = Path.parse(key);
+        ObjectNode node = JsonNodeUtils.walkNodeUpTo(nodeAsMap(), path.getHead());
+        node.put(path.getTail(), value.getJsonNode());
+    }
+
+    public void put(String key, String value) {
+        if(!isMap()) {
+            throw new IllegalStateException("does not represent map");
+        }
+        if(value == null) {
+            return;
+        }
+        Path path = Path.parse(key);
+        ObjectNode node = JsonNodeUtils.walkNodeUpTo(nodeAsMap(), path.getHead());
+        node.put(path.getTail(), value);
+    }
+
+    public void put(String key, JsonNode value) {
+        if(!isMap()) {
+            throw new IllegalStateException("does not represent map");
+        }
+        if(value == null) {
+            return;
+        }
+        Path path = Path.parse(key);
+        ObjectNode node = JsonNodeUtils.walkNodeUpTo(nodeAsMap(), path.getHead());
+        node.put(path.getTail(), value);
+    }
+
+    public void put(String key, long value) {
+        if(!isMap()) {
+            throw new IllegalStateException("does not represent map");
+        }
+        Path path = Path.parse(key);
+        ObjectNode node = JsonNodeUtils.walkNodeUpTo(nodeAsMap(), path.getHead());
+        node.put(path.getTail(), value);
+    }
+
+    public void put(String key, int value) {
+        if(!isMap()) {
+            throw new IllegalStateException("does not represent map");
+        }
+        Path path = Path.parse(key);
+        ObjectNode node = JsonNodeUtils.walkNodeUpTo(nodeAsMap(), path.getHead());
+        node.put(path.getTail(), value);
+    }
+
+    public void put(String key, double value) {
+        if(!isMap()) {
+            throw new IllegalStateException("does not represent map");
+        }
+        Path path = Path.parse(key);
+        ObjectNode node = JsonNodeUtils.walkNodeUpTo(nodeAsMap(), path.getHead());
+        node.put(path.getTail(), value);
+    }
+
+    public void put(String key, float value) {
+        if(!isMap()) {
+            throw new IllegalStateException("does not represent map");
+        }
+        Path path = Path.parse(key);
+        ObjectNode node = JsonNodeUtils.walkNodeUpTo(nodeAsMap(), path.getHead());
+        node.put(path.getTail(), value);
+    }
+
+    public void put(String key, boolean value) {
+        if(!isMap()) {
+            throw new IllegalStateException("does not represent map");
+        }
+        Path path = Path.parse(key);
+        ObjectNode node = JsonNodeUtils.walkNodeUpTo(nodeAsMap(), path.getHead());
+        node.put(path.getTail(), value);
+    }
+
+    private static class Path {
+        private final List<String> head;
+        private final String tail;
+
+        private Path(List<String> head, String tail) {
+            this.head = Collections.unmodifiableList(head);
+            this.tail = tail;
+        }
+        
+        public List<String> getHead() {
+            return head;
+        }
+
+        public String getTail() {
+            return tail;
+        }
+
+        public static Path parse(String pathStr) {
+            List<String> keyList = Lists.newArrayList(Arrays.asList(pathStr.split("\\.")));
+            if(keyList.size() == 0) {
+                throw new IllegalArgumentException(String.format("Malformed path '%s'", pathStr));
+            }
+            String tail = keyList.remove(keyList.size()-1);
+            return new Path(keyList, tail);
+        }
+    }
+    
+
     /////////////////////////////////////////////////////////////////////////
     // toString
     /////////////////////////////////////////////////////////////////////////

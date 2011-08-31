@@ -21,23 +21,20 @@ package org.apache.isis.viewer.json.applib;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
+import java.io.IOException;
+
+import org.codehaus.jackson.JsonParseException;
+import org.codehaus.jackson.map.JsonMappingException;
 import org.junit.Test;
 
-public class JsonRepresentationTest_newArray {
+public class JsonRepresentationTest_newObject {
+
 
     @Test
-    public void newArray() throws Exception {
-        JsonRepresentation jsonRepresentation = JsonRepresentation.newArray();
-        assertThat(jsonRepresentation.isArray(), is(true));
-        assertThat(jsonRepresentation.arraySize(), is(0));
+    public void happyCase() throws JsonParseException, JsonMappingException, IOException {
+        JsonRepresentation jsonRepresentation = JsonRepresentation.newMap() ;
+        assertThat(jsonRepresentation.isMap(), is(true));
     }
 
-    @Test
-    public void newArrayInitialSize() throws Exception {
-        JsonRepresentation jsonRepresentation = JsonRepresentation.newArray(2);
-        assertThat(jsonRepresentation.arraySize(), is(2));
-        assertThat(jsonRepresentation.elementAt(0).isNull(), is(true));
-        assertThat(jsonRepresentation.elementAt(1).isNull(), is(true));
-    }
-
+    
 }

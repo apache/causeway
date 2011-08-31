@@ -20,7 +20,6 @@ package org.apache.isis.viewer.json.viewer.resources;
 
 import java.io.IOException;
 import java.util.Collection;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -48,11 +47,11 @@ import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.OidGenerator;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
+import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.applib.util.JsonMapper;
 import org.apache.isis.viewer.json.applib.util.JsonResponse;
 import org.apache.isis.viewer.json.viewer.RepContext;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
-import org.apache.isis.viewer.json.viewer.representations.Representation;
 import org.apache.isis.viewer.json.viewer.representations.RepresentationBuilder;
 import org.apache.isis.viewer.json.viewer.resources.objects.DomainObjectRepBuilder;
 import org.apache.isis.viewer.json.viewer.util.OidUtils;
@@ -111,7 +110,7 @@ public abstract class ResourceAbstract {
     // //////////////////////////////////////////////////////////////
 
     protected String jsonRepresentionFrom(RepresentationBuilder builder) {
-        Representation representation = builder.build();
+        JsonRepresentation representation = builder.build();
         return asJson(representation);
     }
 
@@ -139,10 +138,10 @@ public abstract class ResourceAbstract {
         }
     }
 
-	private Function<ObjectAdapter, Representation> toObjectSelfRepresentation() {
+	private Function<ObjectAdapter, JsonRepresentation> toObjectSelfRepresentation() {
 		final RepContext representationContext = getResourceContext().repContext();
         
-        Function<ObjectAdapter, Representation> objectSelfRepresentation = 
+        Function<ObjectAdapter, JsonRepresentation> objectSelfRepresentation = 
             Functions.compose(
                 DomainObjectRepBuilder.selfOf(), 
                 DomainObjectRepBuilder.fromAdapter(representationContext));
@@ -214,7 +213,7 @@ public abstract class ResourceAbstract {
 		// reference
 		try {
 			@SuppressWarnings("unchecked")
-			Map<String,Object> argLink = (Map<String,Object>) node;
+			JsonRepresentation argLink = (JsonRepresentation) node;
 			String oidFromHref = UrlParserUtils.oidFromHref(argLink);
 			
 			final ObjectAdapter objectAdapter = OidUtils.getObjectAdapter(oidFromHref, getOidStringifier());
@@ -236,8 +235,8 @@ public abstract class ResourceAbstract {
         return Response.ok().build();
     }
 
-    protected static Response responseOfOk(String entity) {
-        return Response.ok().entity(entity).build();
+    public static Response responseOfOk(String jsonEntity) {
+        return Response.ok().entity(jsonEntity).type(MediaType.APPLICATION_JSON_TYPE).build();
     }
 
     protected static Response responseOfGone(final String reason) {
@@ -258,12 +257,12 @@ public abstract class ResourceAbstract {
 
     protected static Response responseOfBadRequest(final String reason, Exception ex) {
         ResponseBuilder builder = Response.status(Status.BAD_REQUEST).header(JsonResponse.HEADER_X_RESTFUL_OBJECTS_REASON, reason);
-        return withStackTrace(builder,ex).build();
+        return withStackTraceAndMediaType(builder,ex).build();
     }
 
     protected static Response responseOfBadRequest(final Exception ex) {
         ResponseBuilder builder = Response.status(Status.BAD_REQUEST).header(JsonResponse.HEADER_X_RESTFUL_OBJECTS_REASON, ex.getMessage());
-        return withStackTrace(builder,ex).build();
+        return withStackTraceAndMediaType(builder,ex).build();
     }
 
     protected static Response responseOfNotFound(final IllegalArgumentException e) {
@@ -284,10 +283,10 @@ public abstract class ResourceAbstract {
 
     protected static Response responseOfInternalServerError(final Exception ex) {
         ResponseBuilder builder = Response.status(Status.INTERNAL_SERVER_ERROR).header(JsonResponse.HEADER_X_RESTFUL_OBJECTS_REASON, ex.getMessage());
-        return withStackTrace(builder, ex).build();
+        return withStackTraceAndMediaType(builder, ex).build();
     }
 
-    private static ResponseBuilder withStackTrace(ResponseBuilder builder, final Exception ex) {
+    private static ResponseBuilder withStackTraceAndMediaType(ResponseBuilder builder, final Exception ex) {
         return builder.type(MediaType.TEXT_PLAIN_TYPE).entity(ExceptionUtils.getFullStackTrace(ex));
     }
 

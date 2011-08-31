@@ -18,9 +18,7 @@ package org.apache.isis.viewer.json.viewer.resources.objects;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -41,7 +39,6 @@ import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
-import org.apache.isis.core.metamodel.facets.properties.modify.PropertySetterFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
@@ -71,6 +68,7 @@ public class DomainObjectResourceImpl extends ResourceAbstract implements
         final ObjectAdapter objectAdapter = getObjectAdapter(oidStr);
         final DomainObjectRepBuilder builder = DomainObjectRepBuilder
                 .newBuilder(getResourceContext().repContext(), objectAdapter);
+        String mediaType = "application/vnd." + objectAdapter.getSpecification().getFullIdentifier() + "+json";
         return responseOfOk(jsonRepresentionFrom(builder));
     }
 

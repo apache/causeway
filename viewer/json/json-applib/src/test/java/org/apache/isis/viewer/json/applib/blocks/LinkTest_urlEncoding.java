@@ -14,14 +14,11 @@ public class LinkTest_urlEncoding {
 
     @Test
     public void test() throws UnsupportedEncodingException {
-        Link l = new Link();
-        l.setRel("object");
-        l.setHref("http://localhost:8080/objects/ABC|123");
-        l.setMethod(Method.GET);
+        Link l = new Link().withRel("object").withHref("http://localhost:8080/objects/ABC:123").withMethod(Method.GET);
         
-        String expectedValue = "%FE%FF%00%7B%00%22rel%FE%FF%00%22%00%3A%00%22object%FE%FF%00%22%00%2C%00%22href%FE%FF%00%22%00%3A%00%22http%FE%FF%00%3A%00%2F%00%2Flocalhost%FE%FF%00%3A8080%FE%FF%00%2Fobjects%FE%FF%00%2FABC%FE%FF%00%7C123%FE%FF%00%22%00%2C%00%22method%FE%FF%00%22%00%3A%00%22GET%FE%FF%00%22%00%7D";
+        String expectedValue = "%7B%22method%22%3A%22GET%22%2C%22rel%22%3A%22object%22%2C%22href%22%3A%22http%3A%2F%2Flocalhost%3A8080%2Fobjects%2FABC%3A123%22%7D";
         @SuppressWarnings("unused")
-        String decoded = URLDecoder.decode(expectedValue, Charsets.UTF_16.name());
+        String decoded = URLDecoder.decode(expectedValue, Charsets.UTF_8.name());
         
         assertThat(l.asUrlEncoded(), is(expectedValue));
         

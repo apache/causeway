@@ -1,14 +1,28 @@
+/*
+ *  Licensed to the Apache Software Foundation (ASF) under one
+ *  or more contributor license agreements.  See the NOTICE file
+ *  distributed with this work for additional information
+ *  regarding copyright ownership.  The ASF licenses this file
+ *  to you under the Apache License, Version 2.0 (the
+ *  "License"); you may not use this file except in compliance
+ *  with the License.  You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing,
+ *  software distributed under the License is distributed on an
+ *  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ *  KIND, either express or implied.  See the License for the
+ *  specific language governing permissions and limitations
+ *  under the License.
+ */
 package org.apache.isis.viewer.json.applib.blocks;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
-import org.codehaus.jackson.JsonFactory;
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.node.JsonNodeFactory;
 import org.codehaus.jackson.node.ObjectNode;
@@ -16,52 +30,55 @@ import org.jboss.resteasy.client.ClientExecutor;
 import org.jboss.resteasy.client.ClientRequest;
 import org.jboss.resteasy.client.ClientResponse;
 
-import com.google.common.base.Charsets;
 
-public class Link {
+public final class Link extends JsonRepresentation {
     
-    private String rel;
-    private String href;
-    private Method method = Method.GET;
-    private JsonRepresentation body;
-    
+    public Link() {
+        this(new ObjectNode(JsonNodeFactory.instance));
+        withMethod(Method.GET);
+    }
+
+    public Link(JsonNode jsonNode) {
+        super(jsonNode);
+    }
+
     public String getRel() {
-        return rel;
+        return nodeAsMap().path("rel").getTextValue();
     }
-    public void setRel(String rel) {
-        this.rel = rel;
-    }
-    public String getHref() {
-        return href;
-    }
-    public void setHref(String href) {
-        this.href = href;
-    }
-    public Method getMethod() {
-        return method;
-    }
-    public void setMethod(Method method) {
-        this.method = method;
+    public Link withRel(String rel) {
+        nodeAsMap().put("rel", rel);
+        return this;
     }
 
-    /**
-     * @return a {@link JsonRepresentation} that is an {@link JsonRepresentation#isArray() array}
-     */
-    public JsonRepresentation getBody() {
-        return body;
+    public String getHref() {
+        return nodeAsMap().path("href").getTextValue();
+    }
+    public Link withHref(String href) {
+        nodeAsMap().put("href", href);
+        return this;
+    }
+
+    public Method getMethod() {
+        String methodStr = nodeAsMap().path("method").getTextValue();
+        return Method.valueOf(methodStr);
+    }
+    public Link withMethod(Method method) {
+        nodeAsMap().put("method", method.name());
+        return this;
+    }
+
+    public JsonRepresentation getArguments() {
+        JsonNode arguments = nodeAsMap().get("arguments");
+        return new JsonRepresentation(arguments);
     }
     
-    public void setBody(final JsonNode body) {
-        this.body = new JsonRepresentation(body);
-    }
-
     public <T> Response follow(ClientExecutor executor) throws Exception {
         return follow(executor, null);
     }
 
     public <T> Response follow(ClientExecutor executor, JsonRepresentation requestBody) throws Exception {
-        ClientRequest restEasyRequest = executor.createRequest(href);
-        restEasyRequest.setHttpMethod(method.name());
+        ClientRequest restEasyRequest = executor.createRequest(getHref());
+        restEasyRequest.setHttpMethod(getMethod().name());
         restEasyRequest.accept(MediaType.APPLICATION_JSON_TYPE);
         if(requestBody != null) {
             restEasyRequest.body(MediaType.APPLICATION_JSON, requestBody.toString());
@@ -71,33 +88,17 @@ public class Link {
         return restEasyResponse;
     }
 
-    public String asUrlEncoded() {
-        ObjectNode jsonRep = new ObjectNode(JsonNodeFactory.instance);
-        jsonRep.put("rel", getRel());
-        jsonRep.put("href", getHref());
-        if(getMethod() != null) {
-            jsonRep.put("method", getMethod().name());
-        }
-        if(getBody() != null) {
-            jsonRep.put("body", getBody().getJsonNode());
-        }
-        try {
-            return URLEncoder.encode(jsonRep.toString(), Charsets.UTF_16.name());
-        } catch (UnsupportedEncodingException e) {
-            // shouldn't happen
-            throw new RuntimeException(e);
-        }
-    }
-
+    
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((href == null) ? 0 : href.hashCode());
-        result = prime * result + ((method == null) ? 0 : method.hashCode());
-        result = prime * result + ((rel == null) ? 0 : rel.hashCode());
+        result = prime * result + ((getHref() == null) ? 0 : getHref().hashCode());
+        result = prime * result + ((getMethod() == null) ? 0 : getMethod().hashCode());
+        result = prime * result + ((getRel() == null) ? 0 : getRel().hashCode());
         return result;
     }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
@@ -107,24 +108,24 @@ public class Link {
         if (getClass() != obj.getClass())
             return false;
         Link other = (Link) obj;
-        if (href == null) {
-            if (other.href != null)
+        if (getHref() == null) {
+            if (other.getHref() != null)
                 return false;
-        } else if (!href.equals(other.href))
+        } else if (!getHref().equals(other.getHref()))
             return false;
-        if (method != other.method)
+        if (getMethod() != other.getMethod())
             return false;
-        if (rel == null) {
-            if (other.rel != null)
+        if (getRel() == null) {
+            if (other.getRel() != null)
                 return false;
-        } else if (!rel.equals(other.rel))
+        } else if (!getRel().equals(other.getRel()))
             return false;
         return true;
     }
 
     @Override
     public String toString() {
-        return "Link [rel=" + rel + ", href=" + href + ", method=" + method + "]";
+        return "Link [rel=" + getRel() + ", href=" + getHref()+ ", method=" + getMethod() + "]";
     }
     
 

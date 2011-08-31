@@ -22,18 +22,19 @@ import org.apache.isis.core.metamodel.adapter.oid.stringable.OidStringifier;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.OidGenerator;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
+import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.viewer.RepContext;
 
 public abstract class RepresentationBuilder {
 
     protected final RepContext repContext;
-    protected final Representation representation = new Representation();
+    protected final JsonRepresentation representation = JsonRepresentation.newMap();
     
     public RepresentationBuilder(RepContext repContext) {
         this.repContext = repContext;
     }
 
-    public abstract Representation build();
+    public abstract JsonRepresentation build();
     
     protected OidStringifier getOidStringifier() {
         return getOidGenerator().getOidStringifier();

@@ -25,9 +25,9 @@ import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
+import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.viewer.RepContext;
 import org.apache.isis.viewer.json.viewer.representations.LinkRepBuilder;
-import org.apache.isis.viewer.json.viewer.representations.Representation;
 import org.apache.isis.viewer.json.viewer.representations.RepresentationBuilder;
 
 import com.google.common.collect.Lists;
@@ -44,12 +44,12 @@ public abstract class AbstractMemberRepBuilder<T extends ObjectMember> extends R
         this.objectAdapter = objectAdapter;
         this.memberType = memberType;
         this.objectMember = objectMember;
-        this.memberRepType = repContext.hasAttribute()?MemberRepType.INLINE:MemberRepType.STANDALONE;
+        this.memberRepType = repContext.getMemberRepType();
     }
 
     protected void putSelfIfRequired() {
         if(memberRepType.isStandalone()) {
-            Representation selfRep = MemberSelfRepBuilder.newBuilder(repContext, objectAdapter, memberType, objectMember).build();
+            JsonRepresentation selfRep = MemberSelfRepBuilder.newBuilder(repContext, objectAdapter, memberType, objectMember).build();
             representation.put("_self", selfRep);
         }
     }
@@ -59,7 +59,7 @@ public abstract class AbstractMemberRepBuilder<T extends ObjectMember> extends R
     }
 
     protected void putTypeRep() {
-        Representation typeRep = LinkRepBuilder.newTypeBuilder(repContext, memberType.specFor(objectMember)).build();
+        JsonRepresentation typeRep = LinkRepBuilder.newTypeBuilder(repContext, memberType.specFor(objectMember)).build();
         representation.put("type", typeRep);
     }
 
@@ -77,7 +77,7 @@ public abstract class AbstractMemberRepBuilder<T extends ObjectMember> extends R
             if(hasMemberFacet(mutatorSpec.mutatorFacetType)) {
                 String urlForMember = urlForMember(mutatorSpec.suffix);
                 Object body = mutatorArgs(mutatorSpec);
-                Representation detailsLink = 
+                JsonRepresentation detailsLink = 
                     LinkRepBuilder.newBuilder(repContext, mutator, urlForMember)
                         .withHttpMethod(mutatorSpec.httpMethod)
                         .withBody(body)
@@ -132,7 +132,7 @@ public abstract class AbstractMemberRepBuilder<T extends ObjectMember> extends R
             return;
         } 
         String urlForMember = urlForMember();
-        Representation detailsLink = LinkRepBuilder.newBuilder(repContext, memberType.name().toLowerCase(), urlForMember).build();
+        JsonRepresentation detailsLink = LinkRepBuilder.newBuilder(repContext, memberType.name().toLowerCase(), urlForMember).build();
         representation.put("details", detailsLink);
     }
 

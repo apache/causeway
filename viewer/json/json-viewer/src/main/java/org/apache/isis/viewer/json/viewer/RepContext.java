@@ -18,13 +18,7 @@
  */
 package org.apache.isis.viewer.json.viewer;
 
-import java.util.Arrays;
-
-import org.apache.isis.viewer.json.viewer.representations.Representation;
-
-import com.google.common.base.Joiner;
-import com.google.common.base.Predicate;
-import com.google.common.collect.Iterables;
+import org.apache.isis.viewer.json.viewer.resources.objects.MemberRepType;
 
 /**
  * The context within which this representation is being requested.
@@ -35,48 +29,33 @@ import com.google.common.collect.Iterables;
  * 
  * <p>
  * The other part of the context is an indication of the attribute that this
- * representation will be keyed under.  This is required in order that
- * 'rel' links for attributes correctly concatenate.  It is also used to
- * infer whether member representations (which appear in summary form in
- * the {@link Representation} and in more detail in their own resources)
- * should include a _self attribute or not.
+ * representation will be keyed under.  This is required in order to
+ * determine the amount of information to provide within the representations
+ * (less on summary form, more for object members).
  */
 public class RepContext {
 
     private final ResourceContext resourceContext;
-    private final String attribute;
+    private MemberRepType memberRepType;
 
-    public RepContext(ResourceContext resourceContext, String attribute) {
+    public RepContext(ResourceContext resourceContext, MemberRepType memberRepType) {
         this.resourceContext = resourceContext;
-        this.attribute = attribute;
+        this.memberRepType = memberRepType;
     }
 
     public String urlFor(String url) {
         return resourceContext.getUriInfo().getBaseUri().toString() + url;
     }
 
-    public String relFor(String relSuffix) {
-        return Joiner.on(".").join( 
-            Iterables.filter(Arrays.asList(attribute, relSuffix), nonNulls())); 
-    }
-
-    private static <T> Predicate<T> nonNulls() {
-        return new Predicate<T>() {
-            @Override
-            public boolean apply(T input) {
-                return input != null;
-            }
-        };
-    }
-
-    public boolean hasAttribute() {
-        return attribute != null;
+    public MemberRepType getMemberRepType() {
+        return memberRepType;
     }
 
     /**
      * Returns a new {@link RepContext} with a different attribute.
      */
     public RepContext underAttribute(String attribute) {
-        return resourceContext.repContext(attribute);
+        return resourceContext.repContextInline();
     }
+
 }

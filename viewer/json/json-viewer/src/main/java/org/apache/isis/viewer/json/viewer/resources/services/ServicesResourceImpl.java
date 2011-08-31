@@ -25,8 +25,11 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.json.applib.domain.ServicesResource;
+import org.apache.isis.viewer.json.viewer.RepContext;
 import org.apache.isis.viewer.json.viewer.resources.ResourceAbstract;
+import org.apache.isis.viewer.json.viewer.resources.objectlist.DomainObjectListRepBuilder;
 
 public class ServicesResourceImpl extends ResourceAbstract implements ServicesResource {
 
@@ -36,7 +39,10 @@ public class ServicesResourceImpl extends ResourceAbstract implements ServicesRe
         init();
 
         final List<ObjectAdapter> serviceAdapters = getPersistenceSession().getServices();
-		return responseOfOk(jsonRepresentationOf(serviceAdapters));
+        ObjectSpecification objectSpec = getSpecification(Object.class.getName());
+		RepContext repContext = getResourceContext().repContext();
+        DomainObjectListRepBuilder builder = DomainObjectListRepBuilder.newBuilder(repContext, objectSpec, serviceAdapters);
+        return responseOfOk(jsonRepresentionFrom(builder));
     }
 
 }
