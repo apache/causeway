@@ -11,30 +11,36 @@ import javax.ws.rs.core.Response;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.applib.util.HttpStatusCode.Range;
 import org.codehaus.jackson.JsonGenerationException;
+import org.codehaus.jackson.JsonGenerator;
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.JsonParser;
 import org.codehaus.jackson.JsonProcessingException;
+import org.codehaus.jackson.Version;
 import org.codehaus.jackson.map.BeanProperty;
 import org.codehaus.jackson.map.DeserializationConfig;
 import org.codehaus.jackson.map.DeserializationContext;
 import org.codehaus.jackson.map.DeserializerProvider;
 import org.codehaus.jackson.map.JsonDeserializer;
 import org.codehaus.jackson.map.JsonMappingException;
+import org.codehaus.jackson.map.JsonSerializer;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.SerializationConfig;
+import org.codehaus.jackson.map.SerializerProvider;
 import org.codehaus.jackson.map.deser.BeanDeserializerFactory;
 import org.codehaus.jackson.map.deser.JsonNodeDeserializer;
 import org.codehaus.jackson.map.deser.StdDeserializerProvider;
+import org.codehaus.jackson.map.module.SimpleModule;
 import org.codehaus.jackson.type.JavaType;
 
 
 public final class JsonMapper {
-    
+
+    /**
+     * Provides polymorphic deserialization to any subtype of {@link JsonRepresentation}.
+     */
     @SuppressWarnings("deprecation")
     private static final class JsonRepresentationDeserializerFactory extends BeanDeserializerFactory {
-
-
         @Override
         public JsonDeserializer<Object> createBeanDeserializer(DeserializationConfig config, DeserializerProvider p, JavaType type, BeanProperty property) throws JsonMappingException {
             Class<?> rawClass = type.getRawClass();
@@ -51,27 +57,51 @@ public final class JsonMapper {
             } 
             return super.createBeanDeserializer(config, p, type, property);
         }
-    }
 
-    private static final class JsonRepresentationDeserializer extends JsonDeserializer<Object> {
-        private JsonDeserializer<? extends JsonNode> jsonNodeDeser = 
-            JsonNodeDeserializer.getDeserializer(JsonNode.class);
-        
-        private final Constructor<?> rawClassConstructor;
-        public JsonRepresentationDeserializer(Constructor<?> rawClassConstructor) {
-            this.rawClassConstructor = rawClassConstructor;
-        }
+        private static final class JsonRepresentationDeserializer extends JsonDeserializer<Object> {
+            private JsonDeserializer<? extends JsonNode> jsonNodeDeser = 
+                JsonNodeDeserializer.getDeserializer(JsonNode.class);
+            
+            private final Constructor<?> rawClassConstructor;
+            public JsonRepresentationDeserializer(Constructor<?> rawClassConstructor) {
+                this.rawClassConstructor = rawClassConstructor;
+            }
 
-        @Override
-        public JsonRepresentation deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException, JsonProcessingException {
-            JsonNode jsonNode = jsonNodeDeser.deserialize(jp, ctxt);
-            try {
-                return (JsonRepresentation) rawClassConstructor.newInstance(jsonNode);
-            } catch (Exception e) {
-                throw new IllegalStateException(e); 
+            @Override
+            public JsonRepresentation deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException, JsonProcessingException {
+                JsonNode jsonNode = jsonNodeDeser.deserialize(jp, ctxt);
+                try {
+                    return (JsonRepresentation) rawClassConstructor.newInstance(jsonNode);
+                } catch (Exception e) {
+                    throw new IllegalStateException(e); 
+                }
             }
         }
     }
+
+
+    private static class JsonRepresentationSerializer extends JsonSerializer<Object> {
+        @Override
+        public void serialize(Object value, JsonGenerator jgen, SerializerProvider provider) throws IOException, JsonProcessingException {
+            JsonRepresentation jsonRepresentation = (JsonRepresentation) value;
+            JsonNode jsonNode = jsonRepresentation.getJsonNode();
+            jgen.writeTree(jsonNode);
+        }
+    }
+
+    private static ObjectMapper createObjectMapper() {
+        // it's a shame that the serialization and deserialization mechanism used aren't symmetric... but it works.
+        DeserializerProvider deserializerProvider = new StdDeserializerProvider(new JsonRepresentationDeserializerFactory());
+        ObjectMapper objectMapper = new ObjectMapper(null, null, deserializerProvider);
+        SimpleModule jsonModule = new SimpleModule("json", new Version(1,0,0,null));
+        jsonModule.addSerializer(JsonRepresentation.class, new JsonRepresentationSerializer());
+        objectMapper.registerModule(jsonModule);
+        
+        objectMapper.configure(SerializationConfig.Feature.INDENT_OUTPUT, true);
+        objectMapper.configure(DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        return objectMapper;
+    }
+
 
     private static JsonMapper instance = new JsonMapper();
 
@@ -83,10 +113,7 @@ public final class JsonMapper {
     private final ObjectMapper objectMapper;
 
     private JsonMapper() {
-        DeserializerProvider deserializerProvider = new StdDeserializerProvider(new JsonRepresentationDeserializerFactory());
-        objectMapper = new ObjectMapper(null, null, deserializerProvider);
-        objectMapper.configure(SerializationConfig.Feature.INDENT_OUTPUT, true);
-        objectMapper.configure(DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        objectMapper = createObjectMapper();
     }
 
     @SuppressWarnings("unchecked")

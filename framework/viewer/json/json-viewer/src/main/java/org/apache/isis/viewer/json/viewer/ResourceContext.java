@@ -25,15 +25,17 @@ import javax.ws.rs.core.Request;
 import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.core.UriInfo;
 
+import org.apache.isis.viewer.json.viewer.resources.objects.MemberRepType;
+
 public class ResourceContext {
 
     public RepContext repContext() {
-        return repContext(null);
-    }
-    public RepContext repContext(String attribute) {
-        return new RepContext(this, attribute);
+        return new RepContext(this, MemberRepType.STANDALONE);
     }
 
+    public RepContext repContextInline() {
+        return new RepContext(this, MemberRepType.INLINE);
+    }
 
     private final HttpHeaders httpHeaders;
     private final UriInfo uriInfo;

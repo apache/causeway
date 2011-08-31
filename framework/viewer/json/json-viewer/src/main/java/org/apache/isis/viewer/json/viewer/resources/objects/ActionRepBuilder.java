@@ -22,9 +22,9 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
+import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.viewer.RepContext;
 import org.apache.isis.viewer.json.viewer.representations.LinkRepBuilder;
-import org.apache.isis.viewer.json.viewer.representations.Representation;
 
 import com.google.common.collect.Lists;
 
@@ -38,7 +38,7 @@ public class ActionRepBuilder extends AbstractMemberRepBuilder<ObjectAction> {
         super(repContext, objectAdapter, MemberType.ACTION, oa);
     }
 
-    public Representation build() {
+    public JsonRepresentation build() {
         putSelfIfRequired();
         putContributedByIfRequired();
         putTypeRep();
@@ -59,7 +59,7 @@ public class ActionRepBuilder extends AbstractMemberRepBuilder<ObjectAction> {
     		return;
     	}
     	ObjectAdapter serviceAdapter = contributingServiceAdapter();
-        Representation contributedByLink = LinkRepBuilder.newObjectBuilder(repContext, serviceAdapter, getOidStringifier()).build();
+        JsonRepresentation contributedByLink = LinkRepBuilder.newObjectBuilder(repContext, serviceAdapter, getOidStringifier()).build();
 		representation.put("contributedBy", contributedByLink);
 	}
 
@@ -88,7 +88,7 @@ public class ActionRepBuilder extends AbstractMemberRepBuilder<ObjectAction> {
 	}
 
 	private Object paramDetails(ObjectActionParameter param) {
-		final Representation paramRep = new Representation();
+		final JsonRepresentation paramRep = JsonRepresentation.newMap();
 		paramRep.put("name", param.getName());
 		paramRep.put("type", LinkRepBuilder.newTypeBuilder(repContext, param.getSpecification()).build());
 		paramRep.put("num", param.getNumber());

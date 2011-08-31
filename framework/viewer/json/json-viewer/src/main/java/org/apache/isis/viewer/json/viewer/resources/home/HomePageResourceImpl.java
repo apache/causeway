@@ -23,9 +23,9 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.applib.homepage.HomePageResource;
 import org.apache.isis.viewer.json.viewer.representations.LinkRepBuilder;
-import org.apache.isis.viewer.json.viewer.representations.Representation;
 import org.apache.isis.viewer.json.viewer.resources.ResourceAbstract;
 
 /**
@@ -40,15 +40,15 @@ public class HomePageResourceImpl extends ResourceAbstract implements HomePageRe
     public Response resources() {
         init();
         
-        Representation representation = new Representation();
+        JsonRepresentation representation = JsonRepresentation.newMap();
         representation.put("user", linkTo("user", "user"));
         representation.put("services", linkTo("services", "services"));
         
         return responseOfOk(asJson(representation));
     }
 
-    protected Representation linkTo(String url, String rel) {
-        return LinkRepBuilder.newBuilder(getResourceContext().repContext(url), rel, url).build();
+    protected JsonRepresentation linkTo(String url, String rel) {
+        return LinkRepBuilder.newBuilder(getResourceContext().repContextInline(), rel, url).build();
     }
 
 

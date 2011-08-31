@@ -22,23 +22,19 @@ public class JsonRepresentationTest_getLink {
 
     @Before
     public void setUp() throws Exception {
-        link = new Link();
-        link.setHref("http://foo/bar");
-        link.setMethod(Method.GET);
-        
+        link = new Link().withHref("http://foo/bar").withMethod(Method.GET);
         jsonRepresentation = new JsonRepresentation(readJson("map.json"));
     }
 
-
     @Test
     public void forLink_whenSimpleKey() throws JsonParseException, JsonMappingException, IOException {
-        link.setRel("someRel");
+        link.withRel("someRel");
         assertThat(jsonRepresentation.getLink("aLink"), is(link));
     }
 
     @Test
     public void forLink_whenMultipartKey() throws JsonParseException, JsonMappingException, IOException {
-        link.setRel("someSubRel");
+        link.withRel("someSubRel");
         assertThat(jsonRepresentation.getLink("aSubMap.aLink"), is(link));
     }
     

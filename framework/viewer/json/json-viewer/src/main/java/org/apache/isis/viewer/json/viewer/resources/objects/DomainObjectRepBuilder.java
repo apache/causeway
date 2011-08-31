@@ -33,9 +33,9 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectActionContainer.Contrib
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.viewer.RepContext;
 import org.apache.isis.viewer.json.viewer.representations.LinkRepBuilder;
-import org.apache.isis.viewer.json.viewer.representations.Representation;
 import org.apache.isis.viewer.json.viewer.representations.RepresentationBuilder;
 import org.apache.isis.viewer.json.viewer.util.OidUtils;
 
@@ -49,20 +49,20 @@ public class DomainObjectRepBuilder extends RepresentationBuilder {
     }
 
     private final ObjectAdapter objectAdapter;
-    private final Map<String, Representation> members = Maps.newLinkedHashMap();
+    private final Map<String, JsonRepresentation> members = Maps.newLinkedHashMap();
     
     public DomainObjectRepBuilder(RepContext repContext, ObjectAdapter objectAdapter) {
         super(repContext);
         this.objectAdapter = objectAdapter;
     }
     
-    public Representation build() {
+    public JsonRepresentation build() {
         RepContext repContext = this.repContext.underAttribute("_self");
-        Representation selfLink = LinkRepBuilder.newBuilder(repContext, "object", url()).build();
-        Representation selfType = LinkRepBuilder.newTypeBuilder(repContext, objectAdapter.getSpecification()).build();
+        JsonRepresentation selfLink = LinkRepBuilder.newBuilder(repContext, "object", url()).build();
+        JsonRepresentation selfType = LinkRepBuilder.newTypeBuilder(repContext, objectAdapter.getSpecification()).build();
         String title = objectAdapter.titleString();
-        Representation iconLink = LinkRepBuilder.newBuilder(repContext, "icon", icon()).build();
-        Representation self = new Representation();
+        JsonRepresentation iconLink = LinkRepBuilder.newBuilder(repContext, "icon", icon()).build();
+        JsonRepresentation self = JsonRepresentation.newMap();
         self.put("link", selfLink);
         self.put("type", selfType);
         self.put("oid", OidUtils.getOidStr(objectAdapter, getOidStringifier()));
@@ -71,9 +71,9 @@ public class DomainObjectRepBuilder extends RepresentationBuilder {
         representation.put("_self", self);
         withAllMembers(objectAdapter);
         if(!members.isEmpty()) {
-            for(Map.Entry<String, Representation> entry: members.entrySet()) {
+            for(Map.Entry<String, JsonRepresentation> entry: members.entrySet()) {
                 String memberId = entry.getKey();
-                Representation memberRep = entry.getValue();
+                JsonRepresentation memberRep = entry.getValue();
                 representation.put(memberId, memberRep);
             }
         }
@@ -99,12 +99,12 @@ public class DomainObjectRepBuilder extends RepresentationBuilder {
             String id = assoc.getId();
             if(assoc instanceof OneToOneAssociation) {
                 OneToOneAssociation property = (OneToOneAssociation)assoc;
-                Representation propertyRep = PropertyRepBuilder.newBuilder(repContext.underAttribute(id), objectAdapter, property).build();
+                JsonRepresentation propertyRep = PropertyRepBuilder.newBuilder(repContext.underAttribute(id), objectAdapter, property).build();
                 withMember(id, propertyRep);
             }
             if(assoc instanceof OneToManyAssociation) {
                 OneToManyAssociation collection = (OneToManyAssociation) assoc;
-                Representation collectionRep = CollectionRepBuilder.newBuilder(repContext.underAttribute(id), objectAdapter, collection).build();
+                JsonRepresentation collectionRep = CollectionRepBuilder.newBuilder(repContext.underAttribute(id), objectAdapter, collection).build();
                 withMember(id, collectionRep);
             }
         }
@@ -126,13 +126,13 @@ public class DomainObjectRepBuilder extends RepresentationBuilder {
         		withActions(objectAdapter, subactions);
         	} else {
                 final String id = action.getId();
-                Representation actionRep = ActionRepBuilder.newBuilder(repContext.underAttribute(id), objectAdapter, action).build();
+                JsonRepresentation actionRep = ActionRepBuilder.newBuilder(repContext.underAttribute(id), objectAdapter, action).build();
                 withMember(id, actionRep);
         	}
         }
 	}
 
-    private void withMember(String id, Representation propertyRep) {
+    private void withMember(String id, JsonRepresentation propertyRep) {
         members.put(id, propertyRep);
     }
     
@@ -151,20 +151,20 @@ public class DomainObjectRepBuilder extends RepresentationBuilder {
     //
     /////////////////////////////////////////////////////////////////////
 
-    public static Function<ObjectAdapter, Representation> fromAdapter(final RepContext repContext) {
-        return new Function<ObjectAdapter, Representation>() {
+    public static Function<ObjectAdapter, JsonRepresentation> fromAdapter(final RepContext repContext) {
+        return new Function<ObjectAdapter, JsonRepresentation>() {
             @Override
-            public Representation apply(ObjectAdapter input) {
+            public JsonRepresentation apply(ObjectAdapter input) {
                 return newBuilder(repContext, input).build();
             }
         };
     }
 
-    public static Function<Representation, Representation> selfOf() {
-        return new Function<Representation, Representation>() {
+    public static Function<JsonRepresentation, JsonRepresentation> selfOf() {
+        return new Function<JsonRepresentation, JsonRepresentation>() {
             @Override
-            public Representation apply(Representation input) {
-                return (Representation) input.get("_self");
+            public JsonRepresentation apply(JsonRepresentation input) {
+                return input.getRepresentation("_self");
             }
         };
     }

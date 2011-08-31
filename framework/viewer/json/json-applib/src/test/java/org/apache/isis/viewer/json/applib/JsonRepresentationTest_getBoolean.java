@@ -31,7 +31,7 @@ import org.codehaus.jackson.map.JsonMappingException;
 import org.junit.Before;
 import org.junit.Test;
 
-public class JsonRepresentationTest_getInt {
+public class JsonRepresentationTest_getBoolean {
 
     private JsonRepresentation jsonRepresentation;
 
@@ -42,47 +42,47 @@ public class JsonRepresentationTest_getInt {
     
     @Test
     public void happyCase() throws JsonParseException, JsonMappingException, IOException {
-        assertThat(jsonRepresentation.getInt("anInt"), is(123));
+        assertThat(jsonRepresentation.getBoolean("aBoolean"), is(true));
     }
 
     @Test
     public void forNonExistent() throws JsonParseException, JsonMappingException, IOException {
-        assertThat(jsonRepresentation.getInt("doesNotExist"), is(nullValue()));
+        assertThat(jsonRepresentation.getBoolean("doesNotExist"), is(nullValue()));
     }
 
     @Test
-    public void forValueButNotAnInt() throws JsonParseException, JsonMappingException, IOException {
+    public void forValueButNotABoolean() throws JsonParseException, JsonMappingException, IOException {
         try {
-            jsonRepresentation.getInt("aString");
+            jsonRepresentation.getBoolean("aString");
             fail();
         } catch (IllegalArgumentException e) {
-            assertThat(e.getMessage(), is("'aString' (\"aStringValue\") is not an int"));
+            assertThat(e.getMessage(), is("'aString' (\"aStringValue\") is not a boolean"));
         }
     }
 
     @Test
     public void forMap() throws JsonParseException, JsonMappingException, IOException {
         try {
-            jsonRepresentation.getInt("aSubMap");
+            jsonRepresentation.getBoolean("aSubMap");
             fail();
         } catch (IllegalArgumentException e) {
-            assertThat(e.getMessage(), is("'aSubMap' (a map) is not an int"));
+            assertThat(e.getMessage(), is("'aSubMap' (a map) is not a boolean"));
         }
     }
 
     @Test
     public void forList() throws JsonParseException, JsonMappingException, IOException {
         try {
-            jsonRepresentation.getInt("aSubList");
+            jsonRepresentation.getBoolean("aSubList");
             fail();
         } catch (IllegalArgumentException e) {
-            assertThat(e.getMessage(), is("'aSubList' (an array) is not an int"));
+            assertThat(e.getMessage(), is("'aSubList' (an array) is not a boolean"));
         }
     }
 
     @Test
     public void forMultipartKey() throws JsonParseException, JsonMappingException, IOException {
-        assertThat(jsonRepresentation.getInt("aSubMap.anInt"), is(456));
+        assertThat(jsonRepresentation.getBoolean("aSubMap.aBoolean"), is(true));
     }
     
 }

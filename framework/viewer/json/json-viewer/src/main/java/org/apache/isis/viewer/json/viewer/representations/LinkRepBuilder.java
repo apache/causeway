@@ -19,6 +19,7 @@ package org.apache.isis.viewer.json.viewer.representations;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.stringable.OidStringifier;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.viewer.RepContext;
 import org.apache.isis.viewer.json.viewer.resources.objects.DomainObjectRepBuilder;
 
@@ -61,7 +62,7 @@ public class LinkRepBuilder extends RepresentationBuilder {
         this.body = body;
         return this;
     }
-    public Representation build() {
+    public JsonRepresentation build() {
         representation.put("rel", relSuffix);
         representation.put("href", repContext.urlFor(href));
         representation.put("method", method);

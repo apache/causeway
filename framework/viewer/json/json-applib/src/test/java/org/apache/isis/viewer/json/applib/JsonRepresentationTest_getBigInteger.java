@@ -25,13 +25,15 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.junit.Before;
 import org.junit.Test;
 
-public class JsonRepresentationTest_getInt {
+public class JsonRepresentationTest_getBigInteger {
 
     private JsonRepresentation jsonRepresentation;
 
@@ -42,47 +44,47 @@ public class JsonRepresentationTest_getInt {
     
     @Test
     public void happyCase() throws JsonParseException, JsonMappingException, IOException {
-        assertThat(jsonRepresentation.getInt("anInt"), is(123));
+        assertThat(jsonRepresentation.getBigInteger("aBigInteger"), is(new BigInteger("12345678901234534132452342342789678234234")));
     }
 
     @Test
     public void forNonExistent() throws JsonParseException, JsonMappingException, IOException {
-        assertThat(jsonRepresentation.getInt("doesNotExist"), is(nullValue()));
+        assertThat(jsonRepresentation.getBigInteger("doesNotExist"), is(nullValue()));
     }
 
     @Test
-    public void forValueButNotAnInt() throws JsonParseException, JsonMappingException, IOException {
+    public void forValueButNot() throws JsonParseException, JsonMappingException, IOException {
         try {
-            jsonRepresentation.getInt("aString");
+            jsonRepresentation.getBigInteger("aString");
             fail();
         } catch (IllegalArgumentException e) {
-            assertThat(e.getMessage(), is("'aString' (\"aStringValue\") is not an int"));
+            assertThat(e.getMessage(), is("'aString' (\"aStringValue\") is not a biginteger"));
         }
     }
 
     @Test
     public void forMap() throws JsonParseException, JsonMappingException, IOException {
         try {
-            jsonRepresentation.getInt("aSubMap");
+            jsonRepresentation.getBigInteger("aSubMap");
             fail();
         } catch (IllegalArgumentException e) {
-            assertThat(e.getMessage(), is("'aSubMap' (a map) is not an int"));
+            assertThat(e.getMessage(), is("'aSubMap' (a map) is not a biginteger"));
         }
     }
 
     @Test
     public void forList() throws JsonParseException, JsonMappingException, IOException {
         try {
-            jsonRepresentation.getInt("aSubList");
+            jsonRepresentation.getBigInteger("aSubList");
             fail();
         } catch (IllegalArgumentException e) {
-            assertThat(e.getMessage(), is("'aSubList' (an array) is not an int"));
+            assertThat(e.getMessage(), is("'aSubList' (an array) is not a biginteger"));
         }
     }
 
     @Test
     public void forMultipartKey() throws JsonParseException, JsonMappingException, IOException {
-        assertThat(jsonRepresentation.getInt("aSubMap.anInt"), is(456));
+        assertThat(jsonRepresentation.getDouble("aSubMap.aDouble"), is(12345678901234534.4567));
     }
     
 }
