@@ -27,7 +27,7 @@ import org.apache.isis.viewer.json.applib.blocks.Link;
 import org.apache.isis.viewer.json.applib.domain.DomainObjectResource;
 import org.apache.isis.viewer.json.applib.domain.ServicesResource;
 import org.apache.isis.viewer.json.applib.homepage.HomePageResource;
-import org.apache.isis.viewer.json.applib.types.SpecsResource;
+import org.apache.isis.viewer.json.applib.types.TypeResource;
 import org.apache.isis.viewer.json.applib.user.UserResource;
 import org.jboss.resteasy.client.ClientExecutor;
 import org.jboss.resteasy.client.ClientRequestFactory;
@@ -40,7 +40,7 @@ public class RestfulClient {
     private final ServicesResource servicesResource;
     private final DomainObjectResource domainObjectResource;
     private final UserResource userResource;
-    private final SpecsResource specsResource;
+    private final TypeResource specsResource;
 
     private final ClientExecutor executor;
     private final ClientRequestFactory clientRequestFactory;
@@ -56,7 +56,7 @@ public class RestfulClient {
         
         this.homePageResource = clientRequestFactory.createProxy(HomePageResource.class);
         this.userResource = clientRequestFactory.createProxy(UserResource.class);
-        this.specsResource = clientRequestFactory.createProxy(SpecsResource.class);
+        this.specsResource = clientRequestFactory.createProxy(TypeResource.class);
         this.servicesResource = clientRequestFactory.createProxy(ServicesResource.class);
         this.domainObjectResource = clientRequestFactory.createProxy(DomainObjectResource.class);
     }
@@ -74,7 +74,7 @@ public class RestfulClient {
         return userResource;
     }
 
-    public SpecsResource getSpecsResource() {
+    public TypeResource getSpecsResource() {
         return specsResource;
     }
 

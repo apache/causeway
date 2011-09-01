@@ -16,15 +16,17 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.json.viewer.resources.home;
+package org.apache.isis.viewer.json.viewer.resources.reptypes;
 
+import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
-import org.apache.isis.viewer.json.applib.homepage.HomePageResource;
+import org.apache.isis.viewer.json.applib.reptypes.RepresentationTypeResource;
 import org.apache.isis.viewer.json.viewer.representations.LinkRepBuilder;
 import org.apache.isis.viewer.json.viewer.resources.ResourceAbstract;
 
@@ -32,19 +34,19 @@ import org.apache.isis.viewer.json.viewer.resources.ResourceAbstract;
  * Implementation note: it seems to be necessary to annotate the implementation with {@link Path} rather than the
  * interface (at least under RestEasy 1.0.2 and 1.1-RC2).
  */
-public class HomePageResourceImpl extends ResourceAbstract implements HomePageResource {
+@Path("/representationTypes")
+public class RepresentationTypeResourceImpl extends ResourceAbstract implements RepresentationTypeResource {
 
 
-    @Override
+    @GET
+    @Path("/{representationTypeName}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response resources() {
+    public Response representationType(@PathParam("representationTypeName") final String representationTypeName) {
         init();
-        
+
         JsonRepresentation representation = JsonRepresentation.newMap();
-        representation.put("representationType", LinkRepBuilder.newBuilder(getResourceContext().repContextInline(), "representationType", "representationTypes/homePage").build());
-        representation.put("self", LinkRepBuilder.newBuilder(getResourceContext().repContextInline(), "self", "").build());
-        representation.put("user", LinkRepBuilder.newBuilder(getResourceContext().repContextInline(), "user", "user").build());
-        representation.put("services", LinkRepBuilder.newBuilder(getResourceContext().repContextInline(), "services", "services").build());
+        representation.put("representationType", LinkRepBuilder.newBuilder(getResourceContext().repContextInline(), "representationType", "representationTypes/representationType").build());
+        representation.put("self", LinkRepBuilder.newBuilder(getResourceContext().repContextInline(), "self", "representationType/" + representationTypeName).build());
         
         return responseOfOk(asJson(representation));
     }

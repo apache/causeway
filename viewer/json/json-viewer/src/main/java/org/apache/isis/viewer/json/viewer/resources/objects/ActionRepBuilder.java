@@ -127,10 +127,12 @@ public class ActionRepBuilder extends AbstractMemberRepBuilder<ObjectAction> {
 	}
 
 	@Override
-	protected void appendMutatorArgs(MutatorSpec mutatorSpec, List<Object> values) {
+	protected JsonRepresentation appendMutatorArgs(MutatorSpec mutatorSpec) {
+	    JsonRepresentation argList = JsonRepresentation.newArray();
         for(int i=0; i<objectMember.getParameterCount(); i++) {
-            values.add(argValueFor(i)); 
+            argList.add(argValueFor(i)); 
         }
+        return argList;
     }
 
 	private Object argValueFor(int i) {

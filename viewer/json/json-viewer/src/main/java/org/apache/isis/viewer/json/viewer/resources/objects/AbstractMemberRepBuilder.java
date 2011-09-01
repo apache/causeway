@@ -59,7 +59,8 @@ public abstract class AbstractMemberRepBuilder<T extends ObjectMember> extends R
     }
 
     protected void putTypeRep() {
-        JsonRepresentation typeRep = LinkRepBuilder.newTypeBuilder(repContext, memberType.specFor(objectMember)).build();
+        ObjectSpecification specFor = memberType.specFor(objectMember);
+        JsonRepresentation typeRep = LinkRepBuilder.newTypeBuilder(repContext, specFor).build();
         representation.put("type", typeRep);
     }
 
@@ -76,31 +77,28 @@ public abstract class AbstractMemberRepBuilder<T extends ObjectMember> extends R
             MutatorSpec mutatorSpec = mutators.get(mutator);
             if(hasMemberFacet(mutatorSpec.mutatorFacetType)) {
                 String urlForMember = urlForMember(mutatorSpec.suffix);
-                Object body = mutatorArgs(mutatorSpec);
+                JsonRepresentation arguments = mutatorArgs(mutatorSpec);
                 JsonRepresentation detailsLink = 
                     LinkRepBuilder.newBuilder(repContext, mutator, urlForMember)
                         .withHttpMethod(mutatorSpec.httpMethod)
-                        .withBody(body)
+                        .withArguments(arguments)
                         .build();
                 representation.put(mutator, detailsLink);
             }
         }
     }
 
-    private List<Object> mutatorArgs(MutatorSpec mutatorSpec) {
-		final List<Object> argValues = Lists.newArrayList();
-    	appendMutatorArgs(mutatorSpec, argValues);
-    	return argValues;
+    private JsonRepresentation mutatorArgs(MutatorSpec mutatorSpec) {
+    	return appendMutatorArgs(mutatorSpec);
     }
 
-    protected void appendMutatorArgs(MutatorSpec mutatorSpec,
-			final List<Object> argRep) {
-		if(mutatorSpec.bodyArgs.isNone()) {
-    		return;
+    protected JsonRepresentation appendMutatorArgs(MutatorSpec mutatorSpec) {
+		if(mutatorSpec.arguments.isNone()) {
+    		return JsonRepresentation.newMap();
     	}
-        if(mutatorSpec.bodyArgs.isOne()) {
-    		argRep.add(null);
-            return;
+        if(mutatorSpec.arguments.isOne()) {
+            JsonRepresentation argValues = JsonRepresentation.newArray(1);
+            return argValues;
         }
         throw new UnsupportedOperationException("should be overridden if bodyArgs is not 0 or 1");
 	}

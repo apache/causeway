@@ -16,30 +16,28 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.json.applib.domain;
+package org.apache.isis.viewer.json.viewer.resources.user;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.jboss.resteasy.annotations.ClientResponseType;
+import org.apache.isis.viewer.json.applib.user.UserResource;
+import org.apache.isis.viewer.json.viewer.RepContext;
+import org.apache.isis.viewer.json.viewer.resources.ResourceAbstract;
 
-@Path("/services")
-public interface ServicesResource {
+public class UserResourceImpl extends ResourceAbstract implements UserResource {
 
-    @GET
-    @Path("/")
+    @Override
     @Produces({ MediaType.APPLICATION_JSON })
-    @ClientResponseType(entityType=String.class)
-    public Response services();
+    public Response user() {
+        init();
+        
+        RepContext repContext = getResourceContext().repContext();
+        UserRepBuilder builder = UserRepBuilder.newBuilder(repContext, getAuthenticationSession());
+        return responseOfOk(jsonRepresentionFrom(builder));
+    }
 
-    @GET
-    @Path("/{serviceId}")
-    @Produces({ MediaType.APPLICATION_JSON })
-    @ClientResponseType(entityType=String.class)
-    public abstract Response service(@PathParam("serviceId") final String serviceId);
+
 
 }

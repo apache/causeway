@@ -24,7 +24,7 @@ import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Optional;
 import org.apache.isis.applib.value.*;
 
-public class ApplibValuesEntity extends AbstractDomainObject {
+public class ApplibValuedEntity extends AbstractDomainObject {
 
 
     // {{ ColorProperty

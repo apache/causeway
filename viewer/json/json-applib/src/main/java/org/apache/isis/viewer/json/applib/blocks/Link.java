@@ -115,11 +115,6 @@ public final class Link extends JsonRepresentation {
             return false;
         if (getMethod() != other.getMethod())
             return false;
-        if (getRel() == null) {
-            if (other.getRel() != null)
-                return false;
-        } else if (!getRel().equals(other.getRel()))
-            return false;
         return true;
     }
 

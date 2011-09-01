@@ -23,7 +23,7 @@ import org.apache.isis.applib.AbstractDomainObject;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Optional;
 
-public class WrapperValuesEntity extends AbstractDomainObject {
+public class WrapperValuedEntity extends AbstractDomainObject {
 
     // {{ Title
     public String title() {

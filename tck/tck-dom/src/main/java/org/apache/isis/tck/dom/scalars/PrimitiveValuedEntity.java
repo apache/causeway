@@ -22,7 +22,7 @@ package org.apache.isis.tck.dom.scalars;
 import org.apache.isis.applib.AbstractDomainObject;
 import org.apache.isis.applib.annotation.MemberOrder;
 
-public class PrimitiveValuesEntity extends AbstractDomainObject {
+public class PrimitiveValuedEntity extends AbstractDomainObject {
 
     // {{ Title
     public String title() {

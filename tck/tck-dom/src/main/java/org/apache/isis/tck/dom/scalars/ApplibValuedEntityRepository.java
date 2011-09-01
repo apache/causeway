@@ -25,12 +25,12 @@ import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Named;
 
 @Named("ApplibValues")
-public interface ApplibValuesEntityRepository {
+public interface ApplibValuedEntityRepository {
 
     @MemberOrder(sequence="1")
-    public List<ApplibValuesEntity> list();
+    public List<ApplibValuedEntity> list();
 
     @MemberOrder(sequence="2")
-    public ApplibValuesEntity newEntity();
+    public ApplibValuedEntity newEntity();
 
 }

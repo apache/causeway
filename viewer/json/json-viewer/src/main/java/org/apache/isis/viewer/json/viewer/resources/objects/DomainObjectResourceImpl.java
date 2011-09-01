@@ -68,7 +68,6 @@ public class DomainObjectResourceImpl extends ResourceAbstract implements
         final ObjectAdapter objectAdapter = getObjectAdapter(oidStr);
         final DomainObjectRepBuilder builder = DomainObjectRepBuilder
                 .newBuilder(getResourceContext().repContext(), objectAdapter);
-        String mediaType = "application/vnd." + objectAdapter.getSpecification().getFullIdentifier() + "+json";
         return responseOfOk(jsonRepresentionFrom(builder));
     }
 
@@ -541,11 +540,11 @@ public class DomainObjectResourceImpl extends ResourceAbstract implements
         final ObjectAdapter objectAdapter, T objectMember,
         MemberType memberType, Intent intent) {
         String memberId = objectMember.getId();
-        if (objectMember.isVisible(getSession(), objectAdapter).isVetoed()) {
+        if (objectMember.isVisible(getAuthenticationSession(), objectAdapter).isVetoed()) {
             throwNotFoundException(memberId, memberType);
         }
         if (intent.isMutate()) {
-            Consent usable = objectMember.isUsable(getSession(), objectAdapter);
+            Consent usable = objectMember.isUsable(getAuthenticationSession(), objectAdapter);
             if (usable.isVetoed()) {
                 String memberTypeStr = memberType.name().toLowerCase();
                 throw new WebApplicationException(

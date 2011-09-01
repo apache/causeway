@@ -21,12 +21,12 @@
 package org.apache.isis.tck.fixture.scalars;
 
 import org.apache.isis.applib.fixtures.AbstractFixture;
-import org.apache.isis.tck.dom.scalars.JdkValuesEntity;
-import org.apache.isis.tck.dom.scalars.JdkValuesEntityRepository;
+import org.apache.isis.tck.dom.scalars.JdkValuedEntity;
+import org.apache.isis.tck.dom.scalars.JdkValuedEntityRepository;
 
 
 
-public class JdkValuesEntityFixture extends AbstractFixture {
+public class JdkValuedEntityFixture extends AbstractFixture {
 
     @Override
     public void install() {
@@ -37,13 +37,13 @@ public class JdkValuesEntityFixture extends AbstractFixture {
         createEntity();
     }
     
-    private JdkValuesEntity createEntity() {
+    private JdkValuedEntity createEntity() {
         return jdkValuesEntityRepository.newEntity();
     }
 
     
-    private JdkValuesEntityRepository jdkValuesEntityRepository;
-    public void setJdkValuesEntityRepository(JdkValuesEntityRepository jdkValuesEntityRepository) {
+    private JdkValuedEntityRepository jdkValuesEntityRepository;
+    public void setJdkValuesEntityRepository(JdkValuedEntityRepository jdkValuesEntityRepository) {
         this.jdkValuesEntityRepository = jdkValuesEntityRepository;
     }
     

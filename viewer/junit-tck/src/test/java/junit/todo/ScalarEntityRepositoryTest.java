@@ -32,12 +32,12 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 
-import org.apache.isis.tck.dom.scalars.PrimitiveValuesEntity;
-import org.apache.isis.tck.fixture.scalars.PrimitiveValuesEntityFixture;
+import org.apache.isis.tck.dom.scalars.PrimitiveValuedEntity;
+import org.apache.isis.tck.fixture.scalars.PrimitiveValuedEntityFixture;
 import org.apache.isis.viewer.junit.Fixture;
 import org.apache.isis.viewer.junit.Fixtures;
 
-@Fixtures({ @Fixture(PrimitiveValuesEntityFixture.class) })
+@Fixtures({ @Fixture(PrimitiveValuedEntityFixture.class) })
 public class ScalarEntityRepositoryTest extends AbstractTest {
 
     @Test
@@ -46,14 +46,14 @@ public class ScalarEntityRepositoryTest extends AbstractTest {
     @Ignore
     @Test
     public void canFindAllItemsNotYetDone() throws Exception {
-        final List<PrimitiveValuesEntity> foobarList = primitivesEntityRepository.list();
+        final List<PrimitiveValuedEntity> foobarList = primitivesEntityRepository.list();
         assertThat(foobarList.size(), is(5));
     }
 
     @Ignore
     @Test
     public void canCreateScalarEntityItem() throws Exception {
-        PrimitiveValuesEntity newItem = primitivesEntityRepository.newEntity();
+        PrimitiveValuedEntity newItem = primitivesEntityRepository.newEntity();
         assertThat(newItem, is(not(nullValue())));
         assertThat(getDomainObjectContainer().isPersistent(newItem), is(true));
     }

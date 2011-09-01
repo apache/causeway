@@ -37,6 +37,31 @@ public class HttpStatusCode {
         private boolean includes(int statusCode) {
             return from <= statusCode && statusCode <= to;
         }
+
+        public boolean isContinue() {
+            return this == CONTINUE;
+        }
+
+        public boolean isSuccess() {
+            return this == SUCCESS;
+        }
+
+        public boolean isRedirect() {
+            return this == REDIRECT;
+        }
+
+        public boolean isClientError() {
+            return this == CLIENT_ERROR;
+        }
+
+        public boolean isServerError() {
+            return this == SERVER_ERROR;
+        }
+
+        public boolean isOutOfRange() {
+            return this == OUT_OF_RANGE_LOW || this == OUT_OF_RANGE_HIGH;
+        }
+
     }
 
 ////Field descriptor #62 I
@@ -120,8 +145,6 @@ public class HttpStatusCode {
 ////Field descriptor #62 I
 //public static final int SC_REQUEST_TIMEOUT = 408;
 //
-////Field descriptor #62 I
-//public static final int SC_CONFLICT = 409;
     
     public final static HttpStatusCode NOT_CONFLICT = new HttpStatusCode(409);
 

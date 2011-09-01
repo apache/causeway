@@ -28,7 +28,7 @@ import org.apache.isis.applib.AbstractDomainObject;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Optional;
 
-public class JdkValuesEntity extends AbstractDomainObject {
+public class JdkValuedEntity extends AbstractDomainObject {
 
     // {{ Title
     public String title() {

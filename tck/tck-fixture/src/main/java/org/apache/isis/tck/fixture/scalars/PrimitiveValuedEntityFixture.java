@@ -22,11 +22,11 @@ package org.apache.isis.tck.fixture.scalars;
 
 
 import org.apache.isis.applib.fixtures.AbstractFixture;
-import org.apache.isis.tck.dom.scalars.PrimitiveValuesEntity;
-import org.apache.isis.tck.dom.scalars.PrimitiveValuesEntityRepository;
+import org.apache.isis.tck.dom.scalars.PrimitiveValuedEntity;
+import org.apache.isis.tck.dom.scalars.PrimitiveValuedEntityRepository;
 
 
-public class PrimitiveValuesEntityFixture extends AbstractFixture {
+public class PrimitiveValuedEntityFixture extends AbstractFixture {
 
     @Override
     public void install() {
@@ -37,13 +37,13 @@ public class PrimitiveValuesEntityFixture extends AbstractFixture {
         createEntity();
     }
     
-    private PrimitiveValuesEntity createEntity() {
+    private PrimitiveValuedEntity createEntity() {
         return primitiveValuesEntityRepository.newEntity();
     }
 
     
-    private PrimitiveValuesEntityRepository primitiveValuesEntityRepository;
-    public void setPrimitiveValuesEntityRepository(PrimitiveValuesEntityRepository primitiveValuesEntityRepository) {
+    private PrimitiveValuedEntityRepository primitiveValuesEntityRepository;
+    public void setPrimitiveValuesEntityRepository(PrimitiveValuedEntityRepository primitiveValuesEntityRepository) {
         this.primitiveValuesEntityRepository = primitiveValuesEntityRepository;
     }
     

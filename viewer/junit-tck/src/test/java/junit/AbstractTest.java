@@ -28,8 +28,8 @@ import org.junit.runner.RunWith;
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.progmodel.wrapper.applib.WrapperFactory;
 import org.apache.isis.progmodel.wrapper.applib.WrapperObject;
-import org.apache.isis.tck.dom.scalars.PrimitiveValuesEntityRepository;
-import org.apache.isis.tck.objstore.dflt.scalars.PrimitiveValuesEntityRepositoryDefault;
+import org.apache.isis.tck.dom.scalars.PrimitiveValuedEntityRepository;
+import org.apache.isis.tck.objstore.dflt.scalars.PrimitiveValuedEntityRepositoryDefault;
 import org.apache.isis.viewer.junit.ConfigDir;
 import org.apache.isis.viewer.junit.IsisTestRunner;
 import org.apache.isis.viewer.junit.Service;
@@ -37,17 +37,17 @@ import org.apache.isis.viewer.junit.Services;
 
 @RunWith(IsisTestRunner.class)
 @ConfigDir("../../viewer/dnd-tck/src/main/resources")
-@Services({ @Service(PrimitiveValuesEntityRepositoryDefault.class) })
+@Services({ @Service(PrimitiveValuedEntityRepositoryDefault.class) })
 public abstract class AbstractTest {
 
     private DomainObjectContainer domainObjectContainer;
     private WrapperFactory wrapperFactory;
 
     /**
-     * The {@link WrapperFactory#wrap(Object) wrapped} equivalent of the {@link #setFoobarRepository(PrimitiveValuesEntityRepository)
-     * injected} {@link PrimitiveValuesEntityRepository}.
+     * The {@link WrapperFactory#wrap(Object) wrapped} equivalent of the {@link #setFoobarRepository(PrimitiveValuedEntityRepository)
+     * injected} {@link PrimitiveValuedEntityRepository}.
      */
-    protected PrimitiveValuesEntityRepository primitivesEntityRepository;
+    protected PrimitiveValuedEntityRepository primitivesEntityRepository;
 
     @Before
     public void wrapInjectedServices() throws Exception {
@@ -95,7 +95,7 @@ public abstract class AbstractTest {
         this.domainObjectContainer = domainObjectContainer;
     }
 
-    public void setFoobarRepository(final PrimitiveValuesEntityRepository toDoItemRepository) {
+    public void setFoobarRepository(final PrimitiveValuedEntityRepository toDoItemRepository) {
         this.primitivesEntityRepository = toDoItemRepository;
     }
 
