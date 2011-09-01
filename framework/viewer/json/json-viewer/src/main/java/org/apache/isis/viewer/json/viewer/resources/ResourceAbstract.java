@@ -52,6 +52,7 @@ import org.apache.isis.viewer.json.applib.util.JsonMapper;
 import org.apache.isis.viewer.json.applib.util.JsonResponse;
 import org.apache.isis.viewer.json.viewer.RepContext;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
+import org.apache.isis.viewer.json.viewer.representations.LinkRepBuilder;
 import org.apache.isis.viewer.json.viewer.representations.RepresentationBuilder;
 import org.apache.isis.viewer.json.viewer.resources.objects.DomainObjectRepBuilder;
 import org.apache.isis.viewer.json.viewer.util.OidUtils;
@@ -239,24 +240,24 @@ public abstract class ResourceAbstract {
         return Response.ok().entity(jsonEntity).type(MediaType.APPLICATION_JSON_TYPE).build();
     }
 
-    protected static Response responseOfGone(final String reason) {
-        return Response.status(Status.GONE).header(JsonResponse.HEADER_X_RESTFUL_OBJECTS_REASON, reason).build();
+    protected static Response responseOfGone(final String reason, final Object... args) {
+        return Response.status(Status.GONE).header(JsonResponse.HEADER_X_RESTFUL_OBJECTS_REASON, String.format(reason, args)).build();
     }
 
     protected static Response responseOfBadRequest(final Consent consent) {
         return responseOfBadRequest(consent.getReason());
     }
 
-    protected static Response responseOfNoContent(final String reason) {
-        return Response.status(Status.NO_CONTENT).header(JsonResponse.HEADER_X_RESTFUL_OBJECTS_REASON, reason).build();
+    protected static Response responseOfNoContent(final String reason, final Object... args) {
+        return Response.status(Status.NO_CONTENT).header(JsonResponse.HEADER_X_RESTFUL_OBJECTS_REASON, String.format(reason, args)).build();
     }
 
-    protected static Response responseOfBadRequest(final String reason) {
-        return Response.status(Status.BAD_REQUEST).header(JsonResponse.HEADER_X_RESTFUL_OBJECTS_REASON, reason).build();
+    protected static Response responseOfBadRequest(final String reason, final Object... args) {
+        return Response.status(Status.BAD_REQUEST).header(JsonResponse.HEADER_X_RESTFUL_OBJECTS_REASON, String.format(reason, args)).build();
     }
 
-    protected static Response responseOfBadRequest(final String reason, Exception ex) {
-        ResponseBuilder builder = Response.status(Status.BAD_REQUEST).header(JsonResponse.HEADER_X_RESTFUL_OBJECTS_REASON, reason);
+    protected static Response responseOfBadRequest(final String reason, Exception ex, final Object... args) {
+        ResponseBuilder builder = Response.status(Status.BAD_REQUEST).header(JsonResponse.HEADER_X_RESTFUL_OBJECTS_REASON, String.format(reason, args));
         return withStackTraceAndMediaType(builder,ex).build();
     }
 
@@ -269,16 +270,16 @@ public abstract class ResourceAbstract {
         return responseOfNotFound(e.getMessage());
     }
 
-    protected static Response responseOfNotFound(final String reason) {
-        return Response.status(Status.NOT_FOUND).header(JsonResponse.HEADER_X_RESTFUL_OBJECTS_REASON, reason).build();
+    protected static Response responseOfNotFound(final String reason, Object... args) {
+        return Response.status(Status.NOT_FOUND).header(JsonResponse.HEADER_X_RESTFUL_OBJECTS_REASON, String.format(reason, args)).build();
     }
 
-    protected static Response responseOfPreconditionFailed(final String reason) {
-        return Response.status(StatusTypes.PRECONDITION_FAILED).header(JsonResponse.HEADER_X_RESTFUL_OBJECTS_REASON, reason).build();
+    protected static Response responseOfPreconditionFailed(final String reason, final Object... args) {
+        return Response.status(StatusTypes.PRECONDITION_FAILED).header(JsonResponse.HEADER_X_RESTFUL_OBJECTS_REASON, String.format(reason, args)).build();
     }
 
-    protected static Response responseOfMethodNotAllowed(final String reason) {
-        return Response.status(StatusTypes.METHOD_NOT_ALLOWED).header(JsonResponse.HEADER_X_RESTFUL_OBJECTS_REASON, reason).build();
+    protected static Response responseOfMethodNotAllowed(final String reason, final Object... args) {
+        return Response.status(StatusTypes.METHOD_NOT_ALLOWED).header(JsonResponse.HEADER_X_RESTFUL_OBJECTS_REASON, String.format(reason, args)).build();
     }
 
     protected static Response responseOfInternalServerError(final Exception ex) {
@@ -290,18 +291,18 @@ public abstract class ResourceAbstract {
         return builder.type(MediaType.TEXT_PLAIN_TYPE).entity(ExceptionUtils.getFullStackTrace(ex));
     }
 
-    protected static Response responseOfInternalServerError(final String reason) {
-        return Response.status(Status.INTERNAL_SERVER_ERROR).header(JsonResponse.HEADER_X_RESTFUL_OBJECTS_REASON, reason).build();
+    protected static Response responseOfInternalServerError(final String reason, final Object... args) {
+        return Response.status(Status.INTERNAL_SERVER_ERROR).header(JsonResponse.HEADER_X_RESTFUL_OBJECTS_REASON, String.format(reason, args)).build();
     }
 
     // //////////////////////////////////////////////////////////////
     // Dependencies (from singletons)
     // //////////////////////////////////////////////////////////////
 
-    protected AuthenticationSession getSession() {
+    protected AuthenticationSession getAuthenticationSession() {
         return IsisContext.getAuthenticationSession();
     }
-
+    
     private SpecificationLoader getSpecificationLoader() {
         return IsisContext.getSpecificationLoader();
     }

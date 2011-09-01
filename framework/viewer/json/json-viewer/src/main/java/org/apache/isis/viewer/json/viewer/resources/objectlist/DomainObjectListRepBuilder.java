@@ -24,29 +24,45 @@ import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.viewer.RepContext;
 import org.apache.isis.viewer.json.viewer.representations.LinkRepBuilder;
 import org.apache.isis.viewer.json.viewer.representations.RepresentationBuilder;
+import org.apache.isis.viewer.json.viewer.representations.WellKnownType;
 
 public class DomainObjectListRepBuilder extends RepresentationBuilder {
 
-    public static DomainObjectListRepBuilder newBuilder(RepContext repContext, ObjectSpecification objectSpec, List<ObjectAdapter> objectAdapter) {
-        return new DomainObjectListRepBuilder(repContext, objectSpec, objectAdapter);
+    public static DomainObjectListRepBuilder newBuilder(RepContext repContext, ObjectSpecification objectSpec, List<ObjectAdapter> objectAdapters) {
+        return newBuilder(repContext, WellKnownType.canonical(objectSpec.getFullIdentifier()), objectAdapters);
     }
 
-    private final ObjectSpecification objectSpec;
+    public static DomainObjectListRepBuilder newBuilder(RepContext repContext, String typeName, List<ObjectAdapter> objectAdapters) {
+        return new DomainObjectListRepBuilder(repContext, typeName, objectAdapters);
+    }
+
     private final List<ObjectAdapter> objectAdapters;
+    private String typeName;
     
-    public DomainObjectListRepBuilder(RepContext repContext, ObjectSpecification objectSpec, List<ObjectAdapter> objectAdapters) {
+    DomainObjectListRepBuilder(RepContext repContext, String typeName, List<ObjectAdapter> objectAdapters) {
         super(repContext);
-        this.objectSpec = objectSpec;
         this.objectAdapters = objectAdapters;
+        this.typeName = typeName;
     }
     
     public JsonRepresentation build() {
-        representation.put("resourceType", "objectList");
-        
-        JsonRepresentation type = LinkRepBuilder.newTypeBuilder(repContext, objectSpec).build();
-        representation.put("type", type);
+        JsonRepresentation linkToRepresentationType = LinkRepBuilder.newBuilder(repContext, "representationType", "representationTypes/list:" + typeName).build();
+        representation.put("representationType", linkToRepresentationType);
+
+        JsonRepresentation list = JsonRepresentation.newArray();
+        for(ObjectAdapter adapter: objectAdapters) {
+            JsonRepresentation linkToObject = buildLinkTo(adapter);
+            list.add(linkToObject);
+        }
+        representation.put("value", list);
+        representation.put("links", JsonRepresentation.newArray());
+        representation.put("metadata", JsonRepresentation.newMap());
 
         return representation;
+    }
+
+    protected JsonRepresentation buildLinkTo(ObjectAdapter adapter) {
+        return LinkRepBuilder.newObjectBuilder(repContext, adapter, getOidStringifier()).build();
     }
 
 

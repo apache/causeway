@@ -17,34 +17,29 @@
  *  under the License.
  */
 
+package org.apache.isis.tck.objstore.dflt.scalars;
 
-package org.apache.isis.tck.fixture.scalars;
+import org.apache.isis.tck.dom.scalars.AbstractValuedEntityRepository;
+import org.apache.isis.tck.dom.scalars.PrimitiveValuedEntity;
+import org.apache.isis.tck.dom.scalars.PrimitiveValuedEntityRepository;
 
-import org.apache.isis.applib.fixtures.AbstractFixture;
-import org.apache.isis.tck.dom.scalars.WrapperValuesEntity;
-import org.apache.isis.tck.dom.scalars.WrapperValuesEntityRepository;
+public class PrimitiveValuedEntityRepositoryDefault extends AbstractValuedEntityRepository<PrimitiveValuedEntity> implements PrimitiveValuedEntityRepository {
 
-
-
-public class WrapperValuesEntityFixture extends AbstractFixture {
-
+    public PrimitiveValuedEntityRepositoryDefault() {
+        super(PrimitiveValuedEntity.class);
+    }
+    
     @Override
-    public void install() {
-        createEntity();
-        createEntity();
-        createEntity();
-        createEntity();
-        createEntity();
-    }
-    
-    private WrapperValuesEntity createEntity() {
-        return wrapperValuesEntityRepository.newEntity();
+    public String getId() {
+        return "primitiveValuedEntities";
     }
 
-    
-    private WrapperValuesEntityRepository wrapperValuesEntityRepository;
-    public void setPrimitiveValuesEntityRepository(WrapperValuesEntityRepository wrapperValuesEntityRepository) {
-        this.wrapperValuesEntityRepository = wrapperValuesEntityRepository;
+    /**
+     * Required otherwise return type is erased
+     */
+    @Override
+    public PrimitiveValuedEntity newEntity() {
+        return super.newEntity();
     }
-    
+
 }

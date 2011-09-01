@@ -17,24 +17,20 @@
  *  under the License.
  */
 
-package org.apache.isis.tck.objstore.dflt.scalars;
+package org.apache.isis.tck.dom.scalars;
 
-import org.apache.isis.tck.dom.scalars.AbstractValuesEntityRepository;
-import org.apache.isis.tck.dom.scalars.PrimitiveValuesEntity;
-import org.apache.isis.tck.dom.scalars.PrimitiveValuesEntityRepository;
+import java.util.List;
 
-public class PrimitiveValuesEntityRepositoryDefault extends AbstractValuesEntityRepository<PrimitiveValuesEntity> implements PrimitiveValuesEntityRepository {
+import org.apache.isis.applib.annotation.MemberOrder;
+import org.apache.isis.applib.annotation.Named;
 
-    public PrimitiveValuesEntityRepositoryDefault() {
-        super(PrimitiveValuesEntity.class);
-    }
-    
-    /**
-     * Required otherwise return type is erased
-     */
-    @Override
-    public PrimitiveValuesEntity newEntity() {
-        return super.newEntity();
-    }
+@Named("PrimitiveValues")
+public interface PrimitiveValuedEntityRepository {
+
+    @MemberOrder(sequence="1")
+    public List<PrimitiveValuedEntity> list();
+
+    @MemberOrder(sequence="2")
+    public PrimitiveValuedEntity newEntity();
 
 }

@@ -112,12 +112,12 @@ public class JsonRepresentation {
     /////////////////////////////////////////////////////////////////////////
 
     public JsonRepresentation elementAt(int i) {
-        ensureIsAnArrayNoLargerThan(i);
+        ensureIsAnArrayAtLeastAsLargeAs(i);
         return new JsonRepresentation(jsonNode.get(i));
     }
 
     public void setElementAt(int i, JsonRepresentation objectRepr) {
-        ensureIsAnArrayNoLargerThan(i);
+        ensureIsAnArrayAtLeastAsLargeAs(i);
         if(objectRepr.isArray()) {
             throw new IllegalArgumentException("Representation being set cannot be an array");
         }
@@ -126,7 +126,7 @@ public class JsonRepresentation {
         arrayNode.set(i, objectRepr.getJsonNode());
     }
 
-    private void ensureIsAnArrayNoLargerThan(int i) {
+    private void ensureIsAnArrayAtLeastAsLargeAs(int i) {
         if (!jsonNode.isArray()) {
             throw new IllegalStateException("Is not an array");
         }
@@ -437,9 +437,77 @@ public class JsonRepresentation {
         return JsonNodeUtils.asUrlEncoded(getJsonNode());
     }
 
-    
+
+
     /////////////////////////////////////////////////////////////////////////
-    // mutable
+    // mutable (array)
+    /////////////////////////////////////////////////////////////////////////
+
+    public void add(Object value) {
+        if(!isArray()) {
+            throw new IllegalStateException("does not represent array");
+        }
+        nodeAsArray().add(new POJONode(value));
+    }
+
+    public void add(JsonRepresentation value) {
+        if(!isArray()) {
+            throw new IllegalStateException("does not represent array");
+        }
+        nodeAsArray().add(value.getJsonNode());
+    }
+
+    public void add(String value) {
+        if(!isArray()) {
+            throw new IllegalStateException("does not represent array");
+        }
+        nodeAsArray().add(value);
+    }
+
+    public void add(JsonNode value) {
+        if(!isArray()) {
+            throw new IllegalStateException("does not represent array");
+        }
+        nodeAsArray().add(value);
+    }
+
+    public void add(long value) {
+        if(!isArray()) {
+            throw new IllegalStateException("does not represent array");
+        }
+        nodeAsArray().add(value);
+    }
+
+    public void add(int value) {
+        if(!isArray()) {
+            throw new IllegalStateException("does not represent array");
+        }
+        nodeAsArray().add(value);
+    }
+
+    public void add(double value) {
+        if(!isArray()) {
+            throw new IllegalStateException("does not represent array");
+        }
+        nodeAsArray().add(value);
+    }
+
+    public void add(float value) {
+        if(!isArray()) {
+            throw new IllegalStateException("does not represent array");
+        }
+        nodeAsArray().add(value);
+    }
+
+    public void add(boolean value) {
+        if(!isArray()) {
+            throw new IllegalStateException("does not represent array");
+        }
+        nodeAsArray().add(value);
+    }
+
+    /////////////////////////////////////////////////////////////////////////
+    // mutable (map)
     /////////////////////////////////////////////////////////////////////////
 
     public void put(String key, Object value) {
@@ -571,6 +639,8 @@ public class JsonRepresentation {
     public String toString() {
         return jsonNode.toString();
     }
+
+
 
 
 

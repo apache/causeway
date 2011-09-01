@@ -28,7 +28,7 @@ import javax.ws.rs.core.Response;
 import org.jboss.resteasy.annotations.ClientResponseType;
 
 @Path("/types")
-public interface SpecsResource {
+public interface TypeResource {
 
     @GET
     @Path("/")

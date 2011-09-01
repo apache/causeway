@@ -20,16 +20,22 @@ package org.apache.isis.viewer.json.viewer.resources.services;
 
 import java.util.List;
 
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.services.ServiceUtil;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.json.applib.domain.ServicesResource;
 import org.apache.isis.viewer.json.viewer.RepContext;
 import org.apache.isis.viewer.json.viewer.resources.ResourceAbstract;
 import org.apache.isis.viewer.json.viewer.resources.objectlist.DomainObjectListRepBuilder;
+import org.apache.isis.viewer.json.viewer.resources.objectlist.DomainServiceListRepBuilder;
+import org.apache.isis.viewer.json.viewer.resources.objects.DomainObjectRepBuilder;
 
 public class ServicesResourceImpl extends ResourceAbstract implements ServicesResource {
 
@@ -39,10 +45,40 @@ public class ServicesResourceImpl extends ResourceAbstract implements ServicesRe
         init();
 
         final List<ObjectAdapter> serviceAdapters = getPersistenceSession().getServices();
-        ObjectSpecification objectSpec = getSpecification(Object.class.getName());
 		RepContext repContext = getResourceContext().repContext();
-        DomainObjectListRepBuilder builder = DomainObjectListRepBuilder.newBuilder(repContext, objectSpec, serviceAdapters);
+
+        DomainServiceListRepBuilder builder = DomainServiceListRepBuilder.newBuilder(repContext, serviceAdapters);
         return responseOfOk(jsonRepresentionFrom(builder));
+    }
+
+    @GET
+    @Path("/{serviceId}")
+    @Produces({ MediaType.APPLICATION_JSON })
+    @Override
+    public Response service(@PathParam("serviceId") String serviceId) {
+        init();
+
+        final ObjectAdapter serviceAdapter = getServiceAdapter(serviceId);
+        if(serviceAdapter == null) {
+            return responseOfNotFound("Could not locate service '%s'", serviceId);
+        }
+        RepContext repContext = getResourceContext().repContext();
+
+        DomainObjectRepBuilder builder = DomainObjectRepBuilder.newBuilder(repContext, serviceAdapter);
+        return responseOfOk(jsonRepresentionFrom(builder));
+    }
+
+
+    private ObjectAdapter getServiceAdapter(String serviceId) {
+        final List<ObjectAdapter> serviceAdapters = getPersistenceSession().getServices();
+        for (ObjectAdapter serviceAdapter : serviceAdapters) {
+            Object servicePojo = serviceAdapter.getObject();
+            String id = ServiceUtil.id(servicePojo);
+            if(serviceId.equals(id)) {
+                return serviceAdapter;
+            }
+        }
+        return null;
     }
 
 }

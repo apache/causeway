@@ -17,32 +17,34 @@
  *  under the License.
  */
 
-package org.apache.isis.tck.dom.scalars;
 
-import java.util.List;
+package org.apache.isis.tck.fixture.scalars;
 
-import org.apache.isis.applib.AbstractFactoryAndRepository;
+import org.apache.isis.applib.fixtures.AbstractFixture;
+import org.apache.isis.tck.dom.scalars.WrapperValuedEntity;
+import org.apache.isis.tck.dom.scalars.WrapperValuedEntityRepository;
 
-public abstract class AbstractValuesEntityRepository<T> extends AbstractFactoryAndRepository {
+
+
+public class WrapperValuedEntityFixture extends AbstractFixture {
+
+    @Override
+    public void install() {
+        createEntity();
+        createEntity();
+        createEntity();
+        createEntity();
+        createEntity();
+    }
     
-    private Class<T> cls;
-
-    public AbstractValuesEntityRepository(Class<T> cls) {
-        super();
-        this.cls = cls;
-    }
-
-
-    public List<T> list() {
-        return allInstances(cls);
+    private WrapperValuedEntity createEntity() {
+        return wrapperValuesEntityRepository.newEntity();
     }
 
     
-    protected T newEntity() {
-        T entity = newTransientInstance(cls);
-        persist(entity);
-        return entity;
+    private WrapperValuedEntityRepository wrapperValuesEntityRepository;
+    public void setPrimitiveValuesEntityRepository(WrapperValuedEntityRepository wrapperValuesEntityRepository) {
+        this.wrapperValuesEntityRepository = wrapperValuesEntityRepository;
     }
-
-
+    
 }

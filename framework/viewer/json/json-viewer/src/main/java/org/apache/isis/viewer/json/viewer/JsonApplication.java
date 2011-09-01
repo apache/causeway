@@ -20,13 +20,17 @@ package org.apache.isis.viewer.json.viewer;
 
 import org.apache.isis.viewer.json.viewer.resources.home.HomePageResourceImpl;
 import org.apache.isis.viewer.json.viewer.resources.objects.DomainObjectResourceImpl;
+import org.apache.isis.viewer.json.viewer.resources.reptypes.RepresentationTypeResourceImpl;
 import org.apache.isis.viewer.json.viewer.resources.services.ServicesResourceImpl;
+import org.apache.isis.viewer.json.viewer.resources.user.UserResourceImpl;
 
 public class JsonApplication extends AbstractJaxRsApplication {
 
     public JsonApplication() {
         addSingleton(new HomePageResourceImpl());
+        addSingleton(new RepresentationTypeResourceImpl());
         addSingleton(new ServicesResourceImpl());
+        addSingleton(new UserResourceImpl());
         addSingleton(new DomainObjectResourceImpl());
     }
 

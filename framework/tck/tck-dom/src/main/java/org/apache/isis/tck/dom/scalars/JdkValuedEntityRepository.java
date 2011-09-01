@@ -17,24 +17,20 @@
  *  under the License.
  */
 
-package org.apache.isis.tck.objstore.dflt.scalars;
+package org.apache.isis.tck.dom.scalars;
 
-import org.apache.isis.tck.dom.scalars.AbstractValuesEntityRepository;
-import org.apache.isis.tck.dom.scalars.JdkValuesEntity;
-import org.apache.isis.tck.dom.scalars.JdkValuesEntityRepository;
+import java.util.List;
 
-public class JdkValuesEntityRepositoryDefault extends AbstractValuesEntityRepository<JdkValuesEntity> implements JdkValuesEntityRepository {
+import org.apache.isis.applib.annotation.MemberOrder;
+import org.apache.isis.applib.annotation.Named;
 
-    public JdkValuesEntityRepositoryDefault() {
-        super(JdkValuesEntity.class);
-    }
-    
-    /**
-     * Required otherwise return type is erased
-     */
-    @Override
-    public JdkValuesEntity newEntity() {
-        return super.newEntity();
-    }
+@Named("JdkValues")
+public interface JdkValuedEntityRepository {
+
+    @MemberOrder(sequence="1")
+    public List<JdkValuedEntity> list();
+
+    @MemberOrder(sequence="2")
+    public JdkValuedEntity newEntity();
 
 }

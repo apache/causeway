@@ -17,20 +17,29 @@
  *  under the License.
  */
 
-package org.apache.isis.tck.dom.scalars;
+package org.apache.isis.tck.objstore.dflt.scalars;
 
-import java.util.List;
+import org.apache.isis.tck.dom.scalars.AbstractValuedEntityRepository;
+import org.apache.isis.tck.dom.scalars.JdkValuedEntity;
+import org.apache.isis.tck.dom.scalars.JdkValuedEntityRepository;
 
-import org.apache.isis.applib.annotation.MemberOrder;
-import org.apache.isis.applib.annotation.Named;
+public class JdkValuedEntityRepositoryDefault extends AbstractValuedEntityRepository<JdkValuedEntity> implements JdkValuedEntityRepository {
 
-@Named("WrapperValues")
-public interface WrapperValuesEntityRepository {
+    public JdkValuedEntityRepositoryDefault() {
+        super(JdkValuedEntity.class);
+    }
 
-    @MemberOrder(sequence="1")
-    public List<WrapperValuesEntity> list();
+    @Override
+    public String getId() {
+        return "jdkValuedEntities";
+    }
 
-    @MemberOrder(sequence="2")
-    public WrapperValuesEntity newEntity();
+    /**
+     * Required otherwise return type is erased
+     */
+    @Override
+    public JdkValuedEntity newEntity() {
+        return super.newEntity();
+    }
 
 }

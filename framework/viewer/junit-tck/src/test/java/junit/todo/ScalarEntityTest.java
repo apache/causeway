@@ -21,18 +21,18 @@ package junit.todo;
 
 import junit.AbstractTest;
 
-import org.apache.isis.tck.dom.scalars.PrimitiveValuesEntity;
-import org.apache.isis.tck.fixture.scalars.PrimitiveValuesEntityFixture;
+import org.apache.isis.tck.dom.scalars.PrimitiveValuedEntity;
+import org.apache.isis.tck.fixture.scalars.PrimitiveValuedEntityFixture;
 import org.apache.isis.viewer.junit.Fixture;
 import org.apache.isis.viewer.junit.Fixtures;
 import org.junit.Before;
 import org.junit.Test;
 
 
-@Fixtures({ @Fixture(PrimitiveValuesEntityFixture.class) })
+@Fixtures({ @Fixture(PrimitiveValuedEntityFixture.class) })
 public class ScalarEntityTest extends AbstractTest {
 
-    private PrimitiveValuesEntity firstItem;
+    private PrimitiveValuedEntity firstItem;
 
     @Override
     @Before

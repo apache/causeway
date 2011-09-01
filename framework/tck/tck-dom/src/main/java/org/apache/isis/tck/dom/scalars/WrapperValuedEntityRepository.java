@@ -24,13 +24,13 @@ import java.util.List;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Named;
 
-@Named("PrimitiveValues")
-public interface PrimitiveValuesEntityRepository {
+@Named("WrapperValues")
+public interface WrapperValuedEntityRepository {
 
     @MemberOrder(sequence="1")
-    public List<PrimitiveValuesEntity> list();
+    public List<WrapperValuedEntity> list();
 
     @MemberOrder(sequence="2")
-    public PrimitiveValuesEntity newEntity();
+    public WrapperValuedEntity newEntity();
 
 }

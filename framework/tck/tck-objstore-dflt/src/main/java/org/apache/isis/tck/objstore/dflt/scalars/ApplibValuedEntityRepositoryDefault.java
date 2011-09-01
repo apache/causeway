@@ -19,22 +19,27 @@
 
 package org.apache.isis.tck.objstore.dflt.scalars;
 
-import org.apache.isis.tck.dom.scalars.AbstractValuesEntityRepository;
-import org.apache.isis.tck.dom.scalars.WrapperValuesEntity;
-import org.apache.isis.tck.dom.scalars.WrapperValuesEntityRepository;
+import org.apache.isis.tck.dom.scalars.AbstractValuedEntityRepository;
+import org.apache.isis.tck.dom.scalars.ApplibValuedEntity;
+import org.apache.isis.tck.dom.scalars.ApplibValuedEntityRepository;
 
-public class WrapperValuesEntityRepositoryDefault extends AbstractValuesEntityRepository<WrapperValuesEntity> implements WrapperValuesEntityRepository {
+public class ApplibValuedEntityRepositoryDefault extends AbstractValuedEntityRepository<ApplibValuedEntity> implements ApplibValuedEntityRepository {
 
-    public WrapperValuesEntityRepositoryDefault() {
-        super(WrapperValuesEntity.class);
+    public ApplibValuedEntityRepositoryDefault() {
+        super(ApplibValuedEntity.class);
+    }
+
+    @Override
+    public String getId() {
+        return "applibValuedEntities";
     }
     
     /**
      * Required otherwise return type is erased
      */
     @Override
-    public WrapperValuesEntity newEntity() {
+    public ApplibValuedEntity newEntity() {
         return super.newEntity();
-    }    
+    }
 
 }

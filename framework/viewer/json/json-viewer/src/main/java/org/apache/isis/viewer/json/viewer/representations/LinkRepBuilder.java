@@ -25,29 +25,30 @@ import org.apache.isis.viewer.json.viewer.resources.objects.DomainObjectRepBuild
 
 public class LinkRepBuilder extends RepresentationBuilder {
 
-    public static LinkRepBuilder newBuilder(RepContext repContext, String relSuffix, String url) {
-        return new LinkRepBuilder(repContext, relSuffix, url);
-    }
-    public static TypeBuilder newTypeBuilder(RepContext repContext, ObjectSpecification objectSpec) {
-        return new TypeBuilder(repContext, objectSpec);
+    public static LinkRepBuilder newBuilder(RepContext repContext, String rel, String href) {
+        return new LinkRepBuilder(repContext, rel, href);
     }
 
-	public static LinkRepBuilder newObjectBuilder(RepContext repContext,
-			ObjectAdapter elementAdapter, OidStringifier oidStringifier) {
+	public static LinkRepBuilder newObjectBuilder(RepContext repContext, ObjectAdapter elementAdapter, OidStringifier oidStringifier) {
     	String url = DomainObjectRepBuilder.urlFor(elementAdapter, oidStringifier);
         return LinkRepBuilder.newBuilder(repContext, "object", url);
 	}
 
-    private final String relSuffix;
+    public static LinkRepBuilder newTypeBuilder(RepContext repContext, ObjectSpecification objectSpec) {
+        String url = "types/" + WellKnownType.canonical(objectSpec.getFullIdentifier());
+        return LinkRepBuilder.newBuilder(repContext, "type", url);
+    }
+
+    private final String rel;
     private final String href;
     
     private HttpMethod method = HttpMethod.GET;
     private String title;
-    private Object body;
+    private JsonRepresentation arguments;
     
-    public LinkRepBuilder(RepContext repContext, String relSuffix, String href) {
+    public LinkRepBuilder(RepContext repContext, String rel, String href) {
         super(repContext);
-        this.relSuffix = relSuffix;
+        this.rel = rel;
         this.href = href;
     }
     public LinkRepBuilder withHttpMethod(HttpMethod method) {
@@ -58,16 +59,17 @@ public class LinkRepBuilder extends RepresentationBuilder {
         this.title = title;
         return this;
     }
-    public LinkRepBuilder withBody(Object body) {
-        this.body = body;
+    public LinkRepBuilder withArguments(JsonRepresentation arguments) {
+        this.arguments = arguments;
         return this;
     }
     public JsonRepresentation build() {
-        representation.put("rel", relSuffix);
+        representation.put("rel", rel);
         representation.put("href", repContext.urlFor(href));
         representation.put("method", method);
         representation.put("title", title);
-        representation.put("body", body);
+        representation.put("arguments", arguments);
         return representation;
     }
+
 }
