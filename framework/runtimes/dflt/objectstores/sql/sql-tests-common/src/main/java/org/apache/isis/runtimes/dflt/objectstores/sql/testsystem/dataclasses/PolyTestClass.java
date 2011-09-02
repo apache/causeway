@@ -32,7 +32,7 @@ import org.apache.isis.applib.annotation.MemberOrder;
  * @author Kevin
  * 
  */
-public class PolyTestClass extends AbstractDomainObject {
+public class PolyTestClass extends AbstractDomainObject implements PolyTestInterface {
     public String title() {
         return string;
     }
@@ -60,6 +60,20 @@ public class PolyTestClass extends AbstractDomainObject {
 
     public void setPolyBaseClasses(final List<PolyBaseClass> polyBaseClasses) {
         this.polyBaseClasses = polyBaseClasses;
+    }
+
+    // }}
+
+    // {{ PolyBaseClass
+    private List<PolyTestInterface> polyTestClasses = new ArrayList<PolyTestInterface>();
+
+    @MemberOrder(sequence = "2")
+    public List<PolyTestInterface> getPolyTestClasses() {
+        return polyTestClasses;
+    }
+
+    public void setPolyTestClasses(final List<PolyTestInterface> polyTestClasses) {
+        this.polyTestClasses = polyTestClasses;
     }
     // }}
 
