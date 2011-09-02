@@ -49,6 +49,8 @@ public class PolymorphismTest extends SqlIntegrationTestCommonBase {
         final PolyTestClass polyTestClass = factory.newPolyTestClass();
         polyTestClass.setString("polyTestClass");
 
+        polyTestClass.getPolyTestClasses().add(polyTestClass);
+
         // setup the polyTestClass
         PolySubClassOne polySubClassOne = factory.newPolySubClassOne();
         polySubClassOne.setString("PolySubClassOne 1");
