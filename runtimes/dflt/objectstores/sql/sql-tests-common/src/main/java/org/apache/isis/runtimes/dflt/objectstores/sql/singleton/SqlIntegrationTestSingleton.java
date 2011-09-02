@@ -37,6 +37,7 @@ import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.runtimes.dflt.objectstores.sql.SqlObjectStore;
 import org.apache.isis.runtimes.dflt.objectstores.sql.testsystem.SqlDataClassFactory;
 import org.apache.isis.runtimes.dflt.objectstores.sql.testsystem.TestProxySystemIII;
+import org.apache.isis.runtimes.dflt.objectstores.sql.testsystem.dataclasses.PolyTestClass;
 import org.apache.isis.runtimes.dflt.objectstores.sql.testsystem.dataclasses.SimpleClass;
 import org.apache.isis.runtimes.dflt.objectstores.sql.testsystem.dataclasses.SimpleClassTwo;
 import org.apache.isis.runtimes.dflt.objectstores.sql.testsystem.dataclasses.SqlDataClass;
@@ -99,6 +100,7 @@ public class SqlIntegrationTestSingleton {
     private Connection c = null;
     private Statement s = null;
     private SqlDataClass sqlDataClass;
+    private PolyTestClass polyTestClass;
 
     @SuppressWarnings("unchecked")
     private void resetPersistorState(final IsisConfigurationDefault IsisConfigurationDefault) throws SQLException,
@@ -182,6 +184,7 @@ public class SqlIntegrationTestSingleton {
         }
     }
 
+    // {{ SqlDataClass support
     public static void setDataClass(final SqlDataClass person) {
         getInstance().setSqlDataClass(person);
 
@@ -203,4 +206,20 @@ public class SqlIntegrationTestSingleton {
     public SqlDataClass getSqlDataClass() {
         return sqlDataClass;
     }
+
+    // }}
+
+    // {{ PolyTestClass support
+    public static void setStaticPolyTestClass(final PolyTestClass polyTestClass) {
+        getInstance().setPolyTestClass(polyTestClass);
+    }
+
+    private void setPolyTestClass(final PolyTestClass polyTestClass) {
+        this.polyTestClass = polyTestClass;
+    }
+
+    public PolyTestClass getPolyTestClass() {
+        return polyTestClass;
+    }
+    // }}
 }

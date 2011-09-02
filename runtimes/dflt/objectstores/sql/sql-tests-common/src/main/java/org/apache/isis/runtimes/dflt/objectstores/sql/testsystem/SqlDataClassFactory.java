@@ -26,6 +26,9 @@ import java.util.List;
 
 import org.apache.isis.applib.AbstractFactoryAndRepository;
 import org.apache.isis.runtimes.dflt.objectstores.sql.testsystem.dataclasses.NumericTestClass;
+import org.apache.isis.runtimes.dflt.objectstores.sql.testsystem.dataclasses.PolySubClassOne;
+import org.apache.isis.runtimes.dflt.objectstores.sql.testsystem.dataclasses.PolySubClassTwo;
+import org.apache.isis.runtimes.dflt.objectstores.sql.testsystem.dataclasses.PolyTestClass;
 import org.apache.isis.runtimes.dflt.objectstores.sql.testsystem.dataclasses.SimpleClass;
 import org.apache.isis.runtimes.dflt.objectstores.sql.testsystem.dataclasses.SimpleClassTwo;
 import org.apache.isis.runtimes.dflt.objectstores.sql.testsystem.dataclasses.SqlDataClass;
@@ -83,6 +86,25 @@ public class SqlDataClassFactory extends AbstractFactoryAndRepository {
 
     public void resolve(final Object domainObject) {
         getContainer().resolve(domainObject);
+    }
+
+    public PolyTestClass newPolyTestClass() {
+        final PolyTestClass object = newTransientInstance(PolyTestClass.class);
+        return object;
+    }
+
+    public List<PolyTestClass> allPolyTestClasses() {
+        return allInstances(PolyTestClass.class);
+    }
+
+    public PolySubClassOne newPolySubClassOne() {
+        final PolySubClassOne object = newTransientInstance(PolySubClassOne.class);
+        return object;
+    }
+
+    public PolySubClassTwo newPolySubClassTwo() {
+        final PolySubClassTwo object = newTransientInstance(PolySubClassTwo.class);
+        return object;
     }
 
 }

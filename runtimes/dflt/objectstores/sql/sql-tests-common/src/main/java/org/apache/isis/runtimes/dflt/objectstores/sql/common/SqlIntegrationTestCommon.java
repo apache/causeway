@@ -22,16 +22,9 @@
  */
 package org.apache.isis.runtimes.dflt.objectstores.sql.common;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Properties;
-
-import junit.framework.TestCase;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
@@ -46,7 +39,6 @@ import org.apache.isis.applib.value.Password;
 import org.apache.isis.applib.value.Percentage;
 import org.apache.isis.applib.value.Time;
 import org.apache.isis.applib.value.TimeStamp;
-import org.apache.isis.core.commons.config.IsisConfigurationBuilderFileSystem;
 import org.apache.isis.runtimes.dflt.objectstores.sql.singleton.SqlIntegrationTestSingleton;
 import org.apache.isis.runtimes.dflt.objectstores.sql.testsystem.SqlDataClassFactory;
 import org.apache.isis.runtimes.dflt.objectstores.sql.testsystem.dataclasses.NumericTestClass;
@@ -65,7 +57,7 @@ import org.apache.isis.runtimes.dflt.objectstores.sql.testsystem.dataclasses.Sql
  *         the entire framework.
  * 
  */
-public abstract class SqlIntegrationTestCommon extends TestCase {
+public abstract class SqlIntegrationTestCommon extends SqlIntegrationTestCommonBase {
     private static final Logger LOG = Logger.getLogger(SqlIntegrationTestCommon.class);
 
     // private static final TimeZone GMTm2_TIME_ZONE;
@@ -133,28 +125,6 @@ public abstract class SqlIntegrationTestCommon extends TestCase {
     private static NumericTestClass numericTestClassMax;
     private static NumericTestClass numericTestClassMin;
 
-    IsisConfigurationBuilderFileSystem loader;
-
-    private SqlIntegrationTestSingleton getSingletonInstance() {
-        return SqlIntegrationTestSingleton.getInstance();
-    }
-
-    public Properties getProperties() {
-        try {
-            final Properties properties = new Properties();
-            properties.load(new FileInputStream("src/test/config/" + getPropertiesFilename()));
-            return properties;
-        } catch (final FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (final IOException e) {
-            e.printStackTrace();
-        }
-
-        return null;
-    }
-
-    public abstract String getPropertiesFilename();
-
     public String getPersonTableName() {
         return "sqldataclass";
     }
@@ -165,67 +135,6 @@ public abstract class SqlIntegrationTestCommon extends TestCase {
 
     public String getSimpleClassTwoTableName() {
         return "simpleclasstwo";
-    }
-
-    public String getSqlSetupString() {
-        return null;
-    }
-
-    public String getSqlTeardownString() {
-        return null;
-    }
-
-    /**
-     * This method can be used to do any DB specific actions the first time the test framework is setup. e.g. In the XML
-     * test, it must delete all XML files in the data store directory.
-     */
-    public void initialiseTests() {
-    }
-
-    // Set-up the test environment
-    @Override
-    public void setUp() throws FileNotFoundException, IOException, ClassNotFoundException, InstantiationException,
-        IllegalAccessException, SQLException {
-        Logger.getRootLogger().setLevel(Level.INFO);
-
-        // Initialise the framework
-        if (getSingletonInstance().getState() == 0) {
-            final Properties properties = getProperties();
-            if (properties == null) {
-                getSingletonInstance().initNOF("src/test/config", getPropertiesFilename());
-            } else {
-                getSingletonInstance().initNOF(properties);
-            }
-
-            final String sqlSetupString = getSqlSetupString();
-            if (sqlSetupString != null) {
-                getSingletonInstance().sqlExecute(sqlSetupString);
-            }
-        }
-    }
-
-    // Tear down the test environment
-    @Override
-    public void tearDown() {
-        if (getSingletonInstance().getState() == 0) {
-            final String sqlTeardownString = getSqlTeardownString();
-            if (sqlTeardownString != null) {
-                try {
-                    getSingletonInstance().sqlExecute(sqlTeardownString);
-                } catch (final SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-            getSingletonInstance().shutDown();
-        }
-    }
-
-    /**
-     * TODO Confirm that the system tables are created as expected
-     */
-    public void testSetup() {
-        initialiseTests();
-        getSingletonInstance().setState(0);
     }
 
     /**
