@@ -22,6 +22,10 @@
  */
 package org.apache.isis.runtimes.dflt.objectstores.sql.auto;
 
+import java.util.List;
+
+import org.apache.log4j.Logger;
+
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.specloader.specimpl.OneToManyAssociationImpl;
@@ -35,10 +39,34 @@ import org.apache.isis.runtimes.dflt.objectstores.sql.ObjectMappingLookup;
  * @author Kevin
  */
 public class MultiColumnCombinedCollectionMapper extends CombinedCollectionMapper {
+    private static final Logger LOG = Logger.getLogger(CombinedCollectionMapper.class);
 
     public MultiColumnCombinedCollectionMapper(final ObjectAssociation objectAssociation, final String parameterBase,
-        final FieldMappingLookup lookup, final ObjectMappingLookup objectMapperLookup) {
+        final FieldMappingLookup lookup, final ObjectMappingLookup objectMapperLookup,
+        AbstractAutoMapper abstractAutoMapper, ObjectAssociation field) {
         super(objectAssociation, parameterBase, lookup, objectMapperLookup);
+
+        priorFields = abstractAutoMapper.fields;
+        priorField = field;
+
+        setUpFieldMappers();
+    }
+
+    protected final ObjectAssociation priorField; // prevents recursion
+
+    protected final List<ObjectAssociation> priorFields;
+
+    @Override
+    protected void getExtraFields(List<ObjectAssociation> existingFields) {
+        if (priorFields != null) {
+            for (ObjectAssociation priorField1 : priorFields) {
+                if (existingFields.contains(priorField1) == false) {
+                    existingFields.add(priorField1);
+                } else {
+                    LOG.debug("Skipping prior field: " + priorField1.getName());
+                }
+            }
+        }
     }
 
     @Override

@@ -71,7 +71,6 @@ public class JdbcAbstractReferenceFieldMapping extends JdbcObjectReferenceFieldM
     @Override
     public void appendCreateColumnDefinitions(final StringBuffer sql) {
         super.appendCreateColumnDefinitions(sql);
-        // add the class instance name preserver
         sql.append(classnameColumn);
         sql.append(" ");
         sql.append(JdbcConnector.TYPE_STRING());
@@ -93,8 +92,13 @@ public class JdbcAbstractReferenceFieldMapping extends JdbcObjectReferenceFieldM
     public void appendInsertValues(final DatabaseConnector connector, final StringBuffer sql, final ObjectAdapter object) {
         super.appendInsertValues(connector, sql, object);
         sql.append(",?");
+
         ObjectAdapter objectAdapter = field.get(object);
-        connector.addToQueryValues(objectAdapter.getSpecification().getFullIdentifier());
+        if (objectAdapter != null) {
+            connector.addToQueryValues(objectAdapter.getSpecification().getFullIdentifier());
+        } else {
+            connector.addToQueryValues(null);
+        }
     }
 
     @Override
@@ -106,19 +110,24 @@ public class JdbcAbstractReferenceFieldMapping extends JdbcObjectReferenceFieldM
         sql.append(" = ?");
 
         ObjectAdapter objectAdapter = field.get(object);
-        connector.addToQueryValues(objectAdapter.getSpecification().getFullIdentifier());
+        if (objectAdapter != null) {
+            connector.addToQueryValues(objectAdapter.getSpecification().getFullIdentifier());
+        } else {
+            connector.addToQueryValues(null);
+        }
     }
 
     @Override
     public void initializeField(final ObjectAdapter object, final Results rs) {
-        // TODO: find the specification for the field name
         String className = rs.getString(classnameColumn);
-        final ObjectSpecification specification = getReflector().loadSpecification(className);
+        if (className != null) {
+            final ObjectSpecification specification = getReflector().loadSpecification(className);
 
-        final Oid oid = recreateOid(rs, specification);
+            final Oid oid = recreateOid(rs, specification);
 
-        final ObjectAdapter reference = getAdapter(specification, oid);
-        ((OneToOneAssociation) field).initAssociation(object, reference);
+            final ObjectAdapter reference = getAdapter(specification, oid);
+            ((OneToOneAssociation) field).initAssociation(object, reference);
+        }
     }
 
     @Override

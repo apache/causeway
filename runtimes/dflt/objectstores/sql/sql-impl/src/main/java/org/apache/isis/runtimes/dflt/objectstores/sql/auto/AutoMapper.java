@@ -60,6 +60,8 @@ public class AutoMapper extends AbstractAutoMapper implements ObjectMapping, Deb
         idMapping = lookup.createIdMapping();
         versionMapping = lookup.createVersionMapping();
         titleMapping = lookup.createTitleMapping();
+
+        setUpFieldMappers();
     }
 
     @Override
