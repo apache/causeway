@@ -22,6 +22,8 @@ package org.apache.isis.runtimes.dflt.objectstores.sql.auto;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
@@ -40,7 +42,6 @@ import org.apache.isis.runtimes.dflt.objectstores.sql.VersionMapping;
 import org.apache.isis.runtimes.dflt.objectstores.sql.mapping.FieldMapping;
 import org.apache.isis.runtimes.dflt.objectstores.sql.mapping.ObjectReferenceMapping;
 import org.apache.isis.runtimes.dflt.runtime.persistence.PersistorUtil;
-import org.apache.log4j.Logger;
 
 public class CombinedCollectionMapper extends AbstractAutoMapper implements CollectionMapper {
     private static final Logger LOG = Logger.getLogger(CombinedCollectionMapper.class);
@@ -107,6 +108,11 @@ public class CombinedCollectionMapper extends AbstractAutoMapper implements Coll
 
     @Override
     public void loadInternalCollection(final DatabaseConnector connector, final ObjectAdapter parent) {
+        if (collectionMappers == null) {
+            // for abstract classes and interfaces
+            return;
+        }
+
         final ObjectAdapter collection = field.get(parent);
         if (collection.getResolveState().canChangeTo(ResolveState.RESOLVING)) {
             LOG.debug("loading internal collection " + field);
@@ -157,6 +163,10 @@ public class CombinedCollectionMapper extends AbstractAutoMapper implements Coll
 
     @Override
     public void saveInternalCollection(final DatabaseConnector connector, final ObjectAdapter parent) {
+        if (collectionMappers == null) {
+            // for abtract classes and interfaces
+            return;
+        }
         final ObjectAdapter collection = field.get(parent);
         LOG.debug("Saving internal collection " + collection);
 
