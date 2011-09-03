@@ -137,6 +137,11 @@ public abstract class SqlIntegrationTestCommon extends SqlIntegrationTestCommonB
         return "simpleclasstwo";
     }
 
+    public void testSetup() {
+        initialiseTests();
+        getSingletonInstance().setState(0);
+    }
+
     /**
      * Create a {@link SqlDataClass} and persist to the store.
      * 

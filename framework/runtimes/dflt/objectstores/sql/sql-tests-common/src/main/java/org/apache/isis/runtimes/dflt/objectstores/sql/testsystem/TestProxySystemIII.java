@@ -22,6 +22,11 @@ package org.apache.isis.runtimes.dflt.objectstores.sql.testsystem;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jmock.Expectations;
+import org.jmock.Mockery;
+import org.jmock.integration.junit4.JUnit4Mockery;
+import org.jmock.lib.legacy.ClassImposteriser;
+
 import org.apache.isis.applib.AbstractFactoryAndRepository;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
@@ -43,10 +48,6 @@ import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContextStatic;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessionFactory;
 import org.apache.isis.runtimes.dflt.runtime.system.session.IsisSessionFactoryDefault;
-import org.jmock.Expectations;
-import org.jmock.Mockery;
-import org.jmock.integration.junit4.JUnit4Mockery;
-import org.jmock.lib.legacy.ClassImposteriser;
 
 /*
  * TODO allow to be created with specific requirements for components being set up rather than using mocks.
@@ -73,6 +74,7 @@ public class TestProxySystemIII {
         }
     };
     private IsisSessionFactoryDefault sessionFactory = null;
+    private IsisContext context = null;
     private ObjectStorePersistenceMechanismInstallerAbstract persistenceMechanismInstaller;
 
     public void init(final AbstractFactoryAndRepository factory) {
@@ -118,7 +120,7 @@ public class TestProxySystemIII {
             new IsisSessionFactoryDefault(DeploymentType.EXPLORATION, configuration, mockTemplateImageLoader,
                 mockSpecificationLoader, mockAuthenticationManager, mockAuthorizationManager, mockUserProfileLoader,
                 persistenceSessionFactory, servicesList);
-        final IsisContext context = IsisContextStatic.createRelaxedInstance(sessionFactory);
+        context = IsisContextStatic.createRelaxedInstance(sessionFactory);
         IsisContext.setConfiguration(sessionFactory.getConfiguration());
         sessionFactory.init();
 
@@ -136,5 +138,6 @@ public class TestProxySystemIII {
         if (persistenceMechanismInstaller != null) {
             persistenceMechanismInstaller.shutdown();
         }
+        context.closeSessionInstance();
     }
 }

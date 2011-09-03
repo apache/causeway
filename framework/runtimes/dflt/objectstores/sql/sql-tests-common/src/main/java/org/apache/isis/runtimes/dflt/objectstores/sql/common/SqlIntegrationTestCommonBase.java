@@ -83,10 +83,6 @@ public abstract class SqlIntegrationTestCommonBase extends TestCase {
     /**
      * TODO Confirm that the system tables are created as expected
      */
-    public void testSetup() {
-        initialiseTests();
-        getSingletonInstance().setState(0);
-    }
 
     public String getSqlSetupString() {
         return null;

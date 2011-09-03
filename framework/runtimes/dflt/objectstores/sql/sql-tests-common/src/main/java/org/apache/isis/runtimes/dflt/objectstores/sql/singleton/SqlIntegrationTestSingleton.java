@@ -37,10 +37,10 @@ import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.runtimes.dflt.objectstores.sql.SqlObjectStore;
 import org.apache.isis.runtimes.dflt.objectstores.sql.testsystem.SqlDataClassFactory;
 import org.apache.isis.runtimes.dflt.objectstores.sql.testsystem.TestProxySystemIII;
-import org.apache.isis.runtimes.dflt.objectstores.sql.testsystem.dataclasses.PolyTestClass;
 import org.apache.isis.runtimes.dflt.objectstores.sql.testsystem.dataclasses.SimpleClass;
 import org.apache.isis.runtimes.dflt.objectstores.sql.testsystem.dataclasses.SimpleClassTwo;
 import org.apache.isis.runtimes.dflt.objectstores.sql.testsystem.dataclasses.SqlDataClass;
+import org.apache.isis.runtimes.dflt.objectstores.sql.testsystem.dataclasses.polymorphism.PolyTestClass;
 
 /**
  * @author Kevin
@@ -214,6 +214,10 @@ public class SqlIntegrationTestSingleton {
         getInstance().setPolyTestClass(polyTestClass);
     }
 
+    public static PolyTestClass getStaticPolyTestClass() {
+        return getInstance().getPolyTestClass();
+    }
+
     private void setPolyTestClass(final PolyTestClass polyTestClass) {
         this.polyTestClass = polyTestClass;
     }
@@ -222,4 +226,5 @@ public class SqlIntegrationTestSingleton {
         return polyTestClass;
     }
     // }}
+
 }

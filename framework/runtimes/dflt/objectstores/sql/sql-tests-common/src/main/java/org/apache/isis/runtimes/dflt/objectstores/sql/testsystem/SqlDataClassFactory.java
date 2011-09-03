@@ -26,18 +26,40 @@ import java.util.List;
 
 import org.apache.isis.applib.AbstractFactoryAndRepository;
 import org.apache.isis.runtimes.dflt.objectstores.sql.testsystem.dataclasses.NumericTestClass;
-import org.apache.isis.runtimes.dflt.objectstores.sql.testsystem.dataclasses.PolySubClassOne;
-import org.apache.isis.runtimes.dflt.objectstores.sql.testsystem.dataclasses.PolySubClassTwo;
-import org.apache.isis.runtimes.dflt.objectstores.sql.testsystem.dataclasses.PolyTestClass;
 import org.apache.isis.runtimes.dflt.objectstores.sql.testsystem.dataclasses.SimpleClass;
 import org.apache.isis.runtimes.dflt.objectstores.sql.testsystem.dataclasses.SimpleClassTwo;
 import org.apache.isis.runtimes.dflt.objectstores.sql.testsystem.dataclasses.SqlDataClass;
+import org.apache.isis.runtimes.dflt.objectstores.sql.testsystem.dataclasses.polymorphism.PolyInterfaceImplA;
+import org.apache.isis.runtimes.dflt.objectstores.sql.testsystem.dataclasses.polymorphism.PolyInterfaceImplB;
+import org.apache.isis.runtimes.dflt.objectstores.sql.testsystem.dataclasses.polymorphism.PolySubClassOne;
+import org.apache.isis.runtimes.dflt.objectstores.sql.testsystem.dataclasses.polymorphism.PolySubClassTwo;
+import org.apache.isis.runtimes.dflt.objectstores.sql.testsystem.dataclasses.polymorphism.PolyTestClass;
 
 /**
  * @author Kevin
  * 
  */
 public class SqlDataClassFactory extends AbstractFactoryAndRepository {
+    // {{ Persistor actions
+    public void save(final Object sqlDataClass) {
+        persistIfNotAlready(sqlDataClass);
+    }
+
+    public void delete(final Object sqlDataClass) {
+        remove(sqlDataClass);
+    }
+
+    public void update(final Object object) {
+        getContainer().objectChanged(object);
+    }
+
+    public void resolve(final Object domainObject) {
+        getContainer().resolve(domainObject);
+    }
+
+    // }}
+
+    // {{ SQL Data type tests
     public List<SqlDataClass> allDataClasses() {
         return allInstances(SqlDataClass.class);
     }
@@ -72,22 +94,9 @@ public class SqlDataClassFactory extends AbstractFactoryAndRepository {
         return object;
     }
 
-    public void save(final Object sqlDataClass) {
-        persistIfNotAlready(sqlDataClass);
-    }
+    // }}
 
-    public void delete(final Object sqlDataClass) {
-        remove(sqlDataClass);
-    }
-
-    public void update(final Object object) {
-        getContainer().objectChanged(object);
-    }
-
-    public void resolve(final Object domainObject) {
-        getContainer().resolve(domainObject);
-    }
-
+    // {{ For polymorphism tests
     public PolyTestClass newPolyTestClass() {
         final PolyTestClass object = newTransientInstance(PolyTestClass.class);
         return object;
@@ -106,5 +115,16 @@ public class SqlDataClassFactory extends AbstractFactoryAndRepository {
         final PolySubClassTwo object = newTransientInstance(PolySubClassTwo.class);
         return object;
     }
+
+    public PolyInterfaceImplA newPolyInterfaceImplA() {
+        final PolyInterfaceImplA object = newTransientInstance(PolyInterfaceImplA.class);
+        return object;
+    }
+
+    public PolyInterfaceImplB newPolyInterfaceImplB() {
+        final PolyInterfaceImplB object = newTransientInstance(PolyInterfaceImplB.class);
+        return object;
+    }
+    // }}
 
 }

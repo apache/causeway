@@ -34,11 +34,14 @@ public class JdbcObjectReferenceFieldMapping extends JdbcObjectReferenceMapping 
     public static class Factory implements FieldMappingFactory {
         @Override
         public FieldMapping createFieldMapping(final ObjectAssociation field) {
+            if (field.getSpecification().isAbstract()) {
+                return new JdbcAbstractReferenceFieldMapping(field);
+            }
             return new JdbcObjectReferenceFieldMapping(field);
         }
     }
 
-    private final ObjectAssociation field;
+    protected final ObjectAssociation field;
 
     @Override
     public void appendWhereClause(final DatabaseConnector connector, final StringBuffer sql, final ObjectAdapter object) {
