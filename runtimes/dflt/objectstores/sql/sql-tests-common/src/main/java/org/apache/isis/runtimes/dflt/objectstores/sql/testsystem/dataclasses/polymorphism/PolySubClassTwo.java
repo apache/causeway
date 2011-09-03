@@ -20,14 +20,13 @@
 /**
  * 
  */
-package org.apache.isis.runtimes.dflt.objectstores.sql.testsystem.dataclasses;
-
+package org.apache.isis.runtimes.dflt.objectstores.sql.testsystem.dataclasses.polymorphism;
 
 /**
  * @author Kevin
  * 
  */
-public class PolySubClassOne extends PolyBaseClass {
+public class PolySubClassTwo extends PolyBaseClass {
     @Override
     public String title() {
         return string;

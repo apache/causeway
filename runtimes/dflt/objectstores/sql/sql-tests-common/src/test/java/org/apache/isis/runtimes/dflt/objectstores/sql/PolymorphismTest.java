@@ -6,11 +6,15 @@ import java.util.Properties;
 import org.apache.isis.runtimes.dflt.objectstores.sql.common.SqlIntegrationTestCommonBase;
 import org.apache.isis.runtimes.dflt.objectstores.sql.singleton.SqlIntegrationTestSingleton;
 import org.apache.isis.runtimes.dflt.objectstores.sql.testsystem.SqlDataClassFactory;
-import org.apache.isis.runtimes.dflt.objectstores.sql.testsystem.dataclasses.PolySubClassOne;
-import org.apache.isis.runtimes.dflt.objectstores.sql.testsystem.dataclasses.PolySubClassTwo;
-import org.apache.isis.runtimes.dflt.objectstores.sql.testsystem.dataclasses.PolyTestClass;
+import org.apache.isis.runtimes.dflt.objectstores.sql.testsystem.dataclasses.polymorphism.PolyInterface;
+import org.apache.isis.runtimes.dflt.objectstores.sql.testsystem.dataclasses.polymorphism.PolyInterfaceImplA;
+import org.apache.isis.runtimes.dflt.objectstores.sql.testsystem.dataclasses.polymorphism.PolyInterfaceImplB;
+import org.apache.isis.runtimes.dflt.objectstores.sql.testsystem.dataclasses.polymorphism.PolyTestClass;
 
 public class PolymorphismTest extends SqlIntegrationTestCommonBase {
+
+    private static PolyInterfaceImplA polyIntImpA;
+    private static PolyInterfaceImplB polyIntImpB;
 
     // {{ Setup
     @Override
@@ -40,29 +44,44 @@ public class PolymorphismTest extends SqlIntegrationTestCommonBase {
 
     // }}
 
+    public void testSetup() {
+        initialiseTests();
+        getSingletonInstance().setState(0);
+        SqlIntegrationTestSingleton.drop("%");
+    }
+
     public void testCreate() throws Exception {
         SqlIntegrationTestSingleton.drop("ISIS_POLYTESTCLASS");
         SqlIntegrationTestSingleton.drop("ISIS_POLYSUBCLASSONE");
         SqlIntegrationTestSingleton.drop("ISIS_POLYSUBCLASSTWO");
+        SqlIntegrationTestSingleton.drop("ISIS_POLYINTERFACEIMPLA");
+        SqlIntegrationTestSingleton.drop("ISIS_POLYINTERFACEIMPLB");
 
         final SqlDataClassFactory factory = SqlIntegrationTestSingleton.getSqlDataClassFactory();
         final PolyTestClass polyTestClass = factory.newPolyTestClass();
-        polyTestClass.setString("polyTestClass");
+        polyTestClass.setString("polyTestClassString");
 
-        polyTestClass.getPolyTestClasses().add(polyTestClass);
+        // polyTestClass.getPolyTestClasses().add(polyTestClass);
+        polyTestClass.setPolyTestInterface(polyTestClass);
+
+        polyIntImpA = factory.newPolyInterfaceImplA();
+        polyIntImpA.setString("Impl A String");
+        factory.save(polyIntImpA);
+
+        polyTestClass.setPolyInterfaceType(polyIntImpA);
 
         // setup the polyTestClass
-        PolySubClassOne polySubClassOne = factory.newPolySubClassOne();
-        polySubClassOne.setString("PolySubClassOne 1");
+        // PolySubClassOne polySubClassOne = factory.newPolySubClassOne();
+        // polySubClassOne.setString("PolySubClassOne 1");
 
-        PolySubClassTwo polySubClassTwo = factory.newPolySubClassTwo();
-        polySubClassTwo.setString("PolySubClassTwo 1");
+        // PolySubClassTwo polySubClassTwo = factory.newPolySubClassTwo();
+        // polySubClassTwo.setString("PolySubClassTwo 1");
 
-        polyTestClass.getPolyBaseClasses().add(polySubClassOne);
-        polyTestClass.getPolyBaseClasses().add(polySubClassTwo);
+        // polyTestClass.getPolyBaseClasses().add(polySubClassOne);
+        // polyTestClass.getPolyBaseClasses().add(polySubClassTwo);
 
-        factory.save(polySubClassOne);
-        factory.save(polySubClassTwo);
+        // factory.save(polySubClassOne);
+        // factory.save(polySubClassTwo);
 
         // store it and step the state engine
         factory.save(polyTestClass);
@@ -75,18 +94,50 @@ public class PolymorphismTest extends SqlIntegrationTestCommonBase {
     }
 
     // testLoad() Must be the first test defined and run
-    public void testLoad() throws Exception {
+    public void testLoad() {
         final SqlDataClassFactory factory = SqlIntegrationTestSingleton.getSqlDataClassFactory();
         final List<PolyTestClass> dataClasses = factory.allPolyTestClasses();
         assertEquals(1, dataClasses.size());
         final PolyTestClass polyTestClass = dataClasses.get(0);
         SqlIntegrationTestSingleton.setStaticPolyTestClass(polyTestClass);
+
         // Must set state to 1 to prevent re-initialisation
         getSingletonInstance().setState(1);
     }
 
+    public void testInterfaceLoad() {
+        final SqlDataClassFactory factory = SqlIntegrationTestSingleton.getSqlDataClassFactory();
+        final PolyTestClass polyTestClass = SqlIntegrationTestSingleton.getStaticPolyTestClass();
+        assertEquals(polyTestClass.getClass(), polyTestClass.getPolyTestInterface().getClass());
+        PolyInterface loaded = polyTestClass.getPolyInterfaceType();
+        factory.resolve(loaded);
+        assertEquals(polyIntImpA.getString(), loaded.getString());
+
+    }
+
+    public void testInterfaceEditSave() {
+        final SqlDataClassFactory factory = SqlIntegrationTestSingleton.getSqlDataClassFactory();
+        polyIntImpB = factory.newPolyInterfaceImplB();
+        polyIntImpB.setString("Impl B String");
+        factory.save(polyIntImpB);
+
+        final PolyTestClass polyTestClass = SqlIntegrationTestSingleton.getStaticPolyTestClass();
+        polyTestClass.setPolyInterfaceType(polyIntImpB);
+
+        getSingletonInstance().setState(0); // ready for testInterfaceEditSave
+    }
+
+    public void testInterfaceEditLoad() {
+        testLoad(); // reload data
+
+        final PolyTestClass polyTestClass = SqlIntegrationTestSingleton.getStaticPolyTestClass();
+        PolyInterface loaded = polyTestClass.getPolyInterfaceType();
+        assertEquals(polyIntImpB.getString(), loaded.getString());
+
+    }
+
     // Last "test" - Set the Singleton state to 0 to invoke a clean shutdown.
-    public void testSetStateZero() {
+    public void testZSetStateZero() {
         getSingletonInstance().setState(0);
     }
 

@@ -179,6 +179,7 @@ public class JdbcConnector extends AbstractDatabaseConnector {
     static String TYPE_INT;
     static String TYPE_PK;
     static String TYPE_STRING;
+    static String TYPE_LONG_STRING;
     static String TYPE_PASSWORD;
     static String TYPE_DEFAULT;
 
@@ -203,6 +204,7 @@ public class JdbcConnector extends AbstractDatabaseConnector {
         TYPE_BOOLEAN = dataTypes.getString(baseName + "boolean", "BOOLEAN"); // CHAR(1)
         TYPE_PK = dataTypes.getString(baseName + "primarykey", "INTEGER");
         TYPE_STRING = dataTypes.getString(baseName + "string", "VARCHAR(65)");
+        TYPE_LONG_STRING = dataTypes.getString(baseName + "longstring", "VARCHAR(128)");
         TYPE_PASSWORD = dataTypes.getString(baseName + "password", "VARCHAR(12)");
         TYPE_DEFAULT = dataTypes.getString(baseName + "default", "VARCHAR(65)");
     }
@@ -241,6 +243,10 @@ public class JdbcConnector extends AbstractDatabaseConnector {
 
     public static String TYPE_STRING() {
         return TYPE_STRING;
+    }
+
+    public static String TYPE_LONG_STRING() {
+        return TYPE_LONG_STRING;
     }
 
     public static String TYPE_PASSWORD() {

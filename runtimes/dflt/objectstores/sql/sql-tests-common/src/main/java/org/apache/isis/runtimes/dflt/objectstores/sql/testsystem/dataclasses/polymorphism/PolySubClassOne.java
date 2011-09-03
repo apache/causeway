@@ -20,15 +20,15 @@
 /**
  * 
  */
-package org.apache.isis.runtimes.dflt.objectstores.sql.testsystem.dataclasses;
+package org.apache.isis.runtimes.dflt.objectstores.sql.testsystem.dataclasses.polymorphism;
 
-import org.apache.isis.applib.AbstractDomainObject;
 
 /**
  * @author Kevin
  * 
  */
-public class PolyBaseClass extends AbstractDomainObject {
+public class PolySubClassOne extends PolyBaseClass {
+    @Override
     public String title() {
         return string;
     }
@@ -36,10 +36,12 @@ public class PolyBaseClass extends AbstractDomainObject {
     // {{ String type
     private String string;
 
+    @Override
     public String getString() {
         return string;
     }
 
+    @Override
     public void setString(final String string) {
         this.string = string;
     }

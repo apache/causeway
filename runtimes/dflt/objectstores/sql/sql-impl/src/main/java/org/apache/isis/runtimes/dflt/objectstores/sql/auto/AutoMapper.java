@@ -21,6 +21,8 @@ package org.apache.isis.runtimes.dflt.objectstores.sql.auto;
 
 import java.util.Vector;
 
+import org.apache.log4j.Logger;
+
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -44,7 +46,6 @@ import org.apache.isis.runtimes.dflt.runtime.persistence.ConcurrencyException;
 import org.apache.isis.runtimes.dflt.runtime.persistence.ObjectNotFoundException;
 import org.apache.isis.runtimes.dflt.runtime.persistence.PersistorUtil;
 import org.apache.isis.runtimes.dflt.runtime.persistence.query.PersistenceQueryFindByPattern;
-import org.apache.log4j.Logger;
 
 public class AutoMapper extends AbstractAutoMapper implements ObjectMapping, DebuggableWithTitle {
     private static final Logger LOG = Logger.getLogger(AutoMapper.class);
@@ -59,6 +60,32 @@ public class AutoMapper extends AbstractAutoMapper implements ObjectMapping, Deb
         idMapping = lookup.createIdMapping();
         versionMapping = lookup.createVersionMapping();
         titleMapping = lookup.createTitleMapping();
+    }
+
+    @Override
+    public void createTables(final DatabaseConnector connection) {
+        if (!connection.hasTable(table)) {
+            final StringBuffer sql = new StringBuffer();
+            sql.append("create table ");
+            sql.append(table);
+            sql.append(" (");
+            idMapping.appendCreateColumnDefinitions(sql);
+            sql.append(", ");
+            for (final FieldMapping mapping : fieldMappings) {
+                mapping.appendColumnDefinitions(sql);
+                sql.append(",");
+            }
+            titleMapping.appendColumnDefinitions(sql);
+            sql.append(", ");
+            sql.append(versionMapping.appendColumnDefinitions());
+            sql.append(")");
+            connection.update(sql.toString());
+        }
+        for (int i = 0; collectionMappers != null && i < collectionMappers.length; i++) {
+            if (collectionMappers[i].needsTables(connection)) {
+                collectionMappers[i].createTables(connection);
+            }
+        }
     }
 
     @Override
@@ -92,32 +119,6 @@ public class AutoMapper extends AbstractAutoMapper implements ObjectMapping, Deb
 
         for (final CollectionMapper collectionMapper : collectionMappers) {
             collectionMapper.saveInternalCollection(connector, object);
-        }
-    }
-
-    @Override
-    public void createTables(final DatabaseConnector connection) {
-        if (!connection.hasTable(table)) {
-            final StringBuffer sql = new StringBuffer();
-            sql.append("create table ");
-            sql.append(table);
-            sql.append(" (");
-            idMapping.appendCreateColumnDefinitions(sql);
-            sql.append(", ");
-            for (final FieldMapping mapping : fieldMappings) {
-                mapping.appendColumnDefinitions(sql);
-                sql.append(",");
-            }
-            titleMapping.appendColumnDefinitions(sql);
-            sql.append(", ");
-            sql.append(versionMapping.appendColumnDefinitions());
-            sql.append(")");
-            connection.update(sql.toString());
-        }
-        for (int i = 0; collectionMappers != null && i < collectionMappers.length; i++) {
-            if (collectionMappers[i].needsTables(connection)) {
-                collectionMappers[i].createTables(connection);
-            }
         }
     }
 

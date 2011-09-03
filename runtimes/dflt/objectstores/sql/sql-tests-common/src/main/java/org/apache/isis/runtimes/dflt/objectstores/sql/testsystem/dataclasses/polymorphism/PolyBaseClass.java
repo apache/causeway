@@ -20,19 +20,15 @@
 /**
  * 
  */
-package org.apache.isis.runtimes.dflt.objectstores.sql.testsystem.dataclasses;
-
-import java.util.ArrayList;
-import java.util.List;
+package org.apache.isis.runtimes.dflt.objectstores.sql.testsystem.dataclasses.polymorphism;
 
 import org.apache.isis.applib.AbstractDomainObject;
-import org.apache.isis.applib.annotation.MemberOrder;
 
 /**
  * @author Kevin
  * 
  */
-public class PolyTestClass extends AbstractDomainObject implements PolyTestInterface {
+public abstract class PolyBaseClass extends AbstractDomainObject {
     public String title() {
         return string;
     }
@@ -48,33 +44,6 @@ public class PolyTestClass extends AbstractDomainObject implements PolyTestInter
         this.string = string;
     }
 
-    // }}
-
-    // {{ PolyBaseClass
-    private List<PolyBaseClass> polyBaseClasses = new ArrayList<PolyBaseClass>();
-
-    @MemberOrder(sequence = "1")
-    public List<PolyBaseClass> getPolyBaseClasses() {
-        return polyBaseClasses;
-    }
-
-    public void setPolyBaseClasses(final List<PolyBaseClass> polyBaseClasses) {
-        this.polyBaseClasses = polyBaseClasses;
-    }
-
-    // }}
-
-    // {{ PolyBaseClass
-    private List<PolyTestInterface> polyTestClasses = new ArrayList<PolyTestInterface>();
-
-    @MemberOrder(sequence = "2")
-    public List<PolyTestInterface> getPolyTestClasses() {
-        return polyTestClasses;
-    }
-
-    public void setPolyTestClasses(final List<PolyTestInterface> polyTestClasses) {
-        this.polyTestClasses = polyTestClasses;
-    }
     // }}
 
 }

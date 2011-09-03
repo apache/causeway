@@ -61,9 +61,8 @@ public abstract class AbstractAutoMapper extends AbstractMapper {
                 throw new SqlObjectStoreException(specification.getFullIdentifier() + " has no fields: "
                     + specification);
             }
-        } else {
-            setUpFieldMappers(lookup, objectMapperLookup, className, parameterBase);
         }
+        setUpFieldMappers(lookup, objectMapperLookup, className, parameterBase);
     }
 
     private void setUpFieldMappers(final FieldMappingLookup lookup, final ObjectMappingLookup objectMapperLookup,
