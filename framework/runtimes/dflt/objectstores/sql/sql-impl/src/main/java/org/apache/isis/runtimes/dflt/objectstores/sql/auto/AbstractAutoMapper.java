@@ -45,13 +45,11 @@ import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
 
 public abstract class AbstractAutoMapper extends AbstractMapper {
     private static final Logger LOG = Logger.getLogger(AbstractAutoMapper.class);
-    protected CollectionMapper collectionMappers[];
-    protected boolean dbCreatesId;
 
-    protected ObjectSpecification specification;
-    protected String table;
-    protected List<FieldMapping> fieldMappings = new ArrayList<FieldMapping>();
-    protected Map<ObjectAssociation, FieldMapping> fieldMappingLookup = new HashMap<ObjectAssociation, FieldMapping>();
+    final String className;
+    final String parameterBase;
+    final FieldMappingLookup lookup;
+    final ObjectMappingLookup objectMapperLookup;
 
     protected AbstractAutoMapper(final String className, final String parameterBase, final FieldMappingLookup lookup,
         final ObjectMappingLookup objectMapperLookup) {
@@ -62,8 +60,23 @@ public abstract class AbstractAutoMapper extends AbstractMapper {
                     + specification);
             }
         }
+        this.className = className;
+        this.parameterBase = parameterBase;
+        this.lookup = lookup;
+        this.objectMapperLookup = objectMapperLookup;
+    }
+
+    protected void setUpFieldMappers() {
         setUpFieldMappers(lookup, objectMapperLookup, className, parameterBase);
     }
+
+    protected CollectionMapper collectionMappers[];
+    protected boolean dbCreatesId;
+
+    protected ObjectSpecification specification;
+    protected String table;
+    protected List<FieldMapping> fieldMappings = new ArrayList<FieldMapping>();
+    protected Map<ObjectAssociation, FieldMapping> fieldMappingLookup = new HashMap<ObjectAssociation, FieldMapping>();
 
     private void setUpFieldMappers(final FieldMappingLookup lookup, final ObjectMappingLookup objectMapperLookup,
         final String className, final String parameterBase) {
@@ -86,9 +99,30 @@ public abstract class AbstractAutoMapper extends AbstractMapper {
         LOG.info("table mapping: " + table + " (" + columnList() + ")");
     }
 
+    protected List<ObjectAssociation> fields = new ArrayList<ObjectAssociation>();
+
+    protected void getExtraFields(List<ObjectAssociation> fields) {
+    }
+
     private void setupFullMapping(final FieldMappingLookup lookup, final ObjectMappingLookup objectMapperLookup,
         final String className, final IsisConfiguration configParameters, final String parameterBase) {
-        final List<? extends ObjectAssociation> fields = specification.getAssociations();
+
+        fields.addAll(specification.getAssociations());
+
+        if (specification.hasSubclasses()) {
+            getExtraFields(fields);
+
+            final List<ObjectSpecification> subclasses = specification.subclasses();
+
+            for (ObjectSpecification subclass : subclasses) {
+                final List<? extends ObjectAssociation> subAssociations = subclass.getAssociations();
+                for (ObjectAssociation subA : subAssociations) {
+                    if (fields.contains(subA) == false) {
+                        fields.add(subA);
+                    }
+                }
+            }
+        }
 
         int simpleFieldCount = 0;
         int collectionFieldCount = 0;
@@ -125,9 +159,31 @@ public abstract class AbstractAutoMapper extends AbstractMapper {
                     // collectionMappers[collectionFieldNo] = new
                     // CombinedCollectionMapper(oneToManyProperties[collectionFieldNo], parameterBase, lookup,
                     // objectMapperLookup);
-                    collectionMappers[collectionFieldNo] =
-                        new MultiColumnCombinedCollectionMapper(oneToManyProperties[collectionFieldNo], parameterBase,
-                            lookup, objectMapperLookup);
+
+                    CollectionMapper collectionMapper = null;
+
+                    // Trying to detect recursion, here.
+                    // Let MultiColumnCombinedCollectionMapper find itself when a field is a collection of the current
+                    // field type.
+                    if (this instanceof MultiColumnCombinedCollectionMapper) {
+                        MultiColumnCombinedCollectionMapper mc = (MultiColumnCombinedCollectionMapper) this;
+
+                        if (mc.priorField == field) {
+                            collectionMapper = mc;
+                        } else {
+                            collectionMapper =
+                                new MultiColumnCombinedCollectionMapper(oneToManyProperties[collectionFieldNo],
+                                    parameterBase, lookup, objectMapperLookup, this, field);
+                        }
+                    }
+
+                    if (collectionMapper == null) {
+                        collectionMapper =
+                            new MultiColumnCombinedCollectionMapper(oneToManyProperties[collectionFieldNo],
+                                parameterBase, lookup, objectMapperLookup, this, field);
+                    }
+
+                    collectionMappers[collectionFieldNo] = collectionMapper;
 
                 } else if (type.equals("fk-table")) {
                     final String property = parameterBase + field.getId() + ".element-type";

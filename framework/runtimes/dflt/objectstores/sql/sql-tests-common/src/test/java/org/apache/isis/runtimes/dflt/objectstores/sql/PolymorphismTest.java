@@ -61,8 +61,9 @@ public class PolymorphismTest extends SqlIntegrationTestCommonBase {
         final PolyTestClass polyTestClass = factory.newPolyTestClass();
         polyTestClass.setString("polyTestClassString");
 
-        // polyTestClass.getPolyTestClasses().add(polyTestClass);
-        polyTestClass.setPolyTestInterface(polyTestClass);
+        polyTestClass.getPolyTestClasses().add(polyTestClass);
+
+        // polyTestClass.setPolyTestInterface(polyTestClass);
 
         polyIntImpA = factory.newPolyInterfaceImplA();
         polyIntImpA.setString("Impl A String");
@@ -108,11 +109,21 @@ public class PolymorphismTest extends SqlIntegrationTestCommonBase {
     public void testInterfaceLoad() {
         final SqlDataClassFactory factory = SqlIntegrationTestSingleton.getSqlDataClassFactory();
         final PolyTestClass polyTestClass = SqlIntegrationTestSingleton.getStaticPolyTestClass();
-        assertEquals(polyTestClass.getClass(), polyTestClass.getPolyTestInterface().getClass());
+        // assertEquals(polyTestClass.getClass(), polyTestClass.getPolyTestInterface().getClass());
+
         PolyInterface loaded = polyTestClass.getPolyInterfaceType();
         factory.resolve(loaded);
         assertEquals(polyIntImpA.getString(), loaded.getString());
+    }
 
+    public void testInterfaceLoadCollection() {
+        final PolyTestClass polyTestClass = SqlIntegrationTestSingleton.getStaticPolyTestClass();
+
+        List<PolyTestClass> list = polyTestClass.getPolyTestClasses();
+        assertEquals(1, list.size());
+
+        PolyInterface loaded = polyTestClass.getPolyInterfaceType();
+        assertEquals(polyIntImpA.getString(), loaded.getString());
     }
 
     public void testInterfaceEditSave() {

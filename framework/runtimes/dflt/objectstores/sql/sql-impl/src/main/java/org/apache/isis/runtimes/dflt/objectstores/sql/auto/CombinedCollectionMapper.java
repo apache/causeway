@@ -51,20 +51,20 @@ public class CombinedCollectionMapper extends AbstractAutoMapper implements Coll
     private final ObjectReferenceMapping foreignKeyMapping;
     private String foreignKeyName;
     private String columnName;
-    private final ObjectMapping originalMapping;
     private final ObjectMappingLookup objectMapperLookup2;
+
+    private ObjectMapping originalMapping = null;
 
     public CombinedCollectionMapper(final ObjectAssociation objectAssociation, final String parameterBase,
         final FieldMappingLookup lookup, final ObjectMappingLookup objectMapperLookup) {
         super(objectAssociation.getSpecification().getFullIdentifier(), parameterBase, lookup, objectMapperLookup);
+
         this.field = objectAssociation;
 
         objectMapperLookup2 = objectMapperLookup;
 
         idMapping = lookup.createIdMapping();
         versionMapping = lookup.createVersionMapping();
-
-        originalMapping = objectMapperLookup.getMapping(objectAssociation.getSpecification(), null);
 
         setColumnName(determineColumnName(objectAssociation));
         foreignKeyName = Sql.sqlName("fk_" + getColumnName());
@@ -92,6 +92,9 @@ public class CombinedCollectionMapper extends AbstractAutoMapper implements Coll
 
     @Override
     public void startup(final DatabaseConnector connector, final FieldMappingLookup lookup) {
+        if (originalMapping == null) {
+            originalMapping = objectMapperLookup.getMapping(field.getSpecification(), null);
+        }
         originalMapping.startup(connector, objectMapperLookup2);
         super.startup(connector, lookup);
     }
