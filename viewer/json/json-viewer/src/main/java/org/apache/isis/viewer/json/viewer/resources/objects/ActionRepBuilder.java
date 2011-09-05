@@ -23,34 +23,34 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
-import org.apache.isis.viewer.json.viewer.RepContext;
-import org.apache.isis.viewer.json.viewer.representations.LinkRepBuilder;
+import org.apache.isis.viewer.json.viewer.ResourceContext;
 
 import com.google.common.collect.Lists;
 
-public class ActionRepBuilder extends AbstractMemberRepBuilder<ObjectAction> {
+public class ActionRepBuilder extends AbstractMemberRepBuilder<ActionRepBuilder, ObjectAction> {
 
-	public static ActionRepBuilder newBuilder(RepContext repContext, ObjectAdapter objectAdapter, ObjectAction oa) {
-        return new ActionRepBuilder(repContext, objectAdapter, oa);
+	public static ActionRepBuilder newBuilder(ResourceContext resourceContext, ObjectAdapter objectAdapter, ObjectAction objectAction) {
+        return new ActionRepBuilder(resourceContext, objectAdapter, objectAction);
     }
 
-    public ActionRepBuilder(RepContext repContext, ObjectAdapter objectAdapter, ObjectAction oa) {
-        super(repContext, objectAdapter, MemberType.ACTION, oa);
+    protected ActionRepBuilder(ResourceContext resourceContext, ObjectAdapter objectAdapter, ObjectAction objectAction) {
+        super(resourceContext, objectAdapter, MemberType.ACTION, objectAction);
+        MemberRepType memberRepType = MemberRepType.STANDALONE;
+        putSelfIfRequired(memberRepType);
+        putContributedByIfRequired();
+        
+        putIdRep();
+        withMemberType();
+        representation.put("actionType", objectMember.getType());
+        representation.put("numParameters", objectMember.getParameterCount());
+        putParameterDetailsIfRequired(memberRepType);
+        putValueIfRequired(memberRepType);
+        putDisabledReason();
+        putMutatorsIfRequired(memberRepType);
+        putDetailsIfRequired(memberRepType);
     }
 
     public JsonRepresentation build() {
-        putSelfIfRequired();
-        putContributedByIfRequired();
-        putTypeRep();
-        putIdRep();
-        putMemberTypeRep();
-        representation.put("actionType", objectMember.getType());
-        representation.put("numParameters", objectMember.getParameterCount());
-        putParameterDetailsIfRequired();
-        putValueIfRequired();
-        putDisabledReason();
-        putMutatorsIfRequired();
-        putDetailsIfRequired();
         return representation;
     }
     
@@ -59,7 +59,7 @@ public class ActionRepBuilder extends AbstractMemberRepBuilder<ObjectAction> {
     		return;
     	}
     	ObjectAdapter serviceAdapter = contributingServiceAdapter();
-        JsonRepresentation contributedByLink = LinkRepBuilder.newObjectBuilder(repContext, serviceAdapter, getOidStringifier()).build();
+        JsonRepresentation contributedByLink = DomainObjectRepBuilder.newLinkToBuilder(resourceContext, serviceAdapter, getOidStringifier()).build();
 		representation.put("contributedBy", contributedByLink);
 	}
 
@@ -75,7 +75,7 @@ public class ActionRepBuilder extends AbstractMemberRepBuilder<ObjectAction> {
     	throw new IllegalStateException("Unable to locate contributing service");
 	}
 
-    private void putParameterDetailsIfRequired() {
+    private void putParameterDetailsIfRequired(MemberRepType memberRepType) {
     	if (!memberRepType.isStandalone()) {
     		return;
     	} 
@@ -90,7 +90,6 @@ public class ActionRepBuilder extends AbstractMemberRepBuilder<ObjectAction> {
 	private Object paramDetails(ObjectActionParameter param) {
 		final JsonRepresentation paramRep = JsonRepresentation.newMap();
 		paramRep.put("name", param.getName());
-		paramRep.put("type", LinkRepBuilder.newTypeBuilder(repContext, param.getSpecification()).build());
 		paramRep.put("num", param.getNumber());
 		paramRep.put("description", param.getDescription());
 		Object paramChoices = choicesFor(param);
@@ -112,7 +111,7 @@ public class ActionRepBuilder extends AbstractMemberRepBuilder<ObjectAction> {
         List<Object> list = Lists.newArrayList();
         for (final ObjectAdapter choiceAdapter : choiceAdapters) {
         	ObjectSpecification objectSpec = param.getSpecification();
-        	list.add(DomainObjectRepBuilder.valueOrRef(repContext, choiceAdapter, objectSpec, getOidStringifier(), getLocalization()));
+        	list.add(DomainObjectRepBuilder.valueOrRef(resourceContext, choiceAdapter, objectSpec, getOidStringifier(), getLocalization()));
         }
         return list;
 	}
@@ -123,7 +122,7 @@ public class ActionRepBuilder extends AbstractMemberRepBuilder<ObjectAction> {
 			return null;
 		}
     	ObjectSpecification objectSpec = param.getSpecification();
-    	return DomainObjectRepBuilder.valueOrRef(repContext, defaultAdapter, objectSpec, getOidStringifier(), getLocalization());
+    	return DomainObjectRepBuilder.valueOrRef(resourceContext, defaultAdapter, objectSpec, getOidStringifier(), getLocalization());
 	}
 
 	@Override
@@ -139,7 +138,7 @@ public class ActionRepBuilder extends AbstractMemberRepBuilder<ObjectAction> {
     	if(objectMember.isContributed()) {
     		ObjectActionParameter actionParameter = objectMember.getParameters().get(i);
     		if (actionParameter.getSpecification().isOfType(objectAdapter.getSpecification())) {
-    			return LinkRepBuilder.newObjectBuilder(repContext, objectAdapter, getOidStringifier()).build();
+    			return DomainObjectRepBuilder.newLinkToBuilder(resourceContext, objectAdapter, getOidStringifier()).build();
     		}
     	}
     	return "{value}";

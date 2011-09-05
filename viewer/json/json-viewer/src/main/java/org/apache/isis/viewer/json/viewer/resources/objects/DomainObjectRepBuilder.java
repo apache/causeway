@@ -17,7 +17,6 @@
 package org.apache.isis.viewer.json.viewer.resources.objects;
 
 import java.util.List;
-import java.util.Map;
 
 import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -34,50 +33,43 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
-import org.apache.isis.viewer.json.viewer.RepContext;
+import org.apache.isis.viewer.json.viewer.ResourceContext;
 import org.apache.isis.viewer.json.viewer.representations.LinkRepBuilder;
 import org.apache.isis.viewer.json.viewer.representations.RepresentationBuilder;
+import org.apache.isis.viewer.json.viewer.representations.WellKnownType;
 import org.apache.isis.viewer.json.viewer.util.OidUtils;
 
 import com.google.common.base.Function;
-import com.google.common.collect.Maps;
 
-public class DomainObjectRepBuilder extends RepresentationBuilder {
+public class DomainObjectRepBuilder extends RepresentationBuilder<DomainObjectRepBuilder> {
 
-    public static DomainObjectRepBuilder newBuilder(RepContext representationContext, ObjectAdapter objectAdapter) {
+    public static DomainObjectRepBuilder newBuilder(ResourceContext representationContext, ObjectAdapter objectAdapter) {
         return new DomainObjectRepBuilder(representationContext, objectAdapter);
     }
 
     private final ObjectAdapter objectAdapter;
-    private final Map<String, JsonRepresentation> members = Maps.newLinkedHashMap();
     
-    public DomainObjectRepBuilder(RepContext repContext, ObjectAdapter objectAdapter) {
-        super(repContext);
+    public DomainObjectRepBuilder(ResourceContext resourceContext, ObjectAdapter objectAdapter) {
+        super(resourceContext);
         this.objectAdapter = objectAdapter;
+        withRepresentationType("object:" + WellKnownType.canonical(objectAdapter.getSpecification().getFullIdentifier()));
+        withSelf();
+        withMembers();
     }
-    
-    public JsonRepresentation build() {
-        RepContext repContext = this.repContext.underAttribute("_self");
-        JsonRepresentation selfLink = LinkRepBuilder.newBuilder(repContext, "object", url()).build();
-        JsonRepresentation selfType = LinkRepBuilder.newTypeBuilder(repContext, objectAdapter.getSpecification()).build();
-        String title = objectAdapter.titleString();
-        JsonRepresentation iconLink = LinkRepBuilder.newBuilder(repContext, "icon", icon()).build();
+
+    public DomainObjectRepBuilder withSelf() {
         JsonRepresentation self = JsonRepresentation.newMap();
+        JsonRepresentation selfLink = LinkRepBuilder.newBuilder(resourceContext, "object", url()).build();
+        //JsonRepresentation selfType = LinkRepBuilder.newTypeBuilder(resourceContext, objectAdapter.getSpecification()).build();
+        String title = objectAdapter.titleString();
+        //JsonRepresentation iconLink = LinkRepBuilder.newBuilder(resourceContext, "icon", icon()).build();
         self.put("link", selfLink);
-        self.put("type", selfType);
         self.put("oid", OidUtils.getOidStr(objectAdapter, getOidStringifier()));
         self.put("title", title);
-        self.put("icon", iconLink);
-        representation.put("_self", self);
-        withAllMembers(objectAdapter);
-        if(!members.isEmpty()) {
-            for(Map.Entry<String, JsonRepresentation> entry: members.entrySet()) {
-                String memberId = entry.getKey();
-                JsonRepresentation memberRep = entry.getValue();
-                representation.put(memberId, memberRep);
-            }
-        }
-        return representation;
+//        self.put("type", selfType);
+//        self.put("icon", iconLink);
+        representation.put("self", self);
+        return this;
     }
 
     private String icon() {
@@ -89,7 +81,15 @@ public class DomainObjectRepBuilder extends RepresentationBuilder {
         return urlFor(objectAdapter, getOidStringifier());
     }
 
-    private void withAllMembers(final ObjectAdapter objectAdapter) {
+
+    public DomainObjectRepBuilder withMembers() {
+        JsonRepresentation members = JsonRepresentation.newArray();
+        addAllMembers(objectAdapter, members);
+        representation.put("members", members);
+        return this;
+    }
+
+    private void addAllMembers(final ObjectAdapter objectAdapter, JsonRepresentation members) {
         List<ObjectAssociation> associations = objectAdapter.getSpecification().getAssociations();
         for (ObjectAssociation assoc : associations) {
             Consent visibility = assoc.isVisible(getSession(), objectAdapter);
@@ -99,22 +99,22 @@ public class DomainObjectRepBuilder extends RepresentationBuilder {
             String id = assoc.getId();
             if(assoc instanceof OneToOneAssociation) {
                 OneToOneAssociation property = (OneToOneAssociation)assoc;
-                JsonRepresentation propertyRep = PropertyRepBuilder.newBuilder(repContext.underAttribute(id), objectAdapter, property).build();
-                withMember(id, propertyRep);
+                JsonRepresentation propertyRep = PropertyRepBuilder.newBuilder(resourceContext, objectAdapter, property).build();
+                members.put(id, propertyRep);
             }
             if(assoc instanceof OneToManyAssociation) {
                 OneToManyAssociation collection = (OneToManyAssociation) assoc;
-                JsonRepresentation collectionRep = CollectionRepBuilder.newBuilder(repContext.underAttribute(id), objectAdapter, collection).build();
-                withMember(id, collectionRep);
+                JsonRepresentation collectionRep = CollectionRepBuilder.newBuilder(resourceContext, objectAdapter, collection).build();
+                members.put(id, collectionRep);
             }
         }
         
         List<ObjectAction> actions = objectAdapter.getSpecification().getObjectActions(Contributed.INCLUDED);
-        withActions(objectAdapter, actions);
+        addActions(objectAdapter, actions, members);
     }
 
-	private void withActions(final ObjectAdapter objectAdapter,
-			List<ObjectAction> actions) {
+	private void addActions(final ObjectAdapter objectAdapter,
+			List<ObjectAction> actions, JsonRepresentation members) {
 		for (ObjectAction action : actions) {
             Consent visibility = action.isVisible(getSession(), objectAdapter);
             if(!visibility.isAllowed()) {
@@ -123,25 +123,31 @@ public class DomainObjectRepBuilder extends RepresentationBuilder {
         	if(action.getType().isSet()) {
         		ObjectActionSet objectActionSet = (ObjectActionSet) action;
         		List<ObjectAction> subactions = objectActionSet.getActions();
-        		withActions(objectAdapter, subactions);
+        		addActions(objectAdapter, subactions, members);
         	} else {
                 final String id = action.getId();
-                JsonRepresentation actionRep = ActionRepBuilder.newBuilder(repContext.underAttribute(id), objectAdapter, action).build();
-                withMember(id, actionRep);
+                JsonRepresentation actionRep = ActionRepBuilder.newBuilder(resourceContext, objectAdapter, action).build();
+                members.put(id, actionRep);
         	}
         }
 	}
 
-    private void withMember(String id, JsonRepresentation propertyRep) {
-        members.put(id, propertyRep);
+    public JsonRepresentation build() {
+        withLinks();
+        withMetadata();
+        return representation;
     }
-    
 
     /////////////////////////////////////////////////////////////////////
     //
     /////////////////////////////////////////////////////////////////////
     
-	public static String urlFor(ObjectAdapter objectAdapter, OidStringifier oidStringifier) {
+	public static LinkRepBuilder newLinkToBuilder(ResourceContext resourceContext, ObjectAdapter elementAdapter, OidStringifier oidStringifier) {
+    	String url = urlFor(elementAdapter, oidStringifier);
+        return LinkRepBuilder.newBuilder(resourceContext, "object", url);
+    }
+
+    public static String urlFor(ObjectAdapter objectAdapter, OidStringifier oidStringifier) {
         String oidStr = oidStringifier.enString(objectAdapter.getOid());
         return "objects/" + oidStr;
     }
@@ -151,11 +157,11 @@ public class DomainObjectRepBuilder extends RepresentationBuilder {
     //
     /////////////////////////////////////////////////////////////////////
 
-    public static Function<ObjectAdapter, JsonRepresentation> fromAdapter(final RepContext repContext) {
+    public static Function<ObjectAdapter, JsonRepresentation> fromAdapter(final ResourceContext resourceContext) {
         return new Function<ObjectAdapter, JsonRepresentation>() {
             @Override
             public JsonRepresentation apply(ObjectAdapter input) {
-                return newBuilder(repContext, input).build();
+                return newBuilder(resourceContext, input).build();
             }
         };
     }
@@ -174,7 +180,7 @@ public class DomainObjectRepBuilder extends RepresentationBuilder {
     //
     /////////////////////////////////////////////////////////////////////
 
-    public static Object valueOrRef(RepContext repContext,
+    public static Object valueOrRef(ResourceContext resourceContext,
 			final ObjectAdapter objectAdapter, ObjectSpecification objectSpec, OidStringifier oidStringifier, Localization localization) {
 		ValueFacet valueFacet = objectSpec.getFacet(ValueFacet.class);
 		if(valueFacet != null) {
@@ -183,7 +189,7 @@ public class DomainObjectRepBuilder extends RepresentationBuilder {
 		}
 		TitleFacet titleFacet = objectSpec.getFacet(TitleFacet.class);
 		String title = titleFacet.title(objectAdapter, localization);
-		return LinkRepBuilder.newObjectBuilder(repContext, objectAdapter, oidStringifier).withTitle(title).build();
+		return DomainObjectRepBuilder.newLinkToBuilder(resourceContext, objectAdapter, oidStringifier).withTitle(title).build();
 	}
 
 

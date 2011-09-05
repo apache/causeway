@@ -14,5 +14,9 @@ public class ServicesRepresentation extends JsonRepresentation {
     public Link getRepresentationType() {
         return getLink("representationType");
     }
-    
+
+    public Link getSelf() {
+        return getLink("self");
+    }
+
 }

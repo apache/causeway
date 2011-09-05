@@ -18,37 +18,34 @@ package org.apache.isis.viewer.json.viewer.resources.user;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
-import org.apache.isis.viewer.json.viewer.RepContext;
-import org.apache.isis.viewer.json.viewer.representations.LinkRepBuilder;
+import org.apache.isis.viewer.json.viewer.ResourceContext;
 import org.apache.isis.viewer.json.viewer.representations.RepresentationBuilder;
 
-public class UserRepBuilder extends RepresentationBuilder {
+public class UserRepBuilder extends RepresentationBuilder<UserRepBuilder> {
 
-    public static UserRepBuilder newBuilder(RepContext repContext, AuthenticationSession authenticationSession) {
-        return new UserRepBuilder(repContext, authenticationSession);
+    public static UserRepBuilder newBuilder(ResourceContext resourceContext) {
+        return new UserRepBuilder(resourceContext);
     }
 
-    private final AuthenticationSession authenticationSession;
-    
-    private UserRepBuilder(RepContext repContext, AuthenticationSession authenticationSession) {
-        super(repContext);
-        this.authenticationSession = authenticationSession;
+    private UserRepBuilder(ResourceContext resourceContext) {
+        super(resourceContext);
+        withRepresentationType("user");
+        withSelf("user");
     }
-    
-    public JsonRepresentation build() {
-        JsonRepresentation linkToRepresentationType = LinkRepBuilder.newBuilder(repContext, "representationType", "representationTypes/user").build();
-        representation.put("representationType", linkToRepresentationType);
-        
-        representation.put("self", LinkRepBuilder.newBuilder(repContext, "self", "user").build());
+
+    public UserRepBuilder withAuthenticationSession(AuthenticationSession authenticationSession) {
         representation.put("username", authenticationSession.getUserName());
         JsonRepresentation roles = JsonRepresentation.newArray();
         for (String role : authenticationSession.getRoles()) {
             roles.add(role);
         }
         representation.put("roles", roles);
-        
-        representation.put("links", JsonRepresentation.newArray());
-        representation.put("metadata", JsonRepresentation.newMap());
+        return this;
+    }
+    
+    public JsonRepresentation build() {
+        withLinks();
+        withMetadata();
         return representation;
     }
 

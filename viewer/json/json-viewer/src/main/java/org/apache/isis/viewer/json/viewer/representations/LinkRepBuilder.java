@@ -16,38 +16,24 @@
  */
 package org.apache.isis.viewer.json.viewer.representations;
 
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.oid.stringable.OidStringifier;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
-import org.apache.isis.viewer.json.viewer.RepContext;
-import org.apache.isis.viewer.json.viewer.resources.objects.DomainObjectRepBuilder;
+import org.apache.isis.viewer.json.viewer.ResourceContext;
 
-public class LinkRepBuilder extends RepresentationBuilder {
+public class LinkRepBuilder extends RepresentationBuilder<LinkRepBuilder> {
 
-    public static LinkRepBuilder newBuilder(RepContext repContext, String rel, String href) {
-        return new LinkRepBuilder(repContext, rel, href);
+    public static LinkRepBuilder newBuilder(ResourceContext resourceContext, String rel, String href) {
+        return new LinkRepBuilder(resourceContext, rel, href);
     }
 
-	public static LinkRepBuilder newObjectBuilder(RepContext repContext, ObjectAdapter elementAdapter, OidStringifier oidStringifier) {
-    	String url = DomainObjectRepBuilder.urlFor(elementAdapter, oidStringifier);
-        return LinkRepBuilder.newBuilder(repContext, "object", url);
-	}
-
-    public static LinkRepBuilder newTypeBuilder(RepContext repContext, ObjectSpecification objectSpec) {
-        String url = "types/" + WellKnownType.canonical(objectSpec.getFullIdentifier());
-        return LinkRepBuilder.newBuilder(repContext, "type", url);
-    }
-
-    private final String rel;
+	private final String rel;
     private final String href;
     
     private HttpMethod method = HttpMethod.GET;
     private String title;
     private JsonRepresentation arguments;
     
-    public LinkRepBuilder(RepContext repContext, String rel, String href) {
-        super(repContext);
+    public LinkRepBuilder(ResourceContext resourceContext, String rel, String href) {
+        super(resourceContext);
         this.rel = rel;
         this.href = href;
     }
@@ -65,7 +51,7 @@ public class LinkRepBuilder extends RepresentationBuilder {
     }
     public JsonRepresentation build() {
         representation.put("rel", rel);
-        representation.put("href", repContext.urlFor(href));
+        representation.put("href", resourceContext.urlFor(href));
         representation.put("method", method);
         representation.put("title", title);
         representation.put("arguments", arguments);

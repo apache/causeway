@@ -25,7 +25,7 @@ import javax.ws.rs.core.Response;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.isis.viewer.json.applib.blocks.Link;
 import org.apache.isis.viewer.json.applib.domain.DomainObjectResource;
-import org.apache.isis.viewer.json.applib.domain.ServicesResource;
+import org.apache.isis.viewer.json.applib.domain.DomainServicesResource;
 import org.apache.isis.viewer.json.applib.homepage.HomePageResource;
 import org.apache.isis.viewer.json.applib.types.TypeResource;
 import org.apache.isis.viewer.json.applib.user.UserResource;
@@ -37,14 +37,13 @@ import org.jboss.resteasy.client.core.executors.ApacheHttpClientExecutor;
 public class RestfulClient {
 
     private final HomePageResource homePageResource;
-    private final ServicesResource servicesResource;
+    private final DomainServicesResource servicesResource;
     private final DomainObjectResource domainObjectResource;
     private final UserResource userResource;
     private final TypeResource specsResource;
 
     private final ClientExecutor executor;
     private final ClientRequestFactory clientRequestFactory;
-
 
     public RestfulClient(final URI baseUri) {
         this(baseUri, new ApacheHttpClientExecutor(new HttpClient()));
@@ -57,7 +56,7 @@ public class RestfulClient {
         this.homePageResource = clientRequestFactory.createProxy(HomePageResource.class);
         this.userResource = clientRequestFactory.createProxy(UserResource.class);
         this.specsResource = clientRequestFactory.createProxy(TypeResource.class);
-        this.servicesResource = clientRequestFactory.createProxy(ServicesResource.class);
+        this.servicesResource = clientRequestFactory.createProxy(DomainServicesResource.class);
         this.domainObjectResource = clientRequestFactory.createProxy(DomainObjectResource.class);
     }
 
@@ -66,7 +65,7 @@ public class RestfulClient {
         return homePageResource;
     }
 
-    public ServicesResource getServicesResource() {
+    public DomainServicesResource getServicesResource() {
         return servicesResource;
     }
 
@@ -102,7 +101,5 @@ public class RestfulClient {
         restEasy.setReturnType(String.class);
         return response;
     }
-
-
 
 }

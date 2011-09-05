@@ -16,7 +16,6 @@
  */
 package org.apache.isis.viewer.json.viewer.resources.objects;
 
-import java.util.List;
 import java.util.Map;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -26,49 +25,49 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
-import org.apache.isis.viewer.json.viewer.RepContext;
+import org.apache.isis.viewer.json.viewer.ResourceContext;
 import org.apache.isis.viewer.json.viewer.representations.LinkRepBuilder;
 import org.apache.isis.viewer.json.viewer.representations.RepresentationBuilder;
 
-import com.google.common.collect.Lists;
-
-public abstract class AbstractMemberRepBuilder<T extends ObjectMember> extends RepresentationBuilder {
+public abstract class AbstractMemberRepBuilder<R extends RepresentationBuilder<R>, T extends ObjectMember> extends RepresentationBuilder<R> {
 
     protected final ObjectAdapter objectAdapter;
     protected final MemberType memberType;
     protected final T objectMember;
-    protected final MemberRepType memberRepType;
 
-    public AbstractMemberRepBuilder(RepContext repContext, ObjectAdapter objectAdapter, MemberType memberType, T objectMember) {
-        super(repContext);
+    public AbstractMemberRepBuilder(ResourceContext resourceContext, ObjectAdapter objectAdapter, MemberType memberType, T objectMember) {
+        super(resourceContext);
         this.objectAdapter = objectAdapter;
         this.memberType = memberType;
         this.objectMember = objectMember;
-        this.memberRepType = repContext.getMemberRepType();
     }
 
-    protected void putSelfIfRequired() {
-        if(memberRepType.isStandalone()) {
-            JsonRepresentation selfRep = MemberSelfRepBuilder.newBuilder(repContext, objectAdapter, memberType, objectMember).build();
-            representation.put("_self", selfRep);
+    protected void putSelfIfRequired(MemberRepType memberRepType) {
+        if(!memberRepType.isStandalone()) {
+            return;
         }
+        
+        JsonRepresentation selfRep = JsonRepresentation.newMap();
+        String url = AbstractMemberRepBuilder.urlForMember(objectAdapter, memberType, objectMember, getOidStringifier());
+        JsonRepresentation memberLinkRep = LinkRepBuilder.newBuilder(resourceContext, "member", url).build();
+        selfRep.put("link", memberLinkRep);
+        
+        JsonRepresentation linkTo = DomainObjectRepBuilder.newLinkToBuilder(resourceContext, objectAdapter, getOidStringifier()).build();
+        selfRep.put("object", linkTo);
+
+        representation.put("self", selfRep);
     }
 
-    protected void putMemberTypeRep() {
+    public R withMemberType() {
         representation.put("memberType", memberType.name().toLowerCase());
-    }
-
-    protected void putTypeRep() {
-        ObjectSpecification specFor = memberType.specFor(objectMember);
-        JsonRepresentation typeRep = LinkRepBuilder.newTypeBuilder(repContext, specFor).build();
-        representation.put("type", typeRep);
+        return (R) this;
     }
 
     protected void putIdRep() {
         representation.put(memberType.key(), objectMember.getId());
     }
 
-    protected void putMutatorsIfRequired() {
+    protected void putMutatorsIfRequired(MemberRepType memberRepType) {
         if(!memberRepType.isStandalone() || usability().isVetoed()) {
             return;
         }
@@ -79,7 +78,7 @@ public abstract class AbstractMemberRepBuilder<T extends ObjectMember> extends R
                 String urlForMember = urlForMember(mutatorSpec.suffix);
                 JsonRepresentation arguments = mutatorArgs(mutatorSpec);
                 JsonRepresentation detailsLink = 
-                    LinkRepBuilder.newBuilder(repContext, mutator, urlForMember)
+                    LinkRepBuilder.newBuilder(resourceContext, mutator, urlForMember)
                         .withHttpMethod(mutatorSpec.httpMethod)
                         .withArguments(arguments)
                         .build();
@@ -104,7 +103,7 @@ public abstract class AbstractMemberRepBuilder<T extends ObjectMember> extends R
 	}
 
     
-    protected void putValueIfRequired() {
+    protected void putValueIfRequired(MemberRepType memberRepType) {
         if(!memberRepType.hasValueFor(memberType)) {
             return;
         } 
@@ -119,18 +118,17 @@ public abstract class AbstractMemberRepBuilder<T extends ObjectMember> extends R
         return null;
     }
 
-
     protected final void putDisabledReason() {
         String disabledReasonRep = usability().getReason();
         representation.put("disabledReason", disabledReasonRep);
     }
 
-    protected void putDetailsIfRequired() {
+    protected void putDetailsIfRequired(MemberRepType memberRepType) {
         if(!memberRepType.isInline()) {
             return;
         } 
         String urlForMember = urlForMember();
-        JsonRepresentation detailsLink = LinkRepBuilder.newBuilder(repContext, memberType.name().toLowerCase(), urlForMember).build();
+        JsonRepresentation detailsLink = LinkRepBuilder.newBuilder(resourceContext, memberType.name().toLowerCase(), urlForMember).build();
         representation.put("details", detailsLink);
     }
 
@@ -188,4 +186,5 @@ public abstract class AbstractMemberRepBuilder<T extends ObjectMember> extends R
         return buf.toString();
     }
 
+    
 }

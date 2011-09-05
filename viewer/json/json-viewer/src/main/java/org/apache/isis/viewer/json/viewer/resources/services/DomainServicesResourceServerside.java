@@ -30,24 +30,24 @@ import javax.ws.rs.core.Response;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.services.ServiceUtil;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.viewer.json.applib.domain.ServicesResource;
-import org.apache.isis.viewer.json.viewer.RepContext;
+import org.apache.isis.viewer.json.applib.HttpStatusCode;
+import org.apache.isis.viewer.json.applib.domain.DomainServicesResource;
+import org.apache.isis.viewer.json.viewer.ResourceContext;
 import org.apache.isis.viewer.json.viewer.resources.ResourceAbstract;
 import org.apache.isis.viewer.json.viewer.resources.objectlist.DomainObjectListRepBuilder;
-import org.apache.isis.viewer.json.viewer.resources.objectlist.DomainServiceListRepBuilder;
 import org.apache.isis.viewer.json.viewer.resources.objects.DomainObjectRepBuilder;
 
-public class ServicesResourceImpl extends ResourceAbstract implements ServicesResource {
+public class DomainServicesResourceServerside extends ResourceAbstract implements DomainServicesResource {
 
     @Override
     @Produces({ MediaType.APPLICATION_JSON })
     public Response services() {
         init();
 
-        final List<ObjectAdapter> serviceAdapters = getPersistenceSession().getServices();
-		RepContext repContext = getResourceContext().repContext();
+		ResourceContext resourceContext = getResourceContext();
+		final List<ObjectAdapter> serviceAdapters = getPersistenceSession().getServices();
 
-        DomainServiceListRepBuilder builder = DomainServiceListRepBuilder.newBuilder(repContext, serviceAdapters);
+        DomainObjectListRepBuilder builder = DomainServiceListRepBuilder.newBuilder(resourceContext).withAdapters(serviceAdapters);
         return responseOfOk(jsonRepresentionFrom(builder));
     }
 
@@ -60,11 +60,12 @@ public class ServicesResourceImpl extends ResourceAbstract implements ServicesRe
 
         final ObjectAdapter serviceAdapter = getServiceAdapter(serviceId);
         if(serviceAdapter == null) {
-            return responseOfNotFound("Could not locate service '%s'", serviceId);
+            Object[] args = { serviceId };
+            return responseOf(HttpStatusCode.NOT_FOUND, "Could not locate service '%s'", args);
         }
-        RepContext repContext = getResourceContext().repContext();
+        ResourceContext resourceContext = getResourceContext();
 
-        DomainObjectRepBuilder builder = DomainObjectRepBuilder.newBuilder(repContext, serviceAdapter);
+        DomainObjectRepBuilder builder = DomainObjectRepBuilder.newBuilder(resourceContext, serviceAdapter);
         return responseOfOk(jsonRepresentionFrom(builder));
     }
 

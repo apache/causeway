@@ -1,9 +1,11 @@
-package org.apache.isis.viewer.json.applib.util;
+package org.apache.isis.viewer.json.applib;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
-import org.apache.isis.viewer.json.applib.util.HttpStatusCode.Range;
+import javax.ws.rs.core.Response.Status.Family;
+
+import org.apache.isis.viewer.json.applib.HttpStatusCode;
 import org.junit.Test;
 
 public class HttpStatusCodeTest {
@@ -17,7 +19,7 @@ public class HttpStatusCodeTest {
     public void unknownStatusCode() {
         HttpStatusCode statusFor = HttpStatusCode.statusFor(600);
         assertThat(statusFor.getStatusCode(), is(600));
-        assertThat(statusFor.getRange(), is(Range.OUT_OF_RANGE_HIGH));
+        assertThat(statusFor.getFamily(), is(Family.OTHER));
     }
 
 }

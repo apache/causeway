@@ -22,10 +22,9 @@ import java.io.IOException;
 import java.util.List;
 
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status.Family;
 
 import org.apache.isis.viewer.json.applib.blocks.Link;
-import org.apache.isis.viewer.json.applib.util.HttpStatusCode.Range;
-import org.apache.isis.viewer.json.applib.util.JsonResponse;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 
@@ -37,11 +36,11 @@ public class RepresentationWalker {
         private final String key;
         private final Link link;
         private final JsonRepresentation body;
-        private final JsonResponse<? extends JsonRepresentation> response;
+        private final RestfulResponse<? extends JsonRepresentation> response;
         private String error;
         private Exception exception;
 
-        public Step(String key, Link link, JsonRepresentation body, JsonResponse<? extends JsonRepresentation> response, String error, Exception exception) {
+        public Step(String key, Link link, JsonRepresentation body, RestfulResponse<? extends JsonRepresentation> response, String error, Exception exception) {
             this.key = key;
             this.link = link;
             this.body = body;
@@ -62,16 +61,16 @@ public class RepresentationWalker {
 
     public RepresentationWalker(RestfulClient restfulClient, Response response) {
         this.restfulClient = restfulClient;
-        JsonResponse<JsonRepresentation> jsonResp = JsonResponse.of(response, JsonRepresentation.class);
+        RestfulResponse<JsonRepresentation> jsonResp = RestfulResponse.of(response, JsonRepresentation.class);
 
         addStep(null, null, null, jsonResp, null, null);
     }
 
-    private Step addStep(String key, Link link, JsonRepresentation body, JsonResponse<JsonRepresentation> jsonResp, String error, Exception ex) {
+    private Step addStep(String key, Link link, JsonRepresentation body, RestfulResponse<JsonRepresentation> jsonResp, String error, Exception ex) {
         Step step = new Step(key, link, body, jsonResp, error, ex);
         steps.add(0, step);
         if(error != null) {
-            if(jsonResp.getStatus().getRange() != Range.SUCCESS) {
+            if(jsonResp.getStatus().getFamily() != Family.SUCCESSFUL) {
                 step.error = "response status code: " + jsonResp.getStatus();
             }
         }
@@ -84,7 +83,7 @@ public class RepresentationWalker {
             return;
         }
         
-        JsonResponse<? extends JsonRepresentation> jsonResponse = previousStep.response;
+        RestfulResponse<? extends JsonRepresentation> jsonResponse = previousStep.response;
         JsonRepresentation entity;
         try {
             entity = jsonResponse.getEntity();
@@ -113,7 +112,7 @@ public class RepresentationWalker {
             return;
         }
         
-        addStep(key, link, null, JsonResponse.of(response, JsonRepresentation.class), null, null);
+        addStep(key, link, null, RestfulResponse.of(response, JsonRepresentation.class), null, null);
     }
 
     public void walkXpath(String linkXpath) {
@@ -146,7 +145,7 @@ public class RepresentationWalker {
             } else {
                 response = restfulClient.follow(link);
             }
-            addStep(linkXpath, link, null, JsonResponse.of(response, JsonRepresentation.class), null, null);
+            addStep(linkXpath, link, null, RestfulResponse.of(response, JsonRepresentation.class), null, null);
             
         } catch (RuntimeException e) {
             // if xpath fails
@@ -192,7 +191,7 @@ public class RepresentationWalker {
      * (Conversely, will return <tt>null</tt> immediately after instantiation and prior 
      * to a walk being attempted/performed).  
      */
-    public JsonResponse<?> getResponse()  {
+    public RestfulResponse<?> getResponse()  {
         Step currentStep = currentStep();
         return currentStep != null? currentStep.response: null;
     }

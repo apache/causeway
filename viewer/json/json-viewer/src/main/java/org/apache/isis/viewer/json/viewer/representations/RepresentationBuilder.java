@@ -23,15 +23,52 @@ import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.OidGenerator;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
-import org.apache.isis.viewer.json.viewer.RepContext;
+import org.apache.isis.viewer.json.viewer.ResourceContext;
 
-public abstract class RepresentationBuilder {
+public abstract class RepresentationBuilder<T extends RepresentationBuilder<T>> {
 
-    protected final RepContext repContext;
+    protected final ResourceContext resourceContext;
     protected final JsonRepresentation representation = JsonRepresentation.newMap();
     
-    public RepresentationBuilder(RepContext repContext) {
-        this.repContext = repContext;
+    public RepresentationBuilder(ResourceContext resourceContext) {
+        this.resourceContext = resourceContext;
+    }
+
+    public T withRepresentationType(String representationTypeName) {
+        String href = "representationTypes/" + representationTypeName;
+        JsonRepresentation linkToRepresentationType = 
+                LinkRepBuilder.newBuilder(resourceContext, "representationType", href).build();
+        representation.put("representationType", linkToRepresentationType);
+        return (T) this;
+    }
+
+    public T withSelf(String href) {
+        representation.put("self", LinkRepBuilder.newBuilder(resourceContext, "self", href).build());
+        return (T) this;
+    }
+
+    public RepresentationBuilder<T> withLinks() {
+        return withLinks(JsonRepresentation.newArray());
+    }
+
+    public T withLinks(JsonRepresentation links) {
+        if(!links.isArray()) {
+            throw new IllegalArgumentException("links must be a list");
+        }
+        representation.put("links", links);
+        return (T) this;
+    }
+
+    public T withMetadata() {
+        return withMetadata(JsonRepresentation.newMap());
+    }
+
+    public T withMetadata(JsonRepresentation metadata) {
+        if(!metadata.isMap()) {
+            throw new IllegalArgumentException("metadata must be a map");
+        }
+        representation.put("metadata", metadata);
+        return (T) this;
     }
 
     public abstract JsonRepresentation build();
@@ -55,6 +92,5 @@ public abstract class RepresentationBuilder {
     protected Localization getLocalization() {
         return IsisContext.getLocalization();
     }
-
 
 }

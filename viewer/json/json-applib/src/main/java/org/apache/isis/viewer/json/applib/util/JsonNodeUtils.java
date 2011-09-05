@@ -1,10 +1,9 @@
-package org.apache.isis.viewer.json.applib;
+package org.apache.isis.viewer.json.applib.util;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.util.Iterator;
 import java.util.List;
 
 import org.codehaus.jackson.JsonNode;
@@ -17,13 +16,13 @@ public class JsonNodeUtils {
     
     private JsonNodeUtils(){}
 
-    static InputStream asInputStream(JsonNode jsonNode) {
+    public static InputStream asInputStream(JsonNode jsonNode) {
         String jsonStr = jsonNode.toString();
         byte[] bytes = jsonStr.getBytes(Charsets.UTF_8);
         return new ByteArrayInputStream(bytes);
     }
 
-    static JsonNode walkNode(JsonNode node, String path) {
+    public static JsonNode walkNode(JsonNode node, String path) {
         String[] keys = path.split("\\.");
         for(String key: keys) {
             node = node.path(key);
@@ -48,7 +47,7 @@ public class JsonNodeUtils {
      *   }
      * }
      */
-    static ObjectNode walkNodeUpTo(ObjectNode node, List<String> keys) {
+    public static ObjectNode walkNodeUpTo(ObjectNode node, List<String> keys) {
         for (String key : keys) {
             JsonNode jsonNode = node.get(key);
             if(jsonNode == null) {

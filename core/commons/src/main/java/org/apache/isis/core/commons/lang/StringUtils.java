@@ -329,8 +329,8 @@ public final class StringUtils {
         }
     }
 
-    public static String coalesce(String... strings) {
-        for(String str: strings) {
+    public static <T> T coalesce(T... strings) {
+        for(T str: strings) {
             if(str != null) {
                 return str;
             }

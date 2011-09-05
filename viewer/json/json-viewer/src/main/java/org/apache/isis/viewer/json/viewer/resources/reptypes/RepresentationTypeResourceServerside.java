@@ -35,7 +35,7 @@ import org.apache.isis.viewer.json.viewer.resources.ResourceAbstract;
  * interface (at least under RestEasy 1.0.2 and 1.1-RC2).
  */
 @Path("/representationTypes")
-public class RepresentationTypeResourceImpl extends ResourceAbstract implements RepresentationTypeResource {
+public class RepresentationTypeResourceServerside extends ResourceAbstract implements RepresentationTypeResource {
 
 
     @GET
@@ -45,8 +45,8 @@ public class RepresentationTypeResourceImpl extends ResourceAbstract implements 
         init();
 
         JsonRepresentation representation = JsonRepresentation.newMap();
-        representation.put("representationType", LinkRepBuilder.newBuilder(getResourceContext().repContextInline(), "representationType", "representationTypes/representationType").build());
-        representation.put("self", LinkRepBuilder.newBuilder(getResourceContext().repContextInline(), "self", "representationType/" + representationTypeName).build());
+        representation.put("representationType", LinkRepBuilder.newBuilder(getResourceContext(), "representationType", "representationTypes/representationType").build());
+        representation.put("self", LinkRepBuilder.newBuilder(getResourceContext(), "self", "representationType/" + representationTypeName).build());
         
         return responseOfOk(asJson(representation));
     }

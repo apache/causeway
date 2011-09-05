@@ -7,9 +7,10 @@ import java.util.List;
 import java.util.Map;
 
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status.Family;
 
+import org.apache.isis.viewer.json.applib.HttpStatusCode;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
-import org.apache.isis.viewer.json.applib.util.HttpStatusCode.Range;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.JsonGenerator;
 import org.codehaus.jackson.JsonNode;
@@ -135,7 +136,7 @@ public final class JsonMapper {
 
     public <T> T read(Response response, Class<T> requiredType) throws JsonParseException, JsonMappingException, IOException {
         int status = response.getStatus();
-        if(Range.lookup(status) != Range.SUCCESS) {
+        if(HttpStatusCode.lookupFamily(status) != Family.SUCCESSFUL) {
             throw new IllegalArgumentException("response status must be in 2xx range (was " + status + ")");
         }
         Object entityObj = response.getEntity();
