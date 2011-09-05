@@ -24,8 +24,8 @@ import javax.ws.rs.core.Response;
 
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.isis.viewer.json.applib.blocks.Link;
-import org.apache.isis.viewer.json.applib.domain.DomainObjectResource;
-import org.apache.isis.viewer.json.applib.domain.DomainServicesResource;
+import org.apache.isis.viewer.json.applib.domainobjects.DomainObjectResource;
+import org.apache.isis.viewer.json.applib.domainobjects.DomainServicesResource;
 import org.apache.isis.viewer.json.applib.homepage.HomePageResource;
 import org.apache.isis.viewer.json.applib.types.TypeResource;
 import org.apache.isis.viewer.json.applib.user.UserResource;
@@ -65,7 +65,7 @@ public class RestfulClient {
         return homePageResource;
     }
 
-    public DomainServicesResource getServicesResource() {
+    public DomainServicesResource getDomainServicesResource() {
         return servicesResource;
     }
 

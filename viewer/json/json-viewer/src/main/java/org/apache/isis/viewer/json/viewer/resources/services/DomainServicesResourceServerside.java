@@ -29,13 +29,12 @@ import javax.ws.rs.core.Response;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.services.ServiceUtil;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.json.applib.HttpStatusCode;
-import org.apache.isis.viewer.json.applib.domain.DomainServicesResource;
+import org.apache.isis.viewer.json.applib.domainobjects.DomainServicesResource;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
 import org.apache.isis.viewer.json.viewer.resources.ResourceAbstract;
+import org.apache.isis.viewer.json.viewer.resources.domainobjects.DomainObjectRepBuilder;
 import org.apache.isis.viewer.json.viewer.resources.objectlist.DomainObjectListRepBuilder;
-import org.apache.isis.viewer.json.viewer.resources.objects.DomainObjectRepBuilder;
 
 public class DomainServicesResourceServerside extends ResourceAbstract implements DomainServicesResource {
 
