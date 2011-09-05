@@ -23,6 +23,7 @@ public class ArgumentListTest_urlEncoding {
         @SuppressWarnings("unused")
         String decoded = URLDecoder.decode(expectedValue, Charsets.UTF_8.name());
         
+        String x = al.toString();
         assertThat(al.asUrlEncoded(), is(expectedValue));
     }
 }

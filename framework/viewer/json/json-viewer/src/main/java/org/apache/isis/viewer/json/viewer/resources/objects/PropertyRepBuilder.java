@@ -22,30 +22,32 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
-import org.apache.isis.viewer.json.viewer.RepContext;
+import org.apache.isis.viewer.json.viewer.ResourceContext;
 
 import com.google.common.collect.Lists;
 
-public class PropertyRepBuilder extends AbstractMemberRepBuilder<OneToOneAssociation> {
+public class PropertyRepBuilder extends AbstractMemberRepBuilder<PropertyRepBuilder, OneToOneAssociation> {
 
-    public static PropertyRepBuilder newBuilder(RepContext repContext, ObjectAdapter objectAdapter, OneToOneAssociation otoa) {
-        return new PropertyRepBuilder(repContext, objectAdapter, otoa);
+    public static PropertyRepBuilder newBuilder(ResourceContext resourceContext, ObjectAdapter objectAdapter, OneToOneAssociation otoa) {
+        return new PropertyRepBuilder(resourceContext, objectAdapter, otoa);
     }
 
-    public PropertyRepBuilder(RepContext repContext, ObjectAdapter objectAdapter, OneToOneAssociation otoa) {
-        super(repContext, objectAdapter, MemberType.PROPERTY, otoa);
+    public PropertyRepBuilder(ResourceContext resourceContext, ObjectAdapter objectAdapter, OneToOneAssociation otoa) {
+        super(resourceContext, objectAdapter, MemberType.PROPERTY, otoa);
+
+        MemberRepType memberRepType = MemberRepType.STANDALONE;
+
+        putSelfIfRequired(memberRepType);
+        putIdRep();
+        withMemberType();
+        putValueIfRequired(memberRepType);
+        putDisabledReason();
+        putChoices();
+        putMutatorsIfRequired(memberRepType);
+        putDetailsIfRequired(memberRepType);
     }
 
     public JsonRepresentation build() {
-        putSelfIfRequired();
-        putTypeRep();
-        putIdRep();
-        putMemberTypeRep();
-        putValueIfRequired();
-        putDisabledReason();
-        putChoices();
-        putMutatorsIfRequired();
-        putDetailsIfRequired();
         return representation;
     }
 
@@ -56,7 +58,7 @@ public class PropertyRepBuilder extends AbstractMemberRepBuilder<OneToOneAssocia
         if(valueAdapter == null) {
 		    return null;
 		}
-        return DomainObjectRepBuilder.valueOrRef(repContext, valueAdapter, objectMember.getSpecification(), getOidStringifier(), getLocalization());
+        return DomainObjectRepBuilder.valueOrRef(resourceContext, valueAdapter, objectMember.getSpecification(), getOidStringifier(), getLocalization());
     }
 
     private void putChoices() {
@@ -74,7 +76,7 @@ public class PropertyRepBuilder extends AbstractMemberRepBuilder<OneToOneAssocia
         List<Object> list = Lists.newArrayList();
         for (final ObjectAdapter choiceAdapter : choiceAdapters) {
         	ObjectSpecification objectSpec = objectMember.getSpecification();
-        	list.add(DomainObjectRepBuilder.valueOrRef(repContext, choiceAdapter, objectSpec, getOidStringifier(), getLocalization()));
+        	list.add(DomainObjectRepBuilder.valueOrRef(resourceContext, choiceAdapter, objectSpec, getOidStringifier(), getLocalization()));
         }
         return list;
 	}

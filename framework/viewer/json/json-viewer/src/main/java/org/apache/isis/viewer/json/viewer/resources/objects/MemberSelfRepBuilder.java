@@ -19,22 +19,22 @@ package org.apache.isis.viewer.json.viewer.resources.objects;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
-import org.apache.isis.viewer.json.viewer.RepContext;
+import org.apache.isis.viewer.json.viewer.ResourceContext;
 import org.apache.isis.viewer.json.viewer.representations.LinkRepBuilder;
 import org.apache.isis.viewer.json.viewer.representations.RepresentationBuilder;
 
-public class MemberSelfRepBuilder extends RepresentationBuilder {
+public class MemberSelfRepBuilder extends RepresentationBuilder<MemberSelfRepBuilder> {
 
-    public static MemberSelfRepBuilder newBuilder(RepContext repContext, ObjectAdapter objectAdapter, MemberType memberType, ObjectMember objectMember) {
-        return new MemberSelfRepBuilder(repContext, objectAdapter, memberType, objectMember);
+    public static MemberSelfRepBuilder newBuilder(ResourceContext resourceContext, ObjectAdapter objectAdapter, MemberType memberType, ObjectMember objectMember) {
+        return new MemberSelfRepBuilder(resourceContext, objectAdapter, memberType, objectMember);
     }
 
     private final ObjectAdapter objectAdapter;
     private final MemberType memberType;
     private final ObjectMember objectMember;
 
-    public MemberSelfRepBuilder(RepContext repContext, ObjectAdapter objectAdapter, MemberType memberType, ObjectMember objectMember) {
-        super(repContext);
+    public MemberSelfRepBuilder(ResourceContext resourceContext, ObjectAdapter objectAdapter, MemberType memberType, ObjectMember objectMember) {
+        super(resourceContext);
         this.objectAdapter = objectAdapter;
         this.memberType = memberType;
         this.objectMember = objectMember;
@@ -48,11 +48,11 @@ public class MemberSelfRepBuilder extends RepresentationBuilder {
 
     private JsonRepresentation memberLinkRep() {
         String url = AbstractMemberRepBuilder.urlForMember(objectAdapter, memberType, objectMember, getOidStringifier());
-        return LinkRepBuilder.newBuilder(repContext, "member", url).build();
+        return LinkRepBuilder.newBuilder(resourceContext, "member", url).build();
     }
     
     private JsonRepresentation domainObjectLinkRep() {
-        return LinkRepBuilder.newObjectBuilder(repContext, objectAdapter, getOidStringifier()).build();
+        return DomainObjectRepBuilder.newLinkToBuilder(resourceContext, objectAdapter, getOidStringifier()).build();
     }
 
 }

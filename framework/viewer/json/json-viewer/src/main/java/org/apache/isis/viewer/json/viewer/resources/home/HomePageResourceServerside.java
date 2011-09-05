@@ -32,7 +32,7 @@ import org.apache.isis.viewer.json.viewer.resources.ResourceAbstract;
  * Implementation note: it seems to be necessary to annotate the implementation with {@link Path} rather than the
  * interface (at least under RestEasy 1.0.2 and 1.1-RC2).
  */
-public class HomePageResourceImpl extends ResourceAbstract implements HomePageResource {
+public class HomePageResourceServerside extends ResourceAbstract implements HomePageResource {
 
 
     @Override
@@ -41,10 +41,10 @@ public class HomePageResourceImpl extends ResourceAbstract implements HomePageRe
         init();
         
         JsonRepresentation representation = JsonRepresentation.newMap();
-        representation.put("representationType", LinkRepBuilder.newBuilder(getResourceContext().repContextInline(), "representationType", "representationTypes/homePage").build());
-        representation.put("self", LinkRepBuilder.newBuilder(getResourceContext().repContextInline(), "self", "").build());
-        representation.put("user", LinkRepBuilder.newBuilder(getResourceContext().repContextInline(), "user", "user").build());
-        representation.put("services", LinkRepBuilder.newBuilder(getResourceContext().repContextInline(), "services", "services").build());
+        representation.put("representationType", LinkRepBuilder.newBuilder(getResourceContext(), "representationType", "representationTypes/homePage").build());
+        representation.put("self", LinkRepBuilder.newBuilder(getResourceContext(), "self", "").build());
+        representation.put("user", LinkRepBuilder.newBuilder(getResourceContext(), "user", "user").build());
+        representation.put("services", LinkRepBuilder.newBuilder(getResourceContext(), "services", "services").build());
         
         return responseOfOk(asJson(representation));
     }

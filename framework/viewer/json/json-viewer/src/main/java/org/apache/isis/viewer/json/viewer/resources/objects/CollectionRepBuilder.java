@@ -23,30 +23,32 @@ import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacetUtils;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
-import org.apache.isis.viewer.json.viewer.RepContext;
+import org.apache.isis.viewer.json.viewer.ResourceContext;
 import org.apache.isis.viewer.json.viewer.representations.LinkRepBuilder;
 
 import com.google.common.collect.Lists;
 
-public class CollectionRepBuilder extends AbstractMemberRepBuilder<OneToManyAssociation> {
+public class CollectionRepBuilder extends AbstractMemberRepBuilder<CollectionRepBuilder, OneToManyAssociation> {
 
-    public static CollectionRepBuilder newBuilder(RepContext repContext, ObjectAdapter objectAdapter, OneToManyAssociation otma) {
-        return new CollectionRepBuilder(repContext, objectAdapter, otma);
+    public static CollectionRepBuilder newBuilder(ResourceContext resourceContext, ObjectAdapter objectAdapter, OneToManyAssociation otma) {
+        return new CollectionRepBuilder(resourceContext, objectAdapter, otma);
     }
 
-    public CollectionRepBuilder(RepContext repContext, ObjectAdapter objectAdapter, OneToManyAssociation otma) {
-        super(repContext, objectAdapter, MemberType.COLLECTION, otma);
+    public CollectionRepBuilder(ResourceContext resourceContext, ObjectAdapter objectAdapter, OneToManyAssociation otma) {
+        super(resourceContext, objectAdapter, MemberType.COLLECTION, otma);
+
+        MemberRepType memberRepType = MemberRepType.STANDALONE;
+
+        putSelfIfRequired(memberRepType);
+        putIdRep();
+        withMemberType();
+        putValueIfRequired(memberRepType);
+        putDisabledReason();
+        putMutatorsIfRequired(memberRepType);
+        putDetailsIfRequired(memberRepType);
     }
 
     public JsonRepresentation build() {
-        putSelfIfRequired();
-        putTypeRep();
-        putIdRep();
-        putMemberTypeRep();
-        putValueIfRequired();
-        putDisabledReason();
-        putMutatorsIfRequired();
-        putDetailsIfRequired();
         return representation;
     }
 
@@ -60,7 +62,7 @@ public class CollectionRepBuilder extends AbstractMemberRepBuilder<OneToManyAsso
         List<JsonRepresentation> list = Lists.newArrayList();
         for (final ObjectAdapter elementAdapter : facet.iterable(valueAdapter)) {
 
-            LinkRepBuilder newBuilder = LinkRepBuilder.newObjectBuilder(repContext, elementAdapter, getOidStringifier());
+            LinkRepBuilder newBuilder = DomainObjectRepBuilder.newLinkToBuilder(resourceContext, elementAdapter, getOidStringifier());
 
 			list.add(newBuilder.build());
         }

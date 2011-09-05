@@ -18,6 +18,7 @@ import net.sf.json.xml.XMLSerializer;
 
 import org.apache.isis.viewer.json.applib.blocks.Link;
 import org.apache.isis.viewer.json.applib.util.JsonMapper;
+import org.apache.isis.viewer.json.applib.util.JsonNodeUtils;
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
@@ -143,7 +144,7 @@ public class JsonRepresentation {
 
     public Boolean getBoolean(String path) {
         JsonNode node = getNode(path);
-        if (node == null || node.isMissingNode()) {
+        if (representsNull(node)) {
             return null;
         }
         checkValue(path, node, "a boolean");
@@ -155,7 +156,7 @@ public class JsonRepresentation {
 
     public BigInteger getBigInteger(String path) {
         JsonNode node = getNode(path);
-        if (node == null || node.isMissingNode()) {
+        if (representsNull(node)) {
             return null;
         }
         checkValue(path, node, "a biginteger");
@@ -167,7 +168,7 @@ public class JsonRepresentation {
 
     public Integer getInt(String path) {
         JsonNode node = getNode(path);
-        if (node == null || node.isMissingNode()) {
+        if (representsNull(node)) {
             return null;
         }
         checkValue(path, node, "an int");
@@ -179,7 +180,7 @@ public class JsonRepresentation {
 
     public Long getLong(String path) {
         JsonNode node = getNode(path);
-        if (node == null || node.isMissingNode()) {
+        if (representsNull(node)) {
             return null;
         }
         checkValue(path, node, "a long");
@@ -191,7 +192,7 @@ public class JsonRepresentation {
     
     public Double getDouble(String path) {
         JsonNode node = getNode(path);
-        if (node == null || node.isMissingNode()) {
+        if (representsNull(node)) {
             return null;
         }
         checkValue(path, node, "a double");
@@ -203,7 +204,7 @@ public class JsonRepresentation {
 
     public String getString(String path) {
         JsonNode node = getNode(path);
-        if (node == null || node.isMissingNode()) {
+        if (representsNull(node)) {
             return null;
         }
         checkValue(path, node, "a string");
@@ -221,6 +222,7 @@ public class JsonRepresentation {
     public JsonRepresentation getNull(String path) {
         JsonNode node = getNode(path);
         if (node == null || node.isMissingNode()) {
+            // not exclude if node.isNull, cos that's the point of this. 
             return null;
         }
         checkValue(path, node, "the null value");
@@ -238,6 +240,7 @@ public class JsonRepresentation {
     public Boolean isNull(String path) {
         JsonNode node = getNode(path);
         if (node == null || node.isMissingNode()) {
+            // not exclude if node.isNull, cos that's the point of this. 
             return null;
         }
         return node.isNull();
@@ -258,6 +261,10 @@ public class JsonRepresentation {
         }
     }
 
+    private static boolean representsNull(JsonNode node) {
+        return node == null || node.isMissingNode() || node.isNull();
+    }
+
 
     
     /////////////////////////////////////////////////////////////////////////
@@ -266,7 +273,7 @@ public class JsonRepresentation {
 
     public JsonRepresentation getRepresentation(String path) {
         JsonNode node = getNode(path);
-        if (node == null || node.isMissingNode()) {
+        if (representsNull(node)) {
             return null;
         }
 
@@ -275,7 +282,7 @@ public class JsonRepresentation {
 
     public JsonRepresentation getArray(String path) {
         JsonNode node = getNode(path);
-        if (node == null || node.isMissingNode()) {
+        if (representsNull(node)) {
             return null;
         }
         if (node.isValueNode()) {
@@ -289,7 +296,7 @@ public class JsonRepresentation {
 
     public Link getLink(String path) {
         JsonNode node = getNode(path);
-        if (node == null || node.isMissingNode()) {
+        if (representsNull(node)) {
             return null;
         }
 
@@ -531,6 +538,9 @@ public class JsonRepresentation {
         }
         Path path = Path.parse(key);
         ObjectNode node = JsonNodeUtils.walkNodeUpTo(nodeAsMap(), path.getHead());
+        if(node.has(path.getTail())) {
+            throw new IllegalStateException("already has key " + key);
+        }
         node.put(path.getTail(), value.getJsonNode());
     }
 

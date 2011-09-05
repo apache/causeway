@@ -18,20 +18,20 @@
  */
 package org.apache.isis.viewer.json.viewer;
 
-import org.apache.isis.viewer.json.viewer.resources.home.HomePageResourceImpl;
-import org.apache.isis.viewer.json.viewer.resources.objects.DomainObjectResourceImpl;
-import org.apache.isis.viewer.json.viewer.resources.reptypes.RepresentationTypeResourceImpl;
-import org.apache.isis.viewer.json.viewer.resources.services.ServicesResourceImpl;
-import org.apache.isis.viewer.json.viewer.resources.user.UserResourceImpl;
+import org.apache.isis.viewer.json.viewer.resources.home.HomePageResourceServerside;
+import org.apache.isis.viewer.json.viewer.resources.objects.DomainObjectResourceServerside;
+import org.apache.isis.viewer.json.viewer.resources.reptypes.RepresentationTypeResourceServerside;
+import org.apache.isis.viewer.json.viewer.resources.services.DomainServicesResourceServerside;
+import org.apache.isis.viewer.json.viewer.resources.user.UserResourceServerside;
 
 public class JsonApplication extends AbstractJaxRsApplication {
 
     public JsonApplication() {
-        addSingleton(new HomePageResourceImpl());
-        addSingleton(new RepresentationTypeResourceImpl());
-        addSingleton(new ServicesResourceImpl());
-        addSingleton(new UserResourceImpl());
-        addSingleton(new DomainObjectResourceImpl());
+        addSingleton(new HomePageResourceServerside());
+        addSingleton(new RepresentationTypeResourceServerside());
+        addSingleton(new DomainServicesResourceServerside());
+        addSingleton(new UserResourceServerside());
+        addSingleton(new DomainObjectResourceServerside());
     }
 
 }

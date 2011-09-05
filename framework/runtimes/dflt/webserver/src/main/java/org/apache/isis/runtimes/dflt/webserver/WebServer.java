@@ -20,7 +20,6 @@
 package org.apache.isis.runtimes.dflt.webserver;
 
 import java.net.URI;
-import java.text.MessageFormat;
 import java.util.Formatter;
 
 import org.apache.isis.core.commons.lang.ArrayUtils;
@@ -33,10 +32,8 @@ import org.apache.isis.runtimes.dflt.webserver.internal.OptionHandlerPort;
 import org.apache.isis.runtimes.dflt.webserver.internal.OptionHandlerResourceBase;
 import org.apache.isis.runtimes.dflt.webserver.internal.OptionHandlerStartupMode;
 import org.mortbay.jetty.Connector;
-import org.mortbay.jetty.Handler;
 import org.mortbay.jetty.Server;
 import org.mortbay.jetty.webapp.WebAppContext;
-import org.mortbay.util.URIUtil;
 
 public class WebServer {
 

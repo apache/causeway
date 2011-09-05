@@ -29,14 +29,6 @@ import org.apache.isis.viewer.json.viewer.resources.objects.MemberRepType;
 
 public class ResourceContext {
 
-    public RepContext repContext() {
-        return new RepContext(this, MemberRepType.STANDALONE);
-    }
-
-    public RepContext repContextInline() {
-        return new RepContext(this, MemberRepType.INLINE);
-    }
-
     private final HttpHeaders httpHeaders;
     private final UriInfo uriInfo;
     private final Request request;
@@ -78,4 +70,10 @@ public class ResourceContext {
     public SecurityContext getSecurityContext() {
         return securityContext;
     }
+
+
+    public String urlFor(String url) {
+        return getUriInfo().getBaseUri().toString() + url;
+    }
+
 }

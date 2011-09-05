@@ -21,48 +21,50 @@ import java.util.List;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
-import org.apache.isis.viewer.json.viewer.RepContext;
-import org.apache.isis.viewer.json.viewer.representations.LinkRepBuilder;
+import org.apache.isis.viewer.json.viewer.ResourceContext;
 import org.apache.isis.viewer.json.viewer.representations.RepresentationBuilder;
 import org.apache.isis.viewer.json.viewer.representations.WellKnownType;
+import org.apache.isis.viewer.json.viewer.resources.objects.DomainObjectRepBuilder;
 
-public class DomainObjectListRepBuilder extends RepresentationBuilder {
+public class DomainObjectListRepBuilder extends RepresentationBuilder<DomainObjectListRepBuilder> {
 
-    public static DomainObjectListRepBuilder newBuilder(RepContext repContext, ObjectSpecification objectSpec, List<ObjectAdapter> objectAdapters) {
-        return newBuilder(repContext, WellKnownType.canonical(objectSpec.getFullIdentifier()), objectAdapters);
+    protected DomainObjectListRepBuilder(ResourceContext resourceContext, String typeName, List<ObjectAdapter> objectAdapters) {
+        this(resourceContext);
     }
 
-    public static DomainObjectListRepBuilder newBuilder(RepContext repContext, String typeName, List<ObjectAdapter> objectAdapters) {
-        return new DomainObjectListRepBuilder(repContext, typeName, objectAdapters);
+    protected DomainObjectListRepBuilder(ResourceContext resourceContext) {
+        super(resourceContext);
     }
 
-    private final List<ObjectAdapter> objectAdapters;
-    private String typeName;
-    
-    DomainObjectListRepBuilder(RepContext repContext, String typeName, List<ObjectAdapter> objectAdapters) {
-        super(repContext);
-        this.objectAdapters = objectAdapters;
-        this.typeName = typeName;
+    public DomainObjectListRepBuilder withRepresentationTypeListOf(String typeName) {
+        return withRepresentationType("list:" + typeName);
     }
-    
-    public JsonRepresentation build() {
-        JsonRepresentation linkToRepresentationType = LinkRepBuilder.newBuilder(repContext, "representationType", "representationTypes/list:" + typeName).build();
-        representation.put("representationType", linkToRepresentationType);
 
+    public DomainObjectListRepBuilder withRepresentationTypeListOf(ObjectSpecification objectSpec) {
+        return withRepresentationTypeListOf(WellKnownType.canonical(objectSpec.getFullIdentifier()));
+    }
+
+    public DomainObjectListRepBuilder withAdapters(List<ObjectAdapter> objectAdapters) {
         JsonRepresentation list = JsonRepresentation.newArray();
         for(ObjectAdapter adapter: objectAdapters) {
             JsonRepresentation linkToObject = buildLinkTo(adapter);
             list.add(linkToObject);
         }
         representation.put("value", list);
-        representation.put("links", JsonRepresentation.newArray());
-        representation.put("metadata", JsonRepresentation.newMap());
+        return this;
+    }
+
+
+    public JsonRepresentation build() {
+        withLinks();
+        withMetadata();
 
         return representation;
     }
 
+
     protected JsonRepresentation buildLinkTo(ObjectAdapter adapter) {
-        return LinkRepBuilder.newObjectBuilder(repContext, adapter, getOidStringifier()).build();
+        return DomainObjectRepBuilder.newLinkToBuilder(resourceContext, adapter, getOidStringifier()).build();
     }
 
 

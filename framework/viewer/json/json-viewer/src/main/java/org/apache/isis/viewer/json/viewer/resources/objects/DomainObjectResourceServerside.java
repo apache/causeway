@@ -46,6 +46,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.isis.viewer.json.applib.HttpStatusCode;
 import org.apache.isis.viewer.json.applib.domain.DomainObjectResource;
 import org.apache.isis.viewer.json.viewer.resources.ResourceAbstract;
 import org.apache.isis.viewer.json.viewer.util.UrlDecoderUtils;
@@ -57,7 +58,7 @@ import com.google.common.collect.Lists;
 import com.google.common.io.ByteStreams;
 
 @Path("/objects")
-public class DomainObjectResourceImpl extends ResourceAbstract implements
+public class DomainObjectResourceServerside extends ResourceAbstract implements
         DomainObjectResource {
 
     @GET
@@ -67,7 +68,7 @@ public class DomainObjectResourceImpl extends ResourceAbstract implements
 
         final ObjectAdapter objectAdapter = getObjectAdapter(oidStr);
         final DomainObjectRepBuilder builder = DomainObjectRepBuilder
-                .newBuilder(getResourceContext().repContext(), objectAdapter);
+                .newBuilder(getResourceContext(), objectAdapter);
         return responseOfOk(jsonRepresentionFrom(builder));
     }
 
@@ -83,7 +84,7 @@ public class DomainObjectResourceImpl extends ResourceAbstract implements
                 objectAdapter, propertyId, Intent.ACCESS);
 
         final PropertyRepBuilder builder = PropertyRepBuilder.newBuilder(
-                getResourceContext().repContext(), objectAdapter, property);
+                getResourceContext(), objectAdapter, property);
         return responseOfOk(jsonRepresentionFrom(builder));
     }
 
@@ -99,7 +100,7 @@ public class DomainObjectResourceImpl extends ResourceAbstract implements
                 objectAdapter, collectionId, Intent.ACCESS);
 
         final CollectionRepBuilder builder = CollectionRepBuilder.newBuilder(
-                getResourceContext().repContext(), objectAdapter, collection);
+                getResourceContext(), objectAdapter, collection);
         return responseOfOk(jsonRepresentionFrom(builder));
     }
 
@@ -115,7 +116,7 @@ public class DomainObjectResourceImpl extends ResourceAbstract implements
                 objectAdapter, actionId, Intent.ACCESS);
 
         ActionRepBuilder builder = ActionRepBuilder.newBuilder(
-                getResourceContext().repContext(), objectAdapter, action);
+                getResourceContext(), objectAdapter, action);
         return responseOfOk(jsonRepresentionFrom(builder));
     }
 
@@ -132,25 +133,22 @@ public class DomainObjectResourceImpl extends ResourceAbstract implements
                 objectAdapter, actionId, Intent.ACCESS);
 
         if (!isIdempotent(action)) {
-            throw new WebApplicationException(
-                    responseOfMethodNotAllowed("Method not allowed; action '"
-                            + action.getId() + "' is not idempotent"));
+            return responseOf(HttpStatusCode.METHOD_NOT_ALLOWED, 
+                    "Method not allowed; action '%s' is not idempotent", action.getId());
         }
         int numParameters = action.getParameterCount();
         int numArguments = arguments.size();
         if (numArguments != numParameters) {
-            throw new WebApplicationException(
-                    responseOfBadRequest("Action '" + action.getId() + "' has "
-                            + numParameters + " parameters but received "
-                            + numArguments + " arguments"));
+            return responseOf(HttpStatusCode.BAD_REQUEST, 
+                    "Action '%s' has %d parameters but received %d  arguments", action.getId(), numParameters, numArguments);
         }
 
         List<ObjectAdapter> parameters;
         try {
             parameters = argumentAdaptersFor(action, arguments);
         } catch (IOException e) {
-            throw new WebApplicationException(
-                    responseOfBadRequest("Action '" + action.getId() +"' has body that cannot be parsed as JSON", e));
+            return responseOf(HttpStatusCode.BAD_REQUEST, 
+                    "Action '%s' has body that cannot be parsed as JSON", e, action.getId());
         }
         return invokeActionUsingAdapters(action, objectAdapter, parameters);
     }
@@ -212,13 +210,12 @@ public class DomainObjectResourceImpl extends ResourceAbstract implements
 
         Consent consent = property.isAssociationValid(objectAdapter, argAdapter);
         if (consent.isVetoed()) {
-            throw new WebApplicationException(
-                    responseOfPreconditionFailed(consent.getReason()));
+            return responseOfUnauthorized(consent);
         }
 
         property.set(objectAdapter, argAdapter);
 
-        return responseOfOk();
+        return responseOfNoContent();
     }
 
     @PUT
@@ -234,7 +231,8 @@ public class DomainObjectResourceImpl extends ResourceAbstract implements
                 objectAdapter, collectionId, Intent.MUTATE);
 
         if (!collection.getCollectionSemantics().isSet()) {
-            throw new WebApplicationException(responseOfBadRequest("Collection '" + collectionId + "' does not have set semantics"));
+            return responseOf(HttpStatusCode.BAD_REQUEST, 
+                    "Collection '' does not have set semantics", collectionId);
         }
 
         ObjectSpecification collectionSpec = collection.getSpecification();
@@ -242,12 +240,12 @@ public class DomainObjectResourceImpl extends ResourceAbstract implements
 
         Consent consent = collection.isValidToAdd(objectAdapter, argAdapter);
         if (consent.isVetoed()) {
-            throw new WebApplicationException(responseOfPreconditionFailed(consent.getReason()));
+            return responseOfUnauthorized(consent);
         }
 
         collection.addElement(objectAdapter, argAdapter);
         
-        return responseOfOk();
+        return responseOfNoContent();
     }
 
     // /////////////////////////////////////////////////////////////////
@@ -267,13 +265,12 @@ public class DomainObjectResourceImpl extends ResourceAbstract implements
 
         Consent consent = property.isAssociationValid(objectAdapter, null);
         if (consent.isVetoed()) {
-            throw new WebApplicationException(
-                    responseOfPreconditionFailed(consent.getReason()));
+            return responseOfUnauthorized(consent);
         }
 
         property.set(objectAdapter, null);
 
-        return responseOfOk();
+        return responseOfNoContent();
     }
 
     @DELETE
@@ -293,12 +290,12 @@ public class DomainObjectResourceImpl extends ResourceAbstract implements
 
         Consent consent = collection.isValidToRemove(objectAdapter, argAdapter);
         if (consent.isVetoed()) {
-            throw new WebApplicationException(responseOfPreconditionFailed(consent.getReason()));
+            return responseOfUnauthorized(consent);
         }
 
         collection.removeElement(objectAdapter, argAdapter);
         
-        return responseOfOk();
+        return responseOfNoContent();
     }
 
     // /////////////////////////////////////////////////////////////////
@@ -318,7 +315,8 @@ public class DomainObjectResourceImpl extends ResourceAbstract implements
                 objectAdapter, collectionId, Intent.MUTATE);
 
         if (!collection.getCollectionSemantics().isListOrArray()) {
-            throw new WebApplicationException(responseOfBadRequest("Collection '" + collectionId + "' does not have list or array semantics"));
+            return responseOf(HttpStatusCode.METHOD_NOT_ALLOWED, 
+                    "Collection '%s' does not have list or array semantics", collectionId);
         }
 
         ObjectSpecification collectionSpec = collection.getSpecification();
@@ -326,12 +324,12 @@ public class DomainObjectResourceImpl extends ResourceAbstract implements
 
         Consent consent = collection.isValidToAdd(objectAdapter, argAdapter);
         if (consent.isVetoed()) {
-            throw new WebApplicationException(responseOfPreconditionFailed(consent.getReason()));
+            return responseOfUnauthorized(consent);
         }
 
         collection.addElement(objectAdapter, argAdapter);
         
-        return responseOfOk();
+        return responseOfNoContent();
     }
 
     @POST
@@ -360,10 +358,9 @@ public class DomainObjectResourceImpl extends ResourceAbstract implements
         int numArguments = arguments.size();
         if (numArguments != numParameters) {
             throw new WebApplicationException(
-                    responseOfBadRequest("Action '" + action.getId()
-                            + "' has " + numParameters
-                            + " parameters but received " + numArguments
-                            + " arguments in body"));
+                responseOf(HttpStatusCode.BAD_REQUEST, 
+                        "Action '%s' has %d parameters but received %d arguments in body", 
+                        action.getId(), numParameters, numArguments));
         }
 
         for (int i = 0; i < numParameters; i++) {
@@ -391,20 +388,14 @@ public class DomainObjectResourceImpl extends ResourceAbstract implements
             return objectAdapterFor(paramSpec, arg);
         } catch (ExpectedStringRepresentingValueException e) {
             throw new WebApplicationException(
-                    responseOfBadRequest("Action '"
-                            + action.getId()
-                            + "', argument "
-                            + i
-                            + " should be a URL encoded string representing a value of type "
-                            + resourceFor(paramSpec)));
+                    responseOf(HttpStatusCode.BAD_REQUEST, 
+                        "Action '%s', argument %d should be a URL encoded string representing a value of type %s",
+                        action.getId(), i, resourceFor(paramSpec)));
         } catch (ExpectedMapRepresentingReferenceException e) {
             throw new WebApplicationException(
-                    responseOfBadRequest("Action '"
-                            + action.getId()
-                            + "', argument "
-                            + i
-                            + " should be a map representing a link to reference of type "
-                            + resourceFor(paramSpec)));
+                    responseOf(HttpStatusCode.BAD_REQUEST, 
+                        "Action '%s', argument %d should be a map representing a link to reference of type %s",
+                        action.getId(), i, resourceFor(paramSpec)));
         }
     }
 
@@ -424,8 +415,7 @@ public class DomainObjectResourceImpl extends ResourceAbstract implements
                 Object arg = paramAdapter.getObject();
                 String reasonNotValid = parameter.isValid(objectAdapter, arg);
                 if (reasonNotValid != null) {
-                    throw new WebApplicationException(
-                            responseOfPreconditionFailed(reasonNotValid));
+                    return responseOf(HttpStatusCode.NOT_ACCEPTABLE, reasonNotValid);
                 }
             }
         }
@@ -433,14 +423,13 @@ public class DomainObjectResourceImpl extends ResourceAbstract implements
         Consent consent = action.isProposedArgumentSetValid(objectAdapter,
                 argArray);
         if (consent.isVetoed()) {
-            throw new WebApplicationException(
-                    responseOfPreconditionFailed(consent.getReason()));
+            return responseOf(HttpStatusCode.NOT_ACCEPTABLE, consent.getReason());
         }
 
         final ObjectAdapter returnedAdapter = action.execute(objectAdapter,
                 argArray);
         if (returnedAdapter == null) {
-            return responseOfOk();
+            return responseOfNoContent();
         }
         final CollectionFacet facet = returnedAdapter.getSpecification()
                 .getFacet(CollectionFacet.class);
@@ -458,7 +447,9 @@ public class DomainObjectResourceImpl extends ResourceAbstract implements
         List<?> arguments = parseBody(body);
         if (arguments.size() != 1) {
             throw new WebApplicationException(
-                    responseOfBadRequest("Body should contain 1 argument representing a value of type '" + resourceFor(objectSpec) + "'"));
+                    responseOf(HttpStatusCode.BAD_REQUEST, 
+                        "Body should contain 1 argument representing a value of type '%s'", 
+                        resourceFor(objectSpec)));
         }
 
         ObjectAdapter proposedValueAdapter = objectAdapterFor(objectSpec, arguments.get(0));
@@ -474,14 +465,13 @@ public class DomainObjectResourceImpl extends ResourceAbstract implements
             return arguments;
         } catch (JsonParseException e) {
             throw new WebApplicationException(e,
-                    responseOfBadRequest("could not parse body"));
+                    responseOf(HttpStatusCode.BAD_REQUEST, "could not parse body", e));
         } catch (JsonMappingException e) {
-            throw new WebApplicationException(
-                    e,
-                    responseOfBadRequest("could not map body to a Map structure"));
+            throw new WebApplicationException(e,
+                    responseOf(HttpStatusCode.BAD_REQUEST, "could not map body to a Map structure", e));
         } catch (IOException e) {
             throw new WebApplicationException(e,
-                    responseOfBadRequest("could not read body"));
+                    responseOf(HttpStatusCode.BAD_REQUEST, "could not read body", e));
         }
     }
 
@@ -548,20 +538,21 @@ public class DomainObjectResourceImpl extends ResourceAbstract implements
             if (usable.isVetoed()) {
                 String memberTypeStr = memberType.name().toLowerCase();
                 throw new WebApplicationException(
-                        responseOfPreconditionFailed(memberTypeStr
-                                + " is not usable: '" + memberId + "' ("
-                                + usable.getReason() + ")"));
+                        responseOf(HttpStatusCode.NOT_ACCEPTABLE, 
+                        "%s is not usable: '%s' (%s)", 
+                        memberTypeStr, memberId, usable.getReason()));
             }
         }
         return objectMember;
     }
 
-    private static void throwNotFoundException(final String memberId,
-        MemberType memberType) {
+    private static void throwNotFoundException(
+            final String memberId, MemberType memberType) {
         String memberTypeStr = memberType.name().toLowerCase();
         throw new WebApplicationException(
-                responseOfNotFound(memberTypeStr + " '" + memberId
-                        + "' either does not exist or is not visible"));
+                responseOf(HttpStatusCode.NOT_FOUND, 
+                        "%s '%s' either does not exist or is not visible", 
+                        memberTypeStr, memberId));
     }
 
 }

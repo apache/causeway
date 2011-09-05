@@ -22,5 +22,13 @@ public class HomePageRepresentation extends JsonRepresentation {
     public Link getServices() {
         return getLink("services");
     }
-    
+
+    public JsonRepresentation getLinks() {
+        return getArray("services");
+    }
+
+    public JsonRepresentation getMetadata() {
+        return getArray("metadata");
+    }
+
 }

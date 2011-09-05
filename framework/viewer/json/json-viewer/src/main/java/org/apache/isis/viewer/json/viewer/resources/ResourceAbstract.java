@@ -20,6 +20,7 @@ package org.apache.isis.viewer.json.viewer.resources;
 
 import java.io.IOException;
 import java.util.Collection;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -47,13 +48,13 @@ import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.OidGenerator;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
+import org.apache.isis.viewer.json.applib.HttpStatusCode;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
+import org.apache.isis.viewer.json.applib.RestfulResponse;
 import org.apache.isis.viewer.json.applib.util.JsonMapper;
-import org.apache.isis.viewer.json.applib.util.JsonResponse;
-import org.apache.isis.viewer.json.viewer.RepContext;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
-import org.apache.isis.viewer.json.viewer.representations.LinkRepBuilder;
 import org.apache.isis.viewer.json.viewer.representations.RepresentationBuilder;
+import org.apache.isis.viewer.json.viewer.resources.ResourceAbstract.ExceptionPojo;
 import org.apache.isis.viewer.json.viewer.resources.objects.DomainObjectRepBuilder;
 import org.apache.isis.viewer.json.viewer.util.OidUtils;
 import org.apache.isis.viewer.json.viewer.util.UrlDecoderUtils;
@@ -140,7 +141,7 @@ public abstract class ResourceAbstract {
     }
 
 	private Function<ObjectAdapter, JsonRepresentation> toObjectSelfRepresentation() {
-		final RepContext representationContext = getResourceContext().repContext();
+		final ResourceContext representationContext = getResourceContext();
         
         Function<ObjectAdapter, JsonRepresentation> objectSelfRepresentation = 
             Functions.compose(
@@ -165,7 +166,7 @@ public abstract class ResourceAbstract {
         
         if (objectAdapter == null) {
             final String oidStr = UrlDecoderUtils.urlDecode(oidEncodedStr);
-            throw new WebApplicationException(responseOfNotFound("could not determine adapter for OID: '" + oidStr + "'"));
+            throw new WebApplicationException(responseOf(HttpStatusCode.NOT_FOUND, "could not determine adapter for OID: '%s'", oidStr));
         }
         return objectAdapter;
     }
@@ -213,7 +214,6 @@ public abstract class ResourceAbstract {
 
 		// reference
 		try {
-			@SuppressWarnings("unchecked")
 			JsonRepresentation argLink = (JsonRepresentation) node;
 			String oidFromHref = UrlParserUtils.oidFromHref(argLink);
 			
@@ -232,67 +232,94 @@ public abstract class ResourceAbstract {
     // Responses
     // //////////////////////////////////////////////////////////////
 
-    protected static Response responseOfOk() {
-        return Response.ok().build();
-    }
-
+    /**
+     * Common case.
+     */
     public static Response responseOfOk(String jsonEntity) {
         return Response.ok().entity(jsonEntity).type(MediaType.APPLICATION_JSON_TYPE).build();
     }
 
-    protected static Response responseOfGone(final String reason, final Object... args) {
-        return Response.status(Status.GONE).header(JsonResponse.HEADER_X_RESTFUL_OBJECTS_REASON, String.format(reason, args)).build();
+    /**
+     * Common case.
+     */
+    protected static Response responseOfNoContent() {
+        return Response.status(HttpStatusCode.NO_CONTENT.getJaxrsStatusType()).build();
     }
 
-    protected static Response responseOfBadRequest(final Consent consent) {
-        return responseOfBadRequest(consent.getReason());
+    /**
+     * Common case.
+     */
+    protected static Response responseOfUnauthorized(final Consent consent) {
+        return responseOf(HttpStatusCode.UNAUTHORIZED, consent.getReason());
     }
 
-    protected static Response responseOfNoContent(final String reason, final Object... args) {
-        return Response.status(Status.NO_CONTENT).header(JsonResponse.HEADER_X_RESTFUL_OBJECTS_REASON, String.format(reason, args)).build();
+    
+    protected static Response responseOf(HttpStatusCode httpStatusCode, final String reason, final Object... args) {
+        return Response.status(httpStatusCode.getJaxrsStatusType()).header(RestfulResponse.Header.WARNING.getName(), String.format(reason, args)).build();
     }
 
-    protected static Response responseOfBadRequest(final String reason, final Object... args) {
-        return Response.status(Status.BAD_REQUEST).header(JsonResponse.HEADER_X_RESTFUL_OBJECTS_REASON, String.format(reason, args)).build();
+    protected static Response responseOf(HttpStatusCode httpStatusCode, final Exception ex) {
+        ResponseBuilder builder = Response.status(httpStatusCode.getJaxrsStatusType()).header(RestfulResponse.Header.WARNING.getName(), ex.getMessage());
+        return withStackTrace(builder, ex).build();
     }
 
-    protected static Response responseOfBadRequest(final String reason, Exception ex, final Object... args) {
-        ResponseBuilder builder = Response.status(Status.BAD_REQUEST).header(JsonResponse.HEADER_X_RESTFUL_OBJECTS_REASON, String.format(reason, args));
-        return withStackTraceAndMediaType(builder,ex).build();
+    protected static Response responseOf(HttpStatusCode httpStatusCode, final String reason, Exception ex, final Object... args) {
+        ResponseBuilder builder = Response.status(Status.BAD_REQUEST).header(RestfulResponse.Header.WARNING.getName(), String.format(reason, args));
+        return withStackTrace(builder,ex).build();
     }
 
-    protected static Response responseOfBadRequest(final Exception ex) {
-        ResponseBuilder builder = Response.status(Status.BAD_REQUEST).header(JsonResponse.HEADER_X_RESTFUL_OBJECTS_REASON, ex.getMessage());
-        return withStackTraceAndMediaType(builder,ex).build();
+    
+    private static ResponseBuilder withStackTrace(ResponseBuilder builder, final Exception ex) {
+        return builder.type(MediaType.APPLICATION_JSON_TYPE).entity(jsonFor(ex));
     }
 
-    protected static Response responseOfNotFound(final IllegalArgumentException e) {
-        return responseOfNotFound(e.getMessage());
-    }
 
-    protected static Response responseOfNotFound(final String reason, Object... args) {
-        return Response.status(Status.NOT_FOUND).header(JsonResponse.HEADER_X_RESTFUL_OBJECTS_REASON, String.format(reason, args)).build();
-    }
+    static class ExceptionPojo {
 
-    protected static Response responseOfPreconditionFailed(final String reason, final Object... args) {
-        return Response.status(StatusTypes.PRECONDITION_FAILED).header(JsonResponse.HEADER_X_RESTFUL_OBJECTS_REASON, String.format(reason, args)).build();
-    }
+        public static ExceptionPojo create(Exception ex) {
+            return new ExceptionPojo(ex);
+        }
 
-    protected static Response responseOfMethodNotAllowed(final String reason, final Object... args) {
-        return Response.status(StatusTypes.METHOD_NOT_ALLOWED).header(JsonResponse.HEADER_X_RESTFUL_OBJECTS_REASON, String.format(reason, args)).build();
-    }
+        private static String format(StackTraceElement stackTraceElement) {
+            return stackTraceElement.toString();
+        }
 
-    protected static Response responseOfInternalServerError(final Exception ex) {
-        ResponseBuilder builder = Response.status(Status.INTERNAL_SERVER_ERROR).header(JsonResponse.HEADER_X_RESTFUL_OBJECTS_REASON, ex.getMessage());
-        return withStackTraceAndMediaType(builder, ex).build();
-    }
+        private final String message;
+        private final List<String> stackTrace = Lists.newArrayList();
+        private ExceptionPojo causedBy;
 
-    private static ResponseBuilder withStackTraceAndMediaType(ResponseBuilder builder, final Exception ex) {
-        return builder.type(MediaType.TEXT_PLAIN_TYPE).entity(ExceptionUtils.getFullStackTrace(ex));
-    }
+        public ExceptionPojo(Throwable ex) {
+            this.message = ex.getMessage();
+            StackTraceElement[] stackTraceElements = ex.getStackTrace();
+            for (StackTraceElement stackTraceElement : stackTraceElements) {
+                this.stackTrace.add(format(stackTraceElement));
+            }
+            Throwable cause = ex.getCause();
+            if(cause != null && cause != ex) {
+                this.causedBy = new ExceptionPojo(cause);
+            }
+        }
+        
+        public String getMessage() {
+            return message;
+        }
+        
+        public List<String> getStackTrace() {
+            return stackTrace;
+        }
+        
+        public ExceptionPojo getCausedBy() {
+            return causedBy;
+        }
 
-    protected static Response responseOfInternalServerError(final String reason, final Object... args) {
-        return Response.status(Status.INTERNAL_SERVER_ERROR).header(JsonResponse.HEADER_X_RESTFUL_OBJECTS_REASON, String.format(reason, args)).build();
+    }
+    static String jsonFor(Exception ex) {
+        try {
+            return JsonMapper.instance().write(ExceptionPojo.create(ex));
+        } catch (Exception e) {
+            // fallback
+            return "{ \"exception\": \"" + ExceptionUtils.getFullStackTrace(ex) + "\" }";
+        }
     }
 
     // //////////////////////////////////////////////////////////////
