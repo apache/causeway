@@ -20,12 +20,14 @@ package org.apache.isis.viewer.json.viewer.resources.home;
 
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.CacheControl;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
+import org.apache.isis.viewer.json.applib.RestfulResponse;
 import org.apache.isis.viewer.json.applib.homepage.HomePageResource;
-import org.apache.isis.viewer.json.viewer.representations.LinkRepBuilder;
+import org.apache.isis.viewer.json.viewer.representations.LinkBuilder;
 import org.apache.isis.viewer.json.viewer.resources.ResourceAbstract;
 
 /**
@@ -41,14 +43,22 @@ public class HomePageResourceServerside extends ResourceAbstract implements Home
         init();
         
         JsonRepresentation representation = JsonRepresentation.newMap();
-        representation.put("representationType", LinkRepBuilder.newBuilder(getResourceContext(), "representationType", "representationTypes/homePage").build());
-        representation.put("self", LinkRepBuilder.newBuilder(getResourceContext(), "self", "").build());
-        representation.put("user", LinkRepBuilder.newBuilder(getResourceContext(), "user", "user").build());
-        representation.put("services", LinkRepBuilder.newBuilder(getResourceContext(), "services", "services").build());
         
-        return responseOfOk(asJson(representation));
-    }
+        representation.put("self", LinkBuilder.newBuilder(getResourceContext(), "self", "").build());
+        representation.put("user", LinkBuilder.newBuilder(getResourceContext(), "user", "user").build());
+        representation.put("services", LinkBuilder.newBuilder(getResourceContext(), "services", "services").build());
+        representation.put("capabilities", LinkBuilder.newBuilder(getResourceContext(), "capabilities", "capabilities").build());
 
+        representation.put("links", JsonRepresentation.newArray());
+        representation.put("extensions", JsonRepresentation.newMap());
+
+        String jsonEntity = asJson(representation);
+        return Response.ok()
+                .entity(jsonEntity)
+                .cacheControl(CacheControl.valueOf(""+86400))
+                .header(RestfulResponse.Header.X_REPRESENTATION_TYPE.getName(), "homePage")
+                .type(MediaType.APPLICATION_JSON_TYPE).build();
+    }
 
 
 }

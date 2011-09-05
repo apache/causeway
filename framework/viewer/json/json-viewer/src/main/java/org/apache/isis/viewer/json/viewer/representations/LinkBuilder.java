@@ -19,10 +19,10 @@ package org.apache.isis.viewer.json.viewer.representations;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
 
-public class LinkRepBuilder extends RepresentationBuilder<LinkRepBuilder> {
+public class LinkBuilder extends RepresentationBuilder<LinkBuilder> {
 
-    public static LinkRepBuilder newBuilder(ResourceContext resourceContext, String rel, String hrefFormat, Object... args) {
-        return new LinkRepBuilder(resourceContext, rel, String.format(hrefFormat, args));
+    public static LinkBuilder newBuilder(ResourceContext resourceContext, String rel, String hrefFormat, Object... args) {
+        return new LinkBuilder(resourceContext, rel, String.format(hrefFormat, args));
     }
 
 	private final String rel;
@@ -32,20 +32,20 @@ public class LinkRepBuilder extends RepresentationBuilder<LinkRepBuilder> {
     private String title;
     private JsonRepresentation arguments;
     
-    private LinkRepBuilder(ResourceContext resourceContext, String rel, String href) {
+    private LinkBuilder(ResourceContext resourceContext, String rel, String href) {
         super(resourceContext);
         this.rel = rel;
         this.href = href;
     }
-    public LinkRepBuilder withHttpMethod(HttpMethod method) {
+    public LinkBuilder withHttpMethod(HttpMethod method) {
         this.method = method;
         return this;
     }
-    public LinkRepBuilder withTitle(String title) {
+    public LinkBuilder withTitle(String title) {
         this.title = title;
         return this;
     }
-    public LinkRepBuilder withArguments(JsonRepresentation arguments) {
+    public LinkBuilder withArguments(JsonRepresentation arguments) {
         this.arguments = arguments;
         return this;
     }

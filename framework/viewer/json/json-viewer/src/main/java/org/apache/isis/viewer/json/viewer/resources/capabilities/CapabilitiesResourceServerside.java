@@ -26,7 +26,7 @@ import javax.ws.rs.core.Response;
 
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.applib.capabilities.CapabilitiesResource;
-import org.apache.isis.viewer.json.viewer.representations.LinkRepBuilder;
+import org.apache.isis.viewer.json.viewer.representations.LinkBuilder;
 import org.apache.isis.viewer.json.viewer.resources.ResourceAbstract;
 
 /**
@@ -43,7 +43,24 @@ public class CapabilitiesResourceServerside extends ResourceAbstract implements 
         init();
 
         JsonRepresentation representation = JsonRepresentation.newMap();
-        representation.put("self", LinkRepBuilder.newBuilder(getResourceContext(), "self", "capabilities/").build());
+        representation.put("self", LinkBuilder.newBuilder(getResourceContext(), "self", "capabilities/").build());
+        
+        JsonRepresentation capabilities = JsonRepresentation.newMap();
+        representation.put("capabilities", capabilities);
+
+        capabilities.put("concurrencyChecking", "no");
+        capabilities.put("transientObjects", "no");
+        capabilities.put("deleteObjects", "no");
+        capabilities.put("simpleArguments", "no");
+        capabilities.put("partialArguments", "no");
+        capabilities.put("followLinks", "no");
+        capabilities.put("validateOnly", "no");
+        capabilities.put("pagination", "no");
+        capabilities.put("sorting", "no");
+        capabilities.put("domainModel", "rich");
+
+        representation.put("links", JsonRepresentation.newArray());
+        representation.put("extensions", JsonRepresentation.newMap());
         
         return responseOfOk(asJson(representation));
     }

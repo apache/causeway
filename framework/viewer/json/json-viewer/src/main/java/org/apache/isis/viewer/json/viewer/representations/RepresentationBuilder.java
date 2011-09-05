@@ -35,7 +35,7 @@ public abstract class RepresentationBuilder<T extends RepresentationBuilder<T>> 
     }
 
     public T withSelf(String href) {
-        representation.put("self", LinkRepBuilder.newBuilder(resourceContext, "self", href).build());
+        representation.put("self", LinkBuilder.newBuilder(resourceContext, "self", href).build());
         return asT(this);
     }
 

@@ -6,7 +6,7 @@ import javax.ws.rs.core.Response;
 
 import org.apache.isis.viewer.json.applib.HttpStatusCode;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
-import org.apache.isis.viewer.json.applib.LinksToSelf;
+import org.apache.isis.viewer.json.applib.JsonRepresentation.LinksToSelf;
 import org.apache.isis.viewer.json.applib.RestfulClient;
 import org.apache.isis.viewer.json.applib.RestfulResponse;
 import org.apache.isis.viewer.json.applib.blocks.Link;
@@ -121,6 +121,10 @@ public class RepresentationMatchers {
 
     public static abstract class AbstractMatcherBuilder<T> {
         protected RestfulClient client;
+
+        public AbstractMatcherBuilder() {
+            this(null);
+        }
 
         public AbstractMatcherBuilder(RestfulClient client) {
             this.client = client;
@@ -242,6 +246,54 @@ public class RepresentationMatchers {
                 }
             };
         }
+    }
+
+    public static EntryMatcherBuilder entry(String key) {
+        return new EntryMatcherBuilder(key); 
+    }
+
+    public static class EntryMatcherBuilder extends AbstractMatcherBuilder<JsonRepresentation>  {
+
+        private final String key;
+        private String value;
+        private EntryMatcherBuilder(String key) {
+            this.key = key;
+        }
+
+        public EntryMatcherBuilder value(String value) {
+            this.value = value;
+            return this;
+        }
+
+        @Override
+        public Matcher<JsonRepresentation> build() {
+            return new TypeSafeMatcher<JsonRepresentation>() {
+
+                @Override
+                public void describeTo(Description description) {
+                    description.appendText("map with entry with key: " + key);
+                    if(value != null) {
+                        description.appendText(", and value: " + value);
+                    }
+                }
+
+                @Override
+                public boolean matchesSafely(JsonRepresentation item) {
+                    if(!item.isMap()) {
+                        return false;
+                    }
+                    String val = item.getString(key);
+                    if(val == null) {
+                        return false;
+                    }
+                    if(value != null && !value.equals(val)) {
+                        return false;
+                    }
+                    return true;
+                }
+            };
+        }
+
     }
 
 }

@@ -22,6 +22,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -48,10 +49,12 @@ import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.viewer.json.applib.HttpStatusCode;
 import org.apache.isis.viewer.json.applib.domainobjects.DomainObjectResource;
+import org.apache.isis.viewer.json.applib.util.JsonMapper;
 import org.apache.isis.viewer.json.viewer.resources.ResourceAbstract;
 import org.apache.isis.viewer.json.viewer.util.UrlDecoderUtils;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
+import org.jboss.resteasy.annotations.ClientResponseType;
 
 import com.google.common.base.Charsets;
 import com.google.common.collect.Lists;
@@ -60,7 +63,11 @@ import com.google.common.io.ByteStreams;
 @Path("/objects")
 public class DomainObjectResourceServerside extends ResourceAbstract implements
         DomainObjectResource {
-
+    
+    ////////////////////////////////////////////////////////////
+    // domain object
+    ////////////////////////////////////////////////////////////
+    
     @GET
     @Path("/{oid}")
     @Produces({ MediaType.APPLICATION_JSON })
@@ -71,6 +78,22 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements
                 .newBuilder(getResourceContext(), objectAdapter);
         return responseOfOk(jsonRepresentionFrom(builder));
     }
+
+    @PUT
+    @Path("/{oid}")
+    @Consumes({ MediaType.APPLICATION_JSON })
+    @Produces({ MediaType.APPLICATION_JSON })
+    public Response object(
+        @PathParam("oid") final String oidStr, 
+        final InputStream arguments) {
+        
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    ////////////////////////////////////////////////////////////
+    // domain object property
+    ////////////////////////////////////////////////////////////
 
     @GET
     @Path("/{oid}/properties/{propertyId}")
@@ -87,111 +110,6 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements
                 getResourceContext(), objectAdapter, property);
         return responseOfOk(jsonRepresentionFrom(builder));
     }
-
-    @GET
-    @Path("/{oid}/collections/{collectionId}")
-    @Produces({ MediaType.APPLICATION_JSON })
-    public Response accessCollection(
-        @PathParam("oid") final String oidStr,
-        @PathParam("collectionId") final String collectionId) {
-
-        final ObjectAdapter objectAdapter = getObjectAdapter(oidStr);
-        final OneToManyAssociation collection = getCollectionThatIsVisibleAndUsable(
-                objectAdapter, collectionId, Intent.ACCESS);
-
-        final CollectionRepBuilder builder = CollectionRepBuilder.newBuilder(
-                getResourceContext(), objectAdapter, collection);
-        return responseOfOk(jsonRepresentionFrom(builder));
-    }
-
-    @GET
-    @Path("/{oid}/actions/{actionId}")
-    @Produces({ MediaType.APPLICATION_JSON })
-    public Response actionPrompt(
-        @PathParam("oid") final String oidStr,
-        @PathParam("actionId") final String actionId) {
-
-        final ObjectAdapter objectAdapter = getObjectAdapter(oidStr);
-        final ObjectAction action = getObjectActionThatIsVisibleAndUsable(
-                objectAdapter, actionId, Intent.ACCESS);
-
-        ActionRepBuilder builder = ActionRepBuilder.newBuilder(
-                getResourceContext(), objectAdapter, action);
-        return responseOfOk(jsonRepresentionFrom(builder));
-    }
-
-    @GET
-    @Path("/{oid}/actions/{actionId}/invoke")
-    @Produces({ MediaType.APPLICATION_JSON })
-    public Response invokeActionIdempotent(
-        @PathParam("oid") final String oidStr,
-        @PathParam("actionId") final String actionId,
-        @QueryParam("arg") final List<String> arguments) {
-
-        final ObjectAdapter objectAdapter = getObjectAdapter(oidStr);
-        final ObjectAction action = getObjectActionThatIsVisibleAndUsable(
-                objectAdapter, actionId, Intent.ACCESS);
-
-        if (!isIdempotent(action)) {
-            return responseOf(HttpStatusCode.METHOD_NOT_ALLOWED, 
-                    "Method not allowed; action '%s' is not idempotent", action.getId());
-        }
-        int numParameters = action.getParameterCount();
-        int numArguments = arguments.size();
-        if (numArguments != numParameters) {
-            return responseOf(HttpStatusCode.BAD_REQUEST, 
-                    "Action '%s' has %d parameters but received %d  arguments", action.getId(), numParameters, numArguments);
-        }
-
-        List<ObjectAdapter> parameters;
-        try {
-            parameters = argumentAdaptersFor(action, arguments);
-        } catch (IOException e) {
-            return responseOf(HttpStatusCode.BAD_REQUEST, 
-                    "Action '%s' has body that cannot be parsed as JSON", e, action.getId());
-        }
-        return invokeActionUsingAdapters(action, objectAdapter, parameters);
-    }
-
-    private boolean isIdempotent(final ObjectAction action) {
-        // TODO: determine whether action is idempotent
-        return true;
-    }
-
-    private List<ObjectAdapter> argumentAdaptersFor(ObjectAction action,
-        List<String> arguments) throws JsonParseException, JsonMappingException, IOException {
-        List<ObjectActionParameter> parameters = action.getParameters();
-        List<ObjectAdapter> argumentAdapters = Lists.newArrayList();
-        for (int i = 0; i < parameters.size(); i++) {
-            ObjectActionParameter parameter = parameters.get(i);
-            ObjectSpecification paramSpc = parameter.getSpecification();
-            String argument = arguments.get(i);
-            argumentAdapters.add(objectAdapterFor(paramSpc, argument));
-        }
-
-        return argumentAdapters;
-    }
-
-    /**
-     * Similar to {@link #objectAdapterFor(ObjectSpecification, Object)},
-     * however the object being interpreted is a String holding URL encoded JSON
-     * (rather than having already been parsed into a List/Map representation).
-     */
-    private ObjectAdapter objectAdapterFor(ObjectSpecification spec,
-        String urlEncodedJson) throws JsonParseException, JsonMappingException, IOException  {
-        final String json = UrlDecoderUtils.urlDecode(urlEncodedJson);
-        if (spec.containsFacet(EncodableFacet.class)) {
-            EncodableFacet encodableFacet = spec.getFacet(EncodableFacet.class);
-            return encodableFacet.fromEncodedString(json);
-        } else {
-            Map<String, Object> representation = jsonMapper.readAsMap(json);
-            return objectAdapterFor(spec, representation);
-        }
-    }
-
-    // /////////////////////////////////////////////////////////////////
-    // put
-    // /////////////////////////////////////////////////////////////////
 
     @PUT
     @Path("/{oid}/properties/{propertyId}")
@@ -216,6 +134,48 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements
         property.set(objectAdapter, argAdapter);
 
         return responseOfNoContent();
+    }
+
+    @DELETE
+    @Path("/{oid}/properties/{propertyId}")
+    @Produces({ MediaType.APPLICATION_JSON })
+    public Response clearProperty(
+        @PathParam("oid") final String oidStr,
+        @PathParam("propertyId") final String propertyId) {
+
+        final ObjectAdapter objectAdapter = getObjectAdapter(oidStr);
+        final OneToOneAssociation property = getPropertyThatIsVisibleAndUsable(
+                objectAdapter, propertyId, Intent.MUTATE);
+
+        Consent consent = property.isAssociationValid(objectAdapter, null);
+        if (consent.isVetoed()) {
+            return responseOfUnauthorized(consent);
+        }
+
+        property.set(objectAdapter, null);
+
+        return responseOfNoContent();
+    }
+
+
+    ////////////////////////////////////////////////////////////
+    // domain object collection
+    ////////////////////////////////////////////////////////////
+
+    @GET
+    @Path("/{oid}/collections/{collectionId}")
+    @Produces({ MediaType.APPLICATION_JSON })
+    public Response accessCollection(
+        @PathParam("oid") final String oidStr,
+        @PathParam("collectionId") final String collectionId) {
+
+        final ObjectAdapter objectAdapter = getObjectAdapter(oidStr);
+        final OneToManyAssociation collection = getCollectionThatIsVisibleAndUsable(
+                objectAdapter, collectionId, Intent.ACCESS);
+
+        final CollectionRepBuilder builder = CollectionRepBuilder.newBuilder(
+                getResourceContext(), objectAdapter, collection);
+        return responseOfOk(jsonRepresentionFrom(builder));
     }
 
     @PUT
@@ -248,60 +208,6 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements
         return responseOfNoContent();
     }
 
-    // /////////////////////////////////////////////////////////////////
-    // delete
-    // /////////////////////////////////////////////////////////////////
-
-    @DELETE
-    @Path("/{oid}/properties/{propertyId}")
-    @Produces({ MediaType.APPLICATION_JSON })
-    public Response clearProperty(
-        @PathParam("oid") final String oidStr,
-        @PathParam("propertyId") final String propertyId) {
-
-        final ObjectAdapter objectAdapter = getObjectAdapter(oidStr);
-        final OneToOneAssociation property = getPropertyThatIsVisibleAndUsable(
-                objectAdapter, propertyId, Intent.MUTATE);
-
-        Consent consent = property.isAssociationValid(objectAdapter, null);
-        if (consent.isVetoed()) {
-            return responseOfUnauthorized(consent);
-        }
-
-        property.set(objectAdapter, null);
-
-        return responseOfNoContent();
-    }
-
-    @DELETE
-    @Path("/{oid}/collections/{collectionId}")
-    @Produces({ MediaType.APPLICATION_JSON })
-    public Response removeFromCollection(
-        @PathParam("oid") final String oidStr,
-        @PathParam("collectionId") final String collectionId,
-        final InputStream body) {
-
-        final ObjectAdapter objectAdapter = getObjectAdapter(oidStr);
-        final OneToManyAssociation collection = getCollectionThatIsVisibleAndUsable(
-                objectAdapter, collectionId, Intent.MUTATE);
-
-        ObjectSpecification collectionSpec = collection.getSpecification();
-        ObjectAdapter argAdapter = parseBody(collectionSpec, body);
-
-        Consent consent = collection.isValidToRemove(objectAdapter, argAdapter);
-        if (consent.isVetoed()) {
-            return responseOfUnauthorized(consent);
-        }
-
-        collection.removeElement(objectAdapter, argAdapter);
-        
-        return responseOfNoContent();
-    }
-
-    // /////////////////////////////////////////////////////////////////
-    // post
-    // /////////////////////////////////////////////////////////////////
-
     @POST
     @Path("/{oid}/collections/{collectionId}")
     @Produces({ MediaType.APPLICATION_JSON })
@@ -332,6 +238,116 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements
         return responseOfNoContent();
     }
 
+    @DELETE
+    @Path("/{oid}/collections/{collectionId}")
+    @Produces({ MediaType.APPLICATION_JSON })
+    public Response removeFromCollection(
+        @PathParam("oid") final String oidStr,
+        @PathParam("collectionId") final String collectionId,
+        final InputStream body) {
+
+        final ObjectAdapter objectAdapter = getObjectAdapter(oidStr);
+        final OneToManyAssociation collection = getCollectionThatIsVisibleAndUsable(
+                objectAdapter, collectionId, Intent.MUTATE);
+
+        ObjectSpecification collectionSpec = collection.getSpecification();
+        ObjectAdapter argAdapter = parseBody(collectionSpec, body);
+
+        Consent consent = collection.isValidToRemove(objectAdapter, argAdapter);
+        if (consent.isVetoed()) {
+            return responseOfUnauthorized(consent);
+        }
+
+        collection.removeElement(objectAdapter, argAdapter);
+        
+        return responseOfNoContent();
+    }
+
+
+    ////////////////////////////////////////////////////////////
+    // domain object action
+    ////////////////////////////////////////////////////////////
+
+    @GET
+    @Path("/{oid}/actions/{actionId}")
+    @Produces({ MediaType.APPLICATION_JSON })
+    public Response actionPrompt(
+        @PathParam("oid") final String oidStr,
+        @PathParam("actionId") final String actionId) {
+
+        final ObjectAdapter objectAdapter = getObjectAdapter(oidStr);
+        final ObjectAction action = getObjectActionThatIsVisibleAndUsable(
+                objectAdapter, actionId, Intent.ACCESS);
+
+        ActionRepBuilder builder = ActionRepBuilder.newBuilder(
+                getResourceContext(), objectAdapter, action);
+        return responseOfOk(jsonRepresentionFrom(builder));
+    }
+
+    
+    ////////////////////////////////////////////////////////////
+    // domain object action invoke
+    ////////////////////////////////////////////////////////////
+
+    @GET
+    @Path("/{oid}/actions/{actionId}/invoke")
+    @Produces({ MediaType.APPLICATION_JSON })
+    public Response invokeActionQueryOnly(
+        @PathParam("oid") final String oidStr,
+        @PathParam("actionId") final String actionId,
+        @QueryParam("args") final String arguments) {
+
+        final ObjectAdapter objectAdapter = getObjectAdapter(oidStr);
+        final ObjectAction action = getObjectActionThatIsVisibleAndUsable(
+                objectAdapter, actionId, Intent.ACCESS);
+
+        if (!isQueryOnly(action)) {
+            return responseOf(HttpStatusCode.METHOD_NOT_ALLOWED, 
+                    "Method not allowed; action '%s' is not query only", action.getId());
+        }
+
+        List<ObjectAdapter> argumentAdapters;
+        try {
+            argumentAdapters = argumentAdaptersFor(action, arguments);
+        } catch (IOException e) {
+            return responseOf(HttpStatusCode.BAD_REQUEST, 
+                    "Action '%s' has body that cannot be parsed as JSON", e, action.getId());
+        }
+
+        int numParameters = action.getParameterCount();
+        int argSize = argumentAdapters.size();
+        if(argSize != numParameters) {
+            return responseOf(HttpStatusCode.BAD_REQUEST, 
+                    "Action '%s' has %d parameters but received %d arguments", numParameters, argSize, action.getId());
+        }
+         
+        return invokeActionUsingAdapters(action, objectAdapter, argumentAdapters);
+    }
+
+
+    @PUT
+    @Path("/{oid}/actions/{actionId}/invoke")
+    @Produces({ MediaType.APPLICATION_JSON })
+    public Response invokeActionIdempotent(
+        @PathParam("oid") final String oidStr,
+        @PathParam("actionId") final String actionId,
+        final InputStream arguments) {
+
+        final ObjectAdapter objectAdapter = getObjectAdapter(oidStr);
+        final ObjectAction action = getObjectActionThatIsVisibleAndUsable(
+                objectAdapter, actionId, Intent.MUTATE);
+
+        if (!isIdempotent(action)) {
+            return responseOf(HttpStatusCode.METHOD_NOT_ALLOWED, 
+                    "Method not allowed; action '%s' is not idempotent", action.getId());
+        }
+
+        List<ObjectAdapter> argumentAdapters = parseBody(action, arguments);
+        return invokeActionUsingAdapters(action, objectAdapter,
+                argumentAdapters);
+    }
+
+
     @POST
     @Path("/{oid}/actions/{actionId}/invoke")
     @Produces({ MediaType.APPLICATION_JSON })
@@ -348,6 +364,96 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements
         return invokeActionUsingAdapters(action, objectAdapter,
                 argumentAdapters);
     }
+
+
+    private Response invokeActionUsingAdapters(final ObjectAction action,
+        final ObjectAdapter objectAdapter,
+        final List<ObjectAdapter> argAdapters) {
+
+        List<ObjectActionParameter> parameters = action.getParameters();
+        for (int i = 0; i < parameters.size(); i++) {
+            ObjectActionParameter parameter = parameters.get(i);
+            ObjectAdapter paramAdapter = argAdapters.get(i);
+            if (paramAdapter.getSpecification().containsFacet(ValueFacet.class)) {
+                Object arg = paramAdapter.getObject();
+                String reasonNotValid = parameter.isValid(objectAdapter, arg);
+                if (reasonNotValid != null) {
+                    return responseOf(HttpStatusCode.NOT_ACCEPTABLE, reasonNotValid);
+                }
+            }
+        }
+        ObjectAdapter[] argArray = argAdapters.toArray(new ObjectAdapter[0]);
+        Consent consent = action.isProposedArgumentSetValid(objectAdapter,
+                argArray);
+        if (consent.isVetoed()) {
+            return responseOf(HttpStatusCode.NOT_ACCEPTABLE, consent.getReason());
+        }
+
+        final ObjectAdapter returnedAdapter = action.execute(objectAdapter,
+                argArray);
+        if (returnedAdapter == null) {
+            return responseOfNoContent();
+        }
+        final CollectionFacet facet = returnedAdapter.getSpecification()
+                .getFacet(CollectionFacet.class);
+        if (facet != null) {
+            final Collection<ObjectAdapter> collectionAdapters = facet
+                    .collection(returnedAdapter);
+            return responseOfOk(jsonRepresentationOf(collectionAdapters));
+        } else {
+            return responseOfOk(jsonRepresentationOf(returnedAdapter));
+        }
+    }
+
+
+    ////////////////////////////////////////////////////////////
+    // helpers
+    ////////////////////////////////////////////////////////////
+
+    private boolean isQueryOnly(final ObjectAction action) {
+        // TODO: determine whether action is query only
+        return false;
+    }
+
+    private boolean isIdempotent(final ObjectAction action) {
+        // TODO: determine whether action is idempotent
+        return false;
+    }
+
+    private List<ObjectAdapter> argumentAdaptersFor(ObjectAction action,
+        String arguments) throws JsonParseException, JsonMappingException, IOException {
+        
+//        List<ObjectActionParameter> parameters = action.getParameters();
+//        List<ObjectAdapter> argumentAdapters = Lists.newArrayList();
+//        for (int i = 0; i < parameters.size(); i++) {
+//            ObjectActionParameter parameter = parameters.get(i);
+//            ObjectSpecification paramSpc = parameter.getSpecification();
+//            String argument = arguments.get(i);
+//            argumentAdapters.add(objectAdapterFor(paramSpc, argument));
+//        }
+//
+//        return argumentAdapters;
+        
+        return null;
+    }
+
+    /**
+     * Similar to {@link #objectAdapterFor(ObjectSpecification, Object)},
+     * however the object being interpreted is a String holding URL encoded JSON
+     * (rather than having already been parsed into a List/Map representation).
+     */
+    private ObjectAdapter objectAdapterFor(ObjectSpecification spec,
+        String urlEncodedJson) throws JsonParseException, JsonMappingException, IOException  {
+        final String json = UrlDecoderUtils.urlDecode(urlEncodedJson);
+        if (spec.containsFacet(EncodableFacet.class)) {
+            EncodableFacet encodableFacet = spec.getFacet(EncodableFacet.class);
+            return encodableFacet.fromEncodedString(json);
+        } else {
+            Map<String, Object> representation = JsonMapper.instance().readAsMap(json);
+            return objectAdapterFor(spec, representation);
+        }
+    }
+
 
     private List<ObjectAdapter> parseBody(final ObjectAction action,
         final InputStream body) {
@@ -402,45 +508,6 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements
     // ///////////////////////////////////////////////////////////////////
     // helpers
     // ///////////////////////////////////////////////////////////////////
-
-    private Response invokeActionUsingAdapters(final ObjectAction action,
-        final ObjectAdapter objectAdapter,
-        final List<ObjectAdapter> argAdapters) {
-
-        List<ObjectActionParameter> parameters = action.getParameters();
-        for (int i = 0; i < parameters.size(); i++) {
-            ObjectActionParameter parameter = parameters.get(i);
-            ObjectAdapter paramAdapter = argAdapters.get(i);
-            if (paramAdapter.getSpecification().containsFacet(ValueFacet.class)) {
-                Object arg = paramAdapter.getObject();
-                String reasonNotValid = parameter.isValid(objectAdapter, arg);
-                if (reasonNotValid != null) {
-                    return responseOf(HttpStatusCode.NOT_ACCEPTABLE, reasonNotValid);
-                }
-            }
-        }
-        ObjectAdapter[] argArray = argAdapters.toArray(new ObjectAdapter[0]);
-        Consent consent = action.isProposedArgumentSetValid(objectAdapter,
-                argArray);
-        if (consent.isVetoed()) {
-            return responseOf(HttpStatusCode.NOT_ACCEPTABLE, consent.getReason());
-        }
-
-        final ObjectAdapter returnedAdapter = action.execute(objectAdapter,
-                argArray);
-        if (returnedAdapter == null) {
-            return responseOfNoContent();
-        }
-        final CollectionFacet facet = returnedAdapter.getSpecification()
-                .getFacet(CollectionFacet.class);
-        if (facet != null) {
-            final Collection<ObjectAdapter> collectionAdapters = facet
-                    .collection(returnedAdapter);
-            return responseOfOk(jsonRepresentationOf(collectionAdapters));
-        } else {
-            return responseOfOk(jsonRepresentationOf(returnedAdapter));
-        }
-    }
 
     private ObjectAdapter parseBody(ObjectSpecification objectSpec,
         final InputStream body) {
@@ -554,5 +621,6 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements
                         "%s '%s' either does not exist or is not visible", 
                         memberTypeStr, memberId));
     }
+
 
 }

@@ -8,7 +8,9 @@ import java.io.StringReader;
 import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import net.sf.json.JSON;
 import net.sf.json.JSONNull;
@@ -31,7 +33,11 @@ import org.jdom.input.SAXBuilder;
 import org.jdom.output.XMLOutputter;
 import org.jdom.xpath.XPath;
 
+import com.google.common.base.Function;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Iterators;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 
 
 /**
@@ -39,6 +45,41 @@ import com.google.common.collect.Lists;
  * methods, including searching using xpath (requires optional XOM dependency).
  */
 public class JsonRepresentation {
+
+    public interface LinksToSelf {
+        public Link getSelf();
+    }
+
+    public interface HasLinks {
+        public JsonRepresentation getLinks();
+    }
+
+    public interface HasExtensions {
+        public JsonRepresentation getExtensions();
+    }
+
+    private static Map<Class<?>, Function<JsonNode, ?>> JSON_NODE_TRANSFORMERS = Maps.newHashMap();
+    static {
+        JSON_NODE_TRANSFORMERS.put(String.class, new Function<JsonNode, String>() {
+            @Override
+            public String apply(JsonNode input) {
+                if(!input.isTextual()) {
+                    throw new IllegalStateException("found node that is not a string " + input.toString());
+                }
+                return input.getTextValue();
+            }});
+        JSON_NODE_TRANSFORMERS.put(JsonNode.class, new Function<JsonNode, JsonNode>() {
+            @Override
+            public JsonNode apply(JsonNode input) {
+                return input;
+            }});
+        JSON_NODE_TRANSFORMERS.put(JsonRepresentation.class, new Function<JsonNode, JsonRepresentation>() {
+            @Override
+            public JsonRepresentation apply(JsonNode input) {
+                return new JsonRepresentation(input);
+            }});
+    }
+    
 
     public static JsonRepresentation newMap() {
         return new JsonRepresentation(new ObjectNode(JsonNodeFactory.instance));
@@ -104,34 +145,6 @@ public class JsonRepresentation {
         return !isArray() && !isValue();
     }
 
-
-    /////////////////////////////////////////////////////////////////////////
-    // elementAt, setElementAt
-    /////////////////////////////////////////////////////////////////////////
-
-    public JsonRepresentation elementAt(int i) {
-        ensureIsAnArrayAtLeastAsLargeAs(i);
-        return new JsonRepresentation(jsonNode.get(i));
-    }
-
-    public void setElementAt(int i, JsonRepresentation objectRepr) {
-        ensureIsAnArrayAtLeastAsLargeAs(i);
-        if(objectRepr.isArray()) {
-            throw new IllegalArgumentException("Representation being set cannot be an array");
-        }
-        // can safely downcast because *this* representation is an array
-        ArrayNode arrayNode = (ArrayNode)jsonNode;
-        arrayNode.set(i, objectRepr.getJsonNode());
-    }
-
-    private void ensureIsAnArrayAtLeastAsLargeAs(int i) {
-        if (!jsonNode.isArray()) {
-            throw new IllegalStateException("Is not an array");
-        }
-        if(i >= arraySize()) {
-            throw new IndexOutOfBoundsException("array has " + arraySize() + " elements"); 
-        }
-    }
 
 
     /////////////////////////////////////////////////////////////////////////
@@ -282,11 +295,19 @@ public class JsonRepresentation {
         if (representsNull(node)) {
             return null;
         }
-        if (node.isValueNode()) {
-            throw new IllegalArgumentException("'" + path + "' (a value) is not an array");
-        }
         if (!node.isArray()) {
-            throw new IllegalArgumentException("'" + path + "' (a map) is not an array");
+            throw new IllegalArgumentException("'" + path + "' is not an array");
+        }
+        return new JsonRepresentation(node);
+    }
+
+    public JsonRepresentation getMap(String path) {
+        JsonNode node = getNode(path);
+        if (representsNull(node)) {
+            return null;
+        }
+        if (node.isArray() || node.isValueNode()) {
+            throw new IllegalArgumentException("'" + path + "' is not a map");
         }
         return new JsonRepresentation(node);
     }
@@ -510,6 +531,56 @@ public class JsonRepresentation {
         nodeAsArray().add(value);
     }
 
+    public <T> Iterable<T> arrayIterable(final Class<T> requiredType) {
+        return new Iterable<T>() {
+            @Override
+            public Iterator<T> iterator() {
+                return arrayIterator(requiredType);
+            }
+        };
+    }
+
+    public <T> Iterator<T> arrayIterator(final Class<T> requiredType) {
+        ensureIsAnArrayAtLeastAsLargeAs(0);
+        Function<JsonNode, ?> transformer = JSON_NODE_TRANSFORMERS.get(requiredType);
+        if(transformer == null) {
+            throw new IllegalArgumentException("Conversions from JsonNode to " + requiredType + " are not supported");
+        }
+        ArrayNode arrayNode = (ArrayNode)jsonNode;
+        Iterator<JsonNode> iterator = arrayNode.iterator();
+        Function<JsonNode, T> typedTransformer = asT(transformer); // necessary to do in two steps
+        return Iterators.transform(iterator, typedTransformer);
+    }
+
+    @SuppressWarnings("unchecked")
+    private static <T> Function<JsonNode, T> asT(Function<JsonNode, ?> transformer) {
+        return (Function<JsonNode, T>) transformer;
+    }
+
+    public JsonRepresentation elementAt(int i) {
+        ensureIsAnArrayAtLeastAsLargeAs(i);
+        return new JsonRepresentation(jsonNode.get(i));
+    }
+
+    public void setElementAt(int i, JsonRepresentation objectRepr) {
+        ensureIsAnArrayAtLeastAsLargeAs(i);
+        if(objectRepr.isArray()) {
+            throw new IllegalArgumentException("Representation being set cannot be an array");
+        }
+        // can safely downcast because *this* representation is an array
+        ArrayNode arrayNode = (ArrayNode)jsonNode;
+        arrayNode.set(i, objectRepr.getJsonNode());
+    }
+
+    private void ensureIsAnArrayAtLeastAsLargeAs(int i) {
+        if (!jsonNode.isArray()) {
+            throw new IllegalStateException("Is not an array");
+        }
+        if(i >= arraySize()) {
+            throw new IndexOutOfBoundsException("array has " + arraySize() + " elements"); 
+        }
+    }
+
     /////////////////////////////////////////////////////////////////////////
     // mutable (map)
     /////////////////////////////////////////////////////////////////////////
@@ -646,6 +717,7 @@ public class JsonRepresentation {
     public String toString() {
         return jsonNode.toString();
     }
+
 
 
 

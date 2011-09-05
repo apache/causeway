@@ -66,7 +66,7 @@ public class JsonRepresentationTest_getArray {
             jsonRepresentation.getArray("aString");
             fail();
         } catch (IllegalArgumentException e) {
-            assertThat(e.getMessage(), is("'aString' (a value) is not an array"));
+            assertThat(e.getMessage(), is("'aString' is not an array"));
         }
     }
 
@@ -76,7 +76,7 @@ public class JsonRepresentationTest_getArray {
             jsonRepresentation.getArray("aSubMap");
             fail();
         } catch (IllegalArgumentException e) {
-            assertThat(e.getMessage(), is("'aSubMap' (a map) is not an array"));
+            assertThat(e.getMessage(), is("'aSubMap' is not an array"));
         }
     }
     

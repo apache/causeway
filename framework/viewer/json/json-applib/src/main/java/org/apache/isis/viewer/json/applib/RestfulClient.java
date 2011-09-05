@@ -24,10 +24,12 @@ import javax.ws.rs.core.Response;
 
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.isis.viewer.json.applib.blocks.Link;
+import org.apache.isis.viewer.json.applib.capabilities.CapabilitiesResource;
 import org.apache.isis.viewer.json.applib.domainobjects.DomainObjectResource;
+import org.apache.isis.viewer.json.applib.domainobjects.DomainServiceResource;
 import org.apache.isis.viewer.json.applib.domainobjects.DomainServicesResource;
+import org.apache.isis.viewer.json.applib.domaintypes.DomainTypeResource;
 import org.apache.isis.viewer.json.applib.homepage.HomePageResource;
-import org.apache.isis.viewer.json.applib.types.TypeResource;
 import org.apache.isis.viewer.json.applib.user.UserResource;
 import org.jboss.resteasy.client.ClientExecutor;
 import org.jboss.resteasy.client.ClientRequestFactory;
@@ -37,10 +39,12 @@ import org.jboss.resteasy.client.core.executors.ApacheHttpClientExecutor;
 public class RestfulClient {
 
     private final HomePageResource homePageResource;
-    private final DomainServicesResource servicesResource;
-    private final DomainObjectResource domainObjectResource;
     private final UserResource userResource;
-    private final TypeResource specsResource;
+    private final CapabilitiesResource capabilitiesResource;
+    private final DomainServicesResource domainServicesResource;
+    private final DomainObjectResource domainObjectResource;
+    private final DomainServiceResource domainServiceResource;
+    private final DomainTypeResource domainTypeResource;
 
     private final ClientExecutor executor;
     private final ClientRequestFactory clientRequestFactory;
@@ -55,35 +59,50 @@ public class RestfulClient {
         
         this.homePageResource = clientRequestFactory.createProxy(HomePageResource.class);
         this.userResource = clientRequestFactory.createProxy(UserResource.class);
-        this.specsResource = clientRequestFactory.createProxy(TypeResource.class);
-        this.servicesResource = clientRequestFactory.createProxy(DomainServicesResource.class);
+        this.domainTypeResource = clientRequestFactory.createProxy(DomainTypeResource.class);
+        this.domainServicesResource = clientRequestFactory.createProxy(DomainServicesResource.class);
+        this.domainServiceResource = clientRequestFactory.createProxy(DomainServiceResource.class);
         this.domainObjectResource = clientRequestFactory.createProxy(DomainObjectResource.class);
+        this.capabilitiesResource = clientRequestFactory.createProxy(CapabilitiesResource.class);
     }
 
+    
+    /////////////////////////////////////////////////////////////////
+    // resources
+    /////////////////////////////////////////////////////////////////
 
     public HomePageResource getHomePageResource() {
         return homePageResource;
     }
 
     public DomainServicesResource getDomainServicesResource() {
-        return servicesResource;
+        return domainServicesResource;
     }
 
     public UserResource getUserResource() {
         return userResource;
     }
 
-    public TypeResource getSpecsResource() {
-        return specsResource;
+    public CapabilitiesResource getCapabilitiesResource() {
+        return capabilitiesResource;
+    }
+
+    public DomainTypeResource getDomainTypeResource() {
+        return domainTypeResource;
     }
 
     public DomainObjectResource getDomainObjectResource() {
         return domainObjectResource;
     }
     
-    public ClientExecutor getExecutor() {
-        return executor;
+    public DomainServiceResource getDomainServiceResource() {
+        return domainServiceResource;
     }
+
+    
+    /////////////////////////////////////////////////////////////////
+    // resource walking support
+    /////////////////////////////////////////////////////////////////
 
     public RepresentationWalker createWalker(Response response) {
         return new RepresentationWalker(this, response);
@@ -101,5 +120,6 @@ public class RestfulClient {
         restEasy.setReturnType(String.class);
         return response;
     }
+
 
 }
