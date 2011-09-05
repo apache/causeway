@@ -18,7 +18,6 @@
  */
 package org.apache.isis.viewer.json.applib;
 
-import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 

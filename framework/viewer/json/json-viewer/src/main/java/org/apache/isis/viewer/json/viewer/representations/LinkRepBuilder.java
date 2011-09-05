@@ -21,8 +21,8 @@ import org.apache.isis.viewer.json.viewer.ResourceContext;
 
 public class LinkRepBuilder extends RepresentationBuilder<LinkRepBuilder> {
 
-    public static LinkRepBuilder newBuilder(ResourceContext resourceContext, String rel, String href) {
-        return new LinkRepBuilder(resourceContext, rel, href);
+    public static LinkRepBuilder newBuilder(ResourceContext resourceContext, String rel, String hrefFormat, Object... args) {
+        return new LinkRepBuilder(resourceContext, rel, String.format(hrefFormat, args));
     }
 
 	private final String rel;
@@ -32,7 +32,7 @@ public class LinkRepBuilder extends RepresentationBuilder<LinkRepBuilder> {
     private String title;
     private JsonRepresentation arguments;
     
-    public LinkRepBuilder(ResourceContext resourceContext, String rel, String href) {
+    private LinkRepBuilder(ResourceContext resourceContext, String rel, String href) {
         super(resourceContext);
         this.rel = rel;
         this.href = href;

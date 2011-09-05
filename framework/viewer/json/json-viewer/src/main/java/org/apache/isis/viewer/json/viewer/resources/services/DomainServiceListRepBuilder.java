@@ -31,13 +31,12 @@ class DomainServiceListRepBuilder extends DomainObjectListRepBuilder {
 
     private DomainServiceListRepBuilder(ResourceContext resourceContext) {
         super(resourceContext);
-        withRepresentationTypeListOf("object");
     }
 
     @Override
     protected JsonRepresentation buildLinkTo(ObjectAdapter serviceAdapter) {
         String serviceId = ServiceUtil.id(serviceAdapter.getObject());
-        return LinkRepBuilder.newBuilder(resourceContext, "service", "services/" + serviceId).build();
+        return LinkRepBuilder.newBuilder(resourceContext, "service", "services/%s", serviceId).build();
     }
 
 

@@ -19,12 +19,10 @@ package org.apache.isis.viewer.json.viewer.resources.objectlist;
 import java.util.List;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
 import org.apache.isis.viewer.json.viewer.representations.RepresentationBuilder;
-import org.apache.isis.viewer.json.viewer.representations.WellKnownType;
-import org.apache.isis.viewer.json.viewer.resources.objects.DomainObjectRepBuilder;
+import org.apache.isis.viewer.json.viewer.resources.domainobjects.DomainObjectRepBuilder;
 
 public class DomainObjectListRepBuilder extends RepresentationBuilder<DomainObjectListRepBuilder> {
 
@@ -34,14 +32,6 @@ public class DomainObjectListRepBuilder extends RepresentationBuilder<DomainObje
 
     protected DomainObjectListRepBuilder(ResourceContext resourceContext) {
         super(resourceContext);
-    }
-
-    public DomainObjectListRepBuilder withRepresentationTypeListOf(String typeName) {
-        return withRepresentationType("list:" + typeName);
-    }
-
-    public DomainObjectListRepBuilder withRepresentationTypeListOf(ObjectSpecification objectSpec) {
-        return withRepresentationTypeListOf(WellKnownType.canonical(objectSpec.getFullIdentifier()));
     }
 
     public DomainObjectListRepBuilder withAdapters(List<ObjectAdapter> objectAdapters) {

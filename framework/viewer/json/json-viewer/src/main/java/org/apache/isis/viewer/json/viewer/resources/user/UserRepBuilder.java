@@ -29,7 +29,6 @@ public class UserRepBuilder extends RepresentationBuilder<UserRepBuilder> {
 
     private UserRepBuilder(ResourceContext resourceContext) {
         super(resourceContext);
-        withRepresentationType("user");
         withSelf("user");
     }
 
