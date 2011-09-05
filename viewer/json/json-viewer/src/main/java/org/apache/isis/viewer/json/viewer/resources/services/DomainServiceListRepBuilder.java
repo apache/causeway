@@ -20,7 +20,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.services.ServiceUtil;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
-import org.apache.isis.viewer.json.viewer.representations.LinkRepBuilder;
+import org.apache.isis.viewer.json.viewer.representations.LinkBuilder;
 import org.apache.isis.viewer.json.viewer.resources.objectlist.DomainObjectListRepBuilder;
 
 class DomainServiceListRepBuilder extends DomainObjectListRepBuilder {
@@ -36,7 +36,7 @@ class DomainServiceListRepBuilder extends DomainObjectListRepBuilder {
     @Override
     protected JsonRepresentation buildLinkTo(ObjectAdapter serviceAdapter) {
         String serviceId = ServiceUtil.id(serviceAdapter.getObject());
-        return LinkRepBuilder.newBuilder(resourceContext, "service", "services/%s", serviceId).build();
+        return LinkBuilder.newBuilder(resourceContext, "service", "services/%s", serviceId).build();
     }
 
 

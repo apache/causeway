@@ -24,6 +24,7 @@ import org.apache.isis.viewer.json.applib.homepage.HomePageResource;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -44,59 +45,59 @@ public class HomePageResourceTest {
         resource = client.getHomePageResource();
     }
 
-    @org.junit.Ignore("to get working")
+    @Ignore("cache-control")
     @Test
     public void returnsHomePageRepresentation() throws Exception {
 
         // given
-        Response resourcesResp = resource.resources();
+        Response resp = resource.resources();
         
         // when
-        RestfulResponse<HomePageRepresentation> homePageJsonResp = RestfulResponse.of(resourcesResp, HomePageRepresentation.class);
-        assertThat(homePageJsonResp.getStatus().getFamily(), is(Family.SUCCESSFUL));
+        RestfulResponse<HomePageRepresentation> jsonResp = RestfulResponse.of(resp, HomePageRepresentation.class);
+        assertThat(jsonResp.getStatus().getFamily(), is(Family.SUCCESSFUL));
         
         // then
-        assertThat(homePageJsonResp.getStatus(), is(HttpStatusCode.OK));
+        assertThat(jsonResp.getStatus(), is(HttpStatusCode.OK));
+        assertThat(jsonResp.getHeader(RestfulResponse.Header.CACHE_CONTROL, int.class), is(86400));
+        assertThat(jsonResp.getHeader(RestfulResponse.Header.X_REPRESENTATION_TYPE, String.class), is("homePage"));
         
-        HomePageRepresentation homePageRepr = homePageJsonResp.getEntity();
-        assertThat(homePageRepr, is(not(nullValue())));
-        assertThat(homePageRepr.isMap(), is(true));
+        HomePageRepresentation repr = jsonResp.getEntity();
+        assertThat(repr, is(not(nullValue())));
+        assertThat(repr.isMap(), is(true));
         
-        assertThat(homePageRepr.getSelf(), isLink(client).method(Method.GET));
-        assertThat(homePageRepr.getUser(), isLink(client).method(Method.GET));
-        assertThat(homePageRepr.getServices(), isLink(client).method(Method.GET));
-        assertThat(homePageRepr.getCapabilities(), isLink(client).method(Method.GET));
+        assertThat(repr.getSelf(), isLink(client).method(Method.GET));
+        assertThat(repr.getUser(), isLink(client).method(Method.GET));
+        assertThat(repr.getServices(), isLink(client).method(Method.GET));
+        assertThat(repr.getCapabilities(), isLink(client).method(Method.GET));
         
-        assertThat(homePageRepr.getLinks(), is(not(nullValue())));
-        assertThat(homePageRepr.getMetadata(), is(not(nullValue())));
+        assertThat(repr.getLinks(), is(not(nullValue())));
+        assertThat(repr.getExtensions(), is(not(nullValue())));
     }
 
     @Test
     public void linksToSelf() throws Exception {
         // given
-        HomePageRepresentation homePageRepr = givenRepresentation();
+        HomePageRepresentation repr = givenRepresentation();
 
         // when, then
-        assertThat(homePageRepr, isFollowableLinkToSelf(client));
+        assertThat(repr, isFollowableLinkToSelf(client));
     }
     
-    @org.junit.Ignore("to get working")
     @Test
     public void links() throws Exception {
         
-        HomePageRepresentation homePageRepr = givenRepresentation();
+        HomePageRepresentation repr = givenRepresentation();
 
         // when, then
-        assertThat(homePageRepr.getServices(), isLink(client).returning(HttpStatusCode.OK));
-        assertThat(homePageRepr.getUser(), isLink(client).returning(HttpStatusCode.OK));
-        assertThat(homePageRepr.getCapabilities(), isLink(client).returning(HttpStatusCode.OK));
+        assertThat(repr.getServices(), isLink(client).returning(HttpStatusCode.OK));
+        assertThat(repr.getUser(), isLink(client).returning(HttpStatusCode.OK));
+        assertThat(repr.getCapabilities(), isLink(client).returning(HttpStatusCode.OK));
     }
 
     private HomePageRepresentation givenRepresentation() throws JsonParseException, JsonMappingException, IOException {
         return entityOf(resource.resources(), HomePageRepresentation.class);
     }
 
-    //
 }
 
 

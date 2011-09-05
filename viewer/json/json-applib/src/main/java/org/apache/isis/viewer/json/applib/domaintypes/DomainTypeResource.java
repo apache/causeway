@@ -20,19 +20,54 @@ package org.apache.isis.viewer.json.applib.domaintypes;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.jboss.resteasy.annotations.ClientResponseType;
 
-@Path("/representationTypes")
+@Path("/domainTypes")
 public interface DomainTypeResource {
 
     @GET
-    @Path("/{representationTypeName}")
+    @Path("/")
     @Produces({ MediaType.APPLICATION_JSON })
     @ClientResponseType(entityType=String.class)
-    public Response representationType(String representationTypeName);
+    public abstract Response domainTypes();
+
+    @GET
+    @Path("/{domainType}")
+    @Produces({ MediaType.APPLICATION_JSON })
+    @ClientResponseType(entityType=String.class)
+    public abstract Response domainType(@PathParam("domainType") final String domainType);
+
+    @GET
+    @Path("/{domainType}/properties/{propertyId}")
+    @Produces({ MediaType.APPLICATION_JSON })
+    @ClientResponseType(entityType=String.class)
+    public abstract Response typeProperty(@PathParam("domainType") final String domainType,
+        @PathParam("propertyId") final String propertyId);
+
+    @GET
+    @Path("/{domainType}/collections/{collectionId}")
+    @Produces({ MediaType.APPLICATION_JSON })
+    @ClientResponseType(entityType=String.class)
+    public abstract Response typeCollection(@PathParam("domainType") final String domainType,
+        @PathParam("collectionId") final String collectionId);
+
+    @GET
+    @Path("/{domainType}/actions/{actionId}")
+    @Produces({ MediaType.APPLICATION_JSON })
+    @ClientResponseType(entityType=String.class)
+    public abstract Response typeAction(@PathParam("domainType") final String domainType,
+        @PathParam("actionId") final String actionId);
+
+    @GET
+    @Path("/{domainType}/actions/{actionId}/params/{paramNum}")
+    @Produces({ MediaType.APPLICATION_JSON })
+    @ClientResponseType(entityType=String.class)
+    public abstract Response typeActionParam(@PathParam("domainType") final String domainType,
+        @PathParam("actionId") final String actionId, @PathParam("paramNum") final int paramNum);
 
 }

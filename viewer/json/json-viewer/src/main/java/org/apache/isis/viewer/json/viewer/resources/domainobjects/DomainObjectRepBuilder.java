@@ -34,7 +34,7 @@ import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
-import org.apache.isis.viewer.json.viewer.representations.LinkRepBuilder;
+import org.apache.isis.viewer.json.viewer.representations.LinkBuilder;
 import org.apache.isis.viewer.json.viewer.representations.RepresentationBuilder;
 import org.apache.isis.viewer.json.viewer.util.OidUtils;
 
@@ -57,7 +57,7 @@ public class DomainObjectRepBuilder extends RepresentationBuilder<DomainObjectRe
 
     public DomainObjectRepBuilder withSelf() {
         JsonRepresentation self = JsonRepresentation.newMap();
-        JsonRepresentation selfLink = LinkRepBuilder.newBuilder(resourceContext, "object", url()).build();
+        JsonRepresentation selfLink = LinkBuilder.newBuilder(resourceContext, "object", url()).build();
         //JsonRepresentation selfType = LinkRepBuilder.newTypeBuilder(resourceContext, objectAdapter.getSpecification()).build();
         String title = objectAdapter.titleString();
         //JsonRepresentation iconLink = LinkRepBuilder.newBuilder(resourceContext, "icon", icon()).build();
@@ -140,9 +140,9 @@ public class DomainObjectRepBuilder extends RepresentationBuilder<DomainObjectRe
     //
     /////////////////////////////////////////////////////////////////////
     
-	public static LinkRepBuilder newLinkToBuilder(ResourceContext resourceContext, ObjectAdapter elementAdapter, OidStringifier oidStringifier) {
+	public static LinkBuilder newLinkToBuilder(ResourceContext resourceContext, ObjectAdapter elementAdapter, OidStringifier oidStringifier) {
     	String url = urlFor(elementAdapter, oidStringifier);
-        return LinkRepBuilder.newBuilder(resourceContext, "object", url);
+        return LinkBuilder.newBuilder(resourceContext, "object", url);
     }
 
     public static String urlFor(ObjectAdapter objectAdapter, OidStringifier oidStringifier) {

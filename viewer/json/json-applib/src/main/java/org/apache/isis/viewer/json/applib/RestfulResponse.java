@@ -2,8 +2,10 @@ package org.apache.isis.viewer.json.applib;
 
 import java.io.IOException;
 
+import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 
+import org.apache.isis.viewer.json.applib.RestfulResponse.Header;
 import org.apache.isis.viewer.json.applib.util.JsonMapper;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
@@ -14,6 +16,7 @@ public class RestfulResponse<T> {
         WARNING,
         LAST_MODIFIED,
         CONTENT_TYPE,
+        CACHE_CONTROL,
         X_REPRESENTATION_TYPE;
 
         public String getName() {
@@ -44,5 +47,25 @@ public class RestfulResponse<T> {
         return JsonMapper.instance().read(response, returnType);
     }
 
+    public <V> V getHeader(Header header, Class<V> returnType) {
+        MultivaluedMap<String, Object> metadata = response.getMetadata();
+        // in spite of the always returns a String
+        String value = (String) metadata.getFirst(Header.CACHE_CONTROL.getName());
+        return cast(value, returnType);
+    }
+
+    @SuppressWarnings("unchecked")
+    protected <V> V cast(String value, Class<V> returnType) {
+        if(value == null) {
+            return null;
+        }
+        if(returnType == String.class) {
+            return (V) value;
+        }
+        if(returnType == int.class) {
+            return (V) Integer.valueOf(value);
+        }
+        throw new IllegalArgumentException("requested type of " + returnType + " not supported");
+    }
 
 }

@@ -26,7 +26,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
-import org.apache.isis.viewer.json.viewer.representations.LinkRepBuilder;
+import org.apache.isis.viewer.json.viewer.representations.LinkBuilder;
 import org.apache.isis.viewer.json.viewer.representations.RepresentationBuilder;
 
 public abstract class AbstractMemberRepBuilder<R extends RepresentationBuilder<R>, T extends ObjectMember> extends RepresentationBuilder<R> {
@@ -49,7 +49,7 @@ public abstract class AbstractMemberRepBuilder<R extends RepresentationBuilder<R
         
         JsonRepresentation selfRep = JsonRepresentation.newMap();
         String url = AbstractMemberRepBuilder.urlForMember(objectAdapter, memberType, objectMember, getOidStringifier());
-        JsonRepresentation memberLinkRep = LinkRepBuilder.newBuilder(resourceContext, "member", url).build();
+        JsonRepresentation memberLinkRep = LinkBuilder.newBuilder(resourceContext, "member", url).build();
         selfRep.put("link", memberLinkRep);
         
         JsonRepresentation linkTo = DomainObjectRepBuilder.newLinkToBuilder(resourceContext, objectAdapter, getOidStringifier()).build();
@@ -78,7 +78,7 @@ public abstract class AbstractMemberRepBuilder<R extends RepresentationBuilder<R
                 String urlForMember = urlForMember(mutatorSpec.suffix);
                 JsonRepresentation arguments = mutatorArgs(mutatorSpec);
                 JsonRepresentation detailsLink = 
-                    LinkRepBuilder.newBuilder(resourceContext, mutator, urlForMember)
+                    LinkBuilder.newBuilder(resourceContext, mutator, urlForMember)
                         .withHttpMethod(mutatorSpec.httpMethod)
                         .withArguments(arguments)
                         .build();
@@ -128,7 +128,7 @@ public abstract class AbstractMemberRepBuilder<R extends RepresentationBuilder<R
             return;
         } 
         String urlForMember = urlForMember();
-        JsonRepresentation detailsLink = LinkRepBuilder.newBuilder(resourceContext, memberType.name().toLowerCase(), urlForMember).build();
+        JsonRepresentation detailsLink = LinkBuilder.newBuilder(resourceContext, memberType.name().toLowerCase(), urlForMember).build();
         representation.put("details", detailsLink);
     }
 

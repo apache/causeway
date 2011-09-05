@@ -63,8 +63,8 @@ public class DomainObjectResourceTest {
         Link self = domainObjectRepr.getSelf();
         assertThat(self, 
                 isLink().rel("object").href(matches(".+objects/OID:1")).method(Method.GET));
-        assertThat(domainObjectRepr.getDomainType(), 
-                isLink().rel("type").href(matches(".+" + ApplibValuedEntityRepositoryDefault.class.getName() + ".+")).method(Method.GET));
+//        assertThat(domainObjectRepr.getDomainType(), 
+//                isLink().rel("type").href(matches(".+" + ApplibValuedEntityRepositoryDefault.class.getName() + ".+")).method(Method.GET));
         
         assertThat(domainObjectRepr.getTitle(), is("ApplibValues"));
         assertThat(domainObjectRepr.getOid(), is("OID:1"));
