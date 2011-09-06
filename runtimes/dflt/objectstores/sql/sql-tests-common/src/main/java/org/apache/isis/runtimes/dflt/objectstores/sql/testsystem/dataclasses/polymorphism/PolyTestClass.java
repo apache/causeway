@@ -28,6 +28,9 @@ import java.util.List;
 import org.apache.isis.applib.AbstractDomainObject;
 
 /**
+ * This class is the collection point of all the polymorphism and related tests. There is nothing really special about
+ * it, it is just a placeholder for the various tests related to polymorphism or recursion (JIRA ISIS-117 and ISIS-118).
+ * 
  * @author Kevin
  * 
  */
