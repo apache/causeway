@@ -1,9 +1,9 @@
 package org.apache.isis.viewer.json.tck;
 
-import static org.apache.isis.viewer.json.tck.RepresentationMatchers.entityOf;
-import static org.apache.isis.viewer.json.tck.RepresentationMatchers.isLink;
-import static org.apache.isis.viewer.json.tck.RepresentationMatchers.isFollowableLinkToSelf;
 import static org.apache.isis.viewer.json.tck.RepresentationMatchers.assertThat;
+import static org.apache.isis.viewer.json.tck.RepresentationMatchers.entityOf;
+import static org.apache.isis.viewer.json.tck.RepresentationMatchers.isFollowableLinkToSelf;
+import static org.apache.isis.viewer.json.tck.RepresentationMatchers.isLink;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
@@ -16,6 +16,7 @@ import javax.ws.rs.core.Response.Status.Family;
 
 import org.apache.isis.runtimes.dflt.webserver.WebServer;
 import org.apache.isis.viewer.json.applib.HttpStatusCode;
+import org.apache.isis.viewer.json.applib.RepresentationType;
 import org.apache.isis.viewer.json.applib.RestfulClient;
 import org.apache.isis.viewer.json.applib.RestfulResponse;
 import org.apache.isis.viewer.json.applib.blocks.Method;
@@ -24,7 +25,6 @@ import org.apache.isis.viewer.json.applib.homepage.HomePageResource;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -45,9 +45,8 @@ public class HomePageResourceTest {
         resource = client.getHomePageResource();
     }
 
-    @Ignore("cache-control")
     @Test
-    public void returnsHomePageRepresentation() throws Exception {
+    public void representation() throws Exception {
 
         // given
         Response resp = resource.resources();
@@ -58,8 +57,8 @@ public class HomePageResourceTest {
         
         // then
         assertThat(jsonResp.getStatus(), is(HttpStatusCode.OK));
-        assertThat(jsonResp.getHeader(RestfulResponse.Header.CACHE_CONTROL, int.class), is(86400));
-        assertThat(jsonResp.getHeader(RestfulResponse.Header.X_REPRESENTATION_TYPE, String.class), is("homePage"));
+        assertThat(jsonResp.getHeader(RestfulResponse.Header.CACHE_CONTROL).getMaxAge(), is(86400));
+        assertThat(jsonResp.getHeader(RestfulResponse.Header.X_REPRESENTATION_TYPE), is(RepresentationType.HOME_PAGE));
         
         HomePageRepresentation repr = jsonResp.getEntity();
         assertThat(repr, is(not(nullValue())));
@@ -85,7 +84,7 @@ public class HomePageResourceTest {
     
     @Test
     public void links() throws Exception {
-        
+        // given
         HomePageRepresentation repr = givenRepresentation();
 
         // when, then

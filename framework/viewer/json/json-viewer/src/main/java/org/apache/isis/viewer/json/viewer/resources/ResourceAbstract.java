@@ -25,6 +25,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.CacheControl;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
@@ -69,6 +70,12 @@ import com.google.common.collect.Lists;
 public abstract class ResourceAbstract {
 
     protected final static JsonMapper jsonMapper = JsonMapper.instance();
+
+    protected static final CacheControl CACHE_ONE_DAY = new CacheControl();
+    static {
+        CACHE_ONE_DAY.setMaxAge(86400);
+    }
+
 
 	public final static ActionType[] ACTION_TYPES = { ActionType.USER, ActionType.DEBUG, ActionType.EXPLORATION,
     // SET is excluded; we simply flatten contributed actions.

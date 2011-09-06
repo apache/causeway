@@ -8,6 +8,6 @@ public enum RestfulRequestHeader {
     X_VALIDATION_ONLY;
 
     public String getName() {
-        return HeaderNameUtils.convert(name());
+        return HttpHeaderUtils.enumToHttpHeader(name());
     }
 }

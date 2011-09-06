@@ -17,7 +17,7 @@ public class HeaderNameUtilsTest {
     }
 
     protected void assertConverts(String enumName, String expected) {
-        assertThat(HeaderNameUtils.convert(enumName), is(expected));
+        assertThat(HttpHeaderUtils.enumToHttpHeader(enumName), is(expected));
     }
 
 }
