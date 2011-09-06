@@ -167,7 +167,7 @@ public class CombinedCollectionMapper extends AbstractAutoMapper implements Coll
     @Override
     public void saveInternalCollection(final DatabaseConnector connector, final ObjectAdapter parent) {
         if (collectionMappers == null) {
-            // for abtract classes and interfaces
+            // for abstract classes and interfaces
             return;
         }
         final ObjectAdapter collection = field.get(parent);
