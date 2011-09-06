@@ -20,11 +20,11 @@ package org.apache.isis.viewer.json.viewer.resources.home;
 
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
-import javax.ws.rs.core.CacheControl;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
+import org.apache.isis.viewer.json.applib.RepresentationType;
 import org.apache.isis.viewer.json.applib.RestfulResponse;
 import org.apache.isis.viewer.json.applib.homepage.HomePageResource;
 import org.apache.isis.viewer.json.viewer.representations.LinkBuilder;
@@ -55,8 +55,8 @@ public class HomePageResourceServerside extends ResourceAbstract implements Home
         String jsonEntity = asJson(representation);
         return Response.ok()
                 .entity(jsonEntity)
-                .cacheControl(CacheControl.valueOf(""+86400))
-                .header(RestfulResponse.Header.X_REPRESENTATION_TYPE.getName(), "homePage")
+                .cacheControl(CACHE_ONE_DAY)
+                .header(RestfulResponse.Header.X_REPRESENTATION_TYPE.getName(), RepresentationType.HOME_PAGE.getName())
                 .type(MediaType.APPLICATION_JSON_TYPE).build();
     }
 

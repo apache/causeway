@@ -1,27 +1,62 @@
 package org.apache.isis.viewer.json.applib;
 
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
+import javax.ws.rs.core.CacheControl;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 
-import org.apache.isis.viewer.json.applib.RestfulResponse.Header;
 import org.apache.isis.viewer.json.applib.util.JsonMapper;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 
 public class RestfulResponse<T> {
 
-    public enum Header {
-        WARNING,
-        LAST_MODIFIED,
-        CONTENT_TYPE,
-        CACHE_CONTROL,
-        X_REPRESENTATION_TYPE;
+    private static final SimpleDateFormat RFC1123_DATE_FORMAT = new SimpleDateFormat("EEE, dd MMM yyyyy HH:mm:ss z");
+    
+    public abstract static class Header<X> {
+        public final static Header<String> WARNING = new Header<String>("Warning"){
+            @Override
+            public String parse(String value) {
+                return value;
+            }
+        };
+        public final static Header<Date> LAST_MODIFIED = new Header<Date>("Last-Modified"){
+            @Override
+            public Date parse(String value) {
+                try {
+                    return RFC1123_DATE_FORMAT.parse(value);
+                } catch (ParseException e) {
+                    return null;
+                }
+            }};
+        public final static Header<CacheControl> CACHE_CONTROL = new Header<CacheControl>("Cache-Control"){
+            @Override
+            public CacheControl parse(String value) {
+                return CacheControl.valueOf(value);
+            }};
+        public final static Header<RepresentationType> X_REPRESENTATION_TYPE = new Header<RepresentationType>("X-Representation-Type"){
+            @Override
+            public RepresentationType parse(String value) {
+                return RepresentationType.lookup(value);
+            }};
+        
+        private final String name;
+        
+        public Header(String name) {
+            this.name = name;
+        }
 
         public String getName() {
-            return HeaderNameUtils.convert(name());
+            return name;
         }
+        
+        public abstract X parse(String value);
+        
     }
 
     private final Response response;
@@ -47,25 +82,10 @@ public class RestfulResponse<T> {
         return JsonMapper.instance().read(response, returnType);
     }
 
-    public <V> V getHeader(Header header, Class<V> returnType) {
+    public <V> V getHeader(Header<V> header) {
         MultivaluedMap<String, Object> metadata = response.getMetadata();
         // in spite of the always returns a String
-        String value = (String) metadata.getFirst(Header.CACHE_CONTROL.getName());
-        return cast(value, returnType);
+        String value = (String) metadata.getFirst(header.getName());
+        return header.parse(value);
     }
-
-    @SuppressWarnings("unchecked")
-    protected <V> V cast(String value, Class<V> returnType) {
-        if(value == null) {
-            return null;
-        }
-        if(returnType == String.class) {
-            return (V) value;
-        }
-        if(returnType == int.class) {
-            return (V) Integer.valueOf(value);
-        }
-        throw new IllegalArgumentException("requested type of " + returnType + " not supported");
-    }
-
 }
