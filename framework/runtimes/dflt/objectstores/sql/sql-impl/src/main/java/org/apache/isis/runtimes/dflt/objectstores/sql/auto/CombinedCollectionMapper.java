@@ -110,7 +110,8 @@ public class CombinedCollectionMapper extends AbstractAutoMapper implements Coll
     }
 
     @Override
-    public void loadInternalCollection(final DatabaseConnector connector, final ObjectAdapter parent) {
+    public void loadInternalCollection(final DatabaseConnector connector, final ObjectAdapter parent,
+        final boolean makeResolved) {
         if (collectionMappers == null) {
             // for abstract classes and interfaces
             return;
@@ -142,7 +143,7 @@ public class CombinedCollectionMapper extends AbstractAutoMapper implements Coll
             while (rs.next()) {
                 final Oid oid = idMapping.recreateOid(rs, specification);
                 final ObjectAdapter element = getAdapter(specification, oid);
-                loadFields(element, rs);
+                loadFields(element, rs, makeResolved);
                 LOG.debug("  element  " + element.getOid());
                 list.add(element);
             }
@@ -150,17 +151,30 @@ public class CombinedCollectionMapper extends AbstractAutoMapper implements Coll
             collectionFacet.init(collection, list.toArray(new ObjectAdapter[list.size()]));
             rs.close();
             PersistorUtil.end(collection);
+
+            // TODO: Need to finalise this behaviour. At the moment, all collections will get infinitely resolved. I
+            // don't think this is desirable. Sub-collections should be left "Partially Resolved".
+            if (makeResolved) {
+                for (ObjectAdapter field : list) {
+                    // final ObjectMapping mapping = objectMappingLookup.getMapping(field, connector);
+                    if (field.getSpecification().isOfType(parent.getSpecification())) {
+                        loadInternalCollection(connector, field, false);
+                    }
+                }
+            }
         }
     }
 
-    protected void loadFields(final ObjectAdapter object, final Results rs) {
+    protected void loadFields(final ObjectAdapter object, final Results rs, final boolean makeResolved) {
         if (object.getResolveState().canChangeTo(ResolveState.RESOLVING)) {
             PersistorUtil.start(object, ResolveState.RESOLVING);
             for (final FieldMapping mapping : fieldMappings) {
                 mapping.initializeField(object, rs);
             }
             object.setOptimisticLock(versionMapping.getLock(rs));
-            PersistorUtil.end(object);
+            if (makeResolved) {
+                PersistorUtil.end(object);
+            }
         }
     }
 

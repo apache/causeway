@@ -241,7 +241,7 @@ public class AutoMapper extends AbstractAutoMapper implements ObjectMapping, Deb
     private void loadCollections(final DatabaseConnector connector, final ObjectAdapter instance) {
 
         for (final CollectionMapper mapper : collectionMappers) {
-            mapper.loadInternalCollection(connector, instance);
+            mapper.loadInternalCollection(connector, instance, true);
         }
     }
 
@@ -291,7 +291,7 @@ public class AutoMapper extends AbstractAutoMapper implements ObjectMapping, Deb
             rs.close();
 
             for (final CollectionMapper collectionMapper : collectionMappers) {
-                collectionMapper.loadInternalCollection(connector, object);
+                collectionMapper.loadInternalCollection(connector, object, true);
             }
         } else {
             rs.close();
@@ -306,7 +306,7 @@ public class AutoMapper extends AbstractAutoMapper implements ObjectMapping, Deb
         if (collectionMappers.length > 0) {
             final DatabaseConnector secondConnector = connector.getConnectionPool().acquire();
             for (final CollectionMapper collectionMapper : collectionMappers) {
-                collectionMapper.loadInternalCollection(secondConnector, object);
+                collectionMapper.loadInternalCollection(secondConnector, object, true);
             }
             connector.getConnectionPool().release(secondConnector);
         }
