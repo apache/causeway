@@ -170,10 +170,6 @@ public abstract class AbstractAutoMapper extends AbstractMapper {
 
                         if (mc.priorField == field) {
                             collectionMapper = mc;
-                        } else {
-                            collectionMapper =
-                                new MultiColumnCombinedCollectionMapper(oneToManyProperties[collectionFieldNo],
-                                    parameterBase, lookup, objectMapperLookup, this, field);
                         }
                     }
 
