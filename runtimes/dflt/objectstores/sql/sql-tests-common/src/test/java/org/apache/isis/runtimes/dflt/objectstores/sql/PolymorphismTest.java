@@ -9,10 +9,12 @@ import org.apache.isis.runtimes.dflt.objectstores.sql.testsystem.SqlDataClassFac
 import org.apache.isis.runtimes.dflt.objectstores.sql.testsystem.dataclasses.polymorphism.PolyInterface;
 import org.apache.isis.runtimes.dflt.objectstores.sql.testsystem.dataclasses.polymorphism.PolyInterfaceImplA;
 import org.apache.isis.runtimes.dflt.objectstores.sql.testsystem.dataclasses.polymorphism.PolyInterfaceImplB;
+import org.apache.isis.runtimes.dflt.objectstores.sql.testsystem.dataclasses.polymorphism.PolySelfRefClass;
 import org.apache.isis.runtimes.dflt.objectstores.sql.testsystem.dataclasses.polymorphism.PolyTestClass;
 
 public class PolymorphismTest extends SqlIntegrationTestCommonBase {
 
+    private static final String CHILD_1 = "Child 1";
     private static PolyInterfaceImplA polyIntImpA;
     private static PolyInterfaceImplB polyIntImpB;
 
@@ -56,12 +58,35 @@ public class PolymorphismTest extends SqlIntegrationTestCommonBase {
         SqlIntegrationTestSingleton.drop("ISIS_POLYSUBCLASSTWO");
         SqlIntegrationTestSingleton.drop("ISIS_POLYINTERFACEIMPLA");
         SqlIntegrationTestSingleton.drop("ISIS_POLYINTERFACEIMPLB");
+        SqlIntegrationTestSingleton.drop("ISIS_POLYSELFREFCLASS");
 
         final SqlDataClassFactory factory = SqlIntegrationTestSingleton.getSqlDataClassFactory();
         final PolyTestClass polyTestClass = factory.newPolyTestClass();
         polyTestClass.setString("polyTestClassString");
 
-        polyTestClass.getPolyTestClasses().add(polyTestClass);
+        // {{ Setup self-referencing collection
+        PolySelfRefClass polySelfRefClassParent = factory.newPolySelfRefClass();
+        polySelfRefClassParent.setString("Parent");
+
+        PolySelfRefClass polySelfRefClassChild1 = factory.newPolySelfRefClass();
+        polySelfRefClassChild1.setString(CHILD_1);
+        polySelfRefClassParent.addToPolySelfRefClasses(polySelfRefClassChild1);
+
+        PolySelfRefClass polySelfRefClassChild2 = factory.newPolySelfRefClass();
+        polySelfRefClassChild2.setString("Child 2");
+        polySelfRefClassParent.addToPolySelfRefClasses(polySelfRefClassChild2);
+        factory.save(polySelfRefClassChild2);
+
+        PolySelfRefClass polySelfRefClassChild3 = factory.newPolySelfRefClass();
+        polySelfRefClassChild3.setString("Child 1 of Child 1");
+        polySelfRefClassChild1.addToPolySelfRefClasses(polySelfRefClassChild3);
+
+        factory.save(polySelfRefClassChild3);
+        factory.save(polySelfRefClassChild1);
+
+        factory.save(polySelfRefClassParent);
+        polyTestClass.setPolySelfRefClass(polySelfRefClassParent);
+        // }}
 
         // polyTestClass.setPolyTestInterface(polyTestClass);
 
@@ -116,12 +141,31 @@ public class PolymorphismTest extends SqlIntegrationTestCommonBase {
         assertEquals(polyIntImpA.getString(), loaded.getString());
     }
 
-    public void testInterfaceLoadCollection() {
+    public void testLoadSelfReferencingCollection() {
         final PolyTestClass polyTestClass = SqlIntegrationTestSingleton.getStaticPolyTestClass();
 
-        List<PolyTestClass> list = polyTestClass.getPolyTestClasses();
-        assertEquals(1, list.size());
+        PolySelfRefClass polySelfRefParent = polyTestClass.getPolySelfRefClass();
+        List<PolySelfRefClass> list = polySelfRefParent.getPolySelfRefClasses();
+        assertEquals(2, list.size());
 
+        PolySelfRefClass polySelfRefChild1 = null;
+        for (PolySelfRefClass polySelfRefClass : list) {
+            if (polySelfRefClass.getString().equals(CHILD_1)) {
+                polySelfRefChild1 = polySelfRefClass;
+            }
+        }
+        assertNotNull(polySelfRefChild1);
+
+        assertEquals(CHILD_1, polySelfRefChild1.title());
+
+        final SqlDataClassFactory factory = SqlIntegrationTestSingleton.getSqlDataClassFactory();
+        factory.resolve(polySelfRefChild1);
+        List<PolySelfRefClass> list2 = polySelfRefChild1.getPolySelfRefClasses();
+        assertEquals(1, list2.size());
+    }
+
+    public void testInterfaceLoadCollection() {
+        final PolyTestClass polyTestClass = SqlIntegrationTestSingleton.getStaticPolyTestClass();
         PolyInterface loaded = polyTestClass.getPolyInterfaceType();
         assertEquals(polyIntImpA.getString(), loaded.getString());
     }

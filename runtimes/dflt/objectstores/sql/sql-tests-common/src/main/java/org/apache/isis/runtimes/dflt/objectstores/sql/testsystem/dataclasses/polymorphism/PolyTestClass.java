@@ -22,9 +22,6 @@
  */
 package org.apache.isis.runtimes.dflt.objectstores.sql.testsystem.dataclasses.polymorphism;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.apache.isis.applib.AbstractDomainObject;
 
 /**
@@ -34,7 +31,7 @@ import org.apache.isis.applib.AbstractDomainObject;
  * @author Kevin
  * 
  */
-public class PolyTestClass extends AbstractDomainObject implements PolyTestInterface {
+public class PolyTestClass extends AbstractDomainObject {
     public String title() {
         return string;
     }
@@ -66,34 +63,7 @@ public class PolyTestClass extends AbstractDomainObject implements PolyTestInter
 
     // }}
 
-    // {{ PolyTestClass collection
-    private List<PolyTestClass> polyTestClasses = new ArrayList<PolyTestClass>();
-
-    public List<PolyTestClass> getPolyTestClasses() {
-        return polyTestClasses;
-    }
-
-    public void setPolyTestClasses(final List<PolyTestClass> polyTestClasses) {
-        this.polyTestClasses = polyTestClasses;
-    }
-
-    // }}
-
-    // {{ PolyTestClass property
-    private PolyTestInterface polyTestInterface;
-
-    public void setPolyTestInterface(PolyTestInterface polyTestInterface) {
-        this.polyTestInterface = polyTestInterface;
-
-    }
-
-    public PolyTestInterface getPolyTestInterface() {
-        return polyTestInterface;
-    }
-
-    // }}
-
-    // {{ PolyInterfaceType
+    // {{ PolyInterfaceType: Can we store / restore properties by interface?
     private PolyInterface polyInterfaceType;
 
     public PolyInterface getPolyInterfaceType() {
@@ -102,6 +72,19 @@ public class PolyTestClass extends AbstractDomainObject implements PolyTestInter
 
     public void setPolyInterfaceType(final PolyInterface polyInterfaceType) {
         this.polyInterfaceType = polyInterfaceType;
+    }
+
+    // }}
+
+    // {{ PolySelfRefClass: Can we store / restore classes that contain self-referencing collections?
+    private PolySelfRefClass polySelfRefClass;
+
+    public PolySelfRefClass getPolySelfRefClass() {
+        return polySelfRefClass;
+    }
+
+    public void setPolySelfRefClass(final PolySelfRefClass polySelfRefClass) {
+        this.polySelfRefClass = polySelfRefClass;
     }
     // }}
 
