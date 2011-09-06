@@ -86,7 +86,8 @@ public class ReversedAutoAssociationMapper extends AbstractAutoMapper implements
     }
 
     @Override
-    public void loadInternalCollection(final DatabaseConnector connector, final ObjectAdapter parent) {
+    public void loadInternalCollection(final DatabaseConnector connector, final ObjectAdapter parent,
+        final boolean makeResolved) {
         final ObjectAdapter collection = field.get(parent);
         if (collection.getResolveState().canChangeTo(ResolveState.RESOLVING)) {
             LOG.debug("loading internal collection " + field);
@@ -106,7 +107,7 @@ public class ReversedAutoAssociationMapper extends AbstractAutoMapper implements
             while (rs.next()) {
                 final Oid oid = idMapping.recreateOid(rs, specification);
                 final ObjectAdapter element = getAdapter(specification, oid);
-                loadFields(element, rs);
+                loadFields(element, rs, makeResolved);
                 LOG.debug("  element  " + element.getOid());
                 list.add(element);
             }
@@ -117,7 +118,7 @@ public class ReversedAutoAssociationMapper extends AbstractAutoMapper implements
         }
     }
 
-    protected void loadFields(final ObjectAdapter object, final Results rs) {
+    protected void loadFields(final ObjectAdapter object, final Results rs, final boolean makeResolved) {
         PersistorUtil.start(object, ResolveState.RESOLVING);
         for (final FieldMapping mapping : fieldMappings) {
             mapping.initializeField(object, rs);
@@ -132,7 +133,9 @@ public class ReversedAutoAssociationMapper extends AbstractAutoMapper implements
          */
 
         object.setOptimisticLock(versionMapping.getLock(rs));
-        PersistorUtil.end(object);
+        if (makeResolved) {
+            PersistorUtil.end(object);
+        }
 
     }
 
