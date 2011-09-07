@@ -19,11 +19,11 @@
 
 package org.apache.isis.tck.objstore.dflt.scalars;
 
-import org.apache.isis.tck.dom.scalars.AbstractValuedEntityRepository;
+import org.apache.isis.tck.dom.AbstractEntityRepository;
 import org.apache.isis.tck.dom.scalars.JdkValuedEntity;
 import org.apache.isis.tck.dom.scalars.JdkValuedEntityRepository;
 
-public class JdkValuedEntityRepositoryDefault extends AbstractValuedEntityRepository<JdkValuedEntity> implements JdkValuedEntityRepository {
+public class JdkValuedEntityRepositoryDefault extends AbstractEntityRepository<JdkValuedEntity> implements JdkValuedEntityRepository {
 
     public JdkValuedEntityRepositoryDefault() {
         super(JdkValuedEntity.class);

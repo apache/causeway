@@ -17,29 +17,39 @@
  *  under the License.
  */
 
-package org.apache.isis.tck.objstore.dflt.scalars;
+package org.apache.isis.tck.dom.simples;
 
-import org.apache.isis.tck.dom.AbstractEntityRepository;
-import org.apache.isis.tck.dom.scalars.ApplibValuedEntity;
-import org.apache.isis.tck.dom.scalars.ApplibValuedEntityRepository;
+import org.apache.isis.applib.AbstractDomainObject;
+import org.apache.isis.applib.annotation.MemberOrder;
 
-public class ApplibValuedEntityRepositoryDefault extends AbstractEntityRepository<ApplibValuedEntity> implements ApplibValuedEntityRepository {
+public class SimpleEntity extends AbstractDomainObject {
 
-    public ApplibValuedEntityRepositoryDefault() {
-        super(ApplibValuedEntity.class);
+    // {{ Name
+    private String name;
+
+    @MemberOrder(sequence = "1")
+    public String getName() {
+        return name;
     }
 
-    @Override
-    public String getId() {
-        return "applibValuedEntities";
+    public void setName(final String name) {
+        this.name = name;
     }
-    
-    /**
-     * Required otherwise return type is erased
-     */
-    @Override
-    public ApplibValuedEntity newEntity() {
-        return super.newEntity();
+    // }}
+
+
+    // {{ Flag
+    private Boolean flag;
+
+    @MemberOrder(sequence = "1")
+    public Boolean getFlag() {
+        return flag;
     }
+
+    public void setFlag(final Boolean flag) {
+        this.flag = flag;
+    }
+    // }}
+
 
 }

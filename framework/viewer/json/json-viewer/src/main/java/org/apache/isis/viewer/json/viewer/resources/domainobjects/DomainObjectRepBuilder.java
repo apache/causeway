@@ -70,7 +70,7 @@ public class DomainObjectRepBuilder extends RepresentationBuilder<DomainObjectRe
     private DomainObjectRepBuilder withMembers(ObjectAdapter objectAdapter) {
         JsonRepresentation members = JsonRepresentation.newArray();
         List<ObjectAssociation> associations = objectAdapter.getSpecification().getAssociations();
-        addPropertiesAndCollections(objectAdapter, members, associations);
+        addAssociations(objectAdapter, members, associations);
         
         List<ObjectAction> actions = objectAdapter.getSpecification().getObjectActions(Contributed.INCLUDED);
         addActions(objectAdapter, actions, members);
@@ -78,7 +78,7 @@ public class DomainObjectRepBuilder extends RepresentationBuilder<DomainObjectRe
         return this;
     }
 
-    private void addPropertiesAndCollections(ObjectAdapter objectAdapter, JsonRepresentation members, List<ObjectAssociation> associations) {
+    private void addAssociations(ObjectAdapter objectAdapter, JsonRepresentation members, List<ObjectAssociation> associations) {
         for (ObjectAssociation assoc : associations) {
             Consent visibility = assoc.isVisible(getSession(), objectAdapter);
             if(!visibility.isAllowed()) {

@@ -42,34 +42,25 @@ public abstract class AbstractMemberRepBuilder<R extends RepresentationBuilder<R
         this.objectMember = objectMember;
     }
 
-    protected void putSelfIfRequired(MemberRepType memberRepType) {
-        if(!memberRepType.isStandalone()) {
-            return;
-        }
-        
-        JsonRepresentation selfRep = JsonRepresentation.newMap();
+    public R withSelf() {
         String url = AbstractMemberRepBuilder.urlForMember(objectAdapter, memberType, objectMember, getOidStringifier());
-        JsonRepresentation memberLinkRep = LinkBuilder.newBuilder(resourceContext, "member", url).build();
-        selfRep.put("link", memberLinkRep);
+        JsonRepresentation self = LinkBuilder.newBuilder(resourceContext, "self", url).build();
+        representation.put("self", self);
         
-        JsonRepresentation linkTo = DomainObjectRepBuilder.newLinkToBuilder(resourceContext, "object", objectAdapter, getOidStringifier()).build();
-        selfRep.put("object", linkTo);
-
-        representation.put("self", selfRep);
+        return cast(this);
     }
 
-    public R withMemberType() {
+    protected void putMemberType() {
         representation.put("memberType", memberType.name().toLowerCase());
-        return (R) this;
     }
 
-    protected void putIdRep() {
+    protected void putId() {
         representation.put(memberType.key(), objectMember.getId());
     }
 
-    protected void putMutatorsIfRequired(MemberRepType memberRepType) {
-        if(!memberRepType.isStandalone() || usability().isVetoed()) {
-            return;
+    public R withMutatorsIfEnabled() {
+        if(!usability().isVetoed()) {
+            return cast(this);
         }
         Map<String, MutatorSpec> mutators = memberType.getMutators();
         for(String mutator: mutators.keySet()) {
@@ -85,6 +76,7 @@ public abstract class AbstractMemberRepBuilder<R extends RepresentationBuilder<R
                 representation.put(mutator, detailsLink);
             }
         }
+        return cast(this);
     }
 
     private JsonRepresentation mutatorArgs(MutatorSpec mutatorSpec) {
@@ -103,12 +95,9 @@ public abstract class AbstractMemberRepBuilder<R extends RepresentationBuilder<R
 	}
 
     
-    protected void putValueIfRequired(MemberRepType memberRepType) {
-        if(!memberRepType.hasValueFor(memberType)) {
-            return;
-        } 
+    protected R withValue() {
         representation.put("value", valueRep());
-        return;
+        return cast(this);
     }
 
     /**
@@ -118,18 +107,17 @@ public abstract class AbstractMemberRepBuilder<R extends RepresentationBuilder<R
         return null;
     }
 
-    protected final void putDisabledReason() {
+    protected final void putDisabledReasonIfDisabled() {
         String disabledReasonRep = usability().getReason();
         representation.put("disabledReason", disabledReasonRep);
     }
 
-    protected void putDetailsIfRequired(MemberRepType memberRepType) {
-        if(!memberRepType.isInline()) {
-            return;
-        } 
+    public R withDetails() {
         String urlForMember = urlForMember();
         JsonRepresentation detailsLink = LinkBuilder.newBuilder(resourceContext, memberType.name().toLowerCase(), urlForMember).build();
-        representation.put("details", detailsLink);
+        representation.put(memberType.getDetailsRel(), detailsLink);
+        
+        return cast(this);
     }
 
     /**

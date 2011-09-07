@@ -27,6 +27,22 @@ public class RepresentationMatchers {
     }
 
 
+//    public static Matcher<String> matchers(final Method method) {
+//        return new TypeSafeMatcher<Link>() {
+//
+//            @Override
+//            public void describeTo(Description description) {
+//                description.appendText("link with method " + method.name());
+//            }
+//
+//            @Override
+//            public boolean matchesSafely(Link item) {
+//                return item != null && item.getMethod() == method;
+//            }
+//        };
+//    }
+
+
     public static <T extends JsonRepresentation> Matcher<T> isMap() {
         return new TypeSafeMatcher<T>() {
 
@@ -53,6 +69,21 @@ public class RepresentationMatchers {
             @Override
             public boolean matchesSafely(T item) {
                 return item != null && item.isArray();
+            }
+        };
+    }
+
+    public static <T extends JsonRepresentation> Matcher<T> isString() {
+        return new TypeSafeMatcher<T>() {
+
+            @Override
+            public void describeTo(Description description) {
+                description.appendText("string");
+            }
+
+            @Override
+            public boolean matchesSafely(T item) {
+                return item != null && item.isValue() && item.getJsonNode().isTextual();
             }
         };
     }

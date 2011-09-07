@@ -35,34 +35,43 @@ public class ActionRepBuilder extends AbstractMemberRepBuilder<ActionRepBuilder,
 
     protected ActionRepBuilder(ResourceContext resourceContext, ObjectAdapter objectAdapter, ObjectAction objectAction) {
         super(resourceContext, objectAdapter, MemberType.ACTION, objectAction);
-        MemberRepType memberRepType = MemberRepType.STANDALONE;
-        putSelfIfRequired(memberRepType);
-        putContributedByIfRequired();
         
-        putIdRep();
-        withMemberType();
-        representation.put("actionType", objectMember.getType());
+        putId();
+        putMemberType();
+        putNumParameters();
+
+        putDisabledReasonIfDisabled();
+        withMutatorsIfEnabled();
+        
+        putExtensionsForAction();
+        putLinksForAction(resourceContext);
+    }
+
+    private void putLinksForAction(ResourceContext resourceContext) {
+        JsonRepresentation links = JsonRepresentation.newArray();
+        if(objectMember.isContributed()) {
+            ObjectAdapter serviceAdapter = contributingServiceAdapter();
+            JsonRepresentation contributedByLink = DomainObjectRepBuilder.newLinkToBuilder(resourceContext, "object", serviceAdapter, getOidStringifier()).build();
+            links.put("contributedBy", contributedByLink);
+        }
+
+        withLinks(links);
+    }
+
+    private void putExtensionsForAction() {
+        JsonRepresentation extensions = JsonRepresentation.newMap();
+        extensions.put("actionType", objectMember.getType());
+        withExtensions(extensions );
+    }
+
+    protected void putNumParameters() {
         representation.put("numParameters", objectMember.getParameterCount());
-        putParameterDetailsIfRequired(memberRepType);
-        putValueIfRequired(memberRepType);
-        putDisabledReason();
-        putMutatorsIfRequired(memberRepType);
-        putDetailsIfRequired(memberRepType);
     }
 
     public JsonRepresentation build() {
         return representation;
     }
     
-	private void putContributedByIfRequired() {
-    	if(!objectMember.isContributed()) {
-    		return;
-    	}
-    	ObjectAdapter serviceAdapter = contributingServiceAdapter();
-        JsonRepresentation contributedByLink = DomainObjectRepBuilder.newLinkToBuilder(resourceContext, "object", serviceAdapter, getOidStringifier()).build();
-		representation.put("contributedBy", contributedByLink);
-	}
-
 	private ObjectAdapter contributingServiceAdapter() {
     	ObjectSpecification serviceType = objectMember.getOnType();
     	List<ObjectAdapter> serviceAdapters = getPersistenceSession().getServices();
@@ -75,16 +84,14 @@ public class ActionRepBuilder extends AbstractMemberRepBuilder<ActionRepBuilder,
     	throw new IllegalStateException("Unable to locate contributing service");
 	}
 
-    private void putParameterDetailsIfRequired(MemberRepType memberRepType) {
-    	if (!memberRepType.isStandalone()) {
-    		return;
-    	} 
+    public ActionRepBuilder withParameterDetails() {
     	List<Object> parameters = Lists.newArrayList();
 		for (int i=0; i< objectMember.getParameterCount(); i++) {
 			ObjectActionParameter param = objectMember.getParameters().get(i);
 			parameters.add(paramDetails(param));
 		}
 		representation.put("parameters", parameters);
+		return this;
 	}
 
 	private Object paramDetails(ObjectActionParameter param) {

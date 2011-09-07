@@ -17,29 +17,41 @@
  *  under the License.
  */
 
-package org.apache.isis.tck.objstore.dflt.scalars;
 
-import org.apache.isis.tck.dom.AbstractEntityRepository;
+package org.apache.isis.tck.fixture.simples;
+
+import org.apache.isis.applib.fixtures.AbstractFixture;
 import org.apache.isis.tck.dom.scalars.WrapperValuedEntity;
 import org.apache.isis.tck.dom.scalars.WrapperValuedEntityRepository;
+import org.apache.isis.tck.dom.simples.SimpleEntity;
+import org.apache.isis.tck.dom.simples.SimpleEntityRepository;
 
-public class WrapperValuedEntityRepositoryDefault extends AbstractEntityRepository<WrapperValuedEntity> implements WrapperValuedEntityRepository {
 
-    public WrapperValuedEntityRepositoryDefault() {
-        super(WrapperValuedEntity.class);
-    }
+
+public class SimpleEntityFixture extends AbstractFixture {
 
     @Override
-    public String getId() {
-        return "wrapperValuedEntities";
+    public void install() {
+        createEntity("John", true);
+        createEntity("Mary", false);
+        createEntity("Bill", false);
+        createEntity("Sally", true);
+        createEntity("Diedre", true);
+    }
+    
+    private SimpleEntity createEntity(String name, Boolean flag) {
+        return simpleEntityRepository.newPersistentEntity(name, flag);
     }
 
-    /**
-     * Required otherwise return type is erased
-     */
-    @Override
-    public WrapperValuedEntity newEntity() {
-        return super.newEntity();
-    }    
 
+    // {{ injected: SimpleEntityRepository
+    private SimpleEntityRepository simpleEntityRepository;
+
+    public void setSimpleEntityRepository(final SimpleEntityRepository simpleEntityRepository) {
+        this.simpleEntityRepository = simpleEntityRepository;
+    }
+    // }}
+
+
+    
 }

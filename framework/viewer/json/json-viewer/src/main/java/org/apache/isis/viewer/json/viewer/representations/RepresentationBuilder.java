@@ -37,7 +37,7 @@ public abstract class RepresentationBuilder<T extends RepresentationBuilder<T>> 
 
     public T withSelf(String href) {
         representation.put("self", LinkBuilder.newBuilder(resourceContext, "self", href).build());
-        return asT(this);
+        return cast(this);
     }
 
     public RepresentationBuilder<T> withLinks() {
@@ -49,7 +49,7 @@ public abstract class RepresentationBuilder<T extends RepresentationBuilder<T>> 
             throw new IllegalArgumentException("links must be a list");
         }
         representation.put("links", links);
-        return asT(this);
+        return cast(this);
     }
 
     public T withExtensions() {
@@ -61,11 +61,11 @@ public abstract class RepresentationBuilder<T extends RepresentationBuilder<T>> 
             throw new IllegalArgumentException("extensions must be a map");
         }
         representation.put("extensions", extensions);
-        return asT(this);
+        return cast(this);
     }
 
     @SuppressWarnings("unchecked")
-    private static <T extends RepresentationBuilder<T>> T asT(RepresentationBuilder<T> builder) {
+    protected static <T extends RepresentationBuilder<T>> T cast(RepresentationBuilder<T> builder) {
         return (T) builder;
     }
 

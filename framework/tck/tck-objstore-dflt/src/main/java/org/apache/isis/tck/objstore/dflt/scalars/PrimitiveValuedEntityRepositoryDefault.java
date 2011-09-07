@@ -19,11 +19,11 @@
 
 package org.apache.isis.tck.objstore.dflt.scalars;
 
-import org.apache.isis.tck.dom.scalars.AbstractValuedEntityRepository;
+import org.apache.isis.tck.dom.AbstractEntityRepository;
 import org.apache.isis.tck.dom.scalars.PrimitiveValuedEntity;
 import org.apache.isis.tck.dom.scalars.PrimitiveValuedEntityRepository;
 
-public class PrimitiveValuedEntityRepositoryDefault extends AbstractValuedEntityRepository<PrimitiveValuedEntity> implements PrimitiveValuedEntityRepository {
+public class PrimitiveValuedEntityRepositoryDefault extends AbstractEntityRepository<PrimitiveValuedEntity> implements PrimitiveValuedEntityRepository {
 
     public PrimitiveValuedEntityRepositoryDefault() {
         super(PrimitiveValuedEntity.class);

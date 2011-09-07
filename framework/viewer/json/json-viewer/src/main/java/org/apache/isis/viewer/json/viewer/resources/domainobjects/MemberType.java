@@ -36,7 +36,7 @@ import com.google.common.collect.ImmutableMap;
 
 public enum MemberType {
 
-    PROPERTY("properties/", ImmutableMap.of(
+    PROPERTY("properties/", "propertyDetails", ImmutableMap.of(
             "modify", MutatorSpec.of(PropertyValidateFacet.class, PropertySetterFacet.class, HttpMethod.PUT, BodyArgs.ONE),
             "clear", MutatorSpec.of(PropertyValidateFacet.class, PropertyClearFacet.class, HttpMethod.DELETE, BodyArgs.NONE)
             )) {
@@ -45,7 +45,7 @@ public enum MemberType {
             return objectMember.getSpecification();
         }
     },
-    COLLECTION("collections/", ImmutableMap.of(
+    COLLECTION("collections/", "collectionDetails", ImmutableMap.of(
             "addTo", MutatorSpec.of(CollectionValidateAddToFacet.class, CollectionAddToFacet.class, HttpMethod.PUT, BodyArgs.ONE),
             "removeFrom", MutatorSpec.of(CollectionValidateRemoveFromFacet.class, CollectionRemoveFromFacet.class, HttpMethod.DELETE, BodyArgs.ONE)
             )) {
@@ -54,7 +54,7 @@ public enum MemberType {
             return objectMember.getSpecification();
         }
     },
-    ACTION("actions/", ImmutableMap.of(
+    ACTION("actions/", "actionDetails", ImmutableMap.of(
             "invoke", MutatorSpec.of(ActionValidationFacet.class, ActionInvocationFacet.class, HttpMethod.POST, BodyArgs.MANY, "invoke")
             )) {
         @Override
@@ -67,8 +67,11 @@ public enum MemberType {
     private final Map<String, MutatorSpec> mutators;
     
     private final String urlPart;
-    private MemberType(String urlPart, Map<String, MutatorSpec> mutators) {
+    private final String detailsRel;
+    
+    private MemberType(String urlPart, String detailsRel, Map<String, MutatorSpec> mutators) {
         this.urlPart = urlPart;
+        this.detailsRel = detailsRel;
         this.mutators = mutators;
     }
 
@@ -109,5 +112,9 @@ public enum MemberType {
 						PROPERTY:
 						COLLECTION;
 	}
+
+    public String getDetailsRel() {
+        return detailsRel;
+    }
 
 }
