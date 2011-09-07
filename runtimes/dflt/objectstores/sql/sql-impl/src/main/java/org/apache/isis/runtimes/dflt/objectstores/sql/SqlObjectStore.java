@@ -22,6 +22,8 @@ package org.apache.isis.runtimes.dflt.objectstores.sql;
 import java.util.List;
 import java.util.Vector;
 
+import org.apache.log4j.Logger;
+
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.commons.exceptions.IsisException;
@@ -44,7 +46,6 @@ import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceQuery
 import org.apache.isis.runtimes.dflt.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.runtimes.dflt.runtime.system.transaction.MessageBroker;
 import org.apache.isis.runtimes.dflt.runtime.system.transaction.UpdateNotifier;
-import org.apache.log4j.Logger;
 
 public final class SqlObjectStore implements ObjectStore {
     private static final String TABLE_NAME = "isis_admin_services";
@@ -207,8 +208,11 @@ public final class SqlObjectStore implements ObjectStore {
     private ObjectAdapter[] findByPattern(final PersistenceQueryFindByPattern query) {
         final ObjectSpecification specification = query.getSpecification();
         final DatabaseConnector connector = connectionPool.acquire();
+
+        // TODO find derived types, too.
         final ObjectMapping mapper = objectMappingLookup.getMapping(specification, connector);
         final ObjectAdapter instances[] = mapper.getInstances(connector, specification, query);
+
         connectionPool.release(connector);
         return instances;
     }
@@ -218,19 +222,36 @@ public final class SqlObjectStore implements ObjectStore {
         return allInstances(spec);
     }
 
-    // TODO: allInstances of should find all derived types, too.
     private ObjectAdapter[] allInstances(final ObjectSpecification spec) {
         final DatabaseConnector connector = connectionPool.acquire();
-        final ObjectMapping mapper = objectMappingLookup.getMapping(spec, connector);
-        final ObjectAdapter[] instances = mapper.getInstances(connector, spec);
         final Vector<ObjectAdapter> matchingInstances = new Vector<ObjectAdapter>();
-        for (final ObjectAdapter instance : instances) {
-            matchingInstances.addElement(instance);
+
+        // Abstract entities will never be created.
+        if (!spec.isAbstract()) {
+            addSpecInstances(spec, connector, matchingInstances);
         }
+
+        // Search for subclasses, too.
+        if (spec.hasSubclasses()) {
+            final List<ObjectSpecification> subclasses = spec.subclasses();
+            for (ObjectSpecification subclassSpec : subclasses) {
+                addSpecInstances(subclassSpec, connector, matchingInstances);
+            }
+        }
+
         connectionPool.release(connector);
         final ObjectAdapter[] instanceArray = new ObjectAdapter[matchingInstances.size()];
         matchingInstances.copyInto(instanceArray);
         return instanceArray;
+    }
+
+    private void addSpecInstances(ObjectSpecification spec, DatabaseConnector connector,
+        Vector<ObjectAdapter> matchingInstances) {
+        final ObjectMapping mapper = objectMappingLookup.getMapping(spec, connector);
+        final ObjectAdapter[] instances = mapper.getInstances(connector, spec);
+        for (final ObjectAdapter instance : instances) {
+            matchingInstances.addElement(instance);
+        }
     }
 
     private ObjectAdapter[] findByTitle(final PersistenceQueryFindByTitle criteria) {

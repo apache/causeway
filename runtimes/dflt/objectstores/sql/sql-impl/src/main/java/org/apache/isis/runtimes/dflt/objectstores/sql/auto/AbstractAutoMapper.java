@@ -117,7 +117,17 @@ public abstract class AbstractAutoMapper extends AbstractMapper {
             for (ObjectSpecification subclass : subclasses) {
                 final List<? extends ObjectAssociation> subAssociations = subclass.getAssociations();
                 for (ObjectAssociation subA : subAssociations) {
-                    if (fields.contains(subA) == false) {
+                    boolean found = false;
+                    String name = subA.getName();
+
+                    for (ObjectAssociation existingField : fields) {
+                        if (existingField.getName().equals(name)) {
+                            found = true;
+                            continue;
+                        }
+                    }
+
+                    if (found == false) {
                         fields.add(subA);
                     }
                 }

@@ -159,8 +159,9 @@ public class PolymorphismTest extends SqlIntegrationTestCommonBase {
         assertEquals(CHILD_1, polySelfRefChild1.title());
 
         final SqlDataClassFactory factory = SqlIntegrationTestSingleton.getSqlDataClassFactory();
-        factory.resolve(polySelfRefChild1);
         List<PolySelfRefClass> list2 = polySelfRefChild1.getPolySelfRefClasses();
+        factory.resolve(polySelfRefChild1);
+        list2 = polySelfRefChild1.getPolySelfRefClasses();
         assertEquals(1, list2.size());
     }
 
@@ -188,7 +189,12 @@ public class PolymorphismTest extends SqlIntegrationTestCommonBase {
         final PolyTestClass polyTestClass = SqlIntegrationTestSingleton.getStaticPolyTestClass();
         PolyInterface loaded = polyTestClass.getPolyInterfaceType();
         assertEquals(polyIntImpB.getString(), loaded.getString());
+    }
 
+    public void testAllInterfacesInstancesLoaded() {
+        final SqlDataClassFactory factory = SqlIntegrationTestSingleton.getSqlDataClassFactory();
+        List<PolyInterface> list = factory.allPolyInterfaces();
+        assertEquals(2, list.size());
     }
 
     // Last "test" - Set the Singleton state to 0 to invoke a clean shutdown.
