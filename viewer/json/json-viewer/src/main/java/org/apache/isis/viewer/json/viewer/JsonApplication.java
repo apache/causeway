@@ -20,10 +20,9 @@ package org.apache.isis.viewer.json.viewer;
 
 import org.apache.isis.viewer.json.viewer.resources.capabilities.CapabilitiesResourceServerside;
 import org.apache.isis.viewer.json.viewer.resources.domainobjects.DomainObjectResourceServerside;
-import org.apache.isis.viewer.json.viewer.resources.domainobjects.DomainServiceResourceServerside;
+import org.apache.isis.viewer.json.viewer.resources.domainservices.DomainServiceResourceServerside;
 import org.apache.isis.viewer.json.viewer.resources.domaintypes.DomainTypeResourceServerside;
 import org.apache.isis.viewer.json.viewer.resources.home.HomePageResourceServerside;
-import org.apache.isis.viewer.json.viewer.resources.services.DomainServicesResourceServerside;
 import org.apache.isis.viewer.json.viewer.resources.user.UserResourceServerside;
 
 public class JsonApplication extends AbstractJaxRsApplication {
@@ -31,7 +30,6 @@ public class JsonApplication extends AbstractJaxRsApplication {
     public JsonApplication() {
         addSingleton(new HomePageResourceServerside());
         addSingleton(new DomainTypeResourceServerside());
-        addSingleton(new DomainServicesResourceServerside());
         addSingleton(new UserResourceServerside());
         addSingleton(new DomainObjectResourceServerside());
         addSingleton(new DomainServiceResourceServerside());

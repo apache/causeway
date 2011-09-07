@@ -52,7 +52,7 @@ public class MemberSelfRepBuilder extends RepresentationBuilder<MemberSelfRepBui
     }
     
     private JsonRepresentation domainObjectLinkRep() {
-        return DomainObjectRepBuilder.newLinkToBuilder(resourceContext, objectAdapter, getOidStringifier()).build();
+        return DomainObjectRepBuilder.newLinkToBuilder(resourceContext, "object", objectAdapter, getOidStringifier()).build();
     }
 
 }

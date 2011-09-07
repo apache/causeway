@@ -44,7 +44,7 @@ public class UserRepBuilder extends RepresentationBuilder<UserRepBuilder> {
     
     public JsonRepresentation build() {
         withLinks();
-        withMetadata();
+        withExtensions();
         return representation;
     }
 

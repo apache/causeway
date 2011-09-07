@@ -78,6 +78,11 @@ public class JsonRepresentation {
             public JsonRepresentation apply(JsonNode input) {
                 return new JsonRepresentation(input);
             }});
+        JSON_NODE_TRANSFORMERS.put(Link.class, new Function<JsonNode, Link>() {
+            @Override
+            public Link apply(JsonNode input) {
+                return new Link(input);
+            }});
     }
     
 

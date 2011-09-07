@@ -50,7 +50,9 @@ import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.viewer.json.applib.HttpStatusCode;
 import org.apache.isis.viewer.json.applib.domainobjects.DomainObjectResource;
 import org.apache.isis.viewer.json.applib.util.JsonMapper;
+import org.apache.isis.viewer.json.viewer.representations.RepresentationBuilder;
 import org.apache.isis.viewer.json.viewer.resources.ResourceAbstract;
+import org.apache.isis.viewer.json.viewer.resources.domainservices.DomainServiceRepBuilder;
 import org.apache.isis.viewer.json.viewer.util.UrlDecoderUtils;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
@@ -74,9 +76,10 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements
     public Response object(@PathParam("oid") final String oidStr) {
 
         final ObjectAdapter objectAdapter = getObjectAdapter(oidStr);
-        final DomainObjectRepBuilder builder = DomainObjectRepBuilder
-                .newBuilder(getResourceContext(), objectAdapter);
-        return responseOfOk(jsonRepresentionFrom(builder));
+        final RepresentationBuilder<?> builder = DomainServiceRepBuilder
+                .newBuilder(getResourceContext())
+                .withAdapter(objectAdapter);
+        return responseOfOk(jsonFrom(builder));
     }
 
     @PUT
@@ -108,7 +111,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements
 
         final PropertyRepBuilder builder = PropertyRepBuilder.newBuilder(
                 getResourceContext(), objectAdapter, property);
-        return responseOfOk(jsonRepresentionFrom(builder));
+        return responseOfOk(jsonFrom(builder));
     }
 
     @PUT
@@ -175,7 +178,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements
 
         final CollectionRepBuilder builder = CollectionRepBuilder.newBuilder(
                 getResourceContext(), objectAdapter, collection);
-        return responseOfOk(jsonRepresentionFrom(builder));
+        return responseOfOk(jsonFrom(builder));
     }
 
     @PUT
@@ -281,7 +284,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements
 
         ActionRepBuilder builder = ActionRepBuilder.newBuilder(
                 getResourceContext(), objectAdapter, action);
-        return responseOfOk(jsonRepresentionFrom(builder));
+        return responseOfOk(jsonFrom(builder));
     }
 
     
@@ -399,9 +402,9 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements
         if (facet != null) {
             final Collection<ObjectAdapter> collectionAdapters = facet
                     .collection(returnedAdapter);
-            return responseOfOk(jsonRepresentationOf(collectionAdapters));
+            return responseOfOk(jsonFor(collectionAdapters));
         } else {
-            return responseOfOk(jsonRepresentationOf(returnedAdapter));
+            return responseOfOk(jsonFor(returnedAdapter));
         }
     }
 

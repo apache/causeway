@@ -52,7 +52,7 @@ public abstract class AbstractMemberRepBuilder<R extends RepresentationBuilder<R
         JsonRepresentation memberLinkRep = LinkBuilder.newBuilder(resourceContext, "member", url).build();
         selfRep.put("link", memberLinkRep);
         
-        JsonRepresentation linkTo = DomainObjectRepBuilder.newLinkToBuilder(resourceContext, objectAdapter, getOidStringifier()).build();
+        JsonRepresentation linkTo = DomainObjectRepBuilder.newLinkToBuilder(resourceContext, "object", objectAdapter, getOidStringifier()).build();
         selfRep.put("object", linkTo);
 
         representation.put("self", selfRep);
@@ -149,10 +149,6 @@ public abstract class AbstractMemberRepBuilder<R extends RepresentationBuilder<R
         return objectMember.getFacet(facetType) != null;
     }
 
-
-    protected String urlForObject() {
-        return DomainObjectRepBuilder.urlFor(objectAdapter, getOidStringifier());
-    }
 
     protected String urlForMember(String... parts) {
         return urlForMember(objectAdapter, memberType, objectMember, getOidStringifier(), parts);

@@ -1,23 +1,15 @@
 package org.apache.isis.viewer.json.tck;
 
-import static org.apache.isis.core.commons.matchers.IsisMatchers.greaterThan;
-import static org.apache.isis.core.commons.matchers.IsisMatchers.matches;
 import static org.apache.isis.viewer.json.tck.RepresentationMatchers.assertThat;
-import static org.apache.isis.viewer.json.tck.RepresentationMatchers.isArray;
 import static org.apache.isis.viewer.json.tck.RepresentationMatchers.isFollowableLinkToSelf;
 import static org.apache.isis.viewer.json.tck.RepresentationMatchers.isLink;
 import static org.apache.isis.viewer.json.tck.RepresentationMatchers.isMap;
-import static org.apache.isis.viewer.json.tck.RepresentationMatchers.entry;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
-import static org.hamcrest.Matchers.hasItem;
 import static org.junit.Assert.assertThat;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status.Family;
@@ -26,22 +18,14 @@ import org.apache.isis.runtimes.dflt.webserver.WebServer;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.applib.RestfulClient;
 import org.apache.isis.viewer.json.applib.RestfulResponse;
-import org.apache.isis.viewer.json.applib.blocks.Link;
 import org.apache.isis.viewer.json.applib.blocks.Method;
 import org.apache.isis.viewer.json.applib.capabilities.CapabilitiesRepresentation;
 import org.apache.isis.viewer.json.applib.capabilities.CapabilitiesResource;
-import org.apache.isis.viewer.json.applib.domainobjects.DomainObjectRepresentation;
-import org.apache.isis.viewer.json.applib.domainobjects.DomainServicesRepresentation;
-import org.apache.isis.viewer.json.applib.domainobjects.DomainServicesResource;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
-import org.hamcrest.Matcher;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
-
-import com.google.common.collect.Lists;
 
 
 public class CapabilitiesResourceTest {

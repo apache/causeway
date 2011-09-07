@@ -2,9 +2,9 @@ package org.apache.isis.viewer.json.tck;
 
 import static org.apache.isis.viewer.json.tck.RepresentationMatchers.assertThat;
 import static org.apache.isis.viewer.json.tck.RepresentationMatchers.entityOf;
+import static org.apache.isis.viewer.json.tck.RepresentationMatchers.isArray;
 import static org.apache.isis.viewer.json.tck.RepresentationMatchers.isFollowableLinkToSelf;
 import static org.apache.isis.viewer.json.tck.RepresentationMatchers.isLink;
-import static org.apache.isis.viewer.json.tck.RepresentationMatchers.isArray;
 import static org.apache.isis.viewer.json.tck.RepresentationMatchers.isMap;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
@@ -25,6 +25,8 @@ import org.apache.isis.viewer.json.applib.RestfulResponse;
 import org.apache.isis.viewer.json.applib.blocks.Method;
 import org.apache.isis.viewer.json.applib.homepage.HomePageRepresentation;
 import org.apache.isis.viewer.json.applib.homepage.HomePageResource;
+import org.apache.isis.viewer.json.applib.user.UserRepresentation;
+import org.apache.isis.viewer.json.applib.user.UserResource;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.junit.Before;
@@ -32,46 +34,47 @@ import org.junit.Rule;
 import org.junit.Test;
 
 
-public class HomePageResourceTest {
+public class UserResourceTest {
 
     @Rule
     public IsisWebServerRule webServerRule = new IsisWebServerRule();
     
     private RestfulClient client;
-    private HomePageResource resource;
+    private UserResource resource;
 
     @Before
     public void setUp() throws Exception {
         WebServer webServer = webServerRule.getWebServer();
         client = new RestfulClient(webServer.getBase());
         
-        resource = client.getHomePageResource();
+        resource = client.getUserResource();
     }
 
     @Test
     public void representation() throws Exception {
 
         // given
-        Response resp = resource.resources();
+        Response resp = resource.user();
         
         // when
-        RestfulResponse<HomePageRepresentation> jsonResp = RestfulResponse.of(resp, HomePageRepresentation.class);
+        RestfulResponse<UserRepresentation> jsonResp = RestfulResponse.of(resp, UserRepresentation.class);
         assertThat(jsonResp.getStatus().getFamily(), is(Family.SUCCESSFUL));
         
         // then
         assertThat(jsonResp.getStatus(), is(HttpStatusCode.OK));
         assertThat(jsonResp.getHeader(RestfulResponse.Header.MEDIA_TYPE), is(MediaType.APPLICATION_JSON_TYPE));
-        assertThat(jsonResp.getHeader(RestfulResponse.Header.CACHE_CONTROL).getMaxAge(), is(86400));
-        assertThat(jsonResp.getHeader(RestfulResponse.Header.X_REPRESENTATION_TYPE), is(RepresentationType.HOME_PAGE));
+        assertThat(jsonResp.getHeader(RestfulResponse.Header.CACHE_CONTROL).getMaxAge(), is(3600));
+        assertThat(jsonResp.getHeader(RestfulResponse.Header.X_REPRESENTATION_TYPE), is(RepresentationType.USER));
         
-        HomePageRepresentation repr = jsonResp.getEntity();
+        UserRepresentation repr = jsonResp.getEntity();
         assertThat(repr, is(not(nullValue())));
         assertThat(repr.isMap(), is(true));
         
         assertThat(repr.getSelf(), isLink(client).method(Method.GET));
-        assertThat(repr.getUser(), isLink(client).method(Method.GET));
-        assertThat(repr.getServices(), isLink(client).method(Method.GET));
-        assertThat(repr.getCapabilities(), isLink(client).method(Method.GET));
+        assertThat(repr.getUsername(), is(not(nullValue())));
+        assertThat(repr.getFriendlyName(), is(nullValue())); // TODO: change fixture so populated
+        assertThat(repr.getEmail(), is(nullValue())); // TODO: change fixture so populated
+        assertThat(repr.getRoles(), is(not(nullValue()))); // TODO: change fixture so have non-empty list
         
         assertThat(repr.getLinks(), isArray());
         assertThat(repr.getExtensions(), isMap());
@@ -80,25 +83,14 @@ public class HomePageResourceTest {
     @Test
     public void linksToSelf() throws Exception {
         // given
-        HomePageRepresentation repr = givenRepresentation();
+        UserRepresentation repr = givenRepresentation();
 
         // when, then
         assertThat(repr, isFollowableLinkToSelf(client));
     }
     
-    @Test
-    public void links() throws Exception {
-        // given
-        HomePageRepresentation repr = givenRepresentation();
-
-        // when, then
-        assertThat(repr.getServices(), isLink(client).returning(HttpStatusCode.OK));
-        assertThat(repr.getUser(), isLink(client).returning(HttpStatusCode.OK));
-        assertThat(repr.getCapabilities(), isLink(client).returning(HttpStatusCode.OK));
-    }
-
-    private HomePageRepresentation givenRepresentation() throws JsonParseException, JsonMappingException, IOException {
-        return entityOf(resource.resources(), HomePageRepresentation.class);
+    private UserRepresentation givenRepresentation() throws JsonParseException, JsonMappingException, IOException {
+        return entityOf(resource.user(), UserRepresentation.class);
     }
 
 }

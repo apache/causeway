@@ -27,7 +27,6 @@ import org.apache.isis.viewer.json.applib.blocks.Link;
 import org.apache.isis.viewer.json.applib.capabilities.CapabilitiesResource;
 import org.apache.isis.viewer.json.applib.domainobjects.DomainObjectResource;
 import org.apache.isis.viewer.json.applib.domainobjects.DomainServiceResource;
-import org.apache.isis.viewer.json.applib.domainobjects.DomainServicesResource;
 import org.apache.isis.viewer.json.applib.domaintypes.DomainTypeResource;
 import org.apache.isis.viewer.json.applib.homepage.HomePageResource;
 import org.apache.isis.viewer.json.applib.user.UserResource;
@@ -41,7 +40,6 @@ public class RestfulClient {
     private final HomePageResource homePageResource;
     private final UserResource userResource;
     private final CapabilitiesResource capabilitiesResource;
-    private final DomainServicesResource domainServicesResource;
     private final DomainObjectResource domainObjectResource;
     private final DomainServiceResource domainServiceResource;
     private final DomainTypeResource domainTypeResource;
@@ -60,7 +58,6 @@ public class RestfulClient {
         this.homePageResource = clientRequestFactory.createProxy(HomePageResource.class);
         this.userResource = clientRequestFactory.createProxy(UserResource.class);
         this.domainTypeResource = clientRequestFactory.createProxy(DomainTypeResource.class);
-        this.domainServicesResource = clientRequestFactory.createProxy(DomainServicesResource.class);
         this.domainServiceResource = clientRequestFactory.createProxy(DomainServiceResource.class);
         this.domainObjectResource = clientRequestFactory.createProxy(DomainObjectResource.class);
         this.capabilitiesResource = clientRequestFactory.createProxy(CapabilitiesResource.class);
@@ -73,10 +70,6 @@ public class RestfulClient {
 
     public HomePageResource getHomePageResource() {
         return homePageResource;
-    }
-
-    public DomainServicesResource getDomainServicesResource() {
-        return domainServicesResource;
     }
 
     public UserResource getUserResource() {

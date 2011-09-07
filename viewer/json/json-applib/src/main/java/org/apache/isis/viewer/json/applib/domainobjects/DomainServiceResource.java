@@ -36,6 +36,12 @@ import org.jboss.resteasy.annotations.ClientResponseType;
 @Path("/services")
 public interface DomainServiceResource {
 
+    @GET
+    @Path("/")
+    @Produces({ MediaType.APPLICATION_JSON })
+    @ClientResponseType(entityType=String.class)
+    public Response services();
+
     ////////////////////////////////////////////////////////////
     // domain service
     ////////////////////////////////////////////////////////////

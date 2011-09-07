@@ -18,7 +18,7 @@ public class UserRepresentation extends JsonRepresentation implements LinksToSel
         return getLink("self");
     }
 
-    public String getUserName() {
+    public String getUsername() {
         return getString("username");
     }
 

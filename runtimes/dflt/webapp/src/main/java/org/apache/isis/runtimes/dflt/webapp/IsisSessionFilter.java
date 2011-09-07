@@ -106,15 +106,22 @@ public class IsisSessionFilter implements Filter {
             } else {
                 // the destination servlet is expected to know that there
                 // will be no open context
-                chain.doFilter(request, response);
+                try {
+                    chain.doFilter(request, response);
+                } finally {
+                    // nothing to do
+                }
             }
         } else {
             // else, is authenticated so open session
             authSessionLookupStrategy.bind(request, response, authSession);
 
             IsisContext.openSession(authSession);
-            chain.doFilter(request, response);
-            IsisContext.closeSession();
+            try {
+                chain.doFilter(request, response);
+            } finally {
+                IsisContext.closeSession();
+            }
         }
     }
 

@@ -34,6 +34,7 @@ public abstract class RepresentationBuilder<T extends RepresentationBuilder<T>> 
         this.resourceContext = resourceContext;
     }
 
+
     public T withSelf(String href) {
         representation.put("self", LinkBuilder.newBuilder(resourceContext, "self", href).build());
         return asT(this);
@@ -51,15 +52,15 @@ public abstract class RepresentationBuilder<T extends RepresentationBuilder<T>> 
         return asT(this);
     }
 
-    public T withMetadata() {
-        return withMetadata(JsonRepresentation.newMap());
+    public T withExtensions() {
+        return withExtensions(JsonRepresentation.newMap());
     }
 
-    public T withMetadata(JsonRepresentation metadata) {
-        if(!metadata.isMap()) {
-            throw new IllegalArgumentException("metadata must be a map");
+    public T withExtensions(JsonRepresentation extensions) {
+        if(!extensions.isMap()) {
+            throw new IllegalArgumentException("extensions must be a map");
         }
-        representation.put("metadata", metadata);
+        representation.put("extensions", extensions);
         return asT(this);
     }
 
