@@ -14,29 +14,33 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.apache.isis.viewer.json.viewer.resources.services;
+package org.apache.isis.viewer.json.viewer.resources.domainservices;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.services.ServiceUtil;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
 import org.apache.isis.viewer.json.viewer.representations.LinkBuilder;
-import org.apache.isis.viewer.json.viewer.resources.objectlist.DomainObjectListRepBuilder;
+import org.apache.isis.viewer.json.viewer.resources.domainobjects.DomainObjectRepBuilder;
 
-class DomainServiceListRepBuilder extends DomainObjectListRepBuilder {
+public class DomainServiceRepBuilder extends DomainObjectRepBuilder {
 
-    public static DomainObjectListRepBuilder newBuilder(ResourceContext resourceContext) {
-        return new DomainServiceListRepBuilder(resourceContext);
+    public static DomainServiceRepBuilder newBuilder(ResourceContext representationContext) {
+        return new DomainServiceRepBuilder(representationContext);
     }
 
-    private DomainServiceListRepBuilder(ResourceContext resourceContext) {
+    public static LinkBuilder newLinkToBuilder(ResourceContext resourceContext, String string, ObjectAdapter adapter) {
+        String serviceId = ServiceUtil.id(adapter.getObject());
+        return LinkBuilder.newBuilder(resourceContext, "service", "services/%s", serviceId);
+    }
+
+    public DomainServiceRepBuilder(ResourceContext resourceContext) {
         super(resourceContext);
     }
 
     @Override
-    protected JsonRepresentation buildLinkTo(ObjectAdapter serviceAdapter) {
-        String serviceId = ServiceUtil.id(serviceAdapter.getObject());
-        return LinkBuilder.newBuilder(resourceContext, "service", "services/%s", serviceId).build();
+    protected JsonRepresentation linkTo(ObjectAdapter objectAdapter) {
+        return newLinkToBuilder(resourceContext, "service", objectAdapter).build();
     }
 
 

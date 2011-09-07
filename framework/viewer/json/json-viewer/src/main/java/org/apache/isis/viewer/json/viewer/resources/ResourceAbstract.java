@@ -72,8 +72,12 @@ public abstract class ResourceAbstract {
     protected final static JsonMapper jsonMapper = JsonMapper.instance();
 
     protected static final CacheControl CACHE_ONE_DAY = new CacheControl();
+    protected static final CacheControl CACHE_ONE_HOUR = new CacheControl();
+    protected static final CacheControl CACHE_NONE = new CacheControl();
     static {
-        CACHE_ONE_DAY.setMaxAge(86400);
+        CACHE_ONE_DAY.setMaxAge(24*60*60);
+        CACHE_ONE_HOUR.setMaxAge(60*60);
+        CACHE_NONE.setNoCache(true);
     }
 
 
@@ -117,24 +121,24 @@ public abstract class ResourceAbstract {
     // Rendering
     // //////////////////////////////////////////////////////////////
 
-    protected String jsonRepresentionFrom(RepresentationBuilder builder) {
+    protected String jsonFrom(RepresentationBuilder<?> builder) {
         JsonRepresentation representation = builder.build();
-        return asJson(representation);
+        return jsonFor(representation);
     }
 
-	protected String jsonRepresentationOf(
+	protected String jsonFor(
 			final Collection<ObjectAdapter> collectionAdapters) {
-		return asJson(Lists.newArrayList(
+		return jsonFor(Lists.newArrayList(
             Collections2.transform(collectionAdapters, toObjectSelfRepresentation())));
 	}
 
-	protected String jsonRepresentationOf(
+	protected String jsonFor(
 			final ObjectAdapter objectAdapter) {
-		return asJson(toObjectSelfRepresentation().apply(objectAdapter));
+		return jsonFor(toObjectSelfRepresentation().apply(objectAdapter));
 	}
 
 
-    protected String asJson(final Object object) {
+    protected String jsonFor(final Object object) {
         try {
             return jsonMapper.write(object);
         } catch (JsonGenerationException e) {

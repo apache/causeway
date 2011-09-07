@@ -52,9 +52,8 @@ public class HomePageResourceServerside extends ResourceAbstract implements Home
         representation.put("links", JsonRepresentation.newArray());
         representation.put("extensions", JsonRepresentation.newMap());
 
-        String jsonEntity = asJson(representation);
         return Response.ok()
-                .entity(jsonEntity)
+                .entity(jsonFor(representation))
                 .cacheControl(CACHE_ONE_DAY)
                 .header(RestfulResponse.Header.X_REPRESENTATION_TYPE.getName(), RepresentationType.HOME_PAGE.getName())
                 .type(MediaType.APPLICATION_JSON_TYPE).build();

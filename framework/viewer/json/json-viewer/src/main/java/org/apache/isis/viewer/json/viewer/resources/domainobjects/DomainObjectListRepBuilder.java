@@ -14,7 +14,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.apache.isis.viewer.json.viewer.resources.objectlist;
+package org.apache.isis.viewer.json.viewer.resources.domainobjects;
 
 import java.util.List;
 
@@ -22,7 +22,6 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
 import org.apache.isis.viewer.json.viewer.representations.RepresentationBuilder;
-import org.apache.isis.viewer.json.viewer.resources.domainobjects.DomainObjectRepBuilder;
 
 public class DomainObjectListRepBuilder extends RepresentationBuilder<DomainObjectListRepBuilder> {
 
@@ -37,24 +36,24 @@ public class DomainObjectListRepBuilder extends RepresentationBuilder<DomainObje
     public DomainObjectListRepBuilder withAdapters(List<ObjectAdapter> objectAdapters) {
         JsonRepresentation list = JsonRepresentation.newArray();
         for(ObjectAdapter adapter: objectAdapters) {
-            JsonRepresentation linkToObject = buildLinkTo(adapter);
+            JsonRepresentation linkToObject = linkTo(adapter);
             list.add(linkToObject);
         }
-        representation.put("value", list);
+        representation.put("values", list);
         return this;
     }
 
 
     public JsonRepresentation build() {
         withLinks();
-        withMetadata();
+        withExtensions();
 
         return representation;
     }
 
 
-    protected JsonRepresentation buildLinkTo(ObjectAdapter adapter) {
-        return DomainObjectRepBuilder.newLinkToBuilder(resourceContext, adapter, getOidStringifier()).build();
+    protected JsonRepresentation linkTo(ObjectAdapter adapter) {
+        return DomainObjectRepBuilder.newLinkToBuilder(resourceContext, "object", adapter, getOidStringifier()).build();
     }
 
 

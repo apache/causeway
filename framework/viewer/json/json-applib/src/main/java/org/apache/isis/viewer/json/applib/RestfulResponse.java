@@ -7,6 +7,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javax.ws.rs.core.CacheControl;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 
@@ -38,6 +39,11 @@ public class RestfulResponse<T> {
             @Override
             public CacheControl parse(String value) {
                 return CacheControl.valueOf(value);
+            }};
+        public final static Header<MediaType> MEDIA_TYPE = new Header<MediaType>("Content-Type"){
+            @Override
+            public MediaType parse(String value) {
+                return MediaType.valueOf(value);
             }};
         public final static Header<RepresentationType> X_REPRESENTATION_TYPE = new Header<RepresentationType>("X-Representation-Type"){
             @Override
@@ -88,4 +94,5 @@ public class RestfulResponse<T> {
         String value = (String) metadata.getFirst(header.getName());
         return header.parse(value);
     }
+
 }

@@ -18,6 +18,10 @@ public class DomainServicesRepresentation extends JsonRepresentation implements 
         return getLink("self");
     }
 
+    public JsonRepresentation getValues() {
+        return getArray("values");
+    }
+
     public JsonRepresentation getLinks() {
         return getArray("links");
     }

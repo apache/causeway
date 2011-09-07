@@ -62,7 +62,7 @@ public class CapabilitiesResourceServerside extends ResourceAbstract implements 
         representation.put("links", JsonRepresentation.newArray());
         representation.put("extensions", JsonRepresentation.newMap());
         
-        return responseOfOk(asJson(representation));
+        return responseOfOk(jsonFor(representation));
     }
 
 

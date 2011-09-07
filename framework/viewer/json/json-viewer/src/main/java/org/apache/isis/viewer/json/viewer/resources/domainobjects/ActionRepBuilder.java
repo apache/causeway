@@ -59,7 +59,7 @@ public class ActionRepBuilder extends AbstractMemberRepBuilder<ActionRepBuilder,
     		return;
     	}
     	ObjectAdapter serviceAdapter = contributingServiceAdapter();
-        JsonRepresentation contributedByLink = DomainObjectRepBuilder.newLinkToBuilder(resourceContext, serviceAdapter, getOidStringifier()).build();
+        JsonRepresentation contributedByLink = DomainObjectRepBuilder.newLinkToBuilder(resourceContext, "object", serviceAdapter, getOidStringifier()).build();
 		representation.put("contributedBy", contributedByLink);
 	}
 
@@ -138,7 +138,7 @@ public class ActionRepBuilder extends AbstractMemberRepBuilder<ActionRepBuilder,
     	if(objectMember.isContributed()) {
     		ObjectActionParameter actionParameter = objectMember.getParameters().get(i);
     		if (actionParameter.getSpecification().isOfType(objectAdapter.getSpecification())) {
-    			return DomainObjectRepBuilder.newLinkToBuilder(resourceContext, objectAdapter, getOidStringifier()).build();
+    			return DomainObjectRepBuilder.newLinkToBuilder(resourceContext, "object", objectAdapter, getOidStringifier()).build();
     		}
     	}
     	return "{value}";

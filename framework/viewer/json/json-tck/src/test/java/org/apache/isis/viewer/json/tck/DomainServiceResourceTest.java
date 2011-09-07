@@ -7,23 +7,27 @@ import static org.apache.isis.viewer.json.tck.RepresentationMatchers.isArray;
 import static org.apache.isis.viewer.json.tck.RepresentationMatchers.isFollowableLinkToSelf;
 import static org.apache.isis.viewer.json.tck.RepresentationMatchers.isLink;
 import static org.apache.isis.viewer.json.tck.RepresentationMatchers.isMap;
+import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
 import java.io.IOException;
 
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status.Family;
 
 import org.apache.isis.runtimes.dflt.webserver.WebServer;
+import org.apache.isis.viewer.json.applib.HttpStatusCode;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
+import org.apache.isis.viewer.json.applib.RepresentationType;
 import org.apache.isis.viewer.json.applib.RestfulClient;
 import org.apache.isis.viewer.json.applib.RestfulResponse;
 import org.apache.isis.viewer.json.applib.blocks.Link;
 import org.apache.isis.viewer.json.applib.blocks.Method;
 import org.apache.isis.viewer.json.applib.domainobjects.DomainObjectRepresentation;
+import org.apache.isis.viewer.json.applib.domainobjects.DomainServiceResource;
 import org.apache.isis.viewer.json.applib.domainobjects.DomainServicesRepresentation;
-import org.apache.isis.viewer.json.applib.domainobjects.DomainServicesResource;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.junit.Before;
@@ -38,47 +42,43 @@ public class DomainServiceResourceTest {
     public IsisWebServerRule webServerRule = new IsisWebServerRule();
     
     private RestfulClient client;
-    private DomainServicesResource resource;
+    private DomainServiceResource resource;
 
     @Before
     public void setUp() throws Exception {
         WebServer webServer = webServerRule.getWebServer();
         client = new RestfulClient(webServer.getBase());
         
-        resource = client.getDomainServicesResource();
+        resource = client.getDomainServiceResource();
     }
 
 
-    @Ignore("to get working again")
     @Test
-    public void returnsServicesRepresentation() throws Exception {
+    public void representation() throws Exception {
         
-
         // when
-        Response servicesResp = resource.services();
-        RestfulResponse<DomainServicesRepresentation> servicesJsonResp = RestfulResponse.of(servicesResp, DomainServicesRepresentation.class);
-        assertThat(servicesJsonResp.getStatus().getFamily(), is(Family.SUCCESSFUL));
+        Response resp = resource.services();
+        RestfulResponse<DomainServicesRepresentation> jsonResp = RestfulResponse.of(resp, DomainServicesRepresentation.class);
         
         // then
-        DomainServicesRepresentation servicesRepr = servicesJsonResp.getEntity();
+        assertThat(jsonResp.getStatus(), is(HttpStatusCode.OK));
+        assertThat(jsonResp.getHeader(RestfulResponse.Header.MEDIA_TYPE), is(MediaType.APPLICATION_JSON_TYPE));
+        assertThat(jsonResp.getHeader(RestfulResponse.Header.CACHE_CONTROL).isNoCache(), is(true));
+        assertThat(jsonResp.getHeader(RestfulResponse.Header.X_REPRESENTATION_TYPE), is(RepresentationType.LIST));
 
-        assertThat(servicesRepr, isMap());
+        DomainServicesRepresentation repr = jsonResp.getEntity();
 
-        assertThat(servicesRepr.getSelf(), isLink().method(Method.GET));
+        assertThat(repr, isMap());
 
-        assertThat(servicesRepr.getString("title"), is("ApplibValues"));
+        assertThat(repr.getSelf(), isLink().method(Method.GET));
         
-        JsonRepresentation serviceValues = servicesRepr.xpath("/value/e[rel='service']");
-        assertThat(serviceValues, isArray());
-        assertThat(serviceValues.arraySize(), is(greaterThan(0)));
-
-        Link serviceLink = serviceValues.elementAt(0).asLink();
-        assertThat(serviceLink, isLink().rel("service").href(matches("http://localhost:\\d+/services/.*$")).method(Method.GET));
+        assertThat(repr.getValues(), isArray());
+        
+        assertThat(repr.getLinks(), isArray());
+        assertThat(repr.getExtensions(), isMap());
     }
 
 
-
-    @org.junit.Ignore("to get working")
     @Test
     public void linksToSelf() throws Exception {
         // given
@@ -89,24 +89,23 @@ public class DomainServiceResourceTest {
     }
 
 
-    @Ignore("to get working again")
     @Test
     public void linksToDomainServiceResources() throws Exception {
         
         // given
-        DomainServicesRepresentation servicesRepr = givenRepresentation();
+        DomainServicesRepresentation repr = givenRepresentation();
 
-        JsonRepresentation repoRepr = servicesRepr.elementAt(0);
-        Link repoObjLink = repoRepr.getLink("link");
-
-        // and when
-        Response repoFollowResp = client.follow(repoObjLink);
-        RestfulResponse<DomainObjectRepresentation> repoFollowJsonResp = RestfulResponse.of(repoFollowResp, DomainObjectRepresentation.class);
-        
-        // then
-        DomainObjectRepresentation domainObjectRepr = repoFollowJsonResp.getEntity();
-        Link domainObjectReprLink = domainObjectRepr.getLink("_self.link");
-        assertThat(domainObjectReprLink, is(repoObjLink));
+        JsonRepresentation values = repr.getValues();
+        for (Link link : values.arrayIterable(Link.class)) {
+            Response followResp = client.follow(link);
+            RestfulResponse<JsonRepresentation> followJsonResp = RestfulResponse.of(followResp, JsonRepresentation.class);
+            assertThat(followJsonResp.getStatus().getFamily(), is(Family.SUCCESSFUL));
+            
+            JsonRepresentation followRepr = followJsonResp.getEntity();
+            Link self = followRepr.getLink("self");
+            
+            assertThat(self.getHref(), is(link.getHref()));
+        }
     }
 
 
