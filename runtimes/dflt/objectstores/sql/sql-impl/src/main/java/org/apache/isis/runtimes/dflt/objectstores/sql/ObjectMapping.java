@@ -19,6 +19,8 @@
 
 package org.apache.isis.runtimes.dflt.objectstores.sql;
 
+import java.util.Vector;
+
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -30,11 +32,11 @@ public interface ObjectMapping {
 
     void destroyObject(DatabaseConnector connector, ObjectAdapter object);
 
-    ObjectAdapter[] getInstances(DatabaseConnector connector, ObjectSpecification spec);
+    Vector<ObjectAdapter> getInstances(DatabaseConnector connector, ObjectSpecification spec);
 
-    ObjectAdapter[] getInstances(DatabaseConnector connector, ObjectSpecification spec, String title);
+    Vector<ObjectAdapter> getInstances(DatabaseConnector connector, ObjectSpecification spec, String title);
 
-    ObjectAdapter[] getInstances(DatabaseConnector connector, ObjectSpecification spec,
+    Vector<ObjectAdapter> getInstances(DatabaseConnector connector, ObjectSpecification spec,
         PersistenceQueryFindByPattern query);
 
     ObjectAdapter getObject(DatabaseConnector connector, Oid oid, ObjectSpecification hint);

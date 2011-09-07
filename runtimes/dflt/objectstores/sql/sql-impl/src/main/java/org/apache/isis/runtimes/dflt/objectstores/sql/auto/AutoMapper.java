@@ -139,41 +139,53 @@ public class AutoMapper extends AbstractAutoMapper implements ObjectMapping, Deb
     }
 
     @Override
-    public ObjectAdapter[] getInstances(final DatabaseConnector connector, final ObjectSpecification spec) {
+    public Vector<ObjectAdapter> getInstances(final DatabaseConnector connector, final ObjectSpecification spec) {
         final StringBuffer sql = createSelectStatement();
-        return loadInstances(connector, spec, completeSelectStatement(sql));
+        final Vector<ObjectAdapter> instances = new Vector<ObjectAdapter>();
+        loadInstancesToVector(connector, spec, completeSelectStatement(sql), instances);
+        return instances;
     }
 
     @Override
-    public ObjectAdapter[] getInstances(final DatabaseConnector connector, final ObjectSpecification spec,
+    public Vector<ObjectAdapter> getInstances(final DatabaseConnector connector, final ObjectSpecification spec,
         final PersistenceQueryFindByPattern query) {
+        final Vector<ObjectAdapter> instances = new Vector<ObjectAdapter>();
+
         final StringBuffer sql = createSelectStatement();
         sql.append(" WHERE ");
 
         final int initialLength = sql.length();
         final ObjectAdapter pattern = query.getPattern();
-        for (final ObjectAssociation assoc : specification.getAssociations()) {
-            final ObjectAdapter field = assoc.get(pattern);
-            if (field != null) {
-                final FieldMapping fieldMapping = fieldMappingFor(assoc);
-                if (fieldMapping != null) {
-                    if (sql.length() > initialLength) {
-                        sql.append(" AND ");
+        try {
+            for (final ObjectAssociation assoc : specification.getAssociations()) {
+                final ObjectAdapter field = assoc.get(pattern);
+                if (field != null) {
+                    final FieldMapping fieldMapping = fieldMappingFor(assoc);
+                    if (fieldMapping != null) {
+                        if (sql.length() > initialLength) {
+                            sql.append(" AND ");
+                        }
+                        fieldMapping.appendWhereClause(connector, sql, pattern);
                     }
-                    fieldMapping.appendWhereClause(connector, sql, pattern);
                 }
             }
+            loadInstancesToVector(connector, spec, completeSelectStatement(sql), instances);
+        } catch (IllegalArgumentException a) {
+
         }
-        return loadInstances(connector, spec, completeSelectStatement(sql));
+        return instances;
     }
 
     @Override
-    public ObjectAdapter[] getInstances(final DatabaseConnector connector, final ObjectSpecification spec,
+    public Vector<ObjectAdapter> getInstances(final DatabaseConnector connector, final ObjectSpecification spec,
         final String title) {
+        final Vector<ObjectAdapter> instances = new Vector<ObjectAdapter>();
+
         final StringBuffer sql = createSelectStatement();
         sql.append(" WHERE ");
         titleMapping.appendWhereClause(sql, title);
-        return loadInstances(connector, spec, completeSelectStatement(sql));
+        loadInstancesToVector(connector, spec, completeSelectStatement(sql), instances);
+        return instances;
     }
 
     @Override
@@ -245,10 +257,9 @@ public class AutoMapper extends AbstractAutoMapper implements ObjectMapping, Deb
         }
     }
 
-    private ObjectAdapter[] loadInstances(final DatabaseConnector connector, final ObjectSpecification cls,
-        final String selectStatment) {
+    private void loadInstancesToVector(final DatabaseConnector connector, final ObjectSpecification cls,
+        final String selectStatment, Vector<ObjectAdapter> instances) {
         LOG.debug("loading instances from SQL " + table);
-        final Vector<ObjectAdapter> instances = new Vector<ObjectAdapter>();
 
         final Results rs = connector.select(selectStatment);
         for (int count = 0; rs.next() && count < MAX_INSTANCES; count++) {
@@ -257,10 +268,6 @@ public class AutoMapper extends AbstractAutoMapper implements ObjectMapping, Deb
             instances.addElement(instance);
         }
         rs.close();
-
-        final ObjectAdapter[] array = new ObjectAdapter[instances.size()];
-        instances.copyInto(array);
-        return array;
     }
 
     private ObjectAdapter loadObject(final DatabaseConnector connector, final ObjectSpecification cls, final Results rs) {
