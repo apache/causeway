@@ -137,6 +137,10 @@ public class SqlDataClassFactory extends AbstractFactoryAndRepository {
         return allInstances(PolyInterface.class);
     }
 
+    public List<PolyInterface> queryPolyInterfaces(PolyInterface query) {
+        return allMatches(PolyInterface.class, query);
+    }
+
     // }}
 
 }

@@ -14,6 +14,7 @@ import org.apache.isis.runtimes.dflt.objectstores.sql.testsystem.dataclasses.pol
 
 public class PolymorphismTest extends SqlIntegrationTestCommonBase {
 
+    private static final String IMPL_A_STRING = "Impl A String";
     private static final String CHILD_1 = "Child 1";
     private static PolyInterfaceImplA polyIntImpA;
     private static PolyInterfaceImplB polyIntImpB;
@@ -91,7 +92,7 @@ public class PolymorphismTest extends SqlIntegrationTestCommonBase {
         // polyTestClass.setPolyTestInterface(polyTestClass);
 
         polyIntImpA = factory.newPolyInterfaceImplA();
-        polyIntImpA.setString("Impl A String");
+        polyIntImpA.setString(IMPL_A_STRING);
         factory.save(polyIntImpA);
 
         polyTestClass.setPolyInterfaceType(polyIntImpA);
@@ -195,6 +196,21 @@ public class PolymorphismTest extends SqlIntegrationTestCommonBase {
         final SqlDataClassFactory factory = SqlIntegrationTestSingleton.getSqlDataClassFactory();
         List<PolyInterface> list = factory.allPolyInterfaces();
         assertEquals(2, list.size());
+    }
+
+    public void testInterfacesLoadedByQuery() {
+        final SqlDataClassFactory factory = SqlIntegrationTestSingleton.getSqlDataClassFactory();
+        PolyInterface query = polyIntImpA;
+
+        // PolyInterface query = new PolyInterface() {
+        // @Override
+        // public String getString() {
+        // return IMPL_A_STRING;
+        // }
+        // };
+
+        List<PolyInterface> list = factory.queryPolyInterfaces(query);
+        assertEquals(1, list.size());
     }
 
     // Last "test" - Set the Singleton state to 0 to invoke a clean shutdown.
