@@ -37,15 +37,12 @@ public class CollectionRepBuilder extends AbstractMemberRepBuilder<CollectionRep
     public CollectionRepBuilder(ResourceContext resourceContext, ObjectAdapter objectAdapter, OneToManyAssociation otma) {
         super(resourceContext, objectAdapter, MemberType.COLLECTION, otma);
 
-        MemberRepType memberRepType = MemberRepType.STANDALONE;
-
-        putSelfIfRequired(memberRepType);
-        putIdRep();
-        withMemberType();
-        putValueIfRequired(memberRepType);
-        putDisabledReason();
-        putMutatorsIfRequired(memberRepType);
-        putDetailsIfRequired(memberRepType);
+        putId();
+        putMemberType();
+        putDisabledReasonIfDisabled();
+        
+        withLinks();
+        withExtensions();
     }
 
     public JsonRepresentation build() {

@@ -26,6 +26,10 @@ public class DomainObjectRepresentation extends JsonRepresentation implements Li
         return getString("title");
     }
     
+    public JsonRepresentation getMembers() {
+        return getArray("members");
+    }
+
     /**
      * Requires xom:xom:1.1 (LGPL) to be added as a dependency.
      */
@@ -40,7 +44,6 @@ public class DomainObjectRepresentation extends JsonRepresentation implements Li
         return xpath("/*[memberType='action']");
     }
 
-
     
     public JsonRepresentation getLinks() {
         return getArray("links");
@@ -48,5 +51,6 @@ public class DomainObjectRepresentation extends JsonRepresentation implements Li
     public JsonRepresentation getExtensions() {
         return getMap("extensions");
     }
+
 
 }

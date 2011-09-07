@@ -17,29 +17,35 @@
  *  under the License.
  */
 
-package org.apache.isis.tck.objstore.dflt.scalars;
+package org.apache.isis.tck.objstore.dflt.simples;
 
 import org.apache.isis.tck.dom.AbstractEntityRepository;
-import org.apache.isis.tck.dom.scalars.ApplibValuedEntity;
-import org.apache.isis.tck.dom.scalars.ApplibValuedEntityRepository;
+import org.apache.isis.tck.dom.simples.SimpleEntity;
+import org.apache.isis.tck.dom.simples.SimpleEntityRepository;
 
-public class ApplibValuedEntityRepositoryDefault extends AbstractEntityRepository<ApplibValuedEntity> implements ApplibValuedEntityRepository {
+public class SimpleEntityRepositoryDefault extends AbstractEntityRepository<SimpleEntity> implements SimpleEntityRepository {
 
-    public ApplibValuedEntityRepositoryDefault() {
-        super(ApplibValuedEntity.class);
+    public SimpleEntityRepositoryDefault() {
+        super(SimpleEntity.class);
     }
 
     @Override
     public String getId() {
-        return "applibValuedEntities";
+        return "simples";
+    }
+
+    @Override
+    public SimpleEntity newTransientEntity() {
+        return newTransientInstance(SimpleEntity.class);
+    }
+
+    @Override
+    public SimpleEntity newPersistentEntity(String name, Boolean flag) {
+        SimpleEntity entity = newTransientEntity();
+        entity.setName(name);
+        entity.setFlag(flag);
+        return entity;
     }
     
-    /**
-     * Required otherwise return type is erased
-     */
-    @Override
-    public ApplibValuedEntity newEntity() {
-        return super.newEntity();
-    }
 
 }

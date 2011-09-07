@@ -41,6 +41,7 @@ import org.apache.isis.viewer.json.viewer.representations.RepresentationBuilder;
 import org.apache.isis.viewer.json.viewer.resources.ResourceAbstract;
 import org.apache.isis.viewer.json.viewer.resources.domainobjects.DomainObjectListRepBuilder;
 import org.apache.isis.viewer.json.viewer.resources.domainobjects.DomainObjectRepBuilder;
+import org.jboss.resteasy.annotations.ClientResponseType;
 
 @Path("/services")
 public class DomainServiceResourceServerside extends ResourceAbstract implements

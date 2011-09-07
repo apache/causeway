@@ -35,16 +35,12 @@ public class PropertyRepBuilder extends AbstractMemberRepBuilder<PropertyRepBuil
     public PropertyRepBuilder(ResourceContext resourceContext, ObjectAdapter objectAdapter, OneToOneAssociation otoa) {
         super(resourceContext, objectAdapter, MemberType.PROPERTY, otoa);
 
-        MemberRepType memberRepType = MemberRepType.STANDALONE;
-
-        putSelfIfRequired(memberRepType);
-        putIdRep();
-        withMemberType();
-        putValueIfRequired(memberRepType);
-        putDisabledReason();
-        putChoices();
-        putMutatorsIfRequired(memberRepType);
-        putDetailsIfRequired(memberRepType);
+        putId();
+        putMemberType();
+        putDisabledReasonIfDisabled();
+        
+        withLinks();
+        withExtensions();
     }
 
     public JsonRepresentation build() {
@@ -61,11 +57,12 @@ public class PropertyRepBuilder extends AbstractMemberRepBuilder<PropertyRepBuil
         return DomainObjectRepBuilder.valueOrRef(resourceContext, valueAdapter, objectMember.getSpecification(), getOidStringifier(), getLocalization());
     }
 
-    private void putChoices() {
+    public PropertyRepBuilder withChoices() {
 		Object propertyChoices = propertyChoices();
 		if(propertyChoices != null) {
 			representation.put("choices", propertyChoices);
 		}
+		return this;
 	}
 
 	private Object propertyChoices() {

@@ -17,17 +17,17 @@
  *  under the License.
  */
 
-package org.apache.isis.tck.dom.scalars;
+package org.apache.isis.tck.dom;
 
 import java.util.List;
 
 import org.apache.isis.applib.AbstractFactoryAndRepository;
 
-public abstract class AbstractValuedEntityRepository<T> extends AbstractFactoryAndRepository {
+public abstract class AbstractEntityRepository<T> extends AbstractFactoryAndRepository {
     
     private Class<T> cls;
 
-    public AbstractValuedEntityRepository(Class<T> cls) {
+    public AbstractEntityRepository(Class<T> cls) {
         super();
         this.cls = cls;
     }

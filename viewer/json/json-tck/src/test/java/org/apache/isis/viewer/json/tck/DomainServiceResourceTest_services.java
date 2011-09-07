@@ -1,13 +1,10 @@
 package org.apache.isis.viewer.json.tck;
 
-import static org.apache.isis.core.commons.matchers.IsisMatchers.greaterThan;
-import static org.apache.isis.core.commons.matchers.IsisMatchers.matches;
 import static org.apache.isis.viewer.json.tck.RepresentationMatchers.assertThat;
 import static org.apache.isis.viewer.json.tck.RepresentationMatchers.isArray;
 import static org.apache.isis.viewer.json.tck.RepresentationMatchers.isFollowableLinkToSelf;
 import static org.apache.isis.viewer.json.tck.RepresentationMatchers.isLink;
 import static org.apache.isis.viewer.json.tck.RepresentationMatchers.isMap;
-import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
@@ -25,18 +22,16 @@ import org.apache.isis.viewer.json.applib.RestfulClient;
 import org.apache.isis.viewer.json.applib.RestfulResponse;
 import org.apache.isis.viewer.json.applib.blocks.Link;
 import org.apache.isis.viewer.json.applib.blocks.Method;
-import org.apache.isis.viewer.json.applib.domainobjects.DomainObjectRepresentation;
 import org.apache.isis.viewer.json.applib.domainobjects.DomainServiceResource;
 import org.apache.isis.viewer.json.applib.domainobjects.DomainServicesRepresentation;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 
 
-public class DomainServiceResourceTest {
+public class DomainServiceResourceTest_services {
 
     @Rule
     public IsisWebServerRule webServerRule = new IsisWebServerRule();
@@ -82,10 +77,10 @@ public class DomainServiceResourceTest {
     @Test
     public void linksToSelf() throws Exception {
         // given
-        DomainServicesRepresentation servicesRepr = givenRepresentation();
+        DomainServicesRepresentation repr = givenRepresentation();
 
         // when, then
-        assertThat(servicesRepr, isFollowableLinkToSelf(client));
+        assertThat(repr, isFollowableLinkToSelf(client));
     }
 
 
@@ -94,8 +89,11 @@ public class DomainServiceResourceTest {
         
         // given
         DomainServicesRepresentation repr = givenRepresentation();
-
+        
+        // when
         JsonRepresentation values = repr.getValues();
+        
+        // then
         for (Link link : values.arrayIterable(Link.class)) {
             Response followResp = client.follow(link);
             RestfulResponse<JsonRepresentation> followJsonResp = RestfulResponse.of(followResp, JsonRepresentation.class);

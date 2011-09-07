@@ -50,7 +50,7 @@ public interface DomainServiceResource {
     @Path("/{serviceId}")
     @Produces({ MediaType.APPLICATION_JSON })
     @ClientResponseType(entityType=String.class)
-    public Response service(@PathParam("serviceid") final String serviceId);
+    public Response service(@PathParam("serviceId") final String serviceId);
     
     
     ////////////////////////////////////////////////////////////
