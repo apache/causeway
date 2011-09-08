@@ -96,6 +96,10 @@ public class SqlDataClassFactory extends AbstractFactoryAndRepository {
         return object;
     }
 
+    public List<SimpleClass> allSimpleClassesThatMatch(SimpleClass simpleClassMatch) {
+        return allMatches(SimpleClass.class, simpleClassMatch);
+    }
+
     // }}
 
     // {{ For polymorphism tests

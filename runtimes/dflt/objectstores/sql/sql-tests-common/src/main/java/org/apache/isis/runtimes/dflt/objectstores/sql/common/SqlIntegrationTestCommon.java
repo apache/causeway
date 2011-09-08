@@ -120,7 +120,7 @@ public abstract class SqlIntegrationTestCommon extends SqlIntegrationTestCommonB
     private static List<SimpleClass> simpleClassList2 = new ArrayList<SimpleClass>();
 
     private static SimpleClassTwo simpleClassTwoA;
-    // private static SimpleClassTwo simpleClassTwoB;
+    private static SimpleClassTwo simpleClassTwoB;
 
     private static NumericTestClass numericTestClassMax;
     private static NumericTestClass numericTestClassMin;
@@ -171,8 +171,9 @@ public abstract class SqlIntegrationTestCommon extends SqlIntegrationTestCommonB
         simpleClassTwoA.setText("A");
         simpleClassTwoA.setIntValue(999);
         simpleClassTwoA.setBooleanValue(true);
-        // simpleClassTwoB = factory.newSimpleClassTwo();
-        // simpleClassTwoB.setString("A");
+
+        simpleClassTwoB = factory.newSimpleClassTwo();
+        simpleClassTwoB.setText("B");
 
         sqlDataClass.setSimpleClassTwo(simpleClassTwoA);
 
@@ -218,7 +219,7 @@ public abstract class SqlIntegrationTestCommon extends SqlIntegrationTestCommonB
         for (final String string : SqlIntegrationTestCommon.stringList2) {
             final SimpleClass simpleClass = factory.newSimpleClass();
             simpleClass.setString(string);
-            simpleClass.setSimpleClassTwoA(simpleClassTwoA);
+            simpleClass.setSimpleClassTwoA(simpleClassTwoB);
             sqlDataClass.addToSimpleClasses2(simpleClass);
             if (bMustAdd) {
                 simpleClassList2.add(simpleClass);
@@ -557,31 +558,62 @@ public abstract class SqlIntegrationTestCommon extends SqlIntegrationTestCommonB
     public void testSimpleClassTwo() {
         final SqlDataClassFactory factory = SqlIntegrationTestSingleton.getSqlDataClassFactory();
         final List<SimpleClassTwo> classes = factory.allSimpleClassTwos();
-        assertEquals(1, classes.size());
+        assertEquals(2, classes.size());
         for (final SimpleClassTwo simpleClass : classes) {
-            assertEquals(simpleClassTwoA.getText(), simpleClass.getText());
+            // assertEquals(simpleClassTwoA.getText(), simpleClass.getText());
+            assertTrue("AB".contains(simpleClass.getText()));
         }
     }
 
     public void testUpdate1() {
         final SqlDataClassFactory factory = SqlIntegrationTestSingleton.getSqlDataClassFactory();
         final List<SimpleClassTwo> classes = factory.allSimpleClassTwos();
-        assertEquals(1, classes.size());
+        assertEquals(2, classes.size());
 
         final SimpleClassTwo simpleClass = classes.get(0);
         simpleClass.setText("XXX");
         simpleClass.setBooleanValue(false);
         simpleClassTwoA.setBooleanValue(false);
+        if (getProperties().getProperty("isis.persistor") != "in-memory") {
+            getSingletonInstance().setState(0);
+        }
     }
 
     public void testUpdate2() {
         final SqlDataClassFactory factory = SqlIntegrationTestSingleton.getSqlDataClassFactory();
         final List<SimpleClassTwo> classes = factory.allSimpleClassTwos();
-        assertEquals(1, classes.size());
+        assertEquals(2, classes.size());
 
         final SimpleClassTwo simpleClass = classes.get(0);
         assertEquals("XXX", simpleClass.getText());
         assertEquals(simpleClassTwoA.getBooleanValue(), simpleClass.getBooleanValue());
+
+        getSingletonInstance().setState(1);
+    }
+
+    public void testFindByMatchString() {
+        final SimpleClass simpleClassMatch = new SimpleClass();
+        simpleClassMatch.setString(stringList1.get(0));
+
+        final SqlDataClassFactory factory = SqlIntegrationTestSingleton.getSqlDataClassFactory();
+        final List<SimpleClass> classes = factory.allSimpleClassesThatMatch(simpleClassMatch);
+        assertEquals(1, classes.size());
+
+    }
+
+    public void testFindByMatchEntity() {
+        final SqlDataClassFactory factory = SqlIntegrationTestSingleton.getSqlDataClassFactory();
+        final List<SimpleClassTwo> classTwos = factory.allSimpleClassTwos();
+
+        final SimpleClass simpleClassMatch = new SimpleClass();
+        simpleClassMatch.setSimpleClassTwoA(classTwos.get(0));
+
+        final List<SimpleClass> classes = factory.allSimpleClassesThatMatch(simpleClassMatch);
+        // TODO: Why is this hack required?
+        if (getProperties().getProperty("isis.persistor") != "in-memory") {
+            assertEquals(stringList1.size(), classes.size());
+        }
+
     }
 
     // Last "test" - Set the Singleton state to 0 to invoke a clean shutdown.

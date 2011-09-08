@@ -39,4 +39,6 @@ public interface FieldMapping {
 
     void debugData(DebugBuilder debug);
 
+    void appendWhereObject(DatabaseConnector connector, ObjectAdapter objectAdapter);
+
 }
