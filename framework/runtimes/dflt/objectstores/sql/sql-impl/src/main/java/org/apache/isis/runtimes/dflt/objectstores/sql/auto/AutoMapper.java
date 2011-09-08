@@ -25,6 +25,7 @@ import java.util.Vector;
 
 import org.apache.log4j.Logger;
 
+import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -50,6 +51,8 @@ import org.apache.isis.runtimes.dflt.runtime.persistence.ConcurrencyException;
 import org.apache.isis.runtimes.dflt.runtime.persistence.ObjectNotFoundException;
 import org.apache.isis.runtimes.dflt.runtime.persistence.PersistorUtil;
 import org.apache.isis.runtimes.dflt.runtime.persistence.query.PersistenceQueryFindByPattern;
+import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
 
 public class AutoMapper extends AbstractAutoMapper implements ObjectMapping, DebuggableWithTitle {
     private static final Logger LOG = Logger.getLogger(AutoMapper.class);
@@ -170,19 +173,48 @@ public class AutoMapper extends AbstractAutoMapper implements ObjectMapping, Deb
             // LOG.debug(assoc.getName());
             final Method method;
             try {
-                method = o.getClass().getMethod("get" + patternAssoc.getName(), (Class<?>[]) null);
+                final Identifier identifier = patternAssoc.getIdentifier();
+                final String memberName = identifier.getMemberName();
+                final String methodName = memberName.substring(0, 1).toUpperCase() + memberName.substring(1);
+
+                method = o.getClass().getMethod("get" + methodName, (Class<?>[]) null);
                 final Object res = InvokeUtils.invoke(method, o);
                 if (res != null) {
+
                     if (sql.length() > initialLength) {
                         sql.append(" AND ");
                     }
-                    final String fieldName = Sql.sqlFieldName(patternAssoc.getIdentifier().getMemberName());
-                    sql.append(fieldName + "=?");
-                    connector.addToQueryValues(res);
-                    foundFields++;
+
+                    final ObjectSpecification specification = patternAssoc.getSpecification();
+                    if (specification.isValue()) {
+                        // If the property (memberName) is a value type, use the value.
+                        LOG.debug("Pattern Assoc Is Value");
+                        final String fieldName = Sql.sqlFieldName(identifier.getMemberName());
+                        sql.append(fieldName + "=?");
+                        connector.addToQueryValues(res);
+                        foundFields++;
+                    } else {
+                        // If the property (memberName) is an entity, use the ID.
+                        LOG.debug("Pattern Assoc Is Entity");
+
+                        FieldMapping fieldMapping = fieldMappingLookup.get(patternAssoc);
+
+                        fieldMapping.appendColumnNames(sql);
+                        sql.append("=?");
+
+                        final AdapterManager adapterManager = IsisContext.getPersistenceSession().getAdapterManager();
+                        final ObjectAdapter restoredValue = adapterManager.adapterFor(res);
+                        Oid oid = restoredValue.getOid();
+                        Object oidObject = idMapping.primaryKeyAsObject(oid);
+                        connector.addToQueryValues(oidObject);
+                        foundFields++;
+                    }
+
                 }
             } catch (SecurityException e) {
+                LOG.debug(e.getMessage());
             } catch (NoSuchMethodException e) {
+                LOG.debug(e.getMessage());
             }
         }
         if (foundFields > 0) {

@@ -91,6 +91,12 @@ public abstract class AbstractJdbcFieldMapping implements FieldMapping {
         debug.appendln(field.getId(), columnName + "/" + columnType());
     }
 
+    @Override
+    public void appendWhereObject(DatabaseConnector connector, ObjectAdapter objectAdapter) {
+        Object object = preparedStatementObject(objectAdapter);
+        connector.addToQueryValues(object);
+    }
+
     protected abstract String columnType();
 
     protected abstract Object preparedStatementObject(ObjectAdapter value);

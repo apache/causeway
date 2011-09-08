@@ -15,6 +15,7 @@ import org.apache.isis.runtimes.dflt.objectstores.sql.testsystem.dataclasses.pol
 public class PolymorphismTest extends SqlIntegrationTestCommonBase {
 
     public class PolyInterfaceEx implements PolyInterface {
+        // {{ String
         private String string;
 
         @Override
@@ -25,6 +26,8 @@ public class PolymorphismTest extends SqlIntegrationTestCommonBase {
         public void setString(final String string) {
             this.string = string;
         }
+
+        // }}
 
         public String getSpecial() {
             return "special";
