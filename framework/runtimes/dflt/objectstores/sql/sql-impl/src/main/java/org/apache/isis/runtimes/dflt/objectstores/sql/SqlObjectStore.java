@@ -206,7 +206,8 @@ public final class SqlObjectStore implements ObjectStore {
     }
 
     private ObjectAdapter[] findByPattern(final PersistenceQueryFindByPattern query) {
-        final ObjectSpecification specification = query.getSpecification();
+        final ObjectSpecification specification = query.getSpecification();// query.getPattern().getSpecification();//
+                                                                           // getSpecification();
         final DatabaseConnector connector = connectionPool.acquire();
 
         final Vector<ObjectAdapter> matchingInstances = new Vector<ObjectAdapter>();
@@ -221,7 +222,9 @@ public final class SqlObjectStore implements ObjectStore {
             final List<ObjectSpecification> subclasses = specification.subclasses();
             for (ObjectSpecification subclassSpec : subclasses) {
                 // if (subclassSpec.equals(specification)) {
-                addSpecQueryInstances(subclassSpec, connector, query, matchingInstances);
+                if (!subclassSpec.isAbstract()) {
+                    addSpecQueryInstances(subclassSpec, connector, query, matchingInstances);
+                }
                 // }
             }
         }

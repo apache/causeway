@@ -14,6 +14,24 @@ import org.apache.isis.runtimes.dflt.objectstores.sql.testsystem.dataclasses.pol
 
 public class PolymorphismTest extends SqlIntegrationTestCommonBase {
 
+    public class PolyInterfaceEx implements PolyInterface {
+        private String string;
+
+        @Override
+        public String getString() {
+            return string;
+        }
+
+        public void setString(final String string) {
+            this.string = string;
+        }
+
+        public String getSpecial() {
+            return "special";
+        }
+
+    };
+
     private static final String IMPL_A_STRING = "Impl A String";
     private static final String CHILD_1 = "Child 1";
     private static PolyInterfaceImplA polyIntImpA;
@@ -93,6 +111,7 @@ public class PolymorphismTest extends SqlIntegrationTestCommonBase {
 
         polyIntImpA = factory.newPolyInterfaceImplA();
         polyIntImpA.setString(IMPL_A_STRING);
+        polyIntImpA.setSpecial("special");
         factory.save(polyIntImpA);
 
         polyTestClass.setPolyInterfaceType(polyIntImpA);
@@ -176,6 +195,8 @@ public class PolymorphismTest extends SqlIntegrationTestCommonBase {
         final SqlDataClassFactory factory = SqlIntegrationTestSingleton.getSqlDataClassFactory();
         polyIntImpB = factory.newPolyInterfaceImplB();
         polyIntImpB.setString("Impl B String");
+        polyIntImpB.setSpecial("special");
+
         factory.save(polyIntImpB);
 
         final PolyTestClass polyTestClass = SqlIntegrationTestSingleton.getStaticPolyTestClass();
@@ -200,17 +221,22 @@ public class PolymorphismTest extends SqlIntegrationTestCommonBase {
 
     public void testInterfacesLoadedByQuery() {
         final SqlDataClassFactory factory = SqlIntegrationTestSingleton.getSqlDataClassFactory();
-        PolyInterface query = polyIntImpA;
+        // PolyInterface query = polyIntImpA;
 
-        // PolyInterface query = new PolyInterface() {
-        // @Override
-        // public String getString() {
-        // return IMPL_A_STRING;
-        // }
-        // };
+        PolyInterfaceEx query = new PolyInterfaceEx();
+        query.setString(IMPL_A_STRING);
 
         List<PolyInterface> list = factory.queryPolyInterfaces(query);
         assertEquals(1, list.size());
+    }
+
+    public void testInterfacesLoadedByQuerySpecial() {
+        final SqlDataClassFactory factory = SqlIntegrationTestSingleton.getSqlDataClassFactory();
+
+        PolyInterfaceEx query = new PolyInterfaceEx();
+
+        List<PolyInterface> list = factory.queryPolyInterfaces(query);
+        assertEquals(2, list.size());
     }
 
     // Last "test" - Set the Singleton state to 0 to invoke a clean shutdown.
