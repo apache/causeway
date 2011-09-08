@@ -19,6 +19,8 @@
 
 package org.apache.isis.runtimes.dflt.objectstores.sql.auto;
 
+import java.lang.reflect.Method;
+import java.util.List;
 import java.util.Vector;
 
 import org.apache.log4j.Logger;
@@ -28,6 +30,7 @@ import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.core.metamodel.adapter.util.InvokeUtils;
 import org.apache.isis.core.metamodel.adapter.version.SerialNumberVersion;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
@@ -38,6 +41,7 @@ import org.apache.isis.runtimes.dflt.objectstores.sql.IdMapping;
 import org.apache.isis.runtimes.dflt.objectstores.sql.ObjectMapping;
 import org.apache.isis.runtimes.dflt.objectstores.sql.ObjectMappingLookup;
 import org.apache.isis.runtimes.dflt.objectstores.sql.Results;
+import org.apache.isis.runtimes.dflt.objectstores.sql.Sql;
 import org.apache.isis.runtimes.dflt.objectstores.sql.SqlObjectStoreException;
 import org.apache.isis.runtimes.dflt.objectstores.sql.TitleMapping;
 import org.apache.isis.runtimes.dflt.objectstores.sql.VersionMapping;
@@ -155,23 +159,34 @@ public class AutoMapper extends AbstractAutoMapper implements ObjectMapping, Deb
         sql.append(" WHERE ");
 
         final int initialLength = sql.length();
+        int foundFields = 0;
         final ObjectAdapter pattern = query.getPattern();
-        try {
-            for (final ObjectAssociation assoc : specification.getAssociations()) {
-                final ObjectAdapter field = assoc.get(pattern);
-                if (field != null) {
-                    final FieldMapping fieldMapping = fieldMappingFor(assoc);
-                    if (fieldMapping != null) {
-                        if (sql.length() > initialLength) {
-                            sql.append(" AND ");
-                        }
-                        fieldMapping.appendWhereClause(connector, sql, pattern);
-                    }
-                }
-            }
-            loadInstancesToVector(connector, spec, completeSelectStatement(sql), instances);
-        } catch (IllegalArgumentException a) {
 
+        // for all fields in the query.getPattern, build a SQL select clause for this spec.
+        final Object o = pattern.getObject();
+        final ObjectSpecification patternSpec = pattern.getSpecification();
+        final List<ObjectAssociation> patternAssociations = patternSpec.getAssociations();
+        for (ObjectAssociation patternAssoc : patternAssociations) {
+            // LOG.debug(assoc.getName());
+            final Method method;
+            try {
+                method = o.getClass().getMethod("get" + patternAssoc.getName(), (Class<?>[]) null);
+                final Object res = InvokeUtils.invoke(method, o);
+                if (res != null) {
+                    if (sql.length() > initialLength) {
+                        sql.append(" AND ");
+                    }
+                    final String fieldName = Sql.sqlFieldName(patternAssoc.getIdentifier().getMemberName());
+                    sql.append(fieldName + "=?");
+                    connector.addToQueryValues(res);
+                    foundFields++;
+                }
+            } catch (SecurityException e) {
+            } catch (NoSuchMethodException e) {
+            }
+        }
+        if (foundFields > 0) {
+            loadInstancesToVector(connector, spec, completeSelectStatement(sql), instances);
         }
         return instances;
     }
@@ -261,13 +276,17 @@ public class AutoMapper extends AbstractAutoMapper implements ObjectMapping, Deb
         final String selectStatment, Vector<ObjectAdapter> instances) {
         LOG.debug("loading instances from SQL " + table);
 
-        final Results rs = connector.select(selectStatment);
-        for (int count = 0; rs.next() && count < MAX_INSTANCES; count++) {
-            final ObjectAdapter instance = loadObject(connector, cls, rs);
-            LOG.debug("  instance  " + instance);
-            instances.addElement(instance);
+        try {
+            final Results rs = connector.select(selectStatment);
+            for (int count = 0; rs.next() && count < MAX_INSTANCES; count++) {
+                final ObjectAdapter instance = loadObject(connector, cls, rs);
+                LOG.debug("  instance  " + instance);
+                instances.addElement(instance);
+            }
+            rs.close();
+        } catch (SqlObjectStoreException e) {
+            // Invalid SELECT means no object found.. don't worry about it, here.
         }
-        rs.close();
     }
 
     private ObjectAdapter loadObject(final DatabaseConnector connector, final ObjectSpecification cls, final Results rs) {

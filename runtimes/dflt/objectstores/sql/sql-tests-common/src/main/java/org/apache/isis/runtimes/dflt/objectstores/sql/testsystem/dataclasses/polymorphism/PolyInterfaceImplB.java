@@ -40,4 +40,15 @@ public class PolyInterfaceImplB extends AbstractDomainObject implements PolyInte
 
     // }}
 
+    // {{ Special
+    private String special;
+
+    public String getSpecial() {
+        return special;
+    }
+
+    public void setSpecial(final String special) {
+        this.special = special;
+    }
+    // }}
 }
