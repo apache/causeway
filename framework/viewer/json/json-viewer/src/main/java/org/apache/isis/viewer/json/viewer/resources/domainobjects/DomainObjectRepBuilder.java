@@ -58,11 +58,11 @@ public class DomainObjectRepBuilder extends RepresentationBuilder<DomainObjectRe
 
     public DomainObjectRepBuilder withAdapter(ObjectAdapter objectAdapter) {
         JsonRepresentation self = linkTo(objectAdapter);
-        representation.put("self", self);
+        representation.mapPut("self", self);
 
         String title = objectAdapter.titleString();
-        representation.put("oid", OidUtils.getOidStr(objectAdapter, getOidStringifier()));
-        representation.put("title", title);
+        representation.mapPut("oid", OidUtils.getOidStr(objectAdapter, getOidStringifier()));
+        representation.mapPut("title", title);
         withMembers(objectAdapter);
         return this;
     }
@@ -74,7 +74,7 @@ public class DomainObjectRepBuilder extends RepresentationBuilder<DomainObjectRe
         
         List<ObjectAction> actions = objectAdapter.getSpecification().getObjectActions(Contributed.INCLUDED);
         addActions(objectAdapter, actions, members);
-        representation.put("members", members);
+        representation.mapPut("members", members);
         return this;
     }
 
@@ -86,13 +86,19 @@ public class DomainObjectRepBuilder extends RepresentationBuilder<DomainObjectRe
             } 
             if(assoc instanceof OneToOneAssociation) {
                 OneToOneAssociation property = (OneToOneAssociation)assoc;
-                JsonRepresentation propertyRep = PropertyRepBuilder.newBuilder(resourceContext, objectAdapter, property).build();
-                members.add(propertyRep);
+                JsonRepresentation propertyRep = 
+                        ObjectPropertyRepBuilder.newBuilder(resourceContext, objectAdapter, property)
+                        .withDetailsLink()
+                        .build();
+                members.arrayAdd(propertyRep);
             }
             if(assoc instanceof OneToManyAssociation) {
                 OneToManyAssociation collection = (OneToManyAssociation) assoc;
-                JsonRepresentation collectionRep = CollectionRepBuilder.newBuilder(resourceContext, objectAdapter, collection).build();
-                members.add(collectionRep);
+                JsonRepresentation collectionRep = 
+                        ObjectCollectionRepBuilder.newBuilder(resourceContext, objectAdapter, collection)
+                        .withDetailsLink()
+                        .build();
+                members.arrayAdd(collectionRep);
             }
         }
     }
@@ -109,8 +115,11 @@ public class DomainObjectRepBuilder extends RepresentationBuilder<DomainObjectRe
         		List<ObjectAction> subactions = objectActionSet.getActions();
         		addActions(objectAdapter, subactions, members);
         	} else {
-                JsonRepresentation actionRep = ActionRepBuilder.newBuilder(resourceContext, objectAdapter, action).build();
-                members.add(actionRep);
+                JsonRepresentation actionRep = 
+                        ObjectActionRepBuilder.newBuilder(resourceContext, objectAdapter, action)
+                        .withDetailsLink()
+                        .build();
+                members.arrayAdd(actionRep);
         	}
         }
 	}
@@ -164,6 +173,7 @@ public class DomainObjectRepBuilder extends RepresentationBuilder<DomainObjectRe
 		String title = titleFacet.title(objectAdapter, localization);
 		return DomainObjectRepBuilder.newLinkToBuilder(resourceContext, "object", objectAdapter, oidStringifier).withTitle(title).build();
 	}
+
 
 
 }

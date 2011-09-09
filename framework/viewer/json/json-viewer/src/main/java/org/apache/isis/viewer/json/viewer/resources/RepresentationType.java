@@ -1,5 +1,7 @@
 package org.apache.isis.viewer.json.viewer.resources;
 
+import org.apache.isis.viewer.json.applib.util.Enums;
+
 public enum RepresentationType {
 
     HOME_PAGE,
@@ -17,17 +19,7 @@ public enum RepresentationType {
     DOMAIN_ACTION_PARAMETER;
     
     public String getName() {
-        StringBuilder builder = new StringBuilder();
-        boolean nextUpper = false;
-        for(char c: name().toCharArray()) {
-            if(c == '_') {
-                nextUpper = true;
-            } else {
-                builder.append(nextUpper?c:Character.toLowerCase(c));
-                nextUpper = false;
-            }
-        }
-        return builder.toString();
+        return Enums.enumToCamelCase(this);
     }
 
 }

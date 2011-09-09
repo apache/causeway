@@ -27,6 +27,8 @@ import org.apache.isis.viewer.json.applib.blocks.Method;
 import org.apache.isis.viewer.json.applib.domainobjects.DomainObjectRepresentation;
 import org.apache.isis.viewer.json.applib.domainobjects.DomainServiceResource;
 import org.apache.isis.viewer.json.applib.domainobjects.DomainServicesRepresentation;
+import org.apache.isis.viewer.json.applib.domainobjects.ObjectActionRepresentation;
+import org.apache.isis.viewer.json.viewer.resources.domainobjects.MemberType;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.hamcrest.CoreMatchers;
@@ -63,11 +65,9 @@ public class DomainServiceResourceTest_service_serviceId {
         // when
         RestfulResponse<DomainObjectRepresentation> jsonResp = RestfulResponse.of(resp, DomainObjectRepresentation.class);
         
-        
-        
         // then
         assertThat(jsonResp.getStatus(), is(HttpStatusCode.OK));
-        assertThat(jsonResp.getHeader(RestfulResponse.Header.MEDIA_TYPE), is(MediaType.APPLICATION_JSON_TYPE));
+        assertThat(jsonResp.getHeader(RestfulResponse.Header.CONTENT_TYPE), is(MediaType.APPLICATION_JSON_TYPE));
         assertThat(jsonResp.getHeader(RestfulResponse.Header.CACHE_CONTROL).isNoCache(), is(true));
         assertThat(jsonResp.getHeader(RestfulResponse.Header.X_REPRESENTATION_TYPE), is(RepresentationType.DOMAIN_OBJECT));
 
@@ -87,7 +87,7 @@ public class DomainServiceResourceTest_service_serviceId {
 
 
     @Test
-    public void linksToSelf() throws Exception {
+    public void self_isFollowable() throws Exception {
         // given
         DomainObjectRepresentation repr = givenRepresentation("simples");
 
@@ -96,14 +96,49 @@ public class DomainServiceResourceTest_service_serviceId {
     }
 
 
-    @Ignore("up to here")
     @Test
-    public void linksToDomainServiceResources() throws Exception {
-        
+    public void members_actions() throws Exception {
         // given
         DomainObjectRepresentation repr = givenRepresentation("simples");
 
+        JsonRepresentation actions = repr.xpath("/members/e[memberType='objectAction']");
+        assertThat(actions.arraySize(), is(3));
+        for (ObjectActionRepresentation memberRepr : actions.arrayIterable(ObjectActionRepresentation.class)) {
+            assertThat(memberRepr.getMemberType(), is(not(nullValue())));
+            assertThat(MemberType.lookup(memberRepr.getMemberType()), is(MemberType.OBJECT_ACTION));
+            assertThat(memberRepr.getActionId(), is(not(nullValue())));
+            assertThat(memberRepr.getActionDetails(), isLink());
+            assertThat(memberRepr.getDisabledReason(), is(nullValue()));
+        }
+        
+        JsonRepresentation listAction = repr.xpath("/members/e[memberType='objectAction' and actionId='list']").getRepresentation("e");
+        for (JsonRepresentation memberRepr : actions.arrayIterable()) {
+            
+        }
     }
+
+    @Ignore("TODO - need to add fixture data")
+    @Test
+    public void members_actions_disabled() throws Exception {
+        
+    }
+
+    @Test
+    public void links_noIcons() throws Exception {
+        // given, when
+        DomainObjectRepresentation repr = givenRepresentation("simples");
+
+        // then
+        assertThat(repr.getLinks().arraySize(), is(0));
+    }
+    
+
+    @Ignore("TODO - need to add fixture data")
+    @Test
+    public void links_icons() throws Exception {
+        
+    }
+    
 
     @Test
     public void notFound() throws Exception {

@@ -1,12 +1,14 @@
-package org.apache.isis.viewer.json.applib;
+package org.apache.isis.viewer.json.applib.util;
 
-
-final class HttpHeaderUtils {
+public final class Enums {
     
-    private HttpHeaderUtils() {
+    private Enums() {}
+
+    public static String enumToHttpHeader(Enum<?> anEnum) {
+        return enumNameToHttpHeader(anEnum.name());
     }
-    
-    static String enumToHttpHeader(String name) {
+
+    public static String enumNameToHttpHeader(String name) {
         StringBuilder builder = new StringBuilder();
         boolean nextUpper = true;
         for(char c: name.toCharArray()) {
@@ -21,7 +23,11 @@ final class HttpHeaderUtils {
         return builder.toString();
     }
 
-    static String enumToHttpValue(String name) {
+    public static String enumToCamelCase(Enum<?> anEnum) {
+        return enumNameToCamelCase(anEnum.name());
+    }
+
+    private static String enumNameToCamelCase(String name) {
         StringBuilder builder = new StringBuilder();
         boolean nextUpper = false;
         for(char c: name.toCharArray()) {
@@ -35,5 +41,5 @@ final class HttpHeaderUtils {
         return builder.toString();
     }
 
-}
 
+}

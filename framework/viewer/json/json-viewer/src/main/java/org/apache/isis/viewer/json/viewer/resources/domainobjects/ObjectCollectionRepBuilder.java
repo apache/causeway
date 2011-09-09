@@ -28,14 +28,14 @@ import org.apache.isis.viewer.json.viewer.representations.LinkBuilder;
 
 import com.google.common.collect.Lists;
 
-public class CollectionRepBuilder extends AbstractMemberRepBuilder<CollectionRepBuilder, OneToManyAssociation> {
+public class ObjectCollectionRepBuilder extends AbstractObjectMemberRepBuilder<ObjectCollectionRepBuilder, OneToManyAssociation> {
 
-    public static CollectionRepBuilder newBuilder(ResourceContext resourceContext, ObjectAdapter objectAdapter, OneToManyAssociation otma) {
-        return new CollectionRepBuilder(resourceContext, objectAdapter, otma);
+    public static ObjectCollectionRepBuilder newBuilder(ResourceContext resourceContext, ObjectAdapter objectAdapter, OneToManyAssociation otma) {
+        return new ObjectCollectionRepBuilder(resourceContext, objectAdapter, otma);
     }
 
-    public CollectionRepBuilder(ResourceContext resourceContext, ObjectAdapter objectAdapter, OneToManyAssociation otma) {
-        super(resourceContext, objectAdapter, MemberType.COLLECTION, otma);
+    public ObjectCollectionRepBuilder(ResourceContext resourceContext, ObjectAdapter objectAdapter, OneToManyAssociation otma) {
+        super(resourceContext, objectAdapter, MemberType.OBJECT_COLLECTION, otma);
 
         putId();
         putMemberType();

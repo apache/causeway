@@ -29,13 +29,13 @@ import org.apache.isis.viewer.json.viewer.ResourceContext;
 import org.apache.isis.viewer.json.viewer.representations.LinkBuilder;
 import org.apache.isis.viewer.json.viewer.representations.RepresentationBuilder;
 
-public abstract class AbstractMemberRepBuilder<R extends RepresentationBuilder<R>, T extends ObjectMember> extends RepresentationBuilder<R> {
+public abstract class AbstractObjectMemberRepBuilder<R extends RepresentationBuilder<R>, T extends ObjectMember> extends RepresentationBuilder<R> {
 
     protected final ObjectAdapter objectAdapter;
     protected final MemberType memberType;
     protected final T objectMember;
 
-    public AbstractMemberRepBuilder(ResourceContext resourceContext, ObjectAdapter objectAdapter, MemberType memberType, T objectMember) {
+    public AbstractObjectMemberRepBuilder(ResourceContext resourceContext, ObjectAdapter objectAdapter, MemberType memberType, T objectMember) {
         super(resourceContext);
         this.objectAdapter = objectAdapter;
         this.memberType = memberType;
@@ -43,19 +43,19 @@ public abstract class AbstractMemberRepBuilder<R extends RepresentationBuilder<R
     }
 
     public R withSelf() {
-        String url = AbstractMemberRepBuilder.urlForMember(objectAdapter, memberType, objectMember, getOidStringifier());
+        String url = AbstractObjectMemberRepBuilder.urlForMember(objectAdapter, memberType, objectMember, getOidStringifier());
         JsonRepresentation self = LinkBuilder.newBuilder(resourceContext, "self", url).build();
-        representation.put("self", self);
+        representation.mapPut("self", self);
         
         return cast(this);
     }
 
     protected void putMemberType() {
-        representation.put("memberType", memberType.name().toLowerCase());
+        representation.mapPut("memberType", memberType.getName());
     }
 
     protected void putId() {
-        representation.put(memberType.key(), objectMember.getId());
+        representation.mapPut(memberType.getJsProp(), objectMember.getId());
     }
 
     public R withMutatorsIfEnabled() {
@@ -73,7 +73,7 @@ public abstract class AbstractMemberRepBuilder<R extends RepresentationBuilder<R
                         .withHttpMethod(mutatorSpec.httpMethod)
                         .withArguments(arguments)
                         .build();
-                representation.put(mutator, detailsLink);
+                representation.mapPut(mutator, detailsLink);
             }
         }
         return cast(this);
@@ -96,7 +96,7 @@ public abstract class AbstractMemberRepBuilder<R extends RepresentationBuilder<R
 
     
     protected R withValue() {
-        representation.put("value", valueRep());
+        representation.mapPut("value", valueRep());
         return cast(this);
     }
 
@@ -109,13 +109,13 @@ public abstract class AbstractMemberRepBuilder<R extends RepresentationBuilder<R
 
     protected final void putDisabledReasonIfDisabled() {
         String disabledReasonRep = usability().getReason();
-        representation.put("disabledReason", disabledReasonRep);
+        representation.mapPut("disabledReason", disabledReasonRep);
     }
 
-    public R withDetails() {
+    public R withDetailsLink() {
         String urlForMember = urlForMember();
-        JsonRepresentation detailsLink = LinkBuilder.newBuilder(resourceContext, memberType.name().toLowerCase(), urlForMember).build();
-        representation.put(memberType.getDetailsRel(), detailsLink);
+        JsonRepresentation detailsLink = LinkBuilder.newBuilder(resourceContext, memberType.getDetailsRel(), urlForMember).build();
+        representation.mapPut(memberType.getDetailsRel(), detailsLink);
         
         return cast(this);
     }

@@ -26,14 +26,14 @@ import org.apache.isis.viewer.json.viewer.ResourceContext;
 
 import com.google.common.collect.Lists;
 
-public class PropertyRepBuilder extends AbstractMemberRepBuilder<PropertyRepBuilder, OneToOneAssociation> {
+public class ObjectPropertyRepBuilder extends AbstractObjectMemberRepBuilder<ObjectPropertyRepBuilder, OneToOneAssociation> {
 
-    public static PropertyRepBuilder newBuilder(ResourceContext resourceContext, ObjectAdapter objectAdapter, OneToOneAssociation otoa) {
-        return new PropertyRepBuilder(resourceContext, objectAdapter, otoa);
+    public static ObjectPropertyRepBuilder newBuilder(ResourceContext resourceContext, ObjectAdapter objectAdapter, OneToOneAssociation otoa) {
+        return new ObjectPropertyRepBuilder(resourceContext, objectAdapter, otoa);
     }
 
-    public PropertyRepBuilder(ResourceContext resourceContext, ObjectAdapter objectAdapter, OneToOneAssociation otoa) {
-        super(resourceContext, objectAdapter, MemberType.PROPERTY, otoa);
+    public ObjectPropertyRepBuilder(ResourceContext resourceContext, ObjectAdapter objectAdapter, OneToOneAssociation otoa) {
+        super(resourceContext, objectAdapter, MemberType.OBJECT_PROPERTY, otoa);
 
         putId();
         putMemberType();
@@ -57,10 +57,10 @@ public class PropertyRepBuilder extends AbstractMemberRepBuilder<PropertyRepBuil
         return DomainObjectRepBuilder.valueOrRef(resourceContext, valueAdapter, objectMember.getSpecification(), getOidStringifier(), getLocalization());
     }
 
-    public PropertyRepBuilder withChoices() {
+    public ObjectPropertyRepBuilder withChoices() {
 		Object propertyChoices = propertyChoices();
 		if(propertyChoices != null) {
-			representation.put("choices", propertyChoices);
+			representation.mapPut("choices", propertyChoices);
 		}
 		return this;
 	}

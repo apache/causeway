@@ -11,7 +11,7 @@ public class ArgumentMap extends JsonRepresentation {
     }
 
     public void put(String key, ArgumentNode argumentNode) {
-        super.put(key, argumentNode); // same processing as JsonRepresentation
+        super.mapPut(key, argumentNode); // same processing as JsonRepresentation
     }
     
 }

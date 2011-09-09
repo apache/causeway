@@ -10,7 +10,7 @@ public class UrlParserUtilsTest {
 	@Test
 	public void test() throws Exception {
 	    JsonRepresentation link = JsonRepresentation.newMap();
-		link.put("href", "http://localhost/objects/OID:1");
+		link.mapPut("href", "http://localhost/objects/OID:1");
 		String oidFromHref = UrlParserUtils.oidFromHref(link);
 		assertEquals("OID:1", oidFromHref);
 	}

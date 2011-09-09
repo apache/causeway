@@ -1,5 +1,7 @@
 package org.apache.isis.viewer.json.applib;
 
+import org.apache.isis.viewer.json.applib.util.Enums;
+
 public enum RepresentationType {
     HOME_PAGE,
     USER,
@@ -14,11 +16,12 @@ public enum RepresentationType {
     DOMAIN_TYPE_PROPERTY,
     DOMAIN_TYPE_COLLECTION,
     DOMAIN_TYPE_ACTION,
-    DOMAIN_TYPE_ACTION_PARAMETER;
+    DOMAIN_TYPE_ACTION_PARAMETER, 
+    ERROR;
     
     private String name;
     private RepresentationType() {
-        this.name = HttpHeaderUtils.enumToHttpValue(name());
+        this.name = Enums.enumToCamelCase(this);
     }
     public String getName() {
         return name;

@@ -8,9 +8,9 @@ import org.apache.isis.viewer.json.applib.blocks.Link;
 import org.codehaus.jackson.JsonNode;
 
 
-public class ActionPromptRepresentation extends JsonRepresentation implements LinksToSelf, HasLinks, HasExtensions {
+public class ObjectActionRepresentation extends JsonRepresentation implements LinksToSelf, HasLinks, HasExtensions {
 
-    public ActionPromptRepresentation(JsonNode jsonNode) {
+    public ObjectActionRepresentation(JsonNode jsonNode) {
         super(jsonNode);
     }
     
@@ -18,11 +18,27 @@ public class ActionPromptRepresentation extends JsonRepresentation implements Li
         return getLink("self");
     }
 
+    public String getDisabledReason() {
+        return getString("disabledReason");
+    }
+
+    public String getMemberType() {
+        return getString("memberType");
+    }
+
+    public String getActionId() {
+        return getString("actionId");
+    }
+
     public JsonRepresentation getLinks() {
         return getArray("links");
     }
     public JsonRepresentation getExtensions() {
         return getMap("extensions");
+    }
+
+    public Link getActionDetails() {
+        return getLink("actionDetails");
     }
 
 }

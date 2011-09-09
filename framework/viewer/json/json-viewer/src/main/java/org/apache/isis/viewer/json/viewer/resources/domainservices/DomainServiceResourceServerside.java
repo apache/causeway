@@ -29,6 +29,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.ResponseBuilder;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.services.ServiceUtil;
@@ -77,23 +78,30 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
     @Override
     public Response service(@PathParam("serviceId") String serviceId) {
         init();
+        
+        // TODO: figure out how to do exception handling generically
 
         final ObjectAdapter serviceAdapter = getServiceAdapter(serviceId);
         if(serviceAdapter == null) {
             Object[] args = { serviceId };
-            return responseOf(HttpStatusCode.NOT_FOUND, "Could not locate service '%s'", args);
+            return Response
+                    .status(HttpStatusCode.NOT_FOUND.getJaxrsStatusType())
+                    .header(RestfulResponse.Header.WARNING.getName(), String.format("Could not locate service '%s'", args))
+                    .type(MediaType.APPLICATION_JSON_TYPE)
+                    .build();
         }
         ResourceContext resourceContext = getResourceContext();
 
         RepresentationBuilder<?> builder = 
                 DomainServiceRepBuilder.newBuilder(resourceContext)
                 .withAdapter(serviceAdapter);
+        
         return Response.ok()
                 .entity(jsonFrom(builder))
                 .cacheControl(CACHE_NONE)
                 .header(RestfulResponse.Header.X_REPRESENTATION_TYPE.getName(), RepresentationType.DOMAIN_OBJECT.getName())
-                .type(MediaType.APPLICATION_JSON_TYPE).build();
-
+                .type(MediaType.APPLICATION_JSON_TYPE)
+                    .build();
     }
 
 

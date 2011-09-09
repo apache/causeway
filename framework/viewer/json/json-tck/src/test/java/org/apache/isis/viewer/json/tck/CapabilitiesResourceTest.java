@@ -79,7 +79,7 @@ public class CapabilitiesResourceTest {
 
 
     @Test
-    public void linksToSelf() throws Exception {
+    public void selfIsFollowable() throws Exception {
         // given
         CapabilitiesRepresentation repr = givenRepresentation();
 

@@ -36,7 +36,7 @@ public abstract class RepresentationBuilder<T extends RepresentationBuilder<T>> 
 
 
     public T withSelf(String href) {
-        representation.put("self", LinkBuilder.newBuilder(resourceContext, "self", href).build());
+        representation.mapPut("self", LinkBuilder.newBuilder(resourceContext, "self", href).build());
         return cast(this);
     }
 
@@ -48,7 +48,7 @@ public abstract class RepresentationBuilder<T extends RepresentationBuilder<T>> 
         if(!links.isArray()) {
             throw new IllegalArgumentException("links must be a list");
         }
-        representation.put("links", links);
+        representation.mapPut("links", links);
         return cast(this);
     }
 
@@ -60,7 +60,7 @@ public abstract class RepresentationBuilder<T extends RepresentationBuilder<T>> 
         if(!extensions.isMap()) {
             throw new IllegalArgumentException("extensions must be a map");
         }
-        representation.put("extensions", extensions);
+        representation.mapPut("extensions", extensions);
         return cast(this);
     }
 

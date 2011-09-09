@@ -57,7 +57,7 @@ public class DomainServiceResourceTest_services {
         
         // then
         assertThat(jsonResp.getStatus(), is(HttpStatusCode.OK));
-        assertThat(jsonResp.getHeader(RestfulResponse.Header.MEDIA_TYPE), is(MediaType.APPLICATION_JSON_TYPE));
+        assertThat(jsonResp.getHeader(RestfulResponse.Header.CONTENT_TYPE), is(MediaType.APPLICATION_JSON_TYPE));
         assertThat(jsonResp.getHeader(RestfulResponse.Header.CACHE_CONTROL).isNoCache(), is(true));
         assertThat(jsonResp.getHeader(RestfulResponse.Header.X_REPRESENTATION_TYPE), is(RepresentationType.LIST));
 
@@ -75,7 +75,7 @@ public class DomainServiceResourceTest_services {
 
 
     @Test
-    public void linksToSelf() throws Exception {
+    public void self_isFollowable() throws Exception {
         // given
         DomainServicesRepresentation repr = givenRepresentation();
 

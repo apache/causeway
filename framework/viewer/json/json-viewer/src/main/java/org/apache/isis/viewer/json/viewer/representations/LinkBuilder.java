@@ -50,11 +50,11 @@ public class LinkBuilder extends RepresentationBuilder<LinkBuilder> {
         return this;
     }
     public JsonRepresentation build() {
-        representation.put("rel", rel);
-        representation.put("href", resourceContext.urlFor(href));
-        representation.put("method", method);
-        representation.put("title", title);
-        representation.put("arguments", arguments);
+        representation.mapPut("rel", rel);
+        representation.mapPut("href", resourceContext.urlFor(href));
+        representation.mapPut("method", method);
+        representation.mapPut("title", title);
+        representation.mapPut("arguments", arguments);
         return representation;
     }
 

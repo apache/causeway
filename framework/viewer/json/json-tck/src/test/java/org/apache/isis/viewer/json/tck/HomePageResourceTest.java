@@ -60,7 +60,7 @@ public class HomePageResourceTest {
         
         // then
         assertThat(jsonResp.getStatus(), is(HttpStatusCode.OK));
-        assertThat(jsonResp.getHeader(RestfulResponse.Header.MEDIA_TYPE), is(MediaType.APPLICATION_JSON_TYPE));
+        assertThat(jsonResp.getHeader(RestfulResponse.Header.CONTENT_TYPE), is(MediaType.APPLICATION_JSON_TYPE));
         assertThat(jsonResp.getHeader(RestfulResponse.Header.CACHE_CONTROL).getMaxAge(), is(86400));
         assertThat(jsonResp.getHeader(RestfulResponse.Header.X_REPRESENTATION_TYPE), is(RepresentationType.HOME_PAGE));
         
@@ -78,7 +78,7 @@ public class HomePageResourceTest {
     }
 
     @Test
-    public void linksToSelf() throws Exception {
+    public void self_isFollowable() throws Exception {
         // given
         HomePageRepresentation repr = givenRepresentation();
 

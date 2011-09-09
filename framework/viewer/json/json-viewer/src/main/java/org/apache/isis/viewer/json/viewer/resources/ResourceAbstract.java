@@ -53,6 +53,7 @@ import org.apache.isis.viewer.json.applib.HttpStatusCode;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.applib.RestfulResponse;
 import org.apache.isis.viewer.json.applib.util.JsonMapper;
+import org.apache.isis.viewer.json.viewer.JsonApplicationException;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
 import org.apache.isis.viewer.json.viewer.representations.RepresentationBuilder;
 import org.apache.isis.viewer.json.viewer.resources.domainobjects.DomainObjectRepBuilder;
@@ -110,6 +111,12 @@ public abstract class ResourceAbstract {
     protected void init() {
         this.resourceContext =
             new ResourceContext(httpHeaders, uriInfo, request, httpServletRequest, httpServletResponse, securityContext);
+        
+        List<MediaType> mediaTypes = getResourceContext().getHttpHeaders().getAcceptableMediaTypes();
+        if(!mediaTypes.contains(MediaType.APPLICATION_JSON_TYPE)) {
+            throw JsonApplicationException.create(HttpStatusCode.NOT_ACCEPTABLE); 
+        }
+
     }
 
     protected ResourceContext getResourceContext() {
@@ -268,69 +275,8 @@ public abstract class ResourceAbstract {
         return Response.status(httpStatusCode.getJaxrsStatusType()).header(RestfulResponse.Header.WARNING.getName(), String.format(reason, args)).build();
     }
 
-    protected static Response responseOf(HttpStatusCode httpStatusCode, final Exception ex) {
-        ResponseBuilder builder = Response.status(httpStatusCode.getJaxrsStatusType()).header(RestfulResponse.Header.WARNING.getName(), ex.getMessage());
-        return withStackTrace(builder, ex).build();
-    }
-
-    protected static Response responseOf(HttpStatusCode httpStatusCode, final String reason, Exception ex, final Object... args) {
-        ResponseBuilder builder = Response.status(Status.BAD_REQUEST).header(RestfulResponse.Header.WARNING.getName(), String.format(reason, args));
-        return withStackTrace(builder,ex).build();
-    }
-
     
-    private static ResponseBuilder withStackTrace(ResponseBuilder builder, final Exception ex) {
-        return builder.type(MediaType.APPLICATION_JSON_TYPE).entity(jsonFor(ex));
-    }
 
-
-    static class ExceptionPojo {
-
-        public static ExceptionPojo create(Exception ex) {
-            return new ExceptionPojo(ex);
-        }
-
-        private static String format(StackTraceElement stackTraceElement) {
-            return stackTraceElement.toString();
-        }
-
-        private final String message;
-        private final List<String> stackTrace = Lists.newArrayList();
-        private ExceptionPojo causedBy;
-
-        public ExceptionPojo(Throwable ex) {
-            this.message = ex.getMessage();
-            StackTraceElement[] stackTraceElements = ex.getStackTrace();
-            for (StackTraceElement stackTraceElement : stackTraceElements) {
-                this.stackTrace.add(format(stackTraceElement));
-            }
-            Throwable cause = ex.getCause();
-            if(cause != null && cause != ex) {
-                this.causedBy = new ExceptionPojo(cause);
-            }
-        }
-        
-        public String getMessage() {
-            return message;
-        }
-        
-        public List<String> getStackTrace() {
-            return stackTrace;
-        }
-        
-        public ExceptionPojo getCausedBy() {
-            return causedBy;
-        }
-
-    }
-    static String jsonFor(Exception ex) {
-        try {
-            return JsonMapper.instance().write(ExceptionPojo.create(ex));
-        } catch (Exception e) {
-            // fallback
-            return "{ \"exception\": \"" + ExceptionUtils.getFullStackTrace(ex) + "\" }";
-        }
-    }
 
     // //////////////////////////////////////////////////////////////
     // Dependencies (from singletons)

@@ -37,9 +37,9 @@ public class DomainObjectListRepBuilder extends RepresentationBuilder<DomainObje
         JsonRepresentation list = JsonRepresentation.newArray();
         for(ObjectAdapter adapter: objectAdapters) {
             JsonRepresentation linkToObject = linkTo(adapter);
-            list.add(linkToObject);
+            list.arrayAdd(linkToObject);
         }
-        representation.put("values", list);
+        representation.mapPut("values", list);
         return this;
     }
 

@@ -30,13 +30,14 @@ import org.apache.isis.core.progmodel.facets.actions.validate.ActionValidationFa
 import org.apache.isis.core.progmodel.facets.collections.validate.CollectionValidateAddToFacet;
 import org.apache.isis.core.progmodel.facets.collections.validate.CollectionValidateRemoveFromFacet;
 import org.apache.isis.core.progmodel.facets.properties.validate.PropertyValidateFacet;
+import org.apache.isis.viewer.json.applib.util.Enums;
 import org.apache.isis.viewer.json.viewer.representations.HttpMethod;
 
 import com.google.common.collect.ImmutableMap;
 
 public enum MemberType {
 
-    PROPERTY("properties/", "propertyDetails", ImmutableMap.of(
+    OBJECT_PROPERTY("properties/", "propertyId", "propertyDetails", ImmutableMap.of(
             "modify", MutatorSpec.of(PropertyValidateFacet.class, PropertySetterFacet.class, HttpMethod.PUT, BodyArgs.ONE),
             "clear", MutatorSpec.of(PropertyValidateFacet.class, PropertyClearFacet.class, HttpMethod.DELETE, BodyArgs.NONE)
             )) {
@@ -45,7 +46,7 @@ public enum MemberType {
             return objectMember.getSpecification();
         }
     },
-    COLLECTION("collections/", "collectionDetails", ImmutableMap.of(
+    OBJECT_COLLECTION("collections/", "collectionId", "collectionDetails", ImmutableMap.of(
             "addTo", MutatorSpec.of(CollectionValidateAddToFacet.class, CollectionAddToFacet.class, HttpMethod.PUT, BodyArgs.ONE),
             "removeFrom", MutatorSpec.of(CollectionValidateRemoveFromFacet.class, CollectionRemoveFromFacet.class, HttpMethod.DELETE, BodyArgs.ONE)
             )) {
@@ -54,7 +55,7 @@ public enum MemberType {
             return objectMember.getSpecification();
         }
     },
-    ACTION("actions/", "actionDetails", ImmutableMap.of(
+    OBJECT_ACTION("actions/", "actionId", "actionDetails", ImmutableMap.of(
             "invoke", MutatorSpec.of(ActionValidationFacet.class, ActionInvocationFacet.class, HttpMethod.POST, BodyArgs.MANY, "invoke")
             )) {
         @Override
@@ -68,15 +69,19 @@ public enum MemberType {
     
     private final String urlPart;
     private final String detailsRel;
+    private final String name;
+    private final String jsProp;
     
-    private MemberType(String urlPart, String detailsRel, Map<String, MutatorSpec> mutators) {
+    private MemberType(String urlPart, String jsProp, String detailsRel, Map<String, MutatorSpec> mutators) {
         this.urlPart = urlPart;
+        this.jsProp = jsProp;
         this.detailsRel = detailsRel;
         this.mutators = mutators;
+        name = Enums.enumToCamelCase(this);
     }
 
-    public String key() {
-        return name().toLowerCase() + "Id";
+    public String getJsProp() {
+        return jsProp;
     }
 
     public String urlPart() {
@@ -90,31 +95,40 @@ public enum MemberType {
     public abstract ObjectSpecification specFor(ObjectMember objectMember);
 
     public boolean isProperty() {
-        return this == MemberType.PROPERTY;
+        return this == MemberType.OBJECT_PROPERTY;
     }
 
     public boolean isCollection() {
-        return this == MemberType.COLLECTION;
+        return this == MemberType.OBJECT_COLLECTION;
     }
 
     public boolean isAction() {
-        return this == MemberType.ACTION;
+        return this == MemberType.OBJECT_ACTION;
     }
 
-    public static MemberType lookup(final String memberType) {
-    	return valueOf(memberType.toUpperCase());
+    public static MemberType lookup(final String memberTypeName) {
+        for (MemberType memberType : values()) {
+            if(memberType.getName().equals(memberTypeName)) {
+                return memberType;
+            }
+        }
+    	return null;
     }
 
 	public static MemberType of(ObjectMember objectMember) {
 		return objectMember.isAction()?
-				ACTION:
+				OBJECT_ACTION:
 					objectMember.isOneToOneAssociation()?
-						PROPERTY:
-						COLLECTION;
+						OBJECT_PROPERTY:
+						OBJECT_COLLECTION;
 	}
 
     public String getDetailsRel() {
         return detailsRel;
+    }
+
+    public String getName() {
+        return name;
     }
 
 }
