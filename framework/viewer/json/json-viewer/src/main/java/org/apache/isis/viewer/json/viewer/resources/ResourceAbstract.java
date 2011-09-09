@@ -62,6 +62,7 @@ import org.apache.isis.viewer.json.viewer.util.UrlDecoderUtils;
 import org.apache.isis.viewer.json.viewer.util.UrlParserUtils;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
+import org.jboss.resteasy.util.HttpHeaderNames;
 
 import com.google.common.base.Function;
 import com.google.common.base.Functions;
@@ -112,9 +113,12 @@ public abstract class ResourceAbstract {
         this.resourceContext =
             new ResourceContext(httpHeaders, uriInfo, request, httpServletRequest, httpServletResponse, securityContext);
         
-        List<MediaType> mediaTypes = getResourceContext().getHttpHeaders().getAcceptableMediaTypes();
-        if(!mediaTypes.contains(MediaType.APPLICATION_JSON_TYPE)) {
-            throw JsonApplicationException.create(HttpStatusCode.NOT_ACCEPTABLE); 
+        List<MediaType> clientMediaTypes = getResourceContext().getHttpHeaders().getAcceptableMediaTypes();
+        if(!clientMediaTypes.contains(MediaType.APPLICATION_JSON_TYPE)) {
+            throw JsonApplicationException.create(
+                    HttpStatusCode.NOT_ACCEPTABLE, 
+                    "Client %s header %s does not include %s", 
+                    HttpHeaderNames.ACCEPT, clientMediaTypes, MediaType.APPLICATION_JSON_TYPE); 
         }
 
     }
