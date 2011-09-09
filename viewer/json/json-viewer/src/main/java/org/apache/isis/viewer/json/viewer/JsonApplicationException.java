@@ -10,8 +10,8 @@ public class JsonApplicationException extends WebApplicationException {
         return new JsonApplicationException(httpStatusCode, null, null);
     }
 
-    public static JsonApplicationException create(HttpStatusCode httpStatusCode, String message) {
-        return create(httpStatusCode, message, null);
+    public static JsonApplicationException create(HttpStatusCode httpStatusCode, String message, Object... args) {
+        return create(httpStatusCode, String.format(message, args));
     }
 
     public static JsonApplicationException create(HttpStatusCode httpStatusCode, Exception cause) {
