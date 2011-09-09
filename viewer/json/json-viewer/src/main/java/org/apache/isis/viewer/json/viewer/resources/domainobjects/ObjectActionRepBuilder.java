@@ -24,48 +24,54 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
+import org.apache.isis.viewer.json.viewer.resources.domaintypes.DomainTypeRepBuilder;
+import org.apache.isis.viewer.json.viewer.resources.domaintypes.TypeActionRepBuilder;
 
 import com.google.common.collect.Lists;
 
-public class ActionRepBuilder extends AbstractMemberRepBuilder<ActionRepBuilder, ObjectAction> {
+public class ObjectActionRepBuilder extends AbstractObjectMemberRepBuilder<ObjectActionRepBuilder, ObjectAction> {
 
-	public static ActionRepBuilder newBuilder(ResourceContext resourceContext, ObjectAdapter objectAdapter, ObjectAction objectAction) {
-        return new ActionRepBuilder(resourceContext, objectAdapter, objectAction);
+	public static ObjectActionRepBuilder newBuilder(ResourceContext resourceContext, ObjectAdapter objectAdapter, ObjectAction objectAction) {
+        return new ObjectActionRepBuilder(resourceContext, objectAdapter, objectAction);
     }
 
-    protected ActionRepBuilder(ResourceContext resourceContext, ObjectAdapter objectAdapter, ObjectAction objectAction) {
-        super(resourceContext, objectAdapter, MemberType.ACTION, objectAction);
+    protected ObjectActionRepBuilder(ResourceContext resourceContext, ObjectAdapter objectAdapter, ObjectAction objectAction) {
+        super(resourceContext, objectAdapter, MemberType.OBJECT_ACTION, objectAction);
         
         putId();
         putMemberType();
-        putNumParameters();
 
         putDisabledReasonIfDisabled();
         withMutatorsIfEnabled();
         
-        putExtensionsForAction();
-        putLinksForAction(resourceContext);
-    }
-
-    private void putLinksForAction(ResourceContext resourceContext) {
-        JsonRepresentation links = JsonRepresentation.newArray();
-        if(objectMember.isContributed()) {
-            ObjectAdapter serviceAdapter = contributingServiceAdapter();
-            JsonRepresentation contributedByLink = DomainObjectRepBuilder.newLinkToBuilder(resourceContext, "object", serviceAdapter, getOidStringifier()).build();
-            links.put("contributedBy", contributedByLink);
-        }
-
-        withLinks(links);
-    }
-
-    private void putExtensionsForAction() {
         JsonRepresentation extensions = JsonRepresentation.newMap();
-        extensions.put("actionType", objectMember.getType());
+        putExtensionsIsisProprietary(extensions);
+        
+        JsonRepresentation links = JsonRepresentation.newArray();
+        addLinksFormalDomainModel(links, resourceContext);
+        addLinksIsisProprietary(links, resourceContext);
+    }
+
+
+     private void putExtensionsIsisProprietary(JsonRepresentation extensions) {
+        extensions.mapPut("actionType", objectMember.getType());
         withExtensions(extensions );
     }
 
-    protected void putNumParameters() {
-        representation.put("numParameters", objectMember.getParameterCount());
+     private void addLinksFormalDomainModel(JsonRepresentation links, ResourceContext resourceContext) {
+         links.arrayAdd(TypeActionRepBuilder.newLinkToBuilder(resourceContext, "typeAction", objectAdapter.getSpecification(), objectMember).build());
+     }
+
+     private void addLinksIsisProprietary(JsonRepresentation links, ResourceContext resourceContext) {
+       if(objectMember.isContributed()) {
+            ObjectAdapter serviceAdapter = contributingServiceAdapter();
+            JsonRepresentation contributedByLink = DomainObjectRepBuilder.newLinkToBuilder(resourceContext, "contributedBy", serviceAdapter, getOidStringifier()).build();
+            links.arrayAdd(contributedByLink);
+        }
+
+       links.arrayAdd(DomainTypeRepBuilder.newLinkToBuilder(resourceContext, "domainType", objectAdapter.getSpecification()).build());
+       
+        withLinks(links);
     }
 
     public JsonRepresentation build() {
@@ -84,28 +90,28 @@ public class ActionRepBuilder extends AbstractMemberRepBuilder<ActionRepBuilder,
     	throw new IllegalStateException("Unable to locate contributing service");
 	}
 
-    public ActionRepBuilder withParameterDetails() {
+    public ObjectActionRepBuilder withParameterDetails() {
     	List<Object> parameters = Lists.newArrayList();
 		for (int i=0; i< objectMember.getParameterCount(); i++) {
 			ObjectActionParameter param = objectMember.getParameters().get(i);
 			parameters.add(paramDetails(param));
 		}
-		representation.put("parameters", parameters);
+		representation.mapPut("parameters", parameters);
 		return this;
 	}
 
 	private Object paramDetails(ObjectActionParameter param) {
 		final JsonRepresentation paramRep = JsonRepresentation.newMap();
-		paramRep.put("name", param.getName());
-		paramRep.put("num", param.getNumber());
-		paramRep.put("description", param.getDescription());
+		paramRep.mapPut("name", param.getName());
+		paramRep.mapPut("num", param.getNumber());
+		paramRep.mapPut("description", param.getDescription());
 		Object paramChoices = choicesFor(param);
 		if(paramChoices != null) {
-			paramRep.put("choices", paramChoices);
+			paramRep.mapPut("choices", paramChoices);
 		}
 		Object paramDefault = defaultFor(param);
 		if(paramDefault != null) {
-			paramRep.put("default", paramDefault);
+			paramRep.mapPut("default", paramDefault);
 		}
 		return paramRep;
 	}
@@ -136,7 +142,7 @@ public class ActionRepBuilder extends AbstractMemberRepBuilder<ActionRepBuilder,
 	protected JsonRepresentation appendMutatorArgs(MutatorSpec mutatorSpec) {
 	    JsonRepresentation argList = JsonRepresentation.newArray();
         for(int i=0; i<objectMember.getParameterCount(); i++) {
-            argList.add(argValueFor(i)); 
+            argList.arrayAdd(argValueFor(i)); 
         }
         return argList;
     }

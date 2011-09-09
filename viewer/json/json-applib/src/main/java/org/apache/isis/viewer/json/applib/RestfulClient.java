@@ -20,6 +20,7 @@ package org.apache.isis.viewer.json.applib;
 
 import java.net.URI;
 
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.apache.commons.httpclient.HttpClient;
@@ -31,6 +32,7 @@ import org.apache.isis.viewer.json.applib.domaintypes.DomainTypeResource;
 import org.apache.isis.viewer.json.applib.homepage.HomePageResource;
 import org.apache.isis.viewer.json.applib.user.UserResource;
 import org.jboss.resteasy.client.ClientExecutor;
+import org.jboss.resteasy.client.ClientRequest;
 import org.jboss.resteasy.client.ClientRequestFactory;
 import org.jboss.resteasy.client.core.BaseClientResponse;
 import org.jboss.resteasy.client.core.executors.ApacheHttpClientExecutor;
@@ -112,6 +114,22 @@ public class RestfulClient {
         BaseClientResponse<String> restEasy = (BaseClientResponse<String>)response;
         restEasy.setReturnType(String.class);
         return response;
+    }
+
+    public RestfulRequest createRequest(HttpMethod httpMethod, String uriTemplate) {
+        
+        ClientRequest clientRequest = clientRequestFactory.createRelativeRequest(uriTemplate);
+        clientRequest.accept(MediaType.APPLICATION_JSON_TYPE);
+        clientRequest.setHttpMethod(httpMethod.getJavaxRsMethod());
+        
+        return new RestfulRequest(clientRequest);
+    }
+    
+    /**
+     * exposed for testing purposes only.
+     */
+    public ClientRequestFactory getClientRequestFactory() {
+        return clientRequestFactory;
     }
 
 

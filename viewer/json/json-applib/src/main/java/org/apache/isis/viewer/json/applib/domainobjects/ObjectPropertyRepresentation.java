@@ -8,9 +8,9 @@ import org.apache.isis.viewer.json.applib.blocks.Link;
 import org.codehaus.jackson.JsonNode;
 
 
-public class CollectionDetailsRepresentation extends JsonRepresentation implements LinksToSelf, HasLinks, HasExtensions {
+public class ObjectPropertyRepresentation extends JsonRepresentation implements LinksToSelf, HasLinks, HasExtensions {
 
-    public CollectionDetailsRepresentation(JsonNode jsonNode) {
+    public ObjectPropertyRepresentation(JsonNode jsonNode) {
         super(jsonNode);
     }
     
@@ -18,12 +18,12 @@ public class CollectionDetailsRepresentation extends JsonRepresentation implemen
         return getLink("self");
     }
 
-
     public JsonRepresentation getLinks() {
         return getArray("links");
     }
     public JsonRepresentation getExtensions() {
         return getMap("extensions");
     }
+
 
 }

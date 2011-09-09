@@ -62,7 +62,7 @@ public class UserResourceTest {
         
         // then
         assertThat(jsonResp.getStatus(), is(HttpStatusCode.OK));
-        assertThat(jsonResp.getHeader(RestfulResponse.Header.MEDIA_TYPE), is(MediaType.APPLICATION_JSON_TYPE));
+        assertThat(jsonResp.getHeader(RestfulResponse.Header.CONTENT_TYPE), is(MediaType.APPLICATION_JSON_TYPE));
         assertThat(jsonResp.getHeader(RestfulResponse.Header.CACHE_CONTROL).getMaxAge(), is(3600));
         assertThat(jsonResp.getHeader(RestfulResponse.Header.X_REPRESENTATION_TYPE), is(RepresentationType.USER));
         
@@ -81,7 +81,7 @@ public class UserResourceTest {
     }
 
     @Test
-    public void linksToSelf() throws Exception {
+    public void self_isFollowable() throws Exception {
         // given
         UserRepresentation repr = givenRepresentation();
 

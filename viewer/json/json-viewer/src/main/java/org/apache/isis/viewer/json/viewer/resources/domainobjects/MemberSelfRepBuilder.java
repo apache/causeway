@@ -41,13 +41,13 @@ public class MemberSelfRepBuilder extends RepresentationBuilder<MemberSelfRepBui
     }
     
     public JsonRepresentation build() {
-        representation.put("link", memberLinkRep());
-        representation.put("object", domainObjectLinkRep());
+        representation.mapPut("link", memberLinkRep());
+        representation.mapPut("object", domainObjectLinkRep());
         return representation;
     }
 
     private JsonRepresentation memberLinkRep() {
-        String url = AbstractMemberRepBuilder.urlForMember(objectAdapter, memberType, objectMember, getOidStringifier());
+        String url = AbstractObjectMemberRepBuilder.urlForMember(objectAdapter, memberType, objectMember, getOidStringifier());
         return LinkBuilder.newBuilder(resourceContext, "member", url).build();
     }
     

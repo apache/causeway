@@ -5,6 +5,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
+import java.lang.reflect.Constructor;
 import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.Collections;
@@ -58,9 +59,9 @@ public class JsonRepresentation {
         public JsonRepresentation getExtensions();
     }
 
-    private static Map<Class<?>, Function<JsonNode, ?>> JSON_NODE_TRANSFORMERS = Maps.newHashMap();
+    private static Map<Class<?>, Function<JsonNode, ?>> REPRESENTATION_INSTANTIATORS = Maps.newHashMap();
     static {
-        JSON_NODE_TRANSFORMERS.put(String.class, new Function<JsonNode, String>() {
+        REPRESENTATION_INSTANTIATORS.put(String.class, new Function<JsonNode, String>() {
             @Override
             public String apply(JsonNode input) {
                 if(!input.isTextual()) {
@@ -68,21 +69,31 @@ public class JsonRepresentation {
                 }
                 return input.getTextValue();
             }});
-        JSON_NODE_TRANSFORMERS.put(JsonNode.class, new Function<JsonNode, JsonNode>() {
+        REPRESENTATION_INSTANTIATORS.put(JsonNode.class, new Function<JsonNode, JsonNode>() {
             @Override
             public JsonNode apply(JsonNode input) {
                 return input;
             }});
-        JSON_NODE_TRANSFORMERS.put(JsonRepresentation.class, new Function<JsonNode, JsonRepresentation>() {
-            @Override
-            public JsonRepresentation apply(JsonNode input) {
-                return new JsonRepresentation(input);
-            }});
-        JSON_NODE_TRANSFORMERS.put(Link.class, new Function<JsonNode, Link>() {
-            @Override
-            public Link apply(JsonNode input) {
-                return new Link(input);
-            }});
+    }
+
+    private static <T> Function<JsonNode, ?> representationInstantiatorFor(final Class<T> representationType) {
+        Function<JsonNode, ?> transformer = REPRESENTATION_INSTANTIATORS.get(representationType);
+        if(transformer == null) {
+            transformer = new Function<JsonNode, T>() {
+                @Override
+                public T apply(JsonNode input) {
+                    try {
+                        Constructor<T> constructor = representationType.getConstructor(JsonNode.class);
+                        return constructor.newInstance(input);
+                    } catch (Exception e) {
+                        throw new IllegalArgumentException("Conversions from JsonNode to " + representationType + " are not supported");
+                    }
+                }
+                
+            };
+            REPRESENTATION_INSTANTIATORS.put(representationType, transformer);
+        }
+        return transformer;
     }
     
 
@@ -473,67 +484,71 @@ public class JsonRepresentation {
     // mutable (array)
     /////////////////////////////////////////////////////////////////////////
 
-    public void add(Object value) {
+    public void arrayAdd(Object value) {
         if(!isArray()) {
             throw new IllegalStateException("does not represent array");
         }
         nodeAsArray().add(new POJONode(value));
     }
 
-    public void add(JsonRepresentation value) {
+    public void arrayAdd(JsonRepresentation value) {
         if(!isArray()) {
             throw new IllegalStateException("does not represent array");
         }
         nodeAsArray().add(value.getJsonNode());
     }
 
-    public void add(String value) {
+    public void arrayAdd(String value) {
         if(!isArray()) {
             throw new IllegalStateException("does not represent array");
         }
         nodeAsArray().add(value);
     }
 
-    public void add(JsonNode value) {
+    public void arrayAdd(JsonNode value) {
         if(!isArray()) {
             throw new IllegalStateException("does not represent array");
         }
         nodeAsArray().add(value);
     }
 
-    public void add(long value) {
+    public void arrayAdd(long value) {
         if(!isArray()) {
             throw new IllegalStateException("does not represent array");
         }
         nodeAsArray().add(value);
     }
 
-    public void add(int value) {
+    public void arrayAdd(int value) {
         if(!isArray()) {
             throw new IllegalStateException("does not represent array");
         }
         nodeAsArray().add(value);
     }
 
-    public void add(double value) {
+    public void arrayAdd(double value) {
         if(!isArray()) {
             throw new IllegalStateException("does not represent array");
         }
         nodeAsArray().add(value);
     }
 
-    public void add(float value) {
+    public void arrayAdd(float value) {
         if(!isArray()) {
             throw new IllegalStateException("does not represent array");
         }
         nodeAsArray().add(value);
     }
 
-    public void add(boolean value) {
+    public void arrayAdd(boolean value) {
         if(!isArray()) {
             throw new IllegalStateException("does not represent array");
         }
         nodeAsArray().add(value);
+    }
+
+    public Iterable<JsonRepresentation> arrayIterable() {
+        return arrayIterable(JsonRepresentation.class);
     }
 
     public <T> Iterable<T> arrayIterable(final Class<T> requiredType) {
@@ -545,12 +560,13 @@ public class JsonRepresentation {
         };
     }
 
+    public Iterator<JsonRepresentation> arrayIterator() {
+        return arrayIterator(JsonRepresentation.class);
+    }
+
     public <T> Iterator<T> arrayIterator(final Class<T> requiredType) {
         ensureIsAnArrayAtLeastAsLargeAs(0);
-        Function<JsonNode, ?> transformer = JSON_NODE_TRANSFORMERS.get(requiredType);
-        if(transformer == null) {
-            throw new IllegalArgumentException("Conversions from JsonNode to " + requiredType + " are not supported");
-        }
+        Function<JsonNode, ?> transformer = representationInstantiatorFor(requiredType);
         ArrayNode arrayNode = (ArrayNode)jsonNode;
         Iterator<JsonNode> iterator = arrayNode.iterator();
         Function<JsonNode, T> typedTransformer = asT(transformer); // necessary to do in two steps
@@ -562,12 +578,12 @@ public class JsonRepresentation {
         return (Function<JsonNode, T>) transformer;
     }
 
-    public JsonRepresentation elementAt(int i) {
+    public JsonRepresentation arrayElementAt(int i) {
         ensureIsAnArrayAtLeastAsLargeAs(i);
         return new JsonRepresentation(jsonNode.get(i));
     }
 
-    public void setElementAt(int i, JsonRepresentation objectRepr) {
+    public void arraySetElementAt(int i, JsonRepresentation objectRepr) {
         ensureIsAnArrayAtLeastAsLargeAs(i);
         if(objectRepr.isArray()) {
             throw new IllegalArgumentException("Representation being set cannot be an array");
@@ -590,7 +606,7 @@ public class JsonRepresentation {
     // mutable (map)
     /////////////////////////////////////////////////////////////////////////
 
-    public void put(String key, Object value) {
+    public void mapPut(String key, Object value) {
         if(!isMap()) {
             throw new IllegalStateException("does not represent map");
         }
@@ -602,7 +618,7 @@ public class JsonRepresentation {
         node.put(path.getTail(), new POJONode(value));
     }
 
-    public void put(String key, JsonRepresentation value) {
+    public void mapPut(String key, JsonRepresentation value) {
         if(!isMap()) {
             throw new IllegalStateException("does not represent map");
         }
@@ -617,7 +633,7 @@ public class JsonRepresentation {
         node.put(path.getTail(), value.getJsonNode());
     }
 
-    public void put(String key, String value) {
+    public void mapPut(String key, String value) {
         if(!isMap()) {
             throw new IllegalStateException("does not represent map");
         }
@@ -629,7 +645,7 @@ public class JsonRepresentation {
         node.put(path.getTail(), value);
     }
 
-    public void put(String key, JsonNode value) {
+    public void mapPut(String key, JsonNode value) {
         if(!isMap()) {
             throw new IllegalStateException("does not represent map");
         }
@@ -641,7 +657,7 @@ public class JsonRepresentation {
         node.put(path.getTail(), value);
     }
 
-    public void put(String key, long value) {
+    public void mapPut(String key, long value) {
         if(!isMap()) {
             throw new IllegalStateException("does not represent map");
         }
@@ -650,7 +666,7 @@ public class JsonRepresentation {
         node.put(path.getTail(), value);
     }
 
-    public void put(String key, int value) {
+    public void mapPut(String key, int value) {
         if(!isMap()) {
             throw new IllegalStateException("does not represent map");
         }
@@ -659,7 +675,7 @@ public class JsonRepresentation {
         node.put(path.getTail(), value);
     }
 
-    public void put(String key, double value) {
+    public void mapPut(String key, double value) {
         if(!isMap()) {
             throw new IllegalStateException("does not represent map");
         }
@@ -668,7 +684,7 @@ public class JsonRepresentation {
         node.put(path.getTail(), value);
     }
 
-    public void put(String key, float value) {
+    public void mapPut(String key, float value) {
         if(!isMap()) {
             throw new IllegalStateException("does not represent map");
         }
@@ -677,7 +693,7 @@ public class JsonRepresentation {
         node.put(path.getTail(), value);
     }
 
-    public void put(String key, boolean value) {
+    public void mapPut(String key, boolean value) {
         if(!isMap()) {
             throw new IllegalStateException("does not represent map");
         }
@@ -722,11 +738,5 @@ public class JsonRepresentation {
     public String toString() {
         return jsonNode.toString();
     }
-
-
-
-
-
-
 
 }

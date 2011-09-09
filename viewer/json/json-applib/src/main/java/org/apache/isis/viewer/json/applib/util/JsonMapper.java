@@ -135,10 +135,6 @@ public final class JsonMapper {
     }
 
     public <T> T read(Response response, Class<T> requiredType) throws JsonParseException, JsonMappingException, IOException {
-        int status = response.getStatus();
-        if(HttpStatusCode.lookupFamily(status) != Family.SUCCESSFUL) {
-            throw new IllegalArgumentException("response status must be in 2xx range (was " + status + ")");
-        }
         Object entityObj = response.getEntity();
         if(entityObj == null) {
             return null;

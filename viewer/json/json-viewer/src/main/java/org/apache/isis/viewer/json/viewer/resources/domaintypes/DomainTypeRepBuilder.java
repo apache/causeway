@@ -14,37 +14,32 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.apache.isis.viewer.json.viewer.resources.user;
+package org.apache.isis.viewer.json.viewer.resources.domaintypes;
 
-import org.apache.isis.core.commons.authentication.AuthenticationSession;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
+import org.apache.isis.viewer.json.viewer.representations.LinkBuilder;
 import org.apache.isis.viewer.json.viewer.representations.RepresentationBuilder;
 
-public class UserRepBuilder extends RepresentationBuilder<UserRepBuilder> {
+public class DomainTypeRepBuilder extends RepresentationBuilder<DomainTypeRepBuilder> {
 
-    public static UserRepBuilder newBuilder(ResourceContext resourceContext) {
-        return new UserRepBuilder(resourceContext);
+    public static DomainTypeRepBuilder newBuilder(ResourceContext representationContext) {
+        return new DomainTypeRepBuilder(representationContext);
     }
 
-    private UserRepBuilder(ResourceContext resourceContext) {
+    public static LinkBuilder newLinkToBuilder(ResourceContext resourceContext, String rel, ObjectSpecification objectSpec) {
+        String typeFullName = objectSpec.getFullIdentifier();
+        String url = "domainTypes/" + typeFullName;
+        return LinkBuilder.newBuilder(resourceContext, rel, url);
+    }
+
+    public DomainTypeRepBuilder(ResourceContext resourceContext) {
         super(resourceContext);
-        withSelf("user");
     }
 
-    public UserRepBuilder withAuthenticationSession(AuthenticationSession authenticationSession) {
-        representation.mapPut("username", authenticationSession.getUserName());
-        JsonRepresentation roles = JsonRepresentation.newArray();
-        for (String role : authenticationSession.getRoles()) {
-            roles.arrayAdd(role);
-        }
-        representation.mapPut("roles", roles);
-        return this;
-    }
-    
+
     public JsonRepresentation build() {
-        withLinks();
-        withExtensions();
         return representation;
     }
 

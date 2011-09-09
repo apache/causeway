@@ -20,48 +20,48 @@ public class ArgumentList extends JsonRepresentation {
     }
 
     @Override
-    public void add(String value) {
+    public void arrayAdd(String value) {
         add(ArgumentNode.argOf(value));
     }
 
     @Override
-    public void add(int value) {
+    public void arrayAdd(int value) {
         add(ArgumentNode.argOf(value));
     }
 
     @Override
-    public void add(boolean value) {
+    public void arrayAdd(boolean value) {
         add(ArgumentNode.argOf(value));
     }
 
     @Override
-    public void add(long value) {
+    public void arrayAdd(long value) {
         add(ArgumentNode.argOf(value));
     }
 
     @Override
-    public void add(double value) {
+    public void arrayAdd(double value) {
         add(ArgumentNode.argOf(value));
     }
 
     
     @Override
-    public void add(float value) {
+    public void arrayAdd(float value) {
         add(ArgumentNode.argOf(value));
     }
 
     @Override
-    public void add(Object o) {
+    public void arrayAdd(Object o) {
         throw new UnsupportedOperationException("use add(ArgumentNode)");
     }
 
     @Override
-    public void add(JsonRepresentation value) {
+    public void arrayAdd(JsonRepresentation value) {
         throw new UnsupportedOperationException("use add(ArgumentNode)");
     }
 
     @Override
-    public void add(JsonNode value) {
+    public void arrayAdd(JsonNode value) {
         throw new UnsupportedOperationException("use add(ArgumentNode)");
     }
 

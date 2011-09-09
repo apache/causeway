@@ -45,8 +45,8 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
         init();
 
         JsonRepresentation representation = JsonRepresentation.newMap();
-        representation.put("representationType", LinkBuilder.newBuilder(getResourceContext(), "representationType", "representationTypes/representationType").build());
-        representation.put("self", LinkBuilder.newBuilder(getResourceContext(), "self", "representationType/" + representationTypeName).build());
+        representation.mapPut("representationType", LinkBuilder.newBuilder(getResourceContext(), "representationType", "representationTypes/representationType").build());
+        representation.mapPut("self", LinkBuilder.newBuilder(getResourceContext(), "self", "representationType/" + representationTypeName).build());
         
         return responseOfOk(jsonFor(representation));
     }

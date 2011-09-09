@@ -20,10 +20,10 @@ import org.apache.isis.viewer.json.applib.RestfulClient;
 import org.apache.isis.viewer.json.applib.RestfulResponse;
 import org.apache.isis.viewer.json.applib.blocks.Link;
 import org.apache.isis.viewer.json.applib.blocks.Method;
-import org.apache.isis.viewer.json.applib.domainobjects.ActionPromptRepresentation;
+import org.apache.isis.viewer.json.applib.domainobjects.ObjectActionRepresentation;
 import org.apache.isis.viewer.json.applib.domainobjects.DomainObjectRepresentation;
 import org.apache.isis.viewer.json.applib.domainobjects.DomainObjectResource;
-import org.apache.isis.viewer.json.applib.domainobjects.PropertyDetailsRepresentation;
+import org.apache.isis.viewer.json.applib.domainobjects.ObjectPropertyRepresentation;
 import org.apache.isis.viewer.json.applib.domainobjects.ScalarValueRepresentation;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -137,11 +137,11 @@ public class DomainObjectResourceTest {
         
         // when
         Response idPropertyResp = domainObjectResource.propertyDetails("OID:1", "id");
-        RestfulResponse<PropertyDetailsRepresentation> idPropertyJsonResp = RestfulResponse.of(idPropertyResp, PropertyDetailsRepresentation.class);
+        RestfulResponse<ObjectPropertyRepresentation> idPropertyJsonResp = RestfulResponse.of(idPropertyResp, ObjectPropertyRepresentation.class);
         assertThat(idPropertyJsonResp.getStatus().getFamily(), is(Family.SUCCESSFUL));
         
         // then 
-        PropertyDetailsRepresentation propertyDetailsRepr = idPropertyJsonResp.getEntity();
+        ObjectPropertyRepresentation propertyDetailsRepr = idPropertyJsonResp.getEntity();
 
         // _self.link
         Link selfLink = propertyDetailsRepr.getLink("_self.link");
@@ -175,11 +175,11 @@ public class DomainObjectResourceTest {
         
         // when
         Response actionPromptResp = domainObjectResource.actionPrompt("OID:1", "list");
-        RestfulResponse<ActionPromptRepresentation> actionPromptJsonResp = RestfulResponse.of(actionPromptResp, ActionPromptRepresentation.class);
+        RestfulResponse<ObjectActionRepresentation> actionPromptJsonResp = RestfulResponse.of(actionPromptResp, ObjectActionRepresentation.class);
         assertThat(actionPromptJsonResp.getStatus().getFamily(), is(Family.SUCCESSFUL));
         
         // then 
-        ActionPromptRepresentation actionPromptRepr = actionPromptJsonResp.getEntity();
+        ObjectActionRepresentation actionPromptRepr = actionPromptJsonResp.getEntity();
 
         // _self.link
         Link selfLink = actionPromptRepr.getLink("_self.link");
@@ -239,7 +239,7 @@ public class DomainObjectResourceTest {
         assertThat(actionInvokeRepr.isArray(), is(true));
         assertThat(actionInvokeRepr.arraySize(), is(5));
         
-        JsonRepresentation domainObjectRefRepr = actionInvokeRepr.elementAt(0);
+        JsonRepresentation domainObjectRefRepr = actionInvokeRepr.arrayElementAt(0);
 
         assertThat(domainObjectRefRepr, is(not(nullValue())));
         assertThat(domainObjectRefRepr.getString("title"), is("Untitled Applib Values Entity")); // TODO

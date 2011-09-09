@@ -109,7 +109,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements
         final OneToOneAssociation property = getPropertyThatIsVisibleAndUsable(
                 objectAdapter, propertyId, Intent.ACCESS);
 
-        final PropertyRepBuilder builder = PropertyRepBuilder.newBuilder(
+        final ObjectPropertyRepBuilder builder = ObjectPropertyRepBuilder.newBuilder(
                 getResourceContext(), objectAdapter, property);
         return responseOfOk(jsonFrom(builder));
     }
@@ -176,7 +176,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements
         final OneToManyAssociation collection = getCollectionThatIsVisibleAndUsable(
                 objectAdapter, collectionId, Intent.ACCESS);
 
-        final CollectionRepBuilder builder = CollectionRepBuilder.newBuilder(
+        final ObjectCollectionRepBuilder builder = ObjectCollectionRepBuilder.newBuilder(
                 getResourceContext(), objectAdapter, collection);
         return responseOfOk(jsonFrom(builder));
     }
@@ -282,7 +282,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements
         final ObjectAction action = getObjectActionThatIsVisibleAndUsable(
                 objectAdapter, actionId, Intent.ACCESS);
 
-        ActionRepBuilder builder = ActionRepBuilder.newBuilder(
+        ObjectActionRepBuilder builder = ObjectActionRepBuilder.newBuilder(
                 getResourceContext(), objectAdapter, action);
         return responseOfOk(jsonFrom(builder));
     }
@@ -565,11 +565,11 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements
         ObjectAssociation association = objectAdapter.getSpecification()
                 .getAssociation(propertyId);
         if (association == null || !association.isOneToOneAssociation()) {
-            throwNotFoundException(propertyId, MemberType.PROPERTY);
+            throwNotFoundException(propertyId, MemberType.OBJECT_PROPERTY);
         }
         OneToOneAssociation property = (OneToOneAssociation) association;
         return ensureVisibleAndUsableForIntent(objectAdapter, property,
-                MemberType.PROPERTY, intent);
+                MemberType.OBJECT_PROPERTY, intent);
     }
 
     private OneToManyAssociation getCollectionThatIsVisibleAndUsable(
@@ -580,11 +580,11 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements
         ObjectAssociation association = objectAdapter.getSpecification()
                 .getAssociation(collectionId);
         if (association == null || !association.isOneToManyAssociation()) {
-            throwNotFoundException(collectionId, MemberType.COLLECTION);
+            throwNotFoundException(collectionId, MemberType.OBJECT_COLLECTION);
         }
         OneToManyAssociation collection = (OneToManyAssociation) association;
         return ensureVisibleAndUsableForIntent(objectAdapter, collection,
-                MemberType.COLLECTION, intent);
+                MemberType.OBJECT_COLLECTION, intent);
     }
 
     private ObjectAction getObjectActionThatIsVisibleAndUsable(
@@ -593,7 +593,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements
         Intent intent) {
         
         ObjectAction action = objectAdapter.getSpecification().getObjectAction(actionId);
-        return ensureVisibleAndUsableForIntent(objectAdapter, action, MemberType.ACTION, intent);
+        return ensureVisibleAndUsableForIntent(objectAdapter, action, MemberType.OBJECT_ACTION, intent);
     }
 
     public <T extends ObjectMember> T ensureVisibleAndUsableForIntent(

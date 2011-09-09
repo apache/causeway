@@ -42,6 +42,10 @@ public final class HttpStatusCode {
         }
     }
 
+    public static HttpStatusCode lookup(int status) {
+        return statusCodes.get(status);
+    }
+
     public static Family lookupFamily(int statusCode) {
         switch (statusCode / 100)
         {
@@ -66,8 +70,8 @@ public final class HttpStatusCode {
 
     public final static HttpStatusCode OK = new HttpStatusCode(200, Status.OK);
     public final static HttpStatusCode CREATED = new HttpStatusCode(201, Status.CREATED);
-    public static final HttpStatusCode ACCEPTED = new HttpStatusCode(202, Status.ACCEPTED);
-
+    
+    //public static final int SC_ACCEPTED = 202;
     //public static final int SC_NON_AUTHORITATIVE_INFORMATION = 203;
     
     public static final HttpStatusCode NO_CONTENT = new HttpStatusCode(204, Status.NO_CONTENT);
@@ -79,6 +83,8 @@ public final class HttpStatusCode {
     //public static final int SC_MOVED_PERMANENTLY = 301;
     //public static final int SC_MOVED_TEMPORARILY = 302;
     //public static final int SC_SEE_OTHER = 303;
+    public final static HttpStatusCode NOT_MODIFIED = new HttpStatusCode(304, Status.BAD_REQUEST);
+
     //public static final int SC_NOT_MODIFIED = 304;
     //public static final int SC_USE_PROXY = 305;
     //public static final int SC_TEMPORARY_REDIRECT = 307;
@@ -195,6 +201,7 @@ public final class HttpStatusCode {
     public String toString() {
         return "HttpStatusCode " + statusCode + ", " + family;
     }
+
     
 }
 

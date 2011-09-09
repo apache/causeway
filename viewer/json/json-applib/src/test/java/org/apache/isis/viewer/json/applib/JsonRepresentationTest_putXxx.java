@@ -40,23 +40,23 @@ public class JsonRepresentationTest_putXxx {
     
     @Test
     public void putInt() throws JsonParseException, JsonMappingException, IOException {
-        jsonRepresentation.put("a", 123);
+        jsonRepresentation.mapPut("a", 123);
         assertThat(jsonRepresentation.getInt("a"), is(123));
     }
 
     @Test
     public void putInt_multipart() throws JsonParseException, JsonMappingException, IOException {
-        jsonRepresentation.put("a.b", 456);
+        jsonRepresentation.mapPut("a.b", 456);
         assertThat(jsonRepresentation.getInt("a.b"), is(456));
     }
 
     @Test(expected=IllegalArgumentException.class)
     public void putInt_pathBlockedByValue() throws JsonParseException, JsonMappingException, IOException {
         //given
-        jsonRepresentation.put("a", 123);
+        jsonRepresentation.mapPut("a", 123);
 
         // when
-        jsonRepresentation.put("a.b", 456);
+        jsonRepresentation.mapPut("a.b", 456);
     }
 
     
