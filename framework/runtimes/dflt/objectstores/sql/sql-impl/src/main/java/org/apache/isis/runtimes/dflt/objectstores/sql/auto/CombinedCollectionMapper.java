@@ -113,10 +113,6 @@ public class CombinedCollectionMapper extends AbstractAutoMapper implements Coll
     @Override
     public void loadInternalCollection(final DatabaseConnector connector, final ObjectAdapter parent,
         final boolean makeResolved) {
-        if (collectionMappers == null) {
-            // for abstract classes and interfaces
-            return;
-        }
 
         final ObjectAdapter collection = field.get(parent);
         if (collection.getResolveState().canChangeTo(ResolveState.RESOLVING)) {
@@ -181,10 +177,6 @@ public class CombinedCollectionMapper extends AbstractAutoMapper implements Coll
 
     @Override
     public void saveInternalCollection(final DatabaseConnector connector, final ObjectAdapter parent) {
-        if (collectionMappers == null) {
-            // for abstract classes and interfaces
-            return;
-        }
         final ObjectAdapter collection = field.get(parent);
         LOG.debug("Saving internal collection " + collection);
 
