@@ -140,6 +140,17 @@
         </plugins>
     </reporting>
 
+	<repositories>
+        <repository>
+            <id>Maven Central Repository (UK Mirror)</id>
+            <url>http://uk.maven.org/maven2</url>
+            <snapshots>
+              <enabled>false</enabled>
+            </snapshots>
+        </repository>
+ 
+	</repositories>
+
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -155,7 +166,7 @@
             <dependency>
                 <groupId>commons-configuration</groupId>
                 <artifactId>commons-configuration</artifactId>
-                <version>1.6</version>
+                <version>1.7</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
