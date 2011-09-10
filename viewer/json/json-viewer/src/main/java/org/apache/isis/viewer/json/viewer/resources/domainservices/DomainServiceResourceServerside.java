@@ -29,20 +29,17 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.ResponseBuilder;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.services.ServiceUtil;
-import org.apache.isis.viewer.json.applib.HttpStatusCode;
 import org.apache.isis.viewer.json.applib.RepresentationType;
 import org.apache.isis.viewer.json.applib.RestfulResponse;
+import org.apache.isis.viewer.json.applib.RestfulResponse.HttpStatusCode;
 import org.apache.isis.viewer.json.applib.domainobjects.DomainServiceResource;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
 import org.apache.isis.viewer.json.viewer.representations.RepresentationBuilder;
 import org.apache.isis.viewer.json.viewer.resources.ResourceAbstract;
 import org.apache.isis.viewer.json.viewer.resources.domainobjects.DomainObjectListRepBuilder;
-import org.apache.isis.viewer.json.viewer.resources.domainobjects.DomainObjectRepBuilder;
-import org.jboss.resteasy.annotations.ClientResponseType;
 
 @Path("/services")
 public class DomainServiceResourceServerside extends ResourceAbstract implements

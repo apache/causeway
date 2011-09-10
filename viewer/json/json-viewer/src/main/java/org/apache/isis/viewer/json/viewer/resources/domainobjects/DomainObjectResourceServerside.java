@@ -47,7 +47,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.isis.viewer.json.applib.HttpStatusCode;
+import org.apache.isis.viewer.json.applib.RestfulResponse.HttpStatusCode;
 import org.apache.isis.viewer.json.applib.domainobjects.DomainObjectResource;
 import org.apache.isis.viewer.json.applib.util.JsonMapper;
 import org.apache.isis.viewer.json.viewer.representations.RepresentationBuilder;
@@ -56,7 +56,6 @@ import org.apache.isis.viewer.json.viewer.resources.domainservices.DomainService
 import org.apache.isis.viewer.json.viewer.util.UrlDecoderUtils;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
-import org.jboss.resteasy.annotations.ClientResponseType;
 
 import com.google.common.base.Charsets;
 import com.google.common.collect.Lists;

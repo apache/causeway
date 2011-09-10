@@ -4,7 +4,6 @@ import java.util.Date;
 
 import javax.ws.rs.core.Response;
 
-import org.jboss.resteasy.client.ClientExecutor;
 import org.jboss.resteasy.client.ClientRequest;
 
 public final class RestfulRequest {

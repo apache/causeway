@@ -18,13 +18,11 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status.Family;
 
 import org.apache.isis.runtimes.dflt.webserver.WebServer;
-import org.apache.isis.viewer.json.applib.HttpStatusCode;
 import org.apache.isis.viewer.json.applib.RepresentationType;
 import org.apache.isis.viewer.json.applib.RestfulClient;
 import org.apache.isis.viewer.json.applib.RestfulResponse;
+import org.apache.isis.viewer.json.applib.RestfulResponse.HttpStatusCode;
 import org.apache.isis.viewer.json.applib.blocks.Method;
-import org.apache.isis.viewer.json.applib.homepage.HomePageRepresentation;
-import org.apache.isis.viewer.json.applib.homepage.HomePageResource;
 import org.apache.isis.viewer.json.applib.user.UserRepresentation;
 import org.apache.isis.viewer.json.applib.user.UserResource;
 import org.codehaus.jackson.JsonParseException;

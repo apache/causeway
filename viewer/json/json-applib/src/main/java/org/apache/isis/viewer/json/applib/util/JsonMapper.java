@@ -7,9 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status.Family;
 
-import org.apache.isis.viewer.json.applib.HttpStatusCode;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.JsonGenerator;

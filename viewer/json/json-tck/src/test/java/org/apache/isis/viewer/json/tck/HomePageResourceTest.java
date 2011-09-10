@@ -2,9 +2,9 @@ package org.apache.isis.viewer.json.tck;
 
 import static org.apache.isis.viewer.json.tck.RepresentationMatchers.assertThat;
 import static org.apache.isis.viewer.json.tck.RepresentationMatchers.entityOf;
+import static org.apache.isis.viewer.json.tck.RepresentationMatchers.isArray;
 import static org.apache.isis.viewer.json.tck.RepresentationMatchers.isFollowableLinkToSelf;
 import static org.apache.isis.viewer.json.tck.RepresentationMatchers.isLink;
-import static org.apache.isis.viewer.json.tck.RepresentationMatchers.isArray;
 import static org.apache.isis.viewer.json.tck.RepresentationMatchers.isMap;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
@@ -18,10 +18,10 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status.Family;
 
 import org.apache.isis.runtimes.dflt.webserver.WebServer;
-import org.apache.isis.viewer.json.applib.HttpStatusCode;
 import org.apache.isis.viewer.json.applib.RepresentationType;
 import org.apache.isis.viewer.json.applib.RestfulClient;
 import org.apache.isis.viewer.json.applib.RestfulResponse;
+import org.apache.isis.viewer.json.applib.RestfulResponse.HttpStatusCode;
 import org.apache.isis.viewer.json.applib.blocks.Method;
 import org.apache.isis.viewer.json.applib.homepage.HomePageRepresentation;
 import org.apache.isis.viewer.json.applib.homepage.HomePageResource;

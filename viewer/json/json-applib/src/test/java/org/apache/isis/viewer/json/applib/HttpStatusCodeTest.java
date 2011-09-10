@@ -5,6 +5,7 @@ import static org.junit.Assert.assertThat;
 
 import javax.ws.rs.core.Response.Status.Family;
 
+import org.apache.isis.viewer.json.applib.RestfulResponse.HttpStatusCode;
 import org.junit.Test;
 
 public class HttpStatusCodeTest {
