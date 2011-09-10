@@ -41,8 +41,13 @@ public class IdMappingAbstract {
 
     public void appendWhereClause(final DatabaseConnector connector, final StringBuffer sql, final Oid oid) {
         sql.append(column);
+        sql.append(" = ");
+        appendObjectId(connector, sql, oid);
+    }
+
+    public void appendObjectId(final DatabaseConnector connector, final StringBuffer sql, final Oid oid) {
+        sql.append("?");
         connector.addToQueryValues(primaryKeyAsObject(oid));
-        sql.append(" = ?");
     }
 
     public void appendCreateColumnDefinitions(final StringBuffer sql) {
@@ -65,7 +70,8 @@ public class IdMappingAbstract {
         if (object == null) {
             sql.append("NULL");
         } else {
-            sql.append(connector.addToQueryValues(primaryKeyAsObject(object.getOid())));
+            appendObjectId(connector, sql, object.getOid());
+            // sql.append(connector.addToQueryValues(primaryKeyAsObject(object.getOid())));
         }
     }
 

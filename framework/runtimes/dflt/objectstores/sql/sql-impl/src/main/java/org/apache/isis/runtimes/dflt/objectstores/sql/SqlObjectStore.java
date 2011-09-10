@@ -29,6 +29,7 @@ import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.exceptions.NotYetImplementedException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.oid.AggregatedOid;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
@@ -115,15 +116,39 @@ public final class SqlObjectStore implements ObjectStore {
                 final DatabaseConnector connection = ((SqlExecutionContext) context).getConnection();
                 LOG.debug("  save object " + object);
                 if (object.getSpecification().isCollectionOrIsAggregated()) {
-                    /*
-                     * ObjectAdapter parent = object.getSpecification().getAggregate(object); LOG.debug(
-                     * "change to internal collection being persisted through parent" );
-                     * 
-                     * // TODO a better plan would be ask the mapper to save the collection // - saveCollection(parent,
-                     * collection) mapperLookup.getMapper(connection, parent).save(connection, parent);
-                     * connectionPool.release(connection);
-                     */
-                    throw new NotYetImplementedException(object.toString());
+
+                    ObjectAdapter parent = object.getAggregateRoot();
+                    LOG.debug("change to internal collection being persisted through parent");
+
+                    Oid oid = object.getOid();
+                    if (oid instanceof AggregatedOid) {
+                        AggregatedOid aoid = (AggregatedOid) oid;
+                        final ObjectMapping mapping2 = objectMappingLookup.getMapping(parent, connection);
+
+                        if (mapping2.saveCollection(connection, parent, aoid.getId()) == false) {
+                            final ObjectMapping mapping = objectMappingLookup.getMapping(parent, connection);
+                            mapping.save(connection, object);
+                        }
+                        connectionPool.release(connection);
+                    } else {
+                        throw new NotYetImplementedException(object.toString());
+                    }
+                    // / ObjectAssociation assoc = parent.getSpecification().getAssociation(aoid.getId());
+
+                    // / ObjectAdapter realObject = assoc.get(parent);
+
+                    // for (final CollectionMapper collectionMapper : collectionMappers) {
+                    // collectionMapper.saveInternalCollection(connector, object);
+                    // }
+                    // /}
+
+                    // TODO a better plan would be ask the mapper to save the collection
+                    // -saveCollection(parent,collection)
+
+                    // mapperLookup.getMapper(connection, parent).save(connection, parent);
+                    // connectionPool.release(connection);
+
+                    // throw new NotYetImplementedException(object.toString());
                 } else {
                     final ObjectMapping mapping = objectMappingLookup.getMapping(object, connection);
                     mapping.save(connection, object);

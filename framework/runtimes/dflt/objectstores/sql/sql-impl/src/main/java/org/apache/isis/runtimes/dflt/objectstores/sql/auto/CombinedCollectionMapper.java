@@ -29,6 +29,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.runtimes.dflt.objectstores.sql.CollectionMapper;
 import org.apache.isis.runtimes.dflt.objectstores.sql.DatabaseConnector;
@@ -187,7 +188,18 @@ public class CombinedCollectionMapper extends AbstractAutoMapper implements Coll
         final ObjectAdapter collection = field.get(parent);
         LOG.debug("Saving internal collection " + collection);
 
-        StringBuffer sql = new StringBuffer();
+        final CollectionFacet collectionFacet = collection.getSpecification().getFacet(CollectionFacet.class);
+        final Iterable<ObjectAdapter> elements = collectionFacet.iterable(collection);
+
+        // TODO What is needed to allow a collection update (add/remove) to mark the collection as dirty?
+        // checkIfDirty(collection);
+
+        if (elements.iterator().hasNext() == false) {
+            return;
+        }
+
+        // Delete collection parent
+        final StringBuffer sql = new StringBuffer();
         sql.append("update ");
         sql.append(table);
         sql.append(" set ");
@@ -196,18 +208,50 @@ public class CombinedCollectionMapper extends AbstractAutoMapper implements Coll
         foreignKeyMapping.appendUpdateValues(connector, sql, parent);
         connector.update(sql.toString());
 
-        sql = new StringBuffer();
-        sql.append("update ");
-        sql.append(table);
-        sql.append(" set ");
+        // Reinstall collection parent
+        // sql = new StringBuffer();
 
-        final CollectionFacet collectionFacet = collection.getSpecification().getFacet(CollectionFacet.class);
-        for (final ObjectAdapter element : collectionFacet.iterable(collection)) {
-            final StringBuffer update = new StringBuffer(sql);
-            foreignKeyMapping.appendUpdateValues(connector, update, parent);
-            update.append(" where ");
-            idMapping.appendWhereClause(connector, update, element.getOid());
+        final StringBuffer update = new StringBuffer();
+        update.append("update ");
+        update.append(table);
+        update.append(" set ");
+
+        foreignKeyMapping.appendUpdateValues(connector, update, parent);
+        update.append(" where ");
+
+        idMapping.appendColumnNames(update);
+
+        update.append(" IN (");
+
+        int count = 0;
+        for (final ObjectAdapter element : elements) {
+            if (count++ > 0) {
+                update.append(",");
+            }
+            idMapping.appendObjectId(connector, update, element.getOid());
+        }
+        update.append(")");
+        if (count > 0) {
             connector.insert(update.toString());
+        }
+    }
+
+    protected void checkIfDirty(final ObjectAdapter collection) {
+        // Test: is dirty?
+        ObjectSpecification collectionSpecification = collection.getSpecification();
+        if (collectionSpecification.isDirty(collection)) {
+            LOG.debug(collection.getOid() + " is dirty");
+        } else {
+            LOG.debug(collection.getOid() + " is clean");
+        }
+
+        final CollectionFacet collectionFacetD = collection.getSpecification().getFacet(CollectionFacet.class);
+        for (final ObjectAdapter element : collectionFacetD.iterable(collection)) {
+            if (collectionSpecification.isDirty(element)) {
+                LOG.debug(element.getOid() + " is dirty");
+            } else {
+                LOG.debug(element.getOid() + " is clean");
+            }
         }
     }
 

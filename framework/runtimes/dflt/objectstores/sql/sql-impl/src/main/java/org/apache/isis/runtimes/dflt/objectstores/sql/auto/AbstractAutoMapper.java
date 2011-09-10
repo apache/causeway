@@ -71,6 +71,7 @@ public abstract class AbstractAutoMapper extends AbstractMapper {
     }
 
     protected CollectionMapper collectionMappers[];
+    protected String collectionMapperFields[];
     protected boolean dbCreatesId;
 
     protected ObjectSpecification specification;
@@ -149,6 +150,7 @@ public abstract class AbstractAutoMapper extends AbstractMapper {
         final ObjectAssociation[] oneToOneProperties = new ObjectAssociation[simpleFieldCount];
         final ObjectAssociation[] oneToManyProperties = new ObjectAssociation[collectionFieldCount];
         collectionMappers = new CollectionMapper[collectionFieldCount];
+        collectionMapperFields = new String[collectionFieldCount];
         // Properties collectionMappings = configParameters.getPropertiesStrippingPrefix(parameterBase +
         // "collection");
         final IsisConfiguration subset = IsisContext.getConfiguration().createSubset(parameterBase + ".mapper.");
@@ -190,6 +192,7 @@ public abstract class AbstractAutoMapper extends AbstractMapper {
                     }
 
                     collectionMappers[collectionFieldNo] = collectionMapper;
+                    collectionMapperFields[collectionFieldNo] = field.getId();
 
                 } else if (type.equals("fk-table")) {
                     final String property = parameterBase + field.getId() + ".element-type";

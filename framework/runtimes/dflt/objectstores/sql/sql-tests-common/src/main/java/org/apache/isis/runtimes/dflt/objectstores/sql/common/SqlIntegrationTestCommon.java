@@ -591,9 +591,28 @@ public abstract class SqlIntegrationTestCommon extends SqlIntegrationTestCommonB
         getSingletonInstance().setState(1);
     }
 
+    public void testUpdateCollectionIsDirty() {
+        final SqlDataClassFactory factory = SqlIntegrationTestSingleton.getSqlDataClassFactory();
+
+        final List<SqlDataClass> sqlDataClasses = factory.allDataClasses();
+        SqlDataClass sqlDataClass = sqlDataClasses.get(0);
+
+        final List<SimpleClass> collection = sqlDataClass.getSimpleClasses1();
+        SimpleClass simpleClass1 = collection.get(0);
+        // simpleClass1.setString(stringList1.get(3));
+
+        collection.remove(simpleClass1);
+        // XML objectstore doesn't support this.
+        if (getProperties().getProperty("isis.persistor") != "xml") {
+            factory.update(collection);
+        }
+
+        factory.update(sqlDataClass);
+    }
+
     public void testFindByMatchString() {
         final SimpleClass simpleClassMatch = new SimpleClass();
-        simpleClassMatch.setString(stringList1.get(0));
+        simpleClassMatch.setString(stringList1.get(1));
 
         final SqlDataClassFactory factory = SqlIntegrationTestSingleton.getSqlDataClassFactory();
         final List<SimpleClass> classes = factory.allSimpleClassesThatMatch(simpleClassMatch);
@@ -612,6 +631,8 @@ public abstract class SqlIntegrationTestCommon extends SqlIntegrationTestCommonB
         // TODO: Why is this hack required?
         if (getProperties().getProperty("isis.persistor") != "in-memory") {
             assertEquals(stringList1.size(), classes.size());
+        } else {
+            assertEquals(stringList1.size() + 2, classes.size());
         }
 
     }
