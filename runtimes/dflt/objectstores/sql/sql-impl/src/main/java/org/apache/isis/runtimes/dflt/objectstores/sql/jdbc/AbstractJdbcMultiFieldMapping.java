@@ -26,11 +26,13 @@ import org.apache.isis.runtimes.dflt.objectstores.sql.DatabaseConnector;
 import org.apache.isis.runtimes.dflt.objectstores.sql.Results;
 import org.apache.isis.runtimes.dflt.objectstores.sql.Sql;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
 
 public abstract class AbstractJdbcMultiFieldMapping extends AbstractJdbcFieldMapping {
     private final int columnCount;
     private final String[] types;
     private final String[] columnNames;
+    private final AdapterManager adapterManager;
 
     /**
      * 
@@ -56,6 +58,9 @@ public abstract class AbstractJdbcMultiFieldMapping extends AbstractJdbcFieldMap
         columnNames = new String[columnCount];
         columnNames[0] = Sql.sqlFieldName(fieldName + "1");
         columnNames[1] = Sql.sqlFieldName(fieldName + "2");
+
+        adapterManager = IsisContext.getPersistenceSession().getAdapterManager();
+
     }
 
     @Override
@@ -108,11 +113,7 @@ public abstract class AbstractJdbcMultiFieldMapping extends AbstractJdbcFieldMap
 
     @Override
     public void appendWhereClause(final DatabaseConnector connector, final StringBuffer sql, final ObjectAdapter object) {
-        final ObjectAdapter fieldValue = field.get(object);
-        final Object o = (fieldValue == null) ? null : fieldValue.getObject();
-        for (int i = 0; i < columnCount; i++) {
-            appendEqualsClause(connector, i, sql, o, "=");
-        }
+        appendUpdateValues(connector, sql, object);
     }
 
     private void appendEqualsClause(final DatabaseConnector connector, final int index, final StringBuffer sql,
@@ -132,7 +133,8 @@ public abstract class AbstractJdbcMultiFieldMapping extends AbstractJdbcFieldMap
     public ObjectAdapter setFromDBColumn(final Results results, final String columnName, final ObjectAssociation field) {
         ObjectAdapter restoredValue;
         final Object objectValue = getObjectFromResults(results);
-        restoredValue = IsisContext.getPersistenceSession().getAdapterManager().adapterFor(objectValue);
+        restoredValue = adapterManager.adapterFor(objectValue); // NOTE: If this fails, then fetch back the declaration
+                                                                // from the constructor to here.
         return restoredValue;
     }
 
