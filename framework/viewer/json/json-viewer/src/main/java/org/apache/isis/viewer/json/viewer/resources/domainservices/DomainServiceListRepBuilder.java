@@ -17,12 +17,9 @@
 package org.apache.isis.viewer.json.viewer.resources.domainservices;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.services.ServiceUtil;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
-import org.apache.isis.viewer.json.viewer.representations.LinkBuilder;
 import org.apache.isis.viewer.json.viewer.resources.domainobjects.DomainObjectListRepBuilder;
-import org.apache.isis.viewer.json.viewer.resources.domainobjects.DomainObjectRepBuilder;
 
 class DomainServiceListRepBuilder extends DomainObjectListRepBuilder {
 

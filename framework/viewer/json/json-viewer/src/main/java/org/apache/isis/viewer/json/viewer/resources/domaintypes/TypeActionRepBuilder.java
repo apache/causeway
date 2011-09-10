@@ -21,10 +21,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
 import org.apache.isis.viewer.json.viewer.representations.LinkBuilder;
-import org.apache.isis.viewer.json.viewer.representations.RepresentationBuilder;
-import org.apache.isis.viewer.json.viewer.resources.domainobjects.AbstractObjectMemberRepBuilder;
 import org.apache.isis.viewer.json.viewer.resources.domainobjects.MemberType;
-import org.apache.isis.viewer.json.viewer.resources.domainobjects.ObjectActionRepBuilder;
 
 public class TypeActionRepBuilder extends AbstractTypeMemberRepBuilder<TypeActionRepBuilder, ObjectAction> {
 

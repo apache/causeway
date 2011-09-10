@@ -2,7 +2,6 @@ package org.apache.isis.viewer.json.viewer.resources;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
-import org.apache.isis.viewer.json.viewer.resources.RepresentationType;
 import org.junit.Test;
 
 

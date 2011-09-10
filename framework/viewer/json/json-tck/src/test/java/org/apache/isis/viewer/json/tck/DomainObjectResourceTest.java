@@ -14,15 +14,14 @@ import javax.ws.rs.core.Response.Status.Family;
 
 import org.apache.isis.runtimes.dflt.webserver.WebServer;
 import org.apache.isis.tck.dom.scalars.ApplibValuedEntity;
-import org.apache.isis.tck.objstore.dflt.scalars.ApplibValuedEntityRepositoryDefault;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.applib.RestfulClient;
 import org.apache.isis.viewer.json.applib.RestfulResponse;
 import org.apache.isis.viewer.json.applib.blocks.Link;
 import org.apache.isis.viewer.json.applib.blocks.Method;
-import org.apache.isis.viewer.json.applib.domainobjects.ObjectActionRepresentation;
 import org.apache.isis.viewer.json.applib.domainobjects.DomainObjectRepresentation;
 import org.apache.isis.viewer.json.applib.domainobjects.DomainObjectResource;
+import org.apache.isis.viewer.json.applib.domainobjects.ObjectActionRepresentation;
 import org.apache.isis.viewer.json.applib.domainobjects.ObjectPropertyRepresentation;
 import org.apache.isis.viewer.json.applib.domainobjects.ScalarValueRepresentation;
 import org.junit.Before;
@@ -45,7 +44,7 @@ public class DomainObjectResourceTest {
     }
 
 
-    @Ignore("to get working again")
+    @Ignore
     @Test
     public void returnsDomainObjectRepresentation() throws Exception {
         
@@ -53,7 +52,7 @@ public class DomainObjectResourceTest {
         DomainObjectResource domainObjectResource = client.getDomainObjectResource();
         
         // when
-        Response domainObjectResp = domainObjectResource.object("OID:1");
+        Response domainObjectResp = domainObjectResource.object("OID:6");
         RestfulResponse<DomainObjectRepresentation> domainObjectJsonResp = RestfulResponse.of(domainObjectResp, DomainObjectRepresentation.class);
         assertThat(domainObjectJsonResp.getStatus().getFamily(), is(Family.SUCCESSFUL));
         
@@ -239,7 +238,7 @@ public class DomainObjectResourceTest {
         assertThat(actionInvokeRepr.isArray(), is(true));
         assertThat(actionInvokeRepr.arraySize(), is(5));
         
-        JsonRepresentation domainObjectRefRepr = actionInvokeRepr.arrayElementAt(0);
+        JsonRepresentation domainObjectRefRepr = actionInvokeRepr.arrayGet(0);
 
         assertThat(domainObjectRefRepr, is(not(nullValue())));
         assertThat(domainObjectRefRepr.getString("title"), is("Untitled Applib Values Entity")); // TODO

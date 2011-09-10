@@ -35,7 +35,6 @@ import org.jdom.output.XMLOutputter;
 import org.jdom.xpath.XPath;
 
 import com.google.common.base.Function;
-import com.google.common.collect.Iterables;
 import com.google.common.collect.Iterators;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -578,7 +577,7 @@ public class JsonRepresentation {
         return (Function<JsonNode, T>) transformer;
     }
 
-    public JsonRepresentation arrayElementAt(int i) {
+    public JsonRepresentation arrayGet(int i) {
         ensureIsAnArrayAtLeastAsLargeAs(i);
         return new JsonRepresentation(jsonNode.get(i));
     }

@@ -1,6 +1,5 @@
 package org.apache.isis.viewer.json.viewer.resources;
 
-import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
@@ -9,9 +8,8 @@ import static org.junit.Assert.assertThat;
 
 import javax.ws.rs.core.Response;
 
-import org.apache.isis.viewer.json.applib.HttpStatusCode;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
-import org.apache.isis.viewer.json.applib.RestfulResponse;
+import org.apache.isis.viewer.json.applib.RestfulResponse.HttpStatusCode;
 import org.apache.isis.viewer.json.applib.util.JsonMapper;
 import org.apache.isis.viewer.json.viewer.JsonApplicationException;
 import org.apache.isis.viewer.json.viewer.JsonApplicationExceptionMapper;
@@ -78,7 +76,7 @@ public class JsonExceptionMapperTest {
     public void entity_withCause() throws Exception {
         // given
         Exception cause = new Exception("barfoo");
-        JsonApplicationException ex = JsonApplicationException.create(HttpStatusCode.BAD_REQUEST, "foobar", cause);
+        JsonApplicationException ex = JsonApplicationException.create(HttpStatusCode.BAD_REQUEST, cause, "foobar");
         
         // when
         Response response = exceptionMapper.toResponse(ex);

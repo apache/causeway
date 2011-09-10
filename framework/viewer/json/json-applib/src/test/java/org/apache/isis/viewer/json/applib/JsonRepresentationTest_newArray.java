@@ -36,8 +36,8 @@ public class JsonRepresentationTest_newArray {
     public void newArrayInitialSize() throws Exception {
         JsonRepresentation jsonRepresentation = JsonRepresentation.newArray(2);
         assertThat(jsonRepresentation.arraySize(), is(2));
-        assertThat(jsonRepresentation.arrayElementAt(0).isNull(), is(true));
-        assertThat(jsonRepresentation.arrayElementAt(1).isNull(), is(true));
+        assertThat(jsonRepresentation.arrayGet(0).isNull(), is(true));
+        assertThat(jsonRepresentation.arrayGet(1).isNull(), is(true));
     }
 
 }

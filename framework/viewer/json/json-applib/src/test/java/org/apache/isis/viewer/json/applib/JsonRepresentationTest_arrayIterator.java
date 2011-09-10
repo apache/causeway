@@ -20,8 +20,6 @@ package org.apache.isis.viewer.json.applib;
 
 import static org.apache.isis.viewer.json.applib.JsonUtils.readJson;
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
 import java.io.IOException;
@@ -29,7 +27,6 @@ import java.util.Iterator;
 
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
-import org.junit.Before;
 import org.junit.Test;
 
 public class JsonRepresentationTest_arrayIterator {
