@@ -99,32 +99,33 @@ public abstract class AbstractJdbcMultiFieldMapping extends AbstractJdbcFieldMap
 
     @Override
     public void appendUpdateValues(final DatabaseConnector connector, final StringBuffer sql, final ObjectAdapter object) {
+        final ObjectAdapter fieldValue = field.get(object);
+        final Object o = (fieldValue == null) ? null : fieldValue.getObject();
         for (int i = 0; i < columnCount; i++) {
-            appendEqualsClause(connector, i, sql, object, "=");
+            appendEqualsClause(connector, i, sql, o, "=");
         }
     }
 
     @Override
     public void appendWhereClause(final DatabaseConnector connector, final StringBuffer sql, final ObjectAdapter object) {
+        final ObjectAdapter fieldValue = field.get(object);
+        final Object o = (fieldValue == null) ? null : fieldValue.getObject();
         for (int i = 0; i < columnCount; i++) {
-            appendEqualsClause(connector, i, sql, object, "=");
+            appendEqualsClause(connector, i, sql, o, "=");
         }
     }
 
-    protected void appendEqualsClause(final DatabaseConnector connector, final int index, final StringBuffer sql,
-        final ObjectAdapter object, final String condition) {
+    private void appendEqualsClause(final DatabaseConnector connector, final int index, final StringBuffer sql,
+        final Object object, final String condition) {
 
-        final ObjectAdapter fieldValue = field.get(object);
-        final Object o = (fieldValue == null) ? null : fieldValue.getObject();
+        final Object oPart = preparedStatementObject(index, object);
 
-        for (int i = 0; i < columnCount; i++) {
-            sql.append(columnName(i) + condition + "?");
-            if (i < columnCount - 1) {
-                sql.append(", ");
-            }
-
-            connector.addToQueryValues(o);
+        sql.append(columnName(index) + condition + "?");
+        if (index < columnCount - 1) {
+            sql.append(", ");
         }
+
+        connector.addToQueryValues(oPart);
     }
 
     @Override

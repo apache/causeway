@@ -170,13 +170,12 @@ public class AutoMapper extends AbstractAutoMapper implements ObjectMapping, Deb
         final ObjectSpecification patternSpec = pattern.getSpecification();
         final List<ObjectAssociation> patternAssociations = patternSpec.getAssociations();
         for (ObjectAssociation patternAssoc : patternAssociations) {
-            // LOG.debug(assoc.getName());
             final Method method;
-            try {
-                final Identifier identifier = patternAssoc.getIdentifier();
-                final String memberName = identifier.getMemberName();
-                final String methodName = memberName.substring(0, 1).toUpperCase() + memberName.substring(1);
+            final Identifier identifier = patternAssoc.getIdentifier();
+            final String memberName = identifier.getMemberName();
+            final String methodName = memberName.substring(0, 1).toUpperCase() + memberName.substring(1);
 
+            try {
                 method = o.getClass().getMethod("get" + methodName, (Class<?>[]) null);
                 final Object res = InvokeUtils.invoke(method, o);
                 if (res != null) {
@@ -188,15 +187,12 @@ public class AutoMapper extends AbstractAutoMapper implements ObjectMapping, Deb
                     final ObjectSpecification specification = patternAssoc.getSpecification();
                     if (specification.isValue()) {
                         // If the property (memberName) is a value type, use the value.
-                        LOG.debug("Pattern Assoc Is Value");
                         final String fieldName = Sql.sqlFieldName(identifier.getMemberName());
                         sql.append(fieldName + "=?");
                         connector.addToQueryValues(res);
                         foundFields++;
                     } else {
                         // If the property (memberName) is an entity, use the ID.
-                        LOG.debug("Pattern Assoc Is Entity");
-
                         FieldMapping fieldMapping = fieldMappingLookup.get(patternAssoc);
 
                         fieldMapping.appendColumnNames(sql);
@@ -214,6 +210,7 @@ public class AutoMapper extends AbstractAutoMapper implements ObjectMapping, Deb
             } catch (SecurityException e) {
                 LOG.debug(e.getMessage());
             } catch (NoSuchMethodException e) {
+                LOG.info("Unable to invode method: get" + methodName + " in getInstances");
                 LOG.debug(e.getMessage());
             }
         }
@@ -409,6 +406,20 @@ public class AutoMapper extends AbstractAutoMapper implements ObjectMapping, Deb
         for (final CollectionMapper collectionMapper : collectionMappers) {
             collectionMapper.saveInternalCollection(connector, object);
         }
+    }
+
+    @Override
+    public boolean saveCollection(DatabaseConnector connection, ObjectAdapter parent, String fieldName) {
+        int i = 0;
+        for (String collectionFieldName : collectionMapperFields) {
+            if (collectionFieldName.equals(fieldName)) {
+                CollectionMapper fieldMapper = collectionMappers[i];
+                fieldMapper.saveInternalCollection(connection, parent);
+                return true;
+            }
+            i++;
+        }
+        return false;
     }
 
     @Override

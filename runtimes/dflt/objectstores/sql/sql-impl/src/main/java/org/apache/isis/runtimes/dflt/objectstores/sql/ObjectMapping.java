@@ -53,4 +53,6 @@ public interface ObjectMapping {
 
     void startup(DatabaseConnector connection, ObjectMappingLookup objectMapperLookup);
 
+    boolean saveCollection(DatabaseConnector connection, ObjectAdapter parent, String fieldName);
+
 }
