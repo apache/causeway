@@ -105,11 +105,22 @@ public abstract class ResourceAbstract {
 
     private ResourceContext resourceContext;
 
+    // TODO: make parameterizable
+    private boolean strictChecking = false;
+
 
     protected void init() {
         this.resourceContext =
             new ResourceContext(httpHeaders, uriInfo, request, httpServletRequest, httpServletResponse, securityContext);
         
+        checkAcceptHeader();
+
+    }
+
+    private void checkAcceptHeader() {
+        if(!strictChecking) {
+            return;
+        }
         List<MediaType> clientMediaTypes = getResourceContext().getHttpHeaders().getAcceptableMediaTypes();
         if(!clientMediaTypes.contains(MediaType.APPLICATION_JSON_TYPE)) {
             throw JsonApplicationException.create(
@@ -117,7 +128,6 @@ public abstract class ResourceAbstract {
                     "Client %s header %s does not include %s", 
                     HttpHeaderNames.ACCEPT, clientMediaTypes, MediaType.APPLICATION_JSON_TYPE); 
         }
-
     }
 
     protected ResourceContext getResourceContext() {
