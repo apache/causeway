@@ -41,6 +41,8 @@ import org.apache.isis.runtimes.dflt.objectstores.sql.ObjectMappingLookup;
 public class MultiColumnCombinedCollectionMapper extends CombinedCollectionMapper {
     private static final Logger LOG = Logger.getLogger(CombinedCollectionMapper.class);
 
+    // TODO: Needs to detect if field has subclasses, and to add FK_* column to *all* non-abstract subclasses.
+
     public MultiColumnCombinedCollectionMapper(final ObjectAssociation objectAssociation, final String parameterBase,
         final FieldMappingLookup lookup, final ObjectMappingLookup objectMapperLookup,
         AbstractAutoMapper abstractAutoMapper, ObjectAssociation field) {
