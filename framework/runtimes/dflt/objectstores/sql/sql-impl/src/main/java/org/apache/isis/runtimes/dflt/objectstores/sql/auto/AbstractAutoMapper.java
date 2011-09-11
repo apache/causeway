@@ -110,31 +110,6 @@ public abstract class AbstractAutoMapper extends AbstractMapper {
 
         fields.addAll(specification.getAssociations());
 
-        if (specification.hasSubclasses()) {
-            getExtraFields(fields);
-
-            final List<ObjectSpecification> subclasses = specification.subclasses();
-
-            for (ObjectSpecification subclass : subclasses) {
-                final List<? extends ObjectAssociation> subAssociations = subclass.getAssociations();
-                for (ObjectAssociation subA : subAssociations) {
-                    boolean found = false;
-                    String name = subA.getName();
-
-                    for (ObjectAssociation existingField : fields) {
-                        if (existingField.getName().equals(name)) {
-                            found = true;
-                            continue;
-                        }
-                    }
-
-                    if (found == false) {
-                        fields.add(subA);
-                    }
-                }
-            }
-        }
-
         int simpleFieldCount = 0;
         int collectionFieldCount = 0;
         for (int i = 0; i < fields.size(); i++) {
@@ -178,6 +153,7 @@ public abstract class AbstractAutoMapper extends AbstractMapper {
                     // Let MultiColumnCombinedCollectionMapper find itself when a field is a collection of the current
                     // field type.
                     if (this instanceof MultiColumnCombinedCollectionMapper) {
+                        // TODO: Polymorphism - is it sufficient for the collectionMapper to handle the subclasses?
                         MultiColumnCombinedCollectionMapper mc = (MultiColumnCombinedCollectionMapper) this;
 
                         if (mc.priorField == field) {

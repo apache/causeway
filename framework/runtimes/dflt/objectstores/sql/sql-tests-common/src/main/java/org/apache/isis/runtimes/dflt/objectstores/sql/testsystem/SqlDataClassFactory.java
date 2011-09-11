@@ -34,6 +34,7 @@ import org.apache.isis.runtimes.dflt.objectstores.sql.testsystem.dataclasses.pol
 import org.apache.isis.runtimes.dflt.objectstores.sql.testsystem.dataclasses.polymorphism.PolyInterfaceImplB;
 import org.apache.isis.runtimes.dflt.objectstores.sql.testsystem.dataclasses.polymorphism.PolySelfRefClass;
 import org.apache.isis.runtimes.dflt.objectstores.sql.testsystem.dataclasses.polymorphism.PolySubClassOne;
+import org.apache.isis.runtimes.dflt.objectstores.sql.testsystem.dataclasses.polymorphism.PolySubClassThree;
 import org.apache.isis.runtimes.dflt.objectstores.sql.testsystem.dataclasses.polymorphism.PolySubClassTwo;
 import org.apache.isis.runtimes.dflt.objectstores.sql.testsystem.dataclasses.polymorphism.PolyTestClass;
 
@@ -114,6 +115,11 @@ public class SqlDataClassFactory extends AbstractFactoryAndRepository {
 
     public PolySubClassOne newPolySubClassOne() {
         final PolySubClassOne object = newTransientInstance(PolySubClassOne.class);
+        return object;
+    }
+
+    public PolySubClassThree newPolySubClassThree() {
+        final PolySubClassThree object = newTransientInstance(PolySubClassThree.class);
         return object;
     }
 

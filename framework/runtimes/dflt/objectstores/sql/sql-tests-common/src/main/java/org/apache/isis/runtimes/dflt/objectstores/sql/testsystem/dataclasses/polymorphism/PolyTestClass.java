@@ -22,6 +22,9 @@
  */
 package org.apache.isis.runtimes.dflt.objectstores.sql.testsystem.dataclasses.polymorphism;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.isis.applib.AbstractDomainObject;
 
 /**
@@ -50,16 +53,15 @@ public class PolyTestClass extends AbstractDomainObject {
     // }}
 
     // {{ PolyBaseClass
-    // private List<PolyBaseClass> polyBaseClasses = new ArrayList<PolyBaseClass>();
+    private List<PolyBaseClass> polyBaseClasses = new ArrayList<PolyBaseClass>();
 
-    // @MemberOrder(sequence = "1")
-    // public List<PolyBaseClass> getPolyBaseClasses() {
-    // return polyBaseClasses;
-    // }
+    public List<PolyBaseClass> getPolyBaseClasses() {
+        return polyBaseClasses;
+    }
 
-    // public void setPolyBaseClasses(final List<PolyBaseClass> polyBaseClasses) {
-    // this.polyBaseClasses = polyBaseClasses;
-    // }
+    public void setPolyBaseClasses(final List<PolyBaseClass> polyBaseClasses) {
+        this.polyBaseClasses = polyBaseClasses;
+    }
 
     // }}
 

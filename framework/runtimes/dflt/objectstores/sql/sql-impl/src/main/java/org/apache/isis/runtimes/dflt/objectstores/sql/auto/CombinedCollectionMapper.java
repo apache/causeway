@@ -55,12 +55,15 @@ public class CombinedCollectionMapper extends AbstractAutoMapper implements Coll
     private final ObjectMappingLookup objectMapperLookup2;
 
     private ObjectMapping originalMapping = null;
+    private final boolean isAbstract;
 
     public CombinedCollectionMapper(final ObjectAssociation objectAssociation, final String parameterBase,
         final FieldMappingLookup lookup, final ObjectMappingLookup objectMapperLookup) {
         super(objectAssociation.getSpecification().getFullIdentifier(), parameterBase, lookup, objectMapperLookup);
 
         this.field = objectAssociation;
+
+        isAbstract = field.getSpecification().isAbstract();
 
         objectMapperLookup2 = objectMapperLookup;
 
@@ -88,7 +91,7 @@ public class CombinedCollectionMapper extends AbstractAutoMapper implements Coll
 
     @Override
     public boolean needsTables(final DatabaseConnector connection) {
-        return !connection.hasColumn(table, foreignKeyName);
+        return isAbstract || !connection.hasColumn(table, foreignKeyName);
     }
 
     @Override
@@ -102,6 +105,9 @@ public class CombinedCollectionMapper extends AbstractAutoMapper implements Coll
 
     @Override
     public void createTables(final DatabaseConnector connection) {
+        if (isAbstract) {
+            return;
+        }
         final StringBuffer sql = new StringBuffer();
         sql.append("alter table ");
         sql.append(table);
@@ -113,6 +119,12 @@ public class CombinedCollectionMapper extends AbstractAutoMapper implements Coll
     @Override
     public void loadInternalCollection(final DatabaseConnector connector, final ObjectAdapter parent,
         final boolean makeResolved) {
+
+        if (isAbstract) { // hasSubClasses, too?
+            // TODO: Polymorphism: loadInternalCollection must load the instance from all the possible child tables.
+            LOG.debug("Is Abstract");
+            return;
+        }
 
         final ObjectAdapter collection = field.get(parent);
         if (collection.getResolveState().canChangeTo(ResolveState.RESOLVING)) {
@@ -190,7 +202,14 @@ public class CombinedCollectionMapper extends AbstractAutoMapper implements Coll
             return;
         }
 
+        if (isAbstract) {
+            // TODO: Polymorphism: saveInternalCollection must save instance into the appropriate child tables.
+            LOG.debug("Is Abstract");
+            return;
+        }
+
         // Delete collection parent
+        // TODO: for polymorphism, must delete from all? appropriate child tables.
         final StringBuffer sql = new StringBuffer();
         sql.append("update ");
         sql.append(table);
@@ -201,8 +220,7 @@ public class CombinedCollectionMapper extends AbstractAutoMapper implements Coll
         connector.update(sql.toString());
 
         // Reinstall collection parent
-        // sql = new StringBuffer();
-
+        // TODO: : for polymorphism, must load from all appropriate child tables.
         final StringBuffer update = new StringBuffer();
         update.append("update ");
         update.append(table);
