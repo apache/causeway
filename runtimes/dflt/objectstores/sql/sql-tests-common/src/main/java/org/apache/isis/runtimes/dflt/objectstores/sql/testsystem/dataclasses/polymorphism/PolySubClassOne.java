@@ -22,7 +22,6 @@
  */
 package org.apache.isis.runtimes.dflt.objectstores.sql.testsystem.dataclasses.polymorphism;
 
-
 /**
  * @author Kevin
  * 
@@ -30,20 +29,18 @@ package org.apache.isis.runtimes.dflt.objectstores.sql.testsystem.dataclasses.po
 public class PolySubClassOne extends PolyBaseClass {
     @Override
     public String title() {
-        return string;
+        return stringOne;
     }
 
     // {{ String type
-    private String string;
+    private String stringOne;
 
-    @Override
-    public String getString() {
-        return string;
+    public String getStringClassOne() {
+        return stringOne;
     }
 
-    @Override
-    public void setString(final String string) {
-        this.string = string;
+    public void setStringClassOne(final String string) {
+        this.stringOne = string;
     }
 
     // }}

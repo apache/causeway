@@ -29,22 +29,19 @@ package org.apache.isis.runtimes.dflt.objectstores.sql.testsystem.dataclasses.po
 public class PolySubClassTwo extends PolyBaseClass {
     @Override
     public String title() {
-        return string;
+        return stringClassTwo;
     }
 
     // {{ String type
-    private String string;
+    private String stringClassTwo;
 
-    @Override
-    public String getString() {
-        return string;
+    public String getStringClassTwo() {
+        return stringClassTwo;
     }
 
-    @Override
-    public void setString(final String string) {
-        this.string = string;
+    public void setStringClassTwo(final String string) {
+        this.stringClassTwo = string;
     }
-
     // }}
 
 }

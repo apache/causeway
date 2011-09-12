@@ -126,14 +126,17 @@ public class PolymorphismTest extends SqlIntegrationTestCommonBase {
 
         // setup the polyTestClass
         PolySubClassOne polySubClassOne = factory.newPolySubClassOne();
-        polySubClassOne.setString("PolySubClassOne 1");
+        polySubClassOne.setStringBase("PolySubClassOne 1");
+        polySubClassOne.setStringClassOne("Class 1");
 
         PolySubClassTwo polySubClassTwo = factory.newPolySubClassTwo();
-        polySubClassTwo.setString("PolySubClassTwo 1");
+        polySubClassTwo.setStringBase("PolySubClassTwo 1");
+        polySubClassTwo.setStringClassTwo("Class 2");
 
         PolySubClassThree polySubClassThree = factory.newPolySubClassThree();
-        polySubClassThree.setString("PolySubClassThree 1");
-        polySubClassThree.setAnotherString("Another String");
+        polySubClassThree.setStringBase("PolySubClassThree 1");
+        polySubClassThree.setStringClassThree("Another String");
+        polySubClassThree.setStringClassTwo("Class 3");
 
         polyTestClass.getPolyBaseClasses().add(polySubClassOne);
         polyTestClass.getPolyBaseClasses().add(polySubClassTwo);
@@ -169,15 +172,29 @@ public class PolymorphismTest extends SqlIntegrationTestCommonBase {
         final PolyTestClass polyTestClass = SqlIntegrationTestSingleton.getStaticPolyTestClass();
 
         List<PolyBaseClass> polyBaseClasses = polyTestClass.getPolyBaseClasses();
-        // TODO Polymorphism test temporary disabled
         assertEquals(3, polyBaseClasses.size());
 
+        PolyBaseClass polyClassBase = polyBaseClasses.get(0);
+        assertTrue(polyClassBase instanceof PolySubClassOne);
+        assertEquals("PolySubClassOne 1", polyClassBase.getStringBase());
+        final PolySubClassOne polySubClassOne = (PolySubClassOne) polyClassBase;
+        assertEquals("Class 1", polySubClassOne.getStringClassOne());
+
+        polyClassBase = polyBaseClasses.get(1);
+        assertTrue(polyClassBase instanceof PolySubClassTwo);
+        final PolySubClassTwo polySubClassTwo = (PolySubClassTwo) polyClassBase;
+        assertEquals("Class 2", polySubClassTwo.getStringClassTwo());
+
+        polyClassBase = polyBaseClasses.get(2);
+        assertTrue(polyClassBase instanceof PolySubClassThree);
+        final PolySubClassThree polySubClassThree = (PolySubClassThree) polyClassBase;
+        assertEquals("Class 3", polySubClassThree.getStringClassTwo());
+        assertEquals("Another String", polySubClassThree.getStringClassThree());
     }
 
     public void testInterfaceLoad() {
         final SqlDataClassFactory factory = SqlIntegrationTestSingleton.getSqlDataClassFactory();
         final PolyTestClass polyTestClass = SqlIntegrationTestSingleton.getStaticPolyTestClass();
-        // assertEquals(polyTestClass.getClass(), polyTestClass.getPolyTestInterface().getClass());
 
         PolyInterface loaded = polyTestClass.getPolyInterfaceType();
         factory.resolve(loaded);

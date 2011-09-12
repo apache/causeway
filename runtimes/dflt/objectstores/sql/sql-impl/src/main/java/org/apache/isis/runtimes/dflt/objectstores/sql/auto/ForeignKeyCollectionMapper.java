@@ -81,6 +81,23 @@ public class ForeignKeyCollectionMapper extends AbstractAutoMapper implements Co
         foreignKeyMapping = lookup.createMapping(columnName, specification);
     }
 
+    protected ForeignKeyCollectionMapper(final FieldMappingLookup lookup, final AbstractAutoMapper abstractAutoMapper,
+        final ObjectAssociation field) {
+        super(lookup, abstractAutoMapper, field.getSpecification().getFullIdentifier());
+
+        this.field = field;
+        objectMapperLookup2 = null;
+
+        idMapping = lookup.createIdMapping();
+        versionMapping = lookup.createVersionMapping();
+
+        setColumnName(determineColumnName(field));
+        foreignKeyName = Sql.sqlName("fk_" + getColumnName());
+
+        foreignKeyName = Sql.identifier(foreignKeyName);
+        foreignKeyMapping = lookup.createMapping(columnName, specification);
+    }
+
     protected String determineColumnName(final ObjectAssociation objectAssociation) {
         return objectAssociation.getSpecification().getShortIdentifier();
     }
@@ -150,7 +167,7 @@ public class ForeignKeyCollectionMapper extends AbstractAutoMapper implements Co
 
             final List<ObjectAdapter> list = new ArrayList<ObjectAdapter>();
 
-            loadCollectionIntoList(connector, parent, makeResolved, list);
+            loadCollectionIntoList(connector, parent, makeResolved, idMapping, fieldMappings, versionMapping, list);
 
             final CollectionFacet collectionFacet = collection.getSpecification().getFacet(CollectionFacet.class);
             collectionFacet.init(collection, list.toArray(new ObjectAdapter[list.size()]));
@@ -170,13 +187,14 @@ public class ForeignKeyCollectionMapper extends AbstractAutoMapper implements Co
     }
 
     protected void loadCollectionIntoList(final DatabaseConnector connector, final ObjectAdapter parent,
-        final boolean makeResolved, final List<ObjectAdapter> list) {
+        final boolean makeResolved, final IdMapping idMapping, final List<FieldMapping> fieldMappings,
+        final VersionMapping versionMapping, final List<ObjectAdapter> list) {
         final StringBuffer sql = new StringBuffer();
         sql.append("select ");
         idMapping.appendColumnNames(sql);
 
         sql.append(", ");
-        final String columnList = columnList();
+        final String columnList = columnList(fieldMappings);
         if (columnList.length() > 0) {
             sql.append(columnList);
             sql.append(", ");
@@ -191,14 +209,15 @@ public class ForeignKeyCollectionMapper extends AbstractAutoMapper implements Co
         while (rs.next()) {
             final Oid oid = idMapping.recreateOid(rs, specification);
             final ObjectAdapter element = getAdapter(specification, oid);
-            loadFields(element, rs, makeResolved);
+            loadFields(element, rs, makeResolved, fieldMappings);
             LOG.debug("  element  " + element.getOid());
             list.add(element);
         }
         rs.close();
     }
 
-    protected void loadFields(final ObjectAdapter object, final Results rs, final boolean makeResolved) {
+    protected void loadFields(final ObjectAdapter object, final Results rs, final boolean makeResolved,
+        final List<FieldMapping> fieldMappings) {
         if (object.getResolveState().canChangeTo(ResolveState.RESOLVING)) {
             PersistorUtil.start(object, ResolveState.RESOLVING);
             for (final FieldMapping mapping : fieldMappings) {

@@ -30,18 +30,18 @@ import org.apache.isis.applib.AbstractDomainObject;
  */
 public abstract class PolyBaseClass extends AbstractDomainObject {
     public String title() {
-        return string;
+        return stringBase;
     }
 
     // {{ String type
-    private String string;
+    private String stringBase;
 
-    public String getString() {
-        return string;
+    public String getStringBase() {
+        return stringBase;
     }
 
-    public void setString(final String string) {
-        this.string = string;
+    public void setStringBase(final String string) {
+        this.stringBase = string;
     }
 
     // }}
