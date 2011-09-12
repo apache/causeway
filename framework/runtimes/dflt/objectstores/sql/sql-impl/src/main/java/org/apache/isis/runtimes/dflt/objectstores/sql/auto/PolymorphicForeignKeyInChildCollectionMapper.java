@@ -49,7 +49,6 @@ public class PolymorphicForeignKeyInChildCollectionMapper extends ForeignKeyInCh
 
     private static final Logger LOG = Logger.getLogger(PolymorphicForeignKeyInChildCollectionMapper.class);
 
-    // TODO: Fields have subclasses. Must add FK_* column to *all* non-abstract subclasses.
     private final ObjectAssociation baseField;
     private final List<String> tables;
     private final List<ObjectSpecification> tableSpecifications;
