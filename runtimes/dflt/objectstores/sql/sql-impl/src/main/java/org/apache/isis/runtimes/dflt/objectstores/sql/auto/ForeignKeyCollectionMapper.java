@@ -167,7 +167,8 @@ public class ForeignKeyCollectionMapper extends AbstractAutoMapper implements Co
 
             final List<ObjectAdapter> list = new ArrayList<ObjectAdapter>();
 
-            loadCollectionIntoList(connector, parent, makeResolved, idMapping, fieldMappings, versionMapping, list);
+            loadCollectionIntoList(connector, parent, makeResolved, table, specification, idMapping, fieldMappings,
+                versionMapping, list);
 
             final CollectionFacet collectionFacet = collection.getSpecification().getFacet(CollectionFacet.class);
             collectionFacet.init(collection, list.toArray(new ObjectAdapter[list.size()]));
@@ -187,8 +188,8 @@ public class ForeignKeyCollectionMapper extends AbstractAutoMapper implements Co
     }
 
     protected void loadCollectionIntoList(final DatabaseConnector connector, final ObjectAdapter parent,
-        final boolean makeResolved, final IdMapping idMapping, final List<FieldMapping> fieldMappings,
-        final VersionMapping versionMapping, final List<ObjectAdapter> list) {
+        final boolean makeResolved, final String table, ObjectSpecification specification, final IdMapping idMapping,
+        final List<FieldMapping> fieldMappings, final VersionMapping versionMapping, final List<ObjectAdapter> list) {
         final StringBuffer sql = new StringBuffer();
         sql.append("select ");
         idMapping.appendColumnNames(sql);
