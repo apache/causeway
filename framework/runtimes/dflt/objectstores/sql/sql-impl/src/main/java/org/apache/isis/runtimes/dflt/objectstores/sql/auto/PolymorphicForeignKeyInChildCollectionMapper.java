@@ -34,6 +34,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.runtimes.dflt.objectstores.sql.DatabaseConnector;
 import org.apache.isis.runtimes.dflt.objectstores.sql.FieldMappingLookup;
 import org.apache.isis.runtimes.dflt.objectstores.sql.IdMapping;
+import org.apache.isis.runtimes.dflt.objectstores.sql.ObjectMapping;
 import org.apache.isis.runtimes.dflt.objectstores.sql.ObjectMappingLookup;
 import org.apache.isis.runtimes.dflt.objectstores.sql.VersionMapping;
 import org.apache.isis.runtimes.dflt.objectstores.sql.mapping.FieldMapping;
@@ -52,8 +53,7 @@ public class PolymorphicForeignKeyInChildCollectionMapper extends ForeignKeyInCh
     private final ObjectAssociation baseField;
     private final List<String> tables;
     private final List<ObjectSpecification> tableSpecifications;
-    private final List<AutoMapper> subClassMappers;
-    // private final String classColumnName;
+    private final List<ObjectMapping> subClassMappers;
 
     // For iterating through the subclasses
     private ObjectSpecification currentTableSpecification;
@@ -66,8 +66,6 @@ public class PolymorphicForeignKeyInChildCollectionMapper extends ForeignKeyInCh
     final String parameterBase;
     final FieldMappingLookup lookup;
     final ObjectMappingLookup objectMapperLookup;
-    // final AbstractAutoMapper abstractAutoMapper;
-    // final ObjectAssociation field;
     final String fieldClassName;
 
     public PolymorphicForeignKeyInChildCollectionMapper(final ObjectAssociation objectAssociation,
@@ -76,24 +74,19 @@ public class PolymorphicForeignKeyInChildCollectionMapper extends ForeignKeyInCh
 
         super(lookup, abstractAutoMapper, field);
 
-        // super(objectAssociation, parameterBase, lookup, objectMapperLookup, abstractAutoMapper, field);
         fieldClassName = className;
 
         baseField = objectAssociation;
         tables = new ArrayList<String>();
         tableSpecifications = new ArrayList<ObjectSpecification>();
-        subClassMappers = new ArrayList<AutoMapper>();
+        subClassMappers = new ArrayList<ObjectMapping>();
 
         // Capture for use in creating subclass mappers.
         this.parameterBase = parameterBase;
         this.lookup = lookup;
         this.objectMapperLookup = objectMapperLookup;
-        // this.abstractAutoMapper = abstractAutoMapper;
-        // this.field = field;
 
         addSubSpecificationsToTable(specification);
-
-        // classColumnName = Sql.identifier(getForeignKeyName() + "_cls");
     }
 
     protected void addSubSpecificationsToTable(ObjectSpecification objectSpecification) {
@@ -102,9 +95,7 @@ public class PolymorphicForeignKeyInChildCollectionMapper extends ForeignKeyInCh
             tables.add(tableNameFromSpecification);
             tableSpecifications.add(objectSpecification);
 
-            // setUpFieldMappers();
-            AutoMapper autoMapper =
-                new AutoMapper(objectSpecification.getFullIdentifier(), parameterBase, lookup, objectMapperLookup);
+            ObjectMapping autoMapper = objectMapperLookup.getMapping(objectSpecification, null);
             subClassMappers.add(autoMapper);
         }
         if (objectSpecification.hasSubclasses()) {
@@ -118,7 +109,7 @@ public class PolymorphicForeignKeyInChildCollectionMapper extends ForeignKeyInCh
     public boolean needsTables(DatabaseConnector connection) {
         for (String subTableName : tables) {
             table = subTableName;
-            if (super.needsTables(connection)) { // || !connection.hasColumn(table, classColumnName)) {
+            if (super.needsTables(connection)) {
                 // Stop on first table that is needed.
                 return true;
             }
@@ -133,35 +124,7 @@ public class PolymorphicForeignKeyInChildCollectionMapper extends ForeignKeyInCh
             if (super.needsTables(connection)) {
                 super.createTables(connection);
             }
-
-            // if (!connection.hasColumn(table, classColumnName)) {
-            // // I couldn't combine this in one operation with appendColumnDefinitions
-            // final StringBuffer sql = new StringBuffer();
-            // sql.append("alter table ");
-            // sql.append(table);
-            // sql.append(" add ");
-            //
-            // sql.append(classColumnName);
-            // sql.append(" ");
-            // sql.append(JdbcConnector.TYPE_LONG_STRING());
-            //
-            // connection.update(sql.toString());
-            // }
         }
-    }
-
-    @Override
-    protected void appendCollectionUpdateColumnsToNull(StringBuffer sql) {
-        super.appendCollectionUpdateColumnsToNull(sql);
-        // sql.append("," + classColumnName + "=NULL");
-    }
-
-    @Override
-    protected void appendCollectionUpdateValues(final DatabaseConnector connector, final ObjectAdapter parent,
-        final StringBuffer sql) {
-        super.appendCollectionUpdateValues(connector, parent, sql);
-        // sql.append("," + classColumnName + "=?");
-        // connector.addToQueryValues(currentTableSpecification.getFullIdentifier());
     }
 
     @Override
@@ -181,7 +144,6 @@ public class PolymorphicForeignKeyInChildCollectionMapper extends ForeignKeyInCh
             currentCollection.add(item);
         }
 
-        // TODO: Polymorphism: save instances to appropriate subclass tables
         for (int i = 0; i < tables.size(); i++) {
             currentTableSpecification = tableSpecifications.get(i);
             currentIndex = 0;
@@ -218,30 +180,19 @@ public class PolymorphicForeignKeyInChildCollectionMapper extends ForeignKeyInCh
     }
 
     @Override
-    public void loadInternalCollection(final DatabaseConnector connector, final ObjectAdapter parent,
-        final boolean makeResolved) {
-        final ObjectAdapter collection = baseField.get(parent);
-        LOG.debug("loading polymorphic internal collection " + collection);
-        // TODO: Polymorphism: load instances from all subclass tables
-        super.loadInternalCollection(connector, parent, makeResolved);
-    }
-
-    @Override
     protected void loadCollectionIntoList(final DatabaseConnector connector, final ObjectAdapter parent,
-        final boolean makeResolved, final IdMapping idMapping, final List<FieldMapping> fieldMappings,
-        final VersionMapping versionMapping, final List<ObjectAdapter> superList) {
-        // TODO: Polymorphism: save instances to appropriate subclass tables
+        final boolean makeResolved, final String table, final ObjectSpecification specification,
+        final IdMapping idMapping, final List<FieldMapping> fieldMappings, final VersionMapping versionMapping,
+        final List<ObjectAdapter> superList) {
         final List<ObjectAdapter> list = new ArrayList<ObjectAdapter>();
         for (int i = 0; i < tables.size(); i++) {
+
             currentTableSpecification = tableSpecifications.get(i);
+            AutoMapper mapper = (AutoMapper) subClassMappers.get(i);
+            String mapperTable = tables.get(i);
 
-            AutoMapper mapper = subClassMappers.get(i);
-
-            specification = currentTableSpecification;
-
-            table = tables.get(i);
-            super.loadCollectionIntoList(connector, parent, makeResolved, mapper.getIdMapping(), mapper.fieldMappings,
-                mapper.getVersionMapping(), list);
+            super.loadCollectionIntoList(connector, parent, makeResolved, mapperTable, currentTableSpecification,
+                mapper.getIdMapping(), mapper.fieldMappings, mapper.getVersionMapping(), list);
 
             superList.addAll(list);
             list.clear();
