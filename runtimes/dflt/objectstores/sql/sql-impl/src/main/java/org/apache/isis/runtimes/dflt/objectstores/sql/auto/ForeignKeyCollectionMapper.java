@@ -20,6 +20,7 @@
 package org.apache.isis.runtimes.dflt.objectstores.sql.auto;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -44,8 +45,14 @@ import org.apache.isis.runtimes.dflt.objectstores.sql.mapping.FieldMapping;
 import org.apache.isis.runtimes.dflt.objectstores.sql.mapping.ObjectReferenceMapping;
 import org.apache.isis.runtimes.dflt.runtime.persistence.PersistorUtil;
 
-public class CombinedCollectionMapper extends AbstractAutoMapper implements CollectionMapper {
-    private static final Logger LOG = Logger.getLogger(CombinedCollectionMapper.class);
+/**
+ * Stores 1-to-many collections by creating a foreign-key column in the table for the incoming objectAssociation class.
+ * This assumes this the class is only ever in 1 collection parent.
+ * 
+ * @version $Rev$ $Date$
+ */
+public class ForeignKeyCollectionMapper extends AbstractAutoMapper implements CollectionMapper {
+    private static final Logger LOG = Logger.getLogger(ForeignKeyCollectionMapper.class);
     private final ObjectAssociation field;
     private final IdMapping idMapping;
     private final VersionMapping versionMapping;
@@ -55,15 +62,12 @@ public class CombinedCollectionMapper extends AbstractAutoMapper implements Coll
     private final ObjectMappingLookup objectMapperLookup2;
 
     private ObjectMapping originalMapping = null;
-    private final boolean isAbstract;
 
-    public CombinedCollectionMapper(final ObjectAssociation objectAssociation, final String parameterBase,
+    public ForeignKeyCollectionMapper(final ObjectAssociation objectAssociation, final String parameterBase,
         final FieldMappingLookup lookup, final ObjectMappingLookup objectMapperLookup) {
         super(objectAssociation.getSpecification().getFullIdentifier(), parameterBase, lookup, objectMapperLookup);
 
         this.field = objectAssociation;
-
-        isAbstract = field.getSpecification().isAbstract();
 
         objectMapperLookup2 = objectMapperLookup;
 
@@ -74,7 +78,7 @@ public class CombinedCollectionMapper extends AbstractAutoMapper implements Coll
         foreignKeyName = Sql.sqlName("fk_" + getColumnName());
 
         foreignKeyName = Sql.identifier(foreignKeyName);
-        foreignKeyMapping = lookup.createMapping(columnName, objectAssociation.getSpecification());
+        foreignKeyMapping = lookup.createMapping(columnName, specification);
     }
 
     protected String determineColumnName(final ObjectAssociation objectAssociation) {
@@ -89,76 +93,67 @@ public class CombinedCollectionMapper extends AbstractAutoMapper implements Coll
         this.columnName = columnName;
     }
 
-    @Override
-    public boolean needsTables(final DatabaseConnector connection) {
-        return isAbstract || !connection.hasColumn(table, foreignKeyName);
+    protected String getForeignKeyName() {
+        return foreignKeyName;
     }
 
     @Override
     public void startup(final DatabaseConnector connector, final FieldMappingLookup lookup) {
         if (originalMapping == null) {
-            originalMapping = objectMapperLookup.getMapping(field.getSpecification(), null);
+            originalMapping = objectMapperLookup.getMapping(specification, null);
         }
         originalMapping.startup(connector, objectMapperLookup2);
         super.startup(connector, lookup);
     }
 
     @Override
+    public boolean needsTables(final DatabaseConnector connection) {
+        return !connection.hasColumn(table, foreignKeyName);
+    }
+
+    @Override
     public void createTables(final DatabaseConnector connection) {
-        if (isAbstract) {
-            return;
-        }
         final StringBuffer sql = new StringBuffer();
         sql.append("alter table ");
         sql.append(table);
         sql.append(" add ");
-        foreignKeyMapping.appendColumnDefinitions(sql);
+        appendColumnDefinitions(sql);
         connection.update(sql.toString());
+    }
+
+    protected void appendCollectionUpdateColumnsToNull(StringBuffer sql) {
+        sql.append(foreignKeyName + "=NULL ");
+    }
+
+    protected void appendCollectionWhereValues(final DatabaseConnector connector, final ObjectAdapter parent,
+        final StringBuffer sql) {
+        foreignKeyMapping.appendUpdateValues(connector, sql, parent);
+    }
+
+    protected void appendCollectionUpdateValues(final DatabaseConnector connector, final ObjectAdapter parent,
+        final StringBuffer sql) {
+        appendCollectionWhereValues(connector, parent, sql);
+    }
+
+    protected void appendColumnDefinitions(final StringBuffer sql) {
+        foreignKeyMapping.appendColumnDefinitions(sql);
     }
 
     @Override
     public void loadInternalCollection(final DatabaseConnector connector, final ObjectAdapter parent,
         final boolean makeResolved) {
 
-        if (isAbstract) { // hasSubClasses, too?
-            // TODO: Polymorphism: loadInternalCollection must load the instance from all the possible child tables.
-            LOG.debug("Is Abstract");
-            return;
-        }
-
         final ObjectAdapter collection = field.get(parent);
         if (collection.getResolveState().canChangeTo(ResolveState.RESOLVING)) {
             LOG.debug("loading internal collection " + field);
             PersistorUtil.start(collection, ResolveState.RESOLVING);
 
-            final StringBuffer sql = new StringBuffer();
-            sql.append("select ");
-            idMapping.appendColumnNames(sql);
-
-            sql.append(", ");
-            final String columnList = columnList();
-            if (columnList.length() > 0) {
-                sql.append(columnList);
-                sql.append(", ");
-            }
-            sql.append(versionMapping.appendSelectColumns());
-            sql.append(" from ");
-            sql.append(table);
-            sql.append(" where ");
-            foreignKeyMapping.appendUpdateValues(connector, sql, parent);
-
-            final Results rs = connector.select(sql.toString());
             final List<ObjectAdapter> list = new ArrayList<ObjectAdapter>();
-            while (rs.next()) {
-                final Oid oid = idMapping.recreateOid(rs, specification);
-                final ObjectAdapter element = getAdapter(specification, oid);
-                loadFields(element, rs, makeResolved);
-                LOG.debug("  element  " + element.getOid());
-                list.add(element);
-            }
+
+            loadCollectionIntoList(connector, parent, makeResolved, list);
+
             final CollectionFacet collectionFacet = collection.getSpecification().getFacet(CollectionFacet.class);
             collectionFacet.init(collection, list.toArray(new ObjectAdapter[list.size()]));
-            rs.close();
             PersistorUtil.end(collection);
 
             // TODO: Need to finalise this behaviour. At the moment, all collections will get infinitely resolved. I
@@ -174,6 +169,35 @@ public class CombinedCollectionMapper extends AbstractAutoMapper implements Coll
         }
     }
 
+    protected void loadCollectionIntoList(final DatabaseConnector connector, final ObjectAdapter parent,
+        final boolean makeResolved, final List<ObjectAdapter> list) {
+        final StringBuffer sql = new StringBuffer();
+        sql.append("select ");
+        idMapping.appendColumnNames(sql);
+
+        sql.append(", ");
+        final String columnList = columnList();
+        if (columnList.length() > 0) {
+            sql.append(columnList);
+            sql.append(", ");
+        }
+        sql.append(versionMapping.appendSelectColumns());
+        sql.append(" from ");
+        sql.append(table);
+        sql.append(" where ");
+        appendCollectionWhereValues(connector, parent, sql);
+
+        final Results rs = connector.select(sql.toString());
+        while (rs.next()) {
+            final Oid oid = idMapping.recreateOid(rs, specification);
+            final ObjectAdapter element = getAdapter(specification, oid);
+            loadFields(element, rs, makeResolved);
+            LOG.debug("  element  " + element.getOid());
+            list.add(element);
+        }
+        rs.close();
+    }
+
     protected void loadFields(final ObjectAdapter object, final Results rs, final boolean makeResolved) {
         if (object.getResolveState().canChangeTo(ResolveState.RESOLVING)) {
             PersistorUtil.start(object, ResolveState.RESOLVING);
@@ -187,24 +211,30 @@ public class CombinedCollectionMapper extends AbstractAutoMapper implements Coll
         }
     }
 
+    /**
+     * Override this in the Polymorphic case to return just the elements that are appropriate for the subclass currently
+     * being handled.
+     * 
+     * @param collection
+     * @return those elements that ought to be used.
+     */
+    protected Iterator<ObjectAdapter> getElementsForCollectionAsIterator(final ObjectAdapter collection) {
+        final CollectionFacet collectionFacet = collection.getSpecification().getFacet(CollectionFacet.class);
+        final Iterable<ObjectAdapter> elements = collectionFacet.iterable(collection);
+        return elements.iterator();
+    }
+
     @Override
     public void saveInternalCollection(final DatabaseConnector connector, final ObjectAdapter parent) {
         final ObjectAdapter collection = field.get(parent);
         LOG.debug("Saving internal collection " + collection);
 
-        final CollectionFacet collectionFacet = collection.getSpecification().getFacet(CollectionFacet.class);
-        final Iterable<ObjectAdapter> elements = collectionFacet.iterable(collection);
+        final Iterator<ObjectAdapter> elements = getElementsForCollectionAsIterator(collection);
 
         // TODO What is needed to allow a collection update (add/remove) to mark the collection as dirty?
         // checkIfDirty(collection);
 
-        if (elements.iterator().hasNext() == false) {
-            return;
-        }
-
-        if (isAbstract) {
-            // TODO: Polymorphism: saveInternalCollection must save instance into the appropriate child tables.
-            LOG.debug("Is Abstract");
+        if (elements.hasNext() == false) {
             return;
         }
 
@@ -214,9 +244,9 @@ public class CombinedCollectionMapper extends AbstractAutoMapper implements Coll
         sql.append("update ");
         sql.append(table);
         sql.append(" set ");
-        sql.append(foreignKeyName);
-        sql.append(" = NULL where ");
-        foreignKeyMapping.appendUpdateValues(connector, sql, parent);
+        appendCollectionUpdateColumnsToNull(sql);
+        sql.append(" where ");
+        appendCollectionWhereValues(connector, parent, sql);
         connector.update(sql.toString());
 
         // Reinstall collection parent
@@ -225,8 +255,7 @@ public class CombinedCollectionMapper extends AbstractAutoMapper implements Coll
         update.append("update ");
         update.append(table);
         update.append(" set ");
-
-        foreignKeyMapping.appendUpdateValues(connector, update, parent);
+        appendCollectionUpdateValues(connector, parent, update);
         update.append(" where ");
 
         idMapping.appendColumnNames(update);
@@ -234,7 +263,9 @@ public class CombinedCollectionMapper extends AbstractAutoMapper implements Coll
         update.append(" IN (");
 
         int count = 0;
-        for (final ObjectAdapter element : elements) {
+        for (Iterator<ObjectAdapter> iterator = elements; iterator.hasNext();) {
+            ObjectAdapter element = iterator.next();
+
             if (count++ > 0) {
                 update.append(",");
             }

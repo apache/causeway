@@ -65,7 +65,7 @@ public class JdbcAbstractReferenceFieldMapping extends JdbcObjectReferenceFieldM
         sql.append(", ");
         sql.append(classnameColumn);
         sql.append(" ");
-        sql.append(JdbcConnector.TYPE_STRING());
+        sql.append(JdbcConnector.TYPE_LONG_STRING());
     }
 
     @Override
@@ -73,7 +73,7 @@ public class JdbcAbstractReferenceFieldMapping extends JdbcObjectReferenceFieldM
         super.appendCreateColumnDefinitions(sql);
         sql.append(classnameColumn);
         sql.append(" ");
-        sql.append(JdbcConnector.TYPE_STRING());
+        sql.append(JdbcConnector.TYPE_LONG_STRING());
     }
 
     @Override

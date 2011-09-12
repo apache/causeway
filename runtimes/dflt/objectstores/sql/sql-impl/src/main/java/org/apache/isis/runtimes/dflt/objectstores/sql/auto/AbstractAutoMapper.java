@@ -82,10 +82,13 @@ public abstract class AbstractAutoMapper extends AbstractMapper {
     private void setUpFieldMappers(final FieldMappingLookup lookup, final ObjectMappingLookup objectMapperLookup,
         final String className, final String parameterBase) {
         final IsisConfiguration configParameters = IsisContext.getConfiguration();
-        table = configParameters.getString(parameterBase + "table");
+        table = configParameters.getString(parameterBase + ".table." + className);
         if (table == null) {
-            final String name = "isis_" + className.substring(className.lastIndexOf('.') + 1).toUpperCase();
-            table = Sql.sqlName(name);
+            // final String name = "isis_" + className.substring(className.lastIndexOf('.') + 1);
+            final String name = getTableNameFromSpecification(specification);
+            table = name;
+        } else {
+            table = Sql.tableIdentifier(table);
         }
 
         dbCreatesId = configParameters.getBoolean(parameterBase + "db-ids", false);
@@ -95,9 +98,11 @@ public abstract class AbstractAutoMapper extends AbstractMapper {
             // setupSpecifiedMapping(specification, configParameters, parameterBase);
         }
 
-        table = Sql.tableIdentifier(table);
-
         LOG.info("table mapping: " + table + " (" + columnList() + ")");
+    }
+
+    protected String getTableNameFromSpecification(ObjectSpecification objectSpecification) {
+        return Sql.tableIdentifier(Sql.sqlName("isis_" + objectSpecification.getShortIdentifier()));
     }
 
     protected List<ObjectAssociation> fields = new ArrayList<ObjectAssociation>();
@@ -126,8 +131,6 @@ public abstract class AbstractAutoMapper extends AbstractMapper {
         final ObjectAssociation[] oneToManyProperties = new ObjectAssociation[collectionFieldCount];
         collectionMappers = new CollectionMapper[collectionFieldCount];
         collectionMapperFields = new String[collectionFieldCount];
-        // Properties collectionMappings = configParameters.getPropertiesStrippingPrefix(parameterBase +
-        // "collection");
         final IsisConfiguration subset = IsisContext.getConfiguration().createSubset(parameterBase + ".mapper.");
 
         for (int i = 0, simpleFieldNo = 0, collectionFieldNo = 0; i < fields.size(); i++) {
@@ -137,24 +140,23 @@ public abstract class AbstractAutoMapper extends AbstractMapper {
             } else if (field.isOneToManyAssociation()) {
                 oneToManyProperties[collectionFieldNo] = field;
 
-                // TODO: Replace "new CombinedCollectionMapper" with a factory method(?) to allow a different
+                // TODO: Replace "new ForeignKeyCollectionMapper" with a factory method(?) to allow a different
                 // default CollectionMapper
                 final String type = subset.getString(field.getId());
                 if (type == null || type.equals("association-table")) {
                     // collectionMappers[collectionFieldNo] = new AutoCollectionMapper(specification,
                     // oneToManyProperties[collectionFieldNo], lookup);
                     // collectionMappers[collectionFieldNo] = new
-                    // CombinedCollectionMapper(oneToManyProperties[collectionFieldNo], parameterBase, lookup,
+                    // ForeignKeyCollectionMapper(oneToManyProperties[collectionFieldNo], parameterBase, lookup,
                     // objectMapperLookup);
 
                     CollectionMapper collectionMapper = null;
 
                     // Trying to detect recursion, here.
-                    // Let MultiColumnCombinedCollectionMapper find itself when a field is a collection of the current
+                    // Let ForeignKeyInChildCollectionMapper find itself when a field is a collection of the current
                     // field type.
-                    if (this instanceof MultiColumnCombinedCollectionMapper) {
-                        // TODO: Polymorphism - is it sufficient for the collectionMapper to handle the subclasses?
-                        MultiColumnCombinedCollectionMapper mc = (MultiColumnCombinedCollectionMapper) this;
+                    if (this instanceof ForeignKeyInChildCollectionMapper) {
+                        ForeignKeyInChildCollectionMapper mc = (ForeignKeyInChildCollectionMapper) this;
 
                         if (mc.priorField == field) {
                             collectionMapper = mc;
@@ -162,9 +164,17 @@ public abstract class AbstractAutoMapper extends AbstractMapper {
                     }
 
                     if (collectionMapper == null) {
-                        collectionMapper =
-                            new MultiColumnCombinedCollectionMapper(oneToManyProperties[collectionFieldNo],
-                                parameterBase, lookup, objectMapperLookup, this, field);
+                        // TODO: Polymorphism - is it sufficient for the collectionMapper to handle the subclasses?
+                        if (field.getSpecification().hasSubclasses()) {
+                            collectionMapper =
+                                new PolymorphicForeignKeyInChildCollectionMapper(
+                                    oneToManyProperties[collectionFieldNo], parameterBase, lookup, objectMapperLookup,
+                                    this, field);
+                        } else {
+                            collectionMapper =
+                                new ForeignKeyInChildCollectionMapper(oneToManyProperties[collectionFieldNo],
+                                    parameterBase, lookup, objectMapperLookup, this, field);
+                        }
                     }
 
                     collectionMappers[collectionFieldNo] = collectionMapper;
@@ -177,7 +187,7 @@ public abstract class AbstractAutoMapper extends AbstractMapper {
                         throw new SqlObjectStoreException("Expected property " + property);
                     }
                     /*
-                     * collectionMappers[collectionFieldNo] = new CombinedCollectionMapper(elementType,
+                     * collectionMappers[collectionFieldNo] = new ForeignKeyCollectionMapper(elementType,
                      * oneToManyProperties[collectionFieldNo], parameterBase, lookup, objectMapperLookup);
                      */
                 } else {
