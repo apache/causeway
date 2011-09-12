@@ -170,7 +170,7 @@ public class PolymorphismTest extends SqlIntegrationTestCommonBase {
 
         List<PolyBaseClass> polyBaseClasses = polyTestClass.getPolyBaseClasses();
         // TODO Polymorphism test temporary disabled
-        // assertEquals(3, polyBaseClasses.size());
+        assertEquals(3, polyBaseClasses.size());
 
     }
 
