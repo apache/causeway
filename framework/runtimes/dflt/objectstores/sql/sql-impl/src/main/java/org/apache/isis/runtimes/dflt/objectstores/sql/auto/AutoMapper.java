@@ -71,6 +71,14 @@ public class AutoMapper extends AbstractAutoMapper implements ObjectMapping, Deb
         setUpFieldMappers();
     }
 
+    protected VersionMapping getVersionMapping() {
+        return versionMapping;
+    }
+
+    protected IdMapping getIdMapping() {
+        return idMapping;
+    }
+
     @Override
     public void createTables(final DatabaseConnector connection) {
         if (!connection.hasTable(table)) {
@@ -106,7 +114,7 @@ public class AutoMapper extends AbstractAutoMapper implements ObjectMapping, Deb
         sql.append("insert into " + table + " (");
         idMapping.appendColumnNames(sql);
         sql.append(", ");
-        final String columnList = columnList();
+        final String columnList = columnList(fieldMappings);
         if (columnList.length() > 0) {
             sql.append(columnList);
             sql.append(", ");
@@ -257,7 +265,7 @@ public class AutoMapper extends AbstractAutoMapper implements ObjectMapping, Deb
         sql.append("select ");
         idMapping.appendColumnNames(sql);
         sql.append(", ");
-        final String columnList = columnList();
+        final String columnList = columnList(fieldMappings);
         if (columnList.length() > 0) {
             sql.append(columnList);
             sql.append(", ");
@@ -334,7 +342,7 @@ public class AutoMapper extends AbstractAutoMapper implements ObjectMapping, Deb
         LOG.debug("loading data from SQL " + table + " for " + object);
         final StringBuffer sql = new StringBuffer();
         sql.append("select ");
-        sql.append(columnList());
+        sql.append(columnList(fieldMappings));
         sql.append(",");
         sql.append(versionMapping.appendSelectColumns());
         sql.append(" from " + table + " WHERE ");

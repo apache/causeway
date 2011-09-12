@@ -66,6 +66,17 @@ public abstract class AbstractAutoMapper extends AbstractMapper {
         this.objectMapperLookup = objectMapperLookup;
     }
 
+    protected AbstractAutoMapper(final FieldMappingLookup lookup, final AbstractAutoMapper abstractAutoMapper,
+        String className) {
+
+        this.className = className;
+        specification = IsisContext.getSpecificationLoader().loadSpecification(className);
+
+        this.parameterBase = null;
+        this.lookup = null;
+        this.objectMapperLookup = null;
+    }
+
     protected void setUpFieldMappers() {
         setUpFieldMappers(lookup, objectMapperLookup, className, parameterBase);
     }
@@ -98,7 +109,7 @@ public abstract class AbstractAutoMapper extends AbstractMapper {
             // setupSpecifiedMapping(specification, configParameters, parameterBase);
         }
 
-        LOG.info("table mapping: " + table + " (" + columnList() + ")");
+        LOG.info("table mapping: " + table + " (" + columnList(fieldMappings) + ")");
     }
 
     protected String getTableNameFromSpecification(ObjectSpecification objectSpecification) {
@@ -171,9 +182,11 @@ public abstract class AbstractAutoMapper extends AbstractMapper {
                                     oneToManyProperties[collectionFieldNo], parameterBase, lookup, objectMapperLookup,
                                     this, field);
                         } else {
-                            collectionMapper =
+                            ForeignKeyInChildCollectionMapper mapper =
                                 new ForeignKeyInChildCollectionMapper(oneToManyProperties[collectionFieldNo],
                                     parameterBase, lookup, objectMapperLookup, this, field);
+                            mapper.setUpFieldMappers();
+                            collectionMapper = mapper;
                         }
                     }
 
@@ -238,7 +251,7 @@ public abstract class AbstractAutoMapper extends AbstractMapper {
      * 
      * throw new NotYetImplementedException(); } } }
      */
-    protected String columnList() {
+    protected String columnList(List<FieldMapping> fieldMappings) {
         final StringBuffer sql = new StringBuffer();
         for (final FieldMapping mapping : fieldMappings) {
             if (sql.length() > 0) {

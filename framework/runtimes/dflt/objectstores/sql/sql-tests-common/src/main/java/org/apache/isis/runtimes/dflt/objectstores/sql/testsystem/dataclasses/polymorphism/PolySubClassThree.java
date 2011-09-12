@@ -31,11 +31,11 @@ public class PolySubClassThree extends PolySubClassTwo {
     // {{ String type
     private String string;
 
-    public String getAnotherString() {
+    public String getStringClassThree() {
         return string;
     }
 
-    public void setAnotherString(final String string) {
+    public void setStringClassThree(final String string) {
         this.string = string;
     }
 

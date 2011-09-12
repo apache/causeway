@@ -41,7 +41,8 @@ import org.apache.isis.runtimes.dflt.objectstores.sql.ObjectMappingLookup;
 public class ForeignKeyInChildCollectionMapper extends ForeignKeyCollectionMapper {
     private static final Logger LOG = Logger.getLogger(ForeignKeyCollectionMapper.class);
 
-    // TODO: Needs to detect if field has subclasses, and to add FK_* column to *all* non-abstract subclasses.
+    protected final ObjectAssociation priorField; // prevents recursion
+    protected final List<ObjectAssociation> priorFields;
 
     public ForeignKeyInChildCollectionMapper(final ObjectAssociation objectAssociation, final String parameterBase,
         final FieldMappingLookup lookup, final ObjectMappingLookup objectMapperLookup,
@@ -54,9 +55,12 @@ public class ForeignKeyInChildCollectionMapper extends ForeignKeyCollectionMappe
         setUpFieldMappers();
     }
 
-    protected final ObjectAssociation priorField; // prevents recursion
-
-    protected final List<ObjectAssociation> priorFields;
+    protected ForeignKeyInChildCollectionMapper(final FieldMappingLookup lookup,
+        final AbstractAutoMapper abstractAutoMapper, final ObjectAssociation field) {
+        super(lookup, abstractAutoMapper, field);
+        priorFields = null;
+        priorField = null;
+    }
 
     @Override
     protected void getExtraFields(List<ObjectAssociation> existingFields) {
