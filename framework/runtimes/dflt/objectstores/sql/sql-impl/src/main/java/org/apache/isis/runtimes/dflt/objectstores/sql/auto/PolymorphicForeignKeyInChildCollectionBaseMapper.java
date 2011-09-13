@@ -44,6 +44,7 @@ import org.apache.isis.runtimes.dflt.objectstores.sql.jdbc.JdbcConnector;
 import org.apache.isis.runtimes.dflt.objectstores.sql.jdbc.JdbcPolymorphicObjectReferenceMapping;
 import org.apache.isis.runtimes.dflt.objectstores.sql.mapping.FieldMapping;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.OidGenerator;
 
 /**
  * Used to map 1-to-many collections by creating, in the collection child table (which may be an interface or abstract
@@ -60,6 +61,9 @@ public class PolymorphicForeignKeyInChildCollectionBaseMapper extends ForeignKey
 
     private final String classColumnName;
     private final String itemIdColumnName;
+    private final IdMappingAbstract polyIdMapper;
+
+    private final OidGenerator oidGenerator;
 
     public PolymorphicForeignKeyInChildCollectionBaseMapper(final ObjectAssociation objectAssociation,
         final String parameterBase, final FieldMappingLookup lookup, final ObjectMappingLookup objectMapperLookup,
@@ -69,6 +73,9 @@ public class PolymorphicForeignKeyInChildCollectionBaseMapper extends ForeignKey
 
         classColumnName = Sql.identifier(Sql.sqlName(getForeignKeyName() + "_cls"));
         itemIdColumnName = Sql.identifier("item_id");
+
+        polyIdMapper = new JdbcPolymorphicObjectReferenceMapping(itemIdColumnName);
+        oidGenerator = IsisContext.getPersistenceSession().getOidGenerator();
     }
 
     @Override
@@ -132,9 +139,6 @@ public class PolymorphicForeignKeyInChildCollectionBaseMapper extends ForeignKey
         final Iterator<ObjectAdapter> elements) {
         LOG.debug("Saving polymorphic list");
 
-        // TODO: Continue appending "insert" IDs while the element specification is the same. When it changes, commit
-        // current list and start again.
-
         ObjectSpecification elementSpecification;
         while (elements.hasNext()) {
             ObjectAdapter thisAdapter = elements.next();
@@ -152,9 +156,10 @@ public class PolymorphicForeignKeyInChildCollectionBaseMapper extends ForeignKey
             update.append("," + classColumnName);
             update.append(") VALUES (");
 
-            // TODO: I'm not sure about reusing the item's own Id as ID for this table..
-            // PK_ID column
-            getIdMapping().appendObjectId(connector, update, thisAdapter.getOid());
+            // Row ID column
+            final Oid transientOid = oidGenerator.createTransientOid(thisAdapter.getObject());
+            oidGenerator.convertTransientToPersistentOid(transientOid);
+            polyIdMapper.appendObjectId(connector, update, transientOid);
             update.append(",");
 
             // Foreign key ID column
@@ -174,7 +179,7 @@ public class PolymorphicForeignKeyInChildCollectionBaseMapper extends ForeignKey
 
     @Override
     public IdMappingAbstract getIdMapping() {
-        return new JdbcPolymorphicObjectReferenceMapping(itemIdColumnName);
+        return polyIdMapper;
     }
 
     @Override
