@@ -19,18 +19,18 @@ package org.apache.isis.viewer.json.viewer.resources.domainobjects;
 import java.util.Map;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.oid.stringable.OidStringifier;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
-import org.apache.isis.viewer.json.viewer.representations.LinkToBuilder;
 import org.apache.isis.viewer.json.viewer.representations.AbstractRepresentationBuilder;
 
 public abstract class AbstractObjectMemberRepBuilder<R extends AbstractRepresentationBuilder<R>, T extends ObjectMember> extends AbstractRepresentationBuilder<R> {
 
+    protected ObjectAdapterLinkToBuilder linkToBuilder;
+    
     protected final ObjectAdapter objectAdapter;
     protected final MemberType memberType;
     protected final T objectMember;
@@ -40,13 +40,16 @@ public abstract class AbstractObjectMemberRepBuilder<R extends AbstractRepresent
         this.objectAdapter = objectAdapter;
         this.memberType = memberType;
         this.objectMember = objectMember;
+        usingLinkToBuilder(new DomainObjectLinkToBuilder());
+    }
+
+    public R usingLinkToBuilder(ObjectAdapterLinkToBuilder linkToBuilder) {
+        this.linkToBuilder = linkToBuilder.usingResourceContext(resourceContext).with(objectAdapter);
+        return cast(this);
     }
 
     public R withSelf() {
-        String url = AbstractObjectMemberRepBuilder.urlForMember(objectAdapter, memberType, objectMember, getOidStringifier());
-        JsonRepresentation self = LinkToBuilder.newBuilder(resourceContext, "self", url).build();
-        representation.mapPut("self", self);
-        
+        representation.mapPut("self", linkToBuilder.linkToMember("self", memberType, objectMember).build());
         return cast(this);
     }
 
@@ -66,10 +69,10 @@ public abstract class AbstractObjectMemberRepBuilder<R extends AbstractRepresent
         for(String mutator: mutators.keySet()) {
             MutatorSpec mutatorSpec = mutators.get(mutator);
             if(hasMemberFacet(mutatorSpec.mutatorFacetType)) {
-                String urlForMember = urlForMember(mutatorSpec.suffix);
+                
                 JsonRepresentation arguments = mutatorArgs(mutatorSpec);
                 JsonRepresentation detailsLink = 
-                    LinkToBuilder.newBuilder(resourceContext, mutator, urlForMember)
+                        linkToBuilder.linkToMember(mutator, memberType, objectMember, mutatorSpec.suffix)
                         .withHttpMethod(mutatorSpec.httpMethod)
                         .withArguments(arguments)
                         .build();
@@ -93,7 +96,6 @@ public abstract class AbstractObjectMemberRepBuilder<R extends AbstractRepresent
         }
         throw new UnsupportedOperationException("should be overridden if bodyArgs is not 0 or 1");
 	}
-
     
     protected R withValue() {
         representation.mapPut("value", valueRep());
@@ -113,10 +115,8 @@ public abstract class AbstractObjectMemberRepBuilder<R extends AbstractRepresent
     }
 
     public R withDetailsLink() {
-        String urlForMember = urlForMember();
-        JsonRepresentation detailsLink = LinkToBuilder.newBuilder(resourceContext, memberType.getDetailsRel(), urlForMember).build();
-        representation.mapPut(memberType.getDetailsRel(), detailsLink);
-        
+        representation.mapPut(memberType.getDetailsRel(), 
+                linkToBuilder.linkToMember(memberType.getDetailsRel(), memberType, objectMember).build());
         return cast(this);
     }
 
@@ -137,37 +137,12 @@ public abstract class AbstractObjectMemberRepBuilder<R extends AbstractRepresent
         return objectMember.getFacet(facetType) != null;
     }
 
-
-    protected String urlForMember(String... parts) {
-        return urlForMember(objectAdapter, memberType, objectMember, getOidStringifier(), parts);
-    }
-
     protected Consent usability() {
         return objectMember.isUsable(getSession(), objectAdapter);
     }
 
     protected Consent visibility() {
         return objectMember.isVisible(getSession(), objectAdapter);
-    }
-
-    
-    /////////////////////////////////////////////////////////////////
-    // statics
-    /////////////////////////////////////////////////////////////////
-
-    public static String urlForMember(ObjectAdapter objectAdapter, MemberType memberType, ObjectMember objectMember,
-        OidStringifier oidStringifier, String... parts) {
-        String oidStr = oidStringifier.enString(objectAdapter.getOid());
-        StringBuilder buf = new StringBuilder();
-        buf.append("objects/").append(oidStr);
-        buf.append("/").append(memberType.urlPart()).append(objectMember.getId());
-        for(String part: parts) {
-            if(part == null) {
-                continue;
-            }
-            buf.append("/").append(part);
-        }
-        return buf.toString();
     }
 
     

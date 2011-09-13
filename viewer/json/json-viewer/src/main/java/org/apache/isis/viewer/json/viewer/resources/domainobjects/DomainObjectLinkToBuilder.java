@@ -17,50 +17,63 @@
 package org.apache.isis.viewer.json.viewer.resources.domainobjects;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.oid.stringable.OidStringifier;
-import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
-import org.apache.isis.runtimes.dflt.runtime.system.persistence.OidGenerator;
-import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
-import org.apache.isis.viewer.json.applib.JsonRepresentation;
+import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
 import org.apache.isis.viewer.json.viewer.representations.LinkToBuilder;
 
 public class DomainObjectLinkToBuilder implements ObjectAdapterLinkToBuilder {
 
-    private ObjectAdapter objectAdapter;
-    private ResourceContext resourceContext;
+    protected ResourceContext resourceContext;
+    protected ObjectAdapter objectAdapter;
 
     @Override
-    public ObjectAdapterLinkToBuilder with(ObjectAdapter objectAdapter) {
-        this.objectAdapter = objectAdapter;
-        return this;
-    }
-
-    @Override
-    public DomainObjectLinkToBuilder usingResourceContext(ResourceContext resourceContext) {
+    public final DomainObjectLinkToBuilder usingResourceContext(ResourceContext resourceContext) {
         this.resourceContext = resourceContext;
         return this;
     }
 
     @Override
-    public JsonRepresentation build() {
-        String oidStr = getOidStringifier().enString(objectAdapter.getOid());
-        String url = "objects/" + oidStr;
-        LinkToBuilder newLinkToBuilder = LinkToBuilder.newBuilder(resourceContext, "object", url);
-        return newLinkToBuilder.build();
+    public final ObjectAdapterLinkToBuilder with(ObjectAdapter objectAdapter) {
+        this.objectAdapter = objectAdapter;
+        return this;
+    }
+
+    @Override
+    public final LinkToBuilder linkToAdapter() {
+        StringBuilder buf = objectsBuf();
+        return LinkToBuilder.newBuilder(resourceContext, "object", buf.toString());
+    }
+
+
+    @Override
+    public final LinkToBuilder linkToMember(String rel, MemberType memberType, ObjectMember objectMember, String... parts) {
+        StringBuilder buf = objectsBuf();
+        buf.append("/").append(memberType.urlPart()).append(objectMember.getId());
+        for(String part: parts) {
+            if(part == null) {
+                continue;
+            }
+            buf.append("/").append(part);
+        }
+        String url = buf.toString();
+        return LinkToBuilder.newBuilder(resourceContext, rel, url);
+    }
+
+    /**
+     * hook method
+     * @return
+     */
+    protected StringBuilder objectsBuf() {
+        if(resourceContext == null) {
+            throw new IllegalStateException("resourceContext not provided");
+        }
+        if(objectAdapter == null) {
+            throw new IllegalStateException("objectAdapter not provided");
+        }
+        StringBuilder buf = new StringBuilder("objects/");
+        buf.append(resourceContext.getOidStringifier().enString(objectAdapter.getOid()));
+        return buf;
     }
     
-    protected OidStringifier getOidStringifier() {
-        return getOidGenerator().getOidStringifier();
-    }
-
-    protected OidGenerator getOidGenerator() {
-        return getPersistenceSession().getOidGenerator();
-    }
-
-    protected PersistenceSession getPersistenceSession() {
-        return IsisContext.getPersistenceSession();
-    }
-
 
 }

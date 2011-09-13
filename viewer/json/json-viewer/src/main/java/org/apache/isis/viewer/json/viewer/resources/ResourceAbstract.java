@@ -34,6 +34,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.core.UriInfo;
 
+import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.stringable.OidStringifier;
@@ -111,10 +112,9 @@ public abstract class ResourceAbstract {
 
     protected void init() {
         this.resourceContext =
-            new ResourceContext(httpHeaders, uriInfo, request, httpServletRequest, httpServletResponse, securityContext);
-        
+            new ResourceContext(httpHeaders, uriInfo, request, httpServletRequest, httpServletResponse, securityContext, 
+                    getOidStringifier(), getLocalization(), getAuthenticationSession());
         checkAcceptHeader();
-
     }
 
     private void checkAcceptHeader() {
@@ -313,6 +313,10 @@ public abstract class ResourceAbstract {
 
     private OidStringifier getOidStringifier() {
         return getOidGenerator().getOidStringifier();
+    }
+
+    protected Localization getLocalization() {
+        return IsisContext.getLocalization();
     }
 
     // //////////////////////////////////////////////////////////////

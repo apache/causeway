@@ -32,6 +32,7 @@ import javax.ws.rs.core.Response;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.services.ServiceUtil;
+import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.viewer.json.applib.RepresentationType;
 import org.apache.isis.viewer.json.applib.RestfulResponse;
 import org.apache.isis.viewer.json.applib.RestfulResponse.HttpStatusCode;
@@ -40,6 +41,7 @@ import org.apache.isis.viewer.json.viewer.JsonApplicationException;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
 import org.apache.isis.viewer.json.viewer.representations.AbstractRepresentationBuilder;
 import org.apache.isis.viewer.json.viewer.resources.ResourceAbstract;
+import org.apache.isis.viewer.json.viewer.resources.domainobjects.DomainObjectResourceServerside.Intent;
 
 @Path("/services")
 public class DomainServiceResourceServerside extends ResourceAbstract implements
@@ -69,6 +71,23 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
     ////////////////////////////////////////////////////////////
     // domain service
     ////////////////////////////////////////////////////////////
+
+    @GET
+    @Path("/{serviceId}/properties/{propertyId}")
+    @Produces({ MediaType.APPLICATION_JSON })
+    public Response propertyDetails(
+        @PathParam("serviceId") final String serviceId,
+        @PathParam("propertyId") final String propertyId) {
+
+        final ObjectAdapter serviceAdapter = getServiceAdapter(serviceId);
+        final OneToOneAssociation property = DomainObjectResourceServerside.getPropertyThatIsVisibleAndUsable(
+                getResourceContext(), serviceAdapter, propertyId, Intent.ACCESS);
+
+        final ObjectPropertyRepBuilder builder = ObjectPropertyRepBuilder.newBuilder(
+                getResourceContext(), serviceAdapter, property);
+        return responseOfOk(jsonFrom(builder));
+    }
+
 
     @GET
     @Path("/{serviceId}")

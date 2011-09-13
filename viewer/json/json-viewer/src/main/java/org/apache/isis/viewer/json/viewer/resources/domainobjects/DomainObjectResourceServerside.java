@@ -35,6 +35,7 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
@@ -51,6 +52,7 @@ import org.apache.isis.viewer.json.applib.RestfulResponse.HttpStatusCode;
 import org.apache.isis.viewer.json.applib.domainobjects.DomainObjectResource;
 import org.apache.isis.viewer.json.applib.util.JsonMapper;
 import org.apache.isis.viewer.json.viewer.JsonApplicationException;
+import org.apache.isis.viewer.json.viewer.ResourceContext;
 import org.apache.isis.viewer.json.viewer.representations.AbstractRepresentationBuilder;
 import org.apache.isis.viewer.json.viewer.resources.ResourceAbstract;
 import org.apache.isis.viewer.json.viewer.util.UrlDecoderUtils;
@@ -106,7 +108,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements
 
         final ObjectAdapter objectAdapter = getObjectAdapter(oidStr);
         final OneToOneAssociation property = getPropertyThatIsVisibleAndUsable(
-                objectAdapter, propertyId, Intent.ACCESS);
+                getResourceContext(), objectAdapter, propertyId, Intent.ACCESS);
 
         final ObjectPropertyRepBuilder builder = ObjectPropertyRepBuilder.newBuilder(
                 getResourceContext(), objectAdapter, property);
@@ -122,7 +124,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements
 
         final ObjectAdapter objectAdapter = getObjectAdapter(oidStr);
         final OneToOneAssociation property = getPropertyThatIsVisibleAndUsable(
-                objectAdapter, propertyId, Intent.MUTATE);
+                getResourceContext(), objectAdapter, propertyId, Intent.MUTATE);
 
         ObjectSpecification propertySpec = property.getSpecification();
 
@@ -147,7 +149,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements
 
         final ObjectAdapter objectAdapter = getObjectAdapter(oidStr);
         final OneToOneAssociation property = getPropertyThatIsVisibleAndUsable(
-                objectAdapter, propertyId, Intent.MUTATE);
+                getResourceContext(), objectAdapter, propertyId, Intent.MUTATE);
 
         Consent consent = property.isAssociationValid(objectAdapter, null);
         if (consent.isVetoed()) {
@@ -173,7 +175,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements
 
         final ObjectAdapter objectAdapter = getObjectAdapter(oidStr);
         final OneToManyAssociation collection = getCollectionThatIsVisibleAndUsable(
-                objectAdapter, collectionId, Intent.ACCESS);
+                getResourceContext(), objectAdapter, collectionId, Intent.ACCESS);
 
         final ObjectCollectionRepBuilder builder = ObjectCollectionRepBuilder.newBuilder(
                 getResourceContext(), objectAdapter, collection);
@@ -190,7 +192,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements
 
         final ObjectAdapter objectAdapter = getObjectAdapter(oidStr);
         final OneToManyAssociation collection = getCollectionThatIsVisibleAndUsable(
-                objectAdapter, collectionId, Intent.MUTATE);
+                getResourceContext(), objectAdapter, collectionId, Intent.MUTATE);
 
         if (!collection.getCollectionSemantics().isSet()) {
             return responseOf(HttpStatusCode.BAD_REQUEST, 
@@ -220,7 +222,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements
 
         final ObjectAdapter objectAdapter = getObjectAdapter(oidStr);
         final OneToManyAssociation collection = getCollectionThatIsVisibleAndUsable(
-                objectAdapter, collectionId, Intent.MUTATE);
+                getResourceContext(), objectAdapter, collectionId, Intent.MUTATE);
 
         if (!collection.getCollectionSemantics().isListOrArray()) {
             return responseOf(HttpStatusCode.METHOD_NOT_ALLOWED, 
@@ -250,7 +252,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements
 
         final ObjectAdapter objectAdapter = getObjectAdapter(oidStr);
         final OneToManyAssociation collection = getCollectionThatIsVisibleAndUsable(
-                objectAdapter, collectionId, Intent.MUTATE);
+                getResourceContext(), objectAdapter, collectionId, Intent.MUTATE);
 
         ObjectSpecification collectionSpec = collection.getSpecification();
         ObjectAdapter argAdapter = parseBody(collectionSpec, body);
@@ -279,7 +281,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements
 
         final ObjectAdapter objectAdapter = getObjectAdapter(oidStr);
         final ObjectAction action = getObjectActionThatIsVisibleAndUsable(
-                objectAdapter, actionId, Intent.ACCESS);
+                getResourceContext(), objectAdapter, actionId, Intent.ACCESS);
 
         ObjectActionRepBuilder builder = ObjectActionRepBuilder.newBuilder(
                 getResourceContext(), objectAdapter, action);
@@ -301,7 +303,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements
 
         final ObjectAdapter objectAdapter = getObjectAdapter(oidStr);
         final ObjectAction action = getObjectActionThatIsVisibleAndUsable(
-                objectAdapter, actionId, Intent.ACCESS);
+                getResourceContext(), objectAdapter, actionId, Intent.ACCESS);
 
         if (!isQueryOnly(action)) {
             throw JsonApplicationException.create(HttpStatusCode.METHOD_NOT_ALLOWED, 
@@ -337,7 +339,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements
 
         final ObjectAdapter objectAdapter = getObjectAdapter(oidStr);
         final ObjectAction action = getObjectActionThatIsVisibleAndUsable(
-                objectAdapter, actionId, Intent.MUTATE);
+                getResourceContext(), objectAdapter, actionId, Intent.MUTATE);
 
         if (!isIdempotent(action)) {
             return responseOf(HttpStatusCode.METHOD_NOT_ALLOWED, 
@@ -360,7 +362,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements
 
         final ObjectAdapter objectAdapter = getObjectAdapter(oidStr);
         final ObjectAction action = getObjectActionThatIsVisibleAndUsable(
-                objectAdapter, actionId, Intent.MUTATE);
+                getResourceContext(), objectAdapter, actionId, Intent.MUTATE);
 
         List<ObjectAdapter> argumentAdapters = parseBody(action, body);
         return invokeActionUsingAdapters(action, objectAdapter,
@@ -442,8 +444,10 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements
      * however the object being interpreted is a String holding URL encoded JSON
      * (rather than having already been parsed into a List/Map representation).
      */
-    private ObjectAdapter objectAdapterFor(ObjectSpecification spec,
-        String urlEncodedJson) throws JsonParseException, JsonMappingException, IOException  {
+    private ObjectAdapter objectAdapterFor(
+        final ObjectSpecification spec,
+        final String urlEncodedJson) throws JsonParseException, JsonMappingException, IOException  {
+        
         final String json = UrlDecoderUtils.urlDecode(urlEncodedJson);
         if (spec.containsFacet(EncodableFacet.class)) {
             EncodableFacet encodableFacet = spec.getFacet(EncodableFacet.class);
@@ -548,7 +552,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements
         return objectSpec.getFullIdentifier();
     }
 
-    private enum Intent {
+    enum Intent {
         ACCESS, MUTATE;
 
         public boolean isMutate() {
@@ -556,7 +560,8 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements
         }
     }
 
-    private OneToOneAssociation getPropertyThatIsVisibleAndUsable(
+    static OneToOneAssociation getPropertyThatIsVisibleAndUsable(
+        final ResourceContext resourceContext,
         final ObjectAdapter objectAdapter, final String propertyId,
         final Intent intent) {
         ObjectAssociation association = objectAdapter.getSpecification()
@@ -565,11 +570,12 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements
             throwNotFoundException(propertyId, MemberType.OBJECT_PROPERTY);
         }
         OneToOneAssociation property = (OneToOneAssociation) association;
-        return ensureVisibleAndUsableForIntent(objectAdapter, property,
+        return ensureVisibleAndUsableForIntent(resourceContext, objectAdapter, property,
                 MemberType.OBJECT_PROPERTY, intent);
     }
 
-    private OneToManyAssociation getCollectionThatIsVisibleAndUsable(
+    OneToManyAssociation getCollectionThatIsVisibleAndUsable(
+        final ResourceContext resourceContext,
         final ObjectAdapter objectAdapter, 
         final String collectionId,
         final Intent intent) {
@@ -580,28 +586,31 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements
             throwNotFoundException(collectionId, MemberType.OBJECT_COLLECTION);
         }
         OneToManyAssociation collection = (OneToManyAssociation) association;
-        return ensureVisibleAndUsableForIntent(objectAdapter, collection,
+        return ensureVisibleAndUsableForIntent(resourceContext, objectAdapter, collection,
                 MemberType.OBJECT_COLLECTION, intent);
     }
 
-    private ObjectAction getObjectActionThatIsVisibleAndUsable(
+    static ObjectAction getObjectActionThatIsVisibleAndUsable(
+        final ResourceContext resourceContext,
         final ObjectAdapter objectAdapter,
         final String actionId,
         Intent intent) {
         
         ObjectAction action = objectAdapter.getSpecification().getObjectAction(actionId);
-        return ensureVisibleAndUsableForIntent(objectAdapter, action, MemberType.OBJECT_ACTION, intent);
+        return ensureVisibleAndUsableForIntent(resourceContext, objectAdapter, action, MemberType.OBJECT_ACTION, intent);
     }
 
-    public <T extends ObjectMember> T ensureVisibleAndUsableForIntent(
+    static <T extends ObjectMember> T ensureVisibleAndUsableForIntent(
+        final ResourceContext resourceContext,
         final ObjectAdapter objectAdapter, T objectMember,
-        MemberType memberType, Intent intent) {
+        final MemberType memberType, final Intent intent) {
         String memberId = objectMember.getId();
-        if (objectMember.isVisible(getAuthenticationSession(), objectAdapter).isVetoed()) {
+        AuthenticationSession authenticationSession = resourceContext.getAuthenticationSession();
+        if (objectMember.isVisible(authenticationSession, objectAdapter).isVetoed()) {
             throwNotFoundException(memberId, memberType);
         }
         if (intent.isMutate()) {
-            Consent usable = objectMember.isUsable(getAuthenticationSession(), objectAdapter);
+            Consent usable = objectMember.isUsable(authenticationSession, objectAdapter);
             if (usable.isVetoed()) {
                 String memberTypeStr = memberType.name().toLowerCase();
                 throw new WebApplicationException(

@@ -18,9 +18,7 @@ package org.apache.isis.viewer.json.viewer.resources.domainobjects;
 
 import java.util.List;
 
-import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.oid.stringable.OidStringifier;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
@@ -34,8 +32,8 @@ import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
-import org.apache.isis.viewer.json.viewer.representations.LinkToBuilder;
 import org.apache.isis.viewer.json.viewer.representations.AbstractRepresentationBuilder;
+import org.apache.isis.viewer.json.viewer.representations.LinkToBuilder;
 import org.apache.isis.viewer.json.viewer.util.OidUtils;
 
 import com.google.common.base.Function;
@@ -46,8 +44,8 @@ public class DomainObjectRepBuilder extends AbstractRepresentationBuilder<Domain
         return new DomainObjectRepBuilder(representationContext);
     }
 
-    public static LinkToBuilder newLinkToBuilder(ResourceContext resourceContext, String rel, ObjectAdapter elementAdapter, OidStringifier oidStringifier) {
-        String oidStr = oidStringifier.enString(elementAdapter.getOid());
+    public static LinkToBuilder newLinkToBuilder(ResourceContext resourceContext, String rel, ObjectAdapter elementAdapter) {
+        String oidStr = resourceContext.getOidStringifier().enString(elementAdapter.getOid());
         String url = "objects/" + oidStr;
         return LinkToBuilder.newBuilder(resourceContext, rel, url);
     }
@@ -69,7 +67,7 @@ public class DomainObjectRepBuilder extends AbstractRepresentationBuilder<Domain
     }
 
     public DomainObjectRepBuilder withAdapter(ObjectAdapter objectAdapter) {
-        JsonRepresentation self = linkToBuilder.with(objectAdapter).build();
+        JsonRepresentation self = linkToBuilder.with(objectAdapter).linkToAdapter().build();
         representation.mapPut("self", self);
 
         String title = objectAdapter.titleString();
@@ -100,6 +98,7 @@ public class DomainObjectRepBuilder extends AbstractRepresentationBuilder<Domain
                 OneToOneAssociation property = (OneToOneAssociation)assoc;
                 JsonRepresentation propertyRep = 
                         ObjectPropertyRepBuilder.newBuilder(resourceContext, objectAdapter, property)
+                        .usingLinkToBuilder(linkToBuilder)
                         .withDetailsLink()
                         .build();
                 members.arrayAdd(propertyRep);
@@ -108,6 +107,7 @@ public class DomainObjectRepBuilder extends AbstractRepresentationBuilder<Domain
                 OneToManyAssociation collection = (OneToManyAssociation) assoc;
                 JsonRepresentation collectionRep = 
                         ObjectCollectionRepBuilder.newBuilder(resourceContext, objectAdapter, collection)
+                        .usingLinkToBuilder(linkToBuilder)
                         .withDetailsLink()
                         .build();
                 members.arrayAdd(collectionRep);
@@ -129,6 +129,7 @@ public class DomainObjectRepBuilder extends AbstractRepresentationBuilder<Domain
         	} else {
                 JsonRepresentation actionRep = 
                         ObjectActionRepBuilder.newBuilder(resourceContext, objectAdapter, action)
+                        .usingLinkToBuilder(linkToBuilder)
                         .withDetailsLink()
                         .build();
                 members.arrayAdd(actionRep);
@@ -170,18 +171,17 @@ public class DomainObjectRepBuilder extends AbstractRepresentationBuilder<Domain
     //
     /////////////////////////////////////////////////////////////////////
 
-    public static Object valueOrRef(ResourceContext resourceContext,
-			final ObjectAdapter objectAdapter, ObjectSpecification objectSpec, OidStringifier oidStringifier, Localization localization) {
+    public static Object valueOrRef(final ResourceContext resourceContext, final ObjectAdapter objectAdapter, ObjectSpecification objectSpec) {
 		ValueFacet valueFacet = objectSpec.getFacet(ValueFacet.class);
 		if(valueFacet != null) {
 			EncodableFacet encodeableFacet = objectSpec.getFacet(EncodableFacet.class);
 			return encodeableFacet.toEncodedString(objectAdapter);
 		}
 		TitleFacet titleFacet = objectSpec.getFacet(TitleFacet.class);
-		String title = titleFacet.title(objectAdapter, localization);
-		return DomainObjectRepBuilder.newLinkToBuilder(resourceContext, "object", objectAdapter, oidStringifier).withTitle(title).build();
+		String title = titleFacet.title(objectAdapter, resourceContext.getLocalization());
+		return DomainObjectRepBuilder.newLinkToBuilder(resourceContext, "object", objectAdapter)
+		            .withTitle(title).build();
 	}
-
 
 
 }

@@ -59,7 +59,7 @@ public class ObjectCollectionRepBuilder extends AbstractObjectMemberRepBuilder<O
         List<JsonRepresentation> list = Lists.newArrayList();
         for (final ObjectAdapter elementAdapter : facet.iterable(valueAdapter)) {
 
-            LinkToBuilder newBuilder = DomainObjectRepBuilder.newLinkToBuilder(resourceContext, "object", elementAdapter, getOidStringifier());
+            LinkToBuilder newBuilder = DomainObjectRepBuilder.newLinkToBuilder(resourceContext, "object", elementAdapter);
 
 			list.add(newBuilder.build());
         }
