@@ -26,7 +26,7 @@ import javax.ws.rs.core.Response;
 
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.applib.capabilities.CapabilitiesResource;
-import org.apache.isis.viewer.json.viewer.representations.LinkBuilder;
+import org.apache.isis.viewer.json.viewer.representations.LinkToBuilder;
 import org.apache.isis.viewer.json.viewer.resources.ResourceAbstract;
 
 /**
@@ -43,7 +43,7 @@ public class CapabilitiesResourceServerside extends ResourceAbstract implements 
         init();
 
         JsonRepresentation representation = JsonRepresentation.newMap();
-        representation.mapPut("self", LinkBuilder.newBuilder(getResourceContext(), "self", "capabilities/").build());
+        representation.mapPut("self", LinkToBuilder.newBuilder(getResourceContext(), "self", "capabilities/").build());
         
         JsonRepresentation capabilities = JsonRepresentation.newMap();
         representation.mapPut("capabilities", capabilities);

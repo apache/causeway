@@ -68,7 +68,7 @@ public class DomainObjectResourceTest {
         assertThat(domainObjectRepr.getTitle(), is("ApplibValues"));
         assertThat(domainObjectRepr.getOid(), is("OID:1"));
 
-        // _self.icon
+        // self.icon
         Link selfIcon = domainObjectRepr.getLink("_self.icon");
         // TODO: shouldn't really be present since no icon available; or should point to a default, perhaps
         assertThat(selfIcon, isLink().rel("icon").href(matches(".+" + "/images/" + "null\\.png")).method(Method.GET));

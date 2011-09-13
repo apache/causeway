@@ -20,10 +20,10 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
-import org.apache.isis.viewer.json.viewer.representations.LinkBuilder;
-import org.apache.isis.viewer.json.viewer.representations.RepresentationBuilder;
+import org.apache.isis.viewer.json.viewer.representations.LinkToBuilder;
+import org.apache.isis.viewer.json.viewer.representations.AbstractRepresentationBuilder;
 
-public class MemberSelfRepBuilder extends RepresentationBuilder<MemberSelfRepBuilder> {
+public class MemberSelfRepBuilder extends AbstractRepresentationBuilder<MemberSelfRepBuilder> {
 
     public static MemberSelfRepBuilder newBuilder(ResourceContext resourceContext, ObjectAdapter objectAdapter, MemberType memberType, ObjectMember objectMember) {
         return new MemberSelfRepBuilder(resourceContext, objectAdapter, memberType, objectMember);
@@ -48,7 +48,7 @@ public class MemberSelfRepBuilder extends RepresentationBuilder<MemberSelfRepBui
 
     private JsonRepresentation memberLinkRep() {
         String url = AbstractObjectMemberRepBuilder.urlForMember(objectAdapter, memberType, objectMember, getOidStringifier());
-        return LinkBuilder.newBuilder(resourceContext, "member", url).build();
+        return LinkToBuilder.newBuilder(resourceContext, "member", url).build();
     }
     
     private JsonRepresentation domainObjectLinkRep() {

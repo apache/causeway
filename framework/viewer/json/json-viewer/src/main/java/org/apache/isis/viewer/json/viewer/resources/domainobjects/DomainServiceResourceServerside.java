@@ -14,7 +14,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.apache.isis.viewer.json.viewer.resources.domainservices;
+package org.apache.isis.viewer.json.viewer.resources.domainobjects;
 
 import java.io.InputStream;
 import java.util.List;
@@ -36,10 +36,10 @@ import org.apache.isis.viewer.json.applib.RepresentationType;
 import org.apache.isis.viewer.json.applib.RestfulResponse;
 import org.apache.isis.viewer.json.applib.RestfulResponse.HttpStatusCode;
 import org.apache.isis.viewer.json.applib.domainobjects.DomainServiceResource;
+import org.apache.isis.viewer.json.viewer.JsonApplicationException;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
-import org.apache.isis.viewer.json.viewer.representations.RepresentationBuilder;
+import org.apache.isis.viewer.json.viewer.representations.AbstractRepresentationBuilder;
 import org.apache.isis.viewer.json.viewer.resources.ResourceAbstract;
-import org.apache.isis.viewer.json.viewer.resources.domainobjects.DomainObjectListRepBuilder;
 
 @Path("/services")
 public class DomainServiceResourceServerside extends ResourceAbstract implements
@@ -54,7 +54,8 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
         final List<ObjectAdapter> serviceAdapters = getPersistenceSession().getServices();
 
         DomainObjectListRepBuilder builder = 
-                DomainServiceListRepBuilder.newBuilder(resourceContext)
+                DomainObjectListRepBuilder.newBuilder(resourceContext)
+                    .usingLinkToBuilder(new DomainServiceLinkToBuilder())
                     .withSelf("services")
                     .withAdapters(serviceAdapters);
         
@@ -76,22 +77,17 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
     public Response service(@PathParam("serviceId") String serviceId) {
         init();
         
-        // TODO: figure out how to do exception handling generically
-
         final ObjectAdapter serviceAdapter = getServiceAdapter(serviceId);
         if(serviceAdapter == null) {
             Object[] args = { serviceId };
-            return Response
-                    .status(HttpStatusCode.NOT_FOUND.getJaxrsStatusType())
-                    .header(RestfulResponse.Header.WARNING.getName(), String.format("Could not locate service '%s'", args))
-                    .type(MediaType.APPLICATION_JSON_TYPE)
-                    .build();
+            throw JsonApplicationException.create(HttpStatusCode.NOT_FOUND, "Could not locate service '%s'", args);
         }
         ResourceContext resourceContext = getResourceContext();
 
-        RepresentationBuilder<?> builder = 
-                DomainServiceRepBuilder.newBuilder(resourceContext)
-                .withAdapter(serviceAdapter);
+        AbstractRepresentationBuilder<?> builder = 
+                DomainObjectRepBuilder.newBuilder(resourceContext)
+                    .usingLinkToBuilder(new DomainServiceLinkToBuilder())
+                    .withAdapter(serviceAdapter);
         
         return Response.ok()
                 .entity(jsonFrom(builder))

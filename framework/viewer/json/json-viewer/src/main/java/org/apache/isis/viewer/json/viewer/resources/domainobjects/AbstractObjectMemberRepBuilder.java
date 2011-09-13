@@ -26,10 +26,10 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
-import org.apache.isis.viewer.json.viewer.representations.LinkBuilder;
-import org.apache.isis.viewer.json.viewer.representations.RepresentationBuilder;
+import org.apache.isis.viewer.json.viewer.representations.LinkToBuilder;
+import org.apache.isis.viewer.json.viewer.representations.AbstractRepresentationBuilder;
 
-public abstract class AbstractObjectMemberRepBuilder<R extends RepresentationBuilder<R>, T extends ObjectMember> extends RepresentationBuilder<R> {
+public abstract class AbstractObjectMemberRepBuilder<R extends AbstractRepresentationBuilder<R>, T extends ObjectMember> extends AbstractRepresentationBuilder<R> {
 
     protected final ObjectAdapter objectAdapter;
     protected final MemberType memberType;
@@ -44,7 +44,7 @@ public abstract class AbstractObjectMemberRepBuilder<R extends RepresentationBui
 
     public R withSelf() {
         String url = AbstractObjectMemberRepBuilder.urlForMember(objectAdapter, memberType, objectMember, getOidStringifier());
-        JsonRepresentation self = LinkBuilder.newBuilder(resourceContext, "self", url).build();
+        JsonRepresentation self = LinkToBuilder.newBuilder(resourceContext, "self", url).build();
         representation.mapPut("self", self);
         
         return cast(this);
@@ -59,7 +59,7 @@ public abstract class AbstractObjectMemberRepBuilder<R extends RepresentationBui
     }
 
     public R withMutatorsIfEnabled() {
-        if(!usability().isVetoed()) {
+        if(usability().isVetoed()) {
             return cast(this);
         }
         Map<String, MutatorSpec> mutators = memberType.getMutators();
@@ -69,7 +69,7 @@ public abstract class AbstractObjectMemberRepBuilder<R extends RepresentationBui
                 String urlForMember = urlForMember(mutatorSpec.suffix);
                 JsonRepresentation arguments = mutatorArgs(mutatorSpec);
                 JsonRepresentation detailsLink = 
-                    LinkBuilder.newBuilder(resourceContext, mutator, urlForMember)
+                    LinkToBuilder.newBuilder(resourceContext, mutator, urlForMember)
                         .withHttpMethod(mutatorSpec.httpMethod)
                         .withArguments(arguments)
                         .build();
@@ -114,7 +114,7 @@ public abstract class AbstractObjectMemberRepBuilder<R extends RepresentationBui
 
     public R withDetailsLink() {
         String urlForMember = urlForMember();
-        JsonRepresentation detailsLink = LinkBuilder.newBuilder(resourceContext, memberType.getDetailsRel(), urlForMember).build();
+        JsonRepresentation detailsLink = LinkToBuilder.newBuilder(resourceContext, memberType.getDetailsRel(), urlForMember).build();
         representation.mapPut(memberType.getDetailsRel(), detailsLink);
         
         return cast(this);

@@ -30,7 +30,7 @@ import org.apache.isis.viewer.json.applib.RestfulResponse;
 import org.apache.isis.viewer.json.applib.RestfulResponse.HttpStatusCode;
 import org.apache.isis.viewer.json.applib.homepage.HomePageResource;
 import org.apache.isis.viewer.json.viewer.JsonApplicationException;
-import org.apache.isis.viewer.json.viewer.representations.LinkBuilder;
+import org.apache.isis.viewer.json.viewer.representations.LinkToBuilder;
 import org.apache.isis.viewer.json.viewer.resources.ResourceAbstract;
 
 /**
@@ -49,10 +49,10 @@ public class HomePageResourceServerside extends ResourceAbstract implements Home
         
         JsonRepresentation representation = JsonRepresentation.newMap();
         
-        representation.mapPut("self", LinkBuilder.newBuilder(getResourceContext(), "self", "").build());
-        representation.mapPut("user", LinkBuilder.newBuilder(getResourceContext(), "user", "user").build());
-        representation.mapPut("services", LinkBuilder.newBuilder(getResourceContext(), "services", "services").build());
-        representation.mapPut("capabilities", LinkBuilder.newBuilder(getResourceContext(), "capabilities", "capabilities").build());
+        representation.mapPut("self", LinkToBuilder.newBuilder(getResourceContext(), "self", "").build());
+        representation.mapPut("user", LinkToBuilder.newBuilder(getResourceContext(), "user", "user").build());
+        representation.mapPut("services", LinkToBuilder.newBuilder(getResourceContext(), "services", "services").build());
+        representation.mapPut("capabilities", LinkToBuilder.newBuilder(getResourceContext(), "capabilities", "capabilities").build());
 
         representation.mapPut("links", JsonRepresentation.newArray());
         representation.mapPut("extensions", JsonRepresentation.newMap());

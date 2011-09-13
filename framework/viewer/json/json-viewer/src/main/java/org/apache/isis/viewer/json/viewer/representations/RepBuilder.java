@@ -14,26 +14,12 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.apache.isis.viewer.json.viewer.resources.domainservices;
+package org.apache.isis.viewer.json.viewer.representations;
 
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
-import org.apache.isis.viewer.json.viewer.ResourceContext;
-import org.apache.isis.viewer.json.viewer.resources.domainobjects.DomainObjectListRepBuilder;
 
-class DomainServiceListRepBuilder extends DomainObjectListRepBuilder {
+public interface RepBuilder {
 
-    public static DomainObjectListRepBuilder newBuilder(ResourceContext resourceContext) {
-        return new DomainServiceListRepBuilder(resourceContext);
-    }
-
-    private DomainServiceListRepBuilder(ResourceContext resourceContext) {
-        super(resourceContext);
-    }
-
-    protected JsonRepresentation linkTo(ObjectAdapter adapter) {
-        return DomainServiceRepBuilder.newLinkToBuilder(resourceContext, "service", adapter).build();
-    }
-
+    public JsonRepresentation build();
 
 }

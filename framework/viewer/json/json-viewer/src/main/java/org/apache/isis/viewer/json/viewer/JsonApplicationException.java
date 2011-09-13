@@ -1,10 +1,8 @@
 package org.apache.isis.viewer.json.viewer;
 
-import javax.ws.rs.WebApplicationException;
-
 import org.apache.isis.viewer.json.applib.RestfulResponse.HttpStatusCode;
 
-public class JsonApplicationException extends RuntimeException {
+public class JsonApplicationException extends RuntimeException implements HasHttpStatusCode {
 
     public static final JsonApplicationException create(HttpStatusCode httpStatusCode) {
         return create(httpStatusCode, null);

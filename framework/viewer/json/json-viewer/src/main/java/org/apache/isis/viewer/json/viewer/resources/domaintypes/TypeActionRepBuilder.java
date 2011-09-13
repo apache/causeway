@@ -20,7 +20,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
-import org.apache.isis.viewer.json.viewer.representations.LinkBuilder;
+import org.apache.isis.viewer.json.viewer.representations.LinkToBuilder;
 import org.apache.isis.viewer.json.viewer.resources.domainobjects.MemberType;
 
 public class TypeActionRepBuilder extends AbstractTypeMemberRepBuilder<TypeActionRepBuilder, ObjectAction> {
@@ -29,11 +29,11 @@ public class TypeActionRepBuilder extends AbstractTypeMemberRepBuilder<TypeActio
         return new TypeActionRepBuilder(representationContext, objectSpecification, objectAction);
     }
 
-    public static LinkBuilder newLinkToBuilder(ResourceContext resourceContext, String rel, ObjectSpecification objectSpecification, ObjectAction objectAction) {
+    public static LinkToBuilder newLinkToBuilder(ResourceContext resourceContext, String rel, ObjectSpecification objectSpecification, ObjectAction objectAction) {
         String typeFullName = objectSpecification.getFullIdentifier();
         String actionId = objectAction.getId();
         String url = "domainTypes/" + typeFullName + "/actions/" + actionId;
-        return LinkBuilder.newBuilder(resourceContext, rel, url);
+        return LinkToBuilder.newBuilder(resourceContext, rel, url);
     }
 
     public TypeActionRepBuilder(ResourceContext resourceContext, ObjectSpecification objectSpecification, ObjectAction objectAction) {

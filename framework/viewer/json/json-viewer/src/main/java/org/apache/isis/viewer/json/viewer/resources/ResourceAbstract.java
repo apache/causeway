@@ -52,7 +52,7 @@ import org.apache.isis.viewer.json.applib.RestfulResponse.HttpStatusCode;
 import org.apache.isis.viewer.json.applib.util.JsonMapper;
 import org.apache.isis.viewer.json.viewer.JsonApplicationException;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
-import org.apache.isis.viewer.json.viewer.representations.RepresentationBuilder;
+import org.apache.isis.viewer.json.viewer.representations.AbstractRepresentationBuilder;
 import org.apache.isis.viewer.json.viewer.resources.domainobjects.DomainObjectRepBuilder;
 import org.apache.isis.viewer.json.viewer.util.OidUtils;
 import org.apache.isis.viewer.json.viewer.util.UrlDecoderUtils;
@@ -139,7 +139,7 @@ public abstract class ResourceAbstract {
     // Rendering
     // //////////////////////////////////////////////////////////////
 
-    protected String jsonFrom(RepresentationBuilder<?> builder) {
+    protected String jsonFrom(AbstractRepresentationBuilder<?> builder) {
         JsonRepresentation representation = builder.build();
         return jsonFor(representation);
     }
@@ -171,11 +171,9 @@ public abstract class ResourceAbstract {
 	private Function<ObjectAdapter, JsonRepresentation> toObjectSelfRepresentation() {
 		final ResourceContext representationContext = getResourceContext();
         
-        Function<ObjectAdapter, JsonRepresentation> objectSelfRepresentation = 
-            Functions.compose(
-                DomainObjectRepBuilder.selfOf(), 
-                DomainObjectRepBuilder.fromAdapter(representationContext));
-		return objectSelfRepresentation;
+        return Functions.compose(
+            DomainObjectRepBuilder.selfOf(), 
+            DomainObjectRepBuilder.fromAdapter(representationContext));
 	}
 
 
