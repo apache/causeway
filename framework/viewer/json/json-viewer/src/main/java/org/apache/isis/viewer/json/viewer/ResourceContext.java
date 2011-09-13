@@ -25,6 +25,10 @@ import javax.ws.rs.core.Request;
 import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.core.UriInfo;
 
+import org.apache.isis.applib.profiles.Localization;
+import org.apache.isis.core.commons.authentication.AuthenticationSession;
+import org.apache.isis.core.metamodel.adapter.oid.stringable.OidStringifier;
+
 public class ResourceContext {
 
     private final HttpHeaders httpHeaders;
@@ -33,16 +37,23 @@ public class ResourceContext {
     private final HttpServletRequest httpServletRequest;
     private final HttpServletResponse httpServletResponse;
     private final SecurityContext securityContext;
+    private final OidStringifier oidStringifier;
+    private final Localization localization;
+    private final AuthenticationSession authenticationSession;
 
     public ResourceContext(final HttpHeaders httpHeaders, final UriInfo uriInfo, final Request request,
         final HttpServletRequest httpServletRequest, final HttpServletResponse httpServletResponse,
-        final SecurityContext securityContext) {
+        final SecurityContext securityContext, 
+        final OidStringifier oidStringifier, final Localization localization, final AuthenticationSession authenticationSession) {
         this.httpHeaders = httpHeaders;
         this.uriInfo = uriInfo;
         this.request = request;
         this.httpServletRequest = httpServletRequest;
         this.httpServletResponse = httpServletResponse;
         this.securityContext = securityContext;
+        this.oidStringifier = oidStringifier;
+        this.localization = localization;
+        this.authenticationSession = authenticationSession;
     }
 
     public HttpHeaders getHttpHeaders() {
@@ -69,9 +80,22 @@ public class ResourceContext {
         return securityContext;
     }
 
-
     public String urlFor(String url) {
         return getUriInfo().getBaseUri().toString() + url;
     }
+
+    
+    public OidStringifier getOidStringifier() {
+        return oidStringifier;
+    }
+
+    public Localization getLocalization() {
+        return localization;
+    }
+
+    public AuthenticationSession getAuthenticationSession() {
+        return authenticationSession;
+    }
+
 
 }

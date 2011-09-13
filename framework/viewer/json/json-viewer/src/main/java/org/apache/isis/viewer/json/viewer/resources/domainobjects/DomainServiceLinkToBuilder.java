@@ -16,35 +16,15 @@
  */
 package org.apache.isis.viewer.json.viewer.resources.domainobjects;
 
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.services.ServiceUtil;
-import org.apache.isis.viewer.json.applib.JsonRepresentation;
-import org.apache.isis.viewer.json.viewer.ResourceContext;
-import org.apache.isis.viewer.json.viewer.representations.LinkToBuilder;
 
-public class DomainServiceLinkToBuilder implements ObjectAdapterLinkToBuilder {
+public class DomainServiceLinkToBuilder extends DomainObjectLinkToBuilder {
 
-    private ResourceContext resourceContext;
-    private ObjectAdapter objectAdapter;
-
-    public DomainServiceLinkToBuilder() {
-        super();
-    }
-
-    public ObjectAdapterLinkToBuilder with(ObjectAdapter objectAdapter) {
-        this.objectAdapter = objectAdapter;
-        return this;
-    }
-
-    public DomainServiceLinkToBuilder usingResourceContext(ResourceContext resourceContext) {
-        this.resourceContext = resourceContext;
-        return this;
-    }
-    
-    @Override
-    public JsonRepresentation build() {
+    protected StringBuilder objectsBuf() {
+        StringBuilder buf = new StringBuilder("services/");
         String serviceId = ServiceUtil.id(objectAdapter.getObject());
-        return LinkToBuilder.newBuilder(resourceContext, "service", "services/%s", serviceId).build();
+        buf.append(serviceId);
+        return buf;
     }
 
 }

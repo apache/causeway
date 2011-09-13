@@ -40,16 +40,6 @@ public class ObjectActionRepBuilder extends AbstractObjectMemberRepBuilder<Objec
         
         putId();
         putMemberType();
-
-        putDisabledReasonIfDisabled();
-        withMutatorsIfEnabled();
-        
-        JsonRepresentation extensions = JsonRepresentation.newMap();
-        putExtensionsIsisProprietary(extensions);
-        
-        JsonRepresentation links = JsonRepresentation.newArray();
-        addLinksFormalDomainModel(links, resourceContext);
-        addLinksIsisProprietary(links, resourceContext);
     }
 
 
@@ -65,7 +55,7 @@ public class ObjectActionRepBuilder extends AbstractObjectMemberRepBuilder<Objec
      private void addLinksIsisProprietary(JsonRepresentation links, ResourceContext resourceContext) {
        if(objectMember.isContributed()) {
             ObjectAdapter serviceAdapter = contributingServiceAdapter();
-            JsonRepresentation contributedByLink = DomainObjectRepBuilder.newLinkToBuilder(resourceContext, "contributedBy", serviceAdapter, getOidStringifier()).build();
+            JsonRepresentation contributedByLink = DomainObjectRepBuilder.newLinkToBuilder(resourceContext, "contributedBy", serviceAdapter).build();
             links.arrayAdd(contributedByLink);
         }
 
@@ -75,6 +65,17 @@ public class ObjectActionRepBuilder extends AbstractObjectMemberRepBuilder<Objec
     }
 
     public JsonRepresentation build() {
+
+        putDisabledReasonIfDisabled();
+        withMutatorsIfEnabled();
+        
+        JsonRepresentation extensions = JsonRepresentation.newMap();
+        putExtensionsIsisProprietary(extensions);
+        
+        JsonRepresentation links = JsonRepresentation.newArray();
+        addLinksFormalDomainModel(links, resourceContext);
+        addLinksIsisProprietary(links, resourceContext);
+
         return representation;
     }
     
@@ -124,7 +125,7 @@ public class ObjectActionRepBuilder extends AbstractObjectMemberRepBuilder<Objec
         List<Object> list = Lists.newArrayList();
         for (final ObjectAdapter choiceAdapter : choiceAdapters) {
         	ObjectSpecification objectSpec = param.getSpecification();
-        	list.add(DomainObjectRepBuilder.valueOrRef(resourceContext, choiceAdapter, objectSpec, getOidStringifier(), getLocalization()));
+        	list.add(DomainObjectRepBuilder.valueOrRef(resourceContext, choiceAdapter, objectSpec));
         }
         return list;
 	}
@@ -135,7 +136,7 @@ public class ObjectActionRepBuilder extends AbstractObjectMemberRepBuilder<Objec
 			return null;
 		}
     	ObjectSpecification objectSpec = param.getSpecification();
-    	return DomainObjectRepBuilder.valueOrRef(resourceContext, defaultAdapter, objectSpec, getOidStringifier(), getLocalization());
+    	return DomainObjectRepBuilder.valueOrRef(resourceContext, defaultAdapter, objectSpec);
 	}
 
 	@Override
@@ -151,7 +152,7 @@ public class ObjectActionRepBuilder extends AbstractObjectMemberRepBuilder<Objec
     	if(objectMember.isContributed()) {
     		ObjectActionParameter actionParameter = objectMember.getParameters().get(i);
     		if (actionParameter.getSpecification().isOfType(objectAdapter.getSpecification())) {
-    			return DomainObjectRepBuilder.newLinkToBuilder(resourceContext, "object", objectAdapter, getOidStringifier()).build();
+    			return DomainObjectRepBuilder.newLinkToBuilder(resourceContext, "object", objectAdapter).build();
     		}
     	}
     	return "{value}";

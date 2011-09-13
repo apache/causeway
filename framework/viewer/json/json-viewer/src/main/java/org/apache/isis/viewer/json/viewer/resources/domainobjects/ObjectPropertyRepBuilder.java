@@ -31,7 +31,7 @@ public class ObjectPropertyRepBuilder extends AbstractObjectMemberRepBuilder<Obj
     public static ObjectPropertyRepBuilder newBuilder(ResourceContext resourceContext, ObjectAdapter objectAdapter, OneToOneAssociation otoa) {
         return new ObjectPropertyRepBuilder(resourceContext, objectAdapter, otoa);
     }
-
+    
     public ObjectPropertyRepBuilder(ResourceContext resourceContext, ObjectAdapter objectAdapter, OneToOneAssociation otoa) {
         super(resourceContext, objectAdapter, MemberType.OBJECT_PROPERTY, otoa);
 
@@ -54,7 +54,7 @@ public class ObjectPropertyRepBuilder extends AbstractObjectMemberRepBuilder<Obj
         if(valueAdapter == null) {
 		    return null;
 		}
-        return DomainObjectRepBuilder.valueOrRef(resourceContext, valueAdapter, objectMember.getSpecification(), getOidStringifier(), getLocalization());
+        return DomainObjectRepBuilder.valueOrRef(resourceContext, valueAdapter, objectMember.getSpecification());
     }
 
     public ObjectPropertyRepBuilder withChoices() {
@@ -73,7 +73,7 @@ public class ObjectPropertyRepBuilder extends AbstractObjectMemberRepBuilder<Obj
         List<Object> list = Lists.newArrayList();
         for (final ObjectAdapter choiceAdapter : choiceAdapters) {
         	ObjectSpecification objectSpec = objectMember.getSpecification();
-        	list.add(DomainObjectRepBuilder.valueOrRef(resourceContext, choiceAdapter, objectSpec, getOidStringifier(), getLocalization()));
+        	list.add(DomainObjectRepBuilder.valueOrRef(resourceContext, choiceAdapter, objectSpec));
         }
         return list;
 	}

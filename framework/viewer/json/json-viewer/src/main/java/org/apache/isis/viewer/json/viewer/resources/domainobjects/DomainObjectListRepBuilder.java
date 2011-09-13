@@ -44,7 +44,7 @@ public class DomainObjectListRepBuilder extends AbstractRepresentationBuilder<Do
     public DomainObjectListRepBuilder withAdapters(List<ObjectAdapter> objectAdapters) {
         JsonRepresentation list = JsonRepresentation.newArray();
         for(ObjectAdapter adapter: objectAdapters) {
-            JsonRepresentation linkToObject = objectAdapterLinkToBuilder.with(adapter).build();
+            JsonRepresentation linkToObject = objectAdapterLinkToBuilder.with(adapter).linkToAdapter().build();
             list.arrayAdd(linkToObject);
         }
         representation.mapPut("values", list);
