@@ -52,7 +52,7 @@ public class PolyTestClass extends AbstractDomainObject {
 
     // }}
 
-    // {{ PolyBaseClass
+    // {{ PolyBaseClass collection
     private List<PolyBaseClass> polyBaseClasses = new ArrayList<PolyBaseClass>();
 
     public List<PolyBaseClass> getPolyBaseClasses() {
@@ -74,6 +74,19 @@ public class PolyTestClass extends AbstractDomainObject {
 
     public void setPolyInterfaceType(final PolyInterface polyInterfaceType) {
         this.polyInterfaceType = polyInterfaceType;
+    }
+
+    // }}
+
+    // {{ PolyInterface collection
+    private List<PolyInterface> polyInterfaces = new ArrayList<PolyInterface>();
+
+    public List<PolyInterface> getPolyInterfaces() {
+        return polyInterfaces;
+    }
+
+    public void setPolyInterfaces(final List<PolyInterface> polyInterfaces) {
+        this.polyInterfaces = polyInterfaces;
     }
 
     // }}

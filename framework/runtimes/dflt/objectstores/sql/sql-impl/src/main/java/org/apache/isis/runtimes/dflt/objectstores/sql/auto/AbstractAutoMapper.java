@@ -95,7 +95,6 @@ public abstract class AbstractAutoMapper extends AbstractMapper {
         final IsisConfiguration configParameters = IsisContext.getConfiguration();
         table = configParameters.getString(parameterBase + ".table." + className);
         if (table == null) {
-            // final String name = "isis_" + className.substring(className.lastIndexOf('.') + 1);
             final String name = getTableNameFromSpecification(specification);
             table = name;
         } else {
@@ -153,6 +152,9 @@ public abstract class AbstractAutoMapper extends AbstractMapper {
 
                 // TODO: Replace "new ForeignKeyCollectionMapper" with a factory method(?) to allow a different
                 // default CollectionMapper
+
+                // TODO: I think the default order should be changed - and I think I (KAM) have dropped support for the
+                // original "association-table" implementation. This means the current checks are misleading.
                 final String type = subset.getString(field.getId());
                 if (type == null || type.equals("association-table")) {
                     // collectionMappers[collectionFieldNo] = new AutoCollectionMapper(specification,
@@ -176,9 +178,12 @@ public abstract class AbstractAutoMapper extends AbstractMapper {
 
                     if (collectionMapper == null) {
                         // TODO: Polymorphism - is it sufficient for the collectionMapper to handle the subclasses?
-                        if (field.getSpecification().hasSubclasses()) {
+                        final ObjectSpecification fieldSpecification = field.getSpecification();
+                        if (fieldSpecification.hasSubclasses() || fieldSpecification.isAbstract()) {
+                            // PolymorphicForeignKeyInChildCollectionBaseMapper
+                            // Or PolymorphicForeignKeyInChildCollectionMapper
                             collectionMapper =
-                                new PolymorphicForeignKeyInChildCollectionMapper(
+                                new PolymorphicForeignKeyInChildCollectionBaseMapper(
                                     oneToManyProperties[collectionFieldNo], parameterBase, lookup, objectMapperLookup,
                                     this, field);
                         } else {

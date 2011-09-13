@@ -33,7 +33,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.runtimes.dflt.objectstores.sql.DatabaseConnector;
 import org.apache.isis.runtimes.dflt.objectstores.sql.FieldMappingLookup;
-import org.apache.isis.runtimes.dflt.objectstores.sql.IdMapping;
+import org.apache.isis.runtimes.dflt.objectstores.sql.IdMappingAbstract;
 import org.apache.isis.runtimes.dflt.objectstores.sql.ObjectMapping;
 import org.apache.isis.runtimes.dflt.objectstores.sql.ObjectMappingLookup;
 import org.apache.isis.runtimes.dflt.objectstores.sql.VersionMapping;
@@ -42,6 +42,8 @@ import org.apache.isis.runtimes.dflt.objectstores.sql.mapping.FieldMapping;
 /**
  * Used to map 1-to-many collections by creating, in the child table, 1 column per parent collection. The column is
  * named by combining the final part of the parent class name and the collection variable name.
+ * 
+ * You have a choice between this class and {@link PolymorphicForeignKeyInChildCollectionBaseMapper}
  * 
  * @author Kevin
  */
@@ -181,8 +183,8 @@ public class PolymorphicForeignKeyInChildCollectionMapper extends ForeignKeyInCh
     @Override
     protected void loadCollectionIntoList(final DatabaseConnector connector, final ObjectAdapter parent,
         final boolean makeResolved, final String table, final ObjectSpecification specification,
-        final IdMapping idMapping, final List<FieldMapping> fieldMappings, final VersionMapping versionMapping,
-        final List<ObjectAdapter> superList) {
+        final IdMappingAbstract idMappingAbstract, final List<FieldMapping> fieldMappings,
+        final VersionMapping versionMapping, final List<ObjectAdapter> superList) {
         final List<ObjectAdapter> list = new ArrayList<ObjectAdapter>();
         for (int i = 0; i < tables.size(); i++) {
 
