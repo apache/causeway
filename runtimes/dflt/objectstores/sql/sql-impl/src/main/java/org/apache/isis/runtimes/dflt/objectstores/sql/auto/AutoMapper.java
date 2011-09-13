@@ -344,7 +344,7 @@ public class AutoMapper extends AbstractAutoMapper implements ObjectMapping, Deb
         sql.append("select ");
         sql.append(columnList(fieldMappings));
         sql.append(",");
-        sql.append(versionMapping.appendSelectColumns());
+        sql.append(versionMapping.appendColumnNames());
         sql.append(" from " + table + " WHERE ");
         idMapping.appendWhereClause(connector, sql, object.getOid());
 

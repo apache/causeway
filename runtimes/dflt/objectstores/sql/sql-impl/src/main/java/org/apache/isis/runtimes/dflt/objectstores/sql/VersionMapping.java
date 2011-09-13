@@ -62,7 +62,7 @@ public class VersionMapping {
         return versionColumn + " = ?";
     }
 
-    public String appendSelectColumns() {
+    public String appendColumnNames() {
         final StringBuffer sql = new StringBuffer();
         sql.append(versionColumn);
         sql.append(",");

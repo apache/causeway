@@ -36,6 +36,7 @@ import org.apache.isis.runtimes.dflt.objectstores.sql.CollectionMapper;
 import org.apache.isis.runtimes.dflt.objectstores.sql.DatabaseConnector;
 import org.apache.isis.runtimes.dflt.objectstores.sql.FieldMappingLookup;
 import org.apache.isis.runtimes.dflt.objectstores.sql.IdMapping;
+import org.apache.isis.runtimes.dflt.objectstores.sql.IdMappingAbstract;
 import org.apache.isis.runtimes.dflt.objectstores.sql.ObjectMapping;
 import org.apache.isis.runtimes.dflt.objectstores.sql.ObjectMappingLookup;
 import org.apache.isis.runtimes.dflt.objectstores.sql.Results;
@@ -110,6 +111,14 @@ public class ForeignKeyCollectionMapper extends AbstractAutoMapper implements Co
         this.columnName = columnName;
     }
 
+    protected VersionMapping getVersionMapping() {
+        return versionMapping;
+    }
+
+    protected ObjectReferenceMapping getForeignKeyMapping() {
+        return foreignKeyMapping;
+    }
+
     protected String getForeignKeyName() {
         return foreignKeyName;
     }
@@ -130,12 +139,35 @@ public class ForeignKeyCollectionMapper extends AbstractAutoMapper implements Co
 
     @Override
     public void createTables(final DatabaseConnector connection) {
-        final StringBuffer sql = new StringBuffer();
-        sql.append("alter table ");
-        sql.append(table);
-        sql.append(" add ");
-        appendColumnDefinitions(sql);
-        connection.update(sql.toString());
+        if (connection.hasTable(table)) {
+            final StringBuffer sql = new StringBuffer();
+            sql.append("alter table ");
+            sql.append(table);
+            sql.append(" add ");
+            appendColumnDefinitions(sql);
+            connection.update(sql.toString());
+        } else {
+            final StringBuffer sql = new StringBuffer();
+            sql.append("create table ");
+            sql.append(table);
+            sql.append(" (");
+            idMapping.appendCreateColumnDefinitions(sql);
+            sql.append(", ");
+
+            appendColumnDefinitions(sql);
+
+            // for (final FieldMapping mapping : fieldMappings) {
+            // mapping.appendColumnDefinitions(sql);
+            // sql.append(",");
+            // }
+            // sql.append(versionMapping.appendColumnDefinitions());
+            sql.append(")");
+            connection.update(sql.toString());
+        }
+    }
+
+    public IdMappingAbstract getIdMapping() {
+        return idMapping;
     }
 
     protected void appendCollectionUpdateColumnsToNull(StringBuffer sql) {
@@ -167,8 +199,8 @@ public class ForeignKeyCollectionMapper extends AbstractAutoMapper implements Co
 
             final List<ObjectAdapter> list = new ArrayList<ObjectAdapter>();
 
-            loadCollectionIntoList(connector, parent, makeResolved, table, specification, idMapping, fieldMappings,
-                versionMapping, list);
+            loadCollectionIntoList(connector, parent, makeResolved, table, specification, getIdMapping(),
+                fieldMappings, versionMapping, list);
 
             final CollectionFacet collectionFacet = collection.getSpecification().getFacet(CollectionFacet.class);
             collectionFacet.init(collection, list.toArray(new ObjectAdapter[list.size()]));
@@ -188,11 +220,12 @@ public class ForeignKeyCollectionMapper extends AbstractAutoMapper implements Co
     }
 
     protected void loadCollectionIntoList(final DatabaseConnector connector, final ObjectAdapter parent,
-        final boolean makeResolved, final String table, ObjectSpecification specification, final IdMapping idMapping,
+        final boolean makeResolved, final String table, ObjectSpecification specification, final IdMappingAbstract idMappingAbstract,
         final List<FieldMapping> fieldMappings, final VersionMapping versionMapping, final List<ObjectAdapter> list) {
+
         final StringBuffer sql = new StringBuffer();
         sql.append("select ");
-        idMapping.appendColumnNames(sql);
+        idMappingAbstract.appendColumnNames(sql);
 
         sql.append(", ");
         final String columnList = columnList(fieldMappings);
@@ -200,7 +233,7 @@ public class ForeignKeyCollectionMapper extends AbstractAutoMapper implements Co
             sql.append(columnList);
             sql.append(", ");
         }
-        sql.append(versionMapping.appendSelectColumns());
+        sql.append(versionMapping.appendColumnNames());
         sql.append(" from ");
         sql.append(table);
         sql.append(" where ");
@@ -208,7 +241,7 @@ public class ForeignKeyCollectionMapper extends AbstractAutoMapper implements Co
 
         final Results rs = connector.select(sql.toString());
         while (rs.next()) {
-            final Oid oid = idMapping.recreateOid(rs, specification);
+            final Oid oid = idMappingAbstract.recreateOid(rs, specification);
             final ObjectAdapter element = getAdapter(specification, oid);
             loadFields(element, rs, makeResolved, fieldMappings);
             LOG.debug("  element  " + element.getOid());
@@ -258,8 +291,13 @@ public class ForeignKeyCollectionMapper extends AbstractAutoMapper implements Co
             return;
         }
 
+        clearCollectionParent(connector, parent);
+
+        resetCollectionParent(connector, parent, elements);
+    }
+
+    protected void clearCollectionParent(final DatabaseConnector connector, final ObjectAdapter parent) {
         // Delete collection parent
-        // TODO: for polymorphism, must delete from all? appropriate child tables.
         final StringBuffer sql = new StringBuffer();
         sql.append("update ");
         sql.append(table);
@@ -268,9 +306,11 @@ public class ForeignKeyCollectionMapper extends AbstractAutoMapper implements Co
         sql.append(" where ");
         appendCollectionWhereValues(connector, parent, sql);
         connector.update(sql.toString());
+    }
 
+    protected void resetCollectionParent(final DatabaseConnector connector, final ObjectAdapter parent,
+        final Iterator<ObjectAdapter> elements) {
         // Reinstall collection parent
-        // TODO: : for polymorphism, must load from all appropriate child tables.
         final StringBuffer update = new StringBuffer();
         update.append("update ");
         update.append(table);

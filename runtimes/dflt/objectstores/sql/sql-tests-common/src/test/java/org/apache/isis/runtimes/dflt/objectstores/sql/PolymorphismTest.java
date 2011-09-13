@@ -80,6 +80,9 @@ public class PolymorphismTest extends SqlIntegrationTestCommonBase {
 
     public void testCreate() throws Exception {
         SqlIntegrationTestSingleton.drop("ISIS_POLYTESTCLASS");
+        SqlIntegrationTestSingleton.drop("ISIS_POLYBASECLASS");
+        SqlIntegrationTestSingleton.drop("ISIS_POLYINTERFACE");
+        SqlIntegrationTestSingleton.drop("ISIS_POLYSUBCLASS");
         SqlIntegrationTestSingleton.drop("ISIS_POLYSUBCLASSONE");
         SqlIntegrationTestSingleton.drop("ISIS_POLYSUBCLASSTWO");
         SqlIntegrationTestSingleton.drop("ISIS_POLYSUBCLASSTHREE");
@@ -123,6 +126,7 @@ public class PolymorphismTest extends SqlIntegrationTestCommonBase {
         factory.save(polyIntImpA);
 
         polyTestClass.setPolyInterfaceType(polyIntImpA);
+        polyTestClass.getPolyInterfaces().add(polyIntImpA);
 
         // setup the polyTestClass
         PolySubClassOne polySubClassOne = factory.newPolySubClassOne();
@@ -225,9 +229,19 @@ public class PolymorphismTest extends SqlIntegrationTestCommonBase {
         assertEquals(1, list2.size());
     }
 
-    public void testInterfaceLoadCollection() {
+    public void testInterfaceLoadProperty() {
         final PolyTestClass polyTestClass = SqlIntegrationTestSingleton.getStaticPolyTestClass();
         PolyInterface loaded = polyTestClass.getPolyInterfaceType();
+        assertEquals(polyIntImpA.getString(), loaded.getString());
+    }
+
+    public void testInterfaceLoadCollection() {
+        final PolyTestClass polyTestClass = SqlIntegrationTestSingleton.getStaticPolyTestClass();
+        List<PolyInterface> list = polyTestClass.getPolyInterfaces();
+
+        assertEquals(1, list.size());
+        PolyInterface loaded = list.get(0);
+
         assertEquals(polyIntImpA.getString(), loaded.getString());
     }
 
