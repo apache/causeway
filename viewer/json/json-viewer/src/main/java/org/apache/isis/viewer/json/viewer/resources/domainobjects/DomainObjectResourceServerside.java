@@ -50,9 +50,9 @@ import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.viewer.json.applib.RestfulResponse.HttpStatusCode;
 import org.apache.isis.viewer.json.applib.domainobjects.DomainObjectResource;
 import org.apache.isis.viewer.json.applib.util.JsonMapper;
-import org.apache.isis.viewer.json.viewer.representations.RepresentationBuilder;
+import org.apache.isis.viewer.json.viewer.JsonApplicationException;
+import org.apache.isis.viewer.json.viewer.representations.AbstractRepresentationBuilder;
 import org.apache.isis.viewer.json.viewer.resources.ResourceAbstract;
-import org.apache.isis.viewer.json.viewer.resources.domainservices.DomainServiceRepBuilder;
 import org.apache.isis.viewer.json.viewer.util.UrlDecoderUtils;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
@@ -75,8 +75,8 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements
     public Response object(@PathParam("oid") final String oidStr) {
 
         final ObjectAdapter objectAdapter = getObjectAdapter(oidStr);
-        final RepresentationBuilder<?> builder = DomainServiceRepBuilder
-                .newBuilder(getResourceContext())
+        final AbstractRepresentationBuilder<?> builder = 
+                DomainObjectRepBuilder.newBuilder(getResourceContext())
                 .withAdapter(objectAdapter);
         return responseOfOk(jsonFrom(builder));
     }
@@ -304,7 +304,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements
                 objectAdapter, actionId, Intent.ACCESS);
 
         if (!isQueryOnly(action)) {
-            return responseOf(HttpStatusCode.METHOD_NOT_ALLOWED, 
+            throw JsonApplicationException.create(HttpStatusCode.METHOD_NOT_ALLOWED, 
                     "Method not allowed; action '%s' is not query only", action.getId());
         }
 
@@ -312,8 +312,8 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements
         try {
             argumentAdapters = argumentAdaptersFor(action, arguments);
         } catch (IOException e) {
-            return responseOf(HttpStatusCode.BAD_REQUEST, 
-                    "Action '%s' has body that cannot be parsed as JSON", e, action.getId());
+            throw JsonApplicationException.create(HttpStatusCode.BAD_REQUEST, 
+                    "Action '%s' has query arguments that cannot be parsed as JSON", e, action.getId());
         }
 
         int numParameters = action.getParameterCount();
@@ -380,7 +380,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements
                 Object arg = paramAdapter.getObject();
                 String reasonNotValid = parameter.isValid(objectAdapter, arg);
                 if (reasonNotValid != null) {
-                    return responseOf(HttpStatusCode.NOT_ACCEPTABLE, reasonNotValid);
+                    throw JsonApplicationException.create(HttpStatusCode.NOT_ACCEPTABLE, reasonNotValid);
                 }
             }
         }
@@ -388,7 +388,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements
         Consent consent = action.isProposedArgumentSetValid(objectAdapter,
                 argArray);
         if (consent.isVetoed()) {
-            return responseOf(HttpStatusCode.NOT_ACCEPTABLE, consent.getReason());
+            throw JsonApplicationException.create(HttpStatusCode.NOT_ACCEPTABLE, consent.getReason());
         }
 
         final ObjectAdapter returnedAdapter = action.execute(objectAdapter,
@@ -414,19 +414,19 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements
 
     private boolean isQueryOnly(final ObjectAction action) {
         // TODO: determine whether action is query only
-        return false;
+        return true;
     }
 
     private boolean isIdempotent(final ObjectAction action) {
         // TODO: determine whether action is idempotent
-        return false;
+        return true;
     }
 
     private List<ObjectAdapter> argumentAdaptersFor(ObjectAction action,
         String arguments) throws JsonParseException, JsonMappingException, IOException {
         
+        List<ObjectAdapter> argumentAdapters = Lists.newArrayList();
 //        List<ObjectActionParameter> parameters = action.getParameters();
-//        List<ObjectAdapter> argumentAdapters = Lists.newArrayList();
 //        for (int i = 0; i < parameters.size(); i++) {
 //            ObjectActionParameter parameter = parameters.get(i);
 //            ObjectSpecification paramSpc = parameter.getSpecification();
@@ -434,9 +434,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements
 //            argumentAdapters.add(objectAdapterFor(paramSpc, argument));
 //        }
 //
-//        return argumentAdapters;
-        
-        return null;
+        return argumentAdapters;
     }
 
     /**

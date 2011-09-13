@@ -24,7 +24,7 @@ import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacetU
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
-import org.apache.isis.viewer.json.viewer.representations.LinkBuilder;
+import org.apache.isis.viewer.json.viewer.representations.LinkToBuilder;
 
 import com.google.common.collect.Lists;
 
@@ -59,7 +59,7 @@ public class ObjectCollectionRepBuilder extends AbstractObjectMemberRepBuilder<O
         List<JsonRepresentation> list = Lists.newArrayList();
         for (final ObjectAdapter elementAdapter : facet.iterable(valueAdapter)) {
 
-            LinkBuilder newBuilder = DomainObjectRepBuilder.newLinkToBuilder(resourceContext, "object", elementAdapter, getOidStringifier());
+            LinkToBuilder newBuilder = DomainObjectRepBuilder.newLinkToBuilder(resourceContext, "object", elementAdapter, getOidStringifier());
 
 			list.add(newBuilder.build());
         }

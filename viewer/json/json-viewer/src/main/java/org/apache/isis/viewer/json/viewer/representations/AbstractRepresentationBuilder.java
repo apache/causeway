@@ -25,22 +25,22 @@ import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessi
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
 
-public abstract class RepresentationBuilder<T extends RepresentationBuilder<T>> {
+public abstract class AbstractRepresentationBuilder<T extends AbstractRepresentationBuilder<T>> implements RepBuilder {
 
     protected final ResourceContext resourceContext;
     protected final JsonRepresentation representation = JsonRepresentation.newMap();
     
-    public RepresentationBuilder(ResourceContext resourceContext) {
+    public AbstractRepresentationBuilder(ResourceContext resourceContext) {
         this.resourceContext = resourceContext;
     }
 
 
     public T withSelf(String href) {
-        representation.mapPut("self", LinkBuilder.newBuilder(resourceContext, "self", href).build());
+        representation.mapPut("self", LinkToBuilder.newBuilder(resourceContext, "self", href).build());
         return cast(this);
     }
 
-    public RepresentationBuilder<T> withLinks() {
+    public AbstractRepresentationBuilder<T> withLinks() {
         return withLinks(JsonRepresentation.newArray());
     }
 
@@ -65,7 +65,7 @@ public abstract class RepresentationBuilder<T extends RepresentationBuilder<T>> 
     }
 
     @SuppressWarnings("unchecked")
-    protected static <T extends RepresentationBuilder<T>> T cast(RepresentationBuilder<T> builder) {
+    protected static <T extends AbstractRepresentationBuilder<T>> T cast(AbstractRepresentationBuilder<T> builder) {
         return (T) builder;
     }
 

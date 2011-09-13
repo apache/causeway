@@ -21,22 +21,30 @@ import java.util.List;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
-import org.apache.isis.viewer.json.viewer.representations.RepresentationBuilder;
+import org.apache.isis.viewer.json.viewer.representations.AbstractRepresentationBuilder;
 
-public class DomainObjectListRepBuilder extends RepresentationBuilder<DomainObjectListRepBuilder> {
+public class DomainObjectListRepBuilder extends AbstractRepresentationBuilder<DomainObjectListRepBuilder> {
 
-    protected DomainObjectListRepBuilder(ResourceContext resourceContext, String typeName, List<ObjectAdapter> objectAdapters) {
-        this(resourceContext);
+    private ObjectAdapterLinkToBuilder objectAdapterLinkToBuilder;
+    
+    public static DomainObjectListRepBuilder newBuilder(ResourceContext resourceContext) {
+        return new DomainObjectListRepBuilder(resourceContext);
     }
 
-    protected DomainObjectListRepBuilder(ResourceContext resourceContext) {
+    private DomainObjectListRepBuilder(ResourceContext resourceContext) {
         super(resourceContext);
+        usingLinkToBuilder(new DomainObjectLinkToBuilder());
+    }
+    
+    public DomainObjectListRepBuilder usingLinkToBuilder(ObjectAdapterLinkToBuilder objectAdapterLinkToBuilder) {
+        this.objectAdapterLinkToBuilder = objectAdapterLinkToBuilder.usingResourceContext(resourceContext);
+        return this;
     }
 
     public DomainObjectListRepBuilder withAdapters(List<ObjectAdapter> objectAdapters) {
         JsonRepresentation list = JsonRepresentation.newArray();
         for(ObjectAdapter adapter: objectAdapters) {
-            JsonRepresentation linkToObject = linkTo(adapter);
+            JsonRepresentation linkToObject = objectAdapterLinkToBuilder.with(adapter).build();
             list.arrayAdd(linkToObject);
         }
         representation.mapPut("values", list);
@@ -49,11 +57,6 @@ public class DomainObjectListRepBuilder extends RepresentationBuilder<DomainObje
         withExtensions();
 
         return representation;
-    }
-
-
-    protected JsonRepresentation linkTo(ObjectAdapter adapter) {
-        return DomainObjectRepBuilder.newLinkToBuilder(resourceContext, "object", adapter, getOidStringifier()).build();
     }
 
 

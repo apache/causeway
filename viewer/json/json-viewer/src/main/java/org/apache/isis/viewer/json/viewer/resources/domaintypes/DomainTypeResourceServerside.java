@@ -27,7 +27,7 @@ import javax.ws.rs.core.Response;
 
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.applib.domaintypes.DomainTypeResource;
-import org.apache.isis.viewer.json.viewer.representations.LinkBuilder;
+import org.apache.isis.viewer.json.viewer.representations.LinkToBuilder;
 import org.apache.isis.viewer.json.viewer.resources.ResourceAbstract;
 
 /**
@@ -45,8 +45,8 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
         init();
 
         JsonRepresentation representation = JsonRepresentation.newMap();
-        representation.mapPut("representationType", LinkBuilder.newBuilder(getResourceContext(), "representationType", "representationTypes/representationType").build());
-        representation.mapPut("self", LinkBuilder.newBuilder(getResourceContext(), "self", "representationType/" + representationTypeName).build());
+        representation.mapPut("representationType", LinkToBuilder.newBuilder(getResourceContext(), "representationType", "representationTypes/representationType").build());
+        representation.mapPut("self", LinkToBuilder.newBuilder(getResourceContext(), "self", "representationType/" + representationTypeName).build());
         
         return responseOfOk(jsonFor(representation));
     }

@@ -19,9 +19,9 @@ package org.apache.isis.viewer.json.viewer.resources.user;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
-import org.apache.isis.viewer.json.viewer.representations.RepresentationBuilder;
+import org.apache.isis.viewer.json.viewer.representations.AbstractRepresentationBuilder;
 
-public class UserRepBuilder extends RepresentationBuilder<UserRepBuilder> {
+public class UserRepBuilder extends AbstractRepresentationBuilder<UserRepBuilder> {
 
     public static UserRepBuilder newBuilder(ResourceContext resourceContext) {
         return new UserRepBuilder(resourceContext);

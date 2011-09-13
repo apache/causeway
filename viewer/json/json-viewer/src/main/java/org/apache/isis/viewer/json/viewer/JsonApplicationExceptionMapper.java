@@ -41,11 +41,13 @@ public class JsonApplicationExceptionMapper implements ExceptionMapper<JsonAppli
             return stackTraceElement.toString();
         }
 
+        private final int httpStatusCode;
         private final String message;
         private final List<String> stackTrace = Lists.newArrayList();
         private ExceptionPojo causedBy;
 
         public ExceptionPojo(Throwable ex) {
+            httpStatusCode = getHttpStatusCodeIfAny(ex);
             this.message = ex.getMessage();
             StackTraceElement[] stackTraceElements = ex.getStackTrace();
             for (StackTraceElement stackTraceElement : stackTraceElements) {
@@ -56,15 +58,31 @@ public class JsonApplicationExceptionMapper implements ExceptionMapper<JsonAppli
                 this.causedBy = new ExceptionPojo(cause);
             }
         }
+
+        private int getHttpStatusCodeIfAny(Throwable ex) {
+            if(!(ex instanceof HasHttpStatusCode)) {
+                return 0;
+            } 
+            HasHttpStatusCode hasHttpStatusCode = (HasHttpStatusCode) ex;
+            return hasHttpStatusCode.getHttpStatusCode().getStatusCode();
+        }
         
+        @SuppressWarnings("unused")
+        public int getHttpStatusCode() {
+            return httpStatusCode;
+        }
+        
+        @SuppressWarnings("unused")
         public String getMessage() {
             return message;
         }
         
+        @SuppressWarnings("unused")
         public List<String> getStackTrace() {
             return stackTrace;
         }
         
+        @SuppressWarnings("unused")
         public ExceptionPojo getCausedBy() {
             return causedBy;
         }

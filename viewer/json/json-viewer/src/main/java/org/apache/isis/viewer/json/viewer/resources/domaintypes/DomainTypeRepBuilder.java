@@ -19,19 +19,19 @@ package org.apache.isis.viewer.json.viewer.resources.domaintypes;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
-import org.apache.isis.viewer.json.viewer.representations.LinkBuilder;
-import org.apache.isis.viewer.json.viewer.representations.RepresentationBuilder;
+import org.apache.isis.viewer.json.viewer.representations.LinkToBuilder;
+import org.apache.isis.viewer.json.viewer.representations.AbstractRepresentationBuilder;
 
-public class DomainTypeRepBuilder extends RepresentationBuilder<DomainTypeRepBuilder> {
+public class DomainTypeRepBuilder extends AbstractRepresentationBuilder<DomainTypeRepBuilder> {
 
     public static DomainTypeRepBuilder newBuilder(ResourceContext representationContext) {
         return new DomainTypeRepBuilder(representationContext);
     }
 
-    public static LinkBuilder newLinkToBuilder(ResourceContext resourceContext, String rel, ObjectSpecification objectSpec) {
+    public static LinkToBuilder newLinkToBuilder(ResourceContext resourceContext, String rel, ObjectSpecification objectSpec) {
         String typeFullName = objectSpec.getFullIdentifier();
         String url = "domainTypes/" + typeFullName;
-        return LinkBuilder.newBuilder(resourceContext, rel, url);
+        return LinkToBuilder.newBuilder(resourceContext, rel, url);
     }
 
     public DomainTypeRepBuilder(ResourceContext resourceContext) {
