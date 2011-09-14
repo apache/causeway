@@ -63,7 +63,7 @@ public abstract class SqlIntegrationTestCommon extends SqlIntegrationTestCommonB
     // private static final TimeZone GMTm2_TIME_ZONE;
 
     // Helper values
-    private static final java.sql.Date sqlDate;// = java.sql.Date.valueOf("2010-03-05");
+    private static final java.sql.Date sqlDate;
 
     static {
         /*
@@ -125,16 +125,8 @@ public abstract class SqlIntegrationTestCommon extends SqlIntegrationTestCommonB
     private static NumericTestClass numericTestClassMax;
     private static NumericTestClass numericTestClassMin;
 
-    public String getPersonTableName() {
-        return "sqldataclass";
-    }
-
-    public String getSimpleClassTableName() {
-        return "simpleclass";
-    }
-
-    public String getSimpleClassTwoTableName() {
-        return "simpleclasstwo";
+    public List<String> getTableNames() {
+        return Arrays.asList("sqldataclass", "simpleclass", "simpleclasstwo", "numerictestclass");
     }
 
     public void testSetup() {
@@ -148,9 +140,9 @@ public abstract class SqlIntegrationTestCommon extends SqlIntegrationTestCommonB
      * @throws Exception
      */
     public void testCreate() throws Exception {
-        SqlIntegrationTestSingleton.drop(getPersonTableName());
-        SqlIntegrationTestSingleton.drop(getSimpleClassTableName());
-        SqlIntegrationTestSingleton.drop(getSimpleClassTwoTableName());
+        for (String tableName : getTableNames()) {
+            SqlIntegrationTestSingleton.drop(tableName);
+        }
 
         final SqlDataClassFactory factory = SqlIntegrationTestSingleton.getSqlDataClassFactory();
         final SqlDataClass sqlDataClass = factory.newDataClass();
@@ -250,13 +242,6 @@ public abstract class SqlIntegrationTestCommon extends SqlIntegrationTestCommonB
         getSingletonInstance().setState(1);
     }
 
-    public void testSimpleClassCollection1Lazy() {
-        final SqlDataClass sqlDataClass = SqlIntegrationTestSingleton.getDataClass();
-        final List<SimpleClass> collection = sqlDataClass.simpleClasses1;
-
-        assertEquals("collection size is not equal!", collection.size(), simpleClassList1.size());
-    }
-
     /**
      * Test {@link SqlDataClass} {@link String} field.
      * 
@@ -265,6 +250,18 @@ public abstract class SqlIntegrationTestCommon extends SqlIntegrationTestCommonB
     public void testString() {
         final SqlDataClass sqlDataClass = SqlIntegrationTestSingleton.getDataClass();
         assertEquals("Test String", sqlDataClass.getString());
+    }
+
+    public void testSave() {
+        final SqlDataClass sqlDataClass = SqlIntegrationTestSingleton.getDataClass();
+        sqlDataClass.setString("String 2");
+    }
+
+    public void testSimpleClassCollection1Lazy() {
+        final SqlDataClass sqlDataClass = SqlIntegrationTestSingleton.getDataClass();
+        final List<SimpleClass> collection = sqlDataClass.simpleClasses1;
+
+        assertEquals("collection size is not equal!", collection.size(), simpleClassList1.size());
     }
 
     /**
@@ -634,7 +631,6 @@ public abstract class SqlIntegrationTestCommon extends SqlIntegrationTestCommonB
         } else {
             assertEquals(stringList1.size() + 2, classes.size());
         }
-
     }
 
     // Last "test" - Set the Singleton state to 0 to invoke a clean shutdown.

@@ -60,6 +60,7 @@ public class AutoMapper extends AbstractAutoMapper implements ObjectMapping, Deb
     private final IdMapping idMapping;
     private final VersionMapping versionMapping;
     private final TitleMapping titleMapping;
+    final AdapterManager adapterManager;
 
     public AutoMapper(final String className, final String parameterBase, final FieldMappingLookup lookup,
         final ObjectMappingLookup objectMapperLookup) {
@@ -67,6 +68,8 @@ public class AutoMapper extends AbstractAutoMapper implements ObjectMapping, Deb
         idMapping = lookup.createIdMapping();
         versionMapping = lookup.createVersionMapping();
         titleMapping = lookup.createTitleMapping();
+
+        adapterManager = IsisContext.getPersistenceSession().getAdapterManager();
 
         setUpFieldMappers();
     }
@@ -167,9 +170,8 @@ public class AutoMapper extends AbstractAutoMapper implements ObjectMapping, Deb
         final Vector<ObjectAdapter> instances = new Vector<ObjectAdapter>();
 
         final StringBuffer sql = createSelectStatement();
-        sql.append(" WHERE ");
+        int initialLength = 0;
 
-        final int initialLength = sql.length();
         int foundFields = 0;
         final ObjectAdapter pattern = query.getPattern();
 
@@ -184,9 +186,16 @@ public class AutoMapper extends AbstractAutoMapper implements ObjectMapping, Deb
             final String methodName = memberName.substring(0, 1).toUpperCase() + memberName.substring(1);
 
             try {
+                // TODO: replace this back to the original method that uses Facets, instead of directly invoking
+                // "getXXX"
                 method = o.getClass().getMethod("get" + methodName, (Class<?>[]) null);
                 final Object res = InvokeUtils.invoke(method, o);
                 if (res != null) {
+
+                    if (foundFields == 0) {
+                        sql.append(" WHERE ");
+                        initialLength = sql.length();
+                    }
 
                     if (sql.length() > initialLength) {
                         sql.append(" AND ");
@@ -206,7 +215,7 @@ public class AutoMapper extends AbstractAutoMapper implements ObjectMapping, Deb
                         fieldMapping.appendColumnNames(sql);
                         sql.append("=?");
 
-                        final AdapterManager adapterManager = IsisContext.getPersistenceSession().getAdapterManager();
+                        // If you get errors here, bring the definition of adapterManager from above, back to here.
                         final ObjectAdapter restoredValue = adapterManager.adapterFor(res);
                         Oid oid = restoredValue.getOid();
                         Object oidObject = idMapping.primaryKeyAsObject(oid);
@@ -222,9 +231,9 @@ public class AutoMapper extends AbstractAutoMapper implements ObjectMapping, Deb
                 LOG.debug(e.getMessage());
             }
         }
-        if (foundFields > 0) {
-            loadInstancesToVector(connector, spec, completeSelectStatement(sql), instances);
-        }
+        // if (foundFields > 0) {
+        loadInstancesToVector(connector, spec, completeSelectStatement(sql), instances);
+        // }
         return instances;
     }
 

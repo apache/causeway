@@ -53,19 +53,4 @@ public class MySqlTest extends SqlIntegrationTestCommon {
         return "mysql.properties";
     }
 
-    @Override
-    public String getPersonTableName() {
-        return "isis_sqldataclass";
-    }
-
-    @Override
-    public String getSimpleClassTableName() {
-        return "isis_simpleclass";
-    }
-
-    @Override
-    public String getSimpleClassTwoTableName() {
-        return "isis_simpleclasstwo";
-    }
-
 }

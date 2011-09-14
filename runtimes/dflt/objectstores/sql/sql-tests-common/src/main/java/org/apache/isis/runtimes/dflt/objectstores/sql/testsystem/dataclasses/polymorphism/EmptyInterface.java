@@ -17,24 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.runtimes.dflt.objectstores.sql;
+package org.apache.isis.runtimes.dflt.objectstores.sql.testsystem.dataclasses.polymorphism;
 
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-
-public class IdMapping extends IdMappingAbstract {
-
-    public void init() {
-        String idColumn = null;
-        // idColumn = configParameters.getString(parameterBase + "id");
-        if (idColumn == null) {
-            idColumn = Defaults.getPkIdLabel();
-        }
-        setColumn(idColumn);
-    }
-
-    public void appendUpdateValues(final StringBuffer sql, final ObjectAdapter object) {
-    }
-
-    public void initializeField(final ObjectAdapter object, final Results rs) {
-    }
+public interface EmptyInterface {
 }

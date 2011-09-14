@@ -53,19 +53,4 @@ public class HsqlTest extends SqlIntegrationTestCommon {
         return "SHUTDOWN;";
     }
 
-    @Override
-    public String getPersonTableName() {
-        return "ISIS_SQLDATACLASS";
-    }
-
-    @Override
-    public String getSimpleClassTableName() {
-        return "ISIS_SIMPLECLASS";
-    }
-
-    @Override
-    public String getSimpleClassTwoTableName() {
-        return "ISIS_SIMPLECLASSTWO";
-    }
-
 }

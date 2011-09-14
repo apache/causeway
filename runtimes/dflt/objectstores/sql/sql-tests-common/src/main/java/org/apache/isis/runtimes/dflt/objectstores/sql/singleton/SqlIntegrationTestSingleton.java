@@ -34,9 +34,12 @@ import java.util.List;
 import java.util.Properties;
 
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
+import org.apache.isis.core.commons.exceptions.IsisException;
+import org.apache.isis.runtimes.dflt.objectstores.sql.Sql;
 import org.apache.isis.runtimes.dflt.objectstores.sql.SqlObjectStore;
 import org.apache.isis.runtimes.dflt.objectstores.sql.testsystem.SqlDataClassFactory;
 import org.apache.isis.runtimes.dflt.objectstores.sql.testsystem.TestProxySystemIII;
+import org.apache.isis.runtimes.dflt.objectstores.sql.testsystem.dataclasses.NumericTestClass;
 import org.apache.isis.runtimes.dflt.objectstores.sql.testsystem.dataclasses.SimpleClass;
 import org.apache.isis.runtimes.dflt.objectstores.sql.testsystem.dataclasses.SimpleClassTwo;
 import org.apache.isis.runtimes.dflt.objectstores.sql.testsystem.dataclasses.SqlDataClass;
@@ -85,8 +88,6 @@ public class SqlIntegrationTestSingleton {
         configuration.add(properties);
         persistorName = configuration.getString("isis.persistor");
 
-        resetPersistorState(configuration);
-
         sqlDataClassFactory = new SqlDataClassFactory();
         if (system != null) {
             system.shutDown();
@@ -94,6 +95,9 @@ public class SqlIntegrationTestSingleton {
         system = new TestProxySystemIII();
         system.setConfiguration(configuration);
         system.init(sqlDataClassFactory);
+
+        resetPersistorState(configuration);
+
     }
 
     // JDBC
@@ -123,7 +127,7 @@ public class SqlIntegrationTestSingleton {
                 IsisConfigurationDefault.getString(SqlObjectStore.BASE_NAME + ".jdbc.password"));
         s = c.createStatement();
 
-        dropTable(SqlObjectStore.getTableName());
+        // dropTable(SqlObjectStore.getTableName());
     }
 
     private void dropTable(final String tableName) {
@@ -138,26 +142,37 @@ public class SqlIntegrationTestSingleton {
                     sqlDataClassFactory.delete(sqlDataClass);
                 }
                 return;
-            }
-            if (tableName.equalsIgnoreCase("simpleclass")) {
+            } else if (tableName.equalsIgnoreCase("simpleclass")) {
                 final List<SimpleClass> list = sqlDataClassFactory.allSimpleClasses();
                 for (final SimpleClass sqlClass : list) {
                     sqlDataClassFactory.delete(sqlClass);
                 }
                 return;
-            }
-            if (tableName.equalsIgnoreCase("simpleclasstwo")) {
+            } else if (tableName.equalsIgnoreCase("simpleclasstwo")) {
                 final List<SimpleClassTwo> list = sqlDataClassFactory.allSimpleClassTwos();
                 for (final SimpleClassTwo sqlClass : list) {
                     sqlDataClassFactory.delete(sqlClass);
                 }
                 return;
+            } else if (tableName.equalsIgnoreCase("numerictestclass")) {
+                final List<NumericTestClass> list = sqlDataClassFactory.allNumericTestClasses();
+                for (final NumericTestClass sqlClass : list) {
+                    sqlDataClassFactory.delete(sqlClass);
+                }
+                return;
+            } else {
+                throw new IsisException("Unknown table: " + tableName);
             }
-            return;
         }
         /**/
         try {
-            s.executeUpdate("DROP TABLE " + tableName + "");
+            String tableIdentifier;
+            if (tableName.substring(0, 4).toUpperCase().equals("ISIS")) {
+                tableIdentifier = Sql.tableIdentifier(tableName);
+            } else {
+                tableIdentifier = Sql.tableIdentifier("isis_" + tableName);
+            }
+            s.executeUpdate("DROP TABLE " + tableIdentifier);
         } catch (final SQLException e) {
             e.printStackTrace();
         }

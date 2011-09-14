@@ -49,14 +49,93 @@ import org.apache.isis.runtimes.dflt.runtime.system.transaction.MessageBroker;
 import org.apache.isis.runtimes.dflt.runtime.system.transaction.UpdateNotifier;
 
 public final class SqlObjectStore implements ObjectStore {
+
     private static final String TABLE_NAME = "isis_admin_services";
-    private static final String ID_COLUMN = "id";
-    private static final String PRIMARYKEY_COLUMN = "pk_id";
+    // private static final String ID_COLUMN = "id";
+    // private static final String PRIMARYKEY_COLUMN = "pk_id";
     public static final String BASE_NAME = "isis.persistor.sql";
     private static final Logger LOG = Logger.getLogger(SqlObjectStore.class);
     private DatabaseConnectorPool connectionPool;
     private ObjectMappingLookup objectMappingLookup;
     private boolean isInitialized;
+
+    @Override
+    public String name() {
+        return "SQL Object Store";
+    }
+
+    @Override
+    public void open() {
+        Sql.setMetaData(connectionPool.acquire().getMetaData());
+
+        if (!isInitialized) {
+            Defaults.initialise(BASE_NAME);
+            Defaults.setPkIdLabel(Sql.identifier(Defaults.getPkIdLabel()));
+            Defaults.setIdColumn(Sql.identifier(Defaults.getIdColumn()));
+        }
+
+        final DebugBuilder debug = new DebugString();
+        connectionPool.debug(debug);
+        LOG.info("Database: " + debug);
+
+        objectMappingLookup.init();
+
+        final DatabaseConnector connector = connectionPool.acquire();
+        isInitialized = connector.hasColumn(Sql.tableIdentifier(TABLE_NAME), Defaults.getPkIdLabel());
+        if (!isInitialized) {
+            if (connector.hasTable(Sql.tableIdentifier(TABLE_NAME))) {
+                final StringBuffer sql = new StringBuffer();
+                sql.append("drop table ");
+                sql.append(Sql.tableIdentifier(TABLE_NAME));
+                connector.update(sql.toString());
+            }
+            final StringBuffer sql = new StringBuffer();
+            sql.append("create table ");
+            sql.append(Sql.tableIdentifier(TABLE_NAME));
+            sql.append(" (");
+            sql.append(Defaults.getPkIdLabel());
+            sql.append(" int, ");
+            sql.append(Defaults.getIdColumn());
+            sql.append(" varchar(255)");
+            sql.append(")");
+            connector.update(sql.toString());
+        }
+    }
+
+    @Override
+    public boolean isFixturesInstalled() {
+        return isInitialized;
+    }
+
+    @Override
+    public void registerService(final String name, final Oid oid) {
+        final DatabaseConnector connector = connectionPool.acquire();
+
+        final StringBuffer sql = new StringBuffer();
+        sql.append("insert into ");
+        sql.append(Sql.tableIdentifier(TABLE_NAME));
+        sql.append(" (");
+        sql.append(Defaults.getPkIdLabel());
+        sql.append(", ");
+        sql.append(Defaults.getIdColumn());
+        sql.append(") values (?,?)");
+
+        connector.addToQueryValues(((SqlOid) oid).getPrimaryKey().naturalValue());
+        connector.addToQueryValues(name);
+
+        connector.insert(sql.toString());
+        connectionPool.release(connector);
+    }
+
+    @Override
+    public void reset() {
+    }
+
+    @Override
+    public void close() {
+        objectMappingLookup.shutdown();
+        connectionPool.shutdown();
+    }
 
     @Override
     public void abortTransaction() {
@@ -246,11 +325,9 @@ public final class SqlObjectStore implements ObjectStore {
         if (specification.hasSubclasses()) {
             final List<ObjectSpecification> subclasses = specification.subclasses();
             for (ObjectSpecification subclassSpec : subclasses) {
-                // if (subclassSpec.equals(specification)) {
                 if (!subclassSpec.isAbstract()) {
                     addSpecQueryInstances(subclassSpec, connector, query, matchingInstances);
                 }
-                // }
             }
         }
 
@@ -329,17 +406,17 @@ public final class SqlObjectStore implements ObjectStore {
 
         final StringBuffer sql = new StringBuffer();
         sql.append("select ");
-        sql.append(Sql.identifier(PRIMARYKEY_COLUMN));
+        sql.append(Defaults.getPkIdLabel());
         sql.append(" from ");
         sql.append(Sql.tableIdentifier(TABLE_NAME));
         sql.append(" where ");
-        sql.append(Sql.identifier(ID_COLUMN));
+        sql.append(Defaults.getIdColumn());
         sql.append(" = ?");
         connector.addToQueryValues(name);
 
         final Results results = connector.select(sql.toString());
         if (results.next()) {
-            final int key = results.getInt(PRIMARYKEY_COLUMN);
+            final int key = results.getInt(Defaults.getPkIdLabel());
             connectionPool.release(connector);
             return SqlOid.createPersistent(name, new IntegerPrimaryKey(key));
         } else {
@@ -355,69 +432,6 @@ public final class SqlObjectStore implements ObjectStore {
         final boolean hasInstances = mapper.hasInstances(connection, spec);
         connectionPool.release(connection);
         return hasInstances;
-    }
-
-    @Override
-    public boolean isFixturesInstalled() {
-        return isInitialized;
-    }
-
-    @Override
-    public void open() {
-        Sql.setMetaData(connectionPool.acquire().getMetaData());
-
-        final DebugBuilder debug = new DebugString();
-        connectionPool.debug(debug);
-        LOG.info("Database: " + debug);
-
-        objectMappingLookup.init();
-
-        final DatabaseConnector connector = connectionPool.acquire();
-        isInitialized = connector.hasTable(Sql.tableIdentifier(TABLE_NAME));
-        if (!isInitialized) {
-
-            Defaults.initialise();
-
-            final StringBuffer sql = new StringBuffer();
-            sql.append("create table ");
-            sql.append(Sql.tableIdentifier(TABLE_NAME));
-            sql.append(" (");
-            sql.append(Sql.identifier(PRIMARYKEY_COLUMN));
-            sql.append(" int, ");
-            sql.append(Sql.identifier(ID_COLUMN));
-            sql.append(" varchar(255)");
-            sql.append(")");
-            connector.update(sql.toString());
-        }
-    }
-
-    @Override
-    public String name() {
-        return "SQL Object Store";
-    }
-
-    @Override
-    public void registerService(final String name, final Oid oid) {
-        final DatabaseConnector connector = connectionPool.acquire();
-
-        final StringBuffer sql = new StringBuffer();
-        sql.append("insert into ");
-        sql.append(Sql.tableIdentifier(TABLE_NAME));
-        sql.append(" (");
-        sql.append(Sql.identifier(PRIMARYKEY_COLUMN));
-        sql.append(", ");
-        sql.append(Sql.identifier(ID_COLUMN));
-        sql.append(") values (?,?)");
-
-        connector.addToQueryValues(((SqlOid) oid).getPrimaryKey().naturalValue());
-        connector.addToQueryValues(name);
-
-        connector.insert(sql.toString());
-        connectionPool.release(connector);
-    }
-
-    @Override
-    public void reset() {
     }
 
     @Override
@@ -447,12 +461,6 @@ public final class SqlObjectStore implements ObjectStore {
 
     public void setMapperLookup(final ObjectMappingLookup mapperLookup) {
         this.objectMappingLookup = mapperLookup;
-    }
-
-    @Override
-    public void close() {
-        objectMappingLookup.shutdown();
-        connectionPool.shutdown();
     }
 
     @Override
