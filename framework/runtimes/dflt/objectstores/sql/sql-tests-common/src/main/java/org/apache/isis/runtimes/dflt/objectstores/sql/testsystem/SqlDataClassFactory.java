@@ -29,6 +29,7 @@ import org.apache.isis.runtimes.dflt.objectstores.sql.testsystem.dataclasses.Num
 import org.apache.isis.runtimes.dflt.objectstores.sql.testsystem.dataclasses.SimpleClass;
 import org.apache.isis.runtimes.dflt.objectstores.sql.testsystem.dataclasses.SimpleClassTwo;
 import org.apache.isis.runtimes.dflt.objectstores.sql.testsystem.dataclasses.SqlDataClass;
+import org.apache.isis.runtimes.dflt.objectstores.sql.testsystem.dataclasses.polymorphism.EmptyInterface;
 import org.apache.isis.runtimes.dflt.objectstores.sql.testsystem.dataclasses.polymorphism.PolyInterface;
 import org.apache.isis.runtimes.dflt.objectstores.sql.testsystem.dataclasses.polymorphism.PolyInterfaceImplA;
 import org.apache.isis.runtimes.dflt.objectstores.sql.testsystem.dataclasses.polymorphism.PolyInterfaceImplB;
@@ -73,13 +74,17 @@ public class SqlDataClassFactory extends AbstractFactoryAndRepository {
     }
 
     // SimpleClass
+    public SimpleClass newSimpleClass() {
+        final SimpleClass object = newTransientInstance(SimpleClass.class);
+        return object;
+    }
+
     public List<SimpleClass> allSimpleClasses() {
         return allInstances(SimpleClass.class);
     }
 
-    public SimpleClass newSimpleClass() {
-        final SimpleClass object = newTransientInstance(SimpleClass.class);
-        return object;
+    public List<SimpleClass> allSimpleClassesThatMatch(SimpleClass simpleClassMatch) {
+        return allMatches(SimpleClass.class, simpleClassMatch);
     }
 
     // SimpleClassTwo
@@ -92,13 +97,18 @@ public class SqlDataClassFactory extends AbstractFactoryAndRepository {
         return object;
     }
 
+    // NumericTestClass
+    public List<NumericTestClass> allNumericTestClasses() {
+        return allInstances(NumericTestClass.class);
+    }
+
     public NumericTestClass newNumericTestClass() {
         final NumericTestClass object = newTransientInstance(NumericTestClass.class);
         return object;
     }
 
-    public List<SimpleClass> allSimpleClassesThatMatch(SimpleClass simpleClassMatch) {
-        return allMatches(SimpleClass.class, simpleClassMatch);
+    public List<NumericTestClass> allNumericTestClassesThatMatch(NumericTestClass match) {
+        return allMatches(NumericTestClass.class, match);
     }
 
     // }}
@@ -149,6 +159,10 @@ public class SqlDataClassFactory extends AbstractFactoryAndRepository {
 
     public List<PolyInterface> queryPolyInterfaces(PolyInterface query) {
         return allMatches(PolyInterface.class, query);
+    }
+
+    public List<EmptyInterface> allEmptyInterfacesThatMatch(EmptyInterface match) {
+        return allMatches(EmptyInterface.class, match);
     }
 
     // }}

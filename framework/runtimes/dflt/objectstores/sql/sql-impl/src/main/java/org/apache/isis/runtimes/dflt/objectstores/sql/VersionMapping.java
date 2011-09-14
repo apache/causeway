@@ -25,6 +25,7 @@ import java.util.Date;
 import org.apache.isis.core.metamodel.adapter.version.SerialNumberVersion;
 import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.runtimes.dflt.objectstores.sql.jdbc.JdbcConnector;
+import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 
 public class VersionMapping {
     private String lastActivityDateColumn;
@@ -43,7 +44,8 @@ public class VersionMapping {
 
     public String insertValues(final DatabaseConnector connector, final SerialNumberVersion version) {
         connector.addToQueryValues(version.getSequence());
-        String user = version.getUser();
+        IsisContext.getSession().getAuthenticationSession().getUserName();
+        String user = IsisContext.getSession().getAuthenticationSession().getUserName();// version.getUser();
         if (user == "") {
             user = "unknown";
         }

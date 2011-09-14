@@ -19,6 +19,8 @@
 
 package org.apache.isis.runtimes.dflt.objectstores.sql.jdbc;
 
+import org.joda.time.LocalDate;
+
 import org.apache.isis.applib.PersistFailedException;
 import org.apache.isis.applib.value.Date;
 import org.apache.isis.core.commons.exceptions.IsisApplicationException;
@@ -28,7 +30,7 @@ import org.apache.isis.runtimes.dflt.objectstores.sql.Results;
 import org.apache.isis.runtimes.dflt.objectstores.sql.mapping.FieldMapping;
 import org.apache.isis.runtimes.dflt.objectstores.sql.mapping.FieldMappingFactory;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
-import org.joda.time.LocalDate;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
 
 /**
  * Handles reading and writing java.sql.Date and org.apache.isis.applib.value.Date values to and from the data store.
@@ -37,6 +39,8 @@ import org.joda.time.LocalDate;
  * @version $Rev$ $Date$
  */
 public class JdbcDateMapper extends AbstractJdbcFieldMapping {
+
+    private final AdapterManager adapterManager;
 
     public static class Factory implements FieldMappingFactory {
         @Override
@@ -47,6 +51,7 @@ public class JdbcDateMapper extends AbstractJdbcFieldMapping {
 
     protected JdbcDateMapper(final ObjectAssociation field) {
         super(field);
+        adapterManager = IsisContext.getPersistenceSession().getAdapterManager();
     }
 
     @Override
@@ -72,12 +77,12 @@ public class JdbcDateMapper extends AbstractJdbcFieldMapping {
         final Class<?> correspondingClass = field.getSpecification().getCorrespondingClass();
         if (correspondingClass == java.util.Date.class || correspondingClass == java.sql.Date.class) {
             // 2011-04-08 = 1270684800000
-            restoredValue = IsisContext.getPersistenceSession().getAdapterManager().adapterFor(javaDateValue);
+            restoredValue = adapterManager.adapterFor(javaDateValue);
         } else if (correspondingClass == Date.class) {
             // 2010-03-05 = 1267747200000
             Date dateValue;
             dateValue = new Date(javaDateValue);
-            restoredValue = IsisContext.getPersistenceSession().getAdapterManager().adapterFor(dateValue);
+            restoredValue = adapterManager.adapterFor(dateValue);
         } else {
             throw new PersistFailedException("Unhandled date type: " + correspondingClass.getCanonicalName());
         }

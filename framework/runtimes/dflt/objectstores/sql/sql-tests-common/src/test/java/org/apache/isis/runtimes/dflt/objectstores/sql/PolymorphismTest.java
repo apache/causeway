@@ -6,6 +6,7 @@ import java.util.Properties;
 import org.apache.isis.runtimes.dflt.objectstores.sql.common.SqlIntegrationTestCommonBase;
 import org.apache.isis.runtimes.dflt.objectstores.sql.singleton.SqlIntegrationTestSingleton;
 import org.apache.isis.runtimes.dflt.objectstores.sql.testsystem.SqlDataClassFactory;
+import org.apache.isis.runtimes.dflt.objectstores.sql.testsystem.dataclasses.polymorphism.EmptyInterface;
 import org.apache.isis.runtimes.dflt.objectstores.sql.testsystem.dataclasses.polymorphism.PolyBaseClass;
 import org.apache.isis.runtimes.dflt.objectstores.sql.testsystem.dataclasses.polymorphism.PolyInterface;
 import org.apache.isis.runtimes.dflt.objectstores.sql.testsystem.dataclasses.polymorphism.PolyInterfaceImplA;
@@ -17,6 +18,8 @@ import org.apache.isis.runtimes.dflt.objectstores.sql.testsystem.dataclasses.pol
 import org.apache.isis.runtimes.dflt.objectstores.sql.testsystem.dataclasses.polymorphism.PolyTestClass;
 
 public class PolymorphismTest extends SqlIntegrationTestCommonBase {
+
+    private static final String IMPL_B_STRING = "Impl B String";
 
     public class PolyInterfaceEx implements PolyInterface {
         // {{ String
@@ -38,6 +41,21 @@ public class PolymorphismTest extends SqlIntegrationTestCommonBase {
         }
 
     };
+
+    public class EmptyInterfaceEx implements EmptyInterface {
+        // {{ Special
+        private String special;
+
+        public String getSpecial() {
+            return special;
+        }
+
+        public void setSpecial(final String special) {
+            this.special = special;
+        }
+
+        // }}
+    }
 
     private static final String IMPL_A_STRING = "Impl A String";
     private static final String CHILD_1 = "Child 1";
@@ -75,7 +93,7 @@ public class PolymorphismTest extends SqlIntegrationTestCommonBase {
     public void testSetup() {
         initialiseTests();
         getSingletonInstance().setState(0);
-        SqlIntegrationTestSingleton.drop("%");
+        // SqlIntegrationTestSingleton.drop("%");
     }
 
     public void testCreate() throws Exception {
@@ -248,8 +266,9 @@ public class PolymorphismTest extends SqlIntegrationTestCommonBase {
     public void testInterfaceEditSave() {
         final SqlDataClassFactory factory = SqlIntegrationTestSingleton.getSqlDataClassFactory();
         polyIntImpB = factory.newPolyInterfaceImplB();
-        polyIntImpB.setString("Impl B String");
+        polyIntImpB.setString(IMPL_B_STRING);
         polyIntImpB.setSpecial("special");
+        polyIntImpB.setInteger(1);
 
         factory.save(polyIntImpB);
 
@@ -291,6 +310,25 @@ public class PolymorphismTest extends SqlIntegrationTestCommonBase {
 
         List<PolyInterface> list = factory.queryPolyInterfaces(query);
         assertEquals(2, list.size());
+    }
+
+    public void testFindByMatchPartialEntity() {
+        final SqlDataClassFactory factory = SqlIntegrationTestSingleton.getSqlDataClassFactory();
+        final EmptyInterface match = new EmptyInterfaceEx();
+        final List<EmptyInterface> matches = factory.allEmptyInterfacesThatMatch(match);
+        assertEquals(1, matches.size());
+
+        EmptyInterface emptyInterface = matches.get(0);
+        PolyInterfaceImplB imp = (PolyInterfaceImplB) emptyInterface;
+        assertEquals(IMPL_B_STRING, imp.getString());
+    }
+
+    public void testCannotFindByMatchWithWrongValue() {
+        final SqlDataClassFactory factory = SqlIntegrationTestSingleton.getSqlDataClassFactory();
+        final PolyInterfaceImplB match = new PolyInterfaceImplB();
+        match.setInteger(0);
+        final List<EmptyInterface> matches = factory.allEmptyInterfacesThatMatch(match);
+        assertEquals(0, matches.size());
     }
 
     // Last "test" - Set the Singleton state to 0 to invoke a clean shutdown.

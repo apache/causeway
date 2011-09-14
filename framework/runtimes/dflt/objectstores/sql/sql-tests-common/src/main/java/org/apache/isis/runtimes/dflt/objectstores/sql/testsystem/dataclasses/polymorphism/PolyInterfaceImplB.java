@@ -20,8 +20,9 @@
 package org.apache.isis.runtimes.dflt.objectstores.sql.testsystem.dataclasses.polymorphism;
 
 import org.apache.isis.applib.AbstractDomainObject;
+import org.apache.isis.applib.annotation.MemberOrder;
 
-public class PolyInterfaceImplB extends AbstractDomainObject implements PolyInterface {
+public class PolyInterfaceImplB extends AbstractDomainObject implements PolyInterface, EmptyInterface {
     public String title() {
         return string;
     }
@@ -50,5 +51,20 @@ public class PolyInterfaceImplB extends AbstractDomainObject implements PolyInte
     public void setSpecial(final String special) {
         this.special = special;
     }
+
     // }}
+
+    // {{ Integer
+    private Integer integerValue;
+
+    @MemberOrder(sequence = "1")
+    public Integer getInteger() {
+        return integerValue;
+    }
+
+    public void setInteger(final Integer integerValue) {
+        this.integerValue = integerValue;
+    }
+    // }}
+
 }

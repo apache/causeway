@@ -160,6 +160,7 @@ public class PolymorphicForeignKeyInChildCollectionBaseMapper extends ForeignKey
             final Oid transientOid = oidGenerator.createTransientOid(thisAdapter.getObject());
             oidGenerator.convertTransientToPersistentOid(transientOid);
             polyIdMapper.appendObjectId(connector, update, transientOid);
+            // polyIdMapper.appendObjectId(connector, update, thisAdapter.getOid());
             update.append(",");
 
             // Foreign key ID column
