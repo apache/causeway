@@ -25,6 +25,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
+import org.apache.isis.viewer.json.applib.RepresentationType;
 import org.apache.isis.viewer.json.applib.capabilities.CapabilitiesResource;
 import org.apache.isis.viewer.json.viewer.representations.LinkToBuilder;
 import org.apache.isis.viewer.json.viewer.resources.ResourceAbstract;
@@ -62,7 +63,7 @@ public class CapabilitiesResourceServerside extends ResourceAbstract implements 
         representation.mapPut("links", JsonRepresentation.newArray());
         representation.mapPut("extensions", JsonRepresentation.newMap());
         
-        return responseOfOk(jsonFor(representation));
+        return responseOfOk(RepresentationType.CAPABILITIES, representation, Caching.ONE_DAY).build();
     }
 
 

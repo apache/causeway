@@ -35,6 +35,7 @@ public class JsonApplication extends AbstractJaxRsApplication {
         addSingleton(new DomainServiceResourceServerside());
         addSingleton(new CapabilitiesResourceServerside());
         addSingleton(new JsonApplicationExceptionMapper());
+        // addSingleton(new PreProcessInterceptorForIsisSession());
     }
 
 }

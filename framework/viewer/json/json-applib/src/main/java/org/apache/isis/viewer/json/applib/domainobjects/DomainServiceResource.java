@@ -61,7 +61,7 @@ public interface DomainServiceResource {
     @Path("/{serviceId}/actions/{actionId}")
     @Produces({ MediaType.APPLICATION_JSON })
     @ClientResponseType(entityType=String.class)
-    public Response serviceActionPrompt(
+    public Response actionPrompt(
         @PathParam("serviceId") final String serviceId, 
         @PathParam("actionId") final String actionId);
 

@@ -24,13 +24,13 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.CacheControl;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.core.UriInfo;
 
@@ -38,8 +38,9 @@ import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.stringable.OidStringifier;
-import org.apache.isis.core.metamodel.consent.Consent;
+import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
+import org.apache.isis.core.metamodel.services.ServiceUtil;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
@@ -48,12 +49,15 @@ import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.OidGenerator;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
+import org.apache.isis.viewer.json.applib.RepresentationType;
 import org.apache.isis.viewer.json.applib.RestfulResponse;
 import org.apache.isis.viewer.json.applib.RestfulResponse.HttpStatusCode;
 import org.apache.isis.viewer.json.applib.util.JsonMapper;
 import org.apache.isis.viewer.json.viewer.JsonApplicationException;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
 import org.apache.isis.viewer.json.viewer.representations.AbstractRepresentationBuilder;
+import org.apache.isis.viewer.json.viewer.representations.RepBuilder;
+import org.apache.isis.viewer.json.viewer.resources.ResourceAbstract.Caching;
 import org.apache.isis.viewer.json.viewer.resources.domainobjects.DomainObjectRepBuilder;
 import org.apache.isis.viewer.json.viewer.util.OidUtils;
 import org.apache.isis.viewer.json.viewer.util.UrlDecoderUtils;
@@ -71,13 +75,25 @@ public abstract class ResourceAbstract {
 
     protected final static JsonMapper jsonMapper = JsonMapper.instance();
 
-    protected static final CacheControl CACHE_ONE_DAY = new CacheControl();
-    protected static final CacheControl CACHE_ONE_HOUR = new CacheControl();
-    protected static final CacheControl CACHE_NONE = new CacheControl();
-    static {
-        CACHE_ONE_DAY.setMaxAge(24*60*60);
-        CACHE_ONE_HOUR.setMaxAge(60*60);
-        CACHE_NONE.setNoCache(true);
+    public enum Caching {
+        ONE_DAY(24*60*60),
+        ONE_HOUR(60*60),
+        NONE(0);
+
+        private final CacheControl cacheControl;
+
+        private Caching(int maxAge) {
+            this.cacheControl = new CacheControl();
+            if(maxAge > 0) {
+                cacheControl.setMaxAge(maxAge);
+            } else {
+                cacheControl.setNoCache(true);
+            }
+        }
+        
+        public CacheControl getCacheControl() {
+            return cacheControl;
+        }
     }
 
 
@@ -139,7 +155,7 @@ public abstract class ResourceAbstract {
     // Rendering
     // //////////////////////////////////////////////////////////////
 
-    protected String jsonFrom(AbstractRepresentationBuilder<?> builder) {
+    protected String jsonFor(AbstractRepresentationBuilder<?> builder) {
         JsonRepresentation representation = builder.build();
         return jsonFor(representation);
     }
@@ -156,7 +172,7 @@ public abstract class ResourceAbstract {
 	}
 
 
-    protected String jsonFor(final Object object) {
+    protected static String jsonFor(final Object object) {
         try {
             return jsonMapper.write(object);
         } catch (JsonGenerationException e) {
@@ -186,15 +202,27 @@ public abstract class ResourceAbstract {
     }
 
     protected ObjectAdapter getObjectAdapter(final String oidEncodedStr) {
-        init();
 
         final ObjectAdapter objectAdapter = OidUtils.getObjectAdapter(oidEncodedStr, getOidStringifier());
         
         if (objectAdapter == null) {
             final String oidStr = UrlDecoderUtils.urlDecode(oidEncodedStr);
-            throw new WebApplicationException(responseOf(HttpStatusCode.NOT_FOUND, "could not determine adapter for OID: '%s'", oidStr));
+            throw JsonApplicationException.create(
+                    HttpStatusCode.NOT_FOUND, "could not determine adapter for OID: '%s'", oidStr);
         }
         return objectAdapter;
+    }
+
+    protected ObjectAdapter getServiceAdapter(String serviceId) {
+        final List<ObjectAdapter> serviceAdapters = getPersistenceSession().getServices();
+        for (ObjectAdapter serviceAdapter : serviceAdapters) {
+            Object servicePojo = serviceAdapter.getObject();
+            String id = ServiceUtil.id(servicePojo);
+            if(serviceId.equals(id)) {
+                return serviceAdapter;
+            }
+        }
+        throw JsonApplicationException.create(HttpStatusCode.NOT_FOUND, "Could not locate service '%s'", serviceId);
     }
 
 
@@ -204,84 +232,31 @@ public abstract class ResourceAbstract {
 
 
 
-	protected static class ExpectedStringRepresentingValueException extends IllegalArgumentException {
-		private static final long serialVersionUID = 1L;
-	}
-	protected static class ExpectedMapRepresentingReferenceException extends IllegalArgumentException {
-		private static final long serialVersionUID = 1L;
-	}
-	protected static class UnknownOidException extends IllegalArgumentException {
-		private static final long serialVersionUID = 1L;
-		public UnknownOidException(String oid) {
-		    super(UrlDecoderUtils.urlDecode(oid));
-		}
-	}
-	
-	/**
-	 * 
-	 * @param objectSpec - the {@link ObjectSpecification} to interpret the object as.
-	 * @param node - expected to be either a String or a Map (ie from within a List, built by parsing a JSON structure). 
-	 */
-	protected ObjectAdapter objectAdapterFor(ObjectSpecification objectSpec, Object node) {
-		// null
-		if(node == null) {
-			return null;
-		}
-		
-		// value (encodable)
-		if(objectSpec.isEncodeable()) {
-			EncodableFacet encodableFacet = objectSpec.getFacet(EncodableFacet.class);
-			if(!(node instanceof String)) {
-				throw new ExpectedStringRepresentingValueException();
-			} 
-			String argStr = (String) node;
-			return encodableFacet.fromEncodedString(argStr);
-		}
-
-		// reference
-		try {
-			JsonRepresentation argLink = (JsonRepresentation) node;
-			String oidFromHref = UrlParserUtils.oidFromHref(argLink);
-			
-			final ObjectAdapter objectAdapter = OidUtils.getObjectAdapter(oidFromHref, getOidStringifier());
-			
-			if (objectAdapter == null) {
-			    throw new UnknownOidException(oidFromHref);
-			}
-			return objectAdapter;
-		} catch (Exception e) {
-			throw new ExpectedMapRepresentingReferenceException();
-		}
-	}
-
     // //////////////////////////////////////////////////////////////
     // Responses
     // //////////////////////////////////////////////////////////////
 
-    /**
-     * Common case.
-     */
-    public static Response responseOfOk(String jsonEntity) {
-        return Response.ok().entity(jsonEntity).type(MediaType.APPLICATION_JSON_TYPE).build();
+    private static ResponseBuilder responseOf(HttpStatusCode httpStatusCode) {
+        return Response.status(httpStatusCode.getJaxrsStatusType()).type(MediaType.APPLICATION_JSON_TYPE);
     }
 
-    /**
-     * Common case.
-     */
-    protected static Response responseOfNoContent() {
-        return Response.status(HttpStatusCode.NO_CONTENT.getJaxrsStatusType()).build();
+    public static ResponseBuilder responseOfNoContent(Version version) {
+        return responseOf(HttpStatusCode.NO_CONTENT).lastModified(version.getTime());
     }
 
-    /**
-     * Common case.
-     */
-    protected static Response responseOfUnauthorized(final Consent consent) {
-        return responseOf(HttpStatusCode.UNAUTHORIZED, consent.getReason());
+    public static ResponseBuilder responseOfOk(RepresentationType representationType, String representation, Caching caching) {
+        return responseOf(HttpStatusCode.OK)
+                .header(RestfulResponse.Header.X_REPRESENTATION_TYPE.getName(), representationType.getName())
+                .cacheControl(caching.getCacheControl())
+                .entity(representation);
     }
 
-    
-    protected static Response responseOf(HttpStatusCode httpStatusCode, final String reason, final Object... args) {
-        return Response.status(httpStatusCode.getJaxrsStatusType()).header(RestfulResponse.Header.WARNING.getName(), String.format(reason, args)).build();
+    public static ResponseBuilder responseOfOk(RepresentationType representationType, JsonRepresentation representation, Caching caching) {
+        return responseOfOk(representationType, jsonFor(representation), caching);
+    }
+
+    public static ResponseBuilder responseOfOk(RepresentationType representationType, RepBuilder representationBuilder, Caching caching) {
+        return responseOfOk(representationType, representationBuilder.build(), caching);
     }
 
     
