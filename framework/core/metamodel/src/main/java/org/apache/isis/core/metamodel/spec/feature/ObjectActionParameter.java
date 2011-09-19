@@ -22,6 +22,7 @@ package org.apache.isis.core.metamodel.spec.feature;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
+import org.apache.isis.core.metamodel.facets.named.NamedFacet;
 import org.apache.isis.core.metamodel.interactions.ActionArgumentContext;
 
 /**
@@ -60,6 +61,22 @@ public interface ObjectActionParameter extends ObjectFeature, CurrentHolder {
      * Returns the 0-based index to this parameter.
      */
     int getNumber();
+
+    /**
+     * Returns the name of this parameter.
+     * 
+     * <p>
+     * Because Java's reflection API does not allow us to access the code name of
+     * the parameter, we have to do figure out the name of the parameter ourselves:
+     * <ul>
+     * <li>If there is a {@link NamedFacet} associated with this parameter then we infer
+     * a name from this, eg "First Name" becomes "firstName".
+     * <li>Otherwise we use the type, eg "string".
+     * <li>If there is more than one parameter
+     * of the same type, then we use a numeric suffix (eg "string1", "string2").
+     * </ul>
+     */
+    String getName();
 
     ActionArgumentContext createProposedArgumentInteractionContext(AuthenticationSession session,
         InteractionInvocationMethod invocationMethod, ObjectAdapter targetObject, ObjectAdapter[] args, int position);

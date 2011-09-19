@@ -100,6 +100,19 @@ public final class StringUtils {
         return b.toString();
     }
 
+    // TODO: combine with camel
+    public static String camelLowerFirst(final String name) {
+        final StringBuffer b = new StringBuffer(name.length());
+        final StringTokenizer t = new StringTokenizer(name);
+        b.append(lowerFirst(t.nextToken()));
+        while (t.hasMoreTokens()) {
+            final String token = t.nextToken();
+            b.append(token.substring(0, 1).toUpperCase()); // replace spaces with camelCase
+            b.append(token.substring(1).toLowerCase());
+        }
+        return b.toString();
+    }
+
     public static String pascal(final String name) {
         return capitalize(camel(name));
     }
@@ -143,6 +156,7 @@ public final class StringUtils {
         final String[] split = line.split(" ");
         return split[0];
     }
+
 
     // ////////////////////////////////////////////////////////////
     // isNullOrEmpty, nullSafeEquals
@@ -337,5 +351,6 @@ public final class StringUtils {
         }
         return null;
     }
+
 
 }
