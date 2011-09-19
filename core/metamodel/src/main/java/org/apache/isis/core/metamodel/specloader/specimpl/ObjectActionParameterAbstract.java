@@ -28,6 +28,7 @@ import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.query.QueryFindAllInstances;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
+import org.apache.isis.core.commons.lang.StringUtils;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.QuerySubmitter;
 import org.apache.isis.core.metamodel.adapter.map.AdapterMap;
@@ -107,9 +108,22 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
     @Override
     public String getName() {
         final NamedFacet facet = getFacet(NamedFacet.class);
-        String name = facet == null ? null : facet.value();
-        name = name == null ? getSpecification().getSingularName() : name;
-        return name;
+        if(facet != null) {
+            return StringUtils.camelLowerFirst(facet.value());
+        }
+        String name = getSpecification().getSingularName();
+        List<ObjectActionParameter> parameters = this.getAction().getParameters(new Filter<ObjectActionParameter>() {
+
+            @Override
+            public boolean accept(ObjectActionParameter t) {
+                return t.getSpecification() == getSpecification();
+            }
+        });
+        if(parameters.size() == 1) {
+            return StringUtils.camelLowerFirst(name);
+        }
+        int indexOf = parameters.indexOf(this);
+        return StringUtils.camel(name + indexOf);
     }
 
     @Override
