@@ -3,6 +3,7 @@ package org.apache.isis.viewer.json.applib;
 import org.apache.isis.viewer.json.applib.util.Enums;
 
 public enum RepresentationType {
+    
     HOME_PAGE,
     USER,
     CAPABILITIES,

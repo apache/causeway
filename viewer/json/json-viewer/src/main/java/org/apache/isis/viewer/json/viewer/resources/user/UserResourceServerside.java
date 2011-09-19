@@ -23,7 +23,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.apache.isis.viewer.json.applib.RepresentationType;
-import org.apache.isis.viewer.json.applib.RestfulResponse;
 import org.apache.isis.viewer.json.applib.user.UserResource;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
 import org.apache.isis.viewer.json.viewer.resources.ResourceAbstract;
@@ -38,13 +37,7 @@ public class UserResourceServerside extends ResourceAbstract implements UserReso
         ResourceContext resourceContext = getResourceContext();
         UserRepBuilder builder = UserRepBuilder.newBuilder(resourceContext).withAuthenticationSession(getAuthenticationSession());
 
-        return Response.ok()
-                .entity(jsonFrom(builder))
-                .cacheControl(CACHE_ONE_HOUR)
-                .header(RestfulResponse.Header.X_REPRESENTATION_TYPE.getName(), RepresentationType.USER.getName())
-                .type(MediaType.APPLICATION_JSON_TYPE).build();
+        return responseOfOk(RepresentationType.USER, builder, Caching.ONE_HOUR).build();
     }
-
-
 
 }

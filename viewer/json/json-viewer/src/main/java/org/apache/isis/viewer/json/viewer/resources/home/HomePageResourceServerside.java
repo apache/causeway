@@ -57,11 +57,7 @@ public class HomePageResourceServerside extends ResourceAbstract implements Home
         representation.mapPut("links", JsonRepresentation.newArray());
         representation.mapPut("extensions", JsonRepresentation.newMap());
 
-        return Response.ok()
-                .entity(jsonFor(representation))
-                .cacheControl(CACHE_ONE_DAY)
-                .header(RestfulResponse.Header.X_REPRESENTATION_TYPE.getName(), RepresentationType.HOME_PAGE.getName())
-                .type(MediaType.APPLICATION_JSON_TYPE).build();
+        return responseOfOk(RepresentationType.HOME_PAGE, representation, Caching.ONE_DAY).build();
     }
 
     private void fakeRuntimeExceptionIfXFail() {

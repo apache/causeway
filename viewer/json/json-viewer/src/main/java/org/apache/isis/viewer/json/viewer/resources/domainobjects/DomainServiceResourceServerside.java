@@ -31,23 +31,24 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.services.ServiceUtil;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.viewer.json.applib.RepresentationType;
 import org.apache.isis.viewer.json.applib.RestfulResponse;
 import org.apache.isis.viewer.json.applib.RestfulResponse.HttpStatusCode;
 import org.apache.isis.viewer.json.applib.domainobjects.DomainServiceResource;
-import org.apache.isis.viewer.json.viewer.JsonApplicationException;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
 import org.apache.isis.viewer.json.viewer.representations.AbstractRepresentationBuilder;
-import org.apache.isis.viewer.json.viewer.resources.ResourceAbstract;
-import org.apache.isis.viewer.json.viewer.resources.domainobjects.DomainObjectResourceServerside.Intent;
+import org.apache.isis.viewer.json.viewer.resources.ResourceAbstract.Caching;
+import org.apache.isis.viewer.json.viewer.resources.domainobjects.DomainResourceAbstract.Intent;
 
 @Path("/services")
-public class DomainServiceResourceServerside extends ResourceAbstract implements
+public class DomainServiceResourceServerside extends DomainResourceAbstract implements
         DomainServiceResource {
 
     @Override
+    @GET
+    @Path("/")
     @Produces({ MediaType.APPLICATION_JSON })
     public Response services() {
         init();
@@ -61,11 +62,7 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
                     .withSelf("services")
                     .withAdapters(serviceAdapters);
         
-        return Response.ok()
-                .entity(jsonFrom(builder))
-                .cacheControl(CACHE_NONE)
-                .header(RestfulResponse.Header.X_REPRESENTATION_TYPE.getName(), RepresentationType.LIST.getName())
-                .type(MediaType.APPLICATION_JSON_TYPE).build();
+        return responseOfOk(RepresentationType.LIST, builder, Caching.ONE_DAY).build();
     }
 
     ////////////////////////////////////////////////////////////
@@ -73,63 +70,50 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
     ////////////////////////////////////////////////////////////
 
     @GET
-    @Path("/{serviceId}/properties/{propertyId}")
-    @Produces({ MediaType.APPLICATION_JSON })
-    public Response propertyDetails(
-        @PathParam("serviceId") final String serviceId,
-        @PathParam("propertyId") final String propertyId) {
-
-        final ObjectAdapter serviceAdapter = getServiceAdapter(serviceId);
-        final OneToOneAssociation property = DomainObjectResourceServerside.getPropertyThatIsVisibleAndUsable(
-                getResourceContext(), serviceAdapter, propertyId, Intent.ACCESS);
-
-        final ObjectPropertyRepBuilder builder = ObjectPropertyRepBuilder.newBuilder(
-                getResourceContext(), serviceAdapter, property);
-        return responseOfOk(jsonFrom(builder));
-    }
-
-
-    @GET
     @Path("/{serviceId}")
     @Produces({ MediaType.APPLICATION_JSON })
     @Override
-    public Response service(@PathParam("serviceId") String serviceId) {
+    public Response service(
+            @PathParam("serviceId") String serviceId) {
         init();
         
         final ObjectAdapter serviceAdapter = getServiceAdapter(serviceId);
-        if(serviceAdapter == null) {
-            Object[] args = { serviceId };
-            throw JsonApplicationException.create(HttpStatusCode.NOT_FOUND, "Could not locate service '%s'", args);
-        }
+        
         ResourceContext resourceContext = getResourceContext();
-
         AbstractRepresentationBuilder<?> builder = 
                 DomainObjectRepBuilder.newBuilder(resourceContext)
                     .usingLinkToBuilder(new DomainServiceLinkToBuilder())
                     .withAdapter(serviceAdapter);
         
-        return Response.ok()
-                .entity(jsonFrom(builder))
-                .cacheControl(CACHE_NONE)
-                .header(RestfulResponse.Header.X_REPRESENTATION_TYPE.getName(), RepresentationType.DOMAIN_OBJECT.getName())
-                .type(MediaType.APPLICATION_JSON_TYPE)
-                    .build();
+        return responseOfOk(RepresentationType.DOMAIN_OBJECT, builder, Caching.ONE_DAY).build();
     }
 
 
-    private ObjectAdapter getServiceAdapter(String serviceId) {
-        final List<ObjectAdapter> serviceAdapters = getPersistenceSession().getServices();
-        for (ObjectAdapter serviceAdapter : serviceAdapters) {
-            Object servicePojo = serviceAdapter.getObject();
-            String id = ServiceUtil.id(servicePojo);
-            if(serviceId.equals(id)) {
-                return serviceAdapter;
-            }
-        }
-        return null;
+    ////////////////////////////////////////////////////////////
+    // domain service property
+    ////////////////////////////////////////////////////////////
+
+    @GET
+    @Path("/{serviceId}/properties/{propertyId}")
+    @Produces({ MediaType.APPLICATION_JSON })
+    public Response propertyDetails(
+            @PathParam("serviceId") final String serviceId,
+            @PathParam("propertyId") final String propertyId) {
+        init();
+
+        final ObjectAdapter serviceAdapter = getServiceAdapter(serviceId);
+        final OneToOneAssociation property = getPropertyThatIsVisibleAndUsable(
+                serviceAdapter, propertyId, Intent.ACCESS);
+
+        ResourceContext resourceContext = getResourceContext();
+        final ObjectPropertyRepBuilder builder = ObjectPropertyRepBuilder.newBuilder(
+                resourceContext, serviceAdapter, property);
+
+        return responseOfOk(RepresentationType.OBJECT_PROPERTY, builder, Caching.ONE_DAY).build();
     }
 
-    
+
+
     ////////////////////////////////////////////////////////////
     // domain service action
     ////////////////////////////////////////////////////////////
@@ -137,10 +121,20 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
     @GET
     @Path("/{serviceId}/actions/{actionId}")
     @Produces({ MediaType.APPLICATION_JSON })
-    public Response serviceActionPrompt(
-        @PathParam("serviceId") final String serviceId, 
-        @PathParam("actionId") final String actionId) {
-        return null;
+    public Response actionPrompt(
+            @PathParam("serviceId") final String serviceId, 
+            @PathParam("actionId") final String actionId) {
+        init();
+
+        final ObjectAdapter serviceAdapter = getServiceAdapter(serviceId);
+        final ObjectAction action = getObjectActionThatIsVisibleAndUsable(
+                serviceAdapter, actionId, Intent.ACCESS);
+
+        ObjectActionRepBuilder repBuilder = ObjectActionRepBuilder.newBuilder(
+                getResourceContext(), serviceAdapter, action);
+        
+        return responseOfOk(RepresentationType.OBJECT_ACTION, repBuilder, Caching.NONE)
+                .build();
     }
 
     
@@ -152,10 +146,13 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
     @Path("/{oid}/actions/{actionId}/invoke")
     @Produces({ MediaType.APPLICATION_JSON })
     public Response serviceInvokeActionQueryOnly(
-        @PathParam("oid") final String oidStr, 
-        @PathParam("actionId") final String actionId,
-        @QueryParam("args") final String arguments) {
-        return null;
+            @PathParam("oid") final String oidStr, 
+            @PathParam("actionId") final String actionId,
+            @QueryParam("args") final String arguments) {
+        init();
+
+        // TODO
+        throw new UnsupportedOperationException();
     }
 
     @PUT
@@ -163,10 +160,13 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
     @Produces({ MediaType.APPLICATION_JSON })
     @Consumes({ MediaType.APPLICATION_JSON })
     public Response serviceInvokeActionIdempotent(
-        @PathParam("oid") final String oidStr, 
-        @PathParam("actionId") final String actionId,
-        final InputStream arguments) {
-        return null;
+            @PathParam("oid") final String oidStr, 
+            @PathParam("actionId") final String actionId,
+            final InputStream arguments) {
+        init();
+
+        // TODO
+        throw new UnsupportedOperationException();
     }
 
     @POST
@@ -174,10 +174,13 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
     @Produces({ MediaType.APPLICATION_JSON })
     @Consumes({ MediaType.APPLICATION_JSON })
     public Response serviceInvokeAction(
-        @PathParam("oid") final String oidStr, 
-        @PathParam("actionId") final String actionId,
-        final InputStream arguments) {
-        return null;
+            @PathParam("oid") final String oidStr, 
+            @PathParam("actionId") final String actionId,
+            final InputStream arguments) {
+        init();
+
+        // TODO
+        throw new UnsupportedOperationException();
     }
 
 }
