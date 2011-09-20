@@ -51,13 +51,14 @@ public abstract class AbstractObjectMemberRepBuilder<R extends AbstractRepresent
         return cast(this);
     }
 
+    protected void putId() {
+        representation.mapPut(memberType.getJsProp(), objectMember.getId());
+    }
+
     protected void putMemberType() {
         representation.mapPut("memberType", memberType.getName());
     }
 
-    protected void putId() {
-        representation.mapPut(memberType.getJsProp(), objectMember.getId());
-    }
 
     public abstract R withMutatorsIfEnabled();
 

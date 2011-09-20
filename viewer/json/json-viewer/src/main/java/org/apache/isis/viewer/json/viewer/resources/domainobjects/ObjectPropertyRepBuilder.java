@@ -38,13 +38,32 @@ public class ObjectPropertyRepBuilder extends AbstractObjectMemberRepBuilder<Obj
 
         putId();
         putMemberType();
+    }
+
+
+
+
+    public JsonRepresentation build() {
         putDisabledReasonIfDisabled();
+
+        JsonRepresentation extensions = JsonRepresentation.newMap();
+        putExtensionsIsisProprietary(extensions);
+        withExtensions(extensions );
         
-        withLinks();
-        withExtensions();
+        JsonRepresentation links = JsonRepresentation.newArray();
+        addLinksFormalDomainModel(links, resourceContext);
+        addLinksIsisProprietary(links, resourceContext);
+        withLinks(links);
+
+        return representation;
     }
 
     
+    /////////////////////////////////////////////////////
+    // mutators
+    /////////////////////////////////////////////////////
+
+
     @Override
     public ObjectPropertyRepBuilder withMutatorsIfEnabled() {
         if(usability().isVetoed()) {
@@ -80,11 +99,6 @@ public class ObjectPropertyRepBuilder extends AbstractObjectMemberRepBuilder<Obj
     }
 
 
-    public JsonRepresentation build() {
-        return representation;
-    }
-
-
 	@Override
     protected Object valueRep() {
         ObjectAdapter valueAdapter = objectMember.get(objectAdapter);
@@ -94,7 +108,12 @@ public class ObjectPropertyRepBuilder extends AbstractObjectMemberRepBuilder<Obj
         return DomainObjectRepBuilder.valueOrRef(resourceContext, valueAdapter, objectMember.getSpecification());
     }
 
-    public ObjectPropertyRepBuilder withChoices() {
+	
+    /////////////////////////////////////////////////////
+    // choices
+    /////////////////////////////////////////////////////
+
+	public ObjectPropertyRepBuilder withChoices() {
 		Object propertyChoices = propertyChoices();
 		if(propertyChoices != null) {
 			representation.mapPut("choices", propertyChoices);
@@ -114,5 +133,19 @@ public class ObjectPropertyRepBuilder extends AbstractObjectMemberRepBuilder<Obj
         }
         return list;
 	}
+
+	
+    /////////////////////////////////////////////////////
+    // extensions and links
+    /////////////////////////////////////////////////////
+    
+    private void putExtensionsIsisProprietary(JsonRepresentation extensions) {
+    }
+
+    private void addLinksFormalDomainModel(JsonRepresentation links, ResourceContext resourceContext) {
+    }
+
+    private void addLinksIsisProprietary(JsonRepresentation links, ResourceContext resourceContext) {
+    }
 
 }
