@@ -37,26 +37,38 @@ import com.google.common.collect.ImmutableMap;
 
 public enum MemberType {
 
-    OBJECT_PROPERTY("properties/", "propertyId", "propertyDetails", ImmutableMap.of(
-            "modify", MutatorSpec.of(PropertyValidateFacet.class, PropertySetterFacet.class, HttpMethod.PUT, BodyArgs.ONE),
-            "clear", MutatorSpec.of(PropertyValidateFacet.class, PropertyClearFacet.class, HttpMethod.DELETE, BodyArgs.NONE)
-            )) {
+    OBJECT_PROPERTY("properties/", "propertyId", "propertyDetails", 
+            ImmutableMap.of(
+                "modify", MutatorSpec.of(PropertyValidateFacet.class, PropertySetterFacet.class, HttpMethod.PUT, BodyArgs.ONE),
+                "clear", MutatorSpec.of(PropertyValidateFacet.class, PropertyClearFacet.class, HttpMethod.DELETE, BodyArgs.NONE)
+                )) {
         @Override
         public ObjectSpecification specFor(ObjectMember objectMember) {
             return objectMember.getSpecification();
         }
     },
-    OBJECT_COLLECTION("collections/", "collectionId", "collectionDetails", ImmutableMap.of(
-            "addTo", MutatorSpec.of(CollectionValidateAddToFacet.class, CollectionAddToFacet.class, HttpMethod.PUT, BodyArgs.ONE),
-            "removeFrom", MutatorSpec.of(CollectionValidateRemoveFromFacet.class, CollectionRemoveFromFacet.class, HttpMethod.DELETE, BodyArgs.ONE)
-            )) {
+    /**
+     * {@link #getMutators()} are keyed by {@link CollectionSemantics#getAddToKey()}
+     */
+    OBJECT_COLLECTION("collections/", "collectionId", "collectionDetails", 
+            ImmutableMap.of(
+                "addToSet", MutatorSpec.of(CollectionValidateAddToFacet.class, CollectionAddToFacet.class, HttpMethod.PUT, BodyArgs.ONE),
+                "addToList", MutatorSpec.of(CollectionValidateAddToFacet.class, CollectionAddToFacet.class, HttpMethod.POST, BodyArgs.ONE),
+                "removeFrom", MutatorSpec.of(CollectionValidateRemoveFromFacet.class, CollectionRemoveFromFacet.class, HttpMethod.DELETE, BodyArgs.ONE)
+                )) {
         @Override
         public ObjectSpecification specFor(ObjectMember objectMember) {
             return objectMember.getSpecification();
         }
     },
-    OBJECT_ACTION("actions/", "actionId", "actionDetails", ImmutableMap.of(
-            "invoke", MutatorSpec.of(ActionValidationFacet.class, ActionInvocationFacet.class, HttpMethod.POST, BodyArgs.MANY, "invoke")
+    /**
+     * {@link #getMutators()} are keyed by {@link ActionSemantics#getInvokeKey()}
+     */
+    OBJECT_ACTION("actions/", "actionId", "actionDetails",
+            ImmutableMap.of(
+                "invokeQueryOnly", MutatorSpec.of(ActionValidationFacet.class, ActionInvocationFacet.class, HttpMethod.GET, BodyArgs.MANY, "invoke"),
+                "invokeIdempotent", MutatorSpec.of(ActionValidationFacet.class, ActionInvocationFacet.class, HttpMethod.PUT, BodyArgs.MANY, "invoke"),
+                "invoke", MutatorSpec.of(ActionValidationFacet.class, ActionInvocationFacet.class, HttpMethod.POST, BodyArgs.MANY, "invoke")
             )) {
         @Override
         public ObjectSpecification specFor(ObjectMember objectMember) {
