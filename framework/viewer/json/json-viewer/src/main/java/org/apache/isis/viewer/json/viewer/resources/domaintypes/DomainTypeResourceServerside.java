@@ -18,6 +18,8 @@
  */
 package org.apache.isis.viewer.json.viewer.resources.domaintypes;
 
+import java.util.Collection;
+
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -25,6 +27,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.applib.RepresentationType;
 import org.apache.isis.viewer.json.applib.domaintypes.DomainTypeResource;
@@ -40,64 +43,94 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
 
 
     @GET
-    @Path("/{domainTypeName}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response representationType(@PathParam("domainTypeName") final String representationTypeName) {
+    @Path("/")
+    @Produces({ MediaType.APPLICATION_JSON })
+    public Response domainTypes() {
         init();
 
         JsonRepresentation representation = JsonRepresentation.newMap();
-        representation.mapPut("representationType", LinkToBuilder.newBuilder(getResourceContext(), "representationType", "representationTypes/representationType").build());
-        representation.mapPut("self", LinkToBuilder.newBuilder(getResourceContext(), "self", "representationType/" + representationTypeName).build());
+        representation.mapPut("self", LinkToBuilder.newBuilder(getResourceContext(), "self", "domainTypes").build());
+        
+        JsonRepresentation specList = JsonRepresentation.newArray();
+        final Collection<ObjectSpecification> allSpecifications = getSpecificationLoader().allSpecifications();
+        for (ObjectSpecification objectSpec : allSpecifications) {
+            final LinkToBuilder linkBuilder = LinkToBuilder.newBuilder(getResourceContext(), "domainType", "domainTypes/%s", objectSpec.getFullIdentifier());
+            specList.arrayAdd(linkBuilder.build());
+        }
+        
+        representation.mapPut("domainTypes", specList);
         
         return responseOfOk(RepresentationType.DOMAIN_TYPE, representation, Caching.ONE_DAY).build();
     }
 
-
-    @GET
-    @Path("/")
-    @Produces({ MediaType.APPLICATION_JSON })
-    public Response domainTypes() {
-        return null;
-    }
-
+    
     @GET
     @Path("/{domainType}")
     @Produces({ MediaType.APPLICATION_JSON })
     public Response domainType(@PathParam("domainType") final String domainType){
-        return null;
+        init();
+
+        JsonRepresentation representation = JsonRepresentation.newMap();
+        representation.mapPut("self", LinkToBuilder.newBuilder(getResourceContext(), "self", "domainTypes/%s", domainType).build());
+        
+        return responseOfOk(RepresentationType.DOMAIN_TYPE, representation, Caching.ONE_DAY).build();
     }
 
     @GET
     @Path("/{domainType}/properties/{propertyId}")
     @Produces({ MediaType.APPLICATION_JSON })
-    public Response typeProperty(@PathParam("domainType") final String domainType,
-        @PathParam("propertyId") final String propertyId){
-        return null;
+    public Response typeProperty(
+            @PathParam("domainType") final String domainType,
+            @PathParam("propertyId") final String propertyId){
+        init();
+
+        JsonRepresentation representation = JsonRepresentation.newMap();
+        representation.mapPut("self", LinkToBuilder.newBuilder(getResourceContext(), "self", "domainTypes/%s/properties/%s", domainType, propertyId).build());
+        
+        return responseOfOk(RepresentationType.DOMAIN_TYPE_PROPERTY, representation, Caching.ONE_DAY).build();
     }
 
     @GET
     @Path("/{domainType}/collections/{collectionId}")
     @Produces({ MediaType.APPLICATION_JSON })
-    public Response typeCollection(@PathParam("domainType") final String domainType,
-        @PathParam("collectionId") final String collectionId){
-        return null;
+    public Response typeCollection(
+            @PathParam("domainType") final String domainType,
+            @PathParam("collectionId") final String collectionId){
+        init();
+
+        JsonRepresentation representation = JsonRepresentation.newMap();
+        representation.mapPut("self", LinkToBuilder.newBuilder(getResourceContext(), "self", "domainType/%s/collections/%s", domainType, collectionId).build());
+        
+        return responseOfOk(RepresentationType.DOMAIN_TYPE_COLLECTION, representation, Caching.ONE_DAY).build();
     }
 
     @GET
     @Path("/{domainType}/actions/{actionId}")
     @Produces({ MediaType.APPLICATION_JSON })
-    public Response typeAction(@PathParam("domainType") final String domainType,
-        @PathParam("actionId") final String actionId){
-        return null;
+    public Response typeAction(
+            @PathParam("domainType") final String domainType,
+            @PathParam("actionId") final String actionId){
+        init();
+
+        JsonRepresentation representation = JsonRepresentation.newMap();
+        representation.mapPut("self", LinkToBuilder.newBuilder(getResourceContext(), "self", "domainTypes/%s/actions/%s", domainType, actionId).build());
+        
+        return responseOfOk(RepresentationType.DOMAIN_TYPE_ACTION, representation, Caching.ONE_DAY).build();
     }
 
     @GET
-    @Path("/{domainType}/actions/{actionId}/params/{paramNum}")
+    @Path("/{domainType}/actions/{actionId}/params/{paramName}")
     @Produces({ MediaType.APPLICATION_JSON })
-    public Response typeActionParam(@PathParam("domainType") final String domainType,
-        @PathParam("actionId") final String actionId, @PathParam("paramNum") final int paramNum){
-        return null;
-    }
+    public Response typeActionParam(
+            @PathParam("domainType") final String domainType,
+            @PathParam("actionId") final String actionId,
+            @PathParam("paramName") final String paramName){
+        init();
 
+        JsonRepresentation representation = JsonRepresentation.newMap();
+        representation.mapPut("self", LinkToBuilder.newBuilder(getResourceContext(), "self", "domainTypes/%s/actions/%s/params/%s", domainType, actionId, paramName).build());
+        
+        return responseOfOk(RepresentationType.DOMAIN_TYPE_COLLECTION, representation, Caching.ONE_DAY).build();
+    }
 
 }

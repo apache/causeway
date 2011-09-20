@@ -16,16 +16,11 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
-
 package org.apache.isis.tck.fixture.simples;
 
 import org.apache.isis.applib.fixtures.AbstractFixture;
-import org.apache.isis.tck.dom.scalars.WrapperValuedEntity;
-import org.apache.isis.tck.dom.scalars.WrapperValuedEntityRepository;
 import org.apache.isis.tck.dom.simples.SimpleEntity;
 import org.apache.isis.tck.dom.simples.SimpleEntityRepository;
-
 
 
 public class SimpleEntityFixture extends AbstractFixture {

@@ -68,6 +68,6 @@ public interface DomainTypeResource {
     @Produces({ MediaType.APPLICATION_JSON })
     @ClientResponseType(entityType=String.class)
     public abstract Response typeActionParam(@PathParam("domainType") final String domainType,
-        @PathParam("actionId") final String actionId, @PathParam("paramNum") final int paramNum);
+        @PathParam("actionId") final String actionId, @PathParam("paramNum") final String paramName);
 
 }

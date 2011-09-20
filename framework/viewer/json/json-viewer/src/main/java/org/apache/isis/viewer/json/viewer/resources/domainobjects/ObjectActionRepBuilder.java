@@ -48,7 +48,6 @@ public class ObjectActionRepBuilder extends AbstractObjectMemberRepBuilder<Objec
     public JsonRepresentation build() {
 
         putDisabledReasonIfDisabled();
-        withMutatorsIfEnabled();
         
         JsonRepresentation extensions = JsonRepresentation.newMap();
         putExtensionsIsisProprietary(extensions);

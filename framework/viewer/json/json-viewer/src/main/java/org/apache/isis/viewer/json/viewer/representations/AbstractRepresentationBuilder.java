@@ -28,10 +28,15 @@ import org.apache.isis.viewer.json.viewer.ResourceContext;
 public abstract class AbstractRepresentationBuilder<T extends AbstractRepresentationBuilder<T>> implements RepBuilder {
 
     protected final ResourceContext resourceContext;
-    protected final JsonRepresentation representation = JsonRepresentation.newMap();
+    protected final JsonRepresentation representation;
     
     public AbstractRepresentationBuilder(ResourceContext resourceContext) {
+        this(resourceContext, JsonRepresentation.newMap());
+    }
+
+    public AbstractRepresentationBuilder(ResourceContext resourceContext, JsonRepresentation representation) {
         this.resourceContext = resourceContext;
+        this.representation = representation;
     }
 
 

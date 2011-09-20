@@ -43,6 +43,8 @@ import org.apache.isis.viewer.json.applib.RestfulResponse.HttpStatusCode;
 import org.apache.isis.viewer.json.applib.domainobjects.DomainObjectResource;
 import org.apache.isis.viewer.json.viewer.JsonApplicationException;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
+import org.apache.isis.viewer.json.viewer.resources.ResourceAbstract.Caching;
+import org.apache.isis.viewer.json.viewer.resources.domainobjects.DomainResourceAbstract.Intent;
 
 @Path("/objects")
 public class DomainObjectResourceServerside extends DomainResourceAbstract implements
@@ -61,7 +63,7 @@ public class DomainObjectResourceServerside extends DomainResourceAbstract imple
 
         final ObjectAdapter objectAdapter = getObjectAdapter(oidStr);
         
-        return responseWithRepresentationOf(objectAdapter);
+        return object(objectAdapter);
     }
 
     @PUT
@@ -287,14 +289,7 @@ public class DomainObjectResourceServerside extends DomainResourceAbstract imple
         init();
 
         final ObjectAdapter objectAdapter = getObjectAdapter(oidStr);
-        final ObjectAction action = getObjectActionThatIsVisibleAndUsable(
-                objectAdapter, actionId, Intent.ACCESS);
-
-        ObjectActionRepBuilder repBuilder = ObjectActionRepBuilder.newBuilder(
-                getResourceContext(), objectAdapter, action);
-        
-        return responseOfOk(RepresentationType.OBJECT_ACTION, repBuilder, Caching.NONE)
-                .build();
+        return actionPrompt(actionId, objectAdapter);
     }
 
 

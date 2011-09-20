@@ -16,6 +16,7 @@
  */
 package org.apache.isis.viewer.json.viewer.resources.domainobjects;
 
+import java.util.Collection;
 import java.util.List;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -26,13 +27,17 @@ import org.apache.isis.viewer.json.viewer.representations.AbstractRepresentation
 public class DomainObjectListRepBuilder extends AbstractRepresentationBuilder<DomainObjectListRepBuilder> {
 
     private ObjectAdapterLinkToBuilder objectAdapterLinkToBuilder;
-    
-    public static DomainObjectListRepBuilder newBuilder(ResourceContext resourceContext) {
-        return new DomainObjectListRepBuilder(resourceContext);
+
+    public static DomainObjectListRepBuilder newBuilder(ResourceContext resourceContext, JsonRepresentation representation) {
+        return new DomainObjectListRepBuilder(resourceContext, representation);
     }
 
-    private DomainObjectListRepBuilder(ResourceContext resourceContext) {
-        super(resourceContext);
+    public static DomainObjectListRepBuilder newBuilder(ResourceContext resourceContext) {
+        return new DomainObjectListRepBuilder(resourceContext, JsonRepresentation.newMap());
+    }
+
+    private DomainObjectListRepBuilder(ResourceContext resourceContext, JsonRepresentation representation) {
+        super(resourceContext, representation);
         usingLinkToBuilder(new DomainObjectLinkToBuilder());
     }
     
@@ -41,7 +46,7 @@ public class DomainObjectListRepBuilder extends AbstractRepresentationBuilder<Do
         return this;
     }
 
-    public DomainObjectListRepBuilder withAdapters(List<ObjectAdapter> objectAdapters) {
+    public DomainObjectListRepBuilder withAdapters(Collection<ObjectAdapter> objectAdapters) {
         JsonRepresentation list = JsonRepresentation.newArray();
         for(ObjectAdapter adapter: objectAdapters) {
             JsonRepresentation linkToObject = objectAdapterLinkToBuilder.with(adapter).linkToAdapter().build();
