@@ -26,6 +26,8 @@ import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
 import org.apache.isis.viewer.json.viewer.representations.LinkToBuilder;
+import org.apache.isis.viewer.json.viewer.resources.domaintypes.DomainTypeRepBuilder;
+import org.apache.isis.viewer.json.viewer.resources.domaintypes.TypeActionRepBuilder;
 
 import com.google.common.collect.Lists;
 
@@ -40,11 +42,29 @@ public class ObjectCollectionRepBuilder extends AbstractObjectMemberRepBuilder<O
 
         putId();
         putMemberType();
+    }
+
+    
+    public JsonRepresentation build() {
         putDisabledReasonIfDisabled();
         
-        withLinks();
-        withExtensions();
+        JsonRepresentation extensions = JsonRepresentation.newMap();
+        putExtensionsIsisProprietary(extensions);
+        withExtensions(extensions );
+        
+        JsonRepresentation links = JsonRepresentation.newArray();
+        addLinksFormalDomainModel(links, resourceContext);
+        addLinksIsisProprietary(links, resourceContext);
+        withLinks(links);
+
+        return representation;
     }
+
+
+    
+    /////////////////////////////////////////////////////
+    // mutators
+    /////////////////////////////////////////////////////
 
     @Override
     public ObjectCollectionRepBuilder withMutatorsIfEnabled() {
@@ -82,11 +102,6 @@ public class ObjectCollectionRepBuilder extends AbstractObjectMemberRepBuilder<O
     }
     
 
-
-    public JsonRepresentation build() {
-        return representation;
-    }
-
     @Override
     protected Object valueRep() {
         ObjectAdapter valueAdapter = objectMember.get(objectAdapter);
@@ -104,5 +119,19 @@ public class ObjectCollectionRepBuilder extends AbstractObjectMemberRepBuilder<O
         
         return list;
     }
+
+    /////////////////////////////////////////////////////
+    // extensions and links
+    /////////////////////////////////////////////////////
+    
+    private void putExtensionsIsisProprietary(JsonRepresentation extensions) {
+    }
+
+    private void addLinksFormalDomainModel(JsonRepresentation links, ResourceContext resourceContext) {
+    }
+
+    private void addLinksIsisProprietary(JsonRepresentation links, ResourceContext resourceContext) {
+    }
+
 
 }
