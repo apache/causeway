@@ -58,6 +58,7 @@ import org.apache.isis.viewer.json.viewer.ResourceContext;
 import org.apache.isis.viewer.json.viewer.representations.AbstractRepresentationBuilder;
 import org.apache.isis.viewer.json.viewer.representations.RepBuilder;
 import org.apache.isis.viewer.json.viewer.resources.ResourceAbstract.Caching;
+import org.apache.isis.viewer.json.viewer.resources.domainobjects.DomainObjectListRepBuilder;
 import org.apache.isis.viewer.json.viewer.resources.domainobjects.DomainObjectRepBuilder;
 import org.apache.isis.viewer.json.viewer.util.OidUtils;
 import org.apache.isis.viewer.json.viewer.util.UrlDecoderUtils;
@@ -162,6 +163,8 @@ public abstract class ResourceAbstract {
 
 	protected String jsonFor(
 			final Collection<ObjectAdapter> collectionAdapters) {
+	    
+	    
 		return jsonFor(Lists.newArrayList(
             Collections2.transform(collectionAdapters, toObjectSelfRepresentation())));
 	}
@@ -259,7 +262,6 @@ public abstract class ResourceAbstract {
         return responseOfOk(representationType, representationBuilder.build(), caching);
     }
 
-    
 
 
     // //////////////////////////////////////////////////////////////
@@ -270,7 +272,7 @@ public abstract class ResourceAbstract {
         return IsisContext.getAuthenticationSession();
     }
     
-    private SpecificationLoader getSpecificationLoader() {
+    protected SpecificationLoader getSpecificationLoader() {
         return IsisContext.getSpecificationLoader();
     }
 

@@ -46,7 +46,9 @@ import org.apache.isis.viewer.json.applib.util.JsonMapper;
 import org.apache.isis.viewer.json.viewer.JsonApplicationException;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
 import org.apache.isis.viewer.json.viewer.representations.AbstractRepresentationBuilder;
+import org.apache.isis.viewer.json.viewer.representations.LinkToBuilder;
 import org.apache.isis.viewer.json.viewer.resources.ResourceAbstract;
+import org.apache.isis.viewer.json.viewer.resources.ResourceAbstract.Caching;
 import org.apache.isis.viewer.json.viewer.util.OidUtils;
 import org.apache.isis.viewer.json.viewer.util.UrlDecoderUtils;
 import org.apache.isis.viewer.json.viewer.util.UrlParserUtils;
@@ -59,6 +61,199 @@ import com.google.common.io.ByteStreams;
 
 public abstract class DomainResourceAbstract extends ResourceAbstract {
 
+    // //////////////////////////////////////////////////////////////
+    // object
+    // //////////////////////////////////////////////////////////////
+
+    protected Response object(final ObjectAdapter objectAdapter) {
+        ResourceContext resourceContext = getResourceContext();
+        final AbstractRepresentationBuilder<?> repBuilder =
+                DomainObjectRepBuilder.newBuilder(resourceContext)
+                        .withAdapter(objectAdapter);
+
+        ResponseBuilder respBuilder = 
+                responseOfOk(RepresentationType.DOMAIN_OBJECT, repBuilder, Caching.NONE);
+
+        Version version = objectAdapter.getVersion();
+        if (version != null && version.getTime() != null) {
+            respBuilder.lastModified(version.getTime());
+        }
+        return respBuilder.build();
+    }
+
+
+    
+    // //////////////////////////////////////////////////////////////
+    // action Prompt
+    // //////////////////////////////////////////////////////////////
+
+    protected Response actionPrompt(final String actionId, final ObjectAdapter serviceAdapter) {
+        final ObjectAction action = getObjectActionThatIsVisibleAndUsable(
+                serviceAdapter, actionId, Intent.ACCESS);
+
+        ObjectActionRepBuilder repBuilder = 
+                ObjectActionRepBuilder.newBuilder(getResourceContext(), serviceAdapter, action)
+                .withDetailsLink()
+                .withMutatorsIfEnabled();
+        
+        return responseOfOk(RepresentationType.OBJECT_ACTION, repBuilder, Caching.NONE)
+                .build();
+    }
+
+    
+    // //////////////////////////////////////////////////////////////
+    // invoke action
+    // //////////////////////////////////////////////////////////////
+
+    enum Intent {
+        ACCESS, MUTATE;
+
+        public boolean isMutate() {
+            return this == MUTATE;
+        }
+    }
+
+    protected Response invokeActionQueryOnly(final ObjectAdapter objectAdapter, final String actionId, final String arguments) {
+        final ObjectAction action = getObjectActionThatIsVisibleAndUsable(
+                objectAdapter, actionId, Intent.ACCESS);
+
+        final ActionSemantics actionSemantics = ActionSemantics.determine(getResourceContext(), action);
+        if(!actionSemantics.isQueryOnly()) {
+            // TODO: reinstate
+//            throw JsonApplicationException.create(HttpStatusCode.METHOD_NOT_ALLOWED,
+//                    "Method not allowed; action '%s' is not query only", action.getId());
+        }
+
+        List<ObjectAdapter> argumentAdapters;
+        try {
+            argumentAdapters = argumentAdaptersFor(action, arguments);
+        } catch (IOException e) {
+            throw JsonApplicationException.create(HttpStatusCode.BAD_REQUEST,
+                    "Action '%s' has query arguments that cannot be parsed as JSON", e, action.getId());
+        }
+
+        int numParameters = action.getParameterCount();
+        int argSize = argumentAdapters.size();
+        if (argSize != numParameters) {
+            throw JsonApplicationException.create(
+                    HttpStatusCode.BAD_REQUEST,
+                    "Action '%s' has %d parameters but received %d arguments",
+                    numParameters, argSize, action.getId());
+        }
+        
+        JsonRepresentation representationWithSelf = representationWithSelfFor(objectAdapter, action);
+        // TODO: append action args to 'self'
+
+        return invokeActionUsingAdapters(objectAdapter, action, argumentAdapters, representationWithSelf);
+    }
+
+    protected Response invokeActionIdempotent(final ObjectAdapter objectAdapter, final String actionId, final InputStream arguments) {
+        final ObjectAction action = getObjectActionThatIsVisibleAndUsable(
+                objectAdapter, actionId, Intent.MUTATE);
+
+        final ActionSemantics actionSemantics = ActionSemantics.determine(getResourceContext(), action);
+        if(actionSemantics.isQueryOnlyOrIdempotent()) {
+            // TODO: reinstate
+//            throw JsonApplicationException.create(
+//                    HttpStatusCode.METHOD_NOT_ALLOWED,
+//                    "Method not allowed; action '%s' is not idempotent", action.getId());
+        }
+
+        List<ObjectAdapter> argumentAdapters = parseBody(action, arguments);
+        JsonRepresentation representationWithSelf = representationWithSelfFor(objectAdapter, action);
+        // TODO: append action args to 'self'
+
+        return invokeActionUsingAdapters(objectAdapter, action,
+                argumentAdapters, representationWithSelf);
+    }
+
+    protected Response invokeAction(final ObjectAdapter objectAdapter, final String actionId, final InputStream body) {
+        final ObjectAction action = getObjectActionThatIsVisibleAndUsable(
+                objectAdapter, actionId, Intent.MUTATE);
+
+        List<ObjectAdapter> argumentAdapters = parseBody(action, body);
+        JsonRepresentation representationWithSelf = representationWithSelfFor(objectAdapter, action);
+        // TODO: append action args to 'self'
+
+        return invokeActionUsingAdapters(objectAdapter, action,
+                argumentAdapters, representationWithSelf);
+    }
+
+    protected Response invokeActionUsingAdapters(
+        final ObjectAdapter objectAdapter,
+        final ObjectAction action,
+        final List<ObjectAdapter> argAdapters, JsonRepresentation representationWithSelf) {
+        
+        // validate
+        List<ObjectActionParameter> parameters = action.getParameters();
+        for (int i = 0; i < parameters.size(); i++) {
+            ObjectActionParameter parameter = parameters.get(i);
+            ObjectAdapter paramAdapter = argAdapters.get(i);
+            if (paramAdapter.getSpecification().containsFacet(ValueFacet.class)) {
+                Object arg = paramAdapter.getObject();
+                String reasonNotValid = parameter.isValid(objectAdapter, arg);
+                if (reasonNotValid != null) {
+                    throw JsonApplicationException.create(HttpStatusCode.NOT_ACCEPTABLE, reasonNotValid);
+                }
+            }
+        }
+        ObjectAdapter[] argArray = argAdapters.toArray(new ObjectAdapter[0]);
+        Consent consent = action.isProposedArgumentSetValid(objectAdapter,
+                argArray);
+        if (consent.isVetoed()) {
+            throw JsonApplicationException.create(HttpStatusCode.NOT_ACCEPTABLE, consent.getReason());
+        }
+
+        // invoke
+        final ObjectAdapter returnedAdapter = action.execute(objectAdapter, argArray);
+
+        // response
+        if (returnedAdapter == null) {
+            return responseOfNoContent(objectAdapter.getVersion()).build();
+        }
+
+        final CollectionFacet collectionFacet = returnedAdapter.getSpecification().getFacet(CollectionFacet.class);
+        if (collectionFacet != null) {
+            final Collection<ObjectAdapter> collectionAdapters = collectionFacet
+                    .collection(returnedAdapter);
+            DomainObjectListRepBuilder repBuilder = DomainObjectListRepBuilder.newBuilder(getResourceContext(), representationWithSelf).withAdapters(collectionAdapters);
+            return responseOfOk(RepresentationType.LIST, repBuilder, Caching.NONE).build();
+        }
+
+        final EncodableFacet encodableFacet = returnedAdapter.getSpecification().getFacet(EncodableFacet.class);
+        if(encodableFacet != null) {
+            ScalarRepBuilder repBuilder = ScalarRepBuilder.newBuilder(getResourceContext(), representationWithSelf).withAdapter(objectAdapter);
+            return responseOfOk(RepresentationType.SCALAR_VALUE, repBuilder, Caching.NONE).build();
+        }
+
+        return object(returnedAdapter);
+    }
+
+
+    private JsonRepresentation representationWithSelfFor(final ObjectAdapter objectAdapter, final ObjectAction action) {
+        JsonRepresentation representation = JsonRepresentation.newMap();
+        String oid = getOidStr(objectAdapter);
+        representation.mapPut("self", LinkToBuilder.newBuilder(getResourceContext(), "self", "objects/%s/actions/%s/invoke", oid, action.getId()).build());
+        return representation;
+    }
+
+
+    private List<ObjectAdapter> argumentAdaptersFor(ObjectAction action,
+        String arguments) throws JsonParseException, JsonMappingException, IOException {
+
+        List<ObjectAdapter> argumentAdapters = Lists.newArrayList();
+        // List<ObjectActionParameter> parameters = action.getParameters();
+        // for (int i = 0; i < parameters.size(); i++) {
+        // ObjectActionParameter parameter = parameters.get(i);
+        // ObjectSpecification paramSpc = parameter.getSpecification();
+        // String argument = arguments.get(i);
+        // argumentAdapters.add(objectAdapterFor(paramSpc, argument));
+        // }
+        //
+        return argumentAdapters;
+    }
+
+    
     // //////////////////////////////////////////////////////////////
     // objectAdapterFor
     // //////////////////////////////////////////////////////////////
@@ -246,135 +441,7 @@ public abstract class DomainResourceAbstract extends ResourceAbstract {
 
 
     
-    // //////////////////////////////////////////////////////////////
-    // invoke action
-    // //////////////////////////////////////////////////////////////
-
-    enum Intent {
-        ACCESS, MUTATE;
-
-        public boolean isMutate() {
-            return this == MUTATE;
-        }
-    }
-
-    protected Response invokeActionQueryOnly(final ObjectAdapter objectAdapter, final String actionId, final String arguments) {
-        final ObjectAction action = getObjectActionThatIsVisibleAndUsable(
-                objectAdapter, actionId, Intent.ACCESS);
-
-        final ActionSemantics actionSemantics = ActionSemantics.determine(getResourceContext(), action);
-        if(!actionSemantics.isQueryOnly()) {
-            // TODO: reinstate
-//            throw JsonApplicationException.create(HttpStatusCode.METHOD_NOT_ALLOWED,
-//                    "Method not allowed; action '%s' is not query only", action.getId());
-        }
-
-        List<ObjectAdapter> argumentAdapters;
-        try {
-            argumentAdapters = argumentAdaptersFor(action, arguments);
-        } catch (IOException e) {
-            throw JsonApplicationException.create(HttpStatusCode.BAD_REQUEST,
-                    "Action '%s' has query arguments that cannot be parsed as JSON", e, action.getId());
-        }
-
-        int numParameters = action.getParameterCount();
-        int argSize = argumentAdapters.size();
-        if (argSize != numParameters) {
-            throw JsonApplicationException.create(
-                    HttpStatusCode.BAD_REQUEST,
-                    "Action '%s' has %d parameters but received %d arguments",
-                    numParameters, argSize, action.getId());
-        }
-
-        return invokeActionUsingAdapters(action, objectAdapter, argumentAdapters);
-    }
-
-    protected Response invokeActionIdempotent(final ObjectAdapter objectAdapter, final String actionId, final InputStream arguments) {
-        final ObjectAction action = getObjectActionThatIsVisibleAndUsable(
-                objectAdapter, actionId, Intent.MUTATE);
-
-        final ActionSemantics actionSemantics = ActionSemantics.determine(getResourceContext(), action);
-        if(actionSemantics.isIdempotent()) {
-            // TODO: reinstate
-//            throw JsonApplicationException.create(
-//                    HttpStatusCode.METHOD_NOT_ALLOWED,
-//                    "Method not allowed; action '%s' is not idempotent", action.getId());
-        }
-
-        List<ObjectAdapter> argumentAdapters = parseBody(action, arguments);
-        return invokeActionUsingAdapters(action, objectAdapter,
-                argumentAdapters);
-    }
-
-    protected Response invokeAction(final ObjectAdapter objectAdapter, final String actionId, final InputStream body) {
-        final ObjectAction action = getObjectActionThatIsVisibleAndUsable(
-                objectAdapter, actionId, Intent.MUTATE);
-
-        List<ObjectAdapter> argumentAdapters = parseBody(action, body);
-        return invokeActionUsingAdapters(action, objectAdapter,
-                argumentAdapters);
-    }
-
-    protected Response invokeActionUsingAdapters(
-        final ObjectAction action,
-        final ObjectAdapter objectAdapter,
-        final List<ObjectAdapter> argAdapters) {
-
-        // validate
-        List<ObjectActionParameter> parameters = action.getParameters();
-        for (int i = 0; i < parameters.size(); i++) {
-            ObjectActionParameter parameter = parameters.get(i);
-            ObjectAdapter paramAdapter = argAdapters.get(i);
-            if (paramAdapter.getSpecification().containsFacet(ValueFacet.class)) {
-                Object arg = paramAdapter.getObject();
-                String reasonNotValid = parameter.isValid(objectAdapter, arg);
-                if (reasonNotValid != null) {
-                    throw JsonApplicationException.create(HttpStatusCode.NOT_ACCEPTABLE, reasonNotValid);
-                }
-            }
-        }
-        ObjectAdapter[] argArray = argAdapters.toArray(new ObjectAdapter[0]);
-        Consent consent = action.isProposedArgumentSetValid(objectAdapter,
-                argArray);
-        if (consent.isVetoed()) {
-            throw JsonApplicationException.create(HttpStatusCode.NOT_ACCEPTABLE, consent.getReason());
-        }
-
-        // invoke
-        final ObjectAdapter returnedAdapter = action.execute(objectAdapter, argArray);
-
-        // response
-        if (returnedAdapter == null) {
-            return responseOfNoContent(objectAdapter.getVersion()).build();
-        }
-
-        final CollectionFacet facet = returnedAdapter.getSpecification().getFacet(CollectionFacet.class);
-        if (facet != null) {
-            final Collection<ObjectAdapter> collectionAdapters = facet
-                    .collection(returnedAdapter);
-            String json = jsonFor(collectionAdapters);
-            return responseOfOk(RepresentationType.LIST, json, Caching.NONE).build();
-        }
-
-        return responseWithRepresentationOf(returnedAdapter);
-    }
-
-
-    private List<ObjectAdapter> argumentAdaptersFor(ObjectAction action,
-        String arguments) throws JsonParseException, JsonMappingException, IOException {
-
-        List<ObjectAdapter> argumentAdapters = Lists.newArrayList();
-        // List<ObjectActionParameter> parameters = action.getParameters();
-        // for (int i = 0; i < parameters.size(); i++) {
-        // ObjectActionParameter parameter = parameters.get(i);
-        // ObjectSpecification paramSpc = parameter.getSpecification();
-        // String argument = arguments.get(i);
-        // argumentAdapters.add(objectAdapterFor(paramSpc, argument));
-        // }
-        //
-        return argumentAdapters;
-    }
-
+    
     // ///////////////////////////////////////////////////////////////////
     // parseBody
     // ///////////////////////////////////////////////////////////////////
@@ -437,26 +504,6 @@ public abstract class DomainResourceAbstract extends ResourceAbstract {
             return argAdapters;
 
         }
-
-    // //////////////////////////////////////////////////////////////
-    // responses
-    // //////////////////////////////////////////////////////////////
-
-    protected Response responseWithRepresentationOf(final ObjectAdapter objectAdapter) {
-        ResourceContext resourceContext = getResourceContext();
-        final AbstractRepresentationBuilder<?> repBuilder =
-                DomainObjectRepBuilder.newBuilder(resourceContext)
-                        .withAdapter(objectAdapter);
-
-        ResponseBuilder respBuilder = responseOfOk(RepresentationType.DOMAIN_OBJECT, repBuilder, Caching.NONE);
-
-        Version version = objectAdapter.getVersion();
-        if (version != null && version.getTime() != null) {
-            respBuilder.lastModified(version.getTime());
-        }
-        return respBuilder.build();
-    }
-
 
     // //////////////////////////////////////////////////////////////
     // misc

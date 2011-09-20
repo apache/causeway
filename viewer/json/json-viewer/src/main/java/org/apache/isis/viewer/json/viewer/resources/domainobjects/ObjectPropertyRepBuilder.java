@@ -38,9 +38,8 @@ public class ObjectPropertyRepBuilder extends AbstractObjectMemberRepBuilder<Obj
 
         putId();
         putMemberType();
+        withValue();
     }
-
-
 
 
     public JsonRepresentation build() {

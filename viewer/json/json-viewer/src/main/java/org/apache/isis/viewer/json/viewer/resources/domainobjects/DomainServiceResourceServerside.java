@@ -127,14 +127,8 @@ public class DomainServiceResourceServerside extends DomainResourceAbstract impl
         init();
 
         final ObjectAdapter serviceAdapter = getServiceAdapter(serviceId);
-        final ObjectAction action = getObjectActionThatIsVisibleAndUsable(
-                serviceAdapter, actionId, Intent.ACCESS);
 
-        ObjectActionRepBuilder repBuilder = ObjectActionRepBuilder.newBuilder(
-                getResourceContext(), serviceAdapter, action);
-        
-        return responseOfOk(RepresentationType.OBJECT_ACTION, repBuilder, Caching.NONE)
-                .build();
+        return actionPrompt(actionId, serviceAdapter);
     }
 
     

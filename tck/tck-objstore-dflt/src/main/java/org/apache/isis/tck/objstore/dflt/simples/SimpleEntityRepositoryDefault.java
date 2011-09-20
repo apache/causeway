@@ -44,6 +44,7 @@ public class SimpleEntityRepositoryDefault extends AbstractEntityRepository<Simp
         SimpleEntity entity = newTransientEntity();
         entity.setName(name);
         entity.setFlag(flag);
+        getContainer().persist(entity);
         return entity;
     }
     

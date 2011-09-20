@@ -40,8 +40,8 @@ import com.google.common.base.Function;
 
 public class DomainObjectRepBuilder extends AbstractRepresentationBuilder<DomainObjectRepBuilder> {
 
-    public static DomainObjectRepBuilder newBuilder(ResourceContext representationContext) {
-        return new DomainObjectRepBuilder(representationContext);
+    public static DomainObjectRepBuilder newBuilder(ResourceContext resourceContext) {
+        return new DomainObjectRepBuilder(resourceContext);
     }
 
     public static LinkToBuilder newLinkToBuilder(ResourceContext resourceContext, String rel, ObjectAdapter elementAdapter) {
