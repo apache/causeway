@@ -17,6 +17,8 @@
 package org.apache.isis.viewer.json.viewer.resources.domainobjects;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -26,8 +28,12 @@ import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
 import org.apache.isis.viewer.json.viewer.resources.domaintypes.DomainTypeRepBuilder;
 import org.apache.isis.viewer.json.viewer.resources.domaintypes.TypeActionRepBuilder;
+import org.codehaus.jackson.JsonNode;
+import org.codehaus.jackson.node.NullNode;
+import org.jboss.resteasy.util.GetRestful;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 
 public class ObjectActionRepBuilder extends AbstractObjectMemberRepBuilder<ObjectActionRepBuilder, ObjectAction> {
 
@@ -43,6 +49,7 @@ public class ObjectActionRepBuilder extends AbstractObjectMemberRepBuilder<Objec
     }
 
 
+    
      private void putExtensionsIsisProprietary(JsonRepresentation extensions) {
         extensions.mapPut("actionType", objectMember.getType());
         withExtensions(extensions );
@@ -63,6 +70,35 @@ public class ObjectActionRepBuilder extends AbstractObjectMemberRepBuilder<Objec
        
         withLinks(links);
     }
+
+    @Override
+    public ObjectActionRepBuilder withMutatorsIfEnabled() {
+        if(usability().isVetoed()) {
+            return cast(this);
+        }
+        Map<String, MutatorSpec> mutators = memberType.getMutators();
+        final ActionSemantics semantics = ActionSemantics.determine(this.resourceContext, objectMember);
+        
+        final String mutator = semantics.getInvokeKey();
+        final MutatorSpec mutatorSpec = mutators.get(mutator);
+        appendMutator(mutator, mutatorSpec);
+        
+        return cast(this);
+    }
+
+    protected void appendMutator(String mutator, MutatorSpec mutatorSpec) {
+        if(hasMemberFacet(mutatorSpec.mutatorFacetType)) {
+            
+            JsonRepresentation arguments = mutatorArgs(mutatorSpec);
+            JsonRepresentation detailsLink = 
+                    linkToBuilder.linkToMember(mutator, memberType, objectMember, mutatorSpec.suffix)
+                    .withHttpMethod(mutatorSpec.httpMethod)
+                    .withArguments(arguments)
+                    .build();
+            representation.mapPut(mutator, detailsLink);
+        }
+    }
+
 
     public JsonRepresentation build() {
 
@@ -140,12 +176,13 @@ public class ObjectActionRepBuilder extends AbstractObjectMemberRepBuilder<Objec
 	}
 
 	@Override
-	protected JsonRepresentation appendMutatorArgs(MutatorSpec mutatorSpec) {
-	    JsonRepresentation argList = JsonRepresentation.newArray();
+	protected JsonRepresentation mutatorArgs(MutatorSpec mutatorSpec) {
+	    JsonRepresentation argMap = JsonRepresentation.newMap();
+	    List<ObjectActionParameter> parameters = objectMember.getParameters();
         for(int i=0; i<objectMember.getParameterCount(); i++) {
-            argList.arrayAdd(argValueFor(i)); 
+            argMap.mapPut(parameters.get(i).getName(), argValueFor(i)); 
         }
-        return argList;
+        return argMap;
     }
 
 	private Object argValueFor(int i) {
@@ -155,7 +192,7 @@ public class ObjectActionRepBuilder extends AbstractObjectMemberRepBuilder<Objec
     			return DomainObjectRepBuilder.newLinkToBuilder(resourceContext, "object", objectAdapter).build();
     		}
     	}
-    	return "{value}";
+    	return NullNode.instance;
 	}
 
 }

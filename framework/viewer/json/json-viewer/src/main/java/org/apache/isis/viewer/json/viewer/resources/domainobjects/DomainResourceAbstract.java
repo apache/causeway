@@ -262,9 +262,11 @@ public abstract class DomainResourceAbstract extends ResourceAbstract {
         final ObjectAction action = getObjectActionThatIsVisibleAndUsable(
                 objectAdapter, actionId, Intent.ACCESS);
 
-        if (!isQueryOnly(action)) {
-            throw JsonApplicationException.create(HttpStatusCode.METHOD_NOT_ALLOWED,
-                    "Method not allowed; action '%s' is not query only", action.getId());
+        final ActionSemantics actionSemantics = ActionSemantics.determine(getResourceContext(), action);
+        if(!actionSemantics.isQueryOnly()) {
+            // TODO: reinstate
+//            throw JsonApplicationException.create(HttpStatusCode.METHOD_NOT_ALLOWED,
+//                    "Method not allowed; action '%s' is not query only", action.getId());
         }
 
         List<ObjectAdapter> argumentAdapters;
@@ -291,10 +293,12 @@ public abstract class DomainResourceAbstract extends ResourceAbstract {
         final ObjectAction action = getObjectActionThatIsVisibleAndUsable(
                 objectAdapter, actionId, Intent.MUTATE);
 
-        if (!isIdempotent(action)) {
-            throw JsonApplicationException.create(
-                    HttpStatusCode.METHOD_NOT_ALLOWED,
-                    "Method not allowed; action '%s' is not idempotent", action.getId());
+        final ActionSemantics actionSemantics = ActionSemantics.determine(getResourceContext(), action);
+        if(actionSemantics.isIdempotent()) {
+            // TODO: reinstate
+//            throw JsonApplicationException.create(
+//                    HttpStatusCode.METHOD_NOT_ALLOWED,
+//                    "Method not allowed; action '%s' is not idempotent", action.getId());
         }
 
         List<ObjectAdapter> argumentAdapters = parseBody(action, arguments);
@@ -311,7 +315,8 @@ public abstract class DomainResourceAbstract extends ResourceAbstract {
                 argumentAdapters);
     }
 
-    protected Response invokeActionUsingAdapters(final ObjectAction action,
+    protected Response invokeActionUsingAdapters(
+        final ObjectAction action,
         final ObjectAdapter objectAdapter,
         final List<ObjectAdapter> argAdapters) {
 
@@ -354,16 +359,6 @@ public abstract class DomainResourceAbstract extends ResourceAbstract {
         return responseWithRepresentationOf(returnedAdapter);
     }
 
-
-    private boolean isQueryOnly(final ObjectAction action) {
-        // TODO: determine whether action is query only
-        return true;
-    }
-
-    private boolean isIdempotent(final ObjectAction action) {
-        // TODO: determine whether action is idempotent
-        return true;
-    }
 
     private List<ObjectAdapter> argumentAdaptersFor(ObjectAction action,
         String arguments) throws JsonParseException, JsonMappingException, IOException {

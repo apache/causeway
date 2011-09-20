@@ -17,6 +17,7 @@
 package org.apache.isis.viewer.json.viewer.resources.domainobjects;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -42,6 +43,42 @@ public class ObjectPropertyRepBuilder extends AbstractObjectMemberRepBuilder<Obj
         withLinks();
         withExtensions();
     }
+
+    
+    @Override
+    public ObjectPropertyRepBuilder withMutatorsIfEnabled() {
+        if(usability().isVetoed()) {
+            return cast(this);
+        }
+        Map<String, MutatorSpec> mutators = memberType.getMutators();
+        for(String mutator: mutators.keySet()) {
+            MutatorSpec mutatorSpec = mutators.get(mutator);
+            if(hasMemberFacet(mutatorSpec.mutatorFacetType)) {
+                
+                JsonRepresentation arguments = mutatorArgs(mutatorSpec);
+                JsonRepresentation detailsLink = 
+                        linkToBuilder.linkToMember(mutator, memberType, objectMember, mutatorSpec.suffix)
+                        .withHttpMethod(mutatorSpec.httpMethod)
+                        .withArguments(arguments)
+                        .build();
+                representation.mapPut(mutator, detailsLink);
+            }
+        }
+        return cast(this);
+    }
+
+    protected JsonRepresentation mutatorArgs(MutatorSpec mutatorSpec) {
+        final JsonRepresentation repr = JsonRepresentation.newMap();
+        if(mutatorSpec.arguments.isNone()) {
+            return repr;
+        }
+        if(mutatorSpec.arguments.isOne()) {
+            JsonRepresentation argValues = JsonRepresentation.newArray(1);
+            return argValues;
+        }
+        throw new UnsupportedOperationException("should be overridden if bodyArgs is not 0 or 1");
+    }
+
 
     public JsonRepresentation build() {
         return representation;

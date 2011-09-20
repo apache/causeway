@@ -21,7 +21,6 @@ import org.apache.isis.viewer.json.viewer.representations.HttpMethod;
 
 public class MutatorSpec {
 
-    
     public static MutatorSpec of(Class<? extends Facet> validationFacetType, Class<? extends Facet> mutatorFacetType, HttpMethod httpMethod, BodyArgs argSpec) {
         return of(validationFacetType, mutatorFacetType, httpMethod, argSpec, null);
     }

@@ -147,6 +147,7 @@ public class ObjectActionParameterAbstractTest_getName {
         assertThat(objectActionParameter.getName(), is("someParameterName"));
     }
 
+    @SuppressWarnings("unchecked")
     @Test
     public void whenNamedFaceNotPresentAndOnlyOneParamOfType() throws Exception {
 
