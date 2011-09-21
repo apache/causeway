@@ -16,24 +16,16 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.json.viewer.util;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+package org.apache.isis.core.progmodel.facets.actions.queryonly;
 
-import org.apache.isis.viewer.json.applib.JsonRepresentation;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.actions.idempotent.IdempotentFacetAbstract;
 
-public final class UrlParserUtils {
+public class IdempotentFacetInferredFromQueryOnly extends IdempotentFacetAbstract {
 
-    private final static Pattern OBJECT_OID = Pattern.compile(".*objects\\/(.+)");;
-
-	public final static String oidFromLink(final JsonRepresentation link) {
-		String href = link.getString("href");
-		Matcher matcher = OBJECT_OID.matcher(href);
-		if(!matcher.matches()) {
-			return null;
-		}
-		return matcher.group(1);
+    public IdempotentFacetInferredFromQueryOnly(final FacetHolder holder) {
+        super(holder);
     }
 
 }

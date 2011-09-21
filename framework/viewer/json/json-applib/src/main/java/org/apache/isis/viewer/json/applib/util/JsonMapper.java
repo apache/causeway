@@ -83,7 +83,7 @@ public final class JsonMapper {
         @Override
         public void serialize(Object value, JsonGenerator jgen, SerializerProvider provider) throws IOException, JsonProcessingException {
             JsonRepresentation jsonRepresentation = (JsonRepresentation) value;
-            JsonNode jsonNode = jsonRepresentation.getJsonNode();
+            JsonNode jsonNode = jsonRepresentation.asJsonNode();
             jgen.writeTree(jsonNode);
         }
     }
@@ -124,12 +124,12 @@ public final class JsonMapper {
         return read(json, ArrayList.class);
     }
 
-    public <T> T read(String json, Class<T> requiredType) throws JsonParseException, JsonMappingException, IOException {
-        return (T) objectMapper.readValue(json, requiredType);        
+    public JsonRepresentation read(String json) throws JsonParseException, JsonMappingException, IOException {
+        return read(json, JsonRepresentation.class);
     }
 
-    public String write(Object object) throws JsonGenerationException, JsonMappingException, IOException {
-        return objectMapper.writeValueAsString(object);
+    public <T> T read(String json, Class<T> requiredType) throws JsonParseException, JsonMappingException, IOException {
+        return (T) objectMapper.readValue(json, requiredType);        
     }
 
     public <T> T read(Response response, Class<T> requiredType) throws JsonParseException, JsonMappingException, IOException {
@@ -143,6 +143,10 @@ public final class JsonMapper {
         String entity = (String) entityObj;
 
         return read(entity, requiredType);
+    }
+
+    public String write(Object object) throws JsonGenerationException, JsonMappingException, IOException {
+        return objectMapper.writeValueAsString(object);
     }
 
 }

@@ -83,7 +83,7 @@ public class RepresentationMatchers {
 
             @Override
             public boolean matchesSafely(T item) {
-                return item != null && item.isValue() && item.getJsonNode().isTextual();
+                return item != null && item.isValue() && item.asJsonNode().isTextual();
             }
         };
     }

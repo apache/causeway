@@ -37,6 +37,7 @@ import javax.ws.rs.core.UriInfo;
 import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapterLookup;
 import org.apache.isis.core.metamodel.adapter.oid.stringable.OidStringifier;
 import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
@@ -130,7 +131,7 @@ public abstract class ResourceAbstract {
     protected void init() {
         this.resourceContext =
             new ResourceContext(httpHeaders, uriInfo, request, httpServletRequest, httpServletResponse, securityContext, 
-                    getOidStringifier(), getLocalization(), getAuthenticationSession());
+                    getOidStringifier(), getLocalization(), getAuthenticationSession(), getAdapterManager());
         checkAcceptHeader();
     }
 
@@ -206,7 +207,7 @@ public abstract class ResourceAbstract {
 
     protected ObjectAdapter getObjectAdapter(final String oidEncodedStr) {
 
-        final ObjectAdapter objectAdapter = OidUtils.getObjectAdapter(oidEncodedStr, getOidStringifier());
+        final ObjectAdapter objectAdapter = OidUtils.getObjectAdapter(resourceContext, oidEncodedStr);
         
         if (objectAdapter == null) {
             final String oidStr = UrlDecoderUtils.urlDecode(oidEncodedStr);
@@ -230,7 +231,7 @@ public abstract class ResourceAbstract {
 
 
     protected String getOidStr(final ObjectAdapter objectAdapter) {
-        return OidUtils.getOidStr(objectAdapter, getOidStringifier());
+        return OidUtils.getOidStr(resourceContext, objectAdapter);
     }
 
 

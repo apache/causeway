@@ -76,22 +76,22 @@ public class ObjectActionRepBuilder extends AbstractObjectMemberRepBuilder<Objec
         
         final String mutator = semantics.getInvokeKey();
         final MutatorSpec mutatorSpec = mutators.get(mutator);
-        appendMutator(mutator, mutatorSpec);
+        appendInvokeLink(mutatorSpec);
         
         return cast(this);
     }
 
-    protected void appendMutator(String mutator, MutatorSpec mutatorSpec) {
-        if(hasMemberFacet(mutatorSpec.mutatorFacetType)) {
-            
-            JsonRepresentation arguments = mutatorArgs(mutatorSpec);
-            JsonRepresentation detailsLink = 
-                    linkToBuilder.linkToMember(mutator, memberType, objectMember, mutatorSpec.suffix)
-                    .withHttpMethod(mutatorSpec.httpMethod)
-                    .withArguments(arguments)
-                    .build();
-            representation.mapPut(mutator, detailsLink);
-        }
+    private void appendInvokeLink(MutatorSpec mutatorSpec) {
+        if(!hasMemberFacet(mutatorSpec.mutatorFacetType)) {
+            return;
+        } 
+        JsonRepresentation arguments = mutatorArgs(mutatorSpec);
+        JsonRepresentation detailsLink = 
+                linkToBuilder.linkToMember("invoke", memberType, objectMember, mutatorSpec.suffix)
+                .withHttpMethod(mutatorSpec.httpMethod)
+                .withArguments(arguments)
+                .build();
+        representation.mapPut("invoke", detailsLink);
     }
     
 	private ObjectAdapter contributingServiceAdapter() {
@@ -189,6 +189,9 @@ public class ObjectActionRepBuilder extends AbstractObjectMemberRepBuilder<Objec
 	
     private void putExtensionsIsisProprietary(JsonRepresentation extensions) {
         extensions.mapPut("actionType", objectMember.getType());
+        
+        final ActionSemantics semantics = ActionSemantics.determine(resourceContext, objectMember);
+        extensions.mapPut("actionSemantics", semantics.name());
     }
 
      private void addLinksFormalDomainModel(JsonRepresentation links, ResourceContext resourceContext) {

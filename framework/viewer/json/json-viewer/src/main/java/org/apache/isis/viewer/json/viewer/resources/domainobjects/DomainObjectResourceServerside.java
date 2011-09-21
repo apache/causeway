@@ -117,8 +117,9 @@ public class DomainObjectResourceServerside extends DomainResourceAbstract imple
                 objectAdapter, propertyId, Intent.MUTATE);
 
         ObjectSpecification propertySpec = property.getSpecification();
+        String bodyAsString = asStringUtf8(body);
 
-        ObjectAdapter argAdapter = parseBody(propertySpec, body);
+        ObjectAdapter argAdapter = parseBodyAsMapWithSingleValue(propertySpec, bodyAsString);
 
         Consent consent = property.isAssociationValid(objectAdapter, argAdapter);
         if (consent.isVetoed()) {
@@ -201,7 +202,8 @@ public class DomainObjectResourceServerside extends DomainResourceAbstract imple
         }
 
         ObjectSpecification collectionSpec = collection.getSpecification();
-        ObjectAdapter argAdapter = parseBody(collectionSpec, body);
+        String bodyAsString = asStringUtf8(body);
+        ObjectAdapter argAdapter = parseBodyAsMapWithSingleValue(collectionSpec, bodyAsString);
 
         Consent consent = collection.isValidToAdd(objectAdapter, argAdapter);
         if (consent.isVetoed()) {
@@ -235,7 +237,8 @@ public class DomainObjectResourceServerside extends DomainResourceAbstract imple
         }
 
         ObjectSpecification collectionSpec = collection.getSpecification();
-        ObjectAdapter argAdapter = parseBody(collectionSpec, body);
+        String bodyAsString = asStringUtf8(body);
+        ObjectAdapter argAdapter = parseBodyAsMapWithSingleValue(collectionSpec, bodyAsString);
 
         Consent consent = collection.isValidToAdd(objectAdapter, argAdapter);
         if (consent.isVetoed()) {
@@ -262,7 +265,8 @@ public class DomainObjectResourceServerside extends DomainResourceAbstract imple
                 objectAdapter, collectionId, Intent.MUTATE);
 
         ObjectSpecification collectionSpec = collection.getSpecification();
-        ObjectAdapter argAdapter = parseBody(collectionSpec, body);
+        String bodyAsString = asStringUtf8(body);
+        ObjectAdapter argAdapter = parseBodyAsMapWithSingleValue(collectionSpec, bodyAsString);
 
         Consent consent = collection.isValidToRemove(objectAdapter, argAdapter);
         if (consent.isVetoed()) {

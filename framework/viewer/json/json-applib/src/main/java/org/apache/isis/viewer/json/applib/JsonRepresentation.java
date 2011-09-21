@@ -118,7 +118,7 @@ public class JsonRepresentation {
         this.jsonNode = jsonNode;
     }
 
-    public JsonNode getJsonNode() {
+    public JsonNode asJsonNode() {
         return jsonNode;
     }
 
@@ -227,6 +227,18 @@ public class JsonRepresentation {
         return node.getDoubleValue();
     }
 
+    public boolean isString(String path) {
+        return isString(getNode(path));
+    }
+
+    public boolean isString() {
+        return isString(asJsonNode());
+    }
+
+    private boolean isString(JsonNode node) {
+        return !representsNull(node) && node.isValueNode() && node.isTextual();
+    }
+
     public String getString(String path) {
         JsonNode node = getNode(path);
         if (representsNull(node)) {
@@ -235,6 +247,24 @@ public class JsonRepresentation {
         checkValue(path, node, "a string");
         if (!node.isTextual()) {
             throw new IllegalArgumentException("'" + path + "' (" + node.toString() + ") is not a string");
+        }
+        return node.getTextValue();
+    }
+
+    public String asString() {
+        JsonNode node = asJsonNode();
+        if (representsNull(node)) {
+            return null;
+        }
+        
+        if (node.isArray()) {
+            throw new IllegalArgumentException("is an array, not a string");
+        }
+        if (!node.isValueNode()) {
+            throw new IllegalArgumentException("is a map, not a string");
+        }
+        if (!node.isTextual()) {
+            throw new IllegalArgumentException("is a value but is not a string");
         }
         return node.getTextValue();
     }
@@ -347,18 +377,61 @@ public class JsonRepresentation {
         return link;
     }
 
+    public Link asLink() {
+        JsonNode node = asJsonNode();
+        if (representsNull(node)) {
+            return null;
+        }
+
+        if (node.isArray()) {
+            throw new IllegalArgumentException("is an array, does not represent a link");
+        }
+        if (node.isValueNode()) {
+            throw new IllegalArgumentException("is a value, does not represent a link");
+        }
+
+        Link link = new Link(node);
+        if(link.getHref() == null || link.getRel() == null) {
+            throw new IllegalArgumentException("is a map but does not fully represent a link");
+        }
+        return link;
+    }
+
+
+    public boolean isLink() {
+        return isLink(asJsonNode());
+    }
+
+    public boolean isLink(String path) {
+        return isLink(getNode(path));
+    }
+
+    public boolean isLink(JsonNode node) {
+        if (representsNull(node)) {
+            return false;
+        }
+        if(node.isArray() || node.isValueNode()) {
+            return false;
+        }
+
+        Link link = new Link(node);
+        if(link.getHref() == null || link.getRel() == null) {
+            return false;
+        }
+        return true;
+    }
+
     /**
      * Convert a representation that contains a single node representing a link
      * into a {@link Link}.
      */
-    public Link asLink() {
-        if(getJsonNode().size() != 1) {
+    public Link mapValueAsLink() {
+        if(asJsonNode().size() != 1) {
             throw new IllegalStateException("does not represent link");
         }
-        String linkPropertyName = getJsonNode().getFieldNames().next();
+        String linkPropertyName = asJsonNode().getFieldNames().next();
         return getLink(linkPropertyName);
     }
-
 
     /**
      * Convert underlying representation into an array.
@@ -367,7 +440,7 @@ public class JsonRepresentation {
         if(!isArray()) {
             throw new IllegalStateException("does not represent array");
         }
-        return (ArrayNode) getJsonNode();
+        return (ArrayNode) asJsonNode();
     }
 
     /**
@@ -377,7 +450,7 @@ public class JsonRepresentation {
         if(!isMap()) {
             throw new IllegalStateException("does not represent map");
         }
-        return (ObjectNode) getJsonNode();
+        return (ObjectNode) asJsonNode();
     }
 
 
@@ -474,7 +547,7 @@ public class JsonRepresentation {
 
 
     public String asUrlEncoded() {
-        return JsonNodeUtils.asUrlEncoded(getJsonNode());
+        return JsonNodeUtils.asUrlEncoded(asJsonNode());
     }
 
 
@@ -494,7 +567,7 @@ public class JsonRepresentation {
         if(!isArray()) {
             throw new IllegalStateException("does not represent array");
         }
-        nodeAsArray().add(value.getJsonNode());
+        nodeAsArray().add(value.asJsonNode());
     }
 
     public void arrayAdd(String value) {
@@ -589,7 +662,7 @@ public class JsonRepresentation {
         }
         // can safely downcast because *this* representation is an array
         ArrayNode arrayNode = (ArrayNode)jsonNode;
-        arrayNode.set(i, objectRepr.getJsonNode());
+        arrayNode.set(i, objectRepr.asJsonNode());
     }
 
     private void ensureIsAnArrayAtLeastAsLargeAs(int i) {
@@ -629,7 +702,7 @@ public class JsonRepresentation {
         if(node.has(path.getTail())) {
             throw new IllegalStateException("already has key " + key);
         }
-        node.put(path.getTail(), value.getJsonNode());
+        node.put(path.getTail(), value.asJsonNode());
     }
 
     public void mapPut(String key, String value) {
@@ -737,5 +810,7 @@ public class JsonRepresentation {
     public String toString() {
         return jsonNode.toString();
     }
+
+
 
 }

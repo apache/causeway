@@ -20,37 +20,23 @@ package org.apache.isis.viewer.json.viewer.util;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
-import org.apache.isis.core.metamodel.adapter.oid.stringable.OidStringifier;
-import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
-import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
-import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
+import org.apache.isis.viewer.json.viewer.ResourceContext;
 
 public final class OidUtils {
 
     private OidUtils() {
     }
 
-    public static ObjectAdapter getObjectAdapter(final String oidEncodedStr, final OidStringifier oidStringifier) {
+    public static ObjectAdapter getObjectAdapter(ResourceContext resourceContext, final String oidEncodedStr) {
         final String oidStr = UrlDecoderUtils.urlDecode(oidEncodedStr);
-        final Oid oid = oidStringifier.deString(oidStr);
-        return getAdapterManager().getAdapterFor(oid);
+        final Oid oid = resourceContext.getOidStringifier().deString(oidStr);
+        return resourceContext.getAdapterManager().getAdapterFor(oid);
     }
 
-    public static String getOidStr(final ObjectAdapter objectAdapter, final OidStringifier oidStringifier) {
+    public static String getOidStr(ResourceContext resourceContext, final ObjectAdapter objectAdapter) {
         final Oid oid = objectAdapter.getOid();
-        return oid != null ? oidStringifier.enString(oid) : null;
+        return oid != null ? resourceContext.getOidStringifier().enString(oid) : null;
     }
 
-    // //////////////////////////////////////////////////////////////
-    // Dependencies (from singletons)
-    // //////////////////////////////////////////////////////////////
-
-    public static AdapterManager getAdapterManager() {
-        return getPersistenceSession().getAdapterManager();
-    }
-
-    protected static PersistenceSession getPersistenceSession() {
-        return IsisContext.getPersistenceSession();
-    }
 
 }
