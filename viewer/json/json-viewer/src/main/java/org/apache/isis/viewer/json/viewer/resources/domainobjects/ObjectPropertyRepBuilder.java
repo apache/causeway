@@ -24,6 +24,8 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
+import org.apache.isis.viewer.json.viewer.resources.domaintypes.DomainTypeRepBuilder;
+import org.apache.isis.viewer.json.viewer.resources.domaintypes.TypePropertyRepBuilder;
 
 import com.google.common.collect.Lists;
 
@@ -142,9 +144,11 @@ public class ObjectPropertyRepBuilder extends AbstractObjectMemberRepBuilder<Obj
     }
 
     private void addLinksFormalDomainModel(JsonRepresentation links, ResourceContext resourceContext) {
+        links.arrayAdd(TypePropertyRepBuilder.newLinkToBuilder(resourceContext, "typeProperty", objectAdapter.getSpecification(), objectMember).build());
     }
 
     private void addLinksIsisProprietary(JsonRepresentation links, ResourceContext resourceContext) {
+        links.arrayAdd(DomainTypeRepBuilder.newLinkToBuilder(resourceContext, "domainType", objectAdapter.getSpecification()).build());
     }
 
 }

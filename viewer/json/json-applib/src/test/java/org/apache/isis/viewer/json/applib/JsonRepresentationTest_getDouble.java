@@ -56,7 +56,7 @@ public class JsonRepresentationTest_getDouble {
             jsonRepresentation.getDouble("aString");
             fail();
         } catch (IllegalArgumentException e) {
-            assertThat(e.getMessage(), is("'aString' (\"aStringValue\") is not a double"));
+            assertThat(e.getMessage(), is("'aString' is not a double"));
         }
     }
 

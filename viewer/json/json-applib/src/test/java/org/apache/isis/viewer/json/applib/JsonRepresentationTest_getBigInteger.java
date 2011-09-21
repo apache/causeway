@@ -57,7 +57,7 @@ public class JsonRepresentationTest_getBigInteger {
             jsonRepresentation.getBigInteger("aString");
             fail();
         } catch (IllegalArgumentException e) {
-            assertThat(e.getMessage(), is("'aString' (\"aStringValue\") is not a biginteger"));
+            assertThat(e.getMessage(), is("'aString' is not a biginteger"));
         }
     }
 

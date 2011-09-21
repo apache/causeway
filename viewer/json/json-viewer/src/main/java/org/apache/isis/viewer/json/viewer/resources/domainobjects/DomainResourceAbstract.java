@@ -91,7 +91,7 @@ public abstract class DomainResourceAbstract extends ResourceAbstract {
 
         ObjectActionRepBuilder repBuilder = 
                 ObjectActionRepBuilder.newBuilder(getResourceContext(), serviceAdapter, action)
-                .withDetailsLink()
+                .withSelf()
                 .withMutatorsIfEnabled();
         
         return responseOfOk(RepresentationType.OBJECT_ACTION, repBuilder, Caching.NONE)
@@ -290,6 +290,15 @@ public abstract class DomainResourceAbstract extends ResourceAbstract {
         
         // value (encodable)
         if (objectSpec.isEncodeable()) {
+            
+            // special case handling for JSON built-ins
+            final Class<?> specClass = objectSpec.getCorrespondingClass();
+            if(specClass == boolean.class || specClass == Boolean.class) {
+                if(representation.isBoolean()) {
+                    
+                }
+            }
+            
             EncodableFacet encodableFacet = objectSpec.getFacet(EncodableFacet.class);
             if(!representation.isString()) {
                 throw new ExpectedStringRepresentingValueException();

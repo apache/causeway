@@ -56,7 +56,7 @@ public class JsonRepresentationTest_getLong {
             jsonRepresentation.getLong("aString");
             fail();
         } catch (IllegalArgumentException e) {
-            assertThat(e.getMessage(), is("'aString' (\"aStringValue\") is not a long"));
+            assertThat(e.getMessage(), is("'aString' is not a long"));
         }
     }
 
