@@ -25,11 +25,13 @@ import org.apache.isis.core.progmodel.facets.actions.defaults.method.ActionDefau
 import org.apache.isis.core.progmodel.facets.actions.executed.annotation.ExecutedAnnotationFacetFactory;
 import org.apache.isis.core.progmodel.facets.actions.executed.prefix.ExecutedViaNamingConventionFacetFactory;
 import org.apache.isis.core.progmodel.facets.actions.exploration.annotation.ExplorationAnnotationFacetFactory;
+import org.apache.isis.core.progmodel.facets.actions.idempotent.IdempotentAnnotationFacetFactory;
 import org.apache.isis.core.progmodel.facets.actions.invoke.ActionInvocationFacetFactory;
 import org.apache.isis.core.progmodel.facets.actions.notcontributed.annotation.NotContributedAnnotationFacetFactory;
 import org.apache.isis.core.progmodel.facets.actions.notinservicemenu.annotation.NotInServiceMenuAnnotationFacetFactory;
 import org.apache.isis.core.progmodel.facets.actions.notinservicemenu.method.NotInServiceMenuMethodFacetFactory;
 import org.apache.isis.core.progmodel.facets.actions.prototype.annotation.PrototypeAnnotationFacetFactory;
+import org.apache.isis.core.progmodel.facets.actions.queryonly.QueryOnlyAnnotationFacetFactory;
 import org.apache.isis.core.progmodel.facets.actions.typeof.annotation.TypeOfAnnotationForActionsFacetFactory;
 import org.apache.isis.core.progmodel.facets.actions.validate.method.ActionValidationFacetViaValidateMethodFacetFactory;
 import org.apache.isis.core.progmodel.facets.collections.accessor.CollectionAccessorFacetFactory;
@@ -221,6 +223,8 @@ public class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract {
         addFactory(ActionParameterChoicesFacetFactory.class);
         addFactory(ActionDefaultsFacetFactory.class);
         addFactory(ActionParameterDefaultsFacetFactory.class);
+        addFactory(QueryOnlyAnnotationFacetFactory.class);
+        addFactory(IdempotentAnnotationFacetFactory.class);
 
         // members in general
         addFactory(NamedFacetViaNameMethodFacetFactory.class);
