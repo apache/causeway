@@ -44,7 +44,7 @@ public class ArgumentNode extends JsonRepresentation {
     
     public static ArgumentNode argOf(Link value) {
         ObjectNode objectNode = newValue();
-        objectNode.put("value", value.getJsonNode());
+        objectNode.put("value", value.asJsonNode());
         return new ArgumentNode(objectNode);
     }
 

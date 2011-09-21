@@ -20,7 +20,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
@@ -42,13 +41,12 @@ import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.applib.RepresentationType;
 import org.apache.isis.viewer.json.applib.RestfulResponse.HttpStatusCode;
-import org.apache.isis.viewer.json.applib.util.JsonMapper;
+import org.apache.isis.viewer.json.applib.blocks.Link;
 import org.apache.isis.viewer.json.viewer.JsonApplicationException;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
 import org.apache.isis.viewer.json.viewer.representations.AbstractRepresentationBuilder;
 import org.apache.isis.viewer.json.viewer.representations.LinkToBuilder;
 import org.apache.isis.viewer.json.viewer.resources.ResourceAbstract;
-import org.apache.isis.viewer.json.viewer.resources.ResourceAbstract.Caching;
 import org.apache.isis.viewer.json.viewer.util.OidUtils;
 import org.apache.isis.viewer.json.viewer.util.UrlDecoderUtils;
 import org.apache.isis.viewer.json.viewer.util.UrlParserUtils;
@@ -113,15 +111,17 @@ public abstract class DomainResourceAbstract extends ResourceAbstract {
         }
     }
 
-    protected Response invokeActionQueryOnly(final ObjectAdapter objectAdapter, final String actionId, final String arguments) {
+    protected Response invokeActionQueryOnly(
+            final ObjectAdapter objectAdapter, 
+            final String actionId, 
+            final String arguments) {
         final ObjectAction action = getObjectActionThatIsVisibleAndUsable(
                 objectAdapter, actionId, Intent.ACCESS);
 
         final ActionSemantics actionSemantics = ActionSemantics.determine(getResourceContext(), action);
         if(!actionSemantics.isQueryOnly()) {
-            // TODO: reinstate
-//            throw JsonApplicationException.create(HttpStatusCode.METHOD_NOT_ALLOWED,
-//                    "Method not allowed; action '%s' is not query only", action.getId());
+            throw JsonApplicationException.create(HttpStatusCode.METHOD_NOT_ALLOWED,
+                    "Method not allowed; action '%s' is not query only", action.getId());
         }
 
         List<ObjectAdapter> argumentAdapters;
@@ -141,27 +141,30 @@ public abstract class DomainResourceAbstract extends ResourceAbstract {
                     numParameters, argSize, action.getId());
         }
         
-        JsonRepresentation representationWithSelf = representationWithSelfFor(objectAdapter, action);
-        // TODO: append action args to 'self'
-
+        JsonRepresentation representationWithSelf = representationWithSelfFor(objectAdapter, action, arguments);
         return invokeActionUsingAdapters(objectAdapter, action, argumentAdapters, representationWithSelf);
     }
 
-    protected Response invokeActionIdempotent(final ObjectAdapter objectAdapter, final String actionId, final InputStream arguments) {
+
+    protected Response invokeActionIdempotent(
+            final ObjectAdapter objectAdapter, 
+            final String actionId, 
+            final InputStream body) {
+        
         final ObjectAction action = getObjectActionThatIsVisibleAndUsable(
                 objectAdapter, actionId, Intent.MUTATE);
 
         final ActionSemantics actionSemantics = ActionSemantics.determine(getResourceContext(), action);
-        if(actionSemantics.isQueryOnlyOrIdempotent()) {
-            // TODO: reinstate
-//            throw JsonApplicationException.create(
-//                    HttpStatusCode.METHOD_NOT_ALLOWED,
-//                    "Method not allowed; action '%s' is not idempotent", action.getId());
+        if(!actionSemantics.isIdempotent()) {
+            throw JsonApplicationException.create(
+                    HttpStatusCode.METHOD_NOT_ALLOWED,
+                    "Method not allowed; action '%s' is not idempotent", action.getId());
         }
+        String bodyAsString = asStringUtf8(body);
+        final JsonRepresentation arguments = readBodyAsMap(bodyAsString);
 
-        List<ObjectAdapter> argumentAdapters = parseBody(action, arguments);
-        JsonRepresentation representationWithSelf = representationWithSelfFor(objectAdapter, action);
-        // TODO: append action args to 'self'
+        List<ObjectAdapter> argumentAdapters = parseArguments(action, arguments);
+        JsonRepresentation representationWithSelf = representationWithSelfFor(objectAdapter, action, arguments);
 
         return invokeActionUsingAdapters(objectAdapter, action,
                 argumentAdapters, representationWithSelf);
@@ -170,11 +173,13 @@ public abstract class DomainResourceAbstract extends ResourceAbstract {
     protected Response invokeAction(final ObjectAdapter objectAdapter, final String actionId, final InputStream body) {
         final ObjectAction action = getObjectActionThatIsVisibleAndUsable(
                 objectAdapter, actionId, Intent.MUTATE);
+        
+        String bodyAsString = asStringUtf8(body);
+        final JsonRepresentation arguments = readBodyAsMap(bodyAsString);
 
-        List<ObjectAdapter> argumentAdapters = parseBody(action, body);
-        JsonRepresentation representationWithSelf = representationWithSelfFor(objectAdapter, action);
-        // TODO: append action args to 'self'
+        JsonRepresentation representationWithSelf = representationWithSelfFor(objectAdapter, action, arguments);
 
+        List<ObjectAdapter> argumentAdapters = parseArguments(action, arguments);
         return invokeActionUsingAdapters(objectAdapter, action,
                 argumentAdapters, representationWithSelf);
     }
@@ -230,10 +235,25 @@ public abstract class DomainResourceAbstract extends ResourceAbstract {
     }
 
 
+    private JsonRepresentation representationWithSelfFor(final ObjectAdapter objectAdapter, final ObjectAction action, final String queryArgs) {
+        JsonRepresentation representationWithSelf = representationWithSelfFor(objectAdapter, action);
+        final String href = representationWithSelf.getString("self.href");
+        representationWithSelf.mapPut("self.href", href + "?" + queryArgs);
+        return representationWithSelf;
+    }
+
+    private JsonRepresentation representationWithSelfFor(final ObjectAdapter objectAdapter, final ObjectAction action, final JsonRepresentation bodyArgs) {
+        JsonRepresentation representationWithSelf = representationWithSelfFor(objectAdapter, action);
+        final Link selfLink = representationWithSelf.getLink("self");
+        selfLink.mapPut("args", bodyArgs);
+        return representationWithSelf;
+    }
+    
     private JsonRepresentation representationWithSelfFor(final ObjectAdapter objectAdapter, final ObjectAction action) {
         JsonRepresentation representation = JsonRepresentation.newMap();
         String oid = getOidStr(objectAdapter);
-        representation.mapPut("self", LinkToBuilder.newBuilder(getResourceContext(), "self", "objects/%s/actions/%s/invoke", oid, action.getId()).build());
+        final JsonRepresentation repBuilder = LinkToBuilder.newBuilder(getResourceContext(), "self", "objects/%s/actions/%s/invoke", oid, action.getId()).build();
+        representation.mapPut("self", repBuilder);
         return representation;
     }
 
@@ -254,104 +274,69 @@ public abstract class DomainResourceAbstract extends ResourceAbstract {
     }
 
     
-    // //////////////////////////////////////////////////////////////
-    // objectAdapterFor
-    // //////////////////////////////////////////////////////////////
-
-    protected ObjectAdapter objectAdapterFor(
-        final ObjectAction action, int i,
-        ObjectSpecification paramSpec, Object arg) {
-        try {
-            return objectAdapterFor(paramSpec, arg);
-        } catch (ExpectedStringRepresentingValueException e) {
-            throw JsonApplicationException.create(
-                    HttpStatusCode.BAD_REQUEST,
-                    "Action '%s', argument %d should be a URL encoded string representing a value of type %s",
-                    action.getId(), i, resourceFor(paramSpec));
-        } catch (ExpectedMapRepresentingReferenceException e) {
-            throw JsonApplicationException.create(
-                    HttpStatusCode.BAD_REQUEST,
-                    "Action '%s', argument %d should be a map representing a link to reference of type %s",
-                    action.getId(), i, resourceFor(paramSpec));
-        }
-    }
-
-    protected ObjectAdapter objectAdapterFor(
-        final ObjectAction action, List<?> arguments, int i) {
-        List<ObjectActionParameter> parameters = action.getParameters();
-
-        ObjectSpecification paramSpec = parameters.get(i).getSpecification();
-        Object arg = arguments.get(i);
-
-        ObjectAdapter objectAdapter = objectAdapterFor(action, i, paramSpec, arg);
-        return objectAdapter;
-    }
-
     /**
      * 
+     * @param resourceContext
      * @param objectSpec
      *            - the {@link ObjectSpecification} to interpret the object as.
      * @param node
      *            - expected to be either a String or a Map (ie from within a
      *            List, built by parsing a JSON structure).
      */
-    protected ObjectAdapter objectAdapterFor(ObjectSpecification objectSpec, Object node) {
-        // null
-        if (node == null) {
-            return null;
-        }
-
+    private static ObjectAdapter objectAdapterFor(
+            final ResourceContext resourceContext, 
+            final ObjectSpecification objectSpec, 
+            final JsonRepresentation representation) {
+        
         // value (encodable)
         if (objectSpec.isEncodeable()) {
             EncodableFacet encodableFacet = objectSpec.getFacet(EncodableFacet.class);
-            if (!(node instanceof String)) {
+            if(!representation.isString()) {
                 throw new ExpectedStringRepresentingValueException();
             }
-            String argStr = (String) node;
+            String argStr = representation.asString();
             return encodableFacet.fromEncodedString(argStr);
         }
 
         // reference
-        try {
-            JsonRepresentation argLink = (JsonRepresentation) node;
-            String oidFromHref = UrlParserUtils.oidFromHref(argLink);
-
-            final ObjectAdapter objectAdapter = OidUtils.getObjectAdapter(oidFromHref, getResourceContext().getOidStringifier());
-
-            if (objectAdapter == null) {
-                throw new UnknownOidException(oidFromHref);
-            }
-            return objectAdapter;
-        } catch (Exception e) {
-            throw new ExpectedMapRepresentingReferenceException();
+        if(!representation.isLink()) {
+            throw new ExpectedMapRepresentingLinkException();
         }
+        JsonRepresentation argLink = representation.asLink();
+        String oidFromHref = UrlParserUtils.oidFromLink(argLink);
+
+        final ObjectAdapter objectAdapter = OidUtils.getObjectAdapter(
+                resourceContext, oidFromHref);
+
+        if (objectAdapter == null) {
+            throw new UnknownOidException(oidFromHref);
+        }
+        return objectAdapter;
     }
 
     /**
-     * Similar to {@link #objectAdapterFor(ObjectSpecification, Object)},
+     * Similar to {@link #objectAdapterFor(ResourceContext, ObjectSpecification, Object)},
      * however the object being interpreted is a String holding URL encoded JSON
      * (rather than having already been parsed into a List/Map representation).
+     * 
+     * @throws IOException 
+     * @throws JsonMappingException 
+     * @throws JsonParseException 
      */
-    protected ObjectAdapter objectAdapterFor(
-        final ObjectSpecification spec,
-        final String urlEncodedJson) throws JsonParseException, JsonMappingException, IOException {
+    private ObjectAdapter objectAdapterFor(
+            final ObjectSpecification spec,
+            final String urlEncodedJson) throws JsonParseException, JsonMappingException, IOException {
 
         final String json = UrlDecoderUtils.urlDecode(urlEncodedJson);
-        if (spec.containsFacet(EncodableFacet.class)) {
-            EncodableFacet encodableFacet = spec.getFacet(EncodableFacet.class);
-            return encodableFacet.fromEncodedString(json);
-        } else {
-            Map<String, Object> representation = JsonMapper.instance().readAsMap(json);
-            return objectAdapterFor(spec, representation);
-        }
+        JsonRepresentation representation = jsonMapper.read(json);
+        return objectAdapterFor(getResourceContext(), spec, representation);
     }
-
 
     private static class ExpectedStringRepresentingValueException extends IllegalArgumentException {
         private static final long serialVersionUID = 1L;
     }
 
-    private static class ExpectedMapRepresentingReferenceException extends IllegalArgumentException {
+    private static class ExpectedMapRepresentingLinkException extends IllegalArgumentException {
         private static final long serialVersionUID = 1L;
     }
 
@@ -446,28 +431,109 @@ public abstract class DomainResourceAbstract extends ResourceAbstract {
     // parseBody
     // ///////////////////////////////////////////////////////////////////
 
-    protected ObjectAdapter parseBody(ObjectSpecification objectSpec,
-        final InputStream body) {
-        List<?> arguments = parseBody(body);
-        if (arguments.size() != 1) {
+    /**
+     * 
+     * @param objectSpec
+     * @param bodyAsString - as per {@link #asStringUtf8(InputStream)}
+     * @return
+     */
+    protected ObjectAdapter parseBodyAsMapWithSingleValue(
+            final ObjectSpecification objectSpec, 
+            final String bodyAsString) {
+        JsonRepresentation arguments = readBodyAsMap(bodyAsString);
+        
+        JsonRepresentation representation = arguments.getRepresentation("value");
+        if (arguments.mapSize() != 1 || representation == null) {
             throw JsonApplicationException.create(
                     HttpStatusCode.BAD_REQUEST,
-                    "Body should contain 1 argument representing a value of type '%s'",
+                    "Body should be a map with a single key 'value' whose value represents an instance of type '%s'",
                     resourceFor(objectSpec));
         }
 
-        ObjectAdapter proposedValueAdapter = objectAdapterFor(objectSpec, arguments.get(0));
+        ObjectAdapter proposedValueAdapter = objectAdapterFor(getResourceContext(), objectSpec, arguments);
         return proposedValueAdapter;
     }
 
     
-    protected List<?> parseBody(final InputStream body) {
-        try {
-            byte[] byteArray = ByteStreams.toByteArray(body);
-            String bodyAsString = new String(byteArray, Charsets.UTF_8);
+    /**
+     * @param action
+     * @param bodyAsString - as per {@link #asStringUtf8(InputStream)}
+     */
+    private List<ObjectAdapter> parseBody(
+            final ObjectAction action, 
+            final String bodyAsString) {
+        
+        final JsonRepresentation arguments = readBodyAsMap(bodyAsString);
+        return parseArguments(action, arguments);
+    }
 
-            List<?> arguments = jsonMapper.readAsList(bodyAsString);
-            return arguments;
+
+
+    private List<ObjectAdapter> parseArguments(
+            final ObjectAction action, 
+            final JsonRepresentation arguments) {
+        final List<JsonRepresentation> argList = argListFor(action, arguments);
+        
+        final List<ObjectAdapter> argAdapters = Lists.newArrayList();
+        final List<ObjectActionParameter> parameters = action.getParameters();
+        for (int i = 0; i < argList.size(); i++) {
+            final String paramName = parameters.get(i).getName();
+            final JsonRepresentation arg = argList.get(i);
+            final ObjectSpecification paramSpec = parameters.get(i).getSpecification();
+            try {
+                final ObjectAdapter objectAdapter = objectAdapterFor(getResourceContext(), paramSpec, arg);
+                argAdapters.add(objectAdapter);
+            } catch (ExpectedStringRepresentingValueException e) {
+                throw JsonApplicationException.create(
+                        HttpStatusCode.BAD_REQUEST,
+                        "Action '%s', argument %s should be a URL encoded string representing a value of type %s",
+                        action.getId(), paramName, resourceFor(paramSpec));
+            } catch (ExpectedMapRepresentingLinkException e) {
+                throw JsonApplicationException.create(
+                        HttpStatusCode.BAD_REQUEST,
+                        "Action '%s', argument %s should be a map representing a link to reference of type %s",
+                        action.getId(), paramName, resourceFor(paramSpec));
+            }
+        }
+        return argAdapters;
+    }
+
+
+    private List<JsonRepresentation> argListFor(final ObjectAction action, JsonRepresentation arguments) {
+        List<JsonRepresentation> argList = Lists.newArrayList();
+        
+        int numParameters = action.getParameterCount();
+        int numArguments = arguments.mapSize();
+        if (numArguments != numParameters) {
+            throw JsonApplicationException.create(
+                    HttpStatusCode.BAD_REQUEST,
+                    "Action '%s' has %d parameters but received %d arguments in body",
+                    action.getId(), numParameters, numArguments);
+        }
+        final List<ObjectActionParameter> parameters = action.getParameters();
+        for (ObjectActionParameter param : parameters) {
+            final String paramName = param.getName();
+            final JsonRepresentation argRepr = arguments.getRepresentation(paramName);
+            if(argRepr == null) {
+                throw JsonApplicationException.create(
+                        HttpStatusCode.BAD_REQUEST,
+                        "Action '%s', no argument found for parameter '%s'",
+                        action.getId(), paramName);
+            }
+            argList.add(argRepr);
+        }
+        return argList;
+    }
+
+    private JsonRepresentation readBodyAsMap(String bodyAsString) {
+        try {
+            final JsonRepresentation jsonRepr = jsonMapper.read(bodyAsString);
+            if(!jsonRepr.isMap()) {
+                throw JsonApplicationException.create(
+                    HttpStatusCode.BAD_REQUEST,
+                    "could not read body as a JSON map");
+            }
+            return jsonRepr;
         } catch (JsonParseException e) {
             throw JsonApplicationException.create(
                     HttpStatusCode.BAD_REQUEST, e,
@@ -475,7 +541,18 @@ public abstract class DomainResourceAbstract extends ResourceAbstract {
         } catch (JsonMappingException e) {
             throw JsonApplicationException.create(
                     HttpStatusCode.BAD_REQUEST, e,
-                    "could not map body to a Map structure");
+                    "could not read body as JSON");
+        } catch (IOException e) {
+            throw JsonApplicationException.create(
+                    HttpStatusCode.BAD_REQUEST, e,
+                    "could not parse body");
+        }
+    }
+
+    protected String asStringUtf8(final InputStream body) {
+        try {
+            byte[] byteArray = ByteStreams.toByteArray(body);
+            return new String(byteArray, Charsets.UTF_8);
         } catch (IOException e) {
             throw JsonApplicationException.create(
                     HttpStatusCode.BAD_REQUEST, e,
@@ -483,27 +560,6 @@ public abstract class DomainResourceAbstract extends ResourceAbstract {
         }
     }
 
-    private List<ObjectAdapter> parseBody(final ObjectAction action,
-            final InputStream body) {
-            List<ObjectAdapter> argAdapters = Lists.newArrayList();
-            List<?> arguments = parseBody(body);
-
-            int numParameters = action.getParameterCount();
-            int numArguments = arguments.size();
-            if (numArguments != numParameters) {
-                throw JsonApplicationException.create(
-                        HttpStatusCode.BAD_REQUEST,
-                        "Action '%s' has %d parameters but received %d arguments in body",
-                        action.getId(), numParameters, numArguments);
-            }
-
-            for (int i = 0; i < numParameters; i++) {
-                ObjectAdapter argAdapter = objectAdapterFor(action, arguments, i);
-                argAdapters.add(argAdapter);
-            }
-            return argAdapters;
-
-        }
 
     // //////////////////////////////////////////////////////////////
     // misc

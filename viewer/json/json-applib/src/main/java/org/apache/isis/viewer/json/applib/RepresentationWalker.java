@@ -133,7 +133,7 @@ public class RepresentationWalker {
                 return;
             }
 
-            link = matching.asLink();
+            link = matching.mapValueAsLink();
             if(link.getHref() == null) {
                 addStep(linkXpath, link, null, null, "key does not identify a link '" + linkXpath + "'", null);
                 return;

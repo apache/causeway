@@ -27,6 +27,7 @@ import javax.ws.rs.core.UriInfo;
 
 import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapterLookup;
 import org.apache.isis.core.metamodel.adapter.oid.stringable.OidStringifier;
 
 public class ResourceContext {
@@ -40,11 +41,16 @@ public class ResourceContext {
     private final OidStringifier oidStringifier;
     private final Localization localization;
     private final AuthenticationSession authenticationSession;
+    private final ObjectAdapterLookup objectAdapterLookup;
 
-    public ResourceContext(final HttpHeaders httpHeaders, final UriInfo uriInfo, final Request request,
-        final HttpServletRequest httpServletRequest, final HttpServletResponse httpServletResponse,
-        final SecurityContext securityContext, 
-        final OidStringifier oidStringifier, final Localization localization, final AuthenticationSession authenticationSession) {
+    public ResourceContext(
+            final HttpHeaders httpHeaders, final UriInfo uriInfo, final Request request,
+            final HttpServletRequest httpServletRequest, final HttpServletResponse httpServletResponse,
+            final SecurityContext securityContext, 
+            final OidStringifier oidStringifier, 
+            final Localization localization, 
+            final AuthenticationSession authenticationSession, 
+            final ObjectAdapterLookup objectAdapterLookup) {
         this.httpHeaders = httpHeaders;
         this.uriInfo = uriInfo;
         this.request = request;
@@ -54,6 +60,7 @@ public class ResourceContext {
         this.oidStringifier = oidStringifier;
         this.localization = localization;
         this.authenticationSession = authenticationSession;
+        this.objectAdapterLookup = objectAdapterLookup;
     }
 
     public HttpHeaders getHttpHeaders() {
@@ -95,6 +102,10 @@ public class ResourceContext {
 
     public AuthenticationSession getAuthenticationSession() {
         return authenticationSession;
+    }
+
+    public ObjectAdapterLookup getAdapterManager() {
+        return objectAdapterLookup;
     }
 
 

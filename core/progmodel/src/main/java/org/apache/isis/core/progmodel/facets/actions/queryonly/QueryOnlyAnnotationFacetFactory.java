@@ -20,11 +20,10 @@
 package org.apache.isis.core.progmodel.facets.actions.queryonly;
 
 import org.apache.isis.applib.annotation.QueryOnly;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.AnnotationBasedFacetFactoryAbstract;
-import org.apache.isis.core.metamodel.facets.actions.queryonly.QueryOnlyFacet;
+import org.apache.isis.core.metamodel.facets.FacetedMethod;
 
 public class QueryOnlyAnnotationFacetFactory extends AnnotationBasedFacetFactoryAbstract {
 
@@ -35,12 +34,12 @@ public class QueryOnlyAnnotationFacetFactory extends AnnotationBasedFacetFactory
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
         final QueryOnly annotation = getAnnotation(processMethodContext.getMethod(), QueryOnly.class);
-        FacetUtil.addFacet(create(annotation, processMethodContext.getFacetHolder()));
-    }
-
-
-    private QueryOnlyFacet create(final QueryOnly annotation, final FacetHolder holder) {
-        return annotation == null ? null : new QueryOnlyFacetAnnotation(holder);
+        if(annotation == null) {
+            return;
+        }
+        FacetedMethod facetHolder = processMethodContext.getFacetHolder();
+        FacetUtil.addFacet(new QueryOnlyFacetAnnotation(facetHolder));
+        FacetUtil.addFacet(new IdempotentFacetInferredFromQueryOnly(facetHolder));
     }
 
 }

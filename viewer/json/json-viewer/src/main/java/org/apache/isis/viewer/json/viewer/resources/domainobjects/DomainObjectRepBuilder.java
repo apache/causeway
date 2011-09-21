@@ -71,7 +71,7 @@ public class DomainObjectRepBuilder extends AbstractRepresentationBuilder<Domain
         representation.mapPut("self", self);
 
         String title = objectAdapter.titleString();
-        representation.mapPut("oid", OidUtils.getOidStr(objectAdapter, getOidStringifier()));
+        representation.mapPut("oid", OidUtils.getOidStr(resourceContext, objectAdapter));
         representation.mapPut("title", title);
         withMembers(objectAdapter);
         return this;

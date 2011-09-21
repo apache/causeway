@@ -21,18 +21,22 @@ package org.apache.isis.tck.dom.simples;
 
 import java.util.List;
 
+import org.apache.isis.applib.annotation.Idempotent;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Named;
+import org.apache.isis.applib.annotation.QueryOnly;
 
 @Named("Simples")
 public interface SimpleEntityRepository {
 
+    @QueryOnly
     @MemberOrder(sequence="1")
     public List<SimpleEntity> list();
 
     @MemberOrder(sequence="2")
     public SimpleEntity newTransientEntity();
 
+    @Idempotent
     @MemberOrder(sequence="2")
     public SimpleEntity newPersistentEntity(
         @Named("name") String name, 

@@ -1,5 +1,7 @@
 package org.apache.isis.viewer.json.viewer.resources.domainobjects;
 
+import org.apache.isis.core.metamodel.facets.actions.idempotent.IdempotentFacet;
+import org.apache.isis.core.metamodel.facets.actions.queryonly.QueryOnlyFacet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
 
@@ -12,7 +14,6 @@ public enum ActionSemantics {
     private final String invokeKey;
     private ActionSemantics(String invokeKey) {
         this.invokeKey = invokeKey;
-        
     }
     
     public String getInvokeKey() {
@@ -23,13 +24,18 @@ public enum ActionSemantics {
         return this == QUERY_ONLY;
     }
 
-    public boolean isQueryOnlyOrIdempotent() {
-        return isQueryOnly() || this == IDEMPOTENT;
+    public boolean isIdempotent() {
+        return this == IDEMPOTENT;
     }
 
     public static ActionSemantics determine(ResourceContext resourceContext, ObjectAction action) {
-        // TODO
-        return ActionSemantics.QUERY_ONLY;
+        if(action.containsFacet(QueryOnlyFacet.class)) {
+            return QUERY_ONLY;
+        }
+        if(action.containsFacet(IdempotentFacet.class)) {
+            return IDEMPOTENT;
+        }
+        return SIDE_EFFECTS;
     }
 
     
