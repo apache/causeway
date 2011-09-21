@@ -56,7 +56,7 @@ public class JsonRepresentationTest_getBoolean {
             jsonRepresentation.getBoolean("aString");
             fail();
         } catch (IllegalArgumentException e) {
-            assertThat(e.getMessage(), is("'aString' (\"aStringValue\") is not a boolean"));
+            assertThat(e.getMessage(), is("'aString' is not a boolean"));
         }
     }
 

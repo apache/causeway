@@ -12,7 +12,7 @@ public class ArgumentList extends JsonRepresentation {
     }
 
     public void add(ArgumentNode value) {
-        nodeAsArray().add(value.asJsonNode());
+        asArrayNode().add(value.asJsonNode());
     }
 
     public void add(Link value) {

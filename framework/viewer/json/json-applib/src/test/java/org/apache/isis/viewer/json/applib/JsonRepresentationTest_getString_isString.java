@@ -31,7 +31,7 @@ import org.codehaus.jackson.map.JsonMappingException;
 import org.junit.Before;
 import org.junit.Test;
 
-public class JsonRepresentationTest_getString {
+public class JsonRepresentationTest_getString_isString {
 
     private JsonRepresentation jsonRepresentation;
 
@@ -42,26 +42,30 @@ public class JsonRepresentationTest_getString {
     
     @Test
     public void happyCase() throws JsonParseException, JsonMappingException, IOException {
+        assertThat(jsonRepresentation.isString("aString"), is(true));
         assertThat(jsonRepresentation.getString("aString"), is("aStringValue"));
     }
 
     @Test
     public void forNonExistent() throws JsonParseException, JsonMappingException, IOException {
+        assertThat(jsonRepresentation.isString("doesNotExist"), is(false));
         assertThat(jsonRepresentation.getString("doesNotExist"), is(nullValue()));
     }
 
     @Test
     public void forValueButNotAString() throws JsonParseException, JsonMappingException, IOException {
+        assertThat(jsonRepresentation.isString("anInt"), is(false));
         try {
             jsonRepresentation.getString("anInt");
             fail();
         } catch (IllegalArgumentException e) {
-            assertThat(e.getMessage(), is("'anInt' (123) is not a string"));
+            assertThat(e.getMessage(), is("'anInt' is not a string"));
         }
     }
 
     @Test
     public void forMap() throws JsonParseException, JsonMappingException, IOException {
+        assertThat(jsonRepresentation.isString("aSubMap"), is(false));
         try {
             jsonRepresentation.getString("aSubMap");
             fail();
@@ -72,6 +76,7 @@ public class JsonRepresentationTest_getString {
 
     @Test
     public void forList() throws JsonParseException, JsonMappingException, IOException {
+        assertThat(jsonRepresentation.isString("aSubList"), is(false));
         try {
             jsonRepresentation.getString("aSubList");
             fail();
@@ -82,6 +87,7 @@ public class JsonRepresentationTest_getString {
 
     @Test
     public void forMultipartKey() throws JsonParseException, JsonMappingException, IOException {
+        assertThat(jsonRepresentation.isString("aSubMap.aString"), is(true));
         assertThat(jsonRepresentation.getString("aSubMap.aString"), is("aSubMapStringValue"));
     }
     

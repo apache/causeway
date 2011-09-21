@@ -43,32 +43,32 @@ public final class Link extends JsonRepresentation {
     }
 
     public String getRel() {
-        return nodeAsMap().path("rel").getTextValue();
+        return asObjectNode().path("rel").getTextValue();
     }
     public Link withRel(String rel) {
-        nodeAsMap().put("rel", rel);
+        asObjectNode().put("rel", rel);
         return this;
     }
 
     public String getHref() {
-        return nodeAsMap().path("href").getTextValue();
+        return asObjectNode().path("href").getTextValue();
     }
     public Link withHref(String href) {
-        nodeAsMap().put("href", href);
+        asObjectNode().put("href", href);
         return this;
     }
 
     public Method getMethod() {
-        String methodStr = nodeAsMap().path("method").getTextValue();
+        String methodStr = asObjectNode().path("method").getTextValue();
         return Method.valueOf(methodStr);
     }
     public Link withMethod(Method method) {
-        nodeAsMap().put("method", method.name());
+        asObjectNode().put("method", method.name());
         return this;
     }
 
     public JsonRepresentation getArguments() {
-        JsonNode arguments = nodeAsMap().get("arguments");
+        JsonNode arguments = asObjectNode().get("arguments");
         return new JsonRepresentation(arguments);
     }
     

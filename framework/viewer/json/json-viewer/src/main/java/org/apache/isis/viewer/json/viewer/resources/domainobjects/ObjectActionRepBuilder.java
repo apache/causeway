@@ -46,7 +46,6 @@ public class ObjectActionRepBuilder extends AbstractObjectMemberRepBuilder<Objec
 
 
     public JsonRepresentation build() {
-
         putDisabledReasonIfDisabled();
         
         JsonRepresentation extensions = JsonRepresentation.newMap();
@@ -188,10 +187,10 @@ public class ObjectActionRepBuilder extends AbstractObjectMemberRepBuilder<Objec
     /////////////////////////////////////////////////////
 	
     private void putExtensionsIsisProprietary(JsonRepresentation extensions) {
-        extensions.mapPut("actionType", objectMember.getType());
+        extensions.mapPut("actionType", objectMember.getType().name().toLowerCase());
         
         final ActionSemantics semantics = ActionSemantics.determine(resourceContext, objectMember);
-        extensions.mapPut("actionSemantics", semantics.name());
+        extensions.mapPut("actionSemantics", semantics.name().toLowerCase());
     }
 
      private void addLinksFormalDomainModel(JsonRepresentation links, ResourceContext resourceContext) {

@@ -27,7 +27,7 @@ import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
 import org.apache.isis.viewer.json.viewer.representations.LinkToBuilder;
 import org.apache.isis.viewer.json.viewer.resources.domaintypes.DomainTypeRepBuilder;
-import org.apache.isis.viewer.json.viewer.resources.domaintypes.TypeActionRepBuilder;
+import org.apache.isis.viewer.json.viewer.resources.domaintypes.TypeCollectionRepBuilder;
 
 import com.google.common.collect.Lists;
 
@@ -125,12 +125,16 @@ public class ObjectCollectionRepBuilder extends AbstractObjectMemberRepBuilder<O
     /////////////////////////////////////////////////////
     
     private void putExtensionsIsisProprietary(JsonRepresentation extensions) {
+        final CollectionSemantics semantics = CollectionSemantics.determine(resourceContext, objectMember);
+        extensions.mapPut("collectionSemantics", semantics.name().toLowerCase());
     }
 
     private void addLinksFormalDomainModel(JsonRepresentation links, ResourceContext resourceContext) {
+        links.arrayAdd(TypeCollectionRepBuilder.newLinkToBuilder(resourceContext, "typeCollection", objectAdapter.getSpecification(), objectMember).build());
     }
 
     private void addLinksIsisProprietary(JsonRepresentation links, ResourceContext resourceContext) {
+        links.arrayAdd(DomainTypeRepBuilder.newLinkToBuilder(resourceContext, "domainType", objectAdapter.getSpecification()).build());
     }
 
 
