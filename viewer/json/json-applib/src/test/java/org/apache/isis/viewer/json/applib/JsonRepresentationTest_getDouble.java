@@ -66,7 +66,7 @@ public class JsonRepresentationTest_getDouble {
             jsonRepresentation.getDouble("aSubMap");
             fail();
         } catch (IllegalArgumentException e) {
-            assertThat(e.getMessage(), is("'aSubMap' (a map) is not a double"));
+            assertThat(e.getMessage(), is("'aSubMap' is not a double"));
         }
     }
 
@@ -76,7 +76,7 @@ public class JsonRepresentationTest_getDouble {
             jsonRepresentation.getDouble("aSubList");
             fail();
         } catch (IllegalArgumentException e) {
-            assertThat(e.getMessage(), is("'aSubList' (an array) is not a double"));
+            assertThat(e.getMessage(), is("'aSubList' is not a double"));
         }
     }
 

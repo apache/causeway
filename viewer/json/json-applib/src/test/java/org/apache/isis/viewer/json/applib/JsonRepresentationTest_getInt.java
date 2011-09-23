@@ -66,7 +66,7 @@ public class JsonRepresentationTest_getInt {
             jsonRepresentation.getInt("aSubMap");
             fail();
         } catch (IllegalArgumentException e) {
-            assertThat(e.getMessage(), is("'aSubMap' (a map) is not an int"));
+            assertThat(e.getMessage(), is("'aSubMap' is not an int"));
         }
     }
 
@@ -76,7 +76,7 @@ public class JsonRepresentationTest_getInt {
             jsonRepresentation.getInt("aSubList");
             fail();
         } catch (IllegalArgumentException e) {
-            assertThat(e.getMessage(), is("'aSubList' (an array) is not an int"));
+            assertThat(e.getMessage(), is("'aSubList' is not an int"));
         }
     }
 

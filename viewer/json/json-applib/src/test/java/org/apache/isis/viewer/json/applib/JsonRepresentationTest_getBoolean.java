@@ -66,7 +66,7 @@ public class JsonRepresentationTest_getBoolean {
             jsonRepresentation.getBoolean("aSubMap");
             fail();
         } catch (IllegalArgumentException e) {
-            assertThat(e.getMessage(), is("'aSubMap' (a map) is not a boolean"));
+            assertThat(e.getMessage(), is("'aSubMap' is not a boolean"));
         }
     }
 
@@ -76,7 +76,7 @@ public class JsonRepresentationTest_getBoolean {
             jsonRepresentation.getBoolean("aSubList");
             fail();
         } catch (IllegalArgumentException e) {
-            assertThat(e.getMessage(), is("'aSubList' (an array) is not a boolean"));
+            assertThat(e.getMessage(), is("'aSubList' is not a boolean"));
         }
     }
 

@@ -137,14 +137,6 @@ public class JsonRepresentation {
     }
 
 
-    /////////////////////////////////////////////////////////////////////////
-    // isArray, isMap, isValue, isNull
-    /////////////////////////////////////////////////////////////////////////
-
-    public boolean isArray() {
-        return jsonNode.isArray();
-    }
-
     /**
      * Node is a value (nb: could be {@link #isNull() null}).
      */
@@ -152,13 +144,6 @@ public class JsonRepresentation {
         return jsonNode.isValueNode();
     }
 
-    public boolean isNull() {
-        return jsonNode.isNull();
-    }
-
-    public boolean isMap() {
-        return !isArray() && !isValue();
-    }
 
 
 
@@ -176,15 +161,35 @@ public class JsonRepresentation {
     }
 
     /////////////////////////////////////////////////////////////////////////
-    // getArray, isArray, asArray
+    // isArray, getArray, asArray
     /////////////////////////////////////////////////////////////////////////
-    
+
+    public boolean isArray(String path) {
+        return isArray(getNode(path));
+    }
+
+    public boolean isArray() {
+        return isArray(asJsonNode());
+    }
+
+    private boolean isArray(final JsonNode node) {
+        return !representsNull(node) && node.isArray();
+    }
+
+
     public JsonRepresentation getArray(String path) {
-        JsonNode node = getNode(path);
+        return getArray(path, getNode(path));
+    }
+
+    public JsonRepresentation asArray() {
+        return getArray(null, asJsonNode());
+    }
+
+    private JsonRepresentation getArray(String path, JsonNode node) {
         if (representsNull(node)) {
             return null;
         }
-        if (!node.isArray()) {
+        if (!isArray(node)) {
             throw new IllegalArgumentException(formatExMsg(path, "is not an array"));
         }
         return new JsonRepresentation(node);
@@ -193,15 +198,34 @@ public class JsonRepresentation {
 
     
     /////////////////////////////////////////////////////////////////////////
-    // getMap, isMap, asMap
+    // isMap, getMap, asMap
     /////////////////////////////////////////////////////////////////////////
-    
+
+    public boolean isMap(String path) {
+        return isMap(getNode(path));
+    }
+
+    public boolean isMap() {
+        return isMap(asJsonNode());
+    }
+
+    private boolean isMap(final JsonNode node) {
+        return !representsNull(node) && !node.isArray() && !node.isValueNode();
+    }
+
     public JsonRepresentation getMap(String path) {
-        JsonNode node = getNode(path);
+        return getMap(path, getNode(path));
+    }
+
+    public JsonRepresentation asMap() {
+        return getMap(null, asJsonNode());
+    }
+
+    private JsonRepresentation getMap(String path, JsonNode node) {
         if (representsNull(node)) {
             return null;
         }
-        if (node.isArray() || node.isValueNode()) {
+        if (isArray(node) || node.isValueNode()) {
             throw new IllegalArgumentException(formatExMsg(path, "is not a map"));
         }
         return new JsonRepresentation(node);
@@ -432,9 +456,8 @@ public class JsonRepresentation {
 
     
     /////////////////////////////////////////////////////////////////////////
-    // getLink, asLink, isLink
+    // isLink, getLink, asLink
     /////////////////////////////////////////////////////////////////////////
-
 
     public boolean isLink() {
         return isLink(asJsonNode());
@@ -445,7 +468,7 @@ public class JsonRepresentation {
     }
 
     public boolean isLink(JsonNode node) {
-        if (representsNull(node) || node.isArray() || node.isValueNode()) {
+        if (representsNull(node) || isArray(node) || node.isValueNode()) {
             return false;
         }
 
@@ -469,7 +492,7 @@ public class JsonRepresentation {
             return null;
         }
 
-        if (node.isArray()) {
+        if (isArray(node)) {
             throw new IllegalArgumentException(formatExMsg(path, "is an array that does not represent a link"));
         }
         if (node.isValueNode()) {
@@ -488,13 +511,21 @@ public class JsonRepresentation {
     // getNull, isNull
     /////////////////////////////////////////////////////////////////////////
     
+    public boolean isNull() {
+        return isNull(asJsonNode());
+    }
+
     /**
      * Indicates that the wrapped node has <tt>null</tt> value
      * (ie {@link JsonRepresentation#isNull()}), or returns <tt>null</tt> if there was no node with the
      * provided path.
      */
     public Boolean isNull(String path) {
-        JsonNode node = getNode(path);
+        return isNull(getNode(path));
+    }
+
+
+    private Boolean isNull(JsonNode node) {
         if (node == null || node.isMissingNode()) {
             // not exclude if node.isNull, cos that's the point of this. 
             return null;
@@ -508,14 +539,22 @@ public class JsonRepresentation {
      * provided path.
      */
     public JsonRepresentation getNull(String path) {
-        JsonNode node = getNode(path);
+        return getNull(path, getNode(path));
+    }
+
+    public JsonRepresentation asNull() {
+        return getNull(null, asJsonNode());
+    }
+
+
+    private JsonRepresentation getNull(String path, JsonNode node) {
         if (node == null || node.isMissingNode()) {
-            // not exclude if node.isNull, cos that's the point of this. 
+            // exclude if node.isNull, cos that's the point of this. 
             return null;
         }
         checkValue(path, node, "the null value");
         if (!node.isNull()) {
-            throw new IllegalArgumentException("'" + path + "' (" + node.toString() + ") is not the null value");
+            throw new IllegalArgumentException(formatExMsg(path, "is not the null value"));
         }
         return new JsonRepresentation(node);
     }
@@ -538,6 +577,20 @@ public class JsonRepresentation {
         return getLink(linkPropertyName);
     }
 
+    
+    /////////////////////////////////////////////////////////////////////////
+    // asInputStream
+    /////////////////////////////////////////////////////////////////////////
+
+    public InputStream asInputStream() {
+        return JsonNodeUtils.asInputStream(jsonNode);
+    }
+
+
+    /////////////////////////////////////////////////////////////////////////
+    // asArrayNode, asObjectNode
+    /////////////////////////////////////////////////////////////////////////
+
     /**
      * Convert underlying representation into an array.
      */
@@ -547,6 +600,7 @@ public class JsonRepresentation {
         }
         return (ArrayNode) asJsonNode();
     }
+
 
     /**
      * Convert underlying representation into an object (map).
@@ -558,15 +612,6 @@ public class JsonRepresentation {
         return (ObjectNode) asJsonNode();
     }
 
-
-
-    /////////////////////////////////////////////////////////////////////////
-    // asInputStream
-    /////////////////////////////////////////////////////////////////////////
-
-    public InputStream asInputStream() {
-        return JsonNodeUtils.asInputStream(jsonNode);
-    }
 
     /////////////////////////////////////////////////////////////////////////
     // xpath support
@@ -898,6 +943,8 @@ public class JsonRepresentation {
     }
     
 
+
+    
     /////////////////////////////////////////////////////////////////////////
     // helpers
     /////////////////////////////////////////////////////////////////////////
@@ -910,11 +957,7 @@ public class JsonRepresentation {
         if (node.isValueNode()) {
             return;
         }
-        if (node.isArray()) {
-            throw new IllegalArgumentException("'" + path + "' (an array) is not " + requiredType);
-        } else {
-            throw new IllegalArgumentException("'" + path + "' (a map) is not " + requiredType);
-        }
+        throw new IllegalArgumentException(formatExMsg(path, "is not " + requiredType));
     }
 
     private static boolean representsNull(JsonNode node) {

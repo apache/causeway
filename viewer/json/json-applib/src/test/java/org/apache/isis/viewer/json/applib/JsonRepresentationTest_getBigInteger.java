@@ -67,7 +67,7 @@ public class JsonRepresentationTest_getBigInteger {
             jsonRepresentation.getBigInteger("aSubMap");
             fail();
         } catch (IllegalArgumentException e) {
-            assertThat(e.getMessage(), is("'aSubMap' (a map) is not a biginteger"));
+            assertThat(e.getMessage(), is("'aSubMap' is not a biginteger"));
         }
     }
 
@@ -77,7 +77,7 @@ public class JsonRepresentationTest_getBigInteger {
             jsonRepresentation.getBigInteger("aSubList");
             fail();
         } catch (IllegalArgumentException e) {
-            assertThat(e.getMessage(), is("'aSubList' (an array) is not a biginteger"));
+            assertThat(e.getMessage(), is("'aSubList' is not a biginteger"));
         }
     }
 
