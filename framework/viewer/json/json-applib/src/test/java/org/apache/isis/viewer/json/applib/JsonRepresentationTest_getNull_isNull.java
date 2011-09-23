@@ -63,7 +63,7 @@ public class JsonRepresentationTest_getNull_isNull {
             jsonRepresentation.getNull("anEmptyArray");
             fail();
         } catch (IllegalArgumentException e) {
-            assertThat(e.getMessage(), is("'anEmptyArray' (an array) is not the null value"));
+            assertThat(e.getMessage(), is("'anEmptyArray' is not the null value"));
         }
     }
 
@@ -90,7 +90,7 @@ public class JsonRepresentationTest_getNull_isNull {
             jsonRepresentation.getNull("aSubMap");
             fail();
         } catch (IllegalArgumentException e) {
-            assertThat(e.getMessage(), is("'aSubMap' (a map) is not the null value"));
+            assertThat(e.getMessage(), is("'aSubMap' is not the null value"));
         }
     }
     

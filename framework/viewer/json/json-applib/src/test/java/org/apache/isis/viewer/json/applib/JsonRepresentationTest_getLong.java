@@ -66,7 +66,7 @@ public class JsonRepresentationTest_getLong {
             jsonRepresentation.getLong("aSubMap");
             fail();
         } catch (IllegalArgumentException e) {
-            assertThat(e.getMessage(), is("'aSubMap' (a map) is not a long"));
+            assertThat(e.getMessage(), is("'aSubMap' is not a long"));
         }
     }
 
@@ -76,7 +76,7 @@ public class JsonRepresentationTest_getLong {
             jsonRepresentation.getLong("aSubList");
             fail();
         } catch (IllegalArgumentException e) {
-            assertThat(e.getMessage(), is("'aSubList' (an array) is not a long"));
+            assertThat(e.getMessage(), is("'aSubList' is not a long"));
         }
     }
 

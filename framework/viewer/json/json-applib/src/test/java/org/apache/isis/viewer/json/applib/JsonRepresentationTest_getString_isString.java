@@ -70,7 +70,7 @@ public class JsonRepresentationTest_getString_isString {
             jsonRepresentation.getString("aSubMap");
             fail();
         } catch (IllegalArgumentException e) {
-            assertThat(e.getMessage(), is("'aSubMap' (a map) is not a string"));
+            assertThat(e.getMessage(), is("'aSubMap' is not a string"));
         }
     }
 
@@ -81,7 +81,7 @@ public class JsonRepresentationTest_getString_isString {
             jsonRepresentation.getString("aSubList");
             fail();
         } catch (IllegalArgumentException e) {
-            assertThat(e.getMessage(), is("'aSubList' (an array) is not a string"));
+            assertThat(e.getMessage(), is("'aSubList' is not a string"));
         }
     }
 
