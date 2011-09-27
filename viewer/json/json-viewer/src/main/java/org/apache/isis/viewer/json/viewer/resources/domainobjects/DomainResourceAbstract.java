@@ -70,7 +70,7 @@ public abstract class DomainResourceAbstract extends ResourceAbstract {
                         .withAdapter(objectAdapter);
 
         ResponseBuilder respBuilder = 
-                responseOfOk(RepresentationType.DOMAIN_OBJECT, repBuilder, Caching.NONE);
+                responseOfOk(RepresentationType.DOMAIN_OBJECT, Caching.NONE, repBuilder);
 
         Version version = objectAdapter.getVersion();
         if (version != null && version.getTime() != null) {
@@ -94,7 +94,7 @@ public abstract class DomainResourceAbstract extends ResourceAbstract {
                 .withSelf()
                 .withMutatorsIfEnabled();
         
-        return responseOfOk(RepresentationType.OBJECT_ACTION, repBuilder, Caching.NONE)
+        return responseOfOk(RepresentationType.OBJECT_ACTION, Caching.NONE, repBuilder)
                 .build();
     }
 
@@ -187,7 +187,8 @@ public abstract class DomainResourceAbstract extends ResourceAbstract {
     protected Response invokeActionUsingAdapters(
         final ObjectAdapter objectAdapter,
         final ObjectAction action,
-        final List<ObjectAdapter> argAdapters, JsonRepresentation representationWithSelf) {
+        final List<ObjectAdapter> argAdapters, 
+        final JsonRepresentation representationWithSelf) {
         
         // validate
         List<ObjectActionParameter> parameters = action.getParameters();
@@ -222,13 +223,13 @@ public abstract class DomainResourceAbstract extends ResourceAbstract {
             final Collection<ObjectAdapter> collectionAdapters = collectionFacet
                     .collection(returnedAdapter);
             DomainObjectListRepBuilder repBuilder = DomainObjectListRepBuilder.newBuilder(getResourceContext(), representationWithSelf).withAdapters(collectionAdapters);
-            return responseOfOk(RepresentationType.LIST, repBuilder, Caching.NONE).build();
+            return responseOfOk(RepresentationType.LIST, Caching.NONE, repBuilder).build();
         }
 
         final EncodableFacet encodableFacet = returnedAdapter.getSpecification().getFacet(EncodableFacet.class);
         if(encodableFacet != null) {
             ScalarRepBuilder repBuilder = ScalarRepBuilder.newBuilder(getResourceContext(), representationWithSelf).withAdapter(objectAdapter);
-            return responseOfOk(RepresentationType.SCALAR_VALUE, repBuilder, Caching.NONE).build();
+            return responseOfOk(RepresentationType.SCALAR_VALUE, Caching.NONE, repBuilder).build();
         }
 
         return object(returnedAdapter);

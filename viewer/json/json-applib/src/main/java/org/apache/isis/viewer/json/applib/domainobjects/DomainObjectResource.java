@@ -32,6 +32,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.apache.isis.viewer.json.applib.RestfulMediaType;
 import org.jboss.resteasy.annotations.ClientResponseType;
 
 @Path("/objects")
@@ -43,14 +44,14 @@ public interface DomainObjectResource {
 
     @GET
     @Path("/{oid}")
-    @Produces({ MediaType.APPLICATION_JSON })
+    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_DOMAIN_OBJECT, RestfulMediaType.APPLICATION_JSON_ERROR })
     @ClientResponseType(entityType=String.class)
     public Response object(@PathParam("oid") final String oidStr);
 
     @PUT
     @Path("/{oid}")
-    @Consumes({ MediaType.APPLICATION_JSON })
-    @Produces({ MediaType.APPLICATION_JSON })
+    @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_JSON })
+    @Produces({ RestfulMediaType.APPLICATION_JSON_DOMAIN_OBJECT, RestfulMediaType.APPLICATION_JSON_ERROR })
     @ClientResponseType(entityType=String.class)
     public Response object(
         @PathParam("oid") final String oidStr, 
@@ -63,7 +64,7 @@ public interface DomainObjectResource {
 
     @GET
     @Path("/{oid}/properties/{propertyId}")
-    @Produces({ MediaType.APPLICATION_JSON })
+    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT_PROPERTY, RestfulMediaType.APPLICATION_JSON_ERROR })
     @ClientResponseType(entityType=String.class)
     public Response propertyDetails(
         @PathParam("oid") final String oidStr,
@@ -71,8 +72,8 @@ public interface DomainObjectResource {
 
     @PUT
     @Path("/{oid}/properties/{propertyId}")
-    @Produces({ MediaType.APPLICATION_JSON })
     @Consumes({ MediaType.APPLICATION_JSON })
+    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ERROR })
     @ClientResponseType(entityType=String.class)
     public Response modifyProperty(
         @PathParam("oid") final String oidStr,
@@ -81,7 +82,7 @@ public interface DomainObjectResource {
 
     @DELETE
     @Path("/{oid}/properties/{propertyId}")
-    @Produces({ MediaType.APPLICATION_JSON })
+    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ERROR })
     @ClientResponseType(entityType=String.class)
     public Response clearProperty(
         @PathParam("oid") final String oidStr, 
@@ -95,7 +96,7 @@ public interface DomainObjectResource {
 
     @GET
     @Path("/{oid}/collections/{collectionId}")
-    @Produces({ MediaType.APPLICATION_JSON })
+    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT_COLLECTION, RestfulMediaType.APPLICATION_JSON_ERROR })
     @ClientResponseType(entityType=String.class)
     public Response accessCollection(
         @PathParam("oid") final String oidStr,
@@ -104,7 +105,7 @@ public interface DomainObjectResource {
     @PUT
     @Path("/{oid}/collections/{collectionId}")
     @Consumes({ MediaType.APPLICATION_JSON })
-    @Produces({ MediaType.APPLICATION_JSON })
+    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ERROR })
     public Response addToSet(
         @PathParam("oid") final String oidStr,
         @PathParam("collectionId") final String collectionId,
@@ -112,8 +113,8 @@ public interface DomainObjectResource {
 
     @POST
     @Path("/{oid}/collections/{collectionId}")
-    @Produces({ MediaType.APPLICATION_JSON })
     @Consumes({ MediaType.APPLICATION_JSON })
+    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ERROR })
     @ClientResponseType(entityType=String.class)
     public Response addToList(
         @PathParam("oid") final String oidStr,
@@ -122,8 +123,8 @@ public interface DomainObjectResource {
  
     @DELETE
     @Path("/{oid}/collections/{collectionId}")
-    @Produces({ MediaType.APPLICATION_JSON })
     @Consumes({ MediaType.APPLICATION_JSON })
+    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ERROR })
     @ClientResponseType(entityType=String.class)
     public Response removeFromCollection(
         @PathParam("oid") final String oidStr,
@@ -137,7 +138,7 @@ public interface DomainObjectResource {
 
     @GET
     @Path("/{oid}/actions/{actionId}")
-    @Produces({ MediaType.APPLICATION_JSON })
+    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT_ACTION, RestfulMediaType.APPLICATION_JSON_ERROR })
     @ClientResponseType(entityType=String.class)
     public Response actionPrompt(
         @PathParam("oid") final String oidStr, 
@@ -149,7 +150,7 @@ public interface DomainObjectResource {
 
     @GET
     @Path("/{oid}/actions/{actionId}/invoke")
-    @Produces({ MediaType.APPLICATION_JSON })
+    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_DOMAIN_OBJECT, RestfulMediaType.APPLICATION_JSON_LIST, RestfulMediaType.APPLICATION_JSON_SCALAR_VALUE, RestfulMediaType.APPLICATION_JSON_ERROR })
     @ClientResponseType(entityType=String.class)
     public Response invokeActionQueryOnly(
         @PathParam("oid") final String oidStr, 
@@ -158,8 +159,8 @@ public interface DomainObjectResource {
 
     @PUT
     @Path("/{oid}/actions/{actionId}/invoke")
-    @Produces({ MediaType.APPLICATION_JSON })
     @Consumes({ MediaType.APPLICATION_JSON })
+    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_DOMAIN_OBJECT, RestfulMediaType.APPLICATION_JSON_LIST, RestfulMediaType.APPLICATION_JSON_SCALAR_VALUE, RestfulMediaType.APPLICATION_JSON_ERROR })
     @ClientResponseType(entityType=String.class)
     public Response invokeActionIdempotent(
         @PathParam("oid") final String oidStr, 
@@ -168,8 +169,8 @@ public interface DomainObjectResource {
     
     @POST
     @Path("/{oid}/actions/{actionId}/invoke")
-    @Produces({ MediaType.APPLICATION_JSON })
     @Consumes({ MediaType.APPLICATION_JSON })
+    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_DOMAIN_OBJECT, RestfulMediaType.APPLICATION_JSON_LIST, RestfulMediaType.APPLICATION_JSON_SCALAR_VALUE, RestfulMediaType.APPLICATION_JSON_ERROR })
     @ClientResponseType(entityType=String.class)
     public Response invokeAction(
         @PathParam("oid") final String oidStr, 

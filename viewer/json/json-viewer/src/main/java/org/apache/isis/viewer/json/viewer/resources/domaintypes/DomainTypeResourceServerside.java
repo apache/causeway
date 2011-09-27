@@ -30,6 +30,7 @@ import javax.ws.rs.core.Response;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.applib.RepresentationType;
+import org.apache.isis.viewer.json.applib.RestfulMediaType;
 import org.apache.isis.viewer.json.applib.domaintypes.DomainTypeResource;
 import org.apache.isis.viewer.json.viewer.representations.LinkToBuilder;
 import org.apache.isis.viewer.json.viewer.resources.ResourceAbstract;
@@ -44,7 +45,7 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
 
     @GET
     @Path("/")
-    @Produces({ MediaType.APPLICATION_JSON })
+    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_DOMAIN_TYPES })
     public Response domainTypes() {
         init();
 
@@ -60,25 +61,25 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
         
         representation.mapPut("domainTypes", specList);
         
-        return responseOfOk(RepresentationType.DOMAIN_TYPE, representation, Caching.ONE_DAY).build();
+        return responseOfOk(RepresentationType.DOMAIN_TYPE, Caching.ONE_DAY, representation).build();
     }
 
     
     @GET
     @Path("/{domainType}")
-    @Produces({ MediaType.APPLICATION_JSON })
+    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_DOMAIN_TYPE })
     public Response domainType(@PathParam("domainType") final String domainType){
         init();
 
         JsonRepresentation representation = JsonRepresentation.newMap();
         representation.mapPut("self", LinkToBuilder.newBuilder(getResourceContext(), "self", "domainTypes/%s", domainType).build());
         
-        return responseOfOk(RepresentationType.DOMAIN_TYPE, representation, Caching.ONE_DAY).build();
+        return responseOfOk(RepresentationType.DOMAIN_TYPE, Caching.ONE_DAY, representation).build();
     }
 
     @GET
     @Path("/{domainType}/properties/{propertyId}")
-    @Produces({ MediaType.APPLICATION_JSON })
+    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_TYPE_PROPERTY })
     public Response typeProperty(
             @PathParam("domainType") final String domainType,
             @PathParam("propertyId") final String propertyId){
@@ -87,12 +88,12 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
         JsonRepresentation representation = JsonRepresentation.newMap();
         representation.mapPut("self", LinkToBuilder.newBuilder(getResourceContext(), "self", "domainTypes/%s/properties/%s", domainType, propertyId).build());
         
-        return responseOfOk(RepresentationType.DOMAIN_TYPE_PROPERTY, representation, Caching.ONE_DAY).build();
+        return responseOfOk(RepresentationType.TYPE_PROPERTY, Caching.ONE_DAY, representation).build();
     }
 
     @GET
     @Path("/{domainType}/collections/{collectionId}")
-    @Produces({ MediaType.APPLICATION_JSON })
+    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_TYPE_COLLECTION })
     public Response typeCollection(
             @PathParam("domainType") final String domainType,
             @PathParam("collectionId") final String collectionId){
@@ -101,12 +102,12 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
         JsonRepresentation representation = JsonRepresentation.newMap();
         representation.mapPut("self", LinkToBuilder.newBuilder(getResourceContext(), "self", "domainType/%s/collections/%s", domainType, collectionId).build());
         
-        return responseOfOk(RepresentationType.DOMAIN_TYPE_COLLECTION, representation, Caching.ONE_DAY).build();
+        return responseOfOk(RepresentationType.TYPE_COLLECTION, Caching.ONE_DAY, representation).build();
     }
 
     @GET
     @Path("/{domainType}/actions/{actionId}")
-    @Produces({ MediaType.APPLICATION_JSON })
+    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_TYPE_ACTION })
     public Response typeAction(
             @PathParam("domainType") final String domainType,
             @PathParam("actionId") final String actionId){
@@ -115,12 +116,12 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
         JsonRepresentation representation = JsonRepresentation.newMap();
         representation.mapPut("self", LinkToBuilder.newBuilder(getResourceContext(), "self", "domainTypes/%s/actions/%s", domainType, actionId).build());
         
-        return responseOfOk(RepresentationType.DOMAIN_TYPE_ACTION, representation, Caching.ONE_DAY).build();
+        return responseOfOk(RepresentationType.TYPE_ACTION, Caching.ONE_DAY, representation).build();
     }
 
     @GET
     @Path("/{domainType}/actions/{actionId}/params/{paramName}")
-    @Produces({ MediaType.APPLICATION_JSON })
+    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_TYPE_ACTION_PARAMETER })
     public Response typeActionParam(
             @PathParam("domainType") final String domainType,
             @PathParam("actionId") final String actionId,
@@ -130,7 +131,7 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
         JsonRepresentation representation = JsonRepresentation.newMap();
         representation.mapPut("self", LinkToBuilder.newBuilder(getResourceContext(), "self", "domainTypes/%s/actions/%s/params/%s", domainType, actionId, paramName).build());
         
-        return responseOfOk(RepresentationType.DOMAIN_TYPE_COLLECTION, representation, Caching.ONE_DAY).build();
+        return responseOfOk(RepresentationType.TYPE_COLLECTION, Caching.ONE_DAY, representation).build();
     }
 
 }

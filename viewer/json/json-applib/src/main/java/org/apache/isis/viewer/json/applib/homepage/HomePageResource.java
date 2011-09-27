@@ -24,13 +24,14 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.apache.isis.viewer.json.applib.RestfulMediaType;
 import org.jboss.resteasy.annotations.ClientResponseType;
 
 @Path("/")
 public interface HomePageResource {
 
     @GET
-    @Produces({ MediaType.APPLICATION_JSON })
+    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_HOME_PAGE })
     @ClientResponseType(entityType=String.class)
     public Response resources();
 

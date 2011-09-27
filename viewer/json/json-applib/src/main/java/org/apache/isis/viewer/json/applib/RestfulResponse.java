@@ -223,7 +223,6 @@ public class RestfulResponse<T> {
         public final static Header<Date> LAST_MODIFIED = new Header<Date>("Last-Modified", Parser.forDates());
         public final static Header<CacheControl> CACHE_CONTROL = new Header<CacheControl>("Cache-Control", Parser.forCacheControl());
         public final static Header<MediaType> CONTENT_TYPE = new Header<MediaType>("Content-Type", Parser.forMediaType());
-        public final static Header<RepresentationType> X_REPRESENTATION_TYPE = new Header<RepresentationType>("X-Representation-Type", Parser.forRepresentationType());
         
         private final String name;
         private final Parser<X> parser;
