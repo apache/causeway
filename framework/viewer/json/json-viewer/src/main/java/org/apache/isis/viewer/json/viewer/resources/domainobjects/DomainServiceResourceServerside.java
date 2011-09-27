@@ -31,16 +31,12 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.viewer.json.applib.RepresentationType;
-import org.apache.isis.viewer.json.applib.RestfulResponse;
-import org.apache.isis.viewer.json.applib.RestfulResponse.HttpStatusCode;
+import org.apache.isis.viewer.json.applib.RestfulMediaType;
 import org.apache.isis.viewer.json.applib.domainobjects.DomainServiceResource;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
 import org.apache.isis.viewer.json.viewer.representations.AbstractRepresentationBuilder;
-import org.apache.isis.viewer.json.viewer.resources.ResourceAbstract.Caching;
-import org.apache.isis.viewer.json.viewer.resources.domainobjects.DomainResourceAbstract.Intent;
 
 @Path("/services")
 public class DomainServiceResourceServerside extends DomainResourceAbstract implements
@@ -49,7 +45,7 @@ public class DomainServiceResourceServerside extends DomainResourceAbstract impl
     @Override
     @GET
     @Path("/")
-    @Produces({ MediaType.APPLICATION_JSON })
+    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_LIST, RestfulMediaType.APPLICATION_JSON_ERROR })
     public Response services() {
         init();
 
@@ -62,7 +58,7 @@ public class DomainServiceResourceServerside extends DomainResourceAbstract impl
                     .withSelf("services")
                     .withAdapters(serviceAdapters);
         
-        return responseOfOk(RepresentationType.LIST, builder, Caching.ONE_DAY).build();
+        return responseOfOk(RepresentationType.LIST, Caching.ONE_DAY, builder).build();
     }
 
     ////////////////////////////////////////////////////////////
@@ -71,7 +67,7 @@ public class DomainServiceResourceServerside extends DomainResourceAbstract impl
 
     @GET
     @Path("/{serviceId}")
-    @Produces({ MediaType.APPLICATION_JSON })
+    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_DOMAIN_OBJECT, RestfulMediaType.APPLICATION_JSON_ERROR })
     @Override
     public Response service(
             @PathParam("serviceId") String serviceId) {
@@ -85,7 +81,7 @@ public class DomainServiceResourceServerside extends DomainResourceAbstract impl
                     .usingLinkToBuilder(new DomainServiceLinkToBuilder())
                     .withAdapter(serviceAdapter);
         
-        return responseOfOk(RepresentationType.DOMAIN_OBJECT, builder, Caching.ONE_DAY).build();
+        return responseOfOk(RepresentationType.DOMAIN_OBJECT, Caching.ONE_DAY, builder).build();
     }
 
 
@@ -95,7 +91,7 @@ public class DomainServiceResourceServerside extends DomainResourceAbstract impl
 
     @GET
     @Path("/{serviceId}/properties/{propertyId}")
-    @Produces({ MediaType.APPLICATION_JSON })
+    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT_PROPERTY, RestfulMediaType.APPLICATION_JSON_ERROR })
     public Response propertyDetails(
             @PathParam("serviceId") final String serviceId,
             @PathParam("propertyId") final String propertyId) {
@@ -109,7 +105,7 @@ public class DomainServiceResourceServerside extends DomainResourceAbstract impl
         final ObjectPropertyRepBuilder builder = ObjectPropertyRepBuilder.newBuilder(
                 resourceContext, serviceAdapter, property);
 
-        return responseOfOk(RepresentationType.OBJECT_PROPERTY, builder, Caching.ONE_DAY).build();
+        return responseOfOk(RepresentationType.OBJECT_PROPERTY, Caching.ONE_DAY, builder).build();
     }
 
 
@@ -120,7 +116,7 @@ public class DomainServiceResourceServerside extends DomainResourceAbstract impl
     
     @GET
     @Path("/{serviceId}/actions/{actionId}")
-    @Produces({ MediaType.APPLICATION_JSON })
+    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT_ACTION, RestfulMediaType.APPLICATION_JSON_ERROR })
     public Response actionPrompt(
             @PathParam("serviceId") final String serviceId, 
             @PathParam("actionId") final String actionId) {
@@ -138,7 +134,7 @@ public class DomainServiceResourceServerside extends DomainResourceAbstract impl
 
     @GET
     @Path("/{oid}/actions/{actionId}/invoke")
-    @Produces({ MediaType.APPLICATION_JSON })
+    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_DOMAIN_OBJECT, RestfulMediaType.APPLICATION_JSON_LIST, RestfulMediaType.APPLICATION_JSON_SCALAR_VALUE, RestfulMediaType.APPLICATION_JSON_ERROR })
     public Response serviceInvokeActionQueryOnly(
             @PathParam("oid") final String oidStr, 
             @PathParam("actionId") final String actionId,
@@ -151,8 +147,8 @@ public class DomainServiceResourceServerside extends DomainResourceAbstract impl
 
     @PUT
     @Path("/{oid}/actions/{actionId}/invoke")
-    @Produces({ MediaType.APPLICATION_JSON })
     @Consumes({ MediaType.APPLICATION_JSON })
+    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_DOMAIN_OBJECT, RestfulMediaType.APPLICATION_JSON_LIST, RestfulMediaType.APPLICATION_JSON_SCALAR_VALUE, RestfulMediaType.APPLICATION_JSON_ERROR })
     public Response serviceInvokeActionIdempotent(
             @PathParam("oid") final String oidStr, 
             @PathParam("actionId") final String actionId,
@@ -165,8 +161,8 @@ public class DomainServiceResourceServerside extends DomainResourceAbstract impl
 
     @POST
     @Path("/{oid}/actions/{actionId}/invoke")
-    @Produces({ MediaType.APPLICATION_JSON })
     @Consumes({ MediaType.APPLICATION_JSON })
+    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_DOMAIN_OBJECT, RestfulMediaType.APPLICATION_JSON_LIST, RestfulMediaType.APPLICATION_JSON_SCALAR_VALUE, RestfulMediaType.APPLICATION_JSON_ERROR })
     public Response serviceInvokeAction(
             @PathParam("oid") final String oidStr, 
             @PathParam("actionId") final String actionId,

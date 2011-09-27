@@ -31,6 +31,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.apache.isis.viewer.json.applib.RestfulMediaType;
 import org.jboss.resteasy.annotations.ClientResponseType;
 
 @Path("/services")
@@ -38,7 +39,7 @@ public interface DomainServiceResource {
 
     @GET
     @Path("/")
-    @Produces({ MediaType.APPLICATION_JSON })
+    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_LIST, RestfulMediaType.APPLICATION_JSON_ERROR })
     @ClientResponseType(entityType=String.class)
     public Response services();
 
@@ -48,18 +49,29 @@ public interface DomainServiceResource {
 
     @GET
     @Path("/{serviceId}")
-    @Produces({ MediaType.APPLICATION_JSON })
+    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_DOMAIN_OBJECT, RestfulMediaType.APPLICATION_JSON_ERROR })
     @ClientResponseType(entityType=String.class)
     public Response service(@PathParam("serviceId") final String serviceId);
     
+
+    ////////////////////////////////////////////////////////////
+    // domain service property
+    ////////////////////////////////////////////////////////////
     
+    @GET
+    @Path("/{serviceId}/properties/{propertyId}")
+    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT_PROPERTY, RestfulMediaType.APPLICATION_JSON_ERROR })
+    public Response propertyDetails(
+        @PathParam("serviceId") final String serviceId,
+        @PathParam("propertyId") final String propertyId);
+
     ////////////////////////////////////////////////////////////
     // domain service action
     ////////////////////////////////////////////////////////////
     
     @GET
     @Path("/{serviceId}/actions/{actionId}")
-    @Produces({ MediaType.APPLICATION_JSON })
+    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT_ACTION, RestfulMediaType.APPLICATION_JSON_ERROR })
     @ClientResponseType(entityType=String.class)
     public Response actionPrompt(
         @PathParam("serviceId") final String serviceId, 
@@ -72,7 +84,7 @@ public interface DomainServiceResource {
 
     @GET
     @Path("/{oid}/actions/{actionId}/invoke")
-    @Produces({ MediaType.APPLICATION_JSON })
+    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_DOMAIN_OBJECT, RestfulMediaType.APPLICATION_JSON_LIST, RestfulMediaType.APPLICATION_JSON_SCALAR_VALUE, RestfulMediaType.APPLICATION_JSON_ERROR })
     @ClientResponseType(entityType=String.class)
     public Response serviceInvokeActionQueryOnly(
         @PathParam("oid") final String oidStr, 
@@ -81,8 +93,8 @@ public interface DomainServiceResource {
 
     @PUT
     @Path("/{oid}/actions/{actionId}/invoke")
-    @Produces({ MediaType.APPLICATION_JSON })
     @Consumes({ MediaType.APPLICATION_JSON })
+    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_DOMAIN_OBJECT, RestfulMediaType.APPLICATION_JSON_LIST, RestfulMediaType.APPLICATION_JSON_SCALAR_VALUE, RestfulMediaType.APPLICATION_JSON_ERROR })
     @ClientResponseType(entityType=String.class)
     public Response serviceInvokeActionIdempotent(
         @PathParam("oid") final String oidStr, 
@@ -91,8 +103,8 @@ public interface DomainServiceResource {
 
     @POST
     @Path("/{oid}/actions/{actionId}/invoke")
-    @Produces({ MediaType.APPLICATION_JSON })
     @Consumes({ MediaType.APPLICATION_JSON })
+    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_DOMAIN_OBJECT, RestfulMediaType.APPLICATION_JSON_LIST, RestfulMediaType.APPLICATION_JSON_SCALAR_VALUE, RestfulMediaType.APPLICATION_JSON_ERROR })
     @ClientResponseType(entityType=String.class)
     public Response serviceInvokeAction(
         @PathParam("oid") final String oidStr, 

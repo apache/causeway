@@ -13,7 +13,6 @@ import static org.junit.Assert.assertThat;
 
 import java.io.IOException;
 
-import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.apache.isis.runtimes.dflt.webserver.WebServer;
@@ -64,9 +63,8 @@ public class DomainServiceResourceTest_service_serviceId {
         
         // then
         assertThat(jsonResp.getStatus(), is(HttpStatusCode.OK));
-        assertThat(jsonResp.getHeader(RestfulResponse.Header.CONTENT_TYPE), is(MediaType.APPLICATION_JSON_TYPE));
+        assertThat(jsonResp.getHeader(RestfulResponse.Header.CONTENT_TYPE), is(RepresentationType.DOMAIN_OBJECT.getMediaType()));
         assertThat(jsonResp.getHeader(RestfulResponse.Header.CACHE_CONTROL).getMaxAge(), is(24*60*60));
-        assertThat(jsonResp.getHeader(RestfulResponse.Header.X_REPRESENTATION_TYPE), is(RepresentationType.DOMAIN_OBJECT));
 
         DomainObjectRepresentation repr = jsonResp.getEntity();
 

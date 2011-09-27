@@ -16,9 +16,7 @@
  */
 package org.apache.isis.viewer.json.viewer.resources.domainobjects;
 
-import java.io.IOException;
 import java.io.InputStream;
-import java.util.List;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -35,16 +33,14 @@ import javax.ws.rs.core.Response;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.viewer.json.applib.RepresentationType;
+import org.apache.isis.viewer.json.applib.RestfulMediaType;
 import org.apache.isis.viewer.json.applib.RestfulResponse.HttpStatusCode;
 import org.apache.isis.viewer.json.applib.domainobjects.DomainObjectResource;
 import org.apache.isis.viewer.json.viewer.JsonApplicationException;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
-import org.apache.isis.viewer.json.viewer.resources.ResourceAbstract.Caching;
-import org.apache.isis.viewer.json.viewer.resources.domainobjects.DomainResourceAbstract.Intent;
 
 @Path("/objects")
 public class DomainObjectResourceServerside extends DomainResourceAbstract implements
@@ -56,7 +52,7 @@ public class DomainObjectResourceServerside extends DomainResourceAbstract imple
     
     @GET
     @Path("/{oid}")
-    @Produces({ MediaType.APPLICATION_JSON })
+    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_DOMAIN_OBJECT, RestfulMediaType.APPLICATION_JSON_ERROR })
     public Response object(
             @PathParam("oid") final String oidStr) {
         init();
@@ -69,7 +65,7 @@ public class DomainObjectResourceServerside extends DomainResourceAbstract imple
     @PUT
     @Path("/{oid}")
     @Consumes({ MediaType.APPLICATION_JSON })
-    @Produces({ MediaType.APPLICATION_JSON })
+    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_DOMAIN_OBJECT, RestfulMediaType.APPLICATION_JSON_ERROR })
     public Response object(
         @PathParam("oid") final String oidStr, 
         final InputStream arguments) {
@@ -86,7 +82,7 @@ public class DomainObjectResourceServerside extends DomainResourceAbstract imple
 
     @GET
     @Path("/{oid}/properties/{propertyId}")
-    @Produces({ MediaType.APPLICATION_JSON })
+    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT_PROPERTY, RestfulMediaType.APPLICATION_JSON_ERROR })
     public Response propertyDetails(
             @PathParam("oid") final String oidStr,
             @PathParam("propertyId") final String propertyId) {
@@ -100,12 +96,12 @@ public class DomainObjectResourceServerside extends DomainResourceAbstract imple
         final ObjectPropertyRepBuilder builder = ObjectPropertyRepBuilder.newBuilder(
                 resourceContext, objectAdapter, property);
         
-        return responseOfOk(RepresentationType.OBJECT_PROPERTY, builder, Caching.NONE).build();
+        return responseOfOk(RepresentationType.OBJECT_PROPERTY, Caching.NONE, builder).build();
     }
 
     @PUT
     @Path("/{oid}/properties/{propertyId}")
-    @Produces({ MediaType.APPLICATION_JSON })
+    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ERROR })
     public Response modifyProperty(
             @PathParam("oid") final String oidStr,
             @PathParam("propertyId") final String propertyId,
@@ -136,7 +132,7 @@ public class DomainObjectResourceServerside extends DomainResourceAbstract imple
 
     @DELETE
     @Path("/{oid}/properties/{propertyId}")
-    @Produces({ MediaType.APPLICATION_JSON })
+    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ERROR })
     public Response clearProperty(
             @PathParam("oid") final String oidStr,
             @PathParam("propertyId") final String propertyId) {
@@ -164,7 +160,7 @@ public class DomainObjectResourceServerside extends DomainResourceAbstract imple
 
     @GET
     @Path("/{oid}/collections/{collectionId}")
-    @Produces({ MediaType.APPLICATION_JSON })
+    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT_COLLECTION, RestfulMediaType.APPLICATION_JSON_ERROR })
     public Response accessCollection(
         @PathParam("oid") final String oidStr,
         @PathParam("collectionId") final String collectionId) {
@@ -184,7 +180,7 @@ public class DomainObjectResourceServerside extends DomainResourceAbstract imple
 
     @PUT
     @Path("/{oid}/collections/{collectionId}")
-    @Produces({ MediaType.APPLICATION_JSON })
+    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ERROR })
     public Response addToSet(
             @PathParam("oid") final String oidStr,
             @PathParam("collectionId") final String collectionId,
@@ -219,7 +215,7 @@ public class DomainObjectResourceServerside extends DomainResourceAbstract imple
 
     @POST
     @Path("/{oid}/collections/{collectionId}")
-    @Produces({ MediaType.APPLICATION_JSON })
+    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ERROR })
     public Response addToList(
             @PathParam("oid") final String oidStr,
             @PathParam("collectionId") final String collectionId,
@@ -254,7 +250,7 @@ public class DomainObjectResourceServerside extends DomainResourceAbstract imple
 
     @DELETE
     @Path("/{oid}/collections/{collectionId}")
-    @Produces({ MediaType.APPLICATION_JSON })
+    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ERROR })
     public Response removeFromCollection(
         @PathParam("oid") final String oidStr,
         @PathParam("collectionId") final String collectionId,
@@ -286,7 +282,7 @@ public class DomainObjectResourceServerside extends DomainResourceAbstract imple
 
     @GET
     @Path("/{oid}/actions/{actionId}")
-    @Produces({ MediaType.APPLICATION_JSON })
+    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT_ACTION, RestfulMediaType.APPLICATION_JSON_ERROR })
     public Response actionPrompt(
             @PathParam("oid") final String oidStr,
             @PathParam("actionId") final String actionId) {
@@ -304,7 +300,7 @@ public class DomainObjectResourceServerside extends DomainResourceAbstract imple
 
     @GET
     @Path("/{oid}/actions/{actionId}/invoke")
-    @Produces({ MediaType.APPLICATION_JSON })
+    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_DOMAIN_OBJECT, RestfulMediaType.APPLICATION_JSON_LIST, RestfulMediaType.APPLICATION_JSON_SCALAR_VALUE, RestfulMediaType.APPLICATION_JSON_ERROR })
     public Response invokeActionQueryOnly(
             @PathParam("oid") final String oidStr,
             @PathParam("actionId") final String actionId,
@@ -318,7 +314,7 @@ public class DomainObjectResourceServerside extends DomainResourceAbstract imple
 
     @PUT
     @Path("/{oid}/actions/{actionId}/invoke")
-    @Produces({ MediaType.APPLICATION_JSON })
+    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_DOMAIN_OBJECT, RestfulMediaType.APPLICATION_JSON_LIST, RestfulMediaType.APPLICATION_JSON_SCALAR_VALUE, RestfulMediaType.APPLICATION_JSON_ERROR })
     public Response invokeActionIdempotent(
             @PathParam("oid") final String oidStr,
             @PathParam("actionId") final String actionId,
@@ -332,7 +328,7 @@ public class DomainObjectResourceServerside extends DomainResourceAbstract imple
 
     @POST
     @Path("/{oid}/actions/{actionId}/invoke")
-    @Produces({ MediaType.APPLICATION_JSON })
+    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_DOMAIN_OBJECT, RestfulMediaType.APPLICATION_JSON_LIST, RestfulMediaType.APPLICATION_JSON_SCALAR_VALUE, RestfulMediaType.APPLICATION_JSON_ERROR })
     public Response invokeAction(
             @PathParam("oid") final String oidStr,
             @PathParam("actionId") final String actionId,

@@ -190,7 +190,7 @@ public class ObjectActionRepBuilder extends AbstractObjectMemberRepBuilder<Objec
         extensions.mapPut("actionType", objectMember.getType().name().toLowerCase());
         
         final ActionSemantics semantics = ActionSemantics.determine(resourceContext, objectMember);
-        extensions.mapPut("actionSemantics", semantics.name().toLowerCase());
+        extensions.mapPut("actionSemantics", semantics.getName());
     }
 
      private void addLinksFormalDomainModel(JsonRepresentation links, ResourceContext resourceContext) {

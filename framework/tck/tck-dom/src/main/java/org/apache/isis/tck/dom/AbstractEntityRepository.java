@@ -22,6 +22,7 @@ package org.apache.isis.tck.dom;
 import java.util.List;
 
 import org.apache.isis.applib.AbstractFactoryAndRepository;
+import org.apache.isis.applib.annotation.QueryOnly;
 
 public abstract class AbstractEntityRepository<T> extends AbstractFactoryAndRepository {
     
@@ -32,7 +33,7 @@ public abstract class AbstractEntityRepository<T> extends AbstractFactoryAndRepo
         this.cls = cls;
     }
 
-
+    @QueryOnly
     public List<T> list() {
         return allInstances(cls);
     }

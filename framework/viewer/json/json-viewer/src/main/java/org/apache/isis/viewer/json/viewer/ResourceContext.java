@@ -18,9 +18,12 @@
  */
 package org.apache.isis.viewer.json.viewer;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.core.HttpHeaders;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Request;
 import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.core.UriInfo;
@@ -51,6 +54,8 @@ public class ResourceContext {
             final Localization localization, 
             final AuthenticationSession authenticationSession, 
             final ObjectAdapterLookup objectAdapterLookup) {
+        
+
         this.httpHeaders = httpHeaders;
         this.uriInfo = uriInfo;
         this.request = request;
@@ -61,6 +66,8 @@ public class ResourceContext {
         this.localization = localization;
         this.authenticationSession = authenticationSession;
         this.objectAdapterLookup = objectAdapterLookup;
+        
+        List<MediaType> clientMediaTypes = getHttpHeaders().getAcceptableMediaTypes();
     }
 
     public HttpHeaders getHttpHeaders() {
@@ -107,6 +114,7 @@ public class ResourceContext {
     public ObjectAdapterLookup getAdapterManager() {
         return objectAdapterLookup;
     }
+
 
 
 }

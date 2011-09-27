@@ -26,6 +26,7 @@ import javax.ws.rs.core.Response;
 
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.applib.RepresentationType;
+import org.apache.isis.viewer.json.applib.RestfulMediaType;
 import org.apache.isis.viewer.json.applib.capabilities.CapabilitiesResource;
 import org.apache.isis.viewer.json.viewer.representations.LinkToBuilder;
 import org.apache.isis.viewer.json.viewer.resources.ResourceAbstract;
@@ -39,7 +40,7 @@ public class CapabilitiesResourceServerside extends ResourceAbstract implements 
 
 
     @GET
-    @Produces(MediaType.APPLICATION_JSON)
+    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_CAPABILITIES})
     public Response capabilities() {
         init();
 
@@ -63,7 +64,7 @@ public class CapabilitiesResourceServerside extends ResourceAbstract implements 
         representation.mapPut("links", JsonRepresentation.newArray());
         representation.mapPut("extensions", JsonRepresentation.newMap());
         
-        return responseOfOk(RepresentationType.CAPABILITIES, representation, Caching.ONE_DAY).build();
+        return responseOfOk(RepresentationType.CAPABILITIES, Caching.ONE_DAY, representation).build();
     }
 
 

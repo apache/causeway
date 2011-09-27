@@ -26,7 +26,7 @@ import javax.ws.rs.core.Response;
 
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.applib.RepresentationType;
-import org.apache.isis.viewer.json.applib.RestfulResponse;
+import org.apache.isis.viewer.json.applib.RestfulMediaType;
 import org.apache.isis.viewer.json.applib.RestfulResponse.HttpStatusCode;
 import org.apache.isis.viewer.json.applib.homepage.HomePageResource;
 import org.apache.isis.viewer.json.viewer.JsonApplicationException;
@@ -41,7 +41,7 @@ public class HomePageResourceServerside extends ResourceAbstract implements Home
 
 
     @Override
-    @Produces(MediaType.APPLICATION_JSON)
+    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_HOME_PAGE} )
     public Response resources() {
         init();
         
@@ -57,7 +57,7 @@ public class HomePageResourceServerside extends ResourceAbstract implements Home
         representation.mapPut("links", JsonRepresentation.newArray());
         representation.mapPut("extensions", JsonRepresentation.newMap());
 
-        return responseOfOk(RepresentationType.HOME_PAGE, representation, Caching.ONE_DAY).build();
+        return responseOfOk(RepresentationType.HOME_PAGE, Caching.ONE_DAY, representation).build();
     }
 
     private void fakeRuntimeExceptionIfXFail() {

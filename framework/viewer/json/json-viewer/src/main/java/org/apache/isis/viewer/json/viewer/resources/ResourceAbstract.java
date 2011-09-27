@@ -37,10 +37,8 @@ import javax.ws.rs.core.UriInfo;
 import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapterLookup;
 import org.apache.isis.core.metamodel.adapter.oid.stringable.OidStringifier;
 import org.apache.isis.core.metamodel.adapter.version.Version;
-import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.services.ServiceUtil;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -51,22 +49,17 @@ import org.apache.isis.runtimes.dflt.runtime.system.persistence.OidGenerator;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.applib.RepresentationType;
-import org.apache.isis.viewer.json.applib.RestfulResponse;
 import org.apache.isis.viewer.json.applib.RestfulResponse.HttpStatusCode;
 import org.apache.isis.viewer.json.applib.util.JsonMapper;
 import org.apache.isis.viewer.json.viewer.JsonApplicationException;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
 import org.apache.isis.viewer.json.viewer.representations.AbstractRepresentationBuilder;
 import org.apache.isis.viewer.json.viewer.representations.RepBuilder;
-import org.apache.isis.viewer.json.viewer.resources.ResourceAbstract.Caching;
-import org.apache.isis.viewer.json.viewer.resources.domainobjects.DomainObjectListRepBuilder;
 import org.apache.isis.viewer.json.viewer.resources.domainobjects.DomainObjectRepBuilder;
 import org.apache.isis.viewer.json.viewer.util.OidUtils;
 import org.apache.isis.viewer.json.viewer.util.UrlDecoderUtils;
-import org.apache.isis.viewer.json.viewer.util.UrlParserUtils;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
-import org.jboss.resteasy.util.HttpHeaderNames;
 
 import com.google.common.base.Function;
 import com.google.common.base.Functions;
@@ -124,28 +117,10 @@ public abstract class ResourceAbstract {
 
     private ResourceContext resourceContext;
 
-    // TODO: make parameterizable
-    private boolean strictChecking = false;
-
-
     protected void init() {
         this.resourceContext =
             new ResourceContext(httpHeaders, uriInfo, request, httpServletRequest, httpServletResponse, securityContext, 
                     getOidStringifier(), getLocalization(), getAuthenticationSession(), getAdapterManager());
-        checkAcceptHeader();
-    }
-
-    private void checkAcceptHeader() {
-        if(!strictChecking) {
-            return;
-        }
-        List<MediaType> clientMediaTypes = getResourceContext().getHttpHeaders().getAcceptableMediaTypes();
-        if(!clientMediaTypes.contains(MediaType.APPLICATION_JSON_TYPE)) {
-            throw JsonApplicationException.create(
-                    HttpStatusCode.NOT_ACCEPTABLE, 
-                    "Client %s header %s does not include %s", 
-                    HttpHeaderNames.ACCEPT, clientMediaTypes, MediaType.APPLICATION_JSON_TYPE); 
-        }
     }
 
     protected ResourceContext getResourceContext() {
@@ -164,7 +139,6 @@ public abstract class ResourceAbstract {
 
 	protected String jsonFor(
 			final Collection<ObjectAdapter> collectionAdapters) {
-	    
 	    
 		return jsonFor(Lists.newArrayList(
             Collections2.transform(collectionAdapters, toObjectSelfRepresentation())));
@@ -248,19 +222,19 @@ public abstract class ResourceAbstract {
         return responseOf(HttpStatusCode.NO_CONTENT).lastModified(version.getTime());
     }
 
-    public static ResponseBuilder responseOfOk(RepresentationType representationType, String representation, Caching caching) {
+    public static ResponseBuilder responseOfOk(RepresentationType representationType, Caching caching, String representation) {
         return responseOf(HttpStatusCode.OK)
-                .header(RestfulResponse.Header.X_REPRESENTATION_TYPE.getName(), representationType.getName())
+                .type(representationType.getMediaType())
                 .cacheControl(caching.getCacheControl())
                 .entity(representation);
     }
 
-    public static ResponseBuilder responseOfOk(RepresentationType representationType, JsonRepresentation representation, Caching caching) {
-        return responseOfOk(representationType, jsonFor(representation), caching);
+    public static ResponseBuilder responseOfOk(RepresentationType representationType, Caching caching, JsonRepresentation representation) {
+        return responseOfOk(representationType, caching, jsonFor(representation));
     }
 
-    public static ResponseBuilder responseOfOk(RepresentationType representationType, RepBuilder representationBuilder, Caching caching) {
-        return responseOfOk(representationType, representationBuilder.build(), caching);
+    public static ResponseBuilder responseOfOk(RepresentationType representationType, Caching caching, RepBuilder representationBuilder) {
+        return responseOfOk(representationType, caching, representationBuilder.build());
     }
 
 
