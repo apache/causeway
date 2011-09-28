@@ -17,28 +17,29 @@
 package org.apache.isis.viewer.json.viewer.resources.domaintypes;
 
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
-import org.apache.isis.viewer.json.viewer.representations.LinkToBuilder;
+import org.apache.isis.viewer.json.viewer.representations.LinkReprBuilder;
 import org.apache.isis.viewer.json.viewer.resources.domainobjects.MemberType;
 
-public class TypeCollectionRepBuilder extends AbstractTypeMemberRepBuilder<TypeCollectionRepBuilder, OneToManyAssociation> {
+public class TypeActionReprBuilder extends AbstractTypeMemberReprBuilder<TypeActionReprBuilder, ObjectAction> {
 
-    public static TypeCollectionRepBuilder newBuilder(ResourceContext representationContext, ObjectSpecification objectSpecification, OneToManyAssociation collection) {
-        return new TypeCollectionRepBuilder(representationContext, objectSpecification, collection);
+    public static TypeActionReprBuilder newBuilder(ResourceContext representationContext, ObjectSpecification objectSpecification, ObjectAction objectAction) {
+        return new TypeActionReprBuilder(representationContext, objectSpecification, objectAction);
     }
 
-    public static LinkToBuilder newLinkToBuilder(ResourceContext resourceContext, String rel, ObjectSpecification objectSpecification, OneToManyAssociation collection) {
+    public static LinkReprBuilder newLinkToBuilder(ResourceContext resourceContext, String rel, ObjectSpecification objectSpecification, ObjectAction objectAction) {
         String typeFullName = objectSpecification.getFullIdentifier();
-        String collectionId = collection.getId();
-        String url = "domainTypes/" + typeFullName + "/collections/" + collectionId;
-        return LinkToBuilder.newBuilder(resourceContext, rel, url);
+        String actionId = objectAction.getId();
+        String url = "domainTypes/" + typeFullName + "/actions/" + actionId;
+        return LinkReprBuilder.newBuilder(resourceContext, rel, url);
     }
 
-    public TypeCollectionRepBuilder(ResourceContext resourceContext, ObjectSpecification objectSpecification, OneToManyAssociation collection) {
-        super(resourceContext, objectSpecification, MemberType.OBJECT_COLLECTION, collection);
+    public TypeActionReprBuilder(ResourceContext resourceContext, ObjectSpecification objectSpecification, ObjectAction objectAction) {
+        super(resourceContext, objectSpecification, MemberType.OBJECT_ACTION, objectAction);
     }
+
 
     public JsonRepresentation build() {
         return representation;

@@ -19,7 +19,7 @@ package org.apache.isis.viewer.json.viewer.resources.domainobjects;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
-import org.apache.isis.viewer.json.viewer.representations.LinkToBuilder;
+import org.apache.isis.viewer.json.viewer.representations.LinkReprBuilder;
 
 public class DomainObjectLinkToBuilder implements ObjectAdapterLinkToBuilder {
 
@@ -39,14 +39,14 @@ public class DomainObjectLinkToBuilder implements ObjectAdapterLinkToBuilder {
     }
 
     @Override
-    public final LinkToBuilder linkToAdapter() {
+    public final LinkReprBuilder linkToAdapter() {
         StringBuilder buf = objectsBuf();
-        return LinkToBuilder.newBuilder(resourceContext, "object", buf.toString());
+        return LinkReprBuilder.newBuilder(resourceContext, "object", buf.toString());
     }
 
 
     @Override
-    public final LinkToBuilder linkToMember(String rel, MemberType memberType, ObjectMember objectMember, String... parts) {
+    public final LinkReprBuilder linkToMember(String rel, MemberType memberType, ObjectMember objectMember, String... parts) {
         StringBuilder buf = objectsBuf();
         buf.append("/").append(memberType.urlPart()).append(objectMember.getId());
         for(String part: parts) {
@@ -56,7 +56,7 @@ public class DomainObjectLinkToBuilder implements ObjectAdapterLinkToBuilder {
             buf.append("/").append(part);
         }
         String url = buf.toString();
-        return LinkToBuilder.newBuilder(resourceContext, rel, url);
+        return LinkReprBuilder.newBuilder(resourceContext, rel, url);
     }
 
     /**

@@ -32,6 +32,8 @@ import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterLookup;
 import org.apache.isis.core.metamodel.adapter.oid.stringable.OidStringifier;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
+import org.apache.isis.viewer.json.applib.RestfulRequest.QueryParameter;
 
 public class ResourceContext {
 
@@ -44,6 +46,7 @@ public class ResourceContext {
     private final OidStringifier oidStringifier;
     private final Localization localization;
     private final AuthenticationSession authenticationSession;
+    private final PersistenceSession persistenceSession;
     private final ObjectAdapterLookup objectAdapterLookup;
 
     public ResourceContext(
@@ -53,8 +56,8 @@ public class ResourceContext {
             final OidStringifier oidStringifier, 
             final Localization localization, 
             final AuthenticationSession authenticationSession, 
+            final PersistenceSession persistenceSession, 
             final ObjectAdapterLookup objectAdapterLookup) {
-        
 
         this.httpHeaders = httpHeaders;
         this.uriInfo = uriInfo;
@@ -65,14 +68,18 @@ public class ResourceContext {
         this.oidStringifier = oidStringifier;
         this.localization = localization;
         this.authenticationSession = authenticationSession;
+        this.persistenceSession = persistenceSession;
         this.objectAdapterLookup = objectAdapterLookup;
-        
-        List<MediaType> clientMediaTypes = getHttpHeaders().getAcceptableMediaTypes();
     }
 
     public HttpHeaders getHttpHeaders() {
         return httpHeaders;
     }
+
+    public <Q> Q getArg(QueryParameter<Q> queryParameter) {
+        return queryParameter.valueOf(getHttpServletRequest().getParameterMap());
+    }
+
 
     public UriInfo getUriInfo() {
         return uriInfo;
@@ -113,6 +120,10 @@ public class ResourceContext {
 
     public ObjectAdapterLookup getAdapterManager() {
         return objectAdapterLookup;
+    }
+
+    public PersistenceSession getPersistenceSession() {
+        return persistenceSession;
     }
 
 

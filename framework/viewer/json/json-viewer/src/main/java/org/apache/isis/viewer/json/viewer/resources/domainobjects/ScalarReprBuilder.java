@@ -22,23 +22,23 @@ import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.applib.RestfulResponse.HttpStatusCode;
 import org.apache.isis.viewer.json.viewer.JsonApplicationException;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
-import org.apache.isis.viewer.json.viewer.representations.AbstractRepresentationBuilder;
+import org.apache.isis.viewer.json.viewer.representations.AbstractReprBuilder;
 
-public class ScalarRepBuilder extends AbstractRepresentationBuilder<ScalarRepBuilder> {
+public class ScalarReprBuilder extends AbstractReprBuilder<ScalarReprBuilder> {
 
-    public static ScalarRepBuilder newBuilder(final ResourceContext resourceContext) {
-        return new ScalarRepBuilder(resourceContext, JsonRepresentation.newMap());
+    public static ScalarReprBuilder newBuilder(final ResourceContext resourceContext) {
+        return new ScalarReprBuilder(resourceContext, JsonRepresentation.newMap());
     }
 
-    public static ScalarRepBuilder newBuilder(ResourceContext resourceContext, JsonRepresentation representation) {
-        return new ScalarRepBuilder(resourceContext, representation);
+    public static ScalarReprBuilder newBuilder(ResourceContext resourceContext, JsonRepresentation representation) {
+        return new ScalarReprBuilder(resourceContext, representation);
     }
 
-    private ScalarRepBuilder(final ResourceContext resourceContext, JsonRepresentation representation) {
+    private ScalarReprBuilder(final ResourceContext resourceContext, JsonRepresentation representation) {
         super(resourceContext, representation);
     }
 
-    public ScalarRepBuilder withAdapter(final ObjectAdapter objectAdapter) {
+    public ScalarReprBuilder withAdapter(final ObjectAdapter objectAdapter) {
         final EncodableFacet facet = objectAdapter.getSpecification().getFacet(EncodableFacet.class);
         if(facet == null) {
             throw JsonApplicationException.create(HttpStatusCode.INTERNAL_SERVER_ERROR, "Not an (encodable) value", objectAdapter.titleString());

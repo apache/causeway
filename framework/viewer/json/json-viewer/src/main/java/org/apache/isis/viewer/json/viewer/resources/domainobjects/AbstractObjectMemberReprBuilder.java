@@ -23,9 +23,9 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
-import org.apache.isis.viewer.json.viewer.representations.AbstractRepresentationBuilder;
+import org.apache.isis.viewer.json.viewer.representations.AbstractReprBuilder;
 
-public abstract class AbstractObjectMemberRepBuilder<R extends AbstractRepresentationBuilder<R>, T extends ObjectMember> extends AbstractRepresentationBuilder<R> {
+public abstract class AbstractObjectMemberReprBuilder<R extends AbstractReprBuilder<R>, T extends ObjectMember> extends AbstractReprBuilder<R> {
 
     protected ObjectAdapterLinkToBuilder linkToBuilder;
     
@@ -33,7 +33,7 @@ public abstract class AbstractObjectMemberRepBuilder<R extends AbstractRepresent
     protected final MemberType memberType;
     protected final T objectMember;
 
-    public AbstractObjectMemberRepBuilder(ResourceContext resourceContext, ObjectAdapter objectAdapter, MemberType memberType, T objectMember) {
+    public AbstractObjectMemberReprBuilder(ResourceContext resourceContext, ObjectAdapter objectAdapter, MemberType memberType, T objectMember) {
         super(resourceContext);
         this.objectAdapter = objectAdapter;
         this.memberType = memberType;

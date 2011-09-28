@@ -19,10 +19,10 @@ package org.apache.isis.viewer.json.viewer.representations;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
 
-public class LinkToBuilder extends AbstractRepresentationBuilder<LinkToBuilder> {
+public class LinkReprBuilder extends AbstractReprBuilder<LinkReprBuilder> {
 
-    public static LinkToBuilder newBuilder(ResourceContext resourceContext, String rel, String hrefFormat, Object... args) {
-        return new LinkToBuilder(resourceContext, rel, String.format(hrefFormat, args));
+    public static LinkReprBuilder newBuilder(ResourceContext resourceContext, String rel, String hrefFormat, Object... args) {
+        return new LinkReprBuilder(resourceContext, rel, String.format(hrefFormat, args));
     }
 
 	private final String rel;
@@ -31,31 +31,38 @@ public class LinkToBuilder extends AbstractRepresentationBuilder<LinkToBuilder> 
     private HttpMethod method = HttpMethod.GET;
     private String title;
     private JsonRepresentation arguments;
+    private JsonRepresentation value;
     
-    protected LinkToBuilder(ResourceContext resourceContext, String rel, String href) {
+    protected LinkReprBuilder(ResourceContext resourceContext, String rel, String href) {
         super(resourceContext);
         this.rel = rel;
         this.href = href;
     }
-    public LinkToBuilder withHttpMethod(HttpMethod method) {
+    public LinkReprBuilder withHttpMethod(HttpMethod method) {
         this.method = method;
         return this;
     }
-    public LinkToBuilder withTitle(String title) {
+    public LinkReprBuilder withTitle(String title) {
         this.title = title;
         return this;
     }
-    public LinkToBuilder withArguments(JsonRepresentation arguments) {
+    public LinkReprBuilder withArguments(JsonRepresentation arguments) {
         this.arguments = arguments;
         return this;
     }
+    public LinkReprBuilder withValue(JsonRepresentation value) {
+        this.value = value;
+        return this;
+    }
+
     public JsonRepresentation build() {
         representation.mapPut("rel", rel);
         representation.mapPut("href", resourceContext.urlFor(href));
         representation.mapPut("method", method);
         representation.mapPut("title", title);
         representation.mapPut("arguments", arguments);
+        representation.mapPut("value", value);
         return representation;
     }
-
+    
 }

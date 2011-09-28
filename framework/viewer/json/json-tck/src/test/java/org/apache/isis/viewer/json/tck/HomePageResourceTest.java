@@ -105,11 +105,10 @@ public class HomePageResourceTest {
     }
 
     
-    @Ignore
     @Test
     public void xrofollowLinks() throws Exception {
 
-        final RestfulRequest request = client.createRequest(HttpMethod.GET, "/").with(QueryParameter.FOLLOW_LINKS, Arrays.asList("user"));
+        final RestfulRequest request = client.createRequest(HttpMethod.GET, "/").withArg(QueryParameter.FOLLOW_LINKS, "user");
         final RestfulResponse<HomePageRepresentation> restfulResponse = request.executeT();
         
         

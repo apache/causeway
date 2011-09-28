@@ -1,6 +1,7 @@
 package org.apache.isis.viewer.json.applib;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.ws.rs.core.Response;
 
@@ -54,11 +55,18 @@ public final class RestfulRequest {
         public Parser<Q> getParser() {
             return parser;
         }
+
+        public Q valueOf(Map<?, ?> parameterMap) {
+            @SuppressWarnings("unchecked")
+            Map<String, String[]> parameters = (Map<String, String[]>) parameterMap; 
+            final String[] values = parameters.get(getName());
+            return getParser().valueOf(values);
+        }
     }
 
     public static class Header<X> {
         public static Header<String> IF_MATCH = new Header<String>("If-Match", Parser.forString());
-        public static Header<List<String>> ACCEPT = new Header<List<String>>("If-Match", Parser.forListOfStrings());
+        public static Header<List<String>> ACCEPT = new Header<List<String>>("Accept", Parser.forListOfStrings());
             
         private final String name;
         private final Parser<X> parser;
@@ -71,12 +79,12 @@ public final class RestfulRequest {
             return name;
         }
         
-        void setHeader(ClientRequest clientRequest, X t) {
-            clientRequest.header(getName(), asString(t));
+        public Parser<X> getParser() {
+            return parser;
         }
-
-        public String asString(X x) {
-            return parser.asString(x);
+        
+        void setHeader(ClientRequest clientRequest, X t) {
+            clientRequest.header(getName(), parser.asString(t));
         }
     }
 
@@ -112,7 +120,12 @@ public final class RestfulRequest {
         return (RestfulResponse<T>) restfulResponse;
     }
 
-    public <Q> RestfulRequest with(RestfulRequest.QueryParameter<Q> queryParam, Q arg) {
+    public <Q> RestfulRequest withArg(RestfulRequest.QueryParameter<Q> queryParam, String argStr) {
+        final Q arg = queryParam.getParser().valueOf(argStr);
+        return withArg(queryParam, arg);
+    }
+
+    public <Q> RestfulRequest withArg(RestfulRequest.QueryParameter<Q> queryParam, Q arg) {
         return null;
     }
 

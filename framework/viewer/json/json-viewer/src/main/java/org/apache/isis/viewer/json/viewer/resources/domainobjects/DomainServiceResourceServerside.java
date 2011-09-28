@@ -36,7 +36,8 @@ import org.apache.isis.viewer.json.applib.RepresentationType;
 import org.apache.isis.viewer.json.applib.RestfulMediaType;
 import org.apache.isis.viewer.json.applib.domainobjects.DomainServiceResource;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
-import org.apache.isis.viewer.json.viewer.representations.AbstractRepresentationBuilder;
+import org.apache.isis.viewer.json.viewer.representations.AbstractReprBuilder;
+import org.apache.isis.viewer.json.viewer.representations.ReprBuilder;
 
 @Path("/services")
 public class DomainServiceResourceServerside extends DomainResourceAbstract implements
@@ -49,14 +50,8 @@ public class DomainServiceResourceServerside extends DomainResourceAbstract impl
     public Response services() {
         init();
 
-        ResourceContext resourceContext = getResourceContext();
-        final List<ObjectAdapter> serviceAdapters = getPersistenceSession().getServices();
-
-        DomainObjectListRepBuilder builder = 
-                DomainObjectListRepBuilder.newBuilder(resourceContext)
-                    .usingLinkToBuilder(new DomainServiceLinkToBuilder())
-                    .withSelf("services")
-                    .withAdapters(serviceAdapters);
+        final ReprBuilder builder = 
+                new DomainServiceResourceHelper(getResourceContext(), "services").services();
         
         return responseOfOk(RepresentationType.LIST, Caching.ONE_DAY, builder).build();
     }
@@ -76,8 +71,8 @@ public class DomainServiceResourceServerside extends DomainResourceAbstract impl
         final ObjectAdapter serviceAdapter = getServiceAdapter(serviceId);
         
         ResourceContext resourceContext = getResourceContext();
-        AbstractRepresentationBuilder<?> builder = 
-                DomainObjectRepBuilder.newBuilder(resourceContext)
+        AbstractReprBuilder<?> builder = 
+                DomainObjectReprBuilder.newBuilder(resourceContext)
                     .usingLinkToBuilder(new DomainServiceLinkToBuilder())
                     .withAdapter(serviceAdapter);
         
@@ -102,7 +97,7 @@ public class DomainServiceResourceServerside extends DomainResourceAbstract impl
                 serviceAdapter, propertyId, Intent.ACCESS);
 
         ResourceContext resourceContext = getResourceContext();
-        final ObjectPropertyRepBuilder builder = ObjectPropertyRepBuilder.newBuilder(
+        final ObjectPropertyReprBuilder builder = ObjectPropertyReprBuilder.newBuilder(
                 resourceContext, serviceAdapter, property);
 
         return responseOfOk(RepresentationType.OBJECT_PROPERTY, Caching.ONE_DAY, builder).build();

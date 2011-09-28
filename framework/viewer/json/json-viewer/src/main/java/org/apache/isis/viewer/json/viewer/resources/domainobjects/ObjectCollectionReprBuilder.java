@@ -25,19 +25,19 @@ import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacetU
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
-import org.apache.isis.viewer.json.viewer.representations.LinkToBuilder;
-import org.apache.isis.viewer.json.viewer.resources.domaintypes.DomainTypeRepBuilder;
-import org.apache.isis.viewer.json.viewer.resources.domaintypes.TypeCollectionRepBuilder;
+import org.apache.isis.viewer.json.viewer.representations.LinkReprBuilder;
+import org.apache.isis.viewer.json.viewer.resources.domaintypes.DomainTypeReprBuilder;
+import org.apache.isis.viewer.json.viewer.resources.domaintypes.TypeCollectionReprBuilder;
 
 import com.google.common.collect.Lists;
 
-public class ObjectCollectionRepBuilder extends AbstractObjectMemberRepBuilder<ObjectCollectionRepBuilder, OneToManyAssociation> {
+public class ObjectCollectionReprBuilder extends AbstractObjectMemberReprBuilder<ObjectCollectionReprBuilder, OneToManyAssociation> {
 
-    public static ObjectCollectionRepBuilder newBuilder(ResourceContext resourceContext, ObjectAdapter objectAdapter, OneToManyAssociation otma) {
-        return new ObjectCollectionRepBuilder(resourceContext, objectAdapter, otma);
+    public static ObjectCollectionReprBuilder newBuilder(ResourceContext resourceContext, ObjectAdapter objectAdapter, OneToManyAssociation otma) {
+        return new ObjectCollectionReprBuilder(resourceContext, objectAdapter, otma);
     }
 
-    public ObjectCollectionRepBuilder(ResourceContext resourceContext, ObjectAdapter objectAdapter, OneToManyAssociation otma) {
+    public ObjectCollectionReprBuilder(ResourceContext resourceContext, ObjectAdapter objectAdapter, OneToManyAssociation otma) {
         super(resourceContext, objectAdapter, MemberType.OBJECT_COLLECTION, otma);
 
         putId();
@@ -67,7 +67,7 @@ public class ObjectCollectionRepBuilder extends AbstractObjectMemberRepBuilder<O
     /////////////////////////////////////////////////////
 
     @Override
-    public ObjectCollectionRepBuilder withMutatorsIfEnabled() {
+    public ObjectCollectionReprBuilder withMutatorsIfEnabled() {
         if(usability().isVetoed()) {
             return cast(this);
         }
@@ -112,7 +112,7 @@ public class ObjectCollectionRepBuilder extends AbstractObjectMemberRepBuilder<O
         List<JsonRepresentation> list = Lists.newArrayList();
         for (final ObjectAdapter elementAdapter : facet.iterable(valueAdapter)) {
 
-            LinkToBuilder newBuilder = DomainObjectRepBuilder.newLinkToBuilder(resourceContext, "object", elementAdapter);
+            LinkReprBuilder newBuilder = DomainObjectReprBuilder.newLinkToBuilder(resourceContext, "object", elementAdapter);
 
 			list.add(newBuilder.build());
         }
@@ -130,11 +130,11 @@ public class ObjectCollectionRepBuilder extends AbstractObjectMemberRepBuilder<O
     }
 
     private void addLinksFormalDomainModel(JsonRepresentation links, ResourceContext resourceContext) {
-        links.arrayAdd(TypeCollectionRepBuilder.newLinkToBuilder(resourceContext, "typeCollection", objectAdapter.getSpecification(), objectMember).build());
+        links.arrayAdd(TypeCollectionReprBuilder.newLinkToBuilder(resourceContext, "typeCollection", objectAdapter.getSpecification(), objectMember).build());
     }
 
     private void addLinksIsisProprietary(JsonRepresentation links, ResourceContext resourceContext) {
-        links.arrayAdd(DomainTypeRepBuilder.newLinkToBuilder(resourceContext, "domainType", objectAdapter.getSpecification()).build());
+        links.arrayAdd(DomainTypeReprBuilder.newLinkToBuilder(resourceContext, "domainType", objectAdapter.getSpecification()).build());
     }
 
 

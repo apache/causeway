@@ -93,7 +93,7 @@ public class DomainObjectResourceServerside extends DomainResourceAbstract imple
                 objectAdapter, propertyId, Intent.ACCESS);
 
         ResourceContext resourceContext = getResourceContext();
-        final ObjectPropertyRepBuilder builder = ObjectPropertyRepBuilder.newBuilder(
+        final ObjectPropertyReprBuilder builder = ObjectPropertyReprBuilder.newBuilder(
                 resourceContext, objectAdapter, property);
         
         return responseOfOk(RepresentationType.OBJECT_PROPERTY, Caching.NONE, builder).build();
@@ -169,7 +169,7 @@ public class DomainObjectResourceServerside extends DomainResourceAbstract imple
         final OneToManyAssociation collection = getCollectionThatIsVisibleAndUsable(
                 objectAdapter, collectionId, Intent.ACCESS);
 
-        final ObjectCollectionRepBuilder builder = ObjectCollectionRepBuilder.newBuilder(
+        final ObjectCollectionReprBuilder builder = ObjectCollectionReprBuilder.newBuilder(
                 getResourceContext(), objectAdapter, collection);
         
         return Response.status(HttpStatusCode.OK.getJaxrsStatusType())

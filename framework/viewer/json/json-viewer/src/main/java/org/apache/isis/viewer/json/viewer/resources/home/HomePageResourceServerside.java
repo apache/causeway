@@ -18,20 +18,24 @@
  */
 package org.apache.isis.viewer.json.viewer.resources.home;
 
+import java.util.List;
+
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
-import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.applib.RepresentationType;
 import org.apache.isis.viewer.json.applib.RestfulMediaType;
-import org.apache.isis.viewer.json.applib.RestfulResponse.HttpStatusCode;
+import org.apache.isis.viewer.json.applib.RestfulRequest.QueryParameter;
 import org.apache.isis.viewer.json.applib.homepage.HomePageResource;
-import org.apache.isis.viewer.json.viewer.JsonApplicationException;
-import org.apache.isis.viewer.json.viewer.representations.LinkToBuilder;
+import org.apache.isis.viewer.json.viewer.representations.LinkReprBuilder;
+import org.apache.isis.viewer.json.viewer.representations.ReprBuilder;
 import org.apache.isis.viewer.json.viewer.resources.ResourceAbstract;
+import org.apache.isis.viewer.json.viewer.resources.domainobjects.DomainServiceResourceHelper;
+import org.apache.isis.viewer.json.viewer.resources.user.UserReprBuilder;
+import org.apache.isis.viewer.json.viewer.resources.user.UserResourceHelper;
 
 /**
  * Implementation note: it seems to be necessary to annotate the implementation with {@link Path} rather than the
@@ -45,27 +49,54 @@ public class HomePageResourceServerside extends ResourceAbstract implements Home
     public Response resources() {
         init();
         
-        fakeRuntimeExceptionIfXFail();
-        
         JsonRepresentation representation = JsonRepresentation.newMap();
         
-        representation.mapPut("self", LinkToBuilder.newBuilder(getResourceContext(), "self", "").build());
-        representation.mapPut("user", LinkToBuilder.newBuilder(getResourceContext(), "user", "user").build());
-        representation.mapPut("services", LinkToBuilder.newBuilder(getResourceContext(), "services", "services").build());
-        representation.mapPut("capabilities", LinkToBuilder.newBuilder(getResourceContext(), "capabilities", "capabilities").build());
+        // self
+        representation.mapPut("self", LinkReprBuilder.newBuilder(getResourceContext(), "self", "").build());
 
+        // user
+        putLinkToUser(representation);
+
+        // services
+        putLinkToServices(representation);
+        
+        // capabilities
+        representation.mapPut("capabilities", LinkReprBuilder.newBuilder(getResourceContext(), "capabilities", "capabilities").build());
+
+        //
         representation.mapPut("links", JsonRepresentation.newArray());
         representation.mapPut("extensions", JsonRepresentation.newMap());
 
         return responseOfOk(RepresentationType.HOME_PAGE, Caching.ONE_DAY, representation).build();
     }
 
-    private void fakeRuntimeExceptionIfXFail() {
-        HttpHeaders httpHeaders = getResourceContext().getHttpHeaders();
-        if(httpHeaders.getRequestHeader("X-Fail") != null) {
-            throw JsonApplicationException.create(HttpStatusCode.METHOD_FAILURE);
+    private void putLinkToServices(JsonRepresentation representation) {
+
+        final LinkReprBuilder servicesLinkBuilder = LinkReprBuilder.newBuilder(getResourceContext(), "services", "services");
+        
+        final List<String> followLinks = getResourceContext().getArg(QueryParameter.FOLLOW_LINKS);
+        if(followLinks.contains("services")) {
+            final ReprBuilder reprBuilder = 
+                    new DomainServiceResourceHelper(getResourceContext()).services();
+            servicesLinkBuilder.withValue(reprBuilder.build());
         }
+        
+        representation.mapPut("services", servicesLinkBuilder.build());
     }
+
+    private void putLinkToUser(JsonRepresentation representation) {
+        final LinkReprBuilder userLinkBuilder = LinkReprBuilder.newBuilder(getResourceContext(), "user", "user");
+        
+        final List<String> followLinks = getResourceContext().getArg(QueryParameter.FOLLOW_LINKS);
+        if(followLinks.contains("user")) {
+            final ReprBuilder reprBuilder = 
+                    new UserResourceHelper(getResourceContext()).user();
+            userLinkBuilder.withValue(reprBuilder.build());
+        }
+        
+        representation.mapPut("user", userLinkBuilder.build());
+    }
+
 
 
 }

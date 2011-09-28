@@ -25,19 +25,19 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
-import org.apache.isis.viewer.json.viewer.resources.domaintypes.DomainTypeRepBuilder;
-import org.apache.isis.viewer.json.viewer.resources.domaintypes.TypeActionRepBuilder;
+import org.apache.isis.viewer.json.viewer.resources.domaintypes.DomainTypeReprBuilder;
+import org.apache.isis.viewer.json.viewer.resources.domaintypes.TypeActionReprBuilder;
 import org.codehaus.jackson.node.NullNode;
 
 import com.google.common.collect.Lists;
 
-public class ObjectActionRepBuilder extends AbstractObjectMemberRepBuilder<ObjectActionRepBuilder, ObjectAction> {
+public class ObjectActionReprBuilder extends AbstractObjectMemberReprBuilder<ObjectActionReprBuilder, ObjectAction> {
 
-	public static ObjectActionRepBuilder newBuilder(ResourceContext resourceContext, ObjectAdapter objectAdapter, ObjectAction objectAction) {
-        return new ObjectActionRepBuilder(resourceContext, objectAdapter, objectAction);
+	public static ObjectActionReprBuilder newBuilder(ResourceContext resourceContext, ObjectAdapter objectAdapter, ObjectAction objectAction) {
+        return new ObjectActionReprBuilder(resourceContext, objectAdapter, objectAction);
     }
 
-    protected ObjectActionRepBuilder(ResourceContext resourceContext, ObjectAdapter objectAdapter, ObjectAction objectAction) {
+    protected ObjectActionReprBuilder(ResourceContext resourceContext, ObjectAdapter objectAdapter, ObjectAction objectAction) {
         super(resourceContext, objectAdapter, MemberType.OBJECT_ACTION, objectAction);
         
         putId();
@@ -66,7 +66,7 @@ public class ObjectActionRepBuilder extends AbstractObjectMemberRepBuilder<Objec
     /////////////////////////////////////////////////////
 
     @Override
-    public ObjectActionRepBuilder withMutatorsIfEnabled() {
+    public ObjectActionReprBuilder withMutatorsIfEnabled() {
         if(usability().isVetoed()) {
             return cast(this);
         }
@@ -120,7 +120,7 @@ public class ObjectActionRepBuilder extends AbstractObjectMemberRepBuilder<Objec
 	        if(objectMember.isContributed()) {
 	            ObjectActionParameter actionParameter = objectMember.getParameters().get(i);
 	            if (actionParameter.getSpecification().isOfType(objectAdapter.getSpecification())) {
-	                return DomainObjectRepBuilder.newLinkToBuilder(resourceContext, "object", objectAdapter).build();
+	                return DomainObjectReprBuilder.newLinkToBuilder(resourceContext, "object", objectAdapter).build();
 	            }
 	        }
 	        return NullNode.instance;
@@ -131,7 +131,7 @@ public class ObjectActionRepBuilder extends AbstractObjectMemberRepBuilder<Objec
     // parameter details
     /////////////////////////////////////////////////////
 
-    public ObjectActionRepBuilder withParameterDetails() {
+    public ObjectActionReprBuilder withParameterDetails() {
     	List<Object> parameters = Lists.newArrayList();
 		for (int i=0; i< objectMember.getParameterCount(); i++) {
 			ObjectActionParameter param = objectMember.getParameters().get(i);
@@ -165,7 +165,7 @@ public class ObjectActionRepBuilder extends AbstractObjectMemberRepBuilder<Objec
         List<Object> list = Lists.newArrayList();
         for (final ObjectAdapter choiceAdapter : choiceAdapters) {
         	ObjectSpecification objectSpec = param.getSpecification();
-        	list.add(DomainObjectRepBuilder.valueOrRef(resourceContext, choiceAdapter, objectSpec));
+        	list.add(DomainObjectReprBuilder.valueOrRef(resourceContext, choiceAdapter, objectSpec));
         }
         return list;
 	}
@@ -176,7 +176,7 @@ public class ObjectActionRepBuilder extends AbstractObjectMemberRepBuilder<Objec
 			return null;
 		}
     	ObjectSpecification objectSpec = param.getSpecification();
-    	return DomainObjectRepBuilder.valueOrRef(resourceContext, defaultAdapter, objectSpec);
+    	return DomainObjectReprBuilder.valueOrRef(resourceContext, defaultAdapter, objectSpec);
 	}
 
 	
@@ -194,17 +194,17 @@ public class ObjectActionRepBuilder extends AbstractObjectMemberRepBuilder<Objec
     }
 
      private void addLinksFormalDomainModel(JsonRepresentation links, ResourceContext resourceContext) {
-         links.arrayAdd(TypeActionRepBuilder.newLinkToBuilder(resourceContext, "typeAction", objectAdapter.getSpecification(), objectMember).build());
+         links.arrayAdd(TypeActionReprBuilder.newLinkToBuilder(resourceContext, "typeAction", objectAdapter.getSpecification(), objectMember).build());
      }
 
      private void addLinksIsisProprietary(JsonRepresentation links, ResourceContext resourceContext) {
        if(objectMember.isContributed()) {
             ObjectAdapter serviceAdapter = contributingServiceAdapter();
-            JsonRepresentation contributedByLink = DomainObjectRepBuilder.newLinkToBuilder(resourceContext, "contributedBy", serviceAdapter).build();
+            JsonRepresentation contributedByLink = DomainObjectReprBuilder.newLinkToBuilder(resourceContext, "contributedBy", serviceAdapter).build();
             links.arrayAdd(contributedByLink);
         }
 
-       links.arrayAdd(DomainTypeRepBuilder.newLinkToBuilder(resourceContext, "domainType", objectAdapter.getSpecification()).build());
+       links.arrayAdd(DomainTypeReprBuilder.newLinkToBuilder(resourceContext, "domainType", objectAdapter.getSpecification()).build());
     }
 
 

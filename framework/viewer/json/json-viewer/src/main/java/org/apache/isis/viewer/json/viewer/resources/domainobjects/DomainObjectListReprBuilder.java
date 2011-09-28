@@ -22,31 +22,31 @@ import java.util.List;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
-import org.apache.isis.viewer.json.viewer.representations.AbstractRepresentationBuilder;
+import org.apache.isis.viewer.json.viewer.representations.AbstractReprBuilder;
 
-public class DomainObjectListRepBuilder extends AbstractRepresentationBuilder<DomainObjectListRepBuilder> {
+public class DomainObjectListReprBuilder extends AbstractReprBuilder<DomainObjectListReprBuilder> {
 
     private ObjectAdapterLinkToBuilder objectAdapterLinkToBuilder;
 
-    public static DomainObjectListRepBuilder newBuilder(ResourceContext resourceContext, JsonRepresentation representation) {
-        return new DomainObjectListRepBuilder(resourceContext, representation);
+    public static DomainObjectListReprBuilder newBuilder(ResourceContext resourceContext, JsonRepresentation representation) {
+        return new DomainObjectListReprBuilder(resourceContext, representation);
     }
 
-    public static DomainObjectListRepBuilder newBuilder(ResourceContext resourceContext) {
-        return new DomainObjectListRepBuilder(resourceContext, JsonRepresentation.newMap());
+    public static DomainObjectListReprBuilder newBuilder(ResourceContext resourceContext) {
+        return new DomainObjectListReprBuilder(resourceContext, JsonRepresentation.newMap());
     }
 
-    private DomainObjectListRepBuilder(ResourceContext resourceContext, JsonRepresentation representation) {
+    private DomainObjectListReprBuilder(ResourceContext resourceContext, JsonRepresentation representation) {
         super(resourceContext, representation);
         usingLinkToBuilder(new DomainObjectLinkToBuilder());
     }
     
-    public DomainObjectListRepBuilder usingLinkToBuilder(ObjectAdapterLinkToBuilder objectAdapterLinkToBuilder) {
+    public DomainObjectListReprBuilder usingLinkToBuilder(ObjectAdapterLinkToBuilder objectAdapterLinkToBuilder) {
         this.objectAdapterLinkToBuilder = objectAdapterLinkToBuilder.usingResourceContext(resourceContext);
         return this;
     }
 
-    public DomainObjectListRepBuilder withAdapters(Collection<ObjectAdapter> objectAdapters) {
+    public DomainObjectListReprBuilder withAdapters(Collection<ObjectAdapter> objectAdapters) {
         JsonRepresentation list = JsonRepresentation.newArray();
         for(ObjectAdapter adapter: objectAdapters) {
             JsonRepresentation linkToObject = objectAdapterLinkToBuilder.with(adapter).linkToAdapter().build();

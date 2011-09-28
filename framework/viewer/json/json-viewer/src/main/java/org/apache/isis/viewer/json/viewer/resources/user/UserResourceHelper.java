@@ -18,28 +18,23 @@
  */
 package org.apache.isis.viewer.json.viewer.resources.user;
 
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
+import org.apache.isis.viewer.json.viewer.ResourceContext;
+import org.apache.isis.viewer.json.viewer.resources.AbstractResourceHelper;
 
-import org.apache.isis.viewer.json.applib.RepresentationType;
-import org.apache.isis.viewer.json.applib.RestfulMediaType;
-import org.apache.isis.viewer.json.applib.user.UserResource;
-import org.apache.isis.viewer.json.viewer.representations.ReprBuilder;
-import org.apache.isis.viewer.json.viewer.resources.ResourceAbstract;
+public class UserResourceHelper extends AbstractResourceHelper {
 
-public class UserResourceServerside extends ResourceAbstract implements UserResource {
-
-    @Override
-    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_USER })
-    public Response user() {
-        init();
-
-        final ReprBuilder reprBuilder = 
-                new UserResourceHelper(getResourceContext()).user();
-
-        return responseOfOk(RepresentationType.USER, Caching.ONE_HOUR, reprBuilder.build()).build();
+    public UserResourceHelper(ResourceContext resourceContext) {
+        this(resourceContext, null);
     }
 
+    public UserResourceHelper(ResourceContext resourceContext, String selfRef) {
+        super(resourceContext, selfRef);
+    }
+
+    public UserReprBuilder user() {
+        return UserReprBuilder.newBuilder(getResourceContext())
+                    .withAuthenticationSession(getResourceContext().getAuthenticationSession())
+                    .withSelf(getSelfRef());
+    }
 
 }
