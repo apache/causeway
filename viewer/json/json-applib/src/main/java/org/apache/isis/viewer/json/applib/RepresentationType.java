@@ -23,8 +23,9 @@ public enum RepresentationType {
     TYPE_ACTION_PARAMETER(RestfulMediaType.APPLICATION_JSON_TYPE_ACTION_PARAMETER), 
     ERROR(RestfulMediaType.APPLICATION_JSON_ERROR);
     
-    private String name;
-    private MediaType mediaType;
+    private final String name;
+    private final MediaType mediaType;
+    
     private RepresentationType(String mediaTypeStr) {
         this.name = Enums.enumToCamelCase(this);
         this.mediaType = MediaType.valueOf(mediaTypeStr);
@@ -46,4 +47,19 @@ public enum RepresentationType {
         }
         return null;
     }
+    
+    public static Parser<RepresentationType> parser() {
+        return new Parser<RepresentationType>() {
+            @Override
+            public RepresentationType valueOf(String str) {
+                return RepresentationType.lookup(str);
+            }
+            @Override
+            public String asString(RepresentationType t) {
+                return t.getName();
+            }
+        };
+    }
+    
+    
 }

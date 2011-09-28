@@ -219,8 +219,8 @@ public class RestfulResponse<T> {
 
     public static class Header<X> {
         
-        public final static Header<String> WARNING = new Header<String>("Warning", Parser.forStrings());
-        public final static Header<Date> LAST_MODIFIED = new Header<Date>("Last-Modified", Parser.forDates());
+        public final static Header<String> WARNING = new Header<String>("Warning", Parser.forString());
+        public final static Header<Date> LAST_MODIFIED = new Header<Date>("Last-Modified", Parser.forDate());
         public final static Header<CacheControl> CACHE_CONTROL = new Header<CacheControl>("Cache-Control", Parser.forCacheControl());
         public final static Header<MediaType> CONTENT_TYPE = new Header<MediaType>("Content-Type", Parser.forMediaType());
         
