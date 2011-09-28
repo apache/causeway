@@ -3,16 +3,22 @@ package org.apache.isis.viewer.json.applib;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 import javax.ws.rs.core.CacheControl;
 import javax.ws.rs.core.MediaType;
+
+import com.google.common.base.Joiner;
+import com.google.common.base.Splitter;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
 
 public abstract class Parser<T> {
     
     public abstract T valueOf(String str);
     public abstract String asString(T t);
 
-    public final static Parser<String> forStrings() {
+    public final static Parser<String> forString() {
         return new Parser<String>() {
             @Override
             public String valueOf(String str) {
@@ -25,7 +31,7 @@ public abstract class Parser<T> {
         };
     }
 
-    public static Parser<Date> forDates() {
+    public static Parser<Date> forDate() {
 
         return new Parser<Date>() {
             private final SimpleDateFormat RFC1123_DATE_FORMAT = new SimpleDateFormat("EEE, dd MMM yyyyy HH:mm:ss z");
@@ -49,11 +55,15 @@ public abstract class Parser<T> {
         return new Parser<CacheControl>(){
             @Override
             public CacheControl valueOf(String str) {
-                return CacheControl.valueOf(str);
+                final CacheControl cacheControl = CacheControl.valueOf(str);
+             // workaround for bug in CacheControl's equals() method
+                cacheControl.getCacheExtension(); 
+                cacheControl.getNoCacheFields();
+                return cacheControl;
             }
             @Override
-            public String asString(CacheControl t) {
-                return null;
+            public String asString(CacheControl cacheControl) {
+                return cacheControl.toString();
             }};
     }
 
@@ -87,15 +97,31 @@ public abstract class Parser<T> {
         };
     }
 
-    public static Parser<RepresentationType> forRepresentationType() {
-        return new Parser<RepresentationType>() {
+    public static Parser<Integer> forInteger() {
+        return new Parser<Integer>() {
+
             @Override
-            public RepresentationType valueOf(String str) {
-                return RepresentationType.lookup(str);
+            public Integer valueOf(String str) {
+                return Integer.valueOf(str);
             }
+
             @Override
-            public String asString(RepresentationType t) {
-                return t.getName();
+            public String asString(Integer t) {
+                return t.toString();
+            }};
+    }
+
+    public static Parser<Iterable<String>> forIterableOfStrings() {
+        return new Parser<Iterable<String>>() {
+
+            @Override
+            public Iterable<String> valueOf(String str) {
+                return Splitter.on(",").split(str);
+            }
+
+            @Override
+            public String asString(Iterable<String> strings) {
+                return Joiner.on(",").join(strings);
             }
         };
     }

@@ -1,6 +1,7 @@
 package org.apache.isis.viewer.json.applib;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.ws.rs.core.Response;
 
@@ -8,10 +9,57 @@ import org.jboss.resteasy.client.ClientRequest;
 
 public final class RestfulRequest {
 
+    public enum DomainModel {
+        NONE,
+        SIMPLE,
+        FORMAL,
+        SELECTABLE;
+        
+        public static Parser<DomainModel> parser() {
+            return new Parser<RestfulRequest.DomainModel>() {
+                
+                @Override
+                public DomainModel valueOf(String str) {
+                    return DomainModel.valueOf(str.toUpperCase());
+                }
+                
+                @Override
+                public String asString(DomainModel t) {
+                    return t.name().toLowerCase();
+                }
+            };
+        }
+    }
+    
+    public static class QueryParameter<Q> {
+
+        public static QueryParameter<Iterable<String>> FOLLOW_LINKS = new QueryParameter<Iterable<String>>("x-ro-follow-links", Parser.forIterableOfStrings());
+        public static QueryParameter<Integer> PAGE = new QueryParameter<Integer>("x-ro-page", Parser.forInteger());
+        public static QueryParameter<Integer> PAGE_SIZE = new QueryParameter<Integer>("x-ro-page-size", Parser.forInteger());
+        public static QueryParameter<Iterable<String>> SORT_BY = new QueryParameter<Iterable<String>>("x-ro-sort-by", Parser.forIterableOfStrings());
+        public static QueryParameter<DomainModel> DOMAIN_MODEL = new QueryParameter<DomainModel>("x-ro-domain-model", DomainModel.parser());
+        public static QueryParameter<Boolean> VALIDATE_ONLY = new QueryParameter<Boolean>("x-ro-validate-only", Parser.forBoolean());
+        
+        private final String name;
+        private final Parser<Q> parser;
+        
+        private QueryParameter(String name, Parser<Q> parser) {
+            this.name = name;
+            this.parser = parser;
+        }
+        
+        public String getName() {
+            return name;
+        }
+
+        public Parser<Q> getParser() {
+            return parser;
+        }
+    }
+
     public static class Header<X> {
-        public static Header<Date> IF_UNMODIFIED_SINCE = new Header<Date>("If-Unmodified-Since", Parser.forDates());
-        public static Header<Boolean> X_FOLLOW_LINKS = new Header<Boolean>("X-Follow-Links", Parser.forBoolean());
-        public static Header<Boolean> X_VALIDATION_ONLY = new Header<Boolean>("X-Validation-Only", Parser.forBoolean());
+        public static Header<String> IF_MATCH = new Header<String>("If-Match", Parser.forString());
+        public static Header<Iterable<String>> ACCEPT = new Header<Iterable<String>>("If-Match", Parser.forIterableOfStrings());
             
         private final String name;
         private final Parser<X> parser;

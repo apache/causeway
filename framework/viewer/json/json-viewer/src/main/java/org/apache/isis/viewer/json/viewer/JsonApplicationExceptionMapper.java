@@ -2,13 +2,13 @@ package org.apache.isis.viewer.json.viewer;
 
 import java.util.List;
 
-import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
 import org.apache.commons.lang.exception.ExceptionUtils;
+import org.apache.isis.viewer.json.applib.RestfulMediaType;
 import org.apache.isis.viewer.json.applib.RestfulResponse;
 import org.apache.isis.viewer.json.applib.util.JsonMapper;
 
@@ -21,7 +21,7 @@ public class JsonApplicationExceptionMapper implements ExceptionMapper<JsonAppli
     public Response toResponse(JsonApplicationException ex) {
         ResponseBuilder builder = 
                 Response.status(ex.getHttpStatusCode().getJaxrsStatusType())
-                .type(MediaType.APPLICATION_JSON_TYPE)
+                .type(RestfulMediaType.APPLICATION_JSON_ERROR)
                 .entity(jsonFor(ex));
         String message = ex.getMessage();
         if(message != null) {
@@ -97,8 +97,4 @@ public class JsonApplicationExceptionMapper implements ExceptionMapper<JsonAppli
             return "{ \"exception\": \"" + ExceptionUtils.getFullStackTrace(ex) + "\" }";
         }
     }
-
-
-
-    
 }
