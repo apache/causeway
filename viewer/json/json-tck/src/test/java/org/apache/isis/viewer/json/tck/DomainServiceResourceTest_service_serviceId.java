@@ -59,7 +59,7 @@ public class DomainServiceResourceTest_service_serviceId {
         Response resp = resource.service("simples");
         
         // when
-        RestfulResponse<DomainObjectRepresentation> jsonResp = RestfulResponse.of(resp, DomainObjectRepresentation.class);
+        RestfulResponse<DomainObjectRepresentation> jsonResp = RestfulResponse.ofT(resp);
         
         // then
         assertThat(jsonResp.getStatus(), is(HttpStatusCode.OK));
@@ -114,7 +114,7 @@ public class DomainServiceResourceTest_service_serviceId {
         Response listActionDetailsResp = client.follow(listActionDetailsLink);
         
         // then
-        RestfulResponse<ObjectActionRepresentation> listActionDetailsJsonResp = RestfulResponse.of(listActionDetailsResp, ObjectActionRepresentation.class);
+        RestfulResponse<ObjectActionRepresentation> listActionDetailsJsonResp = RestfulResponse.ofT(listActionDetailsResp);
         assertThat(listActionDetailsJsonResp.getStatus(), is(HttpStatusCode.OK));
 
         ObjectActionRepresentation listActionDetailsRepr = listActionDetailsJsonResp.getEntity();
@@ -150,7 +150,7 @@ public class DomainServiceResourceTest_service_serviceId {
 
         // when
         Response resp = resource.service("nonExistentServiceId");
-        RestfulResponse<DomainObjectRepresentation> jsonResp = RestfulResponse.of(resp, DomainObjectRepresentation.class);
+        RestfulResponse<JsonRepresentation> jsonResp = RestfulResponse.of(resp);
         
         // then
         assertThat(jsonResp.getStatus(), is(HttpStatusCode.NOT_FOUND));

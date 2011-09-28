@@ -1,4 +1,4 @@
-package org.apache.isis.viewer.json.applib.domainobjects;
+package org.apache.isis.viewer.json.applib.domaintypes;
 
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.applib.JsonRepresentation.HasExtensions;
@@ -7,19 +7,14 @@ import org.apache.isis.viewer.json.applib.JsonRepresentation.LinksToSelf;
 import org.apache.isis.viewer.json.applib.blocks.Link;
 import org.codehaus.jackson.JsonNode;
 
+public class TypeCollectionRepresentation extends JsonRepresentation implements LinksToSelf, HasLinks, HasExtensions {
 
-public class DomainServicesRepresentation extends JsonRepresentation implements LinksToSelf, HasLinks, HasExtensions {
-
-    public DomainServicesRepresentation(JsonNode jsonNode) {
+    public TypeCollectionRepresentation(JsonNode jsonNode) {
         super(jsonNode);
     }
 
     public Link getSelf() {
         return getLink("self");
-    }
-
-    public JsonRepresentation getValues() {
-        return getArray("values");
     }
 
     public JsonRepresentation getLinks() {

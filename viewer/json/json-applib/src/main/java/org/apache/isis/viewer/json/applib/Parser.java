@@ -111,16 +111,16 @@ public abstract class Parser<T> {
             }};
     }
 
-    public static Parser<Iterable<String>> forIterableOfStrings() {
-        return new Parser<Iterable<String>>() {
+    public static Parser<List<String>> forListOfStrings() {
+        return new Parser<List<String>>() {
 
             @Override
-            public Iterable<String> valueOf(String str) {
-                return Splitter.on(",").split(str);
+            public List<String> valueOf(String str) {
+                return Lists.newArrayList(Splitter.on(",").split(str));
             }
 
             @Override
-            public String asString(Iterable<String> strings) {
+            public String asString(List<String> strings) {
                 return Joiner.on(",").join(strings);
             }
         };

@@ -7,6 +7,7 @@ import static org.junit.Assert.assertThat;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import javax.ws.rs.core.CacheControl;
 import javax.ws.rs.core.MediaType;
@@ -35,13 +36,14 @@ public class ParserTest {
     }
 
     @Test
-    public void forIterableOfStrings() {
-        Parser<Iterable<String>> parser = Parser.forIterableOfStrings();
-        Iterable<String> v = createIterable("", "foo", "foz");
+    public void forListOfStrings() {
+        Parser<List<String>> parser = Parser.forListOfStrings();
+        String[] strings = { "", "foo", "foz" };
+        List<String> v = Arrays.asList(strings);
         final String asString = parser.asString(v);
-        final Iterable<String> valueOf = parser.valueOf(asString);
+        final List<String> valueOf = parser.valueOf(asString);
         
-        assertThat(v, sameSequenceAs(valueOf));
+        assertThat(v, sameContentsAs(valueOf));
     }
 
     @Test
@@ -98,31 +100,17 @@ public class ParserTest {
         return cacheControl;
     }
 
-    private static Iterable<String> createIterable(String... strings) {
-        return Arrays.asList(strings);
-    }
-
-    public static <T> Matcher<Iterable<T>> sameSequenceAs(final Iterable<T> expected) {
-        return new TypeSafeMatcher<Iterable<T>>() {
+    public static <T> Matcher<List<T>> sameContentsAs(final List<T> expected) {
+        return new TypeSafeMatcher<List<T>>() {
 
             @Override
             public void describeTo(Description description) {
-                description.appendText("same sequence as {provided}");
+                description.appendText("same sequence as " + expected);
             }
 
             @Override
-            public boolean matchesSafely(Iterable<T> actual) {
-                for (T element : expected) {
-                    if(!Iterables.contains(actual, element)) {
-                        return false;
-                    }
-                }
-                for (T element : actual) {
-                    if(!Iterables.contains(expected, element)) {
-                        return false;
-                    }
-                }
-                return true;
+            public boolean matchesSafely(List<T> actual) {
+                return actual.containsAll(expected) && expected.containsAll(actual);
             }
         };
     }

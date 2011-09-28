@@ -54,7 +54,7 @@ public class UserResourceTest {
         Response resp = resource.user();
         
         // when
-        RestfulResponse<UserRepresentation> jsonResp = RestfulResponse.of(resp, UserRepresentation.class);
+        RestfulResponse<UserRepresentation> jsonResp = RestfulResponse.ofT(resp);
         assertThat(jsonResp.getStatus().getFamily(), is(Family.SUCCESSFUL));
         
         // then
