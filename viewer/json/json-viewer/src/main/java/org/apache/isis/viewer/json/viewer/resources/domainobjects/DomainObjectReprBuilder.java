@@ -32,27 +32,27 @@ import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
-import org.apache.isis.viewer.json.viewer.representations.AbstractRepresentationBuilder;
-import org.apache.isis.viewer.json.viewer.representations.LinkToBuilder;
+import org.apache.isis.viewer.json.viewer.representations.AbstractReprBuilder;
+import org.apache.isis.viewer.json.viewer.representations.LinkReprBuilder;
 import org.apache.isis.viewer.json.viewer.util.OidUtils;
 
 import com.google.common.base.Function;
 
-public class DomainObjectRepBuilder extends AbstractRepresentationBuilder<DomainObjectRepBuilder> {
+public class DomainObjectReprBuilder extends AbstractReprBuilder<DomainObjectReprBuilder> {
 
-    public static DomainObjectRepBuilder newBuilder(ResourceContext resourceContext) {
-        return new DomainObjectRepBuilder(resourceContext);
+    public static DomainObjectReprBuilder newBuilder(ResourceContext resourceContext) {
+        return new DomainObjectReprBuilder(resourceContext);
     }
 
-    public static LinkToBuilder newLinkToBuilder(ResourceContext resourceContext, String rel, ObjectAdapter elementAdapter) {
+    public static LinkReprBuilder newLinkToBuilder(ResourceContext resourceContext, String rel, ObjectAdapter elementAdapter) {
         String oidStr = resourceContext.getOidStringifier().enString(elementAdapter.getOid());
         String url = "objects/" + oidStr;
-        return LinkToBuilder.newBuilder(resourceContext, rel, url);
+        return LinkReprBuilder.newBuilder(resourceContext, rel, url);
     }
 
     private ObjectAdapterLinkToBuilder linkToBuilder;
 
-    public DomainObjectRepBuilder(ResourceContext resourceContext) {
+    public DomainObjectReprBuilder(ResourceContext resourceContext) {
         super(resourceContext);
         usingLinkToBuilder(new DomainObjectLinkToBuilder());
     }
@@ -61,12 +61,12 @@ public class DomainObjectRepBuilder extends AbstractRepresentationBuilder<Domain
      * Override the default {@link ObjectAdapterLinkToBuilder} (that is used for generating links in
      * {@link #linkTo(ObjectAdapter)}).
      */
-    public DomainObjectRepBuilder usingLinkToBuilder(ObjectAdapterLinkToBuilder objectAdapterLinkToBuilder) {
+    public DomainObjectReprBuilder usingLinkToBuilder(ObjectAdapterLinkToBuilder objectAdapterLinkToBuilder) {
         this.linkToBuilder = objectAdapterLinkToBuilder.usingResourceContext(resourceContext);
         return this;
     }
 
-    public DomainObjectRepBuilder withAdapter(ObjectAdapter objectAdapter) {
+    public DomainObjectReprBuilder withAdapter(ObjectAdapter objectAdapter) {
         JsonRepresentation self = linkToBuilder.with(objectAdapter).linkToAdapter().build();
         representation.mapPut("self", self);
 
@@ -77,7 +77,7 @@ public class DomainObjectRepBuilder extends AbstractRepresentationBuilder<Domain
         return this;
     }
 
-    private DomainObjectRepBuilder withMembers(ObjectAdapter objectAdapter) {
+    private DomainObjectReprBuilder withMembers(ObjectAdapter objectAdapter) {
         JsonRepresentation members = JsonRepresentation.newArray();
         List<ObjectAssociation> associations = objectAdapter.getSpecification().getAssociations();
         addAssociations(objectAdapter, members, associations);
@@ -97,7 +97,7 @@ public class DomainObjectRepBuilder extends AbstractRepresentationBuilder<Domain
             if(assoc instanceof OneToOneAssociation) {
                 OneToOneAssociation property = (OneToOneAssociation)assoc;
                 JsonRepresentation propertyRep = 
-                        ObjectPropertyRepBuilder.newBuilder(resourceContext, objectAdapter, property)
+                        ObjectPropertyReprBuilder.newBuilder(resourceContext, objectAdapter, property)
                         .usingLinkToBuilder(linkToBuilder)
                         .withDetailsLink()
                         .build();
@@ -106,7 +106,7 @@ public class DomainObjectRepBuilder extends AbstractRepresentationBuilder<Domain
             if(assoc instanceof OneToManyAssociation) {
                 OneToManyAssociation collection = (OneToManyAssociation) assoc;
                 JsonRepresentation collectionRep = 
-                        ObjectCollectionRepBuilder.newBuilder(resourceContext, objectAdapter, collection)
+                        ObjectCollectionReprBuilder.newBuilder(resourceContext, objectAdapter, collection)
                         .usingLinkToBuilder(linkToBuilder)
                         .withDetailsLink()
                         .build();
@@ -128,7 +128,7 @@ public class DomainObjectRepBuilder extends AbstractRepresentationBuilder<Domain
         		addActions(objectAdapter, subactions, members);
         	} else {
                 JsonRepresentation actionRep = 
-                        ObjectActionRepBuilder.newBuilder(resourceContext, objectAdapter, action)
+                        ObjectActionReprBuilder.newBuilder(resourceContext, objectAdapter, action)
                         .usingLinkToBuilder(linkToBuilder)
                         .withDetailsLink()
                         .build();
@@ -179,7 +179,7 @@ public class DomainObjectRepBuilder extends AbstractRepresentationBuilder<Domain
 		}
 		TitleFacet titleFacet = objectSpec.getFacet(TitleFacet.class);
 		String title = titleFacet.title(objectAdapter, resourceContext.getLocalization());
-		return DomainObjectRepBuilder.newLinkToBuilder(resourceContext, "object", objectAdapter)
+		return DomainObjectReprBuilder.newLinkToBuilder(resourceContext, "object", objectAdapter)
 		            .withTitle(title).build();
 	}
 

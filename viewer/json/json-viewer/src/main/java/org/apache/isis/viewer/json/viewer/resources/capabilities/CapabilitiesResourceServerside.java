@@ -21,14 +21,17 @@ package org.apache.isis.viewer.json.viewer.resources.capabilities;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.applib.RepresentationType;
 import org.apache.isis.viewer.json.applib.RestfulMediaType;
+import org.apache.isis.viewer.json.applib.RestfulResponse.HttpStatusCode;
 import org.apache.isis.viewer.json.applib.capabilities.CapabilitiesResource;
-import org.apache.isis.viewer.json.viewer.representations.LinkToBuilder;
+import org.apache.isis.viewer.json.viewer.JsonApplicationException;
+import org.apache.isis.viewer.json.viewer.representations.LinkReprBuilder;
 import org.apache.isis.viewer.json.viewer.resources.ResourceAbstract;
 
 /**
@@ -43,9 +46,10 @@ public class CapabilitiesResourceServerside extends ResourceAbstract implements 
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_CAPABILITIES})
     public Response capabilities() {
         init();
+        fakeRuntimeExceptionIfXFail();
 
         JsonRepresentation representation = JsonRepresentation.newMap();
-        representation.mapPut("self", LinkToBuilder.newBuilder(getResourceContext(), "self", "capabilities/").build());
+        representation.mapPut("self", LinkReprBuilder.newBuilder(getResourceContext(), "self", "capabilities/").build());
         
         JsonRepresentation capabilities = JsonRepresentation.newMap();
         representation.mapPut("capabilities", capabilities);
@@ -67,6 +71,12 @@ public class CapabilitiesResourceServerside extends ResourceAbstract implements 
         return responseOfOk(RepresentationType.CAPABILITIES, Caching.ONE_DAY, representation).build();
     }
 
+    private void fakeRuntimeExceptionIfXFail() {
+        HttpHeaders httpHeaders = getResourceContext().getHttpHeaders();
+        if(httpHeaders.getRequestHeader("X-Fail") != null) {
+            throw JsonApplicationException.create(HttpStatusCode.METHOD_FAILURE);
+        }
+    }
 
 
 }

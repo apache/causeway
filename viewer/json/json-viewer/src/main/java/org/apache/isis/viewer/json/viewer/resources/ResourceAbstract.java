@@ -53,9 +53,9 @@ import org.apache.isis.viewer.json.applib.RestfulResponse.HttpStatusCode;
 import org.apache.isis.viewer.json.applib.util.JsonMapper;
 import org.apache.isis.viewer.json.viewer.JsonApplicationException;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
-import org.apache.isis.viewer.json.viewer.representations.AbstractRepresentationBuilder;
-import org.apache.isis.viewer.json.viewer.representations.RepBuilder;
-import org.apache.isis.viewer.json.viewer.resources.domainobjects.DomainObjectRepBuilder;
+import org.apache.isis.viewer.json.viewer.representations.AbstractReprBuilder;
+import org.apache.isis.viewer.json.viewer.representations.ReprBuilder;
+import org.apache.isis.viewer.json.viewer.resources.domainobjects.DomainObjectReprBuilder;
 import org.apache.isis.viewer.json.viewer.util.OidUtils;
 import org.apache.isis.viewer.json.viewer.util.UrlDecoderUtils;
 import org.codehaus.jackson.JsonGenerationException;
@@ -120,7 +120,7 @@ public abstract class ResourceAbstract {
     protected void init() {
         this.resourceContext =
             new ResourceContext(httpHeaders, uriInfo, request, httpServletRequest, httpServletResponse, securityContext, 
-                    getOidStringifier(), getLocalization(), getAuthenticationSession(), getAdapterManager());
+                    getOidStringifier(), getLocalization(), getAuthenticationSession(), getPersistenceSession(), getAdapterManager());
     }
 
     protected ResourceContext getResourceContext() {
@@ -132,7 +132,7 @@ public abstract class ResourceAbstract {
     // Rendering
     // //////////////////////////////////////////////////////////////
 
-    protected String jsonFor(AbstractRepresentationBuilder<?> builder) {
+    protected String jsonFor(AbstractReprBuilder<?> builder) {
         JsonRepresentation representation = builder.build();
         return jsonFor(representation);
     }
@@ -166,8 +166,8 @@ public abstract class ResourceAbstract {
 		final ResourceContext representationContext = getResourceContext();
         
         return Functions.compose(
-            DomainObjectRepBuilder.selfOf(), 
-            DomainObjectRepBuilder.fromAdapter(representationContext));
+            DomainObjectReprBuilder.selfOf(), 
+            DomainObjectReprBuilder.fromAdapter(representationContext));
 	}
 
 
@@ -233,7 +233,7 @@ public abstract class ResourceAbstract {
         return responseOfOk(representationType, caching, jsonFor(representation));
     }
 
-    public static ResponseBuilder responseOfOk(RepresentationType representationType, Caching caching, RepBuilder representationBuilder) {
+    public static ResponseBuilder responseOfOk(RepresentationType representationType, Caching caching, ReprBuilder representationBuilder) {
         return responseOfOk(representationType, caching, representationBuilder.build());
     }
 

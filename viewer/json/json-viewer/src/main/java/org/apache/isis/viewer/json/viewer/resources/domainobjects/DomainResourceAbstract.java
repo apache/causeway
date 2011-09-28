@@ -44,8 +44,8 @@ import org.apache.isis.viewer.json.applib.RestfulResponse.HttpStatusCode;
 import org.apache.isis.viewer.json.applib.blocks.Link;
 import org.apache.isis.viewer.json.viewer.JsonApplicationException;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
-import org.apache.isis.viewer.json.viewer.representations.AbstractRepresentationBuilder;
-import org.apache.isis.viewer.json.viewer.representations.LinkToBuilder;
+import org.apache.isis.viewer.json.viewer.representations.AbstractReprBuilder;
+import org.apache.isis.viewer.json.viewer.representations.LinkReprBuilder;
 import org.apache.isis.viewer.json.viewer.resources.ResourceAbstract;
 import org.apache.isis.viewer.json.viewer.util.OidUtils;
 import org.apache.isis.viewer.json.viewer.util.UrlDecoderUtils;
@@ -65,8 +65,8 @@ public abstract class DomainResourceAbstract extends ResourceAbstract {
 
     protected Response object(final ObjectAdapter objectAdapter) {
         ResourceContext resourceContext = getResourceContext();
-        final AbstractRepresentationBuilder<?> repBuilder =
-                DomainObjectRepBuilder.newBuilder(resourceContext)
+        final AbstractReprBuilder<?> repBuilder =
+                DomainObjectReprBuilder.newBuilder(resourceContext)
                         .withAdapter(objectAdapter);
 
         ResponseBuilder respBuilder = 
@@ -89,8 +89,8 @@ public abstract class DomainResourceAbstract extends ResourceAbstract {
         final ObjectAction action = getObjectActionThatIsVisibleAndUsable(
                 serviceAdapter, actionId, Intent.ACCESS);
 
-        ObjectActionRepBuilder repBuilder = 
-                ObjectActionRepBuilder.newBuilder(getResourceContext(), serviceAdapter, action)
+        ObjectActionReprBuilder repBuilder = 
+                ObjectActionReprBuilder.newBuilder(getResourceContext(), serviceAdapter, action)
                 .withSelf()
                 .withMutatorsIfEnabled();
         
@@ -222,13 +222,13 @@ public abstract class DomainResourceAbstract extends ResourceAbstract {
         if (collectionFacet != null) {
             final Collection<ObjectAdapter> collectionAdapters = collectionFacet
                     .collection(returnedAdapter);
-            DomainObjectListRepBuilder repBuilder = DomainObjectListRepBuilder.newBuilder(getResourceContext(), representationWithSelf).withAdapters(collectionAdapters);
+            DomainObjectListReprBuilder repBuilder = DomainObjectListReprBuilder.newBuilder(getResourceContext(), representationWithSelf).withAdapters(collectionAdapters);
             return responseOfOk(RepresentationType.LIST, Caching.NONE, repBuilder).build();
         }
 
         final EncodableFacet encodableFacet = returnedAdapter.getSpecification().getFacet(EncodableFacet.class);
         if(encodableFacet != null) {
-            ScalarRepBuilder repBuilder = ScalarRepBuilder.newBuilder(getResourceContext(), representationWithSelf).withAdapter(objectAdapter);
+            ScalarReprBuilder repBuilder = ScalarReprBuilder.newBuilder(getResourceContext(), representationWithSelf).withAdapter(objectAdapter);
             return responseOfOk(RepresentationType.SCALAR_VALUE, Caching.NONE, repBuilder).build();
         }
 
@@ -253,7 +253,7 @@ public abstract class DomainResourceAbstract extends ResourceAbstract {
     private JsonRepresentation representationWithSelfFor(final ObjectAdapter objectAdapter, final ObjectAction action) {
         JsonRepresentation representation = JsonRepresentation.newMap();
         String oid = getOidStr(objectAdapter);
-        final JsonRepresentation repBuilder = LinkToBuilder.newBuilder(getResourceContext(), "self", "objects/%s/actions/%s/invoke", oid, action.getId()).build();
+        final JsonRepresentation repBuilder = LinkReprBuilder.newBuilder(getResourceContext(), "self", "objects/%s/actions/%s/invoke", oid, action.getId()).build();
         representation.mapPut("self", repBuilder);
         return representation;
     }

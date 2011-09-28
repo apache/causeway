@@ -18,7 +18,7 @@ package org.apache.isis.viewer.json.viewer.representations;
 
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
 
-public interface RepBuilder {
+public interface ReprBuilder {
 
     public JsonRepresentation build();
 

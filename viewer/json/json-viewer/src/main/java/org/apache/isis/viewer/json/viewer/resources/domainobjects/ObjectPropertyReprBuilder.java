@@ -24,18 +24,18 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
-import org.apache.isis.viewer.json.viewer.resources.domaintypes.DomainTypeRepBuilder;
-import org.apache.isis.viewer.json.viewer.resources.domaintypes.TypePropertyRepBuilder;
+import org.apache.isis.viewer.json.viewer.resources.domaintypes.DomainTypeReprBuilder;
+import org.apache.isis.viewer.json.viewer.resources.domaintypes.TypePropertyReprBuilder;
 
 import com.google.common.collect.Lists;
 
-public class ObjectPropertyRepBuilder extends AbstractObjectMemberRepBuilder<ObjectPropertyRepBuilder, OneToOneAssociation> {
+public class ObjectPropertyReprBuilder extends AbstractObjectMemberReprBuilder<ObjectPropertyReprBuilder, OneToOneAssociation> {
 
-    public static ObjectPropertyRepBuilder newBuilder(ResourceContext resourceContext, ObjectAdapter objectAdapter, OneToOneAssociation otoa) {
-        return new ObjectPropertyRepBuilder(resourceContext, objectAdapter, otoa);
+    public static ObjectPropertyReprBuilder newBuilder(ResourceContext resourceContext, ObjectAdapter objectAdapter, OneToOneAssociation otoa) {
+        return new ObjectPropertyReprBuilder(resourceContext, objectAdapter, otoa);
     }
     
-    public ObjectPropertyRepBuilder(ResourceContext resourceContext, ObjectAdapter objectAdapter, OneToOneAssociation otoa) {
+    public ObjectPropertyReprBuilder(ResourceContext resourceContext, ObjectAdapter objectAdapter, OneToOneAssociation otoa) {
         super(resourceContext, objectAdapter, MemberType.OBJECT_PROPERTY, otoa);
 
         putId();
@@ -66,7 +66,7 @@ public class ObjectPropertyRepBuilder extends AbstractObjectMemberRepBuilder<Obj
 
 
     @Override
-    public ObjectPropertyRepBuilder withMutatorsIfEnabled() {
+    public ObjectPropertyReprBuilder withMutatorsIfEnabled() {
         if(usability().isVetoed()) {
             return cast(this);
         }
@@ -106,7 +106,7 @@ public class ObjectPropertyRepBuilder extends AbstractObjectMemberRepBuilder<Obj
         if(valueAdapter == null) {
 		    return null;
 		}
-        return DomainObjectRepBuilder.valueOrRef(resourceContext, valueAdapter, objectMember.getSpecification());
+        return DomainObjectReprBuilder.valueOrRef(resourceContext, valueAdapter, objectMember.getSpecification());
     }
 
 	
@@ -114,7 +114,7 @@ public class ObjectPropertyRepBuilder extends AbstractObjectMemberRepBuilder<Obj
     // choices
     /////////////////////////////////////////////////////
 
-	public ObjectPropertyRepBuilder withChoices() {
+	public ObjectPropertyReprBuilder withChoices() {
 		Object propertyChoices = propertyChoices();
 		if(propertyChoices != null) {
 			representation.mapPut("choices", propertyChoices);
@@ -130,7 +130,7 @@ public class ObjectPropertyRepBuilder extends AbstractObjectMemberRepBuilder<Obj
         List<Object> list = Lists.newArrayList();
         for (final ObjectAdapter choiceAdapter : choiceAdapters) {
         	ObjectSpecification objectSpec = objectMember.getSpecification();
-        	list.add(DomainObjectRepBuilder.valueOrRef(resourceContext, choiceAdapter, objectSpec));
+        	list.add(DomainObjectReprBuilder.valueOrRef(resourceContext, choiceAdapter, objectSpec));
         }
         return list;
 	}
@@ -144,11 +144,11 @@ public class ObjectPropertyRepBuilder extends AbstractObjectMemberRepBuilder<Obj
     }
 
     private void addLinksFormalDomainModel(JsonRepresentation links, ResourceContext resourceContext) {
-        links.arrayAdd(TypePropertyRepBuilder.newLinkToBuilder(resourceContext, "typeProperty", objectAdapter.getSpecification(), objectMember).build());
+        links.arrayAdd(TypePropertyReprBuilder.newLinkToBuilder(resourceContext, "typeProperty", objectAdapter.getSpecification(), objectMember).build());
     }
 
     private void addLinksIsisProprietary(JsonRepresentation links, ResourceContext resourceContext) {
-        links.arrayAdd(DomainTypeRepBuilder.newLinkToBuilder(resourceContext, "domainType", objectAdapter.getSpecification()).build());
+        links.arrayAdd(DomainTypeReprBuilder.newLinkToBuilder(resourceContext, "domainType", objectAdapter.getSpecification()).build());
     }
 
 }

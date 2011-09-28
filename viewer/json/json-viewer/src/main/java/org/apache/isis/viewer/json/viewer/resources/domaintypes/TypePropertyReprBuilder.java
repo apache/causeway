@@ -20,23 +20,23 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
-import org.apache.isis.viewer.json.viewer.representations.LinkToBuilder;
+import org.apache.isis.viewer.json.viewer.representations.LinkReprBuilder;
 import org.apache.isis.viewer.json.viewer.resources.domainobjects.MemberType;
 
-public class TypePropertyRepBuilder extends AbstractTypeMemberRepBuilder<TypePropertyRepBuilder, OneToOneAssociation> {
+public class TypePropertyReprBuilder extends AbstractTypeMemberReprBuilder<TypePropertyReprBuilder, OneToOneAssociation> {
 
-    public static TypePropertyRepBuilder newBuilder(ResourceContext representationContext, ObjectSpecification objectSpecification, OneToOneAssociation property) {
-        return new TypePropertyRepBuilder(representationContext, objectSpecification, property);
+    public static TypePropertyReprBuilder newBuilder(ResourceContext representationContext, ObjectSpecification objectSpecification, OneToOneAssociation property) {
+        return new TypePropertyReprBuilder(representationContext, objectSpecification, property);
     }
 
-    public static LinkToBuilder newLinkToBuilder(ResourceContext resourceContext, String rel, ObjectSpecification objectSpecification, OneToOneAssociation property) {
+    public static LinkReprBuilder newLinkToBuilder(ResourceContext resourceContext, String rel, ObjectSpecification objectSpecification, OneToOneAssociation property) {
         String typeFullName = objectSpecification.getFullIdentifier();
         String propertyId = property.getId();
         String url = "domainTypes/" + typeFullName + "/properties/" + propertyId;
-        return LinkToBuilder.newBuilder(resourceContext, rel, url);
+        return LinkReprBuilder.newBuilder(resourceContext, rel, url);
     }
 
-    public TypePropertyRepBuilder(ResourceContext resourceContext, ObjectSpecification objectSpecification, OneToOneAssociation property) {
+    public TypePropertyReprBuilder(ResourceContext resourceContext, ObjectSpecification objectSpecification, OneToOneAssociation property) {
         super(resourceContext, objectSpecification, MemberType.OBJECT_COLLECTION, property);
     }
 
