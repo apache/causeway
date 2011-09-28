@@ -22,7 +22,7 @@ import org.apache.isis.viewer.json.applib.RestfulResponse.HttpStatusCode;
 import org.apache.isis.viewer.json.applib.blocks.Link;
 import org.apache.isis.viewer.json.applib.blocks.Method;
 import org.apache.isis.viewer.json.applib.domainobjects.DomainServiceResource;
-import org.apache.isis.viewer.json.applib.domainobjects.DomainServicesRepresentation;
+import org.apache.isis.viewer.json.applib.domainobjects.ListRepresentation;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.junit.Before;
@@ -52,14 +52,14 @@ public class DomainServiceResourceTest_services {
         
         // when
         Response resp = resource.services();
-        RestfulResponse<DomainServicesRepresentation> jsonResp = RestfulResponse.of(resp, DomainServicesRepresentation.class);
+        RestfulResponse<ListRepresentation> jsonResp = RestfulResponse.ofT(resp);
         
         // then
         assertThat(jsonResp.getStatus(), is(HttpStatusCode.OK));
         assertThat(jsonResp.getHeader(RestfulResponse.Header.CONTENT_TYPE), is(RepresentationType.LIST.getMediaType()));
         assertThat(jsonResp.getHeader(RestfulResponse.Header.CACHE_CONTROL).getMaxAge(), is(24*60*60));
 
-        DomainServicesRepresentation repr = jsonResp.getEntity();
+        ListRepresentation repr = jsonResp.getEntity();
 
         assertThat(repr, isMap());
 
@@ -75,7 +75,7 @@ public class DomainServiceResourceTest_services {
     @Test
     public void self_isFollowable() throws Exception {
         // given
-        DomainServicesRepresentation repr = givenRepresentation();
+        ListRepresentation repr = givenRepresentation();
 
         // when, then
         assertThat(repr, isFollowableLinkToSelf(client));
@@ -86,7 +86,7 @@ public class DomainServiceResourceTest_services {
     public void linksToDomainServiceResources() throws Exception {
         
         // given
-        DomainServicesRepresentation repr = givenRepresentation();
+        ListRepresentation repr = givenRepresentation();
         
         // when
         JsonRepresentation values = repr.getValues();
@@ -94,7 +94,7 @@ public class DomainServiceResourceTest_services {
         // then
         for (Link link : values.arrayIterable(Link.class)) {
             Response followResp = client.follow(link);
-            RestfulResponse<JsonRepresentation> followJsonResp = RestfulResponse.of(followResp, JsonRepresentation.class);
+            RestfulResponse<JsonRepresentation> followJsonResp = RestfulResponse.of(followResp);
             assertThat(followJsonResp.getStatus().getFamily(), is(Family.SUCCESSFUL));
             
             JsonRepresentation followRepr = followJsonResp.getEntity();
@@ -105,8 +105,8 @@ public class DomainServiceResourceTest_services {
     }
 
 
-    private DomainServicesRepresentation givenRepresentation() throws JsonParseException, JsonMappingException, IOException {
-        return RepresentationMatchers.entityOf(resource.services(), DomainServicesRepresentation.class);
+    private ListRepresentation givenRepresentation() throws JsonParseException, JsonMappingException, IOException {
+        return RepresentationMatchers.entityOf(resource.services(), ListRepresentation.class);
     }
 
 

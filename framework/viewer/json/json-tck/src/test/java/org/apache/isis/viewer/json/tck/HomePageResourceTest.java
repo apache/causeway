@@ -12,13 +12,17 @@ import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status.Family;
 
 import org.apache.isis.runtimes.dflt.webserver.WebServer;
+import org.apache.isis.viewer.json.applib.HttpMethod;
 import org.apache.isis.viewer.json.applib.RepresentationType;
 import org.apache.isis.viewer.json.applib.RestfulClient;
+import org.apache.isis.viewer.json.applib.RestfulRequest;
+import org.apache.isis.viewer.json.applib.RestfulRequest.QueryParameter;
 import org.apache.isis.viewer.json.applib.RestfulResponse;
 import org.apache.isis.viewer.json.applib.RestfulResponse.HttpStatusCode;
 import org.apache.isis.viewer.json.applib.blocks.Method;
@@ -27,6 +31,7 @@ import org.apache.isis.viewer.json.applib.homepage.HomePageResource;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -54,7 +59,7 @@ public class HomePageResourceTest {
         Response resp = resource.resources();
         
         // when
-        RestfulResponse<HomePageRepresentation> jsonResp = RestfulResponse.of(resp, HomePageRepresentation.class);
+        RestfulResponse<HomePageRepresentation> jsonResp = RestfulResponse.ofT(resp);
         assertThat(jsonResp.getStatus().getFamily(), is(Family.SUCCESSFUL));
         
         // then
@@ -98,6 +103,18 @@ public class HomePageResourceTest {
     private HomePageRepresentation givenRepresentation() throws JsonParseException, JsonMappingException, IOException {
         return entityOf(resource.resources(), HomePageRepresentation.class);
     }
+
+    
+    @Ignore
+    @Test
+    public void xrofollowLinks() throws Exception {
+
+        final RestfulRequest request = client.createRequest(HttpMethod.GET, "/").with(QueryParameter.FOLLOW_LINKS, Arrays.asList("user"));
+        final RestfulResponse<HomePageRepresentation> restfulResponse = request.executeT();
+        
+        
+    }
+    
 
 }
 

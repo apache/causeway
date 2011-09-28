@@ -61,7 +61,7 @@ public class RepresentationWalker {
 
     public RepresentationWalker(RestfulClient restfulClient, Response response) {
         this.restfulClient = restfulClient;
-        RestfulResponse<JsonRepresentation> jsonResp = RestfulResponse.of(response, JsonRepresentation.class);
+        RestfulResponse<JsonRepresentation> jsonResp = RestfulResponse.of(response);
 
         addStep(null, null, null, jsonResp, null, null);
     }
@@ -112,7 +112,7 @@ public class RepresentationWalker {
             return;
         }
         
-        addStep(key, link, null, RestfulResponse.of(response, JsonRepresentation.class), null, null);
+        addStep(key, link, null, RestfulResponse.of(response), null, null);
     }
 
     public void walkXpath(String linkXpath) {
@@ -145,7 +145,7 @@ public class RepresentationWalker {
             } else {
                 response = restfulClient.follow(link);
             }
-            addStep(linkXpath, link, null, RestfulResponse.of(response, JsonRepresentation.class), null, null);
+            addStep(linkXpath, link, null, RestfulResponse.of(response), null, null);
             
         } catch (RuntimeException e) {
             // if xpath fails

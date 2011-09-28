@@ -50,7 +50,7 @@ public class CapabilitiesResourceTest {
         
         // when
         Response servicesResp = resource.capabilities();
-        RestfulResponse<CapabilitiesRepresentation> jsonResp = RestfulResponse.of(servicesResp, CapabilitiesRepresentation.class);
+        RestfulResponse<CapabilitiesRepresentation> jsonResp = RestfulResponse.ofT(servicesResp);
         assertThat(jsonResp.getStatus().getFamily(), is(Family.SUCCESSFUL));
         
         // then

@@ -21,8 +21,8 @@ import org.junit.Assert;
 
 public class RepresentationMatchers {
 
-    public static <T extends JsonRepresentation> T entityOf(Response resp, Class<T> representationType) throws JsonParseException, JsonMappingException, IOException {
-        RestfulResponse<T> jsonResp = RestfulResponse.of(resp, representationType);
+    public static <T extends JsonRepresentation> T entityOf(Response resp, Class<T> returnType) throws JsonParseException, JsonMappingException, IOException {
+        RestfulResponse<T> jsonResp = RestfulResponse.ofT(resp);
         return jsonResp.getEntity();
     }
 
@@ -118,7 +118,7 @@ public class RepresentationMatchers {
                 Response servicesResp;
                 try {
                     servicesResp = client.follow(initialRepr.getSelf());
-                    RestfulResponse<T> followedResp = RestfulResponse.of(servicesResp, asT(item));
+                    RestfulResponse<T> followedResp = RestfulResponse.ofT(servicesResp);
                     
                     // then
                     T repr2 = followedResp.getEntity();
@@ -131,11 +131,6 @@ public class RepresentationMatchers {
         };
     }
 
-    @SuppressWarnings("unchecked")
-    private static <T> Class<T> asT(T initialRepr) {
-        return (Class<T>) initialRepr.getClass();
-    }
-    
 
     public static <T> void assertThat(T actual, AbstractMatcherBuilder<T> matcherBuilder) {
         Assert.assertThat(actual, matcherBuilder.build());
@@ -267,7 +262,7 @@ public class RepresentationMatchers {
 
                     // assertions based on provided criteria
                     if(statusCode != null) {
-                        RestfulResponse<JsonRepresentation> jsonResp = RestfulResponse.of(linkedResp, JsonRepresentation.class);
+                        RestfulResponse<JsonRepresentation> jsonResp = RestfulResponse.of(linkedResp);
                         if(jsonResp.getStatus() != statusCode) {
                             return false;
                         }

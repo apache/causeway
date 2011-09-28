@@ -246,8 +246,17 @@ public class RestfulResponse<T> {
     private final HttpStatusCode httpStatusCode;
     private final Class<T> returnType;
 
-    public static <T> RestfulResponse<T> of(Response response, Class<T> returnType) {
-        return new RestfulResponse<T>(response, returnType);
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+    public static RestfulResponse<JsonRepresentation> of(Response response) {
+        final MediaType mediaType = getHeader(response, Header.CONTENT_TYPE);
+        final RepresentationType representationType = RepresentationType.lookup(mediaType);
+        Class<? extends JsonRepresentation> returnType = representationType.getRepresentationClass();
+        return new RestfulResponse(response, returnType);
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <T extends JsonRepresentation> RestfulResponse<T> ofT(Response response) {
+        return (RestfulResponse<T>) of(response);
     }
 
     private RestfulResponse(Response response, Class<T> returnType) {
@@ -265,6 +274,10 @@ public class RestfulResponse<T> {
     }
 
     public <V> V getHeader(Header<V> header) {
+        return getHeader(response, header);
+    }
+
+    private static <V> V getHeader(final Response response, Header<V> header) {
         MultivaluedMap<String, Object> metadata = response.getMetadata();
         // in spite of the always returns a String
         String value = (String) metadata.getFirst(header.getName());

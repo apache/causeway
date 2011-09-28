@@ -1,6 +1,5 @@
 package org.apache.isis.viewer.json.applib;
 
-import java.util.Date;
 import java.util.List;
 
 import javax.ws.rs.core.Response;
@@ -33,10 +32,10 @@ public final class RestfulRequest {
     
     public static class QueryParameter<Q> {
 
-        public static QueryParameter<Iterable<String>> FOLLOW_LINKS = new QueryParameter<Iterable<String>>("x-ro-follow-links", Parser.forIterableOfStrings());
+        public static QueryParameter<List<String>> FOLLOW_LINKS = new QueryParameter<List<String>>("x-ro-follow-links", Parser.forListOfStrings());
         public static QueryParameter<Integer> PAGE = new QueryParameter<Integer>("x-ro-page", Parser.forInteger());
         public static QueryParameter<Integer> PAGE_SIZE = new QueryParameter<Integer>("x-ro-page-size", Parser.forInteger());
-        public static QueryParameter<Iterable<String>> SORT_BY = new QueryParameter<Iterable<String>>("x-ro-sort-by", Parser.forIterableOfStrings());
+        public static QueryParameter<List<String>> SORT_BY = new QueryParameter<List<String>>("x-ro-sort-by", Parser.forListOfStrings());
         public static QueryParameter<DomainModel> DOMAIN_MODEL = new QueryParameter<DomainModel>("x-ro-domain-model", DomainModel.parser());
         public static QueryParameter<Boolean> VALIDATE_ONLY = new QueryParameter<Boolean>("x-ro-validate-only", Parser.forBoolean());
         
@@ -59,7 +58,7 @@ public final class RestfulRequest {
 
     public static class Header<X> {
         public static Header<String> IF_MATCH = new Header<String>("If-Match", Parser.forString());
-        public static Header<Iterable<String>> ACCEPT = new Header<Iterable<String>>("If-Match", Parser.forIterableOfStrings());
+        public static Header<List<String>> ACCEPT = new Header<List<String>>("If-Match", Parser.forListOfStrings());
             
         private final String name;
         private final Parser<X> parser;
@@ -98,17 +97,23 @@ public final class RestfulRequest {
         return clientRequest;
     }
 
-    public Response execute() throws Exception {
-        return clientRequest.execute();
-    }
-
-    public <T> RestfulResponse<T> execute(Class<T> requiredType) {
+    public RestfulResponse<JsonRepresentation> execute() {
         try {
-            Response executeJaxrs = execute();
-            return RestfulResponse.of(executeJaxrs, requiredType);
+            Response executeJaxrs = clientRequest.execute();
+            return RestfulResponse.ofT(executeJaxrs);
         } catch (Exception ex) {
             throw new RuntimeException(ex);
         }
+    }
+
+    @SuppressWarnings("unchecked")
+    public <T extends JsonRepresentation> RestfulResponse<T> executeT() {
+        final RestfulResponse<JsonRepresentation> restfulResponse = execute();
+        return (RestfulResponse<T>) restfulResponse;
+    }
+
+    public <Q> RestfulRequest with(RestfulRequest.QueryParameter<Q> queryParam, Q arg) {
+        return null;
     }
 
 }

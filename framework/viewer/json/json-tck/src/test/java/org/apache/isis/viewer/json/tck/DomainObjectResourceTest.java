@@ -53,7 +53,7 @@ public class DomainObjectResourceTest {
         
         // when
         Response domainObjectResp = domainObjectResource.object("OID:6");
-        RestfulResponse<DomainObjectRepresentation> domainObjectJsonResp = RestfulResponse.of(domainObjectResp, DomainObjectRepresentation.class);
+        RestfulResponse<DomainObjectRepresentation> domainObjectJsonResp = RestfulResponse.ofT(domainObjectResp);
         assertThat(domainObjectJsonResp.getStatus().getFamily(), is(Family.SUCCESSFUL));
         
         // then 
@@ -136,7 +136,7 @@ public class DomainObjectResourceTest {
         
         // when
         Response idPropertyResp = domainObjectResource.propertyDetails("OID:1", "id");
-        RestfulResponse<ObjectPropertyRepresentation> idPropertyJsonResp = RestfulResponse.of(idPropertyResp, ObjectPropertyRepresentation.class);
+        RestfulResponse<ObjectPropertyRepresentation> idPropertyJsonResp = RestfulResponse.ofT(idPropertyResp);
         assertThat(idPropertyJsonResp.getStatus().getFamily(), is(Family.SUCCESSFUL));
         
         // then 
@@ -174,7 +174,7 @@ public class DomainObjectResourceTest {
         
         // when
         Response actionPromptResp = domainObjectResource.actionPrompt("OID:1", "list");
-        RestfulResponse<ObjectActionRepresentation> actionPromptJsonResp = RestfulResponse.of(actionPromptResp, ObjectActionRepresentation.class);
+        RestfulResponse<ObjectActionRepresentation> actionPromptJsonResp = RestfulResponse.ofT(actionPromptResp);
         assertThat(actionPromptJsonResp.getStatus().getFamily(), is(Family.SUCCESSFUL));
         
         // then 
@@ -230,7 +230,7 @@ public class DomainObjectResourceTest {
         
         // when
         Response actionInvokeResp = domainObjectResource.invokeAction("OID:1", "list", body.asInputStream());
-        RestfulResponse<ScalarValueRepresentation> actionInvokeJsonResp = RestfulResponse.of(actionInvokeResp, ScalarValueRepresentation.class);
+        RestfulResponse<ScalarValueRepresentation> actionInvokeJsonResp = RestfulResponse.ofT(actionInvokeResp);
         assertThat(actionInvokeJsonResp.getStatus().getFamily(), is(Family.SUCCESSFUL));
         
         // then 
