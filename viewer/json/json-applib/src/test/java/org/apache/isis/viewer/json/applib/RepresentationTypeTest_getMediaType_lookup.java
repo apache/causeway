@@ -1,6 +1,7 @@
 package org.apache.isis.viewer.json.applib;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertThat;
 
@@ -27,6 +28,12 @@ public class RepresentationTypeTest_getMediaType_lookup {
     @Test
     public void whenNull() {
         assertThat(RepresentationType.lookup((MediaType)null), is(RepresentationType.GENERIC));
+    }
+
+    @Test
+    public void getMediaTypeProfile() {
+        assertThat(RepresentationType.CAPABILITIES.getMediaTypeProfile(), is("http://restfulobjects.org/profiles/capabilities"));
+        assertThat(RepresentationType.GENERIC.getMediaTypeProfile(), is(nullValue()));
     }
 
 }

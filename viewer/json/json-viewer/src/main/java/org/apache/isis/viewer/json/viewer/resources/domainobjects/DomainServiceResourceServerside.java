@@ -74,7 +74,7 @@ public class DomainServiceResourceServerside extends DomainResourceAbstract impl
         AbstractReprBuilder<?> builder = 
                 DomainObjectReprBuilder.newBuilder(resourceContext)
                     .usingLinkToBuilder(new DomainServiceLinkToBuilder())
-                    .withAdapter(serviceAdapter);
+                    .with(serviceAdapter);
         
         return responseOfOk(RepresentationType.DOMAIN_OBJECT, Caching.ONE_DAY, builder).build();
     }

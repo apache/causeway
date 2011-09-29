@@ -28,14 +28,21 @@ import org.apache.isis.viewer.json.viewer.resources.user.UserResourceServerside;
 public class JsonApplication extends AbstractJaxRsApplication {
 
     public JsonApplication() {
-        addSingleton(new HomePageResourceServerside());
-        addSingleton(new DomainTypeResourceServerside());
-        addSingleton(new UserResourceServerside());
-        addSingleton(new DomainObjectResourceServerside());
-        addSingleton(new DomainServiceResourceServerside());
-        addSingleton(new CapabilitiesResourceServerside());
+        addClass(HomePageResourceServerside.class);
+        addClass(DomainTypeResourceServerside.class);
+        addClass(UserResourceServerside.class);
+        addClass(DomainObjectResourceServerside.class);
+        addClass(DomainServiceResourceServerside.class);
+        addClass(CapabilitiesResourceServerside.class);
+        
         addSingleton(new JsonApplicationExceptionMapper());
+        
+        // TODO: doesn't get injected
+        // addSingleton(new TypedReprBuilderFactoryRegistry());
+        
+        // TODO: idea being to remove the init()
         // addSingleton(new PreProcessInterceptorForIsisSession());
     }
+
 
 }

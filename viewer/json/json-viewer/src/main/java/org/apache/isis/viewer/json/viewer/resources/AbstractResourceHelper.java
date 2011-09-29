@@ -16,25 +16,29 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.json.viewer.resources.user;
+package org.apache.isis.viewer.json.viewer.resources;
 
 import org.apache.isis.viewer.json.viewer.ResourceContext;
-import org.apache.isis.viewer.json.viewer.resources.AbstractResourceHelper;
 
-public class UserResourceHelper extends AbstractResourceHelper {
+public class AbstractResourceHelper {
 
-    public UserResourceHelper(ResourceContext resourceContext) {
+    private final ResourceContext resourceContext;
+    private final String selfRef;
+    
+    public AbstractResourceHelper(ResourceContext resourceContext) {
         this(resourceContext, null);
     }
 
-    public UserResourceHelper(ResourceContext resourceContext, String selfRef) {
-        super(resourceContext, selfRef);
+    public AbstractResourceHelper(ResourceContext resourceContext, String selfRef) {
+        this.resourceContext = resourceContext;
+        this.selfRef = selfRef;
     }
 
-    public UserReprBuilder user() {
-        return UserReprBuilder.newBuilder(getResourceContext())
-                    .withAuthenticationSession(getResourceContext().getAuthenticationSession())
-                    .withSelf("user");
+    public ResourceContext getResourceContext() {
+        return resourceContext;
     }
-
+    
+    public String getSelfRef() {
+        return selfRef;
+    }
 }

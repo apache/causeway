@@ -42,7 +42,7 @@ public class DomainServiceResourceHelper extends AbstractResourceHelper {
         DomainObjectListReprBuilder builder = 
                 DomainObjectListReprBuilder.newBuilder(getResourceContext())
                     .usingLinkToBuilder(new DomainServiceLinkToBuilder())
-                    .withSelf(getSelfRef())
+                    .withSelf("services")
                     .withAdapters(serviceAdapters);
         
         return builder;
