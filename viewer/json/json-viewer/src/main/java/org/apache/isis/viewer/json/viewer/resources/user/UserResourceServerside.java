@@ -22,10 +22,11 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.viewer.json.applib.RepresentationType;
 import org.apache.isis.viewer.json.applib.RestfulMediaType;
 import org.apache.isis.viewer.json.applib.user.UserResource;
-import org.apache.isis.viewer.json.viewer.representations.ReprBuilder;
+import org.apache.isis.viewer.json.viewer.representations.TypedReprBuilderFactory;
 import org.apache.isis.viewer.json.viewer.resources.ResourceAbstract;
 
 public class UserResourceServerside extends ResourceAbstract implements UserResource {
@@ -35,8 +36,10 @@ public class UserResourceServerside extends ResourceAbstract implements UserReso
     public Response user() {
         init();
 
-        final ReprBuilder reprBuilder = 
-                new UserResourceHelper(getResourceContext()).user();
+        final TypedReprBuilderFactory factory = builderFactoryRegistry.find(RepresentationType.USER);
+        final UserReprBuilder reprBuilder = 
+                factory.newBuilder(getResourceContext(), AuthenticationSession.class);
+        reprBuilder.with(getAuthenticationSession());
 
         return responseOfOk(RepresentationType.USER, Caching.ONE_HOUR, reprBuilder.build()).build();
     }

@@ -84,7 +84,7 @@ public class AnyResourceTest_exceptionHandling {
     public void runtimeException_isMapped() throws Exception {
 
         // given
-        RestfulRequest restfulReq = client.createRequest(HttpMethod.GET, "/");
+        RestfulRequest restfulReq = client.createRequest(HttpMethod.GET, "capabilities");
         restfulReq.getClientRequest().header("X-FAIL", "true");
         
         // when

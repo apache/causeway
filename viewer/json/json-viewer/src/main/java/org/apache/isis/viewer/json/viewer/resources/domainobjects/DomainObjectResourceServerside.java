@@ -45,7 +45,7 @@ import org.apache.isis.viewer.json.applib.RestfulResponse.HttpStatusCode;
 import org.apache.isis.viewer.json.applib.domainobjects.DomainObjectResource;
 import org.apache.isis.viewer.json.viewer.JsonApplicationException;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
-import org.apache.isis.viewer.json.viewer.representations.AbstractReprBuilder;
+import org.apache.isis.viewer.json.viewer.representations.ReprBuilderAbstract;
 import org.apache.isis.viewer.json.viewer.representations.TypedReprBuilder;
 import org.apache.isis.viewer.json.viewer.representations.TypedReprBuilderFactory;
 
@@ -72,12 +72,11 @@ public class DomainObjectResourceServerside extends DomainResourceAbstract imple
         final ObjectAdapter objectAdapter = getObjectAdapter(oidStr);
         
         final TypedReprBuilderFactory reprBuilderBuilder = 
-                BUILDER_REGISTRY.locate(RepresentationType.DOMAIN_OBJECT.getMediaType());
+                builderFactoryRegistry.find(RepresentationType.DOMAIN_OBJECT);
         
-        final TypedReprBuilder<ObjectAdapter> repBuilder = 
+        final DomainObjectReprBuilder repBuilder = 
                 reprBuilderBuilder.newBuilder(getResourceContext(), ObjectAdapter.class);
-
-        repBuilder.withSelf().with(objectAdapter);
+        repBuilder.with(objectAdapter);
         
         ResponseBuilder respBuilder = 
                 responseOfOk(RepresentationType.DOMAIN_OBJECT, Caching.NONE, repBuilder);

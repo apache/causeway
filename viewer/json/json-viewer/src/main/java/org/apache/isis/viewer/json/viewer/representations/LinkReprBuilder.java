@@ -19,7 +19,7 @@ package org.apache.isis.viewer.json.viewer.representations;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
 
-public class LinkReprBuilder extends AbstractReprBuilder<LinkReprBuilder> {
+public class LinkReprBuilder extends ReprBuilderAbstract<LinkReprBuilder> {
 
     public static LinkReprBuilder newBuilder(ResourceContext resourceContext, String rel, String hrefFormat, Object... args) {
         return new LinkReprBuilder(resourceContext, rel, String.format(hrefFormat, args));

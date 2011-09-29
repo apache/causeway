@@ -5,8 +5,10 @@ import org.apache.isis.viewer.json.viewer.ResourceContext;
 
 public interface TypedReprBuilderFactory {
 
-    public abstract RepresentationType getRepresentationType();
+    RepresentationType getRepresentationType();
 
-    public abstract <T> TypedReprBuilder<T> newBuilder(ResourceContext resourceContext, Class<T> cls);
+    TypedReprBuilder<?, ?> newBuilder(ResourceContext resourceContext);
+    
+    <R extends TypedReprBuilder<R, T>, T> R newBuilder(ResourceContext resourceContext, Class<T> cls);
 
 }

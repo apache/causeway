@@ -23,6 +23,8 @@ import java.util.Map;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.isis.viewer.json.applib.RepresentationType;
+import org.apache.isis.viewer.json.viewer.resources.domainobjects.DomainObjectReprBuilderFactory;
+import org.apache.isis.viewer.json.viewer.resources.user.UserReprBuilderFactory;
 
 import com.google.common.collect.Maps;
 
@@ -35,7 +37,8 @@ public class TypedReprBuilderFactoryRegistry {
     }
     
     private void registerDefaults() {
-        register(new DomainObjectTypedReprBuilderFactory());
+        register(new DomainObjectReprBuilderFactory());
+        register(new UserReprBuilderFactory());
     }
 
     public void register(TypedReprBuilderFactory factory) {
@@ -43,7 +46,12 @@ public class TypedReprBuilderFactoryRegistry {
         factoryByReprType.put(representationType.getMediaType(), factory);
     }
     
-    public TypedReprBuilderFactory locate(MediaType mediaType) {
+    public TypedReprBuilderFactory find(MediaType mediaType) {
         return factoryByReprType.get(mediaType);
     }
+
+    public TypedReprBuilderFactory find(RepresentationType representationType) {
+        return find(representationType.getMediaType());
+    }
+
 }

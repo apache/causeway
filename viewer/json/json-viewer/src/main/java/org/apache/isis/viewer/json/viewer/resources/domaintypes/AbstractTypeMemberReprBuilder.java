@@ -19,10 +19,10 @@ package org.apache.isis.viewer.json.viewer.resources.domaintypes;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
-import org.apache.isis.viewer.json.viewer.representations.AbstractReprBuilder;
+import org.apache.isis.viewer.json.viewer.representations.ReprBuilderAbstract;
 import org.apache.isis.viewer.json.viewer.resources.domainobjects.MemberType;
 
-public abstract class AbstractTypeMemberReprBuilder<R extends AbstractReprBuilder<R>, T extends ObjectMember> extends AbstractReprBuilder<R> {
+public abstract class AbstractTypeMemberReprBuilder<R extends ReprBuilderAbstract<R>, T extends ObjectMember> extends ReprBuilderAbstract<R> {
 
     protected final ObjectSpecification objectSpecification;
     protected final MemberType memberType;

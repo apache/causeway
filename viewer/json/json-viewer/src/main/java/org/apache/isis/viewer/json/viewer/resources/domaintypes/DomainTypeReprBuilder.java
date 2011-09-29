@@ -20,9 +20,9 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
 import org.apache.isis.viewer.json.viewer.representations.LinkReprBuilder;
-import org.apache.isis.viewer.json.viewer.representations.AbstractReprBuilder;
+import org.apache.isis.viewer.json.viewer.representations.ReprBuilderAbstract;
 
-public class DomainTypeReprBuilder extends AbstractReprBuilder<DomainTypeReprBuilder> {
+public class DomainTypeReprBuilder extends ReprBuilderAbstract<DomainTypeReprBuilder> {
 
     public static DomainTypeReprBuilder newBuilder(ResourceContext representationContext) {
         return new DomainTypeReprBuilder(representationContext);

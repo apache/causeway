@@ -22,9 +22,9 @@ import java.util.List;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
-import org.apache.isis.viewer.json.viewer.representations.AbstractReprBuilder;
+import org.apache.isis.viewer.json.viewer.representations.ReprBuilderAbstract;
 
-public class DomainObjectListReprBuilder extends AbstractReprBuilder<DomainObjectListReprBuilder> {
+public class DomainObjectListReprBuilder extends ReprBuilderAbstract<DomainObjectListReprBuilder> {
 
     private ObjectAdapterLinkToBuilder objectAdapterLinkToBuilder;
 
