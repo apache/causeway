@@ -33,8 +33,7 @@ public class UserResourceHelper extends AbstractResourceHelper {
 
     public UserReprBuilder user() {
         return UserReprBuilder.newBuilder(getResourceContext())
-                    .withAuthenticationSession(getResourceContext().getAuthenticationSession())
-                    .withSelf("user");
+                    .with(getResourceContext().getAuthenticationSession());
     }
 
 }

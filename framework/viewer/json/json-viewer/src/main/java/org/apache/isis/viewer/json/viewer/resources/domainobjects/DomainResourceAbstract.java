@@ -44,7 +44,7 @@ import org.apache.isis.viewer.json.applib.RestfulResponse.HttpStatusCode;
 import org.apache.isis.viewer.json.applib.blocks.Link;
 import org.apache.isis.viewer.json.viewer.JsonApplicationException;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
-import org.apache.isis.viewer.json.viewer.representations.AbstractReprBuilder;
+import org.apache.isis.viewer.json.viewer.representations.ReprBuilderAbstract;
 import org.apache.isis.viewer.json.viewer.representations.LinkReprBuilder;
 import org.apache.isis.viewer.json.viewer.resources.ResourceAbstract;
 import org.apache.isis.viewer.json.viewer.util.OidUtils;
@@ -65,7 +65,7 @@ public abstract class DomainResourceAbstract extends ResourceAbstract {
 
     protected Response object(final ObjectAdapter objectAdapter) {
         ResourceContext resourceContext = getResourceContext();
-        final AbstractReprBuilder<?> repBuilder =
+        final ReprBuilderAbstract<?> repBuilder =
                 DomainObjectReprBuilder.newBuilder(resourceContext)
                         .with(objectAdapter);
 

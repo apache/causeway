@@ -32,14 +32,13 @@ import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
-import org.apache.isis.viewer.json.viewer.representations.AbstractReprBuilder;
 import org.apache.isis.viewer.json.viewer.representations.LinkReprBuilder;
-import org.apache.isis.viewer.json.viewer.representations.TypedReprBuilder;
+import org.apache.isis.viewer.json.viewer.representations.TypedReprBuilderAbstract;
 import org.apache.isis.viewer.json.viewer.util.OidUtils;
 
 import com.google.common.base.Function;
 
-public class DomainObjectReprBuilder extends AbstractReprBuilder<DomainObjectReprBuilder> implements TypedReprBuilder<ObjectAdapter>{
+public class DomainObjectReprBuilder extends TypedReprBuilderAbstract<DomainObjectReprBuilder, ObjectAdapter>{
 
     public static DomainObjectReprBuilder newBuilder(ResourceContext resourceContext) {
         return new DomainObjectReprBuilder(resourceContext);
@@ -68,7 +67,6 @@ public class DomainObjectReprBuilder extends AbstractReprBuilder<DomainObjectRep
         return this;
     }
 
-    @Override
     public DomainObjectReprBuilder withSelf() {
         this.includeSelf = true;
         return this;

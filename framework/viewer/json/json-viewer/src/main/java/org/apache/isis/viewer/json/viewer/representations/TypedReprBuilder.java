@@ -1,10 +1,8 @@
 package org.apache.isis.viewer.json.viewer.representations;
 
 
-public interface TypedReprBuilder<T> extends ReprBuilder {
+public interface TypedReprBuilder<R extends TypedReprBuilder<R, T>, T> extends ReprBuilder {
 
-    TypedReprBuilder<T> withSelf();
-
-    TypedReprBuilder<T> with(T t);
+    R with(T t);
 
 }

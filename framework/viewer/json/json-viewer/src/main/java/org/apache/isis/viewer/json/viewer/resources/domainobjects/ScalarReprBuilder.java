@@ -22,9 +22,9 @@ import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.applib.RestfulResponse.HttpStatusCode;
 import org.apache.isis.viewer.json.viewer.JsonApplicationException;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
-import org.apache.isis.viewer.json.viewer.representations.AbstractReprBuilder;
+import org.apache.isis.viewer.json.viewer.representations.ReprBuilderAbstract;
 
-public class ScalarReprBuilder extends AbstractReprBuilder<ScalarReprBuilder> {
+public class ScalarReprBuilder extends ReprBuilderAbstract<ScalarReprBuilder> {
 
     public static ScalarReprBuilder newBuilder(final ResourceContext resourceContext) {
         return new ScalarReprBuilder(resourceContext, JsonRepresentation.newMap());

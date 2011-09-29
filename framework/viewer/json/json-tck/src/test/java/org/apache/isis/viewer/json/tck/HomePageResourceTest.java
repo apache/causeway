@@ -105,6 +105,7 @@ public class HomePageResourceTest {
     }
 
     
+    @Ignore("in progress")
     @Test
     public void xrofollowLinks() throws Exception {
 

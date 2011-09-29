@@ -36,8 +36,10 @@ import org.apache.isis.viewer.json.applib.RepresentationType;
 import org.apache.isis.viewer.json.applib.RestfulMediaType;
 import org.apache.isis.viewer.json.applib.domainobjects.DomainServiceResource;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
-import org.apache.isis.viewer.json.viewer.representations.AbstractReprBuilder;
+import org.apache.isis.viewer.json.viewer.representations.ReprBuilderAbstract;
 import org.apache.isis.viewer.json.viewer.representations.ReprBuilder;
+import org.apache.isis.viewer.json.viewer.representations.TypedReprBuilder;
+import org.apache.isis.viewer.json.viewer.representations.TypedReprBuilderFactory;
 
 @Path("/services")
 public class DomainServiceResourceServerside extends DomainResourceAbstract implements
@@ -70,13 +72,14 @@ public class DomainServiceResourceServerside extends DomainResourceAbstract impl
         
         final ObjectAdapter serviceAdapter = getServiceAdapter(serviceId);
         
-        ResourceContext resourceContext = getResourceContext();
-        AbstractReprBuilder<?> builder = 
-                DomainObjectReprBuilder.newBuilder(resourceContext)
-                    .usingLinkToBuilder(new DomainServiceLinkToBuilder())
+        final TypedReprBuilderFactory factory = builderFactoryRegistry.find(RepresentationType.DOMAIN_OBJECT);
+        final DomainObjectReprBuilder reprBuilder = 
+                factory.newBuilder(getResourceContext(), ObjectAdapter.class);
+        reprBuilder.usingLinkToBuilder(new DomainServiceLinkToBuilder())
+                    .withSelf()
                     .with(serviceAdapter);
         
-        return responseOfOk(RepresentationType.DOMAIN_OBJECT, Caching.ONE_DAY, builder).build();
+        return responseOfOk(RepresentationType.DOMAIN_OBJECT, Caching.ONE_DAY, reprBuilder).build();
     }
 
 

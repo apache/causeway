@@ -53,7 +53,7 @@ import org.apache.isis.viewer.json.applib.RestfulResponse.HttpStatusCode;
 import org.apache.isis.viewer.json.applib.util.JsonMapper;
 import org.apache.isis.viewer.json.viewer.JsonApplicationException;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
-import org.apache.isis.viewer.json.viewer.representations.AbstractReprBuilder;
+import org.apache.isis.viewer.json.viewer.representations.ReprBuilderAbstract;
 import org.apache.isis.viewer.json.viewer.representations.ReprBuilder;
 import org.apache.isis.viewer.json.viewer.representations.TypedReprBuilderFactoryRegistry;
 import org.apache.isis.viewer.json.viewer.resources.domainobjects.DomainObjectReprBuilder;
@@ -96,7 +96,8 @@ public abstract class ResourceAbstract {
 	public final static ActionType[] ACTION_TYPES = { ActionType.USER, ActionType.DEBUG, ActionType.EXPLORATION };
 
 	// TODO: should inject this instead...
-	protected final static TypedReprBuilderFactoryRegistry BUILDER_REGISTRY = new TypedReprBuilderFactoryRegistry();
+	protected final static TypedReprBuilderFactoryRegistry builderFactoryRegistry = 
+	        new TypedReprBuilderFactoryRegistry();
 
     @Context
     HttpHeaders httpHeaders;
@@ -133,7 +134,7 @@ public abstract class ResourceAbstract {
     // Rendering
     // //////////////////////////////////////////////////////////////
 
-    protected String jsonFor(AbstractReprBuilder<?> builder) {
+    protected String jsonFor(ReprBuilderAbstract<?> builder) {
         JsonRepresentation representation = builder.build();
         return jsonFor(representation);
     }

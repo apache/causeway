@@ -25,20 +25,23 @@ import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessi
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
 
-public abstract class AbstractReprBuilder<T extends AbstractReprBuilder<T>> implements ReprBuilder {
+public abstract class ReprBuilderAbstract<T extends ReprBuilderAbstract<T>> implements ReprBuilder {
 
     protected final ResourceContext resourceContext;
     protected final JsonRepresentation representation;
     
-    public AbstractReprBuilder(ResourceContext resourceContext) {
+    public ReprBuilderAbstract(ResourceContext resourceContext) {
         this(resourceContext, JsonRepresentation.newMap());
     }
 
-    public AbstractReprBuilder(ResourceContext resourceContext, JsonRepresentation representation) {
+    public ReprBuilderAbstract(ResourceContext resourceContext, JsonRepresentation representation) {
         this.resourceContext = resourceContext;
         this.representation = representation;
     }
 
+    public ResourceContext getResourceContext() {
+        return resourceContext;
+    }
 
     public T withSelf(String href) {
         if(href != null) {
@@ -47,7 +50,7 @@ public abstract class AbstractReprBuilder<T extends AbstractReprBuilder<T>> impl
         return cast(this);
     }
 
-    public AbstractReprBuilder<T> withLinks() {
+    public ReprBuilderAbstract<T> withLinks() {
         return withLinks(JsonRepresentation.newArray());
     }
 
@@ -72,7 +75,7 @@ public abstract class AbstractReprBuilder<T extends AbstractReprBuilder<T>> impl
     }
 
     @SuppressWarnings("unchecked")
-    protected static <T extends AbstractReprBuilder<T>> T cast(AbstractReprBuilder<T> builder) {
+    protected static <T extends ReprBuilderAbstract<T>> T cast(ReprBuilderAbstract<T> builder) {
         return (T) builder;
     }
 
