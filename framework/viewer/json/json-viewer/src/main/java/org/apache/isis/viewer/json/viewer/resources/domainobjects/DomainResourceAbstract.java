@@ -67,14 +67,14 @@ public abstract class DomainResourceAbstract extends ResourceAbstract {
         ResourceContext resourceContext = getResourceContext();
         final AbstractReprBuilder<?> repBuilder =
                 DomainObjectReprBuilder.newBuilder(resourceContext)
-                        .withAdapter(objectAdapter);
+                        .with(objectAdapter);
 
         ResponseBuilder respBuilder = 
                 responseOfOk(RepresentationType.DOMAIN_OBJECT, Caching.NONE, repBuilder);
 
         Version version = objectAdapter.getVersion();
         if (version != null && version.getTime() != null) {
-            respBuilder.lastModified(version.getTime());
+            respBuilder.tag(""+version.getTime());
         }
         return respBuilder.build();
     }

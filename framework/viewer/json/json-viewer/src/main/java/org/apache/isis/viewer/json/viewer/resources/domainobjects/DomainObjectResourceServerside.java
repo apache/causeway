@@ -17,6 +17,8 @@
 package org.apache.isis.viewer.json.viewer.resources.domainobjects;
 
 import java.io.InputStream;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -29,8 +31,10 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.ResponseBuilder;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
@@ -41,15 +45,23 @@ import org.apache.isis.viewer.json.applib.RestfulResponse.HttpStatusCode;
 import org.apache.isis.viewer.json.applib.domainobjects.DomainObjectResource;
 import org.apache.isis.viewer.json.viewer.JsonApplicationException;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
+import org.apache.isis.viewer.json.viewer.representations.AbstractReprBuilder;
+import org.apache.isis.viewer.json.viewer.representations.TypedReprBuilder;
+import org.apache.isis.viewer.json.viewer.representations.TypedReprBuilderFactory;
 
 @Path("/objects")
 public class DomainObjectResourceServerside extends DomainResourceAbstract implements
         DomainObjectResource {
-    
+
+    private static final DateFormat ETAG_FORMAT = 
+            new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+
     ////////////////////////////////////////////////////////////
     // domain object
     ////////////////////////////////////////////////////////////
     
+
+
     @GET
     @Path("/{oid}")
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_DOMAIN_OBJECT, RestfulMediaType.APPLICATION_JSON_ERROR })
@@ -59,7 +71,22 @@ public class DomainObjectResourceServerside extends DomainResourceAbstract imple
 
         final ObjectAdapter objectAdapter = getObjectAdapter(oidStr);
         
-        return object(objectAdapter);
+        final TypedReprBuilderFactory reprBuilderBuilder = 
+                BUILDER_REGISTRY.locate(RepresentationType.DOMAIN_OBJECT.getMediaType());
+        
+        final TypedReprBuilder<ObjectAdapter> repBuilder = 
+                reprBuilderBuilder.newBuilder(getResourceContext(), ObjectAdapter.class);
+
+        repBuilder.withSelf().with(objectAdapter);
+        
+        ResponseBuilder respBuilder = 
+                responseOfOk(RepresentationType.DOMAIN_OBJECT, Caching.NONE, repBuilder);
+        
+        Version version = objectAdapter.getVersion();
+        if (version != null && version.getTime() != null) {
+            respBuilder.tag(ETAG_FORMAT.format(version.getTime()));
+        }
+        return respBuilder.build();
     }
 
     @PUT

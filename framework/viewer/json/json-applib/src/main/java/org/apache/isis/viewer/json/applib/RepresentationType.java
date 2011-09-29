@@ -56,7 +56,11 @@ public enum RepresentationType {
     public final MediaType getMediaType() {
         return mediaType;
     }
-    
+
+    public String getMediaTypeProfile() {
+        return getMediaType().getParameters().get("profile");
+    }
+
     public Class<? extends JsonRepresentation> getRepresentationClass() {
         return representationClass;
     }
@@ -91,6 +95,7 @@ public enum RepresentationType {
             }
         };
     }
+
     
     
 }

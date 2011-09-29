@@ -55,6 +55,7 @@ import org.apache.isis.viewer.json.viewer.JsonApplicationException;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
 import org.apache.isis.viewer.json.viewer.representations.AbstractReprBuilder;
 import org.apache.isis.viewer.json.viewer.representations.ReprBuilder;
+import org.apache.isis.viewer.json.viewer.representations.TypedReprBuilderFactoryRegistry;
 import org.apache.isis.viewer.json.viewer.resources.domainobjects.DomainObjectReprBuilder;
 import org.apache.isis.viewer.json.viewer.util.OidUtils;
 import org.apache.isis.viewer.json.viewer.util.UrlDecoderUtils;
@@ -91,11 +92,11 @@ public abstract class ResourceAbstract {
         }
     }
 
+    // nb: SET is excluded; we simply flatten contributed actions.
+	public final static ActionType[] ACTION_TYPES = { ActionType.USER, ActionType.DEBUG, ActionType.EXPLORATION };
 
-	public final static ActionType[] ACTION_TYPES = { ActionType.USER, ActionType.DEBUG, ActionType.EXPLORATION,
-    // SET is excluded; we simply flatten contributed actions.
-        };
-
+	// TODO: should inject this instead...
+	protected final static TypedReprBuilderFactoryRegistry BUILDER_REGISTRY = new TypedReprBuilderFactoryRegistry();
 
     @Context
     HttpHeaders httpHeaders;
@@ -122,7 +123,7 @@ public abstract class ResourceAbstract {
             new ResourceContext(httpHeaders, uriInfo, request, httpServletRequest, httpServletResponse, securityContext, 
                     getOidStringifier(), getLocalization(), getAuthenticationSession(), getPersistenceSession(), getAdapterManager());
     }
-
+    
     protected ResourceContext getResourceContext() {
         return resourceContext;
     }

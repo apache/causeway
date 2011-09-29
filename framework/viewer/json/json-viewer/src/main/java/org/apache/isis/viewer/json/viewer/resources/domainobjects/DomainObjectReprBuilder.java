@@ -34,11 +34,12 @@ import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
 import org.apache.isis.viewer.json.viewer.representations.AbstractReprBuilder;
 import org.apache.isis.viewer.json.viewer.representations.LinkReprBuilder;
+import org.apache.isis.viewer.json.viewer.representations.TypedReprBuilder;
 import org.apache.isis.viewer.json.viewer.util.OidUtils;
 
 import com.google.common.base.Function;
 
-public class DomainObjectReprBuilder extends AbstractReprBuilder<DomainObjectReprBuilder> {
+public class DomainObjectReprBuilder extends AbstractReprBuilder<DomainObjectReprBuilder> implements TypedReprBuilder<ObjectAdapter>{
 
     public static DomainObjectReprBuilder newBuilder(ResourceContext resourceContext) {
         return new DomainObjectReprBuilder(resourceContext);
@@ -51,6 +52,7 @@ public class DomainObjectReprBuilder extends AbstractReprBuilder<DomainObjectRep
     }
 
     private ObjectAdapterLinkToBuilder linkToBuilder;
+    private boolean includeSelf;
 
     public DomainObjectReprBuilder(ResourceContext resourceContext) {
         super(resourceContext);
@@ -66,9 +68,17 @@ public class DomainObjectReprBuilder extends AbstractReprBuilder<DomainObjectRep
         return this;
     }
 
-    public DomainObjectReprBuilder withAdapter(ObjectAdapter objectAdapter) {
-        JsonRepresentation self = linkToBuilder.with(objectAdapter).linkToAdapter().build();
-        representation.mapPut("self", self);
+    @Override
+    public DomainObjectReprBuilder withSelf() {
+        this.includeSelf = true;
+        return this;
+    }
+
+    public DomainObjectReprBuilder with(ObjectAdapter objectAdapter) {
+        if(includeSelf) {
+            JsonRepresentation self = linkToBuilder.with(objectAdapter).linkToAdapter().build();
+            representation.mapPut("self", self);
+        }
 
         String title = objectAdapter.titleString();
         representation.mapPut("oid", OidUtils.getOidStr(resourceContext, objectAdapter));
@@ -152,7 +162,7 @@ public class DomainObjectReprBuilder extends AbstractReprBuilder<DomainObjectRep
         return new Function<ObjectAdapter, JsonRepresentation>() {
             @Override
             public JsonRepresentation apply(ObjectAdapter adapter) {
-                return newBuilder(resourceContext).withAdapter(adapter).build();
+                return newBuilder(resourceContext).with(adapter).build();
             }
         };
     }
@@ -182,6 +192,7 @@ public class DomainObjectReprBuilder extends AbstractReprBuilder<DomainObjectRep
 		return DomainObjectReprBuilder.newLinkToBuilder(resourceContext, "object", objectAdapter)
 		            .withTitle(title).build();
 	}
+
 
 
 }
