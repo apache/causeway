@@ -56,10 +56,16 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
     public Response services() {
         init();
 
-        final ReprBuilder builder = 
-                new DomainServiceResourceHelper(getResourceContext(), "services").services();
+        final List<ObjectAdapter> serviceAdapters = getResourceContext().getPersistenceSession().getServices();
+
+        final RendererFactory factory = RendererFactoryRegistry.instance.find(RepresentationType.LIST);
         
-        return responseOfOk(RepresentationType.LIST, Caching.ONE_DAY, builder).build();
+        final ListReprRenderer renderer = (ListReprRenderer) factory.newRenderer(getResourceContext(), JsonRepresentation.newMap());
+        renderer.usingLinkToBuilder(new DomainServiceLinkToBuilder())
+                .withSelf("services")
+                .with(serviceAdapters);
+        
+        return responseOfOk(Caching.ONE_DAY, renderer).build();
     }
 
     ////////////////////////////////////////////////////////////
@@ -83,7 +89,7 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
                     .includesSelf()
                     .with(serviceAdapter);
         
-        return responseOfOk(RepresentationType.DOMAIN_OBJECT, Caching.ONE_DAY, renderer).build();
+        return responseOfOk(Caching.ONE_DAY, renderer).build();
     }
 
 
@@ -99,20 +105,10 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
             @PathParam("propertyId") final String propertyId) {
         init();
 
+        final ObjectAdapter serviceAdapter = getServiceAdapter(serviceId);
         final DomainResourceHelper helper = new DomainResourceHelper(getResourceContext());
 
-        final ObjectAdapter serviceAdapter = getServiceAdapter(serviceId);
-        final OneToOneAssociation property = helper.getPropertyThatIsVisibleAndUsable(
-                serviceAdapter, propertyId, Intent.ACCESS);
-
-        RendererFactory factory = RendererFactoryRegistry.instance.find(RepresentationType.OBJECT_PROPERTY);
-        final ObjectPropertyReprRenderer renderer = 
-                (ObjectPropertyReprRenderer) factory.newRenderer(getResourceContext(), JsonRepresentation.newMap());
-        
-        renderer.with(new ObjectAndProperty(serviceAdapter, property))
-                .withDetailsLink();
-        
-        return responseOfOk(RepresentationType.OBJECT_PROPERTY, Caching.ONE_DAY, renderer.render()).build();
+        return helper.propertyDetails(serviceAdapter, propertyId, Caching.ONE_DAY);
     }
 
 

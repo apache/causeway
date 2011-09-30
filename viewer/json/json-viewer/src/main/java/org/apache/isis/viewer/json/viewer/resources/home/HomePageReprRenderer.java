@@ -2,6 +2,7 @@ package org.apache.isis.viewer.json.viewer.resources.home;
 
 import java.util.List;
 
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.applib.RepresentationType;
 import org.apache.isis.viewer.json.applib.RestfulRequest.QueryParameter;
@@ -9,11 +10,11 @@ import org.apache.isis.viewer.json.viewer.ResourceContext;
 import org.apache.isis.viewer.json.viewer.representations.LinkReprBuilder;
 import org.apache.isis.viewer.json.viewer.representations.RendererFactory;
 import org.apache.isis.viewer.json.viewer.representations.RendererFactoryRegistry;
-import org.apache.isis.viewer.json.viewer.representations.ReprBuilder;
 import org.apache.isis.viewer.json.viewer.representations.ReprRenderer;
 import org.apache.isis.viewer.json.viewer.representations.ReprRendererAbstract;
 import org.apache.isis.viewer.json.viewer.representations.ReprRendererFactoryAbstract;
-import org.apache.isis.viewer.json.viewer.resources.domainobjects.DomainServiceResourceHelper;
+import org.apache.isis.viewer.json.viewer.resources.domainobjects.DomainServiceLinkToBuilder;
+import org.apache.isis.viewer.json.viewer.resources.domainobjects.ListReprRenderer;
 import org.apache.isis.viewer.json.viewer.resources.user.UserReprRenderer;
 
 public class HomePageReprRenderer extends ReprRendererAbstract<HomePageReprRenderer, Void> {
@@ -43,7 +44,7 @@ public class HomePageReprRenderer extends ReprRendererAbstract<HomePageReprRende
         
         // self
         if(includesSelf) {
-            withSelf("/");
+            withSelf("");
         }
 
         // user
@@ -68,9 +69,17 @@ public class HomePageReprRenderer extends ReprRendererAbstract<HomePageReprRende
         
         final List<String> followLinks = getResourceContext().getArg(QueryParameter.FOLLOW_LINKS);
         if(followLinks.contains("services")) {
-            final ReprBuilder reprBuilder = 
-                    new DomainServiceResourceHelper(getResourceContext()).services();
-            servicesLinkBuilder.withValue(reprBuilder.render());
+            
+            final List<ObjectAdapter> serviceAdapters = getResourceContext().getPersistenceSession().getServices();
+
+            final RendererFactory factory = RendererFactoryRegistry.instance.find(RepresentationType.LIST);
+            
+            final ListReprRenderer renderer = (ListReprRenderer) factory.newRenderer(getResourceContext(), JsonRepresentation.newMap());
+            renderer.usingLinkToBuilder(new DomainServiceLinkToBuilder())
+                    .withSelf("services")
+                    .with(serviceAdapters);
+            
+            servicesLinkBuilder.withValue(renderer.render());
         }
         
         representation.mapPut("services", servicesLinkBuilder.render());

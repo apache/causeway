@@ -1,4 +1,4 @@
-package org.apache.isis.viewer.json.viewer.resources;
+package org.apache.isis.viewer.json.viewer.webapp;
 
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.ext.Provider;
