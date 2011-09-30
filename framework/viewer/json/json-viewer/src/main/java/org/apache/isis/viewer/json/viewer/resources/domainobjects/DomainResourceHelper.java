@@ -21,6 +21,11 @@ import java.io.InputStream;
 import java.util.Collection;
 import java.util.List;
 
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 
@@ -40,6 +45,7 @@ import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.applib.RepresentationType;
+import org.apache.isis.viewer.json.applib.RestfulMediaType;
 import org.apache.isis.viewer.json.applib.RestfulResponse.HttpStatusCode;
 import org.apache.isis.viewer.json.applib.blocks.Link;
 import org.apache.isis.viewer.json.applib.util.JsonMapper;
@@ -73,6 +79,27 @@ public class DomainResourceHelper {
     }
 
     // //////////////////////////////////////////////////////////////
+    // propertyDetails
+    // //////////////////////////////////////////////////////////////
+
+    Response propertyDetails(
+            final ObjectAdapter objectAdapter,
+            final String propertyId, 
+            final Caching caching) {
+
+        final OneToOneAssociation property = getPropertyThatIsVisibleAndUsable(
+                objectAdapter, propertyId, Intent.ACCESS);
+
+        RendererFactory factory = RendererFactoryRegistry.instance.find(RepresentationType.OBJECT_PROPERTY);
+        final ObjectPropertyReprRenderer renderer = 
+                (ObjectPropertyReprRenderer) factory.newRenderer(resourceContext, JsonRepresentation.newMap());
+        
+        renderer.with(new ObjectAndProperty(objectAdapter, property));
+        
+        return ResourceAbstract.responseOfOk(caching, renderer).build();
+    }
+
+    // //////////////////////////////////////////////////////////////
     // action Prompt
     // //////////////////////////////////////////////////////////////
 
@@ -88,8 +115,7 @@ public class DomainResourceHelper {
                 .withSelf()
                 .withMutatorsIfEnabled();
 
-        return ResourceAbstract.responseOfOk(RepresentationType.OBJECT_ACTION, Caching.NONE, renderer.render())
-                .build();
+        return ResourceAbstract.responseOfOk(Caching.NONE, renderer).build();
     }
 
     
@@ -232,7 +258,7 @@ public class DomainResourceHelper {
 
             ScalarValueReprRenderer renderer = (ScalarValueReprRenderer) factory.newRenderer(resourceContext, representation);
             renderer.with(objectAdapter);
-            return ResourceAbstract.responseOfOk(RepresentationType.SCALAR_VALUE, Caching.NONE, renderer).build();
+            return ResourceAbstract.responseOfOk(Caching.NONE, renderer).build();
         }
 
         final RendererFactory factory = rendererFactoryRegistry.find(RepresentationType.DOMAIN_OBJECT);

@@ -235,10 +235,6 @@ public abstract class ResourceAbstract {
         return responseOfOk(representationType, caching, jsonFor(representation));
     }
 
-    public static ResponseBuilder responseOfOk(RepresentationType representationType, Caching caching, ReprBuilder representationBuilder) {
-        return responseOfOk(representationType, caching, representationBuilder.render());
-    }
-
     public static ResponseBuilder responseOfOk(Caching caching, ReprRenderer<?,?> renderer) {
         RepresentationType representationType = renderer.getRepresentationType();
         return responseOfOk(representationType, caching, renderer.render());

@@ -47,7 +47,7 @@ public class HomePageResourceServerside extends ResourceAbstract implements Home
                 (HomePageReprRenderer) factory.newRenderer(getResourceContext(), JsonRepresentation.newMap());
         renderer.includesSelf();
 
-        return responseOfOk(RepresentationType.HOME_PAGE, Caching.ONE_DAY, renderer).build();
+        return responseOfOk(Caching.ONE_DAY, renderer).build();
     }
 
 

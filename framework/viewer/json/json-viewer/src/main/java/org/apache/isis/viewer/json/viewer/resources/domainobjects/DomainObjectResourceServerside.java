@@ -78,8 +78,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements
                 (DomainObjectReprRenderer) rendererFactory.newRenderer(getResourceContext(), JsonRepresentation.newMap());
         renderer.with(objectAdapter);
         
-        ResponseBuilder respBuilder = 
-                responseOfOk(RepresentationType.DOMAIN_OBJECT, Caching.NONE, renderer);
+        ResponseBuilder respBuilder = responseOfOk(Caching.NONE, renderer);
         
         Version version = objectAdapter.getVersion();
         if (version != null && version.getTime() != null) {
@@ -114,20 +113,10 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements
             @PathParam("propertyId") final String propertyId) {
         init();
         
-        final DomainResourceHelper helper = new DomainResourceHelper(getResourceContext());
-
-        final RendererFactory rendererFactory = 
-                rendererFactoryRegistry.find(RepresentationType.OBJECT_PROPERTY);
-        
         final ObjectAdapter objectAdapter = getObjectAdapter(oidStr);
-        final OneToOneAssociation property = helper.getPropertyThatIsVisibleAndUsable(
-                objectAdapter, propertyId, Intent.ACCESS);
+        final DomainResourceHelper helper = new DomainResourceHelper(getResourceContext());
         
-        final ObjectPropertyReprRenderer renderer = 
-                (ObjectPropertyReprRenderer) rendererFactory.newRenderer(getResourceContext(), JsonRepresentation.newMap());
-        renderer.with(new ObjectAndProperty(objectAdapter, property));
-
-        return responseOfOk(RepresentationType.OBJECT_PROPERTY, Caching.NONE, renderer).build();
+        return helper.propertyDetails(objectAdapter, propertyId, Caching.NONE);
     }
 
     @PUT
