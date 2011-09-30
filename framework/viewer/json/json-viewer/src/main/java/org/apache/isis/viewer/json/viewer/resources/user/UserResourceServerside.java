@@ -38,7 +38,7 @@ public class UserResourceServerside extends ResourceAbstract implements UserReso
 
         final TypedReprBuilderFactory factory = builderFactoryRegistry.find(RepresentationType.USER);
         final UserReprBuilder reprBuilder = 
-                factory.newBuilder(getResourceContext(), AuthenticationSession.class);
+                (UserReprBuilder) factory.newBuilder(getResourceContext());
         reprBuilder.with(getAuthenticationSession());
 
         return responseOfOk(RepresentationType.USER, Caching.ONE_HOUR, reprBuilder.build()).build();

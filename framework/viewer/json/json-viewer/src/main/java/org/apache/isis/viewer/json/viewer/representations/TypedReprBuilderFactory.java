@@ -9,6 +9,4 @@ public interface TypedReprBuilderFactory {
 
     TypedReprBuilder<?, ?> newBuilder(ResourceContext resourceContext);
     
-    <R extends TypedReprBuilder<R, T>, T> R newBuilder(ResourceContext resourceContext, Class<T> cls);
-
 }

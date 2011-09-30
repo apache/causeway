@@ -75,7 +75,7 @@ public class DomainObjectResourceServerside extends DomainResourceAbstract imple
                 builderFactoryRegistry.find(RepresentationType.DOMAIN_OBJECT);
         
         final DomainObjectReprBuilder repBuilder = 
-                reprBuilderBuilder.newBuilder(getResourceContext(), ObjectAdapter.class);
+                (DomainObjectReprBuilder) reprBuilderBuilder.newBuilder(getResourceContext());
         repBuilder.with(objectAdapter);
         
         ResponseBuilder respBuilder = 
