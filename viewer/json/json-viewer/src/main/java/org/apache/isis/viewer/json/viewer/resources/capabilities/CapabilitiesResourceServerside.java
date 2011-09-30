@@ -32,7 +32,9 @@ import org.apache.isis.viewer.json.applib.RestfulResponse.HttpStatusCode;
 import org.apache.isis.viewer.json.applib.capabilities.CapabilitiesResource;
 import org.apache.isis.viewer.json.viewer.JsonApplicationException;
 import org.apache.isis.viewer.json.viewer.representations.LinkReprBuilder;
+import org.apache.isis.viewer.json.viewer.representations.RendererFactory;
 import org.apache.isis.viewer.json.viewer.resources.ResourceAbstract;
+import org.apache.isis.viewer.json.viewer.resources.home.HomePageReprRenderer;
 
 /**
  * Implementation note: it seems to be necessary to annotate the implementation with {@link Path} rather than the
@@ -48,27 +50,12 @@ public class CapabilitiesResourceServerside extends ResourceAbstract implements 
         init();
         fakeRuntimeExceptionIfXFail();
 
-        JsonRepresentation representation = JsonRepresentation.newMap();
-        representation.mapPut("self", LinkReprBuilder.newBuilder(getResourceContext(), "self", "capabilities/").build());
+        final RendererFactory factory = rendererFactoryRegistry.find(RepresentationType.CAPABILITIES);
+        final CapabilitiesReprRenderer renderer = 
+                (CapabilitiesReprRenderer) factory.newRenderer(getResourceContext(), JsonRepresentation.newMap());
+        renderer.includesSelf();
         
-        JsonRepresentation capabilities = JsonRepresentation.newMap();
-        representation.mapPut("capabilities", capabilities);
-
-        capabilities.mapPut("concurrencyChecking", "no");
-        capabilities.mapPut("transientObjects", "no");
-        capabilities.mapPut("deleteObjects", "no");
-        capabilities.mapPut("simpleArguments", "no");
-        capabilities.mapPut("partialArguments", "no");
-        capabilities.mapPut("followLinks", "no");
-        capabilities.mapPut("validateOnly", "no");
-        capabilities.mapPut("pagination", "no");
-        capabilities.mapPut("sorting", "no");
-        capabilities.mapPut("domainModel", "rich");
-
-        representation.mapPut("links", JsonRepresentation.newArray());
-        representation.mapPut("extensions", JsonRepresentation.newMap());
-        
-        return responseOfOk(RepresentationType.CAPABILITIES, Caching.ONE_DAY, representation).build();
+        return responseOfOk(Caching.ONE_DAY, renderer).build();
     }
 
     private void fakeRuntimeExceptionIfXFail() {

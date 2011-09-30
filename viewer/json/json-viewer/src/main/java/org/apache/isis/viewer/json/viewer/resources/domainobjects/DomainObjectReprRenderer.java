@@ -31,19 +31,32 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
+import org.apache.isis.viewer.json.applib.RepresentationType;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
 import org.apache.isis.viewer.json.viewer.representations.LinkReprBuilder;
-import org.apache.isis.viewer.json.viewer.representations.TypedReprBuilderAbstract;
+import org.apache.isis.viewer.json.viewer.representations.RendererFactory;
+import org.apache.isis.viewer.json.viewer.representations.RendererFactoryRegistry;
+import org.apache.isis.viewer.json.viewer.representations.ReprRenderer;
+import org.apache.isis.viewer.json.viewer.representations.ReprRendererAbstract;
+import org.apache.isis.viewer.json.viewer.representations.ReprRendererFactoryAbstract;
 import org.apache.isis.viewer.json.viewer.util.OidUtils;
 
 import com.google.common.base.Function;
 
-public class DomainObjectReprBuilder extends TypedReprBuilderAbstract<DomainObjectReprBuilder, ObjectAdapter>{
+public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectReprRenderer, ObjectAdapter>{
 
-    public static DomainObjectReprBuilder newBuilder(ResourceContext resourceContext) {
-        return new DomainObjectReprBuilder(resourceContext);
+    public static class Factory extends ReprRendererFactoryAbstract {
+
+        public Factory() {
+            super(RepresentationType.DOMAIN_OBJECT);
+        }
+
+        @Override
+        public ReprRenderer<?,?> newRenderer(ResourceContext resourceContext, JsonRepresentation representation) {
+            return new DomainObjectReprRenderer(resourceContext, getRepresentationType(), representation);
+        }
     }
-
+    
     public static LinkReprBuilder newLinkToBuilder(ResourceContext resourceContext, String rel, ObjectAdapter elementAdapter) {
         String oidStr = resourceContext.getOidStringifier().enString(elementAdapter.getOid());
         String url = "objects/" + oidStr;
@@ -51,10 +64,9 @@ public class DomainObjectReprBuilder extends TypedReprBuilderAbstract<DomainObje
     }
 
     private ObjectAdapterLinkToBuilder linkToBuilder;
-    private boolean includeSelf;
 
-    public DomainObjectReprBuilder(ResourceContext resourceContext) {
-        super(resourceContext);
+    private DomainObjectReprRenderer(ResourceContext resourceContext, RepresentationType representationType, JsonRepresentation representation) {
+        super(resourceContext, representationType, representation);
         usingLinkToBuilder(new DomainObjectLinkToBuilder());
     }
 
@@ -62,19 +74,14 @@ public class DomainObjectReprBuilder extends TypedReprBuilderAbstract<DomainObje
      * Override the default {@link ObjectAdapterLinkToBuilder} (that is used for generating links in
      * {@link #linkTo(ObjectAdapter)}).
      */
-    public DomainObjectReprBuilder usingLinkToBuilder(ObjectAdapterLinkToBuilder objectAdapterLinkToBuilder) {
+    public DomainObjectReprRenderer usingLinkToBuilder(ObjectAdapterLinkToBuilder objectAdapterLinkToBuilder) {
         this.linkToBuilder = objectAdapterLinkToBuilder.usingResourceContext(resourceContext);
         return this;
     }
 
-    public DomainObjectReprBuilder withSelf() {
-        this.includeSelf = true;
-        return this;
-    }
-
-    public DomainObjectReprBuilder with(ObjectAdapter objectAdapter) {
-        if(includeSelf) {
-            JsonRepresentation self = linkToBuilder.with(objectAdapter).linkToAdapter().build();
+    public DomainObjectReprRenderer with(ObjectAdapter objectAdapter) {
+        if(includesSelf) {
+            JsonRepresentation self = linkToBuilder.with(objectAdapter).linkToAdapter().render();
             representation.mapPut("self", self);
         }
 
@@ -85,7 +92,7 @@ public class DomainObjectReprBuilder extends TypedReprBuilderAbstract<DomainObje
         return this;
     }
 
-    private DomainObjectReprBuilder withMembers(ObjectAdapter objectAdapter) {
+    private DomainObjectReprRenderer withMembers(ObjectAdapter objectAdapter) {
         JsonRepresentation members = JsonRepresentation.newArray();
         List<ObjectAssociation> associations = objectAdapter.getSpecification().getAssociations();
         addAssociations(objectAdapter, members, associations);
@@ -104,21 +111,29 @@ public class DomainObjectReprBuilder extends TypedReprBuilderAbstract<DomainObje
             } 
             if(assoc instanceof OneToOneAssociation) {
                 OneToOneAssociation property = (OneToOneAssociation)assoc;
-                JsonRepresentation propertyRep = 
-                        ObjectPropertyReprBuilder.newBuilder(resourceContext, objectAdapter, property)
+                
+                RendererFactory factory = RendererFactoryRegistry.instance.find(RepresentationType.OBJECT_PROPERTY);
+                final ObjectPropertyReprRenderer renderer = 
+                        (ObjectPropertyReprRenderer) factory.newRenderer(getResourceContext(), JsonRepresentation.newMap());
+                
+                renderer.with(new ObjectAndProperty(objectAdapter, property))
                         .usingLinkToBuilder(linkToBuilder)
-                        .withDetailsLink()
-                        .build();
-                members.arrayAdd(propertyRep);
+                        .withDetailsLink();
+                
+                members.arrayAdd(renderer.render());
             }
             if(assoc instanceof OneToManyAssociation) {
                 OneToManyAssociation collection = (OneToManyAssociation) assoc;
-                JsonRepresentation collectionRep = 
-                        ObjectCollectionReprBuilder.newBuilder(resourceContext, objectAdapter, collection)
-                        .usingLinkToBuilder(linkToBuilder)
-                        .withDetailsLink()
-                        .build();
-                members.arrayAdd(collectionRep);
+
+                RendererFactory factory = RendererFactoryRegistry.instance.find(RepresentationType.OBJECT_COLLECTION);
+                final ObjectCollectionReprRenderer renderer = 
+                        (ObjectCollectionReprRenderer) factory.newRenderer(getResourceContext(), JsonRepresentation.newMap());
+
+                renderer.with(new ObjectAndCollection(objectAdapter, collection))
+                    .usingLinkToBuilder(linkToBuilder)
+                    .withDetailsLink();
+                
+                members.arrayAdd(renderer.render());
             }
         }
     }
@@ -134,18 +149,23 @@ public class DomainObjectReprBuilder extends TypedReprBuilderAbstract<DomainObje
         		ObjectActionSet objectActionSet = (ObjectActionSet) action;
         		List<ObjectAction> subactions = objectActionSet.getActions();
         		addActions(objectAdapter, subactions, members);
+
         	} else {
-                JsonRepresentation actionRep = 
-                        ObjectActionReprBuilder.newBuilder(resourceContext, objectAdapter, action)
+        	    
+                RendererFactory factory = RendererFactoryRegistry.instance.find(RepresentationType.OBJECT_ACTION);
+                final ObjectActionReprRenderer renderer = 
+                        (ObjectActionReprRenderer) factory.newRenderer(getResourceContext(), JsonRepresentation.newMap());
+                
+                renderer.with(new ObjectAndAction(objectAdapter, action))
                         .usingLinkToBuilder(linkToBuilder)
-                        .withDetailsLink()
-                        .build();
-                members.arrayAdd(actionRep);
+                        .withDetailsLink();
+
+                members.arrayAdd(renderer.render());
         	}
         }
 	}
 
-    public JsonRepresentation build() {
+    public JsonRepresentation render() {
         withLinks();
         withExtensions();
         return representation;
@@ -157,10 +177,13 @@ public class DomainObjectReprBuilder extends TypedReprBuilderAbstract<DomainObje
     /////////////////////////////////////////////////////////////////////
 
     public static Function<ObjectAdapter, JsonRepresentation> fromAdapter(final ResourceContext resourceContext) {
+        final RendererFactory factory = RendererFactoryRegistry.instance.find(RepresentationType.DOMAIN_OBJECT);
         return new Function<ObjectAdapter, JsonRepresentation>() {
             @Override
             public JsonRepresentation apply(ObjectAdapter adapter) {
-                return newBuilder(resourceContext).with(adapter).build();
+                DomainObjectReprRenderer renderer = 
+                        (DomainObjectReprRenderer) factory.newRenderer(resourceContext, JsonRepresentation.newMap());
+                return renderer.with(adapter).render();
             }
         };
     }
@@ -187,10 +210,8 @@ public class DomainObjectReprBuilder extends TypedReprBuilderAbstract<DomainObje
 		}
 		TitleFacet titleFacet = objectSpec.getFacet(TitleFacet.class);
 		String title = titleFacet.title(objectAdapter, resourceContext.getLocalization());
-		return DomainObjectReprBuilder.newLinkToBuilder(resourceContext, "object", objectAdapter)
-		            .withTitle(title).build();
+		return DomainObjectReprRenderer.newLinkToBuilder(resourceContext, "object", objectAdapter)
+		            .withTitle(title).render();
 	}
-
-
 
 }

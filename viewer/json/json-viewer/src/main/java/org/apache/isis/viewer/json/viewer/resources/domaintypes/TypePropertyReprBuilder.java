@@ -40,7 +40,7 @@ public class TypePropertyReprBuilder extends AbstractTypeMemberReprBuilder<TypeP
         super(resourceContext, objectSpecification, MemberType.OBJECT_COLLECTION, property);
     }
 
-    public JsonRepresentation build() {
+    public JsonRepresentation render() {
         return representation;
     }
 

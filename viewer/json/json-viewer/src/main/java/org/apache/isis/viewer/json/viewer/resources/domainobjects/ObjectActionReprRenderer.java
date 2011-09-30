@@ -24,28 +24,40 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
+import org.apache.isis.viewer.json.applib.RepresentationType;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
+import org.apache.isis.viewer.json.viewer.representations.ReprRenderer;
+import org.apache.isis.viewer.json.viewer.representations.ReprRendererFactoryAbstract;
 import org.apache.isis.viewer.json.viewer.resources.domaintypes.DomainTypeReprBuilder;
 import org.apache.isis.viewer.json.viewer.resources.domaintypes.TypeActionReprBuilder;
 import org.codehaus.jackson.node.NullNode;
 
 import com.google.common.collect.Lists;
 
-public class ObjectActionReprBuilder extends AbstractObjectMemberReprBuilder<ObjectActionReprBuilder, ObjectAction> {
+public class ObjectActionReprRenderer extends AbstractObjectMemberReprRenderer<ObjectActionReprRenderer, ObjectAction> {
 
-	public static ObjectActionReprBuilder newBuilder(ResourceContext resourceContext, ObjectAdapter objectAdapter, ObjectAction objectAction) {
-        return new ObjectActionReprBuilder(resourceContext, objectAdapter, objectAction);
+    public static class Factory extends ReprRendererFactoryAbstract {
+
+        public Factory() {
+            super(RepresentationType.OBJECT_ACTION);
+        }
+
+        @Override
+        public ReprRenderer<?,?> newRenderer(ResourceContext resourceContext, JsonRepresentation representation) {
+            return new ObjectActionReprRenderer(resourceContext, getRepresentationType(), representation);
+        }
     }
 
-    protected ObjectActionReprBuilder(ResourceContext resourceContext, ObjectAdapter objectAdapter, ObjectAction objectAction) {
-        super(resourceContext, objectAdapter, MemberType.OBJECT_ACTION, objectAction);
-        
+
+    private ObjectActionReprRenderer(ResourceContext resourceContext, RepresentationType representationType, JsonRepresentation representation) {
+        super(resourceContext, representationType, representation);
+    }
+
+
+    public JsonRepresentation render() {
         putId();
         putMemberType();
-    }
-
-
-    public JsonRepresentation build() {
+        
         putDisabledReasonIfDisabled();
         
         JsonRepresentation extensions = JsonRepresentation.newMap();
@@ -66,7 +78,7 @@ public class ObjectActionReprBuilder extends AbstractObjectMemberReprBuilder<Obj
     /////////////////////////////////////////////////////
 
     @Override
-    public ObjectActionReprBuilder withMutatorsIfEnabled() {
+    public ObjectActionReprRenderer withMutatorsIfEnabled() {
         if(usability().isVetoed()) {
             return cast(this);
         }
@@ -89,7 +101,7 @@ public class ObjectActionReprBuilder extends AbstractObjectMemberReprBuilder<Obj
                 linkToBuilder.linkToMember("invoke", memberType, objectMember, mutatorSpec.suffix)
                 .withHttpMethod(mutatorSpec.httpMethod)
                 .withArguments(arguments)
-                .build();
+                .render();
         representation.mapPut("invoke", detailsLink);
     }
     
@@ -120,7 +132,7 @@ public class ObjectActionReprBuilder extends AbstractObjectMemberReprBuilder<Obj
 	        if(objectMember.isContributed()) {
 	            ObjectActionParameter actionParameter = objectMember.getParameters().get(i);
 	            if (actionParameter.getSpecification().isOfType(objectAdapter.getSpecification())) {
-	                return DomainObjectReprBuilder.newLinkToBuilder(resourceContext, "object", objectAdapter).build();
+	                return DomainObjectReprRenderer.newLinkToBuilder(resourceContext, "object", objectAdapter).render();
 	            }
 	        }
 	        return NullNode.instance;
@@ -131,7 +143,7 @@ public class ObjectActionReprBuilder extends AbstractObjectMemberReprBuilder<Obj
     // parameter details
     /////////////////////////////////////////////////////
 
-    public ObjectActionReprBuilder withParameterDetails() {
+    public ObjectActionReprRenderer withParameterDetails() {
     	List<Object> parameters = Lists.newArrayList();
 		for (int i=0; i< objectMember.getParameterCount(); i++) {
 			ObjectActionParameter param = objectMember.getParameters().get(i);
@@ -165,7 +177,7 @@ public class ObjectActionReprBuilder extends AbstractObjectMemberReprBuilder<Obj
         List<Object> list = Lists.newArrayList();
         for (final ObjectAdapter choiceAdapter : choiceAdapters) {
         	ObjectSpecification objectSpec = param.getSpecification();
-        	list.add(DomainObjectReprBuilder.valueOrRef(resourceContext, choiceAdapter, objectSpec));
+        	list.add(DomainObjectReprRenderer.valueOrRef(resourceContext, choiceAdapter, objectSpec));
         }
         return list;
 	}
@@ -176,7 +188,7 @@ public class ObjectActionReprBuilder extends AbstractObjectMemberReprBuilder<Obj
 			return null;
 		}
     	ObjectSpecification objectSpec = param.getSpecification();
-    	return DomainObjectReprBuilder.valueOrRef(resourceContext, defaultAdapter, objectSpec);
+    	return DomainObjectReprRenderer.valueOrRef(resourceContext, defaultAdapter, objectSpec);
 	}
 
 	
@@ -194,17 +206,17 @@ public class ObjectActionReprBuilder extends AbstractObjectMemberReprBuilder<Obj
     }
 
      private void addLinksFormalDomainModel(JsonRepresentation links, ResourceContext resourceContext) {
-         links.arrayAdd(TypeActionReprBuilder.newLinkToBuilder(resourceContext, "typeAction", objectAdapter.getSpecification(), objectMember).build());
+         links.arrayAdd(TypeActionReprBuilder.newLinkToBuilder(resourceContext, "typeAction", objectAdapter.getSpecification(), objectMember).render());
      }
 
      private void addLinksIsisProprietary(JsonRepresentation links, ResourceContext resourceContext) {
        if(objectMember.isContributed()) {
             ObjectAdapter serviceAdapter = contributingServiceAdapter();
-            JsonRepresentation contributedByLink = DomainObjectReprBuilder.newLinkToBuilder(resourceContext, "contributedBy", serviceAdapter).build();
+            JsonRepresentation contributedByLink = DomainObjectReprRenderer.newLinkToBuilder(resourceContext, "contributedBy", serviceAdapter).render();
             links.arrayAdd(contributedByLink);
         }
 
-       links.arrayAdd(DomainTypeReprBuilder.newLinkToBuilder(resourceContext, "domainType", objectAdapter.getSpecification()).build());
+       links.arrayAdd(DomainTypeReprBuilder.newLinkToBuilder(resourceContext, "domainType", objectAdapter.getSpecification()).render());
     }
 
 

@@ -39,18 +39,20 @@ import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.applib.RepresentationType;
 import org.apache.isis.viewer.json.applib.RestfulMediaType;
 import org.apache.isis.viewer.json.applib.RestfulResponse.HttpStatusCode;
 import org.apache.isis.viewer.json.applib.domainobjects.DomainObjectResource;
 import org.apache.isis.viewer.json.viewer.JsonApplicationException;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
-import org.apache.isis.viewer.json.viewer.representations.ReprBuilderAbstract;
-import org.apache.isis.viewer.json.viewer.representations.TypedReprBuilder;
-import org.apache.isis.viewer.json.viewer.representations.TypedReprBuilderFactory;
+import org.apache.isis.viewer.json.viewer.representations.RendererFactory;
+import org.apache.isis.viewer.json.viewer.representations.RendererFactoryRegistry;
+import org.apache.isis.viewer.json.viewer.resources.ResourceAbstract;
+import org.apache.isis.viewer.json.viewer.resources.domainobjects.DomainResourceHelper.Intent;
 
 @Path("/objects")
-public class DomainObjectResourceServerside extends DomainResourceAbstract implements
+public class DomainObjectResourceServerside extends ResourceAbstract implements
         DomainObjectResource {
 
     private static final DateFormat ETAG_FORMAT = 
@@ -60,8 +62,6 @@ public class DomainObjectResourceServerside extends DomainResourceAbstract imple
     // domain object
     ////////////////////////////////////////////////////////////
     
-
-
     @GET
     @Path("/{oid}")
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_DOMAIN_OBJECT, RestfulMediaType.APPLICATION_JSON_ERROR })
@@ -71,15 +71,15 @@ public class DomainObjectResourceServerside extends DomainResourceAbstract imple
 
         final ObjectAdapter objectAdapter = getObjectAdapter(oidStr);
         
-        final TypedReprBuilderFactory reprBuilderBuilder = 
-                builderFactoryRegistry.find(RepresentationType.DOMAIN_OBJECT);
+        final RendererFactory rendererFactory = 
+                rendererFactoryRegistry.find(RepresentationType.DOMAIN_OBJECT);
         
-        final DomainObjectReprBuilder repBuilder = 
-                (DomainObjectReprBuilder) reprBuilderBuilder.newBuilder(getResourceContext());
-        repBuilder.with(objectAdapter);
+        final DomainObjectReprRenderer renderer = 
+                (DomainObjectReprRenderer) rendererFactory.newRenderer(getResourceContext(), JsonRepresentation.newMap());
+        renderer.with(objectAdapter);
         
         ResponseBuilder respBuilder = 
-                responseOfOk(RepresentationType.DOMAIN_OBJECT, Caching.NONE, repBuilder);
+                responseOfOk(RepresentationType.DOMAIN_OBJECT, Caching.NONE, renderer);
         
         Version version = objectAdapter.getVersion();
         if (version != null && version.getTime() != null) {
@@ -114,15 +114,20 @@ public class DomainObjectResourceServerside extends DomainResourceAbstract imple
             @PathParam("propertyId") final String propertyId) {
         init();
         
-        final ObjectAdapter objectAdapter = getObjectAdapter(oidStr);
-        final OneToOneAssociation property = getPropertyThatIsVisibleAndUsable(
-                objectAdapter, propertyId, Intent.ACCESS);
+        final DomainResourceHelper helper = new DomainResourceHelper(getResourceContext());
 
-        ResourceContext resourceContext = getResourceContext();
-        final ObjectPropertyReprBuilder builder = ObjectPropertyReprBuilder.newBuilder(
-                resourceContext, objectAdapter, property);
+        final RendererFactory rendererFactory = 
+                rendererFactoryRegistry.find(RepresentationType.OBJECT_PROPERTY);
         
-        return responseOfOk(RepresentationType.OBJECT_PROPERTY, Caching.NONE, builder).build();
+        final ObjectAdapter objectAdapter = getObjectAdapter(oidStr);
+        final OneToOneAssociation property = helper.getPropertyThatIsVisibleAndUsable(
+                objectAdapter, propertyId, Intent.ACCESS);
+        
+        final ObjectPropertyReprRenderer renderer = 
+                (ObjectPropertyReprRenderer) rendererFactory.newRenderer(getResourceContext(), JsonRepresentation.newMap());
+        renderer.with(new ObjectAndProperty(objectAdapter, property));
+
+        return responseOfOk(RepresentationType.OBJECT_PROPERTY, Caching.NONE, renderer).build();
     }
 
     @PUT
@@ -134,14 +139,16 @@ public class DomainObjectResourceServerside extends DomainResourceAbstract imple
             final InputStream body) {
         init();
 
+        final DomainResourceHelper helper = new DomainResourceHelper(getResourceContext());
+        
         final ObjectAdapter objectAdapter = getObjectAdapter(oidStr);
-        final OneToOneAssociation property = getPropertyThatIsVisibleAndUsable(
+        final OneToOneAssociation property = helper.getPropertyThatIsVisibleAndUsable(
                 objectAdapter, propertyId, Intent.MUTATE);
 
         ObjectSpecification propertySpec = property.getSpecification();
-        String bodyAsString = asStringUtf8(body);
+        String bodyAsString = DomainResourceHelper.asStringUtf8(body);
 
-        ObjectAdapter argAdapter = parseBodyAsMapWithSingleValue(propertySpec, bodyAsString);
+        ObjectAdapter argAdapter = helper.parseBodyAsMapWithSingleValue(propertySpec, bodyAsString);
 
         Consent consent = property.isAssociationValid(objectAdapter, argAdapter);
         if (consent.isVetoed()) {
@@ -164,8 +171,10 @@ public class DomainObjectResourceServerside extends DomainResourceAbstract imple
             @PathParam("propertyId") final String propertyId) {
         init();
 
+        final DomainResourceHelper helper = new DomainResourceHelper(getResourceContext());
+
         final ObjectAdapter objectAdapter = getObjectAdapter(oidStr);
-        final OneToOneAssociation property = getPropertyThatIsVisibleAndUsable(
+        final OneToOneAssociation property = helper.getPropertyThatIsVisibleAndUsable(
                 objectAdapter, propertyId, Intent.MUTATE);
 
         Consent consent = property.isAssociationValid(objectAdapter, null);
@@ -191,15 +200,20 @@ public class DomainObjectResourceServerside extends DomainResourceAbstract imple
         @PathParam("oid") final String oidStr,
         @PathParam("collectionId") final String collectionId) {
 
+        final DomainResourceHelper helper = new DomainResourceHelper(getResourceContext());
+
         final ObjectAdapter objectAdapter = getObjectAdapter(oidStr);
-        final OneToManyAssociation collection = getCollectionThatIsVisibleAndUsable(
+        final OneToManyAssociation collection = helper.getCollectionThatIsVisibleAndUsable(
                 objectAdapter, collectionId, Intent.ACCESS);
 
-        final ObjectCollectionReprBuilder builder = ObjectCollectionReprBuilder.newBuilder(
-                getResourceContext(), objectAdapter, collection);
+        RendererFactory factory = RendererFactoryRegistry.instance.find(RepresentationType.OBJECT_COLLECTION);
+        final ObjectCollectionReprRenderer renderer = 
+                (ObjectCollectionReprRenderer) factory.newRenderer(getResourceContext(), JsonRepresentation.newMap());
+
+        renderer.with(new ObjectAndCollection(objectAdapter, collection));
         
         return Response.status(HttpStatusCode.OK.getJaxrsStatusType())
-                .entity(jsonFor(builder))
+                .entity(jsonFor(renderer))
                 .type(MediaType.APPLICATION_JSON_TYPE)
                 .build();
     }
@@ -213,8 +227,10 @@ public class DomainObjectResourceServerside extends DomainResourceAbstract imple
             final InputStream body) {
         init();
 
+        final DomainResourceHelper helper = new DomainResourceHelper(getResourceContext());
+
         final ObjectAdapter objectAdapter = getObjectAdapter(oidStr);
-        final OneToManyAssociation collection = getCollectionThatIsVisibleAndUsable(
+        final OneToManyAssociation collection = helper.getCollectionThatIsVisibleAndUsable(
                 objectAdapter, collectionId, Intent.MUTATE);
 
         if (!collection.getCollectionSemantics().isSet()) {
@@ -224,8 +240,8 @@ public class DomainObjectResourceServerside extends DomainResourceAbstract imple
         }
 
         ObjectSpecification collectionSpec = collection.getSpecification();
-        String bodyAsString = asStringUtf8(body);
-        ObjectAdapter argAdapter = parseBodyAsMapWithSingleValue(collectionSpec, bodyAsString);
+        String bodyAsString = DomainResourceHelper.asStringUtf8(body);
+        ObjectAdapter argAdapter = helper.parseBodyAsMapWithSingleValue(collectionSpec, bodyAsString);
 
         Consent consent = collection.isValidToAdd(objectAdapter, argAdapter);
         if (consent.isVetoed()) {
@@ -248,8 +264,10 @@ public class DomainObjectResourceServerside extends DomainResourceAbstract imple
             final InputStream body) {
         init();
 
+        final DomainResourceHelper helper = new DomainResourceHelper(getResourceContext());
+
         final ObjectAdapter objectAdapter = getObjectAdapter(oidStr);
-        final OneToManyAssociation collection = getCollectionThatIsVisibleAndUsable(
+        final OneToManyAssociation collection = helper.getCollectionThatIsVisibleAndUsable(
                 objectAdapter, collectionId, Intent.MUTATE);
 
         if (!collection.getCollectionSemantics().isListOrArray()) {
@@ -259,8 +277,8 @@ public class DomainObjectResourceServerside extends DomainResourceAbstract imple
         }
 
         ObjectSpecification collectionSpec = collection.getSpecification();
-        String bodyAsString = asStringUtf8(body);
-        ObjectAdapter argAdapter = parseBodyAsMapWithSingleValue(collectionSpec, bodyAsString);
+        String bodyAsString = DomainResourceHelper.asStringUtf8(body);
+        ObjectAdapter argAdapter = helper.parseBodyAsMapWithSingleValue(collectionSpec, bodyAsString);
 
         Consent consent = collection.isValidToAdd(objectAdapter, argAdapter);
         if (consent.isVetoed()) {
@@ -282,13 +300,17 @@ public class DomainObjectResourceServerside extends DomainResourceAbstract imple
         @PathParam("collectionId") final String collectionId,
         final InputStream body) {
 
+        init();
+        
+        final DomainResourceHelper helper = new DomainResourceHelper(getResourceContext());
+
         final ObjectAdapter objectAdapter = getObjectAdapter(oidStr);
-        final OneToManyAssociation collection = getCollectionThatIsVisibleAndUsable(
+        final OneToManyAssociation collection = helper.getCollectionThatIsVisibleAndUsable(
                 objectAdapter, collectionId, Intent.MUTATE);
 
         ObjectSpecification collectionSpec = collection.getSpecification();
-        String bodyAsString = asStringUtf8(body);
-        ObjectAdapter argAdapter = parseBodyAsMapWithSingleValue(collectionSpec, bodyAsString);
+        String bodyAsString = DomainResourceHelper.asStringUtf8(body);
+        ObjectAdapter argAdapter = helper.parseBodyAsMapWithSingleValue(collectionSpec, bodyAsString);
 
         Consent consent = collection.isValidToRemove(objectAdapter, argAdapter);
         if (consent.isVetoed()) {
@@ -314,8 +336,11 @@ public class DomainObjectResourceServerside extends DomainResourceAbstract imple
             @PathParam("actionId") final String actionId) {
         init();
 
+        final DomainResourceHelper helper = new DomainResourceHelper(getResourceContext());
+
         final ObjectAdapter objectAdapter = getObjectAdapter(oidStr);
-        return actionPrompt(actionId, objectAdapter);
+        
+        return helper.actionPrompt(actionId, objectAdapter);
     }
 
 
@@ -333,9 +358,11 @@ public class DomainObjectResourceServerside extends DomainResourceAbstract imple
             @QueryParam("args") final String arguments) {
         init();
 
+        final DomainResourceHelper helper = new DomainResourceHelper(getResourceContext());
+
         final ObjectAdapter objectAdapter = getObjectAdapter(oidStr);
 
-        return invokeActionQueryOnly(objectAdapter, actionId, arguments);
+        return helper.invokeActionQueryOnly(objectAdapter, actionId, arguments);
     }
 
     @PUT
@@ -347,8 +374,11 @@ public class DomainObjectResourceServerside extends DomainResourceAbstract imple
             final InputStream arguments) {
         init();
 
+        final DomainResourceHelper helper = new DomainResourceHelper(getResourceContext());
+
         final ObjectAdapter objectAdapter = getObjectAdapter(oidStr);
-        return invokeActionIdempotent(objectAdapter, actionId, arguments);
+        
+        return helper.invokeActionIdempotent(objectAdapter, actionId, arguments);
     }
 
 
@@ -360,9 +390,12 @@ public class DomainObjectResourceServerside extends DomainResourceAbstract imple
             @PathParam("actionId") final String actionId,
             final InputStream body) {
         init();
+        
+        final DomainResourceHelper helper = new DomainResourceHelper(getResourceContext());
 
         final ObjectAdapter objectAdapter = getObjectAdapter(oidStr);
-        return invokeAction(objectAdapter, actionId, body);
+        
+        return helper.invokeAction(objectAdapter, actionId, body);
     }
 
 

@@ -17,39 +17,45 @@
 package org.apache.isis.viewer.json.viewer.resources.domainobjects;
 
 import java.util.Collection;
-import java.util.List;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
+import org.apache.isis.viewer.json.applib.RepresentationType;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
-import org.apache.isis.viewer.json.viewer.representations.ReprBuilderAbstract;
+import org.apache.isis.viewer.json.viewer.representations.ReprRenderer;
+import org.apache.isis.viewer.json.viewer.representations.ReprRendererAbstract;
+import org.apache.isis.viewer.json.viewer.representations.ReprRendererFactoryAbstract;
 
-public class DomainObjectListReprBuilder extends ReprBuilderAbstract<DomainObjectListReprBuilder> {
+public class ListReprRenderer extends ReprRendererAbstract<ListReprRenderer, Collection<ObjectAdapter>> {
+
+    public static class Factory extends ReprRendererFactoryAbstract {
+        public Factory() {
+            super(RepresentationType.LIST);
+        }
+
+        @Override
+        public ReprRenderer<?, ?> newRenderer(ResourceContext resourceContext, JsonRepresentation representation) {
+            return new ListReprRenderer(resourceContext, getRepresentationType(), representation);
+        }
+    }
 
     private ObjectAdapterLinkToBuilder objectAdapterLinkToBuilder;
 
-    public static DomainObjectListReprBuilder newBuilder(ResourceContext resourceContext, JsonRepresentation representation) {
-        return new DomainObjectListReprBuilder(resourceContext, representation);
-    }
-
-    public static DomainObjectListReprBuilder newBuilder(ResourceContext resourceContext) {
-        return new DomainObjectListReprBuilder(resourceContext, JsonRepresentation.newMap());
-    }
-
-    private DomainObjectListReprBuilder(ResourceContext resourceContext, JsonRepresentation representation) {
-        super(resourceContext, representation);
+    private ListReprRenderer(ResourceContext resourceContext, RepresentationType representationType, JsonRepresentation representation) {
+        super(resourceContext, representationType, representation);
         usingLinkToBuilder(new DomainObjectLinkToBuilder());
     }
     
-    public DomainObjectListReprBuilder usingLinkToBuilder(ObjectAdapterLinkToBuilder objectAdapterLinkToBuilder) {
+    public ListReprRenderer usingLinkToBuilder(ObjectAdapterLinkToBuilder objectAdapterLinkToBuilder) {
         this.objectAdapterLinkToBuilder = objectAdapterLinkToBuilder.usingResourceContext(resourceContext);
         return this;
     }
 
-    public DomainObjectListReprBuilder withAdapters(Collection<ObjectAdapter> objectAdapters) {
+    @Override
+    public ListReprRenderer with(Collection<ObjectAdapter> objectAdapters) {
         JsonRepresentation list = JsonRepresentation.newArray();
         for(ObjectAdapter adapter: objectAdapters) {
-            JsonRepresentation linkToObject = objectAdapterLinkToBuilder.with(adapter).linkToAdapter().build();
+            JsonRepresentation linkToObject = objectAdapterLinkToBuilder.with(adapter).linkToAdapter().render();
             list.arrayAdd(linkToObject);
         }
         representation.mapPut("values", list);
@@ -57,7 +63,7 @@ public class DomainObjectListReprBuilder extends ReprBuilderAbstract<DomainObjec
     }
 
 
-    public JsonRepresentation build() {
+    public JsonRepresentation render() {
         withLinks();
         withExtensions();
 

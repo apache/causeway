@@ -50,13 +50,13 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
         init();
 
         JsonRepresentation representation = JsonRepresentation.newMap();
-        representation.mapPut("self", LinkReprBuilder.newBuilder(getResourceContext(), "self", "domainTypes").build());
+        representation.mapPut("self", LinkReprBuilder.newBuilder(getResourceContext(), "self", "domainTypes").render());
         
         JsonRepresentation specList = JsonRepresentation.newArray();
         final Collection<ObjectSpecification> allSpecifications = getSpecificationLoader().allSpecifications();
         for (ObjectSpecification objectSpec : allSpecifications) {
             final LinkReprBuilder linkBuilder = LinkReprBuilder.newBuilder(getResourceContext(), "domainType", "domainTypes/%s", objectSpec.getFullIdentifier());
-            specList.arrayAdd(linkBuilder.build());
+            specList.arrayAdd(linkBuilder.render());
         }
         
         representation.mapPut("domainTypes", specList);
@@ -72,7 +72,7 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
         init();
 
         JsonRepresentation representation = JsonRepresentation.newMap();
-        representation.mapPut("self", LinkReprBuilder.newBuilder(getResourceContext(), "self", "domainTypes/%s", domainType).build());
+        representation.mapPut("self", LinkReprBuilder.newBuilder(getResourceContext(), "self", "domainTypes/%s", domainType).render());
         
         return responseOfOk(RepresentationType.DOMAIN_TYPE, Caching.ONE_DAY, representation).build();
     }
@@ -86,7 +86,7 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
         init();
 
         JsonRepresentation representation = JsonRepresentation.newMap();
-        representation.mapPut("self", LinkReprBuilder.newBuilder(getResourceContext(), "self", "domainTypes/%s/properties/%s", domainType, propertyId).build());
+        representation.mapPut("self", LinkReprBuilder.newBuilder(getResourceContext(), "self", "domainTypes/%s/properties/%s", domainType, propertyId).render());
         
         return responseOfOk(RepresentationType.TYPE_PROPERTY, Caching.ONE_DAY, representation).build();
     }
@@ -100,7 +100,7 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
         init();
 
         JsonRepresentation representation = JsonRepresentation.newMap();
-        representation.mapPut("self", LinkReprBuilder.newBuilder(getResourceContext(), "self", "domainType/%s/collections/%s", domainType, collectionId).build());
+        representation.mapPut("self", LinkReprBuilder.newBuilder(getResourceContext(), "self", "domainType/%s/collections/%s", domainType, collectionId).render());
         
         return responseOfOk(RepresentationType.TYPE_COLLECTION, Caching.ONE_DAY, representation).build();
     }
@@ -114,7 +114,7 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
         init();
 
         JsonRepresentation representation = JsonRepresentation.newMap();
-        representation.mapPut("self", LinkReprBuilder.newBuilder(getResourceContext(), "self", "domainTypes/%s/actions/%s", domainType, actionId).build());
+        representation.mapPut("self", LinkReprBuilder.newBuilder(getResourceContext(), "self", "domainTypes/%s/actions/%s", domainType, actionId).render());
         
         return responseOfOk(RepresentationType.TYPE_ACTION, Caching.ONE_DAY, representation).build();
     }
@@ -129,7 +129,7 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
         init();
 
         JsonRepresentation representation = JsonRepresentation.newMap();
-        representation.mapPut("self", LinkReprBuilder.newBuilder(getResourceContext(), "self", "domainTypes/%s/actions/%s/params/%s", domainType, actionId, paramName).build());
+        representation.mapPut("self", LinkReprBuilder.newBuilder(getResourceContext(), "self", "domainTypes/%s/actions/%s/params/%s", domainType, actionId, paramName).render());
         
         return responseOfOk(RepresentationType.TYPE_COLLECTION, Caching.ONE_DAY, representation).build();
     }

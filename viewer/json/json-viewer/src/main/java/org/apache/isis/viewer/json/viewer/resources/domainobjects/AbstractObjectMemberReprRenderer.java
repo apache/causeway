@@ -22,32 +22,43 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
+import org.apache.isis.viewer.json.applib.RepresentationType;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
-import org.apache.isis.viewer.json.viewer.representations.ReprBuilderAbstract;
+import org.apache.isis.viewer.json.viewer.representations.ReprRendererAbstract;
 
-public abstract class AbstractObjectMemberReprBuilder<R extends ReprBuilderAbstract<R>, T extends ObjectMember> extends ReprBuilderAbstract<R> {
+public abstract class AbstractObjectMemberReprRenderer<R extends ReprRendererAbstract<R, ObjectAndMember<T>>, T extends ObjectMember> 
+        extends ReprRendererAbstract<R, ObjectAndMember<T>> {
 
     protected ObjectAdapterLinkToBuilder linkToBuilder;
     
-    protected final ObjectAdapter objectAdapter;
-    protected final MemberType memberType;
-    protected final T objectMember;
+    protected ObjectAdapter objectAdapter;
+    protected MemberType memberType;
+    protected T objectMember;
 
-    public AbstractObjectMemberReprBuilder(ResourceContext resourceContext, ObjectAdapter objectAdapter, MemberType memberType, T objectMember) {
-        super(resourceContext);
-        this.objectAdapter = objectAdapter;
-        this.memberType = memberType;
-        this.objectMember = objectMember;
+
+    public AbstractObjectMemberReprRenderer(ResourceContext resourceContext, RepresentationType representationType, JsonRepresentation representation) {
+        super(resourceContext, representationType, representation);
+    }
+    
+    @Override
+    public R with(ObjectAndMember<T> objectAndMember) {
+        this.objectAdapter = objectAndMember.getObjectAdapter();
+        this.objectMember = objectAndMember.getMember();
+        this.memberType = MemberType.determineFrom(objectMember);
         usingLinkToBuilder(new DomainObjectLinkToBuilder());
+        return cast(this);
     }
 
+    /**
+     * Must be called after {@link #with(ObjectAndMember)} (which provides the {@link #objectAdapter}).
+     */
     public R usingLinkToBuilder(ObjectAdapterLinkToBuilder linkToBuilder) {
         this.linkToBuilder = linkToBuilder.usingResourceContext(resourceContext).with(objectAdapter);
         return cast(this);
     }
 
     public R withSelf() {
-        representation.mapPut("self", linkToBuilder.linkToMember("self", memberType, objectMember).build());
+        representation.mapPut("self", linkToBuilder.linkToMember("self", memberType, objectMember).render());
         return cast(this);
     }
 
@@ -83,7 +94,7 @@ public abstract class AbstractObjectMemberReprBuilder<R extends ReprBuilderAbstr
 
     public R withDetailsLink() {
         representation.mapPut(memberType.getDetailsRel(), 
-                linkToBuilder.linkToMember(memberType.getDetailsRel(), memberType, objectMember).build());
+                linkToBuilder.linkToMember(memberType.getDetailsRel(), memberType, objectMember).render());
         return cast(this);
     }
 

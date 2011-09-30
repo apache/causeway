@@ -20,6 +20,6 @@ import org.apache.isis.viewer.json.applib.JsonRepresentation;
 
 public interface ReprBuilder {
 
-    public JsonRepresentation build();
+    public JsonRepresentation render();
 
 }

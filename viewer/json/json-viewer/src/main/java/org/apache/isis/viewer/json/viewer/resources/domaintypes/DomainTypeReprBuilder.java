@@ -39,7 +39,7 @@ public class DomainTypeReprBuilder extends ReprBuilderAbstract<DomainTypeReprBui
     }
 
 
-    public JsonRepresentation build() {
+    public JsonRepresentation render() {
         return representation;
     }
 

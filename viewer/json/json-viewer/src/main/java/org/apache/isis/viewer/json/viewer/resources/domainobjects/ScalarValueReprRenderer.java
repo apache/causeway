@@ -19,26 +19,32 @@ package org.apache.isis.viewer.json.viewer.resources.domainobjects;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
+import org.apache.isis.viewer.json.applib.RepresentationType;
 import org.apache.isis.viewer.json.applib.RestfulResponse.HttpStatusCode;
 import org.apache.isis.viewer.json.viewer.JsonApplicationException;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
-import org.apache.isis.viewer.json.viewer.representations.ReprBuilderAbstract;
+import org.apache.isis.viewer.json.viewer.representations.ReprRenderer;
+import org.apache.isis.viewer.json.viewer.representations.ReprRendererAbstract;
+import org.apache.isis.viewer.json.viewer.representations.ReprRendererFactoryAbstract;
 
-public class ScalarReprBuilder extends ReprBuilderAbstract<ScalarReprBuilder> {
+public class ScalarValueReprRenderer extends ReprRendererAbstract<ScalarValueReprRenderer, ObjectAdapter> {
 
-    public static ScalarReprBuilder newBuilder(final ResourceContext resourceContext) {
-        return new ScalarReprBuilder(resourceContext, JsonRepresentation.newMap());
+    public static class Factory extends ReprRendererFactoryAbstract {
+        public Factory() {
+            super(RepresentationType.SCALAR_VALUE);
+        }
+
+        @Override
+        public ReprRenderer<?, ?> newRenderer(ResourceContext resourceContext, JsonRepresentation representation) {
+            return new ScalarValueReprRenderer(resourceContext, getRepresentationType(), representation);
+        }
     }
 
-    public static ScalarReprBuilder newBuilder(ResourceContext resourceContext, JsonRepresentation representation) {
-        return new ScalarReprBuilder(resourceContext, representation);
+    private ScalarValueReprRenderer(final ResourceContext resourceContext, RepresentationType representationType, JsonRepresentation representation) {
+        super(resourceContext, representationType, representation);
     }
 
-    private ScalarReprBuilder(final ResourceContext resourceContext, JsonRepresentation representation) {
-        super(resourceContext, representation);
-    }
-
-    public ScalarReprBuilder withAdapter(final ObjectAdapter objectAdapter) {
+    public ScalarValueReprRenderer with(final ObjectAdapter objectAdapter) {
         final EncodableFacet facet = objectAdapter.getSpecification().getFacet(EncodableFacet.class);
         if(facet == null) {
             throw JsonApplicationException.create(HttpStatusCode.INTERNAL_SERVER_ERROR, "Not an (encodable) value", objectAdapter.titleString());
@@ -49,7 +55,7 @@ public class ScalarReprBuilder extends ReprBuilderAbstract<ScalarReprBuilder> {
     }
 
     @Override
-    public JsonRepresentation build() {
+    public JsonRepresentation render() {
  
         JsonRepresentation extensions = JsonRepresentation.newMap();
         putExtensionsIsisProprietary(extensions);

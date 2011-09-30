@@ -55,8 +55,9 @@ import org.apache.isis.viewer.json.viewer.JsonApplicationException;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
 import org.apache.isis.viewer.json.viewer.representations.ReprBuilderAbstract;
 import org.apache.isis.viewer.json.viewer.representations.ReprBuilder;
-import org.apache.isis.viewer.json.viewer.representations.TypedReprBuilderFactoryRegistry;
-import org.apache.isis.viewer.json.viewer.resources.domainobjects.DomainObjectReprBuilder;
+import org.apache.isis.viewer.json.viewer.representations.RendererFactoryRegistry;
+import org.apache.isis.viewer.json.viewer.representations.ReprRenderer;
+import org.apache.isis.viewer.json.viewer.resources.domainobjects.DomainObjectReprRenderer;
 import org.apache.isis.viewer.json.viewer.util.OidUtils;
 import org.apache.isis.viewer.json.viewer.util.UrlDecoderUtils;
 import org.codehaus.jackson.JsonGenerationException;
@@ -96,8 +97,7 @@ public abstract class ResourceAbstract {
 	public final static ActionType[] ACTION_TYPES = { ActionType.USER, ActionType.DEBUG, ActionType.EXPLORATION };
 
 	// TODO: should inject this instead...
-	protected final static TypedReprBuilderFactoryRegistry builderFactoryRegistry = 
-	        new TypedReprBuilderFactoryRegistry();
+	protected final static RendererFactoryRegistry rendererFactoryRegistry = RendererFactoryRegistry.instance;
 
     @Context
     HttpHeaders httpHeaders;
@@ -135,7 +135,7 @@ public abstract class ResourceAbstract {
     // //////////////////////////////////////////////////////////////
 
     protected String jsonFor(ReprBuilderAbstract<?> builder) {
-        JsonRepresentation representation = builder.build();
+        JsonRepresentation representation = builder.render();
         return jsonFor(representation);
     }
 
@@ -168,8 +168,8 @@ public abstract class ResourceAbstract {
 		final ResourceContext representationContext = getResourceContext();
         
         return Functions.compose(
-            DomainObjectReprBuilder.selfOf(), 
-            DomainObjectReprBuilder.fromAdapter(representationContext));
+            DomainObjectReprRenderer.selfOf(), 
+            DomainObjectReprRenderer.fromAdapter(representationContext));
 	}
 
 
@@ -216,7 +216,7 @@ public abstract class ResourceAbstract {
     // Responses
     // //////////////////////////////////////////////////////////////
 
-    private static ResponseBuilder responseOf(HttpStatusCode httpStatusCode) {
+    public static ResponseBuilder responseOf(HttpStatusCode httpStatusCode) {
         return Response.status(httpStatusCode.getJaxrsStatusType()).type(MediaType.APPLICATION_JSON_TYPE);
     }
 
@@ -236,9 +236,13 @@ public abstract class ResourceAbstract {
     }
 
     public static ResponseBuilder responseOfOk(RepresentationType representationType, Caching caching, ReprBuilder representationBuilder) {
-        return responseOfOk(representationType, caching, representationBuilder.build());
+        return responseOfOk(representationType, caching, representationBuilder.render());
     }
 
+    public static ResponseBuilder responseOfOk(Caching caching, ReprRenderer<?,?> renderer) {
+        RepresentationType representationType = renderer.getRepresentationType();
+        return responseOfOk(representationType, caching, renderer.render());
+    }
 
 
     // //////////////////////////////////////////////////////////////

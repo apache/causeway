@@ -26,6 +26,7 @@ import org.apache.isis.core.metamodel.facets.properties.modify.PropertySetterFac
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
+import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.progmodel.facets.actions.validate.ActionValidationFacet;
 import org.apache.isis.core.progmodel.facets.collections.validate.CollectionValidateAddToFacet;
 import org.apache.isis.core.progmodel.facets.collections.validate.CollectionValidateRemoveFromFacet;
@@ -142,5 +143,16 @@ public enum MemberType {
     public String getName() {
         return name;
     }
+
+    public static MemberType determineFrom(ObjectMember objectMember) {
+        if (objectMember instanceof ObjectAction) {
+            return MemberType.OBJECT_ACTION;
+        }
+        if (objectMember instanceof OneToOneAssociation) {
+            return MemberType.OBJECT_PROPERTY;
+        }
+        return MemberType.OBJECT_COLLECTION;
+    }
+
 
 }

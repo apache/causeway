@@ -45,7 +45,7 @@ public abstract class ReprBuilderAbstract<T extends ReprBuilderAbstract<T>> impl
 
     public T withSelf(String href) {
         if(href != null) {
-            representation.mapPut("self", LinkReprBuilder.newBuilder(resourceContext, "self", href).build());
+            representation.mapPut("self", LinkReprBuilder.newBuilder(resourceContext, "self", href).render());
         }
         return cast(this);
     }
@@ -79,7 +79,7 @@ public abstract class ReprBuilderAbstract<T extends ReprBuilderAbstract<T>> impl
         return (T) builder;
     }
 
-    public abstract JsonRepresentation build();
+    public abstract JsonRepresentation render();
     
     protected OidStringifier getOidStringifier() {
         return getOidGenerator().getOidStringifier();

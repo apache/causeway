@@ -42,11 +42,15 @@ import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.applib.RepresentationType;
 import org.apache.isis.viewer.json.applib.RestfulResponse.HttpStatusCode;
 import org.apache.isis.viewer.json.applib.blocks.Link;
+import org.apache.isis.viewer.json.applib.util.JsonMapper;
 import org.apache.isis.viewer.json.viewer.JsonApplicationException;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
-import org.apache.isis.viewer.json.viewer.representations.ReprBuilderAbstract;
 import org.apache.isis.viewer.json.viewer.representations.LinkReprBuilder;
+import org.apache.isis.viewer.json.viewer.representations.RendererFactory;
+import org.apache.isis.viewer.json.viewer.representations.RendererFactoryRegistry;
+import org.apache.isis.viewer.json.viewer.representations.ReprRenderer;
 import org.apache.isis.viewer.json.viewer.resources.ResourceAbstract;
+import org.apache.isis.viewer.json.viewer.resources.ResourceAbstract.Caching;
 import org.apache.isis.viewer.json.viewer.util.OidUtils;
 import org.apache.isis.viewer.json.viewer.util.UrlDecoderUtils;
 import org.apache.isis.viewer.json.viewer.util.UrlParserUtils;
@@ -57,44 +61,34 @@ import com.google.common.base.Charsets;
 import com.google.common.collect.Lists;
 import com.google.common.io.ByteStreams;
 
-public abstract class DomainResourceAbstract extends ResourceAbstract {
+public class DomainResourceHelper {
+    
+    private final ResourceContext resourceContext;
 
-    // //////////////////////////////////////////////////////////////
-    // object
-    // //////////////////////////////////////////////////////////////
+    // TODO: inject somehow instead
+    private final RendererFactoryRegistry rendererFactoryRegistry = RendererFactoryRegistry.instance;
 
-    protected Response object(final ObjectAdapter objectAdapter) {
-        ResourceContext resourceContext = getResourceContext();
-        final ReprBuilderAbstract<?> repBuilder =
-                DomainObjectReprBuilder.newBuilder(resourceContext)
-                        .with(objectAdapter);
-
-        ResponseBuilder respBuilder = 
-                responseOfOk(RepresentationType.DOMAIN_OBJECT, Caching.NONE, repBuilder);
-
-        Version version = objectAdapter.getVersion();
-        if (version != null && version.getTime() != null) {
-            respBuilder.tag(""+version.getTime());
-        }
-        return respBuilder.build();
+    public DomainResourceHelper(ResourceContext resourceContext) {
+        this.resourceContext = resourceContext;
     }
 
-
-    
     // //////////////////////////////////////////////////////////////
     // action Prompt
     // //////////////////////////////////////////////////////////////
 
-    protected Response actionPrompt(final String actionId, final ObjectAdapter serviceAdapter) {
+    Response actionPrompt(final String actionId, final ObjectAdapter serviceAdapter) {
         final ObjectAction action = getObjectActionThatIsVisibleAndUsable(
                 serviceAdapter, actionId, Intent.ACCESS);
 
-        ObjectActionReprBuilder repBuilder = 
-                ObjectActionReprBuilder.newBuilder(getResourceContext(), serviceAdapter, action)
+        RendererFactory factory = RendererFactoryRegistry.instance.find(RepresentationType.OBJECT_ACTION);
+        final ObjectActionReprRenderer renderer = 
+                (ObjectActionReprRenderer) factory.newRenderer(resourceContext, JsonRepresentation.newMap());
+        
+        renderer.with(new ObjectAndAction(serviceAdapter, action))
                 .withSelf()
                 .withMutatorsIfEnabled();
-        
-        return responseOfOk(RepresentationType.OBJECT_ACTION, Caching.NONE, repBuilder)
+
+        return ResourceAbstract.responseOfOk(RepresentationType.OBJECT_ACTION, Caching.NONE, renderer.render())
                 .build();
     }
 
@@ -111,14 +105,14 @@ public abstract class DomainResourceAbstract extends ResourceAbstract {
         }
     }
 
-    protected Response invokeActionQueryOnly(
+    Response invokeActionQueryOnly(
             final ObjectAdapter objectAdapter, 
             final String actionId, 
             final String arguments) {
         final ObjectAction action = getObjectActionThatIsVisibleAndUsable(
                 objectAdapter, actionId, Intent.ACCESS);
 
-        final ActionSemantics actionSemantics = ActionSemantics.determine(getResourceContext(), action);
+        final ActionSemantics actionSemantics = ActionSemantics.determine(resourceContext, action);
         if(!actionSemantics.isQueryOnly()) {
             throw JsonApplicationException.create(HttpStatusCode.METHOD_NOT_ALLOWED,
                     "Method not allowed; action '%s' is not query only", action.getId());
@@ -146,7 +140,7 @@ public abstract class DomainResourceAbstract extends ResourceAbstract {
     }
 
 
-    protected Response invokeActionIdempotent(
+    Response invokeActionIdempotent(
             final ObjectAdapter objectAdapter, 
             final String actionId, 
             final InputStream body) {
@@ -154,7 +148,7 @@ public abstract class DomainResourceAbstract extends ResourceAbstract {
         final ObjectAction action = getObjectActionThatIsVisibleAndUsable(
                 objectAdapter, actionId, Intent.MUTATE);
 
-        final ActionSemantics actionSemantics = ActionSemantics.determine(getResourceContext(), action);
+        final ActionSemantics actionSemantics = ActionSemantics.determine(resourceContext, action);
         if(!actionSemantics.isIdempotent()) {
             throw JsonApplicationException.create(
                     HttpStatusCode.METHOD_NOT_ALLOWED,
@@ -170,7 +164,7 @@ public abstract class DomainResourceAbstract extends ResourceAbstract {
                 argumentAdapters, representationWithSelf);
     }
 
-    protected Response invokeAction(final ObjectAdapter objectAdapter, final String actionId, final InputStream body) {
+    Response invokeAction(final ObjectAdapter objectAdapter, final String actionId, final InputStream body) {
         final ObjectAction action = getObjectActionThatIsVisibleAndUsable(
                 objectAdapter, actionId, Intent.MUTATE);
         
@@ -184,11 +178,11 @@ public abstract class DomainResourceAbstract extends ResourceAbstract {
                 argumentAdapters, representationWithSelf);
     }
 
-    protected Response invokeActionUsingAdapters(
+    Response invokeActionUsingAdapters(
         final ObjectAdapter objectAdapter,
         final ObjectAction action,
         final List<ObjectAdapter> argAdapters, 
-        final JsonRepresentation representationWithSelf) {
+        final JsonRepresentation representation) {
         
         // validate
         List<ObjectActionParameter> parameters = action.getParameters();
@@ -215,25 +209,45 @@ public abstract class DomainResourceAbstract extends ResourceAbstract {
 
         // response
         if (returnedAdapter == null) {
-            return responseOfNoContent(objectAdapter.getVersion()).build();
+            return ResourceAbstract.responseOfNoContent(objectAdapter.getVersion()).build();
         }
 
         final CollectionFacet collectionFacet = returnedAdapter.getSpecification().getFacet(CollectionFacet.class);
         if (collectionFacet != null) {
             final Collection<ObjectAdapter> collectionAdapters = collectionFacet
                     .collection(returnedAdapter);
-            DomainObjectListReprBuilder repBuilder = DomainObjectListReprBuilder.newBuilder(getResourceContext(), representationWithSelf).withAdapters(collectionAdapters);
-            return responseOfOk(RepresentationType.LIST, Caching.NONE, repBuilder).build();
+
+            final RendererFactory factory = rendererFactoryRegistry.find(RepresentationType.LIST);
+            final ListReprRenderer renderer = (ListReprRenderer) factory.newRenderer(resourceContext, representation);
+            renderer.with(collectionAdapters);
+            
+            return ResourceAbstract.responseOfOk(Caching.NONE, renderer).build();
         }
 
+        
         final EncodableFacet encodableFacet = returnedAdapter.getSpecification().getFacet(EncodableFacet.class);
         if(encodableFacet != null) {
-            ScalarReprBuilder repBuilder = ScalarReprBuilder.newBuilder(getResourceContext(), representationWithSelf).withAdapter(objectAdapter);
-            return responseOfOk(RepresentationType.SCALAR_VALUE, Caching.NONE, repBuilder).build();
+            
+            final RendererFactory factory = rendererFactoryRegistry.find(RepresentationType.SCALAR_VALUE);
+
+            ScalarValueReprRenderer renderer = (ScalarValueReprRenderer) factory.newRenderer(resourceContext, representation);
+            renderer.with(objectAdapter);
+            return ResourceAbstract.responseOfOk(RepresentationType.SCALAR_VALUE, Caching.NONE, renderer).build();
         }
 
-        return object(returnedAdapter);
+        final RendererFactory factory = rendererFactoryRegistry.find(RepresentationType.DOMAIN_OBJECT);
+        final DomainObjectReprRenderer renderer = (DomainObjectReprRenderer) factory.newRenderer(resourceContext, representation);
+        renderer.with(returnedAdapter);
+        
+        ResponseBuilder respBuilder = ResourceAbstract.responseOfOk(Caching.NONE, renderer);
+        
+        Version version = returnedAdapter.getVersion();
+        if (version != null && version.getTime() != null) {
+            respBuilder.tag(""+version.getTime());
+        }
+        return respBuilder.build();
     }
+
 
 
     private JsonRepresentation representationWithSelfFor(final ObjectAdapter objectAdapter, final ObjectAction action, final String queryArgs) {
@@ -252,8 +266,8 @@ public abstract class DomainResourceAbstract extends ResourceAbstract {
     
     private JsonRepresentation representationWithSelfFor(final ObjectAdapter objectAdapter, final ObjectAction action) {
         JsonRepresentation representation = JsonRepresentation.newMap();
-        String oid = getOidStr(objectAdapter);
-        final JsonRepresentation repBuilder = LinkReprBuilder.newBuilder(getResourceContext(), "self", "objects/%s/actions/%s/invoke", oid, action.getId()).build();
+        String oid = OidUtils.getOidStr(resourceContext, objectAdapter);
+        final JsonRepresentation repBuilder = LinkReprBuilder.newBuilder(resourceContext, "self", "objects/%s/actions/%s/invoke", oid, action.getId()).render();
         representation.mapPut("self", repBuilder);
         return representation;
     }
@@ -338,8 +352,8 @@ public abstract class DomainResourceAbstract extends ResourceAbstract {
             final String urlEncodedJson) throws JsonParseException, JsonMappingException, IOException {
 
         final String json = UrlDecoderUtils.urlDecode(urlEncodedJson);
-        JsonRepresentation representation = jsonMapper.read(json);
-        return objectAdapterFor(getResourceContext(), spec, representation);
+        JsonRepresentation representation = JsonMapper.instance().read(json);
+        return objectAdapterFor(resourceContext, spec, representation);
     }
 
     private static class ExpectedStringRepresentingValueException extends IllegalArgumentException {
@@ -408,7 +422,7 @@ public abstract class DomainResourceAbstract extends ResourceAbstract {
         T objectMember, final MemberType memberType,
         final Intent intent) {
         String memberId = objectMember.getId();
-        AuthenticationSession authenticationSession = getResourceContext().getAuthenticationSession();
+        AuthenticationSession authenticationSession = resourceContext.getAuthenticationSession();
         if (objectMember.isVisible(authenticationSession, objectAdapter).isVetoed()) {
             throwNotFoundException(memberId, memberType);
         }
@@ -447,7 +461,7 @@ public abstract class DomainResourceAbstract extends ResourceAbstract {
      * @param bodyAsString - as per {@link #asStringUtf8(InputStream)}
      * @return
      */
-    protected ObjectAdapter parseBodyAsMapWithSingleValue(
+    ObjectAdapter parseBodyAsMapWithSingleValue(
             final ObjectSpecification objectSpec, 
             final String bodyAsString) {
         JsonRepresentation arguments = readBodyAsMap(bodyAsString);
@@ -460,7 +474,7 @@ public abstract class DomainResourceAbstract extends ResourceAbstract {
                     resourceFor(objectSpec));
         }
 
-        ObjectAdapter proposedValueAdapter = objectAdapterFor(getResourceContext(), objectSpec, arguments);
+        ObjectAdapter proposedValueAdapter = objectAdapterFor(resourceContext, objectSpec, arguments);
         return proposedValueAdapter;
     }
 
@@ -491,7 +505,7 @@ public abstract class DomainResourceAbstract extends ResourceAbstract {
             final JsonRepresentation arg = argList.get(i);
             final ObjectSpecification paramSpec = parameters.get(i).getSpecification();
             try {
-                final ObjectAdapter objectAdapter = objectAdapterFor(getResourceContext(), paramSpec, arg);
+                final ObjectAdapter objectAdapter = objectAdapterFor(resourceContext, paramSpec, arg);
                 argAdapters.add(objectAdapter);
             } catch (ExpectedStringRepresentingValueException e) {
                 throw JsonApplicationException.create(
@@ -537,7 +551,7 @@ public abstract class DomainResourceAbstract extends ResourceAbstract {
 
     private JsonRepresentation readBodyAsMap(String bodyAsString) {
         try {
-            final JsonRepresentation jsonRepr = jsonMapper.read(bodyAsString);
+            final JsonRepresentation jsonRepr = JsonMapper.instance().read(bodyAsString);
             if(!jsonRepr.isMap()) {
                 throw JsonApplicationException.create(
                     HttpStatusCode.BAD_REQUEST,
@@ -559,7 +573,7 @@ public abstract class DomainResourceAbstract extends ResourceAbstract {
         }
     }
 
-    protected String asStringUtf8(final InputStream body) {
+    static String asStringUtf8(final InputStream body) {
         try {
             byte[] byteArray = ByteStreams.toByteArray(body);
             return new String(byteArray, Charsets.UTF_8);
