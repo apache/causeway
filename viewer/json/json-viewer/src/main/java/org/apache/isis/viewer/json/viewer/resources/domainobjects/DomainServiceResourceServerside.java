@@ -74,7 +74,7 @@ public class DomainServiceResourceServerside extends DomainResourceAbstract impl
         
         final TypedReprBuilderFactory factory = builderFactoryRegistry.find(RepresentationType.DOMAIN_OBJECT);
         final DomainObjectReprBuilder reprBuilder = 
-                factory.newBuilder(getResourceContext(), ObjectAdapter.class);
+                (DomainObjectReprBuilder) factory.newBuilder(getResourceContext());
         reprBuilder.usingLinkToBuilder(new DomainServiceLinkToBuilder())
                     .withSelf()
                     .with(serviceAdapter);

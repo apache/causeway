@@ -16,10 +16,6 @@ public abstract class TypedReprBuilderFactoryAbstract implements TypedReprBuilde
         return representationType;
     }
 
-    @SuppressWarnings("unchecked")
-    public final <R extends TypedReprBuilder<R, T>, T> R newBuilder(ResourceContext resourceContext, Class<T> cls) {
-        return (R) newBuilder(resourceContext);
-    }
 
     
 }
