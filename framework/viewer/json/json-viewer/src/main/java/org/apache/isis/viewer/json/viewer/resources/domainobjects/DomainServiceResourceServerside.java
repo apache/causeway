@@ -32,17 +32,21 @@ import javax.ws.rs.core.Response;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.applib.RepresentationType;
 import org.apache.isis.viewer.json.applib.RestfulMediaType;
 import org.apache.isis.viewer.json.applib.domainobjects.DomainServiceResource;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
+import org.apache.isis.viewer.json.viewer.representations.RendererFactoryRegistry;
 import org.apache.isis.viewer.json.viewer.representations.ReprBuilderAbstract;
 import org.apache.isis.viewer.json.viewer.representations.ReprBuilder;
-import org.apache.isis.viewer.json.viewer.representations.TypedReprBuilder;
-import org.apache.isis.viewer.json.viewer.representations.TypedReprBuilderFactory;
+import org.apache.isis.viewer.json.viewer.representations.ReprRenderer;
+import org.apache.isis.viewer.json.viewer.representations.RendererFactory;
+import org.apache.isis.viewer.json.viewer.resources.ResourceAbstract;
+import org.apache.isis.viewer.json.viewer.resources.domainobjects.DomainResourceHelper.Intent;
 
 @Path("/services")
-public class DomainServiceResourceServerside extends DomainResourceAbstract implements
+public class DomainServiceResourceServerside extends ResourceAbstract implements
         DomainServiceResource {
 
     @Override
@@ -72,14 +76,14 @@ public class DomainServiceResourceServerside extends DomainResourceAbstract impl
         
         final ObjectAdapter serviceAdapter = getServiceAdapter(serviceId);
         
-        final TypedReprBuilderFactory factory = builderFactoryRegistry.find(RepresentationType.DOMAIN_OBJECT);
-        final DomainObjectReprBuilder reprBuilder = 
-                (DomainObjectReprBuilder) factory.newBuilder(getResourceContext());
-        reprBuilder.usingLinkToBuilder(new DomainServiceLinkToBuilder())
-                    .withSelf()
+        final RendererFactory factory = rendererFactoryRegistry.find(RepresentationType.DOMAIN_OBJECT);
+        final DomainObjectReprRenderer renderer = 
+                (DomainObjectReprRenderer) factory.newRenderer(getResourceContext(), JsonRepresentation.newMap());
+        renderer.usingLinkToBuilder(new DomainServiceLinkToBuilder())
+                    .includesSelf()
                     .with(serviceAdapter);
         
-        return responseOfOk(RepresentationType.DOMAIN_OBJECT, Caching.ONE_DAY, reprBuilder).build();
+        return responseOfOk(RepresentationType.DOMAIN_OBJECT, Caching.ONE_DAY, renderer).build();
     }
 
 
@@ -95,15 +99,20 @@ public class DomainServiceResourceServerside extends DomainResourceAbstract impl
             @PathParam("propertyId") final String propertyId) {
         init();
 
+        final DomainResourceHelper helper = new DomainResourceHelper(getResourceContext());
+
         final ObjectAdapter serviceAdapter = getServiceAdapter(serviceId);
-        final OneToOneAssociation property = getPropertyThatIsVisibleAndUsable(
+        final OneToOneAssociation property = helper.getPropertyThatIsVisibleAndUsable(
                 serviceAdapter, propertyId, Intent.ACCESS);
 
-        ResourceContext resourceContext = getResourceContext();
-        final ObjectPropertyReprBuilder builder = ObjectPropertyReprBuilder.newBuilder(
-                resourceContext, serviceAdapter, property);
-
-        return responseOfOk(RepresentationType.OBJECT_PROPERTY, Caching.ONE_DAY, builder).build();
+        RendererFactory factory = RendererFactoryRegistry.instance.find(RepresentationType.OBJECT_PROPERTY);
+        final ObjectPropertyReprRenderer renderer = 
+                (ObjectPropertyReprRenderer) factory.newRenderer(getResourceContext(), JsonRepresentation.newMap());
+        
+        renderer.with(new ObjectAndProperty(serviceAdapter, property))
+                .withDetailsLink();
+        
+        return responseOfOk(RepresentationType.OBJECT_PROPERTY, Caching.ONE_DAY, renderer.render()).build();
     }
 
 
@@ -120,9 +129,11 @@ public class DomainServiceResourceServerside extends DomainResourceAbstract impl
             @PathParam("actionId") final String actionId) {
         init();
 
+        final DomainResourceHelper helper = new DomainResourceHelper(getResourceContext());
+
         final ObjectAdapter serviceAdapter = getServiceAdapter(serviceId);
 
-        return actionPrompt(actionId, serviceAdapter);
+        return helper.actionPrompt(actionId, serviceAdapter);
     }
 
     

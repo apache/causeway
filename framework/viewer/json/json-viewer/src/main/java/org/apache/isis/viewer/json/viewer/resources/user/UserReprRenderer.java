@@ -18,23 +18,32 @@ package org.apache.isis.viewer.json.viewer.resources.user;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
+import org.apache.isis.viewer.json.applib.RepresentationType;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
-import org.apache.isis.viewer.json.viewer.representations.TypedReprBuilderAbstract;
+import org.apache.isis.viewer.json.viewer.representations.ReprRenderer;
+import org.apache.isis.viewer.json.viewer.representations.ReprRendererAbstract;
+import org.apache.isis.viewer.json.viewer.representations.ReprRendererFactoryAbstract;
 
-public class UserReprBuilder extends TypedReprBuilderAbstract<UserReprBuilder, AuthenticationSession> {
+public class UserReprRenderer extends ReprRendererAbstract<UserReprRenderer, AuthenticationSession> {
 
-    public static UserReprBuilder newBuilder(ResourceContext resourceContext) {
-        return new UserReprBuilder(resourceContext);
+    public static class Factory extends ReprRendererFactoryAbstract {
+
+        public Factory() {
+            super(RepresentationType.USER);
+        }
+
+        @Override
+        public ReprRenderer<?, ?> newRenderer(ResourceContext resourceContext, JsonRepresentation representation) {
+            return new UserReprRenderer(resourceContext, getRepresentationType(), representation);
+        }
     }
-
-    private boolean includesSelf;
-
-    private UserReprBuilder(ResourceContext resourceContext) {
-        super(resourceContext);
+    
+    private UserReprRenderer(ResourceContext resourceContext, RepresentationType representationType, JsonRepresentation representation) {
+        super(resourceContext, representationType, representation);
     }
 
     @Override
-    public UserReprBuilder with(AuthenticationSession authenticationSession) {
+    public UserReprRenderer with(AuthenticationSession authenticationSession) {
         representation.mapPut("username", authenticationSession.getUserName());
         JsonRepresentation roles = JsonRepresentation.newArray();
         for (String role : authenticationSession.getRoles()) {
@@ -44,18 +53,13 @@ public class UserReprBuilder extends TypedReprBuilderAbstract<UserReprBuilder, A
         return this;
     }
 
-    public JsonRepresentation build() {
+    public JsonRepresentation render() {
         if(includesSelf) {
             withSelf("user");
         }
         withLinks();
         withExtensions();
         return representation;
-    }
-
-    public UserReprBuilder withSelf() {
-        this.includesSelf = true;
-        return this;
     }
 
 }

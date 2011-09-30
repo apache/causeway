@@ -55,7 +55,7 @@ public class LinkReprBuilder extends ReprBuilderAbstract<LinkReprBuilder> {
         return this;
     }
 
-    public JsonRepresentation build() {
+    public JsonRepresentation render() {
         representation.mapPut("rel", rel);
         representation.mapPut("href", resourceContext.urlFor(href));
         representation.mapPut("method", method);

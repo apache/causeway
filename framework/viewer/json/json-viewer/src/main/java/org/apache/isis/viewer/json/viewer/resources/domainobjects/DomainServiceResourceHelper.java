@@ -21,8 +21,11 @@ package org.apache.isis.viewer.json.viewer.resources.domainobjects;
 import java.util.List;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.viewer.json.applib.JsonRepresentation;
+import org.apache.isis.viewer.json.applib.RepresentationType;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
-import org.apache.isis.viewer.json.viewer.representations.ReprBuilder;
+import org.apache.isis.viewer.json.viewer.representations.RendererFactory;
+import org.apache.isis.viewer.json.viewer.representations.RendererFactoryRegistry;
 import org.apache.isis.viewer.json.viewer.resources.AbstractResourceHelper;
 
 public class DomainServiceResourceHelper extends AbstractResourceHelper {
@@ -35,17 +38,18 @@ public class DomainServiceResourceHelper extends AbstractResourceHelper {
         super(resourceContext, selfRef);
     }
 
-    public ReprBuilder services() {
+    public ListReprRenderer services() {
 
         final List<ObjectAdapter> serviceAdapters = getResourceContext().getPersistenceSession().getServices();
 
-        DomainObjectListReprBuilder builder = 
-                DomainObjectListReprBuilder.newBuilder(getResourceContext())
-                    .usingLinkToBuilder(new DomainServiceLinkToBuilder())
-                    .withSelf("services")
-                    .withAdapters(serviceAdapters);
+        final RendererFactory factory = RendererFactoryRegistry.instance.find(RepresentationType.LIST);
         
-        return builder;
+        final ListReprRenderer renderer = (ListReprRenderer) factory.newRenderer(getResourceContext(), JsonRepresentation.newMap());
+        renderer.usingLinkToBuilder(new DomainServiceLinkToBuilder())
+                .withSelf("services")
+                .with(serviceAdapters);
+        
+        return renderer;
     }
 
 

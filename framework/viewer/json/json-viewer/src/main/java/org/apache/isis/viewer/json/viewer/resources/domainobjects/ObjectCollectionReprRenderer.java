@@ -24,28 +24,38 @@ import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacetUtils;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
+import org.apache.isis.viewer.json.applib.RepresentationType;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
 import org.apache.isis.viewer.json.viewer.representations.LinkReprBuilder;
+import org.apache.isis.viewer.json.viewer.representations.ReprRenderer;
+import org.apache.isis.viewer.json.viewer.representations.ReprRendererFactoryAbstract;
 import org.apache.isis.viewer.json.viewer.resources.domaintypes.DomainTypeReprBuilder;
 import org.apache.isis.viewer.json.viewer.resources.domaintypes.TypeCollectionReprBuilder;
 
 import com.google.common.collect.Lists;
 
-public class ObjectCollectionReprBuilder extends AbstractObjectMemberReprBuilder<ObjectCollectionReprBuilder, OneToManyAssociation> {
+public class ObjectCollectionReprRenderer extends AbstractObjectMemberReprRenderer<ObjectCollectionReprRenderer, OneToManyAssociation> {
 
-    public static ObjectCollectionReprBuilder newBuilder(ResourceContext resourceContext, ObjectAdapter objectAdapter, OneToManyAssociation otma) {
-        return new ObjectCollectionReprBuilder(resourceContext, objectAdapter, otma);
+    public static class Factory extends ReprRendererFactoryAbstract {
+
+        public Factory() {
+            super(RepresentationType.OBJECT_COLLECTION);
+        }
+
+        @Override
+        public ReprRenderer<?,?> newRenderer(ResourceContext resourceContext, JsonRepresentation representation) {
+            return new ObjectCollectionReprRenderer(resourceContext, getRepresentationType(), representation);
+        }
     }
 
-    public ObjectCollectionReprBuilder(ResourceContext resourceContext, ObjectAdapter objectAdapter, OneToManyAssociation otma) {
-        super(resourceContext, objectAdapter, MemberType.OBJECT_COLLECTION, otma);
-
+    private ObjectCollectionReprRenderer(ResourceContext resourceContext, RepresentationType representationType, JsonRepresentation representation) {
+        super(resourceContext, representationType, representation);
+    }
+    
+    public JsonRepresentation render() {
         putId();
         putMemberType();
-    }
-
-    
-    public JsonRepresentation build() {
+        
         putDisabledReasonIfDisabled();
         
         JsonRepresentation extensions = JsonRepresentation.newMap();
@@ -67,7 +77,7 @@ public class ObjectCollectionReprBuilder extends AbstractObjectMemberReprBuilder
     /////////////////////////////////////////////////////
 
     @Override
-    public ObjectCollectionReprBuilder withMutatorsIfEnabled() {
+    public ObjectCollectionReprRenderer withMutatorsIfEnabled() {
         if(usability().isVetoed()) {
             return cast(this);
         }
@@ -81,7 +91,7 @@ public class ObjectCollectionReprBuilder extends AbstractObjectMemberReprBuilder
                         linkToBuilder.linkToMember(mutator, memberType, objectMember, mutatorSpec.suffix)
                         .withHttpMethod(mutatorSpec.httpMethod)
                         .withArguments(arguments)
-                        .build();
+                        .render();
                 representation.mapPut(mutator, detailsLink);
             }
         }
@@ -112,9 +122,9 @@ public class ObjectCollectionReprBuilder extends AbstractObjectMemberReprBuilder
         List<JsonRepresentation> list = Lists.newArrayList();
         for (final ObjectAdapter elementAdapter : facet.iterable(valueAdapter)) {
 
-            LinkReprBuilder newBuilder = DomainObjectReprBuilder.newLinkToBuilder(resourceContext, "object", elementAdapter);
+            LinkReprBuilder newBuilder = DomainObjectReprRenderer.newLinkToBuilder(resourceContext, "object", elementAdapter);
 
-			list.add(newBuilder.build());
+			list.add(newBuilder.render());
         }
         
         return list;
@@ -130,11 +140,11 @@ public class ObjectCollectionReprBuilder extends AbstractObjectMemberReprBuilder
     }
 
     private void addLinksFormalDomainModel(JsonRepresentation links, ResourceContext resourceContext) {
-        links.arrayAdd(TypeCollectionReprBuilder.newLinkToBuilder(resourceContext, "typeCollection", objectAdapter.getSpecification(), objectMember).build());
+        links.arrayAdd(TypeCollectionReprBuilder.newLinkToBuilder(resourceContext, "typeCollection", objectAdapter.getSpecification(), objectMember).render());
     }
 
     private void addLinksIsisProprietary(JsonRepresentation links, ResourceContext resourceContext) {
-        links.arrayAdd(DomainTypeReprBuilder.newLinkToBuilder(resourceContext, "domainType", objectAdapter.getSpecification()).build());
+        links.arrayAdd(DomainTypeReprBuilder.newLinkToBuilder(resourceContext, "domainType", objectAdapter.getSpecification()).render());
     }
 
 

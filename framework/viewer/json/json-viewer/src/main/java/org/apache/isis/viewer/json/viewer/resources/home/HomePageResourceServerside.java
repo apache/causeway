@@ -18,7 +18,6 @@
  */
 package org.apache.isis.viewer.json.viewer.resources.home;
 
-import java.util.List;
 
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -28,14 +27,9 @@ import javax.ws.rs.core.Response;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.applib.RepresentationType;
 import org.apache.isis.viewer.json.applib.RestfulMediaType;
-import org.apache.isis.viewer.json.applib.RestfulRequest.QueryParameter;
 import org.apache.isis.viewer.json.applib.homepage.HomePageResource;
-import org.apache.isis.viewer.json.viewer.representations.LinkReprBuilder;
-import org.apache.isis.viewer.json.viewer.representations.ReprBuilder;
+import org.apache.isis.viewer.json.viewer.representations.RendererFactory;
 import org.apache.isis.viewer.json.viewer.resources.ResourceAbstract;
-import org.apache.isis.viewer.json.viewer.resources.domainobjects.DomainServiceResourceHelper;
-import org.apache.isis.viewer.json.viewer.resources.user.UserReprBuilder;
-import org.apache.isis.viewer.json.viewer.resources.user.UserResourceHelper;
 
 /**
  * Implementation note: it seems to be necessary to annotate the implementation with {@link Path} rather than the
@@ -43,60 +37,18 @@ import org.apache.isis.viewer.json.viewer.resources.user.UserResourceHelper;
  */
 public class HomePageResourceServerside extends ResourceAbstract implements HomePageResource {
 
-
     @Override
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_HOME_PAGE} )
     public Response resources() {
         init();
         
-        JsonRepresentation representation = JsonRepresentation.newMap();
-        
-        // self
-        representation.mapPut("self", LinkReprBuilder.newBuilder(getResourceContext(), "self", "").build());
+        final RendererFactory factory = rendererFactoryRegistry.find(RepresentationType.HOME_PAGE);
+        final HomePageReprRenderer renderer = 
+                (HomePageReprRenderer) factory.newRenderer(getResourceContext(), JsonRepresentation.newMap());
+        renderer.includesSelf();
 
-        // user
-        putLinkToUser(representation);
-
-        // services
-        putLinkToServices(representation);
-        
-        // capabilities
-        representation.mapPut("capabilities", LinkReprBuilder.newBuilder(getResourceContext(), "capabilities", "capabilities").build());
-
-        //
-        representation.mapPut("links", JsonRepresentation.newArray());
-        representation.mapPut("extensions", JsonRepresentation.newMap());
-
-        return responseOfOk(RepresentationType.HOME_PAGE, Caching.ONE_DAY, representation).build();
+        return responseOfOk(RepresentationType.HOME_PAGE, Caching.ONE_DAY, renderer).build();
     }
-
-    private void putLinkToServices(JsonRepresentation representation) {
-
-        final LinkReprBuilder servicesLinkBuilder = LinkReprBuilder.newBuilder(getResourceContext(), "services", "services");
-        
-        final List<String> followLinks = getResourceContext().getArg(QueryParameter.FOLLOW_LINKS);
-        if(followLinks.contains("services")) {
-            final ReprBuilder reprBuilder = 
-                    new DomainServiceResourceHelper(getResourceContext()).services();
-            servicesLinkBuilder.withValue(reprBuilder.build());
-        }
-        
-        representation.mapPut("services", servicesLinkBuilder.build());
-    }
-
-    private void putLinkToUser(JsonRepresentation representation) {
-        final LinkReprBuilder userLinkBuilder = LinkReprBuilder.newBuilder(getResourceContext(), "user", "user");
-        
-        final List<String> followLinks = getResourceContext().getArg(QueryParameter.FOLLOW_LINKS);
-        if(followLinks.contains("user")) {
-            final ReprBuilder reprBuilder = 
-                    new UserResourceHelper(getResourceContext()).user();
-            userLinkBuilder.withValue(reprBuilder.build());
-        }
-        
-        representation.mapPut("user", userLinkBuilder.build());
-    }
-
 
 
 }

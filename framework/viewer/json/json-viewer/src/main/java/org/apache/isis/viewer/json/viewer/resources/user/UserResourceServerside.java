@@ -22,11 +22,11 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.apache.isis.core.commons.authentication.AuthenticationSession;
+import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.applib.RepresentationType;
 import org.apache.isis.viewer.json.applib.RestfulMediaType;
 import org.apache.isis.viewer.json.applib.user.UserResource;
-import org.apache.isis.viewer.json.viewer.representations.TypedReprBuilderFactory;
+import org.apache.isis.viewer.json.viewer.representations.RendererFactory;
 import org.apache.isis.viewer.json.viewer.resources.ResourceAbstract;
 
 public class UserResourceServerside extends ResourceAbstract implements UserResource {
@@ -36,12 +36,13 @@ public class UserResourceServerside extends ResourceAbstract implements UserReso
     public Response user() {
         init();
 
-        final TypedReprBuilderFactory factory = builderFactoryRegistry.find(RepresentationType.USER);
-        final UserReprBuilder reprBuilder = 
-                (UserReprBuilder) factory.newBuilder(getResourceContext());
-        reprBuilder.with(getAuthenticationSession());
+        final RendererFactory factory = rendererFactoryRegistry.find(RepresentationType.USER);
+        final UserReprRenderer renderer = 
+                (UserReprRenderer) factory.newRenderer(getResourceContext(), JsonRepresentation.newMap());
+        renderer.includesSelf()
+                .with(getAuthenticationSession());
 
-        return responseOfOk(RepresentationType.USER, Caching.ONE_HOUR, reprBuilder.build()).build();
+        return responseOfOk(RepresentationType.USER, Caching.ONE_HOUR, renderer.render()).build();
     }
 
 

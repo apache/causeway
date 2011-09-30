@@ -1,13 +1,12 @@
 package org.apache.isis.viewer.json.viewer.representations;
 
 import org.apache.isis.viewer.json.applib.RepresentationType;
-import org.apache.isis.viewer.json.viewer.ResourceContext;
 
-public abstract class TypedReprBuilderFactoryAbstract implements TypedReprBuilderFactory {
+public abstract class ReprRendererFactoryAbstract implements RendererFactory {
 
     private final RepresentationType representationType;
 
-    public TypedReprBuilderFactoryAbstract(RepresentationType representationType) {
+    public ReprRendererFactoryAbstract(RepresentationType representationType) {
         this.representationType = representationType;
     }
     

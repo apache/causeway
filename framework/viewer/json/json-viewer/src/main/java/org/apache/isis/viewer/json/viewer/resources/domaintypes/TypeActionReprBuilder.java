@@ -41,7 +41,7 @@ public class TypeActionReprBuilder extends AbstractTypeMemberReprBuilder<TypeAct
     }
 
 
-    public JsonRepresentation build() {
+    public JsonRepresentation render() {
         return representation;
     }
 
