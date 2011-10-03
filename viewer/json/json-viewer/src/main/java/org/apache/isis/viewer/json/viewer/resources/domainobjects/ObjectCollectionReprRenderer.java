@@ -29,8 +29,8 @@ import org.apache.isis.viewer.json.viewer.ResourceContext;
 import org.apache.isis.viewer.json.viewer.representations.LinkReprBuilder;
 import org.apache.isis.viewer.json.viewer.representations.ReprRenderer;
 import org.apache.isis.viewer.json.viewer.representations.ReprRendererFactoryAbstract;
-import org.apache.isis.viewer.json.viewer.resources.domaintypes.DomainTypeReprBuilder;
-import org.apache.isis.viewer.json.viewer.resources.domaintypes.TypeCollectionReprBuilder;
+import org.apache.isis.viewer.json.viewer.resources.domaintypes.DomainTypeReprRenderer;
+import org.apache.isis.viewer.json.viewer.resources.domaintypes.TypeCollectionReprRenderer;
 
 import com.google.common.collect.Lists;
 
@@ -140,11 +140,11 @@ public class ObjectCollectionReprRenderer extends AbstractObjectMemberReprRender
     }
 
     private void addLinksFormalDomainModel(JsonRepresentation links, ResourceContext resourceContext) {
-        links.arrayAdd(TypeCollectionReprBuilder.newLinkToBuilder(resourceContext, "typeCollection", objectAdapter.getSpecification(), objectMember).render());
+        links.arrayAdd(TypeCollectionReprRenderer.newLinkToBuilder(resourceContext, "typeCollection", objectAdapter.getSpecification(), objectMember).render());
     }
 
     private void addLinksIsisProprietary(JsonRepresentation links, ResourceContext resourceContext) {
-        links.arrayAdd(DomainTypeReprBuilder.newLinkToBuilder(resourceContext, "domainType", objectAdapter.getSpecification()).render());
+        links.arrayAdd(DomainTypeReprRenderer.newLinkToBuilder(resourceContext, "domainType", objectAdapter.getSpecification()).render());
     }
 
 

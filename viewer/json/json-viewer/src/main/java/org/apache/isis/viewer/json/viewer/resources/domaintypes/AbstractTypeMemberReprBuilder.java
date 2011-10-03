@@ -18,22 +18,53 @@ package org.apache.isis.viewer.json.viewer.resources.domaintypes;
 
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
+import org.apache.isis.viewer.json.applib.JsonRepresentation;
+import org.apache.isis.viewer.json.applib.RepresentationType;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
-import org.apache.isis.viewer.json.viewer.representations.ReprBuilderAbstract;
+import org.apache.isis.viewer.json.viewer.representations.LinkReprBuilder;
+import org.apache.isis.viewer.json.viewer.representations.ReprRendererAbstract;
 import org.apache.isis.viewer.json.viewer.resources.domainobjects.MemberType;
 
-public abstract class AbstractTypeMemberReprBuilder<R extends ReprBuilderAbstract<R>, T extends ObjectMember> extends ReprBuilderAbstract<R> {
+public abstract class AbstractTypeMemberReprBuilder<R extends ReprRendererAbstract<R, SpecAndMember<T>>, T extends ObjectMember> extends ReprRendererAbstract<R, SpecAndMember<T>> {
 
-    protected final ObjectSpecification objectSpecification;
-    protected final MemberType memberType;
-    protected final T objectMember;
+    protected ObjectSpecification objectSpecification;
+    protected MemberType memberType;
+    protected T objectMember;
 
-    public AbstractTypeMemberReprBuilder(ResourceContext resourceContext, ObjectSpecification objectSpecification, MemberType memberType, T objectMember) {
-        super(resourceContext);
-        this.objectSpecification = objectSpecification;
-        this.memberType = memberType;
-        this.objectMember = objectMember;
+    public AbstractTypeMemberReprBuilder(ResourceContext resourceContext, RepresentationType representationType, JsonRepresentation representation) {
+        super(resourceContext, representationType, representation);
     }
 
+    public ObjectSpecification getObjectSpecification() {
+        return objectSpecification;
+    }
     
+    public T getObjectMember() {
+        return objectMember;
+    }
+
+    public MemberType getMemberType() {
+        return memberType;
+    }
+    
+    @Override
+    public R with(SpecAndMember<T> specAndMember) {
+        objectSpecification = specAndMember.getObjectSpecification();
+        objectMember = specAndMember.getObjectMember();
+        memberType = MemberType.determineFrom(objectMember);
+        return cast(this);
+    }
+    
+    
+    protected void includeSelfIfRequired() {
+        if(!includesSelf) {
+            return;
+        } 
+        
+        representation.mapPut("self", 
+            LinkReprBuilder.newBuilder(getResourceContext(), "self", getRepresentationType(), "domainTypes/%s/%s/%s", 
+                    getObjectSpecification().getFullIdentifier(), getMemberType().getUrlPart(), getObjectMember().getId()).render());
+    }
+
+
 }

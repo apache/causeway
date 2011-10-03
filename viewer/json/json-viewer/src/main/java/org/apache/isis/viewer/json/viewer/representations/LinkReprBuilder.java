@@ -16,27 +16,36 @@
  */
 package org.apache.isis.viewer.json.viewer.representations;
 
+import javax.ws.rs.core.MediaType;
+
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
+import org.apache.isis.viewer.json.applib.RepresentationType;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
 
 public class LinkReprBuilder extends ReprBuilderAbstract<LinkReprBuilder> {
 
-    public static LinkReprBuilder newBuilder(ResourceContext resourceContext, String rel, String hrefFormat, Object... args) {
-        return new LinkReprBuilder(resourceContext, rel, String.format(hrefFormat, args));
+    public static LinkReprBuilder newBuilder(ResourceContext resourceContext, String rel, RepresentationType representationType, String hrefFormat, Object... hrefArgs) {
+        return newBuilder(resourceContext, rel, representationType.getMediaType(), hrefFormat, hrefArgs);
+    }
+
+    public static LinkReprBuilder newBuilder(ResourceContext resourceContext, String rel, MediaType mediaType, String hrefFormat, Object... hrefArgs) {
+        return new LinkReprBuilder(resourceContext, rel, String.format(hrefFormat, hrefArgs), mediaType);
     }
 
 	private final String rel;
     private final String href;
+    private final MediaType mediaType;
     
     private HttpMethod method = HttpMethod.GET;
     private String title;
     private JsonRepresentation arguments;
     private JsonRepresentation value;
     
-    protected LinkReprBuilder(ResourceContext resourceContext, String rel, String href) {
+    protected LinkReprBuilder(ResourceContext resourceContext, String rel, String href, MediaType mediaType) {
         super(resourceContext);
         this.rel = rel;
         this.href = href;
+        this.mediaType = mediaType;
     }
     public LinkReprBuilder withHttpMethod(HttpMethod method) {
         this.method = method;
@@ -59,6 +68,7 @@ public class LinkReprBuilder extends ReprBuilderAbstract<LinkReprBuilder> {
         representation.mapPut("rel", rel);
         representation.mapPut("href", resourceContext.urlFor(href));
         representation.mapPut("method", method);
+        representation.mapPut("type", mediaType.toString());
         representation.mapPut("title", title);
         representation.mapPut("arguments", arguments);
         representation.mapPut("value", value);

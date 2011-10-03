@@ -43,13 +43,6 @@ public abstract class ReprBuilderAbstract<T extends ReprBuilderAbstract<T>> impl
         return resourceContext;
     }
 
-    public T withSelf(String href) {
-        if(href != null) {
-            representation.mapPut("self", LinkReprBuilder.newBuilder(resourceContext, "self", href).render());
-        }
-        return cast(this);
-    }
-
     public ReprBuilderAbstract<T> withLinks() {
         return withLinks(JsonRepresentation.newArray());
     }
