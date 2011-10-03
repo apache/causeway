@@ -31,6 +31,7 @@ import org.apache.isis.core.progmodel.facets.actions.validate.ActionValidationFa
 import org.apache.isis.core.progmodel.facets.collections.validate.CollectionValidateAddToFacet;
 import org.apache.isis.core.progmodel.facets.collections.validate.CollectionValidateRemoveFromFacet;
 import org.apache.isis.core.progmodel.facets.properties.validate.PropertyValidateFacet;
+import org.apache.isis.viewer.json.applib.RepresentationType;
 import org.apache.isis.viewer.json.applib.util.Enums;
 import org.apache.isis.viewer.json.viewer.representations.HttpMethod;
 
@@ -38,7 +39,7 @@ import com.google.common.collect.ImmutableMap;
 
 public enum MemberType {
 
-    OBJECT_PROPERTY("properties/", "propertyId", "propertyDetails", 
+    OBJECT_PROPERTY("properties/", "propertyId", "propertyDetails", RepresentationType.OBJECT_PROPERTY, 
             ImmutableMap.of(
                 "modify", MutatorSpec.of(PropertyValidateFacet.class, PropertySetterFacet.class, HttpMethod.PUT, BodyArgs.ONE),
                 "clear", MutatorSpec.of(PropertyValidateFacet.class, PropertyClearFacet.class, HttpMethod.DELETE, BodyArgs.NONE)
@@ -51,7 +52,7 @@ public enum MemberType {
     /**
      * {@link #getMutators()} are keyed by {@link CollectionSemantics#getAddToKey()}
      */
-    OBJECT_COLLECTION("collections/", "collectionId", "collectionDetails", 
+    OBJECT_COLLECTION("collections/", "collectionId", "collectionDetails", RepresentationType.OBJECT_COLLECTION, 
             ImmutableMap.of(
                 "addToSet", MutatorSpec.of(CollectionValidateAddToFacet.class, CollectionAddToFacet.class, HttpMethod.PUT, BodyArgs.ONE),
                 "addToList", MutatorSpec.of(CollectionValidateAddToFacet.class, CollectionAddToFacet.class, HttpMethod.POST, BodyArgs.ONE),
@@ -65,7 +66,7 @@ public enum MemberType {
     /**
      * {@link #getMutators()} are keyed by {@link ActionSemantics#getInvokeKey()}
      */
-    OBJECT_ACTION("actions/", "actionId", "actionDetails",
+    OBJECT_ACTION("actions/", "actionId", "actionDetails", RepresentationType.OBJECT_ACTION,
             ImmutableMap.of(
                 "invokeQueryOnly", MutatorSpec.of(ActionValidationFacet.class, ActionInvocationFacet.class, HttpMethod.GET, BodyArgs.MANY, "invoke"),
                 "invokeIdempotent", MutatorSpec.of(ActionValidationFacet.class, ActionInvocationFacet.class, HttpMethod.PUT, BodyArgs.MANY, "invoke"),
@@ -78,17 +79,20 @@ public enum MemberType {
         }
     };
 
-    private final Map<String, MutatorSpec> mutators;
-    
     private final String urlPart;
+    private final String jsProp;
     private final String detailsRel;
     private final String name;
-    private final String jsProp;
+    private final RepresentationType representationType;
+
+    private final Map<String, MutatorSpec> mutators;
     
-    private MemberType(String urlPart, String jsProp, String detailsRel, Map<String, MutatorSpec> mutators) {
+
+    private MemberType(String urlPart, String jsProp, String detailsRel, RepresentationType representationType, Map<String, MutatorSpec> mutators) {
         this.urlPart = urlPart;
         this.jsProp = jsProp;
         this.detailsRel = detailsRel;
+        this.representationType = representationType;
         this.mutators = mutators;
         name = Enums.enumToCamelCase(this);
     }
@@ -97,7 +101,7 @@ public enum MemberType {
         return jsProp;
     }
 
-    public String urlPart() {
+    public String getUrlPart() {
         return urlPart;
     }
     
@@ -136,6 +140,10 @@ public enum MemberType {
 						OBJECT_COLLECTION;
 	}
 
+    public RepresentationType getRepresentationType() {
+        return representationType;
+    }
+
     public String getDetailsRel() {
         return detailsRel;
     }
@@ -153,6 +161,7 @@ public enum MemberType {
         }
         return MemberType.OBJECT_COLLECTION;
     }
+
 
 
 }

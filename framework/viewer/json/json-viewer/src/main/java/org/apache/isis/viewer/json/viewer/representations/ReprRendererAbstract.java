@@ -21,6 +21,13 @@ public abstract class ReprRendererAbstract<R extends ReprRendererAbstract<R, T>,
         return (R) this;
     }
 
+    public R withSelf(String href) {
+        if(href != null) {
+            representation.mapPut("self", LinkReprBuilder.newBuilder(resourceContext, "self", representationType, href).render());
+        }
+        return cast(this);
+    }
+
     @Override
     public RepresentationType getRepresentationType() {
         return representationType;

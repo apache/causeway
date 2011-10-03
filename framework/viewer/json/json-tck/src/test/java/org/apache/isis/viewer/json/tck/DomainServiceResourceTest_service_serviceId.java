@@ -129,12 +129,12 @@ public class DomainServiceResourceTest_service_serviceId {
     }
 
     @Test
-    public void links_noIcons() throws Exception {
+    public void links() throws Exception {
         // given, when
         DomainObjectRepresentation repr = givenRepresentation("simples");
 
         // then
-        assertThat(repr.getLinks().arraySize(), is(0));
+        assertThat(repr.getLinks().arraySize(), is(1));
     }
     
 

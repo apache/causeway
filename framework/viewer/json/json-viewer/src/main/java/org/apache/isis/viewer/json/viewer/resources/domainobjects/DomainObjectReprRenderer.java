@@ -18,6 +18,8 @@ package org.apache.isis.viewer.json.viewer.resources.domainobjects;
 
 import java.util.List;
 
+import javax.ws.rs.core.MediaType;
+
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
@@ -39,6 +41,7 @@ import org.apache.isis.viewer.json.viewer.representations.RendererFactoryRegistr
 import org.apache.isis.viewer.json.viewer.representations.ReprRenderer;
 import org.apache.isis.viewer.json.viewer.representations.ReprRendererAbstract;
 import org.apache.isis.viewer.json.viewer.representations.ReprRendererFactoryAbstract;
+import org.apache.isis.viewer.json.viewer.resources.domaintypes.DomainTypeReprRenderer;
 import org.apache.isis.viewer.json.viewer.util.OidUtils;
 
 import com.google.common.base.Function;
@@ -60,10 +63,11 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
     public static LinkReprBuilder newLinkToBuilder(ResourceContext resourceContext, String rel, ObjectAdapter elementAdapter) {
         String oidStr = resourceContext.getOidStringifier().enString(elementAdapter.getOid());
         String url = "objects/" + oidStr;
-        return LinkReprBuilder.newBuilder(resourceContext, rel, url);
+        return LinkReprBuilder.newBuilder(resourceContext, rel, RepresentationType.DOMAIN_OBJECT, url);
     }
 
     private ObjectAdapterLinkToBuilder linkToBuilder;
+    private ObjectAdapter objectAdapter;
 
     private DomainObjectReprRenderer(ResourceContext resourceContext, RepresentationType representationType, JsonRepresentation representation) {
         super(resourceContext, representationType, representation);
@@ -80,17 +84,38 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
     }
 
     public DomainObjectReprRenderer with(ObjectAdapter objectAdapter) {
+        this.objectAdapter = objectAdapter;
+        return this;
+    }
+
+    public JsonRepresentation render() {
+
+        // self
         if(includesSelf) {
             JsonRepresentation self = linkToBuilder.with(objectAdapter).linkToAdapter().render();
             representation.mapPut("self", self);
         }
 
+        // title
         String title = objectAdapter.titleString();
         representation.mapPut("oid", OidUtils.getOidStr(resourceContext, objectAdapter));
         representation.mapPut("title", title);
+        
+        // members
         withMembers(objectAdapter);
-        return this;
+
+        // links
+        final JsonRepresentation links = JsonRepresentation.newArray();
+        links.arrayAdd(
+                DomainTypeReprRenderer.newLinkToBuilder(getResourceContext(), "domainType", objectAdapter.getSpecification()).render());
+        withLinks(links);
+        
+        // extensions
+        withExtensions();
+        
+        return representation;
     }
+
 
     private DomainObjectReprRenderer withMembers(ObjectAdapter objectAdapter) {
         JsonRepresentation members = JsonRepresentation.newArray();
@@ -139,19 +164,19 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
     }
 
     private void addActions(final ObjectAdapter objectAdapter,
-			List<ObjectAction> actions, JsonRepresentation members) {
-		for (ObjectAction action : actions) {
+            List<ObjectAction> actions, JsonRepresentation members) {
+        for (ObjectAction action : actions) {
             Consent visibility = action.isVisible(getSession(), objectAdapter);
             if(!visibility.isAllowed()) {
                 continue;
             } 
-        	if(action.getType().isSet()) {
-        		ObjectActionSet objectActionSet = (ObjectActionSet) action;
-        		List<ObjectAction> subactions = objectActionSet.getActions();
-        		addActions(objectAdapter, subactions, members);
+            if(action.getType().isSet()) {
+                ObjectActionSet objectActionSet = (ObjectActionSet) action;
+                List<ObjectAction> subactions = objectActionSet.getActions();
+                addActions(objectAdapter, subactions, members);
 
-        	} else {
-        	    
+            } else {
+                
                 RendererFactory factory = RendererFactoryRegistry.instance.find(RepresentationType.OBJECT_ACTION);
                 final ObjectActionReprRenderer renderer = 
                         (ObjectActionReprRenderer) factory.newRenderer(getResourceContext(), JsonRepresentation.newMap());
@@ -161,17 +186,11 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
                         .withDetailsLink();
 
                 members.arrayAdd(renderer.render());
-        	}
+            }
         }
-	}
-
-    public JsonRepresentation render() {
-        withLinks();
-        withExtensions();
-        return representation;
     }
 
-    
+
     /////////////////////////////////////////////////////////////////////
     //
     /////////////////////////////////////////////////////////////////////

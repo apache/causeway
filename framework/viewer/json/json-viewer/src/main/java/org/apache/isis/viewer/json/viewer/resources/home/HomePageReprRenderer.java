@@ -2,6 +2,8 @@ package org.apache.isis.viewer.json.viewer.resources.home;
 
 import java.util.List;
 
+import javax.ws.rs.core.MediaType;
+
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.applib.RepresentationType;
@@ -54,7 +56,7 @@ public class HomePageReprRenderer extends ReprRendererAbstract<HomePageReprRende
         putLinkToServices(representation);
         
         // capabilities
-        representation.mapPut("capabilities", LinkReprBuilder.newBuilder(getResourceContext(), "capabilities", "capabilities").render());
+        putLinkToCapabilities(representation);
 
         // links and extensions
         representation.mapPut("links", JsonRepresentation.newArray());
@@ -63,9 +65,15 @@ public class HomePageReprRenderer extends ReprRendererAbstract<HomePageReprRende
         return representation;
     }
 
+    private void putLinkToCapabilities(final JsonRepresentation representation) {
+        representation.mapPut("capabilities", 
+                LinkReprBuilder.newBuilder(getResourceContext(), "capabilities", RepresentationType.CAPABILITIES, "capabilities").render());
+    }
+
     private void putLinkToServices(JsonRepresentation representation) {
 
-        final LinkReprBuilder servicesLinkBuilder = LinkReprBuilder.newBuilder(getResourceContext(), "services", "services");
+        final LinkReprBuilder servicesLinkBuilder = 
+                LinkReprBuilder.newBuilder(getResourceContext(), "services", RepresentationType.LIST, "services");
         
         final List<String> followLinks = getResourceContext().getArg(QueryParameter.FOLLOW_LINKS);
         if(followLinks.contains("services")) {
@@ -86,7 +94,8 @@ public class HomePageReprRenderer extends ReprRendererAbstract<HomePageReprRende
     }
 
     private void putLinkToUser(JsonRepresentation representation) {
-        final LinkReprBuilder userLinkBuilder = LinkReprBuilder.newBuilder(getResourceContext(), "user", "user");
+        final LinkReprBuilder userLinkBuilder = 
+                LinkReprBuilder.newBuilder(getResourceContext(), "user", RepresentationType.USER, "user");
         
         final List<String> followLinks = getResourceContext().getArg(QueryParameter.FOLLOW_LINKS);
         if(followLinks.contains("user")) {

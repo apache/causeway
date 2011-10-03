@@ -19,28 +19,46 @@ package org.apache.isis.viewer.json.viewer.resources.domaintypes;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
+import org.apache.isis.viewer.json.applib.RepresentationType;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
 import org.apache.isis.viewer.json.viewer.representations.LinkReprBuilder;
-import org.apache.isis.viewer.json.viewer.resources.domainobjects.MemberType;
+import org.apache.isis.viewer.json.viewer.representations.ReprRenderer;
+import org.apache.isis.viewer.json.viewer.representations.ReprRendererFactoryAbstract;
 
-public class TypePropertyReprBuilder extends AbstractTypeMemberReprBuilder<TypePropertyReprBuilder, OneToOneAssociation> {
+public class TypePropertyReprRenderer extends AbstractTypeMemberReprBuilder<TypePropertyReprRenderer, OneToOneAssociation> {
 
-    public static TypePropertyReprBuilder newBuilder(ResourceContext representationContext, ObjectSpecification objectSpecification, OneToOneAssociation property) {
-        return new TypePropertyReprBuilder(representationContext, objectSpecification, property);
+    public static class Factory extends ReprRendererFactoryAbstract {
+
+        public Factory() {
+            super(RepresentationType.TYPE_PROPERTY);
+        }
+
+        @Override
+        public ReprRenderer<?,?> newRenderer(ResourceContext resourceContext, JsonRepresentation representation) {
+            return new TypePropertyReprRenderer(resourceContext, getRepresentationType(), representation);
+        }
     }
 
     public static LinkReprBuilder newLinkToBuilder(ResourceContext resourceContext, String rel, ObjectSpecification objectSpecification, OneToOneAssociation property) {
         String typeFullName = objectSpecification.getFullIdentifier();
         String propertyId = property.getId();
         String url = "domainTypes/" + typeFullName + "/properties/" + propertyId;
-        return LinkReprBuilder.newBuilder(resourceContext, rel, url);
+        return LinkReprBuilder.newBuilder(resourceContext, rel, RepresentationType.TYPE_PROPERTY, url);
     }
 
-    public TypePropertyReprBuilder(ResourceContext resourceContext, ObjectSpecification objectSpecification, OneToOneAssociation property) {
-        super(resourceContext, objectSpecification, MemberType.OBJECT_COLLECTION, property);
+    public TypePropertyReprRenderer(ResourceContext resourceContext, RepresentationType representationType, JsonRepresentation representation) {
+        super(resourceContext, representationType, representation);
     }
 
     public JsonRepresentation render() {
+        
+        // self
+        includeSelfIfRequired();
+
+        // links and extensions
+        representation.mapPut("links", JsonRepresentation.newArray());
+        representation.mapPut("extensions", JsonRepresentation.newMap());
+
         return representation;
     }
 

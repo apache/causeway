@@ -19,28 +19,45 @@ package org.apache.isis.viewer.json.viewer.resources.domaintypes;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
+import org.apache.isis.viewer.json.applib.RepresentationType;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
 import org.apache.isis.viewer.json.viewer.representations.LinkReprBuilder;
-import org.apache.isis.viewer.json.viewer.resources.domainobjects.MemberType;
+import org.apache.isis.viewer.json.viewer.representations.ReprRenderer;
+import org.apache.isis.viewer.json.viewer.representations.ReprRendererFactoryAbstract;
 
-public class TypeCollectionReprBuilder extends AbstractTypeMemberReprBuilder<TypeCollectionReprBuilder, OneToManyAssociation> {
+public class TypeCollectionReprRenderer extends AbstractTypeMemberReprBuilder<TypeCollectionReprRenderer, OneToManyAssociation> {
 
-    public static TypeCollectionReprBuilder newBuilder(ResourceContext representationContext, ObjectSpecification objectSpecification, OneToManyAssociation collection) {
-        return new TypeCollectionReprBuilder(representationContext, objectSpecification, collection);
+    public static class Factory extends ReprRendererFactoryAbstract {
+
+        public Factory() {
+            super(RepresentationType.TYPE_COLLECTION);
+        }
+
+        @Override
+        public ReprRenderer<?,?> newRenderer(ResourceContext resourceContext, JsonRepresentation representation) {
+            return new TypeCollectionReprRenderer(resourceContext, getRepresentationType(), representation);
+        }
     }
 
     public static LinkReprBuilder newLinkToBuilder(ResourceContext resourceContext, String rel, ObjectSpecification objectSpecification, OneToManyAssociation collection) {
         String typeFullName = objectSpecification.getFullIdentifier();
         String collectionId = collection.getId();
         String url = "domainTypes/" + typeFullName + "/collections/" + collectionId;
-        return LinkReprBuilder.newBuilder(resourceContext, rel, url);
+        return LinkReprBuilder.newBuilder(resourceContext, rel, RepresentationType.TYPE_COLLECTION, url);
     }
 
-    public TypeCollectionReprBuilder(ResourceContext resourceContext, ObjectSpecification objectSpecification, OneToManyAssociation collection) {
-        super(resourceContext, objectSpecification, MemberType.OBJECT_COLLECTION, collection);
+    public TypeCollectionReprRenderer(ResourceContext resourceContext, RepresentationType representationType, JsonRepresentation representation) {
+        super(resourceContext, representationType, representation);
     }
 
     public JsonRepresentation render() {
+
+        includeSelfIfRequired();
+
+        // links and extensions
+        representation.mapPut("links", JsonRepresentation.newArray());
+        representation.mapPut("extensions", JsonRepresentation.newMap());
+
         return representation;
     }
 

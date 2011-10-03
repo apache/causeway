@@ -28,12 +28,18 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
+import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.applib.RepresentationType;
 import org.apache.isis.viewer.json.applib.RestfulMediaType;
+import org.apache.isis.viewer.json.applib.RestfulResponse.HttpStatusCode;
 import org.apache.isis.viewer.json.applib.domaintypes.DomainTypeResource;
+import org.apache.isis.viewer.json.viewer.JsonApplicationException;
 import org.apache.isis.viewer.json.viewer.representations.LinkReprBuilder;
+import org.apache.isis.viewer.json.viewer.representations.RendererFactory;
 import org.apache.isis.viewer.json.viewer.resources.ResourceAbstract;
+import org.apache.isis.viewer.json.viewer.resources.domainobjects.DomainObjectReprRenderer;
 
 /**
  * Implementation note: it seems to be necessary to annotate the implementation with {@link Path} rather than the
@@ -49,19 +55,16 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
     public Response domainTypes() {
         init();
 
-        JsonRepresentation representation = JsonRepresentation.newMap();
-        representation.mapPut("self", LinkReprBuilder.newBuilder(getResourceContext(), "self", "domainTypes").render());
-        
-        JsonRepresentation specList = JsonRepresentation.newArray();
         final Collection<ObjectSpecification> allSpecifications = getSpecificationLoader().allSpecifications();
-        for (ObjectSpecification objectSpec : allSpecifications) {
-            final LinkReprBuilder linkBuilder = LinkReprBuilder.newBuilder(getResourceContext(), "domainType", "domainTypes/%s", objectSpec.getFullIdentifier());
-            specList.arrayAdd(linkBuilder.render());
-        }
+
+        final RendererFactory rendererFactory = 
+                rendererFactoryRegistry.find(RepresentationType.DOMAIN_TYPES);
         
-        representation.mapPut("domainTypes", specList);
+        final DomainTypesReprRenderer renderer = 
+                (DomainTypesReprRenderer) rendererFactory.newRenderer(getResourceContext(), JsonRepresentation.newMap());
+        renderer.with(allSpecifications).includesSelf();
         
-        return responseOfOk(RepresentationType.DOMAIN_TYPE, Caching.ONE_DAY, representation).build();
+        return responseOfOk(Caching.ONE_DAY, renderer).build();
     }
 
     
@@ -71,10 +74,16 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
     public Response domainType(@PathParam("domainType") final String domainType){
         init();
 
-        JsonRepresentation representation = JsonRepresentation.newMap();
-        representation.mapPut("self", LinkReprBuilder.newBuilder(getResourceContext(), "self", "domainTypes/%s", domainType).render());
-        
-        return responseOfOk(RepresentationType.DOMAIN_TYPE, Caching.ONE_DAY, representation).build();
+        final ObjectSpecification objectSpec = getSpecificationLoader().loadSpecification(domainType);
+
+        final RendererFactory rendererFactory = 
+                rendererFactoryRegistry.find(RepresentationType.DOMAIN_TYPE);
+
+        final DomainTypeReprRenderer renderer = 
+                (DomainTypeReprRenderer) rendererFactory.newRenderer(getResourceContext(), JsonRepresentation.newMap());
+        renderer.with(objectSpec).includesSelf();
+
+        return responseOfOk(Caching.ONE_DAY, renderer).build();
     }
 
     @GET
@@ -85,10 +94,25 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
             @PathParam("propertyId") final String propertyId){
         init();
 
-        JsonRepresentation representation = JsonRepresentation.newMap();
-        representation.mapPut("self", LinkReprBuilder.newBuilder(getResourceContext(), "self", "domainTypes/%s/properties/%s", domainType, propertyId).render());
+        final ObjectSpecification objectSpec = getSpecificationLoader().loadSpecification(domainType);
+        if(objectSpec == null) {
+            throw JsonApplicationException.create(HttpStatusCode.NOT_FOUND);
+        }
         
-        return responseOfOk(RepresentationType.TYPE_PROPERTY, Caching.ONE_DAY, representation).build();
+        final ObjectMember objectMember = objectSpec.getAssociation(propertyId);
+        if(objectMember == null || objectMember.isOneToManyAssociation()) {
+            throw JsonApplicationException.create(HttpStatusCode.NOT_FOUND);
+        }
+        OneToOneAssociation property = (OneToOneAssociation) objectMember;
+
+        final RendererFactory rendererFactory = 
+                rendererFactoryRegistry.find(RepresentationType.TYPE_PROPERTY);
+        
+        final TypePropertyReprRenderer renderer = 
+                (TypePropertyReprRenderer) rendererFactory.newRenderer(getResourceContext(), JsonRepresentation.newMap());
+        renderer.with(new SpecAndProperty(objectSpec, property)).includesSelf();
+
+        return responseOfOk(Caching.ONE_DAY, renderer).build();
     }
 
     @GET
@@ -100,7 +124,8 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
         init();
 
         JsonRepresentation representation = JsonRepresentation.newMap();
-        representation.mapPut("self", LinkReprBuilder.newBuilder(getResourceContext(), "self", "domainType/%s/collections/%s", domainType, collectionId).render());
+        representation.mapPut("self", 
+                LinkReprBuilder.newBuilder(getResourceContext(), "self", RepresentationType.TYPE_COLLECTION, "domainType/%s/collections/%s", domainType, collectionId).render());
         
         return responseOfOk(RepresentationType.TYPE_COLLECTION, Caching.ONE_DAY, representation).build();
     }
@@ -114,7 +139,8 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
         init();
 
         JsonRepresentation representation = JsonRepresentation.newMap();
-        representation.mapPut("self", LinkReprBuilder.newBuilder(getResourceContext(), "self", "domainTypes/%s/actions/%s", domainType, actionId).render());
+        representation.mapPut("self", 
+                LinkReprBuilder.newBuilder(getResourceContext(), "self", RepresentationType.TYPE_ACTION, "domainTypes/%s/actions/%s", domainType, actionId).render());
         
         return responseOfOk(RepresentationType.TYPE_ACTION, Caching.ONE_DAY, representation).build();
     }
@@ -129,7 +155,8 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
         init();
 
         JsonRepresentation representation = JsonRepresentation.newMap();
-        representation.mapPut("self", LinkReprBuilder.newBuilder(getResourceContext(), "self", "domainTypes/%s/actions/%s/params/%s", domainType, actionId, paramName).render());
+        representation.mapPut("self", 
+                LinkReprBuilder.newBuilder(getResourceContext(), "self", RepresentationType.TYPE_ACTION_PARAMETER, "domainTypes/%s/actions/%s/params/%s", domainType, actionId, paramName).render());
         
         return responseOfOk(RepresentationType.TYPE_COLLECTION, Caching.ONE_DAY, representation).build();
     }

@@ -293,7 +293,9 @@ public class DomainResourceHelper {
     private JsonRepresentation representationWithSelfFor(final ObjectAdapter objectAdapter, final ObjectAction action) {
         JsonRepresentation representation = JsonRepresentation.newMap();
         String oid = OidUtils.getOidStr(resourceContext, objectAdapter);
-        final JsonRepresentation repBuilder = LinkReprBuilder.newBuilder(resourceContext, "self", "objects/%s/actions/%s/invoke", oid, action.getId()).render();
+        // TODO: review; can't be more specific with the media type because we don't have a media type for action/invoke
+        final JsonRepresentation repBuilder = 
+                LinkReprBuilder.newBuilder(resourceContext, "self", MediaType.APPLICATION_JSON_TYPE, "objects/%s/actions/%s/invoke", oid, action.getId()).render();
         representation.mapPut("self", repBuilder);
         return representation;
     }

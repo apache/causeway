@@ -16,32 +16,51 @@
  */
 package org.apache.isis.viewer.json.viewer.resources.domaintypes;
 
+import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
+import org.apache.isis.viewer.json.applib.RepresentationType;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
 import org.apache.isis.viewer.json.viewer.representations.LinkReprBuilder;
-import org.apache.isis.viewer.json.viewer.resources.domainobjects.MemberType;
+import org.apache.isis.viewer.json.viewer.representations.ReprRenderer;
+import org.apache.isis.viewer.json.viewer.representations.ReprRendererFactoryAbstract;
 
-public class TypeActionReprBuilder extends AbstractTypeMemberReprBuilder<TypeActionReprBuilder, ObjectAction> {
+public class TypeActionReprRenderer extends AbstractTypeMemberReprBuilder<TypeActionReprRenderer, ObjectAction> {
 
-    public static TypeActionReprBuilder newBuilder(ResourceContext representationContext, ObjectSpecification objectSpecification, ObjectAction objectAction) {
-        return new TypeActionReprBuilder(representationContext, objectSpecification, objectAction);
+    public static class Factory extends ReprRendererFactoryAbstract {
+
+        public Factory() {
+            super(RepresentationType.TYPE_ACTION);
+        }
+
+        @Override
+        public ReprRenderer<?,?> newRenderer(ResourceContext resourceContext, JsonRepresentation representation) {
+            return new TypeActionReprRenderer(resourceContext, getRepresentationType(), representation);
+        }
     }
 
     public static LinkReprBuilder newLinkToBuilder(ResourceContext resourceContext, String rel, ObjectSpecification objectSpecification, ObjectAction objectAction) {
         String typeFullName = objectSpecification.getFullIdentifier();
         String actionId = objectAction.getId();
         String url = "domainTypes/" + typeFullName + "/actions/" + actionId;
-        return LinkReprBuilder.newBuilder(resourceContext, rel, url);
+        return LinkReprBuilder.newBuilder(resourceContext, rel, RepresentationType.TYPE_ACTION, url);
     }
 
-    public TypeActionReprBuilder(ResourceContext resourceContext, ObjectSpecification objectSpecification, ObjectAction objectAction) {
-        super(resourceContext, objectSpecification, MemberType.OBJECT_ACTION, objectAction);
+    public TypeActionReprRenderer(ResourceContext resourceContext, RepresentationType representationType, JsonRepresentation representation) {
+        super(resourceContext, representationType, representation);
     }
 
 
     public JsonRepresentation render() {
+
+        // self
+        includeSelfIfRequired();
+
+        // links and extensions
+        representation.mapPut("links", JsonRepresentation.newArray());
+        representation.mapPut("extensions", JsonRepresentation.newMap());
+
         return representation;
     }
 
