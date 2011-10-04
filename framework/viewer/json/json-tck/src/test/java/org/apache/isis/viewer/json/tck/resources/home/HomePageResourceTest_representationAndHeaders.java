@@ -1,6 +1,7 @@
 package org.apache.isis.viewer.json.tck.resources.home;
 
 import static org.apache.isis.viewer.json.tck.RepresentationMatchers.assertThat;
+import static org.apache.isis.viewer.json.tck.RepresentationMatchers.hasMaxAge;
 import static org.apache.isis.viewer.json.tck.RepresentationMatchers.hasParameter;
 import static org.apache.isis.viewer.json.tck.RepresentationMatchers.hasSubType;
 import static org.apache.isis.viewer.json.tck.RepresentationMatchers.hasType;
@@ -15,12 +16,12 @@ import static org.junit.Assert.assertThat;
 
 import java.io.IOException;
 
+import javax.ws.rs.core.CacheControl;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status.Family;
 
 import org.apache.isis.runtimes.dflt.webserver.WebServer;
-import org.apache.isis.viewer.json.applib.RepresentationType;
 import org.apache.isis.viewer.json.applib.RestfulClient;
 import org.apache.isis.viewer.json.applib.RestfulResponse;
 import org.apache.isis.viewer.json.applib.RestfulResponse.Header;
@@ -59,15 +60,13 @@ public class HomePageResourceTest_representationAndHeaders {
         Response resp = resource.resources();
         
         // when
-        RestfulResponse<HomePageRepresentation> jsonResp = RestfulResponse.ofT(resp);
-        assertThat(jsonResp.getStatus().getFamily(), is(Family.SUCCESSFUL));
+        RestfulResponse<HomePageRepresentation> restfulResponse = RestfulResponse.ofT(resp);
+        assertThat(restfulResponse.getStatus().getFamily(), is(Family.SUCCESSFUL));
         
         // then
-        assertThat(jsonResp.getStatus(), is(HttpStatusCode.OK));
-        assertThat(jsonResp.getHeader(RestfulResponse.Header.CONTENT_TYPE), is(RepresentationType.HOME_PAGE.getMediaType()));
-        assertThat(jsonResp.getHeader(RestfulResponse.Header.CACHE_CONTROL).getMaxAge(), is(24*60*60));
+        assertThat(restfulResponse.getStatus(), is(HttpStatusCode.OK));
         
-        HomePageRepresentation repr = jsonResp.getEntity();
+        HomePageRepresentation repr = restfulResponse.getEntity();
         assertThat(repr, is(not(nullValue())));
         assertThat(repr.isMap(), is(true));
         
@@ -86,13 +85,17 @@ public class HomePageResourceTest_representationAndHeaders {
         Response resp = resource.resources();
         
         // when
-        RestfulResponse<HomePageRepresentation> jsonResp = RestfulResponse.ofT(resp);
-        final MediaType contentType = jsonResp.getHeader(Header.CONTENT_TYPE);
+        RestfulResponse<HomePageRepresentation> restfulResponse = RestfulResponse.ofT(resp);
         
         // then
+        final MediaType contentType = restfulResponse.getHeader(Header.CONTENT_TYPE);
         assertThat(contentType, hasType("application"));
         assertThat(contentType, hasSubType("json"));
         assertThat(contentType, hasParameter("profile", "http://restfulobjects.org/profiles/homepage"));
+        
+        // then
+        final CacheControl cacheControl = restfulResponse.getHeader(Header.CACHE_CONTROL);
+        assertThat(cacheControl, hasMaxAge(24*60*60));
     }
 
     @Test
@@ -116,8 +119,8 @@ public class HomePageResourceTest_representationAndHeaders {
     }
 
     private HomePageRepresentation givenRepresentation() throws JsonParseException, JsonMappingException, IOException {
-        RestfulResponse<HomePageRepresentation> jsonResp = RestfulResponse.ofT(resource.resources());
-        return jsonResp.getEntity();
+        RestfulResponse<HomePageRepresentation> response = RestfulResponse.ofT(resource.resources());
+        return response.getEntity();
     }
 
 }

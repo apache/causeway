@@ -1,8 +1,10 @@
 package org.apache.isis.viewer.json.applib;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.jboss.resteasy.client.ClientRequest;
@@ -66,7 +68,7 @@ public final class RestfulRequest {
 
     public static class Header<X> {
         public static Header<String> IF_MATCH = new Header<String>("If-Match", Parser.forString());
-        public static Header<List<String>> ACCEPT = new Header<List<String>>("Accept", Parser.forListOfStrings());
+        public static Header<List<MediaType>> ACCEPT = new Header<List<MediaType>>("Accept", Parser.forListOfMediaTypes());
             
         private final String name;
         private final Parser<X> parser;
@@ -94,15 +96,32 @@ public final class RestfulRequest {
         this.clientRequest = clientRequest;
     }
 
-    public <T> void header(Header<T> header, T t) {
-        header.setHeader(clientRequest, t);
-    }
 
     /**
      * Exposed primarily for testing.
      */
     public ClientRequest getClientRequest() {
         return clientRequest;
+    }
+
+    public <T> RestfulRequest withHeader(Header<T> header, T t) {
+        header.setHeader(clientRequest, t);
+        return this;
+    }
+
+    public <T> RestfulRequest withHeader(Header<List<T>> header, T... ts) {
+        header.setHeader(clientRequest, Arrays.asList(ts));
+        return this;
+    }
+
+    public <Q> RestfulRequest withArg(RestfulRequest.QueryParameter<Q> queryParam, String argStr) {
+        final Q arg = queryParam.getParser().valueOf(argStr);
+        return withArg(queryParam, arg);
+    }
+
+    public <Q> RestfulRequest withArg(RestfulRequest.QueryParameter<Q> queryParam, Q arg) {
+        //return this;
+        throw new RuntimeException("not yet implemented");
     }
 
     public RestfulResponse<JsonRepresentation> execute() {
@@ -120,13 +139,5 @@ public final class RestfulRequest {
         return (RestfulResponse<T>) restfulResponse;
     }
 
-    public <Q> RestfulRequest withArg(RestfulRequest.QueryParameter<Q> queryParam, String argStr) {
-        final Q arg = queryParam.getParser().valueOf(argStr);
-        return withArg(queryParam, arg);
-    }
-
-    public <Q> RestfulRequest withArg(RestfulRequest.QueryParameter<Q> queryParam, Q arg) {
-        return null;
-    }
 
 }

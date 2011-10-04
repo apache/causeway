@@ -2,6 +2,7 @@ package org.apache.isis.viewer.json.applib;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
@@ -10,6 +11,7 @@ import java.util.List;
 import javax.ws.rs.core.CacheControl;
 import javax.ws.rs.core.MediaType;
 
+import com.google.common.base.Function;
 import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Iterables;
@@ -224,6 +226,37 @@ public abstract class Parser<T> {
 
             @Override
             public String asString(String[] strings) {
+                return Joiner.on(",").join(strings);
+            }
+        };
+    }
+    
+    public static Parser<List<MediaType>> forListOfMediaTypes() {
+        return new Parser<List<MediaType>>() {
+
+            @Override
+            public List<MediaType> valueOf(String str) {
+                if(str == null) {
+                    return Collections.emptyList();
+                }
+                final List<String> strings = Lists.newArrayList(Splitter.on(",").split(str));
+                return Lists.transform(strings, (Function<? super String, ? extends MediaType>) new Function<String, MediaType>() {
+
+                    @Override
+                    public MediaType apply(String input) {
+                        return MediaType.valueOf(input);
+                    }
+                });
+            }
+
+            @Override
+            public String asString(List<MediaType> listOfMediaTypes) {
+                final List<String> strings = Lists.transform(listOfMediaTypes, new Function<MediaType, String>() {
+                    @Override
+                    public String apply(MediaType input) {
+                        return input.toString();
+                    }
+                });
                 return Joiner.on(",").join(strings);
             }
         };
