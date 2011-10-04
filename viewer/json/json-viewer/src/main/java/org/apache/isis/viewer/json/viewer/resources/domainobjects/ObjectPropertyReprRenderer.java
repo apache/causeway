@@ -92,7 +92,7 @@ public class ObjectPropertyReprRenderer extends AbstractObjectMemberReprRenderer
                         linkToBuilder.linkToMember(mutator, memberType, objectMember, mutatorSpec.suffix)
                         .withHttpMethod(mutatorSpec.httpMethod)
                         .withArguments(arguments)
-                        .render();
+                        .build();
                 representation.mapPut(mutator, detailsLink);
             }
         }
@@ -156,11 +156,11 @@ public class ObjectPropertyReprRenderer extends AbstractObjectMemberReprRenderer
     }
 
     private void addLinksFormalDomainModel(JsonRepresentation links, ResourceContext resourceContext) {
-        links.arrayAdd(TypePropertyReprRenderer.newLinkToBuilder(resourceContext, "typeProperty", objectAdapter.getSpecification(), objectMember).render());
+        links.arrayAdd(TypePropertyReprRenderer.newLinkToBuilder(resourceContext, "typeProperty", objectAdapter.getSpecification(), objectMember).build());
     }
 
     private void addLinksIsisProprietary(JsonRepresentation links, ResourceContext resourceContext) {
-        links.arrayAdd(DomainTypeReprRenderer.newLinkToBuilder(resourceContext, "domainType", objectAdapter.getSpecification()).render());
+        links.arrayAdd(DomainTypeReprRenderer.newLinkToBuilder(resourceContext, "domainType", objectAdapter.getSpecification()).build());
     }
 
 }

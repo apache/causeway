@@ -58,7 +58,7 @@ public abstract class AbstractObjectMemberReprRenderer<R extends ReprRendererAbs
     }
 
     public R withSelf() {
-        representation.mapPut("self", linkToBuilder.linkToMember("self", memberType, objectMember).render());
+        representation.mapPut("self", linkToBuilder.linkToMember("self", memberType, objectMember).build());
         return cast(this);
     }
 
@@ -94,7 +94,7 @@ public abstract class AbstractObjectMemberReprRenderer<R extends ReprRendererAbs
 
     public R withDetailsLink() {
         representation.mapPut(memberType.getDetailsRel(), 
-                linkToBuilder.linkToMember(memberType.getDetailsRel(), memberType, objectMember).render());
+                linkToBuilder.linkToMember(memberType.getDetailsRel(), memberType, objectMember).build());
         return cast(this);
     }
 

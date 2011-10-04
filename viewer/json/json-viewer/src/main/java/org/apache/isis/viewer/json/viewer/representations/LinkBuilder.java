@@ -22,16 +22,19 @@ import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.applib.RepresentationType;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
 
-public class LinkReprBuilder extends ReprBuilderAbstract<LinkReprBuilder> {
+public final class LinkBuilder {
 
-    public static LinkReprBuilder newBuilder(ResourceContext resourceContext, String rel, RepresentationType representationType, String hrefFormat, Object... hrefArgs) {
+    public static LinkBuilder newBuilder(ResourceContext resourceContext, String rel, RepresentationType representationType, String hrefFormat, Object... hrefArgs) {
         return newBuilder(resourceContext, rel, representationType.getMediaType(), hrefFormat, hrefArgs);
     }
 
-    public static LinkReprBuilder newBuilder(ResourceContext resourceContext, String rel, MediaType mediaType, String hrefFormat, Object... hrefArgs) {
-        return new LinkReprBuilder(resourceContext, rel, String.format(hrefFormat, hrefArgs), mediaType);
+    public static LinkBuilder newBuilder(ResourceContext resourceContext, String rel, MediaType mediaType, String hrefFormat, Object... hrefArgs) {
+        return new LinkBuilder(resourceContext, rel, String.format(hrefFormat, hrefArgs), mediaType);
     }
 
+    private final ResourceContext resourceContext;
+    private final JsonRepresentation representation = JsonRepresentation.newMap();
+    
 	private final String rel;
     private final String href;
     private final MediaType mediaType;
@@ -40,31 +43,31 @@ public class LinkReprBuilder extends ReprBuilderAbstract<LinkReprBuilder> {
     private String title;
     private JsonRepresentation arguments;
     private JsonRepresentation value;
-    
-    protected LinkReprBuilder(ResourceContext resourceContext, String rel, String href, MediaType mediaType) {
-        super(resourceContext);
+
+    protected LinkBuilder(ResourceContext resourceContext, String rel, String href, MediaType mediaType) {
+        this.resourceContext = resourceContext;
         this.rel = rel;
         this.href = href;
         this.mediaType = mediaType;
     }
-    public LinkReprBuilder withHttpMethod(HttpMethod method) {
+    public LinkBuilder withHttpMethod(HttpMethod method) {
         this.method = method;
         return this;
     }
-    public LinkReprBuilder withTitle(String title) {
+    public LinkBuilder withTitle(String title) {
         this.title = title;
         return this;
     }
-    public LinkReprBuilder withArguments(JsonRepresentation arguments) {
+    public LinkBuilder withArguments(JsonRepresentation arguments) {
         this.arguments = arguments;
         return this;
     }
-    public LinkReprBuilder withValue(JsonRepresentation value) {
+    public LinkBuilder withValue(JsonRepresentation value) {
         this.value = value;
         return this;
     }
 
-    public JsonRepresentation render() {
+    public JsonRepresentation build() {
         representation.mapPut("rel", rel);
         representation.mapPut("href", resourceContext.urlFor(href));
         representation.mapPut("method", method);

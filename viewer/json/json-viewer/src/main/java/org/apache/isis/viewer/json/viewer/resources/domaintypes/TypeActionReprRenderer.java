@@ -16,13 +16,12 @@
  */
 package org.apache.isis.viewer.json.viewer.resources.domaintypes;
 
-import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.applib.RepresentationType;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
-import org.apache.isis.viewer.json.viewer.representations.LinkReprBuilder;
+import org.apache.isis.viewer.json.viewer.representations.LinkBuilder;
 import org.apache.isis.viewer.json.viewer.representations.ReprRenderer;
 import org.apache.isis.viewer.json.viewer.representations.ReprRendererFactoryAbstract;
 
@@ -40,11 +39,11 @@ public class TypeActionReprRenderer extends AbstractTypeMemberReprBuilder<TypeAc
         }
     }
 
-    public static LinkReprBuilder newLinkToBuilder(ResourceContext resourceContext, String rel, ObjectSpecification objectSpecification, ObjectAction objectAction) {
+    public static LinkBuilder newLinkToBuilder(ResourceContext resourceContext, String rel, ObjectSpecification objectSpecification, ObjectAction objectAction) {
         String typeFullName = objectSpecification.getFullIdentifier();
         String actionId = objectAction.getId();
         String url = "domainTypes/" + typeFullName + "/actions/" + actionId;
-        return LinkReprBuilder.newBuilder(resourceContext, rel, RepresentationType.TYPE_ACTION, url);
+        return LinkBuilder.newBuilder(resourceContext, rel, RepresentationType.TYPE_ACTION, url);
     }
 
     public TypeActionReprRenderer(ResourceContext resourceContext, RepresentationType representationType, JsonRepresentation representation) {

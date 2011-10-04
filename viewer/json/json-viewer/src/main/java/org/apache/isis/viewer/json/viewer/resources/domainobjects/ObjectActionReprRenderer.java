@@ -101,7 +101,7 @@ public class ObjectActionReprRenderer extends AbstractObjectMemberReprRenderer<O
                 linkToBuilder.linkToMember("invoke", memberType, objectMember, mutatorSpec.suffix)
                 .withHttpMethod(mutatorSpec.httpMethod)
                 .withArguments(arguments)
-                .render();
+                .build();
         representation.mapPut("invoke", detailsLink);
     }
     
@@ -132,7 +132,7 @@ public class ObjectActionReprRenderer extends AbstractObjectMemberReprRenderer<O
 	        if(objectMember.isContributed()) {
 	            ObjectActionParameter actionParameter = objectMember.getParameters().get(i);
 	            if (actionParameter.getSpecification().isOfType(objectAdapter.getSpecification())) {
-	                return DomainObjectReprRenderer.newLinkToBuilder(resourceContext, "object", objectAdapter).render();
+	                return DomainObjectReprRenderer.newLinkToBuilder(resourceContext, "object", objectAdapter).build();
 	            }
 	        }
 	        return NullNode.instance;
@@ -206,17 +206,17 @@ public class ObjectActionReprRenderer extends AbstractObjectMemberReprRenderer<O
     }
 
      private void addLinksFormalDomainModel(JsonRepresentation links, ResourceContext resourceContext) {
-         links.arrayAdd(TypeActionReprRenderer.newLinkToBuilder(resourceContext, "typeAction", objectAdapter.getSpecification(), objectMember).render());
+         links.arrayAdd(TypeActionReprRenderer.newLinkToBuilder(resourceContext, "typeAction", objectAdapter.getSpecification(), objectMember).build());
      }
 
      private void addLinksIsisProprietary(JsonRepresentation links, ResourceContext resourceContext) {
        if(objectMember.isContributed()) {
             ObjectAdapter serviceAdapter = contributingServiceAdapter();
-            JsonRepresentation contributedByLink = DomainObjectReprRenderer.newLinkToBuilder(resourceContext, "contributedBy", serviceAdapter).render();
+            JsonRepresentation contributedByLink = DomainObjectReprRenderer.newLinkToBuilder(resourceContext, "contributedBy", serviceAdapter).build();
             links.arrayAdd(contributedByLink);
         }
 
-       links.arrayAdd(DomainTypeReprRenderer.newLinkToBuilder(resourceContext, "domainType", objectAdapter.getSpecification()).render());
+       links.arrayAdd(DomainTypeReprRenderer.newLinkToBuilder(resourceContext, "domainType", objectAdapter.getSpecification()).build());
     }
 
 

@@ -21,7 +21,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.applib.RepresentationType;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
-import org.apache.isis.viewer.json.viewer.representations.LinkReprBuilder;
+import org.apache.isis.viewer.json.viewer.representations.LinkBuilder;
 import org.apache.isis.viewer.json.viewer.representations.ReprRendererAbstract;
 import org.apache.isis.viewer.json.viewer.resources.domainobjects.MemberType;
 
@@ -62,8 +62,8 @@ public abstract class AbstractTypeMemberReprBuilder<R extends ReprRendererAbstra
         } 
         
         representation.mapPut("self", 
-            LinkReprBuilder.newBuilder(getResourceContext(), "self", getRepresentationType(), "domainTypes/%s/%s/%s", 
-                    getObjectSpecification().getFullIdentifier(), getMemberType().getUrlPart(), getObjectMember().getId()).render());
+            LinkBuilder.newBuilder(getResourceContext(), "self", getRepresentationType(), "domainTypes/%s/%s/%s", 
+                    getObjectSpecification().getFullIdentifier(), getMemberType().getUrlPart(), getObjectMember().getId()).build());
     }
 
 

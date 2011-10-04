@@ -19,7 +19,6 @@
 package org.apache.isis.viewer.json.viewer.resources;
 
 import java.io.IOException;
-import java.util.Collection;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -53,20 +52,12 @@ import org.apache.isis.viewer.json.applib.RestfulResponse.HttpStatusCode;
 import org.apache.isis.viewer.json.applib.util.JsonMapper;
 import org.apache.isis.viewer.json.viewer.JsonApplicationException;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
-import org.apache.isis.viewer.json.viewer.representations.ReprBuilderAbstract;
-import org.apache.isis.viewer.json.viewer.representations.ReprBuilder;
 import org.apache.isis.viewer.json.viewer.representations.RendererFactoryRegistry;
 import org.apache.isis.viewer.json.viewer.representations.ReprRenderer;
-import org.apache.isis.viewer.json.viewer.resources.domainobjects.DomainObjectReprRenderer;
 import org.apache.isis.viewer.json.viewer.util.OidUtils;
 import org.apache.isis.viewer.json.viewer.util.UrlDecoderUtils;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
-
-import com.google.common.base.Function;
-import com.google.common.base.Functions;
-import com.google.common.collect.Collections2;
-import com.google.common.collect.Lists;
 
 public abstract class ResourceAbstract {
 
@@ -134,24 +125,6 @@ public abstract class ResourceAbstract {
     // Rendering
     // //////////////////////////////////////////////////////////////
 
-    protected String jsonFor(ReprBuilderAbstract<?> builder) {
-        JsonRepresentation representation = builder.render();
-        return jsonFor(representation);
-    }
-
-	protected String jsonFor(
-			final Collection<ObjectAdapter> collectionAdapters) {
-	    
-		return jsonFor(Lists.newArrayList(
-            Collections2.transform(collectionAdapters, toObjectSelfRepresentation())));
-	}
-
-	protected String jsonFor(
-			final ObjectAdapter objectAdapter) {
-		return jsonFor(toObjectSelfRepresentation().apply(objectAdapter));
-	}
-
-
     protected static String jsonFor(final Object object) {
         try {
             return jsonMapper.write(object);
@@ -163,14 +136,6 @@ public abstract class ResourceAbstract {
             throw new RuntimeException(e);
         }
     }
-
-	private Function<ObjectAdapter, JsonRepresentation> toObjectSelfRepresentation() {
-		final ResourceContext representationContext = getResourceContext();
-        
-        return Functions.compose(
-            DomainObjectReprRenderer.selfOf(), 
-            DomainObjectReprRenderer.fromAdapter(representationContext));
-	}
 
 
     // //////////////////////////////////////////////////////////////
