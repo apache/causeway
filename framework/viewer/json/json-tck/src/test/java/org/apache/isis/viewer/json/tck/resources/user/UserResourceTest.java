@@ -1,7 +1,6 @@
-package org.apache.isis.viewer.json.tck;
+package org.apache.isis.viewer.json.tck.resources.user;
 
 import static org.apache.isis.viewer.json.tck.RepresentationMatchers.assertThat;
-import static org.apache.isis.viewer.json.tck.RepresentationMatchers.entityOf;
 import static org.apache.isis.viewer.json.tck.RepresentationMatchers.isArray;
 import static org.apache.isis.viewer.json.tck.RepresentationMatchers.isFollowableLinkToSelf;
 import static org.apache.isis.viewer.json.tck.RepresentationMatchers.isLink;
@@ -24,6 +23,7 @@ import org.apache.isis.viewer.json.applib.RestfulResponse.HttpStatusCode;
 import org.apache.isis.viewer.json.applib.blocks.Method;
 import org.apache.isis.viewer.json.applib.user.UserRepresentation;
 import org.apache.isis.viewer.json.applib.user.UserResource;
+import org.apache.isis.viewer.json.tck.IsisWebServerRule;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.junit.Before;
@@ -89,7 +89,8 @@ public class UserResourceTest {
     }
     
     private UserRepresentation givenRepresentation() throws JsonParseException, JsonMappingException, IOException {
-        return entityOf(resource.user(), UserRepresentation.class);
+        RestfulResponse<UserRepresentation> jsonResp = RestfulResponse.ofT(resource.user());
+        return jsonResp.getEntity();
     }
 
 }

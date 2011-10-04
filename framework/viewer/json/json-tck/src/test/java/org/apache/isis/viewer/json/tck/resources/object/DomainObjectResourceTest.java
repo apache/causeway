@@ -1,4 +1,4 @@
-package org.apache.isis.viewer.json.tck;
+package org.apache.isis.viewer.json.tck.resources.object;
 
 import static org.apache.isis.core.commons.matchers.IsisMatchers.matches;
 import static org.apache.isis.viewer.json.tck.RepresentationMatchers.assertThat;
@@ -24,6 +24,7 @@ import org.apache.isis.viewer.json.applib.domainobjects.DomainObjectResource;
 import org.apache.isis.viewer.json.applib.domainobjects.ObjectActionRepresentation;
 import org.apache.isis.viewer.json.applib.domainobjects.ObjectPropertyRepresentation;
 import org.apache.isis.viewer.json.applib.domainobjects.ScalarValueRepresentation;
+import org.apache.isis.viewer.json.tck.IsisWebServerRule;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Rule;

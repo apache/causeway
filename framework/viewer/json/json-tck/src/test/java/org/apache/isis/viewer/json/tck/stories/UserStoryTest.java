@@ -1,4 +1,4 @@
-package org.apache.isis.viewer.json.tck;
+package org.apache.isis.viewer.json.tck.stories;
 
 import static org.apache.isis.core.commons.matchers.IsisMatchers.matches;
 import static org.junit.Assert.assertThat;
@@ -10,6 +10,7 @@ import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.applib.RepresentationWalker;
 import org.apache.isis.viewer.json.applib.RestfulClient;
 import org.apache.isis.viewer.json.applib.homepage.HomePageResource;
+import org.apache.isis.viewer.json.tck.IsisWebServerRule;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Rule;
