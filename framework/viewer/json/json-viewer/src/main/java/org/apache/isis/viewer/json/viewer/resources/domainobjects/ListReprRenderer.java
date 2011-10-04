@@ -55,7 +55,7 @@ public class ListReprRenderer extends ReprRendererAbstract<ListReprRenderer, Col
     public ListReprRenderer with(Collection<ObjectAdapter> objectAdapters) {
         JsonRepresentation list = JsonRepresentation.newArray();
         for(ObjectAdapter adapter: objectAdapters) {
-            JsonRepresentation linkToObject = objectAdapterLinkToBuilder.with(adapter).linkToAdapter().render();
+            JsonRepresentation linkToObject = objectAdapterLinkToBuilder.with(adapter).linkToAdapter().build();
             list.arrayAdd(linkToObject);
         }
         representation.mapPut("values", list);

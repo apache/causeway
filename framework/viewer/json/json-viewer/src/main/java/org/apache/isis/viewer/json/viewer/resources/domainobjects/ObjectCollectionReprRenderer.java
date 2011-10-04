@@ -26,7 +26,7 @@ import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.applib.RepresentationType;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
-import org.apache.isis.viewer.json.viewer.representations.LinkReprBuilder;
+import org.apache.isis.viewer.json.viewer.representations.LinkBuilder;
 import org.apache.isis.viewer.json.viewer.representations.ReprRenderer;
 import org.apache.isis.viewer.json.viewer.representations.ReprRendererFactoryAbstract;
 import org.apache.isis.viewer.json.viewer.resources.domaintypes.DomainTypeReprRenderer;
@@ -91,7 +91,7 @@ public class ObjectCollectionReprRenderer extends AbstractObjectMemberReprRender
                         linkToBuilder.linkToMember(mutator, memberType, objectMember, mutatorSpec.suffix)
                         .withHttpMethod(mutatorSpec.httpMethod)
                         .withArguments(arguments)
-                        .render();
+                        .build();
                 representation.mapPut(mutator, detailsLink);
             }
         }
@@ -122,9 +122,9 @@ public class ObjectCollectionReprRenderer extends AbstractObjectMemberReprRender
         List<JsonRepresentation> list = Lists.newArrayList();
         for (final ObjectAdapter elementAdapter : facet.iterable(valueAdapter)) {
 
-            LinkReprBuilder newBuilder = DomainObjectReprRenderer.newLinkToBuilder(resourceContext, "object", elementAdapter);
+            LinkBuilder newBuilder = DomainObjectReprRenderer.newLinkToBuilder(resourceContext, "object", elementAdapter);
 
-			list.add(newBuilder.render());
+			list.add(newBuilder.build());
         }
         
         return list;
@@ -140,11 +140,11 @@ public class ObjectCollectionReprRenderer extends AbstractObjectMemberReprRender
     }
 
     private void addLinksFormalDomainModel(JsonRepresentation links, ResourceContext resourceContext) {
-        links.arrayAdd(TypeCollectionReprRenderer.newLinkToBuilder(resourceContext, "typeCollection", objectAdapter.getSpecification(), objectMember).render());
+        links.arrayAdd(TypeCollectionReprRenderer.newLinkToBuilder(resourceContext, "typeCollection", objectAdapter.getSpecification(), objectMember).build());
     }
 
     private void addLinksIsisProprietary(JsonRepresentation links, ResourceContext resourceContext) {
-        links.arrayAdd(DomainTypeReprRenderer.newLinkToBuilder(resourceContext, "domainType", objectAdapter.getSpecification()).render());
+        links.arrayAdd(DomainTypeReprRenderer.newLinkToBuilder(resourceContext, "domainType", objectAdapter.getSpecification()).build());
     }
 
 

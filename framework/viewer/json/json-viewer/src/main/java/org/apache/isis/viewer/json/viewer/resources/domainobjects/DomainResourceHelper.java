@@ -21,10 +21,6 @@ import java.io.InputStream;
 import java.util.Collection;
 import java.util.List;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
@@ -45,16 +41,14 @@ import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.applib.RepresentationType;
-import org.apache.isis.viewer.json.applib.RestfulMediaType;
 import org.apache.isis.viewer.json.applib.RestfulResponse.HttpStatusCode;
 import org.apache.isis.viewer.json.applib.blocks.Link;
 import org.apache.isis.viewer.json.applib.util.JsonMapper;
 import org.apache.isis.viewer.json.viewer.JsonApplicationException;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
-import org.apache.isis.viewer.json.viewer.representations.LinkReprBuilder;
+import org.apache.isis.viewer.json.viewer.representations.LinkBuilder;
 import org.apache.isis.viewer.json.viewer.representations.RendererFactory;
 import org.apache.isis.viewer.json.viewer.representations.RendererFactoryRegistry;
-import org.apache.isis.viewer.json.viewer.representations.ReprRenderer;
 import org.apache.isis.viewer.json.viewer.resources.ResourceAbstract;
 import org.apache.isis.viewer.json.viewer.resources.ResourceAbstract.Caching;
 import org.apache.isis.viewer.json.viewer.util.OidUtils;
@@ -295,7 +289,7 @@ public class DomainResourceHelper {
         String oid = OidUtils.getOidStr(resourceContext, objectAdapter);
         // TODO: review; can't be more specific with the media type because we don't have a media type for action/invoke
         final JsonRepresentation repBuilder = 
-                LinkReprBuilder.newBuilder(resourceContext, "self", MediaType.APPLICATION_JSON_TYPE, "objects/%s/actions/%s/invoke", oid, action.getId()).render();
+                LinkBuilder.newBuilder(resourceContext, "self", MediaType.APPLICATION_JSON_TYPE, "objects/%s/actions/%s/invoke", oid, action.getId()).build();
         representation.mapPut("self", repBuilder);
         return representation;
     }

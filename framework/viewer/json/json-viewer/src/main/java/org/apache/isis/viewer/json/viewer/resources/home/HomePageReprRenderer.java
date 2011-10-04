@@ -2,14 +2,12 @@ package org.apache.isis.viewer.json.viewer.resources.home;
 
 import java.util.List;
 
-import javax.ws.rs.core.MediaType;
-
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.applib.RepresentationType;
 import org.apache.isis.viewer.json.applib.RestfulRequest.QueryParameter;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
-import org.apache.isis.viewer.json.viewer.representations.LinkReprBuilder;
+import org.apache.isis.viewer.json.viewer.representations.LinkBuilder;
 import org.apache.isis.viewer.json.viewer.representations.RendererFactory;
 import org.apache.isis.viewer.json.viewer.representations.RendererFactoryRegistry;
 import org.apache.isis.viewer.json.viewer.representations.ReprRenderer;
@@ -67,13 +65,13 @@ public class HomePageReprRenderer extends ReprRendererAbstract<HomePageReprRende
 
     private void putLinkToCapabilities(final JsonRepresentation representation) {
         representation.mapPut("capabilities", 
-                LinkReprBuilder.newBuilder(getResourceContext(), "capabilities", RepresentationType.CAPABILITIES, "capabilities").render());
+                LinkBuilder.newBuilder(getResourceContext(), "capabilities", RepresentationType.CAPABILITIES, "capabilities").build());
     }
 
     private void putLinkToServices(JsonRepresentation representation) {
 
-        final LinkReprBuilder servicesLinkBuilder = 
-                LinkReprBuilder.newBuilder(getResourceContext(), "services", RepresentationType.LIST, "services");
+        final LinkBuilder servicesLinkBuilder = 
+                LinkBuilder.newBuilder(getResourceContext(), "services", RepresentationType.LIST, "services");
         
         final List<String> followLinks = getResourceContext().getArg(QueryParameter.FOLLOW_LINKS);
         if(followLinks.contains("services")) {
@@ -90,12 +88,12 @@ public class HomePageReprRenderer extends ReprRendererAbstract<HomePageReprRende
             servicesLinkBuilder.withValue(renderer.render());
         }
         
-        representation.mapPut("services", servicesLinkBuilder.render());
+        representation.mapPut("services", servicesLinkBuilder.build());
     }
 
     private void putLinkToUser(JsonRepresentation representation) {
-        final LinkReprBuilder userLinkBuilder = 
-                LinkReprBuilder.newBuilder(getResourceContext(), "user", RepresentationType.USER, "user");
+        final LinkBuilder userLinkBuilder = 
+                LinkBuilder.newBuilder(getResourceContext(), "user", RepresentationType.USER, "user");
         
         final List<String> followLinks = getResourceContext().getArg(QueryParameter.FOLLOW_LINKS);
         if(followLinks.contains("user")) {
@@ -108,7 +106,7 @@ public class HomePageReprRenderer extends ReprRendererAbstract<HomePageReprRende
             userLinkBuilder.withValue(renderer.render());
         }
         
-        representation.mapPut("user", userLinkBuilder.render());
+        representation.mapPut("user", userLinkBuilder.build());
     }
 
 }

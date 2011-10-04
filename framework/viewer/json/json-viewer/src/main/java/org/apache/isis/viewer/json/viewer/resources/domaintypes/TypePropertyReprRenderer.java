@@ -21,7 +21,7 @@ import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.applib.RepresentationType;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
-import org.apache.isis.viewer.json.viewer.representations.LinkReprBuilder;
+import org.apache.isis.viewer.json.viewer.representations.LinkBuilder;
 import org.apache.isis.viewer.json.viewer.representations.ReprRenderer;
 import org.apache.isis.viewer.json.viewer.representations.ReprRendererFactoryAbstract;
 
@@ -39,11 +39,11 @@ public class TypePropertyReprRenderer extends AbstractTypeMemberReprBuilder<Type
         }
     }
 
-    public static LinkReprBuilder newLinkToBuilder(ResourceContext resourceContext, String rel, ObjectSpecification objectSpecification, OneToOneAssociation property) {
+    public static LinkBuilder newLinkToBuilder(ResourceContext resourceContext, String rel, ObjectSpecification objectSpecification, OneToOneAssociation property) {
         String typeFullName = objectSpecification.getFullIdentifier();
         String propertyId = property.getId();
         String url = "domainTypes/" + typeFullName + "/properties/" + propertyId;
-        return LinkReprBuilder.newBuilder(resourceContext, rel, RepresentationType.TYPE_PROPERTY, url);
+        return LinkBuilder.newBuilder(resourceContext, rel, RepresentationType.TYPE_PROPERTY, url);
     }
 
     public TypePropertyReprRenderer(ResourceContext resourceContext, RepresentationType representationType, JsonRepresentation representation) {

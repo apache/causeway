@@ -5,7 +5,6 @@ import org.apache.isis.core.metamodel.facets.actions.queryonly.QueryOnlyFacet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.json.applib.util.Enums;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
-import org.apache.isis.viewer.json.viewer.util.StringUtil;
 
 public enum ActionSemantics {
 

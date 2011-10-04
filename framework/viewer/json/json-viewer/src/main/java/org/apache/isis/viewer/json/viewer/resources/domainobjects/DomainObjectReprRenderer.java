@@ -18,8 +18,6 @@ package org.apache.isis.viewer.json.viewer.resources.domainobjects;
 
 import java.util.List;
 
-import javax.ws.rs.core.MediaType;
-
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
@@ -35,7 +33,7 @@ import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.applib.RepresentationType;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
-import org.apache.isis.viewer.json.viewer.representations.LinkReprBuilder;
+import org.apache.isis.viewer.json.viewer.representations.LinkBuilder;
 import org.apache.isis.viewer.json.viewer.representations.RendererFactory;
 import org.apache.isis.viewer.json.viewer.representations.RendererFactoryRegistry;
 import org.apache.isis.viewer.json.viewer.representations.ReprRenderer;
@@ -43,8 +41,6 @@ import org.apache.isis.viewer.json.viewer.representations.ReprRendererAbstract;
 import org.apache.isis.viewer.json.viewer.representations.ReprRendererFactoryAbstract;
 import org.apache.isis.viewer.json.viewer.resources.domaintypes.DomainTypeReprRenderer;
 import org.apache.isis.viewer.json.viewer.util.OidUtils;
-
-import com.google.common.base.Function;
 
 public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectReprRenderer, ObjectAdapter>{
 
@@ -60,10 +56,10 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
         }
     }
     
-    public static LinkReprBuilder newLinkToBuilder(ResourceContext resourceContext, String rel, ObjectAdapter elementAdapter) {
+    public static LinkBuilder newLinkToBuilder(ResourceContext resourceContext, String rel, ObjectAdapter elementAdapter) {
         String oidStr = resourceContext.getOidStringifier().enString(elementAdapter.getOid());
         String url = "objects/" + oidStr;
-        return LinkReprBuilder.newBuilder(resourceContext, rel, RepresentationType.DOMAIN_OBJECT, url);
+        return LinkBuilder.newBuilder(resourceContext, rel, RepresentationType.DOMAIN_OBJECT, url);
     }
 
     private ObjectAdapterLinkToBuilder linkToBuilder;
@@ -92,7 +88,7 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
 
         // self
         if(includesSelf) {
-            JsonRepresentation self = linkToBuilder.with(objectAdapter).linkToAdapter().render();
+            JsonRepresentation self = linkToBuilder.with(objectAdapter).linkToAdapter().build();
             representation.mapPut("self", self);
         }
 
@@ -107,7 +103,7 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
         // links
         final JsonRepresentation links = JsonRepresentation.newArray();
         links.arrayAdd(
-                DomainTypeReprRenderer.newLinkToBuilder(getResourceContext(), "domainType", objectAdapter.getSpecification()).render());
+                DomainTypeReprRenderer.newLinkToBuilder(getResourceContext(), "domainType", objectAdapter.getSpecification()).build());
         withLinks(links);
         
         // extensions
@@ -191,31 +187,6 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
     }
 
 
-    /////////////////////////////////////////////////////////////////////
-    //
-    /////////////////////////////////////////////////////////////////////
-
-    public static Function<ObjectAdapter, JsonRepresentation> fromAdapter(final ResourceContext resourceContext) {
-        final RendererFactory factory = RendererFactoryRegistry.instance.find(RepresentationType.DOMAIN_OBJECT);
-        return new Function<ObjectAdapter, JsonRepresentation>() {
-            @Override
-            public JsonRepresentation apply(ObjectAdapter adapter) {
-                DomainObjectReprRenderer renderer = 
-                        (DomainObjectReprRenderer) factory.newRenderer(resourceContext, JsonRepresentation.newMap());
-                return renderer.with(adapter).render();
-            }
-        };
-    }
-
-    public static Function<JsonRepresentation, JsonRepresentation> selfOf() {
-        return new Function<JsonRepresentation, JsonRepresentation>() {
-            @Override
-            public JsonRepresentation apply(JsonRepresentation input) {
-                return input.getRepresentation("self");
-            }
-        };
-    }
-
 
     /////////////////////////////////////////////////////////////////////
     //
@@ -230,7 +201,7 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
 		TitleFacet titleFacet = objectSpec.getFacet(TitleFacet.class);
 		String title = titleFacet.title(objectAdapter, resourceContext.getLocalization());
 		return DomainObjectReprRenderer.newLinkToBuilder(resourceContext, "object", objectAdapter)
-		            .withTitle(title).render();
+		            .withTitle(title).build();
 	}
 
 }

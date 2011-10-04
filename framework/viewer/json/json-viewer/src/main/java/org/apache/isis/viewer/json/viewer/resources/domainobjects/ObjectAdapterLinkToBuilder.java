@@ -3,7 +3,7 @@ package org.apache.isis.viewer.json.viewer.resources.domainobjects;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
-import org.apache.isis.viewer.json.viewer.representations.LinkReprBuilder;
+import org.apache.isis.viewer.json.viewer.representations.LinkBuilder;
 
 public interface ObjectAdapterLinkToBuilder {
 
@@ -11,9 +11,9 @@ public interface ObjectAdapterLinkToBuilder {
     
     ObjectAdapterLinkToBuilder with(ObjectAdapter objectAdapter);
 
-    LinkReprBuilder linkToAdapter();
+    LinkBuilder linkToAdapter();
 
-    LinkReprBuilder linkToMember(String rel, MemberType memberType, ObjectMember objectMember, String... parts);
+    LinkBuilder linkToMember(String rel, MemberType memberType, ObjectMember objectMember, String... parts);
 
 
 }

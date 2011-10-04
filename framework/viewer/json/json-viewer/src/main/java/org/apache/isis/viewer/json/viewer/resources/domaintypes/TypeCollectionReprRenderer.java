@@ -21,7 +21,7 @@ import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.applib.RepresentationType;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
-import org.apache.isis.viewer.json.viewer.representations.LinkReprBuilder;
+import org.apache.isis.viewer.json.viewer.representations.LinkBuilder;
 import org.apache.isis.viewer.json.viewer.representations.ReprRenderer;
 import org.apache.isis.viewer.json.viewer.representations.ReprRendererFactoryAbstract;
 
@@ -39,11 +39,11 @@ public class TypeCollectionReprRenderer extends AbstractTypeMemberReprBuilder<Ty
         }
     }
 
-    public static LinkReprBuilder newLinkToBuilder(ResourceContext resourceContext, String rel, ObjectSpecification objectSpecification, OneToManyAssociation collection) {
+    public static LinkBuilder newLinkToBuilder(ResourceContext resourceContext, String rel, ObjectSpecification objectSpecification, OneToManyAssociation collection) {
         String typeFullName = objectSpecification.getFullIdentifier();
         String collectionId = collection.getId();
         String url = "domainTypes/" + typeFullName + "/collections/" + collectionId;
-        return LinkReprBuilder.newBuilder(resourceContext, rel, RepresentationType.TYPE_COLLECTION, url);
+        return LinkBuilder.newBuilder(resourceContext, rel, RepresentationType.TYPE_COLLECTION, url);
     }
 
     public TypeCollectionReprRenderer(ResourceContext resourceContext, RepresentationType representationType, JsonRepresentation representation) {

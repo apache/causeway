@@ -36,10 +36,9 @@ import org.apache.isis.viewer.json.applib.RestfulMediaType;
 import org.apache.isis.viewer.json.applib.RestfulResponse.HttpStatusCode;
 import org.apache.isis.viewer.json.applib.domaintypes.DomainTypeResource;
 import org.apache.isis.viewer.json.viewer.JsonApplicationException;
-import org.apache.isis.viewer.json.viewer.representations.LinkReprBuilder;
+import org.apache.isis.viewer.json.viewer.representations.LinkBuilder;
 import org.apache.isis.viewer.json.viewer.representations.RendererFactory;
 import org.apache.isis.viewer.json.viewer.resources.ResourceAbstract;
-import org.apache.isis.viewer.json.viewer.resources.domainobjects.DomainObjectReprRenderer;
 
 /**
  * Implementation note: it seems to be necessary to annotate the implementation with {@link Path} rather than the
@@ -125,7 +124,7 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
 
         JsonRepresentation representation = JsonRepresentation.newMap();
         representation.mapPut("self", 
-                LinkReprBuilder.newBuilder(getResourceContext(), "self", RepresentationType.TYPE_COLLECTION, "domainType/%s/collections/%s", domainType, collectionId).render());
+                LinkBuilder.newBuilder(getResourceContext(), "self", RepresentationType.TYPE_COLLECTION, "domainType/%s/collections/%s", domainType, collectionId).build());
         
         return responseOfOk(RepresentationType.TYPE_COLLECTION, Caching.ONE_DAY, representation).build();
     }
@@ -140,7 +139,7 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
 
         JsonRepresentation representation = JsonRepresentation.newMap();
         representation.mapPut("self", 
-                LinkReprBuilder.newBuilder(getResourceContext(), "self", RepresentationType.TYPE_ACTION, "domainTypes/%s/actions/%s", domainType, actionId).render());
+                LinkBuilder.newBuilder(getResourceContext(), "self", RepresentationType.TYPE_ACTION, "domainTypes/%s/actions/%s", domainType, actionId).build());
         
         return responseOfOk(RepresentationType.TYPE_ACTION, Caching.ONE_DAY, representation).build();
     }
@@ -156,7 +155,7 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
 
         JsonRepresentation representation = JsonRepresentation.newMap();
         representation.mapPut("self", 
-                LinkReprBuilder.newBuilder(getResourceContext(), "self", RepresentationType.TYPE_ACTION_PARAMETER, "domainTypes/%s/actions/%s/params/%s", domainType, actionId, paramName).render());
+                LinkBuilder.newBuilder(getResourceContext(), "self", RepresentationType.TYPE_ACTION_PARAMETER, "domainTypes/%s/actions/%s/params/%s", domainType, actionId, paramName).build());
         
         return responseOfOk(RepresentationType.TYPE_COLLECTION, Caching.ONE_DAY, representation).build();
     }

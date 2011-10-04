@@ -31,10 +31,8 @@ import org.apache.isis.viewer.json.applib.RestfulMediaType;
 import org.apache.isis.viewer.json.applib.RestfulResponse.HttpStatusCode;
 import org.apache.isis.viewer.json.applib.capabilities.CapabilitiesResource;
 import org.apache.isis.viewer.json.viewer.JsonApplicationException;
-import org.apache.isis.viewer.json.viewer.representations.LinkReprBuilder;
 import org.apache.isis.viewer.json.viewer.representations.RendererFactory;
 import org.apache.isis.viewer.json.viewer.resources.ResourceAbstract;
-import org.apache.isis.viewer.json.viewer.resources.home.HomePageReprRenderer;
 
 /**
  * Implementation note: it seems to be necessary to annotate the implementation with {@link Path} rather than the

@@ -31,19 +31,13 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.applib.RepresentationType;
 import org.apache.isis.viewer.json.applib.RestfulMediaType;
 import org.apache.isis.viewer.json.applib.domainobjects.DomainServiceResource;
-import org.apache.isis.viewer.json.viewer.ResourceContext;
-import org.apache.isis.viewer.json.viewer.representations.RendererFactoryRegistry;
-import org.apache.isis.viewer.json.viewer.representations.ReprBuilderAbstract;
-import org.apache.isis.viewer.json.viewer.representations.ReprBuilder;
-import org.apache.isis.viewer.json.viewer.representations.ReprRenderer;
 import org.apache.isis.viewer.json.viewer.representations.RendererFactory;
+import org.apache.isis.viewer.json.viewer.representations.RendererFactoryRegistry;
 import org.apache.isis.viewer.json.viewer.resources.ResourceAbstract;
-import org.apache.isis.viewer.json.viewer.resources.domainobjects.DomainResourceHelper.Intent;
 
 @Path("/services")
 public class DomainServiceResourceServerside extends ResourceAbstract implements
