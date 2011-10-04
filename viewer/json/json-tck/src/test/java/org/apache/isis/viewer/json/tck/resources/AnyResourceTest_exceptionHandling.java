@@ -1,4 +1,4 @@
-package org.apache.isis.viewer.json.tck;
+package org.apache.isis.viewer.json.tck.resources;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -14,6 +14,7 @@ import org.apache.isis.viewer.json.applib.RestfulRequest;
 import org.apache.isis.viewer.json.applib.RestfulResponse;
 import org.apache.isis.viewer.json.applib.RestfulResponse.HttpStatusCode;
 import org.apache.isis.viewer.json.applib.homepage.HomePageRepresentation;
+import org.apache.isis.viewer.json.tck.IsisWebServerRule;
 import org.jboss.resteasy.client.ClientRequest;
 import org.jboss.resteasy.client.ClientResponse;
 import org.jboss.resteasy.util.HttpHeaderNames;

@@ -2,6 +2,7 @@ package org.apache.isis.viewer.json.tck;
 
 import java.io.IOException;
 
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
@@ -18,30 +19,10 @@ import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 import org.junit.Assert;
 
+import com.google.common.base.Objects;
+
 
 public class RepresentationMatchers {
-
-    public static <T extends JsonRepresentation> T entityOf(Response resp, Class<T> returnType) throws JsonParseException, JsonMappingException, IOException {
-        RestfulResponse<T> jsonResp = RestfulResponse.ofT(resp);
-        return jsonResp.getEntity();
-    }
-
-
-//    public static Matcher<String> matchers(final Method method) {
-//        return new TypeSafeMatcher<Link>() {
-//
-//            @Override
-//            public void describeTo(Description description) {
-//                description.appendText("link with method " + method.name());
-//            }
-//
-//            @Override
-//            public boolean matchesSafely(Link item) {
-//                return item != null && item.getMethod() == method;
-//            }
-//        };
-//    }
-
 
     public static <T extends JsonRepresentation> Matcher<T> isMap() {
         return new TypeSafeMatcher<T>() {
@@ -322,5 +303,53 @@ public class RepresentationMatchers {
 
     }
 
+    public static Matcher<MediaType> hasType(final String type) {
+        return new TypeSafeMatcher<MediaType>() {
+
+            @Override
+            public void describeTo(Description description) {
+                description.appendText("has type " + type);
+            }
+
+            @Override
+            public boolean matchesSafely(MediaType item) {
+                return Objects.equal(type, item.getType());
+            }
+        };
+    }
+
+    public static Matcher<MediaType> hasSubType(final String subtype) {
+        return new TypeSafeMatcher<MediaType>() {
+
+            @Override
+            public void describeTo(Description description) {
+                description.appendText("has subtype " + subtype);
+            }
+
+            @Override
+            public boolean matchesSafely(MediaType item) {
+                return Objects.equal(subtype, item.getSubtype());
+            }
+        };
+    }
+
+    public static Matcher<MediaType> hasParameter(final String parameterName, final String parameterValue) {
+        return new TypeSafeMatcher<MediaType>() {
+
+            @Override
+            public void describeTo(Description description) {
+                description.appendText(String.format("has parameter '%s' with value '%s'", parameterName, parameterValue));
+            }
+
+            @Override
+            public boolean matchesSafely(MediaType item) {
+                final String paramValue = item.getParameters().get(parameterName);
+                return Objects.equal(paramValue, parameterValue);
+            }
+        };
+    }
+
+
+    
 }
     

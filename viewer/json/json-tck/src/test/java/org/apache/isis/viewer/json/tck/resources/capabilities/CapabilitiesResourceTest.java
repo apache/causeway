@@ -1,4 +1,4 @@
-package org.apache.isis.viewer.json.tck;
+package org.apache.isis.viewer.json.tck.resources.capabilities;
 
 import static org.apache.isis.viewer.json.tck.RepresentationMatchers.assertThat;
 import static org.apache.isis.viewer.json.tck.RepresentationMatchers.isFollowableLinkToSelf;
@@ -21,6 +21,8 @@ import org.apache.isis.viewer.json.applib.RestfulResponse;
 import org.apache.isis.viewer.json.applib.blocks.Method;
 import org.apache.isis.viewer.json.applib.capabilities.CapabilitiesRepresentation;
 import org.apache.isis.viewer.json.applib.capabilities.CapabilitiesResource;
+import org.apache.isis.viewer.json.tck.IsisWebServerRule;
+import org.apache.isis.viewer.json.tck.RepresentationMatchers;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.junit.Before;
@@ -89,7 +91,8 @@ public class CapabilitiesResourceTest {
 
 
     private CapabilitiesRepresentation givenRepresentation() throws JsonParseException, JsonMappingException, IOException {
-        return RepresentationMatchers.entityOf(resource.capabilities(), CapabilitiesRepresentation.class);
+        RestfulResponse<CapabilitiesRepresentation> jsonResp = RestfulResponse.ofT(resource.capabilities());
+        return jsonResp.getEntity();
     }
 
 

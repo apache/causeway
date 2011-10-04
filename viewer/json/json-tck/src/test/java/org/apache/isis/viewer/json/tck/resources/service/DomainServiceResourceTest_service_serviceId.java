@@ -1,4 +1,4 @@
-package org.apache.isis.viewer.json.tck;
+package org.apache.isis.viewer.json.tck.resources.service;
 
 import static org.apache.isis.core.commons.matchers.IsisMatchers.matches;
 import static org.apache.isis.viewer.json.tck.RepresentationMatchers.assertThat;
@@ -26,6 +26,8 @@ import org.apache.isis.viewer.json.applib.blocks.Method;
 import org.apache.isis.viewer.json.applib.domainobjects.DomainObjectRepresentation;
 import org.apache.isis.viewer.json.applib.domainobjects.DomainServiceResource;
 import org.apache.isis.viewer.json.applib.domainobjects.ObjectActionRepresentation;
+import org.apache.isis.viewer.json.tck.IsisWebServerRule;
+import org.apache.isis.viewer.json.tck.RepresentationMatchers;
 import org.apache.isis.viewer.json.viewer.resources.domainobjects.MemberType;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
@@ -158,7 +160,8 @@ public class DomainServiceResourceTest_service_serviceId {
 
 
     private DomainObjectRepresentation givenRepresentation(String serviceId) throws JsonParseException, JsonMappingException, IOException {
-        return RepresentationMatchers.entityOf(resource.service(serviceId), DomainObjectRepresentation.class);
+        RestfulResponse<DomainObjectRepresentation> jsonResp = RestfulResponse.ofT(resource.service(serviceId));
+        return jsonResp.getEntity();
     }
 
 

@@ -1,11 +1,14 @@
-package org.apache.isis.viewer.json.tck;
+package org.apache.isis.viewer.json.tck.resources.service;
 
 import java.io.IOException;
 
 import org.apache.isis.runtimes.dflt.webserver.WebServer;
 import org.apache.isis.viewer.json.applib.RestfulClient;
+import org.apache.isis.viewer.json.applib.RestfulResponse;
 import org.apache.isis.viewer.json.applib.domainobjects.DomainObjectRepresentation;
 import org.apache.isis.viewer.json.applib.domainobjects.DomainServiceResource;
+import org.apache.isis.viewer.json.tck.IsisWebServerRule;
+import org.apache.isis.viewer.json.tck.RepresentationMatchers;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.junit.Before;
@@ -42,7 +45,8 @@ public class DomainServiceResourceTest_invokeAction {
 
 
     private DomainObjectRepresentation givenRepresentation(String serviceId) throws JsonParseException, JsonMappingException, IOException {
-        return RepresentationMatchers.entityOf(resource.service(serviceId), DomainObjectRepresentation.class);
+        RestfulResponse<DomainObjectRepresentation> jsonResp = RestfulResponse.ofT(resource.service(serviceId));
+        return jsonResp.getEntity();
     }
 
 
