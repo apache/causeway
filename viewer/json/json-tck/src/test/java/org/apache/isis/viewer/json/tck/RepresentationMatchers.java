@@ -2,6 +2,7 @@ package org.apache.isis.viewer.json.tck;
 
 import java.io.IOException;
 
+import javax.ws.rs.core.CacheControl;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -12,6 +13,7 @@ import org.apache.isis.viewer.json.applib.RestfulResponse;
 import org.apache.isis.viewer.json.applib.RestfulResponse.HttpStatusCode;
 import org.apache.isis.viewer.json.applib.blocks.Link;
 import org.apache.isis.viewer.json.applib.blocks.Method;
+import org.apache.isis.viewer.json.tck.RepresentationMatchers.AbstractMatcherBuilder;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.hamcrest.Description;
@@ -349,6 +351,20 @@ public class RepresentationMatchers {
         };
     }
 
+    public static Matcher<CacheControl> hasMaxAge(final int maxAge) {
+        return new TypeSafeMatcher<CacheControl>() {
+
+            @Override
+            public void describeTo(Description description) {
+                description.appendText("has max age of " + maxAge + " secs");
+            }
+
+            @Override
+            public boolean matchesSafely(CacheControl item) {
+                return maxAge == item.getMaxAge();
+            }
+        };
+    }
 
     
 }
