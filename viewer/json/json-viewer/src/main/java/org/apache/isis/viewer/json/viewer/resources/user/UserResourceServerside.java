@@ -39,7 +39,7 @@ public class UserResourceServerside extends ResourceAbstract implements UserReso
 
         final RendererFactory factory = rendererFactoryRegistry.find(user);
         final UserReprRenderer renderer = 
-                (UserReprRenderer) factory.newRenderer(getResourceContext(), JsonRepresentation.newMap());
+                (UserReprRenderer) factory.newRenderer(getResourceContext(), null, JsonRepresentation.newMap());
         renderer.includesSelf()
                 .with(getAuthenticationSession());
 

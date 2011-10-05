@@ -1,6 +1,7 @@
 package org.apache.isis.viewer.json.applib;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -8,6 +9,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.jboss.resteasy.client.ClientRequest;
+
+import com.google.common.collect.Maps;
 
 public final class RestfulRequest {
 
@@ -35,19 +38,21 @@ public final class RestfulRequest {
     
     public static class QueryParameter<Q> {
 
-        public static QueryParameter<List<List<String>>> FOLLOW_LINKS = new QueryParameter<List<List<String>>>("x-ro-follow-links", Parser.forListOfListOfStrings());
-        public static QueryParameter<Integer> PAGE = new QueryParameter<Integer>("x-ro-page", Parser.forInteger());
-        public static QueryParameter<Integer> PAGE_SIZE = new QueryParameter<Integer>("x-ro-page-size", Parser.forInteger());
-        public static QueryParameter<List<String>> SORT_BY = new QueryParameter<List<String>>("x-ro-sort-by", Parser.forListOfStrings());
-        public static QueryParameter<DomainModel> DOMAIN_MODEL = new QueryParameter<DomainModel>("x-ro-domain-model", DomainModel.parser());
-        public static QueryParameter<Boolean> VALIDATE_ONLY = new QueryParameter<Boolean>("x-ro-validate-only", Parser.forBoolean());
+        public static QueryParameter<List<List<String>>> FOLLOW_LINKS = new QueryParameter<List<List<String>>>("x-ro-follow-links", Parser.forListOfListOfStrings(), Collections.<List<String>>emptyList());
+        public static QueryParameter<Integer> PAGE = new QueryParameter<Integer>("x-ro-page", Parser.forInteger(), 1);
+        public static QueryParameter<Integer> PAGE_SIZE = new QueryParameter<Integer>("x-ro-page-size", Parser.forInteger(), 25);
+        public static QueryParameter<List<String>> SORT_BY = new QueryParameter<List<String>>("x-ro-sort-by", Parser.forListOfStrings(), Collections.<String>emptyList());
+        public static QueryParameter<DomainModel> DOMAIN_MODEL = new QueryParameter<DomainModel>("x-ro-domain-model", DomainModel.parser(), DomainModel.SIMPLE);
+        public static QueryParameter<Boolean> VALIDATE_ONLY = new QueryParameter<Boolean>("x-ro-validate-only", Parser.forBoolean(), false);
         
         private final String name;
         private final Parser<Q> parser;
+        private final Q defaultValue;
         
-        private QueryParameter(String name, Parser<Q> parser) {
+        private QueryParameter(String name, Parser<Q> parser, Q defaultValue) {
             this.name = name;
             this.parser = parser;
+            this.defaultValue = defaultValue;
         }
         
         public String getName() {
@@ -58,10 +63,24 @@ public final class RestfulRequest {
             return parser;
         }
 
+        public void setValue(ClientRequest clientRequest, Q value) {
+            clientRequest.queryParameter(getName(), parser.asString(value));
+        }
+        
         public Q valueOf(Map<?, ?> parameterMap) {
+            if(parameterMap == null) {
+                return defaultValue;
+            }
             @SuppressWarnings("unchecked")
             Map<String, String[]> parameters = (Map<String, String[]>) parameterMap; 
             final String[] values = parameters.get(getName());
+            if(values == null) {
+                return defaultValue;
+            }
+            // special case processing
+            if(values.length == 1) {
+                return getParser().valueOf(values[0]);
+            }
             return getParser().valueOf(values);
         }
     }
@@ -91,9 +110,12 @@ public final class RestfulRequest {
     }
 
     private final ClientRequest clientRequest;
+    private final HttpMethod httpMethod;
+    private final Map<QueryParameter<?>, Object> queryArgs = Maps.newLinkedHashMap();
     
-    public RestfulRequest(ClientRequest clientRequest) {
+    public RestfulRequest(ClientRequest clientRequest, HttpMethod httpMethod) {
         this.clientRequest = clientRequest;
+        this.httpMethod = httpMethod;
     }
 
 
@@ -120,18 +142,33 @@ public final class RestfulRequest {
     }
 
     public <Q> RestfulRequest withArg(RestfulRequest.QueryParameter<Q> queryParam, Q arg) {
-        //return this;
-        throw new RuntimeException("not yet implemented");
+        queryArgs.put(queryParam, arg);
+        return this;
     }
 
     public RestfulResponse<JsonRepresentation> execute() {
         try {
+            if(httpMethod == HttpMethod.GET) {
+                setQueryArgs();
+            }
+            if(httpMethod == HttpMethod.POST) {
+                throw new RuntimeException("not yet implemented");
+            }
+
             Response executeJaxrs = clientRequest.execute();
             return RestfulResponse.ofT(executeJaxrs);
         } catch (Exception ex) {
             throw new RuntimeException(ex);
         }
     }
+
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    private void setQueryArgs() {
+        for (QueryParameter queryParam : queryArgs.keySet()) {
+            queryParam.setValue(clientRequest, queryArgs.get(queryParam));
+        }
+    }
+
 
     @SuppressWarnings("unchecked")
     public <T extends JsonRepresentation> RestfulResponse<T> executeT() {

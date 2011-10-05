@@ -63,7 +63,7 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
                 rendererFactoryRegistry.find(representationType);
         
         final DomainTypesReprRenderer renderer = 
-                (DomainTypesReprRenderer) rendererFactory.newRenderer(getResourceContext(), JsonRepresentation.newMap());
+                (DomainTypesReprRenderer) rendererFactory.newRenderer(getResourceContext(), null, JsonRepresentation.newMap());
         renderer.with(allSpecifications).includesSelf();
         
         return responseOfOk(Caching.ONE_DAY, renderer).build();
@@ -83,7 +83,7 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
                 rendererFactoryRegistry.find(representationType);
 
         final DomainTypeReprRenderer renderer = 
-                (DomainTypeReprRenderer) rendererFactory.newRenderer(getResourceContext(), JsonRepresentation.newMap());
+                (DomainTypeReprRenderer) rendererFactory.newRenderer(getResourceContext(), null, JsonRepresentation.newMap());
         renderer.with(objectSpec).includesSelf();
 
         return responseOfOk(Caching.ONE_DAY, renderer).build();
@@ -113,7 +113,7 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
                 rendererFactoryRegistry.find(representationType);
         
         final TypePropertyReprRenderer renderer = 
-                (TypePropertyReprRenderer) rendererFactory.newRenderer(getResourceContext(), JsonRepresentation.newMap());
+                (TypePropertyReprRenderer) rendererFactory.newRenderer(getResourceContext(), null, JsonRepresentation.newMap());
         renderer.with(new SpecAndProperty(objectSpec, property)).includesSelf();
 
         return responseOfOk(Caching.ONE_DAY, renderer).build();
@@ -143,7 +143,7 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
                 rendererFactoryRegistry.find(representationType);
         
         final TypeCollectionReprRenderer renderer = 
-                (TypeCollectionReprRenderer) rendererFactory.newRenderer(getResourceContext(), JsonRepresentation.newMap());
+                (TypeCollectionReprRenderer) rendererFactory.newRenderer(getResourceContext(), null, JsonRepresentation.newMap());
         renderer.with(new SpecAndCollection(objectSpec, collection)).includesSelf();
 
         return responseOfOk(Caching.ONE_DAY, renderer).build();
@@ -173,7 +173,7 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
                 rendererFactoryRegistry.find(representationType);
         
         final TypeActionReprRenderer renderer = 
-                (TypeActionReprRenderer) rendererFactory.newRenderer(getResourceContext(), JsonRepresentation.newMap());
+                (TypeActionReprRenderer) rendererFactory.newRenderer(getResourceContext(), null, JsonRepresentation.newMap());
         renderer.with(new SpecAndAction(objectSpec, action)).includesSelf();
 
         return responseOfOk(Caching.ONE_DAY, renderer).build();
@@ -206,7 +206,7 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
                 rendererFactoryRegistry.find(representationType);
         
         final TypeActionParamReprRenderer renderer = 
-                (TypeActionParamReprRenderer) rendererFactory.newRenderer(getResourceContext(), JsonRepresentation.newMap());
+                (TypeActionParamReprRenderer) rendererFactory.newRenderer(getResourceContext(), null, JsonRepresentation.newMap());
         renderer.with(new SpecAndActionParam(objectSpec, actionParam)).includesSelf();
 
         return responseOfOk(Caching.ONE_DAY, renderer).build();

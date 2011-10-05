@@ -86,7 +86,7 @@ public class DomainResourceHelper {
 
         RendererFactory factory = RendererFactoryRegistry.instance.find(RepresentationType.OBJECT_PROPERTY);
         final ObjectPropertyReprRenderer renderer = 
-                (ObjectPropertyReprRenderer) factory.newRenderer(resourceContext, JsonRepresentation.newMap());
+                (ObjectPropertyReprRenderer) factory.newRenderer(resourceContext, null, JsonRepresentation.newMap());
         
         renderer.with(new ObjectAndProperty(objectAdapter, property));
         
@@ -103,7 +103,7 @@ public class DomainResourceHelper {
 
         RendererFactory factory = RendererFactoryRegistry.instance.find(RepresentationType.OBJECT_ACTION);
         final ObjectActionReprRenderer renderer = 
-                (ObjectActionReprRenderer) factory.newRenderer(resourceContext, JsonRepresentation.newMap());
+                (ObjectActionReprRenderer) factory.newRenderer(resourceContext, null, JsonRepresentation.newMap());
         
         renderer.with(new ObjectAndAction(serviceAdapter, action))
                 .withSelf()
@@ -238,7 +238,7 @@ public class DomainResourceHelper {
                     .collection(returnedAdapter);
 
             final RendererFactory factory = rendererFactoryRegistry.find(RepresentationType.LIST);
-            final ListReprRenderer renderer = (ListReprRenderer) factory.newRenderer(resourceContext, representation);
+            final ListReprRenderer renderer = (ListReprRenderer) factory.newRenderer(resourceContext, null, representation);
             renderer.with(collectionAdapters);
             
             return ResourceAbstract.responseOfOk(Caching.NONE, renderer).build();
@@ -250,13 +250,13 @@ public class DomainResourceHelper {
             
             final RendererFactory factory = rendererFactoryRegistry.find(RepresentationType.SCALAR_VALUE);
 
-            ScalarValueReprRenderer renderer = (ScalarValueReprRenderer) factory.newRenderer(resourceContext, representation);
+            ScalarValueReprRenderer renderer = (ScalarValueReprRenderer) factory.newRenderer(resourceContext, null, representation);
             renderer.with(objectAdapter);
             return ResourceAbstract.responseOfOk(Caching.NONE, renderer).build();
         }
 
         final RendererFactory factory = rendererFactoryRegistry.find(RepresentationType.DOMAIN_OBJECT);
-        final DomainObjectReprRenderer renderer = (DomainObjectReprRenderer) factory.newRenderer(resourceContext, representation);
+        final DomainObjectReprRenderer renderer = (DomainObjectReprRenderer) factory.newRenderer(resourceContext, null, representation);
         renderer.with(returnedAdapter);
         
         ResponseBuilder respBuilder = ResourceAbstract.responseOfOk(Caching.NONE, renderer);

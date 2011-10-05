@@ -22,6 +22,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.applib.RepresentationType;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
+import org.apache.isis.viewer.json.viewer.representations.PathFollower;
 import org.apache.isis.viewer.json.viewer.representations.LinkBuilder;
 import org.apache.isis.viewer.json.viewer.representations.ReprRendererAbstract;
 import org.apache.isis.viewer.json.viewer.resources.domainobjects.MemberType;
@@ -32,8 +33,8 @@ public abstract class AbstractTypeFeatureReprBuilder<R extends ReprRendererAbstr
     protected MemberType memberType;
     protected T objectFeature;
 
-    public AbstractTypeFeatureReprBuilder(ResourceContext resourceContext, RepresentationType representationType, JsonRepresentation representation) {
-        super(resourceContext, representationType, representation);
+    public AbstractTypeFeatureReprBuilder(ResourceContext resourceContext, PathFollower pathFollower, RepresentationType representationType, JsonRepresentation representation) {
+        super(resourceContext, pathFollower, representationType, representation);
     }
 
     public ObjectSpecification getObjectSpecification() {

@@ -5,14 +5,15 @@ import java.util.List;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.applib.RepresentationType;
-import org.apache.isis.viewer.json.applib.RestfulRequest.QueryParameter;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
+import org.apache.isis.viewer.json.viewer.representations.PathFollower;
 import org.apache.isis.viewer.json.viewer.representations.LinkBuilder;
 import org.apache.isis.viewer.json.viewer.representations.RendererFactory;
 import org.apache.isis.viewer.json.viewer.representations.RendererFactoryRegistry;
 import org.apache.isis.viewer.json.viewer.representations.ReprRenderer;
 import org.apache.isis.viewer.json.viewer.representations.ReprRendererAbstract;
 import org.apache.isis.viewer.json.viewer.representations.ReprRendererFactoryAbstract;
+import org.apache.isis.viewer.json.viewer.resources.capabilities.CapabilitiesReprRenderer;
 import org.apache.isis.viewer.json.viewer.resources.domainobjects.DomainServiceLinkToBuilder;
 import org.apache.isis.viewer.json.viewer.resources.domainobjects.ListReprRenderer;
 import org.apache.isis.viewer.json.viewer.resources.user.UserReprRenderer;
@@ -25,13 +26,13 @@ public class HomePageReprRenderer extends ReprRendererAbstract<HomePageReprRende
         }
 
         @Override
-        public ReprRenderer<?, ?> newRenderer(ResourceContext resourceContext, JsonRepresentation representation) {
-            return new HomePageReprRenderer(resourceContext, getRepresentationType(), representation);
+        public ReprRenderer<?, ?> newRenderer(ResourceContext resourceContext, PathFollower pathFollower, JsonRepresentation representation) {
+            return new HomePageReprRenderer(resourceContext, pathFollower, getRepresentationType(), representation);
         }
     }
 
-    private HomePageReprRenderer(ResourceContext resourceContext, RepresentationType representationType, JsonRepresentation representation) {
-        super(resourceContext, representationType, representation);
+    private HomePageReprRenderer(ResourceContext resourceContext, PathFollower pathFollower, RepresentationType representationType, JsonRepresentation representation) {
+        super(resourceContext, pathFollower, representationType, representation);
     }
 
     @Override
@@ -44,7 +45,7 @@ public class HomePageReprRenderer extends ReprRendererAbstract<HomePageReprRende
         
         // self
         if(includesSelf) {
-            withSelf("");
+            putLinkToSelf(representation);
         }
 
         // user
@@ -59,48 +60,71 @@ public class HomePageReprRenderer extends ReprRendererAbstract<HomePageReprRende
         // links and extensions
         representation.mapPut("links", JsonRepresentation.newArray());
         representation.mapPut("extensions", JsonRepresentation.newMap());
-        
+
         return representation;
     }
 
+    private void putLinkToSelf(JsonRepresentation representation) {
+        final LinkBuilder linkBuilder = LinkBuilder.newBuilder(resourceContext, "self", getRepresentationType(), "");
+
+        final PathFollower pathFollower = getPathFollower().follow("self");
+        if(!pathFollower.isTerminated()) {
+
+            final RendererFactory factory = RendererFactoryRegistry.instance.find(RepresentationType.HOME_PAGE);
+            final HomePageReprRenderer renderer = (HomePageReprRenderer) factory.newRenderer(getResourceContext(), pathFollower, JsonRepresentation.newMap());
+            
+            linkBuilder.withValue(renderer.render());
+        }
+        representation.mapPut("self", linkBuilder.build());
+    }
+
     private void putLinkToCapabilities(final JsonRepresentation representation) {
-        representation.mapPut("capabilities", 
-                LinkBuilder.newBuilder(getResourceContext(), "capabilities", RepresentationType.CAPABILITIES, "capabilities").build());
+        final LinkBuilder linkBuilder = LinkBuilder.newBuilder(getResourceContext(), "capabilities", RepresentationType.CAPABILITIES, "capabilities");
+        
+        final PathFollower pathFollower = getPathFollower().follow("capabilities");
+        if(!pathFollower.isTerminated()) {
+
+            final RendererFactory factory = RendererFactoryRegistry.instance.find(RepresentationType.CAPABILITIES);
+            final CapabilitiesReprRenderer renderer = (CapabilitiesReprRenderer) factory.newRenderer(getResourceContext(), pathFollower, JsonRepresentation.newMap());
+            
+            linkBuilder.withValue(renderer.render());
+        }
+        
+        representation.mapPut("capabilities", linkBuilder.build());
     }
 
     private void putLinkToServices(JsonRepresentation representation) {
 
-        final LinkBuilder servicesLinkBuilder = 
+        final LinkBuilder linkBuilder = 
                 LinkBuilder.newBuilder(getResourceContext(), "services", RepresentationType.LIST, "services");
         
-        final List<String> followLinks = getResourceContext().getArg(QueryParameter.FOLLOW_LINKS);
-        if(followLinks.contains("services")) {
+        final PathFollower pathFollower = getPathFollower().follow("services");
+        if(!pathFollower.isTerminated()) {
             
             final List<ObjectAdapter> serviceAdapters = getResourceContext().getPersistenceSession().getServices();
 
             final RendererFactory factory = RendererFactoryRegistry.instance.find(RepresentationType.LIST);
             
-            final ListReprRenderer renderer = (ListReprRenderer) factory.newRenderer(getResourceContext(), JsonRepresentation.newMap());
+            final ListReprRenderer renderer = (ListReprRenderer) factory.newRenderer(getResourceContext(), pathFollower, JsonRepresentation.newMap());
             renderer.usingLinkToBuilder(new DomainServiceLinkToBuilder())
                     .withSelf("services")
                     .with(serviceAdapters);
             
-            servicesLinkBuilder.withValue(renderer.render());
+            linkBuilder.withValue(renderer.render());
         }
         
-        representation.mapPut("services", servicesLinkBuilder.build());
+        representation.mapPut("services", linkBuilder.build());
     }
 
     private void putLinkToUser(JsonRepresentation representation) {
         final LinkBuilder userLinkBuilder = 
                 LinkBuilder.newBuilder(getResourceContext(), "user", RepresentationType.USER, "user");
         
-        final List<String> followLinks = getResourceContext().getArg(QueryParameter.FOLLOW_LINKS);
-        if(followLinks.contains("user")) {
-            
+        final PathFollower pathFollower = getPathFollower().follow("user");
+        if(!pathFollower.isTerminated()) {
             final RendererFactory factory = RendererFactoryRegistry.instance.find(RepresentationType.USER);
             final UserReprRenderer renderer = 
-                    (UserReprRenderer) factory.newRenderer(getResourceContext(), JsonRepresentation.newMap());
+                    (UserReprRenderer) factory.newRenderer(getResourceContext(), pathFollower, JsonRepresentation.newMap());
             renderer.with(getResourceContext().getAuthenticationSession());
             
             userLinkBuilder.withValue(renderer.render());

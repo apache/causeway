@@ -26,6 +26,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.applib.RepresentationType;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
+import org.apache.isis.viewer.json.viewer.representations.PathFollower;
 import org.apache.isis.viewer.json.viewer.representations.ReprRenderer;
 import org.apache.isis.viewer.json.viewer.representations.ReprRendererFactoryAbstract;
 import org.apache.isis.viewer.json.viewer.resources.domaintypes.DomainTypeReprRenderer;
@@ -43,16 +44,14 @@ public class ObjectActionReprRenderer extends AbstractObjectMemberReprRenderer<O
         }
 
         @Override
-        public ReprRenderer<?,?> newRenderer(ResourceContext resourceContext, JsonRepresentation representation) {
-            return new ObjectActionReprRenderer(resourceContext, getRepresentationType(), representation);
+        public ReprRenderer<?,?> newRenderer(ResourceContext resourceContext, PathFollower pathFollower, JsonRepresentation representation) {
+            return new ObjectActionReprRenderer(resourceContext, pathFollower, getRepresentationType(), representation);
         }
     }
 
-
-    private ObjectActionReprRenderer(ResourceContext resourceContext, RepresentationType representationType, JsonRepresentation representation) {
-        super(resourceContext, representationType, representation);
+    private ObjectActionReprRenderer(ResourceContext resourceContext, PathFollower pathFollower, RepresentationType representationType, JsonRepresentation representation) {
+        super(resourceContext, pathFollower, representationType, representation);
     }
-
 
     public JsonRepresentation render() {
         putId();

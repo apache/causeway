@@ -52,7 +52,7 @@ public class CapabilitiesResourceServerside extends ResourceAbstract implements 
 
         final RendererFactory factory = rendererFactoryRegistry.find(representationType);
         final CapabilitiesReprRenderer renderer = 
-                (CapabilitiesReprRenderer) factory.newRenderer(getResourceContext(), JsonRepresentation.newMap());
+                (CapabilitiesReprRenderer) factory.newRenderer(getResourceContext(), null, JsonRepresentation.newMap());
         renderer.includesSelf();
         
         return responseOfOk(Caching.ONE_DAY, renderer).build();
