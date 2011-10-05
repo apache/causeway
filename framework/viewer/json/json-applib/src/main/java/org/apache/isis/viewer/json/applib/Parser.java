@@ -2,7 +2,6 @@ package org.apache.isis.viewer.json.applib;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
@@ -187,7 +186,61 @@ public abstract class Parser<T> {
             }
         };
     }
-    
+
+    public static Parser<List<List<String>>> forListOfListOfStrings() {
+        return new Parser<List<List<String>>>() {
+
+            @Override
+            public List<List<String>> valueOf(List<String> str) {
+                if(str == null) {
+                    return null;
+                }
+                if(str.size()==0)
+                    return null;
+                List<List<String>> listOfLists = Lists.newArrayList();
+                for (String s : str) {
+                    final Iterable<String> split = Splitter.on('.').split(s);
+                    listOfLists.add(Lists.newArrayList(split));
+                }
+                return listOfLists;
+            }
+            
+            @Override
+            public List<List<String>> valueOf(String[] str) {
+                if(str == null) {
+                    return null;
+                }
+                if(str.length==0)
+                    return null;
+                return valueOf(Arrays.asList(str));
+            }
+
+            @Override
+            public List<List<String>> valueOf(String str) {
+                final Iterable<String> listOfStrings = Splitter.on(',').split(str);
+                return Lists.transform(Lists.newArrayList(listOfStrings), new Function<String, List<String>>() {
+
+                    @Override
+                    public List<String> apply(String input) {
+                        return Lists.newArrayList(Splitter.on('.').split(input));
+                    }
+                });
+            }
+
+            @Override
+            public String asString(List<List<String>> listOfLists) {
+                List<String> listOfStrings = Lists.transform(listOfLists, new Function<List<String>, String>() {
+                    @Override
+                    public String apply(List<String> listOfStrings) {
+                        return Joiner.on('.').join(listOfStrings);
+                    }
+                });
+                return Joiner.on(',').join(listOfStrings);
+            }
+        };
+    }
+
+
     public static Parser<String[]> forArrayOfStrings() {
         return new Parser<String[]>() {
 
@@ -261,5 +314,5 @@ public abstract class Parser<T> {
             }
         };
     }
-
+    
 }
