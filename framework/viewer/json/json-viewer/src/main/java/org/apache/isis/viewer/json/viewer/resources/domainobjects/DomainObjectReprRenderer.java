@@ -33,6 +33,7 @@ import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.applib.RepresentationType;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
+import org.apache.isis.viewer.json.viewer.representations.PathFollower;
 import org.apache.isis.viewer.json.viewer.representations.LinkBuilder;
 import org.apache.isis.viewer.json.viewer.representations.RendererFactory;
 import org.apache.isis.viewer.json.viewer.representations.RendererFactoryRegistry;
@@ -51,8 +52,8 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
         }
 
         @Override
-        public ReprRenderer<?,?> newRenderer(ResourceContext resourceContext, JsonRepresentation representation) {
-            return new DomainObjectReprRenderer(resourceContext, getRepresentationType(), representation);
+        public ReprRenderer<?,?> newRenderer(ResourceContext resourceContext, PathFollower pathFollower, JsonRepresentation representation) {
+            return new DomainObjectReprRenderer(resourceContext, pathFollower, getRepresentationType(), representation);
         }
     }
     
@@ -65,8 +66,8 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
     private ObjectAdapterLinkToBuilder linkToBuilder;
     private ObjectAdapter objectAdapter;
 
-    private DomainObjectReprRenderer(ResourceContext resourceContext, RepresentationType representationType, JsonRepresentation representation) {
-        super(resourceContext, representationType, representation);
+    private DomainObjectReprRenderer(ResourceContext resourceContext, PathFollower pathFollower, RepresentationType representationType, JsonRepresentation representation) {
+        super(resourceContext, pathFollower, representationType, representation);
         usingLinkToBuilder(new DomainObjectLinkToBuilder());
     }
 
@@ -135,7 +136,7 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
                 
                 RendererFactory factory = RendererFactoryRegistry.instance.find(RepresentationType.OBJECT_PROPERTY);
                 final ObjectPropertyReprRenderer renderer = 
-                        (ObjectPropertyReprRenderer) factory.newRenderer(getResourceContext(), JsonRepresentation.newMap());
+                        (ObjectPropertyReprRenderer) factory.newRenderer(getResourceContext(), null, JsonRepresentation.newMap());
                 
                 renderer.with(new ObjectAndProperty(objectAdapter, property))
                         .usingLinkToBuilder(linkToBuilder)
@@ -148,7 +149,7 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
 
                 RendererFactory factory = RendererFactoryRegistry.instance.find(RepresentationType.OBJECT_COLLECTION);
                 final ObjectCollectionReprRenderer renderer = 
-                        (ObjectCollectionReprRenderer) factory.newRenderer(getResourceContext(), JsonRepresentation.newMap());
+                        (ObjectCollectionReprRenderer) factory.newRenderer(getResourceContext(), null, JsonRepresentation.newMap());
 
                 renderer.with(new ObjectAndCollection(objectAdapter, collection))
                     .usingLinkToBuilder(linkToBuilder)
@@ -175,7 +176,7 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
                 
                 RendererFactory factory = RendererFactoryRegistry.instance.find(RepresentationType.OBJECT_ACTION);
                 final ObjectActionReprRenderer renderer = 
-                        (ObjectActionReprRenderer) factory.newRenderer(getResourceContext(), JsonRepresentation.newMap());
+                        (ObjectActionReprRenderer) factory.newRenderer(getResourceContext(), null, JsonRepresentation.newMap());
                 
                 renderer.with(new ObjectAndAction(objectAdapter, action))
                         .usingLinkToBuilder(linkToBuilder)

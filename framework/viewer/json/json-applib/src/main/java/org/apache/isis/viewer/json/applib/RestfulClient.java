@@ -48,6 +48,7 @@ public class RestfulClient {
 
     private final ClientExecutor executor;
     private final ClientRequestFactory clientRequestFactory;
+    private HttpMethod httpMethod;
 
     public RestfulClient(final URI baseUri) {
         this(baseUri, new ApacheHttpClientExecutor(new HttpClient()));
@@ -122,7 +123,7 @@ public class RestfulClient {
         clientRequest.accept(MediaType.APPLICATION_JSON_TYPE);
         clientRequest.setHttpMethod(httpMethod.getJavaxRsMethod());
         
-        return new RestfulRequest(clientRequest);
+        return new RestfulRequest(clientRequest, httpMethod);
     }
     
     /**

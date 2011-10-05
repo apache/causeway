@@ -19,8 +19,6 @@
 package org.apache.isis.viewer.json.viewer.resources.home;
 
 
-import java.util.List;
-
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
@@ -28,8 +26,6 @@ import javax.ws.rs.core.Response;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.applib.RepresentationType;
 import org.apache.isis.viewer.json.applib.RestfulMediaType;
-import org.apache.isis.viewer.json.applib.RestfulRequest.Header;
-import org.apache.isis.viewer.json.applib.RestfulRequest.QueryParameter;
 import org.apache.isis.viewer.json.applib.homepage.HomePageResource;
 import org.apache.isis.viewer.json.viewer.representations.RendererFactory;
 import org.apache.isis.viewer.json.viewer.resources.ResourceAbstract;
@@ -46,15 +42,12 @@ public class HomePageResourceServerside extends ResourceAbstract implements Home
         RepresentationType representationType = RepresentationType.HOME_PAGE;
         init(representationType);
         
-        //final List<List<String>> arg = getResourceContext().getArg(QueryParameter.FOLLOW_LINKS);
-        
         final RendererFactory factory = rendererFactoryRegistry.find(representationType);
         final HomePageReprRenderer renderer = 
-                (HomePageReprRenderer) factory.newRenderer(getResourceContext(), JsonRepresentation.newMap());
+                (HomePageReprRenderer) factory.newRenderer(getResourceContext(), null, JsonRepresentation.newMap());
         renderer.includesSelf();
 
         return responseOfOk(Caching.ONE_DAY, renderer).build();
     }
-
 
 }

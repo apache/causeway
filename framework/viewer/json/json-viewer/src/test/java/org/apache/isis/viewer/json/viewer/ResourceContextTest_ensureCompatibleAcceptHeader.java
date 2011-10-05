@@ -1,17 +1,14 @@
 package org.apache.isis.viewer.json.viewer;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.isis.viewer.json.applib.RepresentationType;
-import org.apache.isis.viewer.json.viewer.util.MapUtils;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JUnit4Mockery;
@@ -21,64 +18,84 @@ import org.junit.Test;
 public class ResourceContextTest_ensureCompatibleAcceptHeader {
 
     private HttpHeaders httpHeaders;
-    private ResourceContext resourceContext;
+    private HttpServletRequest httpServletRequest;
 
     private Mockery context = new JUnit4Mockery();
 
     @Before
     public void setUp() throws Exception {
         httpHeaders = context.mock(HttpHeaders.class);
-        resourceContext = new ResourceContext(httpHeaders, null, null, null, null, null, null, null, null, null, null);
+        httpServletRequest = context.mock(HttpServletRequest.class);
+        context.checking(new Expectations() {
+            {
+                allowing(httpServletRequest).getParameterMap();
+                will(returnValue(Collections.emptyMap()));
+            }
+        });
     }
 
     @Test
     public void noop() throws Exception {
-        givenHttpHeadersGetAcceptableMediaTypesReturns(Arrays.<MediaType>asList(RepresentationType.HOME_PAGE.getMediaType()));
-        resourceContext.ensureCompatibleAcceptHeader(null);
+        final RepresentationType representationType = RepresentationType.HOME_PAGE;
+        givenHttpHeadersGetAcceptableMediaTypesReturns(Arrays.<MediaType>asList(representationType.getMediaType()));
+        
+        instantiateResourceContext(representationType);
     }
 
     @Test
     public void happyCase() throws Exception {
-        final RepresentationType homePage = RepresentationType.HOME_PAGE;
-        givenHttpHeadersGetAcceptableMediaTypesReturns(Arrays.<MediaType>asList(homePage.getMediaType()));
-        resourceContext.ensureCompatibleAcceptHeader(homePage);
+        final RepresentationType representationType = RepresentationType.HOME_PAGE;
+        givenHttpHeadersGetAcceptableMediaTypesReturns(Arrays.<MediaType>asList(representationType.getMediaType()));
+        
+        instantiateResourceContext(representationType);
     }
 
     @Test
     public void acceptGenericAndProduceGeneric() throws Exception {
+        RepresentationType representationType = RepresentationType.GENERIC;
         givenHttpHeadersGetAcceptableMediaTypesReturns(Arrays.<MediaType>asList(MediaType.APPLICATION_JSON_TYPE));
-        resourceContext.ensureCompatibleAcceptHeader(RepresentationType.GENERIC);
+        
+        instantiateResourceContext(representationType);
     }
 
     @Test
     public void acceptGenericAndProduceSpecific() throws Exception {
-        final RepresentationType homePage = RepresentationType.HOME_PAGE;
+        final RepresentationType representationType = RepresentationType.HOME_PAGE;
         givenHttpHeadersGetAcceptableMediaTypesReturns(Arrays.<MediaType>asList(MediaType.APPLICATION_JSON_TYPE));
-        resourceContext.ensureCompatibleAcceptHeader(homePage);
+        
+        instantiateResourceContext(representationType);
     }
 
     @Test(expected = JsonApplicationException.class)
     public void nonMatching() throws Exception {
+        RepresentationType representationType = RepresentationType.HOME_PAGE;
         givenHttpHeadersGetAcceptableMediaTypesReturns(Arrays.<MediaType>asList(MediaType.APPLICATION_ATOM_XML_TYPE));
-        resourceContext.ensureCompatibleAcceptHeader(RepresentationType.HOME_PAGE);
+        
+        instantiateResourceContext(representationType);
     }
 
     @Test(expected = JsonApplicationException.class)
     public void nonMatchingProfile() throws Exception {
+        RepresentationType representationType = RepresentationType.HOME_PAGE;
         givenHttpHeadersGetAcceptableMediaTypesReturns(Arrays.<MediaType>asList(RepresentationType.USER.getMediaType()));
-        resourceContext.ensureCompatibleAcceptHeader(RepresentationType.HOME_PAGE);
+        
+        instantiateResourceContext(representationType);
     }
 
     @Test(expected = JsonApplicationException.class)
     public void nonMatchingProfile_ignoreGeneric() throws Exception {
+        RepresentationType representationType = RepresentationType.HOME_PAGE;
         givenHttpHeadersGetAcceptableMediaTypesReturns(Arrays.<MediaType>asList(RepresentationType.USER.getMediaType(), MediaType.APPLICATION_JSON_TYPE));
-        resourceContext.ensureCompatibleAcceptHeader(RepresentationType.HOME_PAGE);
+
+        instantiateResourceContext(representationType);
     }
 
     @Test(expected = JsonApplicationException.class)
     public void emptyList() throws Exception {
+        RepresentationType representationType = RepresentationType.HOME_PAGE;
         givenHttpHeadersGetAcceptableMediaTypesReturns(Arrays.<MediaType>asList());
-        resourceContext.ensureCompatibleAcceptHeader(RepresentationType.HOME_PAGE);
+
+        instantiateResourceContext(representationType);
     }
 
     private void givenHttpHeadersGetAcceptableMediaTypesReturns(final List<MediaType> mediaTypes) {
@@ -89,4 +106,10 @@ public class ResourceContextTest_ensureCompatibleAcceptHeader {
             }
         });
     }
+
+    private ResourceContext instantiateResourceContext(final RepresentationType representationType) {
+        return new ResourceContext(representationType, httpHeaders, null, null, httpServletRequest, null, null, null, null, null, null, null);
+    }
+
+
 }

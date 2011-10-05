@@ -75,7 +75,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements
                 rendererFactoryRegistry.find(representationType);
         
         final DomainObjectReprRenderer renderer = 
-                (DomainObjectReprRenderer) rendererFactory.newRenderer(getResourceContext(), JsonRepresentation.newMap());
+                (DomainObjectReprRenderer) rendererFactory.newRenderer(getResourceContext(), null, JsonRepresentation.newMap());
         renderer.with(objectAdapter);
         
         ResponseBuilder respBuilder = responseOfOk(Caching.NONE, renderer);
@@ -200,7 +200,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements
 
         RendererFactory factory = RendererFactoryRegistry.instance.find(RepresentationType.OBJECT_COLLECTION);
         final ObjectCollectionReprRenderer renderer = 
-                (ObjectCollectionReprRenderer) factory.newRenderer(getResourceContext(), JsonRepresentation.newMap());
+                (ObjectCollectionReprRenderer) factory.newRenderer(getResourceContext(), null, JsonRepresentation.newMap());
 
         renderer.with(new ObjectAndCollection(objectAdapter, collection));
         

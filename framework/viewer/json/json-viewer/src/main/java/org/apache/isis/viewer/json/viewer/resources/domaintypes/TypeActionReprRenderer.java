@@ -21,6 +21,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.applib.RepresentationType;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
+import org.apache.isis.viewer.json.viewer.representations.PathFollower;
 import org.apache.isis.viewer.json.viewer.representations.LinkBuilder;
 import org.apache.isis.viewer.json.viewer.representations.ReprRenderer;
 import org.apache.isis.viewer.json.viewer.representations.ReprRendererFactoryAbstract;
@@ -34,8 +35,8 @@ public class TypeActionReprRenderer extends AbstractTypeFeatureReprBuilder<TypeA
         }
 
         @Override
-        public ReprRenderer<?,?> newRenderer(ResourceContext resourceContext, JsonRepresentation representation) {
-            return new TypeActionReprRenderer(resourceContext, getRepresentationType(), representation);
+        public ReprRenderer<?,?> newRenderer(ResourceContext resourceContext, PathFollower pathFollower, JsonRepresentation representation) {
+            return new TypeActionReprRenderer(resourceContext, pathFollower, getRepresentationType(), representation);
         }
     }
 
@@ -46,8 +47,8 @@ public class TypeActionReprRenderer extends AbstractTypeFeatureReprBuilder<TypeA
         return LinkBuilder.newBuilder(resourceContext, rel, RepresentationType.TYPE_ACTION, url);
     }
 
-    public TypeActionReprRenderer(ResourceContext resourceContext, RepresentationType representationType, JsonRepresentation representation) {
-        super(resourceContext, representationType, representation);
+    public TypeActionReprRenderer(ResourceContext resourceContext, PathFollower pathFollower, RepresentationType representationType, JsonRepresentation representation) {
+        super(resourceContext, pathFollower, representationType, representation);
     }
 
 

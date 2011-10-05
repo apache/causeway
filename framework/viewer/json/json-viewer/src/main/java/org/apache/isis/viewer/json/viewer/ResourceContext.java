@@ -19,6 +19,7 @@
 package org.apache.isis.viewer.json.viewer;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -57,6 +58,7 @@ public class ResourceContext {
     private final AuthenticationSession authenticationSession;
     private final PersistenceSession persistenceSession;
     private final ObjectAdapterLookup objectAdapterLookup;
+    private List<List<String>> followLinks;
     
     private final static Predicate<MediaType> MEDIA_TYPE_NOT_GENERIC_APPLICATION_JSON = new Predicate<MediaType>() {
         @Override
@@ -72,14 +74,14 @@ public class ResourceContext {
     };
 
     public ResourceContext(
-            final HttpHeaders httpHeaders, final UriInfo uriInfo, final Request request,
-            final HttpServletRequest httpServletRequest, final HttpServletResponse httpServletResponse,
+            RepresentationType representationType, final HttpHeaders httpHeaders, final UriInfo uriInfo,
+            final Request request, final HttpServletRequest httpServletRequest,
+            final HttpServletResponse httpServletResponse, 
             final SecurityContext securityContext, 
             final OidStringifier oidStringifier, 
             final Localization localization, 
             final AuthenticationSession authenticationSession, 
-            final PersistenceSession persistenceSession, 
-            final ObjectAdapterLookup objectAdapterLookup) {
+            final PersistenceSession persistenceSession, final ObjectAdapterLookup objectAdapterLookup) {
 
         this.httpHeaders = httpHeaders;
         this.uriInfo = uriInfo;
@@ -92,9 +94,46 @@ public class ResourceContext {
         this.authenticationSession = authenticationSession;
         this.persistenceSession = persistenceSession;
         this.objectAdapterLookup = objectAdapterLookup;
+        
+        init(representationType);
     }
 
-    public void ensureCompatibleAcceptHeader(RepresentationType representationType) {
+    void init(RepresentationType representationType) {
+        ensureCompatibleAcceptHeader(representationType);
+        this.followLinks = Collections.unmodifiableList(getArg(QueryParameter.FOLLOW_LINKS));
+    }
+
+    public HttpHeaders getHttpHeaders() {
+        return httpHeaders;
+    }
+
+    public <Q> Q getArg(QueryParameter<Q> queryParameter) {
+        return queryParameter.valueOf(getHttpServletRequest().getParameterMap());
+    }
+
+
+    public UriInfo getUriInfo() {
+        return uriInfo;
+    }
+
+    public Request getRequest() {
+        return request;
+    }
+
+    public HttpServletRequest getHttpServletRequest() {
+        return httpServletRequest;
+    }
+
+    public HttpServletResponse getServletResponse() {
+        return httpServletResponse;
+    }
+
+    public SecurityContext getSecurityContext() {
+        return securityContext;
+    }
+
+
+    private void ensureCompatibleAcceptHeader(RepresentationType representationType) {
         if(representationType == null) {
             return;
         }
@@ -132,33 +171,8 @@ public class ResourceContext {
         return profile == null ? acceptedMediaType.isCompatible(producedMediaType) : acceptedMediaType.equals(producedMediaType);
     }
 
-    public HttpHeaders getHttpHeaders() {
-        return httpHeaders;
-    }
-
-    public <Q> Q getArg(QueryParameter<Q> queryParameter) {
-        return queryParameter.valueOf(getHttpServletRequest().getParameterMap());
-    }
-
-
-    public UriInfo getUriInfo() {
-        return uriInfo;
-    }
-
-    public Request getRequest() {
-        return request;
-    }
-
-    public HttpServletRequest getHttpServletRequest() {
-        return httpServletRequest;
-    }
-
-    public HttpServletResponse getServletResponse() {
-        return httpServletResponse;
-    }
-
-    public SecurityContext getSecurityContext() {
-        return securityContext;
+    public List<List<String>> getFollowLinks() {
+        return followLinks;
     }
 
     public String urlFor(String url) {

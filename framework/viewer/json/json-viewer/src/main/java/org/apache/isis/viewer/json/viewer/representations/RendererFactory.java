@@ -8,6 +8,6 @@ public interface RendererFactory {
 
     RepresentationType getRepresentationType();
 
-    ReprRenderer<?, ?> newRenderer(ResourceContext resourceContext, JsonRepresentation representation);
+    ReprRenderer<?, ?> newRenderer(ResourceContext resourceContext, PathFollower pathFollower, JsonRepresentation representation);
     
 }

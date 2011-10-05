@@ -48,6 +48,7 @@ import org.apache.isis.runtimes.dflt.runtime.system.persistence.OidGenerator;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.applib.RepresentationType;
+import org.apache.isis.viewer.json.applib.RestfulRequest.QueryParameter;
 import org.apache.isis.viewer.json.applib.RestfulResponse.HttpStatusCode;
 import org.apache.isis.viewer.json.applib.util.JsonMapper;
 import org.apache.isis.viewer.json.viewer.JsonApplicationException;
@@ -110,11 +111,12 @@ public abstract class ResourceAbstract {
 
     private ResourceContext resourceContext;
 
+    
+
     protected void init(RepresentationType representationType) {
         this.resourceContext =
-            new ResourceContext(httpHeaders, uriInfo, request, httpServletRequest, httpServletResponse, securityContext, 
-                    getOidStringifier(), getLocalization(), getAuthenticationSession(), getPersistenceSession(), getAdapterManager());
-        resourceContext.ensureCompatibleAcceptHeader(representationType);
+            new ResourceContext(representationType, httpHeaders, uriInfo, request, httpServletRequest, httpServletResponse, 
+                    securityContext, getOidStringifier(), getLocalization(), getAuthenticationSession(), getPersistenceSession(), getAdapterManager());
     }
     
     protected ResourceContext getResourceContext() {

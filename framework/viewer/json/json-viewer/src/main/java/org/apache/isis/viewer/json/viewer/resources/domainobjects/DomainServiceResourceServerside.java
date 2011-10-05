@@ -55,7 +55,7 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
 
         final RendererFactory factory = RendererFactoryRegistry.instance.find(representationType);
         
-        final ListReprRenderer renderer = (ListReprRenderer) factory.newRenderer(getResourceContext(), JsonRepresentation.newMap());
+        final ListReprRenderer renderer = (ListReprRenderer) factory.newRenderer(getResourceContext(), null, JsonRepresentation.newMap());
         renderer.usingLinkToBuilder(new DomainServiceLinkToBuilder())
                 .withSelf("services")
                 .with(serviceAdapters);
@@ -80,7 +80,7 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
         
         final RendererFactory factory = rendererFactoryRegistry.find(representationType);
         final DomainObjectReprRenderer renderer = 
-                (DomainObjectReprRenderer) factory.newRenderer(getResourceContext(), JsonRepresentation.newMap());
+                (DomainObjectReprRenderer) factory.newRenderer(getResourceContext(), null, JsonRepresentation.newMap());
         renderer.usingLinkToBuilder(new DomainServiceLinkToBuilder())
                     .includesSelf()
                     .with(serviceAdapter);
