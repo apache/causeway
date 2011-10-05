@@ -23,7 +23,6 @@ public class CapabilitiesReprRenderer extends ReprRendererAbstract<CapabilitiesR
     
     private CapabilitiesReprRenderer(ResourceContext resourceContext, PathFollower pathFollower, RepresentationType representationType, JsonRepresentation representation) {
         super(resourceContext, pathFollower, representationType, representation);
-        includesSelf();
     }
 
     @Override
