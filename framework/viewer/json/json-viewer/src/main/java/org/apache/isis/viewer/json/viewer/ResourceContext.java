@@ -18,9 +18,14 @@
  */
 package org.apache.isis.viewer.json.viewer;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.core.HttpHeaders;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Request;
 import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.core.UriInfo;
@@ -30,7 +35,14 @@ import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterLookup;
 import org.apache.isis.core.metamodel.adapter.oid.stringable.OidStringifier;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
+import org.apache.isis.viewer.json.applib.RepresentationType;
 import org.apache.isis.viewer.json.applib.RestfulRequest.QueryParameter;
+import org.apache.isis.viewer.json.applib.RestfulResponse.HttpStatusCode;
+
+import com.google.common.base.Predicate;
+import com.google.common.collect.Collections2;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
 
 public class ResourceContext {
 
@@ -45,6 +57,19 @@ public class ResourceContext {
     private final AuthenticationSession authenticationSession;
     private final PersistenceSession persistenceSession;
     private final ObjectAdapterLookup objectAdapterLookup;
+    
+    private final static Predicate<MediaType> MEDIA_TYPE_NOT_GENERIC_APPLICATION_JSON = new Predicate<MediaType>() {
+        @Override
+        public boolean apply(MediaType mediaType) {
+            return !mediaType.equals(MediaType.APPLICATION_JSON_TYPE);
+        }
+    };
+    private final static Predicate<MediaType> MEDIA_TYPE_CONTAINS_PROFILE = new Predicate<MediaType>() {
+        @Override
+        public boolean apply(MediaType mediaType) {
+            return mediaType.getParameters().containsKey("profile");
+        }
+    };
 
     public ResourceContext(
             final HttpHeaders httpHeaders, final UriInfo uriInfo, final Request request,
@@ -67,6 +92,44 @@ public class ResourceContext {
         this.authenticationSession = authenticationSession;
         this.persistenceSession = persistenceSession;
         this.objectAdapterLookup = objectAdapterLookup;
+    }
+
+    public void ensureCompatibleAcceptHeader(RepresentationType representationType) {
+        if(representationType == null) {
+            return;
+        }
+        final MediaType producedType = representationType.getMediaType();
+        List<MediaType> acceptableMediaTypes = acceptableMediaTypes();
+        for (MediaType mediaType : acceptableMediaTypes) {
+            if(compatible(mediaType, representationType)) {
+                return;
+            }
+        }
+        if(!acceptableMediaTypes.contains(producedType)) {
+            throw JsonApplicationException.create(HttpStatusCode.NOT_ACCEPTABLE, "Resource produces %s media type", representationType.getMediaTypeWithProfile());
+        }
+    }
+
+    /**
+     * If no media type has a profile parameter, then simply return all the media types.
+     * 
+     * <p>
+     * Otherwise, though, filter out the {@link MediaType#APPLICATION_JSON_TYPE generic application/json} 
+     * media type if it is present.
+     */
+    private List<MediaType> acceptableMediaTypes() {
+        final List<MediaType> acceptableMediaTypes = getHttpHeaders().getAcceptableMediaTypes();
+        if(Collections2.filter(acceptableMediaTypes, MEDIA_TYPE_CONTAINS_PROFILE).isEmpty()) {
+            return acceptableMediaTypes;
+        }
+        return Lists.newArrayList(
+                Iterables.filter(acceptableMediaTypes, MEDIA_TYPE_NOT_GENERIC_APPLICATION_JSON));
+    }
+
+    private boolean compatible(MediaType acceptedMediaType, RepresentationType representationType) {
+        MediaType producedMediaType = representationType.getMediaType();
+        String profile = acceptedMediaType.getParameters().get("profile");
+        return profile == null ? acceptedMediaType.isCompatible(producedMediaType) : acceptedMediaType.equals(producedMediaType);
     }
 
     public HttpHeaders getHttpHeaders() {
@@ -122,6 +185,7 @@ public class ResourceContext {
     public PersistenceSession getPersistenceSession() {
         return persistenceSession;
     }
+
 
 
 

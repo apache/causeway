@@ -22,6 +22,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status.Family;
 
 import org.apache.isis.runtimes.dflt.webserver.WebServer;
+import org.apache.isis.viewer.json.applib.RepresentationType;
 import org.apache.isis.viewer.json.applib.RestfulClient;
 import org.apache.isis.viewer.json.applib.RestfulResponse;
 import org.apache.isis.viewer.json.applib.RestfulResponse.Header;
@@ -92,10 +93,12 @@ public class HomePageResourceTest_representationAndHeaders {
         assertThat(contentType, hasType("application"));
         assertThat(contentType, hasSubType("json"));
         assertThat(contentType, hasParameter("profile", "http://restfulobjects.org/profiles/homepage"));
+        assertThat(contentType, is(RepresentationType.HOME_PAGE.getMediaType()));
         
         // then
         final CacheControl cacheControl = restfulResponse.getHeader(Header.CACHE_CONTROL);
         assertThat(cacheControl, hasMaxAge(24*60*60));
+        assertThat(cacheControl.getMaxAge(), is(24*60*60));
     }
 
     @Test

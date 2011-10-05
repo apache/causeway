@@ -110,10 +110,11 @@ public abstract class ResourceAbstract {
 
     private ResourceContext resourceContext;
 
-    protected void init() {
+    protected void init(RepresentationType representationType) {
         this.resourceContext =
             new ResourceContext(httpHeaders, uriInfo, request, httpServletRequest, httpServletResponse, securityContext, 
                     getOidStringifier(), getLocalization(), getAuthenticationSession(), getPersistenceSession(), getAdapterManager());
+        resourceContext.ensureCompatibleAcceptHeader(representationType);
     }
     
     protected ResourceContext getResourceContext() {

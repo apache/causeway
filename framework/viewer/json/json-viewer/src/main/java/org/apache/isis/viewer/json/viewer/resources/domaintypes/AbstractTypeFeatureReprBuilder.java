@@ -17,6 +17,7 @@
 package org.apache.isis.viewer.json.viewer.resources.domaintypes;
 
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.applib.RepresentationType;
@@ -25,13 +26,13 @@ import org.apache.isis.viewer.json.viewer.representations.LinkBuilder;
 import org.apache.isis.viewer.json.viewer.representations.ReprRendererAbstract;
 import org.apache.isis.viewer.json.viewer.resources.domainobjects.MemberType;
 
-public abstract class AbstractTypeMemberReprBuilder<R extends ReprRendererAbstract<R, SpecAndMember<T>>, T extends ObjectMember> extends ReprRendererAbstract<R, SpecAndMember<T>> {
+public abstract class AbstractTypeFeatureReprBuilder<R extends ReprRendererAbstract<R, SpecAndFeature<T>>, T extends ObjectFeature> extends ReprRendererAbstract<R, SpecAndFeature<T>> {
 
     protected ObjectSpecification objectSpecification;
     protected MemberType memberType;
-    protected T objectMember;
+    protected T objectFeature;
 
-    public AbstractTypeMemberReprBuilder(ResourceContext resourceContext, RepresentationType representationType, JsonRepresentation representation) {
+    public AbstractTypeFeatureReprBuilder(ResourceContext resourceContext, RepresentationType representationType, JsonRepresentation representation) {
         super(resourceContext, representationType, representation);
     }
 
@@ -39,19 +40,23 @@ public abstract class AbstractTypeMemberReprBuilder<R extends ReprRendererAbstra
         return objectSpecification;
     }
     
-    public T getObjectMember() {
-        return objectMember;
+    public T getObjectFeature() {
+        return objectFeature;
     }
 
+    /**
+     * null if the feature is an object action param.
+     * @return
+     */
     public MemberType getMemberType() {
         return memberType;
     }
     
     @Override
-    public R with(SpecAndMember<T> specAndMember) {
-        objectSpecification = specAndMember.getObjectSpecification();
-        objectMember = specAndMember.getObjectMember();
-        memberType = MemberType.determineFrom(objectMember);
+    public R with(SpecAndFeature<T> specAndFeature) {
+        objectSpecification = specAndFeature.getObjectSpecification();
+        objectFeature = specAndFeature.getObjectFeature();
+        memberType = MemberType.determineFrom(objectFeature);
         return cast(this);
     }
     
@@ -63,7 +68,7 @@ public abstract class AbstractTypeMemberReprBuilder<R extends ReprRendererAbstra
         
         representation.mapPut("self", 
             LinkBuilder.newBuilder(getResourceContext(), "self", getRepresentationType(), "domainTypes/%s/%s/%s", 
-                    getObjectSpecification().getFullIdentifier(), getMemberType().getUrlPart(), getObjectMember().getId()).build());
+                    getObjectSpecification().getFullIdentifier(), getMemberType().getUrlPart(), ((ObjectMember)getObjectFeature()).getId()).build());
     }
 
 

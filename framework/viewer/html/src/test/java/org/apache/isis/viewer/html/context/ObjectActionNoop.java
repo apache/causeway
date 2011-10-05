@@ -166,6 +166,11 @@ public class ObjectActionNoop implements ObjectAction {
     }
 
     @Override
+    public ObjectActionParameter getParameter(String paramName) {
+        return null;
+    }
+
+    @Override
     public ObjectSpecification getReturnType() {
         return null;
     }
@@ -297,5 +302,6 @@ public class ObjectActionNoop implements ObjectAction {
     public FeatureType getFeatureType() {
         return FeatureType.ACTION;
     }
+
 
 }

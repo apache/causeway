@@ -159,6 +159,11 @@ public interface ObjectAction extends ObjectMember {
      */
     List<ObjectActionParameter> getParameters(Filter<ObjectActionParameter> filter);
 
+    /**
+     * Returns the parameter with provided name.
+     */
+    ObjectActionParameter getParameter(String paramName);
+
     // //////////////////////////////////////////////////////
     // Parameters (per instance)
     // //////////////////////////////////////////////////////
@@ -172,5 +177,6 @@ public interface ObjectAction extends ObjectMember {
      * Returns a list of possible references/values for each parameter, which the user can choose from.
      */
     ObjectAdapter[][] getChoices(ObjectAdapter target);
+
 
 }

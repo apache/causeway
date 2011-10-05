@@ -25,7 +25,7 @@ import org.apache.isis.viewer.json.viewer.representations.LinkBuilder;
 import org.apache.isis.viewer.json.viewer.representations.ReprRenderer;
 import org.apache.isis.viewer.json.viewer.representations.ReprRendererFactoryAbstract;
 
-public class TypeActionReprRenderer extends AbstractTypeMemberReprBuilder<TypeActionReprRenderer, ObjectAction> {
+public class TypeActionReprRenderer extends AbstractTypeFeatureReprBuilder<TypeActionReprRenderer, ObjectAction> {
 
     public static class Factory extends ReprRendererFactoryAbstract {
 

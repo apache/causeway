@@ -92,6 +92,11 @@ public class TestProxyAction extends FacetHolderNoop implements ObjectAction {
     }
 
     @Override
+    public ObjectActionParameter getParameter(String paramName) {
+        return null;
+    }
+
+    @Override
     public List<ObjectActionParameter> getParameters(final Filter<ObjectActionParameter> filter) {
         return null;
     }
@@ -254,5 +259,6 @@ public class TestProxyAction extends FacetHolderNoop implements ObjectAction {
     public FeatureType getFeatureType() {
         return FeatureType.ACTION;
     }
+
 
 }

@@ -45,10 +45,12 @@ public class CapabilitiesResourceServerside extends ResourceAbstract implements 
     @GET
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_CAPABILITIES})
     public Response capabilities() {
-        init();
+        final RepresentationType representationType = RepresentationType.CAPABILITIES;
+        
+        init(representationType);
         fakeRuntimeExceptionIfXFail();
 
-        final RendererFactory factory = rendererFactoryRegistry.find(RepresentationType.CAPABILITIES);
+        final RendererFactory factory = rendererFactoryRegistry.find(representationType);
         final CapabilitiesReprRenderer renderer = 
                 (CapabilitiesReprRenderer) factory.newRenderer(getResourceContext(), JsonRepresentation.newMap());
         renderer.includesSelf();

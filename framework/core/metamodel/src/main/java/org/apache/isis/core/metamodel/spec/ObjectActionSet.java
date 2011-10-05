@@ -230,6 +230,11 @@ public class ObjectActionSet implements ObjectAction {
     }
 
     @Override
+    public ObjectActionParameter getParameter(String paramName) {
+        return null;
+    }
+
+    @Override
     public List<ObjectActionParameter> getParameters() {
         return Collections.emptyList();
     }
