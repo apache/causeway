@@ -217,6 +217,9 @@ public abstract class Parser<T> {
 
             @Override
             public List<List<String>> valueOf(String str) {
+                if(str == null || str.isEmpty()) {
+                    return Collections.emptyList();
+                }
                 final Iterable<String> listOfStrings = Splitter.on(',').split(str);
                 return Lists.transform(Lists.newArrayList(listOfStrings), new Function<String, List<String>>() {
 
