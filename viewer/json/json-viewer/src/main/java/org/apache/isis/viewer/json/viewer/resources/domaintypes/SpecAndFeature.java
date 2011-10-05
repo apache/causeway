@@ -1,22 +1,22 @@
 package org.apache.isis.viewer.json.viewer.resources.domaintypes;
 
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
+import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
 
-public abstract class SpecAndMember<T extends ObjectMember> {
+public abstract class SpecAndFeature<T extends ObjectFeature> {
     
     private final ObjectSpecification objectSpecification;
-    private final T objectMember;
+    private final T objectFeature;
     
-    public SpecAndMember(ObjectSpecification objectSpecification, T objectMember) {
+    public SpecAndFeature(ObjectSpecification objectSpecification, T objectFeature) {
         this.objectSpecification = objectSpecification;
-        this.objectMember = objectMember;
+        this.objectFeature = objectFeature;
     }
     public ObjectSpecification getObjectSpecification() {
         return objectSpecification;
     }
-    public T getObjectMember() {
-        return objectMember;
+    public T getObjectFeature() {
+        return objectFeature;
     }
 
     

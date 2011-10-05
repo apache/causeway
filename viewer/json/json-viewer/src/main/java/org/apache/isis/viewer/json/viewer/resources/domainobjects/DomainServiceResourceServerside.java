@@ -48,11 +48,12 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
     @Path("/")
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_LIST, RestfulMediaType.APPLICATION_JSON_ERROR })
     public Response services() {
-        init();
+        RepresentationType representationType = RepresentationType.LIST;
+        init(representationType);
 
         final List<ObjectAdapter> serviceAdapters = getResourceContext().getPersistenceSession().getServices();
 
-        final RendererFactory factory = RendererFactoryRegistry.instance.find(RepresentationType.LIST);
+        final RendererFactory factory = RendererFactoryRegistry.instance.find(representationType);
         
         final ListReprRenderer renderer = (ListReprRenderer) factory.newRenderer(getResourceContext(), JsonRepresentation.newMap());
         renderer.usingLinkToBuilder(new DomainServiceLinkToBuilder())
@@ -72,11 +73,12 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
     @Override
     public Response service(
             @PathParam("serviceId") String serviceId) {
-        init();
+        RepresentationType representationType = RepresentationType.DOMAIN_OBJECT;
+        init(representationType);
         
         final ObjectAdapter serviceAdapter = getServiceAdapter(serviceId);
         
-        final RendererFactory factory = rendererFactoryRegistry.find(RepresentationType.DOMAIN_OBJECT);
+        final RendererFactory factory = rendererFactoryRegistry.find(representationType);
         final DomainObjectReprRenderer renderer = 
                 (DomainObjectReprRenderer) factory.newRenderer(getResourceContext(), JsonRepresentation.newMap());
         renderer.usingLinkToBuilder(new DomainServiceLinkToBuilder())
@@ -97,7 +99,7 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
     public Response propertyDetails(
             @PathParam("serviceId") final String serviceId,
             @PathParam("propertyId") final String propertyId) {
-        init();
+        init(RepresentationType.OBJECT_PROPERTY);
 
         final ObjectAdapter serviceAdapter = getServiceAdapter(serviceId);
         final DomainResourceHelper helper = new DomainResourceHelper(getResourceContext());
@@ -117,7 +119,7 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
     public Response actionPrompt(
             @PathParam("serviceId") final String serviceId, 
             @PathParam("actionId") final String actionId) {
-        init();
+        init(RepresentationType.OBJECT_ACTION);
 
         final DomainResourceHelper helper = new DomainResourceHelper(getResourceContext());
 
@@ -138,7 +140,7 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
             @PathParam("oid") final String oidStr, 
             @PathParam("actionId") final String actionId,
             @QueryParam("args") final String arguments) {
-        init();
+        init(RepresentationType.GENERIC);
 
         // TODO
         throw new UnsupportedOperationException();
@@ -152,7 +154,7 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
             @PathParam("oid") final String oidStr, 
             @PathParam("actionId") final String actionId,
             final InputStream arguments) {
-        init();
+        init(RepresentationType.GENERIC);
 
         // TODO
         throw new UnsupportedOperationException();
@@ -166,7 +168,7 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
             @PathParam("oid") final String oidStr, 
             @PathParam("actionId") final String actionId,
             final InputStream arguments) {
-        init();
+        init(RepresentationType.GENERIC);
 
         // TODO
         throw new UnsupportedOperationException();

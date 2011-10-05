@@ -28,7 +28,10 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
+import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.applib.RepresentationType;
@@ -36,7 +39,6 @@ import org.apache.isis.viewer.json.applib.RestfulMediaType;
 import org.apache.isis.viewer.json.applib.RestfulResponse.HttpStatusCode;
 import org.apache.isis.viewer.json.applib.domaintypes.DomainTypeResource;
 import org.apache.isis.viewer.json.viewer.JsonApplicationException;
-import org.apache.isis.viewer.json.viewer.representations.LinkBuilder;
 import org.apache.isis.viewer.json.viewer.representations.RendererFactory;
 import org.apache.isis.viewer.json.viewer.resources.ResourceAbstract;
 
@@ -52,12 +54,13 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
     @Path("/")
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_DOMAIN_TYPES })
     public Response domainTypes() {
-        init();
+        RepresentationType representationType = RepresentationType.DOMAIN_TYPES;
+        init(representationType);
 
         final Collection<ObjectSpecification> allSpecifications = getSpecificationLoader().allSpecifications();
 
         final RendererFactory rendererFactory = 
-                rendererFactoryRegistry.find(RepresentationType.DOMAIN_TYPES);
+                rendererFactoryRegistry.find(representationType);
         
         final DomainTypesReprRenderer renderer = 
                 (DomainTypesReprRenderer) rendererFactory.newRenderer(getResourceContext(), JsonRepresentation.newMap());
@@ -71,12 +74,13 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
     @Path("/{domainType}")
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_DOMAIN_TYPE })
     public Response domainType(@PathParam("domainType") final String domainType){
-        init();
+        RepresentationType representationType = RepresentationType.DOMAIN_TYPE;
+        init(representationType);
 
         final ObjectSpecification objectSpec = getSpecificationLoader().loadSpecification(domainType);
 
         final RendererFactory rendererFactory = 
-                rendererFactoryRegistry.find(RepresentationType.DOMAIN_TYPE);
+                rendererFactoryRegistry.find(representationType);
 
         final DomainTypeReprRenderer renderer = 
                 (DomainTypeReprRenderer) rendererFactory.newRenderer(getResourceContext(), JsonRepresentation.newMap());
@@ -91,7 +95,8 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
     public Response typeProperty(
             @PathParam("domainType") final String domainType,
             @PathParam("propertyId") final String propertyId){
-        init();
+        RepresentationType representationType = RepresentationType.TYPE_PROPERTY;
+        init(representationType);
 
         final ObjectSpecification objectSpec = getSpecificationLoader().loadSpecification(domainType);
         if(objectSpec == null) {
@@ -105,7 +110,7 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
         OneToOneAssociation property = (OneToOneAssociation) objectMember;
 
         final RendererFactory rendererFactory = 
-                rendererFactoryRegistry.find(RepresentationType.TYPE_PROPERTY);
+                rendererFactoryRegistry.find(representationType);
         
         final TypePropertyReprRenderer renderer = 
                 (TypePropertyReprRenderer) rendererFactory.newRenderer(getResourceContext(), JsonRepresentation.newMap());
@@ -120,13 +125,28 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
     public Response typeCollection(
             @PathParam("domainType") final String domainType,
             @PathParam("collectionId") final String collectionId){
-        init();
+        RepresentationType representationType = RepresentationType.TYPE_COLLECTION;
+        init(representationType);
 
-        JsonRepresentation representation = JsonRepresentation.newMap();
-        representation.mapPut("self", 
-                LinkBuilder.newBuilder(getResourceContext(), "self", RepresentationType.TYPE_COLLECTION, "domainType/%s/collections/%s", domainType, collectionId).build());
+        final ObjectSpecification objectSpec = getSpecificationLoader().loadSpecification(domainType);
+        if(objectSpec == null) {
+            throw JsonApplicationException.create(HttpStatusCode.NOT_FOUND);
+        }
         
-        return responseOfOk(RepresentationType.TYPE_COLLECTION, Caching.ONE_DAY, representation).build();
+        final ObjectMember objectMember = objectSpec.getAssociation(collectionId);
+        if(objectMember == null || objectMember.isOneToOneAssociation()) {
+            throw JsonApplicationException.create(HttpStatusCode.NOT_FOUND);
+        }
+        OneToManyAssociation collection = (OneToManyAssociation) objectMember;
+
+        final RendererFactory rendererFactory = 
+                rendererFactoryRegistry.find(representationType);
+        
+        final TypeCollectionReprRenderer renderer = 
+                (TypeCollectionReprRenderer) rendererFactory.newRenderer(getResourceContext(), JsonRepresentation.newMap());
+        renderer.with(new SpecAndCollection(objectSpec, collection)).includesSelf();
+
+        return responseOfOk(Caching.ONE_DAY, renderer).build();
     }
 
     @GET
@@ -135,13 +155,28 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
     public Response typeAction(
             @PathParam("domainType") final String domainType,
             @PathParam("actionId") final String actionId){
-        init();
+        RepresentationType representationType = RepresentationType.TYPE_ACTION;
+        init(representationType);
 
-        JsonRepresentation representation = JsonRepresentation.newMap();
-        representation.mapPut("self", 
-                LinkBuilder.newBuilder(getResourceContext(), "self", RepresentationType.TYPE_ACTION, "domainTypes/%s/actions/%s", domainType, actionId).build());
+        final ObjectSpecification objectSpec = getSpecificationLoader().loadSpecification(domainType);
+        if(objectSpec == null) {
+            throw JsonApplicationException.create(HttpStatusCode.NOT_FOUND);
+        }
         
-        return responseOfOk(RepresentationType.TYPE_ACTION, Caching.ONE_DAY, representation).build();
+        final ObjectMember objectMember = objectSpec.getObjectAction(actionId);
+        if(objectMember == null) {
+            throw JsonApplicationException.create(HttpStatusCode.NOT_FOUND);
+        }
+        ObjectAction action = (ObjectAction) objectMember;
+
+        final RendererFactory rendererFactory = 
+                rendererFactoryRegistry.find(representationType);
+        
+        final TypeActionReprRenderer renderer = 
+                (TypeActionReprRenderer) rendererFactory.newRenderer(getResourceContext(), JsonRepresentation.newMap());
+        renderer.with(new SpecAndAction(objectSpec, action)).includesSelf();
+
+        return responseOfOk(Caching.ONE_DAY, renderer).build();
     }
 
     @GET
@@ -151,13 +186,30 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
             @PathParam("domainType") final String domainType,
             @PathParam("actionId") final String actionId,
             @PathParam("paramName") final String paramName){
-        init();
+        RepresentationType representationType = RepresentationType.TYPE_ACTION_PARAMETER;
+        init(representationType);
 
-        JsonRepresentation representation = JsonRepresentation.newMap();
-        representation.mapPut("self", 
-                LinkBuilder.newBuilder(getResourceContext(), "self", RepresentationType.TYPE_ACTION_PARAMETER, "domainTypes/%s/actions/%s/params/%s", domainType, actionId, paramName).build());
+        final ObjectSpecification objectSpec = getSpecificationLoader().loadSpecification(domainType);
+        if(objectSpec == null) {
+            throw JsonApplicationException.create(HttpStatusCode.NOT_FOUND);
+        }
         
-        return responseOfOk(RepresentationType.TYPE_COLLECTION, Caching.ONE_DAY, representation).build();
+        final ObjectMember objectMember = objectSpec.getObjectAction(actionId);
+        if(objectMember == null) {
+            throw JsonApplicationException.create(HttpStatusCode.NOT_FOUND);
+        }
+        ObjectAction action = (ObjectAction) objectMember;
+        
+        ObjectActionParameter actionParam = action.getParameter(paramName);
+
+        final RendererFactory rendererFactory = 
+                rendererFactoryRegistry.find(representationType);
+        
+        final TypeActionParamReprRenderer renderer = 
+                (TypeActionParamReprRenderer) rendererFactory.newRenderer(getResourceContext(), JsonRepresentation.newMap());
+        renderer.with(new SpecAndActionParam(objectSpec, actionParam)).includesSelf();
+
+        return responseOfOk(Caching.ONE_DAY, renderer).build();
     }
 
 }

@@ -32,6 +32,7 @@ import org.apache.isis.viewer.json.viewer.resources.domainobjects.ObjectProperty
 import org.apache.isis.viewer.json.viewer.resources.domainobjects.ScalarValueReprRenderer;
 import org.apache.isis.viewer.json.viewer.resources.domaintypes.DomainTypeReprRenderer;
 import org.apache.isis.viewer.json.viewer.resources.domaintypes.DomainTypesReprRenderer;
+import org.apache.isis.viewer.json.viewer.resources.domaintypes.TypeActionParamReprRenderer;
 import org.apache.isis.viewer.json.viewer.resources.domaintypes.TypeActionReprRenderer;
 import org.apache.isis.viewer.json.viewer.resources.domaintypes.TypeCollectionReprRenderer;
 import org.apache.isis.viewer.json.viewer.resources.domaintypes.TypePropertyReprRenderer;
@@ -66,6 +67,7 @@ public class RendererFactoryRegistry {
         register(new TypePropertyReprRenderer.Factory());
         register(new TypeCollectionReprRenderer.Factory());
         register(new TypeActionReprRenderer.Factory());
+        register(new TypeActionParamReprRenderer.Factory());
     }
 
     public void register(RendererFactory factory) {

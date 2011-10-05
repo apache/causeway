@@ -67,6 +67,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMemberContext;
 import org.apache.log4j.Logger;
 
+import com.google.common.base.Objects;
 import com.google.common.collect.Lists;
 
 public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectAction {
@@ -275,6 +276,18 @@ public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectActi
             parameterTypes.add(parameter.getSpecification());
         }
         return parameterTypes;
+    }
+
+    @Override
+    public ObjectActionParameter getParameter(String paramName) {
+        final List<ObjectActionParameter> allParameters = getParameters();
+        for (int i = 0; i < allParameters.size(); i++) {
+            final ObjectActionParameter param = allParameters.get(i);
+            if (Objects.equal(paramName, param.getName())) {
+                return param;
+            }
+        }
+        return null;
     }
 
     @Override
@@ -612,5 +625,6 @@ public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectActi
     public ServicesProvider getServicesProvider() {
         return servicesProvider;
     }
+
 
 }

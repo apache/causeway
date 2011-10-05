@@ -25,7 +25,9 @@ import org.apache.isis.core.metamodel.facets.properties.modify.PropertyClearFace
 import org.apache.isis.core.metamodel.facets.properties.modify.PropertySetterFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
+import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.progmodel.facets.actions.validate.ActionValidationFacet;
 import org.apache.isis.core.progmodel.facets.collections.validate.CollectionValidateAddToFacet;
@@ -152,14 +154,17 @@ public enum MemberType {
         return name;
     }
 
-    public static MemberType determineFrom(ObjectMember objectMember) {
-        if (objectMember instanceof ObjectAction) {
+    public static MemberType determineFrom(ObjectFeature objectFeature) {
+        if (objectFeature instanceof ObjectAction) {
             return MemberType.OBJECT_ACTION;
         }
-        if (objectMember instanceof OneToOneAssociation) {
+        if (objectFeature instanceof OneToOneAssociation) {
             return MemberType.OBJECT_PROPERTY;
         }
-        return MemberType.OBJECT_COLLECTION;
+        if (objectFeature instanceof OneToManyAssociation) {
+            return MemberType.OBJECT_COLLECTION;
+        }
+        return null;
     }
 
 

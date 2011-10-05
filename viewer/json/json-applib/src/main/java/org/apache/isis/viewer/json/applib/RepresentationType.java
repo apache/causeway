@@ -57,7 +57,7 @@ public enum RepresentationType {
         return mediaType;
     }
 
-    public String getMediaTypeProfile() {
+    public String getMediaTypeWithProfile() {
         return getMediaType().getParameters().get("profile");
     }
 
