@@ -35,7 +35,7 @@ public final class RestfulRequest {
     
     public static class QueryParameter<Q> {
 
-        public static QueryParameter<List<String>> FOLLOW_LINKS = new QueryParameter<List<String>>("x-ro-follow-links", Parser.forListOfStrings());
+        public static QueryParameter<List<List<String>>> FOLLOW_LINKS = new QueryParameter<List<List<String>>>("x-ro-follow-links", Parser.forListOfListOfStrings());
         public static QueryParameter<Integer> PAGE = new QueryParameter<Integer>("x-ro-page", Parser.forInteger());
         public static QueryParameter<Integer> PAGE_SIZE = new QueryParameter<Integer>("x-ro-page-size", Parser.forInteger());
         public static QueryParameter<List<String>> SORT_BY = new QueryParameter<List<String>>("x-ro-sort-by", Parser.forListOfStrings());
