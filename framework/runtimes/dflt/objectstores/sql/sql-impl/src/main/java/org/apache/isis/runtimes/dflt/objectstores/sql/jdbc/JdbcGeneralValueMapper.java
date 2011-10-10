@@ -67,6 +67,8 @@ public class JdbcGeneralValueMapper extends AbstractJdbcFieldMapping {
             return ((Password) o).getPassword();
         } else if (o instanceof String) {
             return o;
+        } else if (o instanceof Boolean) {
+            return o;
         } else {
             if (columnType().contains("CHAR")) {
                 final EncodableFacet facet = value.getSpecification().getFacet(EncodableFacet.class);
