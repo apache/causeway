@@ -84,17 +84,29 @@ public abstract class BooleanValueSemanticsProviderAbstract extends ValueSemanti
 
     @Override
     protected Boolean doRestore(final String data) {
-        if (data.length() != 1) {
-            throw new IsisException("Invalid data for logical, expected 1 byte, got " + data.length());
+        final int dataLength = data.length();
+        if (dataLength == 1) {
+            switch (data.charAt(0)) {
+                case 'T':
+                    return Boolean.TRUE;
+                case 'F':
+                    return Boolean.FALSE;
+                default:
+                    throw new IsisException("Invalid data for logical, expected 'T', 'F' or 'N, but got "
+                        + data.charAt(0));
+            }
+        } else if (dataLength == 4 || dataLength == 5) {
+            switch (data.charAt(0)) {
+                case 't':
+                    return Boolean.TRUE;
+                case 'f':
+                    return Boolean.FALSE;
+                default:
+                    throw new IsisException("Invalid data for logical, expected 'T', 'F' or 'N, but got "
+                        + data.charAt(0));
+            }
         }
-        switch (data.charAt(0)) {
-            case 'T':
-                return Boolean.TRUE;
-            case 'F':
-                return Boolean.FALSE;
-            default:
-                throw new IsisException("Invalid data for logical, expected 'T', 'F' or 'N, but got " + data.charAt(0));
-        }
+        throw new IsisException("Invalid data for logical, expected 1, 4 or 5 bytes, got " + dataLength + ": " + data);
     }
 
     private boolean isSet(final Object value) {
