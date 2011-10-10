@@ -22,6 +22,8 @@ package org.apache.isis.core.metamodel.specloader.specimpl;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.common.collect.Lists;
+
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.applib.query.Query;
@@ -50,8 +52,6 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLookup;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
-
-import com.google.common.collect.Lists;
 
 public abstract class ObjectActionParameterAbstract implements ObjectActionParameter {
 
@@ -108,7 +108,7 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
     @Override
     public String getName() {
         final NamedFacet facet = getFacet(NamedFacet.class);
-        if(facet != null) {
+        if (facet != null && facet.value() != null) {
             return StringUtils.camelLowerFirst(facet.value());
         }
         String name = getSpecification().getSingularName();
@@ -119,7 +119,7 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
                 return t.getSpecification() == getSpecification();
             }
         });
-        if(parameters.size() == 1) {
+        if (parameters.size() == 1) {
             return StringUtils.camelLowerFirst(name);
         }
         int indexOf = parameters.indexOf(this);
