@@ -186,43 +186,40 @@ public class AutoMapper extends AbstractAutoMapper implements ObjectMapping, Deb
             final String methodName = memberName.substring(0, 1).toUpperCase() + memberName.substring(1);
 
             try {
-                // TODO: replace this back to the original method that uses Facets, instead of directly invoking
-                // "getXXX"
-                method = o.getClass().getMethod("get" + methodName, (Class<?>[]) null);
-                final Object res = InvokeUtils.invoke(method, o);
-                if (res != null) {
+                if (true) {
+                    final ObjectAdapter field = patternAssoc.get(pattern);
+                    if (field != null) {
 
-                    if (foundFields == 0) {
-                        sql.append(" WHERE ");
-                        initialLength = sql.length();
-                    }
+                        if (foundFields == 0) {
+                            sql.append(" WHERE ");
+                            initialLength = sql.length();
+                        }
 
-                    if (sql.length() > initialLength) {
-                        sql.append(" AND ");
-                    }
+                        if (sql.length() > initialLength) {
+                            sql.append(" AND ");
+                        }
 
-                    final ObjectSpecification specification = patternAssoc.getSpecification();
-                    if (specification.isValue()) {
-                        // If the property (memberName) is a value type, use the value.
-                        final String fieldName = Sql.sqlFieldName(identifier.getMemberName());
-                        sql.append(fieldName + "=?");
-                        connector.addToQueryValues(res);
-                        foundFields++;
-                    } else {
-                        // If the property (memberName) is an entity, use the ID.
-                        FieldMapping fieldMapping = fieldMappingLookup.get(patternAssoc);
+                        final FieldMapping fieldMapping = fieldMappingFor(patternAssoc);
+                        if (fieldMapping != null) {
+                            fieldMapping.appendWhereClause(connector, sql, pattern);
+                        } else {
+                            // Have to use getXXX method if the fieldMapping is null..
+                            final ObjectSpecification specification = patternAssoc.getSpecification();
 
-                        fieldMapping.appendColumnNames(sql);
-                        sql.append("=?");
+                            method = o.getClass().getMethod("get" + methodName, (Class<?>[]) null);
+                            final Object res = InvokeUtils.invoke(method, o);
 
-                        // If you get errors here, bring the definition of adapterManager from above, back to here.
-                        final ObjectAdapter restoredValue = adapterManager.adapterFor(res);
-                        Oid oid = restoredValue.getOid();
-                        Object oidObject = idMapping.primaryKeyAsObject(oid);
-                        connector.addToQueryValues(oidObject);
+                            if (specification.isValue()) {
+                                // If the property (memberName) is a value type, use the value.
+                                final String fieldName = Sql.sqlFieldName(identifier.getMemberName());
+                                sql.append(fieldName + "=?");
+                                connector.addToQueryValues(res);
+                            } else {
+                                throw new SqlObjectStoreException("Unhandled combination!");
+                            }
+                        }
                         foundFields++;
                     }
-
                 }
             } catch (SecurityException e) {
                 LOG.debug(e.getMessage());

@@ -212,7 +212,7 @@ public class ForeignKeyCollectionMapper extends AbstractAutoMapper implements Co
                 for (ObjectAdapter field : list) {
                     // final ObjectMapping mapping = objectMappingLookup.getMapping(field, connector);
                     if (field.getSpecification().isOfType(parent.getSpecification())) {
-                        loadInternalCollection(connector, field, false);
+                        loadInternalCollection(connector, field, true);
                     }
                 }
             }
@@ -220,8 +220,9 @@ public class ForeignKeyCollectionMapper extends AbstractAutoMapper implements Co
     }
 
     protected void loadCollectionIntoList(final DatabaseConnector connector, final ObjectAdapter parent,
-        final boolean makeResolved, final String table, ObjectSpecification specification, final IdMappingAbstract idMappingAbstract,
-        final List<FieldMapping> fieldMappings, final VersionMapping versionMapping, final List<ObjectAdapter> list) {
+        final boolean makeResolved, final String table, ObjectSpecification specification,
+        final IdMappingAbstract idMappingAbstract, final List<FieldMapping> fieldMappings,
+        final VersionMapping versionMapping, final List<ObjectAdapter> list) {
 
         final StringBuffer sql = new StringBuffer();
         sql.append("select ");
