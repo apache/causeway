@@ -27,6 +27,7 @@ import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.runtimes.dflt.objectstores.sql.DatabaseConnector;
+import org.apache.isis.runtimes.dflt.objectstores.sql.Defaults;
 import org.apache.isis.runtimes.dflt.objectstores.sql.Results;
 import org.apache.isis.runtimes.dflt.objectstores.sql.Sql;
 import org.apache.isis.runtimes.dflt.objectstores.sql.mapping.FieldMapping;
@@ -65,7 +66,7 @@ public class JdbcAbstractReferenceFieldMapping extends JdbcObjectReferenceFieldM
         sql.append(", ");
         sql.append(classnameColumn);
         sql.append(" ");
-        sql.append(JdbcConnector.TYPE_LONG_STRING());
+        sql.append(Defaults.TYPE_LONG_STRING());
     }
 
     @Override
@@ -73,7 +74,7 @@ public class JdbcAbstractReferenceFieldMapping extends JdbcObjectReferenceFieldM
         super.appendCreateColumnDefinitions(sql);
         sql.append(classnameColumn);
         sql.append(" ");
-        sql.append(JdbcConnector.TYPE_LONG_STRING());
+        sql.append(Defaults.TYPE_LONG_STRING());
     }
 
     @Override

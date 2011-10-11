@@ -27,11 +27,11 @@ import org.apache.isis.applib.value.Password;
 import org.apache.isis.applib.value.Percentage;
 import org.apache.isis.applib.value.Time;
 import org.apache.isis.applib.value.TimeStamp;
+import org.apache.isis.runtimes.dflt.objectstores.sql.Defaults;
 import org.apache.isis.runtimes.dflt.objectstores.sql.FieldMappingFactoryInstaller;
 import org.apache.isis.runtimes.dflt.objectstores.sql.FieldMappingLookup;
 import org.apache.isis.runtimes.dflt.objectstores.sql.jdbc.JdbcBinaryValueMapper;
 import org.apache.isis.runtimes.dflt.objectstores.sql.jdbc.JdbcColorValueMapper;
-import org.apache.isis.runtimes.dflt.objectstores.sql.jdbc.JdbcConnector;
 import org.apache.isis.runtimes.dflt.objectstores.sql.jdbc.JdbcDateMapper;
 import org.apache.isis.runtimes.dflt.objectstores.sql.jdbc.JdbcDateTimeMapper;
 import org.apache.isis.runtimes.dflt.objectstores.sql.jdbc.JdbcGeneralValueMapper;
@@ -45,20 +45,19 @@ public class JdbcFieldMappingFactoryInstaller implements FieldMappingFactoryInst
 
     @Override
     public void load(final FieldMappingLookup lookup) {
-        lookup.addFieldMappingFactory(boolean.class, new JdbcBinaryValueMapper.Factory(JdbcConnector.TYPE_BOOLEAN()));
-        lookup.addFieldMappingFactory(short.class, new JdbcBinaryValueMapper.Factory(JdbcConnector.TYPE_SHORT()));
-        lookup.addFieldMappingFactory(int.class, new JdbcBinaryValueMapper.Factory(JdbcConnector.TYPE_INT()));
-        lookup.addFieldMappingFactory(long.class, new JdbcBinaryValueMapper.Factory(JdbcConnector.TYPE_LONG()));
-        lookup.addFieldMappingFactory(Float.class, new JdbcBinaryValueMapper.Factory(JdbcConnector.TYPE_FLOAT()));
-        lookup.addFieldMappingFactory(double.class, new JdbcBinaryValueMapper.Factory(JdbcConnector.TYPE_DOUBLE()));
+        lookup.addFieldMappingFactory(boolean.class, new JdbcBinaryValueMapper.Factory(Defaults.TYPE_BOOLEAN()));
+        lookup.addFieldMappingFactory(short.class, new JdbcBinaryValueMapper.Factory(Defaults.TYPE_SHORT()));
+        lookup.addFieldMappingFactory(int.class, new JdbcBinaryValueMapper.Factory(Defaults.TYPE_INT()));
+        lookup.addFieldMappingFactory(long.class, new JdbcBinaryValueMapper.Factory(Defaults.TYPE_LONG()));
+        lookup.addFieldMappingFactory(Float.class, new JdbcBinaryValueMapper.Factory(Defaults.TYPE_FLOAT()));
+        lookup.addFieldMappingFactory(double.class, new JdbcBinaryValueMapper.Factory(Defaults.TYPE_DOUBLE()));
         lookup.addFieldMappingFactory(char.class, new JdbcGeneralValueMapper.Factory("CHAR(2)"));
 
         lookup.addFieldMappingFactory(Money.class, new JdbcMoneyValueMapper.Factory("FLOAT", "VARCHAR(3)"));
         lookup.addFieldMappingFactory(Percentage.class, new JdbcGeneralValueMapper.Factory("FLOAT"));
-        lookup
-            .addFieldMappingFactory(Password.class, new JdbcGeneralValueMapper.Factory(JdbcConnector.TYPE_PASSWORD()));
-        lookup.addFieldMappingFactory(Color.class, new JdbcColorValueMapper.Factory(JdbcConnector.TYPE_LONG()));
-        lookup.addFieldMappingFactory(String.class, new JdbcGeneralValueMapper.Factory(JdbcConnector.TYPE_STRING()));
+        lookup.addFieldMappingFactory(Password.class, new JdbcGeneralValueMapper.Factory(Defaults.TYPE_PASSWORD()));
+        lookup.addFieldMappingFactory(Color.class, new JdbcColorValueMapper.Factory(Defaults.TYPE_LONG()));
+        lookup.addFieldMappingFactory(String.class, new JdbcGeneralValueMapper.Factory(Defaults.TYPE_STRING()));
 
         lookup.addFieldMappingFactory(Date.class, new JdbcDateMapper.Factory());
         lookup.addFieldMappingFactory(Time.class, new JdbcTimeMapper.Factory());

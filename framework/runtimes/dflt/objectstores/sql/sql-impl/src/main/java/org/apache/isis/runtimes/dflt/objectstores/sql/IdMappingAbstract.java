@@ -23,7 +23,6 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.runtimes.dflt.objectstores.sql.SqlOid.State;
-import org.apache.isis.runtimes.dflt.objectstores.sql.jdbc.JdbcConnector;
 import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.simple.SerialOid;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
@@ -53,13 +52,13 @@ public class IdMappingAbstract {
     public void appendCreateColumnDefinitions(final StringBuffer sql) {
         sql.append(column);
         sql.append(" ");
-        sql.append(JdbcConnector.TYPE_PK() + " NOT NULL PRIMARY KEY");
+        sql.append(Defaults.TYPE_PK() + " NOT NULL PRIMARY KEY");
     }
 
     public void appendColumnDefinitions(final StringBuffer sql) {
         sql.append(column);
         sql.append(" ");
-        sql.append(JdbcConnector.TYPE_PK());
+        sql.append(Defaults.TYPE_PK());
     }
 
     public void appendColumnNames(final StringBuffer sql) {

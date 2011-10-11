@@ -37,6 +37,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.runtimes.dflt.objectstores.sql.CollectionMapper;
 import org.apache.isis.runtimes.dflt.objectstores.sql.DatabaseConnector;
+import org.apache.isis.runtimes.dflt.objectstores.sql.Defaults;
 import org.apache.isis.runtimes.dflt.objectstores.sql.FieldMappingLookup;
 import org.apache.isis.runtimes.dflt.objectstores.sql.IdMapping;
 import org.apache.isis.runtimes.dflt.objectstores.sql.ObjectMapping;
@@ -56,7 +57,7 @@ import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
 
 public class AutoMapper extends AbstractAutoMapper implements ObjectMapping, DebuggableWithTitle {
     private static final Logger LOG = Logger.getLogger(AutoMapper.class);
-    private static final int MAX_INSTANCES = 100;
+    // private static final int MAX_INSTANCES = 100;
     private final IdMapping idMapping;
     private final VersionMapping versionMapping;
     private final TitleMapping titleMapping;
@@ -321,7 +322,8 @@ public class AutoMapper extends AbstractAutoMapper implements ObjectMapping, Deb
 
         try {
             final Results rs = connector.select(selectStatment);
-            for (int count = 0; rs.next() && count < MAX_INSTANCES; count++) {
+            final int maxInstances = Defaults.getMaxInstances();
+            for (int count = 0; rs.next() && count < maxInstances; count++) {
                 final ObjectAdapter instance = loadObject(connector, cls, rs);
                 LOG.debug("  instance  " + instance);
                 instances.addElement(instance);
