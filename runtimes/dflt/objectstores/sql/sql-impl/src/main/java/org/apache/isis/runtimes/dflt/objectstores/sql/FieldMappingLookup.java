@@ -22,17 +22,17 @@ package org.apache.isis.runtimes.dflt.objectstores.sql;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
+
 import org.apache.isis.core.commons.exceptions.NotYetImplementedException;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
-import org.apache.isis.runtimes.dflt.objectstores.sql.jdbc.JdbcConnector;
 import org.apache.isis.runtimes.dflt.objectstores.sql.jdbc.JdbcGeneralValueMapper;
 import org.apache.isis.runtimes.dflt.objectstores.sql.mapping.FieldMapping;
 import org.apache.isis.runtimes.dflt.objectstores.sql.mapping.FieldMappingFactory;
 import org.apache.isis.runtimes.dflt.objectstores.sql.mapping.ObjectReferenceMapping;
 import org.apache.isis.runtimes.dflt.objectstores.sql.mapping.ObjectReferenceMappingFactory;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
-import org.apache.log4j.Logger;
 
 public class FieldMappingLookup {
     private static final Logger LOG = Logger.getLogger(FieldMappingLookup.class);
@@ -49,7 +49,7 @@ public class FieldMappingLookup {
         if (factory != null) {
             return factory.createFieldMapping(field);
         } else if (spec.isEncodeable()) {
-            factory = new JdbcGeneralValueMapper.Factory(JdbcConnector.TYPE_DEFAULT());
+            factory = new JdbcGeneralValueMapper.Factory(Defaults.TYPE_DEFAULT());
             addFieldMappingFactory(spec, factory);
             return factory.createFieldMapping(field);
         } else {// if (true /* TODO test for reference */) {

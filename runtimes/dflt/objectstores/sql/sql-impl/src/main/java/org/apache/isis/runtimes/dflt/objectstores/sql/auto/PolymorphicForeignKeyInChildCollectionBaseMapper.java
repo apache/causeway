@@ -33,6 +33,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.runtimes.dflt.objectstores.sql.DatabaseConnector;
+import org.apache.isis.runtimes.dflt.objectstores.sql.Defaults;
 import org.apache.isis.runtimes.dflt.objectstores.sql.FieldMappingLookup;
 import org.apache.isis.runtimes.dflt.objectstores.sql.IdMappingAbstract;
 import org.apache.isis.runtimes.dflt.objectstores.sql.ObjectMapping;
@@ -40,7 +41,6 @@ import org.apache.isis.runtimes.dflt.objectstores.sql.ObjectMappingLookup;
 import org.apache.isis.runtimes.dflt.objectstores.sql.Results;
 import org.apache.isis.runtimes.dflt.objectstores.sql.Sql;
 import org.apache.isis.runtimes.dflt.objectstores.sql.VersionMapping;
-import org.apache.isis.runtimes.dflt.objectstores.sql.jdbc.JdbcConnector;
 import org.apache.isis.runtimes.dflt.objectstores.sql.jdbc.JdbcPolymorphicObjectReferenceMapping;
 import org.apache.isis.runtimes.dflt.objectstores.sql.mapping.FieldMapping;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
@@ -90,8 +90,8 @@ public class PolymorphicForeignKeyInChildCollectionBaseMapper extends ForeignKey
         }
 
         if (!connection.hasColumn(table, classColumnName)) {
-            addColumn(connection, classColumnName, JdbcConnector.TYPE_LONG_STRING());
-            addColumn(connection, itemIdColumnName, JdbcConnector.TYPE_PK());
+            addColumn(connection, classColumnName, Defaults.TYPE_LONG_STRING());
+            addColumn(connection, itemIdColumnName, Defaults.TYPE_PK());
         }
     }
 

@@ -23,6 +23,7 @@ import org.apache.isis.applib.value.TimeStamp;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
+import org.apache.isis.runtimes.dflt.objectstores.sql.Defaults;
 import org.apache.isis.runtimes.dflt.objectstores.sql.Results;
 import org.apache.isis.runtimes.dflt.objectstores.sql.mapping.FieldMapping;
 import org.apache.isis.runtimes.dflt.objectstores.sql.mapping.FieldMappingFactory;
@@ -80,7 +81,7 @@ public class JdbcTimestampMapper extends AbstractJdbcFieldMapping {
 
     @Override
     public String columnType() {
-        return JdbcConnector.TYPE_TIMESTAMP;
+        return Defaults.TYPE_TIMESTAMP();
     }
 
 }

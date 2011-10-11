@@ -24,7 +24,6 @@ import java.util.Date;
 
 import org.apache.isis.core.metamodel.adapter.version.SerialNumberVersion;
 import org.apache.isis.core.metamodel.adapter.version.Version;
-import org.apache.isis.runtimes.dflt.objectstores.sql.jdbc.JdbcConnector;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 
 public class VersionMapping {
@@ -86,7 +85,7 @@ public class VersionMapping {
 
         sql.append(",");
         sql.append(lastActivityDateColumn);
-        sql.append(" " + JdbcConnector.TYPE_TIMESTAMP());
+        sql.append(" " + Defaults.TYPE_TIMESTAMP());
 
         return sql.toString();
     }
