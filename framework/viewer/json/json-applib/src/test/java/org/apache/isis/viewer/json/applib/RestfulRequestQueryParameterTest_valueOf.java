@@ -3,6 +3,8 @@ package org.apache.isis.viewer.json.applib;
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -69,6 +71,21 @@ public class RestfulRequestQueryParameterTest_valueOf {
         
         final QueryParameter<List<List<String>>> queryParameter = RestfulRequest.QueryParameter.FOLLOW_LINKS;
         parameterMap.put("x-ro-follow-links", new String[]{"a,b.c"});
+        List<List<String>> valueOf = queryParameter.valueOf(parameterMap);
+        
+        assertThat(valueOf.size(), is(2));
+        assertThat(valueOf.get(0).size(), is(1));
+        assertThat(valueOf.get(0).get(0), is("a"));
+        assertThat(valueOf.get(1).size(), is(2));
+        assertThat(valueOf.get(1).get(0), is("b"));
+        assertThat(valueOf.get(1).get(1), is("c"));
+    }
+
+    @Test
+    public void commaSeparatedListUrlEncoded() throws UnsupportedEncodingException {
+        
+        final QueryParameter<List<List<String>>> queryParameter = RestfulRequest.QueryParameter.FOLLOW_LINKS;
+        parameterMap.put("x-ro-follow-links", new String[]{URLEncoder.encode("a,b.c", "UTF-8")});
         List<List<String>> valueOf = queryParameter.valueOf(parameterMap);
         
         assertThat(valueOf.size(), is(2));

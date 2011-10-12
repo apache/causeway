@@ -22,7 +22,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.applib.RepresentationType;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
-import org.apache.isis.viewer.json.viewer.representations.PathFollower;
+import org.apache.isis.viewer.json.viewer.representations.LinkFollower;
 import org.apache.isis.viewer.json.viewer.representations.LinkBuilder;
 import org.apache.isis.viewer.json.viewer.representations.ReprRenderer;
 import org.apache.isis.viewer.json.viewer.representations.ReprRendererFactoryAbstract;
@@ -36,8 +36,8 @@ public class TypeActionParamReprRenderer extends AbstractTypeFeatureReprBuilder<
         }
 
         @Override
-        public ReprRenderer<?,?> newRenderer(ResourceContext resourceContext, PathFollower pathFollower, JsonRepresentation representation) {
-            return new TypeActionParamReprRenderer(resourceContext, pathFollower, getRepresentationType(), representation);
+        public ReprRenderer<?,?> newRenderer(ResourceContext resourceContext, LinkFollower linkFollower, JsonRepresentation representation) {
+            return new TypeActionParamReprRenderer(resourceContext, linkFollower, getRepresentationType(), representation);
         }
     }
 
@@ -50,8 +50,8 @@ public class TypeActionParamReprRenderer extends AbstractTypeFeatureReprBuilder<
         return LinkBuilder.newBuilder(resourceContext, rel, RepresentationType.TYPE_ACTION_PARAMETER, url);
     }
 
-    public TypeActionParamReprRenderer(ResourceContext resourceContext, PathFollower pathFollower, RepresentationType representationType, JsonRepresentation representation) {
-        super(resourceContext, pathFollower, representationType, representation);
+    public TypeActionParamReprRenderer(ResourceContext resourceContext, LinkFollower linkFollower, RepresentationType representationType, JsonRepresentation representation) {
+        super(resourceContext, linkFollower, representationType, representation);
     }
 
 

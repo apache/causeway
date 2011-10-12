@@ -22,7 +22,9 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.applib.RepresentationType;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
-import org.apache.isis.viewer.json.viewer.representations.PathFollower;
+import org.apache.isis.viewer.json.viewer.representations.LinkFollower;
+import org.apache.isis.viewer.json.viewer.representations.RendererFactory;
+import org.apache.isis.viewer.json.viewer.representations.RendererFactoryRegistry;
 import org.apache.isis.viewer.json.viewer.representations.ReprRenderer;
 import org.apache.isis.viewer.json.viewer.representations.ReprRendererAbstract;
 import org.apache.isis.viewer.json.viewer.representations.ReprRendererFactoryAbstract;
@@ -35,15 +37,15 @@ public class ListReprRenderer extends ReprRendererAbstract<ListReprRenderer, Col
         }
 
         @Override
-        public ReprRenderer<?, ?> newRenderer(ResourceContext resourceContext, PathFollower pathFollower, JsonRepresentation representation) {
-            return new ListReprRenderer(resourceContext, pathFollower, getRepresentationType(), representation);
+        public ReprRenderer<?, ?> newRenderer(ResourceContext resourceContext, LinkFollower linkFollower, JsonRepresentation representation) {
+            return new ListReprRenderer(resourceContext, linkFollower, getRepresentationType(), representation);
         }
     }
 
     private ObjectAdapterLinkToBuilder objectAdapterLinkToBuilder;
 
-    private ListReprRenderer(ResourceContext resourceContext, PathFollower pathFollower, RepresentationType representationType, JsonRepresentation representation) {
-        super(resourceContext, pathFollower, representationType, representation);
+    private ListReprRenderer(ResourceContext resourceContext, LinkFollower linkFollower, RepresentationType representationType, JsonRepresentation representation) {
+        super(resourceContext, linkFollower, representationType, representation);
         usingLinkToBuilder(new DomainObjectLinkToBuilder());
     }
     
@@ -55,9 +57,21 @@ public class ListReprRenderer extends ReprRendererAbstract<ListReprRenderer, Col
     @Override
     public ListReprRenderer with(Collection<ObjectAdapter> objectAdapters) {
         JsonRepresentation list = JsonRepresentation.newArray();
+
+        final LinkFollower linkFollower = getLinkFollower().follow("values");
+        final boolean following = linkFollower.isFollowing();
+
         for(ObjectAdapter adapter: objectAdapters) {
             JsonRepresentation linkToObject = objectAdapterLinkToBuilder.with(adapter).linkToAdapter().build();
             list.arrayAdd(linkToObject);
+
+            if(following) {
+                final RendererFactory factory = RendererFactoryRegistry.instance.find(RepresentationType.DOMAIN_OBJECT);
+                final DomainObjectReprRenderer renderer = 
+                        (DomainObjectReprRenderer) factory.newRenderer(getResourceContext(), linkFollower, JsonRepresentation.newMap());
+                JsonRepresentation domainObject = renderer.with(adapter).render();
+                linkToObject.mapPut("value", domainObject);
+            }
         }
         representation.mapPut("values", list);
         return this;

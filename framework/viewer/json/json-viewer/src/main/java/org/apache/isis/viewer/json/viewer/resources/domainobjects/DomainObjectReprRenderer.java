@@ -33,7 +33,7 @@ import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.applib.RepresentationType;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
-import org.apache.isis.viewer.json.viewer.representations.PathFollower;
+import org.apache.isis.viewer.json.viewer.representations.LinkFollower;
 import org.apache.isis.viewer.json.viewer.representations.LinkBuilder;
 import org.apache.isis.viewer.json.viewer.representations.RendererFactory;
 import org.apache.isis.viewer.json.viewer.representations.RendererFactoryRegistry;
@@ -52,8 +52,8 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
         }
 
         @Override
-        public ReprRenderer<?,?> newRenderer(ResourceContext resourceContext, PathFollower pathFollower, JsonRepresentation representation) {
-            return new DomainObjectReprRenderer(resourceContext, pathFollower, getRepresentationType(), representation);
+        public ReprRenderer<?,?> newRenderer(ResourceContext resourceContext, LinkFollower linkFollower, JsonRepresentation representation) {
+            return new DomainObjectReprRenderer(resourceContext, linkFollower, getRepresentationType(), representation);
         }
     }
     
@@ -66,8 +66,8 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
     private ObjectAdapterLinkToBuilder linkToBuilder;
     private ObjectAdapter objectAdapter;
 
-    private DomainObjectReprRenderer(ResourceContext resourceContext, PathFollower pathFollower, RepresentationType representationType, JsonRepresentation representation) {
-        super(resourceContext, pathFollower, representationType, representation);
+    private DomainObjectReprRenderer(ResourceContext resourceContext, LinkFollower linkFollower, RepresentationType representationType, JsonRepresentation representation) {
+        super(resourceContext, linkFollower, representationType, representation);
         usingLinkToBuilder(new DomainObjectLinkToBuilder());
     }
 

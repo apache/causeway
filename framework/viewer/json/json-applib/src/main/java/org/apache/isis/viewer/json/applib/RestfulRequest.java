@@ -1,5 +1,7 @@
 package org.apache.isis.viewer.json.applib;
 
+import static org.apache.isis.viewer.json.applib.util.UrlDecodeUtils.*;
+
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -33,6 +35,11 @@ public final class RestfulRequest {
                     return t.name().toLowerCase();
                 }
             };
+        }
+        
+        @Override
+        public String toString() {
+            return name().toLowerCase();
         }
     }
     
@@ -79,9 +86,14 @@ public final class RestfulRequest {
             }
             // special case processing
             if(values.length == 1) {
-                return getParser().valueOf(values[0]);
+                return getParser().valueOf(urlDecode(values[0]));
             }
-            return getParser().valueOf(values);
+            return getParser().valueOf(urlDecode(values));
+        }
+        
+        @Override
+        public String toString() {
+            return getName();
         }
     }
 
@@ -106,6 +118,11 @@ public final class RestfulRequest {
         
         void setHeader(ClientRequest clientRequest, X t) {
             clientRequest.header(getName(), parser.asString(t));
+        }
+        
+        @Override
+        public String toString() {
+            return getName();
         }
     }
 

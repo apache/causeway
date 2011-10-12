@@ -15,7 +15,7 @@ public class PathFollowerTest_asGraph {
     @Test
     public void simple() throws Exception {
         List<List<String>> links = asListOfLists("a.b.c,a.b.d,d.b,e,e");
-        final Map<String, Map> root = PathFollower.asGraph(links);
+        final Map<String, Map> root = LinkFollower.asGraph(links);
         
         assertThat(root.size(), is(3));
         Map<String,Map> nodeA = root.get("a");
@@ -39,14 +39,14 @@ public class PathFollowerTest_asGraph {
     @Test
     public void empty() throws Exception {
         List<List<String>> links = asListOfLists("");
-        final Map<String, Map> root = PathFollower.asGraph(links);
+        final Map<String, Map> root = LinkFollower.asGraph(links);
         
         assertThat(root.size(), is(0));
     }
 
     @Test
     public void whenNull() throws Exception {
-        final Map<String, Map> root = PathFollower.asGraph(null);
+        final Map<String, Map> root = LinkFollower.asGraph(null);
         
         assertThat(root.size(), is(0));
     }

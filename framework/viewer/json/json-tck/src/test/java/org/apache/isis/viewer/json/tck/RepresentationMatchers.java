@@ -1,7 +1,5 @@
 package org.apache.isis.viewer.json.tck;
 
-import java.io.IOException;
-
 import javax.ws.rs.core.CacheControl;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -14,8 +12,6 @@ import org.apache.isis.viewer.json.applib.RestfulResponse.HttpStatusCode;
 import org.apache.isis.viewer.json.applib.blocks.Link;
 import org.apache.isis.viewer.json.applib.blocks.Method;
 import org.apache.isis.viewer.json.tck.RepresentationMatchers.AbstractMatcherBuilder;
-import org.codehaus.jackson.JsonParseException;
-import org.codehaus.jackson.map.JsonMappingException;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
@@ -115,7 +111,7 @@ public class RepresentationMatchers {
     }
 
 
-    public static <T> void assertThat(T actual, AbstractMatcherBuilder<T> matcherBuilder) {
+    public static <T extends JsonRepresentation> void assertThat(T actual, AbstractMatcherBuilder<T> matcherBuilder) {
         Assert.assertThat(actual, matcherBuilder.build());
     }
 
@@ -128,7 +124,7 @@ public class RepresentationMatchers {
     }
 
 
-    public static abstract class AbstractMatcherBuilder<T> {
+    public static abstract class AbstractMatcherBuilder<T extends JsonRepresentation> {
         protected RestfulClient client;
 
         public AbstractMatcherBuilder() {
@@ -142,12 +138,14 @@ public class RepresentationMatchers {
         public abstract Matcher<T> build();
     }
 
-    public static class LinkMatcherBuilder extends AbstractMatcherBuilder<Link> {
+    public static class LinkMatcherBuilder extends AbstractMatcherBuilder<JsonRepresentation> {
         private HttpStatusCode statusCode;
         private Method method;
         private String rel;
         private String href;
         private Matcher<String> hrefMatcher;
+        private Matcher<JsonRepresentation> valueMatcher;
+        private Boolean novalue;
 
         private LinkMatcherBuilder(RestfulClient client) {
             super(client);
@@ -173,6 +171,21 @@ public class RepresentationMatchers {
             return this;
         }
 
+        public LinkMatcherBuilder novalue() {
+            if(valueMatcher != null) {
+                throw new IllegalStateException("cannot assert on both there being a value and there not being a value");
+            }
+            this.novalue = true;
+            return this;
+        }
+
+        public LinkMatcherBuilder value(Matcher<JsonRepresentation> valueMatcher) {
+            if(this.novalue != null) {
+                throw new IllegalStateException("cannot assert on both there being a value and there not being a value");
+            }
+            this.valueMatcher = valueMatcher;
+            return this;
+        }
 
         public LinkMatcherBuilder returning(HttpStatusCode statusCode) {
             this.statusCode = statusCode;
@@ -180,13 +193,12 @@ public class RepresentationMatchers {
         }
 
         @Override
-        public Matcher<Link> build() {
-            
-            return new TypeSafeMatcher<Link>() {
+        public Matcher<JsonRepresentation> build() {
+            return new TypeSafeMatcher<JsonRepresentation>() {
 
                 @Override
                 public void describeTo(Description description) {
-                    description.appendText("a link ");
+                    description.appendText("a link");
                     if(rel != null) {
                         description.appendText(" with rel ").appendText(rel);
                     }
@@ -200,13 +212,20 @@ public class RepresentationMatchers {
                     if(method != null) {
                         description.appendText(" with method ").appendValue(method);
                     }
+                    if(novalue) {
+                        description.appendText(" with no value");
+                    }
+                    if(valueMatcher != null) {
+                        description.appendText(" with value ");
+                        valueMatcher.describeTo(description);
+                    }
                     
                     // trigger link being followed
                     if(statusCode != null) {
                         if(client == null) {
-                            description.appendText(" !!! provide client in matcher's constructor !!!");
+                            throw new IllegalStateException("require client in order to assert on statusCode");
                         }
-                        description.appendText(" that when followed");
+                        description.appendText(" that when followed returns status " + statusCode);
                     }
                     
                     // assertions on response
@@ -216,7 +235,11 @@ public class RepresentationMatchers {
                 }
 
                 @Override
-                public boolean matchesSafely(Link link) {
+                public boolean matchesSafely(JsonRepresentation linkRepr) {
+                    if(linkRepr == null) {
+                        return false;
+                    }
+                    Link link = linkRepr.asLink();
                     if(rel != null && !rel.equals(link.getRel())) {
                         return false;
                     }
@@ -227,6 +250,12 @@ public class RepresentationMatchers {
                         return false;
                     }
                     if(method != null && !method.equals(link.getMethod())) {
+                        return false;
+                    }
+                    if(novalue !=null && novalue && link.getValue() != null) {
+                        return false;
+                    }
+                    if(valueMatcher != null && !valueMatcher.matches(link)) {
                         return false;
                     }
 

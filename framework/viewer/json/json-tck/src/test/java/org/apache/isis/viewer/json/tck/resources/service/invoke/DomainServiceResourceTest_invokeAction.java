@@ -1,4 +1,4 @@
-package org.apache.isis.viewer.json.tck.resources.service;
+package org.apache.isis.viewer.json.tck.resources.service.invoke;
 
 import java.io.IOException;
 
