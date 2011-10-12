@@ -58,6 +58,10 @@ public final class Link extends JsonRepresentation {
         return this;
     }
 
+    public JsonRepresentation getValue() {
+        return getRepresentation("value");
+    }
+
     public Method getMethod() {
         String methodStr = asObjectNode().path("method").getTextValue();
         return Method.valueOf(methodStr);
@@ -122,7 +126,7 @@ public final class Link extends JsonRepresentation {
     public String toString() {
         return "Link [rel=" + getRel() + ", href=" + getHref()+ ", method=" + getMethod() + "]";
     }
-    
+
 
     
 }

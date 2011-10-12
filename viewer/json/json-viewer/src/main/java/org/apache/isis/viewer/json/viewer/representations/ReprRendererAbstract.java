@@ -13,32 +13,32 @@ import org.apache.isis.viewer.json.viewer.ResourceContext;
 public abstract class ReprRendererAbstract<R extends ReprRendererAbstract<R, T>, T> implements ReprRenderer<R, T> {
 
     protected final ResourceContext resourceContext;
-    private final PathFollower pathFollower;
+    private final LinkFollower linkFollower;
     private final RepresentationType representationType;
     protected final JsonRepresentation representation;
     
     protected boolean includesSelf;
 
-    public ReprRendererAbstract(ResourceContext resourceContext, PathFollower pathFollower, RepresentationType representationType, JsonRepresentation representation) {
+    public ReprRendererAbstract(ResourceContext resourceContext, LinkFollower linkFollower, RepresentationType representationType, JsonRepresentation representation) {
         this.resourceContext = resourceContext;
-        this.pathFollower = asProvidedElseCreate(pathFollower);
+        this.linkFollower = asProvidedElseCreate(linkFollower);
         this.representationType = representationType;
         this.representation = representation;
     }
 
-    private PathFollower asProvidedElseCreate(PathFollower pathFollower) {
-        if(pathFollower != null) {
-            return pathFollower;
+    private LinkFollower asProvidedElseCreate(LinkFollower linkFollower) {
+        if(linkFollower != null) {
+            return linkFollower;
         }
-        return PathFollower.initial(resourceContext.getFollowLinks());
+        return LinkFollower.initial(resourceContext.getFollowLinks());
     }
 
     public ResourceContext getResourceContext() {
         return resourceContext;
     }
 
-    public PathFollower getPathFollower() {
-        return pathFollower;
+    public LinkFollower getLinkFollower() {
+        return linkFollower;
     }
 
     @Override

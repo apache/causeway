@@ -6,7 +6,8 @@ import java.util.Map;
 
 import com.google.common.collect.Maps;
 
-public final class PathFollower {
+@SuppressWarnings({"rawtypes","unchecked"})
+public final class LinkFollower {
 
     public final static Map<String,Map> asGraph(List<List<String>> links) {
         if(links == null) {
@@ -32,29 +33,29 @@ public final class PathFollower {
         mergeInto(list.subList(1, list.size()), submap);
     }
 
-    public final static PathFollower initial(List<List<String>> links) {
+    public final static LinkFollower initial(List<List<String>> links) {
         final Map<String, Map> graph = asGraph(links);
-        return new PathFollower(graph, Mode.FOLLOWING_PATH);
+        return new LinkFollower(graph, Mode.FOLLOWINGPATH);
     }
 
-    public final static PathFollower following(Map<String,Map> graph) {
-        return new PathFollower(graph, Mode.FOLLOWING_PATH);
+    public final static LinkFollower following(Map<String,Map> graph) {
+        return new LinkFollower(graph, Mode.FOLLOWINGPATH);
     }
 
-    private static PathFollower terminated() {
-        return new PathFollower(null, Mode.TERMINATED);
+    private static LinkFollower terminated() {
+        return new LinkFollower(null, Mode.TERMINATED);
     }
 
 
     private enum Mode {
-        FOLLOWING_PATH,
+        FOLLOWINGPATH,
         TERMINATED;
     }
 
     private final Map<String, Map> graph;
     private Mode mode;
 
-    private PathFollower(Map<String, Map> graph, Mode mode) {
+    private LinkFollower(Map<String, Map> graph, Mode mode) {
         this.graph = graph;
         this.mode = mode;
     }
@@ -62,21 +63,25 @@ public final class PathFollower {
     /**
      * A little algebra...
      */
-    public PathFollower follow(String path) {
+    public LinkFollower follow(String path) {
         if(path == null || mode == Mode.TERMINATED) {
-            return PathFollower.terminated();
+            return LinkFollower.terminated();
         }
-        if(mode == Mode.FOLLOWING_PATH) {
+        if(mode == Mode.FOLLOWINGPATH) {
             Map remaining = graph.get(path);
             if(remaining != null) {
-                return PathFollower.following(remaining);
+                return LinkFollower.following(remaining);
             } else {
-                return PathFollower.terminated();
+                return LinkFollower.terminated();
             }
         }
-        return PathFollower.terminated();
+        return LinkFollower.terminated();
     }
-    
+
+    public boolean isFollowing() {
+        return mode == Mode.FOLLOWINGPATH;
+    }
+
     public boolean isTerminated() {
         return mode == Mode.TERMINATED;
     }

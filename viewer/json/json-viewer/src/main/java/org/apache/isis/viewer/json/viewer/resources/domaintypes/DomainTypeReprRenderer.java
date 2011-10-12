@@ -20,7 +20,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.applib.RepresentationType;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
-import org.apache.isis.viewer.json.viewer.representations.PathFollower;
+import org.apache.isis.viewer.json.viewer.representations.LinkFollower;
 import org.apache.isis.viewer.json.viewer.representations.LinkBuilder;
 import org.apache.isis.viewer.json.viewer.representations.ReprRenderer;
 import org.apache.isis.viewer.json.viewer.representations.ReprRendererAbstract;
@@ -34,8 +34,8 @@ public class DomainTypeReprRenderer extends ReprRendererAbstract<DomainTypeReprR
         }
 
         @Override
-        public ReprRenderer<?, ?> newRenderer(ResourceContext resourceContext, PathFollower pathFollower, JsonRepresentation representation) {
-            return new DomainTypeReprRenderer(resourceContext, pathFollower, getRepresentationType(), representation);
+        public ReprRenderer<?, ?> newRenderer(ResourceContext resourceContext, LinkFollower linkFollower, JsonRepresentation representation) {
+            return new DomainTypeReprRenderer(resourceContext, linkFollower, getRepresentationType(), representation);
         }
     }
 
@@ -47,8 +47,8 @@ public class DomainTypeReprRenderer extends ReprRendererAbstract<DomainTypeReprR
 
     private ObjectSpecification objectSpecification;
 
-    public DomainTypeReprRenderer(ResourceContext resourceContext, PathFollower pathFollower, RepresentationType representationType, JsonRepresentation representation) {
-        super(resourceContext, pathFollower, representationType, representation);
+    public DomainTypeReprRenderer(ResourceContext resourceContext, LinkFollower linkFollower, RepresentationType representationType, JsonRepresentation representation) {
+        super(resourceContext, linkFollower, representationType, representation);
     }
 
     @Override

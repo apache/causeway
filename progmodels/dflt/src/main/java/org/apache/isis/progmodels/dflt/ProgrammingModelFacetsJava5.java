@@ -97,6 +97,7 @@ import org.apache.isis.core.progmodel.facets.object.parseable.ParseableFacetFact
 import org.apache.isis.core.progmodel.facets.object.plural.annotation.PluralAnnotationFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.plural.staticmethod.PluralMethodFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.regex.annotation.RegExFacetAnnotationForTypeFacetFactory;
+import org.apache.isis.core.progmodel.facets.object.stable.annotation.StableAnnotationFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.title.TitleMethodFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.typicallen.annotation.TypicalLengthAnnotationOnTypeFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.validate.method.ValidateObjectViaValidateMethodFacetFactory;
@@ -285,6 +286,8 @@ public class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract {
         addFactory(DisabledFacetForCollectionDerivedFromImmutableTypeFacetFactory.class);
 
         addFactory(ImmutableMarkerInterfacesFacetFactory.class);
+
+        addFactory(StableAnnotationFacetFactory.class);
 
         addFactory(MaxLengthAnnotationForTypeFacetFactory.class);
         addFactory(MaxLengthAnnotationForPropertyFacetFactory.class);

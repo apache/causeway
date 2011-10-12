@@ -1,4 +1,4 @@
-package org.apache.isis.viewer.json.tck.resources.service;
+package org.apache.isis.viewer.json.tck.resources.service.services;
 
 import static org.apache.isis.viewer.json.tck.RepresentationMatchers.assertThat;
 import static org.apache.isis.viewer.json.tck.RepresentationMatchers.isArray;
@@ -24,7 +24,6 @@ import org.apache.isis.viewer.json.applib.blocks.Method;
 import org.apache.isis.viewer.json.applib.domainobjects.DomainServiceResource;
 import org.apache.isis.viewer.json.applib.domainobjects.ListRepresentation;
 import org.apache.isis.viewer.json.tck.IsisWebServerRule;
-import org.apache.isis.viewer.json.tck.RepresentationMatchers;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.junit.Before;
@@ -32,7 +31,7 @@ import org.junit.Rule;
 import org.junit.Test;
 
 
-public class DomainServiceResourceTest_services {
+public class DomainServiceResourceTest_services_representationAndHeaders {
 
     @Rule
     public IsisWebServerRule webServerRule = new IsisWebServerRule();

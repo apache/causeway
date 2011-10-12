@@ -31,6 +31,7 @@ import org.codehaus.jackson.map.deser.JsonNodeDeserializer;
 import org.codehaus.jackson.map.deser.StdDeserializerProvider;
 import org.codehaus.jackson.map.module.SimpleModule;
 import org.codehaus.jackson.type.JavaType;
+import org.jboss.resteasy.client.ClientResponse;
 
 
 public final class JsonMapper {
@@ -133,7 +134,8 @@ public final class JsonMapper {
     }
 
     public <T> T read(Response response, Class<T> requiredType) throws JsonParseException, JsonMappingException, IOException {
-        Object entityObj = response.getEntity();
+        final ClientResponse<?> clientResponse = (ClientResponse<?>)response; // a shame, but needed if calling resources directly
+        Object entityObj = clientResponse.getEntity(String.class);
         if(entityObj == null) {
             return null;
         }
