@@ -96,8 +96,21 @@ public class JsonRepresentation {
     }
     
 
-    public static JsonRepresentation newMap() {
-        return new JsonRepresentation(new ObjectNode(JsonNodeFactory.instance));
+    public static JsonRepresentation newMap(String... keyValuePairs) {
+        final JsonRepresentation repr = new JsonRepresentation(new ObjectNode(JsonNodeFactory.instance));
+        String key = null;
+        for(String keyOrValue: keyValuePairs) {
+            if(key != null) {
+                repr.mapPut(key, keyOrValue);
+                key = null;
+            } else {
+                key = keyOrValue;
+            }
+        }
+        if(key != null) {
+            throw new IllegalArgumentException("must provide an even number of keys and values");
+        }
+        return repr;
     }
 
     public static JsonRepresentation newArray() {
@@ -616,11 +629,12 @@ public class JsonRepresentation {
     /////////////////////////////////////////////////////////////////////////
     // xpath support
     /////////////////////////////////////////////////////////////////////////
-    
+
     /**
      * Requires xom:xom:1.1 (LGPL) to be added as a dependency.
      */
-    public JsonRepresentation xpath(String xpathExpression) {
+    public JsonRepresentation xpath(String xpathExpressionFormat, Object... args) {
+        String xpathExpression = String.format(xpathExpressionFormat,  args);
         try {
             // puts object structure under a <o>
             org.jdom.Document jdomDoc = new SAXBuilder().build(new StringReader(toXml()));

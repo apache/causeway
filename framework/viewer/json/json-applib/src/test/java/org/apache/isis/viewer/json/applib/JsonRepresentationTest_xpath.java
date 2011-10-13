@@ -48,7 +48,7 @@ public class JsonRepresentationTest_xpath {
     }
     
     @Test
-    public void mapXpath_matchingSingleElement() throws JsonParseException, JsonMappingException, IOException, ValidityException, ParsingException {
+    public void xpath_matchingSingleElement() throws JsonParseException, JsonMappingException, IOException, ValidityException, ParsingException {
         JsonRepresentation matching = mapRepresentation.xpath("//*[rel='someRel']");
         assertThat(matching, is(not(nullValue())));
         assertThat(matching.isArray(), is(false));
@@ -56,7 +56,7 @@ public class JsonRepresentationTest_xpath {
     }
 
     @Test
-    public void mapXpath_matchingMultipleElementsInMap() throws JsonParseException, JsonMappingException, IOException, ValidityException, ParsingException {
+    public void xpath_matchingMultipleElementsInMap() throws JsonParseException, JsonMappingException, IOException, ValidityException, ParsingException {
         JsonRepresentation matching = mapRepresentation.xpath("/*");
         assertThat(matching, is(not(nullValue())));
         assertThat(matching.isArray(), is(false));

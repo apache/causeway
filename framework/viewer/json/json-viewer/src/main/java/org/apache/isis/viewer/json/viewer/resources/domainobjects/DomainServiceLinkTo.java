@@ -16,15 +16,34 @@
  */
 package org.apache.isis.viewer.json.viewer.resources.domainobjects;
 
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.services.ServiceUtil;
+import org.apache.isis.viewer.json.viewer.representations.LinkBuilder;
 
-public class DomainServiceLinkToBuilder extends DomainObjectLinkToBuilder {
+public class DomainServiceLinkTo extends DomainObjectLinkTo {
 
-    protected StringBuilder objectsBuf() {
+    private String serviceId;
+
+    @Override
+    public ObjectAdapterLinkTo with(ObjectAdapter objectAdapter) {
+        serviceId = ServiceUtil.id(objectAdapter.getObject());
+        return super.with(objectAdapter);
+    }
+    
+    protected String linkRef() {
         StringBuilder buf = new StringBuilder("services/");
-        String serviceId = ServiceUtil.id(objectAdapter.getObject());
         buf.append(serviceId);
-        return buf;
+        return buf.toString();
+    }
+    
+    @Override
+    protected String linkRel() {
+        return "service";
+    }
+    
+    @Override
+    public LinkBuilder builder() {
+        return super.builder().withKey(serviceId);
     }
 
 }

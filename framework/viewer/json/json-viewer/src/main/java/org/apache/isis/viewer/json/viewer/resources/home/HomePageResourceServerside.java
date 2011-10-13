@@ -38,7 +38,7 @@ public class HomePageResourceServerside extends ResourceAbstract implements Home
 
     @Override
     @Produces({ RestfulMediaType.APPLICATION_JSON_HOME_PAGE} )
-    public Response resources() {
+    public Response homePage() {
         RepresentationType representationType = RepresentationType.HOME_PAGE;
         init(representationType);
         

@@ -42,30 +42,44 @@ public class ListReprRenderer extends ReprRendererAbstract<ListReprRenderer, Col
         }
     }
 
-    private ObjectAdapterLinkToBuilder objectAdapterLinkToBuilder;
+    private ObjectAdapterLinkTo linkToBuilder;
+    private Collection<ObjectAdapter> objectAdapters;
 
     private ListReprRenderer(ResourceContext resourceContext, LinkFollower linkFollower, RepresentationType representationType, JsonRepresentation representation) {
         super(resourceContext, linkFollower, representationType, representation);
-        usingLinkToBuilder(new DomainObjectLinkToBuilder());
+        usingLinkToBuilder(new DomainObjectLinkTo());
     }
     
-    public ListReprRenderer usingLinkToBuilder(ObjectAdapterLinkToBuilder objectAdapterLinkToBuilder) {
-        this.objectAdapterLinkToBuilder = objectAdapterLinkToBuilder.usingResourceContext(resourceContext);
+    public ListReprRenderer usingLinkToBuilder(ObjectAdapterLinkTo objectAdapterLinkToBuilder) {
+        this.linkToBuilder = objectAdapterLinkToBuilder.usingResourceContext(resourceContext);
         return this;
     }
 
     @Override
     public ListReprRenderer with(Collection<ObjectAdapter> objectAdapters) {
+        this.objectAdapters = objectAdapters;
+        return this;
+    }
+
+
+    public JsonRepresentation render() {
+        withObjectAdapters();
+        withLinks();
+        withExtensions();
+
+        return representation;
+    }
+
+    private void withObjectAdapters() {
         JsonRepresentation list = JsonRepresentation.newArray();
 
         final LinkFollower linkFollower = getLinkFollower().follow("values");
-        final boolean following = linkFollower.isFollowing();
 
         for(ObjectAdapter adapter: objectAdapters) {
-            JsonRepresentation linkToObject = objectAdapterLinkToBuilder.with(adapter).linkToAdapter().build();
+            JsonRepresentation linkToObject = linkToBuilder.with(adapter).builder().build();
             list.arrayAdd(linkToObject);
 
-            if(following) {
+            if(linkFollower.matches(linkToObject)) {
                 final RendererFactory factory = RendererFactoryRegistry.instance.find(RepresentationType.DOMAIN_OBJECT);
                 final DomainObjectReprRenderer renderer = 
                         (DomainObjectReprRenderer) factory.newRenderer(getResourceContext(), linkFollower, JsonRepresentation.newMap());
@@ -74,15 +88,6 @@ public class ListReprRenderer extends ReprRendererAbstract<ListReprRenderer, Col
             }
         }
         representation.mapPut("values", list);
-        return this;
-    }
-
-
-    public JsonRepresentation render() {
-        withLinks();
-        withExtensions();
-
-        return representation;
     }
 
 

@@ -14,7 +14,7 @@ import org.apache.isis.viewer.json.viewer.representations.ReprRenderer;
 import org.apache.isis.viewer.json.viewer.representations.ReprRendererAbstract;
 import org.apache.isis.viewer.json.viewer.representations.ReprRendererFactoryAbstract;
 import org.apache.isis.viewer.json.viewer.resources.capabilities.CapabilitiesReprRenderer;
-import org.apache.isis.viewer.json.viewer.resources.domainobjects.DomainServiceLinkToBuilder;
+import org.apache.isis.viewer.json.viewer.resources.domainobjects.DomainServiceLinkTo;
 import org.apache.isis.viewer.json.viewer.resources.domainobjects.ListReprRenderer;
 import org.apache.isis.viewer.json.viewer.resources.user.UserReprRenderer;
 
@@ -71,7 +71,8 @@ public class HomePageReprRenderer extends ReprRendererAbstract<HomePageReprRende
         if(linkFollower.isFollowing()) {
 
             final RendererFactory factory = RendererFactoryRegistry.instance.find(RepresentationType.HOME_PAGE);
-            final HomePageReprRenderer renderer = (HomePageReprRenderer) factory.newRenderer(getResourceContext(), linkFollower, JsonRepresentation.newMap());
+            final HomePageReprRenderer renderer = 
+                    (HomePageReprRenderer) factory.newRenderer(getResourceContext(), linkFollower, JsonRepresentation.newMap());
             
             linkBuilder.withValue(renderer.render());
         }
@@ -106,7 +107,7 @@ public class HomePageReprRenderer extends ReprRendererAbstract<HomePageReprRende
             final RendererFactory factory = RendererFactoryRegistry.instance.find(RepresentationType.LIST);
             
             final ListReprRenderer renderer = (ListReprRenderer) factory.newRenderer(getResourceContext(), linkFollower, JsonRepresentation.newMap());
-            renderer.usingLinkToBuilder(new DomainServiceLinkToBuilder())
+            renderer.usingLinkToBuilder(new DomainServiceLinkTo())
                     .withSelf("services")
                     .with(serviceAdapters);
             
