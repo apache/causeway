@@ -153,8 +153,9 @@ public final class RestfulRequest {
         return this;
     }
 
-    public <Q> RestfulRequest withArg(RestfulRequest.QueryParameter<Q> queryParam, String argStr) {
-        final Q arg = queryParam.getParser().valueOf(argStr);
+    public <Q> RestfulRequest withArg(RestfulRequest.QueryParameter<Q> queryParam, String argStrFormat, Object... args) {
+        String argStr = String.format(argStrFormat, args);
+        final Q arg = queryParam.getParser().valueOf(argStr );
         return withArg(queryParam, arg);
     }
 

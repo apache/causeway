@@ -58,7 +58,7 @@ public class HomePageResourceTest_representationAndHeaders {
     public void representation() throws Exception {
 
         // given
-        Response resp = resource.resources();
+        Response resp = resource.homePage();
         
         // when
         RestfulResponse<HomePageRepresentation> restfulResponse = RestfulResponse.ofT(resp);
@@ -69,7 +69,7 @@ public class HomePageResourceTest_representationAndHeaders {
         
         HomePageRepresentation repr = restfulResponse.getEntity();
         assertThat(repr, is(not(nullValue())));
-        assertThat(repr.isMap(), is(true));
+        assertThat(repr, isMap());
         
         assertThat(repr.getSelf(), isLink(client).method(Method.GET));
         assertThat(repr.getUser(), isLink(client).method(Method.GET));
@@ -83,7 +83,7 @@ public class HomePageResourceTest_representationAndHeaders {
     @Test
     public void headers() throws Exception {
         // given
-        Response resp = resource.resources();
+        Response resp = resource.homePage();
         
         // when
         RestfulResponse<HomePageRepresentation> restfulResponse = RestfulResponse.ofT(resp);
@@ -122,7 +122,7 @@ public class HomePageResourceTest_representationAndHeaders {
     }
 
     private HomePageRepresentation givenRepresentation() throws JsonParseException, JsonMappingException, IOException {
-        RestfulResponse<HomePageRepresentation> response = RestfulResponse.ofT(resource.resources());
+        RestfulResponse<HomePageRepresentation> response = RestfulResponse.ofT(resource.homePage());
         return response.getEntity();
     }
 

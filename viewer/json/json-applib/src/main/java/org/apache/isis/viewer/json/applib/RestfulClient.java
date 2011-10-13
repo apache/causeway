@@ -119,11 +119,20 @@ public class RestfulClient {
 
     public RestfulRequest createRequest(HttpMethod httpMethod, String uriTemplate) {
         
-        ClientRequest clientRequest = clientRequestFactory.createRelativeRequest(uriTemplate);
+        ClientRequest clientRequest = createRequest(uriTemplate);
         clientRequest.accept(MediaType.APPLICATION_JSON_TYPE);
         clientRequest.setHttpMethod(httpMethod.getJavaxRsMethod());
         
         return new RestfulRequest(clientRequest, httpMethod);
+    }
+
+    private ClientRequest createRequest(String uriTemplate) {
+        boolean includesScheme = uriTemplate.startsWith("http:") || uriTemplate.startsWith("https:");
+        if(includesScheme) {
+            return clientRequestFactory.createRequest(uriTemplate);
+        } else {
+            return clientRequestFactory.createRelativeRequest(uriTemplate);
+        }
     }
     
     /**

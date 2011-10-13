@@ -52,15 +52,15 @@ public class DomainServiceResourceTest_services_representationAndHeaders {
     public void representation() throws Exception {
         
         // when
-        Response resp = resource.services();
-        RestfulResponse<ListRepresentation> jsonResp = RestfulResponse.ofT(resp);
+        final Response response = resource.services();
+        final RestfulResponse<ListRepresentation> restfulResponse = RestfulResponse.ofT(response);
         
         // then
-        assertThat(jsonResp.getStatus(), is(HttpStatusCode.OK));
-        assertThat(jsonResp.getHeader(RestfulResponse.Header.CONTENT_TYPE), is(RepresentationType.LIST.getMediaType()));
-        assertThat(jsonResp.getHeader(RestfulResponse.Header.CACHE_CONTROL).getMaxAge(), is(24*60*60));
+        assertThat(restfulResponse.getStatus(), is(HttpStatusCode.OK));
+        assertThat(restfulResponse.getHeader(RestfulResponse.Header.CONTENT_TYPE), is(RepresentationType.LIST.getMediaType()));
+        assertThat(restfulResponse.getHeader(RestfulResponse.Header.CACHE_CONTROL).getMaxAge(), is(24*60*60));
 
-        ListRepresentation repr = jsonResp.getEntity();
+        ListRepresentation repr = restfulResponse.getEntity();
 
         assertThat(repr, isMap());
 

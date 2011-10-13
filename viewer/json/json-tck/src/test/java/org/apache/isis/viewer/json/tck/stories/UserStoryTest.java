@@ -37,7 +37,7 @@ public class UserStoryTest {
     
         // given a response for an initial resource
         HomePageResource homePageResource = client.getHomePageResource();
-        Response homePageResp = homePageResource.resources();
+        Response homePageResp = homePageResource.homePage();
         
         // and given a walker starting from this response
         RepresentationWalker walker = client.createWalker(homePageResp);

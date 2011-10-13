@@ -63,19 +63,19 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
         return LinkBuilder.newBuilder(resourceContext, rel, RepresentationType.DOMAIN_OBJECT, url);
     }
 
-    private ObjectAdapterLinkToBuilder linkToBuilder;
+    private ObjectAdapterLinkTo linkToBuilder;
     private ObjectAdapter objectAdapter;
 
     private DomainObjectReprRenderer(ResourceContext resourceContext, LinkFollower linkFollower, RepresentationType representationType, JsonRepresentation representation) {
         super(resourceContext, linkFollower, representationType, representation);
-        usingLinkToBuilder(new DomainObjectLinkToBuilder());
+        usingLinkToBuilder(new DomainObjectLinkTo());
     }
 
     /**
-     * Override the default {@link ObjectAdapterLinkToBuilder} (that is used for generating links in
+     * Override the default {@link ObjectAdapterLinkTo} (that is used for generating links in
      * {@link #linkTo(ObjectAdapter)}).
      */
-    public DomainObjectReprRenderer usingLinkToBuilder(ObjectAdapterLinkToBuilder objectAdapterLinkToBuilder) {
+    public DomainObjectReprRenderer usingLinkToBuilder(ObjectAdapterLinkTo objectAdapterLinkToBuilder) {
         this.linkToBuilder = objectAdapterLinkToBuilder.usingResourceContext(resourceContext);
         return this;
     }
@@ -89,7 +89,7 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
 
         // self
         if(includesSelf) {
-            JsonRepresentation self = linkToBuilder.with(objectAdapter).linkToAdapter().build();
+            JsonRepresentation self = linkToBuilder.with(objectAdapter).builder().build();
             representation.mapPut("self", self);
         }
 
@@ -127,6 +127,8 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
 
     private void addAssociations(ObjectAdapter objectAdapter, JsonRepresentation members, List<ObjectAssociation> associations) {
         for (ObjectAssociation assoc : associations) {
+            final LinkFollower follow = getLinkFollower().follow("members");
+            
             Consent visibility = assoc.isVisible(getSession(), objectAdapter);
             if(!visibility.isAllowed()) {
                 continue;

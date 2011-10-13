@@ -3,87 +3,108 @@ package org.apache.isis.viewer.json.viewer.representations;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
-import com.google.common.collect.Maps;
+import org.apache.isis.viewer.json.applib.JsonRepresentation;
+
+import com.google.common.base.Objects;
+
+
 
 @SuppressWarnings({"rawtypes","unchecked"})
 public final class LinkFollower {
 
-    public final static Map<String,Map> asGraph(List<List<String>> links) {
-        if(links == null) {
-            return Collections.emptyMap();
-        }
-        final Map<String, Map> map = Maps.newHashMap();
-        for (List<String> link : links) {
-            mergeInto(link, map);
-        }
-        return map;
+    public final static LinkFollower create(List<List<String>> links) {
+        final Map<Node, Map> graph = ListUtil.asGraph(links);
+        return new LinkFollower(graph, Mode.FOLLOWING, Node.NULL);
     }
-
-    private static void mergeInto(List<String> list, Map<String, Map> map) {
-        if(list.size() == 0) {
-            return;
-        }
-        final String str = list.get(0);
-        Map submap = map.get(str);
-        if(submap == null) {
-            submap = Maps.newHashMap(); 
-            map.put(str, submap);
-        }
-        mergeInto(list.subList(1, list.size()), submap);
-    }
-
-    public final static LinkFollower initial(List<List<String>> links) {
-        final Map<String, Map> graph = asGraph(links);
-        return new LinkFollower(graph, Mode.FOLLOWINGPATH);
-    }
-
-    public final static LinkFollower following(Map<String,Map> graph) {
-        return new LinkFollower(graph, Mode.FOLLOWINGPATH);
-    }
-
-    private static LinkFollower terminated() {
-        return new LinkFollower(null, Mode.TERMINATED);
-    }
-
 
     private enum Mode {
-        FOLLOWINGPATH,
+        FOLLOWING,
         TERMINATED;
     }
 
-    private final Map<String, Map> graph;
+    private final Map<Node, Map> graph;
     private Mode mode;
+    private final Node root;
 
-    private LinkFollower(Map<String, Map> graph, Mode mode) {
+    private LinkFollower(Map<Node, Map> graph, Mode mode, Node root) {
         this.graph = graph;
         this.mode = mode;
+        this.root = root;
     }
 
     /**
      * A little algebra...
      */
     public LinkFollower follow(String path) {
-        if(path == null || mode == Mode.TERMINATED) {
-            return LinkFollower.terminated();
+        if(path == null) {
+            return terminated(Node.NULL);
         }
-        if(mode == Mode.FOLLOWINGPATH) {
-            Map remaining = graph.get(path);
+        if(mode == Mode.TERMINATED) {
+            return terminated(this.root);
+        }
+        Node node = Node.parse(path);
+        if(mode == Mode.FOLLOWING) {
+            Map<Node, Map> remaining = graph.get(node);
             if(remaining != null) {
-                return LinkFollower.following(remaining);
+                Node key = findKey(node);
+                return new LinkFollower(remaining, Mode.FOLLOWING, key);
             } else {
-                return LinkFollower.terminated();
+                return terminated(node);
             }
         }
-        return LinkFollower.terminated();
+        return terminated(node);
+    }
+
+    /**
+     * somewhat bizarre, but we have to find the actual node that is in the graph;
+     * the one we matching on doesn't match on the {@link Node#getCriteria()} map.
+     */
+    private Node findKey(Node node) {
+        final Set<Node> keySet = graph.keySet();
+        for(Node key: keySet) {
+            if(key.equals(node)) {
+                return key;
+            }
+        }
+        // shouldn't happen
+        return node;
+    }
+
+    private static LinkFollower terminated(Node node) {
+        return new LinkFollower(null, Mode.TERMINATED, node);
     }
 
     public boolean isFollowing() {
-        return mode == Mode.FOLLOWINGPATH;
+        return mode == Mode.FOLLOWING;
     }
 
     public boolean isTerminated() {
         return mode == Mode.TERMINATED;
+    }
+
+    public Map<String, String> criteria() {
+        return Collections.unmodifiableMap(root.getCriteria());
+    }
+
+    /**
+     * Ensure that every key present in the provided map matches the criterium.
+     * 
+     * <p>
+     * Any keys in the criterium that are not present in the map will be ignored.
+     */
+    public boolean matches(JsonRepresentation map) {
+        if(!isFollowing()) {
+            return false;
+        }
+        for(Map.Entry<String,String> criterium: root.getCriteria().entrySet()) {
+            final String mapValue = map.getString(criterium.getKey());
+            if(mapValue != null && !Objects.equal(mapValue, criterium.getValue())) {
+                return false;
+            }
+        }
+        return true;
     }
 
 }

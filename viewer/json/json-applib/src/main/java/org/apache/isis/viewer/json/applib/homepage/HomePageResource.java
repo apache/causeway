@@ -33,6 +33,6 @@ public interface HomePageResource {
     @GET
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_HOME_PAGE })
     @ClientResponseType(entityType=String.class)
-    public Response resources();
+    public Response homePage();
 
 }

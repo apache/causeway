@@ -30,7 +30,7 @@ public abstract class ReprRendererAbstract<R extends ReprRendererAbstract<R, T>,
         if(linkFollower != null) {
             return linkFollower;
         }
-        return LinkFollower.initial(resourceContext.getFollowLinks());
+        return LinkFollower.create(resourceContext.getFollowLinks());
     }
 
     public ResourceContext getResourceContext() {

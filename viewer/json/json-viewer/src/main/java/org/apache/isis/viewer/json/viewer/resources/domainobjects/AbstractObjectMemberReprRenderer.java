@@ -30,7 +30,7 @@ import org.apache.isis.viewer.json.viewer.representations.ReprRendererAbstract;
 public abstract class AbstractObjectMemberReprRenderer<R extends ReprRendererAbstract<R, ObjectAndMember<T>>, T extends ObjectMember> 
         extends ReprRendererAbstract<R, ObjectAndMember<T>> {
 
-    protected ObjectAdapterLinkToBuilder linkToBuilder;
+    protected ObjectAdapterLinkTo linkToBuilder;
     
     protected ObjectAdapter objectAdapter;
     protected MemberType memberType;
@@ -46,14 +46,14 @@ public abstract class AbstractObjectMemberReprRenderer<R extends ReprRendererAbs
         this.objectAdapter = objectAndMember.getObjectAdapter();
         this.objectMember = objectAndMember.getMember();
         this.memberType = MemberType.determineFrom(objectMember);
-        usingLinkToBuilder(new DomainObjectLinkToBuilder());
+        usingLinkToBuilder(new DomainObjectLinkTo());
         return cast(this);
     }
 
     /**
      * Must be called after {@link #with(ObjectAndMember)} (which provides the {@link #objectAdapter}).
      */
-    public R usingLinkToBuilder(ObjectAdapterLinkToBuilder linkToBuilder) {
+    public R usingLinkToBuilder(ObjectAdapterLinkTo linkToBuilder) {
         this.linkToBuilder = linkToBuilder.usingResourceContext(resourceContext).with(objectAdapter);
         return cast(this);
     }

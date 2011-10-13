@@ -28,7 +28,6 @@ public class DomainServiceResourceTest_services_xrofollowlinks {
 
     @Rule
     public IsisWebServerRule webServerRule = new IsisWebServerRule();
-    
     private RestfulClient client;
 
     @Before

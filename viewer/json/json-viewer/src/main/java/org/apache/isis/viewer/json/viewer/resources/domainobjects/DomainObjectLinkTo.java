@@ -22,33 +22,54 @@ import org.apache.isis.viewer.json.applib.RepresentationType;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
 import org.apache.isis.viewer.json.viewer.representations.LinkBuilder;
 
-public class DomainObjectLinkToBuilder implements ObjectAdapterLinkToBuilder {
+public class DomainObjectLinkTo implements ObjectAdapterLinkTo {
 
     protected ResourceContext resourceContext;
     protected ObjectAdapter objectAdapter;
 
     @Override
-    public final DomainObjectLinkToBuilder usingResourceContext(ResourceContext resourceContext) {
+    public final DomainObjectLinkTo usingResourceContext(ResourceContext resourceContext) {
         this.resourceContext = resourceContext;
         return this;
     }
 
     @Override
-    public final ObjectAdapterLinkToBuilder with(ObjectAdapter objectAdapter) {
+    public ObjectAdapterLinkTo with(ObjectAdapter objectAdapter) {
         this.objectAdapter = objectAdapter;
         return this;
     }
 
     @Override
-    public final LinkBuilder linkToAdapter() {
-        StringBuilder buf = objectsBuf();
-        return LinkBuilder.newBuilder(resourceContext, "object", RepresentationType.DOMAIN_OBJECT, buf.toString());
+    public LinkBuilder builder() {
+        return LinkBuilder.newBuilder(resourceContext, linkRel(), RepresentationType.DOMAIN_OBJECT, linkRef());
+    }
+
+    /**
+     * hook method
+     */
+    protected String linkRef() {
+        if(resourceContext == null) {
+            throw new IllegalStateException("resourceContext not provided");
+        }
+        if(objectAdapter == null) {
+            throw new IllegalStateException("objectAdapter not provided");
+        }
+        StringBuilder buf = new StringBuilder("objects/");
+        buf.append(resourceContext.getOidStringifier().enString(objectAdapter.getOid()));
+        return buf.toString();
+    }
+
+    /**
+     * hook method
+     */
+    protected String linkRel() {
+        return "object";
     }
 
 
     @Override
     public final LinkBuilder linkToMember(String rel, MemberType memberType, ObjectMember objectMember, String... parts) {
-        StringBuilder buf = objectsBuf();
+        StringBuilder buf = new StringBuilder(linkRef());
         buf.append("/").append(memberType.getUrlPart()).append(objectMember.getId());
         for(String part: parts) {
             if(part == null) {
@@ -60,21 +81,6 @@ public class DomainObjectLinkToBuilder implements ObjectAdapterLinkToBuilder {
         return LinkBuilder.newBuilder(resourceContext, rel, memberType.getRepresentationType(), url);
     }
 
-    /**
-     * hook method
-     * @return
-     */
-    protected StringBuilder objectsBuf() {
-        if(resourceContext == null) {
-            throw new IllegalStateException("resourceContext not provided");
-        }
-        if(objectAdapter == null) {
-            throw new IllegalStateException("objectAdapter not provided");
-        }
-        StringBuilder buf = new StringBuilder("objects/");
-        buf.append(resourceContext.getOidStringifier().enString(objectAdapter.getOid()));
-        return buf;
-    }
     
 
 }
