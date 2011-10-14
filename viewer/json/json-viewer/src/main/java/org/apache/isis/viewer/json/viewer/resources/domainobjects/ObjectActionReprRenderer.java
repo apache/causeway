@@ -27,6 +27,8 @@ import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.applib.RepresentationType;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
 import org.apache.isis.viewer.json.viewer.representations.LinkFollower;
+import org.apache.isis.viewer.json.viewer.representations.RendererFactory;
+import org.apache.isis.viewer.json.viewer.representations.RendererFactoryRegistry;
 import org.apache.isis.viewer.json.viewer.representations.ReprRenderer;
 import org.apache.isis.viewer.json.viewer.representations.ReprRendererFactoryAbstract;
 import org.apache.isis.viewer.json.viewer.resources.domaintypes.DomainTypeReprRenderer;
@@ -54,8 +56,7 @@ public class ObjectActionReprRenderer extends AbstractObjectMemberReprRenderer<O
     }
 
     public JsonRepresentation render() {
-        putId();
-        putMemberType();
+        // id and memberType are put eagerly
         
         putDisabledReasonIfDisabled();
         
@@ -71,7 +72,23 @@ public class ObjectActionReprRenderer extends AbstractObjectMemberReprRenderer<O
         return representation;
     }
 
-    
+
+    /////////////////////////////////////////////////////
+    // details link
+    /////////////////////////////////////////////////////
+
+    /**
+     * Mandatory hook method to support x-ro-follow-links
+     */
+    @Override
+    protected void followDetailsLink(JsonRepresentation detailsLink) {
+        RendererFactory factory = RendererFactoryRegistry.instance.find(RepresentationType.OBJECT_ACTION);
+        final ObjectActionReprRenderer renderer = 
+                (ObjectActionReprRenderer) factory.newRenderer(getResourceContext(), getLinkFollower(), JsonRepresentation.newMap());
+        renderer.with(new ObjectAndAction(objectAdapter, objectMember)).withMutatorsIfEnabled();
+        detailsLink.mapPut("value", renderer.render());
+    }
+
     /////////////////////////////////////////////////////
     // mutators
     /////////////////////////////////////////////////////
@@ -217,6 +234,7 @@ public class ObjectActionReprRenderer extends AbstractObjectMemberReprRenderer<O
 
        links.arrayAdd(DomainTypeReprRenderer.newLinkToBuilder(resourceContext, "domainType", objectAdapter.getSpecification()).build());
     }
+
 
 
 }

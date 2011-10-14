@@ -2,8 +2,6 @@ package org.apache.isis.viewer.json.applib.util;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.List;
 
 import org.codehaus.jackson.JsonNode;
@@ -61,15 +59,6 @@ public class JsonNodeUtils {
             node = (ObjectNode) jsonNode;
         }
         return (ObjectNode) node;
-    }
-
-    public static String asUrlEncoded(JsonNode jsonNode) {
-        try {
-            return URLEncoder.encode(jsonNode.toString(), Charsets.UTF_8.name());
-        } catch (UnsupportedEncodingException e) {
-            // shouldn't happen
-            throw new RuntimeException(e);
-        }
     }
 
 }

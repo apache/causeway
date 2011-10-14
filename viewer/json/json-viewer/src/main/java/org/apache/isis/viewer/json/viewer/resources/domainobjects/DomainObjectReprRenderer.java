@@ -126,10 +126,10 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
     }
 
     private void addAssociations(ObjectAdapter objectAdapter, JsonRepresentation members, List<ObjectAssociation> associations) {
-        for (ObjectAssociation assoc : associations) {
-            final LinkFollower follow = getLinkFollower().follow("members");
+        final LinkFollower linkFollower = getLinkFollower().follow("members");
+        for (final ObjectAssociation assoc : associations) {
             
-            Consent visibility = assoc.isVisible(getSession(), objectAdapter);
+            final Consent visibility = assoc.isVisible(getSession(), objectAdapter);
             if(!visibility.isAllowed()) {
                 continue;
             } 
@@ -138,7 +138,7 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
                 
                 RendererFactory factory = RendererFactoryRegistry.instance.find(RepresentationType.OBJECT_PROPERTY);
                 final ObjectPropertyReprRenderer renderer = 
-                        (ObjectPropertyReprRenderer) factory.newRenderer(getResourceContext(), null, JsonRepresentation.newMap());
+                        (ObjectPropertyReprRenderer) factory.newRenderer(getResourceContext(), linkFollower, JsonRepresentation.newMap());
                 
                 renderer.with(new ObjectAndProperty(objectAdapter, property))
                         .usingLinkToBuilder(linkToBuilder)
@@ -151,7 +151,7 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
 
                 RendererFactory factory = RendererFactoryRegistry.instance.find(RepresentationType.OBJECT_COLLECTION);
                 final ObjectCollectionReprRenderer renderer = 
-                        (ObjectCollectionReprRenderer) factory.newRenderer(getResourceContext(), null, JsonRepresentation.newMap());
+                        (ObjectCollectionReprRenderer) factory.newRenderer(getResourceContext(), linkFollower, JsonRepresentation.newMap());
 
                 renderer.with(new ObjectAndCollection(objectAdapter, collection))
                     .usingLinkToBuilder(linkToBuilder)
@@ -164,8 +164,9 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
 
     private void addActions(final ObjectAdapter objectAdapter,
             List<ObjectAction> actions, JsonRepresentation members) {
-        for (ObjectAction action : actions) {
-            Consent visibility = action.isVisible(getSession(), objectAdapter);
+        final LinkFollower linkFollower = getLinkFollower().follow("members");
+        for (final ObjectAction action : actions) {
+            final Consent visibility = action.isVisible(getSession(), objectAdapter);
             if(!visibility.isAllowed()) {
                 continue;
             } 
@@ -178,7 +179,7 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
                 
                 RendererFactory factory = RendererFactoryRegistry.instance.find(RepresentationType.OBJECT_ACTION);
                 final ObjectActionReprRenderer renderer = 
-                        (ObjectActionReprRenderer) factory.newRenderer(getResourceContext(), null, JsonRepresentation.newMap());
+                        (ObjectActionReprRenderer) factory.newRenderer(getResourceContext(), linkFollower, JsonRepresentation.newMap());
                 
                 renderer.with(new ObjectAndAction(objectAdapter, action))
                         .usingLinkToBuilder(linkToBuilder)
