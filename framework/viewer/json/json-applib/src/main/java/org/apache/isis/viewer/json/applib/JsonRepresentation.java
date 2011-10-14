@@ -12,6 +12,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import net.sf.json.JSON;
 import net.sf.json.JSONNull;
@@ -19,8 +20,10 @@ import net.sf.json.JSONSerializer;
 import net.sf.json.xml.XMLSerializer;
 
 import org.apache.isis.viewer.json.applib.blocks.Link;
+import org.apache.isis.viewer.json.applib.domainobjects.ObjectActionRepresentation;
 import org.apache.isis.viewer.json.applib.util.JsonMapper;
 import org.apache.isis.viewer.json.applib.util.JsonNodeUtils;
+import org.apache.isis.viewer.json.applib.util.UrlEncodingUtils;
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
@@ -35,6 +38,7 @@ import org.jdom.output.XMLOutputter;
 import org.jdom.xpath.XPath;
 
 import com.google.common.base.Function;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Iterators;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -467,6 +471,14 @@ public class JsonRepresentation {
         return node.getTextValue();
     }
 
+    public String asArg() {
+        if(isValue()) {
+            return asJsonNode().getValueAsText();
+        } else {
+            return asJsonNode().toString();
+        }
+    }
+
     
     /////////////////////////////////////////////////////////////////////////
     // isLink, getLink, asLink
@@ -626,6 +638,24 @@ public class JsonRepresentation {
     }
 
 
+    
+    /////////////////////////////////////////////////////////////////////////
+    // asT
+    /////////////////////////////////////////////////////////////////////////
+
+    /**
+     * Convenience to simply downcast.
+     */
+    public <T extends JsonRepresentation> T as(Class<T> cls) {
+        try {
+            final Constructor<T> constructor = cls.getConstructor(JsonNode.class);
+            return (T)constructor.newInstance(jsonNode);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    
     /////////////////////////////////////////////////////////////////////////
     // xpath support
     /////////////////////////////////////////////////////////////////////////
@@ -702,7 +732,7 @@ public class JsonRepresentation {
     }
 
     public String asUrlEncoded() {
-        return JsonNodeUtils.asUrlEncoded(asJsonNode());
+        return UrlEncodingUtils.asUrlEncoded(asJsonNode());
     }
 
 
@@ -957,8 +987,54 @@ public class JsonRepresentation {
     }
     
 
+    public Iterable<Map.Entry<String, JsonRepresentation>> mapIterable() {
+        ensureIsAMap();
+        return new Iterable<Map.Entry<String,JsonRepresentation>>() {
+            
+            @Override
+            public Iterator<Entry<String, JsonRepresentation>> iterator() {
+                return mapIterator();
+            }
+        };
+    }
 
-    
+    public Iterator<Map.Entry<String, JsonRepresentation>> mapIterator() {
+        ensureIsAMap();
+        return Iterators.transform(jsonNode.getFields(), MAP_ENTRY_JSON_NODE_TO_JSON_REPRESENTATION);
+    }
+
+    private void ensureIsAMap() {
+        if (!jsonNode.isObject()) {
+            throw new IllegalStateException("Is not a map");
+        }
+    }
+
+    private final static Function<Entry<String, JsonNode>, Entry<String, JsonRepresentation>> MAP_ENTRY_JSON_NODE_TO_JSON_REPRESENTATION = new Function<Entry<String,JsonNode>, Entry<String,JsonRepresentation>>() {
+
+        @Override
+        public Entry<String, JsonRepresentation> apply(final Entry<String,JsonNode> input) {
+            return new Map.Entry<String, JsonRepresentation>() {
+
+                @Override
+                public String getKey() {
+                    return input.getKey();
+                }
+
+                @Override
+                public JsonRepresentation getValue() {
+                    return new JsonRepresentation(input.getValue());
+                }
+
+                @Override
+                public JsonRepresentation setValue(JsonRepresentation value) {
+                    final JsonNode setValue = input.setValue(value.asJsonNode());
+                    return new JsonRepresentation(setValue);
+                }
+            };
+        }
+    };
+
+
     /////////////////////////////////////////////////////////////////////////
     // helpers
     /////////////////////////////////////////////////////////////////////////
@@ -1006,6 +1082,10 @@ public class JsonRepresentation {
     public String toString() {
         return jsonNode.toString();
     }
+
+
+
+
 
 
 

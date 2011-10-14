@@ -1,6 +1,6 @@
 package org.apache.isis.viewer.json.applib;
 
-import static org.apache.isis.viewer.json.applib.util.UrlDecodeUtils.*;
+import static org.apache.isis.viewer.json.applib.util.UrlEncodingUtils.*;
 
 import java.util.Arrays;
 import java.util.Collections;

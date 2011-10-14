@@ -26,6 +26,10 @@ public class ObjectActionRepresentation extends JsonRepresentation implements Li
         return getString("memberType");
     }
 
+    public Link getInvoke() {
+        return getLink("invoke");
+    }
+
     public String getActionId() {
         return getString("actionId");
     }

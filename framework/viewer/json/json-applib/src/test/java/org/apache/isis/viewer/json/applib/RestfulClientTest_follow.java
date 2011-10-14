@@ -68,24 +68,17 @@ public class RestfulClientTest_follow {
         Link getLink = jsonRepresentation.getLink("aLink");
 
         // when
-        final Sequence sequence = context.sequence("execution");
         context.checking(new Expectations() {
             {
                 one(mockExecutor).createRequest("http://foo/bar");
-                inSequence(sequence);
                 will(returnValue(mockClientRequest));
                 
-                one(mockClientRequest).setHttpMethod(Method.GET.name());
-                inSequence(sequence);
-                one(mockClientRequest).accept(MediaType.APPLICATION_JSON_TYPE);
-                inSequence(sequence);
+                ignoring(mockClientRequest);
 
                 one(mockExecutor).execute(mockClientRequest);
-                inSequence(sequence);
                 will(returnValue(mockClientResponse));
                 
                 one(mockClientResponse).setReturnType(String.class);
-                inSequence(sequence);
             }
         });
         client.follow(getLink);

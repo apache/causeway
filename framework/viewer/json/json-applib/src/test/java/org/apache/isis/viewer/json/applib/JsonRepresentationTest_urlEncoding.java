@@ -1,4 +1,4 @@
-package org.apache.isis.viewer.json.applib.blocks;
+package org.apache.isis.viewer.json.applib;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -6,11 +6,13 @@ import static org.junit.Assert.assertThat;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 
+import org.apache.isis.viewer.json.applib.blocks.Link;
+import org.apache.isis.viewer.json.applib.blocks.Method;
 import org.junit.Test;
 
 import com.google.common.base.Charsets;
 
-public class LinkTest_urlEncoding {
+public class JsonRepresentationTest_urlEncoding {
 
     @Test
     public void test() throws UnsupportedEncodingException {

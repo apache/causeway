@@ -99,8 +99,9 @@ public final class LinkFollower {
             return false;
         }
         for(Map.Entry<String,String> criterium: root.getCriteria().entrySet()) {
-            final String mapValue = map.getString(criterium.getKey());
-            if(mapValue != null && !Objects.equal(mapValue, criterium.getValue())) {
+            final String requiredValue = criterium.getValue();
+            final String actualValue = map.getString(criterium.getKey());
+            if(!Objects.equal(requiredValue, actualValue)) {
                 return false;
             }
         }

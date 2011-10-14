@@ -28,6 +28,8 @@ import org.apache.isis.viewer.json.applib.RepresentationType;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
 import org.apache.isis.viewer.json.viewer.representations.LinkFollower;
 import org.apache.isis.viewer.json.viewer.representations.LinkBuilder;
+import org.apache.isis.viewer.json.viewer.representations.RendererFactory;
+import org.apache.isis.viewer.json.viewer.representations.RendererFactoryRegistry;
 import org.apache.isis.viewer.json.viewer.representations.ReprRenderer;
 import org.apache.isis.viewer.json.viewer.representations.ReprRendererFactoryAbstract;
 import org.apache.isis.viewer.json.viewer.resources.domaintypes.DomainTypeReprRenderer;
@@ -54,8 +56,7 @@ public class ObjectCollectionReprRenderer extends AbstractObjectMemberReprRender
     }
     
     public JsonRepresentation render() {
-        putId();
-        putMemberType();
+        // id and memberType are put eagerly
         
         putDisabledReasonIfDisabled();
         
@@ -72,7 +73,23 @@ public class ObjectCollectionReprRenderer extends AbstractObjectMemberReprRender
     }
 
 
-    
+
+    /////////////////////////////////////////////////////
+    // details link
+    /////////////////////////////////////////////////////
+
+    /**
+     * Mandatory hook method to support x-ro-follow-links
+     */
+    @Override
+    protected void followDetailsLink(JsonRepresentation detailsLink) {
+        RendererFactory factory = RendererFactoryRegistry.instance.find(RepresentationType.OBJECT_COLLECTION);
+        final ObjectCollectionReprRenderer renderer = 
+                (ObjectCollectionReprRenderer) factory.newRenderer(getResourceContext(), getLinkFollower(), JsonRepresentation.newMap());
+        renderer.with(new ObjectAndCollection(objectAdapter, objectMember));
+        detailsLink.mapPut("value", renderer.render());
+    }
+
     /////////////////////////////////////////////////////
     // mutators
     /////////////////////////////////////////////////////
@@ -147,6 +164,7 @@ public class ObjectCollectionReprRenderer extends AbstractObjectMemberReprRender
     private void addLinksIsisProprietary(JsonRepresentation links, ResourceContext resourceContext) {
         links.arrayAdd(DomainTypeReprRenderer.newLinkToBuilder(resourceContext, "domainType", objectAdapter.getSpecification()).build());
     }
+
 
 
 }

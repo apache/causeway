@@ -69,7 +69,8 @@ public class LinkFollowerTest_follow {
         final Map<String,String> criteria = followA.criteria();
         assertThat(criteria.size(), is(1));
         assertThat(criteria.get("x"), is("y"));
-        assertThat(followA.matches(JsonRepresentation.newMap()), is(true));
+        assertThat(followA.matches(JsonRepresentation.newMap("x", "y")), is(true));
+        assertThat(followA.matches(JsonRepresentation.newMap()), is(false));
         assertThat(followA.matches(JsonRepresentation.newMap("x", "z")), is(false));
     }
 
@@ -89,9 +90,11 @@ public class LinkFollowerTest_follow {
         
         assertThat(criteria.get("x"), is("y"));
         assertThat(criteria.get("z"), is("w"));
-        assertThat(followA.matches(JsonRepresentation.newMap("x", "y")), is(true));
-        assertThat(followA.matches(JsonRepresentation.newMap("x", "y", "foo", "bar")), is(true));
         assertThat(followA.matches(JsonRepresentation.newMap("x", "y", "z", "w")), is(true));
+        assertThat(followA.matches(JsonRepresentation.newMap("x", "y", "z", "w", "foo", "bar")), is(true));
+        assertThat(followA.matches(JsonRepresentation.newMap()), is(false));
+        assertThat(followA.matches(JsonRepresentation.newMap("x", "y")), is(false));
+        assertThat(followA.matches(JsonRepresentation.newMap("x", "y", "foo", "bar")), is(false));
         assertThat(followA.matches(JsonRepresentation.newMap("x", "bad")), is(false));
         assertThat(followA.matches(JsonRepresentation.newMap("x", "y", "z", "bad")), is(false));
     }

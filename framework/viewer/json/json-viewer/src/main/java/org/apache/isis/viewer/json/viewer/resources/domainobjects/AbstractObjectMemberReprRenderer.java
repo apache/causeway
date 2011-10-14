@@ -47,6 +47,11 @@ public abstract class AbstractObjectMemberReprRenderer<R extends ReprRendererAbs
         this.objectMember = objectAndMember.getMember();
         this.memberType = MemberType.determineFrom(objectMember);
         usingLinkToBuilder(new DomainObjectLinkTo());
+
+        // done eagerly so can use as criteria for x-ro-follow-links
+        putId();
+        putMemberType();
+
         return cast(this);
     }
 
@@ -94,10 +99,18 @@ public abstract class AbstractObjectMemberReprRenderer<R extends ReprRendererAbs
     }
 
     public R withDetailsLink() {
-        representation.mapPut(memberType.getDetailsRel(), 
-                linkToBuilder.linkToMember(memberType.getDetailsRel(), memberType, objectMember).build());
+        final JsonRepresentation link = 
+                linkToBuilder.linkToMember(memberType.getDetailsRel(), memberType, objectMember).build();
+        representation.mapPut(memberType.getDetailsRel(), link);
+        final LinkFollower membersLinkFollower = getLinkFollower();
+        final LinkFollower detailsLinkFollower = membersLinkFollower.follow(memberType.getDetailsRel());
+        if(membersLinkFollower.matches(representation) && detailsLinkFollower.matches(link)) {
+            followDetailsLink(link);
+        }
         return cast(this);
     }
+
+    protected abstract void followDetailsLink(JsonRepresentation detailsLink);
 
     /**
      * For Resources to call.

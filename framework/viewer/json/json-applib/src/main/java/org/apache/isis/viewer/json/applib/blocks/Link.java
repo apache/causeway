@@ -80,13 +80,12 @@ public final class Link extends JsonRepresentation {
         return follow(executor, null);
     }
 
-    public <T> Response follow(ClientExecutor executor, JsonRepresentation requestBody) throws Exception {
+    public <T> Response follow(ClientExecutor executor, JsonRepresentation requestArgs) throws Exception {
         ClientRequest restEasyRequest = executor.createRequest(getHref());
-        restEasyRequest.setHttpMethod(getMethod().name());
         restEasyRequest.accept(MediaType.APPLICATION_JSON_TYPE);
-        if(requestBody != null) {
-            restEasyRequest.body(MediaType.APPLICATION_JSON, requestBody.toString());
-        }
+        
+        getMethod().setUp(restEasyRequest, requestArgs);
+        
         @SuppressWarnings("unchecked")
         ClientResponse<T> restEasyResponse = executor.execute(restEasyRequest);
         return restEasyResponse;

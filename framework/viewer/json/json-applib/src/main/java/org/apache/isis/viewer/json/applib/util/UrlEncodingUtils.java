@@ -4,22 +4,15 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
+import org.codehaus.jackson.JsonNode;
 
-import org.jboss.resteasy.client.ClientRequest;
-import org.jboss.resteasy.util.URLUtils;
-
+import com.google.common.base.Charsets;
 import com.google.common.base.Function;
-import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 
-public final class UrlDecodeUtils {
+public final class UrlEncodingUtils {
 
     public final static Function<String, String> FUNCTION = new Function<String, String>() {
         
@@ -33,7 +26,7 @@ public final class UrlDecodeUtils {
         }
     };
 
-    private UrlDecodeUtils() {}
+    private UrlEncodingUtils() {}
 
     public static String urlDecode(String string) {
         return FUNCTION.apply(string);
@@ -46,6 +39,19 @@ public final class UrlDecodeUtils {
     public static String[] urlDecode(String[] values) {
         final List<String> asList = Arrays.asList(values);
         return urlDecode(asList).toArray(new String[]{});
+    }
+
+    public static String asUrlEncoded(JsonNode jsonNode) {
+        return UrlEncodingUtils.asUrlEncoded(jsonNode.toString());
+    }
+
+    public static String asUrlEncoded(final String str) {
+        try {
+            return URLEncoder.encode(str, Charsets.UTF_8.name());
+        } catch (UnsupportedEncodingException e) {
+            // shouldn't happen
+            throw new RuntimeException(e);
+        }
     }
 
 }
