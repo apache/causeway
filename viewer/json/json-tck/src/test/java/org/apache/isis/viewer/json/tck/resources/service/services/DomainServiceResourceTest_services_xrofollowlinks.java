@@ -48,7 +48,7 @@ public class DomainServiceResourceTest_services_xrofollowlinks {
         repr = restfulResponse.getEntity();
         
         assertThat(repr.getValues(), isArray());
-        assertThat(repr.getValues().arraySize(), is(greaterThan(0)));
+        assertThat(repr.getValues().size(), is(greaterThan(0)));
         assertThat(repr.getValues().arrayGet(0), isLink().novalue());
 
         request = client.createRequest(HttpMethod.GET, "services").withArg(QueryParameter.FOLLOW_LINKS, "values");

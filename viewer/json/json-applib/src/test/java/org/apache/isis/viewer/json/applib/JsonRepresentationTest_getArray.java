@@ -45,14 +45,14 @@ public class JsonRepresentationTest_getArray {
     public void nonEmptyArray() throws JsonParseException, JsonMappingException, IOException {
         JsonRepresentation array = jsonRepresentation.getArray("aStringArray");
         assertThat(array, is(not(nullValue())));
-        assertThat(array.arraySize(), is(3));
+        assertThat(array.size(), is(3));
     }
 
     @Test
     public void emptyArray() throws JsonParseException, JsonMappingException, IOException {
         JsonRepresentation array = jsonRepresentation.getArray("anEmptyArray");
         assertThat(array, is(not(nullValue())));
-        assertThat(array.arraySize(), is(0));
+        assertThat(array.size(), is(0));
     }
 
     @Test

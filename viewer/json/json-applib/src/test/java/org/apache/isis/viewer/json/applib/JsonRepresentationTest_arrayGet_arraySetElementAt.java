@@ -31,7 +31,7 @@ import org.codehaus.jackson.map.JsonMappingException;
 import org.junit.Before;
 import org.junit.Test;
 
-public class JsonRepresentationTest_arraySize_elementAt_setElementAt {
+public class JsonRepresentationTest_arrayGet_arraySetElementAt {
 
     private JsonRepresentation jsonRepresentation;
     private JsonRepresentation arrayRepr;
@@ -42,70 +42,45 @@ public class JsonRepresentationTest_arraySize_elementAt_setElementAt {
         arrayRepr = JsonRepresentation.newArray();
         objectRepr = JsonRepresentation.newMap();
     }
-
-    @Test
-    public void arraySize_forEmptyList() throws JsonParseException, JsonMappingException, IOException {
-        jsonRepresentation = new JsonRepresentation(readJson("emptyList.json"));
-        assertThat(jsonRepresentation.arraySize(), is(0));
-    }
-
+    
     @Test(expected=IndexOutOfBoundsException.class)
-    public void elementAt_outOfBounds() throws JsonParseException, JsonMappingException, IOException {
+    public void arrayGet_outOfBounds() throws JsonParseException, JsonMappingException, IOException {
         jsonRepresentation = new JsonRepresentation(readJson("emptyList.json"));
         jsonRepresentation.arrayGet(0);
     }
 
     @Test(expected=IndexOutOfBoundsException.class)
-    public void setElementAt_outOfBounds() throws JsonParseException, JsonMappingException, IOException {
+    public void arraySetElementAt_outOfBounds() throws JsonParseException, JsonMappingException, IOException {
         jsonRepresentation = new JsonRepresentation(readJson("emptyList.json"));
         jsonRepresentation.arraySetElementAt(0, objectRepr);
     }
 
     @Test
-    public void arraySize_forNonEmptyList() throws JsonParseException, JsonMappingException, IOException {
-        jsonRepresentation = new JsonRepresentation(readJson("list.json"));
-        assertThat(jsonRepresentation.arraySize(), is(2));
-    }
-
-    @Test
-    public void elementAt_forNonEmptyList() throws JsonParseException, JsonMappingException, IOException {
+    public void arrayGet_forNonEmptyList() throws JsonParseException, JsonMappingException, IOException {
         jsonRepresentation = new JsonRepresentation(readJson("list.json"));
         assertThat(jsonRepresentation.arrayGet(0), is(not(nullValue())));
     }
 
     @Test
-    public void setElementAt_happyCaseWhenSetElementToObject() throws JsonParseException, JsonMappingException, IOException {
+    public void arraySetElementAt_happyCaseWhenSetElementToObject() throws JsonParseException, JsonMappingException, IOException {
         jsonRepresentation = new JsonRepresentation(readJson("list.json"));
         jsonRepresentation.arraySetElementAt(0, objectRepr);
     }
 
     @Test(expected=IllegalArgumentException.class)
-    public void setElementAt_forAttemptingToSetElementToArray() throws JsonParseException, JsonMappingException, IOException {
+    public void arraySetElementAt_forAttemptingToSetElementToArray() throws JsonParseException, JsonMappingException, IOException {
         jsonRepresentation = new JsonRepresentation(readJson("list.json"));
         jsonRepresentation.arraySetElementAt(0, arrayRepr);
     }
     
     @Test(expected=IllegalStateException.class)
-    public void arraySize_forMap() throws JsonParseException, JsonMappingException, IOException {
-        jsonRepresentation = new JsonRepresentation(readJson("emptyMap.json"));
-        jsonRepresentation.arraySize();
-    }
-
-    @Test(expected=IllegalStateException.class)
-    public void elementAt_forMap() throws JsonParseException, JsonMappingException, IOException {
+    public void arrayGet_forMap() throws JsonParseException, JsonMappingException, IOException {
         jsonRepresentation = new JsonRepresentation(readJson("emptyMap.json"));
         jsonRepresentation.arrayGet(0);
     }
 
     @Test(expected=IllegalStateException.class)
-    public void arraySize_forValue() throws JsonParseException, JsonMappingException, IOException {
-        jsonRepresentation = new JsonRepresentation(readJson("map.json"));
-        JsonRepresentation valueRepresentation = jsonRepresentation.getRepresentation("anInt");
-        valueRepresentation.arraySize();
-    }
-
-    @Test(expected=IllegalStateException.class)
-    public void elementAt_forValue() throws JsonParseException, JsonMappingException, IOException {
+    public void arrayGet_forValue() throws JsonParseException, JsonMappingException, IOException {
         jsonRepresentation = new JsonRepresentation(readJson("map.json"));
         JsonRepresentation valueRepresentation = jsonRepresentation.getRepresentation("anInt");
         valueRepresentation.arrayGet(0);

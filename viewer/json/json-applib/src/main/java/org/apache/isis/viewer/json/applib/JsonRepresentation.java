@@ -20,7 +20,6 @@ import net.sf.json.JSONSerializer;
 import net.sf.json.xml.XMLSerializer;
 
 import org.apache.isis.viewer.json.applib.blocks.Link;
-import org.apache.isis.viewer.json.applib.domainobjects.ObjectActionRepresentation;
 import org.apache.isis.viewer.json.applib.util.JsonMapper;
 import org.apache.isis.viewer.json.applib.util.JsonNodeUtils;
 import org.apache.isis.viewer.json.applib.util.UrlEncodingUtils;
@@ -38,7 +37,6 @@ import org.jdom.output.XMLOutputter;
 import org.jdom.xpath.XPath;
 
 import com.google.common.base.Function;
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Iterators;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -139,16 +137,9 @@ public class JsonRepresentation {
         return jsonNode;
     }
 
-    public int arraySize() {
-        if (!isArray()) {
-            throw new IllegalStateException("not an array");
-        }
-        return jsonNode.size();
-    }
-    
-    public int mapSize() {
-        if (!isMap()) {
-            throw new IllegalStateException("not a map");
+    public int size() {
+        if (!isMap() && !isArray()) {
+            throw new IllegalStateException("not a map or an array");
         }
         return jsonNode.size();
     }
@@ -663,8 +654,8 @@ public class JsonRepresentation {
     /**
      * Requires xom:xom:1.1 (LGPL) to be added as a dependency.
      */
-    public JsonRepresentation xpath(String xpathExpressionFormat, Object... args) {
-        String xpathExpression = String.format(xpathExpressionFormat,  args);
+    public JsonRepresentation xpath(String xpathTemplate, Object... args) {
+        String xpathExpression = String.format(xpathTemplate,  args);
         try {
             // puts object structure under a <o>
             org.jdom.Document jdomDoc = new SAXBuilder().build(new StringReader(toXml()));
@@ -854,14 +845,39 @@ public class JsonRepresentation {
         if (!jsonNode.isArray()) {
             throw new IllegalStateException("Is not an array");
         }
-        if(i >= arraySize()) {
-            throw new IndexOutOfBoundsException("array has " + arraySize() + " elements"); 
+        if(i >= size()) {
+            throw new IndexOutOfBoundsException("array has " + size() + " elements"); 
         }
     }
 
     /////////////////////////////////////////////////////////////////////////
     // mutable (map)
     /////////////////////////////////////////////////////////////////////////
+
+    public boolean mapHas(String key) {
+        if(!isMap()) {
+            throw new IllegalStateException("does not represent map");
+        }
+        ObjectNode node = asObjectNode();
+        
+        String[] paths = key.split("\\.");
+        for(int i=0; i<paths.length; i++) {
+            String path = paths[i];
+            final boolean has = node.has(path);
+            if(!has) {
+                return false;
+            }
+            if(i+1 < paths.length) {
+                // not on last
+                final JsonNode subNode = node.get(path);
+                if(!subNode.isObject()) {
+                    return false;
+                }
+                node = (ObjectNode) subNode;
+            }
+        }
+        return true;
+    }
 
     public void mapPut(String key, Object value) {
         if(!isMap()) {
@@ -1040,7 +1056,12 @@ public class JsonRepresentation {
     /////////////////////////////////////////////////////////////////////////
 
     private JsonNode getNode(String path) {
-        return JsonNodeUtils.walkNode(jsonNode, path);
+        JsonNode node = jsonNode;
+        String[] keys = path.split("\\.");
+        for(String key: keys) {
+            node = node.path(key);
+        }
+        return node;
     }
 
     private static void checkValue(String path, JsonNode node, String requiredType) {
@@ -1082,10 +1103,6 @@ public class JsonRepresentation {
     public String toString() {
         return jsonNode.toString();
     }
-
-
-
-
 
 
 

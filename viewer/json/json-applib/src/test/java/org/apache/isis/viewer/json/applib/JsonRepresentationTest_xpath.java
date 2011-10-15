@@ -84,7 +84,7 @@ public class JsonRepresentationTest_xpath {
         JsonRepresentation applibRepo = listRepresentation.xpath("/e");
         assertThat(applibRepo, is(not(nullValue())));
         assertThat(applibRepo.isArray(), is(true));
-        assertThat(applibRepo.arraySize(), is(4));
+        assertThat(applibRepo.size(), is(4));
     }
 
     @Test
