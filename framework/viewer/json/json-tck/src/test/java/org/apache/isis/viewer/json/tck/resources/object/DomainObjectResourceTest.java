@@ -76,7 +76,7 @@ public class DomainObjectResourceTest {
 
         // properties
         JsonRepresentation properties = domainObjectRepr.getProperties();
-        assertThat(properties.mapSize(), is(1));
+        assertThat(properties.size(), is(1));
         
         // id property
         JsonRepresentation idProperty = properties.getRepresentation("id");
@@ -93,7 +93,7 @@ public class DomainObjectResourceTest {
 
         // actions
         JsonRepresentation actions = domainObjectRepr.getActions();
-        assertThat(actions.mapSize(), is(2));
+        assertThat(actions.size(), is(2));
 
         JsonRepresentation listAction = actions.getRepresentation("list");
         assertThat(listAction.getString("memberType"), is("action"));
@@ -202,7 +202,7 @@ public class DomainObjectResourceTest {
         assertThat(actionPromptRepr.getString("memberType"), is("action"));
         assertThat(actionPromptRepr.getString("actionType"), is("USER"));
         assertThat(actionPromptRepr.getInt("numParameters"), is(0));
-        assertThat(actionPromptRepr.getArray("parameters").arraySize(), is(0));
+        assertThat(actionPromptRepr.getArray("parameters").size(), is(0));
         
         Link invokeLink = actionPromptRepr.getLink("invoke");
         assertThat(invokeLink.getRel(), is("invoke"));
@@ -210,7 +210,7 @@ public class DomainObjectResourceTest {
         assertThat(invokeLink.getMethod(), is(Method.POST));
         assertThat(invokeLink.getArguments(), is(not(nullValue())));
         assertThat(invokeLink.getArguments().isArray(), is(true));
-        assertThat(invokeLink.getArguments().arraySize(), is(0));
+        assertThat(invokeLink.getArguments().size(), is(0));
     }
 
     @Ignore("TODO")
@@ -237,7 +237,7 @@ public class DomainObjectResourceTest {
         // then 
         ScalarValueRepresentation actionInvokeRepr = actionInvokeJsonResp.getEntity();
         assertThat(actionInvokeRepr.isArray(), is(true));
-        assertThat(actionInvokeRepr.arraySize(), is(5));
+        assertThat(actionInvokeRepr.size(), is(5));
         
         JsonRepresentation domainObjectRefRepr = actionInvokeRepr.arrayGet(0);
 

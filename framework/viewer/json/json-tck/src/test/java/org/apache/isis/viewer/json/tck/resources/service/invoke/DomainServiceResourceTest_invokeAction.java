@@ -1,7 +1,5 @@
 package org.apache.isis.viewer.json.tck.resources.service.invoke;
 
-import static org.apache.isis.viewer.json.tck.RepresentationMatchers.isArray;
-import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
@@ -16,8 +14,8 @@ import org.apache.isis.viewer.json.applib.HttpMethod;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.applib.RestfulClient;
 import org.apache.isis.viewer.json.applib.RestfulRequest;
-import org.apache.isis.viewer.json.applib.RestfulResponse;
 import org.apache.isis.viewer.json.applib.RestfulRequest.QueryParameter;
+import org.apache.isis.viewer.json.applib.RestfulResponse;
 import org.apache.isis.viewer.json.applib.RestfulResponse.HttpStatusCode;
 import org.apache.isis.viewer.json.applib.blocks.Link;
 import org.apache.isis.viewer.json.applib.domainobjects.DomainObjectRepresentation;
@@ -28,7 +26,6 @@ import org.apache.isis.viewer.json.tck.IsisWebServerRule;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -52,18 +49,52 @@ public class DomainServiceResourceTest_invokeAction {
 
     @Test
     public void invokeNoArg() throws Exception {
-        
+
+        // given
         JsonRepresentation givenAction = givenAction("simples", "list");
         final ObjectActionRepresentation actionRepr = givenAction.as(ObjectActionRepresentation.class);
         
+        // when
         final Link invokeLink = actionRepr.getInvoke();
-        assertThat(invokeLink, is(not(nullValue())));
         
+        // then
+        assertThat(invokeLink, is(not(nullValue())));
         final Response response = client.follow(invokeLink);
         RestfulResponse<ListRepresentation> restfulResponse = RestfulResponse.ofT(response);
         final ListRepresentation listRepr = restfulResponse.getEntity();
         
-        assertThat(listRepr.getValues().arraySize(), is(5));
+        assertThat(listRepr.getValues().size(), is(5));
+    }
+
+    @Test
+    public void invokePut() throws Exception {
+
+        // given
+        JsonRepresentation givenAction = givenAction("simples", "newPersistentEntity");
+        final ObjectActionRepresentation actionRepr = givenAction.as(ObjectActionRepresentation.class);
+        
+        // when
+        final Link invokeLink = actionRepr.getInvoke();
+        
+        // then
+        assertThat(invokeLink, is(not(nullValue())));
+        
+        final JsonRepresentation args = invokeLink.getArguments();
+        assertThat(args.size(), is(2));
+        assertThat(args.mapHas("name"), is(true));
+        assertThat(args.mapHas("flag"), is(true));
+        
+        // when
+        args.mapPut("name", "New Name");
+        args.mapPut("flag", true);
+        final Response response = client.follow(invokeLink, args);
+        
+        // then
+        RestfulResponse<DomainObjectRepresentation> restfulResponse = RestfulResponse.ofT(response);
+        final DomainObjectRepresentation objectRepr = restfulResponse.getEntity();
+        
+        assertThat(objectRepr.xpath("//members/e[propertyId='%s']/value", "name").getString("value"), is("New Name"));
+        assertThat(objectRepr.xpath("//members/e[propertyId='%s']/value", "flag").getBoolean("value"), is(true));
     }
 
 

@@ -28,33 +28,39 @@ import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.junit.Test;
 
-public class JsonRepresentationTest_mapSize {
+public class JsonRepresentationTest_size {
 
     private JsonRepresentation jsonRepresentation;
 
     @Test
-    public void mapSize_forEmptyMap() throws JsonParseException, JsonMappingException, IOException {
+    public void size_forEmptyMap() throws JsonParseException, JsonMappingException, IOException {
         jsonRepresentation = new JsonRepresentation(readJson("emptyMap.json"));
-        assertThat(jsonRepresentation.mapSize(), is(0));
+        assertThat(jsonRepresentation.size(), is(0));
     }
 
     @Test
-    public void mapSize_forNonEmptyMap() throws JsonParseException, JsonMappingException, IOException {
+    public void size_forNonEmptyMap() throws JsonParseException, JsonMappingException, IOException {
         jsonRepresentation = new JsonRepresentation(readJson("map.json"));
-        assertThat(jsonRepresentation.mapSize(), is(14));
+        assertThat(jsonRepresentation.size(), is(14));
     }
 
-    @Test(expected=IllegalStateException.class)
-    public void mapSize_forList() throws JsonParseException, JsonMappingException, IOException {
+    @Test
+    public void size_forEmptyList() throws JsonParseException, JsonMappingException, IOException {
         jsonRepresentation = new JsonRepresentation(readJson("emptyList.json"));
-        jsonRepresentation.mapSize();
+        assertThat(jsonRepresentation.size(), is(0));
+    }
+
+    @Test
+    public void size_forNonEmptyList() throws JsonParseException, JsonMappingException, IOException {
+        jsonRepresentation = new JsonRepresentation(readJson("list.json"));
+        assertThat(jsonRepresentation.size(), is(2));
     }
 
     @Test(expected=IllegalStateException.class)
-    public void mapSize_forValue() throws JsonParseException, JsonMappingException, IOException {
+    public void size_forValue() throws JsonParseException, JsonMappingException, IOException {
         jsonRepresentation = new JsonRepresentation(readJson("map.json"));
         JsonRepresentation valueRepresentation = jsonRepresentation.getRepresentation("anInt");
-        valueRepresentation.mapSize();
+        valueRepresentation.size();
     }
 
 }

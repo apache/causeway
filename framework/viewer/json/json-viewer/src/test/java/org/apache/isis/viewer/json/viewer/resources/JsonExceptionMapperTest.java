@@ -47,7 +47,7 @@ public class JsonExceptionMapperTest {
         // then
         assertThat(jsonRepr.getString("message"), is(nullValue()));
         assertThat(jsonRepr.getArray("stackTrace"), is(not(nullValue())));
-        assertThat(jsonRepr.getArray("stackTrace").arraySize(), is(greaterThan(0)));
+        assertThat(jsonRepr.getArray("stackTrace").size(), is(greaterThan(0)));
         assertThat(jsonRepr.getRepresentation("causedBy"), is(nullValue()));
     }
 

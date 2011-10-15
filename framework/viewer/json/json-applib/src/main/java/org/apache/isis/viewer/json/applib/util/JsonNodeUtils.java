@@ -20,14 +20,6 @@ public class JsonNodeUtils {
         return new ByteArrayInputStream(bytes);
     }
 
-    public static JsonNode walkNode(JsonNode node, String path) {
-        String[] keys = path.split("\\.");
-        for(String key: keys) {
-            node = node.path(key);
-        }
-        return node;
-    }
-
     /**
      * Walks the path, ensuring keys exist and are maps, or creating required
      * maps as it goes.

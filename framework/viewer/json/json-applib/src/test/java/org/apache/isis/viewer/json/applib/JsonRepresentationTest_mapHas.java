@@ -18,26 +18,34 @@
  */
 package org.apache.isis.viewer.json.applib;
 
+import static org.apache.isis.viewer.json.applib.JsonUtils.readJson;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
+import java.io.IOException;
+
+import org.codehaus.jackson.JsonParseException;
+import org.codehaus.jackson.map.JsonMappingException;
 import org.junit.Test;
 
-public class JsonRepresentationTest_newArray {
+public class JsonRepresentationTest_mapHas {
+
+    private JsonRepresentation jsonRepresentation;
 
     @Test
-    public void newArray() throws Exception {
-        JsonRepresentation jsonRepresentation = JsonRepresentation.newArray();
-        assertThat(jsonRepresentation.isArray(), is(true));
-        assertThat(jsonRepresentation.size(), is(0));
+    public void forMap() throws JsonParseException, JsonMappingException, IOException {
+        jsonRepresentation = new JsonRepresentation(readJson("map.json"));
+        
+        assertThat(jsonRepresentation.mapHas("aString"), is(true));
+        assertThat(jsonRepresentation.mapHas("aSubMap.anInt"), is(true));
+        assertThat(jsonRepresentation.mapHas("nonExistent"), is(false));
     }
 
-    @Test
-    public void newArrayInitialSize() throws Exception {
-        JsonRepresentation jsonRepresentation = JsonRepresentation.newArray(2);
-        assertThat(jsonRepresentation.size(), is(2));
-        assertThat(jsonRepresentation.arrayGet(0).isNull(), is(true));
-        assertThat(jsonRepresentation.arrayGet(1).isNull(), is(true));
+    @Test(expected=IllegalStateException.class)
+    public void forList() throws JsonParseException, JsonMappingException, IOException {
+        jsonRepresentation = new JsonRepresentation(readJson("list.json"));
+        
+        jsonRepresentation.mapHas("aString");
     }
 
 }

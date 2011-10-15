@@ -55,7 +55,7 @@ public class ObjectPropertyReprRenderer extends AbstractObjectMemberReprRenderer
     }
 
     public JsonRepresentation render() {
-        // id and memberType are put eagerly
+        // id and memberType are put in eagerly
         
         withValue();
 

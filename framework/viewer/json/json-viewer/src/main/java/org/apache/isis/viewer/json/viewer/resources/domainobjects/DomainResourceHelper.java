@@ -51,6 +51,7 @@ import org.apache.isis.viewer.json.viewer.representations.RendererFactory;
 import org.apache.isis.viewer.json.viewer.representations.RendererFactoryRegistry;
 import org.apache.isis.viewer.json.viewer.resources.ResourceAbstract;
 import org.apache.isis.viewer.json.viewer.resources.ResourceAbstract.Caching;
+import org.apache.isis.viewer.json.viewer.resources.domainobjects.JsonValueEncoder.ExpectedStringRepresentingValueException;
 import org.apache.isis.viewer.json.viewer.util.OidUtils;
 import org.apache.isis.viewer.json.viewer.util.UrlDecoderUtils;
 import org.apache.isis.viewer.json.viewer.util.UrlParserUtils;
@@ -327,21 +328,7 @@ public class DomainResourceHelper {
         
         // value (encodable)
         if (objectSpec.isEncodeable()) {
-            
-            // special case handling for JSON built-ins
-            final Class<?> specClass = objectSpec.getCorrespondingClass();
-            if(specClass == boolean.class || specClass == Boolean.class) {
-                if(representation.isBoolean()) {
-                    
-                }
-            }
-            
-            EncodableFacet encodableFacet = objectSpec.getFacet(EncodableFacet.class);
-            if(!representation.isString()) {
-                throw new ExpectedStringRepresentingValueException();
-            }
-            String argStr = representation.asString();
-            return encodableFacet.fromEncodedString(argStr);
+            return new JsonValueEncoder().asAdapter(objectSpec, representation);
         }
 
         // reference
@@ -363,7 +350,7 @@ public class DomainResourceHelper {
     /**
      * Similar to {@link #objectAdapterFor(ResourceContext, ObjectSpecification, Object)},
      * however the object being interpreted is a String holding URL encoded JSON
-     * (rather than having already been parsed into a List/Map representation).
+     * (rather than having already been parsed into a Map representation).
      * 
      * @throws IOException 
      * @throws JsonMappingException 
@@ -376,10 +363,6 @@ public class DomainResourceHelper {
         final String json = UrlDecoderUtils.urlDecode(urlEncodedJson);
         JsonRepresentation representation = JsonMapper.instance().read(json);
         return objectAdapterFor(resourceContext, spec, representation);
-    }
-
-    private static class ExpectedStringRepresentingValueException extends IllegalArgumentException {
-        private static final long serialVersionUID = 1L;
     }
 
     private static class ExpectedMapRepresentingLinkException extends IllegalArgumentException {
@@ -489,7 +472,7 @@ public class DomainResourceHelper {
         JsonRepresentation arguments = readBodyAsMap(bodyAsString);
         
         JsonRepresentation representation = arguments.getRepresentation("value");
-        if (arguments.mapSize() != 1 || representation == null) {
+        if (arguments.size() != 1 || representation == null) {
             throw JsonApplicationException.create(
                     HttpStatusCode.BAD_REQUEST,
                     "Body should be a map with a single key 'value' whose value represents an instance of type '%s'",
@@ -549,7 +532,7 @@ public class DomainResourceHelper {
         List<JsonRepresentation> argList = Lists.newArrayList();
         
         int numParameters = action.getParameterCount();
-        int numArguments = arguments.mapSize();
+        int numArguments = arguments.size();
         if (numArguments != numParameters) {
             throw JsonApplicationException.create(
                     HttpStatusCode.BAD_REQUEST,
