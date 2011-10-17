@@ -26,6 +26,7 @@ import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.applib.RepresentationType;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
 import org.apache.isis.viewer.json.viewer.representations.LinkFollower;
+import org.apache.isis.viewer.json.viewer.representations.Rel;
 import org.apache.isis.viewer.json.viewer.representations.RendererFactory;
 import org.apache.isis.viewer.json.viewer.representations.RendererFactoryRegistry;
 import org.apache.isis.viewer.json.viewer.representations.ReprRenderer;
@@ -107,7 +108,7 @@ public class ObjectPropertyReprRenderer extends AbstractObjectMemberReprRenderer
                 
                 JsonRepresentation arguments = mutatorArgs(mutatorSpec);
                 JsonRepresentation detailsLink = 
-                        linkToBuilder.linkToMember(mutator, memberType, objectMember, mutatorSpec.suffix)
+                        linkToBuilder.linkToMember(mutatorSpec.rel, memberType, objectMember, mutatorSpec.suffix)
                         .withHttpMethod(mutatorSpec.httpMethod)
                         .withArguments(arguments)
                         .build();
@@ -174,11 +175,10 @@ public class ObjectPropertyReprRenderer extends AbstractObjectMemberReprRenderer
     }
 
     private void addLinksFormalDomainModel(JsonRepresentation links, ResourceContext resourceContext) {
-        links.arrayAdd(TypePropertyReprRenderer.newLinkToBuilder(resourceContext, "typeProperty", objectAdapter.getSpecification(), objectMember).build());
+        links.arrayAdd(TypePropertyReprRenderer.newLinkToBuilder(resourceContext, Rel.DESCRIBEDBY, objectAdapter.getSpecification(), objectMember).build());
     }
 
     private void addLinksIsisProprietary(JsonRepresentation links, ResourceContext resourceContext) {
-        links.arrayAdd(DomainTypeReprRenderer.newLinkToBuilder(resourceContext, "domainType", objectAdapter.getSpecification()).build());
     }
 
 

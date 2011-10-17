@@ -24,6 +24,7 @@ import org.apache.isis.viewer.json.applib.RepresentationType;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
 import org.apache.isis.viewer.json.viewer.representations.LinkFollower;
 import org.apache.isis.viewer.json.viewer.representations.LinkBuilder;
+import org.apache.isis.viewer.json.viewer.representations.Rel;
 import org.apache.isis.viewer.json.viewer.representations.ReprRendererAbstract;
 import org.apache.isis.viewer.json.viewer.resources.domainobjects.MemberType;
 
@@ -68,7 +69,7 @@ public abstract class AbstractTypeFeatureReprBuilder<R extends ReprRendererAbstr
         } 
         
         representation.mapPut("self", 
-            LinkBuilder.newBuilder(getResourceContext(), "self", getRepresentationType(), "domainTypes/%s/%s/%s", 
+            LinkBuilder.newBuilder(getResourceContext(), Rel.SELF, getRepresentationType(), "domainTypes/%s/%s/%s", 
                     getObjectSpecification().getFullIdentifier(), getMemberType().getUrlPart(), ((ObjectMember)getObjectFeature()).getId()).build());
     }
 

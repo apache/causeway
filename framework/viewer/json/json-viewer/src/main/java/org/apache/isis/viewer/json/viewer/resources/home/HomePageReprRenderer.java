@@ -8,6 +8,7 @@ import org.apache.isis.viewer.json.applib.RepresentationType;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
 import org.apache.isis.viewer.json.viewer.representations.LinkFollower;
 import org.apache.isis.viewer.json.viewer.representations.LinkBuilder;
+import org.apache.isis.viewer.json.viewer.representations.Rel;
 import org.apache.isis.viewer.json.viewer.representations.RendererFactory;
 import org.apache.isis.viewer.json.viewer.representations.RendererFactoryRegistry;
 import org.apache.isis.viewer.json.viewer.representations.ReprRenderer;
@@ -65,7 +66,7 @@ public class HomePageReprRenderer extends ReprRendererAbstract<HomePageReprRende
     }
 
     private void putLinkToSelf(JsonRepresentation representation) {
-        final LinkBuilder linkBuilder = LinkBuilder.newBuilder(resourceContext, "self", getRepresentationType(), "");
+        final LinkBuilder linkBuilder = LinkBuilder.newBuilder(resourceContext, Rel.SELF, getRepresentationType(), "");
 
         final LinkFollower linkFollower = getLinkFollower().follow("self");
         if(linkFollower.isFollowing()) {
@@ -80,7 +81,7 @@ public class HomePageReprRenderer extends ReprRendererAbstract<HomePageReprRende
     }
 
     private void putLinkToCapabilities(final JsonRepresentation representation) {
-        final LinkBuilder linkBuilder = LinkBuilder.newBuilder(getResourceContext(), "capabilities", RepresentationType.CAPABILITIES, "capabilities");
+        final LinkBuilder linkBuilder = LinkBuilder.newBuilder(getResourceContext(), Rel.CAPABILITIES, RepresentationType.CAPABILITIES, "capabilities");
         
         final LinkFollower linkFollower = getLinkFollower().follow("capabilities");
         if(linkFollower.isFollowing()) {
@@ -97,7 +98,7 @@ public class HomePageReprRenderer extends ReprRendererAbstract<HomePageReprRende
     private void putLinkToServices(JsonRepresentation representation) {
 
         final LinkBuilder linkBuilder = 
-                LinkBuilder.newBuilder(getResourceContext(), "services", RepresentationType.LIST, "services");
+                LinkBuilder.newBuilder(getResourceContext(), Rel.SERVICES, RepresentationType.LIST, "services");
         
         final LinkFollower linkFollower = getLinkFollower().follow("services");
         if(linkFollower.isFollowing()) {
@@ -119,7 +120,7 @@ public class HomePageReprRenderer extends ReprRendererAbstract<HomePageReprRende
 
     private void putLinkToUser(JsonRepresentation representation) {
         final LinkBuilder userLinkBuilder = 
-                LinkBuilder.newBuilder(getResourceContext(), "user", RepresentationType.USER, "user");
+                LinkBuilder.newBuilder(getResourceContext(), Rel.USER, RepresentationType.USER, "user");
         
         final LinkFollower linkFollower = getLinkFollower().follow("user");
         if(linkFollower.isFollowing()) {

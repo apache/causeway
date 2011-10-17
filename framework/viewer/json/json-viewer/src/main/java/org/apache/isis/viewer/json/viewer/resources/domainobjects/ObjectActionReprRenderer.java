@@ -27,6 +27,7 @@ import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.applib.RepresentationType;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
 import org.apache.isis.viewer.json.viewer.representations.LinkFollower;
+import org.apache.isis.viewer.json.viewer.representations.Rel;
 import org.apache.isis.viewer.json.viewer.representations.RendererFactory;
 import org.apache.isis.viewer.json.viewer.representations.RendererFactoryRegistry;
 import org.apache.isis.viewer.json.viewer.representations.ReprRenderer;
@@ -114,7 +115,7 @@ public class ObjectActionReprRenderer extends AbstractObjectMemberReprRenderer<O
         } 
         JsonRepresentation arguments = mutatorArgs(mutatorSpec);
         JsonRepresentation detailsLink = 
-                linkToBuilder.linkToMember("invoke", memberType, objectMember, mutatorSpec.suffix)
+                linkToBuilder.linkToMember(Rel.INVOKE, memberType, objectMember, mutatorSpec.suffix)
                 .withHttpMethod(mutatorSpec.httpMethod)
                 .withArguments(arguments)
                 .build();
@@ -148,7 +149,7 @@ public class ObjectActionReprRenderer extends AbstractObjectMemberReprRenderer<O
 	        if(objectMember.isContributed()) {
 	            ObjectActionParameter actionParameter = objectMember.getParameters().get(i);
 	            if (actionParameter.getSpecification().isOfType(objectAdapter.getSpecification())) {
-	                return DomainObjectReprRenderer.newLinkToBuilder(resourceContext, "object", objectAdapter).build();
+	                return DomainObjectReprRenderer.newLinkToBuilder(resourceContext, Rel.OBJECT, objectAdapter).build();
 	            }
 	        }
 	        return NullNode.instance;
@@ -222,17 +223,15 @@ public class ObjectActionReprRenderer extends AbstractObjectMemberReprRenderer<O
     }
 
      private void addLinksFormalDomainModel(JsonRepresentation links, ResourceContext resourceContext) {
-         links.arrayAdd(TypeActionReprRenderer.newLinkToBuilder(resourceContext, "typeAction", objectAdapter.getSpecification(), objectMember).build());
+         links.arrayAdd(TypeActionReprRenderer.newLinkToBuilder(resourceContext, Rel.DESCRIBEDBY, objectAdapter.getSpecification(), objectMember).build());
      }
 
      private void addLinksIsisProprietary(JsonRepresentation links, ResourceContext resourceContext) {
        if(objectMember.isContributed()) {
             ObjectAdapter serviceAdapter = contributingServiceAdapter();
-            JsonRepresentation contributedByLink = DomainObjectReprRenderer.newLinkToBuilder(resourceContext, "contributedBy", serviceAdapter).build();
+            JsonRepresentation contributedByLink = DomainObjectReprRenderer.newLinkToBuilder(resourceContext, Rel.CONTRIBUTED_BY, serviceAdapter).build();
             links.arrayAdd(contributedByLink);
         }
-
-       links.arrayAdd(DomainTypeReprRenderer.newLinkToBuilder(resourceContext, "domainType", objectAdapter.getSpecification()).build());
     }
 
 

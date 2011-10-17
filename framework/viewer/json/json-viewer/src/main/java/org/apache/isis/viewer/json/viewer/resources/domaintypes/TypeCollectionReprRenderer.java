@@ -23,6 +23,7 @@ import org.apache.isis.viewer.json.applib.RepresentationType;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
 import org.apache.isis.viewer.json.viewer.representations.LinkFollower;
 import org.apache.isis.viewer.json.viewer.representations.LinkBuilder;
+import org.apache.isis.viewer.json.viewer.representations.Rel;
 import org.apache.isis.viewer.json.viewer.representations.ReprRenderer;
 import org.apache.isis.viewer.json.viewer.representations.ReprRendererFactoryAbstract;
 
@@ -40,7 +41,7 @@ public class TypeCollectionReprRenderer extends AbstractTypeFeatureReprBuilder<T
         }
     }
 
-    public static LinkBuilder newLinkToBuilder(ResourceContext resourceContext, String rel, ObjectSpecification objectSpecification, OneToManyAssociation collection) {
+    public static LinkBuilder newLinkToBuilder(ResourceContext resourceContext, Rel rel, ObjectSpecification objectSpecification, OneToManyAssociation collection) {
         String typeFullName = objectSpecification.getFullIdentifier();
         String collectionId = collection.getId();
         String url = "domainTypes/" + typeFullName + "/collections/" + collectionId;

@@ -55,7 +55,7 @@ public abstract class ReprRendererAbstract<R extends ReprRendererAbstract<R, T>,
 
     public R withSelf(String href) {
         if(href != null) {
-            representation.mapPut("self", LinkBuilder.newBuilder(resourceContext, "self", representationType, href).build());
+            representation.mapPut("self", LinkBuilder.newBuilder(resourceContext, Rel.SELF, representationType, href).build());
         }
         return cast(this);
     }

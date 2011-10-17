@@ -47,6 +47,7 @@ import org.apache.isis.viewer.json.applib.util.JsonMapper;
 import org.apache.isis.viewer.json.viewer.JsonApplicationException;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
 import org.apache.isis.viewer.json.viewer.representations.LinkBuilder;
+import org.apache.isis.viewer.json.viewer.representations.Rel;
 import org.apache.isis.viewer.json.viewer.representations.RendererFactory;
 import org.apache.isis.viewer.json.viewer.representations.RendererFactoryRegistry;
 import org.apache.isis.viewer.json.viewer.resources.ResourceAbstract;
@@ -290,7 +291,7 @@ public class DomainResourceHelper {
         String oid = OidUtils.getOidStr(resourceContext, objectAdapter);
         // TODO: review; can't be more specific with the media type because we don't have a media type for action/invoke
         final JsonRepresentation repBuilder = 
-                LinkBuilder.newBuilder(resourceContext, "self", MediaType.APPLICATION_JSON_TYPE, "objects/%s/actions/%s/invoke", oid, action.getId()).build();
+                LinkBuilder.newBuilder(resourceContext, Rel.SELF, MediaType.APPLICATION_JSON_TYPE, "objects/%s/actions/%s/invoke", oid, action.getId()).build();
         representation.mapPut("self", repBuilder);
         return representation;
     }
@@ -554,9 +555,16 @@ public class DomainResourceHelper {
         return argList;
     }
 
-    private JsonRepresentation readBodyAsMap(String bodyAsString) {
+    static JsonRepresentation readBodyAsMap(String body) {
+        if(body == null) {
+            return JsonRepresentation.newMap();
+        }
+        final String bodyTrimmed = body.trim();
+        if(bodyTrimmed.isEmpty()) {
+            return JsonRepresentation.newMap();
+        }
         try {
-            final JsonRepresentation jsonRepr = JsonMapper.instance().read(bodyAsString);
+            final JsonRepresentation jsonRepr = JsonMapper.instance().read(bodyTrimmed);
             if(!jsonRepr.isMap()) {
                 throw JsonApplicationException.create(
                     HttpStatusCode.BAD_REQUEST,

@@ -9,6 +9,7 @@ import java.io.IOException;
 
 import javax.ws.rs.core.Response;
 
+import org.apache.isis.applib.annotation.Ignore;
 import org.apache.isis.runtimes.dflt.webserver.WebServer;
 import org.apache.isis.viewer.json.applib.HttpMethod;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
@@ -48,7 +49,7 @@ public class DomainServiceResourceTest_invokeAction {
 
 
     @Test
-    public void invokeNoArg() throws Exception {
+    public void invokeQueryOnly_noArg_usingClientFollow() throws Exception {
 
         // given
         JsonRepresentation givenAction = givenAction("simples", "list");
@@ -67,7 +68,7 @@ public class DomainServiceResourceTest_invokeAction {
     }
 
     @Test
-    public void invokePut() throws Exception {
+    public void invokeIdempotent_withArgs_usingClientFollow() throws Exception {
 
         // given
         JsonRepresentation givenAction = givenAction("simples", "newPersistentEntity");
@@ -97,19 +98,49 @@ public class DomainServiceResourceTest_invokeAction {
         assertThat(objectRepr.xpath("//members/e[propertyId='%s']/value", "flag").getBoolean("value"), is(true));
     }
 
+    @org.junit.Ignore("up to here")
+    @Test
+    public void invoke_withAllBuiltInArgs_usingClientFollow() throws Exception {
+
+        // given
+        JsonRepresentation givenAction = givenAction("simples", "newTransientEntity");
+        final ObjectActionRepresentation actionRepr = givenAction.as(ObjectActionRepresentation.class);
+        
+        // when
+        final Link invokeLink = actionRepr.getInvoke();
+        
+        // then
+        assertThat(invokeLink, is(not(nullValue())));
+        
+        final JsonRepresentation args = invokeLink.getArguments();
+        assertThat(args.size(), is(0));
+        
+        // when
+        args.mapPut("name", "New Name");
+        args.mapPut("flag", true);
+        final Response response = client.follow(invokeLink, args);
+        
+        // then
+        RestfulResponse<DomainObjectRepresentation> restfulResponse = RestfulResponse.ofT(response);
+        final DomainObjectRepresentation objectRepr = restfulResponse.getEntity();
+        
+        assertThat(objectRepr.xpath("//members/e[propertyId='%s']/value", "name").getString("value"), is("New Name"));
+        assertThat(objectRepr.xpath("//members/e[propertyId='%s']/value", "flag").getBoolean("value"), is(true));
+    }
+
 
     private JsonRepresentation givenAction(final String serviceId, final String actionId) throws JsonParseException, JsonMappingException, IOException {
         final String href = givenHrefToService(serviceId);
         
         final RestfulRequest request = 
-                client.createRequest(HttpMethod.GET, href).withArg(QueryParameter.FOLLOW_LINKS, "members[actionId=%s].actionDetails", actionId);
+                client.createRequest(HttpMethod.GET, href).withArg(QueryParameter.FOLLOW_LINKS, "members[actionId=%s].details", actionId);
         final RestfulResponse<DomainObjectRepresentation> restfulResponse = request.executeT();
 
         assertThat(restfulResponse.getStatus(), is(HttpStatusCode.OK));
         final DomainObjectRepresentation repr = restfulResponse.getEntity();
         
         JsonRepresentation actionLinkRepr = repr.xpath("/members/e[actionId='%s']", actionId);
-        return actionLinkRepr.getRepresentation("e.actionDetails.value");
+        return actionLinkRepr.getRepresentation("e.details.value");
     }
 
 
