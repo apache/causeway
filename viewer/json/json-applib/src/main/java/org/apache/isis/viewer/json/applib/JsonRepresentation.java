@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
 import java.lang.reflect.Constructor;
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.Collections;
@@ -311,6 +312,43 @@ public class JsonRepresentation {
             throw new IllegalArgumentException(formatExMsg(path, "is not a biginteger"));
         }
         return node.getBigIntegerValue();
+    }
+
+
+    /////////////////////////////////////////////////////////////////////////
+    // isBigDecimal, getBigDecimal, asBigDecimal
+    /////////////////////////////////////////////////////////////////////////
+
+    public boolean isBigDecimal(String path) {
+        return isBigDecimal(getNode(path));
+    }
+
+    public boolean isBigDecimal() {
+        return isBigDecimal(asJsonNode());
+    }
+
+    private boolean isBigDecimal(JsonNode node) {
+        return !representsNull(node) && node.isValueNode() && node.isBigDecimal();
+    }
+
+    public BigDecimal getBigDecimal(String path) {
+        JsonNode node = getNode(path);
+        return getBigDecimal(path, node);
+    }
+
+    public BigDecimal asBigDecimal() {
+        return getBigDecimal(null, asJsonNode());
+    }
+
+    private BigDecimal getBigDecimal(String path, JsonNode node) {
+        if (representsNull(node)) {
+            return null;
+        }
+        checkValue(path, node, "a biginteger");
+        if (!node.isBigDecimal()) {
+            throw new IllegalArgumentException(formatExMsg(path, "is not a biginteger"));
+        }
+        return node.getDecimalValue();
     }
 
 
@@ -658,7 +696,9 @@ public class JsonRepresentation {
         String xpathExpression = String.format(xpathTemplate,  args);
         try {
             // puts object structure under a <o>
-            org.jdom.Document jdomDoc = new SAXBuilder().build(new StringReader(toXml()));
+            final StringReader xmlStream = new StringReader(toXml());
+            final SAXBuilder saxBuilder = new SAXBuilder();
+            org.jdom.Document jdomDoc = saxBuilder.build(xmlStream);
 
             String prefix = jsonNode.isArray()?"a":"o";
             XPath xpath = XPath.newInstance("/" + prefix + xpathExpression);

@@ -25,6 +25,7 @@ import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.applib.RepresentationType;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
 import org.apache.isis.viewer.json.viewer.representations.LinkFollower;
+import org.apache.isis.viewer.json.viewer.representations.Rel;
 import org.apache.isis.viewer.json.viewer.representations.ReprRendererAbstract;
 
 public abstract class AbstractObjectMemberReprRenderer<R extends ReprRendererAbstract<R, ObjectAndMember<T>>, T extends ObjectMember> 
@@ -64,7 +65,7 @@ public abstract class AbstractObjectMemberReprRenderer<R extends ReprRendererAbs
     }
 
     public R withSelf() {
-        representation.mapPut("self", linkToBuilder.linkToMember("self", memberType, objectMember).build());
+        representation.mapPut("self", linkToBuilder.linkToMember(Rel.SELF, memberType, objectMember).build());
         return cast(this);
     }
 
@@ -101,9 +102,9 @@ public abstract class AbstractObjectMemberReprRenderer<R extends ReprRendererAbs
     public R withDetailsLink() {
         final JsonRepresentation link = 
                 linkToBuilder.linkToMember(memberType.getDetailsRel(), memberType, objectMember).build();
-        representation.mapPut(memberType.getDetailsRel(), link);
+        representation.mapPut(memberType.getDetailsRel().getName(), link);
         final LinkFollower membersLinkFollower = getLinkFollower();
-        final LinkFollower detailsLinkFollower = membersLinkFollower.follow(memberType.getDetailsRel());
+        final LinkFollower detailsLinkFollower = membersLinkFollower.follow(memberType.getDetailsRel().getName());
         if(membersLinkFollower.matches(representation) && detailsLinkFollower.matches(link)) {
             followDetailsLink(link);
         }

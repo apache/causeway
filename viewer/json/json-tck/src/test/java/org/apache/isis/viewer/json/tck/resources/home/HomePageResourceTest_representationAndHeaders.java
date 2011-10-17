@@ -92,7 +92,7 @@ public class HomePageResourceTest_representationAndHeaders {
         final MediaType contentType = restfulResponse.getHeader(Header.CONTENT_TYPE);
         assertThat(contentType, hasType("application"));
         assertThat(contentType, hasSubType("json"));
-        assertThat(contentType, hasParameter("profile", "http://restfulobjects.org/profiles/homepage"));
+        assertThat(contentType, hasParameter("profile", "urn:org.restfulobjects/homepage"));
         assertThat(contentType, is(RepresentationType.HOME_PAGE.getMediaType()));
         
         // then

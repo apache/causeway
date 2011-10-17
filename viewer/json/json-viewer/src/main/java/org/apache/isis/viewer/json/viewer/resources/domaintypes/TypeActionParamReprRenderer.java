@@ -24,6 +24,7 @@ import org.apache.isis.viewer.json.applib.RepresentationType;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
 import org.apache.isis.viewer.json.viewer.representations.LinkFollower;
 import org.apache.isis.viewer.json.viewer.representations.LinkBuilder;
+import org.apache.isis.viewer.json.viewer.representations.Rel;
 import org.apache.isis.viewer.json.viewer.representations.ReprRenderer;
 import org.apache.isis.viewer.json.viewer.representations.ReprRendererFactoryAbstract;
 
@@ -41,7 +42,7 @@ public class TypeActionParamReprRenderer extends AbstractTypeFeatureReprBuilder<
         }
     }
 
-    public static LinkBuilder newLinkToBuilder(ResourceContext resourceContext, String rel, ObjectSpecification objectSpecification, ObjectActionParameter objectActionParameter) {
+    public static LinkBuilder newLinkToBuilder(ResourceContext resourceContext, Rel rel, ObjectSpecification objectSpecification, ObjectActionParameter objectActionParameter) {
         String typeFullName = objectSpecification.getFullIdentifier();
         final ObjectAction objectAction = objectActionParameter.getAction();
         String actionId = objectAction.getId();
@@ -63,7 +64,7 @@ public class TypeActionParamReprRenderer extends AbstractTypeFeatureReprBuilder<
         // self
         if(includesSelf) {
             representation.mapPut("self", 
-                newLinkToBuilder(getResourceContext(), "self", getObjectSpecification(), getObjectFeature()).build());
+                newLinkToBuilder(getResourceContext(), Rel.SELF, getObjectSpecification(), getObjectFeature()).build());
         }
         
         // links and extensions

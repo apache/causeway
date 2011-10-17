@@ -24,18 +24,18 @@ import org.apache.isis.viewer.json.viewer.ResourceContext;
 
 public final class LinkBuilder {
 
-    public static LinkBuilder newBuilder(ResourceContext resourceContext, String rel, RepresentationType representationType, String hrefFormat, Object... hrefArgs) {
+    public static LinkBuilder newBuilder(ResourceContext resourceContext, Rel rel, RepresentationType representationType, String hrefFormat, Object... hrefArgs) {
         return newBuilder(resourceContext, rel, representationType.getMediaType(), hrefFormat, hrefArgs);
     }
 
-    public static LinkBuilder newBuilder(ResourceContext resourceContext, String rel, MediaType mediaType, String hrefFormat, Object... hrefArgs) {
+    public static LinkBuilder newBuilder(ResourceContext resourceContext, Rel rel, MediaType mediaType, String hrefFormat, Object... hrefArgs) {
         return new LinkBuilder(resourceContext, rel, String.format(hrefFormat, hrefArgs), mediaType);
     }
 
     private final ResourceContext resourceContext;
     private final JsonRepresentation representation = JsonRepresentation.newMap();
     
-	private final String rel;
+	private final Rel rel;
     private final String href;
     private final MediaType mediaType;
     
@@ -45,7 +45,7 @@ public final class LinkBuilder {
     private JsonRepresentation value;
     private String key;
 
-    protected LinkBuilder(ResourceContext resourceContext, String rel, String href, MediaType mediaType) {
+    protected LinkBuilder(ResourceContext resourceContext, Rel rel, String href, MediaType mediaType) {
         this.resourceContext = resourceContext;
         this.rel = rel;
         this.href = href;
@@ -74,7 +74,7 @@ public final class LinkBuilder {
 
     public JsonRepresentation build() {
         representation.mapPut("key", key);
-        representation.mapPut("rel", rel);
+        representation.mapPut("rel", rel.getName());
         representation.mapPut("href", resourceContext.urlFor(href));
         representation.mapPut("method", method);
         representation.mapPut("type", mediaType.toString());

@@ -12,7 +12,7 @@ public final class RestfulMediaType {
     
     private RestfulMediaType(){}
 
-    private static final String BASE = MediaType.APPLICATION_JSON + ";profile=http://restfulobjects.org/profiles/";
+    private static final String BASE = MediaType.APPLICATION_JSON + ";profile=urn:org.restfulobjects/";
     
     public final static String APPLICATION_JSON_HOME_PAGE = BASE + "homepage";
     public final static String APPLICATION_JSON_USER = BASE + "user";

@@ -18,24 +18,27 @@ package org.apache.isis.viewer.json.viewer.resources.domainobjects;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.viewer.json.viewer.representations.HttpMethod;
+import org.apache.isis.viewer.json.viewer.representations.Rel;
 
 public class MutatorSpec {
 
-    public static MutatorSpec of(Class<? extends Facet> validationFacetType, Class<? extends Facet> mutatorFacetType, HttpMethod httpMethod, BodyArgs argSpec) {
-        return of(validationFacetType, mutatorFacetType, httpMethod, argSpec, null);
+    public static MutatorSpec of(Rel rel, Class<? extends Facet> validationFacetType, Class<? extends Facet> mutatorFacetType, HttpMethod httpMethod, BodyArgs argSpec) {
+        return of(rel, validationFacetType, mutatorFacetType, httpMethod, argSpec, null);
     }
 
-    public static MutatorSpec of(Class<? extends Facet> validationFacetType, Class<? extends Facet> mutatorFacetType, HttpMethod httpMethod, BodyArgs argSpec, String suffix) {
-        return new MutatorSpec(validationFacetType, mutatorFacetType, httpMethod, argSpec, suffix);
+    public static MutatorSpec of(Rel rel, Class<? extends Facet> validationFacetType, Class<? extends Facet> mutatorFacetType, HttpMethod httpMethod, BodyArgs argSpec, String suffix) {
+        return new MutatorSpec(rel, validationFacetType, mutatorFacetType, httpMethod, argSpec, suffix);
     }
 
+    public final Rel rel;
     public final Class<? extends Facet> validationFacetType;
     public final Class<? extends Facet> mutatorFacetType;
     public final HttpMethod httpMethod;
     public final String suffix;
     public final BodyArgs arguments;
 
-    private MutatorSpec(Class<? extends Facet> validationFacetType, Class<? extends Facet> mutatorFacetType, HttpMethod httpMethod, BodyArgs bodyArgs, String suffix) {
+    private MutatorSpec(Rel rel, Class<? extends Facet> validationFacetType, Class<? extends Facet> mutatorFacetType, HttpMethod httpMethod, BodyArgs bodyArgs, String suffix) {
+        this.rel = rel;
         this.validationFacetType = validationFacetType;
         this.mutatorFacetType = mutatorFacetType;
         this.httpMethod = httpMethod;

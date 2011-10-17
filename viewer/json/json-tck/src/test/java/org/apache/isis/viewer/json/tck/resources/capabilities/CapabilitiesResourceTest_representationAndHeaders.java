@@ -104,7 +104,7 @@ public class CapabilitiesResourceTest_representationAndHeaders {
         final MediaType contentType = restfulResponse.getHeader(Header.CONTENT_TYPE);
         assertThat(contentType, hasType("application"));
         assertThat(contentType, hasSubType("json"));
-        assertThat(contentType, hasParameter("profile", "http://restfulobjects.org/profiles/capabilities"));
+        assertThat(contentType, hasParameter("profile", "urn:org.restfulobjects/capabilities"));
         assertThat(contentType, is(RepresentationType.CAPABILITIES.getMediaType()));
         
         // then

@@ -22,6 +22,7 @@ import org.apache.isis.viewer.json.applib.RepresentationType;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
 import org.apache.isis.viewer.json.viewer.representations.LinkFollower;
 import org.apache.isis.viewer.json.viewer.representations.LinkBuilder;
+import org.apache.isis.viewer.json.viewer.representations.Rel;
 import org.apache.isis.viewer.json.viewer.representations.ReprRenderer;
 import org.apache.isis.viewer.json.viewer.representations.ReprRendererAbstract;
 import org.apache.isis.viewer.json.viewer.representations.ReprRendererFactoryAbstract;
@@ -39,7 +40,7 @@ public class DomainTypeReprRenderer extends ReprRendererAbstract<DomainTypeReprR
         }
     }
 
-    public static LinkBuilder newLinkToBuilder(ResourceContext resourceContext, String rel, ObjectSpecification objectSpec) {
+    public static LinkBuilder newLinkToBuilder(ResourceContext resourceContext, Rel rel, ObjectSpecification objectSpec) {
         String typeFullName = objectSpec.getFullIdentifier();
         String url = "domainTypes/" + typeFullName;
         return LinkBuilder.newBuilder(resourceContext, rel, RepresentationType.DOMAIN_TYPE, url);
@@ -62,7 +63,7 @@ public class DomainTypeReprRenderer extends ReprRendererAbstract<DomainTypeReprR
 
         // self
         if(includesSelf) {
-            representation.mapPut("self", newLinkToBuilder(getResourceContext(), "self", objectSpecification).build());
+            representation.mapPut("self", newLinkToBuilder(getResourceContext(), Rel.SELF, objectSpecification).build());
         }
         
         

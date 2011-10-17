@@ -45,7 +45,7 @@ public class DomainServiceResourceTest_serviceId_xrofollowlinks {
         final String href = givenHrefToService("simples");
         
         final RestfulRequest request = 
-                client.createRequest(HttpMethod.GET, href).withArg(QueryParameter.FOLLOW_LINKS, "members[actionId=%s].actionDetails", "list");
+                client.createRequest(HttpMethod.GET, href).withArg(QueryParameter.FOLLOW_LINKS, "members[actionId=%s].details", "list");
         final RestfulResponse<DomainObjectRepresentation> restfulResponse = request.executeT();
 
         assertThat(restfulResponse.getStatus(), is(HttpStatusCode.OK));
@@ -57,12 +57,12 @@ public class DomainServiceResourceTest_serviceId_xrofollowlinks {
         JsonRepresentation actionRepr;
         
         actionRepr = membersList.xpath("/e[actionId='%s']", "list");
-        assertThat(actionRepr.getRepresentation("e.actionDetails"), is(not(nullValue())));
-        assertThat(actionRepr.getRepresentation("e.actionDetails.value"), is(not(nullValue()))); // followed
+        assertThat(actionRepr.getRepresentation("e.details"), is(not(nullValue())));
+        assertThat(actionRepr.getRepresentation("e.details.value"), is(not(nullValue()))); // followed
         
         actionRepr = membersList.xpath("/e[actionId='%s']", "newTransientEntity");
-        assertThat(actionRepr.getRepresentation("e.actionDetails"), is(not(nullValue())));
-        assertThat(actionRepr.getRepresentation("e.actionDetails.value"), is(nullValue())); // not followed
+        assertThat(actionRepr.getRepresentation("e.details"), is(not(nullValue())));
+        assertThat(actionRepr.getRepresentation("e.details.value"), is(nullValue())); // not followed
     }
 
 

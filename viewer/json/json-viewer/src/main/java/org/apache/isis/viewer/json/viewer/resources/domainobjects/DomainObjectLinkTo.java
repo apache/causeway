@@ -21,6 +21,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.viewer.json.applib.RepresentationType;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
 import org.apache.isis.viewer.json.viewer.representations.LinkBuilder;
+import org.apache.isis.viewer.json.viewer.representations.Rel;
 
 public class DomainObjectLinkTo implements ObjectAdapterLinkTo {
 
@@ -62,13 +63,13 @@ public class DomainObjectLinkTo implements ObjectAdapterLinkTo {
     /**
      * hook method
      */
-    protected String linkRel() {
-        return "object";
+    protected Rel linkRel() {
+        return Rel.OBJECT;
     }
 
 
     @Override
-    public final LinkBuilder linkToMember(String rel, MemberType memberType, ObjectMember objectMember, String... parts) {
+    public final LinkBuilder linkToMember(Rel rel, MemberType memberType, ObjectMember objectMember, String... parts) {
         StringBuilder buf = new StringBuilder(linkRef());
         buf.append("/").append(memberType.getUrlPart()).append(objectMember.getId());
         for(String part: parts) {

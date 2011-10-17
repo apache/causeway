@@ -19,12 +19,16 @@
 
 package org.apache.isis.tck.dom.simples;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
+
 import org.apache.isis.applib.AbstractDomainObject;
 import org.apache.isis.applib.annotation.MemberOrder;
+import org.apache.isis.applib.annotation.Optional;
 
 public class SimpleEntity extends AbstractDomainObject {
 
-    // {{ Name
+    // {{ Name (string)
     private String name;
 
     @MemberOrder(sequence = "1")
@@ -38,7 +42,7 @@ public class SimpleEntity extends AbstractDomainObject {
     // }}
 
 
-    // {{ Flag
+    // {{ Flag (boolean)
     private Boolean flag;
 
     @MemberOrder(sequence = "1")
@@ -50,6 +54,127 @@ public class SimpleEntity extends AbstractDomainObject {
         this.flag = flag;
     }
     // }}
+
+    
+    // {{ AnInt (int)
+    private int anInt;
+
+    @MemberOrder(sequence = "1")
+    public int getAnInt() {
+        return anInt;
+    }
+
+    public void setAnInt(final int anInt) {
+        this.anInt = anInt;
+    }
+    // }}
+    
+    
+    // {{ AnotherInt
+    private Integer anotherInt;
+
+    @MemberOrder(sequence = "1")
+    @Optional
+    public Integer getAnotherInt() {
+        return anotherInt;
+    }
+
+    public void setAnotherInt(final Integer anotherInt) {
+        this.anotherInt = anotherInt;
+    }
+    // }}
+
+    // {{ ALong
+    private long aLong;
+    @MemberOrder(sequence = "1")
+    public long getALong() {
+        return aLong;
+    }
+
+    public void setALong(final long aLong) {
+        this.aLong = aLong;
+    }
+    // }}
+
+
+    // {{ AnotherLong
+    private Long anotherLong;
+
+    @MemberOrder(sequence = "1")
+    @Optional
+    public Long getAnotherLong() {
+        return anotherLong;
+    }
+
+    public void setAnotherLong(final Long anotherLong) {
+        this.anotherLong = anotherLong;
+    }
+    // }}
+
+
+    // {{ ADouble
+    private double aDouble;
+
+    @MemberOrder(sequence = "1")
+    public double getADouble() {
+        return aDouble;
+    }
+
+    public void setADouble(final double aDouble) {
+        this.aDouble = aDouble;
+    }
+    // }}
+
+
+    // {{ AnotherDouble
+    private Double anotherDouble;
+
+    @MemberOrder(sequence = "1")
+    @Optional
+    public Double getAnotherDouble() {
+        return anotherDouble;
+    }
+
+    public void setAnotherDouble(final Double anotherDouble) {
+        this.anotherDouble = anotherDouble;
+    }
+    // }}
+
+
+    // {{ ABigInteger
+    private BigInteger aBigInteger;
+
+    @MemberOrder(sequence = "1")
+    @Optional
+    public BigInteger getABigInteger() {
+        return aBigInteger;
+    }
+
+    public void setABigInteger(final BigInteger aBigInteger) {
+        this.aBigInteger = aBigInteger;
+    }
+    // }}
+
+
+    // {{ ABigDecimal
+    private BigDecimal aBigDecimal;
+
+    @MemberOrder(sequence = "1")
+    @Optional
+    public BigDecimal getABigDecimal() {
+        return aBigDecimal;
+    }
+
+    public void setABigDecimal(final BigDecimal bigDecimal) {
+        this.aBigDecimal = bigDecimal;
+    }
+    // }}
+
+
+    
+
+
+
 
 
 }

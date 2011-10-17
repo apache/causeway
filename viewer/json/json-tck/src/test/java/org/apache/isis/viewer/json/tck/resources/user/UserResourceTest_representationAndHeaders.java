@@ -95,7 +95,7 @@ public class UserResourceTest_representationAndHeaders {
         final MediaType contentType = restfulResponse.getHeader(Header.CONTENT_TYPE);
         assertThat(contentType, hasType("application"));
         assertThat(contentType, hasSubType("json"));
-        assertThat(contentType, hasParameter("profile", "http://restfulobjects.org/profiles/user"));
+        assertThat(contentType, hasParameter("profile", "urn:org.restfulobjects/user"));
         assertThat(contentType, is(RepresentationType.USER.getMediaType()));
 
         // then

@@ -8,6 +8,7 @@ import org.apache.isis.viewer.json.applib.RepresentationType;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
 import org.apache.isis.viewer.json.viewer.representations.LinkFollower;
 import org.apache.isis.viewer.json.viewer.representations.LinkBuilder;
+import org.apache.isis.viewer.json.viewer.representations.Rel;
 import org.apache.isis.viewer.json.viewer.representations.ReprRenderer;
 import org.apache.isis.viewer.json.viewer.representations.ReprRendererAbstract;
 import org.apache.isis.viewer.json.viewer.representations.ReprRendererFactoryAbstract;
@@ -48,7 +49,7 @@ public class DomainTypesReprRenderer extends ReprRendererAbstract<DomainTypesRep
         JsonRepresentation specList = JsonRepresentation.newArray();
         for (ObjectSpecification objectSpec : specifications) {
             final LinkBuilder linkBuilder = 
-                    LinkBuilder.newBuilder(getResourceContext(), "domainType", RepresentationType.DOMAIN_TYPE, "domainTypes/%s", objectSpec.getFullIdentifier());
+                    LinkBuilder.newBuilder(getResourceContext(), Rel.DESCRIBEDBY, RepresentationType.DOMAIN_TYPE, "domainTypes/%s", objectSpec.getFullIdentifier());
             specList.arrayAdd(linkBuilder.build());
         }
         

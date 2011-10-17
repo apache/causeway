@@ -35,6 +35,7 @@ import org.apache.isis.viewer.json.applib.RepresentationType;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
 import org.apache.isis.viewer.json.viewer.representations.LinkFollower;
 import org.apache.isis.viewer.json.viewer.representations.LinkBuilder;
+import org.apache.isis.viewer.json.viewer.representations.Rel;
 import org.apache.isis.viewer.json.viewer.representations.RendererFactory;
 import org.apache.isis.viewer.json.viewer.representations.RendererFactoryRegistry;
 import org.apache.isis.viewer.json.viewer.representations.ReprRenderer;
@@ -57,7 +58,7 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
         }
     }
     
-    public static LinkBuilder newLinkToBuilder(ResourceContext resourceContext, String rel, ObjectAdapter elementAdapter) {
+    public static LinkBuilder newLinkToBuilder(ResourceContext resourceContext, Rel rel, ObjectAdapter elementAdapter) {
         String oidStr = resourceContext.getOidStringifier().enString(elementAdapter.getOid());
         String url = "objects/" + oidStr;
         return LinkBuilder.newBuilder(resourceContext, rel, RepresentationType.DOMAIN_OBJECT, url);
@@ -88,7 +89,7 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
     public JsonRepresentation render() {
 
         // self
-        if(includesSelf) {
+        if(includesSelf && objectAdapter.isPersistent()) {
             JsonRepresentation self = linkToBuilder.with(objectAdapter).builder().build();
             representation.mapPut("self", self);
         }
@@ -104,7 +105,7 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
         // links
         final JsonRepresentation links = JsonRepresentation.newArray();
         links.arrayAdd(
-                DomainTypeReprRenderer.newLinkToBuilder(getResourceContext(), "domainType", objectAdapter.getSpecification()).build());
+                DomainTypeReprRenderer.newLinkToBuilder(getResourceContext(), Rel.DESCRIBEDBY, objectAdapter.getSpecification()).build());
         withLinks(links);
         
         // extensions
@@ -203,7 +204,7 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
 		}
 		TitleFacet titleFacet = objectSpec.getFacet(TitleFacet.class);
 		String title = titleFacet.title(objectAdapter, resourceContext.getLocalization());
-		return DomainObjectReprRenderer.newLinkToBuilder(resourceContext, "object", objectAdapter)
+		return DomainObjectReprRenderer.newLinkToBuilder(resourceContext, Rel.OBJECT, objectAdapter)
 		            .withTitle(title).build();
 	}
 
