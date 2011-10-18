@@ -16,7 +16,7 @@ import org.apache.isis.viewer.json.viewer.JsonApplicationExceptionMapper;
 import org.junit.Before;
 import org.junit.Test;
 
-public class JsonExceptionMapperTest {
+public class JsonApplicationExceptionMapperTest {
 
     private JsonApplicationExceptionMapper exceptionMapper;
 
