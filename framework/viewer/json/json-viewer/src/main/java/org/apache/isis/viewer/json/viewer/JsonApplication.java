@@ -36,6 +36,7 @@ public class JsonApplication extends AbstractJaxRsApplication {
         addClass(CapabilitiesResourceServerside.class);
         
         addSingleton(new JsonApplicationExceptionMapper());
+        addSingleton(new RuntimeExceptionMapper());
         
         // TODO: doesn't get injected
         // addSingleton(new TypedReprBuilderFactoryRegistry());
