@@ -26,7 +26,7 @@ do
     cd $d
     pwd
     echo mvn clean site-deploy -D modules=site -D deploy=local -D patch=$n $*
-         mvn clean site-deploy -D modules=site -D deploy=local -D patch=$n $*
+         mvn3 -T 4 clean site-deploy -D modules=site -D deploy=local -D patch=$n $*
     cd $root
   fi
 done
