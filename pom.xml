@@ -186,17 +186,42 @@
         <pluginRepository>
             <id>Codehaus Repository</id>
             <url>http://repository.codehaus.org/</url>
+	      <snapshots>
+		<enabled>false</enabled>
+	      </snapshots>
         </pluginRepository>
     </pluginRepositories>
 
     <repositories>
+<!--
+        <repository>
+            <id>Maven Repository</id>
+            <url>http://repo1.maven.org/maven2/</url>
+            <snapshots>
+              <enabled>false</enabled>
+            </snapshots>
+        </repository>
+-->
+        <repository>
+            <id>Apache Repository</id>
+            <url>https://repository.apache.org/</url>
+            <snapshots>
+              <enabled>false</enabled>
+            </snapshots>
+        </repository>
         <repository>
             <id>Maven Central Repository (UK Mirror)</id>
             <url>http://uk.maven.org/maven2</url>
+            <snapshots>
+              <enabled>false</enabled>
+            </snapshots>
         </repository>
         <repository>
             <id>JBoss Public Release</id>
             <url>https://repository.jboss.org/nexus/content/groups/public-jboss/</url>
+            <snapshots>
+              <enabled>false</enabled>
+            </snapshots>
         </repository>
     </repositories>
 
@@ -231,7 +256,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-enforcer-plugin</artifactId>
-                    <version>1.0</version>
+                    <version>1.0-beta-1</version>
                     <configuration>
                         <rules>
                             <requireMavenVersion>
@@ -528,6 +553,7 @@
                 <plugin>
                     <groupId>com.agilejava.docbkx</groupId>
                     <artifactId>docbkx-maven-plugin</artifactId>
+                    <!-- <version>2.0.13</version> -->
                     <version>2.0.8</version>
                     <!-- doesn't seem to render the title page correctly? 
                         <version>2.0.10</version> -->
