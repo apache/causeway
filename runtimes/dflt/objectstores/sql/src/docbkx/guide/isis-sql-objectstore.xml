@@ -149,7 +149,7 @@
       type. Default mappers are provided by
       JdbcFieldMappingFactoryInstaller.</para>
 
-      <sect2>
+      <sect2 id="sec.mappers.modifiable-values">
         <title>Modifiable values</title>
 
         <para>The following SQL datatypes can be overridden, if specified in
@@ -207,6 +207,11 @@
           </simplelist></para>
 
         <para><simplelist>
+            <member>isis.persistor.sql.datatypes.longstring (VARCHAR(128))
+            [String]</member>
+          </simplelist></para>
+
+        <para><simplelist>
             <member>isis.persistor.sql.datatypes.password (VARCHAR(12))
             [Password]</member>
           </simplelist></para>
@@ -228,6 +233,9 @@
         the default value mappers are written assuming the default values.
         Data parsing uses prepared statements and reads/writes values as
         objects.</para>
+
+        <para>The datatype longstring is used to store classnames, required
+        for polymorphism.</para>
       </sect2>
 
       <sect2>
@@ -293,6 +301,12 @@
           <para>MODIFIED_BY VARCHAR(32),</para>
 
           <para>MODIFIED_ON TIMESTAMP</para>
+
+          <para>The default ID column name is "PK_ID", but this can be
+          over-ridden by specifying the new name in the properties
+          file:</para>
+
+          <para></para>
         </sect3>
 
         <sect3>
@@ -384,9 +398,10 @@
             <para><property>isis.persistor.sql.jdbc.user=sa</property></para>
 
             <para><property>isis.persistor.sql.jdbc.password=</property></para>
-          </blockquote>The default TimeStamp and DateTime SQL data class is
-        DATETIME, which does not work on Postgresql. Here, the default must be
-        replaced with the following properties file entries:</para>
+          </blockquote>The default <classname>TimeStamp</classname> and
+        <classname>DateTime</classname> SQL data class is DATETIME, which does
+        not work on Postgresql. Here, the default must be replaced with the
+        following properties file entries:</para>
 
         <blockquote>
           <para>isis.persistor.sql.datatypes.timestamp=TIMESTAMP</para>
@@ -427,7 +442,7 @@
 
         <para>Beware! This version of DB2 has a very small limit on table and
         column names. You will have to keep your domain class and property
-        names short to suite, especially collections (see ..).</para>
+        names short to suit, especially collections (see ..).</para>
       </sect2>
     </sect1>
 
@@ -480,6 +495,115 @@
       <code>org.apache.isis.runtimes.dflt.objectstores.sql.jdbc.installer.JdbcFieldMappingFactoryInstaller</code></para>
 
       <para></para>
+    </sect1>
+  </chapter>
+
+  <chapter>
+    <title>Defaults</title>
+
+    <para>The SQL objectstore exposes several defaults that can be replaced
+    either in configuration or at runtime.</para>
+
+    <para>The class
+    <code>org.apache.isis.runtimes.dflt.objectstores.sql.Defaults</code>
+    contains the following:</para>
+
+    <para>Programmatic, at runtime: </para>
+
+    <itemizedlist>
+      <listitem>
+        <para>TimeZone: <code>setTimeZone(DateTimeZone.UTC)</code></para>
+      </listitem>
+    </itemizedlist>
+
+    <para>Configuration, e.g. in isis.properties:</para>
+
+    <para><itemizedlist>
+        <listitem>
+          <para>Primary key column: </para>
+
+          <para><code>isis.persistor.sql.default.pk_id=pk_id</code></para>
+        </listitem>
+
+        <listitem>
+          <para>Service ID column: </para>
+
+          <para><code>isis.persistor.sql.default.id=id</code></para>
+        </listitem>
+
+        <listitem>
+          <para>Maximum records returned by objectstore methods that return a
+          list/collection, such as <code>allMatches()</code>, etc: </para>
+
+          <para><code>isis.persistor.sql.default.maxinstances=100</code></para>
+        </listitem>
+
+        <listitem>
+          <para>See "Modifiable values", <link
+          linkend="sec.mappers.modifiable-values">above</link>.</para>
+        </listitem>
+      </itemizedlist></para>
+  </chapter>
+
+  <chapter>
+    <title>Polymorphism</title>
+
+    <para>The SQL Objectstore supports polymorphic classes. Both properties
+    and collections are supported. </para>
+
+    <sect1>
+      <title>Properties</title>
+
+      <para>Polymorphic properties are handled with
+      <classname>JdbcPolymorphicObjectReferenceMapping</classname>.</para>
+
+      <para>Two columns are created in the class table: The actual instance
+      class type, and the instance ID.</para>
+    </sect1>
+
+    <sect1>
+      <title>Collections</title>
+
+      <para>There are two implementations currently selectable by editting
+      <classname>AbstractAutoMapper</classname>.</para>
+
+      <para>The default implementation is
+      <classname>PolymorphicForeignKeyInChildCollectionBaseMapper</classname>.</para>
+
+      <sect2>
+        <title>PolymorphicForeignKeyInChildCollectionBaseMapper</title>
+
+        <para>Creates two columns in the child class table, to contain the
+        child class type and child class ID.</para>
+
+        <para>Used to map 1-to-many collections by creating, in the collection
+        child table (which may be an interface or abstract class), 2 columns
+        per parent collection. </para>
+
+        <para>The first column is the class type, the second is the entity ID.
+        </para>
+
+        <para>The columns are named by combining the final part of the parent
+        class name and the collection variable name.</para>
+
+        <para>Collection loading is a case of iterating through all collection
+        entries and adding the named class instance of the stored ID.</para>
+      </sect2>
+
+      <sect2>
+        <title>PolymorphicForeignKeyInChildCollectionMapper</title>
+
+        <para>Used to map 1-to-many collections by creating, in the child
+        table, 1 column per parent collection. </para>
+
+        <para>The column is named by combining the final part of the parent
+        class name and the collection variable name.</para>
+
+        <para>Collection loading is a case of iterating through all subclasses
+        of the collection type and adding class instances of the stored ID.
+        This could be problematic if different subclasses have the same
+        ID.</para>
+      </sect2>
     </sect1>
   </chapter>
 
@@ -582,7 +706,7 @@
     <sect1>
       <title>Edit History</title>
 
-      <para>Last editted: Kevin, 27/04/2011.<!--dd/mm/yyyy--></para>
+      <para>Last editted: Kevin, 17/10/2011.<!--dd/mm/yyyy--></para>
     </sect1>
   </appendix>
 </book>
