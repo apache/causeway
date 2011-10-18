@@ -44,6 +44,7 @@ import org.apache.isis.viewer.json.applib.RepresentationType;
 import org.apache.isis.viewer.json.applib.RestfulResponse.HttpStatusCode;
 import org.apache.isis.viewer.json.applib.blocks.Link;
 import org.apache.isis.viewer.json.applib.util.JsonMapper;
+import org.apache.isis.viewer.json.applib.util.UrlEncodingUtils;
 import org.apache.isis.viewer.json.viewer.JsonApplicationException;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
 import org.apache.isis.viewer.json.viewer.representations.LinkBuilder;
@@ -130,7 +131,7 @@ public class DomainResourceHelper {
     Response invokeActionQueryOnly(
             final ObjectAdapter objectAdapter, 
             final String actionId, 
-            final String arguments) {
+            final String argumentsQueryString) {
         final ObjectAction action = getObjectActionThatIsVisibleAndUsable(
                 objectAdapter, actionId, Intent.ACCESS);
 
@@ -140,16 +141,10 @@ public class DomainResourceHelper {
                     "Method not allowed; action '%s' is not query only", action.getId());
         }
 
-        List<ObjectAdapter> argumentAdapters;
-        try {
-            argumentAdapters = argumentAdaptersFor(action, arguments);
-        } catch (IOException e) {
-            throw JsonApplicationException.create(HttpStatusCode.BAD_REQUEST,
-                    "Action '%s' has query arguments that cannot be parsed as JSON", e, action.getId());
-        }
-
+        JsonRepresentation arguments = parseQueryString(action, argumentsQueryString);
+        
         int numParameters = action.getParameterCount();
-        int argSize = argumentAdapters.size();
+        int argSize = arguments.size();
         if (argSize != numParameters) {
             throw JsonApplicationException.create(
                     HttpStatusCode.BAD_REQUEST,
@@ -157,10 +152,20 @@ public class DomainResourceHelper {
                     numParameters, argSize, action.getId());
         }
         
-        JsonRepresentation representationWithSelf = representationWithSelfFor(objectAdapter, action, arguments);
-        return invokeActionUsingAdapters(objectAdapter, action, argumentAdapters, representationWithSelf);
+        
+        return invokeActionUsingAdapters(objectAdapter, action, arguments);
     }
 
+
+    static JsonRepresentation parseQueryString(ObjectAction action, String argumentsQueryString) {
+        final String urlDecode = UrlEncodingUtils.urlDecode(argumentsQueryString);
+        try {
+            return JsonMapper.instance().read(urlDecode);
+        } catch (Exception e) {
+            throw JsonApplicationException.create(HttpStatusCode.BAD_REQUEST,
+                    "Action '%s' has query arguments that cannot be parsed as JSON", e, action.getId());
+        }
+    }
 
     Response invokeActionIdempotent(
             final ObjectAdapter objectAdapter, 
@@ -179,11 +184,7 @@ public class DomainResourceHelper {
         String bodyAsString = asStringUtf8(body);
         final JsonRepresentation arguments = readBodyAsMap(bodyAsString);
 
-        List<ObjectAdapter> argumentAdapters = parseArguments(action, arguments);
-        JsonRepresentation representationWithSelf = representationWithSelfFor(objectAdapter, action, arguments);
-
-        return invokeActionUsingAdapters(objectAdapter, action,
-                argumentAdapters, representationWithSelf);
+        return invokeActionUsingAdapters(objectAdapter, action, arguments);
     }
 
     Response invokeAction(final ObjectAdapter objectAdapter, final String actionId, final InputStream body) {
@@ -193,18 +194,16 @@ public class DomainResourceHelper {
         String bodyAsString = asStringUtf8(body);
         final JsonRepresentation arguments = readBodyAsMap(bodyAsString);
 
-        JsonRepresentation representationWithSelf = representationWithSelfFor(objectAdapter, action, arguments);
-
-        List<ObjectAdapter> argumentAdapters = parseArguments(action, arguments);
-        return invokeActionUsingAdapters(objectAdapter, action,
-                argumentAdapters, representationWithSelf);
+        return invokeActionUsingAdapters(objectAdapter, action, arguments);
     }
 
     Response invokeActionUsingAdapters(
         final ObjectAdapter objectAdapter,
         final ObjectAction action,
-        final List<ObjectAdapter> argAdapters, 
-        final JsonRepresentation representation) {
+        final JsonRepresentation arguments) {
+        
+        List<ObjectAdapter> argAdapters = parseArguments(action, arguments);
+        final JsonRepresentation representation;
         
         // validate
         List<ObjectActionParameter> parameters = action.getParameters();
@@ -236,6 +235,8 @@ public class DomainResourceHelper {
 
         final CollectionFacet collectionFacet = returnedAdapter.getSpecification().getFacet(CollectionFacet.class);
         if (collectionFacet != null) {
+            representation = representationWithSelfFor(objectAdapter, action, arguments);
+            
             final Collection<ObjectAdapter> collectionAdapters = collectionFacet
                     .collection(returnedAdapter);
 
@@ -250,6 +251,8 @@ public class DomainResourceHelper {
         final EncodableFacet encodableFacet = returnedAdapter.getSpecification().getFacet(EncodableFacet.class);
         if(encodableFacet != null) {
             
+            representation = representationWithSelfFor(objectAdapter, action, arguments);
+            
             final RendererFactory factory = rendererFactoryRegistry.find(RepresentationType.SCALAR_VALUE);
 
             ScalarValueReprRenderer renderer = (ScalarValueReprRenderer) factory.newRenderer(resourceContext, null, representation);
@@ -257,7 +260,9 @@ public class DomainResourceHelper {
             return ResourceAbstract.responseOfOk(Caching.NONE, renderer).build();
         }
 
+        
         final RendererFactory factory = rendererFactoryRegistry.find(RepresentationType.DOMAIN_OBJECT);
+        representation = JsonRepresentation.newMap();
         final DomainObjectReprRenderer renderer = (DomainObjectReprRenderer) factory.newRenderer(resourceContext, null, representation);
         renderer.with(returnedAdapter);
         
@@ -297,20 +302,6 @@ public class DomainResourceHelper {
     }
 
 
-    private List<ObjectAdapter> argumentAdaptersFor(ObjectAction action,
-        String arguments) throws JsonParseException, JsonMappingException, IOException {
-
-        List<ObjectAdapter> argumentAdapters = Lists.newArrayList();
-        // List<ObjectActionParameter> parameters = action.getParameters();
-        // for (int i = 0; i < parameters.size(); i++) {
-        // ObjectActionParameter parameter = parameters.get(i);
-        // ObjectSpecification paramSpc = parameter.getSpecification();
-        // String argument = arguments.get(i);
-        // argumentAdapters.add(objectAdapterFor(paramSpc, argument));
-        // }
-        //
-        return argumentAdapters;
-    }
 
     
     /**
@@ -482,19 +473,6 @@ public class DomainResourceHelper {
 
         ObjectAdapter proposedValueAdapter = objectAdapterFor(resourceContext, objectSpec, arguments);
         return proposedValueAdapter;
-    }
-
-    
-    /**
-     * @param action
-     * @param bodyAsString - as per {@link #asStringUtf8(InputStream)}
-     */
-    private List<ObjectAdapter> parseBody(
-            final ObjectAction action, 
-            final String bodyAsString) {
-        
-        final JsonRepresentation arguments = readBodyAsMap(bodyAsString);
-        return parseArguments(action, arguments);
     }
 
 
