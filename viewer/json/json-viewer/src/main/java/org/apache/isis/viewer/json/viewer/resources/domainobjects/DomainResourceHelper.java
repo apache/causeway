@@ -158,7 +158,14 @@ public class DomainResourceHelper {
 
 
     static JsonRepresentation parseQueryString(ObjectAction action, String argumentsQueryString) {
-        final String urlDecode = UrlEncodingUtils.urlDecode(argumentsQueryString);
+        if(argumentsQueryString == null) {
+            return JsonRepresentation.newMap();
+        }
+        String argumentsTrimmed = argumentsQueryString.trim();
+        if(argumentsTrimmed .isEmpty()) {
+            return JsonRepresentation.newMap();
+        }
+        final String urlDecode = UrlEncodingUtils.urlDecode(argumentsTrimmed);
         try {
             return JsonMapper.instance().read(urlDecode);
         } catch (Exception e) {
