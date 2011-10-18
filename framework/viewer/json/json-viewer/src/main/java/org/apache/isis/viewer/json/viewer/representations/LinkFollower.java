@@ -6,17 +6,17 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
-
-import com.google.common.base.Objects;
+import org.apache.isis.viewer.json.applib.PathNode;
 
 
 
 @SuppressWarnings({"rawtypes","unchecked"})
 public final class LinkFollower {
 
+
     public final static LinkFollower create(List<List<String>> links) {
-        final Map<Node, Map> graph = ListUtil.asGraph(links);
-        return new LinkFollower(graph, Mode.FOLLOWING, Node.NULL);
+        final Map<PathNode, Map> graph = GraphUtil.asGraph(links);
+        return new LinkFollower(graph, Mode.FOLLOWING, PathNode.NULL);
     }
 
     private enum Mode {
@@ -24,11 +24,11 @@ public final class LinkFollower {
         TERMINATED;
     }
 
-    private final Map<Node, Map> graph;
+    private final Map<PathNode, Map> graph;
     private Mode mode;
-    private final Node root;
+    private final PathNode root;
 
-    private LinkFollower(Map<Node, Map> graph, Mode mode, Node root) {
+    private LinkFollower(Map<PathNode, Map> graph, Mode mode, PathNode root) {
         this.graph = graph;
         this.mode = mode;
         this.root = root;
@@ -39,16 +39,16 @@ public final class LinkFollower {
      */
     public LinkFollower follow(String path) {
         if(path == null) {
-            return terminated(Node.NULL);
+            return terminated(PathNode.NULL);
         }
         if(mode == Mode.TERMINATED) {
             return terminated(this.root);
         }
-        Node node = Node.parse(path);
+        PathNode node = PathNode.parse(path);
         if(mode == Mode.FOLLOWING) {
-            Map<Node, Map> remaining = graph.get(node);
+            Map<PathNode, Map> remaining = graph.get(node);
             if(remaining != null) {
-                Node key = findKey(node);
+                PathNode key = findKey(node);
                 return new LinkFollower(remaining, Mode.FOLLOWING, key);
             } else {
                 return terminated(node);
@@ -59,11 +59,11 @@ public final class LinkFollower {
 
     /**
      * somewhat bizarre, but we have to find the actual node that is in the graph;
-     * the one we matching on doesn't match on the {@link Node#getCriteria()} map.
+     * the one we matching on doesn't match on the {@link PathNode#getCriteria()} map.
      */
-    private Node findKey(Node node) {
-        final Set<Node> keySet = graph.keySet();
-        for(Node key: keySet) {
+    private PathNode findKey(PathNode node) {
+        final Set<PathNode> keySet = graph.keySet();
+        for(PathNode key: keySet) {
             if(key.equals(node)) {
                 return key;
             }
@@ -72,7 +72,7 @@ public final class LinkFollower {
         return node;
     }
 
-    private static LinkFollower terminated(Node node) {
+    private static LinkFollower terminated(PathNode node) {
         return new LinkFollower(null, Mode.TERMINATED, node);
     }
 
@@ -98,14 +98,8 @@ public final class LinkFollower {
         if(!isFollowing()) {
             return false;
         }
-        for(Map.Entry<String,String> criterium: root.getCriteria().entrySet()) {
-            final String requiredValue = criterium.getValue();
-            final String actualValue = map.getString(criterium.getKey());
-            if(!Objects.equal(requiredValue, actualValue)) {
-                return false;
-            }
-        }
-        return true;
+        return root == null || root.matches(map);
     }
+
 
 }

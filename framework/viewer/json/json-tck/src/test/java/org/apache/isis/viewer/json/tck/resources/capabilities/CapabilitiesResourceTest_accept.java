@@ -13,7 +13,6 @@ import org.apache.isis.viewer.json.applib.RestfulRequest;
 import org.apache.isis.viewer.json.applib.RestfulResponse;
 import org.apache.isis.viewer.json.applib.RestfulResponse.HttpStatusCode;
 import org.apache.isis.viewer.json.applib.capabilities.CapabilitiesRepresentation;
-import org.apache.isis.viewer.json.applib.homepage.HomePageRepresentation;
 import org.apache.isis.viewer.json.tck.IsisWebServerRule;
 import org.junit.Before;
 import org.junit.Rule;

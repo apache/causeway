@@ -63,5 +63,40 @@ public class JsonRepresentationTest_getRepresentation {
         assertThat(listRepresentation.isArray(), is(true));
     }
     
-    
+    @Test
+    public void forPath() throws JsonParseException, JsonMappingException, IOException {
+        JsonRepresentation representation = jsonRepresentation.getRepresentation("aSubMap.aLink");
+        assertThat(representation.isMap(), is(true));
+        assertThat(representation.getString("href"), is("http://foo/bar"));
+    }
+
+    @Test
+    public void forListwithCriteria() throws JsonParseException, JsonMappingException, IOException {
+        JsonRepresentation representation = jsonRepresentation.getRepresentation("anotherSubMap.aListOfLinks[rel=aRel]");
+        assertThat(representation.isLink(), is(true));
+        assertThat(representation.asLink().getHref(), is("http://foo/bar"));
+    }
+
+    @Test
+    public void forListWithCriteriaMatchingOne() throws JsonParseException, JsonMappingException, IOException {
+        JsonRepresentation representation = jsonRepresentation.getRepresentation("anotherSubMap.aListOfLinks[rel=multiRel data=someData]");
+        assertThat(representation.isLink(), is(true));
+        assertThat(representation.asLink().getHref(), is("http://foo/bar/multiRel1"));
+    }
+
+    @Test
+    public void forListWithMultipleCriteriaMatchingMultiple() throws JsonParseException, JsonMappingException, IOException {
+        JsonRepresentation representation = jsonRepresentation.getRepresentation("anotherSubMap.aListOfLinks[rel=multiRel method=GET]");
+        assertThat(representation.isArray(), is(true));
+        assertThat(representation.size(), is(2));
+    }
+
+    @Test
+    public void whenStartingWithList() throws JsonParseException, JsonMappingException, IOException {
+        JsonRepresentation listRepresentation = jsonRepresentation.getRepresentation("anotherSubMap.aListOfLinks");
+        JsonRepresentation representation = listRepresentation.getRepresentation("[rel=multiRel method=GET]");
+        assertThat(representation.isArray(), is(true));
+        assertThat(representation.size(), is(2));
+    }
+
 }

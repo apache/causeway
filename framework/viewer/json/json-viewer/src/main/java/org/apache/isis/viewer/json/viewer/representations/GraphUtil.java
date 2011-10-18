@@ -4,31 +4,33 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.isis.viewer.json.applib.PathNode;
+
 import com.google.common.collect.Maps;
 
 @SuppressWarnings({"rawtypes","unchecked"})
-public final class ListUtil {
+public final class GraphUtil {
     
-    private ListUtil(){}
+    private GraphUtil(){}
 
-    public final static Map<Node,Map> asGraph(List<List<String>> links) {
+    public final static Map<PathNode,Map> asGraph(List<List<String>> links) {
         if(links == null) {
             return Collections.emptyMap();
         }
-        final Map<Node, Map> map = Maps.newHashMap();
+        final Map<PathNode, Map> map = Maps.newHashMap();
         for (List<String> link : links) {
-            ListUtil.mergeInto(link, map);
+            GraphUtil.mergeInto(link, map);
         }
         return map;
     }
 
-    private static void mergeInto(List<String> list, Map<Node, Map> map) {
+    private static void mergeInto(List<String> list, Map<PathNode, Map> map) {
         if(list.size() == 0) {
             return;
         }
         final String str = list.get(0);
-        final Node node = Node.parse(str);
-        Map<Node,Map> submap = map.get(node);
+        final PathNode node = PathNode.parse(str);
+        Map<PathNode,Map> submap = map.get(node);
         if(submap == null) {
             submap = Maps.newHashMap(); 
             map.put(node, submap);

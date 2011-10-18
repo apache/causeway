@@ -9,7 +9,6 @@ import java.io.IOException;
 
 import javax.ws.rs.core.Response;
 
-import org.apache.isis.applib.annotation.Ignore;
 import org.apache.isis.runtimes.dflt.webserver.WebServer;
 import org.apache.isis.viewer.json.applib.HttpMethod;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
@@ -37,6 +36,8 @@ public class DomainServiceResourceTest_invokeAction {
     public IsisWebServerRule webServerRule = new IsisWebServerRule();
     
     private RestfulClient client;
+    
+    @SuppressWarnings("unused")
     private DomainServiceResource resource;
 
     @Before
@@ -94,8 +95,8 @@ public class DomainServiceResourceTest_invokeAction {
         RestfulResponse<DomainObjectRepresentation> restfulResponse = RestfulResponse.ofT(response);
         final DomainObjectRepresentation objectRepr = restfulResponse.getEntity();
         
-        assertThat(objectRepr.xpath("//members/e[propertyId='%s']/value", "name").getString("value"), is("New Name"));
-        assertThat(objectRepr.xpath("//members/e[propertyId='%s']/value", "flag").getBoolean("value"), is(true));
+        assertThat(objectRepr.getRepresentation("members[propertyId=%s].value", "name").asString(), is("New Name"));
+        assertThat(objectRepr.getRepresentation("members[propertyId=%s].value", "flag").asBoolean(), is(true));
     }
 
     @org.junit.Ignore("up to here")
@@ -124,8 +125,8 @@ public class DomainServiceResourceTest_invokeAction {
         RestfulResponse<DomainObjectRepresentation> restfulResponse = RestfulResponse.ofT(response);
         final DomainObjectRepresentation objectRepr = restfulResponse.getEntity();
         
-        assertThat(objectRepr.xpath("//members/e[propertyId='%s']/value", "name").getString("value"), is("New Name"));
-        assertThat(objectRepr.xpath("//members/e[propertyId='%s']/value", "flag").getBoolean("value"), is(true));
+        assertThat(objectRepr.getRepresentation("members[propertyId=%s].value", "name").asString(), is("New Name"));
+        assertThat(objectRepr.getRepresentation("members[propertyId=%s].value", "flag").asBoolean(), is(true));
     }
 
 
@@ -139,8 +140,8 @@ public class DomainServiceResourceTest_invokeAction {
         assertThat(restfulResponse.getStatus(), is(HttpStatusCode.OK));
         final DomainObjectRepresentation repr = restfulResponse.getEntity();
         
-        JsonRepresentation actionLinkRepr = repr.xpath("/members/e[actionId='%s']", actionId);
-        return actionLinkRepr.getRepresentation("e.details.value");
+        JsonRepresentation actionLinkRepr = repr.getRepresentation("members[actionId=%s]", actionId);
+        return actionLinkRepr.getRepresentation("details.value");
     }
 
 
@@ -149,7 +150,7 @@ public class DomainServiceResourceTest_invokeAction {
         final Response response = resource.services();
         final ListRepresentation services = RestfulResponse.<ListRepresentation>ofT(response).getEntity();
 
-        return services.xpath("//*[key='%s']", serviceId).getLink("e").getHref();
+        return services.getRepresentation("values[key=%s]", serviceId).asLink().getHref();
     }
 
 }

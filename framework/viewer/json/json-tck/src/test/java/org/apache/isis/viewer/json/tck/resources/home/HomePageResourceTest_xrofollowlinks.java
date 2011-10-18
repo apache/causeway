@@ -73,15 +73,15 @@ public class HomePageResourceTest_xrofollowlinks {
         
         JsonRepresentation service;
         
-        service = serviceLinkList.xpath("/e[key='%s']", "simples");
-        assertThat(service.getRepresentation("e"), isMap());
-        assertThat(service.getString("e.key"), is("simples"));
-        assertThat(service.getRepresentation("e.value"), is(not(nullValue())));
+        service = serviceLinkList.getRepresentation("[key=%s]", "simples");
+        assertThat(service, isMap());
+        assertThat(service.getString("key"), is("simples"));
+        assertThat(service.getRepresentation("value"), is(not(nullValue())));
 
-        service = serviceLinkList.xpath("/e[key='%s']", "applibValuedEntities");
-        assertThat(service.getRepresentation("e"), isMap());
-        assertThat(service.getString("e.key"), is("applibValuedEntities"));
-        assertThat(service.getRepresentation("e.value"), is(not(nullValue())));
+        service = serviceLinkList.getRepresentation("[key=%s]", "applibValuedEntities");
+        assertThat(service, isMap());
+        assertThat(service.getString("key"), is("applibValuedEntities"));
+        assertThat(service.getRepresentation("value"), is(not(nullValue())));
     }
 
     @Test
@@ -97,13 +97,13 @@ public class HomePageResourceTest_xrofollowlinks {
         
         JsonRepresentation service;
         
-        service = serviceLinkList.xpath("/e[key='%s']", "simples");
-        assertThat(service.getRepresentation("e"), isMap());
-        assertThat(service.getString("e.key"), is("simples"));
-        assertThat(service.getRepresentation("e.value"), is(not(nullValue())));
+        service = serviceLinkList.getRepresentation("[key=%s]", "simples");
+        assertThat(service, isMap());
+        assertThat(service.getString("key"), is("simples"));
+        assertThat(service.getRepresentation("value"), is(not(nullValue())));
 
-        service = serviceLinkList.xpath("/e[key='%s']", "applibValuedEntities");
-        assertThat(service.getRepresentation("e.value"), is(nullValue()));
+        service = serviceLinkList.getRepresentation("[key=%s]", "applibValuedEntities");
+        assertThat(service.getRepresentation("value"), is(nullValue()));
     }
 
     private HomePageRepresentation whenExecuteWith(final String uriTemplate, final String followLinks) throws JsonParseException, JsonMappingException, IOException {
