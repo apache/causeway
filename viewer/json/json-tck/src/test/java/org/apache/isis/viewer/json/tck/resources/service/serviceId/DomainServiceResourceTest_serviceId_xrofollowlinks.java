@@ -56,13 +56,13 @@ public class DomainServiceResourceTest_serviceId_xrofollowlinks {
         
         JsonRepresentation actionRepr;
         
-        actionRepr = membersList.xpath("/e[actionId='%s']", "list");
-        assertThat(actionRepr.getRepresentation("e.details"), is(not(nullValue())));
-        assertThat(actionRepr.getRepresentation("e.details.value"), is(not(nullValue()))); // followed
+        actionRepr = membersList.getRepresentation("[actionId=%s]", "list");
+        assertThat(actionRepr.getRepresentation("details"), is(not(nullValue())));
+        assertThat(actionRepr.getRepresentation("details.value"), is(not(nullValue()))); // followed
         
-        actionRepr = membersList.xpath("/e[actionId='%s']", "newTransientEntity");
-        assertThat(actionRepr.getRepresentation("e.details"), is(not(nullValue())));
-        assertThat(actionRepr.getRepresentation("e.details.value"), is(nullValue())); // not followed
+        actionRepr = membersList.getRepresentation("[actionId=%s]", "newTransientEntity");
+        assertThat(actionRepr.getRepresentation("details"), is(not(nullValue())));
+        assertThat(actionRepr.getRepresentation("details.value"), is(nullValue())); // not followed
     }
 
 
@@ -71,7 +71,7 @@ public class DomainServiceResourceTest_serviceId_xrofollowlinks {
         final Response response = resource.services();
         final ListRepresentation services = RestfulResponse.<ListRepresentation>ofT(response).getEntity();
 
-        return services.xpath("//*[key='%s']", serviceId).getLink("e").getHref();
+        return services.getRepresentation("values[key=%s]", serviceId).asLink().getHref();
     }
 
 

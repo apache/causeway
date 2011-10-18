@@ -46,15 +46,15 @@ public class UserStoryTest {
         walker.walk("services");
         
         // and when locate the ApplibValues repo and walk the its 'object' link
-        walker.walkXpath("/*[title='ApplibValues']/link[rel='object']");
+        walker.walk("values[title=ApplibValues].links[rel=object]");
         
         // and when locate the AppLibValues repo's "newEntity" action and walk to its details
-        walker.walkXpath("/newEntity[memberType='action']/details");
+        walker.walk("values[memberType=action].details");
         
         // and when find the invoke body for the "newEntity" action and then walk the action using the body 
         JsonRepresentation newEntityActionDetails = walker.getEntity();
         JsonRepresentation newEntityActionInvokeBody = newEntityActionDetails.getArray("invoke.body");
-        walker.walkXpath("/invoke", newEntityActionInvokeBody);
+        walker.walk("invoke", newEntityActionInvokeBody);
         
         // and when walk the link to the returned object
         walker.walk("link");

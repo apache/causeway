@@ -29,5 +29,34 @@
   },
   "aSubList": [
     "a", "b", "c"
-  ]
+  ],
+  "anotherSubMap": {
+    "aListOfLinks": [
+      {
+        "href": "http://foo/bar",
+        "method": "GET",
+        "rel": "aRel"
+      },
+      {
+        "href": "http://foo/bar/otherRel",
+        "method": "GET",
+        "rel": "otherRel"
+      },
+      {
+        "href": "http://foo/bar/multiRel1",
+        "method": "GET",
+        "rel": "multiRel",
+        "data": "someData"
+      },
+      {
+        "href": "http://foo/bar/multiRel2",
+        "method": "GET",
+        "rel": "multiRel",
+        "data": "someOtherData"
+      }
+    ],
+    "aMap": "aValue",
+    "anEmptyList": [
+     ]
+  }
 }

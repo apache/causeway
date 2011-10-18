@@ -1,21 +1,22 @@
-package org.apache.isis.viewer.json.viewer.representations;
+package org.apache.isis.viewer.json.applib;
 
 import java.util.Collections;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.google.common.base.Objects;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Maps;
 
-class Node {
-    private static final Pattern NODE = Pattern.compile("^([^\\[]+)(\\[(.+)\\])?$");
+public class PathNode {
+    private static final Pattern NODE = Pattern.compile("^([^\\[]*)(\\[(.+)\\])?$");
     private static final Pattern WHITESPACE = Pattern.compile("\\s+");
     private static final Pattern KEY_VALUE = Pattern.compile("^([^=]+)=(.+)$");
     
-    public static final Node NULL = new Node("", Collections.<String,String>emptyMap());
+    public static final PathNode NULL = new PathNode("", Collections.<String,String>emptyMap());
     
-    public static Node parse(String path) {
+    public static PathNode parse(String path) {
         Matcher nodeMatcher = NODE.matcher(path);
         if(!nodeMatcher.matches()) {
             return null;
@@ -36,12 +37,12 @@ class Node {
             }
         }
 
-        return new Node(key, criteria);
+        return new PathNode(key, criteria);
     }
     
     private final String key;
     private final Map<String,String> criteria;
-    private Node(String key, Map<String, String> criteria) {
+    private PathNode(String key, Map<String, String> criteria) {
         this.key = key;
         this.criteria = Collections.unmodifiableMap(criteria);
     }
@@ -51,6 +52,25 @@ class Node {
     public Map<String, String> getCriteria() {
         return criteria;
     }
+
+    public boolean hasCriteria() {
+        return !getCriteria().isEmpty();
+    }
+
+    public boolean matches(JsonRepresentation repr) {
+        if(!repr.isMap()) {
+            return false;
+        }
+        for(Map.Entry<String,String> criterium: getCriteria().entrySet()) {
+            final String requiredValue = criterium.getValue();
+            final String actualValue = repr.getString(criterium.getKey());
+            if(!Objects.equal(requiredValue, actualValue)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -66,7 +86,7 @@ class Node {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        Node other = (Node) obj;
+        PathNode other = (PathNode) obj;
         if (key == null) {
             if (other.key != null)
                 return false;

@@ -31,11 +31,11 @@ public class DomainObjectRepresentation extends JsonRepresentation implements Li
     }
 
     public JsonRepresentation getProperties() {
-        return xpath("/*[memberType='property']");
+        return getRepresentation("members[memberType=property]");
     }
 
     public JsonRepresentation getActions() {
-        return xpath("/*[memberType='action']");
+        return getRepresentation("members[memberType=action]");
     }
     
     public JsonRepresentation getLinks() {

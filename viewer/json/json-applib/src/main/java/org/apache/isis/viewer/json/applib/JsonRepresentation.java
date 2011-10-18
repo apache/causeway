@@ -8,6 +8,7 @@ import java.io.StringReader;
 import java.lang.reflect.Constructor;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
@@ -29,6 +30,7 @@ import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.node.ArrayNode;
 import org.codehaus.jackson.node.JsonNodeFactory;
+import org.codehaus.jackson.node.NullNode;
 import org.codehaus.jackson.node.ObjectNode;
 import org.codehaus.jackson.node.POJONode;
 import org.jdom.Element;
@@ -38,6 +40,9 @@ import org.jdom.output.XMLOutputter;
 import org.jdom.xpath.XPath;
 
 import com.google.common.base.Function;
+import com.google.common.base.Predicate;
+import com.google.common.collect.Collections2;
+import com.google.common.collect.Iterables;
 import com.google.common.collect.Iterators;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -160,8 +165,11 @@ public class JsonRepresentation {
     // getRepresentation
     /////////////////////////////////////////////////////////////////////////
 
-    public JsonRepresentation getRepresentation(String path) {
-        JsonNode node = getNode(path);
+    public JsonRepresentation getRepresentation(String pathTemplate, Object... args) {
+        final String pathStr = String.format(pathTemplate, args);
+        
+        JsonNode node = getNode(pathStr);
+        
         if (representsNull(node)) {
             return null;
         }
@@ -184,7 +192,6 @@ public class JsonRepresentation {
     private boolean isArray(final JsonNode node) {
         return !representsNull(node) && node.isArray();
     }
-
 
     public JsonRepresentation getArray(String path) {
         return getArray(path, getNode(path));
@@ -686,7 +693,7 @@ public class JsonRepresentation {
 
     
     /////////////////////////////////////////////////////////////////////////
-    // xpath support
+    // path support (with an xpath-like DSL)
     /////////////////////////////////////////////////////////////////////////
 
     /**
@@ -1096,13 +1103,57 @@ public class JsonRepresentation {
     /////////////////////////////////////////////////////////////////////////
 
     private JsonNode getNode(String path) {
-        JsonNode node = jsonNode;
+        JsonNode jsonNode = this.jsonNode;
         String[] keys = path.split("\\.");
         for(String key: keys) {
-            node = node.path(key);
+            final PathNode pathNode = PathNode.parse(key);
+            if(!pathNode.getKey().isEmpty()) {
+                jsonNode = jsonNode.path(pathNode.getKey());
+            } else {
+                // pathNode is criteria only; don't change jsonNode
+            }
+            if(jsonNode.isNull()) {
+                return jsonNode;
+            }
+            if(!pathNode.hasCriteria()) {
+                continue;
+            } 
+            if (!jsonNode.isArray()) {
+                return NullNode.getInstance();
+            }
+            jsonNode = matching(jsonNode, pathNode);
+            if(jsonNode.isNull()) {
+                return jsonNode;
+            }
         }
-        return node;
+        return jsonNode;
     }
+
+    private JsonNode matching(JsonNode jsonNode, final PathNode pathNode) {
+        final JsonRepresentation asList = new JsonRepresentation(jsonNode);
+        final Iterable<JsonNode> filtered = Iterables.filter(asList.arrayIterable(JsonNode.class), new Predicate<JsonNode>() {
+            @Override
+            public boolean apply(JsonNode input) {
+                return pathNode.matches(new JsonRepresentation(input));
+            }
+        });
+        final List<JsonNode> matching = Lists.newArrayList(filtered);
+        return toJsonNode(matching);
+    }
+
+    private static JsonNode toJsonNode(List<JsonNode> matching) {
+        switch(matching.size()) {
+        case 0:
+            return NullNode.getInstance();
+        case 1:
+            return matching.get(0);
+        default:
+            final ArrayNode arrayNode = new ArrayNode(JsonNodeFactory.instance);    
+            arrayNode.addAll(matching);
+            return arrayNode;
+        }
+    }
+
 
     private static void checkValue(String path, JsonNode node, String requiredType) {
         if (node.isValueNode()) {
@@ -1143,6 +1194,8 @@ public class JsonRepresentation {
     public String toString() {
         return jsonNode.toString();
     }
+
+
 
 
 

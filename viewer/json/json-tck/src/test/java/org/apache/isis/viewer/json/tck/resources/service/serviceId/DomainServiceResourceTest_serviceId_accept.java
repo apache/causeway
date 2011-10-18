@@ -18,11 +18,9 @@ import org.apache.isis.viewer.json.applib.RestfulResponse.HttpStatusCode;
 import org.apache.isis.viewer.json.applib.domainobjects.DomainObjectRepresentation;
 import org.apache.isis.viewer.json.applib.domainobjects.DomainServiceResource;
 import org.apache.isis.viewer.json.applib.domainobjects.ListRepresentation;
-import org.apache.isis.viewer.json.applib.homepage.HomePageRepresentation;
 import org.apache.isis.viewer.json.tck.IsisWebServerRule;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
-import org.jboss.resteasy.spi.Link;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -81,7 +79,7 @@ public class DomainServiceResourceTest_serviceId_accept {
         final Response response = resource.services();
         final ListRepresentation services = RestfulResponse.<ListRepresentation>ofT(response).getEntity();
 
-        final String href = services.xpath("//*[key='%s']", "simples").getLink("e").getHref();
+        final String href = services.getRepresentation("values.[key=%s]", "simples").asLink().getHref();
         return href;
     }
 

@@ -41,7 +41,7 @@ public class JsonRepresentationTest_size {
     @Test
     public void size_forNonEmptyMap() throws JsonParseException, JsonMappingException, IOException {
         jsonRepresentation = new JsonRepresentation(readJson("map.json"));
-        assertThat(jsonRepresentation.size(), is(14));
+        assertThat(jsonRepresentation.size(), is(15));
     }
 
     @Test

@@ -77,7 +77,11 @@ public class RepresentationWalker {
         return step;
     }
 
-    public void walk(String key) {
+    public void walk(String path) {
+        walk(path, null);
+    }
+
+    public void walk(String path, JsonRepresentation invokeBody) {
         Step previousStep = currentStep();
         if(previousStep.error!=null) {
             return;
@@ -88,86 +92,86 @@ public class RepresentationWalker {
         try {
             entity = jsonResponse.getEntity();
         } catch (Exception e) {
-            addStep(key, null, null, null, "exception: " + e.getMessage(), e);
+            addStep(path, null, null, null, "exception: " + e.getMessage(), e);
             return;
         }
         
         Link link;
         try {
-            link = entity.getLink(key);
+            link = entity.getLink(path);
         } catch (Exception e) {
-            addStep(key, null, null, null, "exception: " + e.getMessage(), e);
+            addStep(path, null, null, null, "exception: " + e.getMessage(), e);
             return;
         }
         if(link == null) {
-            addStep(key, null, null, null, "no such link '" + key + "'", null);
+            addStep(path, null, null, null, "no such link '" + path + "'", null);
             return;
         }
         
         Response response;
         try {
-            response = restfulClient.follow(link);
-        } catch (Exception e) {
-            addStep(key, link, null, null, "failed to follow link: " + e.getMessage(), e);
-            return;
-        }
-        
-        addStep(key, link, null, RestfulResponse.of(response), null, null);
-    }
-
-    public void walkXpath(String linkXpath) {
-        walkXpath(linkXpath, null);
-    }
-
-    public void walkXpath(String linkXpath, JsonRepresentation invokeBody) {
-        JsonRepresentation entity = getEntityElseMarkStepInError();
-        if(entity == null) {
-            return;
-        }
-        
-        Link link = null;
-        try {
-            JsonRepresentation matching = entity.xpath(linkXpath);
-            if (matching == null) {
-                addStep(linkXpath, null, null, null, "no such link '" + linkXpath + "'", null);
-                return;
-            }
-
-            link = matching.mapValueAsLink();
-            if(link.getHref() == null) {
-                addStep(linkXpath, link, null, null, "key does not identify a link '" + linkXpath + "'", null);
-                return;
-            }
-
-            Response response;
             if(invokeBody != null) {
                 response = restfulClient.follow(link, invokeBody);
             } else {
                 response = restfulClient.follow(link);
             }
-            addStep(linkXpath, link, null, RestfulResponse.of(response), null, null);
-            
-        } catch (RuntimeException e) {
-            // if xpath fails
-            addStep(linkXpath, null, null, null, "exception: " + e.getMessage(), e);
-            return;
         } catch (Exception e) {
-            // if follow fails
-            addStep(linkXpath, link, null, null, "failed to follow link: " + e.getMessage(), e);
+            addStep(path, link, null, null, "failed to follow link: " + e.getMessage(), e);
             return;
         }
+        
+        addStep(path, link, null, RestfulResponse.of(response), null, null);
     }
 
-    private JsonRepresentation getEntityElseMarkStepInError() {
-        try {
-            return getEntity();
-        } catch (Exception e) {
-            Step previousStep = currentStep();
-            previousStep.error = "exception: " + e.getMessage();
-            previousStep.exception = e;
-            return null;
-        }
-    }
+//    public void walkXpath(String path, JsonRepresentation invokeBody) {
+//        JsonRepresentation entity = getEntityElseMarkStepInError();
+//        if(entity == null) {
+//            return;
+//        }
+//        
+//        Link link = null;
+//        try {
+//            JsonRepresentation matching = entity.xpath(path);
+//            if (matching == null) {
+//                addStep(path, null, null, null, "no such link '" + path + "'", null);
+//                return;
+//            }
+//
+//            link = matching.mapValueAsLink();
+//            if(link.getHref() == null) {
+//                addStep(path, link, null, null, "key does not identify a link '" + path + "'", null);
+//                return;
+//            }
+//
+//            Response response;
+//            if(invokeBody != null) {
+//                response = restfulClient.follow(link, invokeBody);
+//            } else {
+//                response = restfulClient.follow(link);
+//            }
+//            addStep(path, link, null, RestfulResponse.of(response), null, null);
+//            
+//        } catch (RuntimeException e) {
+//            // if xpath fails
+//            addStep(path, null, null, null, "exception: " + e.getMessage(), e);
+//            return;
+//        } catch (Exception e) {
+//            // if follow fails
+//            addStep(path, link, null, null, "failed to follow link: " + e.getMessage(), e);
+//            return;
+//        }
+//    }
+//
+//    private JsonRepresentation getEntityElseMarkStepInError() {
+//        try {
+//            return getEntity();
+//        } catch (Exception e) {
+//            Step previousStep = currentStep();
+//            previousStep.error = "exception: " + e.getMessage();
+//            previousStep.exception = e;
+//            return null;
+//        }
+//    }
 
     /**
      * The entity returned from the previous walk.
