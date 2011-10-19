@@ -99,7 +99,3 @@ viewer/wicket/wicket-metamodel/:leaf
 viewer/wicket/wicket-model/:leaf
 viewer/wicket/wicket-viewer/:leaf
 tck/:
-tck/tck-dom/:leaf
-tck/tck-fixture/:leaf
-tck/tck-objstore-dflt/:leaf
-
