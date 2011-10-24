@@ -97,7 +97,7 @@ public class DomainServiceResourceTest_serviceId_accept {
         final Response response = resource.services();
         final ListRepresentation services = RestfulResponse.<ListRepresentation>ofT(response).getEntity();
 
-        final String href = services.getRepresentation("values.[key=%s]", "simples").asLink().getHref();
+        final String href = services.getRepresentation("values[id=%s]", "simples").asLink().getHref();
         return href;
     }
 

@@ -90,7 +90,7 @@ public class UserResourceTest_representationAndHeaders {
         assertThat(repr.isMap(), is(true));
         
         assertThat(repr.getSelf(), isLink(client).method(Method.GET));
-        assertThat(repr.getUsername(), is(not(nullValue())));
+        assertThat(repr.getUserName(), is(not(nullValue())));
         assertThat(repr.getFriendlyName(), is(nullValue())); // TODO: change fixture so populated
         assertThat(repr.getEmail(), is(nullValue())); // TODO: change fixture so populated
         assertThat(repr.getRoles(), is(not(nullValue()))); // TODO: change fixture so have non-empty list

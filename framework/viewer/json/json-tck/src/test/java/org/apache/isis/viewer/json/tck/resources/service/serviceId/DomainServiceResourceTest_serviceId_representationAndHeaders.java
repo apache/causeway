@@ -121,7 +121,7 @@ public class DomainServiceResourceTest_serviceId_representationAndHeaders {
         DomainObjectRepresentation repr = givenRepresentation("simples");
 
         // then
-        assertThat(repr.getLinks().size(), is(1));
+        assertThat(repr.getLinks().size(), is(2));
     }
     
 

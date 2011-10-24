@@ -42,7 +42,6 @@ public abstract class ReprRendererAbstract<R extends ReprRendererAbstract<R, T>,
         this.linkFollower = asProvidedElseCreate(linkFollower);
         this.representationType = representationType;
         this.representation = representation;
-        withLinks();
     }
 
     public ResourceContext getResourceContext() {
@@ -58,12 +57,6 @@ public abstract class ReprRendererAbstract<R extends ReprRendererAbstract<R, T>,
             return linkFollower;
         }
         return LinkFollower.create(resourceContext.getFollowLinks());
-    }
-
-    private R withLinks() {
-        JsonRepresentation links = JsonRepresentation.newArray();
-        representation.mapPut("links", links);
-        return cast(this);
     }
 
 
@@ -87,12 +80,28 @@ public abstract class ReprRendererAbstract<R extends ReprRendererAbstract<R, T>,
     }
 
     
+    /**
+     * Will lazily create links array as required
+     */
     protected JsonRepresentation getLinks() {
-        return representation.getArray("links");
+        JsonRepresentation links = representation.getArray("links");
+        if(links == null) {
+            links = JsonRepresentation.newArray();
+            representation.mapPut("links", links);
+        }
+        return links;
     }
 
-    public R withExtensions() {
-        return withExtensions(JsonRepresentation.newMap());
+    /**
+     * Will lazily create extensions map as required
+     */
+    protected JsonRepresentation getExtensions() {
+        JsonRepresentation extensions = representation.getMap("extensions");
+        if(extensions == null) {
+            extensions = JsonRepresentation.newMap();
+            representation.mapPut("extensions", extensions);
+        }
+        return extensions;
     }
 
     public R withExtensions(JsonRepresentation extensions) {

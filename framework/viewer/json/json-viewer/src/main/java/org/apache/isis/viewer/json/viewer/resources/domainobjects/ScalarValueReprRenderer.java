@@ -61,9 +61,8 @@ public class ScalarValueReprRenderer extends ReprRendererAbstract<ScalarValueRep
     @Override
     public JsonRepresentation render() {
  
-        JsonRepresentation extensions = JsonRepresentation.newMap();
+        JsonRepresentation extensions = getExtensions();
         putExtensionsIsisProprietary(extensions);
-        withExtensions(extensions );
         
         JsonRepresentation links = getLinks();
         addLinksFormalDomainModel(links, resourceContext);

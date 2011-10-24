@@ -19,25 +19,18 @@
 package org.apache.isis.viewer.json.applib.user;
 
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
-import org.apache.isis.viewer.json.applib.JsonRepresentation.HasExtensions;
-import org.apache.isis.viewer.json.applib.JsonRepresentation.HasLinks;
-import org.apache.isis.viewer.json.applib.JsonRepresentation.LinksToSelf;
-import org.apache.isis.viewer.json.applib.blocks.LinkRepresentation;
+import org.apache.isis.viewer.json.applib.domainobjects.DomainRepresentation;
 import org.codehaus.jackson.JsonNode;
 
 
-public class UserRepresentation extends JsonRepresentation implements LinksToSelf, HasLinks, HasExtensions {
+public class UserRepresentation extends DomainRepresentation {
 
     public UserRepresentation(JsonNode jsonNode) {
         super(jsonNode);
     }
     
-    public LinkRepresentation getSelf() {
-        return getLink("links[rel=self]");
-    }
-
-    public String getUsername() {
-        return getString("username");
+    public String getUserName() {
+        return getString("userName");
     }
 
     public String getFriendlyName() {
@@ -50,13 +43,6 @@ public class UserRepresentation extends JsonRepresentation implements LinksToSel
 
     public JsonRepresentation getRoles() {
         return getRepresentation("roles");
-    }
-
-    public JsonRepresentation getLinks() {
-        return getArray("links");
-    }
-    public JsonRepresentation getExtensions() {
-        return getMap("extensions");
     }
 
 }

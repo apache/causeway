@@ -39,12 +39,12 @@ public class DomainServiceLinkTo extends DomainObjectLinkTo {
     
     @Override
     protected Rel linkRel() {
-        return Rel.SERVICE;
+         return rel!=null?rel:Rel.SERVICE;
     }
     
     @Override
     public LinkBuilder builder() {
-        return super.builder().withKey(serviceId);
+        return super.builder().withId(serviceId);
     }
 
 }

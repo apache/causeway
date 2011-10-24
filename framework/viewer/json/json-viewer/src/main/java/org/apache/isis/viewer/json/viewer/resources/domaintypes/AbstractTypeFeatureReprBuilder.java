@@ -59,19 +59,43 @@ public abstract class AbstractTypeFeatureReprBuilder<R extends ReprRendererAbstr
         objectSpecification = specAndFeature.getObjectSpecification();
         objectFeature = specAndFeature.getObjectFeature();
         memberType = MemberType.determineFrom(objectFeature);
+        
+        // done eagerly so can use as criteria for x-ro-follow-links
+        putIdIfMember();
+        putMemberTypeIfMember();
+
         return cast(this);
     }
-    
+
+    protected void putIdIfMember() {
+        if(memberType == null) {
+            return;
+        } 
+        ObjectMember objectMember = (ObjectMember) objectFeature;
+        representation.mapPut(memberType.getJsProp(), objectMember.getId());
+    }
+
+    protected void putMemberTypeIfMember() {
+        if(memberType == null) {
+            return;
+        } 
+        representation.mapPut("memberType", memberType.getName());
+    }
+
     
     protected void includeSelfIfRequired() {
         if(!includesSelf) {
             return;
         } 
         
-        representation.mapPut("self", 
-            LinkBuilder.newBuilder(getResourceContext(), Rel.SELF, getRepresentationType(), "domainTypes/%s/%s/%s", 
-                    getObjectSpecification().getFullIdentifier(), getMemberType().getUrlPart(), ((ObjectMember)getObjectFeature()).getId()).build());
+        final ObjectMember objectMember = (ObjectMember)getObjectFeature();
+        final LinkBuilder linkBuilder = LinkBuilder.newBuilder(
+                getResourceContext(), Rel.SELF, getRepresentationType(), 
+                "domainTypes/%s/%s/%s", 
+                getObjectSpecification().getFullIdentifier(), 
+                getMemberType().getUrlPart(), 
+                objectMember.getId());
+        getLinks().arrayAdd(linkBuilder.build());
     }
-
 
 }

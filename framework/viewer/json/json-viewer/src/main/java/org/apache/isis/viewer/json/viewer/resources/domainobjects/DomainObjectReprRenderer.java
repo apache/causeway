@@ -20,7 +20,6 @@ import java.util.List;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
-import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.spec.ObjectActionSet;
@@ -33,8 +32,8 @@ import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.applib.RepresentationType;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
-import org.apache.isis.viewer.json.viewer.representations.LinkFollower;
 import org.apache.isis.viewer.json.viewer.representations.LinkBuilder;
+import org.apache.isis.viewer.json.viewer.representations.LinkFollower;
 import org.apache.isis.viewer.json.viewer.representations.Rel;
 import org.apache.isis.viewer.json.viewer.representations.RendererFactory;
 import org.apache.isis.viewer.json.viewer.representations.RendererFactoryRegistry;
@@ -90,8 +89,8 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
 
         // self
         if(includesSelf && objectAdapter.isPersistent()) {
-            JsonRepresentation self = linkToBuilder.with(objectAdapter).builder().build();
-            representation.mapPut("self", self);
+            JsonRepresentation self = linkToBuilder.with(Rel.SELF).with(objectAdapter).builder().build();
+            getLinks().arrayAdd(self);
         }
 
         // title
@@ -108,7 +107,7 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
                 DomainTypeReprRenderer.newLinkToBuilder(getResourceContext(), Rel.DESCRIBEDBY, objectAdapter.getSpecification()).build());
         
         // extensions
-        withExtensions();
+        getExtensions();
         
         return representation;
     }

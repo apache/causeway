@@ -18,37 +18,25 @@
  */
 package org.apache.isis.viewer.json.applib.homepage;
 
-import org.apache.isis.viewer.json.applib.JsonRepresentation;
-import org.apache.isis.viewer.json.applib.JsonRepresentation.HasExtensions;
-import org.apache.isis.viewer.json.applib.JsonRepresentation.HasLinks;
-import org.apache.isis.viewer.json.applib.JsonRepresentation.LinksToSelf;
 import org.apache.isis.viewer.json.applib.blocks.LinkRepresentation;
+import org.apache.isis.viewer.json.applib.domainobjects.DomainRepresentation;
 import org.codehaus.jackson.JsonNode;
 
-public class HomePageRepresentation extends JsonRepresentation implements LinksToSelf, HasLinks, HasExtensions {
+public class HomePageRepresentation extends DomainRepresentation {
 
     public HomePageRepresentation(JsonNode jsonNode) {
         super(jsonNode);
     }
 
-    public LinkRepresentation getSelf() {
-        return getLink("links[rel=self]");
-    }
     public LinkRepresentation getUser() {
-        return getLink("links[rel=user]");
+        return getLinkWithRel("user");
     }
     public LinkRepresentation getServices() {
-        return getLink("links[rel=services]");
+        return getLinkWithRel("services");
     }
     public LinkRepresentation getCapabilities() {
-        return getLink("links[rel=capabilities]");
+        return getLinkWithRel("capabilities");
     }
 
-    public JsonRepresentation getLinks() {
-        return getArray("links");
-    }
-    public JsonRepresentation getExtensions() {
-        return getMap("extensions");
-    }
 
 }

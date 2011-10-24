@@ -63,7 +63,7 @@ public class DomainServiceResourceTest_serviceId_xrofollowlinks {
         final String href = givenHrefToService("simples");
         
         final RestfulRequest request = 
-                client.createRequest(HttpMethod.GET, href).withArg(QueryParameter.FOLLOW_LINKS, "members[id=%s].details", "list");
+                client.createRequest(HttpMethod.GET, href).withArg(QueryParameter.FOLLOW_LINKS, "members[id=%s].links[rel=details]", "list");
         final RestfulResponse<DomainObjectRepresentation> restfulResponse = request.executeT();
 
         assertThat(restfulResponse.getStatus(), is(HttpStatusCode.OK));
@@ -75,12 +75,12 @@ public class DomainServiceResourceTest_serviceId_xrofollowlinks {
         JsonRepresentation actionRepr;
         
         actionRepr = membersList.getRepresentation("[id=%s]", "list");
-        assertThat(actionRepr.getRepresentation("details"), is(not(nullValue())));
-        assertThat(actionRepr.getRepresentation("details.value"), is(not(nullValue()))); // followed
+        assertThat(actionRepr.getRepresentation("links[rel=details]"), is(not(nullValue())));
+        assertThat(actionRepr.getRepresentation("links[rel=details].value"), is(not(nullValue()))); // followed
         
         actionRepr = membersList.getRepresentation("[id=%s]", "newTransientEntity");
-        assertThat(actionRepr.getRepresentation("details"), is(not(nullValue())));
-        assertThat(actionRepr.getRepresentation("details.value"), is(nullValue())); // not followed
+        assertThat(actionRepr.getRepresentation("links[rel=details]"), is(not(nullValue())));
+        assertThat(actionRepr.getRepresentation("links[rel=details].value"), is(nullValue())); // not followed
     }
 
 
@@ -89,7 +89,7 @@ public class DomainServiceResourceTest_serviceId_xrofollowlinks {
         final Response response = resource.services();
         final ListRepresentation services = RestfulResponse.<ListRepresentation>ofT(response).getEntity();
 
-        return services.getRepresentation("values[key=%s]", serviceId).asLink().getHref();
+        return services.getRepresentation("values[id=%s]", serviceId).asLink().getHref();
     }
 
 

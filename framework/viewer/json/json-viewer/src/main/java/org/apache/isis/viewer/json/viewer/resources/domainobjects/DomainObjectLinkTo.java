@@ -27,6 +27,7 @@ public class DomainObjectLinkTo implements ObjectAdapterLinkTo {
 
     protected ResourceContext resourceContext;
     protected ObjectAdapter objectAdapter;
+    protected Rel rel;
 
     @Override
     public final DomainObjectLinkTo usingResourceContext(ResourceContext resourceContext) {
@@ -40,6 +41,7 @@ public class DomainObjectLinkTo implements ObjectAdapterLinkTo {
         return this;
     }
 
+    
     @Override
     public LinkBuilder builder() {
         return LinkBuilder.newBuilder(resourceContext, linkRel(), RepresentationType.DOMAIN_OBJECT, linkRef());
@@ -64,9 +66,14 @@ public class DomainObjectLinkTo implements ObjectAdapterLinkTo {
      * hook method
      */
     protected Rel linkRel() {
-        return Rel.OBJECT;
+        return rel!=null?rel:Rel.OBJECT;
     }
 
+    @Override
+    public ObjectAdapterLinkTo with(Rel rel) {
+        this.rel = rel;
+        return this;
+    }
 
     @Override
     public final LinkBuilder linkToMember(Rel rel, MemberType memberType, ObjectMember objectMember, String... parts) {

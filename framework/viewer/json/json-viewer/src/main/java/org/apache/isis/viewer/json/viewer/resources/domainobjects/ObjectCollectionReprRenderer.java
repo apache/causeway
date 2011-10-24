@@ -61,9 +61,8 @@ public class ObjectCollectionReprRenderer extends AbstractObjectMemberReprRender
         
         putDisabledReasonIfDisabled();
         
-        JsonRepresentation extensions = JsonRepresentation.newMap();
+        JsonRepresentation extensions = getExtensions();
         putExtensionsIsisProprietary(extensions);
-        withExtensions(extensions );
         
         JsonRepresentation links = getLinks();
         addLinksFormalDomainModel(links, resourceContext);

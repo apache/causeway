@@ -49,7 +49,6 @@ import org.apache.isis.viewer.json.viewer.resources.ResourceAbstract;
 @Path("/domainTypes")
 public class DomainTypeResourceServerside extends ResourceAbstract implements DomainTypeResource {
 
-
     @GET
     @Path("/")
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_DOMAIN_TYPES })

@@ -61,9 +61,8 @@ public class ObjectActionReprRenderer extends AbstractObjectMemberReprRenderer<O
         
         putDisabledReasonIfDisabled();
         
-        JsonRepresentation extensions = JsonRepresentation.newMap();
+        JsonRepresentation extensions = getExtensions();
         putExtensionsIsisProprietary(extensions);
-        withExtensions(extensions );
         
         JsonRepresentation links = getLinks();
         addLinksFormalDomainModel(links, resourceContext);
@@ -103,12 +102,12 @@ public class ObjectActionReprRenderer extends AbstractObjectMemberReprRenderer<O
         
         final String mutator = semantics.getInvokeKey();
         final MutatorSpec mutatorSpec = mutators.get(mutator);
-        appendInvokeLink(mutatorSpec);
+        addInvokeLinkIfMutator(mutatorSpec);
         
         return cast(this);
     }
 
-    private void appendInvokeLink(MutatorSpec mutatorSpec) {
+    private void addInvokeLinkIfMutator(MutatorSpec mutatorSpec) {
         if(!hasMemberFacet(mutatorSpec.mutatorFacetType)) {
             return;
         } 
@@ -118,7 +117,7 @@ public class ObjectActionReprRenderer extends AbstractObjectMemberReprRenderer<O
                 .withHttpMethod(mutatorSpec.httpMethod)
                 .withArguments(arguments)
                 .build();
-        representation.mapPut("invoke", detailsLink);
+        getLinks().arrayAdd(detailsLink);
     }
     
 	private ObjectAdapter contributingServiceAdapter() {

@@ -117,7 +117,7 @@ public class DomainServiceResourceTest_services_representationAndHeaders {
             assertThat(followJsonResp.getStatus().getFamily(), is(Family.SUCCESSFUL));
             
             JsonRepresentation followRepr = followJsonResp.getEntity();
-            LinkRepresentation self = followRepr.getLink("self");
+            LinkRepresentation self = followRepr.getLink("links[rel=self]");
             
             assertThat(self.getHref(), is(link.getHref()));
         }
