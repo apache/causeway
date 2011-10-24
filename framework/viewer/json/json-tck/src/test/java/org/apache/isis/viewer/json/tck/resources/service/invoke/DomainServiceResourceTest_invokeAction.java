@@ -22,7 +22,6 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.fail;
 
 import java.io.IOException;
 
@@ -190,8 +189,11 @@ public class DomainServiceResourceTest_invokeAction {
     @Test
     public void invoke_withAllBuiltInArgs_usingClientFollow() throws Exception {
 
+        // given simple entity with 'flag' property set to true
+        final LinkRepresentation linkToSimpleEntity = givenLinkToSimpleEntity(0);
+
         // given
-        JsonRepresentation givenAction = givenAction("simples", "newTransientEntity");
+        JsonRepresentation givenAction = givenAction("simples", "update");
         final ObjectActionRepresentation actionRepr = givenAction.as(ObjectActionRepresentation.class);
         
         // when

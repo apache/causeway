@@ -42,18 +42,31 @@ public class SimpleEntity extends AbstractDomainObject {
     // }}
 
     // {{ Flag (boolean)
-    private Boolean flag;
+    private boolean flag;
 
     @MemberOrder(sequence = "1")
-    public Boolean getFlag() {
+    public boolean getFlag() {
         return flag;
     }
 
-    public void setFlag(final Boolean flag) {
+    public void setFlag(final boolean flag) {
         this.flag = flag;
     }
     // }}
 
+    // {{ AnotherBoolean (Boolean)
+    private Boolean anotherBoolean;
+
+    @MemberOrder(sequence = "1")
+    @Optional
+    public Boolean getAnotherBoolean() {
+        return anotherBoolean;
+    }
+
+    public void setAnotherBoolean(final Boolean anotherBoolean) {
+        this.anotherBoolean = anotherBoolean;
+    }
+    // }}
     
     // {{ AnInt (int)
     private int anInt;
@@ -68,8 +81,7 @@ public class SimpleEntity extends AbstractDomainObject {
     }
     // }}
     
-    
-    // {{ AnotherInt
+    // {{ AnotherInt (Integer)
     private Integer anotherInt;
 
     @MemberOrder(sequence = "1")
@@ -83,7 +95,7 @@ public class SimpleEntity extends AbstractDomainObject {
     }
     // }}
 
-    // {{ ALong
+    // {{ ALong (long)
     private long aLong;
     @MemberOrder(sequence = "1")
     public long getALong() {
@@ -94,7 +106,6 @@ public class SimpleEntity extends AbstractDomainObject {
         this.aLong = aLong;
     }
     // }}
-
 
     // {{ AnotherLong
     private Long anotherLong;
@@ -111,7 +122,7 @@ public class SimpleEntity extends AbstractDomainObject {
     // }}
 
 
-    // {{ ADouble
+    // {{ ADouble (double)
     private double aDouble;
 
     @MemberOrder(sequence = "1")
@@ -124,8 +135,7 @@ public class SimpleEntity extends AbstractDomainObject {
     }
     // }}
 
-
-    // {{ AnotherDouble
+    // {{ AnotherDouble (Double)
     private Double anotherDouble;
 
     @MemberOrder(sequence = "1")
@@ -153,7 +163,6 @@ public class SimpleEntity extends AbstractDomainObject {
         this.aBigInteger = aBigInteger;
     }
     // }}
-
 
     // {{ ABigDecimal
     private BigDecimal aBigDecimal;
