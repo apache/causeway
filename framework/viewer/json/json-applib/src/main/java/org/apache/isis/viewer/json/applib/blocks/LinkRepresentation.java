@@ -31,21 +31,21 @@ import org.jboss.resteasy.client.ClientRequest;
 import org.jboss.resteasy.client.ClientResponse;
 
 
-public final class Link extends JsonRepresentation {
+public final class LinkRepresentation extends JsonRepresentation {
     
-    public Link() {
+    public LinkRepresentation() {
         this(new ObjectNode(JsonNodeFactory.instance));
         withMethod(Method.GET);
     }
 
-    public Link(JsonNode jsonNode) {
+    public LinkRepresentation(JsonNode jsonNode) {
         super(jsonNode);
     }
 
     public String getRel() {
         return asObjectNode().path("rel").getTextValue();
     }
-    public Link withRel(String rel) {
+    public LinkRepresentation withRel(String rel) {
         asObjectNode().put("rel", rel);
         return this;
     }
@@ -53,7 +53,7 @@ public final class Link extends JsonRepresentation {
     public String getHref() {
         return asObjectNode().path("href").getTextValue();
     }
-    public Link withHref(String href) {
+    public LinkRepresentation withHref(String href) {
         asObjectNode().put("href", href);
         return this;
     }
@@ -66,7 +66,7 @@ public final class Link extends JsonRepresentation {
         String methodStr = asObjectNode().path("method").getTextValue();
         return Method.valueOf(methodStr);
     }
-    public Link withMethod(Method method) {
+    public LinkRepresentation withMethod(Method method) {
         asObjectNode().put("method", method.name());
         return this;
     }
@@ -121,7 +121,7 @@ public final class Link extends JsonRepresentation {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        Link other = (Link) obj;
+        LinkRepresentation other = (LinkRepresentation) obj;
         if (getHref() == null) {
             if (other.getHref() != null)
                 return false;

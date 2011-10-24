@@ -42,7 +42,7 @@ import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.applib.RepresentationType;
 import org.apache.isis.viewer.json.applib.RestfulResponse.HttpStatusCode;
-import org.apache.isis.viewer.json.applib.blocks.Link;
+import org.apache.isis.viewer.json.applib.blocks.LinkRepresentation;
 import org.apache.isis.viewer.json.applib.util.JsonMapper;
 import org.apache.isis.viewer.json.applib.util.UrlEncodingUtils;
 import org.apache.isis.viewer.json.viewer.JsonApplicationException;
@@ -263,7 +263,7 @@ public class DomainResourceHelper {
             final RendererFactory factory = rendererFactoryRegistry.find(RepresentationType.SCALAR_VALUE);
 
             ScalarValueReprRenderer renderer = (ScalarValueReprRenderer) factory.newRenderer(resourceContext, null, representation);
-            renderer.with(objectAdapter);
+            renderer.with(returnedAdapter);
             return ResourceAbstract.responseOfOk(renderer, Caching.NONE).build();
         }
 
@@ -293,7 +293,7 @@ public class DomainResourceHelper {
 
     private JsonRepresentation representationWithSelfFor(final ObjectAdapter objectAdapter, final ObjectAction action, final JsonRepresentation bodyArgs) {
         JsonRepresentation representationWithSelf = representationWithSelfFor(objectAdapter, action);
-        final Link selfLink = representationWithSelf.getLink("self");
+        final LinkRepresentation selfLink = representationWithSelf.getLink("self");
         selfLink.mapPut("args", bodyArgs);
         return representationWithSelf;
     }

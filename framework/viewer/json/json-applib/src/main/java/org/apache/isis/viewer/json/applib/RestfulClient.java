@@ -24,7 +24,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.apache.commons.httpclient.HttpClient;
-import org.apache.isis.viewer.json.applib.blocks.Link;
+import org.apache.isis.viewer.json.applib.blocks.LinkRepresentation;
 import org.apache.isis.viewer.json.applib.capabilities.CapabilitiesResource;
 import org.apache.isis.viewer.json.applib.domainobjects.DomainObjectResource;
 import org.apache.isis.viewer.json.applib.domainobjects.DomainServiceResource;
@@ -104,12 +104,12 @@ public class RestfulClient {
         return new RepresentationWalker(this, response);
     }
 
-    public Response follow(Link link) throws Exception {
+    public Response follow(LinkRepresentation link) throws Exception {
         return follow(link, JsonRepresentation.newMap());
     }
 
     // TODO: generalize into request args
-    public Response follow(Link link, JsonRepresentation requestArgs) throws Exception {
+    public Response follow(LinkRepresentation link, JsonRepresentation requestArgs) throws Exception {
         Response response = link.follow(executor, requestArgs);
         // this is a bit hacky
         @SuppressWarnings("unchecked")

@@ -22,7 +22,7 @@ import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.applib.JsonRepresentation.HasExtensions;
 import org.apache.isis.viewer.json.applib.JsonRepresentation.HasLinks;
 import org.apache.isis.viewer.json.applib.JsonRepresentation.LinksToSelf;
-import org.apache.isis.viewer.json.applib.blocks.Link;
+import org.apache.isis.viewer.json.applib.blocks.LinkRepresentation;
 import org.codehaus.jackson.JsonNode;
 
 
@@ -32,7 +32,7 @@ public class ObjectPropertyRepresentation extends JsonRepresentation implements 
         super(jsonNode);
     }
     
-    public Link getSelf() {
+    public LinkRepresentation getSelf() {
         return getLink("self");
     }
 

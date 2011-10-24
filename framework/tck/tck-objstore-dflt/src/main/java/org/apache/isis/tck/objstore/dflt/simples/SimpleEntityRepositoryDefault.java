@@ -35,6 +35,12 @@ public class SimpleEntityRepositoryDefault extends AbstractEntityRepository<Simp
     }
 
     @Override
+    public int count() {
+        return allInstances(SimpleEntity.class).size();
+    }
+    
+
+    @Override
     public SimpleEntity newTransientEntity() {
         return newTransientInstance(SimpleEntity.class);
     }
@@ -52,6 +58,6 @@ public class SimpleEntityRepositoryDefault extends AbstractEntityRepository<Simp
     public void toggle(SimpleEntity object) {
         object.setFlag(!object.getFlag());
     }
-    
+
 
 }

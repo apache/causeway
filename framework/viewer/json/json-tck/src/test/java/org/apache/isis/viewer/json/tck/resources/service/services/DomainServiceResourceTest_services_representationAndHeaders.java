@@ -37,7 +37,7 @@ import org.apache.isis.viewer.json.applib.RepresentationType;
 import org.apache.isis.viewer.json.applib.RestfulClient;
 import org.apache.isis.viewer.json.applib.RestfulResponse;
 import org.apache.isis.viewer.json.applib.RestfulResponse.HttpStatusCode;
-import org.apache.isis.viewer.json.applib.blocks.Link;
+import org.apache.isis.viewer.json.applib.blocks.LinkRepresentation;
 import org.apache.isis.viewer.json.applib.blocks.Method;
 import org.apache.isis.viewer.json.applib.domainobjects.DomainServiceResource;
 import org.apache.isis.viewer.json.applib.domainobjects.ListRepresentation;
@@ -111,13 +111,13 @@ public class DomainServiceResourceTest_services_representationAndHeaders {
         JsonRepresentation values = repr.getValues();
         
         // then
-        for (Link link : values.arrayIterable(Link.class)) {
+        for (LinkRepresentation link : values.arrayIterable(LinkRepresentation.class)) {
             Response followResp = client.follow(link);
             RestfulResponse<JsonRepresentation> followJsonResp = RestfulResponse.of(followResp);
             assertThat(followJsonResp.getStatus().getFamily(), is(Family.SUCCESSFUL));
             
             JsonRepresentation followRepr = followJsonResp.getEntity();
-            Link self = followRepr.getLink("self");
+            LinkRepresentation self = followRepr.getLink("self");
             
             assertThat(self.getHref(), is(link.getHref()));
         }

@@ -22,7 +22,7 @@ import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.applib.JsonRepresentation.HasExtensions;
 import org.apache.isis.viewer.json.applib.JsonRepresentation.HasLinks;
 import org.apache.isis.viewer.json.applib.JsonRepresentation.LinksToSelf;
-import org.apache.isis.viewer.json.applib.blocks.Link;
+import org.apache.isis.viewer.json.applib.blocks.LinkRepresentation;
 import org.codehaus.jackson.JsonNode;
 
 public class HomePageRepresentation extends JsonRepresentation implements LinksToSelf, HasLinks, HasExtensions {
@@ -31,16 +31,16 @@ public class HomePageRepresentation extends JsonRepresentation implements LinksT
         super(jsonNode);
     }
 
-    public Link getSelf() {
+    public LinkRepresentation getSelf() {
         return getLink("self");
     }
-    public Link getUser() {
+    public LinkRepresentation getUser() {
         return getLink("user");
     }
-    public Link getServices() {
+    public LinkRepresentation getServices() {
         return getLink("services");
     }
-    public Link getCapabilities() {
+    public LinkRepresentation getCapabilities() {
         return getLink("capabilities");
     }
 

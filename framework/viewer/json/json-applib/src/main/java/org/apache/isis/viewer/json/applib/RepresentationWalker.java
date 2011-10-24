@@ -24,7 +24,7 @@ import java.util.List;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status.Family;
 
-import org.apache.isis.viewer.json.applib.blocks.Link;
+import org.apache.isis.viewer.json.applib.blocks.LinkRepresentation;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 
@@ -34,13 +34,13 @@ public class RepresentationWalker {
 
     static class Step {
         private final String key;
-        private final Link link;
+        private final LinkRepresentation link;
         private final JsonRepresentation body;
         private final RestfulResponse<? extends JsonRepresentation> response;
         private String error;
         private Exception exception;
 
-        public Step(String key, Link link, JsonRepresentation body, RestfulResponse<? extends JsonRepresentation> response, String error, Exception exception) {
+        public Step(String key, LinkRepresentation link, JsonRepresentation body, RestfulResponse<? extends JsonRepresentation> response, String error, Exception exception) {
             this.key = key;
             this.link = link;
             this.body = body;
@@ -66,7 +66,7 @@ public class RepresentationWalker {
         addStep(null, null, null, jsonResp, null, null);
     }
 
-    private Step addStep(String key, Link link, JsonRepresentation body, RestfulResponse<JsonRepresentation> jsonResp, String error, Exception ex) {
+    private Step addStep(String key, LinkRepresentation link, JsonRepresentation body, RestfulResponse<JsonRepresentation> jsonResp, String error, Exception ex) {
         Step step = new Step(key, link, body, jsonResp, error, ex);
         steps.add(0, step);
         if(error != null) {
@@ -96,7 +96,7 @@ public class RepresentationWalker {
             return;
         }
         
-        Link link;
+        LinkRepresentation link;
         try {
             link = entity.getLink(path);
         } catch (Exception e) {

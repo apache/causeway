@@ -36,11 +36,12 @@ import org.apache.isis.viewer.json.applib.RestfulRequest;
 import org.apache.isis.viewer.json.applib.RestfulRequest.QueryParameter;
 import org.apache.isis.viewer.json.applib.RestfulResponse;
 import org.apache.isis.viewer.json.applib.RestfulResponse.HttpStatusCode;
-import org.apache.isis.viewer.json.applib.blocks.Link;
+import org.apache.isis.viewer.json.applib.blocks.LinkRepresentation;
 import org.apache.isis.viewer.json.applib.domainobjects.DomainObjectRepresentation;
 import org.apache.isis.viewer.json.applib.domainobjects.DomainServiceResource;
 import org.apache.isis.viewer.json.applib.domainobjects.ListRepresentation;
 import org.apache.isis.viewer.json.applib.domainobjects.ObjectActionRepresentation;
+import org.apache.isis.viewer.json.applib.domainobjects.ScalarValueRepresentation;
 import org.apache.isis.viewer.json.tck.IsisWebServerRule;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
@@ -76,7 +77,7 @@ public class DomainServiceResourceTest_invokeAction {
         final ObjectActionRepresentation actionRepr = givenAction.as(ObjectActionRepresentation.class);
         
         // when
-        final Link invokeLink = actionRepr.getInvoke();
+        final LinkRepresentation invokeLink = actionRepr.getInvoke();
         
         // then
         assertThat(invokeLink, is(not(nullValue())));
@@ -90,12 +91,12 @@ public class DomainServiceResourceTest_invokeAction {
     @Test
     public void invokeIdempotent_withArgs_usingClientFollow() throws Exception {
 
-        // given
+        // given action
         JsonRepresentation givenAction = givenAction("simples", "newPersistentEntity");
         final ObjectActionRepresentation actionRepr = givenAction.as(ObjectActionRepresentation.class);
         
         // when
-        final Link invokeLink = actionRepr.getInvoke();
+        final LinkRepresentation invokeLink = actionRepr.getInvoke();
         
         // then
         assertThat(invokeLink, is(not(nullValue())));
@@ -119,10 +120,36 @@ public class DomainServiceResourceTest_invokeAction {
     }
 
     @Test
+    public void invoke_returningScalar_withReferenceArgs_usingClientFollow() throws Exception {
+        
+        // given action
+        JsonRepresentation givenAction = givenAction("simples", "count");
+        final ObjectActionRepresentation actionRepr = givenAction.as(ObjectActionRepresentation.class);
+        
+        // when
+        final LinkRepresentation invokeLink = actionRepr.getInvoke();
+        
+        // then
+        assertThat(invokeLink, is(not(nullValue())));
+        final JsonRepresentation args = invokeLink.getArguments();
+        assertThat(args.size(), is(0));
+        
+        // when
+        final Response response = client.follow(invokeLink, args);
+        
+        // then
+        RestfulResponse<ScalarValueRepresentation> restfulResponse = RestfulResponse.ofT(response);
+        final ScalarValueRepresentation objectRepr = restfulResponse.getEntity();
+        
+        assertThat(objectRepr.getValue().asInt(), is(6));
+    }
+
+
+    @Test
     public void invokeNonIdempotent_returningVoid_withReferenceArgs_usingClientFollow() throws Exception {
 
         // given simple entity with 'flag' property set to true
-        final Link linkToSimpleEntity = givenLinkToSimpleEntity(0);
+        final LinkRepresentation linkToSimpleEntity = givenLinkToSimpleEntity(0);
         final Response responseBefore = client.follow(linkToSimpleEntity);
         final RestfulResponse<DomainObjectRepresentation> restfulResponseBefore = RestfulResponse.ofT(responseBefore);
         final DomainObjectRepresentation simpleEntityBefore = restfulResponseBefore.getEntity();
@@ -133,7 +160,7 @@ public class DomainServiceResourceTest_invokeAction {
         final ObjectActionRepresentation actionRepr = givenAction.as(ObjectActionRepresentation.class);
         
         // when
-        final Link invokeLink = actionRepr.getInvoke();
+        final LinkRepresentation invokeLink = actionRepr.getInvoke();
         
         // then
         assertThat(invokeLink, is(not(nullValue())));
@@ -158,12 +185,7 @@ public class DomainServiceResourceTest_invokeAction {
     }
 
 
-    @org.junit.Ignore("todo")
-    @Test
-    public void invoke_returningScalar_withReferenceArgs_usingClientFollow() throws Exception {
-        fail();
-    }
-
+    
     @org.junit.Ignore("up to here")
     @Test
     public void invoke_withAllBuiltInArgs_usingClientFollow() throws Exception {
@@ -173,7 +195,7 @@ public class DomainServiceResourceTest_invokeAction {
         final ObjectActionRepresentation actionRepr = givenAction.as(ObjectActionRepresentation.class);
         
         // when
-        final Link invokeLink = actionRepr.getInvoke();
+        final LinkRepresentation invokeLink = actionRepr.getInvoke();
         
         // then
         assertThat(invokeLink, is(not(nullValue())));
@@ -218,13 +240,13 @@ public class DomainServiceResourceTest_invokeAction {
         return services.getRepresentation("values[key=%s]", serviceId).asLink().getHref();
     }
 
-    private Link givenLinkToSimpleEntity(int num) throws JsonParseException, JsonMappingException, IOException, Exception {
+    private LinkRepresentation givenLinkToSimpleEntity(int num) throws JsonParseException, JsonMappingException, IOException, Exception {
         // given
         JsonRepresentation givenAction = givenAction("simples", "list");
         final ObjectActionRepresentation actionRepr = givenAction.as(ObjectActionRepresentation.class);
         
         // when
-        final Link invokeLink = actionRepr.getInvoke();
+        final LinkRepresentation invokeLink = actionRepr.getInvoke();
         
         // then
         final Response response = client.follow(invokeLink);

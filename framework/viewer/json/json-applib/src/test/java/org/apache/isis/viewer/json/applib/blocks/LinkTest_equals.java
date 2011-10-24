@@ -31,10 +31,10 @@ public class LinkTest_equals {
 
     @Test
     public void equalDependsOnMethodAndHref() throws UnsupportedEncodingException {
-        Link link = new Link().withHref("http://localhost:8080/objects/ABC:123").withMethod(Method.GET);
-        Link link2 = new Link().withHref("http://localhost:8080/objects/ABC:123").withMethod(Method.GET);
-        Link link3 = new Link().withHref("http://localhost:8080/objects/ABC:123").withMethod(Method.PUT);
-        Link link4 = new Link().withHref("http://localhost:8080/objects/ABC:456").withMethod(Method.GET);
+        LinkRepresentation link = new LinkRepresentation().withHref("http://localhost:8080/objects/ABC:123").withMethod(Method.GET);
+        LinkRepresentation link2 = new LinkRepresentation().withHref("http://localhost:8080/objects/ABC:123").withMethod(Method.GET);
+        LinkRepresentation link3 = new LinkRepresentation().withHref("http://localhost:8080/objects/ABC:123").withMethod(Method.PUT);
+        LinkRepresentation link4 = new LinkRepresentation().withHref("http://localhost:8080/objects/ABC:456").withMethod(Method.GET);
         
         assertThat(link, is(equalTo(link2)));
         assertThat(link, is(not(equalTo(link3))));
@@ -43,8 +43,8 @@ public class LinkTest_equals {
 
     @Test
     public void equalDoesNotDependsOnMethodAndHref() throws UnsupportedEncodingException {
-        Link link = new Link().withHref("http://localhost:8080/objects/ABC:123").withMethod(Method.GET).withRel("something");
-        Link link2 = new Link().withHref("http://localhost:8080/objects/ABC:123").withMethod(Method.GET).withRel("else");
+        LinkRepresentation link = new LinkRepresentation().withHref("http://localhost:8080/objects/ABC:123").withMethod(Method.GET).withRel("something");
+        LinkRepresentation link2 = new LinkRepresentation().withHref("http://localhost:8080/objects/ABC:123").withMethod(Method.GET).withRel("else");
         
         assertThat(link, is(equalTo(link2)));
     }

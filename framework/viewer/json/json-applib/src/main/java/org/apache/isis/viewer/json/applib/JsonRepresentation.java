@@ -39,7 +39,7 @@ import net.sf.json.JSONNull;
 import net.sf.json.JSONSerializer;
 import net.sf.json.xml.XMLSerializer;
 
-import org.apache.isis.viewer.json.applib.blocks.Link;
+import org.apache.isis.viewer.json.applib.blocks.LinkRepresentation;
 import org.apache.isis.viewer.json.applib.util.JsonMapper;
 import org.apache.isis.viewer.json.applib.util.JsonNodeUtils;
 import org.apache.isis.viewer.json.applib.util.UrlEncodingUtils;
@@ -73,7 +73,7 @@ import com.google.common.collect.Maps;
 public class JsonRepresentation {
 
     public interface LinksToSelf {
-        public Link getSelf();
+        public LinkRepresentation getSelf();
     }
 
     public interface HasLinks {
@@ -551,22 +551,22 @@ public class JsonRepresentation {
             return false;
         }
 
-        Link link = new Link(node);
+        LinkRepresentation link = new LinkRepresentation(node);
         if(link.getHref() == null || link.getRel() == null) {
             return false;
         }
         return true;
     }
 
-    public Link getLink(String path) {
+    public LinkRepresentation getLink(String path) {
         return getLink(path, getNode(path));
     }
 
-    public Link asLink() {
+    public LinkRepresentation asLink() {
         return getLink(null, asJsonNode());
     }
     
-    private Link getLink(String path, JsonNode node) {
+    private LinkRepresentation getLink(String path, JsonNode node) {
         if (representsNull(node)) {
             return null;
         }
@@ -578,7 +578,7 @@ public class JsonRepresentation {
             throw new IllegalArgumentException(formatExMsg(path, "is a value that does not represent a link"));
         }
 
-        Link link = new Link(node);
+        LinkRepresentation link = new LinkRepresentation(node);
         if(link.getHref() == null || link.getRel() == null) {
             throw new IllegalArgumentException(formatExMsg(path, "is a map that does not fully represent a link"));
         }
@@ -646,9 +646,9 @@ public class JsonRepresentation {
     
     /**
      * Convert a representation that contains a single node representing a link
-     * into a {@link Link}.
+     * into a {@link LinkRepresentation}.
      */
-    public Link mapValueAsLink() {
+    public LinkRepresentation mapValueAsLink() {
         if(asJsonNode().size() != 1) {
             throw new IllegalStateException("does not represent link");
         }
