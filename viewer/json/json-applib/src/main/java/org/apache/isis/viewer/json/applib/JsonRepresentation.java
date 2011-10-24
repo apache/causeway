@@ -965,9 +965,6 @@ public class JsonRepresentation {
         }
         Path path = Path.parse(key);
         ObjectNode node = JsonNodeUtils.walkNodeUpTo(asObjectNode(), path.getHead());
-        if(node.has(path.getTail())) {
-            throw new IllegalStateException("already has key " + key);
-        }
         node.put(path.getTail(), value.asJsonNode());
     }
 

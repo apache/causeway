@@ -60,7 +60,7 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
                 .withSelf("services")
                 .with(serviceAdapters);
         
-        return responseOfOk(Caching.ONE_DAY, renderer).build();
+        return responseOfOk(renderer, Caching.ONE_DAY).build();
     }
 
     ////////////////////////////////////////////////////////////
@@ -85,7 +85,7 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
                     .includesSelf()
                     .with(serviceAdapter);
         
-        return responseOfOk(Caching.ONE_DAY, renderer).build();
+        return responseOfOk(renderer, Caching.ONE_DAY).build();
     }
 
 

@@ -60,7 +60,7 @@ public class RuntimeExceptionMapper implements ExceptionMapper<RuntimeException>
         private ExceptionPojo causedBy;
 
         public ExceptionPojo(Throwable ex) {
-            this.message = ex.getMessage();
+            this.message = messageFor(ex);
             StackTraceElement[] stackTraceElements = ex.getStackTrace();
             for (StackTraceElement stackTraceElement : stackTraceElements) {
                 this.stackTrace.add(format(stackTraceElement));
@@ -69,6 +69,11 @@ public class RuntimeExceptionMapper implements ExceptionMapper<RuntimeException>
             if(cause != null && cause != ex) {
                 this.causedBy = new ExceptionPojo(cause);
             }
+        }
+
+        private static String messageFor(Throwable ex) {
+            final String message = ex.getMessage();
+            return message!=null?message:ex.getClass().getName();
         }
 
         @SuppressWarnings("unused")

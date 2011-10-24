@@ -78,7 +78,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements
                 (DomainObjectReprRenderer) rendererFactory.newRenderer(getResourceContext(), null, JsonRepresentation.newMap());
         renderer.with(objectAdapter);
         
-        ResponseBuilder respBuilder = responseOfOk(Caching.NONE, renderer);
+        ResponseBuilder respBuilder = responseOfOk(renderer, Caching.NONE);
         
         Version version = objectAdapter.getVersion();
         if (version != null && version.getTime() != null) {

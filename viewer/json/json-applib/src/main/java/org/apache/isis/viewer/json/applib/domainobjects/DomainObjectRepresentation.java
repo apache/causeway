@@ -48,20 +48,36 @@ public class DomainObjectRepresentation extends JsonRepresentation implements Li
         return getArray("members");
     }
 
+    public JsonRepresentation getProperty(final String id) {
+        return getRepresentation("members[memberType=property id=%s]", id);
+    }
+
     public JsonRepresentation getProperties() {
         return getRepresentation("members[memberType=property]");
+    }
+
+    public JsonRepresentation getCollection(final String id) {
+        return getRepresentation("members[memberType=collection id=%s]", id);
+    }
+
+    public JsonRepresentation getCollections() {
+        return getRepresentation("members[memberType=collection]");
     }
 
     public JsonRepresentation getActions() {
         return getRepresentation("members[memberType=action]");
     }
-    
+
+    public JsonRepresentation getAction(final String id) {
+        return getRepresentation("members[memberType=action id=%s]", id);
+    }
+
+
     public JsonRepresentation getLinks() {
         return getArray("links");
     }
     public JsonRepresentation getExtensions() {
         return getMap("extensions");
     }
-
 
 }

@@ -42,7 +42,7 @@ import com.google.common.collect.ImmutableMap;
 
 public enum MemberType {
 
-    OBJECT_PROPERTY("properties/", "propertyId", Rel.DETAILS, RepresentationType.OBJECT_PROPERTY, 
+    PROPERTY("properties/", "id", Rel.DETAILS, RepresentationType.OBJECT_PROPERTY, 
             ImmutableMap.of(
                 "modify", MutatorSpec.of(Rel.MODIFY, PropertyValidateFacet.class, PropertySetterFacet.class, HttpMethod.PUT, BodyArgs.ONE),
                 "clear", MutatorSpec.of(Rel.CLEAR, PropertyValidateFacet.class, PropertyClearFacet.class, HttpMethod.DELETE, BodyArgs.NONE)
@@ -55,7 +55,7 @@ public enum MemberType {
     /**
      * {@link #getMutators()} are keyed by {@link CollectionSemantics#getAddToKey()}
      */
-    OBJECT_COLLECTION("collections/", "collectionId", Rel.DETAILS, RepresentationType.OBJECT_COLLECTION, 
+    COLLECTION("collections/", "id", Rel.DETAILS, RepresentationType.OBJECT_COLLECTION, 
             ImmutableMap.of(
                 "addToSet", MutatorSpec.of(Rel.ADD_TO, CollectionValidateAddToFacet.class, CollectionAddToFacet.class, HttpMethod.PUT, BodyArgs.ONE),
                 "addToList", MutatorSpec.of(Rel.ADD_TO, CollectionValidateAddToFacet.class, CollectionAddToFacet.class, HttpMethod.POST, BodyArgs.ONE),
@@ -69,7 +69,7 @@ public enum MemberType {
     /**
      * {@link #getMutators()} are keyed by {@link ActionSemantics#getInvokeKey()}
      */
-    OBJECT_ACTION("actions/", "actionId", Rel.DETAILS, RepresentationType.OBJECT_ACTION,
+    ACTION("actions/", "id", Rel.DETAILS, RepresentationType.OBJECT_ACTION,
             ImmutableMap.of(
                 "invokeQueryOnly", MutatorSpec.of(Rel.INVOKE, ActionValidationFacet.class, ActionInvocationFacet.class, HttpMethod.GET, BodyArgs.MANY, "invoke"),
                 "invokeIdempotent", MutatorSpec.of(Rel.INVOKE, ActionValidationFacet.class, ActionInvocationFacet.class, HttpMethod.PUT, BodyArgs.MANY, "invoke"),
@@ -115,15 +115,15 @@ public enum MemberType {
     public abstract ObjectSpecification specFor(ObjectMember objectMember);
 
     public boolean isProperty() {
-        return this == MemberType.OBJECT_PROPERTY;
+        return this == MemberType.PROPERTY;
     }
 
     public boolean isCollection() {
-        return this == MemberType.OBJECT_COLLECTION;
+        return this == MemberType.COLLECTION;
     }
 
     public boolean isAction() {
-        return this == MemberType.OBJECT_ACTION;
+        return this == MemberType.ACTION;
     }
 
     public static MemberType lookup(final String memberTypeName) {
@@ -137,10 +137,10 @@ public enum MemberType {
 
 	public static MemberType of(ObjectMember objectMember) {
 		return objectMember.isAction()?
-				OBJECT_ACTION:
+				ACTION:
 					objectMember.isOneToOneAssociation()?
-						OBJECT_PROPERTY:
-						OBJECT_COLLECTION;
+						PROPERTY:
+						COLLECTION;
 	}
 
     public RepresentationType getRepresentationType() {
@@ -157,13 +157,13 @@ public enum MemberType {
 
     public static MemberType determineFrom(ObjectFeature objectFeature) {
         if (objectFeature instanceof ObjectAction) {
-            return MemberType.OBJECT_ACTION;
+            return MemberType.ACTION;
         }
         if (objectFeature instanceof OneToOneAssociation) {
-            return MemberType.OBJECT_PROPERTY;
+            return MemberType.PROPERTY;
         }
         if (objectFeature instanceof OneToManyAssociation) {
-            return MemberType.OBJECT_COLLECTION;
+            return MemberType.COLLECTION;
         }
         return null;
     }

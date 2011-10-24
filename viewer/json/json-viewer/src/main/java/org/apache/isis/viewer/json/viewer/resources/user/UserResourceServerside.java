@@ -43,7 +43,7 @@ public class UserResourceServerside extends ResourceAbstract implements UserReso
         renderer.includesSelf()
                 .with(getAuthenticationSession());
 
-        return responseOfOk(Caching.ONE_HOUR, renderer).build();
+        return responseOfOk(renderer, Caching.ONE_HOUR).build();
     }
 
 

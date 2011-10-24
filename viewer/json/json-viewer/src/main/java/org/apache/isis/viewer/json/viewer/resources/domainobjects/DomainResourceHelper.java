@@ -93,7 +93,7 @@ public class DomainResourceHelper {
         
         renderer.with(new ObjectAndProperty(objectAdapter, property));
         
-        return ResourceAbstract.responseOfOk(caching, renderer).build();
+        return ResourceAbstract.responseOfOk(renderer, caching).build();
     }
 
     // //////////////////////////////////////////////////////////////
@@ -112,7 +112,7 @@ public class DomainResourceHelper {
                 .withSelf()
                 .withMutatorsIfEnabled();
 
-        return ResourceAbstract.responseOfOk(Caching.NONE, renderer).build();
+        return ResourceAbstract.responseOfOk(renderer, Caching.NONE).build();
     }
 
     
@@ -251,7 +251,7 @@ public class DomainResourceHelper {
             final ListReprRenderer renderer = (ListReprRenderer) factory.newRenderer(resourceContext, null, representation);
             renderer.with(collectionAdapters);
             
-            return ResourceAbstract.responseOfOk(Caching.NONE, renderer).build();
+            return ResourceAbstract.responseOfOk(renderer, Caching.NONE).build();
         }
 
         
@@ -264,7 +264,7 @@ public class DomainResourceHelper {
 
             ScalarValueReprRenderer renderer = (ScalarValueReprRenderer) factory.newRenderer(resourceContext, null, representation);
             renderer.with(objectAdapter);
-            return ResourceAbstract.responseOfOk(Caching.NONE, renderer).build();
+            return ResourceAbstract.responseOfOk(renderer, Caching.NONE).build();
         }
 
         
@@ -273,7 +273,7 @@ public class DomainResourceHelper {
         final DomainObjectReprRenderer renderer = (DomainObjectReprRenderer) factory.newRenderer(resourceContext, null, representation);
         renderer.with(returnedAdapter);
         
-        ResponseBuilder respBuilder = ResourceAbstract.responseOfOk(Caching.NONE, renderer);
+        ResponseBuilder respBuilder = ResourceAbstract.responseOfOk(renderer, Caching.NONE);
         
         Version version = returnedAdapter.getVersion();
         if (version != null && version.getTime() != null) {
@@ -386,10 +386,10 @@ public class DomainResourceHelper {
         ObjectAssociation association = objectAdapter.getSpecification()
                 .getAssociation(propertyId);
         if (association == null || !association.isOneToOneAssociation()) {
-            throwNotFoundException(propertyId, MemberType.OBJECT_PROPERTY);
+            throwNotFoundException(propertyId, MemberType.PROPERTY);
         }
         OneToOneAssociation property = (OneToOneAssociation) association;
-        return memberThatIsVisibleAndUsable(objectAdapter, property, MemberType.OBJECT_PROPERTY,
+        return memberThatIsVisibleAndUsable(objectAdapter, property, MemberType.PROPERTY,
                 intent);
     }
 
@@ -401,10 +401,10 @@ public class DomainResourceHelper {
         ObjectAssociation association = objectAdapter.getSpecification()
                 .getAssociation(collectionId);
         if (association == null || !association.isOneToManyAssociation()) {
-            throwNotFoundException(collectionId, MemberType.OBJECT_COLLECTION);
+            throwNotFoundException(collectionId, MemberType.COLLECTION);
         }
         OneToManyAssociation collection = (OneToManyAssociation) association;
-        return memberThatIsVisibleAndUsable(objectAdapter, collection, MemberType.OBJECT_COLLECTION,
+        return memberThatIsVisibleAndUsable(objectAdapter, collection, MemberType.COLLECTION,
                 intent);
     }
 
@@ -415,10 +415,10 @@ public class DomainResourceHelper {
 
         ObjectAction action = objectAdapter.getSpecification().getObjectAction(actionId);
         if (action == null) {
-            throwNotFoundException(actionId, MemberType.OBJECT_ACTION);
+            throwNotFoundException(actionId, MemberType.ACTION);
         }
         
-        return memberThatIsVisibleAndUsable(objectAdapter, action, MemberType.OBJECT_ACTION, intent);
+        return memberThatIsVisibleAndUsable(objectAdapter, action, MemberType.ACTION, intent);
     }
 
     protected <T extends ObjectMember> T memberThatIsVisibleAndUsable(
