@@ -19,6 +19,9 @@
 
 package org.apache.isis.tck.objstore.dflt.simples;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
+
 import org.apache.isis.tck.dom.AbstractEntityRepository;
 import org.apache.isis.tck.dom.simples.SimpleEntity;
 import org.apache.isis.tck.dom.simples.SimpleEntityRepository;
@@ -57,6 +60,35 @@ public class SimpleEntityRepositoryDefault extends AbstractEntityRepository<Simp
     @Override
     public void toggle(SimpleEntity object) {
         object.setFlag(!object.getFlag());
+    }
+
+    @Override
+    public SimpleEntity update(SimpleEntity object, 
+        final String name, 
+        final boolean flag, 
+        final Boolean anotherBoolean, 
+        final int anInt, 
+        final Integer anotherInt, 
+        final long aLong, 
+        final Long anotherLong, 
+        final double aDouble, 
+        final Double anotherDouble, 
+        final BigInteger aBigInteger, 
+        final BigDecimal aBigDecimal) {
+        
+        object.setName(name);
+        object.setFlag(flag);
+        object.setAnotherBoolean(anotherBoolean);
+        object.setAnInt(anInt);
+        object.setAnotherInt(anotherInt);
+        object.setALong(aLong);
+        object.setAnotherLong(anotherLong);
+        object.setADouble(aDouble);
+        object.setAnotherDouble(anotherDouble);
+        object.setABigInteger(aBigInteger);
+        object.setABigDecimal(aBigDecimal);
+        
+        return object;
     }
 
 

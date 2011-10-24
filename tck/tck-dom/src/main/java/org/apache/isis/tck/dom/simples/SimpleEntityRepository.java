@@ -19,6 +19,8 @@
 
 package org.apache.isis.tck.dom.simples;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.List;
 
 import org.apache.isis.applib.annotation.Idempotent;
@@ -49,5 +51,20 @@ public interface SimpleEntityRepository {
     @MemberOrder(sequence="5")
     public void toggle(
         @Named("object") SimpleEntity object);
+
+    @MemberOrder(sequence="5")
+    public SimpleEntity update(
+        @Named("object") SimpleEntity object,
+        String name,
+        boolean flag,
+        Boolean anotherBoolean,
+        int anInt,
+        Integer anotherInt,
+        long aLong,
+        Long anotherLong,
+        double aDouble,
+        Double anotherDouble,
+        BigInteger aBigInteger,
+        BigDecimal aBigDecimal);
 
 }

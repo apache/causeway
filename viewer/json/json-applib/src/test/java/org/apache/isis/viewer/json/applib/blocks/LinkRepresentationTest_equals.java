@@ -27,7 +27,7 @@ import java.io.UnsupportedEncodingException;
 
 import org.junit.Test;
 
-public class LinkTest_equals {
+public class LinkRepresentationTest_equals {
 
     @Test
     public void equalDependsOnMethodAndHref() throws UnsupportedEncodingException {
