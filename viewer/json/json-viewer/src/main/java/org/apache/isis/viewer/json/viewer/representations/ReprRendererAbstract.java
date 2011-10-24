@@ -42,13 +42,7 @@ public abstract class ReprRendererAbstract<R extends ReprRendererAbstract<R, T>,
         this.linkFollower = asProvidedElseCreate(linkFollower);
         this.representationType = representationType;
         this.representation = representation;
-    }
-
-    private LinkFollower asProvidedElseCreate(LinkFollower linkFollower) {
-        if(linkFollower != null) {
-            return linkFollower;
-        }
-        return LinkFollower.create(resourceContext.getFollowLinks());
+        withLinks();
     }
 
     public ResourceContext getResourceContext() {
@@ -58,6 +52,20 @@ public abstract class ReprRendererAbstract<R extends ReprRendererAbstract<R, T>,
     public LinkFollower getLinkFollower() {
         return linkFollower;
     }
+
+    private LinkFollower asProvidedElseCreate(LinkFollower linkFollower) {
+        if(linkFollower != null) {
+            return linkFollower;
+        }
+        return LinkFollower.create(resourceContext.getFollowLinks());
+    }
+
+    private R withLinks() {
+        JsonRepresentation links = JsonRepresentation.newArray();
+        representation.mapPut("links", links);
+        return cast(this);
+    }
+
 
     @Override
     public RepresentationType getRepresentationType() {
@@ -73,22 +81,14 @@ public abstract class ReprRendererAbstract<R extends ReprRendererAbstract<R, T>,
 
     public R withSelf(String href) {
         if(href != null) {
-            representation.mapPut("self", LinkBuilder.newBuilder(resourceContext, Rel.SELF, representationType, href).build());
+            getLinks().arrayAdd(LinkBuilder.newBuilder(resourceContext, Rel.SELF, representationType, href).build());
         }
         return cast(this);
     }
 
     
-    public R withLinks() {
-        return withLinks(JsonRepresentation.newArray());
-    }
-
-    public R withLinks(JsonRepresentation links) {
-        if(!links.isArray()) {
-            throw new IllegalArgumentException("links must be a list");
-        }
-        representation.mapPut("links", links);
-        return cast(this);
+    protected JsonRepresentation getLinks() {
+        return representation.getArray("links");
     }
 
     public R withExtensions() {

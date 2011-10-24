@@ -103,10 +103,9 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
         withMembers(objectAdapter);
 
         // links
-        final JsonRepresentation links = JsonRepresentation.newArray();
+        final JsonRepresentation links = getLinks();
         links.arrayAdd(
                 DomainTypeReprRenderer.newLinkToBuilder(getResourceContext(), Rel.DESCRIBEDBY, objectAdapter.getSpecification()).build());
-        withLinks(links);
         
         // extensions
         withExtensions();

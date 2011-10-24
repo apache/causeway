@@ -32,16 +32,16 @@ public class HomePageRepresentation extends JsonRepresentation implements LinksT
     }
 
     public LinkRepresentation getSelf() {
-        return getLink("self");
+        return getLink("links[rel=self]");
     }
     public LinkRepresentation getUser() {
-        return getLink("user");
+        return getLink("links[rel=user]");
     }
     public LinkRepresentation getServices() {
-        return getLink("services");
+        return getLink("links[rel=services]");
     }
     public LinkRepresentation getCapabilities() {
-        return getLink("capabilities");
+        return getLink("links[rel=capabilities]");
     }
 
     public JsonRepresentation getLinks() {

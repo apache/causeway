@@ -64,26 +64,20 @@ public class HomePageReprRenderer extends ReprRendererAbstract<HomePageReprRende
         
         // self
         if(includesSelf) {
-            putLinkToSelf(representation);
+            addLinkToSelf(representation);
         }
 
-        // user
-        putLinkToUser(representation);
+        addLinkToUser();
+        addLinkToServices();
+        addLinkToCapabilities();
 
-        // services
-        putLinkToServices(representation);
-        
-        // capabilities
-        putLinkToCapabilities(representation);
-
-        // links and extensions
-        representation.mapPut("links", JsonRepresentation.newArray());
+        // inks and extensions
         representation.mapPut("extensions", JsonRepresentation.newMap());
 
         return representation;
     }
 
-    private void putLinkToSelf(JsonRepresentation representation) {
+    private void addLinkToSelf(JsonRepresentation representation) {
         final LinkBuilder linkBuilder = LinkBuilder.newBuilder(resourceContext, Rel.SELF, getRepresentationType(), "");
 
         final LinkFollower linkFollower = getLinkFollower().follow("self");
@@ -95,10 +89,10 @@ public class HomePageReprRenderer extends ReprRendererAbstract<HomePageReprRende
             
             linkBuilder.withValue(renderer.render());
         }
-        representation.mapPut("self", linkBuilder.build());
+        getLinks().arrayAdd(linkBuilder.build());
     }
 
-    private void putLinkToCapabilities(final JsonRepresentation representation) {
+    private void addLinkToCapabilities() {
         final LinkBuilder linkBuilder = LinkBuilder.newBuilder(getResourceContext(), Rel.CAPABILITIES, RepresentationType.CAPABILITIES, "capabilities");
         
         final LinkFollower linkFollower = getLinkFollower().follow("capabilities");
@@ -110,10 +104,10 @@ public class HomePageReprRenderer extends ReprRendererAbstract<HomePageReprRende
             linkBuilder.withValue(renderer.render());
         }
         
-        representation.mapPut("capabilities", linkBuilder.build());
+        getLinks().arrayAdd(linkBuilder.build());
     }
 
-    private void putLinkToServices(JsonRepresentation representation) {
+    private void addLinkToServices() {
 
         final LinkBuilder linkBuilder = 
                 LinkBuilder.newBuilder(getResourceContext(), Rel.SERVICES, RepresentationType.LIST, "services");
@@ -133,10 +127,10 @@ public class HomePageReprRenderer extends ReprRendererAbstract<HomePageReprRende
             linkBuilder.withValue(renderer.render());
         }
         
-        representation.mapPut("services", linkBuilder.build());
+        getLinks().arrayAdd(linkBuilder.build());
     }
 
-    private void putLinkToUser(JsonRepresentation representation) {
+    private void addLinkToUser() {
         final LinkBuilder userLinkBuilder = 
                 LinkBuilder.newBuilder(getResourceContext(), Rel.USER, RepresentationType.USER, "user");
         
@@ -150,7 +144,7 @@ public class HomePageReprRenderer extends ReprRendererAbstract<HomePageReprRende
             userLinkBuilder.withValue(renderer.render());
         }
         
-        representation.mapPut("user", userLinkBuilder.build());
+        getLinks().arrayAdd(userLinkBuilder.build());
     }
 
 }

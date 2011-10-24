@@ -32,7 +32,7 @@ public class CapabilitiesRepresentation extends JsonRepresentation implements Li
     }
 
     public LinkRepresentation getSelf() {
-        return getLink("self");
+        return getLink("links[rel=self]");
     }
 
     public JsonRepresentation getCapabilities() {

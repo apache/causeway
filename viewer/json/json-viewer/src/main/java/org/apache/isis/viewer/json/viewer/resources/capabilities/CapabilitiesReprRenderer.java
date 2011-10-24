@@ -55,6 +55,13 @@ public class CapabilitiesReprRenderer extends ReprRendererAbstract<CapabilitiesR
             withSelf("capabilities/");
         }
 
+        putCapabilities();
+        putExtensions();
+        
+        return representation;
+    }
+
+    private void putCapabilities() {
         JsonRepresentation capabilities = JsonRepresentation.newMap();
 
         capabilities.mapPut("concurrencyChecking", "no");
@@ -69,9 +76,10 @@ public class CapabilitiesReprRenderer extends ReprRendererAbstract<CapabilitiesR
         capabilities.mapPut("domainModel", "rich");
 
         representation.mapPut("capabilities", capabilities);
-        representation.mapPut("links", JsonRepresentation.newArray());
-        representation.mapPut("extensions", JsonRepresentation.newMap());
-
-        return representation;
     }
+    
+    private void putExtensions() {
+        representation.mapPut("extensions", JsonRepresentation.newMap());
+    }
+
 }
