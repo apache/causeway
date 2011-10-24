@@ -65,10 +65,9 @@ public class ObjectCollectionReprRenderer extends AbstractObjectMemberReprRender
         putExtensionsIsisProprietary(extensions);
         withExtensions(extensions );
         
-        JsonRepresentation links = JsonRepresentation.newArray();
+        JsonRepresentation links = getLinks();
         addLinksFormalDomainModel(links, resourceContext);
         addLinksIsisProprietary(links, resourceContext);
-        withLinks(links);
 
         return representation;
     }

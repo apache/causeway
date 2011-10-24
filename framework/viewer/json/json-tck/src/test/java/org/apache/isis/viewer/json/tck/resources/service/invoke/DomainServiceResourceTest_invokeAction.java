@@ -24,6 +24,8 @@ import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 
 import javax.ws.rs.core.Response;
 
@@ -204,6 +206,18 @@ public class DomainServiceResourceTest_invokeAction {
         
         final JsonRepresentation args = invokeLink.getArguments();
         assertThat(args.size(), is(0));
+        assertThat(args.mapHas("object"), is(true));
+        assertThat(args.mapHas("name"), is(true));
+        assertThat(args.mapHas("flag"), is(true));
+        assertThat(args.mapHas("Boolean"), is(true));
+        assertThat(args.mapHas("int"), is(true));
+        assertThat(args.mapHas("integer"), is(true));
+        assertThat(args.mapHas("long1"), is(true));
+        assertThat(args.mapHas("long2"), is(true));
+        assertThat(args.mapHas("double1"), is(true));
+        assertThat(args.mapHas("double2"), is(true));
+        assertThat(args.mapHas("bigInteger"), is(true));
+        assertThat(args.mapHas("bigDecimal"), is(true));
         
         // when
         args.mapPut("name", "New Name");

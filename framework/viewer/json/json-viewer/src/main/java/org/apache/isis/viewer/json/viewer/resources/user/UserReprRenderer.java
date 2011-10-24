@@ -58,7 +58,6 @@ public class UserReprRenderer extends ReprRendererAbstract<UserReprRenderer, Aut
         if(includesSelf) {
             withSelf("user");
         }
-        withLinks();
         withExtensions();
         return representation;
     }

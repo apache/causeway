@@ -33,7 +33,7 @@ public class ListRepresentation extends JsonRepresentation implements LinksToSel
     }
 
     public LinkRepresentation getSelf() {
-        return getLink("self");
+        return getLink("links[rel=self]");
     }
 
     public JsonRepresentation getValues() {

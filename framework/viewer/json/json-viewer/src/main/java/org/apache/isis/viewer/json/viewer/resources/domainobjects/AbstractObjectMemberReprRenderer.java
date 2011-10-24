@@ -50,6 +50,7 @@ public abstract class AbstractObjectMemberReprRenderer<R extends ReprRendererAbs
         usingLinkToBuilder(new DomainObjectLinkTo());
 
         // done eagerly so can use as criteria for x-ro-follow-links
+        
         putId();
         putMemberType();
 
@@ -65,7 +66,8 @@ public abstract class AbstractObjectMemberReprRenderer<R extends ReprRendererAbs
     }
 
     public R withSelf() {
-        representation.mapPut("self", linkToBuilder.linkToMember(Rel.SELF, memberType, objectMember).build());
+        final JsonRepresentation links = getLinks();
+        links.mapPut("self", linkToBuilder.linkToMember(Rel.SELF, memberType, objectMember).build());
         return cast(this);
     }
 
