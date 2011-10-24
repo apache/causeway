@@ -184,28 +184,34 @@ public abstract class ResourceAbstract {
     // Responses
     // //////////////////////////////////////////////////////////////
 
-    public static ResponseBuilder responseOf(HttpStatusCode httpStatusCode) {
+    public static ResponseBuilder responseOfNoContent(Version version) {
+        final ResponseBuilder response = responseOf(HttpStatusCode.NO_CONTENT);
+        addLastModifiedIfAvailable(response, version);
+        return response;
+    }
+
+    public static ResponseBuilder responseOfOk(ReprRenderer<?,?> renderer, Caching caching) {
+        return responseOfOk(renderer, caching, null);
+    }
+
+    public static ResponseBuilder responseOfOk(ReprRenderer<?,?> renderer, Caching caching, Version version) {
+        RepresentationType representationType = renderer.getRepresentationType();
+        final ResponseBuilder response = responseOf(HttpStatusCode.OK)
+                .type(representationType.getMediaType())
+                .cacheControl(caching.getCacheControl())
+                .entity(jsonFor(renderer.render()));
+        return addLastModifiedIfAvailable(response, version);
+    }
+
+    private static ResponseBuilder responseOf(HttpStatusCode httpStatusCode) {
         return Response.status(httpStatusCode.getJaxrsStatusType()).type(MediaType.APPLICATION_JSON_TYPE);
     }
 
-    public static ResponseBuilder responseOfNoContent(Version version) {
-        return responseOf(HttpStatusCode.NO_CONTENT).lastModified(version.getTime());
-    }
-
-    public static ResponseBuilder responseOfOk(RepresentationType representationType, Caching caching, String representation) {
-        return responseOf(HttpStatusCode.OK)
-                .type(representationType.getMediaType())
-                .cacheControl(caching.getCacheControl())
-                .entity(representation);
-    }
-
-    public static ResponseBuilder responseOfOk(RepresentationType representationType, Caching caching, JsonRepresentation representation) {
-        return responseOfOk(representationType, caching, jsonFor(representation));
-    }
-
-    public static ResponseBuilder responseOfOk(Caching caching, ReprRenderer<?,?> renderer) {
-        RepresentationType representationType = renderer.getRepresentationType();
-        return responseOfOk(representationType, caching, renderer.render());
+    private static ResponseBuilder addLastModifiedIfAvailable(final ResponseBuilder responseBuilder, Version version) {
+        if(version!=null) {
+            responseBuilder.lastModified(version.getTime());
+        }
+        return responseBuilder;
     }
 
 

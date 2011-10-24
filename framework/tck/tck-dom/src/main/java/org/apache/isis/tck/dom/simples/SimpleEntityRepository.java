@@ -37,10 +37,13 @@ public interface SimpleEntityRepository {
     public SimpleEntity newTransientEntity();
 
     @Idempotent
-    @MemberOrder(sequence="2")
+    @MemberOrder(sequence="3")
     public SimpleEntity newPersistentEntity(
         @Named("name") String name, 
         @Named("flag") Boolean flag);
 
+    @MemberOrder(sequence="4")
+    public void toggle(
+        @Named("object") SimpleEntity object);
 
 }

@@ -41,7 +41,6 @@ public class SimpleEntity extends AbstractDomainObject {
     }
     // }}
 
-
     // {{ Flag (boolean)
     private Boolean flag;
 
@@ -169,12 +168,5 @@ public class SimpleEntity extends AbstractDomainObject {
         this.aBigDecimal = bigDecimal;
     }
     // }}
-
-
-    
-
-
-
-
 
 }

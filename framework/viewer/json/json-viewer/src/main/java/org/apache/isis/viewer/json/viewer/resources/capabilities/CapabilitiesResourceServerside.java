@@ -55,7 +55,7 @@ public class CapabilitiesResourceServerside extends ResourceAbstract implements 
                 (CapabilitiesReprRenderer) factory.newRenderer(getResourceContext(), null, JsonRepresentation.newMap());
         renderer.includesSelf();
         
-        return responseOfOk(Caching.ONE_DAY, renderer).build();
+        return responseOfOk(renderer, Caching.ONE_DAY).build();
     }
 
     private void fakeRuntimeExceptionIfXFail() {

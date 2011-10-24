@@ -47,6 +47,11 @@ public class SimpleEntityRepositoryDefault extends AbstractEntityRepository<Simp
         getContainer().persist(entity);
         return entity;
     }
+
+    @Override
+    public void toggle(SimpleEntity object) {
+        object.setFlag(!object.getFlag());
+    }
     
 
 }

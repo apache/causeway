@@ -66,7 +66,7 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
                 (DomainTypesReprRenderer) rendererFactory.newRenderer(getResourceContext(), null, JsonRepresentation.newMap());
         renderer.with(allSpecifications).includesSelf();
         
-        return responseOfOk(Caching.ONE_DAY, renderer).build();
+        return responseOfOk(renderer, Caching.ONE_DAY).build();
     }
 
     
@@ -86,7 +86,7 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
                 (DomainTypeReprRenderer) rendererFactory.newRenderer(getResourceContext(), null, JsonRepresentation.newMap());
         renderer.with(objectSpec).includesSelf();
 
-        return responseOfOk(Caching.ONE_DAY, renderer).build();
+        return responseOfOk(renderer, Caching.ONE_DAY).build();
     }
 
     @GET
@@ -116,7 +116,7 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
                 (TypePropertyReprRenderer) rendererFactory.newRenderer(getResourceContext(), null, JsonRepresentation.newMap());
         renderer.with(new SpecAndProperty(objectSpec, property)).includesSelf();
 
-        return responseOfOk(Caching.ONE_DAY, renderer).build();
+        return responseOfOk(renderer, Caching.ONE_DAY).build();
     }
 
     @GET
@@ -146,7 +146,7 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
                 (TypeCollectionReprRenderer) rendererFactory.newRenderer(getResourceContext(), null, JsonRepresentation.newMap());
         renderer.with(new SpecAndCollection(objectSpec, collection)).includesSelf();
 
-        return responseOfOk(Caching.ONE_DAY, renderer).build();
+        return responseOfOk(renderer, Caching.ONE_DAY).build();
     }
 
     @GET
@@ -176,7 +176,7 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
                 (TypeActionReprRenderer) rendererFactory.newRenderer(getResourceContext(), null, JsonRepresentation.newMap());
         renderer.with(new SpecAndAction(objectSpec, action)).includesSelf();
 
-        return responseOfOk(Caching.ONE_DAY, renderer).build();
+        return responseOfOk(renderer, Caching.ONE_DAY).build();
     }
 
     @GET
@@ -209,7 +209,7 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
                 (TypeActionParamReprRenderer) rendererFactory.newRenderer(getResourceContext(), null, JsonRepresentation.newMap());
         renderer.with(new SpecAndActionParam(objectSpec, actionParam)).includesSelf();
 
-        return responseOfOk(Caching.ONE_DAY, renderer).build();
+        return responseOfOk(renderer, Caching.ONE_DAY).build();
     }
 
 }
