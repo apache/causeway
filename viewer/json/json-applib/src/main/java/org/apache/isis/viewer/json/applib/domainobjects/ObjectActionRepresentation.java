@@ -18,49 +18,18 @@
  */
 package org.apache.isis.viewer.json.applib.domainobjects;
 
-import org.apache.isis.viewer.json.applib.JsonRepresentation;
-import org.apache.isis.viewer.json.applib.JsonRepresentation.HasExtensions;
-import org.apache.isis.viewer.json.applib.JsonRepresentation.HasLinks;
-import org.apache.isis.viewer.json.applib.JsonRepresentation.LinksToSelf;
 import org.apache.isis.viewer.json.applib.blocks.LinkRepresentation;
 import org.codehaus.jackson.JsonNode;
 
 
-public class ObjectActionRepresentation extends JsonRepresentation implements LinksToSelf, HasLinks, HasExtensions {
+public class ObjectActionRepresentation extends AbstractObjectMemberRepresentation {
 
     public ObjectActionRepresentation(JsonNode jsonNode) {
         super(jsonNode);
     }
     
-    public LinkRepresentation getSelf() {
-        return getLink("self");
-    }
-
-    public String getDisabledReason() {
-        return getString("disabledReason");
-    }
-
-    public String getMemberType() {
-        return getString("memberType");
-    }
-
     public LinkRepresentation getInvoke() {
-        return getLink("invoke");
-    }
-
-    public String getActionId() {
-        return getString("actionId");
-    }
-
-    public JsonRepresentation getLinks() {
-        return getArray("links");
-    }
-    public JsonRepresentation getExtensions() {
-        return getMap("extensions");
-    }
-
-    public LinkRepresentation getActionDetails() {
-        return getLink("actionDetails");
+        return getLinkWithRel("invoke");
     }
 
 }

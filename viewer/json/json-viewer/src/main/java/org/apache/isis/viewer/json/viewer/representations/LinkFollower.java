@@ -55,7 +55,8 @@ public final class LinkFollower {
     /**
      * A little algebra...
      */
-    public LinkFollower follow(String path) {
+    public LinkFollower follow(String pathTemplate, Object... args) {
+        String path = String.format(pathTemplate, args);
         if(path == null) {
             return terminated(PathNode.NULL);
         }

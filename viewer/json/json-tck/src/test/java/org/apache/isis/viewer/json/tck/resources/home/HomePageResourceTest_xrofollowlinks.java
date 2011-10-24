@@ -71,7 +71,7 @@ public class HomePageResourceTest_xrofollowlinks {
     @Test
     public void all() throws Exception {
 
-        repr = whenExecuteWith("/", "user,services,capabilities");
+        repr = whenExecuteAndFollowLinksUsing("/", "links[rel=user],links[rel=services],links[rel=capabilities]");
 
         assertThat(repr.getUser().getValue(), is(not(nullValue())));
         assertThat(repr.getCapabilities().getValue(), is(not(nullValue())));
@@ -81,7 +81,7 @@ public class HomePageResourceTest_xrofollowlinks {
     @Test
     public void servicesValues() throws Exception {
 
-        repr = whenExecuteWith("/", "services.values");
+        repr = whenExecuteAndFollowLinksUsing("/", "links[rel=services].values");
 
         JsonRepresentation servicesValue = repr.getServices().getValue();
         assertThat(servicesValue, is(not(nullValue())));
@@ -91,21 +91,21 @@ public class HomePageResourceTest_xrofollowlinks {
         
         JsonRepresentation service;
         
-        service = serviceLinkList.getRepresentation("[key=%s]", "simples");
+        service = serviceLinkList.getRepresentation("[id=%s]", "simples");
         assertThat(service, isMap());
-        assertThat(service.getString("key"), is("simples"));
+        assertThat(service.getString("id"), is("simples"));
         assertThat(service.getRepresentation("value"), is(not(nullValue())));
 
-        service = serviceLinkList.getRepresentation("[key=%s]", "applibValuedEntities");
+        service = serviceLinkList.getRepresentation("[id=%s]", "applibValuedEntities");
         assertThat(service, isMap());
-        assertThat(service.getString("key"), is("applibValuedEntities"));
+        assertThat(service.getString("id"), is("applibValuedEntities"));
         assertThat(service.getRepresentation("value"), is(not(nullValue())));
     }
 
     @Test
     public void servicesValuesWithCriteria() throws Exception {
 
-        repr = whenExecuteWith("/", "services.values[key=simples]");
+        repr = whenExecuteAndFollowLinksUsing("/", "links[rel=services].values[id=simples]");
 
         JsonRepresentation servicesValue = repr.getServices().getValue();
         assertThat(servicesValue, is(not(nullValue())));
@@ -115,16 +115,16 @@ public class HomePageResourceTest_xrofollowlinks {
         
         JsonRepresentation service;
         
-        service = serviceLinkList.getRepresentation("[key=%s]", "simples");
+        service = serviceLinkList.getRepresentation("[id=%s]", "simples");
         assertThat(service, isMap());
-        assertThat(service.getString("key"), is("simples"));
+        assertThat(service.getString("id"), is("simples"));
         assertThat(service.getRepresentation("value"), is(not(nullValue())));
 
-        service = serviceLinkList.getRepresentation("[key=%s]", "applibValuedEntities");
+        service = serviceLinkList.getRepresentation("[id=%s]", "applibValuedEntities");
         assertThat(service.getRepresentation("value"), is(nullValue()));
     }
 
-    private HomePageRepresentation whenExecuteWith(final String uriTemplate, final String followLinks) throws JsonParseException, JsonMappingException, IOException {
+    private HomePageRepresentation whenExecuteAndFollowLinksUsing(final String uriTemplate, final String followLinks) throws JsonParseException, JsonMappingException, IOException {
         request = client.createRequest(HttpMethod.GET, uriTemplate).withArg(QueryParameter.FOLLOW_LINKS, followLinks);
         restfulResponse = request.executeT();
         return restfulResponse.getEntity();

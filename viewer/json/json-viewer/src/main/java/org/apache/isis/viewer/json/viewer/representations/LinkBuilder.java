@@ -43,7 +43,7 @@ public final class LinkBuilder {
     private String title;
     private JsonRepresentation arguments;
     private JsonRepresentation value;
-    private String key;
+    private String id;
 
     protected LinkBuilder(ResourceContext resourceContext, Rel rel, String href, MediaType mediaType) {
         this.resourceContext = resourceContext;
@@ -63,8 +63,8 @@ public final class LinkBuilder {
         this.arguments = arguments;
         return this;
     }
-    public LinkBuilder withKey(String key) {
-        this.key = key;
+    public LinkBuilder withId(String id) {
+        this.id = id;
         return this;
     }
     public LinkBuilder withValue(JsonRepresentation value) {
@@ -73,7 +73,7 @@ public final class LinkBuilder {
     }
 
     public JsonRepresentation build() {
-        representation.mapPut("key", key);
+        representation.mapPut("id", id);
         representation.mapPut("rel", rel.getName());
         representation.mapPut("href", resourceContext.urlFor(href));
         representation.mapPut("method", method);

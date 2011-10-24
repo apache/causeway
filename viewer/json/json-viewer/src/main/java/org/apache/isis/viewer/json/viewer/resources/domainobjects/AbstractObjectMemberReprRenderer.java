@@ -50,7 +50,6 @@ public abstract class AbstractObjectMemberReprRenderer<R extends ReprRendererAbs
         usingLinkToBuilder(new DomainObjectLinkTo());
 
         // done eagerly so can use as criteria for x-ro-follow-links
-        
         putId();
         putMemberType();
 
@@ -67,7 +66,7 @@ public abstract class AbstractObjectMemberReprRenderer<R extends ReprRendererAbs
 
     public R withSelf() {
         final JsonRepresentation links = getLinks();
-        links.mapPut("self", linkToBuilder.linkToMember(Rel.SELF, memberType, objectMember).build());
+        links.arrayAdd(linkToBuilder.linkToMember(Rel.SELF, memberType, objectMember).build());
         return cast(this);
     }
 
@@ -104,9 +103,9 @@ public abstract class AbstractObjectMemberReprRenderer<R extends ReprRendererAbs
     public R withDetailsLink() {
         final JsonRepresentation link = 
                 linkToBuilder.linkToMember(memberType.getDetailsRel(), memberType, objectMember).build();
-        representation.mapPut(memberType.getDetailsRel().getName(), link);
+        getLinks().arrayAdd(link);
         final LinkFollower membersLinkFollower = getLinkFollower();
-        final LinkFollower detailsLinkFollower = membersLinkFollower.follow(memberType.getDetailsRel().getName());
+        final LinkFollower detailsLinkFollower = membersLinkFollower.follow("links[rel=%s]", memberType.getDetailsRel().getName());
         if(membersLinkFollower.matches(representation) && detailsLinkFollower.matches(link)) {
             followDetailsLink(link);
         }

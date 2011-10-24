@@ -64,7 +64,7 @@ public class ListReprRenderer extends ReprRendererAbstract<ListReprRenderer, Col
 
     public JsonRepresentation render() {
         withObjectAdapters();
-        withExtensions();
+        getExtensions();
 
         return representation;
     }

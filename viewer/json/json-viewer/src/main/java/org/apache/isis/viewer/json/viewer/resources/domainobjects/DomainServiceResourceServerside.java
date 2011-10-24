@@ -85,6 +85,7 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
                     .includesSelf()
                     .with(serviceAdapter);
         
+
         return responseOfOk(renderer, Caching.ONE_DAY).build();
     }
 

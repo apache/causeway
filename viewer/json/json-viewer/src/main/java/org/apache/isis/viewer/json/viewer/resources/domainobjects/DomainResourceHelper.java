@@ -242,7 +242,7 @@ public class DomainResourceHelper {
 
         final CollectionFacet collectionFacet = returnedAdapter.getSpecification().getFacet(CollectionFacet.class);
         if (collectionFacet != null) {
-            representation = representationWithSelfFor(objectAdapter, action, arguments);
+            representation = representationWithSelfFor(RepresentationType.LIST, objectAdapter, action, arguments);
             
             final Collection<ObjectAdapter> collectionAdapters = collectionFacet
                     .collection(returnedAdapter);
@@ -257,8 +257,7 @@ public class DomainResourceHelper {
         
         final EncodableFacet encodableFacet = returnedAdapter.getSpecification().getFacet(EncodableFacet.class);
         if(encodableFacet != null) {
-            
-            representation = representationWithSelfFor(objectAdapter, action, arguments);
+            representation = representationWithSelfFor(RepresentationType.SCALAR_VALUE, objectAdapter, action, arguments);
             
             final RendererFactory factory = rendererFactoryRegistry.find(RepresentationType.SCALAR_VALUE);
 
@@ -267,7 +266,6 @@ public class DomainResourceHelper {
             return ResourceAbstract.responseOfOk(renderer, Caching.NONE).build();
         }
 
-        
         final RendererFactory factory = rendererFactoryRegistry.find(RepresentationType.DOMAIN_OBJECT);
         representation = JsonRepresentation.newMap();
         final DomainObjectReprRenderer renderer = (DomainObjectReprRenderer) factory.newRenderer(resourceContext, null, representation);
@@ -283,32 +281,18 @@ public class DomainResourceHelper {
     }
 
 
-
-    private JsonRepresentation representationWithSelfFor(final ObjectAdapter objectAdapter, final ObjectAction action, final String queryArgs) {
-        JsonRepresentation representationWithSelf = representationWithSelfFor(objectAdapter, action);
-        final String href = representationWithSelf.getString("self.href");
-        representationWithSelf.mapPut("self.href", href + "?" + queryArgs);
-        return representationWithSelf;
-    }
-
-    private JsonRepresentation representationWithSelfFor(final ObjectAdapter objectAdapter, final ObjectAction action, final JsonRepresentation bodyArgs) {
-        JsonRepresentation representationWithSelf = representationWithSelfFor(objectAdapter, action);
-        final LinkRepresentation selfLink = representationWithSelf.getLink("self");
-        selfLink.mapPut("args", bodyArgs);
-        return representationWithSelf;
-    }
-    
-    private JsonRepresentation representationWithSelfFor(final ObjectAdapter objectAdapter, final ObjectAction action) {
+    private JsonRepresentation representationWithSelfFor(final RepresentationType representationType, final ObjectAdapter objectAdapter, final ObjectAction action, final JsonRepresentation bodyArgs) {
         JsonRepresentation representation = JsonRepresentation.newMap();
+        final JsonRepresentation links = JsonRepresentation.newArray();
+        representation.mapPut("links", links);
+        
         String oid = OidUtils.getOidStr(resourceContext, objectAdapter);
-        // TODO: review; can't be more specific with the media type because we don't have a media type for action/invoke
-        final JsonRepresentation repBuilder = 
-                LinkBuilder.newBuilder(resourceContext, Rel.SELF, MediaType.APPLICATION_JSON_TYPE, "objects/%s/actions/%s/invoke", oid, action.getId()).build();
-        representation.mapPut("self", repBuilder);
+        final JsonRepresentation selfLink = 
+                LinkBuilder.newBuilder(resourceContext, Rel.SELF, representationType.getMediaType(), "objects/%s/actions/%s/invoke", oid, action.getId()).build();
+        links.arrayAdd(selfLink);
+        selfLink.mapPut("args", bodyArgs);
         return representation;
     }
-
-
 
     
     /**

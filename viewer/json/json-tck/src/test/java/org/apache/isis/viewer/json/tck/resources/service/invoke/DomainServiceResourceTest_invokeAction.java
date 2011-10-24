@@ -237,23 +237,22 @@ public class DomainServiceResourceTest_invokeAction {
         final String href = givenHrefToService(serviceId);
         
         final RestfulRequest request = 
-                client.createRequest(HttpMethod.GET, href).withArg(QueryParameter.FOLLOW_LINKS, "members[id=%s].details", actionId);
+                client.createRequest(HttpMethod.GET, href).withArg(QueryParameter.FOLLOW_LINKS, "members[id=%s].links[rel=details]", actionId);
         final RestfulResponse<DomainObjectRepresentation> restfulResponse = request.executeT();
 
         assertThat(restfulResponse.getStatus(), is(HttpStatusCode.OK));
         final DomainObjectRepresentation repr = restfulResponse.getEntity();
         
         JsonRepresentation actionLinkRepr = repr.getAction(actionId);
-        return actionLinkRepr.getRepresentation("details.value");
+        return actionLinkRepr.getRepresentation("links[rel=details].value");
     }
-
 
     private String givenHrefToService(String serviceId) throws JsonParseException, JsonMappingException, IOException {
         final DomainServiceResource resource = client.getDomainServiceResource();
         final Response response = resource.services();
         final ListRepresentation services = RestfulResponse.<ListRepresentation>ofT(response).getEntity();
 
-        return services.getRepresentation("values[key=%s]", serviceId).asLink().getHref();
+        return services.getRepresentation("values[id=%s]", serviceId).asLink().getHref();
     }
 
     private LinkRepresentation givenLinkToSimpleEntity(int num) throws JsonParseException, JsonMappingException, IOException, Exception {

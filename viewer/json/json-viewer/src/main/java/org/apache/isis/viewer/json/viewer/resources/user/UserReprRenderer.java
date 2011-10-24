@@ -45,7 +45,7 @@ public class UserReprRenderer extends ReprRendererAbstract<UserReprRenderer, Aut
 
     @Override
     public UserReprRenderer with(AuthenticationSession authenticationSession) {
-        representation.mapPut("username", authenticationSession.getUserName());
+        representation.mapPut("userName", authenticationSession.getUserName());
         JsonRepresentation roles = JsonRepresentation.newArray();
         for (String role : authenticationSession.getRoles()) {
             roles.arrayAdd(role);
@@ -58,7 +58,7 @@ public class UserReprRenderer extends ReprRendererAbstract<UserReprRenderer, Aut
         if(includesSelf) {
             withSelf("user");
         }
-        withExtensions();
+        getExtensions();
         return representation;
     }
 

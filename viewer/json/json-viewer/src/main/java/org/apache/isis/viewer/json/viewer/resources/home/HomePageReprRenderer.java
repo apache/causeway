@@ -80,7 +80,7 @@ public class HomePageReprRenderer extends ReprRendererAbstract<HomePageReprRende
     private void addLinkToSelf(JsonRepresentation representation) {
         final LinkBuilder linkBuilder = LinkBuilder.newBuilder(resourceContext, Rel.SELF, getRepresentationType(), "");
 
-        final LinkFollower linkFollower = getLinkFollower().follow("self");
+        final LinkFollower linkFollower = getLinkFollower().follow("links[rel=self]");
         if(linkFollower.isFollowing()) {
 
             final RendererFactory factory = RendererFactoryRegistry.instance.find(RepresentationType.HOME_PAGE);
@@ -95,7 +95,7 @@ public class HomePageReprRenderer extends ReprRendererAbstract<HomePageReprRende
     private void addLinkToCapabilities() {
         final LinkBuilder linkBuilder = LinkBuilder.newBuilder(getResourceContext(), Rel.CAPABILITIES, RepresentationType.CAPABILITIES, "capabilities");
         
-        final LinkFollower linkFollower = getLinkFollower().follow("capabilities");
+        final LinkFollower linkFollower = getLinkFollower().follow("links[rel=capabilities]");
         if(linkFollower.isFollowing()) {
 
             final RendererFactory factory = RendererFactoryRegistry.instance.find(RepresentationType.CAPABILITIES);
@@ -112,7 +112,7 @@ public class HomePageReprRenderer extends ReprRendererAbstract<HomePageReprRende
         final LinkBuilder linkBuilder = 
                 LinkBuilder.newBuilder(getResourceContext(), Rel.SERVICES, RepresentationType.LIST, "services");
         
-        final LinkFollower linkFollower = getLinkFollower().follow("services");
+        final LinkFollower linkFollower = getLinkFollower().follow("links[rel=services]");
         if(linkFollower.isFollowing()) {
             
             final List<ObjectAdapter> serviceAdapters = getResourceContext().getPersistenceSession().getServices();
@@ -134,7 +134,7 @@ public class HomePageReprRenderer extends ReprRendererAbstract<HomePageReprRende
         final LinkBuilder userLinkBuilder = 
                 LinkBuilder.newBuilder(getResourceContext(), Rel.USER, RepresentationType.USER, "user");
         
-        final LinkFollower linkFollower = getLinkFollower().follow("user");
+        final LinkFollower linkFollower = getLinkFollower().follow("links[rel=user]");
         if(linkFollower.isFollowing()) {
             final RendererFactory factory = RendererFactoryRegistry.instance.find(RepresentationType.USER);
             final UserReprRenderer renderer = 

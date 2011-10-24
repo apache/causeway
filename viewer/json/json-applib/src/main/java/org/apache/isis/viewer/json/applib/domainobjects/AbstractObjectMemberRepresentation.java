@@ -16,25 +16,32 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.json.viewer.resources.domainobjects;
+package org.apache.isis.viewer.json.applib.domainobjects;
 
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
-import org.apache.isis.viewer.json.viewer.ResourceContext;
-import org.apache.isis.viewer.json.viewer.representations.LinkBuilder;
-import org.apache.isis.viewer.json.viewer.representations.Rel;
+import org.apache.isis.viewer.json.applib.blocks.LinkRepresentation;
+import org.codehaus.jackson.JsonNode;
 
-public interface ObjectAdapterLinkTo {
 
-    ObjectAdapterLinkTo usingResourceContext(ResourceContext resourceContext);
+public abstract class AbstractObjectMemberRepresentation extends DomainRepresentation  {
+
+    public AbstractObjectMemberRepresentation(JsonNode jsonNode) {
+        super(jsonNode);
+    }
     
-    ObjectAdapterLinkTo with(ObjectAdapter objectAdapter);
+    public String getId() {
+        return getString("id");
+    }
 
-    ObjectAdapterLinkTo with(Rel rel);
+    public String getMemberType() {
+        return getString("memberType");
+    }
 
-    LinkBuilder builder();
+    public String getDisabledReason() {
+        return getString("disabledReason");
+    }
 
-    LinkBuilder linkToMember(Rel rel, MemberType memberType, ObjectMember objectMember, String... parts);
-
+    public LinkRepresentation getDetails() {
+        return getLinkWithRel("details");
+    }
 
 }

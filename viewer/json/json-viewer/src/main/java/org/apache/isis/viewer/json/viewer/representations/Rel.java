@@ -22,22 +22,36 @@ public enum Rel {
     // IANA registered
     SELF("self"),
     DESCRIBEDBY("describedby"),
+    UP("up"), 
+    HELP("help"), 
+    ICON("icon"), 
     
     // Restful Objects namespace
+    ICON16("icon16"),
+    ICON32("icon32"),
     OBJECT("object"), 
     SERVICE("service"), 
+    CHOICE("choice"), 
+    DEFAULT("default"), 
     DETAILS("details"), 
     MODIFY("modify"), 
     CLEAR("clear"), 
-    ADD_TO("addTo"),
-    REMOVE_FROM("removeFrom"), 
+    ADD_TO("addto"),
+    REMOVE_FROM("removefrom"), 
     INVOKE("invoke"), 
+    PERSIST("persist"), 
+    PROPERTY("property"), 
+    COLLECTION("collection"), 
+    ACTION("action"), 
+    ACTIONPARAM("actionparam"), 
+    RETURNTYPE("returntype"), 
+    ELEMENTTYPE("elementtype"), 
     CAPABILITIES("capabilities"), 
-    SERVICES("services"), 
     USER("user"),
+    SERVICES("services"), 
     
     // implementation specific
-    CONTRIBUTED_BY("contributedBy")
+    CONTRIBUTED_BY("contributedby")
     ;
     
     private final String name;
