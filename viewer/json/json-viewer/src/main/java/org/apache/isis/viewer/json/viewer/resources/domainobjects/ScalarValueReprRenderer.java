@@ -30,6 +30,8 @@ import org.apache.isis.viewer.json.viewer.representations.ReprRendererFactoryAbs
 
 public class ScalarValueReprRenderer extends ReprRendererAbstract<ScalarValueReprRenderer, ObjectAdapter> {
 
+    private final JsonValueEncoder jsonValueEncoder = new JsonValueEncoder();
+    
     public static class Factory extends ReprRendererFactoryAbstract {
         public Factory() {
             super(RepresentationType.SCALAR_VALUE);
@@ -50,8 +52,9 @@ public class ScalarValueReprRenderer extends ReprRendererAbstract<ScalarValueRep
         if(facet == null) {
             throw JsonApplicationException.create(HttpStatusCode.INTERNAL_SERVER_ERROR, "Not an (encodable) value", objectAdapter.titleString());
         }
-        final String encodedString = facet.toEncodedString(objectAdapter);
-        representation.mapPut("value", encodedString);
+        final Object value = jsonValueEncoder.asObject(objectAdapter);
+        
+        representation.mapPut("value", value);
         return this;
     }
 

@@ -27,7 +27,7 @@ import org.apache.isis.viewer.json.applib.JsonRepresentation.LinksToSelf;
 import org.apache.isis.viewer.json.applib.RestfulClient;
 import org.apache.isis.viewer.json.applib.RestfulResponse;
 import org.apache.isis.viewer.json.applib.RestfulResponse.HttpStatusCode;
-import org.apache.isis.viewer.json.applib.blocks.Link;
+import org.apache.isis.viewer.json.applib.blocks.LinkRepresentation;
 import org.apache.isis.viewer.json.applib.blocks.Method;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
@@ -84,8 +84,8 @@ public class RepresentationMatchers {
         };
     }
 
-    public static Matcher<Link> isLink(final Method method) {
-        return new TypeSafeMatcher<Link>() {
+    public static Matcher<LinkRepresentation> isLink(final Method method) {
+        return new TypeSafeMatcher<LinkRepresentation>() {
 
             @Override
             public void describeTo(Description description) {
@@ -93,7 +93,7 @@ public class RepresentationMatchers {
             }
 
             @Override
-            public boolean matchesSafely(Link item) {
+            public boolean matchesSafely(LinkRepresentation item) {
                 return item != null && item.getMethod() == method;
             }
         };
@@ -256,7 +256,7 @@ public class RepresentationMatchers {
                     if(linkRepr == null) {
                         return false;
                     }
-                    Link link = linkRepr.asLink();
+                    LinkRepresentation link = linkRepr.asLink();
                     if(rel != null && !rel.equals(link.getRel())) {
                         return false;
                     }

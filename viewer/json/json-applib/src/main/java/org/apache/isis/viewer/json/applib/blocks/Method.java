@@ -18,7 +18,6 @@
  */
 package org.apache.isis.viewer.json.applib.blocks;
 
-import java.util.Arrays;
 import java.util.Map;
 
 import javax.ws.rs.core.MediaType;

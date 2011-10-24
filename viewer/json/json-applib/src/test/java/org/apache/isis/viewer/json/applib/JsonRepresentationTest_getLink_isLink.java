@@ -26,7 +26,7 @@ import static org.junit.Assert.fail;
 
 import java.io.IOException;
 
-import org.apache.isis.viewer.json.applib.blocks.Link;
+import org.apache.isis.viewer.json.applib.blocks.LinkRepresentation;
 import org.apache.isis.viewer.json.applib.blocks.Method;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
@@ -35,12 +35,12 @@ import org.junit.Test;
 
 public class JsonRepresentationTest_getLink_isLink {
 
-    private Link link;
+    private LinkRepresentation link;
     private JsonRepresentation jsonRepresentation;
 
     @Before
     public void setUp() throws Exception {
-        link = new Link().withHref("http://foo/bar").withMethod(Method.GET);
+        link = new LinkRepresentation().withHref("http://foo/bar").withMethod(Method.GET);
         jsonRepresentation = new JsonRepresentation(readJson("map.json"));
     }
 

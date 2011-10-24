@@ -22,7 +22,7 @@ import java.net.URI;
 
 import javax.ws.rs.core.MediaType;
 
-import org.apache.isis.viewer.json.applib.blocks.Link;
+import org.apache.isis.viewer.json.applib.blocks.LinkRepresentation;
 import org.apache.isis.viewer.json.applib.blocks.Method;
 import org.jboss.resteasy.client.ClientExecutor;
 import org.jboss.resteasy.client.ClientRequest;
@@ -65,7 +65,7 @@ public class RestfulClientTest_follow {
     public void follow_get() throws Exception {
         // given
         JsonRepresentation jsonRepresentation = new JsonRepresentation(JsonUtils.readJson("map.json"));
-        Link getLink = jsonRepresentation.getLink("aLink");
+        LinkRepresentation getLink = jsonRepresentation.getLink("aLink");
 
         // when
         context.checking(new Expectations() {
