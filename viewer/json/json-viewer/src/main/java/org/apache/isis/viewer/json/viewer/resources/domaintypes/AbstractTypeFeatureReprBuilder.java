@@ -28,11 +28,14 @@ import org.apache.isis.viewer.json.viewer.representations.Rel;
 import org.apache.isis.viewer.json.viewer.representations.ReprRendererAbstract;
 import org.apache.isis.viewer.json.viewer.resources.domainobjects.MemberType;
 
+import com.google.common.base.Strings;
+
 public abstract class AbstractTypeFeatureReprBuilder<R extends ReprRendererAbstract<R, SpecAndFeature<T>>, T extends ObjectFeature> extends ReprRendererAbstract<R, SpecAndFeature<T>> {
 
     protected ObjectSpecification objectSpecification;
-    protected MemberType memberType;
     protected T objectFeature;
+
+    protected ObjectSpecification parentSpec;
 
     public AbstractTypeFeatureReprBuilder(ResourceContext resourceContext, LinkFollower linkFollower, RepresentationType representationType, JsonRepresentation representation) {
         super(resourceContext, linkFollower, representationType, representation);
@@ -46,56 +49,64 @@ public abstract class AbstractTypeFeatureReprBuilder<R extends ReprRendererAbstr
         return objectFeature;
     }
 
-    /**
-     * null if the feature is an object action param.
-     * @return
-     */
-    public MemberType getMemberType() {
-        return memberType;
-    }
-    
     @Override
     public R with(SpecAndFeature<T> specAndFeature) {
         objectSpecification = specAndFeature.getObjectSpecification();
         objectFeature = specAndFeature.getObjectFeature();
-        memberType = MemberType.determineFrom(objectFeature);
         
-        // done eagerly so can use as criteria for x-ro-follow-links
-        putIdIfMember();
-        putMemberTypeIfMember();
-
         return cast(this);
     }
 
-    protected void putIdIfMember() {
-        if(memberType == null) {
-            return;
-        } 
-        ObjectMember objectMember = (ObjectMember) objectFeature;
-        representation.mapPut(memberType.getJsProp(), objectMember.getId());
+    public R withParent(ObjectSpecification parentSpec) {
+        this.parentSpec = parentSpec;
+        return cast(this);
     }
 
-    protected void putMemberTypeIfMember() {
-        if(memberType == null) {
-            return;
-        } 
-        representation.mapPut("memberType", memberType.getName());
+    public JsonRepresentation render() {
+        
+        addLinkSelfIfRequired();
+        addLinkToParentIfProvided();
+        
+        addLinksSpecificToFeature();
+        putExtensionsSpecificToFeature();
+
+        return representation;
     }
 
     
-    protected void includeSelfIfRequired() {
-        if(!includesSelf) {
-            return;
-        } 
-        
-        final ObjectMember objectMember = (ObjectMember)getObjectFeature();
-        final LinkBuilder linkBuilder = LinkBuilder.newBuilder(
-                getResourceContext(), Rel.SELF, getRepresentationType(), 
-                "domainTypes/%s/%s/%s", 
-                getObjectSpecification().getFullIdentifier(), 
-                getMemberType().getUrlPart(), 
-                objectMember.getId());
-        getLinks().arrayAdd(linkBuilder.build());
+    /**
+     * Mandatory hook method.
+     */
+    protected abstract void addLinkSelfIfRequired();
+
+    /**
+     * Mandatory hook method.
+     */
+    protected abstract void addLinkToParentIfProvided();
+
+    /**
+     * Optional hook method.
+     */
+    protected void addLinksSpecificToFeature() {
     }
+
+    /**
+     * Mandatory hook method.
+     */
+    protected abstract void putExtensionsSpecificToFeature();
+
+    
+    protected void putExtensionsName() {
+        String friendlyName = getObjectFeature().getName();
+        getExtensions().mapPut("friendlyName", friendlyName);
+    }
+
+    protected void putExtensionsDescriptionIfAvailable() {
+        String description = getObjectFeature().getDescription();
+        if(!Strings.isNullOrEmpty(description)) {
+            getExtensions().mapPut("description", description);
+        }
+    }
+
 
 }

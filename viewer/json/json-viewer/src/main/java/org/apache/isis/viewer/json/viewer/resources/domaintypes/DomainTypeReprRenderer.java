@@ -16,7 +16,15 @@
  */
 package org.apache.isis.viewer.json.viewer.resources.domaintypes;
 
+import java.util.List;
+
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.metamodel.spec.feature.ObjectActionContainer.Contributed;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
+import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
+import org.apache.isis.core.metamodel.spec.feature.OneToOneActionParameter;
+import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.applib.RepresentationType;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
@@ -26,6 +34,8 @@ import org.apache.isis.viewer.json.viewer.representations.Rel;
 import org.apache.isis.viewer.json.viewer.representations.ReprRenderer;
 import org.apache.isis.viewer.json.viewer.representations.ReprRendererAbstract;
 import org.apache.isis.viewer.json.viewer.representations.ReprRendererFactoryAbstract;
+
+import com.google.common.base.Strings;
 
 public class DomainTypeReprRenderer extends ReprRendererAbstract<DomainTypeReprRenderer, ObjectSpecification> {
 
@@ -63,16 +73,58 @@ public class DomainTypeReprRenderer extends ReprRendererAbstract<DomainTypeReprR
 
         // self
         if(includesSelf) {
-            representation.mapPut("self", newLinkToBuilder(getResourceContext(), Rel.SELF, objectSpecification).build());
+            final JsonRepresentation selfLink = newLinkToBuilder(getResourceContext(), Rel.SELF, objectSpecification).build();
+            getLinks().arrayAdd(selfLink);
         }
         
-        
-        
-        // links and extensions
-        representation.mapPut("links", JsonRepresentation.newArray());
-        representation.mapPut("extensions", JsonRepresentation.newMap());
+        if(objectSpecification != null) {
+            representation.mapPut("canonicalName", objectSpecification.getFullIdentifier());
+            addMembers();
+
+            putExtensionsNames();
+            putExtensionsDescriptionIfAvailable();
+        }
 
         return representation;
+    }
+
+    private void addMembers() {
+        final JsonRepresentation membersList = JsonRepresentation.newArray();
+        representation.mapPut("members", membersList);
+        final List<ObjectAssociation> associations = objectSpecification.getAssociations();
+        for (ObjectAssociation association : associations) {
+            if(association.isOneToOneAssociation()) {
+                OneToOneAssociation property = (OneToOneAssociation) association;
+                final LinkBuilder linkBuilder = TypePropertyReprRenderer.newLinkToBuilder(getResourceContext(), Rel.PROPERTY, objectSpecification, property);
+                membersList.arrayAdd(linkBuilder.build());
+            } else if(association.isOneToManyAssociation()) {
+                OneToManyAssociation collection = (OneToManyAssociation) association;
+                final LinkBuilder linkBuilder = TypeCollectionReprRenderer.newLinkToBuilder(getResourceContext(), Rel.PROPERTY, objectSpecification, collection);
+                membersList.arrayAdd(linkBuilder.build());
+            }
+        }
+        final List<ObjectAction> actions = objectSpecification.getObjectActions(Contributed.INCLUDED);
+        for (ObjectAction action : actions) {
+            final LinkBuilder linkBuilder = TypeActionReprRenderer.newLinkToBuilder(getResourceContext(), Rel.ACTION, objectSpecification, action);
+            membersList.arrayAdd(linkBuilder.build());
+        }
+        
+    }
+
+    
+    protected void putExtensionsNames() {
+        String singularName = objectSpecification.getSingularName();
+        getExtensions().mapPut("friendlyName", singularName);
+
+        String pluralName = objectSpecification.getPluralName();
+        getExtensions().mapPut("singularName", pluralName);
+    }
+
+    protected void putExtensionsDescriptionIfAvailable() {
+        String description = objectSpecification.getDescription();
+        if(!Strings.isNullOrEmpty(description)) {
+            getExtensions().mapPut("description", description);
+        }
     }
 
 }

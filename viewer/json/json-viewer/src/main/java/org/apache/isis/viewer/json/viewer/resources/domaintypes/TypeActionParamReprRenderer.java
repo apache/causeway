@@ -30,6 +30,9 @@ import org.apache.isis.viewer.json.viewer.representations.ReprRendererFactoryAbs
 
 public class TypeActionParamReprRenderer extends AbstractTypeFeatureReprBuilder<TypeActionParamReprRenderer, ObjectActionParameter> {
 
+    private ObjectAction parentAction;
+    private ObjectSpecification parentSpec;
+
     public static class Factory extends ReprRendererFactoryAbstract {
 
         public Factory() {
@@ -55,23 +58,30 @@ public class TypeActionParamReprRenderer extends AbstractTypeFeatureReprBuilder<
         super(resourceContext, linkFollower, representationType, representation);
     }
 
-
-    protected void includeSelfIfRequired() {
+    @Override
+    protected void addLinkSelfIfRequired() {
+        if(!includesSelf) {
+            return;
+        }
+        getLinks().arrayAdd( 
+                newLinkToBuilder(getResourceContext(), Rel.SELF, getObjectSpecification(), getObjectFeature()).build());
     }
 
-    public JsonRepresentation render() {
-
-        // self
-        if(includesSelf) {
-            representation.mapPut("self", 
-                newLinkToBuilder(getResourceContext(), Rel.SELF, getObjectSpecification(), getObjectFeature()).build());
+    @Override
+    protected void addLinkToParentIfProvided() {
+        if(parentSpec == null || parentAction == null) {
+            return;
         }
         
-        // links and extensions
-        representation.mapPut("links", JsonRepresentation.newArray());
-        representation.mapPut("extensions", JsonRepresentation.newMap());
+        final LinkBuilder parentLinkBuilder = 
+                TypeActionReprRenderer.newLinkToBuilder(resourceContext, Rel.UP, parentSpec, parentAction);
+        getLinks().arrayAdd(parentLinkBuilder.build());
+    }
 
-        return representation;
+    @Override
+    protected void putExtensionsSpecificToFeature() {
+        putExtensionsName();
+        putExtensionsDescriptionIfAvailable();        
     }
 
 

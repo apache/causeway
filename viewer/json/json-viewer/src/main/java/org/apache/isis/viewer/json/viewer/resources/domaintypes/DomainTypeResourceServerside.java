@@ -97,12 +97,12 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
         RepresentationType representationType = RepresentationType.TYPE_PROPERTY;
         init(representationType);
 
-        final ObjectSpecification objectSpec = getSpecificationLoader().loadSpecification(domainType);
-        if(objectSpec == null) {
+        final ObjectSpecification parentSpec = getSpecificationLoader().loadSpecification(domainType);
+        if(parentSpec == null) {
             throw JsonApplicationException.create(HttpStatusCode.NOT_FOUND);
         }
         
-        final ObjectMember objectMember = objectSpec.getAssociation(propertyId);
+        final ObjectMember objectMember = parentSpec.getAssociation(propertyId);
         if(objectMember == null || objectMember.isOneToManyAssociation()) {
             throw JsonApplicationException.create(HttpStatusCode.NOT_FOUND);
         }
@@ -113,7 +113,7 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
         
         final TypePropertyReprRenderer renderer = 
                 (TypePropertyReprRenderer) rendererFactory.newRenderer(getResourceContext(), null, JsonRepresentation.newMap());
-        renderer.with(new SpecAndProperty(objectSpec, property)).includesSelf();
+        renderer.with(new SpecAndProperty(parentSpec, property)).includesSelf().withParent(parentSpec);
 
         return responseOfOk(renderer, Caching.ONE_DAY).build();
     }
@@ -127,12 +127,12 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
         RepresentationType representationType = RepresentationType.TYPE_COLLECTION;
         init(representationType);
 
-        final ObjectSpecification objectSpec = getSpecificationLoader().loadSpecification(domainType);
-        if(objectSpec == null) {
+        final ObjectSpecification parentSpec = getSpecificationLoader().loadSpecification(domainType);
+        if(parentSpec == null) {
             throw JsonApplicationException.create(HttpStatusCode.NOT_FOUND);
         }
         
-        final ObjectMember objectMember = objectSpec.getAssociation(collectionId);
+        final ObjectMember objectMember = parentSpec.getAssociation(collectionId);
         if(objectMember == null || objectMember.isOneToOneAssociation()) {
             throw JsonApplicationException.create(HttpStatusCode.NOT_FOUND);
         }
@@ -143,7 +143,7 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
         
         final TypeCollectionReprRenderer renderer = 
                 (TypeCollectionReprRenderer) rendererFactory.newRenderer(getResourceContext(), null, JsonRepresentation.newMap());
-        renderer.with(new SpecAndCollection(objectSpec, collection)).includesSelf();
+        renderer.with(new SpecAndCollection(parentSpec, collection)).includesSelf().withParent(parentSpec);
 
         return responseOfOk(renderer, Caching.ONE_DAY).build();
     }
@@ -157,12 +157,12 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
         RepresentationType representationType = RepresentationType.TYPE_ACTION;
         init(representationType);
 
-        final ObjectSpecification objectSpec = getSpecificationLoader().loadSpecification(domainType);
-        if(objectSpec == null) {
+        final ObjectSpecification parentSpec = getSpecificationLoader().loadSpecification(domainType);
+        if(parentSpec == null) {
             throw JsonApplicationException.create(HttpStatusCode.NOT_FOUND);
         }
         
-        final ObjectMember objectMember = objectSpec.getObjectAction(actionId);
+        final ObjectMember objectMember = parentSpec.getObjectAction(actionId);
         if(objectMember == null) {
             throw JsonApplicationException.create(HttpStatusCode.NOT_FOUND);
         }
@@ -173,7 +173,7 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
         
         final TypeActionReprRenderer renderer = 
                 (TypeActionReprRenderer) rendererFactory.newRenderer(getResourceContext(), null, JsonRepresentation.newMap());
-        renderer.with(new SpecAndAction(objectSpec, action)).includesSelf();
+        renderer.with(new SpecAndAction(parentSpec, action)).includesSelf().withParent(parentSpec);
 
         return responseOfOk(renderer, Caching.ONE_DAY).build();
     }
@@ -188,25 +188,27 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
         RepresentationType representationType = RepresentationType.TYPE_ACTION_PARAMETER;
         init(representationType);
 
-        final ObjectSpecification objectSpec = getSpecificationLoader().loadSpecification(domainType);
-        if(objectSpec == null) {
+        final ObjectSpecification parentSpec = getSpecificationLoader().loadSpecification(domainType);
+        if(parentSpec == null) {
             throw JsonApplicationException.create(HttpStatusCode.NOT_FOUND);
         }
         
-        final ObjectMember objectMember = objectSpec.getObjectAction(actionId);
+        final ObjectMember objectMember = parentSpec.getObjectAction(actionId);
         if(objectMember == null) {
             throw JsonApplicationException.create(HttpStatusCode.NOT_FOUND);
         }
-        ObjectAction action = (ObjectAction) objectMember;
+        ObjectAction parentAction = (ObjectAction) objectMember;
         
-        ObjectActionParameter actionParam = action.getParameter(paramName);
+        ObjectActionParameter actionParam = parentAction.getParameter(paramName);
 
         final RendererFactory rendererFactory = 
                 rendererFactoryRegistry.find(representationType);
         
         final TypeActionParamReprRenderer renderer = 
                 (TypeActionParamReprRenderer) rendererFactory.newRenderer(getResourceContext(), null, JsonRepresentation.newMap());
-        renderer.with(new SpecAndActionParam(objectSpec, actionParam)).includesSelf();
+        renderer.with(new SpecAndActionParam(parentSpec, actionParam))
+                .includesSelf()
+                .withParent(parentSpec);
 
         return responseOfOk(renderer, Caching.ONE_DAY).build();
     }

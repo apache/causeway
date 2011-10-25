@@ -22,8 +22,14 @@ package org.apache.isis.core.metamodel.specloader.specimpl;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
-import com.google.common.collect.Lists;
-
+import org.apache.isis.applib.filter.Filter;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facets.TypedHolder;
+import org.apache.isis.core.metamodel.facets.named.NamedFacet;
+import org.apache.isis.core.metamodel.spec.Instance;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JMock;
@@ -33,14 +39,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import org.apache.isis.applib.filter.Filter;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.TypedHolder;
-import org.apache.isis.core.metamodel.facets.named.NamedFacet;
-import org.apache.isis.core.metamodel.spec.Instance;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
+import com.google.common.collect.Lists;
 
 @RunWith(JMock.class)
 public class ObjectActionParameterAbstractTest_getName {
@@ -185,7 +184,8 @@ public class ObjectActionParameterAbstractTest_getName {
             }
         });
 
-        assertThat(objectActionParameter.getName(), is("string1"));
+        assertThat(objectActionParameter.getName(), is("string2"));
     }
+
 
 }
