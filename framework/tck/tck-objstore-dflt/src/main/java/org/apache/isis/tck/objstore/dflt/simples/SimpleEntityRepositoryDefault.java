@@ -21,16 +21,14 @@ package org.apache.isis.tck.objstore.dflt.simples;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.List;
 
-import org.apache.isis.tck.dom.AbstractEntityRepository;
+import org.apache.isis.applib.AbstractFactoryAndRepository;
+import org.apache.isis.applib.annotation.QueryOnly;
 import org.apache.isis.tck.dom.simples.SimpleEntity;
 import org.apache.isis.tck.dom.simples.SimpleEntityRepository;
 
-public class SimpleEntityRepositoryDefault extends AbstractEntityRepository<SimpleEntity> implements SimpleEntityRepository {
-
-    public SimpleEntityRepositoryDefault() {
-        super(SimpleEntity.class);
-    }
+public class SimpleEntityRepositoryDefault extends AbstractFactoryAndRepository implements SimpleEntityRepository {
 
     @Override
     public String getId() {
@@ -91,5 +89,9 @@ public class SimpleEntityRepositoryDefault extends AbstractEntityRepository<Simp
         return object;
     }
 
+    @QueryOnly
+    public List<SimpleEntity> list() {
+        return allInstances(SimpleEntity.class);
+    }
 
 }

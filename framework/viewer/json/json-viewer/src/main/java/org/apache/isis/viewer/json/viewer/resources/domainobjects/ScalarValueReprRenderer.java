@@ -18,19 +18,24 @@ package org.apache.isis.viewer.json.viewer.resources.domainobjects;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.applib.RepresentationType;
 import org.apache.isis.viewer.json.applib.RestfulResponse.HttpStatusCode;
 import org.apache.isis.viewer.json.viewer.JsonApplicationException;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
+import org.apache.isis.viewer.json.viewer.representations.LinkBuilder;
 import org.apache.isis.viewer.json.viewer.representations.LinkFollower;
+import org.apache.isis.viewer.json.viewer.representations.Rel;
 import org.apache.isis.viewer.json.viewer.representations.ReprRenderer;
 import org.apache.isis.viewer.json.viewer.representations.ReprRendererAbstract;
 import org.apache.isis.viewer.json.viewer.representations.ReprRendererFactoryAbstract;
+import org.apache.isis.viewer.json.viewer.resources.domaintypes.DomainTypeReprRenderer;
 
 public class ScalarValueReprRenderer extends ReprRendererAbstract<ScalarValueReprRenderer, ObjectAdapter> {
 
     private final JsonValueEncoder jsonValueEncoder = new JsonValueEncoder();
+    private ObjectSpecification returnType;
     
     public static class Factory extends ReprRendererFactoryAbstract {
         public Factory() {
@@ -61,28 +66,22 @@ public class ScalarValueReprRenderer extends ReprRendererAbstract<ScalarValueRep
     @Override
     public JsonRepresentation render() {
  
-        JsonRepresentation extensions = getExtensions();
-        putExtensionsIsisProprietary(extensions);
+        addLinkToReturnType();
         
-        JsonRepresentation links = getLinks();
-        addLinksFormalDomainModel(links, resourceContext);
-        addLinksIsisProprietary(links, resourceContext);
+        getExtensions();
 
         return representation;
     }
 
-    /////////////////////////////////////////////////////
-    // extensions and links
-    /////////////////////////////////////////////////////
-    
-    private void putExtensionsIsisProprietary(JsonRepresentation extensions) {
+    public ScalarValueReprRenderer withReturnType(ObjectSpecification returnType) {
+        this.returnType = returnType;
+        return this;
     }
 
-    private void addLinksFormalDomainModel(JsonRepresentation links, ResourceContext resourceContext) {
+    private void addLinkToReturnType() {
+        addLink(Rel.RETURN_TYPE, returnType);
     }
 
-    private void addLinksIsisProprietary(JsonRepresentation links, ResourceContext resourceContext) {
-    }
 
     
 }
