@@ -73,7 +73,8 @@ public interface ObjectActionParameter extends ObjectFeature, CurrentHolder {
      * a name from this, eg "First Name" becomes "firstName".
      * <li>Otherwise we use the type, eg "string".
      * <li>If there is more than one parameter
-     * of the same type, then we use a numeric suffix (eg "string1", "string2").
+     * of the same type, then we use a numeric suffix (eg "string1", "string2").  Wrappers
+     * and primitives are considered to be the same type.
      * </ul>
      */
     String getName();

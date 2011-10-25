@@ -27,7 +27,7 @@ import org.apache.isis.viewer.json.viewer.representations.Rel;
 import org.apache.isis.viewer.json.viewer.representations.ReprRenderer;
 import org.apache.isis.viewer.json.viewer.representations.ReprRendererFactoryAbstract;
 
-public class TypePropertyReprRenderer extends AbstractTypeFeatureReprBuilder<TypePropertyReprRenderer, OneToOneAssociation> {
+public class TypePropertyReprRenderer extends AbstractTypeMemberReprBuilder<TypePropertyReprRenderer, OneToOneAssociation> {
 
     public static class Factory extends ReprRendererFactoryAbstract {
 
@@ -52,16 +52,26 @@ public class TypePropertyReprRenderer extends AbstractTypeFeatureReprBuilder<Typ
         super(resourceContext, linkFollower, representationType, representation);
     }
 
-    public JsonRepresentation render() {
-        
-        // self
-        includeSelfIfRequired();
+    @Override
+    protected void addLinksSpecificToFeature() {
+        addLinkToReturnTypeIfAny();
+    }
 
-        // links and extensions
-        representation.mapPut("links", JsonRepresentation.newArray());
-        representation.mapPut("extensions", JsonRepresentation.newMap());
+    private void addLinkToReturnTypeIfAny() {
+        final ObjectSpecification returnType = getObjectFeature().getSpecification();
+        if(returnType == null) {
+            return;
+        }
+        final LinkBuilder linkBuilder = 
+            DomainTypeReprRenderer.newLinkToBuilder(getResourceContext(), Rel.RETURN_TYPE, returnType);
+        getLinks().arrayAdd(linkBuilder.build());
+    }
 
-        return representation;
+
+    @Override
+    protected void putExtensionsSpecificToFeature() {
+        putExtensionsName();
+        putExtensionsDescriptionIfAvailable();
     }
 
 

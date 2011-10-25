@@ -116,14 +116,18 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
 
             @Override
             public boolean accept(ObjectActionParameter t) {
-                return t.getSpecification() == getSpecification();
+                return equalsShortIdentifier(t.getSpecification(), getSpecification());
+            }
+
+            protected boolean equalsShortIdentifier(final ObjectSpecification spec1, final ObjectSpecification spec2) {
+                return spec1.getShortIdentifier().toLowerCase().equals(spec2.getShortIdentifier().toLowerCase());
             }
         });
         if (parameters.size() == 1) {
             return StringUtils.camelLowerFirst(name);
         }
         int indexOf = parameters.indexOf(this);
-        return StringUtils.camel(name + indexOf);
+        return StringUtils.camelLowerFirst(name + (indexOf+1));
     }
 
     @Override
