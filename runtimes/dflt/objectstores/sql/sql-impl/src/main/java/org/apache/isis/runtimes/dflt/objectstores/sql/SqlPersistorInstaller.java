@@ -47,6 +47,9 @@ public class SqlPersistorInstaller extends ObjectStorePersistenceMechanismInstal
         if (objectStore == null) {
             final FieldMappingLookup fieldMappingLookup = new FieldMappingLookup();
             final JdbcFieldMappingFactoryInstaller installer = new JdbcFieldMappingFactoryInstaller();
+
+            Defaults.initialise(SqlObjectStore.BASE_NAME);
+
             installer.load(fieldMappingLookup);
             // fieldMappingLookup.setValueMappingFactory(new
             // JdbcFieldMappingFactoryInstaller());
