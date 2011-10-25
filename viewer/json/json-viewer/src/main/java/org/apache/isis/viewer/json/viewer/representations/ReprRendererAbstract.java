@@ -21,12 +21,14 @@ package org.apache.isis.viewer.json.viewer.representations;
 import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.oid.stringable.OidStringifier;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.OidGenerator;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.applib.RepresentationType;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
+import org.apache.isis.viewer.json.viewer.resources.domaintypes.DomainTypeReprRenderer;
 
 public abstract class ReprRendererAbstract<R extends ReprRendererAbstract<R, T>, T> implements ReprRenderer<R, T> {
 
@@ -90,6 +92,14 @@ public abstract class ReprRendererAbstract<R extends ReprRendererAbstract<R, T>,
             representation.mapPut("links", links);
         }
         return links;
+    }
+
+    protected void addLink(final Rel rel, final ObjectSpecification objectSpec) {
+        if(objectSpec == null) {
+            return;
+        }
+        LinkBuilder linkBuilder = DomainTypeReprRenderer.newLinkToBuilder(getResourceContext(), rel, objectSpec);
+        getLinks().arrayAdd(linkBuilder.build());
     }
 
     /**

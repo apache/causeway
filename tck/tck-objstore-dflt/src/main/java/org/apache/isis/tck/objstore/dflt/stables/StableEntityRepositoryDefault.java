@@ -19,15 +19,14 @@
 
 package org.apache.isis.tck.objstore.dflt.stables;
 
-import org.apache.isis.tck.dom.AbstractEntityRepository;
+import java.util.List;
+
+import org.apache.isis.applib.AbstractFactoryAndRepository;
+import org.apache.isis.applib.annotation.QueryOnly;
 import org.apache.isis.tck.dom.stables.StableEntity;
 import org.apache.isis.tck.dom.stables.StableEntityRepository;
 
-public class StableEntityRepositoryDefault extends AbstractEntityRepository<StableEntity> implements StableEntityRepository {
-
-    public StableEntityRepositoryDefault() {
-        super(StableEntity.class);
-    }
+public class StableEntityRepositoryDefault extends AbstractFactoryAndRepository implements StableEntityRepository {
 
     @Override
     public String getId() {
@@ -46,6 +45,10 @@ public class StableEntityRepositoryDefault extends AbstractEntityRepository<Stab
         getContainer().persist(entity);
         return entity;
     }
-    
+
+    @QueryOnly
+    public List<StableEntity> list() {
+        return allInstances(StableEntity.class);
+    }
 
 }

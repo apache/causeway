@@ -32,6 +32,7 @@ import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
+import org.apache.isis.core.metamodel.facets.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
@@ -244,12 +245,13 @@ public class DomainResourceHelper {
         if (collectionFacet != null) {
             representation = representationWithSelfFor(RepresentationType.LIST, objectAdapter, action, arguments);
             
-            final Collection<ObjectAdapter> collectionAdapters = collectionFacet
-                    .collection(returnedAdapter);
+            final Collection<ObjectAdapter> collectionAdapters = collectionFacet.collection(returnedAdapter);
 
             final RendererFactory factory = rendererFactoryRegistry.find(RepresentationType.LIST);
             final ListReprRenderer renderer = (ListReprRenderer) factory.newRenderer(resourceContext, null, representation);
             renderer.with(collectionAdapters);
+            renderer.withReturnType(action.getReturnType());
+            renderer.withElementType(returnedAdapter.getElementSpecification());
             
             return ResourceAbstract.responseOfOk(renderer, Caching.NONE).build();
         }
@@ -263,6 +265,7 @@ public class DomainResourceHelper {
 
             ScalarValueReprRenderer renderer = (ScalarValueReprRenderer) factory.newRenderer(resourceContext, null, representation);
             renderer.with(returnedAdapter);
+            renderer.withReturnType(action.getReturnType());
             return ResourceAbstract.responseOfOk(renderer, Caching.NONE).build();
         }
 

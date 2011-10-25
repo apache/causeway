@@ -19,27 +19,30 @@
 
 package org.apache.isis.tck.objstore.dflt.scalars;
 
-import org.apache.isis.tck.dom.AbstractEntityRepository;
+import java.util.List;
+
+import org.apache.isis.applib.AbstractFactoryAndRepository;
+import org.apache.isis.applib.annotation.QueryOnly;
 import org.apache.isis.tck.dom.scalars.JdkValuedEntity;
 import org.apache.isis.tck.dom.scalars.JdkValuedEntityRepository;
 
-public class JdkValuedEntityRepositoryDefault extends AbstractEntityRepository<JdkValuedEntity> implements JdkValuedEntityRepository {
-
-    public JdkValuedEntityRepositoryDefault() {
-        super(JdkValuedEntity.class);
-    }
+public class JdkValuedEntityRepositoryDefault extends AbstractFactoryAndRepository implements JdkValuedEntityRepository {
 
     @Override
     public String getId() {
         return "jdkValuedEntities";
     }
 
-    /**
-     * Required otherwise return type is erased
-     */
-    @Override
-    public JdkValuedEntity newEntity() {
-        return super.newEntity();
+    @QueryOnly
+    public List<JdkValuedEntity> list() {
+        return allInstances(JdkValuedEntity.class);
     }
+
+    public JdkValuedEntity newEntity() {
+        JdkValuedEntity entity = newTransientInstance(JdkValuedEntity.class);
+        persist(entity);
+        return entity;
+    }
+
 
 }

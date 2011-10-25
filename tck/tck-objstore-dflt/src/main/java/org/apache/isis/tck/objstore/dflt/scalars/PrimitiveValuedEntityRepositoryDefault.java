@@ -19,27 +19,30 @@
 
 package org.apache.isis.tck.objstore.dflt.scalars;
 
-import org.apache.isis.tck.dom.AbstractEntityRepository;
+import java.util.List;
+
+import org.apache.isis.applib.AbstractFactoryAndRepository;
+import org.apache.isis.applib.annotation.QueryOnly;
 import org.apache.isis.tck.dom.scalars.PrimitiveValuedEntity;
 import org.apache.isis.tck.dom.scalars.PrimitiveValuedEntityRepository;
 
-public class PrimitiveValuedEntityRepositoryDefault extends AbstractEntityRepository<PrimitiveValuedEntity> implements PrimitiveValuedEntityRepository {
+public class PrimitiveValuedEntityRepositoryDefault extends AbstractFactoryAndRepository implements PrimitiveValuedEntityRepository {
 
-    public PrimitiveValuedEntityRepositoryDefault() {
-        super(PrimitiveValuedEntity.class);
-    }
-    
     @Override
     public String getId() {
         return "primitiveValuedEntities";
     }
 
-    /**
-     * Required otherwise return type is erased
-     */
-    @Override
-    public PrimitiveValuedEntity newEntity() {
-        return super.newEntity();
+    @QueryOnly
+    public List<PrimitiveValuedEntity> list() {
+        return allInstances(PrimitiveValuedEntity.class);
     }
+
+    public PrimitiveValuedEntity newEntity() {
+        PrimitiveValuedEntity entity = newTransientInstance(PrimitiveValuedEntity.class);
+        persist(entity);
+        return entity;
+    }
+
 
 }

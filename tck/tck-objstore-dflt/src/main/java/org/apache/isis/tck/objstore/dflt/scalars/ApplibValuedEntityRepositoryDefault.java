@@ -19,27 +19,28 @@
 
 package org.apache.isis.tck.objstore.dflt.scalars;
 
-import org.apache.isis.tck.dom.AbstractEntityRepository;
+import java.util.List;
+
+import org.apache.isis.applib.AbstractFactoryAndRepository;
+import org.apache.isis.applib.annotation.QueryOnly;
 import org.apache.isis.tck.dom.scalars.ApplibValuedEntity;
 import org.apache.isis.tck.dom.scalars.ApplibValuedEntityRepository;
 
-public class ApplibValuedEntityRepositoryDefault extends AbstractEntityRepository<ApplibValuedEntity> implements ApplibValuedEntityRepository {
+public class ApplibValuedEntityRepositoryDefault extends AbstractFactoryAndRepository implements ApplibValuedEntityRepository {
 
-    public ApplibValuedEntityRepositoryDefault() {
-        super(ApplibValuedEntity.class);
-    }
-
-    @Override
     public String getId() {
         return "applibValuedEntities";
     }
-    
-    /**
-     * Required otherwise return type is erased
-     */
-    @Override
-    public ApplibValuedEntity newEntity() {
-        return super.newEntity();
+
+    @QueryOnly
+    public List<ApplibValuedEntity> list() {
+        return allInstances(ApplibValuedEntity.class);
     }
 
+    public ApplibValuedEntity newEntity() {
+        ApplibValuedEntity entity = newTransientInstance(ApplibValuedEntity.class);
+        persist(entity);
+        return entity;
+    }
+    
 }

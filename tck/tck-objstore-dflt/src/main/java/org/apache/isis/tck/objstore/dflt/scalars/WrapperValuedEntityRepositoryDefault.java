@@ -19,27 +19,30 @@
 
 package org.apache.isis.tck.objstore.dflt.scalars;
 
-import org.apache.isis.tck.dom.AbstractEntityRepository;
+import java.util.List;
+
+import org.apache.isis.applib.AbstractFactoryAndRepository;
+import org.apache.isis.applib.annotation.QueryOnly;
 import org.apache.isis.tck.dom.scalars.WrapperValuedEntity;
 import org.apache.isis.tck.dom.scalars.WrapperValuedEntityRepository;
 
-public class WrapperValuedEntityRepositoryDefault extends AbstractEntityRepository<WrapperValuedEntity> implements WrapperValuedEntityRepository {
-
-    public WrapperValuedEntityRepositoryDefault() {
-        super(WrapperValuedEntity.class);
-    }
+public class WrapperValuedEntityRepositoryDefault extends AbstractFactoryAndRepository implements WrapperValuedEntityRepository {
 
     @Override
     public String getId() {
         return "wrapperValuedEntities";
     }
 
-    /**
-     * Required otherwise return type is erased
-     */
-    @Override
+    @QueryOnly
+    public List<WrapperValuedEntity> list() {
+        return allInstances(WrapperValuedEntity.class);
+    }
+
     public WrapperValuedEntity newEntity() {
-        return super.newEntity();
-    }    
+        WrapperValuedEntity entity = newTransientInstance(WrapperValuedEntity.class);
+        persist(entity);
+        return entity;
+    }
+
 
 }

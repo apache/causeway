@@ -19,15 +19,20 @@ package org.apache.isis.viewer.json.viewer.resources.domainobjects;
 import java.util.Collection;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.applib.RepresentationType;
+import org.apache.isis.viewer.json.applib.blocks.LinkRepresentation;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
+import org.apache.isis.viewer.json.viewer.representations.LinkBuilder;
 import org.apache.isis.viewer.json.viewer.representations.LinkFollower;
+import org.apache.isis.viewer.json.viewer.representations.Rel;
 import org.apache.isis.viewer.json.viewer.representations.RendererFactory;
 import org.apache.isis.viewer.json.viewer.representations.RendererFactoryRegistry;
 import org.apache.isis.viewer.json.viewer.representations.ReprRenderer;
 import org.apache.isis.viewer.json.viewer.representations.ReprRendererAbstract;
 import org.apache.isis.viewer.json.viewer.representations.ReprRendererFactoryAbstract;
+import org.apache.isis.viewer.json.viewer.resources.domaintypes.DomainTypeReprRenderer;
 
 public class ListReprRenderer extends ReprRendererAbstract<ListReprRenderer, Collection<ObjectAdapter>> {
 
@@ -44,6 +49,8 @@ public class ListReprRenderer extends ReprRendererAbstract<ListReprRenderer, Col
 
     private ObjectAdapterLinkTo linkToBuilder;
     private Collection<ObjectAdapter> objectAdapters;
+    private ObjectSpecification elementType;
+    private ObjectSpecification returnType;
 
     private ListReprRenderer(ResourceContext resourceContext, LinkFollower linkFollower, RepresentationType representationType, JsonRepresentation representation) {
         super(resourceContext, linkFollower, representationType, representation);
@@ -61,22 +68,38 @@ public class ListReprRenderer extends ReprRendererAbstract<ListReprRenderer, Col
         return this;
     }
 
+    public ListReprRenderer withReturnType(ObjectSpecification returnType) {
+        this.returnType = returnType;
+        return this;
+    }
+
+    public ListReprRenderer withElementType(ObjectSpecification elementType) {
+        this.elementType = elementType;
+        return this;
+    }
 
     public JsonRepresentation render() {
-        withObjectAdapters();
+        addValues();
+        
+        addLink(Rel.RETURN_TYPE, returnType);
+        addLink(Rel.ELEMENT_TYPE, elementType);
+        
         getExtensions();
 
         return representation;
     }
 
-    private void withObjectAdapters() {
-        JsonRepresentation list = JsonRepresentation.newArray();
-
+    private void addValues() {
+        if(objectAdapters == null) {
+            return;
+        }
+        
+        JsonRepresentation values = JsonRepresentation.newArray();
         final LinkFollower linkFollower = getLinkFollower().follow("values");
 
         for(ObjectAdapter adapter: objectAdapters) {
             JsonRepresentation linkToObject = linkToBuilder.with(adapter).builder().build();
-            list.arrayAdd(linkToObject);
+            values.arrayAdd(linkToObject);
 
             if(linkFollower.matches(linkToObject)) {
                 final RendererFactory factory = RendererFactoryRegistry.instance.find(RepresentationType.DOMAIN_OBJECT);
@@ -86,7 +109,15 @@ public class ListReprRenderer extends ReprRendererAbstract<ListReprRenderer, Col
                 linkToObject.mapPut("value", domainObject);
             }
         }
-        representation.mapPut("values", list);
+        representation.mapPut("values", values);
+    }
+
+    private void addLinkToReturnType() {
+        addLink(Rel.RETURN_TYPE, returnType);
+    }
+
+    private void addLinkToElementType() {
+        addLink(Rel.ELEMENT_TYPE, elementType);
     }
 
 
