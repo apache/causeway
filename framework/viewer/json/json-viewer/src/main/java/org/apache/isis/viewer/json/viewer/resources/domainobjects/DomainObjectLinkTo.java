@@ -27,7 +27,6 @@ public class DomainObjectLinkTo implements ObjectAdapterLinkTo {
 
     protected ResourceContext resourceContext;
     protected ObjectAdapter objectAdapter;
-    protected Rel rel;
 
     @Override
     public final DomainObjectLinkTo usingResourceContext(ResourceContext resourceContext) {
@@ -44,7 +43,12 @@ public class DomainObjectLinkTo implements ObjectAdapterLinkTo {
     
     @Override
     public LinkBuilder builder() {
-        return LinkBuilder.newBuilder(resourceContext, linkRel(), RepresentationType.DOMAIN_OBJECT, linkRef());
+        return builder(null);
+    }
+
+    @Override
+    public LinkBuilder builder(Rel rel) {
+        return LinkBuilder.newBuilder(resourceContext, relElseDefault(rel), RepresentationType.DOMAIN_OBJECT, linkRef());
     }
 
     /**
@@ -62,21 +66,24 @@ public class DomainObjectLinkTo implements ObjectAdapterLinkTo {
         return buf.toString();
     }
 
+    private Rel relElseDefault(Rel rel) {
+        return rel != null ? rel : defaultRel();
+    }
+
     /**
-     * hook method
+     * hook method; used by {@link #builder(Rel)}.
      */
-    protected Rel linkRel() {
-        return rel!=null?rel:Rel.OBJECT;
+    protected Rel defaultRel() {
+        return Rel.OBJECT;
     }
 
     @Override
-    public ObjectAdapterLinkTo with(Rel rel) {
-        this.rel = rel;
-        return this;
+    public final LinkBuilder memberBuilder(Rel rel, MemberType memberType, ObjectMember objectMember, String... parts) {
+        return memberBuilder(rel, memberType, objectMember, memberType.getRepresentationType(), parts);
     }
 
     @Override
-    public final LinkBuilder linkToMember(Rel rel, MemberType memberType, ObjectMember objectMember, String... parts) {
+    public final LinkBuilder memberBuilder(Rel rel, MemberType memberType, ObjectMember objectMember, RepresentationType representationType, String... parts) {
         StringBuilder buf = new StringBuilder(linkRef());
         buf.append("/").append(memberType.getUrlPart()).append(objectMember.getId());
         for(String part: parts) {
@@ -86,9 +93,8 @@ public class DomainObjectLinkTo implements ObjectAdapterLinkTo {
             buf.append("/").append(part);
         }
         String url = buf.toString();
-        return LinkBuilder.newBuilder(resourceContext, rel, memberType.getRepresentationType(), url);
+        return LinkBuilder.newBuilder(resourceContext, rel, representationType, url);
     }
-
     
 
 }

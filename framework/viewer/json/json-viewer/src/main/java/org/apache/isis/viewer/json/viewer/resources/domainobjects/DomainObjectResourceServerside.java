@@ -76,7 +76,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements
         
         final DomainObjectReprRenderer renderer = 
                 (DomainObjectReprRenderer) rendererFactory.newRenderer(getResourceContext(), null, JsonRepresentation.newMap());
-        renderer.with(objectAdapter);
+        renderer.with(objectAdapter).includesSelf();
         
         ResponseBuilder respBuilder = responseOfOk(renderer, Caching.NONE);
         
@@ -114,7 +114,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements
         init(RepresentationType.OBJECT_PROPERTY);
         
         final ObjectAdapter objectAdapter = getObjectAdapter(oidStr);
-        final DomainResourceHelper helper = new DomainResourceHelper(getResourceContext());
+        final DomainResourceHelper helper = new DomainResourceHelper(getResourceContext(), objectAdapter);
         
         return helper.propertyDetails(objectAdapter, propertyId, Caching.NONE);
     }
@@ -128,11 +128,11 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements
             final InputStream body) {
         init();
 
-        final DomainResourceHelper helper = new DomainResourceHelper(getResourceContext());
-        
         final ObjectAdapter objectAdapter = getObjectAdapter(oidStr);
+        final DomainResourceHelper helper = new DomainResourceHelper(getResourceContext(), objectAdapter);
+        
         final OneToOneAssociation property = helper.getPropertyThatIsVisibleAndUsable(
-                objectAdapter, propertyId, Intent.MUTATE);
+                propertyId, Intent.MUTATE);
 
         ObjectSpecification propertySpec = property.getSpecification();
         String bodyAsString = DomainResourceHelper.asStringUtf8(body);
@@ -160,11 +160,11 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements
             @PathParam("propertyId") final String propertyId) {
         init();
 
-        final DomainResourceHelper helper = new DomainResourceHelper(getResourceContext());
-
         final ObjectAdapter objectAdapter = getObjectAdapter(oidStr);
+        final DomainResourceHelper helper = new DomainResourceHelper(getResourceContext(), objectAdapter);
+        
         final OneToOneAssociation property = helper.getPropertyThatIsVisibleAndUsable(
-                objectAdapter, propertyId, Intent.MUTATE);
+                propertyId, Intent.MUTATE);
 
         Consent consent = property.isAssociationValid(objectAdapter, null);
         if (consent.isVetoed()) {
@@ -191,11 +191,11 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements
         @PathParam("collectionId") final String collectionId) {
         init(RepresentationType.OBJECT_COLLECTION);
 
-        final DomainResourceHelper helper = new DomainResourceHelper(getResourceContext());
-
         final ObjectAdapter objectAdapter = getObjectAdapter(oidStr);
+        final DomainResourceHelper helper = new DomainResourceHelper(getResourceContext(), objectAdapter);
+
         final OneToManyAssociation collection = helper.getCollectionThatIsVisibleAndUsable(
-                objectAdapter, collectionId, Intent.ACCESS);
+                collectionId, Intent.ACCESS);
 
         RendererFactory factory = RendererFactoryRegistry.instance.find(RepresentationType.OBJECT_COLLECTION);
         final ObjectCollectionReprRenderer renderer = 
@@ -215,11 +215,11 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements
             final InputStream body) {
         init();
 
-        final DomainResourceHelper helper = new DomainResourceHelper(getResourceContext());
-
         final ObjectAdapter objectAdapter = getObjectAdapter(oidStr);
+        final DomainResourceHelper helper = new DomainResourceHelper(getResourceContext(), objectAdapter);
+
         final OneToManyAssociation collection = helper.getCollectionThatIsVisibleAndUsable(
-                objectAdapter, collectionId, Intent.MUTATE);
+                collectionId, Intent.MUTATE);
 
         if (!collection.getCollectionSemantics().isSet()) {
             throw JsonApplicationException.create(
@@ -252,11 +252,11 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements
             final InputStream body) {
         init();
 
-        final DomainResourceHelper helper = new DomainResourceHelper(getResourceContext());
-
         final ObjectAdapter objectAdapter = getObjectAdapter(oidStr);
+        final DomainResourceHelper helper = new DomainResourceHelper(getResourceContext(), objectAdapter);
+
         final OneToManyAssociation collection = helper.getCollectionThatIsVisibleAndUsable(
-                objectAdapter, collectionId, Intent.MUTATE);
+                collectionId, Intent.MUTATE);
 
         if (!collection.getCollectionSemantics().isListOrArray()) {
             throw JsonApplicationException.create(
@@ -290,11 +290,11 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements
 
         init();
         
-        final DomainResourceHelper helper = new DomainResourceHelper(getResourceContext());
-
         final ObjectAdapter objectAdapter = getObjectAdapter(oidStr);
+        final DomainResourceHelper helper = new DomainResourceHelper(getResourceContext(), objectAdapter);
+
         final OneToManyAssociation collection = helper.getCollectionThatIsVisibleAndUsable(
-                objectAdapter, collectionId, Intent.MUTATE);
+                collectionId, Intent.MUTATE);
 
         ObjectSpecification collectionSpec = collection.getSpecification();
         String bodyAsString = DomainResourceHelper.asStringUtf8(body);
@@ -324,11 +324,10 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements
             @PathParam("actionId") final String actionId) {
         init(RepresentationType.OBJECT_ACTION);
 
-        final DomainResourceHelper helper = new DomainResourceHelper(getResourceContext());
-
         final ObjectAdapter objectAdapter = getObjectAdapter(oidStr);
-        
-        return helper.actionPrompt(actionId, objectAdapter);
+        final DomainResourceHelper helper = new DomainResourceHelper(getResourceContext(), objectAdapter);
+
+        return helper.actionPrompt(actionId);
     }
 
 
@@ -346,11 +345,10 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements
             @QueryParam("args") final String arguments) {
         init(RepresentationType.GENERIC);
 
-        final DomainResourceHelper helper = new DomainResourceHelper(getResourceContext());
-
         final ObjectAdapter objectAdapter = getObjectAdapter(oidStr);
+        final DomainResourceHelper helper = new DomainResourceHelper(getResourceContext(), objectAdapter);
 
-        return helper.invokeActionQueryOnly(objectAdapter, actionId, arguments);
+        return helper.invokeActionQueryOnly(actionId, arguments);
     }
 
     @PUT
@@ -362,11 +360,10 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements
             final InputStream arguments) {
         init(RepresentationType.GENERIC);
 
-        final DomainResourceHelper helper = new DomainResourceHelper(getResourceContext());
-
         final ObjectAdapter objectAdapter = getObjectAdapter(oidStr);
+        final DomainResourceHelper helper = new DomainResourceHelper(getResourceContext(), objectAdapter);
         
-        return helper.invokeActionIdempotent(objectAdapter, actionId, arguments);
+        return helper.invokeActionIdempotent(actionId, arguments);
     }
 
 
@@ -379,11 +376,10 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements
             final InputStream body) {
         init(RepresentationType.GENERIC);
         
-        final DomainResourceHelper helper = new DomainResourceHelper(getResourceContext());
-
         final ObjectAdapter objectAdapter = getObjectAdapter(oidStr);
+        final DomainResourceHelper helper = new DomainResourceHelper(getResourceContext(), objectAdapter);
         
-        return helper.invokeAction(objectAdapter, actionId, body);
+        return helper.invokeAction(actionId, body);
     }
 
 }

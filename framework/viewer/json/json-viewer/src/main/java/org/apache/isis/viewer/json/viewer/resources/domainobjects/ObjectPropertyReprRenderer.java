@@ -34,6 +34,7 @@ import org.apache.isis.viewer.json.viewer.representations.ReprRendererFactoryAbs
 import org.apache.isis.viewer.json.viewer.resources.domainobjects.AbstractObjectMemberReprRenderer.Mode;
 import org.apache.isis.viewer.json.viewer.resources.domaintypes.DomainTypeReprRenderer;
 import org.apache.isis.viewer.json.viewer.resources.domaintypes.TypePropertyReprRenderer;
+import org.codehaus.jackson.node.NullNode;
 
 import com.google.common.collect.Lists;
 
@@ -83,7 +84,7 @@ public class ObjectPropertyReprRenderer extends AbstractObjectMemberReprRenderer
     private Object valueRep() {
         ObjectAdapter valueAdapter = objectMember.get(objectAdapter);
         if(valueAdapter == null) {
-            return null;
+            return NullNode.getInstance();
         }
         return DomainObjectReprRenderer.valueOrRef(resourceContext, valueAdapter, objectMember.getSpecification());
     }

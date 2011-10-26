@@ -22,6 +22,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
+import org.apache.isis.core.metamodel.services.ServiceUtil;
 import org.apache.isis.core.metamodel.spec.ObjectActionSet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -89,14 +90,18 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
 
         // self
         if(includesSelf && objectAdapter.isPersistent()) {
-            JsonRepresentation self = linkToBuilder.with(Rel.SELF).with(objectAdapter).builder().build();
+            JsonRepresentation self = linkToBuilder.with(objectAdapter).builder(Rel.SELF).build();
             getLinks().arrayAdd(self);
         }
 
         // title
         String title = objectAdapter.titleString();
-        representation.mapPut("oid", OidUtils.getOidStr(resourceContext, objectAdapter));
         representation.mapPut("title", title);
+        representation.mapPut("oid", OidUtils.getOidStr(resourceContext, objectAdapter));
+        final boolean isService = objectAdapter.getSpecification().isService();
+        if(isService) {
+            representation.mapPut("serviceId", ServiceUtil.id(objectAdapter.getObject()));
+        }
         
         // members
         withMembers(objectAdapter);
@@ -107,11 +112,10 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
                 DomainTypeReprRenderer.newLinkToBuilder(getResourceContext(), Rel.DESCRIBEDBY, objectAdapter.getSpecification()).build());
         
         // extensions
-        getExtensions();
+        getExtensions().mapPut("isService", isService);
         
         return representation;
     }
-
 
     private DomainObjectReprRenderer withMembers(ObjectAdapter objectAdapter) {
         JsonRepresentation members = JsonRepresentation.newArray();
@@ -140,7 +144,7 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
                         (ObjectPropertyReprRenderer) factory.newRenderer(getResourceContext(), linkFollower, JsonRepresentation.newMap());
                 
                 renderer.with(new ObjectAndProperty(objectAdapter, property))
-                        .usingLinkToBuilder(linkToBuilder);
+                        .usingLinkTo(linkToBuilder);
                 
                 members.arrayAdd(renderer.render());
             }
@@ -152,7 +156,7 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
                         (ObjectCollectionReprRenderer) factory.newRenderer(getResourceContext(), linkFollower, JsonRepresentation.newMap());
 
                 renderer.with(new ObjectAndCollection(objectAdapter, collection))
-                    .usingLinkToBuilder(linkToBuilder);
+                    .usingLinkTo(linkToBuilder);
                 
                 members.arrayAdd(renderer.render());
             }
@@ -179,7 +183,7 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
                         (ObjectActionReprRenderer) factory.newRenderer(getResourceContext(), linkFollower, JsonRepresentation.newMap());
                 
                 renderer.with(new ObjectAndAction(objectAdapter, action))
-                        .usingLinkToBuilder(linkToBuilder);
+                        .usingLinkTo(linkToBuilder);
 
                 members.arrayAdd(renderer.render());
             }

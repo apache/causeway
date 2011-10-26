@@ -70,21 +70,20 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
     @GET
     @Path("/{serviceId}")
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_DOMAIN_OBJECT, RestfulMediaType.APPLICATION_JSON_ERROR })
-    @Override
     public Response service(
             @PathParam("serviceId") String serviceId) {
-        RepresentationType representationType = RepresentationType.DOMAIN_OBJECT;
-        init(representationType);
+        init(RepresentationType.DOMAIN_OBJECT);
         
         final ObjectAdapter serviceAdapter = getServiceAdapter(serviceId);
         
-        final RendererFactory factory = rendererFactoryRegistry.find(representationType);
-        final DomainObjectReprRenderer renderer = 
-                (DomainObjectReprRenderer) factory.newRenderer(getResourceContext(), null, JsonRepresentation.newMap());
-        renderer.usingLinkToBuilder(new DomainServiceLinkTo())
-                    .includesSelf()
-                    .with(serviceAdapter);
+        final RendererFactory rendererFactory = 
+                rendererFactoryRegistry.find(RepresentationType.DOMAIN_OBJECT);
         
+        final DomainObjectReprRenderer renderer = 
+                (DomainObjectReprRenderer) rendererFactory.newRenderer(getResourceContext(), null, JsonRepresentation.newMap());
+        renderer.usingLinkToBuilder(new DomainServiceLinkTo())
+                    .with(serviceAdapter)
+                    .includesSelf();
 
         return responseOfOk(renderer, Caching.ONE_DAY).build();
     }
@@ -103,7 +102,7 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
         init(RepresentationType.OBJECT_PROPERTY);
 
         final ObjectAdapter serviceAdapter = getServiceAdapter(serviceId);
-        final DomainResourceHelper helper = new DomainResourceHelper(getResourceContext());
+        final DomainResourceHelper helper = new DomainResourceHelper(getResourceContext(), serviceAdapter).using(new DomainServiceLinkTo());
 
         return helper.propertyDetails(serviceAdapter, propertyId, Caching.ONE_DAY);
     }
@@ -122,11 +121,10 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
             @PathParam("actionId") final String actionId) {
         init(RepresentationType.OBJECT_ACTION);
 
-        final DomainResourceHelper helper = new DomainResourceHelper(getResourceContext());
-
         final ObjectAdapter serviceAdapter = getServiceAdapter(serviceId);
+        final DomainResourceHelper helper = new DomainResourceHelper(getResourceContext(), serviceAdapter).using(new DomainServiceLinkTo());
 
-        return helper.actionPrompt(actionId, serviceAdapter);
+        return helper.actionPrompt(actionId);
     }
 
     
@@ -135,44 +133,50 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
     ////////////////////////////////////////////////////////////
 
     @GET
-    @Path("/{oid}/actions/{actionId}/invoke")
+    @Path("/{serviceId}/actions/{actionId}/invoke")
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_DOMAIN_OBJECT, RestfulMediaType.APPLICATION_JSON_LIST, RestfulMediaType.APPLICATION_JSON_SCALAR_VALUE, RestfulMediaType.APPLICATION_JSON_ERROR })
-    public Response serviceInvokeActionQueryOnly(
-            @PathParam("oid") final String oidStr, 
+    public Response invokeActionQueryOnly(
+            @PathParam("serviceId") final String serviceId, 
             @PathParam("actionId") final String actionId,
             @QueryParam("args") final String arguments) {
         init(RepresentationType.GENERIC);
 
-        // TODO
-        throw new UnsupportedOperationException();
+        final ObjectAdapter serviceAdapter = getServiceAdapter(serviceId);
+        final DomainResourceHelper helper = new DomainResourceHelper(getResourceContext(), serviceAdapter).using(new DomainServiceLinkTo());
+
+        return helper.invokeActionQueryOnly(actionId, arguments);
     }
 
     @PUT
-    @Path("/{oid}/actions/{actionId}/invoke")
+    @Path("/{serviceId}/actions/{actionId}/invoke")
     @Consumes({ MediaType.APPLICATION_JSON })
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_DOMAIN_OBJECT, RestfulMediaType.APPLICATION_JSON_LIST, RestfulMediaType.APPLICATION_JSON_SCALAR_VALUE, RestfulMediaType.APPLICATION_JSON_ERROR })
-    public Response serviceInvokeActionIdempotent(
-            @PathParam("oid") final String oidStr, 
+    public Response invokeActionIdempotent(
+            @PathParam("serviceId") final String serviceId, 
             @PathParam("actionId") final String actionId,
             final InputStream arguments) {
         init(RepresentationType.GENERIC);
 
-        // TODO
-        throw new UnsupportedOperationException();
+        final ObjectAdapter serviceAdapter = getServiceAdapter(serviceId);
+        final DomainResourceHelper helper = new DomainResourceHelper(getResourceContext(), serviceAdapter).using(new DomainServiceLinkTo());
+
+        return helper.invokeActionIdempotent(actionId, arguments);
     }
 
     @POST
-    @Path("/{oid}/actions/{actionId}/invoke")
+    @Path("/{serviceId}/actions/{actionId}/invoke")
     @Consumes({ MediaType.APPLICATION_JSON })
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_DOMAIN_OBJECT, RestfulMediaType.APPLICATION_JSON_LIST, RestfulMediaType.APPLICATION_JSON_SCALAR_VALUE, RestfulMediaType.APPLICATION_JSON_ERROR })
-    public Response serviceInvokeAction(
-            @PathParam("oid") final String oidStr, 
+    public Response invokeAction(
+            @PathParam("serviceId") final String serviceId, 
             @PathParam("actionId") final String actionId,
             final InputStream arguments) {
         init(RepresentationType.GENERIC);
 
-        // TODO
-        throw new UnsupportedOperationException();
+        final ObjectAdapter serviceAdapter = getServiceAdapter(serviceId);
+        final DomainResourceHelper helper = new DomainResourceHelper(getResourceContext(), serviceAdapter).using(new DomainServiceLinkTo());
+
+        return helper.invokeAction(actionId, arguments);
     }
 
 }

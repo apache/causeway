@@ -37,6 +37,8 @@ import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessi
 import org.apache.isis.viewer.json.applib.RepresentationType;
 import org.apache.isis.viewer.json.applib.RestfulRequest.QueryParameter;
 import org.apache.isis.viewer.json.applib.RestfulResponse.HttpStatusCode;
+import org.apache.isis.viewer.json.viewer.resources.domainobjects.DomainServiceLinkTo;
+import org.apache.isis.viewer.json.viewer.resources.domainobjects.ObjectAdapterLinkTo;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
@@ -197,6 +199,7 @@ public class ResourceContext {
     public PersistenceSession getPersistenceSession() {
         return persistenceSession;
     }
+
 
 
 

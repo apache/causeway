@@ -22,7 +22,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map.Entry;
 
-import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 
@@ -33,7 +32,6 @@ import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
-import org.apache.isis.core.metamodel.facets.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
@@ -44,7 +42,6 @@ import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.applib.RepresentationType;
 import org.apache.isis.viewer.json.applib.RestfulResponse.HttpStatusCode;
-import org.apache.isis.viewer.json.applib.blocks.LinkRepresentation;
 import org.apache.isis.viewer.json.applib.util.JsonMapper;
 import org.apache.isis.viewer.json.applib.util.UrlEncodingUtils;
 import org.apache.isis.viewer.json.viewer.JsonApplicationException;
@@ -69,12 +66,23 @@ import com.google.common.io.ByteStreams;
 public class DomainResourceHelper {
     
     private final ResourceContext resourceContext;
+    private ObjectAdapterLinkTo adapterLinkTo;
 
     // TODO: inject somehow instead
     private final RendererFactoryRegistry rendererFactoryRegistry = RendererFactoryRegistry.instance;
+    private final ObjectAdapter objectAdapter;
 
-    public DomainResourceHelper(ResourceContext resourceContext) {
+
+    public DomainResourceHelper(ResourceContext resourceContext, ObjectAdapter objectAdapter) {
         this.resourceContext = resourceContext;
+        this.objectAdapter = objectAdapter;
+        using(new DomainObjectLinkTo());
+    }
+
+    public DomainResourceHelper using(ObjectAdapterLinkTo linkTo) {
+        adapterLinkTo = linkTo;
+        adapterLinkTo.usingResourceContext(resourceContext).with(objectAdapter);
+        return this;
     }
 
     // //////////////////////////////////////////////////////////////
@@ -87,13 +95,13 @@ public class DomainResourceHelper {
             final Caching caching) {
 
         final OneToOneAssociation property = getPropertyThatIsVisibleAndUsable(
-                objectAdapter, propertyId, Intent.ACCESS);
+                propertyId, Intent.ACCESS);
 
         RendererFactory factory = RendererFactoryRegistry.instance.find(RepresentationType.OBJECT_PROPERTY);
         final ObjectPropertyReprRenderer renderer = 
                 (ObjectPropertyReprRenderer) factory.newRenderer(resourceContext, null, JsonRepresentation.newMap());
         
-        renderer.with(new ObjectAndProperty(objectAdapter, property))
+        renderer.with(new ObjectAndProperty(objectAdapter, property)).usingLinkTo(adapterLinkTo)
                 .asStandalone();
         
         return ResourceAbstract.responseOfOk(renderer, caching).build();
@@ -103,15 +111,16 @@ public class DomainResourceHelper {
     // action Prompt
     // //////////////////////////////////////////////////////////////
 
-    Response actionPrompt(final String actionId, final ObjectAdapter serviceAdapter) {
+    Response actionPrompt(final String actionId) {
         final ObjectAction action = getObjectActionThatIsVisibleAndUsable(
-                serviceAdapter, actionId, Intent.ACCESS);
+                actionId, Intent.ACCESS);
 
         RendererFactory factory = RendererFactoryRegistry.instance.find(RepresentationType.OBJECT_ACTION);
         final ObjectActionReprRenderer renderer = 
                 (ObjectActionReprRenderer) factory.newRenderer(resourceContext, null, JsonRepresentation.newMap());
         
-        renderer.with(new ObjectAndAction(serviceAdapter, action))
+        renderer.with(new ObjectAndAction(objectAdapter, action))
+                .usingLinkTo(adapterLinkTo)
                 .asStandalone();
 
         return ResourceAbstract.responseOfOk(renderer, Caching.NONE).build();
@@ -131,11 +140,10 @@ public class DomainResourceHelper {
     }
 
     Response invokeActionQueryOnly(
-            final ObjectAdapter objectAdapter, 
             final String actionId, 
             final String argumentsQueryString) {
         final ObjectAction action = getObjectActionThatIsVisibleAndUsable(
-                objectAdapter, actionId, Intent.ACCESS);
+                actionId, Intent.ACCESS);
 
         final ActionSemantics actionSemantics = ActionSemantics.determine(resourceContext, action);
         if(!actionSemantics.isQueryOnly()) {
@@ -145,7 +153,7 @@ public class DomainResourceHelper {
 
         JsonRepresentation arguments = parseQueryString(action, argumentsQueryString);
         
-        return invokeActionUsingAdapters(objectAdapter, action, arguments);
+        return invokeActionUsingAdapters(action, arguments);
     }
 
 
@@ -167,12 +175,11 @@ public class DomainResourceHelper {
     }
 
     Response invokeActionIdempotent(
-            final ObjectAdapter objectAdapter, 
             final String actionId, 
             final InputStream body) {
         
         final ObjectAction action = getObjectActionThatIsVisibleAndUsable(
-                objectAdapter, actionId, Intent.MUTATE);
+                actionId, Intent.MUTATE);
 
         final ActionSemantics actionSemantics = ActionSemantics.determine(resourceContext, action);
         if(!actionSemantics.isIdempotent()) {
@@ -183,21 +190,20 @@ public class DomainResourceHelper {
         String bodyAsString = asStringUtf8(body);
         final JsonRepresentation arguments = readBodyAsMap(bodyAsString);
 
-        return invokeActionUsingAdapters(objectAdapter, action, arguments);
+        return invokeActionUsingAdapters(action, arguments);
     }
 
-    Response invokeAction(final ObjectAdapter objectAdapter, final String actionId, final InputStream body) {
+    Response invokeAction(final String actionId, final InputStream body) {
         final ObjectAction action = getObjectActionThatIsVisibleAndUsable(
-                objectAdapter, actionId, Intent.MUTATE);
+                actionId, Intent.MUTATE);
         
         String bodyAsString = asStringUtf8(body);
         final JsonRepresentation arguments = readBodyAsMap(bodyAsString);
 
-        return invokeActionUsingAdapters(objectAdapter, action, arguments);
+        return invokeActionUsingAdapters(action, arguments);
     }
 
     Response invokeActionUsingAdapters(
-        final ObjectAdapter objectAdapter,
         final ObjectAction action,
         final JsonRepresentation arguments) {
         
@@ -241,15 +247,15 @@ public class DomainResourceHelper {
         
         final CollectionFacet collectionFacet = returnedAdapter.getSpecification().getFacet(CollectionFacet.class);
         if (collectionFacet != null) {
-            representation = representationWithSelfFor(RepresentationType.LIST, objectAdapter, action, arguments);
+            representation = representationWithSelfFor(RepresentationType.LIST, action, arguments);
             
             final Collection<ObjectAdapter> collectionAdapters = collectionFacet.collection(returnedAdapter);
 
             final RendererFactory factory = rendererFactoryRegistry.find(RepresentationType.LIST);
             final ListReprRenderer renderer = (ListReprRenderer) factory.newRenderer(resourceContext, null, representation);
-            renderer.with(collectionAdapters);
-            renderer.withReturnType(action.getReturnType());
-            renderer.withElementType(returnedAdapter.getElementSpecification());
+            renderer.with(collectionAdapters)
+                    .withReturnType(action.getReturnType())
+                    .withElementType(returnedAdapter.getElementSpecification());
             
             return ResourceAbstract.responseOfOk(renderer, Caching.NONE).build();
         }
@@ -257,13 +263,14 @@ public class DomainResourceHelper {
         
         final EncodableFacet encodableFacet = returnedAdapter.getSpecification().getFacet(EncodableFacet.class);
         if(encodableFacet != null) {
-            representation = representationWithSelfFor(RepresentationType.SCALAR_VALUE, objectAdapter, action, arguments);
+            representation = representationWithSelfFor(RepresentationType.SCALAR_VALUE, action, arguments);
             
             final RendererFactory factory = rendererFactoryRegistry.find(RepresentationType.SCALAR_VALUE);
 
             ScalarValueReprRenderer renderer = (ScalarValueReprRenderer) factory.newRenderer(resourceContext, null, representation);
-            renderer.with(returnedAdapter);
-            renderer.withReturnType(action.getReturnType());
+            renderer.with(returnedAdapter)
+                    .withReturnType(action.getReturnType());
+            
             return ResourceAbstract.responseOfOk(renderer, Caching.NONE).build();
         }
 
@@ -282,14 +289,18 @@ public class DomainResourceHelper {
     }
 
 
-    private JsonRepresentation representationWithSelfFor(final RepresentationType representationType, final ObjectAdapter objectAdapter, final ObjectAction action, final JsonRepresentation bodyArgs) {
+    private JsonRepresentation representationWithSelfFor(final RepresentationType representationType, final ObjectAction action, final JsonRepresentation bodyArgs) {
         JsonRepresentation representation = JsonRepresentation.newMap();
         final JsonRepresentation links = JsonRepresentation.newArray();
         representation.mapPut("links", links);
         
-        String oid = OidUtils.getOidStr(resourceContext, objectAdapter);
-        final JsonRepresentation selfLink = 
-                LinkBuilder.newBuilder(resourceContext, Rel.SELF, representationType.getMediaType(), "objects/%s/actions/%s/invoke", oid, action.getId()).build();
+        final LinkBuilder memberBuilder = adapterLinkTo.memberBuilder(Rel.SELF, MemberType.ACTION, action, representationType, "invoke");
+        final JsonRepresentation selfLink = memberBuilder.build();
+
+        // TODO: delete this stuff
+        //String oid = OidUtils.getOidStr(resourceContext, objectAdapter);
+        //LinkBuilder.newBuilder(resourceContext, Rel.SELF, representationType.getMediaType(), "objects/%s/actions/%s/invoke", oid, action.getId()).build();
+        
         links.arrayAdd(selfLink);
         selfLink.mapPut("args", bodyArgs);
         return representation;
@@ -344,7 +355,7 @@ public class DomainResourceHelper {
      * @throws JsonMappingException 
      * @throws JsonParseException 
      */
-    private ObjectAdapter objectAdapterFor(
+    ObjectAdapter objectAdapterFor(
             final ObjectSpecification spec,
             final String urlEncodedJson) throws JsonParseException, JsonMappingException, IOException {
 
@@ -370,20 +381,19 @@ public class DomainResourceHelper {
     // ///////////////////////////////////////////////////////////////////
 
     protected OneToOneAssociation getPropertyThatIsVisibleAndUsable(
-        final ObjectAdapter objectAdapter,
-        final String propertyId, final Intent intent) {
+        final String propertyId,
+        final Intent intent) {
+        
         ObjectAssociation association = objectAdapter.getSpecification()
                 .getAssociation(propertyId);
         if (association == null || !association.isOneToOneAssociation()) {
             throwNotFoundException(propertyId, MemberType.PROPERTY);
         }
         OneToOneAssociation property = (OneToOneAssociation) association;
-        return memberThatIsVisibleAndUsable(objectAdapter, property, MemberType.PROPERTY,
-                intent);
+        return memberThatIsVisibleAndUsable(property, MemberType.PROPERTY, intent);
     }
 
     protected OneToManyAssociation getCollectionThatIsVisibleAndUsable(
-        final ObjectAdapter objectAdapter,
         final String collectionId,
         final Intent intent) {
 
@@ -393,27 +403,24 @@ public class DomainResourceHelper {
             throwNotFoundException(collectionId, MemberType.COLLECTION);
         }
         OneToManyAssociation collection = (OneToManyAssociation) association;
-        return memberThatIsVisibleAndUsable(objectAdapter, collection, MemberType.COLLECTION,
-                intent);
+        return memberThatIsVisibleAndUsable(collection, MemberType.COLLECTION, intent);
     }
 
     protected ObjectAction getObjectActionThatIsVisibleAndUsable(
-        final ObjectAdapter objectAdapter,
-        final String actionId,
-        Intent intent) {
+            final String actionId,
+            Intent intent) {
 
         ObjectAction action = objectAdapter.getSpecification().getObjectAction(actionId);
         if (action == null) {
             throwNotFoundException(actionId, MemberType.ACTION);
         }
         
-        return memberThatIsVisibleAndUsable(objectAdapter, action, MemberType.ACTION, intent);
+        return memberThatIsVisibleAndUsable(action, MemberType.ACTION, intent);
     }
 
     protected <T extends ObjectMember> T memberThatIsVisibleAndUsable(
-        final ObjectAdapter objectAdapter,
-        T objectMember, final MemberType memberType,
-        final Intent intent) {
+            T objectMember,
+            final MemberType memberType, final Intent intent) {
         String memberId = objectMember.getId();
         AuthenticationSession authenticationSession = resourceContext.getAuthenticationSession();
         if (objectMember.isVisible(authenticationSession, objectAdapter).isVetoed()) {
@@ -467,7 +474,7 @@ public class DomainResourceHelper {
                     resourceFor(objectSpec));
         }
 
-        ObjectAdapter proposedValueAdapter = objectAdapterFor(resourceContext, objectSpec, arguments);
+        ObjectAdapter proposedValueAdapter = objectAdapterFor(resourceContext, objectSpec, representation);
         return proposedValueAdapter;
     }
 
@@ -586,6 +593,7 @@ public class DomainResourceHelper {
         // http://localhost:8080/types/xxx
         return objectSpec.getFullIdentifier();
     }
+
 
 
 }

@@ -20,6 +20,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
+import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
@@ -83,7 +85,9 @@ public class ObjectActionReprRenderer extends AbstractObjectMemberReprRenderer<O
         RendererFactory factory = RendererFactoryRegistry.instance.find(RepresentationType.OBJECT_ACTION);
         final ObjectActionReprRenderer renderer = 
                 (ObjectActionReprRenderer) factory.newRenderer(getResourceContext(), getLinkFollower(), JsonRepresentation.newMap());
-        renderer.with(new ObjectAndAction(objectAdapter, objectMember)).asFollowed();
+        renderer.with(new ObjectAndAction(objectAdapter, objectMember))
+                .usingLinkTo(linkTo)
+                .asFollowed();
         detailsLink.mapPut("value", renderer.render());
     }
 
@@ -129,6 +133,21 @@ public class ObjectActionReprRenderer extends AbstractObjectMemberReprRenderer<O
         return argMap;
     }
 
+    @Override
+    protected RepresentationType mutatorRepType() {
+        final ObjectSpecification returnType = objectMember.getReturnType();
+        if(returnType == null) {
+            return RepresentationType.GENERIC;
+        }
+        if(returnType.containsFacet(CollectionFacet.class)) {
+            return RepresentationType.LIST;
+        }
+        if(returnType.containsFacet(ValueFacet.class)) {
+            return RepresentationType.SCALAR_VALUE;
+        }
+        return RepresentationType.DOMAIN_OBJECT;
+    }
+    
     private Object argValueFor(int i) {
         if(objectMember.isContributed()) {
             ObjectActionParameter actionParameter = objectMember.getParameters().get(i);

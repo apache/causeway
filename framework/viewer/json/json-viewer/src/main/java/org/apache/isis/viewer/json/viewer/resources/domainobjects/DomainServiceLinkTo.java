@@ -22,7 +22,6 @@ import org.apache.isis.viewer.json.viewer.representations.LinkBuilder;
 import org.apache.isis.viewer.json.viewer.representations.Rel;
 
 public class DomainServiceLinkTo extends DomainObjectLinkTo {
-
     private String serviceId;
 
     @Override
@@ -38,13 +37,13 @@ public class DomainServiceLinkTo extends DomainObjectLinkTo {
     }
     
     @Override
-    protected Rel linkRel() {
-         return rel!=null?rel:Rel.SERVICE;
+    protected Rel defaultRel() {
+         return Rel.SERVICE;
     }
     
     @Override
-    public LinkBuilder builder() {
-        return super.builder().withId(serviceId);
+    public LinkBuilder builder(Rel rel) {
+        return super.builder(rel).withId(serviceId);
     }
 
 }
