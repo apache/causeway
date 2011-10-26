@@ -1404,10 +1404,10 @@ archetype includes this explicit dependency.
                             <reportSet>
                                 <reports>
                                     <report>javadoc</report>
+                                    <report>test-javadoc</report>
                                     <!--
                                     removed because hitting bug 
                                     (http://jira.codehaus.org/browse/MJAVADOC-298) 
-                                    <report>test-javadoc</report>
                                     -->
                                 </reports>
                             </reportSet>
