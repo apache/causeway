@@ -26,14 +26,14 @@ import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.applib.RepresentationType;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
-import org.apache.isis.viewer.json.viewer.representations.LinkFollower;
 import org.apache.isis.viewer.json.viewer.representations.LinkBuilder;
+import org.apache.isis.viewer.json.viewer.representations.LinkFollower;
 import org.apache.isis.viewer.json.viewer.representations.Rel;
 import org.apache.isis.viewer.json.viewer.representations.RendererFactory;
 import org.apache.isis.viewer.json.viewer.representations.RendererFactoryRegistry;
 import org.apache.isis.viewer.json.viewer.representations.ReprRenderer;
 import org.apache.isis.viewer.json.viewer.representations.ReprRendererFactoryAbstract;
-import org.apache.isis.viewer.json.viewer.resources.domaintypes.DomainTypeReprRenderer;
+import org.apache.isis.viewer.json.viewer.resources.domainobjects.AbstractObjectMemberReprRenderer.Mode;
 import org.apache.isis.viewer.json.viewer.resources.domaintypes.TypeCollectionReprRenderer;
 
 import com.google.common.collect.Lists;
@@ -58,19 +58,39 @@ public class ObjectCollectionReprRenderer extends AbstractObjectMemberReprRender
     
     public JsonRepresentation render() {
         // id and memberType are put eagerly
-        
+
         putDisabledReasonIfDisabled();
-        
-        JsonRepresentation extensions = getExtensions();
-        putExtensionsIsisProprietary(extensions);
-        
-        JsonRepresentation links = getLinks();
-        addLinksFormalDomainModel(links, resourceContext);
-        addLinksIsisProprietary(links, resourceContext);
+
+        addMemberContentSpecificToMode();
+        if(mode.isStandalone()) {
+            addValue();
+        }
 
         return representation;
     }
 
+    
+    /////////////////////////////////////////////////////
+    // value
+    /////////////////////////////////////////////////////
+
+    private void addValue() {
+        ObjectAdapter valueAdapter = objectMember.get(objectAdapter);
+        if(valueAdapter == null) {
+            return;
+        }
+
+        final CollectionFacet facet = CollectionFacetUtils.getCollectionFacetFromSpec(valueAdapter);
+        List<JsonRepresentation> list = Lists.newArrayList();
+        for (final ObjectAdapter elementAdapter : facet.iterable(valueAdapter)) {
+
+            LinkBuilder newBuilder = DomainObjectReprRenderer.newLinkToBuilder(resourceContext, Rel.OBJECT, elementAdapter);
+
+            list.add(newBuilder.build());
+        }
+        
+        representation.mapPut("value", list);
+    }
 
 
     /////////////////////////////////////////////////////
@@ -85,7 +105,7 @@ public class ObjectCollectionReprRenderer extends AbstractObjectMemberReprRender
         RendererFactory factory = RendererFactoryRegistry.instance.find(RepresentationType.OBJECT_COLLECTION);
         final ObjectCollectionReprRenderer renderer = 
                 (ObjectCollectionReprRenderer) factory.newRenderer(getResourceContext(), getLinkFollower(), JsonRepresentation.newMap());
-        renderer.with(new ObjectAndCollection(objectAdapter, objectMember));
+        renderer.with(new ObjectAndCollection(objectAdapter, objectMember)).asFollowed();
         detailsLink.mapPut("value", renderer.render());
     }
 
@@ -94,75 +114,47 @@ public class ObjectCollectionReprRenderer extends AbstractObjectMemberReprRender
     /////////////////////////////////////////////////////
 
     @Override
-    public ObjectCollectionReprRenderer withMutatorsIfEnabled() {
+    protected void addMutatorsIfEnabled() {
         if(usability().isVetoed()) {
-            return cast(this);
-        }
-        Map<String, MutatorSpec> mutators = memberType.getMutators();
-        for(String mutator: mutators.keySet()) {
-            MutatorSpec mutatorSpec = mutators.get(mutator);
-            if(hasMemberFacet(mutatorSpec.mutatorFacetType)) {
-                
-                JsonRepresentation arguments = mutatorArgs(mutatorSpec);
-                JsonRepresentation detailsLink = 
-                        linkToBuilder.linkToMember(mutatorSpec.rel, memberType, objectMember, mutatorSpec.suffix)
-                        .withHttpMethod(mutatorSpec.httpMethod)
-                        .withArguments(arguments)
-                        .build();
-                representation.mapPut(mutator, detailsLink);
-            }
-        }
-        return cast(this);
-    }
-
-
-    protected JsonRepresentation mutatorArgs(MutatorSpec mutatorSpec) {
-        final JsonRepresentation repr = JsonRepresentation.newMap();
-        if(mutatorSpec.arguments.isNone()) {
-            return repr;
-        }
-        if(mutatorSpec.arguments.isOne()) {
-            JsonRepresentation argValues = JsonRepresentation.newArray(1);
-            return argValues;
-        }
-        throw new UnsupportedOperationException("should be overridden if bodyArgs is not 0 or 1");
-    }
-    
-
-    @Override
-    protected Object valueRep() {
-        ObjectAdapter valueAdapter = objectMember.get(objectAdapter);
-        if(valueAdapter == null) {
-            return null;
-        }
-        final CollectionFacet facet = CollectionFacetUtils.getCollectionFacetFromSpec(valueAdapter);
-        List<JsonRepresentation> list = Lists.newArrayList();
-        for (final ObjectAdapter elementAdapter : facet.iterable(valueAdapter)) {
-
-            LinkBuilder newBuilder = DomainObjectReprRenderer.newLinkToBuilder(resourceContext, Rel.OBJECT, elementAdapter);
-
-			list.add(newBuilder.build());
+            return;
         }
         
-        return list;
+        final CollectionSemantics semantics = CollectionSemantics.determine(this.resourceContext, objectMember);
+        addMutatorLink(semantics.getAddToKey());
+        addMutatorLink(semantics.getRemoveFromKey());
+        
+        return;
     }
+
+    private void addMutatorLink(String key) {
+        Map<String, MutatorSpec> mutators = memberType.getMutators();
+        final MutatorSpec mutatorSpec = mutators.get(key);
+        addLinkFor(mutatorSpec);
+    }
+
+
+
+
 
     /////////////////////////////////////////////////////
     // extensions and links
     /////////////////////////////////////////////////////
     
-    private void putExtensionsIsisProprietary(JsonRepresentation extensions) {
+    
+    protected void addLinksToFormalDomainModel() {
+        final LinkBuilder linkBuilder = TypeCollectionReprRenderer.newLinkToBuilder(resourceContext, Rel.DESCRIBEDBY, objectAdapter.getSpecification(), objectMember);
+        getLinks().arrayAdd(linkBuilder.build());
+    }
+
+    @Override
+    protected void addLinksIsisProprietary() {
+        // none
+    }
+
+    protected void putExtensionsIsisProprietary() {
         final CollectionSemantics semantics = CollectionSemantics.determine(resourceContext, objectMember);
-        extensions.mapPut("collectionSemantics", semantics.name().toLowerCase());
+        getExtensions().mapPut("collectionSemantics", semantics.name().toLowerCase());
     }
-
-    private void addLinksFormalDomainModel(JsonRepresentation links, ResourceContext resourceContext) {
-        links.arrayAdd(TypeCollectionReprRenderer.newLinkToBuilder(resourceContext, Rel.DESCRIBEDBY, objectAdapter.getSpecification(), objectMember).build());
-    }
-
-    private void addLinksIsisProprietary(JsonRepresentation links, ResourceContext resourceContext) {
-    }
-
 
 
 }

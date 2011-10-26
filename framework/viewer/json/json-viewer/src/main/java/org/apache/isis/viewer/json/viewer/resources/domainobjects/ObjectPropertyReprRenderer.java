@@ -31,6 +31,7 @@ import org.apache.isis.viewer.json.viewer.representations.RendererFactory;
 import org.apache.isis.viewer.json.viewer.representations.RendererFactoryRegistry;
 import org.apache.isis.viewer.json.viewer.representations.ReprRenderer;
 import org.apache.isis.viewer.json.viewer.representations.ReprRendererFactoryAbstract;
+import org.apache.isis.viewer.json.viewer.resources.domainobjects.AbstractObjectMemberReprRenderer.Mode;
 import org.apache.isis.viewer.json.viewer.resources.domaintypes.DomainTypeReprRenderer;
 import org.apache.isis.viewer.json.viewer.resources.domaintypes.TypePropertyReprRenderer;
 
@@ -58,19 +59,35 @@ public class ObjectPropertyReprRenderer extends AbstractObjectMemberReprRenderer
     public JsonRepresentation render() {
         // id and memberType are put in eagerly
         
-        withValue();
+        addValue();
 
         putDisabledReasonIfDisabled();
 
-        JsonRepresentation extensions = getExtensions();
-        putExtensionsIsisProprietary(extensions);
+        addMemberContentSpecificToMode();
+        if(mode.isStandalone()) {
+            addChoices();
+        }
         
-        JsonRepresentation links = getLinks();
-        addLinksFormalDomainModel(links, resourceContext);
-        addLinksIsisProprietary(links, resourceContext);
-
         return representation;
     }
+
+    
+    /////////////////////////////////////////////////////
+    // value
+    /////////////////////////////////////////////////////
+
+    private void addValue() {
+        representation.mapPut("value", valueRep());
+    }
+
+    private Object valueRep() {
+        ObjectAdapter valueAdapter = objectMember.get(objectAdapter);
+        if(valueAdapter == null) {
+            return null;
+        }
+        return DomainObjectReprRenderer.valueOrRef(resourceContext, valueAdapter, objectMember.getSpecification());
+    }
+
 
 
     /////////////////////////////////////////////////////
@@ -85,7 +102,7 @@ public class ObjectPropertyReprRenderer extends AbstractObjectMemberReprRenderer
         RendererFactory factory = RendererFactoryRegistry.instance.find(RepresentationType.OBJECT_PROPERTY);
         final ObjectPropertyReprRenderer renderer = 
                 (ObjectPropertyReprRenderer) factory.newRenderer(getResourceContext(), getLinkFollower(), JsonRepresentation.newMap());
-        renderer.with(new ObjectAndProperty(objectAdapter, objectMember));
+        renderer.with(new ObjectAndProperty(objectAdapter, objectMember)).asFollowed();
         detailsLink.mapPut("value", renderer.render());
     }
 
@@ -95,55 +112,25 @@ public class ObjectPropertyReprRenderer extends AbstractObjectMemberReprRenderer
 
 
     @Override
-    public ObjectPropertyReprRenderer withMutatorsIfEnabled() {
+    protected void addMutatorsIfEnabled() {
         if(usability().isVetoed()) {
-            return cast(this);
+            return;
         }
         Map<String, MutatorSpec> mutators = memberType.getMutators();
         for(String mutator: mutators.keySet()) {
             MutatorSpec mutatorSpec = mutators.get(mutator);
-            if(hasMemberFacet(mutatorSpec.mutatorFacetType)) {
-                
-                JsonRepresentation arguments = mutatorArgs(mutatorSpec);
-                JsonRepresentation detailsLink = 
-                        linkToBuilder.linkToMember(mutatorSpec.rel, memberType, objectMember, mutatorSpec.suffix)
-                        .withHttpMethod(mutatorSpec.httpMethod)
-                        .withArguments(arguments)
-                        .build();
-                representation.mapPut(mutator, detailsLink);
-            }
+            addLinkFor(mutatorSpec);
         }
-        return cast(this);
+        return;
     }
 
-    protected JsonRepresentation mutatorArgs(MutatorSpec mutatorSpec) {
-        final JsonRepresentation repr = JsonRepresentation.newMap();
-        if(mutatorSpec.arguments.isNone()) {
-            return repr;
-        }
-        if(mutatorSpec.arguments.isOne()) {
-            JsonRepresentation argValues = JsonRepresentation.newArray(1);
-            return argValues;
-        }
-        throw new UnsupportedOperationException("should be overridden if bodyArgs is not 0 or 1");
-    }
-
-
-	@Override
-    protected Object valueRep() {
-        ObjectAdapter valueAdapter = objectMember.get(objectAdapter);
-        if(valueAdapter == null) {
-		    return null;
-		}
-        return DomainObjectReprRenderer.valueOrRef(resourceContext, valueAdapter, objectMember.getSpecification());
-    }
 
 	
     /////////////////////////////////////////////////////
     // choices
     /////////////////////////////////////////////////////
 
-	public ObjectPropertyReprRenderer withChoices() {
+	private ObjectPropertyReprRenderer addChoices() {
 		Object propertyChoices = propertyChoices();
 		if(propertyChoices != null) {
 			representation.mapPut("choices", propertyChoices);
@@ -169,15 +156,19 @@ public class ObjectPropertyReprRenderer extends AbstractObjectMemberReprRenderer
     // extensions and links
     /////////////////////////////////////////////////////
     
-    private void putExtensionsIsisProprietary(JsonRepresentation extensions) {
+    protected void addLinksToFormalDomainModel() {
+        getLinks().arrayAdd(
+                TypePropertyReprRenderer.newLinkToBuilder(getResourceContext(), Rel.DESCRIBEDBY, objectAdapter.getSpecification(), objectMember).build());
     }
 
-    private void addLinksFormalDomainModel(JsonRepresentation links, ResourceContext resourceContext) {
-        links.arrayAdd(TypePropertyReprRenderer.newLinkToBuilder(resourceContext, Rel.DESCRIBEDBY, objectAdapter.getSpecification(), objectMember).build());
+    @Override
+    protected void addLinksIsisProprietary() {
+        // none
     }
 
-    private void addLinksIsisProprietary(JsonRepresentation links, ResourceContext resourceContext) {
+    @Override
+    protected void putExtensionsIsisProprietary() {
+        // none
     }
-
 
 }

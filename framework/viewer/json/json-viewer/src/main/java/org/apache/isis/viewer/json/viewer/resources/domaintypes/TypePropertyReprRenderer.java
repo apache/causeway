@@ -16,6 +16,7 @@
  */
 package org.apache.isis.viewer.json.viewer.resources.domaintypes;
 
+import org.apache.isis.core.metamodel.facets.maxlen.MaxLengthFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
@@ -55,6 +56,15 @@ public class TypePropertyReprRenderer extends AbstractTypeMemberReprBuilder<Type
     @Override
     protected void addLinksSpecificToFeature() {
         addLinkToReturnTypeIfAny();
+    }
+
+    @Override
+    protected void addPropertiesSpecificToFeature() {
+        representation.mapPut("optional", !getObjectFeature().isMandatory());
+        final MaxLengthFacet maxLength = getObjectFeature().getFacet(MaxLengthFacet.class);
+        if(maxLength != null && !maxLength.isNoop()) {
+            representation.mapPut("maxLength", maxLength.value());
+        }
     }
 
     private void addLinkToReturnTypeIfAny() {

@@ -67,6 +67,8 @@ public abstract class AbstractTypeFeatureReprBuilder<R extends ReprRendererAbstr
         addLinkSelfIfRequired();
         addLinkToParentIfProvided();
         
+        addPropertiesSpecificToFeature();
+        
         addLinksSpecificToFeature();
         putExtensionsSpecificToFeature();
 
@@ -74,6 +76,12 @@ public abstract class AbstractTypeFeatureReprBuilder<R extends ReprRendererAbstr
     }
 
     
+    /**
+     * Optional hook method.
+     */
+    protected void addPropertiesSpecificToFeature() {
+    }
+
     /**
      * Mandatory hook method.
      */

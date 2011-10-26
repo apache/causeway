@@ -32,6 +32,7 @@ import org.apache.isis.viewer.json.viewer.representations.RendererFactory;
 import org.apache.isis.viewer.json.viewer.representations.RendererFactoryRegistry;
 import org.apache.isis.viewer.json.viewer.representations.ReprRenderer;
 import org.apache.isis.viewer.json.viewer.representations.ReprRendererFactoryAbstract;
+import org.apache.isis.viewer.json.viewer.resources.domainobjects.AbstractObjectMemberReprRenderer.Mode;
 import org.apache.isis.viewer.json.viewer.resources.domaintypes.DomainTypeReprRenderer;
 import org.apache.isis.viewer.json.viewer.resources.domaintypes.TypeActionReprRenderer;
 import org.codehaus.jackson.node.NullNode;
@@ -61,12 +62,10 @@ public class ObjectActionReprRenderer extends AbstractObjectMemberReprRenderer<O
         
         putDisabledReasonIfDisabled();
         
-        JsonRepresentation extensions = getExtensions();
-        putExtensionsIsisProprietary(extensions);
-        
-        JsonRepresentation links = getLinks();
-        addLinksFormalDomainModel(links, resourceContext);
-        addLinksIsisProprietary(links, resourceContext);
+        addMemberContentSpecificToMode();
+        if(mode.isStandalone()) {
+            addParameterDetails();
+        }
 
         return representation;
     }
@@ -84,7 +83,7 @@ public class ObjectActionReprRenderer extends AbstractObjectMemberReprRenderer<O
         RendererFactory factory = RendererFactoryRegistry.instance.find(RepresentationType.OBJECT_ACTION);
         final ObjectActionReprRenderer renderer = 
                 (ObjectActionReprRenderer) factory.newRenderer(getResourceContext(), getLinkFollower(), JsonRepresentation.newMap());
-        renderer.with(new ObjectAndAction(objectAdapter, objectMember)).withMutatorsIfEnabled();
+        renderer.with(new ObjectAndAction(objectAdapter, objectMember)).asFollowed();
         detailsLink.mapPut("value", renderer.render());
     }
 
@@ -93,32 +92,19 @@ public class ObjectActionReprRenderer extends AbstractObjectMemberReprRenderer<O
     /////////////////////////////////////////////////////
 
     @Override
-    public ObjectActionReprRenderer withMutatorsIfEnabled() {
+    protected void addMutatorsIfEnabled() {
         if(usability().isVetoed()) {
-            return cast(this);
+            return;
         }
         Map<String, MutatorSpec> mutators = memberType.getMutators();
         final ActionSemantics semantics = ActionSemantics.determine(this.resourceContext, objectMember);
         
         final String mutator = semantics.getInvokeKey();
         final MutatorSpec mutatorSpec = mutators.get(mutator);
-        addInvokeLinkIfMutator(mutatorSpec);
         
-        return cast(this);
+        addLinkFor(mutatorSpec);
     }
 
-    private void addInvokeLinkIfMutator(MutatorSpec mutatorSpec) {
-        if(!hasMemberFacet(mutatorSpec.mutatorFacetType)) {
-            return;
-        } 
-        JsonRepresentation arguments = mutatorArgs(mutatorSpec);
-        JsonRepresentation detailsLink = 
-                linkToBuilder.linkToMember(Rel.INVOKE, memberType, objectMember, mutatorSpec.suffix)
-                .withHttpMethod(mutatorSpec.httpMethod)
-                .withArguments(arguments)
-                .build();
-        getLinks().arrayAdd(detailsLink);
-    }
     
 	private ObjectAdapter contributingServiceAdapter() {
     	ObjectSpecification serviceType = objectMember.getOnType();
@@ -133,32 +119,33 @@ public class ObjectActionReprRenderer extends AbstractObjectMemberReprRenderer<O
 	}
 
 	
-	   @Override
-	    protected JsonRepresentation mutatorArgs(MutatorSpec mutatorSpec) {
-	        JsonRepresentation argMap = JsonRepresentation.newMap();
-	        List<ObjectActionParameter> parameters = objectMember.getParameters();
-	        for(int i=0; i<objectMember.getParameterCount(); i++) {
-	            argMap.mapPut(parameters.get(i).getName(), argValueFor(i)); 
-	        }
-	        return argMap;
-	    }
+    @Override
+    protected JsonRepresentation mutatorArgs(MutatorSpec mutatorSpec) {
+        JsonRepresentation argMap = JsonRepresentation.newMap();
+        List<ObjectActionParameter> parameters = objectMember.getParameters();
+        for(int i=0; i<objectMember.getParameterCount(); i++) {
+            argMap.mapPut(parameters.get(i).getName(), argValueFor(i)); 
+        }
+        return argMap;
+    }
 
-	    private Object argValueFor(int i) {
-	        if(objectMember.isContributed()) {
-	            ObjectActionParameter actionParameter = objectMember.getParameters().get(i);
-	            if (actionParameter.getSpecification().isOfType(objectAdapter.getSpecification())) {
-	                return DomainObjectReprRenderer.newLinkToBuilder(resourceContext, Rel.OBJECT, objectAdapter).build();
-	            }
-	        }
-	        return NullNode.instance;
-	    }
+    private Object argValueFor(int i) {
+        if(objectMember.isContributed()) {
+            ObjectActionParameter actionParameter = objectMember.getParameters().get(i);
+            if (actionParameter.getSpecification().isOfType(objectAdapter.getSpecification())) {
+                return DomainObjectReprRenderer.newLinkToBuilder(resourceContext, Rel.OBJECT, objectAdapter).build();
+            }
+        }
+        // force a null into the map
+        return NullNode.getInstance();
+    }
 
 
     /////////////////////////////////////////////////////
     // parameter details
     /////////////////////////////////////////////////////
 
-    public ObjectActionReprRenderer withParameterDetails() {
+    private ObjectActionReprRenderer addParameterDetails() {
     	List<Object> parameters = Lists.newArrayList();
 		for (int i=0; i< objectMember.getParameterCount(); i++) {
 			ObjectActionParameter param = objectMember.getParameters().get(i);
@@ -207,31 +194,27 @@ public class ObjectActionReprRenderer extends AbstractObjectMemberReprRenderer<O
 	}
 
 	
-
-	
 	/////////////////////////////////////////////////////
 	// extensions and links
     /////////////////////////////////////////////////////
 	
-    private void putExtensionsIsisProprietary(JsonRepresentation extensions) {
-        extensions.mapPut("actionType", objectMember.getType().name().toLowerCase());
-        
-        final ActionSemantics semantics = ActionSemantics.determine(resourceContext, objectMember);
-        extensions.mapPut("actionSemantics", semantics.getName());
-    }
-
-     private void addLinksFormalDomainModel(JsonRepresentation links, ResourceContext resourceContext) {
-         links.arrayAdd(TypeActionReprRenderer.newLinkToBuilder(resourceContext, Rel.DESCRIBEDBY, objectAdapter.getSpecification(), objectMember).build());
+     protected void addLinksToFormalDomainModel() {
+         getLinks().arrayAdd(TypeActionReprRenderer.newLinkToBuilder(resourceContext, Rel.DESCRIBEDBY, objectAdapter.getSpecification(), objectMember).build());
      }
-
-     private void addLinksIsisProprietary(JsonRepresentation links, ResourceContext resourceContext) {
-       if(objectMember.isContributed()) {
+     
+     protected void addLinksIsisProprietary() {
+        if(objectMember.isContributed()) {
             ObjectAdapter serviceAdapter = contributingServiceAdapter();
             JsonRepresentation contributedByLink = DomainObjectReprRenderer.newLinkToBuilder(resourceContext, Rel.CONTRIBUTED_BY, serviceAdapter).build();
-            links.arrayAdd(contributedByLink);
+            getLinks().arrayAdd(contributedByLink);
         }
     }
 
-
+     protected void putExtensionsIsisProprietary() {
+         getExtensions().mapPut("actionType", objectMember.getType().name().toLowerCase());
+         
+         final ActionSemantics semantics = ActionSemantics.determine(resourceContext, objectMember);
+         getExtensions().mapPut("actionSemantics", semantics.getName());
+     }
 
 }

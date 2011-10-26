@@ -42,11 +42,10 @@ import com.google.common.collect.ImmutableMap;
 
 public enum MemberType {
 
-    PROPERTY("properties/", "id", Rel.DETAILS, RepresentationType.OBJECT_PROPERTY, 
-            ImmutableMap.of(
-                "modify", MutatorSpec.of(Rel.MODIFY, PropertyValidateFacet.class, PropertySetterFacet.class, HttpMethod.PUT, BodyArgs.ONE),
-                "clear", MutatorSpec.of(Rel.CLEAR, PropertyValidateFacet.class, PropertyClearFacet.class, HttpMethod.DELETE, BodyArgs.NONE)
-                )) {
+    PROPERTY("properties/", "id", RepresentationType.OBJECT_PROPERTY, ImmutableMap.of(
+        "modify", MutatorSpec.of(Rel.MODIFY, PropertyValidateFacet.class, PropertySetterFacet.class, HttpMethod.PUT, BodyArgs.ONE),
+        "clear", MutatorSpec.of(Rel.CLEAR, PropertyValidateFacet.class, PropertyClearFacet.class, HttpMethod.DELETE, BodyArgs.NONE)
+        )) {
         @Override
         public ObjectSpecification specFor(ObjectMember objectMember) {
             return objectMember.getSpecification();
@@ -55,12 +54,11 @@ public enum MemberType {
     /**
      * {@link #getMutators()} are keyed by {@link CollectionSemantics#getAddToKey()}
      */
-    COLLECTION("collections/", "id", Rel.DETAILS, RepresentationType.OBJECT_COLLECTION, 
-            ImmutableMap.of(
-                "addToSet", MutatorSpec.of(Rel.ADD_TO, CollectionValidateAddToFacet.class, CollectionAddToFacet.class, HttpMethod.PUT, BodyArgs.ONE),
-                "addToList", MutatorSpec.of(Rel.ADD_TO, CollectionValidateAddToFacet.class, CollectionAddToFacet.class, HttpMethod.POST, BodyArgs.ONE),
-                "removeFrom", MutatorSpec.of(Rel.REMOVE_FROM, CollectionValidateRemoveFromFacet.class, CollectionRemoveFromFacet.class, HttpMethod.DELETE, BodyArgs.ONE)
-                )) {
+    COLLECTION("collections/", "id", RepresentationType.OBJECT_COLLECTION, ImmutableMap.of(
+        "addToSet", MutatorSpec.of(Rel.ADD_TO, CollectionValidateAddToFacet.class, CollectionAddToFacet.class, HttpMethod.PUT, BodyArgs.ONE),
+        "addToList", MutatorSpec.of(Rel.ADD_TO, CollectionValidateAddToFacet.class, CollectionAddToFacet.class, HttpMethod.POST, BodyArgs.ONE),
+        "removeFrom", MutatorSpec.of(Rel.REMOVE_FROM, CollectionValidateRemoveFromFacet.class, CollectionRemoveFromFacet.class, HttpMethod.DELETE, BodyArgs.ONE)
+        )) {
         @Override
         public ObjectSpecification specFor(ObjectMember objectMember) {
             return objectMember.getSpecification();
@@ -69,12 +67,11 @@ public enum MemberType {
     /**
      * {@link #getMutators()} are keyed by {@link ActionSemantics#getInvokeKey()}
      */
-    ACTION("actions/", "id", Rel.DETAILS, RepresentationType.OBJECT_ACTION,
-            ImmutableMap.of(
-                "invokeQueryOnly", MutatorSpec.of(Rel.INVOKE, ActionValidationFacet.class, ActionInvocationFacet.class, HttpMethod.GET, BodyArgs.MANY, "invoke"),
-                "invokeIdempotent", MutatorSpec.of(Rel.INVOKE, ActionValidationFacet.class, ActionInvocationFacet.class, HttpMethod.PUT, BodyArgs.MANY, "invoke"),
-                "invoke", MutatorSpec.of(Rel.INVOKE, ActionValidationFacet.class, ActionInvocationFacet.class, HttpMethod.POST, BodyArgs.MANY, "invoke")
-            )) {
+    ACTION("actions/", "id", RepresentationType.OBJECT_ACTION, ImmutableMap.of(
+        "invokeQueryOnly", MutatorSpec.of(Rel.INVOKE, ActionValidationFacet.class, ActionInvocationFacet.class, HttpMethod.GET, BodyArgs.MANY, "invoke"),
+        "invokeIdempotent", MutatorSpec.of(Rel.INVOKE, ActionValidationFacet.class, ActionInvocationFacet.class, HttpMethod.PUT, BodyArgs.MANY, "invoke"),
+        "invoke", MutatorSpec.of(Rel.INVOKE, ActionValidationFacet.class, ActionInvocationFacet.class, HttpMethod.POST, BodyArgs.MANY, "invoke")
+    )) {
         @Override
         public ObjectSpecification specFor(ObjectMember objectMember) {
             ObjectAction objectAction = (ObjectAction) objectMember;
@@ -84,17 +81,14 @@ public enum MemberType {
 
     private final String urlPart;
     private final String jsProp;
-    private final Rel detailsRel;
     private final String name;
     private final RepresentationType representationType;
 
     private final Map<String, MutatorSpec> mutators;
-    
 
-    private MemberType(String urlPart, String jsProp, Rel detailsRel, RepresentationType representationType, Map<String, MutatorSpec> mutators) {
+    private MemberType(String urlPart, String jsProp, RepresentationType representationType, Map<String, MutatorSpec> mutators) {
         this.urlPart = urlPart;
         this.jsProp = jsProp;
-        this.detailsRel = detailsRel;
         this.representationType = representationType;
         this.mutators = mutators;
         name = Enums.enumToCamelCase(this);
@@ -147,9 +141,6 @@ public enum MemberType {
         return representationType;
     }
 
-    public Rel getDetailsRel() {
-        return detailsRel;
-    }
 
     public String getName() {
         return name;
