@@ -792,6 +792,13 @@ done</programlisting>
 
           <para>This takes a little longer to run, but is at least
           repeatable.</para>
+
+          <sect3>
+            <title id="sec.build.modules">"Modules" file</title>
+
+            <para>The "modules" resource is manually edited, any new projects
+            or modules must be added manually.</para>
+          </sect3>
         </sect2>
 
         <sect2>
@@ -3634,7 +3641,8 @@ public class FooBar {
             </listitem>
 
             <listitem>
-              <para>site builds ok (<code>sh msdf.sh -o</code>)</para>
+              <para>site builds ok (<code>sh msdf.sh -o</code>), see <xref
+              linkend="sec.build.modules" />.</para>
             </listitem>
 
             <listitem>
@@ -3818,6 +3826,16 @@ public class FooBar {
           </itemizedlist>
 
           <para>Investigate and fix any reported violations.</para>
+
+          <para>You can use the groovy script "addmissinglicenses.groovy" to
+          automatically insert missing copyright headers:</para>
+
+          <para><programlisting>groovy addmissinglicenses.groovy</programlisting></para>
+
+          <para>The actual files checked are those with extensions specified
+          in the line:</para>
+
+          <para><programlisting>def fileEndings = [".java", ".htm"]</programlisting></para>
         </sect2>
 
         <sect2>

@@ -45,7 +45,7 @@ public class JdbcFieldMappingFactoryInstaller implements FieldMappingFactoryInst
 
     @Override
     public void load(final FieldMappingLookup lookup) {
-        lookup.addFieldMappingFactory(boolean.class, new JdbcBinaryValueMapper.Factory(Defaults.TYPE_BOOLEAN()));
+        lookup.addFieldMappingFactory(Boolean.class, new JdbcBinaryValueMapper.Factory(Defaults.TYPE_BOOLEAN()));
         lookup.addFieldMappingFactory(short.class, new JdbcBinaryValueMapper.Factory(Defaults.TYPE_SHORT()));
         lookup.addFieldMappingFactory(int.class, new JdbcBinaryValueMapper.Factory(Defaults.TYPE_INT()));
         lookup.addFieldMappingFactory(long.class, new JdbcBinaryValueMapper.Factory(Defaults.TYPE_LONG()));

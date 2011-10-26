@@ -31,7 +31,7 @@ JSON Viewer
 
 Further Info
   
-  See this module's {{{./apidocs/index.html}Javadoc}} and the 
+  See this module's {{{./json-applib/index.html}applib}},  {{{./json-viewer/index.html}viewer}} and 
   {{{./docbkx/html/guide/isis-json-viewer.html}user guide}} for more information.
  
 See also

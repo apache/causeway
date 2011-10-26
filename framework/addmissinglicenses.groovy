@@ -105,7 +105,7 @@ REM  under the License.
 """
 
 
-def fileEndings = [".htm"]
+def fileEndings = [".java", ".htm"]
 //def fileEndings = [".xml", ".html", ".htm", ".shtml", ".css", ".java", ".sh", ".properties", ".groovy", ".allow", ".passwords", ".bat"]
 
 def licenseTextByFileEnding = [
@@ -153,7 +153,10 @@ currentDir.eachFileRecurse { file ->
             file.write(licenseTextByFileEnding[fileEnding])
             file.append(fileText)
           }
-        }
+
+        } else {
+          // println "Y: "+ file.canonicalPath
+		}
       }    
     }
   }
