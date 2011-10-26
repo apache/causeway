@@ -57,25 +57,26 @@ public class TypeActionReprRenderer extends AbstractTypeMemberReprBuilder<TypeAc
     public TypeActionReprRenderer(ResourceContext resourceContext, LinkFollower linkFollower, RepresentationType representationType, JsonRepresentation representation) {
         super(resourceContext, linkFollower, representationType, representation);
     }
-
     
     @Override
     protected void addLinksSpecificToFeature() {
-        addLinksForParameters();
+        addParameters();
         addLinkToReturnTypeIfAny();
         addLinkToElementTypeIfAny();
     }
 
-    private void addLinksForParameters() {
+    private void addParameters() {
         if(parentSpec == null) {
             return;
         }
+        final JsonRepresentation parameterList = JsonRepresentation.newArray();
         final List<ObjectActionParameter> parameters = getObjectFeature().getParameters();
         for (ObjectActionParameter parameter : parameters) {
             final LinkBuilder linkBuilder = TypeActionParamReprRenderer.newLinkToBuilder(getResourceContext(), Rel.ACTION_PARAM, parentSpec, parameter);
-            getLinks().arrayAdd(linkBuilder.build());
+            parameterList.arrayAdd(linkBuilder.build());
         }
         
+        representation.mapPut("parameters", parameterList);
     }
 
     protected void addLinkToElementTypeIfAny() {

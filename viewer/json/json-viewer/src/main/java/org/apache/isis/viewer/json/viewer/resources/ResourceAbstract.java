@@ -119,6 +119,11 @@ public abstract class ResourceAbstract {
                     securityContext, getOidStringifier(), getLocalization(), getAuthenticationSession(), getPersistenceSession(), getAdapterManager());
     }
     
+    protected void init() {
+        init(RepresentationType.GENERIC);
+    }
+
+    
     protected ResourceContext getResourceContext() {
         return resourceContext;
     }

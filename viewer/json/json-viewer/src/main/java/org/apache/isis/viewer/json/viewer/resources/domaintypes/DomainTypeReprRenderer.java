@@ -83,6 +83,7 @@ public class DomainTypeReprRenderer extends ReprRendererAbstract<DomainTypeReprR
 
             putExtensionsNames();
             putExtensionsDescriptionIfAvailable();
+            putExtensionsIfService();
         }
 
         return representation;
@@ -117,7 +118,7 @@ public class DomainTypeReprRenderer extends ReprRendererAbstract<DomainTypeReprR
         getExtensions().mapPut("friendlyName", singularName);
 
         String pluralName = objectSpecification.getPluralName();
-        getExtensions().mapPut("singularName", pluralName);
+        getExtensions().mapPut("pluralName", pluralName);
     }
 
     protected void putExtensionsDescriptionIfAvailable() {
@@ -125,6 +126,10 @@ public class DomainTypeReprRenderer extends ReprRendererAbstract<DomainTypeReprR
         if(!Strings.isNullOrEmpty(description)) {
             getExtensions().mapPut("description", description);
         }
+    }
+
+    protected void putExtensionsIfService() {
+        getExtensions().mapPut("isService", objectSpecification.isService());
     }
 
 }

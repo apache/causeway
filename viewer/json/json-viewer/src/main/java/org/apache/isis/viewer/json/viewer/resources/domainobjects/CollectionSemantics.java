@@ -36,7 +36,11 @@ public enum CollectionSemantics {
     public String getAddToKey() {
         return addToKey;
     }
-    
+
+    public String getRemoveFromKey() {
+        return "removeFrom";
+    }
+
     public static CollectionSemantics determine(ResourceContext resourceContext, OneToManyAssociation collection) {
         return collection.getCollectionSemantics().isSet()?CollectionSemantics.SET:CollectionSemantics.LIST;
     }

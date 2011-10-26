@@ -48,6 +48,7 @@ import org.apache.isis.viewer.json.viewer.JsonApplicationException;
 import org.apache.isis.viewer.json.viewer.representations.RendererFactory;
 import org.apache.isis.viewer.json.viewer.representations.RendererFactoryRegistry;
 import org.apache.isis.viewer.json.viewer.resources.ResourceAbstract;
+import org.apache.isis.viewer.json.viewer.resources.ResourceAbstract.Caching;
 import org.apache.isis.viewer.json.viewer.resources.domainobjects.DomainResourceHelper.Intent;
 
 @Path("/objects")
@@ -66,13 +67,12 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_DOMAIN_OBJECT, RestfulMediaType.APPLICATION_JSON_ERROR })
     public Response object(
             @PathParam("oid") final String oidStr) {
-        final RepresentationType representationType = RepresentationType.DOMAIN_OBJECT;
-        init(representationType);
+        init(RepresentationType.DOMAIN_OBJECT);
 
         final ObjectAdapter objectAdapter = getObjectAdapter(oidStr);
         
         final RendererFactory rendererFactory = 
-                rendererFactoryRegistry.find(representationType);
+                rendererFactoryRegistry.find(RepresentationType.DOMAIN_OBJECT);
         
         final DomainObjectReprRenderer renderer = 
                 (DomainObjectReprRenderer) rendererFactory.newRenderer(getResourceContext(), null, JsonRepresentation.newMap());
@@ -95,9 +95,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements
         @PathParam("oid") final String oidStr, 
         final InputStream arguments) {
 
-        final RepresentationType representationType = RepresentationType.DOMAIN_OBJECT;
-        
-        init(representationType);
+        init(RepresentationType.DOMAIN_OBJECT);
 
         // TODO
         throw new UnsupportedOperationException();
@@ -113,8 +111,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements
     public Response propertyDetails(
             @PathParam("oid") final String oidStr,
             @PathParam("propertyId") final String propertyId) {
-        final RepresentationType representationType = RepresentationType.OBJECT_PROPERTY;
-        init(representationType);
+        init(RepresentationType.OBJECT_PROPERTY);
         
         final ObjectAdapter objectAdapter = getObjectAdapter(oidStr);
         final DomainResourceHelper helper = new DomainResourceHelper(getResourceContext());
@@ -129,7 +126,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements
             @PathParam("oid") final String oidStr,
             @PathParam("propertyId") final String propertyId,
             final InputStream body) {
-        init(null);
+        init();
 
         final DomainResourceHelper helper = new DomainResourceHelper(getResourceContext());
         
@@ -161,7 +158,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements
     public Response clearProperty(
             @PathParam("oid") final String oidStr,
             @PathParam("propertyId") final String propertyId) {
-        init(null);
+        init();
 
         final DomainResourceHelper helper = new DomainResourceHelper(getResourceContext());
 
@@ -181,6 +178,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements
     }
 
 
+
     ////////////////////////////////////////////////////////////
     // domain object collection
     ////////////////////////////////////////////////////////////
@@ -191,6 +189,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements
     public Response accessCollection(
         @PathParam("oid") final String oidStr,
         @PathParam("collectionId") final String collectionId) {
+        init(RepresentationType.OBJECT_COLLECTION);
 
         final DomainResourceHelper helper = new DomainResourceHelper(getResourceContext());
 
@@ -202,12 +201,9 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements
         final ObjectCollectionReprRenderer renderer = 
                 (ObjectCollectionReprRenderer) factory.newRenderer(getResourceContext(), null, JsonRepresentation.newMap());
 
-        renderer.with(new ObjectAndCollection(objectAdapter, collection));
+        renderer.with(new ObjectAndCollection(objectAdapter, collection)).asStandalone();
         
-        return Response.status(HttpStatusCode.OK.getJaxrsStatusType())
-                .entity(jsonFor(renderer))
-                .type(MediaType.APPLICATION_JSON_TYPE)
-                .build();
+        return ResourceAbstract.responseOfOk(renderer, Caching.NONE).build();
     }
 
     @PUT
@@ -217,7 +213,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements
             @PathParam("oid") final String oidStr,
             @PathParam("collectionId") final String collectionId,
             final InputStream body) {
-        init(null);
+        init();
 
         final DomainResourceHelper helper = new DomainResourceHelper(getResourceContext());
 
@@ -254,7 +250,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements
             @PathParam("oid") final String oidStr,
             @PathParam("collectionId") final String collectionId,
             final InputStream body) {
-        init(null);
+        init();
 
         final DomainResourceHelper helper = new DomainResourceHelper(getResourceContext());
 
@@ -292,7 +288,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements
         @PathParam("collectionId") final String collectionId,
         final InputStream body) {
 
-        init(null);
+        init();
         
         final DomainResourceHelper helper = new DomainResourceHelper(getResourceContext());
 
@@ -326,8 +322,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements
     public Response actionPrompt(
             @PathParam("oid") final String oidStr,
             @PathParam("actionId") final String actionId) {
-        final RepresentationType representationType = RepresentationType.OBJECT_ACTION;
-        init(representationType);
+        init(RepresentationType.OBJECT_ACTION);
 
         final DomainResourceHelper helper = new DomainResourceHelper(getResourceContext());
 
@@ -390,7 +385,5 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements
         
         return helper.invokeAction(objectAdapter, actionId, body);
     }
-
-
 
 }

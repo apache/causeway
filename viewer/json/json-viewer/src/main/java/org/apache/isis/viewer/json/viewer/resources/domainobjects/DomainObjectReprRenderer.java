@@ -140,8 +140,7 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
                         (ObjectPropertyReprRenderer) factory.newRenderer(getResourceContext(), linkFollower, JsonRepresentation.newMap());
                 
                 renderer.with(new ObjectAndProperty(objectAdapter, property))
-                        .usingLinkToBuilder(linkToBuilder)
-                        .withDetailsLink();
+                        .usingLinkToBuilder(linkToBuilder);
                 
                 members.arrayAdd(renderer.render());
             }
@@ -153,8 +152,7 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
                         (ObjectCollectionReprRenderer) factory.newRenderer(getResourceContext(), linkFollower, JsonRepresentation.newMap());
 
                 renderer.with(new ObjectAndCollection(objectAdapter, collection))
-                    .usingLinkToBuilder(linkToBuilder)
-                    .withDetailsLink();
+                    .usingLinkToBuilder(linkToBuilder);
                 
                 members.arrayAdd(renderer.render());
             }
@@ -181,8 +179,7 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
                         (ObjectActionReprRenderer) factory.newRenderer(getResourceContext(), linkFollower, JsonRepresentation.newMap());
                 
                 renderer.with(new ObjectAndAction(objectAdapter, action))
-                        .usingLinkToBuilder(linkToBuilder)
-                        .withDetailsLink();
+                        .usingLinkToBuilder(linkToBuilder);
 
                 members.arrayAdd(renderer.render());
             }

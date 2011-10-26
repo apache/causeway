@@ -16,6 +16,7 @@
  */
 package org.apache.isis.viewer.json.viewer.resources.domaintypes;
 
+import org.apache.isis.core.metamodel.facets.maxlen.MaxLengthFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
@@ -78,6 +79,15 @@ public class TypeActionParamReprRenderer extends AbstractTypeFeatureReprBuilder<
         getLinks().arrayAdd(parentLinkBuilder.build());
     }
 
+    @Override
+    protected void addPropertiesSpecificToFeature() {
+        representation.mapPut("optional", getObjectFeature().isOptional());
+        final MaxLengthFacet maxLength = getObjectFeature().getFacet(MaxLengthFacet.class);
+        if(maxLength != null && !maxLength.isNoop()) {
+            representation.mapPut("maxLength", maxLength.value());
+        }
+    }
+    
     @Override
     protected void putExtensionsSpecificToFeature() {
         putExtensionsName();

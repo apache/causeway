@@ -27,17 +27,34 @@ import org.apache.isis.viewer.json.viewer.ResourceContext;
 import org.apache.isis.viewer.json.viewer.representations.LinkFollower;
 import org.apache.isis.viewer.json.viewer.representations.Rel;
 import org.apache.isis.viewer.json.viewer.representations.ReprRendererAbstract;
+import org.codehaus.jackson.node.NullNode;
 
 public abstract class AbstractObjectMemberReprRenderer<R extends ReprRendererAbstract<R, ObjectAndMember<T>>, T extends ObjectMember> 
         extends ReprRendererAbstract<R, ObjectAndMember<T>> {
 
+    protected enum Mode {
+        INLINE,
+        FOLLOWED,
+        STANDALONE;
+
+        public boolean isInline() {
+            return this == INLINE;
+        }
+        public boolean isFollowed() {
+            return this == FOLLOWED;
+        }
+        public boolean isStandalone() {
+            return this == STANDALONE;
+        }
+    }
+    
     protected ObjectAdapterLinkTo linkToBuilder;
     
     protected ObjectAdapter objectAdapter;
     protected MemberType memberType;
     protected T objectMember;
-
-
+    protected Mode mode = Mode.INLINE; // unless we determine otherwise
+    
     public AbstractObjectMemberReprRenderer(ResourceContext resourceContext, LinkFollower linkFollower, RepresentationType representationType, JsonRepresentation representation) {
         super(resourceContext, linkFollower, representationType, representation);
     }
@@ -50,8 +67,8 @@ public abstract class AbstractObjectMemberReprRenderer<R extends ReprRendererAbs
         usingLinkToBuilder(new DomainObjectLinkTo());
 
         // done eagerly so can use as criteria for x-ro-follow-links
-        putId();
-        putMemberType();
+        representation.mapPut(memberType.getJsProp(), objectMember.getId());
+        representation.mapPut("memberType", memberType.getName());
 
         return cast(this);
     }
@@ -64,48 +81,91 @@ public abstract class AbstractObjectMemberReprRenderer<R extends ReprRendererAbs
         return cast(this);
     }
 
-    public R withSelf() {
-        final JsonRepresentation links = getLinks();
-        links.arrayAdd(linkToBuilder.linkToMember(Rel.SELF, memberType, objectMember).build());
-        return cast(this);
-    }
 
-    protected void putId() {
-        representation.mapPut(memberType.getJsProp(), objectMember.getId());
-    }
-
-    protected void putMemberType() {
-        representation.mapPut("memberType", memberType.getName());
-    }
-
-
-    public abstract R withMutatorsIfEnabled();
-
-    protected abstract JsonRepresentation mutatorArgs(MutatorSpec mutatorSpec);
-    
-    protected R withValue() {
-        representation.mapPut("value", valueRep());
+    /**
+     * Indicate that this is a standalone representation. 
+     */
+    public R asStandalone() {
+        mode = Mode.STANDALONE;
         return cast(this);
     }
 
     /**
-     * Members that can provide a value should override.
+     * Indicate that this is a representation to include as the result of a followed link. 
      */
-    protected Object valueRep() {
-        return null;
+    public R asFollowed() {
+        mode = Mode.FOLLOWED;
+        return cast(this);
     }
 
-    protected final void putDisabledReasonIfDisabled() {
-        String disabledReasonRep = usability().getReason();
-        representation.mapPut("disabledReason", disabledReasonRep);
+    /**
+     * For subclasses to call from their {@link #render()} method.
+     */
+    protected void addMemberContentSpecificToMode() {
+        if(mode.isInline()) {
+            addDetailsLink();
+            return;
+        } 
+        
+        if (mode.isStandalone()){
+            addLinkToSelf();
+        }
+        if (mode.isFollowed() || mode.isStandalone()){
+            addMutatorsIfEnabled();
+            
+            putExtensionsIsisProprietary();
+            addLinksToFormalDomainModel();
+            addLinksIsisProprietary();
+            return;
+        }
+    }
+    
+    private void addLinkToSelf() {
+        getLinks().arrayAdd(linkToBuilder.linkToMember(Rel.SELF, memberType, objectMember).build());
     }
 
-    public R withDetailsLink() {
+    protected abstract void addMutatorsIfEnabled();
+    
+    /**
+     * For subclasses to call back to when {@link #addMutatorsIfEnabled() adding mutators}.
+     */
+    protected void addLinkFor(final MutatorSpec mutatorSpec) {
+        if(hasMemberFacet(mutatorSpec.mutatorFacetType)) {
+            
+            JsonRepresentation arguments = mutatorArgs(mutatorSpec);
+            JsonRepresentation mutatorLink = 
+                    linkToBuilder.linkToMember(mutatorSpec.rel, memberType, objectMember, mutatorSpec.suffix)
+                    .withHttpMethod(mutatorSpec.httpMethod)
+                    .withArguments(arguments)
+                    .build();
+            getLinks().arrayAdd(mutatorLink);
+        }
+    }
+
+    /**
+     * Default implementation (common to properties and collections) that can 
+     * be overridden (ie by actions) if required.
+     */
+    protected JsonRepresentation mutatorArgs(MutatorSpec mutatorSpec) {
+        if(mutatorSpec.arguments.isNone()) {
+            return null;
+        }
+        if(mutatorSpec.arguments.isOne()) {
+            final JsonRepresentation repr = JsonRepresentation.newMap();
+            repr.mapPut("value", NullNode.getInstance()); // force a null into the map
+            return repr;
+        }
+        // overridden by actions
+        throw new UnsupportedOperationException("override mutatorArgs() to populate for many arguments");
+    }
+    
+    private R addDetailsLink() {
         final JsonRepresentation link = 
-                linkToBuilder.linkToMember(memberType.getDetailsRel(), memberType, objectMember).build();
+                linkToBuilder.linkToMember(Rel.DETAILS, memberType, objectMember).build();
         getLinks().arrayAdd(link);
+        
         final LinkFollower membersLinkFollower = getLinkFollower();
-        final LinkFollower detailsLinkFollower = membersLinkFollower.follow("links[rel=%s]", memberType.getDetailsRel().getName());
+        final LinkFollower detailsLinkFollower = membersLinkFollower.follow("links[rel=%s]", Rel.DETAILS.getName());
         if(membersLinkFollower.matches(representation) && detailsLinkFollower.matches(link)) {
             followDetailsLink(link);
         }
@@ -114,13 +174,21 @@ public abstract class AbstractObjectMemberReprRenderer<R extends ReprRendererAbs
 
     protected abstract void followDetailsLink(JsonRepresentation detailsLink);
 
+    protected final void putDisabledReasonIfDisabled() {
+        String disabledReasonRep = usability().getReason();
+        representation.mapPut("disabledReason", disabledReasonRep);
+    }
+
+    protected abstract void putExtensionsIsisProprietary();
+    protected abstract void addLinksToFormalDomainModel();
+    protected abstract void addLinksIsisProprietary();
+
     /**
-     * For Resources to call.
+     * Convenience method.
      */
     public boolean isMemberVisible() {
         return visibility().isAllowed();
     }
-
 
     protected <F extends Facet> F getMemberSpecFacet(Class<F> facetType) {
         ObjectSpecification otoaSpec = objectMember.getSpecification();

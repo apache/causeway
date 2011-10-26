@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map.Entry;
 
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -92,7 +93,8 @@ public class DomainResourceHelper {
         final ObjectPropertyReprRenderer renderer = 
                 (ObjectPropertyReprRenderer) factory.newRenderer(resourceContext, null, JsonRepresentation.newMap());
         
-        renderer.with(new ObjectAndProperty(objectAdapter, property));
+        renderer.with(new ObjectAndProperty(objectAdapter, property))
+                .asStandalone();
         
         return ResourceAbstract.responseOfOk(renderer, caching).build();
     }
@@ -110,8 +112,7 @@ public class DomainResourceHelper {
                 (ObjectActionReprRenderer) factory.newRenderer(resourceContext, null, JsonRepresentation.newMap());
         
         renderer.with(new ObjectAndAction(serviceAdapter, action))
-                .withSelf()
-                .withMutatorsIfEnabled();
+                .asStandalone();
 
         return ResourceAbstract.responseOfOk(renderer, Caching.NONE).build();
     }
@@ -143,16 +144,6 @@ public class DomainResourceHelper {
         }
 
         JsonRepresentation arguments = parseQueryString(action, argumentsQueryString);
-        
-        int numParameters = action.getParameterCount();
-        int argSize = arguments.size();
-        if (argSize != numParameters) {
-            throw JsonApplicationException.create(
-                    HttpStatusCode.BAD_REQUEST,
-                    "Action '%s' has %d parameters but received %d arguments",
-                    numParameters, argSize, action.getId());
-        }
-        
         
         return invokeActionUsingAdapters(objectAdapter, action, arguments);
     }
@@ -211,21 +202,26 @@ public class DomainResourceHelper {
         final JsonRepresentation arguments) {
         
         List<ObjectAdapter> argAdapters = parseArguments(action, arguments);
-        final JsonRepresentation representation;
         
-        // validate
+        // validate individual args
         List<ObjectActionParameter> parameters = action.getParameters();
         for (int i = 0; i < parameters.size(); i++) {
             ObjectActionParameter parameter = parameters.get(i);
-            ObjectAdapter paramAdapter = argAdapters.get(i);
-            if (paramAdapter.getSpecification().containsFacet(ValueFacet.class)) {
-                Object arg = paramAdapter.getObject();
+            ObjectAdapter argAdapter = argAdapters.get(i);
+            if(argAdapter == null) {
+                // can only happen if this is an optional parameter; nothing to do
+                continue;
+            } 
+            if (argAdapter.getSpecification().containsFacet(ValueFacet.class)) {
+                Object arg = argAdapter.getObject();
                 String reasonNotValid = parameter.isValid(objectAdapter, arg);
                 if (reasonNotValid != null) {
                     throw JsonApplicationException.create(HttpStatusCode.NOT_ACCEPTABLE, reasonNotValid);
                 }
             }
         }
+        
+        // validate all args
         ObjectAdapter[] argArray = argAdapters.toArray(new ObjectAdapter[0]);
         Consent consent = action.isProposedArgumentSetValid(objectAdapter,
                 argArray);
@@ -241,6 +237,8 @@ public class DomainResourceHelper {
             return ResourceAbstract.responseOfNoContent(objectAdapter.getVersion()).build();
         }
 
+        final JsonRepresentation representation;
+        
         final CollectionFacet collectionFacet = returnedAdapter.getSpecification().getFacet(CollectionFacet.class);
         if (collectionFacet != null) {
             representation = representationWithSelfFor(RepresentationType.LIST, objectAdapter, action, arguments);
@@ -311,6 +309,10 @@ public class DomainResourceHelper {
             final ResourceContext resourceContext, 
             final ObjectSpecification objectSpec, 
             final JsonRepresentation representation) {
+
+        if(representation == null) {
+            return null;
+        }
         
         // value (encodable)
         if (objectSpec.isEncodeable()) {
@@ -503,23 +505,28 @@ public class DomainResourceHelper {
 
     private List<JsonRepresentation> argListFor(final ObjectAction action, JsonRepresentation arguments) {
         List<JsonRepresentation> argList = Lists.newArrayList();
+
         
-        int numParameters = action.getParameterCount();
-        int numArguments = arguments.size();
-        if (numArguments != numParameters) {
-            throw JsonApplicationException.create(
-                    HttpStatusCode.BAD_REQUEST,
-                    "Action '%s' has %d parameters but received %d arguments in body",
-                    action.getId(), numParameters, numArguments);
+        // ensure that we have no arguments that are not parameters
+        for(Entry<String, JsonRepresentation> arg: arguments.mapIterable()) {
+            final String argName = arg.getKey();
+            if(action.getParameter(argName) == null) {
+                throw JsonApplicationException.create(
+                        HttpStatusCode.BAD_REQUEST,
+                        "Action '%s' does not have a parameter %s but an argument of that name was provided",
+                        action.getId(), argName);
+            }
         }
+
+        // ensure that an argument value has been provided for all non-optional parameters 
         final List<ObjectActionParameter> parameters = action.getParameters();
         for (ObjectActionParameter param : parameters) {
             final String paramName = param.getName();
             final JsonRepresentation argRepr = arguments.getRepresentation(paramName);
-            if(argRepr == null) {
+            if(argRepr == null && !param.isOptional()) {
                 throw JsonApplicationException.create(
                         HttpStatusCode.BAD_REQUEST,
-                        "Action '%s', no argument found for parameter '%s'",
+                        "Action '%s', no argument found for (mandatory) parameter '%s'",
                         action.getId(), paramName);
             }
             argList.add(argRepr);
