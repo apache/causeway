@@ -154,7 +154,7 @@ public class DomainServiceResourceTest_invokeAction {
         final Response responseBefore = client.follow(linkToSimpleEntity);
         final RestfulResponse<DomainObjectRepresentation> restfulResponseBefore = RestfulResponse.ofT(responseBefore);
         final DomainObjectRepresentation simpleEntityBefore = restfulResponseBefore.getEntity();
-        assertThat(simpleEntityBefore.getProperty("flag").getBoolean("value"), is(true));
+        final Boolean before = simpleEntityBefore.getProperty("flag").getBoolean("value");
 
         // and given 'toggle' action on repo
         JsonRepresentation givenAction = givenAction("simples", "toggle");
@@ -182,7 +182,9 @@ public class DomainServiceResourceTest_invokeAction {
         final Response responseAfter = client.follow(linkToSimpleEntity);
         final RestfulResponse<DomainObjectRepresentation> restfulResponseAfter = RestfulResponse.ofT(responseAfter);
         final DomainObjectRepresentation simpleEntityAfter = restfulResponseAfter.getEntity();
-        assertThat(simpleEntityAfter.getProperty("flag").getBoolean("value"), is(false));
+        
+        final Boolean after = simpleEntityAfter.getProperty("flag").getBoolean("value");
+        assertThat(after, is(!before)); // ie has been toggled
     }
 
 

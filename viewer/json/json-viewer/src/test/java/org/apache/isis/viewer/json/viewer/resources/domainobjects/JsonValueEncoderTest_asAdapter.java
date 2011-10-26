@@ -172,6 +172,8 @@ public class JsonValueEncoderTest_asAdapter {
         allowingObjectSpecHas(EncodableFacet.class, encodableFacet);
         allowingObjectSpecCorrespondingClassIs(int.class);
         
+        representation = JsonRepresentation.newMap("foo", "bar");
+        
         // when
         jsonValueEncoder.asAdapter(objectSpec, representation);
     }
@@ -251,7 +253,9 @@ public class JsonValueEncoderTest_asAdapter {
         // given
         allowingObjectSpecHas(EncodableFacet.class, encodableFacet);
         allowingObjectSpecCorrespondingClassIs(double.class);
-        
+
+        representation = JsonRepresentation.newMap("foo", "bar");
+
         // when
         jsonValueEncoder.asAdapter(objectSpec, representation);
     }
@@ -283,6 +287,8 @@ public class JsonValueEncoderTest_asAdapter {
         allowingObjectSpecHas(EncodableFacet.class, encodableFacet);
         allowingObjectSpecCorrespondingClassIs(BigInteger.class);
         
+        representation = JsonRepresentation.newMap("foo", "bar");
+
         // when
         jsonValueEncoder.asAdapter(objectSpec, representation);
     }
@@ -313,7 +319,9 @@ public class JsonValueEncoderTest_asAdapter {
         // given
         allowingObjectSpecHas(EncodableFacet.class, encodableFacet);
         allowingObjectSpecCorrespondingClassIs(BigDecimal.class);
-        
+
+        representation = JsonRepresentation.newMap("foo", "bar");
+
         // when
         jsonValueEncoder.asAdapter(objectSpec, representation);
     }

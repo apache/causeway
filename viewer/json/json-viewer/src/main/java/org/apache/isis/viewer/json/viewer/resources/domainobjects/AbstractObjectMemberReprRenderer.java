@@ -24,6 +24,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.applib.RepresentationType;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
+import org.apache.isis.viewer.json.viewer.representations.LinkBuilder;
 import org.apache.isis.viewer.json.viewer.representations.LinkFollower;
 import org.apache.isis.viewer.json.viewer.representations.Rel;
 import org.apache.isis.viewer.json.viewer.representations.ReprRendererAbstract;
@@ -48,7 +49,7 @@ public abstract class AbstractObjectMemberReprRenderer<R extends ReprRendererAbs
         }
     }
     
-    protected ObjectAdapterLinkTo linkToBuilder;
+    protected ObjectAdapterLinkTo linkTo;
     
     protected ObjectAdapter objectAdapter;
     protected MemberType memberType;
@@ -64,7 +65,7 @@ public abstract class AbstractObjectMemberReprRenderer<R extends ReprRendererAbs
         this.objectAdapter = objectAndMember.getObjectAdapter();
         this.objectMember = objectAndMember.getMember();
         this.memberType = MemberType.determineFrom(objectMember);
-        usingLinkToBuilder(new DomainObjectLinkTo());
+        usingLinkTo(new DomainObjectLinkTo());
 
         // done eagerly so can use as criteria for x-ro-follow-links
         representation.mapPut(memberType.getJsProp(), objectMember.getId());
@@ -76,8 +77,8 @@ public abstract class AbstractObjectMemberReprRenderer<R extends ReprRendererAbs
     /**
      * Must be called after {@link #with(ObjectAndMember)} (which provides the {@link #objectAdapter}).
      */
-    public R usingLinkToBuilder(ObjectAdapterLinkTo linkToBuilder) {
-        this.linkToBuilder = linkToBuilder.usingResourceContext(resourceContext).with(objectAdapter);
+    public R usingLinkTo(ObjectAdapterLinkTo linkTo) {
+        this.linkTo = linkTo.usingResourceContext(resourceContext).with(objectAdapter);
         return cast(this);
     }
 
@@ -109,6 +110,7 @@ public abstract class AbstractObjectMemberReprRenderer<R extends ReprRendererAbs
         
         if (mode.isStandalone()){
             addLinkToSelf();
+            addLinkToUp();
         }
         if (mode.isFollowed() || mode.isStandalone()){
             addMutatorsIfEnabled();
@@ -120,26 +122,39 @@ public abstract class AbstractObjectMemberReprRenderer<R extends ReprRendererAbs
         }
     }
     
+
     private void addLinkToSelf() {
-        getLinks().arrayAdd(linkToBuilder.linkToMember(Rel.SELF, memberType, objectMember).build());
+        getLinks().arrayAdd(linkTo.memberBuilder(Rel.SELF, memberType, objectMember).build());
     }
 
+    private void addLinkToUp() {
+        getLinks().arrayAdd(linkTo.builder(Rel.UP).build());
+    }
+    
     protected abstract void addMutatorsIfEnabled();
     
     /**
      * For subclasses to call back to when {@link #addMutatorsIfEnabled() adding mutators}.
      */
     protected void addLinkFor(final MutatorSpec mutatorSpec) {
-        if(hasMemberFacet(mutatorSpec.mutatorFacetType)) {
-            
-            JsonRepresentation arguments = mutatorArgs(mutatorSpec);
-            JsonRepresentation mutatorLink = 
-                    linkToBuilder.linkToMember(mutatorSpec.rel, memberType, objectMember, mutatorSpec.suffix)
-                    .withHttpMethod(mutatorSpec.httpMethod)
-                    .withArguments(arguments)
-                    .build();
-            getLinks().arrayAdd(mutatorLink);
-        }
+        if(!hasMemberFacet(mutatorSpec.mutatorFacetType)) {
+            return;
+        } 
+        JsonRepresentation arguments = mutatorArgs(mutatorSpec);
+        RepresentationType representationType = mutatorRepType();
+        JsonRepresentation mutatorLink = 
+                linkTo.memberBuilder(mutatorSpec.rel, memberType, objectMember, representationType, mutatorSpec.suffix)
+                .withHttpMethod(mutatorSpec.httpMethod)
+                .withArguments(arguments)
+                .build();
+        getLinks().arrayAdd(mutatorLink);
+    }
+
+    /**
+     * Default implementation is suitable for properties and collections
+     */
+    protected RepresentationType mutatorRepType() {
+        return memberType.getRepresentationType();
     }
 
     /**
@@ -161,7 +176,7 @@ public abstract class AbstractObjectMemberReprRenderer<R extends ReprRendererAbs
     
     private R addDetailsLink() {
         final JsonRepresentation link = 
-                linkToBuilder.linkToMember(Rel.DETAILS, memberType, objectMember).build();
+                linkTo.memberBuilder(Rel.DETAILS, memberType, objectMember).build();
         getLinks().arrayAdd(link);
         
         final LinkFollower membersLinkFollower = getLinkFollower();

@@ -83,31 +83,31 @@ public interface DomainServiceResource {
     ////////////////////////////////////////////////////////////
 
     @GET
-    @Path("/{oid}/actions/{actionId}/invoke")
+    @Path("/{serviceId}/actions/{actionId}/invoke")
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_DOMAIN_OBJECT, RestfulMediaType.APPLICATION_JSON_LIST, RestfulMediaType.APPLICATION_JSON_SCALAR_VALUE, RestfulMediaType.APPLICATION_JSON_ERROR })
     @ClientResponseType(entityType=String.class)
-    public Response serviceInvokeActionQueryOnly(
-        @PathParam("oid") final String oidStr, 
+    public Response invokeActionQueryOnly(
+        @PathParam("serviceId") final String serviceId, 
         @PathParam("actionId") final String actionId,
         @QueryParam("args") final String arguments);
 
     @PUT
-    @Path("/{oid}/actions/{actionId}/invoke")
+    @Path("/{serviceId}/actions/{actionId}/invoke")
     @Consumes({ MediaType.APPLICATION_JSON })
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_DOMAIN_OBJECT, RestfulMediaType.APPLICATION_JSON_LIST, RestfulMediaType.APPLICATION_JSON_SCALAR_VALUE, RestfulMediaType.APPLICATION_JSON_ERROR })
     @ClientResponseType(entityType=String.class)
-    public Response serviceInvokeActionIdempotent(
-        @PathParam("oid") final String oidStr, 
+    public Response invokeActionIdempotent(
+        @PathParam("serviceId") final String serviceId, 
         @PathParam("actionId") final String actionId,
         final InputStream arguments);
 
     @POST
-    @Path("/{oid}/actions/{actionId}/invoke")
+    @Path("/{serviceId}/actions/{actionId}/invoke")
     @Consumes({ MediaType.APPLICATION_JSON })
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_DOMAIN_OBJECT, RestfulMediaType.APPLICATION_JSON_LIST, RestfulMediaType.APPLICATION_JSON_SCALAR_VALUE, RestfulMediaType.APPLICATION_JSON_ERROR })
     @ClientResponseType(entityType=String.class)
-    public Response serviceInvokeAction(
-        @PathParam("oid") final String oidStr, 
+    public Response invokeAction(
+        @PathParam("serviceId") final String serviceId, 
         @PathParam("actionId") final String actionId,
         final InputStream arguments);
 }

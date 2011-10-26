@@ -47,7 +47,7 @@ public class ListReprRenderer extends ReprRendererAbstract<ListReprRenderer, Col
         }
     }
 
-    private ObjectAdapterLinkTo linkToBuilder;
+    private ObjectAdapterLinkTo linkTo;
     private Collection<ObjectAdapter> objectAdapters;
     private ObjectSpecification elementType;
     private ObjectSpecification returnType;
@@ -58,7 +58,7 @@ public class ListReprRenderer extends ReprRendererAbstract<ListReprRenderer, Col
     }
     
     public ListReprRenderer usingLinkToBuilder(ObjectAdapterLinkTo objectAdapterLinkToBuilder) {
-        this.linkToBuilder = objectAdapterLinkToBuilder.usingResourceContext(resourceContext);
+        this.linkTo = objectAdapterLinkToBuilder.usingResourceContext(resourceContext);
         return this;
     }
 
@@ -98,7 +98,7 @@ public class ListReprRenderer extends ReprRendererAbstract<ListReprRenderer, Col
         final LinkFollower linkFollower = getLinkFollower().follow("values");
 
         for(ObjectAdapter adapter: objectAdapters) {
-            JsonRepresentation linkToObject = linkToBuilder.with(adapter).builder().build();
+            JsonRepresentation linkToObject = linkTo.with(adapter).builder().build();
             values.arrayAdd(linkToObject);
 
             if(linkFollower.matches(linkToObject)) {
@@ -110,14 +110,6 @@ public class ListReprRenderer extends ReprRendererAbstract<ListReprRenderer, Col
             }
         }
         representation.mapPut("values", values);
-    }
-
-    private void addLinkToReturnType() {
-        addLink(Rel.RETURN_TYPE, returnType);
-    }
-
-    private void addLinkToElementType() {
-        addLink(Rel.ELEMENT_TYPE, elementType);
     }
 
 

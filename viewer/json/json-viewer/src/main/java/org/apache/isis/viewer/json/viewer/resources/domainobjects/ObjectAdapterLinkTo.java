@@ -20,6 +20,7 @@ package org.apache.isis.viewer.json.viewer.resources.domainobjects;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
+import org.apache.isis.viewer.json.applib.RepresentationType;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
 import org.apache.isis.viewer.json.viewer.representations.LinkBuilder;
 import org.apache.isis.viewer.json.viewer.representations.Rel;
@@ -30,11 +31,11 @@ public interface ObjectAdapterLinkTo {
     
     ObjectAdapterLinkTo with(ObjectAdapter objectAdapter);
 
-    ObjectAdapterLinkTo with(Rel rel);
-
     LinkBuilder builder();
+    LinkBuilder builder(Rel rel);
 
-    LinkBuilder linkToMember(Rel rel, MemberType memberType, ObjectMember objectMember, String... parts);
+    LinkBuilder memberBuilder(Rel rel, MemberType memberType, ObjectMember objectMember, String... parts);
+    LinkBuilder memberBuilder(Rel rel, MemberType memberType, ObjectMember objectMember, RepresentationType representationType, String... parts);
 
 
 }
