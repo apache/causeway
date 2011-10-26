@@ -102,8 +102,7 @@ public abstract class BooleanValueSemanticsProviderAbstract extends ValueSemanti
                 case 'f':
                     return Boolean.FALSE;
                 default:
-                    throw new IsisException("Invalid data for logical, expected 'T', 'F' or 'N, but got "
-                        + data.charAt(0));
+                    throw new IsisException("Invalid data for logical, expected 't' or 'f', but got " + data.charAt(0));
             }
         }
         throw new IsisException("Invalid data for logical, expected 1, 4 or 5 bytes, got " + dataLength + ": " + data);

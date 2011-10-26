@@ -49,7 +49,9 @@ Representation
     
 Further Info
   
-  See this module's {{{./apidocs/index.html}Javadoc}} and the {{{./docbkx/html/guide/isis-xhtml-viewer.html}user guide}} for more information.
+  See this module's {{{./xhtml-applib/index.html}applib}},  {{{./xhtml-viewer/index.html}viewer}} and 
+  {{{./docbkx/html/guide/isis-xhtml-viewer.html}user guide}} for more information.
+
  
 See also
 
