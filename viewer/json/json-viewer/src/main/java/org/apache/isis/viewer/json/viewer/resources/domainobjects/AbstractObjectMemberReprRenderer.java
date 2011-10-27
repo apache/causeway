@@ -24,7 +24,6 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.applib.RepresentationType;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
-import org.apache.isis.viewer.json.viewer.representations.LinkBuilder;
 import org.apache.isis.viewer.json.viewer.representations.LinkFollower;
 import org.apache.isis.viewer.json.viewer.representations.Rel;
 import org.apache.isis.viewer.json.viewer.representations.ReprRendererAbstract;
@@ -102,23 +101,22 @@ public abstract class AbstractObjectMemberReprRenderer<R extends ReprRendererAbs
     /**
      * For subclasses to call from their {@link #render()} method.
      */
-    protected void addMemberContentSpecificToMode() {
+    protected void renderMemberContent() {
         if(mode.isInline()) {
-            addDetailsLink();
-            return;
+            addDetailsLinkIfPersistent();
         } 
         
         if (mode.isStandalone()){
             addLinkToSelf();
             addLinkToUp();
         }
+        
         if (mode.isFollowed() || mode.isStandalone()){
             addMutatorsIfEnabled();
             
             putExtensionsIsisProprietary();
             addLinksToFormalDomainModel();
             addLinksIsisProprietary();
-            return;
         }
     }
     
@@ -174,7 +172,10 @@ public abstract class AbstractObjectMemberReprRenderer<R extends ReprRendererAbs
         throw new UnsupportedOperationException("override mutatorArgs() to populate for many arguments");
     }
     
-    private R addDetailsLink() {
+    private void addDetailsLinkIfPersistent() {
+        if(!objectAdapter.isPersistent()) {
+            return;
+        }
         final JsonRepresentation link = 
                 linkTo.memberBuilder(Rel.DETAILS, memberType, objectMember).build();
         getLinks().arrayAdd(link);
@@ -184,7 +185,7 @@ public abstract class AbstractObjectMemberReprRenderer<R extends ReprRendererAbs
         if(membersLinkFollower.matches(representation) && detailsLinkFollower.matches(link)) {
             followDetailsLink(link);
         }
-        return cast(this);
+        return;
     }
 
     protected abstract void followDetailsLink(JsonRepresentation detailsLink);

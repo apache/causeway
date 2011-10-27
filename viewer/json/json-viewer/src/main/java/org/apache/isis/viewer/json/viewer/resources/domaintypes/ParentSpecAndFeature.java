@@ -19,12 +19,24 @@
 package org.apache.isis.viewer.json.viewer.resources.domaintypes;
 
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
+import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
 
-public class SpecAndCollection extends SpecAndFeature<OneToManyAssociation> {
+public abstract class ParentSpecAndFeature<T extends ObjectFeature> {
     
-    public SpecAndCollection(ObjectSpecification objectSpecification, OneToManyAssociation collection) {
-        super(objectSpecification, collection);
+    private final ObjectSpecification parentSpec;
+    private final T objectFeature;
+    
+    public ParentSpecAndFeature(ObjectSpecification objectSpecification, T objectFeature) {
+        this.parentSpec = objectSpecification;
+        this.objectFeature = objectFeature;
     }
+    public ObjectSpecification getParentSpec() {
+        return parentSpec;
+    }
+    public T getObjectFeature() {
+        return objectFeature;
+    }
+
+    
     
 }

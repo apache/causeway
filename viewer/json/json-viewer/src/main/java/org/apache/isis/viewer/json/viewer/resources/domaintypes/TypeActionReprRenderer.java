@@ -31,9 +31,7 @@ import org.apache.isis.viewer.json.viewer.representations.Rel;
 import org.apache.isis.viewer.json.viewer.representations.ReprRenderer;
 import org.apache.isis.viewer.json.viewer.representations.ReprRendererFactoryAbstract;
 
-import com.google.common.base.Strings;
-
-public class TypeActionReprRenderer extends AbstractTypeMemberReprBuilder<TypeActionReprRenderer, ObjectAction> {
+public class TypeActionReprRenderer extends AbstractTypeMemberReprRenderer<TypeActionReprRenderer, ObjectAction> {
 
     public static class Factory extends ReprRendererFactoryAbstract {
 
@@ -66,13 +64,11 @@ public class TypeActionReprRenderer extends AbstractTypeMemberReprBuilder<TypeAc
     }
 
     private void addParameters() {
-        if(parentSpec == null) {
-            return;
-        }
         final JsonRepresentation parameterList = JsonRepresentation.newArray();
         final List<ObjectActionParameter> parameters = getObjectFeature().getParameters();
         for (ObjectActionParameter parameter : parameters) {
-            final LinkBuilder linkBuilder = TypeActionParamReprRenderer.newLinkToBuilder(getResourceContext(), Rel.ACTION_PARAM, parentSpec, parameter);
+            final LinkBuilder linkBuilder = 
+                    TypeActionParamReprRenderer.newLinkToBuilder(getResourceContext(), Rel.ACTION_PARAM, objectSpecification, parameter);
             parameterList.arrayAdd(linkBuilder.build());
         }
         

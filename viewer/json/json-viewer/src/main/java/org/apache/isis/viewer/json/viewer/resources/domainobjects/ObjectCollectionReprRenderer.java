@@ -57,14 +57,13 @@ public class ObjectCollectionReprRenderer extends AbstractObjectMemberReprRender
     }
     
     public JsonRepresentation render() {
-        // id and memberType are put eagerly
+        // id and memberType are rendered eagerly
 
-        putDisabledReasonIfDisabled();
-
-        addMemberContentSpecificToMode();
-        if(mode.isStandalone()) {
+        renderMemberContent();
+        if(mode.isStandalone() || !objectAdapter.isPersistent()) {
             addValue();
         }
+        putDisabledReasonIfDisabled();
 
         return representation;
     }

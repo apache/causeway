@@ -16,10 +16,12 @@
  */
 package org.apache.isis.viewer.json.viewer.resources.domaintypes;
 
+import org.apache.isis.core.commons.lang.NameUtils;
 import org.apache.isis.core.metamodel.facets.maxlen.MaxLengthFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
+import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.applib.RepresentationType;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
@@ -28,11 +30,9 @@ import org.apache.isis.viewer.json.viewer.representations.LinkBuilder;
 import org.apache.isis.viewer.json.viewer.representations.Rel;
 import org.apache.isis.viewer.json.viewer.representations.ReprRenderer;
 import org.apache.isis.viewer.json.viewer.representations.ReprRendererFactoryAbstract;
+import org.apache.isis.viewer.json.viewer.resources.domainobjects.MemberType;
 
-public class TypeActionParamReprRenderer extends AbstractTypeFeatureReprBuilder<TypeActionParamReprRenderer, ObjectActionParameter> {
-
-    private ObjectAction parentAction;
-    private ObjectSpecification parentSpec;
+public class TypeActionParamReprRenderer extends AbstractTypeFeatureReprRenderer<TypeActionParamReprRenderer, ObjectActionParameter> {
 
     public static class Factory extends ReprRendererFactoryAbstract {
 
@@ -52,7 +52,8 @@ public class TypeActionParamReprRenderer extends AbstractTypeFeatureReprBuilder<
         String actionId = objectAction.getId();
         final String paramName = objectActionParameter.getName();
         String url = String.format("domainTypes/%s/actions/%s/params/%s", typeFullName, actionId, paramName);
-        return LinkBuilder.newBuilder(resourceContext, rel, RepresentationType.TYPE_ACTION_PARAMETER, url);
+        return LinkBuilder.newBuilder(resourceContext, rel, RepresentationType.TYPE_ACTION_PARAMETER, url)
+                          .withId(deriveId(objectActionParameter));
     }
 
     public TypeActionParamReprRenderer(ResourceContext resourceContext, LinkFollower linkFollower, RepresentationType representationType, JsonRepresentation representation) {
@@ -60,32 +61,58 @@ public class TypeActionParamReprRenderer extends AbstractTypeFeatureReprBuilder<
     }
 
     @Override
+    public TypeActionParamReprRenderer with(ParentSpecAndFeature<ObjectActionParameter> specAndFeature) {
+        super.with(specAndFeature);
+        
+        // done eagerly so can use as criteria for x-ro-follow-links
+        representation.mapPut("id", deriveId());
+
+        return this;
+    }
+
+    protected String deriveId() {
+        return deriveId(getObjectFeature());
+    }
+
+    private static String deriveId(ObjectActionParameter objectActionParameter) {
+        return objectActionParameter.getAction().getId() + "-" + objectActionParameter.getName();
+    }
+
+
+    @Override
     protected void addLinkSelfIfRequired() {
         if(!includesSelf) {
             return;
         }
         getLinks().arrayAdd( 
-                newLinkToBuilder(getResourceContext(), Rel.SELF, getObjectSpecification(), getObjectFeature()).build());
+                newLinkToBuilder(getResourceContext(), Rel.SELF, getParentSpecification(), getObjectFeature()).build());
     }
 
     @Override
-    protected void addLinkToParentIfProvided() {
-        if(parentSpec == null || parentAction == null) {
-            return;
-        }
+    protected void addLinkUpToParent() {
+        ObjectAction parentAction = this.objectFeature.getAction();
         
         final LinkBuilder parentLinkBuilder = 
-                TypeActionReprRenderer.newLinkToBuilder(resourceContext, Rel.UP, parentSpec, parentAction);
+                TypeActionReprRenderer.newLinkToBuilder(resourceContext, Rel.UP, objectSpecification, parentAction);
         getLinks().arrayAdd(parentLinkBuilder.build());
     }
 
     @Override
     protected void addPropertiesSpecificToFeature() {
+        representation.mapPut("name", getObjectFeature().getName());
+        representation.mapPut("number", getObjectFeature().getNumber());
         representation.mapPut("optional", getObjectFeature().isOptional());
         final MaxLengthFacet maxLength = getObjectFeature().getFacet(MaxLengthFacet.class);
         if(maxLength != null && !maxLength.isNoop()) {
             representation.mapPut("maxLength", maxLength.value());
         }
+    }
+    
+    @Override
+    protected void addLinksSpecificToFeature() {
+        final LinkBuilder linkBuilder = 
+                DomainTypeReprRenderer.newLinkToBuilder(resourceContext, Rel.RETURN_TYPE, objectFeature.getSpecification());
+        getLinks().arrayAdd(linkBuilder.build());
     }
     
     @Override

@@ -58,13 +58,14 @@ public class ObjectPropertyReprRenderer extends AbstractObjectMemberReprRenderer
     }
 
     public JsonRepresentation render() {
-        // id and memberType are put in eagerly
+        // id and memberType are rendered eagerly
         
-        addValue();
 
+        renderMemberContent();
+        addValue();
+        
         putDisabledReasonIfDisabled();
 
-        addMemberContentSpecificToMode();
         if(mode.isStandalone()) {
             addChoices();
         }
