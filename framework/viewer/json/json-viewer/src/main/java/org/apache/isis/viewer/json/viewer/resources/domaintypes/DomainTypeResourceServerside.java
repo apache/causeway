@@ -113,7 +113,7 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
         
         final TypePropertyReprRenderer renderer = 
                 (TypePropertyReprRenderer) rendererFactory.newRenderer(getResourceContext(), null, JsonRepresentation.newMap());
-        renderer.with(new SpecAndProperty(parentSpec, property)).includesSelf().withParent(parentSpec);
+        renderer.with(new ParentSpecAndProperty(parentSpec, property)).includesSelf();
 
         return responseOfOk(renderer, Caching.ONE_DAY).build();
     }
@@ -143,7 +143,7 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
         
         final TypeCollectionReprRenderer renderer = 
                 (TypeCollectionReprRenderer) rendererFactory.newRenderer(getResourceContext(), null, JsonRepresentation.newMap());
-        renderer.with(new SpecAndCollection(parentSpec, collection)).includesSelf().withParent(parentSpec);
+        renderer.with(new ParentSpecAndCollection(parentSpec, collection)).includesSelf();
 
         return responseOfOk(renderer, Caching.ONE_DAY).build();
     }
@@ -173,7 +173,7 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
         
         final TypeActionReprRenderer renderer = 
                 (TypeActionReprRenderer) rendererFactory.newRenderer(getResourceContext(), null, JsonRepresentation.newMap());
-        renderer.with(new SpecAndAction(parentSpec, action)).includesSelf().withParent(parentSpec);
+        renderer.with(new ParentSpecAndAction(parentSpec, action)).includesSelf();
 
         return responseOfOk(renderer, Caching.ONE_DAY).build();
     }
@@ -206,9 +206,8 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
         
         final TypeActionParamReprRenderer renderer = 
                 (TypeActionParamReprRenderer) rendererFactory.newRenderer(getResourceContext(), null, JsonRepresentation.newMap());
-        renderer.with(new SpecAndActionParam(parentSpec, actionParam))
-                .includesSelf()
-                .withParent(parentSpec);
+        renderer.with(new ParentSpecAndActionParam(parentSpec, actionParam))
+                .includesSelf();
 
         return responseOfOk(renderer, Caching.ONE_DAY).build();
     }

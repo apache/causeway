@@ -27,7 +27,7 @@ import org.apache.isis.viewer.json.viewer.representations.Rel;
 import org.apache.isis.viewer.json.viewer.representations.ReprRenderer;
 import org.apache.isis.viewer.json.viewer.representations.ReprRendererFactoryAbstract;
 
-public class TypeCollectionReprRenderer extends AbstractTypeMemberReprBuilder<TypeCollectionReprRenderer, OneToManyAssociation> {
+public class TypeCollectionReprRenderer extends AbstractTypeMemberReprRenderer<TypeCollectionReprRenderer, OneToManyAssociation> {
 
     public static class Factory extends ReprRendererFactoryAbstract {
 

@@ -19,12 +19,12 @@
 package org.apache.isis.viewer.json.viewer.resources.domaintypes;
 
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 
-public class SpecAndAction extends SpecAndFeature<ObjectAction> {
+public class ParentSpecAndProperty extends ParentSpecAndFeature<OneToOneAssociation> {
     
-    public SpecAndAction(ObjectSpecification objectSpecification, ObjectAction action) {
-        super(objectSpecification, action);
+    public ParentSpecAndProperty(ObjectSpecification objectSpecification, OneToOneAssociation property) {
+        super(objectSpecification, property);
     }
     
 }

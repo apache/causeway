@@ -16,7 +16,6 @@
  */
 package org.apache.isis.viewer.json.viewer.resources.domaintypes;
 
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.applib.RepresentationType;
@@ -27,23 +26,13 @@ import org.apache.isis.viewer.json.viewer.representations.Rel;
 import org.apache.isis.viewer.json.viewer.representations.ReprRendererAbstract;
 import org.apache.isis.viewer.json.viewer.resources.domainobjects.MemberType;
 
-import com.google.common.base.Strings;
-
-public abstract class AbstractTypeMemberReprBuilder<R extends ReprRendererAbstract<R, SpecAndFeature<T>>, T extends ObjectMember> 
-        extends AbstractTypeFeatureReprBuilder<R, T> {
+public abstract class AbstractTypeMemberReprRenderer<R extends ReprRendererAbstract<R, ParentSpecAndFeature<T>>, T extends ObjectMember> 
+        extends AbstractTypeFeatureReprRenderer<R, T> {
 
     protected MemberType memberType;
 
-    public AbstractTypeMemberReprBuilder(ResourceContext resourceContext, LinkFollower linkFollower, RepresentationType representationType, JsonRepresentation representation) {
+    public AbstractTypeMemberReprRenderer(ResourceContext resourceContext, LinkFollower linkFollower, RepresentationType representationType, JsonRepresentation representation) {
         super(resourceContext, linkFollower, representationType, representation);
-    }
-
-    public ObjectSpecification getObjectSpecification() {
-        return objectSpecification;
-    }
-    
-    public T getObjectFeature() {
-        return objectFeature;
     }
 
     /**
@@ -55,36 +44,21 @@ public abstract class AbstractTypeMemberReprBuilder<R extends ReprRendererAbstra
     }
     
     @Override
-    public R with(SpecAndFeature<T> specAndFeature) {
+    public R with(ParentSpecAndFeature<T> specAndFeature) {
         super.with(specAndFeature);
         memberType = MemberType.determineFrom(objectFeature);
         
         // done eagerly so can use as criteria for x-ro-follow-links
-
-        if(memberType != null) {
-            ObjectMember objectMember = (ObjectMember) objectFeature;
-            putId(objectMember);
-            putMemberType(objectMember);
-        }
+        representation.mapPut(memberType.getJsProp(), objectFeature.getId());
+        representation.mapPut("memberType", memberType.getName());
 
         return cast(this);
     }
 
 
-    protected void putId(ObjectMember objectMember) {
-        representation.mapPut(memberType.getJsProp(), objectMember.getId());
-    }
-
-    protected void putMemberType(ObjectMember objectMember) {
-        representation.mapPut("memberType", memberType.getName());
-    }
-
-    protected void addLinkToParentIfProvided() {
-        if(parentSpec == null) {
-            return;
-        }
+    protected void addLinkUpToParent() {
         final LinkBuilder parentLinkBuilder = 
-                DomainTypeReprRenderer.newLinkToBuilder(resourceContext, Rel.UP, parentSpec);
+                DomainTypeReprRenderer.newLinkToBuilder(resourceContext, Rel.UP, objectSpecification);
         getLinks().arrayAdd(parentLinkBuilder.build());
     }
 
@@ -98,7 +72,7 @@ public abstract class AbstractTypeMemberReprBuilder<R extends ReprRendererAbstra
         final LinkBuilder linkBuilder = LinkBuilder.newBuilder(
                 getResourceContext(), Rel.SELF, getRepresentationType(), 
                 "domainTypes/%s/%s%s", 
-                getObjectSpecification().getFullIdentifier(), 
+                getParentSpecification().getFullIdentifier(), 
                 getMemberType().getUrlPart(), 
                 objectMember.getId());
         getLinks().arrayAdd(linkBuilder.build());

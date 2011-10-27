@@ -18,30 +18,24 @@ package org.apache.isis.viewer.json.viewer.resources.domaintypes;
 
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
-import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.applib.RepresentationType;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
 import org.apache.isis.viewer.json.viewer.representations.LinkFollower;
-import org.apache.isis.viewer.json.viewer.representations.LinkBuilder;
-import org.apache.isis.viewer.json.viewer.representations.Rel;
 import org.apache.isis.viewer.json.viewer.representations.ReprRendererAbstract;
-import org.apache.isis.viewer.json.viewer.resources.domainobjects.MemberType;
 
 import com.google.common.base.Strings;
 
-public abstract class AbstractTypeFeatureReprBuilder<R extends ReprRendererAbstract<R, SpecAndFeature<T>>, T extends ObjectFeature> extends ReprRendererAbstract<R, SpecAndFeature<T>> {
+public abstract class AbstractTypeFeatureReprRenderer<R extends ReprRendererAbstract<R, ParentSpecAndFeature<T>>, T extends ObjectFeature> extends ReprRendererAbstract<R, ParentSpecAndFeature<T>> {
 
     protected ObjectSpecification objectSpecification;
     protected T objectFeature;
 
-    protected ObjectSpecification parentSpec;
-
-    public AbstractTypeFeatureReprBuilder(ResourceContext resourceContext, LinkFollower linkFollower, RepresentationType representationType, JsonRepresentation representation) {
+    public AbstractTypeFeatureReprRenderer(ResourceContext resourceContext, LinkFollower linkFollower, RepresentationType representationType, JsonRepresentation representation) {
         super(resourceContext, linkFollower, representationType, representation);
     }
 
-    public ObjectSpecification getObjectSpecification() {
+    public ObjectSpecification getParentSpecification() {
         return objectSpecification;
     }
     
@@ -50,22 +44,17 @@ public abstract class AbstractTypeFeatureReprBuilder<R extends ReprRendererAbstr
     }
 
     @Override
-    public R with(SpecAndFeature<T> specAndFeature) {
-        objectSpecification = specAndFeature.getObjectSpecification();
+    public R with(ParentSpecAndFeature<T> specAndFeature) {
+        objectSpecification = specAndFeature.getParentSpec();
         objectFeature = specAndFeature.getObjectFeature();
         
-        return cast(this);
-    }
-
-    public R withParent(ObjectSpecification parentSpec) {
-        this.parentSpec = parentSpec;
         return cast(this);
     }
 
     public JsonRepresentation render() {
         
         addLinkSelfIfRequired();
-        addLinkToParentIfProvided();
+        addLinkUpToParent();
         
         addPropertiesSpecificToFeature();
         
@@ -90,7 +79,7 @@ public abstract class AbstractTypeFeatureReprBuilder<R extends ReprRendererAbstr
     /**
      * Mandatory hook method.
      */
-    protected abstract void addLinkToParentIfProvided();
+    protected abstract void addLinkUpToParent();
 
     /**
      * Optional hook method.

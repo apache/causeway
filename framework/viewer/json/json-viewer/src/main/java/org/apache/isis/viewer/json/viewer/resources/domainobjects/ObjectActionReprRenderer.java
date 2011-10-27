@@ -60,11 +60,11 @@ public class ObjectActionReprRenderer extends AbstractObjectMemberReprRenderer<O
     }
 
     public JsonRepresentation render() {
-        // id and memberType are put eagerly
+        // id and memberType are rendered eagerly
         
+        renderMemberContent();
         putDisabledReasonIfDisabled();
         
-        addMemberContentSpecificToMode();
         if(mode.isStandalone()) {
             addParameterDetails();
         }
