@@ -1154,23 +1154,49 @@
         <para>A title is used to identify an object to the user in the user
         interface. For example, a <classname>Customer</classname>'s title
         might be the organization's customer reference, or perhaps (more
-        informally) their first and last names. By default, the framework will
-        use the object's <literal moreinfo="none">toString()</literal> method
-        as the title. However, if a <literal moreinfo="none">title()
-        </literal>method (returning a <literal
-        moreinfo="none">String</literal>) is present, then that is used
-        instead, thus:</para>
+        informally) their first and last names.</para>
 
-        <para><programlisting>public String toString()</programlisting></para>
+        <para>By default, the framework will use the object's <literal
+        moreinfo="none">toString()</literal> method as the title. Most titles
+        tend to be made up of the same set of elements: for example a
+        Customer's name might be the concatenation of their customer first
+        name and their ;ast name. For these the <classname>@Title</classname>
+        annotation can be used:</para>
 
-        <para>or</para>
+        <para><programlisting>public class Customer {
+  @Title
+  public String getFirstName() { ... }
+  @Title
+  public String getLastName() { ... }
+  ...
+}</programlisting></para>
 
-        <para><programlisting>public String title()</programlisting></para>
+        <para>For more control, the order of the title components can be
+        specified using a sequence number (specified in Dewey decimal
+        format):</para>
 
-        <para>The reason for providing the option to use a <literal
-        moreinfo="none">title()</literal> method is in case the programmer
+        <programlisting>public class Customer {
+  @Title("1.0")
+  public String getFirstName() { ... }
+  @Title("1.1")
+  public String getLastName() { ... }
+  ...
+}</programlisting>
+
+        <para>For more control the title can be declared imperately using the
+        <literal moreinfo="none">title()</literal> method (returning a
+        <literal moreinfo="none">String</literal>). This leaves the programmer
         needs to make use of the <literal moreinfo="none">toString()</literal>
-        method for other purposes, such as for debugging.</para>
+        method for other purposes, such as for debugging. For example, to
+        return the title for a customer which is their last name and then
+        first initial of their first name, we could use:</para>
+
+        <para><programlisting>public class Customer {
+  public String title() {
+    return getLastName() + ", " + getFirstName().substring(0,1);
+  } 
+  ...
+}</programlisting></para>
 
         <para>The applib contains a class,
         <classname>org.apache.isis.applib.util.TitleBuffer</classname>, which
@@ -7050,6 +7076,33 @@ public class Child {
 public class EmailAddress {
    ...
 }</programlisting>
+      </sect1>
+
+      <sect1>
+        <title>@Title</title>
+
+        <para>The <literal moreinfo="none">@Title</literal> annotation is used
+        to indicate which property or properties make up the object title. If
+        more than one property is used, the order can be specified (using the
+        same Dewey-decimal notation as used by @MemberOrder) and the string to
+        use between the components can also be specified.</para>
+
+        <para>For example:</para>
+
+        <programlisting format="linespecific">public void Customer {
+    @Title(sequence="1.0")
+    public String lastName() { ... }
+    ...
+    @Title(sequence="1.5", prepend=", ")
+    public String firstName() { ... }
+    ...
+    @Title(sequence="1.7", append=".")
+    public String midInitial() { ... }
+    ...
+}</programlisting>
+
+        <para>could be used to create names of the style "Bloggs, Joe
+        K."</para>
       </sect1>
 
       <sect1>

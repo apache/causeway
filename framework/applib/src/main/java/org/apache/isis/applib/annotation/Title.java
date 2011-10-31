@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.core.progmodel.facets.object.title.annotation;
+package org.apache.isis.applib.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -30,4 +30,18 @@ import java.lang.annotation.Target;
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
-public @interface Title {}
+public @interface Title {
+    /**
+     * The order (in Dewey decimal notation) that the property annotated with {@link Title} appears with respect to 
+     * other properties also annotated with {@link Title}.
+     */
+    String sequence() default "1.0";
+    /**
+     * The string to use to separate this property from any preceding properties in the title.  
+     */
+    String prepend() default " ";
+    /**
+     * The string to append to this property if non-empty.  
+     */
+    String append() default "";
+}

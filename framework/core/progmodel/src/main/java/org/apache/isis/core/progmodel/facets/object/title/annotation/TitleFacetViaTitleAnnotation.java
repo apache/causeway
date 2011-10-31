@@ -20,43 +20,62 @@
 package org.apache.isis.core.progmodel.facets.object.title.annotation;
 
 import java.lang.reflect.Method;
-import java.util.Collections;
 import java.util.List;
 
+import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.util.AdapterInvokeUtils;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacetAbstract;
 import org.apache.log4j.Logger;
 
-public class TitleFacetViaTitleAnnotation extends TitleFacetAbstract implements ImperativeFacet {
+import com.google.common.base.Function;
+import com.google.common.base.Strings;
+
+public class TitleFacetViaTitleAnnotation extends TitleFacetAbstract  {
 
     private static final Logger LOG = Logger.getLogger(TitleFacetViaTitleAnnotation.class);
-    private final List<Method> methods;
+    private final List<TitleComponent> components;
 
-    public TitleFacetViaTitleAnnotation(final List<Method> methods, final FacetHolder holder) {
+    public static class TitleComponent {
+        public static final Function<? super Method, ? extends TitleComponent> FROM_METHOD = new Function<Method, TitleComponent>() {
+
+            @Override
+            public TitleComponent apply(Method input) {
+                return TitleComponent.of(input);
+            }
+        };
+
+
+        private final String prepend;
+        private final String append;
+        private final Method method;
+        private TitleComponent(String prepend, String append, Method method) {
+            super();
+            this.prepend = prepend;
+            this.append = append;
+            this.method = method;
+        }
+        public String getPrepend() {
+            return prepend;
+        }
+        public String getAppend() {
+            return append;
+        }
+        public Method getMethod() {
+            return method;
+        }
+        public static TitleComponent of(Method method) {
+            final Title annotation = method.getAnnotation(Title.class);
+            final String prepend = annotation!=null?annotation.prepend():" ";
+            final String append = annotation!=null?annotation.append():"";
+            return new TitleComponent(prepend, append, method);
+        }
+    }
+    public TitleFacetViaTitleAnnotation(final List<TitleComponent> components, final FacetHolder holder) {
         super(holder);
-        this.methods = methods;
-    }
-
-    /**
-     * Returns a singleton list of the {@link Method}(s) provided in the constructor.
-     */
-    @Override
-    public List<Method> getMethods() {
-        return Collections.unmodifiableList(methods);
-    }
-
-    @Override
-    public boolean impliesResolve() {
-        return true;
-    }
-
-    @Override
-    public boolean impliesObjectChanged() {
-        return false;
+        this.components = components;
     }
 
     @Override
@@ -64,8 +83,20 @@ public class TitleFacetViaTitleAnnotation extends TitleFacetAbstract implements 
     	StringBuilder stringBuilder = new StringBuilder();
 
         try {
-        	for (Method method : this.methods) {
-        		stringBuilder.append((String) AdapterInvokeUtils.invoke(method, owningAdapter)).append(' ');
+        	for (TitleComponent entry : this.components) {
+        		final Object titlePart = AdapterInvokeUtils.invoke(entry.getMethod(), owningAdapter);
+        		if(titlePart == null) {
+                    continue;
+                }
+        		final String trim = titlePart.toString().trim();
+                if (Strings.isNullOrEmpty(trim)) {
+                    continue;
+                }
+                if(stringBuilder.length() > 0) {
+                    stringBuilder.append(entry.getPrepend());
+                }
+                stringBuilder.append(trim);
+                stringBuilder.append(entry.getAppend());
         	}
 
         	return stringBuilder.toString().trim();
@@ -73,6 +104,10 @@ public class TitleFacetViaTitleAnnotation extends TitleFacetAbstract implements 
             LOG.warn("Title failure", ex);
             return "Failed Title";
         }
+    }
+
+    public List<TitleComponent> getComponents() {
+        return components;
     }
 
 }
