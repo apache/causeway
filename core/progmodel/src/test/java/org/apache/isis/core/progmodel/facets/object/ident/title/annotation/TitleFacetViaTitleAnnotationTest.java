@@ -24,14 +24,16 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
 import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.List;
 
+import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.methodutils.MethodScope;
 import org.apache.isis.core.progmodel.facets.MethodFinderUtils;
-import org.apache.isis.core.progmodel.facets.object.title.annotation.Title;
 import org.apache.isis.core.progmodel.facets.object.title.annotation.TitleFacetViaTitleAnnotation;
+import org.apache.isis.core.progmodel.facets.object.title.annotation.TitleFacetViaTitleAnnotation.TitleComponent;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JMock;
@@ -39,6 +41,8 @@ import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import com.google.common.collect.Lists;
 
 @RunWith(JMock.class)
 public class TitleFacetViaTitleAnnotationTest  {
@@ -58,17 +62,17 @@ public class TitleFacetViaTitleAnnotationTest  {
 
     protected static class NormalDomainObject {
 
-    	@Title
+    	@Title(sequence="1.0")
         public String titleElement1() {
             return "Normal";
         }
 
-    	@Title
+    	@Title(sequence="2.0")
         public String titleElement2() {
             return "Domain";
         }
 
-    	@Title
+    	@Title(sequence="3.0")
         public String titleElement3() {
             return "Object";
         }
@@ -82,11 +86,11 @@ public class TitleFacetViaTitleAnnotationTest  {
     }
 
     @Test
-    public void testTitle() {
-        List<Method> methods = MethodFinderUtils.findMethodsWithAnnotation(NormalDomainObject.class, MethodScope.OBJECT,
-        		Title.class);
+    public void testTitle() throws Exception {
+        List<Method> methods = Arrays.asList(NormalDomainObject.class.getMethod("titleElement1"), NormalDomainObject.class.getMethod("titleElement2"), NormalDomainObject.class.getMethod("titleElement3"));
 
-        TitleFacetViaTitleAnnotation facet = new TitleFacetViaTitleAnnotation(methods, mockFacetHolder);
+        final List<TitleComponent> components = Lists.transform(methods, TitleComponent.FROM_METHOD);
+        TitleFacetViaTitleAnnotation facet = new TitleFacetViaTitleAnnotation(components, mockFacetHolder);
     	final NormalDomainObject normalPojo = new NormalDomainObject();
 		mockery.checking(new Expectations(){{
 			allowing(mockOwningAdapter).getObject();
@@ -102,7 +106,8 @@ public class TitleFacetViaTitleAnnotationTest  {
         List<Method> methods = MethodFinderUtils.findMethodsWithAnnotation(DomainObjectWithProblemInItsAnnotatedTitleMethod.class, MethodScope.OBJECT,
         		Title.class);
 
-        TitleFacetViaTitleAnnotation facet = new TitleFacetViaTitleAnnotation(methods, mockFacetHolder);
+        final List<TitleComponent> components = Lists.transform(methods, TitleComponent.FROM_METHOD);
+        TitleFacetViaTitleAnnotation facet = new TitleFacetViaTitleAnnotation(components, mockFacetHolder);
     	final DomainObjectWithProblemInItsAnnotatedTitleMethod screwedPojo = new DomainObjectWithProblemInItsAnnotatedTitleMethod();
 		mockery.checking(new Expectations(){{
 			allowing(mockOwningAdapter).getObject();

@@ -91,16 +91,11 @@ public class MemberOrderComparator implements Comparator {
             throw new IllegalArgumentException("Not in same group");
         }
 
-        final StringTokenizer tokens1 = new StringTokenizer(m1.sequence(), ".", false);
-        final String[] components1 = new String[tokens1.countTokens()];
-        for (int i = 0; tokens1.hasMoreTokens(); i++) {
-            components1[i] = tokens1.nextToken();
-        }
-        final StringTokenizer tokens2 = new StringTokenizer(m2.sequence(), ".", false);
-        final String[] components2 = new String[tokens2.countTokens()];
-        for (int i = 0; tokens2.hasMoreTokens(); i++) {
-            components2[i] = tokens2.nextToken();
-        }
+        final String sequence1 = m1.sequence();
+        final String sequence2 = m2.sequence();
+        
+        final String[] components1 = componentsFor(sequence1);
+        final String[] components2 = componentsFor(sequence2);
 
         final int length1 = components1.length;
         final int length2 = components2.length;
@@ -133,7 +128,7 @@ public class MemberOrderComparator implements Comparator {
                 final Integer c2 = Integer.valueOf(components2[n]);
                 componentCompare = c1.compareTo(c2);
             } catch (final NumberFormatException nfe) {
-                // not integers compare as strings}
+                // not integers compare as strings
                 componentCompare = components1[n].compareTo(components2[n]);
             }
 
@@ -143,6 +138,15 @@ public class MemberOrderComparator implements Comparator {
             // this component is the same; lets look at the next
             n++;
         }
+    }
+
+    private static String[] componentsFor(final String sequence) {
+        final StringTokenizer tokens = new StringTokenizer(sequence, ".", false);
+        final String[] components = new String[tokens.countTokens()];
+        for (int i = 0; tokens.hasMoreTokens(); i++) {
+            components[i] = tokens.nextToken();
+        }
+        return components;
     }
 
     private MemberOrderFacet getMemberOrder(final FacetHolder facetHolder) {
