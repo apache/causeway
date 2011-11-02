@@ -19,6 +19,7 @@
 package org.apache.isis.viewer.json.viewer.resources;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -189,10 +190,8 @@ public abstract class ResourceAbstract {
     // Responses
     // //////////////////////////////////////////////////////////////
 
-    public static ResponseBuilder responseOfNoContent(Version version) {
-        final ResponseBuilder response = responseOf(HttpStatusCode.NO_CONTENT);
-        addLastModifiedIfAvailable(response, version);
-        return response;
+    public static ResponseBuilder responseOfNoContent() {
+        return responseOf(HttpStatusCode.NO_CONTENT);
     }
 
     public static ResponseBuilder responseOfOk(ReprRenderer<?,?> renderer, Caching caching) {
@@ -205,16 +204,18 @@ public abstract class ResourceAbstract {
                 .type(representationType.getMediaType())
                 .cacheControl(caching.getCacheControl())
                 .entity(jsonFor(renderer.render()));
-        return addLastModifiedIfAvailable(response, version);
+        return addLastModifiedAndETagIfAvailable(response, version);
     }
 
     private static ResponseBuilder responseOf(HttpStatusCode httpStatusCode) {
         return Response.status(httpStatusCode.getJaxrsStatusType()).type(MediaType.APPLICATION_JSON_TYPE);
     }
 
-    private static ResponseBuilder addLastModifiedIfAvailable(final ResponseBuilder responseBuilder, Version version) {
-        if(version!=null) {
-            responseBuilder.lastModified(version.getTime());
+    public static ResponseBuilder addLastModifiedAndETagIfAvailable(final ResponseBuilder responseBuilder, Version version) {
+        if (version != null && version.getTime() != null) {
+            final Date time = version.getTime();
+            responseBuilder.lastModified(time);
+            responseBuilder.tag(""+time);
         }
         return responseBuilder;
     }

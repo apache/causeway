@@ -134,12 +134,12 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
 
     @GET
     @Path("/{serviceId}/actions/{actionId}/invoke")
-    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_DOMAIN_OBJECT, RestfulMediaType.APPLICATION_JSON_LIST, RestfulMediaType.APPLICATION_JSON_SCALAR_VALUE, RestfulMediaType.APPLICATION_JSON_ERROR })
+    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ACTION_RESULT, RestfulMediaType.APPLICATION_JSON_ERROR })
     public Response invokeActionQueryOnly(
             @PathParam("serviceId") final String serviceId, 
             @PathParam("actionId") final String actionId,
             @QueryParam("args") final String arguments) {
-        init(RepresentationType.GENERIC);
+        init(RepresentationType.ACTION_RESULT);
 
         final ObjectAdapter serviceAdapter = getServiceAdapter(serviceId);
         final DomainResourceHelper helper = new DomainResourceHelper(getResourceContext(), serviceAdapter).using(new DomainServiceLinkTo());
@@ -149,13 +149,13 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
 
     @PUT
     @Path("/{serviceId}/actions/{actionId}/invoke")
-    @Consumes({ MediaType.APPLICATION_JSON })
-    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_DOMAIN_OBJECT, RestfulMediaType.APPLICATION_JSON_LIST, RestfulMediaType.APPLICATION_JSON_SCALAR_VALUE, RestfulMediaType.APPLICATION_JSON_ERROR })
+    @Consumes({ MediaType.WILDCARD })   // to save the client having to specify a Content-Type: application/json
+    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ACTION_RESULT, RestfulMediaType.APPLICATION_JSON_ERROR })
     public Response invokeActionIdempotent(
             @PathParam("serviceId") final String serviceId, 
             @PathParam("actionId") final String actionId,
             final InputStream arguments) {
-        init(RepresentationType.GENERIC);
+        init(RepresentationType.ACTION_RESULT);
 
         final ObjectAdapter serviceAdapter = getServiceAdapter(serviceId);
         final DomainResourceHelper helper = new DomainResourceHelper(getResourceContext(), serviceAdapter).using(new DomainServiceLinkTo());
@@ -165,13 +165,13 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
 
     @POST
     @Path("/{serviceId}/actions/{actionId}/invoke")
-    @Consumes({ MediaType.APPLICATION_JSON })
-    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_DOMAIN_OBJECT, RestfulMediaType.APPLICATION_JSON_LIST, RestfulMediaType.APPLICATION_JSON_SCALAR_VALUE, RestfulMediaType.APPLICATION_JSON_ERROR })
+    @Consumes({ MediaType.WILDCARD })   // to save the client having to specify a Content-Type: application/json
+    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ACTION_RESULT, RestfulMediaType.APPLICATION_JSON_ERROR })
     public Response invokeAction(
             @PathParam("serviceId") final String serviceId, 
             @PathParam("actionId") final String actionId,
             final InputStream arguments) {
-        init(RepresentationType.GENERIC);
+        init(RepresentationType.ACTION_RESULT);
 
         final ObjectAdapter serviceAdapter = getServiceAdapter(serviceId);
         final DomainResourceHelper helper = new DomainResourceHelper(getResourceContext(), serviceAdapter).using(new DomainServiceLinkTo());

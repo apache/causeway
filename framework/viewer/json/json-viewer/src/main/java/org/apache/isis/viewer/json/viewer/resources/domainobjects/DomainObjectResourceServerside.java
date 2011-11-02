@@ -174,7 +174,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements
 
         property.set(objectAdapter, null);
 
-        return responseOfNoContent(objectAdapter.getVersion()).build();
+        return responseOfNoContent().build();
     }
 
 
@@ -277,7 +277,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements
 
         collection.addElement(objectAdapter, argAdapter);
         
-        return responseOfNoContent(objectAdapter.getVersion()).build();
+        return responseOfNoContent().build();
     }
 
     @DELETE
@@ -308,7 +308,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements
 
         collection.removeElement(objectAdapter, argAdapter);
         
-        return responseOfNoContent(objectAdapter.getVersion()).build();
+        return responseOfNoContent().build();
     }
 
 

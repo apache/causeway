@@ -18,6 +18,7 @@ package org.apache.isis.viewer.json.viewer.representations;
 
 import javax.ws.rs.core.MediaType;
 
+import org.apache.isis.viewer.json.applib.HttpMethod;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.applib.RepresentationType;
 import org.apache.isis.viewer.json.viewer.ResourceContext;

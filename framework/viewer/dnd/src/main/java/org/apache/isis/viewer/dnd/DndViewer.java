@@ -129,8 +129,8 @@ public class DndViewer extends IsisViewerAbstract {
 
         final int width = maxWidth - 80;
         final int height = maxHeight - 80;
-        final int x = 40;
-        final int y = 40;
+        final int x = 100;
+        final int y = 100;
 
         final Size defaultWindowSize = new Size(width, height);
         defaultWindowSize.limitWidth(800);

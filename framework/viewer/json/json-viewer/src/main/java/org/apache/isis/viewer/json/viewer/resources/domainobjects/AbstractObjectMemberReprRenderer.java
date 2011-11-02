@@ -139,20 +139,13 @@ public abstract class AbstractObjectMemberReprRenderer<R extends ReprRendererAbs
             return;
         } 
         JsonRepresentation arguments = mutatorArgs(mutatorSpec);
-        RepresentationType representationType = mutatorRepType();
+        RepresentationType representationType = memberType.getRepresentationType();
         JsonRepresentation mutatorLink = 
                 linkTo.memberBuilder(mutatorSpec.rel, memberType, objectMember, representationType, mutatorSpec.suffix)
                 .withHttpMethod(mutatorSpec.httpMethod)
                 .withArguments(arguments)
                 .build();
         getLinks().arrayAdd(mutatorLink);
-    }
-
-    /**
-     * Default implementation is suitable for properties and collections
-     */
-    protected RepresentationType mutatorRepType() {
-        return memberType.getRepresentationType();
     }
 
     /**

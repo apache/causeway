@@ -33,9 +33,9 @@ import org.apache.isis.core.progmodel.facets.actions.validate.ActionValidationFa
 import org.apache.isis.core.progmodel.facets.collections.validate.CollectionValidateAddToFacet;
 import org.apache.isis.core.progmodel.facets.collections.validate.CollectionValidateRemoveFromFacet;
 import org.apache.isis.core.progmodel.facets.properties.validate.PropertyValidateFacet;
+import org.apache.isis.viewer.json.applib.HttpMethod;
 import org.apache.isis.viewer.json.applib.RepresentationType;
 import org.apache.isis.viewer.json.applib.util.Enums;
-import org.apache.isis.viewer.json.viewer.representations.HttpMethod;
 import org.apache.isis.viewer.json.viewer.representations.Rel;
 
 import com.google.common.collect.ImmutableMap;
@@ -67,7 +67,7 @@ public enum MemberType {
     /**
      * {@link #getMutators()} are keyed by {@link ActionSemantics#getInvokeKey()}
      */
-    ACTION("actions/", "id", RepresentationType.OBJECT_ACTION, ImmutableMap.of(
+    ACTION("actions/", "id", RepresentationType.ACTION_RESULT, ImmutableMap.of(
         "invokeQueryOnly", MutatorSpec.of(Rel.INVOKE, ActionValidationFacet.class, ActionInvocationFacet.class, HttpMethod.GET, BodyArgs.MANY, "invoke"),
         "invokeIdempotent", MutatorSpec.of(Rel.INVOKE, ActionValidationFacet.class, ActionInvocationFacet.class, HttpMethod.PUT, BodyArgs.MANY, "invoke"),
         "invoke", MutatorSpec.of(Rel.INVOKE, ActionValidationFacet.class, ActionInvocationFacet.class, HttpMethod.POST, BodyArgs.MANY, "invoke")
