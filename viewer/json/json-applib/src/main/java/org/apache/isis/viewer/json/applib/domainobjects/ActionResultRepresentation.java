@@ -25,9 +25,11 @@ import org.codehaus.jackson.JsonNode;
 public class ActionResultRepresentation extends AbstractObjectMemberRepresentation {
 
     public enum ResultType {
-        DOMAIN_OBJECT("urn:org.restfulobjects/domainobject"),
-        LIST("urn:org.restfulobjects/list"),
-        SCALAR_VALUE("urn:org.restfulobjects/scalarvalue");
+        DOMAIN_OBJECT("domainobject"),
+        LIST("list"),
+        SCALAR_VALUE("scalarvalue"),
+        VOID("void");
+        
         private final String value;
         private ResultType(final String value) {
             this.value = value;
@@ -43,6 +45,9 @@ public class ActionResultRepresentation extends AbstractObjectMemberRepresentati
             }
             throw new IllegalArgumentException("Value '" + value + "' is not a valid result type");
         }
+        public boolean isVoid() {
+            return this == VOID;
+        }
     }
     
     public ActionResultRepresentation(JsonNode jsonNode) {
@@ -51,5 +56,10 @@ public class ActionResultRepresentation extends AbstractObjectMemberRepresentati
     
     public JsonRepresentation getResult() {
         return getRepresentation("result");
+    }
+    
+    public ResultType getResultType() {
+        final String resultType = getString("resulttype");
+        return ResultType.lookup(resultType);
     }
 }

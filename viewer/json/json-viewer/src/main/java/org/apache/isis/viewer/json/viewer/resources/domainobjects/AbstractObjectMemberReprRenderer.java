@@ -141,11 +141,18 @@ public abstract class AbstractObjectMemberReprRenderer<R extends ReprRendererAbs
         JsonRepresentation arguments = mutatorArgs(mutatorSpec);
         RepresentationType representationType = memberType.getRepresentationType();
         JsonRepresentation mutatorLink = 
-                linkTo.memberBuilder(mutatorSpec.rel, memberType, objectMember, representationType, mutatorSpec.suffix)
+                linkToForMutatorInvoke().memberBuilder(mutatorSpec.rel, memberType, objectMember, representationType, mutatorSpec.suffix)
                 .withHttpMethod(mutatorSpec.httpMethod)
                 .withArguments(arguments)
                 .build();
         getLinks().arrayAdd(mutatorLink);
+    }
+
+    /**
+     * Hook to allow actions to render invoke links that point to the contributing service.
+     */
+    protected ObjectAdapterLinkTo linkToForMutatorInvoke() {
+        return linkTo;
     }
 
     /**

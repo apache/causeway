@@ -98,21 +98,26 @@ public class ActionResultReprRenderer extends ReprRendererAbstract<ActionResultR
 
     private void addResult(final JsonRepresentation representation) {
         final JsonRepresentation result = JsonRepresentation.newMap();
-
         final ResultType resultType = addResultTo(result);
-        
-        putResultType(representation, resultType);
-        representation.mapPut("result", result);
+
+        if(!resultType.isVoid()) {
+            putResultType(representation, resultType);
+            representation.mapPut("result", result);
+        }
     }
 
     private ResultType addResultTo(final JsonRepresentation result) {
         
-        final ObjectSpecification returnedSpec = returnedAdapter.getSpecification();
-        final CollectionFacet collectionFacet = returnedSpec.getFacet(CollectionFacet.class);
-        final EncodableFacet encodableFacet = returnedSpec.getFacet(EncodableFacet.class);
+        final ObjectSpecification returnType = this.action.getReturnType();
         
-        // collection
+        if(returnType.getCorrespondingClass() == void.class) {
+            // void
+            return ResultType.VOID;
+        } 
+        
+        final CollectionFacet collectionFacet = returnType.getFacet(CollectionFacet.class);
         if (collectionFacet != null) {
+            // collection
           
             final Collection<ObjectAdapter> collectionAdapters = collectionFacet.collection(returnedAdapter);
 
@@ -124,8 +129,11 @@ public class ActionResultReprRenderer extends ReprRendererAbstract<ActionResultR
             
             renderer.render();
             return ResultType.LIST;
-            
-        } else if(encodableFacet != null) {
+        } 
+        
+        final EncodableFacet encodableFacet = returnType.getFacet(EncodableFacet.class);
+        if(encodableFacet != null) {
+            // scalar
             
             final RendererFactory factory = getRendererFactoryRegistry().find(RepresentationType.SCALAR_VALUE);
 
@@ -136,7 +144,10 @@ public class ActionResultReprRenderer extends ReprRendererAbstract<ActionResultR
             renderer.render();
             return ResultType.SCALAR_VALUE;
             
-        } else {
+        } 
+        
+        {
+            // object
             final RendererFactory factory = getRendererFactoryRegistry().find(RepresentationType.DOMAIN_OBJECT);
             final DomainObjectReprRenderer renderer = (DomainObjectReprRenderer) factory.newRenderer(resourceContext, null, result);
 
@@ -182,10 +193,10 @@ public class ActionResultReprRenderer extends ReprRendererAbstract<ActionResultR
     }
 
     protected void addToExtensions(final JsonRepresentation extensions, final String key, final List<ObjectAdapter> adapters) {
-        final JsonRepresentation changed = JsonRepresentation.newArray();
-        extensions.mapPut(key, changed);
-        for (ObjectAdapter changedAdapter : adapters) {
-            DomainObjectReprRenderer.newLinkToBuilder(getResourceContext(), Rel.OBJECT, changedAdapter);
+        final JsonRepresentation adapterList = JsonRepresentation.newArray();
+        extensions.mapPut(key, adapterList);
+        for (ObjectAdapter adapter : adapters) {
+            adapterList.arrayAdd(DomainObjectReprRenderer.newLinkToBuilder(getResourceContext(), Rel.OBJECT, adapter).build());
         }
     }
 

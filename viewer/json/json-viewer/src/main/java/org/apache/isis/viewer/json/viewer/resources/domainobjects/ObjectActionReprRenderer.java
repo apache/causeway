@@ -107,6 +107,13 @@ public class ObjectActionReprRenderer extends AbstractObjectMemberReprRenderer<O
         addLinkFor(mutatorSpec);
     }
 
+    protected ObjectAdapterLinkTo linkToForMutatorInvoke() {
+        if(!objectMember.isContributed()) {
+            return super.linkToForMutatorInvoke();
+        }
+        final DomainServiceLinkTo linkTo = new DomainServiceLinkTo();
+        return linkTo.usingResourceContext(getResourceContext()).with(contributingServiceAdapter());
+    }
     
 	private ObjectAdapter contributingServiceAdapter() {
     	ObjectSpecification serviceType = objectMember.getOnType();
