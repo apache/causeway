@@ -34,8 +34,6 @@ import org.apache.isis.viewer.json.viewer.representations.RendererFactory;
 import org.apache.isis.viewer.json.viewer.representations.RendererFactoryRegistry;
 import org.apache.isis.viewer.json.viewer.representations.ReprRenderer;
 import org.apache.isis.viewer.json.viewer.representations.ReprRendererFactoryAbstract;
-import org.apache.isis.viewer.json.viewer.resources.domainobjects.AbstractObjectMemberReprRenderer.Mode;
-import org.apache.isis.viewer.json.viewer.resources.domaintypes.DomainTypeReprRenderer;
 import org.apache.isis.viewer.json.viewer.resources.domaintypes.TypeActionReprRenderer;
 import org.codehaus.jackson.node.NullNode;
 
@@ -133,21 +131,6 @@ public class ObjectActionReprRenderer extends AbstractObjectMemberReprRenderer<O
         return argMap;
     }
 
-    @Override
-    protected RepresentationType mutatorRepType() {
-        final ObjectSpecification returnType = objectMember.getReturnType();
-        if(returnType == null) {
-            return RepresentationType.GENERIC;
-        }
-        if(returnType.containsFacet(CollectionFacet.class)) {
-            return RepresentationType.LIST;
-        }
-        if(returnType.containsFacet(ValueFacet.class)) {
-            return RepresentationType.SCALAR_VALUE;
-        }
-        return RepresentationType.DOMAIN_OBJECT;
-    }
-    
     private Object argValueFor(int i) {
         if(objectMember.isContributed()) {
             ObjectActionParameter actionParameter = objectMember.getParameters().get(i);

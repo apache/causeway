@@ -99,6 +99,7 @@ import org.apache.isis.core.progmodel.facets.object.plural.staticmethod.PluralMe
 import org.apache.isis.core.progmodel.facets.object.regex.annotation.RegExFacetAnnotationForTypeFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.stable.annotation.StableAnnotationFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.title.TitleMethodFacetFactory;
+import org.apache.isis.core.progmodel.facets.object.title.annotation.TitleAnnotationFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.typicallen.annotation.TypicalLengthAnnotationOnTypeFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.validate.method.ValidateObjectViaValidateMethodFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.validperspec.MustSatisfySpecificationOnTypeFacetFactory;
@@ -251,6 +252,7 @@ public class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract {
         addFactory(ObjectValidPropertiesFacetFactory.class);
         addFactory(PluralMethodFacetFactory.class);
         addFactory(NamedFacetViaSingularNameStaticMethodFacetFactory.class);
+        addFactory(TitleAnnotationFacetFactory.class);
         addFactory(TitleMethodFacetFactory.class);
 
         addFactory(ActionOrderAnnotationFacetFactory.class);

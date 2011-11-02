@@ -238,73 +238,29 @@ public class DomainResourceHelper {
         // invoke
         final ObjectAdapter returnedAdapter = action.execute(objectAdapter, argArray);
 
-        // response
+        // response (void)
+        final ResponseBuilder respBuilder;
         if (returnedAdapter == null) {
-            return ResourceAbstract.responseOfNoContent(objectAdapter.getVersion()).build();
+            respBuilder = ResourceAbstract.responseOfNoContent();
+
+        } else {
+            
+            RendererFactory factory = RendererFactoryRegistry.instance.find(RepresentationType.ACTION_RESULT);
+            final ActionResultReprRenderer renderer = 
+                    (ActionResultReprRenderer) factory.newRenderer(resourceContext, null, JsonRepresentation.newMap());
+            
+            renderer.with(new ObjectAndActionInvocation(objectAdapter, action, arguments, returnedAdapter)).using(adapterLinkTo);
+            
+            respBuilder = ResourceAbstract.responseOfOk(renderer, Caching.NONE);
         }
 
-        final JsonRepresentation representation;
-        
-        final CollectionFacet collectionFacet = returnedAdapter.getSpecification().getFacet(CollectionFacet.class);
-        if (collectionFacet != null) {
-            representation = representationWithSelfFor(RepresentationType.LIST, action, arguments);
-            
-            final Collection<ObjectAdapter> collectionAdapters = collectionFacet.collection(returnedAdapter);
 
-            final RendererFactory factory = rendererFactoryRegistry.find(RepresentationType.LIST);
-            final ListReprRenderer renderer = (ListReprRenderer) factory.newRenderer(resourceContext, null, representation);
-            renderer.with(collectionAdapters)
-                    .withReturnType(action.getReturnType())
-                    .withElementType(returnedAdapter.getElementSpecification());
-            
-            return ResourceAbstract.responseOfOk(renderer, Caching.NONE).build();
-        }
+        Version version = objectAdapter.getVersion();
+        ResourceAbstract.addLastModifiedAndETagIfAvailable(respBuilder, version);
 
-        
-        final EncodableFacet encodableFacet = returnedAdapter.getSpecification().getFacet(EncodableFacet.class);
-        if(encodableFacet != null) {
-            representation = representationWithSelfFor(RepresentationType.SCALAR_VALUE, action, arguments);
-            
-            final RendererFactory factory = rendererFactoryRegistry.find(RepresentationType.SCALAR_VALUE);
-
-            ScalarValueReprRenderer renderer = (ScalarValueReprRenderer) factory.newRenderer(resourceContext, null, representation);
-            renderer.with(returnedAdapter)
-                    .withReturnType(action.getReturnType());
-            
-            return ResourceAbstract.responseOfOk(renderer, Caching.NONE).build();
-        }
-
-        final RendererFactory factory = rendererFactoryRegistry.find(RepresentationType.DOMAIN_OBJECT);
-        representation = JsonRepresentation.newMap();
-        final DomainObjectReprRenderer renderer = (DomainObjectReprRenderer) factory.newRenderer(resourceContext, null, representation);
-        renderer.with(returnedAdapter);
-        
-        ResponseBuilder respBuilder = ResourceAbstract.responseOfOk(renderer, Caching.NONE);
-        
-        Version version = returnedAdapter.getVersion();
-        if (version != null && version.getTime() != null) {
-            respBuilder.tag(""+version.getTime());
-        }
         return respBuilder.build();
     }
 
-
-    private JsonRepresentation representationWithSelfFor(final RepresentationType representationType, final ObjectAction action, final JsonRepresentation bodyArgs) {
-        JsonRepresentation representation = JsonRepresentation.newMap();
-        final JsonRepresentation links = JsonRepresentation.newArray();
-        representation.mapPut("links", links);
-        
-        final LinkBuilder memberBuilder = adapterLinkTo.memberBuilder(Rel.SELF, MemberType.ACTION, action, representationType, "invoke");
-        final JsonRepresentation selfLink = memberBuilder.build();
-
-        // TODO: delete this stuff
-        //String oid = OidUtils.getOidStr(resourceContext, objectAdapter);
-        //LinkBuilder.newBuilder(resourceContext, Rel.SELF, representationType.getMediaType(), "objects/%s/actions/%s/invoke", oid, action.getId()).build();
-        
-        links.arrayAdd(selfLink);
-        selfLink.mapPut("args", bodyArgs);
-        return representation;
-    }
 
     
     /**

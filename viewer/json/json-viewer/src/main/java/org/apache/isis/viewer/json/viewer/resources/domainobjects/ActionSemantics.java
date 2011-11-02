@@ -32,6 +32,7 @@ public enum ActionSemantics {
     
     private final String invokeKey;
     private final String name;
+    
     private ActionSemantics(String invokeKey) {
         this.invokeKey = invokeKey;
         this.name = Enums.enumToCamelCase(this);

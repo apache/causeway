@@ -24,6 +24,7 @@ import javax.ws.rs.core.MediaType;
 
 import org.apache.isis.viewer.json.applib.RepresentationType;
 import org.apache.isis.viewer.json.viewer.resources.capabilities.CapabilitiesReprRenderer;
+import org.apache.isis.viewer.json.viewer.resources.domainobjects.ActionResultReprRenderer;
 import org.apache.isis.viewer.json.viewer.resources.domainobjects.DomainObjectReprRenderer;
 import org.apache.isis.viewer.json.viewer.resources.domainobjects.ListReprRenderer;
 import org.apache.isis.viewer.json.viewer.resources.domainobjects.ObjectActionReprRenderer;
@@ -60,6 +61,7 @@ public class RendererFactoryRegistry {
         register(new ObjectPropertyReprRenderer.Factory());
         register(new ObjectCollectionReprRenderer.Factory());
         register(new ObjectActionReprRenderer.Factory());
+        register(new ActionResultReprRenderer.Factory());
         register(new ListReprRenderer.Factory());
         register(new ScalarValueReprRenderer.Factory());
         register(new DomainTypesReprRenderer.Factory());

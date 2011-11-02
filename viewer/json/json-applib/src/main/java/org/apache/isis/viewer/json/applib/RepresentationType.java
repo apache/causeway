@@ -21,6 +21,7 @@ package org.apache.isis.viewer.json.applib;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.isis.viewer.json.applib.capabilities.CapabilitiesRepresentation;
+import org.apache.isis.viewer.json.applib.domainobjects.ActionResultRepresentation;
 import org.apache.isis.viewer.json.applib.domainobjects.DomainObjectRepresentation;
 import org.apache.isis.viewer.json.applib.domainobjects.ListRepresentation;
 import org.apache.isis.viewer.json.applib.domainobjects.ObjectActionRepresentation;
@@ -48,6 +49,7 @@ public enum RepresentationType {
     OBJECT_PROPERTY(RestfulMediaType.APPLICATION_JSON_OBJECT_PROPERTY, ObjectPropertyRepresentation.class),
     OBJECT_COLLECTION(RestfulMediaType.APPLICATION_JSON_OBJECT_COLLECTION, ObjectCollectionRepresentation.class),
     OBJECT_ACTION(RestfulMediaType.APPLICATION_JSON_OBJECT_ACTION, ObjectActionRepresentation.class),
+    ACTION_RESULT(RestfulMediaType.APPLICATION_JSON_ACTION_RESULT, ActionResultRepresentation.class),
     DOMAIN_TYPES(RestfulMediaType.APPLICATION_JSON_DOMAIN_TYPES, DomainTypesRepresentation.class),
     DOMAIN_TYPE(RestfulMediaType.APPLICATION_JSON_DOMAIN_TYPE, DomainTypeRepresentation.class),
     TYPE_PROPERTY(RestfulMediaType.APPLICATION_JSON_TYPE_PROPERTY, TypePropertyRepresentation.class),
