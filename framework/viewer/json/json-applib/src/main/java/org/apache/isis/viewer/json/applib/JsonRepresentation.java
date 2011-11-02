@@ -550,7 +550,7 @@ public class JsonRepresentation {
         }
 
         LinkRepresentation link = new LinkRepresentation(node);
-        if(link.getHref() == null || link.getRel() == null) {
+        if(link.getHref() == null) {
             return false;
         }
         return true;
@@ -577,7 +577,7 @@ public class JsonRepresentation {
         }
 
         LinkRepresentation link = new LinkRepresentation(node);
-        if(link.getHref() == null || link.getRel() == null) {
+        if(link.getHref() == null) {
             throw new IllegalArgumentException(formatExMsg(path, "is a map that does not fully represent a link"));
         }
         return link;

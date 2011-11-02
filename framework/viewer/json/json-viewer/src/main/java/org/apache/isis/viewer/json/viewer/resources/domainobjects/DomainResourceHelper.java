@@ -68,8 +68,6 @@ public class DomainResourceHelper {
     private final ResourceContext resourceContext;
     private ObjectAdapterLinkTo adapterLinkTo;
 
-    // TODO: inject somehow instead
-    private final RendererFactoryRegistry rendererFactoryRegistry = RendererFactoryRegistry.instance;
     private final ObjectAdapter objectAdapter;
 
 
@@ -97,7 +95,7 @@ public class DomainResourceHelper {
         final OneToOneAssociation property = getPropertyThatIsVisibleAndUsable(
                 propertyId, Intent.ACCESS);
 
-        RendererFactory factory = RendererFactoryRegistry.instance.find(RepresentationType.OBJECT_PROPERTY);
+        RendererFactory factory = getRendererFactoryRegistry().find(RepresentationType.OBJECT_PROPERTY);
         final ObjectPropertyReprRenderer renderer = 
                 (ObjectPropertyReprRenderer) factory.newRenderer(resourceContext, null, JsonRepresentation.newMap());
         
@@ -107,6 +105,7 @@ public class DomainResourceHelper {
         return ResourceAbstract.responseOfOk(renderer, caching).build();
     }
 
+
     // //////////////////////////////////////////////////////////////
     // action Prompt
     // //////////////////////////////////////////////////////////////
@@ -115,7 +114,7 @@ public class DomainResourceHelper {
         final ObjectAction action = getObjectActionThatIsVisibleAndUsable(
                 actionId, Intent.ACCESS);
 
-        RendererFactory factory = RendererFactoryRegistry.instance.find(RepresentationType.OBJECT_ACTION);
+        RendererFactory factory = getRendererFactoryRegistry().find(RepresentationType.OBJECT_ACTION);
         final ObjectActionReprRenderer renderer = 
                 (ObjectActionReprRenderer) factory.newRenderer(resourceContext, null, JsonRepresentation.newMap());
         
@@ -239,22 +238,14 @@ public class DomainResourceHelper {
         final ObjectAdapter returnedAdapter = action.execute(objectAdapter, argArray);
 
         // response (void)
-        final ResponseBuilder respBuilder;
-        if (returnedAdapter == null) {
-            respBuilder = ResourceAbstract.responseOfNoContent();
-
-        } else {
-            
-            RendererFactory factory = RendererFactoryRegistry.instance.find(RepresentationType.ACTION_RESULT);
-            final ActionResultReprRenderer renderer = 
-                    (ActionResultReprRenderer) factory.newRenderer(resourceContext, null, JsonRepresentation.newMap());
-            
-            renderer.with(new ObjectAndActionInvocation(objectAdapter, action, arguments, returnedAdapter)).using(adapterLinkTo);
-            
-            respBuilder = ResourceAbstract.responseOfOk(renderer, Caching.NONE);
-        }
-
-
+        RendererFactory factory = getRendererFactoryRegistry().find(RepresentationType.ACTION_RESULT);
+        final ActionResultReprRenderer renderer = 
+                (ActionResultReprRenderer) factory.newRenderer(resourceContext, null, JsonRepresentation.newMap());
+        
+        renderer.with(new ObjectAndActionInvocation(objectAdapter, action, arguments, returnedAdapter)).using(adapterLinkTo);
+        
+        final ResponseBuilder respBuilder = ResourceAbstract.responseOfOk(renderer, Caching.NONE);
+        
         Version version = objectAdapter.getVersion();
         ResourceAbstract.addLastModifiedAndETagIfAvailable(respBuilder, version);
 
@@ -292,10 +283,12 @@ public class DomainResourceHelper {
         }
         JsonRepresentation argLink = representation.asLink();
         String oidFromHref = UrlParserUtils.oidFromLink(argLink);
+        if(oidFromHref == null) {
+            throw new ExpectedMapRepresentingLinkException();
+        }
 
-        final ObjectAdapter objectAdapter = OidUtils.getObjectAdapter(
+        ObjectAdapter objectAdapter = OidUtils.getObjectAdapter(
                 resourceContext, oidFromHref);
-
         if (objectAdapter == null) {
             throw new UnknownOidException(oidFromHref);
         }
@@ -550,6 +543,16 @@ public class DomainResourceHelper {
         return objectSpec.getFullIdentifier();
     }
 
+    
+    // //////////////////////////////////////////////////////////////
+    // dependencies
+    // //////////////////////////////////////////////////////////////
+
+
+    protected RendererFactoryRegistry getRendererFactoryRegistry() {
+        // TODO: yuck
+        return RendererFactoryRegistry.instance;
+    }
 
 
 }
