@@ -7084,8 +7084,9 @@ public class EmailAddress {
         <para>The <literal moreinfo="none">@Title</literal> annotation is used
         to indicate which property or properties make up the object title. If
         more than one property is used, the order can be specified (using the
-        same Dewey-decimal notation as used by @MemberOrder) and the string to
-        use between the components can also be specified.</para>
+        same Dewey-decimal notation as used by
+        <classname>@MemberOrder</classname>) and the string to use between the
+        components can also be specified.</para>
 
         <para>For example:</para>
 
@@ -7103,6 +7104,10 @@ public class EmailAddress {
 
         <para>could be used to create names of the style "Bloggs, Joe
         K."</para>
+
+        <para>It is also possible to annotate reference properties; in this
+        case the title will return the title of the referenced object (rather
+        than, say, its string representation).</para>
       </sect1>
 
       <sect1>
@@ -7378,6 +7383,14 @@ public class ComplexNumber {
 
               <entry>remove the object (provided is not already
               transient)</entry>
+            </row>
+
+            <row>
+              <entry>Presentation</entry>
+
+              <entry><methodname>titleOf(Object)</methodname></entry>
+
+              <entry>Returns the title of the object.</entry>
             </row>
 
             <row>

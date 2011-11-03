@@ -48,13 +48,13 @@ public class ActionInvocationFacetViaMethod extends ActionInvocationFacetAbstrac
     private final AdapterMap adapterMap;
 
     public ActionInvocationFacetViaMethod(final Method method, final ObjectSpecification onType,
-        final ObjectSpecification returnType, final FacetHolder holder, final AdapterMap adapterManager) {
+        final ObjectSpecification returnType, final FacetHolder holder, final AdapterMap adapterMap) {
         super(holder);
         this.method = method;
         this.paramCount = method.getParameterTypes().length;
         this.onType = onType;
         this.returnType = returnType;
-        this.adapterMap = adapterManager;
+        this.adapterMap = adapterMap;
     }
 
     /**

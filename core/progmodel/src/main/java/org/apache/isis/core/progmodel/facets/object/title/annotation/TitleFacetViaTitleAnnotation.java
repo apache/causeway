@@ -24,10 +24,15 @@ import java.util.List;
 
 import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.applib.profiles.Localization;
+import org.apache.isis.core.metamodel.adapter.LocalizationProvider;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.map.AdapterMap;
 import org.apache.isis.core.metamodel.adapter.util.AdapterInvokeUtils;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacetAbstract;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.SpecificationLookup;
 import org.apache.log4j.Logger;
 
 import com.google.common.base.Function;
@@ -37,6 +42,9 @@ public class TitleFacetViaTitleAnnotation extends TitleFacetAbstract  {
 
     private static final Logger LOG = Logger.getLogger(TitleFacetViaTitleAnnotation.class);
     private final List<TitleComponent> components;
+    private final SpecificationLookup specificationLookup;
+    private final AdapterMap adapterMap;
+    private final LocalizationProvider localizationProvider;
 
     public static class TitleComponent {
         public static final Function<? super Method, ? extends TitleComponent> FROM_METHOD = new Function<Method, TitleComponent>() {
@@ -73,30 +81,39 @@ public class TitleFacetViaTitleAnnotation extends TitleFacetAbstract  {
             return new TitleComponent(prepend, append, method);
         }
     }
-    public TitleFacetViaTitleAnnotation(final List<TitleComponent> components, final FacetHolder holder) {
+    public TitleFacetViaTitleAnnotation(final List<TitleComponent> components, final FacetHolder holder, SpecificationLookup specificationLookup, AdapterMap adapterMap, LocalizationProvider localizationProvider) {
         super(holder);
         this.components = components;
+        this.specificationLookup = specificationLookup;
+        this.adapterMap = adapterMap;
+        this.localizationProvider = localizationProvider;
     }
 
     @Override
     public String title(final ObjectAdapter owningAdapter, final Localization localization) {
     	StringBuilder stringBuilder = new StringBuilder();
 
+    	
         try {
         	for (TitleComponent entry : this.components) {
-        		final Object titlePart = AdapterInvokeUtils.invoke(entry.getMethod(), owningAdapter);
-        		if(titlePart == null) {
-                    continue;
+        		String title = null;
+                final Object titlePart = AdapterInvokeUtils.invoke(entry.getMethod(), owningAdapter);
+        		if(titlePart != null) {
+        		    // use either titleFacet...
+        		    title = titleOf(titlePart);
+        		    if (Strings.isNullOrEmpty(title)) {
+        		        // or the toString() otherwise
+        		        title = titlePart.toString().trim();
+        		    }
                 }
-        		final String trim = titlePart.toString().trim();
-                if (Strings.isNullOrEmpty(trim)) {
-                    continue;
-                }
-                if(stringBuilder.length() > 0) {
-                    stringBuilder.append(entry.getPrepend());
-                }
-                stringBuilder.append(trim);
-                stringBuilder.append(entry.getAppend());
+        		if (Strings.isNullOrEmpty(title)) {
+        		    continue;
+        		}
+        		if(stringBuilder.length() > 0) {
+        		    stringBuilder.append(entry.getPrepend());
+        		}
+        		stringBuilder.append(title);
+        		stringBuilder.append(entry.getAppend());
         	}
 
         	return stringBuilder.toString().trim();
@@ -104,6 +121,18 @@ public class TitleFacetViaTitleAnnotation extends TitleFacetAbstract  {
             LOG.warn("Title failure", ex);
             return "Failed Title";
         }
+    }
+
+    private String titleOf(final Object domainObject) {
+        final ObjectAdapter adapter = adapterMap.getAdapterFor(domainObject);
+        if(adapter == null) {
+            return null;
+        } 
+        final ObjectSpecification returnSpec = adapter.getSpecification();
+        if(!returnSpec.containsFacet(TitleFacet.class)) {
+            return null;
+        }
+        return returnSpec.getTitle(adapter, localizationProvider.getLocalization());
     }
 
     public List<TitleComponent> getComponents() {

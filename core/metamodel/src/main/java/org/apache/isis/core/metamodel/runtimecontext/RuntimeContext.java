@@ -24,6 +24,7 @@ import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.components.Injectable;
 import org.apache.isis.core.metamodel.adapter.DomainObjectServices;
+import org.apache.isis.core.metamodel.adapter.LocalizationProvider;
 import org.apache.isis.core.metamodel.adapter.ObjectDirtier;
 import org.apache.isis.core.metamodel.adapter.ObjectPersistor;
 import org.apache.isis.core.metamodel.adapter.QuerySubmitter;
@@ -64,6 +65,8 @@ public interface RuntimeContext extends Injectable {
     public ObjectPersistor getObjectPersistor();
 
     public DomainObjectServices getDomainObjectServices();
+
+    public LocalizationProvider getLocalizationProvider();
 
     // ///////////////////////////////////////////
     // container
