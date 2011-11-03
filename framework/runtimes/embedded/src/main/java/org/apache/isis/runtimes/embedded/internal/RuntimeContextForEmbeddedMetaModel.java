@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
@@ -30,6 +31,8 @@ import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.metamodel.adapter.DomainObjectServices;
 import org.apache.isis.core.metamodel.adapter.DomainObjectServicesAbstract;
+import org.apache.isis.core.metamodel.adapter.LocalizationProvider;
+import org.apache.isis.core.metamodel.adapter.LocalizationProviderAbstract;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectDirtier;
 import org.apache.isis.core.metamodel.adapter.ObjectDirtierAbstract;
@@ -71,6 +74,7 @@ public class RuntimeContextForEmbeddedMetaModel extends RuntimeContextAbstract i
     private final AuthenticationSessionProvider authenticationSessionProvider;
     private final ServicesProvider servicesProvider;
     private final DomainObjectServices domainObjectServices;
+    private final LocalizationProvider localizationProvider;
     private final QuerySubmitter querySubmitter;
     private final DependencyInjector dependencyInjector;
 
@@ -219,6 +223,15 @@ public class RuntimeContextForEmbeddedMetaModel extends RuntimeContextAbstract i
                 context.raiseError(message);
             }
         };
+
+        this.localizationProvider = new LocalizationProviderAbstract() {
+            
+            @Override
+            public Localization getLocalization() {
+                return context.getLocalization();
+            }
+        };
+        
         this.dependencyInjector = new DependencyInjectorAbstract() {
             @Override
             public void injectDependenciesInto(final Object domainObject) {
@@ -296,6 +309,11 @@ public class RuntimeContextForEmbeddedMetaModel extends RuntimeContextAbstract i
         return domainObjectServices;
     }
 
+    @Override
+    public LocalizationProvider getLocalizationProvider() {
+        return localizationProvider;
+    }
+    
     @Override
     public QuerySubmitter getQuerySubmitter() {
         return querySubmitter;

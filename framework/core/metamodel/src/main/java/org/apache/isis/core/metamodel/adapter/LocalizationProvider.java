@@ -17,48 +17,14 @@
  *  under the License.
  */
 
-package org.apache.isis.runtimes.embedded;
-
-import java.util.List;
+package org.apache.isis.core.metamodel.adapter;
 
 import org.apache.isis.applib.profiles.Localization;
-import org.apache.isis.applib.query.Query;
-import org.apache.isis.core.commons.authentication.AuthenticationSession;
-import org.apache.isis.runtimes.embedded.internal.PersistenceState;
+import org.apache.isis.core.commons.components.Injectable;
 
-public interface EmbeddedContext {
 
-    AuthenticationSession getAuthenticationSession();
+public interface LocalizationProvider extends Injectable {
 
     Localization getLocalization();
-
-    Object instantiate(Class<?> type);
-    
-    void resolve(Object parent);
-
-    void resolve(Object parent, Object field);
-
-    void objectChanged(Object object);
-
-    void makePersistent(Object object);
-
-    void remove(Object object);
-
-    PersistenceState getPersistenceState(Object object);
-
-    <T> List<T> allMatchingQuery(Query<T> query);
-
-    <T> T firstMatchingQuery(Query<T> query);
-
-    boolean flush();
-
-    void commit();
-
-    void informUser(String message);
-
-    void warnUser(String message);
-
-    void raiseError(String message);
-
 
 }

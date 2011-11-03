@@ -22,12 +22,14 @@ package org.apache.isis.runtimes.dflt.runtime.persistence.internal;
 import java.util.List;
 
 import org.apache.isis.applib.ApplicationException;
+import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProviderAbstract;
 import org.apache.isis.core.metamodel.adapter.DomainObjectServices;
 import org.apache.isis.core.metamodel.adapter.DomainObjectServicesAbstract;
+import org.apache.isis.core.metamodel.adapter.LocalizationProviderAbstract;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectDirtier;
 import org.apache.isis.core.metamodel.adapter.ObjectDirtierAbstract;
@@ -74,6 +76,7 @@ public class RuntimeContextFromSession extends RuntimeContextAbstract {
     private final DependencyInjector dependencyInjector;
     private final QuerySubmitter querySubmitter;
     private final DomainObjectServices domainObjectServices;
+    private final LocalizationProviderAbstract localizationProvider;
 
     // //////////////////////////////////////////////////////////////////
     // Constructor
@@ -228,6 +231,13 @@ public class RuntimeContextFromSession extends RuntimeContextAbstract {
                 getPersistenceSession().getServicesInjector().injectDependencies(object);
             }
         };
+        this.localizationProvider = new LocalizationProviderAbstract() {
+            
+            @Override
+            public Localization getLocalization() {
+                return IsisContext.getLocalization();
+            }
+        };
     }
 
     // //////////////////////////////////////////////////////////////////
@@ -259,6 +269,10 @@ public class RuntimeContextFromSession extends RuntimeContextAbstract {
         return servicesProvider;
     }
 
+    public LocalizationProviderAbstract getLocalizationProvider() {
+        return localizationProvider;
+    }
+    
     @Override
     public ObjectDirtier getObjectDirtier() {
         return objectDirtier;

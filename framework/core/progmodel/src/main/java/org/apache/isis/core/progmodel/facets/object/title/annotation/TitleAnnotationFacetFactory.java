@@ -25,6 +25,10 @@ import java.util.Comparator;
 import java.util.List;
 
 import org.apache.isis.applib.annotation.Title;
+import org.apache.isis.core.metamodel.adapter.LocalizationProvider;
+import org.apache.isis.core.metamodel.adapter.LocalizationProviderAware;
+import org.apache.isis.core.metamodel.adapter.map.AdapterMap;
+import org.apache.isis.core.metamodel.adapter.map.AdapterMapAware;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -38,7 +42,10 @@ import com.google.common.base.Function;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
 
-public class TitleAnnotationFacetFactory extends FacetFactoryAbstract {
+public class TitleAnnotationFacetFactory extends FacetFactoryAbstract implements AdapterMapAware, LocalizationProviderAware {
+
+    private AdapterMap adapterMap;
+    private LocalizationProvider localizationProvider;
 
     public TitleAnnotationFacetFactory() {
         super(FeatureType.OBJECTS_ONLY);
@@ -67,7 +74,7 @@ public class TitleAnnotationFacetFactory extends FacetFactoryAbstract {
             return;
         } 
         List<TitleComponent> titleComponents = Lists.transform(methods, TitleComponent.FROM_METHOD);
-        FacetUtil.addFacet(new TitleFacetViaTitleAnnotation(titleComponents, facetHolder));
+        FacetUtil.addFacet(new TitleFacetViaTitleAnnotation(titleComponents, facetHolder, getSpecificationLookup(), adapterMap, localizationProvider));
     }
     
     static class SequenceComparator implements Comparator<String> {
@@ -123,5 +130,15 @@ public class TitleAnnotationFacetFactory extends FacetFactoryAbstract {
             return Lists.newArrayList(Splitter.on('.').split(sequence));
         }
         
+    }
+
+    @Override
+    public void setLocalizationProvider(LocalizationProvider localizationProvider) {
+        this.localizationProvider = localizationProvider;
+    }
+
+    @Override
+    public void setAdapterMap(AdapterMap adapterMap) {
+        this.adapterMap = adapterMap;
     }
 }

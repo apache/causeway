@@ -22,12 +22,16 @@ package org.apache.isis.core.metamodel.runtimecontext.noruntime;
 import java.util.Collections;
 import java.util.List;
 
+import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProviderAbstract;
 import org.apache.isis.core.metamodel.adapter.DomainObjectServices;
 import org.apache.isis.core.metamodel.adapter.DomainObjectServicesAbstract;
+import org.apache.isis.core.metamodel.adapter.LocalizationDefault;
+import org.apache.isis.core.metamodel.adapter.LocalizationProvider;
+import org.apache.isis.core.metamodel.adapter.LocalizationProviderAbstract;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectDirtier;
 import org.apache.isis.core.metamodel.adapter.ObjectDirtierAbstract;
@@ -57,6 +61,7 @@ public class RuntimeContextNoRuntime extends RuntimeContextAbstract {
     private final ObjectDirtierAbstract objectDirtier;
     private final ObjectPersistorAbstract objectPersistor;
     private final DomainObjectServicesAbstract domainObjectServices;
+    private final LocalizationProviderAbstract localizationProvider;
     private final QuerySubmitterAbstract querySubmitter;
 
     public RuntimeContextNoRuntime() {
@@ -188,6 +193,15 @@ public class RuntimeContextNoRuntime extends RuntimeContextAbstract {
                 throw new UnsupportedOperationException("Not supported by this implementation of RuntimeContext");
             }
         };
+        localizationProvider = new LocalizationProviderAbstract() {
+            
+            private final Localization defaultLocalization = new LocalizationDefault();
+                
+            @Override
+            public Localization getLocalization() {
+                return defaultLocalization;
+            }
+        };
         querySubmitter = new QuerySubmitterAbstract() {
 
             @Override
@@ -269,6 +283,12 @@ public class RuntimeContextNoRuntime extends RuntimeContextAbstract {
                 return Collections.emptyList();
             }
         };
+    }
+
+    @Override
+    public LocalizationProvider getLocalizationProvider() {
+        // TODO Auto-generated method stub
+        return null;
     }
 
 }

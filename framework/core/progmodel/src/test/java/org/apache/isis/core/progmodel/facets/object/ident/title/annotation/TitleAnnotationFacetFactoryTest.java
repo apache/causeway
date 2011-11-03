@@ -18,7 +18,7 @@
  */
 package org.apache.isis.core.progmodel.facets.object.ident.title.annotation;
 
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
 import java.lang.reflect.Method;
@@ -26,11 +26,14 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.apache.isis.applib.annotation.Title;
-import org.apache.isis.applib.profiles.Localization;
+import org.apache.isis.core.metamodel.adapter.LocalizationDefault;
+import org.apache.isis.core.metamodel.adapter.LocalizationProvider;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.map.AdapterMap;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
+import org.apache.isis.core.metamodel.spec.SpecificationLookup;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.progmodel.facets.object.title.annotation.TitleAnnotationFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.title.annotation.TitleFacetViaTitleAnnotation;
@@ -53,14 +56,32 @@ public class TitleAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 
     private TitleAnnotationFacetFactory facetFactory;
 
+    private SpecificationLookup mockSpecificationLookup;
+    private AdapterMap mockAdapterMap;
+    private LocalizationProvider mockLocalizationProvider;
+
     @Before
     @Override
     public void setUp() throws Exception {
         super.setUp();
 
+        mockSpecificationLookup = context.mock(SpecificationLookup.class);
+        mockAdapterMap = context.mock(AdapterMap.class);
+        mockLocalizationProvider = context.mock(LocalizationProvider.class);
+
         objectAdapter = context.mock(ObjectAdapter.class);
                 
         facetFactory = new TitleAnnotationFacetFactory();
+        facetFactory.setAdapterMap(mockAdapterMap);
+        facetFactory.setSpecificationLookup(mockSpecificationLookup);
+        facetFactory.setLocalizationProvider(mockLocalizationProvider);
+        
+        context.checking(new Expectations(){{
+            allowing(mockAdapterMap);
+            allowing(mockSpecificationLookup);
+            allowing(mockLocalizationProvider).getLocalization();
+            will(returnValue(new LocalizationDefault()));
+        }});
     }
 
     @After
@@ -72,7 +93,6 @@ public class TitleAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 
     public static class Customer {
 
-        @SuppressWarnings("unused")
         @Title
         public String someTitle() {
             return "Some Title";
@@ -134,14 +154,13 @@ public class TitleAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
         
         final Customer2 customer = new Customer2();
         
-        Localization localization = null;
         context.checking(new Expectations() {
             {
                 allowing(objectAdapter).getObject();
                 will(returnValue(customer));
             }
         });
-        final String title = titleFacetViaTitleAnnotation.title(objectAdapter, localization );
+        final String title = titleFacetViaTitleAnnotation.title(objectAdapter, mockLocalizationProvider.getLocalization());
         assertThat(title, is("titleElement1. titleElement3,titleElement2"));
     }
     
@@ -203,7 +222,7 @@ public class TitleAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
     }
 
     @Test
-    public void tTitleAnnotatedMethodsSomeOfWhichReturnNulls() throws Exception {
+    public void titleAnnotatedMethodsSomeOfWhichReturnNulls() throws Exception {
 
         facetFactory.process(new ProcessClassContext(Customer4.class, methodRemover, facetedMethod));
         
@@ -212,14 +231,13 @@ public class TitleAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
         
         final Customer4 customer = new Customer4();
         
-        Localization localization = null;
         context.checking(new Expectations() {
             {
                 allowing(objectAdapter).getObject();
                 will(returnValue(customer));
             }
         });
-        final String title = titleFacetViaTitleAnnotation.title(objectAdapter, localization );
+        final String title = titleFacetViaTitleAnnotation.title(objectAdapter, mockLocalizationProvider.getLocalization() );
         assertThat(title, is("titleElement1 titleElement3 titleElement5 3 this needs to be trimmed"));
     }
 

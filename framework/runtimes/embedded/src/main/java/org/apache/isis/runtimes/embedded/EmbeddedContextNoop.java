@@ -21,6 +21,7 @@ package org.apache.isis.runtimes.embedded;
 
 import java.util.List;
 
+import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.runtimes.embedded.internal.PersistenceState;
@@ -29,6 +30,11 @@ public class EmbeddedContextNoop implements EmbeddedContext {
 
     @Override
     public AuthenticationSession getAuthenticationSession() {
+        return null;
+    }
+
+    @Override
+    public Localization getLocalization() {
         return null;
     }
 
@@ -92,5 +98,6 @@ public class EmbeddedContextNoop implements EmbeddedContext {
     @Override
     public void raiseError(final String message) {
     }
+
 
 }

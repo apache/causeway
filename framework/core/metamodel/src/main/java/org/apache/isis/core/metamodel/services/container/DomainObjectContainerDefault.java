@@ -26,6 +26,7 @@ import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.PersistFailedException;
 import org.apache.isis.applib.RepositoryException;
 import org.apache.isis.applib.filter.Filter;
+import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.query.QueryFindAllInstances;
 import org.apache.isis.applib.security.RoleMemento;
@@ -37,6 +38,8 @@ import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.adapter.DomainObjectServices;
 import org.apache.isis.core.metamodel.adapter.DomainObjectServicesAware;
+import org.apache.isis.core.metamodel.adapter.LocalizationProvider;
+import org.apache.isis.core.metamodel.adapter.LocalizationProviderAware;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectDirtier;
 import org.apache.isis.core.metamodel.adapter.ObjectDirtierAware;
@@ -56,7 +59,7 @@ import org.apache.isis.core.metamodel.spec.SpecificationLookup;
 import org.apache.isis.core.metamodel.spec.SpecificationLookupAware;
 
 public class DomainObjectContainerDefault implements DomainObjectContainer, QuerySubmitterAware, ObjectDirtierAware,
-    DomainObjectServicesAware, ObjectPersistorAware, SpecificationLookupAware, AuthenticationSessionProviderAware, AdapterMapAware {
+    DomainObjectServicesAware, ObjectPersistorAware, SpecificationLookupAware, AuthenticationSessionProviderAware, AdapterMapAware, LocalizationProviderAware {
 
     private ObjectDirtier objectDirtier;
     private ObjectPersistor objectPersistor;
@@ -65,10 +68,23 @@ public class DomainObjectContainerDefault implements DomainObjectContainer, Quer
     private DomainObjectServices domainObjectServices;
     private AuthenticationSessionProvider authenticationSessionProvider;
     private AdapterMap adapterMap;
+    private LocalizationProvider localizationProvider;
 
     public DomainObjectContainerDefault() {
 
     }
+
+
+    // //////////////////////////////////////////////////////////////////
+    // titleOf
+    // //////////////////////////////////////////////////////////////////
+
+    @Override
+    public String titleOf(Object domainObject) {
+        final ObjectAdapter objectAdapter = adapterMap.adapterFor(domainObject);
+        return objectAdapter.getSpecification().getTitle(objectAdapter, localizationProvider.getLocalization());
+    }
+
 
     // //////////////////////////////////////////////////////////////////
     // newInstance, disposeInstance
@@ -487,4 +503,10 @@ public class DomainObjectContainerDefault implements DomainObjectContainer, Quer
     public void setObjectPersistor(ObjectPersistor objectPersistor) {
         this.objectPersistor = objectPersistor;
     }
+    
+    @Override
+    public void setLocalizationProvider(LocalizationProvider localizationProvider) {
+        this.localizationProvider = localizationProvider;
+    }
+
 }
