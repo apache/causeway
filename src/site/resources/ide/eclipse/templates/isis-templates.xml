@@ -17,7 +17,7 @@
   specific language governing permissions and limitations
   under the License.
 -->
-<templates><template autoinsert="true" context="java-members" deleted="false" description="Action" enabled="true" name="isa">// {{ ${actionName}&#13;
+<templates><template autoinsert="true" context="java-members" deleted="false" description="Action" enabled="true" name="isa">// {{ ${actionName} (action)&#13;
 ${:import(org.apache.isis.applib.annotation.MemberOrder)}@MemberOrder(sequence="1")&#13;
 public ${ReturnType} ${actionName}(final ${ParameterType} ${parameterType}) {&#13;
 	return ${cursor}null; // TODO: business logic here&#13;
@@ -109,7 +109,7 @@ public void removeFrom${ChildCollectionName}(final ${ChildElementType} ${childEl
 	return ${cursor}null; // TODO: return reason why collection read-only, null if editable&#13;
 }</template><template autoinsert="true" context="java-members" deleted="false" description="Collection hiding" enabled="true" name="ischid">public boolean hide${CollectionName}() {&#13;
 	return ${cursor}false; // TODO: return true if hidden, false otherwise&#13;
-}</template><template autoinsert="true" context="java-members" deleted="false" description="Collection (list)" enabled="true" name="iscl">// {{ ${CollectionName}&#13;
+}</template><template autoinsert="true" context="java-members" deleted="false" description="Collection (list)" enabled="true" name="iscl">// {{ ${CollectionName} (Collection)&#13;
 ${:import(java.util.List,java.util.ArrayList,org.apache.isis.applib.annotation.MemberOrder)}private List&lt;${ElementType}&gt; ${collectionName} = new ArrayList&lt;${ElementType}&gt;();&#13;
 @MemberOrder(sequence="1")&#13;
 public List&lt;${ElementType}&gt; get${CollectionName}() {&#13;
@@ -145,7 +145,7 @@ public void removeFrom${CollectionName}(final ${ElementType} ${elementName}) {&#
 protected void onAddTo${CollectionName}(final ${ElementType} ${elementName}) {&#13;
 }&#13;
 protected void onRemoveFrom${CollectionName}(final ${ElementType} ${elementName}) {&#13;
-}</template><template autoinsert="true" context="java-members" deleted="false" description="Collection (set)" enabled="true" name="iscs">// {{ ${CollectionName}&#13;
+}</template><template autoinsert="true" context="java-members" deleted="false" description="Collection (set)" enabled="true" name="iscs">// {{ ${CollectionName} (Collection)&#13;
 ${:import(java.util.Set,java.util.LinkedHashSet,org.apache.isis.applib.annotation.MemberOrder)}private Set&lt;${ElementType}&gt; ${collectionName} = new LinkedHashSet&lt;${ElementType}&gt;();&#13;
 @MemberOrder(sequence="1")&#13;
 public Set&lt;${ElementType}&gt; get${CollectionName}() {&#13;
@@ -225,7 +225,7 @@ public void removed() {&#13;
 }&#13;
 public void updated() {&#13;
     // TODO: post-update&#13;
-}</template><template autoinsert="true" context="java-members" deleted="false" description="Property" enabled="true" name="isp">// {{ ${PropertyName}&#13;
+}</template><template autoinsert="true" context="java-members" deleted="false" description="Property" enabled="true" name="isp">// {{ ${PropertyName} (property)&#13;
 private ${PropertyType} ${propertyName};&#13;
 ${:import(org.apache.isis.applib.annotation.MemberOrder)}@MemberOrder(sequence="1")&#13;
 public ${PropertyType} get${PropertyName}() {&#13;
