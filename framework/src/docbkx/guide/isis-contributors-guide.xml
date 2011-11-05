@@ -3808,8 +3808,12 @@ public class FooBar {
    | grep -v "tests-common/.*\.xml" \
    | grep -v "tests-common/.*/tests\..*" \
    | grep -v "tests-common/.*\.xml" \
+   | grep -v "tests-common/.*\.script" \
    | grep -v "tests/.*\.xml" \
-   | grep -v "isis.log"</programlisting>
+   | grep -v "isis.log" \
+   | grep -v "target" \
+   | grep -v "test/.*\.json" \
+   | grep -v "hsql-db"</programlisting>
 
           <para>where:</para>
 
@@ -3822,6 +3826,10 @@ public class FooBar {
             <listitem>
               <para><filename>tests-common/*</filename> and
               <filename>tests/*</filename> ignores certain test files</para>
+            </listitem>
+
+            <listitem>
+              <para>hsql-db are generated HSQLDB directories</para>
             </listitem>
           </itemizedlist>
 
