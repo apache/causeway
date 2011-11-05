@@ -3909,7 +3909,7 @@ licenses to remove from supplemental-models.xml (are spurious):
         <sect2>
           <title>Generate Release Notes</title>
 
-          <para>Each release should a release note page called
+          <para>Each release should have a release note page called
           <filename>release-x.x.x.html</filename>, in
           <filename>src/site/resources</filename> (in
           <package>[oai:isis]</package> parent module). This is linked to from
@@ -3934,14 +3934,14 @@ licenses to remove from supplemental-models.xml (are spurious):
         </sect2>
 
         <sect2>
-          <title>Update downloads.apt</title>
+          <title>Update downloads.apt.vm</title>
 
-          <para>The website's <filename>src/site/apt/downloads.apt</filename>
-          file lists (what will be) the current release, along with any
-          archived releases. Update this to reflect how things will be once
-          the release is complete. (We also double-check it at the end of the
-          release process, see <xref
-          linkend="sec.PromoteAndUpdateWebsite" />).</para>
+          <para>The website's
+          <filename>src/site/apt/downloads.apt.vm</filename> file lists (what
+          will be) the current release, along with any archived releases.
+          Update this to reflect how things will be once the release is
+          complete. (We also double-check it at the end of the release
+          process, see <xref linkend="sec.PromoteAndUpdateWebsite" />).</para>
         </sect2>
       </sect1>
 
