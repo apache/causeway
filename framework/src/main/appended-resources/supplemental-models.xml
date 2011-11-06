@@ -314,12 +314,9 @@
       <version>2.2.1.GA</version>
       <licenses>
         <license>
-        <license>
             <name>The Apache Software License, Version 2.0</name>
             <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
             <distribution>repo</distribution>          
-        </license>
-
         </license>
       </licenses>
     </project>
@@ -331,11 +328,9 @@
       <version>2.2.1.GA</version>
       <licenses>
         <license>
-        <license>
             <name>The Apache Software License, Version 2.0</name>
             <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
             <distribution>repo</distribution>          
-        </license>
         </license>
       </licenses>
     </project>
