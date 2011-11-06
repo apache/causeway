@@ -163,6 +163,7 @@ public class EditTask extends Task {
     }
 
     private void saveState(final ObjectAdapter targetAdapter, final ObjectAdapter[] entryAdapters) {
+        getPersistenceSession().getTransactionManager().startTransaction();
         for (int i = 0; i < fields.length; i++) {
             final ObjectAssociation fld = fields[i];
             final ObjectAdapter entryAdapter = entryAdapters[i];
@@ -188,6 +189,7 @@ public class EditTask extends Task {
                 }
             }
         }
+        getPersistenceSession().getTransactionManager().endTransaction();
     }
 
     @Override
