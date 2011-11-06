@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+         http://www.apache.org/licenses/LICENSE-2.0
+         
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+-->
+<html xmlns:concordion="http://www.concordion.org/2007/concordion"
+      xmlns:isis="http://isis.apache.org/2010/concordion">
+<link href="../concordion.css" rel="stylesheet" type="text/css" />
+<body>
+
+<h3>Operational Data</h3>
+<p>With to do items (<span concordion:set="#className">dom.todo.ToDoItem</span>):
+</p>
+<table isis:execute="#result=setUpObject(#className, #alias, #description, #done)">
+	<tr>
+        <th concordion:set="#alias">Alias</th>
+		<th concordion:set="#description">Description</th>
+		<th concordion:set="#done">Done</th>
+		<th concordion:assertEquals="#result"/>
+	</tr>
+	<tr>
+        <td>item1</td>
+		<td>Buy milk</td>
+		<td>false</td>
+		<td>ok</td>
+	</tr>
+	<tr>
+        <td>item2</td>
+        <td>Pick up laundry</td>
+        <td>false</td>
+        <td>ok</td>
+	</tr>
+	<tr>
+        <td>item3</td>
+        <td>Buy stamps</td>
+        <td>false</td>
+        <td>ok</td>
+	</tr>
+    <tr>
+        <td>item4</td>
+        <td>Write blog post</td>
+        <td>false</td>
+        <td>ok</td>
+    </tr>
+    <tr>
+        <td>item5</td>
+        <td>Organize brown bag</td>
+        <td>false</td>
+        <td>ok</td>
+    </tr>
+</table>
+
+</body>
+</html>
