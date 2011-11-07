@@ -74,7 +74,7 @@ public class TitleAnnotationFacetFactory extends FacetFactoryAbstract implements
             return;
         } 
         List<TitleComponent> titleComponents = Lists.transform(methods, TitleComponent.FROM_METHOD);
-        FacetUtil.addFacet(new TitleFacetViaTitleAnnotation(titleComponents, facetHolder, getSpecificationLookup(), adapterMap, localizationProvider));
+        FacetUtil.addFacet(new TitleFacetViaTitleAnnotation(titleComponents, facetHolder, adapterMap, localizationProvider));
     }
     
     static class SequenceComparator implements Comparator<String> {

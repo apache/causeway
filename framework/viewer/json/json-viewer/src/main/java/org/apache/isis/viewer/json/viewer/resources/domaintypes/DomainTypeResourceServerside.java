@@ -24,6 +24,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -37,10 +38,13 @@ import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.applib.RepresentationType;
 import org.apache.isis.viewer.json.applib.RestfulMediaType;
 import org.apache.isis.viewer.json.applib.RestfulResponse.HttpStatusCode;
+import org.apache.isis.viewer.json.applib.blocks.LinkRepresentation;
 import org.apache.isis.viewer.json.applib.domaintypes.DomainTypeResource;
 import org.apache.isis.viewer.json.viewer.JsonApplicationException;
 import org.apache.isis.viewer.json.viewer.representations.RendererFactory;
 import org.apache.isis.viewer.json.viewer.resources.ResourceAbstract;
+import org.apache.isis.viewer.json.viewer.resources.domainobjects.QueryStringUtil;
+import org.apache.isis.viewer.json.viewer.util.UrlParserUtils;
 
 /**
  * Implementation note: it seems to be necessary to annotate the implementation with {@link Path} rather than the
@@ -73,6 +77,7 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
     @Path("/{domainType}")
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_DOMAIN_TYPE })
     public Response domainType(@PathParam("domainType") final String domainType){
+
         RepresentationType representationType = RepresentationType.DOMAIN_TYPE;
         init(representationType);
 
@@ -84,6 +89,38 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
         final DomainTypeReprRenderer renderer = 
                 (DomainTypeReprRenderer) rendererFactory.newRenderer(getResourceContext(), null, JsonRepresentation.newMap());
         renderer.with(objectSpec).includesSelf();
+
+        return responseOfOk(renderer, Caching.ONE_DAY).build();
+    }
+
+    @GET
+    @Path("/{domainType}/typeactions/isSubtypeOf/invoke")
+    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_DOMAIN_TYPE })
+    public Response domainTypeIsSubtypeOf(
+        @PathParam("domainType") String domainType, 
+        @QueryParam("args") final String argumentsQueryString) {
+        
+        RepresentationType representationType = RepresentationType.DOMAIN_TYPE_IS_SUBTYPE_OF;
+        init();
+
+        JsonRepresentation arguments = QueryStringUtil.parseQueryString(argumentsQueryString, "Type action", "isSubtypeOf");
+
+        if(!arguments.isLink("supertype")) {
+            throw JsonApplicationException.create(HttpStatusCode.BAD_REQUEST, "Args should contain a link '%s'", "supertype");
+        }
+        final LinkRepresentation supertypeLink = arguments.getLink("supertype");
+        final String supertypeFullName = UrlParserUtils.domainTypeFromLink(supertypeLink);
+        
+        final ObjectSpecification domainTypeSpec = getSpecificationLoader().loadSpecification(domainType);
+        final ObjectSpecification supertypeSpec = getSpecificationLoader().loadSpecification(supertypeFullName);
+
+        final RendererFactory rendererFactory = 
+                rendererFactoryRegistry.find(representationType);
+
+        final DomainTypeIsSubtypeOfReprRenderer renderer = 
+                (DomainTypeIsSubtypeOfReprRenderer) rendererFactory.newRenderer(getResourceContext(), null, JsonRepresentation.newMap());
+        final ObjectSpecAndSuperSpec objectSpecAndSuperSpec = new ObjectSpecAndSuperSpec(domainTypeSpec, supertypeSpec);
+        renderer.with(objectSpecAndSuperSpec).includesSelf();
 
         return responseOfOk(renderer, Caching.ONE_DAY).build();
     }
@@ -211,5 +248,7 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
 
         return responseOfOk(renderer, Caching.ONE_DAY).build();
     }
+
+
 
 }

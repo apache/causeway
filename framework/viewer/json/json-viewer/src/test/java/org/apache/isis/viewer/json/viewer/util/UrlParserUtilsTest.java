@@ -17,20 +17,44 @@
  *  under the License.
  */
 package org.apache.isis.viewer.json.viewer.util;
+
 import static org.junit.Assert.assertEquals;
 
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.junit.Test;
 
-
 public class UrlParserUtilsTest {
 
-	@Test
-	public void test() throws Exception {
-	    JsonRepresentation link = JsonRepresentation.newMap();
-		link.mapPut("href", "http://localhost/objects/OID:1");
-		String oidFromHref = UrlParserUtils.oidFromLink(link);
-		assertEquals("OID:1", oidFromHref);
-	}
+    @Test
+    public void oidFromLink() throws Exception {
+        JsonRepresentation link = JsonRepresentation.newMap();
+        link.mapPut("href", "http://localhost/objects/OID:1");
+        String oidFromHref = UrlParserUtils.oidFromLink(link);
+        assertEquals("OID:1", oidFromHref);
+    }
+
+    @Test
+    public void domainTypeFromLink() throws Exception {
+        JsonRepresentation link = JsonRepresentation.newMap();
+        link.mapPut("href", "http://localhost/domainTypes/com.mycompany.myapp.Customer");
+        String oidFromHref = UrlParserUtils.domainTypeFromLink(link);
+        assertEquals("com.mycompany.myapp.Customer", oidFromHref);
+    }
+
+    @Test
+    public void domainTypeFromLinkTrailingSlash() throws Exception {
+        JsonRepresentation link = JsonRepresentation.newMap();
+        link.mapPut("href", "http://localhost/domainTypes/com.mycompany.myapp.Customer/");
+        String oidFromHref = UrlParserUtils.domainTypeFromLink(link);
+        assertEquals("com.mycompany.myapp.Customer", oidFromHref);
+    }
+
+    @Test
+    public void domainTypeFromLinkFollowingStuff() throws Exception {
+        JsonRepresentation link = JsonRepresentation.newMap();
+        link.mapPut("href", "http://localhost/domainTypes/com.mycompany.myapp.Customer/otherStuffHere");
+        String oidFromHref = UrlParserUtils.domainTypeFromLink(link);
+        assertEquals("com.mycompany.myapp.Customer", oidFromHref);
+    }
 
 }

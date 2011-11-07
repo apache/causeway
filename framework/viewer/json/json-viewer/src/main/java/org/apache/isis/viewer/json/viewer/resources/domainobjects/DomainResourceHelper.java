@@ -18,7 +18,6 @@ package org.apache.isis.viewer.json.viewer.resources.domainobjects;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map.Entry;
 
@@ -29,8 +28,6 @@ import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.consent.Consent;
-import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
-import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -43,11 +40,8 @@ import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.applib.RepresentationType;
 import org.apache.isis.viewer.json.applib.RestfulResponse.HttpStatusCode;
 import org.apache.isis.viewer.json.applib.util.JsonMapper;
-import org.apache.isis.viewer.json.applib.util.UrlEncodingUtils;
 import org.apache.isis.viewer.json.viewer.JsonApplicationException;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
-import org.apache.isis.viewer.json.viewer.representations.LinkBuilder;
-import org.apache.isis.viewer.json.viewer.representations.Rel;
 import org.apache.isis.viewer.json.viewer.representations.RendererFactory;
 import org.apache.isis.viewer.json.viewer.representations.RendererFactoryRegistry;
 import org.apache.isis.viewer.json.viewer.resources.ResourceAbstract;
@@ -157,20 +151,7 @@ public class DomainResourceHelper {
 
 
     static JsonRepresentation parseQueryString(ObjectAction action, String argumentsQueryString) {
-        if(argumentsQueryString == null) {
-            return JsonRepresentation.newMap();
-        }
-        String argumentsTrimmed = argumentsQueryString.trim();
-        if(argumentsTrimmed .isEmpty()) {
-            return JsonRepresentation.newMap();
-        }
-        final String urlDecode = UrlEncodingUtils.urlDecode(argumentsTrimmed);
-        try {
-            return JsonMapper.instance().read(urlDecode);
-        } catch (Exception e) {
-            throw JsonApplicationException.create(HttpStatusCode.BAD_REQUEST,
-                    "Action '%s' has query arguments that cannot be parsed as JSON", e, action.getId());
-        }
+        return QueryStringUtil.parseQueryString(argumentsQueryString, "Action", action.getId());
     }
 
     Response invokeActionIdempotent(

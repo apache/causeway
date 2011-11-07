@@ -44,4 +44,8 @@ public @interface Title {
      * The string to append to this property if non-empty.  
      */
     String append() default "";
+    /**
+     * The length to abbreviate this title element to.  
+     */
+    int abbreviatedTo() default Integer.MAX_VALUE;
 }

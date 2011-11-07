@@ -32,7 +32,6 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacetAbstract;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.SpecificationLookup;
 import org.apache.log4j.Logger;
 
 import com.google.common.base.Function;
@@ -42,7 +41,6 @@ public class TitleFacetViaTitleAnnotation extends TitleFacetAbstract  {
 
     private static final Logger LOG = Logger.getLogger(TitleFacetViaTitleAnnotation.class);
     private final List<TitleComponent> components;
-    private final SpecificationLookup specificationLookup;
     private final AdapterMap adapterMap;
     private final LocalizationProvider localizationProvider;
 
@@ -59,11 +57,14 @@ public class TitleFacetViaTitleAnnotation extends TitleFacetAbstract  {
         private final String prepend;
         private final String append;
         private final Method method;
-        private TitleComponent(String prepend, String append, Method method) {
+        private final int abbreviateTo;
+        
+        private TitleComponent(String prepend, String append, Method method, int abbreviateTo) {
             super();
             this.prepend = prepend;
             this.append = append;
             this.method = method;
+            this.abbreviateTo = abbreviateTo;
         }
         public String getPrepend() {
             return prepend;
@@ -78,13 +79,13 @@ public class TitleFacetViaTitleAnnotation extends TitleFacetAbstract  {
             final Title annotation = method.getAnnotation(Title.class);
             final String prepend = annotation!=null?annotation.prepend():" ";
             final String append = annotation!=null?annotation.append():"";
-            return new TitleComponent(prepend, append, method);
+            final int abbreviateTo = annotation!=null?annotation.abbreviatedTo():Integer.MAX_VALUE;
+            return new TitleComponent(prepend, append, method, abbreviateTo);
         }
     }
-    public TitleFacetViaTitleAnnotation(final List<TitleComponent> components, final FacetHolder holder, SpecificationLookup specificationLookup, AdapterMap adapterMap, LocalizationProvider localizationProvider) {
+    public TitleFacetViaTitleAnnotation(final List<TitleComponent> components, final FacetHolder holder, AdapterMap adapterMap, LocalizationProvider localizationProvider) {
         super(holder);
         this.components = components;
-        this.specificationLookup = specificationLookup;
         this.adapterMap = adapterMap;
         this.localizationProvider = localizationProvider;
     }
@@ -92,12 +93,11 @@ public class TitleFacetViaTitleAnnotation extends TitleFacetAbstract  {
     @Override
     public String title(final ObjectAdapter owningAdapter, final Localization localization) {
     	StringBuilder stringBuilder = new StringBuilder();
-
     	
         try {
-        	for (TitleComponent entry : this.components) {
+        	for (TitleComponent component : this.components) {
         		String title = null;
-                final Object titlePart = AdapterInvokeUtils.invoke(entry.getMethod(), owningAdapter);
+                final Object titlePart = AdapterInvokeUtils.invoke(component.getMethod(), owningAdapter);
         		if(titlePart != null) {
         		    // use either titleFacet...
         		    title = titleOf(titlePart);
@@ -110,10 +110,10 @@ public class TitleFacetViaTitleAnnotation extends TitleFacetAbstract  {
         		    continue;
         		}
         		if(stringBuilder.length() > 0) {
-        		    stringBuilder.append(entry.getPrepend());
+        		    stringBuilder.append(component.getPrepend());
         		}
-        		stringBuilder.append(title);
-        		stringBuilder.append(entry.getAppend());
+        		stringBuilder.append(abbreviated(title, component.abbreviateTo));
+        		stringBuilder.append(component.getAppend());
         	}
 
         	return stringBuilder.toString().trim();
@@ -138,5 +138,10 @@ public class TitleFacetViaTitleAnnotation extends TitleFacetAbstract  {
     public List<TitleComponent> getComponents() {
         return components;
     }
+    
+    private static String abbreviated(String str, int maxLength) {
+        return str.length() < maxLength?str:str.substring(0, maxLength-3)+"...";
+    }
+
 
 }

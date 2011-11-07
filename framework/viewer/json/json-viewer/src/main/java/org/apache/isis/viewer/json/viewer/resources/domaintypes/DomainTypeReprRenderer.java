@@ -23,13 +23,12 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionContainer.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
-import org.apache.isis.core.metamodel.spec.feature.OneToOneActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.applib.RepresentationType;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
-import org.apache.isis.viewer.json.viewer.representations.LinkFollower;
 import org.apache.isis.viewer.json.viewer.representations.LinkBuilder;
+import org.apache.isis.viewer.json.viewer.representations.LinkFollower;
 import org.apache.isis.viewer.json.viewer.representations.Rel;
 import org.apache.isis.viewer.json.viewer.representations.ReprRenderer;
 import org.apache.isis.viewer.json.viewer.representations.ReprRendererAbstract;
@@ -68,8 +67,11 @@ public class DomainTypeReprRenderer extends ReprRendererAbstract<DomainTypeReprR
         return cast(this);
     }
 
-
     public JsonRepresentation render() {
+
+        if(objectSpecification == null) {
+            throw new IllegalStateException("ObjectSpecification not specified");
+        } 
 
         // self
         if(includesSelf) {
@@ -77,14 +79,14 @@ public class DomainTypeReprRenderer extends ReprRendererAbstract<DomainTypeReprR
             getLinks().arrayAdd(selfLink);
         }
         
-        if(objectSpecification != null) {
-            representation.mapPut("canonicalName", objectSpecification.getFullIdentifier());
-            addMembers();
+        representation.mapPut("canonicalName", objectSpecification.getFullIdentifier());
+        addMembers();
+        
+        addTypeActions();
 
-            putExtensionsNames();
-            putExtensionsDescriptionIfAvailable();
-            putExtensionsIfService();
-        }
+        putExtensionsNames();
+        putExtensionsDescriptionIfAvailable();
+        putExtensionsIfService();
 
         return representation;
     }
@@ -109,7 +111,22 @@ public class DomainTypeReprRenderer extends ReprRendererAbstract<DomainTypeReprR
             final LinkBuilder linkBuilder = TypeActionReprRenderer.newLinkToBuilder(getResourceContext(), Rel.ACTION, objectSpecification, action);
             membersList.arrayAdd(linkBuilder.build());
         }
-        
+    }
+
+    private JsonRepresentation getTypeActions() {
+        JsonRepresentation typeActions = representation.getArray("typeActions");
+        if(typeActions == null) {
+            typeActions = JsonRepresentation.newArray();
+            representation.mapPut("typeActions", typeActions);
+        }
+        return typeActions;
+    }
+
+    private void addTypeActions() {
+        final ObjectSpecAndSuperSpec objectSpecAndSuperSpec = new ObjectSpecAndSuperSpec(objectSpecification, null);
+        final LinkBuilder linkBuilder = DomainTypeIsSubtypeOfReprRenderer.newLinkToBuilder(getResourceContext(), Rel.TYPE_ACTION, objectSpecAndSuperSpec);
+        JsonRepresentation link = linkBuilder.withId("isSubtypeOf").build();
+        getTypeActions().arrayAdd(link);
     }
 
     
