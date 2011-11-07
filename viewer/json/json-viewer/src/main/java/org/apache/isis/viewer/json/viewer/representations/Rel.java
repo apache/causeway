@@ -43,6 +43,7 @@ public enum Rel {
     PROPERTY("property"), 
     COLLECTION("collection"), 
     ACTION("action"), 
+    TYPE_ACTION("typeaction"), 
     ACTION_PARAM("actionparam"), 
     RETURN_TYPE("returntype"), 
     ELEMENT_TYPE("elementtype"), 

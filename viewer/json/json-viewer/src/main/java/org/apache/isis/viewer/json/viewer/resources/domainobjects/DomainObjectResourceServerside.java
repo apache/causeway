@@ -48,7 +48,6 @@ import org.apache.isis.viewer.json.viewer.JsonApplicationException;
 import org.apache.isis.viewer.json.viewer.representations.RendererFactory;
 import org.apache.isis.viewer.json.viewer.representations.RendererFactoryRegistry;
 import org.apache.isis.viewer.json.viewer.resources.ResourceAbstract;
-import org.apache.isis.viewer.json.viewer.resources.ResourceAbstract.Caching;
 import org.apache.isis.viewer.json.viewer.resources.domainobjects.DomainResourceHelper.Intent;
 
 @Path("/objects")
@@ -343,7 +342,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements
             @PathParam("oid") final String oidStr,
             @PathParam("actionId") final String actionId,
             @QueryParam("args") final String arguments) {
-        init(RepresentationType.GENERIC);
+        init(RepresentationType.ACTION_RESULT);
 
         final ObjectAdapter objectAdapter = getObjectAdapter(oidStr);
         final DomainResourceHelper helper = new DomainResourceHelper(getResourceContext(), objectAdapter);
@@ -358,7 +357,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements
             @PathParam("oid") final String oidStr,
             @PathParam("actionId") final String actionId,
             final InputStream arguments) {
-        init(RepresentationType.GENERIC);
+        init(RepresentationType.ACTION_RESULT);
 
         final ObjectAdapter objectAdapter = getObjectAdapter(oidStr);
         final DomainResourceHelper helper = new DomainResourceHelper(getResourceContext(), objectAdapter);
@@ -374,7 +373,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements
             @PathParam("oid") final String oidStr,
             @PathParam("actionId") final String actionId,
             final InputStream body) {
-        init(RepresentationType.GENERIC);
+        init(RepresentationType.ACTION_RESULT);
         
         final ObjectAdapter objectAdapter = getObjectAdapter(oidStr);
         final DomainResourceHelper helper = new DomainResourceHelper(getResourceContext(), objectAdapter);

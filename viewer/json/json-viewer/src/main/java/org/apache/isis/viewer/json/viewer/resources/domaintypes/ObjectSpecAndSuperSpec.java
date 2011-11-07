@@ -16,15 +16,26 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.json.viewer.resources.domainobjects;
+package org.apache.isis.viewer.json.viewer.resources.domaintypes;
 
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
-public class ObjectAndAction extends ObjectAndMember<ObjectAction>{
+public class ObjectSpecAndSuperSpec  {
     
-    public ObjectAndAction(ObjectAdapter objectAdapter, ObjectAction action) {
-        super(objectAdapter, action);
-    }
+    private final ObjectSpecification objectSpecification;
+    private final ObjectSpecification superSpecification;
 
+    public ObjectSpecAndSuperSpec(ObjectSpecification objectSpecification, ObjectSpecification superSpecification) {
+        this.objectSpecification = objectSpecification;
+        this.superSpecification = superSpecification;
+    }
+    
+    public ObjectSpecification getObjectSpecification() {
+        return objectSpecification;
+    }
+    
+    public ObjectSpecification getSuperSpecification() {
+        return superSpecification;
+    }
+    
 }

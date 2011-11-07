@@ -28,6 +28,7 @@ import org.apache.isis.viewer.json.applib.domainobjects.ObjectActionRepresentati
 import org.apache.isis.viewer.json.applib.domainobjects.ObjectCollectionRepresentation;
 import org.apache.isis.viewer.json.applib.domainobjects.ObjectPropertyRepresentation;
 import org.apache.isis.viewer.json.applib.domainobjects.ScalarValueRepresentation;
+import org.apache.isis.viewer.json.applib.domaintypes.DomainTypeIsSubtypeOfRepresentation;
 import org.apache.isis.viewer.json.applib.domaintypes.DomainTypeRepresentation;
 import org.apache.isis.viewer.json.applib.domaintypes.DomainTypesRepresentation;
 import org.apache.isis.viewer.json.applib.domaintypes.TypeActionParameterRepresentation;
@@ -52,12 +53,13 @@ public enum RepresentationType {
     ACTION_RESULT(RestfulMediaType.APPLICATION_JSON_ACTION_RESULT, ActionResultRepresentation.class),
     DOMAIN_TYPES(RestfulMediaType.APPLICATION_JSON_DOMAIN_TYPES, DomainTypesRepresentation.class),
     DOMAIN_TYPE(RestfulMediaType.APPLICATION_JSON_DOMAIN_TYPE, DomainTypeRepresentation.class),
+    DOMAIN_TYPE_IS_SUBTYPE_OF(RestfulMediaType.APPLICATION_JSON_DOMAIN_TYPE_IS_SUBTYPE_OF, DomainTypeIsSubtypeOfRepresentation.class), 
     TYPE_PROPERTY(RestfulMediaType.APPLICATION_JSON_TYPE_PROPERTY, TypePropertyRepresentation.class),
     TYPE_COLLECTION(RestfulMediaType.APPLICATION_JSON_TYPE_COLLECTION, TypeCollectionRepresentation.class),
     TYPE_ACTION(RestfulMediaType.APPLICATION_JSON_TYPE_ACTION, TypeActionRepresentation.class),
     TYPE_ACTION_PARAMETER(RestfulMediaType.APPLICATION_JSON_TYPE_ACTION_PARAMETER, TypeActionParameterRepresentation.class), 
     ERROR(RestfulMediaType.APPLICATION_JSON_ERROR, ErrorRepresentation.class),
-    GENERIC(MediaType.APPLICATION_JSON, JsonRepresentation.class);
+    GENERIC(MediaType.APPLICATION_JSON, JsonRepresentation.class); 
     
     private final String name;
     private final MediaType mediaType;

@@ -22,6 +22,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -42,6 +43,15 @@ public interface DomainTypeResource {
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_DOMAIN_TYPE })
     @ClientResponseType(entityType=String.class)
     public abstract Response domainType(@PathParam("domainType") final String domainType);
+
+    @GET
+    @Path("/{domainType}/isSubtypeOf/invoke")
+    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_DOMAIN_TYPE })
+    @ClientResponseType(entityType=String.class)
+    public abstract Response domainTypeIsSubtypeOf(
+        @PathParam("domainType") final String domainType,
+        @QueryParam("args") final String argumentsQueryString
+        );
 
     @GET
     @Path("/{domainType}/properties/{propertyId}")
