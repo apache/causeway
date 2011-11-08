@@ -23,7 +23,7 @@
     <artifactId>webshop</artifactId>
     <version>1.0-SNAPSHOT</version>
 
-    <name>Quickstart App</name>
+    <name>Webshop App</name>
 
     <packaging>pom</packaging>
     

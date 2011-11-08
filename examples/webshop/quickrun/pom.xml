@@ -33,7 +33,7 @@
     </parent>
 
     <artifactId>webshop-quickrun</artifactId>
-    <name>Quickstart Quick Run</name>
+    <name>Webshop Quick Run</name>
 
     <properties>
         <jetty.version>6.1.4</jetty.version>

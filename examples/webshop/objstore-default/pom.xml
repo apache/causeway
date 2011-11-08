@@ -26,7 +26,7 @@
     </parent>
 
 	<artifactId>webshop-objstore-dflt</artifactId>
-	<name>Quickstart Repositories (for ObjectStore Default)</name>
+	<name>Webshop Repositories (for ObjectStore Default)</name>
 
 	<dependencies>
 	

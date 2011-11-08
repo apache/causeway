@@ -26,7 +26,7 @@
     </parent>
 
 	<artifactId>webshop-fixture</artifactId>
-	<name>Quickstart Fixtures</name>
+	<name>Webshop Fixtures</name>
 
 	<dependencies>
 		<dependency>
