@@ -58,7 +58,7 @@
     <modules>
         <module>quickstart</module>
         <module>claims</module>
-        <module>webshop-cart</module>
+        <module>webshop</module>
 
         <module>orders</module>
         <module>library</module>
