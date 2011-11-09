@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.List;
 
 import org.apache.isis.applib.AbstractFactoryAndRepository;
+import org.apache.isis.applib.annotation.Exploration;
 import org.apache.isis.applib.annotation.Idempotent;
 import org.apache.isis.applib.annotation.QueryOnly;
 import org.apache.isis.applib.filter.Filter;
@@ -28,8 +29,8 @@ public class CustomersDefault extends AbstractFactoryAndRepository implements Cu
 	// }}
 
 
-    private int id = 0;
-    
+
+	// {{ newCustomer
     @Override
     public Customer newCustomer(String firstName, String lastName, String email) {
         final Customer customer = newTransientInstance(Customer.class);
@@ -40,8 +41,14 @@ public class CustomersDefault extends AbstractFactoryAndRepository implements Cu
         persistIfNotAlready(customer);
         return customer;
     }
+    private int id = 0;
+    private String nextRef() {
+        return "ID-" + (++id);
+    }
+    // }}
 
-    @Idempotent
+    // {{ findByEmail
+    @QueryOnly
     @Override
     public Customer findByEmail(final String email) {
         return firstMatch(Customer.class, new Filter<Customer>(){
@@ -53,23 +60,25 @@ public class CustomersDefault extends AbstractFactoryAndRepository implements Cu
     public String default0FindByEmail() {
         return "joe@bloggs.com";
     }
+    // }}
 
+    // {{ all
     @QueryOnly
+    @Exploration
     @Override
     public List<Customer> all() {
         return allInstances(Customer.class);
     }
+    // }}
 
-    private String nextRef() {
-        return "ID-" + (++id);
-    }
-
+    // {{ recent
     @Override
     public List<Customer> recent() {
         final List<Customer> recent = Lists.newArrayList(all());
         Collections.sort(recent, Customer.REF_COMPARATOR);
         return recent;
     }
+    // }}
 
 
 

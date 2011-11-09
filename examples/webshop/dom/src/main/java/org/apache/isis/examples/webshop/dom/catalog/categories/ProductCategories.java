@@ -12,14 +12,7 @@ import org.apache.isis.applib.annotation.QueryOnly;
 public interface ProductCategories {
 
     @QueryOnly
-    @MemberOrder(sequence="1")
-    public List<ProductCategory> list();
-
-    public ProductCategory newCategory(
-        @Named("Code") String code,
-        @Named("Name") String name);
-
-    @QueryOnly
+    @MemberOrder(sequence="3")
     public ProductCategory findByCode(
         @Named("Code") String code);
 

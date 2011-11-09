@@ -59,6 +59,7 @@ public class Product extends AbstractDomainObject {
     // {{ ImageUrl
     private String imageUrl;
 
+    @MemberOrder(sequence = "4.0")
     public String getImageUrl() {
         return imageUrl;
     }

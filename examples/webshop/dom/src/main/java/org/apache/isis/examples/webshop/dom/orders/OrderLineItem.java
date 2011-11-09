@@ -55,7 +55,7 @@ public class OrderLineItem extends AbstractDomainObject {
     // {{ Price (property)
     private Money price;
 
-    @MemberOrder(sequence = "1")
+    @MemberOrder(sequence = "4")
     @Disabled
     public Money getPrice() {
         return price;

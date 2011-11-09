@@ -21,7 +21,7 @@
 
     <groupId>org.apache.isis.examples</groupId>
     <artifactId>webshop</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>0.2.0-incubating-SNAPSHOT</version>
 
     <name>Webshop App</name>
 
@@ -143,37 +143,37 @@
             <dependency>
                 <groupId>${project.groupId}</groupId>
                 <artifactId>webshop-dom</artifactId>
-                <version>1.0-SNAPSHOT</version>
+                <version>0.2.0-incubating-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>${project.groupId}</groupId>
                 <artifactId>webshop-domsvc</artifactId>
-                <version>1.0-SNAPSHOT</version>
+                <version>0.2.0-incubating-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>${project.groupId}</groupId>
                 <artifactId>webshop-fixture</artifactId>
-                <version>1.0-SNAPSHOT</version>
+                <version>0.2.0-incubating-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>${project.groupId}</groupId>
                 <artifactId>webshop-quickrun</artifactId>
-                <version>1.0-SNAPSHOT</version>
+                <version>0.2.0-incubating-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>${project.groupId}</groupId>
                 <artifactId>webshop-objstore-dflt</artifactId>
-                <version>1.0-SNAPSHOT</version>
+                <version>0.2.0-incubating-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>${project.groupId}</groupId>
                 <artifactId>webshop-viewer-dnd</artifactId>
-                <version>1.0-SNAPSHOT</version>
+                <version>0.2.0-incubating-SNAPSHOT</version>
             </dependency>
 
             <dependency>
@@ -185,37 +185,37 @@
             <dependency>
                 <groupId>${project.groupId}</groupId>
                 <artifactId>webshop-viewer-scimpi</artifactId>
-                <version>1.0-SNAPSHOT</version>
+                <version>0.2.0-incubating-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>${project.groupId}</groupId>
                 <artifactId>webshop-viewer-wicket</artifactId>
-                <version>1.0-SNAPSHOT</version>
+                <version>0.2.0-incubating-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>${project.groupId}</groupId>
                 <artifactId>webshop-viewer-json</artifactId>
-                <version>1.0-SNAPSHOT</version>
+                <version>0.2.0-incubating-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>${project.groupId}</groupId>
                 <artifactId>webshop-viewer-xhtml</artifactId>
-                <version>1.0-SNAPSHOT</version>
+                <version>0.2.0-incubating-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>${project.groupId}</groupId>
                 <artifactId>webshop-tests-bdd</artifactId>
-                <version>1.0-SNAPSHOT</version>
+                <version>0.2.0-incubating-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>${project.groupId}</groupId>
                 <artifactId>tests-junit</artifactId>
-                <version>${project.version}</version>
+                <version>0.2.0-incubating-SNAPSHOT</version>
             </dependency>
 
             <dependency>

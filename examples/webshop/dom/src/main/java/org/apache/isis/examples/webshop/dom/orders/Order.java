@@ -28,7 +28,6 @@ public class Order extends AbstractDomainObject {
     }
     // }}
 
-
     // {{ PlacedBy (property, title)
     private Customer placedBy;
 
@@ -43,7 +42,6 @@ public class Order extends AbstractDomainObject {
         this.placedBy = customer;
     }
     // }}
-    
 
     // {{ PlacedOn (property)
     private Date date;
@@ -59,7 +57,6 @@ public class Order extends AbstractDomainObject {
     }
     // }}
 
-
     // {{ LineItems (collection)
     private Set<OrderLineItem> lineItems = new LinkedHashSet<OrderLineItem>();
 
@@ -73,7 +70,6 @@ public class Order extends AbstractDomainObject {
         this.lineItems = lineItems;
     }
     // }}
-
     
     // {{ helpers
     @Ignore // programmatic

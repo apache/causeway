@@ -45,7 +45,6 @@ public class BasketLineItem extends AbstractDomainObject {
 
     @Title(sequence="1", append="x")
     @MemberOrder(sequence = "3")
-    @Disabled
     public Integer getQuantity() {
         return quantity;
     }
@@ -62,14 +61,14 @@ public class BasketLineItem extends AbstractDomainObject {
     // }}
     
     // {{ increment (action)
-    @MemberOrder(sequence = "1")
+    @MemberOrder(sequence = "4")
     public void increment() {
         setQuantity(getQuantity()+1);
     }
     // }}
 
     // {{ decrement (action)
-    @MemberOrder(sequence = "2")
+    @MemberOrder(sequence = "5")
     public void decrement() {
         setQuantity(getQuantity()-1);
         if(getQuantity() == 0) {

@@ -3,6 +3,7 @@ package org.apache.isis.examples.webshop.objstore.dflt.catalog.products;
 import java.util.List;
 
 import org.apache.isis.applib.AbstractFactoryAndRepository;
+import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.applib.value.Money;
 import org.apache.isis.examples.webshop.dom.catalog.categories.ProductCategory;
@@ -23,22 +24,19 @@ public class ProductsDefault extends AbstractFactoryAndRepository implements Pro
     // }}
 
     @Override
-    public Product newProduct(String name, ProductCategory category, Money price, String imagePath) {
+    @MemberOrder(sequence = "1.0")
+    public Product newProduct(String name, ProductCategory category, Money price, String imageUrl) {
         final Product product = newTransientInstance(Product.class);
         product.setName(name);
         product.setCategory(category);
         product.setPrice(price);
-        product.setImageUrl(imagePath);
+        product.setImageUrl(imageUrl);
         persistIfNotAlready(product);
         return product;
     }
 
     @Override
-    public List<Product> all() {
-        return allInstances(Product.class);
-    }
-
-    @Override
+    @MemberOrder(sequence = "2.0")
     public List<Product> all(final ProductCategory productCategory) {
         return allMatches(Product.class, new Filter<Product>() {
 
@@ -47,6 +45,12 @@ public class ProductsDefault extends AbstractFactoryAndRepository implements Pro
                 return t.inCategory(productCategory);
             }
         });
+    }
+
+    @Override
+    @MemberOrder(sequence = "3.0")
+    public List<Product> all() {
+        return allInstances(Product.class);
     }
 
 

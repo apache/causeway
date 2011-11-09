@@ -46,7 +46,7 @@ public class Basket extends AbstractDomainObject {
     // }}
 
     // {{ add (action)
-    @MemberOrder(sequence = "1")
+    @MemberOrder(sequence = "3")
     public BasketLineItem add(final Product product) {
         final BasketLineItem lineItem = newTransientInstance(BasketLineItem.class);
         lineItem.setBasket(this);
@@ -62,7 +62,7 @@ public class Basket extends AbstractDomainObject {
     // }}
 
     // {{ checkout (action)
-    @MemberOrder(sequence = "1")
+    @MemberOrder(sequence = "4")
     public Order checkout() {
         final Order order = orders.createOrder(getOwner());
         for (BasketLineItem bli : getLineItems()) {

@@ -24,7 +24,7 @@ public class Customer extends AbstractDomainObject {
         }
     };
     
-    // {{ Ref (property, title)
+    // {{ Ref (property, key)
     private String ref;
 
     @Hidden
@@ -91,7 +91,7 @@ public class Customer extends AbstractDomainObject {
     // }}
 
     // {{ changeName (action)
-    @MemberOrder(sequence = "1")
+    @MemberOrder(sequence = "6.0")
     public void changeName(
         @Named("First name") final String firstName, 
         @Named("Last name") final String lastName) {
@@ -104,12 +104,8 @@ public class Customer extends AbstractDomainObject {
         if(!onlyAlpha(lastName)) return "Last name can only contain alphabetic characters";
         return null;
     }
-    private boolean onlyAlpha(String str) {
-        for(char c: str.toCharArray()) {
-            if(!Character.isLetter(c))
-                return false;
-        }
-        return true;
+    private static boolean onlyAlpha(String str) {
+        return str.matches("^[a-zA-Z]+$");
     }
     // }}
 
