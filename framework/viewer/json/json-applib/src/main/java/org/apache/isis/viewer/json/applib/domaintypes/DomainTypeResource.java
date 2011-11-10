@@ -55,28 +55,28 @@ public interface DomainTypeResource {
 
     @GET
     @Path("/{domainType}/properties/{propertyId}")
-    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_TYPE_PROPERTY })
+    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_PROPERTY_DESCRIPTION })
     @ClientResponseType(entityType=String.class)
     public abstract Response typeProperty(@PathParam("domainType") final String domainType,
         @PathParam("propertyId") final String propertyId);
 
     @GET
     @Path("/{domainType}/collections/{collectionId}")
-    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_TYPE_COLLECTION })
+    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_COLLECTION_DESCRIPTION })
     @ClientResponseType(entityType=String.class)
     public abstract Response typeCollection(@PathParam("domainType") final String domainType,
         @PathParam("collectionId") final String collectionId);
 
     @GET
     @Path("/{domainType}/actions/{actionId}")
-    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_TYPE_ACTION })
+    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ACTION_DESCRIPTION })
     @ClientResponseType(entityType=String.class)
     public abstract Response typeAction(@PathParam("domainType") final String domainType,
         @PathParam("actionId") final String actionId);
 
     @GET
     @Path("/{domainType}/actions/{actionId}/params/{paramNum}")
-    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_TYPE_ACTION_PARAMETER })
+    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ACTION_PARAMETER_DESCRIPTION })
     @ClientResponseType(entityType=String.class)
     public abstract Response typeActionParam(@PathParam("domainType") final String domainType,
         @PathParam("actionId") final String actionId, @PathParam("paramNum") final String paramName);

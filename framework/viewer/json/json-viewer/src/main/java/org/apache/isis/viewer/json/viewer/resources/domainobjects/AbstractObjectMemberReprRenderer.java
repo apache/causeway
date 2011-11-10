@@ -35,7 +35,8 @@ public abstract class AbstractObjectMemberReprRenderer<R extends ReprRendererAbs
     protected enum Mode {
         INLINE,
         FOLLOWED,
-        STANDALONE;
+        STANDALONE,
+        MUTATED;
 
         public boolean isInline() {
             return this == INLINE;
@@ -46,6 +47,9 @@ public abstract class AbstractObjectMemberReprRenderer<R extends ReprRendererAbs
         public boolean isStandalone() {
             return this == STANDALONE;
         }
+        public boolean isMutated() {
+            return this == MUTATED;
+        }
     }
     
     protected ObjectAdapterLinkTo linkTo;
@@ -54,7 +58,7 @@ public abstract class AbstractObjectMemberReprRenderer<R extends ReprRendererAbs
     protected MemberType memberType;
     protected T objectMember;
     protected Mode mode = Mode.INLINE; // unless we determine otherwise
-    
+
     public AbstractObjectMemberReprRenderer(ResourceContext resourceContext, LinkFollower linkFollower, RepresentationType representationType, JsonRepresentation representation) {
         super(resourceContext, linkFollower, representationType, representation);
     }
@@ -99,6 +103,18 @@ public abstract class AbstractObjectMemberReprRenderer<R extends ReprRendererAbs
     }
 
     /**
+     * Indicates that the representation was produced as the result of a
+     * resource that mutated the state.
+     * 
+     * <p>
+     * The effect of this is to suppress the link to self.
+     */
+    public R asMutated() {
+        mode = Mode.MUTATED;
+        return cast(this);
+    }
+    
+    /**
      * For subclasses to call from their {@link #render()} method.
      */
     protected void renderMemberContent() {
@@ -108,10 +124,13 @@ public abstract class AbstractObjectMemberReprRenderer<R extends ReprRendererAbs
         
         if (mode.isStandalone()){
             addLinkToSelf();
+        }
+
+        if (mode.isStandalone() || mode.isMutated()) {
             addLinkToUp();
         }
-        
-        if (mode.isFollowed() || mode.isStandalone()){
+
+        if (mode.isFollowed() || mode.isStandalone() || mode.isMutated()){
             addMutatorsIfEnabled();
             
             putExtensionsIsisProprietary();

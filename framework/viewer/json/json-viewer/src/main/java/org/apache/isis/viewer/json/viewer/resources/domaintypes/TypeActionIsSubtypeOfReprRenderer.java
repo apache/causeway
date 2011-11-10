@@ -28,16 +28,16 @@ import org.apache.isis.viewer.json.viewer.representations.ReprRendererAbstract;
 import org.apache.isis.viewer.json.viewer.representations.ReprRendererFactoryAbstract;
 import org.codehaus.jackson.node.NullNode;
 
-public class DomainTypeIsSubtypeOfReprRenderer extends ReprRendererAbstract<DomainTypeIsSubtypeOfReprRenderer, ObjectSpecAndSuperSpec> {
+public class TypeActionIsSubtypeOfReprRenderer extends ReprRendererAbstract<TypeActionIsSubtypeOfReprRenderer, ObjectSpecAndSuperSpec> {
 
     public static class Factory extends ReprRendererFactoryAbstract {
         public Factory() {
-            super(RepresentationType.DOMAIN_TYPE_IS_SUBTYPE_OF);
+            super(RepresentationType.TYPE_ACTION_RESULT);
         }
 
         @Override
         public ReprRenderer<?, ?> newRenderer(ResourceContext resourceContext, LinkFollower linkFollower, JsonRepresentation representation) {
-            return new DomainTypeIsSubtypeOfReprRenderer(resourceContext, linkFollower, getRepresentationType(), representation);
+            return new TypeActionIsSubtypeOfReprRenderer(resourceContext, linkFollower, getRepresentationType(), representation);
         }
     }
 
@@ -45,7 +45,7 @@ public class DomainTypeIsSubtypeOfReprRenderer extends ReprRendererAbstract<Doma
         String typeFullName = objectSpecAndSuperSpec.getObjectSpecification().getFullIdentifier();
         String url = "domainTypes/" + typeFullName + "/typeactions/isSubtypeOf/invoke";
         
-        final LinkBuilder linkBuilder = LinkBuilder.newBuilder(resourceContext, rel, RepresentationType.DOMAIN_TYPE_IS_SUBTYPE_OF, url);
+        final LinkBuilder linkBuilder = LinkBuilder.newBuilder(resourceContext, rel, RepresentationType.TYPE_ACTION_RESULT, url);
         
         final JsonRepresentation arguments = argumentsTo(resourceContext, objectSpecAndSuperSpec.getSuperSpecification());
         
@@ -67,12 +67,12 @@ public class DomainTypeIsSubtypeOfReprRenderer extends ReprRendererAbstract<Doma
     private ObjectSpecification objectSpecification;
     private ObjectSpecification superSpecification;
 
-    public DomainTypeIsSubtypeOfReprRenderer(ResourceContext resourceContext, LinkFollower linkFollower, RepresentationType representationType, JsonRepresentation representation) {
+    public TypeActionIsSubtypeOfReprRenderer(ResourceContext resourceContext, LinkFollower linkFollower, RepresentationType representationType, JsonRepresentation representation) {
         super(resourceContext, linkFollower, representationType, representation);
     }
 
     @Override
-    public DomainTypeIsSubtypeOfReprRenderer with(ObjectSpecAndSuperSpec objectSpecAndSuperSpec) {
+    public TypeActionIsSubtypeOfReprRenderer with(ObjectSpecAndSuperSpec objectSpecAndSuperSpec) {
         this.objectSpecification = objectSpecAndSuperSpec.getObjectSpecification();
         this.superSpecification = objectSpecAndSuperSpec.getSuperSpecification();
         return cast(this);
@@ -86,7 +86,7 @@ public class DomainTypeIsSubtypeOfReprRenderer extends ReprRendererAbstract<Doma
             getLinks().arrayAdd(selfLink);
         }
 
-        representation.mapPut("isSubtypeOf", isSubtypeOf());
+        representation.mapPut("value", isSubtypeOf());
         getExtensions();
         
         return representation;

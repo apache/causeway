@@ -98,17 +98,17 @@ public class DomainTypeReprRenderer extends ReprRendererAbstract<DomainTypeReprR
         for (ObjectAssociation association : associations) {
             if(association.isOneToOneAssociation()) {
                 OneToOneAssociation property = (OneToOneAssociation) association;
-                final LinkBuilder linkBuilder = TypePropertyReprRenderer.newLinkToBuilder(getResourceContext(), Rel.PROPERTY, objectSpecification, property);
+                final LinkBuilder linkBuilder = PropertyDescriptionReprRenderer.newLinkToBuilder(getResourceContext(), Rel.PROPERTY, objectSpecification, property);
                 membersList.arrayAdd(linkBuilder.build());
             } else if(association.isOneToManyAssociation()) {
                 OneToManyAssociation collection = (OneToManyAssociation) association;
-                final LinkBuilder linkBuilder = TypeCollectionReprRenderer.newLinkToBuilder(getResourceContext(), Rel.PROPERTY, objectSpecification, collection);
+                final LinkBuilder linkBuilder = CollectionDescriptionReprRenderer.newLinkToBuilder(getResourceContext(), Rel.PROPERTY, objectSpecification, collection);
                 membersList.arrayAdd(linkBuilder.build());
             }
         }
         final List<ObjectAction> actions = objectSpecification.getObjectActions(Contributed.INCLUDED);
         for (ObjectAction action : actions) {
-            final LinkBuilder linkBuilder = TypeActionReprRenderer.newLinkToBuilder(getResourceContext(), Rel.ACTION, objectSpecification, action);
+            final LinkBuilder linkBuilder = ActionDescriptionReprRenderer.newLinkToBuilder(getResourceContext(), Rel.ACTION, objectSpecification, action);
             membersList.arrayAdd(linkBuilder.build());
         }
     }
@@ -124,7 +124,7 @@ public class DomainTypeReprRenderer extends ReprRendererAbstract<DomainTypeReprR
 
     private void addTypeActions() {
         final ObjectSpecAndSuperSpec objectSpecAndSuperSpec = new ObjectSpecAndSuperSpec(objectSpecification, null);
-        final LinkBuilder linkBuilder = DomainTypeIsSubtypeOfReprRenderer.newLinkToBuilder(getResourceContext(), Rel.TYPE_ACTION, objectSpecAndSuperSpec);
+        final LinkBuilder linkBuilder = TypeActionIsSubtypeOfReprRenderer.newLinkToBuilder(getResourceContext(), Rel.TYPE_ACTION, objectSpecAndSuperSpec);
         JsonRepresentation link = linkBuilder.withId("isSubtypeOf").build();
         getTypeActions().arrayAdd(link);
     }

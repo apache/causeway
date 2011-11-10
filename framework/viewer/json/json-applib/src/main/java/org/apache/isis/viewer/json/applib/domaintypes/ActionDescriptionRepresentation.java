@@ -18,13 +18,16 @@
  */
 package org.apache.isis.viewer.json.applib.domaintypes;
 
-import org.apache.isis.viewer.json.applib.domainobjects.DomainRepresentation;
 import org.codehaus.jackson.JsonNode;
 
-public class DomainTypeIsSubtypeOfRepresentation extends DomainRepresentation {
+public class ActionDescriptionRepresentation extends AbstractTypeMemberRepresentation  {
 
-    public DomainTypeIsSubtypeOfRepresentation(JsonNode jsonNode) {
+    public ActionDescriptionRepresentation(JsonNode jsonNode) {
         super(jsonNode);
+    }
+
+    public String getId() {
+        return getString("id");
     }
 
 }

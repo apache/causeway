@@ -38,6 +38,7 @@ import org.apache.isis.viewer.json.applib.domainobjects.DomainServiceResource;
 import org.apache.isis.viewer.json.viewer.representations.RendererFactory;
 import org.apache.isis.viewer.json.viewer.representations.RendererFactoryRegistry;
 import org.apache.isis.viewer.json.viewer.resources.ResourceAbstract;
+import org.apache.isis.viewer.json.viewer.resources.domainobjects.DomainResourceHelper.MemberMode;
 
 @Path("/services")
 public class DomainServiceResourceServerside extends ResourceAbstract implements
@@ -104,7 +105,7 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
         final ObjectAdapter serviceAdapter = getServiceAdapter(serviceId);
         final DomainResourceHelper helper = new DomainResourceHelper(getResourceContext(), serviceAdapter).using(new DomainServiceLinkTo());
 
-        return helper.propertyDetails(serviceAdapter, propertyId, Caching.ONE_DAY);
+        return helper.propertyDetails(serviceAdapter, propertyId, MemberMode.NOT_MUTATING, Caching.ONE_DAY);
     }
 
 

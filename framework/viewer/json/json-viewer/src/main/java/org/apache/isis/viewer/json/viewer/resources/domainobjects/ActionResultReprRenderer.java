@@ -85,13 +85,11 @@ public class ActionResultReprRenderer extends ReprRendererAbstract<ActionResultR
 
     public JsonRepresentation render() {
 
-        final JsonRepresentation representation = representationWithSelfFor(action, arguments);
+        representationWithSelfFor(action, arguments);
 
         addResult(representation);
         
-        final JsonRepresentation extensions = JsonRepresentation.newMap();
-        representation.mapPut("extensions", extensions);
-        addExtensionsIsisProprietaryChangedObjects(extensions);
+        addExtensionsIsisProprietaryChangedObjects();
         
         return representation;
     }
@@ -184,26 +182,6 @@ public class ActionResultReprRenderer extends ReprRendererAbstract<ActionResultR
         return representation;
     }
 
-
-    private void addExtensionsIsisProprietaryChangedObjects(final JsonRepresentation extensions) {
-        final UpdateNotifier updateNotifier = getUpdateNotifier();
-        
-        addToExtensions(extensions, "changed", updateNotifier.getChangedObjects());
-        addToExtensions(extensions, "disposed", updateNotifier.getDisposedObjects());
-    }
-
-    protected void addToExtensions(final JsonRepresentation extensions, final String key, final List<ObjectAdapter> adapters) {
-        final JsonRepresentation adapterList = JsonRepresentation.newArray();
-        extensions.mapPut(key, adapterList);
-        for (ObjectAdapter adapter : adapters) {
-            adapterList.arrayAdd(DomainObjectReprRenderer.newLinkToBuilder(getResourceContext(), Rel.OBJECT, adapter).build());
-        }
-    }
-
-    protected UpdateNotifier getUpdateNotifier() {
-        // TODO: yuck
-        return IsisContext.getCurrentTransaction().getUpdateNotifier();
-    }
 
     protected RendererFactoryRegistry getRendererFactoryRegistry() {
         // TODO: yuck
