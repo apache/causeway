@@ -18,7 +18,7 @@ package org.apache.isis.viewer.json.viewer.resources.domainobjects;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.viewer.json.applib.HttpMethod;
-import org.apache.isis.viewer.json.viewer.representations.Rel;
+import org.apache.isis.viewer.json.applib.Rel;
 
 public class MutatorSpec {
 

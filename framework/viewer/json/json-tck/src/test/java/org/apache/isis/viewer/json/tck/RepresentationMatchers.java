@@ -24,6 +24,7 @@ import javax.ws.rs.core.Response;
 
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.applib.JsonRepresentation.LinksToSelf;
+import org.apache.isis.viewer.json.applib.Rel;
 import org.apache.isis.viewer.json.applib.RestfulClient;
 import org.apache.isis.viewer.json.applib.RestfulResponse;
 import org.apache.isis.viewer.json.applib.RestfulResponse.HttpStatusCode;
@@ -163,6 +164,9 @@ public class RepresentationMatchers {
         private Matcher<String> hrefMatcher;
         private Matcher<JsonRepresentation> valueMatcher;
         private Boolean novalue;
+        private MediaType mediaType;
+        private String typeParameterName;
+        private String typeParameterValue;
 
         private LinkMatcherBuilder(RestfulClient client) {
             super(client);
@@ -170,6 +174,11 @@ public class RepresentationMatchers {
 
         public LinkMatcherBuilder rel(String rel) {
             this.rel = rel;
+            return this;
+        }
+
+        public LinkMatcherBuilder rel(Rel rel) {
+            this.rel = rel.getName();
             return this;
         }
 
@@ -185,6 +194,17 @@ public class RepresentationMatchers {
 
         public LinkMatcherBuilder method(Method method) {
             this.method = method;
+            return this;
+        }
+
+        public LinkMatcherBuilder type(MediaType mediaType) {
+            this.mediaType = mediaType;
+            return this;
+        }
+
+        public LinkMatcherBuilder typeParameter(String typeParameterName, String typeParameterValue) {
+            this.typeParameterName = typeParameterName;
+            this.typeParameterValue = typeParameterValue;
             return this;
         }
 
@@ -217,19 +237,26 @@ public class RepresentationMatchers {
                 public void describeTo(Description description) {
                     description.appendText("a link");
                     if(rel != null) {
-                        description.appendText(" with rel ").appendText(rel);
+                        description.appendText(" with rel '").appendText(rel).appendText("'");
                     }
                     if(href != null) {
-                        description.appendText(" with href ").appendText(href);
+                        description.appendText(" with href '").appendText(href).appendText("'");
                     }
                     if(hrefMatcher != null) {
                         description.appendText(" with href ");
                         hrefMatcher.describeTo(description);
                     }
                     if(method != null) {
-                        description.appendText(" with method ").appendValue(method);
+                        description.appendText(" with method '").appendValue(method).appendText("'");
                     }
-                    if(novalue) {
+                    if(mediaType != null) {
+                        description.appendText(" with type '").appendValue(mediaType).appendText("'");
+                    }
+                    if(typeParameterName != null) {
+                        description.appendText(" with media type parameter '").appendText(typeParameterName).appendText("=").appendText(typeParameterValue).appendText("'");
+                    }
+                    
+                    if(novalue != null && novalue) {
                         description.appendText(" with no value");
                     }
                     if(valueMatcher != null) {
@@ -269,6 +296,16 @@ public class RepresentationMatchers {
                     if(method != null && !method.equals(link.getMethod())) {
                         return false;
                     }
+                    if(mediaType != null && !mediaType.isCompatible(mediaType)) {
+                        return false;
+                    }
+                    if(typeParameterName != null) {
+                        final MediaType mediaType = link.getType();
+                        String parameterValue = mediaType.getParameters().get(typeParameterName);
+                        if(!typeParameterValue.equals(parameterValue)) {
+                            return false;
+                        }
+                    }
                     if(novalue !=null && novalue && link.getValue() != null) {
                         return false;
                     }
@@ -301,6 +338,7 @@ public class RepresentationMatchers {
                 }
             };
         }
+
     }
 
     public static EntryMatcherBuilder entry(String key) {

@@ -53,6 +53,7 @@ public class ParentEntity extends AbstractDomainObject {
     }
     // }}
 
+    
     // {{ Children
     private List<ChildEntity> children = new ArrayList<ChildEntity>();
 

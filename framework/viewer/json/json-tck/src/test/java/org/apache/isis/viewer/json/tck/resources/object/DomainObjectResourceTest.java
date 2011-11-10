@@ -27,12 +27,18 @@ import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 
+import java.io.IOException;
+
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status.Family;
 
 import org.apache.isis.runtimes.dflt.webserver.WebServer;
+import org.apache.isis.tck.dom.assocs.ParentEntity;
 import org.apache.isis.tck.dom.scalars.ApplibValuedEntity;
+import org.apache.isis.tck.objstore.dflt.stables.StableEntityRepositoryDefault;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
+import org.apache.isis.viewer.json.applib.Rel;
 import org.apache.isis.viewer.json.applib.RestfulClient;
 import org.apache.isis.viewer.json.applib.RestfulResponse;
 import org.apache.isis.viewer.json.applib.blocks.LinkRepresentation;
@@ -43,6 +49,8 @@ import org.apache.isis.viewer.json.applib.domainobjects.ObjectActionRepresentati
 import org.apache.isis.viewer.json.applib.domainobjects.ObjectPropertyRepresentation;
 import org.apache.isis.viewer.json.applib.domainobjects.ScalarValueRepresentation;
 import org.apache.isis.viewer.json.tck.IsisWebServerRule;
+import org.codehaus.jackson.JsonParseException;
+import org.codehaus.jackson.map.JsonMappingException;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Rule;
@@ -63,7 +71,6 @@ public class DomainObjectResourceTest {
     }
 
 
-    @Ignore
     @Test
     public void returnsDomainObjectRepresentation() throws Exception {
         
@@ -77,39 +84,89 @@ public class DomainObjectResourceTest {
         
         // then 
         DomainObjectRepresentation domainObjectRepr = domainObjectJsonResp.getEntity();
+        assertThat(domainObjectRepr, is(not(nullValue())));
+    }
 
+    @Test
+    public void domainObjectRepresentationContent_ObjectHeader() throws Exception {
+        
+        // given, when
+        DomainObjectRepresentation domainObjectRepr = givenDomainObjectRepresentationFor("OID:32");
+
+        // then
         LinkRepresentation self = domainObjectRepr.getSelf();
         assertThat(self, 
-                isLink().rel("object").href(matches(".+objects/OID:1")).method(Method.GET));
-//        assertThat(domainObjectRepr.getDomainType(), 
-//                isLink().rel("type").href(matches(".+" + ApplibValuedEntityRepositoryDefault.class.getName() + ".+")).method(Method.GET));
+                isLink().rel(Rel.SELF).href(matches(".+objects/OID:32")).method(Method.GET).type(MediaType.APPLICATION_JSON_TYPE).typeParameter("profile", "urn:org.restfulobjects/domainobject"));
+        assertThat(domainObjectRepr.getLinkWithRel(Rel.DESCRIBEDBY), 
+                isLink().href(matches(".+" + ParentEntity.class.getName())).method(Method.GET).type(MediaType.APPLICATION_JSON_TYPE).typeParameter("profile", "urn:org.restfulobjects/domaintype"));
         
-        assertThat(domainObjectRepr.getTitle(), is("ApplibValues"));
-        assertThat(domainObjectRepr.getOid(), is("OID:1"));
+        assertThat(domainObjectRepr.getTitle(), is("parent 5"));
+        assertThat(domainObjectRepr.getOid(), is("OID:32"));
 
-        // self.icon
-        LinkRepresentation selfIcon = domainObjectRepr.getLink("_self.icon");
-        // TODO: shouldn't really be present since no icon available; or should point to a default, perhaps
-        assertThat(selfIcon, isLink().rel("icon").href(matches(".+" + "/images/" + "null\\.png")).method(Method.GET));
+        // no icon
+        LinkRepresentation selfIcon = domainObjectRepr.getLinkWithRel(Rel.ICON);
+        assertThat(selfIcon, is(nullValue()));
 
-        // properties
+    }
+
+    @Ignore("TODO")
+    @Test
+    public void domainObjectWithIcon() throws Exception {
+
+        // given, when
+        DomainObjectRepresentation domainObjectRepr = givenDomainObjectRepresentationFor("OID:xxx");
+
+        // icon
+        LinkRepresentation selfIcon = domainObjectRepr.getLinkWithRel(Rel.ICON);
+        assertThat(selfIcon, 
+                isLink().href(matches(".+" + "/images/" + "null\\.png")).method(Method.GET));
+
+    }
+
+
+    @Test
+    public void domainObjectRepresentationContent_Properties() throws Exception {
+        
+        // given, when
+        DomainObjectRepresentation domainObjectRepr = givenDomainObjectRepresentationFor("OID:32");
+        LinkRepresentation self = domainObjectRepr.getSelf();
+
+        // then properties
         JsonRepresentation properties = domainObjectRepr.getProperties();
         assertThat(properties.size(), is(1));
         
-        // id property
-        JsonRepresentation idProperty = properties.getRepresentation("id");
-        assertThat(idProperty.getString("memberType"), is("property"));
-        assertThat(idProperty.getString("propertyId"), is("id"));
-        assertThat(idProperty.getString("value"), is(org.apache.isis.tck.objstore.dflt.scalars.ApplibValuedEntityRepositoryDefault.class.getName()));
-        assertThat(idProperty.getString("disabledReason"), is(not(nullValue())));
+        // property ('name')
+        JsonRepresentation nameProperty = properties.getRepresentation("[id=name]");
+        assertThat(nameProperty.getString("memberType"), is("property"));
+        assertThat(nameProperty.getString("value"), is("parent 5"));
+        assertThat(nameProperty.getString("disabledReason"), is(nullValue()));
 
-        LinkRepresentation idPropertyType = idProperty.getLink("type");
-        assertThat(idPropertyType, isLink().rel("type").href(matches(".+vnd\\.string\\+json")).method(Method.GET));
+        LinkRepresentation namePropertyDetails = nameProperty.getLink("links[rel=details]");
+        assertThat(namePropertyDetails, isLink().rel("details").href(self.getHref() + "/properties/name").method(Method.GET));
 
-        LinkRepresentation idPropertyDetails = idProperty.getLink("details");
-        assertThat(idPropertyDetails, isLink().rel("property").href(self.getHref() + "/properties/id").method(Method.GET));
+    }
 
-        // actions
+    @Ignore("todo")
+    @Test
+    public void domainObjectRepresentationContent_Collections() throws Exception {
+        
+        // given, when
+        DomainObjectRepresentation domainObjectRepr = givenDomainObjectRepresentationFor("OID:32");
+
+        // then collections
+        
+
+    }
+
+    @Ignore("TODO")
+    @Test
+    public void domainObjectRepresentationContent() throws Exception {
+        
+        // given, when
+        DomainObjectRepresentation domainObjectRepr = givenDomainObjectRepresentationFor("OID:32");
+        LinkRepresentation self = domainObjectRepr.getSelf();
+
+        // then actions
         JsonRepresentation actions = domainObjectRepr.getActions();
         assertThat(actions.size(), is(2));
 
@@ -138,7 +195,7 @@ public class DomainObjectResourceTest {
         assertThat(newEntityActionType.getRel(), is("type"));
         assertThat(newEntityActionType.getHref(), matches(".+vnd\\." +
                 ApplibValuedEntity.class.getName() +
-        		"\\+json"));
+                "\\+json"));
         assertThat(newEntityActionType.getMethod(), is(Method.GET));
 
         LinkRepresentation newEntityActionDetails = newEntityAction.getLink("details");
@@ -146,6 +203,20 @@ public class DomainObjectResourceTest {
         assertThat(newEntityActionDetails.getHref(), is(self.getHref() + "/actions/newEntity"));
         assertThat(newEntityActionDetails.getMethod(), is(Method.GET));
     }
+
+    @Ignore("TODO")
+    @Test
+    public void domainObjectWithDisabledMembers() throws Exception {
+
+        // given, when
+        DomainObjectRepresentation domainObjectRepr = givenDomainObjectRepresentationFor("OID:xxx");
+
+        // property ('name')
+        JsonRepresentation properties = domainObjectRepr.getProperties();
+        JsonRepresentation nameProperty = properties.getRepresentation("name");
+        assertThat(nameProperty.getString("disabledReason"), is(not(nullValue())));
+    }
+
 
     @Ignore("to get working again")
     @Test
@@ -276,6 +347,18 @@ public class DomainObjectResourceTest {
         assertThat(domainObjectIconLink.getRel(), is("icon"));
         assertThat(domainObjectIconLink.getHref(), matches("http://localhost:\\d+/images/null.png")); // TODO
     }
+
+    private DomainObjectRepresentation givenDomainObjectRepresentationFor(final String oidStr) throws JsonParseException, JsonMappingException, IOException {
+        DomainObjectResource domainObjectResource = client.getDomainObjectResource();
+        
+        Response domainObjectResp = domainObjectResource.object(oidStr);
+        RestfulResponse<DomainObjectRepresentation> domainObjectJsonResp = RestfulResponse.ofT(domainObjectResp);
+        assertThat(domainObjectJsonResp.getStatus().getFamily(), is(Family.SUCCESSFUL));
+        
+        DomainObjectRepresentation domainObjectRepr = domainObjectJsonResp.getEntity();
+        return domainObjectRepr;
+    }
+
 
 }
     
