@@ -27,7 +27,7 @@
     </parent>
 
 	<artifactId>claims-viewer-json</artifactId>
-	<name>Claims JSON Viewer</name>
+	<name>Example Claims App JSON Viewer</name>
 	
 	<packaging>war</packaging>
 

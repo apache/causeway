@@ -20,6 +20,13 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
+    <!-- common use cases: -->
+    <!-- mvn package                    : creates self-contained JAR -->
+    <!-- mvn antrun:run -D exec=dnd     : runs JAR using DnD viewer -->
+    <!-- mvn antrun:run -D exec=html    : runs JAR as self-hosted webapp using HTML viewer (http://localhost:8080/logon.app)  -->
+    <!-- mvn antrun:run -D exec=json    : runs JAR as self-hosted webapp using JSON viewer -->
+    <!-- mvn antrun:run -D exec=xhtml   : runs JAR as self-hosted webapp using XHTML viewer -->
+
 	<parent>
     	<groupId>org.apache.isis.examples.apps</groupId>
     	<artifactId>claims</artifactId>
@@ -33,6 +40,31 @@
 		<jetty.version>6.1.4</jetty.version>
 	</properties>
 
+    <build>
+        <plugins>
+            <!-- mvn package -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <transformers>
+                                <transformer
+                                    implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                    <mainClass>org.apache.isis.Isis</mainClass>
+                                </transformer>
+                            </transformers>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 
 	<dependencies>
 		<!-- other modules in this project -->
