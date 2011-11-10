@@ -46,6 +46,7 @@ import org.apache.isis.viewer.json.viewer.representations.RendererFactory;
 import org.apache.isis.viewer.json.viewer.representations.RendererFactoryRegistry;
 import org.apache.isis.viewer.json.viewer.resources.ResourceAbstract;
 import org.apache.isis.viewer.json.viewer.resources.ResourceAbstract.Caching;
+import org.apache.isis.viewer.json.viewer.resources.domainobjects.DomainResourceHelper.MemberMode;
 import org.apache.isis.viewer.json.viewer.resources.domainobjects.JsonValueEncoder.ExpectedStringRepresentingValueException;
 import org.apache.isis.viewer.json.viewer.util.OidUtils;
 import org.apache.isis.viewer.json.viewer.util.UrlDecoderUtils;
@@ -81,9 +82,27 @@ public class DomainResourceHelper {
     // propertyDetails
     // //////////////////////////////////////////////////////////////
 
+    public enum MemberMode {
+        NOT_MUTATING {
+            @Override
+            public void apply(AbstractObjectMemberReprRenderer<?,?> renderer) {
+                renderer.asStandalone();
+            }
+        },
+        MUTATING {
+            @Override
+            public void apply(AbstractObjectMemberReprRenderer<?,?> renderer) {
+                renderer.asMutated();
+            }
+        };
+
+        public abstract void apply(AbstractObjectMemberReprRenderer<?,?> renderer);
+    }
+    
     Response propertyDetails(
             final ObjectAdapter objectAdapter,
             final String propertyId, 
+            final MemberMode memberMode, 
             final Caching caching) {
 
         final OneToOneAssociation property = getPropertyThatIsVisibleAndUsable(
@@ -93,8 +112,35 @@ public class DomainResourceHelper {
         final ObjectPropertyReprRenderer renderer = 
                 (ObjectPropertyReprRenderer) factory.newRenderer(resourceContext, null, JsonRepresentation.newMap());
         
-        renderer.with(new ObjectAndProperty(objectAdapter, property)).usingLinkTo(adapterLinkTo)
-                .asStandalone();
+        renderer.with(new ObjectAndProperty(objectAdapter, property))
+            .usingLinkTo(adapterLinkTo);
+        
+        memberMode.apply(renderer);
+        
+        return ResourceAbstract.responseOfOk(renderer, caching).build();
+    }
+
+    // //////////////////////////////////////////////////////////////
+    // collectionDetails
+    // //////////////////////////////////////////////////////////////
+
+    Response collectionDetails(
+            final ObjectAdapter objectAdapter, 
+            final String collectionId, 
+            final MemberMode memberMode, 
+            final Caching caching) {
+        
+        final OneToManyAssociation collection = getCollectionThatIsVisibleAndUsable(
+                collectionId, Intent.ACCESS);
+        
+        RendererFactory factory = RendererFactoryRegistry.instance.find(RepresentationType.OBJECT_COLLECTION);
+        final ObjectCollectionReprRenderer renderer = 
+                (ObjectCollectionReprRenderer) factory.newRenderer(resourceContext, null, JsonRepresentation.newMap());
+
+        renderer.with(new ObjectAndCollection(objectAdapter, collection))
+            .usingLinkTo(adapterLinkTo);
+        
+        memberMode.apply(renderer);
         
         return ResourceAbstract.responseOfOk(renderer, caching).build();
     }

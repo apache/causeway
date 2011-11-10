@@ -18,16 +18,21 @@
  */
 package org.apache.isis.viewer.json.viewer.representations;
 
+import java.util.List;
+
 import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.stringable.OidStringifier;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.OidGenerator;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
+import org.apache.isis.runtimes.dflt.runtime.system.transaction.UpdateNotifier;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.applib.RepresentationType;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
+import org.apache.isis.viewer.json.viewer.resources.domainobjects.DomainObjectReprRenderer;
 import org.apache.isis.viewer.json.viewer.resources.domaintypes.DomainTypeReprRenderer;
 
 public abstract class ReprRendererAbstract<R extends ReprRendererAbstract<R, T>, T> implements ReprRenderer<R, T> {
@@ -131,7 +136,24 @@ public abstract class ReprRendererAbstract<R extends ReprRendererAbstract<R, T>,
     public abstract JsonRepresentation render();
 
 
-    
+    /**
+     * Convenience for representations that are returned from objects that mutate state. 
+     */
+    protected final void addExtensionsIsisProprietaryChangedObjects() {
+        final UpdateNotifier updateNotifier = getUpdateNotifier();
+        
+        addToExtensions("changed", updateNotifier.getChangedObjects());
+        addToExtensions("disposed", updateNotifier.getDisposedObjects());
+    }
+
+    private void addToExtensions(final String key, final List<ObjectAdapter> adapters) {
+        final JsonRepresentation adapterList = JsonRepresentation.newArray();
+        getExtensions().mapPut(key, adapterList);
+        for (ObjectAdapter adapter : adapters) {
+            adapterList.arrayAdd(DomainObjectReprRenderer.newLinkToBuilder(getResourceContext(), Rel.OBJECT, adapter).build());
+        }
+    }
+
     protected OidStringifier getOidStringifier() {
         return getOidGenerator().getOidStringifier();
     }
@@ -151,4 +173,10 @@ public abstract class ReprRendererAbstract<R extends ReprRendererAbstract<R, T>,
     protected Localization getLocalization() {
         return IsisContext.getLocalization();
     }
+    
+    protected UpdateNotifier getUpdateNotifier() {
+        return IsisContext.getCurrentTransaction().getUpdateNotifier();
+    }
+    
+
 }

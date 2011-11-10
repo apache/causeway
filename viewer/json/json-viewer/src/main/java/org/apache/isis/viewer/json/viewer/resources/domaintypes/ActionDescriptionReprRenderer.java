@@ -16,9 +16,12 @@
  */
 package org.apache.isis.viewer.json.viewer.resources.domaintypes;
 
-import org.apache.isis.core.metamodel.facets.maxlen.MaxLengthFacet;
+import java.util.List;
+
+import org.apache.isis.core.metamodel.facets.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.applib.RepresentationType;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
@@ -28,47 +31,62 @@ import org.apache.isis.viewer.json.viewer.representations.Rel;
 import org.apache.isis.viewer.json.viewer.representations.ReprRenderer;
 import org.apache.isis.viewer.json.viewer.representations.ReprRendererFactoryAbstract;
 
-public class TypePropertyReprRenderer extends AbstractTypeMemberReprRenderer<TypePropertyReprRenderer, OneToOneAssociation> {
+public class ActionDescriptionReprRenderer extends AbstractTypeMemberReprRenderer<ActionDescriptionReprRenderer, ObjectAction> {
 
     public static class Factory extends ReprRendererFactoryAbstract {
 
         public Factory() {
-            super(RepresentationType.TYPE_PROPERTY);
+            super(RepresentationType.ACTION_DESCRIPTION);
         }
 
         @Override
         public ReprRenderer<?,?> newRenderer(ResourceContext resourceContext, LinkFollower linkFollower, JsonRepresentation representation) {
-            return new TypePropertyReprRenderer(resourceContext, linkFollower, getRepresentationType(), representation);
+            return new ActionDescriptionReprRenderer(resourceContext, linkFollower, getRepresentationType(), representation);
         }
     }
 
-    public static LinkBuilder newLinkToBuilder(ResourceContext resourceContext, Rel rel, ObjectSpecification objectSpecification, OneToOneAssociation property) {
+    public static LinkBuilder newLinkToBuilder(ResourceContext resourceContext, Rel rel, ObjectSpecification objectSpecification, ObjectAction objectAction) {
         String typeFullName = objectSpecification.getFullIdentifier();
-        String propertyId = property.getId();
-        String url = "domainTypes/" + typeFullName + "/properties/" + propertyId;
-        return LinkBuilder.newBuilder(resourceContext, rel, RepresentationType.TYPE_PROPERTY, url);
+        String actionId = objectAction.getId();
+        String url = "domainTypes/" + typeFullName + "/actions/" + actionId;
+        return LinkBuilder.newBuilder(resourceContext, rel, RepresentationType.ACTION_DESCRIPTION, url);
     }
 
-    public TypePropertyReprRenderer(ResourceContext resourceContext, LinkFollower linkFollower, RepresentationType representationType, JsonRepresentation representation) {
+    public ActionDescriptionReprRenderer(ResourceContext resourceContext, LinkFollower linkFollower, RepresentationType representationType, JsonRepresentation representation) {
         super(resourceContext, linkFollower, representationType, representation);
     }
-
+    
     @Override
     protected void addLinksSpecificToFeature() {
+        addParameters();
         addLinkToReturnTypeIfAny();
+        addLinkToElementTypeIfAny();
     }
 
-    @Override
-    protected void addPropertiesSpecificToFeature() {
-        representation.mapPut("optional", !getObjectFeature().isMandatory());
-        final MaxLengthFacet maxLength = getObjectFeature().getFacet(MaxLengthFacet.class);
-        if(maxLength != null && !maxLength.isNoop()) {
-            representation.mapPut("maxLength", maxLength.value());
+    private void addParameters() {
+        final JsonRepresentation parameterList = JsonRepresentation.newArray();
+        final List<ObjectActionParameter> parameters = getObjectFeature().getParameters();
+        for (ObjectActionParameter parameter : parameters) {
+            final LinkBuilder linkBuilder = 
+                    ActionParameterDescriptionReprRenderer.newLinkToBuilder(getResourceContext(), Rel.ACTION_PARAM, objectSpecification, parameter);
+            parameterList.arrayAdd(linkBuilder.build());
         }
+        
+        representation.mapPut("parameters", parameterList);
+    }
+
+    protected void addLinkToElementTypeIfAny() {
+        final TypeOfFacet facet = getObjectFeature().getFacet(TypeOfFacet.class);
+        if(facet == null) {
+            return;
+        } 
+        final ObjectSpecification typeOfSpec = facet.valueSpec();
+        final LinkBuilder linkBuilder = DomainTypeReprRenderer.newLinkToBuilder(getResourceContext(), Rel.ELEMENT_TYPE, typeOfSpec);
+        getLinks().arrayAdd(linkBuilder.build());
     }
 
     private void addLinkToReturnTypeIfAny() {
-        final ObjectSpecification returnType = getObjectFeature().getSpecification();
+        final ObjectSpecification returnType = getObjectFeature().getReturnType();
         if(returnType == null) {
             return;
         }
@@ -76,7 +94,6 @@ public class TypePropertyReprRenderer extends AbstractTypeMemberReprRenderer<Typ
             DomainTypeReprRenderer.newLinkToBuilder(getResourceContext(), Rel.RETURN_TYPE, returnType);
         getLinks().arrayAdd(linkBuilder.build());
     }
-
 
     @Override
     protected void putExtensionsSpecificToFeature() {

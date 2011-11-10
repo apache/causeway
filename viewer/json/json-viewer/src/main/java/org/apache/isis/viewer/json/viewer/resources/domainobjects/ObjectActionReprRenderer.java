@@ -32,7 +32,7 @@ import org.apache.isis.viewer.json.viewer.representations.RendererFactory;
 import org.apache.isis.viewer.json.viewer.representations.RendererFactoryRegistry;
 import org.apache.isis.viewer.json.viewer.representations.ReprRenderer;
 import org.apache.isis.viewer.json.viewer.representations.ReprRendererFactoryAbstract;
-import org.apache.isis.viewer.json.viewer.resources.domaintypes.TypeActionReprRenderer;
+import org.apache.isis.viewer.json.viewer.resources.domaintypes.ActionDescriptionReprRenderer;
 import org.codehaus.jackson.node.NullNode;
 
 import com.google.common.collect.Lists;
@@ -61,7 +61,7 @@ public class ObjectActionReprRenderer extends AbstractObjectMemberReprRenderer<O
         renderMemberContent();
         putDisabledReasonIfDisabled();
         
-        if(mode.isStandalone()) {
+        if(mode.isStandalone() || mode.isMutated()) {
             addParameterDetails();
         }
 
@@ -206,7 +206,7 @@ public class ObjectActionReprRenderer extends AbstractObjectMemberReprRenderer<O
     /////////////////////////////////////////////////////
 	
      protected void addLinksToFormalDomainModel() {
-         getLinks().arrayAdd(TypeActionReprRenderer.newLinkToBuilder(resourceContext, Rel.DESCRIBEDBY, objectAdapter.getSpecification(), objectMember).build());
+         getLinks().arrayAdd(ActionDescriptionReprRenderer.newLinkToBuilder(resourceContext, Rel.DESCRIBEDBY, objectAdapter.getSpecification(), objectMember).build());
      }
      
      protected void addLinksIsisProprietary() {

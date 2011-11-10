@@ -31,13 +31,14 @@ import org.apache.isis.viewer.json.viewer.representations.RendererFactory;
 import org.apache.isis.viewer.json.viewer.representations.RendererFactoryRegistry;
 import org.apache.isis.viewer.json.viewer.representations.ReprRenderer;
 import org.apache.isis.viewer.json.viewer.representations.ReprRendererFactoryAbstract;
-import org.apache.isis.viewer.json.viewer.resources.domaintypes.TypePropertyReprRenderer;
+import org.apache.isis.viewer.json.viewer.resources.domaintypes.PropertyDescriptionReprRenderer;
 import org.codehaus.jackson.node.NullNode;
 
 import com.google.common.collect.Lists;
 
 public class ObjectPropertyReprRenderer extends AbstractObjectMemberReprRenderer<ObjectPropertyReprRenderer, OneToOneAssociation> {
 
+    
     public static class Factory extends ReprRendererFactoryAbstract {
 
         public Factory() {
@@ -58,15 +59,16 @@ public class ObjectPropertyReprRenderer extends AbstractObjectMemberReprRenderer
     public JsonRepresentation render() {
         // id and memberType are rendered eagerly
         
-
         renderMemberContent();
         addValue();
         
         putDisabledReasonIfDisabled();
 
-        if(mode.isStandalone()) {
+        if(mode.isStandalone() || mode.isMutated()) {
             addChoices();
+            addExtensionsIsisProprietaryChangedObjects();
         }
+        
         
         return representation;
     }
@@ -158,7 +160,7 @@ public class ObjectPropertyReprRenderer extends AbstractObjectMemberReprRenderer
     
     protected void addLinksToFormalDomainModel() {
         getLinks().arrayAdd(
-                TypePropertyReprRenderer.newLinkToBuilder(getResourceContext(), Rel.DESCRIBEDBY, objectAdapter.getSpecification(), objectMember).build());
+                PropertyDescriptionReprRenderer.newLinkToBuilder(getResourceContext(), Rel.DESCRIBEDBY, objectAdapter.getSpecification(), objectMember).build());
     }
 
     @Override

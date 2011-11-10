@@ -29,17 +29,17 @@ import org.apache.isis.viewer.json.viewer.representations.Rel;
 import org.apache.isis.viewer.json.viewer.representations.ReprRenderer;
 import org.apache.isis.viewer.json.viewer.representations.ReprRendererFactoryAbstract;
 
-public class TypeActionParamReprRenderer extends AbstractTypeFeatureReprRenderer<TypeActionParamReprRenderer, ObjectActionParameter> {
+public class ActionParameterDescriptionReprRenderer extends AbstractTypeFeatureReprRenderer<ActionParameterDescriptionReprRenderer, ObjectActionParameter> {
 
     public static class Factory extends ReprRendererFactoryAbstract {
 
         public Factory() {
-            super(RepresentationType.TYPE_ACTION_PARAMETER);
+            super(RepresentationType.ACTION_PARAMETER_DESCRIPTION);
         }
 
         @Override
         public ReprRenderer<?,?> newRenderer(ResourceContext resourceContext, LinkFollower linkFollower, JsonRepresentation representation) {
-            return new TypeActionParamReprRenderer(resourceContext, linkFollower, getRepresentationType(), representation);
+            return new ActionParameterDescriptionReprRenderer(resourceContext, linkFollower, getRepresentationType(), representation);
         }
     }
 
@@ -49,16 +49,16 @@ public class TypeActionParamReprRenderer extends AbstractTypeFeatureReprRenderer
         String actionId = objectAction.getId();
         final String paramName = objectActionParameter.getName();
         String url = String.format("domainTypes/%s/actions/%s/params/%s", typeFullName, actionId, paramName);
-        return LinkBuilder.newBuilder(resourceContext, rel, RepresentationType.TYPE_ACTION_PARAMETER, url)
+        return LinkBuilder.newBuilder(resourceContext, rel, RepresentationType.ACTION_PARAMETER_DESCRIPTION, url)
                           .withId(deriveId(objectActionParameter));
     }
 
-    public TypeActionParamReprRenderer(ResourceContext resourceContext, LinkFollower linkFollower, RepresentationType representationType, JsonRepresentation representation) {
+    public ActionParameterDescriptionReprRenderer(ResourceContext resourceContext, LinkFollower linkFollower, RepresentationType representationType, JsonRepresentation representation) {
         super(resourceContext, linkFollower, representationType, representation);
     }
 
     @Override
-    public TypeActionParamReprRenderer with(ParentSpecAndFeature<ObjectActionParameter> specAndFeature) {
+    public ActionParameterDescriptionReprRenderer with(ParentSpecAndFeature<ObjectActionParameter> specAndFeature) {
         super.with(specAndFeature);
         
         // done eagerly so can use as criteria for x-ro-follow-links
@@ -90,7 +90,7 @@ public class TypeActionParamReprRenderer extends AbstractTypeFeatureReprRenderer
         ObjectAction parentAction = this.objectFeature.getAction();
         
         final LinkBuilder parentLinkBuilder = 
-                TypeActionReprRenderer.newLinkToBuilder(resourceContext, Rel.UP, objectSpecification, parentAction);
+                ActionDescriptionReprRenderer.newLinkToBuilder(resourceContext, Rel.UP, objectSpecification, parentAction);
         getLinks().arrayAdd(parentLinkBuilder.build());
     }
 

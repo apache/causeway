@@ -31,13 +31,13 @@ import org.apache.isis.viewer.json.viewer.resources.domainobjects.ObjectActionRe
 import org.apache.isis.viewer.json.viewer.resources.domainobjects.ObjectCollectionReprRenderer;
 import org.apache.isis.viewer.json.viewer.resources.domainobjects.ObjectPropertyReprRenderer;
 import org.apache.isis.viewer.json.viewer.resources.domainobjects.ScalarValueReprRenderer;
-import org.apache.isis.viewer.json.viewer.resources.domaintypes.DomainTypeIsSubtypeOfReprRenderer;
+import org.apache.isis.viewer.json.viewer.resources.domaintypes.TypeActionIsSubtypeOfReprRenderer;
 import org.apache.isis.viewer.json.viewer.resources.domaintypes.DomainTypeReprRenderer;
 import org.apache.isis.viewer.json.viewer.resources.domaintypes.DomainTypesReprRenderer;
-import org.apache.isis.viewer.json.viewer.resources.domaintypes.TypeActionParamReprRenderer;
-import org.apache.isis.viewer.json.viewer.resources.domaintypes.TypeActionReprRenderer;
-import org.apache.isis.viewer.json.viewer.resources.domaintypes.TypeCollectionReprRenderer;
-import org.apache.isis.viewer.json.viewer.resources.domaintypes.TypePropertyReprRenderer;
+import org.apache.isis.viewer.json.viewer.resources.domaintypes.ActionParameterDescriptionReprRenderer;
+import org.apache.isis.viewer.json.viewer.resources.domaintypes.ActionDescriptionReprRenderer;
+import org.apache.isis.viewer.json.viewer.resources.domaintypes.CollectionDescriptionReprRenderer;
+import org.apache.isis.viewer.json.viewer.resources.domaintypes.PropertyDescriptionReprRenderer;
 import org.apache.isis.viewer.json.viewer.resources.home.HomePageReprRenderer;
 import org.apache.isis.viewer.json.viewer.resources.user.UserReprRenderer;
 
@@ -67,11 +67,11 @@ public class RendererFactoryRegistry {
         register(new ScalarValueReprRenderer.Factory());
         register(new DomainTypesReprRenderer.Factory());
         register(new DomainTypeReprRenderer.Factory());
-        register(new TypePropertyReprRenderer.Factory());
-        register(new TypeCollectionReprRenderer.Factory());
-        register(new TypeActionReprRenderer.Factory());
-        register(new TypeActionParamReprRenderer.Factory());
-        register(new DomainTypeIsSubtypeOfReprRenderer.Factory());
+        register(new PropertyDescriptionReprRenderer.Factory());
+        register(new CollectionDescriptionReprRenderer.Factory());
+        register(new ActionDescriptionReprRenderer.Factory());
+        register(new ActionParameterDescriptionReprRenderer.Factory());
+        register(new TypeActionIsSubtypeOfReprRenderer.Factory());
     }
 
     public void register(RendererFactory factory) {

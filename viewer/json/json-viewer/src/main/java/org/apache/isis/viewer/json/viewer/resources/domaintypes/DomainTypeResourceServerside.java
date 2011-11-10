@@ -100,7 +100,7 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
         @PathParam("domainType") String domainType, 
         @QueryParam("args") final String argumentsQueryString) {
         
-        RepresentationType representationType = RepresentationType.DOMAIN_TYPE_IS_SUBTYPE_OF;
+        RepresentationType representationType = RepresentationType.TYPE_ACTION_RESULT;
         init();
 
         JsonRepresentation arguments = QueryStringUtil.parseQueryString(argumentsQueryString, "Type action", "isSubtypeOf");
@@ -117,8 +117,8 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
         final RendererFactory rendererFactory = 
                 rendererFactoryRegistry.find(representationType);
 
-        final DomainTypeIsSubtypeOfReprRenderer renderer = 
-                (DomainTypeIsSubtypeOfReprRenderer) rendererFactory.newRenderer(getResourceContext(), null, JsonRepresentation.newMap());
+        final TypeActionIsSubtypeOfReprRenderer renderer = 
+                (TypeActionIsSubtypeOfReprRenderer) rendererFactory.newRenderer(getResourceContext(), null, JsonRepresentation.newMap());
         final ObjectSpecAndSuperSpec objectSpecAndSuperSpec = new ObjectSpecAndSuperSpec(domainTypeSpec, supertypeSpec);
         renderer.with(objectSpecAndSuperSpec).includesSelf();
 
@@ -127,11 +127,11 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
 
     @GET
     @Path("/{domainType}/properties/{propertyId}")
-    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_TYPE_PROPERTY })
+    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_PROPERTY_DESCRIPTION })
     public Response typeProperty(
             @PathParam("domainType") final String domainType,
             @PathParam("propertyId") final String propertyId){
-        RepresentationType representationType = RepresentationType.TYPE_PROPERTY;
+        RepresentationType representationType = RepresentationType.PROPERTY_DESCRIPTION;
         init(representationType);
 
         final ObjectSpecification parentSpec = getSpecificationLoader().loadSpecification(domainType);
@@ -148,8 +148,8 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
         final RendererFactory rendererFactory = 
                 rendererFactoryRegistry.find(representationType);
         
-        final TypePropertyReprRenderer renderer = 
-                (TypePropertyReprRenderer) rendererFactory.newRenderer(getResourceContext(), null, JsonRepresentation.newMap());
+        final PropertyDescriptionReprRenderer renderer = 
+                (PropertyDescriptionReprRenderer) rendererFactory.newRenderer(getResourceContext(), null, JsonRepresentation.newMap());
         renderer.with(new ParentSpecAndProperty(parentSpec, property)).includesSelf();
 
         return responseOfOk(renderer, Caching.ONE_DAY).build();
@@ -157,11 +157,11 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
 
     @GET
     @Path("/{domainType}/collections/{collectionId}")
-    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_TYPE_COLLECTION })
+    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_COLLECTION_DESCRIPTION })
     public Response typeCollection(
             @PathParam("domainType") final String domainType,
             @PathParam("collectionId") final String collectionId){
-        RepresentationType representationType = RepresentationType.TYPE_COLLECTION;
+        RepresentationType representationType = RepresentationType.COLLECTION_DESCRIPTION;
         init(representationType);
 
         final ObjectSpecification parentSpec = getSpecificationLoader().loadSpecification(domainType);
@@ -178,8 +178,8 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
         final RendererFactory rendererFactory = 
                 rendererFactoryRegistry.find(representationType);
         
-        final TypeCollectionReprRenderer renderer = 
-                (TypeCollectionReprRenderer) rendererFactory.newRenderer(getResourceContext(), null, JsonRepresentation.newMap());
+        final CollectionDescriptionReprRenderer renderer = 
+                (CollectionDescriptionReprRenderer) rendererFactory.newRenderer(getResourceContext(), null, JsonRepresentation.newMap());
         renderer.with(new ParentSpecAndCollection(parentSpec, collection)).includesSelf();
 
         return responseOfOk(renderer, Caching.ONE_DAY).build();
@@ -187,11 +187,11 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
 
     @GET
     @Path("/{domainType}/actions/{actionId}")
-    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_TYPE_ACTION })
+    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ACTION_DESCRIPTION })
     public Response typeAction(
             @PathParam("domainType") final String domainType,
             @PathParam("actionId") final String actionId){
-        RepresentationType representationType = RepresentationType.TYPE_ACTION;
+        RepresentationType representationType = RepresentationType.ACTION_DESCRIPTION;
         init(representationType);
 
         final ObjectSpecification parentSpec = getSpecificationLoader().loadSpecification(domainType);
@@ -208,8 +208,8 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
         final RendererFactory rendererFactory = 
                 rendererFactoryRegistry.find(representationType);
         
-        final TypeActionReprRenderer renderer = 
-                (TypeActionReprRenderer) rendererFactory.newRenderer(getResourceContext(), null, JsonRepresentation.newMap());
+        final ActionDescriptionReprRenderer renderer = 
+                (ActionDescriptionReprRenderer) rendererFactory.newRenderer(getResourceContext(), null, JsonRepresentation.newMap());
         renderer.with(new ParentSpecAndAction(parentSpec, action)).includesSelf();
 
         return responseOfOk(renderer, Caching.ONE_DAY).build();
@@ -217,12 +217,12 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
 
     @GET
     @Path("/{domainType}/actions/{actionId}/params/{paramName}")
-    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_TYPE_ACTION_PARAMETER })
+    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ACTION_PARAMETER_DESCRIPTION })
     public Response typeActionParam(
             @PathParam("domainType") final String domainType,
             @PathParam("actionId") final String actionId,
             @PathParam("paramName") final String paramName){
-        RepresentationType representationType = RepresentationType.TYPE_ACTION_PARAMETER;
+        RepresentationType representationType = RepresentationType.ACTION_PARAMETER_DESCRIPTION;
         init(representationType);
 
         final ObjectSpecification parentSpec = getSpecificationLoader().loadSpecification(domainType);
@@ -241,8 +241,8 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
         final RendererFactory rendererFactory = 
                 rendererFactoryRegistry.find(representationType);
         
-        final TypeActionParamReprRenderer renderer = 
-                (TypeActionParamReprRenderer) rendererFactory.newRenderer(getResourceContext(), null, JsonRepresentation.newMap());
+        final ActionParameterDescriptionReprRenderer renderer = 
+                (ActionParameterDescriptionReprRenderer) rendererFactory.newRenderer(getResourceContext(), null, JsonRepresentation.newMap());
         renderer.with(new ParentSpecAndActionParam(parentSpec, actionParam))
                 .includesSelf();
 

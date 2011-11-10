@@ -49,6 +49,7 @@ import org.apache.isis.viewer.json.viewer.representations.RendererFactory;
 import org.apache.isis.viewer.json.viewer.representations.RendererFactoryRegistry;
 import org.apache.isis.viewer.json.viewer.resources.ResourceAbstract;
 import org.apache.isis.viewer.json.viewer.resources.domainobjects.DomainResourceHelper.Intent;
+import org.apache.isis.viewer.json.viewer.resources.domainobjects.DomainResourceHelper.MemberMode;
 
 @Path("/objects")
 public class DomainObjectResourceServerside extends ResourceAbstract implements
@@ -115,7 +116,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements
         final ObjectAdapter objectAdapter = getObjectAdapter(oidStr);
         final DomainResourceHelper helper = new DomainResourceHelper(getResourceContext(), objectAdapter);
         
-        return helper.propertyDetails(objectAdapter, propertyId, Caching.NONE);
+        return helper.propertyDetails(objectAdapter, propertyId, MemberMode.NOT_MUTATING, Caching.NONE);
     }
 
     @PUT
@@ -147,8 +148,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements
 
         property.set(objectAdapter, argAdapter);
 
-        return Response.status(HttpStatusCode.NO_CONTENT.getJaxrsStatusType())
-                .build();
+        return helper.propertyDetails(objectAdapter, propertyId, MemberMode.MUTATING, Caching.NONE);
     }
 
     @DELETE
@@ -173,7 +173,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements
 
         property.set(objectAdapter, null);
 
-        return responseOfNoContent().build();
+        return helper.propertyDetails(objectAdapter, propertyId, MemberMode.MUTATING, Caching.NONE);
     }
 
 
@@ -193,16 +193,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements
         final ObjectAdapter objectAdapter = getObjectAdapter(oidStr);
         final DomainResourceHelper helper = new DomainResourceHelper(getResourceContext(), objectAdapter);
 
-        final OneToManyAssociation collection = helper.getCollectionThatIsVisibleAndUsable(
-                collectionId, Intent.ACCESS);
-
-        RendererFactory factory = RendererFactoryRegistry.instance.find(RepresentationType.OBJECT_COLLECTION);
-        final ObjectCollectionReprRenderer renderer = 
-                (ObjectCollectionReprRenderer) factory.newRenderer(getResourceContext(), null, JsonRepresentation.newMap());
-
-        renderer.with(new ObjectAndCollection(objectAdapter, collection)).asStandalone();
-        
-        return ResourceAbstract.responseOfOk(renderer, Caching.NONE).build();
+        return helper.collectionDetails(objectAdapter, collectionId, MemberMode.NOT_MUTATING, Caching.NONE);
     }
 
     @PUT
@@ -239,7 +230,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements
 
         collection.addElement(objectAdapter, argAdapter);
         
-        return Response.status(HttpStatusCode.NO_CONTENT.getJaxrsStatusType()).build();
+        return helper.collectionDetails(objectAdapter, collectionId, MemberMode.MUTATING, Caching.NONE);
     }
 
     @POST
@@ -276,7 +267,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements
 
         collection.addElement(objectAdapter, argAdapter);
         
-        return responseOfNoContent().build();
+        return helper.collectionDetails(objectAdapter, collectionId, MemberMode.MUTATING, Caching.NONE);
     }
 
     @DELETE
@@ -307,7 +298,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements
 
         collection.removeElement(objectAdapter, argAdapter);
         
-        return responseOfNoContent().build();
+        return helper.collectionDetails(objectAdapter, collectionId, MemberMode.MUTATING, Caching.NONE);
     }
 
 

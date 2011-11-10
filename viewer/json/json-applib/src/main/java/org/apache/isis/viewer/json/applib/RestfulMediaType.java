@@ -27,7 +27,6 @@ import javax.ws.rs.core.MediaType;
  */
 public final class RestfulMediaType {
     
-    
     private RestfulMediaType(){}
 
     private static final String BASE = MediaType.APPLICATION_JSON + ";profile=urn:org.restfulobjects/";
@@ -44,12 +43,11 @@ public final class RestfulMediaType {
     public final static String APPLICATION_JSON_ACTION_RESULT = BASE + "actionresult"+ "";
     public final static String APPLICATION_JSON_DOMAIN_TYPES = BASE + "domaintypes"+ "";
     public final static String APPLICATION_JSON_DOMAIN_TYPE = BASE + "domaintype"+ "";
-    public final static String APPLICATION_JSON_DOMAIN_TYPE_IS_SUBTYPE_OF = BASE + "domaintypeissubtypeof"+ "";
-    public final static String APPLICATION_JSON_TYPE_PROPERTY = BASE + "typeproperty"+ "";
-    public final static String APPLICATION_JSON_TYPE_COLLECTION = BASE + "typecollection"+ "";
-    public final static String APPLICATION_JSON_TYPE_ACTION = BASE + "typeaction"+ "";
-    public final static String APPLICATION_JSON_TYPE_ACTION_PARAMETER = BASE + "typeactionparameter"+ ""; 
+    public final static String APPLICATION_JSON_TYPEACTION_ISSUBTYPEOF = BASE + "typeaction/issubtypeof"+ "";
+    public final static String APPLICATION_JSON_PROPERTY_DESCRIPTION = BASE + "propertydescription"+ "";
+    public final static String APPLICATION_JSON_COLLECTION_DESCRIPTION = BASE + "collectiondescription"+ "";
+    public final static String APPLICATION_JSON_ACTION_DESCRIPTION = BASE + "actiondescription"+ "";
+    public final static String APPLICATION_JSON_ACTION_PARAMETER_DESCRIPTION = BASE + "actionparameterdescription"+ ""; 
     public final static String APPLICATION_JSON_ERROR = BASE + "error"+ "";
-
 
 }

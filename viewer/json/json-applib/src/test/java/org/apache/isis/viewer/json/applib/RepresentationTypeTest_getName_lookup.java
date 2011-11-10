@@ -30,7 +30,7 @@ public class RepresentationTypeTest_getName_lookup {
     public void selectedValues() {
         assertThat(RepresentationType.CAPABILITIES.getName(), is("capabilities"));
         assertThat(RepresentationType.HOME_PAGE.getName(), is("homePage"));
-        assertThat(RepresentationType.TYPE_ACTION_PARAMETER.getName(), is("typeActionParameter"));
+        assertThat(RepresentationType.ACTION_PARAMETER_DESCRIPTION.getName(), is("actionParameterDescription"));
     }
 
     @Test

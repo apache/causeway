@@ -33,7 +33,7 @@ import org.apache.isis.viewer.json.viewer.representations.RendererFactory;
 import org.apache.isis.viewer.json.viewer.representations.RendererFactoryRegistry;
 import org.apache.isis.viewer.json.viewer.representations.ReprRenderer;
 import org.apache.isis.viewer.json.viewer.representations.ReprRendererFactoryAbstract;
-import org.apache.isis.viewer.json.viewer.resources.domaintypes.TypeCollectionReprRenderer;
+import org.apache.isis.viewer.json.viewer.resources.domaintypes.CollectionDescriptionReprRenderer;
 
 import com.google.common.collect.Lists;
 
@@ -59,10 +59,14 @@ public class ObjectCollectionReprRenderer extends AbstractObjectMemberReprRender
         // id and memberType are rendered eagerly
 
         renderMemberContent();
-        if(mode.isStandalone() || !objectAdapter.isPersistent()) {
+        if(mode.isStandalone() || mode.isMutated() || !objectAdapter.isPersistent()) {
             addValue();
         }
         putDisabledReasonIfDisabled();
+
+        if(mode.isStandalone() || mode.isMutated()) {
+            addExtensionsIsisProprietaryChangedObjects();
+        }
 
         return representation;
     }
@@ -140,7 +144,7 @@ public class ObjectCollectionReprRenderer extends AbstractObjectMemberReprRender
     
     
     protected void addLinksToFormalDomainModel() {
-        final LinkBuilder linkBuilder = TypeCollectionReprRenderer.newLinkToBuilder(resourceContext, Rel.DESCRIBEDBY, objectAdapter.getSpecification(), objectMember);
+        final LinkBuilder linkBuilder = CollectionDescriptionReprRenderer.newLinkToBuilder(resourceContext, Rel.DESCRIBEDBY, objectAdapter.getSpecification(), objectMember);
         getLinks().arrayAdd(linkBuilder.build());
     }
 

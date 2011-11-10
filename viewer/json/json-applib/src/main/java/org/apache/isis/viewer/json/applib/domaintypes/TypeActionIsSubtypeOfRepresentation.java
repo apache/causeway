@@ -18,11 +18,12 @@
  */
 package org.apache.isis.viewer.json.applib.domaintypes;
 
+import org.apache.isis.viewer.json.applib.domainobjects.DomainRepresentation;
 import org.codehaus.jackson.JsonNode;
 
-public class TypeCollectionRepresentation extends AbstractTypeMemberRepresentation {
+public class TypeActionIsSubtypeOfRepresentation extends DomainRepresentation {
 
-    public TypeCollectionRepresentation(JsonNode jsonNode) {
+    public TypeActionIsSubtypeOfRepresentation(JsonNode jsonNode) {
         super(jsonNode);
     }
 
