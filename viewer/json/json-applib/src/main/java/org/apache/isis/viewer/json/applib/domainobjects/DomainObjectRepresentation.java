@@ -45,7 +45,7 @@ public class DomainObjectRepresentation extends DomainRepresentation {
     }
 
     public JsonRepresentation getProperties() {
-        return getRepresentation("members[memberType=property]");
+        return getRepresentation("members[memberType=property]").ensureArray();
     }
 
     public JsonRepresentation getCollection(final String id) {

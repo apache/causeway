@@ -137,14 +137,6 @@
             <scope>test</scope>
         </dependency>
 
-        <dependency>
-            <!-- for xpath queries of JSON representations  -->
-            <groupId>xom</groupId>
-            <artifactId>xom</artifactId>
-            <version>1.1</version>
-            <scope>test</scope>
-        </dependency>
-        
 	</dependencies>
 
 </project>

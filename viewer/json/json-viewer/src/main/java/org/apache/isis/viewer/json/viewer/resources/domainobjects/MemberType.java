@@ -34,9 +34,9 @@ import org.apache.isis.core.progmodel.facets.collections.validate.CollectionVali
 import org.apache.isis.core.progmodel.facets.collections.validate.CollectionValidateRemoveFromFacet;
 import org.apache.isis.core.progmodel.facets.properties.validate.PropertyValidateFacet;
 import org.apache.isis.viewer.json.applib.HttpMethod;
+import org.apache.isis.viewer.json.applib.Rel;
 import org.apache.isis.viewer.json.applib.RepresentationType;
 import org.apache.isis.viewer.json.applib.util.Enums;
-import org.apache.isis.viewer.json.viewer.representations.Rel;
 
 import com.google.common.collect.ImmutableMap;
 

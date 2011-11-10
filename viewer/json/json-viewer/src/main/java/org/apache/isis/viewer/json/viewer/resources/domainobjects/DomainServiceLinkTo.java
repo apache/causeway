@@ -18,8 +18,8 @@ package org.apache.isis.viewer.json.viewer.resources.domainobjects;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.services.ServiceUtil;
+import org.apache.isis.viewer.json.applib.Rel;
 import org.apache.isis.viewer.json.viewer.representations.LinkBuilder;
-import org.apache.isis.viewer.json.viewer.representations.Rel;
 
 public class DomainServiceLinkTo extends DomainObjectLinkTo {
     private String serviceId;

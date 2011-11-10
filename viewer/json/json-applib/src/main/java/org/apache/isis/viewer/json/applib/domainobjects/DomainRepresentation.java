@@ -22,6 +22,7 @@ import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.applib.JsonRepresentation.HasExtensions;
 import org.apache.isis.viewer.json.applib.JsonRepresentation.HasLinks;
 import org.apache.isis.viewer.json.applib.JsonRepresentation.LinksToSelf;
+import org.apache.isis.viewer.json.applib.Rel;
 import org.apache.isis.viewer.json.applib.blocks.LinkRepresentation;
 import org.codehaus.jackson.JsonNode;
 
@@ -32,11 +33,15 @@ public abstract class DomainRepresentation extends JsonRepresentation implements
     }
 
     public LinkRepresentation getSelf() {
-        return getLinkWithRel("self");
+        return getLinkWithRel(Rel.SELF);
     }
 
     public JsonRepresentation getLinks() {
         return getArray("links");
+    }
+
+    public LinkRepresentation getLinkWithRel(Rel rel) {
+        return getLinkWithRel(rel.getName());
     }
 
     public LinkRepresentation getLinkWithRel(String rel) {

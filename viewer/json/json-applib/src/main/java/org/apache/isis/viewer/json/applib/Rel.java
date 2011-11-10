@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.json.viewer.representations;
+package org.apache.isis.viewer.json.applib;
 
 public enum Rel {
     // IANA registered

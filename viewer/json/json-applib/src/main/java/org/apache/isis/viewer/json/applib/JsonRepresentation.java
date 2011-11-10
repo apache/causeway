@@ -709,81 +709,8 @@ public class JsonRepresentation {
 
     
     /////////////////////////////////////////////////////////////////////////
-    // path support (with an xpath-like DSL)
+    // asUrlEncoded
     /////////////////////////////////////////////////////////////////////////
-
-    /**
-     * Requires xom:xom:1.1 (LGPL) to be added as a dependency.
-     */
-    public JsonRepresentation xpath(String xpathTemplate, Object... args) {
-        String xpathExpression = String.format(xpathTemplate,  args);
-        try {
-            // puts object structure under a <o>
-            final StringReader xmlStream = new StringReader(toXml());
-            final SAXBuilder saxBuilder = new SAXBuilder();
-            org.jdom.Document jdomDoc = saxBuilder.build(xmlStream);
-
-            String prefix = jsonNode.isArray()?"a":"o";
-            XPath xpath = XPath.newInstance("/" + prefix + xpathExpression);
-            
-            @SuppressWarnings("unchecked")
-            List<Element> matchingElements = xpath.selectNodes(jdomDoc);
-            
-            org.jdom.Document doc = new org.jdom.Document(new org.jdom.Element(prefix));
-            for (Element el: matchingElements) {
-                el.detach();
-                doc.getRootElement().addContent(el);
-            }
-            JsonRepresentation matchedRepresentation = asJsonRepresentation(doc);
-            if(matchedRepresentation == null) {
-                return null;
-            }
-            return matchedRepresentation;
-
-        } catch (JDOMException e) {
-            throw new RuntimeException(e);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        
-    }
-
-    private String toXml() {
-        XMLSerializer serializer = new XMLSerializer();
-        JSON json = JSONSerializer.toJSON(jsonNode.toString());
-        String xml = serializer.write(json);
-        return xml;
-    }
-    
-
-    private static JsonRepresentation asJsonRepresentation(org.jdom.Document doc) {
-        try {
-            return asJsonRepresentation(asJson(asInputStream(doc)));
-        } catch (IOException e) {
-            // shouldn't occur
-            throw new RuntimeException(e);
-        }
-    }
-
-
-    private static InputStream asInputStream(org.jdom.Document doc) throws IOException {
-        XMLOutputter outputter = new XMLOutputter();
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        
-        outputter.output(doc, baos);
-
-        @SuppressWarnings("unused")
-        String xml = new String(baos.toByteArray());
-
-        InputStream bais = new ByteArrayInputStream(baos.toByteArray());
-        return bais; 
-    }
-    
-    private static JSON asJson(InputStream bais) {
-        XMLSerializer xmlSerializer = new XMLSerializer();
-        JSON json = xmlSerializer.readFromStream(bais);
-        return json;
-    }
 
     public String asUrlEncoded() {
         return UrlEncodingUtils.asUrlEncoded(asJsonNode());
@@ -1206,6 +1133,20 @@ public class JsonRepresentation {
     @Override
     public String toString() {
         return jsonNode.toString();
+    }
+
+
+    /**
+     * A reciprocal of the behaviour of the automatic dereferencing of arrays that
+     * occurs when there is only a single instance.
+     */
+    public JsonRepresentation ensureArray() {
+        if(jsonNode.isArray()) {
+            return this;
+        }
+        final JsonRepresentation arrayRepr = JsonRepresentation.newArray();
+        arrayRepr.arrayAdd(jsonNode);
+        return arrayRepr;
     }
 
 

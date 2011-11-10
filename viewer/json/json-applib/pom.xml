@@ -69,14 +69,6 @@
             <artifactId>jdom</artifactId>
         </dependency>
 	    
-	    <dependency>
-	        <groupId>xom</groupId>
-	        <artifactId>xom</artifactId>
-	        <!-- This dependency is optional because XOM is under LGPL, so not compatible with ASF licensing-->
-	        <!-- it is required for XML/xpath support -->
-	        <optional>true</optional>
-	    </dependency>
-	    
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>

@@ -71,14 +71,14 @@ public class JsonRepresentationTest_getRepresentation {
     }
 
     @Test
-    public void forListwithCriteria() throws JsonParseException, JsonMappingException, IOException {
+    public void forListWithSingleCriteriaMatchingOne() throws JsonParseException, JsonMappingException, IOException {
         JsonRepresentation representation = jsonRepresentation.getRepresentation("anotherSubMap.aListOfLinks[rel=aRel]");
         assertThat(representation.isLink(), is(true));
         assertThat(representation.asLink().getHref(), is("http://foo/bar"));
     }
 
     @Test
-    public void forListWithCriteriaMatchingOne() throws JsonParseException, JsonMappingException, IOException {
+    public void forListWithMultipleCriteriaMatchingOne() throws JsonParseException, JsonMappingException, IOException {
         JsonRepresentation representation = jsonRepresentation.getRepresentation("anotherSubMap.aListOfLinks[rel=multiRel data=someData]");
         assertThat(representation.isLink(), is(true));
         assertThat(representation.asLink().getHref(), is("http://foo/bar/multiRel1"));

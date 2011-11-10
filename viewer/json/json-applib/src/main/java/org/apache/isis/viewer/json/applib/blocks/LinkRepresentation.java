@@ -45,6 +45,7 @@ public final class LinkRepresentation extends JsonRepresentation {
     public String getRel() {
         return asObjectNode().path("rel").getTextValue();
     }
+    
     public LinkRepresentation withRel(String rel) {
         asObjectNode().put("rel", rel);
         return this;
@@ -66,6 +67,14 @@ public final class LinkRepresentation extends JsonRepresentation {
         String methodStr = asObjectNode().path("method").getTextValue();
         return Method.valueOf(methodStr);
     }
+
+    public MediaType getType() {
+        String typeStr = asObjectNode().path("type").getTextValue();
+        if(typeStr == null) { return MediaType.APPLICATION_JSON_TYPE; }
+        return MediaType.valueOf(typeStr);
+    }
+
+
     public LinkRepresentation withMethod(Method method) {
         asObjectNode().put("method", method.name());
         return this;
@@ -134,7 +143,7 @@ public final class LinkRepresentation extends JsonRepresentation {
 
     @Override
     public String toString() {
-        return "Link [rel=" + getRel() + ", href=" + getHref()+ ", method=" + getMethod() + "]";
+        return "Link [rel=" + getRel() + ", href=" + getHref() + ", method=" + getMethod() + ", type=" + getType() + "]";
     }
 
 
