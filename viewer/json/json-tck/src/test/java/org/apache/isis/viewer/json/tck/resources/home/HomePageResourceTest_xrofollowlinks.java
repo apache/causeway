@@ -31,7 +31,7 @@ import org.apache.isis.viewer.json.applib.HttpMethod;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.applib.RestfulClient;
 import org.apache.isis.viewer.json.applib.RestfulRequest;
-import org.apache.isis.viewer.json.applib.RestfulRequest.QueryParameter;
+import org.apache.isis.viewer.json.applib.RestfulRequest.RequestParameter;
 import org.apache.isis.viewer.json.applib.RestfulResponse;
 import org.apache.isis.viewer.json.applib.homepage.HomePageRepresentation;
 import org.apache.isis.viewer.json.tck.IsisWebServerRule;
@@ -125,7 +125,7 @@ public class HomePageResourceTest_xrofollowlinks {
     }
 
     private HomePageRepresentation whenExecuteAndFollowLinksUsing(final String uriTemplate, final String followLinks) throws JsonParseException, JsonMappingException, IOException {
-        request = client.createRequest(HttpMethod.GET, uriTemplate).withArg(QueryParameter.FOLLOW_LINKS, followLinks);
+        request = client.createRequest(HttpMethod.GET, uriTemplate).withArg(RequestParameter.FOLLOW_LINKS, followLinks);
         restfulResponse = request.executeT();
         return restfulResponse.getEntity();
     }

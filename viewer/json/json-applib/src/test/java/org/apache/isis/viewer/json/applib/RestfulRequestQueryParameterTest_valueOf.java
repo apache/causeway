@@ -27,7 +27,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.isis.viewer.json.applib.RestfulRequest.QueryParameter;
+import org.apache.isis.viewer.json.applib.RestfulRequest.RequestParameter;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JUnit4Mockery;
 import org.jmock.lib.legacy.ClassImposteriser;
@@ -47,7 +47,7 @@ public class RestfulRequestQueryParameterTest_valueOf {
     
     @Test
     public void mapContainsList() {
-        final QueryParameter<List<List<String>>> queryParameter = RestfulRequest.QueryParameter.FOLLOW_LINKS;
+        final RequestParameter<List<List<String>>> queryParameter = RestfulRequest.RequestParameter.FOLLOW_LINKS;
         parameterMap.put("x-ro-follow-links", new String[]{"a", "b.c"});
         List<List<String>> valueOf = queryParameter.valueOf(parameterMap);
         
@@ -61,7 +61,7 @@ public class RestfulRequestQueryParameterTest_valueOf {
 
     @Test
     public void mapHasNoKey() {
-        final QueryParameter<List<List<String>>> queryParameter = RestfulRequest.QueryParameter.FOLLOW_LINKS;
+        final RequestParameter<List<List<String>>> queryParameter = RestfulRequest.RequestParameter.FOLLOW_LINKS;
         parameterMap.put("something-else", new String[]{"a", "b.c"});
         List<List<String>> valueOf = queryParameter.valueOf(parameterMap);
         
@@ -70,7 +70,7 @@ public class RestfulRequestQueryParameterTest_valueOf {
 
     @Test
     public void mapIsEmpty() {
-        final QueryParameter<List<List<String>>> queryParameter = RestfulRequest.QueryParameter.FOLLOW_LINKS;
+        final RequestParameter<List<List<String>>> queryParameter = RestfulRequest.RequestParameter.FOLLOW_LINKS;
         List<List<String>> valueOf = queryParameter.valueOf(parameterMap);
         
         assertThat(valueOf.size(), is(0));
@@ -78,7 +78,7 @@ public class RestfulRequestQueryParameterTest_valueOf {
 
     @Test
     public void mapIsNull() {
-        final QueryParameter<List<List<String>>> queryParameter = RestfulRequest.QueryParameter.FOLLOW_LINKS;
+        final RequestParameter<List<List<String>>> queryParameter = RestfulRequest.RequestParameter.FOLLOW_LINKS;
         List<List<String>> valueOf = queryParameter.valueOf(null);
         
         assertThat(valueOf.size(), is(0));
@@ -87,7 +87,7 @@ public class RestfulRequestQueryParameterTest_valueOf {
     @Test
     public void mapContainsCommaSeparatedList() {
         
-        final QueryParameter<List<List<String>>> queryParameter = RestfulRequest.QueryParameter.FOLLOW_LINKS;
+        final RequestParameter<List<List<String>>> queryParameter = RestfulRequest.RequestParameter.FOLLOW_LINKS;
         parameterMap.put("x-ro-follow-links", new String[]{"a,b.c"});
         List<List<String>> valueOf = queryParameter.valueOf(parameterMap);
         
@@ -102,7 +102,7 @@ public class RestfulRequestQueryParameterTest_valueOf {
     @Test
     public void commaSeparatedListUrlEncoded() throws UnsupportedEncodingException {
         
-        final QueryParameter<List<List<String>>> queryParameter = RestfulRequest.QueryParameter.FOLLOW_LINKS;
+        final RequestParameter<List<List<String>>> queryParameter = RestfulRequest.RequestParameter.FOLLOW_LINKS;
         parameterMap.put("x-ro-follow-links", new String[]{URLEncoder.encode("a,b.c", "UTF-8")});
         List<List<String>> valueOf = queryParameter.valueOf(parameterMap);
         

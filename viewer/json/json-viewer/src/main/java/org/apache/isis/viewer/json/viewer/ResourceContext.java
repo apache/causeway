@@ -35,7 +35,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapterLookup;
 import org.apache.isis.core.metamodel.adapter.oid.stringable.OidStringifier;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.viewer.json.applib.RepresentationType;
-import org.apache.isis.viewer.json.applib.RestfulRequest.QueryParameter;
+import org.apache.isis.viewer.json.applib.RestfulRequest.RequestParameter;
 import org.apache.isis.viewer.json.applib.RestfulResponse.HttpStatusCode;
 
 import com.google.common.base.Predicate;
@@ -98,14 +98,14 @@ public class ResourceContext {
 
     void init(RepresentationType representationType) {
         ensureCompatibleAcceptHeader(representationType);
-        this.followLinks = Collections.unmodifiableList(getArg(QueryParameter.FOLLOW_LINKS));
+        this.followLinks = Collections.unmodifiableList(getArg(RequestParameter.FOLLOW_LINKS));
     }
 
     public HttpHeaders getHttpHeaders() {
         return httpHeaders;
     }
 
-    public <Q> Q getArg(QueryParameter<Q> queryParameter) {
+    public <Q> Q getArg(RequestParameter<Q> queryParameter) {
         return queryParameter.valueOf(getHttpServletRequest().getParameterMap());
     }
 

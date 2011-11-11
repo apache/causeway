@@ -36,18 +36,21 @@ import javax.ws.rs.core.Response.Status.Family;
 import org.apache.isis.runtimes.dflt.webserver.WebServer;
 import org.apache.isis.tck.dom.assocs.ParentEntity;
 import org.apache.isis.tck.dom.scalars.ApplibValuedEntity;
-import org.apache.isis.tck.objstore.dflt.stables.StableEntityRepositoryDefault;
+import org.apache.isis.viewer.json.applib.HttpMethod;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.applib.Rel;
 import org.apache.isis.viewer.json.applib.RestfulClient;
+import org.apache.isis.viewer.json.applib.RestfulRequest;
 import org.apache.isis.viewer.json.applib.RestfulResponse;
 import org.apache.isis.viewer.json.applib.blocks.LinkRepresentation;
 import org.apache.isis.viewer.json.applib.blocks.Method;
+import org.apache.isis.viewer.json.applib.domainobjects.ActionResultRepresentation;
 import org.apache.isis.viewer.json.applib.domainobjects.DomainObjectRepresentation;
 import org.apache.isis.viewer.json.applib.domainobjects.DomainObjectResource;
 import org.apache.isis.viewer.json.applib.domainobjects.ObjectActionRepresentation;
 import org.apache.isis.viewer.json.applib.domainobjects.ObjectPropertyRepresentation;
 import org.apache.isis.viewer.json.applib.domainobjects.ScalarValueRepresentation;
+import org.apache.isis.viewer.json.applib.domainobjects.ActionResultRepresentation.ResultType;
 import org.apache.isis.viewer.json.tck.IsisWebServerRule;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
@@ -88,7 +91,7 @@ public class DomainObjectResourceTest {
     }
 
     @Test
-    public void domainObjectRepresentationContent_ObjectHeader() throws Exception {
+    public void domainObjectRepresentationForPersistentObject_hasSelfAndOid() throws Exception {
         
         // given, when
         DomainObjectRepresentation domainObjectRepr = givenDomainObjectRepresentationFor("OID:32");
@@ -106,7 +109,57 @@ public class DomainObjectResourceTest {
         // no icon
         LinkRepresentation selfIcon = domainObjectRepr.getLinkWithRel(Rel.ICON);
         assertThat(selfIcon, is(nullValue()));
+    }
 
+    @Test
+    public void domainObjectRepresentationForTransient_hasNoSelf_andHasNoOid() throws Exception {
+        
+        // given, when
+        final RestfulRequest request = this.client.createRequest(HttpMethod.POST, "services/simples/actions/newTransientEntity/invoke");
+        final RestfulResponse<ActionResultRepresentation> response = request.executeT();
+        final ActionResultRepresentation actionResultRepr = response.getEntity();
+        assertThat(actionResultRepr.getResultType(), is(ResultType.DOMAIN_OBJECT));
+        assertThat(actionResultRepr.getResult(), is(not(nullValue())));
+
+        DomainObjectRepresentation domainObjectRepr = actionResultRepr.getResult().as(DomainObjectRepresentation.class);
+
+        // then
+        LinkRepresentation self = domainObjectRepr.getSelf();
+        assertThat(self, is(nullValue()));
+        
+        assertThat(domainObjectRepr.getOid(), is(nullValue()));
+    }
+
+    @Test
+    public void domainObjectRepresentation_hasTitle() throws Exception {
+        
+        // given, when
+        DomainObjectRepresentation domainObjectRepr = givenDomainObjectRepresentationFor("OID:32");
+
+        // then
+        assertThat(domainObjectRepr.getTitle(), is("parent 5"));
+    }
+
+    @Test
+    public void domainObjectRepresentation_hasDescribedByLink() throws Exception {
+        
+        // given, when
+        DomainObjectRepresentation domainObjectRepr = givenDomainObjectRepresentationFor("OID:32");
+
+        // then
+        assertThat(domainObjectRepr.getLinkWithRel(Rel.DESCRIBEDBY), 
+                isLink().href(matches(".+" + ParentEntity.class.getName())).method(Method.GET).type(MediaType.APPLICATION_JSON_TYPE).typeParameter("profile", "urn:org.restfulobjects/domaintype"));
+    }
+
+    @Test
+    public void domainObjectRepresentation_noIcon() throws Exception {
+        
+        // given, when
+        DomainObjectRepresentation domainObjectRepr = givenDomainObjectRepresentationFor("OID:32");
+
+        // then 
+        LinkRepresentation selfIcon = domainObjectRepr.getLinkWithRel(Rel.ICON);
+        assertThat(selfIcon, is(nullValue()));
     }
 
     @Ignore("TODO")
