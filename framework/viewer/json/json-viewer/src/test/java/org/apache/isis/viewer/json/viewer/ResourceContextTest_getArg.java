@@ -23,7 +23,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.isis.viewer.json.applib.RepresentationType;
-import org.apache.isis.viewer.json.applib.RestfulRequest.QueryParameter;
+import org.apache.isis.viewer.json.applib.RestfulRequest.RequestParameter;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JMock;
@@ -44,13 +44,13 @@ public class ResourceContextTest_getArg {
         }
     };
 
-    private QueryParameter<?> queryParameter;
+    private RequestParameter<?> queryParameter;
 
 
     @Before
     public void setUp() throws Exception {
         httpServletRequest = context.mock(HttpServletRequest.class);
-        queryParameter = context.mock(QueryParameter.class);
+        queryParameter = context.mock(RequestParameter.class);
         
     }
 

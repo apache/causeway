@@ -696,7 +696,11 @@ public class JsonRepresentation {
     /////////////////////////////////////////////////////////////////////////
 
     /**
-     * Convenience to simply downcast.
+     * Convenience to simply &quot;downcast&quot;.
+     * 
+     * <p>
+     * In fact, the method creates a new instance of the specified type, which shares the
+     * underlying {@link #jsonNode jsonNode}. 
      */
     public <T extends JsonRepresentation> T as(Class<T> cls) {
         try {
@@ -1042,6 +1046,22 @@ public class JsonRepresentation {
     // helpers
     /////////////////////////////////////////////////////////////////////////
 
+    /**
+     * A reciprocal of the behaviour of the automatic dereferencing of arrays that
+     * occurs when there is only a single instance.
+     * 
+     * @see #toJsonNode(List)
+     */
+    public JsonRepresentation ensureArray() {
+        if(jsonNode.isArray()) {
+            return this;
+        }
+        final JsonRepresentation arrayRepr = JsonRepresentation.newArray();
+        arrayRepr.arrayAdd(jsonNode);
+        return arrayRepr;
+    }
+
+
     private JsonNode getNode(String path) {
         JsonNode jsonNode = this.jsonNode;
         String[] keys = path.split("\\.");
@@ -1106,14 +1126,6 @@ public class JsonRepresentation {
         return node == null || node.isMissingNode() || node.isNull();
     }
 
-    private static JsonRepresentation asJsonRepresentation(JSON json) throws JsonParseException, JsonMappingException, IOException {
-        if(json == JSONNull.getInstance()) {
-            return null;
-        }
-        String jsonStr = json.toString();
-        return JsonMapper.instance().read(jsonStr, JsonRepresentation.class);
-    }
-
     private static String formatExMsg(String pathIfAny, String errorText) {
         StringBuilder buf = new StringBuilder();
         if(pathIfAny != null) {
@@ -1125,7 +1137,6 @@ public class JsonRepresentation {
 
 
 
-
     /////////////////////////////////////////////////////////////////////////
     // toString
     /////////////////////////////////////////////////////////////////////////
@@ -1134,22 +1145,6 @@ public class JsonRepresentation {
     public String toString() {
         return jsonNode.toString();
     }
-
-
-    /**
-     * A reciprocal of the behaviour of the automatic dereferencing of arrays that
-     * occurs when there is only a single instance.
-     */
-    public JsonRepresentation ensureArray() {
-        if(jsonNode.isArray()) {
-            return this;
-        }
-        final JsonRepresentation arrayRepr = JsonRepresentation.newArray();
-        arrayRepr.arrayAdd(jsonNode);
-        return arrayRepr;
-    }
-
-
 
 
 

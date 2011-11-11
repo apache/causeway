@@ -57,7 +57,7 @@ public class ActionResultRepresentation extends AbstractObjectMemberRepresentati
     public JsonRepresentation getResult() {
         return getRepresentation("result");
     }
-    
+
     public ResultType getResultType() {
         final String resultType = getString("resulttype");
         return ResultType.lookup(resultType);

@@ -89,15 +89,20 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
     public JsonRepresentation render() {
 
         // self
-        if(includesSelf && objectAdapter.isPersistent()) {
-            JsonRepresentation self = linkToBuilder.with(objectAdapter).builder(Rel.SELF).build();
-            getLinks().arrayAdd(self);
+        if (objectAdapter.isPersistent()) {
+            if(includesSelf) {
+                JsonRepresentation self = linkToBuilder.with(objectAdapter).builder(Rel.SELF).build();
+                getLinks().arrayAdd(self);
+            }
+            representation.mapPut("oid", OidUtils.getOidStr(resourceContext, objectAdapter));
         }
 
+        
         // title
         String title = objectAdapter.titleString();
         representation.mapPut("title", title);
-        representation.mapPut("oid", OidUtils.getOidStr(resourceContext, objectAdapter));
+
+        // serviceId
         final boolean isService = objectAdapter.getSpecification().isService();
         if(isService) {
             representation.mapPut("serviceId", ServiceUtil.id(objectAdapter.getObject()));
@@ -106,9 +111,8 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
         // members
         withMembers(objectAdapter);
 
-        // links
-        final JsonRepresentation links = getLinks();
-        links.arrayAdd(
+        // described by
+        getLinks().arrayAdd(
                 DomainTypeReprRenderer.newLinkToBuilder(getResourceContext(), Rel.DESCRIBEDBY, objectAdapter.getSpecification()).build());
         
         // extensions
