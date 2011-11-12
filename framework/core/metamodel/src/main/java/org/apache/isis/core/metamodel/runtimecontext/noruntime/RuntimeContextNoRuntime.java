@@ -194,9 +194,9 @@ public class RuntimeContextNoRuntime extends RuntimeContextAbstract {
             }
         };
         localizationProvider = new LocalizationProviderAbstract() {
-            
+
             private final Localization defaultLocalization = new LocalizationDefault();
-                
+
             @Override
             public Localization getLocalization() {
                 return defaultLocalization;
@@ -287,8 +287,6 @@ public class RuntimeContextNoRuntime extends RuntimeContextAbstract {
 
     @Override
     public LocalizationProvider getLocalizationProvider() {
-        // TODO Auto-generated method stub
-        return null;
+        return localizationProvider;
     }
-
 }
