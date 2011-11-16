@@ -16,9 +16,13 @@
  */
 package org.apache.isis.core.metamodel.spec;
 
+import java.util.Collection;
+
 import org.apache.isis.core.commons.components.Injectable;
 
 public interface SpecificationLookup extends Injectable {
+
+    Collection<ObjectSpecification> allSpecifications();
 
     /**
      * @see #loadSpecification(String)

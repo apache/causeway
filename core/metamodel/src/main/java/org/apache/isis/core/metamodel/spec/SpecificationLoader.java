@@ -27,7 +27,6 @@ import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 
 public interface SpecificationLoader extends ApplicationScopedComponent, DebuggableWithTitle, SpecificationLookup {
 
-    Collection<ObjectSpecification> allSpecifications();
 
     /**
      * @see #loadSpecification(String)

@@ -33,6 +33,7 @@ import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterLookup;
 import org.apache.isis.core.metamodel.adapter.oid.stringable.OidStringifier;
+import org.apache.isis.core.metamodel.spec.SpecificationLookup;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.viewer.json.applib.RepresentationType;
 import org.apache.isis.viewer.json.applib.RestfulRequest.RequestParameter;
@@ -56,6 +57,8 @@ public class ResourceContext {
     private final AuthenticationSession authenticationSession;
     private final PersistenceSession persistenceSession;
     private final ObjectAdapterLookup objectAdapterLookup;
+    private final SpecificationLookup specificationLookup;
+    
     private List<List<String>> followLinks;
     
     private final static Predicate<MediaType> MEDIA_TYPE_NOT_GENERIC_APPLICATION_JSON = new Predicate<MediaType>() {
@@ -79,7 +82,9 @@ public class ResourceContext {
             final OidStringifier oidStringifier, 
             final Localization localization, 
             final AuthenticationSession authenticationSession, 
-            final PersistenceSession persistenceSession, final ObjectAdapterLookup objectAdapterLookup) {
+            final PersistenceSession persistenceSession, 
+            final ObjectAdapterLookup objectAdapterLookup, 
+            final SpecificationLookup specificationLookup) {
 
         this.httpHeaders = httpHeaders;
         this.uriInfo = uriInfo;
@@ -92,6 +97,7 @@ public class ResourceContext {
         this.authenticationSession = authenticationSession;
         this.persistenceSession = persistenceSession;
         this.objectAdapterLookup = objectAdapterLookup;
+        this.specificationLookup = specificationLookup;
         
         init(representationType);
     }
@@ -196,6 +202,10 @@ public class ResourceContext {
 
     public PersistenceSession getPersistenceSession() {
         return persistenceSession;
+    }
+
+    public SpecificationLookup getSpecificationLookup() {
+        return specificationLookup;
     }
 
 

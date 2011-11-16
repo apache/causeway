@@ -73,6 +73,7 @@ public class ObjectPropertyReprRenderer extends AbstractObjectMemberReprRenderer
         return representation;
     }
 
+
     
     /////////////////////////////////////////////////////
     // value
@@ -172,5 +173,6 @@ public class ObjectPropertyReprRenderer extends AbstractObjectMemberReprRenderer
     protected void putExtensionsIsisProprietary() {
         // none
     }
+
 
 }

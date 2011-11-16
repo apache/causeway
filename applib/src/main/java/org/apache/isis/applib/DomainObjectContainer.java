@@ -268,7 +268,7 @@ public interface DomainObjectContainer {
      * This method is useful during exploration/prototyping, but you may want to use {@link #allMatches(Query)} for
      * production code.
      */
-    public <T> List<T> allMatches(final Class<T> ofType, final Filter<T> filter);
+    public <T> List<T> allMatches(final Class<T> ofType, final Filter<? super T> filter);
 
     /**
      * Returns all the instances of the specified type (including subtypes) that have the given title.

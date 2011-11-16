@@ -38,6 +38,14 @@ import org.jboss.resteasy.annotations.ClientResponseType;
 @Path("/objects")
 public interface DomainObjectResource {
 
+    @POST
+    @Path("/")
+    @Consumes({ MediaType.WILDCARD })
+    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_DOMAIN_OBJECT, RestfulMediaType.APPLICATION_JSON_ERROR })
+    @ClientResponseType(entityType=String.class)
+    public Response persist(final InputStream object);
+    
+
     ////////////////////////////////////////////////////////////
     // domain object
     ////////////////////////////////////////////////////////////
@@ -50,7 +58,7 @@ public interface DomainObjectResource {
 
     @PUT
     @Path("/{oid}")
-    @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_JSON })
+    @Consumes({ MediaType.WILDCARD })
     @Produces({ RestfulMediaType.APPLICATION_JSON_DOMAIN_OBJECT, RestfulMediaType.APPLICATION_JSON_ERROR })
     @ClientResponseType(entityType=String.class)
     public Response object(
@@ -72,7 +80,7 @@ public interface DomainObjectResource {
 
     @PUT
     @Path("/{oid}/properties/{propertyId}")
-    @Consumes({ MediaType.APPLICATION_JSON })
+    @Consumes({ MediaType.WILDCARD })
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ERROR })
     @ClientResponseType(entityType=String.class)
     public Response modifyProperty(
@@ -104,7 +112,7 @@ public interface DomainObjectResource {
 
     @PUT
     @Path("/{oid}/collections/{collectionId}")
-    @Consumes({ MediaType.APPLICATION_JSON })
+    @Consumes({ MediaType.WILDCARD })
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ERROR })
     public Response addToSet(
         @PathParam("oid") final String oidStr,
@@ -113,7 +121,7 @@ public interface DomainObjectResource {
 
     @POST
     @Path("/{oid}/collections/{collectionId}")
-    @Consumes({ MediaType.APPLICATION_JSON })
+    @Consumes({ MediaType.WILDCARD })
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ERROR })
     @ClientResponseType(entityType=String.class)
     public Response addToList(
@@ -123,13 +131,12 @@ public interface DomainObjectResource {
  
     @DELETE
     @Path("/{oid}/collections/{collectionId}")
-    @Consumes({ MediaType.APPLICATION_JSON })
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ERROR })
     @ClientResponseType(entityType=String.class)
     public Response removeFromCollection(
         @PathParam("oid") final String oidStr,
         @PathParam("collectionId") final String collectionId,
-        final InputStream arguments);
+        @QueryParam("args") final String arguments);
 
     
     ////////////////////////////////////////////////////////////
@@ -159,7 +166,7 @@ public interface DomainObjectResource {
 
     @PUT
     @Path("/{oid}/actions/{actionId}/invoke")
-    @Consumes({ MediaType.APPLICATION_JSON })
+    @Consumes({ MediaType.WILDCARD })
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_DOMAIN_OBJECT, RestfulMediaType.APPLICATION_JSON_LIST, RestfulMediaType.APPLICATION_JSON_SCALAR_VALUE, RestfulMediaType.APPLICATION_JSON_ERROR })
     @ClientResponseType(entityType=String.class)
     public Response invokeActionIdempotent(
@@ -169,7 +176,7 @@ public interface DomainObjectResource {
     
     @POST
     @Path("/{oid}/actions/{actionId}/invoke")
-    @Consumes({ MediaType.APPLICATION_JSON })
+    @Consumes({ MediaType.WILDCARD })
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_DOMAIN_OBJECT, RestfulMediaType.APPLICATION_JSON_LIST, RestfulMediaType.APPLICATION_JSON_SCALAR_VALUE, RestfulMediaType.APPLICATION_JSON_ERROR })
     @ClientResponseType(entityType=String.class)
     public Response invokeAction(

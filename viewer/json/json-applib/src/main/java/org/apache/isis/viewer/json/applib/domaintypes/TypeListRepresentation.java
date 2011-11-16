@@ -21,9 +21,9 @@ package org.apache.isis.viewer.json.applib.domaintypes;
 import org.apache.isis.viewer.json.applib.domainobjects.DomainRepresentation;
 import org.codehaus.jackson.JsonNode;
 
-public class DomainTypesRepresentation extends DomainRepresentation {
+public class TypeListRepresentation extends DomainRepresentation {
 
-    public DomainTypesRepresentation(JsonNode jsonNode) {
+    public TypeListRepresentation(JsonNode jsonNode) {
         super(jsonNode);
     }
 

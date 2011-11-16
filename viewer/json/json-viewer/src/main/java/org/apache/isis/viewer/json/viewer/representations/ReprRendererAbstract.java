@@ -32,6 +32,7 @@ import org.apache.isis.runtimes.dflt.runtime.system.transaction.UpdateNotifier;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.applib.Rel;
 import org.apache.isis.viewer.json.applib.RepresentationType;
+import org.apache.isis.viewer.json.applib.blocks.LinkRepresentation;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
 import org.apache.isis.viewer.json.viewer.resources.domainobjects.DomainObjectReprRenderer;
 import org.apache.isis.viewer.json.viewer.resources.domaintypes.DomainTypeReprRenderer;
@@ -83,6 +84,17 @@ public abstract class ReprRendererAbstract<R extends ReprRendererAbstract<R, T>,
     public R withSelf(String href) {
         if(href != null) {
             getLinks().arrayAdd(LinkBuilder.newBuilder(resourceContext, Rel.SELF, representationType, href).build());
+        }
+        return cast(this);
+    }
+
+    public R withSelf(JsonRepresentation link) {
+        final String rel = link.getString("rel");
+        if(rel == null || !rel.equals(Rel.SELF.getName())) {
+            throw new IllegalArgumentException("Provided link does not have a 'rel' of 'self'; was: " + link);
+        }
+        if(link != null) {
+            getLinks().arrayAdd(link);
         }
         return cast(this);
     }

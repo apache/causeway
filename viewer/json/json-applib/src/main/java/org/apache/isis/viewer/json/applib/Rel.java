@@ -50,9 +50,11 @@ public enum Rel {
     CAPABILITIES("capabilities"), 
     USER("user"),
     SERVICES("services"), 
+    TYPES("types"),
+    DOMAIN_TYPE("domaintype"),
     
     // implementation specific
-    CONTRIBUTED_BY("contributedby")
+    CONTRIBUTED_BY("contributedby") 
     ;
     
     private final String name;

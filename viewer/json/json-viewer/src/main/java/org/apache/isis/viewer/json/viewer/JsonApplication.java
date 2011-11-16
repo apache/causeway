@@ -27,6 +27,8 @@ import org.apache.isis.viewer.json.viewer.resources.user.UserResourceServerside;
 
 public class JsonApplication extends AbstractJaxRsApplication {
 
+    public static final String SPEC_VERSION = "0.52";
+
     public JsonApplication() {
         addClass(HomePageResourceServerside.class);
         addClass(DomainTypeResourceServerside.class);

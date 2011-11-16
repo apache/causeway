@@ -20,6 +20,7 @@
 package org.apache.isis.core.metamodel.runtimecontext;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Properties;
 
@@ -86,6 +87,11 @@ public abstract class RuntimeContextAbstract implements RuntimeContext, Specific
             @Override
             public ObjectSpecification loadSpecification(final Class<?> cls) {
                 return specificationLoader.loadSpecification(cls);
+            }
+
+            @Override
+            public Collection<ObjectSpecification> allSpecifications() {
+                return specificationLoader.allSpecifications();
             }
         });
     }

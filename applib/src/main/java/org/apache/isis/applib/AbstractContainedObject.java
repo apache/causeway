@@ -66,7 +66,7 @@ public abstract class AbstractContainedObject {
      * 
      * @see DomainObjectContainer#allMatches(Class, Filter)
      */
-    protected <T> List<T> allMatches(final Class<T> ofType, final Filter<T> filter) {
+    protected <T> List<T> allMatches(final Class<T> ofType, final Filter<? super T> filter) {
         return getContainer().allMatches(ofType, filter);
     }
 

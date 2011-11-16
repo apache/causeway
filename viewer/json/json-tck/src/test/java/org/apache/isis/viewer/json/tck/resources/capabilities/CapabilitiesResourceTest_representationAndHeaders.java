@@ -95,12 +95,13 @@ public class CapabilitiesResourceTest_representationAndHeaders {
         JsonRepresentation capabilities = repr.getCapabilities();
         assertThat(capabilities, isMap());
         
+        assertThat(capabilities.getString("specVersion"), is("0.52"));
         assertThat(capabilities.getString("concurrencyChecking"), is("no"));
-        assertThat(capabilities.getString("transientObjects"), is("no"));
+        assertThat(capabilities.getString("transientObjects"), is("yes"));
         assertThat(capabilities.getString("deleteObjects"), is("no"));
         assertThat(capabilities.getString("simpleArguments"), is("no"));
         assertThat(capabilities.getString("partialArguments"), is("no"));
-        assertThat(capabilities.getString("followLinks"), is("no"));
+        assertThat(capabilities.getString("followLinks"), is("yes"));
         assertThat(capabilities.getString("validateOnly"), is("no"));
         assertThat(capabilities.getString("pagination"), is("no"));
         assertThat(capabilities.getString("sorting"), is("no"));

@@ -18,6 +18,8 @@ package org.apache.isis.viewer.json.viewer.resources.domainobjects;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Map.Entry;
 
@@ -33,20 +35,22 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationFilters;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.isis.runtimes.dflt.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.applib.RepresentationType;
 import org.apache.isis.viewer.json.applib.RestfulResponse.HttpStatusCode;
 import org.apache.isis.viewer.json.applib.util.JsonMapper;
+import org.apache.isis.viewer.json.applib.util.UrlEncodingUtils;
 import org.apache.isis.viewer.json.viewer.JsonApplicationException;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
 import org.apache.isis.viewer.json.viewer.representations.RendererFactory;
 import org.apache.isis.viewer.json.viewer.representations.RendererFactoryRegistry;
 import org.apache.isis.viewer.json.viewer.resources.ResourceAbstract;
 import org.apache.isis.viewer.json.viewer.resources.ResourceAbstract.Caching;
-import org.apache.isis.viewer.json.viewer.resources.domainobjects.DomainResourceHelper.MemberMode;
 import org.apache.isis.viewer.json.viewer.resources.domainobjects.JsonValueEncoder.ExpectedStringRepresentingValueException;
 import org.apache.isis.viewer.json.viewer.util.OidUtils;
 import org.apache.isis.viewer.json.viewer.util.UrlDecoderUtils;
@@ -58,8 +62,11 @@ import com.google.common.base.Charsets;
 import com.google.common.collect.Lists;
 import com.google.common.io.ByteStreams;
 
-public class DomainResourceHelper {
-    
+public final class DomainResourceHelper {
+
+    private static final DateFormat ETAG_FORMAT = 
+            new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+
     private final ResourceContext resourceContext;
     private ObjectAdapterLinkTo adapterLinkTo;
 
@@ -77,6 +84,64 @@ public class DomainResourceHelper {
         adapterLinkTo.usingResourceContext(resourceContext).with(objectAdapter);
         return this;
     }
+
+    
+    // //////////////////////////////////////////////////////////////
+    // multiple properties (persist or multi-property update)
+    // //////////////////////////////////////////////////////////////
+
+    static boolean copyOverProperties(ResourceContext resourceContext, ObjectAdapter objectAdapter, JsonRepresentation propertiesList) {
+        final ObjectSpecification objectSpec = objectAdapter.getSpecification();
+        final List<ObjectAssociation> properties = objectSpec.getAssociations(ObjectAssociationFilters.PROPERTIES);
+        boolean allOk = true;
+        
+        for(ObjectAssociation association: properties) {
+            OneToOneAssociation property = (OneToOneAssociation) association;
+            final ObjectSpecification propertySpec = property.getSpecification();
+            final String id = property.getId();
+            final JsonRepresentation propertyRepr = propertiesList.getRepresentation("[id=%s]", id);
+            final JsonRepresentation valueRepr = propertyRepr.getRepresentation("value");
+            
+            final ObjectAdapter valueAdapter = objectAdapterFor(resourceContext, propertySpec, valueRepr);
+            final Consent consent = property.isAssociationValid(objectAdapter, valueAdapter);
+            if(consent.isAllowed()) {
+                try {
+                    property.set(objectAdapter, valueAdapter);
+                } catch(IllegalArgumentException ex) {
+                    propertyRepr.mapPut("invalidReason", ex.getMessage());
+                    allOk = false;
+                }
+            } else {
+                propertyRepr.mapPut("invalidReason", consent.getReason());
+                allOk = false;
+            }
+        }
+
+        return allOk;
+    }
+
+
+    // //////////////////////////////////////////////////////////////
+    // propertyDetails
+    // //////////////////////////////////////////////////////////////
+
+    public Response objectRepresentation() {
+        final RendererFactory rendererFactory = 
+                getRendererFactoryRegistry().find(RepresentationType.DOMAIN_OBJECT);
+        
+        final DomainObjectReprRenderer renderer = 
+                (DomainObjectReprRenderer) rendererFactory.newRenderer(resourceContext, null, JsonRepresentation.newMap());
+        renderer.with(objectAdapter).includesSelf();
+        
+        ResponseBuilder respBuilder = ResourceAbstract.responseOfOk(renderer, Caching.NONE);
+        
+        Version version = objectAdapter.getVersion();
+        if (version != null && version.getTime() != null) {
+            respBuilder.tag(ETAG_FORMAT.format(version.getTime()));
+        }
+        return respBuilder.build();
+    }
+
 
     // //////////////////////////////////////////////////////////////
     // propertyDetails
@@ -190,15 +255,11 @@ public class DomainResourceHelper {
                     "Method not allowed; action '%s' is not query only", action.getId());
         }
 
-        JsonRepresentation arguments = parseQueryString(action, argumentsQueryString);
+        JsonRepresentation arguments = DomainResourceHelper.readQueryStringAsMap(argumentsQueryString);
         
         return invokeActionUsingAdapters(action, arguments);
     }
 
-
-    static JsonRepresentation parseQueryString(ObjectAction action, String argumentsQueryString) {
-        return QueryStringUtil.parseQueryString(argumentsQueryString, "Action", action.getId());
-    }
 
     Response invokeActionIdempotent(
             final String actionId, 
@@ -214,7 +275,7 @@ public class DomainResourceHelper {
                     "Method not allowed; action '%s' is not idempotent", action.getId());
         }
         String bodyAsString = asStringUtf8(body);
-        final JsonRepresentation arguments = readBodyAsMap(bodyAsString);
+        final JsonRepresentation arguments = readAsMap(bodyAsString);
 
         return invokeActionUsingAdapters(action, arguments);
     }
@@ -224,7 +285,7 @@ public class DomainResourceHelper {
                 actionId, Intent.MUTATE);
         
         String bodyAsString = asStringUtf8(body);
-        final JsonRepresentation arguments = readBodyAsMap(bodyAsString);
+        final JsonRepresentation arguments = readAsMap(bodyAsString);
 
         return invokeActionUsingAdapters(action, arguments);
     }
@@ -437,11 +498,15 @@ public class DomainResourceHelper {
      * @param bodyAsString - as per {@link #asStringUtf8(InputStream)}
      * @return
      */
-    ObjectAdapter parseBodyAsMapWithSingleValue(
+    ObjectAdapter parseAsMapWithSingleValue(
             final ObjectSpecification objectSpec, 
             final String bodyAsString) {
-        JsonRepresentation arguments = readBodyAsMap(bodyAsString);
+        JsonRepresentation arguments = readAsMap(bodyAsString);
         
+        return parseAsMapWithSingleValue(objectSpec, arguments);
+    }
+
+    ObjectAdapter parseAsMapWithSingleValue(final ObjectSpecification objectSpec, JsonRepresentation arguments) {
         JsonRepresentation representation = arguments.getRepresentation("value");
         if (arguments.size() != 1 || representation == null) {
             throw JsonApplicationException.create(
@@ -450,15 +515,18 @@ public class DomainResourceHelper {
                     resourceFor(objectSpec));
         }
 
-        ObjectAdapter proposedValueAdapter = objectAdapterFor(resourceContext, objectSpec, representation);
-        return proposedValueAdapter;
+        return objectAdapterFor(resourceContext, objectSpec, representation);
     }
-
-
 
     private List<ObjectAdapter> parseArguments(
             final ObjectAction action, 
             final JsonRepresentation arguments) {
+        final ResourceContext resourceContext2 = resourceContext;
+        
+        return parseArguments(resourceContext2, action, arguments);
+    }
+
+    public static List<ObjectAdapter> parseArguments(final ResourceContext resourceContext, final ObjectAction action, final JsonRepresentation arguments) {
         final List<JsonRepresentation> argList = argListFor(action, arguments);
         
         final List<ObjectAdapter> argAdapters = Lists.newArrayList();
@@ -486,7 +554,7 @@ public class DomainResourceHelper {
     }
 
 
-    private List<JsonRepresentation> argListFor(final ObjectAction action, JsonRepresentation arguments) {
+    private static List<JsonRepresentation> argListFor(final ObjectAction action, JsonRepresentation arguments) {
         List<JsonRepresentation> argList = Lists.newArrayList();
 
         
@@ -517,7 +585,23 @@ public class DomainResourceHelper {
         return argList;
     }
 
-    static JsonRepresentation readBodyAsMap(String body) {
+    public static JsonRepresentation readQueryStringAsMap(String queryString) {
+        if(queryString == null) {
+            return JsonRepresentation.newMap();
+        }
+        String queryStringTrimmed = queryString.trim();
+        if(queryStringTrimmed .isEmpty()) {
+            return JsonRepresentation.newMap();
+        }
+        final String queryStringUrlDecoded = UrlEncodingUtils.urlDecode(queryStringTrimmed);
+        if(queryStringUrlDecoded.isEmpty()) {
+            return JsonRepresentation.newMap();
+        }
+        
+        return read(queryStringUrlDecoded, "query arguments");
+    }
+
+    public static JsonRepresentation readAsMap(String body) {
         if(body == null) {
             return JsonRepresentation.newMap();
         }
@@ -525,30 +609,34 @@ public class DomainResourceHelper {
         if(bodyTrimmed.isEmpty()) {
             return JsonRepresentation.newMap();
         }
+        return read(bodyTrimmed, "body");
+    }
+
+    private static JsonRepresentation read(final String args, final String argsNature) {
         try {
-            final JsonRepresentation jsonRepr = JsonMapper.instance().read(bodyTrimmed);
+            final JsonRepresentation jsonRepr = JsonMapper.instance().read(args);
             if(!jsonRepr.isMap()) {
                 throw JsonApplicationException.create(
                     HttpStatusCode.BAD_REQUEST,
-                    "could not read body as a JSON map");
+                    "could not read %s as a JSON map", argsNature);
             }
             return jsonRepr;
         } catch (JsonParseException e) {
             throw JsonApplicationException.create(
                     HttpStatusCode.BAD_REQUEST, e,
-                    "could not parse body");
+                    "could not parse %s" + argsNature);
         } catch (JsonMappingException e) {
             throw JsonApplicationException.create(
                     HttpStatusCode.BAD_REQUEST, e,
-                    "could not read body as JSON");
+                    "could not read %s as JSON", argsNature);
         } catch (IOException e) {
             throw JsonApplicationException.create(
                     HttpStatusCode.BAD_REQUEST, e,
-                    "could not parse body");
+                    "could not parse %s", argsNature);
         }
     }
 
-    static String asStringUtf8(final InputStream body) {
+    public static String asStringUtf8(final InputStream body) {
         try {
             byte[] byteArray = ByteStreams.toByteArray(body);
             return new String(byteArray, Charsets.UTF_8);

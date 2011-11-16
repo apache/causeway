@@ -108,13 +108,14 @@ public class RestfulClient {
         return follow(link, JsonRepresentation.newMap());
     }
 
-    // TODO: generalize into request args
     public Response follow(LinkRepresentation link, JsonRepresentation requestArgs) throws Exception {
         Response response = link.follow(executor, requestArgs);
+        
         // this is a bit hacky
         @SuppressWarnings("unchecked")
-        BaseClientResponse<String> restEasy = (BaseClientResponse<String>)response;
-        restEasy.setReturnType(String.class);
+        BaseClientResponse<String> restEasyResponse = (BaseClientResponse<String>)response;
+        restEasyResponse.setReturnType(String.class);
+        
         return response;
     }
 

@@ -64,7 +64,7 @@ public class ResourceContextTest_getArg {
                 one(queryParameter).valueOf(parameterMap);
             }
         });
-        resourceContext = new ResourceContext(null, null, null, null, httpServletRequest, null, null, null, null, null, null, null) {
+        resourceContext = new ResourceContext(null, null, null, null, httpServletRequest, null, null, null, null, null, null, null, null) {
             @Override
             void init(RepresentationType representationType) {
                 //

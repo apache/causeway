@@ -32,26 +32,27 @@ import org.jboss.resteasy.annotations.ClientResponseType;
 @Path("/domainTypes")
 public interface DomainTypeResource {
 
+
+    ///////////////////////////////////////////////////////
+    // domainTypes (list of all )
+    ///////////////////////////////////////////////////////
+
     @GET
     @Path("/")
-    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_DOMAIN_TYPES })
+    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_TYPE_LIST })
     @ClientResponseType(entityType=String.class)
     public abstract Response domainTypes();
+
+    
+    ///////////////////////////////////////////////////////
+    // domainType + member description
+    ///////////////////////////////////////////////////////
 
     @GET
     @Path("/{domainType}")
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_DOMAIN_TYPE })
     @ClientResponseType(entityType=String.class)
     public abstract Response domainType(@PathParam("domainType") final String domainType);
-
-    @GET
-    @Path("/{domainType}/isSubtypeOf/invoke")
-    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_DOMAIN_TYPE })
-    @ClientResponseType(entityType=String.class)
-    public abstract Response domainTypeIsSubtypeOf(
-        @PathParam("domainType") final String domainType,
-        @QueryParam("args") final String argumentsQueryString
-        );
 
     @GET
     @Path("/{domainType}/properties/{propertyId}")
@@ -80,5 +81,39 @@ public interface DomainTypeResource {
     @ClientResponseType(entityType=String.class)
     public abstract Response typeActionParam(@PathParam("domainType") final String domainType,
         @PathParam("actionId") final String actionId, @PathParam("paramNum") final String paramName);
+
+    
+    ////////////////////////////////////////////////////////////
+    // domain type actions
+    ////////////////////////////////////////////////////////////
+
+    @GET
+    @Path("/{domainType}/isSubtypeOf/invoke")
+    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_TYPE_ACTION_RESULT, RestfulMediaType.APPLICATION_JSON_ERROR })
+    @ClientResponseType(entityType=String.class)
+    public abstract Response domainTypeIsSubtypeOf(
+        @PathParam("domainType") final String domainType,
+        @QueryParam("supertype") String superType,            // simple style
+        @QueryParam("args") final String argumentsQueryString // formal style 
+        );
+
+    @GET
+    @Path("/{domainType}/isSupertypeOf/invoke")
+    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_TYPE_ACTION_RESULT, RestfulMediaType.APPLICATION_JSON_ERROR })
+    @ClientResponseType(entityType=String.class)
+    public abstract Response domainTypeIsSupertypeOf(
+        @PathParam("domainType") final String domainType,
+        @QueryParam("supertype") String superType,            // simple style
+        @QueryParam("args") final String argumentsQueryString // formal style 
+        );
+
+    @GET
+    @Path("/{domainType}/newTransientInstance/invoke")
+    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_TYPE_ACTION_RESULT, RestfulMediaType.APPLICATION_JSON_ERROR })
+    @ClientResponseType(entityType=String.class)
+    public Response newTransientInstance(
+        @QueryParam("domainType") final String domainType, 
+        @QueryParam("args") final String args);
+
 
 }

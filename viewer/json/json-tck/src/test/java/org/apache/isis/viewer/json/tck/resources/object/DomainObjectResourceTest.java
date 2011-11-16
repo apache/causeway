@@ -34,6 +34,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status.Family;
 
 import org.apache.isis.runtimes.dflt.webserver.WebServer;
+import org.apache.isis.tck.dom.assocs.ChildEntity;
 import org.apache.isis.tck.dom.assocs.ParentEntity;
 import org.apache.isis.tck.dom.scalars.ApplibValuedEntity;
 import org.apache.isis.viewer.json.applib.HttpMethod;
@@ -101,9 +102,9 @@ public class DomainObjectResourceTest {
         assertThat(self, 
                 isLink().rel(Rel.SELF).href(matches(".+objects/OID:32")).method(Method.GET).type(MediaType.APPLICATION_JSON_TYPE).typeParameter("profile", "urn:org.restfulobjects/domainobject"));
         assertThat(domainObjectRepr.getLinkWithRel(Rel.DESCRIBEDBY), 
-                isLink().href(matches(".+" + ParentEntity.class.getName())).method(Method.GET).type(MediaType.APPLICATION_JSON_TYPE).typeParameter("profile", "urn:org.restfulobjects/domaintype"));
+                isLink().href(matches(".+" + ChildEntity.class.getName())).method(Method.GET).type(MediaType.APPLICATION_JSON_TYPE).typeParameter("profile", "urn:org.restfulobjects/domaintype"));
         
-        assertThat(domainObjectRepr.getTitle(), is("parent 5"));
+        assertThat(domainObjectRepr.getTitle(), is("parent 4 - child 2"));
         assertThat(domainObjectRepr.getOid(), is("OID:32"));
 
         // no icon
@@ -137,7 +138,7 @@ public class DomainObjectResourceTest {
         DomainObjectRepresentation domainObjectRepr = givenDomainObjectRepresentationFor("OID:32");
 
         // then
-        assertThat(domainObjectRepr.getTitle(), is("parent 5"));
+        assertThat(domainObjectRepr.getTitle(), is("parent 4 - child 2"));
     }
 
     @Test
@@ -148,7 +149,7 @@ public class DomainObjectResourceTest {
 
         // then
         assertThat(domainObjectRepr.getLinkWithRel(Rel.DESCRIBEDBY), 
-                isLink().href(matches(".+" + ParentEntity.class.getName())).method(Method.GET).type(MediaType.APPLICATION_JSON_TYPE).typeParameter("profile", "urn:org.restfulobjects/domaintype"));
+                isLink().href(matches(".+" + ChildEntity.class.getName())).method(Method.GET).type(MediaType.APPLICATION_JSON_TYPE).typeParameter("profile", "urn:org.restfulobjects/domaintype"));
     }
 
     @Test
@@ -186,12 +187,12 @@ public class DomainObjectResourceTest {
 
         // then properties
         JsonRepresentation properties = domainObjectRepr.getProperties();
-        assertThat(properties.size(), is(1));
+        assertThat(properties.size(), is(2));
         
         // property ('name')
         JsonRepresentation nameProperty = properties.getRepresentation("[id=name]");
         assertThat(nameProperty.getString("memberType"), is("property"));
-        assertThat(nameProperty.getString("value"), is("parent 5"));
+        assertThat(nameProperty.getString("value"), is("child 2"));
         assertThat(nameProperty.getString("disabledReason"), is(nullValue()));
 
         LinkRepresentation namePropertyDetails = nameProperty.getLink("links[rel=details]");
