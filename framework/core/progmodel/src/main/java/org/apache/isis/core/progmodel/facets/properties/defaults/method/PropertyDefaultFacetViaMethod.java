@@ -68,6 +68,9 @@ public class PropertyDefaultFacetViaMethod extends PropertyDefaultFacetAbstract 
     @Override
     public ObjectAdapter getDefault(final ObjectAdapter owningAdapter) {
         final Object result = AdapterInvokeUtils.invoke(method, owningAdapter);
+        if(result == null) {
+            return null;
+        }
         return createAdapter(method.getReturnType(), result);
     }
 

@@ -20,6 +20,7 @@ package org.apache.isis.viewer.json.viewer.resources.capabilities;
 
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.applib.RepresentationType;
+import org.apache.isis.viewer.json.viewer.JsonApplication;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
 import org.apache.isis.viewer.json.viewer.representations.LinkFollower;
 import org.apache.isis.viewer.json.viewer.representations.ReprRenderer;
@@ -64,12 +65,13 @@ public class CapabilitiesReprRenderer extends ReprRendererAbstract<CapabilitiesR
     private void putCapabilities() {
         JsonRepresentation capabilities = JsonRepresentation.newMap();
 
+        capabilities.mapPut("specVersion", JsonApplication.SPEC_VERSION);
         capabilities.mapPut("concurrencyChecking", "no");
-        capabilities.mapPut("transientObjects", "no");
+        capabilities.mapPut("transientObjects", "yes");
         capabilities.mapPut("deleteObjects", "no");
         capabilities.mapPut("simpleArguments", "no");
         capabilities.mapPut("partialArguments", "no");
-        capabilities.mapPut("followLinks", "no");
+        capabilities.mapPut("followLinks", "yes");
         capabilities.mapPut("validateOnly", "no");
         capabilities.mapPut("pagination", "no");
         capabilities.mapPut("sorting", "no");

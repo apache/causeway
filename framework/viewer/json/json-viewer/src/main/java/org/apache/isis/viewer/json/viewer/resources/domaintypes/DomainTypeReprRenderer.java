@@ -24,6 +24,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectActionContainer.Contrib
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.isis.viewer.json.applib.HttpMethod;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.applib.Rel;
 import org.apache.isis.viewer.json.applib.RepresentationType;
@@ -33,6 +34,7 @@ import org.apache.isis.viewer.json.viewer.representations.LinkFollower;
 import org.apache.isis.viewer.json.viewer.representations.ReprRenderer;
 import org.apache.isis.viewer.json.viewer.representations.ReprRendererAbstract;
 import org.apache.isis.viewer.json.viewer.representations.ReprRendererFactoryAbstract;
+import org.codehaus.jackson.node.NullNode;
 
 import com.google.common.base.Strings;
 
@@ -123,10 +125,47 @@ public class DomainTypeReprRenderer extends ReprRendererAbstract<DomainTypeReprR
     }
 
     private void addTypeActions() {
-        final ObjectSpecAndSuperSpec objectSpecAndSuperSpec = new ObjectSpecAndSuperSpec(objectSpecification, null);
-        final LinkBuilder linkBuilder = TypeActionIsSubtypeOfReprRenderer.newLinkToBuilder(getResourceContext(), Rel.TYPE_ACTION, objectSpecAndSuperSpec);
-        JsonRepresentation link = linkBuilder.withId("isSubtypeOf").build();
-        getTypeActions().arrayAdd(link);
+        getTypeActions().arrayAdd(linkToIsSubtypeOf());
+        getTypeActions().arrayAdd(linkToIsSupertypeOf());
+        getTypeActions().arrayAdd(linkToNewTransientInstance());
+    }
+
+    private JsonRepresentation linkToIsSubtypeOf() {
+        final String url = "domainTypes/" + objectSpecification.getFullIdentifier() + "/typeactions/isSubtypeOf/invoke";
+        
+        final LinkBuilder linkBuilder = LinkBuilder.newBuilder(getResourceContext(), Rel.TYPE_ACTION, RepresentationType.TYPE_ACTION_RESULT, url);
+        final JsonRepresentation arguments = argumentsTo(getResourceContext(), "supertype", null);
+        JsonRepresentation link = linkBuilder.withArguments(arguments).withId("isSubtypeOf").build();
+        return link;
+    }
+
+    private JsonRepresentation linkToIsSupertypeOf() {
+        final String url = "domainTypes/" + objectSpecification.getFullIdentifier() + "/typeactions/isSupertypeOf/invoke";
+        
+        final LinkBuilder linkBuilder = LinkBuilder.newBuilder(getResourceContext(), Rel.TYPE_ACTION, RepresentationType.TYPE_ACTION_RESULT, url);
+        final JsonRepresentation arguments = argumentsTo(getResourceContext(), "subtype", null);
+        JsonRepresentation link = linkBuilder.withArguments(arguments).withId("isSupertypeOf").build();
+        return link;
+    }
+
+    private JsonRepresentation linkToNewTransientInstance() {
+        final String url = "domainTypes/" + objectSpecification.getFullIdentifier() + "/typeactions/newTransientInstance/invoke";
+        
+        final LinkBuilder linkBuilder = LinkBuilder.newBuilder(getResourceContext(), Rel.TYPE_ACTION, RepresentationType.TYPE_ACTION_RESULT, url);
+        JsonRepresentation link = linkBuilder.withId("newTransientInstance").build();
+        return link;
+    }
+
+    public static JsonRepresentation argumentsTo(ResourceContext resourceContext, String paramName, final ObjectSpecification objectSpec) {
+        final JsonRepresentation arguments = JsonRepresentation.newMap();
+        final JsonRepresentation link = JsonRepresentation.newMap();
+        arguments.mapPut(paramName, link);
+        if(objectSpec != null) {
+            link.mapPut("href", resourceContext.urlFor("domainTypes/" + objectSpec.getFullIdentifier()));
+        } else {
+            link.mapPut("href", NullNode.instance);
+        }
+        return arguments;
     }
 
     

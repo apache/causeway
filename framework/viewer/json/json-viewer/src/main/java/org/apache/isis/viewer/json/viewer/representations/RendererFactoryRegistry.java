@@ -31,9 +31,9 @@ import org.apache.isis.viewer.json.viewer.resources.domainobjects.ObjectActionRe
 import org.apache.isis.viewer.json.viewer.resources.domainobjects.ObjectCollectionReprRenderer;
 import org.apache.isis.viewer.json.viewer.resources.domainobjects.ObjectPropertyReprRenderer;
 import org.apache.isis.viewer.json.viewer.resources.domainobjects.ScalarValueReprRenderer;
-import org.apache.isis.viewer.json.viewer.resources.domaintypes.TypeActionIsSubtypeOfReprRenderer;
+import org.apache.isis.viewer.json.viewer.resources.domaintypes.TypeActionResultReprRenderer;
 import org.apache.isis.viewer.json.viewer.resources.domaintypes.DomainTypeReprRenderer;
-import org.apache.isis.viewer.json.viewer.resources.domaintypes.DomainTypesReprRenderer;
+import org.apache.isis.viewer.json.viewer.resources.domaintypes.TypeListReprRenderer;
 import org.apache.isis.viewer.json.viewer.resources.domaintypes.ActionParameterDescriptionReprRenderer;
 import org.apache.isis.viewer.json.viewer.resources.domaintypes.ActionDescriptionReprRenderer;
 import org.apache.isis.viewer.json.viewer.resources.domaintypes.CollectionDescriptionReprRenderer;
@@ -65,13 +65,13 @@ public class RendererFactoryRegistry {
         register(new ActionResultReprRenderer.Factory());
         register(new ListReprRenderer.Factory());
         register(new ScalarValueReprRenderer.Factory());
-        register(new DomainTypesReprRenderer.Factory());
+        register(new TypeListReprRenderer.Factory());
         register(new DomainTypeReprRenderer.Factory());
         register(new PropertyDescriptionReprRenderer.Factory());
         register(new CollectionDescriptionReprRenderer.Factory());
         register(new ActionDescriptionReprRenderer.Factory());
         register(new ActionParameterDescriptionReprRenderer.Factory());
-        register(new TypeActionIsSubtypeOfReprRenderer.Factory());
+        register(new TypeActionResultReprRenderer.Factory());
     }
 
     public void register(RendererFactory factory) {

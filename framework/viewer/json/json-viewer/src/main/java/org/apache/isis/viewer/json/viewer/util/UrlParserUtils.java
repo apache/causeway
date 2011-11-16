@@ -38,8 +38,12 @@ public final class UrlParserUtils {
     }
 
 
-    public final static String domainTypeFromLink(final JsonRepresentation link) {
-        String href = link.getString("href");
+    public final static String domainTypeFrom(final JsonRepresentation link) {
+        return domainTypeFrom(link.getString("href"));
+    }
+
+
+    public static String domainTypeFrom(String href) {
         Matcher matcher = DOMAIN_TYPE.matcher(href);
         if(!matcher.matches()) {
             return null;

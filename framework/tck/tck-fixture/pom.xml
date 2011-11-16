@@ -25,7 +25,6 @@
         <version>0.2.0-incubating-SNAPSHOT</version>
     </parent>
 
-    <groupId>org.apache.isis.tck</groupId>
 	<artifactId>tck-fixture</artifactId>
 	<name>Quickstart Fixtures</name>
 

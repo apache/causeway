@@ -28,9 +28,9 @@ import org.apache.isis.viewer.json.applib.domainobjects.ObjectActionRepresentati
 import org.apache.isis.viewer.json.applib.domainobjects.ObjectCollectionRepresentation;
 import org.apache.isis.viewer.json.applib.domainobjects.ObjectPropertyRepresentation;
 import org.apache.isis.viewer.json.applib.domainobjects.ScalarValueRepresentation;
-import org.apache.isis.viewer.json.applib.domaintypes.TypeActionIsSubtypeOfRepresentation;
+import org.apache.isis.viewer.json.applib.domaintypes.TypeActionResultRepresentation;
 import org.apache.isis.viewer.json.applib.domaintypes.DomainTypeRepresentation;
-import org.apache.isis.viewer.json.applib.domaintypes.DomainTypesRepresentation;
+import org.apache.isis.viewer.json.applib.domaintypes.TypeListRepresentation;
 import org.apache.isis.viewer.json.applib.domaintypes.ActionParameterDescriptionRepresentation;
 import org.apache.isis.viewer.json.applib.domaintypes.ActionDescriptionRepresentation;
 import org.apache.isis.viewer.json.applib.domaintypes.CollectionDescriptionRepresentation;
@@ -51,13 +51,13 @@ public enum RepresentationType {
     OBJECT_COLLECTION(RestfulMediaType.APPLICATION_JSON_OBJECT_COLLECTION, ObjectCollectionRepresentation.class),
     OBJECT_ACTION(RestfulMediaType.APPLICATION_JSON_OBJECT_ACTION, ObjectActionRepresentation.class),
     ACTION_RESULT(RestfulMediaType.APPLICATION_JSON_ACTION_RESULT, ActionResultRepresentation.class),
-    DOMAIN_TYPES(RestfulMediaType.APPLICATION_JSON_DOMAIN_TYPES, DomainTypesRepresentation.class),
+    TYPE_LIST(RestfulMediaType.APPLICATION_JSON_TYPE_LIST, TypeListRepresentation.class),
     DOMAIN_TYPE(RestfulMediaType.APPLICATION_JSON_DOMAIN_TYPE, DomainTypeRepresentation.class),
     PROPERTY_DESCRIPTION(RestfulMediaType.APPLICATION_JSON_PROPERTY_DESCRIPTION, PropertyDescriptionRepresentation.class),
     COLLECTION_DESCRIPTION(RestfulMediaType.APPLICATION_JSON_COLLECTION_DESCRIPTION, CollectionDescriptionRepresentation.class),
     ACTION_DESCRIPTION(RestfulMediaType.APPLICATION_JSON_ACTION_DESCRIPTION, ActionDescriptionRepresentation.class),
     ACTION_PARAMETER_DESCRIPTION(RestfulMediaType.APPLICATION_JSON_ACTION_PARAMETER_DESCRIPTION, ActionParameterDescriptionRepresentation.class), 
-    TYPE_ACTION_RESULT(RestfulMediaType.APPLICATION_JSON_TYPEACTION_ISSUBTYPEOF, TypeActionIsSubtypeOfRepresentation.class), 
+    TYPE_ACTION_RESULT(RestfulMediaType.APPLICATION_JSON_TYPE_ACTION_RESULT, TypeActionResultRepresentation.class), 
     ERROR(RestfulMediaType.APPLICATION_JSON_ERROR, ErrorRepresentation.class),
     GENERIC(MediaType.APPLICATION_JSON, JsonRepresentation.class); 
     

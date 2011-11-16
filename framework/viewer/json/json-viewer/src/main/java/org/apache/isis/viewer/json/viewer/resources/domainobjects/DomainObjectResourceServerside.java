@@ -17,8 +17,6 @@
 package org.apache.isis.viewer.json.viewer.resources.domainobjects;
 
 import java.io.InputStream;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -31,32 +29,86 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.ResponseBuilder;
 
+import org.apache.isis.core.commons.exceptions.NotYetImplementedException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.isis.runtimes.dflt.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.applib.RepresentationType;
 import org.apache.isis.viewer.json.applib.RestfulMediaType;
 import org.apache.isis.viewer.json.applib.RestfulResponse.HttpStatusCode;
+import org.apache.isis.viewer.json.applib.blocks.LinkRepresentation;
 import org.apache.isis.viewer.json.applib.domainobjects.DomainObjectResource;
 import org.apache.isis.viewer.json.viewer.JsonApplicationException;
-import org.apache.isis.viewer.json.viewer.representations.RendererFactory;
-import org.apache.isis.viewer.json.viewer.representations.RendererFactoryRegistry;
 import org.apache.isis.viewer.json.viewer.resources.ResourceAbstract;
 import org.apache.isis.viewer.json.viewer.resources.domainobjects.DomainResourceHelper.Intent;
 import org.apache.isis.viewer.json.viewer.resources.domainobjects.DomainResourceHelper.MemberMode;
+import org.apache.isis.viewer.json.viewer.util.UrlParserUtils;
+import org.jboss.resteasy.annotations.ClientResponseType;
 
 @Path("/objects")
 public class DomainObjectResourceServerside extends ResourceAbstract implements
         DomainObjectResource {
 
-    private static final DateFormat ETAG_FORMAT = 
-            new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+
+    ////////////////////////////////////////////////////////////
+    // persist
+    ////////////////////////////////////////////////////////////
+
+    @POST
+    @Path("/")
+    @Consumes({ MediaType.WILDCARD })
+    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_DOMAIN_OBJECT, RestfulMediaType.APPLICATION_JSON_ERROR })
+    @ClientResponseType(entityType=String.class)
+    public Response persist(final InputStream object) {
+
+        init(RepresentationType.DOMAIN_OBJECT);
+
+        final String objectStr = DomainResourceHelper.asStringUtf8(object);
+        final JsonRepresentation objectRepr = DomainResourceHelper.readAsMap(objectStr);
+        if(!objectRepr.isMap()) {
+            throw JsonApplicationException.create(HttpStatusCode.BAD_REQUEST, "Body is not a map; got %s", objectRepr);
+        }
+
+        final LinkRepresentation describedByLink = objectRepr.getLink("links[rel=describedby]");
+        if(!describedByLink.isLink()) {
+            throw JsonApplicationException.create(HttpStatusCode.BAD_REQUEST, "Could not determine type of domain object to persist (no links[rel=describedby] link); got %s", objectRepr);
+        }
+        
+        final String domainTypeStr = UrlParserUtils.domainTypeFrom(describedByLink);
+        if(domainTypeStr == null) {
+            throw JsonApplicationException.create(HttpStatusCode.BAD_REQUEST, "Could not determine type of domain object to persist (no href in links[rel=describedby]); got %s", describedByLink);
+        }
+        final ObjectSpecification domainTypeSpec = getSpecificationLoader().loadSpecification(domainTypeStr);
+        if(domainTypeSpec == null) {
+            throw JsonApplicationException.create(HttpStatusCode.BAD_REQUEST, "Could not determine type of domain object to persist (no such class '%s')", domainTypeStr);
+        }
+        
+        final ObjectAdapter objectAdapter = getResourceContext().getPersistenceSession().createInstance(domainTypeSpec);
+
+        final JsonRepresentation propertiesList = objectRepr.getArrayEnsured("members[memberType=property]");
+        if(propertiesList == null) {
+            throw JsonApplicationException.create(HttpStatusCode.BAD_REQUEST, "Could not find properties list (no members[memberType=property]); got %s", objectRepr);
+        }
+        if(!DomainResourceHelper.copyOverProperties(getResourceContext(), objectAdapter, propertiesList)) {
+            throw JsonApplicationException.create(HttpStatusCode.BAD_REQUEST, objectRepr, "Illegal property value");
+        }
+        
+        final Consent validity = objectAdapter.getSpecification().isValid(objectAdapter);
+        if(validity.isVetoed()) {
+            throw JsonApplicationException.create(HttpStatusCode.BAD_REQUEST, objectRepr, validity.getReason());
+        }
+        getResourceContext().getPersistenceSession().makePersistent(objectAdapter);
+
+        return new DomainResourceHelper(getResourceContext(), objectAdapter).objectRepresentation();
+    }
+
+    
+
 
     ////////////////////////////////////////////////////////////
     // domain object
@@ -71,34 +123,57 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements
 
         final ObjectAdapter objectAdapter = getObjectAdapter(oidStr);
         
-        final RendererFactory rendererFactory = 
-                rendererFactoryRegistry.find(RepresentationType.DOMAIN_OBJECT);
-        
-        final DomainObjectReprRenderer renderer = 
-                (DomainObjectReprRenderer) rendererFactory.newRenderer(getResourceContext(), null, JsonRepresentation.newMap());
-        renderer.with(objectAdapter).includesSelf();
-        
-        ResponseBuilder respBuilder = responseOfOk(renderer, Caching.NONE);
-        
-        Version version = objectAdapter.getVersion();
-        if (version != null && version.getTime() != null) {
-            respBuilder.tag(ETAG_FORMAT.format(version.getTime()));
-        }
-        return respBuilder.build();
+        final DomainResourceHelper helper = new DomainResourceHelper(getResourceContext(), objectAdapter);
+        return helper.objectRepresentation();
     }
 
     @PUT
     @Path("/{oid}")
-    @Consumes({ MediaType.APPLICATION_JSON })
+    @Consumes({ MediaType.WILDCARD })
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_DOMAIN_OBJECT, RestfulMediaType.APPLICATION_JSON_ERROR })
     public Response object(
         @PathParam("oid") final String oidStr, 
-        final InputStream arguments) {
+        final InputStream object) {
 
         init(RepresentationType.DOMAIN_OBJECT);
 
-        // TODO
-        throw new UnsupportedOperationException();
+        final String objectStr = DomainResourceHelper.asStringUtf8(object);
+        final JsonRepresentation objectRepr = DomainResourceHelper.readAsMap(objectStr);
+        if(!objectRepr.isMap()) {
+            throw JsonApplicationException.create(HttpStatusCode.BAD_REQUEST, "Body is not a map; got %s", objectRepr);
+        }
+
+        final ObjectAdapter objectAdapter = getObjectAdapter(oidStr);
+
+        final JsonRepresentation propertiesList = objectRepr.getArrayEnsured("members[memberType=property]");
+        if(propertiesList == null) {
+            throw JsonApplicationException.create(HttpStatusCode.BAD_REQUEST, "Could not find properties list (no members[memberType=property]); got %s", objectRepr);
+        }
+
+        final IsisTransactionManager transactionManager = getResourceContext().getPersistenceSession().getTransactionManager();
+        transactionManager.startTransaction();
+        try {
+            if(!DomainResourceHelper.copyOverProperties(getResourceContext(), objectAdapter, propertiesList)) {
+                transactionManager.abortTransaction();
+                throw JsonApplicationException.create(HttpStatusCode.BAD_REQUEST, objectRepr, "Illegal property value");
+            }
+            
+            final Consent validity = objectAdapter.getSpecification().isValid(objectAdapter);
+            if(validity.isVetoed()) {
+                transactionManager.abortTransaction();
+                throw JsonApplicationException.create(HttpStatusCode.BAD_REQUEST, objectRepr, validity.getReason());
+            }
+
+            transactionManager.endTransaction();
+        } finally {
+            // in case an exception got thrown somewhere...
+            if(!transactionManager.getTransaction().getState().isComplete()) {
+                transactionManager.abortTransaction();
+            }
+        }
+
+        final DomainResourceHelper helper = new DomainResourceHelper(getResourceContext(), objectAdapter);
+        return helper.objectRepresentation();
     }
 
     ////////////////////////////////////////////////////////////
@@ -107,6 +182,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements
 
     @GET
     @Path("/{oid}/properties/{propertyId}")
+    @Consumes({ MediaType.WILDCARD })
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT_PROPERTY, RestfulMediaType.APPLICATION_JSON_ERROR })
     public Response propertyDetails(
             @PathParam("oid") final String oidStr,
@@ -121,6 +197,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements
 
     @PUT
     @Path("/{oid}/properties/{propertyId}")
+    @Consumes({ MediaType.WILDCARD })
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ERROR })
     public Response modifyProperty(
             @PathParam("oid") final String oidStr,
@@ -137,7 +214,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements
         ObjectSpecification propertySpec = property.getSpecification();
         String bodyAsString = DomainResourceHelper.asStringUtf8(body);
 
-        ObjectAdapter argAdapter = helper.parseBodyAsMapWithSingleValue(propertySpec, bodyAsString);
+        ObjectAdapter argAdapter = helper.parseAsMapWithSingleValue(propertySpec, bodyAsString);
 
         Consent consent = property.isAssociationValid(objectAdapter, argAdapter);
         if (consent.isVetoed()) {
@@ -198,6 +275,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements
 
     @PUT
     @Path("/{oid}/collections/{collectionId}")
+    @Consumes({ MediaType.WILDCARD })
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ERROR })
     public Response addToSet(
             @PathParam("oid") final String oidStr,
@@ -219,7 +297,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements
 
         ObjectSpecification collectionSpec = collection.getSpecification();
         String bodyAsString = DomainResourceHelper.asStringUtf8(body);
-        ObjectAdapter argAdapter = helper.parseBodyAsMapWithSingleValue(collectionSpec, bodyAsString);
+        ObjectAdapter argAdapter = helper.parseAsMapWithSingleValue(collectionSpec, bodyAsString);
 
         Consent consent = collection.isValidToAdd(objectAdapter, argAdapter);
         if (consent.isVetoed()) {
@@ -235,6 +313,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements
 
     @POST
     @Path("/{oid}/collections/{collectionId}")
+    @Consumes({ MediaType.WILDCARD })
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ERROR })
     public Response addToList(
             @PathParam("oid") final String oidStr,
@@ -256,7 +335,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements
 
         ObjectSpecification collectionSpec = collection.getSpecification();
         String bodyAsString = DomainResourceHelper.asStringUtf8(body);
-        ObjectAdapter argAdapter = helper.parseBodyAsMapWithSingleValue(collectionSpec, bodyAsString);
+        ObjectAdapter argAdapter = helper.parseAsMapWithSingleValue(collectionSpec, bodyAsString);
 
         Consent consent = collection.isValidToAdd(objectAdapter, argAdapter);
         if (consent.isVetoed()) {
@@ -276,7 +355,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements
     public Response removeFromCollection(
         @PathParam("oid") final String oidStr,
         @PathParam("collectionId") final String collectionId,
-        final InputStream body) {
+        @QueryParam("args") final String arguments) {
 
         init();
         
@@ -287,8 +366,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements
                 collectionId, Intent.MUTATE);
 
         ObjectSpecification collectionSpec = collection.getSpecification();
-        String bodyAsString = DomainResourceHelper.asStringUtf8(body);
-        ObjectAdapter argAdapter = helper.parseBodyAsMapWithSingleValue(collectionSpec, bodyAsString);
+        ObjectAdapter argAdapter = helper.parseAsMapWithSingleValue(collectionSpec, arguments);
 
         Consent consent = collection.isValidToRemove(objectAdapter, argAdapter);
         if (consent.isVetoed()) {
@@ -343,6 +421,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements
 
     @PUT
     @Path("/{oid}/actions/{actionId}/invoke")
+    @Consumes({ MediaType.WILDCARD })
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_DOMAIN_OBJECT, RestfulMediaType.APPLICATION_JSON_LIST, RestfulMediaType.APPLICATION_JSON_SCALAR_VALUE, RestfulMediaType.APPLICATION_JSON_ERROR })
     public Response invokeActionIdempotent(
             @PathParam("oid") final String oidStr,
@@ -359,6 +438,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements
 
     @POST
     @Path("/{oid}/actions/{actionId}/invoke")
+    @Consumes({ MediaType.WILDCARD })
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_DOMAIN_OBJECT, RestfulMediaType.APPLICATION_JSON_LIST, RestfulMediaType.APPLICATION_JSON_SCALAR_VALUE, RestfulMediaType.APPLICATION_JSON_ERROR })
     public Response invokeAction(
             @PathParam("oid") final String oidStr,

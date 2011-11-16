@@ -36,7 +36,8 @@ public abstract class AbstractObjectMemberReprRenderer<R extends ReprRendererAbs
         INLINE,
         FOLLOWED,
         STANDALONE,
-        MUTATED;
+        MUTATED,
+        ARGUMENTS;
 
         public boolean isInline() {
             return this == INLINE;
@@ -49,6 +50,9 @@ public abstract class AbstractObjectMemberReprRenderer<R extends ReprRendererAbs
         }
         public boolean isMutated() {
             return this == MUTATED;
+        }
+        public boolean isArguments() {
+            return this == ARGUMENTS;
         }
     }
     
@@ -114,6 +118,11 @@ public abstract class AbstractObjectMemberReprRenderer<R extends ReprRendererAbs
         return cast(this);
     }
     
+    public R asArguments() {
+        mode = Mode.ARGUMENTS;
+        return cast(this);
+    }
+
     /**
      * For subclasses to call from their {@link #render()} method.
      */

@@ -31,7 +31,7 @@ public class DomainResourceHelperTest_readBodyAsMap {
 
     @Test
     public void whenNull() throws Exception {
-        representation = DomainResourceHelper.readBodyAsMap(null);
+        representation = DomainResourceHelper.readAsMap(null);
         
         assertThat(representation.isMap(), is(true));
         assertThat(representation.size(), is(0));
@@ -39,7 +39,7 @@ public class DomainResourceHelperTest_readBodyAsMap {
 
     @Test
     public void whenEmptyString() throws Exception {
-        representation = DomainResourceHelper.readBodyAsMap("");
+        representation = DomainResourceHelper.readAsMap("");
         
         assertThat(representation.isMap(), is(true));
         assertThat(representation.size(), is(0));
@@ -47,7 +47,7 @@ public class DomainResourceHelperTest_readBodyAsMap {
 
     @Test
     public void whenWhitespaceOnlyString() throws Exception {
-        representation = DomainResourceHelper.readBodyAsMap(" \t ");
+        representation = DomainResourceHelper.readAsMap(" \t ");
         
         assertThat(representation.isMap(), is(true));
         assertThat(representation.size(), is(0));
@@ -55,7 +55,7 @@ public class DomainResourceHelperTest_readBodyAsMap {
 
     @Test
     public void emptyMap() throws Exception {
-        representation = DomainResourceHelper.readBodyAsMap("{}");
+        representation = DomainResourceHelper.readAsMap("{}");
         
         assertThat(representation.isMap(), is(true));
         assertThat(representation.size(), is(0));
@@ -63,7 +63,7 @@ public class DomainResourceHelperTest_readBodyAsMap {
 
     @Test
     public void map() throws Exception {
-        representation = DomainResourceHelper.readBodyAsMap("{\"foo\":\"bar\"}");
+        representation = DomainResourceHelper.readAsMap("{\"foo\":\"bar\"}");
         
         assertThat(representation.isMap(), is(true));
         assertThat(representation.size(), is(1));
@@ -71,7 +71,7 @@ public class DomainResourceHelperTest_readBodyAsMap {
 
     @Test(expected=JsonApplicationException.class)
     public void whenArray() throws Exception {
-        DomainResourceHelper.readBodyAsMap("[]");
+        DomainResourceHelper.readAsMap("[]");
     }
 
 }

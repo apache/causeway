@@ -16,6 +16,8 @@
  */
 package org.apache.isis.core.metamodel.spec;
 
+import java.util.Collection;
+
 /**
  * Allows a SpecificationLookup to be provided even if the concrete implementation is only available later.
  */
@@ -33,6 +35,11 @@ public class SpecificationLookupDelegator extends SpecificationLookupAbstract {
             throw new IllegalStateException("No SpecificationLookup provided");
         }
         return specificationLookupDelegate.loadSpecification(cls);
+    }
+
+    @Override
+    public Collection<ObjectSpecification> allSpecifications() {
+        return specificationLookupDelegate.allSpecifications();
     }
 
 }

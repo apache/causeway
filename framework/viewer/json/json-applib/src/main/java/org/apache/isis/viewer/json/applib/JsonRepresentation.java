@@ -221,12 +221,23 @@ public class JsonRepresentation {
         if (representsNull(node)) {
             return null;
         }
+        
         if (!isArray(node)) {
             throw new IllegalArgumentException(formatExMsg(path, "is not an array"));
         }
         return new JsonRepresentation(node);
     }
 
+    public JsonRepresentation getArrayEnsured(String path) {
+        return getArrayEnsured(path, getNode(path));
+    }
+
+    private JsonRepresentation getArrayEnsured(String path, JsonNode node) {
+        if (representsNull(node)) {
+            return null;
+        }
+        return new JsonRepresentation(node).ensureArray();
+    }
 
     
     /////////////////////////////////////////////////////////////////////////

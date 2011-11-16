@@ -37,7 +37,7 @@ public class UrlParserUtilsTest {
     public void domainTypeFromLink() throws Exception {
         JsonRepresentation link = JsonRepresentation.newMap();
         link.mapPut("href", "http://localhost/domainTypes/com.mycompany.myapp.Customer");
-        String oidFromHref = UrlParserUtils.domainTypeFromLink(link);
+        String oidFromHref = UrlParserUtils.domainTypeFrom(link);
         assertEquals("com.mycompany.myapp.Customer", oidFromHref);
     }
 
@@ -45,7 +45,7 @@ public class UrlParserUtilsTest {
     public void domainTypeFromLinkTrailingSlash() throws Exception {
         JsonRepresentation link = JsonRepresentation.newMap();
         link.mapPut("href", "http://localhost/domainTypes/com.mycompany.myapp.Customer/");
-        String oidFromHref = UrlParserUtils.domainTypeFromLink(link);
+        String oidFromHref = UrlParserUtils.domainTypeFrom(link);
         assertEquals("com.mycompany.myapp.Customer", oidFromHref);
     }
 
@@ -53,7 +53,7 @@ public class UrlParserUtilsTest {
     public void domainTypeFromLinkFollowingStuff() throws Exception {
         JsonRepresentation link = JsonRepresentation.newMap();
         link.mapPut("href", "http://localhost/domainTypes/com.mycompany.myapp.Customer/otherStuffHere");
-        String oidFromHref = UrlParserUtils.domainTypeFromLink(link);
+        String oidFromHref = UrlParserUtils.domainTypeFrom(link);
         assertEquals("com.mycompany.myapp.Customer", oidFromHref);
     }
 

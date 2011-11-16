@@ -115,7 +115,7 @@ public abstract class ResourceAbstract {
     protected void init(RepresentationType representationType) {
         this.resourceContext =
             new ResourceContext(representationType, httpHeaders, uriInfo, request, httpServletRequest, httpServletResponse, 
-                    securityContext, getOidStringifier(), getLocalization(), getAuthenticationSession(), getPersistenceSession(), getAdapterManager());
+                    securityContext, getOidStringifier(), getLocalization(), getAuthenticationSession(), getPersistenceSession(), getAdapterManager(), getSpecificationLoader());
     }
     
     protected void init() {

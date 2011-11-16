@@ -331,7 +331,7 @@ public class DomainObjectContainerDefault implements DomainObjectContainer, Quer
     }
 
     @Override
-    public <T> List<T> allMatches(final Class<T> cls, final Filter<T> filter) {
+    public <T> List<T> allMatches(final Class<T> cls, final Filter<? super T> filter) {
         final List<T> allInstances = allInstances(cls);
         final List<T> filtered = new ArrayList<T>();
         for (T instance : allInstances) {

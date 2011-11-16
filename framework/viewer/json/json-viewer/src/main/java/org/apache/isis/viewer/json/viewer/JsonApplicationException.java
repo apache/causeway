@@ -18,6 +18,7 @@
  */
 package org.apache.isis.viewer.json.viewer;
 
+import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.applib.RestfulResponse.HttpStatusCode;
 
 public class JsonApplicationException extends RuntimeException implements HasHttpStatusCode {
@@ -27,7 +28,7 @@ public class JsonApplicationException extends RuntimeException implements HasHtt
     }
 
     public static JsonApplicationException create(HttpStatusCode httpStatusCode, String message,  Object... args) {
-        return create(httpStatusCode, null, message, args);
+        return create(httpStatusCode, (Exception)null, message, args);
     }
 
     public static JsonApplicationException create(HttpStatusCode httpStatusCode, Exception cause) {
@@ -35,7 +36,11 @@ public class JsonApplicationException extends RuntimeException implements HasHtt
     }
     
     public static JsonApplicationException create(HttpStatusCode httpStatusCode, Exception cause, String message, Object... args) {
-        return new JsonApplicationException(httpStatusCode, formatString(message, args), cause);
+        return new JsonApplicationException(httpStatusCode, formatString(message, args), cause, null);
+    }
+
+    public static JsonApplicationException create(HttpStatusCode httpStatusCode, JsonRepresentation repr, String message, Object... args) {
+        return new JsonApplicationException(httpStatusCode, formatString(message, args), null, repr);
     }
 
     private static String formatString(String formatStr, Object... args) {
@@ -44,14 +49,20 @@ public class JsonApplicationException extends RuntimeException implements HasHtt
 
     private static final long serialVersionUID = 1L;
     private HttpStatusCode httpStatusCode;
+    private final JsonRepresentation jsonRepresentation;
 
-    private JsonApplicationException(HttpStatusCode httpStatusCode, String message, Throwable ex) {
+    private JsonApplicationException(HttpStatusCode httpStatusCode, String message, Throwable ex, JsonRepresentation jsonRepresentation) {
         super(message, ex);
         this.httpStatusCode = httpStatusCode;
+        this.jsonRepresentation = jsonRepresentation;
     }
-    
+
     public HttpStatusCode getHttpStatusCode() {
         return httpStatusCode;
+    }
+
+    public JsonRepresentation getJsonRepresentation() {
+        return jsonRepresentation;
     }
 
 

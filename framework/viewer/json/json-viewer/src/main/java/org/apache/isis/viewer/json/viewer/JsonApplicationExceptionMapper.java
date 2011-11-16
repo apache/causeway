@@ -26,6 +26,7 @@ import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
 import org.apache.commons.lang.exception.ExceptionUtils;
+import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.applib.RestfulMediaType;
 import org.apache.isis.viewer.json.applib.RestfulResponse;
 import org.apache.isis.viewer.json.applib.util.JsonMapper;
@@ -107,7 +108,11 @@ public class JsonApplicationExceptionMapper implements ExceptionMapper<JsonAppli
 
     }
     
-    static String jsonFor(Exception ex) {
+    static String jsonFor(JsonApplicationException ex) {
+        final JsonRepresentation jsonRepresentation = ex.getJsonRepresentation();
+        if(jsonRepresentation != null) {
+            return jsonRepresentation.toString();
+        }
         try {
             return JsonMapper.instance().write(ExceptionPojo.create(ex));
         } catch (Exception e) {

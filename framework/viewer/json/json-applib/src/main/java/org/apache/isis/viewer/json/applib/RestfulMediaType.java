@@ -41,9 +41,9 @@ public final class RestfulMediaType {
     public final static String APPLICATION_JSON_OBJECT_COLLECTION = BASE + "objectcollection"+ "";
     public final static String APPLICATION_JSON_OBJECT_ACTION = BASE + "objectaction"+ "";
     public final static String APPLICATION_JSON_ACTION_RESULT = BASE + "actionresult"+ "";
-    public final static String APPLICATION_JSON_DOMAIN_TYPES = BASE + "domaintypes"+ "";
+    public final static String APPLICATION_JSON_TYPE_LIST = BASE + "typelist"+ "";
     public final static String APPLICATION_JSON_DOMAIN_TYPE = BASE + "domaintype"+ "";
-    public final static String APPLICATION_JSON_TYPEACTION_ISSUBTYPEOF = BASE + "typeaction/issubtypeof"+ "";
+    public final static String APPLICATION_JSON_TYPE_ACTION_RESULT = BASE + "typeactionresult"+ "";
     public final static String APPLICATION_JSON_PROPERTY_DESCRIPTION = BASE + "propertydescription"+ "";
     public final static String APPLICATION_JSON_COLLECTION_DESCRIPTION = BASE + "collectiondescription"+ "";
     public final static String APPLICATION_JSON_ACTION_DESCRIPTION = BASE + "actiondescription"+ "";

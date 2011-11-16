@@ -95,7 +95,10 @@ public final class LinkFollower {
         return new LinkFollower(null, Mode.TERMINATED, node);
     }
 
-    public boolean isFollowing() {
+    /**
+     * Not public API; use {@link #matches(JsonRepresentation)}.
+     */
+    boolean isFollowing() {
         return mode == Mode.FOLLOWING;
     }
 
@@ -113,12 +116,11 @@ public final class LinkFollower {
      * <p>
      * Any keys in the criterium that are not present in the map will be ignored.
      */
-    public boolean matches(JsonRepresentation map) {
+    public boolean matches(JsonRepresentation link) {
         if(!isFollowing()) {
             return false;
         }
-        return root == null || root.matches(map);
+        return root == null || root.matches(link);
     }
-
 
 }

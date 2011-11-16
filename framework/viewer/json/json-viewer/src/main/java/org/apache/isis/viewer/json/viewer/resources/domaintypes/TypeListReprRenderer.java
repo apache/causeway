@@ -31,27 +31,27 @@ import org.apache.isis.viewer.json.viewer.representations.ReprRenderer;
 import org.apache.isis.viewer.json.viewer.representations.ReprRendererAbstract;
 import org.apache.isis.viewer.json.viewer.representations.ReprRendererFactoryAbstract;
 
-public class DomainTypesReprRenderer extends ReprRendererAbstract<DomainTypesReprRenderer, Collection<ObjectSpecification>> {
+public class TypeListReprRenderer extends ReprRendererAbstract<TypeListReprRenderer, Collection<ObjectSpecification>> {
 
     private Collection<ObjectSpecification> specifications;
 
     public static class Factory extends ReprRendererFactoryAbstract {
         public Factory() {
-            super(RepresentationType.DOMAIN_TYPES);
+            super(RepresentationType.TYPE_LIST);
         }
 
         @Override
         public ReprRenderer<?, ?> newRenderer(ResourceContext resourceContext, LinkFollower linkFollower, JsonRepresentation representation) {
-            return new DomainTypesReprRenderer(resourceContext, linkFollower, getRepresentationType(), representation);
+            return new TypeListReprRenderer(resourceContext, linkFollower, getRepresentationType(), representation);
         }
     }
 
-    private DomainTypesReprRenderer(ResourceContext resourceContext, LinkFollower linkFollower, RepresentationType representationType, JsonRepresentation representation) {
+    private TypeListReprRenderer(ResourceContext resourceContext, LinkFollower linkFollower, RepresentationType representationType, JsonRepresentation representation) {
         super(resourceContext, linkFollower, representationType, representation);
     }
 
     @Override
-    public DomainTypesReprRenderer with(Collection<ObjectSpecification> specifications) {
+    public TypeListReprRenderer with(Collection<ObjectSpecification> specifications) {
         this.specifications = specifications;
         return this;
     }
@@ -67,15 +67,13 @@ public class DomainTypesReprRenderer extends ReprRendererAbstract<DomainTypesRep
         JsonRepresentation specList = JsonRepresentation.newArray();
         for (ObjectSpecification objectSpec : specifications) {
             final LinkBuilder linkBuilder = 
-                    LinkBuilder.newBuilder(getResourceContext(), Rel.DESCRIBEDBY, RepresentationType.DOMAIN_TYPE, "domainTypes/%s", objectSpec.getFullIdentifier());
+                    LinkBuilder.newBuilder(getResourceContext(), Rel.DOMAIN_TYPE, RepresentationType.DOMAIN_TYPE, "domainTypes/%s", objectSpec.getFullIdentifier());
             specList.arrayAdd(linkBuilder.build());
         }
         
-        representation.mapPut("domainTypes", specList);
+        representation.mapPut("values", specList);
 
-        // links and extensions
-        representation.mapPut("links", JsonRepresentation.newArray());
-        representation.mapPut("extensions", JsonRepresentation.newMap());
+        getExtensions(); // empty
         
         return representation;
     }
