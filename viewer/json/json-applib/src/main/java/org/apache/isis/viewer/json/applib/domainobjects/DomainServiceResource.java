@@ -84,7 +84,7 @@ public interface DomainServiceResource {
 
     @GET
     @Path("/{serviceId}/actions/{actionId}/invoke")
-    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_DOMAIN_OBJECT, RestfulMediaType.APPLICATION_JSON_LIST, RestfulMediaType.APPLICATION_JSON_SCALAR_VALUE, RestfulMediaType.APPLICATION_JSON_ERROR })
+    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ACTION_RESULT, RestfulMediaType.APPLICATION_JSON_ERROR })
     @ClientResponseType(entityType=String.class)
     public Response invokeActionQueryOnly(
         @PathParam("serviceId") final String serviceId, 
@@ -94,7 +94,7 @@ public interface DomainServiceResource {
     @PUT
     @Path("/{serviceId}/actions/{actionId}/invoke")
     @Consumes({ MediaType.APPLICATION_JSON })
-    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_DOMAIN_OBJECT, RestfulMediaType.APPLICATION_JSON_LIST, RestfulMediaType.APPLICATION_JSON_SCALAR_VALUE, RestfulMediaType.APPLICATION_JSON_ERROR })
+    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ACTION_RESULT, RestfulMediaType.APPLICATION_JSON_ERROR })
     @ClientResponseType(entityType=String.class)
     public Response invokeActionIdempotent(
         @PathParam("serviceId") final String serviceId, 
@@ -104,7 +104,7 @@ public interface DomainServiceResource {
     @POST
     @Path("/{serviceId}/actions/{actionId}/invoke")
     @Consumes({ MediaType.APPLICATION_JSON })
-    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_DOMAIN_OBJECT, RestfulMediaType.APPLICATION_JSON_LIST, RestfulMediaType.APPLICATION_JSON_SCALAR_VALUE, RestfulMediaType.APPLICATION_JSON_ERROR })
+    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ACTION_RESULT, RestfulMediaType.APPLICATION_JSON_ERROR })
     @ClientResponseType(entityType=String.class)
     public Response invokeAction(
         @PathParam("serviceId") final String serviceId, 

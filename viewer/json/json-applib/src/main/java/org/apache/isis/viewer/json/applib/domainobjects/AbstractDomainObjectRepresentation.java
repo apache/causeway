@@ -16,33 +16,40 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.json.applib.user;
+package org.apache.isis.viewer.json.applib.domainobjects;
 
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
-import org.apache.isis.viewer.json.applib.domainobjects.DomainRepresentation;
 import org.codehaus.jackson.JsonNode;
 
 
-public class UserRepresentation extends DomainRepresentation {
+public abstract class AbstractDomainObjectRepresentation extends DomainRepresentation {
 
-    public UserRepresentation(JsonNode jsonNode) {
+    public AbstractDomainObjectRepresentation(JsonNode jsonNode) {
         super(jsonNode);
     }
+
+    public String getTitle() {
+        return getString("title");
+    }
     
-    public String getUserName() {
-        return getString("userName");
+    public JsonRepresentation getMembers() {
+        return getRepresentation("members").ensureArray();
     }
 
-    public String getFriendlyName() {
-        return getString("friendlyName");
+    public JsonRepresentation getProperty(final String id) {
+        return getRepresentation("members[memberType=property id=%s]", id);
     }
 
-    public String getEmail() {
-        return getString("email");
+    public JsonRepresentation getProperties() {
+        return getRepresentation("members[memberType=property]").ensureArray();
     }
 
-    public JsonRepresentation getRoles() {
-        return getRepresentation("roles").ensureArray();
+    public JsonRepresentation getCollection(final String id) {
+        return getRepresentation("members[memberType=collection id=%s]", id);
+    }
+
+    public JsonRepresentation getCollections() {
+        return getRepresentation("members[memberType=collection]").ensureArray();
     }
 
 }

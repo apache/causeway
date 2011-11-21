@@ -21,6 +21,7 @@ import java.io.InputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 
 import javax.ws.rs.core.Response;
@@ -256,6 +257,22 @@ public final class DomainResourceHelper {
         }
 
         JsonRepresentation arguments = DomainResourceHelper.readQueryStringAsMap(argumentsQueryString);
+        
+        return invokeActionUsingAdapters(action, arguments);
+    }
+
+    public Response invokeActionQueryOnly(String actionId, Map<String, String[]> parameterMap) {
+
+        final ObjectAction action = getObjectActionThatIsVisibleAndUsable(
+                actionId, Intent.ACCESS);
+
+        final ActionSemantics actionSemantics = ActionSemantics.determine(resourceContext, action);
+        if(!actionSemantics.isQueryOnly()) {
+            throw JsonApplicationException.create(HttpStatusCode.METHOD_NOT_ALLOWED,
+                    "Method not allowed; action '%s' is not query only", action.getId());
+        }
+
+        JsonRepresentation arguments = DomainResourceHelper.readParameterMapAsMap(parameterMap);
         
         return invokeActionUsingAdapters(action, arguments);
     }
@@ -521,9 +538,7 @@ public final class DomainResourceHelper {
     private List<ObjectAdapter> parseArguments(
             final ObjectAction action, 
             final JsonRepresentation arguments) {
-        final ResourceContext resourceContext2 = resourceContext;
-        
-        return parseArguments(resourceContext2, action, arguments);
+        return parseArguments(resourceContext, action, arguments);
     }
 
     public static List<ObjectAdapter> parseArguments(final ResourceContext resourceContext, final ObjectAction action, final JsonRepresentation arguments) {
@@ -583,6 +598,14 @@ public final class DomainResourceHelper {
             argList.add(argRepr);
         }
         return argList;
+    }
+
+    public static JsonRepresentation readParameterMapAsMap(Map<String, String[]> parameterMap) {
+        final JsonRepresentation map = JsonRepresentation.newMap();
+        for(Map.Entry<String, String[]> parameter: parameterMap.entrySet()) {
+            map.mapPut(parameter.getKey(), parameter.getValue()[0]);
+        }
+        return map;
     }
 
     public static JsonRepresentation readQueryStringAsMap(String queryString) {
@@ -668,6 +691,7 @@ public final class DomainResourceHelper {
         // TODO: yuck
         return RendererFactoryRegistry.instance;
     }
+
 
 
 }

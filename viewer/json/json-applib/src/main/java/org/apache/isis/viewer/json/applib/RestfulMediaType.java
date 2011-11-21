@@ -31,23 +31,24 @@ public final class RestfulMediaType {
 
     private static final String BASE = MediaType.APPLICATION_JSON + ";profile=urn:org.restfulobjects/";
     
-    public final static String APPLICATION_JSON_HOME_PAGE = BASE + "homepage"+ "";
-    public final static String APPLICATION_JSON_USER = BASE + "user"+ "";
-    public final static String APPLICATION_JSON_CAPABILITIES = BASE + "capabilities"+ "";
-    public final static String APPLICATION_JSON_LIST = BASE + "list"+ "";
-    public final static String APPLICATION_JSON_SCALAR_VALUE = BASE + "scalarvalue"+ "";
-    public final static String APPLICATION_JSON_DOMAIN_OBJECT = BASE + "domainobject"+ "";
-    public final static String APPLICATION_JSON_OBJECT_PROPERTY = BASE + "objectproperty"+ "";
-    public final static String APPLICATION_JSON_OBJECT_COLLECTION = BASE + "objectcollection"+ "";
-    public final static String APPLICATION_JSON_OBJECT_ACTION = BASE + "objectaction"+ "";
-    public final static String APPLICATION_JSON_ACTION_RESULT = BASE + "actionresult"+ "";
-    public final static String APPLICATION_JSON_TYPE_LIST = BASE + "typelist"+ "";
-    public final static String APPLICATION_JSON_DOMAIN_TYPE = BASE + "domaintype"+ "";
-    public final static String APPLICATION_JSON_TYPE_ACTION_RESULT = BASE + "typeactionresult"+ "";
-    public final static String APPLICATION_JSON_PROPERTY_DESCRIPTION = BASE + "propertydescription"+ "";
-    public final static String APPLICATION_JSON_COLLECTION_DESCRIPTION = BASE + "collectiondescription"+ "";
-    public final static String APPLICATION_JSON_ACTION_DESCRIPTION = BASE + "actiondescription"+ "";
-    public final static String APPLICATION_JSON_ACTION_PARAMETER_DESCRIPTION = BASE + "actionparameterdescription"+ ""; 
-    public final static String APPLICATION_JSON_ERROR = BASE + "error"+ "";
+    public final static String APPLICATION_JSON_HOME_PAGE = BASE + "homepage";
+    public final static String APPLICATION_JSON_USER = BASE + "user";
+    public final static String APPLICATION_JSON_CAPABILITIES = BASE + "capabilities";
+    public final static String APPLICATION_JSON_LIST = BASE + "list";
+    public final static String APPLICATION_JSON_SCALAR_VALUE = BASE + "scalarvalue";
+    public final static String APPLICATION_JSON_DOMAIN_OBJECT = BASE + "domainobject";
+    public final static String APPLICATION_JSON_TRANSIENT_DOMAIN_OBJECT = BASE + "transient";
+    public final static String APPLICATION_JSON_OBJECT_PROPERTY = BASE + "objectproperty";
+    public final static String APPLICATION_JSON_OBJECT_COLLECTION = BASE + "objectcollection";
+    public final static String APPLICATION_JSON_OBJECT_ACTION = BASE + "objectaction";
+    public final static String APPLICATION_JSON_ACTION_RESULT = BASE + "actionresult";
+    public final static String APPLICATION_JSON_TYPE_LIST = BASE + "typelist";
+    public final static String APPLICATION_JSON_DOMAIN_TYPE = BASE + "domaintype";
+    public final static String APPLICATION_JSON_TYPE_ACTION_RESULT = BASE + "typeactionresult";
+    public final static String APPLICATION_JSON_PROPERTY_DESCRIPTION = BASE + "propertydescription";
+    public final static String APPLICATION_JSON_COLLECTION_DESCRIPTION = BASE + "collectiondescription";
+    public final static String APPLICATION_JSON_ACTION_DESCRIPTION = BASE + "actiondescription";
+    public final static String APPLICATION_JSON_ACTION_PARAMETER_DESCRIPTION = BASE + "actionparameterdescription"; 
+    public final static String APPLICATION_JSON_ERROR = BASE + "error";
 
 }

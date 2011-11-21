@@ -16,33 +16,20 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.json.applib.user;
+package org.apache.isis.viewer.json.applib.domainobjects;
 
-import org.apache.isis.viewer.json.applib.JsonRepresentation;
-import org.apache.isis.viewer.json.applib.domainobjects.DomainRepresentation;
+import org.apache.isis.viewer.json.applib.blocks.LinkRepresentation;
 import org.codehaus.jackson.JsonNode;
 
 
-public class UserRepresentation extends DomainRepresentation {
+public class TransientDomainObjectRepresentation extends AbstractDomainObjectRepresentation {
 
-    public UserRepresentation(JsonNode jsonNode) {
+    public TransientDomainObjectRepresentation(JsonNode jsonNode) {
         super(jsonNode);
     }
     
-    public String getUserName() {
-        return getString("userName");
+    public LinkRepresentation getPersistLink() {
+        return getLink("links[rel=persist]");
     }
-
-    public String getFriendlyName() {
-        return getString("friendlyName");
-    }
-
-    public String getEmail() {
-        return getString("email");
-    }
-
-    public JsonRepresentation getRoles() {
-        return getRepresentation("roles").ensureArray();
-    }
-
+    
 }

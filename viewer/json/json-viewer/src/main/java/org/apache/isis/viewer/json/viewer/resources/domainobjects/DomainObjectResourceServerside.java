@@ -17,6 +17,7 @@
 package org.apache.isis.viewer.json.viewer.resources.domainobjects;
 
 import java.io.InputStream;
+import java.util.Map;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -406,7 +407,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements
 
     @GET
     @Path("/{oid}/actions/{actionId}/invoke")
-    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_DOMAIN_OBJECT, RestfulMediaType.APPLICATION_JSON_LIST, RestfulMediaType.APPLICATION_JSON_SCALAR_VALUE, RestfulMediaType.APPLICATION_JSON_ERROR })
+    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ACTION_RESULT, RestfulMediaType.APPLICATION_JSON_ERROR })
     public Response invokeActionQueryOnly(
             @PathParam("oid") final String oidStr,
             @PathParam("actionId") final String actionId,
@@ -415,14 +416,20 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements
 
         final ObjectAdapter objectAdapter = getObjectAdapter(oidStr);
         final DomainResourceHelper helper = new DomainResourceHelper(getResourceContext(), objectAdapter);
-
-        return helper.invokeActionQueryOnly(actionId, arguments);
+        
+        @SuppressWarnings("unchecked")
+        final Map<String,String[]> parameterMap = getResourceContext().getHttpServletRequest().getParameterMap();
+        if(parameterMap.containsKey("args")) {
+            return helper.invokeActionQueryOnly(actionId, arguments);
+        } else {
+            return helper.invokeActionQueryOnly(actionId, parameterMap);
+        }
     }
 
     @PUT
     @Path("/{oid}/actions/{actionId}/invoke")
     @Consumes({ MediaType.WILDCARD })
-    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_DOMAIN_OBJECT, RestfulMediaType.APPLICATION_JSON_LIST, RestfulMediaType.APPLICATION_JSON_SCALAR_VALUE, RestfulMediaType.APPLICATION_JSON_ERROR })
+    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ACTION_RESULT, RestfulMediaType.APPLICATION_JSON_ERROR })
     public Response invokeActionIdempotent(
             @PathParam("oid") final String oidStr,
             @PathParam("actionId") final String actionId,
@@ -439,7 +446,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements
     @POST
     @Path("/{oid}/actions/{actionId}/invoke")
     @Consumes({ MediaType.WILDCARD })
-    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_DOMAIN_OBJECT, RestfulMediaType.APPLICATION_JSON_LIST, RestfulMediaType.APPLICATION_JSON_SCALAR_VALUE, RestfulMediaType.APPLICATION_JSON_ERROR })
+    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ACTION_RESULT, RestfulMediaType.APPLICATION_JSON_ERROR })
     public Response invokeAction(
             @PathParam("oid") final String oidStr,
             @PathParam("actionId") final String actionId,

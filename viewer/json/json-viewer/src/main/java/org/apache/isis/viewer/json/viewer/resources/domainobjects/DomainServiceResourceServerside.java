@@ -18,6 +18,7 @@ package org.apache.isis.viewer.json.viewer.resources.domainobjects;
 
 import java.io.InputStream;
 import java.util.List;
+import java.util.Map;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -145,7 +146,13 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
         final ObjectAdapter serviceAdapter = getServiceAdapter(serviceId);
         final DomainResourceHelper helper = new DomainResourceHelper(getResourceContext(), serviceAdapter).using(new DomainServiceLinkTo());
 
-        return helper.invokeActionQueryOnly(actionId, arguments);
+        @SuppressWarnings("unchecked")
+        final Map<String,String[]> parameterMap = getResourceContext().getHttpServletRequest().getParameterMap();
+        if(parameterMap.containsKey("args")) {
+            return helper.invokeActionQueryOnly(actionId, arguments);
+        } else {
+            return helper.invokeActionQueryOnly(actionId, parameterMap);
+        }
     }
 
     @PUT

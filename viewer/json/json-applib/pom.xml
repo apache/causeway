@@ -58,13 +58,6 @@
 		</dependency>
 		
         <dependency>
-	        <groupId>net.sf.json-lib</groupId>
-	        <artifactId>json-lib</artifactId>
-	        <type>jar</type>
-	        <classifier>jdk15</classifier>
-	        <scope>compile</scope>
-	    </dependency>
-        <dependency>
             <groupId>org.jdom</groupId>
             <artifactId>jdom</artifactId>
         </dependency>
