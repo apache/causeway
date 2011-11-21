@@ -106,7 +106,7 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
     }
 
     @Override
-    public String getName() {
+    public String getId() {
         final NamedFacet facet = getFacet(NamedFacet.class);
         if (facet != null && facet.value() != null) {
             return StringUtils.camelLowerFirst(facet.value());
@@ -128,6 +128,32 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
         }
         int indexOf = parameters.indexOf(this);
         return StringUtils.camelLowerFirst(name + (indexOf+1));
+    }
+
+    
+    @Override
+    public String getName() {
+        final NamedFacet facet = getFacet(NamedFacet.class);
+        if (facet != null && facet.value() != null) {
+            return facet.value();
+        }
+        final String name = getSpecification().getSingularName();
+        List<ObjectActionParameter> parameters = getAction().getParameters(new Filter<ObjectActionParameter>() {
+
+            @Override
+            public boolean accept(ObjectActionParameter t) {
+                return equalsShortIdentifier(t.getSpecification(), getSpecification());
+            }
+
+            protected boolean equalsShortIdentifier(final ObjectSpecification spec1, final ObjectSpecification spec2) {
+                return spec1.getShortIdentifier().toLowerCase().equals(spec2.getShortIdentifier().toLowerCase());
+            }
+        });
+        if (parameters.size() == 1) {
+            return name;
+        }
+        int indexOf = parameters.indexOf(this);
+        return name + " " + (indexOf+1);
     }
 
     @Override
