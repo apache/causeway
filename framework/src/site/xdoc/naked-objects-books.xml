@@ -21,12 +21,21 @@
 "http://maven.apache.org/dtd/xdoc_1_0.dtd">
 <document>
 	<properties>
-		<title>Introduction to Naked Objects</title>
+		<title>Naked Objects</title>
 		<author email="isis-dev@incubator.apache.org">Apache Isis Contributors</author>
 	</properties>
 
 	<body>
 		<section name="">
+            <p>Although it has evolved since, Apache Isis framework started out as an
+               open source implementation of the <a href="http://en.wikipedia.org/wiki/Naked_objects">naked objects pattern</a>.
+               In fact, the dynamically generated webapp is a naked objects system; the dynamically generated
+               RESTful API can also be considered as a naked objects system (it's just that the representation is not intended
+               by users, instead by machines).
+            </p>
+            <p>
+                If the idea of naked objects is of interest, then there are a couple of books on the topic that you might want to read.
+            </p>
 
 			<h3>Naked Objects</h3>
 

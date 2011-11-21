@@ -45,52 +45,21 @@
             <item name="Screencasts" href="screencasts.html"/>
             <item name="Icons" href="icons.html" />
             <item name="IDE Support" href="ide-support.html"/>
+            <item name="Programming Conventions" href="applib/index.html" />
             <item name="Cheat Sheet" href="IsisCheatSheet.pdf"/>
 		</menu>
 
-        <menu name="The Naked Objects Pattern">
-            <item name="An Introduction" href="naked-objects-pattern.html" />
-            <item name="OOUIs" href="oouis.html" />
-            <item name="Benefits" href="naked-objects-pattern-benefits.html" />
-            <item name="Case Study" href="naked-objects-case-study.html" />
-        </menu>
-
-		<!-- This 'global' menu is inherited -->
-		<menu name="Isis Modules" inherit="bottom" href="core/index.html">
-			<item name="Application Library" href="applib/index.html" />
-			<item name="Core Framework" href="core/index.html"/>
-            <item name="Viewers" href="viewer/index.html">
-                <item name="DnD" href="viewer/dnd/index.html" />
-                <item name="HTML" href="viewer/html/index.html" />
-                <item name="Scimpi" href="viewer/scimpi/index.html" />
-                <item name="Wicket" href="viewer/wicket/index.html" />
-                <item name="XHTML" href="viewer/xhtml/index.html" />
-                <item name="JSON" href="viewer/json/index.html" />
-                <item name="BDD (Concordion)" href="viewer/bdd/index.html" />
-                <item name="JUnit" href="viewer/junit/index.html" />
-            </item>
-			<item name="Runtimes" href="runtimes/index.html">
-				<item name="Default" href="runtimes/dflt/index.html">
-                    <item name="Bytecode Providers" href="runtimes/dflt/bytecode/index.html">
-                    </item>
-                    <item name="Object Stores" href="runtimes/dflt/objectstores/index.html">
-                    </item>
-					<item name="Profile Stores" href="runtimes/dflt/profilestores/index.html">
-		            </item>
-                    <item name="Remoting" href="runtimes/dflt/remoting/index.html">
-                    </item>
-                </item>
-                <item name="Embedded" href="runtimes/embedded/index.html">
-                </item>
-            </item>
-			<item name="Programming Model" href="progmodels/index.html">
-            </item>
-			<item name="Security" href="security/index.html">
-            </item>
+        <!-- This 'global' menu is inherited -->
+        <menu name="Use Cases" inherit="bottom">
+            <item name="Develop and Test" inherit="bottom" href="use-cases/develop-and-test.html"/>
+	        <item name="Deploy as REST service" href="use-cases/deploy-as-rest.html" />
+	        <item name="Deploy as Webapp" href="use-cases/deploy-as-webapp.html" />
 		</menu>
 
 		<menu name="Community and Help">
+            <!-- 
 			<item name="IRC" href="http://webchat.freenode.net/?channels=apache-isis&amp;uio=d4" />
+			-->
             <item name="Mailing List" href="mail-lists.html" >
                 <item name="Post to"
                     href="mailto:isis-dev@incubator.apache.org" />
@@ -117,11 +86,6 @@
 			<item name="Blogs">
 				<item name="Dan Haywood's blog" href="http://danhaywood.com/" />
 			</item>
-			<item name="Naked Objects">
-				<item name="Books on Naked Objects" href="naked-objects-books.html" />
-				<item name="Richard Pawson's Thesis" href="Pawson-Naked-Objects-thesis.pdf" />
-    			<item name="Naked Objects for .NET" href="http://www.nakedobjects.net/" />
-			</item>
             <item name="Presentation Materials (please reuse)" href="./presentations/">
                 <item name="Introducing Apache Isis" href="./presentations/">
                     <item name="PPTX (Microsoft)" href="./presentations/IntroducingApacheIsis.pptx" />
@@ -131,8 +95,40 @@
                     <item name="PDF notes" href="./presentations/IntroducingApacheIsis-notes.pdf" />
                 </item>
             </item>
+            <item name="Naked Objects">
+                <item name="Books on Naked Objects" href="naked-objects-books.html" />
+                <item name="Richard Pawson's Thesis" href="Pawson-Naked-Objects-thesis.pdf" />
+                <item name="Naked Objects for .NET" href="http://www.nakedobjects.net/" />
+            </item>
+            <!-- 
             <item name="Isis Roadmap" href="roadmap.html" />
+            -->
 		</menu>
+
+        <!-- This 'global' menu is inherited -->
+        <menu name="Isis Modules" inherit="bottom">
+            <item name="Application Library" href="applib/index.html" />
+            <item name="Core Framework" href="core/index.html"/>
+            <item name="Testing Support" href="viewer/testing-support.html">
+                <item name="BDD" href="viewer/bdd/index.html" />
+                <item name="JUnit" href="viewer/junit/index.html" />
+            </item>
+            <item name="Deployable viewers" href="viewer/deployable-viewers.html">
+                <item name="Json (REST)" href="viewer/json/index.html" />
+                <item name="HTML (webapp)" href="viewer/html/index.html" />
+            </item>
+            <item name="Other viewers (alpha)" href="viewer/other-viewers.html"/>
+            <item name="Runtimes" href="runtimes/index.html">
+                <item name="Default" href="runtimes/dflt/index.html">
+                    <item name="Object Stores" href="runtimes/dflt/objectstores/index.html"/>
+                </item>
+                <item name="Embedded" href="runtimes/embedded/index.html"/>
+            </item>
+            <item name="Programming Model" href="progmodels/index.html">
+            </item>
+            <item name="Security" href="security/index.html">
+            </item>
+        </menu>
 
         <menu name="For Contributors">
             <item name="Contributor's Guide">
