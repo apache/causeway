@@ -22,40 +22,17 @@ import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.codehaus.jackson.JsonNode;
 
 
-public class DomainObjectRepresentation extends DomainRepresentation {
+public class DomainObjectRepresentation extends AbstractDomainObjectRepresentation {
 
     public DomainObjectRepresentation(JsonNode jsonNode) {
         super(jsonNode);
     }
 
+
     public String getOid() {
         return getString("oid");
     }
-
-    public String getTitle() {
-        return getString("title");
-    }
     
-    public JsonRepresentation getMembers() {
-        return getArray("members");
-    }
-
-    public JsonRepresentation getProperty(final String id) {
-        return getRepresentation("members[memberType=property id=%s]", id);
-    }
-
-    public JsonRepresentation getProperties() {
-        return getRepresentation("members[memberType=property]").ensureArray();
-    }
-
-    public JsonRepresentation getCollection(final String id) {
-        return getRepresentation("members[memberType=collection id=%s]", id);
-    }
-
-    public JsonRepresentation getCollections() {
-        return getRepresentation("members[memberType=collection]");
-    }
-
     public JsonRepresentation getActions() {
         return getRepresentation("members[memberType=action]");
     }
@@ -63,4 +40,5 @@ public class DomainObjectRepresentation extends DomainRepresentation {
     public JsonRepresentation getAction(final String id) {
         return getRepresentation("members[memberType=action id=%s]", id);
     }
+
 }

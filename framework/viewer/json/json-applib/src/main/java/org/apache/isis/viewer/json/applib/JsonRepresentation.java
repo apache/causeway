@@ -18,11 +18,7 @@
  */
 package org.apache.isis.viewer.json.applib;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
-import java.io.StringReader;
 import java.lang.reflect.Constructor;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -33,28 +29,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import net.sf.json.JSON;
-import net.sf.json.JSONNull;
-import net.sf.json.JSONSerializer;
-import net.sf.json.xml.XMLSerializer;
-
 import org.apache.isis.viewer.json.applib.blocks.LinkRepresentation;
-import org.apache.isis.viewer.json.applib.util.JsonMapper;
 import org.apache.isis.viewer.json.applib.util.JsonNodeUtils;
 import org.apache.isis.viewer.json.applib.util.UrlEncodingUtils;
 import org.codehaus.jackson.JsonNode;
-import org.codehaus.jackson.JsonParseException;
-import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.node.ArrayNode;
 import org.codehaus.jackson.node.JsonNodeFactory;
 import org.codehaus.jackson.node.NullNode;
 import org.codehaus.jackson.node.ObjectNode;
 import org.codehaus.jackson.node.POJONode;
-import org.jdom.Element;
-import org.jdom.JDOMException;
-import org.jdom.input.SAXBuilder;
-import org.jdom.output.XMLOutputter;
-import org.jdom.xpath.XPath;
 
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;

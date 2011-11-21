@@ -37,7 +37,7 @@ public abstract class DomainRepresentation extends JsonRepresentation implements
     }
 
     public JsonRepresentation getLinks() {
-        return getArray("links");
+        return getArray("links").ensureArray();
     }
 
     public LinkRepresentation getLinkWithRel(Rel rel) {

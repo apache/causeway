@@ -168,10 +168,13 @@ public final class JsonValueEncoder {
         }
         final ObjectSpecification objectSpec = objectAdapter.getSpecification();
 
-        // special case handling for JSON built-ins
+        // special case handling for JSON built-ins (at least so far as json.org defines them).
         if(     isBoolean(objectSpec) || 
-                isInteger(objectSpec) || isLong(objectSpec) || isBigInteger(objectSpec) || 
-                isDouble(objectSpec) || isBigDecimal(objectSpec) ) {
+                isInteger(objectSpec) || 
+                isLong(objectSpec) || 
+                isBigInteger(objectSpec) || 
+                isDouble(objectSpec) || 
+                isBigDecimal(objectSpec) ) {
             // simply return
             return objectAdapter.getObject();
         }
