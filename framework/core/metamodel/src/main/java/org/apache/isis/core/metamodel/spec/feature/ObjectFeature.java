@@ -34,6 +34,12 @@ import org.apache.isis.core.metamodel.spec.Specification;
 public interface ObjectFeature extends Specification {
 
     /**
+     * Returns the identifier of the member, which must not change. This should be all camel-case with no spaces: so if
+     * the member is called 'Return Date' then the a suitable id would be 'ReturnDate'.
+     */
+    String getId();
+
+    /**
      * Return the name for this member - the field or action. This is based on the name of this member.
      * 
      * @see #getIdentifier()

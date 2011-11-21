@@ -94,4 +94,5 @@ public interface ObjectActionParameter extends ObjectFeature, CurrentHolder {
     ObjectAdapter[] getChoices(ObjectAdapter adapter);
 
     ObjectAdapter getDefault(ObjectAdapter adapter);
+
 }

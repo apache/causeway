@@ -34,15 +34,6 @@ import org.apache.isis.core.metamodel.interactions.VisibilityContext;
  */
 public interface ObjectMember extends ObjectFeature {
 
-    // /////////////////////////////////////////////////////////////
-    // Identifiers
-    // /////////////////////////////////////////////////////////////
-
-    /**
-     * Returns the identifier of the member, which must not change. This should be all camel-case with no spaces: so if
-     * the member is called 'Return Date' then the a suitable id would be 'ReturnDate'.
-     */
-    String getId();
 
     // /////////////////////////////////////////////////////////////
     // Name, Description, Help (convenience for facets)

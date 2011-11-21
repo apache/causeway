@@ -42,7 +42,7 @@ import org.junit.runner.RunWith;
 import com.google.common.collect.Lists;
 
 @RunWith(JMock.class)
-public class ObjectActionParameterAbstractTest_getName {
+public class ObjectActionParameterAbstractTest_getId_and_getName {
 
     private final static class ObjectActionParameterAbstractToTest extends ObjectActionParameterAbstract {
         private ObjectActionParameterAbstractToTest(int number, ObjectActionImpl objectAction, TypedHolder peer) {
@@ -130,7 +130,7 @@ public class ObjectActionParameterAbstractTest_getName {
     }
 
     @Test
-    public void whenNamedFacetPresent() throws Exception {
+    public void getId_whenNamedFacetPresent() throws Exception {
 
         objectActionParameter = new ObjectActionParameterAbstractToTest(0, parentAction, actionParamPeer);
 
@@ -144,7 +144,25 @@ public class ObjectActionParameterAbstractTest_getName {
             }
         });
 
-        assertThat(objectActionParameter.getName(), is("someParameterName"));
+        assertThat(objectActionParameter.getId(), is("someParameterName"));
+    }
+
+    @Test
+    public void getName_whenNamedFacetPresent() throws Exception {
+
+        objectActionParameter = new ObjectActionParameterAbstractToTest(0, parentAction, actionParamPeer);
+
+        context.checking(new Expectations() {
+            {
+                one(actionParamPeer).getFacet(NamedFacet.class);
+                will(returnValue(namedFacet));
+
+                atLeast(1).of(namedFacet).value();
+                will(returnValue("Some parameter name"));
+            }
+        });
+
+        assertThat(objectActionParameter.getName(), is("Some parameter name"));
     }
 
     @SuppressWarnings("unchecked")
@@ -168,7 +186,7 @@ public class ObjectActionParameterAbstractTest_getName {
     }
 
     @Test
-    public void whenNamedFaceNotPresentAndMultipleParamsOfSameType() throws Exception {
+    public void getId_whenNamedFaceNotPresentAndMultipleParamsOfSameType() throws Exception {
 
         objectActionParameter = new ObjectActionParameterAbstractToTest(2, parentAction, actionParamPeer);
         objectActionParameter.setSpecification(stubSpecForString);
@@ -184,7 +202,27 @@ public class ObjectActionParameterAbstractTest_getName {
             }
         });
 
-        assertThat(objectActionParameter.getName(), is("string2"));
+        assertThat(objectActionParameter.getId(), is("string2"));
+    }
+
+    @Test
+    public void getName_whenNamedFaceNotPresentAndMultipleParamsOfSameType() throws Exception {
+
+        objectActionParameter = new ObjectActionParameterAbstractToTest(2, parentAction, actionParamPeer);
+        objectActionParameter.setSpecification(stubSpecForString);
+
+        context.checking(new Expectations() {
+            {
+                one(actionParamPeer).getFacet(NamedFacet.class);
+                will(returnValue(null));
+
+                one(parentAction).getParameters((Filter<ObjectActionParameter>) with(anything()));
+                will(returnValue(Lists.newArrayList(stubObjectActionParameterString, objectActionParameter,
+                    stubObjectActionParameterString2)));
+            }
+        });
+
+        assertThat(objectActionParameter.getName(), is("string 2"));
     }
 
 
