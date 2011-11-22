@@ -34,28 +34,6 @@
 			<groupId>org.apache.isis</groupId>
 			<artifactId>applib</artifactId>
 		</dependency>
-		
-		<dependency>
-			<groupId>org.apache.isis.viewer</groupId>
-			<artifactId>wicket-applib</artifactId>
-		</dependency>
-		
-        <!-- 
-		<dependency>
-			<groupId>net.sourceforge.isiscontrib.viewer.wicket</groupId>
-			<artifactId>view-calendarviews-applib</artifactId>
-		</dependency>
-		
-		<dependency>
-			<groupId>net.sourceforge.isiscontrib.viewer.wicket</groupId>
-			<artifactId>view-gmap2-applib</artifactId>
-		</dependency>
-		
-		<dependency>
-			<groupId>net.sourceforge.isiscontrib.viewer.wicket</groupId>
-			<artifactId>view-googlecharts-applib</artifactId>
-		</dependency>
-        -->        
-		
-	</dependencies>
+    </dependencies>
+    
 </project>
