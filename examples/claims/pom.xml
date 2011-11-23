@@ -123,12 +123,14 @@
 		<module>dom</module>
 		<module>fixture</module>
 		<module>objstore-default</module>
-		<module>quickrun</module>
 		<module>viewer-html</module>
 		<module>viewer-json</module>
-		<module>viewer-wicket</module>
-		<module>viewer-scimpi</module>
-		<!-- <module>viewer-bdd</module> -->
+		<module>viewer-bdd</module>
+		<!-- 
+		<module>quickrun</module>
+        <module>viewer-wicket</module>
+        <module>viewer-scimpi</module>
+		-->
 	</modules>
 
 	<dependencyManagement>
@@ -155,19 +157,7 @@
 
 			<dependency>
 				<groupId>${project.groupId}</groupId>
-				<artifactId>claims-quickrun</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-
-			<dependency>
-				<groupId>${project.groupId}</groupId>
 				<artifactId>claims-objstore-dflt</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-
-			<dependency>
-				<groupId>${project.groupId}</groupId>
-				<artifactId>viewer-dnd</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 
@@ -179,27 +169,9 @@
 
 			<dependency>
 				<groupId>${project.groupId}</groupId>
-				<artifactId>viewer-scimpi</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-
-			<dependency>
-				<groupId>${project.groupId}</groupId>
-				<artifactId>viewer-wicket</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-
-			<dependency>
-				<groupId>${project.groupId}</groupId>
 				<artifactId>viewer-json</artifactId>
 				<version>${project.version}</version>
 			</dependency>
-
-            <dependency>
-                <groupId>${project.groupId}</groupId>
-                <artifactId>viewer-xhtml</artifactId>
-                <version>${project.version}</version>
-            </dependency>
 
 			<dependency>
 				<groupId>${project.groupId}</groupId>
@@ -212,6 +184,26 @@
 				<artifactId>tests-unit</artifactId>
 				<version>${project.version}</version>
 			</dependency>
+
+            <!-- 
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>claims-quickrun</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+			<dependency>
+				<groupId>${project.groupId}</groupId>
+				<artifactId>viewer-scimpi</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>${project.groupId}</groupId>
+				<artifactId>viewer-wicket</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+            -->
 
             <!-- isis: applib -->
             <dependency>
@@ -366,19 +358,21 @@
                 <version>${isis.version}</version>
             </dependency>
 
-            <!-- isis: runtimes-dflt: objectstores: nosql -->
-            <dependency>
-                <groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
-                <artifactId>nosql</artifactId>
-                <version>${isis.version}</version>
-            </dependency>
-
             <!-- isis: runtimes-dflt: objectstore: sql -->
             <dependency>
                 <groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
                 <artifactId>sql-impl</artifactId>
                 <version>${isis.version}</version>
             </dependency>
+
+            <!-- isis: runtimes-dflt: objectstores: nosql -->
+            <!-- 
+            <dependency>
+                <groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
+                <artifactId>nosql</artifactId>
+                <version>${isis.version}</version>
+            </dependency>
+            -->
 
             <!-- isis: runtimes-dflt: profilestores: dflt -->
             <dependency>
@@ -395,6 +389,7 @@
             </dependency>
 
             <!-- isis: runtimes-dflt: remoting -->
+            <!-- 
             <dependency>
                 <groupId>org.apache.isis.runtimes.dflt.remoting</groupId>
                 <artifactId>common</artifactId>
@@ -436,6 +431,7 @@
                 <artifactId>marshalling-xstream</artifactId>
                 <version>${isis.version}</version>
             </dependency>
+            -->
 
             <!-- isis: runtimes: embedded -->
             <dependency>
@@ -445,13 +441,6 @@
             </dependency>
 
 
-            <!-- isis: viewer: dnd -->
-            <dependency>
-                <groupId>org.apache.isis.viewer</groupId>
-                <artifactId>dnd</artifactId>
-                <version>${isis.version}</version>
-            </dependency>
-
             <!-- isis: viewer: html -->
             <dependency>
                 <groupId>org.apache.isis.viewer</groupId>
@@ -459,7 +448,41 @@
                 <version>${isis.version}</version>
             </dependency>
 
+            <!-- isis: viewer: json -->
+            <dependency>
+                <groupId>org.apache.isis.viewer</groupId>
+                <artifactId>json</artifactId>
+                <version>${isis.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.isis.viewer</groupId>
+                <artifactId>json-applib</artifactId>
+                <version>${isis.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.isis.viewer</groupId>
+                <artifactId>json-viewer</artifactId>
+                <version>${isis.version}</version>
+            </dependency>
+
+            <!-- isis: viewer: junit -->
+            <dependency>
+                <groupId>org.apache.isis.viewer</groupId>
+                <artifactId>junit</artifactId>
+                <version>${isis.version}</version>
+            </dependency>
+
+            <!-- isis: viewer: dnd -->
+            <!--
+            <dependency>
+                <groupId>org.apache.isis.viewer</groupId>
+                <artifactId>dnd</artifactId>
+                <version>${isis.version}</version>
+            </dependency>
+            -->
+
             <!-- isis: viewer: scimpi -->
+            <!-- 
             <dependency>
                 <groupId>org.apache.isis.viewer</groupId>
                 <artifactId>scimpi</artifactId>
@@ -475,15 +498,10 @@
                 <artifactId>scimpi-servlet</artifactId>
                 <version>${isis.version}</version>
             </dependency>
-
-            <!-- isis: viewer: junit -->
-            <dependency>
-                <groupId>org.apache.isis.viewer</groupId>
-                <artifactId>junit</artifactId>
-                <version>${isis.version}</version>
-            </dependency>
+            -->
 
             <!-- isis: viewer: wicket -->
+            <!-- 
             <dependency>
                 <groupId>org.apache.isis.viewer</groupId>
                 <artifactId>wicket</artifactId>
@@ -514,40 +532,7 @@
                 <artifactId>wicket-viewer</artifactId>
                 <version>${isis.version}</version>
             </dependency>
-
-            <!-- isis: viewer: json -->
-            <dependency>
-                <groupId>org.apache.isis.viewer</groupId>
-                <artifactId>json</artifactId>
-                <version>${isis.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.isis.viewer</groupId>
-                <artifactId>json-applib</artifactId>
-                <version>${isis.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.isis.viewer</groupId>
-                <artifactId>json-viewer</artifactId>
-                <version>${isis.version}</version>
-            </dependency>
-
-            <!-- isis: viewer: xhtml -->
-            <dependency>
-                <groupId>org.apache.isis.viewer</groupId>
-                <artifactId>xhtml</artifactId>
-                <version>${isis.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.isis.viewer</groupId>
-                <artifactId>xhtml-applib</artifactId>
-                <version>${isis.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.isis.viewer</groupId>
-                <artifactId>xhtml-viewer</artifactId>
-                <version>${isis.version}</version>
-            </dependency>
+            -->
 
 		</dependencies>
 	</dependencyManagement>

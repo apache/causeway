@@ -43,10 +43,6 @@ public interface ClaimRepository {
     @Named("New Claim")
     public Claim newClaimWithDescription(Claimant claimant, String description);
 
-    public ClaimWizard newClaimUsingWizard(Claimant claimant);
-
-    public List<ClaimantExpenseSummary> analyseClaimantExpenses();
-
     @NotContributed
     int countClaimsFor(Claimant claimant);
 

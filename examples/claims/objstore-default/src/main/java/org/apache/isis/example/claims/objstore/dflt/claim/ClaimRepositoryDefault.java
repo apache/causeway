@@ -19,24 +19,16 @@
 
 package org.apache.isis.example.claims.objstore.dflt.claim;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.isis.applib.AbstractFactoryAndRepository;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.applib.value.Date;
-import org.apache.isis.applib.value.Money;
 import org.apache.isis.example.claims.dom.claim.Claim;
-import org.apache.isis.example.claims.dom.claim.ClaimItem;
 import org.apache.isis.example.claims.dom.claim.ClaimRepository;
-import org.apache.isis.example.claims.dom.claim.ClaimWizard;
 import org.apache.isis.example.claims.dom.claim.Claimant;
-import org.apache.isis.example.claims.dom.claim.ClaimantExpenseSummary;
-
-import com.google.common.collect.Maps;
 
 public class ClaimRepositoryDefault extends AbstractFactoryAndRepository implements ClaimRepository {
 
@@ -84,16 +76,6 @@ public class ClaimRepositoryDefault extends AbstractFactoryAndRepository impleme
 
     // {{ action: newClaim
     @Override
-    public ClaimWizard newClaimUsingWizard(Claimant claimant) {
-        final ClaimWizard claimWizard = newTransientInstance(ClaimWizard.class);
-        claimWizard.modifyClaimant(claimant);
-        return claimWizard;
-    }
-
-    // }}
-
-    // {{ action: newClaim
-    @Override
     public Claim newClaim(Claimant claimant) {
         Claim claim = newTransientInstance(Claim.class);
         if (claimant != null) {
@@ -133,36 +115,6 @@ public class ClaimRepositoryDefault extends AbstractFactoryAndRepository impleme
     }
 
     // }}
-
-    // {{ analyseClaimantExpenses
-    @Override
-    public List<ClaimantExpenseSummary> analyseClaimantExpenses() {
-        final Map<Claimant, ClaimantExpenseSummary> summaries = Maps.newHashMap();
-        final List<Claim> claims = allInstances(Claim.class);
-        for (Claim claim : claims) {
-            final Claimant claimant = claim.getClaimant();
-            ClaimantExpenseSummary summary = findOrCreateSummary(claimant, summaries);
-            final List<ClaimItem> items = claim.getItems();
-            for (ClaimItem item : items) {
-                final Money amount = item.getAmount();
-                summary.addAmount(amount);
-            }
-        }
-        return new ArrayList<ClaimantExpenseSummary>(summaries.values());
-        // }}
-
-    }
-
-    private ClaimantExpenseSummary findOrCreateSummary(Claimant claimant,
-        Map<Claimant, ClaimantExpenseSummary> summaries) {
-        ClaimantExpenseSummary summary = summaries.get(claimant);
-        if (summary == null) {
-            summary = newTransientInstance(ClaimantExpenseSummary.class);
-            summary.setClaimant(claimant);
-            summaries.put(claimant, summary);
-        }
-        return summary;
-    }
 
     @Override
     public int countClaimsFor(Claimant claimant) {
