@@ -17,11 +17,20 @@
   specific language governing permissions and limitations
   under the License.
 -->
-<!DOCTYPE web-app PUBLIC
- "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
- "http://java.sun.com/dtd/web-app_2_3.dtd" >
-<web-app>
+<web-app id="WebApp_ID" version="2.4"
+    xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
+
     <display-name>Apache Isis HTML Viewer</display-name>
+
+    <listener>
+        <listener-class>org.apache.isis.runtimes.dflt.webapp.IsisWebAppBootstrapper</listener-class>
+    </listener>
+
+    <context-param>
+        <param-name>isis.viewers</param-name>
+        <param-value>html</param-value>
+    </context-param>
 
 	<filter>
 		<filter-name>IsisSessionFilter</filter-name>
@@ -62,11 +71,7 @@
     	<filter-name>IsisSessionFilter</filter-name>
     	<url-pattern>*.app</url-pattern>
     </filter-mapping>
-
-    <listener>
-        <listener-class>org.apache.isis.runtimes.dflt.webapp.IsisWebAppBootstrapper</listener-class>
-    </listener>
-
+    
     <servlet>
         <servlet-name>Logon</servlet-name>
         <servlet-class>org.apache.isis.viewer.html.servlet.LogonServlet</servlet-class>
@@ -80,6 +85,15 @@
     <servlet>
         <servlet-name>Resource</servlet-name>
         <servlet-class>org.apache.isis.core.webapp.content.ResourceServlet</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>Forward</servlet-name>
+        <servlet-class>org.apache.isis.core.webapp.routing.ForwardingServlet</servlet-class>
+        <init-param>
+            <param-name>forwardTo</param-name>
+            <param-value>logon.app</param-value>
+        </init-param>
     </servlet>
 
     <servlet-mapping>
@@ -108,9 +122,9 @@
         <servlet-name>Resource</servlet-name>
 		<url-pattern>*.gif</url-pattern>
     </servlet-mapping>
- 	
-	<welcome-file-list>
-		<welcome-file>logon.app</welcome-file>
-	</welcome-file-list>
+    <servlet-mapping>
+        <servlet-name>Forward</servlet-name>
+        <url-pattern>/</url-pattern>
+    </servlet-mapping>
 	
 </web-app>

@@ -20,12 +20,6 @@
 
 package org.apache.isis.example.claims.fixture;
 
-import java.awt.Image;
-import java.io.File;
-import java.io.IOException;
-
-import javax.imageio.ImageIO;
-
 import org.apache.isis.applib.fixtures.AbstractFixture;
 import org.apache.isis.applib.value.Date;
 import org.apache.isis.applib.value.Money;
@@ -38,9 +32,9 @@ public class ClaimsFixture extends AbstractFixture {
 
     @Override
     public void install() {
-        Employee fred = createEmployee("Fred Smith", null /*, new Location().north(0.5)*/);
-        Employee tom = createEmployee("Tom Brown", fred /*, new Location().west(0.5)*/);
-        createEmployee("Sam Jones", fred /*, new Location().west(1).south(0.25)*/);
+        Employee fred = createEmployee("Fred Smith", null);
+        Employee tom = createEmployee("Tom Brown", fred);
+        createEmployee("Sam Jones", fred);
 
         Claim claim = createClaim(tom, -16, "Meeting with client");
         addItem(claim, -16, 38.50, "Lunch with client");
@@ -56,28 +50,13 @@ public class ClaimsFixture extends AbstractFixture {
 
     }
     
-    private Employee createEmployee(String name, Employee approver /*, Location location*/) {
+    private Employee createEmployee(String name, Employee approver) {
         Employee claimant;
         claimant = newTransientInstance(Employee.class);
         claimant.setName(name);
         claimant.setDefaultApprover(approver);
-        //claimant.setLocation(location);
         persist(claimant);
         return claimant;
-    }
-
-    @SuppressWarnings("unused")
-    private Image asImage(String name) {
-        String imageFileName = asImageFileName(name);
-        try {
-            return ImageIO.read(new File(imageFileName));
-        } catch (IOException e) {
-            return null;
-        }
-    }
-
-    private String asImageFileName(String name) {
-        return "images/"+name.replaceAll("[ ]", "")+".jpg";
     }
 
     private Claim createClaim(Employee claimant, int days, String description) { 

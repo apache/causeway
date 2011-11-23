@@ -25,7 +25,7 @@ import org.apache.isis.applib.annotation.Optional;
 import org.apache.isis.example.claims.dom.claim.Approver;
 import org.apache.isis.example.claims.dom.claim.Claimant;
 
-public class Employee extends AbstractDomainObject implements Claimant, Approver /* , Locatable */{
+public class Employee extends AbstractDomainObject implements Claimant, Approver {
 
     // {{ Title
     @Override
@@ -69,7 +69,7 @@ public class Employee extends AbstractDomainObject implements Claimant, Approver
 		this.defaultApprover = approver;
 	}
 
-    public String validateApprover(final Approver approver) {
+    public String validateDefaultApprover(final Approver approver) {
         if (approver == null)
             return null;
         if (approver == this) {
