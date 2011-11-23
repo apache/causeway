@@ -27,7 +27,8 @@ public final class ConfigurationConstants {
     public static final String LIST_SEPARATOR = ",";
     public static final String DELIMITER = ".";
     public static final String DEFAULT_CONFIG_DIRECTORY = "config";
-    public static final String WEBINF_CONFIG_DIRECTORY = "src/main/webapp/WEB-INF";
+    public static final String WEBINF_DIRECTORY = "WEB-INF";
+    public static final String WEBINF_FULL_DIRECTORY = "src/main/webapp/" + WEBINF_DIRECTORY;
 
     public static final String DEFAULT_CONFIG_FILE = "isis.properties";
     public static final String WEB_CONFIG_FILE = "web.properties";

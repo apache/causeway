@@ -53,7 +53,7 @@ public class HtmlComponentFactory implements ComponentFactory {
     protected final String styleSheet;
 
     public HtmlComponentFactory() {
-        final IsisConfiguration configuration = IsisContext.getConfiguration();
+        final IsisConfiguration configuration = getConfiguration();
         styleSheet = configuration.getString(STYLE_SHEET);
         String file = configuration.getString(HEADER_FILE);
         header = file == null ? configuration.getString(HEADER) : loadFile(file);
@@ -223,4 +223,9 @@ public class HtmlComponentFactory implements ComponentFactory {
         }
         return content.toString();
     }
+    
+    protected IsisConfiguration getConfiguration() {
+        return IsisContext.getConfiguration();
+    }
+    
 }

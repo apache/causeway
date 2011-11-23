@@ -79,7 +79,7 @@ public class IsisWebAppBootstrapper implements ServletContextListener {
             // will load either from WEB-INF or from the classpath.
             final IsisConfigurationBuilder isisConfigurationBuilder =
                 new IsisConfigurationBuilderResourceStreams(new ResourceStreamSourceForWebInf(servletContext),
-                    new ResourceStreamSourceContextLoaderClassPath());
+                    ResourceStreamSourceContextLoaderClassPath.create());
 
             primeConfigurationBuilder(isisConfigurationBuilder, servletContext);
 

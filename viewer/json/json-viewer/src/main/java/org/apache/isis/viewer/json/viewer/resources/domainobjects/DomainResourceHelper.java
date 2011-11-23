@@ -576,7 +576,7 @@ public final class DomainResourceHelper {
         // ensure that we have no arguments that are not parameters
         for(Entry<String, JsonRepresentation> arg: arguments.mapIterable()) {
             final String argName = arg.getKey();
-            if(action.getParameter(argName) == null) {
+            if(action.getParameterById(argName) == null) {
                 throw JsonApplicationException.create(
                         HttpStatusCode.BAD_REQUEST,
                         "Action '%s' does not have a parameter %s but an argument of that name was provided",
@@ -587,13 +587,13 @@ public final class DomainResourceHelper {
         // ensure that an argument value has been provided for all non-optional parameters 
         final List<ObjectActionParameter> parameters = action.getParameters();
         for (ObjectActionParameter param : parameters) {
-            final String paramName = param.getName();
-            final JsonRepresentation argRepr = arguments.getRepresentation(paramName);
+            final String paramId = param.getId();
+            final JsonRepresentation argRepr = arguments.getRepresentation(paramId);
             if(argRepr == null && !param.isOptional()) {
                 throw JsonApplicationException.create(
                         HttpStatusCode.BAD_REQUEST,
                         "Action '%s', no argument found for (mandatory) parameter '%s'",
-                        action.getId(), paramName);
+                        action.getId(), paramId);
             }
             argList.add(argRepr);
         }

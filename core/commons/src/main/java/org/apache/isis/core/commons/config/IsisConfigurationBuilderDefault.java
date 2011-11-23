@@ -54,8 +54,12 @@ public class IsisConfigurationBuilderDefault extends IsisConfigurationBuilderRes
         if (firstDirectory != null) {
             rssList.add(fromFileSystem(firstDirectory));
         }
-        rssList.addAll(Arrays.asList(fromFileSystem(ConfigurationConstants.DEFAULT_CONFIG_DIRECTORY),
-            fromFileSystem(ConfigurationConstants.WEBINF_CONFIG_DIRECTORY), fromClassPath()));
+        rssList.addAll(Arrays.asList(
+                fromFileSystem(ConfigurationConstants.DEFAULT_CONFIG_DIRECTORY),
+                fromFileSystem(ConfigurationConstants.WEBINF_FULL_DIRECTORY), 
+                fromClassPath(), 
+                fromClassPath(ConfigurationConstants.WEBINF_DIRECTORY))
+            );
         return rssList.toArray(new ResourceStreamSource[0]);
     }
 
@@ -64,7 +68,11 @@ public class IsisConfigurationBuilderDefault extends IsisConfigurationBuilderRes
     }
 
     private static ResourceStreamSource fromClassPath() {
-        return new ResourceStreamSourceContextLoaderClassPath();
+        return ResourceStreamSourceContextLoaderClassPath.create();
+    }
+
+    private static ResourceStreamSource fromClassPath(final String prefix) {
+        return ResourceStreamSourceContextLoaderClassPath.create(prefix);
     }
 
 }

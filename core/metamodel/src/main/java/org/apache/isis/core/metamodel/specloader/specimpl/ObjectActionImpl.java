@@ -279,7 +279,19 @@ public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectActi
     }
 
     @Override
-    public ObjectActionParameter getParameter(String paramName) {
+    public ObjectActionParameter getParameterById(String paramId) {
+        final List<ObjectActionParameter> allParameters = getParameters();
+        for (int i = 0; i < allParameters.size(); i++) {
+            final ObjectActionParameter param = allParameters.get(i);
+            if (Objects.equal(paramId, param.getId())) {
+                return param;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public ObjectActionParameter getParameterByName(String paramName) {
         final List<ObjectActionParameter> allParameters = getParameters();
         for (int i = 0; i < allParameters.size(); i++) {
             final ObjectActionParameter param = allParameters.get(i);

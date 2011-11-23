@@ -87,7 +87,7 @@ public abstract class AbstractHtmlPage implements Component, Page {
             if (i++ > 0) {
                 writer.print("alternate ");
             }
-            writer.print("stylesheet\" title=\"Style " + i + "\" href=\"./");
+            writer.print("stylesheet\" title=\"Style " + i + "\" href=\"");
             writer.print(style);
             writer.println("\" type=\"text/css\" media=\"all\"/>");
         }
