@@ -102,7 +102,7 @@ import com.google.inject.Module;
  * <p>
  * There are also a number of other pluggable hooks (similar way to other Wicket customizations)
  * <ul>
- * <li> {@link #newComponentFactoryList() (mentioned above)</li>
+ * <li> {@link #newComponentFactoryList()} (mentioned above)</li>
  * <li> {@link #newComponentFactoryRegistry()} (uses the {@link ComponentFactoryList} provided by
  *       {@link #newComponentFactoryList()})</li>
  * <li> {@link #newPageClassList()}</li>
