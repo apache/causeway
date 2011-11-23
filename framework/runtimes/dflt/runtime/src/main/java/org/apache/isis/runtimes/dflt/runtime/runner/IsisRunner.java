@@ -98,8 +98,8 @@ public class IsisRunner {
     }
 
     private String determineConfigDirectory() {
-        if (new File(ConfigurationConstants.WEBINF_CONFIG_DIRECTORY).exists()) {
-            return ConfigurationConstants.WEBINF_CONFIG_DIRECTORY;
+        if (new File(ConfigurationConstants.WEBINF_FULL_DIRECTORY).exists()) {
+            return ConfigurationConstants.WEBINF_FULL_DIRECTORY;
         } else {
             return ConfigurationConstants.DEFAULT_CONFIG_DIRECTORY;
         }

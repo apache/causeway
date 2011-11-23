@@ -160,9 +160,14 @@ public interface ObjectAction extends ObjectMember {
     List<ObjectActionParameter> getParameters(Filter<ObjectActionParameter> filter);
 
     /**
+     * Returns the parameter with provided id.
+     */
+    ObjectActionParameter getParameterById(String paramId);
+
+    /**
      * Returns the parameter with provided name.
      */
-    ObjectActionParameter getParameter(String paramName);
+    ObjectActionParameter getParameterByName(String paramName);
 
     // //////////////////////////////////////////////////////
     // Parameters (per instance)

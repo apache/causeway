@@ -460,23 +460,6 @@
                 <version>${isis.version}</version>
             </dependency>
 
-            <!-- isis: viewer: xhtml -->
-            <dependency>
-                <groupId>org.apache.isis.viewer</groupId>
-                <artifactId>xhtml</artifactId>
-                <version>${isis.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.isis.viewer</groupId>
-                <artifactId>xhtml-applib</artifactId>
-                <version>${isis.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.isis.viewer</groupId>
-                <artifactId>xhtml-viewer</artifactId>
-                <version>${isis.version}</version>
-            </dependency>
-
             <!-- isis: viewer: json -->
             <dependency>
                 <groupId>org.apache.isis.viewer</groupId>

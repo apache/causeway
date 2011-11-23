@@ -131,7 +131,7 @@ public class ObjectActionReprRenderer extends AbstractObjectMemberReprRenderer<O
         JsonRepresentation argMap = JsonRepresentation.newMap();
         List<ObjectActionParameter> parameters = objectMember.getParameters();
         for(int i=0; i<objectMember.getParameterCount(); i++) {
-            argMap.mapPut(parameters.get(i).getName(), argValueFor(i)); 
+            argMap.mapPut(parameters.get(i).getId(), argValueFor(i)); 
         }
         return argMap;
     }
@@ -164,8 +164,9 @@ public class ObjectActionReprRenderer extends AbstractObjectMemberReprRenderer<O
 
 	private Object paramDetails(ObjectActionParameter param) {
 		final JsonRepresentation paramRep = JsonRepresentation.newMap();
-		paramRep.mapPut("name", param.getName());
 		paramRep.mapPut("num", param.getNumber());
+		paramRep.mapPut("id", param.getId());
+		paramRep.mapPut("name", param.getName());
 		paramRep.mapPut("description", param.getDescription());
 		Object paramChoices = choicesFor(param);
 		if(paramChoices != null) {

@@ -230,7 +230,12 @@ public class ObjectActionSet implements ObjectAction {
     }
 
     @Override
-    public ObjectActionParameter getParameter(String paramName) {
+    public ObjectActionParameter getParameterById(String paramId) {
+        return null;
+    }
+
+    @Override
+    public ObjectActionParameter getParameterByName(String paramName) {
         return null;
     }
 

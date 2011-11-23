@@ -210,7 +210,7 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
         }
         ObjectAction parentAction = (ObjectAction) objectMember;
         
-        ObjectActionParameter actionParam = parentAction.getParameter(paramName);
+        ObjectActionParameter actionParam = parentAction.getParameterByName(paramName);
 
         final RendererFactory rendererFactory = 
                 rendererFactoryRegistry.find(representationType);
