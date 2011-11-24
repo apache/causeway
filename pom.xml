@@ -27,8 +27,8 @@
 
     <name>Apache Isis</name>
     <description>
-        Root POM for core framework, the viewers,
-        the default implementations and alternatives implementations.
+        Root POM for core framework, the viewers, and 
+        the runtime implementations.
         Defines standard build process, as well as
         standard set of 3rd party dependencies
         (eg for testing and logging frameworks).
