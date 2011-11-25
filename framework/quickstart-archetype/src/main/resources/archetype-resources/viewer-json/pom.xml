@@ -89,6 +89,10 @@
             <groupId>org.apache.isis.runtimes.dflt.profilestores</groupId>
             <artifactId>dflt</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.apache.isis.runtimes.dflt.profilestores</groupId>
+            <artifactId>xml</artifactId>
+        </dependency>
         
         <!-- isis progmodel -->
         <dependency>
@@ -106,7 +110,7 @@
             <artifactId>dflt</artifactId>
         </dependency>
         
-        <!-- to run using WebServer -->
+        <!-- to run using WebServer (optional) -->
         <dependency>
             <groupId>org.apache.isis.runtimes.dflt</groupId>
             <artifactId>webserver</artifactId>
