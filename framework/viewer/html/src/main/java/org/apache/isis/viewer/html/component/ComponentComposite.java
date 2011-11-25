@@ -23,8 +23,22 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.isis.viewer.html.HtmlViewerContext;
+
 public class ComponentComposite implements Component {
+    
     private final List<Component> components = new ArrayList<Component>();
+    protected final HtmlViewerContext htmlViewerContext;
+
+    public ComponentComposite(final HtmlViewerContext htmlViewerContext) {
+        super();
+        this.htmlViewerContext = htmlViewerContext;
+    }
+
+    
+    protected String pathTo(final String prefix) {
+        return htmlViewerContext.pathTo(prefix);
+    }
 
     @Override
     public void write(final PrintWriter writer) {

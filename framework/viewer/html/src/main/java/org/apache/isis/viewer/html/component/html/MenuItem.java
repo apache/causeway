@@ -22,6 +22,7 @@ package org.apache.isis.viewer.html.component.html;
 import java.io.PrintWriter;
 
 import org.apache.isis.core.metamodel.spec.ActionType;
+import org.apache.isis.viewer.html.HtmlViewerContext;
 import org.apache.isis.viewer.html.component.Component;
 
 public class MenuItem implements Component {
@@ -32,10 +33,12 @@ public class MenuItem implements Component {
     private final String reasonDisabled;
     private final boolean takesParameters;
     private final ActionType type;
+    private final HtmlViewerContext htmlViewerContext;
 
-    public MenuItem(final String actionId, final String actionName, final String actionDescription,
-        final String reasonDisabled, final ActionType type, final boolean takesParameters, final String objectId) {
+    public MenuItem(HtmlViewerContext htmlViewerContext, final String actionId, final String actionName,
+        final String actionDescription, final String reasonDisabled, final ActionType type, final boolean takesParameters, final String objectId) {
         this.actionId = actionId;
+        this.htmlViewerContext = htmlViewerContext;
         this.actionName = actionName;
         this.actionDescription = actionDescription;
         this.reasonDisabled = reasonDisabled;
@@ -74,7 +77,7 @@ public class MenuItem implements Component {
         writer.print("<a title=\"");
         writer.print(actionDescription);
         writer.print("\" href=\"");
-        writer.print("method.app?id=");
+        writer.print(pathTo("method") + "?id=");
         writer.print(objectId);
         writer.print("&amp;action=");
         writer.print(actionId);
@@ -90,6 +93,10 @@ public class MenuItem implements Component {
             writer.print(". . .");
         }
         writer.print("</a>");
+    }
+
+    protected String pathTo(final String prefix) {
+        return htmlViewerContext.pathTo(prefix);
     }
 
 }

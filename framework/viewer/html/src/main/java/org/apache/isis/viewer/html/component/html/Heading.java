@@ -21,17 +21,19 @@ package org.apache.isis.viewer.html.component.html;
 
 import java.io.PrintWriter;
 
+import org.apache.isis.viewer.html.HtmlViewerContext;
 import org.apache.isis.viewer.html.component.ComponentAbstract;
 
 public class Heading extends ComponentAbstract {
     private final String title;
     private final int level;
 
-    public Heading(final String title) {
-        this(title, 1);
+    public Heading(HtmlViewerContext htmlViewerContext, final String title) {
+        this(htmlViewerContext, title, 1);
     }
 
-    public Heading(final String title, final int level) {
+    public Heading(HtmlViewerContext htmlViewerContext, final String title, final int level) {
+        super(htmlViewerContext);
         this.title = title;
         this.level = level;
     }

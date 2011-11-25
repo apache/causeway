@@ -21,6 +21,7 @@ package org.apache.isis.viewer.html.component.html;
 
 import java.io.PrintWriter;
 
+import org.apache.isis.viewer.html.HtmlViewerContext;
 import org.apache.isis.viewer.html.component.Block;
 import org.apache.isis.viewer.html.component.Component;
 import org.apache.isis.viewer.html.component.DebugPane;
@@ -30,9 +31,9 @@ public class LogonFormPage extends AbstractHtmlPage {
     private final String user;
     private final String password;
 
-    public LogonFormPage(final String styleSheet, final String header, final String footer, final String user,
-        final String password) {
-        super(styleSheet, header, footer);
+    public LogonFormPage(final HtmlViewerContext htmlViewerContext, final String styleSheet, final String header, final String footer,
+        final String user, final String password) {
+        super(htmlViewerContext, styleSheet, header, footer);
         this.user = user;
         this.password = password;
     }
@@ -47,7 +48,7 @@ public class LogonFormPage extends AbstractHtmlPage {
             writer.println("<span class=\"header-text\">Please enter a valid user name and password.</span>");
         }
         writer.println("</div>");
-        writer.println("<FORM ACTION=\"logon.app\" METHOD=\"post\">");
+        writer.println("<FORM ACTION=\"" + pathTo("logon") + "\" METHOD=\"post\">");
         writer.println("<div id=\"content\">");
         writer.println("<div class=\"field\"><span class=\"label\">User name</span>"
             + "<span class=\"separator\">: </span><INPUT NAME=\"username\" value=\"" + user + "\"></DIV>");
@@ -59,6 +60,10 @@ public class LogonFormPage extends AbstractHtmlPage {
         writer.println("</FORM>");
         writer.println("</div>");
 
+    }
+
+    protected String pathTo(final String prefix) {
+        return htmlViewerContext.pathTo(prefix);
     }
 
     @Override

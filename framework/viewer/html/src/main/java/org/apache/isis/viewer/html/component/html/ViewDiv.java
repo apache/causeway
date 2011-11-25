@@ -23,12 +23,14 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.isis.viewer.html.HtmlViewerContext;
 import org.apache.isis.viewer.html.component.Component;
 import org.apache.isis.viewer.html.component.ComponentComposite;
 import org.apache.isis.viewer.html.component.ViewPane;
 import org.apache.isis.viewer.html.image.ImageLookup;
 
 public class ViewDiv extends ComponentComposite implements ViewPane {
+    
     private String iconName;
     private String objectId;
     private Component[] menu = new Component[0];
@@ -36,6 +38,12 @@ public class ViewDiv extends ComponentComposite implements ViewPane {
     private final List<String> messages = new ArrayList<String>();
     private final List<String> warnings = new ArrayList<String>();
     private String description;
+
+    
+    public ViewDiv(HtmlViewerContext htmlViewerContext) {
+        super(htmlViewerContext);
+    }
+
 
     @Override
     public void setIconName(final String iconName) {
@@ -113,7 +121,7 @@ public class ViewDiv extends ComponentComposite implements ViewPane {
         }
         writer.print(">");
         if (objectId != null) {
-            writer.print("<a href=\"object.app?id=");
+            writer.print("<a href=\"" + pathTo("object") + "?id=");
             writer.print(objectId);
             writer.print("\">");
         }
@@ -130,5 +138,9 @@ public class ViewDiv extends ComponentComposite implements ViewPane {
             writer.print("</a>");
         }
         writer.println("</div>");
+    }
+
+    protected String pathTo(final String prefix) {
+        return htmlViewerContext.pathTo(prefix);
     }
 }

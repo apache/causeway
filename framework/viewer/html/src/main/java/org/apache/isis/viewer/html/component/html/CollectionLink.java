@@ -24,6 +24,7 @@ import java.io.PrintWriter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
+import org.apache.isis.viewer.html.HtmlViewerContext;
 import org.apache.isis.viewer.html.component.ComponentAbstract;
 import org.apache.isis.viewer.html.image.ImageLookup;
 import org.apache.isis.viewer.html.request.Request;
@@ -35,8 +36,9 @@ class CollectionLink extends ComponentAbstract {
     private final String title;
     private final String description;
 
-    public CollectionLink(final ObjectAssociation field, final ObjectAdapter collection, final String description,
-        final String objectId) {
+    public CollectionLink(HtmlViewerContext htmlViewerContext, final ObjectAssociation field, final ObjectAdapter collection,
+        final String description, final String objectId) {
+        super(htmlViewerContext);
         this.description = description;
         this.objectId = objectId;
         fieldId = field.getId();
@@ -55,7 +57,7 @@ class CollectionLink extends ComponentAbstract {
         writer.print(">");
 
         writer.print("<a href=\"");
-        writer.print(Request.FIELD_COLLECTION_COMMAND + ".app?id=");
+        writer.print(pathTo(Request.FIELD_COLLECTION_COMMAND) + "?id=");
         writer.print(objectId);
         writer.print("&amp;field=");
         writer.print(fieldId);
@@ -67,6 +69,10 @@ class CollectionLink extends ComponentAbstract {
         writer.print(title);
         writer.print("</a>");
         writer.println("</span>");
+    }
+
+    protected String pathTo(final String prefix) {
+        return htmlViewerContext.pathTo(prefix);
     }
 
 }

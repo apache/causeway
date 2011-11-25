@@ -22,6 +22,7 @@ package org.apache.isis.viewer.html.component.html;
 import java.io.PrintWriter;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.viewer.html.HtmlViewerContext;
 import org.apache.isis.viewer.html.component.Component;
 import org.apache.isis.viewer.html.image.ImageLookup;
 import org.apache.isis.viewer.html.request.Request;
@@ -31,8 +32,10 @@ public class ObjectIcon implements Component {
     private final String id;
     private final String style;
     private final String description;
+    private final HtmlViewerContext htmlViewerContext;
 
-    public ObjectIcon(final ObjectAdapter element, final String description, final String id, final String style) {
+    public ObjectIcon(final HtmlViewerContext htmlViewerContext, final ObjectAdapter element, final String description, final String id, final String style) {
+        this.htmlViewerContext = htmlViewerContext;
         this.element = element;
         this.description = description;
         this.id = id;
@@ -52,7 +55,7 @@ public class ObjectIcon implements Component {
         writer.print(">");
 
         writer.print("<a href=\"");
-        writer.print(Request.OBJECT_COMMAND + ".app?id=");
+        writer.print(pathTo(Request.OBJECT_COMMAND) + "?id=");
         writer.print(id);
         writer.print("\"><img src=\"");
         writer.print(ImageLookup.image(element));
@@ -66,6 +69,10 @@ public class ObjectIcon implements Component {
 
         writer.println("</div>");
 
+    }
+
+    protected String pathTo(final String prefix) {
+        return htmlViewerContext.pathTo(prefix);
     }
 
 }

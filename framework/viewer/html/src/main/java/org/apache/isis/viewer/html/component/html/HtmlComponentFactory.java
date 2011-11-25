@@ -38,6 +38,7 @@ import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.progmodel.facets.value.booleans.BooleanValueFacet;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
+import org.apache.isis.viewer.html.HtmlViewerContext;
 import org.apache.isis.viewer.html.component.Block;
 import org.apache.isis.viewer.html.component.Component;
 import org.apache.isis.viewer.html.component.ComponentFactory;
@@ -51,8 +52,10 @@ public class HtmlComponentFactory implements ComponentFactory {
     protected final String footer;
     protected final String header;
     protected final String styleSheet;
+    private final HtmlViewerContext htmlViewerContext;
 
-    public HtmlComponentFactory() {
+    public HtmlComponentFactory(final HtmlViewerContext htmlViewerContext) {
+        this.htmlViewerContext = htmlViewerContext;
         final IsisConfiguration configuration = getConfiguration();
         styleSheet = configuration.getString(STYLE_SHEET);
         String file = configuration.getString(HEADER_FILE);
@@ -63,17 +66,17 @@ public class HtmlComponentFactory implements ComponentFactory {
 
     @Override
     public Block createBlock(final String style, final String description) {
-        return new Div(style, description);
+        return new Div(htmlViewerContext, style, description);
     }
 
     @Override
     public Component createBreadCrumbs(final String[] names, final boolean[] isLinked) {
-        return new BreadCrumbs(names, isLinked);
+        return new BreadCrumbs(htmlViewerContext, names, isLinked);
     }
 
     @Override
     public Component createCollectionIcon(final ObjectAssociation field, final ObjectAdapter collection, final String id) {
-        return new CollectionLink(field, collection, field.getDescription(), id);
+        return new CollectionLink(htmlViewerContext, field, collection, field.getDescription(), id);
     }
 
     @Override
@@ -83,17 +86,17 @@ public class HtmlComponentFactory implements ComponentFactory {
 
     @Override
     public Component createEditOption(final String id) {
-        return new ActionComponent("edit", "Edit Object", "Edit the current object", id, null, null);
+        return new ActionComponent(htmlViewerContext, "edit", "Edit Object", "Edit the current object", id, null, null);
     }
 
     @Override
     public Component createRemoveOption(final String id, final String elementId, final String fieldName) {
-        return new ActionComponent("remove", "Remove", "Remove item from collection", id, elementId, fieldName);
+        return new ActionComponent(htmlViewerContext, "remove", "Remove", "Remove item from collection", id, elementId, fieldName);
     }
 
     @Override
     public Component createAddOption(final String id, final String fieldName) {
-        return new ActionComponent("add", "Add Item", "Add item to collection", id, null, fieldName);
+        return new ActionComponent(htmlViewerContext, "add", "Add Item", "Add item to collection", id, null, fieldName);
     }
 
     @Override
@@ -104,12 +107,12 @@ public class HtmlComponentFactory implements ComponentFactory {
     @Override
     public Form createForm(final String id, final String actionName, final int step, final int noOfPages,
         final boolean isEditing) {
-        return new HtmlForm(id, actionName, step, noOfPages, isEditing);
+        return new HtmlForm(htmlViewerContext, id, actionName, step, noOfPages, isEditing);
     }
 
     @Override
     public Component createHeading(final String name) {
-        return new Heading(name, 4);
+        return new Heading(htmlViewerContext, name, 4);
     }
 
     @Override
@@ -129,53 +132,53 @@ public class HtmlComponentFactory implements ComponentFactory {
 
     @Override
     public Component createLink(final String link, final String name, final String description) {
-        return new Link(link, name, description);
+        return new Link(htmlViewerContext, link, name, description);
     }
 
     @Override
     public Component createMenuItem(final String actionId, final String name, final String description,
         final String reasonDisabled, final ActionType type, final boolean hasParameters, final String targetObjectId) {
-        return new MenuItem(actionId, name, description, reasonDisabled, type, hasParameters, targetObjectId);
+        return new MenuItem(htmlViewerContext, actionId, name, description, reasonDisabled, type, hasParameters, targetObjectId);
     }
 
     @Override
     public Component createCollectionIcon(final ObjectAdapter collection, final String collectionId) {
-        return new CollectionIcon(collection, collection.getSpecification().getDescription(), collectionId);
+        return new CollectionIcon(htmlViewerContext, collection, collection.getSpecification().getDescription(), collectionId);
     }
 
     @Override
     public Component createObjectIcon(final ObjectAdapter object, final String objectId, final String style) {
-        return new ObjectIcon(object, object.getSpecification().getDescription(), objectId, style);
+        return new ObjectIcon(htmlViewerContext, object, object.getSpecification().getDescription(), objectId, style);
     }
 
     @Override
     public Component createObjectIcon(final ObjectAssociation field, final ObjectAdapter object, final String objectId,
         final String style) {
-        return new ObjectIcon(object, field.getDescription(), objectId, style);
+        return new ObjectIcon(htmlViewerContext, object, field.getDescription(), objectId, style);
     }
 
     @Override
     public Page createPage() {
-        return new DynamicHtmlPage(styleSheet, header, footer);
+        return new DynamicHtmlPage(htmlViewerContext, styleSheet, header, footer);
     }
 
     public LogonFormPage createLogonPage(final String user, final String password) {
-        return new LogonFormPage(styleSheet, header, footer, user, password);
+        return new LogonFormPage(htmlViewerContext, styleSheet, header, footer, user, password);
     }
 
     @Override
     public Component createService(final String objectId, final String title, final String iconName) {
-        return new ServiceComponent(objectId, title, iconName);
+        return new ServiceComponent(htmlViewerContext, objectId, title, iconName);
     }
 
     @Override
     public Table createTable(final int noColumns, final boolean withSelectorColumn) {
-        return new HtmlTable(noColumns, withSelectorColumn);
+        return new HtmlTable(htmlViewerContext, noColumns, withSelectorColumn);
     }
 
     @Override
     public Component createUserSwap(final String name) {
-        return new UserSwapLink(name);
+        return new UserSwapLink(htmlViewerContext, name);
 
     }
 

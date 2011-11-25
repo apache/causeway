@@ -21,10 +21,15 @@ package org.apache.isis.viewer.html.component.html;
 
 import java.io.PrintWriter;
 
+import org.apache.isis.viewer.html.HtmlViewerContext;
 import org.apache.isis.viewer.html.component.Component;
 import org.apache.isis.viewer.html.component.ComponentComposite;
 
 class TableHeader extends ComponentComposite {
+
+    public TableHeader(HtmlViewerContext htmlViewerContext) {
+        super(htmlViewerContext);
+    }
 
     @Override
     protected void write(final PrintWriter writer, final Component component) {
@@ -34,6 +39,6 @@ class TableHeader extends ComponentComposite {
     }
 
     public void addHeader(final String string) {
-        add(new Html(string));
+        add(new Html(htmlViewerContext, string));
     }
 }

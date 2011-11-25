@@ -40,7 +40,8 @@ import org.apache.isis.viewer.html.request.ServletRequest;
 import org.apache.isis.viewer.html.servlet.internal.WebController;
 import org.apache.log4j.Logger;
 
-public class ControllerServlet extends HttpServlet {
+public class ControllerServlet extends AbstractHtmlViewerServlet {
+    
     private static final long serialVersionUID = 1L;
     private static final Logger LOG = Logger.getLogger(ControllerServlet.class);
 
@@ -56,7 +57,7 @@ public class ControllerServlet extends HttpServlet {
         super.init(servletConfig);
         encoding = getConfiguration().getString(HtmlServletConstants.ENCODING_KEY, encoding);
 
-        controller = new WebController();
+        controller = new WebController(getHtmlViewerContext());
         controller.setDebug(getConfiguration().getBoolean(HtmlServletConstants.DEBUG_KEY));
         controller.init();
     }
@@ -105,7 +106,7 @@ public class ControllerServlet extends HttpServlet {
             (Context) authenticationSession.getAttribute(HtmlServletConstants.AUTHENTICATION_SESSION_CONTEXT_KEY);
         if (context == null || !context.isValid()) {
             // TODO reuse the component factory
-            context = new Context(new HtmlComponentFactory());
+            context = new Context(new HtmlComponentFactory(getHtmlViewerContext()));
             authenticationSession.setAttribute(HtmlServletConstants.AUTHENTICATION_SESSION_CONTEXT_KEY, context);
         }
         return context;
@@ -119,6 +120,7 @@ public class ControllerServlet extends HttpServlet {
         // have prevented us from getting here.
 
         try {
+            // REVIEW: why was this commented out?
             // SessionAccess.startRequest(context.getSession());
             final Page page = controller.generatePage(context, req);
             if (context.isValid()) {
@@ -130,15 +132,20 @@ public class ControllerServlet extends HttpServlet {
                 writer = response.getWriter();
                 page.write(writer);
             } else {
-                response.sendRedirect(HtmlServletConstants.LOGON_APP_PAGE);
+                response.sendRedirect(getLogonPage());
             }
         } finally {
+            // REVIEW: why was this commented out?
             // SessionAccess.endRequest(context.getSession());
             if (!context.isLoggedIn()) {
                 final HttpSession httpSession = request.getSession(false);
                 LOG.info("dropping session: " + httpSession);
             }
         }
+    }
+
+    protected String getLogonPage() {
+        return pathTo(HtmlServletConstants.LOGON_APP_PAGE);
     }
 
     private void addDebug(final HttpServletRequest request, final Page page) {
@@ -148,16 +155,5 @@ public class ControllerServlet extends HttpServlet {
         page.addDebug("Path info", request.getPathInfo());
     }
 
-    // //////////////////////////////////////////////////////////////////
-    // Dependencies (from context)
-    // //////////////////////////////////////////////////////////////////
-
-    private static AuthenticationSession getAuthenticationSession() {
-        return IsisContext.getAuthenticationSession();
-    }
-
-    private static IsisConfiguration getConfiguration() {
-        return IsisContext.getConfiguration();
-    }
 
 }

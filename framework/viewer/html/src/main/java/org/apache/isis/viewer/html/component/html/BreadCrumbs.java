@@ -21,13 +21,15 @@ package org.apache.isis.viewer.html.component.html;
 
 import java.io.PrintWriter;
 
+import org.apache.isis.viewer.html.HtmlViewerContext;
 import org.apache.isis.viewer.html.component.ComponentAbstract;
 
 public class BreadCrumbs extends ComponentAbstract {
     private final String[] names;
     private final boolean[] isLinked;
 
-    public BreadCrumbs(final String[] names, final boolean[] isLinked) {
+    public BreadCrumbs(final HtmlViewerContext htmlViewerContext, final String[] names, final boolean[] isLinked) {
+        super(htmlViewerContext);
         this.names = names;
         this.isLinked = isLinked;
     }
@@ -42,7 +44,7 @@ public class BreadCrumbs extends ComponentAbstract {
                 writer.print("<span class=\"separator\"> &gt; </span>");
             }
             if (isLinked[i]) {
-                writer.print("<a class=\"linked\" href=\"context.app?id=");
+                writer.print("<a class=\"linked\" href=\"" + pathTo("context") + "?id=");
                 writer.print(i);
                 writer.print("\">");
                 writer.print(names[i]);
@@ -55,6 +57,10 @@ public class BreadCrumbs extends ComponentAbstract {
         }
 
         writer.print("</div>");
+    }
+
+    protected String pathTo(final String prefix) {
+        return htmlViewerContext.pathTo(prefix);
     }
 
 }

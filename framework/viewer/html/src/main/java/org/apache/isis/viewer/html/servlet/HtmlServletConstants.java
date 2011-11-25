@@ -31,12 +31,17 @@ public final class HtmlServletConstants {
     static final String ENCODING_KEY = PROPERTY_BASE + "encoding";
     static final String ENCODING_DEFAULT = "ISO-8859-1";
 
+    public static final String SUFFIX_INIT_PARAM = "viewer-html.suffix";
+    public static final String SUFFIX_INIT_PARAM_VALUE_DEFAULT = "app";
+
     /**
      * Binding to the {@link AuthenticationSession}.
      */
     static final String AUTHENTICATION_SESSION_CONTEXT_KEY = "nof-context";
 
-    public static final String LOGON_APP_PAGE = "logon.app";
+    public static final String LOGON_APP_PAGE = "logon";
+    static final String START_PAGE = "start";
+
 
     private HtmlServletConstants() {
     }

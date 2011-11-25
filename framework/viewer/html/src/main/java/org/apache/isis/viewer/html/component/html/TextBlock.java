@@ -21,16 +21,19 @@ package org.apache.isis.viewer.html.component.html;
 
 import java.io.PrintWriter;
 
+import org.apache.isis.viewer.html.HtmlViewerContext;
 import org.apache.isis.viewer.html.component.ComponentAbstract;
 
 class TextBlock extends ComponentAbstract {
     StringBuffer buffer = new StringBuffer();
 
-    public TextBlock(final String text) {
+    public TextBlock(HtmlViewerContext htmlViewerContext, final String text) {
+        super(htmlViewerContext);
         append(text);
     }
 
-    public TextBlock() {
+    public TextBlock(HtmlViewerContext htmlViewerContext) {
+        super(htmlViewerContext);
     }
 
     public void append(final String string) {

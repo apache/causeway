@@ -24,22 +24,29 @@ package org.apache.isis.viewer.html.component.html;
 
 import java.io.PrintWriter;
 
+import org.apache.isis.viewer.html.HtmlViewerContext;
 import org.apache.isis.viewer.html.component.Component;
 
 final class UserSwapLink implements Component {
+    private final HtmlViewerContext htmlViewerContext;
     private final String name;
 
-    UserSwapLink(final String name) {
+    UserSwapLink(final HtmlViewerContext htmlViewerContext, final String name) {
+        this.htmlViewerContext = htmlViewerContext;
         this.name = name;
     }
 
     @Override
     public void write(final PrintWriter writer) {
-        writer.print("<a class=\"user\" href=\"setuser.app?name=");
+        writer.print("<a class=\"user\" href=\"" + pathTo("setuser") + "?name=");
         writer.print(name);
         writer.print("\" title=\"Change user to " + name);
         writer.print("\">");
         writer.print(name);
         writer.println("</a>");
+    }
+
+    protected String pathTo(final String prefix) {
+        return htmlViewerContext.pathTo(prefix);
     }
 }

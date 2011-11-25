@@ -21,10 +21,18 @@ package org.apache.isis.viewer.html.component;
 
 import java.io.PrintWriter;
 
+import org.apache.isis.viewer.html.HtmlViewerContext;
+
 public abstract class ComponentAbstract implements Component {
+    
     private String id;
     private String cls;
+    protected final HtmlViewerContext htmlViewerContext;
 
+    public ComponentAbstract(HtmlViewerContext htmlViewerContext) {
+        this.htmlViewerContext = htmlViewerContext;
+    }
+    
     public void setClass(final String cls) {
         this.cls = cls;
     }
