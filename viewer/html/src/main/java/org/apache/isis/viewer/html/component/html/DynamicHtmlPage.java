@@ -21,6 +21,7 @@ package org.apache.isis.viewer.html.component.html;
 
 import java.io.PrintWriter;
 
+import org.apache.isis.viewer.html.HtmlViewerContext;
 import org.apache.isis.viewer.html.component.Block;
 import org.apache.isis.viewer.html.component.Component;
 import org.apache.isis.viewer.html.component.DebugPane;
@@ -28,13 +29,17 @@ import org.apache.isis.viewer.html.component.Page;
 import org.apache.isis.viewer.html.component.ViewPane;
 
 public class DynamicHtmlPage extends AbstractHtmlPage implements Page {
+    
+    private final Block navigation;
+    private final ViewPane viewPane;
+
     private Component crumbs;
     private DebugPane debugPane;
-    private final Block navigation = new Div(null, "navigation");
-    private final ViewPane viewPane = new ViewDiv();
 
-    public DynamicHtmlPage(final String styleSheet, final String header, final String footer) {
-        super(styleSheet, header, footer);
+    public DynamicHtmlPage(HtmlViewerContext htmlViewerContext, final String styleSheet, final String header, final String footer) {
+        super(htmlViewerContext, styleSheet, header, footer);
+        this.navigation = new Div(htmlViewerContext, null, "navigation");
+        this.viewPane = new ViewDiv(htmlViewerContext);
     }
 
     @Override

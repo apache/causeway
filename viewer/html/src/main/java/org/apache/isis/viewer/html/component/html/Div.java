@@ -21,22 +21,23 @@ package org.apache.isis.viewer.html.component.html;
 
 import java.io.PrintWriter;
 
+import org.apache.isis.viewer.html.HtmlViewerContext;
 import org.apache.isis.viewer.html.component.Block;
 import org.apache.isis.viewer.html.component.Component;
 import org.apache.isis.viewer.html.component.ComponentComposite;
 
 public class Div extends ComponentComposite implements Block {
+    
     private final String className;
     private final String id;
     private final String description;
 
-    public Div(final String className, final String description) {
-        this.className = className;
-        this.description = description;
-        id = null;
+    public Div(final HtmlViewerContext htmlViewerContext, final String className, final String description) {
+        this(htmlViewerContext, className, description, null);
     }
 
-    public Div(final String className, final String description, final String id) {
+    public Div(final HtmlViewerContext htmlViewerContext, final String className, final String description, final String id) {
+        super(htmlViewerContext);
         this.description = description;
         this.className = className;
         this.id = id;
@@ -79,7 +80,7 @@ public class Div extends ComponentComposite implements Block {
     }
 
     public void add(final String text) {
-        super.add(new Html(text));
+        super.add(new Html(htmlViewerContext, text));
     }
 
 }

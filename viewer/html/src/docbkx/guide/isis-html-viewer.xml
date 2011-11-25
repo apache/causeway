@@ -112,6 +112,72 @@
       </sect2>
 
       <sect2>
+        <title>Reading HTML viewer specific properties</title>
+
+        <para></para>
+
+        <para></para>
+
+        <programlisting>&lt;web.xml&gt;
+    ...
+    &lt;context-param&gt;
+        &lt;param-name&gt;isis.viewers&lt;/param-name&gt;
+        &lt;param-value&gt;html&lt;/param-value&gt;
+    &lt;/context-param&gt;
+    ...
+&lt;/web.xml&gt;</programlisting>
+
+        <para>This will cause the viewer_html.properties file to be read if it
+        is present.</para>
+
+        <para></para>
+
+        <para></para>
+
+        <para>NB: the value for this parameter is actually comma-separated, to
+        allow for multiple viewers to be configured in the same webapp.</para>
+
+        <para></para>
+      </sect2>
+
+      <sect2>
+        <title>Hosting multiple viewers at the same time</title>
+
+        <para></para>
+
+        <para>*** combine the servlet, filter and listener entries.</para>
+
+        <para></para>
+
+        <para></para>
+
+        <para>By default the htmlviewer uses ".app" as the suffix for its .
+        this can be changed using the viewer-html.suffix init-param in
+        web.xml:</para>
+
+        <para></para>
+
+        <para>avoid name clashes.</para>
+
+        <para></para>
+
+        <programlisting>&lt;web.xml&gt;
+    ...
+    &lt;context-param&gt;
+        &lt;param-name&gt;viewer-html.suffix&lt;/param-name&gt;
+        &lt;param-value&gt;htmlviewer&lt;/param-value&gt;
+    &lt;/context-param&gt;
+    ...
+&lt;/web.xml&gt;</programlisting>
+
+        <para></para>
+
+        <para></para>
+
+        <para></para>
+      </sect2>
+
+      <sect2>
         <title>Debugging</title>
 
         <para>To turn on debuging use the debugon command, e.g.,</para>

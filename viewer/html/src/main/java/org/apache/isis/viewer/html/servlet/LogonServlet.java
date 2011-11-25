@@ -22,30 +22,29 @@ package org.apache.isis.viewer.html.servlet;
 import java.io.IOException;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
-import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequest;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequestPassword;
 import org.apache.isis.runtimes.dflt.monitoring.servermonitor.Monitor;
 import org.apache.isis.runtimes.dflt.runtime.authentication.exploration.AuthenticationRequestExploration;
 import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
-import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.webapp.WebAppConstants;
+import org.apache.isis.runtimes.dflt.webapp.auth.AuthenticationSessionLookupStrategy.Caching;
 import org.apache.isis.runtimes.dflt.webapp.auth.AuthenticationSessionLookupStrategyDefault;
 import org.apache.isis.viewer.html.component.html.HtmlComponentFactory;
 import org.apache.isis.viewer.html.component.html.LogonFormPage;
 import org.apache.isis.viewer.html.context.Context;
 import org.apache.log4j.Logger;
 
-public class LogonServlet extends HttpServlet {
+public class LogonServlet extends AbstractHtmlViewerServlet {
+    
     private static final Logger LOG = Logger.getLogger(LogonServlet.class);
     private static final long serialVersionUID = 1L;
-
+    
     @Override
     protected void doGet(final HttpServletRequest request, final HttpServletResponse response) throws ServletException,
         IOException {
@@ -56,9 +55,9 @@ public class LogonServlet extends HttpServlet {
     protected void doPost(final HttpServletRequest request, final HttpServletResponse response)
         throws ServletException, IOException {
 
-        AuthenticationSession authSession = new AuthenticationSessionLookupStrategyDefault().lookup(request, response);
+        AuthenticationSession authSession = new AuthenticationSessionLookupStrategyDefault().lookupValid(request, response, Caching.CACHE);
         if (authSession != null) {
-            final boolean sessionValid = IsisContext.getAuthenticationManager().isSessionValid(authSession);
+            final boolean sessionValid = getAuthenticationManager().isSessionValid(authSession);
             if (sessionValid) {
                 loggedIn(response, authSession.getUserName());
                 return;
@@ -68,7 +67,7 @@ public class LogonServlet extends HttpServlet {
         final String user = request.getParameter("username");
         final String password = request.getParameter("password");
 
-        if (user == null && !IsisContext.getDeploymentType().isExploring()) {
+        if (user == null && !getDeploymentType().isExploring()) {
             prompt(response, "", "", "");
             return;
         }
@@ -82,7 +81,7 @@ public class LogonServlet extends HttpServlet {
         final HttpSession httpSession = request.getSession(true);
         httpSession.setAttribute(WebAppConstants.HTTP_SESSION_AUTHENTICATION_SESSION_KEY, authSession);
 
-        final Context context = new Context(new HtmlComponentFactory());
+        final Context context = new Context(new HtmlComponentFactory(getHtmlViewerContext()));
         context.setSession(authSession);
         authSession.setAttribute(HtmlServletConstants.AUTHENTICATION_SESSION_CONTEXT_KEY, context);
 
@@ -92,7 +91,7 @@ public class LogonServlet extends HttpServlet {
 
     private AuthenticationSession authenticate(final String user, final String password) {
         AuthenticationRequest request;
-        if (IsisContext.getDeploymentType() == DeploymentType.EXPLORATION) {
+        if (getDeploymentType() == DeploymentType.EXPLORATION) {
             request = new AuthenticationRequestExploration();
         } else {
             request = new AuthenticationRequestPassword(user, password);
@@ -103,22 +102,14 @@ public class LogonServlet extends HttpServlet {
     private void prompt(final HttpServletResponse response, final String user, final String password,
         final String message) throws IOException {
         response.setContentType("text/html");
-        final HtmlComponentFactory factory = new HtmlComponentFactory();
+        final HtmlComponentFactory factory = new HtmlComponentFactory(getHtmlViewerContext());
         final LogonFormPage page = factory.createLogonPage(user, password);
         page.write(response.getWriter());
     }
 
     private void loggedIn(final HttpServletResponse response, final String user) throws IOException {
         Monitor.addEvent("Web", "Logon - " + user);
-        response.sendRedirect("start.app");
-    }
-
-    // //////////////////////////////////////////////////////////////
-    // Dependencies (from context)
-    // //////////////////////////////////////////////////////////////
-
-    private static AuthenticationManager getAuthenticationManager() {
-        return IsisContext.getAuthenticationManager();
+        response.sendRedirect(pathTo(HtmlServletConstants.START_PAGE));
     }
 
 }

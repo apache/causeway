@@ -21,6 +21,7 @@ package org.apache.isis.viewer.html.component.html;
 
 import java.io.PrintWriter;
 
+import org.apache.isis.viewer.html.HtmlViewerContext;
 import org.apache.isis.viewer.html.component.Component;
 import org.apache.isis.viewer.html.image.ImageLookup;
 
@@ -29,8 +30,10 @@ public class ServiceComponent implements Component {
     private final String id;
     private final String name;
     private final String iconName;
+    private final HtmlViewerContext htmlViewerContext;
 
-    public ServiceComponent(final String id, final String name, final String iconName) {
+    public ServiceComponent(final HtmlViewerContext htmlViewerContext, final String id, final String name, final String iconName) {
+        this.htmlViewerContext = htmlViewerContext;
         this.id = id;
         this.name = name;
         this.iconName = iconName;
@@ -41,7 +44,7 @@ public class ServiceComponent implements Component {
         writer.print("<div class=\"item\">");
 
         writer.print("<a href=\"");
-        writer.print("serviceOption.app?id=");
+        writer.print(pathTo("serviceOption") + "?id=");
         writer.print(id);
         writer.print("\"><img src=\"");
         writer.print(ImageLookup.image(iconName));
@@ -50,6 +53,10 @@ public class ServiceComponent implements Component {
         writer.print("</a>");
 
         writer.println("</div>");
+    }
+
+    protected String pathTo(final String prefix) {
+        return htmlViewerContext.pathTo(prefix);
     }
 
 }

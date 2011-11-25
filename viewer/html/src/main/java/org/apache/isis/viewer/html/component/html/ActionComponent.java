@@ -21,9 +21,13 @@ package org.apache.isis.viewer.html.component.html;
 
 import java.io.PrintWriter;
 
+import org.apache.isis.viewer.html.HtmlViewerConstants;
+import org.apache.isis.viewer.html.HtmlViewerContext;
 import org.apache.isis.viewer.html.component.Component;
 
 class ActionComponent implements Component {
+    
+    private final HtmlViewerContext htmlViewerContext;
     private final String objectId;
     private final String name;
     private final String description;
@@ -31,8 +35,9 @@ class ActionComponent implements Component {
     private final String action;
     private final String elementId;
 
-    public ActionComponent(final String action, final String name, final String description, final String objectId,
-        final String elementId, final String field) {
+    public ActionComponent(final HtmlViewerContext htmlViewerContext, final String action, final String name, final String description,
+        final String objectId, final String elementId, final String field) {
+        this.htmlViewerContext = htmlViewerContext;
         this.action = action;
         this.name = name;
         this.description = description;
@@ -45,8 +50,8 @@ class ActionComponent implements Component {
     public void write(final PrintWriter writer) {
         writer.print("<div class=\"action-button\">");
         writer.print("<a href=\"");
-        writer.print(action);
-        writer.print(".app?id=");
+        writer.print(pathTo(action));
+        writer.print("?id=");
         writer.print(objectId);
         if (field != null) {
             writer.print("&amp;field=");
@@ -62,6 +67,10 @@ class ActionComponent implements Component {
         writer.print(name);
         writer.print("</a>");
         writer.println("</div>");
+    }
+
+    protected String pathTo(final String prefix) {
+        return htmlViewerContext.pathTo(prefix);
     }
 
 }

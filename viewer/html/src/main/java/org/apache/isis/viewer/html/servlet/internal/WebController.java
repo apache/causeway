@@ -36,6 +36,7 @@ import org.apache.isis.runtimes.dflt.monitoring.servermonitor.Monitor;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
 import org.apache.isis.runtimes.dflt.runtime.userprofile.UserProfilesDebugUtil;
+import org.apache.isis.viewer.html.HtmlViewerContext;
 import org.apache.isis.viewer.html.action.Action;
 import org.apache.isis.viewer.html.action.ActionException;
 import org.apache.isis.viewer.html.action.ChangeContext;
@@ -68,6 +69,10 @@ import org.apache.isis.viewer.html.task.TaskStep;
 import org.apache.log4j.Logger;
 
 public class WebController {
+
+    private static final Logger LOG = Logger.getLogger(WebController.class);
+    private static final Logger ACCESS_LOG = Logger.getLogger("access_log");
+
     private static final String ERROR_REASON = "This error occurs when you go back to a page "
         + "using the browsers back button.  To avoid this error in the future please avoid using the back button";
 
@@ -193,10 +198,15 @@ public class WebController {
     }
 
     private final Map actions = new HashMap();
+    
     private boolean isDebug;
-    private final Logger LOG = Logger.getLogger(WebController.class);
-    private final Logger ACCESS_LOG = Logger.getLogger("access_log");
+    private final HtmlViewerContext htmlViewerContext;
+    
 
+    public WebController(HtmlViewerContext htmlViewerContext) {
+        this.htmlViewerContext = htmlViewerContext;
+    }
+    
     public boolean actionExists(final Request req) {
         return actions.containsKey(req.getRequestType());
     }
@@ -221,14 +231,14 @@ public class WebController {
     }
 
     public void addDebug(final Page page, final Request req) {
-        page.addDebug("<a href=\"debug.app\">Debug</a>");
+        page.addDebug("<a href=\"" + pathTo("debug") + "\">Debug</a>");
         final String id = req.getObjectId();
         if (id != null) {
-            page.addDebug("<a href=\"dump.app?id=" + id + "\">Object</a>");
-            page.addDebug("<a href=\"spec.app?id=" + id + "\">Spec</a>");
+            page.addDebug("<a href=\"" + pathTo("dump") + "?id=" + id + "\">Object</a>");
+            page.addDebug("<a href=\"" + pathTo("spec") + "?id=" + id + "\">Spec</a>");
         }
-        page.addDebug("<a href=\"about.app\">About</a>");
-        page.addDebug("<a href=\"debugoff.app\">Debug off</a>");
+        page.addDebug("<a href=\"" + pathTo("about") + "\">About</a>");
+        page.addDebug("<a href=\"" + pathTo("debugoff") + "\">Debug off</a>");
     }
 
     public Page generatePage(final Context context, final Request request) {
@@ -424,6 +434,11 @@ public class WebController {
     public void setDebug(final boolean on) {
         this.isDebug = on;
     }
+
+    protected String pathTo(final String prefix) {
+        return htmlViewerContext.pathTo(prefix);
+    }
+
 
     // ///////////////////////////////////////////////////////
     // Dependencies (from singleton)

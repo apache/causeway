@@ -21,6 +21,7 @@ package org.apache.isis.viewer.html.component.html;
 
 import java.io.PrintWriter;
 
+import org.apache.isis.viewer.html.HtmlViewerContext;
 import org.apache.isis.viewer.html.component.Component;
 import org.apache.isis.viewer.html.component.ComponentComposite;
 import org.apache.isis.viewer.html.component.Table;
@@ -33,14 +34,15 @@ public class HtmlTable extends ComponentComposite implements Table {
     private int cellCount;
     private final boolean addSelector;
 
-    public HtmlTable(final int noColumns, final boolean withSelectorColumn) {
+    public HtmlTable(final HtmlViewerContext htmlViewerContext, final int noColumns, final boolean withSelectorColumn) {
+        super(htmlViewerContext);
         this.noColumns = noColumns + (withSelectorColumn ? 1 : 0);
         addSelector = withSelectorColumn;
-        header = new TableHeader();
+        header = new TableHeader(htmlViewerContext);
     }
 
     public Row newRow() {
-        final Row row = new Row();
+        final Row row = new Row(htmlViewerContext);
         add(row);
         return row;
     }
@@ -104,7 +106,7 @@ public class HtmlTable extends ComponentComposite implements Table {
 
     @Override
     public void addRowHeader(final Component component) {
-        row = new Row();
+        row = new Row(htmlViewerContext);
         add(row);
         cellCount = 0;
         row.addCell(component);
