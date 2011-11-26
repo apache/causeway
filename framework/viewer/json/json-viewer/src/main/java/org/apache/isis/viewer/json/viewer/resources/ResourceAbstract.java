@@ -110,17 +110,21 @@ public abstract class ResourceAbstract {
 
     private ResourceContext resourceContext;
 
-    
+
+    protected void init() {
+        init(RepresentationType.GENERIC);
+    }
 
     protected void init(RepresentationType representationType) {
+        if(!IsisContext.inSession() || getAuthenticationSession() == null) {
+            throw JsonApplicationException.create(HttpStatusCode.UNAUTHORIZED);
+        }
+
         this.resourceContext =
             new ResourceContext(representationType, httpHeaders, uriInfo, request, httpServletRequest, httpServletResponse, 
                     securityContext, getOidStringifier(), getLocalization(), getAuthenticationSession(), getPersistenceSession(), getAdapterManager(), getSpecificationLoader());
     }
     
-    protected void init() {
-        init(RepresentationType.GENERIC);
-    }
 
     
     protected ResourceContext getResourceContext() {

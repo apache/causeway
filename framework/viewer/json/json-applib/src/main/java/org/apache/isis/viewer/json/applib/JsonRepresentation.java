@@ -48,8 +48,7 @@ import com.google.common.collect.Maps;
 
 
 /**
- * A wrapper around {@link JsonNode} that provides some additional helper
- * methods, including searching using xpath (requires optional XOM dependency).
+ * A wrapper around {@link JsonNode} that provides some additional helper methods.
  */
 public class JsonRepresentation {
 

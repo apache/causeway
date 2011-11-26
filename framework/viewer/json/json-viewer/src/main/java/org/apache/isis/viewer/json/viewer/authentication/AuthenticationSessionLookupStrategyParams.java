@@ -25,6 +25,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequestPassword;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
+import org.apache.isis.runtimes.dflt.webapp.auth.AuthenticationSessionLookupStrategy.Caching;
 import org.apache.isis.runtimes.dflt.webapp.auth.AuthenticationSessionLookupStrategyDefault;
 
 import com.google.common.base.Strings;
@@ -32,8 +33,8 @@ import com.google.common.base.Strings;
 public class AuthenticationSessionLookupStrategyParams extends AuthenticationSessionLookupStrategyDefault {
 
     @Override
-    public AuthenticationSession lookup(final ServletRequest servletRequest, final ServletResponse servletResponse) {
-        final AuthenticationSession session = super.lookup(servletRequest, servletResponse);
+    public AuthenticationSession lookupValid(final ServletRequest servletRequest, final ServletResponse servletResponse, Caching caching) {
+        final AuthenticationSession session = super.lookupValid(servletRequest, servletResponse, caching);
         if (session != null) {
             return session;
         }

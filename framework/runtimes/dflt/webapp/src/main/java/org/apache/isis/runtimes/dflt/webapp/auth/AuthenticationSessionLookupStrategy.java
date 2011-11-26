@@ -21,6 +21,7 @@ package org.apache.isis.runtimes.dflt.webapp.auth;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.runtimes.dflt.webapp.IsisSessionFilter;
@@ -30,7 +31,24 @@ import org.apache.isis.runtimes.dflt.webapp.IsisSessionFilter;
  */
 public interface AuthenticationSessionLookupStrategy {
 
-    AuthenticationSession lookup(ServletRequest servletRequest, ServletResponse servletResponse);
+    /**
+     * Whether the {@link AuthenticationSession}, if just authenticated,
+     * should be cached on the {@link HttpSession}.
+     */
+    public enum Caching {
+        CACHE,
+        NO_CACHE;
+        
+        public static Caching lookup(String booleanStr) {
+            return Boolean.parseBoolean(booleanStr)? CACHE: NO_CACHE;
+        }
 
-    void bind(ServletRequest servletRequest, ServletResponse servletResponse, AuthenticationSession authSession);
+        public boolean isEnabled() {
+            return this == CACHE;
+        }
+    }
+
+    AuthenticationSession lookupValid(ServletRequest servletRequest, ServletResponse servletResponse, Caching caching);
+
+    void bind(ServletRequest servletRequest, ServletResponse servletResponse, AuthenticationSession authSession, Caching caching);
 }
