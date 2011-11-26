@@ -29,12 +29,14 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.webapp.auth.AuthenticationSessionLookupStrategy;
+import org.apache.isis.runtimes.dflt.webapp.auth.AuthenticationSessionLookupStrategy.Caching;
 import org.apache.isis.runtimes.dflt.webapp.auth.AuthenticationSessionLookupStrategyDefault;
 
 public class IsisSessionFilter implements Filter {
@@ -56,8 +58,16 @@ public class IsisSessionFilter implements Filter {
      */
     public static final String LOGON_PAGE_KEY = "logonPage";
 
+    /**
+     * Init parameter key for whether the authentication session may be cached on the HttpSession.
+     */
+    public static final String CACHE_AUTH_SESSION_ON_HTTP_SESSION_KEY = "cacheAuthSessionOnHttpSession";
+
+    
     private AuthenticationSessionLookupStrategy authSessionLookupStrategy;
     private String logonPageIfNoSession;
+    
+    private Caching caching;
 
     // /////////////////////////////////////////////////////////////////
     // init, destroy
@@ -66,7 +76,8 @@ public class IsisSessionFilter implements Filter {
     @Override
     public void init(final FilterConfig config) throws ServletException {
         lookupAuthenticationSessionLookupStrategy(config);
-        lookupRedirectIfNoSessionKey(config);
+        lookupLogonPageIfNoSessionKey(config);
+        lookupCacheAuthSessionKey(config);
     }
 
     private void lookupAuthenticationSessionLookupStrategy(final FilterConfig config) {
@@ -78,8 +89,12 @@ public class IsisSessionFilter implements Filter {
             (AuthenticationSessionLookupStrategy) InstanceUtil.createInstance(authLookupStrategyClassName);
     }
 
-    private void lookupRedirectIfNoSessionKey(final FilterConfig config) {
+    private void lookupLogonPageIfNoSessionKey(final FilterConfig config) {
         logonPageIfNoSession = config.getInitParameter(LOGON_PAGE_KEY);
+    }
+
+    private void lookupCacheAuthSessionKey(final FilterConfig config) {
+        caching = Caching.lookup(config.getInitParameter(CACHE_AUTH_SESSION_ON_HTTP_SESSION_KEY));
     }
 
     @Override
@@ -90,51 +105,112 @@ public class IsisSessionFilter implements Filter {
     // doFilter
     // /////////////////////////////////////////////////////////////////
 
-    @Override
-    public void doFilter(final ServletRequest request, final ServletResponse response, final FilterChain chain)
-        throws IOException, ServletException {
+    public enum SessionState {
+        
+        UNDEFINED {
+            @Override
+            public void handle(IsisSessionFilter filter, ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+                
+                final HttpServletRequest httpRequest = (HttpServletRequest) request;
+                final HttpServletResponse httpResponse = (HttpServletResponse) response;
 
-        final HttpServletRequest httpRequest = (HttpServletRequest) request;
-        final HttpServletResponse httpResponse = (HttpServletResponse) response;
+                // request is to logon page
+                if (requestToLogonPage(filter, httpRequest)) {
+                    NO_SESSION_SINCE_REDIRECTING_TO_LOGON_PAGE.setOn(request);
+                    try {
+                        chain.doFilter(request, response);
+                        return;
+                    } finally {
+                        UNDEFINED.setOn(request);
+                        closeSession();
+                    }
+                }
 
-        // forward/redirect as required
-        final AuthenticationSession authSession = authSessionLookupStrategy.lookup(request, response);
-        if (!isValid(authSession)) {
-            if (logonPageIfNoSession != null
-                && !logonPageIfNoSession.equals(httpRequest.getServletPath())) {
-                httpResponse.sendRedirect(logonPageIfNoSession);
-            } else {
+                // authenticate
+                final AuthenticationSession validSession = filter.authSessionLookupStrategy.lookupValid(request, response, filter.caching);
+                if (validSession != null) {
+                    filter.authSessionLookupStrategy.bind(request, response, validSession, filter.caching);
+
+                    openSession(validSession);
+                    SESSION_IN_PROGRESS.setOn(request);
+                    try {
+                        chain.doFilter(request, response);
+                    } finally {
+                        UNDEFINED.setOn(request);
+                        closeSession();
+                    }
+                    return;
+                }
+                
+                // redirect to logon page (if there is one)
+                if (filter.logonPageIfNoSession != null) {
+                    // no need to set state, since not proceeding along the filter chain
+                    httpResponse.sendRedirect(filter.logonPageIfNoSession);
+                    return;
+                }
+                
                 // the destination servlet is expected to know that there
                 // will be no open context
                 try {
+                    NO_SESSION_SINCE_NOT_AUTHENTICATED.setOn(request);
                     chain.doFilter(request, response);
                 } finally {
+                    UNDEFINED.setOn(request);
                     // nothing to do
                 }
             }
-        } else {
-            // else, is authenticated so open session
-            authSessionLookupStrategy.bind(request, response, authSession);
 
-            IsisContext.openSession(authSession);
-            try {
-                chain.doFilter(request, response);
-            } finally {
-                IsisContext.closeSession();
+            private boolean requestToLogonPage(IsisSessionFilter filter, HttpServletRequest httpRequest) {
+                return filter.logonPageIfNoSession != null &&
+                       filter.logonPageIfNoSession.equals(httpRequest.getServletPath());
             }
+
+        },
+        NO_SESSION_SINCE_REDIRECTING_TO_LOGON_PAGE,
+        NO_SESSION_SINCE_NOT_AUTHENTICATED,
+        SESSION_IN_PROGRESS;
+
+        static SessionState lookup(ServletRequest request) {
+            final Object state = request.getAttribute(SESSION_STATE_KEY);
+            return state != null ? (SessionState)state : SessionState.UNDEFINED;
         }
-    }
 
-    private boolean isValid(final AuthenticationSession authSession) {
-        return authSession != null && getAuthenticationManager().isSessionValid(authSession);
-    }
 
-    // /////////////////////////////////////////////////////////////////
-    // Dependencies (from context)
-    // /////////////////////////////////////////////////////////////////
+        boolean isValid(final AuthenticationSession authSession) {
+            return authSession != null && getAuthenticationManager().isSessionValid(authSession);
+        }
 
-    private static AuthenticationManager getAuthenticationManager() {
-        return IsisContext.getAuthenticationManager();
+        void setOn(ServletRequest request) {
+            request.setAttribute(SESSION_STATE_KEY, this);
+        }
+
+        public void handle(IsisSessionFilter filter, ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+            chain.doFilter(request, response);
+        }
+    
+        AuthenticationManager getAuthenticationManager() {
+            return IsisContext.getAuthenticationManager();
+        }
+
+        void openSession(final AuthenticationSession authSession) {
+            IsisContext.openSession(authSession);
+        }
+
+        void closeSession() {
+            IsisContext.closeSession();
+        }
+    
     }
+    
+    static final String SESSION_STATE_KEY = IsisSessionFilter.SessionState.class.getName();
+
+    @Override
+    public void doFilter(final ServletRequest request, final ServletResponse response, final FilterChain chain)
+        throws IOException, ServletException {
+        
+        SessionState sessionState = SessionState.lookup(request);
+        sessionState.handle(this, request, response, chain);
+    }
+    
 
 }

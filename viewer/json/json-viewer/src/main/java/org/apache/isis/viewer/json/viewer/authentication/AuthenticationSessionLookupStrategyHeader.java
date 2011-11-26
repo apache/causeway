@@ -18,26 +18,41 @@
  */
 package org.apache.isis.viewer.json.viewer.authentication;
 
+import java.util.Collections;
+import java.util.List;
+
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
-import org.apache.isis.runtimes.dflt.runtime.authentication.exploration.AuthenticationRequestExploration;
-import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
-import org.apache.isis.runtimes.dflt.webapp.auth.AuthenticationSessionLookupStrategy.Caching;
+import org.apache.isis.core.runtime.authentication.standard.SimpleSession;
 import org.apache.isis.runtimes.dflt.webapp.auth.AuthenticationSessionLookupStrategyDefault;
 
-public class AuthenticationSessionLookupStrategyTrusted extends AuthenticationSessionLookupStrategyDefault {
+import com.google.common.base.Splitter;
+import com.google.common.base.Strings;
+import com.google.common.collect.Lists;
+
+public class AuthenticationSessionLookupStrategyHeader extends AuthenticationSessionLookupStrategyDefault {
 
     @Override
     public AuthenticationSession lookupValid(final ServletRequest servletRequest, final ServletResponse servletResponse, Caching caching) {
-        final AuthenticationSession session = super.lookupValid(servletRequest, servletResponse, caching);
-        if (session != null) {
-            return session;
-        }
 
-        // will always succeed.
-        final AuthenticationRequestExploration request = new AuthenticationRequestExploration();
-        return IsisContext.getAuthenticationManager().authenticate(request);
+        final HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
+        final String user = httpServletRequest.getHeader("isis.user");
+        final List<String> roles = rolesFrom(httpServletRequest);
+
+        if (Strings.isNullOrEmpty(user)) {
+            return null;
+        }
+        return new SimpleSession(user, roles);
+    }
+
+    protected List<String> rolesFrom(final HttpServletRequest httpServletRequest) {
+        final String rolesStr = httpServletRequest.getHeader("isis.roles");
+        if(rolesStr == null) {
+            return Collections.emptyList();
+        }
+        return Lists.newArrayList(Splitter.on(",").split(rolesStr));
     }
 }

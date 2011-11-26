@@ -235,11 +235,59 @@
     <sect1 id="sec.IntroducingRestfulObjects">
       <title>The JSON viewer as an RO implementation</title>
 
-      <para></para>
+      <para><emphasis>Restful Objects</emphasis> defines a core set of
+      functionality that all implementations must honour, and also defines a
+      set of capabilities which may be optionally implemented. Implementations
+      indicate the functionality that they support through (the representation
+      of the) "version" resource, specificially the "optionalCapabilities"
+      property map.</para>
 
-      <para>* capabilites</para>
+      <para>As such, the <emphasis>json viewer</emphasis> returns the
+      following representation:</para>
 
-      <para></para>
+      <para><programlisting>** TODO</programlisting></para>
+
+      <para>See the <emphasis>Restful Objects</emphasis> spec for details on
+      each of these capabilities.</para>
+    </sect1>
+
+    <sect1>
+      <title>The JSON viewer modules</title>
+
+      <para>In terms of software, the <emphasis>json viewer</emphasis>
+      comprises a number of Maven modules:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>org.apache.isis.viewer.json</para>
+
+          <para>is the parent module; this also has the site and documentation
+          (this guide)</para>
+        </listitem>
+
+        <listitem>
+          <para>org.apache.isis.viewer.json-applib</para>
+
+          <para>is a client-side library to simplify the task of writing
+          Java-based applications that consume <emphasis>Restful
+          Objects</emphasis> representations</para>
+        </listitem>
+
+        <listitem>
+          <para>org.apache.isis.viewer.json-viewer</para>
+
+          <para>is the server-side implementation of the resources and
+          representations defined by the <emphasis>Restful Objects</emphasis>
+          spec.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>It isn't mandatory to use the client-side library when writing
+      applications; one could equally write a pure Javascript application, for
+      example. However, the client-side library is worth checking out for
+      Java-based applications, for example in an integration scenario. There
+      is further coverage of its API in <xref
+      linkend="chp.WritingClientSideApps" />.</para>
     </sect1>
   </chapter>
 
@@ -264,21 +312,21 @@
     <emphasis>Isis</emphasis> quickstart archetype (eg as documented on
     <emphasis>Isis</emphasis>' website). Once you've done this, you'll end up
     with an set of modules that allow the application to be booted using the
-    <emphasis>xhtml viewer</emphasis>. It includes the following
+    <emphasis>json viewer</emphasis>. It includes the following
     modules:</para>
 
     <programlisting>myapp/pom.xml
     myapp-dom/pom.xml             # domain object model
     myapp-fixture/pom.xml         # fixtures for seeding object store
     myapp-objstore-dflt/pom.xml   # repository implementations for the default object store
-    myapp-quickrun/pom.xml        # run the application during development/prototyping
-    myapp-viewer-restful/pom.xml  # run the application as a webapp using the xhtml viewer</programlisting>
+    myapp-viewer-html/pom.xml     # run the application as a webapp using the HTML viewer
+    myapp-viewer-json/pom.xml     # run the application as a webapp using the JSON viewer</programlisting>
 
     <para>where 'myapp' is the artifactId specified when you ran the <code>mvn
     archetype:generate</code> goal.</para>
 
     <para>This chapter describes in more detail the contents of these modules,
-    and then describes how to get started with running the <emphasis>xhtml
+    and then describes how to get started with running the <emphasis>json
     viewer</emphasis> for prototyping purposes.</para>
 
     <sect1 id="sec.ParentModule">
@@ -750,11 +798,11 @@ mvn jetty:run</programlisting>
   </chapter>
 
   <chapter id="chp.WritingClientSideApps">
-    <title>Writing Client-side Applications</title>
+    <title>The JSON Viewer AppLib</title>
 
     <abstract>
       <para>How to write custom client-side applications to consume the
-      RESTful resources.</para>
+      RESTful resources using the json-viewer's applib.</para>
     </abstract>
 
     <para>The point of the <emphasis>json viewer</emphasis> is to provide our
@@ -1058,6 +1106,53 @@ mvn jetty:run</programlisting>
           <para>Note that the archetype explicitly specifies the object store
           as in-memory.</para>
         </note></para>
+    </sect1>
+  </chapter>
+
+  <chapter>
+    <title>web.xml</title>
+
+    <para></para>
+
+    <para></para>
+
+    <para></para>
+
+    <para></para>
+
+    <sect1>
+      <title></title>
+
+      <para></para>
+
+      <sect2>
+        <title>Reading HTML viewer specific properties</title>
+
+        <para></para>
+
+        <para></para>
+
+        <programlisting>&lt;web.xml&gt;
+    ...
+    &lt;context-param&gt;
+        &lt;param-name&gt;isis.viewers&lt;/param-name&gt;
+        &lt;param-value&gt;json&lt;/param-value&gt;
+    &lt;/context-param&gt;
+    ...
+&lt;/web.xml&gt;</programlisting>
+
+        <para>This will cause the viewer_json.properties file to be read if it
+        is present.</para>
+
+        <para></para>
+
+        <para></para>
+
+        <para>NB: the value for this parameter is actually comma-separated, to
+        allow for multiple viewers to be configured in the same webapp.</para>
+
+        <para></para>
+      </sect2>
     </sect1>
   </chapter>
 </book>

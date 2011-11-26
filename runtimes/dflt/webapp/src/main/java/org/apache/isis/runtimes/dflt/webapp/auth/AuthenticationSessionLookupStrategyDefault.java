@@ -32,6 +32,7 @@ import org.apache.isis.runtimes.dflt.runtime.fixtures.authentication.Authenticat
 import org.apache.isis.runtimes.dflt.runtime.system.IsisSystem;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.webapp.WebAppConstants;
+import org.apache.isis.runtimes.dflt.webapp.auth.AuthenticationSessionLookupStrategy.Caching;
 
 /**
  * Returns a valid {@link AuthenticationSession} through a number of mechanisms.
@@ -52,16 +53,20 @@ import org.apache.isis.runtimes.dflt.webapp.WebAppConstants;
 public class AuthenticationSessionLookupStrategyDefault extends AuthenticationSessionLookupStrategyAbstract {
 
     @Override
-    public AuthenticationSession lookup(final ServletRequest servletRequest, final ServletResponse servletResponse) {
+    public AuthenticationSession lookupValid(final ServletRequest servletRequest, final ServletResponse servletResponse, Caching caching) {
 
-        // use previously authenticated session if available.
+        final AuthenticationManager authenticationManager = getAuthenticationManager();
         final HttpSession httpSession = getHttpSession(servletRequest);
-        AuthenticationSession authSession =
-            (AuthenticationSession) httpSession.getAttribute(WebAppConstants.HTTP_SESSION_AUTHENTICATION_SESSION_KEY);
-        if (authSession != null) {
-            final boolean sessionValid = getAuthenticationManager().isSessionValid(authSession);
-            if (sessionValid) {
-                return authSession;
+        
+        // use previously authenticated session if available and caching enabled
+        AuthenticationSession authSession = null;
+        if(caching.isEnabled()) {
+            authSession = (AuthenticationSession) httpSession.getAttribute(WebAppConstants.HTTP_SESSION_AUTHENTICATION_SESSION_KEY);
+            if (authSession != null) {
+                final boolean sessionValid = authenticationManager.isSessionValid(authSession);
+                if (sessionValid) {
+                    return authSession;
+                }
             }
         }
 
@@ -76,7 +81,7 @@ public class AuthenticationSessionLookupStrategyDefault extends AuthenticationSe
 
         // see if exploration is supported
         if (system.getDeploymentType().isExploring()) {
-            authSession = getAuthenticationManager().authenticate(new AuthenticationRequestExploration(logonFixture));
+            authSession = authenticationManager.authenticate(new AuthenticationRequestExploration(logonFixture));
             if (authSession != null) {
                 return authSession;
             }
@@ -86,15 +91,18 @@ public class AuthenticationSessionLookupStrategyDefault extends AuthenticationSe
             httpSession.getAttribute(WebAppConstants.HTTP_SESSION_LOGGED_ON_PREVIOUSLY_USING_LOGON_FIXTURE_KEY) != null;
         if (logonFixture != null && !loggedInUsingLogonFixture) {
             httpSession.setAttribute(WebAppConstants.HTTP_SESSION_LOGGED_ON_PREVIOUSLY_USING_LOGON_FIXTURE_KEY, true);
-            return getAuthenticationManager().authenticate(new AuthenticationRequestLogonFixture(logonFixture));
+            return authenticationManager.authenticate(new AuthenticationRequestLogonFixture(logonFixture));
         }
         
         return null;
     }
 
     @Override
-    public void bind(final ServletRequest servletRequest, final ServletResponse servletResponse,
-        final AuthenticationSession authSession) {
+    public void bind(final ServletRequest servletRequest, final ServletResponse servletResponse, final AuthenticationSession authSession, Caching caching) {
+        // no-op if no caching.
+        if(caching == Caching.NO_CACHE) {
+            return;
+        }
         final HttpSession httpSession = getHttpSession(servletRequest);
         httpSession.setAttribute(WebAppConstants.HTTP_SESSION_AUTHENTICATION_SESSION_KEY, authSession);
     }
