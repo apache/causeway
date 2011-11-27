@@ -40,7 +40,9 @@ public interface AuthenticationSessionLookupStrategy {
         NO_CACHE;
         
         public static Caching lookup(String booleanStr) {
-            return Boolean.parseBoolean(booleanStr)? CACHE: NO_CACHE;
+            // written this way so that if not specified, then we get the
+            // original behaviour of allowing caching of the AuthSession.
+            return !Boolean.parseBoolean(booleanStr)? NO_CACHE: CACHE;
         }
 
         public boolean isEnabled() {
