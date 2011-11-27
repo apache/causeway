@@ -26,7 +26,7 @@
     </parent>
 
 	<artifactId>onlinedemo-fixture</artifactId>
-	<name>Quickstart Fixtures</name>
+	<name>Online Demo Fixtures</name>
 
 	<dependencies>
 		<dependency>

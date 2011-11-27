@@ -23,7 +23,7 @@
     <artifactId>onlinedemo</artifactId>
     <version>0.2.0-incubating-SNAPSHOT</version>
 
-    <name>Quickstart App</name>
+    <name>Online Demo</name>
 
     <packaging>pom</packaging>
     
@@ -166,47 +166,9 @@
 
             <dependency>
                 <groupId>${project.groupId}</groupId>
-                <artifactId>onlinedemo-viewer-html</artifactId>
+                <artifactId>onlinedemo-webapp</artifactId>
                 <version>0.2.0-incubating-SNAPSHOT</version>
             </dependency>
-
-            <dependency>
-                <groupId>${project.groupId}</groupId>
-                <artifactId>onlinedemo-viewer-json</artifactId>
-                <version>0.2.0-incubating-SNAPSHOT</version>
-            </dependency>
-
-            <dependency>
-                <groupId>${project.groupId}</groupId>
-                <artifactId>onlinedemo-tests-bdd</artifactId>
-                <version>0.2.0-incubating-SNAPSHOT</version>
-            </dependency>
-
-            <dependency>
-                <groupId>${project.groupId}</groupId>
-                <artifactId>tests-junit</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <!-- 
-            <dependency>
-                <groupId>${project.groupId}</groupId>
-                <artifactId>quickstart-quickrun</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>${project.groupId}</groupId>
-                <artifactId>quickstart-viewer-scimpi</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>${project.groupId}</groupId>
-                <artifactId>quickstart-viewer-wicket</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            -->
 
 
             <!-- isis: applib -->
@@ -369,16 +331,6 @@
                 <version>${isis.version}</version>
             </dependency>
 
-            <!-- isis: runtimes-dflt: objectstores: nosql -->
-            <!-- 
-            <dependency>
-                <groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
-                <artifactId>nosql</artifactId>
-                <version>${isis.version}</version>
-            </dependency>
-            -->
-
-
             <!-- isis: runtimes-dflt: profilestores: dflt -->
             <dependency>
                 <groupId>org.apache.isis.runtimes.dflt.profilestores</groupId>
@@ -392,51 +344,6 @@
                 <artifactId>xml</artifactId>
                 <version>${isis.version}</version>
             </dependency>
-
-            <!-- isis: runtimes-dflt: remoting -->
-            <!-- 
-            <dependency>
-                <groupId>org.apache.isis.runtimes.dflt.remoting</groupId>
-                <artifactId>common</artifactId>
-                <version>${isis.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.isis.runtimes.dflt.remoting</groupId>
-                <artifactId>transport-sockets</artifactId>
-                <version>${isis.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.isis.runtimes.dflt.remoting</groupId>
-                <artifactId>marshalling-encode</artifactId>
-                <version>${isis.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.isis.runtimes.dflt.remoting</groupId>
-                <artifactId>marshalling-serialize</artifactId>
-                <version>${isis.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.apache.isis.runtimes.dflt.remoting</groupId>
-                <artifactId>transport-http</artifactId>
-                <version>${isis.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.isis.runtimes.dflt.remoting</groupId>
-                <artifactId>transport-http-client</artifactId>
-                <version>${isis.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.isis.runtimes.dflt.remoting</groupId>
-                <artifactId>transport-http-server</artifactId>
-                <version>${isis.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.isis.runtimes.dflt.remoting</groupId>
-                <artifactId>marshalling-xstream</artifactId>
-                <version>${isis.version}</version>
-            </dependency>
-            -->
 
             <!-- isis: runtimes: embedded -->
             <dependency>
@@ -470,107 +377,14 @@
                 <version>${isis.version}</version>
             </dependency>
 
-            <!-- isis: viewer: junit -->
-            <dependency>
-                <groupId>org.apache.isis.viewer</groupId>
-                <artifactId>junit</artifactId>
-                <version>${isis.version}</version>
-            </dependency>
-
-            <!-- isis: viewer: bdd -->
-            <dependency>
-                <groupId>org.apache.isis.viewer</groupId>
-                <artifactId>bdd</artifactId>
-                <version>${isis.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.isis.viewer</groupId>
-                <artifactId>bdd-common</artifactId>
-                <version>${isis.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.isis.viewer</groupId>
-                <artifactId>bdd-concordion</artifactId>
-                <version>${isis.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>junit</groupId>
-                <artifactId>junit</artifactId>
-                <version>4.8.2</version>
-            </dependency>
-
-
-            <!-- isis: viewer: scimpi -->
-            <!-- 
-            <dependency>
-                <groupId>org.apache.isis.viewer</groupId>
-                <artifactId>scimpi</artifactId>
-                <version>${isis.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.isis.viewer</groupId>
-                <artifactId>scimpi-dispatcher</artifactId>
-                <version>${isis.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.isis.viewer</groupId>
-                <artifactId>scimpi-servlet</artifactId>
-                <version>${isis.version}</version>
-            </dependency>
-            -->
-
-
-            <!-- isis: viewer: dnd -->
-            <!-- 
-            <dependency>
-                <groupId>org.apache.isis.viewer</groupId>
-                <artifactId>dnd</artifactId>
-                <version>${isis.version}</version>
-            </dependency>
-            -->
-
-            <!-- isis: viewer: wicket -->
-            <!-- 
-            <dependency>
-                <groupId>org.apache.isis.viewer</groupId>
-                <artifactId>wicket</artifactId>
-                <version>${isis.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.isis.viewer</groupId>
-                <artifactId>wicket-applib</artifactId>
-                <version>${isis.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.isis.viewer</groupId>
-                <artifactId>wicket-facets</artifactId>
-                <version>${isis.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.isis.viewer</groupId>
-                <artifactId>wicket-model</artifactId>
-                <version>${isis.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.isis.viewer</groupId>
-                <artifactId>wicket-ui</artifactId>
-                <version>${isis.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.isis.viewer</groupId>
-                <artifactId>wicket-viewer</artifactId>
-                <version>${isis.version}</version>
-            </dependency>
-            -->
-
         </dependencies>
     </dependencyManagement>
 
-  <modules>
-    <module>dom</module>
-    <module>fixture</module>
-    <module>objstore-default</module>
-    <module>webapp</module>
-  </modules>
+    <modules>
+	    <module>dom</module>
+	    <module>fixture</module>
+	    <module>objstore-default</module>
+	    <module>webapp</module>
+    </modules>
+  
 </project>

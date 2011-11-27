@@ -17,17 +17,18 @@
  *  under the License.
  */
 
-package org.apache.isis.examples.onlinedemo.objstore.dflt.todo;
+package org.apache.isis.examples.onlinedemo.objstore.dflt.items;
 
 import java.util.List;
 
 
 import org.apache.isis.applib.AbstractFactoryAndRepository;
 import org.apache.isis.applib.filter.Filter;
-import org.apache.isis.examples.onlinedemo.dom.todo.ToDoItem;
-import org.apache.isis.examples.onlinedemo.dom.todo.ToDoItemRepository;
+import org.apache.isis.examples.onlinedemo.dom.items.Category;
+import org.apache.isis.examples.onlinedemo.dom.items.ToDoItem;
+import org.apache.isis.examples.onlinedemo.dom.items.ToDoItems;
 
-public class ToDoItemRepositoryDefault extends AbstractFactoryAndRepository implements ToDoItemRepository {
+public class ToDoItemsDefault extends AbstractFactoryAndRepository implements ToDoItems {
 
     // {{ Id, iconName
     @Override
@@ -42,11 +43,11 @@ public class ToDoItemRepositoryDefault extends AbstractFactoryAndRepository impl
 
     
     @Override
-    public List<ToDoItem> notYetDone() {
+    public List<ToDoItem> toDosForToday() {
         return allMatches(ToDoItem.class, new Filter<ToDoItem>() {
             @Override
             public boolean accept(ToDoItem t) {
-                return !t.getDone();
+                return !t.getComplete();
             }
         });
     }
@@ -54,9 +55,10 @@ public class ToDoItemRepositoryDefault extends AbstractFactoryAndRepository impl
     
     // {{ NewToDo
     @Override
-    public ToDoItem newToDo(String description) {
+    public ToDoItem newToDo(String description, Category category) {
         ToDoItem toDoItem = newTransientInstance(ToDoItem.class);
         toDoItem.setDescription(description);
+        toDoItem.setCategory(category);
         persist(toDoItem);
         return toDoItem;
     }

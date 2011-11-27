@@ -17,23 +17,30 @@
  *  under the License.
  */
 
-package org.apache.isis.examples.onlinedemo.dom.todo;
+package org.apache.isis.examples.onlinedemo.dom.items;
 
-import java.util.List;
-
+import org.apache.isis.applib.AbstractDomainObject;
 import org.apache.isis.applib.annotation.MemberOrder;
-import org.apache.isis.applib.annotation.Named;
-import org.apache.isis.applib.annotation.QueryOnly;
 
-@Named("ToDos")
-public interface ToDoItemRepository {
+public class Category extends AbstractDomainObject {
 
-    @QueryOnly
-    @MemberOrder(sequence="1")
-    public List<ToDoItem> notYetDone();
+    // {{ Title
+    public String title() {
+        return getDescription();
+    }
+    // }}
 
-    @MemberOrder(sequence="2")
-    public ToDoItem newToDo(
-        @Named("Description") String description);
+    // {{ Description
+    private String description;
+
+    @MemberOrder(sequence = "1")
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+    // }}
 
 }
