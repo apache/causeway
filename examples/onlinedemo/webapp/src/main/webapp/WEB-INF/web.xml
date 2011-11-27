@@ -80,6 +80,10 @@
             <param-value>false</param-value>
         </init-param>
         <init-param>
+            <param-name>ignoreExtensions</param-name>
+            <param-value>css,js,png,jpg,gif</param-value>
+        </init-param>
+        <init-param>
             <param-name>logonPage</param-name>
             <param-value>/notAuthenticated</param-value>
         </init-param>
@@ -99,8 +103,12 @@
 	</filter>
 	<filter-mapping>
 		<filter-name>ResourceCachingFilter</filter-name>
-		<url-pattern>*.css</url-pattern>
+		<url-pattern>*.js</url-pattern>
 	</filter-mapping>
+    <filter-mapping>
+        <filter-name>ResourceCachingFilter</filter-name>
+        <url-pattern>*.css</url-pattern>
+    </filter-mapping>
 	<filter-mapping>
 		<filter-name>ResourceCachingFilter</filter-name>
 		<url-pattern>*.png</url-pattern>
