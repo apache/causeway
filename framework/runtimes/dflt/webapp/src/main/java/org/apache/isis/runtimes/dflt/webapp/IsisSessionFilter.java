@@ -20,6 +20,10 @@
 package org.apache.isis.runtimes.dflt.webapp;
 
 import java.io.IOException;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.regex.Pattern;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -29,7 +33,6 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.factory.InstanceUtil;
@@ -38,6 +41,11 @@ import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.webapp.auth.AuthenticationSessionLookupStrategy;
 import org.apache.isis.runtimes.dflt.webapp.auth.AuthenticationSessionLookupStrategy.Caching;
 import org.apache.isis.runtimes.dflt.webapp.auth.AuthenticationSessionLookupStrategyDefault;
+
+import com.google.common.base.Function;
+import com.google.common.base.Splitter;
+import com.google.common.collect.Collections2;
+import com.google.common.collect.Lists;
 
 public class IsisSessionFilter implements Filter {
 
@@ -63,11 +71,20 @@ public class IsisSessionFilter implements Filter {
      */
     public static final String CACHE_AUTH_SESSION_ON_HTTP_SESSION_KEY = "cacheAuthSessionOnHttpSession";
 
+    /**
+     * Init parameter key for which extensions should be ignored (typically, static content).
+     * 
+     * <p>
+     * The value is expected as a comma separated list, for example:
+     * <pre>css,png,js,gif</pre>
+     */
+    public static final String IGNORE_EXTENSIONS_KEY = "ignoreExtensions";
+
     
     private AuthenticationSessionLookupStrategy authSessionLookupStrategy;
     private String logonPageIfNoSession;
-    
     private Caching caching;
+    private Collection<Pattern> ignoreExtensions;
 
     // /////////////////////////////////////////////////////////////////
     // init, destroy
@@ -78,6 +95,7 @@ public class IsisSessionFilter implements Filter {
         lookupAuthenticationSessionLookupStrategy(config);
         lookupLogonPageIfNoSessionKey(config);
         lookupCacheAuthSessionKey(config);
+        lookupIgnorePatterns(config);
     }
 
     private void lookupAuthenticationSessionLookupStrategy(final FilterConfig config) {
@@ -97,6 +115,25 @@ public class IsisSessionFilter implements Filter {
         caching = Caching.lookup(config.getInitParameter(CACHE_AUTH_SESSION_ON_HTTP_SESSION_KEY));
     }
 
+    private void lookupIgnorePatterns(final FilterConfig config) {
+        ignoreExtensions = Collections.unmodifiableCollection(parseIgnorePatterns(config));
+    }
+
+    private Collection<Pattern> parseIgnorePatterns(final FilterConfig config) {
+        final String ignoreExtensionsStr = config.getInitParameter(IGNORE_EXTENSIONS_KEY);
+        if(ignoreExtensionsStr != null) {
+            final List<String> ignoreExtensions = Lists.newArrayList(Splitter.on(",").split(ignoreExtensionsStr));
+            return Collections2.transform(ignoreExtensions, new Function<String,Pattern>() {
+                @Override
+                public Pattern apply(String input) {
+                    return Pattern.compile(".*\\." + input);
+                }
+                
+            });
+        }
+        return Lists.newArrayList();
+    }
+
     @Override
     public void destroy() {
     }
@@ -114,6 +151,15 @@ public class IsisSessionFilter implements Filter {
                 final HttpServletRequest httpRequest = (HttpServletRequest) request;
                 final HttpServletResponse httpResponse = (HttpServletResponse) response;
 
+                if(requestIsIgnoreExtension(filter, httpRequest)) {
+                    try {
+                        chain.doFilter(request, response);
+                        return;
+                    } finally {
+                        closeSession();
+                    }
+                }
+                
                 // request is to logon page
                 if (requestToLogonPage(filter, httpRequest)) {
                     NO_SESSION_SINCE_REDIRECTING_TO_LOGON_PAGE.setOn(request);
@@ -158,6 +204,16 @@ public class IsisSessionFilter implements Filter {
                     UNDEFINED.setOn(request);
                     // nothing to do
                 }
+            }
+
+            private boolean requestIsIgnoreExtension(IsisSessionFilter filter, HttpServletRequest httpRequest) {
+                final String servletPath = httpRequest.getServletPath();
+                for (final Pattern extension : filter.ignoreExtensions) {
+                    if(extension.matcher(servletPath).matches()) {
+                        return true;
+                    }
+                }
+                return false;
             }
 
             private boolean requestToLogonPage(IsisSessionFilter filter, HttpServletRequest httpRequest) {
