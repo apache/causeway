@@ -32,7 +32,6 @@ import org.apache.isis.runtimes.dflt.runtime.fixtures.authentication.Authenticat
 import org.apache.isis.runtimes.dflt.runtime.system.IsisSystem;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.webapp.WebAppConstants;
-import org.apache.isis.runtimes.dflt.webapp.auth.AuthenticationSessionLookupStrategy.Caching;
 
 /**
  * Returns a valid {@link AuthenticationSession} through a number of mechanisms.
