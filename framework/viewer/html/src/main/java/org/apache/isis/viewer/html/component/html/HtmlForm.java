@@ -23,7 +23,7 @@ import java.io.PrintWriter;
 
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
-import org.apache.isis.viewer.html.HtmlViewerContext;
+import org.apache.isis.viewer.html.PathBuilder;
 import org.apache.isis.viewer.html.component.ComponentComposite;
 import org.apache.isis.viewer.html.component.Form;
 
@@ -34,13 +34,13 @@ public class HtmlForm extends ComponentComposite implements Form {
     private final boolean isEditing;
     private final String id;
 
-    public HtmlForm(final HtmlViewerContext htmlViewerContext, final String id, final String action, final int page, final int noOfPages, final boolean isEditing) {
-        this(htmlViewerContext, id, action, page, noOfPages, false, isEditing);
+    public HtmlForm(final PathBuilder pathBuilder, final String id, final String action, final int page, final int noOfPages, final boolean isEditing) {
+        this(pathBuilder, id, action, page, noOfPages, false, isEditing);
     }
 
-    private HtmlForm(HtmlViewerContext htmlViewerContext, final String id, final String action, final int page, final int noOfPages,
+    private HtmlForm(PathBuilder pathBuilder, final String id, final String action, final int page, final int noOfPages,
         final boolean confirm, final boolean isEditing) {
-        super(htmlViewerContext);
+        super(pathBuilder);
         this.id = id;
         this.confirm = confirm;
         this.isEditing = isEditing;
@@ -62,7 +62,7 @@ public class HtmlForm extends ComponentComposite implements Form {
                 optional = "<span class=\"required\"> *</span>";
             }
         }
-        add(new Html(htmlViewerContext, "<div class=\"field\" title=\"" + description + "\"><span class=\"label\">" + label
+        add(new Html(pathBuilder, "<div class=\"field\" title=\"" + description + "\"><span class=\"label\">" + label
             + "</span><span class=\"separator\">: </span> " + field + optional + error + "</div>"));
     }
 
@@ -107,7 +107,7 @@ public class HtmlForm extends ComponentComposite implements Form {
     }
 
     public void addFieldName(final String fieldLabel) {
-        add(new Heading(htmlViewerContext, fieldLabel, 4));
+        add(new Heading(pathBuilder, fieldLabel, 4));
     }
 
     @Override

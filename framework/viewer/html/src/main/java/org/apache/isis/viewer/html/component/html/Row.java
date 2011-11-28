@@ -21,14 +21,14 @@ package org.apache.isis.viewer.html.component.html;
 
 import java.io.PrintWriter;
 
-import org.apache.isis.viewer.html.HtmlViewerContext;
+import org.apache.isis.viewer.html.PathBuilder;
 import org.apache.isis.viewer.html.component.Component;
 import org.apache.isis.viewer.html.component.ComponentComposite;
 
 class Row extends ComponentComposite {
 
-    public Row(HtmlViewerContext htmlViewerContext) {
-        super(htmlViewerContext);
+    public Row(PathBuilder pathBuilder) {
+        super(pathBuilder);
     }
 
     private static final int TRUNCATE_LENGTH = 18;
@@ -50,7 +50,7 @@ class Row extends ComponentComposite {
         } else {
             s = string;
         }
-        add(new Html(htmlViewerContext, s));
+        add(new Html(pathBuilder, s));
     }
 
     public void addCell(final Component component) {

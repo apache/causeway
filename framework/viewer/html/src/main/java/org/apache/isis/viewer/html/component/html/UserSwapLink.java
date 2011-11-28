@@ -24,15 +24,15 @@ package org.apache.isis.viewer.html.component.html;
 
 import java.io.PrintWriter;
 
-import org.apache.isis.viewer.html.HtmlViewerContext;
+import org.apache.isis.viewer.html.PathBuilder;
 import org.apache.isis.viewer.html.component.Component;
 
 final class UserSwapLink implements Component {
-    private final HtmlViewerContext htmlViewerContext;
+    private final PathBuilder pathBuilder;
     private final String name;
 
-    UserSwapLink(final HtmlViewerContext htmlViewerContext, final String name) {
-        this.htmlViewerContext = htmlViewerContext;
+    UserSwapLink(final PathBuilder pathBuilder, final String name) {
+        this.pathBuilder = pathBuilder;
         this.name = name;
     }
 
@@ -47,6 +47,6 @@ final class UserSwapLink implements Component {
     }
 
     protected String pathTo(final String prefix) {
-        return htmlViewerContext.pathTo(prefix);
+        return pathBuilder.pathTo(prefix);
     }
 }

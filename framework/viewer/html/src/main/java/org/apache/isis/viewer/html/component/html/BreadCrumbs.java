@@ -21,15 +21,15 @@ package org.apache.isis.viewer.html.component.html;
 
 import java.io.PrintWriter;
 
-import org.apache.isis.viewer.html.HtmlViewerContext;
+import org.apache.isis.viewer.html.PathBuilder;
 import org.apache.isis.viewer.html.component.ComponentAbstract;
 
 public class BreadCrumbs extends ComponentAbstract {
     private final String[] names;
     private final boolean[] isLinked;
 
-    public BreadCrumbs(final HtmlViewerContext htmlViewerContext, final String[] names, final boolean[] isLinked) {
-        super(htmlViewerContext);
+    public BreadCrumbs(final PathBuilder pathBuilder, final String[] names, final boolean[] isLinked) {
+        super(pathBuilder);
         this.names = names;
         this.isLinked = isLinked;
     }
@@ -60,7 +60,7 @@ public class BreadCrumbs extends ComponentAbstract {
     }
 
     protected String pathTo(final String prefix) {
-        return htmlViewerContext.pathTo(prefix);
+        return pathBuilder.pathTo(prefix);
     }
 
 }

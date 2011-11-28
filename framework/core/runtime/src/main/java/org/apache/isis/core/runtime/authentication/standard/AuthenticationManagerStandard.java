@@ -31,13 +31,14 @@ import java.util.Map;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.debug.DebugBuilder;
-import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.lang.ToString;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequest;
+import org.apache.isis.core.runtime.authentication.RegistrationDetails;
 
+import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
@@ -53,6 +54,8 @@ public class AuthenticationManagerStandard implements AuthenticationManager, Deb
 
     private RandomCodeGenerator randomCodeGenerator;
     private IsisConfiguration configuration;
+
+    
 
     // //////////////////////////////////////////////////////////
     // constructor
@@ -178,6 +181,30 @@ public class AuthenticationManagerStandard implements AuthenticationManager, Deb
         return Collections.unmodifiableList(authenticators);
     }
 
+
+    // //////////////////////////////////////////////////////////
+    // register
+    // //////////////////////////////////////////////////////////
+
+    @Override
+    public boolean register(RegistrationDetails registrationDetails) {
+        for(final Registrar registrar: getRegistrars()) {
+            if(registrar.canRegister(registrationDetails)) {
+                return registrar.register(registrationDetails);
+            }
+        }
+        return false;
+    }
+
+    public List<Registrar> getRegistrars() {
+        return asAuthenticators(getAuthenticators());
+    }
+
+    private static List<Registrar> asAuthenticators(final List<Authenticator> authenticators2) {
+        final List<Registrar> registrars = Lists.transform(authenticators2, Registrar.AS_REGISTRAR_ELSE_NULL);
+        return Lists.newArrayList(Collections2.filter(registrars, Registrar.NON_NULL));
+    }
+
     // //////////////////////////////////////////////////////////
     // RandomCodeGenerator
     // //////////////////////////////////////////////////////////
@@ -237,6 +264,7 @@ public class AuthenticationManagerStandard implements AuthenticationManager, Deb
     protected IsisConfiguration getConfiguration() {
         return configuration;
     }
+
 
 
 }

@@ -24,15 +24,15 @@ import javax.servlet.ServletContext;
 import org.apache.isis.viewer.html.servlet.HtmlServletConstants;
 
 
-public final class HtmlViewerContext {
+public class PathBuilderDefault implements PathBuilder {
 
     private final String suffix;
 
-    public HtmlViewerContext(final ServletContext servletContext) {
+    public PathBuilderDefault(final ServletContext servletContext) {
         this(getSuffixInitParam(servletContext));
     }
 
-    private HtmlViewerContext(final String suffix) {
+    private PathBuilderDefault(final String suffix) {
         this.suffix = suffix;
     }
     

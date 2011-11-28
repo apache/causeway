@@ -23,21 +23,21 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.isis.viewer.html.HtmlViewerContext;
+import org.apache.isis.viewer.html.PathBuilder;
 
 public class ComponentComposite implements Component {
     
     private final List<Component> components = new ArrayList<Component>();
-    protected final HtmlViewerContext htmlViewerContext;
+    protected final PathBuilder pathBuilder;
 
-    public ComponentComposite(final HtmlViewerContext htmlViewerContext) {
+    public ComponentComposite(final PathBuilder pathBuilder) {
         super();
-        this.htmlViewerContext = htmlViewerContext;
+        this.pathBuilder = pathBuilder;
     }
 
     
     protected String pathTo(final String prefix) {
-        return htmlViewerContext.pathTo(prefix);
+        return pathBuilder.pathTo(prefix);
     }
 
     @Override

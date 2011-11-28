@@ -22,7 +22,7 @@ package org.apache.isis.viewer.html.component.html;
 import java.io.PrintWriter;
 import java.util.StringTokenizer;
 
-import org.apache.isis.viewer.html.HtmlViewerContext;
+import org.apache.isis.viewer.html.PathBuilder;
 import org.apache.isis.viewer.html.component.Block;
 import org.apache.isis.viewer.html.component.Component;
 import org.apache.isis.viewer.html.component.Page;
@@ -36,11 +36,11 @@ public abstract class AbstractHtmlPage implements Component, Page {
     private final StringBuffer debug = new StringBuffer();
     
     private String title = "Apache Isis";
-    protected final HtmlViewerContext htmlViewerContext;
+    protected final PathBuilder pathBuilder;
 
-    public AbstractHtmlPage(final HtmlViewerContext htmlViewerContext, final String styleSheet, final String header, final String footer) {
-        this.htmlViewerContext = htmlViewerContext;
-        this.pageHeader = new Div(htmlViewerContext, null, "page-header");
+    public AbstractHtmlPage(final PathBuilder pathBuilder, final String styleSheet, final String header, final String footer) {
+        this.pathBuilder = pathBuilder;
+        this.pageHeader = new Div(pathBuilder, null, "page-header");
         this.styleSheet = styleSheet == null ? "default.css" : styleSheet;
         this.siteHeader = header;
         this.siteFooter = footer;

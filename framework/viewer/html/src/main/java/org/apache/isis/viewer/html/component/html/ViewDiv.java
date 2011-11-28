@@ -23,7 +23,7 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.isis.viewer.html.HtmlViewerContext;
+import org.apache.isis.viewer.html.PathBuilder;
 import org.apache.isis.viewer.html.component.Component;
 import org.apache.isis.viewer.html.component.ComponentComposite;
 import org.apache.isis.viewer.html.component.ViewPane;
@@ -38,12 +38,10 @@ public class ViewDiv extends ComponentComposite implements ViewPane {
     private final List<String> messages = new ArrayList<String>();
     private final List<String> warnings = new ArrayList<String>();
     private String description;
-
     
-    public ViewDiv(HtmlViewerContext htmlViewerContext) {
-        super(htmlViewerContext);
+    public ViewDiv(PathBuilder pathBuilder) {
+        super(pathBuilder);
     }
-
 
     @Override
     public void setIconName(final String iconName) {
@@ -72,18 +70,18 @@ public class ViewDiv extends ComponentComposite implements ViewPane {
     }
 
     @Override
-    protected void writeAfter(final PrintWriter writer) {
-        writer.println("</div>");
-        writer.println("</div>");
-    }
-
-    @Override
     protected void writeBefore(final PrintWriter writer) {
         writer.println("<div id=\"view\">");
         writeMessages(writer);
         writeHeader(writer);
         writeMenu(writer);
         writer.println("<div id=\"content\">");
+    }
+
+    @Override
+    protected void writeAfter(final PrintWriter writer) {
+        writer.println("</div>");
+        writer.println("</div>");
     }
 
     private void writeMessages(final PrintWriter writer) {
@@ -141,6 +139,6 @@ public class ViewDiv extends ComponentComposite implements ViewPane {
     }
 
     protected String pathTo(final String prefix) {
-        return htmlViewerContext.pathTo(prefix);
+        return pathBuilder.pathTo(prefix);
     }
 }

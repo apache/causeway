@@ -24,7 +24,7 @@ import java.io.PrintWriter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
-import org.apache.isis.viewer.html.HtmlViewerContext;
+import org.apache.isis.viewer.html.PathBuilder;
 import org.apache.isis.viewer.html.component.ComponentAbstract;
 import org.apache.isis.viewer.html.image.ImageLookup;
 import org.apache.isis.viewer.html.request.Request;
@@ -36,9 +36,9 @@ class CollectionLink extends ComponentAbstract {
     private final String title;
     private final String description;
 
-    public CollectionLink(HtmlViewerContext htmlViewerContext, final ObjectAssociation field, final ObjectAdapter collection,
+    public CollectionLink(PathBuilder pathBuilder, final ObjectAssociation field, final ObjectAdapter collection,
         final String description, final String objectId) {
-        super(htmlViewerContext);
+        super(pathBuilder);
         this.description = description;
         this.objectId = objectId;
         fieldId = field.getId();
@@ -72,7 +72,7 @@ class CollectionLink extends ComponentAbstract {
     }
 
     protected String pathTo(final String prefix) {
-        return htmlViewerContext.pathTo(prefix);
+        return pathBuilder.pathTo(prefix);
     }
 
 }

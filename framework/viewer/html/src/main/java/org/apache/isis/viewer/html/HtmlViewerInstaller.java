@@ -45,7 +45,7 @@ import org.apache.isis.viewer.html.servlet.LogonServlet;
  */
 public class HtmlViewerInstaller extends IsisViewerInstallerAbstract {
 
-    private static final String LOGON_PAGE = HtmlServletConstants.LOGON_APP_PAGE;
+    private static final String LOGON_PAGE = HtmlServletConstants.LOGON_PAGE;
     private static final String LOGON_PAGE_MAPPED = "/" + LOGON_PAGE;
 
     private static final String[] STATIC_CONTENT = new String[] { "*.gif", "*.png", "*.jpg", "*.css" };

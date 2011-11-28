@@ -21,18 +21,18 @@ package org.apache.isis.viewer.html.component.html;
 
 import java.io.PrintWriter;
 
-import org.apache.isis.viewer.html.HtmlViewerContext;
+import org.apache.isis.viewer.html.PathBuilder;
 import org.apache.isis.viewer.html.component.Component;
 
 public class Link implements Component {
     
-    private final HtmlViewerContext htmlViewerContext;
+    private final PathBuilder pathBuilder;
     private final String link;
     private final String name;
     private final String description;
 
-    public Link(final HtmlViewerContext htmlViewerContext, final String link, final String name, final String description) {
-        this.htmlViewerContext = htmlViewerContext;
+    public Link(final PathBuilder pathBuilder, final String link, final String name, final String description) {
+        this.pathBuilder = pathBuilder;
         this.link = link;
         this.name = name;
         this.description = description;
@@ -44,7 +44,7 @@ public class Link implements Component {
     }
 
     protected String pathTo(final String link) {
-        return htmlViewerContext.pathTo(link);
+        return pathBuilder.pathTo(link);
     }
 
 }

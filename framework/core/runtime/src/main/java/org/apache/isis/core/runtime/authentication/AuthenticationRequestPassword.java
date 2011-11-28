@@ -20,9 +20,6 @@
 
 package org.apache.isis.core.runtime.authentication;
 
-
-
-
 public class AuthenticationRequestPassword extends AuthenticationRequestAbstract {
 	
     private final String password;

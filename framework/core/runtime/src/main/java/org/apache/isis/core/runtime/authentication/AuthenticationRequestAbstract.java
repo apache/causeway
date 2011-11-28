@@ -27,9 +27,6 @@ import java.util.List;
 import com.google.common.collect.Lists;
 
 
-
-
-
 public abstract class AuthenticationRequestAbstract implements AuthenticationRequest {
 	
     private final String name;

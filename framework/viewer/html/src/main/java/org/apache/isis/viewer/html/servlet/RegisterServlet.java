@@ -24,28 +24,21 @@ import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
-import org.apache.isis.core.commons.authentication.AuthenticationSession;
-import org.apache.isis.core.runtime.authentication.AuthenticationRequest;
-import org.apache.isis.core.runtime.authentication.AuthenticationRequestPassword;
+import org.apache.isis.core.runtime.authentication.standard.RegistrationDetailsPassword;
 import org.apache.isis.runtimes.dflt.monitoring.servermonitor.Monitor;
-import org.apache.isis.runtimes.dflt.runtime.authentication.exploration.AuthenticationRequestExploration;
-import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
-import org.apache.isis.runtimes.dflt.webapp.WebAppConstants;
 import org.apache.isis.runtimes.dflt.webapp.auth.AuthenticationSessionLookupStrategy;
-import org.apache.isis.runtimes.dflt.webapp.auth.AuthenticationSessionLookupStrategy.Caching;
 import org.apache.isis.runtimes.dflt.webapp.auth.AuthenticationSessionLookupStrategyUtils;
 import org.apache.isis.viewer.html.component.html.HtmlComponentFactory;
 import org.apache.isis.viewer.html.component.html.LogonFormPage;
-import org.apache.isis.viewer.html.context.Context;
+import org.apache.isis.viewer.html.component.html.RegisterFormPage;
 import org.apache.log4j.Logger;
 
-public class LogonServlet extends AbstractHtmlViewerServlet {
+public class RegisterServlet extends AbstractHtmlViewerServlet {
     
     private static final long serialVersionUID = 1L;
     
-    private static final Logger LOG = Logger.getLogger(LogonServlet.class);
+    private static final Logger LOG = Logger.getLogger(RegisterServlet.class);
     
     private AuthenticationSessionLookupStrategy authenticationSessionLookupStrategy;
 
@@ -64,62 +57,43 @@ public class LogonServlet extends AbstractHtmlViewerServlet {
     protected void doPost(final HttpServletRequest request, final HttpServletResponse response)
         throws ServletException, IOException {
 
-        // existing valid session
-        AuthenticationSession existingAuthSession = authenticationSessionLookupStrategy.lookupValid(request, response, Caching.CACHE);
-        if (existingAuthSession != null) {
-            redirectToStartPage(response, existingAuthSession.getUserName());
-            return;
-        }
-
         // prompt
         final String user = request.getParameter("username");
         final String password = request.getParameter("password");
-        if (user == null && !getDeploymentType().isExploring()) {
-            renderPrompt(response, "", "", "");
+        final String password2 = request.getParameter("password2");
+        if (user == null) {
+            renderPrompt(response, "", "", "", "");
             return;
         }
 
-        // authenticate; re-prompt if required
-        final AuthenticationSession authSession = authenticate(user, password);
-        if (authSession == null) {
-            renderPrompt(response, user, password, "error");
+        // register; re-prompt if required
+        final boolean registered = register(user, password, password2);
+        if (!registered) {
+            renderPrompt(response, user, password, password2, "error");
             return;
         }
 
-        // authenticated
-        authenticationSessionLookupStrategy.bind(request, response, authSession, Caching.CACHE);
-
-        final Context context = new Context(new HtmlComponentFactory(getPathBuilder()));
-        context.setSession(authSession);
-        authSession.setAttribute(HtmlServletConstants.AUTHENTICATION_SESSION_CONTEXT_KEY, context);
-
-        LOG.info("created session");
-        redirectToStartPage(response, user);
+        // registered
+        redirectToLogonPage(response, user);
     }
 
-    private void redirectToStartPage(final HttpServletResponse response, final String user) throws IOException {
+    private void redirectToLogonPage(final HttpServletResponse response, final String user) throws IOException {
         Monitor.addEvent("Web", "Logon - " + user);
-        response.sendRedirect(pathTo(HtmlServletConstants.START_PAGE));
+        response.sendRedirect(pathTo(HtmlServletConstants.LOGON_PAGE));
     }
 
     private void renderPrompt(
             final HttpServletResponse response, 
-            final String user, final String password,
+            final String user, final String password, final String password2, 
             final String message) throws IOException {
         response.setContentType("text/html");
         final HtmlComponentFactory factory = new HtmlComponentFactory(getPathBuilder());
-        final LogonFormPage page = factory.createLogonPage(user, password);
+        final RegisterFormPage page = factory.createRegisterPage(user, password);
         page.write(response.getWriter());
     }
 
-    private AuthenticationSession authenticate(final String user, final String password) {
-        AuthenticationRequest request;
-        if (getDeploymentType() == DeploymentType.EXPLORATION) {
-            request = new AuthenticationRequestExploration();
-        } else {
-            request = new AuthenticationRequestPassword(user, password);
-        }
-        return getAuthenticationManager().authenticate(request);
+    private boolean register(final String user, final String password, final String password2) {
+        return getAuthenticationManager().register(new RegistrationDetailsPassword(user, password));
     }
 
 

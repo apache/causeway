@@ -25,7 +25,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
-import org.apache.isis.viewer.html.HtmlViewerContext;
+import org.apache.isis.viewer.html.PathBuilder;
 import org.apache.isis.viewer.html.component.Component;
 import org.apache.isis.viewer.html.image.ImageLookup;
 import org.apache.isis.viewer.html.request.Request;
@@ -33,12 +33,12 @@ import org.apache.isis.viewer.html.request.Request;
 public class CollectionIcon implements Component {
     
     private final ObjectAdapter collection;
-    private final HtmlViewerContext htmlViewerContext;
+    private final PathBuilder pathBuilder;
     private final String id;
     private final String description;
 
-    public CollectionIcon(HtmlViewerContext htmlViewerContext, final ObjectAdapter element, final String description, final String id) {
-        this.htmlViewerContext = htmlViewerContext;
+    public CollectionIcon(PathBuilder pathBuilder, final ObjectAdapter element, final String description, final String id) {
+        this.pathBuilder = pathBuilder;
         this.collection = element;
         this.description = description;
         this.id = id;
@@ -75,7 +75,7 @@ public class CollectionIcon implements Component {
     }
 
     protected String pathTo(final String prefix) {
-        return htmlViewerContext.pathTo(prefix);
+        return pathBuilder.pathTo(prefix);
     }
 
 }

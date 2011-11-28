@@ -35,12 +35,14 @@ public interface AuthenticationManager extends ApplicationScopedComponent {
      */
     AuthenticationSession authenticate(AuthenticationRequest request);
 
+    boolean register(RegistrationDetails registrationDetails);
+    
     /**
      * Whether the provided {@link AuthenticationSession} is still valid.
      */
     boolean isSessionValid(AuthenticationSession authenticationSession);
     
     void closeSession(AuthenticationSession authenticationSession);
-    
+
 }
 

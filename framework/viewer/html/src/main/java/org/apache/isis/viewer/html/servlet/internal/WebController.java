@@ -36,7 +36,7 @@ import org.apache.isis.runtimes.dflt.monitoring.servermonitor.Monitor;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
 import org.apache.isis.runtimes.dflt.runtime.userprofile.UserProfilesDebugUtil;
-import org.apache.isis.viewer.html.HtmlViewerContext;
+import org.apache.isis.viewer.html.PathBuilder;
 import org.apache.isis.viewer.html.action.Action;
 import org.apache.isis.viewer.html.action.ActionException;
 import org.apache.isis.viewer.html.action.ChangeContext;
@@ -200,11 +200,11 @@ public class WebController {
     private final Map actions = new HashMap();
     
     private boolean isDebug;
-    private final HtmlViewerContext htmlViewerContext;
+    private final PathBuilder pathBuilder;
     
 
-    public WebController(HtmlViewerContext htmlViewerContext) {
-        this.htmlViewerContext = htmlViewerContext;
+    public WebController(PathBuilder pathBuilder) {
+        this.pathBuilder = pathBuilder;
     }
     
     public boolean actionExists(final Request req) {
@@ -436,7 +436,7 @@ public class WebController {
     }
 
     protected String pathTo(final String prefix) {
-        return htmlViewerContext.pathTo(prefix);
+        return pathBuilder.pathTo(prefix);
     }
 
 

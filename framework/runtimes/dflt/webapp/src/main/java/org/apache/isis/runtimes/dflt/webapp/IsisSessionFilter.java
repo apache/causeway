@@ -20,6 +20,10 @@
 package org.apache.isis.runtimes.dflt.webapp;
 
 import java.io.IOException;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.regex.Pattern;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -38,6 +42,11 @@ import org.apache.isis.runtimes.dflt.webapp.auth.AuthenticationSessionLookupStra
 import org.apache.isis.runtimes.dflt.webapp.auth.AuthenticationSessionLookupStrategy.Caching;
 import org.apache.isis.runtimes.dflt.webapp.auth.AuthenticationSessionLookupStrategyUtils;
 
+import com.google.common.base.Function;
+import com.google.common.base.Splitter;
+import com.google.common.collect.Collections2;
+import com.google.common.collect.Lists;
+
 public class IsisSessionFilter implements Filter {
 
     /**
@@ -51,9 +60,32 @@ public class IsisSessionFilter implements Filter {
      */
     public static final String CACHE_AUTH_SESSION_ON_HTTP_SESSION_KEY = "cacheAuthSessionOnHttpSession";
 
+    /**
+     * Init parameter key for which extensions should be ignored (typically, mappings for other viewers within the webapp context).
+     * 
+     * <p>
+     * It can also be used to specify ignored static resources (though putting the {@link ResourceCachingFilter} first in the
+     * <tt>web.xml</tt> accomplishes the same thing).
+     * 
+     * <p>
+     * The value is expected as a comma separated list, for example:
+     * <pre>htmlviewer</pre>
+     */
+    public static final String IGNORE_EXTENSIONS_KEY = "ignoreExtensions";
+
+    private static final Function<String,Pattern> STRING_TO_PATTERN = new Function<String,Pattern>() {
+        @Override
+        public Pattern apply(String input) {
+            return Pattern.compile(".*\\." + input);
+        }
+        
+    };
+
     private AuthenticationSessionLookupStrategy authSessionLookupStrategy;
     private String logonPageIfNoSession;
     private Caching caching;
+    private Collection<Pattern> ignoreExtensions;
+
 
     // /////////////////////////////////////////////////////////////////
     // init, destroy
@@ -64,8 +96,8 @@ public class IsisSessionFilter implements Filter {
         authSessionLookupStrategy = AuthenticationSessionLookupStrategyUtils.lookup(config);
         lookupLogonPageIfNoSessionKey(config);
         lookupCacheAuthSessionKey(config);
+        lookupIgnorePatterns(config);
     }
-
 
     private void lookupLogonPageIfNoSessionKey(final FilterConfig config) {
         logonPageIfNoSession = config.getInitParameter(LOGON_PAGE_KEY);
@@ -74,6 +106,20 @@ public class IsisSessionFilter implements Filter {
     private void lookupCacheAuthSessionKey(final FilterConfig config) {
         caching = Caching.lookup(config.getInitParameter(CACHE_AUTH_SESSION_ON_HTTP_SESSION_KEY));
     }
+
+    private void lookupIgnorePatterns(final FilterConfig config) {
+        ignoreExtensions = Collections.unmodifiableCollection(parseIgnorePatterns(config));
+    }
+
+    private Collection<Pattern> parseIgnorePatterns(final FilterConfig config) {
+        final String ignoreExtensionsStr = config.getInitParameter(IGNORE_EXTENSIONS_KEY);
+        if(ignoreExtensionsStr != null) {
+            final List<String> ignoreExtensions = Lists.newArrayList(Splitter.on(",").split(ignoreExtensionsStr));
+            return Collections2.transform(ignoreExtensions, STRING_TO_PATTERN);
+        }
+        return Lists.newArrayList();
+    }
+
 
     @Override
     public void destroy() {
@@ -91,6 +137,15 @@ public class IsisSessionFilter implements Filter {
                 
                 final HttpServletRequest httpRequest = (HttpServletRequest) request;
                 final HttpServletResponse httpResponse = (HttpServletResponse) response;
+
+                if(requestIsIgnoreExtension(filter, httpRequest)) {
+                    try {
+                        chain.doFilter(request, response);
+                        return;
+                    } finally {
+                        closeSession();
+                    }
+                }
 
                 if(ResourceCachingFilter.isCachedResource(httpRequest)) {
                     try {
@@ -145,6 +200,16 @@ public class IsisSessionFilter implements Filter {
                     UNDEFINED.setOn(request);
                     // nothing to do
                 }
+            }
+
+            private boolean requestIsIgnoreExtension(IsisSessionFilter filter, HttpServletRequest httpRequest) {
+                final String servletPath = httpRequest.getServletPath();
+                for (final Pattern extension : filter.ignoreExtensions) {
+                    if(extension.matcher(servletPath).matches()) {
+                        return true;
+                    }
+                }
+                return false;
             }
 
             private boolean requestToLogonPage(IsisSessionFilter filter, HttpServletRequest httpRequest) {

@@ -26,26 +26,27 @@ import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
-import org.apache.isis.viewer.html.HtmlViewerContext;
+import org.apache.isis.viewer.html.PathBuilder;
+import org.apache.isis.viewer.html.PathBuilderDefault;
 
 public abstract class AbstractHtmlViewerServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
     
-    private HtmlViewerContext htmlViewerContext;
+    private PathBuilder pathBuilder;
     
-    protected HtmlViewerContext getHtmlViewerContext() {
-        if(htmlViewerContext != null) {
-            return htmlViewerContext;
+    protected PathBuilder getPathBuilder() {
+        if(pathBuilder != null) {
+            return pathBuilder;
         }
-        return htmlViewerContext = new HtmlViewerContext(getServletContext());
+        return pathBuilder = new PathBuilderDefault(getServletContext());
     }
 
     /**
      * Convenience.
      */
     protected String pathTo(final String prefix) {
-        return getHtmlViewerContext().pathTo(prefix);
+        return getPathBuilder().pathTo(prefix);
     }
 
     // //////////////////////////////////////////////////////////////
