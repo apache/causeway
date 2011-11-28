@@ -22,7 +22,7 @@ package org.apache.isis.viewer.html.component.html;
 import java.io.PrintWriter;
 
 import org.apache.isis.core.metamodel.spec.ActionType;
-import org.apache.isis.viewer.html.HtmlViewerContext;
+import org.apache.isis.viewer.html.PathBuilder;
 import org.apache.isis.viewer.html.component.Component;
 
 public class MenuItem implements Component {
@@ -33,12 +33,12 @@ public class MenuItem implements Component {
     private final String reasonDisabled;
     private final boolean takesParameters;
     private final ActionType type;
-    private final HtmlViewerContext htmlViewerContext;
+    private final PathBuilder pathBuilder;
 
-    public MenuItem(HtmlViewerContext htmlViewerContext, final String actionId, final String actionName,
+    public MenuItem(PathBuilder pathBuilder, final String actionId, final String actionName,
         final String actionDescription, final String reasonDisabled, final ActionType type, final boolean takesParameters, final String objectId) {
         this.actionId = actionId;
-        this.htmlViewerContext = htmlViewerContext;
+        this.pathBuilder = pathBuilder;
         this.actionName = actionName;
         this.actionDescription = actionDescription;
         this.reasonDisabled = reasonDisabled;
@@ -96,7 +96,7 @@ public class MenuItem implements Component {
     }
 
     protected String pathTo(final String prefix) {
-        return htmlViewerContext.pathTo(prefix);
+        return pathBuilder.pathTo(prefix);
     }
 
 }

@@ -21,15 +21,15 @@ package org.apache.isis.viewer.html.component.html;
 
 import java.io.PrintWriter;
 
-import org.apache.isis.viewer.html.HtmlViewerContext;
+import org.apache.isis.viewer.html.PathBuilder;
 import org.apache.isis.viewer.html.component.ComponentAbstract;
 
 class Html extends ComponentAbstract {
 
     private final String code;
 
-    public Html(HtmlViewerContext htmlViewerContext, final String code) {
-        super(htmlViewerContext);
+    public Html(PathBuilder pathBuilder, final String code) {
+        super(pathBuilder);
         this.code = code;
     }
 

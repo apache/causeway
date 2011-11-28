@@ -22,8 +22,10 @@ package org.apache.isis.viewer.html.component;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
+import org.apache.isis.viewer.html.PathBuilder;
 
-public interface ComponentFactory {
+public interface ComponentFactory extends PathBuilder {
+    
     Component createAddOption(String id, String id2);
 
     Block createBlock(String style, String description);

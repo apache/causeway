@@ -22,7 +22,7 @@ package org.apache.isis.viewer.html.component.html;
 import java.io.PrintWriter;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.viewer.html.HtmlViewerContext;
+import org.apache.isis.viewer.html.PathBuilder;
 import org.apache.isis.viewer.html.component.Component;
 import org.apache.isis.viewer.html.image.ImageLookup;
 import org.apache.isis.viewer.html.request.Request;
@@ -32,10 +32,10 @@ public class ObjectIcon implements Component {
     private final String id;
     private final String style;
     private final String description;
-    private final HtmlViewerContext htmlViewerContext;
+    private final PathBuilder pathBuilder;
 
-    public ObjectIcon(final HtmlViewerContext htmlViewerContext, final ObjectAdapter element, final String description, final String id, final String style) {
-        this.htmlViewerContext = htmlViewerContext;
+    public ObjectIcon(final PathBuilder pathBuilder, final ObjectAdapter element, final String description, final String id, final String style) {
+        this.pathBuilder = pathBuilder;
         this.element = element;
         this.description = description;
         this.id = id;
@@ -72,7 +72,7 @@ public class ObjectIcon implements Component {
     }
 
     protected String pathTo(final String prefix) {
-        return htmlViewerContext.pathTo(prefix);
+        return pathBuilder.pathTo(prefix);
     }
 
 }

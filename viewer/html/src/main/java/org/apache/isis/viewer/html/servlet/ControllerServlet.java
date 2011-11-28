@@ -57,7 +57,7 @@ public class ControllerServlet extends AbstractHtmlViewerServlet {
         super.init(servletConfig);
         encoding = getConfiguration().getString(HtmlServletConstants.ENCODING_KEY, encoding);
 
-        controller = new WebController(getHtmlViewerContext());
+        controller = new WebController(getPathBuilder());
         controller.setDebug(getConfiguration().getBoolean(HtmlServletConstants.DEBUG_KEY));
         controller.init();
     }
@@ -106,7 +106,7 @@ public class ControllerServlet extends AbstractHtmlViewerServlet {
             (Context) authenticationSession.getAttribute(HtmlServletConstants.AUTHENTICATION_SESSION_CONTEXT_KEY);
         if (context == null || !context.isValid()) {
             // TODO reuse the component factory
-            context = new Context(new HtmlComponentFactory(getHtmlViewerContext()));
+            context = new Context(new HtmlComponentFactory(getPathBuilder()));
             authenticationSession.setAttribute(HtmlServletConstants.AUTHENTICATION_SESSION_CONTEXT_KEY, context);
         }
         return context;
@@ -145,7 +145,7 @@ public class ControllerServlet extends AbstractHtmlViewerServlet {
     }
 
     protected String getLogonPage() {
-        return pathTo(HtmlServletConstants.LOGON_APP_PAGE);
+        return pathTo(HtmlServletConstants.LOGON_PAGE);
     }
 
     private void addDebug(final HttpServletRequest request, final Page page) {

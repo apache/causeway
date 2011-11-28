@@ -22,12 +22,12 @@ package org.apache.isis.viewer.html.component.html;
 import java.io.PrintWriter;
 
 import org.apache.isis.viewer.html.HtmlViewerConstants;
-import org.apache.isis.viewer.html.HtmlViewerContext;
+import org.apache.isis.viewer.html.PathBuilder;
 import org.apache.isis.viewer.html.component.Component;
 
 class ActionComponent implements Component {
     
-    private final HtmlViewerContext htmlViewerContext;
+    private final PathBuilder pathBuilder;
     private final String objectId;
     private final String name;
     private final String description;
@@ -35,9 +35,9 @@ class ActionComponent implements Component {
     private final String action;
     private final String elementId;
 
-    public ActionComponent(final HtmlViewerContext htmlViewerContext, final String action, final String name, final String description,
+    public ActionComponent(final PathBuilder pathBuilder, final String action, final String name, final String description,
         final String objectId, final String elementId, final String field) {
-        this.htmlViewerContext = htmlViewerContext;
+        this.pathBuilder = pathBuilder;
         this.action = action;
         this.name = name;
         this.description = description;
@@ -70,7 +70,7 @@ class ActionComponent implements Component {
     }
 
     protected String pathTo(final String prefix) {
-        return htmlViewerContext.pathTo(prefix);
+        return pathBuilder.pathTo(prefix);
     }
 
 }

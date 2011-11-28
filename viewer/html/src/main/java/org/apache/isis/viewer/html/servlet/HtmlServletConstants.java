@@ -37,9 +37,9 @@ public final class HtmlServletConstants {
     /**
      * Binding to the {@link AuthenticationSession}.
      */
-    static final String AUTHENTICATION_SESSION_CONTEXT_KEY = "nof-context";
+    static final String AUTHENTICATION_SESSION_CONTEXT_KEY = "isis-context";
 
-    public static final String LOGON_APP_PAGE = "logon";
+    public static final String LOGON_PAGE = "logon";
     static final String START_PAGE = "start";
 
 

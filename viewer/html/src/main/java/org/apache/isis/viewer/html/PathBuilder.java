@@ -17,28 +17,14 @@
  *  under the License.
  */
 
-package org.apache.isis.viewer.html.component.html;
+package org.apache.isis.viewer.html;
 
-import java.io.PrintWriter;
 
-import org.apache.isis.viewer.html.PathBuilder;
-import org.apache.isis.viewer.html.component.Component;
-import org.apache.isis.viewer.html.component.ComponentComposite;
 
-class TableHeader extends ComponentComposite {
+public interface PathBuilder {
 
-    public TableHeader(PathBuilder pathBuilder) {
-        super(pathBuilder);
-    }
+    public String getSuffix();
+    
+    public String pathTo(final String prefix);
 
-    @Override
-    protected void write(final PrintWriter writer, final Component component) {
-        writer.print("<th>");
-        component.write(writer);
-        writer.println("</th>");
-    }
-
-    public void addHeader(final String string) {
-        add(new Html(pathBuilder, string));
-    }
 }

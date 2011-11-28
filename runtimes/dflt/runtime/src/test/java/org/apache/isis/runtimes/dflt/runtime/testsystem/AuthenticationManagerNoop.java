@@ -23,6 +23,7 @@ import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.components.Noop;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequest;
+import org.apache.isis.core.runtime.authentication.RegistrationDetails;
 
 public class AuthenticationManagerNoop implements AuthenticationManager, Noop {
 
@@ -49,6 +50,11 @@ public class AuthenticationManagerNoop implements AuthenticationManager, Noop {
     }
 
     public void testSetSession(final AuthenticationSession authenticationSession) {
+    }
+
+    @Override
+    public boolean register(RegistrationDetails registrationDetails) {
+        return false;
     }
 
 }

@@ -21,7 +21,7 @@ package org.apache.isis.viewer.html.component.html;
 
 import java.io.PrintWriter;
 
-import org.apache.isis.viewer.html.HtmlViewerContext;
+import org.apache.isis.viewer.html.PathBuilder;
 import org.apache.isis.viewer.html.component.Block;
 import org.apache.isis.viewer.html.component.Component;
 import org.apache.isis.viewer.html.component.ComponentComposite;
@@ -32,12 +32,12 @@ public class Div extends ComponentComposite implements Block {
     private final String id;
     private final String description;
 
-    public Div(final HtmlViewerContext htmlViewerContext, final String className, final String description) {
-        this(htmlViewerContext, className, description, null);
+    public Div(final PathBuilder pathBuilder, final String className, final String description) {
+        this(pathBuilder, className, description, null);
     }
 
-    public Div(final HtmlViewerContext htmlViewerContext, final String className, final String description, final String id) {
-        super(htmlViewerContext);
+    public Div(final PathBuilder pathBuilder, final String className, final String description, final String id) {
+        super(pathBuilder);
         this.description = description;
         this.className = className;
         this.id = id;
@@ -80,7 +80,7 @@ public class Div extends ComponentComposite implements Block {
     }
 
     public void add(final String text) {
-        super.add(new Html(htmlViewerContext, text));
+        super.add(new Html(pathBuilder, text));
     }
 
 }

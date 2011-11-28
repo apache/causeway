@@ -21,16 +21,16 @@ package org.apache.isis.viewer.html.component;
 
 import java.io.PrintWriter;
 
-import org.apache.isis.viewer.html.HtmlViewerContext;
+import org.apache.isis.viewer.html.PathBuilder;
 
 public abstract class ComponentAbstract implements Component {
     
     private String id;
     private String cls;
-    protected final HtmlViewerContext htmlViewerContext;
+    protected final PathBuilder pathBuilder;
 
-    public ComponentAbstract(HtmlViewerContext htmlViewerContext) {
-        this.htmlViewerContext = htmlViewerContext;
+    public ComponentAbstract(PathBuilder pathBuilder) {
+        this.pathBuilder = pathBuilder;
     }
     
     public void setClass(final String cls) {
