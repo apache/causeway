@@ -47,6 +47,35 @@
     </context-param>
 
     <filter>
+        <filter-name>ResourceCachingFilter</filter-name>
+        <filter-class>org.apache.isis.core.webapp.content.ResourceCachingFilter</filter-class>
+        <init-param>
+            <param-name>CacheTime</param-name>
+            <param-value>86400</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>ResourceCachingFilter</filter-name>
+        <url-pattern>*.js</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>ResourceCachingFilter</filter-name>
+        <url-pattern>*.css</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>ResourceCachingFilter</filter-name>
+        <url-pattern>*.png</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>ResourceCachingFilter</filter-name>
+        <url-pattern>*.jpg</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>ResourceCachingFilter</filter-name>
+        <url-pattern>*.gif</url-pattern>
+    </filter-mapping>
+    
+    <filter>
         <filter-name>IsisSessionFilterForHtml</filter-name>
         <filter-class>org.apache.isis.runtimes.dflt.webapp.IsisSessionFilter</filter-class>
         <init-param>
@@ -80,10 +109,6 @@
             <param-value>false</param-value>
         </init-param>
         <init-param>
-            <param-name>ignoreExtensions</param-name>
-            <param-value>css,js,png,jpg,gif</param-value>
-        </init-param>
-        <init-param>
             <param-name>logonPage</param-name>
             <param-value>/notAuthenticated</param-value>
         </init-param>
@@ -93,41 +118,16 @@
         <url-pattern>*</url-pattern>
     </filter-mapping>
 
-	<filter>
-		<filter-name>ResourceCachingFilter</filter-name>
-		<filter-class>org.apache.isis.core.webapp.content.ResourceCachingFilter</filter-class>
-		<init-param>
-			<param-name>CacheTime</param-name>
-			<param-value>86400</param-value>
-		</init-param>
-	</filter>
-	<filter-mapping>
-		<filter-name>ResourceCachingFilter</filter-name>
-		<url-pattern>*.js</url-pattern>
-	</filter-mapping>
-    <filter-mapping>
-        <filter-name>ResourceCachingFilter</filter-name>
-        <url-pattern>*.css</url-pattern>
-    </filter-mapping>
-	<filter-mapping>
-		<filter-name>ResourceCachingFilter</filter-name>
-		<url-pattern>*.png</url-pattern>
-	</filter-mapping>
-	<filter-mapping>
-		<filter-name>ResourceCachingFilter</filter-name>
-		<url-pattern>*.jpg</url-pattern>
-	</filter-mapping>
-	<filter-mapping>
-		<filter-name>ResourceCachingFilter</filter-name>
-		<url-pattern>*.gif</url-pattern>
-	</filter-mapping>
-    
     <servlet>
         <servlet-name>Logon</servlet-name>
         <servlet-class>org.apache.isis.viewer.html.servlet.LogonServlet</servlet-class>
         <init-param>
             <param-name>startPage</param-name>
             <param-value>start.htmlviewer</param-value>
+        </init-param>
+        <init-param>
+            <param-name>authenticationSessionLookupStrategy</param-name>
+            <param-value>org.apache.isis.runtimes.dflt.webapp.auth.AuthenticationSessionLookupStrategyDefault</param-value>
         </init-param>
     </servlet>
     <servlet-mapping>

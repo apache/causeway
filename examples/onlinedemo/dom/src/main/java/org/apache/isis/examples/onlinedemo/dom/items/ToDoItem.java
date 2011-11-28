@@ -20,9 +20,11 @@
 package org.apache.isis.examples.onlinedemo.dom.items;
 
 import org.apache.isis.applib.annotation.Disabled;
+import org.apache.isis.applib.annotation.Ignore;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.Title;
+import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.applib.value.Date;
 
 public class ToDoItem {
@@ -45,11 +47,11 @@ public class ToDoItem {
     private Date dueBy;
     
     @MemberOrder(sequence = "1")
-    public Date getDate() {
+    public Date getDueBy() {
         return dueBy;
     }
 
-    public void setDate(final Date dueBy) {
+    public void setDueBy(final Date dueBy) {
         this.dueBy = dueBy;
     }
     // }}
@@ -107,10 +109,21 @@ public class ToDoItem {
     @Named("Clone")
     @MemberOrder(sequence = "1")
     public ToDoItem duplicate() {
-        return toDoItems.newToDo(getDescription(), getCategory()); 
+        return toDoItems.newToDo(getDescription() + " - Copy", getCategory(), getDueBy()); 
     }
     // }}
 
+
+    // {{ isDue (programmatic)
+    @Ignore
+    public boolean isDue() {
+        if(getDueBy() == null) {
+            return false;
+        }
+        final Date now = new Date(Clock.getTimeAsDateTime());
+        return now.isGreaterThan(getDueBy());
+    }
+    // }}
 
     
     // {{ injected: ToDoItems
@@ -120,6 +133,7 @@ public class ToDoItem {
         this.toDoItems = toDoItems;
     }
     // }}
+
 
     
 }

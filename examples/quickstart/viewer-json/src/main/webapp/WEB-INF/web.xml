@@ -27,6 +27,10 @@
 		<listener-class>org.apache.isis.runtimes.dflt.webapp.IsisWebAppBootstrapper</listener-class>
 	</listener>
 
+    <listener>
+        <listener-class>org.jboss.resteasy.plugins.server.servlet.ResteasyBootstrap</listener-class>
+    </listener>
+
 	<context-param>
 		<param-name>isis.viewers</param-name>
 		<param-value>json</param-value>
@@ -38,16 +42,6 @@
 	</context-param>
 
 	<filter>
-		<filter-name>IsisSessionFilter</filter-name>
-		<filter-class>org.apache.isis.runtimes.dflt.webapp.IsisSessionFilter</filter-class>
-		<init-param>
-			<!-- trusted client, so no authentication required -->
-			<param-name>authenticationSessionLookupStrategy</param-name>
-			<param-value>org.apache.isis.viewer.json.viewer.authentication.AuthenticationSessionLookupStrategyTrusted</param-value>
-		</init-param>
-	</filter>
-
-	<filter>
 		<filter-name>ResourceCachingFilter</filter-name>
 		<filter-class>org.apache.isis.core.webapp.content.ResourceCachingFilter</filter-class>
 		<init-param>
@@ -55,12 +49,6 @@
 			<param-value>86400</param-value>
 		</init-param>
 	</filter>
-
-	<filter-mapping>
-		<filter-name>IsisSessionFilter</filter-name>
-		<url-pattern>*</url-pattern>
-	</filter-mapping>
-
 	<filter-mapping>
 		<filter-name>ResourceCachingFilter</filter-name>
 		<url-pattern>*.js</url-pattern>
@@ -82,40 +70,48 @@
 		<url-pattern>*.gif</url-pattern>
 	</filter-mapping>
 
-	<listener>
-		<listener-class>org.jboss.resteasy.plugins.server.servlet.ResteasyBootstrap</listener-class>
-	</listener>
+    <filter>
+        <filter-name>IsisSessionFilter</filter-name>
+        <filter-class>org.apache.isis.runtimes.dflt.webapp.IsisSessionFilter</filter-class>
+        <init-param>
+            <!-- trusted client, so no authentication required -->
+            <param-name>authenticationSessionLookupStrategy</param-name>
+            <param-value>org.apache.isis.viewer.json.viewer.authentication.AuthenticationSessionLookupStrategyTrusted</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>IsisSessionFilter</filter-name>
+        <url-pattern>*</url-pattern>
+    </filter-mapping>
+
+    <servlet>
+        <servlet-name>Resource</servlet-name>
+        <servlet-class>org.apache.isis.core.webapp.content.ResourceServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Resource</servlet-name>
+        <url-pattern>*.js</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Resource</servlet-name>
+        <url-pattern>*.gif</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Resource</servlet-name>
+        <url-pattern>*.png</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Resource</servlet-name>
+        <url-pattern>*.html</url-pattern>
+    </servlet-mapping>
 
 	<servlet>
 		<servlet-name>RestEasy</servlet-name>
 		<servlet-class>org.jboss.resteasy.plugins.server.servlet.HttpServletDispatcher</servlet-class>
 	</servlet>
-
-	<servlet>
-		<servlet-name>Resource</servlet-name>
-		<servlet-class>org.apache.isis.core.webapp.content.ResourceServlet</servlet-class>
-	</servlet>
-
-	<servlet-mapping>
-		<servlet-name>RestEasy</servlet-name>
-		<url-pattern>/</url-pattern>
-	</servlet-mapping>
-
-	<servlet-mapping>
-		<servlet-name>Resource</servlet-name>
-		<url-pattern>*.js</url-pattern>
-	</servlet-mapping>
-	<servlet-mapping>
-		<servlet-name>Resource</servlet-name>
-		<url-pattern>*.gif</url-pattern>
-	</servlet-mapping>
-	<servlet-mapping>
-		<servlet-name>Resource</servlet-name>
-		<url-pattern>*.png</url-pattern>
-	</servlet-mapping>
     <servlet-mapping>
-        <servlet-name>Resource</servlet-name>
-        <url-pattern>*.html</url-pattern>
+        <servlet-name>RestEasy</servlet-name>
+        <url-pattern>/</url-pattern>
     </servlet-mapping>
 
 </web-app>

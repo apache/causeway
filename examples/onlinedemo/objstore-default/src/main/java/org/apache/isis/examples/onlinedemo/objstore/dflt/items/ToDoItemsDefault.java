@@ -23,7 +23,9 @@ import java.util.List;
 
 
 import org.apache.isis.applib.AbstractFactoryAndRepository;
+import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.applib.filter.Filter;
+import org.apache.isis.applib.value.Date;
 import org.apache.isis.examples.onlinedemo.dom.items.Category;
 import org.apache.isis.examples.onlinedemo.dom.items.ToDoItem;
 import org.apache.isis.examples.onlinedemo.dom.items.ToDoItems;
@@ -47,7 +49,7 @@ public class ToDoItemsDefault extends AbstractFactoryAndRepository implements To
         return allMatches(ToDoItem.class, new Filter<ToDoItem>() {
             @Override
             public boolean accept(ToDoItem t) {
-                return !t.getComplete();
+                return !t.getComplete() && t.isDue();
             }
         });
     }
@@ -55,10 +57,11 @@ public class ToDoItemsDefault extends AbstractFactoryAndRepository implements To
     
     // {{ NewToDo
     @Override
-    public ToDoItem newToDo(String description, Category category) {
+    public ToDoItem newToDo(String description, Category category, Date dueBy) {
         ToDoItem toDoItem = newTransientInstance(ToDoItem.class);
         toDoItem.setDescription(description);
         toDoItem.setCategory(category);
+        toDoItem.setDueBy(dueBy);
         persist(toDoItem);
         return toDoItem;
     }

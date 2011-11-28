@@ -20,8 +20,10 @@
 package org.apache.isis.examples.onlinedemo.dom.items;
 
 import org.apache.isis.applib.AbstractDomainObject;
+import org.apache.isis.applib.annotation.Bounded;
 import org.apache.isis.applib.annotation.MemberOrder;
 
+@Bounded
 public class Category extends AbstractDomainObject {
 
     // {{ Title

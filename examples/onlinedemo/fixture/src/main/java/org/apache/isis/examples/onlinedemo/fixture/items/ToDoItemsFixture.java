@@ -21,7 +21,9 @@
 package org.apache.isis.examples.onlinedemo.fixture.items;
 
 
+import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.applib.fixtures.AbstractFixture;
+import org.apache.isis.applib.value.Date;
 import org.apache.isis.examples.onlinedemo.dom.items.Categories;
 import org.apache.isis.examples.onlinedemo.dom.items.Category;
 import org.apache.isis.examples.onlinedemo.dom.items.ToDoItem;
@@ -35,20 +37,27 @@ public class ToDoItemsFixture extends AbstractFixture {
         Category domesticCategory = createCategory("Domestic");
         Category professionalCategory = createCategory("Professional");
         
-        createToDoItem("Buy milk", domesticCategory);
-        createToDoItem("Pick up laundry", domesticCategory);
-        createToDoItem("Buy stamps", domesticCategory);
-        createToDoItem("Write blog post", professionalCategory);
-        createToDoItem("Organize brown bag", professionalCategory);
+        createToDoItem("Buy milk", domesticCategory, daysFromToday(0));
+        createToDoItem("Buy stamps", domesticCategory, daysFromToday(0));
+        createToDoItem("Pick up laundry", domesticCategory, daysFromToday(6));
+        createToDoItem("Write blog post", professionalCategory, null);
+        createToDoItem("Organize brown bag", professionalCategory, daysFromToday(14));
     }
 
     private Category createCategory(String description) {
         return categories.newCategory(description);
     }
 
-    private ToDoItem createToDoItem(String description, Category category) {
-        return toDoItems.newToDo(description, category);
+    private ToDoItem createToDoItem(String description, Category category, Date dueBy) {
+        return toDoItems.newToDo(description, category, dueBy);
     }
+
+    private Date daysFromToday(int i) {
+        final Date date = new Date(Clock.getTimeAsDateTime());
+        date.add(0, 0, i);
+        return date;
+    }
+
 
 
     // {{ injected: Categories
