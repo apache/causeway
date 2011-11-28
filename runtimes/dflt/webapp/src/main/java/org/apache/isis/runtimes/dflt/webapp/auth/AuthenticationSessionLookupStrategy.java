@@ -24,6 +24,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
+import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.runtimes.dflt.webapp.IsisSessionFilter;
 
 /**
@@ -53,6 +54,9 @@ public interface AuthenticationSessionLookupStrategy {
         }
     }
 
+    /**
+     * Returns a {@link AuthenticationManager#isSessionValid(AuthenticationSession) still-valid} {@link AuthenticationSession}.
+     */
     AuthenticationSession lookupValid(ServletRequest servletRequest, ServletResponse servletResponse, Caching caching);
 
     void bind(ServletRequest servletRequest, ServletResponse servletResponse, AuthenticationSession authSession, Caching caching);

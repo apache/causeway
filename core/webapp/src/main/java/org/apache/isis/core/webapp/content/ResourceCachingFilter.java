@@ -34,6 +34,7 @@ import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
@@ -75,6 +76,24 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class ResourceCachingFilter implements Filter {
 
+    /**
+     * Attribute set on {@link HttpServletRequest} if the filter has been applied.
+     * 
+     * <p>
+     * This is intended to inform other filters.
+     */
+    private static final String REQUEST_ATTRIBUTE = ResourceCachingFilter.class.getName() + ".resource";
+
+    /**
+     * To allow other filters to ask whether a request is mapped to the resource caching filter.
+     * 
+     * <p>
+     * For example, the <tt>IsisSessionFilter</tt> uses this in order to skip any session handling.
+     */
+    public static boolean isCachedResource(HttpServletRequest request) {
+        return request.getAttribute(REQUEST_ATTRIBUTE) != null;
+    }
+    
     /**
      * The Constant MILLISECONDS_IN_SECOND.
      */
@@ -120,7 +139,7 @@ public class ResourceCachingFilter implements Filter {
     private String[][] mReplyHeaders = { {} };
 
     /** The cache time in seconds. */
-    private Long mCacheTime = 0L;
+    private Long cacheTime = 0L;
 
     /**
      * Initializes the Servlet filter with the cache time and sets up the unchanging headers.
@@ -132,11 +151,11 @@ public class ResourceCachingFilter implements Filter {
     public void init(final FilterConfig pConfig) {
         final ArrayList<String[]> newReplyHeaders = new ArrayList<String[]>();
         String cacheTime = pConfig.getInitParameter(CACHE_TIME_PARAM_NAME);
-		this.mCacheTime = Long.parseLong(cacheTime != null? cacheTime: CACHE_TIME_PARAM_NAME_DEFAULT);
-        if (this.mCacheTime > 0L) {
-            newReplyHeaders.add(new String[] { CACHE_CONTROL_HEADER, MAX_AGE_VALUE + this.mCacheTime.longValue() });
-            newReplyHeaders.add(new String[] { CACHE_CONTROL_HEADER, PRE_CHECK_VALUE + this.mCacheTime.longValue() });
-            newReplyHeaders.add(new String[] { CACHE_CONTROL_HEADER, POST_CHECK_VALUE + this.mCacheTime.longValue() });
+		this.cacheTime = Long.parseLong(cacheTime != null? cacheTime: CACHE_TIME_PARAM_NAME_DEFAULT);
+        if (this.cacheTime > 0L) {
+            newReplyHeaders.add(new String[] { CACHE_CONTROL_HEADER, MAX_AGE_VALUE + this.cacheTime.longValue() });
+            newReplyHeaders.add(new String[] { CACHE_CONTROL_HEADER, PRE_CHECK_VALUE + this.cacheTime.longValue() });
+            newReplyHeaders.add(new String[] { CACHE_CONTROL_HEADER, POST_CHECK_VALUE + this.cacheTime.longValue() });
         } else {
             newReplyHeaders.add(new String[] { PRAGMA_HEADER, NO_CACHE_VALUE });
             newReplyHeaders.add(new String[] { EXPIRES_HEADER, ZERO_STRING_VALUE });
@@ -147,12 +166,15 @@ public class ResourceCachingFilter implements Filter {
         newReplyHeaders.toArray(this.mReplyHeaders);
     }
 
+    
+    
+    
     /**
      * Do filter.
      *
-     * @param pRequest the request
-     * @param pResponse the response
-     * @param pChain the chain
+     * @param servletRequest the request
+     * @param servletResponse the response
+     * @param chain the chain
      *
      * @throws IOException Signals that an I/O exception has occurred.
      * @throws ServletException the servlet exception
@@ -160,24 +182,26 @@ public class ResourceCachingFilter implements Filter {
      * @see javax.servlet.Filter#doFilter(javax.servlet.ServletRequest, javax.servlet.ServletResponse,
      *      javax.servlet.FilterChain)
      */
-    public void doFilter(final ServletRequest pRequest, final ServletResponse pResponse, final FilterChain pChain)
+    public void doFilter(final ServletRequest servletRequest, final ServletResponse servletResponse, final FilterChain chain)
             throws IOException, ServletException {
         // Apply the headers
-        final HttpServletResponse httpResponse = (HttpServletResponse) pResponse;
+        final HttpServletRequest httpRequest = (HttpServletRequest) servletRequest;
+        final HttpServletResponse httpResponse = (HttpServletResponse) servletResponse;
         for (final String[] replyHeader : this.mReplyHeaders) {
             final String name = replyHeader[0];
             final String value = replyHeader[1];
             httpResponse.addHeader(name, value);
         }
-        if (this.mCacheTime > 0L) {
+        if (this.cacheTime > 0L) {
             final long now = System.currentTimeMillis();
             final DateFormat httpDateFormat = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss z", Locale.US);
             httpDateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
             httpResponse.addHeader(LAST_MODIFIED_HEADER, httpDateFormat.format(new Date(now)));
             httpResponse.addHeader(EXPIRES_HEADER, httpDateFormat.format(new Date(now
-                    + (this.mCacheTime.longValue() * MILLISECONDS_IN_SECOND))));
+                    + (this.cacheTime.longValue() * MILLISECONDS_IN_SECOND))));
         }
-        pChain.doFilter(pRequest, pResponse);
+        httpRequest.setAttribute(REQUEST_ATTRIBUTE, true);
+        chain.doFilter(servletRequest, servletResponse);
     }
 
     /**
