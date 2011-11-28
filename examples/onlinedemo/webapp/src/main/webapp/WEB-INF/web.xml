@@ -78,10 +78,12 @@
     <filter>
         <filter-name>IsisSessionFilterForHtml</filter-name>
         <filter-class>org.apache.isis.runtimes.dflt.webapp.IsisSessionFilter</filter-class>
+        <!-- 
         <init-param>
             <param-name>logonPage</param-name>
             <param-value>/logon.htmlviewer</param-value>
         </init-param>
+        -->
         <init-param>
             <param-name>cacheAuthSessionOnHttpSession</param-name>
             <param-value>true</param-value>
@@ -112,6 +114,10 @@
             <param-name>logonPage</param-name>
             <param-value>/notAuthenticated</param-value>
         </init-param>
+        <init-param>
+            <param-name>ignoreExtensions</param-name>
+            <param-value>htmlviewer</param-value>
+        </init-param>
     </filter>
     <filter-mapping>
         <filter-name>IsisSessionFilterForJson</filter-name>
@@ -133,6 +139,19 @@
     <servlet-mapping>
         <servlet-name>Logon</servlet-name>
         <url-pattern>/logon.htmlviewer</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>Register</servlet-name>
+        <servlet-class>org.apache.isis.viewer.html.servlet.RegisterServlet</servlet-class>
+        <init-param>
+            <param-name>authenticationSessionLookupStrategy</param-name>
+            <param-value>org.apache.isis.runtimes.dflt.webapp.auth.AuthenticationSessionLookupStrategyDefault</param-value>
+        </init-param>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Register</servlet-name>
+        <url-pattern>/register.htmlviewer</url-pattern>
     </servlet-mapping>
 
     <servlet>
