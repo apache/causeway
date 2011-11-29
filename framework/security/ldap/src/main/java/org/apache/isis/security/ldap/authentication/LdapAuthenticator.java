@@ -54,8 +54,8 @@ public class LdapAuthenticator extends AuthenticatorAbstract {
     }
 
     @Override
-    public boolean canAuthenticate(final AuthenticationRequest request) {
-        return request instanceof AuthenticationRequestPassword;
+    public final boolean canAuthenticate(final Class<? extends AuthenticationRequest> authenticationRequestClass) {
+        return AuthenticationRequestPassword.class.isAssignableFrom(authenticationRequestClass);
     }
 
     private void setRoles(final DirContext authContext, final AuthenticationRequest request, final String username)

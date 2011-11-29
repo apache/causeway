@@ -74,12 +74,12 @@ public class ExplorationAuthenticatorTest {
 
     @Test
     public void canAuthenticateExplorationRequest() throws Exception {
-        assertThat(authenticator.canAuthenticate(explorationRequest), is(true));
+        assertThat(authenticator.canAuthenticate(explorationRequest.getClass()), is(true));
     }
 
     @Test
     public void canAuthenticateSomeOtherTypeOfRequest() throws Exception {
-        assertThat(authenticator.canAuthenticate(someOtherRequest), is(false));
+        assertThat(authenticator.canAuthenticate(someOtherRequest.getClass()), is(false));
     }
 
     @Test
@@ -123,7 +123,7 @@ public class ExplorationAuthenticatorTest {
                 will(returnValue(DeploymentType.EXPLORATION.name()));
             }
         });
-        assertThat(authenticator.canAuthenticate(someOtherRequest), is(false));
+        assertThat(authenticator.canAuthenticate(someOtherRequest.getClass()), is(false));
     }
 
 }

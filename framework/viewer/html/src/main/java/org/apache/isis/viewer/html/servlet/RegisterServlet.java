@@ -34,6 +34,8 @@ import org.apache.isis.viewer.html.component.html.LogonFormPage;
 import org.apache.isis.viewer.html.component.html.RegisterFormPage;
 import org.apache.log4j.Logger;
 
+import com.google.common.base.Objects;
+
 public class RegisterServlet extends AbstractHtmlViewerServlet {
     
     private static final long serialVersionUID = 1L;
@@ -67,9 +69,15 @@ public class RegisterServlet extends AbstractHtmlViewerServlet {
         }
 
         // register; re-prompt if required
+        if (!Objects.equal(password, password2)) {
+            renderPrompt(response, user, "", "", "passwords don't match");
+            return;
+        }
+
+        // register; re-prompt if required
         final boolean registered = register(user, password, password2);
         if (!registered) {
-            renderPrompt(response, user, password, password2, "error");
+            renderPrompt(response, user, "", "", "user name already taken");
             return;
         }
 
@@ -88,7 +96,7 @@ public class RegisterServlet extends AbstractHtmlViewerServlet {
             final String message) throws IOException {
         response.setContentType("text/html");
         final HtmlComponentFactory factory = new HtmlComponentFactory(getPathBuilder());
-        final RegisterFormPage page = factory.createRegisterPage(user, password);
+        final RegisterFormPage page = factory.createRegisterPage(user, password, message);
         page.write(response.getWriter());
     }
 

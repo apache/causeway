@@ -19,8 +19,10 @@
 
 package org.apache.isis.viewer.html.action.view;
 
+import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.viewer.html.action.Action;
 import org.apache.isis.viewer.html.action.ActionException;
 import org.apache.isis.viewer.html.action.view.util.MenuUtil;
@@ -39,7 +41,7 @@ public abstract class ObjectViewAbstract implements Action {
             throw new ActionException("No such object: " + idString);
         }
 
-        IsisContext.getPersistenceSession().resolveImmediately(adapter);
+        getPersistenceSession().resolveImmediately(adapter);
 
         page.setTitle(adapter.titleString());
 
@@ -76,4 +78,14 @@ public abstract class ObjectViewAbstract implements Action {
     protected boolean addObjectToHistory() {
         return false;
     }
+    
+    protected AuthenticationSession getAuthenticationSession() {
+        return IsisContext.getAuthenticationSession();
+    }
+
+    protected PersistenceSession getPersistenceSession() {
+        return IsisContext.getPersistenceSession();
+    }
+
+
 }

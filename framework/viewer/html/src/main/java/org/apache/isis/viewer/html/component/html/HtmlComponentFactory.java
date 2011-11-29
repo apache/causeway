@@ -162,12 +162,12 @@ public class HtmlComponentFactory implements ComponentFactory {
         return new DynamicHtmlPage(this, styleSheet, header, footer);
     }
 
-    public LogonFormPage createLogonPage(final String user, final String password) {
-        return new LogonFormPage(this, styleSheet, header, footer, user, password);
+    public LogonFormPage createLogonPage(final String user, final String password, boolean registerLink, String error) {
+        return new LogonFormPage(this, styleSheet, header, footer, user, password, registerLink, error);
     }
 
-    public RegisterFormPage createRegisterPage(final String user, final String password) {
-        return new RegisterFormPage(this, styleSheet, header, footer, user, password);
+    public RegisterFormPage createRegisterPage(final String user, final String password, String error) {
+        return new RegisterFormPage(this, styleSheet, header, footer, user, password, error);
     }
 
     @Override

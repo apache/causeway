@@ -88,7 +88,6 @@ public abstract class AbstractHtmlPage implements Component, Page {
         int i = 0;
         while (st.hasMoreTokens()) {
             final String style = st.nextToken().trim();
-
             writer.print("  <link rel=\"");
             if (i++ > 0) {
                 writer.print("alternate ");
@@ -97,6 +96,8 @@ public abstract class AbstractHtmlPage implements Component, Page {
             writer.print(style);
             writer.println("\" type=\"text/css\" media=\"all\"/>");
         }
+        writer.println("  <script src=\"jquery-1.7.1.js\" type=\"text/javascript\"></script>");
+        writer.println("  <script src=\"htmlviewer.js\" type=\"text/javascript\"></script>");
         writer.println("  </head>");
         writer.println("  <body onLoad=\"window.document.form.fld0.focus()\">");
         writer.println("  <div id=\"wrapper\">");

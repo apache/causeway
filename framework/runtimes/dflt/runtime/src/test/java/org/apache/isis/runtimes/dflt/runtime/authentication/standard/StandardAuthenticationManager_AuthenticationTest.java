@@ -24,11 +24,15 @@ import static org.junit.Assert.assertThat;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.commons.matchers.IsisMatchers;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequest;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequestPassword;
 import org.apache.isis.core.runtime.authentication.standard.AuthenticationManagerStandard;
 import org.apache.isis.core.runtime.authentication.standard.Authenticator;
 import org.apache.isis.core.runtime.authentication.standard.RandomCodeGenerator;
+import org.hamcrest.Description;
+import org.hamcrest.Matcher;
+import org.hamcrest.TypeSafeMatcher;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JMock;
@@ -62,7 +66,7 @@ public class StandardAuthenticationManager_AuthenticationTest {
 
         mockery.checking(new Expectations() {
             {
-                allowing(mockAuthenticator).canAuthenticate(with(any(AuthenticationRequest.class)));
+                allowing(mockAuthenticator).canAuthenticate(with(IsisMatchers.anySubclassOf(AuthenticationRequest.class)));
                 will(returnValue(true));
 
                 allowing(mockAuthenticator).authenticate(with(any(AuthenticationRequest.class)),
@@ -80,7 +84,6 @@ public class StandardAuthenticationManager_AuthenticationTest {
 
                 allowing(mockAuthSession).getUserName();
                 will(returnValue("foo"));
-
             }
         });
     }

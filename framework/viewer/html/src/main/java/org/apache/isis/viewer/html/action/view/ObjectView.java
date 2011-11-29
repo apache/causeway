@@ -27,7 +27,6 @@ import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacetUtil
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationFilters;
-import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.html.component.Block;
 import org.apache.isis.viewer.html.component.Component;
 import org.apache.isis.viewer.html.component.ComponentFactory;
@@ -36,6 +35,7 @@ import org.apache.isis.viewer.html.context.Context;
 import org.apache.isis.viewer.html.request.Request;
 
 public class ObjectView extends ObjectViewAbstract {
+    
     @Override
     protected boolean addObjectToHistory() {
         return true;
@@ -57,7 +57,7 @@ public class ObjectView extends ObjectViewAbstract {
         boolean allFieldUneditable = true;
         final List<ObjectAssociation> flds = specification.getAssociations();
         for (int i = 0; i < flds.size(); i++) {
-            if (flds.get(i).isUsable(IsisContext.getAuthenticationSession(), adapter).isAllowed()) {
+            if (flds.get(i).isUsable(getAuthenticationSession(), adapter).isAllowed()) {
                 allFieldUneditable = false;
                 break;
             }
@@ -73,7 +73,7 @@ public class ObjectView extends ObjectViewAbstract {
         final ObjectSpecification specification = object.getSpecification();
         final List<ObjectAssociation> visibleFields =
             specification.getAssociations(ObjectAssociationFilters.dynamicallyVisible(
-                IsisContext.getAuthenticationSession(), object));
+                getAuthenticationSession(), object));
         for (int i = 0; i < visibleFields.size(); i++) {
             final ObjectAssociation field = visibleFields.get(i);
 
@@ -82,7 +82,7 @@ public class ObjectView extends ObjectViewAbstract {
             fieldBlock.add(factory.createInlineBlock("label", field.getName(), null));
             fieldBlock.add(factory.createInlineBlock("separator", ":  ", null));
 
-            IsisContext.getPersistenceSession().resolveField(object, field);
+            getPersistenceSession().resolveField(object, field);
 
             // ordering is important here;
             // look at parseable fields before objects

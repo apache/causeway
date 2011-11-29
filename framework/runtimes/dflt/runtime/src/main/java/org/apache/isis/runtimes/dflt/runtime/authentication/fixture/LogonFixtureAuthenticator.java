@@ -35,8 +35,8 @@ public class LogonFixtureAuthenticator extends AuthenticatorAbstractForDfltRunti
      * Can authenticate if a {@link AuthenticationRequestLogonFixture}.
      */
     @Override
-    public final boolean canAuthenticate(final AuthenticationRequest request) {
-        return request instanceof AuthenticationRequestLogonFixture;
+    public final boolean canAuthenticate(final Class<? extends AuthenticationRequest> authenticationRequestClass) {
+        return AuthenticationRequestLogonFixture.class.isAssignableFrom(authenticationRequestClass);
     }
 
     /**

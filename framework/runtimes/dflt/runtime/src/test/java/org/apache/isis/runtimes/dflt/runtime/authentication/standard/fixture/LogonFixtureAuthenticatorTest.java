@@ -65,12 +65,12 @@ public class LogonFixtureAuthenticatorTest {
 
     @Test
     public void canAuthenticateExplorationRequest() throws Exception {
-        assertThat(authenticator.canAuthenticate(logonFixtureRequest), is(true));
+        assertThat(authenticator.canAuthenticate(logonFixtureRequest.getClass()), is(true));
     }
 
     @Test
     public void canAuthenticateSomeOtherTypeOfRequest() throws Exception {
-        assertThat(authenticator.canAuthenticate(someOtherRequest), is(false));
+        assertThat(authenticator.canAuthenticate(someOtherRequest.getClass()), is(false));
     }
 
     @Test
@@ -126,7 +126,7 @@ public class LogonFixtureAuthenticatorTest {
                 will(returnValue(DeploymentType.EXPLORATION.name()));
             }
         });
-        assertThat(authenticator.canAuthenticate(new SomeOtherAuthenticationRequest()), is(false));
+        assertThat(authenticator.canAuthenticate(SomeOtherAuthenticationRequest.class), is(false));
     }
 
 }

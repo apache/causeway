@@ -114,13 +114,13 @@ public class AuthenticationManagerStandard implements AuthenticationManager, Deb
         }
 
         for (Authenticator authenticator : authenticators) {
-            if (authenticator.canAuthenticate(request)) {
+            if (authenticator.canAuthenticate(request.getClass())) {
                 AuthenticationSession authSession = null;
                 authSession = authenticator.authenticate(request, getUnusedRandomCode());
                 if (authSession != null) {
                     userByValidationCode.put(authSession.getValidationCode(), authSession.getUserName());
+                    return authSession;
                 }
-                return authSession;
             }
         }
         throw new NoAuthenticatorException("No authenticator available for processing " + request.getClass().getName());
@@ -189,8 +189,18 @@ public class AuthenticationManagerStandard implements AuthenticationManager, Deb
     @Override
     public boolean register(RegistrationDetails registrationDetails) {
         for(final Registrar registrar: getRegistrars()) {
-            if(registrar.canRegister(registrationDetails)) {
+            if(registrar.canRegister(registrationDetails.getClass())) {
                 return registrar.register(registrationDetails);
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public boolean supportsRegistration(Class<? extends RegistrationDetails> registrationDetailsClass) {
+        for(final Registrar registrar: getRegistrars()) {
+            if(registrar.canRegister(registrationDetailsClass)) {
+                return true;
             }
         }
         return false;
@@ -264,7 +274,6 @@ public class AuthenticationManagerStandard implements AuthenticationManager, Deb
     protected IsisConfiguration getConfiguration() {
         return configuration;
     }
-
 
 
 }

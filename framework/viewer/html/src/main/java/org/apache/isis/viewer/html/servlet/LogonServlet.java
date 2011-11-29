@@ -29,6 +29,7 @@ import javax.servlet.http.HttpSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequest;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequestPassword;
+import org.apache.isis.core.runtime.authentication.standard.RegistrationDetailsPassword;
 import org.apache.isis.runtimes.dflt.monitoring.servermonitor.Monitor;
 import org.apache.isis.runtimes.dflt.runtime.authentication.exploration.AuthenticationRequestExploration;
 import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
@@ -75,14 +76,14 @@ public class LogonServlet extends AbstractHtmlViewerServlet {
         final String user = request.getParameter("username");
         final String password = request.getParameter("password");
         if (user == null && !getDeploymentType().isExploring()) {
-            renderPrompt(response, "", "", "");
+            renderPrompt(response, "", "", null);
             return;
         }
 
         // authenticate; re-prompt if required
         final AuthenticationSession authSession = authenticate(user, password);
         if (authSession == null) {
-            renderPrompt(response, user, password, "error");
+            renderPrompt(response, user, password, "user/password invalid");
             return;
         }
 
@@ -105,10 +106,11 @@ public class LogonServlet extends AbstractHtmlViewerServlet {
     private void renderPrompt(
             final HttpServletResponse response, 
             final String user, final String password,
-            final String message) throws IOException {
+            final String error) throws IOException {
         response.setContentType("text/html");
         final HtmlComponentFactory factory = new HtmlComponentFactory(getPathBuilder());
-        final LogonFormPage page = factory.createLogonPage(user, password);
+        boolean registerLink = getAuthenticationManager().supportsRegistration(RegistrationDetailsPassword.class);
+        final LogonFormPage page = factory.createLogonPage(user, password, registerLink, error);
         page.write(response.getWriter());
     }
 

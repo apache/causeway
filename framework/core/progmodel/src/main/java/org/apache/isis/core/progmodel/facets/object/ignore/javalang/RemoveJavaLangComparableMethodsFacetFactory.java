@@ -17,27 +17,17 @@
  *  under the License.
  */
 
-package org.apache.isis.security.dflt.authentication;
+package org.apache.isis.core.progmodel.facets.object.ignore.javalang;
 
-import org.apache.isis.core.commons.components.Noop;
-import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.runtime.authentication.AuthenticationRequest;
-import org.apache.isis.core.runtime.authentication.standard.AuthenticatorAbstract;
 
-public class AuthenticatorNoop extends AuthenticatorAbstract implements Noop {
+/**
+ * Removes all methods inherited from {@link Object}.
+ */
+public class RemoveJavaLangComparableMethodsFacetFactory extends AbstractRemoveMethodsFacetFactory {
 
-    public AuthenticatorNoop(final IsisConfiguration configuration) {
-        super(configuration);
+    public RemoveJavaLangComparableMethodsFacetFactory() {
+        super(Comparable.class);
     }
 
-    @Override
-    public boolean isValid(final AuthenticationRequest request) {
-        return true;
-    }
-
-    @Override
-    public boolean canAuthenticate(Class<? extends AuthenticationRequest> authenticationRequestClass) {
-        return true;
-    }
 
 }

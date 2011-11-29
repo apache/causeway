@@ -52,8 +52,21 @@ public class IsisSessionFilter implements Filter {
     /**
      * Init parameter key for (typically, a logon) page to redirect to if the {@link AuthenticationSession} cannot be
      * found or is invalid.
+     * 
+     * <p>
+     * Use this if there is only a single "special" page to forward to as the logon page.  If specified any request which
+     * has not been authenticated will be redirected to this page.
      */
     public static final String LOGON_PAGE_KEY = "logonPage";
+
+    /**
+     * Init parameter key for the page to redirect to the servlet redirected to with no session throws an exception.
+     * 
+     * <p>
+     * Use this if there are several "special" pages that constitute logon, for example a logon page and a registration page.
+     * Do not specify a {@link #LOGON_PAGE_KEY}.
+     */
+    public static final String REDIRECT_TO_ON_NO_SESSION_EXCEPTION_KEY = "redirectToOnNoSessionException";
 
     /**
      * Init parameter key for whether the authentication session may be cached on the HttpSession.
@@ -83,6 +96,7 @@ public class IsisSessionFilter implements Filter {
 
     private AuthenticationSessionLookupStrategy authSessionLookupStrategy;
     private String logonPageIfNoSession;
+    private String redirectToOnNoSessionException;
     private Caching caching;
     private Collection<Pattern> ignoreExtensions;
 
@@ -95,12 +109,17 @@ public class IsisSessionFilter implements Filter {
     public void init(final FilterConfig config) throws ServletException {
         authSessionLookupStrategy = AuthenticationSessionLookupStrategyUtils.lookup(config);
         lookupLogonPageIfNoSessionKey(config);
+        lookupRedirectToOnNoSessionExceptionKey(config);
         lookupCacheAuthSessionKey(config);
         lookupIgnorePatterns(config);
     }
 
     private void lookupLogonPageIfNoSessionKey(final FilterConfig config) {
         logonPageIfNoSession = config.getInitParameter(LOGON_PAGE_KEY);
+    }
+
+    private void lookupRedirectToOnNoSessionExceptionKey(final FilterConfig config) {
+        redirectToOnNoSessionException = config.getInitParameter(REDIRECT_TO_ON_NO_SESSION_EXCEPTION_KEY);
     }
 
     private void lookupCacheAuthSessionKey(final FilterConfig config) {
@@ -193,9 +212,32 @@ public class IsisSessionFilter implements Filter {
                 
                 // the destination servlet is expected to know that there
                 // will be no open context
+                // if it does not, then we will redirect to logon page
                 try {
                     NO_SESSION_SINCE_NOT_AUTHENTICATED.setOn(request);
                     chain.doFilter(request, response);
+                } catch(RuntimeException ex) {
+                    // in case the destination servlet cannot cope, but we've been told
+                    // to redirect elsewhere
+                    if(filter.redirectToOnNoSessionException != null) {
+                        httpResponse.sendRedirect(filter.redirectToOnNoSessionException);
+                        return;
+                    }
+                    throw ex;
+                } catch(IOException ex) {
+                    if(filter.redirectToOnNoSessionException != null) {
+                        httpResponse.sendRedirect(filter.redirectToOnNoSessionException);
+                        return;
+                    }
+                    throw ex;
+                } catch(ServletException ex) {
+                    // in case the destination servlet cannot cope, but we've been told
+                    // to redirect elsewhere
+                    if(filter.redirectToOnNoSessionException != null) {
+                        httpResponse.sendRedirect(filter.redirectToOnNoSessionException);
+                        return;
+                    }
+                    throw ex;
                 } finally {
                     UNDEFINED.setOn(request);
                     // nothing to do

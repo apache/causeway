@@ -16,28 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
-package org.apache.isis.security.dflt.authentication;
-
-import org.apache.isis.core.commons.components.Noop;
-import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.runtime.authentication.AuthenticationRequest;
-import org.apache.isis.core.runtime.authentication.standard.AuthenticatorAbstract;
-
-public class AuthenticatorNoop extends AuthenticatorAbstract implements Noop {
-
-    public AuthenticatorNoop(final IsisConfiguration configuration) {
-        super(configuration);
-    }
-
-    @Override
-    public boolean isValid(final AuthenticationRequest request) {
-        return true;
-    }
-
-    @Override
-    public boolean canAuthenticate(Class<? extends AuthenticationRequest> authenticationRequestClass) {
-        return true;
-    }
-
-}
+$(document).ready(function()
+{
+    $(".message-header").fadeOut(2000)
+});

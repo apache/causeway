@@ -37,8 +37,9 @@ public abstract class AuthenticationManagerStandardInstallerAbstract extends Ins
 
     public final AuthenticationManager createAuthenticationManager() {
         final AuthenticationManagerStandard authenticationManager = createAuthenticationManagerStandard();
-        final Authenticator authenticator = createAuthenticator(getConfiguration());
-        authenticationManager.addAuthenticator(authenticator);
+        for(final Authenticator authenticator: createAuthenticators(getConfiguration())) {
+            authenticationManager.addAuthenticator(authenticator);
+        }
         return authenticationManager;
     }
 
@@ -51,7 +52,7 @@ public abstract class AuthenticationManagerStandardInstallerAbstract extends Ins
      * 
      * @return
      */
-    protected abstract Authenticator createAuthenticator(final IsisConfiguration configuration);
+    protected abstract List<Authenticator> createAuthenticators(final IsisConfiguration configuration);
 
     @Override
     public List<Class<?>> getTypes() {
