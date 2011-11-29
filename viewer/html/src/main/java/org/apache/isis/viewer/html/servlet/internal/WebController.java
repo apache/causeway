@@ -24,6 +24,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
+
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.commons.exceptions.IsisApplicationException;
@@ -66,7 +68,6 @@ import org.apache.isis.viewer.html.request.Request;
 import org.apache.isis.viewer.html.task.InvokeMethod;
 import org.apache.isis.viewer.html.task.TaskLookupException;
 import org.apache.isis.viewer.html.task.TaskStep;
-import org.apache.log4j.Logger;
 
 public class WebController {
 
@@ -76,7 +77,10 @@ public class WebController {
     private static final String ERROR_REASON = "This error occurs when you go back to a page "
         + "using the browsers back button.  To avoid this error in the future please avoid using the back button";
 
-    private class DebugView implements Action {
+    protected class DebugView implements Action {
+        public DebugView() {
+        }
+
         @Override
         public void execute(final Request request, final Context context, final Page page) {
             page.setTitle("Debug");
@@ -125,7 +129,10 @@ public class WebController {
         }
     }
 
-    private class DebugSpecification implements Action {
+    protected class DebugSpecification implements Action {
+        public DebugSpecification() {
+        }
+
         @Override
         public void execute(final Request request, final Context context, final Page page) {
             final DebugPane debugPane = context.getComponentFactory().createDebugPane();
@@ -142,7 +149,10 @@ public class WebController {
         }
     }
 
-    private class DebugObject implements Action {
+    protected class DebugObject implements Action {
+        public DebugObject() {
+        }
+
         @Override
         public void execute(final Request request, final Context context, final Page page) {
             final DebugPane debugPane = context.getComponentFactory().createDebugPane();
@@ -161,7 +171,7 @@ public class WebController {
         }
     }
 
-    private class DebugOn implements Action {
+    protected class DebugOn implements Action {
         private final WebController controller;
 
         public DebugOn(final WebController controller) {
@@ -179,7 +189,7 @@ public class WebController {
         }
     }
 
-    private class DebugOff implements Action {
+    protected class DebugOff implements Action {
         private final WebController controller;
 
         public DebugOff(final WebController controller) {
@@ -198,15 +208,14 @@ public class WebController {
     }
 
     private final Map actions = new HashMap();
-    
+
     private boolean isDebug;
     private final PathBuilder pathBuilder;
-    
 
     public WebController(PathBuilder pathBuilder) {
         this.pathBuilder = pathBuilder;
     }
-    
+
     public boolean actionExists(final Request req) {
         return actions.containsKey(req.getRequestType());
     }
@@ -438,7 +447,6 @@ public class WebController {
     protected String pathTo(final String prefix) {
         return pathBuilder.pathTo(prefix);
     }
-
 
     // ///////////////////////////////////////////////////////
     // Dependencies (from singleton)

@@ -57,9 +57,13 @@ public class ControllerServlet extends AbstractHtmlViewerServlet {
         super.init(servletConfig);
         encoding = getConfiguration().getString(HtmlServletConstants.ENCODING_KEY, encoding);
 
-        controller = new WebController(getPathBuilder());
+        controller = getNewWebController();
         controller.setDebug(getConfiguration().getBoolean(HtmlServletConstants.DEBUG_KEY));
         controller.init();
+    }
+
+    protected WebController getNewWebController() {
+        return new WebController(getPathBuilder());
     }
 
     // //////////////////////////////////////////////////////////////////
@@ -106,10 +110,14 @@ public class ControllerServlet extends AbstractHtmlViewerServlet {
             (Context) authenticationSession.getAttribute(HtmlServletConstants.AUTHENTICATION_SESSION_CONTEXT_KEY);
         if (context == null || !context.isValid()) {
             // TODO reuse the component factory
-            context = new Context(new HtmlComponentFactory(getPathBuilder()));
+            context = new Context(getNewHtmlComponentFactory());
             authenticationSession.setAttribute(HtmlServletConstants.AUTHENTICATION_SESSION_CONTEXT_KEY, context);
         }
         return context;
+    }
+
+    protected HtmlComponentFactory getNewHtmlComponentFactory() {
+        return new HtmlComponentFactory(getPathBuilder());
     }
 
     private void processRequest(final HttpServletRequest request, final HttpServletResponse response,
