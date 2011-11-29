@@ -24,7 +24,8 @@ import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+
+import org.apache.log4j.Logger;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequest;
@@ -33,21 +34,19 @@ import org.apache.isis.core.runtime.authentication.standard.RegistrationDetailsP
 import org.apache.isis.runtimes.dflt.monitoring.servermonitor.Monitor;
 import org.apache.isis.runtimes.dflt.runtime.authentication.exploration.AuthenticationRequestExploration;
 import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
-import org.apache.isis.runtimes.dflt.webapp.WebAppConstants;
 import org.apache.isis.runtimes.dflt.webapp.auth.AuthenticationSessionLookupStrategy;
 import org.apache.isis.runtimes.dflt.webapp.auth.AuthenticationSessionLookupStrategy.Caching;
 import org.apache.isis.runtimes.dflt.webapp.auth.AuthenticationSessionLookupStrategyUtils;
 import org.apache.isis.viewer.html.component.html.HtmlComponentFactory;
 import org.apache.isis.viewer.html.component.html.LogonFormPage;
 import org.apache.isis.viewer.html.context.Context;
-import org.apache.log4j.Logger;
 
 public class LogonServlet extends AbstractHtmlViewerServlet {
-    
+
     private static final long serialVersionUID = 1L;
-    
+
     private static final Logger LOG = Logger.getLogger(LogonServlet.class);
-    
+
     private AuthenticationSessionLookupStrategy authenticationSessionLookupStrategy;
 
     @Override
@@ -66,7 +65,8 @@ public class LogonServlet extends AbstractHtmlViewerServlet {
         throws ServletException, IOException {
 
         // existing valid session
-        AuthenticationSession existingAuthSession = authenticationSessionLookupStrategy.lookupValid(request, response, Caching.CACHE);
+        AuthenticationSession existingAuthSession =
+            authenticationSessionLookupStrategy.lookupValid(request, response, Caching.CACHE);
         if (existingAuthSession != null) {
             redirectToStartPage(response, existingAuthSession.getUserName());
             return;
@@ -90,7 +90,7 @@ public class LogonServlet extends AbstractHtmlViewerServlet {
         // authenticated
         authenticationSessionLookupStrategy.bind(request, response, authSession, Caching.CACHE);
 
-        final Context context = new Context(new HtmlComponentFactory(getPathBuilder()));
+        final Context context = new Context(getHtmlComponentFactory());
         context.setSession(authSession);
         authSession.setAttribute(HtmlServletConstants.AUTHENTICATION_SESSION_CONTEXT_KEY, context);
 
@@ -98,23 +98,25 @@ public class LogonServlet extends AbstractHtmlViewerServlet {
         redirectToStartPage(response, user);
     }
 
+    protected HtmlComponentFactory getHtmlComponentFactory() {
+        return new HtmlComponentFactory(getPathBuilder());
+    }
+
     private void redirectToStartPage(final HttpServletResponse response, final String user) throws IOException {
         Monitor.addEvent("Web", "Logon - " + user);
         response.sendRedirect(pathTo(HtmlServletConstants.START_PAGE));
     }
 
-    private void renderPrompt(
-            final HttpServletResponse response, 
-            final String user, final String password,
-            final String error) throws IOException {
+    private void renderPrompt(final HttpServletResponse response, final String user, final String password,
+        final String error) throws IOException {
         response.setContentType("text/html");
-        final HtmlComponentFactory factory = new HtmlComponentFactory(getPathBuilder());
+        final HtmlComponentFactory factory = getHtmlComponentFactory();
         boolean registerLink = getAuthenticationManager().supportsRegistration(RegistrationDetailsPassword.class);
         final LogonFormPage page = factory.createLogonPage(user, password, registerLink, error);
         page.write(response.getWriter());
     }
 
-    private AuthenticationSession authenticate(final String user, final String password) {
+    protected AuthenticationSession authenticate(final String user, final String password) {
         AuthenticationRequest request;
         if (getDeploymentType() == DeploymentType.EXPLORATION) {
             request = new AuthenticationRequestExploration();
@@ -123,6 +125,5 @@ public class LogonServlet extends AbstractHtmlViewerServlet {
         }
         return getAuthenticationManager().authenticate(request);
     }
-
 
 }
