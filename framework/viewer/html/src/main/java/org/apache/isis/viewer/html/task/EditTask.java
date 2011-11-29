@@ -21,6 +21,7 @@ package org.apache.isis.viewer.html.task;
 
 import java.util.List;
 
+import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.core.metamodel.adapter.util.AdapterUtils;
@@ -40,15 +41,16 @@ import org.apache.isis.viewer.html.component.Page;
 import org.apache.isis.viewer.html.context.Context;
 
 public class EditTask extends Task {
+
     private static int size(final ObjectAdapter object) {
         final List<ObjectAssociation> fields =
             object.getSpecification().getAssociations(
-                ObjectAssociationFilters.dynamicallyVisible(IsisContext.getAuthenticationSession(), object));
+                ObjectAssociationFilters.dynamicallyVisible(getAuthenticationSession(), object));
         return fields.size();
     }
 
     private static boolean skipField(final ObjectAdapter object, final ObjectAssociation fld) {
-        return fld.isOneToManyAssociation() || fld.isUsable(IsisContext.getAuthenticationSession(), object).isVetoed();
+        return fld.isOneToManyAssociation() || fld.isUsable(getAuthenticationSession(), object).isVetoed();
     }
 
     private final ObjectAssociation[] fields;
@@ -59,7 +61,7 @@ public class EditTask extends Task {
 
         final List<ObjectAssociation> allFields =
             object.getSpecification().getAssociations(
-                ObjectAssociationFilters.dynamicallyVisible(IsisContext.getAuthenticationSession(), object));
+                ObjectAssociationFilters.dynamicallyVisible(getAuthenticationSession(), object));
 
         fields = new ObjectAssociation[names.length];
         for (int i = 0, j = 0; j < allFields.size(); j++) {
@@ -68,7 +70,7 @@ public class EditTask extends Task {
             names[i] = fld.getName();
             descriptions[i] = fld.getDescription();
 
-            final Consent usableByUser = fld.isUsable(IsisContext.getAuthenticationSession(), object);
+            final Consent usableByUser = fld.isUsable(getAuthenticationSession(), object);
             if (usableByUser.isVetoed()) {
                 descriptions[i] = usableByUser.getReason();
             }
@@ -206,9 +208,8 @@ public class EditTask extends Task {
     public String getName() {
         if (newType == null) {
             return super.getName();
-        } else {
-            return "New " + newType;
-        }
+        } 
+        return "New " + newType;
     }
 
     // /////////////////////////////////////////////////////
@@ -218,5 +219,10 @@ public class EditTask extends Task {
     private static PersistenceSession getPersistenceSession() {
         return IsisContext.getPersistenceSession();
     }
+
+    private static AuthenticationSession getAuthenticationSession() {
+        return IsisContext.getAuthenticationSession();
+    }
+
 
 }
