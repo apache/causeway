@@ -22,6 +22,7 @@ package org.apache.isis.viewer.html.task;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.progmodel.facets.value.booleans.BooleanValueFacet;
 import org.apache.isis.viewer.html.action.Action;
 import org.apache.isis.viewer.html.action.ActionException;
 import org.apache.isis.viewer.html.component.Component;
@@ -160,7 +161,7 @@ public final class TaskStep implements Action {
             final String currentEntryTitle = entryText[i];
             final String error = errors[i];
             if (readOnly[i]) {
-                addReadOnlyField(form, fieldLabel, currentEntryTitle, fieldDescription);
+                addReadOnlyField(form, paramSpec, fieldLabel, fieldDescription, currentEntryTitle);                    
             } else if (paramSpec.isParseable() && options[i] != null && options[i].length > 0) {
                 addSelectorForValueOptions(form, currentEntryTitle, fieldId, fieldLabel, fieldDescription, options[i],
                     !optional[i], error, task);
@@ -180,8 +181,13 @@ public final class TaskStep implements Action {
         content.add(form);
     }
 
-    private void addReadOnlyField(final Form form, final String fieldLabel, final String title, final String description) {
-        form.addReadOnlyField(fieldLabel, title, description);
+    private void addReadOnlyField(final Form form, final ObjectSpecification paramSpec, final String fieldLabel, final String fieldDescription, final String currentEntryTitle) {
+        if(paramSpec.containsFacet(BooleanValueFacet.class)) {
+            final boolean isSet = Boolean.parseBoolean(currentEntryTitle);
+            form.addReadOnlyCheckbox(fieldLabel, isSet, fieldDescription);
+        } else {
+            form.addReadOnlyField(fieldLabel, currentEntryTitle, fieldDescription);
+        }
     }
 
     @Override

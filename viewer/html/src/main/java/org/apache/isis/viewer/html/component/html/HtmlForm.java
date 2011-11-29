@@ -28,6 +28,7 @@ import org.apache.isis.viewer.html.component.ComponentComposite;
 import org.apache.isis.viewer.html.component.Form;
 
 public class HtmlForm extends ComponentComposite implements Form {
+    
     private final boolean confirm;
     private final boolean hasNext;
     private final boolean hasPrevious;
@@ -147,6 +148,11 @@ public class HtmlForm extends ComponentComposite implements Form {
     }
 
     @Override
+    public void addReadOnlyCheckbox(String fieldLabel, boolean isSet, final String description) {
+        addField(fieldLabel, "<input class=\"value\" type=\"checkbox\" disabled " + (isSet?"checked":"") + "/>", description, true, false, null);
+    }
+
+    @Override
     public void write(final PrintWriter writer) {
         super.write(writer);
     }
@@ -187,5 +193,6 @@ public class HtmlForm extends ComponentComposite implements Form {
         writer.println(">");
         writer.println("<input type=\"hidden\" name=\"id\" value=\"" + id + "\"/>");
     }
+
 
 }

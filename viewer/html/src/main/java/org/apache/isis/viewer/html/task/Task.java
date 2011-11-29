@@ -37,6 +37,7 @@ import org.apache.isis.viewer.html.request.Request;
  * action method.
  */
 public abstract class Task {
+    
     private static int nextID = 1;
     private int[] boundaries;
     private final String description;
@@ -377,14 +378,13 @@ public abstract class Task {
         if (spec.isParseable()) {
             if (textEntry == null) {
                 return;
-            } else {
-                // REVIEW this block uses the existing adapter as it contains the regex needed. This needs to
-                // be reviewed in line with Dan's proposed changes to the reflector.
-                final ObjectAdapter valueAdapter = initialState[i];
-                final ParseableFacet parser = spec.getFacet(ParseableFacet.class);
-                parser.parseTextEntry(valueAdapter, textEntry);
-                // REVIEW what do we do when an exception is thrown - a parse fails?
-            }
+            } 
+            // REVIEW this block uses the existing adapter as it contains the regex needed. This needs to
+            // be reviewed in line with Dan's proposed changes to the reflector.
+            final ObjectAdapter valueAdapter = initialState[i];
+            final ParseableFacet parser = spec.getFacet(ParseableFacet.class);
+            parser.parseTextEntry(valueAdapter, textEntry);
+            // REVIEW what do we do when an exception is thrown - a parse fails?
         }
     }
 

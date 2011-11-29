@@ -42,4 +42,5 @@ public interface Form extends Component {
 
     void addReadOnlyField(String fieldLabel, String title, String fieldDescription);
 
+    void addReadOnlyCheckbox(String fieldLabel, boolean isSet, String fieldDescription);
 }
