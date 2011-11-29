@@ -30,33 +30,40 @@ import org.apache.isis.viewer.html.component.ViewPane;
 public class LogonFormPage extends AbstractHtmlPage {
     private final String user;
     private final String password;
+    private final boolean registerLink;
+    private final String error;
 
     public LogonFormPage(final PathBuilder pathBuilder, final String styleSheet, final String header, final String footer,
-        final String user, final String password) {
+        final String user, final String password, final boolean registerLink, final String error) {
         super(pathBuilder, styleSheet, header, footer);
         this.user = user;
         this.password = password;
+        this.registerLink = registerLink;
+        this.error = error;
     }
 
     @Override
     protected void writeContent(final PrintWriter writer) {
         writer.println("<div id=\"view\">");
         writer.println("<div class=\"header\">");
-        if (user.equals("")) {
-            writer.println("<span class=\"header-text\">Please enter a user name and password.</span>");
-        } else {
-            writer.println("<span class=\"header-text\">Please enter a valid user name and password.</span>");
-        }
+        writer.println("<span class=\"header-text\">Please enter a user name and password.</span>");
         writer.println("</div>");
         writer.println("<FORM ACTION=\"" + pathTo("logon") + "\" METHOD=\"post\">");
         writer.println("<div id=\"content\">");
+        if(error != null) {
+            writer.println("<div class=\"error\">");
+            writer.println(error);
+            writer.println("</div>");
+        }
         writer.println("<div class=\"field\"><span class=\"label\">User name</span>"
             + "<span class=\"separator\">: </span><INPUT NAME=\"username\" value=\"" + user + "\"></DIV>");
         writer.println("<div class=\"field\"><span class=\"label\">Password</span>"
             + "<span class=\"separator\">: </span><INPUT TYPE=\"password\" NAME=\"password\" value=\"" + password
             + "\"></DIV>");
         writer.println("<div class=\"action-button\"><INPUT TYPE=\"submit\" VALUE=\"Log in\" NAME=\"Log in\"></div>");
-        new Link(pathBuilder, "register", "register", "Register").write(writer);
+        if(registerLink) {
+            writer.print("<a class=\"link nav-link\" title=\"Register new user name and password\" href=\"" + pathTo("register") + "\">register</a>");
+        }
         writer.println("</div>");
         writer.println("</FORM>");
         writer.println("</div>");

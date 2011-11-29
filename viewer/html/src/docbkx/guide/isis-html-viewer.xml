@@ -151,6 +151,8 @@
 
         <para></para>
 
+        <para></para>
+
         <para>By default the htmlviewer uses ".app" as the suffix for its .
         this can be changed using the viewer-html.suffix init-param in
         web.xml:</para>
@@ -158,6 +160,10 @@
         <para></para>
 
         <para>avoid name clashes.</para>
+
+        <para></para>
+
+        <para></para>
 
         <para></para>
 

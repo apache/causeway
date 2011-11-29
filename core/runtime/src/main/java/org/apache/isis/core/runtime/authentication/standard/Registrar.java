@@ -25,7 +25,7 @@ import org.apache.isis.core.runtime.authentication.RegistrationDetails;
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 
-public interface Registrar extends ApplicationScopedComponent {
+public interface Registrar extends Authenticator, ApplicationScopedComponent {
 	
     static Predicate<Registrar> NON_NULL = new Predicate<Registrar>() {
         @Override
@@ -47,7 +47,7 @@ public interface Registrar extends ApplicationScopedComponent {
     /**
 	 * Whether the provided {@link RegistrationDetails} is recognized by this {@link Registrar}.
 	 */
-	boolean canRegister(RegistrationDetails registrationDetails);
+	boolean canRegister(Class<? extends RegistrationDetails> registrationDetailsClass);
 
 	boolean register(RegistrationDetails registrationDetails);
 

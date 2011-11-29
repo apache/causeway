@@ -103,8 +103,8 @@ public class ExplorationAuthenticator extends AuthenticatorAbstractForDfltRuntim
      * Can authenticate if a {@link AuthenticationRequestExploration}.
      */
     @Override
-    public final boolean canAuthenticate(final AuthenticationRequest request) {
-        return request instanceof AuthenticationRequestExploration;
+    public final boolean canAuthenticate(final Class<? extends AuthenticationRequest> authenticationRequestClass) {
+        return AuthenticationRequestExploration.class.isAssignableFrom(authenticationRequestClass);
     }
 
     /**

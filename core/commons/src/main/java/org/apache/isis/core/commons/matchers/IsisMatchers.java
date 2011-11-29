@@ -225,4 +225,19 @@ public final class IsisMatchers {
         };
     }
 
+    public static <X> Matcher<Class<X>> anySubclassOf(final Class<X> cls) {
+        return new TypeSafeMatcher<Class<X>>() {
+
+            @Override
+            public void describeTo(Description arg0) {
+                arg0.appendText("is subclass of ").appendText(cls.getName());
+            }
+
+            @Override
+            public boolean matchesSafely(Class<X> item) {
+                return cls.isAssignableFrom(item);
+            }
+        };
+    }
+
 }

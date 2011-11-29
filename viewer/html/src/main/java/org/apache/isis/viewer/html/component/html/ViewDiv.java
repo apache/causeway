@@ -72,7 +72,6 @@ public class ViewDiv extends ComponentComposite implements ViewPane {
     @Override
     protected void writeBefore(final PrintWriter writer) {
         writer.println("<div id=\"view\">");
-        writeMessages(writer);
         writeHeader(writer);
         writeMenu(writer);
         writer.println("<div id=\"content\">");
@@ -82,6 +81,7 @@ public class ViewDiv extends ComponentComposite implements ViewPane {
     protected void writeAfter(final PrintWriter writer) {
         writer.println("</div>");
         writer.println("</div>");
+        writeMessages(writer);
     }
 
     private void writeMessages(final PrintWriter writer) {

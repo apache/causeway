@@ -47,13 +47,14 @@ public class AuthenticatorAbstractForDfltRuntimeTest {
         mockConfiguration = mockery.mock(IsisConfiguration.class);
 
         authenticator = new AuthenticatorAbstractForDfltRuntime(mockConfiguration) {
+
             @Override
-            public boolean canAuthenticate(final AuthenticationRequest request) {
+            public boolean isValid(final AuthenticationRequest request) {
                 return false;
             }
 
             @Override
-            public boolean isValid(final AuthenticationRequest request) {
+            public boolean canAuthenticate(Class<? extends AuthenticationRequest> authenticationRequestClass) {
                 return false;
             }
         };

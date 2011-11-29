@@ -19,9 +19,13 @@
 
 package org.apache.isis.security.dflt.authentication;
 
+import java.util.List;
+
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.runtime.authentication.standard.Authenticator;
 import org.apache.isis.runtimes.dflt.runtime.authentication.AuthenticationManagerStandardInstallerAbstractForDfltRuntime;
+
+import com.google.common.collect.Lists;
 
 public class NoopAuthenticationManagerInstaller extends AuthenticationManagerStandardInstallerAbstractForDfltRuntime {
 
@@ -30,8 +34,8 @@ public class NoopAuthenticationManagerInstaller extends AuthenticationManagerSta
     }
 
     @Override
-    protected Authenticator createAuthenticator(final IsisConfiguration configuration) {
-        return new AuthenticatorNoop(configuration);
+    protected List<Authenticator> createAuthenticators(final IsisConfiguration configuration) {
+        return Lists.<Authenticator>newArrayList(new AuthenticatorNoop(configuration));
     }
 
 }

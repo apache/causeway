@@ -35,6 +35,8 @@ public interface AuthenticationManager extends ApplicationScopedComponent {
      */
     AuthenticationSession authenticate(AuthenticationRequest request);
 
+    boolean supportsRegistration(Class<? extends RegistrationDetails> registrationDetailsClass);
+    
     boolean register(RegistrationDetails registrationDetails);
     
     /**

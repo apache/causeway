@@ -30,9 +30,12 @@ public abstract class PasswordRequestAuthenticatorAbstract extends Authenticator
     	super(configuration);
     }
 
-    public final boolean canAuthenticate(final AuthenticationRequest request) {
-        return request instanceof AuthenticationRequestPassword;
+    @Override
+    public final boolean canAuthenticate(final Class<? extends AuthenticationRequest> authenticationRequestClass) {
+        return AuthenticationRequestPassword.class.isAssignableFrom(authenticationRequestClass);
     }
+
+
 
 
 }

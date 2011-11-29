@@ -28,7 +28,7 @@ public interface Authenticator extends ApplicationScopedComponent {
 	/**
 	 * Whether the provided {@link AuthenticationRequest} is recognized by this {@link Authenticator}.
 	 */
-	boolean canAuthenticate(AuthenticationRequest request);
+	boolean canAuthenticate(Class<? extends AuthenticationRequest> authenticationRequestClass);
 
 	/**
 	 * Whether this {@link Authenticator} is valid in the running context (and

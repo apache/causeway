@@ -200,12 +200,12 @@ public class IsisWicketUnsecuredApplication extends WebApplication implements Co
                 new AuthenticationManagerStandard(configuration);
             authenticationManager.addAuthenticator(new AuthenticatorAbstract(configuration) {
                 @Override
-                public boolean canAuthenticate(final AuthenticationRequest request) {
+                public boolean isValid(final AuthenticationRequest request) {
                     return true;
                 }
 
                 @Override
-                public boolean isValid(final AuthenticationRequest request) {
+                public boolean canAuthenticate(Class<? extends AuthenticationRequest> authenticationRequestClass) {
                     return true;
                 }
             });

@@ -30,12 +30,14 @@ import org.apache.isis.viewer.html.component.ViewPane;
 public class RegisterFormPage extends AbstractHtmlPage {
     private final String user;
     private final String password;
+    private final String error;
 
     public RegisterFormPage(final PathBuilder pathBuilder, final String styleSheet, final String header, final String footer,
-        final String user, final String password) {
+        final String user, final String password, final String error) {
         super(pathBuilder, styleSheet, header, footer);
         this.user = user;
         this.password = password;
+        this.error = error;
     }
 
     @Override
@@ -46,15 +48,21 @@ public class RegisterFormPage extends AbstractHtmlPage {
         writer.println("</div>");
         writer.println("<FORM ACTION=\"" + pathTo("register") + "\" METHOD=\"post\">");
         writer.println("<div id=\"content\">");
+        if(error != null) {
+            writer.println("<div class=\"error\">");
+            writer.println(error);
+            writer.println("</div>");
+        }
         writer.println("<div class=\"field\"><span class=\"label\">User name</span>"
             + "<span class=\"separator\">: </span><INPUT NAME=\"username\" value=\"" + user + "\"></DIV>");
         writer.println("<div class=\"field\"><span class=\"label\">Password</span>"
             + "<span class=\"separator\">: </span><INPUT TYPE=\"password\" NAME=\"password\" value=\"" + password
             + "\"></DIV>");
         writer.println("<div class=\"field\"><span class=\"label\">Password (again)</span>"
-                + "<span class=\"separator\">: </span><INPUT TYPE=\"password2\" NAME=\"password2\" value=\"" + password
+                + "<span class=\"separator\">: </span><INPUT TYPE=\"password\" NAME=\"password2\" value=\"" + password
                 + "\"></DIV>");
         writer.println("<div class=\"action-button\"><INPUT TYPE=\"submit\" VALUE=\"Register\" NAME=\"Register\"></div>");
+        writer.print("<a class=\"link nav-link\" title=\"Back to the login page\" href=\"" + pathTo("login") + "\">back to login</a>");
         writer.println("</div>");
         writer.println("</FORM>");
         writer.println("</div>");

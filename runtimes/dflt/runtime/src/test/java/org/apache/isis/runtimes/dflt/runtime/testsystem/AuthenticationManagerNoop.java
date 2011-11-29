@@ -57,4 +57,9 @@ public class AuthenticationManagerNoop implements AuthenticationManager, Noop {
         return false;
     }
 
+    @Override
+    public boolean supportsRegistration(Class<? extends RegistrationDetails> registrationDetailsClass) {
+        return false;
+    }
+
 }
