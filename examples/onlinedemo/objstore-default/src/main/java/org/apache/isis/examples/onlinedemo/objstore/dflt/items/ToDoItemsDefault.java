@@ -19,16 +19,16 @@
 
 package org.apache.isis.examples.onlinedemo.objstore.dflt.items;
 
+import java.util.Collections;
 import java.util.List;
 
-
 import org.apache.isis.applib.AbstractFactoryAndRepository;
-import org.apache.isis.applib.clock.Clock;
-import org.apache.isis.applib.filter.Filter;
+import org.apache.isis.applib.filter.Filters;
 import org.apache.isis.applib.value.Date;
 import org.apache.isis.examples.onlinedemo.dom.items.Category;
 import org.apache.isis.examples.onlinedemo.dom.items.ToDoItem;
 import org.apache.isis.examples.onlinedemo.dom.items.ToDoItems;
+
 
 public class ToDoItemsDefault extends AbstractFactoryAndRepository implements ToDoItems {
 
@@ -42,28 +42,55 @@ public class ToDoItemsDefault extends AbstractFactoryAndRepository implements To
         return "ToDoItem";
     }
     // }}
-
     
+    // {{ ToDosForToday (action)
     @Override
     public List<ToDoItem> toDosForToday() {
-        return allMatches(ToDoItem.class, new Filter<ToDoItem>() {
-            @Override
-            public boolean accept(ToDoItem t) {
-                return !t.getComplete() && t.isDue();
-            }
-        });
+        return allMatches(ToDoItem.class, Filters.and(ToDoItem.thoseOwnedBy(currentUser()), ToDoItem.thoseDue()));
     }
-
+    // }}
     
-    // {{ NewToDo
+    // {{ NewToDo (action)
     @Override
     public ToDoItem newToDo(String description, Category category, Date dueBy) {
         ToDoItem toDoItem = newTransientInstance(ToDoItem.class);
         toDoItem.setDescription(description);
         toDoItem.setCategory(category);
         toDoItem.setDueBy(dueBy);
+        toDoItem.setUserName(currentUser());
         persist(toDoItem);
         return toDoItem;
+    }
+    // }}
+
+    // {{ AllToDos (action)
+    @Override
+    public List<ToDoItem> allToDos() {
+        final String currentUser = currentUser();
+        final List<ToDoItem> items = allMatches(ToDoItem.class, ToDoItem.thoseOwnedBy(currentUser));
+        Collections.sort(items);
+        return items;
+    }
+    // }}
+
+    // {{ AllToDos (action)
+
+    @Override
+    public void removeCompleted() {
+        final List<ToDoItem> complete= allMatches(ToDoItem.class, ToDoItem.thoseComplete());
+        for (ToDoItem toDoItem : complete) {
+            getContainer().remove(toDoItem);
+        }
+        final int size = complete.size();
+        getContainer().informUser("" + size + " item" +
+        		(size != 1? "s": "") +
+        		" removed");
+    }
+    // }}
+
+    // {{ helpers
+    private String currentUser() {
+        return getContainer().getUser().getName();
     }
     // }}
 

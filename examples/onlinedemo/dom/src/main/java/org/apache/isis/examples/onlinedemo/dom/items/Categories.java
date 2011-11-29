@@ -34,4 +34,6 @@ public interface Categories {
 
     public Category newCategory(
         @Named("Description") String description);
+
+    public Category find(String description);
 }

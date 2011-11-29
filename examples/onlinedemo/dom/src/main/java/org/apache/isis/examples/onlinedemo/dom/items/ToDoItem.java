@@ -20,19 +20,73 @@
 package org.apache.isis.examples.onlinedemo.dom.items;
 
 import org.apache.isis.applib.annotation.Disabled;
+import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.applib.annotation.Ignore;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.applib.clock.Clock;
+import org.apache.isis.applib.filter.Filter;
+import org.apache.isis.applib.filter.Filters;
+import org.apache.isis.applib.util.TitleBuffer;
 import org.apache.isis.applib.value.Date;
 
-public class ToDoItem {
+import com.google.common.base.Objects;
+
+public class ToDoItem implements Comparable<ToDoItem> {
+
+    // {{ filters (programmatic)
+    public static Filter<ToDoItem> thoseDue() {
+        return Filters.and(
+                Filters.not(thoseComplete()), 
+                new Filter<ToDoItem>() {
+            @Override
+            public boolean accept(ToDoItem t) {
+                return t.isDue();
+            }
+        });
+    }
+    
+    public static Filter<ToDoItem> thoseComplete() {
+        return new Filter<ToDoItem>() {
+            @Override
+            public boolean accept(ToDoItem t) {
+                return t.isComplete();
+            }
+        };
+    }
+
+    public static Filter<ToDoItem> thoseOwnedBy(final String currentUser) {
+        return new Filter<ToDoItem>() {
+            @Override
+            public boolean accept(ToDoItem toDoItem) {
+                return Objects.equal(toDoItem.getUserName(), currentUser);
+            }
+            
+        };
+    }
+    // }}
+    
+    
+    // {{ Identification
+    public String title() {
+        final TitleBuffer buf = new TitleBuffer();
+        buf.append(getDescription());
+        if(isComplete()) {
+            buf.append(" - Completed!");
+        } else {
+            if(getDueBy() != null) {
+                buf.append(" due by ", getDueBy());
+            }
+        }
+        return buf.toString();
+    }
+    // }}
+
 
     // {{ Description
     private String description;
 
-    @Title
     @MemberOrder(sequence = "1")
     public String getDescription() {
         return description;
@@ -69,6 +123,19 @@ public class ToDoItem {
     }
     // }}
 
+    // {{ UserName (property)
+    private String userName;
+
+    @MemberOrder(sequence = "1")
+    @Hidden
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(final String userName) {
+        this.userName = userName;
+    }
+    // }}
 
 
     // {{ Complete
@@ -76,7 +143,7 @@ public class ToDoItem {
 
     @Disabled
     @MemberOrder(sequence = "3")
-    public boolean getComplete() {
+    public boolean isComplete() {
         return complete;
     }
 
@@ -87,8 +154,9 @@ public class ToDoItem {
 
     // {{ completed
     @MemberOrder(sequence = "1")
-    public void completed() {
+    public ToDoItem completed() {
         setComplete(true);
+        return this;
     }
     public String disableCompleted() {
         return complete?"Already completed":null;
@@ -97,14 +165,16 @@ public class ToDoItem {
 
     // {{ notYetCompleted
     @MemberOrder(sequence = "2")
-    public void notYetCompleted() {
+    public ToDoItem notYetCompleted() {
         setComplete(false);
+        return this;
     }
     public String disableNotYetCompleted() {
         return !complete?"Not yet completed":null;
     }
     // }}
 
+    
     // {{ clone (action)
     @Named("Clone")
     @MemberOrder(sequence = "1")
@@ -125,15 +195,45 @@ public class ToDoItem {
     }
     // }}
 
+    // {{ compareTo (programmatic)
+    /**
+     * by complete flag, then due by date, then description
+     */
+    @Ignore
+    @Override
+    public int compareTo(ToDoItem other) {
+        if(isComplete() && !other.isComplete()) {
+            return +1;
+        }
+        if(!isComplete() && other.isComplete()) {
+            return -1;
+        }
+        if(getDueBy() == null && other.getDueBy() != null) {
+            return +1;
+        }
+        if(getDueBy() != null && other.getDueBy() == null) {
+            return -1;
+        }
+        if( getDueBy() == null && other.getDueBy() == null || 
+            getDueBy().equals(this.getDescription())) {
+            return getDescription().compareTo(other.getDescription());
+        }
+        return (int) (getDueBy().getMillisSinceEpoch() - other.getDueBy().getMillisSinceEpoch());
+    }
+    // }}
+
     
     // {{ injected: ToDoItems
     private ToDoItems toDoItems;
-
     public void setToDoItems(final ToDoItems toDoItems) {
         this.toDoItems = toDoItems;
     }
     // }}
 
+
+
+    
+    
 
     
 }

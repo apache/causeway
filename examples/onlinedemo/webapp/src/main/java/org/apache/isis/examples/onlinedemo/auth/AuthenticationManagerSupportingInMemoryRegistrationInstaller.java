@@ -19,10 +19,14 @@
 
 package org.apache.isis.examples.onlinedemo.auth;
 
+import java.util.List;
+
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.runtime.authentication.standard.Authenticator;
 import org.apache.isis.runtimes.dflt.runtime.authentication.AuthenticationManagerStandardInstallerAbstractForDfltRuntime;
-import org.apache.isis.security.dflt.authentication.inmemory.AuthenticatorInMemory;
+import org.apache.isis.security.file.authentication.FileAuthenticator;
+
+import com.google.common.collect.Lists;
 
 public class AuthenticationManagerSupportingInMemoryRegistrationInstaller extends
     AuthenticationManagerStandardInstallerAbstractForDfltRuntime {
@@ -32,8 +36,8 @@ public class AuthenticationManagerSupportingInMemoryRegistrationInstaller extend
     }
 
     @Override
-    protected Authenticator createAuthenticator(IsisConfiguration configuration) {
-        return new AuthenticatorInMemory(getConfiguration());
+    protected List<Authenticator> createAuthenticators(IsisConfiguration configuration) {
+        return Lists.<Authenticator>newArrayList(new FileAuthenticator(configuration), new AuthenticatorInMemory(configuration));
     }
 
 }

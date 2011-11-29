@@ -17,36 +17,20 @@
  *  under the License.
  */
 
-package org.apache.isis.examples.onlinedemo.dom.items;
+package org.apache.isis.examples.onlinedemo.dom.demo;
 
 import java.util.List;
 
+import org.apache.isis.applib.annotation.Idempotent;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Named;
-import org.apache.isis.applib.annotation.Optional;
-import org.apache.isis.applib.annotation.QueryOnly;
-import org.apache.isis.applib.value.Date;
+import org.apache.isis.examples.onlinedemo.dom.items.ToDoItem;
 
-@Named("ToDos")
-public interface ToDoItems {
+@Named("Demo")
+public interface DemoFixtures {
 
-    @QueryOnly
+    @Idempotent
     @MemberOrder(sequence="1")
-    public List<ToDoItem> toDosForToday();
-
-    
-    @MemberOrder(sequence="2")
-    public ToDoItem newToDo(
-        @Named("Description") String description, 
-        Category category, 
-        @Named("Due by") @Optional Date dueBy);
-
-
-    @QueryOnly
-    @MemberOrder(sequence="3")
-    public List<ToDoItem> allToDos();
-
-    @MemberOrder(sequence="4")
-    public void removeCompleted();
+    public List<ToDoItem> resetDemoFixtures();
 
 }

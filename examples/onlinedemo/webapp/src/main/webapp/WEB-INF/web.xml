@@ -78,12 +78,10 @@
     <filter>
         <filter-name>IsisSessionFilterForHtml</filter-name>
         <filter-class>org.apache.isis.runtimes.dflt.webapp.IsisSessionFilter</filter-class>
-        <!-- 
         <init-param>
-            <param-name>logonPage</param-name>
+            <param-name>redirectToOnNoSessionException</param-name>
             <param-value>/logon.htmlviewer</param-value>
         </init-param>
-        -->
         <init-param>
             <param-name>cacheAuthSessionOnHttpSession</param-name>
             <param-value>true</param-value>
@@ -213,5 +211,6 @@
         <servlet-name>Resource</servlet-name>
         <url-pattern>*.html</url-pattern>
     </servlet-mapping>
+	
 	
 </web-app>

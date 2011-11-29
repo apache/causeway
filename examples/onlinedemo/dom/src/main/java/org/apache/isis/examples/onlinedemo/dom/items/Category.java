@@ -21,20 +21,33 @@ package org.apache.isis.examples.onlinedemo.dom.items;
 
 import org.apache.isis.applib.AbstractDomainObject;
 import org.apache.isis.applib.annotation.Bounded;
+import org.apache.isis.applib.annotation.Immutable;
 import org.apache.isis.applib.annotation.MemberOrder;
+import org.apache.isis.applib.annotation.Title;
+import org.apache.isis.applib.filter.Filter;
 
+import com.google.common.base.Objects;
+
+@Immutable
 @Bounded
 public class Category extends AbstractDomainObject {
 
-    // {{ Title
-    public String title() {
-        return getDescription();
+    // {{ filters (programmatic)
+    public static Filter<Category> matching(final String description) {
+        return new Filter<Category>() {
+
+            @Override
+            public boolean accept(Category category) {
+                return Objects.equal(category.getDescription(), description);
+            }};
     }
     // }}
+
 
     // {{ Description
     private String description;
 
+    @Title
     @MemberOrder(sequence = "1")
     public String getDescription() {
         return description;

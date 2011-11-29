@@ -49,10 +49,19 @@ public class CategoriesDefault extends AbstractFactoryAndRepository implements C
 
     @Override
     public Category newCategory(String description) {
-        final Category category = newTransientInstance(Category.class);
+        Category category = find(description);
+        if(category != null) {
+            return category;
+        }
+        category = newTransientInstance(Category.class);
         category.setDescription(description);
         persist(category);
         return category;
+    }
+
+    @Override
+    public Category find(String description) {
+        return firstMatch(Category.class, Category.matching(description));
     }
 
 }
