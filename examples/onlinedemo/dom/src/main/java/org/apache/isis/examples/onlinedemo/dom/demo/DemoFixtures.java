@@ -26,11 +26,21 @@ import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.examples.onlinedemo.dom.items.ToDoItem;
 
-@Named("Demo")
+/**
+ * Install fixtures (test data set) for the currently logged-in user.
+ * 
+ * <p>
+ * Typically fixtures are installed directly by the framework, using the
+ * <tt>isis.fixtures</tt> key within the <tt>isis.properties</tt> configuration file.
+ * In this case though, because the online demo is intended to be multi-user, we
+ * have made this capability available directly in the UI.  (In production, this
+ * service would be excluded from the final build)
+ */
+@Named("Demo") // name to use in the UI
 public interface DemoFixtures {
 
-    @Idempotent
+    @Idempotent // post-conditions are always same
     @MemberOrder(sequence="1")
-    public List<ToDoItem> resetDemoFixtures();
+    public List<ToDoItem> resetFixtures();
 
 }

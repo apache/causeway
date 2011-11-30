@@ -21,19 +21,30 @@ package org.apache.isis.examples.onlinedemo.dom.items;
 
 import java.util.List;
 
+import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.QueryOnly;
 
-@Named("Categories")
+/**
+ * A repository for {@link Category}.
+ * 
+ * <p>
+ * The implementation depends on the configured object store.
+ */
+@Hidden
 public interface Categories {
 
-    @QueryOnly
+    @QueryOnly // no side-effects
     @MemberOrder(sequence="1")
     public List<Category> all();
 
-    public Category newCategory(
+    @QueryOnly
+    @MemberOrder(sequence="2")
+    public Category find(
         @Named("Description") String description);
 
-    public Category find(String description);
+    @Hidden // intended for fixtures only, so is hidden in the UI
+    public Category newCategory(String description);
+
 }

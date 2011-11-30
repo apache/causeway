@@ -21,13 +21,9 @@ package org.apache.isis.examples.onlinedemo.objstore.dflt.items;
 
 import java.util.List;
 
-
 import org.apache.isis.applib.AbstractFactoryAndRepository;
-import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.examples.onlinedemo.dom.items.Categories;
 import org.apache.isis.examples.onlinedemo.dom.items.Category;
-import org.apache.isis.examples.onlinedemo.dom.items.ToDoItem;
-import org.apache.isis.examples.onlinedemo.dom.items.ToDoItems;
 
 public class CategoriesDefault extends AbstractFactoryAndRepository implements Categories {
 

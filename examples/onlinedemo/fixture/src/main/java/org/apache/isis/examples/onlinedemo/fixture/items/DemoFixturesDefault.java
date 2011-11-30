@@ -17,16 +17,13 @@
  *  under the License.
  */
 
-package org.apache.isis.examples.onlinedemo.objstore.dflt.demo;
+package org.apache.isis.examples.onlinedemo.fixture.items;
 
 import java.util.List;
 
 import org.apache.isis.applib.AbstractFactoryAndRepository;
-import org.apache.isis.applib.clock.Clock;
-import org.apache.isis.applib.value.Date;
 import org.apache.isis.examples.onlinedemo.dom.demo.DemoFixtures;
 import org.apache.isis.examples.onlinedemo.dom.items.Categories;
-import org.apache.isis.examples.onlinedemo.dom.items.Category;
 import org.apache.isis.examples.onlinedemo.dom.items.ToDoItem;
 import org.apache.isis.examples.onlinedemo.dom.items.ToDoItems;
 
@@ -35,59 +32,31 @@ public class DemoFixturesDefault extends AbstractFactoryAndRepository implements
     // {{ Id, iconName
     @Override
     public String getId() {
-        return "fixtures";
+        return "demo";
     }
 
     public String iconName() {
-        return "Fixtures";
+        return "demo";
     }
     // }}
 
     @Override
-    public List<ToDoItem> resetDemoFixtures() {
-        Category domesticCategory = findOrCreateCategory("Domestic");
-        Category professionalCategory = findOrCreateCategory("Professional");
+    public List<ToDoItem> resetFixtures() {
+        final ToDoItemsFixture fixture = new ToDoItemsFixture();
+        injectServicesInto(fixture);
         
-        removeAllToDosForCurrentUser();
-        
-        createToDoItemForCurrentUser("Buy milk", domesticCategory, daysFromToday(0));
-        createToDoItemForCurrentUser("Buy stamps", domesticCategory, daysFromToday(0));
-        createToDoItemForCurrentUser("Pick up laundry", domesticCategory, daysFromToday(6));
-        createToDoItemForCurrentUser("Write blog post", professionalCategory, null);
-        createToDoItemForCurrentUser("Organize brown bag", professionalCategory, daysFromToday(14));
-        
-        getContainer().flush();
+        fixture.install();
         
         return toDoItems.allToDos();
     }
 
     // {{ helpers
-    private Category findOrCreateCategory(String description) {
-        Category category = categories.find(description);
-        if(category != null) {
-            return category;
-        }
-        return categories.newCategory(description);
-    }
-
-    private void removeAllToDosForCurrentUser() {
-        final List<ToDoItem> allToDos = toDoItems.allToDos();
-        for (ToDoItem toDoItem : allToDos) {
-            getContainer().remove(toDoItem);
-        }
-    }
-
-    private ToDoItem createToDoItemForCurrentUser(String description, Category category, Date dueBy) {
-        return toDoItems.newToDo(description, category, dueBy);
-    }
-
-    private static Date daysFromToday(int i) {
-        final Date date = new Date(Clock.getTimeAsDateTime());
-        date.add(0, 0, i);
-        return date;
+    private void injectServicesInto(final ToDoItemsFixture fixture) {
+        fixture.setCategories(categories);
+        fixture.setContainer(getContainer());
+        fixture.setToDoItems(toDoItems);
     }
     // }}
-
 
     // {{ injected: Categories
     private Categories categories;
@@ -96,7 +65,6 @@ public class DemoFixturesDefault extends AbstractFactoryAndRepository implements
         this.categories = categories;
     }
     // }}
-
 
     // {{ injected: ToDoItems
     private ToDoItems toDoItems;

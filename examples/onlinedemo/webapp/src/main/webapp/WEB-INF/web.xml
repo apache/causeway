@@ -74,6 +74,10 @@
         <filter-name>ResourceCachingFilter</filter-name>
         <url-pattern>*.gif</url-pattern>
     </filter-mapping>
+    <filter-mapping>
+        <filter-name>ResourceCachingFilter</filter-name>
+        <url-pattern>*.html</url-pattern>
+    </filter-mapping>
     
     <filter>
         <filter-name>IsisSessionFilterForHtml</filter-name>

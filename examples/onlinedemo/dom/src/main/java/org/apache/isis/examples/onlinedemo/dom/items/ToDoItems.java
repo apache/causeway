@@ -21,19 +21,25 @@ package org.apache.isis.examples.onlinedemo.dom.items;
 
 import java.util.List;
 
+import org.apache.isis.applib.annotation.Idempotent;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.Optional;
 import org.apache.isis.applib.annotation.QueryOnly;
 import org.apache.isis.applib.value.Date;
 
+/**
+ * A repository for {@link ToDoItem}s.
+ *  
+ * <p>
+ * The implementation depends on the configured object store.
+ */
 @Named("ToDos")
 public interface ToDoItems {
 
-    @QueryOnly
-    @MemberOrder(sequence="1")
+    @QueryOnly // no side-effects
+    @MemberOrder(sequence="1") // order in the UI
     public List<ToDoItem> toDosForToday();
-
     
     @MemberOrder(sequence="2")
     public ToDoItem newToDo(
@@ -41,11 +47,11 @@ public interface ToDoItems {
         Category category, 
         @Named("Due by") @Optional Date dueBy);
 
-
     @QueryOnly
     @MemberOrder(sequence="3")
     public List<ToDoItem> allToDos();
 
+    @Idempotent // same post-conditions
     @MemberOrder(sequence="4")
     public void removeCompleted();
 
