@@ -7,7 +7,7 @@
 
     <style type="text/css">
         body {
-            background-color: #994422;
+            background-color: #1A467B;
             font-family: Verdana, Helvetica, Arial;
             font-size: 90%;
         }
@@ -29,7 +29,7 @@
 
       <li><a href="#rest">REST API</a></li>
 
-      <li><a>Next Steps</a></li>
+      <li><a href="#next-steps">Next Steps</a></li>
     </ul><h2><a name="intro">Introduction</a></h2><p><i>Apache Isis</i> is a
   framework to let you rapidly develop domain-driven apps in Java. It defines
   a clean programming model, has <acronym>BDD</acronym> and JUnit testing
@@ -118,6 +118,18 @@
   indicating no arguments):</p><img alt="Invoke Request"
   src="restconsole-invoke-request.png" style="width:600px;" /><p>Submit this
   request, and the action will be invoked:</p><img alt="Invoke Response"
-  src="restconsole-invoke-response.png" style="width:600px;" /><p></p><p></p>
-  </div></body>
+  src="restconsole-invoke-response.png" style="width:600px;" /><h2><a
+  name="next-steps">Next Steps</a></h2><p>You can download the WAR file <a
+  href="isis-onlinedemo.war">here</a>. It uses an in-memory objectstore, so
+  there is no set up (but note also: any data will be lost when you restart
+  the app).</p><p>To use the WAR, either:</p><ul>
+      <li>deploy in the usual way to a servlet container (eg copy to
+      <tt>webapps</tt> directory for Tomcat); or</li>
+
+      <li>because the WAR is self-hosting, simply start from the command line.
+      Use: <blockquote>java -jar isis-onlinedemo.war</blockquote>(add --help
+      for options)</li>
+    </ul><p>For further information, please subscribe to the <a
+  href="mailto:isis-dev-subscribe@incubator.apache.org">isis-dev</a> mailing
+  list.</p></div></body>
 </html>

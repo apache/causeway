@@ -425,7 +425,7 @@ DIV#body DIV#view {
 /* Start of Message Header */
 DIV.message-header {
 	position: relative;
-	top: 10px;
+	top: 40px;
 	padding: 5px 25px 5px 25px;
 	margin: 0 50px 0 255px;
 	vertical-align: middle;
@@ -930,4 +930,9 @@ SPAN.about {
 SPAN.user {
 	display: block;
 	padding: 4px;
+}
+.nav-link {
+    display: block;
+    padding: 10px;
+    font-size: 75%;
 }
