@@ -69,6 +69,7 @@ import org.apache.isis.core.progmodel.facets.object.choices.enums.EnumFacetFacto
 import org.apache.isis.core.progmodel.facets.object.defaults.annotation.DefaultedAnnotationFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.describedas.annotation.DescribedAsAnnotationOnTypeFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.dirty.method.DirtyMethodsFacetFactory;
+import org.apache.isis.core.progmodel.facets.object.disabled.method.DisabledObjectViaDisabledMethodFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.encodeable.EncodableAnnotationFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.facets.annotation.FacetsAnnotationFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.hidden.HiddenAnnotationForTypeFacetFactory;
@@ -251,6 +252,7 @@ public class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract {
 
         addFactory(DirtyMethodsFacetFactory.class);
         addFactory(ValidateObjectViaValidateMethodFacetFactory.class);
+        addFactory(DisabledObjectViaDisabledMethodFacetFactory.class);
         addFactory(ObjectValidPropertiesFacetFactory.class);
         addFactory(PluralMethodFacetFactory.class);
         addFactory(NamedFacetViaSingularNameStaticMethodFacetFactory.class);
