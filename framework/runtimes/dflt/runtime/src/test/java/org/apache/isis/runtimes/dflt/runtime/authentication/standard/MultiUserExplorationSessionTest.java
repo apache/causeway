@@ -70,7 +70,7 @@ public class MultiUserExplorationSessionTest {
     public void testNameDefaultsToFirstUser() throws Exception {
         mockery.checking(new Expectations() {
             {
-                allowing(mockConfiguration).getString(ExplorationAuthenticatorConstants.NAKEDOBJECTS_USERS);
+                allowing(mockConfiguration).getString(ExplorationAuthenticatorConstants.USERS);
                 will(returnValue("fred, sven:admin|sales|marketing, bob:sales, dick"));
             }
         });
@@ -84,7 +84,7 @@ public class MultiUserExplorationSessionTest {
     public void testValidateCode() throws Exception {
         mockery.checking(new Expectations() {
             {
-                allowing(mockConfiguration).getString(ExplorationAuthenticatorConstants.NAKEDOBJECTS_USERS);
+                allowing(mockConfiguration).getString(ExplorationAuthenticatorConstants.USERS);
                 will(returnValue("fred, sven:admin|sales|marketing, bob:sales, dick"));
             }
         });
@@ -98,7 +98,7 @@ public class MultiUserExplorationSessionTest {
     public void testNoRolesSpecifiedForFirstUser() throws Exception {
         mockery.checking(new Expectations() {
             {
-                allowing(mockConfiguration).getString(ExplorationAuthenticatorConstants.NAKEDOBJECTS_USERS);
+                allowing(mockConfiguration).getString(ExplorationAuthenticatorConstants.USERS);
                 will(returnValue("fred, sven:admin|sales|marketing, bob:sales, dick"));
             }
         });
@@ -112,7 +112,7 @@ public class MultiUserExplorationSessionTest {
     public void testForMultipleUser() throws Exception {
         mockery.checking(new Expectations() {
             {
-                allowing(mockConfiguration).getString(ExplorationAuthenticatorConstants.NAKEDOBJECTS_USERS);
+                allowing(mockConfiguration).getString(ExplorationAuthenticatorConstants.USERS);
                 will(returnValue("fred, sven:admin|sales|marketing, bob:sales, dick"));
             }
         });
@@ -129,7 +129,7 @@ public class MultiUserExplorationSessionTest {
     public void testForSingleUser() throws Exception {
         mockery.checking(new Expectations() {
             {
-                allowing(mockConfiguration).getString(ExplorationAuthenticatorConstants.NAKEDOBJECTS_USERS);
+                allowing(mockConfiguration).getString(ExplorationAuthenticatorConstants.USERS);
                 will(returnValue("sven"));
             }
         });
@@ -145,7 +145,7 @@ public class MultiUserExplorationSessionTest {
     public void testNoUsersSpecified() throws Exception {
         mockery.checking(new Expectations() {
             {
-                allowing(mockConfiguration).getString(ExplorationAuthenticatorConstants.NAKEDOBJECTS_USERS);
+                allowing(mockConfiguration).getString(ExplorationAuthenticatorConstants.USERS);
                 will(returnValue(null));
             }
         });
@@ -160,7 +160,7 @@ public class MultiUserExplorationSessionTest {
     public void testOtherUsers() throws Exception {
         mockery.checking(new Expectations() {
             {
-                allowing(mockConfiguration).getString(ExplorationAuthenticatorConstants.NAKEDOBJECTS_USERS);
+                allowing(mockConfiguration).getString(ExplorationAuthenticatorConstants.USERS);
                 will(returnValue("fred, sven:admin|sales|marketing, bob:sales, dick"));
             }
         });
@@ -180,7 +180,7 @@ public class MultiUserExplorationSessionTest {
     public void testChangeUser() throws Exception {
         mockery.checking(new Expectations() {
             {
-                allowing(mockConfiguration).getString(ExplorationAuthenticatorConstants.NAKEDOBJECTS_USERS);
+                allowing(mockConfiguration).getString(ExplorationAuthenticatorConstants.USERS);
                 will(returnValue("fred, sven:admin|sales|marketing, bob:sales, dick"));
             }
         });
@@ -196,7 +196,7 @@ public class MultiUserExplorationSessionTest {
     public void testRolesExist() throws Exception {
         mockery.checking(new Expectations() {
             {
-                allowing(mockConfiguration).getString(ExplorationAuthenticatorConstants.NAKEDOBJECTS_USERS);
+                allowing(mockConfiguration).getString(ExplorationAuthenticatorConstants.USERS);
                 will(returnValue("fred, sven:admin|sales|marketing, bob:sales, dick"));
             }
         });

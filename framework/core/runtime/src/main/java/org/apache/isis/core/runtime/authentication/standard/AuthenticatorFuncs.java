@@ -17,15 +17,24 @@
  *  under the License.
  */
 
-package org.apache.isis.runtimes.dflt.runtime.authentication.exploration;
+package org.apache.isis.core.runtime.authentication.standard;
 
-import org.apache.isis.core.commons.config.ConfigurationConstants;
+import org.apache.isis.core.runtime.authentication.AuthenticationRequest;
 
-public final class ExplorationAuthenticatorConstants {
+import com.google.common.base.Predicate;
 
-    public static final String USERS = ConfigurationConstants.ROOT + "exploration.users";
+public final class AuthenticatorFuncs {
+    
+    private AuthenticatorFuncs(){}
 
-    private ExplorationAuthenticatorConstants() {
+    public static Predicate<Authenticator> compatibleWith(final AuthenticationRequest request) {
+        return new Predicate<Authenticator>() {
+            @Override
+            public boolean apply(Authenticator authenticator) {
+                return authenticator.canAuthenticate(request.getClass());
+            }
+        };
     }
+
 
 }

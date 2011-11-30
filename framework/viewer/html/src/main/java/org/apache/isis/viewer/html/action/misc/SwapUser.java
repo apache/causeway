@@ -38,7 +38,7 @@ public class SwapUser implements Action {
 
         // TODO pick out users from the perspectives, but only show when in exploration mode
         final String users =
-            IsisContext.getConfiguration().getString(ExplorationAuthenticatorConstants.NAKEDOBJECTS_USERS);
+            IsisContext.getConfiguration().getString(ExplorationAuthenticatorConstants.USERS);
         if (users != null) {
             final StringTokenizer st = new StringTokenizer(users, ",");
             if (st.countTokens() > 0) {
