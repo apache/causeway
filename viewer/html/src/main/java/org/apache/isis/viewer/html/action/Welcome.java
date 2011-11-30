@@ -42,7 +42,7 @@ public class Welcome implements Action {
             name = AboutIsis.getFrameworkName();
         }
         content.add(context.getComponentFactory().createInlineBlock("message",
-            "Welcome to " + name + ", accessed via the Web Viewer", null));
+            "Welcome to " + name + ", accessed via the HTML Viewer", null));
     }
 
     @Override

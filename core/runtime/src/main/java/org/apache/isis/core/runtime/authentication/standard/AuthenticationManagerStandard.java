@@ -24,6 +24,7 @@ import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -38,6 +39,7 @@ import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequest;
 import org.apache.isis.core.runtime.authentication.RegistrationDetails;
 
+import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -113,17 +115,19 @@ public class AuthenticationManagerStandard implements AuthenticationManager, Deb
             return null;
         }
 
-        for (Authenticator authenticator : authenticators) {
-            if (authenticator.canAuthenticate(request.getClass())) {
-                AuthenticationSession authSession = null;
-                authSession = authenticator.authenticate(request, getUnusedRandomCode());
-                if (authSession != null) {
-                    userByValidationCode.put(authSession.getValidationCode(), authSession.getUserName());
-                    return authSession;
-                }
+        final Collection<Authenticator> compatibleAuthenticators = 
+                Collections2.filter(authenticators, AuthenticatorFuncs.compatibleWith(request));
+        if(compatibleAuthenticators.size() == 0) {
+            throw new NoAuthenticatorException("No authenticator available for processing " + request.getClass().getName());
+        }
+        for (final Authenticator authenticator : compatibleAuthenticators) {
+            final AuthenticationSession authSession = authenticator.authenticate(request, getUnusedRandomCode());
+            if (authSession != null) {
+                userByValidationCode.put(authSession.getValidationCode(), authSession.getUserName());
+                return authSession;
             }
         }
-        throw new NoAuthenticatorException("No authenticator available for processing " + request.getClass().getName());
+        return null;
     }
 
     private String getUnusedRandomCode() {

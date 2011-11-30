@@ -61,7 +61,7 @@ public class ExplorationAuthenticatorTest {
 
         mockery.checking(new Expectations() {
             {
-                allowing(mockConfiguration).getString(ExplorationAuthenticatorConstants.NAKEDOBJECTS_USERS);
+                allowing(mockConfiguration).getString(ExplorationAuthenticatorConstants.USERS);
                 will(returnValue(DeploymentType.EXPLORATION.name()));
             }
         });

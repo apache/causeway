@@ -16,9 +16,12 @@
 ~~  under the License.
 
  <Apache Isis> is a framework to let you rapidly develop domain-driven 
- apps in Java.  It defines a clean programming model, has JUnit
- testing support, and can dynamically generate a representation of that 
- domain model in a variety of ways:
+ apps in Java.  It defines a clean programming model, has BDD and JUnit
+ testing support, and can dynamically (at runtime) generate a representation 
+ of that domain model using various presentation technologies.
+ 
+ You can use Apache Isis in a variety of ways, from initial prototyping
+ all the way through to final deployment:
  
 %{snippet|verbatim=false|file=src/site/resources/images/homepage/IsisUseCases.png.map}
 
