@@ -59,7 +59,7 @@ public class ToDoItem implements Comparable<ToDoItem> {
     // {{ Description (property)
     private String description;
 
-    @RegEx(validation = "\\w[@&:-,\\.\\+ \\w]*") // words, spaces and selected punctuation
+    @RegEx(validation = "\\w[@&:\\-\\,\\.\\+ \\w]*") // words, spaces and selected punctuation
     @MemberOrder(sequence = "1") // ordering within UI
     public String getDescription() {
         return description;

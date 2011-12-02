@@ -46,6 +46,9 @@
                         <goals>
                             <goal>createconsole</goal>
                         </goals>
+                        <configuration>
+                            <backgroundImage>${basedir}/src/main/jettyconsole/isis-onlinedemo-banner.png</backgroundImage>
+                        </configuration>
                         <phase>package</phase>
                     </execution>
                 </executions>
@@ -122,6 +125,12 @@
             <artifactId>webserver</artifactId>
             <scope>runtime</scope>
             <optional>true</optional>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.geronimo.specs</groupId>
+            <artifactId>geronimo-servlet_2.5_spec</artifactId>
+            <version>1.2</version>
         </dependency>
 
 	</dependencies>
