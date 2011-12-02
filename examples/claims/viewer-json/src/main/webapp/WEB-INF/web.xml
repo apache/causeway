@@ -73,11 +73,16 @@
 	<filter>
 		<filter-name>IsisSessionFilter</filter-name>
 		<filter-class>org.apache.isis.runtimes.dflt.webapp.IsisSessionFilter</filter-class>
-		<init-param>
-			<!-- trusted client, so no authentication required -->
-			<param-name>authenticationSessionLookupStrategy</param-name>
-			<param-value>org.apache.isis.viewer.json.viewer.authentication.AuthenticationSessionLookupStrategyTrusted</param-value>
-		</init-param>
+        <init-param>
+            <!-- look for basic auth headers -->
+            <param-name>authenticationSessionStrategy</param-name>
+            <param-value>org.apache.isis.viewer.json.viewer.authentication.AuthenticationSessionStrategyBasicAuth</param-value>
+        </init-param>
+        <init-param>
+            <!-- what to do if no session was found; we indicate to issue a 401 basic authentication challenge -->
+            <param-name>whenNoSession</param-name>
+            <param-value>basicAuthChallenge</param-value>
+        </init-param>
 	</filter>
     <filter-mapping>
         <filter-name>IsisSessionFilter</filter-name>

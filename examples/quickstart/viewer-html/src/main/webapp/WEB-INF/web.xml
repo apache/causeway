@@ -61,7 +61,11 @@
         <filter-name>IsisSessionFilter</filter-name>
         <filter-class>org.apache.isis.runtimes.dflt.webapp.IsisSessionFilter</filter-class>
         <init-param>
-            <param-name>logonPage</param-name>
+            <param-name>whenNoSession</param-name>
+            <param-value>restricted</param-value>
+        </init-param>
+        <init-param>
+            <param-name>restricted</param-name>
             <param-value>/logon.app</param-value>
         </init-param>
     </filter>

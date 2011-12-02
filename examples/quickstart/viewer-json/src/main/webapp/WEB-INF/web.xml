@@ -78,6 +78,11 @@
             <param-name>authenticationSessionLookupStrategy</param-name>
             <param-value>org.apache.isis.viewer.json.viewer.authentication.AuthenticationSessionLookupStrategyTrusted</param-value>
         </init-param>
+        <init-param>
+            <!-- should not occur since using 'trusted' session -->
+            <param-name>whenNoSession</param-name>
+            <param-value>continue</param-value>
+        </init-param>
     </filter>
     <filter-mapping>
         <filter-name>IsisSessionFilter</filter-name>

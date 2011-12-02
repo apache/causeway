@@ -19,8 +19,6 @@
 
 package org.apache.isis.examples.onlinedemo.dom.items;
 
-import java.util.regex.Pattern;
-
 import org.apache.isis.applib.annotation.Disabled;
 import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.applib.annotation.Ignore;
@@ -41,7 +39,8 @@ import com.google.common.base.Objects;
  */
 public class ToDoItem implements Comparable<ToDoItem> {
 
-    
+    private static final long ONE_WEEK_IN_MILLIS = 7 * 24 * 60 * 60 * 1000L;
+
     // {{ Identification on the UI
     public String title() {
         final TitleBuffer buf = new TitleBuffer();
@@ -57,11 +56,10 @@ public class ToDoItem implements Comparable<ToDoItem> {
     }
     // }}
 
-
     // {{ Description (property)
     private String description;
 
-    @RegEx(validation = "\\w[ \\w]*") // words and spaces
+    @RegEx(validation = "\\w[@&:-,\\.\\+ \\w]*") // words, spaces and selected punctuation
     @MemberOrder(sequence = "1") // ordering within UI
     public String getDescription() {
         return description;
@@ -88,7 +86,7 @@ public class ToDoItem implements Comparable<ToDoItem> {
     public String validateDueBy(final Date dueBy) {
         if (dueBy == null)
             return null;
-        return isInFuture(dueBy) ? null : "Due by date must be in the future";
+        return isMoreThanOneWeekInPast(dueBy) ? null : "Due by date cannot be more than one week old";
     }
 
     
@@ -119,7 +117,6 @@ public class ToDoItem implements Comparable<ToDoItem> {
         this.userName = userName;
     }
     // }}
-
 
     // {{ Complete (property)
     private boolean complete;
@@ -158,7 +155,6 @@ public class ToDoItem implements Comparable<ToDoItem> {
         return !complete?"Not yet completed":null;
     }
     // }}
-
     
     // {{ clone (action)
     @Named("Clone") // the name of the action in the UI
@@ -170,14 +166,13 @@ public class ToDoItem implements Comparable<ToDoItem> {
     }
     // }}
 
-
     // {{ isDue (programmatic)
     @Ignore // excluded from the framework's metamodel
     public boolean isDue() {
         if(getDueBy() == null) {
             return false;
         }
-        return !isInFuture(getDueBy());
+        return !isMoreThanOneWeekInPast(getDueBy());
     }
     // }}
 
@@ -210,11 +205,10 @@ public class ToDoItem implements Comparable<ToDoItem> {
 
 
     // {{ helpers
-    private static boolean isInFuture(final Date dueBy) {
-        return dueBy.getMillisSinceEpoch() > Clock.getTime();
+    private static boolean isMoreThanOneWeekInPast(final Date dueBy) {
+        return dueBy.getMillisSinceEpoch() > Clock.getTime() - ONE_WEEK_IN_MILLIS ;
     }
     // }}
-
     
     // {{ filters (programmatic)
     public static Filter<ToDoItem> thoseDue() {
@@ -247,7 +241,6 @@ public class ToDoItem implements Comparable<ToDoItem> {
         };
     }
     // }}
-
     
     // {{ injected: ToDoItems
     private ToDoItems toDoItems;

@@ -61,6 +61,7 @@
         <filter-name>IsisSessionFilter</filter-name>
         <filter-class>org.apache.isis.runtimes.dflt.webapp.IsisSessionFilter</filter-class>
         <init-param>
+            <!-- this is the 'legacy' way, preserved only for backwards compatibility -->
             <param-name>logonPage</param-name>
             <param-value>/logon.app</param-value>
         </init-param>

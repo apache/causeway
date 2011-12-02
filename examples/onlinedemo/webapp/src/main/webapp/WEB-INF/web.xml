@@ -24,29 +24,49 @@
     <display-name>Apache Isis HTML Viewer</display-name>
 
     <listener>
+        <!-- bootstrap the Isis metamodel and runtime -->
         <listener-class>org.apache.isis.runtimes.dflt.webapp.IsisWebAppBootstrapper</listener-class>
     </listener>
 
     <listener>
+        <!-- bootstrap the RestEasy framework (on which the json-viewer is implemented) -->
         <listener-class>org.jboss.resteasy.plugins.server.servlet.ResteasyBootstrap</listener-class>
     </listener>
 
     <context-param>
+        <!-- indicates which (optional) configuration file(s) to load -->
         <param-name>isis.viewers</param-name>
         <param-value>html,json</param-value>
     </context-param>
 
     <context-param>
+        <!-- used by the HTML viewer to determine the format of the paths of the links etc that it generates  -->
         <param-name>viewer-html.suffix</param-name>
         <param-value>htmlviewer</param-value>
     </context-param>
 
     <context-param>
+        <!-- used by RestEasy to determine the JAX-RS resources and other related configuration -->
         <param-name>javax.ws.rs.Application</param-name>
         <param-value>org.apache.isis.viewer.json.viewer.JsonApplication</param-value>
     </context-param>
 
     <filter>
+        <!-- redirect to /index.html if not explicitly accessing the json viewer -->
+        <filter-name>RedirectToDocsFilter</filter-name>
+        <filter-class>org.apache.isis.examples.onlinedemo.filters.RedirectToDocsFilter</filter-class>
+        <init-param>
+            <param-name>redirectTo</param-name>
+            <param-value>/index.html</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>RedirectToDocsFilter</filter-name>
+        <url-pattern>/</url-pattern>
+    </filter-mapping>
+
+    <filter>
+        <!-- cache all static resources for 1 day -->
         <filter-name>ResourceCachingFilter</filter-name>
         <filter-class>org.apache.isis.core.webapp.content.ResourceCachingFilter</filter-class>
         <init-param>
@@ -80,15 +100,23 @@
     </filter-mapping>
     
     <filter>
+        <!-- authenticate user for accessing the HTML viewer, and set up an Isis Session -->
         <filter-name>IsisSessionFilterForHtml</filter-name>
         <filter-class>org.apache.isis.runtimes.dflt.webapp.IsisSessionFilter</filter-class>
         <init-param>
-            <param-name>redirectToOnNoSessionException</param-name>
-            <param-value>/logon.htmlviewer</param-value>
+            <!-- lookup from cache, or if a logon filter was provided -->
+            <param-name>authenticationSessionStrategy</param-name>
+            <param-value>org.apache.isis.runtimes.dflt.webapp.auth.AuthenticationSessionStrategyDefault</param-value>
         </init-param>
         <init-param>
-            <param-name>cacheAuthSessionOnHttpSession</param-name>
-            <param-value>true</param-value>
+            <!-- what to do if no session was found; we indicate access only to a restricted list of paths -->
+            <param-name>whenNoSession</param-name>
+            <param-value>restricted</param-value>
+        </init-param>
+        <init-param>
+            <!-- the list of paths that are accessible if no session was found -->
+            <param-name>restricted</param-name>
+            <param-value>/logon.htmlviewer,/register.htmlviewer</param-value>
         </init-param>
     </filter>
     <filter-mapping>
@@ -101,27 +129,28 @@
     </filter-mapping>
 
     <filter>
+        <!-- authenticate user for accessing the JSON viewer, and set up an Isis Session -->
         <filter-name>IsisSessionFilterForJson</filter-name>
         <filter-class>org.apache.isis.runtimes.dflt.webapp.IsisSessionFilter</filter-class>
         <!-- authentication required for REST -->
         <init-param>
-            <param-name>authenticationSessionLookupStrategy</param-name>
-            <param-value>org.apache.isis.viewer.json.viewer.authentication.AuthenticationSessionLookupStrategyHeader</param-value>
+            <param-name>authenticationSessionStrategy</param-name>
+            <param-value>org.apache.isis.viewer.json.viewer.authentication.AuthenticationSessionStrategyBasicAuth</param-value>
         </init-param>
         <init-param>
-            <param-name>cacheAuthSessionOnHttpSession</param-name>
-            <param-value>false</param-value>
+            <!-- what to do if no session was found; we indicate to issue a 401 basic authentication challenge -->
+            <param-name>whenNoSession</param-name>
+            <param-value>basicAuthChallenge</param-value>
         </init-param>
         <init-param>
-            <param-name>logonPage</param-name>
-            <param-value>/notAuthenticated</param-value>
-        </init-param>
-        <init-param>
+            <!-- ignores any requests to the HTML viewer resources -->
             <param-name>ignoreExtensions</param-name>
             <param-value>htmlviewer</param-value>
         </init-param>
     </filter>
     <filter-mapping>
+        <!-- this is mapped to the entire app; however the IsisSessionFilter will "notice" if the session filter has already been
+             executed for the request pipeline, and if so will do nothing -->
         <filter-name>IsisSessionFilterForJson</filter-name>
         <url-pattern>*</url-pattern>
     </filter-mapping>
@@ -130,12 +159,12 @@
         <servlet-name>Logon</servlet-name>
         <servlet-class>org.apache.isis.viewer.html.servlet.LogonServlet</servlet-class>
         <init-param>
-            <param-name>startPage</param-name>
-            <param-value>start.htmlviewer</param-value>
+            <param-name>authenticationSessionStrategy</param-name>
+            <param-value>org.apache.isis.runtimes.dflt.webapp.auth.AuthenticationSessionStrategyDefault</param-value>
         </init-param>
         <init-param>
-            <param-name>authenticationSessionLookupStrategy</param-name>
-            <param-value>org.apache.isis.runtimes.dflt.webapp.auth.AuthenticationSessionLookupStrategyDefault</param-value>
+            <param-name>startPage</param-name>
+            <param-value>start.htmlviewer</param-value>
         </init-param>
     </servlet>
     <servlet-mapping>
@@ -146,10 +175,6 @@
     <servlet>
         <servlet-name>Register</servlet-name>
         <servlet-class>org.apache.isis.viewer.html.servlet.RegisterServlet</servlet-class>
-        <init-param>
-            <param-name>authenticationSessionLookupStrategy</param-name>
-            <param-value>org.apache.isis.runtimes.dflt.webapp.auth.AuthenticationSessionLookupStrategyDefault</param-value>
-        </init-param>
     </servlet>
     <servlet-mapping>
         <servlet-name>Register</servlet-name>

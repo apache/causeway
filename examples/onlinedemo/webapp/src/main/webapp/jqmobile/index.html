@@ -1,0 +1,122 @@
+<!DOCTYPE html> 
+<html> 
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1"> 
+    <title>Apache Isis Online Demo</title> 
+    <link rel="stylesheet" href="http://code.jquery.com/mobile/1.0/jquery.mobile-1.0.min.css" />
+    <script src="http://code.jquery.com/jquery-1.6.4.min.js"></script>
+    <script src="http://code.jquery.com/mobile/1.0/jquery.mobile-1.0.min.js"></script>
+    
+<style type="text/css">
+    * { font-family: Verdana; font-size: 96%; }
+    label { width: 10em; float: left; }
+    label.error { float: none; color: red; padding-left: .5em; vertical-align: top; display: none; }
+    p { clear: both; }
+    .submit { margin-left: 12em; }
+    em { font-weight: bold; padding-right: 1em; vertical-align: top; }
+</style>
+
+</head> 
+    
+<body> 
+
+<div data-role="page" id="login" data-theme="b">
+
+
+    <div data-role="header"  data-theme="b">
+        <h1>Login</h1>
+    </div><!-- /header -->
+
+    <div data-role="content" >  
+        
+        <label for="username">Username:</label>
+        <input type="text" name="username" id="username" value="" placeholder="Username" class="required"/>
+        <label class="error"></label> 
+        
+        <a href="#todays-tasks" data-role="button" data-transition="pop" data-ajax="false" data-icon="arrow-r" data-inline="true">Submit</a>
+
+    </div><!-- /content -->
+
+     <script language="javascript" type="text/javascript">
+        $("#login a").click( function() {
+            var username = $("#username").val();
+            if (!username) { 
+                $("#login label.error").text("required").show().fadeOut(1500);            
+                return false;
+            }
+            $("#login").data("username", username);
+            return true;
+        } )          
+      </script>
+    
+</div>
+
+<div data-role="page" id="todays-tasks" data-theme="b" >
+    <div data-role="header" data-theme="b">
+        <a href="#login" data-icon="back">Logout</a>
+        <h1>Today's tasks</h1>
+    </div><!-- /header -->
+
+    <div data-role="content" >
+        <p class="username"></p>
+        
+    </div><!-- /content -->
+
+     <script language="javascript" type="text/javascript">
+        $(document).bind( "pagechange", function( e, data ) {
+        
+            // yuck!        
+            var u = $.mobile.path.parseUrl(e.currentTarget.URL);
+            var re = /^#todays-tasks/;
+    
+            if (u.hash.search(re) !== -1) {
+                var username = $("#login").data("username");
+                $("#todays-tasks .username").text( username )
+            }
+        
+        });
+
+      </script>
+    
+</div>
+
+
+
+<div data-role="page" id="settings" data-add-back-btn="true">
+
+    <div data-role="header">
+        <h1>Settings</h1>
+    </div><!-- /header -->
+
+    <div data-role="content">    
+        
+    </div><!-- /content -->
+    
+    <div data-role="footer">
+        <h4></h4>
+    </div><!-- /footer -->
+</div><!-- /page two -->
+
+
+<!-- Start of third page: #popup -->
+<div data-role="page" id="popup">
+
+    <div data-role="header" data-theme="e">
+        <h1>Dialog</h1>
+    </div><!-- /header -->
+
+    <div data-role="content" data-theme="d">    
+        <h2>Popup</h2>
+        <p>I have an id of "popup" on my page container and only look like a dialog because the link to me had a <code>data-rel="dialog"</code> attribute which gives me this inset look and a <code>data-transition="pop"</code> attribute to change the transition to pop. Without this, I'd be styled as a normal page.</p>      
+        <p><a href="#one" data-rel="back" data-role="button" data-inline="true" data-icon="back">Back to page "one"</a></p> 
+    </div><!-- /content -->
+    
+    <div data-role="footer">
+        <h4>Page Footer</h4>
+    </div><!-- /footer -->
+</div><!-- /page popup -->
+
+</body>
+</html>
