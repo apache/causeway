@@ -20,35 +20,36 @@
     </style>
   </head>
 
-  <body><div id="wrapper"> <p>Contents:</p><ul>
-      <li><a href="#intro">Introduction</a></li>
+  <body><div id="wrapper"> <img alt="Isis Logo" src="isis-logo.png" /> <p>This
+  is an online demo for <a href="http://incubator.apache.org/isis">Apache
+  Isis</a>, a framework to let you rapidly develop domain-driven apps in Java.
+  Isis defines a clean programming model, has <acronym>BDD</acronym> and JUnit
+  testing support, and provide access to that domain model using various
+  presentation technologies.</p><p>In particular, you can use <i>Isis</i> to
+  access your app through either a REST API or through a webapp. Both of these
+  are generated dynamically at runtime (you code nothing other than the domain
+  model).</p><h2>Table of Contents</h2><ul>
+      <li>The <a href="#domain-model">domain model</a> of the app (including
+      the source code)</li>
 
-      <li><a href="#domain-model">Domain Model</a> (UML and source)</li>
+      <li>The <a href="#webapp">automatically-generated webapp</a></li>
 
-      <li><a href="#webapp">Automatically-generated Webapp</a></li>
-
-      <li><a href="#rest">REST API</a></li>
+      <li>The <a href="#rest">REST API</a></li>
 
       <li><a href="#next-steps">Next Steps</a></li>
-    </ul><h2><a name="intro">Introduction</a></h2><p><i>Apache Isis</i> is a
-  framework to let you rapidly develop domain-driven apps in Java. It defines
-  a clean programming model, has <acronym>BDD</acronym> and JUnit testing
-  support, and can dynamically (at runtime) generate a representation of that
-  domain model using various presentation technologies.</p><p>You can use
-  <i>Apache Isis</i> in a variety of ways:</p><p><img alt="Isis Use Cases"
-  src="IsisUseCases.png" /></p><p>This online demo shows a simple domain model
-  deployed as both a RESTful webservice and a webapp (using Isis' HTML
-  viewer).</p><h2><a name="domain-model">Domain Model</a></h2><p>The domain
-  model (diagram generated using <a
+    </ul><h2><a name="domain-model">Domain Model</a></h2><p>The domain model
+  (diagram generated using <a
   href="http://yuml.me/diagram/class/[ToDoItem|description;dueBy;complete;userName|completed();notYetCompleted();clone()]*-&gt;[Category|description], [ToDoItem], [ToDoItems||toDosForToday();newToDo();allToDos();removeCompleted()]-.-&gt;[ToDoItem]"
   style="width: 400px;">yuml.me</a>) is:</p><img alt="UML Class Diagram"
-  src="yuml-me.png" style="size: 50%;" /><p>To gain a better idea of
-  <i>Isis</i>' programming model, you can also view the <a
+  src="yuml-me.png" style="size: 50%;" /><p>Pretty much the entire source code
+  for this webapp is the above three classes; <b>in particular there is no
+  code relating to the presentation layer</b> (webapp or REST API). To gain a
+  better idea of <i>Isis</i>' programming model, you can also view the <a
   href="xref/index.html">source code</a> and browse the <a
-  href="apidocs/index.html">javadoc</a>.</p><h2><a name="webapp">HTML
+  href="apidocs/index.html">javadoc</a>. </p><h2><a name="webapp">HTML
   WebApp</a></h2><p>To access the webapp, browse to <a
-  href="../htmlviewer">htmlviewer</a>, which will redirect in turn to the
-  logon page:</p><p><img alt="Logon Page" src="htmlviewer-logon.png"
+  href="../htmlviewer">htmlviewer</a>; this redirects in turn to the logon
+  page:</p><p><img alt="Logon Page" src="htmlviewer-logon.png"
   style="width: 600px" /></p><p>Click on the register link and choose a user
   name and password (nb: the demo runs under http so don't use a valuable
   password):</p><p><img alt="Register Page" src="htmlviewer-register.png"
@@ -72,34 +73,40 @@
   REST API implemented by Isis is formally documented as the <a
   href="http://restfulobjects.org">Restful Objects</a> specification. This
   aims to provide a cross-platform standard for exposing domain object models
-  via REST. The Isis viewer that implements the spec is called the
-  json-viewer.</p><p>The REST API can be accessed at the <a>root</a> of the
-  webapp, which returns the homePage representation (as defined by the Restful
-  Objects spec). However, the online demo also protects the json-viewer
-  resources using HTTP Basic Auth (the mechanism used is pluggable).</p><p>In
-  principle, you can access the json-viewer just using a browser such as
-  Firefox or Chrome. However, this will only allow you to browse the domain
-  model, and not to be able to invoke actions etc. Instead, we recommend that
-  you use a browser extension. A particularly good one for Chrome is <a
+  via REST. The <i>Isis</i> viewer that implements the spec is called the
+  json-viewer.</p><p>(Provided that you access it using an <tt>Accept</tt>
+  header of <tt>application/json</tt>, the REST API can be accessed at the <a
+  href="/">root</a> of the webapp. For this we recommend that you use a
+  browser extension; this will also let you interact with the domain rather
+  than merely browse it read-only. A particularly good extension for Chrome is
+  <a
   href="https://chrome.google.com/webstore/detail/cokgbflfommojglbmbpenpphppikmonn">REST
-  Console</a> which makes it easy both to submit requests and to browse the
-  response. There are similar extensions for Firefox.</p><p>First, set up some
-  defaults. Access to the json-viewer requires HTTP Basic Auth to be setup.
-  Browse to the authorization section:</p><img alt="Authorization"
-  src="restconsole-basicauth-1.png" style="width:600px;" /><p>Press Basic
-  Auth, and enter username and password. (The json-viewer provides no
-  mechanism to register users, so these will need to be a user that you've
-  registered using the html-viewer):</p><img alt="Username and Password"
-  src="restconsole-basicauth-2.png" style="width:600px;" /><p>Next, it's
-  important to set the <i>Accept</i> header to <tt>application/json</tt>. It's
-  also correct (though not so essential) to set <i>Content-Type</i> to
-  <tt>application/json</tt> also: </p><img alt="Accept Header"
-  src="restconsole-accept.png" style="width:600px;" /><p>After this has been
-  done, hit "Save Defaults" (so that <i>Rest Console</i> remembers these
-  settings for all subsequent requests).</p><p>Now, go to the Target section
-  and specify [<a href="../">the root of this webapp</a>] as the URL (nb: the
-  screenshot says http://localhost:8080, but you should use the actual URL of
-  this webapp)</p><p>Submit this link using HTTP GET; the <i>Rest Console</i>
+  Console</a>, but there are similar extensions for Firefox.</p><p>If you
+  want, you can still access the REST API directly from a web browser. Even
+  here there are useful extensions; for example the <a>JSONView</a> extension
+  for Chrome will render the returned JSON in a color-coded collapsible
+  display. One caveat: browse to the <a href="services/">services</a> resource
+  instead (because the browser sets an <tt>Accept</tt> header of
+  <tt>text/html</tt>, browsing to root will redirect you to this documentation
+  instead).</p><p>Whichever way you access the REST API, you'll find that the
+  online demo also protects the json-viewer resources using HTTP Basic Auth
+  (the mechanism used is pluggable). So the first step is set up security.
+  Assuming you are using REST Console, browse to the authorization
+  section:</p><img alt="Authorization" src="restconsole-basicauth-1.png"
+  style="width:600px;" /><p>Press Basic Auth, and enter username and password.
+  (The json-viewer provides no mechanism to register users, so these will need
+  to be a user that you've registered using the html-viewer):</p><img
+  alt="Username and Password" src="restconsole-basicauth-2.png"
+  style="width:600px;" /><p>Next, it's important to set the <i>Accept</i>
+  header to <tt>application/json</tt>. It's also correct (though not so
+  essential) to set <i>Content-Type</i> to <tt>application/json</tt> also:
+  </p><img alt="Accept Header" src="restconsole-accept.png"
+  style="width:600px;" /><p>After this has been done, hit "Save Defaults" (so
+  that <i>Rest Console</i> remembers these settings for all subsequent
+  requests).</p><p>Now, go to the Target section and specify [<a
+  href="../">the root of this webapp</a>] as the URL (nb: the screenshot says
+  http://localhost:8080, but you should use the actual URL of this
+  webapp)</p><p>Submit this link using HTTP GET; the <i>Rest Console</i>
   should scroll to the response:</p><img alt="Response"
   src="restconsole-response.png" style="width:600px;" /><p>The console is
   clever enough to notice links in the response; so if the link indicates a
@@ -124,17 +131,26 @@
   src="restconsole-invoke-request.png" style="width:600px;" /><p>Submit this
   request, and the action will be invoked:</p><img alt="Invoke Response"
   src="restconsole-invoke-response.png" style="width:600px;" /><h2><a
-  name="next-steps">Next Steps</a></h2><p>You can download the WAR file <a
-  href="isis-onlinedemo.war">here</a>. It uses an in-memory objectstore, so
-  there is no set up (but note also: any data will be lost when you restart
-  the app).</p><p>To use the WAR, either:</p><ul>
+  name="next-steps">Next Steps</a></h2><p>If you wish, you can download the
+  WAR file <a
+  href="https://sites.google.com/a/haywood-associates.co.uk/restfulobjects/files/isis-onlinedemo.war">here</a>.
+  It uses an in-memory objectstore, so there is no set up (but note also: any
+  data will be lost when you restart the app).</p><p>To use the WAR,
+  either:</p><ul>
       <li>deploy in the usual way to a servlet container (eg copy to
       <tt>webapps</tt> directory for Tomcat); or</li>
 
       <li>because the WAR is self-hosting, simply start from the command line.
       Use: <blockquote>java -jar isis-onlinedemo.war</blockquote>(add --help
       for options)</li>
-    </ul><p>For further information, please subscribe to the <a
-  href="mailto:isis-dev-subscribe@incubator.apache.org">isis-dev</a> mailing
-  list.</p></div></body>
+    </ul><p>The source code can be found in Isis <a
+  href="http://svn.apache.org/repos/asf/incubator/isis/trunk">source code</a>
+  repository (this app can be found in <i>examples/onlinedemo</i>), and is
+  built using Maven.</p><p>If you're interested in exploring <i>Apache
+  Isis</i> further, you'll find that it can be used in a variety of ways. The
+  main use cases are:</p><p><img alt="Isis Use Cases"
+  src="IsisUseCases.png" /></p><p>For further information, please see the <a
+  href="http://incubator.apache.org/isis">Isis website</a> and subscribe to
+  the <a href="mailto:isis-dev-subscribe@incubator.apache.org">isis-dev</a>
+  mailing list.</p></div></body>
 </html>

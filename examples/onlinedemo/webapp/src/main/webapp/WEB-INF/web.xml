@@ -21,7 +21,7 @@
     xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
 
-    <display-name>Apache Isis HTML Viewer</display-name>
+    <display-name>Apache Isis Online Demo</display-name>
 
     <listener>
         <!-- bootstrap the Isis metamodel and runtime -->
@@ -57,7 +57,7 @@
         <filter-class>org.apache.isis.examples.onlinedemo.filters.RedirectToDocsFilter</filter-class>
         <init-param>
             <param-name>redirectTo</param-name>
-            <param-value>/index.html</param-value>
+            <param-value>/doc/index.html</param-value>
         </init-param>
     </filter>
     <filter-mapping>
