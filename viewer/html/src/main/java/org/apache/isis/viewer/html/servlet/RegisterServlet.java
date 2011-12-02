@@ -27,10 +27,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.isis.core.runtime.authentication.standard.RegistrationDetailsPassword;
 import org.apache.isis.runtimes.dflt.monitoring.servermonitor.Monitor;
-import org.apache.isis.runtimes.dflt.webapp.auth.AuthenticationSessionLookupStrategy;
-import org.apache.isis.runtimes.dflt.webapp.auth.AuthenticationSessionLookupStrategyUtils;
 import org.apache.isis.viewer.html.component.html.HtmlComponentFactory;
-import org.apache.isis.viewer.html.component.html.LogonFormPage;
 import org.apache.isis.viewer.html.component.html.RegisterFormPage;
 import org.apache.log4j.Logger;
 
@@ -40,13 +37,11 @@ public class RegisterServlet extends AbstractHtmlViewerServlet {
     
     private static final long serialVersionUID = 1L;
     
+    @SuppressWarnings("unused")
     private static final Logger LOG = Logger.getLogger(RegisterServlet.class);
     
-    private AuthenticationSessionLookupStrategy authenticationSessionLookupStrategy;
-
     @Override
     public void init() throws ServletException {
-        authenticationSessionLookupStrategy = AuthenticationSessionLookupStrategyUtils.lookup(getServletConfig());
     }
 
     @Override

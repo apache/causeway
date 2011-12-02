@@ -20,11 +20,12 @@
 package org.apache.isis.core.commons.lang;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.StringTokenizer;
+
+import com.google.common.collect.Lists;
 
 public final class StringUtils {
     private StringUtils() {
@@ -328,7 +329,7 @@ public final class StringUtils {
     }
 
     public static String[] normalized(final String... strings) {
-        final ArrayList<String> stringList = new ArrayList<String>();
+        final List<String> stringList = Lists.newArrayList();
         for (final String string : strings) {
             stringList.add(normalized(string));
         }

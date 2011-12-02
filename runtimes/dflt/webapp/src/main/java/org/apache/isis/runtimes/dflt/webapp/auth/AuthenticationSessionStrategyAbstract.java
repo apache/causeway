@@ -16,15 +16,17 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.runtimes.dflt.webapp.auth;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-public abstract class AuthenticationSessionLookupStrategyAbstract implements AuthenticationSessionLookupStrategy {
+import org.apache.isis.core.commons.authentication.AuthenticationSession;
+
+public abstract class AuthenticationSessionStrategyAbstract implements AuthenticationSessionStrategy {
 
     protected HttpSession getHttpSession(final ServletRequest servletRequest) {
         final HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
@@ -34,6 +36,11 @@ public abstract class AuthenticationSessionLookupStrategyAbstract implements Aut
     protected ServletContext getServletContext(final ServletRequest servletRequest) {
         final HttpSession httpSession = getHttpSession(servletRequest);
         return httpSession.getServletContext();
+    }
+    
+    @Override
+    public void bind(final ServletRequest servletRequest, final ServletResponse servletResponse, final AuthenticationSession authSession) {
+        // no-op
     }
 
 }

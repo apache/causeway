@@ -24,19 +24,26 @@ import java.util.List;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.runtime.authentication.standard.SimpleSession;
-import org.apache.isis.runtimes.dflt.webapp.auth.AuthenticationSessionLookupStrategyDefault;
+import org.apache.isis.runtimes.dflt.webapp.auth.AuthenticationSessionStrategyAbstract;
 
 import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 
-public class AuthenticationSessionLookupStrategyHeader extends AuthenticationSessionLookupStrategyDefault {
+/**
+ * Implements a home-grown protocol, whereby the user id and roles are passed using custom headers.
+ * 
+ * <p>
+ * Does not bind the {@link AuthenticationSession} onto the {@link HttpSession}.
+ */
+public class AuthenticationSessionStrategyHeader extends AuthenticationSessionStrategyAbstract {
 
     @Override
-    public AuthenticationSession lookupValid(final ServletRequest servletRequest, final ServletResponse servletResponse, Caching caching) {
+    public AuthenticationSession lookupValid(final ServletRequest servletRequest, final ServletResponse servletResponse) {
 
         final HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
         final String user = httpServletRequest.getHeader("isis.user");

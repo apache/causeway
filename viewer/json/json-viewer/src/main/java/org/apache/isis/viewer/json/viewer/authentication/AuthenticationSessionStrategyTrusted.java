@@ -24,14 +24,13 @@ import javax.servlet.ServletResponse;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.runtimes.dflt.runtime.authentication.exploration.AuthenticationRequestExploration;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
-import org.apache.isis.runtimes.dflt.webapp.auth.AuthenticationSessionLookupStrategy.Caching;
-import org.apache.isis.runtimes.dflt.webapp.auth.AuthenticationSessionLookupStrategyDefault;
+import org.apache.isis.runtimes.dflt.webapp.auth.AuthenticationSessionStrategyDefault;
 
-public class AuthenticationSessionLookupStrategyTrusted extends AuthenticationSessionLookupStrategyDefault {
+public class AuthenticationSessionStrategyTrusted extends AuthenticationSessionStrategyDefault {
 
     @Override
-    public AuthenticationSession lookupValid(final ServletRequest servletRequest, final ServletResponse servletResponse, Caching caching) {
-        final AuthenticationSession session = super.lookupValid(servletRequest, servletResponse, caching);
+    public AuthenticationSession lookupValid(final ServletRequest servletRequest, final ServletResponse servletResponse) {
+        final AuthenticationSession session = super.lookupValid(servletRequest, servletResponse);
         if (session != null) {
             return session;
         }
