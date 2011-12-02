@@ -25,8 +25,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.log4j.Logger;
-
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequest;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequestPassword;
@@ -34,12 +32,12 @@ import org.apache.isis.core.runtime.authentication.standard.RegistrationDetailsP
 import org.apache.isis.runtimes.dflt.monitoring.servermonitor.Monitor;
 import org.apache.isis.runtimes.dflt.runtime.authentication.exploration.AuthenticationRequestExploration;
 import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
-import org.apache.isis.runtimes.dflt.webapp.auth.AuthenticationSessionLookupStrategy;
-import org.apache.isis.runtimes.dflt.webapp.auth.AuthenticationSessionLookupStrategy.Caching;
-import org.apache.isis.runtimes.dflt.webapp.auth.AuthenticationSessionLookupStrategyUtils;
+import org.apache.isis.runtimes.dflt.webapp.IsisSessionFilter;
+import org.apache.isis.runtimes.dflt.webapp.auth.AuthenticationSessionStrategy;
 import org.apache.isis.viewer.html.component.html.HtmlComponentFactory;
 import org.apache.isis.viewer.html.component.html.LogonFormPage;
 import org.apache.isis.viewer.html.context.Context;
+import org.apache.log4j.Logger;
 
 public class LogonServlet extends AbstractHtmlViewerServlet {
 
@@ -47,11 +45,11 @@ public class LogonServlet extends AbstractHtmlViewerServlet {
 
     private static final Logger LOG = Logger.getLogger(LogonServlet.class);
 
-    private AuthenticationSessionLookupStrategy authenticationSessionLookupStrategy;
+    private AuthenticationSessionStrategy authenticationSessionStrategy;
 
     @Override
     public void init() throws ServletException {
-        authenticationSessionLookupStrategy = AuthenticationSessionLookupStrategyUtils.lookup(getServletConfig());
+        authenticationSessionStrategy = IsisSessionFilter.lookup(getServletConfig().getInitParameter(IsisSessionFilter.AUTHENTICATION_SESSION_STRATEGY_KEY));
     }
 
     @Override
@@ -64,9 +62,9 @@ public class LogonServlet extends AbstractHtmlViewerServlet {
     protected void doPost(final HttpServletRequest request, final HttpServletResponse response)
         throws ServletException, IOException {
 
-        // existing valid session
+        // look for existing valid session
         AuthenticationSession existingAuthSession =
-            authenticationSessionLookupStrategy.lookupValid(request, response, Caching.CACHE);
+            authenticationSessionStrategy.lookupValid(request, response);
         if (existingAuthSession != null) {
             redirectToStartPage(response, existingAuthSession.getUserName());
             return;
@@ -88,7 +86,7 @@ public class LogonServlet extends AbstractHtmlViewerServlet {
         }
 
         // authenticated
-        authenticationSessionLookupStrategy.bind(request, response, authSession, Caching.CACHE);
+        authenticationSessionStrategy.bind(request, response, authSession);
 
         final Context context = new Context(getHtmlComponentFactory());
         context.setSession(authSession);

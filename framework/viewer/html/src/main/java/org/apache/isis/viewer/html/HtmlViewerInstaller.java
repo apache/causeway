@@ -66,7 +66,7 @@ public class HtmlViewerInstaller extends IsisViewerInstallerAbstract {
                 webAppSpec.addContextParams("isis.viewers", "html");
 
                 webAppSpec.addFilterSpecification(IsisSessionFilter.class,
-                    MapUtils.asMap(IsisSessionFilter.LOGON_PAGE_KEY, LOGON_PAGE_MAPPED), DYNAMIC_CONTENT);
+                    MapUtils.asMap(IsisSessionFilter.RESTRICTED_KEY, LOGON_PAGE_MAPPED), DYNAMIC_CONTENT);
                 webAppSpec.addServletSpecification(LogonServlet.class, LOGON_PAGE_MAPPED);
                 webAppSpec.addServletSpecification(ControllerServlet.class, DYNAMIC_CONTENT);
 

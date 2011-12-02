@@ -34,10 +34,11 @@ import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.webapp.WebAppConstants;
 
 /**
- * Returns a valid {@link AuthenticationSession} through a number of mechanisms.
+ * Returns a valid {@link AuthenticationSession} through a number of mechanisms;
+ * supports caching of the {@link AuthenticationSession} onto the {@link HttpSession}.
  * 
  * <p>
- * Specifically:
+ * The session is looked-up as follows:
  * <ul>
  * <li>it looks up from the {@link HttpSession} using the value
  * {@value WebAppConstants#HTTP_SESSION_AUTHENTICATION_SESSION_KEY}</li>
@@ -49,23 +50,20 @@ import org.apache.isis.runtimes.dflt.webapp.WebAppConstants;
  * </ul> 
  * <p>
  */
-public class AuthenticationSessionLookupStrategyDefault extends AuthenticationSessionLookupStrategyAbstract {
+public class AuthenticationSessionStrategyDefault extends AuthenticationSessionStrategyAbstract {
 
     @Override
-    public AuthenticationSession lookupValid(final ServletRequest servletRequest, final ServletResponse servletResponse, Caching caching) {
+    public AuthenticationSession lookupValid(final ServletRequest servletRequest, final ServletResponse servletResponse) {
 
         final AuthenticationManager authenticationManager = getAuthenticationManager();
         final HttpSession httpSession = getHttpSession(servletRequest);
         
-        // use previously authenticated session if available and caching enabled
-        AuthenticationSession authSession = null;
-        if(caching.isEnabled()) {
-            authSession = (AuthenticationSession) httpSession.getAttribute(WebAppConstants.HTTP_SESSION_AUTHENTICATION_SESSION_KEY);
-            if (authSession != null) {
-                final boolean sessionValid = authenticationManager.isSessionValid(authSession);
-                if (sessionValid) {
-                    return authSession;
-                }
+        // use previously authenticated session if available
+        AuthenticationSession authSession = (AuthenticationSession) httpSession.getAttribute(WebAppConstants.HTTP_SESSION_AUTHENTICATION_SESSION_KEY);
+        if (authSession != null) {
+            final boolean sessionValid = authenticationManager.isSessionValid(authSession);
+            if (sessionValid) {
+                return authSession;
             }
         }
 
@@ -97,11 +95,7 @@ public class AuthenticationSessionLookupStrategyDefault extends AuthenticationSe
     }
 
     @Override
-    public void bind(final ServletRequest servletRequest, final ServletResponse servletResponse, final AuthenticationSession authSession, Caching caching) {
-        // no-op if no caching.
-        if(caching == Caching.NO_CACHE) {
-            return;
-        }
+    public void bind(final ServletRequest servletRequest, final ServletResponse servletResponse, final AuthenticationSession authSession) {
         final HttpSession httpSession = getHttpSession(servletRequest);
         httpSession.setAttribute(WebAppConstants.HTTP_SESSION_AUTHENTICATION_SESSION_KEY, authSession);
     }

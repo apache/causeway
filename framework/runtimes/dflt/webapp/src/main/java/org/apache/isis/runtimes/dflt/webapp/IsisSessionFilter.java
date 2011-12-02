@@ -35,12 +35,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
+import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.webapp.content.ResourceCachingFilter;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
-import org.apache.isis.runtimes.dflt.webapp.auth.AuthenticationSessionLookupStrategy;
-import org.apache.isis.runtimes.dflt.webapp.auth.AuthenticationSessionLookupStrategy.Caching;
-import org.apache.isis.runtimes.dflt.webapp.auth.AuthenticationSessionLookupStrategyUtils;
+import org.apache.isis.runtimes.dflt.webapp.auth.AuthenticationSessionStrategy;
+import org.apache.isis.runtimes.dflt.webapp.auth.AuthenticationSessionStrategyDefault;
 
 import com.google.common.base.Function;
 import com.google.common.base.Splitter;
@@ -50,28 +50,47 @@ import com.google.common.collect.Lists;
 public class IsisSessionFilter implements Filter {
 
     /**
-     * Init parameter key for (typically, a logon) page to redirect to if the {@link AuthenticationSession} cannot be
-     * found or is invalid.
-     * 
-     * <p>
-     * Use this if there is only a single "special" page to forward to as the logon page.  If specified any request which
-     * has not been authenticated will be redirected to this page.
+     * Recommended standard init parameter key for filters and servlets to lookup an implementation of {@link AuthenticationSessionStrategy}.
+     */
+    public static final String AUTHENTICATION_SESSION_STRATEGY_KEY = "authenticationSessionStrategy";
+
+    /**
+     * Default value for {@link AuthenticationSessionLookupStrategyConstants#AUTHENTICATION_SESSION_STRATEGY_KEY} if not specified.
+     */
+    public static final String AUTHENTICATION_SESSION_STRATEGY_DEFAULT =
+        AuthenticationSessionStrategyDefault.class.getName();
+
+    /**
+     * Init parameter key for backward compatibility; if logonPage set then assume 'restricted' handling.
      */
     public static final String LOGON_PAGE_KEY = "logonPage";
 
     /**
-     * Init parameter key for the page to redirect to the servlet redirected to with no session throws an exception.
+     * Init parameter key for what should be done if no session was found.
      * 
      * <p>
-     * Use this if there are several "special" pages that constitute logon, for example a logon page and a registration page.
-     * Do not specify a {@link #LOGON_PAGE_KEY}.
+     * Valid values are:
+     * <ul>
+     * <li>unauthorized       - issue a 401 response.
+     * <li>basicAuthChallenge - issue a basic auth 401 challenge.  The idea here is that the configured logon strategy should handle the next request
+     * <li>restricted         - allow access but only to a restricted (comma-separated) list of paths.  Access elsewhere should be redirected to the first of these paths 
+     * <li>continue           - allow the request to continue (eg if there is no security requirements)
+     * </ul>
      */
-    public static final String REDIRECT_TO_ON_NO_SESSION_EXCEPTION_KEY = "redirectToOnNoSessionException";
+    public static final String WHEN_NO_SESSION_KEY = "whenNoSession";
 
     /**
-     * Init parameter key for whether the authentication session may be cached on the HttpSession.
+     * Init parameter key to read the restricted list of paths (if {@link #WHEN_NO_SESSION_KEY} is for {@link WhenNoSession#RESTRICTED}).
+     * 
+     * <p>
+     * The servlets mapped to these paths are expected to be able to deal with there being no session.  Typically they will be logon pages.
      */
-    public static final String CACHE_AUTH_SESSION_ON_HTTP_SESSION_KEY = "cacheAuthSessionOnHttpSession";
+    public static final String RESTRICTED_KEY = "restricted";
+
+    /**
+     * Init parameter key to redirect to if an exception occurs.
+     */
+    public static final String REDIRECT_TO_ON_EXCEPTION_KEY = "redirectToOnException";
 
     /**
      * Init parameter key for which extensions should be ignored (typically, mappings for other viewers within the webapp context).
@@ -94,10 +113,69 @@ public class IsisSessionFilter implements Filter {
         
     };
 
-    private AuthenticationSessionLookupStrategy authSessionLookupStrategy;
-    private String logonPageIfNoSession;
-    private String redirectToOnNoSessionException;
-    private Caching caching;
+    public enum WhenNoSession {
+        UNAUTHORIZED("unauthorized") {
+            @Override
+            public void handle(IsisSessionFilter filter, HttpServletRequest httpRequest, HttpServletResponse httpResponse, FilterChain chain) throws IOException, ServletException {
+                httpResponse.sendError(401);
+            }
+        },
+        BASIC_AUTH_CHALLENGE("basicAuthChallenge") {
+            @Override
+            public void handle(IsisSessionFilter filter, HttpServletRequest httpRequest, HttpServletResponse httpResponse, FilterChain chain) throws IOException, ServletException {
+                httpResponse.setHeader("WWW-Authenticate", "Basic realm=\"Apache Isis\"");
+                httpResponse.sendError(401);
+            }
+        },
+        /**
+         * the destination servlet is expected to know that there will be no open context
+         */
+        CONTINUE("continue") {
+            @Override
+            public void handle(IsisSessionFilter filter, HttpServletRequest httpRequest, HttpServletResponse httpResponse, FilterChain chain) throws IOException, ServletException {
+                chain.doFilter(httpRequest, httpResponse);
+            }
+        },
+        /**
+         * Allow access to a restricted list of URLs (else redirect to the first of that list of URLs)
+         */
+        RESTRICTED("restricted") {
+            @Override
+            public void handle(IsisSessionFilter filter, HttpServletRequest httpRequest, HttpServletResponse httpResponse, FilterChain chain) throws IOException, ServletException {
+                // TODO Auto-generated method stub
+
+                if(filter.restrictedPaths.contains(httpRequest.getServletPath())) {
+                    chain.doFilter(httpRequest, httpResponse);
+                    return;
+                }
+                httpResponse.sendRedirect(filter.restrictedPaths.get(0));
+            }
+        };
+        private final String initParamValue;
+        private WhenNoSession(String initParamValue) {
+            this.initParamValue = initParamValue;
+        }
+        public static WhenNoSession lookup(final String whenNoSessionStr) {
+            for (WhenNoSession wns : values()) {
+                if(wns.initParamValue.equals(whenNoSessionStr)) {
+                    return wns;
+                }
+            }
+            throw new IllegalStateException("require an init-param of '" + WHEN_NO_SESSION_KEY + "', taking a value of " + WhenNoSession.values());
+        }
+        public abstract void handle(IsisSessionFilter filter, HttpServletRequest httpRequest, HttpServletResponse httpResponse, FilterChain chain) throws IOException, ServletException;
+    }
+
+    /**
+     * Used as a flag on {@link HttpServletRequest} so that if there are two {@link IsisSessionFilter}s in a request pipeline,
+     * then the second can determine what processing has already been done (and is usually then just a no-op).
+     */
+    private static final String SESSION_STATE_KEY = IsisSessionFilter.SessionState.class.getName();
+
+    private AuthenticationSessionStrategy authSessionStrategy;
+    private List<String> restrictedPaths;
+    private WhenNoSession whenNoSession;
+    private String redirectToOnException;
     private Collection<Pattern> ignoreExtensions;
 
 
@@ -105,28 +183,57 @@ public class IsisSessionFilter implements Filter {
     // init, destroy
     // /////////////////////////////////////////////////////////////////
 
+    
     @Override
     public void init(final FilterConfig config) throws ServletException {
-        authSessionLookupStrategy = AuthenticationSessionLookupStrategyUtils.lookup(config);
-        lookupLogonPageIfNoSessionKey(config);
-        lookupRedirectToOnNoSessionExceptionKey(config);
-        lookupCacheAuthSessionKey(config);
-        lookupIgnorePatterns(config);
+        authSessionStrategy = lookup(config.getInitParameter(AUTHENTICATION_SESSION_STRATEGY_KEY));
+        lookupWhenNoSession(config);
+        lookupRedirectToOnException(config);
+        lookupIgnoreExtensions(config);
     }
 
-    private void lookupLogonPageIfNoSessionKey(final FilterConfig config) {
-        logonPageIfNoSession = config.getInitParameter(LOGON_PAGE_KEY);
+
+    /**
+     * Public visibility so can also be used by servlets.
+     */
+    public static AuthenticationSessionStrategy lookup(String authLookupStrategyClassName) {
+        if (authLookupStrategyClassName == null) {
+            authLookupStrategyClassName = AUTHENTICATION_SESSION_STRATEGY_DEFAULT;
+        }
+        return (AuthenticationSessionStrategy) InstanceUtil.createInstance(authLookupStrategyClassName);
     }
 
-    private void lookupRedirectToOnNoSessionExceptionKey(final FilterConfig config) {
-        redirectToOnNoSessionException = config.getInitParameter(REDIRECT_TO_ON_NO_SESSION_EXCEPTION_KEY);
+    private void lookupWhenNoSession(final FilterConfig config) {
+
+        final String whenNoSessionStr = config.getInitParameter(WHEN_NO_SESSION_KEY);
+        
+        // backward compatibility
+        final String logonPage = config.getInitParameter(LOGON_PAGE_KEY);
+        if (logonPage != null) {
+            if(whenNoSessionStr != null) {
+                throw new IllegalStateException("The init-param '" + LOGON_PAGE_KEY + "' is only provided for backwards compatibility; remove if the init-param '" + WHEN_NO_SESSION_KEY + "' has been specified");
+            }
+            whenNoSession = WhenNoSession.RESTRICTED;
+            this.restrictedPaths = Lists.newArrayList(logonPage);
+            return;
+        }
+
+        whenNoSession = WhenNoSession.lookup(whenNoSessionStr);
+        if(whenNoSession == WhenNoSession.RESTRICTED) {
+            final String restrictedPathsStr = config.getInitParameter(RESTRICTED_KEY);
+            if(restrictedPathsStr == null) {
+                throw new IllegalStateException("Require an init-param of '" + RESTRICTED_KEY + "' key to be set.");
+            }
+            this.restrictedPaths = Lists.newArrayList(Splitter.on(",").split(restrictedPathsStr));
+        }
+        
+    }
+    
+    private void lookupRedirectToOnException(final FilterConfig config) {
+        redirectToOnException = config.getInitParameter(REDIRECT_TO_ON_EXCEPTION_KEY);
     }
 
-    private void lookupCacheAuthSessionKey(final FilterConfig config) {
-        caching = Caching.lookup(config.getInitParameter(CACHE_AUTH_SESSION_ON_HTTP_SESSION_KEY));
-    }
-
-    private void lookupIgnorePatterns(final FilterConfig config) {
+    private void lookupIgnoreExtensions(final FilterConfig config) {
         ignoreExtensions = Collections.unmodifiableCollection(parseIgnorePatterns(config));
     }
 
@@ -174,23 +281,11 @@ public class IsisSessionFilter implements Filter {
                         closeSession();
                     }
                 }
-                
-                // request is to logon page
-                if (requestToLogonPage(filter, httpRequest)) {
-                    NO_SESSION_SINCE_REDIRECTING_TO_LOGON_PAGE.setOn(request);
-                    try {
-                        chain.doFilter(request, response);
-                        return;
-                    } finally {
-                        UNDEFINED.setOn(request);
-                        closeSession();
-                    }
-                }
 
                 // authenticate
-                final AuthenticationSession validSession = filter.authSessionLookupStrategy.lookupValid(request, response, filter.caching);
+                final AuthenticationSession validSession = filter.authSessionStrategy.lookupValid(request, response);
                 if (validSession != null) {
-                    filter.authSessionLookupStrategy.bind(request, response, validSession, filter.caching);
+                    filter.authSessionStrategy.bind(request, response, validSession);
 
                     openSession(validSession);
                     SESSION_IN_PROGRESS.setOn(request);
@@ -202,39 +297,30 @@ public class IsisSessionFilter implements Filter {
                     }
                     return;
                 }
-                
-                // redirect to logon page (if there is one)
-                if (filter.logonPageIfNoSession != null) {
-                    // no need to set state, since not proceeding along the filter chain
-                    httpResponse.sendRedirect(filter.logonPageIfNoSession);
-                    return;
-                }
-                
-                // the destination servlet is expected to know that there
-                // will be no open context
-                // if it does not, then we will redirect to logon page
+
+
                 try {
                     NO_SESSION_SINCE_NOT_AUTHENTICATED.setOn(request);
-                    chain.doFilter(request, response);
+                    filter.whenNoSession.handle(filter, httpRequest, httpResponse, chain);
                 } catch(RuntimeException ex) {
                     // in case the destination servlet cannot cope, but we've been told
                     // to redirect elsewhere
-                    if(filter.redirectToOnNoSessionException != null) {
-                        httpResponse.sendRedirect(filter.redirectToOnNoSessionException);
+                    if(filter.redirectToOnException != null) {
+                        httpResponse.sendRedirect(filter.redirectToOnException);
                         return;
                     }
                     throw ex;
                 } catch(IOException ex) {
-                    if(filter.redirectToOnNoSessionException != null) {
-                        httpResponse.sendRedirect(filter.redirectToOnNoSessionException);
+                    if(filter.redirectToOnException != null) {
+                        httpResponse.sendRedirect(filter.redirectToOnException);
                         return;
                     }
                     throw ex;
                 } catch(ServletException ex) {
                     // in case the destination servlet cannot cope, but we've been told
                     // to redirect elsewhere
-                    if(filter.redirectToOnNoSessionException != null) {
-                        httpResponse.sendRedirect(filter.redirectToOnNoSessionException);
+                    if(filter.redirectToOnException != null) {
+                        httpResponse.sendRedirect(filter.redirectToOnException);
                         return;
                     }
                     throw ex;
@@ -242,6 +328,7 @@ public class IsisSessionFilter implements Filter {
                     UNDEFINED.setOn(request);
                     // nothing to do
                 }
+
             }
 
             private boolean requestIsIgnoreExtension(IsisSessionFilter filter, HttpServletRequest httpRequest) {
@@ -252,11 +339,6 @@ public class IsisSessionFilter implements Filter {
                     }
                 }
                 return false;
-            }
-
-            private boolean requestToLogonPage(IsisSessionFilter filter, HttpServletRequest httpRequest) {
-                return filter.logonPageIfNoSession != null &&
-                       filter.logonPageIfNoSession.equals(httpRequest.getServletPath());
             }
         },
         NO_SESSION_SINCE_REDIRECTING_TO_LOGON_PAGE,
@@ -295,7 +377,6 @@ public class IsisSessionFilter implements Filter {
     
     }
     
-    static final String SESSION_STATE_KEY = IsisSessionFilter.SessionState.class.getName();
 
     @Override
     public void doFilter(final ServletRequest request, final ServletResponse response, final FilterChain chain)

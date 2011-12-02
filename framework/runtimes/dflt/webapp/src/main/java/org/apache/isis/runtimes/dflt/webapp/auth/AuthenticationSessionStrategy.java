@@ -19,20 +19,22 @@
 
 package org.apache.isis.runtimes.dflt.webapp.auth;
 
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 
-public class AuthenticationSessionLookupStrategyConstants {
+import org.apache.isis.core.commons.authentication.AuthenticationSession;
+import org.apache.isis.core.runtime.authentication.AuthenticationManager;
+import org.apache.isis.runtimes.dflt.webapp.IsisSessionFilter;
+
+/**
+ * Decouples the {@link IsisSessionFilter} from the mechanism of obtaining the {@link AuthenticationSession}.
+ */
+public interface AuthenticationSessionStrategy {
 
     /**
-     * Default value for {@link AuthenticationSessionLookupStrategyConstants#AUTHENTICATION_SESSION_LOOKUP_STRATEGY_KEY} if not specified.
+     * Returns a {@link AuthenticationManager#isSessionValid(AuthenticationSession) still-valid} {@link AuthenticationSession}.
      */
-    public static final String AUTHENTICATION_SESSION_LOOKUP_STRATEGY_DEFAULT =
-        AuthenticationSessionLookupStrategyDefault.class.getName();
+    AuthenticationSession lookupValid(ServletRequest servletRequest, ServletResponse servletResponse);
 
-    /**
-     * Recommended standard init parameter key for filters and servlets to lookup an implementation of {@link AuthenticationSessionLookupStrategy}.
-     */
-    public static final String AUTHENTICATION_SESSION_LOOKUP_STRATEGY_KEY = "authenticationSessionLookupStrategy";
-
-    private AuthenticationSessionLookupStrategyConstants(){}
-    
+    void bind(ServletRequest servletRequest, ServletResponse servletResponse, AuthenticationSession authSession);
 }
