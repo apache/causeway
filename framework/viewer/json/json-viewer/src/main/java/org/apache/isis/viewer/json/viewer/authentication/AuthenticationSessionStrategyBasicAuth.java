@@ -28,7 +28,9 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
-import org.apache.isis.core.runtime.authentication.standard.SimpleSession;
+import org.apache.isis.core.runtime.authentication.AuthenticationManager;
+import org.apache.isis.core.runtime.authentication.AuthenticationRequestPassword;
+import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.webapp.auth.AuthenticationSessionStrategyAbstract;
 
 /**
@@ -58,7 +60,18 @@ public class AuthenticationSessionStrategyBasicAuth extends AuthenticationSessio
         }
         
         final String user = matcher.group(1);
-        return new SimpleSession(user, new String[]{});
+        final String password = matcher.group(2);
+        
+        final AuthenticationSession authSession = getAuthenticationManager().authenticate(new AuthenticationRequestPassword(user, password));
+        return authSession;
+    }
+
+    // //////////////////////////////////////////////////////////
+    // Dependencies (from context)
+    // //////////////////////////////////////////////////////////
+
+    protected AuthenticationManager getAuthenticationManager() {
+        return IsisContext.getAuthenticationManager();
     }
 
 }
