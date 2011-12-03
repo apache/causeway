@@ -40,7 +40,17 @@ public class RedirectServlet extends HttpServlet {
     @Override
     protected void doGet(final HttpServletRequest request, final HttpServletResponse response) throws ServletException,
         IOException {
-        response.sendRedirect(redirectTo);
+        
+        response.sendRedirect(combine(request.getContextPath(), redirectTo));
+    }
+
+    private static String combine(String str1, String str2) {
+        final StringBuilder buf = new StringBuilder(str1);
+        if(!str2.startsWith("/")) {
+            buf.append("/");
+        }
+        buf.append(str2);
+        return buf.toString();
     }
 
 }
