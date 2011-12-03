@@ -11,6 +11,8 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.Logger;
+
 /**
  * This filter attempts to ensure that would-be users of the framework are
  * directed to the bundled documentation, rather than just hitting the
@@ -27,6 +29,8 @@ import javax.servlet.http.HttpServletResponse;
  * to continue through.
  */
 public class RedirectToDocsFilter implements Filter {
+
+    private static final Logger LOG = Logger.getLogger(RedirectToDocsFilter.class);
     
     private static final String REDIRECT_TO_KEY = "redirectTo";
     private static final String REDIRECT_TO_DEFAULT = "/index.html";
@@ -42,15 +46,26 @@ public class RedirectToDocsFilter implements Filter {
         if(redirectTo == null) {
             redirectTo = REDIRECT_TO_DEFAULT;
         }
+        System.out.println("redirectToDocsFilter: redirectTo=" + redirectTo);
+        LOG.info("redirectToDocsFilter: redirectTo=" + redirectTo);
     }
 
+    @Override
+    public void destroy() {
+    }
+
+    
     @Override
     public void doFilter(final ServletRequest request, final ServletResponse response, FilterChain chain) throws IOException, ServletException {
         final HttpServletRequest httpServletRequest = (HttpServletRequest) request;
         final HttpServletResponse httpServletResponse = (HttpServletResponse) response;
         
-        // do nothing if not mapped to "/"
-        if(!"/".equals(httpServletRequest.getServletPath())) {
+        // do nothing if not requesting "/"
+        final String servletPath = httpServletRequest.getServletPath();
+        System.out.println("redirectToDocsFilter: servletPath: " + servletPath);
+        LOG.info("redirectToDocsFilter: servletPath: " + servletPath);
+        
+        if(!"/".equals(servletPath)) {
             chain.doFilter(request, response);
             return;
         }
@@ -63,11 +78,21 @@ public class RedirectToDocsFilter implements Filter {
         }
         
         // otherwise redirect
-        httpServletResponse.sendRedirect(redirectTo);
+        final String redirect = combine(httpServletRequest.getContextPath(), redirectTo);
+        System.out.println("redirectToDocsFilter: redirecting to: " + redirect);
+        LOG.info("redirectToDocsFilter: redirecting to: " + redirect);
+        
+        httpServletResponse.sendRedirect(redirect);
     }
 
-    @Override
-    public void destroy() {
+    private static String combine(String str1, String str2) {
+        final StringBuilder buf = new StringBuilder(str1);
+        if(!str2.startsWith("/")) {
+            buf.append("/");
+        }
+        buf.append(str2);
+        return buf.toString();
     }
+
     
 }

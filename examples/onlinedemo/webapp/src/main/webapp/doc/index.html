@@ -47,9 +47,11 @@
   better idea of <i>Isis</i>' programming model, you can also view the <a
   href="xref/index.html">source code</a> and browse the <a
   href="apidocs/index.html">javadoc</a>. </p><h2><a name="webapp">HTML
-  WebApp</a></h2><p>To access the webapp, browse to <a
-  href="../htmlviewer">htmlviewer</a>; this redirects in turn to the logon
-  page:</p><p><img alt="Logon Page" src="htmlviewer-logon.png"
+  WebApp</a></h2><p><i><a>Apache Isis</a></i> dynamically (at runtime)
+  generates a fully-functional webapp just from the domain model classes. This
+  is implemented by <i>Isis</i>' html-viewer.</p><p>To access this webapp,
+  just browse to the <a href="../logon.htmlviewer">logon page</a>:</p><p><img
+  alt="Logon Page" src="htmlviewer-logon.png"
   style="width: 600px" /></p><p>Click on the register link and choose a user
   name and password (nb: the demo runs under http so don't use a valuable
   password):</p><p><img alt="Register Page" src="htmlviewer-register.png"
@@ -67,31 +69,35 @@
   style="width:600px;" /><p>The webapp is entirely generated from the domain
   object. Compare the app with the source code to see how the metadata is used
   by the framework.</p><h2><a name="rest">REST API</a></h2><p>As well as the
-  webapp representation, Isis also represents the domain object model through
-  a REST API. The representations returned are in JSON format; with resource
-  URLs mapping to objects, properties, collections and actions. In fact the
-  REST API implemented by Isis is formally documented as the <a
+  human-usable webapp representation of the domain model, <i>Isis</i> also
+  allows access to the domain object model through a REST API. The
+  representations returned are in JSON format; with resource URLs mapping to
+  objects, properties, collections and actions. Again, these representations
+  are generated dynamically at runtime, by <i>Isis</i>' json-viewer.</p><p>In
+  fact the REST API provided by <i>Isis</i> is formally documented as the <a
   href="http://restfulobjects.org">Restful Objects</a> specification. This
   aims to provide a cross-platform standard for exposing domain object models
-  via REST. The <i>Isis</i> viewer that implements the spec is called the
-  json-viewer.</p><p>(Provided that you access it using an <tt>Accept</tt>
-  header of <tt>application/json</tt>, the REST API can be accessed at the <a
-  href="/">root</a> of the webapp. For this we recommend that you use a
-  browser extension; this will also let you interact with the domain rather
-  than merely browse it read-only. A particularly good extension for Chrome is
-  <a
+  via REST. Most developers will write their own custom clients, eg using
+  jqMobile or some other client-side technology. But we expect a variety of
+  generic clients will also emerge to consume this API. </p><p>It is possible
+  though to interact with the REST API directly from the browser, though we
+  recommend that you use a browser extension such as the <a
   href="https://chrome.google.com/webstore/detail/cokgbflfommojglbmbpenpphppikmonn">REST
-  Console</a>, but there are similar extensions for Firefox.</p><p>If you
-  want, you can still access the REST API directly from a web browser. Even
-  here there are useful extensions; for example the <a>JSONView</a> extension
-  for Chrome will render the returned JSON in a color-coded collapsible
-  display. One caveat: browse to the <a href="services/">services</a> resource
-  instead (because the browser sets an <tt>Accept</tt> header of
-  <tt>text/html</tt>, browsing to root will redirect you to this documentation
-  instead).</p><p>Whichever way you access the REST API, you'll find that the
-  online demo also protects the json-viewer resources using HTTP Basic Auth
-  (the mechanism used is pluggable). So the first step is set up security.
-  Assuming you are using REST Console, browse to the authorization
+  Console</a> for Chrome (there are similar extensions for other browsers).
+  Provided that you access set the <tt>Accept</tt> header for requests to
+  <tt>application/json</tt>, the REST API can be accessed at the <a
+  href="..">root</a> of the webapp.</p><p>If you only want to browse the JSON
+  and don't want to bother setting the Accept header, you can still access the
+  REST API directly from a web browser, though you will need to browse to the
+  <a href="../services/">services</a> resource instead (browsing to root will
+  redirect you to this documentation instead). Even here we recommend you use
+  the <a
+  href="https://chrome.google.com/webstore/detail/chklaanhfefbnpoihckbnefhakgolnmc">JSONView</a>
+  extension for Chrome; this will render the returned JSON in a color-coded
+  collapsible display.</p><p>Whichever way you access the REST API, you'll
+  find that the online demo also protects the json-viewer resources using HTTP
+  Basic Auth (the mechanism used is pluggable). So the first step is set up
+  security. Assuming you are using REST Console, browse to the authorization
   section:</p><img alt="Authorization" src="restconsole-basicauth-1.png"
   style="width:600px;" /><p>Press Basic Auth, and enter username and password.
   (The json-viewer provides no mechanism to register users, so these will need
