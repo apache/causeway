@@ -86,7 +86,7 @@ public class ToDoItem implements Comparable<ToDoItem> {
     public String validateDueBy(final Date dueBy) {
         if (dueBy == null)
             return null;
-        return isMoreThanOneWeekInPast(dueBy) ? null : "Due by date cannot be more than one week old";
+        return isMoreThanOneWeekInPast(dueBy) ? "Due by date cannot be more than one week old": null;
     }
 
     
@@ -206,7 +206,7 @@ public class ToDoItem implements Comparable<ToDoItem> {
 
     // {{ helpers
     private static boolean isMoreThanOneWeekInPast(final Date dueBy) {
-        return dueBy.getMillisSinceEpoch() > Clock.getTime() - ONE_WEEK_IN_MILLIS ;
+        return dueBy.getMillisSinceEpoch() < Clock.getTime() - ONE_WEEK_IN_MILLIS ;
     }
     // }}
     
