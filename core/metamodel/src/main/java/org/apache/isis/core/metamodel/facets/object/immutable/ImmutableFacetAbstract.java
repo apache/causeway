@@ -37,15 +37,24 @@ public abstract class ImmutableFacetAbstract extends SingleWhenValueFacetAbstrac
         super(type(), holder, value);
     }
 
+    /**
+     * Immutable facet only prevents changes to a property or a collection.
+     */
     @Override
     public String disables(final UsabilityContext<? extends UsabilityEvent> ic) {
         final ObjectAdapter target = ic.getTarget();
-        return disabledReason(target);
+        switch (ic.getInteractionType()) {
+            case PROPERTY_MODIFY:
+            case COLLECTION_ADD_TO:
+            case COLLECTION_REMOVE_FROM:
+                return disabledReason(target);
+        }
+        return null;
     }
 
     public String disabledReason(final ObjectAdapter targetAdapter) {
         if (value() == When.ALWAYS) {
-            return "Always hidden";
+            return "Always immmutable";
         } else if (value() == When.NEVER) {
             return null;
         }
