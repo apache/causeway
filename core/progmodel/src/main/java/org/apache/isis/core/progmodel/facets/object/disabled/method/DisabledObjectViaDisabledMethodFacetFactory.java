@@ -20,13 +20,18 @@
 package org.apache.isis.core.progmodel.facets.object.disabled.method;
 
 import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.List;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.methodutils.MethodScope;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.progmodel.facets.MethodFinderUtils;
 import org.apache.isis.core.progmodel.facets.MethodPrefixBasedFacetFactoryAbstract;
+import org.apache.isis.core.progmodel.facets.members.disable.method.DisableForContextFacetViaMethod;
 
 public class DisabledObjectViaDisabledMethodFacetFactory extends MethodPrefixBasedFacetFactoryAbstract {
 
@@ -46,8 +51,57 @@ public class DisabledObjectViaDisabledMethodFacetFactory extends MethodPrefixBas
         final Method method =
             MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, DISABLED_PREFIX, String.class, NO_PARAMETERS_TYPES);
         if (method != null) {
+
             FacetUtil.addFacet(new DisabledObjectFacetViaDisabledMethod(method, facetHolder));
+
+            // DNW
+            ObjectSpecification spec = getSpecificationLookup().loadSpecification(cls);
+            List<ObjectAssociation> members = spec.getAssociations();
+            for (ObjectAssociation member : members) {
+                FacetUtil.addFacet(new DisableForContextFacetViaMethod(method, member));
+            }
+
+            // Method methods[] = cls.getMethods();
+            // addFacetToFacetHolder(methods, facetHolder, method);
             processClassContext.removeMethod(method);
         }
+    }
+
+    protected void addFacetToFacetHolder(final Method methods[], final FacetHolder facetHolder, final Method facetMethod) {
+        // Original
+        FacetUtil.addFacet(new DisabledObjectFacetViaDisabledMethod(facetMethod, facetHolder));
+
+        // Dan's suggestion
+        // for (ObjectMember member : objectSpec.getMembers()) {
+        // FacetUtil.addFacet(new DisabledObjectFacetViaDisabledMethod(method, member));
+        // }
+
+        // Try 3?
+        for (Method method : methods) {
+            if (!anIsisMethod(method.getName())) {
+                // DNW
+                // FacetUtil.addFacet(new DisableForContextFacetViaMethod(method, facetHolder));
+            }
+        }
+
+    }
+
+    /**
+     * Check if method name starts with any of the Isis prefixes...
+     * 
+     * @param name
+     * @return
+     */
+    private boolean anIsisMethod(String name) {
+        List<String> names =
+            Arrays.asList("choices", "clear", "created", "default", "hide", "validate", "disable", "iconName",
+                "modify", "set");
+
+        for (String prefix : names) {
+            if (name.startsWith(prefix)) {
+                return true;
+            }
+        }
+        return false;
     }
 }
