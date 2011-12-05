@@ -23,7 +23,6 @@ import java.util.Calendar;
 
 import org.joda.time.DateTimeZone;
 
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 
@@ -35,7 +34,10 @@ import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
  * @version $Rev$ $Date$
  */
 public class Defaults {
+    private static String propertiesBase;
+
     public static void initialise(String propertiesBase) {
+        Defaults.propertiesBase = propertiesBase;
         setTimeZone(DateTimeZone.UTC);
 
         final IsisConfiguration configParameters = IsisContext.getConfiguration();
@@ -43,6 +45,9 @@ public class Defaults {
         setPkIdLabel(getStringProperty(propertiesBase, configParameters, "pk_id"));
         setIdColumn(getStringProperty(propertiesBase, configParameters, "id"));
         setMaxInstances(getIntProperty(propertiesBase, configParameters, "maxinstances", 100));
+        final String useVersioningProperty = getStringProperty(propertiesBase, configParameters, "versioning", "true");
+        final int isTrue = useVersioningProperty.compareToIgnoreCase("true");
+        useVersioning(isTrue == 0);
 
         final String BASE_DATATYPE = propertiesBase + ".datatypes.";
         final IsisConfiguration dataTypes = IsisContext.getConfiguration().getProperties(BASE_DATATYPE);
@@ -53,6 +58,11 @@ public class Defaults {
     protected static String getStringProperty(String propertiesBase, final IsisConfiguration configParameters,
         String property) {
         return configParameters.getString(propertiesBase + ".default." + property, property);
+    }
+
+    protected static String getStringProperty(String propertiesBase, final IsisConfiguration configParameters,
+        String property, String defaultValue) {
+        return configParameters.getString(propertiesBase + ".default." + property, defaultValue);
     }
 
     protected static int getIntProperty(String propertiesBase, final IsisConfiguration configParameters,
@@ -112,7 +122,6 @@ public class Defaults {
     // {{ MaxInstances
     private static int maxInstances;
 
-    @MemberOrder(sequence = "1")
     public static int getMaxInstances() {
         return maxInstances;
     }
@@ -225,5 +234,29 @@ public class Defaults {
     public static String TYPE_TIME() {
         return TYPE_TIME;
     }
+
     // }}
+
+    // {{ Versioning
+    private static boolean useVersioning;
+
+    public static void useVersioning(boolean useVersioning) {
+        Defaults.useVersioning = useVersioning;
+    }
+
+    public static boolean useVersioning() {
+        return useVersioning;
+    }
+
+    public static boolean useVersioning(String shortIdentifier) {
+        if (useVersioning() == false) {
+            return false;
+        }
+        final IsisConfiguration configParameters = IsisContext.getConfiguration();
+        final String useVersioningProperty =
+            getStringProperty(propertiesBase, configParameters, "versioning." + shortIdentifier, "true");
+        return (useVersioningProperty.compareToIgnoreCase("true") == 0);
+    }
+    // }}
+
 }

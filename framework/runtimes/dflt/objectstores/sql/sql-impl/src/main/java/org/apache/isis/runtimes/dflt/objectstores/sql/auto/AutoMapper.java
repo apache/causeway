@@ -57,10 +57,10 @@ import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
 
 public class AutoMapper extends AbstractAutoMapper implements ObjectMapping, DebuggableWithTitle {
     private static final Logger LOG = Logger.getLogger(AutoMapper.class);
-    // private static final int MAX_INSTANCES = 100;
     private final IdMapping idMapping;
     private final VersionMapping versionMapping;
     private final TitleMapping titleMapping;
+    private final boolean useVersioning;
     final AdapterManager adapterManager;
 
     public AutoMapper(final String className, final String parameterBase, final FieldMappingLookup lookup,
@@ -71,6 +71,7 @@ public class AutoMapper extends AbstractAutoMapper implements ObjectMapping, Deb
         titleMapping = lookup.createTitleMapping();
 
         adapterManager = IsisContext.getPersistenceSession().getAdapterManager();
+        useVersioning = Defaults.useVersioning(specification.getShortIdentifier());
 
         setUpFieldMappers();
     }
@@ -393,7 +394,12 @@ public class AutoMapper extends AbstractAutoMapper implements ObjectMapping, Deb
     @Override
     public void save(final DatabaseConnector connector, final ObjectAdapter object) {
         final SerialNumberVersion version = (SerialNumberVersion) object.getVersion();
-        final long nextSequence = version.getSequence() + 1;
+        final long nextSequence;
+        if (useVersioning) {
+            nextSequence = version.getSequence() + 1;
+        } else {
+            nextSequence = version.getSequence();
+        }
 
         final StringBuffer sql = new StringBuffer();
         sql.append("UPDATE " + table + " SET ");
@@ -406,8 +412,10 @@ public class AutoMapper extends AbstractAutoMapper implements ObjectMapping, Deb
         titleMapping.appendUpdateAssignment(connector, sql, object);
         sql.append(" WHERE ");
         idMapping.appendWhereClause(connector, sql, object.getOid());
-        sql.append(" AND ");
-        sql.append(versionMapping.whereClause(connector, (SerialNumberVersion) object.getVersion()));
+        if (useVersioning) {
+            sql.append(" AND ");
+            sql.append(versionMapping.whereClause(connector, (SerialNumberVersion) object.getVersion()));
+        }
 
         final int updateCount = connector.update(sql.toString());
         if (updateCount == 0) {

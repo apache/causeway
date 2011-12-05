@@ -70,6 +70,9 @@ public class JdbcBinaryValueMapper extends AbstractJdbcFieldMapping {
      */
     @Override
     protected Object preparedStatementObject(final ObjectAdapter value) {
+        if (value == null) {
+            return null;
+        }
         final Object o = value.getObject();
         return o;
     }

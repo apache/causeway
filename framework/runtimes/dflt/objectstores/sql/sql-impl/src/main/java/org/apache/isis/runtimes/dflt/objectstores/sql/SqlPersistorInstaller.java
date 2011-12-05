@@ -67,6 +67,10 @@ public class SqlPersistorInstaller extends ObjectStorePersistenceMechanismInstal
         return objectStore;
     }
 
+    public SqlObjectStore getObjectStore() {
+        return objectStore;
+    }
+
     @Override
     protected OidGenerator createOidGenerator(final IsisConfiguration configuration) {
         final DatabaseConnectorFactory connectorFactory = new JdbcConnectorFactory();
