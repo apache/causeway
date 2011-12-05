@@ -20,6 +20,8 @@
 package org.apache.isis.core.progmodel.facets.object.hidden.method;
 
 import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.List;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
@@ -43,24 +45,71 @@ public class HiddenObjectViaHiddenMethodFacetFactory extends MethodPrefixBasedFa
         attachHideFacetIfHideMethodIsFound(processClassContext);
     }
 
-    public static void attachHideFacetIfHideMethodIsFound(final ProcessClassContext processClassContext) {
+    public void attachHideFacetIfHideMethodIsFound(final ProcessClassContext processClassContext) {
         final Class<?> cls = processClassContext.getCls();
         final FacetHolder facetHolder = processClassContext.getFacetHolder();
+
+        final Method methods[] = cls.getMethods();
 
         final Method uBooleanMethod =
             MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, VALIDATE_PREFIX, Boolean.class, NO_PARAMETERS_TYPES);
         if (uBooleanMethod != null) {
-            FacetUtil.addFacet(new HiddenObjectFacetViaHiddenMethod(uBooleanMethod,
-                HiddenObjectFacetViaHiddenMethod.class, facetHolder, false));
+            addFacetToFacetHolder(methods, facetHolder, uBooleanMethod);
             processClassContext.removeMethod(uBooleanMethod);
             return;
         }
         final Method lBooleanMethod =
             MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, VALIDATE_PREFIX, boolean.class, NO_PARAMETERS_TYPES);
         if (lBooleanMethod != null) {
-            FacetUtil.addFacet(new HiddenObjectFacetViaHiddenMethod(lBooleanMethod,
-                HiddenObjectFacetViaHiddenMethod.class, facetHolder, false));
+            addFacetToFacetHolder(methods, facetHolder, lBooleanMethod);
             processClassContext.removeMethod(lBooleanMethod);
         }
     }
+
+    protected void addFacetToFacetHolder(final Method methods[], final FacetHolder facetHolder, final Method facetMethod) {
+        // Original
+        FacetUtil.addFacet(new HiddenObjectFacetViaHiddenMethod(facetMethod, HiddenObjectFacetViaHiddenMethod.class,
+            facetHolder, false));
+
+        // Dan's suggestion
+        // for (ObjectMember member : objectSpec.getMembers()) {
+        // FacetUtil.addFacet(new DisabledObjectFacetViaDisabledMethod(method, member));
+        // }
+
+        // Try 3?
+        for (Method method : methods) {
+            if (!anIsisMethod(method.getName())) {
+                // FacetUtil.addFacet(new HideForSessionFacetViaMethod(method, facetHolder));
+
+                // DNW
+                // FacetUtil.addFacet(new HideForContextFacetViaMethod(method, facetHolder));
+
+                // DNW
+                // FacetUtil.addFacet(new HiddenObjectFacetViaHiddenMethod(method,
+                // HiddenObjectFacetViaHiddenMethod.class,
+                // facetHolder, false));
+            }
+        }
+
+    }
+
+    /**
+     * Check if method name starts with any of the Isis prefixes...
+     * 
+     * @param name
+     * @return
+     */
+    private boolean anIsisMethod(String name) {
+        List<String> names =
+            Arrays.asList("choices", "clear", "created", "default", "hide", "validate", "disable", "iconName",
+                "modify", "hidden", "set");
+
+        for (String prefix : names) {
+            if (name.startsWith(prefix)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 }
