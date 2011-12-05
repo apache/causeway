@@ -73,6 +73,7 @@ import org.apache.isis.core.progmodel.facets.object.disabled.method.DisabledObje
 import org.apache.isis.core.progmodel.facets.object.encodeable.EncodableAnnotationFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.facets.annotation.FacetsAnnotationFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.hidden.HiddenAnnotationForTypeFacetFactory;
+import org.apache.isis.core.progmodel.facets.object.hidden.method.HiddenObjectViaHiddenMethodFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.icon.method.IconMethodFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.ignore.annotation.RemoveIgnoreAnnotationMethodsFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.ignore.isis.RemoveSetDomainObjectContainerMethodFacetFactory;
@@ -252,7 +253,6 @@ public class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract {
 
         addFactory(DirtyMethodsFacetFactory.class);
         addFactory(ValidateObjectViaValidateMethodFacetFactory.class);
-        addFactory(DisabledObjectViaDisabledMethodFacetFactory.class);
         addFactory(ObjectValidPropertiesFacetFactory.class);
         addFactory(PluralMethodFacetFactory.class);
         addFactory(NamedFacetViaSingularNameStaticMethodFacetFactory.class);
@@ -286,6 +286,10 @@ public class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract {
 
         addFactory(HiddenAnnotationForTypeFacetFactory.class);
         addFactory(HiddenAnnotationForMemberFacetFactory.class);
+
+        // KAM
+        addFactory(HiddenObjectViaHiddenMethodFacetFactory.class);
+        addFactory(DisabledObjectViaDisabledMethodFacetFactory.class);
 
         addFactory(ImmutableAnnotationFacetFactory.class);
         addFactory(DisabledFacetForPropertyDerivedFromImmutableTypeFacetFactory.class);
