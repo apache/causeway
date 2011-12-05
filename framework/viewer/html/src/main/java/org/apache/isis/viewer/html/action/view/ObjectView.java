@@ -21,12 +21,15 @@ package org.apache.isis.viewer.html.action.view;
 
 import java.util.List;
 
+import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.exceptions.UnknownTypeException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.facets.hide.HiddenObjectFacet;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacetUtils;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationFilters;
+import org.apache.isis.core.progmodel.facets.object.disabled.DisabledObjectFacet;
 import org.apache.isis.viewer.html.component.Block;
 import org.apache.isis.viewer.html.component.Component;
 import org.apache.isis.viewer.html.component.ComponentFactory;
@@ -35,7 +38,7 @@ import org.apache.isis.viewer.html.context.Context;
 import org.apache.isis.viewer.html.request.Request;
 
 public class ObjectView extends ObjectViewAbstract {
-    
+
     @Override
     protected boolean addObjectToHistory() {
         return true;
@@ -45,35 +48,54 @@ public class ObjectView extends ObjectViewAbstract {
     protected void doExecute(final Context context, final ViewPane content, final ObjectAdapter adapter,
         final String field) {
         final String id = context.mapObject(adapter);
-        createObjectView(context, adapter, content, id);
         final ObjectSpecification specification = adapter.getSpecification();
 
-        // TODO: this test should be done by the ImmutableFacetFactory installing an immutableFacet on every
-        // member
-        final boolean immutable =
-            ImmutableFacetUtils.isAlwaysImmutable(specification)
-                || (adapter.isPersistent() && ImmutableFacetUtils.isImmutableOncePersisted(specification));
+        final AuthenticationSession authenticationSession = getAuthenticationSession();
 
-        boolean allFieldUneditable = true;
-        final List<ObjectAssociation> flds = specification.getAssociations();
-        for (int i = 0; i < flds.size(); i++) {
-            if (flds.get(i).isUsable(getAuthenticationSession(), adapter).isAllowed()) {
-                allFieldUneditable = false;
-                break;
+        boolean isVisible = true;// adapter.isVisible(authenticationSession).isAllowed();
+        HiddenObjectFacet hf = specification.getFacet(HiddenObjectFacet.class);
+        if (hf != null) {
+            isVisible = hf.hiddenReason(adapter) == null;
+        }
+
+        if (isVisible) {
+            createObjectView(context, adapter, content, id);
+
+            boolean isEditable = true;
+            DisabledObjectFacet df = specification.getFacet(DisabledObjectFacet.class);
+            if (df != null) {
+                isEditable = df.disabledReason(adapter) == null;
             }
+
+            if (isEditable) {
+                // TODO: this test should be done by the ImmutableFacetFactory installing an immutableFacet on every
+                // member
+                final boolean immutable =
+                    ImmutableFacetUtils.isAlwaysImmutable(specification)
+                        || (adapter.isPersistent() && ImmutableFacetUtils.isImmutableOncePersisted(specification));
+
+                boolean allFieldUneditable = true;
+                final List<ObjectAssociation> flds = specification.getAssociations();
+                for (int i = 0; i < flds.size(); i++) {
+                    if (flds.get(i).isUsable(authenticationSession, adapter).isAllowed()) {
+                        allFieldUneditable = false;
+                        break;
+                    }
+                }
+                if (!immutable && !allFieldUneditable) {
+                    content.add(context.getComponentFactory().createEditOption(id));
+                }
+            }
+            context.setObjectCrumb(adapter);
         }
-        if (!immutable && !allFieldUneditable) {
-            content.add(context.getComponentFactory().createEditOption(id));
-        }
-        context.setObjectCrumb(adapter);
     }
 
     private void createObjectView(final Context context, final ObjectAdapter object, final ViewPane pane,
         final String id) {
         final ObjectSpecification specification = object.getSpecification();
         final List<ObjectAssociation> visibleFields =
-            specification.getAssociations(ObjectAssociationFilters.dynamicallyVisible(
-                getAuthenticationSession(), object));
+            specification.getAssociations(ObjectAssociationFilters.dynamicallyVisible(getAuthenticationSession(),
+                object));
         for (int i = 0; i < visibleFields.size(); i++) {
             final ObjectAssociation field = visibleFields.get(i);
 
