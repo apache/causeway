@@ -125,10 +125,6 @@
             <groupId>org.apache.isis.viewer</groupId>
             <artifactId>json-viewer</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.apache.isis.viewer</groupId>
-            <artifactId>xhtml-viewer</artifactId>
-        </dependency>
 
         <!-- JUnit Viewer dependencies -->
         <dependency>

@@ -133,8 +133,8 @@
 		<module>viewer-html</module>
 		<module>viewer-json</module>
 		<module>viewer-bdd</module>
+		<module>viewer-dnd</module>
 		<!-- 
-		<module>quickrun</module>
         <module>viewer-wicket</module>
         <module>viewer-scimpi</module>
 		-->
@@ -192,13 +192,13 @@
 				<version>${project.version}</version>
 			</dependency>
 
-            <!-- 
             <dependency>
                 <groupId>${project.groupId}</groupId>
-                <artifactId>claims-quickrun</artifactId>
+                <artifactId>claims-viewer-dnd</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
+            <!-- 
 			<dependency>
 				<groupId>${project.groupId}</groupId>
 				<artifactId>viewer-scimpi</artifactId>
@@ -480,13 +480,11 @@
             </dependency>
 
             <!-- isis: viewer: dnd -->
-            <!--
             <dependency>
                 <groupId>org.apache.isis.viewer</groupId>
                 <artifactId>dnd</artifactId>
                 <version>${isis.version}</version>
             </dependency>
-            -->
 
             <!-- isis: viewer: scimpi -->
             <!-- 
