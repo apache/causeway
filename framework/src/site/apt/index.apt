@@ -29,19 +29,21 @@
   
 Isis in action
   
-  We've deployed a simple demo app, so you can see Isis in action.  You can 
-  browse the app either as a {{{./#}RESTful back-end}}, or as a 
-  {{{./#}standalone webapp}}.   We've also linked to the 
-  {{{./#}application's source}} so you can see how little code 
-  you need to write.
+  We've deployed a {{{http://mmyco.co.uk:8180/isis-onlinedemo}simple demo app}}, so you can see 
+  Isis in action.  The app is deployed with both the RESTful web service and the
+  auto-generated webapp, running against an in-memory object store.  To use, you'll need to
+  register an account (the credentials are stored only in memory and are reset nightly).
+  
+  The webapp has full documentation to guide you further, and also links to the 
+  {{{./#}application's source}} so you can see how little code you need to write in Isis.
   
 Getting Started
  
   Isis is built with Maven and has a {{{./where-to-start.html}quickstart archetype}} 
-  to get you going quickly.  To help guide you through the
-  framework, we've also prepared a {{{./where-to-start.html}where to start}}.
-  If you want to drill into detail, you can either follow the links in the menu
-  on the left, and/or you can click on the modules on image above.  
+  to get you going quickly.  This will generate a simple one-class domain model, configured
+  to run like the online demo (but with no security).
+  
+  After that, there are plenty of resources linked from the site menu on the left-hand side. 
 
 Disclaimer
   

@@ -37,11 +37,6 @@ mvn archetype:generate  \
   The {{{./quickstart-app.html}quickstart app}} page has more detail 
   of the generated application and how to run it.
 
-  Note: <currently the archetype is only available from the Apache snapshot
-  repository; hence the need to specify the archetypeCatalog property to pick
-  it up.  When we get our first release out, the archetype will be available 
-  in the Maven central repo and this property will not be required>.
-
 Documentation
 
   Over and above running the archetype, you'll probably want to read some 

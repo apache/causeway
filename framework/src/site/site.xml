@@ -42,17 +42,21 @@
             <item name="Quick start" href="where-to-start.html" />
 			<item name="Downloads" href="downloads.html" />
             <item name="Documentation" href="documentation.html" />
+            <item name="Cheat Sheet" href="IsisCheatSheet.pdf"/>
+            <!-- 
             <item name="Screencasts" href="screencasts.html"/>
+            -->
             <item name="Icons" href="icons.html" />
             <item name="IDE Support" href="ide-support.html"/>
             <item name="Programming Conventions" href="applib/index.html" />
-            <item name="Cheat Sheet" href="IsisCheatSheet.pdf"/>
 		</menu>
 
         <!-- This 'global' menu is inherited -->
         <menu name="Use Cases" inherit="bottom">
-            <item name="Develop and Test" inherit="bottom" href="use-cases/develop-and-test.html"/>
-	        <item name="Deploy as REST service" href="use-cases/deploy-as-rest.html" />
+            <item name="Develop" inherit="bottom" href="use-cases/develop.html"/>
+            <item name="Specify and Test" inherit="bottom" href="use-cases/specify-and-test.html"/>
+            <item name="Deploy on own framework" href="use-cases/deploy-on-own-framework.html" />
+	        <item name="Deploy as REST web service" href="use-cases/deploy-as-rest.html" />
 	        <item name="Deploy as Webapp" href="use-cases/deploy-as-webapp.html" />
 		</menu>
 
