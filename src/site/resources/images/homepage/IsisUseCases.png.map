@@ -16,14 +16,16 @@
   specific language governing permissions and limitations
   under the License.
 -->
-<img style="display: block; margin-left: auto; margin-right: auto;" src="images/homepage/IsisUseCases.png" width="430" height="236" border="0" usemap="#map" />
+<img style="display: block; margin-left: auto; margin-right: auto;" src="images/homepage/IsisUseCases.png" width="737" height="290" border="0" usemap="#map" />
 
 <map name="map">
 
-<area shape="rect" coords="150,5,283,78" alt="Develop your domain model" href="./usecases/develop.html" />
+<area shape="rect" coords="12,107,143,181" alt="Develop your domain model" href="./usecases/develop.html" />
 
-<area shape="rect" coords="4,156,136,230" alt="Deploy as the domain model in your preferred framework" href="./usecases/deploy/ownframework.html" />
-<area shape="rect" coords="150,156,283,230" alt="Deploy as an auto-generated REST backend" href="./usecases/deploy/rest.html" />
-<area shape="rect" coords="294,156,426,230" alt="Deploy as an auto-generated webapp" href="./usecases/deploy/webapp.html" />
+<area shape="rect" coords="229,107,362,181" alt="Specify and test your domain model" href="./usecases/specify-and-test.html" />
+
+<area shape="rect" coords="438,5,568,79" alt="Deploy as the domain model in your preferred framework" href="./usecases/deploy-own-framework.html" />
+<area shape="rect" coords="438,107,568,181" alt="Deploy as an auto-generated REST web service" href="./usecases/deploy-as-rest.html" />
+<area shape="rect" coords="438,208,568,283" alt="Deploy as an auto-generated webapp" href="./usecases/deploy-as-webapp.html" />
 
 </map>
