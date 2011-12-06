@@ -26,6 +26,8 @@ import java.util.List;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.util.AdapterInvokeUtils;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facetapi.FacetUtil;
+import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.progmodel.facets.object.disabled.DisabledObjectFacetAbstract;
 
@@ -61,5 +63,11 @@ public class DisabledObjectFacetViaDisabledMethod extends DisabledObjectFacetAbs
     @Override
     protected String toStringValues() {
         return "method=" + method;
+    }
+
+    @Override
+    public void copyOnto(FacetHolder holder) {
+        final DisabledObjectFacetViaDisabledMethod clonedFacet = new DisabledObjectFacetViaDisabledMethod(this.method, holder);
+        FacetUtil.addFacet(clonedFacet);
     }
 }

@@ -65,7 +65,7 @@ public class ObjectHiddenMethodFacetFactoryTest extends AbstractFacetFactoryTest
         assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(hiddenMethod));
     }
 
-    public void testDisabledMethodPickedUpAndMethodRemovedBooleanClass() {
+    public void testHiddenMethodPickedUpAndMethodRemovedBooleanClass() {
         class Customer {
             @SuppressWarnings("unused")
             public Boolean hidden() {

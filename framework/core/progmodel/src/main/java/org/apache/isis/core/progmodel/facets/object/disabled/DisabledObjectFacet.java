@@ -19,10 +19,12 @@
 
 package org.apache.isis.core.progmodel.facets.object.disabled;
 
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
 import org.apache.isis.core.metamodel.interactions.DisablingInteractionAdvisor;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 
 /**
  * Mechanism for determining whether this object is should be disabled.
@@ -38,11 +40,12 @@ import org.apache.isis.core.metamodel.interactions.DisablingInteractionAdvisor;
 public interface DisabledObjectFacet extends Facet, DisablingInteractionAdvisor {
 
     /**
-     * The reason the object is disabled.
+     * Clone this facet onto another {@link FacetHolder}.
      * 
      * <p>
-     * . If the object is actually enabled, should return <tt>null</tt>.
+     * Introduced to allow this facet to be installed onto the {@link ObjectSpecification}, and then
+     * copied down onto each of the spec's {@link ObjectMember}s. 
      */
-    public String disabledReason(ObjectAdapter adapter);
+    public void copyOnto(FacetHolder holder);
 
 }

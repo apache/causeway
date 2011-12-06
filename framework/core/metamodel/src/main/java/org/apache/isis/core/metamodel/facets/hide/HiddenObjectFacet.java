@@ -19,9 +19,11 @@
 
 package org.apache.isis.core.metamodel.facets.hide;
 
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.interactions.HidingInteractionAdvisor;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 
 /**
  * Mechanism for determining whether this object is should be hidden.
@@ -39,12 +41,12 @@ import org.apache.isis.core.metamodel.interactions.HidingInteractionAdvisor;
 public interface HiddenObjectFacet extends Facet, HidingInteractionAdvisor {
 
     /**
-     * The reason the object is hidden.
+     * Clone this facet onto another {@link FacetHolder}.
      * 
      * <p>
-     * If the object is actually visible, should return <tt>null</tt>.
-     * </p>
+     * Introduced to allow this facet to be installed onto the {@link ObjectSpecification}, and then
+     * copied down onto each of the spec's {@link ObjectMember}s. 
      */
-    public String hiddenReason(ObjectAdapter target);
+    public void copyOnto(FacetHolder holder);
 
 }

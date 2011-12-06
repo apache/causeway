@@ -20,96 +20,69 @@
 package org.apache.isis.core.progmodel.facets.object.hidden.method;
 
 import java.lang.reflect.Method;
-import java.util.Arrays;
-import java.util.List;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facets.FacetedMethod;
+import org.apache.isis.core.metamodel.facets.hide.HiddenObjectFacet;
 import org.apache.isis.core.metamodel.methodutils.MethodScope;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.progmodel.facets.MethodFinderUtils;
 import org.apache.isis.core.progmodel.facets.MethodPrefixBasedFacetFactoryAbstract;
 
+/**
+ * Installs the {@link HiddenObjectFacetViaHiddenMethod} on the {@link ObjectSpecification},
+ * and copies this facet onto each {@link ObjectMember}.
+ *
+ * <p>
+ * This two-pass design is required because, at the time that the {@link #process(org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext) class is being processed},
+ * the {@link ObjectMember member}s for the {@link ObjectSpecification spec} are not known.
+ */
 public class HiddenObjectViaHiddenMethodFacetFactory extends MethodPrefixBasedFacetFactoryAbstract {
 
-    private static final String VALIDATE_PREFIX = "hidden";
+    private static final String HIDDEN_PREFIX = "hidden";
 
-    private static final String[] PREFIXES = { VALIDATE_PREFIX, };
+    private static final String[] PREFIXES = { HIDDEN_PREFIX, };
 
     public HiddenObjectViaHiddenMethodFacetFactory() {
-        super(FeatureType.OBJECTS_ONLY, PREFIXES);
+        super(FeatureType.EVERYTHING_BUT_PARAMETERS, PREFIXES);
     }
 
     @Override
     public void process(final ProcessClassContext processClassContext) {
-        attachHideFacetIfHideMethodIsFound(processClassContext);
+        for(Class<?> returnType: new Class<?>[]{Boolean.class, boolean.class}) {
+            if(addFacetIfMethodFound(processClassContext, returnType)) {
+                return;
+            }
+        }
+        return;
     }
 
-    public void attachHideFacetIfHideMethodIsFound(final ProcessClassContext processClassContext) {
+    @Override
+    public void process(ProcessMethodContext processMethodContext) {
+        final FacetedMethod member = processMethodContext.getFacetHolder();
+        final Class<?> owningClass = processMethodContext.getCls();
+        final ObjectSpecification owningSpec = getSpecificationLookup().loadSpecification(owningClass);
+        final HiddenObjectFacet facet = owningSpec.getFacet(HiddenObjectFacet.class);
+        if(facet != null) {
+            facet.copyOnto(member);
+        }
+    }
+
+    private boolean addFacetIfMethodFound(final ProcessClassContext processClassContext, final Class<?> returnType) {
         final Class<?> cls = processClassContext.getCls();
         final FacetHolder facetHolder = processClassContext.getFacetHolder();
 
-        final Method methods[] = cls.getMethods();
-
-        final Method uBooleanMethod =
-            MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, VALIDATE_PREFIX, Boolean.class, NO_PARAMETERS_TYPES);
-        if (uBooleanMethod != null) {
-            addFacetToFacetHolder(methods, facetHolder, uBooleanMethod);
-            processClassContext.removeMethod(uBooleanMethod);
-            return;
-        }
-        final Method lBooleanMethod =
-            MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, VALIDATE_PREFIX, boolean.class, NO_PARAMETERS_TYPES);
-        if (lBooleanMethod != null) {
-            addFacetToFacetHolder(methods, facetHolder, lBooleanMethod);
-            processClassContext.removeMethod(lBooleanMethod);
-        }
-    }
-
-    protected void addFacetToFacetHolder(final Method methods[], final FacetHolder facetHolder, final Method facetMethod) {
-        // Original
-        FacetUtil.addFacet(new HiddenObjectFacetViaHiddenMethod(facetMethod, HiddenObjectFacetViaHiddenMethod.class,
-            facetHolder, false));
-
-        // Dan's suggestion
-        // for (ObjectMember member : objectSpec.getMembers()) {
-        // FacetUtil.addFacet(new DisabledObjectFacetViaDisabledMethod(method, member));
-        // }
-
-        // Try 3?
-        for (Method method : methods) {
-            if (!anIsisMethod(method.getName())) {
-                // FacetUtil.addFacet(new HideForSessionFacetViaMethod(method, facetHolder));
-
-                // DNW
-                // FacetUtil.addFacet(new HideForContextFacetViaMethod(method, facetHolder));
-
-                // DNW
-                // FacetUtil.addFacet(new HiddenObjectFacetViaHiddenMethod(method,
-                // HiddenObjectFacetViaHiddenMethod.class,
-                // facetHolder, false));
-            }
-        }
-
-    }
-
-    /**
-     * Check if method name starts with any of the Isis prefixes...
-     * 
-     * @param name
-     * @return
-     */
-    private boolean anIsisMethod(String name) {
-        List<String> names =
-            Arrays.asList("choices", "clear", "created", "default", "hide", "validate", "disable", "iconName",
-                "modify", "hidden", "set");
-
-        for (String prefix : names) {
-            if (name.startsWith(prefix)) {
-                return true;
-            }
-        }
-        return false;
+        final Method method =
+            MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, HIDDEN_PREFIX, returnType, NO_PARAMETERS_TYPES);
+        if (method == null) {
+            return false;
+        } 
+        FacetUtil.addFacet(new HiddenObjectFacetViaHiddenMethod(method, facetHolder));
+        processClassContext.removeMethod(method);
+        return true;
     }
 
 }

@@ -41,8 +41,10 @@ public abstract class DisabledObjectFacetAbstract extends FacetAbstract implemen
         if (!(ic instanceof UsabilityContext)) {
             return null;
         }
-        final ObjectAdapter toValidate = ic.getTarget();
-        return toValidate != null ? disabledReason(toValidate) : null;
+        final ObjectAdapter toDisable = ic.getTarget();
+        return toDisable != null ? disabledReason(toDisable) : null;
     }
+
+    protected abstract String disabledReason(ObjectAdapter toDisable);
 
 }

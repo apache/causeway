@@ -19,10 +19,13 @@
 
 package org.apache.isis.core.metamodel.facets.object.immutable;
 
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.SingleWhenValueFacet;
 import org.apache.isis.core.metamodel.facets.ebc.EqualByContentFacet;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.interactions.DisablingInteractionAdvisor;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 
 /**
  * Indicates that the instances of this class are immutable and so may not be modified either through the viewer or
@@ -36,5 +39,14 @@ import org.apache.isis.core.metamodel.interactions.DisablingInteractionAdvisor;
  * @see ValueFacet
  */
 public interface ImmutableFacet extends SingleWhenValueFacet, DisablingInteractionAdvisor {
+
+    /**
+     * Clone this facet onto another {@link FacetHolder}.
+     * 
+     * <p>
+     * Introduced to allow this facet to be installed onto the {@link ObjectSpecification}, and then
+     * copied down onto each of the spec's {@link ObjectMember}s. 
+     */
+    void copyOnto(FacetHolder holder);
 
 }

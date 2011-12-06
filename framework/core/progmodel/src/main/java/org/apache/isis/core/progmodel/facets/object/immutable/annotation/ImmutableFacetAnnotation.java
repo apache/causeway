@@ -19,7 +19,9 @@
 
 package org.apache.isis.core.progmodel.facets.object.immutable.annotation;
 
+import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facets.When;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacetAbstract;
 
@@ -27,6 +29,12 @@ public class ImmutableFacetAnnotation extends ImmutableFacetAbstract {
 
     public ImmutableFacetAnnotation(final When value, final FacetHolder holder) {
         super(value, holder);
+    }
+
+    @Override
+    public void copyOnto(FacetHolder holder) {
+        final Facet facet = new ImmutableFacetAnnotation(this.when(), holder);
+        FacetUtil.addFacet(facet);
     }
 
 }

@@ -26,13 +26,22 @@ import java.util.List;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.methodutils.MethodScope;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
+import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.progmodel.facets.MethodFinderUtils;
 import org.apache.isis.core.progmodel.facets.MethodPrefixBasedFacetFactoryAbstract;
-import org.apache.isis.core.progmodel.facets.members.disable.method.DisableForContextFacetViaMethod;
+import org.apache.isis.core.progmodel.facets.object.disabled.DisabledObjectFacet;
 
+/**
+ * Installs the {@link DisabledObjectFacetViaDisabledMethod} on the {@link ObjectSpecification},
+ * and copies this facet onto each {@link ObjectMember}.
+ *
+ * <p>
+ * This two-pass design is required because, at the time that the {@link #process(org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext) class is being processed},
+ * the {@link ObjectMember member}s for the {@link ObjectSpecification spec} are not known.
+ */
 public class DisabledObjectViaDisabledMethodFacetFactory extends MethodPrefixBasedFacetFactoryAbstract {
 
     private static final String DISABLED_PREFIX = "disabled";
@@ -40,7 +49,7 @@ public class DisabledObjectViaDisabledMethodFacetFactory extends MethodPrefixBas
     private static final String[] PREFIXES = { DISABLED_PREFIX, };
 
     public DisabledObjectViaDisabledMethodFacetFactory() {
-        super(FeatureType.OBJECTS_ONLY, PREFIXES);
+        super(FeatureType.EVERYTHING_BUT_PARAMETERS, PREFIXES);
     }
 
     @Override
@@ -50,58 +59,22 @@ public class DisabledObjectViaDisabledMethodFacetFactory extends MethodPrefixBas
 
         final Method method =
             MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, DISABLED_PREFIX, String.class, NO_PARAMETERS_TYPES);
-        if (method != null) {
-
-            FacetUtil.addFacet(new DisabledObjectFacetViaDisabledMethod(method, facetHolder));
-
-            // DNW
-            ObjectSpecification spec = getSpecificationLookup().loadSpecification(cls);
-            List<ObjectAssociation> members = spec.getAssociations();
-            for (ObjectAssociation member : members) {
-                FacetUtil.addFacet(new DisableForContextFacetViaMethod(method, member));
-            }
-
-            // Method methods[] = cls.getMethods();
-            // addFacetToFacetHolder(methods, facetHolder, method);
-            processClassContext.removeMethod(method);
-        }
+        if (method == null) {
+            return;
+        } 
+        FacetUtil.addFacet(new DisabledObjectFacetViaDisabledMethod(method, facetHolder));
+        processClassContext.removeMethod(method);
     }
 
-    protected void addFacetToFacetHolder(final Method methods[], final FacetHolder facetHolder, final Method facetMethod) {
-        // Original
-        FacetUtil.addFacet(new DisabledObjectFacetViaDisabledMethod(facetMethod, facetHolder));
-
-        // Dan's suggestion
-        // for (ObjectMember member : objectSpec.getMembers()) {
-        // FacetUtil.addFacet(new DisabledObjectFacetViaDisabledMethod(method, member));
-        // }
-
-        // Try 3?
-        for (Method method : methods) {
-            if (!anIsisMethod(method.getName())) {
-                // DNW
-                // FacetUtil.addFacet(new DisableForContextFacetViaMethod(method, facetHolder));
-            }
+    @Override
+    public void process(ProcessMethodContext processMethodContext) {
+        final FacetedMethod member = processMethodContext.getFacetHolder();
+        final Class<?> owningClass = processMethodContext.getCls();
+        final ObjectSpecification owningSpec = getSpecificationLookup().loadSpecification(owningClass);
+        final DisabledObjectFacet facet = owningSpec.getFacet(DisabledObjectFacet.class);
+        if(facet != null) {
+            facet.copyOnto(member);
         }
-
     }
-
-    /**
-     * Check if method name starts with any of the Isis prefixes...
-     * 
-     * @param name
-     * @return
-     */
-    private boolean anIsisMethod(String name) {
-        List<String> names =
-            Arrays.asList("choices", "clear", "created", "default", "hide", "validate", "disable", "iconName",
-                "modify", "set");
-
-        for (String prefix : names) {
-            if (name.startsWith(prefix)) {
-                return true;
-            }
-        }
-        return false;
-    }
+    
 }
