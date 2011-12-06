@@ -24,16 +24,15 @@ import java.lang.reflect.Method;
 import org.apache.isis.applib.events.VisibilityEvent;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.util.AdapterInvokeUtils;
-import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 import org.apache.isis.core.progmodel.facets.object.hidden.HiddenObjectFacetAbstract;
 
 public class HiddenObjectFacetViaHiddenMethod extends HiddenObjectFacetAbstract {
     private final Method method;
 
-    public HiddenObjectFacetViaHiddenMethod(Method method, Class<? extends Facet> facetType, FacetHolder holder,
-        boolean derived) {
+    public HiddenObjectFacetViaHiddenMethod(Method method, FacetHolder holder) {
         super(holder);
         this.method = method;
     }
@@ -51,6 +50,12 @@ public class HiddenObjectFacetViaHiddenMethod extends HiddenObjectFacetAbstract 
         }
         final Boolean isHidden = (Boolean) AdapterInvokeUtils.invoke(method, target);
         return isHidden.booleanValue() ? "Hidden" : null;
+    }
+
+    @Override
+    public void copyOnto(FacetHolder holder) {
+        final HiddenObjectFacetViaHiddenMethod clonedFacet = new HiddenObjectFacetViaHiddenMethod(this.method, holder);
+        FacetUtil.addFacet(clonedFacet);
     }
 
 }
