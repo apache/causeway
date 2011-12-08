@@ -21,6 +21,7 @@ package org.apache.isis.core.progmodel.facets.object.disabled.method;
 
 import java.lang.reflect.Method;
 
+import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -56,7 +57,7 @@ public class DisabledObjectViaDisabledMethodFacetFactory extends MethodPrefixBas
         final Class<?> cls = processClassContext.getCls();
         final FacetHolder facetHolder = processClassContext.getFacetHolder();
         final Class<?>[] params = new Class<?>[1];
-        params[0] = String.class;
+        params[0] = Identifier.Type.class;// String.class;
 
         final Method method =
             MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, DISABLED_PREFIX, String.class, params);
