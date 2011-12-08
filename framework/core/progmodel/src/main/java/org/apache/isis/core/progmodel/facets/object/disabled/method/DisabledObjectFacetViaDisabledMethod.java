@@ -24,6 +24,7 @@ import java.util.Collections;
 import java.util.List;
 
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.Identifier.Type;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.util.AdapterInvokeUtils;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -57,7 +58,8 @@ public class DisabledObjectFacetViaDisabledMethod extends DisabledObjectFacetAbs
 
     @Override
     public String disabledReason(final ObjectAdapter owningAdapter, Identifier identifier) {
-        String type = identifier.getType().toString();
+        // String type = identifier.getType().toString();
+        Type type = identifier.getType();
         return (String) AdapterInvokeUtils.invoke(method, owningAdapter, type);
     }
 
