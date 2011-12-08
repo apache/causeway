@@ -23,11 +23,11 @@ import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.List;
 
+import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.util.AdapterInvokeUtils;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
-import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.progmodel.facets.object.disabled.DisabledObjectFacetAbstract;
 
@@ -56,8 +56,9 @@ public class DisabledObjectFacetViaDisabledMethod extends DisabledObjectFacetAbs
     }
 
     @Override
-    public String disabledReason(final ObjectAdapter owningAdapter) {
-        return (String) AdapterInvokeUtils.invoke(method, owningAdapter);
+    public String disabledReason(final ObjectAdapter owningAdapter, Identifier identifier) {
+        String type = identifier.getType().toString();
+        return (String) AdapterInvokeUtils.invoke(method, owningAdapter, type);
     }
 
     @Override
@@ -67,7 +68,8 @@ public class DisabledObjectFacetViaDisabledMethod extends DisabledObjectFacetAbs
 
     @Override
     public void copyOnto(FacetHolder holder) {
-        final DisabledObjectFacetViaDisabledMethod clonedFacet = new DisabledObjectFacetViaDisabledMethod(this.method, holder);
+        final DisabledObjectFacetViaDisabledMethod clonedFacet =
+            new DisabledObjectFacetViaDisabledMethod(this.method, holder);
         FacetUtil.addFacet(clonedFacet);
     }
 }
