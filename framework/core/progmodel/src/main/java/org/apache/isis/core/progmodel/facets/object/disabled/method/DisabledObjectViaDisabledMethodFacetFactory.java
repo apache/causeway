@@ -20,8 +20,6 @@
 package org.apache.isis.core.progmodel.facets.object.disabled.method;
 
 import java.lang.reflect.Method;
-import java.util.Arrays;
-import java.util.List;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
@@ -35,11 +33,12 @@ import org.apache.isis.core.progmodel.facets.MethodPrefixBasedFacetFactoryAbstra
 import org.apache.isis.core.progmodel.facets.object.disabled.DisabledObjectFacet;
 
 /**
- * Installs the {@link DisabledObjectFacetViaDisabledMethod} on the {@link ObjectSpecification},
- * and copies this facet onto each {@link ObjectMember}.
- *
+ * Installs the {@link DisabledObjectFacetViaDisabledMethod} on the {@link ObjectSpecification}, and copies this facet
+ * onto each {@link ObjectMember}.
+ * 
  * <p>
- * This two-pass design is required because, at the time that the {@link #process(org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext) class is being processed},
+ * This two-pass design is required because, at the time that the
+ * {@link #process(org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext) class is being processed},
  * the {@link ObjectMember member}s for the {@link ObjectSpecification spec} are not known.
  */
 public class DisabledObjectViaDisabledMethodFacetFactory extends MethodPrefixBasedFacetFactoryAbstract {
@@ -56,12 +55,14 @@ public class DisabledObjectViaDisabledMethodFacetFactory extends MethodPrefixBas
     public void process(final ProcessClassContext processClassContext) {
         final Class<?> cls = processClassContext.getCls();
         final FacetHolder facetHolder = processClassContext.getFacetHolder();
+        final Class<?>[] params = new Class<?>[1];
+        params[0] = String.class;
 
         final Method method =
-            MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, DISABLED_PREFIX, String.class, NO_PARAMETERS_TYPES);
+            MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, DISABLED_PREFIX, String.class, params);
         if (method == null) {
             return;
-        } 
+        }
         FacetUtil.addFacet(new DisabledObjectFacetViaDisabledMethod(method, facetHolder));
         processClassContext.removeMethod(method);
     }
@@ -72,9 +73,9 @@ public class DisabledObjectViaDisabledMethodFacetFactory extends MethodPrefixBas
         final Class<?> owningClass = processMethodContext.getCls();
         final ObjectSpecification owningSpec = getSpecificationLookup().loadSpecification(owningClass);
         final DisabledObjectFacet facet = owningSpec.getFacet(DisabledObjectFacet.class);
-        if(facet != null) {
+        if (facet != null) {
             facet.copyOnto(member);
         }
     }
-    
+
 }

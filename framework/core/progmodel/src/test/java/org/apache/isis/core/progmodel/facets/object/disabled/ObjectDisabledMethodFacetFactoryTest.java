@@ -45,13 +45,17 @@ public class ObjectDisabledMethodFacetFactoryTest extends AbstractFacetFactoryTe
     }
 
     public void testDisabledMethodPickedUpAndMethodRemoved() {
+        final Class<?>[] params = new Class<?>[1];
+        params[0] = String.class;
+
         class Customer {
             @SuppressWarnings("unused")
-            public String disabled() {
+            public String disabled(String type) {
                 return null;
             }
         }
-        final Method disabledMethod = findMethod(Customer.class, "disabled");
+        final Method disabledMethod = findMethod(Customer.class, "disabled", params);
+        assertNotNull(disabledMethod);
 
         final ProcessClassContext processClassContext =
             new ProcessClassContext(Customer.class, methodRemover, facetHolder);

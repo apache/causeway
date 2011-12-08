@@ -33,6 +33,12 @@ public final class AdapterInvokeUtils {
         return InvokeUtils.invoke(method, AdapterUtils.unwrap(adapter));
     }
 
+    public static Object invoke(final Method method, final ObjectAdapter adapter, final Object arg0) {
+        Object[] args = new Object[1];
+        args[0] = arg0;
+        return InvokeUtils.invoke(method, AdapterUtils.unwrap(adapter), args);
+    }
+
     public static void invoke(final List<Method> methods, final ObjectAdapter adapter) {
         InvokeUtils.invoke(methods, AdapterUtils.unwrap(adapter));
     }

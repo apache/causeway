@@ -19,6 +19,7 @@
 
 package org.apache.isis.core.progmodel.facets.object.disabled;
 
+import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.events.UsabilityEvent;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -42,9 +43,10 @@ public abstract class DisabledObjectFacetAbstract extends FacetAbstract implemen
             return null;
         }
         final ObjectAdapter toDisable = ic.getTarget();
-        return toDisable != null ? disabledReason(toDisable) : null;
+        final Identifier identifier = ic.getIdentifier();
+        return toDisable != null ? disabledReason(toDisable, identifier) : null;
     }
 
-    protected abstract String disabledReason(ObjectAdapter toDisable);
+    protected abstract String disabledReason(ObjectAdapter toDisable, Identifier identifier);
 
 }
