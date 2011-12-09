@@ -19,14 +19,13 @@
 
 package org.apache.isis.viewer.junit.internal;
 
+import org.junit.internal.runners.TestClass;
+
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.runtimes.dflt.profilestores.dflt.InMemoryUserProfileStoreInstaller;
 import org.apache.isis.runtimes.dflt.runtime.installerregistry.InstallerLookup;
 import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
 import org.apache.isis.runtimes.dflt.runtime.systemusinginstallers.IsisSystemUsingInstallers;
-import org.apache.isis.security.dflt.authentication.NoopAuthenticationManagerInstaller;
-import org.apache.isis.security.dflt.authorization.NoopAuthorizationManagerInstaller;
-import org.junit.internal.runners.TestClass;
 
 public class IsisSystemUsingInstallersWithinJunit extends IsisSystemUsingInstallers {
 
@@ -37,24 +36,30 @@ public class IsisSystemUsingInstallersWithinJunit extends IsisSystemUsingInstall
         super(deploymentType, installerLookup);
         this.testClass = testClass;
 
-        setAuthenticationInstaller(getInstallerLookup()
-            .injectDependenciesInto(new NoopAuthenticationManagerInstaller()));
-        setAuthorizationInstaller(getInstallerLookup().injectDependenciesInto(new NoopAuthorizationManagerInstaller()));
-        setPersistenceMechanismInstaller(getInstallerLookup().injectDependenciesInto(
-            new InMemoryPersistenceMechanismInstallerWithinJunit()));
-        setUserProfileStoreInstaller(getInstallerLookup().injectDependenciesInto(
-            new InMemoryUserProfileStoreInstaller()));
+        AnnotationInstaller installer = new AnnotationInstaller();
 
-        // fixture installer
-        final FixtureInstallerAnnotatedClass fixtureInstaller = new FixtureInstallerAnnotatedClass();
         try {
+            setAuthenticationInstaller(getInstallerLookup().injectDependenciesInto(
+                installer.addAuthenticatorAnnotatedOn(this.testClass.getJavaClass())));
+
+            setAuthorizationInstaller(getInstallerLookup().injectDependenciesInto(
+                installer.addAuthorizerAnnotatedOn(this.testClass.getJavaClass())));
+
+            setPersistenceMechanismInstaller(getInstallerLookup().injectDependenciesInto(
+                installer.addPersistorAnnotatedOn(this.testClass.getJavaClass())));
+
+            setUserProfileStoreInstaller(getInstallerLookup().injectDependenciesInto(
+                new InMemoryUserProfileStoreInstaller()));
+
+            // fixture installer
+            final FixtureInstallerAnnotatedClass fixtureInstaller = new FixtureInstallerAnnotatedClass();
             fixtureInstaller.addFixturesAnnotatedOn(this.testClass.getJavaClass());
+            setFixtureInstaller(fixtureInstaller);
         } catch (final InstantiationException e) {
             throw new IsisException(e);
         } catch (final IllegalAccessException e) {
             throw new IsisException(e);
         }
-        setFixtureInstaller(fixtureInstaller);
 
         // services installer
         final ServicesInstallerAnnotatedClass servicesInstaller = new ServicesInstallerAnnotatedClass();
