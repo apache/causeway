@@ -22,24 +22,30 @@ package org.apache.isis.runtimes.dflt.objectstores.sql.jdbc;
 import org.apache.isis.applib.PersistFailedException;
 import org.apache.isis.applib.value.Time;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
+import org.apache.isis.runtimes.dflt.objectstores.sql.AbstractFieldMappingFactory;
 import org.apache.isis.runtimes.dflt.objectstores.sql.Defaults;
 import org.apache.isis.runtimes.dflt.objectstores.sql.Results;
 import org.apache.isis.runtimes.dflt.objectstores.sql.mapping.FieldMapping;
-import org.apache.isis.runtimes.dflt.objectstores.sql.mapping.FieldMappingFactory;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 
 public class JdbcTimeMapper extends AbstractJdbcFieldMapping {
 
-    public static class Factory implements FieldMappingFactory {
+    private final String dataType;
+
+    public static class Factory extends AbstractFieldMappingFactory {
+
         @Override
-        public FieldMapping createFieldMapping(final ObjectAssociation field) {
-            return new JdbcTimeMapper(field);
+        public FieldMapping createFieldMapping(final ObjectSpecification object, final ObjectAssociation field) {
+            String dataType = getTypeOverride(object, field, Defaults.TYPE_TIME());
+            return new JdbcTimeMapper(field, dataType);
         }
     }
 
-    protected JdbcTimeMapper(final ObjectAssociation field) {
+    protected JdbcTimeMapper(final ObjectAssociation field, final String dataType) {
         super(field);
+        this.dataType = dataType;
     }
 
     @Override
@@ -69,7 +75,7 @@ public class JdbcTimeMapper extends AbstractJdbcFieldMapping {
 
     @Override
     public String columnType() {
-        return Defaults.TYPE_TIME();
+        return dataType;
     }
 
 }

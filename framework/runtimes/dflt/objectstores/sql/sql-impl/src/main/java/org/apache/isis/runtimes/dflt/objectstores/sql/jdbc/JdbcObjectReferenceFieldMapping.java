@@ -21,21 +21,24 @@ package org.apache.isis.runtimes.dflt.objectstores.sql.jdbc;
 
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.isis.runtimes.dflt.objectstores.sql.AbstractFieldMappingFactory;
 import org.apache.isis.runtimes.dflt.objectstores.sql.DatabaseConnector;
+import org.apache.isis.runtimes.dflt.objectstores.sql.Defaults;
 import org.apache.isis.runtimes.dflt.objectstores.sql.Results;
 import org.apache.isis.runtimes.dflt.objectstores.sql.Sql;
 import org.apache.isis.runtimes.dflt.objectstores.sql.mapping.FieldMapping;
-import org.apache.isis.runtimes.dflt.objectstores.sql.mapping.FieldMappingFactory;
 
 public class JdbcObjectReferenceFieldMapping extends JdbcObjectReferenceMapping implements FieldMapping {
 
-    public static class Factory implements FieldMappingFactory {
+    public static class Factory extends AbstractFieldMappingFactory {
         @Override
-        public FieldMapping createFieldMapping(final ObjectAssociation field) {
+        public FieldMapping createFieldMapping(ObjectSpecification object, final ObjectAssociation field) {
             if (field.getSpecification().isAbstract()) {
-                return new JdbcAbstractReferenceFieldMapping(field);
+                String dataType = getTypeOverride(object, field, Defaults.TYPE_LONG_STRING());
+                return new JdbcAbstractReferenceFieldMapping(field, dataType);
             }
             return new JdbcObjectReferenceFieldMapping(field);
         }

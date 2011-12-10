@@ -22,31 +22,27 @@ package org.apache.isis.runtimes.dflt.objectstores.sql.jdbc;
 import org.apache.isis.applib.value.Money;
 import org.apache.isis.applib.value.Password;
 import org.apache.isis.applib.value.Percentage;
-import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
+import org.apache.isis.runtimes.dflt.objectstores.sql.AbstractFieldMappingFactory;
 import org.apache.isis.runtimes.dflt.objectstores.sql.Results;
-import org.apache.isis.runtimes.dflt.objectstores.sql.SqlObjectStore;
 import org.apache.isis.runtimes.dflt.objectstores.sql.mapping.FieldMapping;
-import org.apache.isis.runtimes.dflt.objectstores.sql.mapping.FieldMappingFactory;
-import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 
 public class JdbcGeneralValueMapper extends AbstractJdbcFieldMapping {
 
-    public static class Factory implements FieldMappingFactory {
+    public static class Factory extends AbstractFieldMappingFactory {
         private final String type;
 
         public Factory(final String type) {
+            super();
             this.type = type;
         }
 
         @Override
-        public FieldMapping createFieldMapping(final ObjectAssociation field) {
-            // isis.persistor.sql.automapper.default
-            final IsisConfiguration configParameters = IsisContext.getConfiguration();
-            final String property = SqlObjectStore.BASE_NAME + ".automapper.type." + field.getId();
-            String dataType = configParameters.getString(property, type);
+        public FieldMapping createFieldMapping(final ObjectSpecification object, final ObjectAssociation field) {
+            String dataType = getTypeOverride(object, field, type);
             return new JdbcGeneralValueMapper(field, dataType);
         }
     }

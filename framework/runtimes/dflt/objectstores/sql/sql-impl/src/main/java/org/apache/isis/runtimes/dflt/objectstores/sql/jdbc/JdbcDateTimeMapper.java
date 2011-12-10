@@ -22,23 +22,28 @@ package org.apache.isis.runtimes.dflt.objectstores.sql.jdbc;
 import org.apache.isis.applib.value.DateTime;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
+import org.apache.isis.runtimes.dflt.objectstores.sql.AbstractFieldMappingFactory;
 import org.apache.isis.runtimes.dflt.objectstores.sql.Defaults;
 import org.apache.isis.runtimes.dflt.objectstores.sql.Results;
 import org.apache.isis.runtimes.dflt.objectstores.sql.mapping.FieldMapping;
-import org.apache.isis.runtimes.dflt.objectstores.sql.mapping.FieldMappingFactory;
 
 public class JdbcDateTimeMapper extends AbstractJdbcFieldMapping {
 
-    public static class Factory implements FieldMappingFactory {
+    private final String dataType;
+
+    public static class Factory extends AbstractFieldMappingFactory {
         @Override
-        public FieldMapping createFieldMapping(final ObjectAssociation field) {
-            return new JdbcDateTimeMapper(field);
+        public FieldMapping createFieldMapping(ObjectSpecification object, final ObjectAssociation field) {
+            String dataType = getTypeOverride(object, field, Defaults.TYPE_DATETIME());
+            return new JdbcDateTimeMapper(field, dataType);
         }
     }
 
-    protected JdbcDateTimeMapper(final ObjectAssociation field) {
+    protected JdbcDateTimeMapper(final ObjectAssociation field, final String dataType) {
         super(field);
+        this.dataType = dataType;
     }
 
     @Override
@@ -66,7 +71,7 @@ public class JdbcDateTimeMapper extends AbstractJdbcFieldMapping {
 
     @Override
     public String columnType() {
-        return Defaults.TYPE_DATETIME();
+        return dataType;
     }
 
 }

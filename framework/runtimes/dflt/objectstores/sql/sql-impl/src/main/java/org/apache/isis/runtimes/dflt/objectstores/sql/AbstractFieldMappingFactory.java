@@ -19,12 +19,20 @@
 
 package org.apache.isis.runtimes.dflt.objectstores.sql;
 
+import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.runtimes.dflt.objectstores.sql.mapping.FieldMappingFactory;
+import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 
 public abstract class AbstractFieldMappingFactory implements FieldMappingFactory {
-    final String type;
 
-    public AbstractFieldMappingFactory(final String type) {
-        this.type = type;
+    protected String getTypeOverride(ObjectSpecification object, final ObjectAssociation field, final String type) {
+        // isis.persistor.sql.automapper.default
+        final IsisConfiguration configParameters = IsisContext.getConfiguration();
+        String find = object.getShortIdentifier() + "." + field.getId();
+        final String property = SqlObjectStore.BASE_NAME + ".automapper.type." + find;
+        String dataType = configParameters.getString(property, type);
+        return dataType;
     }
 }

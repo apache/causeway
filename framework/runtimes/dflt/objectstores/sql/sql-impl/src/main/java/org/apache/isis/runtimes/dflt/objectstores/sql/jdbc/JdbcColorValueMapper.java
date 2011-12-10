@@ -18,10 +18,11 @@ package org.apache.isis.runtimes.dflt.objectstores.sql.jdbc;
 
 import org.apache.isis.applib.value.Color;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
+import org.apache.isis.runtimes.dflt.objectstores.sql.AbstractFieldMappingFactory;
 import org.apache.isis.runtimes.dflt.objectstores.sql.Results;
 import org.apache.isis.runtimes.dflt.objectstores.sql.mapping.FieldMapping;
-import org.apache.isis.runtimes.dflt.objectstores.sql.mapping.FieldMappingFactory;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 
 /**
@@ -31,16 +32,18 @@ import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
  */
 public class JdbcColorValueMapper extends AbstractJdbcFieldMapping {
 
-    public static class Factory implements FieldMappingFactory {
+    public static class Factory extends AbstractFieldMappingFactory {
         private final String type;
 
         public Factory(final String type) {
+            super();
             this.type = type;
         }
 
         @Override
-        public FieldMapping createFieldMapping(final ObjectAssociation field) {
-            return new JdbcColorValueMapper(field, type);
+        public FieldMapping createFieldMapping(final ObjectSpecification object, final ObjectAssociation field) {
+            String dataType = getTypeOverride(object, field, type);
+            return new JdbcColorValueMapper(field, dataType);
         }
     }
 

@@ -224,7 +224,7 @@ public abstract class AbstractAutoMapper extends AbstractMapper {
         }
 
         for (final ObjectAssociation field : oneToOneProperties) {
-            final FieldMapping mapping = lookup.createMapping(field);
+            final FieldMapping mapping = lookup.createMapping(specification, field);
             fieldMappings.add(mapping);
             fieldMappingLookup.put(field, mapping);
         }

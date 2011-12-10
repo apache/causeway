@@ -43,19 +43,19 @@ public class FieldMappingLookup {
     private FieldMappingFactory referenceFieldMappingfactory;
     private ObjectReferenceMappingFactory objectReferenceMappingfactory;
 
-    public FieldMapping createMapping(final ObjectAssociation field) {
+    public FieldMapping createMapping(ObjectSpecification object, final ObjectAssociation field) {
         final ObjectSpecification spec = field.getSpecification();
         FieldMappingFactory factory = fieldMappings.get(spec);
         if (factory != null) {
-            return factory.createFieldMapping(field);
+            return factory.createFieldMapping(object, field);
         } else if (spec.isEncodeable()) {
             factory = new JdbcGeneralValueMapper.Factory(Defaults.TYPE_DEFAULT());
             addFieldMappingFactory(spec, factory);
-            return factory.createFieldMapping(field);
+            return factory.createFieldMapping(object, field);
         } else {// if (true /* TODO test for reference */) {
             factory = referenceFieldMappingfactory;
             addFieldMappingFactory(spec, factory);
-            return factory.createFieldMapping(field);
+            return factory.createFieldMapping(object, field);
             // } else {
             // throw new IsisException("No mapper for " + spec + " (no default mapper)");
         }

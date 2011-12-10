@@ -21,6 +21,7 @@ package org.apache.isis.runtimes.dflt.objectstores.sql.jdbc;
 
 import org.apache.isis.applib.PersistFailedException;
 import org.apache.isis.applib.value.Money;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.runtimes.dflt.objectstores.sql.Results;
 import org.apache.isis.runtimes.dflt.objectstores.sql.mapping.FieldMapping;
@@ -43,7 +44,7 @@ public class JdbcMoneyValueMapper extends AbstractJdbcMultiFieldMapping {
         }
 
         @Override
-        public FieldMapping createFieldMapping(final ObjectAssociation field) {
+        public FieldMapping createFieldMapping(ObjectSpecification object, final ObjectAssociation field) {
             return new JdbcMoneyValueMapper(field, type1, type2);
         }
     }
