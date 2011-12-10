@@ -25,11 +25,12 @@ import org.apache.isis.applib.PersistFailedException;
 import org.apache.isis.applib.value.Date;
 import org.apache.isis.core.commons.exceptions.IsisApplicationException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
+import org.apache.isis.runtimes.dflt.objectstores.sql.AbstractFieldMappingFactory;
 import org.apache.isis.runtimes.dflt.objectstores.sql.Defaults;
 import org.apache.isis.runtimes.dflt.objectstores.sql.Results;
 import org.apache.isis.runtimes.dflt.objectstores.sql.mapping.FieldMapping;
-import org.apache.isis.runtimes.dflt.objectstores.sql.mapping.FieldMappingFactory;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
 
@@ -42,17 +43,20 @@ import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
 public class JdbcDateMapper extends AbstractJdbcFieldMapping {
 
     private final AdapterManager adapterManager;
+    private final String dataType;
 
-    public static class Factory implements FieldMappingFactory {
+    public static class Factory extends AbstractFieldMappingFactory {
         @Override
-        public FieldMapping createFieldMapping(final ObjectAssociation field) {
-            return new JdbcDateMapper(field);
+        public FieldMapping createFieldMapping(ObjectSpecification object, final ObjectAssociation field) {
+            String dataType = getTypeOverride(object, field, Defaults.TYPE_DATE());
+            return new JdbcDateMapper(field, dataType);
         }
     }
 
-    protected JdbcDateMapper(final ObjectAssociation field) {
+    protected JdbcDateMapper(final ObjectAssociation field, final String dataType) {
         super(field);
         adapterManager = IsisContext.getPersistenceSession().getAdapterManager();
+        this.dataType = dataType;
     }
 
     @Override
@@ -92,7 +96,7 @@ public class JdbcDateMapper extends AbstractJdbcFieldMapping {
 
     @Override
     public String columnType() {
-        return Defaults.TYPE_DATE();
+        return dataType;
     }
 
 }

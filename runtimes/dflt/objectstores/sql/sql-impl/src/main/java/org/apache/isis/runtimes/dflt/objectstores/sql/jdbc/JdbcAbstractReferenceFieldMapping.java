@@ -26,12 +26,12 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.isis.runtimes.dflt.objectstores.sql.AbstractFieldMappingFactory;
 import org.apache.isis.runtimes.dflt.objectstores.sql.DatabaseConnector;
 import org.apache.isis.runtimes.dflt.objectstores.sql.Defaults;
 import org.apache.isis.runtimes.dflt.objectstores.sql.Results;
 import org.apache.isis.runtimes.dflt.objectstores.sql.Sql;
 import org.apache.isis.runtimes.dflt.objectstores.sql.mapping.FieldMapping;
-import org.apache.isis.runtimes.dflt.objectstores.sql.mapping.FieldMappingFactory;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 
 /**
@@ -44,18 +44,25 @@ import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
  * @version $Rev$ $Date$
  */
 public class JdbcAbstractReferenceFieldMapping extends JdbcObjectReferenceFieldMapping {
+    private final String classnameColumn;
+    private final String dataType;
 
-    public static class Factory implements FieldMappingFactory {
+    public static class Factory extends AbstractFieldMappingFactory {
+
+        public Factory(final String type) {
+            super();
+        }
+
         @Override
-        public FieldMapping createFieldMapping(final ObjectAssociation field) {
-            return new JdbcAbstractReferenceFieldMapping(field);
+        public FieldMapping createFieldMapping(final ObjectSpecification object, final ObjectAssociation field) {
+            String dataType = getTypeOverride(object, field, Defaults.TYPE_LONG_STRING());
+            return new JdbcAbstractReferenceFieldMapping(field, dataType);
         }
     }
 
-    private final String classnameColumn;
-
-    public JdbcAbstractReferenceFieldMapping(final ObjectAssociation field) {
+    public JdbcAbstractReferenceFieldMapping(final ObjectAssociation field, String dataType) {
         super(field);
+        this.dataType = dataType;
         classnameColumn = Sql.identifier(getColumn() + "_cls");
     }
 
@@ -66,7 +73,7 @@ public class JdbcAbstractReferenceFieldMapping extends JdbcObjectReferenceFieldM
         sql.append(", ");
         sql.append(classnameColumn);
         sql.append(" ");
-        sql.append(Defaults.TYPE_LONG_STRING());
+        sql.append(dataType);
     }
 
     @Override
@@ -74,7 +81,7 @@ public class JdbcAbstractReferenceFieldMapping extends JdbcObjectReferenceFieldM
         super.appendCreateColumnDefinitions(sql);
         sql.append(classnameColumn);
         sql.append(" ");
-        sql.append(Defaults.TYPE_LONG_STRING());
+        sql.append(dataType);
     }
 
     @Override

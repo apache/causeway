@@ -19,8 +19,9 @@
 
 package org.apache.isis.runtimes.dflt.objectstores.sql.mapping;
 
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 
 public interface FieldMappingFactory {
-    FieldMapping createFieldMapping(final ObjectAssociation field);
+    FieldMapping createFieldMapping(final ObjectSpecification object, final ObjectAssociation field);
 }

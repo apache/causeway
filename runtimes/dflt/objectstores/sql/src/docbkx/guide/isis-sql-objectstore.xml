@@ -260,6 +260,45 @@
 
         <para>[Percentage] is FLOAT</para>
       </sect2>
+
+      <sect2>
+        <title>Modifying individual property types</title>
+
+        <para>By default, all property types will use the SQL datatype, as
+        determined above (see <xref
+        linkend="sec.mappers.modifiable-values" />), but it is possible to
+        override these values for individual object properties, by specifying
+        the following override in the properties file:</para>
+
+        <para><property>isis.persistor.sql.automapper.type.&lt;object&gt;.&lt;property&gt;=&lt;SQL
+        data type&gt;</property></para>
+
+        <para>where </para>
+
+        <itemizedlist>
+          <listitem>
+            <para>object is the final part of the domain object name (e.g. in
+            my.domain.Member, it'll be Member)</para>
+          </listitem>
+
+          <listitem>
+            <para>property is the lower case property name (e.g. in getName(),
+            it'll be name)</para>
+          </listitem>
+
+          <listitem>
+            <para>SQL data type is an acceptable datatype (e.g. VARCHAR(255)
+            )</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>Again, please be very careful about changing the defaults as the
+        value mappers make assumptions about the underlying data type. </para>
+
+        <para>It is safe to change the size of VARCHAR() types, e.g. when you
+        know only a partcular field requires more that 65 characters, the
+        default String length.</para>
+      </sect2>
     </sect1>
 
     <sect1>
@@ -292,7 +331,7 @@
         <title>Columns</title>
 
         <sect3>
-          <title>Internal columns</title>
+          <title>Internal column: pk_id</title>
 
           <para>ID column: PK_ID</para>
 
@@ -306,7 +345,14 @@
           over-ridden by specifying the new name in the properties
           file:</para>
 
-          <para></para>
+          <para><property>isis.persistor.sql.pk_id=id</property></para>
+
+          <para><property></property></para>
+
+          <para><property>ID column: ID</property></para>
+
+          <para><property>Used internally by Isis to record services, in the
+          table "ISIS_ADMIN_SERVICES".</property></para>
         </sect3>
 
         <sect3>
@@ -346,6 +392,31 @@
           "<code>AbstractJdbcMultiFieldMapping</code>".</para>
         </sect3>
       </sect2>
+    </sect1>
+
+    <sect1>
+      <title>Number of instances returned by queries</title>
+
+      <para>By default, only up to 100 object instances are returned by
+      queries. This value can be changed by specifying:</para>
+
+      <para><property>isis.persistor.sql.maxinstances=100</property></para>
+    </sect1>
+
+    <sect1>
+      <title>Versioning</title>
+
+      <para>Isis uses a version number to assist in detecting concurrency
+      conflicts.</para>
+
+      <para>However, if you need to turn off versioning completely, or for a
+      particular table, you can control it with:</para>
+
+      <para><property>isis.persistor.sql.default.versioning=false</property></para>
+
+      <para>for global control, or by table:</para>
+
+      <para><property>isis.persistor.sql.default.versioning.members=false</property></para>
     </sect1>
   </chapter>
 
@@ -508,7 +579,7 @@
     <code>org.apache.isis.runtimes.dflt.objectstores.sql.Defaults</code>
     contains the following:</para>
 
-    <para>Programmatic, at runtime: </para>
+    <para>Programmatic, at runtime:</para>
 
     <itemizedlist>
       <listitem>
@@ -520,20 +591,20 @@
 
     <para><itemizedlist>
         <listitem>
-          <para>Primary key column: </para>
+          <para>Primary key column:</para>
 
           <para><code>isis.persistor.sql.default.pk_id=pk_id</code></para>
         </listitem>
 
         <listitem>
-          <para>Service ID column: </para>
+          <para>Service ID column:</para>
 
           <para><code>isis.persistor.sql.default.id=id</code></para>
         </listitem>
 
         <listitem>
           <para>Maximum records returned by objectstore methods that return a
-          list/collection, such as <code>allMatches()</code>, etc: </para>
+          list/collection, such as <code>allMatches()</code>, etc:</para>
 
           <para><code>isis.persistor.sql.default.maxinstances=100</code></para>
         </listitem>
@@ -549,7 +620,7 @@
     <title>Polymorphism</title>
 
     <para>The SQL Objectstore supports polymorphic classes. Both properties
-    and collections are supported. </para>
+    and collections are supported.</para>
 
     <sect1>
       <title>Properties</title>
@@ -578,10 +649,10 @@
 
         <para>Used to map 1-to-many collections by creating, in the collection
         child table (which may be an interface or abstract class), 2 columns
-        per parent collection. </para>
+        per parent collection.</para>
 
-        <para>The first column is the class type, the second is the entity ID.
-        </para>
+        <para>The first column is the class type, the second is the entity
+        ID.</para>
 
         <para>The columns are named by combining the final part of the parent
         class name and the collection variable name.</para>
@@ -594,7 +665,7 @@
         <title>PolymorphicForeignKeyInChildCollectionMapper</title>
 
         <para>Used to map 1-to-many collections by creating, in the child
-        table, 1 column per parent collection. </para>
+        table, 1 column per parent collection.</para>
 
         <para>The column is named by combining the final part of the parent
         class name and the collection variable name.</para>
