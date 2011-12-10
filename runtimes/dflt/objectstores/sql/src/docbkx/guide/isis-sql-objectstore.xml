@@ -593,20 +593,20 @@
         <listitem>
           <para>Primary key column:</para>
 
-          <para><code>isis.persistor.sql.default.pk_id=pk_id</code></para>
+          <para><property>isis.persistor.sql.default.pk_id=pk_id</property></para>
         </listitem>
 
         <listitem>
           <para>Service ID column:</para>
 
-          <para><code>isis.persistor.sql.default.id=id</code></para>
+          <para><property>isis.persistor.sql.default.id=id</property></para>
         </listitem>
 
         <listitem>
           <para>Maximum records returned by objectstore methods that return a
           list/collection, such as <code>allMatches()</code>, etc:</para>
 
-          <para><code>isis.persistor.sql.default.maxinstances=100</code></para>
+          <para><code><property>isis.persistor.sql.default.maxinstances=100</property></code></para>
         </listitem>
 
         <listitem>
@@ -677,6 +677,31 @@
       </sect2>
     </sect1>
   </chapter>
+
+  <appendix>
+    <title>Example</title>
+
+    <para></para>
+
+    <para><property>isis.persistor.sql.jdbc.driver=com.mysql.jdbc.Driver</property></para>
+
+    <para><property>isis.persistor.sql.jdbc.connection=jdbc:mysql://localhost/isis_data</property></para>
+
+    <para><property>isis.persistor.sql.jdbc.user=isis</property></para>
+
+    <para><property>isis.persistor.sql.jdbc.password=noneofyourbusiness</property></para>
+
+    <para><property></property></para>
+
+    <para><property>isis.persistor.sql.default.versioning.Member=false
+    </property></para>
+
+    <para><property>isis.persistor.sql.automapper.type.Member.address=VARCHAR(255)
+    </property></para>
+
+    <para><property>isis.persistor.sql.automapper.type.Member.comments=VARCHAR(255)
+    </property></para>
+  </appendix>
 
   <appendix>
     <title>Correspondence</title>
