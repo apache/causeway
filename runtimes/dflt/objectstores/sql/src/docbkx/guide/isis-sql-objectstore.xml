@@ -606,7 +606,7 @@
           <para>Maximum records returned by objectstore methods that return a
           list/collection, such as <code>allMatches()</code>, etc:</para>
 
-          <para><code><property>isis.persistor.sql.default.maxinstances=100</property></code></para>
+          <para><property><property>isis.persistor.sql.default.maxinstances=100</property></property></para>
         </listitem>
 
         <listitem>
