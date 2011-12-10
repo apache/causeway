@@ -206,20 +206,20 @@
 
       <para>ToDo: Unit tests can be written to ensure 100% code coverage
       without consideration of whether the tests are
-      <emphasis>meaningful</emphasis>. </para>
+      <emphasis>meaningful</emphasis>.</para>
 
       <para>In the above example, a unit test with 100% coverage will call the
-      <code>disableMemberLevel</code> metamodel method with
+      <code><methodname>disableMemberLevel</methodname></code> method with
       <code>authentication.hasSecretaryRights</code> true and false, without
       possibly realising that the hideMemberLevel will ensure that the
       property is hidden from non-Secretaries!</para>
 
       <para>While it is not guaranteed (it depends on how the checks are
       structured), the JUnit viewer, implementing acceptance tests, will
-      demonstrate, in this case, that the <code>if
-      (authentication.hasSecretaryRights())</code> check is not needed (even
-      though all login combinations are tried, that condition will never be
-      called)!</para>
+      demonstrate, in this case, that the <code><code>if
+      (authentication.hasSecretaryRights())</code></code> check is not needed
+      in <methodname>disableMemberLevel</methodname> (even though all login
+      combinations are tried, that condition will never be called)!</para>
     </sect1>
 
     <sect1>
@@ -228,6 +228,89 @@
       <para></para>
     </sect1>
   </chapter>
+
+  <appendix>
+    <title>Replacing Services</title>
+
+    <para>The default test runner (IsisTestRunner) uses No-op services for
+    authenticator, authorization and it uses the in-memory object
+    store.</para>
+
+    <para>These can be replaced by annotations: </para>
+
+    <sect1>
+      <title>Replacing the Persistor</title>
+
+      <para>If, for example, you wish to use a real database, and you want to
+      run your tests against that database, then you'll want to use the real
+      SQL Objectstore, for example. In order to do so, you'll need to provide
+      a replacement installer. There is subtlety here - you need to override
+      the <methodname>createContainer</methodname> method so that it installs
+      wrapped container, for example, using the
+      "<classname>SqlPersistorInstaller</classname>":</para>
+
+      <para><programlisting>public class SqlPersistorInstallerWithinJunit extends SqlPersistorInstaller {
+    /**
+     * Returns a {@link DomainObjectContainerHeadlessViewer}.
+     */
+    @Override
+    protected DomainObjectContainer createContainer(final IsisConfiguration configuration) {
+        return new DomainObjectContainerWrapperFactory();
+    }
+
+}</programlisting>Then you can run your test with:</para>
+
+      <para><programlisting>@RunWith(IsisTestRunner.class)
+@Persistor(SqlPersistorInstallerWithinJunit.class)
+public class RealDatabaseTester {
+ ...
+}</programlisting></para>
+    </sect1>
+
+    <sect1>
+      <title>Replacing the Authenticator</title>
+
+      <para>If you've written a new Authenticator, you'll want to test
+      it.</para>
+
+      <para>You'll need to specify your replacement
+      <classname>AuthenticationManagerInstaller</classname>:</para>
+
+      <programlisting>public class RestAuthenticatorInstaller extends AuthenticationManagerStandardInstallerAbstractForDfltRuntime {
+
+    public static final String NAME = "rest";
+
+    public RestAuthenticatorInstaller() {
+        super(NAME);
+    }
+
+    @Override
+    protected List&lt;Authenticator&gt; createAuthenticators(final IsisConfiguration configuration) {
+        return Lists.&lt;Authenticator&gt; newArrayList(new RestAuthenticator(configuration));
+    }
+
+}</programlisting>
+
+      <para>where "<classname>RestAuthenticator</classname>" is the new
+      authenticator you want to test.</para>
+
+      <para>Then you can run your test with:</para>
+
+      <para><programlisting>@RunWith(IsisTestRunner.class)
+@Authenticator(RestAuthenticatorInstaller.class)
+public class RealAuthenticatorTester {
+ ...
+}</programlisting>Or you can just specify the default authenticator installer,
+      e.g. "<classname>FileAuthenticationManagerInstaller</classname>"</para>
+    </sect1>
+
+    <sect1>
+      <title>Authorizer</title>
+
+      <para>Follow the same process to install your desired
+      AuthorizationManagerInstaller.</para>
+    </sect1>
+  </appendix>
 
   <appendix>
     <title>Example</title>
@@ -302,7 +385,7 @@ public abstract class AbstractMemberTest {
 
       <programlisting>@Services({ @Service(MemberRepositoryDefault.class), @Service(AuthenticationFixtureClass.class) })</programlisting>
 
-      <para> Then, the test class wraps them (thus enabling enforcement of
+      <para>Then, the test class wraps them (thus enabling enforcement of
       applib rules):</para>
 
       <programlisting>    @Before
