@@ -1313,7 +1313,7 @@
              "purchased from us in the past or "+
              "are likely to in the future")
 public class CustomerImpl implements ICustomer {
-    ...y
+    ...
 }</programlisting>
 
         <note>
@@ -1343,8 +1343,8 @@ public class CustomerImpl implements ICustomer {
       </sect1>
 
       <sect1 id="sec.Immutable">
-        <title>How to specify that an object should never be modified by the
-        user</title>
+        <title id="sec.entity.immutable">How to specify that an object should
+        never be modified by the user</title>
 
         <para>Some objects have state which should not be modifiable; for
         example those representing reference data. The viewer is expected to
@@ -1359,6 +1359,61 @@ public class CustomerImpl implements ICustomer {
 public class ChasingLetter implements PaymentReclaimStrategy {
     ...
 }</programlisting>
+
+        <para>See also <xref linkend="sec.Entity.Disabled" />.</para>
+      </sect1>
+
+      <sect1 id="sec.Entity.Disabled">
+        <title>How to control when an object can be modified</title>
+
+        <para>Some objects have state which should not be modifiable only
+        under certain conditions; for example an invoice can not be modified
+        after it has been paid. The viewer is expected to interpret this by
+        suppressing any sort of "edit" button.</para>
+
+        <para>To indicate that an object cannot be modified, use the <literal
+        moreinfo="none">String disabled(Type type)</literal> method.</para>
+
+        <para>For example:</para>
+
+        <programlisting>public class FeeInvoice implements Invoice {
+   public String disabled(Type type){
+    ...
+   }
+}</programlisting>
+
+        <para>The Type is from
+        <classname>org.apache.isis.applib.Identifier</classname>: </para>
+
+        <programlisting>    /**
+     * What type of feature this identifies.
+     */
+    public static enum Type {
+        CLASS, PROPERTY_OR_COLLECTION, ACTION
+    }</programlisting>
+
+        <para>and provides fine grain control over disabling actions and
+        properties.</para>
+
+        <para>The return String is null if the the object (action or property)
+        is not disabled, or the reason why it is disabled, similar to <xref
+        linkend="sec.DisabledProperty" />.</para>
+
+        <para>See also <xref linkend="sec.Entity.Disabled" />.</para>
+      </sect1>
+
+      <sect1 id="sec.Entity.Hidden">
+        <title>How to control when an object is visible</title>
+
+        <para>To when an object is visible, provide a hidden() method:</para>
+
+        <para><programlisting>public class TrackingAction implements Tracking {
+   public boolean hidden(){
+    ...
+   }
+}</programlisting>If the function returns true, all properties and methods
+        will be hidden from the user, similar to <xref
+        linkend="sec.HiddenProperty" />.</para>
       </sect1>
 
       <sect1 id="sec.Bounded">
@@ -2009,6 +2064,9 @@ public void setPropertyName(PropertyType param)</programlisting></para>
         hiding a collection (see <xref linkend="sec.HiddenCollection" />) or
         an action (see <xref linkend="sec.HiddenActions" />).</para>
 
+        <para>For control over the entire object, see <xref
+        linkend="sec.Entity.Hidden" />.</para>
+
         <sect2>
           <title>Hiding a property always</title>
 
@@ -2098,6 +2156,9 @@ public void setPropertyName(PropertyType param)</programlisting></para>
         for disabling a collection (see <xref
         linkend="sec.DisabledCollection" />) or a collection (see <xref
         linkend="sec.DisabledCollection" />).</para>
+
+        <para>For control over the entire object, see <xref
+        linkend="sec.Entity.Disabled" />.</para>
 
         <sect2>
           <title>Disabling a property permanently</title>
