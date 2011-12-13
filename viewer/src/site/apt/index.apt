@@ -17,7 +17,7 @@
 
 
 
-Viewers
+* {Deployable viewers}
  
  The <viewer> module is the parent of the different viewer implementations.
 
@@ -35,7 +35,7 @@ Viewers
   or for exploring the REST API.  Or, if your user base are "experts" in the
   domain then you may also consider deploying it directly into production.
 
-Testing Support
+* {Testing support}
 
  Isis' testing support is also provided by viewer implementations.  That may seem
  slightly odd terminology, but consider the test as a client of the domain model, 
@@ -61,11 +61,11 @@ Testing Support
   exceptions thrown by proxied domain objects.
  
 
-Other Viewers
+* {Other viewers}
 
- There are a number of other viewers that are of alpha-quality.  That means that they are 
- either incomplete implementations, inadequately documented, or just requiring a little
- attention (ie are broken).
+ There are a number of other viewers that should be considered as being of alpha-quality.
+ That means that they are either incomplete implementations, inadequately documented, or 
+ just require a little attention (ie are broken).
  
  That said, you are welcome to use them.  If you do, let us know of any shortcomings 
  and we'll endeavour to fix them.

@@ -16,7 +16,7 @@
 #  under the License.
 
 echo mvn site-deploy -D modules=site -D deploy=local -D site=full $*
-#     mvn site-deploy -D modules=site -D deploy=local -D site=full $*
+     mvn site-deploy -D modules=site -D deploy=local -D site=full $*
 root=`pwd`
 for a in `cat modules | grep -v ^# | grep ^.*[:].*$`
 do
@@ -25,8 +25,8 @@ do
   if [ "$n" ]; then
     cd $d
     pwd
-    echo mvn clean site-deploy -D modules=site -D deploy=local -D patch=$n $*
-         mvn3 -T 4 clean site-deploy -D modules=site -D deploy=local -D patch=$n $*
+    echo mvn -T 4 clean site-deploy -D modules=site -D deploy=local -D patch=$n $*
+         mvn -T 4 clean site-deploy -D modules=site -D deploy=local -D patch=$n $*
     cd $root
   fi
 done

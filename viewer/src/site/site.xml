@@ -29,16 +29,19 @@
             <item name="Jottings" href="jottings.html" />
 		</menu>
 
-        <menu name="Viewer Modules">
-            <item name="DnD" href="./dnd/index.html" />
+        <menu name="Deployable Viewers">
             <item name="HTML" href="./html/index.html" />
-            <item name="Scimpi" href="./scimpi/index.html" />
-            <item name="Wicket" href="./wicket/index.html" />
-            <item name="XHTML" href="./xhtml/index.html" />
             <item name="JSON" href="./json/index.html" />
             <item name="JUnit Support" href="./junit/index.html" />
             <item name="BDD Integration" href="./bdd/index.html" />
         </menu>
+        
+        <menu name="Other Viewers">
+            <item name="DnD" href="./dnd/index.html" />
+            <item name="Scimpi" href="./scimpi/index.html" />
+            <item name="Wicket" href="./wicket/index.html" />
+        </menu>
+        
 
 	</body>
 </project>

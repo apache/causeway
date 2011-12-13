@@ -35,46 +35,49 @@
 
 		<menu name="Apache Isis">
 			<item name="Home" href="index.html" />
-			<item name="Who we are" href="who-we-are.html" />
+            <item name="Demo App" href="http://mmyco.co.uk:8180/isis-onlinedemo" />
 		</menu>
 
 		<menu name="Getting Started">
-            <item name="Quick start" href="where-to-start.html" />
-			<item name="Downloads" href="downloads.html" />
-            <item name="Documentation" href="documentation.html" />
+            <item name="Quick Start" href="quick-start.html" />
             <item name="Cheat Sheet" href="IsisCheatSheet.pdf"/>
             <!-- 
             <item name="Screencasts" href="screencasts.html"/>
             -->
             <item name="Icons" href="icons.html" />
             <item name="IDE Support" href="ide-support.html"/>
-            <item name="Programming Conventions" href="applib/index.html" />
+			<item name="Downloads" href="downloads.html" />
 		</menu>
 
         <!-- This 'global' menu is inherited -->
         <menu name="Use Cases" inherit="bottom">
             <item name="Develop" inherit="bottom" href="use-cases/develop.html"/>
             <item name="Specify and Test" inherit="bottom" href="use-cases/specify-and-test.html"/>
-            <item name="Deploy on own framework" href="use-cases/deploy-on-own-framework.html" />
-	        <item name="Deploy as REST web service" href="use-cases/deploy-as-rest.html" />
-	        <item name="Deploy as Webapp" href="use-cases/deploy-as-webapp.html" />
+            <item name="Deploy on own framework" href="use-cases/deploy-own-framework.html" />
+	        <item name="Deploy as REST service" href="use-cases/deploy-as-rest.html" />
+	        <item name="Deploy as webapp" href="use-cases/deploy-as-webapp.html" />
 		</menu>
 
+        <!-- This 'global' menu is inherited -->
+        <menu name="Documentation">
+            <item name="Isis Programming Model" href="applib/index.html" />
+            <item name="Module Documentation" href="documentation.html" />
+        </menu>
+
 		<menu name="Community and Help">
+            <item name="Who we are" href="who-we-are.html" />
             <!-- 
 			<item name="IRC" href="http://webchat.freenode.net/?channels=apache-isis&amp;uio=d4" />
 			-->
-            <item name="Mailing List" href="mail-lists.html" >
+            <item name="Users Mailing List" href="mail-lists.html" >
                 <item name="Post to"
-                    href="mailto:isis-dev@incubator.apache.org" />
+                    href="mailto:isis-users@incubator.apache.org" />
                 <item name="Archives"
-                    href="http://mail-archives.apache.org/mod_mbox/incubator-isis-dev/" />
+                    href="http://mail-archives.apache.org/mod_mbox/incubator-isis-users/" />
                 <item name="Subscribe"
-                    href="mailto:isis-dev-subscribe@incubator.apache.org" />
+                    href="mailto:isis-users-subscribe@incubator.apache.org" />
                 <item name="Markmail (RSS)"
-                    href="http://incubator.markmail.org/search/?q=isis-dev" />
-                <item name="Gmane (NNTP)"
-                    href="http://blog.gmane.org/gmane.comp.apache.incubator.isis.devel" />
+                    href="http://incubator.markmail.org/search/?q=isis-users" />
             </item>
             <!-- 
             <item name="Twitter (#ApacheIsis)" href="http://search.twitter.com/search?q=%23ApacheIsis" />
@@ -86,42 +89,19 @@
             <item name="Isis Extras" href="http://code.google.com/a/apache-extras.org/p/isis-extras/" />
         </menu>
 
-		<menu name="Other Resources">
-			<item name="Blogs">
-				<item name="Dan Haywood's blog" href="http://danhaywood.com/" />
-			</item>
-            <item name="Presentation Materials (please reuse)" href="./presentations/">
-                <item name="Introducing Apache Isis" href="./presentations/">
-                    <item name="PPTX (Microsoft)" href="./presentations/IntroducingApacheIsis.pptx" />
-                    <item name="PPT (Microsoft)" href="./presentations/IntroducingApacheIsis.ppt" />
-                    <item name="ODP (OpenDocument)" href="./presentations/IntroducingApacheIsis.odp" />
-                    <item name="PDF slides" href="./presentations/IntroducingApacheIsis-slides.pdf" />
-                    <item name="PDF notes" href="./presentations/IntroducingApacheIsis-notes.pdf" />
-                </item>
-            </item>
-            <item name="Naked Objects">
-                <item name="Books on Naked Objects" href="naked-objects-books.html" />
-                <item name="Richard Pawson's Thesis" href="Pawson-Naked-Objects-thesis.pdf" />
-                <item name="Naked Objects for .NET" href="http://www.nakedobjects.net/" />
-            </item>
-            <!-- 
-            <item name="Isis Roadmap" href="roadmap.html" />
-            -->
-		</menu>
-
         <!-- This 'global' menu is inherited -->
         <menu name="Isis Modules" inherit="bottom">
             <item name="Application Library" href="applib/index.html" />
             <item name="Core Framework" href="core/index.html"/>
-            <item name="Testing Support" href="viewer/testing-support.html">
+            <item name="Testing Support" href="viewer/index.html#Testing_support.html">
                 <item name="BDD" href="viewer/bdd/index.html" />
                 <item name="JUnit" href="viewer/junit/index.html" />
             </item>
-            <item name="Deployable viewers" href="viewer/deployable-viewers.html">
+            <item name="Deployable viewers" href="viewer/index.html#Deployable_viewers">
                 <item name="Json (REST)" href="viewer/json/index.html" />
                 <item name="HTML (webapp)" href="viewer/html/index.html" />
             </item>
-            <item name="Other viewers (alpha)" href="viewer/other-viewers.html"/>
+            <item name="Other viewers (alpha)" href="viewer/index.html#Other_viewers"/>
             <item name="Runtimes" href="runtimes/index.html">
                 <item name="Default" href="runtimes/dflt/index.html">
                     <item name="Object Stores" href="runtimes/dflt/objectstores/index.html"/>
@@ -134,10 +114,47 @@
             </item>
         </menu>
 
+        <menu name="Other Resources">
+            <item name="Blogs">
+                <item name="Dan Haywood's blog" href="http://danhaywood.com/" />
+            </item>
+            <!-- 
+            <item name="Presentation Materials (from v0.1)" href="./presentations/">
+                <item name="Introducing Apache Isis" href="./presentations/">
+                    <item name="PPTX (Microsoft)" href="./presentations/IntroducingApacheIsis.pptx" />
+                    <item name="PPT (Microsoft)" href="./presentations/IntroducingApacheIsis.ppt" />
+                    <item name="ODP (OpenDocument)" href="./presentations/IntroducingApacheIsis.odp" />
+                    <item name="PDF slides" href="./presentations/IntroducingApacheIsis-slides.pdf" />
+                    <item name="PDF notes" href="./presentations/IntroducingApacheIsis-notes.pdf" />
+                </item>
+            </item>
+            -->
+            <item name="Naked Objects">
+                <item name="Books on Naked Objects" href="naked-objects-books.html" />
+                <item name="Richard Pawson's Thesis" href="Pawson-Naked-Objects-thesis.pdf" />
+                <item name="Naked Objects for .NET" href="http://www.nakedobjects.net/" />
+            </item>
+            <!-- 
+            <item name="Isis Roadmap" href="roadmap.html" />
+            -->
+        </menu>
+
         <menu name="For Contributors">
             <item name="Contributor's Guide">
                 <item name="PDF" href="docbkx/pdf/${docbkxGuideName}.pdf" />
                 <item name="HTML" href="docbkx/html/guide/${docbkxGuideName}.html" />
+            </item>
+            <item name="Dev Mailing List" href="mail-lists.html" >
+                <item name="Post to"
+                    href="mailto:isis-dev@incubator.apache.org" />
+                <item name="Archives"
+                    href="http://mail-archives.apache.org/mod_mbox/incubator-isis-dev/" />
+                <item name="Subscribe"
+                    href="mailto:isis-dev-subscribe@incubator.apache.org" />
+                <item name="Markmail (RSS)"
+                    href="http://incubator.markmail.org/search/?q=isis-dev" />
+                <item name="Gmane (NNTP)"
+                    href="http://blog.gmane.org/gmane.comp.apache.incubator.isis.devel" />
             </item>
         </menu>
 
