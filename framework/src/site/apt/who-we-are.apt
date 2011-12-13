@@ -24,17 +24,17 @@ Team
 |<<Who>>               |<<Role>>               |<<Contributions>>                                                     |    
 *----------------------+-----------------------+----------------------------------------------------------------------+
 |Dan Haywood           |PPMC, Committer        |Core, Default runtime, JSR-299 runtime, Wicket viewer,                |
-|                      |                       |Restful viewer, BDD viewer, JUnit viewer, JPA objectstore             |
+|                      |                       |Json viewer, BDD viewer, JUnit viewer, JPA objectstore             |
 |                      |                       |Wrapper progmodel, Groovy progmodel, site, docs, archetype            |
 *----------------------+-----------------------+----------------------------------------------------------------------+
+|Kevin Meyer           |PPMC, Committer        |Core, default runtime, SQL objectstore, Security                      |
+*----------------------+-----------------------+----------------------------------------------------------------------+
 |Robert Matthews       |PPMC, Committer        |Core, default runtime, DnD viewer, HTML viewer, Scimpi viewer,        |
-|                      |                       |XML objectstore, SQL objectstore, NoSQL objectstore, Remoting         | 
+|                      |                       |XML objectstore, NoSQL objectstore, Remoting         | 
 *----------------------+-----------------------+----------------------------------------------------------------------+
-|Kevin Meyer           |PPMC, Committer        |SQL objectstore                                                       |
+|Alexander Krasnukhin  |PPMC, Committer        |                                                                      |
 *----------------------+-----------------------+----------------------------------------------------------------------+
-|Dave Slaughter        |PPMC, Committer        |Screencasts                                                           |
-*----------------------+-----------------------+----------------------------------------------------------------------+
-|Alexander Krasnukhin  |PPMC, Committer        |Android viewer?                                                       |
+|Dave Slaughter        |PPMC, Committer        |                                                                      |
 *----------------------+-----------------------+----------------------------------------------------------------------+
 |Mark Struberg         |PPMC, Champion, Mentor |                                                                      |
 *----------------------+-----------------------+----------------------------------------------------------------------+
@@ -43,13 +43,5 @@ Team
 |Benson Marguiles      |PPMC, Mentor           |                                                                      |
 *----------------------+-----------------------+----------------------------------------------------------------------+
 |Siegfried Goeschl     |PPMC, Mentor           |                                                                      |
-*----------------------+-----------------------+----------------------------------------------------------------------+
-|Sabine Winkler        |user                   |BDD (Concordion) viewer (testing)                                     |
-*----------------------+-----------------------+----------------------------------------------------------------------+
-|Vangjel Stavro        |user                   |RESTful viewer, JavaFX viewer                                         |
-*----------------------+-----------------------+----------------------------------------------------------------------+
-|Mike Burton           |user                   |Facelets viewer?                                                      |
-*----------------------+-----------------------+----------------------------------------------------------------------+
-|Ulrich Stark          |(to confirm)           |Tapestry viewer?                                                      |
 *----------------------+-----------------------+----------------------------------------------------------------------+
  

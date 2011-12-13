@@ -34,16 +34,17 @@ Isis in action
   auto-generated webapp, running against an in-memory object store.  To use, you'll need to
   register an account (the credentials are stored only in memory and are reset nightly).
   
-  The webapp has full documentation to guide you further, and also links to the 
-  {{{./#}application's source}} so you can see how little code you need to write in Isis.
+  The webapp has full documentation to guide you further.  It also links to the 
+  {{{http://mmyco.co.uk:8180/isis-onlinedemo/doc/xref/index.html}application's source}} 
+  so you can see how little code you need to write to get an application up and running with Isis.
   
 Getting Started
  
-  Isis is built with Maven and has a {{{./where-to-start.html}quickstart archetype}} 
+  Isis is built with Maven and has a {{{./quick-start.html}quickstart archetype}} 
   to get you going quickly.  This will generate a simple one-class domain model, configured
   to run like the online demo (but with no security).
   
-  After that, there are plenty of resources linked from the site menu on the left-hand side. 
+  After that, please consult the various resources linked from the site menu on the left-hand side. 
 
 Disclaimer
   
