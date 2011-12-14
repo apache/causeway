@@ -29,8 +29,7 @@ Use <Isis> for Prototyping and Development
   Once you've sketched out your domain model, you can then either 
   start-over using your preferred framework, or you might choose to 
   take the domain model forward into more formal {{{./specify-and-test.html}specification
-  and testing}}.  Either way, a {{{./deploy-own-framework.html}number of}} deployment
-  {{{./deploy-as-rest.html}options}} are {{{./deploy-as-webapp.html}available}}.       
+  and testing}}.       
   
 * {Isis programming model}
 

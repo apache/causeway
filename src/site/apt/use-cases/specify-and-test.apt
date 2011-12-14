@@ -17,10 +17,13 @@
 
 Specify and test your <Isis> domain model
 
-  If you decide to use <Isis> for more than just {{{./develop.html}prototyping}}}, 
+  If you decide to use <Isis> for more than just {{{./develop.html}prototyping}}, 
   then you'll probably want to formally test your domain model.
 
-  <Isis> integrates with two testing frameworks to help you.
+  <Isis> integrates with two testing frameworks to help you, Junit and Concordion.
+  Being able to test your domain models independently of the other gives you
+  confidence when you move onto {{{./deploy-own-framework.html}deploying}} your
+  {{{./deploy-as-rest.html}application}} as you {{{./deploy-as-webapp.html}prefer}}.
   
 * {JUnit integration}
 
