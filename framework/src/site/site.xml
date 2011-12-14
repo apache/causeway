@@ -118,8 +118,7 @@
             <item name="Blogs">
                 <item name="Dan Haywood's blog" href="http://danhaywood.com/" />
             </item>
-            <!-- 
-            <item name="Presentation Materials (from v0.1)" href="./presentations/">
+            <item name="Presentation Materials (feel free to reuse)" href="./presentations/">
                 <item name="Introducing Apache Isis" href="./presentations/">
                     <item name="PPTX (Microsoft)" href="./presentations/IntroducingApacheIsis.pptx" />
                     <item name="PPT (Microsoft)" href="./presentations/IntroducingApacheIsis.ppt" />
@@ -128,7 +127,6 @@
                     <item name="PDF notes" href="./presentations/IntroducingApacheIsis-notes.pdf" />
                 </item>
             </item>
-            -->
             <item name="Naked Objects">
                 <item name="Books on Naked Objects" href="naked-objects-books.html" />
                 <item name="Richard Pawson's Thesis" href="Pawson-Naked-Objects-thesis.pdf" />
