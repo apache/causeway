@@ -33,6 +33,7 @@ import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.util.InvokeUtils;
 import org.apache.isis.core.metamodel.adapter.version.SerialNumberVersion;
+import org.apache.isis.core.metamodel.facets.notpersisted.NotPersistedFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.runtimes.dflt.objectstores.sql.CollectionMapper;
@@ -191,6 +192,12 @@ public class AutoMapper extends AbstractAutoMapper implements ObjectMapping, Deb
                 if (true) {
                     final ObjectAdapter field = patternAssoc.get(pattern);
                     if (field != null) {
+                        String id = patternAssoc.getId();
+                        ObjectAssociation oa = spec.getAssociation(id);
+                        NotPersistedFacet fc = oa.getFacet(NotPersistedFacet.class);
+                        if (fc != null) {
+                            continue;
+                        }
 
                         if (foundFields == 0) {
                             sql.append(" WHERE ");
