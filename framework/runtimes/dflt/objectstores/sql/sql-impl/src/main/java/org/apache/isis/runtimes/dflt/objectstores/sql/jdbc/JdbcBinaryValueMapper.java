@@ -95,6 +95,9 @@ public class JdbcBinaryValueMapper extends AbstractJdbcFieldMapping {
 
         final Class<?> correspondingClass = field.getSpecification().getCorrespondingClass();
         Object resultObject = results.getObject(columnName);
+        if (resultObject == null) {
+            return null;
+        }
 
         if (resultObject.getClass() != correspondingClass) {
             if (checkIfIsClass(correspondingClass, Integer.class, int.class)) {
