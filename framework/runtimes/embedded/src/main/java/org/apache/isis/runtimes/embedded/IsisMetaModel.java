@@ -24,7 +24,6 @@ import static org.apache.isis.core.commons.ensure.Ensure.ensureThatState;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -34,12 +33,10 @@ import java.util.TreeSet;
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
-import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.facetdecorator.FacetDecorator;
 import org.apache.isis.core.metamodel.layout.MemberLayoutArranger;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
-import org.apache.isis.core.metamodel.services.container.DomainObjectContainerDefault;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.ObjectReflectorDefault;
@@ -53,10 +50,11 @@ import org.apache.isis.core.progmodel.layout.dflt.MemberLayoutArrangerDefault;
 import org.apache.isis.core.progmodel.metamodelvalidator.dflt.MetaModelValidatorDefault;
 import org.apache.isis.progmodel.wrapper.applib.WrapperFactory;
 import org.apache.isis.progmodel.wrapper.metamodel.DomainObjectContainerWrapperFactory;
-import org.apache.isis.progmodel.wrapper.metamodel.internal.WrapperFactoryDefault;
 import org.apache.isis.progmodels.dflt.ProgrammingModelFacetsJava5;
 import org.apache.isis.runtimes.dflt.bytecode.identity.classsubstitutor.ClassSubstitutorIdentity;
 import org.apache.isis.runtimes.embedded.internal.RuntimeContextForEmbeddedMetaModel;
+
+import com.google.common.collect.Lists;
 
 /**
  * Facade for the entire Isis metamodel and supporting components.
@@ -67,7 +65,7 @@ public class IsisMetaModel implements ApplicationScopedComponent {
         NOT_INITIALIZED, INITIALIZED, SHUTDOWN;
     }
 
-    private final List<Class<?>> serviceTypes = new ArrayList<Class<?>>();
+    private final List<Object> services = Lists.newArrayList();
     private State state = State.NOT_INITIALIZED;
 
     private ObjectReflectorDefault reflector;
@@ -82,13 +80,15 @@ public class IsisMetaModel implements ApplicationScopedComponent {
     private Set<FacetDecorator> facetDecorators;
     private MetaModelValidator metaModelValidator;
 
-    private WrapperFactory viewer;
+    private WrapperFactory wrapperFactory;
     private final EmbeddedContext context;
-    private List<Object> services;
 
-    public IsisMetaModel(final EmbeddedContext context, final Class<?>... serviceTypes) {
+    public IsisMetaModel(final EmbeddedContext context, final Object... services) {
+        this(context, Arrays.asList(services));
+    }
 
-        this.serviceTypes.addAll(Arrays.asList(serviceTypes));
+    public IsisMetaModel(final EmbeddedContext context, final List<Object> services) {
+        this.services.addAll(services);
         setConfiguration(new IsisConfigurationDefault());
         setClassSubstitutor(new ClassSubstitutorIdentity());
         setCollectionTypeRegistry(new CollectionTypeRegistryDefault());
@@ -96,9 +96,9 @@ public class IsisMetaModel implements ApplicationScopedComponent {
         setMemberLayoutArranger(new MemberLayoutArrangerDefault());
         setFacetDecorators(new TreeSet<FacetDecorator>());
         setProgrammingModelFacets(new ProgrammingModelFacetsJava5());
-
+        
         setMetaModelValidator(new MetaModelValidatorDefault());
-
+        
         this.context = context;
     }
 
@@ -110,8 +110,8 @@ public class IsisMetaModel implements ApplicationScopedComponent {
      * To obtain the instantiated services, use the {@link ServicesInjector#getRegisteredServices()} (available from
      * {@link #getServicesInjector()}).
      */
-    public List<Class<?>> getServiceTypes() {
-        return Collections.unmodifiableList(serviceTypes);
+    public List<Object> getServices() {
+        return Collections.unmodifiableList(services);
     }
 
     // ///////////////////////////////////////////////////////
@@ -125,9 +125,8 @@ public class IsisMetaModel implements ApplicationScopedComponent {
             new ObjectReflectorDefault(configuration, classSubstitutor, collectionTypeRegistry, specificationTraverser,
                 memberLayoutArranger, programmingModel, facetDecorators, metaModelValidator);
 
-        services = createServices(serviceTypes);
         runtimeContext = new RuntimeContextForEmbeddedMetaModel(context, services);
-        final DomainObjectContainerDefault container = new DomainObjectContainerWrapperFactory();
+        final DomainObjectContainerWrapperFactory container = new DomainObjectContainerWrapperFactory();
 
         runtimeContext.injectInto(container);
         runtimeContext.setContainer(container);
@@ -137,33 +136,19 @@ public class IsisMetaModel implements ApplicationScopedComponent {
         reflector.init();
         runtimeContext.init();
 
-        for (final Class<?> serviceType : serviceTypes) {
-            final ObjectSpecification serviceSpec = reflector.loadSpecification(serviceType);
+        for (final Object service : services) {
+            final ObjectSpecification serviceSpec = reflector.loadSpecification(service.getClass());
             serviceSpec.markAsService();
         }
         state = State.INITIALIZED;
 
-        viewer = new WrapperFactoryDefault();
+        wrapperFactory = container;
     }
 
     @Override
     public void shutdown() {
         ensureInitialized();
         state = State.SHUTDOWN;
-    }
-
-    private List<Object> createServices(final List<Class<?>> serviceTypes) {
-        final List<Object> services = new ArrayList<Object>();
-        for (final Class<?> serviceType : serviceTypes) {
-            try {
-                services.add(serviceType.newInstance());
-            } catch (final InstantiationException e) {
-                throw new IsisException("Unable to instantiate service", e);
-            } catch (final IllegalAccessException e) {
-                throw new IsisException("Unable to instantiate service", e);
-            }
-        }
-        return services;
     }
 
     // ///////////////////////////////////////////////////////
@@ -184,9 +169,9 @@ public class IsisMetaModel implements ApplicationScopedComponent {
     /**
      * Available once {@link #init() initialized}.
      */
-    public WrapperFactory getViewer() {
+    public WrapperFactory getWrapperFactory() {
         ensureInitialized();
-        return viewer;
+        return wrapperFactory;
     }
 
     // ///////////////////////////////////////////////////////

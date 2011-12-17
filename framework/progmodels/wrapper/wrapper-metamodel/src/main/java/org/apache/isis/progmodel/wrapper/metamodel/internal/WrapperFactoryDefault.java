@@ -272,8 +272,8 @@ public class WrapperFactoryDefault implements WrapperFactory, AuthenticationSess
     }
 
     @Override
-    public void setAdapterMap(final AdapterMap adapterManager) {
-        this.adapterManager = adapterManager;
+    public void setAdapterMap(final AdapterMap adapterMap) {
+        this.adapterManager = adapterMap;
     }
 
     @Override

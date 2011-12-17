@@ -122,6 +122,13 @@
             <groupId>org.apache.isis.runtimes.dflt.bytecode</groupId>
             <artifactId>identity</artifactId>
         </dependency>
+        
+        <dependency>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>testsupport</artifactId>
+            <scope>test</scope>
+        </dependency>
+        
 	</dependencies>
 
 </project>
