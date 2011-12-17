@@ -22,12 +22,15 @@
 <book>
   <bookinfo>
     <title><?eval ${docbkxGuideTitle}?></title>
+
     <subtitle><?eval ${docbkxGuideSubTitle}?></subtitle>
+
     <releaseinfo><?eval ${project.version}?></releaseinfo>
 
     <authorgroup>
       <author>
         <firstname>Dan</firstname>
+
         <surname>Haywood</surname>
       </author>
     </authorgroup>
@@ -49,16 +52,34 @@
     <para><emphasis>Apache Isis</emphasis> is designed to allow programmers
     rapidly develop domain-driven applications following the <ulink
     url="http://en.wikipedia.org/wiki/Naked_Objects">Naked Objects</ulink>
-    pattern. It is made up of a core framework plus a number of alternate
-    implementations, and supports various viewers and object stores.  Apache 
-    Isis is hosted at the 
-    <ulink url="http://incubator.apache.org/isis">Apache Foundation</ulink>,
-    and is licensed under <ulink
+    pattern. It is made up of a core framework plus a number of modules for
+    such concerns as presentation logic, security and persistence. These
+    modules define APIs to provide pluggability of alternative
+    implementations.</para>
+
+    <para>The runtime module is responsible for managing the lifecycle and
+    persistence of domain objects, broadly equivalent to a
+    <acronym>JPA</acronym> <classname>PersistenceContext</classname>. The
+    default runtime implementation manages the majority of the lifecycle
+    concerns, and defines its own sub APIs to support persistence and
+    remoting.</para>
+
+    <para>This implementation, though, is the <emphasis>embedded</emphasis>
+    runtime. It exists to allow the "unique stuff" of Isis - namely its
+    metamodel and optionally its viewers - to be embedded or hosted within
+    some other existing runtime (eg Spring, CDI, Maven plugin etc). As such,
+    it is a very thin layer; it basically consolidates all the dependencies of
+    the metamodel into a single interface.</para>
+
+    <para>This guide is written for developers and architects who wish to use
+    the embedded runtime as a means of embedding Isis within some other
+    framework.</para>
+
+    <para><emphasis>Isis</emphasis> is hosted at the <ulink
+    url="http://incubator.apache.org/isis">Apache Foundation</ulink>, and is
+    licensed under <ulink
     url="http://www.apache.org/licenses/LICENSE-2.0.html">Apache Software
     License v2</ulink>.</para>
-
-
-    <para>This guide is written for ...</para>
   </preface>
 
   <!-- main content -->
@@ -74,11 +95,35 @@
       <title>***</title>
 
       <para><emphasis>*** yada yada</emphasis></para>
+
+      <para></para>
+
+      <para></para>
+
+      <para>The IsisMetaModel class.</para>
+
+      <para>-</para>
+
+      <para></para>
+
+      <para></para>
+
+      <para>WrapperFactory, and wrapped objects.</para>
+
+      <para></para>
+
+      <para></para>
+
+      <para>The Wrapped Objects</para>
+
+      <para>- how they handle save(), how they hand title()</para>
+
+      <para></para>
     </sect1>
   </chapter>
 
   <chapter>
-    <title>***</title>
+    <title>EmbeddedContext API</title>
 
     <abstract>
       <para>*** yada yada</para>
@@ -88,7 +133,71 @@
       <title>***</title>
 
       <para><emphasis>*** yada yada</emphasis></para>
+
+      <para></para>
+
+      <para></para>
+
+      <para></para>
+
+      <programlisting>public interface EmbeddedContext {
+
+    AuthenticationSession getAuthenticationSession();
+    Localization getLocalization();
+
+    Object instantiate(Class&lt;?&gt; type);
+    
+    void resolve(Object parent);
+    void resolve(Object parent, Object field);
+    void objectChanged(Object object);
+
+    void makePersistent(Object object);
+    void remove(Object object);
+    PersistenceState getPersistenceState(Object object);
+
+    &lt;T&gt; List&lt;T&gt; allMatchingQuery(Query&lt;T&gt; query);
+    &lt;T&gt; T firstMatchingQuery(Query&lt;T&gt; query);
+
+    boolean flush();
+    void commit();
+
+    void informUser(String message);
+    void warnUser(String message);
+    void raiseError(String message);
+}</programlisting>
+
+      <para></para>
+
+      <para></para>
+
+      <para></para>
     </sect1>
+  </chapter>
+
+  <chapter>
+    <title>Writing and Deploying an Implementation</title>
+
+    <para></para>
+
+    <para></para>
+
+    <para>instantiate IsisMetaModel via Spring.</para>
+
+    <para></para>
+
+    <para>Provide some copy-n-paste example code here...</para>
+
+    <para></para>
+
+    <para>The IsisMetaModel creates a DomainObjectContainerWrapperFactory. The
+    EmbeddedContext implementation should take this and inject into entities
+    as required.</para>
+
+    <para></para>
+
+    <para></para>
+
+    <para></para>
   </chapter>
 
   <appendix>

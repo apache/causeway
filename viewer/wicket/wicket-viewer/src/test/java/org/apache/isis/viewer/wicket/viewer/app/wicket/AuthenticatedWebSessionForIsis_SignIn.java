@@ -22,39 +22,54 @@ package org.apache.isis.viewer.wicket.viewer.app.wicket;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
+import java.util.Locale;
+
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
-import org.apache.isis.core.testsupport.jmock.FixtureMockery;
-import org.apache.isis.viewer.wicket.viewer.Fixture_AuthenticationManager_AuthenticateOk;
-import org.apache.isis.viewer.wicket.viewer.Fixture_Request_Stub;
+import org.apache.isis.core.runtime.authentication.AuthenticationRequest;
+import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2;
+import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2.Mode;
 import org.apache.isis.viewer.wicket.viewer.integration.wicket.AuthenticatedWebSessionForIsis;
 import org.apache.wicket.Request;
-import org.jmock.integration.junit4.JMock;
-import org.jmock.lib.legacy.ClassImposteriser;
+import org.jmock.Expectations;
+import org.jmock.auto.Mock;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
-@RunWith(JMock.class)
 public class AuthenticatedWebSessionForIsis_SignIn {
 
-    private final FixtureMockery context = new FixtureMockery() {
-        {
-            setImposteriser(ClassImposteriser.INSTANCE);
-        }
-    };
+    @Rule
+    public final JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
 
     private AuthenticatedWebSessionForIsis webSession;
+    @Mock
     private Request stubRequest;
+    @Mock
+    private AuthenticationManager mockAuthMgr;
 
     @Before
     public void setUp() throws Exception {
-        stubRequest = context.fixture(Fixture_Request_Stub.class).object();
+        context.checking(new Expectations() {
+            {
+                // must provide explicit expectation, since Locale is final.
+                allowing(stubRequest).getLocale();
+                will(returnValue(Locale.getDefault()));
+
+                // stub everything else out
+                ignoring(stubRequest);
+            }
+        });
+
     }
 
     @Test
     public void signInJustDelegatesToAuthenticateAndSavesState() {
-        final AuthenticationManager mockAuthMgr =
-            context.fixture(Fixture_AuthenticationManager_AuthenticateOk.class).object();
+        context.checking(new Expectations() {
+            {
+                one(mockAuthMgr).authenticate(with(any(AuthenticationRequest.class)));
+            }
+        });
+
         webSession = new AuthenticatedWebSessionForIsis(stubRequest) {
             private static final long serialVersionUID = 1L;
 

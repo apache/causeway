@@ -36,7 +36,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 @RunWith(JMock.class)
-public class GivenMetaModelWhenShutdown {
+public class IsisMetaModelTest_init {
 
     private final Mockery mockery = new JUnit4Mockery();
 
@@ -58,7 +58,7 @@ public class GivenMetaModelWhenShutdown {
         mockFacetDecorator = mockery.mock(FacetDecorator.class);
         mockClassSubstitutor = mockery.mock(ClassSubstitutor.class);
 
-        metaModel = new IsisMetaModel(mockContext, EmployeeRepositoryImpl.class, ClaimRepositoryImpl.class);
+        metaModel = new IsisMetaModel(mockContext);
     }
 
     @Test
@@ -107,6 +107,12 @@ public class GivenMetaModelWhenShutdown {
         metaModel.init();
         //
         metaModel.init();
+    }
+
+    @Test
+    public void shouldPrime() {
+        metaModel.init();
+
     }
 
 }

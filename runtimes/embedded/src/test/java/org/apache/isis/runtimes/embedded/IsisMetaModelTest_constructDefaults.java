@@ -23,25 +23,25 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
 
-import org.jmock.Mockery;
-import org.jmock.integration.junit4.JMock;
-import org.jmock.integration.junit4.JUnit4Mockery;
+import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2;
+import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2.Mode;
+import org.jmock.auto.Mock;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
-@RunWith(JMock.class)
-public class GivenMetaModelWhenInstantiated {
+public class IsisMetaModelTest_constructDefaults {
 
-    private final Mockery mockery = new JUnit4Mockery();
+    @Rule
+    public final JUnitRuleMockery2 mockery = JUnitRuleMockery2.createFor(Mode.INTERFACES_ONLY);
 
+    @Mock
     private EmbeddedContext mockContext;
 
     private IsisMetaModel metaModel;
 
     @Before
     public void setUp() {
-        mockContext = mockery.mock(EmbeddedContext.class);
         metaModel = new IsisMetaModel(mockContext);
     }
 

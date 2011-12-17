@@ -26,6 +26,9 @@ import java.util.List;
 
 import org.apache.isis.runtimes.embedded.dom.claim.ClaimRepositoryImpl;
 import org.apache.isis.runtimes.embedded.dom.employee.EmployeeRepositoryImpl;
+import org.hamcrest.Description;
+import org.hamcrest.Matcher;
+import org.hamcrest.TypeSafeMatcher;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JMock;
 import org.jmock.integration.junit4.JUnit4Mockery;
@@ -34,7 +37,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 @RunWith(JMock.class)
-public class GivenMetaModelWhenInstantiate {
+public class IsisMetaModelTest_constructWithServices {
 
     private final Mockery mockery = new JUnit4Mockery();
 
@@ -54,11 +57,31 @@ public class GivenMetaModelWhenInstantiate {
 
     @Test
     public void shouldBeAbleToRegisterServices() {
-        metaModel = new IsisMetaModel(mockContext, EmployeeRepositoryImpl.class, ClaimRepositoryImpl.class);
-        final List<Class<?>> serviceTypes = metaModel.getServiceTypes();
-        assertThat(serviceTypes.size(), is(2));
-        assertThat(serviceTypes.contains(EmployeeRepositoryImpl.class), is(true));
-        assertThat(serviceTypes.contains(ClaimRepositoryImpl.class), is(true));
+        metaModel = new IsisMetaModel(mockContext, new EmployeeRepositoryImpl(), new ClaimRepositoryImpl());
+        final List<Object> services = metaModel.getServices();
+        assertThat(services.size(), is(2));
+        assertThat(services, contains(EmployeeRepositoryImpl.class));
+        assertThat(services, contains(ClaimRepositoryImpl.class));
+    }
+
+    private Matcher<List<Object>> contains(final Class<?> cls) {
+        return new TypeSafeMatcher<List<Object>>() {
+
+            @Override
+            public void describeTo(Description desc) {
+                desc.appendText("contains instance of type " + cls.getName());
+            }
+
+            @Override
+            public boolean matchesSafely(List<Object> items) {
+                for (Object object : items) {
+                    if(cls.isAssignableFrom(object.getClass())) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+        };
     }
 
 }

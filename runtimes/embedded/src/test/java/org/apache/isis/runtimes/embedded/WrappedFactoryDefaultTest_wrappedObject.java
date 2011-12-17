@@ -28,8 +28,10 @@ import org.apache.isis.progmodel.wrapper.applib.DisabledException;
 import org.apache.isis.progmodel.wrapper.applib.HiddenException;
 import org.apache.isis.progmodel.wrapper.applib.InvalidException;
 import org.apache.isis.progmodel.wrapper.applib.WrapperFactory;
+import org.apache.isis.runtimes.embedded.dom.claim.ClaimRepository;
 import org.apache.isis.runtimes.embedded.dom.claim.ClaimRepositoryImpl;
 import org.apache.isis.runtimes.embedded.dom.employee.Employee;
+import org.apache.isis.runtimes.embedded.dom.employee.EmployeeRepository;
 import org.apache.isis.runtimes.embedded.dom.employee.EmployeeRepositoryImpl;
 import org.apache.isis.runtimes.embedded.internal.PersistenceState;
 import org.jmock.Expectations;
@@ -42,27 +44,37 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 @RunWith(JMock.class)
-public class GivenEmbeddedViewerAndPersistentDomainObject {
+public class WrappedFactoryDefaultTest_wrappedObject {
 
+//    @Rule
+//    public JMockRule rule = new JMockRule();
+    
     private final Mockery mockery = new JUnit4Mockery();
 
+    // @Mock
     private EmbeddedContext mockContext;
-
+    // @Mock
     private AuthenticationSession mockAuthenticationSession;
 
-    private IsisMetaModel metaModel;
-
-    private WrapperFactory viewer;
-
+    private EmployeeRepository employeeRepository;
+    private ClaimRepository claimRepository;
+    
     private Employee employeeDO;
+    private Employee employeeWO;
 
-    private Employee employeeVO;
+    private IsisMetaModel metaModel;
+    private WrapperFactory wrapperFactory;
 
+    
     @Before
     public void setUp() {
 
+        employeeRepository = new EmployeeRepositoryImpl();
+        claimRepository = new ClaimRepositoryImpl();
+
         employeeDO = new Employee();
         employeeDO.setName("Smith");
+        employeeDO.setEmployeeRepository(employeeRepository); // would be done by the EmbeddedContext impl
 
         mockContext = mockery.mock(EmbeddedContext.class);
         mockAuthenticationSession = mockery.mock(AuthenticationSession.class);
@@ -80,87 +92,85 @@ public class GivenEmbeddedViewerAndPersistentDomainObject {
             }
         });
 
-        metaModel = new IsisMetaModel(mockContext, EmployeeRepositoryImpl.class, ClaimRepositoryImpl.class);
+        metaModel = new IsisMetaModel(mockContext, employeeRepository, claimRepository);
         metaModel.init();
 
-        viewer = metaModel.getViewer();
+        //employeeDO.setEmployeeRepository(employeeRepository);
+        wrapperFactory = metaModel.getWrapperFactory();
+        employeeWO = wrapperFactory.wrap(employeeDO);
     }
 
     @Test
-    public void shouldBeAbleToGetViewOfDomainObject() {
-        employeeVO = viewer.wrap(employeeDO);
-        assertThat(employeeVO, is(notNullValue()));
+    public void shouldWrapDomainObject() {
+        // then
+        assertThat(employeeWO, is(notNullValue()));
     }
+
+    @Test
+    public void shouldBeAbleToInjectIntoDomainObjects() {
+
+        // given
+        assertThat(employeeDO.getEmployeeRepository(), is(notNullValue()));
+        
+        // then
+        assertThat(employeeWO.getEmployeeRepository(), is(notNullValue()));
+    }
+
 
     @Test
     public void shouldBeAbleToReadVisibleProperty() {
-        employeeVO = viewer.wrap(employeeDO);
-
-        assertThat(employeeVO.getName(), is(employeeDO.getName()));
+        // then
+        assertThat(employeeWO.getName(), is(employeeDO.getName()));
     }
 
     @Test(expected = HiddenException.class)
     public void shouldNotBeAbleToViewHiddenProperty() {
-        employeeVO = viewer.wrap(employeeDO);
-
+        // given
         employeeDO.whetherHideName = true;
-        employeeVO.getName(); // should throw exception
+        // when
+        employeeWO.getName(); 
+        // then should throw exception
     }
 
     @Test
     public void shouldBeAbleToModifyEnabledPropertyUsingSetter() {
-        employeeVO = viewer.wrap(employeeDO);
-
-        employeeVO.setName("Jones");
+        // when
+        employeeWO.setName("Jones");
+        // then
         assertThat(employeeDO.getName(), is("Jones"));
-        assertThat(employeeVO.getName(), is(employeeDO.getName()));
+        assertThat(employeeWO.getName(), is(employeeDO.getName()));
     }
 
     @Test(expected = DisabledException.class)
     public void shouldNotBeAbleToModifyDisabledProperty() {
-        employeeVO = viewer.wrap(employeeDO);
-
+        // given
         employeeDO.reasonDisableName = "sorry, no change allowed";
-        employeeVO.setName("Jones");
+        // when
+        employeeWO.setName("Jones");
+        // then should throw exception
     }
 
     @Test(expected = UnsupportedOperationException.class)
     public void shouldNotBeAbleToModifyPropertyUsingModify() {
-        employeeVO = viewer.wrap(employeeDO);
-
-        employeeVO.modifyName("Jones"); // should throw exception
+        // when
+        employeeWO.modifyName("Jones");
+        // then should throw exception
     }
 
     @Test(expected = UnsupportedOperationException.class)
     public void shouldNotBeAbleToModifyPropertyUsingClear() {
-        employeeVO = viewer.wrap(employeeDO);
-
-        employeeVO.clearName(); // should throw exception
+        // when
+        employeeWO.clearName();
+        // then should throw exception
     }
 
     @Test(expected = InvalidException.class)
     public void shouldNotBeAbleToModifyPropertyIfInvalid() {
-        employeeVO = viewer.wrap(employeeDO);
-
+        // given
         employeeDO.reasonValidateName = "sorry, invalid data";
-        employeeVO.setName("Jones");
-    }
-
-    @Test(expected = DisabledException.class)
-    public void shouldNotBeAbleToModifyPropertyForTransientOnly() {
-        employeeVO = viewer.wrap(employeeDO);
-
-        employeeVO.setPassword("12345678");
-    }
-
-    @Ignore("incomplete")
-    @Test
-    public void shouldBeAbleToInjectIntoDomainObjects() {
-
-        // TODO: also ... be able to inject EmbeddedViewer as a service itself, if required.
-
-        employeeVO.setPassword("12345678");
-
+        // when
+        employeeWO.setName("Jones");
+        // then should throw exception
     }
 
 }

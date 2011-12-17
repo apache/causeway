@@ -33,7 +33,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 @RunWith(JMock.class)
-public class GivenMetaModelWhenInitialized {
+public class IsisMetaModelTest_getWrapperFactory {
 
     private final Mockery mockery = new JUnit4Mockery();
 
@@ -45,13 +45,13 @@ public class GivenMetaModelWhenInitialized {
     public void setUp() {
         mockContext = mockery.mock(EmbeddedContext.class);
 
-        metaModel = new IsisMetaModel(mockContext, EmployeeRepositoryImpl.class, ClaimRepositoryImpl.class);
+        metaModel = new IsisMetaModel(mockContext);
         metaModel.init();
     }
 
     @Test
-    public void shouldBeAbleToGetViewer() {
-        assertThat(metaModel.getViewer(), is(notNullValue()));
+    public void happyCase() {
+        assertThat(metaModel.getWrapperFactory(), is(notNullValue()));
     }
 
 }

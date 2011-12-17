@@ -22,7 +22,8 @@ package org.apache.isis.viewer.wicket.viewer;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
-import org.apache.isis.core.testsupport.jmock.FixtureMockery;
+import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2;
+import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2.Mode;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.isis.viewer.wicket.ui.pages.PageType;
 import org.apache.isis.viewer.wicket.ui.pages.home.HomePage;
@@ -30,18 +31,14 @@ import org.apache.wicket.Page;
 import org.apache.wicket.markup.html.WebPage;
 import org.jmock.Expectations;
 import org.jmock.integration.junit4.JMock;
-import org.jmock.lib.legacy.ClassImposteriser;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-@RunWith(JMock.class)
 public class IsisWicketApplication_Pages {
 
-    private final FixtureMockery context = new FixtureMockery() {
-        {
-            setImposteriser(ClassImposteriser.INSTANCE);
-        }
-    };
+    @Rule
+    public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_ONLY);
 
     private IsisWicketApplication application;
 

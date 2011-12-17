@@ -103,9 +103,9 @@ public class DomainObjectContainerWrapperFactory extends DomainObjectContainerDe
     }
 
     @Override
-    public void setAdapterMap(final AdapterMap adapterManager) {
-        super.setAdapterMap(adapterManager);
-        wrapperFactoryDelegate.setAdapterMap(adapterManager);
+    public void setAdapterMap(final AdapterMap adapterMap) {
+        super.setAdapterMap(adapterMap);
+        wrapperFactoryDelegate.setAdapterMap(adapterMap);
     }
 
     @Override

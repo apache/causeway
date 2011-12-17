@@ -19,10 +19,15 @@
 
 package org.apache.isis.progmodel.wrapper.metamodel.internal;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.CoreMatchers.nullValue;
+
 import java.util.Collection;
 import java.util.Map;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
+import org.apache.isis.core.commons.ensure.Ensure;
 import org.apache.isis.core.metamodel.adapter.ObjectPersistor;
 import org.apache.isis.core.metamodel.adapter.map.AdapterMap;
 import org.apache.isis.core.metamodel.spec.SpecificationLookup;
@@ -32,12 +37,19 @@ import org.apache.isis.progmodel.wrapper.applib.WrapperFactory.ExecutionMode;
 
 public class Proxy {
 
-    public static <T> T proxy(final T domainObject, final WrapperFactory embeddedViewer, final ExecutionMode mode,
+    public static <T> T proxy(final T domainObject, final WrapperFactory wrapperFactory, final ExecutionMode mode,
         final AuthenticationSessionProvider authenticationSessionProvider,
         final SpecificationLookup specificationLookup, final AdapterMap adapterManager,
         final ObjectPersistor objectPersistor) {
+        
+        Ensure.ensureThatArg(wrapperFactory, is(not(nullValue())));
+        Ensure.ensureThatArg(authenticationSessionProvider, is(not(nullValue())));
+        Ensure.ensureThatArg(specificationLookup, is(not(nullValue())));
+        Ensure.ensureThatArg(adapterManager, is(not(nullValue())));
+        Ensure.ensureThatArg(objectPersistor, is(not(nullValue())));
+        
         final DomainObjectInvocationHandler<T> invocationHandler =
-            new DomainObjectInvocationHandler<T>(domainObject, embeddedViewer, mode, authenticationSessionProvider,
+            new DomainObjectInvocationHandler<T>(domainObject, wrapperFactory, mode, authenticationSessionProvider,
                 specificationLookup, adapterManager, objectPersistor);
 
         final CgLibProxy<T> cglibProxy = new CgLibProxy<T>(invocationHandler);
