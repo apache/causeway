@@ -316,20 +316,7 @@ public final class SqlObjectStore implements ObjectStore {
 
         final Vector<ObjectAdapter> matchingInstances = new Vector<ObjectAdapter>();
 
-        // TODO find derived types, too.
-        if (!specification.isAbstract()) {
-            addSpecQueryInstances(specification, connector, query, matchingInstances);
-        }
-
-        // Search for subclasses, too.
-        if (specification.hasSubclasses()) {
-            final List<ObjectSpecification> subclasses = specification.subclasses();
-            for (ObjectSpecification subclassSpec : subclasses) {
-                if (!subclassSpec.isAbstract()) {
-                    addSpecQueryInstances(subclassSpec, connector, query, matchingInstances);
-                }
-            }
-        }
+        addSpecQueryInstances(specification, connector, query, matchingInstances);
 
         connectionPool.release(connector);
 
@@ -340,9 +327,20 @@ public final class SqlObjectStore implements ObjectStore {
 
     private void addSpecQueryInstances(ObjectSpecification specification, DatabaseConnector connector,
         PersistenceQueryFindByPattern query, Vector<ObjectAdapter> matchingInstances) {
-        final ObjectMapping mapper = objectMappingLookup.getMapping(specification, connector);
-        Vector<ObjectAdapter> instances = mapper.getInstances(connector, specification, query);
-        matchingInstances.addAll(instances);
+
+        if (specification.isAbstract() == false) {
+            final ObjectMapping mapper = objectMappingLookup.getMapping(specification, connector);
+            Vector<ObjectAdapter> instances = mapper.getInstances(connector, specification, query);
+            matchingInstances.addAll(instances);
+
+        }
+        if (specification.hasSubclasses()) {
+            final List<ObjectSpecification> subclasses = specification.subclasses();
+            for (ObjectSpecification subclassSpec : subclasses) {
+                addSpecQueryInstances(subclassSpec, connector, query, matchingInstances);
+            }
+        }
+
     }
 
     private ObjectAdapter[] getAllInstances(final PersistenceQueryFindAllInstances criteria) {
@@ -354,18 +352,7 @@ public final class SqlObjectStore implements ObjectStore {
         final DatabaseConnector connector = connectionPool.acquire();
         final Vector<ObjectAdapter> matchingInstances = new Vector<ObjectAdapter>();
 
-        // Abstract entities will never be created.
-        if (!spec.isAbstract()) {
-            addSpecInstances(spec, connector, matchingInstances);
-        }
-
-        // Search for subclasses, too.
-        if (spec.hasSubclasses()) {
-            final List<ObjectSpecification> subclasses = spec.subclasses();
-            for (ObjectSpecification subclassSpec : subclasses) {
-                addSpecInstances(subclassSpec, connector, matchingInstances);
-            }
-        }
+        addSpecInstances(spec, connector, matchingInstances);
 
         connectionPool.release(connector);
         final ObjectAdapter[] instanceArray = new ObjectAdapter[matchingInstances.size()];
@@ -375,9 +362,20 @@ public final class SqlObjectStore implements ObjectStore {
 
     private void addSpecInstances(ObjectSpecification spec, DatabaseConnector connector,
         Vector<ObjectAdapter> matchingInstances) {
-        final ObjectMapping mapper = objectMappingLookup.getMapping(spec, connector);
-        final Vector<ObjectAdapter> instances = mapper.getInstances(connector, spec);
-        matchingInstances.addAll(instances);
+
+        if (spec.isAbstract() == false) {
+            final ObjectMapping mapper = objectMappingLookup.getMapping(spec, connector);
+            final Vector<ObjectAdapter> instances = mapper.getInstances(connector, spec);
+            matchingInstances.addAll(instances);
+        }
+
+        if (spec.hasSubclasses()) {
+            final List<ObjectSpecification> subclasses = spec.subclasses();
+            for (ObjectSpecification subclassSpec : subclasses) {
+                addSpecInstances(subclassSpec, connector, matchingInstances);
+            }
+        }
+
     }
 
     private ObjectAdapter[] findByTitle(final PersistenceQueryFindByTitle criteria) {
