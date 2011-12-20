@@ -201,7 +201,7 @@ public class AutoMapper extends AbstractAutoMapper implements ObjectMapping, Deb
                                 continue;
                             }
                         } catch (ObjectSpecificationException e) {
-                            // this is ok
+                            // this is OK
                         }
 
                         if (foundFields == 0) {

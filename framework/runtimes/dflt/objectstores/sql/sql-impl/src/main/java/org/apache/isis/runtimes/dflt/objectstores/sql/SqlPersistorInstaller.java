@@ -27,6 +27,7 @@ import org.apache.isis.runtimes.dflt.objectstores.sql.jdbc.installer.JdbcFieldMa
 import org.apache.isis.runtimes.dflt.runtime.installerregistry.installerapi.ObjectStorePersistenceMechanismInstallerAbstract;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.ObjectStore;
 import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
+import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.OidGenerator;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessionFactory;
@@ -48,7 +49,7 @@ public class SqlPersistorInstaller extends ObjectStorePersistenceMechanismInstal
             final FieldMappingLookup fieldMappingLookup = new FieldMappingLookup();
             final JdbcFieldMappingFactoryInstaller installer = new JdbcFieldMappingFactoryInstaller();
 
-            Defaults.initialise(SqlObjectStore.BASE_NAME);
+            Defaults.initialise(SqlObjectStore.BASE_NAME, IsisContext.getConfiguration());
 
             installer.load(fieldMappingLookup);
             // fieldMappingLookup.setValueMappingFactory(new

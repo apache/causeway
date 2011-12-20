@@ -69,7 +69,7 @@ public final class SqlObjectStore implements ObjectStore {
         Sql.setMetaData(connectionPool.acquire().getMetaData());
 
         if (!isInitialized) {
-            Defaults.initialise(BASE_NAME);
+            Defaults.initialise(BASE_NAME, IsisContext.getConfiguration());
             Defaults.setPkIdLabel(Sql.identifier(Defaults.getPkIdLabel()));
             Defaults.setIdColumn(Sql.identifier(Defaults.getIdColumn()));
         }

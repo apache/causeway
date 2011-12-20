@@ -35,6 +35,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.runtimes.dflt.objectstores.sql.AbstractMapper;
 import org.apache.isis.runtimes.dflt.objectstores.sql.CollectionMapper;
 import org.apache.isis.runtimes.dflt.objectstores.sql.DatabaseConnector;
+import org.apache.isis.runtimes.dflt.objectstores.sql.Defaults;
 import org.apache.isis.runtimes.dflt.objectstores.sql.FieldMappingLookup;
 import org.apache.isis.runtimes.dflt.objectstores.sql.ObjectMappingLookup;
 import org.apache.isis.runtimes.dflt.objectstores.sql.Sql;
@@ -112,7 +113,7 @@ public abstract class AbstractAutoMapper extends AbstractMapper {
     }
 
     protected String getTableNameFromSpecification(ObjectSpecification objectSpecification) {
-        return Sql.tableIdentifier(Sql.sqlName("isis_" + objectSpecification.getShortIdentifier()));
+        return Sql.tableIdentifier(Sql.sqlName(Defaults.getTablePrefix() + objectSpecification.getShortIdentifier()));
     }
 
     protected List<ObjectAssociation> fields = new ArrayList<ObjectAssociation>();

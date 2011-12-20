@@ -24,7 +24,6 @@ import java.util.Calendar;
 import org.joda.time.DateTimeZone;
 
 import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 
 /**
  * Provides objectstore defaults. Most significantly, maintains the object store default TimeZone, and maintains
@@ -35,22 +34,24 @@ import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
  */
 public class Defaults {
     private static String propertiesBase;
+    private static IsisConfiguration isisConfiguration;
 
-    public static void initialise(String propertiesBase) {
+    public static void initialise(String propertiesBase, IsisConfiguration isisConfiguration) {
         Defaults.propertiesBase = propertiesBase;
         setTimeZone(DateTimeZone.UTC);
 
-        final IsisConfiguration configParameters = IsisContext.getConfiguration();
+        Defaults.isisConfiguration = isisConfiguration;
 
-        setPkIdLabel(getStringProperty(propertiesBase, configParameters, "pk_id"));
-        setIdColumn(getStringProperty(propertiesBase, configParameters, "id"));
-        setMaxInstances(getIntProperty(propertiesBase, configParameters, "maxinstances", 100));
-        final String useVersioningProperty = getStringProperty(propertiesBase, configParameters, "versioning", "true");
+        setTablePrefix(getStringProperty(propertiesBase, isisConfiguration, "tableprefix", "isis_"));
+        setPkIdLabel(getStringProperty(propertiesBase, isisConfiguration, "pk_id"));
+        setIdColumn(getStringProperty(propertiesBase, isisConfiguration, "id"));
+        setMaxInstances(getIntProperty(propertiesBase, isisConfiguration, "maxinstances", 100));
+        final String useVersioningProperty = getStringProperty(propertiesBase, isisConfiguration, "versioning", "true");
         final int isTrue = useVersioningProperty.compareToIgnoreCase("true");
         useVersioning(isTrue == 0);
 
         final String BASE_DATATYPE = propertiesBase + ".datatypes.";
-        final IsisConfiguration dataTypes = IsisContext.getConfiguration().getProperties(BASE_DATATYPE);
+        final IsisConfiguration dataTypes = isisConfiguration.getProperties(BASE_DATATYPE);
         populateSqlDataTypes(dataTypes, BASE_DATATYPE);
 
     }
@@ -89,6 +90,19 @@ public class Defaults {
     public static void setTimeZone(final DateTimeZone timezone) {
         dateTimeZone = timezone;
         calendar = Calendar.getInstance(timezone.toTimeZone());
+    }
+
+    // }}
+
+    // {{ Table prefix, defaults to "isis_"
+    private static String tablePrefix;
+
+    public static String getTablePrefix() {
+        return Defaults.tablePrefix;
+    }
+
+    public static void setTablePrefix(final String prefix) {
+        Defaults.tablePrefix = prefix;
     }
 
     // }}
@@ -252,9 +266,8 @@ public class Defaults {
         if (useVersioning() == false) {
             return false;
         }
-        final IsisConfiguration configParameters = IsisContext.getConfiguration();
         final String useVersioningProperty =
-            getStringProperty(propertiesBase, configParameters, "versioning." + shortIdentifier, "true");
+            getStringProperty(propertiesBase, isisConfiguration, "versioning." + shortIdentifier, "true");
         return (useVersioningProperty.compareToIgnoreCase("true") == 0);
     }
     // }}
