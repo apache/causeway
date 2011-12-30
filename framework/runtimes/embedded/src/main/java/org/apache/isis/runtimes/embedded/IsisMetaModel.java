@@ -30,6 +30,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
+import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
@@ -65,7 +66,9 @@ public class IsisMetaModel implements ApplicationScopedComponent {
         NOT_INITIALIZED, INITIALIZED, SHUTDOWN;
     }
 
+    private final EmbeddedContext context;
     private final List<Object> services = Lists.newArrayList();
+    
     private State state = State.NOT_INITIALIZED;
 
     private ObjectReflectorDefault reflector;
@@ -81,7 +84,7 @@ public class IsisMetaModel implements ApplicationScopedComponent {
     private MetaModelValidator metaModelValidator;
 
     private WrapperFactory wrapperFactory;
-    private final EmbeddedContext context;
+	private DomainObjectContainerWrapperFactory container;
 
     public IsisMetaModel(final EmbeddedContext context, final Object... services) {
         this(context, Arrays.asList(services));
@@ -126,7 +129,7 @@ public class IsisMetaModel implements ApplicationScopedComponent {
                 memberLayoutArranger, programmingModel, facetDecorators, metaModelValidator);
 
         runtimeContext = new RuntimeContextForEmbeddedMetaModel(context, services);
-        final DomainObjectContainerWrapperFactory container = new DomainObjectContainerWrapperFactory();
+        this.container = new DomainObjectContainerWrapperFactory();
 
         runtimeContext.injectInto(container);
         runtimeContext.setContainer(container);
@@ -163,7 +166,7 @@ public class IsisMetaModel implements ApplicationScopedComponent {
     }
 
     // ///////////////////////////////////////////////////////
-    // Viewer
+    // WrapperFactory
     // ///////////////////////////////////////////////////////
 
     /**
@@ -172,6 +175,18 @@ public class IsisMetaModel implements ApplicationScopedComponent {
     public WrapperFactory getWrapperFactory() {
         ensureInitialized();
         return wrapperFactory;
+    }
+
+    // ///////////////////////////////////////////////////////
+    // WrapperFactory
+    // ///////////////////////////////////////////////////////
+
+    /**
+     * Available once {@link #init() initialized}.
+     */
+    public DomainObjectContainer getDomainObjectContainer() {
+        ensureInitialized();
+        return container;
     }
 
     // ///////////////////////////////////////////////////////
