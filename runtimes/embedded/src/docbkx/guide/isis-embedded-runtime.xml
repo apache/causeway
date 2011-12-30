@@ -66,14 +66,18 @@
 
     <para>This implementation, though, is the <emphasis>embedded</emphasis>
     runtime. It exists to allow the "unique stuff" of Isis - namely its
-    metamodel and optionally its viewers - to be embedded or hosted within
-    some other existing runtime (eg Spring, CDI, Maven plugin etc). As such,
-    it is a very thin layer; it basically consolidates all the dependencies of
-    the metamodel into a single interface.</para>
+    metamodel - to be embedded or hosted within some other existing runtime
+    (eg Spring, CDI, Maven plugin etc).<footnote>
+        <para>In principle, the embedded runtime ought also to be able to
+        support the viewers. At the time of writing, however, pretty much all
+        the viewers have a hard-coded dependency on the default runtime.
+        Hopefully this will change in the future.</para>
+      </footnote> As such, it is a very thin layer; it basically consolidates
+    all the dependencies of the metamodel into a single interface.</para>
 
     <para>This guide is written for developers and architects who wish to use
-    the embedded runtime as a means of embedding Isis within some other
-    framework.</para>
+    the embedded runtime as a means of embedding <emphasis>Isis</emphasis>
+    within some other framework.</para>
 
     <para><emphasis>Isis</emphasis> is hosted at the <ulink
     url="http://incubator.apache.org/isis">Apache Foundation</ulink>, and is
@@ -85,62 +89,109 @@
   <!-- main content -->
 
   <chapter id="chp.Intro">
-    <title>Introduction</title>
+    <title>IsisMetaModel</title>
 
     <abstract>
-      <para>*** yada yada</para>
+      <para>An overview of the <classname>IsisMetaModel</classname> class and
+      supporting classes.</para>
     </abstract>
 
     <sect1>
-      <title>***</title>
+      <title>Introduction</title>
 
-      <para><emphasis>*** yada yada</emphasis></para>
+      <para>The heart of the <emphasis>embedded runtime</emphasis> is the
+      <classname>IsisMetaModel</classname> class. This combines all the
+      various internal components (all pluggable) that specify, identify and
+      give access to an Isis metamodel. The intention of this class is so that
+      it can be instantiated within some other framework (eg Spring, CDI) so
+      that other clients can consume and use the Isis metamodel for their own
+      purposes.</para>
 
-      <para></para>
+      <para>Broadly speaking, there are two main use cases where
+      <classname>IsisMetaModel</classname> can be used; each is discussed
+      briefly below.</para>
 
-      <para></para>
+      <sect2>
+        <title>Use Case "A": Static Analysis</title>
 
-      <para>The IsisMetaModel class.</para>
+        <para>The first main use case ("use case A"), is for static analysis
+        of a set of domain classes.</para>
 
-      <para>-</para>
+        <para>For example, a Maven plugin could use the metamodel to perform
+        validation of a domain object model within the build phase.</para>
 
-      <para></para>
+        <para>Or, as another example, a diagram generator could inspect the
+        metamodel in order to generate a <acronym>UML</acronym> class diagram,
+        annotated to highlight certain semantics (eg immutable classes
+        etc).</para>
 
-      <para></para>
+        <para>In this use case, the only really requirement is upon the static
+        <classname>ObjectSpecification</classname>s (cf
+        <classname>java.lang.Class</classname>). For these the
+        <classname>IsisMetaModel</classname> provides access to the
+        <classname>SpecificationLoader</classname> from which the
+        <classname>ObjectSpecification</classname> of any class can be
+        obtained.</para>
+      </sect2>
 
-      <para>WrapperFactory, and wrapped objects.</para>
+      <sect2>
+        <title>Use Case "B": Custom application</title>
 
-      <para></para>
+        <para>The second main use case ("use case B") is for embedding within
+        a application that will have custom code for instantiating domain
+        objects (cf <classname>java.lang.Object</classname>).</para>
 
-      <para></para>
+        <para>The lifecycle of these domain objects is
+        <emphasis>not</emphasis> be managed by
+        <classname>IsisMetaModel</classname>; instead you will need to manage
+        this yourself (eg using <acronym>JPA</acronym>
+        <classname>PersistenceContext</classname>).</para>
 
-      <para>The Wrapped Objects</para>
+        <para>The value of <classname>IsisMetaModel</classname> for this use
+        case is two-fold:</para>
 
-      <para>- how they handle save(), how they hand title()</para>
+        <itemizedlist>
+          <listitem>
+            <para>First, the metamodel helps to describe the structure and
+            behaviour of these domain objects; this information could then be
+            used to autogenerate certain pages (similar to Isis' own viewers),
+            perhaps using another framework such as <ulink
+            url="http://metawidget.org">MetaWidget</ulink>.</para>
+          </listitem>
 
-      <para></para>
+          <listitem>
+            <para>Second, the <classname>IsisMetaModel</classname> provides
+            access to a <classname>ServicesInjector</classname>, which can be
+            used to inject both the supplied domain services into the domain
+            objects, along with a number of "built-in" domain services
+            (specifically, <classname>DomainObjectContainer</classname> and
+            <classname>WrapperFactory</classname>).</para>
+          </listitem>
+        </itemizedlist>
+      </sect2>
     </sect1>
-  </chapter>
-
-  <chapter>
-    <title>EmbeddedContext API</title>
-
-    <abstract>
-      <para>*** yada yada</para>
-    </abstract>
 
     <sect1>
-      <title>***</title>
+      <title>Instantiating the <classname>IsisMetaModel</classname></title>
 
-      <para><emphasis>*** yada yada</emphasis></para>
+      <para>The constructor for <classname>IsisMetaModel</classname>
+      is:</para>
 
-      <para></para>
+      <programlisting>public IsisMetaModel(final EmbeddedContext context, final List&lt;Object&gt; domainServices)</programlisting>
 
-      <para></para>
+      <para>This takes two arguments, an
+      <classname>EmbeddedContext</classname> and a list of domain
+      services.</para>
 
-      <para></para>
+      <sect2>
+        <title><classname>EmbeddedContext</classname></title>
 
-      <programlisting>public interface EmbeddedContext {
+        <para>The <classname>EmbeddedContext</classname> interface acts as a
+        facade for the <classname>IsisMetaModel</classname> into the custom
+        runtime in which it is embedded. This interface is defined as
+        follows:</para>
+
+        <programlisting>public interface EmbeddedContext {
 
     AuthenticationSession getAuthenticationSession();
     Localization getLocalization();
@@ -166,51 +217,348 @@
     void raiseError(String message);
 }</programlisting>
 
-      <para></para>
+        <para>In order to instantiate an <classname>IsisMetaModel</classname>,
+        an implementation of this interface must be provided. If only using
+        IsisMetaModel in use case "A"-like scenarios, then you may find it
+        sufficient to use the <classname>EmbeddedContextNoop</classname>
+        implementation. However, to support use case "B" - specifically, where
+        your domain objects make use of the DomainObjectContainer domain
+        service - then you will need to provide a custom implementation of
+        <classname>EmbeddedContext</classname> interface that hooks into the
+        rest of your custom runtime.</para>
 
-      <para></para>
+        <sidebar>
+          <para>Implementation note: the
+          <classname>EmbeddedContext</classname> is similar to the internal
+          <classname>RuntimeContext</classname> through which Isis normally
+          routes all interactions between the metamodel and the rest of core.
+          However, <classname>EmbeddedContext</classname> depends only on the
+          <emphasis>Isis</emphasis> applib, whereas
+          <classname>RuntimeContext</classname> brings in dependencies on
+          other non-applib modules of the framework.</para>
+        </sidebar>
+      </sect2>
 
-      <para></para>
+      <sect2>
+        <title>Domain Services</title>
+
+        <para>The other parameter required to instantiate
+        <classname>IsisMetaModel</classname> is a list of domain services.
+        These are singletons that typically act as factories or repositories.
+        As such, they represent the "start point" of interactions.</para>
+
+        <para>The <classname>IsisMetaModel</classname> uses the domain service
+        list for two purposes.</para>
+
+        <para>First, they are used to find the other classes that make up the
+        metamodel. This is done by traversing specifications
+        transitively</para>
+
+        <para>Second, for use case "B", the services can be automatically
+        injected into any domain objects.</para>
+      </sect2>
+    </sect1>
+
+    <sect1>
+      <title>Component Implementations</title>
+
+      <para>When the <classname>IsisMetaModel</classname> is instantiated, it
+      in turn instantiates a number of internal components.</para>
+
+      <table>
+        <title>IsisMetaModel "internal" components</title>
+
+        <tgroup cols="3">
+          <colspec colwidth="4*" />
+
+          <colspec colwidth="8*" />
+
+          <colspec colwidth="8*" />
+
+          <thead>
+            <row>
+              <entry align="center">Component</entry>
+
+              <entry align="center">Description</entry>
+
+              <entry align="center">Default Implementation</entry>
+            </row>
+          </thead>
+
+          <tbody>
+            <row>
+              <entry>IsisConfiguration</entry>
+
+              <entry>Immutable set of properties representing the
+              configuration of the running system.</entry>
+
+              <entry><classname>IsisConfigurationDefault</classname>. Reads
+              from specified <classname>ResourceStreamSource</classname> (an
+              abstraction over an inputstream that can read resources/files eg
+              from a filesystem or classpath).</entry>
+            </row>
+
+            <row>
+              <entry>ClassSubstitutor</entry>
+
+              <entry>Provides capability to translate or ignore classes when
+              loading a class. For example, this can be used to ignore proxy
+              subclasses generated by <acronym>ORM</acronym>s.</entry>
+
+              <entry><classname>ClassSubstitutorIdentity</classname>. This is
+              a no-op implementation (performs no substitution).</entry>
+            </row>
+
+            <row>
+              <entry>CollectionTypeRegistry</entry>
+
+              <entry>Defines the types which are considered to be
+              collections</entry>
+
+              <entry><classname>CollectionTypeRegistryDefault</classname>.
+              This implementation defines subclasses of
+              <classname>java.util.Collection</classname>, along with Java
+              arrays.</entry>
+            </row>
+
+            <row>
+              <entry>SpecificationTraverser</entry>
+
+              <entry>Defines an algorithm for discovering one type from the
+              next.</entry>
+
+              <entry><classname>SpecificationTraverserDefault</classname>.
+              This implementation considers just the return types of each
+              method handed to it.</entry>
+            </row>
+
+            <row>
+              <entry>MemberLayoutArranger</entry>
+
+              <entry>Orders both associations (collections and properties) and
+              actions.</entry>
+
+              <entry><classname>MemberLayoutArrangerDefault</classname>.
+              Supports ordering by
+              <methodname>fieldOrder()</methodname>/<methodname>actionOrder()</methodname>
+              methods, and also by the <classname>@MemberOrder</classname>
+              annotation.</entry>
+            </row>
+
+            <row>
+              <entry>FacetDecorators</entry>
+
+              <entry>Set of <classname>FacetDecorator</classname>s, each of
+              which can post-process any <classname>Facet</classname> in the
+              metamodel (eg to add security, transaction support etc).</entry>
+
+              <entry>(empty set)</entry>
+            </row>
+
+            <row>
+              <entry>ProgrammingModel</entry>
+
+              <entry>The list of <classname>FacetFactory</classname>s by which
+              the programming conventions understood by
+              <emphasis>Isis</emphasis> are defined.</entry>
+
+              <entry><classname>ProgrammingModelFacetsJava5</classname>. This
+              implementation defines the programming model described in
+              <emphasis>Isis'</emphasis> applib documentation.</entry>
+            </row>
+
+            <row>
+              <entry>MetaModelValidator</entry>
+
+              <entry>Validates the metamodel after it has been built (the
+              <classname>SpecificationLoader</classname> is injected into this
+              component in order that it iterate through
+              <classname>ObjectSpecification</classname>s as
+              required).</entry>
+
+              <entry><classname>MetaModelValidatorDefault</classname>. This is
+              a no-op implementation.</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+
+      <para>The most significant of these "internal" components is probably
+      the <classname>ProgrammingModel</classname> implementation; however all
+      the others influence the meta-model that is built one way or
+      another.</para>
+
+      <para>Once the <classname>IsisMetaModel</classname> has been
+      instantiated, the implementation of any of these "internal" components
+      can be replaced using the appropriate setter.</para>
+    </sect1>
+
+    <sect1>
+      <title>Initializing the <classname>IsisMetaModel</classname></title>
+
+      <para>After the <classname>IsisMetaModel</classname> has been
+      instantiated (and "internal" component implementations replaced as need
+      be), it should be initialized. This is done by calling its
+      <methodname>init()</methodname> method.</para>
+
+      <programlisting>IsisMetaModel#init()</programlisting>
+
+      <para>Invoking this method causes the
+      <classname>IsisMetaModel</classname> to instantiate its a set of
+      "external" components that can then be used for the various use cases
+      (described in <xref linkend="sec.UsingTheMetaModel" />). Attempting to
+      initialize the metamodel more than once will throw a runtime
+      exception.</para>
+    </sect1>
+
+    <sect1 id="sec.UsingTheMetaModel">
+      <title>Using the <classname>IsisMetaModel</classname></title>
+
+      <para>Once the <classname>IsisMetaModel</classname> has been
+      initialized, any of the "external" components that it provides can be
+      used as required.</para>
+
+      <table>
+        <title>IsisMetaModel "external" components</title>
+
+        <tgroup cols="2">
+          <colspec colwidth="4*" />
+
+          <colspec colwidth="16*" />
+
+          <thead>
+            <row>
+              <entry align="center">Component</entry>
+
+              <entry align="center">Description</entry>
+            </row>
+          </thead>
+
+          <tbody>
+            <row>
+              <entry>SpecificationLoader</entry>
+
+              <entry>Loads and caches the
+              <classname>ObjectSpecification</classname>s of the metamodel.
+              Each <classname>ObjectSpecification</classname> describes the
+              structure and behaviour of a class.</entry>
+            </row>
+
+            <row>
+              <entry>DomainObjectContainer &amp; WrapperFactory</entry>
+
+              <entry>Implementation of the
+              <classname>org.apache.isis.applib.DomainObjectContainer</classname>
+              interface (which provides as single facade to the runtime for a
+              domain object). the implementation also implements
+              <classname>org.apache.isis.progmodel.wrapper.applib.WrapperFactory</classname>
+              interface. This allows domain objects to interact directly but
+              still enforcing the business logic of the programming
+              model.</entry>
+            </row>
+
+            <row>
+              <entry>ServicesInjector</entry>
+
+              <entry>Provides the ability to inject both the domain services
+              (provided in the <classname>IsisMetaModel</classname>
+              constructor) along with the
+              <classname>DomainObjectContainer</classname>.</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+
+      <para>Which of these components you use will largely depend on the use
+      case.<itemizedlist>
+          <listitem>
+            <para>For static analysis use cases (use case "A"), only
+            <classname>SpecificationLoader</classname> is likely to be
+            required.</para>
+
+            <para>From this all of the
+            <classname>ObjectSpecification</classname>s that make up the
+            metamodel can be obtained, and inspected as required.</para>
+          </listitem>
+
+          <listitem>
+            <para>For a custom application (use case "B"), both
+            <classname>SpecificationLoader</classname> and
+            <classname>ServicesInjector</classname> are likely to be
+            required.</para>
+
+            <para>The <classname>SpecificationLoader</classname> can be used
+            to obtain the <classname>ObjectSpecification</classname> for a
+            given domain object, from which its structure and behaviour can be
+            queried.</para>
+
+            <para>The <classname>ServicesInjector</classname> is typically
+            hooked into a callback provided by the custom runtime, eg when an
+            object is pulled back from a database. The ServicesInjector can
+            then be used to automatically inject the domain object instance
+            with the domain services and with the
+            <classname>DomainObjectContainer</classname> and
+            <classname>WrapperFactory</classname>.</para>
+          </listitem>
+        </itemizedlist></para>
+
+      <para>In addition, any of the "internal" components can be accessed; for
+      example the <classname>IsisConfiguration</classname> could be used to
+      obtain configuration parameters.</para>
     </sect1>
   </chapter>
 
   <chapter>
-    <title>Writing and Deploying an Implementation</title>
-
-    <para></para>
-
-    <para></para>
-
-    <para>instantiate IsisMetaModel via Spring.</para>
-
-    <para></para>
-
-    <para>Provide some copy-n-paste example code here...</para>
-
-    <para></para>
-
-    <para>The IsisMetaModel creates a DomainObjectContainerWrapperFactory. The
-    EmbeddedContext implementation should take this and inject into entities
-    as required.</para>
-
-    <para></para>
-
-    <para></para>
-
-    <para></para>
-  </chapter>
-
-  <appendix>
-    <title>***</title>
+    <title>Worked Example</title>
 
     <abstract>
-      <para>*** yada yada</para>
+      <para>Illustrates the use of <classname>IsisMetaModel</classname>,
+      bootstrapped by Spring framework.</para>
     </abstract>
 
-    <sect1 id="sec.module-ui">
-      <title>***</title>
+    <para></para>
 
-      <para>*** yada yada</para>
+    <para></para>
+
+    <sect1>
+      <title>Instantiating IsisMetaModel using Spring</title>
+
+      <para></para>
+
+      <para>instantiate IsisMetaModel via Spring.</para>
+
+      <para></para>
+
+      <para>Provide some copy-n-paste example code here...</para>
+
+      <para></para>
     </sect1>
-  </appendix>
+
+    <sect1>
+      <title>Using DomainObjectContainer within a Domain Object</title>
+
+      <para></para>
+    </sect1>
+
+    <sect1>
+      <title>Using WrapperFactory within a Domain Object</title>
+
+      <para>The IsisMetaModel creates a
+      DomainObjectContainerWrapperFactory.</para>
+
+      <para></para>
+
+      <para></para>
+
+      <para>The Wrapped Objects</para>
+
+      <para>- how they handle save(), how they hand title()</para>
+
+      <para></para>
+
+      <para></para>
+
+      <para></para>
+    </sect1>
+  </chapter>
 </book>
