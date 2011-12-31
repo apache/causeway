@@ -88,11 +88,6 @@
                 <artifactId>dflt</artifactId>
                 <version>0.2.0-incubating-SNAPSHOT</version>
             </dependency>
-            <dependency>
-                <groupId>org.apache.isis.runtimes.dflt.bytecode</groupId>
-                <artifactId>identity</artifactId>
-                <version>0.2.0-incubating-SNAPSHOT</version>
-            </dependency>
 
 			<dependency>
 				<groupId>org.apache.isis.progmodels</groupId>
@@ -108,19 +103,16 @@
 			<artifactId>metamodel</artifactId>
         </dependency>
 
+<!--
 		<dependency>
 			<groupId>org.apache.isis.progmodels</groupId>
 			<artifactId>wrapper-metamodel</artifactId>
         </dependency>
+-->
 
         <dependency>
             <groupId>org.apache.isis.progmodels</groupId>
             <artifactId>dflt</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.isis.runtimes.dflt.bytecode</groupId>
-            <artifactId>identity</artifactId>
         </dependency>
         
         <dependency>

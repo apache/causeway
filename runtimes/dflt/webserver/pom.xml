@@ -73,12 +73,22 @@
 			<groupId>org.mortbay.jetty</groupId>
 			<artifactId>jetty</artifactId>
 		</dependency>
+		<dependency>
+	        <groupId>org.mortbay.jetty</groupId>
+	        <artifactId>jsp-2.1</artifactId>
+	    </dependency>
+	    <dependency>
+	        <groupId>org.mortbay.jetty</groupId>
+	        <artifactId>jsp-api-2.1</artifactId>
+	    </dependency>
 
 	    <dependency>
             <groupId>org.apache.geronimo.specs</groupId>
             <artifactId>geronimo-servlet_2.5_spec</artifactId>
             <scope>provided</scope>
         </dependency>
+
+    
 	</dependencies>
 
 </project>

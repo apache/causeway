@@ -99,6 +99,17 @@
     <sect1>
       <title>Introduction</title>
 
+      <para></para>
+
+      <para>*** TODO: remove WrapperFactory stuff, since have removed the
+      dependency on that module.</para>
+
+      <para></para>
+
+      <para></para>
+
+      <para></para>
+
       <para>The heart of the <emphasis>embedded runtime</emphasis> is the
       <classname>IsisMetaModel</classname> class. This combines all the
       various internal components (all pluggable) that specify, identify and
@@ -445,16 +456,12 @@
             </row>
 
             <row>
-              <entry>DomainObjectContainer &amp; WrapperFactory</entry>
+              <entry>DomainObjectContainer</entry>
 
               <entry>Implementation of the
               <classname>org.apache.isis.applib.DomainObjectContainer</classname>
               interface (which provides as single facade to the runtime for a
-              domain object). the implementation also implements
-              <classname>org.apache.isis.progmodel.wrapper.applib.WrapperFactory</classname>
-              interface. This allows domain objects to interact directly but
-              still enforcing the business logic of the programming
-              model.</entry>
+              domain object).</entry>
             </row>
 
             <row>
@@ -541,20 +548,10 @@
     </sect1>
 
     <sect1>
-      <title>Using WrapperFactory within a Domain Object</title>
+      <title>Using IsisMetaModel to validate interactions</title>
 
-      <para>The IsisMetaModel creates a
-      DomainObjectContainerWrapperFactory.</para>
-
-      <para></para>
-
-      <para></para>
-
-      <para>The Wrapped Objects</para>
-
-      <para>- how they handle save(), how they hand title()</para>
-
-      <para></para>
+      <para>*** TODO: define a simple interface to make this easy to
+      do.</para>
 
       <para></para>
 

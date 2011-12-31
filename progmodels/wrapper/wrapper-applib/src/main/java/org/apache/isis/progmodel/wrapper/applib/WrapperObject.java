@@ -19,7 +19,6 @@
 
 package org.apache.isis.progmodel.wrapper.applib;
 
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 /**
  * Implemented by all objects that have been viewed as per {@link WrapperFactory#wrap(Object)}.
@@ -36,7 +35,7 @@ public interface WrapperObject {
      * Provide access to the underlying, wrapped object.
      * 
      * <p>
-     * Used to unwrap objects used as arguments to actions (otherwise, end up creating a {@link ObjectSpecification} for
+     * Used to unwrap objects used as arguments to actions (otherwise, end up creating a <tt>ObjectSpecification</tt> for
      * the CGLib-enhanced class, not the original class).
      * 
      * <p>

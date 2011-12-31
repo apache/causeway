@@ -57,6 +57,7 @@ import org.apache.isis.core.metamodel.spec.ObjectInstantiatorAbstract;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification.CreationMode;
 import org.apache.isis.runtimes.embedded.EmbeddedContext;
+import org.apache.isis.runtimes.embedded.PersistenceState;
 
 /**
  * Acts as a bridge between the {@link RuntimeContext} (as used internally within the meta-model) and the

@@ -20,8 +20,8 @@
 package org.apache.isis.runtimes.dflt.bytecode.dflt.classsubstitutor;
 
 import org.apache.isis.core.commons.lang.JavaClassUtils;
+import org.apache.isis.core.metamodel.specloader.classsubstitutor.CglibEnhanced;
 import org.apache.isis.core.metamodel.specloader.classsubstitutor.ClassSubstitutorAbstract;
-import org.apache.isis.runtimes.dflt.bytecode.dflt.objectfactory.internal.CglibEnhanced;
 
 public class CglibClassSubstitutor extends ClassSubstitutorAbstract {
 

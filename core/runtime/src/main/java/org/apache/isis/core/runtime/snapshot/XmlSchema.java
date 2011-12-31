@@ -39,7 +39,7 @@ public final class XmlSchema {
     private final String uriBase;
     private String uri;
 
-    private final IsisMetaModel nofMeta;
+    private final IsisSchema nofMeta;
     private final XsMetaModel xsMeta;
     private final Helper helper;
 
@@ -49,7 +49,7 @@ public final class XmlSchema {
     public final static String DEFAULT_PREFIX = "app";
 
     public XmlSchema() {
-        this(IsisMetaModel.DEFAULT_URI_BASE, XmlSchema.DEFAULT_PREFIX);
+        this(IsisSchema.DEFAULT_URI_BASE, XmlSchema.DEFAULT_PREFIX);
     }
 
     /**
@@ -59,7 +59,7 @@ public final class XmlSchema {
      *            the prefix for the application namespace's prefix
      */
     public XmlSchema(final String uriBase, final String prefix) {
-        this.nofMeta = new IsisMetaModel();
+        this.nofMeta = new IsisSchema();
         this.xsMeta = new XsMetaModel();
         this.helper = new Helper();
 
@@ -82,10 +82,10 @@ public final class XmlSchema {
         if (XsMetaModel.W3_ORG_XSI_PREFIX.equals(prefix)) {
             throw new IllegalArgumentException("Namespace prefix reserved for w3.org XML schema-instance namespace.");
         }
-        if (IsisMetaModel.NOF_METAMODEL_NS_URI.equals(base)) {
+        if (IsisSchema.NS_URI.equals(base)) {
             throw new IllegalArgumentException("Namespace URI reserved for NOF metamodel namespace.");
         }
-        if (IsisMetaModel.NOF_METAMODEL_NS_PREFIX.equals(prefix)) {
+        if (IsisSchema.NS_PREFIX.equals(prefix)) {
             throw new IllegalArgumentException("Namespace prefix reserved for NOF metamodel namespace.");
         }
         this.uriBase = base;
@@ -148,9 +148,9 @@ public final class XmlSchema {
             final String singularName,
             final String pluralName) {
         final Element element = doc.createElementNS(getUri(), getPrefix() + ":" + localName);
-        element.setAttributeNS(IsisMetaModel.NOF_METAMODEL_NS_URI, "nof:fqn", fullyQualifiedClassName);
-        element.setAttributeNS(IsisMetaModel.NOF_METAMODEL_NS_URI, "nof:singular", singularName);
-        element.setAttributeNS(IsisMetaModel.NOF_METAMODEL_NS_URI, "nof:plural", pluralName);
+        element.setAttributeNS(IsisSchema.NS_URI, "nof:fqn", fullyQualifiedClassName);
+        element.setAttributeNS(IsisSchema.NS_URI, "nof:singular", singularName);
+        element.setAttributeNS(IsisSchema.NS_URI, "nof:plural", pluralName);
         nofMeta.addNamespace(element); // good a place as any
 
         addNamespace(element, getPrefix(), getUri());
@@ -211,7 +211,7 @@ public final class XmlSchema {
 
         // xs:element/xs:complexType/xs:sequence/xs:element ref="nof:title"
         final Element xsTitleElement = xsMeta.createXsElement(helper.docFor(xsSequenceElement), "element");
-        xsTitleElement.setAttribute("ref", IsisMetaModel.NOF_METAMODEL_NS_PREFIX + ":" + "title");
+        xsTitleElement.setAttribute("ref", IsisSchema.NS_PREFIX + ":" + "title");
         xsSequenceElement.appendChild(xsTitleElement);
         xsMeta.setXsCardinality(xsTitleElement, 0, 1);
 
@@ -302,7 +302,7 @@ public final class XmlSchema {
             final Hashtable extensions) {
 
         // gather details from XML element
-        final String datatype = xmlValueElement.getAttributeNS(IsisMetaModel.NOF_METAMODEL_NS_URI, "datatype");
+        final String datatype = xmlValueElement.getAttributeNS(IsisSchema.NS_URI, "datatype");
         final String fieldName = xmlValueElement.getLocalName();
 
         // <xs:element name="%owning object%">
@@ -434,7 +434,7 @@ public final class XmlSchema {
         // xs:element/xs:complexType/xs:sequence/xs:element/xs:complexType/xs:sequence/xs:element
         // ref="nof:title"
         final Element xsFieldTitleElement = xsMeta.createXsElement(helper.docFor(xsFieldSequenceElement), "element");
-        xsFieldTitleElement.setAttribute("ref", IsisMetaModel.NOF_METAMODEL_NS_PREFIX + ":" + "title");
+        xsFieldTitleElement.setAttribute("ref", IsisSchema.NS_PREFIX + ":" + "title");
         xsFieldSequenceElement.appendChild(xsFieldTitleElement);
         xsMeta.setXsCardinality(xsFieldTitleElement, 0, 1);
 
@@ -503,7 +503,7 @@ public final class XmlSchema {
         // xs:element/xs:complexType/xs:sequence/xs:element/xs:complexType/xs:sequence/xs:element
         // ref="nof:oids"
         final Element xsFieldOidsElement = xsMeta.createXsElement(helper.docFor(xsFieldSequenceElement), "element");
-        xsFieldOidsElement.setAttribute("ref", IsisMetaModel.NOF_METAMODEL_NS_PREFIX + ":" + "oids");
+        xsFieldOidsElement.setAttribute("ref", IsisSchema.NS_PREFIX + ":" + "oids");
         xsFieldSequenceElement.appendChild(xsFieldOidsElement);
         xsMeta.setXsCardinality(xsFieldOidsElement, 0, 1);
 

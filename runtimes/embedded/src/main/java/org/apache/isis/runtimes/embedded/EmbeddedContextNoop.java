@@ -24,7 +24,6 @@ import java.util.List;
 import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
-import org.apache.isis.runtimes.embedded.internal.PersistenceState;
 
 public class EmbeddedContextNoop implements EmbeddedContext {
 

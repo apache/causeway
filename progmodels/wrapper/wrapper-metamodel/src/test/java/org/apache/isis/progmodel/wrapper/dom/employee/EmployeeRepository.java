@@ -17,15 +17,16 @@
  *  under the License.
  */
 
-package org.apache.isis.runtimes.embedded.internal;
+package org.apache.isis.progmodel.wrapper.dom.employee;
 
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.runtimes.embedded.PersistenceState;
+import java.util.List;
 
-public class ServiceAdapter extends StandaloneAdapter {
+import org.apache.isis.applib.annotation.Named;
 
-    public ServiceAdapter(final ObjectSpecification spec, final Object serviceObject) {
-        super(spec, serviceObject, PersistenceState.PERSISTENT);
-    }
+@Named("Employees")
+public interface EmployeeRepository {
 
+    public List<Employee> allEmployees();
+
+    public List<Employee> findEmployees(@Named("Name") String name);
 }

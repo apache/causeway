@@ -64,11 +64,11 @@ public final class XsMetaModel {
      */
     public static final String W3_ORG_XSI_PREFIX = "xsi";
 
-    private final IsisMetaModel nofMeta;
+    private final IsisSchema nofMeta;
 
     public XsMetaModel() {
         this.helper = new Helper();
-        this.nofMeta = new IsisMetaModel();
+        this.nofMeta = new IsisSchema();
     }
 
     /**
@@ -94,8 +94,8 @@ public final class XsMetaModel {
 
         xsdDoc.appendChild(xsSchemaElement);
         final Element xsImportElement = createXsElement(xsdDoc, "import");
-        xsImportElement.setAttribute("namespace", IsisMetaModel.NOF_METAMODEL_NS_URI);
-        xsImportElement.setAttribute("schemaLocation", IsisMetaModel.DEFAULT_NOF_SCHEMA_LOCATION);
+        xsImportElement.setAttribute("namespace", IsisSchema.NS_URI);
+        xsImportElement.setAttribute("schemaLocation", IsisSchema.DEFAULT_LOCATION);
 
         xsSchemaElement.appendChild(xsImportElement);
 
@@ -166,7 +166,7 @@ public final class XsMetaModel {
             final String value,
             final boolean useFixed) {
         final Element xsNofAttributeElement = createXsElement(helper.docFor(parentXsElement), "attribute");
-        xsNofAttributeElement.setAttribute("ref", IsisMetaModel.NOF_METAMODEL_NS_PREFIX + ":" + nofAttributeRef);
+        xsNofAttributeElement.setAttribute("ref", IsisSchema.NS_PREFIX + ":" + nofAttributeRef);
         parentXsElement.appendChild(xsNofAttributeElement);
         if (value != null) {
             if (useFixed) {

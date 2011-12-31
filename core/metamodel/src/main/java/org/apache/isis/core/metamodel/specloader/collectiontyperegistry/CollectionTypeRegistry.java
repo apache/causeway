@@ -24,13 +24,16 @@ import org.apache.isis.core.commons.components.Injectable;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyFeature.CollectionSemantics;
 
 /**
- * TODO: plan is to allow new collection types to be installed dynamically, allowing the domain programmer to declare
- * custom classes to have collection semantics.
+ * Defines the types which are considered to be collections.
  * 
  * <p>
  * In this way there are similarities with the way in which value types are specified using <tt>@Value</tt>. However, we
  * need to maintain a repository of these collection types once nominated so that when we introspect classes we look for
  * collections first, and then properties second.
+ *
+ * <p>
+ * TODO: plan is to allow new collection types to be installed dynamically, allowing the domain programmer to declare
+ * custom classes to have collection semantics.
  */
 public interface CollectionTypeRegistry extends Injectable, ApplicationScopedComponent {
 

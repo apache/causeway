@@ -69,8 +69,8 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>org.apache.isis.runtimes.dflt</groupId>
-			<artifactId>runtime</artifactId>
+			<groupId>org.apache.isis</groupId>
+			<artifactId>applib</artifactId>
         </dependency>
 	</dependencies>
 

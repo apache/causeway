@@ -23,8 +23,6 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
 
-import org.apache.isis.runtimes.embedded.dom.claim.ClaimRepositoryImpl;
-import org.apache.isis.runtimes.embedded.dom.employee.EmployeeRepositoryImpl;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JMock;
 import org.jmock.integration.junit4.JUnit4Mockery;
@@ -33,7 +31,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 @RunWith(JMock.class)
-public class IsisMetaModelTest_getWrapperFactory {
+public class IsisMetaModelTest_getDomainObjectContainer {
 
     private final Mockery mockery = new JUnit4Mockery();
 
@@ -51,7 +49,7 @@ public class IsisMetaModelTest_getWrapperFactory {
 
     @Test
     public void happyCase() {
-        assertThat(metaModel.getWrapperFactory(), is(notNullValue()));
+        assertThat(metaModel.getDomainObjectContainer(), is(notNullValue()));
     }
 
 }
