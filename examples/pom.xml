@@ -58,7 +58,8 @@
     <modules>
         <module>quickstart</module>
         <module>claims</module>
-
+        <module>onlinedemo</module>
+        <module>embeddedinspring</module>
         <module>metamodel-examples/namefile</module>
     </modules>
 

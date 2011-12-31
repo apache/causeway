@@ -51,7 +51,7 @@
 		<!-- this project's dependencies -->
 		<dependency>
 			<groupId>org.apache.isis.examples.apps</groupId>
-            <artifactId>claims-quickrun</artifactId>
+            <artifactId>claims-dom</artifactId>
             <version>0.2.0-incubating-SNAPSHOT</version>
         </dependency>
 

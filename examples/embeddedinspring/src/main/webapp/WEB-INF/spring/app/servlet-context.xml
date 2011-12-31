@@ -12,6 +12,14 @@
 	<!-- Enables the Spring MVC @Controller programming model -->
 	<annotation-driven />	
 
+	<!-- Imports user-defined @Controller beans that process client requests -->
+	<beans:import resource="controllers.xml" />
+
+	<!-- Scan for DAOs -->
+	<beans:import resource="dao.xml" />
+
+	<!-- Initialize the IsisMetaModel -->
+	<beans:import resource="isis.xml" />
 	
 
 	<!-- Handles HTTP GET requests for /resources/** by efficiently serving up static resources in the ${webappRoot}/resources directory -->
@@ -22,9 +30,6 @@
 		<beans:property name="prefix" value="/WEB-INF/views/" />
 		<beans:property name="suffix" value=".jsp" />
 	</beans:bean>
-	
-	<!-- Imports user-defined @Controller beans that process client requests -->
-	<beans:import resource="controllers.xml" />
 	
 
 	<beans:bean id="validator"

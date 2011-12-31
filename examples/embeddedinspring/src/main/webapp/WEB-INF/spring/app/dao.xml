@@ -10,12 +10,6 @@
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd" default-autowire="byName">
 
 
-	<bean id="isisMetaModel" class="org.apache.isis.runtimes.embedded.IsisMetaModel" init-method="init">
-		<constructor-arg ref="embeddedContext"/>
-		<constructor-arg ref="personRepo"/>
-	</bean>	
-	
-	<bean id="embeddedContext" class="org.apache.isis.runtimes.embedded.EmbeddedContextNoop"/>
-
+	<context:component-scan base-package="org.apache.isis.examples.embeddedinspring.dao" />
 	
 </beans>

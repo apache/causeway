@@ -172,6 +172,7 @@
 			<scope>compile</scope>
 		</dependency>
 
+		<!-- Isis dependencies -->
 		<dependency>
 			<groupId>org.apache.isis.runtimes</groupId>
 			<artifactId>embedded</artifactId>
@@ -179,6 +180,16 @@
 			<type>jar</type>
 			<scope>compile</scope>
 		</dependency>
+
+
+        <!-- to run using WebServer (optional) -->
+        <dependency>
+            <groupId>org.apache.isis.runtimes.dflt</groupId>
+            <artifactId>webserver</artifactId>
+            <version>0.2.0-incubating-SNAPSHOT</version>
+            <scope>runtime</scope>
+            <optional>true</optional>
+        </dependency>
 
 	</dependencies>
 

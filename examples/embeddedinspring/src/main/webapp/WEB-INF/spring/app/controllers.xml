@@ -9,6 +9,7 @@
 
 	<!-- Scans within the base package of the application for @Components to 
 		configure as beans -->
+
 	<context:component-scan base-package="org.apache.isis.examples.embeddedinspring.controller" />
 	
 	<tx:annotation-driven />
