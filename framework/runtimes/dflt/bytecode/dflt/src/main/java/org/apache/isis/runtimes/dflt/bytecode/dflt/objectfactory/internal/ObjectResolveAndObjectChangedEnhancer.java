@@ -33,6 +33,7 @@ import org.apache.isis.core.metamodel.facets.ImperativeFacetUtils;
 import org.apache.isis.core.metamodel.facets.ImperativeFacetUtils.ImperativeFacetFlags;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
+import org.apache.isis.core.metamodel.specloader.classsubstitutor.CglibEnhanced;
 import org.apache.isis.core.metamodel.specloader.specimpl.dflt.ObjectSpecificationDefault;
 import org.apache.isis.runtimes.dflt.runtime.bytecode.ObjectResolveAndObjectChangedEnhancerAbstract;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectfactory.ObjectChanger;

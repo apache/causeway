@@ -17,23 +17,20 @@
  *  under the License.
  */
 
-package org.apache.isis.runtimes.embedded.internal;
+package org.apache.isis.progmodel.wrapper.dom.claim;
 
-public enum PersistenceState {
-    TRANSIENT(true, false), PERSISTENT(false, true), STANDALONE(false, false);
-    private boolean trans;
-    private boolean persistent;
+import java.util.List;
 
-    PersistenceState(final boolean trans, final boolean persistent) {
-        this.trans = trans;
-        this.persistent = persistent;
-    }
+import org.apache.isis.applib.annotation.Named;
 
-    public boolean isTransient() {
-        return trans;
-    }
+@Named("Claims")
+public interface ClaimRepository {
 
-    public boolean isPersistent() {
-        return persistent;
-    }
+    public List<Claim> allClaims();
+
+    public List<Claim> findClaims(@Named("Description") String description);
+
+    public List<Claim> claimsFor(Claimant claimant);
+
+    public Claim newClaim(Claimant claimant);
 }

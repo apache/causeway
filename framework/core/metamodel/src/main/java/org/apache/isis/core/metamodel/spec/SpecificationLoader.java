@@ -19,7 +19,6 @@
 
 package org.apache.isis.core.metamodel.spec;
 
-import java.util.Collection;
 import java.util.List;
 
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;

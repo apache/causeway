@@ -38,10 +38,12 @@ import org.apache.isis.core.metamodel.facetdecorator.FacetDecorator;
 import org.apache.isis.core.metamodel.layout.MemberLayoutArranger;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
+import org.apache.isis.core.metamodel.services.container.DomainObjectContainerDefault;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.ObjectReflectorDefault;
 import org.apache.isis.core.metamodel.specloader.classsubstitutor.ClassSubstitutor;
+import org.apache.isis.core.metamodel.specloader.classsubstitutor.ClassSubstitutorAbstract;
 import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistry;
 import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistryDefault;
 import org.apache.isis.core.metamodel.specloader.traverser.SpecificationTraverser;
@@ -49,10 +51,7 @@ import org.apache.isis.core.metamodel.specloader.traverser.SpecificationTraverse
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.isis.core.progmodel.layout.dflt.MemberLayoutArrangerDefault;
 import org.apache.isis.core.progmodel.metamodelvalidator.dflt.MetaModelValidatorDefault;
-import org.apache.isis.progmodel.wrapper.applib.WrapperFactory;
-import org.apache.isis.progmodel.wrapper.metamodel.DomainObjectContainerWrapperFactory;
 import org.apache.isis.progmodels.dflt.ProgrammingModelFacetsJava5;
-import org.apache.isis.runtimes.dflt.bytecode.identity.classsubstitutor.ClassSubstitutorIdentity;
 import org.apache.isis.runtimes.embedded.internal.RuntimeContextForEmbeddedMetaModel;
 
 import com.google.common.collect.Lists;
@@ -83,8 +82,7 @@ public class IsisMetaModel implements ApplicationScopedComponent {
     private Set<FacetDecorator> facetDecorators;
     private MetaModelValidator metaModelValidator;
 
-    private WrapperFactory wrapperFactory;
-	private DomainObjectContainerWrapperFactory container;
+	private DomainObjectContainer container;
 
     public IsisMetaModel(final EmbeddedContext context, final Object... services) {
         this(context, Arrays.asList(services));
@@ -93,7 +91,7 @@ public class IsisMetaModel implements ApplicationScopedComponent {
     public IsisMetaModel(final EmbeddedContext context, final List<Object> services) {
         this.services.addAll(services);
         setConfiguration(new IsisConfigurationDefault());
-        setClassSubstitutor(new ClassSubstitutorIdentity());
+        setClassSubstitutor(new ClassSubstitutorAbstract(){});
         setCollectionTypeRegistry(new CollectionTypeRegistryDefault());
         setSpecificationTraverser(new SpecificationTraverserDefault());
         setMemberLayoutArranger(new MemberLayoutArrangerDefault());
@@ -129,7 +127,7 @@ public class IsisMetaModel implements ApplicationScopedComponent {
                 memberLayoutArranger, programmingModel, facetDecorators, metaModelValidator);
 
         runtimeContext = new RuntimeContextForEmbeddedMetaModel(context, services);
-        this.container = new DomainObjectContainerWrapperFactory();
+        this.container = new DomainObjectContainerDefault();
 
         runtimeContext.injectInto(container);
         runtimeContext.setContainer(container);
@@ -144,8 +142,6 @@ public class IsisMetaModel implements ApplicationScopedComponent {
             serviceSpec.markAsService();
         }
         state = State.INITIALIZED;
-
-        wrapperFactory = container;
     }
 
     @Override
@@ -166,19 +162,7 @@ public class IsisMetaModel implements ApplicationScopedComponent {
     }
 
     // ///////////////////////////////////////////////////////
-    // WrapperFactory
-    // ///////////////////////////////////////////////////////
-
-    /**
-     * Available once {@link #init() initialized}.
-     */
-    public WrapperFactory getWrapperFactory() {
-        ensureInitialized();
-        return wrapperFactory;
-    }
-
-    // ///////////////////////////////////////////////////////
-    // WrapperFactory
+    // DomainObjectContainer
     // ///////////////////////////////////////////////////////
 
     /**

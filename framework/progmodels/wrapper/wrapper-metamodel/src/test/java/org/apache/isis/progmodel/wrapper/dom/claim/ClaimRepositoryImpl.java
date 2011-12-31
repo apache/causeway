@@ -17,15 +17,30 @@
  *  under the License.
  */
 
-package org.apache.isis.runtimes.embedded.internal;
+package org.apache.isis.progmodel.wrapper.dom.claim;
 
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.runtimes.embedded.PersistenceState;
+import java.util.List;
 
-public class ServiceAdapter extends StandaloneAdapter {
+public class ClaimRepositoryImpl implements ClaimRepository {
 
-    public ServiceAdapter(final ObjectSpecification spec, final Object serviceObject) {
-        super(spec, serviceObject, PersistenceState.PERSISTENT);
+    @Override
+    public List<Claim> allClaims() {
+        return null;
+    }
+
+    @Override
+    public List<Claim> findClaims(final String description) {
+        return null;
+    }
+
+    @Override
+    public List<Claim> claimsFor(final Claimant claimant) {
+        return null;
+    }
+
+    @Override
+    public Claim newClaim(final Claimant claimant) {
+        return null;
     }
 
 }

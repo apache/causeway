@@ -71,7 +71,7 @@ public class XmlSnapshot {
 
     private static final Logger LOG = Logger.getLogger(XmlSnapshot.class);
 
-    private final IsisMetaModel isisMetaModel;
+    private final IsisSchema isisMetaModel;
 
     private final Place rootPlace;
 
@@ -113,7 +113,7 @@ public class XmlSnapshot {
     		LOG.debug(".ctor(" + log("rootObj", rootAdapter) + andlog("schema", schema) + andlog("addOids", "" + true) + ")");
     	}
 
-        this.isisMetaModel = new IsisMetaModel();
+        this.isisMetaModel = new IsisSchema();
         this.xsMeta = new XsMetaModel();
 
         this.schema = schema;
@@ -751,7 +751,7 @@ public class XmlSnapshot {
                     final String fullyQualifiedClassName = referencedTypeNos.getFullIdentifier();
 
                     // XML
-                    isisMetaModel.setNofCollection(xmlCollectionElement, schema.getPrefix(), fullyQualifiedClassName, collection);
+                    isisMetaModel.setIsisCollection(xmlCollectionElement, schema.getPrefix(), fullyQualifiedClassName, collection);
                 } catch (final Exception ex) {
                     LOG.warn("objectToElement(NO): " + log("field", fieldName)
                             + ": get(obj) threw exception - skipping XML generation");

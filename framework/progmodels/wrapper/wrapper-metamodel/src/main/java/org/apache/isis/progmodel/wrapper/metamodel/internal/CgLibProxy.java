@@ -26,8 +26,8 @@ import java.util.List;
 import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.Factory;
 
+import org.apache.isis.core.metamodel.specloader.classsubstitutor.CglibEnhanced;
 import org.apache.isis.progmodel.wrapper.applib.WrapperObject;
-import org.apache.isis.runtimes.dflt.bytecode.dflt.objectfactory.internal.CglibEnhanced;
 
 public class CgLibProxy<T> {
 

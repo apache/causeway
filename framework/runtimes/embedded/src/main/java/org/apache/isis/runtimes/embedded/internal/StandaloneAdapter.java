@@ -21,7 +21,6 @@ package org.apache.isis.runtimes.embedded.internal;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
-import org.apache.isis.core.metamodel.adapter.oid.AggregatedOid;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.spec.ElementSpecificationProvider;
@@ -29,9 +28,7 @@ import org.apache.isis.core.metamodel.spec.Instance;
 import org.apache.isis.core.metamodel.spec.ObjectMetaModel;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.Specification;
-import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
-import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
-import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
+import org.apache.isis.runtimes.embedded.PersistenceState;
 
 /**
  * Only provides a concrete implementation of the methods corresponding to the {@link ObjectMetaModel} interface.
@@ -239,24 +236,7 @@ public class StandaloneAdapter implements ObjectAdapter {
 
     @Override
     public ObjectAdapter getAggregateRoot() {
-        if (getSpecification().isAggregated()) {
-            final Oid parentOid = ((AggregatedOid) this.getOid()).getParentOid();
-            return getAdapterManager().getAdapterFor(parentOid);
-        } else {
-            return this;
-        }
-    }
-
-    // ////////////////////////////////////////////////////////////////
-    // Dependencies (from context)
-    // ////////////////////////////////////////////////////////////////
-
-    protected AdapterManager getAdapterManager() {
-        return getPersistenceSession().getAdapterManager();
-    }
-
-    protected PersistenceSession getPersistenceSession() {
-        return IsisContext.getPersistenceSession();
+    	throw new UnsupportedOperationException();
     }
 
 }

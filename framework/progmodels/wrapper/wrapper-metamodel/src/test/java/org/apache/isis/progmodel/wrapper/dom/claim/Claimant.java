@@ -17,15 +17,10 @@
  *  under the License.
  */
 
-package org.apache.isis.runtimes.embedded.internal;
+package org.apache.isis.progmodel.wrapper.dom.claim;
 
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.runtimes.embedded.PersistenceState;
+public interface Claimant {
 
-public class ServiceAdapter extends StandaloneAdapter {
-
-    public ServiceAdapter(final ObjectSpecification spec, final Object serviceObject) {
-        super(spec, serviceObject, PersistenceState.PERSISTENT);
-    }
+    Approver getApprover();
 
 }

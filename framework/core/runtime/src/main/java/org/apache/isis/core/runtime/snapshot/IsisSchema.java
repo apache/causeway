@@ -29,15 +29,15 @@ import org.w3c.dom.Element;
 
 
 /**
- * Stateless utility methods relating to the NOF meta model.
+ * Utility methods relating to the Isis meta model.
  */
-final class IsisMetaModel {
+final class IsisSchema {
 
     /**
      * The generated XML schema references the NOF metamodel schema. This is the default location for this
      * schema.
      */
-    public static final String DEFAULT_NOF_SCHEMA_LOCATION = "isis.xsd";
+    public static final String DEFAULT_LOCATION = "isis.xsd";
     /**
      * The base of the namespace URI to use for application namespaces if none explicitly supplied in the
      * constructor.
@@ -45,43 +45,43 @@ final class IsisMetaModel {
     public final static String DEFAULT_URI_BASE = "http://isis.apache.org/ns/app/";
 
     /**
-     * Enumeration of nof:feature attribute representing a class
+     * Enumeration of isis:feature attribute representing a class
      */
-    public static final String NOF_METAMODEL_FEATURE_CLASS = "class";
+    public static final String FEATURE_CLASS = "class";
     /**
-     * Enumeration of nof:feature attribute representing a collection (1:n association)
+     * Enumeration of isis:feature attribute representing a collection (1:n association)
      */
-    public static final String NOF_METAMODEL_FEATURE_COLLECTION = "collection";
+    public static final String FEATURE_COLLECTION = "collection";
     /**
-     * Enumeration of nof:feature attribute representing a reference (1:1 association)
+     * Enumeration of isis:feature attribute representing a reference (1:1 association)
      */
-    public static final String NOF_METAMODEL_FEATURE_REFERENCE = "reference";
+    public static final String FEATURE_REFERENCE = "reference";
     /**
-     * Enumeration of nof:feature attribute representing a value field
+     * Enumeration of isis:feature attribute representing a value field
      */
-    public static final String NOF_METAMODEL_FEATURE_VALUE = "value";
+    public static final String FEATURE_VALUE = "value";
     /**
-     * Namespace prefix for {@link NOF_METAMODEL_NS_URI}.
+     * Namespace prefix for {@link NS_URI}.
      * 
      * The NamespaceManager will not allow any namespace to use this prefix.
      */
-    public static final String NOF_METAMODEL_NS_PREFIX = "nof";
+    public static final String NS_PREFIX = "nof";
     /**
      * URI representing the namespace of ObjectAdapter framework's metamodel.
      * 
      * The NamespaceManager will not allow any namespaces with this URI to be added.
      */
-    public static final String NOF_METAMODEL_NS_URI = "http://isis.apache.org/ns/0.1/metamodel";
+    public static final String NS_URI = "http://isis.apache.org/ns/0.1/metamodel";
 
     private final Helper helper;
 
-    public IsisMetaModel() {
+    public IsisSchema() {
         this.helper = new Helper();
     }
 
     void addNamespace(final Element element) {
         helper.rootElementFor(element).setAttributeNS(XsMetaModel.W3_ORG_XMLNS_URI,
-                XsMetaModel.W3_ORG_XMLNS_PREFIX + ":" + IsisMetaModel.NOF_METAMODEL_NS_PREFIX, IsisMetaModel.NOF_METAMODEL_NS_URI);
+                XsMetaModel.W3_ORG_XMLNS_PREFIX + ":" + IsisSchema.NS_PREFIX, IsisSchema.NS_URI);
     }
 
     /**
@@ -89,8 +89,8 @@ final class IsisMetaModel {
      * if required.
      */
     Element appendElement(final Element parentElement, final String localName) {
-        final Element element = helper.docFor(parentElement).createElementNS(IsisMetaModel.NOF_METAMODEL_NS_URI,
-                IsisMetaModel.NOF_METAMODEL_NS_PREFIX + ":" + localName);
+        final Element element = helper.docFor(parentElement).createElementNS(IsisSchema.NS_URI,
+                IsisSchema.NS_PREFIX + ":" + localName);
         parentElement.appendChild(element);
         // addNamespace(parentElement);
         return element;
@@ -106,33 +106,33 @@ final class IsisMetaModel {
     }
 
     /**
-     * Gets an attribute with the supplied name in the NOF namespace from the supplied element
+     * Gets an attribute with the supplied name in the Isis namespace from the supplied element
      */
     String getAttribute(final Element element, final String attributeName) {
-        return element.getAttributeNS(IsisMetaModel.NOF_METAMODEL_NS_URI, attributeName);
+        return element.getAttributeNS(IsisSchema.NS_URI, attributeName);
     }
 
     /**
-     * Adds an <code>nof:annotation</code> attribute for the supplied class to the supplied element.
+     * Adds an <code>isis:annotation</code> attribute for the supplied class to the supplied element.
      */
     void setAnnotationAttribute(final Element element, final String annotation) {
-        setAttribute(element, "annotation", IsisMetaModel.NOF_METAMODEL_NS_PREFIX + ":" + annotation);
+        setAttribute(element, "annotation", IsisSchema.NS_PREFIX + ":" + annotation);
     }
 
     /**
-     * Sets an attribute of the supplied element with the attribute being in the NOF namespace.
+     * Sets an attribute of the supplied element with the attribute being in the Isis namespace.
      */
     private void setAttribute(final Element element, final String attributeName, final String attributeValue) {
-        element.setAttributeNS(IsisMetaModel.NOF_METAMODEL_NS_URI, IsisMetaModel.NOF_METAMODEL_NS_PREFIX + ":" + attributeName,
+        element.setAttributeNS(IsisSchema.NS_URI, IsisSchema.NS_PREFIX + ":" + attributeName,
                 attributeValue);
     }
 
     /**
-     * Adds <code>nof:feature=&quot;class&quot;</code> attribute and <code>nof:oid=&quote;...&quot;</code>
+     * Adds <code>isis:feature=&quot;class&quot;</code> attribute and <code>isis:oid=&quote;...&quot;</code>
      * for the supplied element.
      */
     void setAttributesForClass(final Element element, final String oid) {
-        setAttribute(element, "feature", NOF_METAMODEL_FEATURE_CLASS);
+        setAttribute(element, "feature", FEATURE_CLASS);
         setAttribute(element, "oid", oid);
     }
 
@@ -141,7 +141,7 @@ final class IsisMetaModel {
      * <code>nof:type=&quote;...&quot;</code> for the supplied element.
      */
     void setAttributesForReference(final Element element, final String prefix, final String fullyQualifiedClassName) {
-        setAttribute(element, "feature", NOF_METAMODEL_FEATURE_REFERENCE);
+        setAttribute(element, "feature", FEATURE_REFERENCE);
         setAttribute(element, "type", prefix + ":" + fullyQualifiedClassName);
     }
 
@@ -150,8 +150,8 @@ final class IsisMetaModel {
      * <code>nof:datatype=&quote;...&quot;</code> for the supplied element.
      */
     void setAttributesForValue(final Element element, final String datatypeName) {
-        setAttribute(element, "feature", NOF_METAMODEL_FEATURE_VALUE);
-        setAttribute(element, "datatype", IsisMetaModel.NOF_METAMODEL_NS_PREFIX + ":" + datatypeName);
+        setAttribute(element, "feature", FEATURE_VALUE);
+        setAttribute(element, "datatype", IsisSchema.NS_PREFIX + ":" + datatypeName);
     }
 
     /**
@@ -169,12 +169,12 @@ final class IsisMetaModel {
      * Additionally, if the <code>addOids</code> parameter is set, also adds <code>&lt;oids&gt;</code>
      * child elements.
      */
-    void setNofCollection(
+    void setIsisCollection(
             final Element element,
             final String prefix,
             final String fullyQualifiedClassName,
             final ObjectAdapter collection) {
-        setAttribute(element, "feature", NOF_METAMODEL_FEATURE_COLLECTION);
+        setAttribute(element, "feature", FEATURE_COLLECTION);
         setAttribute(element, "type", prefix + ":" + fullyQualifiedClassName);
         final CollectionFacet facet = CollectionFacetUtils.getCollectionFacetFromSpec(collection);
         setAttribute(element, "size", "" + facet.size(collection));
