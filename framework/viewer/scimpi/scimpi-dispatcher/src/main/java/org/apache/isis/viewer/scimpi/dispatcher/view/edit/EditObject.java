@@ -51,9 +51,9 @@ public class EditObject extends AbstractElementProcessor {
 
         final String objectId = request.getOptionalProperty(OBJECT);
         final String forwardEditedTo = request.getOptionalProperty(VIEW);
-        final String forwardErrorTo = request.getOptionalProperty(ERRORS);
+        final String forwardErrorTo = request.getOptionalProperty(ERROR);
         final boolean hideNonEditableFields = request.isRequested(HIDE_UNEDITABLE, false);
-        final boolean showIcon = request.isRequested(SHOW_ICON, true);
+        final boolean showIcon = request.isRequested(SHOW_ICON, showIconByDefault());
         String buttonTitle = request.getOptionalProperty(BUTTON_TITLE);
         String formTitle = request.getOptionalProperty(FORM_TITLE);
         final String formId = request.getOptionalProperty(FORM_ID, request.nextFormId());
@@ -130,7 +130,7 @@ public class EditObject extends AbstractElementProcessor {
         hiddenFields.add(completionMessage == null ? null : new HiddenInputField("_" + MESSAGE, completionMessage));
         hiddenFields.add(forwardEditedTo == null ? null : new HiddenInputField("_" + VIEW, context
             .fullFilePath(forwardEditedTo)));
-        hiddenFields.add(new HiddenInputField("_" + ERRORS, errorView));
+        hiddenFields.add(new HiddenInputField("_" + ERROR, errorView));
         hiddenFields.add(variable == null ? null : new HiddenInputField("_" + RESULT_NAME, variable));
         hiddenFields.add(resultOverride == null ? null : new HiddenInputField("_" + RESULT_OVERRIDE, resultOverride));
         hiddenFields.add(scope == null ? null : new HiddenInputField("_" + SCOPE, scope));
@@ -160,7 +160,7 @@ public class EditObject extends AbstractElementProcessor {
 
         final HiddenInputField[] hiddenFieldArray = hiddenFields.toArray(new HiddenInputField[hiddenFields.size()]);
         HtmlFormBuilder.createForm(request, EditAction.ACTION + ".app", hiddenFieldArray, formFields, className, id,
-            formTitle, null, null, buttonTitle, errors);
+            formTitle, null, null, buttonTitle, errors, "_generic.shtml?_result=" + actualObjectId);
         request.popBlockContent();
     }
 

@@ -22,6 +22,7 @@ package org.apache.isis.viewer.scimpi.dispatcher.edit;
 import java.io.IOException;
 import java.util.List;
 
+import org.apache.isis.core.commons.authentication.AnonymousSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -52,9 +53,9 @@ public class EditAction implements Action {
 
     @Override
     public void process(final RequestContext context) throws IOException {
-        final AuthenticationSession session = context.getSession();
+        AuthenticationSession session = context.getSession();
         if (session == null) {
-            throw new NotLoggedInException();
+            session = new AnonymousSession();
         }
 
         try {
@@ -67,9 +68,19 @@ public class EditAction implements Action {
             String message = context.getParameter("_" + MESSAGE);
 
             final ObjectAdapter adapter = context.getMappedObject(objectId);
+
+
+            
             final List<ObjectAssociation> fields =
                 adapter.getSpecification().getAssociations(
                     ObjectAssociationFilters.dynamicallyVisible(session, adapter));
+            
+            for (ObjectAssociation objectAssociation : fields) {
+                if (objectAssociation.isVisible(session, adapter).isVetoed()) {
+                    throw new NotLoggedInException();
+                }
+            }
+            
             final FormState entryState = validateObject(context, adapter, fields);
             final Version adapterVersion = adapter.getVersion();
             final Version formVersion = context.getVersion(version);
@@ -79,7 +90,7 @@ public class EditAction implements Action {
                     "The " + adapter.getSpecification().getSingularName() + " was edited " + "by another user ("
                         + adapterVersion.getUser() + "). Please  make your changes based on their changes.");
 
-                final String view = context.getParameter("_" + ERRORS);
+                final String view = context.getParameter("_" + ERROR);
                 context.setRequestPath(view, Dispatcher.EDIT);
 
                 entryState.setForm(formId);
@@ -124,7 +135,7 @@ public class EditAction implements Action {
                 }
 
             } else {
-                final String view = context.getParameter("_" + ERRORS);
+                final String view = context.getParameter("_" + ERROR);
                 context.setRequestPath(view, Dispatcher.EDIT);
 
                 entryState.setForm(formId);
@@ -240,9 +251,9 @@ public class EditAction implements Action {
             if (fields.get(i).getSpecification().containsFacet(ParseableFacet.class)) {
                 final ParseableFacet facet = fields.get(i).getSpecification().getFacet(ParseableFacet.class);
                 final ObjectAdapter newValue = facet.parseTextEntry(originalValue, newEntry);
-                ((OneToOneAssociation) fields.get(i)).setAssociation(object, newValue);
+                ((OneToOneAssociation) fields.get(i)).set(object, newValue);
             } else {
-                ((OneToOneAssociation) fields.get(i)).setAssociation(object, field.getValue());
+                ((OneToOneAssociation) fields.get(i)).set(object, field.getValue());
             }
         }
     }

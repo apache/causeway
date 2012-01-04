@@ -58,7 +58,7 @@ public class RemoveElement extends AbstractElementProcessor {
 
         String view = request.getOptionalProperty(VIEW);
         view = context.fullFilePath(view == null ? context.getResourceFile() : view);
-        String error = request.getOptionalProperty(ERRORS);
+        String error = request.getOptionalProperty(ERROR);
         error = context.fullFilePath(error == null ? context.getResourceFile() : error);
 
         request.processUtilCloseTag();
@@ -112,7 +112,7 @@ public class RemoveElement extends AbstractElementProcessor {
                         + resultOverride + "\" />");
                 }
                 request.appendHtml("<input type=\"hidden\" name=\"" + VIEW + "\" value=\"" + view + "\" />");
-                request.appendHtml("<input type=\"hidden\" name=\"" + ERRORS + "\" value=\"" + error + "\" />");
+                request.appendHtml("<input type=\"hidden\" name=\"" + ERROR + "\" value=\"" + error + "\" />");
                 request.appendHtml(request.getContext().interactionFields());
                 request.appendHtml("<input class=\"button\" type=\"submit\" value=\"" + title + "\" />");
                 request.appendHtml("</form>");

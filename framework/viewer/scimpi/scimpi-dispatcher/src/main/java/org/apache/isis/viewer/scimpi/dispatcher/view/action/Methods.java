@@ -50,62 +50,66 @@ public class Methods extends AbstractElementProcessor {
         request.processUtilCloseTag();
 
         request.appendHtml("<div class=\"actions\">");
-        request.appendHtml("<div class=\"action\">");
         if (inclusionList.includes("edit") && !object.getSpecification().isService()) {
-            request.appendHtml("<a href=\"_generic_edit." + Dispatcher.EXTENSION + "?_result=" + objectId
-                + "\">Edit</a>");
+            request.appendHtml("<div class=\"action\">");
+            request.appendHtml("<a class=\"button\" href=\"_generic_edit." + Dispatcher.EXTENSION + "?_result=" + objectId
+                + "\">Edit...</a>");
+            request.appendHtml("</div>");
         }
-        request.appendHtml("</div>");
-        writeMethods(request, objectId, object, showForms, inclusionList);
+        writeMethods(request, objectId, object, showForms, inclusionList, "_generic.shtml?_result=" + objectId);
         request.popBlockContent();
         request.appendHtml("</div>");
     }
 
     public static void writeMethods(final Request request, final String objectId, final ObjectAdapter adapter,
-        final boolean showForms, final InclusionList inclusionList) {
+        final boolean showForms, final InclusionList inclusionList, final String cancelTo) {
         List<ObjectAction> actions = adapter.getSpecification().getObjectActions(ActionType.USER, Contributed.INCLUDED);
-        writeMethods(request, adapter, actions, objectId, showForms, inclusionList);
+        writeMethods(request, adapter, actions, objectId, showForms, inclusionList, cancelTo);
         // TODO determine if system is set up to display exploration methods
         if (true) {
             actions = adapter.getSpecification().getObjectActions(ActionType.EXPLORATION, Contributed.INCLUDED);
-            writeMethods(request, adapter, actions, objectId, showForms, inclusionList);
+            writeMethods(request, adapter, actions, objectId, showForms, inclusionList, cancelTo);
         }
         // TODO determine if system is set up to display debug methods
         if (true) {
             actions = adapter.getSpecification().getObjectActions(ActionType.DEBUG, Contributed.INCLUDED);
-            writeMethods(request, adapter, actions, objectId, showForms, inclusionList);
+            writeMethods(request, adapter, actions, objectId, showForms, inclusionList, cancelTo);
         }
     }
 
     private static void writeMethods(final Request request, final ObjectAdapter adapter, List<ObjectAction> actions,
-        final String objectId, final boolean showForms, final InclusionList inclusionList) {
+        final String objectId, final boolean showForms, final InclusionList inclusionList, final String cancelTo) {
         actions = inclusionList.includedActions(actions);
         for (int j = 0; j < actions.size(); j++) {
             final ObjectAction action = actions.get(j);
             if (action instanceof ObjectActionSet) {
                 request.appendHtml("<div class=\"actions\">");
-                writeMethods(request, adapter, action.getActions(), objectId, showForms, inclusionList);
+                writeMethods(request, adapter, action.getActions(), objectId, showForms, inclusionList, cancelTo);
                 request.appendHtml("</div>");
-            } else if (action.isContributed() && action.getParameterCount() == 1
-                && adapter.getSpecification().isOfType(action.getParameters().get(0).getSpecification())) {
-                if (objectId != null) {
-                    final ObjectAdapter target = request.getContext().getMappedObject(objectId);
-                    final ObjectAdapter realTarget = action.realTarget(target);
-                    final String realTargetId = request.getContext().mapObject(realTarget, Scope.INTERACTION);
-                    writeMethod(request, adapter, new String[] { objectId }, action, realTargetId, showForms);
-                } else {
-                    request.appendHtml("<div class=\"action\">");
-                    request.appendAsHtmlEncoded(action.getName());
-                    request.appendHtml("???</div>");
+            } else if (action.isContributed()) {
+                if (action.getParameterCount() == 1
+                        && adapter.getSpecification().isOfType(action.getParameters().get(0).getSpecification())) {
+                    if (objectId != null) {
+                        final ObjectAdapter target = request.getContext().getMappedObject(objectId);
+                        final ObjectAdapter realTarget = action.realTarget(target);
+                        final String realTargetId = request.getContext().mapObject(realTarget, Scope.INTERACTION);
+                        writeMethod(request, adapter, new String[] { objectId }, action, realTargetId, showForms, cancelTo);
+                    } else {
+                        request.appendHtml("<div class=\"action\">");
+                        request.appendAsHtmlEncoded(action.getName());
+                        request.appendHtml("???</div>");
+                    }
+                } else if (!adapter.getSpecification().isService()) {
+                    writeMethod(request, adapter, new String[0], action, objectId, showForms, cancelTo);
                 }
             } else {
-                writeMethod(request, adapter, new String[0], action, objectId, showForms);
+                writeMethod(request, adapter, new String[0], action, objectId, showForms, cancelTo);
             }
         }
     }
 
     private static void writeMethod(final Request request, final ObjectAdapter adapter, final String[] parameters,
-        final ObjectAction action, final String objectId, final boolean showForms) {
+        final ObjectAction action, final String objectId, final boolean showForms, String cancelTo) {
         // if (action.isVisible(IsisContext.getSession(), null) && action.isVisible(IsisContext.getSession(), adapter))
         // {
         if (action.isVisible(IsisContext.getAuthenticationSession(), adapter).isAllowed()) {
@@ -125,7 +129,7 @@ public class Methods extends AbstractElementProcessor {
                 request.appendHtml("</span>");
             } else {
                 final String version = request.getContext().mapVersion(adapter);
-                if (action.getParameterCount() == 0) {
+                if (action.getParameterCount() == 0 || (action.isContributed() && action.getParameterCount() == 1)) {
                     ActionButton.write(request, adapter, action, parameters, objectId, version, "_generic."
                         + Dispatcher.EXTENSION, null, null, null, null, null, null, null, null, null);
                 } else if (showForms) {
@@ -142,10 +146,14 @@ public class Methods extends AbstractElementProcessor {
                     // parameters.id = request.getOptionalProperty(ID);
                     ActionForm.createForm(request, params, true);
                 } else {
-                    request.appendHtml("<a href=\"_generic_action." + Dispatcher.EXTENSION + "?_result=" + objectId
-                            + "&amp;" + VERSION + "=" + version + "&method=" + action.getId() + "\" title="
-                            + action.getDescription() + ">");
-                    request.appendAsHtmlEncoded(action.getName());
+                    request.appendHtml("<a class=\"button\" href=\"_generic_action." + Dispatcher.EXTENSION + "?_result=" + objectId
+                            + "&amp;" + VERSION + "=" + version + "&_method=" + action.getId());
+                    if (cancelTo  != null) {
+                        request.appendHtml("&_cancel-to=");
+                        request.appendAsHtmlEncoded("cancel-to=\"" + cancelTo + "\"");
+                    }
+                    request.appendHtml("\" title=" + action.getDescription() + ">");
+                    request.appendAsHtmlEncoded(action.getName() + "...");
                     request.appendHtml("</a>");
                 }
             }

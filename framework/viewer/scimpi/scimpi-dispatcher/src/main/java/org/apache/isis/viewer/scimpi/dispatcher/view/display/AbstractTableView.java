@@ -96,7 +96,7 @@ public abstract class AbstractTableView extends AbstractElementProcessor {
         final TableContentWriter rowBuilder, final String tableClass, final String[] rowClasses) {
         final RequestContext context = request.getContext();
 
-        final String summarySegment = " summary=\"" + summary + "\"";
+        final String summarySegment = summary == null ? "" : (" summary=\"" + summary + "\"");
         final String classSegment = tableClass == null ? "" : (" class=\"" + tableClass + "\"");
         request.appendHtml("<table" + classSegment + summarySegment + ">");
         rowBuilder.writeHeaders(request);

@@ -19,10 +19,20 @@
 
 package org.apache.isis.viewer.scimpi.dispatcher;
 
+import org.apache.isis.core.commons.config.ConfigurationConstants;
+import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 
 public abstract class AbstractElementProcessor implements ElementProcessor, Names {
 
+    private static final String SHOW_ICONS_BY_DEFAULT = ConfigurationConstants.ROOT + "scimpi.show-icons";
+
+    private boolean showIconByDefault;
+
+    public AbstractElementProcessor() {
+        showIconByDefault = IsisContext.getConfiguration().getBoolean(SHOW_ICONS_BY_DEFAULT, false);
+    }
+    
     /**
      * Return the Class for the class specified in the type attribute.
      */
@@ -37,5 +47,9 @@ public abstract class AbstractElementProcessor implements ElementProcessor, Name
             }
         }
         return cls;
+    }
+    
+    protected boolean showIconByDefault() {
+        return showIconByDefault;
     }
 }

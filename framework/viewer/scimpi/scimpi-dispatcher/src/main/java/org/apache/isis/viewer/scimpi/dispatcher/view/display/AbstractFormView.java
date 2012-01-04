@@ -46,7 +46,7 @@ public abstract class AbstractFormView extends AbstractObjectProcessor {
         String title = request.getOptionalProperty(FORM_TITLE);
         final String oddRowClass = request.getOptionalProperty(ODD_ROW_CLASS);
         final String evenRowClass = request.getOptionalProperty(EVEN_ROW_CLASS);
-        final boolean showIcons = request.isRequested(SHOW_ICON, true);
+        final boolean showIcons = request.isRequested(SHOW_ICON, showIconByDefault());
 
         final LinkedFieldsBlock tag = new LinkedFieldsBlock();
         request.setBlockContent(tag);
@@ -80,9 +80,16 @@ public abstract class AbstractFormView extends AbstractObjectProcessor {
         request.popBlockContent();
     }
 
-    private void write(final Request request, final ObjectAdapter object, final List<ObjectAssociation> fields,
-        final LinkedObject[] linkFields, final String classString, final String title, final String oddRowClass,
-        final String evenRowClass, final boolean showIcons) {
+    private void write(
+            final Request request,
+            final ObjectAdapter object,
+            final List<ObjectAssociation> fields,
+            final LinkedObject[] linkFields,
+            final String classString,
+            final String title,
+            final String oddRowClass,
+            final String evenRowClass,
+            final boolean showIcons) {
         request.appendHtml("<div" + classString + ">");
         if (title != null) {
             request.appendHtml("<div class=\"title\">");
@@ -119,9 +126,13 @@ public abstract class AbstractFormView extends AbstractObjectProcessor {
         request.appendHtml("</div>");
     }
 
-    protected void addField(final Request request, final ObjectAdapter object, final ObjectAssociation field,
-        final LinkedObject linkedObject, final boolean showIcons) {
-        FieldValue.write(request, object, field, linkedObject, "value", showIcons, 0);
+    protected void addField(
+            final Request request,
+            final ObjectAdapter object,
+            final ObjectAssociation field,
+            final LinkedObject linkedObject,
+            final boolean showIcons) {
+        FieldValue.write(request, object, field, linkedObject, null, showIcons, 0);
     }
 
     protected boolean ignoreField(final ObjectAssociation objectField) {

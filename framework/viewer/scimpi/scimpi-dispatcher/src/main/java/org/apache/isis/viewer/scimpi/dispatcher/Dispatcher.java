@@ -82,7 +82,6 @@ public class Dispatcher {
     public static final String REMOVE = "_remove";
     public static final String GENERIC = "_generic";
     public static final String EXTENSION = "shtml";
-    private static final long serialVersionUID = 1L;
     private static final Logger LOG = Logger.getLogger(Dispatcher.class);
     public static final String COMMAND_ROOT = ".app";
     private final Map<String, Action> actions = new HashMap<String, Action>();

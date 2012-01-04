@@ -48,7 +48,7 @@ public class FieldValue extends AbstractElementProcessor {
         if (field.isVisible(IsisContext.getAuthenticationSession(), object).isVetoed()) {
             throw new ForbiddenException(field, ForbiddenException.VISIBLE);
         }
-        final boolean isIconShowing = request.isRequested(SHOW_ICON, true);
+        final boolean isIconShowing = request.isRequested(SHOW_ICON, showIconByDefault());
         final int truncateTo = Integer.valueOf(request.getOptionalProperty(TRUNCATE, "0")).intValue();
 
         write(request, object, field, null, className, isIconShowing, truncateTo);
@@ -59,13 +59,19 @@ public class FieldValue extends AbstractElementProcessor {
         return "field";
     }
 
-    public static void write(final Request request, final ObjectAdapter object, final ObjectAssociation field,
-        final LinkedObject linkedField, final String className, final boolean showIcon, final int truncateTo) {
+    public static void write(
+            final Request request,
+            final ObjectAdapter object,
+            final ObjectAssociation field,
+            final LinkedObject linkedField,
+            final String className,
+            final boolean showIcon,
+            final int truncateTo) {
 
         final ObjectAdapter fieldReference = field.get(object);
 
         if (fieldReference != null) {
-            final String classSection = "class=\"" + (className == null ? "field" : className) + "\"";
+            final String classSection = "class=\"" + (className == null ? "value" : className) + "\"";
             request.appendHtml("<span " + classSection + ">");
             if (field.isOneToOneAssociation()) {
                 try {

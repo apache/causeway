@@ -38,4 +38,5 @@ public class CreateFormParameter {
     public boolean showMessage;
     public boolean showIcon;
     public String completionMessage;
+    public String cancelTo;
 }

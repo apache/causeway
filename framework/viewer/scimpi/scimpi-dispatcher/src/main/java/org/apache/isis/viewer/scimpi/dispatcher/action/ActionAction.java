@@ -77,7 +77,7 @@ public class ActionAction implements Action {
             entryState = validateParameters(context, action, object);
 
             final AuthenticationSession session = context.getSession();
-            if (session == null && action.isUsable(new AnonymousSession(), object).isVetoed()) {
+            if (session == null && action.isVisible(new AnonymousSession(), object).isVetoed()) {
                 throw new NotLoggedInException();
             }
 
@@ -137,7 +137,7 @@ public class ActionAction implements Action {
                  * if (error != null) { context.addVariable(RequestContext.ERROR, error, Scope.REQUEST); }
                  */
 
-                final String view = context.getParameter("_" + ERRORS);
+                final String view = context.getParameter("_" + ERROR);
                 context.setRequestPath(view, Dispatcher.ACTION);
 
                 final MessageBroker messageBroker = IsisContext.getMessageBroker();
@@ -159,7 +159,7 @@ public class ActionAction implements Action {
                 context.addVariable(RequestContext.ERROR, error, Scope.REQUEST);
             }
 
-            final String view = context.getParameter("_" + ERRORS);
+            final String view = context.getParameter("_" + ERROR);
             context.setRequestPath(view, Dispatcher.ACTION);
 
         } catch (final RuntimeException e) {
