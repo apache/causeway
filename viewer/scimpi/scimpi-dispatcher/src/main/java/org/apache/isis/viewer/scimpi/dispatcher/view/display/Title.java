@@ -34,7 +34,7 @@ public class Title extends AbstractElementProcessor {
         final String id = request.getOptionalProperty(OBJECT);
         final String fieldName = request.getOptionalProperty(FIELD);
         final int truncateTo = Integer.valueOf(request.getOptionalProperty(TRUNCATE, "0")).intValue();
-        final boolean isIconShowing = request.isRequested(SHOW_ICON, true);
+        final boolean isIconShowing = request.isRequested(SHOW_ICON, showIconByDefault());
         String className = request.getOptionalProperty(CLASS);
         className = className == null ? "title-icon" : className;
         ObjectAdapter object = MethodsUtils.findObject(request.getContext(), id);

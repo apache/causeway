@@ -17,20 +17,24 @@
  *  under the License.
  */
 
-package org.apache.isis.viewer.scimpi.dispatcher.view.display;
+package org.apache.isis.viewer.scimpi.dispatcher.view.simple;
 
-import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
+import org.apache.isis.viewer.scimpi.dispatcher.AbstractElementProcessor;
+import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 
-public class ShortFormView extends AbstractFormView {
-
+public class SimpleButton extends AbstractElementProcessor {
     @Override
-    protected boolean ignoreField(final ObjectAssociation field) {
-        return field.isOneToManyAssociation();
+    public void process(final Request request) {
+        String href = request.getRequiredProperty("href");
+        request.pushNewBuffer();
+        request.processUtilCloseTag();
+        final String text = request.popBuffer();
+        request.appendHtml("<div class=\"action\"><a class=\"button\" href=\"" +
+        		href + "\">" + text + "</a></div>");
     }
 
     @Override
     public String getName() {
-        return "short-form";
+        return "button";
     }
-
 }

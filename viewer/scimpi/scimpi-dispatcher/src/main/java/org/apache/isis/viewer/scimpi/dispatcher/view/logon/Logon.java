@@ -50,9 +50,9 @@ public class Logon extends AbstractElementProcessor {
     public static void loginForm(final Request request, final String view) {
         // String message = (String) request.getContext().examplegetVariable("login-failure");
 
-        final String error = request.getOptionalProperty(ERRORS, request.getContext().getRequestedFile());
+        final String error = request.getOptionalProperty(ERROR, request.getContext().getRequestedFile());
         final List<HiddenInputField> hiddenFields = new ArrayList<HiddenInputField>();
-        hiddenFields.add(new HiddenInputField(ERRORS, error));
+        hiddenFields.add(new HiddenInputField(ERROR, error));
         if (view != null) {
             hiddenFields.add(new HiddenInputField(VIEW, view));
         }
@@ -69,12 +69,12 @@ public class Logon extends AbstractElementProcessor {
 
         final String formTitle = request.getOptionalProperty(FORM_TITLE);
         final String loginButtonTitle = request.getOptionalProperty(BUTTON_TITLE, "Log in");
-        final String className = request.getOptionalProperty(CLASS, "action login full");
+        final String className = request.getOptionalProperty(CLASS, "login");
         final String id = request.getOptionalProperty(ID);
 
         HtmlFormBuilder.createForm(request, "logon.app",
             hiddenFields.toArray(new HiddenInputField[hiddenFields.size()]), fields, className, id, formTitle, null,
-            null, loginButtonTitle, entryState == null ? null : entryState.getError());
+            null, loginButtonTitle, entryState == null ? null : entryState.getError(), null);
     }
 
     protected static InputField createdField(final String fieldName, final String fieldLabel, final int type,

@@ -36,7 +36,9 @@ public abstract class AbstractLink extends AbstractElementProcessor {
     public void process(final Request request) {
         final String title = request.getOptionalProperty(FORM_TITLE);
         final String name = request.getOptionalProperty(NAME);
-        final String cls = request.getOptionalProperty(CLASS, "action");
+        boolean showAsButton = request.isRequested("show-as-button", false);
+        final String linkClass = request.getOptionalProperty(CLASS, showAsButton ? "button" : defaultLinkClass());
+        final String containerClass = request.getOptionalProperty(CONTAINER_CLASS, "action");
         final String object = request.getOptionalProperty(OBJECT);
         final RequestContext context = request.getContext();
         String objectId = object != null ? object : (String) context.getVariable(RequestContext.RESULT);
@@ -69,10 +71,13 @@ public abstract class AbstractLink extends AbstractElementProcessor {
                 view = defaultView();
             }
             view = context.fullUriPath(view);
-            final String classSegment = " class=\"" + cls + "\"";
+            final String classSegment = " class=\"" + linkClass + "\"";
             final String titleSegment = title == null ? "" : (" title=\"" + title + "\"");
             String additionalSegment = additionalParameters(request);
             additionalSegment = additionalSegment == null ? "" : "&amp;" + additionalSegment;
+            if (showAsButton) {
+                request.appendHtml("<div class=\"" + containerClass + "\">");
+            }
             request.appendHtml("<a" + classSegment + titleSegment + " href=\"" + view + "?" + variableSegment
                 + context.encodedInteractionParameters() + additionalSegment + "\">");
             request.pushNewBuffer();
@@ -84,9 +89,16 @@ public abstract class AbstractLink extends AbstractElementProcessor {
                 request.appendAsHtmlEncoded(linkLabel(name, adapter));
             }
             request.appendHtml("</a>");
+            if (showAsButton) {
+                request.appendHtml("</div>");
+            }
         } else {
             request.skipUntilClose();
         }
+    }
+
+    private String defaultLinkClass() {
+        return "action";
     }
 
     protected abstract String linkLabel(String name, ObjectAdapter object);

@@ -36,9 +36,13 @@ import org.apache.isis.viewer.scimpi.dispatcher.view.form.InputField;
 
 public class FieldFactory {
 
-    public static void initializeField(final RequestContext context, final ObjectAdapter object,
-        final ObjectFeature param, final ObjectAdapter[] optionsForParameter, final boolean isRequired,
-        final InputField field) {
+    public static void initializeField(
+            final RequestContext context,
+            final ObjectAdapter object,
+            final ObjectFeature param,
+            final ObjectAdapter[] optionsForParameter,
+            final boolean isRequired,
+            final InputField field) {
 
         field.setLabel(param.getName());
         field.setDescription(param.getDescription());

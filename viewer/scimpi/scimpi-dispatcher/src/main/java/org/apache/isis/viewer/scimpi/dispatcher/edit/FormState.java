@@ -61,7 +61,7 @@ public class FormState {
     }
 
     public boolean isForForm(final String formId) {
-        return this.formId.equals(formId);
+        return this.formId == null || this.formId.equals(formId);
     }
 
 }

@@ -47,10 +47,11 @@ public class ActionForm extends AbstractElementProcessor {
         final CreateFormParameter parameters = new CreateFormParameter();
         parameters.objectId = request.getOptionalProperty(OBJECT);
         parameters.methodName = request.getRequiredProperty(METHOD);
+        parameters.cancelTo = request.getOptionalProperty(CANCEL_TO);
         parameters.forwardResultTo = request.getOptionalProperty(VIEW);
         parameters.forwardVoidTo = request.getOptionalProperty(VOID);
-        parameters.forwardErrorTo = request.getOptionalProperty(ERRORS);
-        parameters.showIcon = request.isRequested(SHOW_ICON, true);
+        parameters.forwardErrorTo = request.getOptionalProperty(ERROR);
+        parameters.showIcon = request.isRequested(SHOW_ICON, showIconByDefault());
         parameters.buttonTitle = request.getOptionalProperty(BUTTON_TITLE);
         parameters.formTitle = request.getOptionalProperty(FORM_TITLE);
         parameters.formId = request.getOptionalProperty(FORM_ID, request.nextFormId());
@@ -114,7 +115,7 @@ public class ActionForm extends AbstractElementProcessor {
                 parameterObject.forwardResultTo == null ? null : new HiddenInputField("_" + VIEW,
                     context.fullFilePath(parameterObject.forwardResultTo)),
                 new HiddenInputField("_" + VOID, voidView),
-                new HiddenInputField("_" + ERRORS, errorView),
+                new HiddenInputField("_" + ERROR, errorView),
                 parameterObject.completionMessage == null ? null : new HiddenInputField("_" + MESSAGE,
                     parameterObject.completionMessage),
                 parameterObject.scope == null ? null : new HiddenInputField("_" + SCOPE, parameterObject.scope),
@@ -168,9 +169,12 @@ public class ActionForm extends AbstractElementProcessor {
             buttonTitle = "Ok";
         }
 
+        String cancelTo = parameterObject.cancelTo == null ? "_generic.shtml?_result=" + objectId : 
+            parameterObject.cancelTo;
+        
         HtmlFormBuilder.createForm(request, ActionAction.ACTION + ".app", hiddenFields, formFields,
             parameterObject.className, parameterObject.id, formTitle, action.getDescription(), action.getHelp(),
-            buttonTitle, errors);
+            buttonTitle, errors, cancelTo);
 
         request.popBlockContent();
     }

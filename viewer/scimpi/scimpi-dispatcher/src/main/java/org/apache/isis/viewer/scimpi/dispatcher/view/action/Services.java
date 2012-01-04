@@ -34,6 +34,7 @@ public class Services extends AbstractElementProcessor {
     @Override
     public void process(final Request request) {
         final boolean showForms = request.isRequested(FORMS, false);
+        final String cancelTo = request.getOptionalProperty(CANCEL_TO);
 
         final InclusionList inclusionList = new InclusionList();
         request.setBlockContent(inclusionList);
@@ -46,7 +47,7 @@ public class Services extends AbstractElementProcessor {
             request.appendHtml("<h3>");
             request.appendAsHtmlEncoded(adapter.titleString());
             request.appendHtml("</h3>");
-            Methods.writeMethods(request, serviceId, adapter, showForms, inclusionList);
+            Methods.writeMethods(request, serviceId, adapter, showForms, inclusionList, cancelTo);
             request.appendHtml("</div>");
         }
         request.popBlockContent();

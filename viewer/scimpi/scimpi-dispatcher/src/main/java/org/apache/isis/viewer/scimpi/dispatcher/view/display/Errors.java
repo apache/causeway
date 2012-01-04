@@ -22,25 +22,45 @@ package org.apache.isis.viewer.scimpi.dispatcher.view.display;
 import org.apache.isis.viewer.scimpi.dispatcher.AbstractElementProcessor;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 
-public class Feedback extends AbstractElementProcessor {
+public class Errors extends AbstractElementProcessor {
 
     @Override
     public void process(final Request request) {
         final String cls = request.getOptionalProperty(CLASS);
         final StringBuffer buffer = new StringBuffer();
-        Errors.write(request, cls, buffer);
-        Warnings.write(cls, buffer);
-        Messages.write(cls, buffer);
+        write(request, cls, buffer);
         if (buffer.length() > 0) {
-            request.appendHtml("<div class=\"feedback\">");
+            request.appendHtml("<div class=\"error\">");
             request.appendHtml(buffer.toString());
             request.appendHtml("</div>");
         }
     }
 
+    public static void write(Request request, String cls, final StringBuffer buffer) {
+        if (cls == null) {
+            cls = "error";
+        }
+        String message = (String) request.getContext().getVariable("_error-message");
+        if (message != null) {
+            buffer.append(message);
+        }
+        String details = (String) request.getContext().getVariable("_error-details");
+        if (details != null) {
+            buffer.append(details);
+        }
+        
+        /*
+        final MessageBroker messageBroker = IsisContext.getMessageBroker();
+        final List<String> warnings = messageBroker.getWarnings();
+        for (final String warning : warnings) {
+            buffer.append("<div class=\"" + cls + "\">" + warning + "</div>");
+        }
+        */
+    }
+
     @Override
     public String getName() {
-        return "feedback";
+        return "errors";
     }
 
 }

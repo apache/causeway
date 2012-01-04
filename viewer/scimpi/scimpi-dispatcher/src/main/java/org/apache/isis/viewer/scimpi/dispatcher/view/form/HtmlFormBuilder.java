@@ -27,7 +27,7 @@ public class HtmlFormBuilder {
 
     public static void createForm(final Request request, final String action, final HiddenInputField[] hiddenFields,
         final InputField[] fields, final String className, final String id, final String formTitle,
-        final String description, final String helpReference, final String buttonTitle, final String errors) {
+        final String description, final String helpReference, final String buttonTitle, final String errors, String cancelTo) {
 
         String classSegment = " class=\"" + className + (id == null ? "\"" : "\" id=\"" + id + "\"");
         request.appendHtml("<form " + classSegment + " action=\"" + action
@@ -68,7 +68,7 @@ public class HtmlFormBuilder {
                 final String fieldSegment = createField(fld);
                 final String helpSegment = HelpLink.createHelpSegment(fld.getDescription(), fld.getHelpReference());
                 final String title = fld.getDescription().equals("") ? "" : " title=\"" + fld.getDescription() + "\"";
-                request.appendHtml("  <div class=\"field\"><label" + title + ">");
+                request.appendHtml("  <div class=\"field\"><label class=\"label\" " + title + ">");
                 request.appendAsHtmlEncoded(fld.getLabel());
                 request.appendHtml(":</label>" + fieldSegment + errorSegment + helpSegment + "</div>\n");
             }
@@ -78,6 +78,15 @@ public class HtmlFormBuilder {
         request.appendAsHtmlEncoded(buttonTitle);
         request.appendHtml("\" name=\"execute\" />\n");
         HelpLink.append(request, description, helpReference);
+        // TODO alllow forms to be cancelled, returning to previous page.   
+        // request.appendHtml("  <div class=\"action\"><a class=\"button\" href=\"reset\">Cancel</a></div>");
+
+        if (cancelTo != null) {
+            request.appendHtml("  <input class=\"button\" type=\"button\" value=\"");
+            request.appendAsHtmlEncoded("Cancel");
+            request.appendHtml("\" onclick=\"window.location = '" + cancelTo + "'\" name=\"cancel\" />\n");
+        }
+        
         // TODO reinstate fieldsets when we can specify them
         // request.appendHtml("</fieldset>\n");
         request.appendHtml("</form>\n");
@@ -92,7 +101,7 @@ public class HtmlFormBuilder {
             }
         } else {
             if (field.getType() == InputField.HTML) {
-                return field.getHtml();
+                return "<span class=\"value\">" + field.getHtml() + "</span>"; 
             } else if (field.getOptionsText() != null) {
                 return createOptions(field);
             } else if (field.getType() == InputField.REFERENCE) {

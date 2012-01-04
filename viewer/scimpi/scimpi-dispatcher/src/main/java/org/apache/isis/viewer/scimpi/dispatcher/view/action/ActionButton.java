@@ -42,7 +42,7 @@ public class ActionButton extends AbstractElementProcessor {
         final String methodName = request.getRequiredProperty(METHOD);
         final String forwardResultTo = request.getOptionalProperty(VIEW);
         final String forwardVoidTo = request.getOptionalProperty(VOID);
-        final String forwardErrorTo = request.getOptionalProperty(ERRORS);
+        final String forwardErrorTo = request.getOptionalProperty(ERROR);
         final String variable = request.getOptionalProperty(RESULT_NAME);
         final String scope = request.getOptionalProperty(SCOPE);
         final String buttonTitle = request.getOptionalProperty(BUTTON_TITLE);
@@ -163,7 +163,7 @@ public class ActionButton extends AbstractElementProcessor {
             forwardErrorTo = request.getContext().getResourceFile();
         }
         forwardErrorTo = context.fullFilePath(forwardErrorTo);
-        request.appendHtml("  <input type=\"hidden\" name=\"" + "_" + ERRORS + "\" value=\"" + forwardErrorTo
+        request.appendHtml("  <input type=\"hidden\" name=\"" + "_" + ERROR + "\" value=\"" + forwardErrorTo
             + "\" />\n");
         if (forwardVoidTo == null) {
             forwardVoidTo = request.getContext().getResourceFile();

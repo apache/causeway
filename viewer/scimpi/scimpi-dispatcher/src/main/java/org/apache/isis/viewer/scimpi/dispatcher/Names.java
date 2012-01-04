@@ -21,22 +21,24 @@ package org.apache.isis.viewer.scimpi.dispatcher;
 
 public interface Names {
     static final String BUTTON_TITLE = "button-title";
+    static final String CANCEL_TO = "cancel-to";
     static final String COLLECTION = "collection";
     static final String CONFIRM = "confirm";
     static final String CLASS = "class";
+    static final String CONTAINER_CLASS = "container-" + CLASS;
     static final String DEFAULT = "default";
     static final String ELEMENT_NAME = "element-name";
     static final String ELEMENT = "element";
     static final String EVEN_ROW_CLASS = "even-row";
     static final String FALSE = "false";
-    static final String ERRORS = "error";
+    static final String ERROR = "error";
     static final String FIELD = "field";
     static final String FIELD_NAME = "field-name";
-    static final String FOOTING = "footing";
+    static final String FOOTER = "footer";
     static final String FORM_ID = "form-id";
     static final String FORM_TITLE = "title";
     static final String FORMS = "show-forms";
-    static final String HEADING = "heading";
+    static final String HEADER = "header";
     static final String ICON_CLASS = "icon";
     static final String HIDDEN = "hidden";
     static final String HIDE_UNEDITABLE = "hide-uneditable";
@@ -61,6 +63,7 @@ public interface Names {
     static final String SHOW_EDIT = "edit";
     static final String SHOW_DELETE = "delete";
     static final String SHOW_MESSAGE = "show-message";
+    static final String SHOW_TITLE = "show-title";
     static final String TRUNCATE = "truncate";
     static final String TYPE = "type";
     static final String VIEW = "view";
