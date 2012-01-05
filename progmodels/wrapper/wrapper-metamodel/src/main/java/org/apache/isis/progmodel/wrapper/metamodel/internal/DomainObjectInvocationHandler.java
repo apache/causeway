@@ -23,6 +23,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.isis.applib.events.CollectionAccessEvent;
@@ -32,15 +33,28 @@ import org.apache.isis.applib.events.PropertyAccessEvent;
 import org.apache.isis.applib.events.UsabilityEvent;
 import org.apache.isis.applib.events.ValidityEvent;
 import org.apache.isis.applib.events.VisibilityEvent;
+import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
-import org.apache.isis.core.commons.lang.StringUtils;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectPersistor;
 import org.apache.isis.core.metamodel.adapter.map.AdapterMap;
 import org.apache.isis.core.metamodel.adapter.util.AdapterUtils;
 import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
 import org.apache.isis.core.metamodel.consent.InteractionResult;
+import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facets.ImperativeFacet;
+import org.apache.isis.core.metamodel.facets.accessor.PropertyOrCollectionAccessorFacet;
+import org.apache.isis.core.metamodel.facets.actions.choices.ActionChoicesFacet;
+import org.apache.isis.core.metamodel.facets.actions.defaults.ActionDefaultsFacet;
+import org.apache.isis.core.metamodel.facets.collections.modify.CollectionAddToFacet;
+import org.apache.isis.core.metamodel.facets.collections.modify.CollectionRemoveFromFacet;
+import org.apache.isis.core.metamodel.facets.hide.HiddenFacet;
+import org.apache.isis.core.metamodel.facets.param.choices.ActionParameterChoicesFacet;
+import org.apache.isis.core.metamodel.facets.properties.choices.PropertyChoicesFacet;
+import org.apache.isis.core.metamodel.facets.properties.defaults.PropertyDefaultFacet;
+import org.apache.isis.core.metamodel.facets.properties.modify.PropertyInitializationFacet;
+import org.apache.isis.core.metamodel.facets.properties.modify.PropertySetterFacet;
 import org.apache.isis.core.metamodel.interactions.ObjectTitleContext;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLookup;
@@ -49,6 +63,17 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.specloader.specimpl.dflt.ObjectSpecificationDefault;
+import org.apache.isis.core.progmodel.facets.actions.validate.method.ActionValidationFacetViaMethod;
+import org.apache.isis.core.progmodel.facets.collections.validate.CollectionValidateAddToFacetViaMethod;
+import org.apache.isis.core.progmodel.facets.collections.validate.CollectionValidateRemoveFromFacetViaMethod;
+import org.apache.isis.core.progmodel.facets.members.disable.method.DisableForContextFacetViaMethod;
+import org.apache.isis.core.progmodel.facets.members.hide.method.HiddenFacetViaHideMethodFacetFactory;
+import org.apache.isis.core.progmodel.facets.members.hide.method.HideForContextFacetViaMethod;
+import org.apache.isis.core.progmodel.facets.object.hidden.method.HiddenObjectFacetViaHiddenMethod;
+import org.apache.isis.core.progmodel.facets.properties.modify.PropertyClearFacetViaClearMethod;
+import org.apache.isis.core.progmodel.facets.properties.modify.PropertyModifyFacetFactory;
+import org.apache.isis.core.progmodel.facets.properties.modify.PropertySetterFacetViaModifyMethod;
+import org.apache.isis.core.progmodel.facets.properties.validate.PropertyValidateFacetViaMethod;
 import org.apache.isis.progmodel.wrapper.applib.DisabledException;
 import org.apache.isis.progmodel.wrapper.applib.HiddenException;
 import org.apache.isis.progmodel.wrapper.applib.InteractionException;
@@ -56,8 +81,6 @@ import org.apache.isis.progmodel.wrapper.applib.InvalidException;
 import org.apache.isis.progmodel.wrapper.applib.WrapperFactory;
 import org.apache.isis.progmodel.wrapper.applib.WrapperFactory.ExecutionMode;
 import org.apache.isis.progmodel.wrapper.applib.WrapperObject;
-import org.apache.isis.progmodel.wrapper.metamodel.internal.util.Constants;
-import org.apache.isis.progmodel.wrapper.metamodel.internal.util.MethodPrefixFinder;
 
 public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandlerDefault<T> {
 
@@ -128,68 +151,101 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
         }
 
         final ObjectMember objectMember = locateAndCheckMember(method);
+        final List<Facet> imperativeFacets = getImperativeFacets(objectMember, method);
+        
         final String memberName = objectMember.getName();
 
-        final String methodName = method.getName();
-        final String prefix = checkPrefix(methodName);
+        
+        if(instanceOf(imperativeFacets, 
+                DisableForContextFacetViaMethod.class, 
+                HideForContextFacetViaMethod.class 
+                )) {
+            throw new UnsupportedOperationException(String.format(
+                "Cannot invoke supporting method '%s'", memberName));
+        }            
 
-        if (isDefaultMethod(prefix) || isChoicesMethod(prefix)) {
+        
+        final String methodName = method.getName();
+
+        if(instanceOf(imperativeFacets, ActionDefaultsFacet.class, PropertyDefaultFacet.class, ActionChoicesFacet.class, ActionParameterChoicesFacet.class, PropertyChoicesFacet.class)) {
             return method.invoke(getDelegate(), args);
         }
-
-        final boolean isGetterMethod = isGetterMethod(prefix);
-        final boolean isSetterMethod = isSetterMethod(prefix);
-        final boolean isAddToMethod = isAddToMethod(prefix);
-        final boolean isRemoveFromMethod = isRemoveFromMethod(prefix);
 
         // for all members, check visibility and usability
         checkVisibility(getAuthenticationSession(), targetAdapter, objectMember);
 
         if (objectMember.isOneToOneAssociation()) {
+
+            if(instanceOf(imperativeFacets, 
+                    PropertyValidateFacetViaMethod.class, 
+                    PropertySetterFacetViaModifyMethod.class, 
+                    PropertyClearFacetViaClearMethod.class 
+                    )) {
+                throw new UnsupportedOperationException(String.format(
+                    "Cannot invoke supporting method '%s'; use only property accessor/mutator", memberName));
+            }            
+
             final OneToOneAssociation otoa = (OneToOneAssociation) objectMember;
-            if (isGetterMethod) {
+            if(instanceOf(imperativeFacets, PropertyOrCollectionAccessorFacet.class)) {
                 return handleGetterMethodOnProperty(args, targetAdapter, otoa, methodName);
             }
-            if (isSetterMethod) {
+            if(instanceOf(imperativeFacets, PropertySetterFacet.class, PropertyInitializationFacet.class)) {
                 checkUsability(getAuthenticationSession(), targetAdapter, objectMember);
                 return handleSetterMethodOnProperty(args, getAuthenticationSession(), targetAdapter, otoa, methodName);
             }
         }
         if (objectMember.isOneToManyAssociation()) {
+
+            if(instanceOf(imperativeFacets, 
+                    CollectionValidateAddToFacetViaMethod.class, 
+                    CollectionValidateRemoveFromFacetViaMethod.class 
+                    )) {
+                throw new UnsupportedOperationException(String.format(
+                    "Cannot invoke supporting method '%s'; use only collection accessor/mutator", memberName));
+            }            
+
             final OneToManyAssociation otma = (OneToManyAssociation) objectMember;
-            if (isGetterMethod) {
+            if(instanceOf(imperativeFacets, PropertyOrCollectionAccessorFacet.class)) {
                 return handleGetterMethodOnCollection(method, args, targetAdapter, otma, memberName);
             }
-            if (isAddToMethod) {
+            if(instanceOf(imperativeFacets, CollectionAddToFacet.class)) {
                 checkUsability(getAuthenticationSession(), targetAdapter, objectMember);
                 return handleCollectionAddToMethod(args, targetAdapter, otma, methodName);
             }
-            if (isRemoveFromMethod) {
+            if(instanceOf(imperativeFacets, CollectionRemoveFromFacet.class)) {
                 checkUsability(getAuthenticationSession(), targetAdapter, objectMember);
                 return handleCollectionRemoveFromMethod(args, targetAdapter, otma, methodName);
             }
         }
 
         // filter out
-        if (isGetterMethod) {
+        if(instanceOf(imperativeFacets, PropertyOrCollectionAccessorFacet.class)) {
             throw new UnsupportedOperationException(String.format(
-                "Can only invoke 'get' on properties or collections; '%s' represents %s", methodName,
+                "Can only invoke accessor on properties or collections; '%s' represents %s", methodName,
                 decode(objectMember)));
         }
-        if (isSetterMethod) {
+        if(instanceOf(imperativeFacets, PropertySetterFacet.class)) {
             throw new UnsupportedOperationException(String.format(
-                "Can only invoke 'set' on properties; '%s' represents %s", methodName, decode(objectMember)));
+                "Can only invoke mutator on properties; '%s' represents %s", methodName, decode(objectMember)));
         }
-        if (isAddToMethod) {
+        if(instanceOf(imperativeFacets, CollectionAddToFacet.class)) {
             throw new UnsupportedOperationException(String.format(
-                "Can only invoke 'addTo' on collections; '%s' represents %s", methodName, decode(objectMember)));
+                "Can only invoke 'adder' on collections; '%s' represents %s", methodName, decode(objectMember)));
         }
-        if (isRemoveFromMethod) {
+        if(instanceOf(imperativeFacets, CollectionRemoveFromFacet.class)) {
             throw new UnsupportedOperationException(String.format(
-                "Can only invoke 'removeFrom' on collections; '%s' represents %s", methodName, decode(objectMember)));
+                "Can only invoke 'remover' on collections; '%s' represents %s", methodName, decode(objectMember)));
         }
 
         if (objectMember instanceof ObjectAction) {
+
+            if(instanceOf(imperativeFacets, 
+                    ActionValidationFacetViaMethod.class 
+                    )) {
+                throw new UnsupportedOperationException(String.format(
+                    "Cannot invoke supporting method '%s'; use only the 'invoke' method", memberName));
+            }            
+
             checkUsability(getAuthenticationSession(), targetAdapter, objectMember);
 
             final ObjectAction noa = (ObjectAction) objectMember;
@@ -197,6 +253,45 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
         }
 
         throw new UnsupportedOperationException(String.format("Unknown member type '%s'", objectMember));
+    }
+
+    public List<Facet> getImperativeFacets(final ObjectMember objectMember, final Method method) {
+        final List<Facet> imperativeFacets = objectMember.getFacets(new Filter<Facet>() {
+            @Override
+            public boolean accept(Facet facet) {
+                ImperativeFacet imperativeFacet = asImperativeFacet(facet);
+                if(imperativeFacet == null) {
+                    return false;
+                }
+                return imperativeFacet.getMethods().contains(method);
+            }
+            private ImperativeFacet asImperativeFacet(Facet facet) {
+                if(facet == null) {
+                    return null;
+                }
+                if(facet instanceof ImperativeFacet) {
+                    return (ImperativeFacet) facet;
+                }
+                return asImperativeFacet(facet.getUnderlyingFacet());
+            }
+        });
+        
+        // there will be at least one
+        if(imperativeFacets.isEmpty()) {
+            throw new IllegalStateException("should be at least one imperative facet");
+        }
+        return imperativeFacets;
+    }
+
+    private static boolean instanceOf(final List<?> objects, final Class<?>... superTypes) {
+        for (final Class<?> superType : superTypes) {
+            for(final Object obj: objects) {
+                if(superType.isAssignableFrom(obj.getClass())) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     // /////////////////////////////////////////////////////////////////
@@ -537,15 +632,6 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
         return member;
     }
 
-    private String checkPrefix(final String methodName) {
-        final String prefix = new MethodPrefixFinder().findPrefix(methodName);
-        if (StringUtils.in(prefix, Constants.INVALID_PREFIXES)) {
-            throw new UnsupportedOperationException(String.format(
-                "Cannot invoke methods with prefix '%s'; use only get/set/addTo/removeFrom/action", prefix));
-        }
-        return prefix;
-    }
-
     protected boolean isTitleMethod(final Method method) {
         return method.equals(titleMethod);
     }
@@ -558,29 +644,6 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
         return method.equals(wrappedMethod);
     }
 
-    private boolean isGetterMethod(final String prefix) {
-        return prefix.equals(Constants.PREFIX_GET);
-    }
-
-    private boolean isSetterMethod(final String prefix) {
-        return prefix.equals(Constants.PREFIX_SET);
-    }
-
-    private boolean isAddToMethod(final String prefix) {
-        return prefix.equals(Constants.PREFIX_ADD_TO);
-    }
-
-    private boolean isRemoveFromMethod(final String prefix) {
-        return prefix.equals(Constants.PREFIX_REMOVE_FROM);
-    }
-
-    private boolean isChoicesMethod(final String prefix) {
-        return prefix.equals(Constants.PREFIX_CHOICES);
-    }
-
-    private boolean isDefaultMethod(final String prefix) {
-        return prefix.equals(Constants.PREFIX_DEFAULT);
-    }
 
     // /////////////////////////////////////////////////////////////////
     // Specification lookup

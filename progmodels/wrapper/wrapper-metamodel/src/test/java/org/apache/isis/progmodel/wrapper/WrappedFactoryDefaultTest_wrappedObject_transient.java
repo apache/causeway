@@ -45,10 +45,10 @@ public class WrappedFactoryDefaultTest_wrappedObject_transient {
     public final JUnitRuleMockery2 mockery = JUnitRuleMockery2.createFor(Mode.INTERFACES_ONLY);
 
     @Mock
-    private AuthenticationSession mockAuthenticationSession;
+    //private AuthenticationSession mockAuthenticationSession;
 
-    private EmployeeRepository employeeRepository;
-    private ClaimRepository claimRepository;
+    //private EmployeeRepository employeeRepository;
+    //private ClaimRepository claimRepository;
     
     private Employee employeeDO;
     private Employee employeeWO;
@@ -59,12 +59,12 @@ public class WrappedFactoryDefaultTest_wrappedObject_transient {
     @Before
     public void setUp() {
 
-        employeeRepository = new EmployeeRepositoryImpl();
-        claimRepository = new ClaimRepositoryImpl();
+        //employeeRepository = new EmployeeRepositoryImpl();
+        //claimRepository = new ClaimRepositoryImpl();
 
         employeeDO = new Employee();
         employeeDO.setName("Smith");
-        employeeDO.setEmployeeRepository(employeeRepository); // would be done by the EmbeddedContext impl
+        //employeeDO.setEmployeeRepository(employeeRepository); // would be done by the EmbeddedContext impl
 
         wrapperFactory = new WrapperFactoryDefault();
 

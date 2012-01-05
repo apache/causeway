@@ -166,19 +166,6 @@
 				<type>test-jar</type>
 			</dependency>
 
-            <!-- TODO: remove this dependency -->            
-			<dependency>
-				<groupId>org.apache.isis.runtimes.dflt</groupId>
-				<artifactId>runtime</artifactId>
-				<version>0.2.0-incubating-SNAPSHOT</version>
-			</dependency>
-            <!-- TODO: remove this dependency -->            
-			<dependency>
-				<groupId>org.apache.isis.runtimes.dflt</groupId>
-				<artifactId>webapp</artifactId>
-				<version>0.2.0-incubating-SNAPSHOT</version>
-			</dependency>
-
 
 			<!-- Wicket -->
 			<dependency>
