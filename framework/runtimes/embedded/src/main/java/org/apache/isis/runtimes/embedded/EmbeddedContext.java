@@ -51,5 +51,4 @@ public interface EmbeddedContext {
     void warnUser(String message);
     void raiseError(String message);
 
-
 }

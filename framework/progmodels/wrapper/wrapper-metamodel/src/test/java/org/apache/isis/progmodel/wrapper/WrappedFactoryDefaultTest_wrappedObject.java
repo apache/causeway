@@ -48,7 +48,7 @@ public class WrappedFactoryDefaultTest_wrappedObject {
     public JUnitRuleMockery2 mockery = JUnitRuleMockery2.createFor(Mode.INTERFACES_ONLY);
     
     private EmployeeRepository employeeRepository;
-    private ClaimRepository claimRepository;
+    //private ClaimRepository claimRepository;
     
     private Employee employeeDO;
     private Employee employeeWO;
@@ -60,7 +60,7 @@ public class WrappedFactoryDefaultTest_wrappedObject {
     public void setUp() {
 
         employeeRepository = new EmployeeRepositoryImpl();
-        claimRepository = new ClaimRepositoryImpl();
+        //claimRepository = new ClaimRepositoryImpl();
 
         employeeDO = new Employee();
         employeeDO.setName("Smith");

@@ -34,7 +34,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
  * Java implementation of a {@link ObjectMember}.
  * 
  * <p>
- * Used by <tt>JavaSpecification#getMember(Method)</tt> in order to reverse lookup {@link ObjectMember}s from underlying
+ * Used by <tt>ObjectSpecificationDefault#getMember(Method)</tt> in order to reverse lookup {@link ObjectMember}s from underlying
  * {@link Method}s. So, for example, the facets that represents an action xxx, or an <tt>validateXxx</tt> method, or an
  * <tt>addToXxx</tt> collection, can all be used to lookup the member.
  * 

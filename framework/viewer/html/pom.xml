@@ -101,6 +101,10 @@
             <scope>test</scope>
 		</dependency>
 
+        <dependency>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>progmodel</artifactId>
+        </dependency>
 		<dependency>
 		    <groupId>org.apache.isis.core</groupId>
 		    <artifactId>runtime</artifactId>
@@ -111,24 +115,21 @@
 		    <artifactId>webapp</artifactId>
 		</dependency>
         
-        <!-- TODO: remove this dependency -->
+        <!-- TODO: remove these dependencies (they prevent the viewer using different runtimes) -->
 		<dependency>
 			<groupId>org.apache.isis.runtimes.dflt</groupId>
 			<artifactId>runtime</artifactId>
 			<type>test-jar</type>
             <scope>test</scope>
 		</dependency>
-        <!-- TODO: remove this dependency -->
 		<dependency>
 			<groupId>org.apache.isis.runtimes.dflt</groupId>
 			<artifactId>runtime</artifactId>
 		</dependency>
-        <!-- TODO: remove this dependency -->
 		<dependency>
 			<groupId>org.apache.isis.runtimes.dflt</groupId>
 			<artifactId>monitoring</artifactId>
 		</dependency>
-        <!-- TODO: remove this dependency -->
 		<dependency>
 			<groupId>org.apache.isis.runtimes.dflt</groupId>
 			<artifactId>webapp</artifactId>
