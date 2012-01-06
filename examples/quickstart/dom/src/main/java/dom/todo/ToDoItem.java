@@ -52,7 +52,7 @@ public class ToDoItem extends AbstractDomainObject {
 
     @Disabled
     @MemberOrder(sequence = "3")
-    public boolean getDone() {
+    public boolean isComplete() {
         return done;
     }
 

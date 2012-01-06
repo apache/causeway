@@ -41,13 +41,13 @@ public class ToDoItemRepositoryTest extends AbstractTest {
 
     @Test
     public void canFindAllItemsNotYetDone() throws Exception {
-        final List<ToDoItem> foobarList = toDoItemRepository.notYetDone();
+        final List<ToDoItem> foobarList = toDoItems.notYetDone();
         assertThat(foobarList.size(), is(5));
     }
 
     @Test
     public void canCreateToDoItem() throws Exception {
-        ToDoItem newItem = toDoItemRepository.newToDo("item description");
+        ToDoItem newItem = toDoItems.newToDo("item description");
         assertThat(newItem, is(not(nullValue())));
         assertThat(newItem.getDescription(), is("item description"));
         assertThat(getDomainObjectContainer().isPersistent(newItem), is(true));

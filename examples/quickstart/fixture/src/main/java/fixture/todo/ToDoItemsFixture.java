@@ -21,7 +21,7 @@
 package fixture.todo;
 
 import dom.todo.ToDoItem;
-import dom.todo.ToDoItemRepository;
+import dom.todo.ToDoItems;
 
 import org.apache.isis.applib.fixtures.AbstractFixture;
 
@@ -38,13 +38,13 @@ public class ToDoItemsFixture extends AbstractFixture {
     }
     
     private ToDoItem createToDoItem(String description) {
-        return toDoItemRepository.newToDo(description);
+        return toDoItems.newToDo(description);
     }
 
     
-    private ToDoItemRepository toDoItemRepository;
-    public void setToDoItemRepository(ToDoItemRepository toDoItemRepository) {
-        this.toDoItemRepository = toDoItemRepository;
+    private ToDoItems toDoItems;
+    public void setToDoItemRepository(ToDoItems toDoItems) {
+        this.toDoItems = toDoItems;
     }
     
 }

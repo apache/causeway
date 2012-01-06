@@ -22,12 +22,12 @@ package objstore.dflt.todo;
 import java.util.List;
 
 import dom.todo.ToDoItem;
-import dom.todo.ToDoItemRepository;
+import dom.todo.ToDoItems;
 
 import org.apache.isis.applib.AbstractFactoryAndRepository;
 import org.apache.isis.applib.filter.Filter;
 
-public class ToDoItemRepositoryDefault extends AbstractFactoryAndRepository implements ToDoItemRepository {
+public class ToDoItemsDefault extends AbstractFactoryAndRepository implements ToDoItems {
 
     // {{ Id, iconName
     @Override
@@ -46,7 +46,7 @@ public class ToDoItemRepositoryDefault extends AbstractFactoryAndRepository impl
         return allMatches(ToDoItem.class, new Filter<ToDoItem>() {
             @Override
             public boolean accept(ToDoItem t) {
-                return !t.getDone();
+                return !t.isComplete();
             }
         });
     }

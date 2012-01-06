@@ -19,13 +19,13 @@
 
 package junit;
 
-import objstore.dflt.todo.ToDoItemRepositoryDefault;
+import objstore.dflt.todo.ToDoItemsDefault;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.runner.RunWith;
 
-import dom.todo.ToDoItemRepository;
+import dom.todo.ToDoItems;
 
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.progmodel.wrapper.applib.WrapperFactory;
@@ -36,22 +36,22 @@ import org.apache.isis.viewer.junit.Service;
 import org.apache.isis.viewer.junit.Services;
 
 @RunWith(IsisTestRunner.class)
-@ConfigDir("../quickrun/src/main/resources")
-@Services({ @Service(ToDoItemRepositoryDefault.class) })
+@ConfigDir("../webapp/src/main/webapp/WEB-INF")
+@Services({ @Service(ToDoItemsDefault.class) })
 public abstract class AbstractTest {
 
     private DomainObjectContainer domainObjectContainer;
     private WrapperFactory wrapperFactory;
 
     /**
-     * The {@link WrapperFactory#wrap(Object) wrapped} equivalent of the {@link #setFoobarRepository(ToDoItemRepository)
-     * injected} {@link ToDoItemRepository}.
+     * The {@link WrapperFactory#wrap(Object) wrapped} equivalent of the {@link #setToDoItems(ToDoItems)
+     * injected} {@link ToDoItems}.
      */
-    protected ToDoItemRepository toDoItemRepository;
+    protected ToDoItems toDoItems;
 
     @Before
     public void wrapInjectedServices() throws Exception {
-        toDoItemRepository = wrapped(toDoItemRepository);
+        toDoItems = wrapped(toDoItems);
     }
 
     @Before
@@ -95,8 +95,8 @@ public abstract class AbstractTest {
         this.domainObjectContainer = domainObjectContainer;
     }
 
-    public void setFoobarRepository(final ToDoItemRepository toDoItemRepository) {
-        this.toDoItemRepository = toDoItemRepository;
+    public void setToDoItems(final ToDoItems toDoItems) {
+        this.toDoItems = toDoItems;
     }
 
 }

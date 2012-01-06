@@ -149,12 +149,13 @@
         <module>dom</module>
         <module>fixture</module>
         <module>objstore-default</module>
-        <module>viewer-html</module>
-        <module>viewer-json</module>
+        <module>webapp</module>
         <module>tests-junit</module>
         <module>tests-bdd</module>
         <!-- 
         <module>quickrun</module>
+        <module>viewer-html</module>
+        <module>viewer-json</module>
         <module>viewer-scimpi</module>
         <module>viewer-wicket</module>
         -->
@@ -179,6 +180,12 @@
             <dependency>
                 <groupId>${project.groupId}</groupId>
                 <artifactId>quickstart-objstore-dflt</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>quickstart-webapp</artifactId>
                 <version>${project.version}</version>
             </dependency>
 

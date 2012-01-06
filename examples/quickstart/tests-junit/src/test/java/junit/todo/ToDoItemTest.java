@@ -42,21 +42,21 @@ public class ToDoItemTest extends AbstractTest {
     @Override
     @Before
     public void setUp() {
-        firstItem = wrapped(toDoItemRepository.notYetDone().get(0));
+        firstItem = wrapped(toDoItems.notYetDone().get(0));
     }
     
     @Test
-    public void canMarkAsDone() throws Exception {
+    public void canMarkAsComplete() throws Exception {
         firstItem.markAsDone();
-        assertThat(firstItem.getDone(), is(true));
+        assertThat(firstItem.isComplete(), is(true));
     }
 
     @Test
-    public void cannotMarkAsDoneTwice() throws Exception {
+    public void cannotMarkAsCompleteTwice() throws Exception {
         firstItem.markAsDone();
         try {
             firstItem.markAsDone();
-            fail("Should not been disabled");
+            fail("Should have been disabled");
         } catch (DisabledException e) {
             assertThat(e.getMessage(), is("Already done"));
         }

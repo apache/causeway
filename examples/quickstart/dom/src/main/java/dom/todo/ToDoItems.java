@@ -25,7 +25,7 @@ import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Named;
 
 @Named("ToDos")
-public interface ToDoItemRepository {
+public interface ToDoItems {
 
     @MemberOrder(sequence="1")
     public List<ToDoItem> notYetDone();
