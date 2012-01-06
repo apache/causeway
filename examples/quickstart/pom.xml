@@ -154,8 +154,6 @@
         <module>tests-bdd</module>
         <!-- 
         <module>quickrun</module>
-        <module>viewer-html</module>
-        <module>viewer-json</module>
         <module>viewer-scimpi</module>
         <module>viewer-wicket</module>
         -->
