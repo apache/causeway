@@ -2598,7 +2598,7 @@ public class Department {
         <title>How to make a derived collection</title>
 
         <para>Collections can be derived by omitting the mutator (the same way
-        as properties, see <xref linkend="sec.DerivedProperty" />). </para>
+        as properties, see <xref linkend="sec.DerivedProperty" />).</para>
 
         <para>For example:</para>
 
@@ -7135,6 +7135,31 @@ public class Child {
         <programlisting format="linespecific">@Value(...)
 @RegEx(validation = "(\\w+\\.)*\\w+@(\\w+\\.)+[A-Za-z]+")
 public class EmailAddress {
+   ...
+y}</programlisting>
+      </sect1>
+
+      <sect1>
+        <title>@Stable</title>
+
+        <para>The <classname>@Stable</classname> annotation allows the
+        developer to declare that any changes to an entity's structure are
+        guaranteed to be backwardly compatible.</para>
+
+        <para>It was originally introduced to support a requirement of the
+        RESTful viewers (json viewer) which directly expose the domain objects
+        as RESTful representations. The presence of this annotation allows the
+        viewer to return an application-defined media type. This would
+        typically be annotated only on non-persisted domain objects acting as
+        view models.</para>
+
+        <para>For example, a domain object that represents a summary of a
+        <classname>Customer</classname> and their most recent
+        <classname>Order</classname>s might be annotated as:</para>
+
+        <programlisting format="linespecific">@NotPersistable
+@Stable
+public class CustomerAndOrdersViewModel {
    ...
 }</programlisting>
       </sect1>
