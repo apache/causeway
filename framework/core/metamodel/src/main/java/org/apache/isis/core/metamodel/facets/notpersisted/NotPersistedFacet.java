@@ -20,7 +20,6 @@
 package org.apache.isis.core.metamodel.facets.notpersisted;
 
 import org.apache.isis.core.metamodel.facets.MarkerFacet;
-import org.apache.isis.core.metamodel.interactions.DisablingInteractionAdvisor;
 
 /**
  * Indicates that a property or a collection shouldn't be persisted.
@@ -28,7 +27,11 @@ import org.apache.isis.core.metamodel.interactions.DisablingInteractionAdvisor;
  * <p>
  * In the standard Apache Isis Programming Model, corresponds to annotating the property or collection with the
  * <tt>@NotPersisted</tt> annotation.
+ * 
+ * <p>
+ * Note that being non-persisted does not imply being disabled; see for example:
+ * @see http://mail-archives.apache.org/mod_mbox/incubator-isis-dev/201010.mbox/%3C4CB2FA43.7030206@nakedobjects.org%3E 
  */
-public interface NotPersistedFacet extends MarkerFacet, DisablingInteractionAdvisor {
+public interface NotPersistedFacet extends MarkerFacet {
 
 }

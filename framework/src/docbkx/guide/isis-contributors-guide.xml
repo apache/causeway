@@ -190,9 +190,9 @@
             <programlisting>-Xms512m -Xmx2048m -XX:PermSize=256m -XX:MaxPermSize=512m</programlisting>
 
             <para><note>
-                <para>Although building Isis with both Maven 2 and Maven 3 is
-                supported, the site documentation may only be built using
-                Maven 3.</para>
+                <para>Although building <emphasis>Isis</emphasis> with both
+                Maven 2 and Maven 3 is supported, the site documentation may
+                only be built using Maven 3.</para>
               </note></para>
           </listitem>
         </itemizedlist>
@@ -5041,6 +5041,46 @@ $ svn commit -m "reintegrating release branch 0.x.x-incubating ready for next it
           <filename>examples</filename> and <filename>domain-libs</filename>
           modules - should be manually updated also.</para>
         </sect2>
+      </sect1>
+
+      <sect1>
+        <title>Update Isis Project Incubation Status page</title>
+
+        <para>Update the <ulink
+        url="http://incubator.apache.org/projects/isis.html">Isis Project
+        Incubation Status</ulink> page to capture the new status of the
+        project. In particular:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>The <emphasis>News</emphasis> section should document the
+            new release</para>
+          </listitem>
+
+          <listitem>
+            <para>The <emphasis>Project Info</emphasis> section should be
+            reviewed and updated if required</para>
+          </listitem>
+
+          <listitem>
+            <para>Any links to missing <emphasis>Incubation status</emphasis>
+            reports should be added</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>The file is updated by checking out and editing the following
+        file from SVN:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><ulink
+            url="https://svn.apache.org/repos/asf/incubator/public/trunk/site-author/projects/isis.xml">https://svn.apache.org/repos/asf/incubator/public/trunk/site-author/projects/isis.xml</ulink></para>
+          </listitem>
+        </itemizedlist>
+
+        <para>For additional information, see this <ulink
+        url="http://incubator.apache.org/guides/website.html">guidance</ulink>
+        on the incubator website.</para>
       </sect1>
     </chapter>
 

@@ -164,7 +164,8 @@
 
       <itemizedlist>
         <listitem>
-          <para>the principles and patterns that underpin Isis (<xref
+          <para>the principles and patterns that underpin
+          <emphasis>Isis</emphasis> (<xref
           linkend="chp.PrinciplesAndPatterns" />)</para>
         </listitem>
 
@@ -189,10 +190,11 @@
       directly from the domain model. However, there's much more to
       <emphasis>Apache Isis</emphasis> than this.</para>
 
-      <para>This chapter introduces the Apache Isis and the naked objects
-      pattern by way of a series of questions and answers. It is adapted from
-      an <ulink url="http://www.infoq.com/articles/haywood-ddd-no">interview
-      originally published on InfoQ</ulink>.</para>
+      <para>This chapter introduces the <emphasis>Apache Isis</emphasis> and
+      the naked objects pattern by way of a series of questions and answers.
+      It is adapted from an <ulink
+      url="http://www.infoq.com/articles/haywood-ddd-no">interview originally
+      published on InfoQ</ulink>.</para>
 
       <sect1>
         <title>Apache Isis implements naked objects pattern... but what is
@@ -396,9 +398,9 @@
         <title>What are the limitations of Apache Isis framework?</title>
 
         <para>It's certainly true that naked objects pattern implemented by
-        Apache Isis is opinionated, so if you don't agree with all of its
-        opinions then you're going to find it limiting in one way or
-        another.</para>
+        <emphasis>Apache Isis</emphasis> is opinionated, so if you don't agree
+        with all of its opinions then you're going to find it limiting in one
+        way or another.</para>
 
         <para>The first of these is that everything that the user wants to
         interact with has to be an object of some sort. As already explained,
@@ -663,7 +665,8 @@
         the most significant of these is the runtime/persistence
         <acronym>API</acronym>. One piece of work is to develop an ORM-based
         object store from Hibernate (which is not compatible with Apache's) to
-        a compatible JPA implementation, We've also had a suggestion [***2] to
+        a compatible JPA implementation, We've also had a suggestion [<ulink
+        url="https://issues.apache.org/jira/browse/ISIS-14">2</ulink>] to
         re-implement using JDO 3.0/DataNucleus, which would allow us to cover
         a lot of persistence technologies in one fell swoop</para>
 
@@ -709,8 +712,9 @@
         url="http://incubator.apache.org/isis">website</ulink>) to set this up
         for you. This sets up a simple application that can be run
         out-of-the-box using the default runtime and in-memory object store,
-        and supporting all of the main viewers, either run from the command
-        lineor as webapps served by Jetty.</para>
+        and supporting a number of the webapp viewers. The WAR file can be run
+        either standalone from the command line or deployed to a servlet
+        container such as Tomcat.</para>
       </sect1>
 
       <sect1>
@@ -758,20 +762,10 @@
 
         <para><emphasis>Apache Isis</emphasis> allows the same domain object
         model to be consumed by multiple presentation layers. You'll find that
-        the quickstart archetype sets up modules for each of the viewers
-        currently available:</para>
+        the quickstart archetype sets up a webapp module that bundles together
+        two of the viewers currently available, namely:</para>
 
         <itemizedlist>
-          <listitem>
-            <para>The <acronym>DnD</acronym> viewer (in
-            <filename>viewers/dnd</filename>) provides a generic view of all
-            domain objects as a desktop app, supporting a drag-n-drop metaphor
-            between forms/icons that represent each object.</para>
-
-            <para>The viewer also provides its own <acronym>API</acronym> to
-            allow more sophisticated views to be constructed.</para>
-          </listitem>
-
           <listitem>
             <para>The <acronym>HTML</acronym> viewer (in
             <filename>viewers/html</filename>) provides a basic webapp.</para>
@@ -781,57 +775,32 @@
           </listitem>
 
           <listitem>
-            <para>Scimpi (in <filename>viewers/scimpi</filename>) allows your
-            application to be deployed as a webapp.</para>
-
-            <para>Out-of-the-box you get a generic view (very similar to that
-            provided by <acronym>HTML</acronym> viewer); you can then
-            customize the view by providing custom pages that use Scimpi
-            tags.</para>
-          </listitem>
-
-          <listitem>
-            <para>The Wicket viewer (in <filename>viewers/wicket</filename>)
-            uses <ulink url="http://wicket.apache.org">Apache Wicket</ulink>
-            to render generic views of your domain objects in a webapp.</para>
-
-            <para>Like Scimpi, it allows these views to be customized, this
-            time by leveraging the Wicket <classname>Component</classname>
-            <acronym>API</acronym>.</para>
-          </listitem>
-
-          <listitem>
-            <para>The two RESTful viewers (in
+            <para>The <acronym>JSON</acronym> viewer (in
             <filename>viewers/xhtml</filename> and
-            <filename>viewers/json</filename>) are designed to expose your
-            domain objects through a <ulink
+            <filename>viewers/json</filename>) which exposes your domain
+            objects through a <ulink
             url="http://en.wikipedia.org/wiki/Representational_State_Transfer">RESTful</ulink>
             interface.</para>
 
-            <para>The intention of these viewers is to allow programmatic
+            <para>The intention of theis viewers is to allow programmatic
             access to your domain objects from other (perhaps non-Java)
-            clients. The <acronym>XHTML</acronym> viewer produces
-            <acronym>XHTML</acronym> representations, the
-            <acronym>JSON</acronym> viewer produces <acronym>JSON</acronym>
-            representations.</para>
+            clients.</para>
           </listitem>
 
           <listitem>
-            <para>The junit viewer (in <filename>viewers/junit</filename>)
-            uses wappers and a custom Isis JUnit test class runner
-            (<code>IsisTestRunner</code>) to let you write tests that interact
-            with the Isis framework as if you were a user, using one of the
-            normal end-user viewers.</para>
+            <para>The <acronym>BDD</acronym> viewer (in
+            <filename>viewers/</filename>bdd) provides an integration with the
+            <ulink url="http://concordion.org">Concordion</ulink> BDD
+            framework; see <xref linkend="sec.BddTesting" />.</para>
+          </listitem>
 
-            <para>For more information, see <xref
-            linkend="sec.UnitTesting" />)</para>
+          <listitem>
+            <para>The <acronym>JUnit</acronym> viewer (in
+            <filename>viewers/junit</filename>) uses wrappers and a custom
+            Isis JUnit test class runner (<code>IsisTestRunner</code>); see
+            <xref linkend="sec.UnitTesting" />.</para>
           </listitem>
         </itemizedlist>
-
-        <para>If deploying with the <acronym>DnD</acronym> viewer you also
-        need to decide whether to deploy standalone (ie, each user has their
-        own private object store) or in client/server mode (so all users share
-        a server-based object store).</para>
       </sect1>
 
       <sect1 id="sec.AgileTesting">
@@ -839,9 +808,11 @@
 
         <para><emphasis>Apache Isis</emphasis> is very much aligned to agile
         development practices, and provides two complementary mechanisms for
-        you to test-drive the development of your application.</para>
+        you to test-drive the development of your application. A story test
+        (BDD ensures that the right system is built. A unit test ensures that
+        the system is built right.</para>
 
-        <sect2>
+        <sect2 id="sec.BddTesting">
           <title>Story (BDD) Testing</title>
 
           <para>Many agile practitioners use story tests as a means to capture
@@ -868,9 +839,7 @@
 
           <para>Unlike story tests, unit tests are normally written in a
           programming language, typically in a framework such as <ulink
-          url="http://junit.org">JUnit</ulink>. <emphasis>A story test ensures
-          that the right system is built, while a unit tests ensures the
-          system is built right</emphasis>.</para>
+          url="http://junit.org">JUnit</ulink>.</para>
 
           <para>When writing unit tests, you have a choice. Since all the
           business logic in Isis applications is encapsulated in domain object
@@ -1383,7 +1352,7 @@ public class ChasingLetter implements PaymentReclaimStrategy {
 }</programlisting>
 
         <para>The Type is from
-        <classname>org.apache.isis.applib.Identifier</classname>: </para>
+        <classname>org.apache.isis.applib.Identifier</classname>:</para>
 
         <programlisting>    /**
      * What type of feature this identifies.
@@ -1994,11 +1963,11 @@ public void setPropertyName(PropertyType param)</programlisting></para>
           <title>Lazily derived</title>
 
           <para>Omitting the mutator (<code>setXxx()</code>) method for a
-          property indicates both that the field is will not be persisted, and
-          it will <emphasis>also</emphasis> be unmodifiable. This is the
-          standard approach to derive a property from other information
-          available to the object. It also happens to be compatible with Java
-          Persistence Api (JPA) semantics.</para>
+          property indicates both that the field is derived, and is not be
+          persisted. This is the standard approach to derive a property from
+          other information available to the object. It also happens to be
+          compatible with Java Persistence Api (<acronym>JPA</acronym>)
+          semantics.</para>
 
           <para>For example:</para>
 
@@ -2013,6 +1982,29 @@ public void setPropertyName(PropertyType param)</programlisting></para>
     }
     ...
 }</programlisting>
+
+          <para>Although there is no setter, such properties can nevertheless
+          be modified if a modifyXxx supporting method is provided:</para>
+
+          <programlisting format="linespecific">public class Employee {
+    public Department getDepartment() { ... }
+    ...
+
+    // this is the derived property
+    public Employee getManager() { ... }
+
+    // this makes the derived property modifiable
+    public void modifyManager(Employee manager) {
+        if (getDepartment() == null) { return; }
+        getDepartment().modifyManager(manager);
+    }
+
+    ...
+}</programlisting>
+
+          <para>Note how the implementation of such a modifyXxx() method
+          typically modifies the original source of the information (the
+          <classname>Department</classname> object).</para>
         </sect2>
 
         <sect2>
@@ -2044,17 +2036,11 @@ public void setPropertyName(PropertyType param)</programlisting></para>
     private void setManager(Employee manager) { ... }
     ...
 }</programlisting>
+
+          <para>Eagerly derived properties can be made modifiable either
+          changing the setter to have public visibility, or introducing a
+          modifyXxx() method.</para>
         </sect2>
-      </sect1>
-
-      <sect1>
-        <title>How to make an (eagerly-) derived property</title>
-
-        <note>
-          <para>Using eager derivation can be problematic, because a change in
-          an underlying value must be reflected wherever it is
-          required.</para>
-        </note>
       </sect1>
 
       <sect1 id="sec.HiddenProperty">
@@ -2612,9 +2598,7 @@ public class Department {
         <title>How to make a derived collection</title>
 
         <para>Collections can be derived by omitting the mutator (the same way
-        as properties, see <xref linkend="sec.DerivedProperty" />). Derived
-        collections are not persisted, and are represented as read only
-        collections.</para>
+        as properties, see <xref linkend="sec.DerivedProperty" />). </para>
 
         <para>For example:</para>
 
@@ -2626,7 +2610,7 @@ public class Department {
 
     // Derived collection
     public List&lt;Employee&gt; getTerminatedEmployees() {
-        List&lt;Employee&gt; terminatedEmployees = new ArrayListt&lt;Employee&gt;();
+        List&lt;Employee&gt; terminatedEmployees = new ArrayList&lt;Employee&gt;();
         for(Employee e: employees) {
             if (e.isTerminated()) {
                 addTo(terminatedEmployees, e);
@@ -2635,6 +2619,22 @@ public class Department {
         return terminatedEmployees;
     }
     ...
+}</programlisting>
+
+        <para>Derived collections are not persisted, though may be modified if
+        there is an addToXxx() or removeFromXxx() supporting method. As for
+        derived properties, the implementations of these mutators change the
+        underlying data. For example:</para>
+
+        <programlisting format="linespecific">public class Department {
+    ...
+
+    public void addToTerminatedEmployees(Employee employee) {
+        employee.setTerminated(true);
+    }
+    public void removeFromTerminatedEmployees(Employee employee) {
+        employee.setTerminated(false);
+    }
 }</programlisting>
       </sect1>
 
