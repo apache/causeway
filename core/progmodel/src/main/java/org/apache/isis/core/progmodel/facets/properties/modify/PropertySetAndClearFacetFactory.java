@@ -25,13 +25,14 @@ import org.apache.isis.core.commons.lang.NameUtils;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facets.object.notpersistable.NotPersistableFacet;
 import org.apache.isis.core.metamodel.methodutils.MethodScope;
 import org.apache.isis.core.progmodel.facets.MethodFinderUtils;
 import org.apache.isis.core.progmodel.facets.MethodPrefixBasedFacetFactoryAbstract;
 import org.apache.isis.core.progmodel.facets.MethodPrefixConstants;
 import org.apache.isis.core.progmodel.facets.members.disable.DisabledFacet;
 import org.apache.isis.core.progmodel.facets.members.disable.staticmethod.DisabledFacetAlways;
-import org.apache.isis.core.progmodel.facets.properties.derived.inferred.DerivedFacetInferred;
+import org.apache.isis.core.progmodel.facets.properties.derived.inferred.NotPersistableFacetInferred;
 
 public class PropertySetAndClearFacetFactory extends MethodPrefixBasedFacetFactoryAbstract {
 
@@ -52,7 +53,7 @@ public class PropertySetAndClearFacetFactory extends MethodPrefixBasedFacetFacto
 
     /**
      * Sets up the {@link PropertySetterFacetViaSetterMethod} to invoke the property's setter if available, but if none
-     * then marks the property as {@link DerivedFacet derived} and {@link DisabledFacet disabled} otherwise.
+     * then marks the property as {@link NotPersistableFacet not-persistable} and {@link DisabledFacet disabled} otherwise.
      */
     private static Method attachPropertyModifyFacetIfSetterIsFound(final ProcessMethodContext processMethodContext) {
 
@@ -72,7 +73,7 @@ public class PropertySetAndClearFacetFactory extends MethodPrefixBasedFacetFacto
             FacetUtil.addFacet(new PropertySetterFacetViaSetterMethod(setMethod, property));
             FacetUtil.addFacet(new PropertyInitializationFacetViaSetterMethod(setMethod, property));
         } else {
-            FacetUtil.addFacet(new DerivedFacetInferred(property));
+            FacetUtil.addFacet(new NotPersistableFacetInferred(property));
             FacetUtil.addFacet(new DisabledFacetAlways(property));
         }
 

@@ -63,7 +63,7 @@ import org.apache.isis.core.progmodel.facets.properties.choices.method.PropertyC
 import org.apache.isis.core.progmodel.facets.properties.choices.method.PropertyChoicesFacetViaMethod;
 import org.apache.isis.core.progmodel.facets.properties.defaults.method.PropertyDefaultFacetFactory;
 import org.apache.isis.core.progmodel.facets.properties.defaults.method.PropertyDefaultFacetViaMethod;
-import org.apache.isis.core.progmodel.facets.properties.derived.inferred.DerivedFacetInferred;
+import org.apache.isis.core.progmodel.facets.properties.derived.inferred.NotPersistableFacetInferred;
 import org.apache.isis.core.progmodel.facets.properties.modify.PropertyClearFacetViaClearMethod;
 import org.apache.isis.core.progmodel.facets.properties.modify.PropertyClearFacetViaSetterMethod;
 import org.apache.isis.core.progmodel.facets.properties.modify.PropertyInitializationFacetViaSetterMethod;
@@ -232,7 +232,7 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
         Facet facet = facetedMethod.getFacet(NotPersistedFacet.class);
         assertNotNull(facet);
-        assertTrue(facet instanceof DerivedFacetInferred);
+        assertTrue(facet instanceof NotPersistableFacetInferred);
 
         facet = facetedMethod.getFacet(DisabledFacet.class);
         assertNotNull(facet);
