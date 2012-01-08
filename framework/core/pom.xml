@@ -18,9 +18,7 @@
         <version>0.2.0-incubating-SNAPSHOT</version>
     </parent>
 
-    <groupId>org.apache.isis</groupId>
     <artifactId>core</artifactId>
-    <version>0.2.0-incubating-SNAPSHOT</version>
 
     <name>Isis Core</name>
 

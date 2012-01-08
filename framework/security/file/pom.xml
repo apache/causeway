@@ -28,7 +28,6 @@
 
 	<groupId>org.apache.isis.security</groupId>
 	<artifactId>file</artifactId>
-	<version>0.2.0-incubating-SNAPSHOT</version>
 
 	<name>File Security Implementation</name>
 

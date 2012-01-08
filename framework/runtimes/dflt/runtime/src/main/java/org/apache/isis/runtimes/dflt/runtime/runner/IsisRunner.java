@@ -59,9 +59,9 @@ import org.apache.isis.runtimes.dflt.runtime.runner.opts.OptionValidatorForPersi
 import org.apache.isis.runtimes.dflt.runtime.runner.opts.OptionValidatorForViewers;
 import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
 
+import com.google.common.collect.Lists;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import com.google.inject.internal.Lists;
 
 public class IsisRunner {
 

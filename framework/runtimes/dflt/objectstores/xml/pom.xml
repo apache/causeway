@@ -28,7 +28,6 @@
 
 	<groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
 	<artifactId>xml</artifactId>
-	<version>0.2.0-incubating-SNAPSHOT</version>
 
 	<name>Default Runtime XML ObjectStore</name>
 

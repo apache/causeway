@@ -248,7 +248,7 @@ public class PopupMenu extends AbstractView {
         simpleFocusManager = new SubviewFocusManager(this);
     }
 
-    private void addItems(final View target, final UserAction[] options, final int len, final Vector list,
+    private void addItems(final View target, final UserAction[] options, final int len, final Vector<Item> list,
         final ActionType type) {
         final int initialSize = list.size();
         for (int i = 0; i < len; i++) {

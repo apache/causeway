@@ -83,7 +83,7 @@ import org.apache.isis.core.metamodel.specloader.specimpl.objectlist.ObjectSpeci
 import org.apache.log4j.Logger;
 
 import com.google.common.collect.Lists;
-import com.google.inject.internal.Maps;
+import com.google.common.collect.Maps;
 
 public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implements ObjectSpecification {
 

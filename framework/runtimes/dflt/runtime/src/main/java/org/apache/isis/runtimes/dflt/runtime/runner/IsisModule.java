@@ -34,11 +34,11 @@ import org.apache.isis.runtimes.dflt.runtime.system.IsisSystemFactory;
 import org.apache.isis.runtimes.dflt.runtime.systemusinginstallers.IsisSystemThatUsesInstallersFactory;
 import org.apache.isis.runtimes.dflt.runtime.viewer.IsisViewer;
 
+import com.google.common.collect.Lists;
 import com.google.inject.AbstractModule;
 import com.google.inject.Inject;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
-import com.google.inject.internal.Lists;
 
 public class IsisModule extends AbstractModule {
 

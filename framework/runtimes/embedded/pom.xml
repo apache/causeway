@@ -29,7 +29,6 @@
 
 	<groupId>org.apache.isis.runtimes</groupId>
 	<artifactId>embedded</artifactId>
-    <version>0.2.0-incubating-SNAPSHOT</version>
 
 	<name>Embedded Runtime</name>
 

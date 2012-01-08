@@ -66,7 +66,7 @@ public class DummyView implements View {
     public int invlidateLayout;
     public int invalidateContent;
     private final ViewState state = new ViewState();
-    private final Vector subviews = new Vector();
+    private final Vector<View> subviews = new Vector<View>();
     private boolean allowSubviewsToBeAdded;
     private final Axes axes = new Axes();
 

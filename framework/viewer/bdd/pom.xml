@@ -28,7 +28,6 @@
 
     <groupId>org.apache.isis.viewer</groupId>
     <artifactId>bdd</artifactId>
-    <version>0.2.0-incubating-SNAPSHOT</version>
     
     <name>BDD Viewers</name>
 

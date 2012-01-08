@@ -17,7 +17,7 @@
 
 
 
-* {Deployable viewers}
+{Deployable viewers}
  
  The <viewer> module is the parent of the different viewer implementations.
 
@@ -61,7 +61,7 @@
   exceptions thrown by proxied domain objects.
  
 
-* {Other viewers}
+{Other viewers}
 
  There are a number of other viewers that should be considered as being of alpha-quality.
  That means that they are either incomplete implementations, inadequately documented, or 

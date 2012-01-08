@@ -477,7 +477,7 @@ public final class ApplicationWorkspace extends CompositeViewUsingBuilder implem
         return createArrayOfViews(views);
     }
 
-    private View[] createArrayOfViews(final Vector views) {
+    private View[] createArrayOfViews(final Vector<View> views) {
         final View[] array = new View[views.size()];
         views.copyInto(array);
         return array;

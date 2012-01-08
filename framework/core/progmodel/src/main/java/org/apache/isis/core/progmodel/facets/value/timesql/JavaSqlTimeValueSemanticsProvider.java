@@ -33,7 +33,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProviderContext;
 import org.apache.isis.core.progmodel.facets.value.time.TimeValueSemanticsProviderAbstract;
 
-import com.google.inject.internal.Maps;
+import com.google.common.collect.Maps;
 
 /**
  * Treats {@link java.sql.Time} as a time-only value type.

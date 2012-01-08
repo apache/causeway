@@ -33,7 +33,7 @@ import org.apache.isis.runtimes.dflt.remoting.common.data.common.ReferenceData;
 import org.apache.isis.runtimes.dflt.runtime.transaction.messagebroker.MessageList;
 import org.apache.isis.runtimes.dflt.runtime.transaction.messagebroker.WarningList;
 
-import com.google.inject.internal.Lists;
+import com.google.common.collect.Lists;
 
 public class ExecuteServerActionResponse implements Encodable, Serializable, MessageList, WarningList {
 

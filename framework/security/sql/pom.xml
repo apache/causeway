@@ -28,7 +28,6 @@
 
 	<groupId>org.apache.isis.security</groupId>
 	<artifactId>sql</artifactId>
-	<version>0.2.0-incubating-SNAPSHOT</version>
 
 	<name>SQL Security Implementation</name>
 

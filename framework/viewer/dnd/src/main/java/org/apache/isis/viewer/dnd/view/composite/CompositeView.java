@@ -52,7 +52,7 @@ public abstract class CompositeView extends ObjectView {
 
     public CompositeView(final Content content, final ViewSpecification specification) {
         super(content, specification);
-        views = new Vector();
+        views = new Vector<View>();
     }
 
     @Override
@@ -69,7 +69,7 @@ public abstract class CompositeView extends ObjectView {
     }
 
     // TODO make private
-    protected void add(final Vector views, final View view) {
+    protected void add(final Vector<View> views, final View view) {
         LOG.debug("adding " + view + " to " + this);
         views.addElement(view);
         getViewManager().addToNotificationList(view);

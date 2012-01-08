@@ -37,7 +37,7 @@ import org.apache.isis.core.metamodel.testspec.TestProxySpecification;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.ObjectFactory;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 
-import com.google.inject.internal.Maps;
+import com.google.common.collect.Maps;
 
 public class TestProxyReflector implements ObjectReflector {
 

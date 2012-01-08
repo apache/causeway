@@ -21,10 +21,11 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
-import com.google.inject.internal.Lists;
 
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+
+import com.google.common.collect.Lists;
 
 public abstract class MemberLayoutArrangerComposite implements MemberLayoutArranger {
     

@@ -28,7 +28,6 @@
 
     <groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
     <artifactId>nosql</artifactId>
-    <version>0.2.0-incubating-SNAPSHOT</version>
 
     <name>Default Runtime NOSQL ObjectStore</name>
 

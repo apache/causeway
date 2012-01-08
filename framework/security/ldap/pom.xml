@@ -28,7 +28,6 @@
 
 	<groupId>org.apache.isis.security</groupId>
 	<artifactId>ldap</artifactId>
-	<version>0.2.0-incubating-SNAPSHOT</version>
 
 	<name>LDAP Security Implementation</name>
 

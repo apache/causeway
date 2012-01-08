@@ -36,7 +36,7 @@ import org.apache.isis.viewer.dnd.view.message.TextMessageContent;
 
 public class XFeedbackManager implements Feedback {
     private final XViewer viewer;
-    private final Vector busy = new Vector();
+    private final Vector<ObjectAdapter> busy = new Vector<ObjectAdapter>();
     private String messages;
     private String view;
     private String action;

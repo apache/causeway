@@ -52,7 +52,7 @@ public class ViewerFrame extends Frame implements RenderingArea {
          * compensate for change in tab handling in Java 1.4
          */
         try {
-            final Class c = getClass();
+            final Class<?> c = getClass();
             final Method m = c.getMethod("setFocusTraversalKeysEnabled", new Class[] { Boolean.TYPE });
             m.invoke(this, new Object[] { Boolean.FALSE });
         } catch (final SecurityException e1) {

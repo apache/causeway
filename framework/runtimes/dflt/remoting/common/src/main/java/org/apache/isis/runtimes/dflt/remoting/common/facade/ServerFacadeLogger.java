@@ -76,7 +76,7 @@ import org.apache.isis.runtimes.dflt.remoting.common.exchange.SetValueResponse;
 import org.apache.isis.runtimes.dflt.remoting.common.protocol.ObjectEncoderDecoder;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 
-import com.google.inject.internal.Lists;
+import com.google.common.collect.Lists;
 
 /**
  * previously called <tt>DistributionLogger</tt>.

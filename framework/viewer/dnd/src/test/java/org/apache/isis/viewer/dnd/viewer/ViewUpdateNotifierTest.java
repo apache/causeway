@@ -215,7 +215,7 @@ public class ViewUpdateNotifierTest {
 
         object.setupResolveState(ResolveState.RESOLVED);
 
-        final Vector vector = new Vector();
+        final Vector<View> vector = new Vector<View>();
         final DummyView view1 = createView(object);
         vector.addElement(view1);
 
@@ -243,7 +243,7 @@ public class ViewUpdateNotifierTest {
 
         final DummyWorkspaceView workspace = new DummyWorkspaceView();
 
-        final Vector vector = new Vector();
+        final Vector<View> vector = new Vector<View>();
         final DummyView view1 = createView(object);
         view1.setParent(workspace);
         workspace.addView(view1);
@@ -271,11 +271,11 @@ class ExposedViewUpdateNotifier extends ViewUpdateNotifierImpl {
 
     public void assertContainsViewForObject(final View view, final ObjectAdapter object) {
         Assert.assertTrue(viewListByAdapter.containsKey(object));
-        final Vector viewsForObject = viewListByAdapter.get(object);
+        final Vector<View> viewsForObject = viewListByAdapter.get(object);
         Assert.assertTrue(viewsForObject.contains(view));
     }
 
-    public void setupViewsForObject(final ObjectAdapter object, final Vector vector) {
+    public void setupViewsForObject(final ObjectAdapter object, final Vector<View> vector) {
         viewListByAdapter.put(object, vector);
     }
 

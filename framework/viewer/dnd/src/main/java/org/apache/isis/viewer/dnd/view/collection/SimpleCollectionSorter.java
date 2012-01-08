@@ -32,12 +32,12 @@ public class SimpleCollectionSorter implements CollectionSorter {
             return;
         }
 
-        final Vector sorted = new Vector(elements.length);
+        final Vector<ObjectAdapter> sorted = new Vector<ObjectAdapter>(elements.length);
         outer: for (int j = 0; j < elements.length; j++) {
             final ObjectAdapter element = elements[j];
             order.init(element);
             int i = 0;
-            for (final Enumeration f = sorted.elements(); f.hasMoreElements();) {
+            for (final Enumeration<ObjectAdapter> f = sorted.elements(); f.hasMoreElements();) {
                 final ObjectAdapter sortedElement = (ObjectAdapter) f.nextElement();
                 if (sortedElement != null && (order.compare(sortedElement) > 0 ^ reverse)) {
                     sorted.insertElementAt(element, i);

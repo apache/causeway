@@ -30,7 +30,8 @@ import org.apache.isis.core.commons.lang.StringUtils;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
 
-import com.google.inject.internal.Lists;
+import com.google.common.collect.Lists;
+
 
 /**
  * non-final only so it can be mocked if need be.
