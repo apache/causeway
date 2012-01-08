@@ -21,29 +21,42 @@ package org.apache.isis.core.webapp.routing;
 
 import java.io.IOException;
 
-import javax.servlet.ServletConfig;
+import javax.servlet.Filter;
+import javax.servlet.FilterChain;
+import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.isis.core.commons.lang.PathUtils;
 
-public class RedirectServlet extends HttpServlet {
+public class RedirectFilter implements Filter {
 
-    private static final long serialVersionUID = 1L;
     private String redirectTo;
 
-    @Override
-    public void init(ServletConfig config) throws ServletException {
-        redirectTo = config.getInitParameter("redirectTo");
-    }
-
-    @Override
     protected void doGet(final HttpServletRequest request, final HttpServletResponse response) throws ServletException,
         IOException {
         
-        response.sendRedirect(PathUtils.combine(request.getContextPath(), redirectTo));
+    }
+
+    @Override
+    public void init(FilterConfig filterConfig) throws ServletException {
+        redirectTo = filterConfig.getInitParameter("redirectTo");
+    }
+
+    @Override
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+        final HttpServletRequest httpServletRequest = (HttpServletRequest)request;
+        final HttpServletResponse httpServletResponse = (HttpServletResponse)response;
+        
+        httpServletResponse.sendRedirect(PathUtils.combine(httpServletRequest.getContextPath(), redirectTo));
+    }
+
+    @Override
+    public void destroy() {
+        
     }
 
 }
