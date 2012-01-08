@@ -53,6 +53,22 @@
                     </execution>
                 </executions>
             </plugin>
+
+            <!-- prereqs: mvn package -->
+            <!-- mvn antrun:run -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <configuration>
+                    <tasks>
+                        <exec executable="java" failonerror="true">
+                            <arg value="-jar"/>
+                            <arg value="${project.build.directory}/${project.build.finalName}-jetty-console.war"/>
+                        </exec>
+                    </tasks>
+                </configuration>
+            </plugin>
+
 		</plugins>
 	</build>
 
