@@ -5669,100 +5669,56 @@ gpg --armor --export nnnnnnnn &gt;&gt;KEYS</programlisting>
         <para>Procedure for recreating the quickstart archetype.</para>
       </abstract>
 
-      <para>Based on notes in the <ulink
-      url="https://cwiki.apache.org/confluence/display/ISIS/RecreatingMavenArchetypeFromProject">Isis
-      wiki</ulink>.</para>
+      <para>The quickstart archetype is created by "reverse-engineering" the
+      quickstart prototype application that resides in
+      <filename>trunk/examples/quickstart</filename>. This appendix describes
+      the steps needed in order to do so.</para>
 
       <sect1 id="sec.TestingTheQuickstartApp">
-        <title>Confirm that the quickstart prototype application works
+        <title>Confirm that the quickstart example application works
         correctly</title>
 
-        <para>The quickstart archetype is created by "reverse-engineering" the
-        quickstart prototype application that resides in
-        <filename>trunk/examples/quickstart</filename>. Therefore a
-        prerequisite is to ensure that this application works correctly. The
-        steps described here are to test both the prototype app (used to
-        generate the archetype) and also the resultant app (from the generated
-        archetype, prior to commit).</para>
+        <para>The first step is to ensure that the quickstart example
+        application works correctly. These steps can also be used to test a
+        newly created app built by the archetype (to test that the archetype
+        is ok, prior to commit).</para>
 
-        <para>In the quickstart application, there are multiple ways of
-        running the application, each corresponding to using the application
-        with a specific viewer.</para>
+        <para>The quickstart example application defines a number of modules.
+        These include:</para>
 
         <itemizedlist>
           <listitem>
-            <para>Those viewers which run from the commandline can be run
-            either:</para>
+            <para>the <filename>webapp</filename> module</para>
 
-            <itemizedlist>
-              <listitem>
-                <para>from a shaded <acronym>JAR</acronym>.</para>
-
-                <para>For convenience the <code>mvn antrun</code> plugin is
-                used to simplify calling the shaded <acronym>JAR</acronym>
-                with the appropriate parameters</para>
-              </listitem>
-
-              <listitem>
-                <para>(if using Eclipse), from a provided Eclipse
-                <filename>.launch</filename> configuration</para>
-              </listitem>
-            </itemizedlist>
+            <para>which defines a <acronym>WAR</acronym> artifact that bundles
+            the <acronym>HTML</acronym> viewer and the (Restful)
+            <acronym>JSON</acronym> viewer.</para>
           </listitem>
 
           <listitem>
-            <para>Those viewers which are webapps will have a
-            <filename>web.xml</filename> specifying the required
-            servlets/filters/context listeners. For these webapps you can
-            either:</para>
+            <para>the <filename>tests-bdd</filename> module</para>
 
-            <itemizedlist>
-              <listitem>
-                <para>use <code>mvn jetty:run</code></para>
+            <para>which contains a set of <ulink
+            url="http://concordion.org">Concordion</ulink> story tests that
+            are executed through <emphasis>Isis</emphasis>' Concordion
+            integration (ie the <acronym>BDD</acronym> viewer);</para>
+          </listitem>
 
-                <para>In this approach Maven itself starts up a Jetty instance
-                configured to host the webapp defined by the
-                <filename>web.xml</filename>.</para>
-              </listitem>
+          <listitem>
+            <para>The tests-junit module</para>
 
-              <listitem>
-                <para>(if using Eclipse) using the provided Eclipse
-                <filename>.launch</filename> configuration</para>
-
-                <para>In this approach the <filename>.launch</filename>
-                configuration runs an <emphasis>Isis</emphasis>-provided class
-                that in turn starts a Jetty instance configured to host the
-                webapp defined by the <filename>web.xml</filename>.</para>
-
-                <note>
-                  <para>If using Eclipse, then it ought in theory to be
-                  possible to use Eclipse <acronym>WTP</acronym> (web tooling
-                  platform) support, ie "Run as&gt; Run on server". However,
-                  at the time of writing there are known issues with the
-                  integration between m2e(clipse) and <acronym>WTP</acronym>:
-                  it does not reliably deploy transitive dependencies. For
-                  this reason we omit testing using
-                  <acronym>WTP</acronym>.</para>
-                </note>
-              </listitem>
-            </itemizedlist>
+            <para>which contains a set of <ulink
+            url="http://junit.org">JUnit</ulink> tests that exercise the
+            domain object model using <emphasis>Isis</emphasis>' JUnit
+            integration (ie the JUnit viewer)</para>
           </listitem>
         </itemizedlist>
 
-        <para>Just to confuse things slightly, there are some viewers
-        (<acronym>HTML</acronym>, <acronym>JSON</acronym> and
-        <acronym>XHTML</acronym>) that fall into both categories: they can be
-        run both from the commandline and which are also web.xml files. For
-        these viewers all the various ways of running the viewer must be
-        tested.</para>
-
-        <para>Running the application using Maven is described in <xref
-        linkend="sec.QuickstartTestingFromMaven" />, running from Eclipse is
-        described in <xref
-        linkend="sec.QuickstartTestingFromEclipse" />.</para>
+        <para>Each of these modules defines artifacts that can be run in a
+        variety of waysm and so each must be tested.</para>
 
         <sect2 id="sec.QuickstartTestingFromMaven">
-          <title>Testing from Maven</title>
+          <title>Build (and Test) from Maven</title>
 
           <para>The following steps assume working in the directory that holds
           the parent module</para>
@@ -5791,27 +5747,20 @@ gpg --armor --export nnnnnnnn &gt;&gt;KEYS</programlisting>
             <para>If the build succeeds, you should see something like:</para>
 
             <programlisting>...
-[INFO]
 [INFO] ------------------------------------------------------------------------
 [INFO] Reactor Summary:
+[INFO]
+[INFO] Quickstart App .................................... SUCCESS [0.518s]
+[INFO] Quickstart DOM .................................... SUCCESS [1.873s]
+[INFO] Quickstart Repositories (for ObjectStore Default) . SUCCESS [0.778s]
+[INFO] Quickstart Fixtures ............................... SUCCESS [0.646s]
+[INFO] Quickstart Webapp with HTML+JSON Viewers .......... SUCCESS [8.014s]
+[INFO] Quickstart JUnit Tests ............................ SUCCESS [3.071s]
+[INFO] Quickstart BDD (Concordion) Tests ................. SUCCESS [3.567s]
 [INFO] ------------------------------------------------------------------------
-[INFO] Quickstart App ........................................ SUCCESS [3.154s]
-[INFO] Quickstart DOM ........................................ SUCCESS [2.867s]
-[INFO] Quickstart Repositories (for ObjectStore Default) ..... SUCCESS [0.742s]
-[INFO] Quickstart Fixtures ................................... SUCCESS [0.634s]
-[INFO] Quickstart Quick Run .................................. SUCCESS [7.138s]
-[INFO] Quickstart HTML Viewer ................................ SUCCESS [6.248s]
-[INFO] Quickstart JSON Viewer ................................ SUCCESS [1.248s]
-[INFO] Quickstart Scimpi Viewer .............................. SUCCESS [1.585s]
-[INFO] Quickstart Wicket Viewer .............................. SUCCESS [2.871s]
-[INFO] Quickstart XHTML Viewer ............................... SUCCESS [1.222s]
-[INFO] Quickstart JUnit Tests ................................ SUCCESS [3.626s]
-[INFO] Quickstart BDD (Concordion) Tests ..................... SUCCESS [4.196s]
+[INFO] BUILD SUCCESS
 [INFO] ------------------------------------------------------------------------
-[INFO] ------------------------------------------------------------------------
-[INFO] BUILD SUCCESSFUL
-[INFO] ------------------------------------------------------------------------
-...</programlisting>
+[INFO] ...</programlisting>
 
             <para>This command also runs tests, so a successful build means
             that the JUnit tests in the <filename>tests-junit</filename> and
@@ -5825,7 +5774,7 @@ gpg --armor --export nnnnnnnn &gt;&gt;KEYS</programlisting>
             for the surefire plugin).</para>
 
             <para>For example, the
-            <filename>tests-bdd/target/concordion/viewer/bdd/stories/todo/ScenarioMarkItemAsDone.html</filename>
+            <filename>tests-bdd/target/concordion/viewer/bdd/stories/todo/ScenarioMarkItemAsComplete.html</filename>
             should look something like:</para>
 
             <mediaobject>
@@ -5837,190 +5786,79 @@ gpg --armor --export nnnnnnnn &gt;&gt;KEYS</programlisting>
           </sect3>
 
           <sect3>
-            <title>Run shaded JARs from mvn command line</title>
+            <title>Run webapp JARs from mvn command line</title>
 
-            <para>The <filename>quickrun</filename> module provides a number
-            of profiles that allow the application to be run from the command
-            line from a <ulink
-            url="http://maven.apache.org/plugins/maven-shade-plugin/">shaded</ulink>
-            <acronym>JAR</acronym> file. One benefit of this mechanism of is
-            that the shaded <acronym>JAR</acronym>s are self-contained and so
-            (so long as an in-memory object store is used) can be distributed
-            to business stakeholders.</para>
+            <para>The <filename>webapp</filename> module actually creates two
+            WAR artifacts:</para>
 
-            <note>
-              <para>Not every viewer supports this mechanism, but the
-              <acronym>DnD</acronym> and <acronym>HTML</acronym> viewers both
-              do.</para>
-            </note>
+            <itemizedlist>
+              <listitem>
+                <para>The first is the regular WAR file generated by the Maven
+                WAR plugin.</para>
+              </listitem>
 
-            <para>The general command to run the shaded
-            <acronym>JAR</acronym>s is:</para>
+              <listitem>
+                <para>The second is the same WAR as a self-contained
+                executable, ie, that can be run from the command-line. This is
+                built using the
+                org.simplericity.jettyconsole:jetty-console-maven-plugin
+                plugin.</para>
 
-            <programlisting>$ cd quickrun
-$ mvn antrun:run -D exec=xxx</programlisting>
+                <para>This is convenient both for demos or (so long as an
+                in-memory object store is used) for distribution to business
+                stakeholders. </para>
+              </listitem>
+            </itemizedlist>
 
-            <para>where the exec argument 'xxx' selects the viewer as shown in
-            the table below:</para>
+            <para>The simplest way to check the jetty-console WAR is using the
+            antrun goal:</para>
 
-            <table>
-              <title>Testing viewers with mvn antrun:run</title>
+            <programlisting>mvn antrun:run</programlisting>
 
-              <tgroup cols="3">
-                <colspec align="center" />
+            <para>This should run a Swing application that displays the
+            following banner:</para>
 
-                <colspec align="left" />
+            <mediaobject>
+              <imageobject>
+                <imagedata fileref="images/jetty-console-banner.png"
+                           scale="55" />
+              </imageobject>
+            </mediaobject>
 
-                <thead>
-                  <row>
-                    <entry>Viewer</entry>
+            <para>Alternatively, you can run the jetty-console war manually
+            using:</para>
 
-                    <entry align="center">Command</entry>
+            <programlisting>java -jar xxx-webapp-vvv-jetty-console.war</programlisting>
 
-                    <entry>Browse to</entry>
-                  </row>
-                </thead>
+            <para>where xxx is the artifactId, and vvv is the version.</para>
 
-                <tbody>
-                  <row>
-                    <entry>DnD</entry>
-
-                    <entry><programlisting>$ cd quickrun/
-$ mvn antrun:run -D exec=dnd</programlisting></entry>
-
-                    <entry>n/a</entry>
-                  </row>
-
-                  <row>
-                    <entry>HTML</entry>
-
-                    <entry><programlisting>$ cd quickrun/
-$ mvn antrun:run -D exec=html</programlisting></entry>
-
-                    <entry><ulink
-                    url="http://localhost:8080/logon.app">http://localhost:8080/logon.app</ulink></entry>
-                  </row>
-
-                  <row>
-                    <entry>JSON (Restful)</entry>
-
-                    <entry><programlisting>$ cd quickrun/
-$ mvn antrun:run -D exec=json</programlisting></entry>
-
-                    <entry><ulink
-                    url="http://localhost:8080">http://localhost:8080</ulink><para>Use
-                    Chrome to view the JSON</para></entry>
-                  </row>
-
-                  <row>
-                    <entry>XHTML (Restful)</entry>
-
-                    <entry><programlisting>$ cd quickrun/
-$ mvn antrun:run -D exec=xhtml</programlisting></entry>
-
-                    <entry><ulink
-                    url="http://localhost:8080">http://localhost:8080</ulink></entry>
-                  </row>
-                </tbody>
-              </tgroup>
-            </table>
+            <para>Either way, start the application and sanity check that the
+            viewers are functional.</para>
           </sect3>
 
           <sect3>
             <title>Testing webapp viewers using jetty:run</title>
 
-            <para>A number of the viewers are webapps and as typically
-            bootstrapped from their <filename>web.xml</filename> configuration
-            file. These can be tested from Maven using the <ulink
+            <para>The webapp WAR can also be tested from Maven using the
+            <ulink
             url="http://docs.codehaus.org/display/JETTY/Maven+Jetty+Plugin">Jetty
             plugin</ulink>:</para>
 
-            <programlisting>$ cd viewer-xxx
+            <programlisting>$ cd webapp
 $ mvn jetty:run</programlisting>
-
-            <para>where xxx is the directory as shown in the table
-            below.</para>
-
-            <table>
-              <title>Testing webapp viewers with mvn jetty:run</title>
-
-              <tgroup cols="3">
-                <colspec align="center" />
-
-                <colspec align="left" />
-
-                <colspec />
-
-                <thead>
-                  <row>
-                    <entry>Viewer</entry>
-
-                    <entry align="center">Command</entry>
-
-                    <entry>Browse to</entry>
-                  </row>
-                </thead>
-
-                <tbody>
-                  <row>
-                    <entry>HTML</entry>
-
-                    <entry><programlisting>$ cd viewer-html/
-$ mvn jetty:run</programlisting></entry>
-
-                    <entry><ulink
-                    url="http://localhost:8080/quickstart-viewer-html/logon.app">http://localhost:8080/quickstart-viewer-html/logon.app</ulink><para>logon
-                    using <emphasis>sven | pass</emphasis></para></entry>
-                  </row>
-
-                  <row>
-                    <entry>JSON (Restful)</entry>
-
-                    <entry><programlisting>$ cd viewer-json/
-$ mvn jetty:run</programlisting></entry>
-
-                    <entry><ulink
-                    url="http://localhost:8080/quickstart-viewer-json">http://localhost:8080/quickstart-viewer-json</ulink><para>use
-                    Chrome to view the JSON</para></entry>
-                  </row>
-
-                  <row>
-                    <entry>Scimpi</entry>
-
-                    <entry><programlisting>$ cd viewer-scimpi/
-$ mvn jetty:run</programlisting></entry>
-
-                    <entry><ulink
-                    url="http://localhost:8080/quickstart-viewer-scimpi">http://localhost:8080/quickstart-viewer-scimpi</ulink><para>logon
-                    using <emphasis>sven | pass</emphasis> (when required to
-                    do so)</para></entry>
-                  </row>
-
-                  <row>
-                    <entry>Wicket</entry>
-
-                    <entry><programlisting>$ cd viewer-wicket/
-$ mvn jetty:run</programlisting></entry>
-
-                    <entry><ulink
-                    url="http://localhost:8080/quickstart-viewer-wicket">http://localhost:8080/quickstart-viewer-wicket</ulink></entry>
-                  </row>
-
-                  <row>
-                    <entry>XHTML (Restful)</entry>
-
-                    <entry><programlisting>$ cd viewer-xhtml/
-$ mvn jetty:run</programlisting></entry>
-
-                    <entry><ulink
-                    url="http://localhost:8080/quickstart-viewer-xhtml/">http://localhost:8080/quickstart-viewer-xhtml</ulink></entry>
-                  </row>
-                </tbody>
-              </tgroup>
-            </table>
 
             <para>The jetty webserver will continue running until the maven
             command will cancelled (ctrl-C).</para>
+          </sect3>
+
+          <sect3>
+            <title>Testing webapp viewers using external servlet
+            container</title>
+
+            <para>Optionally, you can also test the webapps by deploying to an
+            external servlet container, for example the webapps directory of
+            Tomcat 7. This is a very quick check that the application can be
+            "deployed" to a production-like environment.</para>
           </sect3>
         </sect2>
 
@@ -6097,175 +5935,19 @@ $ mvn jetty:run</programlisting></entry>
           </sect3>
 
           <sect3 id="sec.QuickrunLaunchConfigurations">
-            <title>Quickrun <filename>.launch</filename>
+            <title>Testing the webapp <filename>.launch</filename>
             configurations</title>
 
-            <para>Each of the quickrun applications can also be started using
-            an Eclipse <filename>.launch</filename> configuration. Navigate to
-            the <filename>quickrun/ide/eclipse/launch</filename> directory,
-            and right-click Run As &gt; ...</para>
-
-            <para>The table below summarizes the available launch
-            configurations:</para>
-
-            <table>
-              <title>Testing webapp viewers with Quickrun launch
-              configs</title>
-
-              <tgroup cols="3">
-                <colspec align="center" />
-
-                <colspec align="left" />
-
-                <colspec />
-
-                <thead>
-                  <row>
-                    <entry>Viewer</entry>
-
-                    <entry align="center">Launch Configuration</entry>
-
-                    <entry>Browse to</entry>
-                  </row>
-                </thead>
-
-                <tbody>
-                  <row>
-                    <entry>DnD</entry>
-
-                    <entry><filename>quickrun/ide/eclipse/launch/quickstart-quickrun-dnd.launch</filename></entry>
-
-                    <entry>n/a</entry>
-                  </row>
-
-                  <row>
-                    <entry>HTML</entry>
-
-                    <entry><filename>quickrun/ide/eclipse/launch/quickstart-quickrun-html.launch</filename></entry>
-
-                    <entry><ulink
-                    url="http://localhost:8080/start.app">http://localhost:8080/start.app</ulink></entry>
-                  </row>
-
-                  <row>
-                    <entry>JSON (Restful)</entry>
-
-                    <entry><filename>quickrun/ide/eclipse/launch/quickstart-quickrun-json.launch</filename></entry>
-
-                    <entry><ulink
-                    url="http://localhost:8080/quickstart-viewer-wicket">http://localhost:8080</ulink></entry>
-                  </row>
-
-                  <row>
-                    <entry>XHTML (Restful)</entry>
-
-                    <entry><filename>quickrun/ide/eclipse/launch/quickstart-quickrun-xhtml.launch</filename></entry>
-
-                    <entry><ulink
-                    url="http://localhost:8080">http://localhost:8080</ulink></entry>
-                  </row>
-                </tbody>
-              </tgroup>
-            </table>
-          </sect3>
-
-          <sect3>
-            <title>Testing webapp viewers</title>
-
-            <para>For those viewers that are webapps (ie, as defined by a
-            <filename>web.xml</filename> file), the application can be
-            launched using the <filename>.launch</filename> configuration
-            provided. As for the quickrun launches (described in <xref
-            linkend="sec.QuickrunLaunchConfigurations" />), the
-            <filename>.launch</filename> configuration files reside in
-            ide/eclipse/launch and can be run using <filename>Run As&gt;
-            ...</filename>. However, whereas the quickrun
-            <filename>.launch</filename> configurations bootstrap the
-            application using the <classname>org.apache.isis.Isis</classname>
-            class (which in turn uses the
-            <classname>ViewerInstaller</classname> <acronym>API</acronym> that
-            is proprietary to <emphasis>Isis</emphasis>), the module
-            <filename>.launch</filename> configurations use the
+            <para>The webapp can be started using an Eclipse
+            <filename>.launch</filename> configuration. This runs the
             <classname>org.apache.isis.WebServer</classname>, which simply
             bootstraps the application defined in the
-            <filename>web.xml</filename> file.</para>
+            <filename>web.xml</filename> file using an embedded Jetty.</para>
 
-            <para>The table below summarises the modules that can be run using
-            the <filename>.launch</filename> configuration.</para>
-
-            <table>
-              <title>Testing webapp viewers with module .launch
-              configurations</title>
-
-              <tgroup cols="3">
-                <colspec align="center" />
-
-                <colspec align="left" />
-
-                <colspec />
-
-                <thead>
-                  <row>
-                    <entry>Viewer</entry>
-
-                    <entry align="center">Launch Configuration</entry>
-
-                    <entry>Browse to</entry>
-                  </row>
-                </thead>
-
-                <tbody>
-                  <row>
-                    <entry>HTML</entry>
-
-                    <entry><filename>viewer-html/ide/eclipse/launch/quickstart-viewer-html.launch</filename></entry>
-
-                    <entry><ulink
-                    url="http://localhost:8080/logon.app">http://localhost:8080/logon.app</ulink><para>logon
-                    using <emphasis>sven | pass</emphasis></para></entry>
-                  </row>
-
-                  <row>
-                    <entry>JSON (Restful)</entry>
-
-                    <entry><filename>viewer-json/ide/eclipse/launch/quickstart-viewer-json.launch</filename></entry>
-
-                    <entry><ulink
-                    url="http://localhost:8080">http://localhost:8080</ulink><para>Use
-                    Chrome to view the JSON</para></entry>
-                  </row>
-
-                  <row>
-                    <entry>Scimpi</entry>
-
-                    <entry><filename>viewer-scimpi/ide/eclipse/launch/quickstart-viewer-scimpi.launch</filename></entry>
-
-                    <entry><ulink
-                    url="http://localhost:8080">http://localhost:8080</ulink><para>logon
-                    using <emphasis>sven | pass</emphasis> (when required to
-                    do so)</para></entry>
-                  </row>
-
-                  <row>
-                    <entry>Wicket</entry>
-
-                    <entry><filename>viewer-wicket/ide/eclipse/launch/quickstart-viewer-wicket.launch</filename></entry>
-
-                    <entry><ulink
-                    url="http://localhost:8080">http://localhost:8080</ulink></entry>
-                  </row>
-
-                  <row>
-                    <entry>XHTML (Restful)</entry>
-
-                    <entry><filename>viewer-xhtml/ide/eclipse/launch/quickstart-viewer-xhtml.launch</filename></entry>
-
-                    <entry><ulink
-                    url="http://localhost:8080">http://localhost:8080</ulink></entry>
-                  </row>
-                </tbody>
-              </tgroup>
-            </table>
+            <para>Navigate to the
+            <filename>webapp/ide/eclipse/launch</filename> directory, and
+            right-click Run As &gt; ... on the .launch file. Sanity check the
+            application is running ok.</para>
           </sect3>
 
           <sect3>
@@ -6312,15 +5994,6 @@ $ mvn jetty:run</programlisting></entry>
             <filename>/tmp/concordion</filename> (the default
             location).</para>
           </sect3>
-        </sect2>
-
-        <sect2>
-          <title>Testing from a Tomcat Install</title>
-
-          <para>Optionally, you can also test the webapps by deploying to an
-          external servlet container, for example the webapps directory of
-          Tomcat 7. This is a very quick check that the application can be
-          "deployed" to a production-like environment.</para>
         </sect2>
       </sect1>
 

@@ -34,6 +34,9 @@ public final class PathUtils {
         if (isEmpty(suffix)) {
             return path;
         }
+        if(path.endsWith("/") || suffix.startsWith("/")) {
+            return path + suffix;
+        }
         return path + "/" + suffix;
     }
 

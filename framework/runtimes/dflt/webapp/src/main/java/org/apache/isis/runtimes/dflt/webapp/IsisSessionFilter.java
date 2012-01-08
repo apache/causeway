@@ -36,6 +36,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.factory.InstanceUtil;
+import org.apache.isis.core.commons.lang.PathUtils;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.webapp.content.ResourceCachingFilter;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
@@ -113,6 +114,10 @@ public class IsisSessionFilter implements Filter {
         
     };
 
+    static void redirect(HttpServletRequest httpRequest, HttpServletResponse httpResponse, final String redirectTo) throws IOException {
+        httpResponse.sendRedirect(PathUtils.combine(httpRequest.getContextPath(), redirectTo));
+    }
+
     public enum WhenNoSession {
         UNAUTHORIZED("unauthorized") {
             @Override
@@ -142,14 +147,14 @@ public class IsisSessionFilter implements Filter {
         RESTRICTED("restricted") {
             @Override
             public void handle(IsisSessionFilter filter, HttpServletRequest httpRequest, HttpServletResponse httpResponse, FilterChain chain) throws IOException, ServletException {
-                // TODO Auto-generated method stub
 
                 if(filter.restrictedPaths.contains(httpRequest.getServletPath())) {
                     chain.doFilter(httpRequest, httpResponse);
                     return;
                 }
-                httpResponse.sendRedirect(filter.restrictedPaths.get(0));
+                redirect(httpRequest, httpResponse, filter.restrictedPaths.get(0));
             }
+
         };
         private final String initParamValue;
         private WhenNoSession(String initParamValue) {
@@ -306,13 +311,13 @@ public class IsisSessionFilter implements Filter {
                     // in case the destination servlet cannot cope, but we've been told
                     // to redirect elsewhere
                     if(filter.redirectToOnException != null) {
-                        httpResponse.sendRedirect(filter.redirectToOnException);
+                        redirect(httpRequest, httpResponse, filter.redirectToOnException);
                         return;
                     }
                     throw ex;
                 } catch(IOException ex) {
                     if(filter.redirectToOnException != null) {
-                        httpResponse.sendRedirect(filter.redirectToOnException);
+                        redirect(httpRequest, httpResponse, filter.redirectToOnException);
                         return;
                     }
                     throw ex;
@@ -320,7 +325,7 @@ public class IsisSessionFilter implements Filter {
                     // in case the destination servlet cannot cope, but we've been told
                     // to redirect elsewhere
                     if(filter.redirectToOnException != null) {
-                        httpResponse.sendRedirect(filter.redirectToOnException);
+                        redirect(httpRequest, httpResponse, filter.redirectToOnException);
                         return;
                     }
                     throw ex;
