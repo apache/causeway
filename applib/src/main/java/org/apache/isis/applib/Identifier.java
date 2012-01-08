@@ -377,7 +377,7 @@ public class Identifier implements Comparable<Identifier> {
         if (allParms.length() > 0) {
             // use StringTokenizer for .NET compatibility
             final StringTokenizer tokens = new StringTokenizer(allParms, ",", false);
-            for (int i = 0; tokens.hasMoreTokens(); i++) {
+            while(tokens.hasMoreTokens()) {
                 String nextParam = tokens.nextToken();
                 parmList.add(nextParam);
             }

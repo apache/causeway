@@ -55,6 +55,7 @@
 		    <groupId>org.apache.isis.core</groupId>
 		    <artifactId>progmodel</artifactId>
 		</dependency>
+		
 		<!--  TODO: remove this dependency -->
 		<dependency>
 			<groupId>org.apache.isis.runtimes.dflt</groupId>
