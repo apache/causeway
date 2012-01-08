@@ -86,16 +86,7 @@ public class IsisConfigurationBuilderResourceStreams implements IsisConfiguratio
     // Constructor, initialization
     // ////////////////////////////////////////////////////////////
 
-    public IsisConfigurationBuilderResourceStreams() {
-        this(ResourceStreamSourceFileSystem.create(ConfigurationConstants.DEFAULT_CONFIG_DIRECTORY));
-    }
-
-    public IsisConfigurationBuilderResourceStreams(final ResourceStreamSource resourceStreamSource) {
-        this.resourceStreamSource = resourceStreamSource;
-        addDefaultConfigurationResources();
-    }
-
-    public IsisConfigurationBuilderResourceStreams(final ResourceStreamSource... resourceStreamSources) {
+    private static ResourceStreamSource createComposite(final ResourceStreamSource... resourceStreamSources) {
         final ResourceStreamSourceComposite composite = new ResourceStreamSourceComposite();
         for (final ResourceStreamSource rss : resourceStreamSources) {
             if (rss == null) {
@@ -103,7 +94,19 @@ public class IsisConfigurationBuilderResourceStreams implements IsisConfiguratio
             }
             composite.addResourceStreamSource(rss);
         }
-        this.resourceStreamSource = composite;
+        return composite;
+    }
+
+    public IsisConfigurationBuilderResourceStreams() {
+        this(ResourceStreamSourceFileSystem.create(ConfigurationConstants.DEFAULT_CONFIG_DIRECTORY));
+    }
+
+    public IsisConfigurationBuilderResourceStreams(final ResourceStreamSource... resourceStreamSources) {
+        this(createComposite(resourceStreamSources));
+    }
+
+    public IsisConfigurationBuilderResourceStreams(final ResourceStreamSource resourceStreamSource) {
+        this.resourceStreamSource = resourceStreamSource;
         addDefaultConfigurationResources();
     }
 
