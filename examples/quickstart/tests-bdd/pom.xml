@@ -51,7 +51,12 @@
 		<!-- this project's dependencies -->
 		<dependency>
 			<groupId>${project.groupId}</groupId>
-            <artifactId>quickstart-fixture</artifactId>
+            <artifactId>quickstart-dom</artifactId>
+            <version>0.2.0-incubating-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>quickstart-objstore-dflt</artifactId>
             <version>0.2.0-incubating-SNAPSHOT</version>
         </dependency>
 
@@ -62,10 +67,6 @@
         </dependency>
 
         <!-- isis default runtime -->
-        <dependency>
-            <groupId>org.apache.isis.runtimes.dflt</groupId>
-            <artifactId>webserver</artifactId>
-        </dependency>
         <dependency>
             <groupId>org.apache.isis.runtimes.dflt.bytecode</groupId>
             <artifactId>dflt</artifactId>
@@ -92,6 +93,7 @@
             <groupId>org.apache.isis.security</groupId>
             <artifactId>dflt</artifactId>
         </dependency>
+
 		<!-- BDD Viewers concordion dependencies -->
 		<dependency>
 			<groupId>org.apache.isis.viewer</groupId>
