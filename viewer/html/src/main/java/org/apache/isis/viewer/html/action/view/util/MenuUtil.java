@@ -33,8 +33,6 @@ import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.html.component.Component;
 import org.apache.isis.viewer.html.context.Context;
 
-import com.google.inject.internal.Lists;
-
 public class MenuUtil {
 
     public static Component[] menu(final ObjectAdapter target, final String targetObjectId, final Context context) {

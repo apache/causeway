@@ -24,7 +24,7 @@ import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectActionSet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 
-import com.google.inject.internal.Lists;
+import com.google.common.collect.Lists;
 
 public final class ActionUtils {
 

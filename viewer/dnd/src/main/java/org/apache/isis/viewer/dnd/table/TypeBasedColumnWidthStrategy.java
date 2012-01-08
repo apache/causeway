@@ -25,7 +25,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 
 public class TypeBasedColumnWidthStrategy implements ColumnWidthStrategy {
-    private final Hashtable types = new Hashtable();
+    private final Hashtable<ObjectSpecification, Integer> types = new Hashtable<ObjectSpecification, Integer>();
 
     public TypeBasedColumnWidthStrategy() {
         /*

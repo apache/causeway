@@ -28,7 +28,6 @@
 
     <groupId>org.apache.isis.runtimes.dflt.remoting</groupId>
 	<artifactId>marshalling-xstream</artifactId>
-	<version>0.2.0-incubating-SNAPSHOT</version>
 
 	<name>Default Runtime XStream Marshalling</name>
 

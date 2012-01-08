@@ -28,7 +28,7 @@ import org.apache.log4j.Logger;
 
 public class Axes {
     private static final Logger LOG = Logger.getLogger(Axes.class);
-    private final Map<Class, ViewAxis> axes = new HashMap<Class, ViewAxis>();
+    private final Map<Class<?>, ViewAxis> axes = new HashMap<Class<?>, ViewAxis>();
 
     public void add(final ViewAxis axis) {
         if (axis != null) {

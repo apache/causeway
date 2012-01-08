@@ -41,7 +41,7 @@ import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProvider
 import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProviderContext;
 import org.apache.isis.core.progmodel.facets.value.date.DateValueFacet;
 
-import com.google.inject.internal.Maps;
+import com.google.common.collect.Maps;
 
 public abstract class ValueSemanticsProviderAbstractTemporal<T> extends ValueSemanticsProviderAndFacetAbstract<T>
     implements DateValueFacet {

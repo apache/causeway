@@ -28,7 +28,6 @@
 
 	<groupId>org.apache.isis.viewer</groupId>
 	<artifactId>scimpi</artifactId>
-	<version>0.2.0-incubating-SNAPSHOT</version>
 	
 	<name>Scimpi Viewer</name>
 	

@@ -52,8 +52,8 @@
 
         <!-- This 'global' menu is inherited -->
         <menu name="Use Cases" inherit="bottom">
-            <item name="Develop" inherit="bottom" href="use-cases/develop.html"/>
-            <item name="Specify and Test" inherit="bottom" href="use-cases/specify-and-test.html"/>
+            <item name="Develop" href="use-cases/develop.html"/>
+            <item name="Specify and Test" href="use-cases/specify-and-test.html"/>
             <item name="Deploy on own framework" href="use-cases/deploy-own-framework.html" />
 	        <item name="Deploy as REST service" href="use-cases/deploy-as-rest.html" />
 	        <item name="Deploy as webapp" href="use-cases/deploy-as-webapp.html" />
@@ -120,9 +120,7 @@
         </menu>
 
         <menu name="Other Resources">
-            <item name="Blogs">
-                <item name="Dan Haywood's blog" href="http://danhaywood.com/" />
-            </item>
+            <item name="Dan Haywood's blog" href="http://danhaywood.com/" />
             <item name="Presentation Materials (feel free to reuse)" href="./presentations/">
                 <item name="Introducing Apache Isis" href="./presentations/">
                     <item name="PPTX (Microsoft)" href="./presentations/IntroducingApacheIsis.pptx" />
@@ -132,7 +130,7 @@
                     <item name="PDF notes" href="./presentations/IntroducingApacheIsis-notes.pdf" />
                 </item>
             </item>
-            <item name="Naked Objects">
+            <item name="Naked Objects" href="#">
                 <item name="Books on Naked Objects" href="naked-objects-books.html" />
                 <item name="Richard Pawson's Thesis" href="Pawson-Naked-Objects-thesis.pdf" />
                 <item name="Naked Objects for .NET" href="http://www.nakedobjects.net/" />
@@ -143,7 +141,7 @@
         </menu>
 
         <menu name="For Contributors">
-            <item name="Contributor's Guide">
+            <item name="Contributor's Guide" href="#">
                 <item name="PDF" href="docbkx/pdf/${docbkxGuideName}.pdf" />
                 <item name="HTML" href="docbkx/html/guide/${docbkxGuideName}.html" />
             </item>

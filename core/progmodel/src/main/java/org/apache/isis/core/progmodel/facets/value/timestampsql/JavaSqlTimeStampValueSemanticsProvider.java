@@ -33,7 +33,7 @@ import org.apache.isis.core.metamodel.facets.properties.defaults.PropertyDefault
 import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProviderContext;
 import org.apache.isis.core.progmodel.facets.value.timestamp.TimeStampValueSemanticsProviderAbstract;
 
-import com.google.inject.internal.Maps;
+import com.google.common.collect.Maps;
 
 public class JavaSqlTimeStampValueSemanticsProvider extends TimeStampValueSemanticsProviderAbstract<java.sql.Timestamp> {
 

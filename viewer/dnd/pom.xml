@@ -28,7 +28,6 @@
 
 	<groupId>org.apache.isis.viewer</groupId>
 	<artifactId>dnd</artifactId>
-	<version>0.2.0-incubating-SNAPSHOT</version>
 
 	<name>Drag-n-Drop Viewer</name>
 

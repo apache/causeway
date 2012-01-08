@@ -28,7 +28,6 @@
 	
 	<groupId>org.apache.isis.runtimes.dflt.remoting</groupId>
 	<artifactId>transport-http</artifactId>
-	<version>0.2.0-incubating-SNAPSHOT</version>
 	
 	<name>Default Runtime HTTP Transport</name>
 	

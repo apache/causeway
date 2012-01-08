@@ -29,7 +29,6 @@
 
 	<groupId>org.apache.isis.progmodels</groupId>
 	<artifactId>wrapper</artifactId>
-	<version>0.2.0-incubating-SNAPSHOT</version>
 
 	<name>Wrapper ProgModel</name>
 

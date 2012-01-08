@@ -29,7 +29,6 @@
 
 	<groupId>org.apache.isis.viewer</groupId>
 	<artifactId>wicket</artifactId>
-	<version>0.2.0-incubating-SNAPSHOT</version>
 
 	<name>Wicket Viewer</name>
 

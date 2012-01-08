@@ -50,12 +50,12 @@ public abstract class AbstractCollectionContent extends AbstractContent implemen
     private boolean reverse;
 
     @Override
-    public final Enumeration allElements() {
+    public final Enumeration<ObjectAdapter> allElements() {
         final ObjectAdapter[] elements = elements();
 
         sorter.sort(elements, order, reverse);
 
-        return new Enumeration() {
+        return new Enumeration<ObjectAdapter>() {
             int i = 0;
             int size = elements.length;
 
@@ -65,7 +65,7 @@ public abstract class AbstractCollectionContent extends AbstractContent implemen
             }
 
             @Override
-            public Object nextElement() {
+            public ObjectAdapter nextElement() {
                 return elements[i++];
             }
         };

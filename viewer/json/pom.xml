@@ -29,7 +29,6 @@
 
 	<groupId>org.apache.isis.viewer</groupId>
 	<artifactId>json</artifactId>
-	<version>0.2.0-incubating-SNAPSHOT</version>
 
 	<name>JSON Viewer</name>
 

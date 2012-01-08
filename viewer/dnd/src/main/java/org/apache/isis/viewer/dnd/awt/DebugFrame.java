@@ -54,7 +54,7 @@ import org.apache.log4j.Logger;
 public abstract class DebugFrame extends Frame {
     private static final long serialVersionUID = 1L;
     private static final Logger LOG = Logger.getLogger(DebugFrame.class);
-    private static Vector frames = new Vector();
+    private static Vector<Frame> frames = new Vector<Frame>();
     private int panel = 0;
 
     /**
