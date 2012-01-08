@@ -364,7 +364,7 @@ public final class XmlSchema {
 
 	private void addExtensionElements(final Element parentElement, final Hashtable extensions) {
         for (final Enumeration e = extensions.keys(); e.hasMoreElements();) {
-            final Class<?> extensionClass = (Class) e.nextElement();
+            final Class<?> extensionClass = (Class<?>) e.nextElement();
             final Object extensionObject = extensions.get(extensionClass);
             // xs:element/xs:complexType/xs:sequence/xs:element/xs:complexType/xs:sequence/xs:element
             // name="%extensionClassShortName%"
