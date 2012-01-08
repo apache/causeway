@@ -36,7 +36,6 @@
 
 	<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
 	</bean>
-		
 
 	<bean
 		class="org.springframework.orm.jpa.support.PersistenceAnnotationBeanPostProcessor" />

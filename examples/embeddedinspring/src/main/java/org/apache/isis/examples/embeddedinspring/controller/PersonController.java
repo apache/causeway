@@ -1,15 +1,14 @@
 package org.apache.isis.examples.embeddedinspring.controller;
 
-import java.util.Collection;
 import java.util.List;
 
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.examples.embeddedinspring.dao.PersonDao;
 import org.apache.isis.examples.embeddedinspring.model.Person;
 import org.apache.isis.runtimes.embedded.IsisMetaModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,7 +29,8 @@ public class PersonController {
 	private IsisMetaModel isisMetaModel;
 
 	@RequestMapping(method=RequestMethod.GET,value="edit")
-	public ModelAndView editPerson(@RequestParam(value="id",required=false) Long id) {		
+	public ModelAndView editPerson(@RequestParam(value="id",required=false) Long id) {
+	    
 		logger.debug("Received request to edit person id : "+id);				
 		ModelAndView mav = new ModelAndView();		
  		mav.setViewName("edit");
