@@ -153,6 +153,20 @@
         <param-value>htmlviewer</param-value>
     </context-param>
 
+    <!-- redirect requests to 'htmlviewer' to the HTML viewer's start page -->
+    <filter>
+        <filter-name>RedirectFilterForHtml</filter-name>
+        <filter-class>org.apache.isis.core.webapp.routing.RedirectFilter</filter-class>
+        <init-param>
+            <param-name>redirectTo</param-name>
+            <param-value>/start.htmlviewer</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>RedirectFilterForHtml</filter-name>
+        <url-pattern>/htmlviewer</url-pattern>
+    </filter-mapping>
+
     <!-- authenticate user, and set up an Isis Session -->
     <filter>
         <filter-name>IsisSessionFilterForHtml</filter-name>
@@ -176,10 +190,6 @@
     <filter-mapping>
         <filter-name>IsisSessionFilterForHtml</filter-name>
         <url-pattern>*.htmlviewer</url-pattern>
-    </filter-mapping>
-    <filter-mapping>
-        <filter-name>IsisSessionFilterForHtml</filter-name>
-        <url-pattern>/htmlviewer</url-pattern>
     </filter-mapping>
 
     <servlet>
