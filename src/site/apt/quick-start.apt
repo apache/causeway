@@ -76,12 +76,12 @@ App Structure
 | myapp                | The parent (aggregator) module                          |
 *----------------------+---------------------------------------------------------+
 | myapp-dom            | The domain object model, consisting of ToDoItem and     |
-|                      | ToDoItemRepository interface.                           |
+|                      | ToDoItems (repository) interface.                           |
 *----------------------+---------------------------------------------------------+
 | myapp-fixture        | Domain object fixtures used for initializing the system |
 |                      | when being demo'ed or for unit testing.                 |
 *----------------------+---------------------------------------------------------+
-| myapp-objstore-dflt  | Implementation of ToDoItemRepository, for the default   |
+| myapp-objstore-dflt  | Implementation of ToDoItems repository, for the default   |
 |                      | (in-memory) object store.                               |
 *----------------------+---------------------------------------------------------+
 | myapp-webapp         | Run as a webapp (from web.xml) using either the         |
@@ -118,22 +118,31 @@ mvn clean install
 
 Running the webapp
 
-  Now that you've built the application, it's time to run it.  One way to do this is 
-  with Maven's Jetty plugin:
+  Now that you've built the application, it's time to run it.  You've a few options.
+
+  The first is to run the self-hosting version version of the WAR file.  This is the
+  as the regular WAR, but includes an embedded jetty webserver.  It can be run either
+  from Maven:     
+  
++------------------------------------------------------------
+mvn antrun:run
++------------------------------------------------------------
+
+  Or you can just run using java -jar: 
+
++------------------------------------------------------------
+java -jar webapp/target/myapp-webapp-1.0.0-SNAPSHOT-jetty-console.war
++------------------------------------------------------------
+  
+  Either way, this is great if you want to distribute your app as a prototype.
+  
+  Alternatively, you can also run using Maven's Jetty plugin:
   
 +------------------------------------------------------------
 cd webapp
 mvn jetty:run
 +------------------------------------------------------------
     
-  Alternatively you can run <Isis> as a self-hosted WAR: 
-  
-+------------------------------------------------------------
-cd webapp
-java -jar target/myapp-webapp-1.0.0-SNAPSHOT-jetty-console.war
-+------------------------------------------------------------
-  
-  This is great if you want to distribute your app as a prototype.
 
   The webapp is configured to support two of Isis' viewers, the {{{./viewer/html/index.html}HTML viewer}}
   and the {{{./viewer/json/index.html}JSON (RESTful) viewer}}.  
@@ -232,7 +241,7 @@ Exploring the App
   
     This is used to initialize the in-memory object store between runs.
     
-  * open up <<<ToDoItemRepositoryDefault>>> (in the objstore-dflt module)
+  * open up <<<ToDoItemsDefault>>> (in the objstore-dflt module)
   
     This is an implementation of the repository that delegates to the in-memory 
     object store
@@ -272,27 +281,31 @@ Running the app from within Eclipse (3.7)
 
 Where Next?
 
-  Over and above running the archetype, you should decide how you want to use Isis:
+  <<Your first port of call should be the {{{./applib/docbkx/pdf/isis-applib.pdf}applib}}  
+  documentation>>.  This describes how to go about writing a domain application following
+  Isis' programming model.  The {{{./IsisCheatSheet.pdf}cheat sheet}} acts as a handy
+  reference.
+
+  To speed up your coding we provide some templates and other help for IDEs; 
+  check out the {{{./ide-support.html}IDE support}} page.  You should also check out
+  the {{{./icons.html}icons}} that we make available. 
+  
+  And after that, think about how you could use Isis:
   
   * to {{{./use-cases/develop.html}develop prototypes}}
   
   * to {{{./use-cases/specify-and-test.html}develop tested domain models...}}
   
-  * to {{{./use-cases/deploy-own-framework.html}... to deploy on your own framework}}
+  * to {{{./use-cases/deploy-own-framework.html} deploy on your own framework}}
   
-  * to {{{./use-cases/deploy-as-rest.html}... to deploy as a RESTful web service}}
+  * to {{{./use-cases/deploy-as-rest.html} deploy as a RESTful web service}}
   
-  * to {{{./use-cases/deploy-as-webapp.html}... to deploy as a webapp}}
+  * to {{{./use-cases/deploy-as-webapp.html} deploy as a webapp}}
+
+What else is there?  
   
-  []
-  
-  To guide you, you'll want to read some documentation to figure out what Isis offers.  
-  
-  <<Your first port of call should be the {{{./applib/docbkx/pdf/isis-applib.pdf}applib}}  
-  documentation>>.  This describes how to go about writing a domain application following
-  Isis' programming model.
-  
-  After that, you probably should look through the {{{./core/docbkx/pdf/isis-core.pdf}core}}
+  In terms of further documentation, you probably should look through the 
+  {{{./core/docbkx/pdf/isis-core.pdf}core}}
   documentation.  This provides more detail on the design and architecture of Isis, along
   with the key APIs.
   
@@ -305,16 +318,8 @@ Where Next?
   
   You'll find documentation for all of these components {{{./documentation.html}here}}.
 
-
-What else is there?  
-  
-  To speed up your coding we provide some templates and other help for IDEs; 
-  check out the {{{./ide-support.html}IDE support}} page.  You should also check out
-  the {{{./icons.html}icons}} and the {{{./IsisCheatSheet.pdf}cheat sheet}}.  
-    
-  In the future, we also hope to provide a selection of off-the-shelf domain 
+  And in the future, we also hope to provide a selection of off-the-shelf domain 
   services and value types integrations for you to reuse; these will be hosted
   within a "domain" library. (Until then, why not contribute some of your own ? ;-).
-
    
   []
