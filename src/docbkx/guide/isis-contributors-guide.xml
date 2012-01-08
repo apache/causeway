@@ -3629,11 +3629,27 @@ public class FooBar {
         <para>Before making any formal release, there are a number of
         prerequisites that should always be checked.</para>
 
+        <sect2>
+          <title>Update Dependency Versions</title>
+
+          <para>First, check (via <ulink
+          url="http://search.maven.org">http://search.maven.org</ulink>)
+          whether there is a newer version of the Apache parent
+          [org.apache.apache]. If so, update the &lt;parent&gt; element in
+          Isis' own parent POM [org.apache.isis:isis].</para>
+
+          <para>Second, use the Maven versions plugin can be used to determine
+          if there are newer versions of any of Isis' dependencies:</para>
+
+          <programlisting>$ mvn versions:display-dependency-updates</programlisting>
+
+          <para>Update any of the dependencies that are out-of-date.</para>
+        </sect2>
+
         <sect2 id="sec.SanityCheck">
           <title>Sanity check</title>
 
-          <para>Before deploying the snapshot, perform a quick sanity
-          check:</para>
+          <para>Next, perform a quick sanity check:</para>
 
           <itemizedlist>
             <listitem>
@@ -5848,7 +5864,7 @@ gpg --armor --export nnnnnnnn &gt;&gt;KEYS</programlisting>
 $ mvn jetty:run</programlisting>
 
             <para>The jetty webserver will continue running until the maven
-            command will cancelled (ctrl-C).</para>
+            command is cancelled (ctrl-C).</para>
           </sect3>
 
           <sect3>
@@ -5940,8 +5956,8 @@ $ mvn jetty:run</programlisting>
 
             <para>The webapp can be started using an Eclipse
             <filename>.launch</filename> configuration. This runs the
-            <classname>org.apache.isis.WebServer</classname>, which simply
-            bootstraps the application defined in the
+            <classname>org.apache.isis.WebServer</classname>, which basically
+            just bootstraps the application defined in the
             <filename>web.xml</filename> file using an embedded Jetty.</para>
 
             <para>Navigate to the
