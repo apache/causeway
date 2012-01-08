@@ -80,6 +80,7 @@ final class WebServerBootstrapper implements IsisBootstrapper {
         copyConfigurationPrimersIntoServletContext(context);
 
         jettyServer.setHandler(context);
+        
         try {
             jettyServer.start();
             if(startupMode.isForeground()) {

@@ -120,7 +120,7 @@ public class WebServer {
         WebAppContext handler = (WebAppContext) jettyServer.getHandler();
         String contextPath = handler.getContextPath();
 
-        StringBuilder buf = new StringBuilder();
+        final StringBuilder buf = new StringBuilder();
         Formatter formatter = new Formatter(buf);
         formatter.format("%s://%s:%d/%s", scheme, host, port, contextPath);
         return appendSlashIfRequired(buf).toString();
