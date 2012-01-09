@@ -36,8 +36,15 @@ public class Defaults {
     private static String propertiesBase;
     private static IsisConfiguration isisConfiguration;
 
+    /**
+     * Initialise the Defaults internals. Called by the PersistorInstaller.
+     * 
+     * @param propertiesBase
+     *            by default, @link {@link SqlObjectStore#BASE_NAME}
+     * @param isisConfiguration
+     */
     public static void initialise(String propertiesBase, IsisConfiguration isisConfiguration) {
-        Defaults.propertiesBase = propertiesBase;
+        Defaults.propertiesBase = propertiesBase; // "isis.persistor.sql"
         setTimeZone(DateTimeZone.UTC);
 
         Defaults.isisConfiguration = isisConfiguration;
@@ -56,16 +63,44 @@ public class Defaults {
 
     }
 
+    /**
+     * Returns a string value by looking up "isis.persistor.sql.default.XXXX"
+     * 
+     * @param propertiesBase
+     * @param configParameters
+     * @param property
+     * @return
+     */
     protected static String getStringProperty(String propertiesBase, final IsisConfiguration configParameters,
         String property) {
         return configParameters.getString(propertiesBase + ".default." + property, property);
     }
 
+    /**
+     * Returns a string value by looking up "isis.persistor.sql.default.XXXX", returning the specified default, if no
+     * value was found.
+     * 
+     * @param propertiesBase
+     * @param configParameters
+     * @param property
+     * @param defaultValue
+     * @return
+     */
     protected static String getStringProperty(String propertiesBase, final IsisConfiguration configParameters,
         String property, String defaultValue) {
         return configParameters.getString(propertiesBase + ".default." + property, defaultValue);
     }
 
+    /**
+     * Returns an integer value by looking up "isis.persistor.sql.default.XXXX", returning the specified default, if no
+     * value was found.
+     * 
+     * @param propertiesBase
+     * @param configParameters
+     * @param property
+     * @param defaultValue
+     * @return
+     */
     protected static int getIntProperty(String propertiesBase, final IsisConfiguration configParameters,
         String property, int defaultValue) {
         return configParameters.getInteger(propertiesBase + ".default." + property, defaultValue);

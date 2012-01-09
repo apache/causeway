@@ -29,15 +29,15 @@
 
     <authorgroup>
       <author>
-        <firstname>Robert</firstname>
-
-        <surname>Matthews</surname>
-      </author>
-
-      <author>
         <firstname>Kevin</firstname>
 
         <surname>Meyer</surname>
+      </author>
+
+      <author>
+        <firstname>Robert</firstname>
+
+        <surname>Matthews</surname>
       </author>
     </authorgroup>
 
@@ -86,7 +86,7 @@
       <title>Background</title>
 
       <para>The SQL objectstore provides a fully-automatic object store that
-      uses a SQL-compatible database server.</para>
+      uses a jdbc SQL-compatible database server.</para>
 
       <para>All domain objects (entities) are introspected during
       initialisation, and have a 1-to-1 mapping onto a database table. All
@@ -149,8 +149,8 @@
       type. Default mappers are provided by
       JdbcFieldMappingFactoryInstaller.</para>
 
-      <sect2 id="sec.mappers.modifiable-values">
-        <title>Modifiable values</title>
+      <sect2>
+        <title id="sec.mappers.modifiable-values">Modifiable values</title>
 
         <para>The following SQL datatypes can be overridden, if specified in
         the properties file (the default value is given in parenthesis), [the
@@ -273,7 +273,7 @@
         <para><property>isis.persistor.sql.automapper.type.&lt;object&gt;.&lt;property&gt;=&lt;SQL
         data type&gt;</property></para>
 
-        <para>where </para>
+        <para>where</para>
 
         <itemizedlist>
           <listitem>
@@ -293,7 +293,7 @@
         </itemizedlist>
 
         <para>Again, please be very careful about changing the defaults as the
-        value mappers make assumptions about the underlying data type. </para>
+        value mappers make assumptions about the underlying data type.</para>
 
         <para>It is safe to change the size of VARCHAR() types, e.g. when you
         know only a partcular field requires more that 65 characters, the
@@ -310,7 +310,9 @@
       <sect2>
         <title>Tables</title>
 
-        <para>By default, all Isis tables are preceded with "ISIS_".</para>
+        <para>By default, all Isis tables are preceded with "ISIS_". This
+        behaviour can be altered by specifying a replacement table prefix. See
+        <xref linkend="sec.defaults.tableprefix" />.</para>
 
         <sect3>
           <title>Internal Tables</title>
@@ -323,7 +325,8 @@
 
           <para>Only the "class" part of the package name is used. Thus a
           domain class called "some.package.Client", will be mapped onto a
-          table "ISIS_CLIENT".</para>
+          table "ISIS_CLIENT" (assuming that the default table prefix has not
+          been changed).</para>
         </sect3>
       </sect2>
 
@@ -346,8 +349,6 @@
           file:</para>
 
           <para><property>isis.persistor.sql.pk_id=id</property></para>
-
-          <para><property></property></para>
 
           <para><property>ID column: ID</property></para>
 
@@ -570,7 +571,7 @@
   </chapter>
 
   <chapter>
-    <title>Defaults</title>
+    <title id="sec.defaults">Defaults</title>
 
     <para>The SQL objectstore exposes several defaults that can be replaced
     either in configuration or at runtime.</para>
@@ -607,6 +608,15 @@
           list/collection, such as <code>allMatches()</code>, etc:</para>
 
           <para><property><property>isis.persistor.sql.default.maxinstances=100</property></property></para>
+        </listitem>
+
+        <listitem>
+          <para id="sec.defaults.tableprefix">Table prefix. The default prefix
+          "isis_" is added to all table created by the object store. This
+          prefix can be replaced, or left off entirely by specifying an empty
+          value, e.g.:</para>
+
+          <para><property>isis.persistor.sql.default.tableprefix=</property></para>
         </listitem>
 
         <listitem>
