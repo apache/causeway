@@ -611,10 +611,10 @@
         </listitem>
 
         <listitem>
-          <para id="sec.defaults.tableprefix">Table prefix. The default prefix
-          "isis_" is added to all table created by the object store. This
-          prefix can be replaced, or left off entirely by specifying an empty
-          value, e.g.:</para>
+          <para id="sec.defaults.tableprefix" xreflabel="Table Prefix">Table
+          prefix. The default prefix "isis_" is added to all table created by
+          the object store. This prefix can be replaced, or left off entirely
+          by specifying an empty value, e.g.:</para>
 
           <para><property>isis.persistor.sql.default.tableprefix=</property></para>
         </listitem>
