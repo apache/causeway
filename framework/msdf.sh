@@ -25,8 +25,8 @@ do
   if [ "$n" ]; then
     cd $d
     pwd
-    echo mvn -T 4 clean site-deploy -D modules=site -D deploy=local -D patch=$n $*
-         mvn -T 4 clean site-deploy -D modules=site -D deploy=local -D patch=$n $*
+    echo mvn clean site-deploy -D modules=site -D deploy=local -D patch=$n $*
+         mvn clean site-deploy -D modules=site -D deploy=local -D patch=$n $*
     cd $root
   fi
 done

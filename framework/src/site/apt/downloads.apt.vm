@@ -35,13 +35,17 @@ Release
  
  * the binaries can be downloaded from {{{http://search.maven.org}Maven central repo}}, typically by using the <Isis> quickstart archetype.
  
-   See the {{{./quickstart-app.html}quickstart page}} for details on how to using the quickstart archetype.
+   See the {{{./quick-start.html}quickstart page}} for details on how to using the quickstart archetype.
    
  []
  
  In both cases, you can use the {{{http://www.apache.org/dist/incubator/isis/KEYS}KEYS}} to verify the archives.
 
- A list of JIRA issues addressed in this release can be found {{{./release-notes-${project.version}.html}here}}.  
+Release Notes
+
+ A list of JIRA issues addressed in this release can be found {{{./release-notes-${project.version}.html}here}}.
+ 
+ Previous release: {{{./release-notes-0.1.2-incubating.html}0.1.2-incubating}}).
 
 
 Building Isis yourself

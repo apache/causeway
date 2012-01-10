@@ -38,15 +38,18 @@ Use <Isis> for Prototyping and Development
   
   This programming model is essentially POJOs, supplemented with a number of
   annotations and method naming conventions.  It is fully documented in the 
-  Isis application library, or {{{./applib/index.html}applib}} for short.  Most of the
-  important conventions are documented in the {{{./IsisCheatSheet.pdf}cheat sheet}}. 
+  Isis application library, (the {{{../applib/index.html}applib}}).  Most of the
+  important conventions are documented in the {{{../IsisCheatSheet.pdf}cheat sheet}}. 
   
 * {Custom extensions}
 
   As well as the conventions that Isis defines, you are free to also define your 
   own programming conventions.  Each aspect - or facet - of the programming model is 
-  defined through the {{{./TODO}FacetFactory}}} API, and the set of active <<<FacetFactory>>>s
-  is specified through the {{{./TODO}ProgrammingModel}}} API.
+  defined through the 
+  {{{./core/metamodel/xref/org/apache/isis/core/metamodel/facets/FacetFactory.html}FacetFactory}} 
+  API, and the set of active <<<FacetFactory>>>s is specified through the 
+  {{{./core/metamodel/xref/org/apache/isis/core/metamodel/progmodel/ProgrammingModel.html}ProgrammingModel}}
+  API.
   
   We expect that most developers won't bother to customise the programming model,
   and even if you do, you'll probably just want to tweak Isis' defaults, rather than
@@ -55,6 +58,6 @@ Use <Isis> for Prototyping and Development
   other framework.
   
   Isis customisability is also the basis by which the framework supports other programming
-  languages.  For example, the {{{./progmodel/groovy/index.html}Groovy}} progmodel allows
+  languages.  For example, the {{{../progmodels/groovy/index.html}Groovy}} progmodel allows
   you to write your domain objects using the {{{http://groovy.codehaus.org}Groovy}} programming language.   
   

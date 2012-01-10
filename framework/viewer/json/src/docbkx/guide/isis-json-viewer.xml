@@ -319,8 +319,8 @@
     myapp-dom/pom.xml             # domain object model
     myapp-fixture/pom.xml         # fixtures for seeding object store
     myapp-objstore-dflt/pom.xml   # repository implementations for the default object store
-    myapp-viewer-html/pom.xml     # run the application as a webapp using the HTML viewer
-    myapp-viewer-json/pom.xml     # run the application as a webapp using the JSON viewer</programlisting>
+    myapp-webapp/pom.xml          # run the application as a webapp using either the HTML viewer or the JSON viewer
+</programlisting>
 
     <para>where 'myapp' is the artifactId specified when you ran the <code>mvn
     archetype:generate</code> goal.</para>
@@ -388,124 +388,51 @@
     &lt;dependency&gt;
       &lt;groupId&gt;org.apache.isis.viewer&lt;/groupId&gt;
       &lt;artifactId&gt;json&lt;/artifactId&gt;
-      &lt;version&gt;${isis.viewer-restful.version}&lt;/version&gt;
+      &lt;version&gt;${isis.version}&lt;/version&gt;
     &lt;/dependency&gt;
     &lt;dependency&gt;
       &lt;groupId&gt;org.apache.isis.viewer&lt;/groupId&gt;
-      &lt;artifactId&gt;restful-applib&lt;/artifactId&gt;
-      &lt;version&gt;${isis.viewer-restful.version}&lt;/version&gt;
+      &lt;artifactId&gt;json-applib&lt;/artifactId&gt;
+      &lt;version&gt;${isis.version}&lt;/version&gt;
     &lt;/dependency&gt;
     &lt;dependency&gt;
       &lt;groupId&gt;org.apache.isis.viewer&lt;/groupId&gt;
-      &lt;artifactId&gt;restful-viewer&lt;/artifactId&gt;
-      &lt;version&gt;${isis.viewer-restful.version}&lt;/version&gt;
+      &lt;artifactId&gt;json-viewer&lt;/artifactId&gt;
+      &lt;version&gt;${isis.version}&lt;/version&gt;
     &lt;/dependency&gt;
     ...
   &lt;/dependencies&gt;
 &lt;/dependencyManagement&gt;</programlisting>
 
-        <para>The <package>[oai.viewer:restful]</package> module is the parent
-        for <emphasis>xhtml viewer</emphasis>
+        <para>The <package>[oai.viewer:json]</package> module is the parent
+        for <emphasis>json viewer</emphasis>
         (<code>&lt;packaging&gt;pom&lt;/packaging&gt;</code>). That means that
-        it doesn't provide any Java classesper se. The <emphasis>xhtml
-        viewer</emphasis> module
-        <package>[oai.viewer.restful:viewer]</package> on the other hand does
-        provide a <acronym>JAR</acronym> artifact, being the main
-        implementation of the viewer. The <emphasis>restful applib</emphasis>
-        module <package>[oai.viewer.restful:applib]</package> meanwhile is
-        used for writing client-side applications that use an exposed Isis
-        module, the topic of <xref
+        it doesn't provide any Java classesper se. The <emphasis>json
+        viewer</emphasis> module <package>[oai.viewer.json:viewer]</package>
+        on the other hand does provide a <acronym>JAR</acronym> artifact,
+        being the main implementation of the viewer. The <emphasis>json
+        applib</emphasis> module <package>[oai.viewer.json:applib]</package>
+        meanwhile is used for writing client-side applications that use an
+        exposed <emphasis>Isis</emphasis> module, the topic of <xref
         linkend="chp.WritingClientSideApps" />.</para>
       </sect2>
 
-      <sect2 id="sec.TheQuickRunModule">
-        <title>The QuickRun Module</title>
-
-        <para>First, the <emphasis>quickrun</emphasis> module's parent is the
-        parent module of the previous section, so all of the definitions in
-        the parent <acronym>POM</acronym> are inherited. Delving further, If
-        you look at the <classname>&lt;dependencies&gt;</classname> for the
-        generated quickrun module, then you'll see a dependency on the
-        <emphasis>xhtml viewer</emphasis>'s <emphasis>viewer</emphasis>
-        module:</para>
-
-        <programlisting>&lt;dependencies&gt;
-  ...
-  &lt;!-- viewer: restful --&gt;
-  &lt;dependency&gt;
-    &lt;groupId&gt;org.apache.isis.viewer&lt;/groupId&gt;
-    &lt;artifactId&gt;restful-viewer&lt;/artifactId&gt;
-  &lt;/dependency&gt;
-    ...
-&lt;/dependencyManagement&gt;</programlisting>
-
-        <para>It also includes a <classname>&lt;profile&gt;</classname> to
-        allow the application to be run as a standalone JAR, with an embedded
-        Jetty viewer.</para>
-
-        <programlisting>&lt;profiles&gt;
-  ...
-  &lt;profile&gt;
-    &lt;!-- prereqs: mvn package --&gt;
-    &lt;!-- mvn antrun:run -D exec=restful --&gt;
-    &lt;id&gt;exec-restful&lt;/id&gt;
-    &lt;activation&gt;
-      &lt;property&gt;
-        &lt;name&gt;exec&lt;/name&gt;
-        &lt;value&gt;restful&lt;/value&gt;
-      &lt;/property&gt;
-    &lt;/activation&gt;
-    ...
-  &lt;/profile&gt;
-  ...
-&lt;/profiles&gt;</programlisting>
-
-        <para>This profile defines a goal for the antrun plugin to execute the
-        generated <acronym>JAR</acronym><footnote>
-            <para>The generated JAR uses the maven-shade-plugin to package up
-            all dependencies.</para>
-          </footnote> from the command line using:</para>
-
-        <para><programlisting>java -jar xxx.jar -type exploration -viewer org.apache.isis.viewer.restful.viewer.embedded.RestfulViewerInstaller</programlisting></para>
-
-        <para>The installer specified by the <code>-viewer</code> flag acts as
-        a bridge to the embedded Jetty viewer.</para>
-
-        <para>Taking all the above together, it allows us to run the
-        application from the command line if we wish (discussed further in
-        <xref linkend="sec.RunningFromTheQuickRunModule" />). Moreover, the
-        generated <acronym>JAR</acronym> is built using the <ulink
-        url="http://maven.apache.org/plugins/maven-shade-plugin/">Maven shade
-        plugin</ulink>, so that it also packages up all dependencies. This
-        means that you can distribute this <acronym>JAR</acronym> - eg to your
-        project's stakeholders for review - as a self-contained entity.</para>
-
-        <para>Finally, the <emphasis>quickrun</emphasis> module also includes
-        a <filename>.launch</filename> configuration (in
-        <filename>ide/eclipse/launch</filename>) which lets us run the
-        application from within the Eclipse <acronym>IDE</acronym>. This is
-        equivalent to the <acronym>POM</acronym> profile described
-        above.</para>
-      </sect2>
-
       <sect2 id="sec.TheViewerRestfulModule">
-        <title>The Viewer-Json Module</title>
+        <title>The Webapp Module</title>
 
-        <para>Although the <emphasis>quickrun</emphasis> module is convenient
-        for prototyping, it isn't intended for runtime deployment. Instead,
-        you'll want a module that follows the webapp conventions and generates
-        a <acronym>WAR</acronym> file. This is the point of the generated
-        <emphasis>viewer-restful</emphasis> module.</para>
+        <para>The webapp module generates a <acronym>WAR</acronym> file. In
+        fact, it generates two WAR files; the second is a
+        xxx-jetty-console.war that embeds a Jetty webserver and allows the WAR
+        to be self-hosting.</para>
 
-        <para>Like the <emphasis>quickrun</emphasis> module, the
-        <emphasis>viewer-restful</emphasis> module inherits from the parent
-        module and so inherits the various definitions of the parent module.
-        And, not surprisingly, its <code>&lt;dependencies&gt;</code> section
-        includes a reference to the
-        <package>[oai.viewer.restful:viewer]</package> module.</para>
+        <para>The <emphasis>viewer-json</emphasis> module inherits from the
+        parent module and so inherits the various definitions of the parent
+        module. And, not surprisingly, its <code>&lt;dependencies&gt;</code>
+        section includes a reference to the
+        <package>[oai.viewer.json:viewer]</package> module.</para>
 
-        <para>More significantly, the <emphasis>viewer-restful</emphasis> has
-        the standard directory structure for a webapp, with
+        <para>More significantly, the <emphasis>viewer-json</emphasis> has the
+        standard directory structure for a webapp, with
         <filename>src/main/webapp/WEB-INF</filename> holding the
         <filename>web.xml</filename> along with <emphasis>Isis</emphasis>' own
         configuration files (<filename>isis.properties</filename> and
@@ -575,7 +502,7 @@
   &lt;filter-class&gt;org.apache.isis.runtimes.dflt.webapp.IsisSessionFilter&lt;/filter-class&gt;
   &lt;init-param&gt;
     &lt;param-name&gt;authenticationSessionLookupStrategy&lt;/param-name&gt;
-    &lt;param-value&gt;org.apache.isis.viewer.restful.viewer.authentication.AuthenticationSessionLookupStrategyTrusted&lt;/param-value&gt;
+    &lt;param-value&gt;org.apache.isis.viewer.json.viewer.authentication.AuthenticationSessionLookupStrategyTrusted&lt;/param-value&gt;
   &lt;/init-param&gt;
 &lt;/filter&gt;
 ...
@@ -669,7 +596,7 @@
       <para>The viewer can be run in a number of ways.</para>
 
       <sect2 id="sec.RunningFromTheQuickRunModule">
-        <title>Running from the QuickRun Module</title>
+        <title>Running from the WebApp Module</title>
 
         <para>To run the viewer in a prototyping mode (that is, using the
         standalone <acronym>JAR</acronym> and embedded Jetty webserver), you
@@ -718,7 +645,7 @@ mvn antrun:run -D exec=json</programlisting>
           <listitem>
             <para>run from the command-line using Maven:</para>
 
-            <programlisting>cd viewer-json
+            <programlisting>cd webapp
 mvn jetty:run</programlisting>
           </listitem>
 
@@ -907,12 +834,19 @@ mvn jetty:run</programlisting>
   </chapter>
 
   <chapter id="chp.DeployingRestfulObjectsWebapps">
-    <title>Deploying XHTML Viewer Webapps</title>
+    <title>Deploying JSON Viewer Webapps</title>
 
     <abstract>
       <para>Guidance on how to deploy Isis using the <emphasis>xhtml
       viewer</emphasis>.</para>
     </abstract>
+
+    <para></para>
+
+    <para>*** this material is now more general purpose, and probably should
+    be tidied up and moved to the applib documentation.</para>
+
+    <para></para>
 
     <para>At some point you'll presumably want to deploy your domain object
     using <emphasis>xhtml viewer</emphasis> as a webapp. The quickstart
@@ -1106,53 +1040,6 @@ mvn jetty:run</programlisting>
           <para>Note that the archetype explicitly specifies the object store
           as in-memory.</para>
         </note></para>
-    </sect1>
-  </chapter>
-
-  <chapter>
-    <title>web.xml</title>
-
-    <para></para>
-
-    <para></para>
-
-    <para></para>
-
-    <para></para>
-
-    <sect1>
-      <title></title>
-
-      <para></para>
-
-      <sect2>
-        <title>Reading HTML viewer specific properties</title>
-
-        <para></para>
-
-        <para></para>
-
-        <programlisting>&lt;web.xml&gt;
-    ...
-    &lt;context-param&gt;
-        &lt;param-name&gt;isis.viewers&lt;/param-name&gt;
-        &lt;param-value&gt;json&lt;/param-value&gt;
-    &lt;/context-param&gt;
-    ...
-&lt;/web.xml&gt;</programlisting>
-
-        <para>This will cause the viewer_json.properties file to be read if it
-        is present.</para>
-
-        <para></para>
-
-        <para></para>
-
-        <para>NB: the value for this parameter is actually comma-separated, to
-        allow for multiple viewers to be configured in the same webapp.</para>
-
-        <para></para>
-      </sect2>
     </sect1>
   </chapter>
 </book>
