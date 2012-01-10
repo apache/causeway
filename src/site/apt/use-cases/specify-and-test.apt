@@ -22,13 +22,13 @@ Specify and test your <Isis> domain model
 
   <Isis> integrates with two testing frameworks to help you, Junit and Concordion.
   Being able to test your domain models independently of the other gives you
-  confidence when you move onto {{{./deploy-own-framework.html}deploying}} your
-  {{{./deploy-as-rest.html}application}} as you {{{./deploy-as-webapp.html}prefer}}.
+  confidence when you move onto deploying your application {{{./deploy-own-framework.html}as}} 
+  {{{./deploy-as-rest.html}you}} {{{./deploy-as-webapp.html}prefer}}.
   
 * {JUnit integration}
 
   <Isis> provides a JUnit test runner in order to integrate with {{{http://junit.org}JUnit}}.
-  This is provided through its {{{./viewer/junit/index.html}JUnit viewer}}.
+  This is provided through its {{{../viewer/junit/index.html}JUnit viewer}}.
   
   For example, the following (based on the quickstart archetype) tests
   that a todo-item marked as complete cannot be marked as done once more.
@@ -41,14 +41,15 @@ public class ToDoItemTest {
 
     @Before
     public void setUp() {
-        firstItem = wrapped(toDoItems.notYetDone().get(0));
+        toDoItem = toDoItems.notYetDone().get(0);
+        toDoItem = wrapped(toDoItem);
     }
     
     @Test
-    public void cannotMarkAsCompleteTwice() throws Exception {
-        toDoItem.markAsComplete();
+    public void cannotMarkAsDoneTwice() throws Exception {
+        toDoItem.markAsDone();
         try {
-            toDoItem.markAsComplete();
+            toDoItem.markAsDone();
             fail("Should not been disabled");
         } catch (DisabledException e) {
             assertThat(e.getMessage(), is("Already done"));
@@ -64,7 +65,7 @@ public class ToDoItemTest {
   underlying pojo is interacted with in the same way as it would were being
   viewed in a regular Isis viewer.
   
-  For example, the call to <<<markAsComplete()>>> action is transparently 
+  For example, the call to <<<markAsDone()>>> action is transparently 
   prefaced by a check to ensure that the action is not disabled.  If the
   action is disabled, then the proxy throws the DisabledException. 
   
@@ -75,13 +76,14 @@ public class ToDoItemTest {
 * {BDD integration}
 
   <Isis> also provides an integration with {{{http://concordion.org}Concordion}},
-  which is a BDD (behaviour-driven design) framework.
+  which is a BDD (behaviour-driven design) framework.  This is provided through its 
+  {{{../viewer/bdd/index.html}BDD viewer}}.
   
   The idea behind BDD is to allow a business stakeholder to describe the desired
   behaviour of the system in non-technical terms, and then to gain feedback )as to
   whether that behaviour has been implemented) in the similar way.
   
-  Concordion implementation of this idea is to capture the specification using
+  Concordion's implementation of this idea is to capture the specification using
   XHTML.  This XHTML is then annotated by the developer inline with corresponding Java methods. 
   Concordion's own JUnit test runner parses the XHTML in order to call these methods, which
   in turn interact with the system-under-test.  Running the test also generates a copy of the 

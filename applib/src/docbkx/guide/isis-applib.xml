@@ -561,18 +561,14 @@
         bus.</para>
 
         <para>As to providing <acronym>SOA</acronym> services, Isis'
-        <acronym>XHTML</acronym> and <acronym>JSON</acronym> viewers both
-        exposes the domain objects as a set of RESTful resources. We map
-        objects and object members to the standard <acronym>HTTP</acronym>
-        verbs, eg so that a GET on an object returns an object representation,
-        a PUT on an object's property will modify the state, or a POST on an
-        object's actions will invoke the action. As its name suggests, the
-        <acronym>XHTML</acronym> viewer provides a representation is in terms
-        of <acronym>XHTML</acronym>, which has the nice side effect that the
-        representation can actually be viewed directly from a web browser. The
-        <acronym>JSON</acronym> viewer produces a <acronym>JSON</acronym>
-        representation, making it easy to consume in Javascript
-        applications.</para>
+        <acronym>JSON</acronym> viewer exposes the domain objects as a set of
+        RESTful resources. We map objects and object members to the standard
+        <acronym>HTTP</acronym> verbs, eg so that a GET on an object returns
+        an object representation, a PUT on an object's property will modify
+        the state, or a POST on an object's actions will invoke the action. As
+        its name suggests, the <acronym>JSON</acronym> viewer produces a
+        <acronym>JSON</acronym> representation, making it easy to consume (eg
+        in HTML5 or RIA applications).</para>
       </sect1>
 
       <sect1>
@@ -608,13 +604,12 @@
 
         <para>Viewers are channels by which the domain model is accessed.
         <emphasis>Apache Isis</emphasis> has viewers that expose the domain
-        model as either a desktop app or as a webapp, and also has two RESTful
-        viewers (producing either <acronym>XHTML</acronym> or
-        <acronym>JSON</acronym>) which allow the view model objects/domain
-        objects to be surfaced as RESTful resources. In <acronym>DDD</acronym>
-        terms the RESTful viewers are examples of an "open host service"
-        context mapping from some client bounded context up to our model's
-        context.</para>
+        model as either a desktop app or as a webapp, and also has a RESTful
+        viewer (producing <acronym>JSON</acronym>) which allow the view model
+        objects/domain objects to be surfaced as RESTful resources. In
+        <acronym>DDD</acronym> terms the RESTful viewers are examples of an
+        "open host service" context mapping from some client bounded context
+        up to our model's context.</para>
 
         <para>With respect to domain services, these are not reusable per se,
         rather they allow the domain objects to be the client of some other
@@ -776,14 +771,13 @@
 
           <listitem>
             <para>The <acronym>JSON</acronym> viewer (in
-            <filename>viewers/xhtml</filename> and
             <filename>viewers/json</filename>) which exposes your domain
             objects through a <ulink
             url="http://en.wikipedia.org/wiki/Representational_State_Transfer">RESTful</ulink>
             interface.</para>
 
-            <para>The intention of theis viewers is to allow programmatic
-            access to your domain objects from other (perhaps non-Java)
+            <para>The intention of this viewer is to allow programmatic access
+            to your domain objects from other (perhaps non-Java)
             clients.</para>
           </listitem>
 

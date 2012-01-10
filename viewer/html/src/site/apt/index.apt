@@ -36,7 +36,7 @@ Alternatives
   
   * the {{{../scimpi/index.html}Scimpi}} viewer uses a JSF-like markup metaphor
   
-  * the {{{../wicket/index.html}Wicket}} viewer uses a {{{http://wicket/apache.org}Apache Wicket}} components
+  * the {{{../wicket/index.html}Wicket}} viewer uses a {{{http://wicket.apache.org}Apache Wicket}} components
     (and allows you to define your own components also).
     
   []

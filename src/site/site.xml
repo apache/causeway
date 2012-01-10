@@ -79,18 +79,15 @@
             </item>
             <item name="Wiki" href="https://cwiki.apache.org/confluence/display/ISIS/Index" />
             <item name="JIRA" href="https://issues.apache.org/jira/browse/ISIS" />
+            <item name="Fisheye" href="https://fisheye6.atlassian.com/changelog/isis" />
             <item name="CI" href="https://builds.apache.org/job/isis-framework-ubuntu" />
-            <item name="Incubator status" href="incubator.apache.org/projects/isis.html" />
+            <item name="Incubator status" href="http://incubator.apache.org/projects/isis.html" />
             <item name="Isis Extras" href="http://code.google.com/a/apache-extras.org/p/isis-extras/" />
             <!-- 
             <item name="IRC" href="http://webchat.freenode.net/?channels=apache-isis&amp;uio=d4" />
             -->
             <!-- 
             <item name="Twitter (#ApacheIsis)" href="http://search.twitter.com/search?q=%23ApacheIsis" />
-            -->
-            <!-- 
-            seems to be broken...
-            <item name="Fisheye" href="http://fisheye6.atlassian.com/browse/isis/trunk/framework" />
             -->
         </menu>
 
@@ -121,8 +118,8 @@
 
         <menu name="Other Resources">
             <item name="Dan Haywood's blog" href="http://danhaywood.com/" />
-            <item name="Presentation Materials (feel free to reuse)" href="./presentations/">
-                <item name="Introducing Apache Isis" href="./presentations/">
+            <item name="Presentation Materials (feel free to reuse)" href="#">
+                <item name="Introducing Apache Isis" href="#">
                     <item name="PPTX (Microsoft)" href="./presentations/IntroducingApacheIsis.pptx" />
                     <item name="PPT (Microsoft)" href="./presentations/IntroducingApacheIsis.ppt" />
                     <item name="ODP (OpenDocument)" href="./presentations/IntroducingApacheIsis.odp" />

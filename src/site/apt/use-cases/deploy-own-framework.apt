@@ -17,10 +17,10 @@
 
 Deploy <Isis> domain model on your own Framework
 
-  The {{{./applib/index.html}programming model}} defined by Isis deliberately minimizes
+  The {{{../applib/index.html}programming model}} defined by Isis deliberately minimizes
   the dependencies on the rest of the framework.  In fact, the only hard dependency
   that the domain model classes have on Isis is through the <<<org.apache.isis.applib>>> 
-  classes, mostly to pick up annotations such as {{{../applib/xref/org/apache/isis/applib/annotations/Disabled.html}@Disabled}}.  
+  classes, mostly to pick up annotations such as {{{../applib/xref/org/apache/isis/applib/annotation/Disabled.html}@Disabled}}.  
   The idea is to make it easy to be able to write take a domain object {{{./develop.html}prototyped}} 
   and/or {{{./specify-and-test.html}tested}} using Isis, but to deploy on some
   other framework's runtime.
@@ -57,14 +57,23 @@ Deploy <Isis> domain model on your own Framework
   
     Isis only lets business logic to be written in domain objects.  Using Isis for your domain model 
     helps prevent business logic creeping into adjacent layers.
+
+  That said, it is also possible to deploy Isis as a {{{./deploy-as-rest.html}REST webservice}}, so you
+  could choose to implement a custom UI (eg in HTML5) that calls back to an Isis backend. 
   
 * {Custom persistence}
 
   Another reason for choosing the custom framework is full control over persistence.  That is, you can
   use whichever persistence technology you prefer, not just those that have been integrated by Isis.
   
-  That said, it is also possible to deploy Isis either as a {{{./deploy-as-rest.html}REST webservice}} or 
-  {{{./deploy-as-webapp.html}as a webapp}} but, while using a custom persistence mechanism.  So if custom
-  persistence is your only reason for going down the custom framework route, consider these 
-  other deployment options also.  
-   
+  That said, Isis has a pluggable persistence API, so you could integrate to some other persistence
+  mechanism by implementing to this API.
+  
+* Embedded Runtime
+
+  Even if you choose to deploy on your own framework, you may want to explore Isis
+  {{{../runtimes/embedded/index.html}Embedded Runtime}} module. This allows the Isis metamodel to be
+  instantiated standalone from the rest of the framework.  Using this you could, for example, roll-your-own
+  generic UI; or you could integrate with other UI frameworks (such as {{{http://metawidget.org}MetaWidget}})
+  that do a lot of the heavy lifting for you.
+  

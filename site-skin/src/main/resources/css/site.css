@@ -43,22 +43,6 @@ body {
   float: left;
 }
 
-/*
-#bannerLeft {
-  background: url(../images/logos/banner-left.png) left top no-repeat;
-  height: 100px;
-  width: 627px;
-  float: left;
-}
-
-#bannerRight {
-  background: url(../images/logos/apache-incubator-logo.png) right center no-repeat;
-  height: 100px;
-  width: 240px;
-  float: right;
-}
-*/
-
 img.wrap-left {
     float: left;
     padding-top: 2px;

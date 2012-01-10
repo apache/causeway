@@ -48,9 +48,7 @@ Runtimes
   * {{{./embedded/index.html}Embedded runtime}}
 
   The <embedded> runtime allows just the metamodel to be embedded into an
-  application.  It is an enabling module for the wrapper progmodel and
-  the JUnit test support.  It could also be used in tooling such as a
-  Maven validator plugin.
+  application, for example a custom application.  It could also be used in 
+  build-time tooling, such as a Maven plugin.
 
   []
-
