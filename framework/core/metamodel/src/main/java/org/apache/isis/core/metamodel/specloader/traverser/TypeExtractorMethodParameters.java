@@ -49,9 +49,7 @@ public class TypeExtractorMethodParameters extends TypeExtractorAbstract {
         }
 
         final Type[] genericTypes = getMethod().getGenericParameterTypes();
-        for (final Type genericType : genericTypes) {
-            addParameterizedTypes(genericTypes);
-        }
+        addParameterizedTypes(genericTypes);
     }
 
     public Class<?>[] getParameterTypes() {

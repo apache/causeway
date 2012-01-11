@@ -24,7 +24,6 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 
 import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -396,11 +395,10 @@ public class FacetProcessor implements RuntimeContextAware {
         }
     }
 
-    @SuppressWarnings("unchecked")
-    private static <T> List<T> getList(final Map map, final Object key) {
+    private static <K,T> List<T> getList(final Map<K, List<T>> map, final K key) {
         List<T> list = (List<T>) map.get(key);
         if (list == null) {
-            list = new ArrayList<T>();
+            list = Lists.newArrayList();
             map.put(key, list);
         }
         return list;

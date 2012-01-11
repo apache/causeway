@@ -40,7 +40,7 @@ import org.apache.isis.core.metamodel.layout.OrderSet;
  * <p>
  * Can specify if requires that members are in the same (group) name.
  */
-public class MemberOrderComparator implements Comparator {
+public class MemberOrderComparator implements Comparator<Object> {
 
     private final boolean ensureInSameGroup;
 

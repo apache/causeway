@@ -19,10 +19,7 @@
 
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
-import java.util.ArrayList;
 import java.util.List;
-
-import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.filter.Filter;
@@ -52,6 +49,8 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLookup;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
+
+import com.google.common.collect.Lists;
 
 public abstract class ObjectActionParameterAbstract implements ObjectActionParameter {
 
@@ -192,6 +191,7 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
         return peer != null ? peer.getFacet(cls) : null;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public Class<? extends Facet>[] getFacetTypes() {
         return peer != null ? peer.getFacetTypes() : new Class[] {};
@@ -244,7 +244,7 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
 
     @Override
     public ObjectAdapter[] getChoices(final ObjectAdapter adapter) {
-        final List<ObjectAdapter> parameterChoices = new ArrayList<ObjectAdapter>();
+        final List<ObjectAdapter> parameterChoices = Lists.newArrayList();
         final ActionParameterChoicesFacet choicesFacet = getFacet(ActionParameterChoicesFacet.class);
 
         if (choicesFacet != null) {
@@ -255,13 +255,17 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
             }
         }
         if (parameterChoices.size() == 0 && BoundedFacetUtils.isBoundedSet(getSpecification())) {
-            final Query query = new QueryFindAllInstances(getSpecification().getFullIdentifier());
-            final List<ObjectAdapter> allInstancesAdapter = getQuerySubmitter().allMatchingQuery(query);
-            for (final ObjectAdapter choiceAdapter : allInstancesAdapter) {
-                parameterChoices.add(choiceAdapter);
-            }
+            addParameterChoicesForBounded(parameterChoices);
         }
         return parameterChoices.toArray(new ObjectAdapter[0]);
+    }
+
+    private <T> void addParameterChoicesForBounded(final List<ObjectAdapter> parameterChoices) {
+        final Query<T> query = new QueryFindAllInstances<T>(getSpecification().getFullIdentifier());
+        final List<ObjectAdapter> allInstancesAdapter = getQuerySubmitter().allMatchingQuery(query);
+        for (final ObjectAdapter choiceAdapter : allInstancesAdapter) {
+            parameterChoices.add(choiceAdapter);
+        }
     }
 
     protected static void checkChoicesType(final SpecificationLookup specificationLookup, final Object[] objects,

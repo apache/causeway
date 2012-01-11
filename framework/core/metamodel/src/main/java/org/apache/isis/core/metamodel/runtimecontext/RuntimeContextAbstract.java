@@ -25,7 +25,6 @@ import java.util.List;
 import java.util.Properties;
 
 import org.apache.isis.applib.DomainObjectContainer;
-import org.apache.isis.core.commons.components.Injectable;
 import org.apache.isis.core.metamodel.services.container.DomainObjectContainerAware;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;

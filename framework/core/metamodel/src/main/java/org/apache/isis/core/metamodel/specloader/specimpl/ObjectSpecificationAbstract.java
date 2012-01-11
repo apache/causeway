@@ -20,7 +20,6 @@
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -73,7 +72,6 @@ import org.apache.isis.core.metamodel.spec.Persistability;
 import org.apache.isis.core.metamodel.spec.SpecificationContext;
 import org.apache.isis.core.metamodel.spec.SpecificationLookup;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.core.metamodel.spec.feature.ObjectActionContainer.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationFilters;
@@ -612,6 +610,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     @SuppressWarnings("unchecked")
     public List<OneToOneAssociation> getProperties() {
         final List<OneToOneAssociation> list = new ArrayList<OneToOneAssociation>();
+        @SuppressWarnings("rawtypes")
         final List associationList = getAssociations(ObjectAssociationFilters.PROPERTIES);
         list.addAll(associationList);
         return list;

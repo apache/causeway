@@ -99,17 +99,6 @@
     <sect1>
       <title>Introduction</title>
 
-      <para></para>
-
-      <para>*** TODO: remove WrapperFactory stuff, since have removed the
-      dependency on that module.</para>
-
-      <para></para>
-
-      <para></para>
-
-      <para></para>
-
       <para>The heart of the <emphasis>embedded runtime</emphasis> is the
       <classname>IsisMetaModel</classname> class. This combines all the
       various internal components (all pluggable) that specify, identify and
@@ -530,13 +519,12 @@
     <sect1>
       <title>Instantiating IsisMetaModel using Spring</title>
 
+      <para>The "embeddedinspring" example (in
+      <filename>examples/embeddedinspring</filename>) shows how the
+      <classname>IsisMetaModel</classname> can be bootstrapped in
+      Spring.</para>
+
       <para></para>
-
-      <para>instantiate IsisMetaModel via Spring.</para>
-
-      <para></para>
-
-      <para>Provide some copy-n-paste example code here...</para>
 
       <para></para>
     </sect1>
@@ -544,16 +532,31 @@
     <sect1>
       <title>Using DomainObjectContainer within a Domain Object</title>
 
+      <para>to docuent.</para>
+
       <para></para>
     </sect1>
 
     <sect1>
-      <title>Using IsisMetaModel to validate interactions</title>
+      <title>Using IsisMetaModel to validate interactions (TODO)</title>
 
-      <para>*** TODO: define a simple interface to make this easy to
-      do.</para>
+      <para><note>
+          <para>TODO: it would be useful if the IsisMetaModel could provide an
+          object equivalent to te InteractionUtils class, ie so that a
+          controller could ask whether a particular action could be invoked or
+          not.</para>
+        </note></para>
 
       <para></para>
+    </sect1>
+
+    <sect1>
+      <title>Implementing EmbeddedContext for Spring (TODO)</title>
+
+      <note>
+        <para>TODO: it would be good to provide a ready-to-use implementation
+        of EmbeddedContext interface for Spring.</para>
+      </note>
 
       <para></para>
     </sect1>
