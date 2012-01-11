@@ -30,13 +30,13 @@ import org.apache.isis.viewer.json.applib.RestfulClient;
 import org.apache.isis.viewer.json.applib.RestfulRequest;
 import org.apache.isis.viewer.json.applib.RestfulResponse;
 import org.apache.isis.viewer.json.applib.RestfulResponse.HttpStatusCode;
-import org.apache.isis.viewer.json.applib.capabilities.CapabilitiesRepresentation;
+import org.apache.isis.viewer.json.applib.version.VersionRepresentation;
 import org.apache.isis.viewer.json.tck.IsisWebServerRule;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-public class CapabilitiesResourceTest_accept {
+public class VersionResourceTest_accept {
 
     @Rule
     public IsisWebServerRule webServerRule = new IsisWebServerRule();
@@ -54,7 +54,7 @@ public class CapabilitiesResourceTest_accept {
 
         final RestfulRequest request = 
                 client.createRequest(HttpMethod.GET, "capabilities").withHeader(RestfulRequest.Header.ACCEPT, MediaType.APPLICATION_JSON_TYPE);
-        final RestfulResponse<CapabilitiesRepresentation> restfulResponse = request.executeT();
+        final RestfulResponse<VersionRepresentation> restfulResponse = request.executeT();
 
         assertThat(restfulResponse.getStatus(), is(HttpStatusCode.OK));
     }
@@ -63,8 +63,8 @@ public class CapabilitiesResourceTest_accept {
     public void applicationJson_profileCapabilities() throws Exception {
 
         final RestfulRequest request = 
-                client.createRequest(HttpMethod.GET, "capabilities").withHeader(RestfulRequest.Header.ACCEPT, RepresentationType.CAPABILITIES.getMediaType());
-        final RestfulResponse<CapabilitiesRepresentation> restfulResponse = request.executeT();
+                client.createRequest(HttpMethod.GET, "capabilities").withHeader(RestfulRequest.Header.ACCEPT, RepresentationType.VERSION.getMediaType());
+        final RestfulResponse<VersionRepresentation> restfulResponse = request.executeT();
 
         assertThat(restfulResponse.getStatus(), is(HttpStatusCode.OK));
     }
@@ -73,7 +73,7 @@ public class CapabilitiesResourceTest_accept {
     public void applicationJson_invalid() throws Exception {
 
         final RestfulRequest request = client.createRequest(HttpMethod.GET, "/").withHeader(RestfulRequest.Header.ACCEPT, RepresentationType.USER.getMediaType());
-        final RestfulResponse<CapabilitiesRepresentation> restfulResponse = request.executeT();
+        final RestfulResponse<VersionRepresentation> restfulResponse = request.executeT();
 
         assertThat(restfulResponse.getStatus(), is(HttpStatusCode.NOT_ACCEPTABLE));
     }

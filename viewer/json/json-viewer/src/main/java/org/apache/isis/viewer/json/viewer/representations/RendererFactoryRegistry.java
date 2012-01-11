@@ -23,7 +23,6 @@ import java.util.Map;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.isis.viewer.json.applib.RepresentationType;
-import org.apache.isis.viewer.json.viewer.resources.capabilities.CapabilitiesReprRenderer;
 import org.apache.isis.viewer.json.viewer.resources.domainobjects.ActionResultReprRenderer;
 import org.apache.isis.viewer.json.viewer.resources.domainobjects.DomainObjectReprRenderer;
 import org.apache.isis.viewer.json.viewer.resources.domainobjects.ListReprRenderer;
@@ -31,15 +30,16 @@ import org.apache.isis.viewer.json.viewer.resources.domainobjects.ObjectActionRe
 import org.apache.isis.viewer.json.viewer.resources.domainobjects.ObjectCollectionReprRenderer;
 import org.apache.isis.viewer.json.viewer.resources.domainobjects.ObjectPropertyReprRenderer;
 import org.apache.isis.viewer.json.viewer.resources.domainobjects.ScalarValueReprRenderer;
-import org.apache.isis.viewer.json.viewer.resources.domaintypes.TypeActionResultReprRenderer;
-import org.apache.isis.viewer.json.viewer.resources.domaintypes.DomainTypeReprRenderer;
-import org.apache.isis.viewer.json.viewer.resources.domaintypes.TypeListReprRenderer;
-import org.apache.isis.viewer.json.viewer.resources.domaintypes.ActionParameterDescriptionReprRenderer;
 import org.apache.isis.viewer.json.viewer.resources.domaintypes.ActionDescriptionReprRenderer;
+import org.apache.isis.viewer.json.viewer.resources.domaintypes.ActionParameterDescriptionReprRenderer;
 import org.apache.isis.viewer.json.viewer.resources.domaintypes.CollectionDescriptionReprRenderer;
+import org.apache.isis.viewer.json.viewer.resources.domaintypes.DomainTypeReprRenderer;
 import org.apache.isis.viewer.json.viewer.resources.domaintypes.PropertyDescriptionReprRenderer;
+import org.apache.isis.viewer.json.viewer.resources.domaintypes.TypeActionResultReprRenderer;
+import org.apache.isis.viewer.json.viewer.resources.domaintypes.TypeListReprRenderer;
 import org.apache.isis.viewer.json.viewer.resources.home.HomePageReprRenderer;
 import org.apache.isis.viewer.json.viewer.resources.user.UserReprRenderer;
+import org.apache.isis.viewer.json.viewer.resources.version.VersionReprRenderer;
 
 import com.google.common.collect.Maps;
 
@@ -57,7 +57,7 @@ public class RendererFactoryRegistry {
     private void registerDefaults() {
         register(new HomePageReprRenderer.Factory());
         register(new UserReprRenderer.Factory());
-        register(new CapabilitiesReprRenderer.Factory());
+        register(new VersionReprRenderer.Factory());
         register(new DomainObjectReprRenderer.Factory());
         register(new ObjectPropertyReprRenderer.Factory());
         register(new ObjectCollectionReprRenderer.Factory());

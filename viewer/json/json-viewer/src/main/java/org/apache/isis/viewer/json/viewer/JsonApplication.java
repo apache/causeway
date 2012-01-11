@@ -18,12 +18,12 @@
  */
 package org.apache.isis.viewer.json.viewer;
 
-import org.apache.isis.viewer.json.viewer.resources.capabilities.CapabilitiesResourceServerside;
 import org.apache.isis.viewer.json.viewer.resources.domainobjects.DomainObjectResourceServerside;
 import org.apache.isis.viewer.json.viewer.resources.domainobjects.DomainServiceResourceServerside;
 import org.apache.isis.viewer.json.viewer.resources.domaintypes.DomainTypeResourceServerside;
 import org.apache.isis.viewer.json.viewer.resources.home.HomePageResourceServerside;
 import org.apache.isis.viewer.json.viewer.resources.user.UserResourceServerside;
+import org.apache.isis.viewer.json.viewer.resources.version.VersionResourceServerside;
 
 public class JsonApplication extends AbstractJaxRsApplication {
 
@@ -35,7 +35,7 @@ public class JsonApplication extends AbstractJaxRsApplication {
         addClass(UserResourceServerside.class);
         addClass(DomainObjectResourceServerside.class);
         addClass(DomainServiceResourceServerside.class);
-        addClass(CapabilitiesResourceServerside.class);
+        addClass(VersionResourceServerside.class);
         
         addSingleton(new JsonApplicationExceptionMapper());
         addSingleton(new RuntimeExceptionMapper());

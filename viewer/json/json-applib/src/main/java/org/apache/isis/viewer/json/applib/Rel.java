@@ -47,7 +47,7 @@ public enum Rel {
     ACTION_PARAM("actionparam"), 
     RETURN_TYPE("returntype"), 
     ELEMENT_TYPE("elementtype"), 
-    CAPABILITIES("capabilities"), 
+    VERSION("version"), 
     USER("user"),
     SERVICES("services"), 
     TYPES("types"),

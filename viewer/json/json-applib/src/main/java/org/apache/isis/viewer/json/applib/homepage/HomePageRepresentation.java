@@ -34,8 +34,8 @@ public class HomePageRepresentation extends DomainRepresentation {
     public LinkRepresentation getServices() {
         return getLinkWithRel("services");
     }
-    public LinkRepresentation getCapabilities() {
-        return getLinkWithRel("capabilities");
+    public LinkRepresentation getVersion() {
+        return getLinkWithRel("version");
     }
 
 

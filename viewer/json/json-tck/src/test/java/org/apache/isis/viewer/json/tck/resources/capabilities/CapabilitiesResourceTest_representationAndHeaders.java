@@ -47,8 +47,8 @@ import org.apache.isis.viewer.json.applib.RestfulResponse;
 import org.apache.isis.viewer.json.applib.RestfulResponse.Header;
 import org.apache.isis.viewer.json.applib.RestfulResponse.HttpStatusCode;
 import org.apache.isis.viewer.json.applib.blocks.Method;
-import org.apache.isis.viewer.json.applib.capabilities.CapabilitiesRepresentation;
-import org.apache.isis.viewer.json.applib.capabilities.CapabilitiesResource;
+import org.apache.isis.viewer.json.applib.version.VersionRepresentation;
+import org.apache.isis.viewer.json.applib.version.VersionResource;
 import org.apache.isis.viewer.json.tck.IsisWebServerRule;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
@@ -63,36 +63,36 @@ public class CapabilitiesResourceTest_representationAndHeaders {
     public IsisWebServerRule webServerRule = new IsisWebServerRule();
     
     private RestfulClient client;
-    private CapabilitiesResource resource;
+    private VersionResource resource;
 
     @Before
     public void setUp() throws Exception {
         WebServer webServer = webServerRule.getWebServer();
         client = new RestfulClient(webServer.getBase());
         
-        resource = client.getCapabilitiesResource();
+        resource = client.getVersionResource();
     }
 
     @Test
     public void representation() throws Exception {
         
         // given
-        Response servicesResp = resource.capabilities();
+        Response servicesResp = resource.version();
         
         // when
-        RestfulResponse<CapabilitiesRepresentation> restfulResponse = RestfulResponse.ofT(servicesResp);
+        RestfulResponse<VersionRepresentation> restfulResponse = RestfulResponse.ofT(servicesResp);
         assertThat(restfulResponse.getStatus().getFamily(), is(Family.SUCCESSFUL));
         
         // then
         assertThat(restfulResponse.getStatus(), is(HttpStatusCode.OK));
         
-        CapabilitiesRepresentation repr = restfulResponse.getEntity();
+        VersionRepresentation repr = restfulResponse.getEntity();
         assertThat(repr, is(not(nullValue())));
         assertThat(repr, isMap());
 
         assertThat(repr.getSelf(), isLink().method(Method.GET));
 
-        JsonRepresentation capabilities = repr.getCapabilities();
+        JsonRepresentation capabilities = repr.getVersion();
         assertThat(capabilities, isMap());
         
         assertThat(capabilities.getString("specVersion"), is("0.52"));
@@ -114,17 +114,17 @@ public class CapabilitiesResourceTest_representationAndHeaders {
     @Test
     public void headers() throws Exception {
         // given
-        Response resp = resource.capabilities();
+        Response resp = resource.version();
         
         // when
-        RestfulResponse<CapabilitiesRepresentation> restfulResponse = RestfulResponse.ofT(resp);
+        RestfulResponse<VersionRepresentation> restfulResponse = RestfulResponse.ofT(resp);
         
         // then
         final MediaType contentType = restfulResponse.getHeader(Header.CONTENT_TYPE);
         assertThat(contentType, hasType("application"));
         assertThat(contentType, hasSubType("json"));
         assertThat(contentType, hasParameter("profile", "urn:org.restfulobjects/capabilities"));
-        assertThat(contentType, is(RepresentationType.CAPABILITIES.getMediaType()));
+        assertThat(contentType, is(RepresentationType.VERSION.getMediaType()));
         
         // then
         final CacheControl cacheControl = restfulResponse.getHeader(Header.CACHE_CONTROL);
@@ -136,15 +136,15 @@ public class CapabilitiesResourceTest_representationAndHeaders {
     @Test
     public void selfIsFollowable() throws Exception {
         // given
-        CapabilitiesRepresentation repr = givenRepresentation();
+        VersionRepresentation repr = givenRepresentation();
 
         // when, then
         assertThat(repr, isFollowableLinkToSelf(client));
     }
 
 
-    private CapabilitiesRepresentation givenRepresentation() throws JsonParseException, JsonMappingException, IOException {
-        RestfulResponse<CapabilitiesRepresentation> jsonResp = RestfulResponse.ofT(resource.capabilities());
+    private VersionRepresentation givenRepresentation() throws JsonParseException, JsonMappingException, IOException {
+        RestfulResponse<VersionRepresentation> jsonResp = RestfulResponse.ofT(resource.version());
         return jsonResp.getEntity();
     }
 

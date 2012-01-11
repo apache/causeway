@@ -182,11 +182,11 @@ public final class RestfulRequest {
         try {
             switch (httpMethod) {
             case GET:
-            case PUT:
+            case DELETE:
                 setQueryArgs();
                 break;
             case POST:
-            case DELETE:
+            case PUT:
                 setBody();
                 break;
             }

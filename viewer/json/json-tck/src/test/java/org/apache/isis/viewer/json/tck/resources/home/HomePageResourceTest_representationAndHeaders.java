@@ -92,7 +92,7 @@ public class HomePageResourceTest_representationAndHeaders {
         assertThat(repr.getSelf(), isLink(client).method(Method.GET));
         assertThat(repr.getUser(), isLink(client).method(Method.GET));
         assertThat(repr.getServices(), isLink(client).method(Method.GET));
-        assertThat(repr.getCapabilities(), isLink(client).method(Method.GET));
+        assertThat(repr.getVersion(), isLink(client).method(Method.GET));
         
         assertThat(repr.getLinks(), isArray());
         assertThat(repr.getExtensions(), isMap());
@@ -136,7 +136,7 @@ public class HomePageResourceTest_representationAndHeaders {
         // when, then
         assertThat(repr.getServices(), isLink(client).returning(HttpStatusCode.OK));
         assertThat(repr.getUser(), isLink(client).returning(HttpStatusCode.OK));
-        assertThat(repr.getCapabilities(), isLink(client).returning(HttpStatusCode.OK));
+        assertThat(repr.getVersion(), isLink(client).returning(HttpStatusCode.OK));
     }
 
     private HomePageRepresentation givenRepresentation() throws JsonParseException, JsonMappingException, IOException {

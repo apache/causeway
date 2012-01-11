@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.json.viewer.resources.capabilities;
+package org.apache.isis.viewer.json.viewer.resources.version;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -29,7 +29,7 @@ import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.applib.RepresentationType;
 import org.apache.isis.viewer.json.applib.RestfulMediaType;
 import org.apache.isis.viewer.json.applib.RestfulResponse.HttpStatusCode;
-import org.apache.isis.viewer.json.applib.capabilities.CapabilitiesResource;
+import org.apache.isis.viewer.json.applib.version.VersionResource;
 import org.apache.isis.viewer.json.viewer.JsonApplicationException;
 import org.apache.isis.viewer.json.viewer.representations.RendererFactory;
 import org.apache.isis.viewer.json.viewer.resources.ResourceAbstract;
@@ -38,21 +38,21 @@ import org.apache.isis.viewer.json.viewer.resources.ResourceAbstract;
  * Implementation note: it seems to be necessary to annotate the implementation with {@link Path} rather than the
  * interface (at least under RestEasy 1.0.2 and 1.1-RC2).
  */
-@Path("/capabilities")
-public class CapabilitiesResourceServerside extends ResourceAbstract implements CapabilitiesResource {
+@Path("/version")
+public class VersionResourceServerside extends ResourceAbstract implements VersionResource {
 
 
     @GET
-    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_CAPABILITIES})
-    public Response capabilities() {
-        final RepresentationType representationType = RepresentationType.CAPABILITIES;
+    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_VERSION})
+    public Response version() {
+        final RepresentationType representationType = RepresentationType.VERSION;
         
         init(representationType);
         fakeRuntimeExceptionIfXFail();
 
         final RendererFactory factory = rendererFactoryRegistry.find(representationType);
-        final CapabilitiesReprRenderer renderer = 
-                (CapabilitiesReprRenderer) factory.newRenderer(getResourceContext(), null, JsonRepresentation.newMap());
+        final VersionReprRenderer renderer = 
+                (VersionReprRenderer) factory.newRenderer(getResourceContext(), null, JsonRepresentation.newMap());
         renderer.includesSelf();
         
         return responseOfOk(renderer, Caching.ONE_DAY).build();

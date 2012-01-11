@@ -20,7 +20,6 @@ package org.apache.isis.viewer.json.applib;
 
 import javax.ws.rs.core.MediaType;
 
-import org.apache.isis.viewer.json.applib.capabilities.CapabilitiesRepresentation;
 import org.apache.isis.viewer.json.applib.domainobjects.ActionResultRepresentation;
 import org.apache.isis.viewer.json.applib.domainobjects.DomainObjectRepresentation;
 import org.apache.isis.viewer.json.applib.domainobjects.ListRepresentation;
@@ -39,12 +38,13 @@ import org.apache.isis.viewer.json.applib.domaintypes.PropertyDescriptionReprese
 import org.apache.isis.viewer.json.applib.homepage.HomePageRepresentation;
 import org.apache.isis.viewer.json.applib.user.UserRepresentation;
 import org.apache.isis.viewer.json.applib.util.Enums;
+import org.apache.isis.viewer.json.applib.version.VersionRepresentation;
 
 public enum RepresentationType {
     
     HOME_PAGE(RestfulMediaType.APPLICATION_JSON_HOME_PAGE, HomePageRepresentation.class),
     USER(RestfulMediaType.APPLICATION_JSON_USER, UserRepresentation.class),
-    CAPABILITIES(RestfulMediaType.APPLICATION_JSON_CAPABILITIES, CapabilitiesRepresentation.class),
+    VERSION(RestfulMediaType.APPLICATION_JSON_VERSION, VersionRepresentation.class),
     LIST(RestfulMediaType.APPLICATION_JSON_LIST, ListRepresentation.class),
     SCALAR_VALUE(RestfulMediaType.APPLICATION_JSON_SCALAR_VALUE, ScalarValueRepresentation.class),
     DOMAIN_OBJECT(RestfulMediaType.APPLICATION_JSON_DOMAIN_OBJECT, DomainObjectRepresentation.class),
