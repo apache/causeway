@@ -18,13 +18,14 @@
  */
 package org.apache.isis.runtimes.dflt.objectstores.nosql.file;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.isis.runtimes.dflt.objectstores.nosql.StateReader;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 
 public class JsonStateReaderTest {
@@ -96,6 +97,11 @@ public class JsonStateReaderTest {
     @Test
     public void readStringFieldAsNull() throws Exception {
         assertEquals(null, reader.readField("field-4"));
+    }
+
+    @Test
+    public void readUnsavedCollection() throws Exception {
+        assertEquals(new ArrayList<StateReader>(), reader.readCollection("unknown-list"));
     }
 
     @Test

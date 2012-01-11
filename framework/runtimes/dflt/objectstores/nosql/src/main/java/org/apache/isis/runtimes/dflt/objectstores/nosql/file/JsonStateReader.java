@@ -136,9 +136,11 @@ public class JsonStateReader implements StateReader {
     public List<StateReader> readCollection(final String id) {
         final JSONArray array = instance.optJSONArray(id);
         final List<StateReader> readers = new ArrayList<StateReader>();
-        final int size = array.length();
-        for (int i = 0; i < size; i++) {
-            readers.add(new JsonStateReader(array.optJSONObject(i)));
+        if (array !=null) {
+            final int size = array.length();
+            for (int i = 0; i < size; i++) {
+                readers.add(new JsonStateReader(array.optJSONObject(i)));
+            }
         }
         return readers;
     }
