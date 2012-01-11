@@ -578,7 +578,7 @@ public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectActi
                     parameterChoicesAdapters[i][j] = adapterFor(parameterChoicesPojos[i][j]);
                 }
             } else if (BoundedFacetUtils.isBoundedSet(paramSpec)) {
-                final QueryFindAllInstances query = new QueryFindAllInstances(paramSpec.getFullIdentifier());
+                final QueryFindAllInstances<ObjectAdapter> query = new QueryFindAllInstances<ObjectAdapter>(paramSpec.getFullIdentifier());
                 final List<ObjectAdapter> allInstancesAdapter = getQuerySubmitter().allMatchingQuery(query);
                 parameterChoicesAdapters[i] = new ObjectAdapter[allInstancesAdapter.size()];
                 int j = 0;

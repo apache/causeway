@@ -25,12 +25,11 @@ import org.hamcrest.Matcher;
 
 public final class Classes {
 
-    @SuppressWarnings("unchecked")
-    public static Matcher isSubclassOf(final Class superClass) {
-        return new BaseMatcher() {
+    public static Matcher<?> isSubclassOf(final Class<?> superClass) {
+        return new BaseMatcher<Object>() {
             @Override
             public boolean matches(final Object item) {
-                final Class cls = (Class) item;
+                final Class<?> cls = (Class<?>) item;
                 return superClass.isAssignableFrom(cls);
             }
 

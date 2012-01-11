@@ -21,6 +21,7 @@ package org.apache.isis.core.metamodel.specloader.specimpl;
 
 import java.util.List;
 
+import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.query.QueryFindAllInstances;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.debug.DebugString;
@@ -260,17 +261,20 @@ public class OneToOneAssociationImpl extends ObjectAssociationAbstract implement
             }
             return options;
         } else if (BoundedFacetUtils.isBoundedSet(getSpecification())) {
-
-            final QueryFindAllInstances query = new QueryFindAllInstances(getSpecification().getFullIdentifier());
-            final List<ObjectAdapter> allInstancesAdapter = getQuerySubmitter().allMatchingQuery(query);
-            final ObjectAdapter[] options = new ObjectAdapter[allInstancesAdapter.size()];
-            int j = 0;
-            for (final ObjectAdapter adapter : allInstancesAdapter) {
-                options[j++] = adapter;
-            }
-            return options;
+            return options();
         }
         return null;
+    }
+
+    private <T> ObjectAdapter[] options() {
+        final Query<T> query = new QueryFindAllInstances<T>(getSpecification().getFullIdentifier());
+        final List<ObjectAdapter> allInstancesAdapter = getQuerySubmitter().allMatchingQuery(query);
+        final ObjectAdapter[] options = new ObjectAdapter[allInstancesAdapter.size()];
+        int j = 0;
+        for (final ObjectAdapter adapter : allInstancesAdapter) {
+            options[j++] = adapter;
+        }
+        return options;
     }
 
     // /////////////////////////////////////////////////////////////

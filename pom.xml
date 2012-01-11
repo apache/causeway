@@ -777,7 +777,6 @@
 
             <plugin>
                 <artifactId>maven-remote-resources-plugin</artifactId>
-                <version>1.2</version>
                 <!-- required while Isis is in the incubator -->
                 <dependencies>
                     <dependency>

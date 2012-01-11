@@ -24,12 +24,14 @@ import java.util.List;
 import java.util.Set;
 import java.util.SortedMap;
 import java.util.SortedSet;
-import java.util.TreeMap;
 import java.util.TreeSet;
 
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.members.order.MemberOrderFacet;
 import org.apache.isis.core.metamodel.layout.OrderSet;
+
+import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 
 /**
  * Represents a nested hierarchy of ordered members.
@@ -64,35 +66,35 @@ import org.apache.isis.core.metamodel.layout.OrderSet;
  * 
  */
 public class DeweyOrderSet extends OrderSet {
-    public static DeweyOrderSet createOrderSet(final List<FacetedMethod> members) {
+    public static DeweyOrderSet createOrderSet(final List<FacetedMethod> facetedMethods) {
 
-        final SortedMap sortedMembersByGroup = new TreeMap();
-        final SortedSet nonAnnotatedGroup = new TreeSet(new MemberIdentifierComparator());
+        final SortedMap<String, SortedSet<FacetedMethod>> sortedMembersByGroup = Maps.newTreeMap();
+        final SortedSet<FacetedMethod> nonAnnotatedGroup = Sets.newTreeSet(new MemberIdentifierComparator());
 
         // spin over all the members and put them into a Map of SortedSets
         // any non-annotated members go into additional nonAnnotatedGroup set.
-        for (final FacetedMethod member : members) {
-            final MemberOrderFacet memberOrder = member.getFacet(MemberOrderFacet.class);
+        for (final FacetedMethod facetedMethod : facetedMethods) {
+            final MemberOrderFacet memberOrder = facetedMethod.getFacet(MemberOrderFacet.class);
             if (memberOrder == null) {
-                nonAnnotatedGroup.add(member);
+                nonAnnotatedGroup.add(facetedMethod);
                 continue;
             }
-            final SortedSet sortedMembersForGroup = getSortedSet(sortedMembersByGroup, memberOrder.name());
-            sortedMembersForGroup.add(member);
+            final SortedSet<FacetedMethod> sortedMembersForGroup = getSortedSet(sortedMembersByGroup, memberOrder.name());
+            sortedMembersForGroup.add(facetedMethod);
         }
 
         // add the non-annotated group to the first "" group.
-        final SortedSet defaultSet = getSortedSet(sortedMembersByGroup, "");
+        final SortedSet<FacetedMethod> defaultSet = getSortedSet(sortedMembersByGroup, "");
         defaultSet.addAll(nonAnnotatedGroup);
 
         // create OrderSets, wiring up parents and children.
 
         // since sortedMembersByGroup is a SortedMap, the
         // iteration will be in alphabetical order (ie parent groups before their children).
-        final Set groupNames = sortedMembersByGroup.keySet();
-        final SortedMap orderSetsByGroup = new TreeMap();
+        final Set<String> groupNames = sortedMembersByGroup.keySet();
+        final SortedMap<String,DeweyOrderSet> orderSetsByGroup = Maps.newTreeMap();
 
-        for (final Iterator iter = groupNames.iterator(); iter.hasNext();) {
+        for (final Iterator<String> iter = groupNames.iterator(); iter.hasNext();) {
             final String groupName = (String) iter.next();
             final DeweyOrderSet deweyOrderSet = new DeweyOrderSet(groupName);
             orderSetsByGroup.put(groupName, deweyOrderSet);
@@ -100,9 +102,9 @@ public class DeweyOrderSet extends OrderSet {
         }
 
         // now populate the OrderSets
-        for (final Iterator iter = groupNames.iterator(); iter.hasNext();) {
-            final String groupName = (String) iter.next();
+        for (final String groupName: groupNames) {
             final DeweyOrderSet deweyOrderSet = (DeweyOrderSet) orderSetsByGroup.get(groupName);
+            // REVIEW: something fishy happens here with casting, hence warnings left in
             final SortedSet sortedMembers = (SortedSet) sortedMembersByGroup.get(groupName);
             deweyOrderSet.addAll(sortedMembers);
             deweyOrderSet.copyOverChildren();
@@ -145,11 +147,11 @@ public class DeweyOrderSet extends OrderSet {
      * @param groupName
      * @return
      */
-    private static SortedSet getSortedSet(final SortedMap sortedMembersByGroup, final String groupName) {
-        SortedSet sortedMembersForGroup;
-        sortedMembersForGroup = (SortedSet) sortedMembersByGroup.get(groupName);
+    private static SortedSet<FacetedMethod> getSortedSet(final SortedMap<String,SortedSet<FacetedMethod>> sortedMembersByGroup, final String groupName) {
+        SortedSet<FacetedMethod> sortedMembersForGroup;
+        sortedMembersForGroup = sortedMembersByGroup.get(groupName);
         if (sortedMembersForGroup == null) {
-            sortedMembersForGroup = new TreeSet(new MemberOrderComparator(true));
+            sortedMembersForGroup = new TreeSet<FacetedMethod>(new MemberOrderComparator(true));
             sortedMembersByGroup.put(groupName, sortedMembersForGroup);
         }
         return sortedMembersForGroup;

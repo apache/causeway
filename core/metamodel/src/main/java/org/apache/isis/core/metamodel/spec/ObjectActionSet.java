@@ -163,6 +163,7 @@ public class ObjectActionSet implements ObjectAction {
     /**
      * Does nothing
      */
+    @SuppressWarnings("unchecked")
     @Override
     public Class<? extends Facet>[] getFacetTypes() {
         return new Class[0];

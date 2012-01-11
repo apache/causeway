@@ -117,7 +117,11 @@
         </menu>
 
         <menu name="Other Resources">
-            <item name="Dan Haywood's blog" href="http://danhaywood.com/" />
+            <item name="Blogs" href="#">
+                <item name="Dan Haywood" href="http://danhaywood.com/" />
+                <item name="Kevin Meyer" href="http://www.kmz.co.za/blog/" />
+                <item name="Rob Matthews" href="http://www.objectconnexions.co.uk/" />
+            </item>
             <item name="Presentation Materials (feel free to reuse)" href="#">
                 <item name="Introducing Apache Isis" href="#">
                     <item name="PPTX (Microsoft)" href="./presentations/IntroducingApacheIsis.pptx" />

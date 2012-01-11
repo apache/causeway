@@ -27,10 +27,10 @@ import java.util.SortedSet;
 import java.util.StringTokenizer;
 import java.util.TreeSet;
 
-import com.google.common.collect.Lists;
-
 import org.apache.isis.core.metamodel.layout.memberorderfacet.DeweyOrderSet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
+
+import com.google.common.collect.Lists;
 
 
 /**
