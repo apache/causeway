@@ -16,20 +16,20 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.json.applib.capabilities;
+package org.apache.isis.viewer.json.applib.version;
 
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.applib.domainobjects.DomainRepresentation;
 import org.codehaus.jackson.JsonNode;
 
-public class CapabilitiesRepresentation extends DomainRepresentation  {
+public class VersionRepresentation extends DomainRepresentation  {
 
-    public CapabilitiesRepresentation(JsonNode jsonNode) {
+    public VersionRepresentation(JsonNode jsonNode) {
         super(jsonNode);
     }
 
-    public JsonRepresentation getCapabilities() {
-        return getMap("capabilities");
+    public JsonRepresentation getVersion() {
+        return getMap("version");
     }
 
 }

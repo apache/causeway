@@ -28,7 +28,7 @@ public class RepresentationTypeTest_getName_lookup {
 
     @Test
     public void selectedValues() {
-        assertThat(RepresentationType.CAPABILITIES.getName(), is("capabilities"));
+        assertThat(RepresentationType.VERSION.getName(), is("version"));
         assertThat(RepresentationType.HOME_PAGE.getName(), is("homePage"));
         assertThat(RepresentationType.ACTION_PARAMETER_DESCRIPTION.getName(), is("actionParameterDescription"));
     }

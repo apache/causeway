@@ -34,11 +34,11 @@ import org.apache.isis.viewer.json.viewer.representations.RendererFactoryRegistr
 import org.apache.isis.viewer.json.viewer.representations.ReprRenderer;
 import org.apache.isis.viewer.json.viewer.representations.ReprRendererAbstract;
 import org.apache.isis.viewer.json.viewer.representations.ReprRendererFactoryAbstract;
-import org.apache.isis.viewer.json.viewer.resources.capabilities.CapabilitiesReprRenderer;
 import org.apache.isis.viewer.json.viewer.resources.domainobjects.DomainServiceLinkTo;
 import org.apache.isis.viewer.json.viewer.resources.domainobjects.ListReprRenderer;
 import org.apache.isis.viewer.json.viewer.resources.domaintypes.TypeListReprRenderer;
 import org.apache.isis.viewer.json.viewer.resources.user.UserReprRenderer;
+import org.apache.isis.viewer.json.viewer.resources.version.VersionReprRenderer;
 
 public class HomePageReprRenderer extends ReprRendererAbstract<HomePageReprRenderer, Void> {
 
@@ -72,7 +72,7 @@ public class HomePageReprRenderer extends ReprRendererAbstract<HomePageReprRende
 
         addLinkToUser();
         addLinkToServices();
-        addLinkToCapabilities();
+        addLinkToVersion();
         addLinkToDomainTypes();
 
         // inks and extensions
@@ -96,14 +96,14 @@ public class HomePageReprRenderer extends ReprRendererAbstract<HomePageReprRende
         getLinks().arrayAdd(link);
     }
 
-    private void addLinkToCapabilities() {
-        final JsonRepresentation link = LinkBuilder.newBuilder(getResourceContext(), Rel.CAPABILITIES, RepresentationType.CAPABILITIES, "capabilities").build();
+    private void addLinkToVersion() {
+        final JsonRepresentation link = LinkBuilder.newBuilder(getResourceContext(), Rel.VERSION, RepresentationType.VERSION, "version").build();
         
-        final LinkFollower linkFollower = getLinkFollower().follow("links[rel=capabilities]");
+        final LinkFollower linkFollower = getLinkFollower().follow("links[rel=version]");
         if(linkFollower.matches(link)) {
 
-            final RendererFactory factory = RendererFactoryRegistry.instance.find(RepresentationType.CAPABILITIES);
-            final CapabilitiesReprRenderer renderer = (CapabilitiesReprRenderer) factory.newRenderer(getResourceContext(), linkFollower, JsonRepresentation.newMap());
+            final RendererFactory factory = RendererFactoryRegistry.instance.find(RepresentationType.VERSION);
+            final VersionReprRenderer renderer = (VersionReprRenderer) factory.newRenderer(getResourceContext(), linkFollower, JsonRepresentation.newMap());
             
             link.mapPut("value", renderer.render());
         }

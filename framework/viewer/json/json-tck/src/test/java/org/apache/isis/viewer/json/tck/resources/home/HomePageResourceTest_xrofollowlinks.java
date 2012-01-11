@@ -64,7 +64,7 @@ public class HomePageResourceTest_xrofollowlinks {
         
         // given
         assertThat(repr.getUser().getValue(), is(nullValue()));
-        assertThat(repr.getCapabilities().getValue(), is(nullValue()));
+        assertThat(repr.getVersion().getValue(), is(nullValue()));
         assertThat(repr.getServices().getValue(), is(nullValue()));
     }
 
@@ -74,7 +74,7 @@ public class HomePageResourceTest_xrofollowlinks {
         repr = whenExecuteAndFollowLinksUsing("/", "links[rel=user],links[rel=services],links[rel=capabilities]");
 
         assertThat(repr.getUser(), is(not(nullValue())));
-        assertThat(repr.getCapabilities(), is(not(nullValue())));
+        assertThat(repr.getVersion(), is(not(nullValue())));
         assertThat(repr.getServices(), is(not(nullValue())));
     }
 

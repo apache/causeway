@@ -25,12 +25,12 @@ import javax.ws.rs.core.Response;
 
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.isis.viewer.json.applib.blocks.LinkRepresentation;
-import org.apache.isis.viewer.json.applib.capabilities.CapabilitiesResource;
 import org.apache.isis.viewer.json.applib.domainobjects.DomainObjectResource;
 import org.apache.isis.viewer.json.applib.domainobjects.DomainServiceResource;
 import org.apache.isis.viewer.json.applib.domaintypes.DomainTypeResource;
 import org.apache.isis.viewer.json.applib.homepage.HomePageResource;
 import org.apache.isis.viewer.json.applib.user.UserResource;
+import org.apache.isis.viewer.json.applib.version.VersionResource;
 import org.jboss.resteasy.client.ClientExecutor;
 import org.jboss.resteasy.client.ClientRequest;
 import org.jboss.resteasy.client.ClientRequestFactory;
@@ -41,7 +41,7 @@ public class RestfulClient {
 
     private final HomePageResource homePageResource;
     private final UserResource userResource;
-    private final CapabilitiesResource capabilitiesResource;
+    private final VersionResource versionResource;
     private final DomainObjectResource domainObjectResource;
     private final DomainServiceResource domainServiceResource;
     private final DomainTypeResource domainTypeResource;
@@ -63,7 +63,7 @@ public class RestfulClient {
         this.domainTypeResource = clientRequestFactory.createProxy(DomainTypeResource.class);
         this.domainServiceResource = clientRequestFactory.createProxy(DomainServiceResource.class);
         this.domainObjectResource = clientRequestFactory.createProxy(DomainObjectResource.class);
-        this.capabilitiesResource = clientRequestFactory.createProxy(CapabilitiesResource.class);
+        this.versionResource = clientRequestFactory.createProxy(VersionResource.class);
     }
 
     
@@ -79,8 +79,8 @@ public class RestfulClient {
         return userResource;
     }
 
-    public CapabilitiesResource getCapabilitiesResource() {
-        return capabilitiesResource;
+    public VersionResource getVersionResource() {
+        return versionResource;
     }
 
     public DomainTypeResource getDomainTypeResource() {

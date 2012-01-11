@@ -33,7 +33,7 @@ public final class RestfulMediaType {
     
     public final static String APPLICATION_JSON_HOME_PAGE = BASE + "homepage";
     public final static String APPLICATION_JSON_USER = BASE + "user";
-    public final static String APPLICATION_JSON_CAPABILITIES = BASE + "capabilities";
+    public final static String APPLICATION_JSON_VERSION = BASE + "version";
     public final static String APPLICATION_JSON_LIST = BASE + "list";
     public final static String APPLICATION_JSON_SCALAR_VALUE = BASE + "scalarvalue";
     public final static String APPLICATION_JSON_DOMAIN_OBJECT = BASE + "domainobject";

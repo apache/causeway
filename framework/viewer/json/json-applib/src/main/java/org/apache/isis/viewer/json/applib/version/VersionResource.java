@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.json.applib.capabilities;
+package org.apache.isis.viewer.json.applib.version;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -27,12 +27,12 @@ import javax.ws.rs.core.Response;
 import org.apache.isis.viewer.json.applib.RestfulMediaType;
 import org.jboss.resteasy.annotations.ClientResponseType;
 
-@Path("/capabilities")
-public interface CapabilitiesResource {
+@Path("/version")
+public interface VersionResource {
 
     @GET
-    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_CAPABILITIES })
+    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_VERSION })
     @ClientResponseType(entityType=String.class)
-    public Response capabilities();
+    public Response version();
 
 }
