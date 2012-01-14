@@ -24,7 +24,7 @@ import static org.junit.Assert.assertThat;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.isis.runtimes.dflt.webserver.WebServer;
-import org.apache.isis.viewer.json.applib.HttpMethod2;
+import org.apache.isis.viewer.json.applib.HttpMethod;
 import org.apache.isis.viewer.json.applib.RepresentationType;
 import org.apache.isis.viewer.json.applib.RestfulClient;
 import org.apache.isis.viewer.json.applib.RestfulRequest;
@@ -53,7 +53,7 @@ public class HomePageResourceTest_accept {
     public void applicationJson() throws Exception {
 
         final RestfulRequest request = 
-                client.createRequest(HttpMethod2.GET, "/").withHeader(RestfulRequest.Header.ACCEPT, MediaType.APPLICATION_JSON_TYPE);
+                client.createRequest(HttpMethod.GET, "/").withHeader(RestfulRequest.Header.ACCEPT, MediaType.APPLICATION_JSON_TYPE);
         final RestfulResponse<HomePageRepresentation> restfulResponse = request.executeT();
 
         assertThat(restfulResponse.getStatus(), is(HttpStatusCode.OK));
@@ -63,7 +63,7 @@ public class HomePageResourceTest_accept {
     public void applicationJson_profileHomePage() throws Exception {
 
         final RestfulRequest request = 
-                client.createRequest(HttpMethod2.GET, "/").withHeader(RestfulRequest.Header.ACCEPT, RepresentationType.HOME_PAGE.getMediaType());
+                client.createRequest(HttpMethod.GET, "/").withHeader(RestfulRequest.Header.ACCEPT, RepresentationType.HOME_PAGE.getMediaType());
         final RestfulResponse<HomePageRepresentation> restfulResponse = request.executeT();
 
         assertThat(restfulResponse.getStatus(), is(HttpStatusCode.OK));
@@ -72,7 +72,7 @@ public class HomePageResourceTest_accept {
     @Test
     public void applicationJson_invalid() throws Exception {
 
-        final RestfulRequest request = client.createRequest(HttpMethod2.GET, "/").withHeader(RestfulRequest.Header.ACCEPT, RepresentationType.USER.getMediaType());
+        final RestfulRequest request = client.createRequest(HttpMethod.GET, "/").withHeader(RestfulRequest.Header.ACCEPT, RepresentationType.USER.getMediaType());
         final RestfulResponse<HomePageRepresentation> restfulResponse = request.executeT();
 
         assertThat(restfulResponse.getStatus(), is(HttpStatusCode.NOT_ACCEPTABLE));

@@ -40,7 +40,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status.Family;
 
 import org.apache.isis.runtimes.dflt.webserver.WebServer;
-import org.apache.isis.viewer.json.applib.HttpMethod2;
+import org.apache.isis.viewer.json.applib.HttpMethod;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.applib.RepresentationType;
 import org.apache.isis.viewer.json.applib.RestfulClient;
@@ -90,7 +90,7 @@ public class VersionResourceTest_representationAndHeaders {
         assertThat(repr, is(not(nullValue())));
         assertThat(repr, isMap());
 
-        assertThat(repr.getSelf(), isLink().httpMethod2(HttpMethod2.GET));
+        assertThat(repr.getSelf(), isLink().httpMethod(HttpMethod.GET));
 
         assertThat(repr.getString("specVersion"), is("0.52"));
         assertThat(repr.getString("implVersion"), is(not(nullValue())));

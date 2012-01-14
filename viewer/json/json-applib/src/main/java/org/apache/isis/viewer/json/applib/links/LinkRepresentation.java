@@ -23,7 +23,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.apache.isis.viewer.json.applib.ClientRequestConfigurer;
-import org.apache.isis.viewer.json.applib.HttpMethod2;
+import org.apache.isis.viewer.json.applib.HttpMethod;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.applib.RestfulRequest;
 import org.apache.isis.viewer.json.applib.RestfulResponse;
@@ -37,7 +37,7 @@ public final class LinkRepresentation extends JsonRepresentation {
     
     public LinkRepresentation() {
         this(new ObjectNode(JsonNodeFactory.instance));
-        withMethod(HttpMethod2.GET);
+        withMethod(HttpMethod.GET);
     }
 
     public LinkRepresentation(JsonNode jsonNode) {
@@ -65,9 +65,9 @@ public final class LinkRepresentation extends JsonRepresentation {
         return getRepresentation("value");
     }
 
-    public HttpMethod2 getHttpMethod() {
+    public HttpMethod getHttpMethod() {
         String methodStr = asObjectNode().path("method").getTextValue();
-        return HttpMethod2.valueOf(methodStr);
+        return HttpMethod.valueOf(methodStr);
     }
 
     public MediaType getType() {
@@ -77,8 +77,8 @@ public final class LinkRepresentation extends JsonRepresentation {
     }
 
 
-    public LinkRepresentation withMethod(HttpMethod2 httpMethod2) {
-        asObjectNode().put("method", httpMethod2.name());
+    public LinkRepresentation withMethod(HttpMethod httpMethod) {
+        asObjectNode().put("method", httpMethod.name());
         return this;
     }
 

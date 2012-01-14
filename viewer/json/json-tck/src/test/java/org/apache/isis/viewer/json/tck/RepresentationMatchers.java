@@ -24,7 +24,7 @@ import javax.ws.rs.core.Response;
 
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.applib.JsonRepresentation.LinksToSelf;
-import org.apache.isis.viewer.json.applib.HttpMethod2;
+import org.apache.isis.viewer.json.applib.HttpMethod;
 import org.apache.isis.viewer.json.applib.RestfulClient;
 import org.apache.isis.viewer.json.applib.RestfulResponse;
 import org.apache.isis.viewer.json.applib.RestfulResponse.HttpStatusCode;
@@ -85,17 +85,17 @@ public class RepresentationMatchers {
         };
     }
 
-    public static Matcher<LinkRepresentation> isLink(final HttpMethod2 httpMethod2) {
+    public static Matcher<LinkRepresentation> isLink(final HttpMethod httpMethod) {
         return new TypeSafeMatcher<LinkRepresentation>() {
 
             @Override
             public void describeTo(Description description) {
-                description.appendText("link with method " + httpMethod2.name());
+                description.appendText("link with method " + httpMethod.name());
             }
 
             @Override
             public boolean matchesSafely(LinkRepresentation item) {
-                return item != null && item.getHttpMethod() == httpMethod2;
+                return item != null && item.getHttpMethod() == httpMethod;
             }
         };
     }
@@ -156,7 +156,7 @@ public class RepresentationMatchers {
 
     public static class LinkMatcherBuilder extends AbstractMatcherBuilder<JsonRepresentation> {
         private HttpStatusCode statusCode;
-        private HttpMethod2 httpMethod2;
+        private HttpMethod httpMethod;
         private String rel;
         private String href;
         private Matcher<String> hrefMatcher;
@@ -190,8 +190,8 @@ public class RepresentationMatchers {
             return this;
         }
 
-        public LinkMatcherBuilder httpMethod2(HttpMethod2 httpMethod2) {
-            this.httpMethod2 = httpMethod2;
+        public LinkMatcherBuilder httpMethod(HttpMethod httpMethod) {
+            this.httpMethod = httpMethod;
             return this;
         }
 
@@ -244,8 +244,8 @@ public class RepresentationMatchers {
                         description.appendText(" with href ");
                         hrefMatcher.describeTo(description);
                     }
-                    if(httpMethod2 != null) {
-                        description.appendText(" with method '").appendValue(httpMethod2).appendText("'");
+                    if(httpMethod != null) {
+                        description.appendText(" with method '").appendValue(httpMethod).appendText("'");
                     }
                     if(mediaType != null) {
                         description.appendText(" with type '").appendValue(mediaType).appendText("'");
@@ -291,7 +291,7 @@ public class RepresentationMatchers {
                     if(hrefMatcher != null && !hrefMatcher.matches(link.getHref())) {
                         return false;
                     }
-                    if(httpMethod2 != null && !httpMethod2.equals(link.getHttpMethod())) {
+                    if(httpMethod != null && !httpMethod.equals(link.getHttpMethod())) {
                         return false;
                     }
                     if(mediaType != null && !mediaType.isCompatible(mediaType)) {

@@ -170,7 +170,7 @@ public abstract class AbstractObjectMemberReprRenderer<R extends ReprRendererAbs
         RepresentationType representationType = memberType.getRepresentationType();
         JsonRepresentation mutatorLink = 
                 linkToForMutatorInvoke().memberBuilder(mutatorSpec.rel, memberType, objectMember, representationType, mutatorSpec.suffix)
-                .withHttpMethod(mutatorSpec.httpMethod2)
+                .withHttpMethod(mutatorSpec.httpMethod)
                 .withArguments(arguments)
                 .build();
         getLinks().arrayAdd(mutatorLink);

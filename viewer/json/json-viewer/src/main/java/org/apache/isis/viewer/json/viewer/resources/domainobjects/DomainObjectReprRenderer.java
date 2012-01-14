@@ -30,7 +30,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectActionContainer.Contrib
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.isis.viewer.json.applib.HttpMethod2;
+import org.apache.isis.viewer.json.applib.HttpMethod;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.applib.RepresentationType;
 import org.apache.isis.viewer.json.applib.links.Rel;
@@ -267,7 +267,7 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
         final JsonRepresentation domainObjectRepr = renderer.with(objectAdapter).asPersistLinkArguments().render();
         
         final LinkBuilder persistLinkBuilder = LinkBuilder.newBuilder(getResourceContext(), Rel.PERSIST, RepresentationType.DOMAIN_OBJECT, "objects/")
-                .withHttpMethod(HttpMethod2.POST)
+                .withHttpMethod(HttpMethod.POST)
                 .withArguments(domainObjectRepr);
         getLinks().arrayAdd(persistLinkBuilder.build());
     }
@@ -294,7 +294,7 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
         final JsonRepresentation domainObjectRepr = renderer.with(objectAdapter).asModifyPropertiesLinkArguments().render();
 
         final LinkBuilder persistLinkBuilder = LinkBuilder.newBuilder(getResourceContext(), Rel.MODIFY, RepresentationType.DOMAIN_OBJECT, "objects/%s", getOidStr())
-                .withHttpMethod(HttpMethod2.PUT)
+                .withHttpMethod(HttpMethod.PUT)
                 .withArguments(domainObjectRepr);
         getLinks().arrayAdd(persistLinkBuilder.build());
     }

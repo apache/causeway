@@ -117,7 +117,7 @@ public class RestfulClient {
         return link.<T>follow(executor, requestArgs);
     }
 
-    public RestfulRequest createRequest(HttpMethod2 httpMethod2, String uriTemplate) {
+    public RestfulRequest createRequest(HttpMethod httpMethod, String uriTemplate) {
         
         boolean includesScheme = uriTemplate.startsWith("http:") || uriTemplate.startsWith("https:");
         final String base = clientRequestFactory.getBase().toString();
@@ -126,7 +126,7 @@ public class RestfulClient {
         final ClientRequestConfigurer clientRequestConfigurer = ClientRequestConfigurer.create(executor, uri);
 
         clientRequestConfigurer.accept(MediaType.APPLICATION_JSON_TYPE);
-        clientRequestConfigurer.setHttpMethod(httpMethod2);
+        clientRequestConfigurer.setHttpMethod(httpMethod);
         
         return new RestfulRequest(clientRequestConfigurer);
     }
