@@ -28,8 +28,8 @@ public class VersionRepresentation extends DomainRepresentation  {
         super(jsonNode);
     }
 
-    public JsonRepresentation getVersion() {
-        return getMap("version");
+    public JsonRepresentation getOptionalCapabilities() {
+        return getMap("optionalCapabilities");
     }
 
 }

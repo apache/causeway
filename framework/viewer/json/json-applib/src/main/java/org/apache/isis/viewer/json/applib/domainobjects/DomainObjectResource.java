@@ -135,8 +135,7 @@ public interface DomainObjectResource {
     @ClientResponseType(entityType=String.class)
     public Response removeFromCollection(
         @PathParam("oid") final String oidStr,
-        @PathParam("collectionId") final String collectionId,
-        @QueryParam("args") final String arguments);
+        @PathParam("collectionId") final String collectionId);
 
     
     ////////////////////////////////////////////////////////////
@@ -161,8 +160,7 @@ public interface DomainObjectResource {
     @ClientResponseType(entityType=String.class)
     public Response invokeActionQueryOnly(
         @PathParam("oid") final String oidStr, 
-        @PathParam("actionId") final String actionId,
-        @QueryParam("args") final String arguments);
+        @PathParam("actionId") final String actionId);
 
     @PUT
     @Path("/{oid}/actions/{actionId}/invoke")

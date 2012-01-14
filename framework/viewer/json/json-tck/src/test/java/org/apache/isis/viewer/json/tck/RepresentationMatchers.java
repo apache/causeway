@@ -24,12 +24,12 @@ import javax.ws.rs.core.Response;
 
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.applib.JsonRepresentation.LinksToSelf;
-import org.apache.isis.viewer.json.applib.Rel;
+import org.apache.isis.viewer.json.applib.HttpMethod2;
 import org.apache.isis.viewer.json.applib.RestfulClient;
 import org.apache.isis.viewer.json.applib.RestfulResponse;
 import org.apache.isis.viewer.json.applib.RestfulResponse.HttpStatusCode;
-import org.apache.isis.viewer.json.applib.blocks.LinkRepresentation;
-import org.apache.isis.viewer.json.applib.blocks.Method;
+import org.apache.isis.viewer.json.applib.links.LinkRepresentation;
+import org.apache.isis.viewer.json.applib.links.Rel;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
@@ -85,17 +85,17 @@ public class RepresentationMatchers {
         };
     }
 
-    public static Matcher<LinkRepresentation> isLink(final Method method) {
+    public static Matcher<LinkRepresentation> isLink(final HttpMethod2 httpMethod2) {
         return new TypeSafeMatcher<LinkRepresentation>() {
 
             @Override
             public void describeTo(Description description) {
-                description.appendText("link with method " + method.name());
+                description.appendText("link with method " + httpMethod2.name());
             }
 
             @Override
             public boolean matchesSafely(LinkRepresentation item) {
-                return item != null && item.getMethod() == method;
+                return item != null && item.getHttpMethod() == httpMethod2;
             }
         };
     }
@@ -112,10 +112,8 @@ public class RepresentationMatchers {
             public boolean matchesSafely(T item) {
                 LinksToSelf initialRepr = (LinksToSelf) item; // no easy way to do this with Hamcrest
                 // when
-                Response servicesResp;
                 try {
-                    servicesResp = client.follow(initialRepr.getSelf());
-                    RestfulResponse<T> followedResp = RestfulResponse.ofT(servicesResp);
+                    final RestfulResponse<T> followedResp = client.followT(initialRepr.getSelf());
                     
                     // then
                     T repr2 = followedResp.getEntity();
@@ -158,7 +156,7 @@ public class RepresentationMatchers {
 
     public static class LinkMatcherBuilder extends AbstractMatcherBuilder<JsonRepresentation> {
         private HttpStatusCode statusCode;
-        private Method method;
+        private HttpMethod2 httpMethod2;
         private String rel;
         private String href;
         private Matcher<String> hrefMatcher;
@@ -192,8 +190,8 @@ public class RepresentationMatchers {
             return this;
         }
 
-        public LinkMatcherBuilder method(Method method) {
-            this.method = method;
+        public LinkMatcherBuilder httpMethod2(HttpMethod2 httpMethod2) {
+            this.httpMethod2 = httpMethod2;
             return this;
         }
 
@@ -246,8 +244,8 @@ public class RepresentationMatchers {
                         description.appendText(" with href ");
                         hrefMatcher.describeTo(description);
                     }
-                    if(method != null) {
-                        description.appendText(" with method '").appendValue(method).appendText("'");
+                    if(httpMethod2 != null) {
+                        description.appendText(" with method '").appendValue(httpMethod2).appendText("'");
                     }
                     if(mediaType != null) {
                         description.appendText(" with type '").appendValue(mediaType).appendText("'");
@@ -293,7 +291,7 @@ public class RepresentationMatchers {
                     if(hrefMatcher != null && !hrefMatcher.matches(link.getHref())) {
                         return false;
                     }
-                    if(method != null && !method.equals(link.getMethod())) {
+                    if(httpMethod2 != null && !httpMethod2.equals(link.getHttpMethod())) {
                         return false;
                     }
                     if(mediaType != null && !mediaType.isCompatible(mediaType)) {
@@ -314,13 +312,13 @@ public class RepresentationMatchers {
                     }
 
                     // follow link if criteria require it
-                    Response linkedResp = null;
+                    RestfulResponse<JsonRepresentation> jsonResp = null;
                     if(statusCode != null) {
                         if(client == null) {
                             return false;
                         }
                         try {
-                            linkedResp = client.follow(link);
+                            jsonResp = client.followT(link);
                         } catch (Exception e) {
                             throw new RuntimeException(e);
                         }
@@ -328,7 +326,6 @@ public class RepresentationMatchers {
 
                     // assertions based on provided criteria
                     if(statusCode != null) {
-                        RestfulResponse<JsonRepresentation> jsonResp = RestfulResponse.of(linkedResp);
                         if(jsonResp.getStatus() != statusCode) {
                             return false;
                         }

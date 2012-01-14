@@ -18,7 +18,6 @@
  */
 package org.apache.isis.viewer.json.viewer.resources.version;
 
-import java.io.IOException;
 import java.nio.charset.Charset;
 
 import org.apache.isis.viewer.json.applib.JsonRepresentation;

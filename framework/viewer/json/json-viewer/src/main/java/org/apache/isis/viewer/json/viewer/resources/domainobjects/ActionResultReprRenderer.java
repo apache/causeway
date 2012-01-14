@@ -17,7 +17,6 @@
 package org.apache.isis.viewer.json.viewer.resources.domainobjects;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.Map;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -25,12 +24,10 @@ import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
-import org.apache.isis.runtimes.dflt.runtime.system.transaction.UpdateNotifier;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
-import org.apache.isis.viewer.json.applib.Rel;
 import org.apache.isis.viewer.json.applib.RepresentationType;
 import org.apache.isis.viewer.json.applib.domainobjects.ActionResultRepresentation.ResultType;
+import org.apache.isis.viewer.json.applib.links.Rel;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
 import org.apache.isis.viewer.json.viewer.representations.LinkBuilder;
 import org.apache.isis.viewer.json.viewer.representations.LinkFollower;
@@ -173,7 +170,7 @@ public class ActionResultReprRenderer extends ReprRendererAbstract<ActionResultR
         final ActionSemantics semantics = ActionSemantics.determine(getResourceContext(), action);
         final String mutator = semantics.getInvokeKey();
         final MutatorSpec mutatorSpec = mutators.get(mutator);
-        selfLinkBuilder.withHttpMethod(mutatorSpec.httpMethod);
+        selfLinkBuilder.withHttpMethod(mutatorSpec.httpMethod2);
         
         final JsonRepresentation selfLink = selfLinkBuilder.build();
 

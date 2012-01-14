@@ -16,13 +16,14 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.json.applib;
+package org.apache.isis.viewer.json.applib.util;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
 import java.util.Map;
 
+import org.apache.isis.viewer.json.applib.util.PathNode;
 import org.junit.Test;
 
 public class PathNodeTest_parse {

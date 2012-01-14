@@ -139,20 +139,15 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ACTION_RESULT, RestfulMediaType.APPLICATION_JSON_ERROR })
     public Response invokeActionQueryOnly(
             @PathParam("serviceId") final String serviceId, 
-            @PathParam("actionId") final String actionId,
-            @QueryParam("args") final String arguments) {
+            @PathParam("actionId") final String actionId) {
         init(RepresentationType.ACTION_RESULT);
-
+        
+        final JsonRepresentation arguments = getResourceContext().getQueryStringAsJsonRepr();
+        
         final ObjectAdapter serviceAdapter = getServiceAdapter(serviceId);
         final DomainResourceHelper helper = new DomainResourceHelper(getResourceContext(), serviceAdapter).using(new DomainServiceLinkTo());
 
-        @SuppressWarnings("unchecked")
-        final Map<String,String[]> parameterMap = getResourceContext().getHttpServletRequest().getParameterMap();
-        if(parameterMap.containsKey("args")) {
-            return helper.invokeActionQueryOnly(actionId, arguments);
-        } else {
-            return helper.invokeActionQueryOnly(actionId, parameterMap);
-        }
+        return helper.invokeActionQueryOnly(actionId, arguments);
     }
 
     @PUT

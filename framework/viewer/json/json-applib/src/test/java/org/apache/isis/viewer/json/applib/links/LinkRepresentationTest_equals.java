@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.json.applib.blocks;
+package org.apache.isis.viewer.json.applib.links;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
@@ -25,16 +25,18 @@ import static org.junit.Assert.assertThat;
 
 import java.io.UnsupportedEncodingException;
 
+import org.apache.isis.viewer.json.applib.HttpMethod2;
+import org.apache.isis.viewer.json.applib.links.LinkRepresentation;
 import org.junit.Test;
 
 public class LinkRepresentationTest_equals {
 
     @Test
     public void equalDependsOnMethodAndHref() throws UnsupportedEncodingException {
-        LinkRepresentation link = new LinkRepresentation().withHref("http://localhost:8080/objects/ABC:123").withMethod(Method.GET);
-        LinkRepresentation link2 = new LinkRepresentation().withHref("http://localhost:8080/objects/ABC:123").withMethod(Method.GET);
-        LinkRepresentation link3 = new LinkRepresentation().withHref("http://localhost:8080/objects/ABC:123").withMethod(Method.PUT);
-        LinkRepresentation link4 = new LinkRepresentation().withHref("http://localhost:8080/objects/ABC:456").withMethod(Method.GET);
+        LinkRepresentation link = new LinkRepresentation().withHref("http://localhost:8080/objects/ABC:123").withMethod(HttpMethod2.GET);
+        LinkRepresentation link2 = new LinkRepresentation().withHref("http://localhost:8080/objects/ABC:123").withMethod(HttpMethod2.GET);
+        LinkRepresentation link3 = new LinkRepresentation().withHref("http://localhost:8080/objects/ABC:123").withMethod(HttpMethod2.PUT);
+        LinkRepresentation link4 = new LinkRepresentation().withHref("http://localhost:8080/objects/ABC:456").withMethod(HttpMethod2.GET);
         
         assertThat(link, is(equalTo(link2)));
         assertThat(link, is(not(equalTo(link3))));
@@ -43,8 +45,8 @@ public class LinkRepresentationTest_equals {
 
     @Test
     public void equalDoesNotDependsOnMethodAndHref() throws UnsupportedEncodingException {
-        LinkRepresentation link = new LinkRepresentation().withHref("http://localhost:8080/objects/ABC:123").withMethod(Method.GET).withRel("something");
-        LinkRepresentation link2 = new LinkRepresentation().withHref("http://localhost:8080/objects/ABC:123").withMethod(Method.GET).withRel("else");
+        LinkRepresentation link = new LinkRepresentation().withHref("http://localhost:8080/objects/ABC:123").withMethod(HttpMethod2.GET).withRel("something");
+        LinkRepresentation link2 = new LinkRepresentation().withHref("http://localhost:8080/objects/ABC:123").withMethod(HttpMethod2.GET).withRel("else");
         
         assertThat(link, is(equalTo(link2)));
     }

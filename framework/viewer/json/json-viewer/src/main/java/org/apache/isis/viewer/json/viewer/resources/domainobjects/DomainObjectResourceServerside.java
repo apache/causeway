@@ -31,7 +31,6 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.apache.isis.core.commons.exceptions.NotYetImplementedException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -42,8 +41,8 @@ import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.applib.RepresentationType;
 import org.apache.isis.viewer.json.applib.RestfulMediaType;
 import org.apache.isis.viewer.json.applib.RestfulResponse.HttpStatusCode;
-import org.apache.isis.viewer.json.applib.blocks.LinkRepresentation;
 import org.apache.isis.viewer.json.applib.domainobjects.DomainObjectResource;
+import org.apache.isis.viewer.json.applib.links.LinkRepresentation;
 import org.apache.isis.viewer.json.viewer.JsonApplicationException;
 import org.apache.isis.viewer.json.viewer.resources.ResourceAbstract;
 import org.apache.isis.viewer.json.viewer.resources.domainobjects.DomainResourceHelper.Intent;
@@ -355,10 +354,10 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ERROR })
     public Response removeFromCollection(
         @PathParam("oid") final String oidStr,
-        @PathParam("collectionId") final String collectionId,
-        @QueryParam("args") final String arguments) {
+        @PathParam("collectionId") final String collectionId) {
 
         init();
+        
         
         final ObjectAdapter objectAdapter = getObjectAdapter(oidStr);
         final DomainResourceHelper helper = new DomainResourceHelper(getResourceContext(), objectAdapter);
@@ -367,7 +366,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements
                 collectionId, Intent.MUTATE);
 
         ObjectSpecification collectionSpec = collection.getSpecification();
-        ObjectAdapter argAdapter = helper.parseAsMapWithSingleValue(collectionSpec, arguments);
+        ObjectAdapter argAdapter = helper.parseAsMapWithSingleValue(collectionSpec, getResourceContext().getQueryString());
 
         Consent consent = collection.isValidToRemove(objectAdapter, argAdapter);
         if (consent.isVetoed()) {
@@ -410,20 +409,15 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ACTION_RESULT, RestfulMediaType.APPLICATION_JSON_ERROR })
     public Response invokeActionQueryOnly(
             @PathParam("oid") final String oidStr,
-            @PathParam("actionId") final String actionId,
-            @QueryParam("args") final String arguments) {
+            @PathParam("actionId") final String actionId) {
         init(RepresentationType.ACTION_RESULT);
+        
+        final JsonRepresentation arguments = getResourceContext().getQueryStringAsJsonRepr();
 
         final ObjectAdapter objectAdapter = getObjectAdapter(oidStr);
         final DomainResourceHelper helper = new DomainResourceHelper(getResourceContext(), objectAdapter);
         
-        @SuppressWarnings("unchecked")
-        final Map<String,String[]> parameterMap = getResourceContext().getHttpServletRequest().getParameterMap();
-        if(parameterMap.containsKey("args")) {
-            return helper.invokeActionQueryOnly(actionId, arguments);
-        } else {
-            return helper.invokeActionQueryOnly(actionId, parameterMap);
-        }
+        return helper.invokeActionQueryOnly(actionId, arguments);
     }
 
     @PUT

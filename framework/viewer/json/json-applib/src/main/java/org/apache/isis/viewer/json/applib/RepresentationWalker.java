@@ -24,7 +24,7 @@ import java.util.List;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status.Family;
 
-import org.apache.isis.viewer.json.applib.blocks.LinkRepresentation;
+import org.apache.isis.viewer.json.applib.links.LinkRepresentation;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 
@@ -108,7 +108,7 @@ public class RepresentationWalker {
             return;
         }
         
-        Response response;
+        final RestfulResponse<JsonRepresentation> response;
         try {
             if(invokeBody != null) {
                 response = restfulClient.follow(link, invokeBody);
@@ -120,58 +120,8 @@ public class RepresentationWalker {
             return;
         }
         
-        addStep(path, link, null, RestfulResponse.of(response), null, null);
+        addStep(path, link, null, response, null, null);
     }
-
-//    public void walkXpath(String path, JsonRepresentation invokeBody) {
-//        JsonRepresentation entity = getEntityElseMarkStepInError();
-//        if(entity == null) {
-//            return;
-//        }
-//        
-//        Link link = null;
-//        try {
-//            JsonRepresentation matching = entity.xpath(path);
-//            if (matching == null) {
-//                addStep(path, null, null, null, "no such link '" + path + "'", null);
-//                return;
-//            }
-//
-//            link = matching.mapValueAsLink();
-//            if(link.getHref() == null) {
-//                addStep(path, link, null, null, "key does not identify a link '" + path + "'", null);
-//                return;
-//            }
-//
-//            Response response;
-//            if(invokeBody != null) {
-//                response = restfulClient.follow(link, invokeBody);
-//            } else {
-//                response = restfulClient.follow(link);
-//            }
-//            addStep(path, link, null, RestfulResponse.of(response), null, null);
-//            
-//        } catch (RuntimeException e) {
-//            // if xpath fails
-//            addStep(path, null, null, null, "exception: " + e.getMessage(), e);
-//            return;
-//        } catch (Exception e) {
-//            // if follow fails
-//            addStep(path, link, null, null, "failed to follow link: " + e.getMessage(), e);
-//            return;
-//        }
-//    }
-//
-//    private JsonRepresentation getEntityElseMarkStepInError() {
-//        try {
-//            return getEntity();
-//        } catch (Exception e) {
-//            Step previousStep = currentStep();
-//            previousStep.error = "exception: " + e.getMessage();
-//            previousStep.exception = e;
-//            return null;
-//        }
-//    }
 
     /**
      * The entity returned from the previous walk.

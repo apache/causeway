@@ -88,8 +88,7 @@ public interface DomainServiceResource {
     @ClientResponseType(entityType=String.class)
     public Response invokeActionQueryOnly(
         @PathParam("serviceId") final String serviceId, 
-        @PathParam("actionId") final String actionId,
-        @QueryParam("args") final String arguments);
+        @PathParam("actionId") final String actionId);
 
     @PUT
     @Path("/{serviceId}/actions/{actionId}/invoke")

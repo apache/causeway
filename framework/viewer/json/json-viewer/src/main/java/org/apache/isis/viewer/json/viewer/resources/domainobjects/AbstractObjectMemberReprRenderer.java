@@ -22,8 +22,8 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
-import org.apache.isis.viewer.json.applib.Rel;
 import org.apache.isis.viewer.json.applib.RepresentationType;
+import org.apache.isis.viewer.json.applib.links.Rel;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
 import org.apache.isis.viewer.json.viewer.representations.LinkFollower;
 import org.apache.isis.viewer.json.viewer.representations.ReprRendererAbstract;
@@ -170,7 +170,7 @@ public abstract class AbstractObjectMemberReprRenderer<R extends ReprRendererAbs
         RepresentationType representationType = memberType.getRepresentationType();
         JsonRepresentation mutatorLink = 
                 linkToForMutatorInvoke().memberBuilder(mutatorSpec.rel, memberType, objectMember, representationType, mutatorSpec.suffix)
-                .withHttpMethod(mutatorSpec.httpMethod)
+                .withHttpMethod(mutatorSpec.httpMethod2)
                 .withArguments(arguments)
                 .build();
         getLinks().arrayAdd(mutatorLink);

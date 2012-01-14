@@ -28,12 +28,12 @@ import org.codehaus.jackson.map.JsonMappingException;
 import com.google.common.base.Charsets;
 import com.google.common.io.Resources;
 
-class JsonUtils {
+class JsonFixture {
     
-    private JsonUtils(){}
+    private JsonFixture(){}
 
     public static JsonNode readJson(String resourceName) throws JsonParseException, JsonMappingException, IOException {
-        return JsonMapper.instance().read(Resources.toString(Resources.getResource(JsonUtils.class, resourceName), Charsets.UTF_8), JsonNode.class);
+        return JsonMapper.instance().read(Resources.toString(Resources.getResource(JsonFixture.class, resourceName), Charsets.UTF_8), JsonNode.class);
     }
 
 }

@@ -24,7 +24,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
-import org.apache.isis.viewer.json.applib.PathNode;
+import org.apache.isis.viewer.json.applib.util.PathNode;
 
 
 

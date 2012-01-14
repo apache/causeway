@@ -18,8 +18,6 @@
  */
 package org.apache.isis.viewer.json.applib;
 
-import static org.apache.isis.viewer.json.applib.util.UrlEncodingUtils.*;
-
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -28,7 +26,8 @@ import java.util.Map;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.jboss.resteasy.client.ClientRequest;
+import org.apache.isis.viewer.json.applib.util.Parser;
+import org.jboss.resteasy.client.core.BaseClientResponse;
 
 import com.google.common.collect.Maps;
 
@@ -54,7 +53,7 @@ public final class RestfulRequest {
                 }
             };
         }
-        
+
         @Override
         public String toString() {
             return name().toLowerCase();
@@ -87,22 +86,20 @@ public final class RestfulRequest {
         public Parser<Q> getParser() {
             return parser;
         }
-
-        public Q valueOf(Map<?, ?> parameterMap) {
-            if(parameterMap == null) {
+        
+        public Q valueOf(JsonRepresentation parameterRepresentation) {
+            if(parameterRepresentation == null) {
                 return defaultValue;
             }
-            @SuppressWarnings("unchecked")
-            Map<String, String[]> parameters = (Map<String, String[]>) parameterMap; 
-            final String[] values = parameters.get(getName());
-            if(values == null) {
+            if(!parameterRepresentation.isMap()) {
                 return defaultValue;
-            }
-            // special case processing
-            if(values.length == 1) {
-                return getParser().valueOf(urlDecode(values[0]));
-            }
-            return getParser().valueOf(urlDecode(values));
+            } 
+            final Q parsedValue = getParser().valueOf(parameterRepresentation.getRepresentation(getName()));
+            return parsedValue != null? parsedValue: defaultValue;
+        }
+        
+        public Q getDefault() {
+            return defaultValue;
         }
         
         @Override
@@ -117,7 +114,10 @@ public final class RestfulRequest {
             
         private final String name;
         private final Parser<X> parser;
-        private Header(String name, Parser<X> parser) {
+        /**
+         * public visibility for testing purposes only.
+         */
+        public Header(String name, Parser<X> parser) {
             this.name = name;
             this.parser = parser;
         }
@@ -130,8 +130,8 @@ public final class RestfulRequest {
             return parser;
         }
         
-        void setHeader(ClientRequest clientRequest, X t) {
-            clientRequest.header(getName(), parser.asString(t));
+        void setHeader(ClientRequestConfigurer clientRequestConfigurer, X t) {
+            clientRequestConfigurer.header(getName(), parser.asString(t));
         }
         
         @Override
@@ -140,30 +140,21 @@ public final class RestfulRequest {
         }
     }
 
-    private final ClientRequest clientRequest;
-    private final HttpMethod httpMethod;
+    private final ClientRequestConfigurer clientRequestConfigurer;
     private final Map<RequestParameter<?>, Object> args = Maps.newLinkedHashMap();
     
-    public RestfulRequest(ClientRequest clientRequest, HttpMethod httpMethod) {
-        this.clientRequest = clientRequest;
-        this.httpMethod = httpMethod;
+    public RestfulRequest(ClientRequestConfigurer clientRequestConfigurer) {
+        this.clientRequestConfigurer = clientRequestConfigurer;
     }
 
-
-    /**
-     * Exposed primarily for testing.
-     */
-    public ClientRequest getClientRequest() {
-        return clientRequest;
-    }
 
     public <T> RestfulRequest withHeader(Header<T> header, T t) {
-        header.setHeader(clientRequest, t);
+        header.setHeader(clientRequestConfigurer, t);
         return this;
     }
 
     public <T> RestfulRequest withHeader(Header<List<T>> header, T... ts) {
-        header.setHeader(clientRequest, Arrays.asList(ts));
+        header.setHeader(clientRequestConfigurer, Arrays.asList(ts));
         return this;
     }
 
@@ -180,38 +171,20 @@ public final class RestfulRequest {
 
     public RestfulResponse<JsonRepresentation> execute() {
         try {
-            switch (httpMethod) {
-            case GET:
-            case DELETE:
-                setQueryArgs();
-                break;
-            case POST:
-            case PUT:
-                setBody();
-                break;
+            if(!args.isEmpty()) {
+                clientRequestConfigurer.configureArgs(args);
             }
+            Response response = clientRequestConfigurer.getClientRequest().execute();
+            
+            // this is a bit hacky
+            @SuppressWarnings("unchecked")
+            BaseClientResponse<String> restEasyResponse = (BaseClientResponse<String>)response;
+            restEasyResponse.setReturnType(String.class);
 
-            Response executeJaxrs = clientRequest.execute();
-            return RestfulResponse.ofT(executeJaxrs);
+            return RestfulResponse.ofT(response);
         } catch (Exception ex) {
             throw new RuntimeException(ex);
         }
-    }
-
-
-    @SuppressWarnings({"unchecked", "rawtypes"})
-    private void setQueryArgs() {
-        for (RequestParameter requestParam : args.keySet()) {
-            clientRequest.queryParameter(requestParam.getName(), requestParam.parser.asString(args.get(requestParam)));
-        }
-    }
-
-    private void setBody() {
-        final JsonRepresentation bodyArgs = JsonRepresentation.newMap();
-        for (RequestParameter<?> requestParam : args.keySet()) {
-            bodyArgs.mapPut(requestParam.getName(), args.get(requestParam));
-        }
-        clientRequest.body(MediaType.APPLICATION_JSON, bodyArgs.toString());
     }
 
 
@@ -219,6 +192,14 @@ public final class RestfulRequest {
     public <T extends JsonRepresentation> RestfulResponse<T> executeT() {
         final RestfulResponse<JsonRepresentation> restfulResponse = execute();
         return (RestfulResponse<T>) restfulResponse;
+    }
+
+
+    /**
+     * For testing only.
+     */
+    ClientRequestConfigurer getClientRequestConfigurer() {
+        return clientRequestConfigurer;
     }
 
 

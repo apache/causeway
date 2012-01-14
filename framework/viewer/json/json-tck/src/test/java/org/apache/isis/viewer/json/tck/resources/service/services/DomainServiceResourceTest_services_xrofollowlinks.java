@@ -28,7 +28,7 @@ import static org.hamcrest.Matchers.greaterThan;
 import static org.junit.Assert.assertThat;
 
 import org.apache.isis.runtimes.dflt.webserver.WebServer;
-import org.apache.isis.viewer.json.applib.HttpMethod;
+import org.apache.isis.viewer.json.applib.HttpMethod2;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.applib.RestfulClient;
 import org.apache.isis.viewer.json.applib.RestfulRequest;
@@ -61,7 +61,7 @@ public class DomainServiceResourceTest_services_xrofollowlinks {
         RestfulResponse<ListRepresentation> restfulResponse;
         ListRepresentation repr;
         
-        request = client.createRequest(HttpMethod.GET, "services");
+        request = client.createRequest(HttpMethod2.GET, "services");
         restfulResponse = request.executeT();
         repr = restfulResponse.getEntity();
         
@@ -69,7 +69,7 @@ public class DomainServiceResourceTest_services_xrofollowlinks {
         assertThat(repr.getValues().size(), is(greaterThan(0)));
         assertThat(repr.getValues().arrayGet(0), isLink().novalue());
 
-        request = client.createRequest(HttpMethod.GET, "services").withArg(RequestParameter.FOLLOW_LINKS, "values");
+        request = client.createRequest(HttpMethod2.GET, "services").withArg(RequestParameter.FOLLOW_LINKS, "values");
         restfulResponse = request.executeT();
         repr = restfulResponse.getEntity();
 

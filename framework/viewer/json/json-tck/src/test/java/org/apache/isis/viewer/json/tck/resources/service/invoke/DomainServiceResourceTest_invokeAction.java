@@ -24,25 +24,23 @@ import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
 import java.io.IOException;
-import java.math.BigDecimal;
-import java.math.BigInteger;
 
 import javax.ws.rs.core.Response;
 
 import org.apache.isis.runtimes.dflt.webserver.WebServer;
-import org.apache.isis.viewer.json.applib.HttpMethod;
+import org.apache.isis.viewer.json.applib.HttpMethod2;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.applib.RestfulClient;
 import org.apache.isis.viewer.json.applib.RestfulRequest;
 import org.apache.isis.viewer.json.applib.RestfulRequest.RequestParameter;
 import org.apache.isis.viewer.json.applib.RestfulResponse;
 import org.apache.isis.viewer.json.applib.RestfulResponse.HttpStatusCode;
-import org.apache.isis.viewer.json.applib.blocks.LinkRepresentation;
 import org.apache.isis.viewer.json.applib.domainobjects.DomainObjectRepresentation;
 import org.apache.isis.viewer.json.applib.domainobjects.DomainServiceResource;
 import org.apache.isis.viewer.json.applib.domainobjects.ListRepresentation;
 import org.apache.isis.viewer.json.applib.domainobjects.ObjectActionRepresentation;
 import org.apache.isis.viewer.json.applib.domainobjects.ScalarValueRepresentation;
+import org.apache.isis.viewer.json.applib.links.LinkRepresentation;
 import org.apache.isis.viewer.json.tck.IsisWebServerRule;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
@@ -84,8 +82,7 @@ public class DomainServiceResourceTest_invokeAction {
         
         // then
         assertThat(invokeLink, is(not(nullValue())));
-        final Response response = client.follow(invokeLink);
-        RestfulResponse<ListRepresentation> restfulResponse = RestfulResponse.ofT(response);
+        RestfulResponse<ListRepresentation> restfulResponse = client.followT(invokeLink);
         final ListRepresentation listRepr = restfulResponse.getEntity();
         
         assertThat(listRepr.getValues().size(), is(5));
@@ -113,10 +110,9 @@ public class DomainServiceResourceTest_invokeAction {
         // when
         args.mapPut("name", "New Name");
         args.mapPut("flag", true);
-        final Response response = client.follow(invokeLink, args);
+        RestfulResponse<DomainObjectRepresentation> restfulResponse = client.followT(invokeLink, args);
         
         // then
-        RestfulResponse<DomainObjectRepresentation> restfulResponse = RestfulResponse.ofT(response);
         final DomainObjectRepresentation objectRepr = restfulResponse.getEntity();
         
         assertThat(objectRepr.getProperty("name").getString("value"), is("New Name"));
@@ -140,10 +136,9 @@ public class DomainServiceResourceTest_invokeAction {
         assertThat(args.size(), is(0));
         
         // when
-        final Response response = client.follow(invokeLink, args);
+        final RestfulResponse<ScalarValueRepresentation> restfulResponse = client.followT(invokeLink, args);
         
         // then
-        RestfulResponse<ScalarValueRepresentation> restfulResponse = RestfulResponse.ofT(response);
         final ScalarValueRepresentation objectRepr = restfulResponse.getEntity();
         
         assertThat(objectRepr.getValue().asInt(), is(6));
@@ -156,8 +151,7 @@ public class DomainServiceResourceTest_invokeAction {
 
         // given simple entity with 'flag' property set to true
         final LinkRepresentation linkToSimpleEntity = givenLinkToSimpleEntity(0);
-        final Response responseBefore = client.follow(linkToSimpleEntity);
-        final RestfulResponse<DomainObjectRepresentation> restfulResponseBefore = RestfulResponse.ofT(responseBefore);
+        final RestfulResponse<DomainObjectRepresentation> restfulResponseBefore = client.followT(linkToSimpleEntity);
         final DomainObjectRepresentation simpleEntityBefore = restfulResponseBefore.getEntity();
         final Boolean before = simpleEntityBefore.getProperty("flag").getBoolean("value");
 
@@ -177,15 +171,13 @@ public class DomainServiceResourceTest_invokeAction {
         
         // when
         args.mapPut("object", linkToSimpleEntity);
-        final Response response = client.follow(invokeLink, args);
+        final RestfulResponse<JsonRepresentation> restfulResponse = client.followT(invokeLink, args);
         
         // then
-        RestfulResponse<JsonRepresentation> restfulResponse = RestfulResponse.ofT(response);
         assertThat(restfulResponse.getStatus(), is(HttpStatusCode.NO_CONTENT));
 
         // and then simple entity 'flag' property set to false
-        final Response responseAfter = client.follow(linkToSimpleEntity);
-        final RestfulResponse<DomainObjectRepresentation> restfulResponseAfter = RestfulResponse.ofT(responseAfter);
+        final RestfulResponse<DomainObjectRepresentation> restfulResponseAfter = client.followT(linkToSimpleEntity);
         final DomainObjectRepresentation simpleEntityAfter = restfulResponseAfter.getEntity();
         
         final Boolean after = simpleEntityAfter.getProperty("flag").getBoolean("value");
@@ -229,10 +221,9 @@ public class DomainServiceResourceTest_invokeAction {
         // when
         args.mapPut("name", "New Name");
         args.mapPut("flag", true);
-        final Response response = client.follow(invokeLink, args);
+        final RestfulResponse<DomainObjectRepresentation> restfulResponse = client.followT(invokeLink, args);
         
         // then
-        RestfulResponse<DomainObjectRepresentation> restfulResponse = RestfulResponse.ofT(response);
         final DomainObjectRepresentation objectRepr = restfulResponse.getEntity();
         
         assertThat(objectRepr.getRepresentation("members[propertyId=%s].value", "name").asString(), is("New Name"));
@@ -244,7 +235,7 @@ public class DomainServiceResourceTest_invokeAction {
         final String href = givenHrefToService(serviceId);
         
         final RestfulRequest request = 
-                client.createRequest(HttpMethod.GET, href).withArg(RequestParameter.FOLLOW_LINKS, "members[id=%s].links[rel=details]", actionId);
+                client.createRequest(HttpMethod2.GET, href).withArg(RequestParameter.FOLLOW_LINKS, "members[id=%s].links[rel=details]", actionId);
         final RestfulResponse<DomainObjectRepresentation> restfulResponse = request.executeT();
 
         assertThat(restfulResponse.getStatus(), is(HttpStatusCode.OK));
@@ -271,8 +262,7 @@ public class DomainServiceResourceTest_invokeAction {
         final LinkRepresentation invokeLink = actionRepr.getInvoke();
         
         // then
-        final Response response = client.follow(invokeLink);
-        RestfulResponse<ListRepresentation> restfulResponse = RestfulResponse.ofT(response);
+        final RestfulResponse<ListRepresentation> restfulResponse = client.followT(invokeLink);
         final ListRepresentation listRepr = restfulResponse.getEntity();
         
         return listRepr.getValues().arrayGet(num).asLink();

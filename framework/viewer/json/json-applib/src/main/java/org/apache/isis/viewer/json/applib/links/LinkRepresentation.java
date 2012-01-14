@@ -16,26 +16,28 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.json.applib.blocks;
+package org.apache.isis.viewer.json.applib.links;
 
 
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.apache.isis.viewer.json.applib.ClientRequestConfigurer;
+import org.apache.isis.viewer.json.applib.HttpMethod2;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
+import org.apache.isis.viewer.json.applib.RestfulRequest;
+import org.apache.isis.viewer.json.applib.RestfulResponse;
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.node.JsonNodeFactory;
 import org.codehaus.jackson.node.ObjectNode;
 import org.jboss.resteasy.client.ClientExecutor;
-import org.jboss.resteasy.client.ClientRequest;
-import org.jboss.resteasy.client.ClientResponse;
 
 
 public final class LinkRepresentation extends JsonRepresentation {
     
     public LinkRepresentation() {
         this(new ObjectNode(JsonNodeFactory.instance));
-        withMethod(Method.GET);
+        withMethod(HttpMethod2.GET);
     }
 
     public LinkRepresentation(JsonNode jsonNode) {
@@ -63,9 +65,9 @@ public final class LinkRepresentation extends JsonRepresentation {
         return getRepresentation("value");
     }
 
-    public Method getMethod() {
+    public HttpMethod2 getHttpMethod() {
         String methodStr = asObjectNode().path("method").getTextValue();
-        return Method.valueOf(methodStr);
+        return HttpMethod2.valueOf(methodStr);
     }
 
     public MediaType getType() {
@@ -75,8 +77,8 @@ public final class LinkRepresentation extends JsonRepresentation {
     }
 
 
-    public LinkRepresentation withMethod(Method method) {
-        asObjectNode().put("method", method.name());
+    public LinkRepresentation withMethod(HttpMethod2 httpMethod2) {
+        asObjectNode().put("method", httpMethod2.name());
         return this;
     }
 
@@ -96,29 +98,29 @@ public final class LinkRepresentation extends JsonRepresentation {
         return new JsonRepresentation(arguments);
     }
     
-    public <T> Response follow(ClientExecutor executor) throws Exception {
+    public <T> RestfulResponse<JsonRepresentation> follow(ClientExecutor executor) throws Exception {
         return follow(executor, null);
     }
-
-    public <T> Response follow(ClientExecutor executor, JsonRepresentation requestArgs) throws Exception {
-        ClientRequest restEasyRequest = executor.createRequest(getHref());
-        restEasyRequest.accept(MediaType.APPLICATION_JSON_TYPE);
+    
+    public <T extends JsonRepresentation> RestfulResponse<T> follow(ClientExecutor executor, JsonRepresentation requestArgs) throws Exception {
         
-        getMethod().setUp(restEasyRequest, requestArgs);
+        final ClientRequestConfigurer clientRequestConfigurer = ClientRequestConfigurer.create(executor, getHref());
         
-        @SuppressWarnings("unchecked")
-        ClientResponse<T> restEasyResponse = executor.execute(restEasyRequest);
-        return restEasyResponse;
+        clientRequestConfigurer.accept(MediaType.APPLICATION_JSON_TYPE);
+        clientRequestConfigurer.setHttpMethod(getHttpMethod());
+        
+        clientRequestConfigurer.configureArgs(requestArgs);
+        
+        final RestfulRequest restfulRequest = new RestfulRequest(clientRequestConfigurer);
+        return restfulRequest.executeT();
     }
-
     
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((getHref() == null) ? 0 : getHref().hashCode());
-        result = prime * result + ((getMethod() == null) ? 0 : getMethod().hashCode());
-        result = prime * result + ((getRel() == null) ? 0 : getRel().hashCode());
+        result = prime * result + ((getHttpMethod() == null) ? 0 : getHttpMethod().hashCode());
         return result;
     }
 
@@ -136,14 +138,14 @@ public final class LinkRepresentation extends JsonRepresentation {
                 return false;
         } else if (!getHref().equals(other.getHref()))
             return false;
-        if (getMethod() != other.getMethod())
+        if (getHttpMethod() != other.getHttpMethod())
             return false;
         return true;
     }
 
     @Override
     public String toString() {
-        return "Link [rel=" + getRel() + ", href=" + getHref() + ", method=" + getMethod() + ", type=" + getType() + "]";
+        return "Link [rel=" + getRel() + ", href=" + getHref() + ", method=" + getHttpMethod() + ", type=" + getType() + "]";
     }
 
 

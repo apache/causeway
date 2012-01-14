@@ -32,15 +32,15 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status.Family;
 
 import org.apache.isis.runtimes.dflt.webserver.WebServer;
+import org.apache.isis.viewer.json.applib.HttpMethod2;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.applib.RepresentationType;
 import org.apache.isis.viewer.json.applib.RestfulClient;
 import org.apache.isis.viewer.json.applib.RestfulResponse;
 import org.apache.isis.viewer.json.applib.RestfulResponse.HttpStatusCode;
-import org.apache.isis.viewer.json.applib.blocks.LinkRepresentation;
-import org.apache.isis.viewer.json.applib.blocks.Method;
 import org.apache.isis.viewer.json.applib.domainobjects.DomainServiceResource;
 import org.apache.isis.viewer.json.applib.domainobjects.ListRepresentation;
+import org.apache.isis.viewer.json.applib.links.LinkRepresentation;
 import org.apache.isis.viewer.json.tck.IsisWebServerRule;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
@@ -82,7 +82,7 @@ public class DomainServiceResourceTest_services_representationAndHeaders {
 
         assertThat(repr, isMap());
 
-        assertThat(repr.getSelf(), isLink().method(Method.GET));
+        assertThat(repr.getSelf(), isLink().httpMethod2(HttpMethod2.GET));
         
         assertThat(repr.getValues(), isArray());
         
@@ -112,8 +112,7 @@ public class DomainServiceResourceTest_services_representationAndHeaders {
         
         // then
         for (LinkRepresentation link : values.arrayIterable(LinkRepresentation.class)) {
-            Response followResp = client.follow(link);
-            RestfulResponse<JsonRepresentation> followJsonResp = RestfulResponse.of(followResp);
+            final RestfulResponse<JsonRepresentation> followJsonResp = client.follow(link);
             assertThat(followJsonResp.getStatus().getFamily(), is(Family.SUCCESSFUL));
             
             JsonRepresentation followRepr = followJsonResp.getEntity();

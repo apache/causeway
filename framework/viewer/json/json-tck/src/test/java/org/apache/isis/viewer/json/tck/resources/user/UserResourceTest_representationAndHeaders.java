@@ -40,12 +40,12 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status.Family;
 
 import org.apache.isis.runtimes.dflt.webserver.WebServer;
+import org.apache.isis.viewer.json.applib.HttpMethod2;
 import org.apache.isis.viewer.json.applib.RepresentationType;
 import org.apache.isis.viewer.json.applib.RestfulClient;
 import org.apache.isis.viewer.json.applib.RestfulResponse;
 import org.apache.isis.viewer.json.applib.RestfulResponse.Header;
 import org.apache.isis.viewer.json.applib.RestfulResponse.HttpStatusCode;
-import org.apache.isis.viewer.json.applib.blocks.Method;
 import org.apache.isis.viewer.json.applib.user.UserRepresentation;
 import org.apache.isis.viewer.json.applib.user.UserResource;
 import org.apache.isis.viewer.json.tck.IsisWebServerRule;
@@ -89,7 +89,7 @@ public class UserResourceTest_representationAndHeaders {
         assertThat(repr, is(not(nullValue())));
         assertThat(repr.isMap(), is(true));
         
-        assertThat(repr.getSelf(), isLink(client).method(Method.GET));
+        assertThat(repr.getSelf(), isLink(client).httpMethod2(HttpMethod2.GET));
         assertThat(repr.getUserName(), is(not(nullValue())));
         assertThat(repr.getFriendlyName(), is(nullValue())); // TODO: change fixture so populated
         assertThat(repr.getEmail(), is(nullValue())); // TODO: change fixture so populated

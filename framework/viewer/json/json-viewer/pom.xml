@@ -55,6 +55,12 @@
 		</dependency>
 
         <dependency>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>testsupport</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
             <groupId>org.apache.isis.runtimes.dflt</groupId>
             <artifactId>webapp</artifactId>
         </dependency>

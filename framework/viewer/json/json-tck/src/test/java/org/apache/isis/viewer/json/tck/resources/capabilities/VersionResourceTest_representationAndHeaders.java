@@ -40,13 +40,13 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status.Family;
 
 import org.apache.isis.runtimes.dflt.webserver.WebServer;
+import org.apache.isis.viewer.json.applib.HttpMethod2;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.applib.RepresentationType;
 import org.apache.isis.viewer.json.applib.RestfulClient;
 import org.apache.isis.viewer.json.applib.RestfulResponse;
 import org.apache.isis.viewer.json.applib.RestfulResponse.Header;
 import org.apache.isis.viewer.json.applib.RestfulResponse.HttpStatusCode;
-import org.apache.isis.viewer.json.applib.blocks.Method;
 import org.apache.isis.viewer.json.applib.version.VersionRepresentation;
 import org.apache.isis.viewer.json.applib.version.VersionResource;
 import org.apache.isis.viewer.json.tck.IsisWebServerRule;
@@ -57,7 +57,7 @@ import org.junit.Rule;
 import org.junit.Test;
 
 
-public class CapabilitiesResourceTest_representationAndHeaders {
+public class VersionResourceTest_representationAndHeaders {
 
     @Rule
     public IsisWebServerRule webServerRule = new IsisWebServerRule();
@@ -90,22 +90,24 @@ public class CapabilitiesResourceTest_representationAndHeaders {
         assertThat(repr, is(not(nullValue())));
         assertThat(repr, isMap());
 
-        assertThat(repr.getSelf(), isLink().method(Method.GET));
+        assertThat(repr.getSelf(), isLink().httpMethod2(HttpMethod2.GET));
 
-        JsonRepresentation capabilities = repr.getVersion();
-        assertThat(capabilities, isMap());
+        assertThat(repr.getString("specVersion"), is("0.52"));
+        assertThat(repr.getString("implVersion"), is(not(nullValue())));
         
-        assertThat(capabilities.getString("specVersion"), is("0.52"));
-        assertThat(capabilities.getString("concurrencyChecking"), is("no"));
-        assertThat(capabilities.getString("transientObjects"), is("yes"));
-        assertThat(capabilities.getString("deleteObjects"), is("no"));
-        assertThat(capabilities.getString("simpleArguments"), is("no"));
-        assertThat(capabilities.getString("partialArguments"), is("no"));
-        assertThat(capabilities.getString("followLinks"), is("yes"));
-        assertThat(capabilities.getString("validateOnly"), is("no"));
-        assertThat(capabilities.getString("pagination"), is("no"));
-        assertThat(capabilities.getString("sorting"), is("no"));
-        assertThat(capabilities.getString("domainModel"), is("rich"));
+        JsonRepresentation optionalCapbilitiesRepr = repr.getOptionalCapabilities();
+        assertThat(optionalCapbilitiesRepr, isMap());
+        
+        assertThat(optionalCapbilitiesRepr.getString("concurrencyChecking"), is("no"));
+        assertThat(optionalCapbilitiesRepr.getString("transientObjects"), is("yes"));
+        assertThat(optionalCapbilitiesRepr.getString("deleteObjects"), is("no"));
+        assertThat(optionalCapbilitiesRepr.getString("simpleArguments"), is("no"));
+        assertThat(optionalCapbilitiesRepr.getString("partialArguments"), is("no"));
+        assertThat(optionalCapbilitiesRepr.getString("followLinks"), is("yes"));
+        assertThat(optionalCapbilitiesRepr.getString("validateOnly"), is("no"));
+        assertThat(optionalCapbilitiesRepr.getString("pagination"), is("no"));
+        assertThat(optionalCapbilitiesRepr.getString("sorting"), is("no"));
+        assertThat(optionalCapbilitiesRepr.getString("domainModel"), is("rich"));
         
         assertThat(repr.getLinks(), isArray());
         assertThat(repr.getExtensions(), is(not(nullValue())));
@@ -123,7 +125,7 @@ public class CapabilitiesResourceTest_representationAndHeaders {
         final MediaType contentType = restfulResponse.getHeader(Header.CONTENT_TYPE);
         assertThat(contentType, hasType("application"));
         assertThat(contentType, hasSubType("json"));
-        assertThat(contentType, hasParameter("profile", "urn:org.restfulobjects/capabilities"));
+        assertThat(contentType, hasParameter("profile", "urn:org.restfulobjects/version"));
         assertThat(contentType, is(RepresentationType.VERSION.getMediaType()));
         
         // then

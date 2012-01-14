@@ -16,8 +16,9 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.json.applib;
+package org.apache.isis.viewer.json.applib.errors;
 
+import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.codehaus.jackson.JsonNode;
 
 public class ErrorRepresentation extends JsonRepresentation  {

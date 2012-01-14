@@ -240,4 +240,19 @@ public final class IsisMatchers {
         };
     }
 
+    public static <T> Matcher<List<T>> sameContentsAs(final List<T> expected) {
+        return new TypeSafeMatcher<List<T>>() {
+
+            @Override
+            public void describeTo(Description description) {
+                description.appendText("same sequence as " + expected);
+            }
+
+            @Override
+            public boolean matchesSafely(List<T> actual) {
+                return actual.containsAll(expected) && expected.containsAll(actual);
+            }
+        };
+    }
+
 }

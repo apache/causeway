@@ -46,8 +46,8 @@ public class ResourceContextTest_ensureCompatibleAcceptHeader {
         httpServletRequest = context.mock(HttpServletRequest.class);
         context.checking(new Expectations() {
             {
-                allowing(httpServletRequest).getParameterMap();
-                will(returnValue(Collections.emptyMap()));
+                allowing(httpServletRequest).getQueryString();
+                will(returnValue(""));
             }
         });
     }

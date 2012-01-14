@@ -24,17 +24,15 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.apache.commons.httpclient.HttpClient;
-import org.apache.isis.viewer.json.applib.blocks.LinkRepresentation;
 import org.apache.isis.viewer.json.applib.domainobjects.DomainObjectResource;
 import org.apache.isis.viewer.json.applib.domainobjects.DomainServiceResource;
 import org.apache.isis.viewer.json.applib.domaintypes.DomainTypeResource;
 import org.apache.isis.viewer.json.applib.homepage.HomePageResource;
+import org.apache.isis.viewer.json.applib.links.LinkRepresentation;
 import org.apache.isis.viewer.json.applib.user.UserResource;
 import org.apache.isis.viewer.json.applib.version.VersionResource;
 import org.jboss.resteasy.client.ClientExecutor;
-import org.jboss.resteasy.client.ClientRequest;
 import org.jboss.resteasy.client.ClientRequestFactory;
-import org.jboss.resteasy.client.core.BaseClientResponse;
 import org.jboss.resteasy.client.core.executors.ApacheHttpClientExecutor;
 
 public class RestfulClient {
@@ -48,7 +46,6 @@ public class RestfulClient {
 
     private final ClientExecutor executor;
     private final ClientRequestFactory clientRequestFactory;
-    private HttpMethod httpMethod;
 
     public RestfulClient(final URI baseUri) {
         this(baseUri, new ApacheHttpClientExecutor(new HttpClient()));
@@ -104,39 +101,36 @@ public class RestfulClient {
         return new RepresentationWalker(this, response);
     }
 
-    public Response follow(LinkRepresentation link) throws Exception {
-        return follow(link, JsonRepresentation.newMap());
+    public RestfulResponse<JsonRepresentation> follow(LinkRepresentation link) throws Exception {
+        return followT(link);
     }
 
-    public Response follow(LinkRepresentation link, JsonRepresentation requestArgs) throws Exception {
-        Response response = link.follow(executor, requestArgs);
-        
-        // this is a bit hacky
-        @SuppressWarnings("unchecked")
-        BaseClientResponse<String> restEasyResponse = (BaseClientResponse<String>)response;
-        restEasyResponse.setReturnType(String.class);
-        
-        return response;
+    public <T extends JsonRepresentation> RestfulResponse<T> followT(LinkRepresentation link) throws Exception {
+        return followT(link, JsonRepresentation.newMap());
     }
 
-    public RestfulRequest createRequest(HttpMethod httpMethod, String uriTemplate) {
-        
-        ClientRequest clientRequest = createRequest(uriTemplate);
-        clientRequest.accept(MediaType.APPLICATION_JSON_TYPE);
-        clientRequest.setHttpMethod(httpMethod.getJavaxRsMethod());
-        
-        return new RestfulRequest(clientRequest, httpMethod);
+    public RestfulResponse<JsonRepresentation> follow(LinkRepresentation link, JsonRepresentation requestArgs) throws Exception {
+        return followT(link, requestArgs);
     }
 
-    private ClientRequest createRequest(String uriTemplate) {
+    public <T extends JsonRepresentation> RestfulResponse<T> followT(LinkRepresentation link, JsonRepresentation requestArgs) throws Exception {
+        return link.<T>follow(executor, requestArgs);
+    }
+
+    public RestfulRequest createRequest(HttpMethod2 httpMethod2, String uriTemplate) {
+        
         boolean includesScheme = uriTemplate.startsWith("http:") || uriTemplate.startsWith("https:");
-        if(includesScheme) {
-            return clientRequestFactory.createRequest(uriTemplate);
-        } else {
-            return clientRequestFactory.createRelativeRequest(uriTemplate);
-        }
+        final String base = clientRequestFactory.getBase().toString();
+        String uri = (includesScheme ? "" : base) + uriTemplate;
+
+        final ClientRequestConfigurer clientRequestConfigurer = ClientRequestConfigurer.create(executor, uri);
+
+        clientRequestConfigurer.accept(MediaType.APPLICATION_JSON_TYPE);
+        clientRequestConfigurer.setHttpMethod(httpMethod2);
+        
+        return new RestfulRequest(clientRequestConfigurer);
     }
-    
+
     /**
      * exposed for testing purposes only.
      */

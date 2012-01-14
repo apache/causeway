@@ -29,8 +29,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.apache.isis.viewer.json.applib.blocks.LinkRepresentation;
+import org.apache.isis.viewer.json.applib.links.LinkRepresentation;
 import org.apache.isis.viewer.json.applib.util.JsonNodeUtils;
+import org.apache.isis.viewer.json.applib.util.PathNode;
 import org.apache.isis.viewer.json.applib.util.UrlEncodingUtils;
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.node.ArrayNode;
@@ -864,6 +865,20 @@ public class JsonRepresentation {
             }
         }
         return true;
+    }
+
+    public void mapPut(String key, List<Object> value) {
+        if(!isMap()) {
+            throw new IllegalStateException("does not represent map");
+        }
+        if(value == null) {
+            return;
+        }
+        final JsonRepresentation array = JsonRepresentation.newArray();
+        for(Object v: value) {
+            array.arrayAdd(v);
+        }
+        mapPut(key, array);
     }
 
     public void mapPut(String key, Object value) {
