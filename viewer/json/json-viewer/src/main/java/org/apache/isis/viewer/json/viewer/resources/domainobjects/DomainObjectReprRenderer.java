@@ -28,13 +28,12 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionContainer.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationFilters;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.isis.viewer.json.applib.HttpMethod;
+import org.apache.isis.viewer.json.applib.HttpMethod2;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
-import org.apache.isis.viewer.json.applib.Rel;
 import org.apache.isis.viewer.json.applib.RepresentationType;
+import org.apache.isis.viewer.json.applib.links.Rel;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
 import org.apache.isis.viewer.json.viewer.representations.LinkBuilder;
 import org.apache.isis.viewer.json.viewer.representations.LinkFollower;
@@ -45,7 +44,6 @@ import org.apache.isis.viewer.json.viewer.representations.ReprRendererAbstract;
 import org.apache.isis.viewer.json.viewer.representations.ReprRendererFactoryAbstract;
 import org.apache.isis.viewer.json.viewer.resources.domaintypes.DomainTypeReprRenderer;
 import org.apache.isis.viewer.json.viewer.util.OidUtils;
-import org.codehaus.jackson.node.NullNode;
 
 public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectReprRenderer, ObjectAdapter>{
 
@@ -269,7 +267,7 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
         final JsonRepresentation domainObjectRepr = renderer.with(objectAdapter).asPersistLinkArguments().render();
         
         final LinkBuilder persistLinkBuilder = LinkBuilder.newBuilder(getResourceContext(), Rel.PERSIST, RepresentationType.DOMAIN_OBJECT, "objects/")
-                .withHttpMethod(HttpMethod.POST)
+                .withHttpMethod(HttpMethod2.POST)
                 .withArguments(domainObjectRepr);
         getLinks().arrayAdd(persistLinkBuilder.build());
     }
@@ -296,7 +294,7 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
         final JsonRepresentation domainObjectRepr = renderer.with(objectAdapter).asModifyPropertiesLinkArguments().render();
 
         final LinkBuilder persistLinkBuilder = LinkBuilder.newBuilder(getResourceContext(), Rel.MODIFY, RepresentationType.DOMAIN_OBJECT, "objects/%s", getOidStr())
-                .withHttpMethod(HttpMethod.PUT)
+                .withHttpMethod(HttpMethod2.PUT)
                 .withArguments(domainObjectRepr);
         getLinks().arrayAdd(persistLinkBuilder.build());
     }

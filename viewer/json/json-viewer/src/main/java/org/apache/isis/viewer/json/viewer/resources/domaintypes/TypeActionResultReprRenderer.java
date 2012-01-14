@@ -19,7 +19,7 @@ package org.apache.isis.viewer.json.viewer.resources.domaintypes;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.applib.RepresentationType;
-import org.apache.isis.viewer.json.applib.blocks.LinkRepresentation;
+import org.apache.isis.viewer.json.applib.links.LinkRepresentation;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
 import org.apache.isis.viewer.json.viewer.representations.LinkFollower;
 import org.apache.isis.viewer.json.viewer.representations.ReprRenderer;

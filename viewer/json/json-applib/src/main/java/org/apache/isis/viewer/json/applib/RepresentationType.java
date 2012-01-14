@@ -28,16 +28,18 @@ import org.apache.isis.viewer.json.applib.domainobjects.ObjectCollectionRepresen
 import org.apache.isis.viewer.json.applib.domainobjects.ObjectPropertyRepresentation;
 import org.apache.isis.viewer.json.applib.domainobjects.ScalarValueRepresentation;
 import org.apache.isis.viewer.json.applib.domainobjects.TransientDomainObjectRepresentation;
-import org.apache.isis.viewer.json.applib.domaintypes.TypeActionResultRepresentation;
-import org.apache.isis.viewer.json.applib.domaintypes.DomainTypeRepresentation;
-import org.apache.isis.viewer.json.applib.domaintypes.TypeListRepresentation;
-import org.apache.isis.viewer.json.applib.domaintypes.ActionParameterDescriptionRepresentation;
 import org.apache.isis.viewer.json.applib.domaintypes.ActionDescriptionRepresentation;
+import org.apache.isis.viewer.json.applib.domaintypes.ActionParameterDescriptionRepresentation;
 import org.apache.isis.viewer.json.applib.domaintypes.CollectionDescriptionRepresentation;
+import org.apache.isis.viewer.json.applib.domaintypes.DomainTypeRepresentation;
 import org.apache.isis.viewer.json.applib.domaintypes.PropertyDescriptionRepresentation;
+import org.apache.isis.viewer.json.applib.domaintypes.TypeActionResultRepresentation;
+import org.apache.isis.viewer.json.applib.domaintypes.TypeListRepresentation;
+import org.apache.isis.viewer.json.applib.errors.ErrorRepresentation;
 import org.apache.isis.viewer.json.applib.homepage.HomePageRepresentation;
 import org.apache.isis.viewer.json.applib.user.UserRepresentation;
 import org.apache.isis.viewer.json.applib.util.Enums;
+import org.apache.isis.viewer.json.applib.util.Parser;
 import org.apache.isis.viewer.json.applib.version.VersionRepresentation;
 
 public enum RepresentationType {

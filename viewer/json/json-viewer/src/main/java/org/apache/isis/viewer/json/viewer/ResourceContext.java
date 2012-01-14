@@ -31,13 +31,16 @@ import javax.ws.rs.core.UriInfo;
 
 import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
+import org.apache.isis.core.commons.exceptions.NotYetImplementedException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterLookup;
 import org.apache.isis.core.metamodel.adapter.oid.stringable.OidStringifier;
 import org.apache.isis.core.metamodel.spec.SpecificationLookup;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
+import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.applib.RepresentationType;
 import org.apache.isis.viewer.json.applib.RestfulRequest.RequestParameter;
 import org.apache.isis.viewer.json.applib.RestfulResponse.HttpStatusCode;
+import org.apache.isis.viewer.json.viewer.resources.domainobjects.DomainResourceHelper;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
@@ -73,6 +76,7 @@ public class ResourceContext {
             return mediaType.getParameters().containsKey("profile");
         }
     };
+    private JsonRepresentation readQueryStringAsMap;
 
     public ResourceContext(
             RepresentationType representationType, final HttpHeaders httpHeaders, final UriInfo uriInfo,
@@ -111,10 +115,21 @@ public class ResourceContext {
         return httpHeaders;
     }
 
-    public <Q> Q getArg(RequestParameter<Q> queryParameter) {
-        return queryParameter.valueOf(getHttpServletRequest().getParameterMap());
+    public String getQueryString() {
+        return getHttpServletRequest().getQueryString();
     }
 
+    public JsonRepresentation getQueryStringAsJsonRepr() {
+        if(readQueryStringAsMap == null) {
+            readQueryStringAsMap = DomainResourceHelper.readQueryStringAsMap(getQueryString());
+        }
+        return readQueryStringAsMap;
+    }
+
+    public <Q> Q getArg(RequestParameter<Q> requestParameter) {
+        final JsonRepresentation queryStringJsonRepr = getQueryStringAsJsonRepr();
+        return requestParameter.valueOf(queryStringJsonRepr);
+    }
 
     public UriInfo getUriInfo() {
         return uriInfo;
@@ -207,6 +222,8 @@ public class ResourceContext {
     public SpecificationLookup getSpecificationLookup() {
         return specificationLookup;
     }
+
+
 
 
 

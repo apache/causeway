@@ -40,7 +40,6 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationFilters;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.isis.runtimes.dflt.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.applib.RepresentationType;
 import org.apache.isis.viewer.json.applib.RestfulResponse.HttpStatusCode;
@@ -246,7 +245,7 @@ public final class DomainResourceHelper {
 
     Response invokeActionQueryOnly(
             final String actionId, 
-            final String argumentsQueryString) {
+            final JsonRepresentation arguments) {
         final ObjectAction action = getObjectActionThatIsVisibleAndUsable(
                 actionId, Intent.ACCESS);
 
@@ -256,27 +255,8 @@ public final class DomainResourceHelper {
                     "Method not allowed; action '%s' is not query only", action.getId());
         }
 
-        JsonRepresentation arguments = DomainResourceHelper.readQueryStringAsMap(argumentsQueryString);
-        
         return invokeActionUsingAdapters(action, arguments);
     }
-
-    public Response invokeActionQueryOnly(String actionId, Map<String, String[]> parameterMap) {
-
-        final ObjectAction action = getObjectActionThatIsVisibleAndUsable(
-                actionId, Intent.ACCESS);
-
-        final ActionSemantics actionSemantics = ActionSemantics.determine(resourceContext, action);
-        if(!actionSemantics.isQueryOnly()) {
-            throw JsonApplicationException.create(HttpStatusCode.METHOD_NOT_ALLOWED,
-                    "Method not allowed; action '%s' is not query only", action.getId());
-        }
-
-        JsonRepresentation arguments = DomainResourceHelper.readParameterMapAsMap(parameterMap);
-        
-        return invokeActionUsingAdapters(action, arguments);
-    }
-
 
     Response invokeActionIdempotent(
             final String actionId, 
@@ -621,7 +601,7 @@ public final class DomainResourceHelper {
             return JsonRepresentation.newMap();
         }
         
-        return read(queryStringUrlDecoded, "query arguments");
+        return read(queryStringUrlDecoded, "query string");
     }
 
     public static JsonRepresentation readAsMap(String body) {
@@ -647,7 +627,7 @@ public final class DomainResourceHelper {
         } catch (JsonParseException e) {
             throw JsonApplicationException.create(
                     HttpStatusCode.BAD_REQUEST, e,
-                    "could not parse %s" + argsNature);
+                    "could not parse %s", argsNature);
         } catch (JsonMappingException e) {
             throw JsonApplicationException.create(
                     HttpStatusCode.BAD_REQUEST, e,

@@ -26,7 +26,7 @@ import javax.ws.rs.core.Response.Status.Family;
 import org.apache.isis.viewer.json.applib.RestfulResponse.HttpStatusCode;
 import org.junit.Test;
 
-public class HttpStatusCodeTest {
+public class RestfulResponse_HttpStatusCodeTest {
 
     @Test
     public void knownStatusCode() {

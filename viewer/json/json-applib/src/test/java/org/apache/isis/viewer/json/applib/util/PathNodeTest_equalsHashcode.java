@@ -16,11 +16,12 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.json.applib;
+package org.apache.isis.viewer.json.applib.util;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
+import org.apache.isis.viewer.json.applib.util.PathNode;
 import org.junit.Test;
 
 public class PathNodeTest_equalsHashcode {

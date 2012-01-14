@@ -24,10 +24,9 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectActionContainer.Contrib
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.isis.viewer.json.applib.HttpMethod;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
-import org.apache.isis.viewer.json.applib.Rel;
 import org.apache.isis.viewer.json.applib.RepresentationType;
+import org.apache.isis.viewer.json.applib.links.Rel;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
 import org.apache.isis.viewer.json.viewer.representations.LinkBuilder;
 import org.apache.isis.viewer.json.viewer.representations.LinkFollower;

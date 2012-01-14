@@ -18,7 +18,7 @@
  */
 package org.apache.isis.viewer.json.applib;
 
-import static org.apache.isis.viewer.json.applib.JsonUtils.readJson;
+import static org.apache.isis.viewer.json.applib.JsonFixture.readJson;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
@@ -26,8 +26,7 @@ import static org.junit.Assert.fail;
 
 import java.io.IOException;
 
-import org.apache.isis.viewer.json.applib.blocks.LinkRepresentation;
-import org.apache.isis.viewer.json.applib.blocks.Method;
+import org.apache.isis.viewer.json.applib.links.LinkRepresentation;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.junit.Before;
@@ -40,7 +39,7 @@ public class JsonRepresentationTest_getLink_isLink {
 
     @Before
     public void setUp() throws Exception {
-        link = new LinkRepresentation().withHref("http://foo/bar").withMethod(Method.GET);
+        link = new LinkRepresentation().withHref("http://foo/bar").withMethod(HttpMethod2.GET);
         jsonRepresentation = new JsonRepresentation(readJson("map.json"));
     }
 

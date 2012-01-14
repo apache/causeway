@@ -18,16 +18,18 @@
  */
 package org.apache.isis.viewer.json.tck.resources.service.serviceId;
 
-import static org.hamcrest.CoreMatchers.*;
+import static org.apache.isis.viewer.json.tck.RepresentationMatchers.isArray;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
-import static org.apache.isis.viewer.json.tck.RepresentationMatchers.*;
 
 import java.io.IOException;
 
 import javax.ws.rs.core.Response;
 
 import org.apache.isis.runtimes.dflt.webserver.WebServer;
-import org.apache.isis.viewer.json.applib.HttpMethod;
+import org.apache.isis.viewer.json.applib.HttpMethod2;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.applib.RestfulClient;
 import org.apache.isis.viewer.json.applib.RestfulRequest;
@@ -63,7 +65,7 @@ public class DomainServiceResourceTest_serviceId_xrofollowlinks {
         final String href = givenHrefToService("simples");
         
         final RestfulRequest request = 
-                client.createRequest(HttpMethod.GET, href).withArg(RequestParameter.FOLLOW_LINKS, "members[id=%s].links[rel=details]", "list");
+                client.createRequest(HttpMethod2.GET, href).withArg(RequestParameter.FOLLOW_LINKS, "members[id=%s].links[rel=details]", "list");
         final RestfulResponse<DomainObjectRepresentation> restfulResponse = request.executeT();
 
         assertThat(restfulResponse.getStatus(), is(HttpStatusCode.OK));

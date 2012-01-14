@@ -16,12 +16,14 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.json.applib;
+package org.apache.isis.viewer.json.applib.util;
 
 import java.util.Collections;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import org.apache.isis.viewer.json.applib.JsonRepresentation;
 
 import com.google.common.base.Objects;
 import com.google.common.base.Splitter;

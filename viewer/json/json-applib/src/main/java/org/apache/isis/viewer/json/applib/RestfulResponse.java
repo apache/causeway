@@ -31,6 +31,7 @@ import javax.ws.rs.core.Response.Status.Family;
 import javax.ws.rs.core.Response.StatusType;
 
 import org.apache.isis.viewer.json.applib.util.JsonMapper;
+import org.apache.isis.viewer.json.applib.util.Parser;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 
@@ -234,7 +235,6 @@ public class RestfulResponse<T> {
         
     }
 
-
     public static class Header<X> {
         
         public final static Header<String> WARNING = new Header<String>("Warning", Parser.forString());
@@ -297,7 +297,7 @@ public class RestfulResponse<T> {
 
     private static <V> V getHeader(final Response response, Header<V> header) {
         MultivaluedMap<String, Object> metadata = response.getMetadata();
-        // in spite of the always returns a String
+        // always returns a String
         String value = (String) metadata.getFirst(header.getName());
         return header.parse(value);
     }

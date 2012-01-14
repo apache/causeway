@@ -18,7 +18,7 @@
  */
 package org.apache.isis.viewer.json.applib;
 
-import static org.apache.isis.viewer.json.applib.JsonUtils.readJson;
+import static org.apache.isis.viewer.json.applib.JsonFixture.readJson;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;

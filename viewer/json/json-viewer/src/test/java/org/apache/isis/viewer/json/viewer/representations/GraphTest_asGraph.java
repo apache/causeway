@@ -24,8 +24,8 @@ import static org.junit.Assert.assertThat;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.isis.viewer.json.applib.Parser;
-import org.apache.isis.viewer.json.applib.PathNode;
+import org.apache.isis.viewer.json.applib.util.Parser;
+import org.apache.isis.viewer.json.applib.util.PathNode;
 import org.junit.Test;
 
 @SuppressWarnings({"rawtypes", "unchecked"})

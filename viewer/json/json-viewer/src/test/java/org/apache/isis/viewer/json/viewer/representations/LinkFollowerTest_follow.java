@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
-import org.apache.isis.viewer.json.applib.Parser;
+import org.apache.isis.viewer.json.applib.util.Parser;
 import org.junit.Test;
 
 public class LinkFollowerTest_follow {

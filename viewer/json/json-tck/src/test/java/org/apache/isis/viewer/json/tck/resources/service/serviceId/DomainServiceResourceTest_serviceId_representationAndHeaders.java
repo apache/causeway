@@ -32,11 +32,11 @@ import java.io.IOException;
 import javax.ws.rs.core.Response;
 
 import org.apache.isis.runtimes.dflt.webserver.WebServer;
+import org.apache.isis.viewer.json.applib.HttpMethod2;
 import org.apache.isis.viewer.json.applib.RepresentationType;
 import org.apache.isis.viewer.json.applib.RestfulClient;
 import org.apache.isis.viewer.json.applib.RestfulResponse;
 import org.apache.isis.viewer.json.applib.RestfulResponse.HttpStatusCode;
-import org.apache.isis.viewer.json.applib.blocks.Method;
 import org.apache.isis.viewer.json.applib.domainobjects.DomainObjectRepresentation;
 import org.apache.isis.viewer.json.applib.domainobjects.DomainServiceResource;
 import org.apache.isis.viewer.json.tck.IsisWebServerRule;
@@ -80,7 +80,7 @@ public class DomainServiceResourceTest_serviceId_representationAndHeaders {
 
         assertThat(repr, isMap());
 
-        assertThat(repr.getSelf(), isLink().method(Method.GET));
+        assertThat(repr.getSelf(), isLink().httpMethod2(HttpMethod2.GET));
         assertThat(repr.getOid(), matches("OID[:].+"));
         assertThat(repr.getTitle(), matches("Simples"));
 

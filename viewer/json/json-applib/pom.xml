@@ -66,6 +66,18 @@
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>commons</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>testsupport</artifactId>
+            <scope>test</scope>
+        </dependency>
 	    	
 	</dependencies>
 

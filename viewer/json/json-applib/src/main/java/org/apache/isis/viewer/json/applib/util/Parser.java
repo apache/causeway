@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.json.applib;
+package org.apache.isis.viewer.json.applib.util;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -28,6 +28,8 @@ import java.util.List;
 import javax.ws.rs.core.CacheControl;
 import javax.ws.rs.core.MediaType;
 
+import org.apache.isis.viewer.json.applib.JsonRepresentation;
+
 import com.google.common.base.Function;
 import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;
@@ -35,7 +37,6 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 
 public abstract class Parser<T> {
-    
     public T valueOf(List<String> str) {
         if(str == null) {
             return null;
@@ -52,6 +53,17 @@ public abstract class Parser<T> {
             return null;
         return valueOf(str[0]);
     }
+    public T valueOf(JsonRepresentation jsonRepresentation) {
+        if(jsonRepresentation == null) {
+            return null;
+        }
+        return valueOf(jsonRepresentation.asString());
+    }
+    public JsonRepresentation asJsonRepresentation(T t) {
+        return JsonRepresentation.newMap("dummy", asString(t)).getRepresentation("dummy");
+    }
+    
+
     public abstract T valueOf(String str);
     public abstract String asString(T t);
 

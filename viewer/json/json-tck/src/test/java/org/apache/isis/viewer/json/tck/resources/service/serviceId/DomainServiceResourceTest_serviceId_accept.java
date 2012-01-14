@@ -27,7 +27,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.apache.isis.runtimes.dflt.webserver.WebServer;
-import org.apache.isis.viewer.json.applib.HttpMethod;
+import org.apache.isis.viewer.json.applib.HttpMethod2;
 import org.apache.isis.viewer.json.applib.RepresentationType;
 import org.apache.isis.viewer.json.applib.RestfulClient;
 import org.apache.isis.viewer.json.applib.RestfulRequest;
@@ -62,7 +62,7 @@ public class DomainServiceResourceTest_serviceId_accept {
         final String href = givenLinkToService();
         
         final RestfulRequest request = 
-                client.createRequest(HttpMethod.GET, href).withHeader(RestfulRequest.Header.ACCEPT, MediaType.APPLICATION_JSON_TYPE);
+                client.createRequest(HttpMethod2.GET, href).withHeader(RestfulRequest.Header.ACCEPT, MediaType.APPLICATION_JSON_TYPE);
         final RestfulResponse<DomainObjectRepresentation> restfulResponse = request.executeT();
 
         assertThat(restfulResponse.getStatus(), is(HttpStatusCode.OK));
@@ -74,7 +74,7 @@ public class DomainServiceResourceTest_serviceId_accept {
         final String href = givenLinkToService();
 
         final RestfulRequest request = 
-                client.createRequest(HttpMethod.GET, href).withHeader(RestfulRequest.Header.ACCEPT, RepresentationType.DOMAIN_OBJECT.getMediaType());
+                client.createRequest(HttpMethod2.GET, href).withHeader(RestfulRequest.Header.ACCEPT, RepresentationType.DOMAIN_OBJECT.getMediaType());
         final RestfulResponse<DomainObjectRepresentation> restfulResponse = request.executeT();
 
         assertThat(restfulResponse.getStatus(), is(HttpStatusCode.OK));
@@ -86,7 +86,7 @@ public class DomainServiceResourceTest_serviceId_accept {
         final String href = givenLinkToService();
 
         final RestfulRequest request = 
-                client.createRequest(HttpMethod.GET, href).withHeader(RestfulRequest.Header.ACCEPT, RepresentationType.USER.getMediaType());
+                client.createRequest(HttpMethod2.GET, href).withHeader(RestfulRequest.Header.ACCEPT, RepresentationType.USER.getMediaType());
         final RestfulResponse<DomainObjectRepresentation> restfulResponse = request.executeT();
 
         assertThat(restfulResponse.getStatus(), is(HttpStatusCode.NOT_ACCEPTABLE));

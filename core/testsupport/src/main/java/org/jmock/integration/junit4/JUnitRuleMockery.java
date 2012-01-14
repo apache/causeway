@@ -27,17 +27,16 @@ DAMAGE.
  */
 package org.jmock.integration.junit4;
 
-import org.jmock.auto.internal.AllDeclaredFields;
-import org.jmock.auto.internal.Mockomatic;
-import org.jmock.integration.junit4.JUnit4Mockery;
-import org.junit.rules.MethodRule;
-import org.junit.runners.model.FrameworkMethod;
-import org.junit.runners.model.Statement;
+import static org.junit.Assert.fail;
 
 import java.lang.reflect.Field;
 import java.util.List;
 
-import static org.junit.Assert.fail;
+import org.jmock.auto.internal.AllDeclaredFields;
+import org.jmock.auto.internal.Mockomatic;
+import org.junit.rules.MethodRule;
+import org.junit.runners.model.FrameworkMethod;
+import org.junit.runners.model.Statement;
 
 /**
  * A <code>JUnitRuleMockery</code> is a JUnit Rule that manages JMock expectations

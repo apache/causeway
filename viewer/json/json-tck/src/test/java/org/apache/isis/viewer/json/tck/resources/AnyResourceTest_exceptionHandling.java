@@ -24,14 +24,16 @@ import static org.junit.Assert.assertThat;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.isis.runtimes.dflt.webserver.WebServer;
-import org.apache.isis.viewer.json.applib.HttpMethod;
+import org.apache.isis.viewer.json.applib.HttpMethod2;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.applib.RepresentationType;
 import org.apache.isis.viewer.json.applib.RestfulClient;
 import org.apache.isis.viewer.json.applib.RestfulRequest;
+import org.apache.isis.viewer.json.applib.RestfulRequest.Header;
 import org.apache.isis.viewer.json.applib.RestfulResponse;
 import org.apache.isis.viewer.json.applib.RestfulResponse.HttpStatusCode;
 import org.apache.isis.viewer.json.applib.homepage.HomePageRepresentation;
+import org.apache.isis.viewer.json.applib.util.Parser;
 import org.apache.isis.viewer.json.tck.IsisWebServerRule;
 import org.jboss.resteasy.client.ClientRequest;
 import org.jboss.resteasy.client.ClientResponse;
@@ -57,7 +59,7 @@ public class AnyResourceTest_exceptionHandling {
     @Test
     public void noMediaType() throws Exception {
         // given
-        RestfulRequest restfulReq = client.createRequest(HttpMethod.GET, "/");
+        RestfulRequest restfulReq = client.createRequest(HttpMethod2.GET, "/");
         
         // when
         RestfulResponse<HomePageRepresentation> restfulResp = restfulReq.executeT();
@@ -71,8 +73,8 @@ public class AnyResourceTest_exceptionHandling {
     public void correctMediaType() throws Exception {
 
         // given
-        RestfulRequest restfulReq = client.createRequest(HttpMethod.GET, "/");
-        restfulReq.getClientRequest().header(HttpHeaderNames.ACCEPT, MediaType.APPLICATION_JSON_TYPE);
+        RestfulRequest restfulReq = client.createRequest(HttpMethod2.GET, "/");
+        restfulReq.withHeader(Header.ACCEPT, MediaType.APPLICATION_JSON_TYPE);
         
         // when
         RestfulResponse<HomePageRepresentation> restfulResp = restfulReq.executeT();
@@ -103,8 +105,9 @@ public class AnyResourceTest_exceptionHandling {
     public void runtimeException_isMapped() throws Exception {
 
         // given
-        RestfulRequest restfulReq = client.createRequest(HttpMethod.GET, "capabilities");
-        restfulReq.getClientRequest().header("X-FAIL", "true");
+        RestfulRequest restfulReq = client.createRequest(HttpMethod2.GET, "version");
+        Header<Boolean> header = new Header<Boolean>("X-FAIL", Parser.forBoolean());
+        restfulReq.withHeader(header, true);
         
         // when
         RestfulResponse<JsonRepresentation> jsonResp = restfulReq.execute();

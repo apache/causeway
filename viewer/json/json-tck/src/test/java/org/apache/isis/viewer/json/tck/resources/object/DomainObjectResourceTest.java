@@ -35,23 +35,21 @@ import javax.ws.rs.core.Response.Status.Family;
 
 import org.apache.isis.runtimes.dflt.webserver.WebServer;
 import org.apache.isis.tck.dom.assocs.ChildEntity;
-import org.apache.isis.tck.dom.assocs.ParentEntity;
 import org.apache.isis.tck.dom.scalars.ApplibValuedEntity;
-import org.apache.isis.viewer.json.applib.HttpMethod;
+import org.apache.isis.viewer.json.applib.HttpMethod2;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
-import org.apache.isis.viewer.json.applib.Rel;
 import org.apache.isis.viewer.json.applib.RestfulClient;
 import org.apache.isis.viewer.json.applib.RestfulRequest;
 import org.apache.isis.viewer.json.applib.RestfulResponse;
-import org.apache.isis.viewer.json.applib.blocks.LinkRepresentation;
-import org.apache.isis.viewer.json.applib.blocks.Method;
 import org.apache.isis.viewer.json.applib.domainobjects.ActionResultRepresentation;
+import org.apache.isis.viewer.json.applib.domainobjects.ActionResultRepresentation.ResultType;
 import org.apache.isis.viewer.json.applib.domainobjects.DomainObjectRepresentation;
 import org.apache.isis.viewer.json.applib.domainobjects.DomainObjectResource;
 import org.apache.isis.viewer.json.applib.domainobjects.ObjectActionRepresentation;
 import org.apache.isis.viewer.json.applib.domainobjects.ObjectPropertyRepresentation;
 import org.apache.isis.viewer.json.applib.domainobjects.ScalarValueRepresentation;
-import org.apache.isis.viewer.json.applib.domainobjects.ActionResultRepresentation.ResultType;
+import org.apache.isis.viewer.json.applib.links.LinkRepresentation;
+import org.apache.isis.viewer.json.applib.links.Rel;
 import org.apache.isis.viewer.json.tck.IsisWebServerRule;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
@@ -100,9 +98,9 @@ public class DomainObjectResourceTest {
         // then
         LinkRepresentation self = domainObjectRepr.getSelf();
         assertThat(self, 
-                isLink().rel(Rel.SELF).href(matches(".+objects/OID:32")).method(Method.GET).type(MediaType.APPLICATION_JSON_TYPE).typeParameter("profile", "urn:org.restfulobjects/domainobject"));
+                isLink().rel(Rel.SELF).href(matches(".+objects/OID:32")).httpMethod2(HttpMethod2.GET).type(MediaType.APPLICATION_JSON_TYPE).typeParameter("profile", "urn:org.restfulobjects/domainobject"));
         assertThat(domainObjectRepr.getLinkWithRel(Rel.DESCRIBEDBY), 
-                isLink().href(matches(".+" + ChildEntity.class.getName())).method(Method.GET).type(MediaType.APPLICATION_JSON_TYPE).typeParameter("profile", "urn:org.restfulobjects/domaintype"));
+                isLink().href(matches(".+" + ChildEntity.class.getName())).httpMethod2(HttpMethod2.GET).type(MediaType.APPLICATION_JSON_TYPE).typeParameter("profile", "urn:org.restfulobjects/domaintype"));
         
         assertThat(domainObjectRepr.getTitle(), is("parent 4 - child 2"));
         assertThat(domainObjectRepr.getOid(), is("OID:32"));
@@ -116,7 +114,7 @@ public class DomainObjectResourceTest {
     public void domainObjectRepresentationForTransient_hasNoSelf_andHasNoOid() throws Exception {
         
         // given, when
-        final RestfulRequest request = this.client.createRequest(HttpMethod.POST, "services/simples/actions/newTransientEntity/invoke");
+        final RestfulRequest request = this.client.createRequest(HttpMethod2.POST, "services/simples/actions/newTransientEntity/invoke");
         final RestfulResponse<ActionResultRepresentation> response = request.executeT();
         final ActionResultRepresentation actionResultRepr = response.getEntity();
         assertThat(actionResultRepr.getResultType(), is(ResultType.DOMAIN_OBJECT));
@@ -149,7 +147,7 @@ public class DomainObjectResourceTest {
 
         // then
         assertThat(domainObjectRepr.getLinkWithRel(Rel.DESCRIBEDBY), 
-                isLink().href(matches(".+" + ChildEntity.class.getName())).method(Method.GET).type(MediaType.APPLICATION_JSON_TYPE).typeParameter("profile", "urn:org.restfulobjects/domaintype"));
+                isLink().href(matches(".+" + ChildEntity.class.getName())).httpMethod2(HttpMethod2.GET).type(MediaType.APPLICATION_JSON_TYPE).typeParameter("profile", "urn:org.restfulobjects/domaintype"));
     }
 
     @Test
@@ -173,7 +171,7 @@ public class DomainObjectResourceTest {
         // icon
         LinkRepresentation selfIcon = domainObjectRepr.getLinkWithRel(Rel.ICON);
         assertThat(selfIcon, 
-                isLink().href(matches(".+" + "/images/" + "null\\.png")).method(Method.GET));
+                isLink().href(matches(".+" + "/images/" + "null\\.png")).httpMethod2(HttpMethod2.GET));
 
     }
 
@@ -196,7 +194,7 @@ public class DomainObjectResourceTest {
         assertThat(nameProperty.getString("disabledReason"), is(nullValue()));
 
         LinkRepresentation namePropertyDetails = nameProperty.getLink("links[rel=details]");
-        assertThat(namePropertyDetails, isLink().rel("details").href(self.getHref() + "/properties/name").method(Method.GET));
+        assertThat(namePropertyDetails, isLink().rel("details").href(self.getHref() + "/properties/name").httpMethod2(HttpMethod2.GET));
 
     }
 
@@ -233,12 +231,12 @@ public class DomainObjectResourceTest {
         LinkRepresentation listActionType = listAction.getLink("type");
         assertThat(listActionType.getRel(), is("type"));
         assertThat(listActionType.getHref(), matches(".+vnd\\.list\\+json"));
-        assertThat(listActionType.getMethod(), is(Method.GET));
+        assertThat(listActionType.getHttpMethod(), is(HttpMethod2.GET));
 
         LinkRepresentation listActionDetails = listAction.getLink("details");
         assertThat(listActionDetails.getRel(), is("action"));
         assertThat(listActionDetails.getHref(), is(self.getHref() + "/actions/list"));
-        assertThat(listActionDetails.getMethod(), is(Method.GET));
+        assertThat(listActionDetails.getHttpMethod(), is(HttpMethod2.GET));
 
         JsonRepresentation newEntityAction = actions.getRepresentation("newEntity");
         assertThat(newEntityAction.getString("memberType"), is("action"));
@@ -250,12 +248,12 @@ public class DomainObjectResourceTest {
         assertThat(newEntityActionType.getHref(), matches(".+vnd\\." +
                 ApplibValuedEntity.class.getName() +
                 "\\+json"));
-        assertThat(newEntityActionType.getMethod(), is(Method.GET));
+        assertThat(newEntityActionType.getHttpMethod(), is(HttpMethod2.GET));
 
         LinkRepresentation newEntityActionDetails = newEntityAction.getLink("details");
         assertThat(newEntityActionDetails.getRel(), is("action"));
         assertThat(newEntityActionDetails.getHref(), is(self.getHref() + "/actions/newEntity"));
-        assertThat(newEntityActionDetails.getMethod(), is(Method.GET));
+        assertThat(newEntityActionDetails.getHttpMethod(), is(HttpMethod2.GET));
     }
 
     @Ignore("TODO")
@@ -290,19 +288,19 @@ public class DomainObjectResourceTest {
         LinkRepresentation selfLink = propertyDetailsRepr.getLink("_self.link");
         assertThat(selfLink.getRel(), is("member"));
         assertThat(selfLink.getHref(), matches(".+objects/OID:1/properties/id"));
-        assertThat(selfLink.getMethod(), is(Method.GET));
+        assertThat(selfLink.getHttpMethod(), is(HttpMethod2.GET));
 
         // _self.object
         LinkRepresentation selfObject = propertyDetailsRepr.getLink("_self.object");
         assertThat(selfObject.getRel(), is("object"));
         assertThat(selfObject.getHref(), matches(".+objects/OID:1"));
-        assertThat(selfObject.getMethod(), is(Method.GET));
+        assertThat(selfObject.getHttpMethod(), is(HttpMethod2.GET));
 
         // type
         LinkRepresentation type = propertyDetailsRepr.getLink("type");
         assertThat(type.getRel(), is("type"));
         assertThat(type.getHref(), matches(".+vnd\\.string\\+json"));
-        assertThat(type.getMethod(), is(Method.GET));
+        assertThat(type.getHttpMethod(), is(HttpMethod2.GET));
 
         assertThat(propertyDetailsRepr.getString("memberType"), is("property"));
         assertThat(propertyDetailsRepr.getString("value"), is(org.apache.isis.tck.objstore.dflt.scalars.ApplibValuedEntityRepositoryDefault.class.getName()));
@@ -328,19 +326,19 @@ public class DomainObjectResourceTest {
         LinkRepresentation selfLink = actionPromptRepr.getLink("_self.link");
         assertThat(selfLink.getRel(), is("member"));
         assertThat(selfLink.getHref(), matches(".+objects/OID:1/actions/list"));
-        assertThat(selfLink.getMethod(), is(Method.GET));
+        assertThat(selfLink.getHttpMethod(), is(HttpMethod2.GET));
 
         // _self.object
         LinkRepresentation selfObject = actionPromptRepr.getLink("_self.object");
         assertThat(selfObject.getRel(), is("object"));
         assertThat(selfObject.getHref(), matches(".+objects/OID:1"));
-        assertThat(selfObject.getMethod(), is(Method.GET));
+        assertThat(selfObject.getHttpMethod(), is(HttpMethod2.GET));
 
         // type
         LinkRepresentation type = actionPromptRepr.getLink("type");
         assertThat(type.getRel(), is("type"));
         assertThat(type.getHref(), matches(".+vnd\\.list\\+json"));
-        assertThat(type.getMethod(), is(Method.GET));
+        assertThat(type.getHttpMethod(), is(HttpMethod2.GET));
 
         assertThat(actionPromptRepr.getString("memberType"), is("action"));
         assertThat(actionPromptRepr.getString("actionType"), is("USER"));
@@ -350,7 +348,7 @@ public class DomainObjectResourceTest {
         LinkRepresentation invokeLink = actionPromptRepr.getLink("invoke");
         assertThat(invokeLink.getRel(), is("invoke"));
         assertThat(invokeLink.getHref(), matches(".+objects/OID:1/actions/list/invoke"));
-        assertThat(invokeLink.getMethod(), is(Method.POST));
+        assertThat(invokeLink.getHttpMethod(), is(HttpMethod2.POST));
         assertThat(invokeLink.getArguments(), is(not(nullValue())));
         assertThat(invokeLink.getArguments().isArray(), is(true));
         assertThat(invokeLink.getArguments().size(), is(0));
