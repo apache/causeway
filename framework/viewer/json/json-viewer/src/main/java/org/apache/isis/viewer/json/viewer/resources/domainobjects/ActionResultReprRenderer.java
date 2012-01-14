@@ -170,7 +170,7 @@ public class ActionResultReprRenderer extends ReprRendererAbstract<ActionResultR
         final ActionSemantics semantics = ActionSemantics.determine(getResourceContext(), action);
         final String mutator = semantics.getInvokeKey();
         final MutatorSpec mutatorSpec = mutators.get(mutator);
-        selfLinkBuilder.withHttpMethod(mutatorSpec.httpMethod2);
+        selfLinkBuilder.withHttpMethod(mutatorSpec.httpMethod);
         
         final JsonRepresentation selfLink = selfLinkBuilder.build();
 

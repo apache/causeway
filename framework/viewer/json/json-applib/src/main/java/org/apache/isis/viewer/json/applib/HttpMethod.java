@@ -21,7 +21,7 @@ package org.apache.isis.viewer.json.applib;
 import org.jboss.resteasy.client.ClientRequest;
 import org.jboss.resteasy.specimpl.UriBuilderImpl;
 
-public enum HttpMethod2 {
+public enum HttpMethod {
     GET(javax.ws.rs.HttpMethod.GET, ArgStrategy.QUERY_STRING),
     PUT(javax.ws.rs.HttpMethod.PUT, ArgStrategy.BODY),
     DELETE(javax.ws.rs.HttpMethod.DELETE, ArgStrategy.QUERY_STRING),
@@ -58,7 +58,7 @@ public enum HttpMethod2 {
     private final String javaxRsMethod;
     private final ArgStrategy argStrategy;
 
-    private HttpMethod2(String javaxRsMethod, ArgStrategy argStrategy) {
+    private HttpMethod(String javaxRsMethod, ArgStrategy argStrategy) {
         this.javaxRsMethod = javaxRsMethod;
         this.argStrategy = argStrategy;
     }

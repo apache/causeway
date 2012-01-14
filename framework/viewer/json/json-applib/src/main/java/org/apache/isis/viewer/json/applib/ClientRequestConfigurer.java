@@ -70,8 +70,8 @@ public class ClientRequestConfigurer {
     /**
      * Prerequisite to {@link #configureArgs(JsonRepresentation)} or {@link #configureArgs(Map)}.
      */
-    public ClientRequestConfigurer setHttpMethod(HttpMethod2 httpMethod2) {
-        clientRequest.setHttpMethod(httpMethod2.getJavaxRsMethod());
+    public ClientRequestConfigurer setHttpMethod(HttpMethod httpMethod) {
+        clientRequest.setHttpMethod(httpMethod.getJavaxRsMethod());
         return this;
     }
 
@@ -81,7 +81,7 @@ public class ClientRequestConfigurer {
      * <p>
      * Typical flow is:
      * <ul>
-     * <li> {@link RestfulClient#createRequest(HttpMethod2, String)}
+     * <li> {@link RestfulClient#createRequest(HttpMethod, String)}
      * <li> {@link RestfulRequest#withArg(RequestParameter, Object)} for each arg
      * <li> {@link RestfulRequest#execute()} - which calls this method.
      * </ul>
@@ -119,7 +119,7 @@ public class ClientRequestConfigurer {
     }
 
     /**
-     * Called back from {@link HttpMethod2#setUpArgs(ClientRequestConfigurer, JsonRepresentation)}
+     * Called back from {@link HttpMethod#setUpArgs(ClientRequestConfigurer, JsonRepresentation)}
      */
     ClientRequestConfigurer body(JsonRepresentation requestArgs) {
         clientRequest.body(MediaType.APPLICATION_JSON_TYPE, requestArgs.toString());
@@ -127,7 +127,7 @@ public class ClientRequestConfigurer {
     }
 
     /**
-     * Called back from {@link HttpMethod2#setUpArgs(ClientRequestConfigurer, JsonRepresentation)}
+     * Called back from {@link HttpMethod#setUpArgs(ClientRequestConfigurer, JsonRepresentation)}
      */
     ClientRequestConfigurer queryString(JsonRepresentation requestArgs) {
         if(requestArgs.size() == 0) {
@@ -139,7 +139,7 @@ public class ClientRequestConfigurer {
     }
 
     /**
-     * Called back from {@link HttpMethod2#setUpArgs(ClientRequestConfigurer, JsonRepresentation)}
+     * Called back from {@link HttpMethod#setUpArgs(ClientRequestConfigurer, JsonRepresentation)}
      */
     ClientRequestConfigurer queryArgs(JsonRepresentation requestArgs) {
         final MultivaluedMap<String, String> queryParameters = clientRequest.getQueryParameters();
@@ -159,9 +159,9 @@ public class ClientRequestConfigurer {
         return clientRequest;
     }
 
-    HttpMethod2 getHttpMethod() {
+    HttpMethod getHttpMethod() {
         final String httpMethod = clientRequest.getHttpMethod();
-        return HttpMethod2.valueOf(httpMethod);
+        return HttpMethod.valueOf(httpMethod);
     }
 
 

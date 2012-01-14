@@ -39,7 +39,7 @@ public class JsonRepresentationTest_getLink_isLink {
 
     @Before
     public void setUp() throws Exception {
-        link = new LinkRepresentation().withHref("http://foo/bar").withMethod(HttpMethod2.GET);
+        link = new LinkRepresentation().withHref("http://foo/bar").withMethod(HttpMethod.GET);
         jsonRepresentation = new JsonRepresentation(readJson("map.json"));
     }
 

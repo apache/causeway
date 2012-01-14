@@ -40,7 +40,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status.Family;
 
 import org.apache.isis.runtimes.dflt.webserver.WebServer;
-import org.apache.isis.viewer.json.applib.HttpMethod2;
+import org.apache.isis.viewer.json.applib.HttpMethod;
 import org.apache.isis.viewer.json.applib.RepresentationType;
 import org.apache.isis.viewer.json.applib.RestfulClient;
 import org.apache.isis.viewer.json.applib.RestfulResponse;
@@ -89,10 +89,10 @@ public class HomePageResourceTest_representationAndHeaders {
         assertThat(repr, is(not(nullValue())));
         assertThat(repr, isMap());
         
-        assertThat(repr.getSelf(), isLink(client).httpMethod2(HttpMethod2.GET));
-        assertThat(repr.getUser(), isLink(client).httpMethod2(HttpMethod2.GET));
-        assertThat(repr.getServices(), isLink(client).httpMethod2(HttpMethod2.GET));
-        assertThat(repr.getVersion(), isLink(client).httpMethod2(HttpMethod2.GET));
+        assertThat(repr.getSelf(), isLink(client).httpMethod(HttpMethod.GET));
+        assertThat(repr.getUser(), isLink(client).httpMethod(HttpMethod.GET));
+        assertThat(repr.getServices(), isLink(client).httpMethod(HttpMethod.GET));
+        assertThat(repr.getVersion(), isLink(client).httpMethod(HttpMethod.GET));
         
         assertThat(repr.getLinks(), isArray());
         assertThat(repr.getExtensions(), isMap());

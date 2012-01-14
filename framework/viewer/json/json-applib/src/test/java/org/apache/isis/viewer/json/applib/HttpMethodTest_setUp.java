@@ -23,7 +23,7 @@ import java.io.UnsupportedEncodingException;
 import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2;
 import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2.Mode;
 import org.apache.isis.viewer.json.applib.ClientRequestConfigurer;
-import org.apache.isis.viewer.json.applib.HttpMethod2;
+import org.apache.isis.viewer.json.applib.HttpMethod;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
@@ -53,45 +53,45 @@ public class HttpMethodTest_setUp {
     
     @Test
     public void get() throws Exception {
-        setsUpQueryString(HttpMethod2.GET);
+        setsUpQueryString(HttpMethod.GET);
     }
 
     @Test
     public void delete() throws Exception {
-        setsUpQueryString(HttpMethod2.DELETE);
+        setsUpQueryString(HttpMethod.DELETE);
     }
 
     @Test
     public void post() throws Exception {
-        setsUpBody(HttpMethod2.POST);
+        setsUpBody(HttpMethod.POST);
     }
 
     @Test
     public void put() throws Exception {
-        setsUpBody(HttpMethod2.PUT);
+        setsUpBody(HttpMethod.PUT);
     }
 
 
-    private void setsUpQueryString(final HttpMethod2 httpMethod2) throws UnsupportedEncodingException {
+    private void setsUpQueryString(final HttpMethod httpMethod) throws UnsupportedEncodingException {
         context.checking(new Expectations() {
             {
-                one(requestConfigurer).setHttpMethod(httpMethod2);
+                one(requestConfigurer).setHttpMethod(httpMethod);
                 one(requestConfigurer).queryString(repr);
             }
         });
         
-        httpMethod2.setUpArgs(requestConfigurer, repr);
+        httpMethod.setUpArgs(requestConfigurer, repr);
     }
 
-    private void setsUpBody(final HttpMethod2 httpMethod2) throws UnsupportedEncodingException {
+    private void setsUpBody(final HttpMethod httpMethod) throws UnsupportedEncodingException {
         context.checking(new Expectations() {
             {
-                one(requestConfigurer).setHttpMethod(httpMethod2);
+                one(requestConfigurer).setHttpMethod(httpMethod);
                 one(requestConfigurer).body(repr);
             }
         });
         
-        httpMethod2.setUpArgs(requestConfigurer, repr);
+        httpMethod.setUpArgs(requestConfigurer, repr);
     }
 
 }

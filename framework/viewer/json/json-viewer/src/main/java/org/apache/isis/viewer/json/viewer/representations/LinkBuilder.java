@@ -18,7 +18,7 @@ package org.apache.isis.viewer.json.viewer.representations;
 
 import javax.ws.rs.core.MediaType;
 
-import org.apache.isis.viewer.json.applib.HttpMethod2;
+import org.apache.isis.viewer.json.applib.HttpMethod;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.applib.RepresentationType;
 import org.apache.isis.viewer.json.applib.links.Rel;
@@ -41,7 +41,7 @@ public final class LinkBuilder {
     private final String href;
     private final MediaType mediaType;
     
-    private HttpMethod2 method = HttpMethod2.GET;
+    private HttpMethod method = HttpMethod.GET;
     private String title;
     private JsonRepresentation arguments;
     private JsonRepresentation value;
@@ -53,7 +53,7 @@ public final class LinkBuilder {
         this.href = href;
         this.mediaType = mediaType;
     }
-    public LinkBuilder withHttpMethod(HttpMethod2 method) {
+    public LinkBuilder withHttpMethod(HttpMethod method) {
         this.method = method;
         return this;
     }

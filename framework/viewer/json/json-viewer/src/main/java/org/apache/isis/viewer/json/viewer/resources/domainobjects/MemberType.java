@@ -33,7 +33,7 @@ import org.apache.isis.core.progmodel.facets.actions.validate.ActionValidationFa
 import org.apache.isis.core.progmodel.facets.collections.validate.CollectionValidateAddToFacet;
 import org.apache.isis.core.progmodel.facets.collections.validate.CollectionValidateRemoveFromFacet;
 import org.apache.isis.core.progmodel.facets.properties.validate.PropertyValidateFacet;
-import org.apache.isis.viewer.json.applib.HttpMethod2;
+import org.apache.isis.viewer.json.applib.HttpMethod;
 import org.apache.isis.viewer.json.applib.RepresentationType;
 import org.apache.isis.viewer.json.applib.links.Rel;
 import org.apache.isis.viewer.json.applib.util.Enums;
@@ -43,8 +43,8 @@ import com.google.common.collect.ImmutableMap;
 public enum MemberType {
 
     PROPERTY("properties/", "id", RepresentationType.OBJECT_PROPERTY, ImmutableMap.of(
-        "modify", MutatorSpec.of(Rel.MODIFY, PropertyValidateFacet.class, PropertySetterFacet.class, HttpMethod2.PUT, BodyArgs.ONE),
-        "clear", MutatorSpec.of(Rel.CLEAR, PropertyValidateFacet.class, PropertyClearFacet.class, HttpMethod2.DELETE, BodyArgs.NONE)
+        "modify", MutatorSpec.of(Rel.MODIFY, PropertyValidateFacet.class, PropertySetterFacet.class, HttpMethod.PUT, BodyArgs.ONE),
+        "clear", MutatorSpec.of(Rel.CLEAR, PropertyValidateFacet.class, PropertyClearFacet.class, HttpMethod.DELETE, BodyArgs.NONE)
         )) {
         @Override
         public ObjectSpecification specFor(ObjectMember objectMember) {
@@ -55,9 +55,9 @@ public enum MemberType {
      * {@link #getMutators()} are keyed by {@link CollectionSemantics#getAddToKey()}
      */
     COLLECTION("collections/", "id", RepresentationType.OBJECT_COLLECTION, ImmutableMap.of(
-        "addToSet", MutatorSpec.of(Rel.ADD_TO, CollectionValidateAddToFacet.class, CollectionAddToFacet.class, HttpMethod2.PUT, BodyArgs.ONE),
-        "addToList", MutatorSpec.of(Rel.ADD_TO, CollectionValidateAddToFacet.class, CollectionAddToFacet.class, HttpMethod2.POST, BodyArgs.ONE),
-        "removeFrom", MutatorSpec.of(Rel.REMOVE_FROM, CollectionValidateRemoveFromFacet.class, CollectionRemoveFromFacet.class, HttpMethod2.DELETE, BodyArgs.ONE)
+        "addToSet", MutatorSpec.of(Rel.ADD_TO, CollectionValidateAddToFacet.class, CollectionAddToFacet.class, HttpMethod.PUT, BodyArgs.ONE),
+        "addToList", MutatorSpec.of(Rel.ADD_TO, CollectionValidateAddToFacet.class, CollectionAddToFacet.class, HttpMethod.POST, BodyArgs.ONE),
+        "removeFrom", MutatorSpec.of(Rel.REMOVE_FROM, CollectionValidateRemoveFromFacet.class, CollectionRemoveFromFacet.class, HttpMethod.DELETE, BodyArgs.ONE)
         )) {
         @Override
         public ObjectSpecification specFor(ObjectMember objectMember) {
@@ -68,9 +68,9 @@ public enum MemberType {
      * {@link #getMutators()} are keyed by {@link ActionSemantics#getInvokeKey()}
      */
     ACTION("actions/", "id", RepresentationType.ACTION_RESULT, ImmutableMap.of(
-        "invokeQueryOnly", MutatorSpec.of(Rel.INVOKE, ActionValidationFacet.class, ActionInvocationFacet.class, HttpMethod2.GET, BodyArgs.MANY, "invoke"),
-        "invokeIdempotent", MutatorSpec.of(Rel.INVOKE, ActionValidationFacet.class, ActionInvocationFacet.class, HttpMethod2.PUT, BodyArgs.MANY, "invoke"),
-        "invoke", MutatorSpec.of(Rel.INVOKE, ActionValidationFacet.class, ActionInvocationFacet.class, HttpMethod2.POST, BodyArgs.MANY, "invoke")
+        "invokeQueryOnly", MutatorSpec.of(Rel.INVOKE, ActionValidationFacet.class, ActionInvocationFacet.class, HttpMethod.GET, BodyArgs.MANY, "invoke"),
+        "invokeIdempotent", MutatorSpec.of(Rel.INVOKE, ActionValidationFacet.class, ActionInvocationFacet.class, HttpMethod.PUT, BodyArgs.MANY, "invoke"),
+        "invoke", MutatorSpec.of(Rel.INVOKE, ActionValidationFacet.class, ActionInvocationFacet.class, HttpMethod.POST, BodyArgs.MANY, "invoke")
     )) {
         @Override
         public ObjectSpecification specFor(ObjectMember objectMember) {
