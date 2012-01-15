@@ -37,25 +37,26 @@ import org.apache.isis.viewer.junit.Fixtures;
 @Fixtures({ @Fixture(ToDoItemsFixture.class) })
 public class ToDoItemTest extends AbstractTest {
 
-    private ToDoItem firstItem;
+    private ToDoItem toDoItem;
 
     @Override
     @Before
     public void setUp() {
-        firstItem = wrapped(toDoItems.notYetDone().get(0));
+        toDoItem = toDoItems.notYetDone().get(0);
+        toDoItem = wrapped(toDoItem);
     }
     
     @Test
-    public void canMarkAsComplete() throws Exception {
-        firstItem.markAsDone();
-        assertThat(firstItem.isComplete(), is(true));
+    public void canMarkAsDone() throws Exception {
+        toDoItem.markAsDone();
+        assertThat(toDoItem.isComplete(), is(true));
     }
 
     @Test
-    public void cannotMarkAsCompleteTwice() throws Exception {
-        firstItem.markAsDone();
+    public void cannotMarkAsDoneTwice() throws Exception {
+        toDoItem.markAsDone();
         try {
-            firstItem.markAsDone();
+            toDoItem.markAsDone();
             fail("Should have been disabled");
         } catch (DisabledException e) {
             assertThat(e.getMessage(), is("Already done"));

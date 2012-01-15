@@ -22,7 +22,6 @@ package dom.todo;
 import org.apache.isis.applib.AbstractDomainObject;
 import org.apache.isis.applib.annotation.Disabled;
 import org.apache.isis.applib.annotation.MemberOrder;
-import org.apache.isis.applib.annotation.Optional;
 
 public class ToDoItem extends AbstractDomainObject {
 
