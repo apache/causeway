@@ -5,9 +5,9 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1"> 
     <title>Apache Isis Online Demo</title> 
-    <link rel="stylesheet" href="http://code.jquery.com/mobile/1.0/jquery.mobile-1.0.min.css" />
-    <script src="http://code.jquery.com/jquery-1.6.4.min.js"></script>
-    <script src="http://code.jquery.com/mobile/1.0/jquery.mobile-1.0.min.js"></script>
+    <link rel="stylesheet" href="../jquery.mobile/jquery.mobile-1.0.min.css" />
+    <script src="../jquery/jquery-1.6.4.min.js"></script>
+    <script src="../jquery.mobile/jquery.mobile-1.0.min.js"></script>
     
 <style type="text/css">
     * { font-family: Verdana; font-size: 96%; }
@@ -23,7 +23,6 @@
 <body> 
 
 <div data-role="page" id="login" data-theme="b">
-
 
     <div data-role="header"  data-theme="b">
         <h1>Login</h1>
@@ -50,7 +49,6 @@
             return true;
         } )          
       </script>
-    
 </div>
 
 <div data-role="page" id="todays-tasks" data-theme="b" >
@@ -75,7 +73,6 @@
                 var username = $("#login").data("username");
                 $("#todays-tasks .username").text( username )
             }
-        
         });
 
       </script>
@@ -98,6 +95,7 @@
         <h4></h4>
     </div><!-- /footer -->
 </div><!-- /page two -->
+
 
 
 <!-- Start of third page: #popup -->

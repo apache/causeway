@@ -33,6 +33,7 @@ import org.apache.isis.applib.annotation.QueryOnly;
  * The implementation depends on the configured object store.
  */
 @Hidden
+@Named("Categories")
 public interface Categories {
 
     @QueryOnly // no side-effects
