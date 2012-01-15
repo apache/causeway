@@ -18,10 +18,9 @@
 </head>
 
 <body>
+	<div data-role="page" id="login">
 
-	<div data-role="page" id="login" data-theme="b">
-
-		<div data-role="header" data-theme="b">
+		<div data-role="header">
 			<h1>Login</h1>
 		</div>
 		<!-- /header -->
@@ -46,9 +45,9 @@
 	</div>
 
 
-	<div data-role="page" id="todays-tasks" data-theme="b">
+	<div data-role="page" id="todays-tasks">
 
-		<div data-role="header" data-theme="b">
+		<div data-role="header">
 			<a href="#login" data-icon="back" data-rel="back">Logout</a>
 			<h1>Today's tasks</h1>
 		</div>
@@ -56,16 +55,37 @@
 		<div data-role="content">
         
             <br/>
-            <ul data-role="listview" data-theme="b" class="tasks"></ul>
+            <ul data-role="listview" class="tasks"></ul>
 		</div>
 
         <script class="tasks-tmpl" type="text/x-jquery-tmpl">
-            <li data-theme="b">
-                <a href="#">${title}</a>
+            <li>
+                <a href="#task?href=${href}">${title}</a>
             </li>
         </script>
 	</div>
 
+    <div data-role="page" id="task">
+
+        <div data-role="header">
+            <a href="#tasks" data-icon="back" data-rel="back">Back</a>
+            <h1>Task</h1>
+        </div>
+
+        <div data-role="content">
+            <br/>
+            <div class="task"></div>
+        </div>
+
+        <script class="task-tmpl" type="text/x-jquery-tmpl">
+
+            <label for="${id}">${id}:</label>
+            <input type="text"
+                name="${id}" id="${id}" value="${value}" placeholder="${id}"
+                class="required"/>
+
+        </script>
+    </div>
 
 	<div data-role="page" id="settings" data-add-back-btn="true">
 
@@ -83,11 +103,11 @@
 
 	<div data-role="page" id="popup">
 
-		<div data-role="header" data-theme="e">
+		<div data-role="header">
 			<h1>Dialog</h1>
 		</div>
 
-		<div data-role="content" data-theme="d">
+		<div data-role="content">
 			<h2>Popup</h2>
 			<p>
 				I have an id of "popup" on my page container and only look like a
