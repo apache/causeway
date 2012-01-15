@@ -76,7 +76,7 @@ public class ListReprRenderer extends ReprRendererAbstract<ListReprRenderer, Col
     }
 
     public JsonRepresentation render() {
-        addValues();
+        addValue();
         
         addLink(Rel.RETURN_TYPE, returnType);
         addLink(Rel.ELEMENT_TYPE, elementType);
@@ -86,13 +86,13 @@ public class ListReprRenderer extends ReprRendererAbstract<ListReprRenderer, Col
         return representation;
     }
 
-    private void addValues() {
+    private void addValue() {
         if(objectAdapters == null) {
             return;
         }
         
         JsonRepresentation values = JsonRepresentation.newArray();
-        final LinkFollower linkFollower = getLinkFollower().follow("values");
+        final LinkFollower linkFollower = getLinkFollower().follow("value");
 
         for(ObjectAdapter adapter: objectAdapters) {
             JsonRepresentation linkToObject = linkTo.with(adapter).builder().build();
@@ -106,7 +106,7 @@ public class ListReprRenderer extends ReprRendererAbstract<ListReprRenderer, Col
                 linkToObject.mapPut("value", domainObject);
             }
         }
-        representation.mapPut("values", values);
+        representation.mapPut("value", values);
     }
 
 
