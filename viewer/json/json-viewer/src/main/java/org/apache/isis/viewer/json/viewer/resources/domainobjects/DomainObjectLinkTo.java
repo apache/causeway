@@ -48,7 +48,9 @@ public class DomainObjectLinkTo implements ObjectAdapterLinkTo {
 
     @Override
     public LinkBuilder builder(Rel rel) {
-        return LinkBuilder.newBuilder(resourceContext, relElseDefault(rel), RepresentationType.DOMAIN_OBJECT, linkRef());
+        final LinkBuilder linkBuilder = LinkBuilder.newBuilder(resourceContext, relElseDefault(rel), RepresentationType.DOMAIN_OBJECT, linkRef());
+        linkBuilder.withTitle(objectAdapter.titleString());
+        return linkBuilder;
     }
 
     /**

@@ -65,6 +65,14 @@ public final class LinkRepresentation extends JsonRepresentation {
         return getRepresentation("value");
     }
 
+    public String getTitle() {
+        return getString("title");
+    }
+    public LinkRepresentation withTitle(final String title) {
+        asObjectNode().put("title", title);
+        return this;
+    }
+
     public HttpMethod getHttpMethod() {
         String methodStr = asObjectNode().path("method").getTextValue();
         return HttpMethod.valueOf(methodStr);
