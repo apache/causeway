@@ -51,8 +51,12 @@ public interface ToDoItems {
     @MemberOrder(sequence="3")
     public List<ToDoItem> allToDos();
 
-    @Idempotent // same post-conditions
+    @QueryOnly
     @MemberOrder(sequence="4")
+    public List<ToDoItem> similarTo(ToDoItem toDoItem);
+
+    @Idempotent // same post-conditions
+    @MemberOrder(sequence="5")
     public void removeCompleted();
 
 }

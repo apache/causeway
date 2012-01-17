@@ -19,6 +19,10 @@
 
 package org.apache.isis.examples.onlinedemo.dom.items;
 
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
+
 import org.apache.isis.applib.annotation.Disabled;
 import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.applib.annotation.Ignore;
@@ -33,6 +37,8 @@ import org.apache.isis.applib.util.TitleBuffer;
 import org.apache.isis.applib.value.Date;
 
 import com.google.common.base.Objects;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
 
 /**
  * A todo item (task) owned by a particular user. 
@@ -176,6 +182,16 @@ public class ToDoItem implements Comparable<ToDoItem> {
     }
     // }}
 
+    
+    // {{ SimilarItems (collection)
+    @MemberOrder(sequence = "5")
+    public List<ToDoItem> getSimilarItems() {
+        return toDoItems.similarTo(this);
+    }
+    // }}
+
+
+    
     // {{ compareTo (programmatic)
     /**
      * by complete flag, then due by date, then description
@@ -240,6 +256,17 @@ public class ToDoItem implements Comparable<ToDoItem> {
             
         };
     }
+
+    public static Filter<ToDoItem> thoseSimilarTo(final ToDoItem toDoItem) {
+        return new Filter<ToDoItem>() {
+            @Override
+            public boolean accept(ToDoItem eachToDoItem) {
+                return Objects.equal(toDoItem.getCategory(), eachToDoItem.getCategory()) && eachToDoItem != toDoItem;
+            }
+            
+        };
+    }
+
     // }}
     
     // {{ injected: ToDoItems
@@ -248,6 +275,7 @@ public class ToDoItem implements Comparable<ToDoItem> {
         this.toDoItems = toDoItems;
     }
     // }}
+
 
 
 }

@@ -14,77 +14,121 @@
 
 <link rel="stylesheet" type="text/css" href="app.css" />
 
+<script type="text/javascript" src="util.js"></script>
+<script type="text/javascript" src="generic.js"></script>
 <script type="text/javascript" src="app.js"></script>
 </head>
 
-<body>
-	<div data-role="page" id="login">
+<body id="pageHolder">
+	<div data-role="page" id="home">
 
 		<div data-role="header">
-			<h1>Login</h1>
-		</div>
-		<!-- /header -->
-
-		<div data-role="content">
-
-			<label for="username">Username:</label>
-			<input type="text"
-				name="username" id="username" value="" placeholder="Username"
-				class="required"/>
-  		    <label for="password">Password:</label>
-  		    <input type="password" name="password" id="password" value=""
-				placeholder="Password" class="required" /> <label class="error"></label>
-
-			<a href="#todays-tasks" data-role="button" data-transition="pop"
-				data-ajax="false" data-icon="arrow-r" data-inline="true">Submit</a>
-
-		</div>
-
-        <script type="text/javascript">
-        </script>
-	</div>
-
-
-	<div data-role="page" id="todays-tasks">
-
-		<div data-role="header">
-			<a href="#login" data-icon="back" data-rel="back">Logout</a>
-			<h1>Today's tasks</h1>
+        <!-- 
+            <a href="#settings" data-icon="gear" class="ui-btn-right" data-transition="slideup">Settings</a>
+        -->
+			<h1>Home</h1>
 		</div>
 
 		<div data-role="content">
-        
             <br/>
+            <button>Todays Tasks</button>
             <ul data-role="listview" class="tasks"></ul>
 		</div>
 
-        <script class="tasks-tmpl" type="text/x-jquery-tmpl">
+        <script class="tmpl" type="text/x-jquery-tmpl">
             <li>
-                <a href="#task?href=${href}">${title}</a>
+                <a href="${href}">${title}</a>
             </li>
+        </script>
+        
+        <!-- workaround? http://stackoverflow.com/questions/7544023/how-to-initialize-pages-in-jquery-mobile-pageinit-not-firing -->
+        <script type="text/javascript">
+        
+            $("#home button").click(function(){
+                $.mobile.changePage("/services/toDoItems/actions/toDosForToday/invoke", "pop")
+            });
+            
+            /*$(document).delegate("#home", "pageinit", todaysTasksPage);*/
         </script>
 	</div>
 
-    <div data-role="page" id="task">
+    <div data-role="page" id="listView">
 
         <div data-role="header">
-            <a href="#tasks" data-icon="back" data-rel="back">Back</a>
-            <h1>Task</h1>
+            <a data-icon="back" data-rel="back">Back</a>
+            <h1>List</h1>
         </div>
 
         <div data-role="content">
             <br/>
-            <div class="task"></div>
+            <ul data-filter="true" data-role="listview"></ul>
         </div>
 
-        <script class="task-tmpl" type="text/x-jquery-tmpl">
-
-            <label for="${id}">${id}:</label>
-            <input type="text"
-                name="${id}" id="${id}" value="${value}" placeholder="${id}"
-                class="required"/>
-
+        <script class="tmpl" type="text/x-jquery-tmpl">
+            <li>
+                <a href="${href}">${title}</a>
+            </li>
         </script>
+    </div>
+
+    <div data-role="page" id="objectCollectionView">
+
+        <div data-role="header">
+            <a data-icon="back" data-rel="back">Back</a>
+            <h1>Collection</h1>
+        </div>
+
+        <div data-role="content">
+            <br/>
+            <ul data-filter="true" data-role="listview"></ul>
+        </div>
+
+        <script class="tmpl" type="text/x-jquery-tmpl">
+            <li>
+                <a href="${href}">${title}</a>
+            </li>
+        </script>
+    </div>
+
+    <div data-role="page" id="domainObjectView">
+
+        <div data-role="header">
+            <a data-icon="back" data-rel="back">Back</a>
+            <h1>Object</h1>
+        </div>
+
+        <div data-role="content">
+            <div class="valueProperties"></div>
+            <br/>
+            <p>References</p>
+            <ul data-role="listview" data-inset="true" class="referenceProperties" style="margin-right: 2em;"></ul>
+            <br/>
+            <p>Collections</p>
+            <ul data-role="listview" data-inset="true" class="collections" style="margin-right: 2em;"></ul>
+        </div>
+
+        <script class="valueProperties-tmpl" type="text/x-jquery-tmpl">
+                <label for="${id}">${id}:</label>
+                <input type="text"
+                    name="${id}" id="${id}" value="${value}" placeholder="${id}"
+                    class="required"/>
+         </script>
+
+        <script class="referenceProperties-tmpl" type="text/x-jquery-tmpl">
+            <li>
+                <a data-transition="slide" href="${value.href}">
+                    <p>${id}</p>
+                    <p><b>${value.title}</b></p>
+                </a>
+            </li>
+         </script>
+
+        <script class="collections-tmpl" type="text/x-jquery-tmpl">
+            <li>
+                <a data-transition="slideup" href="${href}">${id}</a>
+            </li>
+         </script>
+
     </div>
 
 	<div data-role="page" id="settings" data-add-back-btn="true">
@@ -93,7 +137,38 @@
 			<h1>Settings</h1>
 		</div>
 
-		<div data-role="content"></div>
+		<div data-role="content">
+            
+            <fieldset id="settings-theme">
+                <legend>Theme:</legend>
+                    <input type="radio" name="settings-theme" id="settings-theme-a" value="a" checked="checked" />
+                    <label for="settings-theme-a">Dark</label>
+        
+                    <input type="radio" name="settings-theme" id="settings-theme-b" value="b"/>
+                    <label for="settings-theme-b">Blue</label>
+        
+                    <input type="radio" name="settings-theme" id="settings-theme-c" value="c"/>
+                    <label for="settings-theme-c">Grey</label>
+        
+                    <input type="radio" name="settings-theme" id="settings-theme-d" value="d"/>
+                    <label for="settings-theme-d">White</label>
+        
+                    <input type="radio" name="settings-theme" id="settings-theme-e" value="e"/>
+                    <label for="settings-theme-e">Yellow</label>
+            </fieldset>
+
+        </div>
+        
+        <script type="text/javascript">
+            $("#settings input").change(function(e){
+                var theme = $(this).attr("value");
+                $("div").filter( function() {
+                    var divDataRole = $(this).attr("data-role")
+                    var isPage = (divDataRole === "page"); 
+                    return isPage;
+                }).attr("data-theme", theme);
+            });
+        </script>
 
 		<div data-role="footer">
 			<h4></h4>

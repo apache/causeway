@@ -73,7 +73,16 @@ public class ToDoItemsDefault extends AbstractFactoryAndRepository implements To
     }
     // }}
 
-    // {{ AllToDos (action)
+    // {{ SimilarTo (action)
+
+    @Override
+    public List<ToDoItem> similarTo(ToDoItem toDoItem) {
+        return allMatches(ToDoItem.class, ToDoItem.thoseSimilarTo(toDoItem));
+    }
+    // }}
+
+
+    // {{ RemoveCompleted (action)
 
     @Override
     public void removeCompleted() {
