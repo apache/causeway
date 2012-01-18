@@ -62,7 +62,8 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
     public static LinkBuilder newLinkToBuilder(ResourceContext resourceContext, Rel rel, ObjectAdapter elementAdapter) {
         String oidStr = resourceContext.getOidStringifier().enString(elementAdapter.getOid());
         String url = "objects/" + oidStr;
-        return LinkBuilder.newBuilder(resourceContext, rel, RepresentationType.DOMAIN_OBJECT, url);
+        final LinkBuilder builder = LinkBuilder.newBuilder(resourceContext, rel, RepresentationType.DOMAIN_OBJECT, url).withTitle(elementAdapter.titleString());
+        return builder;
     }
 
     private static enum Mode {
