@@ -7,10 +7,11 @@ clonePage = function(pageTemplateId, discriminator) {
   return page;
 }
 
-handleDomainObjectRepresentation = function(json) {
+handleDomainObjectRepresentation = function(urlHref, dataOptions, json, xhr) {
   
   var page = clonePage("#domainObjectView", json.oid);
-
+  $(page).data("urlHref", urlHref);
+  
   var header = page.children(":jqmData(role=header)");
   header.find("h1").html(json.title);
 
@@ -32,7 +33,7 @@ handleDomainObjectRepresentation = function(json) {
   var collections = json.members.filter(function(item) {
     return item.memberType === "collection";
   }).map(function(value, i) {
-    var href = $.grep(value.links, function(v) { return v.rel === "details" } )[0].href
+    var href = grepLink(value.links, "details").href
     return {
       "hrefUrlEncoded" : urlencode(value.links[0].href),
       "id" : value.id,
@@ -49,16 +50,19 @@ handleDomainObjectRepresentation = function(json) {
   
   referencePropertiesList.listview("refresh");
   collectionsList.listview("refresh");
+  
+  dataOptions.dataUrl="#object?url=" + urlencode(urlHref)
 
   return page
 } 
 
 
 listRepresentation = 0;
-handleListRepresentation = function(json) {
+handleListRepresentation = function(urlHref, dataOptions, json, xhr) {
   
   var page = clonePage("#listView", listRepresentation++);
-
+  $(page).data("urlHref", urlHref);
+  
   var items = $.map(json, function(value, i) {
     return {
       "hrefUrlEncoded" : urlencode(value.href),
@@ -80,14 +84,20 @@ handleListRepresentation = function(json) {
 
   div.listview("refresh");
   
+  dataOptions.dataUrl="#list?num=" + listRepresentation
+  
   return page;
 }
 
+grepLink = function(links, relStr) {
+  return $.grep(links, function(v) { return v.rel === relStr } )[0]
+}
 
 objectCollectionRepresentation = 0;
-handleObjectCollectionRepresentation = function(json) {
+handleObjectCollectionRepresentation = function(urlHref, dataOptions, json, xhr) {
   
   var page = clonePage("#objectCollectionView", objectCollectionRepresentation++);
+  $(page).data("urlHref", urlHref);
 
   var items = $.map(json.value, function(value, i) {
     return {
@@ -100,7 +110,22 @@ handleObjectCollectionRepresentation = function(json) {
   var header = page.children(":jqmData(role=header)");
   var content = page.children(":jqmData(role=content)");
 
-  header.find("h1").html(json.id);
+  var parentHref = grepLink(json.links, "up").href
+  var parentOid;
+  var parentTitle;
+  
+  $.ajax({
+    url : parentHref,
+    dataType : 'json',
+    async: false,
+    success : function(json, str, xhr) {
+      parentOid = json.oid;
+      parentTitle = json.title;
+    }
+  })
+
+  var collectionId = json.id;
+  header.find("h1").html(collectionId + " for " + parentTitle);
 
   var div = page.find("ul");
   var templateDiv = page.find(".tmpl");
@@ -108,19 +133,23 @@ handleObjectCollectionRepresentation = function(json) {
   applyTemplateDiv(items, div, templateDiv);
   page.page();
 
+  
+  
   div.listview("refresh");
+  
+  dataOptions.dataUrl="#collection?url=" + urlencode(urlHref)
   
   return page;
 }
 
 
-handleActionResultRepresentation = function(json) {
+handleActionResultRepresentation = function(urlHref, dataOptions, json, xhr) {
   var resultType = json.resulttype
   if(resultType === "object") {
-    return handleDomainObjectRepresentation(json.result)
+    return handleDomainObjectRepresentation(urlHref, dataOptions, json.result, xhr)
   }
   if(resultType === "list") {
-    return handleListRepresentation(json.result.value)
+    return handleListRepresentation(urlHref, dataOptions, json.result.value, xhr)
   }
   alert("not yet supported")
 }
@@ -143,10 +172,11 @@ submitAndRender = function(urlHref, dataOptions) {
         alert("unable to handle response")
         return;
       } 
+      var page = handler(urlHref, dataOptions, json, xhr)
+
       if(dataOptions) {
         dataOptions.dataUrl = urlHref;
       }
-      var page = handler(json)
   
       $.mobile.changePage(page, dataOptions);
     }
