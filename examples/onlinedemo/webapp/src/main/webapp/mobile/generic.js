@@ -50,6 +50,14 @@ generic.handleDomainObjectRepresentation = function(urlHref, dataOptions, json, 
   var valueProperties = json.members.filter(function(item) {
     return item.memberType === "property" && !item.value.href;
   });
+  valueProperties = $.map( valueProperties, function(value, i) {
+    return {
+      "id": value.id,
+      "value": value.value,
+      "inputType": "text"
+    }
+  } );
+
   var valuePropertiesDiv = page.children(":jqmData(role=content)").find(".valueProperties");
   var valuePropertiesTemplateDiv = page.children(".valueProperties-tmpl");
   util.applyTemplateDiv(valueProperties, valuePropertiesDiv, valuePropertiesTemplateDiv);

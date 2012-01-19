@@ -15,7 +15,7 @@ $(function() {
 
   // if user manually refreshes page for domain object, then re-retrieve
   var locationHref = location.href;
-  if(locationHref.indexOf("View") != -1) {
+  if(locationHref.indexOf("genericDomainObjectView") != -1) {
     var urlHref = generic.extract(locationHref);
     generic.submitAndRender(urlHref, "pop");
   } else {
