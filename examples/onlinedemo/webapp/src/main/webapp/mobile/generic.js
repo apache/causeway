@@ -1,29 +1,43 @@
-cloneTemplatePage = function(pageBaseId, urlHref, dataOptions) {
+var util = namespace('org.apache.isis.viewer.json.jqmobile.util');
+var generic = namespace('org.apache.isis.viewer.json.jqmobile.generic');
 
-  var urlHrefEncoded = urlencode(urlHref);
+generic.cloneTemplatePage = function(pageBaseId, urlHref, dataOptions) {
+
+  var urlHrefEncoded = util.urlencode(urlHref);
 
   var pageId = pageBaseId + "-" + urlHrefEncoded;
-  removePage(pageId);
+  util.removePage(pageId);
 
-  var page = cloneAndInsertPage(pageBaseId, pageId)
+  var page = util.cloneAndInsertPage(pageBaseId, pageId)
   
   dataOptions.dataUrl = pageBaseId + "?url=" + urlHrefEncoded
   return page;
 }
 
-extract = function(urlHref) {
+generic.itemLinks = function(jsonItems) { 
+  var items = $.map(jsonItems, function(value, i) {
+    return {
+      "hrefUrlEncoded" : util.urlencode(value.href),
+      "title" : value.title,
+      "href" : value.href
+    }
+  })
+  return items
+}
+
+generic.extract = function(urlHref) {
   var regex = /.*?url=(.*)/
   var matches = regex.exec(urlHref)
   var url = matches && matches[1]
   if(url) {
-    return urldecode(url)
+    return util.urldecode(url)
   }
   return urlHref
 }
 
-handleDomainObjectRepresentation = function(urlHref, dataOptions, json, xhr) {
+generic.handleDomainObjectRepresentation = function(urlHref, dataOptions, json, xhr) {
   
-  var page = cloneTemplatePage("genericDomainObjectView", urlHref, dataOptions);
+  var page = generic.cloneTemplatePage("genericDomainObjectView", urlHref, dataOptions);
   
   var header = page.children(":jqmData(role=header)");
   header.find("h1").html(json.title);
@@ -34,7 +48,7 @@ handleDomainObjectRepresentation = function(urlHref, dataOptions, json, xhr) {
   });
   var valuePropertiesDiv = page.children(":jqmData(role=content)").find(".valueProperties");
   var valuePropertiesTemplateDiv = page.children(".valueProperties-tmpl");
-  applyTemplateDiv(valueProperties, valuePropertiesDiv, valuePropertiesTemplateDiv);
+  util.applyTemplateDiv(valueProperties, valuePropertiesDiv, valuePropertiesTemplateDiv);
 
   
   // reference properties
@@ -43,14 +57,14 @@ handleDomainObjectRepresentation = function(urlHref, dataOptions, json, xhr) {
   });
   var referencePropertiesList = page.children(":jqmData(role=content)").find(".referenceProperties");
   var referencePropertiesTemplateDiv = page.children(".referenceProperties-tmpl");
-  applyTemplateDiv(referenceProperties, referencePropertiesList, referencePropertiesTemplateDiv);
+  util.applyTemplateDiv(referenceProperties, referencePropertiesList, referencePropertiesTemplateDiv);
 
   var collections = json.members.filter(function(item) {
     return item.memberType === "collection";
   }).map(function(value, i) {
-    var href = grepLink(value.links, "details").href
+    var href = util.grepLink(value.links, "details").href
     return {
-      "hrefUrlEncoded" : urlencode(value.links[0].href),
+      "hrefUrlEncoded" : util.urlencode(value.links[0].href),
       "id" : value.id,
       "href" : value.links[0].href
     }
@@ -59,7 +73,7 @@ handleDomainObjectRepresentation = function(urlHref, dataOptions, json, xhr) {
   // collections
   var collectionsList = page.children(":jqmData(role=content)").find(".collections");
   var collectionsTemplateDiv = page.children(".collections-tmpl");
-  applyTemplateDiv(collections, collectionsList, collectionsTemplateDiv);
+  util.applyTemplateDiv(collections, collectionsList, collectionsTemplateDiv);
 
 
   // refresh
@@ -73,17 +87,11 @@ handleDomainObjectRepresentation = function(urlHref, dataOptions, json, xhr) {
 } 
 
 
-handleListRepresentation = function(urlHref, dataOptions, json, xhr) {
+generic.handleListRepresentation = function(urlHref, dataOptions, json, xhr) {
   
-  var page = cloneTemplatePage("genericListView", urlHref, dataOptions);
-  
-  var items = $.map(json, function(value, i) {
-    return {
-      "hrefUrlEncoded" : urlencode(value.href),
-      "title" : value.title,
-      "href" : value.href
-    }
-  });
+  var page = generic.cloneTemplatePage("genericListView", urlHref, dataOptions);
+
+  var items = generic.itemLinks(json)
 
   var header = page.children(":jqmData(role=header)");
   var content = page.children(":jqmData(role=content)");
@@ -93,7 +101,7 @@ handleListRepresentation = function(urlHref, dataOptions, json, xhr) {
   var div = page.find("ul");
   var templateDiv = page.find(".tmpl");
   
-  applyTemplateDiv(items, div, templateDiv);
+  util.applyTemplateDiv(items, div, templateDiv);
   
   // no longer needed?
   //page.page();
@@ -102,22 +110,16 @@ handleListRepresentation = function(urlHref, dataOptions, json, xhr) {
   return page;
 }
 
-handleObjectCollectionRepresentation = function(urlHref, dataOptions, json, xhr) {
+generic.handleObjectCollectionRepresentation = function(urlHref, dataOptions, json, xhr) {
   
-  var page = cloneTemplatePage("genericObjectCollectionView", urlHref, dataOptions);
-  
-  var items = $.map(json.value, function(value, i) {
-    return {
-      "hrefUrlEncoded" : urlencode(value.href),
-      "title" : value.title,
-      "href" : value.href
-    }
-  });
+  var page = generic.cloneTemplatePage("genericObjectCollectionView", urlHref, dataOptions);
+
+  var items = generic.itemLinks(json.value)
 
   var header = page.children(":jqmData(role=header)");
   var content = page.children(":jqmData(role=content)");
 
-  var parentTitle = grepLink(json.links, "up").title
+  var parentTitle = util.grepLink(json.links, "up").title
   
   var collectionId = json.id;
   header.find("h1").html(collectionId + " for " + parentTitle);
@@ -125,45 +127,41 @@ handleObjectCollectionRepresentation = function(urlHref, dataOptions, json, xhr)
   var div = page.find("ul");
   var templateDiv = page.find(".tmpl");
   
-  applyTemplateDiv(items, div, templateDiv);
-  
-  // no longer needed?
-  //page.page();
-  //div.listview("refresh");
+  util.applyTemplateDiv(items, div, templateDiv);
   
   return page;
 }
 
 
-handleActionResultRepresentation = function(urlHref, dataOptions, json, xhr) {
+generic.handleActionResultRepresentation = function(urlHref, dataOptions, json, xhr) {
   var resultType = json.resulttype
   if(resultType === "object") {
-    return handleDomainObjectRepresentation(urlHref, dataOptions, json.result, xhr)
+    return generic.handleDomainObjectRepresentation(urlHref, dataOptions, json.result, xhr)
   }
   if(resultType === "list") {
-    return handleListRepresentation(urlHref, dataOptions, json.result.value, xhr)
+    return generic.handleListRepresentation(urlHref, dataOptions, json.result.value, xhr)
   }
   alert("not yet supported")
 }
 
-handlers = {
-    "application/json;profile=\"urn:org.restfulobjects/domainobject\"": handleDomainObjectRepresentation,
-    "application/json; profile=\"urn:org.restfulobjects/domainobject\"": handleDomainObjectRepresentation,
-    "application/json;profile=\"urn:org.restfulobjects/list\"": handleListRepresentation,
-    "application/json; profile=\"urn:org.restfulobjects/list\"": handleListRepresentation,
-    "application/json;profile=\"urn:org.restfulobjects/objectcollection\"": handleObjectCollectionRepresentation,
-    "application/json; profile=\"urn:org.restfulobjects/objectcollection\"": handleObjectCollectionRepresentation,
-    "application/json;profile=\"urn:org.restfulobjects/actionresult\"": handleActionResultRepresentation,
-    "application/json; profile=\"urn:org.restfulobjects/actionresult\"": handleActionResultRepresentation
+generic.handlers = {
+    "application/json;profile=\"urn:org.restfulobjects/domainobject\"": generic.handleDomainObjectRepresentation,
+    "application/json; profile=\"urn:org.restfulobjects/domainobject\"": generic.handleDomainObjectRepresentation,
+    "application/json;profile=\"urn:org.restfulobjects/list\"": generic.handleListRepresentation,
+    "application/json; profile=\"urn:org.restfulobjects/list\"": generic.handleListRepresentation,
+    "application/json;profile=\"urn:org.restfulobjects/objectcollection\"": generic.handleObjectCollectionRepresentation,
+    "application/json; profile=\"urn:org.restfulobjects/objectcollection\"": generic.handleObjectCollectionRepresentation,
+    "application/json;profile=\"urn:org.restfulobjects/actionresult\"": generic.handleActionResultRepresentation,
+    "application/json; profile=\"urn:org.restfulobjects/actionresult\"": generic.handleActionResultRepresentation
 }
 
-submitAndRender = function(urlHref, dataOptions) {
+generic.submitAndRender = function(urlHref, dataOptions) {
   $.ajax({
     url : urlHref,
     dataType : 'json',
     success : function(json, str, xhr) {
       var contentType = xhr.getResponseHeader("Content-Type");
-      var handler = handlers[contentType];
+      var handler = generic.handlers[contentType];
       if(!handler) {
         alert("unable to handle response")
         return;
@@ -175,7 +173,7 @@ submitAndRender = function(urlHref, dataOptions) {
   })
 }
 
-submitRenderAndNavigate = function(e, data) {
+generic.submitRenderAndNavigate = function(e, data) {
   if (typeof data.toPage !== "string") {
     return;
   }
@@ -185,7 +183,7 @@ submitRenderAndNavigate = function(e, data) {
     return;
   }
 
-  submitAndRender(url.href, data.options);
+  generic.submitAndRender(url.href, data.options);
   e.preventDefault();
 }
 

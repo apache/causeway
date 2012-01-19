@@ -1,13 +1,5 @@
-//cloneGenericView = function(pageBaseId) {
-//  cloneAndInsertPage(pageBaseId, pageBaseId + "-template")
-//}
-//
-//cloneGenericViews = function() {
-//  cloneGenericView("genericDomainObjectView")
-//  cloneGenericView("genericObjectCollectionView")
-//  cloneGenericView("genericListView")
-//}
-
+var util    = namespace('org.apache.isis.viewer.json.jqmobile.util');
+var generic = namespace('org.apache.isis.viewer.json.jqmobile.generic');
 
 $(function() {
   $(document).bind("mobileinit", function() {
@@ -23,17 +15,14 @@ $(function() {
     });
   });
 
-  $(document).bind("pagebeforechange", submitRenderAndNavigate);
+  $(document).bind("pagebeforechange", generic.submitRenderAndNavigate);
 
-  //cloneGenericViews();
-  
   // if user manually refreshes page for domain object, then re-retrieve
   var locationHref = location.href;
   if(locationHref.indexOf("genericDomainObjectView") != -1) {
-    var urlHref = extract(locationHref);
-    submitAndRender(urlHref, "pop");
+    var urlHref = generic.extract(locationHref);
+    generic.submitAndRender(urlHref, "pop");
   } else {
     $.mobile.changePage($("#home"))
   }
-  
 });
