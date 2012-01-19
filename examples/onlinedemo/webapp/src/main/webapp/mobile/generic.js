@@ -39,6 +39,25 @@ generic.extract = function(urlHref) {
   return urlHref
 }
 
+generic.returnTypeFor = function(memberItem) {
+  var detailsJson = util.grepAndFollowLink(memberItem.links, "details")
+  if (!detailsJson) {
+    return null;
+  }
+  var describedByJson = util.grepAndFollowLink(detailsJson.links, "describedby")
+  if (!describedByJson) {
+    return null;
+  }
+  var returnTypeLink = util.grepLink(describedByJson.links, "returntype")
+  return returnTypeLink? returnTypeLink.href : null;
+}
+
+generic.dataTypeFor = function(memberItem) {
+  var returnType = generic.returnTypeFor(memberItem);
+  if(returnType.endsWith("boolean")) return "boolean"
+  return "string"
+}
+
 generic.handleDomainObjectRepresentation = function(urlHref, dataOptions, json, xhr) {
   
   var page = generic.cloneTemplatePage("genericDomainObjectView", urlHref, dataOptions);
@@ -50,11 +69,14 @@ generic.handleDomainObjectRepresentation = function(urlHref, dataOptions, json, 
   var valueProperties = json.members.filter(function(item) {
     return item.memberType === "property" && !item.value.href;
   });
+  
   valueProperties = $.map( valueProperties, function(value, i) {
+    var dataType = generic.dataTypeFor(value)
     return {
       "id": value.id,
       "value": value.value,
-      "inputType": "text"
+      "dataTypeIsString": dataType === "string",
+      "dataTypeIsBoolean": dataType === "boolean"
     }
   } );
 

@@ -105,10 +105,23 @@
         </div>
 
         <script class="valueProperties-tmpl" type="text/x-jquery-tmpl">
+            {{if dataTypeIsString}}
                 <label for="${id}">${id}:</label>
-                <input type="${inputType}"
+                <input type="text"
                     name="${id}" id="${id}" value="${value}" placeholder="${id}"
                     class="required"/>
+            {{/if}}
+            {{if dataTypeIsBoolean}}
+                <div data-role="fieldcontain">
+                    <fieldset data-role="controlgroup">
+                        <label for="${id}">${id}:</label>
+                        <input type="checkbox" 
+                            name="${id}" id="${id}" value="${value}"
+                            class="custom required"/>
+                    </fieldset>
+                </div>
+                <label for="${id}">${id}:</label>
+            {{/if}}
          </script>
 
         <script class="referenceProperties-tmpl" type="text/x-jquery-tmpl">

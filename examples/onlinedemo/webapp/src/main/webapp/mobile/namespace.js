@@ -1,3 +1,5 @@
+
+
 namespace = function(namespaceString) {
     var parts = namespaceString.split('.'),
         parent = window,
