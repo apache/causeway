@@ -2,7 +2,6 @@ var util = namespace('org.apache.isis.viewer.json.jqmobile.util');
 var generic = namespace('org.apache.isis.viewer.json.jqmobile.generic');
 
 generic.cloneTemplatePage = function(pageBaseId, urlHref, dataOptions) {
-
   var urlHrefEncoded = util.urlencode(urlHref);
 
   var pageId = pageBaseId + "-" + urlHrefEncoded;
@@ -26,12 +25,17 @@ generic.itemLinks = function(jsonItems) {
 }
 
 generic.extract = function(urlHref) {
-  var regex = /.*?url=(.*)/
-  var matches = regex.exec(urlHref)
+  // does it match: foobar.html?url=xxx; if so, then return xxx
+  var matches = /.*?url=(.*)/.exec(urlHref)
   var url = matches && matches[1]
   if(url) {
     return util.urldecode(url)
   }
+  // does it simply match foobar.html; if so, then return null
+  if ( /.*\.html$/.test(urlHref)) {
+    return null
+  }
+  // simply return the URL, assuming it is the data url we need to get.
   return urlHref
 }
 
@@ -102,10 +106,6 @@ generic.handleListRepresentation = function(urlHref, dataOptions, json, xhr) {
   var templateDiv = page.find(".tmpl");
   
   util.applyTemplateDiv(items, div, templateDiv);
-  
-  // no longer needed?
-  //page.page();
-  //div.listview("refresh");
   
   return page;
 }
@@ -179,11 +179,12 @@ generic.submitRenderAndNavigate = function(e, data) {
   }
 
   var url = $.mobile.path.parseUrl(data.toPage)
-  if(url.href.search(/^.+\.html.*$/) !== -1) {
+  var urlHref = generic.extract(url.href)
+  if(!urlHref) {
     return;
   }
 
-  generic.submitAndRender(url.href, data.options);
+  generic.submitAndRender(urlHref, data.options);
   e.preventDefault();
 }
 

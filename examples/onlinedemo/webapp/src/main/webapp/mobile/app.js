@@ -2,10 +2,6 @@ var util    = namespace('org.apache.isis.viewer.json.jqmobile.util');
 var generic = namespace('org.apache.isis.viewer.json.jqmobile.generic');
 
 $(function() {
-  $(document).bind("mobileinit", function() {
-    $.mobile.ajaxEnabled = false;
-  });
-
   $("#settings-theme input").click(function(e) {
     
     var theme = e.currentTarget.value;
@@ -19,7 +15,7 @@ $(function() {
 
   // if user manually refreshes page for domain object, then re-retrieve
   var locationHref = location.href;
-  if(locationHref.indexOf("genericDomainObjectView") != -1) {
+  if(locationHref.indexOf("View") != -1) {
     var urlHref = generic.extract(locationHref);
     generic.submitAndRender(urlHref, "pop");
   } else {
