@@ -3,7 +3,8 @@
 
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="initial-scale=1, width=device-width, target-densitydpi=device-dpi"/>
+
 <title>Apache Isis Online Demo</title>
 
 <link rel="stylesheet" href="../jquery.mobile/jquery.mobile-1.0.min.css" />
@@ -114,13 +115,13 @@
             {{if dataTypeIsBoolean}}
                 <div data-role="fieldcontain">
                     <fieldset data-role="controlgroup">
-                        <label for="${id}">${id}:</label>
+                        <legend>${id}?</legend>
                         <input type="checkbox" 
                             name="${id}" id="${id}" value="${value}"
                             class="custom required"/>
+                        <label for="${id}">${id}</label>
                     </fieldset>
                 </div>
-                <label for="${id}">${id}:</label>
             {{/if}}
          </script>
 
