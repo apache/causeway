@@ -1,39 +1,12 @@
-renderTasks = function(list, title) {
-  var items = $.map(list, function(value, i) {
-    return {
-      "hrefUrlEncoded" : urlencode(value.href),
-      "title" : value.title,
-      "href" : value.href
-    }
-  });
-
-  var page = $("#home");
-
-  var header = page.children(":jqmData(role=header)");
-  var content = page.children(":jqmData(role=content)");
-
-  header.find("h1").html(title);
-
-  var div = page.find("ul.tasks");
-  var templateDiv = page.find(".tmpl");
-  
-  applyTemplateDiv(items, div, templateDiv);
-  page.page();
-
-  div.listview("refresh");
-  
-  return page;
-}
-
-todaysTasksPage = function() {
-  $.ajax({
-    url : "/services/toDoItems/actions/toDosForToday/invoke",
-    dataType : 'json',
-    success : function(json, str, xhr) {
-      renderTasks(json.result.value, "Today's Tasks")
-    }
-  });
-};
+//cloneGenericView = function(pageBaseId) {
+//  cloneAndInsertPage(pageBaseId, pageBaseId + "-template")
+//}
+//
+//cloneGenericViews = function() {
+//  cloneGenericView("genericDomainObjectView")
+//  cloneGenericView("genericObjectCollectionView")
+//  cloneGenericView("genericListView")
+//}
 
 
 $(function() {
@@ -50,6 +23,17 @@ $(function() {
     });
   });
 
-
   $(document).bind("pagebeforechange", submitRenderAndNavigate);
+
+  //cloneGenericViews();
+  
+  // if user manually refreshes page for domain object, then re-retrieve
+  var locationHref = location.href;
+  if(locationHref.indexOf("genericDomainObjectView") != -1) {
+    var urlHref = extract(locationHref);
+    submitAndRender(urlHref, "pop");
+  } else {
+    $.mobile.changePage($("#home"))
+  }
+  
 });

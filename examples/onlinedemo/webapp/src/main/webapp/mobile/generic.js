@@ -1,20 +1,34 @@
-clonePage = function(pageTemplateId, discriminator) {
+cloneTemplatePage = function(pageBaseId, urlHref, dataOptions) {
 
-  var id = pageTemplateId + "-" + urlencode(discriminator);
-  var page = $(pageTemplateId).clone().attr("id", id);
-  page.appendTo("#pageHolder");
+  var urlHrefEncoded = urlencode(urlHref);
 
+  var pageId = pageBaseId + "-" + urlHrefEncoded;
+  removePage(pageId);
+
+  var page = cloneAndInsertPage(pageBaseId, pageId)
+  
+  dataOptions.dataUrl = pageBaseId + "?url=" + urlHrefEncoded
   return page;
+}
+
+extract = function(urlHref) {
+  var regex = /.*?url=(.*)/
+  var matches = regex.exec(urlHref)
+  var url = matches && matches[1]
+  if(url) {
+    return urldecode(url)
+  }
+  return urlHref
 }
 
 handleDomainObjectRepresentation = function(urlHref, dataOptions, json, xhr) {
   
-  var page = clonePage("#domainObjectView", json.oid);
-  $(page).data("urlHref", urlHref);
+  var page = cloneTemplatePage("genericDomainObjectView", urlHref, dataOptions);
   
   var header = page.children(":jqmData(role=header)");
   header.find("h1").html(json.title);
 
+  // value properties
   var valueProperties = json.members.filter(function(item) {
     return item.memberType === "property" && !item.value.href;
   });
@@ -23,6 +37,7 @@ handleDomainObjectRepresentation = function(urlHref, dataOptions, json, xhr) {
   applyTemplateDiv(valueProperties, valuePropertiesDiv, valuePropertiesTemplateDiv);
 
   
+  // reference properties
   var referenceProperties = json.members.filter(function(item) {
     return item.memberType === "property" && item.value.href;
   });
@@ -41,27 +56,26 @@ handleDomainObjectRepresentation = function(urlHref, dataOptions, json, xhr) {
     }
   });
 
+  // collections
   var collectionsList = page.children(":jqmData(role=content)").find(".collections");
   var collectionsTemplateDiv = page.children(".collections-tmpl");
   applyTemplateDiv(collections, collectionsList, collectionsTemplateDiv);
 
+
+  // refresh
   page.page();
   page.trigger("create");
   
   referencePropertiesList.listview("refresh");
   collectionsList.listview("refresh");
   
-  dataOptions.dataUrl="#object?url=" + urlencode(urlHref)
-
   return page
 } 
 
 
-listRepresentation = 0;
 handleListRepresentation = function(urlHref, dataOptions, json, xhr) {
   
-  var page = clonePage("#listView", listRepresentation++);
-  $(page).data("urlHref", urlHref);
+  var page = cloneTemplatePage("genericListView", urlHref, dataOptions);
   
   var items = $.map(json, function(value, i) {
     return {
@@ -80,25 +94,18 @@ handleListRepresentation = function(urlHref, dataOptions, json, xhr) {
   var templateDiv = page.find(".tmpl");
   
   applyTemplateDiv(items, div, templateDiv);
-  page.page();
-
-  div.listview("refresh");
   
-  dataOptions.dataUrl="#list?num=" + listRepresentation
+  // no longer needed?
+  //page.page();
+  //div.listview("refresh");
   
   return page;
 }
 
-grepLink = function(links, relStr) {
-  return $.grep(links, function(v) { return v.rel === relStr } )[0]
-}
-
-objectCollectionRepresentation = 0;
 handleObjectCollectionRepresentation = function(urlHref, dataOptions, json, xhr) {
   
-  var page = clonePage("#objectCollectionView", objectCollectionRepresentation++);
-  $(page).data("urlHref", urlHref);
-
+  var page = cloneTemplatePage("genericObjectCollectionView", urlHref, dataOptions);
+  
   var items = $.map(json.value, function(value, i) {
     return {
       "hrefUrlEncoded" : urlencode(value.href),
@@ -110,20 +117,8 @@ handleObjectCollectionRepresentation = function(urlHref, dataOptions, json, xhr)
   var header = page.children(":jqmData(role=header)");
   var content = page.children(":jqmData(role=content)");
 
-  var parentHref = grepLink(json.links, "up").href
-  var parentOid;
-  var parentTitle;
+  var parentTitle = grepLink(json.links, "up").title
   
-  $.ajax({
-    url : parentHref,
-    dataType : 'json',
-    async: false,
-    success : function(json, str, xhr) {
-      parentOid = json.oid;
-      parentTitle = json.title;
-    }
-  })
-
   var collectionId = json.id;
   header.find("h1").html(collectionId + " for " + parentTitle);
 
@@ -131,13 +126,10 @@ handleObjectCollectionRepresentation = function(urlHref, dataOptions, json, xhr)
   var templateDiv = page.find(".tmpl");
   
   applyTemplateDiv(items, div, templateDiv);
-  page.page();
-
   
-  
-  div.listview("refresh");
-  
-  dataOptions.dataUrl="#collection?url=" + urlencode(urlHref)
+  // no longer needed?
+  //page.page();
+  //div.listview("refresh");
   
   return page;
 }
@@ -156,9 +148,13 @@ handleActionResultRepresentation = function(urlHref, dataOptions, json, xhr) {
 
 handlers = {
     "application/json;profile=\"urn:org.restfulobjects/domainobject\"": handleDomainObjectRepresentation,
+    "application/json; profile=\"urn:org.restfulobjects/domainobject\"": handleDomainObjectRepresentation,
     "application/json;profile=\"urn:org.restfulobjects/list\"": handleListRepresentation,
+    "application/json; profile=\"urn:org.restfulobjects/list\"": handleListRepresentation,
     "application/json;profile=\"urn:org.restfulobjects/objectcollection\"": handleObjectCollectionRepresentation,
-    "application/json;profile=\"urn:org.restfulobjects/actionresult\"": handleActionResultRepresentation
+    "application/json; profile=\"urn:org.restfulobjects/objectcollection\"": handleObjectCollectionRepresentation,
+    "application/json;profile=\"urn:org.restfulobjects/actionresult\"": handleActionResultRepresentation,
+    "application/json; profile=\"urn:org.restfulobjects/actionresult\"": handleActionResultRepresentation
 }
 
 submitAndRender = function(urlHref, dataOptions) {
@@ -174,10 +170,6 @@ submitAndRender = function(urlHref, dataOptions) {
       } 
       var page = handler(urlHref, dataOptions, json, xhr)
 
-      if(dataOptions) {
-        dataOptions.dataUrl = urlHref;
-      }
-  
       $.mobile.changePage(page, dataOptions);
     }
   })

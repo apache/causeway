@@ -1,3 +1,28 @@
+findPage = function(id) {
+  var page = $("#pageHolder").find("#"+id);
+  if(page[0]) {
+    return page[0];
+  }
+  return null
+}
+
+removePage = function(id) {
+  var page = findPage(id)
+  if(page) {
+    page.remove();
+  }
+}
+
+cloneAndInsertPage = function(sourceId, targetId) {
+  var page = $("#"+sourceId).clone().attr("id", targetId);
+  page.appendTo("#pageHolder");
+  return page
+}
+
+grepLink = function(links, relStr) {
+  return $.grep(links, function(v) { return v.rel === relStr } )[0]
+}
+
 queryParamsFor = function (href) {
     var vars = [], hash;
     var hashes = href.slice(href.indexOf('?') + 1).split('&');

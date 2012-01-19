@@ -41,18 +41,14 @@
             </li>
         </script>
         
-        <!-- workaround? http://stackoverflow.com/questions/7544023/how-to-initialize-pages-in-jquery-mobile-pageinit-not-firing -->
         <script type="text/javascript">
-        
             $("#home button").click(function(){
                 $.mobile.changePage("/services/toDoItems/actions/toDosForToday/invoke", "pop")
             });
-            
-            /*$(document).delegate("#home", "pageinit", todaysTasksPage);*/
         </script>
 	</div>
 
-    <div data-role="page" id="listView">
+    <div data-role="page" id="genericListView">
 
         <div data-role="header">
             <a data-icon="back" data-rel="back">Back</a>
@@ -71,7 +67,7 @@
         </script>
     </div>
 
-    <div data-role="page" id="objectCollectionView">
+    <div data-role="page" id="genericObjectCollectionView">
 
         <div data-role="header">
             <a data-icon="back" data-rel="back">Back</a>
@@ -90,7 +86,7 @@
         </script>
     </div>
 
-    <div data-role="page" id="domainObjectView">
+    <div data-role="page" id="genericDomainObjectView">
 
         <div data-role="header">
             <a data-icon="back" data-rel="back">Back</a>
