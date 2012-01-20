@@ -1,18 +1,6 @@
 var util = namespace('org.apache.isis.viewer.json.jqmobile.util');
 var generic = namespace('org.apache.isis.viewer.json.jqmobile.generic');
 
-generic.cloneTemplatePage = function(pageBaseId, urlHref, dataOptions) {
-  var urlHrefEncoded = util.urlencode(urlHref);
-
-  var pageId = pageBaseId + "-" + urlHrefEncoded;
-  util.removePage(pageId);
-
-  var page = util.cloneAndInsertPage(pageBaseId, pageId)
-  
-  dataOptions.dataUrl = pageBaseId + "?url=" + urlHrefEncoded
-  return page;
-}
-
 generic.itemLinks = function(jsonItems) { 
   var items = $.map(jsonItems, function(value, i) {
     return {
@@ -25,8 +13,8 @@ generic.itemLinks = function(jsonItems) {
 }
 
 generic.extract = function(urlHref) {
-  // does it match: foobar.html?url=xxx; if so, then return xxx
-  var matches = /.*?url=(.*)/.exec(urlHref)
+  // does it match: foobar.html?dataUrl=xxx; if so, then return xxx
+  var matches = /.*?dataUrl=(.*)/.exec(urlHref)
   var url = matches && matches[1]
   if(url) {
     return util.urldecode(url)
@@ -58,11 +46,24 @@ generic.dataTypeFor = function(memberItem) {
   return "string"
 }
 
-generic.handleDomainObjectRepresentation = function(urlHref, dataOptions, json, xhr) {
+generic.pageAndOptions = function(page, view, dataUrl, transition) {
+  var pageAndOptions = {
+      "page": page,
+      "allowSamePageTransition": true,
+      "options": { 
+         "dataUrl": "#" + view + "?dataUrl=" + util.urlencode(dataUrl),
+         "transition": transition
+       }
+    }
+  return pageAndOptions
+}
+
+generic.handleDomainObjectRepresentation = function(urlHref, pageChangeData, json, xhr) {
   
-  var page = generic.cloneTemplatePage("genericDomainObjectView", urlHref, dataOptions);
-  
+  var page = $("#genericDomainObjectView");
   var header = page.children(":jqmData(role=header)");
+  var content = page.children(":jqmData(role=content)");
+  
   header.find("h1").html(json.title);
 
   // value properties
@@ -109,26 +110,21 @@ generic.handleDomainObjectRepresentation = function(urlHref, dataOptions, json, 
   var collectionsTemplateDiv = page.children(".collections-tmpl");
   util.applyTemplateDiv(collections, collectionsList, collectionsTemplateDiv);
 
-
-  // refresh
   page.page();
+  content.find( ":jqmData(role=listview)" ).listview("refresh");
   page.trigger("create");
-  
-  referencePropertiesList.listview("refresh");
-  collectionsList.listview("refresh");
-  
-  return page
+
+  return generic.pageAndOptions(page, "genericDomainObjectView", urlHref)
 } 
 
 
-generic.handleListRepresentation = function(urlHref, dataOptions, json, xhr) {
+generic.handleListRepresentation = function(urlHref, pageChangeData, json, xhr) {
   
-  var page = generic.cloneTemplatePage("genericListView", urlHref, dataOptions);
-
-  var items = generic.itemLinks(json)
-
+  var page = $("#genericListView");
   var header = page.children(":jqmData(role=header)");
   var content = page.children(":jqmData(role=content)");
+
+  var items = generic.itemLinks(json.value)
 
   header.find("h1").html("Objects");
 
@@ -136,18 +132,21 @@ generic.handleListRepresentation = function(urlHref, dataOptions, json, xhr) {
   var templateDiv = page.find(".tmpl");
   
   util.applyTemplateDiv(items, div, templateDiv);
-  
-  return page;
+
+  page.page();
+  content.find( ":jqmData(role=listview)" ).listview("refresh");
+  page.trigger("create");
+
+  return generic.pageAndOptions(page, "genericListView", urlHref)
 }
 
-generic.handleObjectCollectionRepresentation = function(urlHref, dataOptions, json, xhr) {
+generic.handleObjectCollectionRepresentation = function(urlHref, pageChangeData, json, xhr) {
   
-  var page = generic.cloneTemplatePage("genericObjectCollectionView", urlHref, dataOptions);
-
-  var items = generic.itemLinks(json.value)
-
+  var page = $("#genericObjectCollectionView");
   var header = page.children(":jqmData(role=header)");
   var content = page.children(":jqmData(role=content)");
+
+  var items = generic.itemLinks(json.value)
 
   var parentTitle = util.grepLink(json.links, "up").title
   
@@ -156,22 +155,29 @@ generic.handleObjectCollectionRepresentation = function(urlHref, dataOptions, js
 
   var div = page.find("ul");
   var templateDiv = page.find(".tmpl");
-  
   util.applyTemplateDiv(items, div, templateDiv);
-  
-  return page;
+
+  page.page();
+  content.find( ":jqmData(role=listview)" ).listview("refresh");
+  page.trigger("create");
+
+  return generic.pageAndOptions(page, "genericObjectCollectionView", urlHref, "slideup")
 }
 
 
-generic.handleActionResultRepresentation = function(urlHref, dataOptions, json, xhr) {
+generic.actionResultHandlers = {
+    "object": generic.handleDomainObjectRepresentation,
+    "list": generic.handleListRepresentation
+}
+
+generic.handleActionResultRepresentation = function(urlHref, pageChangeData, json, xhr) {
   var resultType = json.resulttype
-  if(resultType === "object") {
-    return generic.handleDomainObjectRepresentation(urlHref, dataOptions, json.result, xhr)
-  }
-  if(resultType === "list") {
-    return generic.handleListRepresentation(urlHref, dataOptions, json.result.value, xhr)
-  }
-  alert("not yet supported")
+  var handler = generic.actionResultHandlers[resultType];
+  if(!handler) {
+    alert("unable to handle result type")
+    return;
+  } 
+  return handler(urlHref, pageChangeData, json.result, xhr)
 }
 
 generic.handlers = {
@@ -185,7 +191,7 @@ generic.handlers = {
     "application/json; profile=\"urn:org.restfulobjects/actionresult\"": generic.handleActionResultRepresentation
 }
 
-generic.submitAndRender = function(urlHref, dataOptions) {
+generic.submitAndRender = function(urlHref, pageChangeData) {
   $.ajax({
     url : urlHref,
     dataType : 'json',
@@ -196,25 +202,25 @@ generic.submitAndRender = function(urlHref, dataOptions) {
         alert("unable to handle response")
         return;
       } 
-      var page = handler(urlHref, dataOptions, json, xhr)
+      var pageAndOptions = handler(urlHref, pageChangeData, json, xhr)
 
-      $.mobile.changePage(page, dataOptions);
+      $.mobile.changePage(pageAndOptions.page, pageAndOptions.options);
     }
   })
 }
 
-generic.submitRenderAndNavigate = function(e, data) {
-  if (typeof data.toPage !== "string") {
+generic.submitRenderAndNavigate = function(e, pageChangeData) {
+  if (typeof pageChangeData.toPage !== "string") {
     return;
   }
 
-  var url = $.mobile.path.parseUrl(data.toPage)
+  var url = $.mobile.path.parseUrl(pageChangeData.toPage)
   var urlHref = generic.extract(url.href)
   if(!urlHref) {
     return;
   }
 
-  generic.submitAndRender(urlHref, data.options);
+  generic.submitAndRender(urlHref, pageChangeData);
   e.preventDefault();
 }
 

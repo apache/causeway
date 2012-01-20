@@ -6,8 +6,8 @@ String.prototype.endsWith = function(pattern) {
 
 var util = namespace('org.apache.isis.viewer.json.jqmobile.util');
 
-util.findPage = function(id) {
-  var page = $("#pageHolder").find("#"+id);
+util.findPage = function(selector) {
+  var page = $("#pageHolder").find(selector);
   if(page[0]) {
     return page[0];
   }
