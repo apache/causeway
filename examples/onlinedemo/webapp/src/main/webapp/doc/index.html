@@ -34,7 +34,8 @@
 
       <li>The <a href="#webapp">automatically-generated webapp</a></li>
 
-      <li>The <a href="#rest">REST API</a></li>
+      <li>The <a href="#rest">REST API</a> (plus a simple JQueryMobile <a
+      href="#jqm">demo app</a>)</li>
 
       <li><a href="#next-steps">Next Steps</a></li>
     </ul><h2><a name="domain-model">Domain Model</a></h2><p>The domain model
@@ -66,9 +67,12 @@
   alt="Reset Fixtures" src="htmlviewer-resetfixtures.png"
   style="width:600px;" /><p>Now click on the link to one of the newly created
   objects:</p><img alt="Object" src="htmlviewer-object.png"
+  style="width:600px;" /><p>From there, in turn, you can navigate to related
+  objects. For example, the similarItems collection lists other todo
+  items:</p><img alt="Object" src="htmlviewer-collection.png"
   style="width:600px;" /><p>The webapp is entirely generated from the domain
   object. Compare the app with the source code to see how the metadata is used
-  by the framework.</p><h2><a name="rest">REST API</a></h2><p>As well as the
+  by the framework.</p> <h2><a name="rest">REST API</a></h2><p>As well as the
   human-usable webapp representation of the domain model, <i>Isis</i> also
   allows access to the domain object model through a REST API. The
   representations returned are in JSON format; with resource URLs mapping to
@@ -77,36 +81,38 @@
   fact the REST API provided by <i>Isis</i> is formally documented as the <a
   href="http://restfulobjects.org">Restful Objects</a> specification. This
   aims to provide a cross-platform standard for exposing domain object models
-  via REST. Most developers will write their own custom clients, eg using
-  jqMobile or some other client-side technology. But we expect a variety of
-  generic clients will also emerge to consume this API. </p><p>It is possible
-  though to interact with the REST API directly from the browser, though we
-  recommend that you use a browser extension such as the <a
-  href="https://chrome.google.com/webstore/detail/cokgbflfommojglbmbpenpphppikmonn">REST
-  Console</a> for Chrome (there are similar extensions for other browsers).
-  Provided that you access set the <tt>Accept</tt> header for requests to
-  <tt>application/json</tt>, the REST API can be accessed at the <a
-  href="..">root</a> of the webapp.</p><p>If you only want to browse the JSON
-  and don't want to bother setting the Accept header, you can still access the
-  REST API directly from a web browser, though you will need to browse to the
-  <a href="../services/">services</a> resource instead (browsing to root will
-  redirect you to this documentation instead). Even here we recommend you use
-  the <a
+  via REST. Most developers will write their own custom clients, eg using <a
+  href="http://jquerymobile.com">JQueryMobile</a> or some other client-side
+  technology. But we expect a variety of generic clients will also emerge to
+  consume this API. In fact, this online demo has a simple demo of such a
+  client; see <a href="#jqm">mobile demo</a> below for details.</p><p>To fully
+  explore the REST API you'll need to use another tool. If you only want to
+  browse the JSON you can access the REST API directly from a web browser. The
+  Isis development team tends to either the Chrome or Firefox browsers, and
+  for these browsers you can use the <a
   href="https://chrome.google.com/webstore/detail/chklaanhfefbnpoihckbnefhakgolnmc">JSONView</a>
-  extension for Chrome; this will render the returned JSON in a color-coded
-  collapsible display.</p><p>Whichever way you access the REST API, you'll
-  find that the online demo also protects the json-viewer resources using HTTP
-  Basic Auth (the mechanism used is pluggable). So the first step is set up
-  security. Assuming you are using REST Console, browse to the authorization
-  section:</p><img alt="Authorization" src="restconsole-basicauth-1.png"
-  style="width:600px;" /><p>Press Basic Auth, and enter username and password.
-  (The json-viewer provides no mechanism to register users, so these will need
-  to be a user that you've registered using the html-viewer):</p><img
-  alt="Username and Password" src="restconsole-basicauth-2.png"
-  style="width:600px;" /><p>Next, it's important to set the <i>Accept</i>
-  header to <tt>application/json</tt>. It's also correct (though not so
-  essential) to set <i>Content-Type</i> to <tt>application/json</tt> also:
-  </p><img alt="Accept Header" src="restconsole-accept.png"
+  extension which will render the returned JSON in a color-coded collapsible
+  display. One slight caveat: for this online demo webapp you will need to
+  browse to the <a href="../services/">services</a> resource rather than the
+  <a href="../">root</a> resource (browsing to root resource will redirect you
+  to this documentation instead).</p><p>To more fully interact with the REST
+  API, we recommend using a browser extension such as the <a
+  href="https://chrome.google.com/webstore/detail/cokgbflfommojglbmbpenpphppikmonn">REST
+  Console</a> for Chrome or Firefox (there are similar extensions for other
+  browsers). Because the online demo also protects the json-viewer resources
+  using HTTP Basic Auth (the mechanism used is pluggable), the first step is
+  set up security. Assuming you are using REST Console, browse to the
+  authorization section:</p><img alt="Authorization"
+  src="restconsole-basicauth-1.png" style="width:600px;" /><p>Press Basic
+  Auth, and enter username and password. (The json-viewer provides no
+  mechanism to register users, so these will need to be a user that you've
+  registered using the html-viewer):</p><img alt="Username and Password"
+  src="restconsole-basicauth-2.png" style="width:600px;" /><p>Next, it's
+  important to set the <i>Accept</i> header to <tt>application/json</tt>.
+  (Doing this will also enable you to browse the <a href="..">root</a> of the
+  webapp). It's also correct (though not so essential) to set
+  <i>Content-Type</i> to <tt>application/json</tt> also: </p><img
+  alt="Accept Header" src="restconsole-accept.png"
   style="width:600px;" /><p>After this has been done, hit "Save Defaults" (so
   that <i>Rest Console</i> remembers these settings for all subsequent
   requests).</p><p>Now, go to the Target section and specify [<a
@@ -136,7 +142,27 @@
   indicating no arguments):</p><img alt="Invoke Request"
   src="restconsole-invoke-request.png" style="width:600px;" /><p>Submit this
   request, and the action will be invoked:</p><img alt="Invoke Response"
-  src="restconsole-invoke-response.png" style="width:600px;" /><h2><a
+  src="restconsole-invoke-response.png" style="width:600px;" /><p> </p><h2><a
+  name="jqm">JQueryMobile Demo App</a></h2><p><a
+  href="http://jquerymobile.com">JQueryMobile</a> describes itself as "a
+  unified, HTML5-based user interface system for all popular mobile device
+  platforms, built on the rock-solid jQuery and jQuery UI foundation". The
+  demo app shows how the <a href="#rest">REST API</a> can be browsed on mobile
+  devices using a (mostly) generic user interface.</p><p>Before you start the
+  app, first shrink down your browser window to the dimensions of a smart
+  phone, then start the app by browsing to the <a
+  href="../mobile/index.html">mobile home page</a> :</p><center><img
+  alt="Home Page" src="jqm-home.png" style="width:600px;" /></center><p>This
+  button is hard-coded to call the "ToDoItems#todaysTasks()" service for the
+  current user; from here on though the application is entirely
+  generic.</p><p>Click on the button; the page should transition to a list of
+  the current task items:</p><center><img alt="Home Page" src="jqm-list.png"
+  style="width:600px;" /></center><p>Click on one of the todo
+  items:</p><center><img alt="Home Page" src="jqm-object.png"
+  style="width:600px;" /></center><p>From here you can transition to other,
+  related objects. For example, clicking on the "similarItems" collection
+  shows a list of other task items:</p><center><img alt="Home Page"
+  src="jqm-collection.png" style="width:600px;" /></center><h2><a
   name="next-steps">Next Steps</a></h2><p>If you wish, you can download the
   WAR file <a
   href="https://sites.google.com/a/haywood-associates.co.uk/restfulobjects/files/isis-onlinedemo.war">here</a>.
