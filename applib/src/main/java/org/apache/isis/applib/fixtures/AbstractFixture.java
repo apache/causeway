@@ -30,14 +30,17 @@ import org.apache.isis.applib.fixtures.switchuser.SwitchUserServiceAware;
  * Convenience class for creating fixtures.
  * 
  * <p>
- * Most subclasses will simply override {@link #install()} to setup objects. In addition though fixtures may also:
+ * Most subclasses will simply override {@link #install()} to setup objects. In
+ * addition though fixtures may also:
  * <ul>
- * <li>change the date/time within the course of fixture installation, using {@link #setDate(int, int, int)} and
- * {@link #setTime(int, int)}.
+ * <li>change the date/time within the course of fixture installation, using
+ * {@link #setDate(int, int, int)} and {@link #setTime(int, int)}.
  * <li>change the current user using {@link #switchUser(String, String...)}.
  * <li>create composite fixtures using {@link #addFixture(Object)}.
- * <li>search for existing objects using {@link #firstMatch(Class, org.apache.isis.applib.Filter)} or
- * {@link #uniqueMatch(Class, org.apache.isis.applib.Filter)} (and various overloads thereof).
+ * <li>search for existing objects using
+ * {@link #firstMatch(Class, org.apache.isis.applib.Filter)} or
+ * {@link #uniqueMatch(Class, org.apache.isis.applib.Filter)} (and various
+ * overloads thereof).
  * </ul>
  * 
  * <p>
@@ -67,8 +70,8 @@ public abstract class AbstractFixture extends BaseFixture implements CompositeFi
     // ///////////////////////////////////////////////////////////////
 
     /**
-     * Most subclasses will override this method, but composite fixtures should instead call {@link #addFixture(Object)}
-     * in their constructor.
+     * Most subclasses will override this method, but composite fixtures should
+     * instead call {@link #addFixture(Object)} in their constructor.
      */
     @Override
     public void install() {
@@ -86,7 +89,8 @@ public abstract class AbstractFixture extends BaseFixture implements CompositeFi
     }
 
     /**
-     * Returns an array of any fixtures that have been {@link #addFixture(Object) added}.
+     * Returns an array of any fixtures that have been
+     * {@link #addFixture(Object) added}.
      */
     @Override
     public List<Object> getFixtures() {
@@ -98,8 +102,8 @@ public abstract class AbstractFixture extends BaseFixture implements CompositeFi
     // ///////////////////////////////////////////////////////////////
 
     /**
-     * Will print warning message and do nothing if {@link FixtureClock} could not be {@link FixtureClock#initialize()
-     * initialized}.
+     * Will print warning message and do nothing if {@link FixtureClock} could
+     * not be {@link FixtureClock#initialize() initialized}.
      */
     public void earlierDate(final int years, final int months, final int days) {
         if (shouldIgnoreCallBecauseNoClockSetup("earlierDate()")) {
@@ -109,8 +113,8 @@ public abstract class AbstractFixture extends BaseFixture implements CompositeFi
     }
 
     /**
-     * Will print warning message and do nothing if {@link FixtureClock} could not be {@link FixtureClock#initialize()
-     * initialized}.
+     * Will print warning message and do nothing if {@link FixtureClock} could
+     * not be {@link FixtureClock#initialize() initialized}.
      */
     public void earlierTime(final int hours, final int minutes) {
         if (shouldIgnoreCallBecauseNoClockSetup("earlierTime()")) {
@@ -120,8 +124,8 @@ public abstract class AbstractFixture extends BaseFixture implements CompositeFi
     }
 
     /**
-     * Will print warning message and do nothing if {@link FixtureClock} could not be {@link FixtureClock#initialize()
-     * initialized}.
+     * Will print warning message and do nothing if {@link FixtureClock} could
+     * not be {@link FixtureClock#initialize() initialized}.
      */
     public void laterDate(final int years, final int months, final int days) {
         if (shouldIgnoreCallBecauseNoClockSetup("laterDate()")) {
@@ -131,8 +135,8 @@ public abstract class AbstractFixture extends BaseFixture implements CompositeFi
     }
 
     /**
-     * Will print warning message and do nothing if {@link FixtureClock} could not be {@link FixtureClock#initialize()
-     * initialized}.
+     * Will print warning message and do nothing if {@link FixtureClock} could
+     * not be {@link FixtureClock#initialize() initialized}.
      */
     public void laterTime(final int hours, final int minutes) {
         if (shouldIgnoreCallBecauseNoClockSetup("laterTime()")) {

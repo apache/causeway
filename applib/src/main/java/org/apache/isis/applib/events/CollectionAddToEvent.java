@@ -22,11 +22,12 @@ package org.apache.isis.applib.events;
 import org.apache.isis.applib.Identifier;
 
 /**
- * Represents a check as to whether a particular object to be added to a collection is valid or not.
+ * Represents a check as to whether a particular object to be added to a
+ * collection is valid or not.
  * 
  * <p>
- * If {@link #getReason()} is not <tt>null</tt> then provides the reason why the object is invalid; otherwise the object
- * is valid.
+ * If {@link #getReason()} is not <tt>null</tt> then provides the reason why the
+ * object is invalid; otherwise the object is valid.
  * 
  * @see CollectionRemoveFromEvent
  */

@@ -26,11 +26,13 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Indicates the a (service) action should be not be displayed in the service menu.
+ * Indicates the a (service) action should be not be displayed in the service
+ * menu.
  * 
  * <p>
- * It may still be contributed (unless it has been annotated as {@link NotContributed}). If {@link Hidden}, then also
- * implies that the menu should not appear in the service menu.
+ * It may still be contributed (unless it has been annotated as
+ * {@link NotContributed}). If {@link Hidden}, then also implies that the menu
+ * should not appear in the service menu.
  * 
  * <p>
  * Has no meanings for actions on regular entities.

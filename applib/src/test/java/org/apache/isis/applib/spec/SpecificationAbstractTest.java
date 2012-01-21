@@ -24,10 +24,9 @@ import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
-import org.junit.Test;
-
 import org.apache.isis.applib.spec.AbstractSpecification.Nullability;
 import org.apache.isis.applib.spec.AbstractSpecification.TypeChecking;
+import org.junit.Test;
 
 public class SpecificationAbstractTest {
 
@@ -52,13 +51,12 @@ public class SpecificationAbstractTest {
 
     @Test
     public void shouldNotSatisfyForNullIfConfiguredAsSuch() {
-        specAbstractSomeDomainObject =
-            new AbstractSpecification<SomeDomainObject>(Nullability.ENSURE_NOT_NULL, TypeChecking.IGNORE_INCORRECT_TYPE) {
-                @Override
-                public String satisfiesSafely(final SomeDomainObject obj) {
-                    return null;
-                }
-            };
+        specAbstractSomeDomainObject = new AbstractSpecification<SomeDomainObject>(Nullability.ENSURE_NOT_NULL, TypeChecking.IGNORE_INCORRECT_TYPE) {
+            @Override
+            public String satisfiesSafely(final SomeDomainObject obj) {
+                return null;
+            }
+        };
         assertThat(specAbstractSomeDomainObject.satisfies(null), is(not(nullValue())));
     }
 
@@ -75,25 +73,23 @@ public class SpecificationAbstractTest {
 
     @Test
     public void shouldNotSatisfyForIncorrectTypeIfConfiguredAsSuch() {
-        specAbstractSomeDomainObject =
-            new AbstractSpecification<SomeDomainObject>(Nullability.IGNORE_IF_NULL, TypeChecking.ENSURE_CORRECT_TYPE) {
-                @Override
-                public String satisfiesSafely(final SomeDomainObject obj) {
-                    return null;
-                }
-            };
+        specAbstractSomeDomainObject = new AbstractSpecification<SomeDomainObject>(Nullability.IGNORE_IF_NULL, TypeChecking.ENSURE_CORRECT_TYPE) {
+            @Override
+            public String satisfiesSafely(final SomeDomainObject obj) {
+                return null;
+            }
+        };
         assertThat(specAbstractSomeDomainObject.satisfies(new SomeOtherDomainObject()), is(not(nullValue())));
     }
 
     @Test
     public void shouldSatisfyForNonNullCorrectTypeIfConfiguredAsSuch() {
-        specAbstractSomeDomainObject =
-            new AbstractSpecification<SomeDomainObject>(Nullability.ENSURE_NOT_NULL, TypeChecking.ENSURE_CORRECT_TYPE) {
-                @Override
-                public String satisfiesSafely(final SomeDomainObject obj) {
-                    return null;
-                }
-            };
+        specAbstractSomeDomainObject = new AbstractSpecification<SomeDomainObject>(Nullability.ENSURE_NOT_NULL, TypeChecking.ENSURE_CORRECT_TYPE) {
+            @Override
+            public String satisfiesSafely(final SomeDomainObject obj) {
+                return null;
+            }
+        };
         assertThat(specAbstractSomeDomainObject.satisfies(new SomeDomainObject()), is(nullValue()));
     }
 

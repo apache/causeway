@@ -26,10 +26,12 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Indicates that a property, collection or action is to be hidden from the user.
+ * Indicates that a property, collection or action is to be hidden from the
+ * user.
  * 
  * <p>
- * For a repository action, is equivalent to {@link NotContributed} and also {@link NotInServiceMenu}.
+ * For a repository action, is equivalent to {@link NotContributed} and also
+ * {@link NotInServiceMenu}.
  */
 @Inherited
 @Target({ ElementType.TYPE, ElementType.METHOD })

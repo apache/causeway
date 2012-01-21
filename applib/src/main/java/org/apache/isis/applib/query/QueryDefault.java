@@ -24,27 +24,28 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Default implementation of {@link Query} that supports parameter/argument values, along with a query name.
+ * Default implementation of {@link Query} that supports parameter/argument
+ * values, along with a query name.
  */
 public class QueryDefault<T> extends QueryAbstract<T> {
 
     private static final long serialVersionUID = 1L;
 
     /**
-     * Convenience factory method, preferable to {@link #QueryDefault(Class, String, Object...) constructor} because
-     * will automatically genericize.
+     * Convenience factory method, preferable to
+     * {@link #QueryDefault(Class, String, Object...) constructor} because will
+     * automatically genericize.
      */
-    public static <Q> QueryDefault<Q> create(final Class<Q> resultType, final String queryName,
-        final Object... paramArgs) {
+    public static <Q> QueryDefault<Q> create(final Class<Q> resultType, final String queryName, final Object... paramArgs) {
         return new QueryDefault<Q>(resultType, queryName, paramArgs);
     }
 
     /**
-     * Convenience factory method, preferable to {@link #QueryDefault(Class, String, Map) constructor} because will
+     * Convenience factory method, preferable to
+     * {@link #QueryDefault(Class, String, Map) constructor} because will
      * automatically genericize.
      */
-    public static <Q> QueryDefault<Q> create(final Class<Q> resultType, final String queryName,
-        final Map<String, Object> argumentsByParameterName) {
+    public static <Q> QueryDefault<Q> create(final Class<Q> resultType, final String queryName, final Map<String, Object> argumentsByParameterName) {
         return new QueryDefault<Q>(resultType, queryName, argumentsByParameterName);
     }
 
@@ -82,8 +83,7 @@ public class QueryDefault<T> extends QueryAbstract<T> {
         this(resultType, queryName, asMap(paramArgs));
     }
 
-    public QueryDefault(final Class<T> resultType, final String queryName,
-        final Map<String, Object> argumentsByParameterName) {
+    public QueryDefault(final Class<T> resultType, final String queryName, final Map<String, Object> argumentsByParameterName) {
         super(resultType);
         this.queryName = queryName;
         this.argumentsByParameterName = argumentsByParameterName;

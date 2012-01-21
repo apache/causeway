@@ -22,7 +22,8 @@ package org.apache.isis.applib.marker;
 import org.apache.isis.applib.annotation.Immutable;
 
 /**
- * Marker interface to show that an object cannot be changed before it is persisted.
+ * Marker interface to show that an object cannot be changed before it is
+ * persisted.
  * 
  * Use {@link Immutable} annotation in preference to this marker interface.
  */

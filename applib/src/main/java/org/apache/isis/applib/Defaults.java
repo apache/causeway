@@ -33,7 +33,7 @@ public class Defaults {
         return timeZone;
     }
 
-    public static void setTimeZone(DateTimeZone timezone) {
+    public static void setTimeZone(final DateTimeZone timezone) {
         timeZone = timezone;
         calendar = Calendar.getInstance(timezone.toTimeZone());
     }

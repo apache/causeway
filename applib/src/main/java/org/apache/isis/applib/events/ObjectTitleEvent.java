@@ -25,7 +25,8 @@ import org.apache.isis.applib.Identifier;
  * Represents an access (reading) of an object's title.
  * 
  * <p>
- * The {@link #getReason()} will always be <tt>null</tt>; access is always allowed.
+ * The {@link #getReason()} will always be <tt>null</tt>; access is always
+ * allowed.
  */
 public class ObjectTitleEvent extends AccessEvent {
 

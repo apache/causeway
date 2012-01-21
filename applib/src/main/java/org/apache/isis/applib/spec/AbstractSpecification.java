@@ -27,12 +27,15 @@ import java.lang.reflect.Method;
  * <p>
  * Provides two main features:
  * <ul>
- * <li>first, is type-safe (with invalid type being either ignored or constituting a failure), and
- * <li>second, checks for nulls (with a null either being ignore or again constituting a failure)
+ * <li>first, is type-safe (with invalid type being either ignored or
+ * constituting a failure), and
+ * <li>second, checks for nulls (with a null either being ignore or again
+ * constituting a failure)
  * </ul>
  * 
  * <p>
- * Implementation note: inspired by (borrowed code from) Hamcrest's <tt>TypeSafeMatcher</tt>.
+ * Implementation note: inspired by (borrowed code from) Hamcrest's
+ * <tt>TypeSafeMatcher</tt>.
  */
 public abstract class AbstractSpecification<T> implements Specification {
 
@@ -57,8 +60,7 @@ public abstract class AbstractSpecification<T> implements Specification {
     }
 
     private static boolean isSatisfiesSafelyMethod(final Method method) {
-        return method.getName().equals("satisfiesSafely") && method.getParameterTypes().length == 1
-            && !method.isSynthetic();
+        return method.getName().equals("satisfiesSafely") && method.getParameterTypes().length == 1 && !method.isSynthetic();
     }
 
     private final Class<?> expectedType;
@@ -76,7 +78,8 @@ public abstract class AbstractSpecification<T> implements Specification {
     }
 
     /**
-     * Checks not null and is correct type, and delegates to {@link #satisfiesSafely(Object)}.
+     * Checks not null and is correct type, and delegates to
+     * {@link #satisfiesSafely(Object)}.
      */
     @Override
     @SuppressWarnings({ "unchecked" })
@@ -92,11 +95,12 @@ public abstract class AbstractSpecification<T> implements Specification {
     }
 
     /**
-     * If <tt>null</tt> then satisfied, otherwise is reason why the specification is not satisfied.
+     * If <tt>null</tt> then satisfied, otherwise is reason why the
+     * specification is not satisfied.
      * 
      * <p>
-     * Subclasses should implement this. The item will already have been checked for the specific type and will never be
-     * null.
+     * Subclasses should implement this. The item will already have been checked
+     * for the specific type and will never be null.
      */
     public abstract String satisfiesSafely(T obj);
 

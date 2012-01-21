@@ -27,7 +27,8 @@ import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.security.UserMemento;
 
 /**
- * Convenience super class for all classes that wish to interact with the container.
+ * Convenience super class for all classes that wish to interact with the
+ * container.
  * 
  * @see org.apache.isis.applib.DomainObjectContainer
  */
@@ -38,12 +39,12 @@ public abstract class AbstractContainedObject {
     protected <T> T newTransientInstance(final Class<T> ofType) {
         return getContainer().newTransientInstance(ofType);
     }
-    
+
     @Hidden
     protected <T> T newAggregatedInstance(final Class<T> ofType) {
         return newAggregatedInstance(this, ofType);
     }
-    
+
     @Hidden
     protected <T> T newAggregatedInstance(final Object parent, final Class<T> ofType) {
         return getContainer().newAggregatedInstance(parent, ofType);
@@ -211,7 +212,8 @@ public abstract class AbstractContainedObject {
      * Save provided object to the persistent object store.
      * 
      * <p>
-     * If the object {@link #isPersistent(Object) is persistent} already, then will throw an exception.
+     * If the object {@link #isPersistent(Object) is persistent} already, then
+     * will throw an exception.
      * 
      * @see #persistIfNotAlready(Object)
      */
@@ -221,7 +223,8 @@ public abstract class AbstractContainedObject {
     }
 
     /**
-     * Saves the object, but only if not already {@link #isPersistent() persistent}.
+     * Saves the object, but only if not already {@link #isPersistent()
+     * persistent}.
      * 
      * @see #isPersistent()
      * @see #persist(Object)
@@ -249,15 +252,16 @@ public abstract class AbstractContainedObject {
     }
 
     /**
-     * Display the specified message as a warning to the user, in a more visible fashion, but without requiring explicit
-     * acknowledgement.
+     * Display the specified message as a warning to the user, in a more visible
+     * fashion, but without requiring explicit acknowledgement.
      */
     protected void warnUser(final String message) {
         getContainer().warnUser(message);
     }
 
     /**
-     * Display the specified message as an error to the user, ensuring that it is acknowledged.
+     * Display the specified message as an error to the user, ensuring that it
+     * is acknowledged.
      */
     protected void raiseError(final String message) {
         getContainer().raiseError(message);

@@ -25,7 +25,8 @@ import org.apache.isis.applib.fixtures.AbstractFixture;
  * Implement if require {@link SwitchUserService} to be injected into fixture.
  * 
  * <p>
- * Most fixtures will subclass from {@link AbstractFixture} which does indeed implement this interface.
+ * Most fixtures will subclass from {@link AbstractFixture} which does indeed
+ * implement this interface.
  */
 public interface SwitchUserServiceAware {
 

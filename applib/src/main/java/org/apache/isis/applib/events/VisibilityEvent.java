@@ -22,10 +22,12 @@ package org.apache.isis.applib.events;
 import org.apache.isis.applib.Identifier;
 
 /**
- * Represents a check to determine whether a member of an object is visible or has been hidden.
+ * Represents a check to determine whether a member of an object is visible or
+ * has been hidden.
  * 
  * <p>
- * If {@link #getReason()} is <tt>null</tt>, then is usable; otherwise is invisible.
+ * If {@link #getReason()} is <tt>null</tt>, then is usable; otherwise is
+ * invisible.
  * 
  * @see AccessEvent
  * @see UsabilityEvent

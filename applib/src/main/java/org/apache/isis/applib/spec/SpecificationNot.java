@@ -24,8 +24,9 @@ package org.apache.isis.applib.spec;
  * 
  * <p>
  * <p>
- * Subclasses represent the logical inverse of a {@link Specification}s. An implementation should instantiate the
- * {@link Specification}s to be satisfied in its constructor.
+ * Subclasses represent the logical inverse of a {@link Specification}s. An
+ * implementation should instantiate the {@link Specification}s to be satisfied
+ * in its constructor.
  * 
  * <p>
  * For example:

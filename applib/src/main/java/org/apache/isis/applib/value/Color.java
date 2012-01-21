@@ -22,11 +22,12 @@ package org.apache.isis.applib.value;
 import org.apache.isis.applib.annotation.Value;
 
 /**
- * Color is simple numerical representation of a color using the brightness of red, green and blue (RGB) components.
+ * Color is simple numerical representation of a color using the brightness of
+ * red, green and blue (RGB) components.
  * 
  * <p>
- * Where there is no basic colors (RGB all equal 0) then you get black; where each color is at maximum (RGB all equal
- * 255) you get white.
+ * Where there is no basic colors (RGB all equal 0) then you get black; where
+ * each color is at maximum (RGB all equal 255) you get white.
  */
 @Value(semanticsProviderName = "org.apache.isis.core.progmodel.facets.value.color.ColorValueSemanticsProvider")
 public class Color extends Magnitude<Color> {
@@ -47,7 +48,8 @@ public class Color extends Magnitude<Color> {
     }
 
     /**
-     * returns true if the number of this object has the same value as the specified number
+     * returns true if the number of this object has the same value as the
+     * specified number
      */
     @Override
     public boolean isEqualTo(final Color number) {

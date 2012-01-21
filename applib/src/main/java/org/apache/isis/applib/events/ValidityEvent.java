@@ -35,7 +35,8 @@ import org.apache.isis.applib.Identifier;
  * </ul>
  * 
  * <p>
- * If {@link #getReason()} is <tt>null</tt>, then is usable; otherwise is disabled.
+ * If {@link #getReason()} is <tt>null</tt>, then is usable; otherwise is
+ * disabled.
  * 
  * @see AccessEvent
  * @see VisibilityEvent

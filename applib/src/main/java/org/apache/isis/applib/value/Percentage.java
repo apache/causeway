@@ -115,7 +115,8 @@ public class Percentage extends Magnitude<Percentage> {
 
     @Override
     public int hashCode() {
-        // multiply by 100 just in case the percentage is being stored as 0.0 to 1.0
+        // multiply by 100 just in case the percentage is being stored as 0.0 to
+        // 1.0
         return (int) (floatValue() * 100);
     }
 

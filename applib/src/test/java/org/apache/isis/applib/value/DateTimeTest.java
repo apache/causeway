@@ -73,7 +73,7 @@ public class DateTimeTest {
 
     @Test
     public void testAdd() {
-        DateTime resultDateTime = actual.add(1, 2, 3);
+        final DateTime resultDateTime = actual.add(1, 2, 3);
         assertEquals(17, resultDateTime.getDay());
         assertEquals(5, resultDateTime.getMonth());
         assertEquals(2001, resultDateTime.getYear());
@@ -95,7 +95,8 @@ public class DateTimeTest {
     @Test
     public void testSameDayOfWeekAs() throws Exception {
         assertTrue(new DateTime(2000, 2, 17).sameDayOfWeekAs(new DateTime(2003, 8, 7))); // Thursday
-        assertFalse(new DateTime(2000, 2, 15).sameDayOfWeekAs(new DateTime(2003, 8, 17))); // Tues &
+        assertFalse(new DateTime(2000, 2, 15).sameDayOfWeekAs(new DateTime(2003, 8, 17))); // Tues
+                                                                                           // &
     }
 
     @Test
@@ -107,15 +108,24 @@ public class DateTimeTest {
     @Test
     public void testSameDayOfYearAs() throws Exception {
         assertTrue(new DateTime(2001, 8, 17).sameDayOfYearAs(new DateTime(2003, 8, 17)));
-        assertTrue(new DateTime(1999, 3, 1).sameDayOfYearAs(new DateTime(2000, 2, 29))); // leap year
+        assertTrue(new DateTime(1999, 3, 1).sameDayOfYearAs(new DateTime(2000, 2, 29))); // leap
+                                                                                         // year
         assertFalse(new DateTime(2001, 3, 1).sameDayOfYearAs(new DateTime(2000, 3, 2)));
     }
 
     @Test
     public void testSameWeekAs() throws Exception {
-        assertFalse(new DateTime(2000, 2, 15).sameWeekAs(new DateTime(2000, 2, 12))); // Tue, week 7 and Sat,
+        assertFalse(new DateTime(2000, 2, 15).sameWeekAs(new DateTime(2000, 2, 12))); // Tue,
+                                                                                      // week
+                                                                                      // 7
+                                                                                      // and
+                                                                                      // Sat,
         // week 6
-        assertTrue(new DateTime(2001, 2, 16).sameWeekAs(new DateTime(2002, 2, 11))); // Tue, week 7, and Thu,
+        assertTrue(new DateTime(2001, 2, 16).sameWeekAs(new DateTime(2002, 2, 11))); // Tue,
+                                                                                     // week
+                                                                                     // 7,
+                                                                                     // and
+                                                                                     // Thu,
         // week 7
     }
 

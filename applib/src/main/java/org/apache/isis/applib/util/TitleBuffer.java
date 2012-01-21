@@ -23,18 +23,21 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 /**
- * Title buffer is a utility class to help produce titles for objects without having to add lots of guard code. It
- * provides two basic method: one to concatenate a title to the buffer; another to append a title with a joiner string,
- * taking care adding in necessary spaces. The benefits of using this class is that null references are safely ignored
- * (rather than appearing as 'null'), and joiners (a space by default) are only added when needed.
+ * Title buffer is a utility class to help produce titles for objects without
+ * having to add lots of guard code. It provides two basic method: one to
+ * concatenate a title to the buffer; another to append a title with a joiner
+ * string, taking care adding in necessary spaces. The benefits of using this
+ * class is that null references are safely ignored (rather than appearing as
+ * 'null'), and joiners (a space by default) are only added when needed.
  */
 public class TitleBuffer {
     private static final String SPACE = " ";
 
     /**
-     * Determines if the specified object's title (from its <code>toString</code> method) is empty. Will return true if
-     * either: the specified reference is null; the object's <code>toString</code> method returns null; or if the
-     * <code>toString</code> returns an empty string.
+     * Determines if the specified object's title (from its
+     * <code>toString</code> method) is empty. Will return true if either: the
+     * specified reference is null; the object's <code>toString</code> method
+     * returns null; or if the <code>toString</code> returns an empty string.
      */
     public static boolean isEmpty(final Object object) {
         final String title = titleFor(object);
@@ -42,8 +45,8 @@ public class TitleBuffer {
     }
 
     /**
-     * Reflectively run the <tt>String title()</tt> method if it exists, else fall back to the <tt>toString()</tt>
-     * method.
+     * Reflectively run the <tt>String title()</tt> method if it exists, else
+     * fall back to the <tt>toString()</tt> method.
      */
     private static String titleFor(final Object object) {
         if (object == null) {
@@ -68,8 +71,8 @@ public class TitleBuffer {
     }
 
     /**
-     * Determines if the specified text is empty. Will return true if either: the specified reference is null; or if the
-     * reference is an empty string.
+     * Determines if the specified text is empty. Will return true if either:
+     * the specified reference is null; or if the reference is an empty string.
      */
     public static boolean isEmpty(final String text) {
         return text == null || text.equals("");
@@ -131,13 +134,15 @@ public class TitleBuffer {
     }
 
     /**
-     * Appends the title of the specified object, or the specified text if the objects title is null or empty. Prepends
-     * a space if there is already some text in this title object.
+     * Appends the title of the specified object, or the specified text if the
+     * objects title is null or empty. Prepends a space if there is already some
+     * text in this title object.
      * 
      * @param object
      *            the object whose title is to be appended to this title.
      * @param defaultValue
-     *            a textual value to be used if the object's title is null or empty.
+     *            a textual value to be used if the object's title is null or
+     *            empty.
      * @return a reference to the called object (itself).
      */
     public TitleBuffer append(final Object object, final String defaultValue) {
@@ -150,7 +155,8 @@ public class TitleBuffer {
     }
 
     /**
-     * Appends a space (if there is already some text in this title object) and then the specified text.
+     * Appends a space (if there is already some text in this title object) and
+     * then the specified text.
      * 
      * @return a reference to the called object (itself).
      */
@@ -162,8 +168,9 @@ public class TitleBuffer {
     }
 
     /**
-     * Appends the joining string and the title of the specified object (from its <code>toString</code> method). If the
-     * object is empty then nothing will be appended.
+     * Appends the joining string and the title of the specified object (from
+     * its <code>toString</code> method). If the object is empty then nothing
+     * will be appended.
      * 
      * @see #isEmpty(Object)
      */
@@ -176,10 +183,13 @@ public class TitleBuffer {
     }
 
     /**
-     * Append the <code>joiner</code> text, a space, and the title of the specified ObjectAdapter (<code>object</code>)
-     * (got by calling the objects title() method) to the text of this TitleString object. If the title of the specified
-     * object is null then use the <code>defaultValue</code> text. If both the objects title and the default value are
-     * null or equate to a zero-length string then no text will be appended ; not even the joiner text.
+     * Append the <code>joiner</code> text, a space, and the title of the
+     * specified ObjectAdapter (<code>object</code>) (got by calling the objects
+     * title() method) to the text of this TitleString object. If the title of
+     * the specified object is null then use the <code>defaultValue</code> text.
+     * If both the objects title and the default value are null or equate to a
+     * zero-length string then no text will be appended ; not even the joiner
+     * text.
      * 
      * @param joiner
      *            text to append before the title
@@ -200,8 +210,9 @@ public class TitleBuffer {
     }
 
     /**
-     * Appends the joiner text, a space, and the text to the text of this TitleString object. If no text yet exists in
-     * the object then the joiner text and space are omitted.
+     * Appends the joiner text, a space, and the text to the text of this
+     * TitleString object. If no text yet exists in the object then the joiner
+     * text and space are omitted.
      * 
      * @return a reference to the called object (itself).
      */
@@ -220,8 +231,9 @@ public class TitleBuffer {
     }
 
     /**
-     * Append a space to the text of this TitleString object if, and only if, there is some existing text i.e., a space
-     * is only added to existing text and will not create a text entry consisting of only one space.
+     * Append a space to the text of this TitleString object if, and only if,
+     * there is some existing text i.e., a space is only added to existing text
+     * and will not create a text entry consisting of only one space.
      * 
      * @return a reference to the called object (itself).
      */
@@ -238,8 +250,9 @@ public class TitleBuffer {
     }
 
     /**
-     * Concatenate the the title value (the result of calling an objects label() method) to this TitleString object. If
-     * the value is null the no text is added.
+     * Concatenate the the title value (the result of calling an objects label()
+     * method) to this TitleString object. If the value is null the no text is
+     * added.
      * 
      * @param object
      *            the ObjectAdapter to get a title from
@@ -251,8 +264,9 @@ public class TitleBuffer {
     }
 
     /**
-     * Concatenate the the title value (the result of calling an objects label() method), or the specified default value
-     * if the title is equal to null or is empty, to this TitleString object.
+     * Concatenate the the title value (the result of calling an objects label()
+     * method), or the specified default value if the title is equal to null or
+     * is empty, to this TitleString object.
      * 
      * @param object
      *            the ObjectAdapter to get a title from
@@ -271,7 +285,8 @@ public class TitleBuffer {
     }
 
     /**
-     * Concatenate the specified text on to the end of the text of this TitleString.
+     * Concatenate the specified text on to the end of the text of this
+     * TitleString.
      * 
      * @param text
      *            text to append
@@ -283,8 +298,9 @@ public class TitleBuffer {
     }
 
     /**
-     * Concatenate the joiner text and the text to the text of this TitleString object. If no text yet exists in
-     * the object then the joiner text is omitted.
+     * Concatenate the joiner text and the text to the text of this TitleString
+     * object. If no text yet exists in the object then the joiner text is
+     * omitted.
      * 
      * @return a reference to the called object (itself).
      */
@@ -297,8 +313,9 @@ public class TitleBuffer {
     }
 
     /**
-     * Concatenate the joiner text and the title of the object to the text of this TitleString object. If no object yet exists in
-     * the object then the joiner text is omitted.
+     * Concatenate the joiner text and the title of the object to the text of
+     * this TitleString object. If no object yet exists in the object then the
+     * joiner text is omitted.
      * 
      * @return a reference to the called object (itself).
      */
@@ -311,8 +328,9 @@ public class TitleBuffer {
     }
 
     /**
-     * Concatenate the joiner text and the title of the object to the text of this TitleString object. If no object yet exists in
-     * the object then defaultValue is used instead.
+     * Concatenate the joiner text and the title of the object to the text of
+     * this TitleString object. If no object yet exists in the object then
+     * defaultValue is used instead.
      * 
      * @return a reference to the called object (itself).
      */
@@ -336,8 +354,9 @@ public class TitleBuffer {
     }
 
     /**
-     * Truncates this title so it has a maximum number of words. Spaces are used to determine words, thus two spaces in
-     * a title will cause two words to be mistakenly identified.
+     * Truncates this title so it has a maximum number of words. Spaces are used
+     * to determine words, thus two spaces in a title will cause two words to be
+     * mistakenly identified.
      * 
      * @param noWords
      *            the number of words to show
@@ -357,7 +376,8 @@ public class TitleBuffer {
             pos++;
         }
         if (pos < title.length()) {
-            title.setLength(pos - 1); // string.delete(pos - 1, string.length());
+            title.setLength(pos - 1); // string.delete(pos - 1,
+                                      // string.length());
             title.append("...");
         }
         return this;

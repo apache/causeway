@@ -38,7 +38,8 @@ public @interface MustSatisfy {
      * The {@link Specification}(s) to be satisfied.
      * 
      * <p>
-     * If more than one is provided, then all must be satisfied (in effect &quot;AND&quot;ed together).
+     * If more than one is provided, then all must be satisfied (in effect
+     * &quot;AND&quot;ed together).
      */
     Class<? extends Specification>[] value();
 }

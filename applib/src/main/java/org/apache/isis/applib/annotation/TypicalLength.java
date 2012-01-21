@@ -28,7 +28,8 @@ import java.lang.annotation.Target;
 import org.apache.isis.applib.adapters.Parser;
 
 /**
- * The typical entry length of a field, use to determine the optimum width for display
+ * The typical entry length of a field, use to determine the optimum width for
+ * display
  * 
  * @see Parser
  */

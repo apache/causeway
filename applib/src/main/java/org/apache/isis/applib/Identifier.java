@@ -27,10 +27,9 @@ import java.util.StringTokenizer;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 
-
 public class Identifier implements Comparable<Identifier> {
 
-    private static final List<String> EMPTY_LIST_OF_STRINGS = Collections.<String>emptyList();
+    private static final List<String> EMPTY_LIST_OF_STRINGS = Collections.<String> emptyList();
 
     /**
      * What type of feature this identifies.
@@ -91,29 +90,23 @@ public class Identifier implements Comparable<Identifier> {
         return new Identifier(className, "", EMPTY_LIST_OF_STRINGS, Type.CLASS);
     }
 
-    public static Identifier propertyOrCollectionIdentifier(final Class<?> declaringClass,
-        final String propertyOrCollectionName) {
+    public static Identifier propertyOrCollectionIdentifier(final Class<?> declaringClass, final String propertyOrCollectionName) {
         return propertyOrCollectionIdentifier(declaringClass.getCanonicalName(), propertyOrCollectionName);
     }
 
-    public static Identifier propertyOrCollectionIdentifier(final String declaringClassName,
-        final String propertyOrCollectionName) {
-        return new Identifier(declaringClassName, propertyOrCollectionName, EMPTY_LIST_OF_STRINGS,
-            Type.PROPERTY_OR_COLLECTION);
+    public static Identifier propertyOrCollectionIdentifier(final String declaringClassName, final String propertyOrCollectionName) {
+        return new Identifier(declaringClassName, propertyOrCollectionName, EMPTY_LIST_OF_STRINGS, Type.PROPERTY_OR_COLLECTION);
     }
 
-    public static Identifier actionIdentifier(final Class<?> declaringClass, final String actionName,
-        final Class<?>... parameterClasses) {
+    public static Identifier actionIdentifier(final Class<?> declaringClass, final String actionName, final Class<?>... parameterClasses) {
         return actionIdentifier(declaringClass.getCanonicalName(), actionName, classNamesOf(parameterClasses));
     }
 
-    public static Identifier actionIdentifier(final String declaringClassName, final String actionName,
-        final Class<?>... parameterClasses) {
+    public static Identifier actionIdentifier(final String declaringClassName, final String actionName, final Class<?>... parameterClasses) {
         return actionIdentifier(declaringClassName, actionName, classNamesOf(parameterClasses));
     }
 
-    public static Identifier actionIdentifier(final String declaringClassName, final String actionName,
-        final List<String> parameterClassNames) {
+    public static Identifier actionIdentifier(final String declaringClassName, final String actionName, final List<String> parameterClassNames) {
         return new Identifier(declaringClassName, actionName, parameterClassNames, Type.ACTION);
     }
 
@@ -125,7 +118,7 @@ public class Identifier implements Comparable<Identifier> {
             return EMPTY_LIST_OF_STRINGS;
         }
         final List<String> parameterClassNames = Lists.newArrayList();
-        for (Class<?> parameterClass : parameterClasses) {
+        for (final Class<?> parameterClass : parameterClasses) {
             parameterClassNames.add(parameterClass.getName());
         }
         return parameterClassNames;
@@ -162,8 +155,8 @@ public class Identifier implements Comparable<Identifier> {
     }
 
     public String getClassNaturalName() {
-        String className = getClassName();
-        String isolatedName = className.substring(className.lastIndexOf('.') + 1);
+        final String className = getClassName();
+        final String isolatedName = className.substring(className.lastIndexOf('.') + 1);
         return NameUtils.naturalName(isolatedName);
     }
 
@@ -225,7 +218,7 @@ public class Identifier implements Comparable<Identifier> {
     }
 
     public StringBuilder toClassAndNameIdentityString(final StringBuilder buf) {
-        StringBuilder builder = toClassIdentityString(buf).append("#").append(memberName);
+        final StringBuilder builder = toClassIdentityString(buf).append("#").append(memberName);
         if (type == Type.ACTION) {
             builder.append("()");
         }
@@ -302,8 +295,7 @@ public class Identifier implements Comparable<Identifier> {
     }
 
     public boolean equals(final Identifier other) {
-        return equals(other.className, className) && equals(other.memberName, other.memberName)
-            && equals(other.parameterNames, parameterNames);
+        return equals(other.className, className) && equals(other.memberName, other.memberName) && equals(other.parameterNames, parameterNames);
     }
 
     private boolean equals(final String a, final String b) {
@@ -355,10 +347,10 @@ public class Identifier implements Comparable<Identifier> {
      * @see #toIdentityString(int)
      */
     public static Identifier fromIdentityString(final String asString) {
-        if(asString == null) {
+        if (asString == null) {
             throw new IllegalArgumentException("expected: non-null identity string");
         }
-    
+
         final int indexOfHash = asString.indexOf("#");
         final int indexOfOpenBracket = asString.indexOf("(");
         final int indexOfCloseBracket = asString.indexOf(")");
@@ -371,14 +363,14 @@ public class Identifier implements Comparable<Identifier> {
             name = asString.substring(indexOfHash + 1);
             return propertyOrCollectionIdentifier(className, name);
         }
-        List<String> parmList = new ArrayList<String>();
+        final List<String> parmList = new ArrayList<String>();
         name = asString.substring(indexOfHash + 1, indexOfOpenBracket);
         final String allParms = asString.substring(indexOfOpenBracket + 1, indexOfCloseBracket).trim();
         if (allParms.length() > 0) {
             // use StringTokenizer for .NET compatibility
             final StringTokenizer tokens = new StringTokenizer(allParms, ",", false);
-            while(tokens.hasMoreTokens()) {
-                String nextParam = tokens.nextToken();
+            while (tokens.hasMoreTokens()) {
+                final String nextParam = tokens.nextToken();
                 parmList.add(nextParam);
             }
         }
@@ -388,14 +380,16 @@ public class Identifier implements Comparable<Identifier> {
 }
 
 /**
- * Not public API, provides a number of utilities to represent formal {@link Identifier} names more naturally.
+ * Not public API, provides a number of utilities to represent formal
+ * {@link Identifier} names more naturally.
  */
 class NameUtils {
     private static final char SPACE = ' ';
 
     /**
-     * Returns a word spaced version of the specified name, so there are spaces between the words, where each word
-     * starts with a capital letter. E.g., "NextAvailableDate" is returned as "Next Available Date".
+     * Returns a word spaced version of the specified name, so there are spaces
+     * between the words, where each word starts with a capital letter. E.g.,
+     * "NextAvailableDate" is returned as "Next Available Date".
      */
     public static String naturalName(final String name) {
 
@@ -408,7 +402,9 @@ class NameUtils {
         final StringBuffer naturalName = new StringBuffer(length);
 
         char previousCharacter;
-        char character = Character.toUpperCase(name.charAt(0));// ensure first character is upper case
+        char character = Character.toUpperCase(name.charAt(0));// ensure first
+                                                               // character is
+                                                               // upper case
         naturalName.append(character);
         char nextCharacter = name.charAt(1);
 
@@ -421,8 +417,7 @@ class NameUtils {
                 if (Character.isUpperCase(character) && !Character.isUpperCase(previousCharacter)) {
                     naturalName.append(SPACE);
                 }
-                if (Character.isUpperCase(character) && Character.isLowerCase(nextCharacter)
-                    && Character.isUpperCase(previousCharacter)) {
+                if (Character.isUpperCase(character) && Character.isLowerCase(nextCharacter) && Character.isUpperCase(previousCharacter)) {
                     naturalName.append(SPACE);
                 }
                 if (Character.isDigit(character) && !Character.isDigit(previousCharacter)) {
@@ -436,7 +431,7 @@ class NameUtils {
     }
 
     public static List<String> naturalNames(final List<String> names) {
-        List<String> naturalNames = Lists.newArrayList();
+        final List<String> naturalNames = Lists.newArrayList();
         for (final String name : names) {
             naturalNames.add(NameUtils.naturalName(name));
         }
@@ -444,4 +439,3 @@ class NameUtils {
     }
 
 }
-

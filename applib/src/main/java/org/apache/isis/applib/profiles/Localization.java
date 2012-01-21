@@ -22,10 +22,9 @@ import java.util.Locale;
 import java.util.TimeZone;
 
 public interface Localization {
-    
-    Locale getLocale();
-    
-    TimeZone getTimeZone();
-    
-}
 
+    Locale getLocale();
+
+    TimeZone getTimeZone();
+
+}

@@ -25,27 +25,32 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * A title annotation used to annotate methods used to construct the title of a domain object instance.
- * It is used as a marker.
+ * A title annotation used to annotate methods used to construct the title of a
+ * domain object instance. It is used as a marker.
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
 public @interface Title {
     /**
-     * The order (in Dewey decimal notation) that the property annotated with {@link Title} appears with respect to 
-     * other properties also annotated with {@link Title}.
+     * The order (in Dewey decimal notation) that the property annotated with
+     * {@link Title} appears with respect to other properties also annotated
+     * with {@link Title}.
      */
     String sequence() default "1.0";
+
     /**
-     * The string to use to separate this property from any preceding properties in the title.  
+     * The string to use to separate this property from any preceding properties
+     * in the title.
      */
     String prepend() default " ";
+
     /**
-     * The string to append to this property if non-empty.  
+     * The string to append to this property if non-empty.
      */
     String append() default "";
+
     /**
-     * The length to abbreviate this title element to.  
+     * The length to abbreviate this title element to.
      */
     int abbreviatedTo() default Integer.MAX_VALUE;
 }

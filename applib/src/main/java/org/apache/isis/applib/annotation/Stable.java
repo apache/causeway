@@ -26,13 +26,12 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Indicates that an entity's definition is stable, 
- * such that any changes to its structure will be
- * backwardly compatible.
+ * Indicates that an entity's definition is stable, such that any changes to its
+ * structure will be backwardly compatible.
  * 
  * <p>
- * Originally introduced to support the json-viewer's
- * RESTful support for application-defined mime types.
+ * Originally introduced to support the json-viewer's RESTful support for
+ * application-defined mime types.
  */
 @Inherited
 @Target({ ElementType.TYPE })

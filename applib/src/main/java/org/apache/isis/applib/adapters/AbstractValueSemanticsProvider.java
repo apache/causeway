@@ -25,7 +25,8 @@ public abstract class AbstractValueSemanticsProvider<T> implements ValueSemantic
     private boolean equalByContent;
 
     /**
-     * Defaults {@link #isImmutable()} to <tt>true</tt> and {@link #isEqualByContent()} to <tt>true</tt> also.
+     * Defaults {@link #isImmutable()} to <tt>true</tt> and
+     * {@link #isEqualByContent()} to <tt>true</tt> also.
      */
     public AbstractValueSemanticsProvider() {
         this(true, true);
@@ -49,7 +50,7 @@ public abstract class AbstractValueSemanticsProvider<T> implements ValueSemantic
     }
 
     @SuppressWarnings("unchecked")
-	@Override
+    @Override
     public DefaultsProvider<T> getDefaultsProvider() {
         return (DefaultsProvider<T>) (this instanceof DefaultsProvider ? this : null);
     }
