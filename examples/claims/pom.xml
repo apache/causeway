@@ -132,11 +132,11 @@
 		<module>objstore-default</module>
 		<module>viewer-html</module>
 		<module>viewer-json</module>
+        <module>viewer-scimpi</module>
 		<module>viewer-bdd</module>
 		<module>viewer-dnd</module>
 		<!-- 
         <module>viewer-wicket</module>
-        <module>viewer-scimpi</module>
 		-->
 	</modules>
 
@@ -198,12 +198,12 @@
                 <version>${project.version}</version>
             </dependency>
 
-            <!-- 
 			<dependency>
 				<groupId>${project.groupId}</groupId>
 				<artifactId>viewer-scimpi</artifactId>
 				<version>${project.version}</version>
 			</dependency>
+            <!-- 
 
 			<dependency>
 				<groupId>${project.groupId}</groupId>
@@ -487,7 +487,6 @@
             </dependency>
 
             <!-- isis: viewer: scimpi -->
-            <!-- 
             <dependency>
                 <groupId>org.apache.isis.viewer</groupId>
                 <artifactId>scimpi</artifactId>
@@ -503,7 +502,6 @@
                 <artifactId>scimpi-servlet</artifactId>
                 <version>${isis.version}</version>
             </dependency>
-            -->
 
             <!-- isis: viewer: wicket -->
             <!-- 
