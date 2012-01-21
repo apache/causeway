@@ -54,8 +54,8 @@ abstract class BaseFixture extends AbstractContainedObject implements Installabl
     // /////////////////////////////////////////////////
 
     /**
-     * Will print warning message and do nothing if {@link FixtureClock} could not be {@link FixtureClock#initialize()
-     * initialized}.
+     * Will print warning message and do nothing if {@link FixtureClock} could
+     * not be {@link FixtureClock#initialize() initialized}.
      */
     public void setDate(final int year, final int month, final int day) {
         if (shouldIgnoreCallBecauseNoClockSetup("setDate()")) {
@@ -65,8 +65,8 @@ abstract class BaseFixture extends AbstractContainedObject implements Installabl
     }
 
     /**
-     * Will print warning message and do nothing if {@link FixtureClock} could not be {@link FixtureClock#initialize()
-     * initialized}.
+     * Will print warning message and do nothing if {@link FixtureClock} could
+     * not be {@link FixtureClock#initialize() initialized}.
      */
     public void setTime(final int hour, final int minute) {
         if (shouldIgnoreCallBecauseNoClockSetup("setTime()")) {
@@ -79,15 +79,16 @@ abstract class BaseFixture extends AbstractContainedObject implements Installabl
      * The {@link Clock} singleton, downcast to {@link FixtureClock}.
      * 
      * <p>
-     * Will return <tt>null</tt> if {@link FixtureClock} could not be {@link FixtureClock#initialize() initialized}.
+     * Will return <tt>null</tt> if {@link FixtureClock} could not be
+     * {@link FixtureClock#initialize() initialized}.
      */
     public FixtureClock getFixtureClock() {
         return clock;
     }
 
     /**
-     * Will print warning message and do nothing if {@link FixtureClock} could not be {@link FixtureClock#initialize()
-     * initialized}.
+     * Will print warning message and do nothing if {@link FixtureClock} could
+     * not be {@link FixtureClock#initialize() initialized}.
      */
     public void resetClock() {
         if (shouldIgnoreCallBecauseNoClockSetup("resetClock()")) {

@@ -22,11 +22,12 @@ package org.apache.isis.applib.events;
 import org.apache.isis.applib.Identifier;
 
 /**
- * Represents a check as to whether a particular argument for an action is valid or not.
+ * Represents a check as to whether a particular argument for an action is valid
+ * or not.
  * 
  * <p>
- * If {@link #getReason()} is not <tt>null</tt> then provides the reason why the argument is invalid; otherwise the
- * argument is valid.
+ * If {@link #getReason()} is not <tt>null</tt> then provides the reason why the
+ * argument is invalid; otherwise the argument is valid.
  * 
  * <p>
  * Called once per argument, and before {@link ActionInvocationEvent}.
@@ -39,8 +40,7 @@ public class ActionArgumentEvent extends ValidityEvent {
     private final int position;
     private final Object proposed;
 
-    public ActionArgumentEvent(final Object source, final Identifier actionIdentifier, final Object[] args,
-        final int position) {
+    public ActionArgumentEvent(final Object source, final Identifier actionIdentifier, final Object[] args, final int position) {
         super(source, actionIdentifier);
         this.args = args;
         this.position = position;

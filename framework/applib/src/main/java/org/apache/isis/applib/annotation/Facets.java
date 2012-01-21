@@ -26,12 +26,12 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Indicates that the class has additional facets, and specifies the how to obtain the <tt>FacetFactory</tt> to
- * manufacture them.
+ * Indicates that the class has additional facets, and specifies the how to
+ * obtain the <tt>FacetFactory</tt> to manufacture them.
  * 
  * <p>
- * At least one named factory (as per {@link #facetFactoryNames()}) or one class factory (as per
- * {@link #facetFactoryClasses()}) should be specified.
+ * At least one named factory (as per {@link #facetFactoryNames()}) or one class
+ * factory (as per {@link #facetFactoryClasses()}) should be specified.
  */
 @Inherited
 @Target({ ElementType.TYPE })
@@ -42,7 +42,8 @@ public @interface Facets {
      * <tt>org.apache.isis.metamodel.facets.FacetFactory</tt>.
      * 
      * <p>
-     * Either the array provided by this method or by {@link #facetFactoryClasses()} should be non-empty.
+     * Either the array provided by this method or by
+     * {@link #facetFactoryClasses()} should be non-empty.
      */
     String[] facetFactoryNames() default {};
 
@@ -51,7 +52,8 @@ public @interface Facets {
      * <tt>org.apache.isis.metamodel.facets.FacetFactory</tt>.
      * 
      * <p>
-     * Either the array provided by this method or by {@link #facetFactoryNames()} should be non-empty.
+     * Either the array provided by this method or by
+     * {@link #facetFactoryNames()} should be non-empty.
      */
     Class<?>[] facetFactoryClasses() default {};
 

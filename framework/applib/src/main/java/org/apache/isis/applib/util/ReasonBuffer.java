@@ -20,12 +20,13 @@
 package org.apache.isis.applib.util;
 
 /**
- * Helper class to create properly concatenated reason string for use in method that return {@link String}s with
- * reasons.
+ * Helper class to create properly concatenated reason string for use in method
+ * that return {@link String}s with reasons.
  * 
  * <p>
- * If no reasons are specified {@link #getReason()} will return <code>null</code> , otherwise it will return a
- * {@link String} with all the valid reasons concatenated with a semi-colon separating each one.
+ * If no reasons are specified {@link #getReason()} will return
+ * <code>null</code> , otherwise it will return a {@link String} with all the
+ * valid reasons concatenated with a semi-colon separating each one.
  * 
  * <p>
  * An alternative is to use the {@link Reasons} class.
@@ -46,7 +47,8 @@ public class ReasonBuffer {
     }
 
     /**
-     * Append a reason to the list of existing reasons if the condition flag is true.
+     * Append a reason to the list of existing reasons if the condition flag is
+     * true.
      */
     public void appendOnCondition(final boolean condition, final String reason) {
         if (condition) {
@@ -55,7 +57,8 @@ public class ReasonBuffer {
     }
 
     /**
-     * Return the combined set of reasons, or <code>null</code> if there are none.
+     * Return the combined set of reasons, or <code>null</code> if there are
+     * none.
      */
     public String getReason() {
         return reasonBuffer.length() == 0 ? null : reasonBuffer.toString();

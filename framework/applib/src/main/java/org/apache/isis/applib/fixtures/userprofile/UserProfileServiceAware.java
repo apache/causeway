@@ -22,7 +22,8 @@ package org.apache.isis.applib.fixtures.userprofile;
 import org.apache.isis.applib.fixtures.UserProfileFixture;
 
 /**
- * Not intended to be implemented directly; is implemented by {@link UserProfileFixture}.
+ * Not intended to be implemented directly; is implemented by
+ * {@link UserProfileFixture}.
  * 
  * <p>
  * If using perspectives then subclass from {@link UserProfileFixture}.

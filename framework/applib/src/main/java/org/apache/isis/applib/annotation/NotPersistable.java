@@ -26,7 +26,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Indicates that an instance cannot be persisted by a user, but only programmatically.
+ * Indicates that an instance cannot be persisted by a user, but only
+ * programmatically.
  */
 @Inherited
 @Target({ ElementType.TYPE })

@@ -19,14 +19,13 @@
 
 package org.apache.isis.applib.value;
 
+import org.apache.isis.applib.Defaults;
+import org.apache.isis.applib.annotation.Value;
+import org.apache.isis.applib.clock.Clock;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeFieldType;
 import org.joda.time.Period;
 import org.joda.time.format.DateTimeFormat;
-
-import org.apache.isis.applib.Defaults;
-import org.apache.isis.applib.annotation.Value;
-import org.apache.isis.applib.clock.Clock;
 
 /**
  * Value object representing a date (not time) value.
@@ -49,7 +48,7 @@ public class Date extends Magnitude<Date> {
      * Create a Date object for today's date.
      */
     public Date() {
-        DateTime time = Clock.getTimeAsDateTime().withTime(0, 0, 0, 0);
+        final DateTime time = Clock.getTimeAsDateTime().withTime(0, 0, 0, 0);
         date = new DateTime(time, Defaults.getTimeZone());
     }
 
@@ -62,7 +61,8 @@ public class Date extends Magnitude<Date> {
     }
 
     /**
-     * Create a Date object based on the specified Java date object. The time portion of the Java date is disposed of.
+     * Create a Date object based on the specified Java date object. The time
+     * portion of the Java date is disposed of.
      */
     public Date(final java.util.Date date) {
         this.date = new DateTime(date.getTime(), Defaults.getTimeZone());
@@ -76,21 +76,22 @@ public class Date extends Magnitude<Date> {
         this.date = new DateTime(date);
     }
 
-    private DateTime newDateTime(int year, int month, int day) {
+    private DateTime newDateTime(final int year, final int month, final int day) {
         return new DateTime(year, month, day, 0, 0, 0, 0, Defaults.getTimeZone());
     }
 
     protected Date createDate(final DateTime date) {
-        Date newDate = new Date(date);
+        final Date newDate = new Date(date);
         return newDate;
     }
 
     /**
-     * Add the specified days, years and months to this date value and return a new date object containing the result.
+     * Add the specified days, years and months to this date value and return a
+     * new date object containing the result.
      */
     public Date add(final int years, final int months, final int days) {
-        Period add = new Period(years, months, 0, days, 0, 0, 0, 0);
-        DateTime newDate = date.plus(add);
+        final Period add = new Period(years, months, 0, days, 0, 0, 0, 0);
+        final DateTime newDate = date.plus(add);
         return new Date(newDate);
     }
 
@@ -112,7 +113,7 @@ public class Date extends Magnitude<Date> {
      * @see java.util.Date
      */
     public java.util.Date dateValue() {
-        java.util.Date javaDate = date.toDate();
+        final java.util.Date javaDate = date.toDate();
         return javaDate;
     }
 
@@ -125,7 +126,8 @@ public class Date extends Magnitude<Date> {
     }
 
     /**
-     * Calculates, and returns, a date representing the last day of the month relative to the current date.
+     * Calculates, and returns, a date representing the last day of the month
+     * relative to the current date.
      * 
      * @author Joshua Cassidy
      */
@@ -161,8 +163,8 @@ public class Date extends Magnitude<Date> {
     }
 
     /**
-     * Calculates, and returns, an int representing the day of the week relative to the current date. With Mon = 0
-     * through to Sun = 6
+     * Calculates, and returns, an int representing the day of the week relative
+     * to the current date. With Mon = 0 through to Sun = 6
      * 
      * @author Joshua Cassidy
      */
@@ -185,7 +187,8 @@ public class Date extends Magnitude<Date> {
     }
 
     /**
-     * Returns true if the date of this object has the same value as the specified date
+     * Returns true if the date of this object has the same value as the
+     * specified date
      */
     @Override
     public boolean isEqualTo(final Date date) {
@@ -193,7 +196,8 @@ public class Date extends Magnitude<Date> {
     }
 
     /**
-     * Returns true if the time of this object is earlier than the specified time
+     * Returns true if the time of this object is earlier than the specified
+     * time
      */
     @Override
     public boolean isLessThan(final Date date) {
@@ -206,39 +210,40 @@ public class Date extends Magnitude<Date> {
     }
 
     /**
-     * Determines if this date and the specified date represent the same day of the month, eg both dates are for the
-     * 3rd.
+     * Determines if this date and the specified date represent the same day of
+     * the month, eg both dates are for the 3rd.
      */
     public boolean sameDayOfMonthAs(final Date as) {
         return sameAs(as, DateTimeFieldType.dayOfMonth());
     }
 
     /**
-     * Determines if this date and the specified date represent the same day of the week, eg both dates are on a
-     * Tuesday.
+     * Determines if this date and the specified date represent the same day of
+     * the week, eg both dates are on a Tuesday.
      */
     public boolean sameDayOfWeekAs(final Date as) {
         return sameAs(as, DateTimeFieldType.dayOfWeek());
     }
 
     /**
-     * Determines if this date and the specified date represent the same day of the year, eg both dates are for the
-     * 108th day of the year.
+     * Determines if this date and the specified date represent the same day of
+     * the year, eg both dates are for the 108th day of the year.
      */
     public boolean sameDayOfYearAs(final Date as) {
         return sameAs(as, DateTimeFieldType.dayOfYear());
     }
 
     /**
-     * Determines if this date and the specified date represent the same month, eg both dates are for the March.
+     * Determines if this date and the specified date represent the same month,
+     * eg both dates are for the March.
      */
     public boolean sameMonthAs(final Date as) {
         return sameAs(as, DateTimeFieldType.monthOfYear());
     }
 
     /**
-     * Determines if this date and the specified date represent the same week in the year, eg both dates are the for the
-     * 18th week of the year.
+     * Determines if this date and the specified date represent the same week in
+     * the year, eg both dates are the for the 18th week of the year.
      */
     public boolean sameWeekAs(final Date as) {
         return sameAs(as, DateTimeFieldType.weekOfWeekyear());
@@ -252,21 +257,24 @@ public class Date extends Magnitude<Date> {
     }
 
     /**
-     * Calculates, and returns, a date representing the first day of the month relative to the current date.
+     * Calculates, and returns, a date representing the first day of the month
+     * relative to the current date.
      */
     public Date startOfMonth() {
         return new Date(date.dayOfMonth().withMinimumValue());
     }
 
     /**
-     * Calculates, and returns, a date representing the first day of the week relative to the current date.
+     * Calculates, and returns, a date representing the first day of the week
+     * relative to the current date.
      */
     public Date startOfWeek() {
         return new Date(date.dayOfWeek().withMinimumValue());
     }
 
     /**
-     * Calculates, and returns, a date representing the first day of the year relative to the current date.
+     * Calculates, and returns, a date representing the first day of the year
+     * relative to the current date.
      */
     public Date startOfYear() {
         return new Date(date.dayOfYear().withMinimumValue());

@@ -27,7 +27,8 @@ import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.NotPersistable;
 
 /**
- * Details, obtained from the container, about the user and his roles. Read-only.
+ * Details, obtained from the container, about the user and his roles.
+ * Read-only.
  */
 @NotPersistable
 public final class UserMemento {
@@ -110,7 +111,8 @@ public final class UserMemento {
     }
 
     /**
-     * Determines if the user fulfills the specified role. Roles are compared lexically by role name.
+     * Determines if the user fulfills the specified role. Roles are compared
+     * lexically by role name.
      */
     public boolean hasRole(final String roleName) {
         for (final RoleMemento role : roles) {

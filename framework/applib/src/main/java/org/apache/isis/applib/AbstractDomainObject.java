@@ -22,11 +22,12 @@ package org.apache.isis.applib;
 import org.apache.isis.applib.annotation.Hidden;
 
 /**
- * Convenience super class for all domain objects that wish to interact with the container.
+ * Convenience super class for all domain objects that wish to interact with the
+ * container.
  * 
  * <p>
- * Subclassing is NOT mandatory; the methods in this superclass can be pushed down into domain objects and another
- * superclass used if required.
+ * Subclassing is NOT mandatory; the methods in this superclass can be pushed
+ * down into domain objects and another superclass used if required.
  * 
  * @see org.apache.isis.applib.DomainObjectContainer
  */
@@ -50,7 +51,8 @@ public abstract class AbstractDomainObject extends AbstractContainedObject {
     }
 
     /**
-     * Notifies the container that this object has changed, so that it can be persisted.
+     * Notifies the container that this object has changed, so that it can be
+     * persisted.
      */
     @Hidden
     protected void objectChanged() {
@@ -75,7 +77,8 @@ public abstract class AbstractDomainObject extends AbstractContainedObject {
      * Save this object to the persistent object store.
      * 
      * <p>
-     * If the object {@link #isPersistent(Object) is persistent} already, then will throw an exception.
+     * If the object {@link #isPersistent(Object) is persistent} already, then
+     * will throw an exception.
      * 
      * @see #persistIfNotAlready(Object)
      * 
@@ -88,7 +91,8 @@ public abstract class AbstractDomainObject extends AbstractContainedObject {
     }
 
     /**
-     * Saves the object, but only if not already {@link #isPersistent(Object) persistent}.
+     * Saves the object, but only if not already {@link #isPersistent(Object)
+     * persistent}.
      * 
      * @see #isPersistent(Object)
      * @see #persist(Object)

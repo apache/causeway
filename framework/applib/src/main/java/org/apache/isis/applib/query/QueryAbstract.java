@@ -31,8 +31,8 @@ public abstract class QueryAbstract<T> implements Query<T> {
 
     private final String resultTypeName;
     /**
-     * Derived from {@link #getResultTypeName()}, with respect to the {@link Thread#getContextClassLoader() current
-     * thread's class loader}.
+     * Derived from {@link #getResultTypeName()}, with respect to the
+     * {@link Thread#getContextClassLoader() current thread's class loader}.
      */
     private transient Class<T> resultType;
 
@@ -46,7 +46,8 @@ public abstract class QueryAbstract<T> implements Query<T> {
 
     /**
      * @throws IllegalStateException
-     *             (wrapping a {@link ClassNotFoundException}) if the class could not be determined.
+     *             (wrapping a {@link ClassNotFoundException}) if the class
+     *             could not be determined.
      */
     @Override
     @SuppressWarnings("unchecked")

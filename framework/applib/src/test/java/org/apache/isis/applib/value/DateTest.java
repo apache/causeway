@@ -83,7 +83,8 @@ public class DateTest {
     @Test
     public void testSameDayOfWeekAs() throws Exception {
         assertTrue(new Date(2000, 2, 17).sameDayOfWeekAs(new Date(2003, 8, 7))); // Thursday
-        assertFalse(new Date(2000, 2, 15).sameDayOfWeekAs(new Date(2003, 8, 17))); // Tues &
+        assertFalse(new Date(2000, 2, 15).sameDayOfWeekAs(new Date(2003, 8, 17))); // Tues
+                                                                                   // &
     }
 
     @Test
@@ -95,14 +96,26 @@ public class DateTest {
     @Test
     public void testSameDayOfYearAs() throws Exception {
         assertTrue(new Date(2001, 8, 17).sameDayOfYearAs(new Date(2003, 8, 17)));
-        assertTrue(new Date(1999, 3, 1).sameDayOfYearAs(new Date(2000, 2, 29))); // leap year
+        assertTrue(new Date(1999, 3, 1).sameDayOfYearAs(new Date(2000, 2, 29))); // leap
+                                                                                 // year
         assertFalse(new Date(2001, 3, 1).sameDayOfYearAs(new Date(2000, 3, 2)));
     }
 
     @Test
     public void testSameWeekAs() throws Exception {
-        assertFalse(new Date(2000, 2, 15).sameWeekAs(new Date(2000, 2, 12))); // Tue, week 7 and Sat, week 6
-        assertTrue(new Date(2001, 2, 16).sameWeekAs(new Date(2002, 2, 11))); // Tue, week 7, and Thu, week
+        assertFalse(new Date(2000, 2, 15).sameWeekAs(new Date(2000, 2, 12))); // Tue,
+                                                                              // week
+                                                                              // 7
+                                                                              // and
+                                                                              // Sat,
+                                                                              // week
+                                                                              // 6
+        assertTrue(new Date(2001, 2, 16).sameWeekAs(new Date(2002, 2, 11))); // Tue,
+                                                                             // week
+                                                                             // 7,
+                                                                             // and
+                                                                             // Thu,
+                                                                             // week
         // 7
     }
 
@@ -124,7 +137,7 @@ public class DateTest {
         assertEquals(1970, date.getYear());
         assertEquals(1, date.getMonth());
         assertEquals(1, date.getDay());
-        java.util.Date dateValue = date.dateValue();
+        final java.util.Date dateValue = date.dateValue();
         final long time = dateValue.getTime();
         assertEquals(1000 * 60 * 60 * 12 * 0, time);
     }

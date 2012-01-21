@@ -24,18 +24,21 @@ import java.io.Serializable;
 import org.apache.isis.applib.DomainObjectContainer;
 
 /**
- * Although (through this class) the subclasses implements {@link Query} and thus are meant to be {@link Serializable},
- * this isn't actually required of the built-in queries because they are all converted into corresponding
+ * Although (through this class) the subclasses implements {@link Query} and
+ * thus are meant to be {@link Serializable}, this isn't actually required of
+ * the built-in queries because they are all converted into corresponding
  * <tt>PersistenceQuery</tt> in the runtime for remoting purposes.
  * 
  * <p>
- * The principle reason for this is to reduce the size of the API from the {@link DomainObjectContainer} to
- * <tt>RuntimeContext</tt>, as well as possibly to the embedded viewer's <tt>EmbeddedContext</tt>. It also means that
- * the requirements for writing an object store are more easily expressed: support the three built-in queries, plus any
- * others.
+ * The principle reason for this is to reduce the size of the API from the
+ * {@link DomainObjectContainer} to <tt>RuntimeContext</tt>, as well as possibly
+ * to the embedded viewer's <tt>EmbeddedContext</tt>. It also means that the
+ * requirements for writing an object store are more easily expressed: support
+ * the three built-in queries, plus any others.
  * 
  * <p>
- * Note also that the {@link QueryFindByPattern} isn't actually serializable (because it references an arbitrary pojo).
+ * Note also that the {@link QueryFindByPattern} isn't actually serializable
+ * (because it references an arbitrary pojo).
  */
 public abstract class QueryBuiltInAbstract<T> extends QueryAbstract<T> {
 

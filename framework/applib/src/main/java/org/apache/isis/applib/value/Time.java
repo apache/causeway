@@ -19,14 +19,13 @@
 
 package org.apache.isis.applib.value;
 
+import org.apache.isis.applib.Defaults;
+import org.apache.isis.applib.annotation.Value;
+import org.apache.isis.applib.clock.Clock;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.joda.time.Period;
 import org.joda.time.format.DateTimeFormat;
-
-import org.apache.isis.applib.Defaults;
-import org.apache.isis.applib.annotation.Value;
-import org.apache.isis.applib.clock.Clock;
 
 /**
  * Value object representing a time value.
@@ -35,11 +34,12 @@ import org.apache.isis.applib.clock.Clock;
  * TODO: other methods to implement:
  * <ul>
  * <li>comparison methods</li>
- * <li>sameHourAs() hour ==hour sameMinuteAs() minutes = minutes sameTimeAs(hour, min) hour == hour & minutes == minutes
- * </li>
- * <li>withinNextTimePeriod(int hours, int minutes); withinTimePeriod(Date d, int hours, int minutes)</li>
- * <li>withinPreviousTimePeriod(int hours, int minutes); d.hour >= this.hour >= d.hour + hours & d.minutes >=
- * this.minutes >= d.minutes + minutes</li>
+ * <li>sameHourAs() hour ==hour sameMinuteAs() minutes = minutes
+ * sameTimeAs(hour, min) hour == hour & minutes == minutes</li>
+ * <li>withinNextTimePeriod(int hours, int minutes); withinTimePeriod(Date d,
+ * int hours, int minutes)</li>
+ * <li>withinPreviousTimePeriod(int hours, int minutes); d.hour >= this.hour >=
+ * d.hour + hours & d.minutes >= this.minutes >= d.minutes + minutes</li>
  * </ul>
  */
 @Value(semanticsProviderName = "org.apache.isis.core.progmodel.facets.value.time.TimeValueSemanticsProvider")
@@ -56,7 +56,7 @@ public class Time extends Magnitude<Time> {
      * Create a Time object set to the current time.
      */
     public Time() {
-        DateTime dateTime = Clock.getTimeAsDateTime();
+        final DateTime dateTime = Clock.getTimeAsDateTime();
         time = dateTime.withDate(1970, 1, 1); // Epoch is 1970-01-01
     }
 
@@ -65,13 +65,14 @@ public class Time extends Magnitude<Time> {
     }
 
     /**
-     * Create a Time object for storing a time with the time set to the specified hours and minutes.
+     * Create a Time object for storing a time with the time set to the
+     * specified hours and minutes.
      */
     public Time(final int hour, final int minute) {
         this(hour, minute, 0);
     }
 
-    public Time(int hour, int minute, int second) {
+    public Time(final int hour, final int minute, final int second) {
         time = time(hour, minute, second);
     }
 
@@ -81,7 +82,8 @@ public class Time extends Magnitude<Time> {
     }
 
     /**
-     * Create a Time object for storing a time with the time set to the specified time of the Java Date object.
+     * Create a Time object for storing a time with the time set to the
+     * specified time of the Java Date object.
      */
     public Time(final java.sql.Date date) {
 
@@ -96,12 +98,13 @@ public class Time extends Magnitude<Time> {
      */
 
     public Time(final java.util.Date date, final DateTimeZone dateTimeZone) {
-        DateTime DateTime = new DateTime(date.getTime(), dateTimeZone);
+        final DateTime DateTime = new DateTime(date.getTime(), dateTimeZone);
         this.time = DateTime.secondOfMinute().setCopy(0);
     }
 
     /**
-     * Create a Time object for storing a time with the time set to the specified time of the Joda Time DateTime object.
+     * Create a Time object for storing a time with the time set to the
+     * specified time of the Joda Time DateTime object.
      */
     public Time(final DateTime dateTime) {
         this.time = newDateTime(dateTime.getHourOfDay(), dateTime.getMinuteOfHour(), dateTime.getSecondOfMinute());
@@ -110,15 +113,16 @@ public class Time extends Magnitude<Time> {
     /**
      * Create a new Time object from the millisSinceEpoch, using UTC.
      */
-    public Time(long millisSinceEpoch) {
+    public Time(final long millisSinceEpoch) {
         this.time = new DateTime(millisSinceEpoch, Defaults.getTimeZone());
     }
 
     /**
-     * Add the specified hours and minutes to this time value, returned as a new Time object.
+     * Add the specified hours and minutes to this time value, returned as a new
+     * Time object.
      */
     public Time add(final int hours, final int minutes) {
-        Period period = new Period(hours, minutes, 0, 0);
+        final Period period = new Period(hours, minutes, 0, 0);
         return new Time(time.plus(period));
     }
 
@@ -137,7 +141,8 @@ public class Time extends Magnitude<Time> {
     }
 
     /*
-     * public java.util.Date dateValue() { return (date == null) ? null : date; }
+     * public java.util.Date dateValue() { return (date == null) ? null : date;
+     * }
      */
 
     public int getHour() {
@@ -153,7 +158,8 @@ public class Time extends Magnitude<Time> {
     }
 
     /**
-     * returns true if the time of this object has the same value as the specified time
+     * returns true if the time of this object has the same value as the
+     * specified time
      */
     @Override
     public boolean isEqualTo(final Time time) {
@@ -161,7 +167,8 @@ public class Time extends Magnitude<Time> {
     }
 
     /**
-     * returns true if the time of this object is earlier than the specified time
+     * returns true if the time of this object is earlier than the specified
+     * time
      */
     @Override
     public boolean isLessThan(final Time time) {
@@ -238,7 +245,7 @@ public class Time extends Magnitude<Time> {
     }
 
     public java.sql.Time asJavaTime() {
-        java.sql.Time time1 = java.sql.Time.valueOf(toString());
+        final java.sql.Time time1 = java.sql.Time.valueOf(toString());
         // TODO: confirm that this is in UTC
         return time1;
     }

@@ -22,10 +22,12 @@ package org.apache.isis.applib.events;
 import org.apache.isis.applib.Identifier;
 
 /**
- * Represents a check to determine whether a member of an object is usable or has been disabled.
+ * Represents a check to determine whether a member of an object is usable or
+ * has been disabled.
  * 
  * <p>
- * If {@link #getReason()} is <tt>null</tt>, then is usable; otherwise is disabled.
+ * If {@link #getReason()} is <tt>null</tt>, then is usable; otherwise is
+ * disabled.
  * 
  * @see AccessEvent
  * @see VisibilityEvent

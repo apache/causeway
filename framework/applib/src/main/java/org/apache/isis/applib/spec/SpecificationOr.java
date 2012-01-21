@@ -25,8 +25,9 @@ import org.apache.isis.applib.util.ReasonBuffer;
  * Adapter to make it easy to perform boolean algebra on {@link Specification}s.
  * 
  * <p>
- * Subclasses represent the conjunction of multiple {@link Specification}s. An implementation should instantiate the
- * {@link Specification}s to be satisfied in its constructor.
+ * Subclasses represent the conjunction of multiple {@link Specification}s. An
+ * implementation should instantiate the {@link Specification}s to be satisfied
+ * in its constructor.
  * 
  * <p>
  * For example:

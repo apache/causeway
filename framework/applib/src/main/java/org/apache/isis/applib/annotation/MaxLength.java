@@ -29,8 +29,8 @@ import java.lang.annotation.Target;
  * The maximum entry length of a field.
  * 
  * <p>
- * Can also be specified for types that are annotated as <tt>@Value</tt> types. To apply, the value must have string
- * semantics.
+ * Can also be specified for types that are annotated as <tt>@Value</tt> types.
+ * To apply, the value must have string semantics.
  */
 @Inherited
 @Target({ ElementType.TYPE, ElementType.METHOD, ElementType.PARAMETER })

@@ -22,11 +22,12 @@ package org.apache.isis.applib.events;
 import org.apache.isis.applib.Identifier;
 
 /**
- * Represents a check as to whether the proposed values of the value type is valid.
+ * Represents a check as to whether the proposed values of the value type is
+ * valid.
  * 
  * <p>
- * If {@link #getReason()} is not <tt>null</tt> then provides the reason why the proposed value is invalid, otherwise
- * the new value is acceptable.
+ * If {@link #getReason()} is not <tt>null</tt> then provides the reason why the
+ * proposed value is invalid, otherwise the new value is acceptable.
  */
 public class ParseValueEvent extends ValidityEvent {
 
@@ -44,8 +45,9 @@ public class ParseValueEvent extends ValidityEvent {
     }
 
     /**
-     * Will be the source provided in the {@link #ParseValueEvent(Object, Identifier, String) constructor} if not null,
-     * otherwise will fallback to the proposed value.
+     * Will be the source provided in the
+     * {@link #ParseValueEvent(Object, Identifier, String) constructor} if not
+     * null, otherwise will fallback to the proposed value.
      */
     @Override
     public Object getSource() {

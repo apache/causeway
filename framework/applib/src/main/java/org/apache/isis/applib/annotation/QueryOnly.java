@@ -26,7 +26,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Indicates that an action is query only; invoking it will not modify any domain object state.
+ * Indicates that an action is query only; invoking it will not modify any
+ * domain object state.
  */
 @Inherited
 @Target({ ElementType.METHOD })

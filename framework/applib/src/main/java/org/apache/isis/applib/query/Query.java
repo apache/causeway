@@ -28,14 +28,16 @@ import org.apache.isis.applib.filter.Filter;
  * For use by repository implementations, representing the values of a query.
  * 
  * <p>
- * The implementations of these objects are be provided by the underlying persistor/object store; consult its
- * documentation.
+ * The implementations of these objects are be provided by the underlying
+ * persistor/object store; consult its documentation.
  * 
  * <p>
- * <b>Note:</b> that not every object store will necessarily support this interface. In particular, the in-memory object
- * store does not. For this, you can use the {@link Filter} interface to similar effect, for example in
- * {@link DomainObjectContainer#allMatches(Class, Filter)}). Note that the filtering is done within the
- * {@link DomainObjectContainer} rather than being pushed back to the object store.
+ * <b>Note:</b> that not every object store will necessarily support this
+ * interface. In particular, the in-memory object store does not. For this, you
+ * can use the {@link Filter} interface to similar effect, for example in
+ * {@link DomainObjectContainer#allMatches(Class, Filter)}). Note that the
+ * filtering is done within the {@link DomainObjectContainer} rather than being
+ * pushed back to the object store.
  */
 public interface Query<T> extends Serializable {
 

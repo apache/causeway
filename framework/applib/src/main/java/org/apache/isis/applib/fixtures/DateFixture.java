@@ -20,15 +20,18 @@
 package org.apache.isis.applib.fixtures;
 
 /**
- * Sole purpose is to set the date/time while object fixtures are being installed.
+ * Sole purpose is to set the date/time while object fixtures are being
+ * installed.
  * 
  * <p>
- * An alternative is to change the date using {@link AbstractFixture#setDate(int, int, int)} and
+ * An alternative is to change the date using
+ * {@link AbstractFixture#setDate(int, int, int)} and
  * {@link AbstractFixture#setTime(int, int)}.
  * 
  * <p>
- * Note that the last date set <i>will</i> remain in force for the application itself. To revert to the current time,
- * have a fixture at the end call {@link #resetClock()}.
+ * Note that the last date set <i>will</i> remain in force for the application
+ * itself. To revert to the current time, have a fixture at the end call
+ * {@link #resetClock()}.
  * 
  * @see SwitchUserFixture
  */

@@ -23,8 +23,9 @@ import org.apache.isis.applib.annotation.Value;
 import org.apache.isis.applib.clock.Clock;
 
 /**
- * Value object representing a date/time value marking a point in time This is a user facing date/time value, more a
- * marker used to indicate the temporal relationship between two objects.
+ * Value object representing a date/time value marking a point in time This is a
+ * user facing date/time value, more a marker used to indicate the temporal
+ * relationship between two objects.
  * 
  * @see DateTime
  */
@@ -35,7 +36,8 @@ public class TimeStamp extends Magnitude<TimeStamp> {
     private final long time;
 
     /**
-     * Create a TimeStamp object for storing a timeStamp set to the current time.
+     * Create a TimeStamp object for storing a timeStamp set to the current
+     * time.
      */
     public TimeStamp() {
         time = Clock.getTime();
@@ -46,7 +48,8 @@ public class TimeStamp extends Magnitude<TimeStamp> {
     }
 
     /**
-     * returns true if the time stamp of this object has the same value as the specified timeStamp
+     * returns true if the time stamp of this object has the same value as the
+     * specified timeStamp
      */
     @Override
     public boolean isEqualTo(final TimeStamp timeStamp) {
@@ -54,7 +57,8 @@ public class TimeStamp extends Magnitude<TimeStamp> {
     }
 
     /**
-     * returns true if the timeStamp of this object is earlier than the specified timeStamp
+     * returns true if the timeStamp of this object is earlier than the
+     * specified timeStamp
      */
     @Override
     public boolean isLessThan(final TimeStamp timeStamp) {

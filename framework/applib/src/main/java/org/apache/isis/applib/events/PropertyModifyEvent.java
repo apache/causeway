@@ -22,11 +22,12 @@ package org.apache.isis.applib.events;
 import org.apache.isis.applib.Identifier;
 
 /**
- * Represents a check as to whether a particular value for a property is valid or not.
+ * Represents a check as to whether a particular value for a property is valid
+ * or not.
  * 
  * <p>
- * If {@link #getReason()} is not <tt>null</tt> then provides the reason why the value is invalid; otherwise the value
- * is valid.
+ * If {@link #getReason()} is not <tt>null</tt> then provides the reason why the
+ * value is invalid; otherwise the value is valid.
  */
 public class PropertyModifyEvent extends ValidityEvent {
 

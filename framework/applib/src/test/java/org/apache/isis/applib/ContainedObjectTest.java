@@ -21,12 +21,11 @@ package org.apache.isis.applib;
 
 import static org.junit.Assert.assertEquals;
 
+import org.apache.isis.applib.security.UserMemento;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.junit.Before;
 import org.junit.Test;
-
-import org.apache.isis.applib.security.UserMemento;
 
 public class ContainedObjectTest {
 

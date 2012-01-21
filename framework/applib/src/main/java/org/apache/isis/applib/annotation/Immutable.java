@@ -29,12 +29,14 @@ import java.lang.annotation.Target;
  * Indicates that an instance cannot be changed.
  * 
  * <p>
- * To make something always immutable used the form <tt>@Immutable</tt>. To make something immutable only once persisted
- * use the form <tt>@Immutable(Immutable.ONCE_PERSISTED)</tt>.
+ * To make something always immutable used the form <tt>@Immutable</tt>. To make
+ * something immutable only once persisted use the form
+ * <tt>@Immutable(Immutable.ONCE_PERSISTED)</tt>.
  * 
  * <p>
- * By default any {@link Value value} types are assumed to be immutable, though this can be overridden if required.
- * Immutable objects that are acting as a value type should almost certainly also follow the {@link EqualByContent
+ * By default any {@link Value value} types are assumed to be immutable, though
+ * this can be overridden if required. Immutable objects that are acting as a
+ * value type should almost certainly also follow the {@link EqualByContent
  * equal-by-content} contract.
  * 
  * @see Value

@@ -17,14 +17,12 @@
  *  under the License.
  */
 
-
 package org.apache.isis.applib.filter;
-
-
 
 public final class Filters {
 
-    private Filters() {}
+    private Filters() {
+    }
 
     public static <T> Filter<T> and(final Filter<T> f1, final Filter<T> f2) {
         return new Filter<T>() {

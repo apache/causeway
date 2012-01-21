@@ -25,8 +25,8 @@ import org.apache.isis.applib.Identifier;
  * Represents a check as to whether a property is visible or has been hidden.
  * 
  * <p>
- * If {@link #getReason()} is not <tt>null</tt> then provides the reason why the property is invisible; otherwise
- * property is visible.
+ * If {@link #getReason()} is not <tt>null</tt> then provides the reason why the
+ * property is invisible; otherwise property is visible.
  */
 public class PropertyVisibilityEvent extends VisibilityEvent {
 

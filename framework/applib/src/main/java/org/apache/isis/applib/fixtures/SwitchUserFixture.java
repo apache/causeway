@@ -21,21 +21,24 @@ package org.apache.isis.applib.fixtures;
 
 import java.util.List;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
-
 import org.apache.isis.applib.fixtures.switchuser.SwitchUserService;
 import org.apache.isis.applib.fixtures.switchuser.SwitchUserServiceAware;
 
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
+
 /**
- * Sole purpose is to switch the current user while object fixtures are being installed.
+ * Sole purpose is to switch the current user while object fixtures are being
+ * installed.
  * 
  * <p>
- * An alternative is to switch user using the {@link AbstractFixture#switchUser(String, String...) switchUser} method.
+ * An alternative is to switch user using the
+ * {@link AbstractFixture#switchUser(String, String...) switchUser} method.
  * 
  * <p>
- * Note that (unlike the otherwise similar {@link DateFixture}) the last user switched to is <i>not</i> used as the
- * logon fixture. If you want to automatically logon as some user, use the {@link LogonFixture}.
+ * Note that (unlike the otherwise similar {@link DateFixture}) the last user
+ * switched to is <i>not</i> used as the logon fixture. If you want to
+ * automatically logon as some user, use the {@link LogonFixture}.
  * 
  * @see DateFixture
  * @see LogonFixture

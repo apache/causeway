@@ -25,11 +25,13 @@ import org.apache.isis.applib.profiles.Perspective;
 import org.apache.isis.applib.profiles.Profile;
 
 /**
- * Not intended to be used directly; decouples the {@link UserProfileFixture}, which needs to persist
- * {@link Perspective}s, from the rest of the framework's runtime.
+ * Not intended to be used directly; decouples the {@link UserProfileFixture},
+ * which needs to persist {@link Perspective}s, from the rest of the framework's
+ * runtime.
  * 
  * <p>
- * A suitable implementation is injected into {@link UserProfileFixture} when installed.
+ * A suitable implementation is injected into {@link UserProfileFixture} when
+ * installed.
  * 
  * @see SwitchUserService
  */

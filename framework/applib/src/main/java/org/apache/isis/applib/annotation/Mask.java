@@ -31,8 +31,9 @@ import java.lang.annotation.Target;
  * A mask to apply to string attributes.
  * 
  * <p>
- * The characters that can be used are shown in the following table (adapted from masks used by Swing's MaskFormatter,
- * Java's SimpleDateFormat and also Microsoft's MaskedEdit control):
+ * The characters that can be used are shown in the following table (adapted
+ * from masks used by Swing's MaskFormatter, Java's SimpleDateFormat and also
+ * Microsoft's MaskedEdit control):
  * 
  * <table border='2'>
  * <tr>
@@ -47,37 +48,42 @@ import java.lang.annotation.Target;
  * </tr>
  * <tr>
  * <td align='center'>.</td>
- * <td align='left'>Decimal placeholder. The actual character used is the one specified as the decimal placeholder in
- * your international settings. This character is treated as a literal for masking purposes.</td>
+ * <td align='left'>Decimal placeholder. The actual character used is the one
+ * specified as the decimal placeholder in your international settings. This
+ * character is treated as a literal for masking purposes.</td>
  * <td align='left'>MS</td>
  * </tr>
  * <tr>
  * <td align='center'>,</td>
- * <td align='left'>Thousands separator. The actual character used is the one specified as the thousands separator in
- * your international settings. This character is treated as a literal for masking purposes.</td>
+ * <td align='left'>Thousands separator. The actual character used is the one
+ * specified as the thousands separator in your international settings. This
+ * character is treated as a literal for masking purposes.</td>
  * <td align='left'>MS</td>
  * </tr>
  * <tr>
  * <td align='center'>:</td>
- * <td align='left'>Time separator. This character is treated as a literal for masking purposes.</td>
+ * <td align='left'>Time separator. This character is treated as a literal for
+ * masking purposes.</td>
  * <td align='left'>MS</td>
  * </tr>
  * <tr>
  * <td align='center'>/</td>
- * <td align='left'>Date separator. This character is treated as a literal for masking purposes.</td>
+ * <td align='left'>Date separator. This character is treated as a literal for
+ * masking purposes.</td>
  * <td align='left'>MS</td>
  * </tr>
  * <tr>
  * <td align='center'>&amp;</td>
- * <td align='left'>Character placeholder. Valid values for this placeholder are ANSI characters in the following
- * ranges: 32-126 and 128-255.</td>
+ * <td align='left'>Character placeholder. Valid values for this placeholder are
+ * ANSI characters in the following ranges: 32-126 and 128-255.</td>
  * <td align='left'>MS</td>
  * </tr>
  * 
  * <tr>
  * <td align='center'>A</td>
- * <td align='left'>Alphanumeric character placeholder (<code>Character.isLetter</code> or
- * <code>Character.isDigit</code>), with entry required. For example: a ~ z, A ~ Z, or 0 ~ 9.</td>
+ * <td align='left'>Alphanumeric character placeholder (
+ * <code>Character.isLetter</code> or <code>Character.isDigit</code>), with
+ * entry required. For example: a ~ z, A ~ Z, or 0 ~ 9.</td>
  * <td align='left'>MS</td>
  * </tr>
  * 
@@ -93,29 +99,33 @@ import java.lang.annotation.Target;
  * </tr>
  * <tr>
  * <td align='center'>?</td>
- * <td align='left'>Letter placeholder (<code>Character.isLetter</code>). For example: a ~ z or A ~ Z.</td>
+ * <td align='left'>Letter placeholder (<code>Character.isLetter</code>). For
+ * example: a ~ z or A ~ Z.</td>
  * <td align='left'>MS, Swing</td>
  * </tr>
  * <tr>
  * <td align='center'>U</td>
- * <td align='left'>Any character (<code>Character.isLetter</code>). All lowercase letters are mapped to upper case.</td>
+ * <td align='left'>Any character (<code>Character.isLetter</code>). All
+ * lowercase letters are mapped to upper case.</td>
  * <td align='left'>Swing</td>
  * </tr>
  * <tr>
  * <td align='center'>L</td>
- * <td align='left'>Any character (<code>Character.isLetter</code>). All lowercase letters are mapped to lower case.</td>
+ * <td align='left'>Any character (<code>Character.isLetter</code>). All
+ * lowercase letters are mapped to lower case.</td>
  * <td align='left'>Swing</td>
  * </tr>
  * <tr>
  * <td align='center'>Literal</td>
- * <td align='left'>All other symbols are displayed as literals; that is, as themselves.</td>
+ * <td align='left'>All other symbols are displayed as literals; that is, as
+ * themselves.</td>
  * <td align='left'>MS</td>
  * </tr>
  * </table>
  * 
  * <p>
- * Can also be specified for types that are annotated as <tt>@Value</tt> types. To apply, the value must have string
- * semantics.
+ * Can also be specified for types that are annotated as <tt>@Value</tt> types.
+ * To apply, the value must have string semantics.
  * 
  * <p>
  * Not yet implemented:
@@ -127,8 +137,9 @@ import java.lang.annotation.Target;
  * </tr>
  * <tr>
  * <td align='center'>\ or '</td>
- * <td align='left'>Treat the next character in the mask string as a literal. This allows you to include the '#', '&',
- * 'A', and '?' characters in the mask. This character is treated as a literal for masking purposes.</td>
+ * <td align='left'>Treat the next character in the mask string as a literal.
+ * This allows you to include the '#', '&', 'A', and '?' characters in the mask.
+ * This character is treated as a literal for masking purposes.</td>
  * <td align='left'>MS (\), Swing (')</td>
  * </tr>
  * <tr>
@@ -148,7 +159,8 @@ import java.lang.annotation.Target;
  * </tr>
  * <tr>
  * <td align='center'>MMM</td>
- * <td align='left'>Three character representation of month, eg <i>Jul</i> for July.</td>
+ * <td align='left'>Three character representation of month, eg <i>Jul</i> for
+ * July.</td>
  * <td align='left'>DateFormat</td>
  * </tr>
  * <tr>
@@ -163,7 +175,8 @@ import java.lang.annotation.Target;
  * </tr>
  * <tr>
  * <td align='center'>HH</td>
- * <td align='left'>Two digit representation of hour in day (24 hour clock), eg 05 or 19.</td>
+ * <td align='left'>Two digit representation of hour in day (24 hour clock), eg
+ * 05 or 19.</td>
  * <td align='left'>DateFormat</td>
  * </tr>
  * <tr>

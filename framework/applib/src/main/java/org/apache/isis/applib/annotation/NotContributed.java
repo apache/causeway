@@ -29,8 +29,9 @@ import java.lang.annotation.Target;
  * Indicates the a (repository) action should be not be contributed.
  * 
  * <p>
- * It may still be appear in the repository menu (unless it has been annotated as {@link NotInServiceMenu}). If
- * {@link Hidden}, then also implies that the menu should not be contributed.
+ * It may still be appear in the repository menu (unless it has been annotated
+ * as {@link NotInServiceMenu}). If {@link Hidden}, then also implies that the
+ * menu should not be contributed.
  * 
  * <p>
  * Has no meanings for actions on regular entities.
