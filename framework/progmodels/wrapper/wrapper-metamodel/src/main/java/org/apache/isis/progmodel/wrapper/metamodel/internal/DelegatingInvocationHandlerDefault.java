@@ -44,8 +44,7 @@ public class DelegatingInvocationHandlerDefault<T> implements DelegatingInvocati
 
     private boolean resolveObjectChangedEnabled;
 
-    public DelegatingInvocationHandlerDefault(final T delegate, final WrapperFactory headlessViewer,
-        final ExecutionMode executionMode) {
+    public DelegatingInvocationHandlerDefault(final T delegate, final WrapperFactory headlessViewer, final ExecutionMode executionMode) {
         if (delegate == null) {
             throw new IllegalArgumentException("delegate must not be null");
         }
@@ -110,8 +109,7 @@ public class DelegatingInvocationHandlerDefault<T> implements DelegatingInvocati
         return executionMode;
     }
 
-    protected Object delegate(final Method method, final Object[] args) throws IllegalArgumentException,
-        IllegalAccessException, InvocationTargetException {
+    protected Object delegate(final Method method, final Object[] args) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException {
 
         return method.invoke(getDelegate(), args);
     }

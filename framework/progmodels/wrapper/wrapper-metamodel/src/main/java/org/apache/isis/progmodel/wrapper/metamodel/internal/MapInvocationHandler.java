@@ -27,8 +27,7 @@ import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 
 class MapInvocationHandler<T, C> extends AbstractCollectionInvocationHandler<T, C> {
 
-    public MapInvocationHandler(final C collectionToProxy, final String collectionName,
-        final DomainObjectInvocationHandler<T> handler, final OneToManyAssociation otma) {
+    public MapInvocationHandler(final C collectionToProxy, final String collectionName, final DomainObjectInvocationHandler<T> handler, final OneToManyAssociation otma) {
         super(collectionToProxy, collectionName, handler, otma);
 
         try {

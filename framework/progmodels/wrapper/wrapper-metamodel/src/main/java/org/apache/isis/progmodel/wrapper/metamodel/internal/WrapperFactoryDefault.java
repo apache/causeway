@@ -53,12 +53,10 @@ import org.apache.isis.progmodel.wrapper.applib.WrapperFactory;
 import org.apache.isis.progmodel.wrapper.applib.WrapperObject;
 import org.apache.isis.progmodel.wrapper.applib.listeners.InteractionListener;
 
-public class WrapperFactoryDefault implements WrapperFactory, AuthenticationSessionProviderAware,
-    SpecificationLookupAware, AdapterMapAware, ObjectPersistorAware {
+public class WrapperFactoryDefault implements WrapperFactory, AuthenticationSessionProviderAware, SpecificationLookupAware, AdapterMapAware, ObjectPersistorAware {
 
     private final List<InteractionListener> listeners = new ArrayList<InteractionListener>();
-    private final Map<Class<? extends InteractionEvent>, InteractionEventDispatcher> dispatchersByEventClass =
-        new HashMap<Class<? extends InteractionEvent>, InteractionEventDispatcher>();
+    private final Map<Class<? extends InteractionEvent>, InteractionEventDispatcher> dispatchersByEventClass = new HashMap<Class<? extends InteractionEvent>, InteractionEventDispatcher>();
 
     private AuthenticationSessionProvider authenticationSessionProvider;
     private SpecificationLookup specificationLookup;
@@ -74,141 +72,126 @@ public class WrapperFactoryDefault implements WrapperFactory, AuthenticationSess
                 }
             }
         });
-        dispatchersByEventClass.put(PropertyVisibilityEvent.class,
-            new InteractionEventDispatcherTypeSafe<PropertyVisibilityEvent>() {
-                @Override
-                public void dispatchTypeSafe(final PropertyVisibilityEvent interactionEvent) {
-                    for (final InteractionListener l : getListeners()) {
-                        l.propertyVisible(interactionEvent);
-                    }
+        dispatchersByEventClass.put(PropertyVisibilityEvent.class, new InteractionEventDispatcherTypeSafe<PropertyVisibilityEvent>() {
+            @Override
+            public void dispatchTypeSafe(final PropertyVisibilityEvent interactionEvent) {
+                for (final InteractionListener l : getListeners()) {
+                    l.propertyVisible(interactionEvent);
                 }
-            });
-        dispatchersByEventClass.put(PropertyUsabilityEvent.class,
-            new InteractionEventDispatcherTypeSafe<PropertyUsabilityEvent>() {
-                @Override
-                public void dispatchTypeSafe(final PropertyUsabilityEvent interactionEvent) {
-                    for (final InteractionListener l : getListeners()) {
-                        l.propertyUsable(interactionEvent);
-                    }
+            }
+        });
+        dispatchersByEventClass.put(PropertyUsabilityEvent.class, new InteractionEventDispatcherTypeSafe<PropertyUsabilityEvent>() {
+            @Override
+            public void dispatchTypeSafe(final PropertyUsabilityEvent interactionEvent) {
+                for (final InteractionListener l : getListeners()) {
+                    l.propertyUsable(interactionEvent);
                 }
-            });
-        dispatchersByEventClass.put(PropertyAccessEvent.class,
-            new InteractionEventDispatcherTypeSafe<PropertyAccessEvent>() {
-                @Override
-                public void dispatchTypeSafe(final PropertyAccessEvent interactionEvent) {
-                    for (final InteractionListener l : getListeners()) {
-                        l.propertyAccessed(interactionEvent);
-                    }
+            }
+        });
+        dispatchersByEventClass.put(PropertyAccessEvent.class, new InteractionEventDispatcherTypeSafe<PropertyAccessEvent>() {
+            @Override
+            public void dispatchTypeSafe(final PropertyAccessEvent interactionEvent) {
+                for (final InteractionListener l : getListeners()) {
+                    l.propertyAccessed(interactionEvent);
                 }
-            });
-        dispatchersByEventClass.put(PropertyModifyEvent.class,
-            new InteractionEventDispatcherTypeSafe<PropertyModifyEvent>() {
-                @Override
-                public void dispatchTypeSafe(final PropertyModifyEvent interactionEvent) {
-                    for (final InteractionListener l : getListeners()) {
-                        l.propertyModified(interactionEvent);
-                    }
+            }
+        });
+        dispatchersByEventClass.put(PropertyModifyEvent.class, new InteractionEventDispatcherTypeSafe<PropertyModifyEvent>() {
+            @Override
+            public void dispatchTypeSafe(final PropertyModifyEvent interactionEvent) {
+                for (final InteractionListener l : getListeners()) {
+                    l.propertyModified(interactionEvent);
                 }
-            });
-        dispatchersByEventClass.put(CollectionVisibilityEvent.class,
-            new InteractionEventDispatcherTypeSafe<CollectionVisibilityEvent>() {
-                @Override
-                public void dispatchTypeSafe(final CollectionVisibilityEvent interactionEvent) {
-                    for (final InteractionListener l : getListeners()) {
-                        l.collectionVisible(interactionEvent);
-                    }
+            }
+        });
+        dispatchersByEventClass.put(CollectionVisibilityEvent.class, new InteractionEventDispatcherTypeSafe<CollectionVisibilityEvent>() {
+            @Override
+            public void dispatchTypeSafe(final CollectionVisibilityEvent interactionEvent) {
+                for (final InteractionListener l : getListeners()) {
+                    l.collectionVisible(interactionEvent);
                 }
-            });
-        dispatchersByEventClass.put(CollectionUsabilityEvent.class,
-            new InteractionEventDispatcherTypeSafe<CollectionUsabilityEvent>() {
-                @Override
-                public void dispatchTypeSafe(final CollectionUsabilityEvent interactionEvent) {
-                    for (final InteractionListener l : getListeners()) {
-                        l.collectionUsable(interactionEvent);
-                    }
+            }
+        });
+        dispatchersByEventClass.put(CollectionUsabilityEvent.class, new InteractionEventDispatcherTypeSafe<CollectionUsabilityEvent>() {
+            @Override
+            public void dispatchTypeSafe(final CollectionUsabilityEvent interactionEvent) {
+                for (final InteractionListener l : getListeners()) {
+                    l.collectionUsable(interactionEvent);
                 }
-            });
-        dispatchersByEventClass.put(CollectionAccessEvent.class,
-            new InteractionEventDispatcherTypeSafe<CollectionAccessEvent>() {
-                @Override
-                public void dispatchTypeSafe(final CollectionAccessEvent interactionEvent) {
-                    for (final InteractionListener l : getListeners()) {
-                        l.collectionAccessed(interactionEvent);
-                    }
+            }
+        });
+        dispatchersByEventClass.put(CollectionAccessEvent.class, new InteractionEventDispatcherTypeSafe<CollectionAccessEvent>() {
+            @Override
+            public void dispatchTypeSafe(final CollectionAccessEvent interactionEvent) {
+                for (final InteractionListener l : getListeners()) {
+                    l.collectionAccessed(interactionEvent);
                 }
-            });
-        dispatchersByEventClass.put(CollectionAddToEvent.class,
-            new InteractionEventDispatcherTypeSafe<CollectionAddToEvent>() {
-                @Override
-                public void dispatchTypeSafe(final CollectionAddToEvent interactionEvent) {
-                    for (final InteractionListener l : getListeners()) {
-                        l.collectionAddedTo(interactionEvent);
-                    }
+            }
+        });
+        dispatchersByEventClass.put(CollectionAddToEvent.class, new InteractionEventDispatcherTypeSafe<CollectionAddToEvent>() {
+            @Override
+            public void dispatchTypeSafe(final CollectionAddToEvent interactionEvent) {
+                for (final InteractionListener l : getListeners()) {
+                    l.collectionAddedTo(interactionEvent);
                 }
-            });
-        dispatchersByEventClass.put(CollectionRemoveFromEvent.class,
-            new InteractionEventDispatcherTypeSafe<CollectionRemoveFromEvent>() {
-                @Override
-                public void dispatchTypeSafe(final CollectionRemoveFromEvent interactionEvent) {
-                    for (final InteractionListener l : getListeners()) {
-                        l.collectionRemovedFrom(interactionEvent);
-                    }
+            }
+        });
+        dispatchersByEventClass.put(CollectionRemoveFromEvent.class, new InteractionEventDispatcherTypeSafe<CollectionRemoveFromEvent>() {
+            @Override
+            public void dispatchTypeSafe(final CollectionRemoveFromEvent interactionEvent) {
+                for (final InteractionListener l : getListeners()) {
+                    l.collectionRemovedFrom(interactionEvent);
                 }
-            });
-        dispatchersByEventClass.put(ActionVisibilityEvent.class,
-            new InteractionEventDispatcherTypeSafe<ActionVisibilityEvent>() {
-                @Override
-                public void dispatchTypeSafe(final ActionVisibilityEvent interactionEvent) {
-                    for (final InteractionListener l : getListeners()) {
-                        l.actionVisible(interactionEvent);
-                    }
+            }
+        });
+        dispatchersByEventClass.put(ActionVisibilityEvent.class, new InteractionEventDispatcherTypeSafe<ActionVisibilityEvent>() {
+            @Override
+            public void dispatchTypeSafe(final ActionVisibilityEvent interactionEvent) {
+                for (final InteractionListener l : getListeners()) {
+                    l.actionVisible(interactionEvent);
                 }
-            });
-        dispatchersByEventClass.put(ActionUsabilityEvent.class,
-            new InteractionEventDispatcherTypeSafe<ActionUsabilityEvent>() {
-                @Override
-                public void dispatchTypeSafe(final ActionUsabilityEvent interactionEvent) {
-                    for (final InteractionListener l : getListeners()) {
-                        l.actionUsable(interactionEvent);
-                    }
+            }
+        });
+        dispatchersByEventClass.put(ActionUsabilityEvent.class, new InteractionEventDispatcherTypeSafe<ActionUsabilityEvent>() {
+            @Override
+            public void dispatchTypeSafe(final ActionUsabilityEvent interactionEvent) {
+                for (final InteractionListener l : getListeners()) {
+                    l.actionUsable(interactionEvent);
                 }
-            });
-        dispatchersByEventClass.put(ActionArgumentEvent.class,
-            new InteractionEventDispatcherTypeSafe<ActionArgumentEvent>() {
-                @Override
-                public void dispatchTypeSafe(final ActionArgumentEvent interactionEvent) {
-                    for (final InteractionListener l : getListeners()) {
-                        l.actionArgument(interactionEvent);
-                    }
+            }
+        });
+        dispatchersByEventClass.put(ActionArgumentEvent.class, new InteractionEventDispatcherTypeSafe<ActionArgumentEvent>() {
+            @Override
+            public void dispatchTypeSafe(final ActionArgumentEvent interactionEvent) {
+                for (final InteractionListener l : getListeners()) {
+                    l.actionArgument(interactionEvent);
                 }
-            });
-        dispatchersByEventClass.put(ActionInvocationEvent.class,
-            new InteractionEventDispatcherTypeSafe<ActionInvocationEvent>() {
-                @Override
-                public void dispatchTypeSafe(final ActionInvocationEvent interactionEvent) {
-                    for (final InteractionListener l : getListeners()) {
-                        l.actionInvoked(interactionEvent);
-                    }
+            }
+        });
+        dispatchersByEventClass.put(ActionInvocationEvent.class, new InteractionEventDispatcherTypeSafe<ActionInvocationEvent>() {
+            @Override
+            public void dispatchTypeSafe(final ActionInvocationEvent interactionEvent) {
+                for (final InteractionListener l : getListeners()) {
+                    l.actionInvoked(interactionEvent);
                 }
-            });
-        dispatchersByEventClass.put(ObjectValidityEvent.class,
-            new InteractionEventDispatcherTypeSafe<ObjectValidityEvent>() {
-                @Override
-                public void dispatchTypeSafe(final ObjectValidityEvent interactionEvent) {
-                    for (final InteractionListener l : getListeners()) {
-                        l.objectPersisted(interactionEvent);
-                    }
+            }
+        });
+        dispatchersByEventClass.put(ObjectValidityEvent.class, new InteractionEventDispatcherTypeSafe<ObjectValidityEvent>() {
+            @Override
+            public void dispatchTypeSafe(final ObjectValidityEvent interactionEvent) {
+                for (final InteractionListener l : getListeners()) {
+                    l.objectPersisted(interactionEvent);
                 }
-            });
-        dispatchersByEventClass.put(CollectionMethodEvent.class,
-            new InteractionEventDispatcherTypeSafe<CollectionMethodEvent>() {
-                @Override
-                public void dispatchTypeSafe(final CollectionMethodEvent interactionEvent) {
-                    for (final InteractionListener l : getListeners()) {
-                        l.collectionMethodInvoked(interactionEvent);
-                    }
+            }
+        });
+        dispatchersByEventClass.put(CollectionMethodEvent.class, new InteractionEventDispatcherTypeSafe<CollectionMethodEvent>() {
+            @Override
+            public void dispatchTypeSafe(final CollectionMethodEvent interactionEvent) {
+                for (final InteractionListener l : getListeners()) {
+                    l.collectionMethodInvoked(interactionEvent);
                 }
-            });
+            }
+        });
     }
 
     // /////////////////////////////////////////////////////////////
@@ -225,8 +208,7 @@ public class WrapperFactoryDefault implements WrapperFactory, AuthenticationSess
         if (isWrapper(domainObject)) {
             return domainObject;
         }
-        return Proxy.proxy(domainObject, this, mode, authenticationSessionProvider, specificationLookup,
-            adapterManager, objectPersistor);
+        return Proxy.proxy(domainObject, this, mode, authenticationSessionProvider, specificationLookup, adapterManager, objectPersistor);
     }
 
     @Override

@@ -19,15 +19,16 @@
 
 package org.apache.isis.progmodel.wrapper.applib;
 
-
 /**
- * Implemented by all objects that have been viewed as per {@link WrapperFactory#wrap(Object)}.
+ * Implemented by all objects that have been viewed as per
+ * {@link WrapperFactory#wrap(Object)}.
  */
 public interface WrapperObject {
 
     /**
-     * Programmatic equivalent of invoking save for a transient object (that is, like hitting the <i>save</i> button
-     * that the DnD viewer automatically renders.
+     * Programmatic equivalent of invoking save for a transient object (that is,
+     * like hitting the <i>save</i> button that the DnD viewer automatically
+     * renders.
      */
     void save();
 
@@ -35,12 +36,13 @@ public interface WrapperObject {
      * Provide access to the underlying, wrapped object.
      * 
      * <p>
-     * Used to unwrap objects used as arguments to actions (otherwise, end up creating a <tt>ObjectSpecification</tt> for
-     * the CGLib-enhanced class, not the original class).
+     * Used to unwrap objects used as arguments to actions (otherwise, end up
+     * creating a <tt>ObjectSpecification</tt> for the CGLib-enhanced class, not
+     * the original class).
      * 
      * <p>
-     * <b>NOTE: there is a string-literal reference to this name <tt>DomainObjectInvocationHandler</tt>, so it should
-     * not be changed.</b>.
+     * <b>NOTE: there is a string-literal reference to this name
+     * <tt>DomainObjectInvocationHandler</tt>, so it should not be changed.</b>.
      */
     Object wrapped();
 

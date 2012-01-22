@@ -23,7 +23,8 @@ import org.apache.isis.applib.events.InteractionEvent;
 import org.apache.isis.applib.events.UsabilityEvent;
 
 /**
- * Superclass of exceptions which indicate an attempt to interact with a class member that is disabled.
+ * Superclass of exceptions which indicate an attempt to interact with a class
+ * member that is disabled.
  */
 public class DisabledException extends InteractionException {
 

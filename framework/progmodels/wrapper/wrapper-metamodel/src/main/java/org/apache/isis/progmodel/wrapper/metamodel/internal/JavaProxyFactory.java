@@ -35,7 +35,6 @@ public class JavaProxyFactory<T> implements IProxyFactory<T> {
     @Override
     @SuppressWarnings("unchecked")
     public T createProxy(final Class<T> toProxy, final InvocationHandler handler) {
-        return (T) Proxy.newProxyInstance(toProxy.getClassLoader(), new Class[] { toProxy, WrapperObject.class },
-            handler);
+        return (T) Proxy.newProxyInstance(toProxy.getClassLoader(), new Class[] { toProxy, WrapperObject.class }, handler);
     }
 }

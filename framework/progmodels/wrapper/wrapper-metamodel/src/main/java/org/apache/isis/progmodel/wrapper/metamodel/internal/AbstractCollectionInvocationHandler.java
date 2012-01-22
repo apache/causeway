@@ -35,8 +35,7 @@ abstract class AbstractCollectionInvocationHandler<T, C> extends DelegatingInvoc
     private final OneToManyAssociation oneToManyAssociation;
     private final T domainObject;
 
-    public AbstractCollectionInvocationHandler(final C collectionOrMapToProxy, final String collectionName,
-        final DomainObjectInvocationHandler<T> handler, final OneToManyAssociation otma) {
+    public AbstractCollectionInvocationHandler(final C collectionOrMapToProxy, final String collectionName, final DomainObjectInvocationHandler<T> handler, final OneToManyAssociation otma) {
         super(collectionOrMapToProxy, handler.getHeadlessViewer(), handler.getExecutionMode());
         this.collectionName = collectionName;
         this.oneToManyAssociation = otma;
@@ -75,16 +74,13 @@ abstract class AbstractCollectionInvocationHandler<T, C> extends DelegatingInvoc
 
             resolveIfRequired(domainObject);
 
-            final InteractionEvent ev =
-                new CollectionMethodEvent(getDelegate(), getCollection().getIdentifier(), getDomainObject(),
-                    method.getName(), args, returnValueObj);
+            final InteractionEvent ev = new CollectionMethodEvent(getDelegate(), getCollection().getIdentifier(), getDomainObject(), method.getName(), args, returnValueObj);
             notifyListeners(ev);
             return returnValueObj;
         }
 
         if (vetoedMethods.contains(method)) {
-            throw new UnsupportedOperationException(String.format("Method '%s' may not be called directly.",
-                method.getName()));
+            throw new UnsupportedOperationException(String.format("Method '%s' may not be called directly.", method.getName()));
         }
 
         return returnValueObj;

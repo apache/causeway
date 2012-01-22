@@ -183,7 +183,8 @@ public class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract {
 
     public ProgrammingModelFacetsJava5() {
 
-        // must be first, so any Facets created can be replaced by other FacetFactorys later.
+        // must be first, so any Facets created can be replaced by other
+        // FacetFactorys later.
         addFactory(FallbackFacetFactory.class);
 
         addFactory(IteratorFilteringFacetFactory.class);
@@ -197,7 +198,8 @@ public class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract {
         addFactory(RemoveGetClassMethodFacetFactory.class);
         addFactory(RemoveIgnoreAnnotationMethodsFacetFactory.class);
 
-        // must be before any other FacetFactories that install MandatoryFacet.class facets
+        // must be before any other FacetFactories that install
+        // MandatoryFacet.class facets
         addFactory(MandatoryDefaultForPropertiesFacetFactory.class);
         addFactory(MandatoryDefaultForParametersFacetFactory.class);
 
@@ -211,7 +213,8 @@ public class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract {
         // properties
         addFactory(PropertyAccessorFacetFactory.class);
         addFactory(PropertySetAndClearFacetFactory.class);
-        addFactory(PropertyModifyFacetFactory.class); // must come after PropertySetAndClearFacetFactory
+        addFactory(PropertyModifyFacetFactory.class); // must come after
+                                                      // PropertySetAndClearFacetFactory
         addFactory(PropertyValidateFacetFactory.class);
         addFactory(PropertyChoicesFacetFactory.class);
         addFactory(PropertyDefaultFacetFactory.class);

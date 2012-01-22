@@ -35,12 +35,14 @@ public abstract class InteractionException extends ApplicationException {
     }
 
     /**
-     * The {@link InteractionEvent event} passed into the {@link #InteractionException(InteractionEvent) constructor}.
+     * The {@link InteractionEvent event} passed into the
+     * {@link #InteractionException(InteractionEvent) constructor}.
      * 
      * <p>
-     * Not part of the API, but made available so that subclasses can expose as the appropriate subtype of
-     * {@link InteractionEvent}. This would have been more obvious to see if {@link InteractionException} was generic,
-     * but generic subclasses of {@link Throwable} are (apparently) not allowed.
+     * Not part of the API, but made available so that subclasses can expose as
+     * the appropriate subtype of {@link InteractionEvent}. This would have been
+     * more obvious to see if {@link InteractionException} was generic, but
+     * generic subclasses of {@link Throwable} are (apparently) not allowed.
      * 
      * @return
      */
@@ -49,7 +51,8 @@ public abstract class InteractionException extends ApplicationException {
     }
 
     /**
-     * Convenience method that returns the {@link InteractionEvent#getAdvisorClass() advisor class} of the wrapped
+     * Convenience method that returns the
+     * {@link InteractionEvent#getAdvisorClass() advisor class} of the wrapped
      * {@link #getInteractionEvent() interaction event}.
      * 
      * @return
@@ -59,7 +62,8 @@ public abstract class InteractionException extends ApplicationException {
     }
 
     /**
-     * Convenience method that returns the {@link InteractionEvent#getIdentifier() identifier} of the wrapped
+     * Convenience method that returns the
+     * {@link InteractionEvent#getIdentifier() identifier} of the wrapped
      * {@link #getInteractionEvent() interaction event}.
      * 
      * @return

@@ -23,20 +23,16 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
 
-import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2;
 import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2.Mode;
 import org.apache.isis.progmodel.wrapper.applib.DisabledException;
 import org.apache.isis.progmodel.wrapper.applib.HiddenException;
 import org.apache.isis.progmodel.wrapper.applib.InvalidException;
 import org.apache.isis.progmodel.wrapper.applib.WrapperFactory;
-import org.apache.isis.progmodel.wrapper.dom.claim.ClaimRepository;
-import org.apache.isis.progmodel.wrapper.dom.claim.ClaimRepositoryImpl;
 import org.apache.isis.progmodel.wrapper.dom.employee.Employee;
 import org.apache.isis.progmodel.wrapper.dom.employee.EmployeeRepository;
 import org.apache.isis.progmodel.wrapper.dom.employee.EmployeeRepositoryImpl;
 import org.apache.isis.progmodel.wrapper.metamodel.internal.WrapperFactoryDefault;
-import org.jmock.Expectations;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Rule;
@@ -46,26 +42,27 @@ public class WrappedFactoryDefaultTest_wrappedObject {
 
     @Rule
     public JUnitRuleMockery2 mockery = JUnitRuleMockery2.createFor(Mode.INTERFACES_ONLY);
-    
+
     private EmployeeRepository employeeRepository;
-    //private ClaimRepository claimRepository;
-    
+    // private ClaimRepository claimRepository;
+
     private Employee employeeDO;
     private Employee employeeWO;
 
     private WrapperFactory wrapperFactory;
 
-    
     @Before
     public void setUp() {
 
         employeeRepository = new EmployeeRepositoryImpl();
-        //claimRepository = new ClaimRepositoryImpl();
+        // claimRepository = new ClaimRepositoryImpl();
 
         employeeDO = new Employee();
         employeeDO.setName("Smith");
-        employeeDO.setEmployeeRepository(employeeRepository); // would be done by the EmbeddedContext impl
-
+        employeeDO.setEmployeeRepository(employeeRepository); // would be done
+                                                              // by the
+                                                              // EmbeddedContext
+                                                              // impl
 
         wrapperFactory = new WrapperFactoryDefault();
         employeeWO = wrapperFactory.wrap(employeeDO);
@@ -84,11 +81,10 @@ public class WrappedFactoryDefaultTest_wrappedObject {
 
         // given
         assertThat(employeeDO.getEmployeeRepository(), is(notNullValue()));
-        
+
         // then
         assertThat(employeeWO.getEmployeeRepository(), is(notNullValue()));
     }
-
 
     @Ignore("TODO - moved from embedded runtime, need to re-enable")
     @Test
@@ -103,7 +99,7 @@ public class WrappedFactoryDefaultTest_wrappedObject {
         // given
         employeeDO.whetherHideName = true;
         // when
-        employeeWO.getName(); 
+        employeeWO.getName();
         // then should throw exception
     }
 

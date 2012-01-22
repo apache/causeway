@@ -70,8 +70,9 @@ public interface InteractionListener {
      * A property was read.
      * 
      * <p>
-     * Unlike most other events, a {@link PropertyAccessEvent} will never have been vetoed (that is,
-     * {@link PropertyAccessEvent#isVeto()} will always be <tt>false</tt>).
+     * Unlike most other events, a {@link PropertyAccessEvent} will never have
+     * been vetoed (that is, {@link PropertyAccessEvent#isVeto()} will always be
+     * <tt>false</tt>).
      * 
      * @param ev
      */
@@ -81,7 +82,8 @@ public interface InteractionListener {
      * A property was modified (or an attempt to modify it was made)
      * 
      * <p>
-     * Use {@link PropertyModifyEvent#getProposed()} to determine whether the property was being set or cleared.
+     * Use {@link PropertyModifyEvent#getProposed()} to determine whether the
+     * property was being set or cleared.
      * 
      * @param ev
      */
@@ -91,7 +93,8 @@ public interface InteractionListener {
      * A check was made to determine if a collection was visible.
      * 
      * <p>
-     * Will be fired prior to {@link #collectionUsable(CollectionUsabilityEvent)}.
+     * Will be fired prior to
+     * {@link #collectionUsable(CollectionUsabilityEvent)}.
      * 
      * @param ev
      */
@@ -101,8 +104,10 @@ public interface InteractionListener {
      * A check was made to determine if a collection was usable.
      * 
      * <p>
-     * Will be fired prior to either {@link #collectionAccessed(CollectionAccessEvent)} or
-     * {@link #collectionAddedTo(CollectionAddToEvent)} or {@link #collectionRemovedFrom(CollectionRemoveFromEvent)}.
+     * Will be fired prior to either
+     * {@link #collectionAccessed(CollectionAccessEvent)} or
+     * {@link #collectionAddedTo(CollectionAddToEvent)} or
+     * {@link #collectionRemovedFrom(CollectionRemoveFromEvent)}.
      * 
      * @param ev
      */
@@ -112,8 +117,9 @@ public interface InteractionListener {
      * A collection was read.
      * 
      * <p>
-     * Unlike most other events, a {@link CollectionAccessEvent} will never have been vetoed (that is,
-     * {@link CollectionAccessEvent#isVeto()} will always be <tt>false</tt>).
+     * Unlike most other events, a {@link CollectionAccessEvent} will never have
+     * been vetoed (that is, {@link CollectionAccessEvent#isVeto()} will always
+     * be <tt>false</tt>).
      * 
      * @param ev
      */
@@ -127,7 +133,8 @@ public interface InteractionListener {
     void collectionAddedTo(CollectionAddToEvent ev);
 
     /**
-     * An object was removed from the collection (or an attempt to remove it was made).
+     * An object was removed from the collection (or an attempt to remove it was
+     * made).
      * 
      * @param ev
      */
@@ -167,7 +174,8 @@ public interface InteractionListener {
     void actionUsable(ActionUsabilityEvent ev);
 
     /**
-     * A check was made as to whether an argument proposed for an action was valid.
+     * A check was made as to whether an argument proposed for an action was
+     * valid.
      * 
      * <p>
      * Will be fired prior to {@link #actionInvoked(ActionInvocationEvent)}.
