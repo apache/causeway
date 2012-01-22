@@ -28,19 +28,22 @@ import org.apache.isis.tck.dom.scalars.ApplibValuedEntityRepository;
 
 public class ApplibValuedEntityRepositoryDefault extends AbstractFactoryAndRepository implements ApplibValuedEntityRepository {
 
+    @Override
     public String getId() {
         return "applibValuedEntities";
     }
 
+    @Override
     @QueryOnly
     public List<ApplibValuedEntity> list() {
         return allInstances(ApplibValuedEntity.class);
     }
 
+    @Override
     public ApplibValuedEntity newEntity() {
-        ApplibValuedEntity entity = newTransientInstance(ApplibValuedEntity.class);
+        final ApplibValuedEntity entity = newTransientInstance(ApplibValuedEntity.class);
         persist(entity);
         return entity;
     }
-    
+
 }

@@ -33,16 +33,17 @@ public class WrapperValuedEntityRepositoryDefault extends AbstractFactoryAndRepo
         return "wrapperValuedEntities";
     }
 
+    @Override
     @QueryOnly
     public List<WrapperValuedEntity> list() {
         return allInstances(WrapperValuedEntity.class);
     }
 
+    @Override
     public WrapperValuedEntity newEntity() {
-        WrapperValuedEntity entity = newTransientInstance(WrapperValuedEntity.class);
+        final WrapperValuedEntity entity = newTransientInstance(WrapperValuedEntity.class);
         persist(entity);
         return entity;
     }
-
 
 }

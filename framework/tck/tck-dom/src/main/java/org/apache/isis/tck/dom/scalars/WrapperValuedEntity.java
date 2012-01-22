@@ -29,6 +29,7 @@ public class WrapperValuedEntity extends AbstractDomainObject {
     public String title() {
         return getStringProperty();
     }
+
     // }}
 
     // {{ StringProperty
@@ -40,11 +41,12 @@ public class WrapperValuedEntity extends AbstractDomainObject {
         return stringProperty;
     }
 
-    public void setStringProperty(String description) {
+    public void setStringProperty(final String description) {
         this.stringProperty = description;
     }
+
     // }}
-    
+
     // {{ BooleanWProperty
     private Boolean booleanWProperty;
 
@@ -57,6 +59,7 @@ public class WrapperValuedEntity extends AbstractDomainObject {
     public void setBooleanWProperty(final Boolean booleanWProperty) {
         this.booleanWProperty = booleanWProperty;
     }
+
     // }}
 
     // {{ ByteProperty
@@ -71,6 +74,7 @@ public class WrapperValuedEntity extends AbstractDomainObject {
     public void setByteProperty(final Byte byteWProperty) {
         this.byteProperty = byteWProperty;
     }
+
     // }}
 
     // {{ ShortProperty
@@ -85,6 +89,7 @@ public class WrapperValuedEntity extends AbstractDomainObject {
     public void setShortProperty(final Short shortProperty) {
         this.shortProperty = shortProperty;
     }
+
     // }}
 
     // {{ IntegerProperty
@@ -99,6 +104,7 @@ public class WrapperValuedEntity extends AbstractDomainObject {
     public void setIntegerProperty(final Integer integerProperty) {
         this.integerProperty = integerProperty;
     }
+
     // }}
 
     // {{ LongProperty
@@ -113,6 +119,7 @@ public class WrapperValuedEntity extends AbstractDomainObject {
     public void setLongProperty(final Long longProperty) {
         this.longProperty = longProperty;
     }
+
     // }}
 
     // {{ FloatProperty
@@ -127,6 +134,7 @@ public class WrapperValuedEntity extends AbstractDomainObject {
     public void setFloatProperty(final Float floatWProperty) {
         this.floatProperty = floatWProperty;
     }
+
     // }}
 
     // {{ DoubleProperty
@@ -142,6 +150,5 @@ public class WrapperValuedEntity extends AbstractDomainObject {
         this.doubleProperty = doubleWProperty;
     }
     // }}
-
 
 }

@@ -22,10 +22,17 @@ package org.apache.isis.tck.dom.scalars;
 import org.apache.isis.applib.AbstractDomainObject;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Optional;
-import org.apache.isis.applib.value.*;
+import org.apache.isis.applib.value.Color;
+import org.apache.isis.applib.value.Date;
+import org.apache.isis.applib.value.DateTime;
+import org.apache.isis.applib.value.Image;
+import org.apache.isis.applib.value.Money;
+import org.apache.isis.applib.value.Password;
+import org.apache.isis.applib.value.Percentage;
+import org.apache.isis.applib.value.Time;
+import org.apache.isis.applib.value.TimeStamp;
 
 public class ApplibValuedEntity extends AbstractDomainObject {
-
 
     // {{ ColorProperty
     private Color colorProperty;
@@ -39,8 +46,9 @@ public class ApplibValuedEntity extends AbstractDomainObject {
     public void setColorProperty(final Color colorProperty) {
         this.colorProperty = colorProperty;
     }
+
     // }}
-    
+
     // {{ DateProperty
     private Date dateProperty;
 
@@ -53,8 +61,8 @@ public class ApplibValuedEntity extends AbstractDomainObject {
     public void setDateProperty(final Date dateProperty) {
         this.dateProperty = dateProperty;
     }
-    // }}
 
+    // }}
 
     // {{ DateTimeProperty
     private DateTime dateTimeProperty;
@@ -68,8 +76,8 @@ public class ApplibValuedEntity extends AbstractDomainObject {
     public void setDateTimeProperty(final DateTime dateTimeProperty) {
         this.dateTimeProperty = dateTimeProperty;
     }
-    // }}
 
+    // }}
 
     // {{ ImageProperty
     private Image imageProperty;
@@ -83,8 +91,8 @@ public class ApplibValuedEntity extends AbstractDomainObject {
     public void setImageProperty(final Image imageProperty) {
         this.imageProperty = imageProperty;
     }
-    // }}
 
+    // }}
 
     // {{ MoneyProperty
     private Money moneyProperty;
@@ -98,8 +106,8 @@ public class ApplibValuedEntity extends AbstractDomainObject {
     public void setMoneyProperty(final Money moneyProperty) {
         this.moneyProperty = moneyProperty;
     }
-    // }}
 
+    // }}
 
     // {{ PasswordProperty
     private Password passwordProperty;
@@ -113,9 +121,9 @@ public class ApplibValuedEntity extends AbstractDomainObject {
     public void setPasswordProperty(final Password passwordProperty) {
         this.passwordProperty = passwordProperty;
     }
+
     // }}
 
-    
     // {{ PercentageProperty
     private Percentage percentageProperty;
 
@@ -128,9 +136,8 @@ public class ApplibValuedEntity extends AbstractDomainObject {
     public void setPercentageProperty(final Percentage percentageProperty) {
         this.percentageProperty = percentageProperty;
     }
+
     // }}
-
-
 
     // {{ TimeProperty
     private Time timeProperty;
@@ -144,8 +151,8 @@ public class ApplibValuedEntity extends AbstractDomainObject {
     public void setTimeProperty(final Time timeProperty) {
         this.timeProperty = timeProperty;
     }
-    // }}
 
+    // }}
 
     // {{ TimeStampProperty
     private TimeStamp timeStampProperty;
@@ -160,5 +167,5 @@ public class ApplibValuedEntity extends AbstractDomainObject {
         this.timeStampProperty = timestampProperty;
     }
     // }}
-    
+
 }

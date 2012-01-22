@@ -39,5 +39,4 @@ public class StableEntity extends AbstractDomainObject {
     }
     // }}
 
-
 }

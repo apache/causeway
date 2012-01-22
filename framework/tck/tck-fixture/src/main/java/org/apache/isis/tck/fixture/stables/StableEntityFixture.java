@@ -22,7 +22,6 @@ import org.apache.isis.applib.fixtures.AbstractFixture;
 import org.apache.isis.tck.dom.stables.StableEntity;
 import org.apache.isis.tck.dom.stables.StableEntityRepository;
 
-
 public class StableEntityFixture extends AbstractFixture {
 
     @Override
@@ -33,11 +32,10 @@ public class StableEntityFixture extends AbstractFixture {
         createEntity("Sally");
         createEntity("Diedre");
     }
-    
-    private StableEntity createEntity(String name) {
+
+    private StableEntity createEntity(final String name) {
         return stableEntityRepository.newPersistentEntity(name);
     }
-
 
     // {{ injected: StableEntityRepository
     private StableEntityRepository stableEntityRepository;
@@ -47,6 +45,4 @@ public class StableEntityFixture extends AbstractFixture {
     }
     // }}
 
-
-    
 }

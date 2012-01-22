@@ -27,10 +27,10 @@ import org.apache.isis.applib.annotation.Named;
 @Named("ApplibValues")
 public interface ApplibValuedEntityRepository {
 
-    @MemberOrder(sequence="1")
+    @MemberOrder(sequence = "1")
     public List<ApplibValuedEntity> list();
 
-    @MemberOrder(sequence="2")
+    @MemberOrder(sequence = "2")
     public ApplibValuedEntity newEntity();
 
 }

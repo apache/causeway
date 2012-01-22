@@ -29,10 +29,10 @@ import org.apache.isis.applib.annotation.QueryOnly;
 public interface WithDefaultsEntityRepository {
 
     @QueryOnly
-    @MemberOrder(sequence="1")
+    @MemberOrder(sequence = "1")
     public List<WithDefaultsEntity> list();
 
-    @MemberOrder(sequence="3")
+    @MemberOrder(sequence = "3")
     public WithDefaultsEntity newTransientEntity();
 
 }

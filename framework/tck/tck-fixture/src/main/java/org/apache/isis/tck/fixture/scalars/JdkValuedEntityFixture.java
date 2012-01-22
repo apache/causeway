@@ -17,14 +17,11 @@
  *  under the License.
  */
 
-
 package org.apache.isis.tck.fixture.scalars;
 
 import org.apache.isis.applib.fixtures.AbstractFixture;
 import org.apache.isis.tck.dom.scalars.JdkValuedEntity;
 import org.apache.isis.tck.dom.scalars.JdkValuedEntityRepository;
-
-
 
 public class JdkValuedEntityFixture extends AbstractFixture {
 
@@ -36,15 +33,15 @@ public class JdkValuedEntityFixture extends AbstractFixture {
         createEntity();
         createEntity();
     }
-    
+
     private JdkValuedEntity createEntity() {
         return jdkValuesEntityRepository.newEntity();
     }
 
-    
     private JdkValuedEntityRepository jdkValuesEntityRepository;
-    public void setJdkValuesEntityRepository(JdkValuedEntityRepository jdkValuesEntityRepository) {
+
+    public void setJdkValuesEntityRepository(final JdkValuedEntityRepository jdkValuesEntityRepository) {
         this.jdkValuesEntityRepository = jdkValuesEntityRepository;
     }
-    
+
 }

@@ -39,7 +39,6 @@ public class SimpleEntityRepositoryDefault extends AbstractFactoryAndRepository 
     public int count() {
         return allInstances(SimpleEntity.class).size();
     }
-    
 
     @Override
     public SimpleEntity newTransientEntity() {
@@ -47,8 +46,8 @@ public class SimpleEntityRepositoryDefault extends AbstractFactoryAndRepository 
     }
 
     @Override
-    public SimpleEntity newPersistentEntity(String name, Boolean flag) {
-        SimpleEntity entity = newTransientEntity();
+    public SimpleEntity newPersistentEntity(final String name, final Boolean flag) {
+        final SimpleEntity entity = newTransientEntity();
         entity.setName(name);
         entity.setFlag(flag);
         getContainer().persist(entity);
@@ -56,24 +55,14 @@ public class SimpleEntityRepositoryDefault extends AbstractFactoryAndRepository 
     }
 
     @Override
-    public void toggle(SimpleEntity object) {
+    public void toggle(final SimpleEntity object) {
         object.setFlag(!object.getFlag());
     }
 
     @Override
-    public SimpleEntity update(SimpleEntity object, 
-        final String name, 
-        final boolean flag, 
-        final Boolean anotherBoolean, 
-        final int anInt, 
-        final Integer anotherInt, 
-        final long aLong, 
-        final Long anotherLong, 
-        final double aDouble, 
-        final Double anotherDouble, 
-        final BigInteger aBigInteger, 
-        final BigDecimal aBigDecimal) {
-        
+    public SimpleEntity update(final SimpleEntity object, final String name, final boolean flag, final Boolean anotherBoolean, final int anInt, final Integer anotherInt, final long aLong, final Long anotherLong, final double aDouble, final Double anotherDouble, final BigInteger aBigInteger,
+            final BigDecimal aBigDecimal) {
+
         object.setName(name);
         object.setFlag(flag);
         object.setAnotherBoolean(anotherBoolean);
@@ -85,10 +74,11 @@ public class SimpleEntityRepositoryDefault extends AbstractFactoryAndRepository 
         object.setAnotherDouble(anotherDouble);
         object.setABigInteger(aBigInteger);
         object.setABigDecimal(aBigDecimal);
-        
+
         return object;
     }
 
+    @Override
     @QueryOnly
     public List<SimpleEntity> list() {
         return allInstances(SimpleEntity.class);

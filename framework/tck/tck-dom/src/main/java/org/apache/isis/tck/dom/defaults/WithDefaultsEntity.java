@@ -39,9 +39,11 @@ public class WithDefaultsEntity extends AbstractDomainObject {
     public void setName(final String name) {
         this.name = name;
     }
+
     public String defaultName() {
         return "default-name";
     }
+
     // }}
 
     // {{ Flag (boolean)
@@ -55,9 +57,11 @@ public class WithDefaultsEntity extends AbstractDomainObject {
     public void setFlag(final boolean flag) {
         this.flag = flag;
     }
+
     public boolean defaultFlag() {
         return true;
     }
+
     // }}
 
     // {{ AnInt (int)
@@ -71,11 +75,11 @@ public class WithDefaultsEntity extends AbstractDomainObject {
     public void setAnInt(final int anInt) {
         this.anInt = anInt;
     }
-    
+
     public int defaultAnInt() {
         return 42;
     }
-    
+
     // }}
 
     // {{ Other (property)
@@ -89,12 +93,13 @@ public class WithDefaultsEntity extends AbstractDomainObject {
     public void setOtherEntity(final WithDefaultsEntity withDefaultsEntity) {
         this.other = withDefaultsEntity;
     }
+
     public WithDefaultsEntity defaultOther() {
         final List<WithDefaultsEntity> list = repository.list();
-        return list.size()>0?list.get(list.size()-1):null;
+        return list.size() > 0 ? list.get(list.size() - 1) : null;
     }
-    // }}
 
+    // }}
 
     // {{ injected: WithDefaultsEntityRepository
     private WithDefaultsEntityRepository repository;
@@ -103,7 +108,5 @@ public class WithDefaultsEntity extends AbstractDomainObject {
         this.repository = repository;
     }
     // }}
-
-
 
 }

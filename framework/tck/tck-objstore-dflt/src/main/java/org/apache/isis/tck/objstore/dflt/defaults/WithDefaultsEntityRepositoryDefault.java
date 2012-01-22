@@ -29,25 +29,27 @@ import org.apache.isis.tck.dom.defaults.WithDefaultsEntityRepository;
 
 public class WithDefaultsEntityRepositoryDefault extends AbstractFactoryAndRepository implements WithDefaultsEntityRepository {
 
-    
+    @Override
     public String getId() {
         return "withDefaultsEntities";
     }
 
+    @Override
     @QueryOnly
     public List<WithDefaultsEntity> list() {
-        Filter<Object> filterPersistentOnly = new Filter<Object>() {
+        final Filter<Object> filterPersistentOnly = new Filter<Object>() {
 
             @Override
-            public boolean accept(Object t) {
+            public boolean accept(final Object t) {
                 return getContainer().isPersistent(t);
             }
         };
         return allMatches(WithDefaultsEntity.class, filterPersistentOnly);
     }
 
+    @Override
     public WithDefaultsEntity newTransientEntity() {
         return newTransientInstance(WithDefaultsEntity.class);
     }
-    
+
 }

@@ -34,6 +34,7 @@ public class JdkValuedEntity extends AbstractDomainObject {
     public String title() {
         return getStringProperty();
     }
+
     // }}
 
     // {{ StringProperty
@@ -45,11 +46,12 @@ public class JdkValuedEntity extends AbstractDomainObject {
         return stringProperty;
     }
 
-    public void setStringProperty(String description) {
+    public void setStringProperty(final String description) {
         this.stringProperty = description;
     }
+
     // }}
-    
+
     // {{ JavaUtilDateProperty
     private Date javaUtilDateProperty;
 
@@ -62,8 +64,9 @@ public class JdkValuedEntity extends AbstractDomainObject {
     public void setJavaUtilDateProperty(final Date javaUtilDateProperty) {
         this.javaUtilDateProperty = javaUtilDateProperty;
     }
+
     // }}
-    
+
     // {{ JavaSqlDateProperty
     private java.sql.Date javaSqlDateProperty;
 
@@ -76,6 +79,7 @@ public class JdkValuedEntity extends AbstractDomainObject {
     public void setJavaSqlDateProperty(final java.sql.Date javaSqlDateProperty) {
         this.javaSqlDateProperty = javaSqlDateProperty;
     }
+
     // }}
 
     // {{ JavaSqlTimestampProperty
@@ -90,6 +94,7 @@ public class JdkValuedEntity extends AbstractDomainObject {
     public void setJavaSqlTimestampProperty(final java.sql.Timestamp javaSqlTimestampProperty) {
         this.javaSqlTimestampProperty = javaSqlTimestampProperty;
     }
+
     // }}
 
     // {{ BigIntegerProperty
@@ -104,8 +109,9 @@ public class JdkValuedEntity extends AbstractDomainObject {
     public void setBigIntegerProperty(final BigInteger bigIntegerProperty) {
         this.bigIntegerProperty = bigIntegerProperty;
     }
+
     // }}
-    
+
     // {{ BigDecimalProperty
     private BigDecimal bigDecimalProperty;
 
@@ -118,6 +124,7 @@ public class JdkValuedEntity extends AbstractDomainObject {
     public void setBigDecimalProperty(final BigDecimal bigDecimalProperty) {
         this.bigDecimalProperty = bigDecimalProperty;
     }
+
     // }}
 
     // {{ ImageProperty

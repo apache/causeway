@@ -19,7 +19,6 @@
 
 package org.apache.isis.tck.dom.assocs;
 
-import java.util.Collections;
 import java.util.List;
 
 import org.apache.isis.applib.AbstractDomainObject;
@@ -32,12 +31,13 @@ public class ChildEntity extends AbstractDomainObject {
     // {{ Identification
     public String title() {
         final TitleBuffer buf = new TitleBuffer();
-        if(getParent() != null) {
+        if (getParent() != null) {
             buf.append(getParent().getName()).append("-");
         }
         buf.append(getName());
         return buf.toString();
     }
+
     // }}
 
     // {{ Name
@@ -51,6 +51,7 @@ public class ChildEntity extends AbstractDomainObject {
     public void setName(final String name) {
         this.name = name;
     }
+
     // }}
 
     // {{ Parent
@@ -65,44 +66,43 @@ public class ChildEntity extends AbstractDomainObject {
     public void setParent(final ParentEntity parent) {
         this.parent = parent;
     }
+
     // }}
-
-
 
     // {{ moveTo
     @MemberOrder(sequence = "1")
     public ChildEntity moveTo(final ParentEntity newParent) {
-        if(newParent == getParent()) {
+        if (newParent == getParent()) {
             // nothing to do
             return this;
         }
-        if(getParent() != null) {
+        if (getParent() != null) {
             getParent().removeChild(this);
         }
         newParent.getChildren().add(this);
         this.setParent(newParent);
         return this;
     }
+
     public ParentEntity default0MoveTo() {
         return getParent();
     }
+
     public List<ParentEntity> choices0MoveTo() {
         return parentEntityRepository.list();
     }
-    // }}
 
+    // }}
 
     // {{ injected dependencies
     // {{ injected: ParentEntityRepository
     private ParentEntityRepository parentEntityRepository;
+
     public void setParentEntityRepository(final ParentEntityRepository parentEntityRepository) {
         this.parentEntityRepository = parentEntityRepository;
     }
     // }}
 
-
     // }}
 
-
-    
 }

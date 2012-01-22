@@ -22,7 +22,6 @@ import org.apache.isis.applib.fixtures.AbstractFixture;
 import org.apache.isis.tck.dom.defaults.WithDefaultsEntity;
 import org.apache.isis.tck.dom.defaults.WithDefaultsEntityRepository;
 
-
 public class WithDefaultsEntityFixture extends AbstractFixture {
 
     @Override
@@ -33,8 +32,8 @@ public class WithDefaultsEntityFixture extends AbstractFixture {
         createEntity("Sally");
         createEntity("Diedre");
     }
-    
-    private WithDefaultsEntity createEntity(String name) {
+
+    private WithDefaultsEntity createEntity(final String name) {
         final WithDefaultsEntity entity = repository.newTransientEntity();
         persist(entity);
         return entity;

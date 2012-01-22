@@ -39,13 +39,14 @@ public class StableEntityRepositoryDefault extends AbstractFactoryAndRepository 
     }
 
     @Override
-    public StableEntity newPersistentEntity(String name) {
-        StableEntity entity = newTransientEntity();
+    public StableEntity newPersistentEntity(final String name) {
+        final StableEntity entity = newTransientEntity();
         entity.setName(name);
         getContainer().persist(entity);
         return entity;
     }
 
+    @Override
     @QueryOnly
     public List<StableEntity> list() {
         return allInstances(StableEntity.class);
