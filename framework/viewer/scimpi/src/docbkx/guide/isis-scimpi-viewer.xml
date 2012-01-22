@@ -1837,6 +1837,17 @@ public class CountElements implements ElementProcessor {
               </row>
 
               <row>
+                <entry>error</entry>
+
+                <entry>View to be forwarded to if the action causes an error
+                (such as validation failure or missing entry). </entry>
+
+                <entry>no</entry>
+
+                <entry>the current page</entry>
+              </row>
+
+              <row>
                 <entry>result-name</entry>
 
                 <entry>Name of variable to store the resultant object.</entry>
@@ -1844,6 +1855,18 @@ public class CountElements implements ElementProcessor {
                 <entry>no</entry>
 
                 <entry>RESULT</entry>
+              </row>
+
+              <row>
+                <entry>result-override</entry>
+
+                <entry>value passed into the next page as the result variable
+                (${_result} by default) instead of the returned value or the
+                target.</entry>
+
+                <entry>no</entry>
+
+                <entry></entry>
               </row>
 
               <row>
@@ -1864,6 +1887,17 @@ public class CountElements implements ElementProcessor {
                 <entry>no</entry>
 
                 <entry>the action's name</entry>
+              </row>
+
+              <row>
+                <entry>show-message</entry>
+
+                <entry>allow validation message to be shown if the action is
+                not shown because it is not available</entry>
+
+                <entry>no</entry>
+
+                <entry>false</entry>
               </row>
             </tbody>
           </tgroup>
@@ -1998,23 +2032,45 @@ public class CountElements implements ElementProcessor {
               </row>
 
               <row>
-                <entry>title</entry>
+                <entry>button-title</entry>
 
-                <entry>Title for the submission button.</entry>
+                <entry>Title for the submission button. If blank ("") then
+                "OK" is used.</entry>
 
                 <entry>no</entry>
 
-                <entry>"OK"</entry>
+                <entry>the action's name</entry>
               </row>
 
               <row>
-                <entry>legend</entry>
+                <entry>title</entry>
 
                 <entry>Title for the generated form.</entry>
 
                 <entry>no</entry>
 
-                <entry>the action's name</entry>
+                <entry>the action's name </entry>
+              </row>
+
+              <row>
+                <entry>show-message</entry>
+
+                <entry>allow validation message to be shown if the action is
+                not shown because it is not available</entry>
+
+                <entry>no</entry>
+
+                <entry>false</entry>
+              </row>
+
+              <row>
+                <entry>message</entry>
+
+                <entry>Message to show user on completion of action</entry>
+
+                <entry>no</entry>
+
+                <entry></entry>
               </row>
             </tbody>
           </tgroup>
@@ -2143,6 +2199,16 @@ public class CountElements implements ElementProcessor {
                 <entry>confirm</entry>
 
                 <entry>To be implemented - not in use yet!</entry>
+
+                <entry>no</entry>
+
+                <entry></entry>
+              </row>
+
+              <row>
+                <entry>message</entry>
+
+                <entry>Message to show user on completion of action</entry>
 
                 <entry>no</entry>
 
@@ -2305,6 +2371,19 @@ public class CountElements implements ElementProcessor {
                 <entry>no</entry>
 
                 <entry>RESULT</entry>
+              </row>
+
+              <row>
+                <entry>row-classes</entry>
+
+                <entry>List of classes (separated by a comma (,), slash (/) or
+                bar (|)) to iterate through repeatedly as the rows are
+                created. Sets the variable ${row-class} for each
+                iteration.</entry>
+
+                <entry>no</entry>
+
+                <entry>odd-row|even-row</entry>
               </row>
             </tbody>
           </tgroup>
@@ -2517,7 +2596,7 @@ public class CountElements implements ElementProcessor {
               </row>
 
               <row>
-                <entry>title</entry>
+                <entry>button-title</entry>
 
                 <entry>Title for the submission button.</entry>
 
@@ -2527,7 +2606,7 @@ public class CountElements implements ElementProcessor {
               </row>
 
               <row>
-                <entry>legend</entry>
+                <entry>title</entry>
 
                 <entry>Title for the generated form.</entry>
 
@@ -2554,6 +2633,28 @@ public class CountElements implements ElementProcessor {
                 <entry>no</entry>
 
                 <entry>request</entry>
+              </row>
+
+              <row>
+                <entry>class</entry>
+
+                <entry><code><code>class</code></code> attribute given to HTML
+                form element</entry>
+
+                <entry>no</entry>
+
+                <entry>edit full</entry>
+              </row>
+
+              <row>
+                <entry>id</entry>
+
+                <entry><code>id</code> attribute given to HTML form element
+                </entry>
+
+                <entry>no</entry>
+
+                <entry></entry>
               </row>
             </tbody>
           </tgroup>
@@ -3526,6 +3627,58 @@ public class CountElements implements ElementProcessor {
         <para>As for <link
         linkend="short-form"><markup>short-form</markup></link>, except that
         collections are displayed (as in-line tables)</para>
+
+        <table>
+          <title><markup>short-form</markup> attributes</title>
+
+          <tgroup cols="4">
+            <colspec colwidth="1*" />
+
+            <colspec colwidth="3*" />
+
+            <colspec colwidth="0.8*" />
+
+            <colspec colwidth="1*" />
+
+            <thead>
+              <row>
+                <entry align="center">Name</entry>
+
+                <entry align="center">Description</entry>
+
+                <entry align="center">Required</entry>
+
+                <entry align="center">Default</entry>
+              </row>
+            </thead>
+
+            <tbody>
+              <row>
+                <entry>table-class</entry>
+
+                <entry>Class attribute given to HTML <code>table</code>
+                element.</entry>
+
+                <entry>no</entry>
+
+                <entry></entry>
+              </row>
+
+              <row>
+                <entry>row-classes</entry>
+
+                <entry>List of classes (separated by a comma (,), slash (/) or
+                bar (|)) to iterate through repeatedly as the rows are
+                created. Sets the variable ${row-class} for each
+                iteration.</entry>
+
+                <entry>no</entry>
+
+                <entry>odd-row|even-row</entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
       </section>
 
       <section id="messages">
