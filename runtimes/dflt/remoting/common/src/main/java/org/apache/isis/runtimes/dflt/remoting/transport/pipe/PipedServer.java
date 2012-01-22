@@ -19,10 +19,11 @@
 
 package org.apache.isis.runtimes.dflt.remoting.transport.pipe;
 
+import org.apache.log4j.Logger;
+
 import org.apache.isis.runtimes.dflt.remoting.common.exchange.Request;
 import org.apache.isis.runtimes.dflt.remoting.common.exchange.ResponseEnvelope;
 import org.apache.isis.runtimes.dflt.remoting.common.facade.ServerFacade;
-import org.apache.log4j.Logger;
 
 public class PipedServer {
     private static final Logger LOG = Logger.getLogger(PipedServer.class);

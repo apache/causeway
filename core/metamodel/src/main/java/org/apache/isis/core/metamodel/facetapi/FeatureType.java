@@ -23,12 +23,12 @@ import java.beans.Introspector;
 import java.lang.reflect.Method;
 import java.util.List;
 
+import com.google.common.collect.ImmutableList;
+
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.commons.lang.NameUtils;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-
-import com.google.common.collect.ImmutableList;
 
 /**
  * Enumerates the features that a particular Facet can be applied to.

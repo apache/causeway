@@ -22,6 +22,8 @@ package org.apache.isis.runtimes.dflt.objectstores.nosql;
 import java.util.HashSet;
 import java.util.Map;
 
+import com.google.common.collect.Maps;
+
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterFactory;
@@ -43,8 +45,6 @@ import org.apache.isis.runtimes.dflt.runtime.persistence.adapterfactory.AdapterF
 import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.simple.SerialOid;
 import org.apache.isis.runtimes.dflt.runtime.testsystem.TestClassSubstitutor;
 import org.apache.isis.runtimes.dflt.runtime.testsystem.TestProxyAdapter;
-
-import com.google.common.collect.Maps;
 
 public class TrialObjects {
 

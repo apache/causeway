@@ -21,9 +21,10 @@ package org.apache.isis.core.commons.config;
 
 import junit.framework.TestCase;
 
-import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
+
+import org.apache.isis.core.commons.exceptions.IsisException;
 
 public class ConfigurationBuilderFileSystemTest extends TestCase {
     IsisConfigurationBuilderFileSystem loader;

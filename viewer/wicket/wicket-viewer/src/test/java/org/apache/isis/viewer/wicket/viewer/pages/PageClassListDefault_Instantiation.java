@@ -19,10 +19,6 @@
 
 package org.apache.isis.viewer.wicket.viewer.pages;
 
-import org.apache.isis.viewer.wicket.ui.pages.PageClassList;
-import org.apache.isis.viewer.wicket.ui.pages.PageRegistrySpi;
-import org.apache.isis.viewer.wicket.viewer.registries.pages.PageClassListDefault;
-import org.apache.isis.viewer.wicket.viewer.registries.pages.PageClassRegistryDefault;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JMock;
@@ -31,6 +27,11 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import org.apache.isis.viewer.wicket.ui.pages.PageClassList;
+import org.apache.isis.viewer.wicket.ui.pages.PageRegistrySpi;
+import org.apache.isis.viewer.wicket.viewer.registries.pages.PageClassListDefault;
+import org.apache.isis.viewer.wicket.viewer.registries.pages.PageClassRegistryDefault;
 
 @RunWith(JMock.class)
 public class PageClassListDefault_Instantiation {

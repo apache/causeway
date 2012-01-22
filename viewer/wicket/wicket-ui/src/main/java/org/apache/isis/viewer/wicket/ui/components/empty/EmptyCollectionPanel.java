@@ -19,10 +19,11 @@
 
 package org.apache.isis.viewer.wicket.ui.components.empty;
 
-import org.apache.isis.viewer.wicket.model.models.ActionModel;
-import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.model.Model;
+
+import org.apache.isis.viewer.wicket.model.models.ActionModel;
+import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 
 public class EmptyCollectionPanel extends PanelAbstract<ActionModel> {
 

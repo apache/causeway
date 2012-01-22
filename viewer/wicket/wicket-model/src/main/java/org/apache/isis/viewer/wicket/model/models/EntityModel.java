@@ -22,6 +22,10 @@ package org.apache.isis.viewer.wicket.model.models;
 import java.io.Serializable;
 import java.util.Map;
 
+import com.google.common.collect.Maps;
+
+import org.apache.wicket.PageParameters;
+
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.stringable.OidStringifier;
 import org.apache.isis.core.metamodel.consent.Consent;
@@ -31,9 +35,6 @@ import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.mementos.PageParameterNames;
 import org.apache.isis.viewer.wicket.model.mementos.PropertyMemento;
 import org.apache.isis.viewer.wicket.model.mementos.SpecMemento;
-import org.apache.wicket.PageParameters;
-
-import com.google.common.collect.Maps;
 
 /**
  * Backing model to represent a {@link ObjectAdapter}.

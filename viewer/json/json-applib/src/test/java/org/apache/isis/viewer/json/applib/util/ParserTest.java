@@ -30,10 +30,11 @@ import java.util.List;
 import javax.ws.rs.core.CacheControl;
 import javax.ws.rs.core.MediaType;
 
+import org.junit.Test;
+
 import org.apache.isis.core.commons.matchers.IsisMatchers;
 import org.apache.isis.viewer.json.applib.RepresentationType;
 import org.apache.isis.viewer.json.applib.RestfulMediaType;
-import org.junit.Test;
 
 public class ParserTest {
 

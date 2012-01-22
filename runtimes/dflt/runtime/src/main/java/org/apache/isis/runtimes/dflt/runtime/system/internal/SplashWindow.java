@@ -28,11 +28,12 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Window;
 
+import org.apache.log4j.Logger;
+
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.runtime.about.AboutIsis;
 import org.apache.isis.core.runtime.imageloader.TemplateImage;
 import org.apache.isis.core.runtime.imageloader.TemplateImageLoader;
-import org.apache.log4j.Logger;
 
 public class SplashWindow extends Window implements Runnable {
     private static final long serialVersionUID = 1L;

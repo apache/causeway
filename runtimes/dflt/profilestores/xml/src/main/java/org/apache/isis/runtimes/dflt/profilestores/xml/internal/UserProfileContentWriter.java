@@ -26,6 +26,7 @@ import java.io.Writer;
 import java.util.Iterator;
 
 import org.apache.commons.lang.StringUtils;
+
 import org.apache.isis.core.commons.encoding.DataOutputStreamExtended;
 import org.apache.isis.core.commons.xml.ContentWriter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;

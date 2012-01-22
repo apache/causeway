@@ -21,11 +21,12 @@ package org.apache.isis.viewer.wicket.ui.app.registry;
 
 import java.util.List;
 
-import org.apache.isis.viewer.wicket.ui.ComponentFactory;
-import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.model.IModel;
+
+import org.apache.isis.viewer.wicket.ui.ComponentFactory;
+import org.apache.isis.viewer.wicket.ui.ComponentType;
 
 /**
  * API for finding registered {@link ComponentFactory}s.

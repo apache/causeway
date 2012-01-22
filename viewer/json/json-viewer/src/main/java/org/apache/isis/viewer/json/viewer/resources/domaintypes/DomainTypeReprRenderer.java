@@ -18,6 +18,10 @@ package org.apache.isis.viewer.json.viewer.resources.domaintypes;
 
 import java.util.List;
 
+import com.google.common.base.Strings;
+
+import org.codehaus.jackson.node.NullNode;
+
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionContainer.Contributed;
@@ -33,9 +37,6 @@ import org.apache.isis.viewer.json.viewer.representations.LinkFollower;
 import org.apache.isis.viewer.json.viewer.representations.ReprRenderer;
 import org.apache.isis.viewer.json.viewer.representations.ReprRendererAbstract;
 import org.apache.isis.viewer.json.viewer.representations.ReprRendererFactoryAbstract;
-import org.codehaus.jackson.node.NullNode;
-
-import com.google.common.base.Strings;
 
 public class DomainTypeReprRenderer extends ReprRendererAbstract<DomainTypeReprRenderer, ObjectSpecification> {
 

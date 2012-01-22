@@ -35,6 +35,10 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.StringTokenizer;
 
+import com.google.common.collect.Maps;
+
+import org.apache.log4j.Logger;
+
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationException;
@@ -43,9 +47,6 @@ import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.resource.ResourceStreamSource;
 import org.apache.isis.core.runtime.authorization.standard.AuthorizorAbstract;
-import org.apache.log4j.Logger;
-
-import com.google.common.collect.Maps;
 
 public class FileAuthorizor extends AuthorizorAbstract implements FileAuthorizorMBean {
 

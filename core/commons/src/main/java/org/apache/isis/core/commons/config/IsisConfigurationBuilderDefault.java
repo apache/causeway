@@ -22,12 +22,13 @@ package org.apache.isis.core.commons.config;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import com.google.common.collect.Lists;
+
+import org.apache.log4j.Logger;
+
 import org.apache.isis.core.commons.resource.ResourceStreamSource;
 import org.apache.isis.core.commons.resource.ResourceStreamSourceContextLoaderClassPath;
 import org.apache.isis.core.commons.resource.ResourceStreamSourceFileSystem;
-import org.apache.log4j.Logger;
-
-import com.google.common.collect.Lists;
 
 /**
  * Convenience implementation of {@link IsisConfigurationBuilder} that loads

@@ -16,10 +16,11 @@
  */
 package org.apache.isis.core.progmodel.layout.dflt;
 
+import org.apache.log4j.Logger;
+
 import org.apache.isis.core.metamodel.layout.MemberLayoutArrangerComposite;
 import org.apache.isis.core.metamodel.layout.memberorderfacet.MemberLayoutArrangerUsingMemberOrderFacet;
 import org.apache.isis.core.progmodel.layout.ordermethod.MemberLayoutArrangerUsingOrderMethod;
-import org.apache.log4j.Logger;
 
 public class MemberLayoutArrangerDefault extends MemberLayoutArrangerComposite {
 

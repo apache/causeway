@@ -21,6 +21,8 @@ import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import org.apache.isis.core.commons.lang.JavaClassUtils;
 import org.apache.isis.core.commons.lang.StringUtils;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
@@ -32,7 +34,6 @@ import org.apache.isis.core.metamodel.layout.ordermethod.SimpleOrderSet;
 import org.apache.isis.core.metamodel.methodutils.MethodFinderUtils;
 import org.apache.isis.core.metamodel.methodutils.MethodScope;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.log4j.Logger;
 
 public class MemberLayoutArrangerUsingOrderMethod implements MemberLayoutArranger {
 

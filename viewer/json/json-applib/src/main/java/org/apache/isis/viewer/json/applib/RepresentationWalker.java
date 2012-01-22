@@ -24,11 +24,12 @@ import java.util.List;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status.Family;
 
-import org.apache.isis.viewer.json.applib.links.LinkRepresentation;
+import com.google.common.collect.Lists;
+
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 
-import com.google.common.collect.Lists;
+import org.apache.isis.viewer.json.applib.links.LinkRepresentation;
 
 public class RepresentationWalker {
 

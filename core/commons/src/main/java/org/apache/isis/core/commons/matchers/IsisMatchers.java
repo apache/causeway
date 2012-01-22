@@ -24,7 +24,6 @@ import static org.hamcrest.CoreMatchers.nullValue;
 import java.io.File;
 import java.util.List;
 
-import org.apache.isis.core.commons.lang.StringUtils;
 import org.hamcrest.CoreMatchers;
 import org.hamcrest.Description;
 import org.hamcrest.Factory;
@@ -35,6 +34,8 @@ import org.hamcrest.number.IsGreaterThan;
 import org.hamcrest.text.StringContains;
 import org.hamcrest.text.StringEndsWith;
 import org.hamcrest.text.StringStartsWith;
+
+import org.apache.isis.core.commons.lang.StringUtils;
 
 /**
  * Hamcrest {@link Matcher} implementations.

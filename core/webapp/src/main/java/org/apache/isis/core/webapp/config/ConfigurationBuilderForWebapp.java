@@ -21,10 +21,11 @@ package org.apache.isis.core.webapp.config;
 
 import javax.servlet.ServletContext;
 
+import org.apache.log4j.Logger;
+
 import org.apache.isis.core.commons.config.IsisConfigurationBuilder;
 import org.apache.isis.core.commons.config.IsisConfigurationBuilderFileSystem;
 import org.apache.isis.core.commons.config.IsisConfigurationBuilderResourceStreams;
-import org.apache.log4j.Logger;
 
 /**
  * Convenience implementation of {@link IsisConfigurationBuilder} that loads

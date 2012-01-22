@@ -22,6 +22,10 @@ package org.apache.isis.runtimes.dflt.remoting.common.protocol.encoding;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -40,9 +44,6 @@ import org.apache.isis.runtimes.dflt.runtime.testspec.PersonSpecification;
 import org.apache.isis.runtimes.dflt.runtime.testsystem.ProxyJunit4TestCase;
 import org.apache.isis.runtimes.dflt.runtime.testsystem.TestProxyOid;
 import org.apache.isis.runtimes.dflt.runtime.testsystem.TestProxyVersion;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
 
 public class ObjectEncoderImplTest extends ProxyJunit4TestCase {
 

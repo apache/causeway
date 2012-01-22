@@ -19,6 +19,8 @@
 
 package org.apache.isis.viewer.dnd.calendar;
 
+import org.apache.log4j.Logger;
+
 import org.apache.isis.viewer.dnd.drawing.Bounds;
 import org.apache.isis.viewer.dnd.drawing.Location;
 import org.apache.isis.viewer.dnd.drawing.Size;
@@ -33,7 +35,6 @@ import org.apache.isis.viewer.dnd.view.composite.CompositeView;
 import org.apache.isis.viewer.dnd.view.content.NullContent;
 import org.apache.isis.viewer.dnd.view.control.AbstractButtonAction;
 import org.apache.isis.viewer.dnd.view.control.Button;
-import org.apache.log4j.Logger;
 
 public class CalendarView extends CompositeView {
     private static final Logger LOG = Logger.getLogger(CalendarView.class);

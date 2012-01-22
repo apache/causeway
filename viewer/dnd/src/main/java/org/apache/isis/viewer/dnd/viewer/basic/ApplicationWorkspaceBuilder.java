@@ -19,6 +19,8 @@
 
 package org.apache.isis.viewer.dnd.viewer.basic;
 
+import org.apache.log4j.Logger;
+
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.runtime.userprofile.PerspectiveEntry;
@@ -31,7 +33,6 @@ import org.apache.isis.viewer.dnd.view.Placement;
 import org.apache.isis.viewer.dnd.view.View;
 import org.apache.isis.viewer.dnd.view.base.Layout;
 import org.apache.isis.viewer.dnd.view.composite.AbstractViewBuilder;
-import org.apache.log4j.Logger;
 
 /**
  * WorkspaceBuilder builds a workspace view for an ObjectContent view by finding

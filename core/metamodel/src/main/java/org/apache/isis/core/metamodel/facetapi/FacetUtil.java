@@ -24,9 +24,9 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.isis.applib.filter.Filter;
-
 import com.google.common.collect.Lists;
+
+import org.apache.isis.applib.filter.Filter;
 
 public final class FacetUtil {
 

@@ -25,13 +25,14 @@ import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
+import com.google.common.collect.Lists;
+
 import org.apache.commons.lang.exception.ExceptionUtils;
+
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.applib.RestfulMediaType;
 import org.apache.isis.viewer.json.applib.RestfulResponse;
 import org.apache.isis.viewer.json.applib.util.JsonMapper;
-
-import com.google.common.collect.Lists;
 
 @Provider
 public class JsonApplicationExceptionMapper implements ExceptionMapper<JsonApplicationException> {

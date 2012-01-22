@@ -22,6 +22,7 @@ package org.apache.isis.viewer.html.component.html;
 import java.io.PrintWriter;
 
 import org.apache.commons.lang.StringEscapeUtils;
+
 import org.apache.isis.viewer.html.component.Component;
 
 public class Span implements Component {

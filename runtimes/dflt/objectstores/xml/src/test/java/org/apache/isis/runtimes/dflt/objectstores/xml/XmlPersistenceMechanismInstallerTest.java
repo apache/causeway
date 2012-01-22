@@ -21,6 +21,9 @@ package org.apache.isis.runtimes.dflt.objectstores.xml;
 
 import static org.junit.Assert.assertTrue;
 
+import org.junit.Before;
+import org.junit.Test;
+
 import org.apache.isis.runtimes.dflt.runtime.system.ContextCategory;
 import org.apache.isis.runtimes.dflt.runtime.system.DeploymentCategory;
 import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
@@ -28,8 +31,6 @@ import org.apache.isis.runtimes.dflt.runtime.system.Splash;
 import org.apache.isis.runtimes.dflt.runtime.system.SystemConstants;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessionFactory;
 import org.apache.isis.runtimes.dflt.runtime.testsystem.ProxyJunit4TestCase;
-import org.junit.Before;
-import org.junit.Test;
 
 public class XmlPersistenceMechanismInstallerTest extends ProxyJunit4TestCase {
 

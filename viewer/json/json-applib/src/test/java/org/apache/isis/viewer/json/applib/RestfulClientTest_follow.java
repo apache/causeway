@@ -23,9 +23,6 @@ import java.net.URI;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.commons.collections.map.MultiValueMap;
-import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2;
-import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2.Mode;
-import org.apache.isis.viewer.json.applib.links.LinkRepresentation;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
@@ -39,6 +36,10 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
+
+import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2;
+import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2.Mode;
+import org.apache.isis.viewer.json.applib.links.LinkRepresentation;
 
 public class RestfulClientTest_follow {
 

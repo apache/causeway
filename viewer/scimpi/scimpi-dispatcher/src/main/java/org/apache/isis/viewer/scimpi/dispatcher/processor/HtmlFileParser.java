@@ -25,13 +25,6 @@ import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.Stack;
 
-import org.apache.isis.viewer.scimpi.dispatcher.ElementProcessor;
-import org.apache.isis.viewer.scimpi.dispatcher.ScimpiException;
-import org.apache.isis.viewer.scimpi.dispatcher.action.Attributes;
-import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext;
-import org.apache.isis.viewer.scimpi.dispatcher.view.HtmlSnippet;
-import org.apache.isis.viewer.scimpi.dispatcher.view.Snippet;
-import org.apache.isis.viewer.scimpi.dispatcher.view.SwfTag;
 import org.apache.log4j.Logger;
 import org.htmlparser.Node;
 import org.htmlparser.Remark;
@@ -39,6 +32,14 @@ import org.htmlparser.lexer.Lexer;
 import org.htmlparser.lexer.Page;
 import org.htmlparser.nodes.TagNode;
 import org.htmlparser.util.ParserException;
+
+import org.apache.isis.viewer.scimpi.dispatcher.ElementProcessor;
+import org.apache.isis.viewer.scimpi.dispatcher.ScimpiException;
+import org.apache.isis.viewer.scimpi.dispatcher.action.Attributes;
+import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext;
+import org.apache.isis.viewer.scimpi.dispatcher.view.HtmlSnippet;
+import org.apache.isis.viewer.scimpi.dispatcher.view.Snippet;
+import org.apache.isis.viewer.scimpi.dispatcher.view.SwfTag;
 
 public class HtmlFileParser {
     private static final Logger LOG = Logger.getLogger(HtmlFileParser.class);

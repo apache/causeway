@@ -22,13 +22,14 @@ package org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu;
 import java.util.Arrays;
 import java.util.List;
 
+import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.repeater.RepeatingView;
+import org.apache.wicket.model.util.ListModel;
+
 import org.apache.isis.viewer.wicket.model.util.Strings;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
-import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.repeater.RepeatingView;
-import org.apache.wicket.model.util.ListModel;
 
 /**
  * Top level panel for a CSS menu, consisting of a number of unparented

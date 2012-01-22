@@ -22,10 +22,11 @@ package org.apache.isis.runtimes.dflt.runtime.memento;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotSame;
 
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.runtimes.dflt.runtime.testsystem.ProxyJunit4TestCase;
 import org.junit.Before;
 import org.junit.Test;
+
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.runtimes.dflt.runtime.testsystem.ProxyJunit4TestCase;
 
 public class MementoTest extends ProxyJunit4TestCase {
 

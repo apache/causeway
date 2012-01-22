@@ -24,6 +24,7 @@ import java.util.Enumeration;
 import java.util.Vector;
 
 import org.apache.commons.collections.CollectionUtils;
+
 import org.apache.isis.core.commons.exceptions.NotYetImplementedException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.collections.CollectionFacetAbstract;

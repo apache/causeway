@@ -26,10 +26,11 @@ import java.util.Iterator;
 import java.util.Properties;
 import java.util.StringTokenizer;
 
+import org.apache.log4j.Logger;
+
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.resource.ResourceStreamSource;
-import org.apache.log4j.Logger;
 
 public class IsisConfigurationDefault implements IsisConfiguration {
     private static final Logger LOG = Logger.getLogger(IsisConfigurationDefault.class);

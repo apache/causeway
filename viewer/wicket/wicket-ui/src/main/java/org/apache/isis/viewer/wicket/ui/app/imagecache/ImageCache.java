@@ -19,8 +19,9 @@
 
 package org.apache.isis.viewer.wicket.ui.app.imagecache;
 
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.wicket.markup.html.PackageResource;
+
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 public interface ImageCache {
 

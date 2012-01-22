@@ -29,6 +29,8 @@ import static org.hamcrest.CoreMatchers.nullValue;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
+
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.ensure.Assert;
@@ -68,7 +70,6 @@ import org.apache.isis.runtimes.dflt.runtime.system.transaction.UpdateNotifier;
 import org.apache.isis.runtimes.dflt.runtime.transaction.ObjectPersistenceException;
 import org.apache.isis.runtimes.dflt.runtime.transaction.TransactionalClosureAbstract;
 import org.apache.isis.runtimes.dflt.runtime.transaction.TransactionalClosureWithReturnAbstract;
-import org.apache.log4j.Logger;
 
 public class PersistenceSessionObjectStore extends PersistenceSessionAbstract implements ToPersistObjectSet {
     private static final Logger LOG = Logger.getLogger(PersistenceSessionObjectStore.class);

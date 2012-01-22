@@ -21,13 +21,14 @@ package org.apache.isis.runtimes.dflt.remoting.common.client;
 
 import java.io.IOException;
 
+import org.apache.log4j.Logger;
+
 import org.apache.isis.runtimes.dflt.remoting.common.IsisRemoteException;
 import org.apache.isis.runtimes.dflt.remoting.common.exchange.Request;
 import org.apache.isis.runtimes.dflt.remoting.common.exchange.ResponseEnvelope;
 import org.apache.isis.runtimes.dflt.remoting.common.marshalling.ClientMarshaller;
 import org.apache.isis.runtimes.dflt.remoting.transport.ConnectionException;
 import org.apache.isis.runtimes.dflt.runtime.persistence.ConcurrencyException;
-import org.apache.log4j.Logger;
 
 /**
  * Default implementation of {@link ClientConnection} that delegates to

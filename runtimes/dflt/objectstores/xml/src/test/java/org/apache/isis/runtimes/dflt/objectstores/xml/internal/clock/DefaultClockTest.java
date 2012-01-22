@@ -21,8 +21,9 @@ package org.apache.isis.runtimes.dflt.objectstores.xml.internal.clock;
 
 import static org.junit.Assert.assertTrue;
 
-import org.apache.isis.runtimes.dflt.runtime.testsystem.ProxyJunit4TestCase;
 import org.junit.Test;
+
+import org.apache.isis.runtimes.dflt.runtime.testsystem.ProxyJunit4TestCase;
 
 public class DefaultClockTest extends ProxyJunit4TestCase {
     DefaultClock clock;

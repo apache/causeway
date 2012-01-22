@@ -26,9 +26,10 @@ import static org.junit.Assert.assertThat;
 import java.lang.reflect.Method;
 import java.util.List;
 
+import org.junit.Test;
+
 import org.apache.isis.core.commons.matchers.IsisMatchers;
 import org.apache.isis.core.metamodel.specloader.traverser.TypeExtractorMethodParameters;
-import org.junit.Test;
 
 public class TypeExtractorMethodsParametersTest {
 

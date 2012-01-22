@@ -22,9 +22,10 @@ package org.apache.isis.viewer.dnd.view;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
+
 import org.apache.isis.core.commons.lang.ToString;
 import org.apache.isis.viewer.dnd.util.ViewerException;
-import org.apache.log4j.Logger;
 
 public class Axes {
     private static final Logger LOG = Logger.getLogger(Axes.class);

@@ -22,9 +22,9 @@ package org.apache.isis.core.commons.config;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.isis.core.commons.components.Installer;
-
 import com.google.common.collect.Lists;
+
+import org.apache.isis.core.commons.components.Installer;
 
 public abstract class InstallerAbstract implements Installer, IsisConfigurationBuilderAware {
 

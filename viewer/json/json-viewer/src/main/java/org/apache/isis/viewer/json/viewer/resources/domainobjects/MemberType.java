@@ -18,6 +18,8 @@ package org.apache.isis.viewer.json.viewer.resources.domainobjects;
 
 import java.util.Map;
 
+import com.google.common.collect.ImmutableMap;
+
 import org.apache.isis.core.metamodel.facets.actions.invoke.ActionInvocationFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionAddToFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionRemoveFromFacet;
@@ -37,8 +39,6 @@ import org.apache.isis.viewer.json.applib.HttpMethod;
 import org.apache.isis.viewer.json.applib.RepresentationType;
 import org.apache.isis.viewer.json.applib.links.Rel;
 import org.apache.isis.viewer.json.applib.util.Enums;
-
-import com.google.common.collect.ImmutableMap;
 
 public enum MemberType {
 

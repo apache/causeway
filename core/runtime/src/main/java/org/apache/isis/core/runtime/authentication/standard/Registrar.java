@@ -19,11 +19,11 @@
 
 package org.apache.isis.core.runtime.authentication.standard;
 
-import org.apache.isis.core.commons.components.ApplicationScopedComponent;
-import org.apache.isis.core.runtime.authentication.RegistrationDetails;
-
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;
+
+import org.apache.isis.core.commons.components.ApplicationScopedComponent;
+import org.apache.isis.core.runtime.authentication.RegistrationDetails;
 
 public interface Registrar extends Authenticator, ApplicationScopedComponent {
 

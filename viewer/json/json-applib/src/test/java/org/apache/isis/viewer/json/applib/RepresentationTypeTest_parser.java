@@ -20,8 +20,9 @@ package org.apache.isis.viewer.json.applib;
 
 import static org.junit.Assert.assertSame;
 
-import org.apache.isis.viewer.json.applib.util.Parser;
 import org.junit.Test;
+
+import org.apache.isis.viewer.json.applib.util.Parser;
 
 public class RepresentationTypeTest_parser {
 

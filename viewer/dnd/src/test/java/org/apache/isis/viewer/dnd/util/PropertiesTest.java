@@ -21,12 +21,13 @@ package org.apache.isis.viewer.dnd.util;
 
 import static org.junit.Assert.assertEquals;
 
-import org.apache.isis.core.runtime.userprofile.Options;
-import org.apache.isis.runtimes.dflt.objectstores.dflt.testsystem.TestProxySystemII;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.junit.Ignore;
 import org.junit.Test;
+
+import org.apache.isis.core.runtime.userprofile.Options;
+import org.apache.isis.runtimes.dflt.objectstores.dflt.testsystem.TestProxySystemII;
 
 public class PropertiesTest {
 

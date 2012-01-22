@@ -26,6 +26,8 @@ import static org.hamcrest.CoreMatchers.notNullValue;
 
 import java.util.Iterator;
 
+import org.apache.log4j.Logger;
+
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
@@ -57,7 +59,6 @@ import org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager.internal
 import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.OidGeneratorAware;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.OidGenerator;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
-import org.apache.log4j.Logger;
 
 public class AdapterManagerDefault extends AdapterManagerAbstract implements AdapterFactoryAware, SpecificationLoaderAware, OidGeneratorAware, ServicesInjectorAware, DebuggableWithTitle {
 

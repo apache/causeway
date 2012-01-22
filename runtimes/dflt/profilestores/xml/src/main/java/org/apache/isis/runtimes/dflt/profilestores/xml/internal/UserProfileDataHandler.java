@@ -22,14 +22,15 @@ package org.apache.isis.runtimes.dflt.profilestores.xml.internal;
 import java.util.List;
 import java.util.Stack;
 
+import org.xml.sax.Attributes;
+import org.xml.sax.SAXException;
+import org.xml.sax.helpers.DefaultHandler;
+
 import org.apache.isis.core.metamodel.services.ServiceUtil;
 import org.apache.isis.core.runtime.userprofile.Options;
 import org.apache.isis.core.runtime.userprofile.PerspectiveEntry;
 import org.apache.isis.core.runtime.userprofile.UserProfile;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
-import org.xml.sax.Attributes;
-import org.xml.sax.SAXException;
-import org.xml.sax.helpers.DefaultHandler;
 
 public class UserProfileDataHandler extends DefaultHandler {
     private final StringBuffer data = new StringBuffer();

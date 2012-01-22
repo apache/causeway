@@ -25,12 +25,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 
-import org.apache.isis.viewer.json.applib.RepresentationType;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Before;
 import org.junit.Test;
+
+import org.apache.isis.viewer.json.applib.RepresentationType;
 
 public class ResourceContextTest_ensureCompatibleAcceptHeader {
 

@@ -19,10 +19,11 @@
 
 package org.apache.isis.viewer.wicket.ui.components.scalars.wizardpagedesc;
 
-import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.Model;
+
+import org.apache.isis.viewer.wicket.model.models.ScalarModel;
+import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 
 /**
  * Panel for rendering scalars of type {@link String}.

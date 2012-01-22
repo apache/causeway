@@ -23,6 +23,12 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
@@ -48,11 +54,6 @@ import org.apache.isis.core.progmodel.facets.members.hide.HideForContextFacetNon
 import org.apache.isis.core.progmodel.facets.members.hide.HideForSessionFacetAbstract;
 import org.apache.isis.core.progmodel.facets.members.hide.staticmethod.HiddenFacetAlways;
 import org.apache.isis.runtimes.dflt.runtime.testsystem.TestProxySystem;
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
 
 public class ObjectMemberAbstractTest {
 

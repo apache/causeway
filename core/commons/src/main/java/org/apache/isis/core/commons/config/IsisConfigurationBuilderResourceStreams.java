@@ -25,13 +25,14 @@ import java.util.Enumeration;
 import java.util.List;
 import java.util.Properties;
 
+import com.google.common.base.Objects;
+
+import org.apache.log4j.Logger;
+
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.resource.ResourceStreamSource;
 import org.apache.isis.core.commons.resource.ResourceStreamSourceComposite;
 import org.apache.isis.core.commons.resource.ResourceStreamSourceFileSystem;
-import org.apache.log4j.Logger;
-
-import com.google.common.base.Objects;
 
 /**
  * Adapter for {@link IsisConfigurationBuilder}, loading the specified

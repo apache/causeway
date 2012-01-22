@@ -19,10 +19,11 @@
 
 package org.apache.isis.viewer.scimpi.dispatcher.view.debug;
 
-import org.apache.isis.viewer.scimpi.dispatcher.AbstractElementProcessor;
-import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 import org.apache.log4j.Level;
 import org.apache.log4j.LogManager;
+
+import org.apache.isis.viewer.scimpi.dispatcher.AbstractElementProcessor;
+import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 
 public class LogLevel extends AbstractElementProcessor {
 

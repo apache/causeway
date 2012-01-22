@@ -22,11 +22,12 @@ package org.apache.isis.runtimes.dflt.runtime.system.context;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
+
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.runtimes.dflt.runtime.system.session.IsisSession;
 import org.apache.isis.runtimes.dflt.runtime.system.session.IsisSessionFactory;
-import org.apache.log4j.Logger;
 
 /**
  * Basic multi-user implementation of Isis that stores a set of components for

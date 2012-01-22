@@ -26,13 +26,14 @@ import static org.junit.Assert.assertThat;
 
 import javax.ws.rs.core.Response;
 
+import org.junit.Before;
+import org.junit.Test;
+
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.applib.RestfulResponse.HttpStatusCode;
 import org.apache.isis.viewer.json.applib.util.JsonMapper;
 import org.apache.isis.viewer.json.viewer.JsonApplicationException;
 import org.apache.isis.viewer.json.viewer.JsonApplicationExceptionMapper;
-import org.junit.Before;
-import org.junit.Test;
 
 public class JsonApplicationExceptionMapperTest {
 

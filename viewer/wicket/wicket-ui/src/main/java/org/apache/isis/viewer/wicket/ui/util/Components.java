@@ -19,10 +19,11 @@
 
 package org.apache.isis.viewer.wicket.ui.util;
 
-import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+
+import org.apache.isis.viewer.wicket.ui.ComponentType;
 
 public final class Components {
 

@@ -23,9 +23,9 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
 
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-
 import com.google.common.collect.Maps;
+
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 public class SpecificationCacheDefault implements SpecificationCache {
     private final Map<String, ObjectSpecification> specByClassName = Maps.newHashMap();

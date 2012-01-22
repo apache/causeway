@@ -19,13 +19,14 @@
 
 package org.apache.isis.runtimes.dflt.remoting.common.client.facets;
 
+import org.apache.log4j.Logger;
+
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.runtimes.dflt.runtime.persistence.ConcurrencyException;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
-import org.apache.log4j.Logger;
 
 public class ProxyUtil {
     private final static Logger LOG = Logger.getLogger(ProxyUtil.class);

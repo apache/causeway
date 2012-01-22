@@ -19,6 +19,8 @@
 
 package org.apache.isis.viewer.dnd.viewer.basic;
 
+import org.apache.log4j.Logger;
+
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.dnd.drawing.Background;
@@ -28,7 +30,6 @@ import org.apache.isis.viewer.dnd.drawing.ImageFactory;
 import org.apache.isis.viewer.dnd.drawing.Location;
 import org.apache.isis.viewer.dnd.drawing.Size;
 import org.apache.isis.viewer.dnd.util.Properties;
-import org.apache.log4j.Logger;
 
 public class LogoBackground implements Background {
     private static final Logger LOG = Logger.getLogger(LogoBackground.class);

@@ -25,9 +25,6 @@ import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
-import org.apache.isis.core.metamodel.spec.SpecificationLoader;
-import org.apache.isis.runtimes.dflt.runtime.persistence.objectfactory.ObjectChanger;
-import org.apache.isis.runtimes.dflt.runtime.persistence.objectfactory.ObjectResolver;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.Sequence;
@@ -38,6 +35,10 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import org.apache.isis.core.metamodel.spec.SpecificationLoader;
+import org.apache.isis.runtimes.dflt.runtime.persistence.objectfactory.ObjectChanger;
+import org.apache.isis.runtimes.dflt.runtime.persistence.objectfactory.ObjectResolver;
 
 @RunWith(JMock.class)
 public class ClassEnhancerTest {

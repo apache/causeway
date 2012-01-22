@@ -19,13 +19,14 @@
 
 package org.apache.isis.viewer.wicket.ui.components.collection;
 
+import org.apache.wicket.Component;
+import org.apache.wicket.model.IModel;
+
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentFactoryAbstract;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.simple.CollectionContentsAsSimpleTable;
-import org.apache.wicket.Component;
-import org.apache.wicket.model.IModel;
 
 /**
  * {@link ComponentFactory} for {@link CollectionContentsAsSimpleTable}.

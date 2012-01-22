@@ -21,6 +21,13 @@ package org.apache.isis.viewer.json.tck;
 import javax.ws.rs.core.CacheControl;
 import javax.ws.rs.core.MediaType;
 
+import com.google.common.base.Objects;
+
+import org.hamcrest.Description;
+import org.hamcrest.Matcher;
+import org.hamcrest.TypeSafeMatcher;
+import org.junit.Assert;
+
 import org.apache.isis.viewer.json.applib.HttpMethod;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.applib.JsonRepresentation.LinksToSelf;
@@ -29,12 +36,6 @@ import org.apache.isis.viewer.json.applib.RestfulResponse;
 import org.apache.isis.viewer.json.applib.RestfulResponse.HttpStatusCode;
 import org.apache.isis.viewer.json.applib.links.LinkRepresentation;
 import org.apache.isis.viewer.json.applib.links.Rel;
-import org.hamcrest.Description;
-import org.hamcrest.Matcher;
-import org.hamcrest.TypeSafeMatcher;
-import org.junit.Assert;
-
-import com.google.common.base.Objects;
 
 public class RepresentationMatchers {
 

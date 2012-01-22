@@ -28,10 +28,11 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.Iterator;
 
-import org.apache.isis.core.commons.debug.DebugString;
-import org.apache.isis.core.runtime.userprofile.Options;
 import org.junit.Before;
 import org.junit.Test;
+
+import org.apache.isis.core.commons.debug.DebugString;
+import org.apache.isis.core.runtime.userprofile.Options;
 
 public class OptionsTest {
 

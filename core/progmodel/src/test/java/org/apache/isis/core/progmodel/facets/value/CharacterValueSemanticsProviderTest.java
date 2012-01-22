@@ -22,6 +22,11 @@ package org.apache.isis.core.progmodel.facets.value;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
+import org.jmock.integration.junit4.JMock;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+
 import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -29,10 +34,6 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facets.object.parseable.InvalidEntryException;
 import org.apache.isis.core.progmodel.facets.value.chars.CharValueSemanticsProviderAbstract;
 import org.apache.isis.core.progmodel.facets.value.chars.CharWrapperValueSemanticsProvider;
-import org.jmock.integration.junit4.JMock;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
 
 @RunWith(JMock.class)
 public class CharacterValueSemanticsProviderTest extends ValueSemanticsProviderAbstractTestCase {

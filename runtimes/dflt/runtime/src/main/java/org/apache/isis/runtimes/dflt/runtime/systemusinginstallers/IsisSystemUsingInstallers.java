@@ -27,6 +27,8 @@ import static org.hamcrest.CoreMatchers.nullValue;
 
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.specloader.FacetDecoratorInstaller;
 import org.apache.isis.core.metamodel.specloader.ObjectReflector;
@@ -55,7 +57,6 @@ import org.apache.isis.runtimes.dflt.runtime.systemdependencyinjector.SystemDepe
 import org.apache.isis.runtimes.dflt.runtime.transaction.facetdecorator.standard.TransactionFacetDecoratorInstaller;
 import org.apache.isis.runtimes.dflt.runtime.userprofile.UserProfileLoaderDefault;
 import org.apache.isis.runtimes.dflt.runtime.userprofile.UserProfileStoreInstaller;
-import org.apache.log4j.Logger;
 
 public class IsisSystemUsingInstallers extends IsisSystemAbstract {
 

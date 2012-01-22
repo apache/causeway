@@ -19,6 +19,8 @@
 
 package org.apache.isis.viewer.wicket.viewer.registries.pages;
 
+import com.google.inject.Singleton;
+
 import org.apache.isis.viewer.wicket.ui.pages.PageClassList;
 import org.apache.isis.viewer.wicket.ui.pages.PageRegistrySpi;
 import org.apache.isis.viewer.wicket.ui.pages.PageType;
@@ -26,8 +28,6 @@ import org.apache.isis.viewer.wicket.ui.pages.action.ActionPage;
 import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 import org.apache.isis.viewer.wicket.ui.pages.home.HomePage;
 import org.apache.isis.viewer.wicket.ui.pages.login.WicketSignInPage;
-
-import com.google.inject.Singleton;
 
 /**
  * Default implementation of {@link PageClassList}, specifying the default pages

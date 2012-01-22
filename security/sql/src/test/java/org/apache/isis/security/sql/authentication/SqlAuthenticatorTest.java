@@ -21,13 +21,14 @@ package org.apache.isis.security.sql.authentication;
 
 import java.util.Properties;
 
-import org.apache.isis.core.commons.config.IsisConfigurationDefault;
-import org.apache.isis.core.runtime.authentication.AuthenticationRequestPassword;
-import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+
+import org.apache.isis.core.commons.config.IsisConfigurationDefault;
+import org.apache.isis.core.runtime.authentication.AuthenticationRequestPassword;
+import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 
 public class SqlAuthenticatorTest {
     IsisConfigurationDefault configuration;

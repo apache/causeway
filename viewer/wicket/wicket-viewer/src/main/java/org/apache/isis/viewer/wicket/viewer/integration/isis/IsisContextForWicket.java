@@ -23,6 +23,12 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import com.google.common.base.Function;
+import com.google.common.collect.Collections2;
+import com.google.common.collect.Maps;
+
+import org.apache.wicket.Session;
+
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.exceptions.NotYetImplementedException;
 import org.apache.isis.runtimes.dflt.runtime.system.ContextCategory;
@@ -31,11 +37,6 @@ import org.apache.isis.runtimes.dflt.runtime.system.internal.InitialisationSessi
 import org.apache.isis.runtimes.dflt.runtime.system.session.IsisSession;
 import org.apache.isis.runtimes.dflt.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.viewer.wicket.viewer.integration.wicket.AuthenticatedWebSessionForIsis;
-import org.apache.wicket.Session;
-
-import com.google.common.base.Function;
-import com.google.common.collect.Collections2;
-import com.google.common.collect.Maps;
 
 /**
  * Implementation of Isis' {@link IsisContext}, associating a

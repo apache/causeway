@@ -19,6 +19,8 @@
 
 package org.apache.isis.viewer.dnd.dialog;
 
+import org.apache.log4j.Logger;
+
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.Veto;
@@ -48,7 +50,6 @@ import org.apache.isis.viewer.dnd.view.composite.CompositeViewSpecification;
 import org.apache.isis.viewer.dnd.view.composite.StackLayout;
 import org.apache.isis.viewer.dnd.view.control.AbstractButtonAction;
 import org.apache.isis.viewer.dnd.view.control.CancelAction;
-import org.apache.log4j.Logger;
 
 public class ActionDialogSpecification extends CompositeViewSpecification {
     private static final Logger LOG = Logger.getLogger(ActionDialogSpecification.class);

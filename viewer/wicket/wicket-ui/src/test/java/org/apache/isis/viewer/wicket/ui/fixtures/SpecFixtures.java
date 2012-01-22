@@ -19,9 +19,10 @@
 
 package org.apache.isis.viewer.wicket.ui.fixtures;
 
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
+
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 public final class SpecFixtures {
 

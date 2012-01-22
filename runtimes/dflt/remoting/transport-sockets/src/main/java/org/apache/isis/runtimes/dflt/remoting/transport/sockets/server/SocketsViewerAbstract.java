@@ -26,6 +26,8 @@ import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+import org.apache.log4j.Logger;
+
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.commons.exceptions.IsisException;
@@ -45,7 +47,6 @@ import org.apache.isis.runtimes.dflt.remoting.transport.sockets.shared.Worker;
 import org.apache.isis.runtimes.dflt.remoting.transport.sockets.shared.WorkerPool;
 import org.apache.isis.runtimes.dflt.runtime.system.IsisSystem;
 import org.apache.isis.runtimes.dflt.runtime.viewer.IsisViewerAbstract;
-import org.apache.log4j.Logger;
 
 public abstract class SocketsViewerAbstract extends IsisViewerAbstract implements DebuggableWithTitle {
 

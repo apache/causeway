@@ -22,9 +22,10 @@ package org.apache.isis.viewer.scimpi.dispatcher.action;
 import java.util.Enumeration;
 import java.util.Vector;
 
-import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext;
 import org.htmlparser.Attribute;
 import org.htmlparser.nodes.TagNode;
+
+import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext;
 
 public class Attributes {
     private static final String TRUE = " true yes on ";

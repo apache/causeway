@@ -22,8 +22,11 @@ package org.apache.isis.runtimes.dflt.runtime;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.inject.Injector;
+
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.Predicate;
+
 import org.apache.isis.core.commons.lang.Threads;
 import org.apache.isis.runtimes.dflt.runtime.installerregistry.InstallerLookup;
 import org.apache.isis.runtimes.dflt.runtime.installerregistry.installerapi.EmbeddedWebServerInstaller;
@@ -34,8 +37,6 @@ import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.viewer.IsisViewer;
 import org.apache.isis.runtimes.dflt.runtime.viewer.web.WebAppSpecification;
 import org.apache.isis.runtimes.dflt.runtime.web.EmbeddedWebServer;
-
-import com.google.inject.Injector;
 
 final class RuntimeBootstrapper implements IsisBootstrapper {
 

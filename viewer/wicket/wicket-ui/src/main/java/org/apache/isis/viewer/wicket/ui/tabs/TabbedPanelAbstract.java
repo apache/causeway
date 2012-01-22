@@ -19,9 +19,10 @@
 
 package org.apache.isis.viewer.wicket.ui.tabs;
 
-import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.model.IModel;
+
+import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 
 /**
  * Adapter class for tabbed panels; does very little in itself, but does ensure

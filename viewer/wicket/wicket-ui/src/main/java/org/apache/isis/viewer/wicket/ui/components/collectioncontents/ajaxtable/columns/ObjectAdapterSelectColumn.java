@@ -19,12 +19,13 @@
 
 package org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns;
 
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.viewer.wicket.model.common.SelectionHandler;
-import org.apache.isis.viewer.wicket.ui.components.widgets.buttons.ContainedButton;
 import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulator;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.model.IModel;
+
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.viewer.wicket.model.common.SelectionHandler;
+import org.apache.isis.viewer.wicket.ui.components.widgets.buttons.ContainedButton;
 
 public final class ObjectAdapterSelectColumn extends ColumnAbstract<ObjectAdapter> {
 

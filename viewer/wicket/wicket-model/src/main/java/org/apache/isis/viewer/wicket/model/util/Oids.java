@@ -19,10 +19,11 @@
 
 package org.apache.isis.viewer.wicket.model.util;
 
-import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
+
+import org.apache.isis.core.metamodel.adapter.oid.Oid;
 
 public final class Oids {
 

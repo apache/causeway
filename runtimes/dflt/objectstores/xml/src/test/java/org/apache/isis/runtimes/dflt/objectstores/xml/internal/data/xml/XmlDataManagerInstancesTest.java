@@ -22,6 +22,8 @@ package org.apache.isis.runtimes.dflt.objectstores.xml.internal.data.xml;
 import java.io.File;
 import java.io.FilenameFilter;
 
+import org.apache.log4j.Logger;
+
 import org.apache.isis.core.commons.xml.XmlFile;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.runtimes.dflt.objectstores.xml.internal.clock.DefaultClock;
@@ -30,7 +32,6 @@ import org.apache.isis.runtimes.dflt.objectstores.xml.internal.data.ObjectDataVe
 import org.apache.isis.runtimes.dflt.objectstores.xml.internal.version.FileVersion;
 import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.simple.SerialOid;
 import org.apache.isis.runtimes.dflt.runtime.testsystem.ProxyJunit3TestCase;
-import org.apache.log4j.Logger;
 
 public class XmlDataManagerInstancesTest extends ProxyJunit3TestCase {
     private static final Logger LOG = Logger.getLogger(XmlDataManagerInstancesTest.class);

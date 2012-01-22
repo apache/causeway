@@ -19,9 +19,10 @@
 
 package org.apache.isis.viewer.wicket.viewer.integration.wicket;
 
-import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.wicket.Request;
 import org.apache.wicket.Session;
+
+import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 
 public class AnonymousWebSessionForIsis extends AuthenticatedWebSessionForIsis {
 

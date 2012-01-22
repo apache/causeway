@@ -19,6 +19,9 @@
 
 package org.apache.isis.progmodels.dflt;
 
+import org.junit.Assert;
+import org.junit.Test;
+
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.describedas.DescribedAsFacet;
@@ -31,8 +34,6 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.ObjectReflectorDefault;
 import org.apache.isis.core.progmodel.facets.object.validprops.ObjectValidPropertiesFacet;
 import org.apache.isis.runtimes.dflt.runtime.system.TestDomainObject;
-import org.junit.Assert;
-import org.junit.Test;
 
 public class JavaReflector_ObjectTest extends JavaReflectorTestAbstract {
 

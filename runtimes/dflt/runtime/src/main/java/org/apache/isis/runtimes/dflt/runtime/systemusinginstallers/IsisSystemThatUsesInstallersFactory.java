@@ -19,13 +19,13 @@
 
 package org.apache.isis.runtimes.dflt.runtime.systemusinginstallers;
 
+import com.google.inject.Inject;
+
 import org.apache.isis.runtimes.dflt.runtime.installerregistry.InstallerLookup;
 import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
 import org.apache.isis.runtimes.dflt.runtime.system.IsisSystem;
 import org.apache.isis.runtimes.dflt.runtime.system.IsisSystemFactory;
 import org.apache.isis.runtimes.dflt.runtime.systemdependencyinjector.SystemDependencyInjector;
-
-import com.google.inject.Inject;
 
 /**
  * Implementation of {@link IsisSystemFactory} that uses {@link InstallerLookup}

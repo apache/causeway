@@ -27,6 +27,10 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Set;
 
+import com.google.common.collect.Sets;
+
+import org.apache.log4j.Logger;
+
 import org.apache.isis.applib.AbstractService;
 import org.apache.isis.applib.annotation.DescribedAs;
 import org.apache.isis.applib.annotation.Exploration;
@@ -43,9 +47,6 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
-import org.apache.log4j.Logger;
-
-import com.google.common.collect.Sets;
 
 public class ObjectFixtureService {
 

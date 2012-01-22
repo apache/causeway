@@ -22,6 +22,11 @@ package org.apache.isis.core.progmodel.facets.object.title.annotation;
 import java.lang.reflect.Method;
 import java.util.List;
 
+import com.google.common.base.Function;
+import com.google.common.base.Strings;
+
+import org.apache.log4j.Logger;
+
 import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.metamodel.adapter.LocalizationProvider;
@@ -32,10 +37,6 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacetAbstract;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.log4j.Logger;
-
-import com.google.common.base.Function;
-import com.google.common.base.Strings;
 
 public class TitleFacetViaTitleAnnotation extends TitleFacetAbstract {
 

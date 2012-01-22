@@ -24,12 +24,13 @@ import java.awt.FontMetrics;
 import java.awt.Frame;
 import java.util.StringTokenizer;
 
+import org.apache.log4j.Logger;
+
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.dnd.drawing.ColorsAndFonts;
 import org.apache.isis.viewer.dnd.drawing.Text;
 import org.apache.isis.viewer.dnd.util.Properties;
-import org.apache.log4j.Logger;
 
 public class AwtText implements Text {
     private static final String ASCENT_ADJUST = Properties.PROPERTY_BASE + "ascent-adjust";

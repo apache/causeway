@@ -25,6 +25,11 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
+import com.google.inject.Guice;
+import com.google.inject.Injector;
+
+import org.apache.log4j.Logger;
+
 import org.apache.isis.core.commons.config.IsisConfigurationBuilder;
 import org.apache.isis.core.commons.config.IsisConfigurationBuilderPrimer;
 import org.apache.isis.core.commons.config.IsisConfigurationBuilderResourceStreams;
@@ -38,10 +43,6 @@ import org.apache.isis.runtimes.dflt.runtime.runner.IsisModule;
 import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
 import org.apache.isis.runtimes.dflt.runtime.system.IsisSystem;
 import org.apache.isis.runtimes.dflt.runtime.system.SystemConstants;
-import org.apache.log4j.Logger;
-
-import com.google.inject.Guice;
-import com.google.inject.Injector;
 
 /**
  * Initialize the {@link IsisSystem} when the web application starts, and

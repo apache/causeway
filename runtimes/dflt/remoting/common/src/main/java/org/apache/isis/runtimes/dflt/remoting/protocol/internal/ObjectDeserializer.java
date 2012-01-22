@@ -21,6 +21,8 @@ package org.apache.isis.runtimes.dflt.remoting.protocol.internal;
 
 import java.util.Enumeration;
 
+import org.apache.log4j.Logger;
+
 import org.apache.isis.core.commons.exceptions.UnknownTypeException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
@@ -51,7 +53,6 @@ import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessionHydrator;
 import org.apache.isis.runtimes.dflt.runtime.system.transaction.UpdateNotifier;
-import org.apache.log4j.Logger;
 
 public class ObjectDeserializer {
 

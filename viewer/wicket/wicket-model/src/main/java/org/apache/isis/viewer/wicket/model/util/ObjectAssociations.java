@@ -19,10 +19,10 @@
 
 package org.apache.isis.viewer.wicket.model.util;
 
+import com.google.common.base.Function;
+
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
-
-import com.google.common.base.Function;
 
 public final class ObjectAssociations {
 

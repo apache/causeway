@@ -22,13 +22,14 @@ package org.apache.isis.viewer.dnd.awt;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 
+import org.apache.log4j.Logger;
+
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.viewer.dnd.drawing.Location;
 import org.apache.isis.viewer.dnd.interaction.KeyboardActionImpl;
 import org.apache.isis.viewer.dnd.view.FocusManager;
 import org.apache.isis.viewer.dnd.view.KeyboardAction;
 import org.apache.isis.viewer.dnd.view.View;
-import org.apache.log4j.Logger;
 
 public class KeyboardManager {
     private static final Logger LOG = Logger.getLogger(KeyboardManager.class);

@@ -27,8 +27,9 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
 
-import org.apache.isis.runtimes.dflt.objectstores.nosql.NoSqlStoreException;
 import org.apache.log4j.Logger;
+
+import org.apache.isis.runtimes.dflt.objectstores.nosql.NoSqlStoreException;
 
 public class Util {
 

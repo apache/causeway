@@ -19,10 +19,11 @@
 
 package org.apache.isis.runtimes.dflt.runtime.persistence;
 
+import org.apache.log4j.Logger;
+
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
-import org.apache.log4j.Logger;
 
 public class PersistorUtil {
 

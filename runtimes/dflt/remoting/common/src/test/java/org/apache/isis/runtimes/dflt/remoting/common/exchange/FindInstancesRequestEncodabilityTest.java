@@ -25,12 +25,13 @@ import static org.junit.Assert.assertThat;
 
 import java.io.IOException;
 
-import org.apache.isis.core.commons.encoding.EncodabilityContractTest;
-import org.apache.isis.core.commons.encoding.Encodable;
-import org.apache.isis.runtimes.dflt.remoting.common.data.query.PersistenceQueryData;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+
+import org.apache.isis.core.commons.encoding.EncodabilityContractTest;
+import org.apache.isis.core.commons.encoding.Encodable;
+import org.apache.isis.runtimes.dflt.remoting.common.data.query.PersistenceQueryData;
 
 public class FindInstancesRequestEncodabilityTest extends EncodabilityContractTest {
 

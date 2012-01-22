@@ -18,8 +18,6 @@
  */
 package org.apache.isis.viewer.bdd.common.registries;
 
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.viewer.bdd.common.story.registries.AliasRegistryDefault;
 import org.hamcrest.CoreMatchers;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JMock;
@@ -28,6 +26,9 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.viewer.bdd.common.story.registries.AliasRegistryDefault;
 
 @RunWith(JMock.class)
 public class AliasesRegistryTest {

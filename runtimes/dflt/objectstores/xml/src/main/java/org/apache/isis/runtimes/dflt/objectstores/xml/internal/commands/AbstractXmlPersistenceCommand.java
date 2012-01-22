@@ -21,6 +21,8 @@ package org.apache.isis.runtimes.dflt.objectstores.xml.internal.commands;
 
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -30,7 +32,6 @@ import org.apache.isis.runtimes.dflt.objectstores.xml.internal.data.ObjectData;
 import org.apache.isis.runtimes.dflt.objectstores.xml.internal.version.FileVersion;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.PersistenceCommandAbstract;
 import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.simple.SerialOid;
-import org.apache.log4j.Logger;
 
 abstract class AbstractXmlPersistenceCommand extends PersistenceCommandAbstract {
     private static final Logger LOG = Logger.getLogger(AbstractXmlPersistenceCommand.class);

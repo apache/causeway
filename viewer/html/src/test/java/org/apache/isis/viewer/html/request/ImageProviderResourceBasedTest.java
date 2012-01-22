@@ -22,10 +22,11 @@ package org.apache.isis.viewer.html.request;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertThat;
 
-import org.apache.isis.viewer.html.image.ImageProviderResourceBased;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
+import org.apache.isis.viewer.html.image.ImageProviderResourceBased;
 
 public class ImageProviderResourceBasedTest {
 

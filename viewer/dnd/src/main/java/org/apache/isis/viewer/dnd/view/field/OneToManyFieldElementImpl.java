@@ -19,6 +19,8 @@
 
 package org.apache.isis.viewer.dnd.view.field;
 
+import org.apache.log4j.Logger;
+
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
@@ -29,7 +31,6 @@ import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.dnd.view.UserActionSet;
 import org.apache.isis.viewer.dnd.view.content.AbstractObjectContent;
-import org.apache.log4j.Logger;
 
 public class OneToManyFieldElementImpl extends AbstractObjectContent implements OneToManyFieldElement {
     private static final Logger LOG = Logger.getLogger(OneToManyFieldElementImpl.class);

@@ -22,6 +22,8 @@ package org.apache.isis.viewer.dnd.field;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 
+import org.apache.log4j.Logger;
+
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -52,7 +54,6 @@ import org.apache.isis.viewer.dnd.view.text.CursorPosition;
 import org.apache.isis.viewer.dnd.view.text.TextBlockTarget;
 import org.apache.isis.viewer.dnd.view.text.TextContent;
 import org.apache.isis.viewer.dnd.view.text.TextSelection;
-import org.apache.log4j.Logger;
 
 public abstract class TextField extends TextParseableFieldAbstract implements TextBlockTarget {
     private static final Logger LOG = Logger.getLogger(TextField.class);

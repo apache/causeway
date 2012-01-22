@@ -22,17 +22,18 @@ package org.apache.isis.progmodel.wrapper;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
+import org.jmock.auto.Mock;
+import org.junit.Before;
+import org.junit.Ignore;
+import org.junit.Rule;
+import org.junit.Test;
+
 import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2;
 import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2.Mode;
 import org.apache.isis.progmodel.wrapper.applib.DisabledException;
 import org.apache.isis.progmodel.wrapper.applib.WrapperFactory;
 import org.apache.isis.progmodel.wrapper.dom.employee.Employee;
 import org.apache.isis.progmodel.wrapper.metamodel.internal.WrapperFactoryDefault;
-import org.jmock.auto.Mock;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Rule;
-import org.junit.Test;
 
 public class WrappedFactoryDefaultTest_wrappedObject_transient {
 

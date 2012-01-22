@@ -19,6 +19,8 @@
 
 package org.apache.isis.viewer.dnd.view.option;
 
+import org.apache.log4j.Logger;
+
 import org.apache.isis.viewer.dnd.drawing.Location;
 import org.apache.isis.viewer.dnd.view.Content;
 import org.apache.isis.viewer.dnd.view.Placement;
@@ -27,7 +29,6 @@ import org.apache.isis.viewer.dnd.view.View;
 import org.apache.isis.viewer.dnd.view.ViewSpecification;
 import org.apache.isis.viewer.dnd.view.Workspace;
 import org.apache.isis.viewer.dnd.view.content.FieldContent;
-import org.apache.log4j.Logger;
 
 public class OpenViewOption extends UserActionAbstract {
     private static final Logger LOG = Logger.getLogger(OpenViewOption.class);

@@ -23,9 +23,10 @@ import static org.junit.Assert.assertThat;
 
 import java.util.List;
 
-import org.apache.isis.viewer.json.applib.RestfulRequest.RequestParameter;
 import org.junit.Before;
 import org.junit.Test;
+
+import org.apache.isis.viewer.json.applib.RestfulRequest.RequestParameter;
 
 public class RestfulRequestRequestParameterTest_valueOf {
 

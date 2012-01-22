@@ -30,11 +30,12 @@ import java.net.Socket;
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
 
+import org.apache.log4j.Logger;
+
 import org.apache.isis.core.commons.config.ConfigurationConstants;
 import org.apache.isis.runtimes.dflt.runtime.services.InitialisationException;
 import org.apache.isis.runtimes.dflt.runtime.system.IsisSystem;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
-import org.apache.log4j.Logger;
 
 public abstract class AbstractServerMonitor {
     private static final Logger LOG = Logger.getLogger(AbstractServerMonitor.class);

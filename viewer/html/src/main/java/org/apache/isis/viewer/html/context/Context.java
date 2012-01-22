@@ -29,6 +29,8 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.Stack;
 
+import org.apache.log4j.Logger;
+
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.ensure.Assert;
@@ -49,7 +51,6 @@ import org.apache.isis.viewer.html.crumb.ObjectFieldCrumb;
 import org.apache.isis.viewer.html.crumb.TaskCrumb;
 import org.apache.isis.viewer.html.request.Request;
 import org.apache.isis.viewer.html.task.Task;
-import org.apache.log4j.Logger;
 
 public class Context {
     private static final Logger LOG = Logger.getLogger(Context.class);

@@ -23,6 +23,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 
+import org.apache.log4j.Logger;
+
 import org.apache.isis.core.commons.config.ConfigurationConstants;
 import org.apache.isis.core.commons.config.InstallerAbstract;
 import org.apache.isis.core.commons.config.IsisConfiguration;
@@ -33,7 +35,6 @@ import org.apache.isis.core.commons.lang.ListUtils;
 import org.apache.isis.runtimes.dflt.runtime.fixturedomainservice.ObjectFixtureService;
 import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
 import org.apache.isis.runtimes.dflt.runtime.system.SystemConstants;
-import org.apache.log4j.Logger;
 
 public class ServicesInstallerFromConfiguration extends InstallerAbstract implements ServicesInstaller {
 

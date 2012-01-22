@@ -21,10 +21,11 @@ package org.apache.isis.runtimes.dflt.objectstores.sql;
 
 import static org.hamcrest.Matchers.is;
 
-import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.junit.Assert;
 import org.junit.Test;
+
+import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 
 public class DefaultsTest {
     @Test

@@ -22,10 +22,11 @@ package org.apache.isis.runtimes.dflt.runtime.web;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.viewer.web.WebAppSpecification;
-import org.apache.log4j.Logger;
 
 public abstract class EmbeddedWebServerAbstract implements EmbeddedWebServer {
 

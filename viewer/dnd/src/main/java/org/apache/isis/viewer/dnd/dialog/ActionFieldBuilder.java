@@ -19,6 +19,8 @@
 
 package org.apache.isis.viewer.dnd.dialog;
 
+import org.apache.log4j.Logger;
+
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -32,7 +34,6 @@ import org.apache.isis.viewer.dnd.view.action.ObjectParameterImpl;
 import org.apache.isis.viewer.dnd.view.action.ParameterContent;
 import org.apache.isis.viewer.dnd.view.action.TextParseableParameter;
 import org.apache.isis.viewer.dnd.view.composite.AbstractViewBuilder;
-import org.apache.log4j.Logger;
 
 public class ActionFieldBuilder extends AbstractViewBuilder {
     private static final Logger LOG = Logger.getLogger(ActionFieldBuilder.class);

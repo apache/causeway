@@ -25,13 +25,14 @@ import static org.junit.Assert.assertThat;
 
 import java.io.IOException;
 
-import org.apache.isis.core.commons.encoding.EncodabilityContractTest;
-import org.apache.isis.core.commons.encoding.Encodable;
-import org.apache.isis.runtimes.dflt.remoting.common.data.common.IdentityData;
 import org.jmock.integration.junit4.JMock;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import org.apache.isis.core.commons.encoding.EncodabilityContractTest;
+import org.apache.isis.core.commons.encoding.Encodable;
+import org.apache.isis.runtimes.dflt.remoting.common.data.common.IdentityData;
 
 @RunWith(JMock.class)
 public class AuthorizationRequestUsabilityEncodabilityTest extends EncodabilityContractTest {

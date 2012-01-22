@@ -22,6 +22,8 @@ import java.util.Map;
 
 import javax.ws.rs.core.MediaType;
 
+import com.google.common.collect.Maps;
+
 import org.apache.isis.viewer.json.applib.RepresentationType;
 import org.apache.isis.viewer.json.viewer.resources.domainobjects.ActionResultReprRenderer;
 import org.apache.isis.viewer.json.viewer.resources.domainobjects.DomainObjectReprRenderer;
@@ -40,8 +42,6 @@ import org.apache.isis.viewer.json.viewer.resources.domaintypes.TypeListReprRend
 import org.apache.isis.viewer.json.viewer.resources.home.HomePageReprRenderer;
 import org.apache.isis.viewer.json.viewer.resources.user.UserReprRenderer;
 import org.apache.isis.viewer.json.viewer.resources.version.VersionReprRenderer;
-
-import com.google.common.collect.Maps;
 
 public class RendererFactoryRegistry {
 

@@ -24,6 +24,8 @@ import java.net.SocketException;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
+
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.encoding.DataInputExtended;
 import org.apache.isis.core.commons.encoding.DataInputStreamExtended;
@@ -37,7 +39,6 @@ import org.apache.isis.runtimes.dflt.remoting.common.exchange.Request;
 import org.apache.isis.runtimes.dflt.remoting.common.marshalling.MarshallerAbstract;
 import org.apache.isis.runtimes.dflt.remoting.common.marshalling.MarshallingConstants;
 import org.apache.isis.runtimes.dflt.remoting.transport.Transport;
-import org.apache.log4j.Logger;
 
 public class EncodingMarshaller extends MarshallerAbstract {
 

@@ -21,9 +21,9 @@ package org.apache.isis.core.runtime.userprofile;
 
 import java.util.List;
 
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-
 import com.google.common.collect.Lists;
+
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 
 public class PerspectiveEntry {
 

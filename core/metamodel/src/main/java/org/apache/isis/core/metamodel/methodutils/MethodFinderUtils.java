@@ -25,10 +25,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import com.google.common.collect.Maps;
+
 import org.apache.isis.core.commons.lang.JavaClassUtils;
 import org.apache.isis.core.commons.lang.WrapperUtils;
-
-import com.google.common.collect.Maps;
 
 /**
  * TODO: remove duplication with {@link WrapperUtils} and {@link PrimitiveUtils}

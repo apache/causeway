@@ -21,6 +21,8 @@ package org.apache.isis.viewer.dnd.view.composite;
 
 import java.util.Enumeration;
 
+import org.apache.log4j.Logger;
+
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
@@ -33,7 +35,6 @@ import org.apache.isis.viewer.dnd.view.collection.CollectionContent;
 import org.apache.isis.viewer.dnd.view.collection.CollectionElement;
 import org.apache.isis.viewer.dnd.view.field.OneToManyField;
 import org.apache.isis.viewer.dnd.view.field.OneToManyFieldElementImpl;
-import org.apache.log4j.Logger;
 
 public class CollectionElementBuilder extends AbstractViewBuilder {
     private static final Logger LOG = Logger.getLogger(CollectionElementBuilder.class);

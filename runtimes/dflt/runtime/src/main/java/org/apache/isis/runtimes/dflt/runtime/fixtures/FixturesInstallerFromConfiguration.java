@@ -19,11 +19,12 @@
 
 package org.apache.isis.runtimes.dflt.runtime.fixtures;
 
+import org.apache.log4j.Logger;
+
 import org.apache.isis.core.commons.config.ConfigurationConstants;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.runtimes.dflt.runtime.fixtures.domainservice.ObjectLoaderFixture;
-import org.apache.log4j.Logger;
 
 public class FixturesInstallerFromConfiguration extends FixturesInstallerAbstract {
 

@@ -19,11 +19,11 @@
 
 package viewer.wicket.app;
 
-import org.apache.isis.viewer.wicket.viewer.IsisWicketApplication;
-
 import com.google.inject.AbstractModule;
 import com.google.inject.Module;
 import com.google.inject.util.Modules;
+
+import org.apache.isis.viewer.wicket.viewer.IsisWicketApplication;
 
 public class TckApplication extends IsisWicketApplication {
 

@@ -18,9 +18,10 @@
  */
 package org.apache.isis.viewer.json.applib.version;
 
+import org.codehaus.jackson.JsonNode;
+
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.applib.domainobjects.DomainRepresentation;
-import org.codehaus.jackson.JsonNode;
 
 public class VersionRepresentation extends DomainRepresentation {
 

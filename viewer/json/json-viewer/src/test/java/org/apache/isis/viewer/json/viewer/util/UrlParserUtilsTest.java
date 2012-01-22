@@ -20,8 +20,9 @@ package org.apache.isis.viewer.json.viewer.util;
 
 import static org.junit.Assert.assertEquals;
 
-import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.junit.Test;
+
+import org.apache.isis.viewer.json.applib.JsonRepresentation;
 
 public class UrlParserUtilsTest {
 

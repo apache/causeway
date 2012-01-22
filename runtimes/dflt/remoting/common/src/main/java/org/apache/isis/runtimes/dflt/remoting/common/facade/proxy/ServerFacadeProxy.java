@@ -19,6 +19,8 @@
 
 package org.apache.isis.runtimes.dflt.remoting.common.facade.proxy;
 
+import org.apache.log4j.Logger;
+
 import org.apache.isis.runtimes.dflt.remoting.common.IsisRemoteException;
 import org.apache.isis.runtimes.dflt.remoting.common.client.ClientConnection;
 import org.apache.isis.runtimes.dflt.remoting.common.exchange.AuthorizationRequestUsability;
@@ -57,7 +59,6 @@ import org.apache.isis.runtimes.dflt.remoting.common.exchange.SetAssociationResp
 import org.apache.isis.runtimes.dflt.remoting.common.exchange.SetValueRequest;
 import org.apache.isis.runtimes.dflt.remoting.common.exchange.SetValueResponse;
 import org.apache.isis.runtimes.dflt.remoting.common.facade.ServerFacade;
-import org.apache.log4j.Logger;
 
 /**
  * previously called <tt>ClientConnection</tt>.

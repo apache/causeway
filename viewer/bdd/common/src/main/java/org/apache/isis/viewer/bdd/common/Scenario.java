@@ -28,6 +28,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import com.google.inject.Guice;
+import com.google.inject.Injector;
+
 import org.apache.isis.applib.fixtures.LogonFixture;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationBuilder;
@@ -57,9 +60,6 @@ import org.apache.isis.viewer.bdd.common.story.bootstrapping.SetClock;
 import org.apache.isis.viewer.bdd.common.story.bootstrapping.ShutdownIsis;
 import org.apache.isis.viewer.bdd.common.story.registries.AliasRegistryDefault;
 import org.apache.isis.viewer.bdd.common.story.registries.AliasRegistryHolder;
-
-import com.google.inject.Guice;
-import com.google.inject.Injector;
 
 /**
  * Holds the bootstrapped {@link IsisSystem} and provides access to the

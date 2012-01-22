@@ -21,10 +21,11 @@ package org.apache.isis.viewer.junit.sample.domain;
 
 import java.util.Date;
 
+import org.apache.log4j.Logger;
+
 import org.apache.isis.applib.AbstractDomainObject;
 import org.apache.isis.applib.annotation.Disabled;
 import org.apache.isis.applib.util.TitleBuffer;
-import org.apache.log4j.Logger;
 
 public class Order extends AbstractDomainObject {
 

@@ -28,6 +28,8 @@ import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.io.File;
 
+import org.apache.log4j.Logger;
+
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.progmodel.facets.value.image.ImageValueFacet;
@@ -50,7 +52,6 @@ import org.apache.isis.viewer.dnd.view.base.AwtImage;
 import org.apache.isis.viewer.dnd.view.content.FieldContent;
 import org.apache.isis.viewer.dnd.view.field.OneToOneField;
 import org.apache.isis.viewer.dnd.view.option.UserActionAbstract;
-import org.apache.log4j.Logger;
 
 public class ImageField extends AbstractField {
     public static class Specification extends AbstractFieldSpecification {

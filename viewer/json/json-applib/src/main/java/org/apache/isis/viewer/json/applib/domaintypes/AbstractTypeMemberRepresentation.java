@@ -18,8 +18,9 @@
  */
 package org.apache.isis.viewer.json.applib.domaintypes;
 
-import org.apache.isis.viewer.json.applib.domainobjects.DomainRepresentation;
 import org.codehaus.jackson.JsonNode;
+
+import org.apache.isis.viewer.json.applib.domainobjects.DomainRepresentation;
 
 public abstract class AbstractTypeMemberRepresentation extends DomainRepresentation {
 

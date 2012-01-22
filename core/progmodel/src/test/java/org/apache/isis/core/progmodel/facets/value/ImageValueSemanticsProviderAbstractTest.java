@@ -23,15 +23,16 @@ import static org.junit.Assert.assertEquals;
 
 import java.awt.Image;
 
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
-import org.apache.isis.core.progmodel.facets.value.image.ImageValueSemanticsProviderAbstract;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JMock;
 import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
+import org.apache.isis.core.progmodel.facets.value.image.ImageValueSemanticsProviderAbstract;
 
 @RunWith(JMock.class)
 public class ImageValueSemanticsProviderAbstractTest {

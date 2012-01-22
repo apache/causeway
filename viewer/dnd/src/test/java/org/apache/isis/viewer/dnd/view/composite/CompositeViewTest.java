@@ -23,14 +23,15 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import org.apache.isis.viewer.dnd.DummyView;
-import org.apache.isis.viewer.dnd.TestToolkit;
-import org.apache.isis.viewer.dnd.drawing.Size;
-import org.apache.isis.viewer.dnd.view.content.NullContent;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.junit.Before;
 import org.junit.Test;
+
+import org.apache.isis.viewer.dnd.DummyView;
+import org.apache.isis.viewer.dnd.TestToolkit;
+import org.apache.isis.viewer.dnd.drawing.Size;
+import org.apache.isis.viewer.dnd.view.content.NullContent;
 
 public class CompositeViewTest {
 

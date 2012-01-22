@@ -21,13 +21,13 @@ package org.apache.isis.viewer.bdd.common.fixtures;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.common.collect.Iterables;
+
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.viewer.bdd.common.AliasRegistry;
 import org.apache.isis.viewer.bdd.common.CellBinding;
 import org.apache.isis.viewer.bdd.common.ScenarioValueException;
-
-import com.google.common.collect.Iterables;
 
 public class AbstractListFixturePeer extends AbstractFixturePeer {
 

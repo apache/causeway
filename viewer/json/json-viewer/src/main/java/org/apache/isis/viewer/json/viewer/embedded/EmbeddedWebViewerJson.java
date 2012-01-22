@@ -18,6 +18,9 @@
  */
 package org.apache.isis.viewer.json.viewer.embedded;
 
+import org.jboss.resteasy.plugins.server.servlet.HttpServletDispatcher;
+import org.jboss.resteasy.plugins.server.servlet.ResteasyBootstrap;
+
 import org.apache.isis.core.commons.lang.MapUtils;
 import org.apache.isis.core.webapp.content.ResourceCachingFilter;
 import org.apache.isis.core.webapp.content.ResourceServlet;
@@ -26,8 +29,6 @@ import org.apache.isis.runtimes.dflt.runtime.web.EmbeddedWebViewer;
 import org.apache.isis.runtimes.dflt.webapp.IsisSessionFilter;
 import org.apache.isis.viewer.json.viewer.JsonApplication;
 import org.apache.isis.viewer.json.viewer.authentication.AuthenticationSessionStrategyTrusted;
-import org.jboss.resteasy.plugins.server.servlet.HttpServletDispatcher;
-import org.jboss.resteasy.plugins.server.servlet.ResteasyBootstrap;
 
 final class EmbeddedWebViewerJson extends EmbeddedWebViewer {
     @Override

@@ -19,6 +19,8 @@
 
 package org.apache.isis.runtimes.dflt.remoting.common.client;
 
+import org.easymock.MockControl;
+
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.runtimes.dflt.remoting.common.IsisRemoteException;
 import org.apache.isis.runtimes.dflt.remoting.common.data.DummyIdentityData;
@@ -38,7 +40,6 @@ import org.apache.isis.runtimes.dflt.remoting.common.facade.proxy.ServerFacadePr
 import org.apache.isis.runtimes.dflt.runtime.testsystem.ProxyJunit3TestCase;
 import org.apache.isis.runtimes.dflt.runtime.testsystem.TestProxyOid;
 import org.apache.isis.runtimes.dflt.runtime.testsystem.TestProxySession;
-import org.easymock.MockControl;
 
 public class CommandClientTest extends ProxyJunit3TestCase {
     private MockControl control;

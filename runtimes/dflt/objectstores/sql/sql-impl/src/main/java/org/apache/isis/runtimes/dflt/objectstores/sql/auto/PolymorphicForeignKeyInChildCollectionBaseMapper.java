@@ -25,6 +25,8 @@ package org.apache.isis.runtimes.dflt.objectstores.sql.auto;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -43,7 +45,6 @@ import org.apache.isis.runtimes.dflt.objectstores.sql.jdbc.JdbcPolymorphicObject
 import org.apache.isis.runtimes.dflt.objectstores.sql.mapping.FieldMapping;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.OidGenerator;
-import org.apache.log4j.Logger;
 
 /**
  * Used to map 1-to-many collections by creating, in the collection child table

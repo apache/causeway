@@ -19,15 +19,16 @@
 
 package org.apache.isis.viewer.wicket.ui.components.scalars;
 
-import org.apache.isis.core.metamodel.facets.maxlen.MaxLengthFacet;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.validation.IValidatable;
 import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.ValidationError;
 import org.apache.wicket.validation.validator.StringValidator;
+
+import org.apache.isis.core.metamodel.facets.maxlen.MaxLengthFacet;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 
 /**
  * Adapter for {@link ScalarPanelTextFieldAbstract textField-based scalar panel}

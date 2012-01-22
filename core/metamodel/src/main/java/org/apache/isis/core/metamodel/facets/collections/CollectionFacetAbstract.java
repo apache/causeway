@@ -24,6 +24,7 @@ import java.util.Enumeration;
 import java.util.Iterator;
 
 import org.apache.commons.collections.iterators.IteratorEnumeration;
+
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;

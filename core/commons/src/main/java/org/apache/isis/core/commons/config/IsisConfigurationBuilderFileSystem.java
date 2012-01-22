@@ -19,10 +19,11 @@
 
 package org.apache.isis.core.commons.config;
 
+import org.apache.log4j.Logger;
+
 import org.apache.isis.core.commons.resource.ResourceStreamSource;
 import org.apache.isis.core.commons.resource.ResourceStreamSourceComposite;
 import org.apache.isis.core.commons.resource.ResourceStreamSourceFileSystem;
-import org.apache.log4j.Logger;
 
 /**
  * Convenience implementation of {@link IsisConfigurationBuilder} that loads

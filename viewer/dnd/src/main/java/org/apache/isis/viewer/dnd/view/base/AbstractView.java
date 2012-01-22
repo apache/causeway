@@ -21,6 +21,8 @@ package org.apache.isis.viewer.dnd.view.base;
 
 import java.util.Enumeration;
 
+import org.apache.log4j.Logger;
+
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -70,7 +72,6 @@ import org.apache.isis.viewer.dnd.view.content.FieldContent;
 import org.apache.isis.viewer.dnd.view.content.RootObject;
 import org.apache.isis.viewer.dnd.view.option.OpenViewOption;
 import org.apache.isis.viewer.dnd.view.option.UserActionAbstract;
-import org.apache.log4j.Logger;
 
 public abstract class AbstractView implements View {
     private static final Logger LOG = Logger.getLogger(AbstractView.class);

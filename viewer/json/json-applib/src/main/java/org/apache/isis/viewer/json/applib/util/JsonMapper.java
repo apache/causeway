@@ -27,7 +27,6 @@ import java.util.Map;
 
 import javax.ws.rs.core.Response;
 
-import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.JsonGenerator;
 import org.codehaus.jackson.JsonNode;
@@ -51,6 +50,8 @@ import org.codehaus.jackson.map.deser.StdDeserializerProvider;
 import org.codehaus.jackson.map.module.SimpleModule;
 import org.codehaus.jackson.type.JavaType;
 import org.jboss.resteasy.client.ClientResponse;
+
+import org.apache.isis.viewer.json.applib.JsonRepresentation;
 
 public final class JsonMapper {
 

@@ -23,6 +23,10 @@ import static org.junit.Assert.assertThat;
 
 import javax.ws.rs.core.Response;
 
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
+
 import org.apache.isis.runtimes.dflt.webserver.WebServer;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.applib.RestfulClient;
@@ -30,9 +34,6 @@ import org.apache.isis.viewer.json.applib.RestfulResponse;
 import org.apache.isis.viewer.json.applib.RestfulResponse.HttpStatusCode;
 import org.apache.isis.viewer.json.applib.domainobjects.DomainServiceResource;
 import org.apache.isis.viewer.json.tck.IsisWebServerRule;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
 
 public class DomainServiceResourceTest_serviceId_notFound {
 

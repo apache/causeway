@@ -22,8 +22,6 @@ package org.apache.isis.core.progmodel.facets.propparam.validate.regex;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertThat;
 
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.progmodel.facets.object.regex.annotation.RegExFacetAnnotationForType;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JMock;
 import org.jmock.integration.junit4.JUnit4Mockery;
@@ -31,6 +29,9 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.progmodel.facets.object.regex.annotation.RegExFacetAnnotationForType;
 
 @RunWith(JMock.class)
 public class RegExFacetAnnotationTest {

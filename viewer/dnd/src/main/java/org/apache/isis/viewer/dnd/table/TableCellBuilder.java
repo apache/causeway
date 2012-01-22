@@ -19,6 +19,8 @@
 
 package org.apache.isis.viewer.dnd.table;
 
+import org.apache.log4j.Logger;
+
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.exceptions.UnexpectedCallException;
 import org.apache.isis.core.commons.exceptions.UnknownTypeException;
@@ -46,7 +48,6 @@ import org.apache.isis.viewer.dnd.view.content.TextParseableContent;
 import org.apache.isis.viewer.dnd.view.field.OneToOneFieldImpl;
 import org.apache.isis.viewer.dnd.view.field.TextParseableFieldImpl;
 import org.apache.isis.viewer.dnd.viewer.basic.UnlinedTextFieldSpecification;
-import org.apache.log4j.Logger;
 
 class TableCellBuilder extends AbstractViewBuilder {
     private static final Logger LOG = Logger.getLogger(TableCellBuilder.class);

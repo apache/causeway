@@ -22,9 +22,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.isis.viewer.json.applib.util.PathNode;
-
 import com.google.common.collect.Maps;
+
+import org.apache.isis.viewer.json.applib.util.PathNode;
 
 @SuppressWarnings({ "rawtypes", "unchecked" })
 public final class GraphUtil {

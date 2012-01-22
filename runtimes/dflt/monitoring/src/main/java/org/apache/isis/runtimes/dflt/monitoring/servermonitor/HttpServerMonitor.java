@@ -24,10 +24,11 @@ import java.io.PrintWriter;
 import java.net.URLDecoder;
 import java.util.StringTokenizer;
 
+import org.apache.log4j.Logger;
+
 import org.apache.isis.core.commons.config.ConfigurationConstants;
 import org.apache.isis.runtimes.dflt.runtime.system.IsisSystem;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
-import org.apache.log4j.Logger;
 
 public class HttpServerMonitor extends AbstractServerMonitor {
     private static final Logger LOG = Logger.getLogger(HttpServerMonitor.class);

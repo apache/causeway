@@ -19,6 +19,10 @@
 
 package org.apache.isis.viewer.junit;
 
+import org.junit.After;
+import org.junit.Before;
+import org.junit.runner.RunWith;
+
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.progmodel.wrapper.applib.WrapperFactory;
 import org.apache.isis.viewer.junit.sample.domain.Country;
@@ -32,9 +36,6 @@ import org.apache.isis.viewer.junit.sample.service.CountryRepository;
 import org.apache.isis.viewer.junit.sample.service.CustomerRepository;
 import org.apache.isis.viewer.junit.sample.service.OrderRepository;
 import org.apache.isis.viewer.junit.sample.service.ProductRepository;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.runner.RunWith;
 
 @RunWith(IsisTestRunner.class)
 @Fixtures({ @Fixture(CountriesFixture.class), @Fixture(ProductsFixture.class), @Fixture(CustomersFixture.class), @Fixture(CustomerOrdersFixture.class) })

@@ -36,11 +36,12 @@ import javax.naming.directory.InitialDirContext;
 import javax.naming.directory.SearchControls;
 import javax.naming.directory.SearchResult;
 
+import org.apache.log4j.Logger;
+
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.runtime.authorization.standard.AuthorizorAbstract;
-import org.apache.log4j.Logger;
 
 public class LdapAuthorizor extends AuthorizorAbstract {
 

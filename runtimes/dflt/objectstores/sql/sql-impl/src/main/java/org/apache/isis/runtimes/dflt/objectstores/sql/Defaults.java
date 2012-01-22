@@ -21,8 +21,9 @@ package org.apache.isis.runtimes.dflt.objectstores.sql;
 
 import java.util.Calendar;
 
-import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.joda.time.DateTimeZone;
+
+import org.apache.isis.core.commons.config.IsisConfiguration;
 
 /**
  * Provides objectstore defaults. Most significantly, maintains the object store

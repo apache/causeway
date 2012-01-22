@@ -24,6 +24,7 @@ import java.io.PrintWriter;
 
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Options;
+
 import org.apache.isis.core.runtime.sysout.SystemPrinter;
 
 public class BootPrinter extends SystemPrinter {

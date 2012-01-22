@@ -19,6 +19,8 @@
 
 package org.apache.isis.viewer.dnd.view.border;
 
+import org.apache.log4j.Logger;
+
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Allow;
 import org.apache.isis.core.metamodel.consent.Consent;
@@ -35,7 +37,6 @@ import org.apache.isis.viewer.dnd.view.Workspace;
 import org.apache.isis.viewer.dnd.view.content.FieldContent;
 import org.apache.isis.viewer.dnd.view.content.RootObject;
 import org.apache.isis.viewer.dnd.view.control.AbstractButtonAction;
-import org.apache.log4j.Logger;
 
 public class SaveTransientObjectBorder extends ButtonBorder {
     private static final Logger LOG = Logger.getLogger(SaveTransientObjectBorder.class);

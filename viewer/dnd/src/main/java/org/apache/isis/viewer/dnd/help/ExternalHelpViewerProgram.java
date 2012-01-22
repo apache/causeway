@@ -21,9 +21,10 @@ package org.apache.isis.viewer.dnd.help;
 
 import java.io.IOException;
 
+import org.apache.log4j.Logger;
+
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.viewer.dnd.drawing.Location;
-import org.apache.log4j.Logger;
 
 public class ExternalHelpViewerProgram implements HelpViewer {
     private static final Logger LOG = Logger.getLogger(ExternalHelpViewerProgram.class);

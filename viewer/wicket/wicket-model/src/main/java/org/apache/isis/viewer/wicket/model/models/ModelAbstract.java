@@ -19,10 +19,11 @@
 
 package org.apache.isis.viewer.wicket.model.models;
 
+import org.apache.wicket.model.LoadableDetachableModel;
+
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
-import org.apache.wicket.model.LoadableDetachableModel;
 
 /**
  * Adapter for {@link LoadableDetachableModel}s, providing access to some of the

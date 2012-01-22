@@ -19,11 +19,12 @@
 
 package org.apache.isis.viewer.junit.sample.fixtures;
 
+import org.apache.log4j.Logger;
+
 import org.apache.isis.applib.fixtures.AbstractFixture;
 import org.apache.isis.viewer.junit.sample.domain.Country;
 import org.apache.isis.viewer.junit.sample.service.CountryRepository;
 import org.apache.isis.viewer.junit.sample.service.CustomerRepository;
-import org.apache.log4j.Logger;
 
 public class CustomersFixture extends AbstractFixture {
 

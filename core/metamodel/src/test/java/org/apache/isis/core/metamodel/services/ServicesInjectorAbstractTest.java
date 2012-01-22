@@ -21,7 +21,6 @@ package org.apache.isis.core.metamodel.services;
 
 import java.util.Arrays;
 
-import org.apache.isis.applib.DomainObjectContainer;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JMock;
@@ -30,6 +29,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import org.apache.isis.applib.DomainObjectContainer;
 
 @RunWith(JMock.class)
 public class ServicesInjectorAbstractTest {

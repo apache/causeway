@@ -26,8 +26,9 @@ import static org.junit.Assert.assertThat;
 
 import java.util.List;
 
-import org.apache.isis.viewer.junit.sample.domain.Country;
 import org.junit.Test;
+
+import org.apache.isis.viewer.junit.sample.domain.Country;
 
 public class MemberReadTest extends AbstractTest {
 

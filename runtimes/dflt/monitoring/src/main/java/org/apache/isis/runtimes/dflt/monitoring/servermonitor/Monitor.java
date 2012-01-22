@@ -22,8 +22,9 @@ package org.apache.isis.runtimes.dflt.monitoring.servermonitor;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.log4j.Logger;
+
+import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 
 public class Monitor {
     private static final Logger LOG = Logger.getLogger(Monitor.class);

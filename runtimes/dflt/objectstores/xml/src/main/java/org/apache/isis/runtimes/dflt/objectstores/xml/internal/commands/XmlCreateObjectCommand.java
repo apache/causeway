@@ -19,6 +19,8 @@
 
 package org.apache.isis.runtimes.dflt.objectstores.xml.internal.commands;
 
+import org.apache.log4j.Logger;
+
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.runtimes.dflt.objectstores.xml.internal.data.DataManager;
 import org.apache.isis.runtimes.dflt.objectstores.xml.internal.data.ObjectData;
@@ -26,7 +28,6 @@ import org.apache.isis.runtimes.dflt.objectstores.xml.internal.version.FileVersi
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.CreateObjectCommand;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.PersistenceCommandContext;
 import org.apache.isis.runtimes.dflt.runtime.transaction.ObjectPersistenceException;
-import org.apache.log4j.Logger;
 
 public final class XmlCreateObjectCommand extends AbstractXmlPersistenceCommand implements CreateObjectCommand {
     private static final Logger LOG = Logger.getLogger(XmlCreateObjectCommand.class);

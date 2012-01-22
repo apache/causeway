@@ -21,6 +21,11 @@ package org.apache.isis.viewer.dnd.configurable;
 
 import static org.junit.Assert.assertEquals;
 
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
+import org.junit.Before;
+import org.junit.Test;
+
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.testsystem.TestProxyConfiguration;
 import org.apache.isis.viewer.dnd.DummyContent;
@@ -29,10 +34,6 @@ import org.apache.isis.viewer.dnd.TestToolkit;
 import org.apache.isis.viewer.dnd.configurable.PanelView.Position;
 import org.apache.isis.viewer.dnd.drawing.Location;
 import org.apache.isis.viewer.dnd.drawing.Size;
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
-import org.junit.Before;
-import org.junit.Test;
 
 public class PanelViewTest {
 

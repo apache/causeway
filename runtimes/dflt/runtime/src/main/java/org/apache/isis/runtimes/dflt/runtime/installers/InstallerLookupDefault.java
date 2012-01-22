@@ -30,6 +30,10 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.inject.Inject;
+
+import org.apache.log4j.Logger;
+
 import org.apache.isis.core.commons.components.Installer;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationBuilder;
@@ -63,9 +67,6 @@ import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
 import org.apache.isis.runtimes.dflt.runtime.system.SystemConstants;
 import org.apache.isis.runtimes.dflt.runtime.systemdependencyinjector.SystemDependencyInjectorAware;
 import org.apache.isis.runtimes.dflt.runtime.userprofile.UserProfileStoreInstaller;
-import org.apache.log4j.Logger;
-
-import com.google.inject.Inject;
 
 /**
  * This class retrieves named {@link Installer}s from those loaded at creation,

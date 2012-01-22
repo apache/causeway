@@ -33,6 +33,8 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.lang.ToString;
@@ -71,7 +73,6 @@ import org.apache.isis.viewer.dnd.view.debug.LoggingOptions;
 import org.apache.isis.viewer.dnd.view.menu.PopupMenuContainer;
 import org.apache.isis.viewer.dnd.view.message.MessageContent;
 import org.apache.isis.viewer.dnd.viewer.ApplicationOptions;
-import org.apache.log4j.Logger;
 
 public class XViewer implements Viewer {
     private static final Size NO_SIZE = new Size(0, 0);

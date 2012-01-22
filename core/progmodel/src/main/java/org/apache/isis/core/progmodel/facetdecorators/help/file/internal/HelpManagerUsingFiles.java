@@ -25,10 +25,11 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
+import org.apache.log4j.Logger;
+
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.progmodel.facetdecorators.help.HelpManagerAbstract;
-import org.apache.log4j.Logger;
 
 public class HelpManagerUsingFiles extends HelpManagerAbstract {
 
