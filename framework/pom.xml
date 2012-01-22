@@ -990,6 +990,13 @@ archetype includes this explicit dependency.
                 <version>0.2.0-incubating-SNAPSHOT</version>
             </dependency>
 
+            <!-- isis: tck -->
+            <dependency>
+                <groupId>org.apache.isis</groupId>
+                <artifactId>viewer</artifactId>
+                <version>0.2.0-incubating-SNAPSHOT</version>
+            </dependency>
+
 
             <!-- Logging -->
             <dependency>

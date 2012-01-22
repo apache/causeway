@@ -3823,6 +3823,7 @@ public class FooBar {
   -d . --exclude \
   resources.txt site.vm \
   *.project *.classpath *.launch *.importorder \
+  *.odg \
   *.java.hsp \
   *.ucd *.ucls *.euml2 *.umlproject \
   fop-cust.xsl html-cust.xsl *.ent *.dtd *.pdn catalog.xml \
@@ -3850,6 +3851,11 @@ public class FooBar {
             <listitem>
               <para><filename>.json</filename> are test JSON files (JSON does
               not support comments)</para>
+            </listitem>
+
+            <listitem>
+              <para><filename>.odg</filename> are OpenOffice diagram
+              files</para>
             </listitem>
 
             <listitem>
@@ -3963,7 +3969,7 @@ public class FooBar {
           <programlisting>mvn license:download-licenses</programlisting>
 
           <para>This Maven plugin creates a <filename>license.xml</filename>
-          file in the <filename>target/generated</filename>-resources/
+          file in the <filename>target/generated-resources</filename>
           directory of each module.</para>
 
           <para>Then, run the <emphasis>Isis</emphasis> script:</para>
@@ -3987,6 +3993,12 @@ licenses to remove from supplemental-models.xml (are spurious):
 
           <para>If any missing entries are listed or are spurious, then update
           <filename>supplemental-models.xml</filename> and try again.</para>
+
+          <note>
+            <para>Ignore any missing license warnings for the TCK modules;
+            this is a result of the TCK modules for the viewers (eg
+            bdd-concordion-tck) depending on the TCK dom, fixtures etc.</para>
+          </note>
         </sect2>
       </sect1>
 
