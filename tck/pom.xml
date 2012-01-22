@@ -140,6 +140,25 @@
     <dependencyManagement>
         <dependencies>
 
+            <!-- this project's own modules -->
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>tck-dom</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>tck-fixture</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>tck-objstore-dflt</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
 
             <!-- isis: applib -->
             <dependency>
