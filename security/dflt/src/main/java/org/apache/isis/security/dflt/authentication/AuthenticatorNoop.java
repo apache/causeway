@@ -36,7 +36,7 @@ public class AuthenticatorNoop extends AuthenticatorAbstract implements Noop {
     }
 
     @Override
-    public boolean canAuthenticate(Class<? extends AuthenticationRequest> authenticationRequestClass) {
+    public boolean canAuthenticate(final Class<? extends AuthenticationRequest> authenticationRequestClass) {
         return true;
     }
 

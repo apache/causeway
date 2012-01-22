@@ -60,11 +60,9 @@ public class FileAuthenticator extends PasswordRequestAuthenticatorAbstract {
 
         BufferedReader reader = null;
         try {
-            final InputStream readStream =
-                resourceStreamSource.readResource(FileAuthenticationConstants.PASSWORDS_FILE);
+            final InputStream readStream = resourceStreamSource.readResource(FileAuthenticationConstants.PASSWORDS_FILE);
             if (readStream == null) {
-                throw new IsisException("Failed to open password file: " + FileAuthenticationConstants.PASSWORDS_FILE
-                    + " from " + resourceStreamSource.getName());
+                throw new IsisException("Failed to open password file: " + FileAuthenticationConstants.PASSWORDS_FILE + " from " + resourceStreamSource.getName());
             }
             reader = new BufferedReader(new InputStreamReader(readStream));
             String line;
@@ -84,8 +82,7 @@ public class FileAuthenticator extends PasswordRequestAuthenticatorAbstract {
             }
             return false;
         } catch (final IOException e) {
-            throw new IsisException("Failed to read password file: " + FileAuthenticationConstants.PASSWORDS_FILE
-                + " from " + resourceStreamSource.getName());
+            throw new IsisException("Failed to read password file: " + FileAuthenticationConstants.PASSWORDS_FILE + " from " + resourceStreamSource.getName());
         } finally {
             IoUtils.closeSafely(reader);
         }

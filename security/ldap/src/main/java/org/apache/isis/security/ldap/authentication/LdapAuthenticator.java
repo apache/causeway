@@ -58,15 +58,13 @@ public class LdapAuthenticator extends AuthenticatorAbstract {
         return AuthenticationRequestPassword.class.isAssignableFrom(authenticationRequestClass);
     }
 
-    private void setRoles(final DirContext authContext, final AuthenticationRequest request, final String username)
-        throws NamingException {
+    private void setRoles(final DirContext authContext, final AuthenticationRequest request, final String username) throws NamingException {
         final List<String> roles = new ArrayList<String>();
         final SearchControls controls = new SearchControls();
         controls.setSearchScope(SearchControls.SUBTREE_SCOPE);
         controls.setReturningAttributes(new String[] { "cn" });
         final String name = "uid=" + username + ", " + ldapDn;
-        final NamingEnumeration<SearchResult> answer =
-            authContext.search(name, LdapAuthenticationConstants.FILTER, controls);
+        final NamingEnumeration<SearchResult> answer = authContext.search(name, LdapAuthenticationConstants.FILTER, controls);
         while (answer.hasMore()) {
             final SearchResult result = answer.nextElement();
             final String roleName = (String) result.getAttributes().get("cn").get(0);

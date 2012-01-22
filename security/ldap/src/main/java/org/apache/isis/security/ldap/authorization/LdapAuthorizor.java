@@ -61,9 +61,7 @@ public class LdapAuthorizor extends AuthorizorAbstract {
         ldapProvider = getConfiguration().getString(LdapAuthorizationConstants.SERVER_KEY);
         ldapDn = getConfiguration().getString(LdapAuthorizationConstants.LDAPDN_KEY);
         appDn = getConfiguration().getString(LdapAuthorizationConstants.APP_DN_KEY);
-        learn =
-            getConfiguration().getBoolean(LdapAuthorizationConstants.LEARN_KEY,
-                LdapAuthorizationConstants.LEARN_DEFAULT);
+        learn = getConfiguration().getBoolean(LdapAuthorizationConstants.LEARN_KEY, LdapAuthorizationConstants.LEARN_DEFAULT);
     }
 
     // ////////////////////////////////////////////////////////
@@ -130,8 +128,7 @@ public class LdapAuthorizor extends AuthorizorAbstract {
         }
     }
 
-    private boolean isPermitted(final DirContext authContext, final String role, final Identifier member,
-        final String flag) throws NamingException {
+    private boolean isPermitted(final DirContext authContext, final String role, final Identifier member, final String flag) throws NamingException {
         final String cls = member.toIdentityString(Identifier.CLASS);
         final String name = member.toIdentityString(Identifier.MEMBERNAME_ONLY);
         final String parms = member.toIdentityString(Identifier.PARAMETERS_ONLY);
@@ -143,11 +140,13 @@ public class LdapAuthorizor extends AuthorizorAbstract {
         final NamingEnumeration<SearchResult> answer = authContext.search(searchName, FILTER, args, controls);
         while (answer.hasMore()) {
             // if we have a class match must be OK
-            // if we have a name match must be OK (parent must be class by definition)
+            // if we have a name match must be OK (parent must be class by
+            // definition)
             // but parm matches need to check that parent = name
             final SearchResult result = answer.nextElement();
             final String cn = (String) result.getAttributes().get("cn").get(0);
-            // result.getname gives relative path from class - so if contains 'name' it is parent of parms
+            // result.getname gives relative path from class - so if contains
+            // 'name' it is parent of parms
             // entry
             if (cn.equals(cls) || cn.equals(name) || ((cn.equals(parms) && result.getName().contains(name)))) {
                 // last check if there is a flag attribute
@@ -201,8 +200,7 @@ public class LdapAuthorizor extends AuthorizorAbstract {
         return bindName.toString();
     }
 
-    private void bindClass(final DirContext authContext, final String role, final Identifier member)
-        throws NamingException {
+    private void bindClass(final DirContext authContext, final String role, final Identifier member) throws NamingException {
         final String cls = member.toIdentityString(Identifier.CLASS);
         final Attributes attrs = createCommonAttributes(cls, role, true);
         try {
@@ -221,8 +219,7 @@ public class LdapAuthorizor extends AuthorizorAbstract {
         return bindName.toString();
     }
 
-    private void bindName(final DirContext authContext, final String role, final Identifier member)
-        throws NamingException {
+    private void bindName(final DirContext authContext, final String role, final Identifier member) throws NamingException {
         final String cls = member.toIdentityString(Identifier.CLASS);
         final String name = member.toIdentityString(Identifier.MEMBERNAME_ONLY);
         final Attributes attrs = createCommonAttributes(name, role, false);
@@ -242,8 +239,7 @@ public class LdapAuthorizor extends AuthorizorAbstract {
         return bindName.toString();
     }
 
-    private void bindParms(final DirContext authContext, final String role, final Identifier member)
-        throws NamingException {
+    private void bindParms(final DirContext authContext, final String role, final Identifier member) throws NamingException {
         final String cls = member.toIdentityString(Identifier.CLASS);
         final String name = member.toIdentityString(Identifier.MEMBERNAME_ONLY);
         // have to escape any commas in parms string or ldap parser is not happy
@@ -261,8 +257,7 @@ public class LdapAuthorizor extends AuthorizorAbstract {
         }
     }
 
-    private boolean bindNames(final DirContext authContext, final String role, final Identifier member)
-        throws NamingException {
+    private boolean bindNames(final DirContext authContext, final String role, final Identifier member) throws NamingException {
         bindClass(authContext, role, member);
         bindName(authContext, role, member);
         bindParms(authContext, role, member);

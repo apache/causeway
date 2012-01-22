@@ -35,7 +35,7 @@ public class NoopAuthenticationManagerInstaller extends AuthenticationManagerSta
 
     @Override
     protected List<Authenticator> createAuthenticators(final IsisConfiguration configuration) {
-        return Lists.<Authenticator>newArrayList(new AuthenticatorNoop(configuration));
+        return Lists.<Authenticator> newArrayList(new AuthenticatorNoop(configuration));
     }
 
 }

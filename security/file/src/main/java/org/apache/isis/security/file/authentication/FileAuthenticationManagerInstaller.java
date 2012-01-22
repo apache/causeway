@@ -37,7 +37,7 @@ public class FileAuthenticationManagerInstaller extends AuthenticationManagerSta
 
     @Override
     protected List<Authenticator> createAuthenticators(final IsisConfiguration configuration) {
-        return Lists.<Authenticator>newArrayList(new FileAuthenticator(configuration));
+        return Lists.<Authenticator> newArrayList(new FileAuthenticator(configuration));
     }
 
 }
