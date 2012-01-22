@@ -18,7 +18,6 @@
  */
 package org.apache.isis.viewer.json.viewer.resources.home;
 
-
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -35,20 +34,20 @@ import org.apache.isis.viewer.json.viewer.representations.RendererFactory;
 import org.apache.isis.viewer.json.viewer.resources.ResourceAbstract;
 
 /**
- * Implementation note: it seems to be necessary to annotate the implementation with {@link Path} rather than the
- * interface (at least under RestEasy 1.0.2 and 1.1-RC2).
+ * Implementation note: it seems to be necessary to annotate the implementation
+ * with {@link Path} rather than the interface (at least under RestEasy 1.0.2
+ * and 1.1-RC2).
  */
 public class HomePageResourceServerside extends ResourceAbstract implements HomePageResource {
 
     @Override
-    @Produces({ RestfulMediaType.APPLICATION_JSON_HOME_PAGE} )
+    @Produces({ RestfulMediaType.APPLICATION_JSON_HOME_PAGE })
     public Response homePage() {
-        RepresentationType representationType = RepresentationType.HOME_PAGE;
+        final RepresentationType representationType = RepresentationType.HOME_PAGE;
         init(representationType);
-        
+
         final RendererFactory factory = rendererFactoryRegistry.find(representationType);
-        final HomePageReprRenderer renderer = 
-                (HomePageReprRenderer) factory.newRenderer(getResourceContext(), null, JsonRepresentation.newMap());
+        final HomePageReprRenderer renderer = (HomePageReprRenderer) factory.newRenderer(getResourceContext(), null, JsonRepresentation.newMap());
         renderer.includesSelf();
 
         return responseOfOk(renderer, Caching.ONE_DAY).build();
@@ -57,7 +56,7 @@ public class HomePageResourceServerside extends ResourceAbstract implements Home
     @Override
     @GET
     @Path("/notAuthenticated")
-    @Produces({ MediaType.APPLICATION_JSON } )
+    @Produces({ MediaType.APPLICATION_JSON })
     public Response notAuthenticated() {
 
         throw JsonApplicationException.create(HttpStatusCode.UNAUTHORIZED);

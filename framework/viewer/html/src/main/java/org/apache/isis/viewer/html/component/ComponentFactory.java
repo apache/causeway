@@ -25,7 +25,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.viewer.html.PathBuilder;
 
 public interface ComponentFactory extends PathBuilder {
-    
+
     Component createAddOption(String id, String id2);
 
     Block createBlock(String style, String description);
@@ -50,8 +50,7 @@ public interface ComponentFactory extends PathBuilder {
 
     Component createSubmenu(String menuName, Component[] items);
 
-    Component createMenuItem(String actionId, String name, String description, String reasonDisabled, ActionType type,
-        boolean hasParameters, String targetObjectId);
+    Component createMenuItem(String actionId, String name, String description, String reasonDisabled, ActionType type, boolean hasParameters, String targetObjectId);
 
     Component createCollectionIcon(ObjectAdapter object, String collectionId);
 

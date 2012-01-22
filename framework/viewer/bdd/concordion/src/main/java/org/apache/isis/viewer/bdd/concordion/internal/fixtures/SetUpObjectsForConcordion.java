@@ -27,15 +27,11 @@ import org.apache.isis.viewer.bdd.common.fixtures.SetUpObjectsPeer;
 
 public class SetUpObjectsForConcordion extends AbstractFixture<SetUpObjectsPeer> {
 
-    public SetUpObjectsForConcordion(final AliasRegistry aliasesRegistry, final String className,
-        final SetUpObjectsPeer.Mode mode) {
-        this(aliasesRegistry, className, mode, CellBindingDefault
-            .builder(IsisViewerConstants.ALIAS_RESULT_NAME, IsisViewerConstants.ALIAS_RESULT_HEAD_SET).autoCreate()
-            .build());
+    public SetUpObjectsForConcordion(final AliasRegistry aliasesRegistry, final String className, final SetUpObjectsPeer.Mode mode) {
+        this(aliasesRegistry, className, mode, CellBindingDefault.builder(IsisViewerConstants.ALIAS_RESULT_NAME, IsisViewerConstants.ALIAS_RESULT_HEAD_SET).autoCreate().build());
     }
 
-    private SetUpObjectsForConcordion(final AliasRegistry storyFixture, final String className,
-        final SetUpObjectsPeer.Mode mode, final CellBinding aliasBinding) {
+    private SetUpObjectsForConcordion(final AliasRegistry storyFixture, final String className, final SetUpObjectsPeer.Mode mode, final CellBinding aliasBinding) {
         super(new SetUpObjectsPeer(storyFixture, className, mode, aliasBinding));
     }
 

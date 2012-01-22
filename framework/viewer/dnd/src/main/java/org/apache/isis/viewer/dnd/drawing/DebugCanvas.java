@@ -56,8 +56,7 @@ public class DebugCanvas implements Canvas {
     }
 
     @Override
-    public void draw3DRectangle(final int x, final int y, final int width, final int height, final Color color,
-        final boolean raised) {
+    public void draw3DRectangle(final int x, final int y, final int width, final int height, final Color color, final boolean raised) {
         indent();
         buffer.appendln("Rectangle (3D) " + x + "," + y + " " + width + "x" + height);
     }
@@ -83,8 +82,7 @@ public class DebugCanvas implements Canvas {
     @Override
     public void drawLine(final Location start, final int xExtent, final int yExtent, final Color color) {
         indent();
-        buffer.appendln("Line from " + start.getX() + "," + start.getY() + " to " + (start.getX() + xExtent) + ","
-            + (start.getY() + yExtent) + " " + color);
+        buffer.appendln("Line from " + start.getX() + "," + start.getY() + " to " + (start.getX() + xExtent) + "," + (start.getY() + yExtent) + " " + color);
     }
 
     @Override
@@ -106,8 +104,7 @@ public class DebugCanvas implements Canvas {
     }
 
     @Override
-    public void drawRoundedRectangle(final int x, final int y, final int width, final int height, final int arcWidth,
-        final int arcHeight, final Color color) {
+    public void drawRoundedRectangle(final int x, final int y, final int width, final int height, final int arcWidth, final int arcHeight, final Color color) {
         indent();
         buffer.appendln("Rounded Rectangle " + x + "," + y + " " + (x + width) + "x" + (y + height) + " " + color);
     }
@@ -130,28 +127,32 @@ public class DebugCanvas implements Canvas {
         buffer.appendln("Oval (solid) " + x + "," + y + " " + width + "x" + height + " " + color);
     }
 
+    @Override
     public void drawSolidRectangle(final int x, final int y, final int width, final int height, final Color color) {
         indent();
         buffer.appendln("Rectangle (solid) " + x + "," + y + " " + width + "x" + height + " " + color);
     }
 
+    @Override
     public void drawSolidShape(final Shape shape, final Color color) {
         indent();
         buffer.appendln("Shape (solid) " + shape + " " + color);
     }
 
+    @Override
     public void drawSolidShape(final Shape shape, final int x, final int y, final Color color) {
         indent();
         buffer.appendln("Shape (solid)" + shape + " at " + x + "/" + y + " (left, top)" + " " + color);
     }
 
+    @Override
     public void drawText(final String text, final int x, final int y, final Color color, final Text style) {
         indent();
         buffer.appendln("Text " + x + "," + y + " \"" + text + "\" " + style + " " + color);
     }
 
-    public void drawText(final String text, final int x, final int y, final int maxWidth, final Color color,
-        final Text style) {
+    @Override
+    public void drawText(final String text, final int x, final int y, final int maxWidth, final Color color, final Text style) {
         indent();
         buffer.appendln("Text " + x + "," + y + " +" + maxWidth + "xh \"" + text + "\" " + style + " " + color);
     }
@@ -163,11 +164,13 @@ public class DebugCanvas implements Canvas {
         }
     }
 
+    @Override
     public void offset(final int x, final int y) {
         indent();
         buffer.appendln("Offset by " + x + "/" + y + " (left, top)");
     }
 
+    @Override
     public boolean overlaps(final Bounds bounds) {
         return true;
     }
@@ -177,6 +180,7 @@ public class DebugCanvas implements Canvas {
         return "Canvas";
     }
 
+    @Override
     public void drawDebugOutline(final Bounds bounds, final int baseline, final Color color) {
     }
 

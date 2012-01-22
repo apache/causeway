@@ -67,8 +67,7 @@ public abstract class SplitViewSpecification extends CompositeViewSpecification 
         final ObjectSpecification spec = content.getSpecification();
         final ObjectAdapter target = content.getAdapter();
         final AuthenticationSession session = IsisContext.getAuthenticationSession();
-        final List<ObjectAssociation> fields =
-            spec.getAssociations(ObjectAssociationFilters.dynamicallyVisible(session, target));
+        final List<ObjectAssociation> fields = spec.getAssociations(ObjectAssociationFilters.dynamicallyVisible(session, target));
         final List<ObjectAssociation> selectableFields = new ArrayList<ObjectAssociation>();
         for (final ObjectAssociation field : fields) {
             if (validField(field)) {

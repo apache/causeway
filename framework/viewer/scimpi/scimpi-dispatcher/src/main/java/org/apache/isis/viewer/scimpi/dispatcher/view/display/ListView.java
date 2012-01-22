@@ -44,15 +44,13 @@ public class ListView extends AbstractObjectProcessor {
         final String linkObjectScope = request.getOptionalProperty(SCOPE, Scope.INTERACTION.toString());
         LinkedObject linkedRow = null;
         if (linkRowView != null) {
-            linkedRow =
-                new LinkedObject(linkObjectName, linkObjectScope, request.getContext().fullUriPath(linkRowView));
+            linkedRow = new LinkedObject(linkObjectName, linkObjectScope, request.getContext().fullUriPath(linkRowView));
         }
         final String bulletType = request.getOptionalProperty("type");
         write(request, object, linkedRow, bulletType);
     }
 
-    public static void write(final Request request, final ObjectAdapter collection, final LinkedObject linkRow,
-        final String bulletType) {
+    public static void write(final Request request, final ObjectAdapter collection, final LinkedObject linkRow, final String bulletType) {
 
         if (bulletType == null) {
             request.appendHtml("<ol>");
@@ -69,8 +67,7 @@ public class ListView extends AbstractObjectProcessor {
             if (linkRow != null) {
                 final Scope scope = linkRow == null ? Scope.INTERACTION : RequestContext.scope(linkRow.getScope());
                 final String rowId = request.getContext().mapObject(element, scope);
-                request.appendHtml("<a class=\"item-select\" href=\"" + linkRow.getForwardView() + "?"
-                    + linkRow.getVariable() + "=" + rowId + "\">");
+                request.appendHtml("<a class=\"item-select\" href=\"" + linkRow.getForwardView() + "?" + linkRow.getVariable() + "=" + rowId + "\">");
             }
             request.appendAsHtmlEncoded(element.titleString());
             if (linkRow != null) {

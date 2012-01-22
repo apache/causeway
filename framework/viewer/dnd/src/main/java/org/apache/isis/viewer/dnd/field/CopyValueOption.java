@@ -40,7 +40,8 @@ public class CopyValueOption extends AbstractValueOption {
         }
         // TODO: move logic into Facets
         return Allow.DEFAULT;
-        // return new Allow(String.format("Copy value '%s' to clipboard", field.getSelectedText()));
+        // return new Allow(String.format("Copy value '%s' to clipboard",
+        // field.getSelectedText()));
     }
 
     @Override

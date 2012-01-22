@@ -37,26 +37,22 @@ import com.google.common.collect.Lists;
 public class JsonApplicationExceptionMapper implements ExceptionMapper<JsonApplicationException> {
 
     @Override
-    public Response toResponse(JsonApplicationException ex) {
-        ResponseBuilder builder = 
-                Response.status(ex.getHttpStatusCode().getJaxrsStatusType())
-                .type(RestfulMediaType.APPLICATION_JSON_ERROR)
-                .entity(jsonFor(ex));
-        String message = ex.getMessage();
-        if(message != null) {
+    public Response toResponse(final JsonApplicationException ex) {
+        final ResponseBuilder builder = Response.status(ex.getHttpStatusCode().getJaxrsStatusType()).type(RestfulMediaType.APPLICATION_JSON_ERROR).entity(jsonFor(ex));
+        final String message = ex.getMessage();
+        if (message != null) {
             builder.header(RestfulResponse.Header.WARNING.getName(), message);
         }
         return builder.build();
     }
 
-
     private static class ExceptionPojo {
 
-        public static ExceptionPojo create(Exception ex) {
+        public static ExceptionPojo create(final Exception ex) {
             return new ExceptionPojo(ex);
         }
 
-        private static String format(StackTraceElement stackTraceElement) {
+        private static String format(final StackTraceElement stackTraceElement) {
             return stackTraceElement.toString();
         }
 
@@ -65,57 +61,57 @@ public class JsonApplicationExceptionMapper implements ExceptionMapper<JsonAppli
         private final List<String> stackTrace = Lists.newArrayList();
         private ExceptionPojo causedBy;
 
-        public ExceptionPojo(Throwable ex) {
+        public ExceptionPojo(final Throwable ex) {
             httpStatusCode = getHttpStatusCodeIfAny(ex);
             this.message = ex.getMessage();
-            StackTraceElement[] stackTraceElements = ex.getStackTrace();
-            for (StackTraceElement stackTraceElement : stackTraceElements) {
+            final StackTraceElement[] stackTraceElements = ex.getStackTrace();
+            for (final StackTraceElement stackTraceElement : stackTraceElements) {
                 this.stackTrace.add(format(stackTraceElement));
             }
-            Throwable cause = ex.getCause();
-            if(cause != null && cause != ex) {
+            final Throwable cause = ex.getCause();
+            if (cause != null && cause != ex) {
                 this.causedBy = new ExceptionPojo(cause);
             }
         }
 
-        private int getHttpStatusCodeIfAny(Throwable ex) {
-            if(!(ex instanceof HasHttpStatusCode)) {
+        private int getHttpStatusCodeIfAny(final Throwable ex) {
+            if (!(ex instanceof HasHttpStatusCode)) {
                 return 0;
-            } 
-            HasHttpStatusCode hasHttpStatusCode = (HasHttpStatusCode) ex;
+            }
+            final HasHttpStatusCode hasHttpStatusCode = (HasHttpStatusCode) ex;
             return hasHttpStatusCode.getHttpStatusCode().getStatusCode();
         }
-        
+
         @SuppressWarnings("unused")
         public int getHttpStatusCode() {
             return httpStatusCode;
         }
-        
+
         @SuppressWarnings("unused")
         public String getMessage() {
             return message;
         }
-        
+
         @SuppressWarnings("unused")
         public List<String> getStackTrace() {
             return stackTrace;
         }
-        
+
         @SuppressWarnings("unused")
         public ExceptionPojo getCausedBy() {
             return causedBy;
         }
 
     }
-    
-    static String jsonFor(JsonApplicationException ex) {
+
+    static String jsonFor(final JsonApplicationException ex) {
         final JsonRepresentation jsonRepresentation = ex.getJsonRepresentation();
-        if(jsonRepresentation != null) {
+        if (jsonRepresentation != null) {
             return jsonRepresentation.toString();
         }
         try {
             return JsonMapper.instance().write(ExceptionPojo.create(ex));
-        } catch (Exception e) {
+        } catch (final Exception e) {
             // fallback
             return "{ \"exception\": \"" + ExceptionUtils.getFullStackTrace(ex) + "\" }";
         }

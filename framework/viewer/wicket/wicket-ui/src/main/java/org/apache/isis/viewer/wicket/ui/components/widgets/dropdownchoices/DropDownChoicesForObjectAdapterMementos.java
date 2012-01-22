@@ -58,14 +58,11 @@ public class DropDownChoicesForObjectAdapterMementos extends DropDownChoice<Obje
 
     private static final long serialVersionUID = 1L;
 
-    public DropDownChoicesForObjectAdapterMementos(final String id, final IModel<ObjectAdapterMemento> model,
-        final IModel<? extends List<? extends ObjectAdapterMemento>> choices) {
+    public DropDownChoicesForObjectAdapterMementos(final String id, final IModel<ObjectAdapterMemento> model, final IModel<? extends List<? extends ObjectAdapterMemento>> choices) {
         this(id, model, choices, new ObjectAdapterMementoRenderer());
     }
 
-    private DropDownChoicesForObjectAdapterMementos(final String id, final IModel<ObjectAdapterMemento> model,
-        final IModel<? extends List<? extends ObjectAdapterMemento>> choices,
-        final IChoiceRenderer<? super ObjectAdapterMemento> renderer) {
+    private DropDownChoicesForObjectAdapterMementos(final String id, final IModel<ObjectAdapterMemento> model, final IModel<? extends List<? extends ObjectAdapterMemento>> choices, final IChoiceRenderer<? super ObjectAdapterMemento> renderer) {
         super(id, model, choices, renderer);
     }
 

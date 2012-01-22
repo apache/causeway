@@ -22,7 +22,7 @@ import org.codehaus.jackson.JsonNode;
 
 public class ActionParameterDescriptionRepresentation extends AbstractTypeMemberRepresentation {
 
-    public ActionParameterDescriptionRepresentation(JsonNode jsonNode) {
+    public ActionParameterDescriptionRepresentation(final JsonNode jsonNode) {
         super(jsonNode);
     }
 

@@ -33,8 +33,7 @@ public class SummaryFormSpecification extends AbstractFormSpecification {
 
     @Override
     public boolean canDisplay(final ViewRequirement requirement) {
-        return requirement.isObject() && !requirement.isTextParseable() && requirement.hasReference()
-            && requirement.isOpen() && requirement.isSubview() && requirement.isFixed();
+        return requirement.isObject() && !requirement.isTextParseable() && requirement.hasReference() && requirement.isOpen() && requirement.isSubview() && requirement.isFixed();
     }
 
     @Override

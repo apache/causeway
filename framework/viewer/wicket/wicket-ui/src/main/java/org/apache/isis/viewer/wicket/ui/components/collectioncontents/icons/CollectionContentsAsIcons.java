@@ -29,8 +29,8 @@ import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.wicket.markup.repeater.RepeatingView;
 
 /**
- * {@link PanelAbstract Panel} that represents a {@link EntityCollectionModel collection of entity}s rendered using a
- * simple list of icons.
+ * {@link PanelAbstract Panel} that represents a {@link EntityCollectionModel
+ * collection of entity}s rendered using a simple list of icons.
  */
 public class CollectionContentsAsIcons extends PanelAbstract<EntityCollectionModel> {
 

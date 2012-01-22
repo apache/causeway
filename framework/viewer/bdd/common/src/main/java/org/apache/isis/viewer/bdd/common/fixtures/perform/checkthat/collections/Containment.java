@@ -36,8 +36,7 @@ public class Containment extends ThatAbstract {
     }
 
     @Override
-    protected void doThat(final PerformContext performContext, final Iterable<ObjectAdapter> collection)
-        throws ScenarioBoundValueException {
+    protected void doThat(final PerformContext performContext, final Iterable<ObjectAdapter> collection) throws ScenarioBoundValueException {
 
         final ObjectMember nakedObjectMember = performContext.getObjectMember();
         final CellBinding thatBinding = performContext.getPeer().getThatItBinding();
@@ -49,8 +48,7 @@ public class Containment extends ThatAbstract {
 
         final ScenarioCell arg0Cell = arg0Binding.getCurrentCell();
 
-        final ObjectAdapter containedAdapter =
-            performContext.getPeer().getAdapter(null, nakedObjectMember.getSpecification(), arg0Binding, arg0Cell);
+        final ObjectAdapter containedAdapter = performContext.getPeer().getAdapter(null, nakedObjectMember.getSpecification(), arg0Binding, arg0Cell);
 
         boolean contains = false;
         for (final ObjectAdapter eachAdapter : collection) {

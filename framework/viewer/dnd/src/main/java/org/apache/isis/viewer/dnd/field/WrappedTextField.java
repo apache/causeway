@@ -34,8 +34,7 @@ import org.apache.log4j.Logger;
 public class WrappedTextField extends TextField {
     private static final Logger LOG = Logger.getLogger(WrappedTextField.class);
 
-    public WrappedTextField(final TextParseableContent content, final ViewSpecification specification,
-        final boolean showLines) {
+    public WrappedTextField(final TextParseableContent content, final ViewSpecification specification, final boolean showLines) {
         super(content, specification, showLines, TextContent.WRAPPING);
     }
 
@@ -79,8 +78,7 @@ public class WrappedTextField extends TextField {
                     end = style.stringWidth(line.substring(0, at));
                 }
 
-                canvas.drawSolidRectangle(start + (HPADDING), top, end - start, getText().getLineHeight(),
-                    Toolkit.getColor(ColorsAndFonts.COLOR_TEXT_HIGHLIGHT));
+                canvas.drawSolidRectangle(start + (HPADDING), top, end - start, getText().getLineHeight(), Toolkit.getColor(ColorsAndFonts.COLOR_TEXT_HIGHLIGHT));
             }
 
             top += getText().getLineHeight();
@@ -105,8 +103,7 @@ public class WrappedTextField extends TextField {
             if (hasFocus() && canChangeValue().isAllowed() && cursorLine == i) {
                 final int at = Math.min(cursor.getCharacter(), chars.length());
                 final int pos = style.stringWidth(chars.substring(0, at)) + HPADDING;
-                canvas.drawLine(pos, (baseline + style.getDescent()), pos, baseline - style.getAscent(),
-                    Toolkit.getColor(ColorsAndFonts.COLOR_TEXT_CURSOR));
+                canvas.drawLine(pos, (baseline + style.getDescent()), pos, baseline - style.getAscent(), Toolkit.getColor(ColorsAndFonts.COLOR_TEXT_CURSOR));
             }
 
             // draw text
@@ -114,8 +111,9 @@ public class WrappedTextField extends TextField {
             baseline += getText().getLineHeight();
         }
         /*
-         * if (end < entryLength) { int x = style.stringWidth(new String(buffer, start, end)); g.setColor(Color.red);
-         * g.drawString("\u00bb", x, baseline - lineHeight()); }
+         * if (end < entryLength) { int x = style.stringWidth(new String(buffer,
+         * start, end)); g.setColor(Color.red); g.drawString("\u00bb", x,
+         * baseline - lineHeight()); }
          */
     }
 

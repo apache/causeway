@@ -34,8 +34,7 @@ public class SimpleCollectionSorterTest extends TestCase {
     }
 
     public void testSortByTitle() {
-        final ObjectAdapter[] instances =
-            new ObjectAdapter[] { object("one"), object("two"), object("three"), object("four"), };
+        final ObjectAdapter[] instances = new ObjectAdapter[] { object("one"), object("two"), object("three"), object("four"), };
 
         final SimpleCollectionSorter sorter = new SimpleCollectionSorter();
         sorter.sort(instances, new TitleComparator(), CollectionSorter.NORMAL);
@@ -47,8 +46,7 @@ public class SimpleCollectionSorterTest extends TestCase {
     }
 
     public void testSortByTitleReversed() {
-        final ObjectAdapter[] instances =
-            new ObjectAdapter[] { object("one"), object("two"), object("three"), object("four"), };
+        final ObjectAdapter[] instances = new ObjectAdapter[] { object("one"), object("two"), object("three"), object("four"), };
 
         final SimpleCollectionSorter sorter = new SimpleCollectionSorter();
         sorter.sort(instances, new TitleComparator(), CollectionSorter.REVERSED);

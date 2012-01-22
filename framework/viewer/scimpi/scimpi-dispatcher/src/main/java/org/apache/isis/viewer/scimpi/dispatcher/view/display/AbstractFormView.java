@@ -53,9 +53,7 @@ public abstract class AbstractFormView extends AbstractObjectProcessor {
         request.processUtilCloseTag();
 
         if (object != null) {
-            final List<ObjectAssociation> fields =
-                tag.includedFields(object.getSpecification().getAssociations(
-                    ObjectAssociationFilters.STATICALLY_VISIBLE_ASSOCIATIONS));
+            final List<ObjectAssociation> fields = tag.includedFields(object.getSpecification().getAssociations(ObjectAssociationFilters.STATICALLY_VISIBLE_ASSOCIATIONS));
             final LinkedObject[] linkFields = tag.linkedFields(fields);
 
             String linkAllView = request.getOptionalProperty(LINK);
@@ -63,8 +61,7 @@ public abstract class AbstractFormView extends AbstractObjectProcessor {
                 linkAllView = request.getContext().fullUriPath(linkAllView);
                 for (int i = 0; i < linkFields.length; i++) {
                     final boolean isObject = fields.get(i).isOneToOneAssociation();
-                    final boolean isNotParseable =
-                        !fields.get(i).getSpecification().containsFacet(ParseableFacet.class);
+                    final boolean isNotParseable = !fields.get(i).getSpecification().containsFacet(ParseableFacet.class);
                     linkFields[i] = isObject && isNotParseable ? new LinkedObject(linkAllView) : null;
                 }
             }
@@ -80,16 +77,7 @@ public abstract class AbstractFormView extends AbstractObjectProcessor {
         request.popBlockContent();
     }
 
-    private void write(
-            final Request request,
-            final ObjectAdapter object,
-            final List<ObjectAssociation> fields,
-            final LinkedObject[] linkFields,
-            final String classString,
-            final String title,
-            final String oddRowClass,
-            final String evenRowClass,
-            final boolean showIcons) {
+    private void write(final Request request, final ObjectAdapter object, final List<ObjectAssociation> fields, final LinkedObject[] linkFields, final String classString, final String title, final String oddRowClass, final String evenRowClass, final boolean showIcons) {
         request.appendHtml("<div" + classString + ">");
         if (title != null) {
             request.appendHtml("<div class=\"title\">");
@@ -107,8 +95,7 @@ public abstract class AbstractFormView extends AbstractObjectProcessor {
                 continue;
             }
 
-            final String description =
-                field.getDescription().equals("") ? "" : "title=\"" + field.getDescription() + "\"";
+            final String description = field.getDescription().equals("") ? "" : "title=\"" + field.getDescription() + "\"";
             String cls;
             if (row++ % 2 == 1) {
                 cls = " class=\"field " + (oddRowClass == null ? ODD_ROW_CLASS : oddRowClass) + "\"";
@@ -126,12 +113,7 @@ public abstract class AbstractFormView extends AbstractObjectProcessor {
         request.appendHtml("</div>");
     }
 
-    protected void addField(
-            final Request request,
-            final ObjectAdapter object,
-            final ObjectAssociation field,
-            final LinkedObject linkedObject,
-            final boolean showIcons) {
+    protected void addField(final Request request, final ObjectAdapter object, final ObjectAssociation field, final LinkedObject linkedObject, final boolean showIcons) {
         FieldValue.write(request, object, field, linkedObject, null, showIcons, 0);
     }
 

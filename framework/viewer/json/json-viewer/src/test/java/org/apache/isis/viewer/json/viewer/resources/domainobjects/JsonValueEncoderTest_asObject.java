@@ -40,8 +40,8 @@ import org.junit.runner.RunWith;
 @RunWith(JMock.class)
 public class JsonValueEncoderTest_asObject {
 
-    private Mockery context = new JUnit4Mockery();
-    
+    private final Mockery context = new JUnit4Mockery();
+
     private JsonValueEncoder jsonValueEncoder;
     private JsonRepresentation representation;
     private ObjectAdapter objectAdapter;
@@ -54,7 +54,7 @@ public class JsonValueEncoderTest_asObject {
     public void setUp() throws Exception {
         objectAdapter = context.mock(ObjectAdapter.class);
         objectSpec = context.mock(ObjectSpecification.class);
-        
+
         context.checking(new Expectations() {
             {
                 allowing(objectAdapter).getSpecification();
@@ -62,18 +62,18 @@ public class JsonValueEncoderTest_asObject {
             }
         });
         encodableFacet = context.mock(EncodableFacet.class);
-        
+
         encoded = new Object();
-        
+
         jsonValueEncoder = new JsonValueEncoder();
     }
 
-    @Test(expected=IllegalArgumentException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void whenAdapterIsNull() throws Exception {
         jsonValueEncoder.asObject(null);
     }
 
-    @Test(expected=IllegalArgumentException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void whenObjectAdapterIsNotSpecialCaseAndSpecIsNotEncodable() throws Exception {
         allowingObjectSpecCorrespondingClassIs(String.class);
         allowingObjectSpecHas(EncodableFacet.class, null);
@@ -102,7 +102,6 @@ public class JsonValueEncoderTest_asObject {
         });
         assertEquals(true, jsonValueEncoder.asObject(objectAdapter));
     }
-
 
     @Test
     public void whenIntegerPrimitive() throws Exception {
@@ -205,7 +204,6 @@ public class JsonValueEncoderTest_asObject {
         assertEquals(value, jsonValueEncoder.asObject(objectAdapter));
     }
 
-    
     @Test
     public void whenString() throws Exception {
         allowingObjectSpecCorrespondingClassIs(String.class);
@@ -244,6 +242,5 @@ public class JsonValueEncoderTest_asObject {
             }
         });
     }
-
 
 }

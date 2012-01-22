@@ -41,8 +41,7 @@ public class Welcome implements Action {
         if (name == null) {
             name = AboutIsis.getFrameworkName();
         }
-        content.add(context.getComponentFactory().createInlineBlock("message",
-            "Welcome to " + name + ", accessed via the HTML Viewer", null));
+        content.add(context.getComponentFactory().createInlineBlock("message", "Welcome to " + name + ", accessed via the HTML Viewer", null));
     }
 
     @Override

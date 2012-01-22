@@ -25,24 +25,25 @@ public class DomainServiceLinkTo extends DomainObjectLinkTo {
     private String serviceId;
 
     @Override
-    public ObjectAdapterLinkTo with(ObjectAdapter objectAdapter) {
+    public ObjectAdapterLinkTo with(final ObjectAdapter objectAdapter) {
         serviceId = ServiceUtil.id(objectAdapter.getObject());
         return super.with(objectAdapter);
     }
-    
+
+    @Override
     protected String linkRef() {
-        StringBuilder buf = new StringBuilder("services/");
+        final StringBuilder buf = new StringBuilder("services/");
         buf.append(serviceId);
         return buf.toString();
     }
-    
+
     @Override
     protected Rel defaultRel() {
-         return Rel.SERVICE;
+        return Rel.SERVICE;
     }
-    
+
     @Override
-    public LinkBuilder builder(Rel rel) {
+    public LinkBuilder builder(final Rel rel) {
         return super.builder(rel).withId(serviceId);
     }
 

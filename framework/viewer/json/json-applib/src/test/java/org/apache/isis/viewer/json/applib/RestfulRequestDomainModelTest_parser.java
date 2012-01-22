@@ -29,7 +29,7 @@ public class RestfulRequestDomainModelTest_parser {
     @Test
     public void parser_roundtrips() {
         final Parser<DomainModel> parser = RestfulRequest.DomainModel.parser();
-        for (DomainModel domainModel : DomainModel.values()) {
+        for (final DomainModel domainModel : DomainModel.values()) {
             final String asString = parser.asString(domainModel);
             final DomainModel roundtripped = parser.valueOf(asString);
             assertSame(roundtripped, domainModel);

@@ -53,8 +53,10 @@ public class SetValueCommand implements Command {
         final Object obj = facet.fromEncodedString(oldValue);
         final ObjectAdapter adapter = getAdapterManager().adapterFor(obj);
         value.setAssociation(object, adapter);
-        // have commented this out because it isn't needed; the transaction manager will do this
-        // for us on endTransaction. Still, if I'm wrong and it is needed, hopefully this
+        // have commented this out because it isn't needed; the transaction
+        // manager will do this
+        // for us on endTransaction. Still, if I'm wrong and it is needed,
+        // hopefully this
         // comment will help...
         // IsisContext.getObjectPersistor().objectChangedAllDirty();
     }

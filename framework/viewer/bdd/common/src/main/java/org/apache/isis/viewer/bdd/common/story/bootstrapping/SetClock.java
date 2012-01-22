@@ -34,8 +34,7 @@ public class SetClock extends AbstractHelper {
         final FixtureClock clock = FixtureClock.initialize();
         final Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
-        clock.setDate(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 1,
-            calendar.get(Calendar.DAY_OF_MONTH));
+        clock.setDate(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.DAY_OF_MONTH));
         clock.setTime(calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE));
     }
 

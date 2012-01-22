@@ -20,9 +20,9 @@ package org.apache.isis.viewer.json.applib.domaintypes;
 
 import org.codehaus.jackson.JsonNode;
 
-public class PropertyDescriptionRepresentation extends AbstractTypeMemberRepresentation  {
+public class PropertyDescriptionRepresentation extends AbstractTypeMemberRepresentation {
 
-    public PropertyDescriptionRepresentation(JsonNode jsonNode) {
+    public PropertyDescriptionRepresentation(final JsonNode jsonNode) {
         super(jsonNode);
     }
 

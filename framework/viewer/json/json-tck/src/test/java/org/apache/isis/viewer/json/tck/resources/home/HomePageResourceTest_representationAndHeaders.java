@@ -55,20 +55,19 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-
 public class HomePageResourceTest_representationAndHeaders {
 
     @Rule
     public IsisWebServerRule webServerRule = new IsisWebServerRule();
-    
+
     private RestfulClient client;
     private HomePageResource resource;
 
     @Before
     public void setUp() throws Exception {
-        WebServer webServer = webServerRule.getWebServer();
+        final WebServer webServer = webServerRule.getWebServer();
         client = new RestfulClient(webServer.getBase());
-        
+
         resource = client.getHomePageResource();
     }
 
@@ -76,24 +75,24 @@ public class HomePageResourceTest_representationAndHeaders {
     public void representation() throws Exception {
 
         // given
-        Response resp = resource.homePage();
-        
+        final Response resp = resource.homePage();
+
         // when
-        RestfulResponse<HomePageRepresentation> restfulResponse = RestfulResponse.ofT(resp);
+        final RestfulResponse<HomePageRepresentation> restfulResponse = RestfulResponse.ofT(resp);
         assertThat(restfulResponse.getStatus().getFamily(), is(Family.SUCCESSFUL));
-        
+
         // then
         assertThat(restfulResponse.getStatus(), is(HttpStatusCode.OK));
-        
-        HomePageRepresentation repr = restfulResponse.getEntity();
+
+        final HomePageRepresentation repr = restfulResponse.getEntity();
         assertThat(repr, is(not(nullValue())));
         assertThat(repr, isMap());
-        
+
         assertThat(repr.getSelf(), isLink(client).httpMethod(HttpMethod.GET));
         assertThat(repr.getUser(), isLink(client).httpMethod(HttpMethod.GET));
         assertThat(repr.getServices(), isLink(client).httpMethod(HttpMethod.GET));
         assertThat(repr.getVersion(), isLink(client).httpMethod(HttpMethod.GET));
-        
+
         assertThat(repr.getLinks(), isArray());
         assertThat(repr.getExtensions(), isMap());
     }
@@ -101,37 +100,37 @@ public class HomePageResourceTest_representationAndHeaders {
     @Test
     public void headers() throws Exception {
         // given
-        Response resp = resource.homePage();
-        
+        final Response resp = resource.homePage();
+
         // when
-        RestfulResponse<HomePageRepresentation> restfulResponse = RestfulResponse.ofT(resp);
-        
+        final RestfulResponse<HomePageRepresentation> restfulResponse = RestfulResponse.ofT(resp);
+
         // then
         final MediaType contentType = restfulResponse.getHeader(Header.CONTENT_TYPE);
         assertThat(contentType, hasType("application"));
         assertThat(contentType, hasSubType("json"));
         assertThat(contentType, hasParameter("profile", "urn:org.restfulobjects/homepage"));
         assertThat(contentType, is(RepresentationType.HOME_PAGE.getMediaType()));
-        
+
         // then
         final CacheControl cacheControl = restfulResponse.getHeader(Header.CACHE_CONTROL);
-        assertThat(cacheControl, hasMaxAge(24*60*60));
-        assertThat(cacheControl.getMaxAge(), is(24*60*60));
+        assertThat(cacheControl, hasMaxAge(24 * 60 * 60));
+        assertThat(cacheControl.getMaxAge(), is(24 * 60 * 60));
     }
 
     @Test
     public void self_isFollowable() throws Exception {
         // given
-        HomePageRepresentation repr = givenRepresentation();
+        final HomePageRepresentation repr = givenRepresentation();
 
         // when, then
         assertThat(repr, isFollowableLinkToSelf(client));
     }
-    
+
     @Test
     public void links() throws Exception {
         // given
-        HomePageRepresentation repr = givenRepresentation();
+        final HomePageRepresentation repr = givenRepresentation();
 
         // when, then
         assertThat(repr.getServices(), isLink(client).returning(HttpStatusCode.OK));
@@ -140,11 +139,8 @@ public class HomePageResourceTest_representationAndHeaders {
     }
 
     private HomePageRepresentation givenRepresentation() throws JsonParseException, JsonMappingException, IOException {
-        RestfulResponse<HomePageRepresentation> response = RestfulResponse.ofT(resource.homePage());
+        final RestfulResponse<HomePageRepresentation> response = RestfulResponse.ofT(resource.homePage());
         return response.getEntity();
     }
 
 }
-
-
-    

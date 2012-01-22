@@ -21,13 +21,12 @@ package org.apache.isis.viewer.json.applib.domainobjects;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.codehaus.jackson.JsonNode;
 
-
 public class ScalarValueRepresentation extends DomainRepresentation {
 
-    public ScalarValueRepresentation(JsonNode jsonNode) {
+    public ScalarValueRepresentation(final JsonNode jsonNode) {
         super(jsonNode);
     }
-    
+
     public JsonRepresentation getValue() {
         return getRepresentation("value");
     }

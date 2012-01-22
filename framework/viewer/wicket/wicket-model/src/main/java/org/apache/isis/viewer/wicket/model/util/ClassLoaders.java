@@ -33,9 +33,7 @@ public final class ClassLoaders {
 
     static {
         @SuppressWarnings("unchecked")
-        final List<Class> primitiveClasses =
-            Arrays.<Class> asList(boolean.class, byte.class, short.class, int.class, long.class, float.class,
-                double.class, char.class);
+        final List<Class> primitiveClasses = Arrays.<Class> asList(boolean.class, byte.class, short.class, int.class, long.class, float.class, double.class, char.class);
         for (final Class<?> cls : primitiveClasses) {
             primitives.put(cls.getName(), cls);
         }

@@ -83,7 +83,9 @@ public class IsisTestRunner extends JUnit4ClassRunner {
         final Description description = methodDescription(method);
 
         final IsisConfigurationBuilder isisConfigurationBuilder = new IsisConfigurationBuilderDefault(configDirIfAny);
-        isisConfigurationBuilder.add(SystemConstants.NOSPLASH_KEY, "" + true); // switch off splash
+        isisConfigurationBuilder.add(SystemConstants.NOSPLASH_KEY, "" + true); // switch
+                                                                               // off
+                                                                               // splash
 
         final InstallerLookupDefault installerLookup = new InstallerLookupDefault();
         isisConfigurationBuilder.injectInto(installerLookup);
@@ -92,7 +94,8 @@ public class IsisTestRunner extends JUnit4ClassRunner {
         IsisSystemUsingInstallersWithinJunit system = null;
         AuthenticationSession session = null;
         try {
-            // init the system; cf similar code in Isis and IsisServletContextInitializer
+            // init the system; cf similar code in Isis and
+            // IsisServletContextInitializer
             final DeploymentType deploymentType = DeploymentType.PROTOTYPE;
 
             // TODO: replace with regular IsisSystem and remove this subclass.

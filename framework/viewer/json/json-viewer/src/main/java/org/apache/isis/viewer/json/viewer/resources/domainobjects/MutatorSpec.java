@@ -22,11 +22,11 @@ import org.apache.isis.viewer.json.applib.links.Rel;
 
 public class MutatorSpec {
 
-    public static MutatorSpec of(Rel rel, Class<? extends Facet> validationFacetType, Class<? extends Facet> mutatorFacetType, HttpMethod httpMethod, BodyArgs argSpec) {
+    public static MutatorSpec of(final Rel rel, final Class<? extends Facet> validationFacetType, final Class<? extends Facet> mutatorFacetType, final HttpMethod httpMethod, final BodyArgs argSpec) {
         return of(rel, validationFacetType, mutatorFacetType, httpMethod, argSpec, null);
     }
 
-    public static MutatorSpec of(Rel rel, Class<? extends Facet> validationFacetType, Class<? extends Facet> mutatorFacetType, HttpMethod httpMethod, BodyArgs argSpec, String suffix) {
+    public static MutatorSpec of(final Rel rel, final Class<? extends Facet> validationFacetType, final Class<? extends Facet> mutatorFacetType, final HttpMethod httpMethod, final BodyArgs argSpec, final String suffix) {
         return new MutatorSpec(rel, validationFacetType, mutatorFacetType, httpMethod, argSpec, suffix);
     }
 
@@ -37,7 +37,7 @@ public class MutatorSpec {
     public final String suffix;
     public final BodyArgs arguments;
 
-    private MutatorSpec(Rel rel, Class<? extends Facet> validationFacetType, Class<? extends Facet> mutatorFacetType, HttpMethod httpMethod, BodyArgs bodyArgs, String suffix) {
+    private MutatorSpec(final Rel rel, final Class<? extends Facet> validationFacetType, final Class<? extends Facet> mutatorFacetType, final HttpMethod httpMethod, final BodyArgs bodyArgs, final String suffix) {
         this.rel = rel;
         this.validationFacetType = validationFacetType;
         this.mutatorFacetType = mutatorFacetType;

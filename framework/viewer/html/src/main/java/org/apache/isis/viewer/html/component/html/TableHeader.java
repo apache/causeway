@@ -27,7 +27,7 @@ import org.apache.isis.viewer.html.component.ComponentComposite;
 
 class TableHeader extends ComponentComposite {
 
-    public TableHeader(PathBuilder pathBuilder) {
+    public TableHeader(final PathBuilder pathBuilder) {
         super(pathBuilder);
     }
 

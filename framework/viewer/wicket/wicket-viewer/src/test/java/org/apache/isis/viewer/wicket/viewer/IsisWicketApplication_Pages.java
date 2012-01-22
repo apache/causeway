@@ -30,10 +30,8 @@ import org.apache.isis.viewer.wicket.ui.pages.home.HomePage;
 import org.apache.wicket.Page;
 import org.apache.wicket.markup.html.WebPage;
 import org.jmock.Expectations;
-import org.jmock.integration.junit4.JMock;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
 public class IsisWicketApplication_Pages {
 

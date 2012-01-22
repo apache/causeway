@@ -24,8 +24,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
-
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.commons.exceptions.IsisApplicationException;
@@ -68,14 +66,14 @@ import org.apache.isis.viewer.html.request.Request;
 import org.apache.isis.viewer.html.task.InvokeMethod;
 import org.apache.isis.viewer.html.task.TaskLookupException;
 import org.apache.isis.viewer.html.task.TaskStep;
+import org.apache.log4j.Logger;
 
 public class WebController {
 
     private static final Logger LOG = Logger.getLogger(WebController.class);
     private static final Logger ACCESS_LOG = Logger.getLogger("access_log");
 
-    private static final String ERROR_REASON = "This error occurs when you go back to a page "
-        + "using the browsers back button.  To avoid this error in the future please avoid using the back button";
+    private static final String ERROR_REASON = "This error occurs when you go back to a page " + "using the browsers back button.  To avoid this error in the future please avoid using the back button";
 
     protected class DebugView implements Action {
         public DebugView() {
@@ -212,7 +210,7 @@ public class WebController {
     private boolean isDebug;
     private final PathBuilder pathBuilder;
 
-    public WebController(PathBuilder pathBuilder) {
+    public WebController(final PathBuilder pathBuilder) {
         this.pathBuilder = pathBuilder;
     }
 
@@ -286,7 +284,8 @@ public class WebController {
         runAction(context, request, page);
         addCrumbs(context, page);
 
-        // The web viewer has no views of other objects, so changes can be ignored
+        // The web viewer has no views of other objects, so changes can be
+        // ignored
         if (IsisContext.inSession() && IsisContext.inTransaction()) {
             IsisContext.getUpdateNotifier().clear();
         }
@@ -316,7 +315,8 @@ public class WebController {
         addAction(new AddItemToCollection());
         addAction(new ChangeContext());
 
-        // TODO allow these to be exclude by configuration so they cannot be run in a real system
+        // TODO allow these to be exclude by configuration so they cannot be run
+        // in a real system
         addAction(new DebugOn(this));
         addAction(new DebugOff(this));
 
@@ -351,8 +351,7 @@ public class WebController {
         navigationBar.add(taskBar);
     }
 
-    private Component createServiceComponent(final Context context, final String serviceMapId,
-        final ObjectAdapter serviceNO) {
+    private Component createServiceComponent(final Context context, final String serviceMapId, final ObjectAdapter serviceNO) {
         final String serviceName = serviceNO.titleString();
         final String serviceIcon = serviceNO.getIconName();
         return context.getComponentFactory().createService(serviceMapId, serviceName, serviceIcon);
@@ -381,12 +380,10 @@ public class WebController {
                 try {
                     action.execute(r, context, page);
                 } catch (final ObjectLookupException e) {
-                    final String error =
-                        "The object/service you selected has timed out.  Please navigate to the object via the history bar.";
+                    final String error = "The object/service you selected has timed out.  Please navigate to the object via the history bar.";
                     displayError(context, page, error);
                 } catch (final TaskLookupException e) {
-                    final String error =
-                        "The task you went back to has already been completed or cancelled.  Please start the task again.";
+                    final String error = "The task you went back to has already been completed or cancelled.  Please start the task again.";
                     displayError(context, page, error);
                 }
                 r = r.getForward();

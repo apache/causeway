@@ -86,19 +86,16 @@ public class ConfigurableFieldBorder extends AbstractBorder {
                 if (wrappedView instanceof LabelBorder) {
                     wrappedView = ((LabelBorder) wrappedView).getWrapped();
                 } else {
-                    wrappedView =
-                        LabelBorder.createFieldLabelBorder(view.getParent().getViewAxes().getAxis(LabelAxis.class),
-                            wrappedView);
+                    wrappedView = LabelBorder.createFieldLabelBorder(view.getParent().getViewAxes().getAxis(LabelAxis.class), wrappedView);
                 }
                 wrappedView.setView(ConfigurableFieldBorder.this);
                 getView().invalidateLayout();
             }
         });
 
-        replaceOptions(
-            Toolkit.getViewFactory().availableViews(
-                new ViewRequirement(getContent(), ViewRequirement.OPEN | ViewRequirement.CLOSED
-                    | ViewRequirement.SUBVIEW)), menuOptions); // openSubviews(content, this), options);
+        replaceOptions(Toolkit.getViewFactory().availableViews(new ViewRequirement(getContent(), ViewRequirement.OPEN | ViewRequirement.CLOSED | ViewRequirement.SUBVIEW)), menuOptions); // openSubviews(content,
+                                                                                                                                                                                          // this),
+                                                                                                                                                                                          // options);
 
     }
 
@@ -114,9 +111,7 @@ public class ConfigurableFieldBorder extends AbstractBorder {
                         @Override
                         protected void replace(final View view, final View withReplacement) {
                             final View parent = wrappedView.getParent();
-                            wrappedView =
-                                LabelBorder.createFieldLabelBorder(
-                                    view.getParent().getViewAxes().getAxis(LabelAxis.class), withReplacement);
+                            wrappedView = LabelBorder.createFieldLabelBorder(view.getParent().getViewAxes().getAxis(LabelAxis.class), withReplacement);
                             wrappedView.setParent(parent);
                             wrappedView.setView(ConfigurableFieldBorder.this);
                             invalidateLayout();
@@ -137,8 +132,7 @@ public class ConfigurableFieldBorder extends AbstractBorder {
             final Size s = getSize();
             final int xExtent = s.getWidth();
             if (state.isViewIdentified()) {
-                canvas.drawSolidRectangle(xExtent - BORDER + 1, top, BORDER - 2, s.getHeight() - 2 * top,
-                    Toolkit.getColor(ColorsAndFonts.COLOR_SECONDARY3));
+                canvas.drawSolidRectangle(xExtent - BORDER + 1, top, BORDER - 2, s.getHeight() - 2 * top, Toolkit.getColor(ColorsAndFonts.COLOR_SECONDARY3));
             }
         }
     }

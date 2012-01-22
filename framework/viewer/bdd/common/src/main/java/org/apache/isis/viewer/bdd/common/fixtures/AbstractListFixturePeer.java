@@ -38,8 +38,7 @@ public class AbstractListFixturePeer extends AbstractFixturePeer {
      */
     private List<ObjectAdapter> objects;
 
-    public AbstractListFixturePeer(final AliasRegistry aliasesRegistry, final String listAlias,
-        final CellBinding... cellBindings) {
+    public AbstractListFixturePeer(final AliasRegistry aliasesRegistry, final String listAlias, final CellBinding... cellBindings) {
         super(aliasesRegistry, cellBindings);
 
         this.listAlias = listAlias;

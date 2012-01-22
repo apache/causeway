@@ -44,7 +44,8 @@ class IconOpenAction extends AbstractViewDecorator {
             @Override
             public void execute(final Workspace workspace, final View view, final Location at) {
                 getView().dispose();
-                // getWorkspace().removeObject((ObjectAdapter) view.getContent().getAdapter());
+                // getWorkspace().removeObject((ObjectAdapter)
+                // view.getContent().getAdapter());
             }
         });
     }

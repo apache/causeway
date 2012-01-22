@@ -29,46 +29,45 @@ import org.apache.isis.viewer.json.viewer.representations.LinkFollower;
 import org.apache.isis.viewer.json.viewer.representations.ReprRendererAbstract;
 import org.codehaus.jackson.node.NullNode;
 
-public abstract class AbstractObjectMemberReprRenderer<R extends ReprRendererAbstract<R, ObjectAndMember<T>>, T extends ObjectMember> 
-        extends ReprRendererAbstract<R, ObjectAndMember<T>> {
+public abstract class AbstractObjectMemberReprRenderer<R extends ReprRendererAbstract<R, ObjectAndMember<T>>, T extends ObjectMember> extends ReprRendererAbstract<R, ObjectAndMember<T>> {
 
     protected enum Mode {
-        INLINE,
-        FOLLOWED,
-        STANDALONE,
-        MUTATED,
-        ARGUMENTS;
+        INLINE, FOLLOWED, STANDALONE, MUTATED, ARGUMENTS;
 
         public boolean isInline() {
             return this == INLINE;
         }
+
         public boolean isFollowed() {
             return this == FOLLOWED;
         }
+
         public boolean isStandalone() {
             return this == STANDALONE;
         }
+
         public boolean isMutated() {
             return this == MUTATED;
         }
+
         public boolean isArguments() {
             return this == ARGUMENTS;
         }
     }
-    
+
     protected ObjectAdapterLinkTo linkTo;
-    
+
     protected ObjectAdapter objectAdapter;
     protected MemberType memberType;
     protected T objectMember;
     protected Mode mode = Mode.INLINE; // unless we determine otherwise
 
-    public AbstractObjectMemberReprRenderer(ResourceContext resourceContext, LinkFollower linkFollower, RepresentationType representationType, JsonRepresentation representation) {
+    public AbstractObjectMemberReprRenderer(final ResourceContext resourceContext, final LinkFollower linkFollower, final RepresentationType representationType, final JsonRepresentation representation) {
         super(resourceContext, linkFollower, representationType, representation);
     }
-    
+
     @Override
-    public R with(ObjectAndMember<T> objectAndMember) {
+    public R with(final ObjectAndMember<T> objectAndMember) {
         this.objectAdapter = objectAndMember.getObjectAdapter();
         this.objectMember = objectAndMember.getMember();
         this.memberType = MemberType.determineFrom(objectMember);
@@ -82,16 +81,16 @@ public abstract class AbstractObjectMemberReprRenderer<R extends ReprRendererAbs
     }
 
     /**
-     * Must be called after {@link #with(ObjectAndMember)} (which provides the {@link #objectAdapter}).
+     * Must be called after {@link #with(ObjectAndMember)} (which provides the
+     * {@link #objectAdapter}).
      */
-    public R usingLinkTo(ObjectAdapterLinkTo linkTo) {
+    public R usingLinkTo(final ObjectAdapterLinkTo linkTo) {
         this.linkTo = linkTo.usingResourceContext(resourceContext).with(objectAdapter);
         return cast(this);
     }
 
-
     /**
-     * Indicate that this is a standalone representation. 
+     * Indicate that this is a standalone representation.
      */
     public R asStandalone() {
         mode = Mode.STANDALONE;
@@ -99,7 +98,8 @@ public abstract class AbstractObjectMemberReprRenderer<R extends ReprRendererAbs
     }
 
     /**
-     * Indicate that this is a representation to include as the result of a followed link. 
+     * Indicate that this is a representation to include as the result of a
+     * followed link.
      */
     public R asFollowed() {
         mode = Mode.FOLLOWED;
@@ -117,7 +117,7 @@ public abstract class AbstractObjectMemberReprRenderer<R extends ReprRendererAbs
         mode = Mode.MUTATED;
         return cast(this);
     }
-    
+
     public R asArguments() {
         mode = Mode.ARGUMENTS;
         return cast(this);
@@ -127,11 +127,11 @@ public abstract class AbstractObjectMemberReprRenderer<R extends ReprRendererAbs
      * For subclasses to call from their {@link #render()} method.
      */
     protected void renderMemberContent() {
-        if(mode.isInline()) {
+        if (mode.isInline()) {
             addDetailsLinkIfPersistent();
-        } 
-        
-        if (mode.isStandalone()){
+        }
+
+        if (mode.isStandalone()) {
             addLinkToSelf();
         }
 
@@ -139,15 +139,14 @@ public abstract class AbstractObjectMemberReprRenderer<R extends ReprRendererAbs
             addLinkToUp();
         }
 
-        if (mode.isFollowed() || mode.isStandalone() || mode.isMutated()){
+        if (mode.isFollowed() || mode.isStandalone() || mode.isMutated()) {
             addMutatorsIfEnabled();
-            
+
             putExtensionsIsisProprietary();
             addLinksToFormalDomainModel();
             addLinksIsisProprietary();
         }
     }
-    
 
     private void addLinkToSelf() {
         getLinks().arrayAdd(linkTo.memberBuilder(Rel.SELF, memberType, objectMember).build());
@@ -156,61 +155,59 @@ public abstract class AbstractObjectMemberReprRenderer<R extends ReprRendererAbs
     private void addLinkToUp() {
         getLinks().arrayAdd(linkTo.builder(Rel.UP).build());
     }
-    
+
     protected abstract void addMutatorsIfEnabled();
-    
+
     /**
-     * For subclasses to call back to when {@link #addMutatorsIfEnabled() adding mutators}.
+     * For subclasses to call back to when {@link #addMutatorsIfEnabled() adding
+     * mutators}.
      */
     protected void addLinkFor(final MutatorSpec mutatorSpec) {
-        if(!hasMemberFacet(mutatorSpec.mutatorFacetType)) {
+        if (!hasMemberFacet(mutatorSpec.mutatorFacetType)) {
             return;
-        } 
-        JsonRepresentation arguments = mutatorArgs(mutatorSpec);
-        RepresentationType representationType = memberType.getRepresentationType();
-        JsonRepresentation mutatorLink = 
-                linkToForMutatorInvoke().memberBuilder(mutatorSpec.rel, memberType, objectMember, representationType, mutatorSpec.suffix)
-                .withHttpMethod(mutatorSpec.httpMethod)
-                .withArguments(arguments)
-                .build();
+        }
+        final JsonRepresentation arguments = mutatorArgs(mutatorSpec);
+        final RepresentationType representationType = memberType.getRepresentationType();
+        final JsonRepresentation mutatorLink = linkToForMutatorInvoke().memberBuilder(mutatorSpec.rel, memberType, objectMember, representationType, mutatorSpec.suffix).withHttpMethod(mutatorSpec.httpMethod).withArguments(arguments).build();
         getLinks().arrayAdd(mutatorLink);
     }
 
     /**
-     * Hook to allow actions to render invoke links that point to the contributing service.
+     * Hook to allow actions to render invoke links that point to the
+     * contributing service.
      */
     protected ObjectAdapterLinkTo linkToForMutatorInvoke() {
         return linkTo;
     }
 
     /**
-     * Default implementation (common to properties and collections) that can 
-     * be overridden (ie by actions) if required.
+     * Default implementation (common to properties and collections) that can be
+     * overridden (ie by actions) if required.
      */
-    protected JsonRepresentation mutatorArgs(MutatorSpec mutatorSpec) {
-        if(mutatorSpec.arguments.isNone()) {
+    protected JsonRepresentation mutatorArgs(final MutatorSpec mutatorSpec) {
+        if (mutatorSpec.arguments.isNone()) {
             return null;
         }
-        if(mutatorSpec.arguments.isOne()) {
+        if (mutatorSpec.arguments.isOne()) {
             final JsonRepresentation repr = JsonRepresentation.newMap();
-            repr.mapPut("value", NullNode.getInstance()); // force a null into the map
+            repr.mapPut("value", NullNode.getInstance()); // force a null into
+                                                          // the map
             return repr;
         }
         // overridden by actions
         throw new UnsupportedOperationException("override mutatorArgs() to populate for many arguments");
     }
-    
+
     private void addDetailsLinkIfPersistent() {
-        if(!objectAdapter.isPersistent()) {
+        if (!objectAdapter.isPersistent()) {
             return;
         }
-        final JsonRepresentation link = 
-                linkTo.memberBuilder(Rel.DETAILS, memberType, objectMember).build();
+        final JsonRepresentation link = linkTo.memberBuilder(Rel.DETAILS, memberType, objectMember).build();
         getLinks().arrayAdd(link);
-        
+
         final LinkFollower membersLinkFollower = getLinkFollower();
         final LinkFollower detailsLinkFollower = membersLinkFollower.follow("links[rel=%s]", Rel.DETAILS.getName());
-        if(membersLinkFollower.matches(representation) && detailsLinkFollower.matches(link)) {
+        if (membersLinkFollower.matches(representation) && detailsLinkFollower.matches(link)) {
             followDetailsLink(link);
         }
         return;
@@ -219,12 +216,14 @@ public abstract class AbstractObjectMemberReprRenderer<R extends ReprRendererAbs
     protected abstract void followDetailsLink(JsonRepresentation detailsLink);
 
     protected final void putDisabledReasonIfDisabled() {
-        String disabledReasonRep = usability().getReason();
+        final String disabledReasonRep = usability().getReason();
         representation.mapPut("disabledReason", disabledReasonRep);
     }
 
     protected abstract void putExtensionsIsisProprietary();
+
     protected abstract void addLinksToFormalDomainModel();
+
     protected abstract void addLinksIsisProprietary();
 
     /**
@@ -234,12 +233,12 @@ public abstract class AbstractObjectMemberReprRenderer<R extends ReprRendererAbs
         return visibility().isAllowed();
     }
 
-    protected <F extends Facet> F getMemberSpecFacet(Class<F> facetType) {
-        ObjectSpecification otoaSpec = objectMember.getSpecification();
+    protected <F extends Facet> F getMemberSpecFacet(final Class<F> facetType) {
+        final ObjectSpecification otoaSpec = objectMember.getSpecification();
         return otoaSpec.getFacet(facetType);
     }
 
-    protected boolean hasMemberFacet(Class<? extends Facet> facetType) {
+    protected boolean hasMemberFacet(final Class<? extends Facet> facetType) {
         return objectMember.getFacet(facetType) != null;
     }
 
@@ -251,5 +250,4 @@ public abstract class AbstractObjectMemberReprRenderer<R extends ReprRendererAbs
         return objectMember.isVisible(getSession(), objectAdapter);
     }
 
-    
 }

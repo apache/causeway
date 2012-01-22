@@ -39,14 +39,12 @@ public class LogonAction implements Action {
     public void process(final RequestContext context) throws IOException {
         final String username = context.getParameter("username");
         final String password = context.getParameter("password");
-        final AuthenticationSession session =
-            UserManager.authenticate(new AuthenticationRequestPassword(username, password));
+        final AuthenticationSession session = UserManager.authenticate(new AuthenticationRequestPassword(username, password));
 
         String view;
         if (session == null) {
             final FormState formState = new FormState();
-            formState
-                .setError("Failed to login. Check the username and ensure that your password was entered correctly");
+            formState.setError("Failed to login. Check the username and ensure that your password was entered correctly");
             FieldEditState fieldState = formState.createField("username", username);
             if (username.length() == 0) {
                 fieldState.setError("User Name required");

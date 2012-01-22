@@ -61,8 +61,7 @@ public class AddToCollection extends PerformAbstractTypeParams {
         }
 
         // validate argument
-        otma.createValidateAddInteractionContext(getSession(), InteractionInvocationMethod.BY_USER, onAdapter,
-            toAddAdapter);
+        otma.createValidateAddInteractionContext(getSession(), InteractionInvocationMethod.BY_USER, onAdapter, toAddAdapter);
         final Consent validToAdd = otma.isValidToAdd(onAdapter, toAddAdapter);
         if (validToAdd.isVetoed()) {
             throw ScenarioBoundValueException.current(arg0Binding, validToAdd.getReason());

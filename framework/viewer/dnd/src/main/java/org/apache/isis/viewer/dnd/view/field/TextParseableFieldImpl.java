@@ -42,8 +42,7 @@ public class TextParseableFieldImpl extends AbstractTextParsableContent implemen
     private final ObjectAdapter parent;
     private ObjectAdapter object;
 
-    public TextParseableFieldImpl(final ObjectAdapter parent, final ObjectAdapter object,
-        final OneToOneAssociation association) {
+    public TextParseableFieldImpl(final ObjectAdapter parent, final ObjectAdapter object, final OneToOneAssociation association) {
         field = new ObjectField(parent, association);
         this.parent = parent;
         this.object = object;
@@ -56,7 +55,8 @@ public class TextParseableFieldImpl extends AbstractTextParsableContent implemen
 
     @Override
     public Consent canClear() {
-        return Allow.DEFAULT; // TODO is this flagged anywhere - getValueAssociation().canClear();
+        return Allow.DEFAULT; // TODO is this flagged anywhere -
+                              // getValueAssociation().canClear();
     }
 
     @Override
@@ -89,9 +89,7 @@ public class TextParseableFieldImpl extends AbstractTextParsableContent implemen
         final String title = object == null ? "" : ": " + object.titleString();
         final String name = field.getName();
         final ObjectSpecification specification = getSpecification();
-        final String type =
-            name.indexOf(specification.getShortIdentifier()) == -1 ? "" : " (" + specification.getShortIdentifier()
-                + ")";
+        final String type = name.indexOf(specification.getShortIdentifier()) == -1 ? "" : " (" + specification.getShortIdentifier() + ")";
         final String description = getValueAssociation().getDescription();
         return name + type + title + " " + description;
     }

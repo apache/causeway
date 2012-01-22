@@ -116,21 +116,23 @@ public abstract class AbstractCollectionContent extends AbstractContent implemen
         // TODO find all collection actions, and make them available
         // not valid ObjectOption.menuOptions((ObjectAdapter) object, options);
         /*
-         * Action[] actions = collection.getSpecification().getObjectActions(Action.USER);
+         * Action[] actions =
+         * collection.getSpecification().getObjectActions(Action.USER);
          * 
-         * for (int i = 0; i < actions.length; i++) { final Action action = actions[i]; AbstractUserAction option;
-         * option = new AbstractUserAction(actions[i].getId()) { public void execute(final Workspace workspace, final
-         * View view, final Location at) { ObjectAdapter result = collection.execute(action, new ObjectAdapter[0]);
-         * at.add(20, 20); workspace.addOpenViewFor(result, at); } };
+         * for (int i = 0; i < actions.length; i++) { final Action action =
+         * actions[i]; AbstractUserAction option; option = new
+         * AbstractUserAction(actions[i].getId()) { public void execute(final
+         * Workspace workspace, final View view, final Location at) {
+         * ObjectAdapter result = collection.execute(action, new
+         * ObjectAdapter[0]); at.add(20, 20); workspace.addOpenViewFor(result,
+         * at); } };
          * 
          * if (option != null) { options.add(option); } }
          */
         options.add(new UserActionAbstract("Clear resolved", ActionType.DEBUG) {
             @Override
             public Consent disabled(final View component) {
-                return ConsentAbstract.allowIf(collection == null
-                    || collection.getResolveState() != ResolveState.TRANSIENT
-                    || collection.getResolveState() == ResolveState.GHOST);
+                return ConsentAbstract.allowIf(collection == null || collection.getResolveState() != ResolveState.TRANSIENT || collection.getResolveState() == ResolveState.GHOST);
             }
 
             @Override

@@ -56,8 +56,7 @@ public final class InvokeMethod implements Action {
         final boolean isContributedMethod = action.isContributed();
         if (action.getParameterCount() == 0) {
             executeImmediately = true;
-        } else if (action.getParameterCount() == 1 && isContributedMethod
-            && target.getSpecification().isOfType(action.getParameters().get(0).getSpecification())) {
+        } else if (action.getParameterCount() == 1 && isContributedMethod && target.getSpecification().isOfType(action.getParameters().get(0).getSpecification())) {
             executeImmediately = true;
         }
 
@@ -78,10 +77,10 @@ public final class InvokeMethod implements Action {
         }
     }
 
-    static void displayMethodResult(final Request request, final Context context, final Page page,
-        final ObjectAdapter result, final String targetId) {
+    static void displayMethodResult(final Request request, final Context context, final Page page, final ObjectAdapter result, final String targetId) {
         if (result == null) {
-            // TODO ask context for page to display - this will be the most recent object prior to the task
+            // TODO ask context for page to display - this will be the most
+            // recent object prior to the task
             // null object - so just view service
             request.forward(ForwardRequest.viewService(targetId));
         } else {
@@ -93,7 +92,8 @@ public final class InvokeMethod implements Action {
                     forwardCollectionResult(request, context, result);
                 }
             } else if (result.getSpecification().isValueOrIsAggregated()) {
-                // TODO deal with this object properly, it might not be just a simple string
+                // TODO deal with this object properly, it might not be just a
+                // simple string
                 final List<String> messages = context.getMessages();
                 messages.add(0, "Action returned: " + result.titleString());
                 request.forward(ForwardRequest.viewObject(targetId));
@@ -112,8 +112,7 @@ public final class InvokeMethod implements Action {
 
     static void forwardObjectResult(final Request request, final Context context, final ObjectAdapter resultAdapter) {
         final String objectId = context.mapObject(resultAdapter);
-        if (resultAdapter.isTransient()
-            && resultAdapter.getSpecification().persistability() == Persistability.USER_PERSISTABLE) {
+        if (resultAdapter.isTransient() && resultAdapter.getSpecification().persistability() == Persistability.USER_PERSISTABLE) {
             request.forward(ForwardRequest.editObject(objectId));
         } else if (resultAdapter.getSpecification().isService()) {
             request.forward(ForwardRequest.viewService(objectId));

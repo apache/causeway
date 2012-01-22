@@ -30,7 +30,8 @@ public final class Components {
     }
 
     /**
-     * Permanently hides by replacing with a {@link Label} that has an empty string for its caption.
+     * Permanently hides by replacing with a {@link Label} that has an empty
+     * string for its caption.
      */
     public static void permanentlyHide(final MarkupContainer container, final String... ids) {
         for (final String id : ids) {
@@ -49,7 +50,8 @@ public final class Components {
     }
 
     /**
-     * Not overloaded because - although compiles ok on JDK6u20 (Mac), fails to on JDK6u18 (Ubuntu)
+     * Not overloaded because - although compiles ok on JDK6u20 (Mac), fails to
+     * on JDK6u18 (Ubuntu)
      */
     private static void permanentlyHideSingle(final MarkupContainer container, final String id) {
         final Label label = new Label(id, "");
@@ -58,7 +60,8 @@ public final class Components {
     }
 
     /**
-     * Sets the visibility of the child component(s) within the supplied container.
+     * Sets the visibility of the child component(s) within the supplied
+     * container.
      */
     public static void setVisible(final MarkupContainer container, final boolean visibility, final String... ids) {
         for (final String id : ids) {
@@ -69,8 +72,7 @@ public final class Components {
     /**
      * @see #setVisible(MarkupContainer, boolean, String...)
      */
-    public static void setVisible(final MarkupContainer container, final boolean visibility,
-        final ComponentType... componentTypes) {
+    public static void setVisible(final MarkupContainer container, final boolean visibility, final ComponentType... componentTypes) {
         for (final ComponentType componentType : componentTypes) {
             final String wicketId = componentType.getWicketId();
             setVisible(container, visibility, wicketId);

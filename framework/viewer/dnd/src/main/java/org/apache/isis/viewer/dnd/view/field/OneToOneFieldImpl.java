@@ -36,8 +36,7 @@ public class OneToOneFieldImpl extends AbstractObjectContent implements OneToOne
     private final ObjectField field;
     private final ObjectAdapter adapter;
 
-    public OneToOneFieldImpl(final ObjectAdapter parentAdapter, final ObjectAdapter adapter,
-        final OneToOneAssociation association) {
+    public OneToOneFieldImpl(final ObjectAdapter parentAdapter, final ObjectAdapter adapter, final OneToOneAssociation association) {
         field = new ObjectField(parentAdapter, association);
         this.adapter = adapter;
     }

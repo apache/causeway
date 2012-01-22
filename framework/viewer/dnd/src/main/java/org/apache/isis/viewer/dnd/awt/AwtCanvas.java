@@ -48,8 +48,7 @@ public class AwtCanvas implements Canvas {
         this.renderingArea = renderingArea;
     }
 
-    public AwtCanvas(final Graphics bufferGraphic, final RenderingArea renderingArea, final int x, final int y,
-        final int width, final int height) {
+    public AwtCanvas(final Graphics bufferGraphic, final RenderingArea renderingArea, final int x, final int y, final int width, final int height) {
         graphics = bufferGraphic;
         this.renderingArea = renderingArea;
         graphics.clipRect(x, y, width, height);
@@ -88,8 +87,7 @@ public class AwtCanvas implements Canvas {
     }
 
     @Override
-    public void draw3DRectangle(final int x, final int y, final int width, final int height, final Color color,
-        final boolean raised) {
+    public void draw3DRectangle(final int x, final int y, final int width, final int height, final Color color, final boolean raised) {
         useColor(color);
         graphics.draw3DRect(x, y, width - 1, height - 1, raised);
     }
@@ -102,8 +100,7 @@ public class AwtCanvas implements Canvas {
         final int midpoint = bounds.getY() + height / 2;
         drawLine(bounds.getX(), midpoint, width - 2, midpoint, color);
         if (baseline > 0) {
-            drawLine(bounds.getX(), baseline, width - 1, baseline,
-                Toolkit.getColor(ColorsAndFonts.COLOR_DEBUG_BASELINE));
+            drawLine(bounds.getX(), baseline, width - 1, baseline, Toolkit.getColor(ColorsAndFonts.COLOR_DEBUG_BASELINE));
         }
     }
 
@@ -114,8 +111,7 @@ public class AwtCanvas implements Canvas {
 
     @Override
     public void drawImage(final Image image, final int x, final int y, final int width, final int height) {
-        graphics
-            .drawImage(((AwtImage) image).getAwtImage(), x, y, width - 1, height - 1, (ImageObserver) renderingArea);
+        graphics.drawImage(((AwtImage) image).getAwtImage(), x, y, width - 1, height - 1, (ImageObserver) renderingArea);
     }
 
     @Override
@@ -148,8 +144,7 @@ public class AwtCanvas implements Canvas {
     }
 
     @Override
-    public void drawRoundedRectangle(final int x, final int y, final int width, final int height, final int arcWidth,
-        final int arcHeight, final Color color) {
+    public void drawRoundedRectangle(final int x, final int y, final int width, final int height, final int arcWidth, final int arcHeight, final Color color) {
         useColor(color);
         graphics.drawRoundRect(x, y, width - 1, height - 1, arcWidth, arcHeight);
     }
@@ -201,8 +196,7 @@ public class AwtCanvas implements Canvas {
     }
 
     @Override
-    public void drawText(final String text, final int x, final int y, final int maxWidth, final Color color,
-        final Text style) {
+    public void drawText(final String text, final int x, final int y, final int maxWidth, final Color color, final Text style) {
         useColor(color);
         useFont(style);
 
@@ -247,8 +241,7 @@ public class AwtCanvas implements Canvas {
     @Override
     public String toString() {
         final Rectangle cb = graphics.getClipBounds();
-        return "Canvas [area=" + cb.x + "," + cb.y + " " + cb.width + "x" + cb.height + ",color=" + color + ",font="
-            + font + "]";
+        return "Canvas [area=" + cb.x + "," + cb.y + " " + cb.width + "x" + cb.height + ",color=" + color + ",font=" + font + "]";
     }
 
     private void useColor(final Color color) {

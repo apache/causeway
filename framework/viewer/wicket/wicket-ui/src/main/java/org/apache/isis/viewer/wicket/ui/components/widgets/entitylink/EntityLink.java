@@ -63,10 +63,10 @@ import org.apache.wicket.model.Model;
 import com.google.common.collect.Lists;
 
 /**
- * {@link FormComponentPanel} representing a reference to an entity: a link and a findUsing button.
+ * {@link FormComponentPanel} representing a reference to an entity: a link and
+ * a findUsing button.
  */
-public class EntityLink extends FormComponentPanelAbstract<ObjectAdapter> implements CancelHintRequired,
-    ActionInvokeHandler {
+public class EntityLink extends FormComponentPanelAbstract<ObjectAdapter> implements CancelHintRequired, ActionInvokeHandler {
 
     private static final long serialVersionUID = 1L;
 
@@ -151,40 +151,39 @@ public class EntityLink extends FormComponentPanelAbstract<ObjectAdapter> implem
         final List<ObjectAction> actions = findServiceActionsFor(entityModel.getTypeOfSpecification());
         findUsing = new WebMarkupContainer(ID_FIND_USING);
         switch (actions.size()) {
-            case 0:
-                permanentlyHide(findUsing, ComponentType.ACTION);
-                break;
-            default:
-                // TODO: i18n
+        case 0:
+            permanentlyHide(findUsing, ComponentType.ACTION);
+            break;
+        default:
+            // TODO: i18n
 
-                final CssMenuBuilder cssMenuBuilder =
-                    new CssMenuBuilder(null, getServiceAdapters(), actions, linkFactory);
-                final CssMenuPanel cssMenuPanel =
-                    cssMenuBuilder.buildPanel(ComponentType.ACTION.getWicketId(), "find using...");
+            final CssMenuBuilder cssMenuBuilder = new CssMenuBuilder(null, getServiceAdapters(), actions, linkFactory);
+            final CssMenuPanel cssMenuPanel = cssMenuBuilder.buildPanel(ComponentType.ACTION.getWicketId(), "find using...");
 
-                findUsing.addOrReplace(cssMenuPanel);
-                actionFindUsingComponent = cssMenuPanel;
-                break;
+            findUsing.addOrReplace(cssMenuPanel);
+            actionFindUsingComponent = cssMenuPanel;
+            break;
         }
         addOrReplace(findUsing);
     }
 
     /**
-     * Must be called after {@link #setEnabled(boolean)} to ensure that the <tt>findUsing</tt> button is shown/not shown
-     * as required.
+     * Must be called after {@link #setEnabled(boolean)} to ensure that the
+     * <tt>findUsing</tt> button is shown/not shown as required.
      * 
      * <p>
-     * REVIEW: there ought to be a better way to do this. I'd hoped to override {@link #setEnabled(boolean)}, but it is
-     * <tt>final</tt>, and there doesn't seem to be anyway to install a listener. One option might be to move it to
-     * {@link #onBeforeRender()} ?
+     * REVIEW: there ought to be a better way to do this. I'd hoped to override
+     * {@link #setEnabled(boolean)}, but it is <tt>final</tt>, and there doesn't
+     * seem to be anyway to install a listener. One option might be to move it
+     * to {@link #onBeforeRender()} ?
      */
     public void syncFindUsingVisibility() {
         findUsing.setVisible(isEnabled() && !getEntityModel().isViewMode());
     }
 
     /**
-     * Since we override {@link #convertInput()}, it is (apparently) enough to just return a value that is suitable for
-     * error reporting.
+     * Since we override {@link #convertInput()}, it is (apparently) enough to
+     * just return a value that is suitable for error reporting.
      * 
      * @see DateField#getInput() for reference
      */
@@ -194,8 +193,8 @@ public class EntityLink extends FormComponentPanelAbstract<ObjectAdapter> implem
     }
 
     /**
-     * Ensures that the link is always enabled and traversable, even if (in the context of an entity property form) the
-     * entity model is in view mode.
+     * Ensures that the link is always enabled and traversable, even if (in the
+     * context of an entity property form) the entity model is in view mode.
      * 
      * <p>
      * A slight hack, but works...
@@ -325,8 +324,7 @@ public class EntityLink extends FormComponentPanelAbstract<ObjectAdapter> implem
                 return null;
             }
             // take a copy otherwise is only lazily evaluated
-            final List<ObjectAdapterMemento> choicesMementos =
-                Lists.newArrayList(Lists.transform(choices, Mementos.fromAdapter()));
+            final List<ObjectAdapterMemento> choicesMementos = Lists.newArrayList(Lists.transform(choices, Mementos.fromAdapter()));
             return Model.ofList(choicesMementos);
         }
         return null;
@@ -364,8 +362,7 @@ public class EntityLink extends FormComponentPanelAbstract<ObjectAdapter> implem
     private void addOrReplaceLink(final ObjectAdapter adapter) {
         final PageParameters pageParameters = EntityModel.createPageParameters(adapter, getOidStringifier());
         final Class<? extends Page> pageClass = getPageClassRegistry().getPageClass(PageType.ENTITY);
-        final BookmarkablePageLink<EntityPage> link =
-            new BookmarkablePageLink<EntityPage>(ID_ENTITY_LINK, pageClass, pageParameters);
+        final BookmarkablePageLink<EntityPage> link = new BookmarkablePageLink<EntityPage>(ID_ENTITY_LINK, pageClass, pageParameters);
         label = new Label(ID_ENTITY_TITLE, adapter.titleString());
         link.add(label);
         final WebMarkupContainer entityLinkWrapper = new WebMarkupContainer(ID_ENTITY_LINK_WRAPPER);
@@ -385,16 +382,14 @@ public class EntityLink extends FormComponentPanelAbstract<ObjectAdapter> implem
         return actionList;
     }
 
-    private static void addServiceActionsFor(final ObjectSpecification noSpec, final ActionType actionType,
-        final List<ObjectAction> actionList) {
+    private static void addServiceActionsFor(final ObjectSpecification noSpec, final ActionType actionType, final List<ObjectAction> actionList) {
         final List<ObjectAction> serviceActionsFor = noSpec.getServiceActionsReturning(actionType);
         actionList.addAll(serviceActionsFor);
     }
 
     @Override
     public void onClick(final ActionModel actionModel) {
-        final ActionPanel actionPanel =
-            new ActionPanel(actionFindUsingComponent.getComponentType().toString(), actionModel);
+        final ActionPanel actionPanel = new ActionPanel(actionFindUsingComponent.getComponentType().toString(), actionModel);
         actionFindUsingComponent.replaceWith(actionPanel);
     }
 

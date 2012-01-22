@@ -64,31 +64,29 @@ public abstract class ResourceAbstract {
     protected final static JsonMapper jsonMapper = JsonMapper.instance();
 
     public enum Caching {
-        ONE_DAY(24*60*60),
-        ONE_HOUR(60*60),
-        NONE(0);
+        ONE_DAY(24 * 60 * 60), ONE_HOUR(60 * 60), NONE(0);
 
         private final CacheControl cacheControl;
 
-        private Caching(int maxAge) {
+        private Caching(final int maxAge) {
             this.cacheControl = new CacheControl();
-            if(maxAge > 0) {
+            if (maxAge > 0) {
                 cacheControl.setMaxAge(maxAge);
             } else {
                 cacheControl.setNoCache(true);
             }
         }
-        
+
         public CacheControl getCacheControl() {
             return cacheControl;
         }
     }
 
     // nb: SET is excluded; we simply flatten contributed actions.
-	public final static ActionType[] ACTION_TYPES = { ActionType.USER, ActionType.DEBUG, ActionType.EXPLORATION };
+    public final static ActionType[] ACTION_TYPES = { ActionType.USER, ActionType.DEBUG, ActionType.EXPLORATION };
 
-	// TODO: should inject this instead...
-	protected final static RendererFactoryRegistry rendererFactoryRegistry = RendererFactoryRegistry.instance;
+    // TODO: should inject this instead...
+    protected final static RendererFactoryRegistry rendererFactoryRegistry = RendererFactoryRegistry.instance;
 
     @Context
     HttpHeaders httpHeaders;
@@ -110,28 +108,22 @@ public abstract class ResourceAbstract {
 
     private ResourceContext resourceContext;
 
-
     protected void init() {
         init(RepresentationType.GENERIC);
     }
 
-    protected void init(RepresentationType representationType) {
-        if(!IsisContext.inSession() || getAuthenticationSession() == null) {
+    protected void init(final RepresentationType representationType) {
+        if (!IsisContext.inSession() || getAuthenticationSession() == null) {
             throw JsonApplicationException.create(HttpStatusCode.UNAUTHORIZED);
         }
 
-        this.resourceContext =
-            new ResourceContext(representationType, httpHeaders, uriInfo, request, httpServletRequest, httpServletResponse, 
-                    securityContext, getOidStringifier(), getLocalization(), getAuthenticationSession(), getPersistenceSession(), getAdapterManager(), getSpecificationLoader());
+        this.resourceContext = new ResourceContext(representationType, httpHeaders, uriInfo, request, httpServletRequest, httpServletResponse, securityContext, getOidStringifier(), getLocalization(), getAuthenticationSession(), getPersistenceSession(), getAdapterManager(), getSpecificationLoader());
     }
-    
 
-    
     protected ResourceContext getResourceContext() {
         return resourceContext;
     }
 
-    
     // //////////////////////////////////////////////////////////////
     // Rendering
     // //////////////////////////////////////////////////////////////
@@ -139,15 +131,14 @@ public abstract class ResourceAbstract {
     protected static String jsonFor(final Object object) {
         try {
             return jsonMapper.write(object);
-        } catch (JsonGenerationException e) {
+        } catch (final JsonGenerationException e) {
             throw new RuntimeException(e);
-        } catch (JsonMappingException e) {
+        } catch (final JsonMappingException e) {
             throw new RuntimeException(e);
-        } catch (IOException e) {
+        } catch (final IOException e) {
             throw new RuntimeException(e);
         }
     }
-
 
     // //////////////////////////////////////////////////////////////
     // Isis integration
@@ -160,33 +151,29 @@ public abstract class ResourceAbstract {
     protected ObjectAdapter getObjectAdapter(final String oidEncodedStr) {
 
         final ObjectAdapter objectAdapter = OidUtils.getObjectAdapter(resourceContext, oidEncodedStr);
-        
+
         if (objectAdapter == null) {
             final String oidStr = UrlDecoderUtils.urlDecode(oidEncodedStr);
-            throw JsonApplicationException.create(
-                    HttpStatusCode.NOT_FOUND, "could not determine adapter for OID: '%s'", oidStr);
+            throw JsonApplicationException.create(HttpStatusCode.NOT_FOUND, "could not determine adapter for OID: '%s'", oidStr);
         }
         return objectAdapter;
     }
 
-    protected ObjectAdapter getServiceAdapter(String serviceId) {
+    protected ObjectAdapter getServiceAdapter(final String serviceId) {
         final List<ObjectAdapter> serviceAdapters = getPersistenceSession().getServices();
-        for (ObjectAdapter serviceAdapter : serviceAdapters) {
-            Object servicePojo = serviceAdapter.getObject();
-            String id = ServiceUtil.id(servicePojo);
-            if(serviceId.equals(id)) {
+        for (final ObjectAdapter serviceAdapter : serviceAdapters) {
+            final Object servicePojo = serviceAdapter.getObject();
+            final String id = ServiceUtil.id(servicePojo);
+            if (serviceId.equals(id)) {
                 return serviceAdapter;
             }
         }
         throw JsonApplicationException.create(HttpStatusCode.NOT_FOUND, "Could not locate service '%s'", serviceId);
     }
 
-
     protected String getOidStr(final ObjectAdapter objectAdapter) {
         return OidUtils.getOidStr(resourceContext, objectAdapter);
     }
-
-
 
     // //////////////////////////////////////////////////////////////
     // Responses
@@ -196,32 +183,28 @@ public abstract class ResourceAbstract {
         return responseOf(HttpStatusCode.NO_CONTENT);
     }
 
-    public static ResponseBuilder responseOfOk(ReprRenderer<?,?> renderer, Caching caching) {
+    public static ResponseBuilder responseOfOk(final ReprRenderer<?, ?> renderer, final Caching caching) {
         return responseOfOk(renderer, caching, null);
     }
 
-    public static ResponseBuilder responseOfOk(ReprRenderer<?,?> renderer, Caching caching, Version version) {
-        RepresentationType representationType = renderer.getRepresentationType();
-        final ResponseBuilder response = responseOf(HttpStatusCode.OK)
-                .type(representationType.getMediaType())
-                .cacheControl(caching.getCacheControl())
-                .entity(jsonFor(renderer.render()));
+    public static ResponseBuilder responseOfOk(final ReprRenderer<?, ?> renderer, final Caching caching, final Version version) {
+        final RepresentationType representationType = renderer.getRepresentationType();
+        final ResponseBuilder response = responseOf(HttpStatusCode.OK).type(representationType.getMediaType()).cacheControl(caching.getCacheControl()).entity(jsonFor(renderer.render()));
         return addLastModifiedAndETagIfAvailable(response, version);
     }
 
-    private static ResponseBuilder responseOf(HttpStatusCode httpStatusCode) {
+    private static ResponseBuilder responseOf(final HttpStatusCode httpStatusCode) {
         return Response.status(httpStatusCode.getJaxrsStatusType()).type(MediaType.APPLICATION_JSON_TYPE);
     }
 
-    public static ResponseBuilder addLastModifiedAndETagIfAvailable(final ResponseBuilder responseBuilder, Version version) {
+    public static ResponseBuilder addLastModifiedAndETagIfAvailable(final ResponseBuilder responseBuilder, final Version version) {
         if (version != null && version.getTime() != null) {
             final Date time = version.getTime();
             responseBuilder.lastModified(time);
-            responseBuilder.tag(""+time);
+            responseBuilder.tag("" + time);
         }
         return responseBuilder;
     }
-
 
     // //////////////////////////////////////////////////////////////
     // Dependencies (from singletons)
@@ -230,7 +213,7 @@ public abstract class ResourceAbstract {
     protected AuthenticationSession getAuthenticationSession() {
         return IsisContext.getAuthenticationSession();
     }
-    
+
     protected SpecificationLoader getSpecificationLoader() {
         return IsisContext.getSpecificationLoader();
     }

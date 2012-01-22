@@ -43,12 +43,11 @@ import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 
-
 public class HomePageResourceTest_xrofollowlinks {
 
     @Rule
     public IsisWebServerRule webServerRule = new IsisWebServerRule();
-    
+
     private RestfulClient client;
 
     private RestfulRequest request;
@@ -57,13 +56,13 @@ public class HomePageResourceTest_xrofollowlinks {
 
     @Before
     public void setUp() throws Exception {
-        WebServer webServer = webServerRule.getWebServer();
+        final WebServer webServer = webServerRule.getWebServer();
         client = new RestfulClient(webServer.getBase());
 
         request = client.createRequest(HttpMethod.GET, "");
         restfulResponse = request.executeT();
         repr = restfulResponse.getEntity();
-        
+
         // given
         assertThat(repr.getUser().getValue(), is(nullValue()));
         assertThat(repr.getVersion().getValue(), is(nullValue()));
@@ -110,14 +109,14 @@ public class HomePageResourceTest_xrofollowlinks {
 
         repr = whenExecuteAndFollowLinksUsing("/", "links[rel=services].values");
 
-        JsonRepresentation servicesValue = repr.getServices().getValue();
+        final JsonRepresentation servicesValue = repr.getServices().getValue();
         assertThat(servicesValue, is(not(nullValue())));
         assertThat(servicesValue, isMap());
         final JsonRepresentation serviceLinkList = servicesValue.getArray("values");
         assertThat(serviceLinkList, isArray());
-        
+
         JsonRepresentation service;
-        
+
         service = serviceLinkList.getRepresentation("[id=%s]", "simples");
         assertThat(service, isMap());
         assertThat(service.getString("id"), is("simples"));
@@ -134,14 +133,14 @@ public class HomePageResourceTest_xrofollowlinks {
 
         repr = whenExecuteAndFollowLinksUsing("/", "links[rel=services].values[id=simples]");
 
-        JsonRepresentation servicesValue = repr.getServices().getValue();
+        final JsonRepresentation servicesValue = repr.getServices().getValue();
         assertThat(servicesValue, is(not(nullValue())));
         assertThat(servicesValue, isMap());
         final JsonRepresentation serviceLinkList = servicesValue.getArray("values");
         assertThat(serviceLinkList, isArray());
-        
+
         JsonRepresentation service;
-        
+
         service = serviceLinkList.getRepresentation("[id=%s]", "simples");
         assertThat(service, isMap());
         assertThat(service.getString("id"), is("simples"));
@@ -156,9 +155,5 @@ public class HomePageResourceTest_xrofollowlinks {
         restfulResponse = request.executeT();
         return restfulResponse.getEntity();
     }
-    
 
 }
-
-
-    

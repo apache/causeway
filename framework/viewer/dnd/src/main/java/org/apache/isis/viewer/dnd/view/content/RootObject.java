@@ -66,8 +66,7 @@ public class RootObject extends AbstractObjectContent {
 
     @Override
     public String getDescription() {
-        return getSpecification().getSingularName() + ": " + getObject().titleString() + " "
-            + getSpecification().getDescription();
+        return getSpecification().getSingularName() + ": " + getObject().titleString() + " " + getSpecification().getDescription();
     }
 
     @Override

@@ -44,59 +44,56 @@ public class RestfulClientTest_follow {
 
     @Rule
     public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
-    
-    private URI uri = URI.create("http://yadayada:8080");
-    
+
+    private final URI uri = URI.create("http://yadayada:8080");
+
     @Mock
     private ClientExecutor mockExecutor;
-    
+
     @Mock
     private ClientRequest mockClientRequest;
-    
+
     @Mock
     private BaseClientResponse<String> mockClientResponse;
 
     private JsonRepresentation jsonRepresentation;
 
-
     private RestfulClient client;
-
 
     @Before
     public void setUp() throws Exception {
         jsonRepresentation = new JsonRepresentation(JsonFixture.readJson("map.json"));
         client = new RestfulClient(uri, mockExecutor);
     }
-    
-    
+
     @Ignore("TODO")
     @Test
     public void follow_get() throws Exception {
-        LinkRepresentation link = jsonRepresentation.getLink("aLink");
+        final LinkRepresentation link = jsonRepresentation.getLink("aLink");
 
         final String href = link.getHref();
-        
+
         // when
         context.checking(new Expectations() {
             {
                 one(mockExecutor).createRequest(with(any(UriBuilderImpl.class)));
                 will(returnValue(mockClientRequest));
-                
+
                 one(mockExecutor).execute(mockClientRequest);
                 will(returnValue(mockClientResponse));
-                
+
                 one(mockClientRequest).accept(MediaType.APPLICATION_JSON_TYPE);
                 atLeast(1).of(mockClientRequest).setHttpMethod("GET");
-                
+
                 allowing(mockClientRequest).getHttpMethod();
                 will(returnValue("GET"));
-                
+
                 one(mockClientRequest).execute();
                 will(returnValue(mockClientResponse));
-                
+
                 one(mockClientResponse).setReturnType(String.class);
                 allowing(mockClientResponse);
-                
+
                 final MultiValueMap result = new MultiValueMap();
                 result.put("Content-Type", "application/json");
                 allowing(mockClientResponse).getMetadata();
@@ -105,7 +102,7 @@ public class RestfulClientTest_follow {
 
         });
         final RestfulResponse<JsonRepresentation> response = client.follow(link);
-        
+
         // then
     }
 
@@ -113,15 +110,15 @@ public class RestfulClientTest_follow {
         return new TypeSafeMatcher<ClientRequest>() {
 
             @Override
-            public void describeTo(Description description) {
+            public void describeTo(final Description description) {
                 description.appendText("request to href: " + href);
             }
 
             @Override
-            public boolean matchesSafely(ClientRequest clientRequest) {
+            public boolean matchesSafely(final ClientRequest clientRequest) {
                 try {
                     return clientRequest.getUri().equals(href);
-                } catch (Exception e) {
+                } catch (final Exception e) {
                     return false;
                 }
             }

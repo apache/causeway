@@ -40,13 +40,12 @@ import org.apache.wicket.RestartResponseAtInterceptPageException;
 import org.apache.wicket.markup.MarkupStream;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.internal.HtmlHeaderContainer;
-import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.Link;
-import org.apache.wicket.markup.html.link.PageLink;
 import org.apache.wicket.model.IModel;
 
 /**
- * Convenience adapter for {@link WebPage}s built up using {@link ComponentType}s.
+ * Convenience adapter for {@link WebPage}s built up using {@link ComponentType}
+ * s.
  */
 public abstract class PageAbstract extends WebPage {
 
@@ -64,21 +63,24 @@ public abstract class PageAbstract extends WebPage {
     }
 
     private void addLogoutLink() {
-		add(new Link<Object>(ID_LOGOUT_LINK){
-			private static final long serialVersionUID = 1L;
-			@Override
-			public void onClick() {
-				getSession().invalidate();
-				throw new RestartResponseAtInterceptPageException(WicketSignInPage.class);
-			}});
-	}
+        add(new Link<Object>(ID_LOGOUT_LINK) {
+            private static final long serialVersionUID = 1L;
 
-	/**
+            @Override
+            public void onClick() {
+                getSession().invalidate();
+                throw new RestartResponseAtInterceptPageException(WicketSignInPage.class);
+            }
+        });
+    }
+
+    /**
      * As provided in the {@link #PageAbstract(ComponentType) constructor}.
      * 
      * <p>
-     * This superclass doesn't do anything with this property directly, but requiring it to be provided enforces
-     * standardization of the implementation of the subclasses.
+     * This superclass doesn't do anything with this property directly, but
+     * requiring it to be provided enforces standardization of the
+     * implementation of the subclasses.
      */
     public List<ComponentType> getChildModelTypes() {
         return childComponentIds;
@@ -101,7 +103,8 @@ public abstract class PageAbstract extends WebPage {
      * Should be called in the subclass' constructor.
      * 
      * @param model
-     *            - used to find the best matching {@link ComponentFactory} to render the model.
+     *            - used to find the best matching {@link ComponentFactory} to
+     *            render the model.
      */
     protected void addChildComponents(final IModel<?> model) {
         for (final ComponentType componentType : getChildModelTypes()) {

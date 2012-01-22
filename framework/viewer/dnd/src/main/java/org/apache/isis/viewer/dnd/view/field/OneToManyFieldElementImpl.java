@@ -36,8 +36,7 @@ public class OneToManyFieldElementImpl extends AbstractObjectContent implements 
     private final ObjectAdapter element;
     private final ObjectField field;
 
-    public OneToManyFieldElementImpl(final ObjectAdapter parent, final ObjectAdapter element,
-        final OneToManyAssociation association) {
+    public OneToManyFieldElementImpl(final ObjectAdapter parent, final ObjectAdapter element, final OneToManyAssociation association) {
         field = new ObjectField(parent, association);
         this.element = element;
     }
@@ -153,9 +152,12 @@ public class OneToManyFieldElementImpl extends AbstractObjectContent implements 
     @Override
     public void setObject(final ObjectAdapter object) {
         /*
-         * ObjectAdapter parentObject = getParent(); OneToManyAssociationSpecification association =
-         * getOneToManyAssociation(); ObjectAdapter associatedObject = getObject(); LOG.debug("remove " +
-         * associatedObject + " from " + parentObject); association.clearAssociation(parentObject, associatedObject);
+         * ObjectAdapter parentObject = getParent();
+         * OneToManyAssociationSpecification association =
+         * getOneToManyAssociation(); ObjectAdapter associatedObject =
+         * getObject(); LOG.debug("remove " + associatedObject + " from " +
+         * parentObject); association.clearAssociation(parentObject,
+         * associatedObject);
          */
 
     }

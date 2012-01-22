@@ -115,9 +115,9 @@ public abstract class AbstractWindowBorder extends AbstractBorder {
 
         final boolean hasFocus = containsFocus();
         final ViewState state = getState();
-        borderRender.draw(canvas, getSize(), hasFocus, state, controls, title() + " (" + getSpecification().getName()
-            + ")");
-        // canvas.drawRectangle(0, 0, getSize().getWidth(), borderRender.getTop(), Toolkit.getColor(0xfff));
+        borderRender.draw(canvas, getSize(), hasFocus, state, controls, title() + " (" + getSpecification().getName() + ")");
+        // canvas.drawRectangle(0, 0, getSize().getWidth(),
+        // borderRender.getTop(), Toolkit.getColor(0xfff));
 
         // controls
         for (int i = 0; controls != null && i < controls.length; i++) {

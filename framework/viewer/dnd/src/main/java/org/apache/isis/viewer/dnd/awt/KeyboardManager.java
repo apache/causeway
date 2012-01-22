@@ -46,7 +46,8 @@ public class KeyboardManager {
     }
 
     /*
-     * At the moment, as a fudge, the text field is calling its parent's keyPressed method for enter presses.
+     * At the moment, as a fudge, the text field is calling its parent's
+     * keyPressed method for enter presses.
      */
     public void pressed(final int keyCode, final int modifiers) {
         if (ignoreKey(keyCode)) {
@@ -85,7 +86,8 @@ public class KeyboardManager {
             return;
         }
 
-        // this should really check the modifiers to ensure there are none in use.
+        // this should really check the modifiers to ensure there are none in
+        // use.
         if (keyCode == KeyEvent.VK_F10) {
             final Location location = keyboardFocus.getAbsoluteLocation();
             location.add(20, 14);
@@ -93,10 +95,12 @@ public class KeyboardManager {
             return;
         }
         /*
-         * if(keyCode == KeyEvent.VK_ENTER) { //viewer.firstClick(new Click(keyboardFocus, keyboardFocus.getLocation(),
-         * modifiers)); Location location = keyboardFocus.getAbsoluteLocation(); location.add(1, 1);
-         * viewer.secondClick(new Click(keyboardFocus, location, modifiers)); //viewer.thirdClick(new
-         * Click(keyboardFocus, keyboardFocus.getLocation(), modifiers)); return; }
+         * if(keyCode == KeyEvent.VK_ENTER) { //viewer.firstClick(new
+         * Click(keyboardFocus, keyboardFocus.getLocation(), modifiers));
+         * Location location = keyboardFocus.getAbsoluteLocation();
+         * location.add(1, 1); viewer.secondClick(new Click(keyboardFocus,
+         * location, modifiers)); //viewer.thirdClick(new Click(keyboardFocus,
+         * keyboardFocus.getLocation(), modifiers)); return; }
          */
 
         if (keyCode == KeyEvent.VK_F4 && (modifiers & InputEvent.CTRL_MASK) == InputEvent.CTRL_MASK) {
@@ -142,21 +146,21 @@ public class KeyboardManager {
         }
 
         switch (action) {
-            case KeyboardAction.NEXT_VIEW:
-                focusManager.focusNextView();
-                // focusNextSubview(keyboardFocus);
-                break;
-            case KeyboardAction.PREVIOUS_VIEW:
-                focusManager.focusPreviousView();
-                // focusPreviousSubview(keyboardFocus);
-                break;
-            case KeyboardAction.NEXT_WINDOW:
-                focusManager.focusParentView();
-                // focusNextRootView(keyboardFocus);
-                break;
-            case KeyboardAction.PREVIOUS_WINDOW:
-                focusManager.focusFirstChildView();
-                break;
+        case KeyboardAction.NEXT_VIEW:
+            focusManager.focusNextView();
+            // focusNextSubview(keyboardFocus);
+            break;
+        case KeyboardAction.PREVIOUS_VIEW:
+            focusManager.focusPreviousView();
+            // focusPreviousSubview(keyboardFocus);
+            break;
+        case KeyboardAction.NEXT_WINDOW:
+            focusManager.focusParentView();
+            // focusNextRootView(keyboardFocus);
+            break;
+        case KeyboardAction.PREVIOUS_WINDOW:
+            focusManager.focusFirstChildView();
+            break;
         }
     }
 

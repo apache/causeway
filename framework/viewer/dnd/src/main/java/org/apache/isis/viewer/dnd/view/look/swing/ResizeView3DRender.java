@@ -30,9 +30,7 @@ public class ResizeView3DRender implements ResizeViewRender {
 
     @Override
     public void draw(final Canvas canvas, final int x, final int width, final int height, final boolean hasFocus) {
-        final Color borderColor =
-            hasFocus ? Toolkit.getColor(ColorsAndFonts.COLOR_PRIMARY3) : Toolkit
-                .getColor(ColorsAndFonts.COLOR_SECONDARY3);
+        final Color borderColor = hasFocus ? Toolkit.getColor(ColorsAndFonts.COLOR_PRIMARY3) : Toolkit.getColor(ColorsAndFonts.COLOR_SECONDARY3);
         canvas.drawSolidRectangle(x, 0, width, height, borderColor);
 
         final Color secondary2 = Toolkit.getColor(ColorsAndFonts.COLOR_SECONDARY2);

@@ -26,17 +26,14 @@ import org.apache.isis.viewer.dnd.view.window.ResizeWindowRender;
 public class ResizeWindow3DRender implements ResizeWindowRender {
 
     @Override
-    public void draw(final Canvas canvas, final int width, final int height, final boolean isDisabled,
-        final boolean isOver, final boolean isPressed) {
+    public void draw(final Canvas canvas, final int width, final int height, final boolean isDisabled, final boolean isOver, final boolean isPressed) {
         final int x = 0;
         final int y = 0;
 
         canvas.drawRectangle(x - 1, y, width + 2, height + 1, Toolkit.getColor(ColorsAndFonts.COLOR_WHITE));
         canvas.drawRectangle(x, y - 1, width, height + 1, Toolkit.getColor(ColorsAndFonts.COLOR_SECONDARY1));
-        canvas.drawSolidRectangle(width / 2 - 1, y + 2, 3, height - 4,
-            Toolkit.getColor(ColorsAndFonts.COLOR_SECONDARY2));
-        canvas.drawSolidRectangle(x + 2, height / 2 - 1, width - 4, 3,
-            Toolkit.getColor(ColorsAndFonts.COLOR_SECONDARY2));
+        canvas.drawSolidRectangle(width / 2 - 1, y + 2, 3, height - 4, Toolkit.getColor(ColorsAndFonts.COLOR_SECONDARY2));
+        canvas.drawSolidRectangle(x + 2, height / 2 - 1, width - 4, 3, Toolkit.getColor(ColorsAndFonts.COLOR_SECONDARY2));
 
     }
 }

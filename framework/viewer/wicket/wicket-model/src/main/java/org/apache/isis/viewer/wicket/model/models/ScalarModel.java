@@ -41,10 +41,12 @@ import org.apache.isis.viewer.wicket.model.util.ClassLoaders;
 import org.apache.wicket.Session;
 
 /**
- * Represents a scalar of an entity, either a {@link Kind#PROPERTY property} or a {@link Kind#PARAMETER parameter}.
+ * Represents a scalar of an entity, either a {@link Kind#PROPERTY property} or
+ * a {@link Kind#PARAMETER parameter}.
  * 
  * <p>
- * Is the backing model to each of the fields that appear in forms (for entities or action dialogs).
+ * Is the backing model to each of the fields that appear in forms (for entities
+ * or action dialogs).
  */
 public class ScalarModel extends EntityModel {
 
@@ -69,8 +71,7 @@ public class ScalarModel extends EntityModel {
 
             @Override
             public String getLongName(final ScalarModel scalarModel) {
-                final String specShortName =
-                    scalarModel.parentObjectAdapterMemento.getSpecMemento().getSpecification().getShortIdentifier();
+                final String specShortName = scalarModel.parentObjectAdapterMemento.getSpecMemento().getSpecification().getShortIdentifier();
                 return specShortName + "-" + scalarModel.getPropertyMemento().getProperty().getId();
             }
 
@@ -97,8 +98,7 @@ public class ScalarModel extends EntityModel {
                 try {
                     final ObjectAdapter parentAdapter = scalarModel.parentObjectAdapterMemento.getObjectAdapter();
                     final ObjectAdapter currentValue = property.get(parentAdapter);
-                    final ObjectAdapter proposedAdapter =
-                        parseableFacet.parseTextEntry(currentValue, proposedPojoAsStr);
+                    final ObjectAdapter proposedAdapter = parseableFacet.parseTextEntry(currentValue, proposedPojoAsStr);
                     final Consent valid = property.isAssociationValid(parentAdapter, proposedAdapter);
                     return valid.isAllowed() ? null : valid.getReason();
                 } catch (final Exception ex) {
@@ -134,8 +134,7 @@ public class ScalarModel extends EntityModel {
             public List<ObjectAdapter> getChoices(final ScalarModel scalarModel) {
                 final PropertyMemento propertyMemento = scalarModel.getPropertyMemento();
                 final OneToOneAssociation property = propertyMemento.getProperty();
-                final ObjectAdapter[] choices =
-                    property.getChoices(scalarModel.parentObjectAdapterMemento.getObjectAdapter());
+                final ObjectAdapter[] choices = property.getChoices(scalarModel.parentObjectAdapterMemento.getObjectAdapter());
                 return choicesAsList(choices);
             }
         },
@@ -163,8 +162,7 @@ public class ScalarModel extends EntityModel {
                     return null;
                 }
                 final String specShortName = adapterMemento.getSpecMemento().getSpecification().getShortIdentifier();
-                final String parmId =
-                    scalarModel.getParameterMemento().getActionParameter().getIdentifier().toNameIdentityString();
+                final String parmId = scalarModel.getParameterMemento().getActionParameter().getIdentifier().toNameIdentityString();
                 return specShortName + "-" + parmId + "-" + scalarModel.getParameterMemento().getNumber();
             }
 
@@ -212,8 +210,7 @@ public class ScalarModel extends EntityModel {
             public List<ObjectAdapter> getChoices(final ScalarModel scalarModel) {
                 final ActionParameterMemento parameterMemento = scalarModel.getParameterMemento();
                 final ObjectActionParameter actionParameter = parameterMemento.getActionParameter();
-                final ObjectAdapter[] choices =
-                    actionParameter.getChoices(scalarModel.parentObjectAdapterMemento.getObjectAdapter());
+                final ObjectAdapter[] choices = actionParameter.getChoices(scalarModel.parentObjectAdapterMemento.getObjectAdapter());
                 return choicesAsList(choices);
             }
         };
@@ -267,8 +264,9 @@ public class ScalarModel extends EntityModel {
     private PropertyMemento propertyMemento;
 
     /**
-     * Creates a model representing an action parameter of an action of a parent object, with the {@link #getObject()
-     * value of this model} to be default value (if any) of that action parameter.
+     * Creates a model representing an action parameter of an action of a parent
+     * object, with the {@link #getObject() value of this model} to be default
+     * value (if any) of that action parameter.
      */
     public ScalarModel(final ObjectAdapterMemento parentObjectAdapterMemento, final ActionParameterMemento apm) {
         this.kind = Kind.PARAMETER;
@@ -283,8 +281,9 @@ public class ScalarModel extends EntityModel {
     }
 
     /**
-     * Creates a model representing a property of a parent object, with the {@link #getObject() value of this model} to
-     * be current value of the property.
+     * Creates a model representing a property of a parent object, with the
+     * {@link #getObject() value of this model} to be current value of the
+     * property.
      */
     public ScalarModel(final ObjectAdapterMemento parentObjectAdapterMemento, final PropertyMemento pm) {
         this.kind = Kind.PROPERTY;
@@ -299,7 +298,8 @@ public class ScalarModel extends EntityModel {
     }
 
     /**
-     * Whether the scalar represents a {@link Kind#PROPERTY property} or a {@link Kind#PARAMETER}.
+     * Whether the scalar represents a {@link Kind#PROPERTY property} or a
+     * {@link Kind#PARAMETER}.
      */
     public Kind getKind() {
         return kind;
@@ -324,8 +324,9 @@ public class ScalarModel extends EntityModel {
     }
 
     /**
-     * Overrides superclass' implementation, because a {@link ScalarModel} can know the {@link ObjectSpecification of}
-     * the {@link ObjectAdapter adapter} without there necessarily being any adapter being
+     * Overrides superclass' implementation, because a {@link ScalarModel} can
+     * know the {@link ObjectSpecification of} the {@link ObjectAdapter adapter}
+     * without there necessarily being any adapter being
      * {@link #setObject(ObjectAdapter) set}.
      */
     @Override
@@ -384,7 +385,8 @@ public class ScalarModel extends EntityModel {
     }
 
     /**
-     * Default implementation looks up from singleton, but can be overridden for testing.
+     * Default implementation looks up from singleton, but can be overridden for
+     * testing.
      */
     protected AuthenticationSession getAuthenticationSession() {
         return ((AuthenticationSessionAccessor) Session.get()).getAuthenticationSession();

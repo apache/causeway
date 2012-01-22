@@ -135,8 +135,7 @@ public class TableRowBorder extends AbstractBorder {
         if (getState().isObjectIdentified()) {
             final int xExtent = width - 1;
             canvas.drawLine(xExtent - BORDER, top, xExtent - BORDER, top + s.getHeight() - 1, secondary2);
-            canvas.drawSolidRectangle(xExtent - BORDER + 1, top, BORDER - 2, s.getHeight() - 2 * top - 1,
-                Toolkit.getColor(ColorsAndFonts.COLOR_SECONDARY3));
+            canvas.drawSolidRectangle(xExtent - BORDER + 1, top, BORDER - 2, s.getHeight() - 2 * top - 1, Toolkit.getColor(ColorsAndFonts.COLOR_SECONDARY3));
         }
 
         // components

@@ -42,10 +42,10 @@ public abstract class ReprRendererAbstract<R extends ReprRendererAbstract<R, T>,
     private final LinkFollower linkFollower;
     private final RepresentationType representationType;
     protected final JsonRepresentation representation;
-    
+
     protected boolean includesSelf;
 
-    public ReprRendererAbstract(ResourceContext resourceContext, LinkFollower linkFollower, RepresentationType representationType, JsonRepresentation representation) {
+    public ReprRendererAbstract(final ResourceContext resourceContext, final LinkFollower linkFollower, final RepresentationType representationType, final JsonRepresentation representation) {
         this.resourceContext = resourceContext;
         this.linkFollower = asProvidedElseCreate(linkFollower);
         this.representationType = representationType;
@@ -60,19 +60,17 @@ public abstract class ReprRendererAbstract<R extends ReprRendererAbstract<R, T>,
         return linkFollower;
     }
 
-    private LinkFollower asProvidedElseCreate(LinkFollower linkFollower) {
-        if(linkFollower != null) {
+    private LinkFollower asProvidedElseCreate(final LinkFollower linkFollower) {
+        if (linkFollower != null) {
             return linkFollower;
         }
         return LinkFollower.create(resourceContext.getFollowLinks());
     }
 
-
     @Override
     public RepresentationType getRepresentationType() {
         return representationType;
     }
-
 
     @SuppressWarnings("unchecked")
     public R includesSelf() {
@@ -80,31 +78,30 @@ public abstract class ReprRendererAbstract<R extends ReprRendererAbstract<R, T>,
         return (R) this;
     }
 
-    public R withSelf(String href) {
-        if(href != null) {
+    public R withSelf(final String href) {
+        if (href != null) {
             getLinks().arrayAdd(LinkBuilder.newBuilder(resourceContext, Rel.SELF, representationType, href).build());
         }
         return cast(this);
     }
 
-    public R withSelf(JsonRepresentation link) {
+    public R withSelf(final JsonRepresentation link) {
         final String rel = link.getString("rel");
-        if(rel == null || !rel.equals(Rel.SELF.getName())) {
+        if (rel == null || !rel.equals(Rel.SELF.getName())) {
             throw new IllegalArgumentException("Provided link does not have a 'rel' of 'self'; was: " + link);
         }
-        if(link != null) {
+        if (link != null) {
             getLinks().arrayAdd(link);
         }
         return cast(this);
     }
 
-    
     /**
      * Will lazily create links array as required
      */
     protected JsonRepresentation getLinks() {
         JsonRepresentation links = representation.getArray("links");
-        if(links == null) {
+        if (links == null) {
             links = JsonRepresentation.newArray();
             representation.mapPut("links", links);
         }
@@ -112,10 +109,10 @@ public abstract class ReprRendererAbstract<R extends ReprRendererAbstract<R, T>,
     }
 
     protected void addLink(final Rel rel, final ObjectSpecification objectSpec) {
-        if(objectSpec == null) {
+        if (objectSpec == null) {
             return;
         }
-        LinkBuilder linkBuilder = DomainTypeReprRenderer.newLinkToBuilder(getResourceContext(), rel, objectSpec);
+        final LinkBuilder linkBuilder = DomainTypeReprRenderer.newLinkToBuilder(getResourceContext(), rel, objectSpec);
         getLinks().arrayAdd(linkBuilder.build());
     }
 
@@ -124,36 +121,36 @@ public abstract class ReprRendererAbstract<R extends ReprRendererAbstract<R, T>,
      */
     protected JsonRepresentation getExtensions() {
         JsonRepresentation extensions = representation.getMap("extensions");
-        if(extensions == null) {
+        if (extensions == null) {
             extensions = JsonRepresentation.newMap();
             representation.mapPut("extensions", extensions);
         }
         return extensions;
     }
 
-    public R withExtensions(JsonRepresentation extensions) {
-        if(!extensions.isMap()) {
+    public R withExtensions(final JsonRepresentation extensions) {
+        if (!extensions.isMap()) {
             throw new IllegalArgumentException("extensions must be a map");
         }
         representation.mapPut("extensions", extensions);
         return cast(this);
     }
 
-    
     @SuppressWarnings("unchecked")
-    protected static <R extends ReprRendererAbstract<R, T>, T> R cast(ReprRendererAbstract<R,T> builder) {
+    protected static <R extends ReprRendererAbstract<R, T>, T> R cast(final ReprRendererAbstract<R, T> builder) {
         return (R) builder;
     }
 
+    @Override
     public abstract JsonRepresentation render();
 
-
     /**
-     * Convenience for representations that are returned from objects that mutate state. 
+     * Convenience for representations that are returned from objects that
+     * mutate state.
      */
     protected final void addExtensionsIsisProprietaryChangedObjects() {
         final UpdateNotifier updateNotifier = getUpdateNotifier();
-        
+
         addToExtensions("changed", updateNotifier.getChangedObjects());
         addToExtensions("disposed", updateNotifier.getDisposedObjects());
     }
@@ -161,7 +158,7 @@ public abstract class ReprRendererAbstract<R extends ReprRendererAbstract<R, T>,
     private void addToExtensions(final String key, final List<ObjectAdapter> adapters) {
         final JsonRepresentation adapterList = JsonRepresentation.newArray();
         getExtensions().mapPut(key, adapterList);
-        for (ObjectAdapter adapter : adapters) {
+        for (final ObjectAdapter adapter : adapters) {
             adapterList.arrayAdd(DomainObjectReprRenderer.newLinkToBuilder(getResourceContext(), Rel.OBJECT, adapter).build());
         }
     }
@@ -185,10 +182,9 @@ public abstract class ReprRendererAbstract<R extends ReprRendererAbstract<R, T>,
     protected Localization getLocalization() {
         return IsisContext.getLocalization();
     }
-    
+
     protected UpdateNotifier getUpdateNotifier() {
         return IsisContext.getCurrentTransaction().getUpdateNotifier();
     }
-    
 
 }

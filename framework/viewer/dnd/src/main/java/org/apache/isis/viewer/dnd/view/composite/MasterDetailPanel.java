@@ -42,8 +42,7 @@ public class MasterDetailPanel extends CompositeView implements Selectable {
     private final ViewSpecification leftHandSideSpecification;
     private final Axes axes;
 
-    public MasterDetailPanel(final Content content, final ViewSpecification specification,
-        final ViewSpecification leftHandSideSpecification) {
+    public MasterDetailPanel(final Content content, final ViewSpecification specification, final ViewSpecification leftHandSideSpecification) {
         super(content, specification);
         this.leftHandSideSpecification = leftHandSideSpecification;
         axes = new Axes();
@@ -76,16 +75,23 @@ public class MasterDetailPanel extends CompositeView implements Selectable {
             }
         } else if (content instanceof ObjectContent) {
             /*
-             * TODO provide a view that shows first useful object (not redisplaying parent)
+             * TODO provide a view that shows first useful object (not
+             * redisplaying parent)
              * 
-             * ObjectAssociation[] associations = content.getSpecification().getAssociations(); for (int i = 0; i <
-             * associations.length; i++) { ObjectAssociation assoc = associations[i]; if
-             * (assoc.isOneToManyAssociation()) { ObjectAdapter collection = assoc.get(content.getAdapter()); final
-             * Content collectionContent = Toolkit.getContentFactory().createRootContent(collection);
-             * setSelectedNode(collectionContent); break; } else if (assoc.isOneToOneAssociation() &&
-             * !((OneToOneAssociation)assoc).getSpecification().isParseable()) { ObjectAdapter object =
-             * assoc.get(content.getAdapter()); if (object == null) { continue; } final Content objectContent =
-             * Toolkit.getContentFactory().createRootContent(object); setSelectedNode(objectContent); break; } }
+             * ObjectAssociation[] associations =
+             * content.getSpecification().getAssociations(); for (int i = 0; i <
+             * associations.length; i++) { ObjectAssociation assoc =
+             * associations[i]; if (assoc.isOneToManyAssociation()) {
+             * ObjectAdapter collection = assoc.get(content.getAdapter()); final
+             * Content collectionContent =
+             * Toolkit.getContentFactory().createRootContent(collection);
+             * setSelectedNode(collectionContent); break; } else if
+             * (assoc.isOneToOneAssociation() &&
+             * !((OneToOneAssociation)assoc).getSpecification().isParseable()) {
+             * ObjectAdapter object = assoc.get(content.getAdapter()); if
+             * (object == null) { continue; } final Content objectContent =
+             * Toolkit.getContentFactory().createRootContent(object);
+             * setSelectedNode(objectContent); break; } }
              */
             setSelectedNode(content);
         }
@@ -99,8 +105,7 @@ public class MasterDetailPanel extends CompositeView implements Selectable {
         final View left = subviews[0];
         final View right = subviews[1];
         final Size leftPanelRequiredSize = left.getRequiredSize(new Size(availableSpace));
-        final Size rightPanelRequiredSize =
-            right == null ? new Size() : right.getRequiredSize(new Size(availableSpace));
+        final Size rightPanelRequiredSize = right == null ? new Size() : right.getRequiredSize(new Size(availableSpace));
 
         // combine the two sizes
         final Size totalSize = new Size(leftPanelRequiredSize);
@@ -109,8 +114,8 @@ public class MasterDetailPanel extends CompositeView implements Selectable {
 
         if (totalSize.getWidth() > availableSpace.getWidth()) {
             /*
-             * If the combined width is greater than the available then we need to divide the space between the two
-             * sides and recalculate
+             * If the combined width is greater than the available then we need
+             * to divide the space between the two sides and recalculate
              */
             if (rightPanelRequiredSize.getWidth() <= MINIMUM_WIDTH) {
                 leftPanelRequiredSize.setWidth(availableSpace.getWidth() - rightPanelRequiredSize.getWidth());
@@ -121,19 +126,24 @@ public class MasterDetailPanel extends CompositeView implements Selectable {
                 rightPanelRequiredSize.setWidth(rightPanelRequiredSize.getWidth() * availableWidth / requiredWidth);
             }
             /*
-             * final int leftWidth = Math.max(MINIMUM_WIDTH, leftPanelRequiredSize.getWidth()); final int rightWidth =
-             * rightPanelRequiredSize.getWidth(); final int totalWidth = leftWidth + rightWidth;
+             * final int leftWidth = Math.max(MINIMUM_WIDTH,
+             * leftPanelRequiredSize.getWidth()); final int rightWidth =
+             * rightPanelRequiredSize.getWidth(); final int totalWidth =
+             * leftWidth + rightWidth;
              * 
-             * final int bestWidth = (int) (1.0 * leftWidth / totalWidth * availableWidth); final Size maximumSizeLeft =
-             * new Size(bestWidth, maximumSize.getHeight()); leftPanelRequiredSize =
+             * final int bestWidth = (int) (1.0 * leftWidth / totalWidth *
+             * availableWidth); final Size maximumSizeLeft = new Size(bestWidth,
+             * maximumSize.getHeight()); leftPanelRequiredSize =
              * left.getRequiredSize(maximumSizeLeft);
              * 
-             * final Size maximumSizeRight = new Size(availableWidth - leftPanelRequiredSize.getWidth(),
-             * maximumSize.getHeight()); rightPanelRequiredSize = right.getRequiredSize(maximumSizeRight);
+             * final Size maximumSizeRight = new Size(availableWidth -
+             * leftPanelRequiredSize.getWidth(), maximumSize.getHeight());
+             * rightPanelRequiredSize = right.getRequiredSize(maximumSizeRight);
              */
         }
 
-        // combinedSize.setHeight(Math.min(combinedSize.getHeight(), maximumSize.getHeight()));
+        // combinedSize.setHeight(Math.min(combinedSize.getHeight(),
+        // maximumSize.getHeight()));
         // totalSize.limitSize(availableSpace);
 
         left.setSize(new Size(leftPanelRequiredSize.getWidth(), totalSize.getHeight()));
@@ -159,8 +169,8 @@ public class MasterDetailPanel extends CompositeView implements Selectable {
 
         if (leftPanelRequiredSize.getWidth() + rightPanelRequiredSize.getWidth() > availableSpace.getWidth()) {
             /*
-             * If the combined width is greater than the available then we need to divide the space between the two
-             * sides and recalculate
+             * If the combined width is greater than the available then we need
+             * to divide the space between the two sides and recalculate
              */
 
             final int availableWidth = availableSpace.getWidth();
@@ -172,8 +182,7 @@ public class MasterDetailPanel extends CompositeView implements Selectable {
             final Size maximumSizeLeft = new Size(bestWidth, availableSpace.getHeight());
             leftPanelRequiredSize = left.getRequiredSize(maximumSizeLeft);
 
-            final Size maximumSizeRight =
-                new Size(availableWidth - leftPanelRequiredSize.getWidth(), availableSpace.getHeight());
+            final Size maximumSizeRight = new Size(availableWidth - leftPanelRequiredSize.getWidth(), availableSpace.getHeight());
             rightPanelRequiredSize = right == null ? new Size() : right.getRequiredSize(maximumSizeRight);
         }
 
@@ -195,17 +204,20 @@ public class MasterDetailPanel extends CompositeView implements Selectable {
     }
 
     private void setSelectedNode(final Content content) {
-        final ViewRequirement requirement =
-            new ViewRequirement(content, ViewRequirement.OPEN | ViewRequirement.SUBVIEW | ViewRequirement.FIXED);
+        final ViewRequirement requirement = new ViewRequirement(content, ViewRequirement.OPEN | ViewRequirement.SUBVIEW | ViewRequirement.FIXED);
         /*
-         * final ObjectAdapter object = content.getAdapter(); final ObjectSpecification specification =
-         * object.getSpecification(); final CollectionFacet facet = specification.getFacet(CollectionFacet.class); if
-         * (facet != null && facet.size(object) > 0) { if (mainViewTableSpec.canDisplay(requirement)) {
-         * showInRightPane(mainViewTableSpec.createView(content, axes, -1)); } else if
-         * (mainViewListSpec.canDisplay(requirement)) { showInRightPane(mainViewListSpec.createView(content, axes, -1));
-         * }
+         * final ObjectAdapter object = content.getAdapter(); final
+         * ObjectSpecification specification = object.getSpecification(); final
+         * CollectionFacet facet =
+         * specification.getFacet(CollectionFacet.class); if (facet != null &&
+         * facet.size(object) > 0) { if
+         * (mainViewTableSpec.canDisplay(requirement)) {
+         * showInRightPane(mainViewTableSpec.createView(content, axes, -1)); }
+         * else if (mainViewListSpec.canDisplay(requirement)) {
+         * showInRightPane(mainViewListSpec.createView(content, axes, -1)); }
          * 
-         * } else if (specification.isObject()) { if (object != null && mainViewFormSpec.canDisplay(requirement)) {
+         * } else if (specification.isObject()) { if (object != null &&
+         * mainViewFormSpec.canDisplay(requirement)) {
          * showInRightPane(mainViewFormSpec.createView(content, axes, -1)); } }
          */
         final View createView = Toolkit.getViewFactory().createView(requirement);

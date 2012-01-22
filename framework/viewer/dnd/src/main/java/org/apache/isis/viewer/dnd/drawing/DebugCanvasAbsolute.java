@@ -42,6 +42,7 @@ public class DebugCanvasAbsolute implements Canvas {
         offsetY = y;
     }
 
+    @Override
     public Canvas createSubcanvas() {
         buffer.blankLine();
         indent();
@@ -49,10 +50,12 @@ public class DebugCanvasAbsolute implements Canvas {
         return new DebugCanvasAbsolute(buffer, level + 1, offsetX, offsetY);
     }
 
+    @Override
     public Canvas createSubcanvas(final Bounds bounds) {
         return createSubcanvas(bounds.getX(), bounds.getY(), bounds.getWidth(), bounds.getHeight());
     }
 
+    @Override
     public Canvas createSubcanvas(final int x, final int y, final int width, final int height) {
         // buffer.blankLine();
         indent();
@@ -65,27 +68,27 @@ public class DebugCanvasAbsolute implements Canvas {
         return new DebugCanvasAbsolute(buffer, level + 1, dx, dy);
     }
 
-    public void draw3DRectangle(final int x, final int y, final int width, final int height, final Color color,
-        final boolean raised) {
+    @Override
+    public void draw3DRectangle(final int x, final int y, final int width, final int height, final Color color, final boolean raised) {
         indent();
         final int px = offsetX + x;
         final int py = offsetY + y;
         final int qx = px + width - 1;
         final int qy = py + height - 1;
-        buffer.appendln("Rectangle (3D) " + px + "," + py + " " + width + "x" + height + " (" + qx + "," + qy + ") "
-            + line());
+        buffer.appendln("Rectangle (3D) " + px + "," + py + " " + width + "x" + height + " (" + qx + "," + qy + ") " + line());
     }
 
+    @Override
     public void drawImage(final Image image, final int x, final int y) {
         indent();
         final int px = offsetX + x;
         final int py = offsetY + y;
         final int qx = px + image.getWidth() - 1;
         final int qy = py + image.getHeight() - 1;
-        buffer.appendln("Icon " + px + "," + py + " " + image.getWidth() + "x" + image.getHeight() + " (" + qx + ","
-            + qy + ") " + line());
+        buffer.appendln("Icon " + px + "," + py + " " + image.getWidth() + "x" + image.getHeight() + " (" + qx + "," + qy + ") " + line());
     }
 
+    @Override
     public void drawImage(final Image image, final int x, final int y, final int width, final int height) {
         indent();
         final int px = offsetX + x;
@@ -95,6 +98,7 @@ public class DebugCanvasAbsolute implements Canvas {
         buffer.appendln("Icon " + px + "," + py + " " + width + "x" + height + " (" + qx + "," + qy + ") " + line());
     }
 
+    @Override
     public void drawLine(final int x, final int y, final int x2, final int y2, final Color color) {
         indent();
         final int px = offsetX + x;
@@ -104,12 +108,13 @@ public class DebugCanvasAbsolute implements Canvas {
         buffer.appendln("Line from " + px + "," + py + " to " + qx + "," + qy + " " + color + line());
     }
 
+    @Override
     public void drawLine(final Location start, final int xExtent, final int yExtent, final Color color) {
         indent();
-        buffer.appendln("Line from " + start.getX() + "," + start.getY() + " to " + (start.getX() + xExtent) + ","
-            + (start.getY() + yExtent) + " " + color + line());
+        buffer.appendln("Line from " + start.getX() + "," + start.getY() + " to " + (start.getX() + xExtent) + "," + (start.getY() + yExtent) + " " + color + line());
     }
 
+    @Override
     public void drawOval(final int x, final int y, final int width, final int height, final Color color) {
         indent();
         final int px = offsetX + x;
@@ -117,6 +122,7 @@ public class DebugCanvasAbsolute implements Canvas {
         buffer.appendln("Oval " + px + "," + py + " " + width + "x" + height + " " + color + line());
     }
 
+    @Override
     public void drawRectangle(final int x, final int y, final int width, final int height, final Color color) {
         indent();
         final int px = offsetX + x;
@@ -124,8 +130,7 @@ public class DebugCanvasAbsolute implements Canvas {
         final int qx = px + width - 1;
         final int qy = py + height - 1;
 
-        buffer.appendln("Rectangle " + px + "," + py + " " + width + "x" + height + " (" + qx + "," + qy + ") " + color
-            + line());
+        buffer.appendln("Rectangle " + px + "," + py + " " + width + "x" + height + " (" + qx + "," + qy + ") " + color + line());
     }
 
     private String line() {
@@ -141,27 +146,29 @@ public class DebugCanvasAbsolute implements Canvas {
         return line.substring(line.indexOf('('));
     }
 
+    @Override
     public void drawRectangleAround(final Bounds bounds, final Color color) {
         indent();
         buffer.appendln("Rectangle 0,0 " + bounds.getWidth() + "x" + bounds.getHeight() + " " + color + line());
     }
 
-    public void drawRoundedRectangle(final int x, final int y, final int width, final int height, final int arcWidth,
-        final int arcHeight, final Color color) {
+    @Override
+    public void drawRoundedRectangle(final int x, final int y, final int width, final int height, final int arcWidth, final int arcHeight, final Color color) {
         indent();
         final int px = offsetX + x;
         final int py = offsetY + y;
         final int qx = px + width - 1;
         final int qy = py + height - 1;
-        buffer.appendln("Rounded Rectangle " + px + "," + py + " " + width + "x" + height + " (" + qx + "," + qy + ") "
-            + color + line());
+        buffer.appendln("Rounded Rectangle " + px + "," + py + " " + width + "x" + height + " (" + qx + "," + qy + ") " + color + line());
     }
 
+    @Override
     public void drawShape(final Shape shape, final Color color) {
         indent();
         buffer.appendln("Shape " + shape + " " + color);
     }
 
+    @Override
     public void drawShape(final Shape shape, final int x, final int y, final Color color) {
         indent();
         final int px = offsetX + x;
@@ -169,31 +176,33 @@ public class DebugCanvasAbsolute implements Canvas {
         buffer.appendln("Shape " + shape + " at " + px + "," + py + " (left, top)" + " " + color + line());
     }
 
+    @Override
     public void drawSolidOval(final int x, final int y, final int width, final int height, final Color color) {
         indent();
         final int px = offsetX + x;
         final int py = offsetY + y;
         final int qx = px + width - 1;
         final int qy = py + height - 1;
-        buffer.appendln("Oval (solid) " + px + "," + py + " " + width + "x" + height + " (" + qx + "," + qy + ") "
-            + color + line());
+        buffer.appendln("Oval (solid) " + px + "," + py + " " + width + "x" + height + " (" + qx + "," + qy + ") " + color + line());
     }
 
+    @Override
     public void drawSolidRectangle(final int x, final int y, final int width, final int height, final Color color) {
         indent();
         final int px = offsetX + x;
         final int py = offsetY + y;
         final int qx = px + width - 1;
         final int qy = py + height - 1;
-        buffer.appendln("Rectangle (solid) " + px + "," + py + " " + width + "x" + height + " (" + qx + "," + qy + ") "
-            + color + line());
+        buffer.appendln("Rectangle (solid) " + px + "," + py + " " + width + "x" + height + " (" + qx + "," + qy + ") " + color + line());
     }
 
+    @Override
     public void drawSolidShape(final Shape shape, final Color color) {
         indent();
         buffer.appendln("Shape (solid) " + shape + " " + color);
     }
 
+    @Override
     public void drawSolidShape(final Shape shape, final int x, final int y, final Color color) {
         indent();
         final int px = offsetX + x;
@@ -201,6 +210,7 @@ public class DebugCanvasAbsolute implements Canvas {
         buffer.appendln("Shape (solid)" + shape + " at " + px + "," + py + " (left, top)" + " " + color + line());
     }
 
+    @Override
     public void drawText(final String text, final int x, final int y, final Color color, final Text style) {
         indent();
         final int px = offsetX + x;
@@ -208,8 +218,8 @@ public class DebugCanvasAbsolute implements Canvas {
         buffer.appendln("Text " + px + "," + py + " \"" + text + "\" " + color + line());
     }
 
-    public void drawText(final String text, final int x, final int y, final int maxWidth, final Color color,
-        final Text style) {
+    @Override
+    public void drawText(final String text, final int x, final int y, final int maxWidth, final Color color, final Text style) {
         indent();
         final int px = offsetX + x;
         final int py = offsetY + y;
@@ -222,6 +232,7 @@ public class DebugCanvasAbsolute implements Canvas {
         }
     }
 
+    @Override
     public void offset(final int x, final int y) {
         // indent();
         offsetX += x;
@@ -229,14 +240,17 @@ public class DebugCanvasAbsolute implements Canvas {
         // buffer.appendln("Offset by " + x + "/" + y + " (left, top)");
     }
 
+    @Override
     public boolean overlaps(final Bounds bounds) {
         return true;
     }
 
+    @Override
     public String toString() {
         return "Canvas";
     }
 
+    @Override
     public void drawDebugOutline(final Bounds bounds, final int baseline, final Color color) {
     }
 

@@ -83,8 +83,9 @@ public abstract class ObjectView extends AbstractView {
     }
 
     /**
-     * Called when a dragged object is dropped onto this view. The default behaviour implemented here calls the action
-     * method on the target, passing the source object in as the only parameter.
+     * Called when a dragged object is dropped onto this view. The default
+     * behaviour implemented here calls the action method on the target, passing
+     * the source object in as the only parameter.
      */
     @Override
     public void drop(final ContentDrag drag) {

@@ -34,7 +34,7 @@ public class TypeActionResultReprRenderer extends ReprRendererAbstract<TypeActio
         }
 
         @Override
-        public ReprRenderer<?, ?> newRenderer(ResourceContext resourceContext, LinkFollower linkFollower, JsonRepresentation representation) {
+        public ReprRenderer<?, ?> newRenderer(final ResourceContext resourceContext, final LinkFollower linkFollower, final JsonRepresentation representation) {
             return new TypeActionResultReprRenderer(resourceContext, linkFollower, getRepresentationType(), representation);
         }
     }
@@ -43,34 +43,35 @@ public class TypeActionResultReprRenderer extends ReprRendererAbstract<TypeActio
     private LinkRepresentation selfLink;
     private Object value;
 
-    public TypeActionResultReprRenderer(ResourceContext resourceContext, LinkFollower linkFollower, RepresentationType representationType, JsonRepresentation representation) {
+    public TypeActionResultReprRenderer(final ResourceContext resourceContext, final LinkFollower linkFollower, final RepresentationType representationType, final JsonRepresentation representation) {
         super(resourceContext, linkFollower, representationType, representation);
     }
 
     @Override
-    public TypeActionResultReprRenderer with(ObjectSpecification objectSpecification) {
+    public TypeActionResultReprRenderer with(final ObjectSpecification objectSpecification) {
         this.objectSpecification = objectSpecification;
         return cast(this);
     }
 
-    public TypeActionResultReprRenderer withValue(Object value) {
+    public TypeActionResultReprRenderer withValue(final Object value) {
         this.value = value;
         return this;
     }
-    
+
+    @Override
     public JsonRepresentation render() {
-        if(includesSelf && selfLink != null) {
+        if (includesSelf && selfLink != null) {
             getLinks().arrayAdd(selfLink);
         }
 
-        if(value != null) {
+        if (value != null) {
             representation.mapPut("value", value);
         }
         getExtensions();
-        
+
         return representation;
     }
-    
+
     protected void putExtensionsIfService() {
         getExtensions().mapPut("isService", objectSpecification.isService());
     }

@@ -61,9 +61,7 @@ public abstract class OpenDropDownBorder extends AbstractBorder {
 
             canvas.drawShape(triangle, x, y, Toolkit.getColor(ColorsAndFonts.COLOR_SECONDARY3));
             if (over) {
-                final Color color =
-                    over ? Toolkit.getColor(ColorsAndFonts.COLOR_SECONDARY1) : Toolkit
-                        .getColor(ColorsAndFonts.COLOR_PRIMARY2);
+                final Color color = over ? Toolkit.getColor(ColorsAndFonts.COLOR_SECONDARY1) : Toolkit.getColor(ColorsAndFonts.COLOR_PRIMARY2);
                 canvas.drawSolidShape(triangle, x, y, color);
             }
         }

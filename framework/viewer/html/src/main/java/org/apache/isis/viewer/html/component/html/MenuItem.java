@@ -35,8 +35,7 @@ public class MenuItem implements Component {
     private final ActionType type;
     private final PathBuilder pathBuilder;
 
-    public MenuItem(PathBuilder pathBuilder, final String actionId, final String actionName,
-        final String actionDescription, final String reasonDisabled, final ActionType type, final boolean takesParameters, final String objectId) {
+    public MenuItem(final PathBuilder pathBuilder, final String actionId, final String actionName, final String actionDescription, final String reasonDisabled, final ActionType type, final boolean takesParameters, final String objectId) {
         this.actionId = actionId;
         this.pathBuilder = pathBuilder;
         this.actionName = actionName;

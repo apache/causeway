@@ -88,7 +88,7 @@ public class Dispatcher {
     private final Map<String, String> parameters = new HashMap<String, String>();
     private final ProcessorLookup processors = new ProcessorLookup();
     private final HtmlFileParser parser = new HtmlFileParser(processors);
-    private final Encoder encoder  = new SimpleEncoder();
+    private final Encoder encoder = new SimpleEncoder();
 
     public void process(final RequestContext context, final String servletPath) {
         LOG.debug("processing request " + servletPath);
@@ -113,8 +113,7 @@ public class Dispatcher {
                 // TODO pick options up from configuration
                 // context.raiseError(404);
                 // context.setRequestPath("/error/notfound_404.shtml");
-                IsisContext.getMessageBroker().addWarning(
-                    "Failed to find page " + servletPath + ". Please navigate from here");
+                IsisContext.getMessageBroker().addWarning("Failed to find page " + servletPath + ". Please navigate from here");
                 context.setRequestPath("/index.shtml");
                 processTheView(context);
             } catch (final IOException e1) {
@@ -122,8 +121,7 @@ public class Dispatcher {
             }
 
         } catch (final NotLoggedInException e) {
-            IsisContext.getMessageBroker().addWarning(
-                "You are not currently logged in! Please log in so you can continue.");
+            IsisContext.getMessageBroker().addWarning("You are not currently logged in! Please log in so you can continue.");
             context.setRequestPath("/login.shtml");
             try {
                 processTheView(context);
@@ -141,8 +139,7 @@ public class Dispatcher {
 
             final PersistenceSession checkSession = IsisContext.getPersistenceSession();
             final IsisTransactionManager transactionManager = checkSession.getTransactionManager();
-            if (transactionManager.getTransaction() != null
-                && transactionManager.getTransaction().getState().canAbort()) {
+            if (transactionManager.getTransaction() != null && transactionManager.getTransaction().getState().canAbort()) {
                 transactionManager.abortTransaction();
                 transactionManager.startTransaction();
             }
@@ -157,9 +154,7 @@ public class Dispatcher {
                 // TODO allow these values to be got configuration
                 // context.raiseError(403);
                 // context.setRequestPath("/error/security_403.shtml");
-                IsisContext.getMessageBroker().addWarning(
-                    "You don't have the right permissions to perform this (#" + errorRef + ")"
-                        + "<span class=\"debug-link\" onclick=\"$('#security-dump').toggle()\" > ...</span>");
+                IsisContext.getMessageBroker().addWarning("You don't have the right permissions to perform this (#" + errorRef + ")" + "<span class=\"debug-link\" onclick=\"$('#security-dump').toggle()\" > ...</span>");
                 context.clearVariables(Scope.REQUEST);
                 context.setRequestPath("/index.shtml");
                 context.setRequestPath("/error/security_403.shtml");
@@ -173,9 +168,7 @@ public class Dispatcher {
                 // context.raiseError(500);
                 // context.setRequestPath("/error/server_500.shtml");
 
-                final String message =
-                    "There was a error while processing this request (#" + errorRef + ")"
-                        + "<span class=\"debug-link\" onclick=\"$('#error-dump').toggle()\" > ...</span>";
+                final String message = "There was a error while processing this request (#" + errorRef + ")" + "<span class=\"debug-link\" onclick=\"$('#error-dump').toggle()\" > ...</span>";
                 IsisContext.getMessageBroker().addWarning(message);
                 context.clearVariables(Scope.REQUEST);
                 context.setRequestPath("/index.shtml");
@@ -213,7 +206,8 @@ public class Dispatcher {
             transactionManager.flushTransaction();
         }
         processView(context);
-        // Note - the session will have changed since the earlier call if a user has logged in or out in the action
+        // Note - the session will have changed since the earlier call if a user
+        // has logged in or out in the action
         // processing above.
         transactionManager = IsisContext.getPersistenceSession().getTransactionManager();
         if (transactionManager.getTransaction().getState().canCommit()) {
@@ -224,8 +218,7 @@ public class Dispatcher {
         UserManager.endRequest(context.getSession());
     }
 
-    private void prepareErrorDetails(final Throwable exception, final RequestContext requestContext,
-        final String errorRef, final String servletPath) {
+    private void prepareErrorDetails(final Throwable exception, final RequestContext requestContext, final String errorRef, final String servletPath) {
         final DebugString debugText = new DebugString();
         final DebugHtmlString debugHtml = new DebugHtmlString();
         final DebugBuilder debug = new DebugTee(debugText, debugHtml);
@@ -262,9 +255,8 @@ public class Dispatcher {
 
         PrintWriter writer;
         try {
-            final String directory =
-                IsisContext.getConfiguration().getString(ConfigurationConstants.ROOT + "scimpi.error-snapshots", ".");
-            File dir = new File(directory);
+            final String directory = IsisContext.getConfiguration().getString(ConfigurationConstants.ROOT + "scimpi.error-snapshots", ".");
+            final File dir = new File(directory);
             if (!dir.exists()) {
                 dir.mkdirs();
             }
@@ -280,10 +272,8 @@ public class Dispatcher {
         final String replace = "";
         final String withReplacement = "";
         final String message = exception.getMessage();
-        requestContext.addVariable("_error-message",
-            message == null ? "" : message.replaceAll(replace, withReplacement), Scope.ERROR);
-        requestContext.addVariable("_error-details", debugHtml.toString().replaceAll(replace, withReplacement),
-            Scope.ERROR);
+        requestContext.addVariable("_error-message", message == null ? "" : message.replaceAll(replace, withReplacement), Scope.ERROR);
+        requestContext.addVariable("_error-details", debugHtml.toString().replaceAll(replace, withReplacement), Scope.ERROR);
         requestContext.addVariable("_error-ref", errorRef, Scope.ERROR);
         requestContext.clearTransientVariables();
 
@@ -299,8 +289,7 @@ public class Dispatcher {
         return parameters.get(name);
     }
 
-    private void processActions(final RequestContext context, final boolean userLoggedIn, final String actionName)
-        throws IOException {
+    private void processActions(final RequestContext context, final boolean userLoggedIn, final String actionName) throws IOException {
         if (actionName.endsWith(COMMAND_ROOT)) {
             final int pos = actionName.lastIndexOf('/');
             final Action action = actions.get(actionName.substring(pos, actionName.length() - COMMAND_ROOT.length()));
@@ -401,13 +390,11 @@ public class Dispatcher {
         return file;
     }
 
-    private String findFileForSpecification(final RequestContext context, final ObjectSpecification specification,
-        final String name, final String extension) {
+    private String findFileForSpecification(final RequestContext context, final ObjectSpecification specification, final String name, final String extension) {
         return findFileForSpecification(context, specification, name, name, extension);
     }
 
-    private String findFileForSpecification(final RequestContext context, final ObjectSpecification specification,
-        final String name, final String defaultName, final String extension) {
+    private String findFileForSpecification(final RequestContext context, final ObjectSpecification specification, final String name, final String defaultName, final String extension) {
 
         String find = findFile(context, specification, name, extension);
         if (find == null) {
@@ -416,8 +403,7 @@ public class Dispatcher {
         return find;
     }
 
-    private String findFile(final RequestContext context, final ObjectSpecification specification, final String name,
-        final String extension) {
+    private String findFile(final RequestContext context, final ObjectSpecification specification, final String name, final String extension) {
         final String className = specification.getShortIdentifier();
         String fileName = context.findFile("/" + className + "/" + name + "." + extension);
         if (fileName == null) {
@@ -435,8 +421,7 @@ public class Dispatcher {
         return fileName;
     }
 
-    private Stack<Snippet> loadPageTemplate(final RequestContext context, final String path) throws IOException,
-        FileNotFoundException {
+    private Stack<Snippet> loadPageTemplate(final RequestContext context, final String path) throws IOException, FileNotFoundException {
         // TODO cache stacks and check for them first
         copyParametersToVariableList(context);
         LOG.debug("parsing source " + path);
@@ -445,9 +430,11 @@ public class Dispatcher {
 
     private void copyParametersToVariableList(final RequestContext context) {
         /*
-         * Enumeration parameterNames = context.getParameterNames(); while (parameterNames.hasMoreElements()) { String
-         * name = (String) parameterNames.nextElement(); if (!name.equals("view")) { context.addVariable(name,
-         * context.getParameter(name), Scope.REQUEST); } }
+         * Enumeration parameterNames = context.getParameterNames(); while
+         * (parameterNames.hasMoreElements()) { String name = (String)
+         * parameterNames.nextElement(); if (!name.equals("view")) {
+         * context.addVariable(name, context.getParameter(name), Scope.REQUEST);
+         * } }
          */
     }
 
@@ -527,8 +514,9 @@ public class Dispatcher {
             debug.appendln(name, actions.get(name));
         }
         /*
-         * new ArrayList<E>(actions.keySet().iterator()) Iterator<String> names = Collections.sort().iterator(); while
-         * (names.hasNext()) { String name = names.next(); view.appendRow(name, actions.get(name)); }
+         * new ArrayList<E>(actions.keySet().iterator()) Iterator<String> names
+         * = Collections.sort().iterator(); while (names.hasNext()) { String
+         * name = names.next(); view.appendRow(name, actions.get(name)); }
          */
         final Iterator<Action> iterator = actions.values().iterator();
         while (iterator.hasNext()) {

@@ -26,7 +26,8 @@ import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.model.util.ListModel;
 
 /**
- * Panel containing a list of {@link CssMenuItem}s acting as submenus of a parent {@link CssMenuItem}.
+ * Panel containing a list of {@link CssMenuItem}s acting as submenus of a
+ * parent {@link CssMenuItem}.
  */
 public class CssSubMenuItemsPanel extends CssMenuItemPanelAbstract<CssSubMenuItemsPanel.MyModel> {
 

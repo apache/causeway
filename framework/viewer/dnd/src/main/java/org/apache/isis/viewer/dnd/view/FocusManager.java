@@ -24,23 +24,26 @@ package org.apache.isis.viewer.dnd.view;
  */
 public interface FocusManager {
     /**
-     * The next view within the container to move the focus to; move to next field.
+     * The next view within the container to move the focus to; move to next
+     * field.
      */
     void focusNextView();
 
     /**
-     * The previous view within the container to move the focus to; move to previous field.
+     * The previous view within the container to move the focus to; move to
+     * previous field.
      */
     void focusPreviousView();
 
     /**
-     * The parent view within the container to move the focus to; move up to containing view in the hierachy.
+     * The parent view within the container to move the focus to; move up to
+     * containing view in the hierachy.
      */
     void focusParentView();
 
     /**
-     * The first child view within the container to move the focus to; move down to the first view within the current
-     * view.
+     * The first child view within the container to move the focus to; move down
+     * to the first view within the current view.
      */
     void focusFirstChildView();
 

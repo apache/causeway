@@ -25,7 +25,8 @@ import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.wicket.markup.html.basic.Label;
 
 /**
- * {@link PanelAbstract Panel} displaying welcome message (as used on {@link HomePage}).
+ * {@link PanelAbstract Panel} displaying welcome message (as used on
+ * {@link HomePage}).
  */
 public class WelcomePanel extends PanelAbstract<WelcomeModel> {
 

@@ -27,12 +27,12 @@ public abstract class AbstractElementProcessor implements ElementProcessor, Name
 
     private static final String SHOW_ICONS_BY_DEFAULT = ConfigurationConstants.ROOT + "scimpi.show-icons";
 
-    private boolean showIconByDefault;
+    private final boolean showIconByDefault;
 
     public AbstractElementProcessor() {
         showIconByDefault = IsisContext.getConfiguration().getBoolean(SHOW_ICONS_BY_DEFAULT, false);
     }
-    
+
     /**
      * Return the Class for the class specified in the type attribute.
      */
@@ -48,7 +48,7 @@ public abstract class AbstractElementProcessor implements ElementProcessor, Name
         }
         return cls;
     }
-    
+
     protected boolean showIconByDefault() {
         return showIconByDefault;
     }

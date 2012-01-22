@@ -30,8 +30,10 @@ public class TypeBasedColumnWidthStrategy implements ColumnWidthStrategy {
     public TypeBasedColumnWidthStrategy() {
         /*
          * ObjectSpecificationLoader loader = Isis.getSpecificationLoader();
-         * addWidth(loader.loadSpecification(Logical.class), 25); addWidth(loader.loadSpecification(Date.class), 65);
-         * addWidth(loader.loadSpecification(Time.class), 38); addWidth(loader.loadSpecification(DateTime.class), 100);
+         * addWidth(loader.loadSpecification(Logical.class), 25);
+         * addWidth(loader.loadSpecification(Date.class), 65);
+         * addWidth(loader.loadSpecification(Time.class), 38);
+         * addWidth(loader.loadSpecification(DateTime.class), 100);
          * addWidth(loader.loadSpecification(TextString.class), 80);
          */
     }
@@ -57,7 +59,7 @@ public class TypeBasedColumnWidthStrategy implements ColumnWidthStrategy {
         if (type == null) {
             return 200;
         }
-        final Integer t = (Integer) types.get(type);
+        final Integer t = types.get(type);
         if (t != null) {
             return t.intValue();
         } else if (type.isNotCollection()) {

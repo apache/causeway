@@ -70,7 +70,8 @@ public class BooleanPanel extends ScalarPanelAbstract {
     }
 
     /**
-     * Mandatory hook method to build the component to render the model when in {@link Format#COMPACT compact} format.
+     * Mandatory hook method to build the component to render the model when in
+     * {@link Format#COMPACT compact} format.
      */
     @Override
     protected Component addComponentForCompact() {
@@ -97,7 +98,8 @@ public class BooleanPanel extends ScalarPanelAbstract {
             }
         });
         checkBox.setOutputMarkupId(true);
-        checkBox.setEnabled(false); // will be enabled before rendering if required
+        checkBox.setEnabled(false); // will be enabled before rendering if
+                                    // required
         return checkBox;
     }
 

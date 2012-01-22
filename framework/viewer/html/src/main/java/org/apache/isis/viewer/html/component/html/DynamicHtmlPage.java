@@ -29,14 +29,14 @@ import org.apache.isis.viewer.html.component.Page;
 import org.apache.isis.viewer.html.component.ViewPane;
 
 public class DynamicHtmlPage extends AbstractHtmlPage implements Page {
-    
+
     private final Block navigation;
     private final ViewPane viewPane;
 
     private Component crumbs;
     private DebugPane debugPane;
 
-    public DynamicHtmlPage(PathBuilder pathBuilder, final String styleSheet, final String header, final String footer) {
+    public DynamicHtmlPage(final PathBuilder pathBuilder, final String styleSheet, final String header, final String footer) {
         super(pathBuilder, styleSheet, header, footer);
         this.navigation = new Div(pathBuilder, null, "navigation");
         this.viewPane = new ViewDiv(pathBuilder);

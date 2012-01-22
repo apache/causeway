@@ -38,8 +38,9 @@ import org.apache.wicket.Application;
 import com.google.common.collect.Collections2;
 
 /**
- * Used to build a {@link CssMenuItem} hierarchy from a {@link ObjectAdapterMemento object adapter}'s actions and any
- * contributed actions from services.
+ * Used to build a {@link CssMenuItem} hierarchy from a
+ * {@link ObjectAdapterMemento object adapter}'s actions and any contributed
+ * actions from services.
  */
 public class CssMenuBuilder {
 
@@ -49,8 +50,7 @@ public class CssMenuBuilder {
 
     private final CssMenuLinkFactory cssMenuLinkFactory;
 
-    public CssMenuBuilder(final ObjectAdapterMemento adapterMemento, final List<ObjectAdapter> serviceAdapters,
-        final List<ObjectAction> actions, final CssMenuLinkFactory cssMenuLinkFactory) {
+    public CssMenuBuilder(final ObjectAdapterMemento adapterMemento, final List<ObjectAdapter> serviceAdapters, final List<ObjectAction> actions, final CssMenuLinkFactory cssMenuLinkFactory) {
         this.adapterMemento = adapterMemento;
         this.serviceAdapters = serviceAdapters;
         this.actions = actions;
@@ -87,12 +87,12 @@ public class CssMenuBuilder {
      */
     protected boolean isDebugMode() {
         // TODO: need to figure out how to switch into debug mode;
-        // probably call a Debug toggle page, and stuff into Session.getMetaData()
+        // probably call a Debug toggle page, and stuff into
+        // Session.getMetaData()
         return true;
     }
 
-    private void addMenuItemsForActionsOfType(final CssMenuItem parent, final List<ObjectAction> actions,
-        final ActionType type) {
+    private void addMenuItemsForActionsOfType(final CssMenuItem parent, final List<ObjectAction> actions, final ActionType type) {
         final Collection<ObjectAction> filterActionsOfType = Collections2.filter(actions, Actions.ofType(type));
         for (final ObjectAction action : filterActionsOfType) {
             addMenuItem(parent, action);
@@ -129,8 +129,7 @@ public class CssMenuBuilder {
 
         final ObjectAdapterMemento serviceAdapterMemento = determineAdapterFor(contributedAction);
 
-        final Builder subMenuItemBuilder =
-            parent.newSubMenuItem(serviceAdapterMemento, contributedAction, cssMenuLinkFactory);
+        final Builder subMenuItemBuilder = parent.newSubMenuItem(serviceAdapterMemento, contributedAction, cssMenuLinkFactory);
         if (subMenuItemBuilder != null) {
             // could be null if invisible
             subMenuItemBuilder.build();
@@ -139,9 +138,10 @@ public class CssMenuBuilder {
 
     /**
      * It's a bit hokey to have to do this, but the
-     * {@link ObjectSpecification#getServiceActionsReturning(ActionType...) method we call} on
-     * {@link ObjectSpecification}, while nicely traversing the services for us, unfortunately does not pass us back the
-     * service adapters also.
+     * {@link ObjectSpecification#getServiceActionsReturning(ActionType...)
+     * method we call} on {@link ObjectSpecification}, while nicely traversing
+     * the services for us, unfortunately does not pass us back the service
+     * adapters also.
      */
     private ObjectAdapterMemento determineAdapterFor(final ObjectAction action) {
         // search through service adapters first

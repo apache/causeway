@@ -21,13 +21,12 @@ package org.apache.isis.viewer.json.applib.domainobjects;
 import org.apache.isis.viewer.json.applib.links.LinkRepresentation;
 import org.codehaus.jackson.JsonNode;
 
+public abstract class AbstractObjectMemberRepresentation extends DomainRepresentation {
 
-public abstract class AbstractObjectMemberRepresentation extends DomainRepresentation  {
-
-    public AbstractObjectMemberRepresentation(JsonNode jsonNode) {
+    public AbstractObjectMemberRepresentation(final JsonNode jsonNode) {
         super(jsonNode);
     }
-    
+
     public String getId() {
         return getString("id");
     }

@@ -90,10 +90,8 @@ public class TextFieldContentTest {
             }
         });
 
-        final IsisSessionFactory sessionFactory =
-            new IsisSessionFactoryDefault(DeploymentType.EXPLORATION, new IsisConfigurationDefault(),
-                mockTemplateImageLoader, mockSpecificationLoader, mockAuthenticationManager, mockAuthorizationManager,
-                mockUserProfileLoader, mockPersistenceSessionFactory, servicesList);
+        final IsisSessionFactory sessionFactory = new IsisSessionFactoryDefault(DeploymentType.EXPLORATION, new IsisConfigurationDefault(), mockTemplateImageLoader, mockSpecificationLoader, mockAuthenticationManager, mockAuthorizationManager, mockUserProfileLoader, mockPersistenceSessionFactory,
+                servicesList);
         sessionFactory.init();
         IsisContextStatic.createRelaxedInstance(sessionFactory);
 
@@ -136,7 +134,8 @@ public class TextFieldContentTest {
     @Test
     public void testInsert() {
         /*
-         * CursorPosition cursor = new CursorPosition(0,0); content.insert(cursor, "test string");
+         * CursorPosition cursor = new CursorPosition(0,0);
+         * content.insert(cursor, "test string");
          */
     }
 
@@ -165,8 +164,7 @@ public class TextFieldContentTest {
     // TODO reinstate once name has be set
     public void testAlignField() {
         // the following text wraps so it takes up 9 line
-        content
-            .setText("Apache Isis - a framework that exposes behaviourally complete business objects directly to the user. Copyright (C) 2010 Apache Software Foundation");
+        content.setText("Apache Isis - a framework that exposes behaviourally complete business objects directly to the user. Copyright (C) 2010 Apache Software Foundation");
 
         assertEquals(9, content.getNoLinesOfContent());
 
@@ -202,11 +200,9 @@ public class TextFieldContentTest {
     @Test
     public void testInstertOverTheEndOfLine() {
         final CursorPosition cursor = new CursorPosition(content, 0, 0);
-        content.insert(cursor,
-            "test insert that is longer than the four lines that were originally allocated for this test");
+        content.insert(cursor, "test insert that is longer than the four lines that were originally allocated for this test");
 
-        assertEquals("test insert that is longer than the four lines that were originally allocated for this test",
-            content.getText());
+        assertEquals("test insert that is longer than the four lines that were originally allocated for this test", content.getText());
         assertEquals(4, content.getNoDisplayLines());
         assertEquals(6, content.getNoLinesOfContent());
     }

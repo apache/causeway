@@ -26,27 +26,23 @@ import java.util.Set;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.applib.util.PathNode;
 
-
-
-@SuppressWarnings({"rawtypes","unchecked"})
+@SuppressWarnings({ "rawtypes", "unchecked" })
 public final class LinkFollower {
 
-
-    public final static LinkFollower create(List<List<String>> links) {
+    public final static LinkFollower create(final List<List<String>> links) {
         final Map<PathNode, Map> graph = GraphUtil.asGraph(links);
         return new LinkFollower(graph, Mode.FOLLOWING, PathNode.NULL);
     }
 
     private enum Mode {
-        FOLLOWING,
-        TERMINATED;
+        FOLLOWING, TERMINATED;
     }
 
     private final Map<PathNode, Map> graph;
-    private Mode mode;
+    private final Mode mode;
     private final PathNode root;
 
-    private LinkFollower(Map<PathNode, Map> graph, Mode mode, PathNode root) {
+    private LinkFollower(final Map<PathNode, Map> graph, final Mode mode, final PathNode root) {
         this.graph = graph;
         this.mode = mode;
         this.root = root;
@@ -55,19 +51,19 @@ public final class LinkFollower {
     /**
      * A little algebra...
      */
-    public LinkFollower follow(String pathTemplate, Object... args) {
-        String path = String.format(pathTemplate, args);
-        if(path == null) {
+    public LinkFollower follow(final String pathTemplate, final Object... args) {
+        final String path = String.format(pathTemplate, args);
+        if (path == null) {
             return terminated(PathNode.NULL);
         }
-        if(mode == Mode.TERMINATED) {
+        if (mode == Mode.TERMINATED) {
             return terminated(this.root);
         }
-        PathNode node = PathNode.parse(path);
-        if(mode == Mode.FOLLOWING) {
-            Map<PathNode, Map> remaining = graph.get(node);
-            if(remaining != null) {
-                PathNode key = findKey(node);
+        final PathNode node = PathNode.parse(path);
+        if (mode == Mode.FOLLOWING) {
+            final Map<PathNode, Map> remaining = graph.get(node);
+            if (remaining != null) {
+                final PathNode key = findKey(node);
                 return new LinkFollower(remaining, Mode.FOLLOWING, key);
             } else {
                 return terminated(node);
@@ -77,13 +73,14 @@ public final class LinkFollower {
     }
 
     /**
-     * somewhat bizarre, but we have to find the actual node that is in the graph;
-     * the one we matching on doesn't match on the {@link PathNode#getCriteria()} map.
+     * somewhat bizarre, but we have to find the actual node that is in the
+     * graph; the one we matching on doesn't match on the
+     * {@link PathNode#getCriteria()} map.
      */
-    private PathNode findKey(PathNode node) {
+    private PathNode findKey(final PathNode node) {
         final Set<PathNode> keySet = graph.keySet();
-        for(PathNode key: keySet) {
-            if(key.equals(node)) {
+        for (final PathNode key : keySet) {
+            if (key.equals(node)) {
                 return key;
             }
         }
@@ -91,7 +88,7 @@ public final class LinkFollower {
         return node;
     }
 
-    private static LinkFollower terminated(PathNode node) {
+    private static LinkFollower terminated(final PathNode node) {
         return new LinkFollower(null, Mode.TERMINATED, node);
     }
 
@@ -114,10 +111,11 @@ public final class LinkFollower {
      * Ensure that every key present in the provided map matches the criterium.
      * 
      * <p>
-     * Any keys in the criterium that are not present in the map will be ignored.
+     * Any keys in the criterium that are not present in the map will be
+     * ignored.
      */
-    public boolean matches(JsonRepresentation link) {
-        if(!isFollowing()) {
+    public boolean matches(final JsonRepresentation link) {
+        if (!isFollowing()) {
             return false;
         }
         return root == null || root.matches(link);

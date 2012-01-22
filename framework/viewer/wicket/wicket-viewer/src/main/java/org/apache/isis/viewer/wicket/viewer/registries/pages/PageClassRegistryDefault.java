@@ -35,7 +35,8 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
 /**
- * Default implementation of {@link PageClassRegistry}; just delegates to an underlying {@link PageClassList}.
+ * Default implementation of {@link PageClassRegistry}; just delegates to an
+ * underlying {@link PageClassList}.
  */
 @Singleton
 public class PageClassRegistryDefault implements PageClassRegistry, PageRegistrySpi {
@@ -43,7 +44,8 @@ public class PageClassRegistryDefault implements PageClassRegistry, PageRegistry
     private final Map<PageType, Class<? extends Page>> pagesByType = Maps.newHashMap();
 
     /**
-     * {@link Inject}ed in {@link #PageClassRegistryDefault(PageClassList) constructor}.
+     * {@link Inject}ed in {@link #PageClassRegistryDefault(PageClassList)
+     * constructor}.
      */
     @SuppressWarnings("unused")
     private final PageClassList pageClassList;

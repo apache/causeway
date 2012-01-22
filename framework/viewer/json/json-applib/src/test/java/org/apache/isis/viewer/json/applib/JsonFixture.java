@@ -29,10 +29,11 @@ import com.google.common.base.Charsets;
 import com.google.common.io.Resources;
 
 class JsonFixture {
-    
-    private JsonFixture(){}
 
-    public static JsonNode readJson(String resourceName) throws JsonParseException, JsonMappingException, IOException {
+    private JsonFixture() {
+    }
+
+    public static JsonNode readJson(final String resourceName) throws JsonParseException, JsonMappingException, IOException {
         return JsonMapper.instance().read(Resources.toString(Resources.getResource(JsonFixture.class, resourceName), Charsets.UTF_8), JsonNode.class);
     }
 

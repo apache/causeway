@@ -48,86 +48,79 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-
 public class DomainServiceResourceTest_services_representationAndHeaders {
 
     @Rule
     public IsisWebServerRule webServerRule = new IsisWebServerRule();
-    
+
     private RestfulClient client;
     private DomainServiceResource resource;
 
     @Before
     public void setUp() throws Exception {
-        WebServer webServer = webServerRule.getWebServer();
+        final WebServer webServer = webServerRule.getWebServer();
         client = new RestfulClient(webServer.getBase());
-        
+
         resource = client.getDomainServiceResource();
     }
 
-
     @Test
     public void representation() throws Exception {
-        
+
         // when
         final Response response = resource.services();
         final RestfulResponse<ListRepresentation> restfulResponse = RestfulResponse.ofT(response);
-        
+
         // then
         assertThat(restfulResponse.getStatus(), is(HttpStatusCode.OK));
         assertThat(restfulResponse.getHeader(RestfulResponse.Header.CONTENT_TYPE), is(RepresentationType.LIST.getMediaType()));
-        assertThat(restfulResponse.getHeader(RestfulResponse.Header.CACHE_CONTROL).getMaxAge(), is(24*60*60));
+        assertThat(restfulResponse.getHeader(RestfulResponse.Header.CACHE_CONTROL).getMaxAge(), is(24 * 60 * 60));
 
-        ListRepresentation repr = restfulResponse.getEntity();
+        final ListRepresentation repr = restfulResponse.getEntity();
 
         assertThat(repr, isMap());
 
         assertThat(repr.getSelf(), isLink().httpMethod(HttpMethod.GET));
-        
+
         assertThat(repr.getValues(), isArray());
-        
+
         assertThat(repr.getLinks(), isArray());
         assertThat(repr.getExtensions(), isMap());
     }
 
-
     @Test
     public void self_isFollowable() throws Exception {
         // given
-        ListRepresentation repr = givenRepresentation();
+        final ListRepresentation repr = givenRepresentation();
 
         // when, then
         assertThat(repr, isFollowableLinkToSelf(client));
     }
 
-
     @Test
     public void linksToDomainServiceResources() throws Exception {
-        
+
         // given
-        ListRepresentation repr = givenRepresentation();
-        
+        final ListRepresentation repr = givenRepresentation();
+
         // when
-        JsonRepresentation values = repr.getValues();
-        
+        final JsonRepresentation values = repr.getValues();
+
         // then
-        for (LinkRepresentation link : values.arrayIterable(LinkRepresentation.class)) {
+        for (final LinkRepresentation link : values.arrayIterable(LinkRepresentation.class)) {
             final RestfulResponse<JsonRepresentation> followJsonResp = client.follow(link);
             assertThat(followJsonResp.getStatus().getFamily(), is(Family.SUCCESSFUL));
-            
-            JsonRepresentation followRepr = followJsonResp.getEntity();
-            LinkRepresentation self = followRepr.getLink("links[rel=self]");
-            
+
+            final JsonRepresentation followRepr = followJsonResp.getEntity();
+            final LinkRepresentation self = followRepr.getLink("links[rel=self]");
+
             assertThat(self.getHref(), is(link.getHref()));
         }
     }
 
-
     private ListRepresentation givenRepresentation() throws JsonParseException, JsonMappingException, IOException {
-        RestfulResponse<ListRepresentation> jsonResp = RestfulResponse.ofT(resource.services());
+        final RestfulResponse<ListRepresentation> jsonResp = RestfulResponse.ofT(resource.services());
         return jsonResp.getEntity();
     }
 
-
 }
-    

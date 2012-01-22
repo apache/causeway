@@ -35,12 +35,11 @@ import org.junit.Test;
 public class DomainObjectRepresentationTest {
 
     private DomainObjectRepresentation representation;
-    
+
     @Before
     public void setUp() throws Exception {
         representation = new DomainObjectRepresentation(readJson("domainObjectRepresentation.json"));
     }
-    
 
     @Test
     public void xx() throws JsonParseException, JsonMappingException, IOException {

@@ -104,8 +104,7 @@ class InternalFieldView extends CompositeView {
 
     private final Content fieldContent;
 
-    public InternalFieldView(final Content content, final Content fieldContent, final Axes axes,
-        final ViewSpecification specification) {
+    public InternalFieldView(final Content content, final Content fieldContent, final Axes axes, final ViewSpecification specification) {
         super(content, specification);
         this.fieldContent = fieldContent;
     }

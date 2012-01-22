@@ -137,8 +137,7 @@ public class DndViewer extends IsisViewerAbstract {
         defaultWindowSize.limitHeight(600);
 
         final Size size = Properties.getSize(Properties.PROPERTY_BASE + "initial.size", defaultWindowSize);
-        final Location location =
-            Properties.getLocation(Properties.PROPERTY_BASE + "initial.location", new Location(x, y));
+        final Location location = Properties.getLocation(Properties.PROPERTY_BASE + "initial.location", new Location(x, y));
         return new Bounds(location, size);
     }
 
@@ -226,8 +225,9 @@ public class DndViewer extends IsisViewerAbstract {
     private boolean loggedInUsingLogonFixture = false;
 
     /**
-     * TODO: there is similar code in <tt>AuthenticationSessionLookupStrategyDefault</tt>; should try to combine
-     * somehow...
+     * TODO: there is similar code in
+     * <tt>AuthenticationSessionLookupStrategyDefault</tt>; should try to
+     * combine somehow...
      */
     private boolean login() {
         final AuthenticationRequest request = determineRequestIfPossible();
@@ -263,9 +263,10 @@ public class DndViewer extends IsisViewerAbstract {
     }
 
     private AuthenticationRequest determineRequestIfPossible() {
-        
+
         // command line args
-        AuthenticationRequest request = getAuthenticationRequestViaArgs();;
+        AuthenticationRequest request = getAuthenticationRequestViaArgs();
+        ;
 
         // exploration & (optionally) logon fixture provided
         if (request == null) {
@@ -291,7 +292,8 @@ public class DndViewer extends IsisViewerAbstract {
             bounds = calculateInitialWindowSize(frame.getToolkit().getScreenSize());
         }
 
-        frame.pack(); // forces insets to be calculated, hence need to then set bounds
+        frame.pack(); // forces insets to be calculated, hence need to then set
+                      // bounds
         frame.setBounds(bounds.getX(), bounds.getY(), bounds.getWidth(), bounds.getHeight());
 
         viewer = (XViewer) Toolkit.getViewer();
@@ -317,7 +319,8 @@ public class DndViewer extends IsisViewerAbstract {
 
         final UserProfile userProfiler = IsisContext.getUserProfile();
 
-        // TODO viewer should be shown during init() (so login can take place on main window, and can quit
+        // TODO viewer should be shown during init() (so login can take place on
+        // main window, and can quit
         // before
         // logging in), and should be updated during start to show context.
 
@@ -373,11 +376,13 @@ public class DndViewer extends IsisViewerAbstract {
         LOG.debug("setting up default views (provided by the framework)");
 
         /*
-         * viewFactory.addValueFieldSpecification(loadSpecification("field.option",
-         * OptionSelectionField.Specification.class));
-         * viewFactory.addValueFieldSpecification(loadSpecification("field.percentage",
+         * viewFactory.addValueFieldSpecification(loadSpecification("field.option"
+         * , OptionSelectionField.Specification.class));
+         * viewFactory.addValueFieldSpecification
+         * (loadSpecification("field.percentage",
          * PercentageBarField.Specification.class));
-         * viewFactory.addValueFieldSpecification(loadSpecification("field.timeperiod",
+         * viewFactory.addValueFieldSpecification
+         * (loadSpecification("field.timeperiod",
          * TimePeriodBarField.Specification.class));
          */
         viewFactory.addSpecification(loadSpecification("field.image", ImageField.Specification.class));
@@ -396,7 +401,8 @@ public class DndViewer extends IsisViewerAbstract {
             viewFactory.addSpecification(new InternalListSpecification());
             viewFactory.addSpecification(new SimpleListSpecification());
             viewFactory.addSpecification(new GridSpecification());
-            // TBA viewFactory.addSpecification(new ListWithExpandableElementsSpecification());
+            // TBA viewFactory.addSpecification(new
+            // ListWithExpandableElementsSpecification());
             // TBA
             viewFactory.addSpecification(new CalendarSpecification());
             viewFactory.addSpecification(new ListWithDetailSpecification());
@@ -416,8 +422,10 @@ public class DndViewer extends IsisViewerAbstract {
             viewFactory.addSpecification(new SummaryFormSpecification());
 
             viewFactory.addSpecification(new TreeSpecification());
-            // TODO allow window form to be used for objects with limited number of collections
-            // viewFactory.addSpecification(new TreeWithDetailSpecification(0, 3));
+            // TODO allow window form to be used for objects with limited number
+            // of collections
+            // viewFactory.addSpecification(new TreeWithDetailSpecification(0,
+            // 3));
 
             viewFactory.addDesignSpecification(new GridListSpecification());
             viewFactory.addDesignSpecification(new ConfigurableObjectViewSpecification());

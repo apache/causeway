@@ -32,7 +32,8 @@ import org.apache.wicket.markup.html.image.resource.RenderedDynamicImageResource
 import org.apache.wicket.markup.html.panel.ComponentFeedbackPanel;
 
 /**
- * {@link FormComponentPanel} representing a reference to an entity: a link and a findUsing button.
+ * {@link FormComponentPanel} representing a reference to an entity: a link and
+ * a findUsing button.
  */
 public class JavaAwtImagePanel extends PanelAbstract<ScalarModel> {
 
@@ -56,18 +57,17 @@ public class JavaAwtImagePanel extends PanelAbstract<ScalarModel> {
         final ObjectAdapter adapter = getModel().getObject();
         if (adapter != null) {
             final java.awt.Image imageValue = imageValueFacet.getImage(adapter);
-            final RenderedDynamicImageResource imageResource =
-                new RenderedDynamicImageResource(imageValue.getWidth(null), imageValue.getHeight(null)) {
+            final RenderedDynamicImageResource imageResource = new RenderedDynamicImageResource(imageValue.getWidth(null), imageValue.getHeight(null)) {
 
-                    private static final long serialVersionUID = 1L;
+                private static final long serialVersionUID = 1L;
 
-                    @Override
-                    protected boolean render(final Graphics2D graphics) {
-                        graphics.drawImage(imageValue, 0, 0, null);
-                        return true;
-                    }
+                @Override
+                protected boolean render(final Graphics2D graphics) {
+                    graphics.drawImage(imageValue, 0, 0, null);
+                    return true;
+                }
 
-                };
+            };
             final Image image = new Image(ID_SCALAR_VALUE, imageResource);
             addOrReplace(image);
             addOrReplace(new ComponentFeedbackPanel(ID_FEEDBACK, image));

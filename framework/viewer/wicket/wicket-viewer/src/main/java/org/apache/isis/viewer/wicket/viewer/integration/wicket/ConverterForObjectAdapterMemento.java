@@ -22,8 +22,6 @@ package org.apache.isis.viewer.wicket.viewer.integration.wicket;
 import java.util.Locale;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.wicket.util.convert.IConverter;
-
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.stringable.OidStringifier;
@@ -31,17 +29,20 @@ import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
+import org.apache.wicket.util.convert.IConverter;
 
 /**
- * Implementation of a Wicket {@link IConverter} for {@link ObjectAdapterMemento}s, converting to-and-from their
- * {@link Oid}'s string representation.
+ * Implementation of a Wicket {@link IConverter} for
+ * {@link ObjectAdapterMemento}s, converting to-and-from their {@link Oid}'s
+ * string representation.
  */
 public class ConverterForObjectAdapterMemento implements IConverter {
 
     private static final long serialVersionUID = 1L;
 
     /**
-     * Converts {@link OidStringifier stringified} {@link Oid} to {@link ObjectAdapterMemento}.
+     * Converts {@link OidStringifier stringified} {@link Oid} to
+     * {@link ObjectAdapterMemento}.
      */
     @Override
     public Object convertToObject(final String value, final Locale locale) {
@@ -54,7 +55,8 @@ public class ConverterForObjectAdapterMemento implements IConverter {
     }
 
     /**
-     * Converts {@link ObjectAdapterMemento} to {@link OidStringifier stringified} {@link Oid}.
+     * Converts {@link ObjectAdapterMemento} to {@link OidStringifier
+     * stringified} {@link Oid}.
      */
     @Override
     public String convertToString(final Object object, final Locale locale) {

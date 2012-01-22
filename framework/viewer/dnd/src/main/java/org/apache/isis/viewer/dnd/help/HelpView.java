@@ -39,10 +39,7 @@ public class HelpView extends AbstractView implements TextBlockTarget {
 
     public HelpView(final String name, final String description, final String help) {
         super(new NullContent());
-        final String text =
-            (name == null || name.trim().equals("") ? "" : (name + "\n"))
-                + (description == null || description.trim().equals("") ? "" : (description + "\n"))
-                + (help == null ? "" : help);
+        final String text = (name == null || name.trim().equals("") ? "" : (name + "\n")) + (description == null || description.trim().equals("") ? "" : (description + "\n")) + (help == null ? "" : help);
         content = new TextContent(this, 10, TextContent.WRAPPING);
         content.setText(text);
     }
@@ -58,8 +55,7 @@ public class HelpView extends AbstractView implements TextBlockTarget {
         canvas.drawSolidRectangle(x + 2, y + 2, xEntent - 4, yExtent - 4, Toolkit.getColor(ColorsAndFonts.COLOR_WHITE));
         final Color black = Toolkit.getColor(ColorsAndFonts.COLOR_BLACK);
         canvas.drawRoundedRectangle(x, y++, xEntent, yExtent, arc, arc, black);
-        canvas.drawRoundedRectangle(x + 1, y++, xEntent - 2, yExtent - 2, arc, arc,
-            Toolkit.getColor(ColorsAndFonts.COLOR_SECONDARY2));
+        canvas.drawRoundedRectangle(x + 1, y++, xEntent - 2, yExtent - 2, arc, arc, Toolkit.getColor(ColorsAndFonts.COLOR_SECONDARY2));
         canvas.drawRoundedRectangle(x + 2, y++, xEntent - 4, yExtent - 4, arc, arc, black);
 
         x += 10;

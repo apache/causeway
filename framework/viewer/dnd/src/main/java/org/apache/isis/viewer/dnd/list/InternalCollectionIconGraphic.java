@@ -30,8 +30,10 @@ public class InternalCollectionIconGraphic extends IconGraphic {
     }
 
     /*
-     * protected Image iconPicture(ObjectAdapter object) { final InternalCollection cls = (InternalCollection) object;
-     * final ObjectSpecification spec = cls.getElementSpecification(); Image icon = loadIcon(spec, ""); if(icon == null)
-     * { icon = loadIcon(spec, ""); } return icon; }
+     * protected Image iconPicture(ObjectAdapter object) { final
+     * InternalCollection cls = (InternalCollection) object; final
+     * ObjectSpecification spec = cls.getElementSpecification(); Image icon =
+     * loadIcon(spec, ""); if(icon == null) { icon = loadIcon(spec, ""); }
+     * return icon; }
      */
 }

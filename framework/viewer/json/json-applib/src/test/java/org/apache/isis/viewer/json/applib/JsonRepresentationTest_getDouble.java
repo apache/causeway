@@ -39,7 +39,7 @@ public class JsonRepresentationTest_getDouble {
     public void setUp() throws Exception {
         jsonRepresentation = new JsonRepresentation(readJson("map.json"));
     }
-    
+
     @Test
     public void happyCase() throws JsonParseException, JsonMappingException, IOException {
         assertThat(jsonRepresentation.getDouble("aDouble"), is(12345678901234534.3242));
@@ -55,7 +55,7 @@ public class JsonRepresentationTest_getDouble {
         try {
             jsonRepresentation.getDouble("aString");
             fail();
-        } catch (IllegalArgumentException e) {
+        } catch (final IllegalArgumentException e) {
             assertThat(e.getMessage(), is("'aString' is not a double"));
         }
     }
@@ -65,7 +65,7 @@ public class JsonRepresentationTest_getDouble {
         try {
             jsonRepresentation.getDouble("aSubMap");
             fail();
-        } catch (IllegalArgumentException e) {
+        } catch (final IllegalArgumentException e) {
             assertThat(e.getMessage(), is("'aSubMap' is not a double"));
         }
     }
@@ -75,7 +75,7 @@ public class JsonRepresentationTest_getDouble {
         try {
             jsonRepresentation.getDouble("aSubList");
             fail();
-        } catch (IllegalArgumentException e) {
+        } catch (final IllegalArgumentException e) {
             assertThat(e.getMessage(), is("'aSubList' is not a double"));
         }
     }
@@ -84,5 +84,5 @@ public class JsonRepresentationTest_getDouble {
     public void forMultipartKey() throws JsonParseException, JsonMappingException, IOException {
         assertThat(jsonRepresentation.getDouble("aSubMap.aDouble"), is(12345678901234534.4567));
     }
-    
+
 }

@@ -41,7 +41,13 @@ public class TableRowLayout implements Layout {
         for (int i = 0; i < cells.length; i++) {
             totalWidth += axis.getColumnWidth(i);
 
-            final Size s = cells[i].getRequiredSize(Size.createMax());// TODO Need to pass in a max size (is 0 at the
+            final Size s = cells[i].getRequiredSize(Size.createMax());// TODO
+                                                                      // Need to
+                                                                      // pass in
+                                                                      // a max
+                                                                      // size
+                                                                      // (is 0
+                                                                      // at the
                                                                       // moment)
             final int b = cells[i].getBaseline();
             final int baselineOffset = Math.max(0, maxBaseline - b);
@@ -59,7 +65,11 @@ public class TableRowLayout implements Layout {
         int x = 0;
         for (int i = 0; i < cells.length; i++) {
             final View cell = cells[i];
-            final Size s = cell.getRequiredSize(Size.createMax()); // TODO Need to pass in a max size (is 0 at the
+            final Size s = cell.getRequiredSize(Size.createMax()); // TODO Need
+                                                                   // to pass in
+                                                                   // a max size
+                                                                   // (is 0 at
+                                                                   // the
                                                                    // moment)
             s.setWidth(axis.getColumnWidth(i));
             cell.setSize(s);

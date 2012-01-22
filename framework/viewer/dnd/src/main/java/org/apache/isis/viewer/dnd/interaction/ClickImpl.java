@@ -36,7 +36,8 @@ public class ClickImpl extends PointerEvent implements Click {
      * @param mouseLocation
      *            the location of the mouse relative to the viewer
      * @param modifiers
-     *            the button and key held down during the click (@see java.awt.event.MouseEvent)
+     *            the button and key held down during the click (@see
+     *            java.awt.event.MouseEvent)
      */
     public ClickImpl(final Location mouseLocation, final int modifiers) {
         super(modifiers);

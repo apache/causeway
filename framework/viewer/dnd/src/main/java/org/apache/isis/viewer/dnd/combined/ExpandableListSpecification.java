@@ -42,8 +42,10 @@ public class ExpandableListSpecification extends AbstractCollectionViewSpecifica
 
     // TODO this should be available if an item can be given more space
     /*
-     * @Override public boolean canDisplay(final Content content, ViewRequirement requirement) { return
-     * content.isCollection() && requirement.is(ViewRequirement.CLOSED) && requirement.is(ViewRequirement.SUBVIEW) &&
+     * @Override public boolean canDisplay(final Content content,
+     * ViewRequirement requirement) { return content.isCollection() &&
+     * requirement.is(ViewRequirement.CLOSED) &&
+     * requirement.is(ViewRequirement.SUBVIEW) &&
      * requirement.is(ViewRequirement.SUBVIEW); }
      */
 

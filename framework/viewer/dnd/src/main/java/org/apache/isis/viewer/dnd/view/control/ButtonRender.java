@@ -24,8 +24,7 @@ import org.apache.isis.viewer.dnd.drawing.Size;
 
 public interface ButtonRender {
 
-    void draw(Canvas canvas, Size size, boolean isDisabled, boolean isDefault, boolean hasFocus, boolean isOver,
-        boolean isPressed, String text);
+    void draw(Canvas canvas, Size size, boolean isDisabled, boolean isDefault, boolean hasFocus, boolean isOver, boolean isPressed, String text);
 
     Size getMaximumSize(String text);
 

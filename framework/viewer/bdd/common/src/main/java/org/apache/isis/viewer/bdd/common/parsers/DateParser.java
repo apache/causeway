@@ -26,8 +26,8 @@ import java.util.Date;
 import java.util.TimeZone;
 
 /**
- * A mutable wrapper around a {@link DateFormat}, allowing the date and time parts of the format to be specified
- * independently specified.
+ * A mutable wrapper around a {@link DateFormat}, allowing the date and time
+ * parts of the format to be specified independently specified.
  */
 public class DateParser {
 

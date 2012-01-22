@@ -28,8 +28,7 @@ import org.apache.isis.runtimes.dflt.runtime.userprofile.UserProfileStoreInstall
 
 public class IsisSystemUsingInstallersWithinStory extends IsisSystemUsingInstallers {
 
-    public IsisSystemUsingInstallersWithinStory(final DeploymentType deploymentType,
-        final InstallerLookup installerLookup) {
+    public IsisSystemUsingInstallersWithinStory(final DeploymentType deploymentType, final InstallerLookup installerLookup) {
         super(deploymentType, installerLookup);
 
         final AuthenticationManagerInstaller authManagerInstaller = new BddAuthenticationManagerInstaller();

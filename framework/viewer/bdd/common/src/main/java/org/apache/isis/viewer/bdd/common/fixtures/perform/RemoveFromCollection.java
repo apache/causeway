@@ -67,8 +67,7 @@ public class RemoveFromCollection extends PerformAbstractTypeParams {
         }
 
         // validate argument
-        otma.createValidateAddInteractionContext(getSession(), InteractionInvocationMethod.BY_USER, onAdapter,
-            toRemoveAdapter);
+        otma.createValidateAddInteractionContext(getSession(), InteractionInvocationMethod.BY_USER, onAdapter, toRemoveAdapter);
         final Consent validToRemove = otma.isValidToRemove(onAdapter, toRemoveAdapter);
         if (validToRemove.isVetoed()) {
             throw ScenarioBoundValueException.current(onMemberBinding, validToRemove.getReason());

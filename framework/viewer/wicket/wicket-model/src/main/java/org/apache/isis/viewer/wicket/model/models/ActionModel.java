@@ -48,15 +48,17 @@ import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import com.google.common.collect.Maps;
 
 /**
- * Models an action invocation, either the gathering of arguments for the action's {@link Mode#PARAMETERS parameters},
- * or the handling of the {@link Mode#RESULTS results} once invoked.
+ * Models an action invocation, either the gathering of arguments for the
+ * action's {@link Mode#PARAMETERS parameters}, or the handling of the
+ * {@link Mode#RESULTS results} once invoked.
  */
 public class ActionModel extends ModelAbstract<ObjectAdapter> {
 
     private static final long serialVersionUID = 1L;
 
     /**
-     * Whether we are obtaining arguments (eg in a dialog), or displaying the results
+     * Whether we are obtaining arguments (eg in a dialog), or displaying the
+     * results
      */
     public enum Mode {
         PARAMETERS, RESULTS
@@ -87,16 +89,14 @@ public class ActionModel extends ModelAbstract<ObjectAdapter> {
     /**
      * Factory; for use directly.
      */
-    public static ActionModel create(final ObjectAdapterMemento targetAdapter, final ActionMemento action,
-        final Mode mode, final SingleResultsMode singleResultsMode) {
+    public static ActionModel create(final ObjectAdapterMemento targetAdapter, final ActionMemento action, final Mode mode, final SingleResultsMode singleResultsMode) {
         return new ActionModel(targetAdapter, action, mode, singleResultsMode);
     }
 
     /**
      * Factory; for use by {@link BookmarkablePageLink}s.
      */
-    public static ActionModel createForPersistent(final PageParameters pageParameters,
-        final OidStringifier oidStringifier) {
+    public static ActionModel createForPersistent(final PageParameters pageParameters, final OidStringifier oidStringifier) {
         return new ActionModel(pageParameters, oidStringifier);
     }
 
@@ -105,9 +105,7 @@ public class ActionModel extends ModelAbstract<ObjectAdapter> {
      * 
      * see {@link #ActionModel(PageParameters)}
      */
-    public static PageParameters createPageParameters(final ObjectAdapter adapter, final ObjectAction noAction,
-        final OidStringifier oidStringifier, final ObjectAdapter contextAdapter,
-        final SingleResultsMode singleResultsMode) {
+    public static PageParameters createPageParameters(final ObjectAdapter adapter, final ObjectAction noAction, final OidStringifier oidStringifier, final ObjectAdapter contextAdapter, final SingleResultsMode singleResultsMode) {
         final PageParameters pageParameters = EntityModel.createPageParameters(adapter, oidStringifier);
 
         final String actionType = noAction.getType().name();
@@ -142,8 +140,7 @@ public class ActionModel extends ModelAbstract<ObjectAdapter> {
         return ActionParams.compatibleWith(contextAdapter, actionParam) ? Mode.RESULTS : Mode.PARAMETERS;
     }
 
-    private static void addActionParamContextIfPossible(final ObjectAction noAction,
-        final OidStringifier oidStringifier, final ObjectAdapter contextAdapter, final PageParameters pageParameters) {
+    private static void addActionParamContextIfPossible(final ObjectAction noAction, final OidStringifier oidStringifier, final ObjectAdapter contextAdapter, final PageParameters pageParameters) {
         if (contextAdapter == null) {
             return;
         }
@@ -187,8 +184,7 @@ public class ActionModel extends ModelAbstract<ObjectAdapter> {
     private ActionExecutor executor;
 
     private ActionModel(final PageParameters pageParameters, final OidStringifier oidStringifier) {
-        this(newObjectAdapterMementoFrom(pageParameters, oidStringifier), newActionMementoFrom(pageParameters),
-            actionModeFor(pageParameters), singleResultsModeFor(pageParameters));
+        this(newObjectAdapterMementoFrom(pageParameters, oidStringifier), newActionMementoFrom(pageParameters), actionModeFor(pageParameters), singleResultsModeFor(pageParameters));
 
         setContextArgumentIfPossible(pageParameters, oidStringifier);
 
@@ -206,8 +202,7 @@ public class ActionModel extends ModelAbstract<ObjectAdapter> {
     }
 
     private static ActionMemento newActionMementoFrom(final PageParameters pageParameters) {
-        return new ActionMemento(actionOwningSpecFor(pageParameters), actionTypeFor(pageParameters),
-            actionNameParmsFor(pageParameters));
+        return new ActionMemento(actionOwningSpecFor(pageParameters), actionTypeFor(pageParameters), actionNameParmsFor(pageParameters));
     }
 
     private static SingleResultsMode singleResultsModeFor(final PageParameters pageParameters) {
@@ -230,10 +225,8 @@ public class ActionModel extends ModelAbstract<ObjectAdapter> {
         return SpecMemento.representing(PageParameterNames.ACTION_OWNING_SPEC.getFrom(pageParameters));
     }
 
-    private static ObjectAdapterMemento newObjectAdapterMementoFrom(final PageParameters pageParameters,
-        final OidStringifier oidStringifier) {
-        return ObjectAdapterMemento.createPersistent(oidFor(pageParameters, oidStringifier),
-            objectSpecFor(pageParameters));
+    private static ObjectAdapterMemento newObjectAdapterMementoFrom(final PageParameters pageParameters, final OidStringifier oidStringifier) {
+        return ObjectAdapterMemento.createPersistent(oidFor(pageParameters, oidStringifier), objectSpecFor(pageParameters));
     }
 
     private static SpecMemento objectSpecFor(final PageParameters pageParameters) {
@@ -244,16 +237,14 @@ public class ActionModel extends ModelAbstract<ObjectAdapter> {
         return oidStringifier.deString(PageParameterNames.OBJECT_OID.getFrom(pageParameters));
     }
 
-    private ActionModel(final ObjectAdapterMemento adapterMemento, final ActionMemento actionMemento,
-        final Mode actionMode, final SingleResultsMode singleResultsMode) {
+    private ActionModel(final ObjectAdapterMemento adapterMemento, final ActionMemento actionMemento, final Mode actionMode, final SingleResultsMode singleResultsMode) {
         this.targetAdapterMemento = adapterMemento;
         this.actionMemento = actionMemento;
         this.actionMode = actionMode;
         this.singleResultsMode = singleResultsMode;
     }
 
-    private boolean setContextArgumentIfPossible(final PageParameters pageParameters,
-        final OidStringifier oidStringifier) {
+    private boolean setContextArgumentIfPossible(final PageParameters pageParameters, final OidStringifier oidStringifier) {
         final String paramContext = PageParameterNames.ACTION_PARAM_CONTEXT.getFrom(pageParameters);
         if (paramContext == null) {
             return false;
@@ -401,8 +392,10 @@ public class ActionModel extends ModelAbstract<ObjectAdapter> {
      * The {@link SelectionHandler}, if any.
      * 
      * <p>
-     * If specified, then {@link EntityCollectionModel#setSelectionHandler(SelectionHandler) propogated} if the results
-     * is a {@link EntityCollectionModel collection}, or used directly if the results is an {@link EntityModel}.
+     * If specified, then
+     * {@link EntityCollectionModel#setSelectionHandler(SelectionHandler)
+     * propogated} if the results is a {@link EntityCollectionModel collection},
+     * or used directly if the results is an {@link EntityModel}.
      */
     public SelectionHandler getSelectionHandler() {
         return selectionHandler;

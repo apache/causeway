@@ -30,11 +30,10 @@ import org.junit.Test;
 
 public class LinkFollowerTest_follow {
 
-
     @Test
     public void simple() throws Exception {
-        List<List<String>> links = asListOfLists("a.b.c");
-        
+        final List<List<String>> links = asListOfLists("a.b.c");
+
         final LinkFollower linkFollower = LinkFollower.create(links);
 
         assertThat(linkFollower.follow("a").isFollowing(), is(true));
@@ -43,8 +42,8 @@ public class LinkFollowerTest_follow {
 
     @Test
     public void notMatching() throws Exception {
-        List<List<String>> links = asListOfLists("a.b.c");
-        
+        final List<List<String>> links = asListOfLists("a.b.c");
+
         final LinkFollower linkFollower = LinkFollower.create(links);
 
         assertThat(linkFollower.follow("x").isFollowing(), is(false));
@@ -53,8 +52,8 @@ public class LinkFollowerTest_follow {
 
     @Test
     public void create_noCriteria() throws Exception {
-        List<List<String>> links = asListOfLists("a.b.c");
-        
+        final List<List<String>> links = asListOfLists("a.b.c");
+
         final LinkFollower linkFollower = LinkFollower.create(links);
 
         assertThat(linkFollower.criteria().size(), is(0));
@@ -63,28 +62,28 @@ public class LinkFollowerTest_follow {
 
     @Test
     public void follow_noCriteria() throws Exception {
-        List<List<String>> links = asListOfLists("a.b.c");
-        
+        final List<List<String>> links = asListOfLists("a.b.c");
+
         final LinkFollower linkFollower = LinkFollower.create(links);
 
         final LinkFollower followA = linkFollower.follow("a");
-        
+
         assertThat(followA.criteria().size(), is(0));
         assertThat(linkFollower.matches(JsonRepresentation.newMap()), is(true));
     }
 
     @Test
     public void follow_withSingleCriteria() throws Exception {
-        List<List<String>> links = asListOfLists("a[x=y].b.c");
-        
+        final List<List<String>> links = asListOfLists("a[x=y].b.c");
+
         final LinkFollower linkFollower = LinkFollower.create(links);
 
         assertThat(linkFollower.follow("x").isFollowing(), is(false));
-        
+
         final LinkFollower followA = linkFollower.follow("a");
-        
+
         assertThat(followA.isFollowing(), is(true));
-        final Map<String,String> criteria = followA.criteria();
+        final Map<String, String> criteria = followA.criteria();
         assertThat(criteria.size(), is(1));
         assertThat(criteria.get("x"), is("y"));
         assertThat(followA.matches(JsonRepresentation.newMap("x", "y")), is(true));
@@ -94,18 +93,18 @@ public class LinkFollowerTest_follow {
 
     @Test
     public void follow_withMultipleCriteria() throws Exception {
-        List<List<String>> links = asListOfLists("a[x=y z=w].b.c");
-        
+        final List<List<String>> links = asListOfLists("a[x=y z=w].b.c");
+
         final LinkFollower linkFollower = LinkFollower.create(links);
 
         assertThat(linkFollower.follow("x").isFollowing(), is(false));
-        
+
         final LinkFollower followA = linkFollower.follow("a");
-        
+
         assertThat(followA.isFollowing(), is(true));
         final Map<String, String> criteria = followA.criteria();
         assertThat(criteria.size(), is(2));
-        
+
         assertThat(criteria.get("x"), is("y"));
         assertThat(criteria.get("z"), is("w"));
         assertThat(followA.matches(JsonRepresentation.newMap("x", "y", "z", "w")), is(true));
@@ -117,8 +116,7 @@ public class LinkFollowerTest_follow {
         assertThat(followA.matches(JsonRepresentation.newMap("x", "y", "z", "bad")), is(false));
     }
 
-
-    private List<List<String>> asListOfLists(String string) {
+    private List<List<String>> asListOfLists(final String string) {
         return Parser.forListOfListOfStrings().valueOf(string);
     }
 }

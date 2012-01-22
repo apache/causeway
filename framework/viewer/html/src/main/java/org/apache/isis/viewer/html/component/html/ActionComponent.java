@@ -21,12 +21,11 @@ package org.apache.isis.viewer.html.component.html;
 
 import java.io.PrintWriter;
 
-import org.apache.isis.viewer.html.HtmlViewerConstants;
 import org.apache.isis.viewer.html.PathBuilder;
 import org.apache.isis.viewer.html.component.Component;
 
 class ActionComponent implements Component {
-    
+
     private final PathBuilder pathBuilder;
     private final String objectId;
     private final String name;
@@ -35,8 +34,7 @@ class ActionComponent implements Component {
     private final String action;
     private final String elementId;
 
-    public ActionComponent(final PathBuilder pathBuilder, final String action, final String name, final String description,
-        final String objectId, final String elementId, final String field) {
+    public ActionComponent(final PathBuilder pathBuilder, final String action, final String name, final String description, final String objectId, final String elementId, final String field) {
         this.pathBuilder = pathBuilder;
         this.action = action;
         this.name = name;

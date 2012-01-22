@@ -23,8 +23,9 @@ import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 
 /**
- * {@link PanelAbstract Panel} that represents a placeholder for a {@link EntityCollectionModel collection of entity}s
- * so that they can be only lazily resolved.
+ * {@link PanelAbstract Panel} that represents a placeholder for a
+ * {@link EntityCollectionModel collection of entity}s so that they can be only
+ * lazily resolved.
  */
 public class CollectionContentsAsUnresolved extends PanelAbstract<EntityCollectionModel> {
 

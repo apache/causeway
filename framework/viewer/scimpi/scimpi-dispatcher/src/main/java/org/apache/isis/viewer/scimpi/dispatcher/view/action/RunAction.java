@@ -59,8 +59,7 @@ public class RunAction extends AbstractElementProcessor {
         if (action.isContributed()) {
             final List<ObjectActionParameter> parameterSpecs = action.getParameters();
             for (int i = 0; i < parameters.length; i++) {
-                if (parameters[i] == null
-                    && object.getSpecification().isOfType(parameterSpecs.get(i).getSpecification())) {
+                if (parameters[i] == null && object.getSpecification().isOfType(parameterSpecs.get(i).getSpecification())) {
                     parameters[i] = object;
                     break;
                 }

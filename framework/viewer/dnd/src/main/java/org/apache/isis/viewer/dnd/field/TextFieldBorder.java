@@ -26,7 +26,8 @@ import org.apache.isis.viewer.dnd.view.View;
 import org.apache.isis.viewer.dnd.view.base.AbstractBorder;
 
 /**
- * Border decorator to draw a white background and 3D style border around a text field.
+ * Border decorator to draw a white background and 3D style border around a text
+ * field.
  */
 public class TextFieldBorder extends AbstractBorder {
 

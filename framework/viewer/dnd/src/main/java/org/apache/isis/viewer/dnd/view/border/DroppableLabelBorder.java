@@ -63,7 +63,8 @@ public class DroppableLabelBorder extends LabelBorder {
     @Override
     public ViewAreaType viewAreaType(final Location location) {
         if (overBorder(location)) {
-            return ViewAreaType.CONTENT; // used to ensure menu options for contained object are shown
+            return ViewAreaType.CONTENT; // used to ensure menu options for
+                                         // contained object are shown
         } else {
             return super.viewAreaType(location);
         }

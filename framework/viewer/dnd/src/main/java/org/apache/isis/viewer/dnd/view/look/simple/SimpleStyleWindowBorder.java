@@ -39,8 +39,7 @@ public class SimpleStyleWindowBorder implements BorderDrawing {
     final protected static int LINE_THICKNESS = 4;
     private final static Text TITLE_STYLE = Toolkit.getText(ColorsAndFonts.TEXT_TITLE_SMALL);
 
-    int titlebarHeight = Math.max(WindowControl.HEIGHT + View.VPADDING + TITLE_STYLE.getDescent(),
-        TITLE_STYLE.getTextHeight());
+    int titlebarHeight = Math.max(WindowControl.HEIGHT + View.VPADDING + TITLE_STYLE.getDescent(), TITLE_STYLE.getTextHeight());
     int baseline = LINE_THICKNESS + WindowControl.HEIGHT;
     int left = LINE_THICKNESS;
     int right = LINE_THICKNESS;
@@ -54,7 +53,8 @@ public class SimpleStyleWindowBorder implements BorderDrawing {
 
     @Override
     public void layoutControls(final Size size, final View[] controls) {
-        int x = left + View.HPADDING; // size.getWidth() - right - (WindowControl.WIDTH + View.HPADDING) *
+        int x = left + View.HPADDING; // size.getWidth() - right -
+                                      // (WindowControl.WIDTH + View.HPADDING) *
                                       // controls.length;
         final int y = LINE_THICKNESS + View.VPADDING;
 
@@ -66,40 +66,36 @@ public class SimpleStyleWindowBorder implements BorderDrawing {
     }
 
     @Override
-    public void draw(final Canvas canvas, final Size s, final boolean hasFocus, final ViewState state,
-        final View[] controls, final String title) {
+    public void draw(final Canvas canvas, final Size s, final boolean hasFocus, final ViewState state, final View[] controls, final String title) {
         final int x = left;
         final int width = s.getWidth();
         final int height = s.getHeight();
 
-        final Color borderColor =
-            hasFocus ? Toolkit.getColor(ColorsAndFonts.COLOR_PRIMARY1) : Toolkit
-                .getColor(ColorsAndFonts.COLOR_SECONDARY1);
+        final Color borderColor = hasFocus ? Toolkit.getColor(ColorsAndFonts.COLOR_PRIMARY1) : Toolkit.getColor(ColorsAndFonts.COLOR_SECONDARY1);
         canvas.drawRoundedRectangle(0, 0, width, height, 8, 8, borderColor);
-        canvas.drawRectangle(LINE_THICKNESS - 1, LINE_THICKNESS - 1, width - LINE_THICKNESS * 2 + 2, height
-            - LINE_THICKNESS * 2 + 2, borderColor);
+        canvas.drawRectangle(LINE_THICKNESS - 1, LINE_THICKNESS - 1, width - LINE_THICKNESS * 2 + 2, height - LINE_THICKNESS * 2 + 2, borderColor);
 
-        final Color titleBarTextColor =
-            hasFocus ? Toolkit.getColor(ColorsAndFonts.COLOR_BLACK) : Toolkit.getColor(ColorsAndFonts.COLOR_SECONDARY1);
-        final Color titleBarBackgroundColor =
-            hasFocus ? Toolkit.getColor(ColorsAndFonts.COLOR_PRIMARY3) : Toolkit
-                .getColor(ColorsAndFonts.COLOR_SECONDARY3);
+        final Color titleBarTextColor = hasFocus ? Toolkit.getColor(ColorsAndFonts.COLOR_BLACK) : Toolkit.getColor(ColorsAndFonts.COLOR_SECONDARY1);
+        final Color titleBarBackgroundColor = hasFocus ? Toolkit.getColor(ColorsAndFonts.COLOR_PRIMARY3) : Toolkit.getColor(ColorsAndFonts.COLOR_SECONDARY3);
         /*
-         * final Color insetColorLight = hasFocus ? Toolkit.getColor("primary2") : Toolkit.getColor("secondary2"); final
-         * Color insetColorDark = hasFocus ? Toolkit.getColor("black") : Toolkit.getColor("black");
+         * final Color insetColorLight = hasFocus ? Toolkit.getColor("primary2")
+         * : Toolkit.getColor("secondary2"); final Color insetColorDark =
+         * hasFocus ? Toolkit.getColor("black") : Toolkit.getColor("black");
          * 
          * 
-         * // slightly rounded grey border canvas.drawRectangle(1, 0, width - 2, height, borderColor);
-         * canvas.drawRectangle(0, 1, width, height - 2, borderColor);
+         * // slightly rounded grey border canvas.drawRectangle(1, 0, width - 2,
+         * height, borderColor); canvas.drawRectangle(0, 1, width, height - 2,
+         * borderColor);
          * 
-         * for (int i = 2; i < left; i++) { canvas.drawRectangle(i, i, width - 2 * i, height - 2 * i, borderColor); }
+         * for (int i = 2; i < left; i++) { canvas.drawRectangle(i, i, width - 2
+         * * i, height - 2 * i, borderColor); }
          * 
-         * if (state.isActive()) { final int i = left; canvas.drawRectangle(i, top, width - 2 * i, height - 2 * i - top,
+         * if (state.isActive()) { final int i = left; canvas.drawRectangle(i,
+         * top, width - 2 * i, height - 2 * i - top,
          * Toolkit.getColor("active")); }
          */
         // title bar
-        canvas.drawSolidRectangle(left + 1, LINE_THICKNESS + 1, width - LINE_THICKNESS * 2 - 1, titlebarHeight - 1,
-            titleBarBackgroundColor);
+        canvas.drawSolidRectangle(left + 1, LINE_THICKNESS + 1, width - LINE_THICKNESS * 2 - 1, titlebarHeight - 1, titleBarBackgroundColor);
         final int y = LINE_THICKNESS + titlebarHeight;
         canvas.drawLine(LINE_THICKNESS, y, width - LINE_THICKNESS - 1, y, borderColor);
 
@@ -108,10 +104,12 @@ public class SimpleStyleWindowBorder implements BorderDrawing {
         canvas.drawText(text, x + controlWidth, baseline, titleBarTextColor, TITLE_STYLE);
         // canvas.drawRectangle(x, 3, width, 20, titleBarTextColor);
         /*
-         * final Color white = Toolkit.getColor("white"); final int hatchX = View.HPADDING +
-         * TITLE_STYLE.stringWidth(title) + 10; final int hatchWidth = controls[0].getBounds().getX() - hatchX - 10;
-         * final int hatchY = LINE_THICKNESS + 2; final int hatchHeight = titlebarHeight - 6;
-         * DrawingUtil.drawHatching(canvas, hatchX, hatchY, hatchWidth, hatchHeight, borderColor, white);
+         * final Color white = Toolkit.getColor("white"); final int hatchX =
+         * View.HPADDING + TITLE_STYLE.stringWidth(title) + 10; final int
+         * hatchWidth = controls[0].getBounds().getX() - hatchX - 10; final int
+         * hatchY = LINE_THICKNESS + 2; final int hatchHeight = titlebarHeight -
+         * 6; DrawingUtil.drawHatching(canvas, hatchX, hatchY, hatchWidth,
+         * hatchHeight, borderColor, white);
          */
     }
 
@@ -121,20 +119,18 @@ public class SimpleStyleWindowBorder implements BorderDrawing {
         final int x = size.getWidth() - 50;
         final Image icon = ImageFactory.getInstance().loadIcon("transient", height, null);
         if (icon == null) {
-            canvas.drawText("*", x, baseline, Toolkit.getColor(ColorsAndFonts.COLOR_BLACK),
-                Toolkit.getText(ColorsAndFonts.TEXT_NORMAL));
+            canvas.drawText("*", x, baseline, Toolkit.getColor(ColorsAndFonts.COLOR_BLACK), Toolkit.getText(ColorsAndFonts.TEXT_NORMAL));
         } else {
             canvas.drawImage(icon, x, LINE_THICKNESS + 1, height, height);
-            // canvas.drawRectangle(x, LINE_THICKNESS + 1, height, height, Color.RED);
+            // canvas.drawRectangle(x, LINE_THICKNESS + 1, height, height,
+            // Color.RED);
         }
 
     }
 
     @Override
     public void getRequiredSize(final Size size, final String title, final View[] controls) {
-        final int width =
-            left + View.HPADDING + TITLE_STYLE.stringWidth(title) + View.HPADDING + controls.length
-                * (WindowControl.WIDTH + View.HPADDING) + View.HPADDING + right;
+        final int width = left + View.HPADDING + TITLE_STYLE.stringWidth(title) + View.HPADDING + controls.length * (WindowControl.WIDTH + View.HPADDING) + View.HPADDING + right;
         size.ensureWidth(width);
     }
 

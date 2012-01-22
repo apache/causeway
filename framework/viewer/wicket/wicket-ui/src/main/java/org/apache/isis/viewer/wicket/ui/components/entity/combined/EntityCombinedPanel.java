@@ -24,7 +24,8 @@ import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 
 /**
- * {@link PanelAbstract Panel} to represent an entity on a single page made up of several &lt;div&gt; regions.
+ * {@link PanelAbstract Panel} to represent an entity on a single page made up
+ * of several &lt;div&gt; regions.
  */
 public class EntityCombinedPanel extends PanelAbstract<EntityModel> {
 

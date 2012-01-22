@@ -20,8 +20,8 @@
 package org.apache.isis.viewer.html;
 
 import org.apache.isis.core.commons.lang.MapUtils;
-import org.apache.isis.core.webapp.content.ResourceServlet;
 import org.apache.isis.core.webapp.content.ResourceCachingFilter;
+import org.apache.isis.core.webapp.content.ResourceServlet;
 import org.apache.isis.runtimes.dflt.runtime.Isis;
 import org.apache.isis.runtimes.dflt.runtime.installerregistry.installerapi.IsisViewerInstallerAbstract;
 import org.apache.isis.runtimes.dflt.runtime.viewer.IsisViewer;
@@ -33,15 +33,16 @@ import org.apache.isis.viewer.html.servlet.HtmlServletConstants;
 import org.apache.isis.viewer.html.servlet.LogonServlet;
 
 /**
- * Convenience implementation of a {@link IsisViewer} providing the ability to run a Jetty web server configured for the
- * HTML viewer from the {@link Isis command line}.
+ * Convenience implementation of a {@link IsisViewer} providing the ability to
+ * run a Jetty web server configured for the HTML viewer from the {@link Isis
+ * command line}.
  * 
  * <p>
  * To run, use the <tt>--viewer html</tt> flag.
  * 
  * <p>
- * In a production deployment the configuration represented by the {@link WebAppSpecification} would be specified in the
- * <tt>web.xml<tt> file.
+ * In a production deployment the configuration represented by the
+ * {@link WebAppSpecification} would be specified in the <tt>web.xml<tt> file.
  */
 public class HtmlViewerInstaller extends IsisViewerInstallerAbstract {
 
@@ -65,17 +66,14 @@ public class HtmlViewerInstaller extends IsisViewerInstallerAbstract {
 
                 webAppSpec.addContextParams("isis.viewers", "html");
 
-                webAppSpec.addFilterSpecification(IsisSessionFilter.class,
-                    MapUtils.asMap(IsisSessionFilter.RESTRICTED_KEY, LOGON_PAGE_MAPPED), DYNAMIC_CONTENT);
+                webAppSpec.addFilterSpecification(IsisSessionFilter.class, MapUtils.asMap(IsisSessionFilter.RESTRICTED_KEY, LOGON_PAGE_MAPPED), DYNAMIC_CONTENT);
                 webAppSpec.addServletSpecification(LogonServlet.class, LOGON_PAGE_MAPPED);
                 webAppSpec.addServletSpecification(ControllerServlet.class, DYNAMIC_CONTENT);
 
-                webAppSpec.addFilterSpecification(ResourceCachingFilter.class, MapUtils.asMap("CacheTime", "86400"),
-                    STATIC_CONTENT);
+                webAppSpec.addFilterSpecification(ResourceCachingFilter.class, MapUtils.asMap("CacheTime", "86400"), STATIC_CONTENT);
                 webAppSpec.addServletSpecification(ResourceServlet.class, STATIC_CONTENT);
 
-                final String resourceBaseDir =
-                    getConfiguration().getString(HtmlViewerConstants.VIEWER_HTML_RESOURCE_BASE_KEY);
+                final String resourceBaseDir = getConfiguration().getString(HtmlViewerConstants.VIEWER_HTML_RESOURCE_BASE_KEY);
                 if (resourceBaseDir != null) {
                     webAppSpec.addResourcePath(resourceBaseDir);
                 }

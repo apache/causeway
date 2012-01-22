@@ -173,8 +173,7 @@ public abstract class AbstractControlView implements View {
     public void entered() {
         final View target = getParent();
         final Consent consent = action.disabled(target);
-        final String actionText =
-            action.getName(target) + " - " + (consent.isVetoed() ? consent.getReason() : action.getDescription(target));
+        final String actionText = action.getName(target) + " - " + (consent.isVetoed() ? consent.getReason() : action.getDescription(target));
         getFeedbackManager().setAction(actionText);
 
         isOver = true;

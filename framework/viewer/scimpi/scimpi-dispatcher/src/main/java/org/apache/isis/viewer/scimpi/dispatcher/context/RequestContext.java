@@ -84,13 +84,12 @@ public abstract class RequestContext {
     public static final String ERROR = "_error";
     public static final String BACK_TO = "_back_to";
     private static final Map<String, Object> globalVariables = new HashMap<String, Object>();
-    private static final Scope[] SCOPES = new Scope[] { Scope.ERROR, Scope.REQUEST, Scope.INTERACTION, Scope.SESSION,
-        Scope.GLOBAL };
+    private static final Scope[] SCOPES = new Scope[] { Scope.ERROR, Scope.REQUEST, Scope.INTERACTION, Scope.SESSION, Scope.GLOBAL };
 
     private final ObjectMapping objectMapping;
     private final VersionMapping versionMapping;
     private final Map<Scope, Map<String, Object>> variables;
-    private final StringBuffer debugTrace = new StringBuffer(); 
+    private final StringBuffer debugTrace = new StringBuffer();
     private final DebugUsers debugUsers;
 
     private String forwardTo;
@@ -105,13 +104,9 @@ public abstract class RequestContext {
     public RequestContext(final DebugUsers debugUsers) {
         this.debugUsers = debugUsers;
 
-        String className =
-            IsisContext.getConfiguration().getString("scimpi.object-mapping.class",
-                DefaultOidObjectMapping.class.getName());
+        String className = IsisContext.getConfiguration().getString("scimpi.object-mapping.class", DefaultOidObjectMapping.class.getName());
         objectMapping = InstanceUtil.createInstance(className, ObjectMapping.class);
-        className =
-            IsisContext.getConfiguration().getString("scimpi.version-mapping.class",
-                DefaultVersionMapping.class.getName());
+        className = IsisContext.getConfiguration().getString("scimpi.version-mapping.class", DefaultVersionMapping.class.getName());
         versionMapping = InstanceUtil.createInstance(className, VersionMapping.class);
         variables = new HashMap<Scope, Map<String, Object>>();
 
@@ -231,8 +226,12 @@ public abstract class RequestContext {
     }
 
     public boolean isInternalRequest() {
-        final String referrer = getHeader("Referer"); // Note spelling mistake is intentional
-        return referrer != null && referrer.contains("localhost"); // TODO need to look for actual domain
+        final String referrer = getHeader("Referer"); // Note spelling mistake
+                                                      // is intentional
+        return referrer != null && referrer.contains("localhost"); // TODO need
+                                                                   // to look
+                                                                   // for actual
+                                                                   // domain
     }
 
     // //////////////////////////////////////////////////////////////////
@@ -338,7 +337,7 @@ public abstract class RequestContext {
             }
         }
     }
-    
+
     public List<String> getDebugUsers() {
         return debugUsers.getNames();
     }
@@ -477,7 +476,8 @@ public abstract class RequestContext {
             return resourceParentPath;
         } else if (name.equals("_base")) {
             return getUrlBase() + getContextPath() + resourceParentPath + resourceFile;
-            // return "http://localhost:8080" + resourceParentPath + resourceFile;
+            // return "http://localhost:8080" + resourceParentPath +
+            // resourceFile;
         }
         return null;
     }
@@ -499,8 +499,7 @@ public abstract class RequestContext {
         final Iterator<Entry<String, Object>> iterator = map.entrySet().iterator();
         while (iterator.hasNext()) {
             final Entry<String, Object> entry = iterator.next();
-            buffer.append("<input type=\"hidden\" name=\"" + entry.getKey() + "\" value=\"" + entry.getValue()
-                + "\" />\n");
+            buffer.append("<input type=\"hidden\" name=\"" + entry.getKey() + "\" value=\"" + entry.getValue() + "\" />\n");
         }
         return buffer.toString();
     }
@@ -582,8 +581,9 @@ public abstract class RequestContext {
     // ///////////////////////////////////////
 
     /**
-     * The requested file is the file that the browser requested. This may or may not be the file that is actually
-     * processed and returned; that is the {@link #getResourceFile()}.
+     * The requested file is the file that the browser requested. This may or
+     * may not be the file that is actually processed and returned; that is the
+     * {@link #getResourceFile()}.
      */
     public String getRequestedFile() {
         return requestedFile;
@@ -624,9 +624,11 @@ public abstract class RequestContext {
     }
 
     /**
-     * Returns the absolute file system path to the specified resource based on the path used for the current request
-     * during the call to {@link #setRequestPath(String)}. The return path can then be used to access the specified
-     * resource. If the resource has a leading slash (/) then that resource string is returned as the path.
+     * Returns the absolute file system path to the specified resource based on
+     * the path used for the current request during the call to
+     * {@link #setRequestPath(String)}. The return path can then be used to
+     * access the specified resource. If the resource has a leading slash (/)
+     * then that resource string is returned as the path.
      */
     public String requestedFilePath(final String resource) {
         if (resource.startsWith("/")) {
@@ -641,13 +643,14 @@ public abstract class RequestContext {
     // ///////////////////////////////////////
 
     /**
-     * The resource file is the file on disk that is processed and returned to the browser. This may or may not be the
-     * file that was actually requested by the browser; that is the {@link #getRequestedFile()}.
+     * The resource file is the file on disk that is processed and returned to
+     * the browser. This may or may not be the file that was actually requested
+     * by the browser; that is the {@link #getRequestedFile()}.
      */
     public String getResourceFile() {
         return resourceFile;
     }
-    
+
     public String getResourceParentPath() {
         return resourceParentPath;
     }
@@ -671,10 +674,12 @@ public abstract class RequestContext {
     }
 
     /**
-     * Returns a uri for the specified resource based on the path used for the current request (as set up during the
-     * call to {@link #setResourcePath(String)}). Such a uri when used by the browser will allow access to the specified
-     * resource. If the resource has a leading slash (/) or the resource is for a generic page (starts with "_generic")
-     * then that resource string is returned as the path.
+     * Returns a uri for the specified resource based on the path used for the
+     * current request (as set up during the call to
+     * {@link #setResourcePath(String)}). Such a uri when used by the browser
+     * will allow access to the specified resource. If the resource has a
+     * leading slash (/) or the resource is for a generic page (starts with
+     * "_generic") then that resource string is returned as the path.
      */
     public String fullUriPath(final String resource) {
         if (resource.startsWith("/") || resource.startsWith("_generic")) {
@@ -685,10 +690,12 @@ public abstract class RequestContext {
     }
 
     /**
-     * Returns the absolute file system path to the specified resource based on the path used for the current request
-     * (as set up during the call to {@link #setResourcePath(String)}). The return path can then be used to access the
-     * specified resource. If the resource has a leading slash (/) or the resource is for a generic page (starts with
-     * "_generic") then that resource string is returned as the path.
+     * Returns the absolute file system path to the specified resource based on
+     * the path used for the current request (as set up during the call to
+     * {@link #setResourcePath(String)}). The return path can then be used to
+     * access the specified resource. If the resource has a leading slash (/) or
+     * the resource is for a generic page (starts with "_generic") then that
+     * resource string is returned as the path.
      */
     public String fullFilePath(final String resource) {
         if (resource.startsWith("/") || resource.startsWith("_generic")) {

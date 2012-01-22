@@ -174,18 +174,18 @@ public class ImageField extends AbstractField {
         final boolean ctrl = (modifiers & InputEvent.CTRL_MASK) > 0;
 
         switch (keyCode) {
-            case KeyEvent.VK_V:
-                if (ctrl) {
-                    key.consume();
-                    pasteFromClipboard();
-                }
-                break;
-            case KeyEvent.VK_C:
-                if (ctrl) {
-                    key.consume();
-                    copy();
-                }
-                break;
+        case KeyEvent.VK_V:
+            if (ctrl) {
+                key.consume();
+                pasteFromClipboard();
+            }
+            break;
+        case KeyEvent.VK_C:
+            if (ctrl) {
+                key.consume();
+                copy();
+            }
+            break;
         }
     }
 
@@ -206,9 +206,11 @@ public class ImageField extends AbstractField {
     }
 
     /*
-     * private void loadImageFromURL(final String filename) { try { final URL url = new URL("file://" + filename); final
-     * Image image = java.awt.Toolkit.getDefaultToolkit().getImage(url); loadImage(image); } catch (final
-     * MalformedURLException e) { throw new IsisException("Failed to load image from " + filename); } }
+     * private void loadImageFromURL(final String filename) { try { final URL
+     * url = new URL("file://" + filename); final Image image =
+     * java.awt.Toolkit.getDefaultToolkit().getImage(url); loadImage(image); }
+     * catch (final MalformedURLException e) { throw new
+     * IsisException("Failed to load image from " + filename); } }
      */
     private void loadImageFromFile(final String filename) {
         final Image image = java.awt.Toolkit.getDefaultToolkit().getImage(filename);
@@ -230,14 +232,19 @@ public class ImageField extends AbstractField {
             } else {
                 LOG.info("unsupported paste operation " + content);
 
-                // note java does not support transferring images from the clipboard
+                // note java does not support transferring images from the
+                // clipboard
                 // although it has an image flavor for it !!?
                 /*
-                 * DataFlavor[] transferDataFlavors = content.getTransferDataFlavors(); for (int i = 0; i <
-                 * transferDataFlavors.length; i++) { LOG.debug("data transfer as " +
+                 * DataFlavor[] transferDataFlavors =
+                 * content.getTransferDataFlavors(); for (int i = 0; i <
+                 * transferDataFlavors.length; i++) {
+                 * LOG.debug("data transfer as " +
                  * transferDataFlavors[i].getMimeType()); }
                  * 
-                 * Image image = (Image) content.getTransferData(DataFlavor.imageFlavor); LOG.debug("pasted " + image);
+                 * Image image = (Image)
+                 * content.getTransferData(DataFlavor.imageFlavor);
+                 * LOG.debug("pasted " + image);
                  */
 
             }

@@ -30,7 +30,8 @@ import org.apache.wicket.markup.html.panel.ComponentFeedbackPanel;
 import org.apache.wicket.model.Model;
 
 /**
- * Panel for rendering entity collection; analogous to (any concrete subclass of) {@link ScalarPanelAbstract}.
+ * Panel for rendering entity collection; analogous to (any concrete subclass
+ * of) {@link ScalarPanelAbstract}.
  */
 public class CollectionPanel extends PanelAbstract<EntityCollectionModel> {
 
@@ -52,9 +53,7 @@ public class CollectionPanel extends PanelAbstract<EntityCollectionModel> {
 
         final String name = getModel().getName();
         markupContainer.addOrReplace(new Label(ID_COLLECTION_NAME, Model.of(name)));
-        final Component collectionContents =
-            getComponentFactoryRegistry().addOrReplaceComponent(markupContainer, ComponentType.COLLECTION_CONTENTS,
-                getModel());
+        final Component collectionContents = getComponentFactoryRegistry().addOrReplaceComponent(markupContainer, ComponentType.COLLECTION_CONTENTS, getModel());
 
         addOrReplace(new ComponentFeedbackPanel(ID_FEEDBACK, collectionContents));
         addOrReplace(markupContainer);

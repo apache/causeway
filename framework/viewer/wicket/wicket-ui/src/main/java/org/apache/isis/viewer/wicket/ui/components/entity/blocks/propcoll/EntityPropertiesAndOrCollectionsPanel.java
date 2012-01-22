@@ -60,7 +60,8 @@ import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.model.Model;
 
 /**
- * {@link PanelAbstract Panel} representing the properties of an entity, as per the provided {@link EntityModel}.
+ * {@link PanelAbstract Panel} representing the properties of an entity, as per
+ * the provided {@link EntityModel}.
  */
 public class EntityPropertiesAndOrCollectionsPanel extends PanelAbstract<EntityModel> {
 
@@ -136,8 +137,7 @@ public class EntityPropertiesAndOrCollectionsPanel extends PanelAbstract<EntityM
         private Button cancelButton;
         private FeedbackPanel feedback;
 
-        public PropCollForm(final String id, final EntityModel entityModel, final Render render,
-            final Component owningPanel) {
+        public PropCollForm(final String id, final EntityModel entityModel, final Render render, final Component owningPanel) {
             super(id, entityModel);
             this.owningPanel = owningPanel; // for repainting
             this.render = render;
@@ -175,21 +175,15 @@ public class EntityPropertiesAndOrCollectionsPanel extends PanelAbstract<EntityM
                     final PropertyMemento pm = new PropertyMemento(otoa);
 
                     final ScalarModel scalarModel = entityModel.getPropertyModel(pm);
-                    component =
-                        getComponentFactoryRegistry().addOrReplaceComponent(container, ID_PROPERTY_OR_COLLECTION,
-                            ComponentType.SCALAR_NAME_AND_VALUE, scalarModel);
+                    component = getComponentFactoryRegistry().addOrReplaceComponent(container, ID_PROPERTY_OR_COLLECTION, ComponentType.SCALAR_NAME_AND_VALUE, scalarModel);
                 } else {
                     final OneToManyAssociation otma = (OneToManyAssociation) association;
 
-                    final EntityCollectionModel entityCollectionModel =
-                        EntityCollectionModel.createParented(entityModel, otma);
-                    final CollectionPanel collectionPanel =
-                        new CollectionPanel(ID_PROPERTY_OR_COLLECTION, entityCollectionModel);
+                    final EntityCollectionModel entityCollectionModel = EntityCollectionModel.createParented(entityModel, otma);
+                    final CollectionPanel collectionPanel = new CollectionPanel(ID_PROPERTY_OR_COLLECTION, entityCollectionModel);
                     container.addOrReplace(collectionPanel);
 
-                    component =
-                        getComponentFactoryRegistry().addOrReplaceComponent(container, ID_PROPERTY_OR_COLLECTION,
-                            ComponentType.COLLECTION_NAME_AND_CONTENTS, entityCollectionModel);
+                    component = getComponentFactoryRegistry().addOrReplaceComponent(container, ID_PROPERTY_OR_COLLECTION, ComponentType.COLLECTION_NAME_AND_CONTENTS, entityCollectionModel);
                 }
             }
 
@@ -201,14 +195,12 @@ public class EntityPropertiesAndOrCollectionsPanel extends PanelAbstract<EntityM
         }
 
         @SuppressWarnings("unchecked")
-        private List<ObjectAssociation> visibleAssociations(final ObjectAdapter adapter,
-            final ObjectSpecification noSpec) {
+        private List<ObjectAssociation> visibleAssociations(final ObjectAdapter adapter, final ObjectSpecification noSpec) {
             return noSpec.getAssociations(visibleAssociationFilter(adapter));
         }
 
         private Filter<ObjectAssociation> visibleAssociationFilter(final ObjectAdapter adapter) {
-            return Filters.and(render.getFilters(),
-                ObjectAssociationFilters.dynamicallyVisible(getAuthenticationSession(), adapter));
+            return Filters.and(render.getFilters(), ObjectAssociationFilters.dynamicallyVisible(getAuthenticationSession(), adapter));
         }
 
         private void addButtons() {
@@ -235,9 +227,12 @@ public class EntityPropertiesAndOrCollectionsPanel extends PanelAbstract<EntityM
                     if (!getForm().hasError()) {
                         final ObjectAdapter object = getEntityModel().getObject();
                         final Memento snapshotToRollbackToIfInvalid = new Memento(object);
-                        // to perform object-level validation, we must apply the changes first
-                        // contrast this with ActionPanel (for validating action arguments) where
-                        // we do the validation prior to the execution of the action
+                        // to perform object-level validation, we must apply the
+                        // changes first
+                        // contrast this with ActionPanel (for validating action
+                        // arguments) where
+                        // we do the validation prior to the execution of the
+                        // action
                         getEntityModel().apply();
                         final String invalidReasonIfAny = getEntityModel().getReasonInvalidIfAny();
                         if (invalidReasonIfAny != null) {
@@ -321,8 +316,7 @@ public class EntityPropertiesAndOrCollectionsPanel extends PanelAbstract<EntityM
                     }
                     final String invalidReasonIfAny = facet.invalidReason(adapter);
                     if (invalidReasonIfAny != null) {
-                        Session.get().getFeedbackMessages()
-                            .add(new FeedbackMessage(form, invalidReasonIfAny, FeedbackMessage.ERROR));
+                        Session.get().getFeedbackMessages().add(new FeedbackMessage(form, invalidReasonIfAny, FeedbackMessage.ERROR));
                     }
                 }
             });

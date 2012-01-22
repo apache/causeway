@@ -26,8 +26,7 @@ import org.apache.isis.viewer.dnd.view.window.CloseWindowRender;
 public class CloseWindowSimpleRender extends SimpleRender implements CloseWindowRender {
 
     @Override
-    public void draw(final Canvas canvas, final int width, final int height, final boolean isDisabled,
-        final boolean isOver, final boolean isPressed) {
+    public void draw(final Canvas canvas, final int width, final int height, final boolean isDisabled, final boolean isOver, final boolean isPressed) {
         final int x = 0;
         final int y = 0;
 

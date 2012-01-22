@@ -23,16 +23,15 @@ import org.apache.isis.viewer.json.viewer.ResourceContext;
 
 public enum CollectionSemantics {
 
-    SET("addToSet"),
-    LIST("addToList");
-    
+    SET("addToSet"), LIST("addToList");
+
     private final String addToKey;
 
-    private CollectionSemantics(String addToKey) {
+    private CollectionSemantics(final String addToKey) {
         this.addToKey = addToKey;
-        
+
     }
-    
+
     public String getAddToKey() {
         return addToKey;
     }
@@ -41,8 +40,8 @@ public enum CollectionSemantics {
         return "removeFrom";
     }
 
-    public static CollectionSemantics determine(ResourceContext resourceContext, OneToManyAssociation collection) {
-        return collection.getCollectionSemantics().isSet()?CollectionSemantics.SET:CollectionSemantics.LIST;
+    public static CollectionSemantics determine(final ResourceContext resourceContext, final OneToManyAssociation collection) {
+        return collection.getCollectionSemantics().isSet() ? CollectionSemantics.SET : CollectionSemantics.LIST;
     }
 
 }

@@ -34,7 +34,7 @@ public class AuthenticatedWebSessionForIsis_Instantiation {
 
     @Rule
     public final JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
-    
+
     @Mock
     private Request stubRequest;
 

@@ -34,7 +34,8 @@ import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.ValidationError;
 
 /**
- * Panel for rendering scalars which of are of reference type (as opposed to value types).
+ * Panel for rendering scalars which of are of reference type (as opposed to
+ * value types).
  */
 public class ReferencePanel extends ScalarPanelAbstract {
 
@@ -135,7 +136,8 @@ public class ReferencePanel extends ScalarPanelAbstract {
     }
 
     /**
-     * Mandatory hook method to build the component to render the model when in {@link Format#COMPACT compact} format.
+     * Mandatory hook method to build the component to render the model when in
+     * {@link Format#COMPACT compact} format.
      */
     @Override
     protected Component addComponentForCompact() {

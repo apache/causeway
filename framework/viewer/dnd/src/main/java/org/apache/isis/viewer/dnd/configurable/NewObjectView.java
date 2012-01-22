@@ -67,8 +67,7 @@ public class NewObjectView extends CompositeView {
 
     private void addFieldView(final ObjectAdapter object, final ObjectAssociation field) {
         final FieldContent fieldContent = (FieldContent) Toolkit.getContentFactory().createFieldContent(field, object);
-        final ViewRequirement requirement =
-            new ViewRequirement(fieldContent, ViewRequirement.CLOSED | ViewRequirement.SUBVIEW);
+        final ViewRequirement requirement = new ViewRequirement(fieldContent, ViewRequirement.CLOSED | ViewRequirement.SUBVIEW);
         View fieldView = Toolkit.getViewFactory().createView(requirement);
 
         fieldView = LabelBorder.createFieldLabelBorder(labelAxis, fieldView);
@@ -78,10 +77,8 @@ public class NewObjectView extends CompositeView {
 
     private void addFieldView(final NewObjectField field) {
         final ObjectAdapter object = getContent().getAdapter();
-        final FieldContent fieldContent =
-            (FieldContent) Toolkit.getContentFactory().createFieldContent(field.getField(), object);
-        final ViewRequirement requirement =
-            new ViewRequirement(fieldContent, ViewRequirement.CLOSED | ViewRequirement.SUBVIEW);
+        final FieldContent fieldContent = (FieldContent) Toolkit.getContentFactory().createFieldContent(field.getField(), object);
+        final ViewRequirement requirement = new ViewRequirement(fieldContent, ViewRequirement.CLOSED | ViewRequirement.SUBVIEW);
         View fieldView = Toolkit.getViewFactory().createView(requirement);
         if (field.includeLabel()) {
             fieldView = LabelBorder.createFieldLabelBorder(labelAxis, fieldView);

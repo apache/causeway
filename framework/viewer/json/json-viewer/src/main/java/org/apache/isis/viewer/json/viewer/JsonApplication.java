@@ -36,16 +36,15 @@ public class JsonApplication extends AbstractJaxRsApplication {
         addClass(DomainObjectResourceServerside.class);
         addClass(DomainServiceResourceServerside.class);
         addClass(VersionResourceServerside.class);
-        
+
         addSingleton(new JsonApplicationExceptionMapper());
         addSingleton(new RuntimeExceptionMapper());
-        
+
         // TODO: doesn't get injected
         // addSingleton(new TypedReprBuilderFactoryRegistry());
-        
+
         // TODO: idea being to remove the init()
         // addSingleton(new PreProcessInterceptorForIsisSession());
     }
-
 
 }

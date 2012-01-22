@@ -51,10 +51,10 @@ public class RestfulClient {
         this(baseUri, new ApacheHttpClientExecutor(new HttpClient()));
     }
 
-    public RestfulClient(final URI baseUri, ClientExecutor clientExecutor) {
+    public RestfulClient(final URI baseUri, final ClientExecutor clientExecutor) {
         this.executor = clientExecutor;
         this.clientRequestFactory = new ClientRequestFactory(clientExecutor, baseUri);
-        
+
         this.homePageResource = clientRequestFactory.createProxy(HomePageResource.class);
         this.userResource = clientRequestFactory.createProxy(UserResource.class);
         this.domainTypeResource = clientRequestFactory.createProxy(DomainTypeResource.class);
@@ -63,10 +63,9 @@ public class RestfulClient {
         this.versionResource = clientRequestFactory.createProxy(VersionResource.class);
     }
 
-    
-    /////////////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////////////
     // resources
-    /////////////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////////////
 
     public HomePageResource getHomePageResource() {
         return homePageResource;
@@ -87,47 +86,46 @@ public class RestfulClient {
     public DomainObjectResource getDomainObjectResource() {
         return domainObjectResource;
     }
-    
+
     public DomainServiceResource getDomainServiceResource() {
         return domainServiceResource;
     }
 
-    
-    /////////////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////////////
     // resource walking support
-    /////////////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////////////
 
-    public RepresentationWalker createWalker(Response response) {
+    public RepresentationWalker createWalker(final Response response) {
         return new RepresentationWalker(this, response);
     }
 
-    public RestfulResponse<JsonRepresentation> follow(LinkRepresentation link) throws Exception {
+    public RestfulResponse<JsonRepresentation> follow(final LinkRepresentation link) throws Exception {
         return followT(link);
     }
 
-    public <T extends JsonRepresentation> RestfulResponse<T> followT(LinkRepresentation link) throws Exception {
+    public <T extends JsonRepresentation> RestfulResponse<T> followT(final LinkRepresentation link) throws Exception {
         return followT(link, JsonRepresentation.newMap());
     }
 
-    public RestfulResponse<JsonRepresentation> follow(LinkRepresentation link, JsonRepresentation requestArgs) throws Exception {
+    public RestfulResponse<JsonRepresentation> follow(final LinkRepresentation link, final JsonRepresentation requestArgs) throws Exception {
         return followT(link, requestArgs);
     }
 
-    public <T extends JsonRepresentation> RestfulResponse<T> followT(LinkRepresentation link, JsonRepresentation requestArgs) throws Exception {
-        return link.<T>follow(executor, requestArgs);
+    public <T extends JsonRepresentation> RestfulResponse<T> followT(final LinkRepresentation link, final JsonRepresentation requestArgs) throws Exception {
+        return link.<T> follow(executor, requestArgs);
     }
 
-    public RestfulRequest createRequest(HttpMethod httpMethod, String uriTemplate) {
-        
-        boolean includesScheme = uriTemplate.startsWith("http:") || uriTemplate.startsWith("https:");
+    public RestfulRequest createRequest(final HttpMethod httpMethod, final String uriTemplate) {
+
+        final boolean includesScheme = uriTemplate.startsWith("http:") || uriTemplate.startsWith("https:");
         final String base = clientRequestFactory.getBase().toString();
-        String uri = (includesScheme ? "" : base) + uriTemplate;
+        final String uri = (includesScheme ? "" : base) + uriTemplate;
 
         final ClientRequestConfigurer clientRequestConfigurer = ClientRequestConfigurer.create(executor, uri);
 
         clientRequestConfigurer.accept(MediaType.APPLICATION_JSON_TYPE);
         clientRequestConfigurer.setHttpMethod(httpMethod);
-        
+
         return new RestfulRequest(clientRequestConfigurer);
     }
 
@@ -137,6 +135,5 @@ public class RestfulClient {
     public ClientRequestFactory getClientRequestFactory() {
         return clientRequestFactory;
     }
-
 
 }

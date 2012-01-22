@@ -59,8 +59,7 @@ public class DefaultOidObjectMapping implements ObjectMapping {
         append(debug, sessionTransients, "session");
     }
 
-    protected void append(final DebugBuilder debug, final Map<String, TransientObjectMapping> transients,
-        final String type) {
+    protected void append(final DebugBuilder debug, final Map<String, TransientObjectMapping> transients, final String type) {
         final Iterator<String> ids = new HashSet(transients.keySet()).iterator();
         if (ids.hasNext()) {
             debug.appendTitle("Transient objects (" + type + ")");
@@ -107,8 +106,7 @@ public class DefaultOidObjectMapping implements ObjectMapping {
         }
     }
 
-    private JSONObject encodeTransientData(final ObjectAdapter object, final List<ObjectAdapter> savedObject)
-        throws JSONException {
+    private JSONObject encodeTransientData(final ObjectAdapter object, final List<ObjectAdapter> savedObject) throws JSONException {
         if (savedObject.contains(object)) {
             return null;
         }
@@ -166,7 +164,8 @@ public class DefaultOidObjectMapping implements ObjectMapping {
 
     @Override
     public String mapObject(final ObjectAdapter inObject, final Scope scope) {
-        // TODO need to ensure that transient objects are remapped each time so that any changes are added to
+        // TODO need to ensure that transient objects are remapped each time so
+        // that any changes are added to
         // session data
         // continue work here.....here
 
@@ -191,14 +190,15 @@ public class DefaultOidObjectMapping implements ObjectMapping {
         }
 
         final boolean isTransient = object.isTransient();
-        final String transferableId =
-            (isTransient ? "T" : "P") + object.getSpecification().getFullIdentifier() + "@" + encodedOid;
+        final String transferableId = (isTransient ? "T" : "P") + object.getSpecification().getFullIdentifier() + "@" + encodedOid;
         LOG.debug("encoded " + oid + " as " + transferableId + " ~ " + encodedOid);
 
         if (inObject.isTransient()) {
 
-            // TODO cache these in requests so that Mementos are only created once.
-            // TODO if Transient/Interaction then return state; other store state in session an return OID
+            // TODO cache these in requests so that Mementos are only created
+            // once.
+            // TODO if Transient/Interaction then return state; other store
+            // state in session an return OID
             // string
             final TransientObjectMapping mapping = new TransientObjectMapping(inObject);
             if (scope == Scope.REQUEST) {
@@ -250,26 +250,26 @@ public class DefaultOidObjectMapping implements ObjectMapping {
                 if (fieldValue == null) {
                     ((OneToOneAssociation) association).initAssociation(object, null);
                 } else {
-                    final EncodableFacet encodeableFacet =
-                        association.getSpecification().getFacet(EncodableFacet.class);
+                    final EncodableFacet encodeableFacet = association.getSpecification().getFacet(EncodableFacet.class);
                     final ObjectAdapter fromEncodedString = encodeableFacet.fromEncodedString((String) fieldValue);
                     ((OneToOneAssociation) association).initAssociation(object, fromEncodedString);
                 }
             } else if (association instanceof OneToManyAssociation) {
                 final JSONArray collection = (JSONArray) fieldValue;
                 for (int i = 0; i < collection.length(); i++) {
-                    JSONObject jsonElement = (JSONObject) collection.get(i);
-                    ObjectAdapter objectToAdd = restoreTransientObject(jsonElement);
+                    final JSONObject jsonElement = (JSONObject) collection.get(i);
+                    final ObjectAdapter objectToAdd = restoreTransientObject(jsonElement);
                     ((OneToManyAssociation) association).addElement(object, objectToAdd);
                 }
-                
-/*                
-                CollectionFacet facet = fieldValue.getSpecification().getFacet(CollectionFacet.class);
-                for (ObjectAdapter element : facet.iterable(fieldValue)) {
-                    collection.add(saveData(element, savedObject));
-                }
-                data.put(fieldName, collection);
-*/
+
+                /*
+                 * CollectionFacet facet =
+                 * fieldValue.getSpecification().getFacet
+                 * (CollectionFacet.class); for (ObjectAdapter element :
+                 * facet.iterable(fieldValue)) {
+                 * collection.add(saveData(element, savedObject)); }
+                 * data.put(fieldName, collection);
+                 */
             } else {
                 if (fieldValue == null) {
                     ((OneToOneAssociation) association).initAssociation(object, null);
@@ -297,8 +297,7 @@ public class DefaultOidObjectMapping implements ObjectMapping {
             }
             if (mapping == null) {
                 final String[] split = id.split("@");
-                final ObjectSpecification spec =
-                    IsisContext.getSpecificationLoader().loadSpecification(split[0].substring(1));
+                final ObjectSpecification spec = IsisContext.getSpecificationLoader().loadSpecification(split[0].substring(1));
                 final Object pojo = spec.createObject(CreationMode.NO_INITIALIZE);
                 final String oidData = split[1];
                 final SerialOid oid = SerialOid.createTransient(Long.valueOf(oidData, 16).longValue());
@@ -309,8 +308,7 @@ public class DefaultOidObjectMapping implements ObjectMapping {
             return mappedTransientObject;
         } else {
             final String[] split = id.split("@");
-            final ObjectSpecification spec =
-                IsisContext.getSpecificationLoader().loadSpecification(split[0].substring(1));
+            final ObjectSpecification spec = IsisContext.getSpecificationLoader().loadSpecification(split[0].substring(1));
 
             try {
                 final String oidData = split[1];

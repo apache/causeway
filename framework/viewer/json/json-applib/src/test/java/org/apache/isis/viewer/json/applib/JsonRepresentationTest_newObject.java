@@ -29,12 +29,10 @@ import org.junit.Test;
 
 public class JsonRepresentationTest_newObject {
 
-
     @Test
     public void happyCase() throws JsonParseException, JsonMappingException, IOException {
-        JsonRepresentation jsonRepresentation = JsonRepresentation.newMap() ;
+        final JsonRepresentation jsonRepresentation = JsonRepresentation.newMap();
         assertThat(jsonRepresentation.isMap(), is(true));
     }
 
-    
 }

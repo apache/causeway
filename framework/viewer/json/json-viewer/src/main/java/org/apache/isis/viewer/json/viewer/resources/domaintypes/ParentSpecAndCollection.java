@@ -22,9 +22,9 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 
 public class ParentSpecAndCollection extends ParentSpecAndFeature<OneToManyAssociation> {
-    
-    public ParentSpecAndCollection(ObjectSpecification objectSpecification, OneToManyAssociation collection) {
+
+    public ParentSpecAndCollection(final ObjectSpecification objectSpecification, final OneToManyAssociation collection) {
         super(objectSpecification, collection);
     }
-    
+
 }

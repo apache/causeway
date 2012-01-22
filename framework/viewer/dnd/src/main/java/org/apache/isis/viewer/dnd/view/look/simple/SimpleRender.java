@@ -29,8 +29,7 @@ class SimpleRender {
         if (isDisabled) {
             color = Toolkit.getColor(ColorsAndFonts.COLOR_SECONDARY3);
         } else {
-            color =
-                isOver ? Toolkit.getColor(ColorsAndFonts.COLOR_PRIMARY2) : Toolkit.getColor(ColorsAndFonts.COLOR_BLACK);
+            color = isOver ? Toolkit.getColor(ColorsAndFonts.COLOR_PRIMARY2) : Toolkit.getColor(ColorsAndFonts.COLOR_BLACK);
         }
         return color;
     }

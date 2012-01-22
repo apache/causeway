@@ -43,8 +43,7 @@ public class TableCell extends AbstractElementProcessor {
         request.appendHtml("<td" + className + ">");
         if (field.isVisible(IsisContext.getAuthenticationSession(), object).isAllowed()) {
             final ObjectAdapter fieldReference = field.get(object);
-            final String source =
-                fieldReference == null ? "" : request.getContext().mapObject(fieldReference, Scope.REQUEST);
+            final String source = fieldReference == null ? "" : request.getContext().mapObject(fieldReference, Scope.REQUEST);
             final String name = request.getOptionalProperty(RESULT_NAME, fieldName);
             request.getContext().addVariable(name, Request.getEncoder().encoder(source), Scope.REQUEST);
 

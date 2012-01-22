@@ -71,16 +71,13 @@ public class RemoveElement extends AbstractElementProcessor {
         return "remove-element";
     }
 
-    public static void write(final Request request, final ObjectAdapter adapter, final String fieldName,
-        final ObjectAdapter element, final String resultOverride, final String view, final String error,
-        final String title, final String cssClass) {
+    public static void write(final Request request, final ObjectAdapter adapter, final String fieldName, final ObjectAdapter element, final String resultOverride, final String view, final String error, final String title, final String cssClass) {
         final ObjectAssociation field = adapter.getSpecification().getAssociation(fieldName);
         if (field == null) {
             throw new ScimpiException("No field " + fieldName + " in " + adapter.getSpecification().getFullIdentifier());
         }
         if (!field.isOneToManyAssociation()) {
-            throw new ScimpiException("Field " + fieldName + " not a collection, in "
-                + adapter.getSpecification().getFullIdentifier());
+            throw new ScimpiException("Field " + fieldName + " not a collection, in " + adapter.getSpecification().getFullIdentifier());
         }
         if (field.isVisible(IsisContext.getAuthenticationSession(), adapter).isVetoed()) {
             throw new ForbiddenException(field, ForbiddenException.VISIBLE);
@@ -93,7 +90,7 @@ public class RemoveElement extends AbstractElementProcessor {
         }
 
         if (usable.isVetoed()) {
-            request.appendHtml("<span class=\"veto\">" );
+            request.appendHtml("<span class=\"veto\">");
             request.appendAsHtmlEncoded(usable.getReason());
             request.appendHtml("</span>");
         } else {
@@ -108,8 +105,7 @@ public class RemoveElement extends AbstractElementProcessor {
                 request.appendHtml("<input type=\"hidden\" name=\"" + FIELD + "\" value=\"" + fieldName + "\" />");
                 request.appendHtml("<input type=\"hidden\" name=\"" + ELEMENT + "\" value=\"" + elementId + "\" />");
                 if (resultOverride != null) {
-                    request.appendHtml("<input type=\"hidden\" name=\"" + RESULT_OVERRIDE + "\" value=\""
-                        + resultOverride + "\" />");
+                    request.appendHtml("<input type=\"hidden\" name=\"" + RESULT_OVERRIDE + "\" value=\"" + resultOverride + "\" />");
                 }
                 request.appendHtml("<input type=\"hidden\" name=\"" + VIEW + "\" value=\"" + view + "\" />");
                 request.appendHtml("<input type=\"hidden\" name=\"" + ERROR + "\" value=\"" + error + "\" />");

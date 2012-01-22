@@ -45,15 +45,14 @@ public class UserResourceTest_accept {
 
     @Before
     public void setUp() throws Exception {
-        WebServer webServer = webServerRule.getWebServer();
+        final WebServer webServer = webServerRule.getWebServer();
         client = new RestfulClient(webServer.getBase());
     }
 
     @Test
     public void applicationJson() throws Exception {
 
-        final RestfulRequest request = 
-                client.createRequest(HttpMethod.GET, "user").withHeader(RestfulRequest.Header.ACCEPT, MediaType.APPLICATION_JSON_TYPE);
+        final RestfulRequest request = client.createRequest(HttpMethod.GET, "user").withHeader(RestfulRequest.Header.ACCEPT, MediaType.APPLICATION_JSON_TYPE);
         final RestfulResponse<HomePageRepresentation> restfulResponse = request.executeT();
 
         assertThat(restfulResponse.getStatus(), is(HttpStatusCode.OK));
@@ -62,8 +61,7 @@ public class UserResourceTest_accept {
     @Test
     public void applicationJson_profileUser() throws Exception {
 
-        final RestfulRequest request = 
-                client.createRequest(HttpMethod.GET, "user").withHeader(RestfulRequest.Header.ACCEPT, RepresentationType.USER.getMediaType());
+        final RestfulRequest request = client.createRequest(HttpMethod.GET, "user").withHeader(RestfulRequest.Header.ACCEPT, RepresentationType.USER.getMediaType());
         final RestfulResponse<HomePageRepresentation> restfulResponse = request.executeT();
 
         assertThat(restfulResponse.getStatus(), is(HttpStatusCode.OK));

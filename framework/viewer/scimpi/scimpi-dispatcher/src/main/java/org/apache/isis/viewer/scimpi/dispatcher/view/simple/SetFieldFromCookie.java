@@ -29,13 +29,17 @@ public class SetFieldFromCookie extends AbstractElementProcessor {
     public void process(final Request request) {
         throw new NotYetImplementedException("3.1");
         /*
-         * String name = request.getRequiredProperty(NAME); String cookieString = request.getContext().getCookie(name);
-         * ObjectAdapter valueAdapter = IsisContext.getObjectPersistor().createAdapterForValue(cookieString);
+         * String name = request.getRequiredProperty(NAME); String cookieString
+         * = request.getContext().getCookie(name); ObjectAdapter valueAdapter =
+         * IsisContext.getObjectPersistor().createAdapterForValue(cookieString);
          * 
-         * String objectId = request.getOptionalProperty(OBJECT); String fieldName = request.getRequiredProperty(FIELD);
-         * ObjectAdapter object = (ObjectAdapter) request.getContext().getMappedObjectOrResult(objectId);
-         * ObjectAssociation field = object.getSpecification().getField(fieldName); if (field.isValue()) { throw new
-         * ScimpiException("Can only set up a value field"); }
+         * String objectId = request.getOptionalProperty(OBJECT); String
+         * fieldName = request.getRequiredProperty(FIELD); ObjectAdapter object
+         * = (ObjectAdapter)
+         * request.getContext().getMappedObjectOrResult(objectId);
+         * ObjectAssociation field =
+         * object.getSpecification().getField(fieldName); if (field.isValue()) {
+         * throw new ScimpiException("Can only set up a value field"); }
          * 
          * ((ValueAssociation) field).setValue(object, valueAdapter);
          */

@@ -97,7 +97,8 @@ public class SaveObjectsTest extends AbstractTest {
         } catch (final InvalidException ex) {
 
             assertThat(ex.getAdvisorClass(), classEqualTo(ValidateObjectFacetViaValidateMethod.class));
-            assertThat(getDomainObjectContainer().isPersistent(newCustomer), is(false)); // not saved
+            assertThat(getDomainObjectContainer().isPersistent(newCustomer), is(false)); // not
+                                                                                         // saved
             assertThat(ex.getMessage(), equalTo("No shakes"));
         }
     }

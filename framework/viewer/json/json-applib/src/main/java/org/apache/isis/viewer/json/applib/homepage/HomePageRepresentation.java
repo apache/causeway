@@ -24,19 +24,20 @@ import org.codehaus.jackson.JsonNode;
 
 public class HomePageRepresentation extends DomainRepresentation {
 
-    public HomePageRepresentation(JsonNode jsonNode) {
+    public HomePageRepresentation(final JsonNode jsonNode) {
         super(jsonNode);
     }
 
     public LinkRepresentation getUser() {
         return getLinkWithRel("user");
     }
+
     public LinkRepresentation getServices() {
         return getLinkWithRel("services");
     }
+
     public LinkRepresentation getVersion() {
         return getLinkWithRel("version");
     }
-
 
 }

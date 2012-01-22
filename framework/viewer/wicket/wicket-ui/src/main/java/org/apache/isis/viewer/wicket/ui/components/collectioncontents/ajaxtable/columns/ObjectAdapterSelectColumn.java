@@ -38,8 +38,7 @@ public final class ObjectAdapterSelectColumn extends ColumnAbstract<ObjectAdapte
     }
 
     @Override
-    public void populateItem(final Item<ICellPopulator<ObjectAdapter>> cellItem, final String componentId,
-        final IModel<ObjectAdapter> rowModel) {
+    public void populateItem(final Item<ICellPopulator<ObjectAdapter>> cellItem, final String componentId, final IModel<ObjectAdapter> rowModel) {
 
         // TODO: i18n
         cellItem.add(new ContainedButton(componentId, "select") {

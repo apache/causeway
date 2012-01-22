@@ -38,11 +38,13 @@ import com.google.common.collect.Collections2;
 import com.google.common.collect.Maps;
 
 /**
- * Implementation of Isis' {@link IsisContext}, associating a {@link IsisSession} with a Wicket {@link Session}.
+ * Implementation of Isis' {@link IsisContext}, associating a
+ * {@link IsisSession} with a Wicket {@link Session}.
  * 
  * <p>
- * This implementation also takes multi-threading into account, so that the browser can submit multiple requests on the
- * same session simultaneously (eg to render an image of a pojo).
+ * This implementation also takes multi-threading into account, so that the
+ * browser can submit multiple requests on the same session simultaneously (eg
+ * to render an image of a pojo).
  */
 public class IsisContextForWicket extends IsisContext {
 
@@ -55,8 +57,7 @@ public class IsisContextForWicket extends IsisContext {
 
         @Override
         public void initContext(final IsisSessionFactory sessionFactory) {
-            new IsisContextForWicket(ContextReplacePolicy.NOT_REPLACEABLE, SessionClosePolicy.EXPLICIT_CLOSE,
-                sessionFactory);
+            new IsisContextForWicket(ContextReplacePolicy.NOT_REPLACEABLE, SessionClosePolicy.EXPLICIT_CLOSE, sessionFactory);
         }
     }
 
@@ -68,16 +69,17 @@ public class IsisContextForWicket extends IsisContext {
     }
 
     /**
-     * Only used while bootstrapping, corresponding to the {@link InitialisationSession}.
+     * Only used while bootstrapping, corresponding to the
+     * {@link InitialisationSession}.
      */
     private IsisSession bootstrapSession;
     /**
-     * Maps (our custom) {@link AuthenticatedWebSessionForIsis Wicket session}s to vanilla {@link IsisSession}s.
+     * Maps (our custom) {@link AuthenticatedWebSessionForIsis Wicket session}s
+     * to vanilla {@link IsisSession}s.
      */
     private final Map<AuthenticatedWebSessionForIsis, IsisSession> sessionMap = Maps.newHashMap();
 
-    protected IsisContextForWicket(final ContextReplacePolicy replacePolicy,
-        final SessionClosePolicy sessionClosePolicy, final IsisSessionFactory sessionFactory) {
+    protected IsisContextForWicket(final ContextReplacePolicy replacePolicy, final SessionClosePolicy sessionClosePolicy, final IsisSessionFactory sessionFactory) {
         super(replacePolicy, sessionClosePolicy, sessionFactory);
     }
 

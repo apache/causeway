@@ -183,21 +183,24 @@ public class DebugAction implements Action {
             context.getWriter().append("" + name + ":roles\n");
             for (final ObjectAssociation assoc : spec.getAssociations()) {
                 context.getWriter().append("#" + name + "#" + assoc.getId() + ":roles\n");
-                // context.getWriter().append("#" + name + ".property." + assoc.getId() + ".description" + "=\n");
-                // context.getWriter().append("#" + name + ".property." + assoc.getId() + ".help" + "=\n");
+                // context.getWriter().append("#" + name + ".property." +
+                // assoc.getId() + ".description" + "=\n");
+                // context.getWriter().append("#" + name + ".property." +
+                // assoc.getId() + ".help" + "=\n");
             }
             for (final ObjectAction action : spec.getObjectActions(Contributed.EXCLUDED)) {
                 context.getWriter().append("#" + name + "#" + action.getId() + "():roles\n");
-                // context.getWriter().append("#" + name + ".action." + action.getId() + ".description" + "=\n");
-                // context.getWriter().append("#" + name + ".action." + action.getId() + ".help" + "=\n");
+                // context.getWriter().append("#" + name + ".action." +
+                // action.getId() + ".description" + "=\n");
+                // context.getWriter().append("#" + name + ".action." +
+                // action.getId() + ".help" + "=\n");
             }
             context.getWriter().append("\n");
         }
     }
 
     private void listSpecifications(final DebugWriter view) {
-        final List<ObjectSpecification> fullIdentifierList =
-            new ArrayList<ObjectSpecification>(getSpecificationLoader().allSpecifications());
+        final List<ObjectSpecification> fullIdentifierList = new ArrayList<ObjectSpecification>(getSpecificationLoader().allSpecifications());
         Collections.sort(fullIdentifierList, ObjectSpecification.COMPARATOR_SHORT_IDENTIFIER_IGNORE_CASE);
         view.appendTitle("Specifications");
         for (final ObjectSpecification spec : fullIdentifierList) {
@@ -207,20 +210,26 @@ public class DebugAction implements Action {
         }
 
         /*
-         * new Comparator<ObjectSpecification>() { public int compare(ObjectSpecification o1, ObjectSpecification o2) {
-         * return o1.getSingularName().compareTo(o2.getSingularName()); }});
+         * new Comparator<ObjectSpecification>() { public int
+         * compare(ObjectSpecification o1, ObjectSpecification o2) { return
+         * o1.getSingularName().compareTo(o2.getSingularName()); }});
          * 
-         * /* Collection<ObjectSpecification> allSpecifications = getSpecificationLoader().allSpecifications();
-         * Collection<String> list = Collections2.transform(allSpecifications,
-         * ObjectSpecification.COMPARATOR_SHORT_IDENTIFIER_IGNORE_CASE); final List<String> fullIdentifierList =
-         * Lists.newArrayList(list); /* Collections.sort(fullIdentifierList, new Comparator<ObjectSpecification>() {
-         * public int compare(ObjectSpecification o1, ObjectSpecification o2) { return
+         * /* Collection<ObjectSpecification> allSpecifications =
+         * getSpecificationLoader().allSpecifications(); Collection<String> list
+         * = Collections2.transform(allSpecifications,
+         * ObjectSpecification.COMPARATOR_SHORT_IDENTIFIER_IGNORE_CASE); final
+         * List<String> fullIdentifierList = Lists.newArrayList(list); /*
+         * Collections.sort(fullIdentifierList, new
+         * Comparator<ObjectSpecification>() { public int
+         * compare(ObjectSpecification o1, ObjectSpecification o2) { return
          * o1.getSingularName().compareTo(o2.getSingularName()); }});
          */
         /*
-         * view.divider("Specifications"); for (String fullIdentifier : fullIdentifierList) { ObjectSpecification spec =
-         * getSpecificationLoader().loadSpecification(fullIdentifier); String name = spec.getSingularName();
-         * view.appendRow(name, specificationLink(spec)); }
+         * view.divider("Specifications"); for (String fullIdentifier :
+         * fullIdentifierList) { ObjectSpecification spec =
+         * getSpecificationLoader().loadSpecification(fullIdentifier); String
+         * name = spec.getSingularName(); view.appendRow(name,
+         * specificationLink(spec)); }
          */
     }
 

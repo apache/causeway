@@ -50,7 +50,6 @@ public abstract class AbstractObjectViewSpecification extends CompositeViewSpeci
 
     @Override
     public boolean canDisplay(final ViewRequirement requirement) {
-        return requirement.isObject() && !requirement.isTextParseable() && requirement.hasReference()
-            && requirement.isOpen();
+        return requirement.isObject() && !requirement.isTextParseable() && requirement.hasReference() && requirement.isOpen();
     }
 }

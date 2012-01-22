@@ -49,42 +49,40 @@ import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 
-
 public class DomainServiceResourceTest_invokeAction {
 
     @Rule
     public IsisWebServerRule webServerRule = new IsisWebServerRule();
-    
+
     private RestfulClient client;
-    
+
     @SuppressWarnings("unused")
     private DomainServiceResource resource;
 
     @Before
     public void setUp() throws Exception {
-        WebServer webServer = webServerRule.getWebServer();
+        final WebServer webServer = webServerRule.getWebServer();
         client = new RestfulClient(webServer.getBase());
-        
+
         resource = client.getDomainServiceResource();
     }
-
 
     @Ignore("TODO - fix broken test resulting from introduction of actionresult repr")
     @Test
     public void invokeQueryOnly_noArg_usingClientFollow() throws Exception {
 
         // given
-        JsonRepresentation givenAction = givenAction("simples", "list");
+        final JsonRepresentation givenAction = givenAction("simples", "list");
         final ObjectActionRepresentation actionRepr = givenAction.as(ObjectActionRepresentation.class);
-        
+
         // when
         final LinkRepresentation invokeLink = actionRepr.getInvoke();
-        
+
         // then
         assertThat(invokeLink, is(not(nullValue())));
-        RestfulResponse<ListRepresentation> restfulResponse = client.followT(invokeLink);
+        final RestfulResponse<ListRepresentation> restfulResponse = client.followT(invokeLink);
         final ListRepresentation listRepr = restfulResponse.getEntity();
-        
+
         assertThat(listRepr.getValues().size(), is(5));
     }
 
@@ -93,28 +91,28 @@ public class DomainServiceResourceTest_invokeAction {
     public void invokeIdempotent_withArgs_usingClientFollow() throws Exception {
 
         // given action
-        JsonRepresentation givenAction = givenAction("simples", "newPersistentEntity");
+        final JsonRepresentation givenAction = givenAction("simples", "newPersistentEntity");
         final ObjectActionRepresentation actionRepr = givenAction.as(ObjectActionRepresentation.class);
-        
+
         // when
         final LinkRepresentation invokeLink = actionRepr.getInvoke();
-        
+
         // then
         assertThat(invokeLink, is(not(nullValue())));
-        
+
         final JsonRepresentation args = invokeLink.getArguments();
         assertThat(args.size(), is(2));
         assertThat(args.mapHas("name"), is(true));
         assertThat(args.mapHas("flag"), is(true));
-        
+
         // when
         args.mapPut("name", "New Name");
         args.mapPut("flag", true);
-        RestfulResponse<DomainObjectRepresentation> restfulResponse = client.followT(invokeLink, args);
-        
+        final RestfulResponse<DomainObjectRepresentation> restfulResponse = client.followT(invokeLink, args);
+
         // then
         final DomainObjectRepresentation objectRepr = restfulResponse.getEntity();
-        
+
         assertThat(objectRepr.getProperty("name").getString("value"), is("New Name"));
         assertThat(objectRepr.getProperty("flag").getBoolean("value"), is(true));
     }
@@ -122,28 +120,27 @@ public class DomainServiceResourceTest_invokeAction {
     @Ignore("TODO - fix broken test resulting from introduction of actionresult repr")
     @Test
     public void invoke_returningScalar_withReferenceArgs_usingClientFollow() throws Exception {
-        
+
         // given action
-        JsonRepresentation givenAction = givenAction("simples", "count");
+        final JsonRepresentation givenAction = givenAction("simples", "count");
         final ObjectActionRepresentation actionRepr = givenAction.as(ObjectActionRepresentation.class);
-        
+
         // when
         final LinkRepresentation invokeLink = actionRepr.getInvoke();
-        
+
         // then
         assertThat(invokeLink, is(not(nullValue())));
         final JsonRepresentation args = invokeLink.getArguments();
         assertThat(args.size(), is(0));
-        
+
         // when
         final RestfulResponse<ScalarValueRepresentation> restfulResponse = client.followT(invokeLink, args);
-        
+
         // then
         final ScalarValueRepresentation objectRepr = restfulResponse.getEntity();
-        
+
         assertThat(objectRepr.getValue().asInt(), is(6));
     }
-
 
     @Ignore("TODO - fix broken test resulting from introduction of actionresult repr")
     @Test
@@ -156,36 +153,34 @@ public class DomainServiceResourceTest_invokeAction {
         final Boolean before = simpleEntityBefore.getProperty("flag").getBoolean("value");
 
         // and given 'toggle' action on repo
-        JsonRepresentation givenAction = givenAction("simples", "toggle");
+        final JsonRepresentation givenAction = givenAction("simples", "toggle");
         final ObjectActionRepresentation actionRepr = givenAction.as(ObjectActionRepresentation.class);
-        
+
         // when
         final LinkRepresentation invokeLink = actionRepr.getInvoke();
-        
+
         // then
         assertThat(invokeLink, is(not(nullValue())));
-        
+
         final JsonRepresentation args = invokeLink.getArguments();
         assertThat(args.size(), is(1));
         assertThat(args.mapHas("object"), is(true));
-        
+
         // when
         args.mapPut("object", linkToSimpleEntity);
         final RestfulResponse<JsonRepresentation> restfulResponse = client.followT(invokeLink, args);
-        
+
         // then
         assertThat(restfulResponse.getStatus(), is(HttpStatusCode.NO_CONTENT));
 
         // and then simple entity 'flag' property set to false
         final RestfulResponse<DomainObjectRepresentation> restfulResponseAfter = client.followT(linkToSimpleEntity);
         final DomainObjectRepresentation simpleEntityAfter = restfulResponseAfter.getEntity();
-        
+
         final Boolean after = simpleEntityAfter.getProperty("flag").getBoolean("value");
         assertThat(after, is(!before)); // ie has been toggled
     }
 
-
-    
     @org.junit.Ignore("up to here")
     @Test
     public void invoke_withAllBuiltInArgs_usingClientFollow() throws Exception {
@@ -194,15 +189,15 @@ public class DomainServiceResourceTest_invokeAction {
         final LinkRepresentation linkToSimpleEntity = givenLinkToSimpleEntity(0);
 
         // given
-        JsonRepresentation givenAction = givenAction("simples", "update");
+        final JsonRepresentation givenAction = givenAction("simples", "update");
         final ObjectActionRepresentation actionRepr = givenAction.as(ObjectActionRepresentation.class);
-        
+
         // when
         final LinkRepresentation invokeLink = actionRepr.getInvoke();
-        
+
         // then
         assertThat(invokeLink, is(not(nullValue())));
-        
+
         final JsonRepresentation args = invokeLink.getArguments();
         assertThat(args.size(), is(0));
         assertThat(args.mapHas("object"), is(true));
@@ -217,57 +212,53 @@ public class DomainServiceResourceTest_invokeAction {
         assertThat(args.mapHas("double2"), is(true));
         assertThat(args.mapHas("bigInteger"), is(true));
         assertThat(args.mapHas("bigDecimal"), is(true));
-        
+
         // when
         args.mapPut("name", "New Name");
         args.mapPut("flag", true);
         final RestfulResponse<DomainObjectRepresentation> restfulResponse = client.followT(invokeLink, args);
-        
+
         // then
         final DomainObjectRepresentation objectRepr = restfulResponse.getEntity();
-        
+
         assertThat(objectRepr.getRepresentation("members[propertyId=%s].value", "name").asString(), is("New Name"));
         assertThat(objectRepr.getRepresentation("members[propertyId=%s].value", "flag").asBoolean(), is(true));
     }
 
-
     private JsonRepresentation givenAction(final String serviceId, final String actionId) throws JsonParseException, JsonMappingException, IOException {
         final String href = givenHrefToService(serviceId);
-        
-        final RestfulRequest request = 
-                client.createRequest(HttpMethod.GET, href).withArg(RequestParameter.FOLLOW_LINKS, "members[id=%s].links[rel=details]", actionId);
+
+        final RestfulRequest request = client.createRequest(HttpMethod.GET, href).withArg(RequestParameter.FOLLOW_LINKS, "members[id=%s].links[rel=details]", actionId);
         final RestfulResponse<DomainObjectRepresentation> restfulResponse = request.executeT();
 
         assertThat(restfulResponse.getStatus(), is(HttpStatusCode.OK));
         final DomainObjectRepresentation repr = restfulResponse.getEntity();
-        
-        JsonRepresentation actionLinkRepr = repr.getAction(actionId);
+
+        final JsonRepresentation actionLinkRepr = repr.getAction(actionId);
         return actionLinkRepr.getRepresentation("links[rel=details].value");
     }
 
-    private String givenHrefToService(String serviceId) throws JsonParseException, JsonMappingException, IOException {
+    private String givenHrefToService(final String serviceId) throws JsonParseException, JsonMappingException, IOException {
         final DomainServiceResource resource = client.getDomainServiceResource();
         final Response response = resource.services();
-        final ListRepresentation services = RestfulResponse.<ListRepresentation>ofT(response).getEntity();
+        final ListRepresentation services = RestfulResponse.<ListRepresentation> ofT(response).getEntity();
 
         return services.getRepresentation("values[id=%s]", serviceId).asLink().getHref();
     }
 
-    private LinkRepresentation givenLinkToSimpleEntity(int num) throws JsonParseException, JsonMappingException, IOException, Exception {
+    private LinkRepresentation givenLinkToSimpleEntity(final int num) throws JsonParseException, JsonMappingException, IOException, Exception {
         // given
-        JsonRepresentation givenAction = givenAction("simples", "list");
+        final JsonRepresentation givenAction = givenAction("simples", "list");
         final ObjectActionRepresentation actionRepr = givenAction.as(ObjectActionRepresentation.class);
-        
+
         // when
         final LinkRepresentation invokeLink = actionRepr.getInvoke();
-        
+
         // then
         final RestfulResponse<ListRepresentation> restfulResponse = client.followT(invokeLink);
         final ListRepresentation listRepr = restfulResponse.getEntity();
-        
+
         return listRepr.getValues().arrayGet(num).asLink();
     }
 
-
 }
-    

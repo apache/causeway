@@ -58,13 +58,11 @@ public class CheckListPeer extends AbstractListFixturePeer {
      */
     private final List<ObjectAdapter> foundAdapters = new ArrayList<ObjectAdapter>();
 
-    public CheckListPeer(final AliasRegistry aliasesRegistry, final String listAlias, final CheckMode checkMode,
-        final CellBinding titleBinding) {
+    public CheckListPeer(final AliasRegistry aliasesRegistry, final String listAlias, final CheckMode checkMode, final CellBinding titleBinding) {
         this(aliasesRegistry, listAlias, checkMode, titleBinding, null);
     }
 
-    public CheckListPeer(final AliasRegistry aliasesRegistry, final String listAlias, final CheckMode checkMode,
-        final CellBinding titleBinding, final CellBinding typeBinding) {
+    public CheckListPeer(final AliasRegistry aliasesRegistry, final String listAlias, final CheckMode checkMode, final CellBinding titleBinding, final CellBinding typeBinding) {
         super(aliasesRegistry, listAlias, titleBinding, typeBinding);
         this.checkMode = checkMode;
         this.titleBinding = titleBinding;

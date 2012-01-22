@@ -56,10 +56,10 @@ public class JsonRepresentationTest_size {
         assertThat(jsonRepresentation.size(), is(2));
     }
 
-    @Test(expected=IllegalStateException.class)
+    @Test(expected = IllegalStateException.class)
     public void size_forValue() throws JsonParseException, JsonMappingException, IOException {
         jsonRepresentation = new JsonRepresentation(readJson("map.json"));
-        JsonRepresentation valueRepresentation = jsonRepresentation.getRepresentation("anInt");
+        final JsonRepresentation valueRepresentation = jsonRepresentation.getRepresentation("anInt");
         valueRepresentation.size();
     }
 

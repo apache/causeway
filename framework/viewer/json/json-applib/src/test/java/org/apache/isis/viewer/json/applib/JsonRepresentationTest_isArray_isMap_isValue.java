@@ -37,7 +37,7 @@ public class JsonRepresentationTest_isArray_isMap_isValue {
     public void setUp() throws Exception {
         jsonRepresentation = new JsonRepresentation(readJson("map.json"));
     }
-    
+
     @Test
     public void forMap() throws JsonParseException, JsonMappingException, IOException {
         assertThat(jsonRepresentation.isArray(), is(false));
@@ -47,7 +47,7 @@ public class JsonRepresentationTest_isArray_isMap_isValue {
 
     @Test
     public void forValue() throws JsonParseException, JsonMappingException, IOException {
-        JsonRepresentation valueRepresentation = jsonRepresentation.getRepresentation("aString");
+        final JsonRepresentation valueRepresentation = jsonRepresentation.getRepresentation("aString");
         assertThat(valueRepresentation.isArray(), is(false));
         assertThat(valueRepresentation.isMap(), is(false));
         assertThat(valueRepresentation.isValue(), is(true));
@@ -60,5 +60,5 @@ public class JsonRepresentationTest_isArray_isMap_isValue {
         assertThat(jsonRepresentation.isMap(), is(false));
         assertThat(jsonRepresentation.isValue(), is(false));
     }
-    
+
 }

@@ -49,7 +49,7 @@ public class Request implements PageWriter {
     public static final boolean ENSURE_VARIABLES_EXIST = true;
     public static final boolean NO_VARIABLE_CHECKING = false;
     private static Encoder encoder;
-    
+
     public static Encoder getEncoder() {
         return encoder;
     }
@@ -63,8 +63,7 @@ public class Request implements PageWriter {
     private int index = -1;
     private final String path;
 
-    public Request(final String path, final RequestContext context, final Encoder encoder, final Stack<Snippet> snippets,
-        final ProcessorLookup processors) {
+    public Request(final String path, final RequestContext context, final Encoder encoder, final Stack<Snippet> snippets, final ProcessorLookup processors) {
         this.path = path;
         this.context = context;
         Request.encoder = encoder;
@@ -108,17 +107,16 @@ public class Request implements PageWriter {
             final String withReplacement = "&lt;";
             html = html.replaceAll(replace, withReplacement);
 
-            throw new TagProcessingException("Error while processing html block at " + snippet.errorAt() + " - "
-                + e.getMessage(), html, e);
+            throw new TagProcessingException("Error while processing html block at " + snippet.errorAt() + " - " + e.getMessage(), html, e);
         }
     }
 
     @Override
-    public void appendAsHtmlEncoded(String string) {
+    public void appendAsHtmlEncoded(final String string) {
         appendHtml(encodeHtml(string));
-       // appendHtml(string);
+        // appendHtml(string);
     }
-    
+
     @Override
     public void appendHtml(final String html) {
         final StringBuffer buffer = buffers.peek();
@@ -129,7 +127,7 @@ public class Request implements PageWriter {
         context.appendDebugTrace(encodeHtml(line));
     }
 
-    private String encodeHtml(String text) {
+    private String encodeHtml(final String text) {
         return encoder.encoder(text);
     }
 
@@ -151,8 +149,7 @@ public class Request implements PageWriter {
         } catch (final TagProcessingException e) {
             throw e;
         } catch (final RuntimeException e) {
-            throw new TagProcessingException("Error while processing " + tag.getName().toLowerCase() + " element at "
-                + tag.errorAt() + " - " + e.getMessage(), tag.toString(), e);
+            throw new TagProcessingException("Error while processing " + tag.getName().toLowerCase() + " element at " + tag.errorAt() + " - " + e.getMessage(), tag.toString(), e);
         }
     }
 
@@ -176,8 +173,7 @@ public class Request implements PageWriter {
                 }
                 final String name = nextTag.getName();
                 if (nextTag.getType() == SwfTag.END && !tag.getName().equals(name)) {
-                    throw new TagProcessingException("Expected " + nextTag.getName().toLowerCase() + " tag but found "
-                        + tag.getName().toLowerCase() + " tag at " + nextTag.errorAt(), tag.toString());
+                    throw new TagProcessingException("Expected " + nextTag.getName().toLowerCase() + " tag but found " + tag.getName().toLowerCase() + " tag at " + nextTag.errorAt(), tag.toString());
                 }
                 final ElementProcessor processor = processors.getFor(name);
                 process(nextTag, processor);

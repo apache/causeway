@@ -21,11 +21,9 @@ package org.apache.isis.viewer.json.applib.util;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
-import org.apache.isis.viewer.json.applib.util.PathNode;
 import org.junit.Test;
 
 public class PathNodeTest_equalsHashcode {
-
 
     @Test
     public void simple() throws Exception {

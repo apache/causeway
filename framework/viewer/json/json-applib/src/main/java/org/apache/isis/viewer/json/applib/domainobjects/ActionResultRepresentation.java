@@ -21,39 +21,39 @@ package org.apache.isis.viewer.json.applib.domainobjects;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.codehaus.jackson.JsonNode;
 
-
 public class ActionResultRepresentation extends AbstractObjectMemberRepresentation {
 
     public enum ResultType {
-        DOMAIN_OBJECT("domainobject"),
-        LIST("list"),
-        SCALAR_VALUE("scalarvalue"),
-        VOID("void");
-        
+        DOMAIN_OBJECT("domainobject"), LIST("list"), SCALAR_VALUE("scalarvalue"), VOID("void");
+
         private final String value;
+
         private ResultType(final String value) {
             this.value = value;
         }
+
         public String getValue() {
             return value;
         }
-        public static ResultType lookup(String value) {
-            for(ResultType resultType: values()) {
-                if(resultType.value.equals(value)) {
+
+        public static ResultType lookup(final String value) {
+            for (final ResultType resultType : values()) {
+                if (resultType.value.equals(value)) {
                     return resultType;
                 }
             }
             throw new IllegalArgumentException("Value '" + value + "' is not a valid result type");
         }
+
         public boolean isVoid() {
             return this == VOID;
         }
     }
-    
-    public ActionResultRepresentation(JsonNode jsonNode) {
+
+    public ActionResultRepresentation(final JsonNode jsonNode) {
         super(jsonNode);
     }
-    
+
     public JsonRepresentation getResult() {
         return getRepresentation("result");
     }

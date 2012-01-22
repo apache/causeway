@@ -105,8 +105,7 @@ public class EditObject extends AbstractElementProcessor {
         request.processUtilCloseTag();
 
         final AuthenticationSession session = IsisContext.getAuthenticationSession();
-        List<ObjectAssociation> viewFields =
-            specification.getAssociations(ObjectAssociationFilters.dynamicallyVisible(session, object));
+        List<ObjectAssociation> viewFields = specification.getAssociations(ObjectAssociationFilters.dynamicallyVisible(session, object));
         viewFields = containedBlock.includedFields(viewFields);
         final InputField[] formFields = createFields(viewFields);
 
@@ -121,15 +120,13 @@ public class EditObject extends AbstractElementProcessor {
             errors = entryState.getError();
         }
 
-        final String errorView =
-            context.fullFilePath(forwardErrorTo == null ? context.getResourceFile() : forwardErrorTo);
+        final String errorView = context.fullFilePath(forwardErrorTo == null ? context.getResourceFile() : forwardErrorTo);
         final List<HiddenInputField> hiddenFields = new ArrayList<HiddenInputField>();
         hiddenFields.add(new HiddenInputField("_" + OBJECT, actualObjectId));
         hiddenFields.add(new HiddenInputField("_" + VERSION, version));
         hiddenFields.add(new HiddenInputField("_" + FORM_ID, formId));
         hiddenFields.add(completionMessage == null ? null : new HiddenInputField("_" + MESSAGE, completionMessage));
-        hiddenFields.add(forwardEditedTo == null ? null : new HiddenInputField("_" + VIEW, context
-            .fullFilePath(forwardEditedTo)));
+        hiddenFields.add(forwardEditedTo == null ? null : new HiddenInputField("_" + VIEW, context.fullFilePath(forwardEditedTo)));
         hiddenFields.add(new HiddenInputField("_" + ERROR, errorView));
         hiddenFields.add(variable == null ? null : new HiddenInputField("_" + RESULT_NAME, variable));
         hiddenFields.add(resultOverride == null ? null : new HiddenInputField("_" + RESULT_OVERRIDE, resultOverride));
@@ -159,8 +156,7 @@ public class EditObject extends AbstractElementProcessor {
         }
 
         final HiddenInputField[] hiddenFieldArray = hiddenFields.toArray(new HiddenInputField[hiddenFields.size()]);
-        HtmlFormBuilder.createForm(request, EditAction.ACTION + ".app", hiddenFieldArray, formFields, className, id,
-            formTitle, null, null, buttonTitle, errors, "_generic.shtml?_result=" + actualObjectId);
+        HtmlFormBuilder.createForm(request, EditAction.ACTION + ".app", hiddenFieldArray, formFields, className, id, formTitle, null, null, buttonTitle, errors, "_generic.shtml?_result=" + actualObjectId);
         request.popBlockContent();
     }
 
@@ -183,8 +179,7 @@ public class EditObject extends AbstractElementProcessor {
     }
 
     // TODO duplicated in ActionForm#initializeFields
-    private void initializeFields(final RequestContext context, final ObjectAdapter object,
-        final InputField[] formFields, final FormState entryState, final boolean includeUnusableFields) {
+    private void initializeFields(final RequestContext context, final ObjectAdapter object, final InputField[] formFields, final FormState entryState, final boolean includeUnusableFields) {
         for (final InputField formField : formFields) {
             final String fieldId = formField.getName();
             final ObjectAssociation field = object.getSpecification().getAssociation(fieldId);
@@ -207,8 +202,7 @@ public class EditObject extends AbstractElementProcessor {
         }
     }
 
-    private void copyFieldContent(final RequestContext context, final ObjectAdapter object,
-        final InputField[] formFields, final boolean showIcon) {
+    private void copyFieldContent(final RequestContext context, final ObjectAdapter object, final InputField[] formFields, final boolean showIcon) {
         for (final InputField inputField : formFields) {
             final String fieldName = inputField.getName();
             final ObjectAssociation field = object.getSpecification().getAssociation(fieldName);
@@ -229,9 +223,7 @@ public class EditObject extends AbstractElementProcessor {
 
                 if (field.getSpecification().getFacet(ParseableFacet.class) == null) {
                     if (fieldValue != null) {
-                        final String iconSegment =
-                            showIcon ? "<img class=\"small-icon\" src=\"" + context.imagePath(field.getSpecification())
-                                + "\" alt=\"" + field.getSpecification().getShortIdentifier() + "\"/>" : "";
+                        final String iconSegment = showIcon ? "<img class=\"small-icon\" src=\"" + context.imagePath(field.getSpecification()) + "\" alt=\"" + field.getSpecification().getShortIdentifier() + "\"/>" : "";
                         final String entry = iconSegment + fieldValue.titleString();
                         inputField.setHtml(entry);
                     } else {
@@ -243,8 +235,7 @@ public class EditObject extends AbstractElementProcessor {
         }
     }
 
-    private void setDefaults(final RequestContext context, final ObjectAdapter object, final InputField[] formFields,
-        final FormState entryState, final boolean showIcon) {
+    private void setDefaults(final RequestContext context, final ObjectAdapter object, final InputField[] formFields, final FormState entryState, final boolean showIcon) {
         for (final InputField formField : formFields) {
             final String fieldId = formField.getName();
             final ObjectAssociation field = object.getSpecification().getAssociation(fieldId);
@@ -259,21 +250,17 @@ public class EditObject extends AbstractElementProcessor {
             } else if (field.isOneToOneAssociation()) {
                 final ObjectSpecification objectSpecification = field.getSpecification();
                 if (defaultValue != null) {
-                    final String iconSegment =
-                        showIcon ? "<img class=\"small-icon\" src=\"" + context.imagePath(objectSpecification)
-                            + "\" alt=\"" + objectSpecification.getShortIdentifier() + "\"/>" : "";
+                    final String iconSegment = showIcon ? "<img class=\"small-icon\" src=\"" + context.imagePath(objectSpecification) + "\" alt=\"" + objectSpecification.getShortIdentifier() + "\"/>" : "";
                     final String html = iconSegment + title;
                     formField.setHtml(html);
-                    final String value =
-                        defaultValue == null ? null : context.mapObject(defaultValue, Scope.INTERACTION);
+                    final String value = defaultValue == null ? null : context.mapObject(defaultValue, Scope.INTERACTION);
                     formField.setValue(value);
                 }
             }
         }
     }
 
-    private void overrideWithHtml(final RequestContext context, final FormFieldBlock containedBlock,
-        final InputField[] formFields) {
+    private void overrideWithHtml(final RequestContext context, final FormFieldBlock containedBlock, final InputField[] formFields) {
         for (final InputField formField : formFields) {
             final String fieldId = formField.getName();
             if (containedBlock.hasContent(fieldId)) {
@@ -287,8 +274,7 @@ public class EditObject extends AbstractElementProcessor {
         }
     }
 
-    private void copyEntryState(final RequestContext context, final ObjectAdapter object,
-        final InputField[] formFields, final FormState entryState) {
+    private void copyEntryState(final RequestContext context, final ObjectAdapter object, final InputField[] formFields, final FormState entryState) {
         for (final InputField formField : formFields) {
             final String fieldId = formField.getName();
             final ObjectAssociation field = object.getSpecification().getAssociation(fieldId);

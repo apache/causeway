@@ -92,7 +92,8 @@ public class CssMenuItem implements Serializable {
         }
 
         /**
-         * Returns the built {@link CssMenuItem}, associating with {@link #parent(CssMenuItem) parent} (if specified).
+         * Returns the built {@link CssMenuItem}, associating with
+         * {@link #parent(CssMenuItem) parent} (if specified).
          */
         public CssMenuItem build() {
             if (cssMenuItem.parent != null) {
@@ -183,10 +184,10 @@ public class CssMenuItem implements Serializable {
     // //////////////////////////////////////////////////////////////
 
     /**
-     * @return the builder, else <tt>null</tt> if the action is not visible for the current user.
+     * @return the builder, else <tt>null</tt> if the action is not visible for
+     *         the current user.
      */
-    public Builder newSubMenuItem(final ObjectAdapterMemento adapterMemento, final ObjectAction noAction,
-        final CssMenuLinkFactory cssMenuLinkFactory) {
+    public Builder newSubMenuItem(final ObjectAdapterMemento adapterMemento, final ObjectAction noAction, final CssMenuLinkFactory cssMenuLinkFactory) {
 
         final AuthenticationSession session = getAuthenticationSession();
 
@@ -198,8 +199,7 @@ public class CssMenuItem implements Serializable {
             return null;
         }
 
-        final LinkAndLabel linkAndLabel =
-            cssMenuLinkFactory.newLink(adapterMemento, noAction, PageAbstract.ID_MENU_LINK);
+        final LinkAndLabel linkAndLabel = cssMenuLinkFactory.newLink(adapterMemento, noAction, PageAbstract.ID_MENU_LINK);
 
         final Link<?> link = linkAndLabel.getLink();
         final String actionLabel = linkAndLabel.getLabel();

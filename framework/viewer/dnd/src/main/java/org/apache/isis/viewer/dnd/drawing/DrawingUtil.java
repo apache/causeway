@@ -20,8 +20,7 @@
 package org.apache.isis.viewer.dnd.drawing;
 
 public class DrawingUtil {
-    public static void drawHatching(final Canvas canvas, final int x, final int y, final int width, final int height,
-        final Color foreground, final Color shadow) {
+    public static void drawHatching(final Canvas canvas, final int x, final int y, final int width, final int height, final Color foreground, final Color shadow) {
         final int bottom = y + height;
         for (int p = y; p < bottom; p += 4) {
             drawDots(canvas, x, p, width, foreground, shadow);
@@ -31,8 +30,7 @@ public class DrawingUtil {
         }
     }
 
-    private static void drawDots(final Canvas canvas, final int x, final int y, final int width,
-        final Color foreground, final Color shadow) {
+    private static void drawDots(final Canvas canvas, final int x, final int y, final int width, final Color foreground, final Color shadow) {
         final int x2 = x + width;
         for (int p = x; p < x2; p += 4) {
             canvas.drawLine(p, y, p, y, shadow);

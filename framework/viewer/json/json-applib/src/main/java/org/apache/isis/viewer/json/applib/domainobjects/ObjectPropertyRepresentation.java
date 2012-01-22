@@ -20,10 +20,9 @@ package org.apache.isis.viewer.json.applib.domainobjects;
 
 import org.codehaus.jackson.JsonNode;
 
-
 public class ObjectPropertyRepresentation extends AbstractObjectMemberRepresentation {
 
-    public ObjectPropertyRepresentation(JsonNode jsonNode) {
+    public ObjectPropertyRepresentation(final JsonNode jsonNode) {
         super(jsonNode);
     }
 

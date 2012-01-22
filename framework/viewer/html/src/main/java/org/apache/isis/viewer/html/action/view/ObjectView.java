@@ -42,44 +42,41 @@ public class ObjectView extends ObjectViewAbstract {
     }
 
     @Override
-    protected void doExecute(final Context context, final ViewPane content, final ObjectAdapter adapter,
-        final String field) {
+    protected void doExecute(final Context context, final ViewPane content, final ObjectAdapter adapter, final String field) {
         final String id = context.mapObject(adapter);
         final ObjectSpecification specification = adapter.getSpecification();
 
         final AuthenticationSession authenticationSession = getAuthenticationSession();
-        
+
         createObjectView(context, adapter, content, id);
 
-//        // TODO: this test should be done by the ImmutableFacetFactory installing an immutableFacet on every
-//        // member
-//        final boolean immutable =
-//            ImmutableFacetUtils.isAlwaysImmutable(specification)
-//                || (adapter.isPersistent() && ImmutableFacetUtils.isImmutableOncePersisted(specification));
+        // // TODO: this test should be done by the ImmutableFacetFactory
+        // installing an immutableFacet on every
+        // // member
+        // final boolean immutable =
+        // ImmutableFacetUtils.isAlwaysImmutable(specification)
+        // || (adapter.isPersistent() &&
+        // ImmutableFacetUtils.isImmutableOncePersisted(specification));
 
         boolean atLeastOneFieldVisibleAndEditable = false;
         final List<ObjectAssociation> flds = specification.getAssociations();
         for (int i = 0; i < flds.size(); i++) {
-            if (flds.get(i).isVisible(authenticationSession, adapter).isAllowed() && 
-                flds.get(i).isUsable(authenticationSession, adapter).isAllowed()) {
+            if (flds.get(i).isVisible(authenticationSession, adapter).isAllowed() && flds.get(i).isUsable(authenticationSession, adapter).isAllowed()) {
                 atLeastOneFieldVisibleAndEditable = true;
                 break;
             }
         }
-        if (/* !immutable &&*/ atLeastOneFieldVisibleAndEditable) {
+        if (/* !immutable && */atLeastOneFieldVisibleAndEditable) {
             content.add(context.getComponentFactory().createEditOption(id));
         }
-        
+
         context.setObjectCrumb(adapter);
     }
 
-    private void createObjectView(final Context context, final ObjectAdapter object, final ViewPane pane,
-        final String id) {
-        
+    private void createObjectView(final Context context, final ObjectAdapter object, final ViewPane pane, final String id) {
+
         final ObjectSpecification specification = object.getSpecification();
-        final List<ObjectAssociation> visibleFields =
-            specification.getAssociations(ObjectAssociationFilters.dynamicallyVisible(getAuthenticationSession(),
-                object));
+        final List<ObjectAssociation> visibleFields = specification.getAssociations(ObjectAssociationFilters.dynamicallyVisible(getAuthenticationSession(), object));
         for (int i = 0; i < visibleFields.size(); i++) {
             final ObjectAssociation field = visibleFields.get(i);
 
@@ -101,8 +98,10 @@ public class ObjectView extends ObjectViewAbstract {
                     component = factory.createInlineBlock("value", "", null);
                     fieldBlock.add(component);
                 } else {
-                    // previously there was a called to resolveImmediately here on the
-                    // associated object, but it has been removed (presumably we don't
+                    // previously there was a called to resolveImmediately here
+                    // on the
+                    // associated object, but it has been removed (presumably we
+                    // don't
                     // want to force eager loading).
                     final String elementId = context.mapObject(associatedObject);
                     component = factory.createObjectIcon(field, associatedObject, elementId, "value");

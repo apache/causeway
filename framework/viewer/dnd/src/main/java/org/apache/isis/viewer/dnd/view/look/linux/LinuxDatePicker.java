@@ -67,8 +67,7 @@ public class LinuxDatePicker extends AbstractView implements DatePicker {
     private final Calendar today;
     private final boolean isEditable;
 
-    String[] monthName = { "January", "February", "March", "April", "May", "June", "July", "August", "September",
-        "October", "November", "December" };
+    String[] monthName = { "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" };
 
     private Location mouseLocation = new Location(-1, -1);
 
@@ -165,11 +164,9 @@ public class LinuxDatePicker extends AbstractView implements DatePicker {
         canvas.drawImage(monthUp, CONTROL_VERTICAL_INSET, CONTROL_HORIZONTAL_INSET);
         canvas.drawImage(monthDown, CONTROL_VERTICAL_INSET, CONTROL_HORIZONTAL_INSET + CONTROL_HORIZONTAL_SPACING);
         canvas.drawImage(yearUp, CONTROL_VERTICAL_INSET + CONTROL_VERTICAL_SPACING, CONTROL_HORIZONTAL_INSET);
-        canvas.drawImage(yearDown, CONTROL_VERTICAL_INSET + CONTROL_VERTICAL_SPACING, CONTROL_HORIZONTAL_INSET
-            + CONTROL_HORIZONTAL_SPACING);
+        canvas.drawImage(yearDown, CONTROL_VERTICAL_INSET + CONTROL_VERTICAL_SPACING, CONTROL_HORIZONTAL_INSET + CONTROL_HORIZONTAL_SPACING);
         canvas.drawImage(decadeUp, CONTROL_VERTICAL_INSET + (2 * CONTROL_VERTICAL_SPACING), CONTROL_HORIZONTAL_INSET);
-        canvas.drawImage(decadeDown, CONTROL_VERTICAL_INSET + (2 * CONTROL_VERTICAL_SPACING), CONTROL_HORIZONTAL_INSET
-            + CONTROL_HORIZONTAL_SPACING);
+        canvas.drawImage(decadeDown, CONTROL_VERTICAL_INSET + (2 * CONTROL_VERTICAL_SPACING), CONTROL_HORIZONTAL_INSET + CONTROL_HORIZONTAL_SPACING);
     }
 
     @Override
@@ -190,13 +187,10 @@ public class LinuxDatePicker extends AbstractView implements DatePicker {
     public void firstClick(final Click click) {
         final int x = click.getLocation().getX();
         final int y = click.getLocation().getY();
-        if (y >= CONTROL_HORIZONTAL_INSET + CONTROL_HORIZONTAL_SPACING
-            && y <= CONTROL_HORIZONTAL_INSET + (2 * CONTROL_HORIZONTAL_SPACING)) {
-            if (x <= CONTROL_VERTICAL_INSET + (3 * CONTROL_VERTICAL_SPACING)
-                && x >= CONTROL_VERTICAL_INSET + (2 * CONTROL_VERTICAL_SPACING)) {
+        if (y >= CONTROL_HORIZONTAL_INSET + CONTROL_HORIZONTAL_SPACING && y <= CONTROL_HORIZONTAL_INSET + (2 * CONTROL_HORIZONTAL_SPACING)) {
+            if (x <= CONTROL_VERTICAL_INSET + (3 * CONTROL_VERTICAL_SPACING) && x >= CONTROL_VERTICAL_INSET + (2 * CONTROL_VERTICAL_SPACING)) {
                 today.add(Calendar.YEAR, -10);
-            } else if (x >= CONTROL_VERTICAL_INSET + CONTROL_VERTICAL_SPACING
-                && x <= CONTROL_VERTICAL_INSET + (2 * CONTROL_VERTICAL_SPACING)) {
+            } else if (x >= CONTROL_VERTICAL_INSET + CONTROL_VERTICAL_SPACING && x <= CONTROL_VERTICAL_INSET + (2 * CONTROL_VERTICAL_SPACING)) {
                 today.add(Calendar.YEAR, -1);
             } else if (x >= CONTROL_VERTICAL_INSET && x <= CONTROL_VERTICAL_INSET + CONTROL_VERTICAL_SPACING) {
                 today.add(Calendar.MONTH, -1);
@@ -205,11 +199,9 @@ public class LinuxDatePicker extends AbstractView implements DatePicker {
             return;
         }
         if (y > CONTROL_HORIZONTAL_INSET && y <= CONTROL_HORIZONTAL_INSET + CONTROL_HORIZONTAL_SPACING) {
-            if (x <= CONTROL_VERTICAL_INSET + (3 * CONTROL_VERTICAL_SPACING)
-                && x >= CONTROL_VERTICAL_INSET + (2 * CONTROL_VERTICAL_SPACING)) {
+            if (x <= CONTROL_VERTICAL_INSET + (3 * CONTROL_VERTICAL_SPACING) && x >= CONTROL_VERTICAL_INSET + (2 * CONTROL_VERTICAL_SPACING)) {
                 today.add(Calendar.YEAR, 10);
-            } else if (x >= CONTROL_VERTICAL_INSET + CONTROL_VERTICAL_SPACING
-                && x <= CONTROL_VERTICAL_INSET + (2 * CONTROL_VERTICAL_SPACING)) {
+            } else if (x >= CONTROL_VERTICAL_INSET + CONTROL_VERTICAL_SPACING && x <= CONTROL_VERTICAL_INSET + (2 * CONTROL_VERTICAL_SPACING)) {
                 today.add(Calendar.YEAR, 1);
             } else if (x >= CONTROL_VERTICAL_INSET && x <= CONTROL_VERTICAL_INSET + CONTROL_VERTICAL_SPACING) {
                 today.add(Calendar.MONTH, 1);

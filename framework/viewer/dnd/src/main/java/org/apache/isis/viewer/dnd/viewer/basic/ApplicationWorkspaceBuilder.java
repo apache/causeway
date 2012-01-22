@@ -34,13 +34,15 @@ import org.apache.isis.viewer.dnd.view.composite.AbstractViewBuilder;
 import org.apache.log4j.Logger;
 
 /**
- * WorkspaceBuilder builds a workspace view for an ObjectContent view by finding a collection of classes from a field
- * called 'classes' and adding an icon for each element. Similarly, if there is a collection called 'objects' its
+ * WorkspaceBuilder builds a workspace view for an ObjectContent view by finding
+ * a collection of classes from a field called 'classes' and adding an icon for
+ * each element. Similarly, if there is a collection called 'objects' its
  * elements are also added to the display.
  * 
  * <p>
- * During lay-out any icons that have an UNPLACED location (-1, -1) are given a location. Objects of type
- * ObjectSpecification are added to the left-hand side, while all other icons are placed on the right-hand side of the
+ * During lay-out any icons that have an UNPLACED location (-1, -1) are given a
+ * location. Objects of type ObjectSpecification are added to the left-hand
+ * side, while all other icons are placed on the right-hand side of the
  * workspace view. Open windows are displayed in the centre.
  */
 public class ApplicationWorkspaceBuilder extends AbstractViewBuilder {

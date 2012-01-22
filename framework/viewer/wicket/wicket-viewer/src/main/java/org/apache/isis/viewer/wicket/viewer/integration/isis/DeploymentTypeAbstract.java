@@ -27,10 +27,12 @@ import org.apache.wicket.Application;
 
 /**
  * Simple adapter for Isis' {@link DeploymentType} class, specifying that the
- * {@link IsisContextForWicket.WicketContextCategory} is used as the {@link ContextCategory}.
+ * {@link IsisContextForWicket.WicketContextCategory} is used as the
+ * {@link ContextCategory}.
  * 
  * <p>
- * TODO: should somehow tie this in with Wicket's own {@link Application#getConfigurationType() configuration mode}.
+ * TODO: should somehow tie this in with Wicket's own
+ * {@link Application#getConfigurationType() configuration mode}.
  */
 public abstract class DeploymentTypeAbstract extends DeploymentType {
 

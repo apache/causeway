@@ -26,18 +26,16 @@ import org.apache.isis.viewer.json.viewer.ResourceContext;
 
 public enum ActionSemantics {
 
-    QUERY_ONLY("invokeQueryOnly"),
-    IDEMPOTENT("invokeIdempotent"),
-    SIDE_EFFECTS("invoke");
-    
+    QUERY_ONLY("invokeQueryOnly"), IDEMPOTENT("invokeIdempotent"), SIDE_EFFECTS("invoke");
+
     private final String invokeKey;
     private final String name;
-    
-    private ActionSemantics(String invokeKey) {
+
+    private ActionSemantics(final String invokeKey) {
         this.invokeKey = invokeKey;
         this.name = Enums.enumToCamelCase(this);
     }
-    
+
     public String getInvokeKey() {
         return invokeKey;
     }
@@ -53,16 +51,15 @@ public enum ActionSemantics {
     public String getName() {
         return name;
     }
-    
-    public static ActionSemantics determine(ResourceContext resourceContext, ObjectAction action) {
-        if(action.containsFacet(QueryOnlyFacet.class)) {
+
+    public static ActionSemantics determine(final ResourceContext resourceContext, final ObjectAction action) {
+        if (action.containsFacet(QueryOnlyFacet.class)) {
             return QUERY_ONLY;
         }
-        if(action.containsFacet(IdempotentFacet.class)) {
+        if (action.containsFacet(IdempotentFacet.class)) {
             return IDEMPOTENT;
         }
         return SIDE_EFFECTS;
     }
 
-    
 }

@@ -22,9 +22,9 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 
 public class ParentSpecAndActionParam extends ParentSpecAndFeature<ObjectActionParameter> {
-    
-    public ParentSpecAndActionParam(ObjectSpecification objectSpecification, ObjectActionParameter actionParam) {
+
+    public ParentSpecAndActionParam(final ObjectSpecification objectSpecification, final ObjectActionParameter actionParam) {
         super(objectSpecification, actionParam);
     }
-    
+
 }

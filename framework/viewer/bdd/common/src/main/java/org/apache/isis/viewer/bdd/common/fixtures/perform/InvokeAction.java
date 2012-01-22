@@ -53,8 +53,7 @@ public class InvokeAction extends PerformAbstractTypeParams {
         if (!isContributedOneArgAction) {
 
             // lookup arguments
-            proposedArguments =
-                performContext.getPeer().getAdapters(onAdapter, objectAction, onMemberBinding, argumentCells);
+            proposedArguments = performContext.getPeer().getAdapters(onAdapter, objectAction, onMemberBinding, argumentCells);
 
             // validate arguments
             final Consent argSetValid = objectAction.isProposedArgumentSetValid(onAdapter, proposedArguments);

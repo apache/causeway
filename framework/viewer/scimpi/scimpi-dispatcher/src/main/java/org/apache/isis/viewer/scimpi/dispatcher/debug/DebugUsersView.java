@@ -22,15 +22,16 @@ package org.apache.isis.viewer.scimpi.dispatcher.debug;
 import org.apache.isis.viewer.scimpi.dispatcher.AbstractElementProcessor;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 
-
 public class DebugUsersView extends AbstractElementProcessor {
 
+    @Override
     public String getName() {
         return "debug-users";
     }
 
+    @Override
     public void process(final Request request) {
-        String view = request.getContext().getContextPath() + request.getContext().getResourceParentPath() + request.getContext().getResourceFile();
+        final String view = request.getContext().getContextPath() + request.getContext().getResourceParentPath() + request.getContext().getResourceFile();
 
         request.appendHtml("<form class=\"generic action\" action=\"debug-user.app\" method=\"post\" accept-charset=\"ISO-8859-1\">\n");
         request.appendHtml("<div class=\"title\">Add Debug User</div>\n");
@@ -41,9 +42,8 @@ public class DebugUsersView extends AbstractElementProcessor {
         request.appendHtml("</form>\n");
 
         request.appendHtml("<table class=\"debug\">\n<tr><th class=\"title\">Name</th><th class=\"title\"></th></tr>\n");
-        for (String name : request.getContext().getDebugUsers()) {
-            request.appendHtml("<tr><th>" + name + "</th><th><a href=\"debug-user.app?method=remove&name=" + name + "&view="
-                    + view + " \">remove</a></th></tr>\n");
+        for (final String name : request.getContext().getDebugUsers()) {
+            request.appendHtml("<tr><th>" + name + "</th><th><a href=\"debug-user.app?method=remove&name=" + name + "&view=" + view + " \">remove</a></th></tr>\n");
         }
         request.appendHtml("</table>\n");
     }

@@ -44,8 +44,8 @@ import org.apache.wicket.markup.html.image.Image;
 import com.google.inject.Inject;
 
 /**
- * {@link PanelAbstract Panel} representing the summary details (title, icon and actions) of an entity, as per the
- * provided {@link EntityModel}.
+ * {@link PanelAbstract Panel} representing the summary details (title, icon and
+ * actions) of an entity, as per the provided {@link EntityModel}.
  */
 public class EntitySummaryPanel extends PanelAbstract<EntityModel> implements ActionInvokeHandler {
 
@@ -90,7 +90,8 @@ public class EntitySummaryPanel extends PanelAbstract<EntityModel> implements Ac
 
     private String determineTitle() {
         final ObjectAdapter adapter = getModel().getObject();
-        final String titleString = adapter != null ? adapter.titleString() : "(no object)"; // TODO: i18n
+        final String titleString = adapter != null ? adapter.titleString() : "(no object)"; // TODO:
+                                                                                            // i18n
         return titleString;
     }
 
@@ -125,8 +126,7 @@ public class EntitySummaryPanel extends PanelAbstract<EntityModel> implements Ac
         if (adapter != null) {
             final List<ObjectAction> userActions = adapter.getSpecification().getObjectActions(ActionType.USER, Contributed.INCLUDED);
 
-            final CssMenuBuilder cssMenuBuilder =
-                new CssMenuBuilder(adapterMemento, getServiceAdapters(), userActions, linkFactory);
+            final CssMenuBuilder cssMenuBuilder = new CssMenuBuilder(adapterMemento, getServiceAdapters(), userActions, linkFactory);
             // TODO: i18n
             final CssMenuPanel cssMenuPanel = cssMenuBuilder.buildPanel(ID_ENTITY_ACTIONS, "Actions");
 

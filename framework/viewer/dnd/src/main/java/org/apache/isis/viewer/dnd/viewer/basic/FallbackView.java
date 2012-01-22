@@ -91,8 +91,7 @@ public class FallbackView extends ObjectView {
         canvas.drawSolidRectangle(0, 0, 10, height, Toolkit.getColor(ColorsAndFonts.COLOR_SECONDARY2));
         canvas.drawLine(10, 0, 10, height - 2, Toolkit.getColor(ColorsAndFonts.COLOR_BLACK));
         canvas.drawRectangle(0, 0, width, height, Toolkit.getColor(ColorsAndFonts.COLOR_BLACK));
-        canvas.drawText(getContent().title(), 14, getBaseline(), Toolkit.getColor(ColorsAndFonts.COLOR_BLACK),
-            Toolkit.getText(ColorsAndFonts.TEXT_NORMAL));
+        canvas.drawText(getContent().title(), 14, getBaseline(), Toolkit.getColor(ColorsAndFonts.COLOR_BLACK), Toolkit.getText(ColorsAndFonts.TEXT_NORMAL));
     }
 
     @Override

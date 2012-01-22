@@ -29,12 +29,13 @@ import org.apache.isis.viewer.dnd.view.View;
 import org.apache.isis.viewer.dnd.view.Workspace;
 
 /**
- * Each option that a user is shown in an objects popup menu a MenuOption. A MenuOption details: the name of an option
- * (in the users language);
+ * Each option that a user is shown in an objects popup menu a MenuOption. A
+ * MenuOption details: the name of an option (in the users language);
  * <ul>
  * the type of object that might result when requesting this option
  * </ul>
- * ; a way to determine whether a user can select this option on the current object.
+ * ; a way to determine whether a user can select this option on the current
+ * object.
  */
 public abstract class UserActionAbstract implements UserAction {
     private String description;

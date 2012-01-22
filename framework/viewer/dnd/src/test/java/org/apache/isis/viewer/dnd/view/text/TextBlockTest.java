@@ -37,8 +37,7 @@ public class TextBlockTest extends TestCase {
         LogManager.getRootLogger().setLevel(Level.OFF);
 
         final TextBlockTarget user = new TextBlockTargetExample();
-        block =
-            new TextBlock(user, "Now is the winter of our discontent made summer by this glorious sun of York", true);
+        block = new TextBlock(user, "Now is the winter of our discontent made summer by this glorious sun of York", true);
         // "Now is the winter "
         // "of our discontent "
         // "made summer by "

@@ -37,8 +37,7 @@ public class ObjectAdapterTitleColumn extends ColumnAbstract<ObjectAdapter> {
     }
 
     @Override
-    public void populateItem(final Item<ICellPopulator<ObjectAdapter>> cellItem, final String componentId,
-        final IModel<ObjectAdapter> rowModel) {
+    public void populateItem(final Item<ICellPopulator<ObjectAdapter>> cellItem, final String componentId, final IModel<ObjectAdapter> rowModel) {
         final Component component = createComponent(componentId, rowModel);
         cellItem.add(component);
     }

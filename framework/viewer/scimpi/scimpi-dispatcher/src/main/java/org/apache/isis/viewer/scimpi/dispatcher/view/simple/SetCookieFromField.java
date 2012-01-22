@@ -29,15 +29,21 @@ public class SetCookieFromField extends AbstractElementProcessor {
     public void process(final Request request) {
         throw new NotYetImplementedException("3.1");
         /*
-         * String objectId = request.getOptionalProperty(OBJECT); String fieldName = request.getRequiredProperty(FIELD);
+         * String objectId = request.getOptionalProperty(OBJECT); String
+         * fieldName = request.getRequiredProperty(FIELD);
          * 
-         * ObjectAdapter object = (ObjectAdapter) request.getContext().getMappedObjectOrResult(objectId);
-         * ObjectAssociation field = object.getSpecification().getField(fieldName); if (field.isValue()) { throw new
-         * ScimpiException("Can only set up a value field"); } ObjectAdapter value = field.get(object); if (value !=
-         * null) { String title = value.titleString();
+         * ObjectAdapter object = (ObjectAdapter)
+         * request.getContext().getMappedObjectOrResult(objectId);
+         * ObjectAssociation field =
+         * object.getSpecification().getField(fieldName); if (field.isValue()) {
+         * throw new ScimpiException("Can only set up a value field"); }
+         * ObjectAdapter value = field.get(object); if (value != null) { String
+         * title = value.titleString();
          * 
-         * if (title.length() > 0) { String name = request.getRequiredProperty(NAME); String expiresString =
-         * request.getOptionalProperty("expires", "-1"); request.getContext().addCookie(name, title,
+         * if (title.length() > 0) { String name =
+         * request.getRequiredProperty(NAME); String expiresString =
+         * request.getOptionalProperty("expires", "-1");
+         * request.getContext().addCookie(name, title,
          * Integer.valueOf(expiresString)); } }
          */
     }

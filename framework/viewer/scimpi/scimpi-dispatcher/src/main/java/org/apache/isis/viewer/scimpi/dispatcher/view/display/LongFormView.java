@@ -32,12 +32,7 @@ import org.apache.isis.viewer.scimpi.dispatcher.view.field.LinkedObject;
 public class LongFormView extends AbstractFormView {
 
     @Override
-    protected void addField(
-            final Request request,
-            final ObjectAdapter object,
-            final ObjectAssociation field,
-            final LinkedObject linkedObject,
-            final boolean showIcons) {
+    protected void addField(final Request request, final ObjectAdapter object, final ObjectAssociation field, final LinkedObject linkedObject, final boolean showIcons) {
         if (field.isOneToManyAssociation()) {
             final String noColumnsString = request.getOptionalProperty("no-columns", "3");
             final String tableClass = request.getOptionalProperty("table-class");
@@ -50,8 +45,7 @@ public class LongFormView extends AbstractFormView {
             IsisContext.getPersistenceSession().resolveField(object, field);
             final ObjectAdapter collection = field.get(object);
             final ObjectSpecification elementSpec = collection.getElementSpecification();
-            final List<ObjectAssociation> fields =
-                elementSpec.getAssociations(ObjectAssociationFilters.STATICALLY_VISIBLE_ASSOCIATIONS);
+            final List<ObjectAssociation> fields = elementSpec.getAssociations(ObjectAssociationFilters.STATICALLY_VISIBLE_ASSOCIATIONS);
             if (noColumnsString.equalsIgnoreCase("all")) {
                 noColumns = fields.size();
             } else {
@@ -59,8 +53,7 @@ public class LongFormView extends AbstractFormView {
             }
             final boolean isFieldEditable = field.isUsable(IsisContext.getAuthenticationSession(), object).isAllowed();
             final String summary = "Table of elements in " + field.getName();
-            TableView.write(request, summary, object, field, collection, noColumns, fields, isFieldEditable, showIconByDefault(),
-                    tableClass, rowClasses);
+            TableView.write(request, summary, object, field, collection, noColumns, fields, isFieldEditable, showIconByDefault(), tableClass, rowClasses);
         } else {
             super.addField(request, object, field, linkedObject, showIcons);
         }

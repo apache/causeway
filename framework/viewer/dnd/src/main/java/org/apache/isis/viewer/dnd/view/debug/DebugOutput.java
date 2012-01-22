@@ -89,12 +89,15 @@ public class DebugOutput {
     /*
      * 
      * 
-     * Frame frame = new Frame(); PrintJob job = Toolkit.getDefaultToolkit().getPrintJob(frame, "Print object", null);
+     * Frame frame = new Frame(); PrintJob job =
+     * Toolkit.getDefaultToolkit().getPrintJob(frame, "Print object", null);
      * 
-     * if (job != null) { Graphics pg = job.getGraphics(); Dimension pageSize = job.getPageDimension();
+     * if (job != null) { Graphics pg = job.getGraphics(); Dimension pageSize =
+     * job.getPageDimension();
      * 
-     * if (pg != null) { pg.translate(LEFT, HEIGHT); pg.drawRect(0, 0, pageSize.width - LEFT - 1, pageSize.height -
-     * HEIGHT - 1); view.print(new PrintCanvas(pg, view)); pg.dispose(); }
+     * if (pg != null) { pg.translate(LEFT, HEIGHT); pg.drawRect(0, 0,
+     * pageSize.width - LEFT - 1, pageSize.height - HEIGHT - 1); view.print(new
+     * PrintCanvas(pg, view)); pg.dispose(); }
      * 
      * job.end(); } frame.dispose();
      */

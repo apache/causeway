@@ -32,11 +32,11 @@ import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 
-public class WebRequestCycleForIsisTest  {
+public class WebRequestCycleForIsisTest {
 
     @Rule
     public final JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_ONLY);
-    
+
     @Mock
     private WebRequest mockRequest;
     @Mock

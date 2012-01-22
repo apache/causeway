@@ -52,8 +52,7 @@ public class Methods extends AbstractElementProcessor {
         request.appendHtml("<div class=\"actions\">");
         if (inclusionList.includes("edit") && !object.getSpecification().isService()) {
             request.appendHtml("<div class=\"action\">");
-            request.appendHtml("<a class=\"button\" href=\"_generic_edit." + Dispatcher.EXTENSION + "?_result=" + objectId
-                + "\">Edit...</a>");
+            request.appendHtml("<a class=\"button\" href=\"_generic_edit." + Dispatcher.EXTENSION + "?_result=" + objectId + "\">Edit...</a>");
             request.appendHtml("</div>");
         }
         writeMethods(request, objectId, object, showForms, inclusionList, "_generic.shtml?_result=" + objectId);
@@ -61,8 +60,7 @@ public class Methods extends AbstractElementProcessor {
         request.appendHtml("</div>");
     }
 
-    public static void writeMethods(final Request request, final String objectId, final ObjectAdapter adapter,
-        final boolean showForms, final InclusionList inclusionList, final String cancelTo) {
+    public static void writeMethods(final Request request, final String objectId, final ObjectAdapter adapter, final boolean showForms, final InclusionList inclusionList, final String cancelTo) {
         List<ObjectAction> actions = adapter.getSpecification().getObjectActions(ActionType.USER, Contributed.INCLUDED);
         writeMethods(request, adapter, actions, objectId, showForms, inclusionList, cancelTo);
         // TODO determine if system is set up to display exploration methods
@@ -77,8 +75,7 @@ public class Methods extends AbstractElementProcessor {
         }
     }
 
-    private static void writeMethods(final Request request, final ObjectAdapter adapter, List<ObjectAction> actions,
-        final String objectId, final boolean showForms, final InclusionList inclusionList, final String cancelTo) {
+    private static void writeMethods(final Request request, final ObjectAdapter adapter, List<ObjectAction> actions, final String objectId, final boolean showForms, final InclusionList inclusionList, final String cancelTo) {
         actions = inclusionList.includedActions(actions);
         for (int j = 0; j < actions.size(); j++) {
             final ObjectAction action = actions.get(j);
@@ -87,8 +84,7 @@ public class Methods extends AbstractElementProcessor {
                 writeMethods(request, adapter, action.getActions(), objectId, showForms, inclusionList, cancelTo);
                 request.appendHtml("</div>");
             } else if (action.isContributed()) {
-                if (action.getParameterCount() == 1
-                        && adapter.getSpecification().isOfType(action.getParameters().get(0).getSpecification())) {
+                if (action.getParameterCount() == 1 && adapter.getSpecification().isOfType(action.getParameters().get(0).getSpecification())) {
                     if (objectId != null) {
                         final ObjectAdapter target = request.getContext().getMappedObject(objectId);
                         final ObjectAdapter realTarget = action.realTarget(target);
@@ -108,9 +104,9 @@ public class Methods extends AbstractElementProcessor {
         }
     }
 
-    private static void writeMethod(final Request request, final ObjectAdapter adapter, final String[] parameters,
-        final ObjectAction action, final String objectId, final boolean showForms, String cancelTo) {
-        // if (action.isVisible(IsisContext.getSession(), null) && action.isVisible(IsisContext.getSession(), adapter))
+    private static void writeMethod(final Request request, final ObjectAdapter adapter, final String[] parameters, final ObjectAction action, final String objectId, final boolean showForms, final String cancelTo) {
+        // if (action.isVisible(IsisContext.getSession(), null) &&
+        // action.isVisible(IsisContext.getSession(), adapter))
         // {
         if (action.isVisible(IsisContext.getAuthenticationSession(), adapter).isAllowed()) {
             request.appendHtml("<div class=\"action\">");
@@ -119,19 +115,20 @@ public class Methods extends AbstractElementProcessor {
                 request.appendAsHtmlEncoded(action.getName());
                 request.appendHtml("</span>");
                 /*
-                 * } else if (action.isUsable(IsisContext.getSession(), null).isVetoed()) {
-                 * request.appendHtml("<span class=\"disabled\" title=\"" + action.isUsable(IsisContext.getSession(),
-                 * null).getReason() + "\">"); request.appendHtml(action.getName()); request.appendHtml("</span>");
+                 * } else if (action.isUsable(IsisContext.getSession(),
+                 * null).isVetoed()) {
+                 * request.appendHtml("<span class=\"disabled\" title=\"" +
+                 * action.isUsable(IsisContext.getSession(), null).getReason() +
+                 * "\">"); request.appendHtml(action.getName());
+                 * request.appendHtml("</span>");
                  */} else if (action.isUsable(IsisContext.getAuthenticationSession(), adapter).isVetoed()) {
-                request.appendHtml("<span class=\"disabled\" title=\""
-                    + action.isUsable(IsisContext.getAuthenticationSession(), adapter).getReason() + "\">");
+                request.appendHtml("<span class=\"disabled\" title=\"" + action.isUsable(IsisContext.getAuthenticationSession(), adapter).getReason() + "\">");
                 request.appendAsHtmlEncoded(action.getName());
                 request.appendHtml("</span>");
             } else {
                 final String version = request.getContext().mapVersion(adapter);
                 if (action.getParameterCount() == 0 || (action.isContributed() && action.getParameterCount() == 1)) {
-                    ActionButton.write(request, adapter, action, parameters, objectId, version, "_generic."
-                        + Dispatcher.EXTENSION, null, null, null, null, null, null, null, null, null);
+                    ActionButton.write(request, adapter, action, parameters, objectId, version, "_generic." + Dispatcher.EXTENSION, null, null, null, null, null, null, null, null, null);
                 } else if (showForms) {
                     final CreateFormParameter params = new CreateFormParameter();
                     params.objectId = objectId;
@@ -139,16 +136,18 @@ public class Methods extends AbstractElementProcessor {
                     params.forwardResultTo = "_generic." + Dispatcher.EXTENSION;
                     params.buttonTitle = "OK";
                     params.formTitle = action.getName();
-                    // parameters.resultName = request.getOptionalProperty(RESULT_NAME);
-                    // parameters.resultOverride = request.getOptionalProperty(RESULT_OVERRIDE);
+                    // parameters.resultName =
+                    // request.getOptionalProperty(RESULT_NAME);
+                    // parameters.resultOverride =
+                    // request.getOptionalProperty(RESULT_OVERRIDE);
                     // parameters.scope = request.getOptionalProperty(SCOPE);
-                    // parameters.className = request.getOptionalProperty(CLASS, "action");
+                    // parameters.className = request.getOptionalProperty(CLASS,
+                    // "action");
                     // parameters.id = request.getOptionalProperty(ID);
                     ActionForm.createForm(request, params, true);
                 } else {
-                    request.appendHtml("<a class=\"button\" href=\"_generic_action." + Dispatcher.EXTENSION + "?_result=" + objectId
-                            + "&amp;" + VERSION + "=" + version + "&_method=" + action.getId());
-                    if (cancelTo  != null) {
+                    request.appendHtml("<a class=\"button\" href=\"_generic_action." + Dispatcher.EXTENSION + "?_result=" + objectId + "&amp;" + VERSION + "=" + version + "&_method=" + action.getId());
+                    if (cancelTo != null) {
                         request.appendHtml("&_cancel-to=");
                         request.appendAsHtmlEncoded("cancel-to=\"" + cancelTo + "\"");
                     }

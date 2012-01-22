@@ -45,8 +45,7 @@ public class SelectedBorder extends AbstractBorder {
     public void draw(final Canvas canvas) {
         if (axis.isSelected(getView())) {
             final Size size = getSize();
-            canvas.drawSolidRectangle(left, right, size.getWidth() - left - right, size.getHeight() - top - bottom,
-                Toolkit.getColor(ColorsAndFonts.COLOR_PRIMARY3));
+            canvas.drawSolidRectangle(left, right, size.getWidth() - left - right, size.getHeight() - top - bottom, Toolkit.getColor(ColorsAndFonts.COLOR_PRIMARY3));
         }
         super.draw(canvas);
     }

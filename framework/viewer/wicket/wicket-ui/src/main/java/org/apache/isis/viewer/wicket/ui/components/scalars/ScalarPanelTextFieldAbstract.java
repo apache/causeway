@@ -32,7 +32,8 @@ import org.apache.wicket.markup.html.panel.ComponentFeedbackPanel;
 import org.apache.wicket.model.Model;
 
 /**
- * Adapter for {@link ScalarPanelAbstract scalar panel}s that are implemented using a simple {@link TextField}.
+ * Adapter for {@link ScalarPanelAbstract scalar panel}s that are implemented
+ * using a simple {@link TextField}.
  */
 public abstract class ScalarPanelTextFieldAbstract<T> extends ScalarPanelAbstract {
 
@@ -128,7 +129,8 @@ public abstract class ScalarPanelTextFieldAbstract<T> extends ScalarPanelAbstrac
     }
 
     /**
-     * Mandatory hook method to build the component to render the model when in {@link Format#COMPACT compact} format.
+     * Mandatory hook method to build the component to render the model when in
+     * {@link Format#COMPACT compact} format.
      */
     @Override
     protected Component addComponentForCompact() {

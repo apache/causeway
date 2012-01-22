@@ -39,7 +39,7 @@ public class JsonRepresentationTest_getLong {
     public void setUp() throws Exception {
         jsonRepresentation = new JsonRepresentation(readJson("map.json"));
     }
-    
+
     @Test
     public void happyCase() throws JsonParseException, JsonMappingException, IOException {
         assertThat(jsonRepresentation.getLong("aLong"), is(1234567890123L));
@@ -55,7 +55,7 @@ public class JsonRepresentationTest_getLong {
         try {
             jsonRepresentation.getLong("aString");
             fail();
-        } catch (IllegalArgumentException e) {
+        } catch (final IllegalArgumentException e) {
             assertThat(e.getMessage(), is("'aString' is not a long"));
         }
     }
@@ -65,7 +65,7 @@ public class JsonRepresentationTest_getLong {
         try {
             jsonRepresentation.getLong("aSubMap");
             fail();
-        } catch (IllegalArgumentException e) {
+        } catch (final IllegalArgumentException e) {
             assertThat(e.getMessage(), is("'aSubMap' is not a long"));
         }
     }
@@ -75,7 +75,7 @@ public class JsonRepresentationTest_getLong {
         try {
             jsonRepresentation.getLong("aSubList");
             fail();
-        } catch (IllegalArgumentException e) {
+        } catch (final IllegalArgumentException e) {
             assertThat(e.getMessage(), is("'aSubList' is not a long"));
         }
     }
@@ -84,5 +84,5 @@ public class JsonRepresentationTest_getLong {
     public void forMultipartKey() throws JsonParseException, JsonMappingException, IOException {
         assertThat(jsonRepresentation.getLong("aSubMap.aLong"), is(1234567890456L));
     }
-    
+
 }

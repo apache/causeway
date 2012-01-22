@@ -19,7 +19,6 @@
 
 package org.apache.isis.viewer.dnd.view.text;
 
-
 public class CursorPostionStub extends CursorPosition {
     public CursorPostionStub(final TextContent content, final int line, final int afterCharacter) {
         super(content, line, afterCharacter);

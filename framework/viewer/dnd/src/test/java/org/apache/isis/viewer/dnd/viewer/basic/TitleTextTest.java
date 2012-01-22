@@ -58,24 +58,32 @@ public class TitleTextTest extends ProxyJunit3TestCase {
         canvas = new TestCanvas();
     }
 
-    // TODO these tests won't work on server that doesn't have graphics - eg a Linux box without X
+    // TODO these tests won't work on server that doesn't have graphics - eg a
+    // Linux box without X
     /*
-     * public void XXtestDrawCanvas() { title = "abcde"; titleText.draw(canvas, 10, 20); }
+     * public void XXtestDrawCanvas() { title = "abcde"; titleText.draw(canvas,
+     * 10, 20); }
      * 
-     * public void testDrawCanvasDefaultColor() { titleText.draw(canvas, 10, 20);
-     * assertEquals(Toolkit.getColor(ColorsAndFonts.COLOR_BLACK), canvas.color); }
+     * public void testDrawCanvasDefaultColor() { titleText.draw(canvas, 10,
+     * 20); assertEquals(Toolkit.getColor(ColorsAndFonts.COLOR_BLACK),
+     * canvas.color); }
      * 
      * public void testDrawCanvasCanDrop() { view.getState().setCanDrop();
      * 
-     * titleText.draw(canvas, 10, 20); assertEquals(Toolkit.getColor(ColorsAndFonts.COLOR_VALID), canvas.color); }
+     * titleText.draw(canvas, 10, 20);
+     * assertEquals(Toolkit.getColor(ColorsAndFonts.COLOR_VALID), canvas.color);
+     * }
      * 
      * public void testDrawCanvasCantDrop() { view.getState().setCantDrop();
      * 
-     * titleText.draw(canvas, 10, 20); assertEquals(ColorsAndFonts.COLOR_INVALID, canvas.color); }
+     * titleText.draw(canvas, 10, 20);
+     * assertEquals(ColorsAndFonts.COLOR_INVALID, canvas.color); }
      * 
-     * public void testDrawCanvasIdentifier() { view.getState().setContentIdentified();
+     * public void testDrawCanvasIdentifier() {
+     * view.getState().setContentIdentified();
      * 
-     * titleText.draw(canvas, 10, 20); assertEquals(Toolkit.getColor("primary1"), canvas.color); }
+     * titleText.draw(canvas, 10, 20);
+     * assertEquals(Toolkit.getColor("primary1"), canvas.color); }
      */
     public void testDrawingLocation() {
         titleText.draw(canvas, 10, 20);

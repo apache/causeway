@@ -37,13 +37,10 @@ public class EditLink extends AbstractLink {
     protected boolean valid(final Request request, final ObjectAdapter adapter) {
         final ObjectSpecification specification = adapter.getSpecification();
         final AuthenticationSession session = IsisContext.getAuthenticationSession();
-        final List<ObjectAssociation> visibleFields =
-            specification.getAssociations(ObjectAssociationFilters.dynamicallyVisible(session, adapter));
+        final List<ObjectAssociation> visibleFields = specification.getAssociations(ObjectAssociationFilters.dynamicallyVisible(session, adapter));
         final ImmutableFacet facet = specification.getFacet(ImmutableFacet.class);
         final boolean isImmutable = facet != null && facet.value() == org.apache.isis.core.metamodel.facets.When.ALWAYS;
-        final boolean isImmutableOncePersisted =
-            facet != null && facet.value() == org.apache.isis.core.metamodel.facets.When.ONCE_PERSISTED
-                && adapter.isPersistent();
+        final boolean isImmutableOncePersisted = facet != null && facet.value() == org.apache.isis.core.metamodel.facets.When.ONCE_PERSISTED && adapter.isPersistent();
         return visibleFields.size() > 0 && !isImmutable && !isImmutableOncePersisted;
     }
 

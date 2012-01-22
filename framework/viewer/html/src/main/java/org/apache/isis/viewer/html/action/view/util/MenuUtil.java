@@ -42,8 +42,7 @@ public class MenuUtil {
         return menuItems;
     }
 
-    private static Component[] createMenu(final String menuName, final ObjectAdapter target,
-        final List<ObjectAction> actions, final Context context, final String targetObjectId) {
+    private static Component[] createMenu(final String menuName, final ObjectAdapter target, final List<ObjectAction> actions, final Context context, final String targetObjectId) {
         final List<Component> menuItems = new ArrayList<Component>();
         for (int j = 0; j < actions.size(); j++) {
             final ObjectAction action = actions.get(j);
@@ -86,18 +85,16 @@ public class MenuUtil {
                 boolean collectParameters;
                 if (action.getParameterCount() == 0) {
                     collectParameters = false;
-                    // TODO use new promptForParameters method instead of all this
-                } else if (action.getParameterCount() == 1 && action.isContributed()
-                    && target.getSpecification().isOfType(action.getParameters().get(0).getSpecification())) {
+                    // TODO use new promptForParameters method instead of all
+                    // this
+                } else if (action.getParameterCount() == 1 && action.isContributed() && target.getSpecification().isOfType(action.getParameters().get(0).getSpecification())) {
                     collectParameters = false;
                 } else {
                     collectParameters = true;
                 }
                 final Consent consent = action.isUsable(IsisContext.getAuthenticationSession(), target);
                 final String consentReason = consent.getReason();
-                menuItem =
-                    context.getComponentFactory().createMenuItem(actionId, action.getName(), action.getDescription(),
-                        consentReason, action.getType(), collectParameters, targetObjectId);
+                menuItem = context.getComponentFactory().createMenuItem(actionId, action.getName(), action.getDescription(), consentReason, action.getType(), collectParameters, targetObjectId);
             }
             if (menuItem != null) {
                 menuItems.add(menuItem);

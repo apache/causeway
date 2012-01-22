@@ -43,18 +43,17 @@ public class JsonRepresentationTest_asInputStream {
     public void setUp() throws Exception {
         jsonRepresentation = new JsonRepresentation(readJson("map.json"));
     }
-    
+
     @Test
     public void asInputStream() throws JsonParseException, JsonMappingException, IOException {
-        InputStream array = jsonRepresentation.asInputStream();
+        final InputStream array = jsonRepresentation.asInputStream();
 
-        ByteArrayOutputStream to = new ByteArrayOutputStream();
+        final ByteArrayOutputStream to = new ByteArrayOutputStream();
         com.google.common.io.ByteStreams.copy(array, to);
-        
-        String jsonStr = to.toString(Charsets.UTF_8.name());
-        
+
+        final String jsonStr = to.toString(Charsets.UTF_8.name());
+
         assertThat(jsonStr, is(not(nullValue())));
     }
 
-    
 }

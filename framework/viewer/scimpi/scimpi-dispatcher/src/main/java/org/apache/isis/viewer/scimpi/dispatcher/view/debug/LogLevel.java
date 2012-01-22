@@ -37,8 +37,7 @@ public class LogLevel extends AbstractElementProcessor {
             request.appendHtml("<form action=\"log.app\" type=\"post\" >");
             request.appendHtml("<input type=\"hidden\" name=\"view\" value=\"" + view + "\" />");
             request.appendHtml("<select name=\"level\">");
-            for (final Level l : new Level[] { Level.OFF, Level.FATAL, Level.ERROR, Level.WARN, Level.INFO,
-                Level.DEBUG, Level.TRACE }) {
+            for (final Level l : new Level[] { Level.OFF, Level.FATAL, Level.ERROR, Level.WARN, Level.INFO, Level.DEBUG, Level.TRACE }) {
                 final String settings = level + "\"" + (level == l ? " selected=\"selected\" " : "");
                 request.appendHtml("<option " + settings + ">" + l + "</option>");
             }

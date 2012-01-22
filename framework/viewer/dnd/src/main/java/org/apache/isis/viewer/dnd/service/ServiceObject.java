@@ -69,8 +69,7 @@ public class ServiceObject extends AbstractContent {
     public String getDescription() {
         final String specName = getSpecification().getSingularName();
         final String objectTitle = getObject().titleString();
-        return specName + (specName.equalsIgnoreCase(objectTitle) ? "" : ": " + objectTitle) + " "
-            + getSpecification().getDescription();
+        return specName + (specName.equalsIgnoreCase(objectTitle) ? "" : ": " + objectTitle) + " " + getSpecification().getDescription();
     }
 
     @Override
@@ -138,8 +137,7 @@ public class ServiceObject extends AbstractContent {
             return Veto.DEFAULT;
         } else {
             final ObjectAdapter source = sourceContent.getAdapter();
-            final Consent parameterSetValid =
-                action.isProposedArgumentSetValid(adapter, new ObjectAdapter[] { source });
+            final Consent parameterSetValid = action.isProposedArgumentSetValid(adapter, new ObjectAdapter[] { source });
             parameterSetValid.setDescription("Execute '" + action.getName() + "' with " + source.titleString());
             return parameterSetValid;
         }
@@ -147,9 +145,7 @@ public class ServiceObject extends AbstractContent {
 
     private ObjectAction actionFor(final Content sourceContent) {
         ObjectAction action;
-        action =
-            adapter.getSpecification().getObjectAction(ActionType.USER, null,
-                Arrays.asList(sourceContent.getSpecification()));
+        action = adapter.getSpecification().getObjectAction(ActionType.USER, null, Arrays.asList(sourceContent.getSpecification()));
         return action;
     }
 

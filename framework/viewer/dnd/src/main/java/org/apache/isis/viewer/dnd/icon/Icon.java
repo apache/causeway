@@ -118,7 +118,8 @@ public class Icon extends ObjectView {
     }
 
     /**
-     * Set up the graphic to be used when displaying the icon and the icon is selected.
+     * Set up the graphic to be used when displaying the icon and the icon is
+     * selected.
      */
     public void setSelectedGraphic(final IconGraphic selectedGraphic) {
         this.selectedGraphic = selectedGraphic;
@@ -136,8 +137,9 @@ public class Icon extends ObjectView {
     }
 
     /**
-     * Set up the graphic to be used when displaying the icon and the icon is unselected. If this returns null the
-     * graphic will not be changed when the icon becomes unselected.
+     * Set up the graphic to be used when displaying the icon and the icon is
+     * unselected. If this returns null the graphic will not be changed when the
+     * icon becomes unselected.
      */
     public void setUnselectedGraphic(final IconGraphic unselectedGraphic) {
         this.unselectedGraphic = unselectedGraphic;
@@ -145,7 +147,8 @@ public class Icon extends ObjectView {
     }
 
     /**
-     * Specifies if the graphic should be aligned vertical above the label; otherwise aligned horizontally.
+     * Specifies if the graphic should be aligned vertical above the label;
+     * otherwise aligned horizontally.
      */
     public void setVertical(final boolean isVertical) {
         this.isVertical = isVertical;

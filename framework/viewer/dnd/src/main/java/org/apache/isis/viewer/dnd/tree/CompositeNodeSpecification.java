@@ -45,20 +45,21 @@ public abstract class CompositeNodeSpecification extends NodeSpecification imple
 
     @Override
     protected View createNodeView(final Content content, final Axes axes) {
-        final CompositeViewUsingBuilder view =
-            new CompositeViewUsingBuilder(content, this, axes, createLayout(content, axes), builder);
+        final CompositeViewUsingBuilder view = new CompositeViewUsingBuilder(content, this, axes, createLayout(content, axes), builder);
         return view;
     }
 
     protected abstract Layout createLayout(Content content, Axes axes);
 
     /*
-     * public View createView(final Content content, Axes axes, int fieldNumber) { ViewRequirement requirement = new
-     * ViewRequirement(content, ViewRequirement.CLOSED); if (collectionLeafNodeSpecification.canDisplay(content,
-     * requirement )) { return collectionLeafNodeSpecification.createView(content, axes, -1); }
+     * public View createView(final Content content, Axes axes, int fieldNumber)
+     * { ViewRequirement requirement = new ViewRequirement(content,
+     * ViewRequirement.CLOSED); if
+     * (collectionLeafNodeSpecification.canDisplay(content, requirement )) {
+     * return collectionLeafNodeSpecification.createView(content, axes, -1); }
      * 
-     * if (objectLeafNodeSpecification.canDisplay(content, requirement)) { return
-     * objectLeafNodeSpecification.createView(content, axes, -1); }
+     * if (objectLeafNodeSpecification.canDisplay(content, requirement)) {
+     * return objectLeafNodeSpecification.createView(content, axes, -1); }
      * 
      * return null; }
      */

@@ -33,8 +33,8 @@ import org.jboss.resteasy.spi.interception.PreProcessInterceptor;
 public class PreProcessInterceptorForIsisSession implements PreProcessInterceptor {
 
     @Override
-    public ServerResponse preProcess(HttpRequest request, ResourceMethod method) throws Failure, WebApplicationException {
-        
+    public ServerResponse preProcess(final HttpRequest request, final ResourceMethod method) throws Failure, WebApplicationException {
+
         // TODO Auto-generated method stub
         return null;
     }

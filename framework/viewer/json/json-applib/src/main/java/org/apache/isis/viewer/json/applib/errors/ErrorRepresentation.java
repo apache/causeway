@@ -21,9 +21,9 @@ package org.apache.isis.viewer.json.applib.errors;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.codehaus.jackson.JsonNode;
 
-public class ErrorRepresentation extends JsonRepresentation  {
+public class ErrorRepresentation extends JsonRepresentation {
 
-    public ErrorRepresentation(JsonNode jsonNode) {
+    public ErrorRepresentation(final JsonNode jsonNode) {
         super(jsonNode);
     }
 

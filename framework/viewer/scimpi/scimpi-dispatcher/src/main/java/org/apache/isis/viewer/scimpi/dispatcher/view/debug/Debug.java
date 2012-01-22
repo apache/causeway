@@ -61,7 +61,8 @@ public class Debug extends AbstractElementProcessor {
             return;
         }
 
-        // Application | System | Specifications | Dispatcher | Context | Variables | Object | I18N File | Authorization
+        // Application | System | Specifications | Dispatcher | Context |
+        // Variables | Object | I18N File | Authorization
         // File | Hide Debug
 
         final String type = request.getOptionalProperty(TYPE);
@@ -164,8 +165,7 @@ public class Debug extends AbstractElementProcessor {
 
     private void specification(final Request request, final ObjectSpecification spec) {
         request.appendHtml("<h1>Specification - " + spec.getFullIdentifier() + "</h1>");
-        request.appendHtml("<p><a href=\"./debug.shtml?type=specification-graph&value=" + spec.getFullIdentifier()
-            + "\">Specification Graph</a></p>");
+        request.appendHtml("<p><a href=\"./debug.shtml?type=specification-graph&value=" + spec.getFullIdentifier() + "\">Specification Graph</a></p>");
         final DebugBuilder debug = new DebugHtmlString();
         specification(spec, debug);
         request.appendHtml(debug.toString());
@@ -175,8 +175,7 @@ public class Debug extends AbstractElementProcessor {
         final String name = request.getOptionalProperty(VALUE);
         final ObjectSpecification spec = getSpecificationLoader().loadSpecification(name);
         request.appendHtml("<h1>Specification Graph - " + spec.getFullIdentifier() + "</h1>");
-        request.appendHtml("<p><a href=\"./debug.shtml?type=specification&value=" + spec.getFullIdentifier()
-            + "\">Full Specification</a></p>");
+        request.appendHtml("<p><a href=\"./debug.shtml?type=specification&value=" + spec.getFullIdentifier() + "\">Full Specification</a></p>");
         request.appendHtml("<pre>");
         final DebugBuilder debug = new DebugString();
         debug.appendln(spec.getFullIdentifier());
@@ -222,8 +221,7 @@ public class Debug extends AbstractElementProcessor {
 
     protected void listSpecifications(final Request request) {
         request.appendHtml("<h1>Specifications</h1>");
-        final List<ObjectSpecification> fullIdentifierList =
-            new ArrayList<ObjectSpecification>(getSpecificationLoader().allSpecifications());
+        final List<ObjectSpecification> fullIdentifierList = new ArrayList<ObjectSpecification>(getSpecificationLoader().allSpecifications());
         Collections.sort(fullIdentifierList, ObjectSpecification.COMPARATOR_SHORT_IDENTIFIER_IGNORE_CASE);
         final DebugHtmlString debug = new DebugHtmlString();
         for (final ObjectSpecification spec : fullIdentifierList) {
@@ -251,10 +249,10 @@ public class Debug extends AbstractElementProcessor {
         return "debug";
     }
 
-    private void specificationGraph(final ObjectSpecification spec, final DebugBuilder view,
-        final ArrayList<ObjectSpecification> visited) {
+    private void specificationGraph(final ObjectSpecification spec, final DebugBuilder view, final ArrayList<ObjectSpecification> visited) {
         final List<ObjectAssociation> fields = new ArrayList<ObjectAssociation>(spec.getAssociations());
         Collections.sort(fields, new Comparator<ObjectAssociation>() {
+            @Override
             public int compare(final ObjectAssociation o1, final ObjectAssociation o2) {
                 return o1.getName().compareTo(o2.getName());
             }
@@ -265,9 +263,7 @@ public class Debug extends AbstractElementProcessor {
             if (!specification.isValue()) {
                 final boolean contains = visited.contains(specification);
                 final String aggregated = specification.isAggregated() ? "++" : "";
-                view.appendln(aggregated + field.getName()
-                    + "  (<a href=\"./debug.shtml?type=specification-graph&value=" + specification.getFullIdentifier()
-                    + "\">" + specification.getFullIdentifier() + "</a>" + (contains ? "..." : "") + ")");
+                view.appendln(aggregated + field.getName() + "  (<a href=\"./debug.shtml?type=specification-graph&value=" + specification.getFullIdentifier() + "\">" + specification.getFullIdentifier() + "</a>" + (contains ? "..." : "") + ")");
                 if (!contains) {
                     visited.add(specification);
                     view.indent();
@@ -315,10 +311,8 @@ public class Debug extends AbstractElementProcessor {
             view.appendln("Name", field.getName());
             view.appendln("Specification", specificationLink(field.getSpecification()));
 
-            view.appendln("Type", field.isOneToManyAssociation() ? "Collection" : field.isOneToOneAssociation()
-                ? "Object" : "Unknown");
-            view.appendln("Flags", (field.isAlwaysHidden() ? "" : "Visible ")
-                + (field.isNotPersisted() ? "Not-Persisted " : " ") + (field.isMandatory() ? "Mandatory " : ""));
+            view.appendln("Type", field.isOneToManyAssociation() ? "Collection" : field.isOneToOneAssociation() ? "Object" : "Unknown");
+            view.appendln("Flags", (field.isAlwaysHidden() ? "" : "Visible ") + (field.isNotPersisted() ? "Not-Persisted " : " ") + (field.isMandatory() ? "Mandatory " : ""));
 
             speficationFacets(view, field);
         }
@@ -365,8 +359,7 @@ public class Debug extends AbstractElementProcessor {
         }
     }
 
-    private void specificationClasses(final DebugBuilder view, final String label,
-        final List<ObjectSpecification> subclasses) {
+    private void specificationClasses(final DebugBuilder view, final String label, final List<ObjectSpecification> subclasses) {
         final StringBuffer buffer = new StringBuffer();
         if (subclasses.size() == 0) {
             buffer.append("none");
@@ -378,8 +371,7 @@ public class Debug extends AbstractElementProcessor {
         view.appendln(label, buffer.toString());
     }
 
-    private void specificationMembers(final DebugBuilder view, final String label,
-        final List<? extends ObjectMember> members) {
+    private void specificationMembers(final DebugBuilder view, final String label, final List<? extends ObjectMember> members) {
         final StringBuffer buffer = new StringBuffer();
         if (members.size() == 0) {
             buffer.append("none");
@@ -410,17 +402,16 @@ public class Debug extends AbstractElementProcessor {
             buffer.append("none");
         } else {
             Collections.sort(facets, new Comparator<Facet>() {
+                @Override
                 public int compare(final Facet o1, final Facet o2) {
                     final String facetType1 = o1.facetType().getName();
                     final String facetType2 = o2.facetType().getName();
-                    return facetType1.substring(facetType1.lastIndexOf('.') + 1).compareTo(
-                        facetType2.substring(facetType2.lastIndexOf('.') + 1));
+                    return facetType1.substring(facetType1.lastIndexOf('.') + 1).compareTo(facetType2.substring(facetType2.lastIndexOf('.') + 1));
                 }
             });
             for (final Facet facet : facets) {
                 final String facetType = facet.facetType().getName();
-                buffer.append("<span class=\"facet-type\">" + facetType.substring(facetType.lastIndexOf('.') + 1)
-                    + "</span>:  " + facet + "<br>");
+                buffer.append("<span class=\"facet-type\">" + facetType.substring(facetType.lastIndexOf('.') + 1) + "</span>:  " + facet + "<br>");
             }
         }
         view.appendln("Facets", buffer.toString());

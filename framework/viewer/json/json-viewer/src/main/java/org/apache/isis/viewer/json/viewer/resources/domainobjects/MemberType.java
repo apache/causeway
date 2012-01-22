@@ -42,39 +42,33 @@ import com.google.common.collect.ImmutableMap;
 
 public enum MemberType {
 
-    PROPERTY("properties/", "id", RepresentationType.OBJECT_PROPERTY, ImmutableMap.of(
-        "modify", MutatorSpec.of(Rel.MODIFY, PropertyValidateFacet.class, PropertySetterFacet.class, HttpMethod.PUT, BodyArgs.ONE),
-        "clear", MutatorSpec.of(Rel.CLEAR, PropertyValidateFacet.class, PropertyClearFacet.class, HttpMethod.DELETE, BodyArgs.NONE)
-        )) {
+    PROPERTY("properties/", "id", RepresentationType.OBJECT_PROPERTY, ImmutableMap.of("modify", MutatorSpec.of(Rel.MODIFY, PropertyValidateFacet.class, PropertySetterFacet.class, HttpMethod.PUT, BodyArgs.ONE), "clear",
+            MutatorSpec.of(Rel.CLEAR, PropertyValidateFacet.class, PropertyClearFacet.class, HttpMethod.DELETE, BodyArgs.NONE))) {
         @Override
-        public ObjectSpecification specFor(ObjectMember objectMember) {
+        public ObjectSpecification specFor(final ObjectMember objectMember) {
             return objectMember.getSpecification();
         }
     },
     /**
-     * {@link #getMutators()} are keyed by {@link CollectionSemantics#getAddToKey()}
+     * {@link #getMutators()} are keyed by
+     * {@link CollectionSemantics#getAddToKey()}
      */
-    COLLECTION("collections/", "id", RepresentationType.OBJECT_COLLECTION, ImmutableMap.of(
-        "addToSet", MutatorSpec.of(Rel.ADD_TO, CollectionValidateAddToFacet.class, CollectionAddToFacet.class, HttpMethod.PUT, BodyArgs.ONE),
-        "addToList", MutatorSpec.of(Rel.ADD_TO, CollectionValidateAddToFacet.class, CollectionAddToFacet.class, HttpMethod.POST, BodyArgs.ONE),
-        "removeFrom", MutatorSpec.of(Rel.REMOVE_FROM, CollectionValidateRemoveFromFacet.class, CollectionRemoveFromFacet.class, HttpMethod.DELETE, BodyArgs.ONE)
-        )) {
+    COLLECTION("collections/", "id", RepresentationType.OBJECT_COLLECTION, ImmutableMap.of("addToSet", MutatorSpec.of(Rel.ADD_TO, CollectionValidateAddToFacet.class, CollectionAddToFacet.class, HttpMethod.PUT, BodyArgs.ONE), "addToList",
+            MutatorSpec.of(Rel.ADD_TO, CollectionValidateAddToFacet.class, CollectionAddToFacet.class, HttpMethod.POST, BodyArgs.ONE), "removeFrom", MutatorSpec.of(Rel.REMOVE_FROM, CollectionValidateRemoveFromFacet.class, CollectionRemoveFromFacet.class, HttpMethod.DELETE, BodyArgs.ONE))) {
         @Override
-        public ObjectSpecification specFor(ObjectMember objectMember) {
+        public ObjectSpecification specFor(final ObjectMember objectMember) {
             return objectMember.getSpecification();
         }
     },
     /**
-     * {@link #getMutators()} are keyed by {@link ActionSemantics#getInvokeKey()}
+     * {@link #getMutators()} are keyed by
+     * {@link ActionSemantics#getInvokeKey()}
      */
-    ACTION("actions/", "id", RepresentationType.ACTION_RESULT, ImmutableMap.of(
-        "invokeQueryOnly", MutatorSpec.of(Rel.INVOKE, ActionValidationFacet.class, ActionInvocationFacet.class, HttpMethod.GET, BodyArgs.MANY, "invoke"),
-        "invokeIdempotent", MutatorSpec.of(Rel.INVOKE, ActionValidationFacet.class, ActionInvocationFacet.class, HttpMethod.PUT, BodyArgs.MANY, "invoke"),
-        "invoke", MutatorSpec.of(Rel.INVOKE, ActionValidationFacet.class, ActionInvocationFacet.class, HttpMethod.POST, BodyArgs.MANY, "invoke")
-    )) {
+    ACTION("actions/", "id", RepresentationType.ACTION_RESULT, ImmutableMap.of("invokeQueryOnly", MutatorSpec.of(Rel.INVOKE, ActionValidationFacet.class, ActionInvocationFacet.class, HttpMethod.GET, BodyArgs.MANY, "invoke"), "invokeIdempotent",
+            MutatorSpec.of(Rel.INVOKE, ActionValidationFacet.class, ActionInvocationFacet.class, HttpMethod.PUT, BodyArgs.MANY, "invoke"), "invoke", MutatorSpec.of(Rel.INVOKE, ActionValidationFacet.class, ActionInvocationFacet.class, HttpMethod.POST, BodyArgs.MANY, "invoke"))) {
         @Override
-        public ObjectSpecification specFor(ObjectMember objectMember) {
-            ObjectAction objectAction = (ObjectAction) objectMember;
+        public ObjectSpecification specFor(final ObjectMember objectMember) {
+            final ObjectAction objectAction = (ObjectAction) objectMember;
             return objectAction.getReturnType();
         }
     };
@@ -86,7 +80,7 @@ public enum MemberType {
 
     private final Map<String, MutatorSpec> mutators;
 
-    private MemberType(String urlPart, String jsProp, RepresentationType representationType, Map<String, MutatorSpec> mutators) {
+    private MemberType(final String urlPart, final String jsProp, final RepresentationType representationType, final Map<String, MutatorSpec> mutators) {
         this.urlPart = urlPart;
         this.jsProp = jsProp;
         this.representationType = representationType;
@@ -101,11 +95,11 @@ public enum MemberType {
     public String getUrlPart() {
         return urlPart;
     }
-    
+
     public Map<String, MutatorSpec> getMutators() {
         return mutators;
     }
-    
+
     public abstract ObjectSpecification specFor(ObjectMember objectMember);
 
     public boolean isProperty() {
@@ -121,32 +115,27 @@ public enum MemberType {
     }
 
     public static MemberType lookup(final String memberTypeName) {
-        for (MemberType memberType : values()) {
-            if(memberType.getName().equals(memberTypeName)) {
+        for (final MemberType memberType : values()) {
+            if (memberType.getName().equals(memberTypeName)) {
                 return memberType;
             }
         }
-    	return null;
+        return null;
     }
 
-	public static MemberType of(ObjectMember objectMember) {
-		return objectMember.isAction()?
-				ACTION:
-					objectMember.isOneToOneAssociation()?
-						PROPERTY:
-						COLLECTION;
-	}
+    public static MemberType of(final ObjectMember objectMember) {
+        return objectMember.isAction() ? ACTION : objectMember.isOneToOneAssociation() ? PROPERTY : COLLECTION;
+    }
 
     public RepresentationType getRepresentationType() {
         return representationType;
     }
 
-
     public String getName() {
         return name;
     }
 
-    public static MemberType determineFrom(ObjectFeature objectFeature) {
+    public static MemberType determineFrom(final ObjectFeature objectFeature) {
         if (objectFeature instanceof ObjectAction) {
             return MemberType.ACTION;
         }
@@ -158,7 +147,5 @@ public enum MemberType {
         }
         return null;
     }
-
-
 
 }

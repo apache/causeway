@@ -21,15 +21,14 @@ package org.apache.isis.viewer.json.applib.domainobjects;
 import org.apache.isis.viewer.json.applib.links.LinkRepresentation;
 import org.codehaus.jackson.JsonNode;
 
-
 public class TransientDomainObjectRepresentation extends AbstractDomainObjectRepresentation {
 
-    public TransientDomainObjectRepresentation(JsonNode jsonNode) {
+    public TransientDomainObjectRepresentation(final JsonNode jsonNode) {
         super(jsonNode);
     }
-    
+
     public LinkRepresentation getPersistLink() {
         return getLink("links[rel=persist]");
     }
-    
+
 }

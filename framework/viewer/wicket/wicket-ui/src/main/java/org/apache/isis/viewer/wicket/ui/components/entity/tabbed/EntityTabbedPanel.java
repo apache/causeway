@@ -34,8 +34,8 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
 
 /**
- * {@link PanelAbstract Panel} for entity, with separate tabs for the summary info (icon, title, actions), the
- * properties, and for each of the collections.
+ * {@link PanelAbstract Panel} for entity, with separate tabs for the summary
+ * info (icon, title, actions), the properties, and for each of the collections.
  */
 public class EntityTabbedPanel extends TabbedPanelAbstract<EntityModel> {
 

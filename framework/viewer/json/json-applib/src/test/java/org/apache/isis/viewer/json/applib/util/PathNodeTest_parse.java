@@ -23,11 +23,9 @@ import static org.junit.Assert.assertThat;
 
 import java.util.Map;
 
-import org.apache.isis.viewer.json.applib.util.PathNode;
 import org.junit.Test;
 
 public class PathNodeTest_parse {
-
 
     @Test
     public void simple() throws Exception {
@@ -67,6 +65,5 @@ public class PathNodeTest_parse {
         assertThat(criteria.get("bar"), is("coz"));
         assertThat(criteria.get("dat"), is("ein"));
     }
-
 
 }

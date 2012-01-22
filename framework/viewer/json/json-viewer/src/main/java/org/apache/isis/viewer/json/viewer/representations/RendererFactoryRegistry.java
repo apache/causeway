@@ -49,11 +49,11 @@ public class RendererFactoryRegistry {
     public final static RendererFactoryRegistry instance = new RendererFactoryRegistry();
 
     private final Map<MediaType, RendererFactory> factoryByReprType = Maps.newHashMap();
-    
+
     RendererFactoryRegistry() {
         registerDefaults();
     }
-    
+
     private void registerDefaults() {
         register(new HomePageReprRenderer.Factory());
         register(new UserReprRenderer.Factory());
@@ -74,16 +74,16 @@ public class RendererFactoryRegistry {
         register(new TypeActionResultReprRenderer.Factory());
     }
 
-    public void register(RendererFactory factory) {
+    public void register(final RendererFactory factory) {
         final RepresentationType representationType = factory.getRepresentationType();
         factoryByReprType.put(representationType.getMediaType(), factory);
     }
-    
-    public RendererFactory find(MediaType mediaType) {
+
+    public RendererFactory find(final MediaType mediaType) {
         return factoryByReprType.get(mediaType);
     }
 
-    public RendererFactory find(RepresentationType representationType) {
+    public RendererFactory find(final RepresentationType representationType) {
         return find(representationType.getMediaType());
     }
 

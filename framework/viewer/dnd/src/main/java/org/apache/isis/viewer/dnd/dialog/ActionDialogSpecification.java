@@ -59,12 +59,10 @@ public class ActionDialogSpecification extends CompositeViewSpecification {
         public View createView(final Content content, final Axes axes, final int fieldNumber) {
             if (content instanceof TextParseableParameter) {
                 final GlobalViewFactory factory = Toolkit.getViewFactory();
-                return factory
-                    .createView(new ViewRequirement(content, ViewRequirement.CLOSED | ViewRequirement.SUBVIEW));
+                return factory.createView(new ViewRequirement(content, ViewRequirement.CLOSED | ViewRequirement.SUBVIEW));
             } else if (content instanceof ObjectParameter) {
                 final GlobalViewFactory factory = Toolkit.getViewFactory();
-                return factory
-                    .createView(new ViewRequirement(content, ViewRequirement.CLOSED | ViewRequirement.SUBVIEW));
+                return factory.createView(new ViewRequirement(content, ViewRequirement.CLOSED | ViewRequirement.SUBVIEW));
             }
 
             return null;
@@ -177,10 +175,10 @@ public class ActionDialogSpecification extends CompositeViewSpecification {
         addViewDecorator(new CompositeViewDecorator() {
             @Override
             public View decorate(final View view, final Axes axes) {
-                // TODO reintroduce the 'Apply' notion, but under control from the method declaration
+                // TODO reintroduce the 'Apply' notion, but under control from
+                // the method declaration
                 final ButtonAction[] actions = new ButtonAction[] { new ExecuteAndCloseAction(), new CancelAction() };
-                final ButtonBorder buttonBorder =
-                    new ButtonBorder(actions, new IconBorder(view, Toolkit.getText(ColorsAndFonts.TEXT_TITLE_SMALL)));
+                final ButtonBorder buttonBorder = new ButtonBorder(actions, new IconBorder(view, Toolkit.getText(ColorsAndFonts.TEXT_TITLE_SMALL)));
                 buttonBorder.setFocusManager(new ActionDialogFocusManager(buttonBorder));
                 return buttonBorder;
             }

@@ -20,22 +20,22 @@ package org.apache.isis.viewer.json.viewer.resources.domaintypes;
 
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
-public class ObjectSpecAndSuperSpec  {
-    
+public class ObjectSpecAndSuperSpec {
+
     private final ObjectSpecification objectSpecification;
     private final ObjectSpecification superSpecification;
 
-    public ObjectSpecAndSuperSpec(ObjectSpecification objectSpecification, ObjectSpecification superSpecification) {
+    public ObjectSpecAndSuperSpec(final ObjectSpecification objectSpecification, final ObjectSpecification superSpecification) {
         this.objectSpecification = objectSpecification;
         this.superSpecification = superSpecification;
     }
-    
+
     public ObjectSpecification getObjectSpecification() {
         return objectSpecification;
     }
-    
+
     public ObjectSpecification getSuperSpecification() {
         return superSpecification;
     }
-    
+
 }

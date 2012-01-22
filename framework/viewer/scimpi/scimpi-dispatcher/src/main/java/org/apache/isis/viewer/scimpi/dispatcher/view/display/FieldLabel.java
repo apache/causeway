@@ -27,7 +27,6 @@ import org.apache.isis.viewer.scimpi.dispatcher.ForbiddenException;
 import org.apache.isis.viewer.scimpi.dispatcher.ScimpiException;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 
-
 public class FieldLabel extends AbstractElementProcessor {
 
     @Override

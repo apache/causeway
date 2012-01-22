@@ -32,13 +32,11 @@ public class ScenarioBoundValueException extends Exception {
         return new ScenarioBoundValueException(cellBinding, cellBinding.getCurrentCell(), message);
     }
 
-    public static ScenarioBoundValueException arg(final CellBinding cellBinding, final ScenarioCell storyCell,
-        final String message) {
+    public static ScenarioBoundValueException arg(final CellBinding cellBinding, final ScenarioCell storyCell, final String message) {
         return new ScenarioBoundValueException(cellBinding, storyCell, message);
     }
 
-    private ScenarioBoundValueException(final CellBinding cellBinding, final ScenarioCell storyCell,
-        final String message) {
+    private ScenarioBoundValueException(final CellBinding cellBinding, final ScenarioCell storyCell, final String message) {
         super(message);
         this.cellBinding = cellBinding;
         this.storyCell = storyCell;

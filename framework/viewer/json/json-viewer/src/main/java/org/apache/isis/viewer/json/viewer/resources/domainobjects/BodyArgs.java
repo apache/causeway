@@ -34,8 +34,8 @@ public enum BodyArgs {
         return this == ONE;
     }
 
-	public boolean isNone() {
-		return this == NONE;
-	}
+    public boolean isNone() {
+        return this == NONE;
+    }
 
 }

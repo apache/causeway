@@ -24,15 +24,15 @@ import java.io.PrintWriter;
 import org.apache.isis.viewer.html.PathBuilder;
 
 public abstract class ComponentAbstract implements Component {
-    
+
     private String id;
     private String cls;
     protected final PathBuilder pathBuilder;
 
-    public ComponentAbstract(PathBuilder pathBuilder) {
+    public ComponentAbstract(final PathBuilder pathBuilder) {
         this.pathBuilder = pathBuilder;
     }
-    
+
     public void setClass(final String cls) {
         this.cls = cls;
     }

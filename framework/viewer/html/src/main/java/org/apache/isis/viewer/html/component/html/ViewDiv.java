@@ -30,7 +30,7 @@ import org.apache.isis.viewer.html.component.ViewPane;
 import org.apache.isis.viewer.html.image.ImageLookup;
 
 public class ViewDiv extends ComponentComposite implements ViewPane {
-    
+
     private String iconName;
     private String objectId;
     private Component[] menu = new Component[0];
@@ -38,8 +38,8 @@ public class ViewDiv extends ComponentComposite implements ViewPane {
     private final List<String> messages = new ArrayList<String>();
     private final List<String> warnings = new ArrayList<String>();
     private String description;
-    
-    public ViewDiv(PathBuilder pathBuilder) {
+
+    public ViewDiv(final PathBuilder pathBuilder) {
         super(pathBuilder);
     }
 
@@ -138,6 +138,7 @@ public class ViewDiv extends ComponentComposite implements ViewPane {
         writer.println("</div>");
     }
 
+    @Override
     protected String pathTo(final String prefix) {
         return pathBuilder.pathTo(prefix);
     }

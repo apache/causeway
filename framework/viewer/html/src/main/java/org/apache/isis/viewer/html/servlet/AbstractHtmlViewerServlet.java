@@ -32,11 +32,11 @@ import org.apache.isis.viewer.html.PathBuilderDefault;
 public abstract class AbstractHtmlViewerServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
-    
+
     private PathBuilder pathBuilder;
-    
+
     protected PathBuilder getPathBuilder() {
-        if(pathBuilder != null) {
+        if (pathBuilder != null) {
             return pathBuilder;
         }
         return pathBuilder = new PathBuilderDefault(getServletContext());
@@ -68,6 +68,5 @@ public abstract class AbstractHtmlViewerServlet extends HttpServlet {
     protected DeploymentType getDeploymentType() {
         return IsisContext.getDeploymentType();
     }
-
 
 }

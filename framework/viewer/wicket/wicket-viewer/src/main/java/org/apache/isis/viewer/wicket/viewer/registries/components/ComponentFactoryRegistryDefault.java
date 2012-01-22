@@ -41,7 +41,8 @@ import com.google.common.collect.Multimaps;
 import com.google.inject.Singleton;
 
 /**
- * Implementation of {@link ComponentFactoryRegistry} that delegates to a provided {@link ComponentFactoryList}.
+ * Implementation of {@link ComponentFactoryRegistry} that delegates to a
+ * provided {@link ComponentFactoryList}.
  */
 @Singleton
 public class ComponentFactoryRegistryDefault implements ComponentFactoryRegistry {
@@ -53,14 +54,12 @@ public class ComponentFactoryRegistryDefault implements ComponentFactoryRegistry
     }
 
     public ComponentFactoryRegistryDefault(final ComponentFactoryList componentFactoryList) {
-        componentFactoriesByType =
-            Multimaps.newListMultimap(new HashMap<ComponentType, Collection<ComponentFactory>>(),
-                new Supplier<List<ComponentFactory>>() {
-                    @Override
-                    public List<ComponentFactory> get() {
-                        return Lists.<ComponentFactory> newArrayList();
-                    }
-                });
+        componentFactoriesByType = Multimaps.newListMultimap(new HashMap<ComponentType, Collection<ComponentFactory>>(), new Supplier<List<ComponentFactory>>() {
+            @Override
+            public List<ComponentFactory> get() {
+                return Lists.<ComponentFactory> newArrayList();
+            }
+        });
 
         registerComponentFactories(componentFactoryList);
     }
@@ -101,16 +100,14 @@ public class ComponentFactoryRegistryDefault implements ComponentFactoryRegistry
     // ///////////////////////////////////////////////////////
 
     @Override
-    public Component addOrReplaceComponent(final MarkupContainer markupContainer, final ComponentType componentType,
-        final IModel<?> model) {
+    public Component addOrReplaceComponent(final MarkupContainer markupContainer, final ComponentType componentType, final IModel<?> model) {
         final Component component = createComponent(componentType, model);
         markupContainer.addOrReplace(component);
         return component;
     }
 
     @Override
-    public Component addOrReplaceComponent(final MarkupContainer markupContainer, final String id,
-        final ComponentType componentType, final IModel<?> model) {
+    public Component addOrReplaceComponent(final MarkupContainer markupContainer, final String id, final ComponentType componentType, final IModel<?> model) {
         final Component component = createComponent(componentType, id, model);
         markupContainer.addOrReplace(component);
         return component;
@@ -156,9 +153,7 @@ public class ComponentFactoryRegistryDefault implements ComponentFactoryRegistry
     public ComponentFactory findComponentFactoryElseFailFast(final ComponentType componentType, final IModel<?> model) {
         final ComponentFactory componentFactory = findComponentFactory(componentType, model);
         if (componentFactory == null) {
-            throw new RuntimeException(String.format(
-                "could not find component for componentType = '%s'; model object is of type %s", componentType, model
-                    .getClass().getName()));
+            throw new RuntimeException(String.format("could not find component for componentType = '%s'; model object is of type %s", componentType, model.getClass().getName()));
         }
         return componentFactory;
     }

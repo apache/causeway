@@ -47,27 +47,26 @@ public class IsisDatePanel extends ScalarPanelTextFieldAbstract<java.util.Date> 
 
     @Override
     protected TextField<java.util.Date> createTextField() {
-        final TextField<java.util.Date> textField =
-            DateTextField.forDatePattern(ID_SCALAR_VALUE, new Model<java.util.Date>() {
-                private static final long serialVersionUID = 1L;
+        final TextField<java.util.Date> textField = DateTextField.forDatePattern(ID_SCALAR_VALUE, new Model<java.util.Date>() {
+            private static final long serialVersionUID = 1L;
 
-                @Override
-                public java.util.Date getObject() {
-                    final ObjectAdapter adapter = getModel().getObject();
-                    if (adapter == null) {
-                        return null;
-                    }
-                    final Date noDate = (Date) adapter.getObject();
-                    return noDate.dateValue();
+            @Override
+            public java.util.Date getObject() {
+                final ObjectAdapter adapter = getModel().getObject();
+                if (adapter == null) {
+                    return null;
                 }
+                final Date noDate = (Date) adapter.getObject();
+                return noDate.dateValue();
+            }
 
-                @Override
-                public void setObject(final java.util.Date date) {
-                    final Date noDate = new Date(date);
-                    final ObjectAdapter adapter = adapterFor(noDate);
-                    getModel().setObject(adapter);
-                }
-            }, DATE_PATTERN);
+            @Override
+            public void setObject(final java.util.Date date) {
+                final Date noDate = new Date(date);
+                final ObjectAdapter adapter = adapterFor(noDate);
+                getModel().setObject(adapter);
+            }
+        }, DATE_PATTERN);
         return textField;
     }
 

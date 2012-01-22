@@ -45,8 +45,7 @@ public class LargeIconSpecification implements ViewSpecification {
 
     @Override
     public boolean canDisplay(final ViewRequirement requirement) {
-        return requirement.isClosed() && requirement.isObject() && requirement.hasReference()
-            && requirement.isSubview();
+        return requirement.isClosed() && requirement.isObject() && requirement.hasReference() && requirement.isSubview();
     }
 
     @Override

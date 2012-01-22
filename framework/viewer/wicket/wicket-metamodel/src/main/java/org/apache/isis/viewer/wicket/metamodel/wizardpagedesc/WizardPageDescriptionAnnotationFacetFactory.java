@@ -35,8 +35,7 @@ public class WizardPageDescriptionAnnotationFacetFactory extends AnnotationBased
     public void process(final ProcessMethodContext processMethodContext) {
 
         // look for annotation on the property
-        final WizardPageDescription annotation =
-            getAnnotation(processMethodContext.getMethod(), WizardPageDescription.class);
+        final WizardPageDescription annotation = getAnnotation(processMethodContext.getMethod(), WizardPageDescription.class);
         final WizardPageDescriptionFacet facet = create(annotation, processMethodContext.getFacetHolder());
         if (facet != null) {
             FacetUtil.addFacet(facet);

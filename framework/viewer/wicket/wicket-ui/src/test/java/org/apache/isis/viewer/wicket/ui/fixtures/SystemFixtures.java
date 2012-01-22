@@ -45,8 +45,7 @@ public final class SystemFixtures {
         });
     }
 
-    public <T> void newLink(final CssMenuLinkFactory mockLinkBuilder, final String linkId,
-        final ObjectAdapterMemento adapterMemento, final ObjectAction noAction, final Link<T> returns) {
+    public <T> void newLink(final CssMenuLinkFactory mockLinkBuilder, final String linkId, final ObjectAdapterMemento adapterMemento, final ObjectAction noAction, final Link<T> returns) {
         context.checking(new Expectations() {
             {
                 allowing(mockLinkBuilder).newLink(adapterMemento, noAction, linkId);

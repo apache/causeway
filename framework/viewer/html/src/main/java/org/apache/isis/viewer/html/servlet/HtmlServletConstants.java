@@ -42,7 +42,6 @@ public final class HtmlServletConstants {
     public static final String LOGON_PAGE = "logon";
     static final String START_PAGE = "start";
 
-
     private HtmlServletConstants() {
     }
 

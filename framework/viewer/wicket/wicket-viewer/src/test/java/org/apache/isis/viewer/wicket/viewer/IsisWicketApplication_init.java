@@ -38,7 +38,7 @@ public class IsisWicketApplication_init {
 
     @Rule
     public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_ONLY);
-    
+
     private IsisWicketApplication application;
 
     private ISecuritySettings mockSecuritySettings;

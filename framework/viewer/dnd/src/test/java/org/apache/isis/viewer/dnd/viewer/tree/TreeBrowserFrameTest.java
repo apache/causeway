@@ -74,14 +74,16 @@ public class TreeBrowserFrameTest extends ProxyJunit3TestCase {
     }
 
     public void testLeftViewSize() {
-        // width => width of view (150) + scroll border (0) + resize border (7) => 159
+        // width => width of view (150) + scroll border (0) + resize border (7)
+        // => 159
         // height => height of view (250) + scroll border (0) => 250
         assertEquals(leftView(), leftView().getView());
         assertEquals(new Size(350 + 7, 250), leftView().getView().getRequiredSize(Size.createMax()));
     }
 
     public void testInitialBlankViewSize() {
-        // 120 is the minimum width given to the blan view by the MasterDetailPanel
+        // 120 is the minimum width given to the blan view by the
+        // MasterDetailPanel
         assertEquals(new Size(120, 0), rightView().getRequiredSize(Size.createMax()));
     }
 
@@ -110,7 +112,8 @@ public class TreeBrowserFrameTest extends ProxyJunit3TestCase {
         assertEquals("retains original size", new Size(400 - 120, 200), leftView().getSize());
 
         // scroll border 16 pixels; resize border 5 pixels; total 21 pixels
-        // assertEquals("width reduces", new Size(100, 200), rightView.getSize());
+        // assertEquals("width reduces", new Size(100, 200),
+        // rightView.getSize());
 
         // assertEquals(new Location(100, 0), rightView.getLocation());
     }
@@ -136,8 +139,9 @@ public class TreeBrowserFrameTest extends ProxyJunit3TestCase {
     }
 
     /*
-     * public void testLayoutInReducedSpaceReducesSizeOfRightView() { layoutFrameInReducedSpace();
-     * assertEquals("retains original size", new Size(120, 200), rightView().getSize()); }
+     * public void testLayoutInReducedSpaceReducesSizeOfRightView() {
+     * layoutFrameInReducedSpace(); assertEquals("retains original size", new
+     * Size(120, 200), rightView().getSize()); }
      */
 
     private void layoutFrameInReducedSpace() {

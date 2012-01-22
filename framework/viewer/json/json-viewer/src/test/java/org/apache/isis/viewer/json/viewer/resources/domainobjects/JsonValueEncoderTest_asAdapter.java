@@ -47,8 +47,8 @@ import org.junit.runner.RunWith;
 @RunWith(JMock.class)
 public class JsonValueEncoderTest_asAdapter {
 
-    private Mockery context = new JUnit4Mockery();
-    
+    private final Mockery context = new JUnit4Mockery();
+
     private JsonValueEncoder jsonValueEncoder;
     private JsonRepresentation representation;
     private ObjectSpecification objectSpec;
@@ -61,35 +61,35 @@ public class JsonValueEncoderTest_asAdapter {
         objectSpec = context.mock(ObjectSpecification.class);
         encodableFacet = context.mock(EncodableFacet.class);
         objectAdapter = context.mock(ObjectAdapter.class);
-        
+
         representation = new JsonRepresentation(TextNode.valueOf("aString"));
         jsonValueEncoder = new JsonValueEncoder();
     }
 
-    @Test(expected=IllegalArgumentException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void whenSpecIsNull() throws Exception {
         jsonValueEncoder.asAdapter(null, representation);
     }
 
-    @Test(expected=IllegalArgumentException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void whenReprIsNull() throws Exception {
         allowingObjectSpecHas(EncodableFacet.class, encodableFacet);
         jsonValueEncoder.asAdapter(objectSpec, null);
     }
 
-    @Test(expected=IllegalArgumentException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void whenReprIsAnArray() throws Exception {
         allowingObjectSpecHas(EncodableFacet.class, encodableFacet);
         jsonValueEncoder.asAdapter(objectSpec, JsonRepresentation.newArray());
     }
 
-    @Test(expected=IllegalArgumentException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void whenReprIsAMap() throws Exception {
         allowingObjectSpecHas(EncodableFacet.class, encodableFacet);
         assertNull(jsonValueEncoder.asAdapter(objectSpec, JsonRepresentation.newMap()));
     }
 
-    @Test(expected=IllegalArgumentException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void whenSpecDoesNotHaveAnEncodableFacet() throws Exception {
         allowingObjectSpecHas(EncodableFacet.class, null);
 
@@ -118,20 +118,20 @@ public class JsonValueEncoderTest_asAdapter {
                 will(returnValue(objectAdapter));
             }
         });
-        
+
         // when
         final ObjectAdapter adapter = jsonValueEncoder.asAdapter(objectSpec, representation);
-        
+
         // then
         assertSame(objectAdapter, adapter);
     }
 
-    @Test(expected=IllegalArgumentException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void whenObjectSpecIsBooleanButReprIsNot() throws Exception {
         // given
         allowingObjectSpecHas(EncodableFacet.class, encodableFacet);
         allowingObjectSpecCorrespondingClassIs(boolean.class);
-        
+
         // when
         jsonValueEncoder.asAdapter(objectSpec, representation);
     }
@@ -158,22 +158,22 @@ public class JsonValueEncoderTest_asAdapter {
                 will(returnValue(objectAdapter));
             }
         });
-        
+
         // when
         final ObjectAdapter adapter = jsonValueEncoder.asAdapter(objectSpec, representation);
-        
+
         // then
         assertSame(objectAdapter, adapter);
     }
 
-    @Test(expected=IllegalArgumentException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void whenObjectSpecIsIntegerButReprIsNot() throws Exception {
         // given
         allowingObjectSpecHas(EncodableFacet.class, encodableFacet);
         allowingObjectSpecCorrespondingClassIs(int.class);
-        
+
         representation = JsonRepresentation.newMap("foo", "bar");
-        
+
         // when
         jsonValueEncoder.asAdapter(objectSpec, representation);
     }
@@ -200,20 +200,20 @@ public class JsonValueEncoderTest_asAdapter {
                 will(returnValue(objectAdapter));
             }
         });
-        
+
         // when
         final ObjectAdapter adapter = jsonValueEncoder.asAdapter(objectSpec, representation);
-        
+
         // then
         assertSame(objectAdapter, adapter);
     }
 
-    @Test(expected=IllegalArgumentException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void whenObjectSpecIsLongButReprIsNot() throws Exception {
         // given
         allowingObjectSpecHas(EncodableFacet.class, encodableFacet);
         allowingObjectSpecCorrespondingClassIs(long.class);
-        
+
         // when
         jsonValueEncoder.asAdapter(objectSpec, representation);
     }
@@ -240,15 +240,15 @@ public class JsonValueEncoderTest_asAdapter {
                 will(returnValue(objectAdapter));
             }
         });
-        
+
         // when
         final ObjectAdapter adapter = jsonValueEncoder.asAdapter(objectSpec, representation);
-        
+
         // then
         assertSame(objectAdapter, adapter);
     }
 
-    @Test(expected=IllegalArgumentException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void whenObjectSpecIsDoubleButReprIsNot() throws Exception {
         // given
         allowingObjectSpecHas(EncodableFacet.class, encodableFacet);
@@ -273,20 +273,20 @@ public class JsonValueEncoderTest_asAdapter {
                 will(returnValue(objectAdapter));
             }
         });
-        
+
         // when
         final ObjectAdapter adapter = jsonValueEncoder.asAdapter(objectSpec, representation);
-        
+
         // then
         assertSame(objectAdapter, adapter);
     }
 
-    @Test(expected=IllegalArgumentException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void whenObjectSpecIsBigIntegerButReprIsNot() throws Exception {
         // given
         allowingObjectSpecHas(EncodableFacet.class, encodableFacet);
         allowingObjectSpecCorrespondingClassIs(BigInteger.class);
-        
+
         representation = JsonRepresentation.newMap("foo", "bar");
 
         // when
@@ -306,15 +306,15 @@ public class JsonValueEncoderTest_asAdapter {
                 will(returnValue(objectAdapter));
             }
         });
-        
+
         // when
         final ObjectAdapter adapter = jsonValueEncoder.asAdapter(objectSpec, representation);
-        
+
         // then
         assertSame(objectAdapter, adapter);
     }
 
-    @Test(expected=IllegalArgumentException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void whenObjectSpecIsBigDecimalButReprIsNot() throws Exception {
         // given
         allowingObjectSpecHas(EncodableFacet.class, encodableFacet);
@@ -326,28 +326,27 @@ public class JsonValueEncoderTest_asAdapter {
         jsonValueEncoder.asAdapter(objectSpec, representation);
     }
 
-
     @Test
     public void whenReprIsString() throws Exception {
         // given
         allowingObjectSpecHas(EncodableFacet.class, encodableFacet);
         allowingObjectSpecCorrespondingClassIs(String.class);
         representation = new JsonRepresentation(TextNode.valueOf("aString"));
-        
+
         context.checking(new Expectations() {
             {
                 one(encodableFacet).fromEncodedString("aString");
                 will(returnValue(objectAdapter));
             }
         });
-        
+
         // when
         final ObjectAdapter adapter = jsonValueEncoder.asAdapter(objectSpec, representation);
-        
+
         // then
         assertSame(objectAdapter, adapter);
     }
-    
+
     private <T extends Facet> void allowingObjectSpecHas(final Class<T> facetClass, final T encodableFacet) {
         context.checking(new Expectations() {
             {

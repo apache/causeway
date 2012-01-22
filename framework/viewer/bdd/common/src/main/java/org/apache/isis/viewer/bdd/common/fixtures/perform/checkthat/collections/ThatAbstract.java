@@ -38,15 +38,13 @@ public abstract class ThatAbstract extends ThatSubcommandAbstract {
         final OneToManyAssociation otma = (OneToManyAssociation) performContext.getObjectMember();
 
         final ObjectAdapter nakedObjectRepresentingCollection = otma.get(onAdapter);
-        final CollectionFacet collectionFacet =
-            nakedObjectRepresentingCollection.getSpecification().getFacet(CollectionFacet.class);
+        final CollectionFacet collectionFacet = nakedObjectRepresentingCollection.getSpecification().getFacet(CollectionFacet.class);
 
         doThat(performContext, collectionFacet.iterable(nakedObjectRepresentingCollection));
 
         return nakedObjectRepresentingCollection; // can alias if wish
     }
 
-    protected abstract void doThat(PerformContext performContext, Iterable<ObjectAdapter> collection)
-        throws ScenarioBoundValueException;
+    protected abstract void doThat(PerformContext performContext, Iterable<ObjectAdapter> collection) throws ScenarioBoundValueException;
 
 }

@@ -24,12 +24,13 @@ import org.apache.isis.runtimes.dflt.runtime.viewer.IsisViewer;
 import org.apache.isis.runtimes.dflt.runtime.viewer.web.WebAppSpecification;
 
 /**
- * Convenience implementation of a {@link IsisViewer} providing the ability to configured for the JSON viewer from
- * the {@link Isis command line} using <tt>--viewer restful</tt> command line option.
+ * Convenience implementation of a {@link IsisViewer} providing the ability to
+ * configured for the JSON viewer from the {@link Isis command line} using
+ * <tt>--viewer restful</tt> command line option.
  * 
  * <p>
- * In a production deployment the configuration represented by the {@link WebAppSpecification} would be specified in the
- * <tt>web.xml<tt> file.
+ * In a production deployment the configuration represented by the
+ * {@link WebAppSpecification} would be specified in the <tt>web.xml<tt> file.
  */
 public class JsonViewerInstaller extends IsisViewerInstallerAbstract {
 

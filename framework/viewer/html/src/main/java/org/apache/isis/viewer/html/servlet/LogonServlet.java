@@ -53,18 +53,15 @@ public class LogonServlet extends AbstractHtmlViewerServlet {
     }
 
     @Override
-    protected void doGet(final HttpServletRequest request, final HttpServletResponse response) throws ServletException,
-        IOException {
+    protected void doGet(final HttpServletRequest request, final HttpServletResponse response) throws ServletException, IOException {
         doPost(request, response);
     }
 
     @Override
-    protected void doPost(final HttpServletRequest request, final HttpServletResponse response)
-        throws ServletException, IOException {
+    protected void doPost(final HttpServletRequest request, final HttpServletResponse response) throws ServletException, IOException {
 
         // look for existing valid session
-        AuthenticationSession existingAuthSession =
-            authenticationSessionStrategy.lookupValid(request, response);
+        final AuthenticationSession existingAuthSession = authenticationSessionStrategy.lookupValid(request, response);
         if (existingAuthSession != null) {
             redirectToStartPage(response, existingAuthSession.getUserName());
             return;
@@ -105,11 +102,10 @@ public class LogonServlet extends AbstractHtmlViewerServlet {
         response.sendRedirect(pathTo(HtmlServletConstants.START_PAGE));
     }
 
-    private void renderPrompt(final HttpServletResponse response, final String user, final String password,
-        final String error) throws IOException {
+    private void renderPrompt(final HttpServletResponse response, final String user, final String password, final String error) throws IOException {
         response.setContentType("text/html");
         final HtmlComponentFactory factory = getHtmlComponentFactory();
-        boolean registerLink = getAuthenticationManager().supportsRegistration(RegistrationDetailsPassword.class);
+        final boolean registerLink = getAuthenticationManager().supportsRegistration(RegistrationDetailsPassword.class);
         final LogonFormPage page = factory.createLogonPage(user, password, registerLink, error);
         page.write(response.getWriter());
     }

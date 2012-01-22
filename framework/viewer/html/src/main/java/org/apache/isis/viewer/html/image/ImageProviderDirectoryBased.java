@@ -66,8 +66,7 @@ public class ImageProviderDirectoryBased implements ImageProvider {
                 final int dot = name.lastIndexOf('.');
                 if (dot > 0) {
                     for (final String element : EXTENSIONS) {
-                        if (name.substring(0, dot).equalsIgnoreCase(imageName)
-                            && name.substring(dot + 1).equalsIgnoreCase(element)) {
+                        if (name.substring(0, dot).equalsIgnoreCase(imageName) && name.substring(dot + 1).equalsIgnoreCase(element)) {
                             return true;
                         }
                     }
@@ -96,8 +95,8 @@ public class ImageProviderDirectoryBased implements ImageProvider {
     }
 
     /**
-     * For an object, the icon name from the object is return if it is not null, otherwise the specification is used to
-     * look up a suitable image name.
+     * For an object, the icon name from the object is return if it is not null,
+     * otherwise the specification is used to look up a suitable image name.
      * 
      * @see ObjectAdapter#getIconName()
      * @see #image(ObjectSpecification)

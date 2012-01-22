@@ -19,21 +19,21 @@
 
 package org.apache.isis.viewer.wicket.ui.components.scalars;
 
+import org.apache.isis.viewer.wicket.model.models.ScalarModel;
+import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.wicket.Component;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.form.FormComponentLabel;
 import org.apache.wicket.markup.html.form.LabeledWebMarkupContainer;
 import org.apache.wicket.model.Model;
 
-import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
-
 /**
- * Adapter for {@link PanelAbstract panel}s that use a {@link ScalarModel} as their backing model.
+ * Adapter for {@link PanelAbstract panel}s that use a {@link ScalarModel} as
+ * their backing model.
  * 
  * <p>
- * Supports the concept of being {@link Format#COMPACT} (eg within a table) or {@link Format#REGULAR regular} (eg within
- * a form).
+ * Supports the concept of being {@link Format#COMPACT} (eg within a table) or
+ * {@link Format#REGULAR regular} (eg within a form).
  */
 public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> {
 
@@ -125,7 +125,8 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> {
      * Builds GUI lazily prior to first render.
      * 
      * <p>
-     * This design allows the panel to be configured first, using {@link #setFormat(Format)}.
+     * This design allows the panel to be configured first, using
+     * {@link #setFormat(Format)}.
      * 
      * @see #onBeforeRender()
      * @see #setFormat(Format)
@@ -145,7 +146,8 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> {
     }
 
     /**
-     * Mandatory hook method to build the component to render the model when in {@link Format#REGULAR regular} format.
+     * Mandatory hook method to build the component to render the model when in
+     * {@link Format#REGULAR regular} format.
      */
     protected abstract FormComponentLabel addComponentForRegular();
 

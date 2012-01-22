@@ -37,8 +37,7 @@ public class SimpleButtonRender implements ButtonRender {
     }
 
     @Override
-    public void draw(final Canvas canvas, final Size size, final boolean isDisabled, final boolean isDefault,
-        final boolean hasFocus, final boolean isOver, final boolean isPressed, final String text) {
+    public void draw(final Canvas canvas, final Size size, final boolean isDisabled, final boolean isDefault, final boolean hasFocus, final boolean isOver, final boolean isPressed, final String text) {
         final int buttonWidth = TEXT_PADDING + style.stringWidth(text) + TEXT_PADDING;
 
         final Color borderColor;
@@ -58,8 +57,7 @@ public class SimpleButtonRender implements ButtonRender {
 
     @Override
     public Size getMaximumSize(final String text) {
-        final int buttonWidth =
-            TEXT_PADDING + Toolkit.getText(ColorsAndFonts.TEXT_CONTROL).stringWidth(text) + TEXT_PADDING;
+        final int buttonWidth = TEXT_PADDING + Toolkit.getText(ColorsAndFonts.TEXT_CONTROL).stringWidth(text) + TEXT_PADDING;
         return new Size(buttonWidth, buttonHeight);
     }
 }

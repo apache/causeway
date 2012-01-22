@@ -137,7 +137,7 @@ public class ProcessorLookup {
         addElementProcessor(new DebugAccessCheck());
         addElementProcessor(new DebuggerLink());
         addElementProcessor(new DebugUsersView());
-        addElementProcessor(new DefaultValue()); 
+        addElementProcessor(new DefaultValue());
         addElementProcessor(new EditLink());
         addElementProcessor(new EditObject());
         addElementProcessor(new ElementType());

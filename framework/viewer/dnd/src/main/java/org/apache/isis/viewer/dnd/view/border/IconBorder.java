@@ -102,8 +102,7 @@ public class IconBorder extends AbstractBorder {
         int x = left - 2;
 
         if (Toolkit.debug) {
-            canvas.drawDebugOutline(new Bounds(getSize()), baseline,
-                Toolkit.getColor(ColorsAndFonts.COLOR_DEBUG_BOUNDS_DRAW));
+            canvas.drawDebugOutline(new Bounds(getSize()), baseline, Toolkit.getColor(ColorsAndFonts.COLOR_DEBUG_BOUNDS_DRAW));
         }
 
         // icon & title
@@ -119,7 +118,8 @@ public class IconBorder extends AbstractBorder {
 
     @Override
     public int getBaseline() {
-        return baseline; // wrappedView.getBaseline() + baseline + titlebarHeight;
+        return baseline; // wrappedView.getBaseline() + baseline +
+                         // titlebarHeight;
     }
 
     @Override

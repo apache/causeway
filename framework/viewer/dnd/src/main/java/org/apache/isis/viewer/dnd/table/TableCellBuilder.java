@@ -87,15 +87,13 @@ class TableCellBuilder extends AbstractViewBuilder {
             final View subview = subviews[i];
             final ObjectAdapter value = field.get(object);
 
-            // if the field is parseable then it may have been modified; we need to replace what was
+            // if the field is parseable then it may have been modified; we need
+            // to replace what was
             // typed in with the actual title.
             if (field.getSpecification().isParseable()) {
-                final boolean visiblityChange =
-                    !field.isVisible(IsisContext.getAuthenticationSession(), object).isAllowed()
-                        ^ (subview instanceof BlankView);
+                final boolean visiblityChange = !field.isVisible(IsisContext.getAuthenticationSession(), object).isAllowed() ^ (subview instanceof BlankView);
                 final ObjectAdapter adapter = subview.getContent().getAdapter();
-                final boolean valueChange =
-                    value != null && value.getObject() != null && !value.getObject().equals(adapter.getObject());
+                final boolean valueChange = value != null && value.getObject() != null && !value.getObject().equals(adapter.getObject());
 
                 if (visiblityChange || valueChange) {
                     final View fieldView = createFieldView(view, axes, object, field, value);
@@ -137,8 +135,7 @@ class TableCellBuilder extends AbstractViewBuilder {
         }
     }
 
-    private View createFieldView(final View view, final Axes axes, final ObjectAdapter object,
-        final ObjectAssociation field, final ObjectAdapter value) {
+    private View createFieldView(final View view, final Axes axes, final ObjectAdapter object, final ObjectAssociation field, final ObjectAdapter value) {
         if (field == null) {
             throw new NullPointerException();
         }
@@ -162,8 +159,9 @@ class TableCellBuilder extends AbstractViewBuilder {
                 }
                 if (((TextParseableContent) content).getNoLines() > 0) {
                     /*
-                     * TODO remove this after introducing constraints into view specs that allow the parent view to
-                     * specify what kind of subviews it can deal
+                     * TODO remove this after introducing constraints into view
+                     * specs that allow the parent view to specify what kind of
+                     * subviews it can deal
                      */
 
                     if (fieldSpecification.containsFacet(BooleanValueFacet.class)) {
@@ -179,8 +177,7 @@ class TableCellBuilder extends AbstractViewBuilder {
                 if (!field.isVisible(IsisContext.getAuthenticationSession(), object).isAllowed()) {
                     return new BlankView(content);
                 }
-                return factory
-                    .createView(new ViewRequirement(content, ViewRequirement.CLOSED | ViewRequirement.SUBVIEW));
+                return factory.createView(new ViewRequirement(content, ViewRequirement.CLOSED | ViewRequirement.SUBVIEW));
 
             }
 

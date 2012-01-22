@@ -30,14 +30,13 @@ import org.junit.Test;
 
 public class JsonRepresentationTest_putXxx {
 
-
     private JsonRepresentation jsonRepresentation;
 
     @Before
     public void setUp() throws Exception {
         jsonRepresentation = JsonRepresentation.newMap();
     }
-    
+
     @Test
     public void putInt() throws JsonParseException, JsonMappingException, IOException {
         jsonRepresentation.mapPut("a", 123);
@@ -50,14 +49,13 @@ public class JsonRepresentationTest_putXxx {
         assertThat(jsonRepresentation.getInt("a.b"), is(456));
     }
 
-    @Test(expected=IllegalArgumentException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void putInt_pathBlockedByValue() throws JsonParseException, JsonMappingException, IOException {
-        //given
+        // given
         jsonRepresentation.mapPut("a", 123);
 
         // when
         jsonRepresentation.mapPut("a.b", 456);
     }
 
-    
 }

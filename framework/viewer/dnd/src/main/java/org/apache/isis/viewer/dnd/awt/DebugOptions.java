@@ -44,8 +44,7 @@ public class DebugOptions implements MenuOptions {
 
     @Override
     public void menuOptions(final UserActionSet options) {
-        final String showExplorationMenu =
-            "Always show exploration menu " + (viewer.showExplorationMenuByDefault ? "off" : "on");
+        final String showExplorationMenu = "Always show exploration menu " + (viewer.showExplorationMenuByDefault ? "off" : "on");
         options.add(new UserActionAbstract(showExplorationMenu, ActionType.DEBUG) {
             @Override
             public void execute(final Workspace workspace, final View view, final Location at) {
@@ -80,11 +79,14 @@ public class DebugOptions implements MenuOptions {
             }
         });
 
-        // I've commented this out because in the new design we should close the ExecutionContext
+        // I've commented this out because in the new design we should close the
+        // ExecutionContext
         // and then re-login.
-        // options.add(new AbstractUserAction("Restart object loader/persistor", UserAction.DEBUG) {
+        // options.add(new AbstractUserAction("Restart object loader/persistor",
+        // UserAction.DEBUG) {
         // @Override
-        // public void execute(final Workspace workspace, final View view, final Location at) {
+        // public void execute(final Workspace workspace, final View view, final
+        // Location at) {
         // IsisContext.getObjectPersistor().reset();
         // }
         // });

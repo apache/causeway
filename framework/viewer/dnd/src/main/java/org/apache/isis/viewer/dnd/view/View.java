@@ -33,11 +33,9 @@ import org.apache.isis.viewer.dnd.util.Properties;
 
 public interface View extends Cloneable, OptionsClient {
     /** Horizontal padding (||) between two components */
-    public static final int HPADDING = IsisContext.getConfiguration().getInteger(Properties.PROPERTY_BASE + "hpadding",
-        3);
+    public static final int HPADDING = IsisContext.getConfiguration().getInteger(Properties.PROPERTY_BASE + "hpadding", 3);
     /** Vertical padding (=) between two components */
-    public static final int VPADDING = IsisContext.getConfiguration().getInteger(Properties.PROPERTY_BASE + "vpadding",
-        3);
+    public static final int VPADDING = IsisContext.getConfiguration().getInteger(Properties.PROPERTY_BASE + "vpadding", 3);
 
     void addView(View view);
 
@@ -47,7 +45,8 @@ public interface View extends Cloneable, OptionsClient {
     Consent canChangeValue();
 
     /**
-     * Determines whether this view accepts keyboard focus. If so focusLost and focusReceived will be called.
+     * Determines whether this view accepts keyboard focus. If so focusLost and
+     * focusReceived will be called.
      */
     boolean canFocus();
 
@@ -56,8 +55,9 @@ public interface View extends Cloneable, OptionsClient {
     boolean containsFocus();
 
     /**
-     * Called when the popup menu is being populated for this view. Any content options that need to appear on the menu
-     * should be added to the <code>menuOptions</code> object.
+     * Called when the popup menu is being populated for this view. Any content
+     * options that need to appear on the menu should be added to the
+     * <code>menuOptions</code> object.
      */
     void contentMenuOptions(UserActionSet menuOptions);
 
@@ -66,16 +66,17 @@ public interface View extends Cloneable, OptionsClient {
     void debugStructure(DebugBuilder debug);
 
     /**
-     * Called when a view is no longer needed and its resources can be disposed of. Dissociates this view from its
-     * parent, and removes itself from the list of views that need to be updated.
+     * Called when a view is no longer needed and its resources can be disposed
+     * of. Dissociates this view from its parent, and removes itself from the
+     * list of views that need to be updated.
      * 
      * @see #removeView(View)
      */
     void dispose();
 
     /**
-     * Called as mouse is dragged within and without this view. This only occurs when no content or view is being
-     * dragged.
+     * Called as mouse is dragged within and without this view. This only occurs
+     * when no content or view is being dragged.
      */
     void drag(InternalDrag drag);
 
@@ -86,61 +87,71 @@ public interface View extends Cloneable, OptionsClient {
     View dragFrom(Location location);
 
     /**
-     * Called as the content being dragged is dragged into this view. This only occurs when view contents are being
-     * dragged, and not when views themselves are being dragged.
+     * Called as the content being dragged is dragged into this view. This only
+     * occurs when view contents are being dragged, and not when views
+     * themselves are being dragged.
      */
     void dragIn(ContentDrag drag);
 
     /**
-     * Called as the content being dragged is dragged out of this view. This only occurs when view contents are being
-     * dragged, and not when views themselves are being dragged.
+     * Called as the content being dragged is dragged out of this view. This
+     * only occurs when view contents are being dragged, and not when views
+     * themselves are being dragged.
      */
     void dragOut(ContentDrag drag);
 
     DragEvent dragStart(DragStart drag);
 
     /**
-     * Called as the drag ends within and without this view. This only occurs when no content or view is being dragged.
+     * Called as the drag ends within and without this view. This only occurs
+     * when no content or view is being dragged.
      */
     void dragTo(InternalDrag drag);
 
     /**
-     * Called by the frame, or the parent view, when this view must redraw itself.
+     * Called by the frame, or the parent view, when this view must redraw
+     * itself.
      */
     void draw(Canvas canvas);
 
     /**
-     * Called as another view's contents (the source) is dropped on this view's contents (the target). The source view
-     * can be obtained from the ViewDrag object.
+     * Called as another view's contents (the source) is dropped on this view's
+     * contents (the target). The source view can be obtained from the ViewDrag
+     * object.
      */
     void drop(ContentDrag drag);
 
     /**
-     * Called as another view (the source) is dropped on this view (the target). The source view can be obtained from
-     * the ViewDrag object.
+     * Called as another view (the source) is dropped on this view (the target).
+     * The source view can be obtained from the ViewDrag object.
      */
     void drop(ViewDrag drag);
 
     /**
-     * Indicates that editing has been completed and the entry should be saved. Will be called by the view manager when
-     * other action place within the parent.
+     * Indicates that editing has been completed and the entry should be saved.
+     * Will be called by the view manager when other action place within the
+     * parent.
      * 
      * @param moveFocus
-     *            flags that focus should be moved from this field after the entry has been processed.
+     *            flags that focus should be moved from this field after the
+     *            entry has been processed.
      * @param toNextField
-     *            flags that the focus should be moved to the next field (if <code>true</code>) or to the previous field
-     *            (if <code>false</code>). This parameter is ignored if the moveFocus parameter is <code>false</code>.
+     *            flags that the focus should be moved to the next field (if
+     *            <code>true</code>) or to the previous field (if
+     *            <code>false</code>). This parameter is ignored if the
+     *            moveFocus parameter is <code>false</code>.
      */
     void editComplete(boolean moveFocus, boolean toNextField);
 
     /**
-     * Called as the mouse crosses the bounds, and ends up inside, of this view. Is also called as the mouse returns
-     * into this view from a contained view.
+     * Called as the mouse crosses the bounds, and ends up inside, of this view.
+     * Is also called as the mouse returns into this view from a contained view.
      */
     void entered();
 
     /**
-     * Called as the mouse crosses the bounds, and ends up outside, of this view.
+     * Called as the mouse crosses the bounds, and ends up outside, of this
+     * view.
      */
     void exited();
 
@@ -148,7 +159,8 @@ public interface View extends Cloneable, OptionsClient {
      * Called when the user clicks the mouse buttone within this view.
      * 
      * @param click
-     *            the location within the current view where the mouse click took place
+     *            the location within the current view where the mouse click
+     *            took place
      */
     void firstClick(Click click);
 
@@ -161,7 +173,8 @@ public interface View extends Cloneable, OptionsClient {
     int getBaseline();
 
     /**
-     * Returns the bounding rectangle that describes where (within it parent), and how big, this view is.
+     * Returns the bounding rectangle that describes where (within it parent),
+     * and how big, this view is.
      * 
      * @see #getSize()
      * @see #getLocation()
@@ -205,7 +218,8 @@ public interface View extends Cloneable, OptionsClient {
     View[] getSubviews();
 
     /**
-     * returns the topmost decorator in the chain, or the view itself if not decorated.
+     * returns the topmost decorator in the chain, or the view itself if not
+     * decorated.
      */
     View getView();
 
@@ -222,42 +236,49 @@ public interface View extends Cloneable, OptionsClient {
     View identify(Location mouseLocation);
 
     /**
-     * Flags that the views do not properly represent the content, and hence it needs rebuilding. Contrast this with
-     * invalidateLayout(), which deals with an a complete view, but one that is not showing properly.
+     * Flags that the views do not properly represent the content, and hence it
+     * needs rebuilding. Contrast this with invalidateLayout(), which deals with
+     * an a complete view, but one that is not showing properly.
      * 
      * @see #invalidateLayout()
      */
     void invalidateContent();
 
     /**
-     * Flags that the views are possibly not displaying the content fully - too small, wrong place etc - although views
-     * exists for all the content. Contrast this with invalidateContent(), which deals with an incomplete view.
+     * Flags that the views are possibly not displaying the content fully - too
+     * small, wrong place etc - although views exists for all the content.
+     * Contrast this with invalidateContent(), which deals with an incomplete
+     * view.
      * 
      * @see #invalidateContent()
      */
     void invalidateLayout();
 
     /**
-     * Called when the user presses any key on the keyboard while this view has the focus.
+     * Called when the user presses any key on the keyboard while this view has
+     * the focus.
      */
     void keyPressed(KeyboardAction key);
 
     /**
-     * Called when the user releases any key on the keyboard while this view has the focus.
+     * Called when the user releases any key on the keyboard while this view has
+     * the focus.
      */
     void keyReleased(KeyboardAction action);
 
     /**
-     * Called when the user presses a non-control key (i.e. data entry keys and not shift, up-arrow etc). Such a key
-     * press will result in a prior call to <code>keyPressed</code> and a subsequent call to <code>keyReleased</code>.
+     * Called when the user presses a non-control key (i.e. data entry keys and
+     * not shift, up-arrow etc). Such a key press will result in a prior call to
+     * <code>keyPressed</code> and a subsequent call to <code>keyReleased</code>
+     * .
      */
     void keyTyped(KeyboardAction action);
 
     void layout();
 
     /**
-     * Limits the bounds of this view (normally when being moved or dropped) so it never extends beyond the bounds of a
-     * view of the specified size.
+     * Limits the bounds of this view (normally when being moved or dropped) so
+     * it never extends beyond the bounds of a view of the specified size.
      */
     void limitBoundsWithin(Size size);
 
@@ -266,13 +287,15 @@ public interface View extends Cloneable, OptionsClient {
     void markDamaged(Bounds bounds);
 
     /**
-     * Called as the mouse button is pressed down within this view. Does nothing; should be overriden when needed. the
-     * position relative to the top-left of this view
+     * Called as the mouse button is pressed down within this view. Does
+     * nothing; should be overriden when needed. the position relative to the
+     * top-left of this view
      */
     void mouseDown(Click click);
 
     /**
-     * Called as the mouse is moved around within this view. Does nothing; should be overriden when needed.
+     * Called as the mouse is moved around within this view. Does nothing;
+     * should be overriden when needed.
      * 
      * @param location
      *            the position relative to the top-left of this view
@@ -280,13 +303,15 @@ public interface View extends Cloneable, OptionsClient {
     void mouseMoved(Location location);
 
     /**
-     * Called as the mouse button is released within this view (assuming that it was pressed in this view). Does
-     * nothing; should be overridden when needed.
+     * Called as the mouse button is released within this view (assuming that it
+     * was pressed in this view). Does nothing; should be overridden when
+     * needed.
      */
     void mouseUp(Click click);
 
     /**
-     * Called when an action generates a result, allowing this view to decide what to do with it.
+     * Called when an action generates a result, allowing this view to decide
+     * what to do with it.
      */
     void objectActionResult(ObjectAdapter result, Placement placement);
 
@@ -315,8 +340,8 @@ public interface View extends Cloneable, OptionsClient {
     void replaceView(View toReplace, View replacement);
 
     /**
-     * Called when the user double-clicked this view. This method will have been preceded by a call to
-     * <code>click</code>.
+     * Called when the user double-clicked this view. This method will have been
+     * preceded by a call to <code>click</code>.
      */
     void secondClick(Click click);
 
@@ -336,14 +361,15 @@ public interface View extends Cloneable, OptionsClient {
     void setView(View view);
 
     /**
-     * Identifies the subview that contains the specified location within its bounds. Returns null if no subview exists
-     * for that location.
+     * Identifies the subview that contains the specified location within its
+     * bounds. Returns null if no subview exists for that location.
      */
     View subviewFor(Location location);
 
     /**
-     * Called when the user triple-clicks the mouse buttone within this view. This method will have been preceded by a
-     * call to <code>doubleClick</code>.
+     * Called when the user triple-clicks the mouse buttone within this view.
+     * This method will have been preceded by a call to <code>doubleClick</code>
+     * .
      */
     void thirdClick(Click click);
 
@@ -355,16 +381,19 @@ public interface View extends Cloneable, OptionsClient {
     void updateView();
 
     /**
-     * Determines if the user is invoking an action relating to this view, rather than to whatever this view represents.
+     * Determines if the user is invoking an action relating to this view,
+     * rather than to whatever this view represents.
      * 
      * @param mouseLocation
-     * @return true if the user is targeting the view itself, false if the user is targeting what is being represented
+     * @return true if the user is targeting the view itself, false if the user
+     *         is targeting what is being represented
      */
     ViewAreaType viewAreaType(Location mouseLocation);
 
     /**
-     * Called when the popup menu is being populated for this view. Any view options that need to appear on the menu
-     * should be added to the <code>menuOptions</code> object.
+     * Called when the popup menu is being populated for this view. Any view
+     * options that need to appear on the menu should be added to the
+     * <code>menuOptions</code> object.
      */
     void viewMenuOptions(UserActionSet menuOptions);
 

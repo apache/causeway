@@ -43,10 +43,12 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 
 /**
- * Has no functionality but makes it easier to write tests that require an instance of an {@link Identifier}.
+ * Has no functionality but makes it easier to write tests that require an
+ * instance of an {@link Identifier}.
  * 
  * <p>
- * Was previously DummyAction, in the web viewer project. Only used by tests there.
+ * Was previously DummyAction, in the web viewer project. Only used by tests
+ * there.
  */
 public class ObjectActionNoop implements ObjectAction {
 
@@ -166,12 +168,12 @@ public class ObjectActionNoop implements ObjectAction {
     }
 
     @Override
-    public ObjectActionParameter getParameterById(String paramId) {
+    public ObjectActionParameter getParameterById(final String paramId) {
         return null;
     }
 
     @Override
-    public ObjectActionParameter getParameterByName(String paramName) {
+    public ObjectActionParameter getParameterByName(final String paramName) {
         return null;
     }
 
@@ -206,8 +208,7 @@ public class ObjectActionNoop implements ObjectAction {
     }
 
     @Override
-    public VisibilityContext<?> createVisibleInteractionContext(final AuthenticationSession session,
-        final InteractionInvocationMethod invocationMethod, final ObjectAdapter targetObjectAdapter) {
+    public VisibilityContext<?> createVisibleInteractionContext(final AuthenticationSession session, final InteractionInvocationMethod invocationMethod, final ObjectAdapter targetObjectAdapter) {
         return null;
     }
 
@@ -242,15 +243,12 @@ public class ObjectActionNoop implements ObjectAction {
     }
 
     @Override
-    public UsabilityContext<?> createUsableInteractionContext(final AuthenticationSession session,
-        final InteractionInvocationMethod invocationMethod, final ObjectAdapter target) {
+    public UsabilityContext<?> createUsableInteractionContext(final AuthenticationSession session, final InteractionInvocationMethod invocationMethod, final ObjectAdapter target) {
         return null;
     }
 
     @Override
-    public ActionInvocationContext createActionInvocationInteractionContext(final AuthenticationSession session,
-        final InteractionInvocationMethod invocationMethod, final ObjectAdapter object,
-        final ObjectAdapter[] candidateArguments) {
+    public ActionInvocationContext createActionInvocationInteractionContext(final AuthenticationSession session, final InteractionInvocationMethod invocationMethod, final ObjectAdapter object, final ObjectAdapter[] candidateArguments) {
         return null;
     }
 
@@ -301,12 +299,13 @@ public class ObjectActionNoop implements ObjectAction {
     /*
      * (non-Javadoc)
      * 
-     * @see org.apache.isis.core.metamodel.spec.feature.ObjectFeature#getFeatureType()
+     * @see
+     * org.apache.isis.core.metamodel.spec.feature.ObjectFeature#getFeatureType
+     * ()
      */
     @Override
     public FeatureType getFeatureType() {
         return FeatureType.ACTION;
     }
-
 
 }

@@ -31,8 +31,7 @@ public class Secure extends AbstractElementProcessor {
     public void process(final Request request) {
         final boolean isLoggedIn = !(IsisContext.getSession().getAuthenticationSession() instanceof AnonymousSession);
         if (!isLoggedIn) {
-            IsisContext.getMessageBroker().addWarning(
-                "You are not currently logged in! Please log in so you can continue.");
+            IsisContext.getMessageBroker().addWarning("You are not currently logged in! Please log in so you can continue.");
             final String view = request.getOptionalProperty(LOGIN_VIEW, "/login.shtml");
             request.getContext().redirectTo(view);
         }

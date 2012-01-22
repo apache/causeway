@@ -21,13 +21,12 @@ package org.apache.isis.viewer.json.applib.domainobjects;
 import org.apache.isis.viewer.json.applib.links.LinkRepresentation;
 import org.codehaus.jackson.JsonNode;
 
-
 public class ObjectActionRepresentation extends AbstractObjectMemberRepresentation {
 
-    public ObjectActionRepresentation(JsonNode jsonNode) {
+    public ObjectActionRepresentation(final JsonNode jsonNode) {
         super(jsonNode);
     }
-    
+
     public LinkRepresentation getInvoke() {
         return getLinkWithRel("invoke");
     }

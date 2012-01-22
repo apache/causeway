@@ -102,7 +102,8 @@ public class InternalCollectionBorder extends AbstractBorder {
     @Override
     public void contentMenuOptions(final UserActionSet options) {
         super.contentMenuOptions(options);
-        // final ObjectSpecification specification = ((OneToManyField) getContent()).getSpecification();
+        // final ObjectSpecification specification = ((OneToManyField)
+        // getContent()).getSpecification();
         // OptionFactory.addCreateOptions(specification, options);
     }
 

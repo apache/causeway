@@ -23,13 +23,13 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
 
 public class ObjectAndActionInvocation {
-    
+
     private final ObjectAdapter objectAdapter;
     private final ObjectAction action;
     private final JsonRepresentation arguments;
     private final ObjectAdapter returnedAdapter;
-    
-    public ObjectAndActionInvocation(ObjectAdapter objectAdapter, ObjectAction action, JsonRepresentation arguments, ObjectAdapter returnedAdapter) {
+
+    public ObjectAndActionInvocation(final ObjectAdapter objectAdapter, final ObjectAction action, final JsonRepresentation arguments, final ObjectAdapter returnedAdapter) {
         this.objectAdapter = objectAdapter;
         this.action = action;
         this.arguments = arguments;
@@ -39,12 +39,15 @@ public class ObjectAndActionInvocation {
     public ObjectAdapter getObjectAdapter() {
         return objectAdapter;
     }
+
     public ObjectAction getAction() {
         return action;
     }
+
     public JsonRepresentation getArguments() {
         return arguments;
     }
+
     public ObjectAdapter getReturnedAdapter() {
         return returnedAdapter;
     }

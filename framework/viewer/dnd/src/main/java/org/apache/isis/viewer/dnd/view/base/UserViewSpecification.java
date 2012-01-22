@@ -38,8 +38,10 @@ public class UserViewSpecification implements ViewSpecification {
     }
 
     /*
-     * public UserViewSpecification(View view) { specification = view.getSpecification(); Options copyOptions = new
-     * Options(); view.saveOptions(copyOptions); name = specification.getName() + " " + new Date().getSeconds();
+     * public UserViewSpecification(View view) { specification =
+     * view.getSpecification(); Options copyOptions = new Options();
+     * view.saveOptions(copyOptions); name = specification.getName() + " " + new
+     * Date().getSeconds();
      * 
      * // view.setSpecification(this); // view.loadOptions(copyOptions); }
      */

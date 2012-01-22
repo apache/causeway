@@ -26,14 +26,16 @@ import org.apache.isis.viewer.dnd.view.ViewRequirement;
 import org.apache.isis.viewer.dnd.view.ViewSpecification;
 
 /**
- * Specification for a tree browser frame with a tree displaying only collections and objects containing collections.
+ * Specification for a tree browser frame with a tree displaying only
+ * collections and objects containing collections.
  */
 public class TreeSpecification implements ViewSpecification {
     private final OpenCollectionNodeSpecification openCollection;
     private final OpenObjectNodeSpecification openObject;
 
     public TreeSpecification() {
-        final ClosedObjectNodeSpecification closedObject = new ClosedObjectNodeSpecification(false); // , new
+        final ClosedObjectNodeSpecification closedObject = new ClosedObjectNodeSpecification(false); // ,
+                                                                                                     // new
                                                                                                      // SelectObjectBorder.Factory());
         final NodeSpecification closedCollection = new ClosedCollectionNodeSpecification();
         final EmptyNodeSpecification noNode = new EmptyNodeSpecification();
@@ -55,9 +57,7 @@ public class TreeSpecification implements ViewSpecification {
 
     @Override
     public boolean canDisplay(final ViewRequirement requirement) {
-        return requirement.is(ViewRequirement.OPEN)
-            && (openCollection.canDisplay(requirement) || openObject.canDisplay(requirement))
-            && requirement.isExpandable();
+        return requirement.is(ViewRequirement.OPEN) && (openCollection.canDisplay(requirement) || openObject.canDisplay(requirement)) && requirement.isExpandable();
     }
 
     @Override

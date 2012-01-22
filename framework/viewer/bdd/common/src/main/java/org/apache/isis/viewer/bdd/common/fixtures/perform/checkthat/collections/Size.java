@@ -31,8 +31,7 @@ public class Size extends ThatAbstract {
     }
 
     @Override
-    protected void doThat(final PerformContext performContext, final Iterable<ObjectAdapter> collection)
-        throws ScenarioBoundValueException {
+    protected void doThat(final PerformContext performContext, final Iterable<ObjectAdapter> collection) throws ScenarioBoundValueException {
 
         final CellBinding thatBinding = performContext.getPeer().getThatItBinding();
         final CellBinding arg0Binding = performContext.getPeer().getArg0Binding();

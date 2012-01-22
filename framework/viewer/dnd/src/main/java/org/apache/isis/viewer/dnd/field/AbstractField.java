@@ -73,7 +73,8 @@ public abstract class AbstractField extends AbstractView {
     }
 
     /**
-     * Indicates the drag started within this view's bounds is continuing. By default does nothing.
+     * Indicates the drag started within this view's bounds is continuing. By
+     * default does nothing.
      */
     @Override
     public void drag(final InternalDrag drag) {
@@ -87,7 +88,8 @@ public abstract class AbstractField extends AbstractView {
     }
 
     /**
-     * Indicates the start of a drag within this view's bounds. By default does nothing.
+     * Indicates the start of a drag within this view's bounds. By default does
+     * nothing.
      */
     @Override
     public View dragFrom(final Location location) {
@@ -95,8 +97,9 @@ public abstract class AbstractField extends AbstractView {
     }
 
     /**
-     * Indicates the drag started within this view's bounds has been finished (although the location may now be outside
-     * of its bounds). By default does nothing.
+     * Indicates the drag started within this view's bounds has been finished
+     * (although the location may now be outside of its bounds). By default does
+     * nothing.
      */
     @Override
     public void dragTo(final InternalDrag drag) {
@@ -118,7 +121,8 @@ public abstract class AbstractField extends AbstractView {
                 canvas.drawImage(image, getSize().getWidth() - 16, 2);
             }
 
-            // canvas.clearBackground(this, Toolkit.getColor(ColorsAndFonts.COLOR_INVALID));
+            // canvas.clearBackground(this,
+            // Toolkit.getColor(ColorsAndFonts.COLOR_INVALID));
         }
 
         super.draw(canvas);
@@ -173,22 +177,26 @@ public abstract class AbstractField extends AbstractView {
     }
 
     /**
-     * Called when the user presses any key on the keyboard while this view has the focus.
+     * Called when the user presses any key on the keyboard while this view has
+     * the focus.
      */
     @Override
     public void keyPressed(final KeyboardAction key) {
     }
 
     /**
-     * Called when the user releases any key on the keyboard while this view has the focus.
+     * Called when the user releases any key on the keyboard while this view has
+     * the focus.
      */
     @Override
     public void keyReleased(final KeyboardAction action) {
     }
 
     /**
-     * Called when the user presses a non-control key (i.e. data entry keys and not shift, up-arrow etc). Such a key
-     * press will result in a prior call to <code>keyPressed</code> and a subsequent call to <code>keyReleased</code>.
+     * Called when the user presses a non-control key (i.e. data entry keys and
+     * not shift, up-arrow etc). Such a key press will result in a prior call to
+     * <code>keyPressed</code> and a subsequent call to <code>keyReleased</code>
+     * .
      */
     @Override
     public void keyTyped(final KeyboardAction action) {

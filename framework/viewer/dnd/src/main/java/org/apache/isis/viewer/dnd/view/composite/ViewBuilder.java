@@ -36,14 +36,17 @@ public interface ViewBuilder {
     /**
      * Indicates whether this view is expanded, or iconized.
      * 
-     * @return true if it is showing the object's details; false if it is showing the object only.
+     * @return true if it is showing the object's details; false if it is
+     *         showing the object only.
      */
     boolean isOpen();
 
     /**
-     * Indicates whether this view can be replaced with another view (for the same value or reference).
+     * Indicates whether this view can be replaced with another view (for the
+     * same value or reference).
      * 
-     * @return true if it can be replaced by another view; false if it can't be replaces
+     * @return true if it can be replaced by another view; false if it can't be
+     *         replaces
      */
     boolean isReplaceable();
 

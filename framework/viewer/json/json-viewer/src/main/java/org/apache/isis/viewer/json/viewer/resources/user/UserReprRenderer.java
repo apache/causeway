@@ -34,28 +34,29 @@ public class UserReprRenderer extends ReprRendererAbstract<UserReprRenderer, Aut
         }
 
         @Override
-        public ReprRenderer<?, ?> newRenderer(ResourceContext resourceContext, LinkFollower linkFollower, JsonRepresentation representation) {
+        public ReprRenderer<?, ?> newRenderer(final ResourceContext resourceContext, final LinkFollower linkFollower, final JsonRepresentation representation) {
             return new UserReprRenderer(resourceContext, linkFollower, getRepresentationType(), representation);
         }
     }
-    
-    private UserReprRenderer(ResourceContext resourceContext, LinkFollower linkFollower, RepresentationType representationType, JsonRepresentation representation) {
+
+    private UserReprRenderer(final ResourceContext resourceContext, final LinkFollower linkFollower, final RepresentationType representationType, final JsonRepresentation representation) {
         super(resourceContext, linkFollower, representationType, representation);
     }
 
     @Override
-    public UserReprRenderer with(AuthenticationSession authenticationSession) {
+    public UserReprRenderer with(final AuthenticationSession authenticationSession) {
         representation.mapPut("userName", authenticationSession.getUserName());
-        JsonRepresentation roles = JsonRepresentation.newArray();
-        for (String role : authenticationSession.getRoles()) {
+        final JsonRepresentation roles = JsonRepresentation.newArray();
+        for (final String role : authenticationSession.getRoles()) {
             roles.arrayAdd(role);
         }
         representation.mapPut("roles", roles);
         return this;
     }
 
+    @Override
     public JsonRepresentation render() {
-        if(includesSelf) {
+        if (includesSelf) {
             withSelf("user");
         }
         getExtensions();

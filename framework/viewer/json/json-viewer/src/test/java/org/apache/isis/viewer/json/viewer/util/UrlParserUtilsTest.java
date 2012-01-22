@@ -27,33 +27,33 @@ public class UrlParserUtilsTest {
 
     @Test
     public void oidFromLink() throws Exception {
-        JsonRepresentation link = JsonRepresentation.newMap();
+        final JsonRepresentation link = JsonRepresentation.newMap();
         link.mapPut("href", "http://localhost/objects/OID:1");
-        String oidFromHref = UrlParserUtils.oidFromLink(link);
+        final String oidFromHref = UrlParserUtils.oidFromLink(link);
         assertEquals("OID:1", oidFromHref);
     }
 
     @Test
     public void domainTypeFromLink() throws Exception {
-        JsonRepresentation link = JsonRepresentation.newMap();
+        final JsonRepresentation link = JsonRepresentation.newMap();
         link.mapPut("href", "http://localhost/domainTypes/com.mycompany.myapp.Customer");
-        String oidFromHref = UrlParserUtils.domainTypeFrom(link);
+        final String oidFromHref = UrlParserUtils.domainTypeFrom(link);
         assertEquals("com.mycompany.myapp.Customer", oidFromHref);
     }
 
     @Test
     public void domainTypeFromLinkTrailingSlash() throws Exception {
-        JsonRepresentation link = JsonRepresentation.newMap();
+        final JsonRepresentation link = JsonRepresentation.newMap();
         link.mapPut("href", "http://localhost/domainTypes/com.mycompany.myapp.Customer/");
-        String oidFromHref = UrlParserUtils.domainTypeFrom(link);
+        final String oidFromHref = UrlParserUtils.domainTypeFrom(link);
         assertEquals("com.mycompany.myapp.Customer", oidFromHref);
     }
 
     @Test
     public void domainTypeFromLinkFollowingStuff() throws Exception {
-        JsonRepresentation link = JsonRepresentation.newMap();
+        final JsonRepresentation link = JsonRepresentation.newMap();
         link.mapPut("href", "http://localhost/domainTypes/com.mycompany.myapp.Customer/otherStuffHere");
-        String oidFromHref = UrlParserUtils.domainTypeFrom(link);
+        final String oidFromHref = UrlParserUtils.domainTypeFrom(link);
         assertEquals("com.mycompany.myapp.Customer", oidFromHref);
     }
 

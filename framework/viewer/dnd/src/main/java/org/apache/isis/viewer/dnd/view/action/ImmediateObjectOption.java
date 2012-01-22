@@ -31,8 +31,9 @@ import org.apache.isis.viewer.dnd.view.View;
 import org.apache.isis.viewer.dnd.view.Workspace;
 
 /**
- * Options for an underlying object determined dynamically by looking for methods starting with action, veto and option
- * for specifying the action, vetoing the option and giving the option an name respectively.
+ * Options for an underlying object determined dynamically by looking for
+ * methods starting with action, veto and option for specifying the action,
+ * vetoing the option and giving the option an name respectively.
  */
 public class ImmediateObjectOption extends AbstractObjectOption {
 

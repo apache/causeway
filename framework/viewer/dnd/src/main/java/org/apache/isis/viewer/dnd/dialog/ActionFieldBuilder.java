@@ -97,8 +97,7 @@ public class ActionFieldBuilder extends AbstractViewBuilder {
 
             if (content instanceof ObjectParameter) {
                 if (subviewsObject != invocationsObject) {
-                    final ObjectParameter parameter =
-                        new ObjectParameterImpl((ObjectParameterImpl) content, invocationsObject);
+                    final ObjectParameter parameter = new ObjectParameterImpl((ObjectParameterImpl) content, invocationsObject);
                     final View fieldView = createFieldView(view, parameter, i);
                     view.replaceView(subview, decorateSubview(view.getViewAxes(), fieldView));
                 }

@@ -32,7 +32,7 @@ public class DomainResourceHelperTest_readBodyAsMap {
     @Test
     public void whenNull() throws Exception {
         representation = DomainResourceHelper.readAsMap(null);
-        
+
         assertThat(representation.isMap(), is(true));
         assertThat(representation.size(), is(0));
     }
@@ -40,7 +40,7 @@ public class DomainResourceHelperTest_readBodyAsMap {
     @Test
     public void whenEmptyString() throws Exception {
         representation = DomainResourceHelper.readAsMap("");
-        
+
         assertThat(representation.isMap(), is(true));
         assertThat(representation.size(), is(0));
     }
@@ -48,7 +48,7 @@ public class DomainResourceHelperTest_readBodyAsMap {
     @Test
     public void whenWhitespaceOnlyString() throws Exception {
         representation = DomainResourceHelper.readAsMap(" \t ");
-        
+
         assertThat(representation.isMap(), is(true));
         assertThat(representation.size(), is(0));
     }
@@ -56,7 +56,7 @@ public class DomainResourceHelperTest_readBodyAsMap {
     @Test
     public void emptyMap() throws Exception {
         representation = DomainResourceHelper.readAsMap("{}");
-        
+
         assertThat(representation.isMap(), is(true));
         assertThat(representation.size(), is(0));
     }
@@ -64,12 +64,12 @@ public class DomainResourceHelperTest_readBodyAsMap {
     @Test
     public void map() throws Exception {
         representation = DomainResourceHelper.readAsMap("{\"foo\":\"bar\"}");
-        
+
         assertThat(representation.isMap(), is(true));
         assertThat(representation.size(), is(1));
     }
 
-    @Test(expected=JsonApplicationException.class)
+    @Test(expected = JsonApplicationException.class)
     public void whenArray() throws Exception {
         DomainResourceHelper.readAsMap("[]");
     }

@@ -33,17 +33,17 @@ public class SubviewIconSpecification extends IconSpecification {
 
     @Override
     public boolean canDisplay(final ViewRequirement requirement) {
-        return super.canDisplay(requirement) && requirement.is(ViewRequirement.CLOSED)
-            && requirement.is(ViewRequirement.SUBVIEW);
+        return super.canDisplay(requirement) && requirement.is(ViewRequirement.CLOSED) && requirement.is(ViewRequirement.SUBVIEW);
     }
 
     @Override
     public View createView(final Content content, final Axes axes, final int sequence) {
         final View view = super.createView(content, axes, sequence);
         /*
-         * boolean isEditable = content instanceof OneToOneField && ((OneToOneField) content).isEditable().isAllowed();
-         * boolean hasOptions = content.isOptionEnabled(); if (isEditable && hasOptions) { return new
-         * OpenObjectDropDownBorder(view, spec); } return view;
+         * boolean isEditable = content instanceof OneToOneField &&
+         * ((OneToOneField) content).isEditable().isAllowed(); boolean
+         * hasOptions = content.isOptionEnabled(); if (isEditable && hasOptions)
+         * { return new OpenObjectDropDownBorder(view, spec); } return view;
          */
 
         if (content instanceof OneToOneField && ((OneToOneField) content).isEditable().isVetoed()) {

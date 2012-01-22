@@ -53,8 +53,7 @@ public class CalendarSpecification implements CompositeViewSpecification {
     public boolean canDisplay(final ViewRequirement requirement) {
         final boolean openCollection = requirement.isCollection() && requirement.isOpen();
         if (openCollection) {
-            final List<OneToOneAssociation> propertyList =
-                ((CollectionContent) requirement.getContent()).getElementSpecification().getProperties();
+            final List<OneToOneAssociation> propertyList = ((CollectionContent) requirement.getContent()).getElementSpecification().getProperties();
             for (final OneToOneAssociation association : propertyList) {
                 if (!association.isAlwaysHidden() && association.getSpecification().containsFacet(DateValueFacet.class)) {
                     return true;

@@ -29,7 +29,8 @@ import org.apache.isis.viewer.dnd.view.Workspace;
 public class ViewDragImpl extends DragImpl implements ViewDrag {
     private Location location;
     /**
-     * Offset from the view's top-left corner to the pointer (relative to the view).
+     * Offset from the view's top-left corner to the pointer (relative to the
+     * view).
      */
     private final Offset overlayOffset;
     private final View sourceView;
@@ -38,9 +39,10 @@ public class ViewDragImpl extends DragImpl implements ViewDrag {
     private final Workspace viewsWorkspace;
 
     /**
-     * Creates a new drag event. The source view has its pickup(), and then, exited() methods called on it. The view
-     * returned by the pickup method becomes this event overlay view, which is moved continuously so that it tracks the
-     * pointer.
+     * Creates a new drag event. The source view has its pickup(), and then,
+     * exited() methods called on it. The view returned by the pickup method
+     * becomes this event overlay view, which is moved continuously so that it
+     * tracks the pointer.
      * 
      * @param view
      *            the view over which the pointer was when this event started
@@ -54,7 +56,8 @@ public class ViewDragImpl extends DragImpl implements ViewDrag {
     }
 
     /**
-     * getView().getAbsoluteLocation().getX(), -getView().getAbsoluteLocation().getY() Cancel drag by changing cursor
+     * getView().getAbsoluteLocation().getX(),
+     * -getView().getAbsoluteLocation().getY() Cancel drag by changing cursor
      * back to pointer.
      */
     @Override

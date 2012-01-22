@@ -37,19 +37,19 @@ public class PropertyDescriptionReprRenderer extends AbstractTypeMemberReprRende
         }
 
         @Override
-        public ReprRenderer<?,?> newRenderer(ResourceContext resourceContext, LinkFollower linkFollower, JsonRepresentation representation) {
+        public ReprRenderer<?, ?> newRenderer(final ResourceContext resourceContext, final LinkFollower linkFollower, final JsonRepresentation representation) {
             return new PropertyDescriptionReprRenderer(resourceContext, linkFollower, getRepresentationType(), representation);
         }
     }
 
-    public static LinkBuilder newLinkToBuilder(ResourceContext resourceContext, Rel rel, ObjectSpecification objectSpecification, OneToOneAssociation property) {
-        String typeFullName = objectSpecification.getFullIdentifier();
-        String propertyId = property.getId();
-        String url = "domainTypes/" + typeFullName + "/properties/" + propertyId;
+    public static LinkBuilder newLinkToBuilder(final ResourceContext resourceContext, final Rel rel, final ObjectSpecification objectSpecification, final OneToOneAssociation property) {
+        final String typeFullName = objectSpecification.getFullIdentifier();
+        final String propertyId = property.getId();
+        final String url = "domainTypes/" + typeFullName + "/properties/" + propertyId;
         return LinkBuilder.newBuilder(resourceContext, rel, RepresentationType.PROPERTY_DESCRIPTION, url);
     }
 
-    public PropertyDescriptionReprRenderer(ResourceContext resourceContext, LinkFollower linkFollower, RepresentationType representationType, JsonRepresentation representation) {
+    public PropertyDescriptionReprRenderer(final ResourceContext resourceContext, final LinkFollower linkFollower, final RepresentationType representationType, final JsonRepresentation representation) {
         super(resourceContext, linkFollower, representationType, representation);
     }
 
@@ -62,27 +62,24 @@ public class PropertyDescriptionReprRenderer extends AbstractTypeMemberReprRende
     protected void addPropertiesSpecificToFeature() {
         representation.mapPut("optional", !getObjectFeature().isMandatory());
         final MaxLengthFacet maxLength = getObjectFeature().getFacet(MaxLengthFacet.class);
-        if(maxLength != null && !maxLength.isNoop()) {
+        if (maxLength != null && !maxLength.isNoop()) {
             representation.mapPut("maxLength", maxLength.value());
         }
     }
 
     private void addLinkToReturnTypeIfAny() {
         final ObjectSpecification returnType = getObjectFeature().getSpecification();
-        if(returnType == null) {
+        if (returnType == null) {
             return;
         }
-        final LinkBuilder linkBuilder = 
-            DomainTypeReprRenderer.newLinkToBuilder(getResourceContext(), Rel.RETURN_TYPE, returnType);
+        final LinkBuilder linkBuilder = DomainTypeReprRenderer.newLinkToBuilder(getResourceContext(), Rel.RETURN_TYPE, returnType);
         getLinks().arrayAdd(linkBuilder.build());
     }
-
 
     @Override
     protected void putExtensionsSpecificToFeature() {
         putExtensionsName();
         putExtensionsDescriptionIfAvailable();
     }
-
 
 }

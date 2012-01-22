@@ -39,8 +39,7 @@ public class CustomStyleWindowBorder implements BorderDrawing {
     final protected static int LINE_THICKNESS = 5;
     private final static Text TITLE_STYLE = Toolkit.getText(ColorsAndFonts.TEXT_TITLE_SMALL);
 
-    int titlebarHeight = Math.max(WindowControl.HEIGHT + View.VPADDING + TITLE_STYLE.getDescent(),
-        TITLE_STYLE.getTextHeight());
+    int titlebarHeight = Math.max(WindowControl.HEIGHT + View.VPADDING + TITLE_STYLE.getDescent(), TITLE_STYLE.getTextHeight());
     int baseline = LINE_THICKNESS + WindowControl.HEIGHT;
     int left = LINE_THICKNESS;
     int right = LINE_THICKNESS;
@@ -65,20 +64,14 @@ public class CustomStyleWindowBorder implements BorderDrawing {
     }
 
     @Override
-    public void draw(final Canvas canvas, final Size s, final boolean hasFocus, final ViewState state,
-        final View[] controls, final String title) {
+    public void draw(final Canvas canvas, final Size s, final boolean hasFocus, final ViewState state, final View[] controls, final String title) {
         final int x = left;
         final int width = s.getWidth();
         final int height = s.getHeight();
 
-        final Color titleBarBackgroundColor =
-            hasFocus ? Toolkit.getColor(ColorsAndFonts.COLOR_PRIMARY3) : Toolkit
-                .getColor(ColorsAndFonts.COLOR_SECONDARY3);
-        final Color titleBarTextColor =
-            hasFocus ? Toolkit.getColor(ColorsAndFonts.COLOR_BLACK) : Toolkit.getColor(ColorsAndFonts.COLOR_SECONDARY1);
-        final Color borderColor =
-            hasFocus ? Toolkit.getColor(ColorsAndFonts.COLOR_PRIMARY1) : Toolkit
-                .getColor(ColorsAndFonts.COLOR_SECONDARY1);
+        final Color titleBarBackgroundColor = hasFocus ? Toolkit.getColor(ColorsAndFonts.COLOR_PRIMARY3) : Toolkit.getColor(ColorsAndFonts.COLOR_SECONDARY3);
+        final Color titleBarTextColor = hasFocus ? Toolkit.getColor(ColorsAndFonts.COLOR_BLACK) : Toolkit.getColor(ColorsAndFonts.COLOR_SECONDARY1);
+        final Color borderColor = hasFocus ? Toolkit.getColor(ColorsAndFonts.COLOR_PRIMARY1) : Toolkit.getColor(ColorsAndFonts.COLOR_SECONDARY1);
 
         // slightly rounded grey border
         canvas.drawRectangle(1, 0, width - 2, height, borderColor);
@@ -117,8 +110,7 @@ public class CustomStyleWindowBorder implements BorderDrawing {
         final int x = size.getWidth() - 50;
         final Image icon = ImageFactory.getInstance().loadIcon("transient", height, null);
         if (icon == null) {
-            canvas.drawText("*", x, baseline, Toolkit.getColor(ColorsAndFonts.COLOR_BLACK),
-                Toolkit.getText(ColorsAndFonts.TEXT_NORMAL));
+            canvas.drawText("*", x, baseline, Toolkit.getColor(ColorsAndFonts.COLOR_BLACK), Toolkit.getText(ColorsAndFonts.TEXT_NORMAL));
         } else {
             canvas.drawImage(icon, x, LINE_THICKNESS + 1, height, height);
         }
@@ -127,9 +119,7 @@ public class CustomStyleWindowBorder implements BorderDrawing {
 
     @Override
     public void getRequiredSize(final Size size, final String title, final View[] controls) {
-        final int width =
-            left + View.HPADDING + TITLE_STYLE.stringWidth(title) + View.HPADDING + controls.length
-                * (WindowControl.WIDTH + View.HPADDING) + View.HPADDING + right;
+        final int width = left + View.HPADDING + TITLE_STYLE.stringWidth(title) + View.HPADDING + controls.length * (WindowControl.WIDTH + View.HPADDING) + View.HPADDING + right;
         // size.extendWidth(getLeft() + getRight());
         size.ensureWidth(width);
     }

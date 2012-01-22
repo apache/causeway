@@ -41,8 +41,7 @@ public class CollectionTreeNodeSpecification extends AbstractCollectionViewSpeci
         collectionNodeSpec.addSubviewDecorator(new ExpandableViewBorder.Factory(iconSpec, objectNodeSpec, null));
         collectionNodeSpec.addViewDecorator(new IconBorder.Factory(Toolkit.getText(ColorsAndFonts.TEXT_NORMAL)));
         objectNodeSpec.addSubviewDecorator(new SelectObjectBorder.Factory());
-        objectNodeSpec.addSubviewDecorator(new ExpandableViewBorder.Factory(iconSpec, objectNodeSpec,
-            collectionNodeSpec));
+        objectNodeSpec.addSubviewDecorator(new ExpandableViewBorder.Factory(iconSpec, objectNodeSpec, collectionNodeSpec));
         // objectNodeSpec.addSubviewDecorator(new FieldLabelsDecorator());
         objectNodeSpec.addViewDecorator(new IconBorder.Factory(Toolkit.getText(ColorsAndFonts.TEXT_NORMAL)));
         return new ViewSpecification[] { collectionNodeSpec, objectNodeSpec };
@@ -60,8 +59,10 @@ public class CollectionTreeNodeSpecification extends AbstractCollectionViewSpeci
 
     // TODO this should be available if an item can be given more space
     /*
-     * @Override public boolean canDisplay(final Content content, ViewRequirement requirement) { return
-     * content.isCollection() && requirement.is(ViewRequirement.CLOSED) && requirement.is(ViewRequirement.SUBVIEW) &&
+     * @Override public boolean canDisplay(final Content content,
+     * ViewRequirement requirement) { return content.isCollection() &&
+     * requirement.is(ViewRequirement.CLOSED) &&
+     * requirement.is(ViewRequirement.SUBVIEW) &&
      * requirement.is(ViewRequirement.SUBVIEW); }
      */
 

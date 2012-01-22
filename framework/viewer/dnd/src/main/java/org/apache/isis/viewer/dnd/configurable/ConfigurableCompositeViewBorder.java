@@ -71,10 +71,8 @@ public class ConfigurableCompositeViewBorder extends AbstractBorder {
             ViewSpecification specification;
             if (elementsClass.startsWith("user:")) {
                 final String name = elementsClass.substring("user:".length());
-                final String wrappedSpecificationClass =
-                    Properties.getUserViewSpecificationOptions(name).getString("wrapped-specification");
-                final ViewSpecification wrappedSpectification =
-                    (ViewSpecification) InstanceUtil.createInstance(wrappedSpecificationClass);
+                final String wrappedSpecificationClass = Properties.getUserViewSpecificationOptions(name).getString("wrapped-specification");
+                final ViewSpecification wrappedSpectification = (ViewSpecification) InstanceUtil.createInstance(wrappedSpecificationClass);
                 specification = new UserViewSpecification(wrappedSpectification, name);
             } else {
                 specification = (ViewSpecification) InstanceUtil.createInstance(elementsClass);
@@ -105,8 +103,7 @@ public class ConfigurableCompositeViewBorder extends AbstractBorder {
         super.viewMenuOptions(menuOptions);
         final UserActionSet subOptions = menuOptions.addNewActionSet("Elements as");
         final View firstSubview = getSubviews()[0];
-        final int status =
-            ViewRequirement.OPEN | ViewRequirement.CLOSED | ViewRequirement.SUBVIEW | ViewRequirement.FIXED;
+        final int status = ViewRequirement.OPEN | ViewRequirement.CLOSED | ViewRequirement.SUBVIEW | ViewRequirement.FIXED;
         final ViewRequirement viewRequirement = new ViewRequirement(firstSubview.getContent(), status);
         final Enumeration<ViewSpecification> possibleViews = Toolkit.getViewFactory().availableViews(viewRequirement);
         while (possibleViews.hasMoreElements()) {

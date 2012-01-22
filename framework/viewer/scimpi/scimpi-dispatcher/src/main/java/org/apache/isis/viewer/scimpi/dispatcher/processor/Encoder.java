@@ -24,4 +24,3 @@ public interface Encoder {
     String encoder(String text);
 
 }
-

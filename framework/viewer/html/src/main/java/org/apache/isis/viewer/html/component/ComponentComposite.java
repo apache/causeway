@@ -26,7 +26,7 @@ import java.util.List;
 import org.apache.isis.viewer.html.PathBuilder;
 
 public class ComponentComposite implements Component {
-    
+
     private final List<Component> components = new ArrayList<Component>();
     protected final PathBuilder pathBuilder;
 
@@ -35,7 +35,6 @@ public class ComponentComposite implements Component {
         this.pathBuilder = pathBuilder;
     }
 
-    
     protected String pathTo(final String prefix) {
         return pathBuilder.pathTo(prefix);
     }

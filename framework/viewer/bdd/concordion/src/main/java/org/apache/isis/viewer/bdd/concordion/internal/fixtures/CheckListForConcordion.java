@@ -33,8 +33,7 @@ public class CheckListForConcordion extends AbstractFixture<CheckListPeer> {
     }
 
     private static CellBindingDefault titleBinding() {
-        return CellBindingDefault.builder(CheckListConstants.TITLE_NAME, CheckListConstants.TITLE_HEAD_SET).ditto()
-            .build();
+        return CellBindingDefault.builder(CheckListConstants.TITLE_NAME, CheckListConstants.TITLE_HEAD_SET).ditto().build();
     }
 
     public String executeHeader(final String title) {

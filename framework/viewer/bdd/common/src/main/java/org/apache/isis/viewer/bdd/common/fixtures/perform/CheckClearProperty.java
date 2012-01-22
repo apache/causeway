@@ -25,8 +25,7 @@ import org.apache.isis.viewer.bdd.common.fixtures.perform.checkthat.property.Pro
 public class CheckClearProperty extends PerformCheckThatAbstract {
 
     public CheckClearProperty(final Perform.Mode mode) {
-        super("check clear property", OnMemberColumn.REQUIRED, mode, new ProposedClear(AssertsValidity.VALID),
-            new ProposedClear(AssertsValidity.INVALID));
+        super("check clear property", OnMemberColumn.REQUIRED, mode, new ProposedClear(AssertsValidity.VALID), new ProposedClear(AssertsValidity.INVALID));
     }
 
 }

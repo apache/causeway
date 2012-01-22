@@ -29,8 +29,7 @@ import org.apache.isis.viewer.bdd.common.fixtures.perform.checkthat.action.Argum
 public class CheckAction extends PerformCheckThatAbstract {
 
     public CheckAction(final Perform.Mode mode) {
-        super("check action", OnMemberColumn.REQUIRED, mode, new Hidden(), new Visible(), new Disabled(), new Usable(),
-            new ArgumentSetValid(), new ArgumentSetNotValid());
+        super("check action", OnMemberColumn.REQUIRED, mode, new Hidden(), new Visible(), new Disabled(), new Usable(), new ArgumentSetValid(), new ArgumentSetNotValid());
     }
 
 }

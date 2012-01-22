@@ -81,10 +81,8 @@ public class MultilineTextFieldContentTest {
             }
         });
 
-        final IsisSessionFactoryDefault sessionFactory =
-            new IsisSessionFactoryDefault(DeploymentType.EXPLORATION, new IsisConfigurationDefault(),
-                mockTemplateImageLoader, mockSpecificationLoader, mockAuthenticationManager, mockAuthorizationManager,
-                mockUserProfileLoader, mockPersistenceSessionFactory, servicesList);
+        final IsisSessionFactoryDefault sessionFactory = new IsisSessionFactoryDefault(DeploymentType.EXPLORATION, new IsisConfigurationDefault(), mockTemplateImageLoader, mockSpecificationLoader, mockAuthenticationManager, mockAuthorizationManager, mockUserProfileLoader,
+                mockPersistenceSessionFactory, servicesList);
         IsisContextStatic.createRelaxedInstance(sessionFactory);
         sessionFactory.init();
 
@@ -100,8 +98,7 @@ public class MultilineTextFieldContentTest {
         selection.resetTo(new CursorPosition(content, 1, 3));
         selection.extendTo(new CursorPosition(content, 1, 7));
         content.delete(selection);
-        Assert.assertEquals("Line one\nLino\nLine three\nLine four that is long enough that it wraps",
-            content.getText());
+        Assert.assertEquals("Line one\nLino\nLine three\nLine four that is long enough that it wraps", content.getText());
     }
 
     @Test
@@ -110,8 +107,7 @@ public class MultilineTextFieldContentTest {
         selection.resetTo(new CursorPosition(content, 1, 7));
         selection.extendTo(new CursorPosition(content, 1, 3));
         content.delete(selection);
-        Assert.assertEquals("Line one\nLino\nLine three\nLine four that is long enough that it wraps",
-            content.getText());
+        Assert.assertEquals("Line one\nLino\nLine three\nLine four that is long enough that it wraps", content.getText());
     }
 
     @Test
@@ -147,8 +143,7 @@ public class MultilineTextFieldContentTest {
         selection.resetTo(new CursorPosition(content, 5, 0));
         selection.extendTo(new CursorPosition(content, 5, 3));
         content.delete(selection);
-        Assert.assertEquals("Line one\nLine two\nLine three\nLine four that is long enough that wraps",
-            content.getText());
+        Assert.assertEquals("Line one\nLine two\nLine three\nLine four that is long enough that wraps", content.getText());
     }
 
     @Test

@@ -27,18 +27,21 @@ public interface Text {
     int charWidth(char c);
 
     /**
-     * Returns the height, in pixels, of the distance from the baseline to top of the tallest character (including
-     * accents that are not common in english.
+     * Returns the height, in pixels, of the distance from the baseline to top
+     * of the tallest character (including accents that are not common in
+     * english.
      */
     int getAscent();
 
     /**
-     * Returns the height, in pixels, of the distance from bottom of the lowest descending character to the baseline.
+     * Returns the height, in pixels, of the distance from bottom of the lowest
+     * descending character to the baseline.
      */
     int getDescent();
 
     /**
-     * Returns the mid point, in pixels, between the baseline and the top of the characters.
+     * Returns the mid point, in pixels, between the baseline and the top of the
+     * characters.
      */
     int getMidPoint();
 
@@ -48,7 +51,8 @@ public interface Text {
     String getName();
 
     /**
-     * Returns the height, in pixels, for a normal line of text - where there is some space between two lines of text.
+     * Returns the height, in pixels, for a normal line of text - where there is
+     * some space between two lines of text.
      */
     int getTextHeight();
 
@@ -61,7 +65,8 @@ public interface Text {
     int getLineHeight();
 
     /**
-     * Returns the number of blank vertical pixels to add between adjacent lines to give them additional spacing.
+     * Returns the number of blank vertical pixels to add between adjacent lines
+     * to give them additional spacing.
      */
     int getLineSpacing();
 
@@ -71,7 +76,8 @@ public interface Text {
     int stringWidth(String text);
 
     /**
-     * Returns the height in pixels when the specified text is wrapped at the specified width
+     * Returns the height in pixels when the specified text is wrapped at the
+     * specified width
      */
     int stringHeight(String text, int maxWidth);
 

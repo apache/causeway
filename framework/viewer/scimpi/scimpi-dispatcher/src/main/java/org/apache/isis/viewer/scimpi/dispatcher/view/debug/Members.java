@@ -62,16 +62,13 @@ public class Members extends AbstractElementProcessor {
             }
             request.processUtilCloseTag();
 
-            final ObjectSpecification specification =
-                field == null ? object.getSpecification() : field.getSpecification();
+            final ObjectSpecification specification = field == null ? object.getSpecification() : field.getSpecification();
 
             request.appendHtml(specification.getSingularName() + " (" + specification.getFullIdentifier() + ") \n");
             final List<ObjectAssociation> fields = specification.getAssociations();
             for (final ObjectAssociation fld : fields) {
                 if (!fld.isAlwaysHidden()) {
-                    request.appendHtml("   " + fld.getId() + " - '" + fld.getName() + "' -> "
-                        + fld.getSpecification().getSingularName()
-                        + (fld.isOneToManyAssociation() ? " (collection of)" : "") + "\n");
+                    request.appendHtml("   " + fld.getId() + " - '" + fld.getName() + "' -> " + fld.getSpecification().getSingularName() + (fld.isOneToManyAssociation() ? " (collection of)" : "") + "\n");
                 }
             }
             request.appendHtml("   --------------\n");

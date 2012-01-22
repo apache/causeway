@@ -127,9 +127,7 @@ public class PopupMenuContainer extends AbstractView {
                 }
                 final Location submenuLocation = new Location(0, submenuOffset);
 
-                final boolean placeToLeft =
-                    at.getX() + menuSize.getWidth() + submenuSize.getWidth() < getViewManager().getOverlaySize()
-                        .getWidth();
+                final boolean placeToLeft = at.getX() + menuSize.getWidth() + submenuSize.getWidth() < getViewManager().getOverlaySize().getWidth();
                 if (placeToLeft) {
                     submenuLocation.setX(menuSize.getWidth() - MENU_OVERLAP);
                 } else {
@@ -166,13 +164,11 @@ public class PopupMenuContainer extends AbstractView {
         }
     }
 
-    public void show(final boolean forView, final boolean includeDebug, final boolean includeExploration,
-        final boolean includePrototype) {
+    public void show(final boolean forView, final boolean includeDebug, final boolean includeExploration, final boolean includePrototype) {
         final boolean withExploration = getViewManager().isRunningAsExploration() && includeExploration;
         final boolean withPrototype = getViewManager().isRunningAsPrototype() && includePrototype;
 
-        final UserActionSet optionSet =
-            new UserActionSetImpl(withExploration, withPrototype, includeDebug, ActionType.USER);
+        final UserActionSet optionSet = new UserActionSetImpl(withExploration, withPrototype, includeDebug, ActionType.USER);
         if (forView) {
             target.viewMenuOptions(optionSet);
         } else {
@@ -197,8 +193,7 @@ public class PopupMenuContainer extends AbstractView {
         }
     }
 
-    private String changeStatus(final View over, final boolean forView, final boolean includeExploration,
-        final boolean includeDebug) {
+    private String changeStatus(final View over, final boolean forView, final boolean includeExploration, final boolean includeDebug) {
         final StringBuffer status = new StringBuffer("Menu for ");
         if (forView) {
             status.append("view ");

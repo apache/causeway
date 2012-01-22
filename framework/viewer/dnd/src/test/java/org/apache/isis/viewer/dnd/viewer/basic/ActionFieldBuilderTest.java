@@ -105,10 +105,7 @@ public class ActionFieldBuilderTest {
             }
         };
 
-        final IsisSessionFactoryDefault sessionFactory =
-            new IsisSessionFactoryDefault(DeploymentType.EXPLORATION, configuration, mockTemplateImageLoader,
-                mockSpecificationLoader, mockAuthenticationManager, mockAuthorizationManager, mockUserProfileLoader,
-                mockPersistenceSessionFactory, servicesList);
+        final IsisSessionFactoryDefault sessionFactory = new IsisSessionFactoryDefault(DeploymentType.EXPLORATION, configuration, mockTemplateImageLoader, mockSpecificationLoader, mockAuthenticationManager, mockAuthorizationManager, mockUserProfileLoader, mockPersistenceSessionFactory, servicesList);
 
         IsisContext.setConfiguration(sessionFactory.getConfiguration());
         IsisContextStatic.createRelaxedInstance(sessionFactory);
@@ -132,8 +129,9 @@ public class ActionFieldBuilderTest {
         control.expectAndDefaultReturn(view.getContent(), null);
 
         /*
-         * DummyView[] views = new DummyView[2]; views[1] = new DummyView(); views[1].setupContent(new
-         * ObjectParameter("name", null, null, false, 1, actionContent)); view.setupSubviews(views);
+         * DummyView[] views = new DummyView[2]; views[1] = new DummyView();
+         * views[1].setupContent(new ObjectParameter("name", null, null, false,
+         * 1, actionContent)); view.setupSubviews(views);
          */
 
         control.replay();
@@ -144,17 +142,21 @@ public class ActionFieldBuilderTest {
     }
 
     /*
-     * // TODO fails on server as cant load X11 for Text class public void xxxtestNewBuild() { view.setupSubviews(new
-     * View[0]);
+     * // TODO fails on server as cant load X11 for Text class public void
+     * xxxtestNewBuild() { view.setupSubviews(new View[0]);
      * 
-     * view.addAction("add TextView0 null"); view.addAction("add MockView1/LabelBorder"); view.addAction("add
+     * view.addAction("add TextView0 null");
+     * view.addAction("add MockView1/LabelBorder"); view.addAction("add
      * MockView2/LabelBorder");
      * 
      * builder.build(view);
      * 
-     * view.verify(); } public void xxxtestUpdateBuildWhereParameterHasChangedFromNullToAnObject() { DummyView[] views =
-     * new DummyView[2]; views[1] = new DummyView(); ObjectParameter objectParameter = new ObjectParameter("name", null,
-     * null, false, 1, actionContent); views[1].setupContent(objectParameter); view.setupSubviews(views);
+     * view.verify(); } public void
+     * xxxtestUpdateBuildWhereParameterHasChangedFromNullToAnObject() {
+     * DummyView[] views = new DummyView[2]; views[1] = new DummyView();
+     * ObjectParameter objectParameter = new ObjectParameter("name", null, null,
+     * false, 1, actionContent); views[1].setupContent(objectParameter);
+     * view.setupSubviews(views);
      * 
      * actionContent.setParameter(0, new DummyObjectAdapter());
      * 
@@ -164,10 +166,12 @@ public class ActionFieldBuilderTest {
      * 
      * view.verify(); }
      * 
-     * public void xxxtestUpdateBuildWhereParameterHasChangedFromAnObjectToNull() { DummyView[] views = new
-     * DummyView[2]; views[1] = new DummyView(); ObjectParameter objectParameter = new ObjectParameter("name", new
-     * DummyObjectAdapter(), null, false, 1, actionContent); views[1].setupContent(objectParameter);
-     * view.setupSubviews(views);
+     * public void
+     * xxxtestUpdateBuildWhereParameterHasChangedFromAnObjectToNull() {
+     * DummyView[] views = new DummyView[2]; views[1] = new DummyView();
+     * ObjectParameter objectParameter = new ObjectParameter("name", new
+     * DummyObjectAdapter(), null, false, 1, actionContent);
+     * views[1].setupContent(objectParameter); view.setupSubviews(views);
      * 
      * objectParameter.setObject(null);
      * 
@@ -177,10 +181,12 @@ public class ActionFieldBuilderTest {
      * 
      * view.verify(); }
      * 
-     * public void xxxtestUpdateBuildWhereParameterHasChangedFromOneObjectToAnother() { DummyView[] views = new
-     * DummyView[2]; views[1] = new DummyView(); ObjectParameter objectParameter = new ObjectParameter("name", new
-     * DummyObjectAdapter(), null, false, 1, actionContent); views[1].setupContent(objectParameter);
-     * view.setupSubviews(views);
+     * public void
+     * xxxtestUpdateBuildWhereParameterHasChangedFromOneObjectToAnother() {
+     * DummyView[] views = new DummyView[2]; views[1] = new DummyView();
+     * ObjectParameter objectParameter = new ObjectParameter("name", new
+     * DummyObjectAdapter(), null, false, 1, actionContent);
+     * views[1].setupContent(objectParameter); view.setupSubviews(views);
      * 
      * objectParameter.setObject(new DummyObjectAdapter());
      * 
@@ -190,12 +196,15 @@ public class ActionFieldBuilderTest {
      * 
      * view.verify(); }
      * 
-     * public void xxtestUpdateBuildWhereParameterObjectSetButToSameObject() { DummyView[] views = new DummyView[2];
-     * views[1] = new DummyView(); DummyObjectAdapter dummyObjectAdapter = new DummyObjectAdapter(); ObjectParameter
-     * objectParameter = new ObjectParameter("name", dummyObjectAdapter, null, false, 1, actionContent);
+     * public void xxtestUpdateBuildWhereParameterObjectSetButToSameObject() {
+     * DummyView[] views = new DummyView[2]; views[1] = new DummyView();
+     * DummyObjectAdapter dummyObjectAdapter = new DummyObjectAdapter();
+     * ObjectParameter objectParameter = new ObjectParameter("name",
+     * dummyObjectAdapter, null, false, 1, actionContent);
      * views[1].setupContent(objectParameter); view.setupSubviews(views);
      * 
-     * actionContent.setParameter(0, dummyObjectAdapter); // objectParameter.setObject(dummyObjectAdapter);
+     * actionContent.setParameter(0, dummyObjectAdapter); //
+     * objectParameter.setObject(dummyObjectAdapter);
      * 
      * builder.build(view);
      * 
@@ -203,8 +212,9 @@ public class ActionFieldBuilderTest {
      * 
      * class MockActionHelper extends ActionHelper {
      * 
-     * protected MockActionHelper( ObjectAdapter target, Action action, String[] labels, ObjectAdapter[] parameters,
-     * ObjectSpecification[] parameterTypes, boolean[] required) { super(target, action, labels, parameters,
+     * protected MockActionHelper( ObjectAdapter target, Action action, String[]
+     * labels, ObjectAdapter[] parameters, ObjectSpecification[] parameterTypes,
+     * boolean[] required) { super(target, action, labels, parameters,
      * parameterTypes, required); }
      */
 }

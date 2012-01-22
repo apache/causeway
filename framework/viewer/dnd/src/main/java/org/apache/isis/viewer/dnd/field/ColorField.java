@@ -101,12 +101,15 @@ public class ColorField extends TextParseableFieldAbstract {
     }
 
     /*
-     * @Override public void firstClick(final Click click) { if (((TextParseableContent)
-     * getContent()).isEditable().isAllowed()) { final View overlay = new DisposeOverlay(new ColorFieldOverlay(this),
-     * new ValueDropDownAxis((TextParseableContent) getContent(), getView())); final Location location =
-     * this.getAbsoluteLocation(); // Location location = click.getLocationWithinViewer(); // TODO offset by constant
-     * amount // location.move(10, 10); overlay.setLocation(location); // overlay.setSize(overlay.getRequiredSize(new
-     * Size())); // overlay.markDamaged(); getViewManager().setOverlayView(overlay); } }
+     * @Override public void firstClick(final Click click) { if
+     * (((TextParseableContent) getContent()).isEditable().isAllowed()) { final
+     * View overlay = new DisposeOverlay(new ColorFieldOverlay(this), new
+     * ValueDropDownAxis((TextParseableContent) getContent(), getView())); final
+     * Location location = this.getAbsoluteLocation(); // Location location =
+     * click.getLocationWithinViewer(); // TODO offset by constant amount //
+     * location.move(10, 10); overlay.setLocation(location); //
+     * overlay.setSize(overlay.getRequiredSize(new Size())); //
+     * overlay.markDamaged(); getViewManager().setOverlayView(overlay); } }
      */
     @Override
     public int getBaseline() {

@@ -32,8 +32,8 @@ import org.apache.isis.viewer.dnd.view.View;
 import org.apache.isis.viewer.dnd.view.ViewState;
 
 /**
- * TitleText draws the text derived from the subclass within a view. The text is properly truncated if longer than the
- * specified maximum width.
+ * TitleText draws the text derived from the subclass within a view. The text is
+ * properly truncated if longer than the specified maximum width.
  */
 public abstract class TitleText {
     private static final int NO_MAX_WIDTH = -1;
@@ -49,18 +49,21 @@ public abstract class TitleText {
     }
 
     /**
-     * Draw this TitleText's text stating from the specified x coordination and on the specified baseline.
+     * Draw this TitleText's text stating from the specified x coordination and
+     * on the specified baseline.
      */
     public void draw(final Canvas canvas, final int x, final int baseline) {
         draw(canvas, x, baseline, NO_MAX_WIDTH);
     }
 
     /**
-     * Draw this TitleText's text stating from the specified x coordination and on the specified baseline. If a maximum
-     * width is specified (ie it is positive) then the text drawn will not extend past that width.
+     * Draw this TitleText's text stating from the specified x coordination and
+     * on the specified baseline. If a maximum width is specified (ie it is
+     * positive) then the text drawn will not extend past that width.
      * 
      * @param maxWidth
-     *            the maximum width to display the text within; if negative no limit is imposed
+     *            the maximum width to display the text within; if negative no
+     *            limit is imposed
      */
     public void draw(final Canvas canvas, final int x, final int baseline, final int maxWidth) {
         Color color;
@@ -84,8 +87,7 @@ public abstract class TitleText {
 
         if (Toolkit.debug) {
             final int x2 = style.stringWidth(text);
-            canvas.drawDebugOutline(new Bounds(xt, yt - style.getAscent(), x2, style.getTextHeight()), baseline,
-                Toolkit.getColor(ColorsAndFonts.COLOR_DEBUG_BOUNDS_DRAW));
+            canvas.drawDebugOutline(new Bounds(xt, yt - style.getAscent(), x2, style.getTextHeight()), baseline, Toolkit.getColor(ColorsAndFonts.COLOR_DEBUG_BOUNDS_DRAW));
         }
         canvas.drawText(text, xt, yt, color, style);
     }

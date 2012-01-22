@@ -27,14 +27,14 @@ public class JsonRepresentationTest_newArray {
 
     @Test
     public void newArray() throws Exception {
-        JsonRepresentation jsonRepresentation = JsonRepresentation.newArray();
+        final JsonRepresentation jsonRepresentation = JsonRepresentation.newArray();
         assertThat(jsonRepresentation.isArray(), is(true));
         assertThat(jsonRepresentation.size(), is(0));
     }
 
     @Test
     public void newArrayInitialSize() throws Exception {
-        JsonRepresentation jsonRepresentation = JsonRepresentation.newArray(2);
+        final JsonRepresentation jsonRepresentation = JsonRepresentation.newArray(2);
         assertThat(jsonRepresentation.size(), is(2));
         assertThat(jsonRepresentation.arrayGet(0).isNull(), is(true));
         assertThat(jsonRepresentation.arrayGet(1).isNull(), is(true));

@@ -65,11 +65,11 @@ public class ValueChoicesPanel extends ScalarPanelAbstract { // ScalarPanelTextF
 
     @Override
     protected FormComponentLabel addComponentForRegular() {
-        
+
         final IModel<ObjectAdapterMemento> modelObject = createModel();
         final IModel<List<? extends ObjectAdapterMemento>> choicesMementos = getChoicesModel();
         valueField = createDropDownChoices(choicesMementos, modelObject);
-        
+
         addStandardSemantics();
         // addSemantics();
 
@@ -114,7 +114,7 @@ public class ValueChoicesPanel extends ScalarPanelAbstract { // ScalarPanelTextF
 
     protected void addStandardSemantics() {
         setRequiredIfSpecified();
-        //setSizeIfSpecified();
+        // setSizeIfSpecified();
     }
 
     private void setRequiredIfSpecified() {
@@ -125,7 +125,7 @@ public class ValueChoicesPanel extends ScalarPanelAbstract { // ScalarPanelTextF
 
     private void setSizeIfSpecified() {
         final int size = determineSize();
-        
+
         if (size != -1) {
             valueField.add(new AttributeModifier("size", true, new Model<String>("" + size)));
         }
@@ -173,9 +173,8 @@ public class ValueChoicesPanel extends ScalarPanelAbstract { // ScalarPanelTextF
         return scalarModel.getObject();
     }
 
-
     private DropDownChoicesForValueMementos createDropDownChoices(final IModel<List<? extends ObjectAdapterMemento>> choicesMementos, final IModel<ObjectAdapterMemento> modelObject) {
-        String id = ID_VALUE_ID;
+        final String id = ID_VALUE_ID;
         return new DropDownChoicesForValueMementos(id, modelObject, choicesMementos);
     }
 
@@ -195,8 +194,7 @@ public class ValueChoicesPanel extends ScalarPanelAbstract { // ScalarPanelTextF
             return null;
         }
         // take a copy otherwise is only lazily evaluated
-        final List<ObjectAdapterMemento> choicesMementos =
-            Lists.newArrayList(Lists.transform(choices, Mementos.fromAdapter()));
+        final List<ObjectAdapterMemento> choicesMementos = Lists.newArrayList(Lists.transform(choices, Mementos.fromAdapter()));
         return Model.ofList(choicesMementos);
     }
 

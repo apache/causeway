@@ -35,28 +35,25 @@ import org.apache.isis.viewer.dnd.view.window.WindowControl;
 
 public class LineStyleWindowBorder implements BorderDrawing {
     private final static Text TITLE_STYLE = Toolkit.getText(ColorsAndFonts.TEXT_TITLE_SMALL);
-    private final int titlebarHeight = Math.max(WindowControl.HEIGHT + View.VPADDING + TITLE_STYLE.getDescent(),
-        TITLE_STYLE.getTextHeight());
+    private final int titlebarHeight = Math.max(WindowControl.HEIGHT + View.VPADDING + TITLE_STYLE.getDescent(), TITLE_STYLE.getTextHeight());
 
     @Override
     public void debugDetails(final DebugBuilder debug) {
     }
 
     @Override
-    public void draw(final Canvas canvas, final Size s, final boolean hasFocus, final ViewState state,
-        final View[] controls, final String title) {
-        final Color borderColor =
-            hasFocus ? Toolkit.getColor(ColorsAndFonts.COLOR_BLACK) : Toolkit.getColor(ColorsAndFonts.COLOR_SECONDARY1);
+    public void draw(final Canvas canvas, final Size s, final boolean hasFocus, final ViewState state, final View[] controls, final String title) {
+        final Color borderColor = hasFocus ? Toolkit.getColor(ColorsAndFonts.COLOR_BLACK) : Toolkit.getColor(ColorsAndFonts.COLOR_SECONDARY1);
         canvas.drawRectangle(0, 0, s.getWidth(), s.getHeight(), borderColor);
         final int y = getTop();
         canvas.drawLine(0, y, s.getWidth(), y, borderColor);
         final int controlWidth = View.HPADDING + (WindowControl.WIDTH + View.HPADDING) * controls.length;
         final String text = TextUtils.limitText(title, TITLE_STYLE, s.getWidth() - controlWidth - View.VPADDING);
-        canvas.drawText(text, 6, TITLE_STYLE.getLineHeight(), borderColor,
-            Toolkit.getText(ColorsAndFonts.TEXT_TITLE_SMALL));
+        canvas.drawText(text, 6, TITLE_STYLE.getLineHeight(), borderColor, Toolkit.getText(ColorsAndFonts.TEXT_TITLE_SMALL));
     }
 
-    // TODO transiency should be flagged elsewhere and dealt with in the draw method.
+    // TODO transiency should be flagged elsewhere and dealt with in the draw
+    // method.
     @Override
     public void drawTransientMarker(final Canvas canvas, final Size size) {
     }
@@ -73,9 +70,7 @@ public class LineStyleWindowBorder implements BorderDrawing {
 
     @Override
     public void getRequiredSize(final Size size, final String title, final View[] controls) {
-        final int width =
-            getLeft() + View.HPADDING + TITLE_STYLE.stringWidth(title) + View.HPADDING + controls.length
-                * (WindowControl.WIDTH + View.HPADDING) + View.HPADDING + getRight();
+        final int width = getLeft() + View.HPADDING + TITLE_STYLE.stringWidth(title) + View.HPADDING + controls.length * (WindowControl.WIDTH + View.HPADDING) + View.HPADDING + getRight();
         size.ensureWidth(width);
     }
 

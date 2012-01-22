@@ -102,11 +102,13 @@ public class ConfigurableListViewSpecificationTest {
 
         /*
          * TODO Fails trying to load user profile form NO system. View view =
-         * viewSpecification.createView(collectionContent, new Axes(), 0); Axes axes = view.getViewAxes(); GridLayout
-         * axis = axes.getAxis(GridLayout.class); assertEquals(1, axis.getSize());
+         * viewSpecification.createView(collectionContent, new Axes(), 0); Axes
+         * axes = view.getViewAxes(); GridLayout axis =
+         * axes.getAxis(GridLayout.class); assertEquals(1, axis.getSize());
          * 
          * 
-         * ConfigurationAxis configurationAxis = axes.getAxis(ConfigurationAxis.class);
+         * ConfigurationAxis configurationAxis =
+         * axes.getAxis(ConfigurationAxis.class);
          * assertNotNull(configurationAxis);
          */
     }

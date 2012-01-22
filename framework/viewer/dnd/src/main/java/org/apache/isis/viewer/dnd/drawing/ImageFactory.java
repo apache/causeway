@@ -46,8 +46,8 @@ public abstract class ImageFactory {
     }
 
     /**
-     * Keyed list of icons (each derived from an image, of a specific size etc), where the key is the name of the icon
-     * and its size.
+     * Keyed list of icons (each derived from an image, of a specific size etc),
+     * where the key is the name of the icon and its size.
      */
     private final Hashtable<String, Image> templateImages = new Hashtable<String, Image>();
 
@@ -117,7 +117,8 @@ public abstract class ImageFactory {
     // ////////////////////////////////////////////////////////////////////
 
     /**
-     * Loads an icon of the specified size, and with the specified tint. If color is null then no tint is applied.
+     * Loads an icon of the specified size, and with the specified tint. If
+     * color is null then no tint is applied.
      */
     public Image loadIcon(final String name, final int height, final Color tint) {
         final String id = name + SEPARATOR + height + SEPARATOR + tint;
@@ -137,7 +138,8 @@ public abstract class ImageFactory {
     // ////////////////////////////////////////////////////////////////////
 
     /**
-     * Loads the fall back icon image, for use when no specific image can be found
+     * Loads the fall back icon image, for use when no specific image can be
+     * found
      */
     public Image loadDefaultIcon(final int height, final Color tint) {
         final String fallbackImage = getConfiguration().getString(DEFAULT_IMAGE_PROPERTY, DEFAULT_IMAGE_NAME);
@@ -161,7 +163,8 @@ public abstract class ImageFactory {
     public abstract Image loadImage(final String path);
 
     /**
-     * Load an image with the given name, but of a specific height and of a specific hint.
+     * Load an image with the given name, but of a specific height and of a
+     * specific hint.
      */
     protected abstract Image loadImage(final String name, final int height, final Color tint);
 

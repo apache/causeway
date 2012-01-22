@@ -31,7 +31,8 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
 /**
- * Represents a {@link AbstractColumn} within a {@link AjaxFallbackDefaultDataTable}.
+ * Represents a {@link AbstractColumn} within a
+ * {@link AjaxFallbackDefaultDataTable}.
  * 
  * <p>
  * Part of the implementation of {@link CollectionContentsAsAjaxTable}.

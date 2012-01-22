@@ -102,8 +102,7 @@ public class ObjectBorder extends AbstractBorder {
             final int y = 0;
             final Image icon = ImageFactory.getInstance().loadIcon("transient", 8, null);
             if (icon == null) {
-                canvas.drawText("*", x, y + Toolkit.getText(ColorsAndFonts.TEXT_NORMAL).getAscent(),
-                    Toolkit.getColor(ColorsAndFonts.COLOR_BLACK), Toolkit.getText(ColorsAndFonts.TEXT_NORMAL));
+                canvas.drawText("*", x, y + Toolkit.getText(ColorsAndFonts.TEXT_NORMAL).getAscent(), Toolkit.getColor(ColorsAndFonts.COLOR_BLACK), Toolkit.getText(ColorsAndFonts.TEXT_NORMAL));
             } else {
                 canvas.drawImage(icon, x, y, 12, 12);
             }
@@ -121,8 +120,7 @@ public class ObjectBorder extends AbstractBorder {
                     canvas.drawRectangle(i, i, xExtent - 2 * i, s.getHeight() - 2 * i, color);
                 }
                 canvas.drawLine(xExtent - BORDER, top, xExtent - BORDER, top + s.getHeight(), color);
-                canvas.drawSolidRectangle(xExtent - BORDER + 1, top, BORDER - 2, s.getHeight() - 2 * top,
-                    Toolkit.getColor(ColorsAndFonts.COLOR_SECONDARY3));
+                canvas.drawSolidRectangle(xExtent - BORDER + 1, top, BORDER - 2, s.getHeight() - 2 * top, Toolkit.getColor(ColorsAndFonts.COLOR_SECONDARY3));
             }
         }
     }
@@ -144,17 +142,22 @@ public class ObjectBorder extends AbstractBorder {
     }
 
     /*
-     * @Override public void viewMenuOptions(final UserActionSet options) { super.viewMenuOptions(options); Content
-     * content = getContent(); UserActionSet suboptions = options.addNewActionSet("Replace with");
-     * replaceOptions(Toolkit.getViewFactory().availableViews(new ViewRequirement(content, ViewRequirement.OPEN |
+     * @Override public void viewMenuOptions(final UserActionSet options) {
+     * super.viewMenuOptions(options); Content content = getContent();
+     * UserActionSet suboptions = options.addNewActionSet("Replace with");
+     * replaceOptions(Toolkit.getViewFactory().availableViews(new
+     * ViewRequirement(content, ViewRequirement.OPEN |
      * ViewRequirement.REPLACEABLE | ViewRequirement.SUBVIEW)), suboptions);
-     * replaceOptions(Toolkit.getViewFactory().availableViews(new ViewRequirement(content, ViewRequirement.CLOSED |
+     * replaceOptions(Toolkit.getViewFactory().availableViews(new
+     * ViewRequirement(content, ViewRequirement.CLOSED |
      * ViewRequirement.REPLACEABLE | ViewRequirement.SUBVIEW)), suboptions); }
      * 
-     * protected void replaceOptions(final Enumeration possibleViews, final UserActionSet options) { if
-     * (possibleViews.hasMoreElements()) { while (possibleViews.hasMoreElements()) { final ViewSpecification
-     * specification = (ViewSpecification) possibleViews.nextElement(); if (specification != getSpecification()) {
-     * options.add(new ReplaceViewOption(specification) { protected void replace(View view, View withReplacement) {
+     * protected void replaceOptions(final Enumeration possibleViews, final
+     * UserActionSet options) { if (possibleViews.hasMoreElements()) { while
+     * (possibleViews.hasMoreElements()) { final ViewSpecification specification
+     * = (ViewSpecification) possibleViews.nextElement(); if (specification !=
+     * getSpecification()) { options.add(new ReplaceViewOption(specification) {
+     * protected void replace(View view, View withReplacement) {
      * replaceWrappedView(withReplacement); } }); } } } }
      */
     @Override

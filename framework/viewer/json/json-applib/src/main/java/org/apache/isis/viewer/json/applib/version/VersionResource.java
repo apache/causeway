@@ -32,7 +32,7 @@ public interface VersionResource {
 
     @GET
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_VERSION })
-    @ClientResponseType(entityType=String.class)
+    @ClientResponseType(entityType = String.class)
     public Response version();
 
 }

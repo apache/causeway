@@ -39,10 +39,10 @@ public class TableAxisImpl implements TableAxis {
     private final int[] widths;
 
     public TableAxisImpl(final CollectionContent content) {
-        // TODO create axis first, then after view built set up the axis details?
+        // TODO create axis first, then after view built set up the axis
+        // details?
         final ObjectSpecification elementSpecification = (content).getElementSpecification();
-        final List<ObjectAssociation> accessibleFields =
-            elementSpecification.getAssociations(ObjectAssociationFilters.STATICALLY_VISIBLE_ASSOCIATIONS);
+        final List<ObjectAssociation> accessibleFields = elementSpecification.getAssociations(ObjectAssociationFilters.STATICALLY_VISIBLE_ASSOCIATIONS);
 
         this.columns = tableFields(accessibleFields, content);
         widths = new int[columns.size()];
@@ -51,26 +51,29 @@ public class TableAxisImpl implements TableAxis {
             columnName[i] = columns.get(i).getName();
         }
 
-        // TODO make the setting of the column width strategy external so it can be changed
+        // TODO make the setting of the column width strategy external so it can
+        // be changed
         setupColumnWidths(new TypeBasedColumnWidthStrategy());
     }
 
     /*
-     * public TableAxis(final ObjectAssociation[] columns) { this.columns = columns; widths = new int[columns.length];
-     * columnName = new String[columns.length]; for (int i = 0; i < widths.length; i++) { columnName[i] =
-     * columns[i].getName(); } }
+     * public TableAxis(final ObjectAssociation[] columns) { this.columns =
+     * columns; widths = new int[columns.length]; columnName = new
+     * String[columns.length]; for (int i = 0; i < widths.length; i++) {
+     * columnName[i] = columns[i].getName(); } }
      */
-    private List<ObjectAssociation> tableFields(final List<ObjectAssociation> viewFields,
-        final CollectionContent content) {
+    private List<ObjectAssociation> tableFields(final List<ObjectAssociation> viewFields, final CollectionContent content) {
         for (int i = 0; i < viewFields.size(); i++) {
             // final ObjectAssociation objectAssociation = viewFields[i];
             // TODO reinstate check to skip unsuitable types
             /*
              * if (viewFields[i].getSpecification().isOfType(
-             * IsisContext.getSpecificationLoader().loadSpecification(ImageValue.class))) { continue; }
+             * IsisContext.getSpecificationLoader
+             * ().loadSpecification(ImageValue.class))) { continue; }
              */
 
-            // if (!objectAssociation.isVisible(IsisContext.getAuthenticationSession(),
+            // if
+            // (!objectAssociation.isVisible(IsisContext.getAuthenticationSession(),
             // content.getAdapter()).isAllowed()) {
             // continue;
             // }
@@ -94,8 +97,9 @@ public class TableAxisImpl implements TableAxis {
     }
 
     /**
-     * Returns the number of the column found at the specificied position, ignoring the columns two borders. Returns 0
-     * for the first column, 1 for second column, etc.
+     * Returns the number of the column found at the specificied position,
+     * ignoring the columns two borders. Returns 0 for the first column, 1 for
+     * second column, etc.
      * 
      * If over the column border then returns -1.
      */
@@ -116,8 +120,8 @@ public class TableAxisImpl implements TableAxis {
     }
 
     /**
-     * Returns 0 for left side of first column, 1 for right side of first column, 2 for right side of second column,
-     * etc.
+     * Returns 0 for left side of first column, 1 for right side of first
+     * column, 2 for right side of second column, etc.
      * 
      * If no column border is identified then returns -1.
      */

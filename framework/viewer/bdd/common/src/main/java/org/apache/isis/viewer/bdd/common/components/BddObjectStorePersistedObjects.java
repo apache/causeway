@@ -32,16 +32,17 @@ import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.simple.Sim
 import com.google.common.collect.Iterables;
 
 /**
- * Stores instances in one of two maps, based on whether have their specification has the {@link CachedFacet}
- * (represents cached or reference data) or not (represents operational data).
+ * Stores instances in one of two maps, based on whether have their
+ * specification has the {@link CachedFacet} (represents cached or reference
+ * data) or not (represents operational data).
  * <p>
- * Those that are cached are stored in a <tt>static</tt> map that is never {@link #clear()}ed down. Those that are
- * operational go in a regular instance cache and can be {@link #clear()}ed.
+ * Those that are cached are stored in a <tt>static</tt> map that is never
+ * {@link #clear()}ed down. Those that are operational go in a regular instance
+ * cache and can be {@link #clear()}ed.
  */
 public class BddObjectStorePersistedObjects implements ObjectStorePersistedObjects {
 
-    private static final Map<ObjectSpecification, ObjectStoreInstances> cachedInstancesBySpecMap =
-        new HashMap<ObjectSpecification, ObjectStoreInstances>();
+    private static final Map<ObjectSpecification, ObjectStoreInstances> cachedInstancesBySpecMap = new HashMap<ObjectSpecification, ObjectStoreInstances>();
 
     private final Map<ObjectSpecification, ObjectStoreInstances> operationalInstancesBySpecMap;
 
@@ -73,8 +74,7 @@ public class BddObjectStorePersistedObjects implements ObjectStorePersistedObjec
         final Oid oidLookedUpByName = serviceOidByIdMap.get(name);
         if (oidLookedUpByName != null) {
             if (!oidLookedUpByName.equals(oid)) {
-                throw new IsisException("Already another service registered as name: " + name + " (existing Oid: "
-                    + oidLookedUpByName + ", " + "intended: " + oid + ")");
+                throw new IsisException("Already another service registered as name: " + name + " (existing Oid: " + oidLookedUpByName + ", " + "intended: " + oid + ")");
             }
         } else {
             serviceOidByIdMap.put(name, oid);
@@ -83,14 +83,12 @@ public class BddObjectStorePersistedObjects implements ObjectStorePersistedObjec
 
     @Override
     public Iterable<ObjectSpecification> specifications() {
-        return Iterables.concat(BddObjectStorePersistedObjects.cachedInstancesBySpecMap.keySet(),
-            operationalInstancesBySpecMap.keySet());
+        return Iterables.concat(BddObjectStorePersistedObjects.cachedInstancesBySpecMap.keySet(), operationalInstancesBySpecMap.keySet());
     }
 
     @Override
     public Iterable<ObjectStoreInstances> instances() {
-        return Iterables.concat(BddObjectStorePersistedObjects.cachedInstancesBySpecMap.values(),
-            operationalInstancesBySpecMap.values());
+        return Iterables.concat(BddObjectStorePersistedObjects.cachedInstancesBySpecMap.values(), operationalInstancesBySpecMap.values());
     }
 
     @Override
@@ -106,8 +104,7 @@ public class BddObjectStorePersistedObjects implements ObjectStorePersistedObjec
     // Helpers
     // //////////////////////////////////////////////////////////////////
 
-    private ObjectStoreInstances getFromMap(final ObjectSpecification spec,
-        final Map<ObjectSpecification, ObjectStoreInstances> map) {
+    private ObjectStoreInstances getFromMap(final ObjectSpecification spec, final Map<ObjectSpecification, ObjectStoreInstances> map) {
         ObjectStoreInstances ins = map.get(spec);
         if (ins == null) {
             ins = new ObjectStoreInstances(spec);

@@ -45,7 +45,8 @@ public abstract class AbstractTableSpecification extends CompositeViewSpecificat
             // TODO do directly without specification
             @Override
             public View createView(final Content content, final Axes axes, final int sequence) {
-                // ViewSpecification rowSpecification = new SubviewIconSpecification();
+                // ViewSpecification rowSpecification = new
+                // SubviewIconSpecification();
                 return rowSpecification.createView(content, axes, -1);
             }
         });
@@ -78,8 +79,7 @@ public abstract class AbstractTableSpecification extends CompositeViewSpecificat
         } else {
             final CollectionContent collectionContent = (CollectionContent) requirement.getContent();
             final ObjectSpecification elementSpecification = collectionContent.getElementSpecification();
-            final List<ObjectAssociation> fields =
-                elementSpecification.getAssociations(ObjectAssociationFilters.STATICALLY_VISIBLE_ASSOCIATIONS);
+            final List<ObjectAssociation> fields = elementSpecification.getAssociations(ObjectAssociationFilters.STATICALLY_VISIBLE_ASSOCIATIONS);
             for (int i = 0; i < fields.size(); i++) {
                 if (fields.get(i).isOneToOneAssociation()) {
                     return true;
@@ -90,9 +90,11 @@ public abstract class AbstractTableSpecification extends CompositeViewSpecificat
     }
 
     /*
-     * protected View decorateView(View view) { TableAxis tableAxis = (TableAxis) view.getViewAxisForChildren();
-     * tableAxis.setRoot(view); return view; // return doCreateView(table, content, axis); } protected abstract View
-     * doCreateView(final View table, final Content content, final ViewAxis axis);
+     * protected View decorateView(View view) { TableAxis tableAxis =
+     * (TableAxis) view.getViewAxisForChildren(); tableAxis.setRoot(view);
+     * return view; // return doCreateView(table, content, axis); } protected
+     * abstract View doCreateView(final View table, final Content content, final
+     * ViewAxis axis);
      */
 
     @Override

@@ -25,10 +25,12 @@ import org.apache.isis.viewer.dnd.view.View;
 import org.apache.isis.viewer.dnd.view.base.Layout;
 
 /**
- * A stack layout stacks its components vertically, one on top of the other, working down from the top. Each component
- * is given the space it requests. Components adopt the width of the widest component when that component's view
- * specification's <code>isAligned</code> method returns <code>true</code>, or the layout's <code>fixedWidth</code> flag
- * is set (via the two parameter constructor).
+ * A stack layout stacks its components vertically, one on top of the other,
+ * working down from the top. Each component is given the space it requests.
+ * Components adopt the width of the widest component when that component's view
+ * specification's <code>isAligned</code> method returns <code>true</code>, or
+ * the layout's <code>fixedWidth</code> flag is set (via the two parameter
+ * constructor).
  * 
  */
 public class StackLayout implements Layout {

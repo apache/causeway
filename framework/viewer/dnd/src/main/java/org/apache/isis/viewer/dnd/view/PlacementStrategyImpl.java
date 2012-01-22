@@ -39,11 +39,9 @@ public class PlacementStrategyImpl implements PlacementStrategy {
         final Location newLocation = new Location(rootViewLocation);
         final Size requiredSize = newView.getView().getRequiredSize(Size.createMax());
 
-        if (rootViewLocation.getX() + rootViewSize.getWidth() + PADDING + requiredSize.getWidth() < workspaceSize
-            .getWidth()) {
+        if (rootViewLocation.getX() + rootViewSize.getWidth() + PADDING + requiredSize.getWidth() < workspaceSize.getWidth()) {
             newLocation.add(rootViewSize.getWidth() + PADDING, 0);
-        } else if (rootViewLocation.getY() + rootViewSize.getHeight() + PADDING + requiredSize.getHeight() < workspaceSize
-            .getHeight()) {
+        } else if (rootViewLocation.getY() + rootViewSize.getHeight() + PADDING + requiredSize.getHeight() < workspaceSize.getHeight()) {
             newLocation.add(0, rootViewSize.getHeight() + PADDING);
         } else if (requiredSize.getWidth() + PADDING < rootViewLocation.getX()) {
             newLocation.subtract(requiredSize.getWidth() + PADDING, 0);
@@ -61,8 +59,7 @@ public class PlacementStrategyImpl implements PlacementStrategy {
 
         final Location firstAttempt = new Location(newLocation);
 
-        while (workspace.subviewFor(newLocation) != null
-            && workspace.subviewFor(newLocation).getLocation().equals(newLocation)) {
+        while (workspace.subviewFor(newLocation) != null && workspace.subviewFor(newLocation).getLocation().equals(newLocation)) {
             newLocation.add(PADDING * 4, PADDING * 4);
             ensureWidth(newLocation, maxSpaceToLeft);
             ensureHeight(newLocation, maxSpaceAbove);

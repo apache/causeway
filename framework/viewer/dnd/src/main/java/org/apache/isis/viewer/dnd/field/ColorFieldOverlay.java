@@ -28,12 +28,14 @@ import org.apache.isis.viewer.dnd.view.Toolkit;
 import org.apache.isis.viewer.dnd.view.base.AbstractView;
 
 class ColorFieldOverlay extends AbstractView {
-    private static final int colors[] = new int[] { 0xffffff, 0x0, 0x666666, 0xcccccc, // white, black, dark
-        // gray, light gray
-        0x000099, 0x0066cc, 0x0033ff, 0x99ccff, // blues
-        0x990000, 0xff0033, 0xcc0066, 0xff66ff, // reds
-        0x003300, 0x00ff33, 0x669933, 0xccff66 // greens
-        };
+    private static final int colors[] = new int[] { 0xffffff, 0x0, 0x666666, 0xcccccc, // white,
+                                                                                       // black,
+                                                                                       // dark
+            // gray, light gray
+            0x000099, 0x0066cc, 0x0033ff, 0x99ccff, // blues
+            0x990000, 0xff0033, 0xcc0066, 0xff66ff, // reds
+            0x003300, 0x00ff33, 0x669933, 0xccff66 // greens
+    };
     private static final int COLUMNS = 4;
     private static final int ROWS = 4;
     private static final int ROW_HEIGHT = 18;
@@ -54,16 +56,14 @@ class ColorFieldOverlay extends AbstractView {
 
     @Override
     public void draw(final Canvas canvas) {
-        canvas.drawSolidRectangle(0, 0, COLUMNS * COLUMN_WIDTH - 1, ROWS * ROW_HEIGHT - 1,
-            Toolkit.getColor(ColorsAndFonts.COLOR_SECONDARY3));
+        canvas.drawSolidRectangle(0, 0, COLUMNS * COLUMN_WIDTH - 1, ROWS * ROW_HEIGHT - 1, Toolkit.getColor(ColorsAndFonts.COLOR_SECONDARY3));
         for (int i = 0; i < colors.length; i++) {
             final Color color = Toolkit.getColor(colors[i]);
             final int y = i / COLUMNS * ROW_HEIGHT;
             final int x = i % COLUMNS * COLUMN_WIDTH;
             canvas.drawSolidRectangle(x, y, COLUMN_WIDTH - 1, ROW_HEIGHT - 1, color);
         }
-        canvas.drawRectangle(0, 0, COLUMNS * COLUMN_WIDTH - 1, ROWS * ROW_HEIGHT - 1,
-            Toolkit.getColor(ColorsAndFonts.COLOR_PRIMARY2));
+        canvas.drawRectangle(0, 0, COLUMNS * COLUMN_WIDTH - 1, ROWS * ROW_HEIGHT - 1, Toolkit.getColor(ColorsAndFonts.COLOR_PRIMARY2));
     }
 
     @Override

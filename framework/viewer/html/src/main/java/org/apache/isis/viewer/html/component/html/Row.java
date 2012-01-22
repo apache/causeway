@@ -27,7 +27,7 @@ import org.apache.isis.viewer.html.component.ComponentComposite;
 
 class Row extends ComponentComposite {
 
-    public Row(PathBuilder pathBuilder) {
+    public Row(final PathBuilder pathBuilder) {
         super(pathBuilder);
     }
 

@@ -43,9 +43,7 @@ import org.apache.isis.viewer.html.context.Context;
 public class EditTask extends Task {
 
     private static int size(final ObjectAdapter object) {
-        final List<ObjectAssociation> fields =
-            object.getSpecification().getAssociations(
-                ObjectAssociationFilters.dynamicallyVisible(getAuthenticationSession(), object));
+        final List<ObjectAssociation> fields = object.getSpecification().getAssociations(ObjectAssociationFilters.dynamicallyVisible(getAuthenticationSession(), object));
         return fields.size();
     }
 
@@ -59,9 +57,7 @@ public class EditTask extends Task {
     public EditTask(final Context context, final ObjectAdapter object) {
         super(context, "Edit", "", object, size(object));
 
-        final List<ObjectAssociation> allFields =
-            object.getSpecification().getAssociations(
-                ObjectAssociationFilters.dynamicallyVisible(getAuthenticationSession(), object));
+        final List<ObjectAssociation> allFields = object.getSpecification().getAssociations(ObjectAssociationFilters.dynamicallyVisible(getAuthenticationSession(), object));
 
         fields = new ObjectAssociation[names.length];
         for (int i = 0, j = 0; j < allFields.size(); j++) {
@@ -149,9 +145,7 @@ public class EditTask extends Task {
         final ObjectAdapter[] entryAdapters = getEntries(context);
 
         if (targetAdapter.isTransient()) {
-            final ObjectAction action =
-                targetAdapter.getSpecification().getObjectAction(ActionType.USER, "save",
-                    ObjectSpecification.EMPTY_LIST);
+            final ObjectAction action = targetAdapter.getSpecification().getObjectAction(ActionType.USER, "save", ObjectSpecification.EMPTY_LIST);
             if (action == null) {
                 getPersistenceSession().makePersistent(targetAdapter);
             } else {
@@ -208,7 +202,7 @@ public class EditTask extends Task {
     public String getName() {
         if (newType == null) {
             return super.getName();
-        } 
+        }
         return "New " + newType;
     }
 
@@ -223,6 +217,5 @@ public class EditTask extends Task {
     private static AuthenticationSession getAuthenticationSession() {
         return IsisContext.getAuthenticationSession();
     }
-
 
 }

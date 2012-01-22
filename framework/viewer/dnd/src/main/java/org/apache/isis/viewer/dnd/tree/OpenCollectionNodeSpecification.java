@@ -30,14 +30,16 @@ import org.apache.isis.viewer.dnd.view.composite.CollectionElementBuilder;
 import org.apache.isis.viewer.dnd.view.composite.StackLayout;
 
 /**
- * Specification for a tree node that will display an open collection as a root node or within an object.
+ * Specification for a tree node that will display an open collection as a root
+ * node or within an object.
  * 
- * @see org.apache.isis.viewer.dnd.tree.ClosedCollectionNodeSpecification for displaying a closed collection within an
- *      object.
+ * @see org.apache.isis.viewer.dnd.tree.ClosedCollectionNodeSpecification for
+ *      displaying a closed collection within an object.
  */
 public class OpenCollectionNodeSpecification extends CompositeNodeSpecification {
     /**
-     * A collection tree can only be displayed for a collection that has elements.
+     * A collection tree can only be displayed for a collection that has
+     * elements.
      */
     @Override
     public boolean canDisplay(final ViewRequirement requirement) {

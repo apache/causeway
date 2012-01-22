@@ -44,11 +44,11 @@ import org.apache.wicket.markup.html.form.FormComponentPanel;
 import org.apache.wicket.model.IModel;
 
 /**
- * Convenience adapter for {@link FormComponent}s that are implemented using the Wicket {@link FormComponentPanel},
- * providing the ability to build up the panel using other {@link ComponentType}s.
+ * Convenience adapter for {@link FormComponent}s that are implemented using the
+ * Wicket {@link FormComponentPanel}, providing the ability to build up the
+ * panel using other {@link ComponentType}s.
  */
-public abstract class FormComponentPanelAbstract<T> extends FormComponentPanel<T> implements
-    PersistenceSessionAccessor, AuthenticationSessionAccessor {
+public abstract class FormComponentPanelAbstract<T> extends FormComponentPanel<T> implements PersistenceSessionAccessor, AuthenticationSessionAccessor {
 
     private static final long serialVersionUID = 1L;
 
@@ -132,7 +132,8 @@ public abstract class FormComponentPanelAbstract<T> extends FormComponentPanel<T
     }
 
     /**
-     * The underlying {@link AuthenticationSession Isis session} wrapped in the {@link #getWebSession() Wicket session}.
+     * The underlying {@link AuthenticationSession Isis session} wrapped in the
+     * {@link #getWebSession() Wicket session}.
      * 
      * @return
      */

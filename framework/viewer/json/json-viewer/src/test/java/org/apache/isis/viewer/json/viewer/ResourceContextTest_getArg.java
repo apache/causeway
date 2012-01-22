@@ -18,7 +18,7 @@
  */
 package org.apache.isis.viewer.json.viewer;
 
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertThat;
 
 import javax.servlet.http.HttpServletRequest;
@@ -28,7 +28,6 @@ import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2.Mode;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.applib.RepresentationType;
 import org.apache.isis.viewer.json.applib.RestfulRequest.RequestParameter;
-import org.apache.isis.viewer.json.applib.util.Parser;
 import org.apache.isis.viewer.json.applib.util.UrlEncodingUtils;
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
@@ -36,7 +35,7 @@ import org.junit.Rule;
 import org.junit.Test;
 
 public class ResourceContextTest_getArg {
-    
+
     @Rule
     public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
 
@@ -44,13 +43,13 @@ public class ResourceContextTest_getArg {
     private HttpServletRequest httpServletRequest;
     @Mock
     private ResourceContext resourceContext;
-    
+
     private String queryString;
 
     @Test
     public void whenArgExists() throws Exception {
         queryString = UrlEncodingUtils.asUrlEncoded(JsonRepresentation.newMap("x-ro-page", "123").asJsonNode());
-         
+
         context.checking(new Expectations() {
             {
                 one(httpServletRequest).getQueryString();
@@ -59,18 +58,18 @@ public class ResourceContextTest_getArg {
         });
         resourceContext = new ResourceContext(null, null, null, null, httpServletRequest, null, null, null, null, null, null, null, null) {
             @Override
-            void init(RepresentationType representationType) {
+            void init(final RepresentationType representationType) {
                 //
             }
         };
         final Integer arg = resourceContext.getArg(RequestParameter.PAGE);
         assertThat(arg, equalTo(123));
     }
-    
+
     @Test
     public void whenArgDoesNotExist() throws Exception {
         queryString = UrlEncodingUtils.asUrlEncoded(JsonRepresentation.newMap("xxx", "123").asJsonNode());
-         
+
         context.checking(new Expectations() {
             {
                 one(httpServletRequest).getQueryString();
@@ -79,7 +78,7 @@ public class ResourceContextTest_getArg {
         });
         resourceContext = new ResourceContext(null, null, null, null, httpServletRequest, null, null, null, null, null, null, null, null) {
             @Override
-            void init(RepresentationType representationType) {
+            void init(final RepresentationType representationType) {
                 //
             }
         };

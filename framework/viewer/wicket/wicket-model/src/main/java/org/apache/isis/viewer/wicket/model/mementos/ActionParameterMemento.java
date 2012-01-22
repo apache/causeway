@@ -26,7 +26,8 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 
 /**
- * {@link Serializable} representation of a {@link ObjectActioneter parameter} of a {@link ObjecObjectAction}.
+ * {@link Serializable} representation of a {@link ObjectActioneter parameter}
+ * of a {@link ObjecObjectAction}.
  * 
  * @see ActionMemento
  */

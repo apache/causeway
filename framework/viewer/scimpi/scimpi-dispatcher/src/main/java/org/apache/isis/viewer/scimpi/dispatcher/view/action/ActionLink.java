@@ -38,8 +38,7 @@ public class ActionLink extends AbstractElementProcessor {
         final String forwardResultTo = request.getOptionalProperty(VIEW);
         final String forwardVoidTo = request.getOptionalProperty(VOID);
         final String resultOverride = request.getOptionalProperty(RESULT_OVERRIDE);
-        final String resultOverrideSegment =
-            resultOverride == null ? "" : "&amp;" + RESULT_OVERRIDE + "=" + resultOverride;
+        final String resultOverrideSegment = resultOverride == null ? "" : "&amp;" + RESULT_OVERRIDE + "=" + resultOverride;
         final String resultName = request.getOptionalProperty(RESULT_NAME);
         final String resultNameSegment = resultName == null ? "" : "&amp;" + RESULT_NAME + "=" + resultName;
         final String scope = request.getOptionalProperty(SCOPE);
@@ -47,10 +46,10 @@ public class ActionLink extends AbstractElementProcessor {
         final String confirm = request.getOptionalProperty(CONFIRM);
         final String completionMessage = request.getOptionalProperty(MESSAGE);
 
-        // TODO need a mechanism for globally dealing with encoding; then use the new encode method
+        // TODO need a mechanism for globally dealing with encoding; then use
+        // the new encode method
         final String confirmSegment = confirm == null ? "" : "&amp;" + "_" + CONFIRM + "=" + URLEncoder.encode(confirm);
-        final String messageSegment =
-            completionMessage == null ? "" : "&amp;" + "_" + MESSAGE + "=" + URLEncoder.encode(completionMessage);
+        final String messageSegment = completionMessage == null ? "" : "&amp;" + "_" + MESSAGE + "=" + URLEncoder.encode(completionMessage);
 
         final RequestContext context = request.getContext();
         final ObjectAdapter object = MethodsUtils.findObject(context, objectId);
@@ -64,16 +63,13 @@ public class ActionLink extends AbstractElementProcessor {
         final String text = request.popBuffer();
 
         if (MethodsUtils.isVisibleAndUsable(object, action)) {
-            writeLink(request, objectId, version, method, forwardResultTo, forwardVoidTo, resultNameSegment,
-                scopeSegment, confirmSegment, messageSegment, context, action, parameterBlock, text);
+            writeLink(request, objectId, version, method, forwardResultTo, forwardVoidTo, resultNameSegment, scopeSegment, confirmSegment, messageSegment, context, action, parameterBlock, text);
         }
         request.popBlockContent();
     }
 
-    public static void writeLink(final Request request, final String objectId, final String version,
-        final String method, final String forwardResultTo, final String forwardVoidTo, final String resultNameSegment,
-        final String scopeSegment, final String confirmSegment, final String messageSegment,
-        final RequestContext context, final ObjectAction action, final ActionContent parameterBlock, String text) {
+    public static void writeLink(final Request request, final String objectId, final String version, final String method, final String forwardResultTo, final String forwardVoidTo, final String resultNameSegment, final String scopeSegment, final String confirmSegment, final String messageSegment,
+            final RequestContext context, final ObjectAction action, final ActionContent parameterBlock, String text) {
         text = text == null || text.trim().equals("") ? action.getName() : text;
 
         String parameterSegment = "";
@@ -83,14 +79,11 @@ public class ActionLink extends AbstractElementProcessor {
         }
 
         final String interactionParamters = context.encodedInteractionParameters();
-        final String forwardResultSegment =
-            forwardResultTo == null ? "" : "&amp;" + "_" + VIEW + "=" + context.fullFilePath(forwardResultTo);
+        final String forwardResultSegment = forwardResultTo == null ? "" : "&amp;" + "_" + VIEW + "=" + context.fullFilePath(forwardResultTo);
         final String voidView = context.fullFilePath(forwardVoidTo == null ? context.getResourceFile() : forwardVoidTo);
         final String forwardVoidSegment = "&amp;" + "_" + VOID + "=" + voidView;
-        request.appendHtml("<a href=\"action.app?" + "_" + OBJECT + "=" + objectId + "&amp;" + "_" + VERSION + "="
-            + version + "&amp;" + "_" + METHOD + "=" + method + forwardResultSegment + forwardVoidSegment
-            + resultNameSegment + parameterSegment + scopeSegment + confirmSegment + messageSegment
-            + interactionParamters + "\">");
+        request.appendHtml("<a href=\"action.app?" + "_" + OBJECT + "=" + objectId + "&amp;" + "_" + VERSION + "=" + version + "&amp;" + "_" + METHOD + "=" + method + forwardResultSegment + forwardVoidSegment + resultNameSegment + parameterSegment + scopeSegment + confirmSegment + messageSegment
+                + interactionParamters + "\">");
         request.appendAsHtmlEncoded(text);
         request.appendHtml("</a>");
         HelpLink.append(request, action.getDescription(), action.getHelp());

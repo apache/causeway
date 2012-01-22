@@ -24,14 +24,11 @@ import java.io.PrintWriter;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
-import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.html.component.Page;
 import org.apache.isis.viewer.html.component.html.HtmlComponentFactory;
 import org.apache.isis.viewer.html.context.Context;
@@ -41,7 +38,7 @@ import org.apache.isis.viewer.html.servlet.internal.WebController;
 import org.apache.log4j.Logger;
 
 public class ControllerServlet extends AbstractHtmlViewerServlet {
-    
+
     private static final long serialVersionUID = 1L;
     private static final Logger LOG = Logger.getLogger(ControllerServlet.class);
 
@@ -71,20 +68,17 @@ public class ControllerServlet extends AbstractHtmlViewerServlet {
     // //////////////////////////////////////////////////////////////////
 
     @Override
-    protected void doPost(final HttpServletRequest request, final HttpServletResponse response)
-        throws ServletException, IOException {
+    protected void doPost(final HttpServletRequest request, final HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding(encoding);
         processRequest(request, response);
     }
 
     @Override
-    protected void doGet(final HttpServletRequest request, final HttpServletResponse response) throws ServletException,
-        IOException {
+    protected void doGet(final HttpServletRequest request, final HttpServletResponse response) throws ServletException, IOException {
         processRequest(request, response);
     }
 
-    private void processRequest(final HttpServletRequest request, final HttpServletResponse response)
-        throws ServletException, IOException {
+    private void processRequest(final HttpServletRequest request, final HttpServletResponse response) throws ServletException, IOException {
         LOG.info("request: " + request.getServletPath() + "?" + request.getQueryString());
 
         final Request req = new ServletRequest(request);
@@ -106,8 +100,7 @@ public class ControllerServlet extends AbstractHtmlViewerServlet {
 
     private Context getContextForRequest(final HttpServletRequest request) {
         final AuthenticationSession authenticationSession = getAuthenticationSession();
-        Context context =
-            (Context) authenticationSession.getAttribute(HtmlServletConstants.AUTHENTICATION_SESSION_CONTEXT_KEY);
+        Context context = (Context) authenticationSession.getAttribute(HtmlServletConstants.AUTHENTICATION_SESSION_CONTEXT_KEY);
         if (context == null || !context.isValid()) {
             // TODO reuse the component factory
             context = new Context(getNewHtmlComponentFactory());
@@ -120,8 +113,7 @@ public class ControllerServlet extends AbstractHtmlViewerServlet {
         return new HtmlComponentFactory(getPathBuilder());
     }
 
-    private void processRequest(final HttpServletRequest request, final HttpServletResponse response,
-        final Request req, final Context context) throws IOException, ServletException {
+    private void processRequest(final HttpServletRequest request, final HttpServletResponse response, final Request req, final Context context) throws IOException, ServletException {
         response.setContentType("text/html");
 
         // no need to check if logged in; the IsisSessionFilter would
@@ -162,6 +154,5 @@ public class ControllerServlet extends AbstractHtmlViewerServlet {
         page.addDebug("Context path", request.getContextPath());
         page.addDebug("Path info", request.getPathInfo());
     }
-
 
 }

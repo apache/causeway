@@ -32,8 +32,7 @@ public class SwfTag implements Snippet {
     private final String lineNumbers;
     private final String path;
 
-    public SwfTag(final String tagName, final Attributes attributes, final int type, final String lineNumbers,
-        final String path) {
+    public SwfTag(final String tagName, final Attributes attributes, final int type, final String lineNumbers, final String path) {
         this.tagName = tagName;
         this.attributes = attributes;
         this.type = type;
@@ -71,15 +70,15 @@ public class SwfTag implements Snippet {
     public String toString() {
         String t = null;
         switch (type) {
-            case EMPTY:
-                t = "empty";
-                break;
-            case START:
-                t = "start";
-                break;
-            case END:
-                t = "end";
-                break;
+        case EMPTY:
+            t = "empty";
+            break;
+        case START:
+            t = "start";
+            break;
+        case END:
+            t = "end";
+            break;
         }
         return "SwfTag[name=" + tagName + ",path=" + path + ",line=" + lineNumbers + ",type=" + t + "]";
     }

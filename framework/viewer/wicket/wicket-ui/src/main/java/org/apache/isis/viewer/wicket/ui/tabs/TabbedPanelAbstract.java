@@ -24,7 +24,8 @@ import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.model.IModel;
 
 /**
- * Adapter class for tabbed panels; does very little in itself, but does ensure that the CSS needed is rendered.
+ * Adapter class for tabbed panels; does very little in itself, but does ensure
+ * that the CSS needed is rendered.
  */
 public abstract class TabbedPanelAbstract<T extends IModel<?>> extends PanelAbstract<T> {
 

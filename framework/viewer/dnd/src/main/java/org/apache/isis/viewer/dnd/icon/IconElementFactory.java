@@ -35,8 +35,7 @@ public class IconElementFactory implements ViewFactory {
         this(null, null, false);
     }
 
-    public IconElementFactory(final ViewSpecification objectSpec, final ViewSpecification collectionSpec,
-        final boolean createViewsForEmptyContent) {
+    public IconElementFactory(final ViewSpecification objectSpec, final ViewSpecification collectionSpec, final boolean createViewsForEmptyContent) {
         this.objectSpec = this.objectSpec == null ? new SubviewIconSpecification() : objectSpec;
         this.collectionSpec = this.collectionSpec == null ? new SubviewIconSpecification() : collectionSpec;
         this.createViewsForEmptyContent = createViewsForEmptyContent;
@@ -53,7 +52,8 @@ public class IconElementFactory implements ViewFactory {
         } else if (content.isCollection()) {
             return collectionSpec.createView(content, axes, -1);
         } else {
-            // TODO decide what to do with values: use factory, use another SubviewSpec, or ignore always
+            // TODO decide what to do with values: use factory, use another
+            // SubviewSpec, or ignore always
             return null;
         }
     }

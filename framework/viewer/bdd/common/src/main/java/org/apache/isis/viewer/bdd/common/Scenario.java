@@ -62,15 +62,19 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 
 /**
- * Holds the bootstrapped {@link IsisSystem} and provides access to the {@link AliasRegistry aliases}.
+ * Holds the bootstrapped {@link IsisSystem} and provides access to the
+ * {@link AliasRegistry aliases}.
  * 
  * <p>
- * Typically held in a thread-local by the test framework, acting as a context to the story.
+ * Typically held in a thread-local by the test framework, acting as a context
+ * to the story.
  * 
  * <p>
- * Implementation note: this class directly implements {@link AliasRegistrySpi}, though delegates to an underlying
- * {@link AliasRegistryDefault}. This is needed because the underlying {@link AliasRegistry} can change on
- * {@link #switchUserWithRoles(String, String)} (see {@link #reAdapt(AliasRegistrySpi)} method).
+ * Implementation note: this class directly implements {@link AliasRegistrySpi},
+ * though delegates to an underlying {@link AliasRegistryDefault}. This is
+ * needed because the underlying {@link AliasRegistry} can change on
+ * {@link #switchUserWithRoles(String, String)} (see
+ * {@link #reAdapt(AliasRegistrySpi)} method).
  */
 public class Scenario implements AliasRegistryHolder {
 
@@ -108,12 +112,9 @@ public class Scenario implements AliasRegistryHolder {
     @SuppressWarnings("unchecked")
     public void bootstrapIsis(final String configDirectory, final DeploymentType deploymentType) {
         this.configDirectory = configDirectory;
-        this.deploymentType =
-            ensureThatArg(deploymentType,
-                is(anyOf(equalTo(DeploymentType.EXPLORATION), equalTo(DeploymentType.PROTOTYPE))));
+        this.deploymentType = ensureThatArg(deploymentType, is(anyOf(equalTo(DeploymentType.EXPLORATION), equalTo(DeploymentType.PROTOTYPE))));
 
-        final IsisConfigurationBuilderFileSystem configurationBuilder =
-            new IsisConfigurationBuilderFileSystem(getConfigDirectory());
+        final IsisConfigurationBuilderFileSystem configurationBuilder = new IsisConfigurationBuilderFileSystem(getConfigDirectory());
 
         configurationBuilder.add(SystemConstants.DEPLOYMENT_TYPE_KEY, deploymentType.name());
         defaultStoryComponentsInto(configurationBuilder);
@@ -135,8 +136,7 @@ public class Scenario implements AliasRegistryHolder {
         }
     }
 
-    private IsisSystem createSystem(final DeploymentType deploymentType,
-        final IsisConfigurationBuilder isisConfigurationBuilder) {
+    private IsisSystem createSystem(final DeploymentType deploymentType, final IsisConfigurationBuilder isisConfigurationBuilder) {
         this.installerLookup = new InstallerLookupDefault();
         isisConfigurationBuilder.injectInto(installerLookup);
 
@@ -146,18 +146,14 @@ public class Scenario implements AliasRegistryHolder {
     }
 
     private void defaultStoryComponentsInto(final IsisConfigurationBuilder isisConfigurationBuilder) {
-        isisConfigurationBuilder.add(SystemConstants.AUTHENTICATION_INSTALLER_KEY,
-            BddAuthenticationManagerInstaller.class.getName());
-        isisConfigurationBuilder.add(SystemConstants.OBJECT_PERSISTOR_INSTALLER_KEY,
-            BddInMemoryPersistenceMechanismInstaller.class.getName());
-        isisConfigurationBuilder.add(SystemConstants.PROFILE_PERSISTOR_INSTALLER_KEY,
-            InMemoryUserProfileStoreInstaller.class.getName());
+        isisConfigurationBuilder.add(SystemConstants.AUTHENTICATION_INSTALLER_KEY, BddAuthenticationManagerInstaller.class.getName());
+        isisConfigurationBuilder.add(SystemConstants.OBJECT_PERSISTOR_INSTALLER_KEY, BddInMemoryPersistenceMechanismInstaller.class.getName());
+        isisConfigurationBuilder.add(SystemConstants.PROFILE_PERSISTOR_INSTALLER_KEY, InMemoryUserProfileStoreInstaller.class.getName());
         isisConfigurationBuilder.add(SystemConstants.FIXTURES_INSTALLER_KEY, FixturesInstallerNoop.class.getName());
         isisConfigurationBuilder.add(SystemConstants.NOSPLASH_KEY, "" + true);
     }
 
-    private Injector createGuiceInjector(final DeploymentType deploymentType,
-        final IsisConfigurationBuilder isisConfigurationBuilder, final InstallerLookup installerLookup) {
+    private Injector createGuiceInjector(final DeploymentType deploymentType, final IsisConfigurationBuilder isisConfigurationBuilder, final InstallerLookup installerLookup) {
         final IsisModule isisModule = new IsisModule(deploymentType, isisConfigurationBuilder, installerLookup);
         return Guice.createInjector(isisModule);
     }
@@ -183,8 +179,9 @@ public class Scenario implements AliasRegistryHolder {
     /**
      * Logon, specifying no roles.
      * <p>
-     * Unlike the {@link LogonFixture} on regular fixtures, the logonAs is not automatically remembered until the end of
-     * the setup. It should therefore be invoked at the end of setup explicitly.
+     * Unlike the {@link LogonFixture} on regular fixtures, the logonAs is not
+     * automatically remembered until the end of the setup. It should therefore
+     * be invoked at the end of setup explicitly.
      */
     public void logonAsOrSwitchUserTo(final String userName) {
         final List<String> noRoles = Collections.emptyList();
@@ -194,8 +191,9 @@ public class Scenario implements AliasRegistryHolder {
     /**
      * Logon, specifying roles.
      * <p>
-     * Unlike the {@link LogonFixture} on regular Isis fixtures, the logonAs is not automatically remembered until the
-     * end of the setup. It should therefore be invoked at the end of setup explicitly.
+     * Unlike the {@link LogonFixture} on regular Isis fixtures, the logonAs is
+     * not automatically remembered until the end of the setup. It should
+     * therefore be invoked at the end of setup explicitly.
      */
     public void logonAsOrSwitchUserTo(final String userName, final List<String> roleList) {
         new OpenSession(this).openSession(userName, roleList);

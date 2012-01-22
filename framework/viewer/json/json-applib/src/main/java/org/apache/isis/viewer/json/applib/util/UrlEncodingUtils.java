@@ -33,40 +33,41 @@ import com.google.common.collect.Lists;
 public final class UrlEncodingUtils {
 
     public final static Function<String, String> FUNCTION = new Function<String, String>() {
-        
+
         @Override
-        public String apply(String input) {
+        public String apply(final String input) {
             try {
                 return URLDecoder.decode(input, "UTF-8");
-            } catch (UnsupportedEncodingException e) {
+            } catch (final UnsupportedEncodingException e) {
                 return "";
             }
         }
     };
 
-    private UrlEncodingUtils() {}
+    private UrlEncodingUtils() {
+    }
 
-    public static String urlDecode(String string) {
+    public static String urlDecode(final String string) {
         return FUNCTION.apply(string);
     }
 
-    public static List<String> urlDecode(List<String> values) {
+    public static List<String> urlDecode(final List<String> values) {
         return Lists.transform(values, FUNCTION);
     }
 
-    public static String[] urlDecode(String[] values) {
+    public static String[] urlDecode(final String[] values) {
         final List<String> asList = Arrays.asList(values);
-        return urlDecode(asList).toArray(new String[]{});
+        return urlDecode(asList).toArray(new String[] {});
     }
 
-    public static String asUrlEncoded(JsonNode jsonNode) {
+    public static String asUrlEncoded(final JsonNode jsonNode) {
         return UrlEncodingUtils.asUrlEncoded(jsonNode.toString());
     }
 
     public static String asUrlEncoded(final String str) {
         try {
             return URLEncoder.encode(str, Charsets.UTF_8.name());
-        } catch (UnsupportedEncodingException e) {
+        } catch (final UnsupportedEncodingException e) {
             // shouldn't happen
             throw new RuntimeException(e);
         }

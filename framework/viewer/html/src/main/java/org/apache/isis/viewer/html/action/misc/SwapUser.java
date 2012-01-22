@@ -36,9 +36,9 @@ public class SwapUser implements Action {
         final ViewPane content = page.getViewPane();
         content.setTitle("Swap Exploration User", null);
 
-        // TODO pick out users from the perspectives, but only show when in exploration mode
-        final String users =
-            IsisContext.getConfiguration().getString(ExplorationAuthenticatorConstants.USERS);
+        // TODO pick out users from the perspectives, but only show when in
+        // exploration mode
+        final String users = IsisContext.getConfiguration().getString(ExplorationAuthenticatorConstants.USERS);
         if (users != null) {
             final StringTokenizer st = new StringTokenizer(users, ",");
             if (st.countTokens() > 0) {
@@ -57,14 +57,19 @@ public class SwapUser implements Action {
 
         // TODO find user list and interate through them
         /*
-         * content.add(context.getFactory().createInlineBlock("title", AboutIsis.getApplicationName(), null));
-         * content.add(context.getFactory().createInlineBlock("title", AboutIsis.getApplicationVersion(), null));
-         * content.add(context.getFactory().createInlineBlock("title", AboutIsis.getApplicationCopyrightNotice(),
-         * null));
+         * content.add(context.getFactory().createInlineBlock("title",
+         * AboutIsis.getApplicationName(), null));
+         * content.add(context.getFactory().createInlineBlock("title",
+         * AboutIsis.getApplicationVersion(), null));
+         * content.add(context.getFactory().createInlineBlock("title",
+         * AboutIsis.getApplicationCopyrightNotice(), null));
          * 
-         * content.add(context.getFactory().createInlineBlock("title", AboutIsis.getFrameworkName(), null));
-         * content.add(context.getFactory().createInlineBlock("title", AboutIsis.getFrameworkVersion(), null));
-         * content.add(context.getFactory().createInlineBlock("title", AboutIsis.getFrameworkCopyrightNotice(), null));
+         * content.add(context.getFactory().createInlineBlock("title",
+         * AboutIsis.getFrameworkName(), null));
+         * content.add(context.getFactory().createInlineBlock("title",
+         * AboutIsis.getFrameworkVersion(), null));
+         * content.add(context.getFactory().createInlineBlock("title",
+         * AboutIsis.getFrameworkCopyrightNotice(), null));
          */
     }
 

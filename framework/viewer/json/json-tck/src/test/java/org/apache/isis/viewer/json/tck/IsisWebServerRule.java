@@ -26,19 +26,20 @@ import org.junit.runners.model.Statement;
 public class IsisWebServerRule implements MethodRule {
 
     private static ThreadLocal<WebServer> WEBSERVER = new ThreadLocal<WebServer>() {
+        @Override
         protected WebServer initialValue() {
-            WebServer webServer = new WebServer();
+            final WebServer webServer = new WebServer();
             webServer.run(39393);
             return webServer;
         };
-    }; 
-    
+    };
+
     @Override
-    public Statement apply(Statement base, FrameworkMethod method, Object target) {
+    public Statement apply(final Statement base, final FrameworkMethod method, final Object target) {
         getWebServer(); // creates and starts running if required
         return base;
     }
-    
+
     public WebServer getWebServer() {
         return WEBSERVER.get();
     }

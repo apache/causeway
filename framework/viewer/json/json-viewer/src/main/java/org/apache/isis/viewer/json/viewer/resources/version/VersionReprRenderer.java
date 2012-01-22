@@ -41,40 +41,40 @@ public class VersionReprRenderer extends ReprRendererAbstract<VersionReprRendere
         }
 
         @Override
-        public ReprRenderer<?, ?> newRenderer(ResourceContext resourceContext, LinkFollower linkFollower, JsonRepresentation representation) {
+        public ReprRenderer<?, ?> newRenderer(final ResourceContext resourceContext, final LinkFollower linkFollower, final JsonRepresentation representation) {
             return new VersionReprRenderer(resourceContext, linkFollower, getRepresentationType(), representation);
         }
     }
-    
-    private VersionReprRenderer(ResourceContext resourceContext, LinkFollower linkFollower, RepresentationType representationType, JsonRepresentation representation) {
+
+    private VersionReprRenderer(final ResourceContext resourceContext, final LinkFollower linkFollower, final RepresentationType representationType, final JsonRepresentation representation) {
         super(resourceContext, linkFollower, representationType, representation);
     }
 
     @Override
-    public VersionReprRenderer with(Void t) {
+    public VersionReprRenderer with(final Void t) {
         return this;
     }
 
     @Override
     public JsonRepresentation render() {
 
-        if(includesSelf) {
+        if (includesSelf) {
             withSelf("version/");
         }
 
         representation.mapPut("specVersion", JsonApplication.SPEC_VERSION);
         representation.mapPut("implVersion", versionFromManifest());
-        
+
         putOptionalCapabilities();
         putExtensions();
-        
+
         return representation;
     }
 
     private static String versionFromManifest() {
         try {
             return Resources.toString(Resources.getResource(META_INF_POM_PROPERTIES), Charset.defaultCharset());
-        } catch (Exception ex) {
+        } catch (final Exception ex) {
             return "UNKNOWN";
         }
     }
@@ -95,7 +95,7 @@ public class VersionReprRenderer extends ReprRendererAbstract<VersionReprRendere
 
         representation.mapPut("optionalCapabilities", optionalCapabilities);
     }
-    
+
     private void putExtensions() {
         representation.mapPut("extensions", JsonRepresentation.newMap());
     }

@@ -39,7 +39,7 @@ public class JsonRepresentationTest_getString_isString {
     public void setUp() throws Exception {
         jsonRepresentation = new JsonRepresentation(readJson("map.json"));
     }
-    
+
     @Test
     public void happyCase() throws JsonParseException, JsonMappingException, IOException {
         assertThat(jsonRepresentation.isString("aString"), is(true));
@@ -58,7 +58,7 @@ public class JsonRepresentationTest_getString_isString {
         try {
             jsonRepresentation.getString("anInt");
             fail();
-        } catch (IllegalArgumentException e) {
+        } catch (final IllegalArgumentException e) {
             assertThat(e.getMessage(), is("'anInt' is not a string"));
         }
     }
@@ -69,7 +69,7 @@ public class JsonRepresentationTest_getString_isString {
         try {
             jsonRepresentation.getString("aSubMap");
             fail();
-        } catch (IllegalArgumentException e) {
+        } catch (final IllegalArgumentException e) {
             assertThat(e.getMessage(), is("'aSubMap' is not a string"));
         }
     }
@@ -80,7 +80,7 @@ public class JsonRepresentationTest_getString_isString {
         try {
             jsonRepresentation.getString("aSubList");
             fail();
-        } catch (IllegalArgumentException e) {
+        } catch (final IllegalArgumentException e) {
             assertThat(e.getMessage(), is("'aSubList' is not a string"));
         }
     }
@@ -90,5 +90,5 @@ public class JsonRepresentationTest_getString_isString {
         assertThat(jsonRepresentation.isString("aSubMap.aString"), is(true));
         assertThat(jsonRepresentation.getString("aSubMap.aString"), is("aSubMapStringValue"));
     }
-    
+
 }

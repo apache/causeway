@@ -19,12 +19,10 @@
 
 package org.apache.isis.viewer.html;
 
-
-
 public interface PathBuilder {
 
     public String getSuffix();
-    
+
     public String pathTo(final String prefix);
 
 }

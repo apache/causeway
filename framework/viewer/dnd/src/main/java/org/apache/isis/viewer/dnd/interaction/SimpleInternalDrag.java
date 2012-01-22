@@ -34,9 +34,10 @@ public class SimpleInternalDrag extends DragImpl implements InternalDrag {
     private final View view;
 
     /**
-     * Creates a new drag event. The source view has its pickup(), and then, exited() methods called on it. The view
-     * returned by the pickup method becomes this event overlay view, which is moved continuously so that it tracks the
-     * pointer,
+     * Creates a new drag event. The source view has its pickup(), and then,
+     * exited() methods called on it. The view returned by the pickup method
+     * becomes this event overlay view, which is moved continuously so that it
+     * tracks the pointer,
      * 
      * @param view
      *            the view over which the pointer was when this event started
@@ -53,8 +54,7 @@ public class SimpleInternalDrag extends DragImpl implements InternalDrag {
 
         final Padding targetPadding = view.getPadding();
         final Padding containerPadding = view.getView().getPadding();
-        offset.add(containerPadding.getLeft() - targetPadding.getLeft(),
-            containerPadding.getTop() - targetPadding.getTop());
+        offset.add(containerPadding.getLeft() - targetPadding.getLeft(), containerPadding.getTop() - targetPadding.getTop());
 
         this.location.subtract(offset);
     }
@@ -68,8 +68,7 @@ public class SimpleInternalDrag extends DragImpl implements InternalDrag {
 
         final Padding targetPadding = view.getPadding();
         final Padding containerPadding = view.getView().getPadding();
-        offset.add(containerPadding.getLeft() - targetPadding.getLeft(),
-            containerPadding.getTop() - targetPadding.getTop());
+        offset.add(containerPadding.getLeft() - targetPadding.getLeft(), containerPadding.getTop() - targetPadding.getTop());
 
         this.location.subtract(offset);
     }

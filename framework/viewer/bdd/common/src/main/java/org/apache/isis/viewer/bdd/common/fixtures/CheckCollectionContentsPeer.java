@@ -31,8 +31,8 @@ public class CheckCollectionContentsPeer extends AbstractListFixturePeer {
      * Returns <tt>true</tt> if collection contains specified alias.
      * 
      * <p>
-     * If either the list alias is invalid, or the provided alias is {@link #isValidAlias(String) invalid}, will return
-     * <tt>false</tt>.
+     * If either the list alias is invalid, or the provided alias is
+     * {@link #isValidAlias(String) invalid}, will return <tt>false</tt>.
      */
     public boolean contains(final String alias) {
         if (!isValidListAlias()) {
@@ -50,8 +50,8 @@ public class CheckCollectionContentsPeer extends AbstractListFixturePeer {
      * Returns <tt>true</tt> if collection does not contain specified alias.
      * 
      * <p>
-     * If either the list alias is invalid, or the provided alias is {@link #isValidAlias(String) invalid}, will return
-     * <tt>false</tt>.
+     * If either the list alias is invalid, or the provided alias is
+     * {@link #isValidAlias(String) invalid}, will return <tt>false</tt>.
      */
     public boolean doesNotContain(final String alias) {
         if (!isValidListAlias()) {
@@ -67,7 +67,8 @@ public class CheckCollectionContentsPeer extends AbstractListFixturePeer {
     /**
      * Returns <tt>true</tt> if is empty.
      * 
-     * @return <tt>false</tt> if the alias is invalid or does not represent a list
+     * @return <tt>false</tt> if the alias is invalid or does not represent a
+     *         list
      */
     public boolean isEmpty() {
         if (!isValidListAlias()) {
@@ -79,7 +80,8 @@ public class CheckCollectionContentsPeer extends AbstractListFixturePeer {
     /**
      * Returns <tt>true</tt> if is not empty.
      * 
-     * @return <tt>false</tt> if the alias is invalid or does not represent a list
+     * @return <tt>false</tt> if the alias is invalid or does not represent a
+     *         list
      */
     public boolean isNotEmpty() {
         if (!isValidListAlias()) {
@@ -92,7 +94,8 @@ public class CheckCollectionContentsPeer extends AbstractListFixturePeer {
     /**
      * Returns <tt>true</tt> if collection has specified size.
      * 
-     * @return <tt>false</tt> if the alias is invalid or does not represent a list
+     * @return <tt>false</tt> if the alias is invalid or does not represent a
+     *         list
      */
     public boolean assertSize(final int size) {
         if (!isValidListAlias()) {

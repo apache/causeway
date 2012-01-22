@@ -30,19 +30,19 @@ import org.junit.Test;
 public class RestfulRequestRequestParameterTest_valueOf {
 
     private final RequestParameter<List<List<String>>> requestParameter = RestfulRequest.RequestParameter.FOLLOW_LINKS;
-    
+
     private JsonRepresentation repr;
 
     @Before
     public void setUp() throws Exception {
         repr = JsonRepresentation.newMap();
     }
-    
+
     @Test
     public void mapContainsList() {
         repr.mapPut("x-ro-follow-links", "a,b.c");
-        List<List<String>> valueOf = requestParameter.valueOf(repr);
-        
+        final List<List<String>> valueOf = requestParameter.valueOf(repr);
+
         assertThat(valueOf.size(), is(2));
         assertThat(valueOf.get(0).size(), is(1));
         assertThat(valueOf.get(0).get(0), is("a"));
@@ -54,31 +54,31 @@ public class RestfulRequestRequestParameterTest_valueOf {
     @Test
     public void mapHasNoKey() {
         repr.mapPut("something-else", "a,b.c");
-        List<List<String>> valueOf = requestParameter.valueOf(repr);
-        
+        final List<List<String>> valueOf = requestParameter.valueOf(repr);
+
         assertThat(valueOf.size(), is(0));
     }
 
     @Test
     public void mapIsEmpty() {
-        List<List<String>> valueOf = requestParameter.valueOf(repr);
-        
+        final List<List<String>> valueOf = requestParameter.valueOf(repr);
+
         assertThat(valueOf.size(), is(0));
     }
 
     @Test
     public void mapIsNull() {
-        List<List<String>> valueOf = requestParameter.valueOf(null);
-        
+        final List<List<String>> valueOf = requestParameter.valueOf(null);
+
         assertThat(valueOf.size(), is(0));
     }
 
     @Test
     public void mapContainsCommaSeparatedList() {
-        
+
         repr.mapPut("x-ro-follow-links", "a,b.c");
-        List<List<String>> valueOf = requestParameter.valueOf(repr);
-        
+        final List<List<String>> valueOf = requestParameter.valueOf(repr);
+
         assertThat(valueOf.size(), is(2));
         assertThat(valueOf.get(0).size(), is(1));
         assertThat(valueOf.get(0).get(0), is("a"));

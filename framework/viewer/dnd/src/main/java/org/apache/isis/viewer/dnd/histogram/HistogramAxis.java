@@ -34,8 +34,7 @@ class HistogramAxis implements ViewAxis {
     private final int noBars;
 
     public HistogramAxis(final Content content) {
-        final List<? extends ObjectAssociation> associationList =
-            HistogramSpecification.availableFields((CollectionContent) content);
+        final List<? extends ObjectAssociation> associationList = HistogramSpecification.availableFields((CollectionContent) content);
         noBars = associationList.size();
         fields = new ObjectAssociation[noBars];
         maxValues = new double[noBars];
@@ -46,16 +45,14 @@ class HistogramAxis implements ViewAxis {
     }
 
     public double getLengthFor(final Content content, final int fieldNo) {
-        return NumberAdapters.doubleValue(fields[fieldNo], fields[fieldNo].get(content.getAdapter()))
-            / maxValues[fieldNo];
+        return NumberAdapters.doubleValue(fields[fieldNo], fields[fieldNo].get(content.getAdapter())) / maxValues[fieldNo];
     }
 
     public void determineMaximum(final Content content) {
         int i = 0;
         for (final ObjectAssociation field : fields) {
             maxValues[i] = 0;
-            final CollectionFacet collectionFacet =
-                content.getAdapter().getSpecification().getFacet(CollectionFacet.class);
+            final CollectionFacet collectionFacet = content.getAdapter().getSpecification().getFacet(CollectionFacet.class);
             for (final ObjectAdapter element : collectionFacet.iterable(content.getAdapter())) {
                 final ObjectAdapter value = field.get(element);
                 final double doubleValue = NumberAdapters.doubleValue(field, value);

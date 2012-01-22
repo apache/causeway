@@ -51,8 +51,7 @@ public class GetActionParameterChoices extends PerformAbstractTypeParams {
         final ObjectAction noa = (ObjectAction) nakedObjectMember;
         final int parameterCount = noa.getParameterCount();
         if (requestedParamNum < 0 || requestedParamNum > parameterCount - 1) {
-            throw ScenarioBoundValueException.current(arg0Binding, "(must be between 0 and " + (parameterCount - 1)
-                + ")");
+            throw ScenarioBoundValueException.current(arg0Binding, "(must be between 0 and " + (parameterCount - 1) + ")");
         }
 
         final ObjectAdapter[][] allParameterChoices = noa.getChoices(onAdapter);

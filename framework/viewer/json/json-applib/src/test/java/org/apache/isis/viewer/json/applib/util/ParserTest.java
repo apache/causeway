@@ -39,22 +39,22 @@ public class ParserTest {
 
     @Test
     public void forBoolean() {
-        Parser<Boolean> parser = Parser.forBoolean();
-        for (Boolean v : new Boolean[] {Boolean.TRUE, Boolean.FALSE}) {
+        final Parser<Boolean> parser = Parser.forBoolean();
+        for (final Boolean v : new Boolean[] { Boolean.TRUE, Boolean.FALSE }) {
             final String asString = parser.asString(v);
             final Boolean valueOf = parser.valueOf(asString);
             assertThat(v, is(equalTo(valueOf)));
         }
-        
+
         final Boolean valueOf = parser.valueOf(Arrays.asList(parser.asString(Boolean.TRUE), parser.asString(Boolean.FALSE)));
         assertThat(valueOf, is(Boolean.TRUE));
     }
 
     @Test
     public void forString() {
-        Parser<String> parser = Parser.forString();
-        
-        for (String v : new String[] {"", "foo", "foz"}) {
+        final Parser<String> parser = Parser.forString();
+
+        for (final String v : new String[] { "", "foo", "foz" }) {
             final String asString = parser.asString(v);
             final String valueOf = parser.valueOf(asString);
             assertThat(v, is(equalTo(valueOf)));
@@ -63,22 +63,22 @@ public class ParserTest {
 
     @Test
     public void forListOfStrings() {
-        Parser<List<String>> parser = Parser.forListOfStrings();
-        
-        List<String> v = Arrays.asList("", "foo", "foz" );
-        
+        final Parser<List<String>> parser = Parser.forListOfStrings();
+
+        final List<String> v = Arrays.asList("", "foo", "foz");
+
         final String asString = parser.asString(v);
         final List<String> valueOf = parser.valueOf(asString);
-        
+
         assertThat(v, IsisMatchers.sameContentsAs(valueOf));
     }
 
     @Test
     public void forListOfListOfStringsDottedNotation() {
-        Parser<List<List<String>>> parser = Parser.forListOfListOfStrings();
-        
-        final List<List<String>> valueOf = parser.valueOf(Arrays.asList("a", "b.c", "d.e.f" ));
-        
+        final Parser<List<List<String>>> parser = Parser.forListOfListOfStrings();
+
+        final List<List<String>> valueOf = parser.valueOf(Arrays.asList("a", "b.c", "d.e.f"));
+
         assertThat(valueOf.size(), is(3));
         assertThat(valueOf.get(0).size(), is(1));
         assertThat(valueOf.get(0).get(0), is("a"));
@@ -89,16 +89,16 @@ public class ParserTest {
         assertThat(valueOf.get(2).get(0), is("d"));
         assertThat(valueOf.get(2).get(1), is("e"));
         assertThat(valueOf.get(2).get(2), is("f"));
-        
+
         assertThat(parser.asString(valueOf), is("a,b.c,d.e.f"));
     }
 
     @Test
     public void forListOfListOfStringsCommaSeparated() {
-        Parser<List<List<String>>> parser = Parser.forListOfListOfStrings();
-        
+        final Parser<List<List<String>>> parser = Parser.forListOfListOfStrings();
+
         final List<List<String>> valueOf = parser.valueOf("a,b.c,d.e.f");
-        
+
         assertThat(valueOf.size(), is(3));
         assertThat(valueOf.get(0).size(), is(1));
         assertThat(valueOf.get(0).get(0), is("a"));
@@ -113,35 +113,34 @@ public class ParserTest {
 
     @Test
     public void forMediaTypes() {
-        Parser<MediaType> parser = Parser.forMediaType();
-        MediaType mediaType = RepresentationType.DOMAIN_OBJECT.getMediaType();
+        final Parser<MediaType> parser = Parser.forMediaType();
+        final MediaType mediaType = RepresentationType.DOMAIN_OBJECT.getMediaType();
         final String asString = parser.asString(mediaType);
         final MediaType valueOf = parser.valueOf(asString);
-        
+
         assertThat(valueOf, is(mediaType));
     }
 
-
     @Test
     public void forListOfMediaTypes() {
-        Parser<List<MediaType>> parser = Parser.forListOfMediaTypes();
-        MediaType mediaType = RepresentationType.DOMAIN_OBJECT.getMediaType();
-        List<MediaType> v = Arrays.asList(mediaType, MediaType.APPLICATION_JSON_TYPE);
+        final Parser<List<MediaType>> parser = Parser.forListOfMediaTypes();
+        final MediaType mediaType = RepresentationType.DOMAIN_OBJECT.getMediaType();
+        final List<MediaType> v = Arrays.asList(mediaType, MediaType.APPLICATION_JSON_TYPE);
         final String asString = parser.asString(v);
         final List<MediaType> valueOf = parser.valueOf(asString);
-        
+
         assertThat(v, IsisMatchers.sameContentsAs(valueOf));
     }
 
     @Test
     public void forDate() {
-        Parser<Date> parser = Parser.forDate();
-        
+        final Parser<Date> parser = Parser.forDate();
+
         final Calendar cal = Calendar.getInstance();
         cal.setTime(new Date());
         cal.set(Calendar.MILLISECOND, 0);
-        Date nowToNearestSecond = cal.getTime();
-        for (Date v : new Date[] {nowToNearestSecond}) {
+        final Date nowToNearestSecond = cal.getTime();
+        for (final Date v : new Date[] { nowToNearestSecond }) {
             final String asString = parser.asString(v);
             final Date valueOf = parser.valueOf(asString);
             assertThat(v, is(equalTo(valueOf)));
@@ -150,9 +149,9 @@ public class ParserTest {
 
     @Test
     public void forInteger() {
-        Parser<Integer> parser = Parser.forInteger();
-        
-        for (Integer v : new Integer[] {1, 2, 3, -5, -100, 0, Integer.MAX_VALUE, Integer.MIN_VALUE}) {
+        final Parser<Integer> parser = Parser.forInteger();
+
+        for (final Integer v : new Integer[] { 1, 2, 3, -5, -100, 0, Integer.MAX_VALUE, Integer.MIN_VALUE }) {
             final String asString = parser.asString(v);
             final Integer valueOf = parser.valueOf(asString);
             assertThat(v, is(equalTo(valueOf)));
@@ -161,29 +160,24 @@ public class ParserTest {
 
     @Test
     public void forMediaType() {
-        Parser<MediaType> parser = Parser.forMediaType();
-        
-        for (MediaType v : new MediaType[] { 
-                MediaType.APPLICATION_ATOM_XML_TYPE, 
-                MediaType.APPLICATION_JSON_TYPE, 
-                MediaType.APPLICATION_XHTML_XML_TYPE, 
-                MediaType.valueOf(RestfulMediaType.APPLICATION_JSON_DOMAIN_OBJECT) }) {
+        final Parser<MediaType> parser = Parser.forMediaType();
+
+        for (final MediaType v : new MediaType[] { MediaType.APPLICATION_ATOM_XML_TYPE, MediaType.APPLICATION_JSON_TYPE, MediaType.APPLICATION_XHTML_XML_TYPE, MediaType.valueOf(RestfulMediaType.APPLICATION_JSON_DOMAIN_OBJECT) }) {
             final String asString = parser.asString(v);
             final MediaType valueOf = parser.valueOf(asString);
             assertThat(v, is(equalTo(valueOf)));
         }
     }
 
-
     @Test
     public void forCacheControl() {
-        Parser<CacheControl> parser = Parser.forCacheControl();
-        
+        final Parser<CacheControl> parser = Parser.forCacheControl();
+
         final CacheControl cc1 = createCacheControl();
         cc1.setMaxAge(2000);
         final CacheControl cc2 = createCacheControl();
         cc2.setNoCache(true);
-        for (CacheControl v : new CacheControl[] { cc1, cc2 }) {
+        for (final CacheControl v : new CacheControl[] { cc1, cc2 }) {
             final String asString = parser.asString(v);
             final CacheControl valueOf = parser.valueOf(asString);
             assertThat(v, is(equalTo(valueOf)));
@@ -192,8 +186,10 @@ public class ParserTest {
 
     private static CacheControl createCacheControl() {
         final CacheControl cacheControl = new CacheControl();
-        cacheControl.getCacheExtension(); // workaround for bug in CacheControl's equals() method
-        cacheControl.getNoCacheFields(); // workaround for bug in CacheControl's equals() method
+        cacheControl.getCacheExtension(); // workaround for bug in
+                                          // CacheControl's equals() method
+        cacheControl.getNoCacheFields(); // workaround for bug in CacheControl's
+                                         // equals() method
         return cacheControl;
     }
 

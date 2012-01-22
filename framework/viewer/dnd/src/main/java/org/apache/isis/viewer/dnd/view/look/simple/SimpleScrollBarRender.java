@@ -27,30 +27,29 @@ import org.apache.isis.viewer.dnd.view.border.ScrollBarRender;
 public class SimpleScrollBarRender implements ScrollBarRender {
 
     @Override
-    public void draw(final Canvas canvas, final boolean isHorizontal, final int x, final int y, final int width,
-        final int height, final int scrollPosition, final int visibleAmount) {
+    public void draw(final Canvas canvas, final boolean isHorizontal, final int x, final int y, final int width, final int height, final int scrollPosition, final int visibleAmount) {
         // canvas.drawSolidRectangle(x + 1, y + 1, width - 2, height - 2,
         // Toolkit.getColor(ColorsAndFonts.COLOR_SECONDARY3));
         if (isHorizontal) {
-            // canvas.drawSolidRectangle(x + scrollPosition, y + 2, visibleAmount, height - 4,
+            // canvas.drawSolidRectangle(x + scrollPosition, y + 2,
+            // visibleAmount, height - 4,
             // Toolkit.getColor(ColorsAndFonts.COLOR_SECONDARY3));
-            // canvas.drawRectangle(x + scrollPosition, y + 1, visibleAmount, height - 2,
+            // canvas.drawRectangle(x + scrollPosition, y + 1, visibleAmount,
+            // height - 2,
             // Toolkit.getColor(ColorsAndFonts.COLOR_SECONDARY2));
 
-            canvas.drawRectangle(x + scrollPosition + 2, y + 2, visibleAmount - 4, height - 4,
-                Toolkit.getColor(ColorsAndFonts.COLOR_SECONDARY2));
-            canvas.drawSolidRectangle(x + scrollPosition + 3, y + 3, visibleAmount - 6, height - 6,
-                Toolkit.getColor(ColorsAndFonts.COLOR_SECONDARY3));
+            canvas.drawRectangle(x + scrollPosition + 2, y + 2, visibleAmount - 4, height - 4, Toolkit.getColor(ColorsAndFonts.COLOR_SECONDARY2));
+            canvas.drawSolidRectangle(x + scrollPosition + 3, y + 3, visibleAmount - 6, height - 6, Toolkit.getColor(ColorsAndFonts.COLOR_SECONDARY3));
         } else {
-            // canvas.drawSolidRectangle(x + 2, y + scrollPosition, width - 4, visibleAmount,
+            // canvas.drawSolidRectangle(x + 2, y + scrollPosition, width - 4,
+            // visibleAmount,
             // Toolkit.getColor(ColorsAndFonts.COLOR_SECONDARY3));
-            // canvas.drawRectangle(x + 1, y + scrollPosition, width - 2, visibleAmount,
+            // canvas.drawRectangle(x + 1, y + scrollPosition, width - 2,
+            // visibleAmount,
             // Toolkit.getColor(ColorsAndFonts.COLOR_SECONDARY2));
 
-            canvas.drawRectangle(x + 2, y + scrollPosition + 2, width - 4, visibleAmount - 4,
-                Toolkit.getColor(ColorsAndFonts.COLOR_SECONDARY2));
-            canvas.drawSolidRectangle(x + 3, y + scrollPosition + 3, width - 6, visibleAmount - 6,
-                Toolkit.getColor(ColorsAndFonts.COLOR_SECONDARY3));
+            canvas.drawRectangle(x + 2, y + scrollPosition + 2, width - 4, visibleAmount - 4, Toolkit.getColor(ColorsAndFonts.COLOR_SECONDARY2));
+            canvas.drawSolidRectangle(x + 3, y + scrollPosition + 3, width - 6, visibleAmount - 6, Toolkit.getColor(ColorsAndFonts.COLOR_SECONDARY3));
         }
         canvas.drawRectangle(x, y, width, height, Toolkit.getColor(ColorsAndFonts.COLOR_SECONDARY2));
     }

@@ -39,7 +39,7 @@ public class JsonRepresentationTest_getBoolean {
     public void setUp() throws Exception {
         jsonRepresentation = new JsonRepresentation(readJson("map.json"));
     }
-    
+
     @Test
     public void happyCase() throws JsonParseException, JsonMappingException, IOException {
         assertThat(jsonRepresentation.getBoolean("aBoolean"), is(true));
@@ -55,7 +55,7 @@ public class JsonRepresentationTest_getBoolean {
         try {
             jsonRepresentation.getBoolean("aString");
             fail();
-        } catch (IllegalArgumentException e) {
+        } catch (final IllegalArgumentException e) {
             assertThat(e.getMessage(), is("'aString' is not a boolean"));
         }
     }
@@ -65,7 +65,7 @@ public class JsonRepresentationTest_getBoolean {
         try {
             jsonRepresentation.getBoolean("aSubMap");
             fail();
-        } catch (IllegalArgumentException e) {
+        } catch (final IllegalArgumentException e) {
             assertThat(e.getMessage(), is("'aSubMap' is not a boolean"));
         }
     }
@@ -75,7 +75,7 @@ public class JsonRepresentationTest_getBoolean {
         try {
             jsonRepresentation.getBoolean("aSubList");
             fail();
-        } catch (IllegalArgumentException e) {
+        } catch (final IllegalArgumentException e) {
             assertThat(e.getMessage(), is("'aSubList' is not a boolean"));
         }
     }
@@ -84,5 +84,5 @@ public class JsonRepresentationTest_getBoolean {
     public void forMultipartKey() throws JsonParseException, JsonMappingException, IOException {
         assertThat(jsonRepresentation.getBoolean("aSubMap.aBoolean"), is(true));
     }
-    
+
 }

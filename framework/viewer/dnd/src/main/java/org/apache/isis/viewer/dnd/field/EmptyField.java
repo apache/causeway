@@ -48,15 +48,13 @@ public class EmptyField extends AbstractView {
     public static class Specification implements ViewSpecification {
         @Override
         public boolean canDisplay(final ViewRequirement requirement) {
-            return requirement.isObject() && requirement.isOpen() && !requirement.isTextParseable()
-                && !requirement.hasReference();
+            return requirement.isObject() && requirement.isOpen() && !requirement.isTextParseable() && !requirement.hasReference();
         }
 
         @Override
         public View createView(final Content content, final Axes axes, final int sequence) {
             final EmptyField emptyField = new EmptyField(content, this, Toolkit.getText(ColorsAndFonts.TEXT_NORMAL));
-            if ((content instanceof OneToOneField && ((OneToOneField) content).isEditable().isAllowed())
-                || content instanceof ObjectParameter) {
+            if ((content instanceof OneToOneField && ((OneToOneField) content).isEditable().isAllowed()) || content instanceof ObjectParameter) {
                 if (content.isOptionEnabled()) {
                     return new ObjectBorder(new OpenObjectDropDownBorder(emptyField, new IconSpecification()));
                 } else {
@@ -183,7 +181,8 @@ public class EmptyField extends AbstractView {
     }
 
     /**
-     * Objects returned by menus are used to set this field before passing the call on to the parent.
+     * Objects returned by menus are used to set this field before passing the
+     * call on to the parent.
      */
     @Override
     public void objectActionResult(final ObjectAdapter result, final Placement placement) {

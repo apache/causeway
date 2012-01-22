@@ -28,24 +28,22 @@ public final class UrlParserUtils {
     private final static Pattern OBJECT_OID = Pattern.compile(".*objects\\/(.+)");;
     private final static Pattern DOMAIN_TYPE = Pattern.compile(".*domainTypes\\/([^/]+).*");;
 
-	public final static String oidFromLink(final JsonRepresentation link) {
-		String href = link.getString("href");
-		Matcher matcher = OBJECT_OID.matcher(href);
-		if(!matcher.matches()) {
-			return null;
-		}
-		return matcher.group(1);
+    public final static String oidFromLink(final JsonRepresentation link) {
+        final String href = link.getString("href");
+        final Matcher matcher = OBJECT_OID.matcher(href);
+        if (!matcher.matches()) {
+            return null;
+        }
+        return matcher.group(1);
     }
-
 
     public final static String domainTypeFrom(final JsonRepresentation link) {
         return domainTypeFrom(link.getString("href"));
     }
 
-
-    public static String domainTypeFrom(String href) {
-        Matcher matcher = DOMAIN_TYPE.matcher(href);
-        if(!matcher.matches()) {
+    public static String domainTypeFrom(final String href) {
+        final Matcher matcher = DOMAIN_TYPE.matcher(href);
+        if (!matcher.matches()) {
             return null;
         }
         return matcher.group(1);

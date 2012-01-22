@@ -59,14 +59,7 @@ public class FieldValue extends AbstractElementProcessor {
         return "field";
     }
 
-    public static void write(
-            final Request request,
-            final ObjectAdapter object,
-            final ObjectAssociation field,
-            final LinkedObject linkedField,
-            final String className,
-            final boolean showIcon,
-            final int truncateTo) {
+    public static void write(final Request request, final ObjectAdapter object, final ObjectAssociation field, final LinkedObject linkedField, final String className, final boolean showIcon, final int truncateTo) {
 
         final ObjectAdapter fieldReference = field.get(object);
 
@@ -82,22 +75,20 @@ public class FieldValue extends AbstractElementProcessor {
             }
 
             if (!field.getSpecification().containsFacet(ParseableFacet.class) && showIcon) {
-                request.appendHtml("<img class=\"small-icon\" src=\"" + request.getContext().imagePath(fieldReference)
-                    + "\" alt=\"" + field.getSpecification().getShortIdentifier() + "\"/>");
+                request.appendHtml("<img class=\"small-icon\" src=\"" + request.getContext().imagePath(fieldReference) + "\" alt=\"" + field.getSpecification().getShortIdentifier() + "\"/>");
             }
 
             if (linkedField != null) {
-                final String id =
-                    request.getContext().mapObject(fieldReference, linkedField.getScope(), Scope.INTERACTION);
-                request.appendHtml("<a href=\"" + linkedField.getForwardView() + "?" + linkedField.getVariable() + "="
-                    + id + request.getContext().encodedInteractionParameters() + "\">");
+                final String id = request.getContext().mapObject(fieldReference, linkedField.getScope(), Scope.INTERACTION);
+                request.appendHtml("<a href=\"" + linkedField.getForwardView() + "?" + linkedField.getVariable() + "=" + id + request.getContext().encodedInteractionParameters() + "\">");
             }
             String value = fieldReference == null ? "" : fieldReference.titleString();
             if (truncateTo > 0 && value.length() > truncateTo) {
                 value = value.substring(0, truncateTo) + "...";
             }
 
-            // TODO figure out a better way to determine if boolean or a password
+            // TODO figure out a better way to determine if boolean or a
+            // password
             final ObjectSpecification spec = field.getSpecification();
             final BooleanValueFacet facet = spec.getFacet(BooleanValueFacet.class);
             if (facet != null) {
@@ -108,7 +99,7 @@ public class FieldValue extends AbstractElementProcessor {
             } else {
                 request.appendAsHtmlEncoded(value);
             }
-            
+
             if (linkedField != null) {
                 request.appendHtml("</a>");
             }

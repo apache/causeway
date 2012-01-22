@@ -32,8 +32,7 @@ import org.apache.isis.viewer.scimpi.dispatcher.processor.Request.RepeatMarker;
 public class TableBuilder extends AbstractTableView {
 
     @Override
-    protected TableContentWriter createRowBuilder(final Request request, final RequestContext context,
-        final String parent, final List<ObjectAssociation> allFields, final ObjectAdapter collection) {
+    protected TableContentWriter createRowBuilder(final Request request, final RequestContext context, final String parent, final List<ObjectAssociation> allFields, final ObjectAdapter collection) {
 
         final String variable = request.getOptionalProperty(ELEMENT_NAME, ELEMENT);
         final String headerClass = request.getOptionalProperty("head-" + CLASS);

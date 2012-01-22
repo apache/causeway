@@ -34,7 +34,8 @@ import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.webapp.auth.AuthenticationSessionStrategyAbstract;
 
 /**
- * Implements the HTTP Basic Auth protocol; does not bind the {@link AuthenticationSession} onto the {@link HttpSession}.
+ * Implements the HTTP Basic Auth protocol; does not bind the
+ * {@link AuthenticationSession} onto the {@link HttpSession}.
  */
 public class AuthenticationSessionStrategyBasicAuth extends AuthenticationSessionStrategyAbstract {
 
@@ -45,23 +46,23 @@ public class AuthenticationSessionStrategyBasicAuth extends AuthenticationSessio
 
         final HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
         final String authStr = httpServletRequest.getHeader("Authorization");
-        
+
         // value should be in the form:
         // Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==
-        if(authStr == null || !authStr.startsWith("Basic ")) {
+        if (authStr == null || !authStr.startsWith("Basic ")) {
             return null;
         }
         final String digest = authStr.substring(6);
-        
+
         final String userAndPassword = new String(new Base64().decode(digest.getBytes()));
         final Matcher matcher = USER_AND_PASSWORD_REGEX.matcher(userAndPassword);
-        if(!matcher.matches()) {
+        if (!matcher.matches()) {
             return null;
         }
-        
+
         final String user = matcher.group(1);
         final String password = matcher.group(2);
-        
+
         final AuthenticationSession authSession = getAuthenticationManager().authenticate(new AuthenticationRequestPassword(user, password));
         return authSession;
     }

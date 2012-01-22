@@ -25,7 +25,8 @@ import org.apache.isis.viewer.dnd.view.View;
 import org.apache.isis.viewer.dnd.view.ViewRequirement;
 
 /**
- * A simple specification that always returns false when asked if it can display any content.
+ * A simple specification that always returns false when asked if it can display
+ * any content.
  * 
  * @see #canDisplay(ViewRequirement)
  */

@@ -26,50 +26,55 @@ import org.apache.isis.viewer.json.viewer.ResourceContext;
 
 public final class LinkBuilder {
 
-    public static LinkBuilder newBuilder(ResourceContext resourceContext, Rel rel, RepresentationType representationType, String hrefFormat, Object... hrefArgs) {
+    public static LinkBuilder newBuilder(final ResourceContext resourceContext, final Rel rel, final RepresentationType representationType, final String hrefFormat, final Object... hrefArgs) {
         return newBuilder(resourceContext, rel, representationType.getMediaType(), hrefFormat, hrefArgs);
     }
 
-    public static LinkBuilder newBuilder(ResourceContext resourceContext, Rel rel, MediaType mediaType, String hrefFormat, Object... hrefArgs) {
+    public static LinkBuilder newBuilder(final ResourceContext resourceContext, final Rel rel, final MediaType mediaType, final String hrefFormat, final Object... hrefArgs) {
         return new LinkBuilder(resourceContext, rel, String.format(hrefFormat, hrefArgs), mediaType);
     }
 
     private final ResourceContext resourceContext;
     private final JsonRepresentation representation = JsonRepresentation.newMap();
-    
-	private final Rel rel;
+
+    private final Rel rel;
     private final String href;
     private final MediaType mediaType;
-    
+
     private HttpMethod method = HttpMethod.GET;
     private String title;
     private JsonRepresentation arguments;
     private JsonRepresentation value;
     private String id;
 
-    protected LinkBuilder(ResourceContext resourceContext, Rel rel, String href, MediaType mediaType) {
+    protected LinkBuilder(final ResourceContext resourceContext, final Rel rel, final String href, final MediaType mediaType) {
         this.resourceContext = resourceContext;
         this.rel = rel;
         this.href = href;
         this.mediaType = mediaType;
     }
-    public LinkBuilder withHttpMethod(HttpMethod method) {
+
+    public LinkBuilder withHttpMethod(final HttpMethod method) {
         this.method = method;
         return this;
     }
-    public LinkBuilder withTitle(String title) {
+
+    public LinkBuilder withTitle(final String title) {
         this.title = title;
         return this;
     }
-    public LinkBuilder withArguments(JsonRepresentation arguments) {
+
+    public LinkBuilder withArguments(final JsonRepresentation arguments) {
         this.arguments = arguments;
         return this;
     }
-    public LinkBuilder withId(String id) {
+
+    public LinkBuilder withId(final String id) {
         this.id = id;
         return this;
     }
-    public LinkBuilder withValue(JsonRepresentation value) {
+
+    public LinkBuilder withValue(final JsonRepresentation value) {
         this.value = value;
         return this;
     }
@@ -85,5 +90,5 @@ public final class LinkBuilder {
         representation.mapPut("value", value);
         return representation;
     }
-    
+
 }

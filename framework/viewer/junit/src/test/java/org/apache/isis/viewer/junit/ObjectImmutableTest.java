@@ -66,7 +66,8 @@ public class ObjectImmutableTest extends AbstractTest {
 
     @Test
     public void removingFromCollectionOnImmutableObjectThrowsException() {
-        product355DO.addToSimilarProducts(product850DO); // TODO: can't setup, throws
+        product355DO.addToSimilarProducts(product850DO); // TODO: can't setup,
+                                                         // throws
         // ObjectPersistenceException
         try {
             product355VO.removeFromSimilarProducts(product850DO);

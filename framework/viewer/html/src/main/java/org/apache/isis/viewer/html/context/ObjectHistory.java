@@ -74,7 +74,9 @@ public class ObjectHistory {
                     throw new UnknownTypeException(item);
                 }
                 taskBar.add(icon);
-            } catch (final IsisException e) { // Catch resolveImmediately exception when object is deleted.
+            } catch (final IsisException e) { // Catch resolveImmediately
+                                              // exception when object is
+                                              // deleted.
 
             }
         }
