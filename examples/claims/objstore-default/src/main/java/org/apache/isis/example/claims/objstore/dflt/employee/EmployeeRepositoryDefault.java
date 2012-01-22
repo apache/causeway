@@ -50,7 +50,7 @@ public class EmployeeRepositoryDefault extends AbstractFactoryAndRepository impl
 
     // {{ action: findEmployees
     @Override
-    public List<Employee> findEmployees(String name) {
+    public List<Employee> findEmployees(final String name) {
         return allMatches(Employee.class, name);
     }
 

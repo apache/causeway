@@ -17,9 +17,7 @@
  *  under the License.
  */
 
-
 package org.apache.isis.examples.onlinedemo.fixture.items;
-
 
 import java.util.List;
 
@@ -31,29 +29,28 @@ import org.apache.isis.examples.onlinedemo.dom.items.Category;
 import org.apache.isis.examples.onlinedemo.dom.items.ToDoItem;
 import org.apache.isis.examples.onlinedemo.dom.items.ToDoItems;
 
-
 public class ToDoItemsFixture extends AbstractFixture {
 
     @Override
     public void install() {
-        Category domesticCategory = findOrCreateCategory("Domestic");
-        Category professionalCategory = findOrCreateCategory("Professional");
-        
+        final Category domesticCategory = findOrCreateCategory("Domestic");
+        final Category professionalCategory = findOrCreateCategory("Professional");
+
         removeAllToDosForCurrentUser();
-        
+
         createToDoItemForCurrentUser("Buy milk", domesticCategory, daysFromToday(0));
         createToDoItemForCurrentUser("Buy stamps", domesticCategory, daysFromToday(0));
         createToDoItemForCurrentUser("Pick up laundry", domesticCategory, daysFromToday(6));
         createToDoItemForCurrentUser("Write blog post", professionalCategory, null);
         createToDoItemForCurrentUser("Organize brown bag", professionalCategory, daysFromToday(14));
-        
+
         getContainer().flush();
     }
 
     // {{ helpers
-    private Category findOrCreateCategory(String description) {
-        Category category = categories.find(description);
-        if(category != null) {
+    private Category findOrCreateCategory(final String description) {
+        final Category category = categories.find(description);
+        if (category != null) {
             return category;
         }
         return categories.newCategory(description);
@@ -61,20 +58,21 @@ public class ToDoItemsFixture extends AbstractFixture {
 
     private void removeAllToDosForCurrentUser() {
         final List<ToDoItem> allToDos = toDoItems.allToDos();
-        for (ToDoItem toDoItem : allToDos) {
+        for (final ToDoItem toDoItem : allToDos) {
             getContainer().remove(toDoItem);
         }
     }
 
-    private ToDoItem createToDoItemForCurrentUser(String description, Category category, Date dueBy) {
+    private ToDoItem createToDoItemForCurrentUser(final String description, final Category category, final Date dueBy) {
         return toDoItems.newToDo(description, category, dueBy);
     }
 
-    private static Date daysFromToday(int i) {
+    private static Date daysFromToday(final int i) {
         final Date date = new Date(Clock.getTimeAsDateTime());
         date.add(0, 0, i);
         return date;
     }
+
     // }}
 
     // {{ injected: Categories
@@ -83,13 +81,15 @@ public class ToDoItemsFixture extends AbstractFixture {
     public void setCategories(final Categories categories) {
         this.categories = categories;
     }
+
     // }}
 
     // {{ injected: ToDoItems
     private ToDoItems toDoItems;
-    public void setToDoItems(ToDoItems toDoItems) {
+
+    public void setToDoItems(final ToDoItems toDoItems) {
         this.toDoItems = toDoItems;
     }
     // }}
-    
+
 }

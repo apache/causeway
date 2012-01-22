@@ -38,15 +38,16 @@ public class DemoFixturesDefault extends AbstractFactoryAndRepository implements
     public String iconName() {
         return "demo";
     }
+
     // }}
 
     @Override
     public List<ToDoItem> resetFixtures() {
         final ToDoItemsFixture fixture = new ToDoItemsFixture();
         injectServicesInto(fixture);
-        
+
         fixture.install();
-        
+
         return toDoItems.allToDos();
     }
 
@@ -56,6 +57,7 @@ public class DemoFixturesDefault extends AbstractFactoryAndRepository implements
         fixture.setContainer(getContainer());
         fixture.setToDoItems(toDoItems);
     }
+
     // }}
 
     // {{ injected: Categories
@@ -64,14 +66,15 @@ public class DemoFixturesDefault extends AbstractFactoryAndRepository implements
     public void setCategories(final Categories categories) {
         this.categories = categories;
     }
+
     // }}
 
     // {{ injected: ToDoItems
     private ToDoItems toDoItems;
-    public void setToDoItems(ToDoItems toDoItems) {
+
+    public void setToDoItems(final ToDoItems toDoItems) {
         this.toDoItems = toDoItems;
     }
     // }}
-    
 
 }

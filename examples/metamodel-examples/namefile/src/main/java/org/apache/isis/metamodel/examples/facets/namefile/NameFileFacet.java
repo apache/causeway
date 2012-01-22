@@ -17,14 +17,12 @@
  *  under the License.
  */
 
-
 package org.apache.isis.metamodel.examples.facets.namefile;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.named.NamedFacet;
-
 
 public class NameFileFacet extends FacetAbstract implements NamedFacet {
 
@@ -34,14 +32,14 @@ public class NameFileFacet extends FacetAbstract implements NamedFacet {
 
     private final String name;
 
-    public NameFileFacet(final FacetHolder holder, String name) {
+    public NameFileFacet(final FacetHolder holder, final String name) {
         super(type(), holder, false);
         this.name = name;
     }
 
+    @Override
     public String value() {
         return name;
     }
-
 
 }

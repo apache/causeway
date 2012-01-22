@@ -29,13 +29,13 @@ public class CglibClassSubstitutor extends ClassSubstitutorAbstract {
     }
 
     @Override
-    public Class<?> getClass(Class<?> cls) {
-    	//Class<?> superclass = cls.getSuperclass();
-    	//Class<?>[] interfaces = cls.getInterfaces();
-    	if(cls.getName().contains("EnhancerByCGLIB")) {
-    		return getClass(cls.getSuperclass());
-    	} 
-		return super.getClass(cls);
+    public Class<?> getClass(final Class<?> cls) {
+        // Class<?> superclass = cls.getSuperclass();
+        // Class<?>[] interfaces = cls.getInterfaces();
+        if (cls.getName().contains("EnhancerByCGLIB")) {
+            return getClass(cls.getSuperclass());
+        }
+        return super.getClass(cls);
     }
 
 }

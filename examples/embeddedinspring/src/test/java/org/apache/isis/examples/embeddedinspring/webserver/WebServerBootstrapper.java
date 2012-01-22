@@ -27,25 +27,25 @@ import org.mortbay.jetty.webapp.WebAppContext;
  * For bootstrapping the app from the command line.
  */
 public class WebServerBootstrapper {
-    
+
     private static final String SRC_MAIN_WEBAPP = "src/main/webapp";
-    
+
     private static final String CONTEXT_PATH = "/";
     private static final int PORT = 8080;
-    
+
     private Server jettyServer;
 
-    public static void main(String[] args) {
+    public static void main(final String[] args) {
         new WebServerBootstrapper().run();
     }
-    
+
     public void run() {
 
         jettyServer = new Server(PORT);
         final WebAppContext context = new WebAppContext(SRC_MAIN_WEBAPP, CONTEXT_PATH);
 
         jettyServer.setHandler(context);
-        
+
         try {
             jettyServer.start();
             jettyServer.join();

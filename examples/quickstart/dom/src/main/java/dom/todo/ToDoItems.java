@@ -27,11 +27,10 @@ import org.apache.isis.applib.annotation.Named;
 @Named("ToDos")
 public interface ToDoItems {
 
-    @MemberOrder(sequence="1")
+    @MemberOrder(sequence = "1")
     public List<ToDoItem> notYetDone();
 
-    @MemberOrder(sequence="2")
-    public ToDoItem newToDo(
-        @Named("Description") String description);
+    @MemberOrder(sequence = "2")
+    public ToDoItem newToDo(@Named("Description") String description);
 
 }

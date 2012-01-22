@@ -30,33 +30,33 @@ import org.apache.isis.applib.value.Date;
 
 /**
  * A repository for {@link ToDoItem}s.
- *  
+ * 
  * <p>
  * The implementation depends on the configured object store.
  */
 @Named("ToDos")
 public interface ToDoItems {
 
-    @QueryOnly // no side-effects
-    @MemberOrder(sequence="1") // order in the UI
+    @QueryOnly
+    // no side-effects
+    @MemberOrder(sequence = "1")
+    // order in the UI
     public List<ToDoItem> toDosForToday();
-    
-    @MemberOrder(sequence="2")
-    public ToDoItem newToDo(
-        @Named("Description") String description, 
-        Category category, 
-        @Named("Due by") @Optional Date dueBy);
+
+    @MemberOrder(sequence = "2")
+    public ToDoItem newToDo(@Named("Description") String description, Category category, @Named("Due by") @Optional Date dueBy);
 
     @QueryOnly
-    @MemberOrder(sequence="3")
+    @MemberOrder(sequence = "3")
     public List<ToDoItem> allToDos();
 
     @QueryOnly
-    @MemberOrder(sequence="4")
+    @MemberOrder(sequence = "4")
     public List<ToDoItem> similarTo(ToDoItem toDoItem);
 
-    @Idempotent // same post-conditions
-    @MemberOrder(sequence="5")
+    @Idempotent
+    // same post-conditions
+    @MemberOrder(sequence = "5")
     public void removeCompleted();
 
 }

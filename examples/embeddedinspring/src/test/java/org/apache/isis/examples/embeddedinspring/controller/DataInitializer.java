@@ -14,31 +14,31 @@ import org.springframework.stereotype.Component;
 @Scope("prototype")
 public class DataInitializer {
 
-	public static final int PERSON_COUNT = 3;
+    public static final int PERSON_COUNT = 3;
 
-	@PersistenceContext
-	private EntityManager entityManager;
+    @PersistenceContext
+    private EntityManager entityManager;
 
-	public List<Long> people = new ArrayList<Long>();
+    public List<Long> people = new ArrayList<Long>();
 
-	public void initData() {
-		people.clear();// clear out the previous list of people
-		addPerson("Jim", "Smith");
-		addPerson("Tina", "Marsh");
-		addPerson("Steve", "Blair");
-		entityManager.flush();
-		entityManager.clear();
-	}
+    public void initData() {
+        people.clear();// clear out the previous list of people
+        addPerson("Jim", "Smith");
+        addPerson("Tina", "Marsh");
+        addPerson("Steve", "Blair");
+        entityManager.flush();
+        entityManager.clear();
+    }
 
-	public void addPerson(String firstName, String lastName) {
-		Person p = new Person();
-		p.setFirstName(firstName);
-		p.setLastName(lastName);
-		entityManager.persist(p);
-		people.add(p.getId());
-	}
-	
-	public EntityManager getEntityManager() {
-		return entityManager;
-	}
+    public void addPerson(final String firstName, final String lastName) {
+        final Person p = new Person();
+        p.setFirstName(firstName);
+        p.setLastName(lastName);
+        entityManager.persist(p);
+        people.add(p.getId());
+    }
+
+    public EntityManager getEntityManager() {
+        return entityManager;
+    }
 }

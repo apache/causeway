@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.metamodel.examples.facets.namefile;
 
 import org.apache.isis.applib.AbstractDomainObject;
@@ -31,9 +30,9 @@ public class DomainObjectWithNameFileEntry extends AbstractDomainObject {
         return lastName;
     }
 
-    public void setLastName(String lastName) {
+    public void setLastName(final String lastName) {
         this.lastName = lastName;
         objectChanged();
     }
-    
+
 }

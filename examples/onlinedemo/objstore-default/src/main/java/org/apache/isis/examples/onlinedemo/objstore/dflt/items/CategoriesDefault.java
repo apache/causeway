@@ -36,6 +36,7 @@ public class CategoriesDefault extends AbstractFactoryAndRepository implements C
     public String iconName() {
         return "Category";
     }
+
     // }}
 
     @Override
@@ -44,9 +45,9 @@ public class CategoriesDefault extends AbstractFactoryAndRepository implements C
     }
 
     @Override
-    public Category newCategory(String description) {
+    public Category newCategory(final String description) {
         Category category = find(description);
-        if(category != null) {
+        if (category != null) {
             return category;
         }
         category = newTransientInstance(Category.class);
@@ -56,7 +57,7 @@ public class CategoriesDefault extends AbstractFactoryAndRepository implements C
     }
 
     @Override
-    public Category find(String description) {
+    public Category find(final String description) {
         return firstMatch(Category.class, Category.matching(description));
     }
 

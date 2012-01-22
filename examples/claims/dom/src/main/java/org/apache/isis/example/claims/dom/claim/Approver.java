@@ -17,9 +17,8 @@
  *  under the License.
  */
 
-
 package org.apache.isis.example.claims.dom.claim;
 
 public interface Approver {
-	
+
 }

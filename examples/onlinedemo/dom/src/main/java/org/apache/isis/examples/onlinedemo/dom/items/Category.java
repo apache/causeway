@@ -28,32 +28,37 @@ import org.apache.isis.applib.filter.Filter;
 
 import com.google.common.base.Objects;
 
-@Immutable // cannot be modified through the UI
-@Bounded   // a bounded number of instances (viewers typically display all instances in a drop-down)
+@Immutable
+// cannot be modified through the UI
+@Bounded
+// a bounded number of instances (viewers typically display all instances in a
+// drop-down)
 public class Category extends AbstractDomainObject {
-
 
     // {{ Description
     private String description;
 
-    @Title // use as the title
+    @Title
+    // use as the title
     @MemberOrder(sequence = "1")
     public String getDescription() {
         return description;
     }
 
-    public void setDescription(String description) {
+    public void setDescription(final String description) {
         this.description = description;
     }
+
     // }}
 
     // {{ filters (programmatic)
     public static Filter<Category> matching(final String description) {
         return new Filter<Category>() {
             @Override
-            public boolean accept(Category category) {
+            public boolean accept(final Category category) {
                 return Objects.equal(category.getDescription(), description);
-            }};
+            }
+        };
     }
     // }}
 

@@ -17,16 +17,12 @@
  *  under the License.
  */
 
-
 package org.apache.isis.metamodel.examples.facets.namefile;
 
+import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-
-import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
-import org.apache.isis.metamodel.examples.facets.namefile.NameFileFacet;
-
 
 public class NameFileFacetInstantiationTest {
 

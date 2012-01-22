@@ -17,13 +17,18 @@
  *  under the License.
  */
 
-
 package org.apache.isis.metamodel.examples.facets.namefile;
 
 import static org.apache.isis.core.commons.matchers.IsisMatchers.anInstanceOf;
 
 import java.lang.reflect.Method;
 
+import org.apache.isis.applib.Identifier;
+import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facetapi.MethodRemover;
+import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
+import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
+import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JMock;
@@ -34,24 +39,15 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import org.apache.isis.applib.Identifier;
-import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facetapi.MethodRemover;
-import org.apache.isis.core.metamodel.facets.FacetedMethod;
-import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
-import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
-
-
-
 @RunWith(JMock.class)
 public class NameFileFacetFactoryProcessTest {
 
-    private Mockery mockery = new JUnit4Mockery() {
+    private final Mockery mockery = new JUnit4Mockery() {
         {
             setImposteriser(ClassImposteriser.INSTANCE);
         }
     };
-    
+
     private NameFileFacetFactory facetFactory;
     private MethodRemover mockMethodRemover;
     private FacetedMethod mockFacetHolder;
@@ -67,7 +63,7 @@ public class NameFileFacetFactoryProcessTest {
         facetFactory = new NameFileFacetFactory();
         mockMethodRemover = mockery.mock(MethodRemover.class);
         mockFacetHolder = mockery.mock(FacetedMethod.class);
-        
+
         domainObjectWithNameFileEntryClass = DomainObjectWithNameFileEntry.class;
         domainObjectWithNameFileEntryMethod = domainObjectWithNameFileEntryClass.getMethod("getLastName");
 
@@ -84,44 +80,52 @@ public class NameFileFacetFactoryProcessTest {
 
     @Test
     public void addsANameFileFacetForObjectIfEntryExists() {
-        mockery.checking(new Expectations() {{
-            one(mockFacetHolder).addFacet(with(anInstanceOf(NameFileFacet.class)));
-        }});
-        
+        mockery.checking(new Expectations() {
+            {
+                one(mockFacetHolder).addFacet(with(anInstanceOf(NameFileFacet.class)));
+            }
+        });
+
         facetFactory.process(new ProcessClassContext(domainObjectWithNameFileEntryClass, mockMethodRemover, mockFacetHolder));
     }
 
     @Test
     public void doesNotAddsANameFileFacetForObjectIfEntryDoesNotExists() {
-        mockery.checking(new Expectations() {{
-            never(mockFacetHolder).addFacet(with(anInstanceOf(NameFileFacet.class)));
-        }});
-        
+        mockery.checking(new Expectations() {
+            {
+                never(mockFacetHolder).addFacet(with(anInstanceOf(NameFileFacet.class)));
+            }
+        });
+
         facetFactory.process(new ProcessClassContext(domainObjectWithoutNameFileEntryClass, mockMethodRemover, mockFacetHolder));
     }
-    
+
     @Test
     public void addsANameFileFacetForPropertyIfEntryExists() {
-        mockery.checking(new Expectations() {{
-            one(mockFacetHolder).getIdentifier();
-            will(returnValue(Identifier.propertyOrCollectionIdentifier(domainObjectWithNameFileEntryClass, "lastName")));
-            
-            one(mockFacetHolder).addFacet(with(anInstanceOf(NameFileFacet.class)));
-        }});
-        
+        mockery.checking(new Expectations() {
+            {
+                one(mockFacetHolder).getIdentifier();
+                will(returnValue(Identifier.propertyOrCollectionIdentifier(domainObjectWithNameFileEntryClass, "lastName")));
+
+                one(mockFacetHolder).addFacet(with(anInstanceOf(NameFileFacet.class)));
+            }
+        });
+
         facetFactory.process(new ProcessMethodContext(domainObjectWithNameFileEntryClass, domainObjectWithNameFileEntryMethod, mockMethodRemover, mockFacetHolder));
     }
-    
+
     @Test
     public void doesNotAddsANameFileFacetForPropertyIfEntryDoesNotExists() {
-        mockery.checking(new Expectations() {{
-            one(mockFacetHolder).getIdentifier();
-            will(returnValue(Identifier.propertyOrCollectionIdentifier(domainObjectWithoutNameFileEntryClass, "lastName")));
-            
-            never(mockFacetHolder).addFacet(with(anInstanceOf(Facet.class)));
-        }});
-        
+        mockery.checking(new Expectations() {
+            {
+                one(mockFacetHolder).getIdentifier();
+                will(returnValue(Identifier.propertyOrCollectionIdentifier(domainObjectWithoutNameFileEntryClass, "lastName")));
+
+                never(mockFacetHolder).addFacet(with(anInstanceOf(Facet.class)));
+            }
+        });
+
         facetFactory.process(new ProcessMethodContext(domainObjectWithoutNameFileEntryClass, domainObjectWithoutNameFileEntryMethod, mockMethodRemover, mockFacetHolder));
     }
-    
+
 }

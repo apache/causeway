@@ -13,19 +13,16 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @Controller
 public class HomeController {
 
-	private static final Logger logger = LoggerFactory
-			.getLogger(HomeController.class);
+    private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
 
-	/**
-	 * Selects the home page and populates the model with a message
-	 */
-	@RequestMapping(value = "/", method = RequestMethod.GET)
-	public String home(Model model) {
-		logger.info("Welcome home!");
-		model.addAttribute("controllerMessage",
-				"This is the message from the controller!");
-		return "home";
-	}
-	
+    /**
+     * Selects the home page and populates the model with a message
+     */
+    @RequestMapping(value = "/", method = RequestMethod.GET)
+    public String home(final Model model) {
+        logger.info("Welcome home!");
+        model.addAttribute("controllerMessage", "This is the message from the controller!");
+        return "home";
+    }
 
 }

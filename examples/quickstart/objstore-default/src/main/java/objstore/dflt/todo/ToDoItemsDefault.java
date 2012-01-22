@@ -21,11 +21,11 @@ package objstore.dflt.todo;
 
 import java.util.List;
 
-import dom.todo.ToDoItem;
-import dom.todo.ToDoItems;
-
 import org.apache.isis.applib.AbstractFactoryAndRepository;
 import org.apache.isis.applib.filter.Filter;
+
+import dom.todo.ToDoItem;
+import dom.todo.ToDoItems;
 
 public class ToDoItemsDefault extends AbstractFactoryAndRepository implements ToDoItems {
 
@@ -38,29 +38,27 @@ public class ToDoItemsDefault extends AbstractFactoryAndRepository implements To
     public String iconName() {
         return "ToDoItem";
     }
+
     // }}
 
-    
     @Override
     public List<ToDoItem> notYetDone() {
         return allMatches(ToDoItem.class, new Filter<ToDoItem>() {
             @Override
-            public boolean accept(ToDoItem t) {
+            public boolean accept(final ToDoItem t) {
                 return !t.isComplete();
             }
         });
     }
 
-    
     // {{ NewToDo
     @Override
-    public ToDoItem newToDo(String description) {
-        ToDoItem toDoItem = newTransientInstance(ToDoItem.class);
+    public ToDoItem newToDo(final String description) {
+        final ToDoItem toDoItem = newTransientInstance(ToDoItem.class);
         toDoItem.setDescription(description);
         persist(toDoItem);
         return toDoItem;
     }
     // }}
-
 
 }

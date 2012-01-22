@@ -17,15 +17,14 @@
  *  under the License.
  */
 
-
 package org.apache.isis.example.claims.fixture;
 
 import org.apache.isis.applib.fixtures.LogonFixture;
 
 public class ClaimsLogonFixture extends LogonFixture {
 
-	public ClaimsLogonFixture() {
-		super("bill");
-	}
+    public ClaimsLogonFixture() {
+        super("bill");
+    }
 
 }

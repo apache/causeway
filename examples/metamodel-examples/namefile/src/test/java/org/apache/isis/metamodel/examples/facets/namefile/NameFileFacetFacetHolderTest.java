@@ -17,12 +17,12 @@
  *  under the License.
  */
 
-
 package org.apache.isis.metamodel.examples.facets.namefile;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JMock;
 import org.jmock.integration.junit4.JUnit4Mockery;
@@ -31,12 +31,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.metamodel.examples.facets.namefile.NameFileFacet;
-
-
-
 
 @RunWith(JMock.class)
 public class NameFileFacetFacetHolderTest {
@@ -50,7 +44,6 @@ public class NameFileFacetFacetHolderTest {
     private NameFileFacet facet;
     private FacetHolder mockHolder;
 
-    
     @Before
     public void setUp() throws Exception {
         mockHolder = mockery.mock(FacetHolder.class);
@@ -62,7 +55,6 @@ public class NameFileFacetFacetHolderTest {
         mockHolder = null;
         facet = null;
     }
-
 
     @Test
     public void facetHolder() {

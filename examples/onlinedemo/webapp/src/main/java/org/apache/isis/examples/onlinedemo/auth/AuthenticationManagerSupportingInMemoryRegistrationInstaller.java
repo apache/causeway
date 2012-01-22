@@ -27,17 +27,16 @@ import org.apache.isis.runtimes.dflt.runtime.authentication.AuthenticationManage
 
 import com.google.common.collect.Lists;
 
-public class AuthenticationManagerSupportingInMemoryRegistrationInstaller extends
-    AuthenticationManagerStandardInstallerAbstractForDfltRuntime {
+public class AuthenticationManagerSupportingInMemoryRegistrationInstaller extends AuthenticationManagerStandardInstallerAbstractForDfltRuntime {
 
     public AuthenticationManagerSupportingInMemoryRegistrationInstaller() {
         super("demo");
     }
 
     @Override
-    protected List<Authenticator> createAuthenticators(IsisConfiguration configuration) {
-        return Lists.<Authenticator>newArrayList(
-                //new FileAuthenticator(configuration), 
+    protected List<Authenticator> createAuthenticators(final IsisConfiguration configuration) {
+        return Lists.<Authenticator> newArrayList(
+        // new FileAuthenticator(configuration),
                 new AuthenticatorInMemory(configuration));
     }
 

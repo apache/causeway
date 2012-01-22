@@ -29,8 +29,8 @@ public class ToDoItem extends AbstractDomainObject {
     public String title() {
         return getDescription();
     }
-    // }}
 
+    // }}
 
     // {{ Description
     private String description;
@@ -40,12 +40,12 @@ public class ToDoItem extends AbstractDomainObject {
         return description;
     }
 
-    public void setDescription(String description) {
+    public void setDescription(final String description) {
         this.description = description;
     }
+
     // }}
 
-    
     // {{ Done
     private boolean done;
 
@@ -55,21 +55,22 @@ public class ToDoItem extends AbstractDomainObject {
         return done;
     }
 
-    public void setDone(boolean done) {
+    public void setDone(final boolean done) {
         this.done = done;
     }
+
     // }}
-
-
 
     // {{ markAsDone
     @MemberOrder(sequence = "1")
     public void markAsDone() {
         setDone(true);
     }
+
     public String disableMarkAsDone() {
-        return done?"Already done":null;
+        return done ? "Already done" : null;
     }
+
     // }}
 
     // {{ markAsNotDone
@@ -77,8 +78,9 @@ public class ToDoItem extends AbstractDomainObject {
     public void markAsNotDone() {
         setDone(false);
     }
+
     public String disableMarkAsNotDone() {
-        return !done?"Not yet done":null;
+        return !done ? "Not yet done" : null;
     }
     // }}
 

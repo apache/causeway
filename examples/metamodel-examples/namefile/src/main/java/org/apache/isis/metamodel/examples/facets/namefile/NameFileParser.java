@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.metamodel.examples.facets.namefile;
 
 import java.io.IOException;
@@ -32,7 +31,7 @@ public class NameFileParser {
     public void parse() throws IOException {
         InputStream in = Thread.currentThread().getContextClassLoader().getResourceAsStream(CONFIG_NAMEFILE_PROPERTIES);
         if (in == null) {
-            in = getClass().getClassLoader().getResourceAsStream(CONFIG_NAMEFILE_PROPERTIES); 
+            in = getClass().getClassLoader().getResourceAsStream(CONFIG_NAMEFILE_PROPERTIES);
         }
         if (in == null) {
             throw new NullPointerException("Cannot locate resource '" + CONFIG_NAMEFILE_PROPERTIES + "'");
@@ -46,8 +45,7 @@ public class NameFileParser {
     }
 
     public String getMemberName(final Class<?> cls, final String memberName) {
-        return properties.getProperty(cls.getCanonicalName()+"#"+memberName);
+        return properties.getProperty(cls.getCanonicalName() + "#" + memberName);
     }
-    
-    
+
 }

@@ -54,7 +54,7 @@ public class ClaimRepositoryDefault extends AbstractFactoryAndRepository impleme
 
     // {{ action: findClaims
     @Override
-    public List<Claim> findClaims(String description) {
+    public List<Claim> findClaims(final String description) {
         return allMatches(Claim.class, description);
     }
 
@@ -62,8 +62,8 @@ public class ClaimRepositoryDefault extends AbstractFactoryAndRepository impleme
 
     // {{ action: claimsFor
     @Override
-    public List<Claim> claimsFor(Claimant claimant) {
-        Claim pattern = newTransientInstance(Claim.class);
+    public List<Claim> claimsFor(final Claimant claimant) {
+        final Claim pattern = newTransientInstance(Claim.class);
         pattern.setDescription(null);
         pattern.setApprover(null);
         pattern.setStatus(null);
@@ -76,8 +76,8 @@ public class ClaimRepositoryDefault extends AbstractFactoryAndRepository impleme
 
     // {{ action: newClaim
     @Override
-    public Claim newClaim(Claimant claimant) {
-        Claim claim = newTransientInstance(Claim.class);
+    public Claim newClaim(final Claimant claimant) {
+        final Claim claim = newTransientInstance(Claim.class);
         if (claimant != null) {
             claim.setClaimant(claimant);
             claim.setApprover(claimant.getDefaultApprover());
@@ -89,8 +89,8 @@ public class ClaimRepositoryDefault extends AbstractFactoryAndRepository impleme
 
     // {{ action: newClaimWithDescription
     @Override
-    public Claim newClaimWithDescription(Claimant claimant, String description) {
-        Claim claim = newClaim(claimant);
+    public Claim newClaimWithDescription(final Claimant claimant, final String description) {
+        final Claim claim = newClaim(claimant);
         claim.setDescription(description);
         return claim;
     }
@@ -103,30 +103,30 @@ public class ClaimRepositoryDefault extends AbstractFactoryAndRepository impleme
         return allMatches(Claim.class, new Filter<Claim>() {
 
             @Override
-            public boolean accept(Claim pojo) {
+            public boolean accept(final Claim pojo) {
                 return pojo.getClaimant() == claimant && pojo.getDate() != null && pojo.getDate().isGreaterThan(since);
             }
         });
     }
 
     public String validateClaimsSince(final Claimant claimant, final Date since) {
-        Date today = new Date();
+        final Date today = new Date();
         return since.isGreaterThan(today) ? "cannot be after today" : null;
     }
 
     // }}
 
     @Override
-    public int countClaimsFor(Claimant claimant) {
+    public int countClaimsFor(final Claimant claimant) {
         return claimsFor(claimant).size();
     }
 
     @Override
-    public Claim mostRecentClaim(Claimant claimant) {
-        List<Claim> claims = claimsFor(claimant);
+    public Claim mostRecentClaim(final Claimant claimant) {
+        final List<Claim> claims = claimsFor(claimant);
         Collections.sort(claims, new Comparator<Claim>() {
             @Override
-            public int compare(Claim o1, Claim o2) {
+            public int compare(final Claim o1, final Claim o2) {
                 return o1.getDate().isLessThan(o2.getDate()) ? +1 : -1;
             }
         });

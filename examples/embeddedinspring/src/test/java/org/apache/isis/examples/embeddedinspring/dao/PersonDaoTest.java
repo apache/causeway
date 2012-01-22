@@ -13,45 +13,45 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-@ContextConfiguration({"/test-context.xml", "/test-isis.xml"})
+@ContextConfiguration({ "/test-context.xml", "/test-isis.xml" })
 @RunWith(SpringJUnit4ClassRunner.class)
 @Transactional
 public class PersonDaoTest {
 
-	@Autowired
-	private PersonDao personDao;
+    @Autowired
+    private PersonDao personDao;
 
-	@Autowired
-	private DataInitializer dataInitializer;
+    @Autowired
+    private DataInitializer dataInitializer;
 
-	@Before
-	public void prepareData() {
-		dataInitializer.initData();
-	}
+    @Before
+    public void prepareData() {
+        dataInitializer.initData();
+    }
 
-	@Test
-	public void shouldSaveAPerson() {
-		Person p = new Person();
-		p.setFirstName("Andy");
-		p.setLastName("Gibson");
-		personDao.save(p);
-		Long id = p.getId();
-		Assert.assertNotNull(id);
-	}
+    @Test
+    public void shouldSaveAPerson() {
+        final Person p = new Person();
+        p.setFirstName("Andy");
+        p.setLastName("Gibson");
+        personDao.save(p);
+        final Long id = p.getId();
+        Assert.assertNotNull(id);
+    }
 
-	@Test
-	public void shouldLoadAPerson() {
-		Long template = dataInitializer.people.get(0);
-		Person p = personDao.find(template);
+    @Test
+    public void shouldLoadAPerson() {
+        final Long template = dataInitializer.people.get(0);
+        final Person p = personDao.find(template);
 
-		Assert.assertNotNull("Person not found!", p);
-		Assert.assertEquals(template, p.getId());
-	}
+        Assert.assertNotNull("Person not found!", p);
+        Assert.assertEquals(template, p.getId());
+    }
 
-	public void shouldListPeople() {
-		List<Person> people = personDao.listPeople();
-		Assert.assertEquals(DataInitializer.PERSON_COUNT, people.size());
+    public void shouldListPeople() {
+        final List<Person> people = personDao.listPeople();
+        Assert.assertEquals(DataInitializer.PERSON_COUNT, people.size());
 
-	}
+    }
 
 }

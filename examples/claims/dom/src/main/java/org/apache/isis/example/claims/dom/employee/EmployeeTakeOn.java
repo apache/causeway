@@ -98,7 +98,7 @@ public class EmployeeTakeOn extends AbstractDomainObject {
     // {{ finish
     @MemberOrder(sequence = "2")
     public Employee finish() {
-        Employee employee = newTransientInstance(Employee.class);
+        final Employee employee = newTransientInstance(Employee.class);
         employee.setName(getName());
         employee.setDefaultApprover(approver);
         persist(employee);

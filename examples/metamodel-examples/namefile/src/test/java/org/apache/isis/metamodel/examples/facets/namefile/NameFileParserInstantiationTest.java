@@ -17,12 +17,9 @@
  *  under the License.
  */
 
-
 package org.apache.isis.metamodel.examples.facets.namefile;
 
 import org.junit.Test;
-import org.apache.isis.metamodel.examples.facets.namefile.NameFileParser;
-
 
 public class NameFileParserInstantiationTest {
 

@@ -47,12 +47,12 @@ public class Employee extends AbstractDomainObject implements Claimant, Approver
 
     @MemberOrder(sequence = "1")
     public String getName() {
-		return name;
-	}
+        return name;
+    }
 
-    public void setName(String lastName) {
-		this.name = lastName;
-	}
+    public void setName(final String lastName) {
+        this.name = lastName;
+    }
 
     // }}
 
@@ -62,16 +62,17 @@ public class Employee extends AbstractDomainObject implements Claimant, Approver
     @Override
     @MemberOrder(sequence = "2")
     public Approver getDefaultApprover() {
-		return defaultApprover;
-	}
+        return defaultApprover;
+    }
 
-    public void setDefaultApprover(Approver approver) {
-		this.defaultApprover = approver;
-	}
+    public void setDefaultApprover(final Approver approver) {
+        this.defaultApprover = approver;
+    }
 
     public String validateDefaultApprover(final Approver approver) {
-        if (approver == null)
+        if (approver == null) {
             return null;
+        }
         if (approver == this) {
             return "Cannot act as own approver";
         }
@@ -86,12 +87,12 @@ public class Employee extends AbstractDomainObject implements Claimant, Approver
     @Optional
     @MemberOrder(sequence = "1")
     public Integer getLimit() {
-		return limit;
-	}
-    public void setLimit(final Integer limit) {
-		this.limit = limit;
-	}
-    // }}
+        return limit;
+    }
 
+    public void setLimit(final Integer limit) {
+        this.limit = limit;
+    }
+    // }}
 
 }

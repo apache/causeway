@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.metamodel.examples.facets.namefile;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -26,11 +25,6 @@ import static org.junit.Assert.assertThat;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.apache.isis.metamodel.examples.facets.namefile.NameFileParser;
-
-
-
-
 
 public class NameFileParserParsingTest {
 

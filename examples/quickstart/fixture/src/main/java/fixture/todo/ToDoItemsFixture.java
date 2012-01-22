@@ -17,14 +17,12 @@
  *  under the License.
  */
 
-
 package fixture.todo;
-
-import dom.todo.ToDoItem;
-import dom.todo.ToDoItems;
 
 import org.apache.isis.applib.fixtures.AbstractFixture;
 
+import dom.todo.ToDoItem;
+import dom.todo.ToDoItems;
 
 public class ToDoItemsFixture extends AbstractFixture {
 
@@ -36,15 +34,15 @@ public class ToDoItemsFixture extends AbstractFixture {
         createToDoItem("Write blog post");
         createToDoItem("Organize brown bag");
     }
-    
-    private ToDoItem createToDoItem(String description) {
+
+    private ToDoItem createToDoItem(final String description) {
         return toDoItems.newToDo(description);
     }
 
-    
     private ToDoItems toDoItems;
-    public void setToDoItemRepository(ToDoItems toDoItems) {
+
+    public void setToDoItemRepository(final ToDoItems toDoItems) {
         this.toDoItems = toDoItems;
     }
-    
+
 }

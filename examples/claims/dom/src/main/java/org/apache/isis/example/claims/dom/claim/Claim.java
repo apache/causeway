@@ -37,7 +37,7 @@ import org.apache.isis.applib.value.Date;
 import org.apache.isis.applib.value.Money;
 
 /**
- * @author  danhaywood
+ * @author danhaywood
  */
 public class Claim extends AbstractDomainObject /* implements Calendarable */{
 
@@ -45,6 +45,7 @@ public class Claim extends AbstractDomainObject /* implements Calendarable */{
     public String title() {
         return getStatus() + " - " + getDate();
     }
+
     // }}
 
     // {{ Lifecycle
@@ -60,12 +61,12 @@ public class Claim extends AbstractDomainObject /* implements Calendarable */{
 
     @MemberOrder(sequence = "1.2")
     public boolean getRush() {
-		return rush;
-	}
+        return rush;
+    }
 
     public void setRush(final boolean flag) {
-		this.rush = flag;
-	}
+        this.rush = flag;
+    }
 
     // }}
 
@@ -74,20 +75,21 @@ public class Claim extends AbstractDomainObject /* implements Calendarable */{
 
     @MemberOrder(sequence = "1")
     public String getDescription() {
-		return description;
-	}
+        return description;
+    }
 
-    public void setDescription(String description) {
-		this.description = description;
-	}
+    public void setDescription(final String description) {
+        this.description = description;
+    }
 
     public String defaultDescription() {
         return "enter a description here";
     }
 
     public String validateDescription(final String description) {
-        if (description == null)
+        if (description == null) {
             return null;
+        }
         if (description.contains("foobar")) {
             return "can't contain foobar!";
         }
@@ -101,47 +103,45 @@ public class Claim extends AbstractDomainObject /* implements Calendarable */{
 
     @MemberOrder(sequence = "2")
     public Date getDate() {
-		return date;
-	}
+        return date;
+    }
 
-    public void setDate(Date date) {
-		this.date = date;
-	}
+    public void setDate(final Date date) {
+        this.date = date;
+    }
 
     // }}
 
     // {{ Status
     /**
-     * @uml.property  name="status"
+     * @uml.property name="status"
      */
     private String status;
 
     /**
      * @return
-     * @uml.property  name="status"
+     * @uml.property name="status"
      */
     @Disabled
     @MemberOrder(sequence = "3")
     @MaxLength(5)
     public String getStatus() {
-		return status;
-	}
+        return status;
+    }
 
     /**
      * @param status
-     * @uml.property  name="status"
+     * @uml.property name="status"
      */
-    public void setStatus(String status) {
-		this.status = status;
-	}
+    public void setStatus(final String status) {
+        this.status = status;
+    }
 
     // }}
 
     // {{ changeStatus
     @MemberOrder(sequence = "1")
-    public void changeStatus(
-        @MustSatisfy(ClaimStatus.ChoicesSpecification.class)
-        final String status) {
+    public void changeStatus(@MustSatisfy(ClaimStatus.ChoicesSpecification.class) final String status) {
         setStatus(status);
     }
 
@@ -157,28 +157,28 @@ public class Claim extends AbstractDomainObject /* implements Calendarable */{
 
     // {{ Claimant
     /**
-     * @uml.property  name="claimant"
-     * @uml.associationEnd  
+     * @uml.property name="claimant"
+     * @uml.associationEnd
      */
     private Claimant claimant;
 
     /**
      * @return
-     * @uml.property  name="claimant"
+     * @uml.property name="claimant"
      */
     @Disabled
     @MemberOrder(sequence = "4")
     public Claimant getClaimant() {
-		return claimant;
-	}
+        return claimant;
+    }
 
     /**
      * @param claimant
-     * @uml.property  name="claimant"
+     * @uml.property name="claimant"
      */
-    public void setClaimant(Claimant claimant) {
-		this.claimant = claimant;
-	}
+    public void setClaimant(final Claimant claimant) {
+        this.claimant = claimant;
+    }
 
     // }}
 
@@ -189,20 +189,21 @@ public class Claim extends AbstractDomainObject /* implements Calendarable */{
     @MemberOrder(sequence = "5")
     @Optional
     public Approver getApprover() {
-		return approver;
-	}
+        return approver;
+    }
 
-    public void setApprover(Approver approver) {
-		this.approver = approver;
-	}
+    public void setApprover(final Approver approver) {
+        this.approver = approver;
+    }
 
     public String disableApprover() {
         return getDescription().contains("baz") ? "desc contains baz" : null;
     }
 
     public String validateApprover(final Approver approver) {
-        if (approver == null)
+        if (approver == null) {
             return null;
+        }
         return approver == getClaimant() ? "Can't approve own claims" : null;
     }
 
@@ -213,21 +214,21 @@ public class Claim extends AbstractDomainObject /* implements Calendarable */{
 
     @MemberOrder(sequence = "6")
     public List<ClaimItem> getItems() {
-		return items;
-	}
+        return items;
+    }
 
-    public void addToItems(ClaimItem item) {
+    public void addToItems(final ClaimItem item) {
         items.add(item);
     }
 
-    public void removeFromItems(ClaimItem item) {
+    public void removeFromItems(final ClaimItem item) {
         items.remove(item);
     }
 
     // }}
 
     // {{ action: Submit
-    public void submit(Approver approver) {
+    public void submit(final Approver approver) {
         setStatus(ClaimStatus.SUBMITTED);
         setApprover(approver);
     }
@@ -244,9 +245,8 @@ public class Claim extends AbstractDomainObject /* implements Calendarable */{
 
     // {{ action: addItem
     @MemberOrder(sequence = "1")
-    public void addItem(@Named("Days since") int days, @Named("Amount") double amount,
-        @Named("Description") String description) {
-        ClaimItem claimItem = newTransientInstance(ClaimItem.class);
+    public void addItem(@Named("Days since") final int days, @Named("Amount") final double amount, @Named("Description") final String description) {
+        final ClaimItem claimItem = newTransientInstance(ClaimItem.class);
         Date date = new Date();
         date = date.add(0, 0, days);
         claimItem.setDateIncurred(date);
@@ -301,15 +301,14 @@ public class Claim extends AbstractDomainObject /* implements Calendarable */{
         private static final String NEW = "New";
         private static final String INCOMPLETE = "Incomplete";
         private static final String SUBMITTED = "Submitted";
-        
-        public static final List<String> ALL = 
-            Collections.unmodifiableList(Arrays.asList(NEW, INCOMPLETE, SUBMITTED));
+
+        public static final List<String> ALL = Collections.unmodifiableList(Arrays.asList(NEW, INCOMPLETE, SUBMITTED));
 
         public static class ChoicesSpecification implements Specification {
 
             @Override
-            public String satisfies(Object obj) {
-                for (String str : ALL) {
+            public String satisfies(final Object obj) {
+                for (final String str : ALL) {
                     if (str.equals(obj)) {
                         return null;
                     }
@@ -318,6 +317,5 @@ public class Claim extends AbstractDomainObject /* implements Calendarable */{
             }
         }
     }
-
 
 }

@@ -19,10 +19,6 @@
 
 package org.apache.isis.example.claims.junit;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.runner.RunWith;
-
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.example.claims.dom.claim.ClaimRepository;
 import org.apache.isis.example.claims.dom.employee.Employee;
@@ -34,6 +30,9 @@ import org.apache.isis.progmodel.wrapper.applib.WrapperObject;
 import org.apache.isis.viewer.junit.IsisTestRunner;
 import org.apache.isis.viewer.junit.Service;
 import org.apache.isis.viewer.junit.Services;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.runner.RunWith;
 
 @RunWith(IsisTestRunner.class)
 @Services({ @Service(ClaimRepositoryDefault.class), @Service(EmployeeRepositoryDefault.class) })
@@ -43,13 +42,15 @@ public abstract class AbstractTest {
     private WrapperFactory wrapperFactory;
 
     /**
-     * The {@link WrapperFactory#wrap(Object) wrapped} equivalent of the {@link #setClaimRepository(ClaimRepository)
-     * injected} {@link ClaimRepository}.
+     * The {@link WrapperFactory#wrap(Object) wrapped} equivalent of the
+     * {@link #setClaimRepository(ClaimRepository) injected}
+     * {@link ClaimRepository}.
      */
     protected ClaimRepository claimRepository;
     /**
      * The {@link WrapperFactory#wrap(Object) wrapped} equivalent of the
-     * {@link #setEmployeeRepository(EmployeeRepository) injected} {@link EmployeeRepository}.
+     * {@link #setEmployeeRepository(EmployeeRepository) injected}
+     * {@link EmployeeRepository}.
      */
     protected EmployeeRepository employeeRepository;
 
@@ -66,14 +67,14 @@ public abstract class AbstractTest {
         tomEmployee = wrapped(employeeRepository.findEmployees("Tom").get(0));
     }
 
-    protected <T> T wrapped(T obj) {
+    protected <T> T wrapped(final T obj) {
         return wrapperFactory.wrap(obj);
     }
 
     @SuppressWarnings("unchecked")
-    protected <T> T unwrapped(T obj) {
+    protected <T> T unwrapped(final T obj) {
         if (obj instanceof WrapperObject) {
-            WrapperObject wrapperObject = (WrapperObject) obj;
+            final WrapperObject wrapperObject = (WrapperObject) obj;
             return (T) wrapperObject.wrapped();
         }
         return obj;
@@ -91,7 +92,7 @@ public abstract class AbstractTest {
         return wrapperFactory;
     }
 
-    public void setWrapperFactory(WrapperFactory wrapperFactory) {
+    public void setWrapperFactory(final WrapperFactory wrapperFactory) {
         this.wrapperFactory = wrapperFactory;
     }
 

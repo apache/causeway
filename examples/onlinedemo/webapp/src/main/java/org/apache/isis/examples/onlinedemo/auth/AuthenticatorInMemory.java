@@ -35,6 +35,7 @@ import com.google.common.collect.Maps;
 public class AuthenticatorInMemory extends AuthenticatorAbstract implements Registrar {
 
     private static AuthenticatorInMemory instance;
+
     /**
      * Rather nasty, but is required to make available to the Users repository.
      */
@@ -42,8 +43,8 @@ public class AuthenticatorInMemory extends AuthenticatorAbstract implements Regi
         return instance;
     }
 
-    private Map<String, String> passwordsByUser = Maps.newHashMap();
-    
+    private final Map<String, String> passwordsByUser = Maps.newHashMap();
+
     public AuthenticatorInMemory(final IsisConfiguration configuration) {
         super(configuration);
         instance = this;
@@ -70,13 +71,11 @@ public class AuthenticatorInMemory extends AuthenticatorAbstract implements Regi
     public boolean register(final RegistrationDetails registrationDetails) {
         final RegistrationDetailsPassword registration = (RegistrationDetailsPassword) registrationDetails;
         final String userId = registration.getUser();
-        if(passwordsByUser.containsKey(userId)) {
+        if (passwordsByUser.containsKey(userId)) {
             return false;
         }
         passwordsByUser.put(userId, registration.getPassword());
         return true;
     }
-    
 
 }
-

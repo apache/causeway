@@ -33,7 +33,7 @@ public class NewClaimTest extends AbstractTest {
 
     @Test
     public void whenCreateNewClaimDefaultsOk() throws Exception {
-        Claim newClaim = claimRepository.newClaim(tomEmployee);
+        final Claim newClaim = claimRepository.newClaim(tomEmployee);
         assertThat(newClaim.getDescription(), is("enter a description here"));
         assertThat(newClaim.getStatus(), is("New"));
         assertThat(newClaim.getApprover(), is(tomEmployee.getDefaultApprover()));

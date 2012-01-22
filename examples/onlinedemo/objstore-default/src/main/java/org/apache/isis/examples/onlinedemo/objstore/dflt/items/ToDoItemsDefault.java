@@ -29,7 +29,6 @@ import org.apache.isis.examples.onlinedemo.dom.items.Category;
 import org.apache.isis.examples.onlinedemo.dom.items.ToDoItem;
 import org.apache.isis.examples.onlinedemo.dom.items.ToDoItems;
 
-
 public class ToDoItemsDefault extends AbstractFactoryAndRepository implements ToDoItems {
 
     // {{ Id, iconName
@@ -41,19 +40,21 @@ public class ToDoItemsDefault extends AbstractFactoryAndRepository implements To
     public String iconName() {
         return "ToDoItem";
     }
+
     // }}
-    
+
     // {{ ToDosForToday (action)
     @Override
     public List<ToDoItem> toDosForToday() {
         return allMatches(ToDoItem.class, Filters.and(ToDoItem.thoseOwnedBy(currentUser()), ToDoItem.thoseDue()));
     }
+
     // }}
-    
+
     // {{ NewToDo (action)
     @Override
-    public ToDoItem newToDo(String description, Category category, Date dueBy) {
-        ToDoItem toDoItem = newTransientInstance(ToDoItem.class);
+    public ToDoItem newToDo(final String description, final Category category, final Date dueBy) {
+        final ToDoItem toDoItem = newTransientInstance(ToDoItem.class);
         toDoItem.setDescription(description);
         toDoItem.setCategory(category);
         toDoItem.setDueBy(dueBy);
@@ -61,6 +62,7 @@ public class ToDoItemsDefault extends AbstractFactoryAndRepository implements To
         persist(toDoItem);
         return toDoItem;
     }
+
     // }}
 
     // {{ AllToDos (action)
@@ -71,30 +73,30 @@ public class ToDoItemsDefault extends AbstractFactoryAndRepository implements To
         Collections.sort(items);
         return items;
     }
+
     // }}
 
     // {{ SimilarTo (action)
 
     @Override
-    public List<ToDoItem> similarTo(ToDoItem toDoItem) {
+    public List<ToDoItem> similarTo(final ToDoItem toDoItem) {
         return allMatches(ToDoItem.class, ToDoItem.thoseSimilarTo(toDoItem));
     }
-    // }}
 
+    // }}
 
     // {{ RemoveCompleted (action)
 
     @Override
     public void removeCompleted() {
-        final List<ToDoItem> complete= allMatches(ToDoItem.class, ToDoItem.thoseComplete());
-        for (ToDoItem toDoItem : complete) {
+        final List<ToDoItem> complete = allMatches(ToDoItem.class, ToDoItem.thoseComplete());
+        for (final ToDoItem toDoItem : complete) {
             getContainer().remove(toDoItem);
         }
         final int size = complete.size();
-        getContainer().informUser("" + size + " item" +
-        		(size != 1? "s": "") +
-        		" removed");
+        getContainer().informUser("" + size + " item" + (size != 1 ? "s" : "") + " removed");
     }
+
     // }}
 
     // {{ helpers
@@ -102,6 +104,5 @@ public class ToDoItemsDefault extends AbstractFactoryAndRepository implements To
         return getContainer().getUser().getName();
     }
     // }}
-
 
 }

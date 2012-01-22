@@ -24,15 +24,14 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 import junit.AbstractTest;
 
+import org.apache.isis.progmodel.wrapper.applib.DisabledException;
+import org.apache.isis.viewer.junit.Fixture;
+import org.apache.isis.viewer.junit.Fixtures;
 import org.junit.Before;
 import org.junit.Test;
 
 import dom.todo.ToDoItem;
 import fixture.todo.ToDoItemsFixture;
-
-import org.apache.isis.progmodel.wrapper.applib.DisabledException;
-import org.apache.isis.viewer.junit.Fixture;
-import org.apache.isis.viewer.junit.Fixtures;
 
 @Fixtures({ @Fixture(ToDoItemsFixture.class) })
 public class ToDoItemTest extends AbstractTest {
@@ -45,7 +44,7 @@ public class ToDoItemTest extends AbstractTest {
         toDoItem = toDoItems.notYetDone().get(0);
         toDoItem = wrapped(toDoItem);
     }
-    
+
     @Test
     public void canMarkAsDone() throws Exception {
         toDoItem.markAsDone();
@@ -58,10 +57,9 @@ public class ToDoItemTest extends AbstractTest {
         try {
             toDoItem.markAsDone();
             fail("Should have been disabled");
-        } catch (DisabledException e) {
+        } catch (final DisabledException e) {
             assertThat(e.getMessage(), is("Already done"));
         }
     }
-
 
 }

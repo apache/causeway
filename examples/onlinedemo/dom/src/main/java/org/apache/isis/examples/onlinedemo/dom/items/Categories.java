@@ -36,16 +36,17 @@ import org.apache.isis.applib.annotation.QueryOnly;
 @Named("Categories")
 public interface Categories {
 
-    @QueryOnly // no side-effects
-    @MemberOrder(sequence="1")
+    @QueryOnly
+    // no side-effects
+    @MemberOrder(sequence = "1")
     public List<Category> all();
 
     @QueryOnly
-    @MemberOrder(sequence="2")
-    public Category find(
-        @Named("Description") String description);
+    @MemberOrder(sequence = "2")
+    public Category find(@Named("Description") String description);
 
-    @Hidden // intended for fixtures only, so is hidden in the UI
+    @Hidden
+    // intended for fixtures only, so is hidden in the UI
     public Category newCategory(String description);
 
 }

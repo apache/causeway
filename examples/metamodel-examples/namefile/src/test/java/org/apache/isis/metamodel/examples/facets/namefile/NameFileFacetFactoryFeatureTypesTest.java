@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.metamodel.examples.facets.namefile;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -26,13 +25,10 @@ import static org.junit.Assert.assertThat;
 
 import java.util.List;
 
+import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-
-import org.apache.isis.core.metamodel.facetapi.FeatureType;
-
-
 
 public class NameFileFacetFactoryFeatureTypesTest {
 
@@ -50,31 +46,31 @@ public class NameFileFacetFactoryFeatureTypesTest {
 
     @Test
     public void featureTypesLength() {
-        List<FeatureType> featureTypes = facetFactory.getFeatureTypes();
+        final List<FeatureType> featureTypes = facetFactory.getFeatureTypes();
         assertThat(featureTypes.size(), is(4));
     }
 
     @Test
     public void featureTypesContainsTypeRepresentingObject() {
-        List<FeatureType> featureTypes = facetFactory.getFeatureTypes();
+        final List<FeatureType> featureTypes = facetFactory.getFeatureTypes();
         assertThat(featureTypes, hasItem(FeatureType.OBJECT));
     }
 
     @Test
     public void featureTypesContainsTypeRepresentingProperty() {
-        List<FeatureType> featureTypes = facetFactory.getFeatureTypes();
+        final List<FeatureType> featureTypes = facetFactory.getFeatureTypes();
         assertThat(featureTypes, hasItem(FeatureType.PROPERTY));
     }
 
     @Test
     public void featureTypesContainsTypeRepresentingCollection() {
-        List<FeatureType> featureTypes = facetFactory.getFeatureTypes();
+        final List<FeatureType> featureTypes = facetFactory.getFeatureTypes();
         assertThat(featureTypes, hasItem(FeatureType.COLLECTION));
     }
 
     @Test
     public void featureTypesContainsTypeRepresentingAction() {
-        List<FeatureType> featureTypes = facetFactory.getFeatureTypes();
+        final List<FeatureType> featureTypes = facetFactory.getFeatureTypes();
         assertThat(featureTypes, hasItem(FeatureType.ACTION));
     }
 
