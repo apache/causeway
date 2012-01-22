@@ -391,6 +391,50 @@
           of wisdom here.</para>
         </sect2>
       </sect1>
+
+      <sect1>
+        <title>Setting up Subversion Client</title>
+
+        <para>As per <ulink
+        url="http://www.apache.org/dev/version-control.html#https-svn-config">Apache
+        standards</ulink>, the <varname>svn:eol-style</varname> and/or
+        <varname>svn:mime-type</varname> property must be set on every file.
+        Subversion can be configured to do this automatically for all new
+        files:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>Download the Apache subversion config file <ulink
+            url="http://www.apache.org/dev/svn-eol-style.txt">svn-eol-style.txt</ulink>;</para>
+          </listitem>
+
+          <listitem>
+            <para>As instructed, append to your local config file:</para>
+
+            <itemizedlist>
+              <listitem>
+                <para>on *Nix, this is at
+                <filename>~/.subversion/config</filename></para>
+              </listitem>
+
+              <listitem>
+                <para>on Windows &lt;Vista, this is at <filename>C:\Documents
+                and Settings\{username}\Application
+                Data\Subversion\config</filename></para>
+              </listitem>
+
+              <listitem>
+                <para>on Windows &gt;Vista, this is at
+                <filename>C:\Users\{username}\AppData\Roaming\Subversion\config</filename></para>
+              </listitem>
+            </itemizedlist>
+          </listitem>
+        </itemizedlist>
+
+        <para>Note that in the code release chapter <xref
+        linkend="chp.FormalRelease" /> there is also a manual procedure to
+        ensure that all files are set correctly.</para>
+      </sect1>
     </chapter>
 
     <chapter id="chp.SetUpDevelopmentEnvironment">
@@ -1535,6 +1579,13 @@ protected IsisConfiguration getConfiguration() {
           <para>We make the above recommendation slightly tentatively;
           reformatting all lines clearly could cause a lot of changes.</para>
         </warning>
+      </sect1>
+
+      <sect1>
+        <title>Subversion Properties</title>
+
+        <para>An the svn:eol-style property should be set for each
+        file.</para>
       </sect1>
     </chapter>
 
@@ -3395,8 +3446,8 @@ public class FooBar {
         </listitem>
 
         <listitem>
-          <para>next, , the <code>mvn release:prepare</code> command is used
-          to upload the signed versions of the artifacts (which includes the
+          <para>next, the <code>mvn release:perform</code> command is used to
+          upload the signed versions of the artifacts (which includes the
           source release <acronym>ZIP</acronym>) to the Apache staging
           repository. See <xref
           linkend="sec.UploadReleaseForVoting" />.</para>
@@ -3674,6 +3725,12 @@ public class FooBar {
               <para>app generated from the archetype runs ok</para>
             </listitem>
           </itemizedlist>
+        </sect2>
+
+        <sect2>
+          <title>Fix Line Endings and Subversion Properties</title>
+
+          <para>The </para>
         </sect2>
 
         <sect2>
@@ -5822,7 +5879,7 @@ gpg --armor --export nnnnnnnn &gt;&gt;KEYS</programlisting>
 
                 <para>This is convenient both for demos or (so long as an
                 in-memory object store is used) for distribution to business
-                stakeholders. </para>
+                stakeholders.</para>
               </listitem>
             </itemizedlist>
 
