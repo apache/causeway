@@ -19,7 +19,6 @@
 
 package org.apache.isis.viewer.dnd.view.text;
 
-
 public class TextFieldContentStub extends TextContent {
 
     public TextFieldContentStub() {

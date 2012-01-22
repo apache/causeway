@@ -44,8 +44,8 @@ import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 
 /**
- * {@link ComponentFactory} for a {@link CssMenuPanel} to represent the {@link ApplicationActionsModel application
- * action}s.
+ * {@link ComponentFactory} for a {@link CssMenuPanel} to represent the
+ * {@link ApplicationActionsModel application action}s.
  */
 public class AppActionsCssMenuFactory extends ComponentFactoryAbstract {
 
@@ -98,8 +98,7 @@ public class AppActionsCssMenuFactory extends ComponentFactoryAbstract {
         }
     }
 
-    private void addActionSubMenuItems(final ObjectAdapterMemento serviceAdapterMemento,
-        final CssMenuItem serviceMenuItem) {
+    private void addActionSubMenuItems(final ObjectAdapterMemento serviceAdapterMemento, final CssMenuItem serviceMenuItem) {
 
         final ObjectSpecification serviceSpec = serviceAdapterMemento.getObjectAdapter().getSpecification();
 
@@ -109,8 +108,7 @@ public class AppActionsCssMenuFactory extends ComponentFactoryAbstract {
             if (noAction.getFacet(NotInServiceMenuFacet.class) != null) {
                 continue;
             }
-            final Builder subMenuItemBuilder =
-                serviceMenuItem.newSubMenuItem(serviceAdapterMemento, noAction, getLinkFactory());
+            final Builder subMenuItemBuilder = serviceMenuItem.newSubMenuItem(serviceAdapterMemento, noAction, getLinkFactory());
             if (subMenuItemBuilder != null) {
                 // not visible
                 subMenuItemBuilder.build();

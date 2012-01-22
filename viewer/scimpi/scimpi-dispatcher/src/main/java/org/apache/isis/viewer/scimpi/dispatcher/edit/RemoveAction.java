@@ -62,8 +62,7 @@ public class RemoveAction implements Action {
             final String fieldName = context.getParameter(FIELD);
             final ObjectAssociation field = parent.getSpecification().getAssociation(fieldName);
             if (field == null) {
-                throw new ScimpiException("No field " + fieldName + " in "
-                    + parent.getSpecification().getFullIdentifier());
+                throw new ScimpiException("No field " + fieldName + " in " + parent.getSpecification().getFullIdentifier());
             }
             if (field.isVisible(IsisContext.getAuthenticationSession(), parent).isVetoed()) {
                 throw new ForbiddenException(field, ForbiddenException.VISIBLE);

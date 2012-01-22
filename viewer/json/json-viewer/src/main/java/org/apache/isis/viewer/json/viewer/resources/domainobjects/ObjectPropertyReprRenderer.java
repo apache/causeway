@@ -38,7 +38,6 @@ import com.google.common.collect.Lists;
 
 public class ObjectPropertyReprRenderer extends AbstractObjectMemberReprRenderer<ObjectPropertyReprRenderer, OneToOneAssociation> {
 
-    
     public static class Factory extends ReprRendererFactoryAbstract {
 
         public Factory() {
@@ -46,122 +45,112 @@ public class ObjectPropertyReprRenderer extends AbstractObjectMemberReprRenderer
         }
 
         @Override
-        public ReprRenderer<?,?> newRenderer(ResourceContext resourceContext, LinkFollower linkFollower, JsonRepresentation representation) {
+        public ReprRenderer<?, ?> newRenderer(final ResourceContext resourceContext, final LinkFollower linkFollower, final JsonRepresentation representation) {
             return new ObjectPropertyReprRenderer(resourceContext, linkFollower, getRepresentationType(), representation);
         }
     }
-    
 
-    private ObjectPropertyReprRenderer(ResourceContext resourceContext, LinkFollower linkFollower, RepresentationType representationType, JsonRepresentation representation) {
+    private ObjectPropertyReprRenderer(final ResourceContext resourceContext, final LinkFollower linkFollower, final RepresentationType representationType, final JsonRepresentation representation) {
         super(resourceContext, linkFollower, representationType, representation);
     }
 
+    @Override
     public JsonRepresentation render() {
         // id and memberType are rendered eagerly
-        
+
         renderMemberContent();
         addValue();
-        
+
         putDisabledReasonIfDisabled();
 
-        if(mode.isStandalone() || mode.isMutated()) {
+        if (mode.isStandalone() || mode.isMutated()) {
             addChoices();
             addExtensionsIsisProprietaryChangedObjects();
         }
-        
-        
+
         return representation;
     }
 
-
-    
-    /////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////
     // value
-    /////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////
 
     private void addValue() {
         representation.mapPut("value", valueRep());
     }
 
     private Object valueRep() {
-        ObjectAdapter valueAdapter = objectMember.get(objectAdapter);
-        if(valueAdapter == null) {
+        final ObjectAdapter valueAdapter = objectMember.get(objectAdapter);
+        if (valueAdapter == null) {
             return NullNode.getInstance();
         }
         return DomainObjectReprRenderer.valueOrRef(resourceContext, valueAdapter, objectMember.getSpecification());
     }
 
-
-
-    /////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////
     // details link
-    /////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////
 
     /**
      * Mandatory hook method to support x-ro-follow-links
      */
     @Override
-    protected void followDetailsLink(JsonRepresentation detailsLink) {
-        RendererFactory factory = RendererFactoryRegistry.instance.find(RepresentationType.OBJECT_PROPERTY);
-        final ObjectPropertyReprRenderer renderer = 
-                (ObjectPropertyReprRenderer) factory.newRenderer(getResourceContext(), getLinkFollower(), JsonRepresentation.newMap());
+    protected void followDetailsLink(final JsonRepresentation detailsLink) {
+        final RendererFactory factory = RendererFactoryRegistry.instance.find(RepresentationType.OBJECT_PROPERTY);
+        final ObjectPropertyReprRenderer renderer = (ObjectPropertyReprRenderer) factory.newRenderer(getResourceContext(), getLinkFollower(), JsonRepresentation.newMap());
         renderer.with(new ObjectAndProperty(objectAdapter, objectMember)).asFollowed();
         detailsLink.mapPut("value", renderer.render());
     }
 
-    /////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////
     // mutators
-    /////////////////////////////////////////////////////
-
+    // ///////////////////////////////////////////////////
 
     @Override
     protected void addMutatorsIfEnabled() {
-        if(usability().isVetoed()) {
+        if (usability().isVetoed()) {
             return;
         }
-        Map<String, MutatorSpec> mutators = memberType.getMutators();
-        for(String mutator: mutators.keySet()) {
-            MutatorSpec mutatorSpec = mutators.get(mutator);
+        final Map<String, MutatorSpec> mutators = memberType.getMutators();
+        for (final String mutator : mutators.keySet()) {
+            final MutatorSpec mutatorSpec = mutators.get(mutator);
             addLinkFor(mutatorSpec);
         }
         return;
     }
 
-
-	
-    /////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////
     // choices
-    /////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////
 
-	private ObjectPropertyReprRenderer addChoices() {
-		Object propertyChoices = propertyChoices();
-		if(propertyChoices != null) {
-			representation.mapPut("choices", propertyChoices);
-		}
-		return this;
-	}
+    private ObjectPropertyReprRenderer addChoices() {
+        final Object propertyChoices = propertyChoices();
+        if (propertyChoices != null) {
+            representation.mapPut("choices", propertyChoices);
+        }
+        return this;
+    }
 
-	private Object propertyChoices() {
-		ObjectAdapter[] choiceAdapters = objectMember.getChoices(objectAdapter);
-		if(choiceAdapters == null || choiceAdapters.length == 0) {
-			return null;
-		}
-        List<Object> list = Lists.newArrayList();
+    private Object propertyChoices() {
+        final ObjectAdapter[] choiceAdapters = objectMember.getChoices(objectAdapter);
+        if (choiceAdapters == null || choiceAdapters.length == 0) {
+            return null;
+        }
+        final List<Object> list = Lists.newArrayList();
         for (final ObjectAdapter choiceAdapter : choiceAdapters) {
-        	ObjectSpecification objectSpec = objectMember.getSpecification();
-        	list.add(DomainObjectReprRenderer.valueOrRef(resourceContext, choiceAdapter, objectSpec));
+            final ObjectSpecification objectSpec = objectMember.getSpecification();
+            list.add(DomainObjectReprRenderer.valueOrRef(resourceContext, choiceAdapter, objectSpec));
         }
         return list;
-	}
+    }
 
-	
-    /////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////
     // extensions and links
-    /////////////////////////////////////////////////////
-    
+    // ///////////////////////////////////////////////////
+
+    @Override
     protected void addLinksToFormalDomainModel() {
-        getLinks().arrayAdd(
-                PropertyDescriptionReprRenderer.newLinkToBuilder(getResourceContext(), Rel.DESCRIBEDBY, objectAdapter.getSpecification(), objectMember).build());
+        getLinks().arrayAdd(PropertyDescriptionReprRenderer.newLinkToBuilder(getResourceContext(), Rel.DESCRIBEDBY, objectAdapter.getSpecification(), objectMember).build());
     }
 
     @Override
@@ -173,6 +162,5 @@ public class ObjectPropertyReprRenderer extends AbstractObjectMemberReprRenderer
     protected void putExtensionsIsisProprietary() {
         // none
     }
-
 
 }

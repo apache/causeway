@@ -92,10 +92,7 @@ public class ScrollBorderTest {
         TestToolkit.createInstance();
 
         final IsisConfigurationDefault configuration = new IsisConfigurationDefault();
-        final IsisSessionFactory sessionFactory =
-            new IsisSessionFactoryDefault(DeploymentType.EXPLORATION, configuration, mockTemplateImageLoader,
-                mockSpecificationLoader, mockAuthenticationManager, mockAuthorizationManager, mockUserProfileLoader,
-                mockPersistenceSessionFactory, servicesList);
+        final IsisSessionFactory sessionFactory = new IsisSessionFactoryDefault(DeploymentType.EXPLORATION, configuration, mockTemplateImageLoader, mockSpecificationLoader, mockAuthenticationManager, mockAuthorizationManager, mockUserProfileLoader, mockPersistenceSessionFactory, servicesList);
         sessionFactory.init();
         IsisContextStatic.createRelaxedInstance(sessionFactory);
     }

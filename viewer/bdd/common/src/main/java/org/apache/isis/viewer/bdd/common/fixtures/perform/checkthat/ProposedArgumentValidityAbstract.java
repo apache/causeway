@@ -51,12 +51,10 @@ public abstract class ProposedArgumentValidityAbstract extends ThatValidityAbstr
             throw ScenarioBoundValueException.current(arg0Binding, "(required)");
         }
 
-        final ObjectAdapter toValidateAdapter =
-            performContext.getPeer().getAdapter(null, nakedObjectMember.getSpecification(), arg0Binding, arg0Cell);
+        final ObjectAdapter toValidateAdapter = performContext.getPeer().getAdapter(null, nakedObjectMember.getSpecification(), arg0Binding, arg0Cell);
         final Consent validityConsent = determineConsent(performContext, toValidateAdapter);
         if (!getAssertion().satisfiedBy(validityConsent)) {
-            throw ScenarioBoundValueException.current(getAssertion().colorBinding(arg0Binding, thatBinding),
-                getAssertion().getReason(validityConsent));
+            throw ScenarioBoundValueException.current(getAssertion().colorBinding(arg0Binding, thatBinding), getAssertion().getReason(validityConsent));
         }
 
         return toValidateAdapter;

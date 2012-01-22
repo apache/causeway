@@ -34,8 +34,7 @@ public class Emptiness extends ThatAbstract {
     }
 
     @Override
-    protected void doThat(final PerformContext performContext, final Iterable<ObjectAdapter> collection)
-        throws ScenarioBoundValueException {
+    protected void doThat(final PerformContext performContext, final Iterable<ObjectAdapter> collection) throws ScenarioBoundValueException {
 
         boolean empty = true;
         for (@SuppressWarnings("unused")

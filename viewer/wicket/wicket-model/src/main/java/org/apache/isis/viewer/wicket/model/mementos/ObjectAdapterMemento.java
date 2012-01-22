@@ -58,8 +58,9 @@ public class ObjectAdapterMemento implements Serializable {
 
     enum Type {
         /**
-         * The {@link ObjectAdapter} that this is the memento for directly has an {@link EncodableFacet} (it is almost
-         * certainly a value), and so is stored directly.
+         * The {@link ObjectAdapter} that this is the memento for directly has
+         * an {@link EncodableFacet} (it is almost certainly a value), and so is
+         * stored directly.
          */
         ENCODEABLE {
             @Override
@@ -74,13 +75,13 @@ public class ObjectAdapterMemento implements Serializable {
             }
         },
         /**
-         * The {@link ObjectAdapter} that this is for is already known by its (persistent) {@link Oid}.
+         * The {@link ObjectAdapter} that this is for is already known by its
+         * (persistent) {@link Oid}.
          */
         PERSISTENT {
             @Override
             ObjectAdapter recreateAdapter(final ObjectAdapterMemento nom) {
-                return getPersistenceSession().recreateAdapter(nom.persistentOid,
-                    nom.getSpecMemento().getSpecification());
+                return getPersistenceSession().recreateAdapter(nom.persistentOid, nom.getSpecMemento().getSpecification());
             }
 
             private PersistenceSession getPersistenceSession() {
@@ -93,7 +94,8 @@ public class ObjectAdapterMemento implements Serializable {
             }
         },
         /**
-         * Uses Isis' own {@link Memento}, to capture the state of a transient object.
+         * Uses Isis' own {@link Memento}, to capture the state of a transient
+         * object.
          */
         TRANSIENT {
             @Override
@@ -196,10 +198,11 @@ public class ObjectAdapterMemento implements Serializable {
      * Lazily looks up {@link ObjectAdapter} if required.
      * 
      * <p>
-     * For transient objects, be aware that calling this method more than once will cause the underlying
-     * {@link ObjectAdapter} to be recreated, overwriting any changes that may have been made. In general then it's best
-     * to call once and then hold onto the value thereafter. Alternatively, can call {@link #setAdapter(ObjectAdapter)}
-     * to keep this memento in sync.
+     * For transient objects, be aware that calling this method more than once
+     * will cause the underlying {@link ObjectAdapter} to be recreated,
+     * overwriting any changes that may have been made. In general then it's
+     * best to call once and then hold onto the value thereafter. Alternatively,
+     * can call {@link #setAdapter(ObjectAdapter)} to keep this memento in sync.
      */
     public ObjectAdapter getObjectAdapter() {
         return type.getAdapter(this);

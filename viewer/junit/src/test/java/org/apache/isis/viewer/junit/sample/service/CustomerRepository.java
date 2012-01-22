@@ -100,8 +100,7 @@ public class CustomerRepository extends AbstractFactoryAndRepository {
      * @return
      */
     @Hidden
-    public Customer newCustomer(final String firstName, final String lastName, final int customerNumber,
-        final Country countryOfBirth) {
+    public Customer newCustomer(final String firstName, final String lastName, final int customerNumber, final Country countryOfBirth) {
 
         final Customer customer = newCustomer();
         customer.setFirstName(firstName);

@@ -39,8 +39,10 @@ public abstract class AbstractValueOption extends UserActionAbstract {
     }
 
     protected void updateParent(final View view) {
-        // have commented this out because it isn't needed; the transaction manager will do this
-        // for us on endTransaction. Still, if I'm wrong and it is needed, hopefully this
+        // have commented this out because it isn't needed; the transaction
+        // manager will do this
+        // for us on endTransaction. Still, if I'm wrong and it is needed,
+        // hopefully this
         // comment will help...
         // IsisContext.getObjectPersistor().objectChangedAllDirty();
 

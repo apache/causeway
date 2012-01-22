@@ -105,8 +105,7 @@ public class HtmlComponentFactory implements ComponentFactory {
     }
 
     @Override
-    public Form createForm(final String id, final String actionName, final int step, final int noOfPages,
-        final boolean isEditing) {
+    public Form createForm(final String id, final String actionName, final int step, final int noOfPages, final boolean isEditing) {
         return new HtmlForm(this, id, actionName, step, noOfPages, isEditing);
     }
 
@@ -136,8 +135,7 @@ public class HtmlComponentFactory implements ComponentFactory {
     }
 
     @Override
-    public Component createMenuItem(final String actionId, final String name, final String description,
-        final String reasonDisabled, final ActionType type, final boolean hasParameters, final String targetObjectId) {
+    public Component createMenuItem(final String actionId, final String name, final String description, final String reasonDisabled, final ActionType type, final boolean hasParameters, final String targetObjectId) {
         return new MenuItem(this, actionId, name, description, reasonDisabled, type, hasParameters, targetObjectId);
     }
 
@@ -152,8 +150,7 @@ public class HtmlComponentFactory implements ComponentFactory {
     }
 
     @Override
-    public Component createObjectIcon(final ObjectAssociation field, final ObjectAdapter object, final String objectId,
-        final String style) {
+    public Component createObjectIcon(final ObjectAssociation field, final ObjectAdapter object, final String objectId, final String style) {
         return new ObjectIcon(this, object, field.getDescription(), objectId, style);
     }
 
@@ -162,11 +159,11 @@ public class HtmlComponentFactory implements ComponentFactory {
         return new DynamicHtmlPage(this, styleSheet, header, footer);
     }
 
-    public LogonFormPage createLogonPage(final String user, final String password, boolean registerLink, String error) {
+    public LogonFormPage createLogonPage(final String user, final String password, final boolean registerLink, final String error) {
         return new LogonFormPage(this, styleSheet, header, footer, user, password, registerLink, error);
     }
 
-    public RegisterFormPage createRegisterPage(final String user, final String password, String error) {
+    public RegisterFormPage createRegisterPage(final String user, final String password, final String error) {
         return new RegisterFormPage(this, styleSheet, header, footer, user, password, error);
     }
 
@@ -187,8 +184,7 @@ public class HtmlComponentFactory implements ComponentFactory {
     }
 
     @Override
-    public Component createParseableField(final ObjectAssociation field, final ObjectAdapter value,
-        final boolean isEditable) {
+    public Component createParseableField(final ObjectAssociation field, final ObjectAdapter value, final boolean isEditable) {
         final BooleanValueFacet facet = field.getSpecification().getFacet(BooleanValueFacet.class);
         if (facet != null) {
             return createCheckboxBlock(isEditable, facet.isSet(value));
@@ -237,16 +233,14 @@ public class HtmlComponentFactory implements ComponentFactory {
     }
 
     @Override
-    public String pathTo(String prefix) {
+    public String pathTo(final String prefix) {
         return pathBuilder.pathTo(prefix);
     }
-    
 
-    
-    ///////////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////////
     // injected services
-    ///////////////////////////////////////////////////////////////
-    
+    // /////////////////////////////////////////////////////////////
+
     protected IsisConfiguration getConfiguration() {
         return IsisContext.getConfiguration();
     }

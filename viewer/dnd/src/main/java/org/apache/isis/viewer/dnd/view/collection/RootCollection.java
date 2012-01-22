@@ -108,7 +108,8 @@ public class RootCollection extends AbstractCollectionContent {
 
     @Override
     public Image getIconPicture(final int iconHeight) {
-        // return ImageFactory.getInstance().loadObjectIcon(getSpecification(), "", iconHeight);
+        // return ImageFactory.getInstance().loadObjectIcon(getSpecification(),
+        // "", iconHeight);
         return ImageFactory.getInstance().loadIcon("root-collection", iconHeight, null);
     }
 }

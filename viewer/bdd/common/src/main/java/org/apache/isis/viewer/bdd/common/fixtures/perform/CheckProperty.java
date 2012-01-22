@@ -31,8 +31,7 @@ import org.apache.isis.viewer.bdd.common.fixtures.perform.checkthat.property.Not
 public class CheckProperty extends PerformCheckThatAbstract {
 
     public CheckProperty(final Perform.Mode mode) {
-        super("check property", OnMemberColumn.REQUIRED, mode, new Hidden(), new Visible(), new Disabled(),
-            new Usable(), new Contains(), new DoesNotContain(), new Empty(), new NotEmpty());
+        super("check property", OnMemberColumn.REQUIRED, mode, new Hidden(), new Visible(), new Disabled(), new Usable(), new Contains(), new DoesNotContain(), new Empty(), new NotEmpty());
     }
 
 }

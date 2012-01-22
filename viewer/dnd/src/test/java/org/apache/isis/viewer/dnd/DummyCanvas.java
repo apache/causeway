@@ -49,8 +49,7 @@ public class DummyCanvas implements Canvas {
     }
 
     @Override
-    public void draw3DRectangle(final int x, final int y, final int width, final int height, final Color color,
-        final boolean raised) {
+    public void draw3DRectangle(final int x, final int y, final int width, final int height, final Color color, final boolean raised) {
     }
 
     @Override
@@ -82,8 +81,7 @@ public class DummyCanvas implements Canvas {
     }
 
     @Override
-    public void drawRoundedRectangle(final int x, final int y, final int width, final int height, final int arcWidth,
-        final int arcHeight, final Color color) {
+    public void drawRoundedRectangle(final int x, final int y, final int width, final int height, final int arcWidth, final int arcHeight, final Color color) {
     }
 
     @Override
@@ -115,8 +113,7 @@ public class DummyCanvas implements Canvas {
     }
 
     @Override
-    public void drawText(final String text, final int x, final int y, final int maxWidth, final Color color,
-        final Text style) {
+    public void drawText(final String text, final int x, final int y, final int maxWidth, final Color color, final Text style) {
     }
 
     @Override

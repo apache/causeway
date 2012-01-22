@@ -74,8 +74,7 @@ public class Properties {
                 y = Integer.valueOf(st.nextToken().trim()).intValue();
                 return new Location(x, y);
             } else {
-                throw new IsisConfigurationException("Location not specified correctly in " + name + ": "
-                    + initialLocation);
+                throw new IsisConfigurationException("Location not specified correctly in " + name + ": " + initialLocation);
             }
         }
         return defaultLocation;

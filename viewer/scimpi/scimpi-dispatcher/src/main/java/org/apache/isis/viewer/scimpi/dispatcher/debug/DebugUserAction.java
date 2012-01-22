@@ -27,12 +27,11 @@ import org.apache.isis.viewer.scimpi.dispatcher.ForbiddenException;
 import org.apache.isis.viewer.scimpi.dispatcher.ScimpiException;
 import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext;
 
-
 public class DebugUserAction implements Action {
 
     private final DebugUsers debugUsers;
 
-    public DebugUserAction(DebugUsers debugUsers) {
+    public DebugUserAction(final DebugUsers debugUsers) {
         this.debugUsers = debugUsers;
     }
 
@@ -42,7 +41,8 @@ public class DebugUserAction implements Action {
     }
 
     @Override
-    public void debug(final DebugBuilder debug) {}
+    public void debug(final DebugBuilder debug) {
+    }
 
     @Override
     public void process(final RequestContext context) throws IOException {
@@ -50,9 +50,9 @@ public class DebugUserAction implements Action {
             throw new ForbiddenException("Can't access debug action when debug is disabled");
         }
 
-        String method = context.getParameter(METHOD);
-        String name = context.getParameter(NAME);
-        String view = context.getParameter(VIEW);
+        final String method = context.getParameter(METHOD);
+        final String name = context.getParameter(NAME);
+        final String view = context.getParameter(VIEW);
 
         if (method != null && method.equals("add")) {
             debugUsers.add(name);
@@ -66,5 +66,6 @@ public class DebugUserAction implements Action {
     }
 
     @Override
-    public void init() {}
+    public void init() {
+    }
 }

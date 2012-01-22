@@ -123,8 +123,7 @@ public class CssMenuUtilsTest {
         new ActionFixtures(context).getOnType(mockUserAction, mockUserActionOnTypeSpec);
         new SpecFixtures(context).getFullName(mockUserActionOnTypeSpec, Customers.class.getName());
         new ActionFixtures(context).getType(mockUserAction, ActionType.USER);
-        new ActionFixtures(context).getIdentifier(context, mockUserAction,
-            Identifier.actionIdentifier(Customers.class, "findCustomers", new Class[0]));
+        new ActionFixtures(context).getIdentifier(context, mockUserAction, Identifier.actionIdentifier(Customers.class, "findCustomers", new Class[0]));
 
         new SystemFixtures(context).newLink(mockLinkBuilder, "linkId", mockAdapterMemento, mockUserAction, fakeLink);
 

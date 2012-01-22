@@ -111,19 +111,16 @@ public abstract class CompositeView extends ObjectView {
             }
             if (canvas.overlaps(bounds)) {
                 // Canvas subCanvas = canvas.createSubcanvas();
-                final Canvas subCanvas =
-                    canvas.createSubcanvas(bounds.getX(), bounds.getY(), bounds.getWidth() - 0, bounds.getSize()
-                        .getHeight());
-                // subCanvas.offset(subview.getBounds().getX(), subview.getBounds().getY());
+                final Canvas subCanvas = canvas.createSubcanvas(bounds.getX(), bounds.getY(), bounds.getWidth() - 0, bounds.getSize().getHeight());
+                // subCanvas.offset(subview.getBounds().getX(),
+                // subview.getBounds().getY());
                 if (Toolkit.debug) {
                     LOG.debug("-- repainting " + subview);
                     LOG.debug("subcanvas " + subCanvas);
                 }
                 subview.draw(subCanvas);
                 if (Toolkit.debug) {
-                    canvas.drawRectangle(subview.getBounds().getX(), subview.getBounds().getY(), subview.getBounds()
-                        .getWidth() - 1, subview.getBounds().getHeight() - 1, Toolkit
-                        .getColor(ColorsAndFonts.COLOR_DEBUG_BOUNDS_BORDER));
+                    canvas.drawRectangle(subview.getBounds().getX(), subview.getBounds().getY(), subview.getBounds().getWidth() - 1, subview.getBounds().getHeight() - 1, Toolkit.getColor(ColorsAndFonts.COLOR_DEBUG_BOUNDS_BORDER));
                 }
             }
         }
@@ -154,12 +151,15 @@ public abstract class CompositeView extends ObjectView {
     protected abstract Size requiredSize(Size availableSpace);
 
     /**
-     * Gets the set of subviews for this container. If the container is marked as not being built yet (ie
-     * {@link #buildInvalid} is <tt>true</tt> ), then a view building process is initiated and the flag is cleared.
-     * During this build process the {@link #buildView()} method is called and then each subview is asked for its
-     * subview so that the build process can recurse down the tree if it needs to.
+     * Gets the set of subviews for this container. If the container is marked
+     * as not being built yet (ie {@link #buildInvalid} is <tt>true</tt> ), then
+     * a view building process is initiated and the flag is cleared. During this
+     * build process the {@link #buildView()} method is called and then each
+     * subview is asked for its subview so that the build process can recurse
+     * down the tree if it needs to.
      * 
-     * This method is synchronised so that two threads do not try to build the same view at the same time
+     * This method is synchronised so that two threads do not try to build the
+     * same view at the same time
      */
     @Override
     public synchronized View[] getSubviews() {
@@ -197,7 +197,8 @@ public abstract class CompositeView extends ObjectView {
     /**
      * @deprecated
      */
-    // TODO call two different methods instead: buildNewView and buildModifiedView
+    // TODO call two different methods instead: buildNewView and
+    // buildModifiedView
     @Deprecated
     protected abstract void buildView();
 
@@ -242,8 +243,9 @@ public abstract class CompositeView extends ObjectView {
     protected abstract void doLayout(Size maximumSize);
 
     /**
-     * When the specified size is different to the current size the the layout of this component is marked as invalid,
-     * forcing its components to re-laid out in turn.
+     * When the specified size is different to the current size the the layout
+     * of this component is marked as invalid, forcing its components to re-laid
+     * out in turn.
      */
     @Override
     public void setSize(final Size size) {

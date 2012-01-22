@@ -49,8 +49,7 @@ public class Selector extends AbstractElementProcessor {
         final String type = request.getOptionalProperty(TYPE, "dropdown");
         if (!request.isPropertySpecified(METHOD) && request.isPropertySpecified(COLLECTION)) {
             final String id = request.getRequiredProperty(COLLECTION, Request.NO_VARIABLE_CHECKING);
-            final String selector =
-                showSelectionList(request, id, block.getCurrent(field), block.isNullable(field), type);
+            final String selector = showSelectionList(request, id, block.getCurrent(field), block.isNullable(field), type);
             block.replaceContent(field, selector);
         } else {
             final String objectId = request.getOptionalProperty(OBJECT);
@@ -59,14 +58,12 @@ public class Selector extends AbstractElementProcessor {
             final ObjectAction action = MethodsUtils.findAction(object, methodName);
             if (action.getParameterCount() == 0) {
                 final ObjectAdapter collection = action.execute(object, new ObjectAdapter[0]);
-                final String selector =
-                    showSelectionList(request, collection, block.getCurrent(field), block.isNullable(field), type);
+                final String selector = showSelectionList(request, collection, block.getCurrent(field), block.isNullable(field), type);
                 block.replaceContent(field, selector);
             } else {
                 final String id = "selector_options";
                 final String id2 = (String) request.getContext().getVariable(id);
-                final String selector =
-                    showSelectionList(request, id2, block.getCurrent(field), block.isNullable(field), type);
+                final String selector = showSelectionList(request, id2, block.getCurrent(field), block.isNullable(field), type);
 
                 final CreateFormParameter parameters = new CreateFormParameter();
                 parameters.objectId = objectId;
@@ -90,8 +87,7 @@ public class Selector extends AbstractElementProcessor {
         }
     }
 
-    private String showSelectionList(final Request request, final String collectionId,
-        final ObjectAdapter selectedItem, final boolean allowNotSet, final String type) {
+    private String showSelectionList(final Request request, final String collectionId, final ObjectAdapter selectedItem, final boolean allowNotSet, final String type) {
         if (collectionId != null && !collectionId.equals("")) {
             final ObjectAdapter collection = request.getContext().getMappedObjectOrResult(collectionId);
             return showSelectionList(request, collection, selectedItem, allowNotSet, type);
@@ -100,8 +96,7 @@ public class Selector extends AbstractElementProcessor {
         }
     }
 
-    private String showSelectionList(final Request request, final ObjectAdapter collection,
-        final ObjectAdapter selectedItem, final boolean allowNotSet, final String type) {
+    private String showSelectionList(final Request request, final ObjectAdapter collection, final ObjectAdapter selectedItem, final boolean allowNotSet, final String type) {
         final String field = request.getRequiredProperty(FIELD);
         final CollectionFacet facet = collection.getSpecification().getFacet(CollectionFacet.class);
 
@@ -119,21 +114,18 @@ public class Selector extends AbstractElementProcessor {
         }
     }
 
-    private String onlyItem(final Request request, final String field, final ObjectAdapter collection,
-        final CollectionFacet facet) {
+    private String onlyItem(final Request request, final String field, final ObjectAdapter collection, final CollectionFacet facet) {
         final RequestContext context = request.getContext();
         final Iterator<ObjectAdapter> iterator = facet.iterator(collection);
         final StringBuffer buffer = new StringBuffer();
         final ObjectAdapter element = iterator.next();
         final String elementId = context.mapObject(element, Scope.INTERACTION);
-        buffer.append("<img class=\"small-icon\" src=\"" + request.getContext().imagePath(element) + "\" alt=\""
-            + element.getSpecification().getShortIdentifier() + "\"/>" + element.titleString() + "\n");
+        buffer.append("<img class=\"small-icon\" src=\"" + request.getContext().imagePath(element) + "\" alt=\"" + element.getSpecification().getShortIdentifier() + "\"/>" + element.titleString() + "\n");
         buffer.append("<input type=\"hidden\" name=\"" + field + "\" value=\"" + elementId + "\" />\n");
         return buffer.toString();
     }
 
-    private String radioButtonList(final Request request, final String field, final boolean allowNotSet,
-        final ObjectAdapter collection, final ObjectAdapter selectedItem, final CollectionFacet facet) {
+    private String radioButtonList(final Request request, final String field, final boolean allowNotSet, final ObjectAdapter collection, final ObjectAdapter selectedItem, final CollectionFacet facet) {
         final RequestContext context = request.getContext();
         final Iterator<ObjectAdapter> iterator = facet.iterator(collection);
         final StringBuffer buffer = new StringBuffer();
@@ -145,15 +137,13 @@ public class Selector extends AbstractElementProcessor {
             final String elementId = context.mapObject(element, Scope.INTERACTION);
             final String title = element.titleString();
             final String checked = element == selectedItem ? "checked=\"checked\"" : "";
-            buffer.append("<input type=\"radio\" name=\"" + field + "\" value=\"" + elementId + "\"" + checked + ">"
-                + title + "</input><br/>\n");
+            buffer.append("<input type=\"radio\" name=\"" + field + "\" value=\"" + elementId + "\"" + checked + ">" + title + "</input><br/>\n");
         }
 
         return buffer.toString();
     }
 
-    private String dropdownList(final Request request, final String field, final boolean allowNotSet,
-        final ObjectAdapter collection, final ObjectAdapter selectedItem, String size, final CollectionFacet facet) {
+    private String dropdownList(final Request request, final String field, final boolean allowNotSet, final ObjectAdapter collection, final ObjectAdapter selectedItem, String size, final CollectionFacet facet) {
         final RequestContext context = request.getContext();
         final Iterator<ObjectAdapter> iterator = facet.iterator(collection);
         final StringBuffer buffer = new StringBuffer();

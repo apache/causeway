@@ -56,7 +56,6 @@ public class JsonRepresentationTest_getLink_isLink {
         assertThat(jsonRepresentation.isLink("aSubMap.aLink"), is(true));
         assertThat(jsonRepresentation.getLink("aSubMap.aLink"), is(link));
     }
-    
 
     @Test
     public void forNonExistent() throws JsonParseException, JsonMappingException, IOException {
@@ -70,7 +69,7 @@ public class JsonRepresentationTest_getLink_isLink {
         try {
             jsonRepresentation.getLink("anInt");
             fail();
-        } catch (IllegalArgumentException e) {
+        } catch (final IllegalArgumentException e) {
             assertThat(e.getMessage(), is("'anInt' is a value that does not represent a link"));
         }
     }
@@ -81,7 +80,7 @@ public class JsonRepresentationTest_getLink_isLink {
         try {
             jsonRepresentation.getLink("aSubMap");
             fail();
-        } catch (IllegalArgumentException e) {
+        } catch (final IllegalArgumentException e) {
             assertThat(e.getMessage(), is("'aSubMap' is a map that does not fully represent a link"));
         }
     }
@@ -92,7 +91,7 @@ public class JsonRepresentationTest_getLink_isLink {
         try {
             jsonRepresentation.getLink("aSubList");
             fail();
-        } catch (IllegalArgumentException e) {
+        } catch (final IllegalArgumentException e) {
             assertThat(e.getMessage(), is("'aSubList' is an array that does not represent a link"));
         }
     }

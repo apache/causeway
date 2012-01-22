@@ -30,7 +30,8 @@ import org.apache.isis.viewer.wicket.ui.pages.login.WicketSignInPage;
 import com.google.inject.Singleton;
 
 /**
- * Default implementation of {@link PageClassList}, specifying the default pages for each of the {@link PageType}s.
+ * Default implementation of {@link PageClassList}, specifying the default pages
+ * for each of the {@link PageType}s.
  */
 @Singleton
 public class PageClassListDefault implements PageClassList {

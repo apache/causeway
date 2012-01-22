@@ -34,20 +34,19 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-
 public class DomainServiceResourceTest_serviceId_notFound {
 
     @Rule
     public IsisWebServerRule webServerRule = new IsisWebServerRule();
-    
+
     private RestfulClient client;
     private DomainServiceResource resource;
 
     @Before
     public void setUp() throws Exception {
-        WebServer webServer = webServerRule.getWebServer();
+        final WebServer webServer = webServerRule.getWebServer();
         client = new RestfulClient(webServer.getBase());
-        
+
         resource = client.getDomainServiceResource();
     }
 
@@ -55,13 +54,11 @@ public class DomainServiceResourceTest_serviceId_notFound {
     public void notFound() throws Exception {
 
         // when
-        Response resp = resource.service("nonExistentServiceId");
-        RestfulResponse<JsonRepresentation> jsonResp = RestfulResponse.of(resp);
-        
+        final Response resp = resource.service("nonExistentServiceId");
+        final RestfulResponse<JsonRepresentation> jsonResp = RestfulResponse.of(resp);
+
         // then
         assertThat(jsonResp.getStatus(), is(HttpStatusCode.NOT_FOUND));
     }
 
-
 }
-    

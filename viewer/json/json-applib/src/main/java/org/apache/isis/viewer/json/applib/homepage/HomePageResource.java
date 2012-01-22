@@ -32,18 +32,17 @@ public interface HomePageResource {
 
     @GET
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_HOME_PAGE })
-    @ClientResponseType(entityType=String.class)
+    @ClientResponseType(entityType = String.class)
     public Response homePage();
-    
-    
+
     /**
-     * Not part of the RO spec; this resource always returns 401, and is intended to be redirected to
-     * if credentials cannot be obtained.
+     * Not part of the RO spec; this resource always returns 401, and is
+     * intended to be redirected to if credentials cannot be obtained.
      */
     @GET
     @Path("/notAuthenticated")
     @Produces({ MediaType.APPLICATION_JSON })
-    @ClientResponseType(entityType=String.class)
+    @ClientResponseType(entityType = String.class)
     public Response notAuthenticated();
 
 }

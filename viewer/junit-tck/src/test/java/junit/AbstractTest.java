@@ -19,12 +19,6 @@
 
 package junit;
 
-
-import org.junit.After;
-import org.junit.Before;
-import org.junit.runner.RunWith;
-
-
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.progmodel.wrapper.applib.WrapperFactory;
 import org.apache.isis.progmodel.wrapper.applib.WrapperObject;
@@ -34,6 +28,9 @@ import org.apache.isis.viewer.junit.ConfigDir;
 import org.apache.isis.viewer.junit.IsisTestRunner;
 import org.apache.isis.viewer.junit.Service;
 import org.apache.isis.viewer.junit.Services;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.runner.RunWith;
 
 @RunWith(IsisTestRunner.class)
 @ConfigDir("../../viewer/dnd-tck/src/main/resources")
@@ -44,8 +41,9 @@ public abstract class AbstractTest {
     private WrapperFactory wrapperFactory;
 
     /**
-     * The {@link WrapperFactory#wrap(Object) wrapped} equivalent of the {@link #setFoobarRepository(PrimitiveValuedEntityRepository)
-     * injected} {@link PrimitiveValuedEntityRepository}.
+     * The {@link WrapperFactory#wrap(Object) wrapped} equivalent of the
+     * {@link #setFoobarRepository(PrimitiveValuedEntityRepository) injected}
+     * {@link PrimitiveValuedEntityRepository}.
      */
     protected PrimitiveValuedEntityRepository primitivesEntityRepository;
 
@@ -58,14 +56,14 @@ public abstract class AbstractTest {
     public void setUp() throws Exception {
     }
 
-    protected <T> T wrapped(T obj) {
+    protected <T> T wrapped(final T obj) {
         return wrapperFactory.wrap(obj);
     }
 
     @SuppressWarnings("unchecked")
-    protected <T> T unwrapped(T obj) {
+    protected <T> T unwrapped(final T obj) {
         if (obj instanceof WrapperObject) {
-            WrapperObject wrapperObject = (WrapperObject) obj;
+            final WrapperObject wrapperObject = (WrapperObject) obj;
             return (T) wrapperObject.wrapped();
         }
         return obj;
@@ -83,7 +81,7 @@ public abstract class AbstractTest {
         return wrapperFactory;
     }
 
-    public void setWrapperFactory(WrapperFactory wrapperFactory) {
+    public void setWrapperFactory(final WrapperFactory wrapperFactory) {
         this.wrapperFactory = wrapperFactory;
     }
 

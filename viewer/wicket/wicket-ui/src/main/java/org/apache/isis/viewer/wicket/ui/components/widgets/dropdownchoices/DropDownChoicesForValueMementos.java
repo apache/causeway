@@ -21,11 +21,10 @@ package org.apache.isis.viewer.wicket.ui.components.widgets.dropdownchoices;
 
 import java.util.List;
 
+import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.model.IModel;
-
-import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 
 public class DropDownChoicesForValueMementos extends DropDownChoice<ObjectAdapterMemento> {
 
@@ -47,14 +46,11 @@ public class DropDownChoicesForValueMementos extends DropDownChoice<ObjectAdapte
 
     private static final long serialVersionUID = 1L;
 
-    public DropDownChoicesForValueMementos(final String id, final IModel<ObjectAdapterMemento> model,
-        final IModel<? extends List<? extends ObjectAdapterMemento>> choices) {
+    public DropDownChoicesForValueMementos(final String id, final IModel<ObjectAdapterMemento> model, final IModel<? extends List<? extends ObjectAdapterMemento>> choices) {
         this(id, model, choices, new ValueMementoRenderer());
     }
 
-    private DropDownChoicesForValueMementos(final String id, final IModel<ObjectAdapterMemento> model,
-        final IModel<? extends List<? extends ObjectAdapterMemento>> choices,
-        final IChoiceRenderer<? super ObjectAdapterMemento> renderer) {
+    private DropDownChoicesForValueMementos(final String id, final IModel<ObjectAdapterMemento> model, final IModel<? extends List<? extends ObjectAdapterMemento>> choices, final IChoiceRenderer<? super ObjectAdapterMemento> renderer) {
         super(id, model, choices, renderer);
     }
 

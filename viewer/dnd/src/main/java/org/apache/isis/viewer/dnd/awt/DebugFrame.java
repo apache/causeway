@@ -49,7 +49,8 @@ import org.apache.isis.viewer.dnd.view.debug.DebugOutput;
 import org.apache.log4j.Logger;
 
 /**
- * A specialised frame for displaying the details of an object and its display mechanisms.
+ * A specialised frame for displaying the details of an object and its display
+ * mechanisms.
  */
 public abstract class DebugFrame extends Frame {
     private static final long serialVersionUID = 1L;
@@ -65,7 +66,7 @@ public abstract class DebugFrame extends Frame {
         final Frame[] f = new Frame[frames.size()];
 
         for (int i = 0; i < f.length; i++) {
-            f[i] = (Frame) frames.elementAt(i);
+            f[i] = frames.elementAt(i);
         }
 
         for (final Frame element : f) {
@@ -221,8 +222,9 @@ public abstract class DebugFrame extends Frame {
      */
     public void show(final int x, final int y) {
         /*
-         * WARNING - When refresh button is pressed it is in the AWT thread; if the repository is thread based then the
-         * wrong set of components will be used giving strange results, particularly in the object persistor.
+         * WARNING - When refresh button is pressed it is in the AWT thread; if
+         * the repository is thread based then the wrong set of components will
+         * be used giving strange results, particularly in the object persistor.
          */
         // TODO run in correct thread
         refresh();

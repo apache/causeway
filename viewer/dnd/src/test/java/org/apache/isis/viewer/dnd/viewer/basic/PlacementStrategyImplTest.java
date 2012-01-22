@@ -87,8 +87,7 @@ public class PlacementStrategyImplTest {
         newView.setupRequiredSize(new Size(NEW_VIEW_WIDTH, NEW_VIEW_HEIGHT));
 
         final Location location = strategy.determinePlacement(workspace, existingView, newView);
-        Assert.assertEquals(
-            new Location(ORIGINAL_X + ROOT_VIEW_WIDTH + PADDING + PADDING * 4, ORIGINAL_Y + PADDING * 4), location);
+        Assert.assertEquals(new Location(ORIGINAL_X + ROOT_VIEW_WIDTH + PADDING + PADDING * 4, ORIGINAL_Y + PADDING * 4), location);
     }
 
     @Test
@@ -141,8 +140,7 @@ public class PlacementStrategyImplTest {
         existingView.setSize(new Size(800, 600));
 
         final Location location = strategy.determinePlacement(workspace, existingView, newView);
-        Assert.assertEquals("should be placed on top of original, but slightly offset", new Location(100 + PADDING * 6,
-            100 + PADDING * 6), location);
+        Assert.assertEquals("should be placed on top of original, but slightly offset", new Location(100 + PADDING * 6, 100 + PADDING * 6), location);
     }
 
     @Test

@@ -26,15 +26,15 @@ import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 
 /**
- * {@link Serializable} representation of a {@link OneToManyAssociation} (a parented collection of entities).
+ * {@link Serializable} representation of a {@link OneToManyAssociation} (a
+ * parented collection of entities).
  */
 public class CollectionMemento implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     private static ObjectSpecification owningSpecFor(final OneToManyAssociation association) {
-        return IsisContext.getSpecificationLoader().loadSpecification(
-            association.getIdentifier().toClassIdentityString());
+        return IsisContext.getSpecificationLoader().loadSpecification(association.getIdentifier().toClassIdentityString());
     }
 
     private final SpecMemento owningType;
@@ -57,7 +57,8 @@ public class CollectionMemento implements Serializable {
     }
 
     /**
-     * Only applies to parented collections, being the id of the collection in the parent (eg <tt>lineItems</tt>).
+     * Only applies to parented collections, being the id of the collection in
+     * the parent (eg <tt>lineItems</tt>).
      * 
      * <p>
      * Will return <tt>null</tt> otherwise.

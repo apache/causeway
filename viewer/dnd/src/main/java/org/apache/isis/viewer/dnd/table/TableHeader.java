@@ -146,13 +146,13 @@ public class TableHeader extends AbstractView {
             canvas.drawLine(0, 0, 0, getSize().getHeight() - 1, secondary1);
             canvas.drawLine(x, 0, x, getSize().getHeight() - 1, secondary1);
             final Canvas headerCanvas = canvas.createSubcanvas(x, 0, axis.getColumnWidth(i) - 1, height);
-            headerCanvas.drawText(axis.getColumnName(i), HPADDING, y, secondary1,
-                Toolkit.getText(ColorsAndFonts.TEXT_LABEL));
+            headerCanvas.drawText(axis.getColumnName(i), HPADDING, y, secondary1, Toolkit.getText(ColorsAndFonts.TEXT_LABEL));
             x += axis.getColumnWidth(i);
         }
         // Color secondary2 = Toolkit.getColor(ColorsAndFonts.COLOR_SECONDARY2);
         // canvas.drawLine(x, 0, x, getSize().getHeight() - 1, secondary2);
-        // canvas.drawRectangle(0, height, getSize().getWidth() - 1, getSize().getHeight() - height - 1, secondary2);
+        // canvas.drawRectangle(0, height, getSize().getWidth() - 1,
+        // getSize().getHeight() - height - 1, secondary2);
     }
 
     private void drawOrderIndicator(final Canvas canvas, final TableAxis axis, final int x) {
@@ -167,7 +167,8 @@ public class TableHeader extends AbstractView {
             arrow.addPoint(6, 0);
             arrow.addPoint(3, 7);
         }
-        // canvas.drawRectangle(x + axis.getColumnWidth(i) - 10, 3, 7, 8, Toolkit.getColor("secondary3"));
+        // canvas.drawRectangle(x + axis.getColumnWidth(i) - 10, 3, 7, 8,
+        // Toolkit.getColor("secondary3"));
         canvas.drawShape(arrow, x, 3, Toolkit.getColor(ColorsAndFonts.COLOR_SECONDARY2));
     }
 

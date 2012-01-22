@@ -32,8 +32,7 @@ public class CompositeViewUsingBuilder extends CompositeView {
     private final Layout layout;
     private final Axes axes = new Axes();
 
-    public CompositeViewUsingBuilder(final Content content, final ViewSpecification specification, final Axes axes,
-        final Layout layout, final ViewBuilder builder) {
+    public CompositeViewUsingBuilder(final Content content, final ViewSpecification specification, final Axes axes, final Layout layout, final ViewBuilder builder) {
         super(content, specification);
         this.layout = layout;
         this.builder = builder;

@@ -54,8 +54,7 @@ public final class EntityActionLinkFactory implements CssMenuLinkFactory {
     }
 
     @Override
-    public LinkAndLabel newLink(final ObjectAdapterMemento adapterMemento, final ObjectAction action,
-        final String linkId) {
+    public LinkAndLabel newLink(final ObjectAdapterMemento adapterMemento, final ObjectAction action, final String linkId) {
         final ObjectAdapter adapter = adapterMemento.getObjectAdapter();
 
         final Link<?> link = createLink(adapterMemento, action, linkId, adapter);
@@ -65,8 +64,7 @@ public final class EntityActionLinkFactory implements CssMenuLinkFactory {
         return new LinkAndLabel(link, label);
     }
 
-    private Link<?> createLink(final ObjectAdapterMemento adapterMemento, final ObjectAction action,
-        final String linkId, final ObjectAdapter adapter) {
+    private Link<?> createLink(final ObjectAdapterMemento adapterMemento, final ObjectAction action, final String linkId, final ObjectAdapter adapter) {
         final Boolean persistent = adapter.isPersistent();
         if (persistent) {
             return createLinkForPersistent(linkId, adapterMemento, action);
@@ -75,14 +73,11 @@ public final class EntityActionLinkFactory implements CssMenuLinkFactory {
         }
     }
 
-    private Link<?> createLinkForPersistent(final String linkId, final ObjectAdapterMemento adapterMemento,
-        final ObjectAction action) {
+    private Link<?> createLinkForPersistent(final String linkId, final ObjectAdapterMemento adapterMemento, final ObjectAction action) {
         final ObjectAdapter adapter = adapterMemento.getObjectAdapter();
         final ObjectAdapter contextAdapter = summaryPanel.getEntityModel().getObject();
 
-        final PageParameters pageParameters =
-            ActionModel.createPageParameters(adapter, action, getOidStringifier(), contextAdapter,
-                ActionModel.SingleResultsMode.REDIRECT);
+        final PageParameters pageParameters = ActionModel.createPageParameters(adapter, action, getOidStringifier(), contextAdapter, ActionModel.SingleResultsMode.REDIRECT);
         final Class<? extends Page> pageClass = getPageClassRegistry().getPageClass(PageType.ACTION);
         return newBookmarkablePageLink(linkId, pageClass, pageParameters);
     }
@@ -90,13 +85,11 @@ public final class EntityActionLinkFactory implements CssMenuLinkFactory {
     /*
      * Separate method in order to capture the generic
      */
-    private <T extends Page> Link<T> newBookmarkablePageLink(final String linkId, final Class<T> pageClass,
-        final PageParameters pageParameters) {
+    private <T extends Page> Link<T> newBookmarkablePageLink(final String linkId, final Class<T> pageClass, final PageParameters pageParameters) {
         return new BookmarkablePageLink<T>(linkId, pageClass, pageParameters);
     }
 
-    private Link<?> createLinkForTransient(final String linkId, final ObjectAdapterMemento adapterMemento,
-        final ObjectAction action) {
+    private Link<?> createLinkForTransient(final String linkId, final ObjectAdapterMemento adapterMemento, final ObjectAction action) {
         final ActionMemento actionMemento = new ActionMemento(action);
         final ActionModel.Mode actionMode = ActionModel.determineMode(action);
         return new Link<String>(linkId) {
@@ -107,8 +100,7 @@ public final class EntityActionLinkFactory implements CssMenuLinkFactory {
                 // TODO: seems like can't use REDIRECT, since won't
                 // let multiple setResponsePage() calls once
                 // committed to redirecting (I'm guessing)
-                final ActionModel actionModel =
-                    ActionModel.create(adapterMemento, actionMemento, actionMode, SingleResultsMode.INLINE);
+                final ActionModel actionModel = ActionModel.create(adapterMemento, actionMemento, actionMode, SingleResultsMode.INLINE);
                 summaryPanel.onClick(actionModel);
             }
         };

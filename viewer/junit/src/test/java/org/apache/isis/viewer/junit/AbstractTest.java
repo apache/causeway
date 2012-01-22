@@ -37,10 +37,8 @@ import org.junit.Before;
 import org.junit.runner.RunWith;
 
 @RunWith(IsisTestRunner.class)
-@Fixtures({ @Fixture(CountriesFixture.class), @Fixture(ProductsFixture.class), @Fixture(CustomersFixture.class),
-    @Fixture(CustomerOrdersFixture.class) })
-@Services({ @Service(CountryRepository.class), @Service(ProductRepository.class), @Service(CustomerRepository.class),
-    @Service(OrderRepository.class) })
+@Fixtures({ @Fixture(CountriesFixture.class), @Fixture(ProductsFixture.class), @Fixture(CustomersFixture.class), @Fixture(CustomerOrdersFixture.class) })
+@Services({ @Service(CountryRepository.class), @Service(ProductRepository.class), @Service(CustomerRepository.class), @Service(OrderRepository.class) })
 public abstract class AbstractTest {
 
     protected Customer custJsDO;

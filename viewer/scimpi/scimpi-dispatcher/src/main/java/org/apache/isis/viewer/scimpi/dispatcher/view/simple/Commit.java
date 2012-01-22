@@ -32,7 +32,8 @@ public class Commit extends AbstractElementProcessor {
 
     @Override
     public void process(final Request request) {
-        // Note - the session will have changed since the earlier call if a user has logged in or out in the action
+        // Note - the session will have changed since the earlier call if a user
+        // has logged in or out in the action
         // processing above.
         final IsisTransactionManager transactionManager = IsisContext.getPersistenceSession().getTransactionManager();
         if (transactionManager.getTransaction().getState().canCommit()) {

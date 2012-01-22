@@ -73,8 +73,9 @@ import org.apache.isis.viewer.wicket.ui.components.welcome.WelcomePanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.widgets.entitylink.EntityLinkFactory;
 
 /**
- * Default implementation of {@link ComponentFactoryList} that registers a hardcoded set of built-in
- * {@link ComponentFactory}s, along with any implementations loaded using {@link ServiceLoader} (ie from
+ * Default implementation of {@link ComponentFactoryList} that registers a
+ * hardcoded set of built-in {@link ComponentFactory}s, along with any
+ * implementations loaded using {@link ServiceLoader} (ie from
  * <tt>META-INF/services</tt>).
  */
 public class ComponentFactoryListDefault implements ComponentFactoryList {
@@ -90,13 +91,15 @@ public class ComponentFactoryListDefault implements ComponentFactoryList {
     }
 
     /**
-     * Any {@link ComponentFactory}s that act as selectors of other factories should be registered here; they will be
-     * loaded first, to ensure that they are found first.
+     * Any {@link ComponentFactory}s that act as selectors of other factories
+     * should be registered here; they will be loaded first, to ensure that they
+     * are found first.
      */
     protected void addComponentFactoriesActingAsSelectors(final List<ComponentFactory> componentFactories) {
         componentFactories.add(new EntitySelectorFactory());
         componentFactories.add(new CollectionContentsSelectorFactory());
-        componentFactories.add(new CollectionContentsAsUnresolvedFactory()); // make first
+        componentFactories.add(new CollectionContentsAsUnresolvedFactory()); // make
+                                                                             // first
     }
 
     protected void addComponentFactoriesUsingServiceLoader(final List<ComponentFactory> componentFactories) {
@@ -148,7 +151,8 @@ public class ComponentFactoryListDefault implements ComponentFactoryList {
 
     protected void addComponentFactoriesForEntityCollectionContents(final List<ComponentFactory> componentFactories) {
         componentFactories.add(new CollectionContentsAsAjaxTableFactory());
-        // componentFactories.add(new CollectionContentsAsSimpleTableFactory()); // work-in-progress
+        // componentFactories.add(new CollectionContentsAsSimpleTableFactory());
+        // // work-in-progress
         componentFactories.add(new CollectionContentsAsIconsFactory());
     }
 
@@ -179,7 +183,8 @@ public class ComponentFactoryListDefault implements ComponentFactoryList {
 
         componentFactories.add(new StringPanelFactory());
 
-        // componentFactories.add(new JavaAwtImagePanelFactory()); // work-in-progress
+        // componentFactories.add(new JavaAwtImagePanelFactory()); //
+        // work-in-progress
         componentFactories.add(new JavaUtilDatePanelFactory());
         componentFactories.add(new JavaSqlDatePanelFactory());
         componentFactories.add(new JavaSqlTimePanelFactory());
@@ -226,8 +231,7 @@ public class ComponentFactoryListDefault implements ComponentFactoryList {
     /**
      * Allows the subclass to remove any built-in factories.
      */
-    protected void removeComponentFactories(final List<ComponentFactory> componentFactories,
-        final Class<? extends ComponentFactory>... classes) {
+    protected void removeComponentFactories(final List<ComponentFactory> componentFactories, final Class<? extends ComponentFactory>... classes) {
         for (final Iterator<ComponentFactory> iterator = componentFactories.iterator(); iterator.hasNext();) {
             final ComponentFactory componentFactory = iterator.next();
             if (isAssignableToAny(componentFactory, classes)) {
@@ -236,8 +240,7 @@ public class ComponentFactoryListDefault implements ComponentFactoryList {
         }
     }
 
-    private boolean isAssignableToAny(final ComponentFactory componentFactory,
-        final Class<? extends ComponentFactory>... classes) {
+    private boolean isAssignableToAny(final ComponentFactory componentFactory, final Class<? extends ComponentFactory>... classes) {
         final Class<? extends ComponentFactory> componentFactoryCls = componentFactory.getClass();
         for (final Class<? extends ComponentFactory> cls : classes) {
             if (cls.isAssignableFrom(componentFactoryCls)) {

@@ -69,9 +69,7 @@ public class CalendarGrid extends CompositeView {
                 if (cellContents[cellNo] == null) {
                     cell = new BlankView(new NullContent());
                 } else {
-                    cell =
-                        new CompositeViewUsingBuilder(cellContents[cellNo], null, new Axes(), new StackLayout(),
-                            new CollectionElementBuilder(new IconElementFactory()));
+                    cell = new CompositeViewUsingBuilder(cellContents[cellNo], null, new Axes(), new StackLayout(), new CollectionElementBuilder(new IconElementFactory()));
                     cell = new ScrollBorder(cell);
                 }
                 cells[cellNo] = cell;
@@ -197,8 +195,7 @@ public class CalendarGrid extends CompositeView {
         for (int row = 0; row < rows; row++) {
             final int y = topInset + row * rowHeight;
             if (!acrossThenDown && hasHeader) {
-                canvas
-                    .drawText(cellLayout.header(row), 0, y + 20, CalendarConstants.textColor, CalendarConstants.style);
+                canvas.drawText(cellLayout.header(row), 0, y + 20, CalendarConstants.textColor, CalendarConstants.style);
             }
             canvas.drawLine(leftInset, y, width, y, CalendarConstants.lineColor);
         }
@@ -207,8 +204,7 @@ public class CalendarGrid extends CompositeView {
         for (int column = 0; column < columns; column++) {
             final int x = leftInset + column * columnWidth;
             if (acrossThenDown && hasHeader) {
-                canvas.drawText(cellLayout.header(column), x, topInset - 5, CalendarConstants.textColor,
-                    CalendarConstants.style);
+                canvas.drawText(cellLayout.header(column), x, topInset - 5, CalendarConstants.textColor, CalendarConstants.style);
             }
             canvas.drawLine(x, topInset, x, topInset + height, CalendarConstants.lineColor);
         }

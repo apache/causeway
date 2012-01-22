@@ -53,10 +53,8 @@ public class WicketObjectModule_bindingsStandard {
 
     @Parameters
     public static Collection<Object[]> params() {
-        return Arrays.asList(new Object[][] { { ComponentFactoryList.class, ComponentFactoryListDefault.class },
-            { ComponentFactoryRegistry.class, ComponentFactoryRegistryDefault.class },
-            { PageClassList.class, PageClassListDefault.class },
-            { PageClassRegistry.class, PageClassRegistryDefault.class }, });
+        return Arrays.asList(new Object[][] { { ComponentFactoryList.class, ComponentFactoryListDefault.class }, { ComponentFactoryRegistry.class, ComponentFactoryRegistryDefault.class }, { PageClassList.class, PageClassListDefault.class },
+                { PageClassRegistry.class, PageClassRegistryDefault.class }, });
     }
 
     public WicketObjectModule_bindingsStandard(final Class<?> from, final Class<?> to) {

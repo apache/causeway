@@ -32,7 +32,7 @@ public interface UserResource {
 
     @GET
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_USER })
-    @ClientResponseType(entityType=String.class)
+    @ClientResponseType(entityType = String.class)
     public Response user();
 
 }

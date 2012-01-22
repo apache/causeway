@@ -23,7 +23,6 @@ import javax.servlet.ServletContext;
 
 import org.apache.isis.viewer.html.servlet.HtmlServletConstants;
 
-
 public class PathBuilderDefault implements PathBuilder {
 
     private final String suffix;
@@ -35,19 +34,21 @@ public class PathBuilderDefault implements PathBuilder {
     private PathBuilderDefault(final String suffix) {
         this.suffix = suffix;
     }
-    
+
     private static String getSuffixInitParam(final ServletContext servletContext) {
         final String suffixInitParam = servletContext.getInitParameter(HtmlServletConstants.SUFFIX_INIT_PARAM);
-        return suffixInitParam != null? suffixInitParam: HtmlServletConstants.SUFFIX_INIT_PARAM_VALUE_DEFAULT;
+        return suffixInitParam != null ? suffixInitParam : HtmlServletConstants.SUFFIX_INIT_PARAM_VALUE_DEFAULT;
     }
 
+    @Override
     public String getSuffix() {
         return suffix;
     }
-    
+
+    @Override
     public String pathTo(final String prefix) {
         final StringBuilder buf = new StringBuilder(prefix);
-        if(!prefix.endsWith(".")) {
+        if (!prefix.endsWith(".")) {
             buf.append(".");
         }
         buf.append(suffix);

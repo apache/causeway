@@ -28,8 +28,10 @@ public class UserPanel /* extends PanelAbstract */{
 
     // public UserPanel(String id, Class<? extends Page> signoutClass) {
     // super(id);
-    // AuthenticatedWebSessionForIsis session = getIsisAuthenticatedWebSession();
-    // add(new Label("fullname", session.getAuthenticationSession().getUserName()));
+    // AuthenticatedWebSessionForIsis session =
+    // getIsisAuthenticatedWebSession();
+    // add(new Label("fullname",
+    // session.getAuthenticationSession().getUserName()));
     // add(new BookmarkablePageLink("signout", signoutClass));
     // }
 

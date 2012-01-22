@@ -37,8 +37,7 @@ public class Variable extends AbstractElementProcessor {
         process(request, name, value, defaultTo, isClear, scope);
     }
 
-    protected void process(final Request request, final String name, final String value, final String defaultTo,
-        final boolean isClear, final Scope scope) {
+    protected void process(final Request request, final String name, final String value, final String defaultTo, final boolean isClear, final Scope scope) {
         request.pushNewBuffer();
         request.processUtilCloseTag();
         String source = request.popBuffer();

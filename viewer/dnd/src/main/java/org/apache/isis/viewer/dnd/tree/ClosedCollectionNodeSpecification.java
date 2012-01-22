@@ -29,10 +29,11 @@ import org.apache.isis.viewer.dnd.view.ViewRequirement;
 import org.apache.isis.viewer.dnd.view.collection.CollectionContent;
 
 /**
- * Specification for a tree node that will display a closed collection as a root node or within an object.
+ * Specification for a tree node that will display a closed collection as a root
+ * node or within an object.
  * 
- * @see org.apache.isis.viewer.dnd.tree.OpenCollectionNodeSpecification for displaying an open collection within an
- *      object.
+ * @see org.apache.isis.viewer.dnd.tree.OpenCollectionNodeSpecification for
+ *      displaying an open collection within an object.
  */
 public class ClosedCollectionNodeSpecification extends NodeSpecification {
     @Override

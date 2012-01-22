@@ -43,7 +43,8 @@ public class Order extends AbstractDomainObject {
 
     // {{ Identification Methods
     /**
-     * Defines the title that will be displayed on the user interface in order to identity this object.
+     * Defines the title that will be displayed on the user interface in order
+     * to identity this object.
      */
     public String title() {
         final TitleBuffer t = new TitleBuffer();

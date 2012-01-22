@@ -43,10 +43,7 @@ public class NumberAdapters {
     }
 
     public static boolean contains(final ObjectAssociation t) {
-        return t.getSpecification().containsFacet(IntegerValueFacet.class)
-            || t.getSpecification().containsFacet(DoubleFloatingPointValueFacet.class)
-            || t.getSpecification().containsFacet(FloatingPointValueFacet.class)
-            || t.getSpecification().containsFacet(MoneyValueFacet.class);
+        return t.getSpecification().containsFacet(IntegerValueFacet.class) || t.getSpecification().containsFacet(DoubleFloatingPointValueFacet.class) || t.getSpecification().containsFacet(FloatingPointValueFacet.class) || t.getSpecification().containsFacet(MoneyValueFacet.class);
     }
 
     public static double doubleValue(final ObjectAssociation field, final ObjectAdapter value) {
@@ -57,8 +54,7 @@ public class NumberAdapters {
             return intValueFacet.integerValue(value).doubleValue();
         }
 
-        final DoubleFloatingPointValueFacet doubleValueFacet =
-            specification.getFacet(DoubleFloatingPointValueFacet.class);
+        final DoubleFloatingPointValueFacet doubleValueFacet = specification.getFacet(DoubleFloatingPointValueFacet.class);
         if (doubleValueFacet != null) {
             return doubleValueFacet.doubleValue(value).doubleValue();
         }

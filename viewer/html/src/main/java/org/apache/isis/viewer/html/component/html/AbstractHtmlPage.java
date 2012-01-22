@@ -28,13 +28,13 @@ import org.apache.isis.viewer.html.component.Component;
 import org.apache.isis.viewer.html.component.Page;
 
 public abstract class AbstractHtmlPage implements Component, Page {
-    
+
     private final Block pageHeader;
     private final String siteFooter;
     private final String siteHeader;
     private final String styleSheet;
     private final StringBuffer debug = new StringBuffer();
-    
+
     private String title = "Apache Isis";
     protected final PathBuilder pathBuilder;
 
@@ -75,8 +75,7 @@ public abstract class AbstractHtmlPage implements Component, Page {
 
     @Override
     public void write(final PrintWriter writer) {
-        writer
-            .println("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">");
+        writer.println("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">");
         writer.println("<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\">");
         writer.println("  <head>");
         writer.print("  <title>");

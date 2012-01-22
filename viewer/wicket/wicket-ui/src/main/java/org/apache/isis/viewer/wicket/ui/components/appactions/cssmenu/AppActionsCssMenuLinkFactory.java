@@ -38,11 +38,8 @@ class AppActionsCssMenuLinkFactory implements CssMenuLinkFactory {
     private static final long serialVersionUID = 1L;
 
     @Override
-    public LinkAndLabel newLink(final ObjectAdapterMemento adapterMemento, final ObjectAction action,
-        final String linkId) {
-        final PageParameters pageParameters =
-            ActionModel.createPageParameters(adapterMemento.getObjectAdapter(), action,
-                AppActionsCssMenuFactory.getOidStringifier(), null, ActionModel.SingleResultsMode.REDIRECT);
+    public LinkAndLabel newLink(final ObjectAdapterMemento adapterMemento, final ObjectAction action, final String linkId) {
+        final PageParameters pageParameters = ActionModel.createPageParameters(adapterMemento.getObjectAdapter(), action, AppActionsCssMenuFactory.getOidStringifier(), null, ActionModel.SingleResultsMode.REDIRECT);
 
         final Class<? extends Page> pageClass = getPageClassRegistry().getPageClass(PageType.ACTION);
 
@@ -52,8 +49,7 @@ class AppActionsCssMenuLinkFactory implements CssMenuLinkFactory {
         return new LinkAndLabel(link, actionLabel);
     }
 
-    private <T extends Page> Link<T> createLink(final String linkId, final PageParameters pageParameters,
-        final Class<T> pageClass) {
+    private <T extends Page> Link<T> createLink(final String linkId, final PageParameters pageParameters, final Class<T> pageClass) {
         return new BookmarkablePageLink<T>(linkId, pageClass, pageParameters);
     }
 

@@ -48,10 +48,8 @@ public class UserActionSetImpl implements UserActionSet {
     private final Vector options = new Vector();
     private final ActionType type;
 
-    public UserActionSetImpl(final boolean includeExploration, final boolean includePrototype,
-        final boolean includeDebug, final ActionType type) {
-        this("", type, includeExploration, includePrototype, includeDebug, Toolkit
-            .getColor(ColorsAndFonts.COLOR_DEBUG_BASELINE));
+    public UserActionSetImpl(final boolean includeExploration, final boolean includePrototype, final boolean includeDebug, final ActionType type) {
+        this("", type, includeExploration, includePrototype, includeDebug, Toolkit.getColor(ColorsAndFonts.COLOR_DEBUG_BASELINE));
     }
 
     private UserActionSetImpl(final String groupName, final UserActionSetImpl parent) {
@@ -59,12 +57,10 @@ public class UserActionSetImpl implements UserActionSet {
     }
 
     private UserActionSetImpl(final String groupName, final UserActionSetImpl parent, final ActionType type) {
-        this(groupName, type, parent.includeExploration, parent.includePrototype, parent.includeDebug, parent
-            .getColor());
+        this(groupName, type, parent.includeExploration, parent.includePrototype, parent.includeDebug, parent.getColor());
     }
 
-    private UserActionSetImpl(final String groupName, final ActionType type, final boolean includeExploration,
-        final boolean includePrototype, final boolean includeDebug, final Color backgroundColor) {
+    private UserActionSetImpl(final String groupName, final ActionType type, final boolean includeExploration, final boolean includePrototype, final boolean includeDebug, final Color backgroundColor) {
         this.groupName = groupName;
         this.type = type;
         this.includeExploration = includeExploration;
@@ -93,8 +89,7 @@ public class UserActionSetImpl implements UserActionSet {
     @Override
     public void add(final UserAction option) {
         final ActionType section = option.getType();
-        if (section == ActionType.USER || (includeExploration && section == ActionType.EXPLORATION)
-            || (includePrototype && section == ActionType.PROTOTYPE) || (includeDebug && section == ActionType.DEBUG)) {
+        if (section == ActionType.USER || (includeExploration && section == ActionType.EXPLORATION) || (includePrototype && section == ActionType.PROTOTYPE) || (includeDebug && section == ActionType.DEBUG)) {
             options.addElement(option);
         }
     }

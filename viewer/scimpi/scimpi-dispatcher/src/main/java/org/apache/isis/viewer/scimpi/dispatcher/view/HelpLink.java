@@ -37,8 +37,7 @@ public class HelpLink extends AbstractElementProcessor {
             site = IsisContext.getConfiguration().getString(ConfigurationConstants.ROOT + "scimpi.help-site", "/help/");
         }
         if (suffix == null) {
-            suffix =
-                IsisContext.getConfiguration().getString(ConfigurationConstants.ROOT + "scimpi.help-suffix", "shtml");
+            suffix = IsisContext.getConfiguration().getString(ConfigurationConstants.ROOT + "scimpi.help-suffix", "shtml");
             if (suffix == null || suffix.equals("")) {
                 suffix = "";
             } else {
@@ -53,19 +52,20 @@ public class HelpLink extends AbstractElementProcessor {
             final String link = site + helpReference + suffix;
             final String linkText = "Help";
             final String target = "scimpi-help";
-            String titleSection = description == null ? "" : ("\" title=\"" + description);
-            return "<a class=\"" + elementClass + "\" href=\"" + link + "\" target=\"" + target + titleSection
-                + "\"><img src=\"/images/help.png\" alt=\"" + linkText + "\" /></a>";
+            final String titleSection = description == null ? "" : ("\" title=\"" + description);
+            return "<a class=\"" + elementClass + "\" href=\"" + link + "\" target=\"" + target + titleSection + "\"><img src=\"/images/help.png\" alt=\"" + linkText + "\" /></a>";
         }
     }
-    
+
+    @Override
     public String getName() {
         return "help";
     }
-    
-    public void process(Request request) {
-        String description = null;
-        String helpReference = request.getRequiredProperty("ref");
+
+    @Override
+    public void process(final Request request) {
+        final String description = null;
+        final String helpReference = request.getRequiredProperty("ref");
         append(request, description, helpReference);
     }
 

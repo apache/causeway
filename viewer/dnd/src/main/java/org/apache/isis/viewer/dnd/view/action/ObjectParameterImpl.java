@@ -41,8 +41,7 @@ public class ObjectParameterImpl extends AbstractObjectContent implements Object
     private final ObjectAdapter[] optionAdapters;
     private final OneToOneActionParameter objectActionParameter;
 
-    public ObjectParameterImpl(final OneToOneActionParameter objectActionParameter, final ObjectAdapter adapter,
-        final ObjectAdapter[] optionAdapters, final int i, final ActionHelper invocation) {
+    public ObjectParameterImpl(final OneToOneActionParameter objectActionParameter, final ObjectAdapter adapter, final ObjectAdapter[] optionAdapters, final int i, final ActionHelper invocation) {
         this.objectActionParameter = objectActionParameter;
         this.optionAdapters = optionAdapters;
         this.index = i;

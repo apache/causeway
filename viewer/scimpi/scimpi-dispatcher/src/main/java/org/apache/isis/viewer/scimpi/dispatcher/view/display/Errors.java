@@ -36,26 +36,25 @@ public class Errors extends AbstractElementProcessor {
         }
     }
 
-    public static void write(Request request, String cls, final StringBuffer buffer) {
+    public static void write(final Request request, String cls, final StringBuffer buffer) {
         if (cls == null) {
             cls = "error";
         }
-        String message = (String) request.getContext().getVariable("_error-message");
+        final String message = (String) request.getContext().getVariable("_error-message");
         if (message != null) {
             buffer.append(message);
         }
-        String details = (String) request.getContext().getVariable("_error-details");
+        final String details = (String) request.getContext().getVariable("_error-details");
         if (details != null) {
             buffer.append(details);
         }
-        
+
         /*
-        final MessageBroker messageBroker = IsisContext.getMessageBroker();
-        final List<String> warnings = messageBroker.getWarnings();
-        for (final String warning : warnings) {
-            buffer.append("<div class=\"" + cls + "\">" + warning + "</div>");
-        }
-        */
+         * final MessageBroker messageBroker = IsisContext.getMessageBroker();
+         * final List<String> warnings = messageBroker.getWarnings(); for (final
+         * String warning : warnings) { buffer.append("<div class=\"" + cls +
+         * "\">" + warning + "</div>"); }
+         */
     }
 
     @Override

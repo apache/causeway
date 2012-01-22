@@ -30,16 +30,11 @@ import org.apache.isis.viewer.bdd.common.fixtures.AliasItemsInListPeer;
 public class AliasItemsInListForConcordion extends AbstractFixture<AliasItemsInListPeer> {
 
     public AliasItemsInListForConcordion(final AliasRegistry aliasRegistry, final String listAlias) {
-        this(aliasRegistry, listAlias, CellBindingDefault.builder(IsisViewerConstants.TITLE_NAME,
-            IsisViewerConstants.TITLE_HEAD).build(), CellBindingDefault
-            .builder(IsisViewerConstants.TYPE_NAME, IsisViewerConstants.TYPE_HEAD).optional().build(),
-            CellBindingDefault
-                .builder(IsisViewerConstants.ALIAS_RESULT_NAME, IsisViewerConstants.ALIAS_RESULT_HEAD_SET).autoCreate()
-                .build());
+        this(aliasRegistry, listAlias, CellBindingDefault.builder(IsisViewerConstants.TITLE_NAME, IsisViewerConstants.TITLE_HEAD).build(), CellBindingDefault.builder(IsisViewerConstants.TYPE_NAME, IsisViewerConstants.TYPE_HEAD).optional().build(), CellBindingDefault
+                .builder(IsisViewerConstants.ALIAS_RESULT_NAME, IsisViewerConstants.ALIAS_RESULT_HEAD_SET).autoCreate().build());
     }
 
-    private AliasItemsInListForConcordion(final AliasRegistry aliasRegistry, final String listAlias,
-        final CellBinding titleBinding, final CellBinding typeBinding, final CellBinding aliasBinding) {
+    private AliasItemsInListForConcordion(final AliasRegistry aliasRegistry, final String listAlias, final CellBinding titleBinding, final CellBinding typeBinding, final CellBinding aliasBinding) {
         super(new AliasItemsInListPeer(aliasRegistry, listAlias, titleBinding, typeBinding, aliasBinding));
     }
 

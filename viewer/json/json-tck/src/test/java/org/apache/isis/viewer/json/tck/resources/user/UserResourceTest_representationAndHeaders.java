@@ -55,20 +55,19 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-
 public class UserResourceTest_representationAndHeaders {
 
     @Rule
     public IsisWebServerRule webServerRule = new IsisWebServerRule();
-    
+
     private RestfulClient client;
     private UserResource resource;
 
     @Before
     public void setUp() throws Exception {
-        WebServer webServer = webServerRule.getWebServer();
+        final WebServer webServer = webServerRule.getWebServer();
         client = new RestfulClient(webServer.getBase());
-        
+
         resource = client.getUserResource();
     }
 
@@ -76,25 +75,30 @@ public class UserResourceTest_representationAndHeaders {
     public void representation() throws Exception {
 
         // given
-        Response resp = resource.user();
-        
+        final Response resp = resource.user();
+
         // when
-        RestfulResponse<UserRepresentation> jsonResp = RestfulResponse.ofT(resp);
+        final RestfulResponse<UserRepresentation> jsonResp = RestfulResponse.ofT(resp);
         assertThat(jsonResp.getStatus().getFamily(), is(Family.SUCCESSFUL));
-        
+
         // then
         assertThat(jsonResp.getStatus(), is(HttpStatusCode.OK));
-        
-        UserRepresentation repr = jsonResp.getEntity();
+
+        final UserRepresentation repr = jsonResp.getEntity();
         assertThat(repr, is(not(nullValue())));
         assertThat(repr.isMap(), is(true));
-        
+
         assertThat(repr.getSelf(), isLink(client).httpMethod(HttpMethod.GET));
         assertThat(repr.getUserName(), is(not(nullValue())));
-        assertThat(repr.getFriendlyName(), is(nullValue())); // TODO: change fixture so populated
-        assertThat(repr.getEmail(), is(nullValue())); // TODO: change fixture so populated
-        assertThat(repr.getRoles(), is(not(nullValue()))); // TODO: change fixture so have non-empty list
-        
+        assertThat(repr.getFriendlyName(), is(nullValue())); // TODO: change
+                                                             // fixture so
+                                                             // populated
+        assertThat(repr.getEmail(), is(nullValue())); // TODO: change fixture so
+                                                      // populated
+        assertThat(repr.getRoles(), is(not(nullValue()))); // TODO: change
+                                                           // fixture so have
+                                                           // non-empty list
+
         assertThat(repr.getLinks(), isArray());
         assertThat(repr.getExtensions(), isMap());
     }
@@ -103,11 +107,11 @@ public class UserResourceTest_representationAndHeaders {
     public void headers() throws Exception {
 
         // given
-        Response resp = resource.user();
-        
+        final Response resp = resource.user();
+
         // when
-        RestfulResponse<UserRepresentation> restfulResponse = RestfulResponse.ofT(resp);
-        
+        final RestfulResponse<UserRepresentation> restfulResponse = RestfulResponse.ofT(resp);
+
         // then
         final MediaType contentType = restfulResponse.getHeader(Header.CONTENT_TYPE);
         assertThat(contentType, hasType("application"));
@@ -117,26 +121,22 @@ public class UserResourceTest_representationAndHeaders {
 
         // then
         final CacheControl cacheControl = restfulResponse.getHeader(Header.CACHE_CONTROL);
-        assertThat(cacheControl, hasMaxAge(60*60));
-        assertThat(cacheControl.getMaxAge(), is(60*60));
+        assertThat(cacheControl, hasMaxAge(60 * 60));
+        assertThat(cacheControl.getMaxAge(), is(60 * 60));
     }
 
-    
     @Test
     public void self_isFollowable() throws Exception {
         // given
-        UserRepresentation repr = givenRepresentation();
+        final UserRepresentation repr = givenRepresentation();
 
         // when, then
         assertThat(repr, isFollowableLinkToSelf(client));
     }
-    
+
     private UserRepresentation givenRepresentation() throws JsonParseException, JsonMappingException, IOException {
-        RestfulResponse<UserRepresentation> jsonResp = RestfulResponse.ofT(resource.user());
+        final RestfulResponse<UserRepresentation> jsonResp = RestfulResponse.ofT(resource.user());
         return jsonResp.getEntity();
     }
 
 }
-
-
-    

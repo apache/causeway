@@ -36,8 +36,7 @@ public class PasteValueOption extends AbstractValueOption {
         if (changable.isVetoed()) {
             return changable;
         } else {
-            return changable.setDescription(String.format("Replace field content with '%s' from clipboard",
-                getClipboard(view)));
+            return changable.setDescription(String.format("Replace field content with '%s' from clipboard", getClipboard(view)));
         }
     }
 

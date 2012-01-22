@@ -37,33 +37,31 @@ import org.apache.isis.viewer.json.applib.util.Parser;
 import org.apache.isis.viewer.json.tck.IsisWebServerRule;
 import org.jboss.resteasy.client.ClientRequest;
 import org.jboss.resteasy.client.ClientResponse;
-import org.jboss.resteasy.util.HttpHeaderNames;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-
 
 public class AnyResourceTest_exceptionHandling {
 
     @Rule
     public IsisWebServerRule webServerRule = new IsisWebServerRule();
-    
+
     private RestfulClient client;
 
     @Before
     public void setUp() throws Exception {
-        WebServer webServer = webServerRule.getWebServer();
+        final WebServer webServer = webServerRule.getWebServer();
         client = new RestfulClient(webServer.getBase());
     }
 
     @Test
     public void noMediaType() throws Exception {
         // given
-        RestfulRequest restfulReq = client.createRequest(HttpMethod.GET, "/");
-        
+        final RestfulRequest restfulReq = client.createRequest(HttpMethod.GET, "/");
+
         // when
-        RestfulResponse<HomePageRepresentation> restfulResp = restfulReq.executeT();
-        
+        final RestfulResponse<HomePageRepresentation> restfulResp = restfulReq.executeT();
+
         // then
         assertThat(restfulResp.getStatus(), is(HttpStatusCode.OK));
         assertThat(restfulResp.getHeader(RestfulResponse.Header.CONTENT_TYPE), is(RepresentationType.HOME_PAGE.getMediaType()));
@@ -73,49 +71,44 @@ public class AnyResourceTest_exceptionHandling {
     public void correctMediaType() throws Exception {
 
         // given
-        RestfulRequest restfulReq = client.createRequest(HttpMethod.GET, "/");
+        final RestfulRequest restfulReq = client.createRequest(HttpMethod.GET, "/");
         restfulReq.withHeader(Header.ACCEPT, MediaType.APPLICATION_JSON_TYPE);
-        
+
         // when
-        RestfulResponse<HomePageRepresentation> restfulResp = restfulReq.executeT();
-        
+        final RestfulResponse<HomePageRepresentation> restfulResp = restfulReq.executeT();
+
         // then
         assertThat(restfulResp.getStatus(), is(HttpStatusCode.OK));
         assertThat(restfulResp.getHeader(RestfulResponse.Header.CONTENT_TYPE), is(RepresentationType.HOME_PAGE.getMediaType()));
     }
 
-    
     @Test
     public void incorrectMediaType_returnsNotAcceptable() throws Exception {
 
         // given
-        ClientRequest clientRequest = client.getClientRequestFactory().createRelativeRequest("/");
+        final ClientRequest clientRequest = client.getClientRequestFactory().createRelativeRequest("/");
         clientRequest.accept(MediaType.APPLICATION_ATOM_XML_TYPE);
-        
+
         // when
-        ClientResponse<?> resp = clientRequest.get();
-        RestfulResponse<JsonRepresentation> restfulResp = RestfulResponse.of(resp);
-        
+        final ClientResponse<?> resp = clientRequest.get();
+        final RestfulResponse<JsonRepresentation> restfulResp = RestfulResponse.of(resp);
+
         // then
         assertThat(restfulResp.getStatus(), is(HttpStatusCode.NOT_ACCEPTABLE));
     }
-
 
     @Test
     public void runtimeException_isMapped() throws Exception {
 
         // given
-        RestfulRequest restfulReq = client.createRequest(HttpMethod.GET, "version");
-        Header<Boolean> header = new Header<Boolean>("X-FAIL", Parser.forBoolean());
+        final RestfulRequest restfulReq = client.createRequest(HttpMethod.GET, "version");
+        final Header<Boolean> header = new Header<Boolean>("X-FAIL", Parser.forBoolean());
         restfulReq.withHeader(header, true);
-        
+
         // when
-        RestfulResponse<JsonRepresentation> jsonResp = restfulReq.execute();
-        
+        final RestfulResponse<JsonRepresentation> jsonResp = restfulReq.execute();
+
         // then
         assertThat(jsonResp.getStatus(), is(HttpStatusCode.METHOD_FAILURE));
     }
 }
-
-
-    

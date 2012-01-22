@@ -56,8 +56,7 @@ public class CellBindingDefault extends CellBinding {
         return new Builder(name, headText);
     }
 
-    private CellBindingDefault(final String name, final boolean autoCreate, final boolean ditto,
-        final boolean optional, final String[] headTexts) {
+    private CellBindingDefault(final String name, final boolean autoCreate, final boolean ditto, final boolean optional, final String[] headTexts) {
         super(name, autoCreate, ditto, optional, headTexts);
     }
 

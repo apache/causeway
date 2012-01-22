@@ -30,8 +30,7 @@ public class AssociateCommand implements Command {
     private final ObjectAdapter associatedObject;
     private final String name;
 
-    public AssociateCommand(final ObjectAdapter object, final ObjectAdapter associatedObject,
-        final OneToOneAssociation field) {
+    public AssociateCommand(final ObjectAdapter object, final ObjectAdapter associatedObject, final OneToOneAssociation field) {
         this.description = "Clear association of " + associatedObject.titleString();
         this.name = "associate " + associatedObject.titleString();
         this.object = object;

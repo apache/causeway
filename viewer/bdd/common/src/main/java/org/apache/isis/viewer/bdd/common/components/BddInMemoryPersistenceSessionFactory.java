@@ -26,14 +26,15 @@ import org.apache.isis.runtimes.dflt.runtime.persistence.PersistenceSessionFacto
 import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
 
 /**
- * As per {@link InMemoryPersistenceSessionFactory}, but uses the {@link BddObjectStorePersistedObjects} implementation
- * which stores any {@link CachedFacet cached} {@link ObjectSpecification class}es <tt>static</tt>ally (and thus
- * persisted across multiple setups/teardowns of the {@link NakedObjectsContext}.
+ * As per {@link InMemoryPersistenceSessionFactory}, but uses the
+ * {@link BddObjectStorePersistedObjects} implementation which stores any
+ * {@link CachedFacet cached} {@link ObjectSpecification class}es
+ * <tt>static</tt>ally (and thus persisted across multiple setups/teardowns of
+ * the {@link NakedObjectsContext}.
  */
 public class BddInMemoryPersistenceSessionFactory extends InMemoryPersistenceSessionFactory {
 
-    public BddInMemoryPersistenceSessionFactory(final DeploymentType deploymentType,
-        final PersistenceSessionFactoryDelegate persistenceSessionFactoryDelegate) {
+    public BddInMemoryPersistenceSessionFactory(final DeploymentType deploymentType, final PersistenceSessionFactoryDelegate persistenceSessionFactoryDelegate) {
         super(deploymentType, persistenceSessionFactoryDelegate);
     }
 

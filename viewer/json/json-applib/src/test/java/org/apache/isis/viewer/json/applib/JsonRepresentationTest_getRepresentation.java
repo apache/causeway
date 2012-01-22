@@ -38,10 +38,10 @@ public class JsonRepresentationTest_getRepresentation {
     public void setUp() throws Exception {
         jsonRepresentation = new JsonRepresentation(readJson("map.json"));
     }
-    
+
     @Test
     public void forMap() throws JsonParseException, JsonMappingException, IOException {
-        JsonRepresentation mapRepresentation = jsonRepresentation.getRepresentation("aLink");
+        final JsonRepresentation mapRepresentation = jsonRepresentation.getRepresentation("aLink");
         assertThat(mapRepresentation.getString("rel"), is("someRel"));
         assertThat(mapRepresentation.isMap(), is(true));
     }
@@ -53,48 +53,48 @@ public class JsonRepresentationTest_getRepresentation {
 
     @Test
     public void forValue() throws JsonParseException, JsonMappingException, IOException {
-        JsonRepresentation valueRepresentation = jsonRepresentation.getRepresentation("anInt");
+        final JsonRepresentation valueRepresentation = jsonRepresentation.getRepresentation("anInt");
         assertThat(valueRepresentation.isValue(), is(true));
     }
 
     @Test
     public void forList() throws JsonParseException, JsonMappingException, IOException {
-        JsonRepresentation listRepresentation = jsonRepresentation.getRepresentation("aSubList");
+        final JsonRepresentation listRepresentation = jsonRepresentation.getRepresentation("aSubList");
         assertThat(listRepresentation.isArray(), is(true));
     }
-    
+
     @Test
     public void forPath() throws JsonParseException, JsonMappingException, IOException {
-        JsonRepresentation representation = jsonRepresentation.getRepresentation("aSubMap.aLink");
+        final JsonRepresentation representation = jsonRepresentation.getRepresentation("aSubMap.aLink");
         assertThat(representation.isMap(), is(true));
         assertThat(representation.getString("href"), is("http://foo/bar"));
     }
 
     @Test
     public void forListWithSingleCriteriaMatchingOne() throws JsonParseException, JsonMappingException, IOException {
-        JsonRepresentation representation = jsonRepresentation.getRepresentation("anotherSubMap.aListOfLinks[rel=aRel]");
+        final JsonRepresentation representation = jsonRepresentation.getRepresentation("anotherSubMap.aListOfLinks[rel=aRel]");
         assertThat(representation.isLink(), is(true));
         assertThat(representation.asLink().getHref(), is("http://foo/bar"));
     }
 
     @Test
     public void forListWithMultipleCriteriaMatchingOne() throws JsonParseException, JsonMappingException, IOException {
-        JsonRepresentation representation = jsonRepresentation.getRepresentation("anotherSubMap.aListOfLinks[rel=multiRel data=someData]");
+        final JsonRepresentation representation = jsonRepresentation.getRepresentation("anotherSubMap.aListOfLinks[rel=multiRel data=someData]");
         assertThat(representation.isLink(), is(true));
         assertThat(representation.asLink().getHref(), is("http://foo/bar/multiRel1"));
     }
 
     @Test
     public void forListWithMultipleCriteriaMatchingMultiple() throws JsonParseException, JsonMappingException, IOException {
-        JsonRepresentation representation = jsonRepresentation.getRepresentation("anotherSubMap.aListOfLinks[rel=multiRel method=GET]");
+        final JsonRepresentation representation = jsonRepresentation.getRepresentation("anotherSubMap.aListOfLinks[rel=multiRel method=GET]");
         assertThat(representation.isArray(), is(true));
         assertThat(representation.size(), is(2));
     }
 
     @Test
     public void whenStartingWithList() throws JsonParseException, JsonMappingException, IOException {
-        JsonRepresentation listRepresentation = jsonRepresentation.getRepresentation("anotherSubMap.aListOfLinks");
-        JsonRepresentation representation = listRepresentation.getRepresentation("[rel=multiRel method=GET]");
+        final JsonRepresentation listRepresentation = jsonRepresentation.getRepresentation("anotherSubMap.aListOfLinks");
+        final JsonRepresentation representation = listRepresentation.getRepresentation("[rel=multiRel method=GET]");
         assertThat(representation.isArray(), is(true));
         assertThat(representation.size(), is(2));
     }

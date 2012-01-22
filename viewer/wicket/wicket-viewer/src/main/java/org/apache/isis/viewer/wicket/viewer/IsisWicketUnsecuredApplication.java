@@ -73,8 +73,7 @@ import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.google.inject.Module;
 
-public class IsisWicketUnsecuredApplication extends WebApplication implements ComponentFactoryRegistryAccessor,
-    PageClassRegistryAccessor, ImageCacheAccessor, ApplicationCssRenderer, AuthenticationSessionAccessor {
+public class IsisWicketUnsecuredApplication extends WebApplication implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, ImageCacheAccessor, ApplicationCssRenderer, AuthenticationSessionAccessor {
 
     private static final long serialVersionUID = 1L;
 
@@ -127,8 +126,9 @@ public class IsisWicketUnsecuredApplication extends WebApplication implements Co
     }
 
     /**
-     * Initializes the application; in particular, bootstrapping the Isis backend, and initializing the
-     * {@link ComponentFactoryRegistry} to be used for rendering.
+     * Initializes the application; in particular, bootstrapping the Isis
+     * backend, and initializing the {@link ComponentFactoryRegistry} to be used
+     * for rendering.
      */
     @Override
     protected void init() {
@@ -158,8 +158,7 @@ public class IsisWicketUnsecuredApplication extends WebApplication implements Co
         final ResourceStreamSource rssServletContext = new ResourceStreamSourceForWebInf(getServletContext());
         final ResourceStreamSource rssTcl = ResourceStreamSourceContextLoaderClassPath.create();
         final ResourceStreamSource rssClasspath = new ResourceStreamSourceCurrentClassClassPath();
-        final IsisConfigurationBuilder isisConfigurationBuilder =
-            new IsisConfigurationBuilderResourceStreams(rssTcl, rssClasspath, rssServletContext);
+        final IsisConfigurationBuilder isisConfigurationBuilder = new IsisConfigurationBuilderResourceStreams(rssTcl, rssClasspath, rssServletContext);
         return isisConfigurationBuilder;
     }
 
@@ -182,8 +181,7 @@ public class IsisWicketUnsecuredApplication extends WebApplication implements Co
     public Session newSession(final Request request, final Response response) {
         final AuthenticationManager authenticationManager = anonymousAuthenticationManager();
 
-        final AnonymousWebSessionForIsis anonymousWebSession =
-            new AnonymousWebSessionForIsis(request, authenticationManager);
+        final AnonymousWebSessionForIsis anonymousWebSession = new AnonymousWebSessionForIsis(request, authenticationManager);
         anonymousWebSession.authenticate(null, null);
         return anonymousWebSession;
     }
@@ -191,13 +189,13 @@ public class IsisWicketUnsecuredApplication extends WebApplication implements Co
     private AuthenticationManager authenticationManager;
 
     /**
-     * Lazily creates an {@link AuthenticationManager} that will authenticate all requests.
+     * Lazily creates an {@link AuthenticationManager} that will authenticate
+     * all requests.
      */
     private AuthenticationManager anonymousAuthenticationManager() {
         if (authenticationManager == null) {
             final IsisConfiguration configuration = IsisContext.getConfiguration();
-            final AuthenticationManagerStandard authenticationManager =
-                new AuthenticationManagerStandard(configuration);
+            final AuthenticationManagerStandard authenticationManager = new AuthenticationManagerStandard(configuration);
             authenticationManager.addAuthenticator(new AuthenticatorAbstract(configuration) {
                 @Override
                 public boolean isValid(final AuthenticationRequest request) {
@@ -205,7 +203,7 @@ public class IsisWicketUnsecuredApplication extends WebApplication implements Co
                 }
 
                 @Override
-                public boolean canAuthenticate(Class<? extends AuthenticationRequest> authenticationRequestClass) {
+                public boolean canAuthenticate(final Class<? extends AuthenticationRequest> authenticationRequestClass) {
                     return true;
                 }
             });
@@ -216,9 +214,10 @@ public class IsisWicketUnsecuredApplication extends WebApplication implements Co
     }
 
     /**
-     * Installs a {@link WebRequestCycleForIsis custom implementation} of Wicket's own {@link RequestCycle}, hooking in
-     * to provide session and transaction management across potentially multiple concurrent requests for the same Wicket
-     * session.
+     * Installs a {@link WebRequestCycleForIsis custom implementation} of
+     * Wicket's own {@link RequestCycle}, hooking in to provide session and
+     * transaction management across potentially multiple concurrent requests
+     * for the same Wicket session.
      * 
      * <p>
      * In general, it shouldn't be necessary to override this method.
@@ -229,8 +228,8 @@ public class IsisWicketUnsecuredApplication extends WebApplication implements Co
     }
 
     /**
-     * Installs a {@link ConverterLocator} preconfigured with a number of implementations to support Isis specific
-     * objects.
+     * Installs a {@link ConverterLocator} preconfigured with a number of
+     * implementations to support Isis specific objects.
      * 
      * <p>
      * In general, it shouldn't be necessary to override this method.
@@ -252,12 +251,15 @@ public class IsisWicketUnsecuredApplication extends WebApplication implements Co
     }
 
     /**
-     * Renders the {@link #getApplicationCssUrl() application-supplied CSS}, if any.
+     * Renders the {@link #getApplicationCssUrl() application-supplied CSS}, if
+     * any.
      * 
      * <p>
-     * TODO: doing it this way, as opposed to simply {@link #addRenderHeadListener(IHeaderContributor) registering} an
-     * {@link IHeaderContributor} does mean that the header is not first in the list, so can override other page-level
-     * CSS. However, it still comes after any component-level CSS, so is not ideal.
+     * TODO: doing it this way, as opposed to simply
+     * {@link #addRenderHeadListener(IHeaderContributor) registering} an
+     * {@link IHeaderContributor} does mean that the header is not first in the
+     * list, so can override other page-level CSS. However, it still comes after
+     * any component-level CSS, so is not ideal.
      */
     @Override
     public void renderApplicationCss(final HtmlHeaderContainer container) {
@@ -274,7 +276,8 @@ public class IsisWicketUnsecuredApplication extends WebApplication implements Co
     // /////////////////////////////////////////////////
 
     /**
-     * The {@link ComponentFactoryRegistry} created in {@link #newComponentFactoryRegistry()}.
+     * The {@link ComponentFactoryRegistry} created in
+     * {@link #newComponentFactoryRegistry()}.
      */
     @Override
     public final ComponentFactoryRegistry getComponentFactoryRegistry() {

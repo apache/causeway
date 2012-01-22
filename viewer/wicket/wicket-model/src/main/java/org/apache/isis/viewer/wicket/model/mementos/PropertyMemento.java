@@ -31,8 +31,7 @@ public class PropertyMemento implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private static ObjectSpecification owningSpecFor(final OneToOneAssociation association) {
-        return IsisContext.getSpecificationLoader().loadSpecification(
-            association.getIdentifier().toClassIdentityString());
+        return IsisContext.getSpecificationLoader().loadSpecification(association.getIdentifier().toClassIdentityString());
     }
 
     private final SpecMemento owningType;
@@ -56,8 +55,7 @@ public class PropertyMemento implements Serializable {
     }
 
     public PropertyMemento(final OneToOneAssociation property) {
-        this(new SpecMemento(owningSpecFor(property)), property.getIdentifier().toNameIdentityString(),
-            new SpecMemento(property.getSpecification()));
+        this(new SpecMemento(owningSpecFor(property)), property.getIdentifier().toNameIdentityString(), new SpecMemento(property.getSpecification()));
         this.property = property;
     }
 

@@ -186,8 +186,7 @@ public class LoginDialog extends Frame implements ActionListener, KeyListener {
             instructionLabel.setText("Authorising...");
             instructionLabel.setForeground(Color.BLACK);
 
-            final AuthenticationRequestPassword authenticationRequest =
-                new AuthenticationRequestPassword(getUser(), getPassword());
+            final AuthenticationRequestPassword authenticationRequest = new AuthenticationRequestPassword(getUser(), getPassword());
             session = authenticationManager.authenticate(authenticationRequest);
             if (session == null) {
                 try {

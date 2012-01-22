@@ -40,22 +40,22 @@ public class ActionDescriptionReprRenderer extends AbstractTypeMemberReprRendere
         }
 
         @Override
-        public ReprRenderer<?,?> newRenderer(ResourceContext resourceContext, LinkFollower linkFollower, JsonRepresentation representation) {
+        public ReprRenderer<?, ?> newRenderer(final ResourceContext resourceContext, final LinkFollower linkFollower, final JsonRepresentation representation) {
             return new ActionDescriptionReprRenderer(resourceContext, linkFollower, getRepresentationType(), representation);
         }
     }
 
-    public static LinkBuilder newLinkToBuilder(ResourceContext resourceContext, Rel rel, ObjectSpecification objectSpecification, ObjectAction objectAction) {
-        String typeFullName = objectSpecification.getFullIdentifier();
-        String actionId = objectAction.getId();
-        String url = "domainTypes/" + typeFullName + "/actions/" + actionId;
+    public static LinkBuilder newLinkToBuilder(final ResourceContext resourceContext, final Rel rel, final ObjectSpecification objectSpecification, final ObjectAction objectAction) {
+        final String typeFullName = objectSpecification.getFullIdentifier();
+        final String actionId = objectAction.getId();
+        final String url = "domainTypes/" + typeFullName + "/actions/" + actionId;
         return LinkBuilder.newBuilder(resourceContext, rel, RepresentationType.ACTION_DESCRIPTION, url);
     }
 
-    public ActionDescriptionReprRenderer(ResourceContext resourceContext, LinkFollower linkFollower, RepresentationType representationType, JsonRepresentation representation) {
+    public ActionDescriptionReprRenderer(final ResourceContext resourceContext, final LinkFollower linkFollower, final RepresentationType representationType, final JsonRepresentation representation) {
         super(resourceContext, linkFollower, representationType, representation);
     }
-    
+
     @Override
     protected void addLinksSpecificToFeature() {
         addParameters();
@@ -66,20 +66,19 @@ public class ActionDescriptionReprRenderer extends AbstractTypeMemberReprRendere
     private void addParameters() {
         final JsonRepresentation parameterList = JsonRepresentation.newArray();
         final List<ObjectActionParameter> parameters = getObjectFeature().getParameters();
-        for (ObjectActionParameter parameter : parameters) {
-            final LinkBuilder linkBuilder = 
-                    ActionParameterDescriptionReprRenderer.newLinkToBuilder(getResourceContext(), Rel.ACTION_PARAM, objectSpecification, parameter);
+        for (final ObjectActionParameter parameter : parameters) {
+            final LinkBuilder linkBuilder = ActionParameterDescriptionReprRenderer.newLinkToBuilder(getResourceContext(), Rel.ACTION_PARAM, objectSpecification, parameter);
             parameterList.arrayAdd(linkBuilder.build());
         }
-        
+
         representation.mapPut("parameters", parameterList);
     }
 
     protected void addLinkToElementTypeIfAny() {
         final TypeOfFacet facet = getObjectFeature().getFacet(TypeOfFacet.class);
-        if(facet == null) {
+        if (facet == null) {
             return;
-        } 
+        }
         final ObjectSpecification typeOfSpec = facet.valueSpec();
         final LinkBuilder linkBuilder = DomainTypeReprRenderer.newLinkToBuilder(getResourceContext(), Rel.ELEMENT_TYPE, typeOfSpec);
         getLinks().arrayAdd(linkBuilder.build());
@@ -87,11 +86,10 @@ public class ActionDescriptionReprRenderer extends AbstractTypeMemberReprRendere
 
     private void addLinkToReturnTypeIfAny() {
         final ObjectSpecification returnType = getObjectFeature().getReturnType();
-        if(returnType == null) {
+        if (returnType == null) {
             return;
         }
-        final LinkBuilder linkBuilder = 
-            DomainTypeReprRenderer.newLinkToBuilder(getResourceContext(), Rel.RETURN_TYPE, returnType);
+        final LinkBuilder linkBuilder = DomainTypeReprRenderer.newLinkToBuilder(getResourceContext(), Rel.RETURN_TYPE, returnType);
         getLinks().arrayAdd(linkBuilder.build());
     }
 
@@ -100,6 +98,5 @@ public class ActionDescriptionReprRenderer extends AbstractTypeMemberReprRendere
         putExtensionsName();
         putExtensionsDescriptionIfAvailable();
     }
-
 
 }

@@ -26,19 +26,23 @@ import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 
 /**
- * Creates {@link Component}s of a specified {@link ComponentType}, optionally {@link #appliesTo(ComponentType, IModel)
- * dependent on} the provided {@link IModel model}.
+ * Creates {@link Component}s of a specified {@link ComponentType}, optionally
+ * {@link #appliesTo(ComponentType, IModel) dependent on} the provided
+ * {@link IModel model}.
  * 
  * <p>
- * This interface is at the very heart of the Wicket Objects' model, being an usage of the chain-of-responsibility
- * design pattern. The available {@link ComponentFactory}s are registered through {@link ComponentFactoryRegistry}
- * (bootstrapped from the <tt>WicketObjectsApplication</tt>); various adapters make it easy to lookup {@link Component}s
- * from this registry.
+ * This interface is at the very heart of the Wicket Objects' model, being an
+ * usage of the chain-of-responsibility design pattern. The available
+ * {@link ComponentFactory}s are registered through
+ * {@link ComponentFactoryRegistry} (bootstrapped from the
+ * <tt>WicketObjectsApplication</tt>); various adapters make it easy to lookup
+ * {@link Component}s from this registry.
  */
 public interface ComponentFactory extends Serializable {
 
     /**
-     * The {@link ComponentType} with which this component factory has been registered.
+     * The {@link ComponentType} with which this component factory has been
+     * registered.
      */
     ComponentType getComponentType();
 
@@ -57,7 +61,8 @@ public interface ComponentFactory extends Serializable {
         }
 
         /**
-         * Whether no other {@link ComponentFactory}s should apply (ie stop searching for other views).
+         * Whether no other {@link ComponentFactory}s should apply (ie stop
+         * searching for other views).
          */
         public boolean exclusively() {
             return exclusively;
@@ -65,13 +70,14 @@ public interface ComponentFactory extends Serializable {
     }
 
     /**
-     * Whether the {@link Component} created by this factory applies to the specified {@link ComponentType} and
-     * {@link IModel}.
+     * Whether the {@link Component} created by this factory applies to the
+     * specified {@link ComponentType} and {@link IModel}.
      */
     ApplicationAdvice appliesTo(ComponentType componentType, IModel<?> model);
 
     /**
-     * Creates component, with id being derived from the {@link #getComponentType() component type} for this factory.
+     * Creates component, with id being derived from the
+     * {@link #getComponentType() component type} for this factory.
      * 
      * @param model
      * @return

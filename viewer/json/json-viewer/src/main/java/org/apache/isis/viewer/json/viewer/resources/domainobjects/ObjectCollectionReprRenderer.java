@@ -46,103 +46,97 @@ public class ObjectCollectionReprRenderer extends AbstractObjectMemberReprRender
         }
 
         @Override
-        public ReprRenderer<?,?> newRenderer(ResourceContext resourceContext, LinkFollower linkFollower, JsonRepresentation representation) {
+        public ReprRenderer<?, ?> newRenderer(final ResourceContext resourceContext, final LinkFollower linkFollower, final JsonRepresentation representation) {
             return new ObjectCollectionReprRenderer(resourceContext, linkFollower, getRepresentationType(), representation);
         }
     }
 
-    private ObjectCollectionReprRenderer(ResourceContext resourceContext, LinkFollower linkFollower, RepresentationType representationType, JsonRepresentation representation) {
+    private ObjectCollectionReprRenderer(final ResourceContext resourceContext, final LinkFollower linkFollower, final RepresentationType representationType, final JsonRepresentation representation) {
         super(resourceContext, linkFollower, representationType, representation);
     }
-    
+
+    @Override
     public JsonRepresentation render() {
         // id and memberType are rendered eagerly
 
         renderMemberContent();
-        if(mode.isStandalone() || mode.isMutated() || !objectAdapter.isPersistent()) {
+        if (mode.isStandalone() || mode.isMutated() || !objectAdapter.isPersistent()) {
             addValue();
         }
         putDisabledReasonIfDisabled();
 
-        if(mode.isStandalone() || mode.isMutated()) {
+        if (mode.isStandalone() || mode.isMutated()) {
             addExtensionsIsisProprietaryChangedObjects();
         }
 
         return representation;
     }
 
-    
-    /////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////
     // value
-    /////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////
 
     private void addValue() {
-        ObjectAdapter valueAdapter = objectMember.get(objectAdapter);
-        if(valueAdapter == null) {
+        final ObjectAdapter valueAdapter = objectMember.get(objectAdapter);
+        if (valueAdapter == null) {
             return;
         }
 
         final CollectionFacet facet = CollectionFacetUtils.getCollectionFacetFromSpec(valueAdapter);
-        List<JsonRepresentation> list = Lists.newArrayList();
+        final List<JsonRepresentation> list = Lists.newArrayList();
         for (final ObjectAdapter elementAdapter : facet.iterable(valueAdapter)) {
 
-            LinkBuilder newBuilder = DomainObjectReprRenderer.newLinkToBuilder(resourceContext, Rel.OBJECT, elementAdapter);
+            final LinkBuilder newBuilder = DomainObjectReprRenderer.newLinkToBuilder(resourceContext, Rel.OBJECT, elementAdapter);
 
             list.add(newBuilder.build());
         }
-        
+
         representation.mapPut("value", list);
     }
 
-
-    /////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////
     // details link
-    /////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////
 
     /**
      * Mandatory hook method to support x-ro-follow-links
      */
     @Override
-    protected void followDetailsLink(JsonRepresentation detailsLink) {
-        RendererFactory factory = RendererFactoryRegistry.instance.find(RepresentationType.OBJECT_COLLECTION);
-        final ObjectCollectionReprRenderer renderer = 
-                (ObjectCollectionReprRenderer) factory.newRenderer(getResourceContext(), getLinkFollower(), JsonRepresentation.newMap());
+    protected void followDetailsLink(final JsonRepresentation detailsLink) {
+        final RendererFactory factory = RendererFactoryRegistry.instance.find(RepresentationType.OBJECT_COLLECTION);
+        final ObjectCollectionReprRenderer renderer = (ObjectCollectionReprRenderer) factory.newRenderer(getResourceContext(), getLinkFollower(), JsonRepresentation.newMap());
         renderer.with(new ObjectAndCollection(objectAdapter, objectMember)).asFollowed();
         detailsLink.mapPut("value", renderer.render());
     }
 
-    /////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////
     // mutators
-    /////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////
 
     @Override
     protected void addMutatorsIfEnabled() {
-        if(usability().isVetoed()) {
+        if (usability().isVetoed()) {
             return;
         }
-        
+
         final CollectionSemantics semantics = CollectionSemantics.determine(this.resourceContext, objectMember);
         addMutatorLink(semantics.getAddToKey());
         addMutatorLink(semantics.getRemoveFromKey());
-        
+
         return;
     }
 
-    private void addMutatorLink(String key) {
-        Map<String, MutatorSpec> mutators = memberType.getMutators();
+    private void addMutatorLink(final String key) {
+        final Map<String, MutatorSpec> mutators = memberType.getMutators();
         final MutatorSpec mutatorSpec = mutators.get(key);
         addLinkFor(mutatorSpec);
     }
 
-
-
-
-
-    /////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////
     // extensions and links
-    /////////////////////////////////////////////////////
-    
-    
+    // ///////////////////////////////////////////////////
+
+    @Override
     protected void addLinksToFormalDomainModel() {
         final LinkBuilder linkBuilder = CollectionDescriptionReprRenderer.newLinkToBuilder(resourceContext, Rel.DESCRIBEDBY, objectAdapter.getSpecification(), objectMember);
         getLinks().arrayAdd(linkBuilder.build());
@@ -153,10 +147,10 @@ public class ObjectCollectionReprRenderer extends AbstractObjectMemberReprRender
         // none
     }
 
+    @Override
     protected void putExtensionsIsisProprietary() {
         final CollectionSemantics semantics = CollectionSemantics.determine(resourceContext, objectMember);
         getExtensions().mapPut("collectionSemantics", semantics.name().toLowerCase());
     }
-
 
 }

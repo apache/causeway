@@ -40,8 +40,9 @@ import org.apache.wicket.authorization.strategies.role.Roles;
 import org.apache.wicket.protocol.http.request.WebClientInfo;
 
 /**
- * Viewer-specific implementation of {@link AuthenticatedWebSession}, which delegates to the Isis' configured
- * {@link AuthenticationManager}, and which also tracks threadusage (so that multiple concurrent requests are all
+ * Viewer-specific implementation of {@link AuthenticatedWebSession}, which
+ * delegates to the Isis' configured {@link AuthenticationManager}, and which
+ * also tracks threadusage (so that multiple concurrent requests are all
  * associated with the same session).
  */
 public class AuthenticatedWebSessionForIsis extends AuthenticatedWebSession implements AuthenticationSessionAccessor {
@@ -100,8 +101,9 @@ public class AuthenticatedWebSessionForIsis extends AuthenticatedWebSession impl
      * Capture fact that this session is currently being used by a thread.
      * 
      * <p>
-     * There could be several concurrent requests all of which will use the same Session; for example to obtain img
-     * resources for entities. This counter keeps track of one of these threadUsages, when it gets back down to zero
+     * There could be several concurrent requests all of which will use the same
+     * Session; for example to obtain img resources for entities. This counter
+     * keeps track of one of these threadUsages, when it gets back down to zero
      * then we can close the thread.
      * 
      * @see #deregisterUseByThread()

@@ -25,7 +25,6 @@ package org.apache.isis.viewer.wicket.ui.selector;
 import java.util.List;
 
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
-import org.apache.isis.viewer.wicket.ui.util.Components;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
@@ -34,7 +33,8 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
 /**
- * {@link ComponentFactory} for rendering a selection of {@link ComponentFactory}s.
+ * {@link ComponentFactory} for rendering a selection of
+ * {@link ComponentFactory}s.
  * 
  * <p>
  * Used by {@link SelectorPanelAbstract}.
@@ -69,16 +69,14 @@ public class DropDownChoiceComponentFactory extends DropDownChoice<ComponentFact
      * @param componentFactories
      *            - list of {@link ComponentFactory}s to show in drop-down
      * @param container
-     *            - the container that should contain the {@link Component} created by the selected
-     *            {@link ComponentFactory}
+     *            - the container that should contain the {@link Component}
+     *            created by the selected {@link ComponentFactory}
      * @param underlyingId
      *            - the id of the {@link Component} created
      * @param underlyingModel
      *            - the model for the {@link Component}
      */
-    public DropDownChoiceComponentFactory(final String id, final Model<ComponentFactory> selectedComponentFactoryModel,
-        final List<? extends ComponentFactory> componentFactories, final MarkupContainer container,
-        final String underlyingId, final IModel<?> underlyingModel) {
+    public DropDownChoiceComponentFactory(final String id, final Model<ComponentFactory> selectedComponentFactoryModel, final List<? extends ComponentFactory> componentFactories, final MarkupContainer container, final String underlyingId, final IModel<?> underlyingModel) {
         super(id, selectedComponentFactoryModel, componentFactories, new ComponentFactoryChoiceRenderer());
         this.underlyingId = underlyingId;
         this.underlyingModel = underlyingModel;

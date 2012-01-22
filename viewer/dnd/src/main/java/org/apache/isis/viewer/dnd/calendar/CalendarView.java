@@ -187,9 +187,11 @@ public class CalendarView extends CompositeView {
     }
 
     /*
-     * public void invalidateLayout() { // super.invalidateLayout(); View parent = getParent(); if (parent != null) { //
-     * parent.invalidateLayout(); } isInvalid = true; View toolbar = getSubviews()[0]; toolbar.invalidateLayout(); //
-     * View grid = getSubviews()[1]; // grid.invalidateLayout(); } protected boolean isLayoutInvalid() { return
+     * public void invalidateLayout() { // super.invalidateLayout(); View parent
+     * = getParent(); if (parent != null) { // parent.invalidateLayout(); }
+     * isInvalid = true; View toolbar = getSubviews()[0];
+     * toolbar.invalidateLayout(); // View grid = getSubviews()[1]; //
+     * grid.invalidateLayout(); } protected boolean isLayoutInvalid() { return
      * isInvalid; }
      */
 

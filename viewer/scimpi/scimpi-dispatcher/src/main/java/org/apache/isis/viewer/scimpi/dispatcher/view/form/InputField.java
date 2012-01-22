@@ -191,18 +191,18 @@ public class InputField {
         str.append("name", name);
         String typeName;
         switch (type) {
-            case CHECKBOX:
-                typeName = "checkbox";
-                break;
-            case REFERENCE:
-                typeName = "reference";
-                break;
-            case TEXT:
-                typeName = "text";
-                break;
-            default:
-                typeName = "unset";
-                break;
+        case CHECKBOX:
+            typeName = "checkbox";
+            break;
+        case REFERENCE:
+            typeName = "reference";
+            break;
+        case TEXT:
+            typeName = "text";
+            break;
+        default:
+            typeName = "unset";
+            break;
         }
         str.append("type", typeName);
         str.append("editable", isEditable);

@@ -27,7 +27,8 @@ import java.lang.annotation.Target;
 import com.google.inject.BindingAnnotation;
 
 /**
- * Names the injection of a string representing the default application CSS link to be included.
+ * Names the injection of a string representing the default application CSS link
+ * to be included.
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ ElementType.FIELD })

@@ -78,7 +78,8 @@ class SelectionListFocusBorder extends AbstractBorder {
                 final View view = axis.getOriginalView();
                 final View parentView = view.getParent();
 
-                // remember which view has the focus so we can re-establish it later
+                // remember which view has the focus so we can re-establish it
+                // later
                 final View[] parentsSubviews = parentView.getSubviews();
                 int index = 0;
                 for (int j = 0; j < parentsSubviews.length; j++) {

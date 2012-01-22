@@ -121,8 +121,7 @@ public class XViewer implements Viewer {
 
     public XViewer() {
         doubleBuffering = IsisContext.getConfiguration().getBoolean(Properties.PROPERTY_BASE + "double-buffer", true);
-        showExplorationMenuByDefault =
-            IsisContext.getConfiguration().getBoolean(Properties.PROPERTY_BASE + "exploration.show", true);
+        showExplorationMenuByDefault = IsisContext.getConfiguration().getBoolean(Properties.PROPERTY_BASE + "exploration.show", true);
         overlayView = CLEAR_OVERLAY;
         redrawArea = new Bounds();
     }
@@ -150,8 +149,7 @@ public class XViewer implements Viewer {
         }
 
         final FocusManager currentFocusManager = keyboardManager.getFocusManager();
-        if (currentFocusManager != null && currentFocusManager.getFocus() != null
-            && currentFocusManager.getFocus().getParent() != null) {
+        if (currentFocusManager != null && currentFocusManager.getFocus() != null && currentFocusManager.getFocus().getParent() != null) {
             currentFocusManager.getFocus().getParent().markDamaged();
         }
 
@@ -234,7 +232,8 @@ public class XViewer implements Viewer {
 
     public void firstClick(final Click click) {
         /*
-         * for (int i = 0; i < panes.length; i++) { if(panes[i].respondsTo(click.getLocation())) {
+         * for (int i = 0; i < panes.length; i++) {
+         * if(panes[i].respondsTo(click.getLocation())) {
          * panes[i].firstClick(click); return; } }
          */
         if (onOverlay(click.getLocation())) {
@@ -303,8 +302,7 @@ public class XViewer implements Viewer {
         spy = new InteractionSpy(new SpyWindow());
 
         keyboardManager = new KeyboardManager(this);
-        final InteractionHandler interactionHandler =
-            new InteractionHandler(this, feedbackManager, keyboardManager, spy);
+        final InteractionHandler interactionHandler = new InteractionHandler(this, feedbackManager, keyboardManager, spy);
         renderingArea.addMouseMotionListener(interactionHandler);
         renderingArea.addMouseListener(interactionHandler);
         renderingArea.addKeyListener(interactionHandler);
@@ -398,8 +396,7 @@ public class XViewer implements Viewer {
             spy.redraw(paintArea.toString(), redrawCount);
         }
         if (UI_LOG.isDebugEnabled()) {
-            UI_LOG.debug("------ repaint viewer #" + redrawCount + " " + paintArea.x + "," + paintArea.y + " "
-                + paintArea.width + "x" + paintArea.height);
+            UI_LOG.debug("------ repaint viewer #" + redrawCount + " " + paintArea.x + "," + paintArea.y + " " + paintArea.width + "x" + paintArea.height);
         }
 
         final Canvas c = createCanvas(graphic, paintArea);
@@ -419,7 +416,8 @@ public class XViewer implements Viewer {
         }
 
         /*
-         * for (int i = 0; i < panes.length; i++) { panes[i].draw(c.createSubcanvas()); }
+         * for (int i = 0; i < panes.length; i++) {
+         * panes[i].draw(c.createSubcanvas()); }
          */
         // paint status
         // paintUserStatus(bufferGraphics);
@@ -441,8 +439,7 @@ public class XViewer implements Viewer {
         final int w = internalDisplaySize.getWidth();
         final int h = internalDisplaySize.getHeight();
         if (doubleBuffering) {
-            if ((doubleBuffer == null) || (bufferGraphics == null) || (doubleBuffer.getWidth(null) < w)
-                || (doubleBuffer.getHeight(null) < h)) {
+            if ((doubleBuffer == null) || (bufferGraphics == null) || (doubleBuffer.getWidth(null) < w) || (doubleBuffer.getHeight(null) < h)) {
                 doubleBuffer = renderingArea.createImage(w, h);
                 LOG.debug("buffer sized to " + doubleBuffer.getWidth(null) + "x" + doubleBuffer.getHeight(null));
             }
@@ -455,8 +452,7 @@ public class XViewer implements Viewer {
         bufferGraphics.clearRect(0, 0, w, h);
 
         bufferGraphics.setClip(paintArea.x, paintArea.y, paintArea.width, paintArea.height);
-        final Canvas c =
-            new AwtCanvas(bufferGraphics, renderingArea, paintArea.x, paintArea.y, paintArea.width, paintArea.height);
+        final Canvas c = new AwtCanvas(bufferGraphics, renderingArea, paintArea.x, paintArea.y, paintArea.width, paintArea.height);
         // Canvas c = new Canvas(bufferGraphics, 0, 0, w, h);
         return c;
     }
@@ -466,7 +462,8 @@ public class XViewer implements Viewer {
      */
     private Rectangle layoutViews() {
         if (!Thread.currentThread().getName().startsWith("AWT-EventQueue") && !isDotNet()) {
-            // REVIEW remove this check and exception when problem with multiple field drawing is resolved
+            // REVIEW remove this check and exception when problem with multiple
+            // field drawing is resolved
             // (Bug 1)
             throw new IsisException("Drawing with wrong thread: " + Thread.currentThread());
         }
@@ -477,8 +474,7 @@ public class XViewer implements Viewer {
         rootView.layout();
         synchronized (redrawArea) {
             if (!redrawArea.equals(NO_REDRAW)) {
-                final Rectangle r2 =
-                    new Rectangle(redrawArea.getX(), redrawArea.getY(), redrawArea.getWidth(), redrawArea.getHeight());
+                final Rectangle r2 = new Rectangle(redrawArea.getX(), redrawArea.getY(), redrawArea.getWidth(), redrawArea.getHeight());
                 redrawArea.setBounds(NO_REDRAW);
                 return r2;
             }
@@ -526,8 +522,7 @@ public class XViewer implements Viewer {
         }
     }
 
-    public void popupMenu(final View over, final Location at, final boolean forView, final boolean includeExploration,
-        final boolean includeDebug) {
+    public void popupMenu(final View over, final Location at, final boolean forView, final boolean includeExploration, final boolean includeDebug) {
         feedbackManager.setBusy(over, null);
         saveCurrentFieldEntry();
         final PopupMenuContainer menu = new PopupMenuContainer(over, at);
@@ -611,7 +606,8 @@ public class XViewer implements Viewer {
     public void setOverlayView(final View view) {
         disposeOverlayView();
         overlayView = view;
-        // TODO ensure that the view is laid out properly; hence is the right size to begin with.
+        // TODO ensure that the view is laid out properly; hence is the right
+        // size to begin with.
         // view.limitSize(rootView.getSize());
 
         final Size size = view.getRequiredSize(rootView.getSize());
@@ -632,9 +628,7 @@ public class XViewer implements Viewer {
     public void showInOverlay(final Content content, final Location location) {
         View view;
         view = Toolkit.getViewFactory().createView(new ViewRequirement(content, ViewRequirement.OPEN));
-        view =
-            new LineBorder(2, Toolkit.getColor(ColorsAndFonts.COLOR_SECONDARY2), new BackgroundBorder(
-                Toolkit.getColor(ColorsAndFonts.COLOR_SECONDARY3), view));
+        view = new LineBorder(2, Toolkit.getColor(ColorsAndFonts.COLOR_SECONDARY2), new BackgroundBorder(Toolkit.getColor(ColorsAndFonts.COLOR_SECONDARY3), view));
         final Size size = view.getRequiredSize(Size.createMax());
         location.subtract(size.getWidth() / 2, size.getHeight() / 2);
         view.setLocation(location);
@@ -699,8 +693,7 @@ public class XViewer implements Viewer {
         final Text text = Toolkit.getText(ColorsAndFonts.TEXT_STATUS);
         statusBarHeight = text.getLineHeight() + text.getDescent();
         rootViewSize.contractHeight(statusBarHeight);
-        statusBarArea =
-            new Bounds(insets.left, insets.top + rootViewSize.getHeight(), rootViewSize.getWidth(), statusBarHeight);
+        statusBarArea = new Bounds(insets.left, insets.top + rootViewSize.getHeight(), rootViewSize.getWidth(), statusBarHeight);
         rootView.setSize(rootViewSize);
     }
 

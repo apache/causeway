@@ -25,7 +25,8 @@ import org.apache.isis.viewer.dnd.view.FocusManager;
 import org.apache.isis.viewer.dnd.view.View;
 
 /**
- * Abstract focus manager that uses the set of views to move focus between from the concrete subclass.
+ * Abstract focus manager that uses the set of views to move focus between from
+ * the concrete subclass.
  * 
  * @see #getChildViews()
  */
@@ -47,7 +48,8 @@ public abstract class AbstractFocusManager implements FocusManager {
     }
 
     /**
-     * Throws a ObjectAdapterRuntimeException if the specified view is available to this focus manager.
+     * Throws a ObjectAdapterRuntimeException if the specified view is available
+     * to this focus manager.
      */
     private void checkCanFocusOn(final View view) {
         final View[] views = getChildViews();
@@ -59,7 +61,8 @@ public abstract class AbstractFocusManager implements FocusManager {
         }
 
         if (!valid) {
-            // throw new ObjectAdapterRuntimeException("No view " + view + " to focus on in " +
+            // throw new ObjectAdapterRuntimeException("No view " + view +
+            // " to focus on in " +
             // container.getView());
         }
     }
@@ -158,7 +161,9 @@ public abstract class AbstractFocusManager implements FocusManager {
             }
 
             // Don't move to any view
-            // throw new ObjectAdapterRuntimeException("Can't move to previous peer from " + focus);
+            // throw new
+            // ObjectAdapterRuntimeException("Can't move to previous peer from "
+            // + focus);
         }
     }
 

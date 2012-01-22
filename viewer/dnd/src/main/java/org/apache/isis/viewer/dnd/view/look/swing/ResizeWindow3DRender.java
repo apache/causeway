@@ -27,8 +27,7 @@ import org.apache.isis.viewer.dnd.view.window.ResizeWindowRender;
 public class ResizeWindow3DRender implements ResizeWindowRender {
 
     @Override
-    public void draw(final Canvas canvas, final int width, final int height, final boolean isDisabled,
-        final boolean isOver, final boolean isPressed) {
+    public void draw(final Canvas canvas, final int width, final int height, final boolean isDisabled, final boolean isOver, final boolean isPressed) {
         final int x = 0;
         final int y = 0;
 

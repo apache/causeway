@@ -37,10 +37,12 @@ import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 
 /**
- * {@link PanelAbstract Panel} representing an action invocation, backed by an {@link ActionModel}.
+ * {@link PanelAbstract Panel} representing an action invocation, backed by an
+ * {@link ActionModel}.
  * 
  * <p>
- * Based on the {@link ActionModel.Mode mode}, will render either parameter dialog or the results.
+ * Based on the {@link ActionModel.Mode mode}, will render either parameter
+ * dialog or the results.
  * 
  * <p>
  * TODO: on results panel, have a button to resubmit?
@@ -54,9 +56,7 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
      * 
      * @see #hideAllBut(ComponentType)
      */
-    private static final List<ComponentType> COMPONENT_TYPES = Arrays.asList(ComponentType.PARAMETERS,
-        ComponentType.ENTITY_LINK, ComponentType.ENTITY, ComponentType.VALUE, ComponentType.EMPTY_COLLECTION,
-        ComponentType.VOID_RETURN, ComponentType.COLLECTION_CONTENTS);
+    private static final List<ComponentType> COMPONENT_TYPES = Arrays.asList(ComponentType.PARAMETERS, ComponentType.ENTITY_LINK, ComponentType.ENTITY, ComponentType.VALUE, ComponentType.EMPTY_COLLECTION, ComponentType.VOID_RETURN, ComponentType.COLLECTION_CONTENTS);
 
     public ActionPanel(final String id, final ActionModel actionModel) {
         super(id, actionModel);
@@ -115,8 +115,7 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
                 addResultsAccordingToSingleResultsMode(panel, actualAdapter);
             }
 
-            private ObjectAdapter determineActualAdapter(final ObjectAdapter resultAdapter,
-                final PersistenceSessionAccessor psa) {
+            private ObjectAdapter determineActualAdapter(final ObjectAdapter resultAdapter, final PersistenceSessionAccessor psa) {
                 ObjectAdapter actualAdapter;
                 if (resultAdapter.getSpecification().isNotCollection()) {
                     actualAdapter = resultAdapter;
@@ -129,8 +128,7 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
                 return actualAdapter;
             }
 
-            private void addResultsAccordingToSingleResultsMode(final ActionPanel panel,
-                final ObjectAdapter actualAdapter) {
+            private void addResultsAccordingToSingleResultsMode(final ActionPanel panel, final ObjectAdapter actualAdapter) {
                 final ActionModel actionModel = panel.getActionModel();
                 final ActionModel.SingleResultsMode singleResultsMode = actionModel.getSingleResultsMode();
 
@@ -166,8 +164,7 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
                 if (selectionHandler != null) {
                     collectionModel.setSelectionHandler(selectionHandler);
                 }
-                panel.getComponentFactoryRegistry().addOrReplaceComponent(panel, ComponentType.COLLECTION_CONTENTS,
-                    collectionModel);
+                panel.getComponentFactoryRegistry().addOrReplaceComponent(panel, ComponentType.COLLECTION_CONTENTS, collectionModel);
             }
         },
         EMPTY {
@@ -175,16 +172,14 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
             public void addResults(final ActionPanel panel, final ObjectAdapter resultAdapter) {
                 panel.hideAllBut(ComponentType.EMPTY_COLLECTION);
                 final ActionModel actionModel = panel.getActionModel();
-                panel.getComponentFactoryRegistry().addOrReplaceComponent(panel, ComponentType.EMPTY_COLLECTION,
-                    actionModel);
+                panel.getComponentFactoryRegistry().addOrReplaceComponent(panel, ComponentType.EMPTY_COLLECTION, actionModel);
             }
         },
         VALUE {
             @Override
             public void addResults(final ActionPanel panel, final ObjectAdapter resultAdapter) {
                 panel.hideAllBut(ComponentType.VALUE);
-                panel.getComponentFactoryRegistry().addOrReplaceComponent(panel, ComponentType.VALUE,
-                    new ValueModel(resultAdapter));
+                panel.getComponentFactoryRegistry().addOrReplaceComponent(panel, ComponentType.VALUE, new ValueModel(resultAdapter));
             }
         },
         VOID {
@@ -210,12 +205,12 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
             } else {
                 final List<Object> pojoList = asList(resultAdapter);
                 switch (pojoList.size()) {
-                    case 0:
-                        return ResultType.EMPTY;
-                    case 1:
-                        return ResultType.OBJECT;
-                    default:
-                        return ResultType.COLLECTION;
+                case 0:
+                    return ResultType.EMPTY;
+                case 1:
+                    return ResultType.OBJECT;
+                default:
+                    return ResultType.COLLECTION;
                 }
             }
         }

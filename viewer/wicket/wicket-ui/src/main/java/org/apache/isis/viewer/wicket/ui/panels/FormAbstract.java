@@ -38,8 +38,7 @@ import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.IModel;
 
-public abstract class FormAbstract<T> extends Form<T> implements IHeaderContributor, ComponentFactoryRegistryAccessor,
-    PageClassRegistryAccessor, AuthenticationSessionAccessor, PersistenceSessionAccessor {
+public abstract class FormAbstract<T> extends Form<T> implements IHeaderContributor, ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, AuthenticationSessionAccessor, PersistenceSessionAccessor {
 
     private static final long serialVersionUID = 1L;
 
@@ -65,7 +64,8 @@ public abstract class FormAbstract<T> extends Form<T> implements IHeaderContribu
     }
 
     /**
-     * Factored out to allow non-concrete subclasses to additionally render their own CSS if required.
+     * Factored out to allow non-concrete subclasses to additionally render
+     * their own CSS if required.
      */
     protected void renderHead(final IHeaderResponse response, final Class<?> cls) {
         final String url = cls.getSimpleName() + ".css";

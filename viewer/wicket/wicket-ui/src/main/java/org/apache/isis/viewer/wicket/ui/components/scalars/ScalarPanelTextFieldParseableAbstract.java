@@ -19,6 +19,9 @@
 
 package org.apache.isis.viewer.wicket.ui.components.scalars;
 
+import org.apache.isis.core.metamodel.facets.maxlen.MaxLengthFacet;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.validation.IValidatable;
@@ -26,21 +29,17 @@ import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.ValidationError;
 import org.apache.wicket.validation.validator.StringValidator;
 
-import org.apache.isis.core.metamodel.facets.maxlen.MaxLengthFacet;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-
 /**
- * Adapter for {@link ScalarPanelTextFieldAbstract textField-based scalar panel}s where moreover the scalar parameter or
- * property is a value type that is parseable.
+ * Adapter for {@link ScalarPanelTextFieldAbstract textField-based scalar panel}
+ * s where moreover the scalar parameter or property is a value type that is
+ * parseable.
  */
 public abstract class ScalarPanelTextFieldParseableAbstract extends ScalarPanelTextFieldAbstract<String> {
 
     private static final long serialVersionUID = 1L;
     protected final String idTextField;
 
-    public ScalarPanelTextFieldParseableAbstract(final String id, final String idTextField,
-        final ScalarModel scalarModel) {
+    public ScalarPanelTextFieldParseableAbstract(final String id, final String idTextField, final ScalarModel scalarModel) {
         super(id, scalarModel);
         this.idTextField = idTextField;
     }

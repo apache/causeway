@@ -56,37 +56,36 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-
 public class VersionResourceTest_representationAndHeaders {
 
     @Rule
     public IsisWebServerRule webServerRule = new IsisWebServerRule();
-    
+
     private RestfulClient client;
     private VersionResource resource;
 
     @Before
     public void setUp() throws Exception {
-        WebServer webServer = webServerRule.getWebServer();
+        final WebServer webServer = webServerRule.getWebServer();
         client = new RestfulClient(webServer.getBase());
-        
+
         resource = client.getVersionResource();
     }
 
     @Test
     public void representation() throws Exception {
-        
+
         // given
-        Response servicesResp = resource.version();
-        
+        final Response servicesResp = resource.version();
+
         // when
-        RestfulResponse<VersionRepresentation> restfulResponse = RestfulResponse.ofT(servicesResp);
+        final RestfulResponse<VersionRepresentation> restfulResponse = RestfulResponse.ofT(servicesResp);
         assertThat(restfulResponse.getStatus().getFamily(), is(Family.SUCCESSFUL));
-        
+
         // then
         assertThat(restfulResponse.getStatus(), is(HttpStatusCode.OK));
-        
-        VersionRepresentation repr = restfulResponse.getEntity();
+
+        final VersionRepresentation repr = restfulResponse.getEntity();
         assertThat(repr, is(not(nullValue())));
         assertThat(repr, isMap());
 
@@ -94,10 +93,10 @@ public class VersionResourceTest_representationAndHeaders {
 
         assertThat(repr.getString("specVersion"), is("0.52"));
         assertThat(repr.getString("implVersion"), is(not(nullValue())));
-        
-        JsonRepresentation optionalCapbilitiesRepr = repr.getOptionalCapabilities();
+
+        final JsonRepresentation optionalCapbilitiesRepr = repr.getOptionalCapabilities();
         assertThat(optionalCapbilitiesRepr, isMap());
-        
+
         assertThat(optionalCapbilitiesRepr.getString("concurrencyChecking"), is("no"));
         assertThat(optionalCapbilitiesRepr.getString("transientObjects"), is("yes"));
         assertThat(optionalCapbilitiesRepr.getString("deleteObjects"), is("no"));
@@ -108,7 +107,7 @@ public class VersionResourceTest_representationAndHeaders {
         assertThat(optionalCapbilitiesRepr.getString("pagination"), is("no"));
         assertThat(optionalCapbilitiesRepr.getString("sorting"), is("no"));
         assertThat(optionalCapbilitiesRepr.getString("domainModel"), is("rich"));
-        
+
         assertThat(repr.getLinks(), isArray());
         assertThat(repr.getExtensions(), is(not(nullValue())));
     }
@@ -116,40 +115,36 @@ public class VersionResourceTest_representationAndHeaders {
     @Test
     public void headers() throws Exception {
         // given
-        Response resp = resource.version();
-        
+        final Response resp = resource.version();
+
         // when
-        RestfulResponse<VersionRepresentation> restfulResponse = RestfulResponse.ofT(resp);
-        
+        final RestfulResponse<VersionRepresentation> restfulResponse = RestfulResponse.ofT(resp);
+
         // then
         final MediaType contentType = restfulResponse.getHeader(Header.CONTENT_TYPE);
         assertThat(contentType, hasType("application"));
         assertThat(contentType, hasSubType("json"));
         assertThat(contentType, hasParameter("profile", "urn:org.restfulobjects/version"));
         assertThat(contentType, is(RepresentationType.VERSION.getMediaType()));
-        
+
         // then
         final CacheControl cacheControl = restfulResponse.getHeader(Header.CACHE_CONTROL);
-        assertThat(cacheControl, hasMaxAge(24*60*60));
-        assertThat(cacheControl.getMaxAge(), is(24*60*60));
+        assertThat(cacheControl, hasMaxAge(24 * 60 * 60));
+        assertThat(cacheControl.getMaxAge(), is(24 * 60 * 60));
     }
-
 
     @Test
     public void selfIsFollowable() throws Exception {
         // given
-        VersionRepresentation repr = givenRepresentation();
+        final VersionRepresentation repr = givenRepresentation();
 
         // when, then
         assertThat(repr, isFollowableLinkToSelf(client));
     }
 
-
     private VersionRepresentation givenRepresentation() throws JsonParseException, JsonMappingException, IOException {
-        RestfulResponse<VersionRepresentation> jsonResp = RestfulResponse.ofT(resource.version());
+        final RestfulResponse<VersionRepresentation> jsonResp = RestfulResponse.ofT(resource.version());
         return jsonResp.getEntity();
     }
 
-
 }
-    

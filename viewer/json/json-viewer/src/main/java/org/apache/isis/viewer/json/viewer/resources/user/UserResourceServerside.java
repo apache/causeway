@@ -34,17 +34,14 @@ public class UserResourceServerside extends ResourceAbstract implements UserReso
     @Override
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_USER })
     public Response user() {
-        RepresentationType user = RepresentationType.USER;
+        final RepresentationType user = RepresentationType.USER;
         init(user);
 
         final RendererFactory factory = rendererFactoryRegistry.find(user);
-        final UserReprRenderer renderer = 
-                (UserReprRenderer) factory.newRenderer(getResourceContext(), null, JsonRepresentation.newMap());
-        renderer.includesSelf()
-                .with(getAuthenticationSession());
+        final UserReprRenderer renderer = (UserReprRenderer) factory.newRenderer(getResourceContext(), null, JsonRepresentation.newMap());
+        renderer.includesSelf().with(getAuthenticationSession());
 
         return responseOfOk(renderer, Caching.ONE_HOUR).build();
     }
-
 
 }

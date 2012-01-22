@@ -27,7 +27,7 @@ import org.apache.isis.viewer.html.component.Component;
 import org.apache.isis.viewer.html.component.ComponentComposite;
 
 public class Div extends ComponentComposite implements Block {
-    
+
     private final String className;
     private final String id;
     private final String description;

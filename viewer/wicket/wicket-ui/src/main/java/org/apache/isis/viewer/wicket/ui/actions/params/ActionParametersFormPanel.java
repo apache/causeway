@@ -45,7 +45,8 @@ import org.apache.wicket.markup.repeater.RepeatingView;
 import com.google.common.collect.Lists;
 
 /**
- * {@link PanelAbstract Panel} to capture the arguments for an action invocation.
+ * {@link PanelAbstract Panel} to capture the arguments for an action
+ * invocation.
  */
 public class ActionParametersFormPanel extends PanelAbstract<ActionModel> {
 
@@ -102,8 +103,7 @@ public class ActionParametersFormPanel extends PanelAbstract<ActionModel> {
                 rv.add(container);
 
                 final ScalarModel argumentModel = actionModel.getArgumentModel(apm);
-                getComponentFactoryRegistry().addOrReplaceComponent(container, ComponentType.SCALAR_NAME_AND_VALUE,
-                    argumentModel);
+                getComponentFactoryRegistry().addOrReplaceComponent(container, ComponentType.SCALAR_NAME_AND_VALUE, argumentModel);
             }
         }
 
@@ -119,8 +119,7 @@ public class ActionParametersFormPanel extends PanelAbstract<ActionModel> {
         }
 
         private List<ActionParameterMemento> buildParameterMementos(final List<ObjectActionParameter> parameters) {
-            final List<ActionParameterMemento> parameterMementoList =
-                Lists.transform(parameters, Mementos.fromActionParameter());
+            final List<ActionParameterMemento> parameterMementoList = Lists.transform(parameters, Mementos.fromActionParameter());
             // we copy into a new array list otherwise we get lazy evaluation =
             // reference to a non-serializable object
             return Lists.newArrayList(parameterMementoList);

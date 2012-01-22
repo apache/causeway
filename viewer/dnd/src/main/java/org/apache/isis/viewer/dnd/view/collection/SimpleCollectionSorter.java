@@ -19,7 +19,6 @@
 
 package org.apache.isis.viewer.dnd.view.collection;
 
-import java.util.Enumeration;
 import java.util.Vector;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -37,8 +36,8 @@ public class SimpleCollectionSorter implements CollectionSorter {
             final ObjectAdapter element = elements[j];
             order.init(element);
             int i = 0;
-            for (final Enumeration<ObjectAdapter> f = sorted.elements(); f.hasMoreElements();) {
-                final ObjectAdapter sortedElement = (ObjectAdapter) f.nextElement();
+            for (final ObjectAdapter objectAdapter : sorted) {
+                final ObjectAdapter sortedElement = objectAdapter;
                 if (sortedElement != null && (order.compare(sortedElement) > 0 ^ reverse)) {
                     sorted.insertElementAt(element, i);
                     continue outer;

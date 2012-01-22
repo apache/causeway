@@ -22,21 +22,21 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
 
 public abstract class ParentSpecAndFeature<T extends ObjectFeature> {
-    
+
     private final ObjectSpecification parentSpec;
     private final T objectFeature;
-    
-    public ParentSpecAndFeature(ObjectSpecification objectSpecification, T objectFeature) {
+
+    public ParentSpecAndFeature(final ObjectSpecification objectSpecification, final T objectFeature) {
         this.parentSpec = objectSpecification;
         this.objectFeature = objectFeature;
     }
+
     public ObjectSpecification getParentSpec() {
         return parentSpec;
     }
+
     public T getObjectFeature() {
         return objectFeature;
     }
 
-    
-    
 }

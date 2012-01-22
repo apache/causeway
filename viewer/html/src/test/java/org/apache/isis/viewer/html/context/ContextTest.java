@@ -66,8 +66,9 @@ public class ContextTest extends ProxyJunit3TestCase {
     }
 
     /*
-     * REVIEW public void testIdentityUsedToLookupCollection() { DummyCollectionAdapter collection1 = new
-     * DummyCollectionAdapter(); String id = context.mapCollection(collection1); assertEquals(collection1,
+     * REVIEW public void testIdentityUsedToLookupCollection() {
+     * DummyCollectionAdapter collection1 = new DummyCollectionAdapter(); String
+     * id = context.mapCollection(collection1); assertEquals(collection1,
      * context.getMappedCollection(id)); }
      */
     public void testIdentityUsedToLookupObject() {
@@ -99,8 +100,10 @@ public class ContextTest extends ProxyJunit3TestCase {
     }
 
     /*
-     * REVIEW public void testRegisteredCollectionReturnDifferentIdentityForDifferentCollection() { replay(); String id
-     * = context.mapCollection(new DummyCollectionAdapter()); String id2 = context.mapCollection(new
+     * REVIEW public void
+     * testRegisteredCollectionReturnDifferentIdentityForDifferentCollection() {
+     * replay(); String id = context.mapCollection(new
+     * DummyCollectionAdapter()); String id2 = context.mapCollection(new
      * DummyCollectionAdapter()); assertNotSame(id, id2); verify(); }
      */
 
@@ -119,10 +122,13 @@ public class ContextTest extends ProxyJunit3TestCase {
     }
 
     /*
-     * TODO reinstate public void testClearRemovesObject() { replay(); DummyObjectAdapter object = new
-     * DummyObjectAdapter(new DummyOid(13)); String id = context.mapObject(object); context.clearMappedObject(object);
-     * try { context.getMappedObject(id); fail(); } catch (ObjectAdapterRuntimeException expected) {
-     * assertEquals("No object in object map with id " + id, expected.getMessage()); } verify(); }
+     * TODO reinstate public void testClearRemovesObject() { replay();
+     * DummyObjectAdapter object = new DummyObjectAdapter(new DummyOid(13));
+     * String id = context.mapObject(object); context.clearMappedObject(object);
+     * try { context.getMappedObject(id); fail(); } catch
+     * (ObjectAdapterRuntimeException expected) {
+     * assertEquals("No object in object map with id " + id,
+     * expected.getMessage()); } verify(); }
      */
     public void testRegisteredObjectReturnDifferentIdentityForDifferentObject() {
         final ObjectAdapter dummyObjectAdapter = system.createPersistentTestObject();

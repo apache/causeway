@@ -79,8 +79,7 @@ public abstract class ProcessObjectPanelAbstract extends PanelAbstract<EntityMod
             rv.add(container);
 
             final ScalarModel scalarModel = entityModel.getPropertyModel(pm);
-            getComponentFactoryRegistry().addOrReplaceComponent(container, idProperty,
-                ComponentType.SCALAR_NAME_AND_VALUE, scalarModel);
+            getComponentFactoryRegistry().addOrReplaceComponent(container, idProperty, ComponentType.SCALAR_NAME_AND_VALUE, scalarModel);
         }
     }
 
@@ -92,8 +91,7 @@ public abstract class ProcessObjectPanelAbstract extends PanelAbstract<EntityMod
     }
 
     private Filter<ObjectAssociation> visiblePropertyFilter(final ObjectAdapter adapter) {
-        return Filters.and(ObjectAssociationFilters.PROPERTIES,
-            ObjectAssociationFilters.dynamicallyVisible(getAuthenticationSession(), adapter));
+        return Filters.and(ObjectAssociationFilters.PROPERTIES, ObjectAssociationFilters.dynamicallyVisible(getAuthenticationSession(), adapter));
     }
 
     private List<PropertyMemento> buildPropertyMementos(final List<OneToOneAssociation> properties) {
@@ -104,7 +102,8 @@ public abstract class ProcessObjectPanelAbstract extends PanelAbstract<EntityMod
     }
 
     /**
-     * Validates the form properties and domain object (object-level validation).
+     * Validates the form properties and domain object (object-level
+     * validation).
      */
     protected boolean isValid(final Form<?> form) {
 
@@ -144,8 +143,7 @@ public abstract class ProcessObjectPanelAbstract extends PanelAbstract<EntityMod
         final ActionMemento actionMemento = new ActionMemento(action);
         final ActionModel.Mode actionMode = ActionModel.determineMode(action);
 
-        final ActionModel actionModel =
-            ActionModel.create(adapterMemento, actionMemento, actionMode, SingleResultsMode.INLINE);
+        final ActionModel actionModel = ActionModel.create(adapterMemento, actionMemento, actionMode, SingleResultsMode.INLINE);
         setResponsePage(new ActionPage(actionModel));
     }
 

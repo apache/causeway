@@ -77,8 +77,7 @@ public class ServiceBorder extends AbstractBorder {
                     canvas.drawRectangle(i, i, xExtent - 2 * i, s.getHeight() - 2 * i, color);
                 }
                 canvas.drawLine(xExtent - BORDER, left, xExtent - BORDER, left + s.getHeight(), color);
-                canvas.drawSolidRectangle(xExtent - BORDER + 1, left, BORDER - 2, s.getHeight() - 2 * left,
-                    Toolkit.getColor(ColorsAndFonts.COLOR_SECONDARY3));
+                canvas.drawSolidRectangle(xExtent - BORDER + 1, left, BORDER - 2, s.getHeight() - 2 * left, Toolkit.getColor(ColorsAndFonts.COLOR_SECONDARY3));
             }
         }
     }

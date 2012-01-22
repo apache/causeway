@@ -42,8 +42,7 @@ public abstract class SelectorPanelAbstract<T extends IModel<?>> extends PanelAb
 
     private final ComponentType componentType;
 
-    public SelectorPanelAbstract(final String id, final String underlyingId, final T model,
-        final ComponentFactory factory) {
+    public SelectorPanelAbstract(final String id, final String underlyingId, final T model, final ComponentFactory factory) {
         super(id, model);
 
         componentType = factory.getComponentType();
@@ -59,9 +58,7 @@ public abstract class SelectorPanelAbstract<T extends IModel<?>> extends PanelAb
 
         if (componentFactories.size() > 1) {
             final WebMarkupContainer views = new WebMarkupContainer(ID_VIEWS);
-            final DropDownChoiceComponentFactory viewsDropDown =
-                new DropDownChoiceComponentFactory(ID_VIEWS_DROP_DOWN, componentFactoryModel, componentFactories, this,
-                    underlyingId, model);
+            final DropDownChoiceComponentFactory viewsDropDown = new DropDownChoiceComponentFactory(ID_VIEWS_DROP_DOWN, componentFactoryModel, componentFactories, this, underlyingId, model);
             views.addOrReplace(viewsDropDown);
             addOrReplace(views);
         } else {
@@ -71,8 +68,7 @@ public abstract class SelectorPanelAbstract<T extends IModel<?>> extends PanelAb
     }
 
     private List<ComponentFactory> findOtherComponentFactories(final T model, final ComponentFactory ignoreFactory) {
-        final List<ComponentFactory> componentFactories =
-            getComponentFactoryRegistry().findComponentFactories(componentType, model);
+        final List<ComponentFactory> componentFactories = getComponentFactoryRegistry().findComponentFactories(componentType, model);
         return Lists.newArrayList(Collections2.filter(componentFactories, new Predicate<ComponentFactory>() {
             @Override
             public boolean apply(final ComponentFactory input) {

@@ -178,8 +178,8 @@ class TextBlock {
     }
 
     /**
-     * breaks a block at the cursor position by truncating this block and creating a new block and adding the removed
-     * text.
+     * breaks a block at the cursor position by truncating this block and
+     * creating a new block and adding the removed text.
      */
     public TextBlock splitAt(final int line, final int character) {
         format();

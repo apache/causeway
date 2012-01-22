@@ -22,9 +22,6 @@ import java.io.UnsupportedEncodingException;
 
 import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2;
 import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2.Mode;
-import org.apache.isis.viewer.json.applib.ClientRequestConfigurer;
-import org.apache.isis.viewer.json.applib.HttpMethod;
-import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
 import org.junit.Before;
@@ -34,23 +31,23 @@ import org.junit.Test;
 public class HttpMethodTest_setUp {
 
     @Rule
-    public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES); 
-    
+    public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
+
     @Mock
     private ClientRequestConfigurer requestConfigurer;
-    
+
     private JsonRepresentation repr;
 
     @Before
     public void setUp() throws Exception {
         repr = JsonRepresentation.newMap();
-        repr.mapPut("aString", "bar"); 
-        repr.mapPut("anInt", 3); 
-        repr.mapPut("aLong", 31231231L); 
-        repr.mapPut("aBoolean", true); 
+        repr.mapPut("aString", "bar");
+        repr.mapPut("anInt", 3);
+        repr.mapPut("aLong", 31231231L);
+        repr.mapPut("aBoolean", true);
         repr.mapPut("aStringRequiringEncoding", "http://localhost:8080/somewhere");
     }
-    
+
     @Test
     public void get() throws Exception {
         setsUpQueryString(HttpMethod.GET);
@@ -71,7 +68,6 @@ public class HttpMethodTest_setUp {
         setsUpBody(HttpMethod.PUT);
     }
 
-
     private void setsUpQueryString(final HttpMethod httpMethod) throws UnsupportedEncodingException {
         context.checking(new Expectations() {
             {
@@ -79,7 +75,7 @@ public class HttpMethodTest_setUp {
                 one(requestConfigurer).queryString(repr);
             }
         });
-        
+
         httpMethod.setUpArgs(requestConfigurer, repr);
     }
 
@@ -90,7 +86,7 @@ public class HttpMethodTest_setUp {
                 one(requestConfigurer).body(repr);
             }
         });
-        
+
         httpMethod.setUpArgs(requestConfigurer, repr);
     }
 

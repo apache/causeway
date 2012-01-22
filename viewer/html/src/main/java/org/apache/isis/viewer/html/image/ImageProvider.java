@@ -24,16 +24,16 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 /**
- * Factors out the {@link ImageLookup} responsibilities into an interface, with a view to moving towards alternative
- * mechanisms.
+ * Factors out the {@link ImageLookup} responsibilities into an interface, with
+ * a view to moving towards alternative mechanisms.
  */
 public interface ImageProvider {
 
     public void debug(final DebugBuilder debug);
 
     /**
-     * For an object, the icon name from the object is return if it is not null, otherwise the specification is used to
-     * look up a suitable image name.
+     * For an object, the icon name from the object is return if it is not null,
+     * otherwise the specification is used to look up a suitable image name.
      * 
      * @see ObjectAdapter#getIconName()
      * @see #image(ObjectSpecification)

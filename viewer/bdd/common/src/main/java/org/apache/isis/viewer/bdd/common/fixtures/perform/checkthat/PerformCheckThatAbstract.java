@@ -40,8 +40,7 @@ public abstract class PerformCheckThatAbstract extends PerformAbstract {
     private ObjectAdapter result;
     private final boolean requiresMember;
 
-    public PerformCheckThatAbstract(final String key, final OnMemberColumn onMemberColumn, final Perform.Mode mode,
-        final ThatSubcommand... thatSubcommands) {
+    public PerformCheckThatAbstract(final String key, final OnMemberColumn onMemberColumn, final Perform.Mode mode, final ThatSubcommand... thatSubcommands) {
         super(key, mode);
         requiresMember = onMemberColumn == OnMemberColumn.REQUIRED;
         for (final ThatSubcommand thatSubcommand : thatSubcommands) {
@@ -56,15 +55,13 @@ public abstract class PerformCheckThatAbstract extends PerformAbstract {
         final CellBinding thatItBinding = performContext.getPeer().getThatItBinding();
         if (!thatItBinding.isFound()) {
             final CellBinding performBinding = performContext.getPeer().getPerformBinding();
-            throw ScenarioBoundValueException.current(performBinding, "(require " + IsisViewerConstants.THAT_IT_NAME
-                + "' column)");
+            throw ScenarioBoundValueException.current(performBinding, "(require " + IsisViewerConstants.THAT_IT_NAME + "' column)");
         }
         final ScenarioCell thatItCell = thatItBinding.getCurrentCell();
         final String thatIt = thatItCell.getText();
         final ThatSubcommand thatSubcommand = subcommandByKey.get(thatIt);
         if (thatSubcommand == null) {
-            throw ScenarioBoundValueException.current(thatItBinding, "(unknown '" + IsisViewerConstants.THAT_IT_NAME
-                + "' verb)");
+            throw ScenarioBoundValueException.current(thatItBinding, "(unknown '" + IsisViewerConstants.THAT_IT_NAME + "' verb)");
         }
         result = thatSubcommand.that(performContext);
     }

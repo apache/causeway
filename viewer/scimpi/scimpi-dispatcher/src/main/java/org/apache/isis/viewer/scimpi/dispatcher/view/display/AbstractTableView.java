@@ -77,10 +77,8 @@ public abstract class AbstractTableView extends AbstractElementProcessor {
             rowClasses = rowClassesList.split("[,|/]");
         }
 
-        final List<ObjectAssociation> allFields =
-            elementSpec.getAssociations(ObjectAssociationFilters.STATICALLY_VISIBLE_ASSOCIATIONS);
-        final TableContentWriter rowBuilder =
-            createRowBuilder(request, context, isFieldEditable ? parentObjectId : null, allFields, collection);
+        final List<ObjectAssociation> allFields = elementSpec.getAssociations(ObjectAssociationFilters.STATICALLY_VISIBLE_ASSOCIATIONS);
+        final TableContentWriter rowBuilder = createRowBuilder(request, context, isFieldEditable ? parentObjectId : null, allFields, collection);
         write(request, collection, summary, rowBuilder, tableClass, rowClasses);
 
     }
@@ -89,11 +87,9 @@ public abstract class AbstractTableView extends AbstractElementProcessor {
         return IsisContext.getPersistenceSession();
     }
 
-    protected abstract TableContentWriter createRowBuilder(final Request request, RequestContext context,
-        final String parent, final List<ObjectAssociation> allFields, ObjectAdapter collection);
+    protected abstract TableContentWriter createRowBuilder(final Request request, RequestContext context, final String parent, final List<ObjectAssociation> allFields, ObjectAdapter collection);
 
-    public static void write(final Request request, final ObjectAdapter collection, final String summary,
-        final TableContentWriter rowBuilder, final String tableClass, final String[] rowClasses) {
+    public static void write(final Request request, final ObjectAdapter collection, final String summary, final TableContentWriter rowBuilder, final String tableClass, final String[] rowClasses) {
         final RequestContext context = request.getContext();
 
         final String summarySegment = summary == null ? "" : (" summary=\"" + summary + "\"");

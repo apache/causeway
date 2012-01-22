@@ -39,7 +39,8 @@ import com.google.common.collect.Maps;
  * Backing model to represent a {@link ObjectAdapter}.
  * 
  * <p>
- * So that the model is {@link Serializable}, the {@link ObjectAdapter} is stored as a {@link ObjectAdapterMemento}.
+ * So that the model is {@link Serializable}, the {@link ObjectAdapter} is
+ * stored as a {@link ObjectAdapterMemento}.
  */
 public class EntityModel extends ModelAbstract<ObjectAdapter> {
 
@@ -50,7 +51,8 @@ public class EntityModel extends ModelAbstract<ObjectAdapter> {
     // //////////////////////////////////////////////////////////
 
     /**
-     * Factory method for creating {@link PageParameters} to represent an entity.
+     * Factory method for creating {@link PageParameters} to represent an
+     * entity.
      */
     public static PageParameters createPageParameters(final ObjectAdapter adapter, final OidStringifier oidStringifier) {
 
@@ -67,7 +69,8 @@ public class EntityModel extends ModelAbstract<ObjectAdapter> {
             PageParameterNames.OBJECT_SPEC.addTo(pageParameters, noSpec.getFullIdentifier());
         } else {
             // don't do anything; instead the page should be redirected back to
-            // an EntityPage so that the underlying EntityModel that contains the
+            // an EntityPage so that the underlying EntityModel that contains
+            // the
             // memento for the transient ObjectAdapter can be accessed.
         }
 
@@ -95,9 +98,7 @@ public class EntityModel extends ModelAbstract<ObjectAdapter> {
     }
 
     public EntityModel(final PageParameters pageParameters, final OidStringifier oidStringifier) {
-        this(ObjectAdapterMemento.createPersistent(
-            oidStringifier.deString(PageParameterNames.OBJECT_OID.getFrom(pageParameters)),
-            SpecMemento.representing(PageParameterNames.OBJECT_SPEC.getFrom(pageParameters))));
+        this(ObjectAdapterMemento.createPersistent(oidStringifier.deString(PageParameterNames.OBJECT_OID.getFrom(pageParameters)), SpecMemento.representing(PageParameterNames.OBJECT_SPEC.getFrom(pageParameters))));
     }
 
     public EntityModel(final ObjectAdapter adapter) {
@@ -118,7 +119,8 @@ public class EntityModel extends ModelAbstract<ObjectAdapter> {
     }
 
     /**
-     * Overridable for submodels (eg {@link ScalarModel}) that know the type of the adapter without there being one.
+     * Overridable for submodels (eg {@link ScalarModel}) that know the type of
+     * the adapter without there being one.
      */
     public ObjectSpecification getTypeOfSpecification() {
         if (adapterMemento == null) {
@@ -171,7 +173,8 @@ public class EntityModel extends ModelAbstract<ObjectAdapter> {
     // "no adapter set for the EntityModel");
     // }
     // ObjectSpecification noSpec = adapter.getSpecification();
-    // ObjectAssociation association = noSpec.getAssociation(propertyIdentifier);
+    // ObjectAssociation association =
+    // noSpec.getAssociation(propertyIdentifier);
     // if (association == null) {
     // throw new IllegalArgumentException(String.format(
     // "Id '%s' does not represent an association in spec '%s'",
@@ -218,8 +221,9 @@ public class EntityModel extends ModelAbstract<ObjectAdapter> {
     }
 
     /**
-     * Resets the {@link #propertyScalarModels hash} of {@link ScalarModel}s for each {@link PropertyMemento property}
-     * to the value held in the underlying {@link #getObject() entity}.
+     * Resets the {@link #propertyScalarModels hash} of {@link ScalarModel}s for
+     * each {@link PropertyMemento property} to the value held in the underlying
+     * {@link #getObject() entity}.
      */
     public void resetPropertyModels() {
         for (final PropertyMemento pm : propertyScalarModels.keySet()) {

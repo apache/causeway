@@ -297,7 +297,7 @@ public class DummyView implements View {
 
     @Override
     public View[] getSubviews() {
-        return (View[]) subviews.toArray(new View[subviews.size()]);
+        return subviews.toArray(new View[subviews.size()]);
     }
 
     @Override

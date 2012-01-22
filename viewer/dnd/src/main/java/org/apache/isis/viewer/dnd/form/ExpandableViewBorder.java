@@ -66,8 +66,7 @@ public class ExpandableViewBorder extends AbstractBorder {
             this.openCollectionViewSpecification = new InternalListSpecification();
         }
 
-        public Factory(final ViewSpecification closedViewSpecification,
-            final ViewSpecification openObjectViewSpecification, final ViewSpecification openCollectionViewSpecification) {
+        public Factory(final ViewSpecification closedViewSpecification, final ViewSpecification openObjectViewSpecification, final ViewSpecification openCollectionViewSpecification) {
             this.closedViewSpecification = closedViewSpecification;
             this.openObjectViewSpecification = openObjectViewSpecification;
             this.openCollectionViewSpecification = openCollectionViewSpecification;
@@ -95,8 +94,7 @@ public class ExpandableViewBorder extends AbstractBorder {
     private final ViewSpecification closedViewSpecification;
     private int canOpen;
 
-    public ExpandableViewBorder(final View view, final ViewSpecification closedViewSpecification,
-        final ViewSpecification openViewSpecification) {
+    public ExpandableViewBorder(final View view, final ViewSpecification closedViewSpecification, final ViewSpecification openViewSpecification) {
         super(view);
         left = Toolkit.defaultFieldHeight();
         this.openViewSpecification = openViewSpecification;
@@ -199,14 +197,11 @@ public class ExpandableViewBorder extends AbstractBorder {
     private int canOpenObject(final Content content) {
         final ObjectAdapter object = ((ObjectContent) content).getObject();
         if (object != null) {
-            final List<ObjectAssociation> fields =
-                object.getSpecification().getAssociations(
-                    ObjectAssociationFilters.dynamicallyVisible(IsisContext.getAuthenticationSession(), object));
+            final List<ObjectAssociation> fields = object.getSpecification().getAssociations(ObjectAssociationFilters.dynamicallyVisible(IsisContext.getAuthenticationSession(), object));
             for (int i = 0; i < fields.size(); i++) {
                 if (fields.get(i).isOneToManyAssociation()) {
                     return CAN_OPEN;
-                } else if (fields.get(i).isOneToOneAssociation() && !fields.get(i).getSpecification().isParseable()
-                    && fieldContainsReference(object, fields.get(i))) {
+                } else if (fields.get(i).isOneToOneAssociation() && !fields.get(i).getSpecification().isParseable() && fieldContainsReference(object, fields.get(i))) {
                     return CAN_OPEN;
                 }
             }

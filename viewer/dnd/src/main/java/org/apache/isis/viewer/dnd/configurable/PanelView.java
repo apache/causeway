@@ -99,8 +99,7 @@ public class PanelView extends CompositeView {
     }
 
     public void addView(final Content content, final Position position) {
-        final ViewRequirement requirement =
-            new ViewRequirement(content, ViewRequirement.OPEN | ViewRequirement.SUBVIEW);
+        final ViewRequirement requirement = new ViewRequirement(content, ViewRequirement.OPEN | ViewRequirement.SUBVIEW);
         final ViewSpecification viewSpecification = Toolkit.getViewFactory().availableViews(requirement).nextElement();
         addView(content, viewSpecification, position);
     }

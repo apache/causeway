@@ -126,10 +126,12 @@ public class TreeNodeBorder extends AbstractBorder {
         final Color secondary2 = Toolkit.getColor(ColorsAndFonts.COLOR_SECONDARY2);
         final Color secondary3 = Toolkit.getColor(ColorsAndFonts.COLOR_SECONDARY3);
         /*
-         * REVIEW if (getViewAxis(TableAxis.class) != null) { if (((SelectableViewAxis)
-         * getViewAxis(SelectableViewAxis.class)).isSelected(getView())) { canvas.drawSolidRectangle(left, 0,
-         * getSize().getWidth() - left, top, Toolkit.getColor(ColorsAndFonts.COLOR_PRIMARY2)); secondary2 = secondary1;
-         * } }
+         * REVIEW if (getViewAxis(TableAxis.class) != null) { if
+         * (((SelectableViewAxis)
+         * getViewAxis(SelectableViewAxis.class)).isSelected(getView())) {
+         * canvas.drawSolidRectangle(left, 0, getSize().getWidth() - left, top,
+         * Toolkit.getColor(ColorsAndFonts.COLOR_PRIMARY2)); secondary2 =
+         * secondary1; } }
          */
         if (getState().isObjectIdentified()) {
             canvas.drawRectangle(left, 0, getSize().getWidth() - left, top, secondary2);
@@ -150,8 +152,7 @@ public class TreeNodeBorder extends AbstractBorder {
         if (addBox) {
             x += BOX_X_OFFSET;
             canvas.drawLine(x, y, x + BOX_SIZE - 1, y, secondary3);
-            canvas.drawSolidRectangle(x, y - BOX_SIZE / 2, BOX_SIZE, BOX_SIZE,
-                Toolkit.getColor(ColorsAndFonts.COLOR_WHITE));
+            canvas.drawSolidRectangle(x, y - BOX_SIZE / 2, BOX_SIZE, BOX_SIZE, Toolkit.getColor(ColorsAndFonts.COLOR_WHITE));
             canvas.drawRectangle(x, y - BOX_SIZE / 2, BOX_SIZE, BOX_SIZE, secondary1);
 
             if (canOpen == NodeSpecification.UNKNOWN) {
@@ -221,8 +222,9 @@ public class TreeNodeBorder extends AbstractBorder {
                 getParent().replaceView(getView(), newView);
             }
             /*
-             * } else if (y < top && x > left && click.button1()) { if (canOpen() == NodeSpecification.UNKNOWN) {
-             * resolveContent(); markDamaged(); } selectNode();
+             * } else if (y < top && x > left && click.button1()) { if
+             * (canOpen() == NodeSpecification.UNKNOWN) { resolveContent();
+             * markDamaged(); } selectNode();
              */
         } else {
             super.firstClick(click);
@@ -294,7 +296,8 @@ public class TreeNodeBorder extends AbstractBorder {
     // TODO remove
     private void selectNode() {
         /*
-         * if (getViewAxis(SelectableViewAxis.class) != null) { ((SelectableViewAxis)
+         * if (getViewAxis(SelectableViewAxis.class) != null) {
+         * ((SelectableViewAxis)
          * getViewAxis(SelectableViewAxis.class)).selected(getView()); }
          */
     }
@@ -344,7 +347,6 @@ public class TreeNodeBorder extends AbstractBorder {
     }
 
     private boolean withinBox(final int x, final int y) {
-        return x >= BOX_X_OFFSET && x <= BOX_X_OFFSET + BOX_SIZE && y >= (top - BOX_SIZE) / 2
-            && y <= (top + BOX_SIZE) / 2;
+        return x >= BOX_X_OFFSET && x <= BOX_X_OFFSET + BOX_SIZE && y >= (top - BOX_SIZE) / 2 && y <= (top + BOX_SIZE) / 2;
     }
 }

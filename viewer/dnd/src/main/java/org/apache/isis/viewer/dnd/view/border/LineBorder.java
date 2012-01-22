@@ -75,7 +75,8 @@ public class LineBorder extends AbstractBorder {
         final Size s = getSize();
         final int width = s.getWidth();
         for (int i = 0; i < left - padding; i++) {
-            // canvas.drawRectangle(i, i, width - 2 * i, s.getHeight() - 2 * i, color);
+            // canvas.drawRectangle(i, i, width - 2 * i, s.getHeight() - 2 * i,
+            // color);
             canvas.drawRoundedRectangle(i, i, width - 2 * i, s.getHeight() - 2 * i, arcRadius, arcRadius, color);
         }
     }

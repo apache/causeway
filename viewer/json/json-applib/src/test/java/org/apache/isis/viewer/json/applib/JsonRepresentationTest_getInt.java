@@ -39,7 +39,7 @@ public class JsonRepresentationTest_getInt {
     public void setUp() throws Exception {
         jsonRepresentation = new JsonRepresentation(readJson("map.json"));
     }
-    
+
     @Test
     public void happyCase() throws JsonParseException, JsonMappingException, IOException {
         assertThat(jsonRepresentation.getInt("anInt"), is(123));
@@ -55,7 +55,7 @@ public class JsonRepresentationTest_getInt {
         try {
             jsonRepresentation.getInt("aString");
             fail();
-        } catch (IllegalArgumentException e) {
+        } catch (final IllegalArgumentException e) {
             assertThat(e.getMessage(), is("'aString' is not an int"));
         }
     }
@@ -65,7 +65,7 @@ public class JsonRepresentationTest_getInt {
         try {
             jsonRepresentation.getInt("aSubMap");
             fail();
-        } catch (IllegalArgumentException e) {
+        } catch (final IllegalArgumentException e) {
             assertThat(e.getMessage(), is("'aSubMap' is not an int"));
         }
     }
@@ -75,7 +75,7 @@ public class JsonRepresentationTest_getInt {
         try {
             jsonRepresentation.getInt("aSubList");
             fail();
-        } catch (IllegalArgumentException e) {
+        } catch (final IllegalArgumentException e) {
             assertThat(e.getMessage(), is("'aSubList' is not an int"));
         }
     }
@@ -84,5 +84,5 @@ public class JsonRepresentationTest_getInt {
     public void forMultipartKey() throws JsonParseException, JsonMappingException, IOException {
         assertThat(jsonRepresentation.getInt("aSubMap.anInt"), is(456));
     }
-    
+
 }

@@ -41,8 +41,7 @@ public class InitializeFromResult extends AbstractElementProcessor {
         final RequestContext context = request.getContext();
         final ObjectAdapter sourceObject = context.getMappedObject(sourceObjectId);
         final boolean isSourceSet = sourceObject != null;
-        final boolean isSourceAssignable =
-            isSourceSet && (cls == null || cls.isAssignableFrom(sourceObject.getObject().getClass()));
+        final boolean isSourceAssignable = isSourceSet && (cls == null || cls.isAssignableFrom(sourceObject.getObject().getClass()));
         if (isSourceAssignable) {
             request.appendDebug("     " + variableName + " set to " + sourceObjectId + " (" + scope + ")");
             context.addVariable(variableName, sourceObjectId, scope);
@@ -66,8 +65,7 @@ public class InitializeFromResult extends AbstractElementProcessor {
 
     private void disallowSourceAndDefault(final Request request) {
         if (request.getOptionalProperty(DEFAULT) != null && request.getOptionalProperty(OBJECT) != null) {
-            throw new ScimpiException("Cannot specify both " + OBJECT + " and " + DEFAULT + " for the " + getName()
-                + " element");
+            throw new ScimpiException("Cannot specify both " + OBJECT + " and " + DEFAULT + " for the " + getName() + " element");
         }
     }
 

@@ -62,16 +62,17 @@ public class TextContent {
     }
 
     /**
-     * Returns the number of lines that this field will display the content. This can be smaller than the actual number
-     * of lines of content, but will be at least one.
+     * Returns the number of lines that this field will display the content.
+     * This can be smaller than the actual number of lines of content, but will
+     * be at least one.
      */
     public int getNoDisplayLines() {
         return availableDisplayLines;
     }
 
     /**
-     * Aligns the lines of content so that the specified line is within the array of lines returned by
-     * getDisplayLines().
+     * Aligns the lines of content so that the specified line is within the
+     * array of lines returned by getDisplayLines().
      * 
      * @see #getDisplayLines()
      */
@@ -181,7 +182,8 @@ public class TextContent {
     }
 
     /**
-     * returns the entire text of the content, with a newline between each block (but not after the final block.
+     * returns the entire text of the content, with a newline between each block
+     * (but not after the final block.
      */
     public String getText() {
         final StringBuffer content = new StringBuffer();
@@ -243,7 +245,8 @@ public class TextContent {
     }
 
     /**
-     * Returns the number of lines required to display the content text in it entirety.
+     * Returns the number of lines required to display the content text in it
+     * entirety.
      */
     public int getNoLinesOfContent() {
         int lineCount = 0;
@@ -276,8 +279,8 @@ public class TextContent {
         content.append("lines", availableDisplayLines);
         content.append("blocks=", blocks.size());
         /*
-         * for (int i = 0; i < blocks.size(); i++) { content.append(i == 0 ? " " : "\n ");
-         * content.append(blocks.elementAt(i)); }
+         * for (int i = 0; i < blocks.size(); i++) { content.append(i == 0 ? " "
+         * : "\n "); content.append(blocks.elementAt(i)); }
          */
         return content.toString();
     }
@@ -346,8 +349,8 @@ public class TextContent {
         }
 
         /*
-         * slightly offsetting mouse helps the user position the cursor between characters near the pointer rather than
-         * always after the pointer
+         * slightly offsetting mouse helps the user position the cursor between
+         * characters near the pointer rather than always after the pointer
          */
         final int x = atLocation.getX() - 3;
 

@@ -22,8 +22,9 @@ package org.apache.isis.viewer.dnd.view.text;
 import org.apache.isis.viewer.dnd.drawing.Location;
 
 /**
- * Represents the position of a line cursor within a TextContent. The character position for a line extends from zero to
- * text.length + 1. Where 0 means the cursor is to the left of the first character, and 1 is to right of the first
+ * Represents the position of a line cursor within a TextContent. The character
+ * position for a line extends from zero to text.length + 1. Where 0 means the
+ * cursor is to the left of the first character, and 1 is to right of the first
  * character and to the left of the second character.
  */
 public class CursorPosition {
@@ -255,7 +256,6 @@ public class CursorPosition {
     }
 
     public boolean isBefore(final CursorPosition positionToCompare) {
-        return line < positionToCompare.line
-            || (line == positionToCompare.line && character < positionToCompare.character);
+        return line < positionToCompare.line || (line == positionToCompare.line && character < positionToCompare.character);
     }
 }

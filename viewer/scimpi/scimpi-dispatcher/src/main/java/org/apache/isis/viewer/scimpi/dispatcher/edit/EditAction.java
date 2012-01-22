@@ -69,26 +69,20 @@ public class EditAction implements Action {
 
             final ObjectAdapter adapter = context.getMappedObject(objectId);
 
+            final List<ObjectAssociation> fields = adapter.getSpecification().getAssociations(ObjectAssociationFilters.dynamicallyVisible(session, adapter));
 
-            
-            final List<ObjectAssociation> fields =
-                adapter.getSpecification().getAssociations(
-                    ObjectAssociationFilters.dynamicallyVisible(session, adapter));
-            
-            for (ObjectAssociation objectAssociation : fields) {
+            for (final ObjectAssociation objectAssociation : fields) {
                 if (objectAssociation.isVisible(session, adapter).isVetoed()) {
                     throw new NotLoggedInException();
                 }
             }
-            
+
             final FormState entryState = validateObject(context, adapter, fields);
             final Version adapterVersion = adapter.getVersion();
             final Version formVersion = context.getVersion(version);
             if (formVersion != null && adapterVersion.different(formVersion)) {
 
-                IsisContext.getMessageBroker().addMessage(
-                    "The " + adapter.getSpecification().getSingularName() + " was edited " + "by another user ("
-                        + adapterVersion.getUser() + "). Please  make your changes based on their changes.");
+                IsisContext.getMessageBroker().addMessage("The " + adapter.getSpecification().getSingularName() + " was edited " + "by another user (" + adapterVersion.getUser() + "). Please  make your changes based on their changes.");
 
                 final String view = context.getParameter("_" + ERROR);
                 context.setRequestPath(view, Dispatcher.EDIT);
@@ -158,8 +152,7 @@ public class EditAction implements Action {
         }
     }
 
-    private FormState validateObject(final RequestContext context, final ObjectAdapter object,
-        final List<ObjectAssociation> fields) {
+    private FormState validateObject(final RequestContext context, final ObjectAdapter object, final List<ObjectAssociation> fields) {
         final FormState formState = new FormState();
         for (int i = 0; i < fields.size(); i++) {
             final ObjectAssociation field = fields.get(i);
@@ -182,8 +175,7 @@ public class EditAction implements Action {
             if (newEntry == null) {
                 // TODO duplicated in EditObject; line 97
                 final ObjectSpecification spec = field.getSpecification();
-                if (spec.isOfType(IsisContext.getSpecificationLoader().loadSpecification(boolean.class))
-                    || spec.isOfType(IsisContext.getSpecificationLoader().loadSpecification(Boolean.class))) {
+                if (spec.isOfType(IsisContext.getSpecificationLoader().loadSpecification(boolean.class)) || spec.isOfType(IsisContext.getSpecificationLoader().loadSpecification(Boolean.class))) {
                     newEntry = FALSE;
                 } else {
                     continue;
@@ -226,8 +218,7 @@ public class EditAction implements Action {
         return formState;
     }
 
-    private void changeObject(final RequestContext context, final ObjectAdapter object, final FormState editState,
-        final List<ObjectAssociation> fields) {
+    private void changeObject(final RequestContext context, final ObjectAdapter object, final FormState editState, final List<ObjectAssociation> fields) {
         for (int i = 0; i < fields.size(); i++) {
             final FieldEditState field = editState.getField(fields.get(i).getId());
             if (field == null) {
@@ -235,8 +226,7 @@ public class EditAction implements Action {
             }
             final String newEntry = field.getEntry();
             final ObjectAdapter originalValue = fields.get(i).get(object);
-            final boolean isVisible =
-                fields.get(i).isVisible(IsisContext.getAuthenticationSession(), object).isAllowed();
+            final boolean isVisible = fields.get(i).isVisible(IsisContext.getAuthenticationSession(), object).isAllowed();
             final boolean isUsable = fields.get(i).isUsable(IsisContext.getAuthenticationSession(), object).isAllowed();
             final boolean bothEmpty = originalValue == null && newEntry.equals("");
             final boolean bothSame = newEntry.equals(originalValue == null ? "" : originalValue.titleString());

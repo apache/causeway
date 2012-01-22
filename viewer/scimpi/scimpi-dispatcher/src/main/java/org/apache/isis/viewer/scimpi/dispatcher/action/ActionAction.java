@@ -22,8 +22,8 @@ package org.apache.isis.viewer.scimpi.dispatcher.action;
 import java.io.IOException;
 import java.util.List;
 
-import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AnonymousSession;
+import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
@@ -71,7 +71,8 @@ public class ActionAction implements Action {
         FormState entryState = null;
         try {
             final ObjectAdapter object = MethodsUtils.findObject(context, objectId);
-            // FIXME need to find method based on the set of parameters. otherwise overloaded method may be incorrectly
+            // FIXME need to find method based on the set of parameters.
+            // otherwise overloaded method may be incorrectly
             // selected.
             final ObjectAction action = MethodsUtils.findAction(object, methodName);
             entryState = validateParameters(context, action, object);
@@ -83,19 +84,24 @@ public class ActionAction implements Action {
 
             object.checkLock(context.getVersion(version));
             /*
-             * Version adapterVersion = object.getVersion(); if (adapterVersion.different(context.getVersion(version)))
-             * {
+             * Version adapterVersion = object.getVersion(); if
+             * (adapterVersion.different(context.getVersion(version))) {
              * 
-             * IsisContext.getMessageBroker().addMessage("The " + object.getSpecification().getSingularName() +
-             * " was edited " + "by another user (" + adapterVersion.getUser() +
+             * IsisContext.getMessageBroker().addMessage("The " +
+             * object.getSpecification().getSingularName() + " was edited " +
+             * "by another user (" + adapterVersion.getUser() +
              * "). Please  make your changes based on their changes.");
              * 
-             * entryState.setForm(objectId + ":" + methodName); context.addVariable(ENTRY_FIELDS, entryState,
-             * Scope.REQUEST); context.addVariable(resultName, objectId, Scope.REQUEST); if (override != null) {
-             * context.addVariable(resultName, override, Scope.REQUEST); } final String error = entryState.getError();
-             * if (error != null) { context.addVariable(RequestContext.ERROR, error, Scope.REQUEST); }
+             * entryState.setForm(objectId + ":" + methodName);
+             * context.addVariable(ENTRY_FIELDS, entryState, Scope.REQUEST);
+             * context.addVariable(resultName, objectId, Scope.REQUEST); if
+             * (override != null) { context.addVariable(resultName, override,
+             * Scope.REQUEST); } final String error = entryState.getError(); if
+             * (error != null) { context.addVariable(RequestContext.ERROR,
+             * error, Scope.REQUEST); }
              * 
-             * String view = context.getParameter(ERRORS); context.setRequestPath(view, Dispatcher.ACTION);
+             * String view = context.getParameter(ERRORS);
+             * context.setRequestPath(view, Dispatcher.ACTION);
              * 
              * } else
              */
@@ -134,7 +140,9 @@ public class ActionAction implements Action {
                 }
                 final String error = entryState.getError();
                 /*
-                 * if (error != null) { context.addVariable(RequestContext.ERROR, error, Scope.REQUEST); }
+                 * if (error != null) {
+                 * context.addVariable(RequestContext.ERROR, error,
+                 * Scope.REQUEST); }
                  */
 
                 final String view = context.getParameter("_" + ERROR);
@@ -171,8 +179,7 @@ public class ActionAction implements Action {
         }
     }
 
-    private boolean invokeMethod(final RequestContext context, final String variable, final ObjectAdapter object,
-        final ObjectAction action, final FormState entryState) {
+    private boolean invokeMethod(final RequestContext context, final String variable, final ObjectAdapter object, final ObjectAction action, final FormState entryState) {
 
         final ObjectAdapter[] parameters = getParameters(action, entryState);
         final String scopeName = context.getParameter("_" + SCOPE);
@@ -189,8 +196,7 @@ public class ActionAction implements Action {
         return parameters;
     }
 
-    private FormState validateParameters(final RequestContext context, final ObjectAction action,
-        final ObjectAdapter object) {
+    private FormState validateParameters(final RequestContext context, final ObjectAction action, final ObjectAdapter object) {
         final FormState formState = new FormState();
         final List<ObjectActionParameter> parameters2 = action.getParameters();
         final int parameterCount = action.getParameterCount();
@@ -203,10 +209,10 @@ public class ActionAction implements Action {
             }
 
             if (newEntry == null) {
-                // TODO figure out a better way to determine if boolean or a password
+                // TODO figure out a better way to determine if boolean or a
+                // password
                 final ObjectSpecification spec = parameters2.get(i).getSpecification();
-                if (spec.isOfType(IsisContext.getSpecificationLoader().loadSpecification(boolean.class))
-                    || spec.isOfType(IsisContext.getSpecificationLoader().loadSpecification(Boolean.class))) {
+                if (spec.isOfType(IsisContext.getSpecificationLoader().loadSpecification(boolean.class)) || spec.isOfType(IsisContext.getSpecificationLoader().loadSpecification(Boolean.class))) {
                     newEntry = FALSE;
                 } else {
                     newEntry = "";

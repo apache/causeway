@@ -69,8 +69,7 @@ public class ActionForm extends AbstractElementProcessor {
         createForm(request, parameterObject, false);
     }
 
-    protected static void createForm(final Request request, final CreateFormParameter parameterObject,
-        final boolean withoutProcessing) {
+    protected static void createForm(final Request request, final CreateFormParameter parameterObject, final boolean withoutProcessing) {
         final RequestContext context = request.getContext();
         final ObjectAdapter object = MethodsUtils.findObject(context, parameterObject.objectId);
         final String version = request.getContext().mapVersion(object);
@@ -100,33 +99,16 @@ public class ActionForm extends AbstractElementProcessor {
             return;
         }
         final String objectId = context.mapObject(object, Scope.INTERACTION);
-        final String errorView =
-            context.fullFilePath(parameterObject.forwardErrorTo == null ? context.getResourceFile()
-                : parameterObject.forwardErrorTo);
-        final String voidView =
-            context.fullFilePath(parameterObject.forwardVoidTo == null ? context.getResourceFile()
-                : parameterObject.forwardVoidTo);
-        final HiddenInputField[] hiddenFields =
-            new HiddenInputField[] {
-                new HiddenInputField("_" + OBJECT, objectId),
-                new HiddenInputField("_" + VERSION, version),
-                new HiddenInputField("_" + FORM_ID, parameterObject.formId),
-                new HiddenInputField("_" + METHOD, parameterObject.methodName),
-                parameterObject.forwardResultTo == null ? null : new HiddenInputField("_" + VIEW,
-                    context.fullFilePath(parameterObject.forwardResultTo)),
-                new HiddenInputField("_" + VOID, voidView),
-                new HiddenInputField("_" + ERROR, errorView),
-                parameterObject.completionMessage == null ? null : new HiddenInputField("_" + MESSAGE,
-                    parameterObject.completionMessage),
-                parameterObject.scope == null ? null : new HiddenInputField("_" + SCOPE, parameterObject.scope),
-                parameterObject.resultOverride == null ? null : new HiddenInputField("_" + RESULT_OVERRIDE,
-                    parameterObject.resultOverride),
-                parameterObject.resultName == null ? null : new HiddenInputField("_" + RESULT_NAME,
-                    parameterObject.resultName),
-                parameterObject.resultName == null ? null : new HiddenInputField(RequestContext.RESULT,
-                    (String) request.getContext().getVariable(RequestContext.RESULT)) };
+        final String errorView = context.fullFilePath(parameterObject.forwardErrorTo == null ? context.getResourceFile() : parameterObject.forwardErrorTo);
+        final String voidView = context.fullFilePath(parameterObject.forwardVoidTo == null ? context.getResourceFile() : parameterObject.forwardVoidTo);
+        final HiddenInputField[] hiddenFields = new HiddenInputField[] { new HiddenInputField("_" + OBJECT, objectId), new HiddenInputField("_" + VERSION, version), new HiddenInputField("_" + FORM_ID, parameterObject.formId), new HiddenInputField("_" + METHOD, parameterObject.methodName),
+                parameterObject.forwardResultTo == null ? null : new HiddenInputField("_" + VIEW, context.fullFilePath(parameterObject.forwardResultTo)), new HiddenInputField("_" + VOID, voidView), new HiddenInputField("_" + ERROR, errorView),
+                parameterObject.completionMessage == null ? null : new HiddenInputField("_" + MESSAGE, parameterObject.completionMessage), parameterObject.scope == null ? null : new HiddenInputField("_" + SCOPE, parameterObject.scope),
+                parameterObject.resultOverride == null ? null : new HiddenInputField("_" + RESULT_OVERRIDE, parameterObject.resultOverride), parameterObject.resultName == null ? null : new HiddenInputField("_" + RESULT_NAME, parameterObject.resultName),
+                parameterObject.resultName == null ? null : new HiddenInputField(RequestContext.RESULT, (String) request.getContext().getVariable(RequestContext.RESULT)) };
 
-        // TODO when the block contains a selector tag it doesn't disable it if the field cannot be edited!!!
+        // TODO when the block contains a selector tag it doesn't disable it if
+        // the field cannot be edited!!!
         final FormFieldBlock containedBlock = new FormFieldBlock() {
             @Override
             public boolean isNullable(final String name) {
@@ -142,7 +124,8 @@ public class ActionForm extends AbstractElementProcessor {
 
         final FormState entryState = (FormState) context.getVariable(ENTRY_FIELDS);
 
-        // TODO the list of included fields should be considered in the next method (see EditObject)
+        // TODO the list of included fields should be considered in the next
+        // method (see EditObject)
         final InputField[] formFields = createFields(action, object);
         containedBlock.hideExcludedParameters(formFields);
         containedBlock.setUpValues(formFields);
@@ -169,12 +152,9 @@ public class ActionForm extends AbstractElementProcessor {
             buttonTitle = "Ok";
         }
 
-        String cancelTo = parameterObject.cancelTo == null ? "_generic.shtml?_result=" + objectId : 
-            parameterObject.cancelTo;
-        
-        HtmlFormBuilder.createForm(request, ActionAction.ACTION + ".app", hiddenFields, formFields,
-            parameterObject.className, parameterObject.id, formTitle, action.getDescription(), action.getHelp(),
-            buttonTitle, errors, cancelTo);
+        final String cancelTo = parameterObject.cancelTo == null ? "_generic.shtml?_result=" + objectId : parameterObject.cancelTo;
+
+        HtmlFormBuilder.createForm(request, ActionAction.ACTION + ".app", hiddenFields, formFields, parameterObject.className, parameterObject.id, formTitle, action.getDescription(), action.getHelp(), buttonTitle, errors, cancelTo);
 
         request.popBlockContent();
     }
@@ -188,14 +168,14 @@ public class ActionForm extends AbstractElementProcessor {
         return fields;
     }
 
-    private static void initializeFields(final RequestContext context, final ObjectAdapter object,
-        final ObjectAction action, final InputField[] fields) {
+    private static void initializeFields(final RequestContext context, final ObjectAdapter object, final ObjectAction action, final InputField[] fields) {
         final List<ObjectActionParameter> parameters = action.getParameters();
         for (int i = 0; i < fields.length; i++) {
             final InputField field = fields[i];
             final ObjectActionParameter param = parameters.get(i);
             if (action.isContributed() && i == 0) {
-                // fields[i].setValue(context.mapObject(object, Scope.INTERACTION));
+                // fields[i].setValue(context.mapObject(object,
+                // Scope.INTERACTION));
                 fields[i].setType(InputField.REFERENCE);
                 fields[i].setHidden(true);
             } else {
@@ -212,8 +192,7 @@ public class ActionForm extends AbstractElementProcessor {
      * 
      * @param showIcon
      */
-    private static void setDefaults(final RequestContext context, final ObjectAdapter object,
-        final ObjectAction action, final InputField[] fields, final FormState entryState, final boolean showIcon) {
+    private static void setDefaults(final RequestContext context, final ObjectAdapter object, final ObjectAction action, final InputField[] fields, final FormState entryState, final boolean showIcon) {
         final ObjectAdapter[] defaultValues = action.getDefaults(object);
         if (defaultValues == null) {
             return;
@@ -227,9 +206,7 @@ public class ActionForm extends AbstractElementProcessor {
             if (field.getType() == InputField.REFERENCE) {
                 final ObjectSpecification objectSpecification = action.getParameters().get(i).getSpecification();
                 if (defaultValue != null) {
-                    final String imageSegment =
-                        showIcon ? "<img class=\"small-icon\" src=\"" + context.imagePath(objectSpecification)
-                            + "\" alt=\"" + objectSpecification.getShortIdentifier() + "\"/>" : "";
+                    final String imageSegment = showIcon ? "<img class=\"small-icon\" src=\"" + context.imagePath(objectSpecification) + "\" alt=\"" + objectSpecification.getShortIdentifier() + "\"/>" : "";
                     final String html = imageSegment + title;
                     final String value = context.mapObject(defaultValue, Scope.INTERACTION);
                     field.setValue(value);
@@ -241,8 +218,7 @@ public class ActionForm extends AbstractElementProcessor {
         }
     }
 
-    private static void copyEntryState(final RequestContext context, final ObjectAdapter object,
-        final ObjectAction action, final InputField[] fields, final FormState entryState) {
+    private static void copyEntryState(final RequestContext context, final ObjectAdapter object, final ObjectAction action, final InputField[] fields, final FormState entryState) {
 
         for (final InputField field : fields) {
             final FieldEditState fieldState = entryState.getField(field.getName());
@@ -258,8 +234,7 @@ public class ActionForm extends AbstractElementProcessor {
         }
     }
 
-    private static void overrideWithHtml(final RequestContext context, final FormFieldBlock containedBlock,
-        final InputField[] formFields) {
+    private static void overrideWithHtml(final RequestContext context, final FormFieldBlock containedBlock, final InputField[] formFields) {
         for (int i = 0; i < formFields.length; i++) {
             final String id = ActionAction.parameterName(i);
             if (containedBlock.hasContent(id)) {

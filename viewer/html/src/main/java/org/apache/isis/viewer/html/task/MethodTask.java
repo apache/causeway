@@ -79,8 +79,10 @@ public final class MethodTask extends Task {
                 initialState[i] = defaultParameterValues[i];
             }
             /*
-             * noLines[i] = action.getParameterNoLines()[i]; wraps[i] = action.canParametersWrap()[i]; maxLength[i] =
-             * action.getParameterMaxLengths()[i]; typicalLength[i] = action.getParameterTypicalLengths()[i];
+             * noLines[i] = action.getParameterNoLines()[i]; wraps[i] =
+             * action.canParametersWrap()[i]; maxLength[i] =
+             * action.getParameterMaxLengths()[i]; typicalLength[i] =
+             * action.getParameterTypicalLengths()[i];
              */
         }
 

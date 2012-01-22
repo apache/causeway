@@ -32,8 +32,7 @@ public class AliasItemsInListPeer extends AbstractListFixturePeer {
     private final CellBinding typeBinding;
     private final CellBinding aliasBinding;
 
-    public AliasItemsInListPeer(final AliasRegistry aliasesRegistry, final String listAlias,
-        final CellBinding titleBinding, final CellBinding typeBinding, final CellBinding aliasBinding) {
+    public AliasItemsInListPeer(final AliasRegistry aliasesRegistry, final String listAlias, final CellBinding titleBinding, final CellBinding typeBinding, final CellBinding aliasBinding) {
         super(aliasesRegistry, listAlias, titleBinding, typeBinding, aliasBinding);
 
         this.titleBinding = titleBinding;

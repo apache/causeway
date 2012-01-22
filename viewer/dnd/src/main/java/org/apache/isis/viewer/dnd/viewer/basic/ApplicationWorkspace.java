@@ -73,8 +73,7 @@ public final class ApplicationWorkspace extends CompositeViewUsingBuilder implem
     protected Vector<View> serviceViews;
     protected Vector<View> iconViews;
 
-    public ApplicationWorkspace(final Content content, final Axes axes, final CompositeViewSpecification specification,
-        final Layout layout, final ApplicationWorkspaceBuilder builder) {
+    public ApplicationWorkspace(final Content content, final Axes axes, final CompositeViewSpecification specification, final Layout layout, final ApplicationWorkspaceBuilder builder) {
         super(content, specification, axes, layout, builder);
         serviceViews = new Vector<View>();
         iconViews = new Vector<View>();
@@ -128,9 +127,7 @@ public final class ApplicationWorkspace extends CompositeViewUsingBuilder implem
     @Override
     public View addIconFor(final ObjectAdapter object, final Placement placement) {
         final Content content = Toolkit.getContentFactory().createRootContent(object);
-        final View icon =
-            Toolkit.getViewFactory().createView(
-                new ViewRequirement(content, ViewRequirement.CLOSED | ViewRequirement.ROOT));
+        final View icon = Toolkit.getViewFactory().createView(new ViewRequirement(content, ViewRequirement.CLOSED | ViewRequirement.ROOT));
         add(iconViews, icon);
         placement.position(this, icon);
         return icon;
@@ -138,9 +135,7 @@ public final class ApplicationWorkspace extends CompositeViewUsingBuilder implem
 
     public void addServiceIconFor(final ObjectAdapter service) {
         final Content content = new ServiceObject(service);
-        final View serviceIcon =
-            Toolkit.getViewFactory().createView(
-                new ViewRequirement(content, ViewRequirement.CLOSED | ViewRequirement.SUBVIEW));
+        final View serviceIcon = Toolkit.getViewFactory().createView(new ViewRequirement(content, ViewRequirement.CLOSED | ViewRequirement.SUBVIEW));
         add(serviceViews, serviceIcon);
     }
 
@@ -155,7 +150,8 @@ public final class ApplicationWorkspace extends CompositeViewUsingBuilder implem
         }
     }
 
-    // TODO check the dragging in of objects, flag to user that object cannot be dropped
+    // TODO check the dragging in of objects, flag to user that object cannot be
+    // dropped
     @Override
     public void drop(final ContentDrag drag) {
         getFeedbackManager().showDefaultCursor();
@@ -187,9 +183,7 @@ public final class ApplicationWorkspace extends CompositeViewUsingBuilder implem
             dropLocation.subtract(drag.getOffset());
 
             if (drag.isShift()) {
-                newView =
-                    Toolkit.getViewFactory().createView(
-                        new ViewRequirement(getContent(), ViewRequirement.OPEN | ViewRequirement.SUBVIEW));
+                newView = Toolkit.getViewFactory().createView(new ViewRequirement(getContent(), ViewRequirement.OPEN | ViewRequirement.SUBVIEW));
                 drag.getTargetView().addView(newView);
                 newView.setLocation(dropLocation);
             } else {
@@ -417,7 +411,8 @@ public final class ApplicationWorkspace extends CompositeViewUsingBuilder implem
     }
 
     private void menuForChangingUsers(final UserActionSet options) {
-        // TODO pick out users from the perspectives, but only show when in exploration mode
+        // TODO pick out users from the perspectives, but only show when in
+        // exploration mode
         if (getAuthenticationSession() instanceof MultiUserExplorationSession) {
             final MultiUserExplorationSession session = (MultiUserExplorationSession) getAuthenticationSession();
 

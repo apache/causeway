@@ -71,14 +71,13 @@ public abstract class ObjectViewAbstract implements Action {
         context.clearMessagesAndWarnings();
     }
 
-    protected void doExecute(final Context context, final ViewPane content, final ObjectAdapter object,
-        final String field) {
+    protected void doExecute(final Context context, final ViewPane content, final ObjectAdapter object, final String field) {
     }
 
     protected boolean addObjectToHistory() {
         return false;
     }
-    
+
     protected AuthenticationSession getAuthenticationSession() {
         return IsisContext.getAuthenticationSession();
     }
@@ -86,6 +85,5 @@ public abstract class ObjectViewAbstract implements Action {
     protected PersistenceSession getPersistenceSession() {
         return IsisContext.getPersistenceSession();
     }
-
 
 }

@@ -32,8 +32,7 @@ public class SetUser implements Action {
     @Override
     public void execute(final Request request, final Context context, final Page page) {
         final String name = request.getName();
-        final MultiUserExplorationSession session =
-            (MultiUserExplorationSession) IsisContext.getAuthenticationSession();
+        final MultiUserExplorationSession session = (MultiUserExplorationSession) IsisContext.getAuthenticationSession();
         session.setCurrentSession(name);
 
         final ViewPane content = page.getViewPane();

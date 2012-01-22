@@ -53,8 +53,7 @@ public class WindowBorder extends AbstractWindowBorder {
         if (isTransient()) {
             setControls(new WindowControl[] { new CloseWindowControl(this) });
         } else {
-            setControls(new WindowControl[] { new IconizeWindowControl(this), new ResizeWindowControl(this),
-                new CloseWindowControl(this) });
+            setControls(new WindowControl[] { new IconizeWindowControl(this), new ResizeWindowControl(this), new CloseWindowControl(this) });
         }
     }
 
@@ -101,10 +100,8 @@ public class WindowBorder extends AbstractWindowBorder {
 
         final Content content = getContent();
         final UserActionSet suboptions = menuOptions.addNewActionSet("Replace with");
-        replaceOptions(Toolkit.getViewFactory().availableViews(new ViewRequirement(content, ViewRequirement.OPEN)),
-            suboptions);
-        replaceOptions(Toolkit.getViewFactory().availableViews(new ViewRequirement(content, ViewRequirement.CLOSED)),
-            suboptions);
+        replaceOptions(Toolkit.getViewFactory().availableViews(new ViewRequirement(content, ViewRequirement.OPEN)), suboptions);
+        replaceOptions(Toolkit.getViewFactory().availableViews(new ViewRequirement(content, ViewRequirement.CLOSED)), suboptions);
     }
 
     protected void replaceOptions(final Enumeration possibleViews, final UserActionSet options) {

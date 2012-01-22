@@ -55,8 +55,7 @@ public class HtmlFileParser {
         return tagsBeforeContent;
     }
 
-    public void parseHtmlFile(final String parentPath, final String filePath, final RequestContext context,
-        final Stack<Snippet> allTags, final Stack<Snippet> tagsForPreviousTemplate) {
+    public void parseHtmlFile(final String parentPath, final String filePath, final RequestContext context, final Stack<Snippet> allTags, final Stack<Snippet> tagsForPreviousTemplate) {
         LOG.debug("parent/file: " + parentPath + " & " + filePath);
         final File directory = filePath.startsWith("/") ? new File(".") : new File(parentPath);
         final File loadFile = new File(directory.getParentFile(), filePath);
@@ -82,7 +81,8 @@ public class HtmlFileParser {
             // NOTE done like this the tags can be cached for faster processing
             while ((node = lexer.nextNode()) != null) {
                 if (node instanceof Remark) {
-                    // TODO need to pick up on comments within tags; at the moment this splits a tag into two causing a
+                    // TODO need to pick up on comments within tags; at the
+                    // moment this splits a tag into two causing a
                     // failure later
                     continue;
 
@@ -91,7 +91,8 @@ public class HtmlFileParser {
                     final String tagName = tagNode.getTagName().toUpperCase();
                     LOG.debug(tagName);
 
-                    // TODO remove context & request from Attributes -- the tags will be re-used across
+                    // TODO remove context & request from Attributes -- the tags
+                    // will be re-used across
                     // requests
                     final Attributes attributes = new Attributes(tagNode, context);
                     int type = 0;

@@ -52,8 +52,7 @@ public class SetUpObjectsPeer extends AbstractFixturePeer {
     }
 
     public static enum SetUpObjectResult {
-        OK, NO_ASSOCIATION, CLEARED, CANNOT_CLEAR("(cannot clear)"), CANNOT_SET("(cannot set"),
-        CANNOT_PARSE("(cannot parse)"), UNKNOWN_REFERENCE("(unknown reference)");
+        OK, NO_ASSOCIATION, CLEARED, CANNOT_CLEAR("(cannot clear)"), CANNOT_SET("(cannot set"), CANNOT_PARSE("(cannot parse)"), UNKNOWN_REFERENCE("(unknown reference)");
         private String errorMessage;
 
         private SetUpObjectResult() {
@@ -94,8 +93,7 @@ public class SetUpObjectsPeer extends AbstractFixturePeer {
     // constructor
     // ///////////////////////////////////////////////////////////////////////
 
-    public SetUpObjectsPeer(final AliasRegistry aliasRegistry, final String className,
-        final SetUpObjectsPeer.Mode mode, final CellBinding aliasBinding) {
+    public SetUpObjectsPeer(final AliasRegistry aliasRegistry, final String className, final SetUpObjectsPeer.Mode mode, final CellBinding aliasBinding) {
         super(aliasRegistry, aliasBinding);
 
         this.spec = loadSpecIfValid(className);
@@ -167,7 +165,8 @@ public class SetUpObjectsPeer extends AbstractFixturePeer {
      * Used by Concordion only.
      * 
      * <p>
-     * FitNesse, on the other hand, uses a more fine-grained approach, calling the underlying methods.
+     * FitNesse, on the other hand, uses a more fine-grained approach, calling
+     * the underlying methods.
      */
     public void createObject() throws ScenarioBoundValueException {
         final ObjectAdapter adapter = createInstance();

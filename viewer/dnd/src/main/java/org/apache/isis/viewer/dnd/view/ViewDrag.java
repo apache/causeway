@@ -22,11 +22,13 @@ package org.apache.isis.viewer.dnd.view;
 import org.apache.isis.viewer.dnd.drawing.Location;
 
 /**
- * Details a drag event that affects a view. The target of a ViewDrag is always the workspace of the source view.
+ * Details a drag event that affects a view. The target of a ViewDrag is always
+ * the workspace of the source view.
  * 
  * <p>
- * An overlay view, as returned by the pickup() method on the source view, is moved by this drag objects so its location
- * follows the pointer by an offset equivalent to the mouse location within the view.
+ * An overlay view, as returned by the pickup() method on the source view, is
+ * moved by this drag objects so its location follows the pointer by an offset
+ * equivalent to the mouse location within the view.
  */
 public interface ViewDrag extends Drag {
 

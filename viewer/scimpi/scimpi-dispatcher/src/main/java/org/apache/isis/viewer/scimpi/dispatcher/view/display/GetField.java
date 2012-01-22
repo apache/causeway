@@ -72,8 +72,7 @@ public class GetField extends AbstractElementProcessor {
         process(request, object, field, format, name, scope);
     }
 
-    protected void process(final Request request, final ObjectAdapter object, final ObjectAssociation field,
-        final Format format, final String name, final Scope scope) {
+    protected void process(final Request request, final ObjectAdapter object, final ObjectAssociation field, final Format format, final String name, final Scope scope) {
         final ObjectAdapter fieldReference = field.get(object);
         if (format != null && fieldReference.getResolveState().isValue()) {
             final DateValueFacet facet = fieldReference.getSpecification().getFacet(DateValueFacet.class);

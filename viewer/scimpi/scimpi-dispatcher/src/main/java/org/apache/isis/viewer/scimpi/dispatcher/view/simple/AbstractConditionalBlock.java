@@ -56,10 +56,13 @@ public abstract class AbstractConditionalBlock extends AbstractElementProcessor 
         addNegated(new TestObjectPersistent(), "object-transient");
         addNormal(new TestObjectType(), "object-type");
         /*
-         * addNormal(new TestObjectIs(), "object-is"); addNegated(new TestObjectIs(), "object-is-not"); addNormal(new
-         * TestObjectType(), "object-type"); addNormal(new TestObjectType(), "object-title-equals"); addNegated(new
-         * TestObjectType(), "object-title-not-equals"); addNormal(new TestObjectType(), "object-title-contains");
-         * addNegated(new TestObjectType(), "object-title-not-contains");
+         * addNormal(new TestObjectIs(), "object-is"); addNegated(new
+         * TestObjectIs(), "object-is-not"); addNormal(new TestObjectType(),
+         * "object-type"); addNormal(new TestObjectType(),
+         * "object-title-equals"); addNegated(new TestObjectType(),
+         * "object-title-not-equals"); addNormal(new TestObjectType(),
+         * "object-title-contains"); addNegated(new TestObjectType(),
+         * "object-title-not-contains");
          */
         addNormal(new TestCollectionFull(), "collection-full");
         addNegated(new TestCollectionFull(), "collection-empty");
@@ -106,8 +109,7 @@ public abstract class AbstractConditionalBlock extends AbstractElementProcessor 
         boolean checkMade = false;
         boolean allConditionsMet = true;
 
-        final String[] propertyNames =
-            request.getAttributes().getPropertyNames(new String[] { "object", "collection" });
+        final String[] propertyNames = request.getAttributes().getPropertyNames(new String[] { "object", "collection" });
         for (final String propertyName : propertyNames) {
             boolean result;
             if (propertyName.equals("set")) {
@@ -129,95 +131,132 @@ public abstract class AbstractConditionalBlock extends AbstractElementProcessor 
 
         /*
          * 
-         * // Check variables if (request.isPropertySpecified("variable-exists")) { boolean valuePresent =
-         * request.isPropertySet("variable-exists"); checkMade = true; allConditionsMet &= valuePresent; }
+         * // Check variables if
+         * (request.isPropertySpecified("variable-exists")) { boolean
+         * valuePresent = request.isPropertySet("variable-exists"); checkMade =
+         * true; allConditionsMet &= valuePresent; }
          * 
-         * String variable = request.getOptionalProperty("variable-true"); if (variable != null) { String value =
-         * (String) request.getContext().getVariable(variable); checkMade = true; allConditionsMet &=
-         * Attributes.isTrue(value); }
+         * String variable = request.getOptionalProperty("variable-true"); if
+         * (variable != null) { String value = (String)
+         * request.getContext().getVariable(variable); checkMade = true;
+         * allConditionsMet &= Attributes.isTrue(value); }
          * 
-         * variable = request.getOptionalProperty("variable-equals"); if (variable != null) { String value = (String)
-         * request.getContext().getVariable(variable); checkMade = true; allConditionsMet &= variable.equals(value); }
+         * variable = request.getOptionalProperty("variable-equals"); if
+         * (variable != null) { String value = (String)
+         * request.getContext().getVariable(variable); checkMade = true;
+         * allConditionsMet &= variable.equals(value); }
          */
         // Check Object
 
         /*
-         * // Check Collection String collection = request.getOptionalProperty("collection-" + TYPE); if (collection !=
-         * null) { ObjectAdapter object = MethodsUtils.findObject(request.getContext(), collection); Class<?> cls =
-         * forClass(request); TypeOfFacet facet = object.getSpecification().getFacet(TypeOfFacet.class); boolean hasType
-         * = object != null && (cls == null || cls.isAssignableFrom(facet.value())); checkMade = true; allConditionsMet
-         * &= hasType;; }
+         * // Check Collection String collection =
+         * request.getOptionalProperty("collection-" + TYPE); if (collection !=
+         * null) { ObjectAdapter object =
+         * MethodsUtils.findObject(request.getContext(), collection); Class<?>
+         * cls = forClass(request); TypeOfFacet facet =
+         * object.getSpecification().getFacet(TypeOfFacet.class); boolean
+         * hasType = object != null && (cls == null ||
+         * cls.isAssignableFrom(facet.value())); checkMade = true;
+         * allConditionsMet &= hasType;; }
          * 
-         * collection = request.getOptionalProperty("collection-" + "empty"); if (collection != null) { ObjectAdapter
-         * object = MethodsUtils.findObject(request.getContext(), id); CollectionFacet facet =
-         * object.getSpecification().getFacet(CollectionFacet.class); boolean isEmpty = facet != null &&
-         * facet.size(object) == 0; processTags(isEmpty, request); allConditionsMet &= isEmpty; }
+         * collection = request.getOptionalProperty("collection-" + "empty"); if
+         * (collection != null) { ObjectAdapter object =
+         * MethodsUtils.findObject(request.getContext(), id); CollectionFacet
+         * facet = object.getSpecification().getFacet(CollectionFacet.class);
+         * boolean isEmpty = facet != null && facet.size(object) == 0;
+         * processTags(isEmpty, request); allConditionsMet &= isEmpty; }
          */
 
         // Check Methods
         /*
-         * String method = request.getOptionalProperty(METHOD + "-exists"); if (method != null) { ObjectAdapter object =
-         * MethodsUtils.findObject(request.getContext(), id); List<? extends ObjectAction> objectActions =
-         * object.getSpecification().getObjectActions(ActionType.USER); boolean methodExists = false; for (ObjectAction
-         * objectAssociation : objectActions) { if (objectAssociation.getId().equals(method)) { methodExists = true;
-         * break; } } checkMade = true; allConditionsMet &= methodExists; }
+         * String method = request.getOptionalProperty(METHOD + "-exists"); if
+         * (method != null) { ObjectAdapter object =
+         * MethodsUtils.findObject(request.getContext(), id); List<? extends
+         * ObjectAction> objectActions =
+         * object.getSpecification().getObjectActions(ActionType.USER); boolean
+         * methodExists = false; for (ObjectAction objectAssociation :
+         * objectActions) { if (objectAssociation.getId().equals(method)) {
+         * methodExists = true; break; } } checkMade = true; allConditionsMet &=
+         * methodExists; }
          * 
-         * method = request.getOptionalProperty(METHOD + "-visible"); if (method != null) { ObjectAdapter object =
-         * MethodsUtils.findObject(request.getContext(), id); // TODO needs to work irrespective of parameters
-         * ObjectAction objectAction = object.getSpecification().getObjectAction(ActionType.USER, method,
+         * method = request.getOptionalProperty(METHOD + "-visible"); if (method
+         * != null) { ObjectAdapter object =
+         * MethodsUtils.findObject(request.getContext(), id); // TODO needs to
+         * work irrespective of parameters ObjectAction objectAction =
+         * object.getSpecification().getObjectAction(ActionType.USER, method,
          * ObjectSpecification.EMPTY_LIST); Consent visible =
-         * objectAction.isVisible(IsisContext.getAuthenticationSession(), object); checkMade = true; allConditionsMet &=
-         * visible.isAllowed(); }
+         * objectAction.isVisible(IsisContext.getAuthenticationSession(),
+         * object); checkMade = true; allConditionsMet &= visible.isAllowed(); }
          * 
-         * method = request.getOptionalProperty(METHOD + "-usable"); if (method != null) { ObjectAdapter object =
-         * MethodsUtils.findObject(request.getContext(), id); // TODO needs to work irrespective of parameters
-         * ObjectAction objectAction = object.getSpecification().getObjectAction(ActionType.USER, method,
+         * method = request.getOptionalProperty(METHOD + "-usable"); if (method
+         * != null) { ObjectAdapter object =
+         * MethodsUtils.findObject(request.getContext(), id); // TODO needs to
+         * work irrespective of parameters ObjectAction objectAction =
+         * object.getSpecification().getObjectAction(ActionType.USER, method,
          * ObjectSpecification.EMPTY_LIST); Consent usable =
-         * objectAction.isUsable(IsisContext.getAuthenticationSession(), object); checkMade = true; allConditionsMet &=
-         * usable.isAllowed(); }
+         * objectAction.isUsable(IsisContext.getAuthenticationSession(),
+         * object); checkMade = true; allConditionsMet &= usable.isAllowed(); }
          * 
          * 
-         * // Check Fields String field = request.getOptionalProperty(FIELD + "-exists"); if (field != null) {
-         * ObjectAdapter object = MethodsUtils.findObject(request.getContext(), id); List<? extends ObjectAssociation>
-         * objectFields = object.getSpecification().getAssociations(); boolean fieldExists = false; for
-         * (ObjectAssociation objectAssociation : objectFields) { if (objectAssociation.getId().equals(field)) {
-         * fieldExists = true; break; } } checkMade = true; allConditionsMet &= fieldExists; }
+         * // Check Fields String field = request.getOptionalProperty(FIELD +
+         * "-exists"); if (field != null) { ObjectAdapter object =
+         * MethodsUtils.findObject(request.getContext(), id); List<? extends
+         * ObjectAssociation> objectFields =
+         * object.getSpecification().getAssociations(); boolean fieldExists =
+         * false; for (ObjectAssociation objectAssociation : objectFields) { if
+         * (objectAssociation.getId().equals(field)) { fieldExists = true;
+         * break; } } checkMade = true; allConditionsMet &= fieldExists; }
          * 
-         * field = request.getOptionalProperty(FIELD + "-visible"); if (field != null) { ObjectAdapter object =
-         * MethodsUtils.findObject(request.getContext(), id); ObjectAssociation objectField =
-         * object.getSpecification().getAssociation(field); Consent visible =
-         * objectField.isVisible(IsisContext.getAuthenticationSession(), object); checkMade = true; allConditionsMet &=
-         * visible.isAllowed(); }
+         * field = request.getOptionalProperty(FIELD + "-visible"); if (field !=
+         * null) { ObjectAdapter object =
+         * MethodsUtils.findObject(request.getContext(), id); ObjectAssociation
+         * objectField = object.getSpecification().getAssociation(field);
+         * Consent visible =
+         * objectField.isVisible(IsisContext.getAuthenticationSession(),
+         * object); checkMade = true; allConditionsMet &= visible.isAllowed(); }
          * 
-         * field = request.getOptionalProperty(FIELD + "-editable"); if (field != null) { ObjectAdapter object =
-         * MethodsUtils.findObject(request.getContext(), id); ObjectAssociation objectField =
-         * object.getSpecification().getAssociation(field); Consent usable =
-         * objectField.isUsable(IsisContext.getAuthenticationSession(), object); checkMade = true; allConditionsMet &=
-         * usable.isAllowed(); }
+         * field = request.getOptionalProperty(FIELD + "-editable"); if (field
+         * != null) { ObjectAdapter object =
+         * MethodsUtils.findObject(request.getContext(), id); ObjectAssociation
+         * objectField = object.getSpecification().getAssociation(field);
+         * Consent usable =
+         * objectField.isUsable(IsisContext.getAuthenticationSession(), object);
+         * checkMade = true; allConditionsMet &= usable.isAllowed(); }
          * 
-         * field = request.getOptionalProperty(FIELD + "-empty"); if (field != null) { ObjectAdapter object =
-         * MethodsUtils.findObject(request.getContext(), id); ObjectAssociation objectField =
-         * object.getSpecification().getAssociation(field); IsisContext.getPersistenceSession().resolveField(object,
-         * objectField); ObjectAdapter fld = objectField.get(object); if (fld == null) { checkMade = true;
-         * allConditionsMet &= true; } else { CollectionFacet facet =
-         * fld.getSpecification().getFacet(CollectionFacet.class); boolean isEmpty = facet != null && facet.size(fld) ==
-         * 0; processTags(isEmpty, request); allConditionsMet &= isEmpty; } }
+         * field = request.getOptionalProperty(FIELD + "-empty"); if (field !=
+         * null) { ObjectAdapter object =
+         * MethodsUtils.findObject(request.getContext(), id); ObjectAssociation
+         * objectField = object.getSpecification().getAssociation(field);
+         * IsisContext.getPersistenceSession().resolveField(object,
+         * objectField); ObjectAdapter fld = objectField.get(object); if (fld ==
+         * null) { checkMade = true; allConditionsMet &= true; } else {
+         * CollectionFacet facet =
+         * fld.getSpecification().getFacet(CollectionFacet.class); boolean
+         * isEmpty = facet != null && facet.size(fld) == 0; processTags(isEmpty,
+         * request); allConditionsMet &= isEmpty; } }
          * 
-         * field = request.getOptionalProperty(FIELD + "-set"); if (field != null) { ObjectAdapter object =
-         * MethodsUtils.findObject(request.getContext(), id); ObjectAssociation objectField =
-         * object.getSpecification().getAssociation(field); IsisContext.getPersistenceSession().resolveField(object,
-         * objectField); ObjectAdapter fld = objectField.get(object); if (fld == null) { throw new
-         * ScimpiException("No object for field-set " + field); } Object fieldValue = fld.getObject(); if (fieldValue
-         * instanceof Boolean) { checkMade = true; allConditionsMet &= ((Boolean) fieldValue).booleanValue(); } else {
-         * checkMade = true; allConditionsMet &= true; } }
+         * field = request.getOptionalProperty(FIELD + "-set"); if (field !=
+         * null) { ObjectAdapter object =
+         * MethodsUtils.findObject(request.getContext(), id); ObjectAssociation
+         * objectField = object.getSpecification().getAssociation(field);
+         * IsisContext.getPersistenceSession().resolveField(object,
+         * objectField); ObjectAdapter fld = objectField.get(object); if (fld ==
+         * null) { throw new ScimpiException("No object for field-set " +
+         * field); } Object fieldValue = fld.getObject(); if (fieldValue
+         * instanceof Boolean) { checkMade = true; allConditionsMet &=
+         * ((Boolean) fieldValue).booleanValue(); } else { checkMade = true;
+         * allConditionsMet &= true; } }
          */
 
         // Check User
         /*
-         * String hasRole = request.getOptionalProperty("has-role"); if (hasRole != null) { AuthenticationSession
-         * session = IsisContext.getSession().getAuthenticationSession(); List<String> roles = session.getRoles();
-         * boolean hasMatchingRole = false; for (String role : roles) { if (role.equals(hasRole.trim())) {
-         * hasMatchingRole = true; break; } } checkMade = true; allConditionsMet &= hasMatchingRole; }
+         * String hasRole = request.getOptionalProperty("has-role"); if (hasRole
+         * != null) { AuthenticationSession session =
+         * IsisContext.getSession().getAuthenticationSession(); List<String>
+         * roles = session.getRoles(); boolean hasMatchingRole = false; for
+         * (String role : roles) { if (role.equals(hasRole.trim())) {
+         * hasMatchingRole = true; break; } } checkMade = true; allConditionsMet
+         * &= hasMatchingRole; }
          */
 
         final String persistent = request.getOptionalProperty("persistent");
@@ -227,10 +266,12 @@ public abstract class AbstractConditionalBlock extends AbstractElementProcessor 
             allConditionsMet &= object.isPersistent();
         }
         /*
-         * String type = request.getOptionalProperty(TYPE); if (type != null) { ObjectAdapter object =
-         * MethodsUtils.findObject(request.getContext(), id); Class<?> cls = forClass(request); boolean hasType = object
-         * != null && (cls == null || cls.isAssignableFrom(object.getObject().getClass())); checkMade = true;
-         * allConditionsMet &= hasType;; }
+         * String type = request.getOptionalProperty(TYPE); if (type != null) {
+         * ObjectAdapter object = MethodsUtils.findObject(request.getContext(),
+         * id); Class<?> cls = forClass(request); boolean hasType = object !=
+         * null && (cls == null ||
+         * cls.isAssignableFrom(object.getObject().getClass())); checkMade =
+         * true; allConditionsMet &= hasType;; }
          */
         if (request.isPropertySpecified("empty")) {
             if (request.isPropertySet("empty")) {
@@ -359,8 +400,7 @@ class TestMethodVisible extends Test {
     boolean test(final Request request, final String attributeName, final String targetId) {
         final ObjectAdapter object = MethodsUtils.findObject(request.getContext(), targetId);
         // TODO needs to work irrespective of parameters
-        final ObjectAction objectAction =
-            object.getSpecification().getObjectAction(ActionType.USER, attributeName, ObjectSpecification.EMPTY_LIST);
+        final ObjectAction objectAction = object.getSpecification().getObjectAction(ActionType.USER, attributeName, ObjectSpecification.EMPTY_LIST);
         final Consent visible = objectAction.isVisible(IsisContext.getAuthenticationSession(), object);
         return visible.isAllowed();
     }
@@ -371,8 +411,7 @@ class TestMethodUseable extends Test {
     boolean test(final Request request, final String attributeName, final String targetId) {
         final ObjectAdapter object = MethodsUtils.findObject(request.getContext(), targetId);
         // TODO needs to work irrespective of parameters
-        final ObjectAction objectAction =
-            object.getSpecification().getObjectAction(ActionType.USER, attributeName, ObjectSpecification.EMPTY_LIST);
+        final ObjectAction objectAction = object.getSpecification().getObjectAction(ActionType.USER, attributeName, ObjectSpecification.EMPTY_LIST);
         final Consent usable = objectAction.isUsable(IsisContext.getAuthenticationSession(), object);
         return usable.isAllowed();
     }

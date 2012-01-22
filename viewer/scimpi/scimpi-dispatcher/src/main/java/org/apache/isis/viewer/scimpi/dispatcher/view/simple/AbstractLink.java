@@ -36,7 +36,7 @@ public abstract class AbstractLink extends AbstractElementProcessor {
     public void process(final Request request) {
         final String title = request.getOptionalProperty(FORM_TITLE);
         final String name = request.getOptionalProperty(NAME);
-        boolean showAsButton = request.isRequested("show-as-button", false);
+        final boolean showAsButton = request.isRequested("show-as-button", false);
         final String linkClass = request.getOptionalProperty(CLASS, showAsButton ? "button" : defaultLinkClass());
         final String containerClass = request.getOptionalProperty(CONTAINER_CLASS, "action");
         final String object = request.getOptionalProperty(OBJECT);
@@ -49,8 +49,7 @@ public abstract class AbstractLink extends AbstractElementProcessor {
         if (fieldName != null) {
             final ObjectAssociation field = adapter.getSpecification().getAssociation(fieldName);
             if (field == null) {
-                throw new ScimpiException("No field " + fieldName + " in "
-                    + adapter.getSpecification().getFullIdentifier());
+                throw new ScimpiException("No field " + fieldName + " in " + adapter.getSpecification().getFullIdentifier());
             }
             if (field.isVisible(IsisContext.getAuthenticationSession(), adapter).isVetoed()) {
                 throw new ForbiddenException(field, ForbiddenException.VISIBLE);
@@ -78,8 +77,7 @@ public abstract class AbstractLink extends AbstractElementProcessor {
             if (showAsButton) {
                 request.appendHtml("<div class=\"" + containerClass + "\">");
             }
-            request.appendHtml("<a" + classSegment + titleSegment + " href=\"" + view + "?" + variableSegment
-                + context.encodedInteractionParameters() + additionalSegment + "\">");
+            request.appendHtml("<a" + classSegment + titleSegment + " href=\"" + view + "?" + variableSegment + context.encodedInteractionParameters() + additionalSegment + "\">");
             request.pushNewBuffer();
             request.processUtilCloseTag();
             final String buffer = request.popBuffer();

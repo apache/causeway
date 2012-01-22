@@ -40,9 +40,7 @@ final class EmbeddedWebViewerJson extends EmbeddedWebViewer {
 
         webAppSpec.addServletContextListener(ResteasyBootstrap.class);
 
-        webAppSpec.addFilterSpecification(IsisSessionFilter.class, MapUtils.asMap(
-            IsisSessionFilter.AUTHENTICATION_SESSION_STRATEGY_KEY,
-            AuthenticationSessionStrategyTrusted.class.getName()), JsonViewerInstaller.EVERYTHING);
+        webAppSpec.addFilterSpecification(IsisSessionFilter.class, MapUtils.asMap(IsisSessionFilter.AUTHENTICATION_SESSION_STRATEGY_KEY, AuthenticationSessionStrategyTrusted.class.getName()), JsonViewerInstaller.EVERYTHING);
         webAppSpec.addServletSpecification(HttpServletDispatcher.class, JsonViewerInstaller.ROOT);
 
         webAppSpec.addFilterSpecification(ResourceCachingFilter.class, JsonViewerInstaller.STATIC_CONTENT);

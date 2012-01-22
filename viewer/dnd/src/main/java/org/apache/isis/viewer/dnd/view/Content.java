@@ -33,7 +33,8 @@ public interface Content {
     Consent canDrop(Content sourceContent);
 
     /**
-     * Allows this content to add menu options to the set of menu options the user will see for this content.
+     * Allows this content to add menu options to the set of menu options the
+     * user will see for this content.
      * 
      * @see #viewMenuOptions(UserActionSet)
      */
@@ -42,7 +43,8 @@ public interface Content {
     void debugDetails(DebugBuilder debug);
 
     /**
-     * Implements the response to the dropping of the specified content onto this content.
+     * Implements the response to the dropping of the specified content onto
+     * this content.
      */
     ObjectAdapter drop(Content sourceContent);
 
@@ -51,7 +53,8 @@ public interface Content {
     String getHelp();
 
     /**
-     * The name of the icon to use to respresent the object represented by this content.
+     * The name of the icon to use to respresent the object represented by this
+     * content.
      */
     String getIconName();
 
@@ -92,7 +95,8 @@ public interface Content {
     boolean isOptionEnabled();
 
     /**
-     * Returns true if the object represented by this content is transient; has not been persisted yet.
+     * Returns true if the object represented by this content is transient; has
+     * not been persisted yet.
      */
     boolean isTransient();
 
@@ -101,7 +105,8 @@ public interface Content {
     String title();
 
     /**
-     * Allows this content to add menu options to the set of menu options the user will see for this view.
+     * Allows this content to add menu options to the set of menu options the
+     * user will see for this view.
      * 
      * @see #contentMenuOptions(UserActionSet)
      */

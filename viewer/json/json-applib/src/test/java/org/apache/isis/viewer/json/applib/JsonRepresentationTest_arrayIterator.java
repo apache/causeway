@@ -32,11 +32,11 @@ import org.junit.Test;
 public class JsonRepresentationTest_arrayIterator {
 
     private JsonRepresentation jsonRepresentation;
-    
+
     @Test
     public void forJsonRepresentation() throws JsonParseException, JsonMappingException, IOException {
         jsonRepresentation = new JsonRepresentation(readJson("list.json"));
-        Iterator<JsonRepresentation> arrayIterator = jsonRepresentation.arrayIterator(JsonRepresentation.class);
+        final Iterator<JsonRepresentation> arrayIterator = jsonRepresentation.arrayIterator(JsonRepresentation.class);
         assertThat(arrayIterator.hasNext(), is(true));
         assertThat(arrayIterator.next().getString("a"), is("a1"));
         assertThat(arrayIterator.hasNext(), is(true));
@@ -47,7 +47,7 @@ public class JsonRepresentationTest_arrayIterator {
     @Test
     public void forString() throws JsonParseException, JsonMappingException, IOException {
         jsonRepresentation = new JsonRepresentation(readJson("listOfStrings.json"));
-        Iterator<String> arrayIterator = jsonRepresentation.arrayIterator(String.class);
+        final Iterator<String> arrayIterator = jsonRepresentation.arrayIterator(String.class);
         assertThat(arrayIterator.hasNext(), is(true));
         assertThat(arrayIterator.next(), is("a"));
         assertThat(arrayIterator.hasNext(), is(true));
@@ -56,6 +56,5 @@ public class JsonRepresentationTest_arrayIterator {
         assertThat(arrayIterator.next(), is("c"));
         assertThat(arrayIterator.hasNext(), is(false));
     }
-
 
 }

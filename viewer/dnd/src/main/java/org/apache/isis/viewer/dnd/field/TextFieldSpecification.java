@@ -39,8 +39,7 @@ public class TextFieldSpecification extends AbstractFieldSpecification {
 
     @Override
     public View createView(final Content content, final Axes axes, final int sequence) {
-        final View field =
-            new TextFieldResizeBorder(new SingleLineTextField((TextParseableContent) content, this, true));
+        final View field = new TextFieldResizeBorder(new SingleLineTextField((TextParseableContent) content, this, true));
         if (content.isOptionEnabled()) {
             return new OpenValueDropDownBorder(field);
         } else {

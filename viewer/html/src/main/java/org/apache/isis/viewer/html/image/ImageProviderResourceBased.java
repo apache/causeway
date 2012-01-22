@@ -38,8 +38,8 @@ public class ImageProviderResourceBased extends ImageProviderAbstract {
     private List<String> locations = new ArrayList<String>();
 
     /**
-     * Initializes {@link #locations} with {@link #DEFAULT_LOCATIONS}, but can be overridden using
-     * {@link #setLocations(List)}.
+     * Initializes {@link #locations} with {@link #DEFAULT_LOCATIONS}, but can
+     * be overridden using {@link #setLocations(List)}.
      */
     public ImageProviderResourceBased() {
         locations.addAll(Arrays.asList(DEFAULT_LOCATIONS));

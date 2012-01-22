@@ -40,8 +40,7 @@ public class GridListSpecification extends CompositeViewSpecification implements
         public View createView(final Content content, final Axes axes, final int sequence) {
             final GlobalViewFactory factory = Toolkit.getViewFactory();
 
-            final ViewSpecification elementSpecification =
-                axes.getAxis(ConfigurationAxis.class).getElementSpecification();
+            final ViewSpecification elementSpecification = axes.getAxis(ConfigurationAxis.class).getElementSpecification();
             if (elementSpecification == null) {
                 final int defaultRequirement = ViewRequirement.CLOSED | ViewRequirement.SUBVIEW;
                 final ViewRequirement viewRequirement = new ViewRequirement(content, defaultRequirement);
@@ -55,7 +54,8 @@ public class GridListSpecification extends CompositeViewSpecification implements
     public GridListSpecification() {
         final ElementFactory factory = new ElementFactory();
         builder = new CollectionElementBuilder(factory);
-        // TODO allow to be switched on so that user can change the view for a single element. This type of
+        // TODO allow to be switched on so that user can change the view for a
+        // single element. This type of
         // view used for an element would not be stored.
         if (false) {
             addSubviewDecorator(new ConfigurableFieldBorder.Factory());

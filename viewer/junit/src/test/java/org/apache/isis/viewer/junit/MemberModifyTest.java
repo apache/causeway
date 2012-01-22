@@ -193,10 +193,12 @@ public class MemberModifyTest extends AbstractTest {
     @Test
     public void cannotInvokeActionIfParameterDoesNotMatchRegularExpression() {
         try {
-            custJsWO.actionWithRegExStringParameter("abcd"); // doesn't match [0-9]{4}
+            custJsWO.actionWithRegExStringParameter("abcd"); // doesn't match
+                                                             // [0-9]{4}
             fail("InvalidRegExException should have been thrown");
         } catch (final InvalidException ex) {
-            assertThat(custJsDO.actionWithRegExStringParameterArgument, equalTo("1234")); // ie unchanged
+            assertThat(custJsDO.actionWithRegExStringParameterArgument, equalTo("1234")); // ie
+                                                                                          // unchanged
         }
     }
 
@@ -212,7 +214,8 @@ public class MemberModifyTest extends AbstractTest {
             custJsWO.actionWithMaxLengthStringParameter("abcde");
             fail("InvalidMaxLengthException should have been thrown");
         } catch (final InvalidException ex) {
-            assertThat(custJsDO.actionWithMaxLengthStringParameterArgument, equalTo("1234")); // ie unchanged
+            assertThat(custJsDO.actionWithMaxLengthStringParameterArgument, equalTo("1234")); // ie
+                                                                                              // unchanged
         }
     }
 

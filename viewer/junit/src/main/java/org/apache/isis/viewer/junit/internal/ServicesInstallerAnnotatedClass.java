@@ -38,8 +38,7 @@ public class ServicesInstallerAnnotatedClass extends ServicesInstallerAbstract {
         addServices(services);
     }
 
-    private void addServicesAnnotatedOn(final Class<?> testClass, final List<Object> services)
-        throws InstantiationException, IllegalAccessException {
+    private void addServicesAnnotatedOn(final Class<?> testClass, final List<Object> services) throws InstantiationException, IllegalAccessException {
         final Services servicesAnnotation = testClass.getAnnotation(Services.class);
         if (servicesAnnotation != null) {
             final Service[] serviceAnnotations = servicesAnnotation.value();
@@ -54,8 +53,7 @@ public class ServicesInstallerAnnotatedClass extends ServicesInstallerAbstract {
         }
     }
 
-    private void addServiceRepresentedBy(final Service serviceAnnotation, final List<Object> services)
-        throws InstantiationException, IllegalAccessException {
+    private void addServiceRepresentedBy(final Service serviceAnnotation, final List<Object> services) throws InstantiationException, IllegalAccessException {
         final Class<?> serviceClass = serviceAnnotation.value();
         // there's no need to unravel any Collections of services,
         // because the ServiceLoader will do it for us later.

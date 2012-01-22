@@ -34,37 +34,46 @@ public class ViewManagerTest extends TestCase {
     }
 
     /*
-     * public void testMouseClick() { MockWorkspace workspace = new MockWorkspace(null); MockView view = new MockView();
+     * public void testMouseClick() { MockWorkspace workspace = new
+     * MockWorkspace(null); MockView view = new MockView();
      * workspace.setupIdentifyView(view);
      * 
      * ViewManager manager = new ViewManager(workspace, null);
      * 
-     * view.setupGetAbsoluteLocation(new Location(10, 10)); view.setupIndicatesForView(true);
-     * view.setExpectedFirstClickCalls(1);
+     * view.setupGetAbsoluteLocation(new Location(10, 10));
+     * view.setupIndicatesForView(true); view.setExpectedFirstClickCalls(1);
      * 
-     * manager.mouseClicked(createMouseEvent(10, 20, 1, MouseEvent.BUTTON1_MASK));
+     * manager.mouseClicked(createMouseEvent(10, 20, 1,
+     * MouseEvent.BUTTON1_MASK));
      * 
      * view.verify(); }
      * 
-     * public void testPopupMouseClick() { MockWorkspace workspace = new MockWorkspace(null); MockView view = new
-     * MockView(); workspace.setupIdentifyView(view);
+     * public void testPopupMouseClick() { MockWorkspace workspace = new
+     * MockWorkspace(null); MockView view = new MockView();
+     * workspace.setupIdentifyView(view);
      * 
-     * MockPopupMenu popup = new MockPopupMenu(); ViewManager manager = new ViewManager(workspace, popup);
+     * MockPopupMenu popup = new MockPopupMenu(); ViewManager manager = new
+     * ViewManager(workspace, popup);
      * 
-     * view.setupGetAbsoluteLocation(new Location(10, 10)); view.setupIndicatesForView(true);
+     * view.setupGetAbsoluteLocation(new Location(10, 10));
+     * view.setupIndicatesForView(true);
      * 
      * workspace.addExpectedSetIdentifiedViewValues(view);
      * 
-     * popup.addExpectedInitValues(view, true, true); view.setupGetAbsoluteLocation(new Location(10, 10));
-     * view.setupIndicatesForView(true); // popup.setupGetParent(null); // popup.setupIndicatesForView(true);
+     * popup.addExpectedInitValues(view, true, true);
+     * view.setupGetAbsoluteLocation(new Location(10, 10));
+     * view.setupIndicatesForView(true); // popup.setupGetParent(null); //
+     * popup.setupIndicatesForView(true);
      * 
-     * manager.mouseClicked(createMouseEvent(10, 20, 1, MouseEvent.BUTTON3_MASK));
+     * manager.mouseClicked(createMouseEvent(10, 20, 1,
+     * MouseEvent.BUTTON3_MASK));
      * 
      * popup.verify(); view.verify();
      * 
      * popup.setExpectedFirstClickCalls(1); }
      * 
-     * private MouseEvent createMouseEvent(final int x, final int y, final int count, final int button) { return new
-     * MouseEvent(COMPONENT, 0, 0, button, x, y, count, false); }
+     * private MouseEvent createMouseEvent(final int x, final int y, final int
+     * count, final int button) { return new MouseEvent(COMPONENT, 0, 0, button,
+     * x, y, count, false); }
      */
 }

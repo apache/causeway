@@ -35,8 +35,7 @@ class EntityCollectionTab extends TabAbstract<EntityCollectionModel> {
     public EntityCollectionTab(final String id, final EntityCollectionModel entityCollectionModel) {
         super(id, entityCollectionModel);
 
-        getComponentFactoryRegistry().addOrReplaceComponent(this, ID_ENTITY_COLLECTION,
-            ComponentType.COLLECTION_CONTENTS, entityCollectionModel);
+        getComponentFactoryRegistry().addOrReplaceComponent(this, ID_ENTITY_COLLECTION, ComponentType.COLLECTION_CONTENTS, entityCollectionModel);
     }
 
 }

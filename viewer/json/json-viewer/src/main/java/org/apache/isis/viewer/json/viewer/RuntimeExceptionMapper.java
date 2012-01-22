@@ -36,22 +36,18 @@ import com.google.common.collect.Lists;
 public class RuntimeExceptionMapper implements ExceptionMapper<RuntimeException> {
 
     @Override
-    public Response toResponse(RuntimeException ex) {
-        ResponseBuilder builder = 
-                Response.status(HttpStatusCode.INTERNAL_SERVER_ERROR.getJaxrsStatusType())
-                .type(RestfulMediaType.APPLICATION_JSON_ERROR)
-                .entity(jsonFor(ex));
+    public Response toResponse(final RuntimeException ex) {
+        final ResponseBuilder builder = Response.status(HttpStatusCode.INTERNAL_SERVER_ERROR.getJaxrsStatusType()).type(RestfulMediaType.APPLICATION_JSON_ERROR).entity(jsonFor(ex));
         return builder.build();
     }
 
-
     private static class ExceptionPojo {
 
-        public static ExceptionPojo create(Exception ex) {
+        public static ExceptionPojo create(final Exception ex) {
             return new ExceptionPojo(ex);
         }
 
-        private static String format(StackTraceElement stackTraceElement) {
+        private static String format(final StackTraceElement stackTraceElement) {
             return stackTraceElement.toString();
         }
 
@@ -59,43 +55,43 @@ public class RuntimeExceptionMapper implements ExceptionMapper<RuntimeException>
         private final List<String> stackTrace = Lists.newArrayList();
         private ExceptionPojo causedBy;
 
-        public ExceptionPojo(Throwable ex) {
+        public ExceptionPojo(final Throwable ex) {
             this.message = messageFor(ex);
-            StackTraceElement[] stackTraceElements = ex.getStackTrace();
-            for (StackTraceElement stackTraceElement : stackTraceElements) {
+            final StackTraceElement[] stackTraceElements = ex.getStackTrace();
+            for (final StackTraceElement stackTraceElement : stackTraceElements) {
                 this.stackTrace.add(format(stackTraceElement));
             }
-            Throwable cause = ex.getCause();
-            if(cause != null && cause != ex) {
+            final Throwable cause = ex.getCause();
+            if (cause != null && cause != ex) {
                 this.causedBy = new ExceptionPojo(cause);
             }
         }
 
-        private static String messageFor(Throwable ex) {
+        private static String messageFor(final Throwable ex) {
             final String message = ex.getMessage();
-            return message!=null?message:ex.getClass().getName();
+            return message != null ? message : ex.getClass().getName();
         }
 
         @SuppressWarnings("unused")
         public String getMessage() {
             return message;
         }
-        
+
         @SuppressWarnings("unused")
         public List<String> getStackTrace() {
             return stackTrace;
         }
-        
+
         @SuppressWarnings("unused")
         public ExceptionPojo getCausedBy() {
             return causedBy;
         }
     }
-    
-    static String jsonFor(Exception ex) {
+
+    static String jsonFor(final Exception ex) {
         try {
             return JsonMapper.instance().write(ExceptionPojo.create(ex));
-        } catch (Exception e) {
+        } catch (final Exception e) {
             // fallback
             return "{ \"exception\": \"" + ExceptionUtils.getFullStackTrace(ex) + "\" }";
         }

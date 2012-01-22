@@ -19,17 +19,18 @@
 
 package org.apache.isis.viewer.wicket.ui;
 
+import org.apache.isis.viewer.wicket.model.util.Strings;
 import org.apache.wicket.Component;
 
-import org.apache.isis.viewer.wicket.model.util.Strings;
-
 /**
- * Enumerates the different types of {@link Component}s that can be constructed using {@link ComponentFactory}.
+ * Enumerates the different types of {@link Component}s that can be constructed
+ * using {@link ComponentFactory}.
  * 
  * <p>
- * Some are fine-grained (such as {@link ComponentType#SCALAR_NAME_AND_VALUE}, a panel to represent a single scalar
- * property or parameter), but others are somewhat larger (such as {@link ComponentType#ENTITY}, representing an entity,
- * with its actions, properties and collections).
+ * Some are fine-grained (such as {@link ComponentType#SCALAR_NAME_AND_VALUE}, a
+ * panel to represent a single scalar property or parameter), but others are
+ * somewhat larger (such as {@link ComponentType#ENTITY}, representing an
+ * entity, with its actions, properties and collections).
  */
 public enum ComponentType {
 
@@ -41,7 +42,8 @@ public enum ComponentType {
      * List of services and their actions.
      * 
      * <p>
-     * Could be rendered using a JavaScript or DHTML menu, an accordion, or a tree view.
+     * Could be rendered using a JavaScript or DHTML menu, an accordion, or a
+     * tree view.
      */
     APPLICATION_ACTIONS,
     /**
@@ -73,8 +75,9 @@ public enum ComponentType {
      */
     SCALAR_NAME_AND_VALUE,
     /**
-     * The name and contents of a single collection of an entity; {@link Component}s are expected to use
-     * {@link #COLLECTION_CONTENTS} to actually render the contents.
+     * The name and contents of a single collection of an entity;
+     * {@link Component}s are expected to use {@link #COLLECTION_CONTENTS} to
+     * actually render the contents.
      */
     COLLECTION_NAME_AND_CONTENTS,
     /**
@@ -82,19 +85,23 @@ public enum ComponentType {
      */
     PARAMETERS,
     /**
-     * Info details for an action, eg to display the target, a resubmit button, any description or help text, and so on.
+     * Info details for an action, eg to display the target, a resubmit button,
+     * any description or help text, and so on.
      */
     ACTION_INFO,
     /**
      * Used for two different (but related) types of components:
      * <ul>
-     * <li>For a menu panel, to display list of available actions ('find using').</li>
-     * <li>The parameters or results of an action; the model indicates which to display.</li>
+     * <li>For a menu panel, to display list of available actions ('find
+     * using').</li>
+     * <li>The parameters or results of an action; the model indicates which to
+     * display.</li>
      * </ul>
      * 
      * <p>
-     * If showing results, then provides a level of indirection around another view (eg {@link #ACTION_PARAMETERS},
-     * {@link #ENTITY} or {@link #COLLECTION_NAME_AND_CONTENTS}).
+     * If showing results, then provides a level of indirection around another
+     * view (eg {@link #ACTION_PARAMETERS}, {@link #ENTITY} or
+     * {@link #COLLECTION_NAME_AND_CONTENTS}).
      */
     ACTION,
     /**
@@ -115,7 +122,8 @@ public enum ComponentType {
     VOID_RETURN;
 
     /**
-     * Returns the {@link #name()} formatted as {@link Strings#camelCase(String) camel case}.
+     * Returns the {@link #name()} formatted as
+     * {@link Strings#camelCase(String) camel case}.
      * 
      * <p>
      * For example, <tt>OBJECT_EDIT</tt> becomes <tt>objectEdit</tt>.

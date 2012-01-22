@@ -42,8 +42,7 @@ public class TextParseableParameterImpl extends AbstractTextParsableContent impl
     private final ActionHelper invocation;
     private final int index;
 
-    public TextParseableParameterImpl(final ParseableEntryActionParameter objectActionParameters,
-        final ObjectAdapter adapter, final ObjectAdapter[] options, final int i, final ActionHelper invocation) {
+    public TextParseableParameterImpl(final ParseableEntryActionParameter objectActionParameters, final ObjectAdapter adapter, final ObjectAdapter[] options, final int i, final ActionHelper invocation) {
         this.parameter = objectActionParameters;
         this.options = options;
         index = i;

@@ -188,8 +188,7 @@ public abstract class AbstractView implements View {
 
         debug.appendln("Self", getView());
         debug.appendln("Parent's size", getParent() == null ? new Size() : getParent().getSize());
-        debug.appendln("Size w/in parent",
-            getView().getRequiredSize(getParent() == null ? new Size() : getParent().getSize()));
+        debug.appendln("Size w/in parent", getView().getRequiredSize(getParent() == null ? new Size() : getParent().getSize()));
         debug.appendln("Location w/in parent", getView().getLocation());
         debug.appendln("Changable", canChangeValue());
         debug.appendln("Focus", (canFocus() ? "focusable" : "non-focusable"));
@@ -216,8 +215,10 @@ public abstract class AbstractView implements View {
         debug.appendln();
 
         debug.appendTitle("View structure");
-        // b.appendln("Built", (buildInvalid ? "no" : "yes") + ", " + buildCount + " builds");
-        // b.appendln("Laid out", (layoutInvalid ? "no" : "yes") + ", " + layoutCount + " layouts");
+        // b.appendln("Built", (buildInvalid ? "no" : "yes") + ", " + buildCount
+        // + " builds");
+        // b.appendln("Laid out", (layoutInvalid ? "no" : "yes") + ", " +
+        // layoutCount + " layouts");
 
         debug.appendln(getSpecification().getName().toUpperCase());
         debugStructure(debug);
@@ -306,7 +307,8 @@ public abstract class AbstractView implements View {
     }
 
     /**
-     * Clears the background of this view to the given color (call from the {@link #draw(Canvas)} method.
+     * Clears the background of this view to the given color (call from the
+     * {@link #draw(Canvas)} method.
      */
     protected void clearBackground(final Canvas canvas, final Color color) {
         final Bounds bounds = getBounds();
@@ -316,8 +318,7 @@ public abstract class AbstractView implements View {
     @Override
     public void draw(final Canvas canvas) {
         if (Toolkit.debug) {
-            canvas.drawDebugOutline(new Bounds(getSize()), getBaseline(),
-                Toolkit.getColor(ColorsAndFonts.COLOR_DEBUG_BOUNDS_VIEW));
+            canvas.drawDebugOutline(new Bounds(getSize()), getBaseline(), Toolkit.getColor(ColorsAndFonts.COLOR_DEBUG_BOUNDS_VIEW));
         }
     }
 
@@ -423,7 +424,8 @@ public abstract class AbstractView implements View {
 
     @Override
     public final View getParent() {
-        // Assert.assertEquals(parent == null ? null : parent.getView(), parent);
+        // Assert.assertEquals(parent == null ? null : parent.getView(),
+        // parent);
         // return parent;
 
         return parent == null ? null : parent.getView();
@@ -529,8 +531,8 @@ public abstract class AbstractView implements View {
     }
 
     /**
-     * Limits the bounds of the this view (when being moved or dropped) so it never extends outside the specified bounds
-     * e.g. outside of a parent view
+     * Limits the bounds of the this view (when being moved or dropped) so it
+     * never extends outside the specified bounds e.g. outside of a parent view
      */
     public void limitBoundsWithin(final Bounds containerBounds) {
         final Bounds contentBounds = getView().getBounds();
@@ -680,7 +682,8 @@ public abstract class AbstractView implements View {
     }
 
     /**
-     * Sets the location and size view the {@link #setLocation(Location)) and {@link #setSize(Size)) methods.
+     * Sets the location and size view the {@link #setLocation(Location)) and
+     * {@link #setSize(Size)) methods.
      */
     @Override
     public void setBounds(final Bounds bounds) {
@@ -778,7 +781,8 @@ public abstract class AbstractView implements View {
         addContentMenuItems(options, content);
         addNewViewMenuItems(options, content);
 
-        // TODO ask the viewer for the print option - provided by the underlying system
+        // TODO ask the viewer for the print option - provided by the underlying
+        // system
         // options.add(new PrintOption());
 
         addViewDebugMenuItems(options);
@@ -832,8 +836,9 @@ public abstract class AbstractView implements View {
                 public void execute(final Workspace workspace, final View view, final Location at) {
                     Properties.setStringOption("view.object-default", getSpecification().getName());
                     /*
-                     * Options viewOptions = Properties.getViewConfigurationOptions(getSpecification());
-                     * getView().saveOptions(viewOptions);
+                     * Options viewOptions =
+                     * Properties.getViewConfigurationOptions
+                     * (getSpecification()); getView().saveOptions(viewOptions);
                      */
                 }
             });
@@ -844,8 +849,9 @@ public abstract class AbstractView implements View {
                 public void execute(final Workspace workspace, final View view, final Location at) {
                     Properties.setStringOption("view.collection-default", getSpecification().getName());
                     /*
-                     * Options viewOptions = Properties.getViewConfigurationOptions(getSpecification());
-                     * getView().saveOptions(viewOptions);
+                     * Options viewOptions =
+                     * Properties.getViewConfigurationOptions
+                     * (getSpecification()); getView().saveOptions(viewOptions);
                      */
                 }
             });
@@ -856,16 +862,16 @@ public abstract class AbstractView implements View {
                 public void execute(final Workspace workspace, final View view, final Location at) {
                     Properties.setStringOption("view.icon-default", getSpecification().getName());
                     /*
-                     * Options viewOptions = Properties.getViewConfigurationOptions(getSpecification());
-                     * getView().saveOptions(viewOptions);
+                     * Options viewOptions =
+                     * Properties.getViewConfigurationOptions
+                     * (getSpecification()); getView().saveOptions(viewOptions);
                      */
                 }
             });
         }
 
         if (getContent() instanceof RootObject || getContent() instanceof RootCollection) {
-            options.add(new UserActionAbstract("Use as default view for "
-                + getContent().getSpecification().getSingularName(), ActionType.USER) {
+            options.add(new UserActionAbstract("Use as default view for " + getContent().getSpecification().getSingularName(), ActionType.USER) {
                 @Override
                 public void execute(final Workspace workspace, final View view, final Location at) {
                     final Options viewOptions = Properties.getViewConfigurationOptions(getSpecification());
@@ -879,13 +885,17 @@ public abstract class AbstractView implements View {
             });
         }
         /*
-         * options.add(new UserActionAbstract("Create new specification", UserAction.USER) { // TODO probably needs to
-         * be a replace with new view specification public void execute(final Workspace workspace, final View view,
-         * final Location at) { UserViewSpecification newSpec = new UserViewSpecification(getView()); Options
-         * viewOptions = Properties.getViewConfigurationOptions(newSpec); getView().saveOptions(viewOptions);
+         * options.add(new UserActionAbstract("Create new specification",
+         * UserAction.USER) { // TODO probably needs to be a replace with new
+         * view specification public void execute(final Workspace workspace,
+         * final View view, final Location at) { UserViewSpecification newSpec =
+         * new UserViewSpecification(getView()); Options viewOptions =
+         * Properties.getViewConfigurationOptions(newSpec);
+         * getView().saveOptions(viewOptions);
          * 
          * viewOptions = Properties.getUserViewSpecificationOptions(newSpec);
-         * viewOptions.addOption("wrapped-specification", getSpecification().getClass().getName());
+         * viewOptions.addOption("wrapped-specification",
+         * getSpecification().getClass().getName());
          * 
          * Toolkit.getViewFactory().addSpecification(newSpec); } });
          */
@@ -904,8 +914,7 @@ public abstract class AbstractView implements View {
     }
 
     private void createOpenAsSubmenu(final UserActionSet options, final Content content) {
-        final ViewRequirement requirements =
-            new ViewRequirement(content, ViewRequirement.OPEN | ViewRequirement.EXPANDABLE);
+        final ViewRequirement requirements = new ViewRequirement(content, ViewRequirement.OPEN | ViewRequirement.EXPANDABLE);
         final Enumeration possibleViews = Toolkit.getViewFactory().availableViews(requirements);
         if (possibleViews.hasMoreElements()) {
             final UserActionSet submenu = options.addNewActionSet("Open as");
@@ -971,6 +980,7 @@ public abstract class AbstractView implements View {
 
     @Override
     public void saveOptions(final Options viewOptions) {
-        // viewOptions.addOption("spec", getSpecification().getClass().getName());
+        // viewOptions.addOption("spec",
+        // getSpecification().getClass().getName());
     }
 }

@@ -65,8 +65,7 @@ public class ObjectFieldBuilder extends AbstractViewBuilder {
         LOG.debug("build view " + view + " for " + object);
 
         final ObjectSpecification spec = object.getSpecification();
-        final Filter<ObjectAssociation> filter =
-            ObjectAssociationFilters.dynamicallyVisible(IsisContext.getAuthenticationSession(), object);
+        final Filter<ObjectAssociation> filter = ObjectAssociationFilters.dynamicallyVisible(IsisContext.getAuthenticationSession(), object);
         final List<ObjectAssociation> flds = spec.getAssociations(filter);
 
         if (view.getSubviews().length == 0) {
@@ -76,8 +75,7 @@ public class ObjectFieldBuilder extends AbstractViewBuilder {
         }
     }
 
-    private void initialBuild(final View view, final Axes axes, final ObjectAdapter object,
-        final List<ObjectAssociation> flds) {
+    private void initialBuild(final View view, final Axes axes, final ObjectAdapter object, final List<ObjectAssociation> flds) {
         LOG.debug("  as new build");
         // addViewAxes(view);
         for (int f = 0; f < flds.size(); f++) {
@@ -86,23 +84,24 @@ public class ObjectFieldBuilder extends AbstractViewBuilder {
         }
     }
 
-    private void addField(final View view, final Axes axes, final ObjectAdapter object, final ObjectAssociation field,
-        final int fieldNumber) {
+    private void addField(final View view, final Axes axes, final ObjectAdapter object, final ObjectAssociation field, final int fieldNumber) {
         final View fieldView = createFieldView(view, axes, object, fieldNumber, field);
         if (fieldView != null) {
             view.addView(decorateSubview(axes, fieldView));
         }
     }
 
-    private void updateBuild(final View view, final Axes axes, final ObjectAdapter object,
-        final List<ObjectAssociation> flds) {
+    private void updateBuild(final View view, final Axes axes, final ObjectAdapter object, final List<ObjectAssociation> flds) {
         LOG.debug("  as update build");
         /*
-         * 1/ To remove fields: look through views and remove any that don't exists in visible fields
+         * 1/ To remove fields: look through views and remove any that don't
+         * exists in visible fields
          * 
-         * 2/ From remaining views, check for changes as already being done, and replace if needed
+         * 2/ From remaining views, check for changes as already being done, and
+         * replace if needed
          * 
-         * 3/ Finally look through fields to see if there is no existing subview; and add one
+         * 3/ Finally look through fields to see if there is no existing
+         * subview; and add one
          */
 
         View[] subviews = view.getSubviews();
@@ -132,7 +131,8 @@ public class ObjectFieldBuilder extends AbstractViewBuilder {
             } else if (field.isOneToOneAssociation()) {
                 final ObjectAdapter existing = subview.getContent().getAdapter();
 
-                // if the field is parseable then it may have been modified; we need to replace what was
+                // if the field is parseable then it may have been modified; we
+                // need to replace what was
                 // typed in with the actual title.
                 if (!field.getSpecification().isParseable()) {
                     final boolean changedValue = value != existing;
@@ -172,8 +172,7 @@ public class ObjectFieldBuilder extends AbstractViewBuilder {
         }
     }
 
-    private View createFieldView(final View view, final Axes axes, final ObjectAdapter object, final int fieldNumber,
-        final ObjectAssociation field) {
+    private View createFieldView(final View view, final Axes axes, final ObjectAdapter object, final int fieldNumber, final ObjectAssociation field) {
         if (field == null) {
             throw new NullPointerException();
         }

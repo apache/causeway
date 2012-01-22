@@ -36,8 +36,7 @@ class CollectionLink extends ComponentAbstract {
     private final String title;
     private final String description;
 
-    public CollectionLink(PathBuilder pathBuilder, final ObjectAssociation field, final ObjectAdapter collection,
-        final String description, final String objectId) {
+    public CollectionLink(final PathBuilder pathBuilder, final ObjectAssociation field, final ObjectAdapter collection, final String description, final String objectId) {
         super(pathBuilder);
         this.description = description;
         this.objectId = objectId;

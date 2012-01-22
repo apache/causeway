@@ -31,13 +31,13 @@ import org.apache.isis.viewer.html.image.ImageLookup;
 import org.apache.isis.viewer.html.request.Request;
 
 public class CollectionIcon implements Component {
-    
+
     private final ObjectAdapter collection;
     private final PathBuilder pathBuilder;
     private final String id;
     private final String description;
 
-    public CollectionIcon(PathBuilder pathBuilder, final ObjectAdapter element, final String description, final String id) {
+    public CollectionIcon(final PathBuilder pathBuilder, final ObjectAdapter element, final String description, final String id) {
         this.pathBuilder = pathBuilder;
         this.collection = element;
         this.description = description;
@@ -48,8 +48,7 @@ public class CollectionIcon implements Component {
     public void write(final PrintWriter writer) {
         final TypeOfFacet facet = collection.getSpecification().getFacet(TypeOfFacet.class);
         final Class<?> elementType = facet.value();
-        final ObjectSpecification elementSpecification =
-            IsisContext.getSpecificationLoader().loadSpecification(elementType);
+        final ObjectSpecification elementSpecification = IsisContext.getSpecificationLoader().loadSpecification(elementType);
 
         writer.print("<div class=\"item\">");
         writer.print("<a href=\"");

@@ -63,8 +63,7 @@ public class IconGraphic {
     public void draw(final Canvas canvas, final int x, final int baseline) {
         final int y = baseline - this.baseline + 1;
         if (Toolkit.debug) {
-            canvas.drawDebugOutline(new Bounds(new Location(x, y), getSize()), getBaseline(),
-                Toolkit.getColor(ColorsAndFonts.COLOR_DEBUG_BOUNDS_DRAW));
+            canvas.drawDebugOutline(new Bounds(new Location(x, y), getSize()), getBaseline(), Toolkit.getColor(ColorsAndFonts.COLOR_DEBUG_BOUNDS_DRAW));
         }
         final Image icon = icon();
         if (icon == null) {
@@ -87,8 +86,8 @@ public class IconGraphic {
     protected Image icon() {
         final String iconName = content.getIconName();
         /*
-         * If the graphic is based on a name provided by the object then the icon could be changed at any time, so we
-         * won't lazily load it.
+         * If the graphic is based on a name provided by the object then the
+         * icon could be changed at any time, so we won't lazily load it.
          */
         if (icon != null && (iconName == null || iconName.equals(lastIconName))) {
             return icon;

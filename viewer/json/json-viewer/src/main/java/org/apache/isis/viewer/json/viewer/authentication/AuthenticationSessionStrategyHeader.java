@@ -35,7 +35,8 @@ import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 
 /**
- * Implements a home-grown protocol, whereby the user id and roles are passed using custom headers.
+ * Implements a home-grown protocol, whereby the user id and roles are passed
+ * using custom headers.
  * 
  * <p>
  * Does not bind the {@link AuthenticationSession} onto the {@link HttpSession}.
@@ -57,7 +58,7 @@ public class AuthenticationSessionStrategyHeader extends AuthenticationSessionSt
 
     protected List<String> rolesFrom(final HttpServletRequest httpServletRequest) {
         final String rolesStr = httpServletRequest.getHeader("isis.roles");
-        if(rolesStr == null) {
+        if (rolesStr == null) {
             return Collections.emptyList();
         }
         return Lists.newArrayList(Splitter.on(",").split(rolesStr));

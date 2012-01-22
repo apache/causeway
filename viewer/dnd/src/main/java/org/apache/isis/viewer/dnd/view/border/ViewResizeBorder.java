@@ -27,8 +27,7 @@ import org.apache.isis.viewer.dnd.view.View;
 
 // TODO enhance so the direction of resizing can be specified (could limit to width on right, height on bottom, or width/height from corner
 public class ViewResizeBorder extends ResizeBorder {
-    public static final int BORDER_WIDTH = IsisContext.getConfiguration().getInteger(
-        Properties.PROPERTY_BASE + "tree-resize-border", 7);
+    public static final int BORDER_WIDTH = IsisContext.getConfiguration().getInteger(Properties.PROPERTY_BASE + "tree-resize-border", 7);
 
     private static ResizeViewRender render;
 

@@ -92,8 +92,7 @@ public class GridLayoutControlBorder extends AbstractBorder {
         super.loadOptions(viewOptions);
 
         final GridLayout layout = getViewAxes().getAxis(GridLayout.class);
-        layout.setOrientation(viewOptions.getString("orientation", "columns").equals("columns") ? GridLayout.COLUMNS
-            : GridLayout.ROWS);
+        layout.setOrientation(viewOptions.getString("orientation", "columns").equals("columns") ? GridLayout.COLUMNS : GridLayout.ROWS);
         layout.setSize(viewOptions.getInteger("size", 1));
     }
 }

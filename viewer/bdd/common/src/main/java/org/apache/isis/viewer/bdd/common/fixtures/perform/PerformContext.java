@@ -34,7 +34,8 @@ import org.apache.isis.viewer.bdd.common.fixtures.UsingIsisViewerPeer;
 import org.apache.isis.viewer.bdd.common.parsers.DateParser;
 
 /**
- * Represents the context for a single {@link Perform} command; in effect, a row of a table.
+ * Represents the context for a single {@link Perform} command; in effect, a row
+ * of a table.
  */
 public class PerformContext {
 
@@ -44,8 +45,7 @@ public class PerformContext {
     private final ObjectMember objectMember;
     private final List<ScenarioCell> argumentCells;
 
-    public PerformContext(final UsingIsisViewerPeer peer, final ObjectAdapter onAdapter,
-        final ObjectMember objectMember, final List<ScenarioCell> argumentCells) {
+    public PerformContext(final UsingIsisViewerPeer peer, final ObjectAdapter onAdapter, final ObjectMember objectMember, final List<ScenarioCell> argumentCells) {
         this.onAdapter = onAdapter;
         this.objectMember = objectMember;
         this.peer = peer;
@@ -81,24 +81,21 @@ public class PerformContext {
         return onAdapter.getSpecification().isValid(onAdapter);
     }
 
-    public void ensureVisible(final CellBinding onMemberBinding, final ScenarioCell onMemberCell)
-        throws ScenarioBoundValueException {
+    public void ensureVisible(final CellBinding onMemberBinding, final ScenarioCell onMemberCell) throws ScenarioBoundValueException {
         final Consent visible = objectMember.isVisible(getAuthenticationSession(), getOnAdapter());
         if (visible.isVetoed()) {
             throw ScenarioBoundValueException.current(onMemberBinding, "(not visible)");
         }
     }
 
-    public void ensureUsable(final CellBinding onMemberBinding, final ScenarioCell onMemberCell)
-        throws ScenarioBoundValueException {
+    public void ensureUsable(final CellBinding onMemberBinding, final ScenarioCell onMemberCell) throws ScenarioBoundValueException {
         final Consent usable = objectMember.isUsable(getAuthenticationSession(), getOnAdapter());
         if (usable.isVetoed()) {
             throw ScenarioBoundValueException.current(onMemberBinding, "(not usable)");
         }
     }
 
-    public void ensureAvailableForDeploymentType(final CellBinding onMemberBinding, final ScenarioCell onMemberCell)
-        throws ScenarioBoundValueException {
+    public void ensureAvailableForDeploymentType(final CellBinding onMemberBinding, final ScenarioCell onMemberCell) throws ScenarioBoundValueException {
         final DeploymentType deploymentType = this.peer.getDeploymentType();
 
         final boolean isExploration = objectMember.getFacet(ExplorationFacet.class) != null;

@@ -35,8 +35,9 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.log4j.Logger;
 
 /**
- * ImageLookup provides an efficient way of finding the most suitable image to use. It ensures that an image is always
- * available, providing a default image if needed. All requests are cached to improve performance.
+ * ImageLookup provides an efficient way of finding the most suitable image to
+ * use. It ensures that an image is always available, providing a default image
+ * if needed. All requests are cached to improve performance.
  */
 // TODO allow for multiple extension types
 public class ImageLookup {
@@ -124,8 +125,8 @@ public class ImageLookup {
     }
 
     /**
-     * For an object, the icon name from the object is return if it is not null, otherwise the specification is used to
-     * look up a suitable image name.
+     * For an object, the icon name from the object is return if it is not null,
+     * otherwise the specification is used to look up a suitable image name.
      * 
      * @param contextPath
      * 
@@ -133,8 +134,9 @@ public class ImageLookup {
      * @see #imagePath(ObjectSpecification)
      */
     /*
-     * public static String imagePath(ObjectAdapter object) { String iconName = object.getIconName(); if (iconName !=
-     * null) { return imagePath(iconName); } else { return imagePath(object.getSpecification()); } }
+     * public static String imagePath(ObjectAdapter object) { String iconName =
+     * object.getIconName(); if (iconName != null) { return imagePath(iconName);
+     * } else { return imagePath(object.getSpecification()); } }
      */
     public static String imagePath(final ObjectSpecification specification, final String contextPath) {
         final String name = specification.getShortIdentifier();
@@ -147,8 +149,9 @@ public class ImageLookup {
     }
 
     /*
-     * public static String imagePath(String name) { String imageName = (String) images.get(name); if (imageName !=
-     * null) { return (String) imageName; } else { String fileName = imageFile(name); return fileName == null ?
+     * public static String imagePath(String name) { String imageName = (String)
+     * images.get(name); if (imageName != null) { return (String) imageName; }
+     * else { String fileName = imageFile(name); return fileName == null ?
      * unknownImageFile : fileName; } }
      */
 

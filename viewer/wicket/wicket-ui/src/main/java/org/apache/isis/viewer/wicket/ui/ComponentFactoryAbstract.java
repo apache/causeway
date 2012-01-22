@@ -51,7 +51,8 @@ public abstract class ComponentFactoryAbstract implements ComponentFactory, Spec
     }
 
     /**
-     * Applies if {@link #getComponentType()} matches; disregards the provided {@link IModel}.
+     * Applies if {@link #getComponentType()} matches; disregards the provided
+     * {@link IModel}.
      * 
      * @see #appliesTo(IModel)
      */

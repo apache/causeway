@@ -71,8 +71,7 @@ public class PopupMenu extends AbstractView {
             return item;
         }
 
-        public static Item createOption(final UserAction action, final Object object, final View view,
-            final Location location) {
+        public static Item createOption(final UserAction action, final Object object, final View view, final Location location) {
             final Item item = new Item();
             if (action == null) {
                 item.isBlank = true;
@@ -248,8 +247,7 @@ public class PopupMenu extends AbstractView {
         simpleFocusManager = new SubviewFocusManager(this);
     }
 
-    private void addItems(final View target, final UserAction[] options, final int len, final Vector<Item> list,
-        final ActionType type) {
+    private void addItems(final View target, final UserAction[] options, final int len, final Vector<Item> list, final ActionType type) {
         final int initialSize = list.size();
         for (int i = 0; i < len; i++) {
             if (options[i].getType() == type) {
@@ -293,7 +291,8 @@ public class PopupMenu extends AbstractView {
         canvas.draw3DRectangle(0, 0, width, height, backgroundColor, true);
 
         final int itemHeight = style().getLineHeight() + VPADDING;
-        // int baseLine = itemHeight / 2 + style().getAscent() / 2 + getPadding().getTop();
+        // int baseLine = itemHeight / 2 + style().getAscent() / 2 +
+        // getPadding().getTop();
         int baseLine = style().getAscent() + getPadding().getTop() + 1;
         final int left = getPadding().getLeft();
         for (int i = 0; i < items.length; i++) {
@@ -310,7 +309,8 @@ public class PopupMenu extends AbstractView {
                     final int depth = style().getLineHeight() + 2;
                     canvas.drawSolidRectangle(2, top, width - 4, depth, backgroundColor.darker());
                     canvas.draw3DRectangle(2, top, width - 4, depth + 1, backgroundColor.brighter(), false);
-                    // canvas.drawText(items[i].name, left, baseLine, normalColor(), style());
+                    // canvas.drawText(items[i].name, left, baseLine,
+                    // normalColor(), style());
 
                     color = reversedColor();
                 } else {
@@ -329,7 +329,8 @@ public class PopupMenu extends AbstractView {
             baseLine += itemHeight;
         }
 
-        // canvas.drawRectangleAround(this, Toolkit.getColor(ColorsAndFonts.COLOR_DEBUG_BOUNDS_VIEW));
+        // canvas.drawRectangleAround(this,
+        // Toolkit.getColor(ColorsAndFonts.COLOR_DEBUG_BOUNDS_VIEW));
     }
 
     @Override
@@ -494,15 +495,19 @@ public class PopupMenu extends AbstractView {
     }
 
     /*
-     * @Override public void layout(final Size maximumSize) { coreSize = new Bounds(getCoreRequiredSize());
+     * @Override public void layout(final Size maximumSize) { coreSize = new
+     * Bounds(getCoreRequiredSize());
      * 
-     * final int option = getOption(); final int itemHeight = style().getLineHeight() + VPADDING; int menuWidth =
-     * coreSize.getWidth(); // Location menuLocation = new Location(menuWidth - 4, itemHeight * option); Location
-     * menuLocation = new Location(0, itemHeight * option);
+     * final int option = getOption(); final int itemHeight =
+     * style().getLineHeight() + VPADDING; int menuWidth = coreSize.getWidth();
+     * // Location menuLocation = new Location(menuWidth - 4, itemHeight *
+     * option); Location menuLocation = new Location(0, itemHeight * option);
      * 
-     * if (submenu != null) { submenu.layout(maximumSize); submenu.setLocation(menuLocation);
+     * if (submenu != null) { submenu.layout(maximumSize);
+     * submenu.setLocation(menuLocation);
      * 
-     * //coreSize.setX(submenu.getSize().getWidth() - 4); //getLocation() } setSize(getMaximumSize()); }
+     * //coreSize.setX(submenu.getSize().getWidth() - 4); //getLocation() }
+     * setSize(getMaximumSize()); }
      */
     public View makeView(final ObjectAdapter object, final ObjectAssociation field) throws CloneNotSupportedException {
         throw new RuntimeException();
@@ -515,7 +520,8 @@ public class PopupMenu extends AbstractView {
         } else {
             getParent().markDamaged();
         }
-        // markDamaged(new Bounds(getAbsoluteLocation(), getSize())); ///getView().getBounds());
+        // markDamaged(new Bounds(getAbsoluteLocation(), getSize()));
+        // ///getView().getBounds());
     }
 
     @Override
@@ -589,8 +595,7 @@ public class PopupMenu extends AbstractView {
 
     @Override
     public String toString() {
-        return "PopupMenu [location=" + getLocation() + ",item=" + optionIdentified + ",itemCount="
-            + (items == null ? 0 : items.length) + "]";
+        return "PopupMenu [location=" + getLocation() + ",item=" + optionIdentified + ",itemCount=" + (items == null ? 0 : items.length) + "]";
     }
 
     protected boolean transparentBackground() {

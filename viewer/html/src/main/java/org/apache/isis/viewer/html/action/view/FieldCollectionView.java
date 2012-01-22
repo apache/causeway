@@ -31,8 +31,7 @@ import org.apache.isis.viewer.html.request.Request;
 
 public class FieldCollectionView extends ObjectViewAbstract {
     @Override
-    protected void doExecute(final Context context, final ViewPane content, final ObjectAdapter object,
-        final String field) {
+    protected void doExecute(final Context context, final ViewPane content, final ObjectAdapter object, final String field) {
         final String id = context.mapObject(object);
         final ObjectSpecification specification = object.getSpecification();
 

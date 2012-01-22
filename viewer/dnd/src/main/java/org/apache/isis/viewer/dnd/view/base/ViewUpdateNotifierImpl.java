@@ -173,10 +173,7 @@ public class ViewUpdateNotifierImpl implements ViewUpdateNotifier {
             removeViews(viewsForObject);
             final Vector<View> remainingViews = viewListByAdapter.get(objectToDispose);
             if (remainingViews != null && remainingViews.size() > 0) {
-                getMessageBroker().addWarning(
-                    "There are still views (within other views) for the disposed object "
-                        + objectToDispose.titleString()
-                        + ".  Only objects that are shown as root views can be properly disposed of");
+                getMessageBroker().addWarning("There are still views (within other views) for the disposed object " + objectToDispose.titleString() + ".  Only objects that are shown as root views can be properly disposed of");
             } else {
                 getAdapterManager().removeAdapter(objectToDispose);
             }

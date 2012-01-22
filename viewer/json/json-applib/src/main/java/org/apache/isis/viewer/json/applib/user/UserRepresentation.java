@@ -22,13 +22,12 @@ import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.applib.domainobjects.DomainRepresentation;
 import org.codehaus.jackson.JsonNode;
 
-
 public class UserRepresentation extends DomainRepresentation {
 
-    public UserRepresentation(JsonNode jsonNode) {
+    public UserRepresentation(final JsonNode jsonNode) {
         super(jsonNode);
     }
-    
+
     public String getUserName() {
         return getString("userName");
     }

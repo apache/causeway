@@ -29,8 +29,9 @@ import org.apache.wicket.markup.html.WebPage;
  * Enumerates the different types of pages that can be rendered.
  * 
  * <p>
- * Is used by {@link PageClassRegistry} to lookup the concrete page to render different types of pages. This allows the
- * large-scale structure of page layout (eg headers, footers) to be altered.
+ * Is used by {@link PageClassRegistry} to lookup the concrete page to render
+ * different types of pages. This allows the large-scale structure of page
+ * layout (eg headers, footers) to be altered.
  */
 public enum PageType {
     SIGN_IN(WebPage.class), HOME(HomePage.class), ENTITY(EntityPage.class), ACTION(ActionPage.class);
@@ -46,10 +47,12 @@ public enum PageType {
     }
 
     /**
-     * The class that pages registered against this page type must be assignable from (ie have as their superclass).
+     * The class that pages registered against this page type must be assignable
+     * from (ie have as their superclass).
      * 
      * <p>
-     * This allows us to perform fail-fast checking when pages are registered, rather than when they are used.
+     * This allows us to perform fail-fast checking when pages are registered,
+     * rather than when they are used.
      */
     public Class<? extends Page> getPageClass() {
         return superClass;

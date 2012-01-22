@@ -33,15 +33,15 @@ import org.apache.isis.viewer.dnd.view.View;
 import org.apache.isis.viewer.dnd.view.Workspace;
 
 /**
- * Options for an underlying object determined dynamically by looking for methods starting with action, veto and option
- * for specifying the action, vetoing the option and giving the option an name respectively.
+ * Options for an underlying object determined dynamically by looking for
+ * methods starting with action, veto and option for specifying the action,
+ * vetoing the option and giving the option an name respectively.
  */
 public class DialoggedObjectOption extends AbstractObjectOption {
     public static DialoggedObjectOption createOption(final ObjectAction action, final ObjectAdapter object) {
         final int paramCount = action.getParameterCount();
         Assert.assertTrue("Only for actions taking one or more params", paramCount > 0);
-        if (!action.isVisible(IsisContext.getAuthenticationSession(), object).isAllowed()
-            || !action.isVisible(IsisContext.getAuthenticationSession(), object).isAllowed()) {
+        if (!action.isVisible(IsisContext.getAuthenticationSession(), object).isAllowed() || !action.isVisible(IsisContext.getAuthenticationSession(), object).isAllowed()) {
             return null;
         }
 
@@ -60,8 +60,7 @@ public class DialoggedObjectOption extends AbstractObjectOption {
             public void execute() {
                 final ActionHelper helper = ActionHelper.createInstance(target, action);
                 Content content;
-                if (target == null && action.getOnType().isService() || target != null
-                    && target.getSpecification().isNotCollection()) {
+                if (target == null && action.getOnType().isService() || target != null && target.getSpecification().isNotCollection()) {
                     content = new ObjectActionContent(helper);
                 } else if (target.getSpecification().isCollection()) {
                     content = new CollectionActionContent(helper);

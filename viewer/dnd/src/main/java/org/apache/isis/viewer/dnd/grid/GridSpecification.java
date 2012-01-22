@@ -104,9 +104,9 @@ class ColumnLabelBorder extends AbstractBorder {
         final int top = subview.getPadding().getTop();
         for (final View view : subview.getSubviews()) {
             final String fieldName = ((FieldContent) view.getContent()).getFieldName();
-            canvas.drawText(fieldName + ":", 0, view.getLocation().getY() + top + view.getBaseline(),
-                Toolkit.getColor(ColorsAndFonts.COLOR_PRIMARY1), Toolkit.getText(ColorsAndFonts.TEXT_LABEL));
-            // canvas.drawRectangle(0, view.getLocation().getY() + top, 80, 10, Toolkit.getColor("primary1"));
+            canvas.drawText(fieldName + ":", 0, view.getLocation().getY() + top + view.getBaseline(), Toolkit.getColor(ColorsAndFonts.COLOR_PRIMARY1), Toolkit.getText(ColorsAndFonts.TEXT_LABEL));
+            // canvas.drawRectangle(0, view.getLocation().getY() + top, 80, 10,
+            // Toolkit.getColor("primary1"));
         }
 
         super.draw(canvas);

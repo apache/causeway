@@ -29,7 +29,6 @@ import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.scimpi.dispatcher.ScimpiException;
 import org.apache.log4j.Logger;
 
-
 public class DebugUsers {
 
     private static Logger LOG = Logger.getLogger(DebugUsers.class);
@@ -46,18 +45,18 @@ public class DebugUsers {
             throw new ScimpiException("Debug mode is already set up!");
         }
 
-        String debugUserEntry = IsisContext.getConfiguration().getString(ConfigurationConstants.ROOT + "scimpi.debug.users", "");
-        String[] users = debugUserEntry.split("\\|");
-        for (String name : users) {
+        final String debugUserEntry = IsisContext.getConfiguration().getString(ConfigurationConstants.ROOT + "scimpi.debug.users", "");
+        final String[] users = debugUserEntry.split("\\|");
+        for (final String name : users) {
             debugUsers.add(name.trim());
         }
 
-        String debugModeEntry = IsisContext.getConfiguration().getString(ConfigurationConstants.ROOT + "scimpi.debug.mode");
+        final String debugModeEntry = IsisContext.getConfiguration().getString(ConfigurationConstants.ROOT + "scimpi.debug.mode");
         if (debugModeEntry != null) {
             try {
                 debugMode = DebugMode.valueOf(debugModeEntry.toUpperCase());
                 LOG.info("Debug mode set to " + debugMode);
-            } catch (IllegalArgumentException e) {
+            } catch (final IllegalArgumentException e) {
                 LOG.error("Invalid debug mode - " + debugModeEntry + " - mode set to OFF");
                 debugMode = DebugMode.OFF;
             }
@@ -78,7 +77,7 @@ public class DebugUsers {
     }
 
     public List<String> getNames() {
-        ArrayList<String> users = new ArrayList<String>(debugUsers);
+        final ArrayList<String> users = new ArrayList<String>(debugUsers);
         Collections.sort(users);
         return users;
     }

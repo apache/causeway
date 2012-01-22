@@ -31,7 +31,8 @@ import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.model.util.ListModel;
 
 /**
- * Top level panel for a CSS menu, consisting of a number of unparented {@link CssMenuItem}s.
+ * Top level panel for a CSS menu, consisting of a number of unparented
+ * {@link CssMenuItem}s.
  * 
  * <p>
  * The {@link Style} enum allows the presentation to be altered.

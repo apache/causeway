@@ -32,8 +32,7 @@ class HistogramBar extends ObjectView {
     private static final int colors[] = new int[] { 0xccccff, 0x99ff99, 0xffccff };
     private final HistogramAxis histogramAxis;
 
-    protected HistogramBar(final Content content, final HistogramAxis histogramAxis,
-        final ViewSpecification specification) {
+    protected HistogramBar(final Content content, final HistogramAxis histogramAxis, final ViewSpecification specification) {
         super(content, specification);
         this.histogramAxis = histogramAxis;
     }

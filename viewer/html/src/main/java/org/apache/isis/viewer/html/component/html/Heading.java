@@ -28,11 +28,11 @@ public class Heading extends ComponentAbstract {
     private final String title;
     private final int level;
 
-    public Heading(PathBuilder pathBuilder, final String title) {
+    public Heading(final PathBuilder pathBuilder, final String title) {
         this(pathBuilder, title, 1);
     }
 
-    public Heading(PathBuilder pathBuilder, final String title, final int level) {
+    public Heading(final PathBuilder pathBuilder, final String title, final int level) {
         super(pathBuilder);
         this.title = title;
         this.level = level;

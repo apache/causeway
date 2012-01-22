@@ -43,33 +43,21 @@ import org.apache.isis.viewer.json.applib.util.Parser;
 import org.apache.isis.viewer.json.applib.version.VersionRepresentation;
 
 public enum RepresentationType {
-    
-    HOME_PAGE(RestfulMediaType.APPLICATION_JSON_HOME_PAGE, HomePageRepresentation.class),
-    USER(RestfulMediaType.APPLICATION_JSON_USER, UserRepresentation.class),
-    VERSION(RestfulMediaType.APPLICATION_JSON_VERSION, VersionRepresentation.class),
-    LIST(RestfulMediaType.APPLICATION_JSON_LIST, ListRepresentation.class),
-    SCALAR_VALUE(RestfulMediaType.APPLICATION_JSON_SCALAR_VALUE, ScalarValueRepresentation.class),
-    DOMAIN_OBJECT(RestfulMediaType.APPLICATION_JSON_DOMAIN_OBJECT, DomainObjectRepresentation.class),
-    TRANSIENT_DOMAIN_OBJECT(RestfulMediaType.APPLICATION_JSON_TRANSIENT_DOMAIN_OBJECT, TransientDomainObjectRepresentation.class),
-    OBJECT_PROPERTY(RestfulMediaType.APPLICATION_JSON_OBJECT_PROPERTY, ObjectPropertyRepresentation.class),
-    OBJECT_COLLECTION(RestfulMediaType.APPLICATION_JSON_OBJECT_COLLECTION, ObjectCollectionRepresentation.class),
-    OBJECT_ACTION(RestfulMediaType.APPLICATION_JSON_OBJECT_ACTION, ObjectActionRepresentation.class),
-    ACTION_RESULT(RestfulMediaType.APPLICATION_JSON_ACTION_RESULT, ActionResultRepresentation.class),
-    TYPE_LIST(RestfulMediaType.APPLICATION_JSON_TYPE_LIST, TypeListRepresentation.class),
-    DOMAIN_TYPE(RestfulMediaType.APPLICATION_JSON_DOMAIN_TYPE, DomainTypeRepresentation.class),
-    PROPERTY_DESCRIPTION(RestfulMediaType.APPLICATION_JSON_PROPERTY_DESCRIPTION, PropertyDescriptionRepresentation.class),
-    COLLECTION_DESCRIPTION(RestfulMediaType.APPLICATION_JSON_COLLECTION_DESCRIPTION, CollectionDescriptionRepresentation.class),
-    ACTION_DESCRIPTION(RestfulMediaType.APPLICATION_JSON_ACTION_DESCRIPTION, ActionDescriptionRepresentation.class),
-    ACTION_PARAMETER_DESCRIPTION(RestfulMediaType.APPLICATION_JSON_ACTION_PARAMETER_DESCRIPTION, ActionParameterDescriptionRepresentation.class), 
-    TYPE_ACTION_RESULT(RestfulMediaType.APPLICATION_JSON_TYPE_ACTION_RESULT, TypeActionResultRepresentation.class), 
-    ERROR(RestfulMediaType.APPLICATION_JSON_ERROR, ErrorRepresentation.class),
-    GENERIC(MediaType.APPLICATION_JSON, JsonRepresentation.class); 
-    
+
+    HOME_PAGE(RestfulMediaType.APPLICATION_JSON_HOME_PAGE, HomePageRepresentation.class), USER(RestfulMediaType.APPLICATION_JSON_USER, UserRepresentation.class), VERSION(RestfulMediaType.APPLICATION_JSON_VERSION, VersionRepresentation.class), LIST(RestfulMediaType.APPLICATION_JSON_LIST,
+            ListRepresentation.class), SCALAR_VALUE(RestfulMediaType.APPLICATION_JSON_SCALAR_VALUE, ScalarValueRepresentation.class), DOMAIN_OBJECT(RestfulMediaType.APPLICATION_JSON_DOMAIN_OBJECT, DomainObjectRepresentation.class), TRANSIENT_DOMAIN_OBJECT(
+            RestfulMediaType.APPLICATION_JSON_TRANSIENT_DOMAIN_OBJECT, TransientDomainObjectRepresentation.class), OBJECT_PROPERTY(RestfulMediaType.APPLICATION_JSON_OBJECT_PROPERTY, ObjectPropertyRepresentation.class), OBJECT_COLLECTION(RestfulMediaType.APPLICATION_JSON_OBJECT_COLLECTION,
+            ObjectCollectionRepresentation.class), OBJECT_ACTION(RestfulMediaType.APPLICATION_JSON_OBJECT_ACTION, ObjectActionRepresentation.class), ACTION_RESULT(RestfulMediaType.APPLICATION_JSON_ACTION_RESULT, ActionResultRepresentation.class), TYPE_LIST(
+            RestfulMediaType.APPLICATION_JSON_TYPE_LIST, TypeListRepresentation.class), DOMAIN_TYPE(RestfulMediaType.APPLICATION_JSON_DOMAIN_TYPE, DomainTypeRepresentation.class), PROPERTY_DESCRIPTION(RestfulMediaType.APPLICATION_JSON_PROPERTY_DESCRIPTION, PropertyDescriptionRepresentation.class), COLLECTION_DESCRIPTION(
+            RestfulMediaType.APPLICATION_JSON_COLLECTION_DESCRIPTION, CollectionDescriptionRepresentation.class), ACTION_DESCRIPTION(RestfulMediaType.APPLICATION_JSON_ACTION_DESCRIPTION, ActionDescriptionRepresentation.class), ACTION_PARAMETER_DESCRIPTION(
+            RestfulMediaType.APPLICATION_JSON_ACTION_PARAMETER_DESCRIPTION, ActionParameterDescriptionRepresentation.class), TYPE_ACTION_RESULT(RestfulMediaType.APPLICATION_JSON_TYPE_ACTION_RESULT, TypeActionResultRepresentation.class), ERROR(RestfulMediaType.APPLICATION_JSON_ERROR,
+            ErrorRepresentation.class), GENERIC(MediaType.APPLICATION_JSON, JsonRepresentation.class);
+
     private final String name;
     private final MediaType mediaType;
     private final Class<? extends JsonRepresentation> representationClass;
-    
-    private RepresentationType(String mediaTypeStr, Class<? extends JsonRepresentation> representationClass) {
+
+    private RepresentationType(final String mediaTypeStr, final Class<? extends JsonRepresentation> representationClass) {
         this.representationClass = representationClass;
         this.name = Enums.enumToCamelCase(this);
         this.mediaType = MediaType.valueOf(mediaTypeStr);
@@ -78,7 +66,7 @@ public enum RepresentationType {
     public String getName() {
         return name;
     }
-    
+
     public final MediaType getMediaType() {
         return mediaType;
     }
@@ -90,36 +78,37 @@ public enum RepresentationType {
     public Class<? extends JsonRepresentation> getRepresentationClass() {
         return representationClass;
     }
-    
-    public static RepresentationType lookup(String name) {
-        for(RepresentationType representationType: values()) {
+
+    public static RepresentationType lookup(final String name) {
+        for (final RepresentationType representationType : values()) {
             if (representationType.getName().equals(name)) {
                 return representationType;
             }
         }
         return RepresentationType.GENERIC;
     }
-    
-    public static RepresentationType lookup(MediaType mediaType) {
-        for(RepresentationType representationType: values()) {
+
+    public static RepresentationType lookup(final MediaType mediaType) {
+        for (final RepresentationType representationType : values()) {
             if (representationType.getMediaType().equals(mediaType)) {
                 return representationType;
             }
         }
         return RepresentationType.GENERIC;
     }
-    
+
     public static Parser<RepresentationType> parser() {
         return new Parser<RepresentationType>() {
             @Override
-            public RepresentationType valueOf(String str) {
+            public RepresentationType valueOf(final String str) {
                 return RepresentationType.lookup(str);
             }
+
             @Override
-            public String asString(RepresentationType t) {
+            public String asString(final RepresentationType t) {
                 return t.getName();
             }
         };
     }
-    
+
 }

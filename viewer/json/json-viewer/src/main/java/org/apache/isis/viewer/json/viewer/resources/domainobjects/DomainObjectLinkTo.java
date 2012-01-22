@@ -29,25 +29,24 @@ public class DomainObjectLinkTo implements ObjectAdapterLinkTo {
     protected ObjectAdapter objectAdapter;
 
     @Override
-    public final DomainObjectLinkTo usingResourceContext(ResourceContext resourceContext) {
+    public final DomainObjectLinkTo usingResourceContext(final ResourceContext resourceContext) {
         this.resourceContext = resourceContext;
         return this;
     }
 
     @Override
-    public ObjectAdapterLinkTo with(ObjectAdapter objectAdapter) {
+    public ObjectAdapterLinkTo with(final ObjectAdapter objectAdapter) {
         this.objectAdapter = objectAdapter;
         return this;
     }
 
-    
     @Override
     public LinkBuilder builder() {
         return builder(null);
     }
 
     @Override
-    public LinkBuilder builder(Rel rel) {
+    public LinkBuilder builder(final Rel rel) {
         final LinkBuilder linkBuilder = LinkBuilder.newBuilder(resourceContext, relElseDefault(rel), RepresentationType.DOMAIN_OBJECT, linkRef());
         linkBuilder.withTitle(objectAdapter.titleString());
         return linkBuilder;
@@ -57,18 +56,18 @@ public class DomainObjectLinkTo implements ObjectAdapterLinkTo {
      * hook method
      */
     protected String linkRef() {
-        if(resourceContext == null) {
+        if (resourceContext == null) {
             throw new IllegalStateException("resourceContext not provided");
         }
-        if(objectAdapter == null) {
+        if (objectAdapter == null) {
             throw new IllegalStateException("objectAdapter not provided");
         }
-        StringBuilder buf = new StringBuilder("objects/");
+        final StringBuilder buf = new StringBuilder("objects/");
         buf.append(resourceContext.getOidStringifier().enString(objectAdapter.getOid()));
         return buf.toString();
     }
 
-    private Rel relElseDefault(Rel rel) {
+    private Rel relElseDefault(final Rel rel) {
         return rel != null ? rel : defaultRel();
     }
 
@@ -80,23 +79,22 @@ public class DomainObjectLinkTo implements ObjectAdapterLinkTo {
     }
 
     @Override
-    public final LinkBuilder memberBuilder(Rel rel, MemberType memberType, ObjectMember objectMember, String... parts) {
+    public final LinkBuilder memberBuilder(final Rel rel, final MemberType memberType, final ObjectMember objectMember, final String... parts) {
         return memberBuilder(rel, memberType, objectMember, memberType.getRepresentationType(), parts);
     }
 
     @Override
-    public final LinkBuilder memberBuilder(Rel rel, MemberType memberType, ObjectMember objectMember, RepresentationType representationType, String... parts) {
-        StringBuilder buf = new StringBuilder(linkRef());
+    public final LinkBuilder memberBuilder(final Rel rel, final MemberType memberType, final ObjectMember objectMember, final RepresentationType representationType, final String... parts) {
+        final StringBuilder buf = new StringBuilder(linkRef());
         buf.append("/").append(memberType.getUrlPart()).append(objectMember.getId());
-        for(String part: parts) {
-            if(part == null) {
+        for (final String part : parts) {
+            if (part == null) {
                 continue;
             }
             buf.append("/").append(part);
         }
-        String url = buf.toString();
+        final String url = buf.toString();
         return LinkBuilder.newBuilder(resourceContext, rel, representationType, url);
     }
-    
 
 }

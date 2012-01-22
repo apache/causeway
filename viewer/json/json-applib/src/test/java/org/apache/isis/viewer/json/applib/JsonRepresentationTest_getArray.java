@@ -40,17 +40,17 @@ public class JsonRepresentationTest_getArray {
     public void setUp() throws Exception {
         jsonRepresentation = new JsonRepresentation(readJson("map.json"));
     }
-    
+
     @Test
     public void nonEmptyArray() throws JsonParseException, JsonMappingException, IOException {
-        JsonRepresentation array = jsonRepresentation.getArray("aStringArray");
+        final JsonRepresentation array = jsonRepresentation.getArray("aStringArray");
         assertThat(array, is(not(nullValue())));
         assertThat(array.size(), is(3));
     }
 
     @Test
     public void emptyArray() throws JsonParseException, JsonMappingException, IOException {
-        JsonRepresentation array = jsonRepresentation.getArray("anEmptyArray");
+        final JsonRepresentation array = jsonRepresentation.getArray("anEmptyArray");
         assertThat(array, is(not(nullValue())));
         assertThat(array.size(), is(0));
     }
@@ -65,7 +65,7 @@ public class JsonRepresentationTest_getArray {
         try {
             jsonRepresentation.getArray("aString");
             fail();
-        } catch (IllegalArgumentException e) {
+        } catch (final IllegalArgumentException e) {
             assertThat(e.getMessage(), is("'aString' is not an array"));
         }
     }
@@ -75,9 +75,9 @@ public class JsonRepresentationTest_getArray {
         try {
             jsonRepresentation.getArray("aSubMap");
             fail();
-        } catch (IllegalArgumentException e) {
+        } catch (final IllegalArgumentException e) {
             assertThat(e.getMessage(), is("'aSubMap' is not an array"));
         }
     }
-    
+
 }

@@ -25,14 +25,17 @@ import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.selector.SelectorPanelAbstract;
 
 /**
- * Provides a drop-down for selecting other views that support {@link ComponentType#COLLECTION_CONTENTS} with a backing
+ * Provides a drop-down for selecting other views that support
+ * {@link ComponentType#COLLECTION_CONTENTS} with a backing
  * {@link EntityCollectionModel}.
  * 
  * <p>
- * Most of the heavy lifting is factored out into the superclass, {@link SelectorPanelAbstract}.
+ * Most of the heavy lifting is factored out into the superclass,
+ * {@link SelectorPanelAbstract}.
  * 
  * <p>
- * Note that this class is {@link ComponentFactoryListDefault registered} prior to any other views.
+ * Note that this class is {@link ComponentFactoryListDefault registered} prior
+ * to any other views.
  */
 public class CollectionContentsSelector extends SelectorPanelAbstract<EntityCollectionModel> {
 

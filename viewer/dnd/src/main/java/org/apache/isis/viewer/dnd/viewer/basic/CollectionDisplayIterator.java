@@ -36,7 +36,8 @@ public interface CollectionDisplayIterator {
     public int getDisplaySize();
 
     /**
-     * If true there is a next page to display, and 'next' and 'last' options are valid
+     * If true there is a next page to display, and 'next' and 'last' options
+     * are valid
      */
     public boolean hasNext();
 

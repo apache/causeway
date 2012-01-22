@@ -45,8 +45,7 @@ public class ImageProviderDirectoryBasedReworked extends ImageProviderAbstract {
                     final String nameWithoutExtension = name.substring(0, dot);
                     final String nameExtension = name.substring(dot + 1);
                     for (final String extension : extensions) {
-                        if (nameWithoutExtension.equalsIgnoreCase(imageName)
-                            && nameExtension.equalsIgnoreCase(extension)) {
+                        if (nameWithoutExtension.equalsIgnoreCase(imageName) && nameExtension.equalsIgnoreCase(extension)) {
                             return true;
                         }
                     }

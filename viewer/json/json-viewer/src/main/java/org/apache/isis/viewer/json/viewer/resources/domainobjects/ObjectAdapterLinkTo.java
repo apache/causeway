@@ -28,14 +28,15 @@ import org.apache.isis.viewer.json.viewer.representations.LinkBuilder;
 public interface ObjectAdapterLinkTo {
 
     ObjectAdapterLinkTo usingResourceContext(ResourceContext resourceContext);
-    
+
     ObjectAdapterLinkTo with(ObjectAdapter objectAdapter);
 
     LinkBuilder builder();
+
     LinkBuilder builder(Rel rel);
 
     LinkBuilder memberBuilder(Rel rel, MemberType memberType, ObjectMember objectMember, String... parts);
-    LinkBuilder memberBuilder(Rel rel, MemberType memberType, ObjectMember objectMember, RepresentationType representationType, String... parts);
 
+    LinkBuilder memberBuilder(Rel rel, MemberType memberType, ObjectMember objectMember, RepresentationType representationType, String... parts);
 
 }

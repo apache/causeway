@@ -25,8 +25,9 @@ import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 
 /**
- * {@link FeedbackPanel} designed for forms; filters out any {@link FeedbackMessage}s from {@link FormComponent}s (the
- * idea being that they will have their own {@link FeedbackPanel}s.
+ * {@link FeedbackPanel} designed for forms; filters out any
+ * {@link FeedbackMessage}s from {@link FormComponent}s (the idea being that
+ * they will have their own {@link FeedbackPanel}s.
  */
 public class FormFeedbackPanel extends FeedbackPanel {
     private static final long serialVersionUID = 1L;

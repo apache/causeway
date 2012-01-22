@@ -24,8 +24,8 @@ import java.util.List;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 
 /**
- * Backing model for actions of application services menu bar (typically, as displayed along the top or side of the
- * page).
+ * Backing model for actions of application services menu bar (typically, as
+ * displayed along the top or side of the page).
  */
 public class ApplicationActionsModel extends ModelAbstract<List<ObjectAdapter>> {
 

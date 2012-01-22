@@ -27,16 +27,15 @@ public final class OidUtils {
     private OidUtils() {
     }
 
-    public static ObjectAdapter getObjectAdapter(ResourceContext resourceContext, final String oidEncodedStr) {
+    public static ObjectAdapter getObjectAdapter(final ResourceContext resourceContext, final String oidEncodedStr) {
         final String oidStr = UrlDecoderUtils.urlDecode(oidEncodedStr);
         final Oid oid = resourceContext.getOidStringifier().deString(oidStr);
         return resourceContext.getAdapterManager().getAdapterFor(oid);
     }
 
-    public static String getOidStr(ResourceContext resourceContext, final ObjectAdapter objectAdapter) {
+    public static String getOidStr(final ResourceContext resourceContext, final ObjectAdapter objectAdapter) {
         final Oid oid = objectAdapter.getOid();
         return oid != null ? resourceContext.getOidStringifier().enString(oid) : null;
     }
-
 
 }

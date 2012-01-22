@@ -22,9 +22,9 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 
 public class ParentSpecAndProperty extends ParentSpecAndFeature<OneToOneAssociation> {
-    
-    public ParentSpecAndProperty(ObjectSpecification objectSpecification, OneToOneAssociation property) {
+
+    public ParentSpecAndProperty(final ObjectSpecification objectSpecification, final OneToOneAssociation property) {
         super(objectSpecification, property);
     }
-    
+
 }

@@ -33,11 +33,11 @@ import org.apache.isis.viewer.html.context.Context;
 import org.apache.isis.viewer.html.request.Request;
 
 /**
- * Represents a task that the user is working through. Is used for both editing objects and setting up parameters for an
- * action method.
+ * Represents a task that the user is working through. Is used for both editing
+ * objects and setting up parameters for an action method.
  */
 public abstract class Task {
-    
+
     private static int nextID = 1;
     private int[] boundaries;
     private final String description;
@@ -60,8 +60,7 @@ public abstract class Task {
     protected final int[] typicalLength;
     protected final int id = nextID++;
 
-    public Task(final Context context, final String name, final String description, final ObjectAdapter target,
-        final int noFields) {
+    public Task(final Context context, final String name, final String description, final ObjectAdapter target, final int noFields) {
         this.name = name;
         this.description = description;
         targetId = context.mapObject(target);
@@ -145,10 +144,8 @@ public abstract class Task {
         debug.appendln("fields (" + names.length + ")");
         debug.indent();
         for (int i = 0; i < names.length; i++) {
-            final String status =
-                (readOnly[i] ? "R" : "-") + (optional[i] ? "O" : "M") + (errors[i] == null ? "-" : "E");
-            debug.appendln("    " + i + "  " + names[i] + " (" + status + "):  "
-                + fieldSpecifications[i].getFullIdentifier() + " -> " + entryText[i]);
+            final String status = (readOnly[i] ? "R" : "-") + (optional[i] ? "O" : "M") + (errors[i] == null ? "-" : "E");
+            debug.appendln("    " + i + "  " + names[i] + " (" + status + "):  " + fieldSpecifications[i].getFullIdentifier() + " -> " + entryText[i]);
         }
         debug.unindent();
         debug.unindent();
@@ -351,10 +348,10 @@ public abstract class Task {
                 continue;
             }
             final ObjectSpecification spec = fieldSpecifications[i];
-            // deal with check boxes specially: expect 'true' if checked and no entry if not checked, hence
+            // deal with check boxes specially: expect 'true' if checked and no
+            // entry if not checked, hence
             // need to set as 'false'
-            if (spec.isOfType(IsisContext.getSpecificationLoader().loadSpecification(boolean.class))
-                || spec.isOfType(IsisContext.getSpecificationLoader().loadSpecification(Boolean.class))) {
+            if (spec.isOfType(IsisContext.getSpecificationLoader().loadSpecification(boolean.class)) || spec.isOfType(IsisContext.getSpecificationLoader().loadSpecification(Boolean.class))) {
                 if (textEntry == null || !textEntry.equals("true")) {
                     textEntry = "false";
                 }
@@ -378,8 +375,9 @@ public abstract class Task {
         if (spec.isParseable()) {
             if (textEntry == null) {
                 return;
-            } 
-            // REVIEW this block uses the existing adapter as it contains the regex needed. This needs to
+            }
+            // REVIEW this block uses the existing adapter as it contains the
+            // regex needed. This needs to
             // be reviewed in line with Dan's proposed changes to the reflector.
             final ObjectAdapter valueAdapter = initialState[i];
             final ParseableFacet parser = spec.getFacet(ParseableFacet.class);

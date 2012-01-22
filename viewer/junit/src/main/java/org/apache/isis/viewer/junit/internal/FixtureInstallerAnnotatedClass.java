@@ -43,7 +43,8 @@ public class FixtureInstallerAnnotatedClass extends FixturesInstallerAbstract {
     // ///////////////////////////////////////////
 
     /**
-     * Just copies the fixtures added using {@link #addFixturesAnnotatedOn(Class)} into the delegate.
+     * Just copies the fixtures added using
+     * {@link #addFixturesAnnotatedOn(Class)} into the delegate.
      */
     @Override
     protected void addFixturesTo(final FixturesInstallerDelegate delegate) {
@@ -57,11 +58,12 @@ public class FixtureInstallerAnnotatedClass extends FixturesInstallerAbstract {
     // ///////////////////////////////////////////
 
     /**
-     * Should be called prior to installing; typically called immediately after instantiation.
+     * Should be called prior to installing; typically called immediately after
+     * instantiation.
      * 
      * <p>
-     * Note: an alternative design would be to have a 1-arg constructor, but the convention for installers is to make
-     * them no-arg.
+     * Note: an alternative design would be to have a 1-arg constructor, but the
+     * convention for installers is to make them no-arg.
      */
     public void addFixturesAnnotatedOn(final Class<?> javaClass) throws InstantiationException, IllegalAccessException {
         final Fixtures fixturesAnnotation = javaClass.getAnnotation(Fixtures.class);
@@ -78,8 +80,7 @@ public class FixtureInstallerAnnotatedClass extends FixturesInstallerAbstract {
         }
     }
 
-    private void addFixtureRepresentedBy(final Fixture fixtureAnnotation, final List<Object> fixtures)
-        throws InstantiationException, IllegalAccessException {
+    private void addFixtureRepresentedBy(final Fixture fixtureAnnotation, final List<Object> fixtures) throws InstantiationException, IllegalAccessException {
         final Class<?> fixtureClass = fixtureAnnotation.value();
         fixtures.add(fixtureClass.newInstance());
     }

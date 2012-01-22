@@ -72,8 +72,7 @@ public class FormWithTableSpecification extends SplitViewSpecification {
         final ObjectSpecification spec = content.getSpecification();
         final ObjectAdapter target = content.getAdapter();
         final AuthenticationSession session = IsisContext.getAuthenticationSession();
-        final List<ObjectAssociation> fields =
-            spec.getAssociations(ObjectAssociationFilters.dynamicallyVisible(session, target));
+        final List<ObjectAssociation> fields = spec.getAssociations(ObjectAssociationFilters.dynamicallyVisible(session, target));
         for (final ObjectAssociation field : fields) {
             if (field.isOneToManyAssociation()) {
                 return Toolkit.getContentFactory().createFieldContent(field, target);
@@ -84,15 +83,20 @@ public class FormWithTableSpecification extends SplitViewSpecification {
 
     /*
      * 
-     * @Override protected void init() { addSubviewDecorator(new FieldLabelsDecorator() { public View decorate(Axes
-     * axes, View view) { if (view.getContent().isCollection()) { return view; } else { return super.decorate(axes,
-     * view); } } }); addViewDecorator(new IconBorder.Factory()); }
+     * @Override protected void init() { addSubviewDecorator(new
+     * FieldLabelsDecorator() { public View decorate(Axes axes, View view) { if
+     * (view.getContent().isCollection()) { return view; } else { return
+     * super.decorate(axes, view); } } }); addViewDecorator(new
+     * IconBorder.Factory()); }
      * 
-     * @Override protected SubviewSpec createFieldFactory() { return new SubviewSpec() { public View createView(final
-     * Content content, Axes axes, int sequence) { if (content.isCollection()) { return new
-     * InternalTableSpecification().createView(content, axes, sequence); } else { final ViewFactory factory =
-     * Toolkit.getViewFactory(); int requirement = ViewRequirement.CLOSED | ViewRequirement.SUBVIEW; ViewRequirement
-     * viewRequirement = new ViewRequirement(content, requirement); return factory.createView(viewRequirement); } } }; }
+     * @Override protected SubviewSpec createFieldFactory() { return new
+     * SubviewSpec() { public View createView(final Content content, Axes axes,
+     * int sequence) { if (content.isCollection()) { return new
+     * InternalTableSpecification().createView(content, axes, sequence); } else
+     * { final ViewFactory factory = Toolkit.getViewFactory(); int requirement =
+     * ViewRequirement.CLOSED | ViewRequirement.SUBVIEW; ViewRequirement
+     * viewRequirement = new ViewRequirement(content, requirement); return
+     * factory.createView(viewRequirement); } } }; }
      */
     @Override
     public String getName() {

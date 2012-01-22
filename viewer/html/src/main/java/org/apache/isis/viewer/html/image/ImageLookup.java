@@ -24,11 +24,12 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 /**
- * ImageLookup provides an efficient way of finding the most suitable image to use.
+ * ImageLookup provides an efficient way of finding the most suitable image to
+ * use.
  * 
  * <p>
- * It ensures that an image is always available, providing a default image if needed. All requests are cached to improve
- * performance.
+ * It ensures that an image is always available, providing a default image if
+ * needed. All requests are cached to improve performance.
  */
 // TODO allow for multiple extension types
 public class ImageLookup {

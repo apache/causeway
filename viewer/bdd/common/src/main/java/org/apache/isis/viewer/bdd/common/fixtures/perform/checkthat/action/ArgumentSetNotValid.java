@@ -54,8 +54,7 @@ public class ArgumentSetNotValid extends ThatSubcommandAbstract {
         }
 
         // lookup arguments
-        final ObjectAdapter[] proposedArguments =
-            performContext.getPeer().getAdapters(onAdapter, nakedObjectAction, onMemberBinding, argumentCells);
+        final ObjectAdapter[] proposedArguments = performContext.getPeer().getAdapters(onAdapter, nakedObjectAction, onMemberBinding, argumentCells);
 
         // validate arguments
         final Consent argSetValid = nakedObjectAction.isProposedArgumentSetValid(onAdapter, proposedArguments);

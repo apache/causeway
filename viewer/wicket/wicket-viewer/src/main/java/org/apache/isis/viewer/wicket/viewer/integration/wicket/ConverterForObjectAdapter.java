@@ -30,15 +30,16 @@ import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessi
 import org.apache.wicket.util.convert.IConverter;
 
 /**
- * Implementation of a Wicket {@link IConverter} for {@link ObjectAdapter}s, converting to-and-from their {@link Oid}'s
- * string representation.
+ * Implementation of a Wicket {@link IConverter} for {@link ObjectAdapter}s,
+ * converting to-and-from their {@link Oid}'s string representation.
  */
 public class ConverterForObjectAdapter implements IConverter {
 
     private static final long serialVersionUID = 1L;
 
     /**
-     * Converts {@link OidStringifier stringified} {@link Oid} to {@link ObjectAdapter}.
+     * Converts {@link OidStringifier stringified} {@link Oid} to
+     * {@link ObjectAdapter}.
      */
     @Override
     public Object convertToObject(final String value, final Locale locale) {
@@ -47,7 +48,8 @@ public class ConverterForObjectAdapter implements IConverter {
     }
 
     /**
-     * Converts {@link ObjectAdapter} to {@link OidStringifier stringified} {@link Oid}.
+     * Converts {@link ObjectAdapter} to {@link OidStringifier stringified}
+     * {@link Oid}.
      */
     @Override
     public String convertToString(final Object object, final Locale locale) {

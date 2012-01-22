@@ -25,14 +25,16 @@ import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.selector.SelectorPanelAbstract;
 
 /**
- * Provides a drop-down for selecting other views that support {@link ComponentType#ENTITY} with a backing
- * {@link EntityModel}.
+ * Provides a drop-down for selecting other views that support
+ * {@link ComponentType#ENTITY} with a backing {@link EntityModel}.
  * 
  * <p>
- * Most of the heavy lifting is factored out into the superclass, {@link SelectorPanelAbstract}.
+ * Most of the heavy lifting is factored out into the superclass,
+ * {@link SelectorPanelAbstract}.
  * 
  * <p>
- * Note that this class should be registered (in <tt>ComponentFactoryListDefault</tt>) prior to any other views.
+ * Note that this class should be registered (in
+ * <tt>ComponentFactoryListDefault</tt>) prior to any other views.
  */
 public class EntitySelector extends SelectorPanelAbstract<EntityModel> {
 

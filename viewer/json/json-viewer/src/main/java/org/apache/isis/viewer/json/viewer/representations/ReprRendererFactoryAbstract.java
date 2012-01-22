@@ -24,15 +24,13 @@ public abstract class ReprRendererFactoryAbstract implements RendererFactory {
 
     private final RepresentationType representationType;
 
-    public ReprRendererFactoryAbstract(RepresentationType representationType) {
+    public ReprRendererFactoryAbstract(final RepresentationType representationType) {
         this.representationType = representationType;
     }
-    
+
     @Override
     public RepresentationType getRepresentationType() {
         return representationType;
     }
 
-
-    
 }

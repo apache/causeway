@@ -31,8 +31,7 @@ public interface BorderDrawing {
 
     public abstract void layoutControls(final Size size, View[] controls);
 
-    public abstract void draw(final Canvas canvas, Size s, boolean hasFocus, final ViewState state, View[] controls,
-        String title);
+    public abstract void draw(final Canvas canvas, Size s, boolean hasFocus, final ViewState state, View[] controls, String title);
 
     public abstract void drawTransientMarker(Canvas canvas, Size size);
 

@@ -35,7 +35,7 @@ public class RepresentationTypeTest_getName_lookup {
 
     @Test
     public void roundtrip() {
-        for (RepresentationType repType : RepresentationType.values()) {
+        for (final RepresentationType repType : RepresentationType.values()) {
             final String name = repType.getName();
             final RepresentationType lookup = RepresentationType.lookup(name);
             assertSame(repType, lookup);
@@ -49,7 +49,7 @@ public class RepresentationTypeTest_getName_lookup {
 
     @Test
     public void lookup_whenNull() {
-        assertThat(RepresentationType.lookup((String)null), is(RepresentationType.GENERIC));
+        assertThat(RepresentationType.lookup((String) null), is(RepresentationType.GENERIC));
     }
 
 }

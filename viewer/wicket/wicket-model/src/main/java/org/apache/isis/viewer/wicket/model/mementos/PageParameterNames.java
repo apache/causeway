@@ -37,27 +37,31 @@ public enum PageParameterNames {
      */
     OBJECT_SPEC,
     /**
-     * The object's {@link Oid} (only used if the object is {@link #OBJECT_PERSISTENT persistent}.
+     * The object's {@link Oid} (only used if the object is
+     * {@link #OBJECT_PERSISTENT persistent}.
      */
     OBJECT_OID,
     /**
      * Owning type of an action.
      * 
      * <p>
-     * Whereas {@link #OBJECT_SPEC} is the concrete runtime type of the adapter, the owning type could be some
-     * superclass if the action has been inherited.
+     * Whereas {@link #OBJECT_SPEC} is the concrete runtime type of the adapter,
+     * the owning type could be some superclass if the action has been
+     * inherited.
      */
     ACTION_OWNING_SPEC, ACTION_TYPE, ACTION_NAME_PARMS, ACTION_MODE, ACTION_SINGLE_RESULTS_MODE,
     /**
      * The argument acting as a context for a contributed action, if any.
      * 
      * <p>
-     * In the format N=OBJECT_OID, where N is the 0-based action parameter index.
+     * In the format N=OBJECT_OID, where N is the 0-based action parameter
+     * index.
      */
     ACTION_PARAM_CONTEXT;
 
     /**
-     * Returns the {@link #name()} formatted as {@link Strings#camelCase(String) camel case}.
+     * Returns the {@link #name()} formatted as
+     * {@link Strings#camelCase(String) camel case}.
      * 
      * <p>
      * For example, <tt>ACTION_TYPE</tt> becomes <tt>actionType</tt>.

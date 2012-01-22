@@ -35,15 +35,13 @@ public class DebuggerLink extends AbstractElementProcessor {
         final RequestContext context = request.getContext();
         final Object result = context.getVariable(RequestContext.RESULT);
         request.appendHtml("<div class=\"debug\">");
-        request
-            .appendHtml("<a class=\"debug-link\" href=\"/debug/debug.shtml\" target=\"debug\" title=\"debug\" >...</a>");
+        request.appendHtml("<a class=\"debug-link\" href=\"/debug/debug.shtml\" target=\"debug\" title=\"debug\" >...</a>");
         if (result != null) {
-            request.appendHtml(" <a href=\"/debug/object.shtml?_result=" + result
-                + "\" target=\"debug\"  title=\"debug instance\">...</a>");
+            request.appendHtml(" <a href=\"/debug/object.shtml?_result=" + result + "\" target=\"debug\"  title=\"debug instance\">...</a>");
         }
         request.appendHtml(" <span class=\"debug-link\" onclick=\"$('#page-debug').toggle()\" alt=\"show/hide debug details\">...</span>");
         request.appendHtml("</div>");
-        
+
         request.processUtilCloseTag();
     }
 

@@ -87,8 +87,8 @@ public class ProductRepository extends AbstractFactoryAndRepository {
      * Creates a new still transient product.
      * 
      * <p>
-     * For use by tests only. Using this rather than {@link Customer} since {@link Product} has a
-     * {@link Product#validate()} method.
+     * For use by tests only. Using this rather than {@link Customer} since
+     * {@link Product} has a {@link Product#validate()} method.
      * 
      * @return
      */

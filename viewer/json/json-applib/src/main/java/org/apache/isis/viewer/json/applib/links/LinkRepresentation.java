@@ -18,9 +18,7 @@
  */
 package org.apache.isis.viewer.json.applib.links;
 
-
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 
 import org.apache.isis.viewer.json.applib.ClientRequestConfigurer;
 import org.apache.isis.viewer.json.applib.HttpMethod;
@@ -32,23 +30,22 @@ import org.codehaus.jackson.node.JsonNodeFactory;
 import org.codehaus.jackson.node.ObjectNode;
 import org.jboss.resteasy.client.ClientExecutor;
 
-
 public final class LinkRepresentation extends JsonRepresentation {
-    
+
     public LinkRepresentation() {
         this(new ObjectNode(JsonNodeFactory.instance));
         withMethod(HttpMethod.GET);
     }
 
-    public LinkRepresentation(JsonNode jsonNode) {
+    public LinkRepresentation(final JsonNode jsonNode) {
         super(jsonNode);
     }
 
     public String getRel() {
         return asObjectNode().path("rel").getTextValue();
     }
-    
-    public LinkRepresentation withRel(String rel) {
+
+    public LinkRepresentation withRel(final String rel) {
         asObjectNode().put("rel", rel);
         return this;
     }
@@ -56,7 +53,8 @@ public final class LinkRepresentation extends JsonRepresentation {
     public String getHref() {
         return asObjectNode().path("href").getTextValue();
     }
-    public LinkRepresentation withHref(String href) {
+
+    public LinkRepresentation withHref(final String href) {
         asObjectNode().put("href", href);
         return this;
     }
@@ -68,24 +66,26 @@ public final class LinkRepresentation extends JsonRepresentation {
     public String getTitle() {
         return getString("title");
     }
+
     public LinkRepresentation withTitle(final String title) {
         asObjectNode().put("title", title);
         return this;
     }
 
     public HttpMethod getHttpMethod() {
-        String methodStr = asObjectNode().path("method").getTextValue();
+        final String methodStr = asObjectNode().path("method").getTextValue();
         return HttpMethod.valueOf(methodStr);
     }
 
     public MediaType getType() {
-        String typeStr = asObjectNode().path("type").getTextValue();
-        if(typeStr == null) { return MediaType.APPLICATION_JSON_TYPE; }
+        final String typeStr = asObjectNode().path("type").getTextValue();
+        if (typeStr == null) {
+            return MediaType.APPLICATION_JSON_TYPE;
+        }
         return MediaType.valueOf(typeStr);
     }
 
-
-    public LinkRepresentation withMethod(HttpMethod httpMethod) {
+    public LinkRepresentation withMethod(final HttpMethod httpMethod) {
         asObjectNode().put("method", httpMethod.name());
         return this;
     }
@@ -94,35 +94,36 @@ public final class LinkRepresentation extends JsonRepresentation {
      * Returns the &quot;arguments&quot; json-property of the link (a map).
      * 
      * <p>
-     * If there is no &quot;arguments&quot; node, then as a convenience
-     * will return an empty map.
+     * If there is no &quot;arguments&quot; node, then as a convenience will
+     * return an empty map.
+     * 
      * @return
      */
     public JsonRepresentation getArguments() {
-        JsonNode arguments = asObjectNode().get("arguments");
-        if(arguments.isNull()) {
+        final JsonNode arguments = asObjectNode().get("arguments");
+        if (arguments.isNull()) {
             return JsonRepresentation.newMap();
         }
         return new JsonRepresentation(arguments);
     }
-    
-    public <T> RestfulResponse<JsonRepresentation> follow(ClientExecutor executor) throws Exception {
+
+    public <T> RestfulResponse<JsonRepresentation> follow(final ClientExecutor executor) throws Exception {
         return follow(executor, null);
     }
-    
-    public <T extends JsonRepresentation> RestfulResponse<T> follow(ClientExecutor executor, JsonRepresentation requestArgs) throws Exception {
-        
+
+    public <T extends JsonRepresentation> RestfulResponse<T> follow(final ClientExecutor executor, final JsonRepresentation requestArgs) throws Exception {
+
         final ClientRequestConfigurer clientRequestConfigurer = ClientRequestConfigurer.create(executor, getHref());
-        
+
         clientRequestConfigurer.accept(MediaType.APPLICATION_JSON_TYPE);
         clientRequestConfigurer.setHttpMethod(getHttpMethod());
-        
+
         clientRequestConfigurer.configureArgs(requestArgs);
-        
+
         final RestfulRequest restfulRequest = new RestfulRequest(clientRequestConfigurer);
         return restfulRequest.executeT();
     }
-    
+
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -133,21 +134,27 @@ public final class LinkRepresentation extends JsonRepresentation {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
+    public boolean equals(final Object obj) {
+        if (this == obj) {
             return true;
-        if (obj == null)
+        }
+        if (obj == null) {
             return false;
-        if (getClass() != obj.getClass())
+        }
+        if (getClass() != obj.getClass()) {
             return false;
-        LinkRepresentation other = (LinkRepresentation) obj;
+        }
+        final LinkRepresentation other = (LinkRepresentation) obj;
         if (getHref() == null) {
-            if (other.getHref() != null)
+            if (other.getHref() != null) {
                 return false;
-        } else if (!getHref().equals(other.getHref()))
+            }
+        } else if (!getHref().equals(other.getHref())) {
             return false;
-        if (getHttpMethod() != other.getHttpMethod())
+        }
+        if (getHttpMethod() != other.getHttpMethod()) {
             return false;
+        }
         return true;
     }
 
@@ -156,6 +163,4 @@ public final class LinkRepresentation extends JsonRepresentation {
         return "Link [rel=" + getRel() + ", href=" + getHref() + ", method=" + getHttpMethod() + ", type=" + getType() + "]";
     }
 
-
-    
 }

@@ -62,8 +62,7 @@ public class HistogramSpecification extends CompositeViewSpecification {
 
     @Override
     public boolean canDisplay(final ViewRequirement requirement) {
-        return requirement.isCollection() && requirement.isOpen()
-            && availableFields((CollectionContent) requirement.getContent()).size() > 0;
+        return requirement.isCollection() && requirement.isOpen() && availableFields((CollectionContent) requirement.getContent()).size() > 0;
     }
 
     @Override

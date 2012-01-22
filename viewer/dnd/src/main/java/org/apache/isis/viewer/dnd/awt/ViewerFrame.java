@@ -59,7 +59,8 @@ public class ViewerFrame extends Frame implements RenderingArea {
             e1.printStackTrace();
         } catch (final NoSuchMethodException ignore) {
             /*
-             * Ignore no such method exception as this method is only available, but needed, in version 1.4 and later.
+             * Ignore no such method exception as this method is only available,
+             * but needed, in version 1.4 and later.
              */
         } catch (final IllegalArgumentException e) {
             e.printStackTrace();
@@ -92,7 +93,8 @@ public class ViewerFrame extends Frame implements RenderingArea {
     }
 
     /**
-     * Paints the double-buffered image. Calls the <code>draw()</code> method on each top-level view.
+     * Paints the double-buffered image. Calls the <code>draw()</code> method on
+     * each top-level view.
      * 
      * @see java.awt.Component#update(Graphics)
      */

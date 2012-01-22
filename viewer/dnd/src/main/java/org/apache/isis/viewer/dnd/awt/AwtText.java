@@ -66,8 +66,7 @@ public class AwtText implements Text {
 
         ascentAdjust = cfg.getBoolean(ASCENT_ADJUST, false);
 
-        LOG.debug("font " + propertyName + " height=" + metrics.getHeight() + ", leading=" + metrics.getLeading()
-            + ", ascent=" + metrics.getAscent() + ", descent=" + metrics.getDescent() + ", line spacing=" + lineSpacing);
+        LOG.debug("font " + propertyName + " height=" + metrics.getHeight() + ", leading=" + metrics.getLeading() + ", ascent=" + metrics.getAscent() + ", descent=" + metrics.getDescent() + ", line spacing=" + lineSpacing);
     }
 
     @Override
@@ -174,7 +173,8 @@ public class AwtText implements Text {
     }
 
     // DKH: 20060404... yes, this will grow over time, but only used client-side
-    // RCM this is only a temporary solutions to help deal with titles, TODO move the caching up to the
+    // RCM this is only a temporary solutions to help deal with titles, TODO
+    // move the caching up to the
     // views/components that use this method
     private final java.util.Hashtable stringWidthByString = new java.util.Hashtable();
 
@@ -195,8 +195,8 @@ public class AwtText implements Text {
         if (stringWidth > text.length() * maxCharWidth) {
             LOG.debug("spurious width of string; calculating manually: " + stringWidth + " for " + this + ": " + text);
             /*
-             * This fixes an intermittent bug in .NET where stringWidth() returns a ridiculous number is returned for
-             * the width.
+             * This fixes an intermittent bug in .NET where stringWidth()
+             * returns a ridiculous number is returned for the width.
              * 
              * TODO don't do this when running Java
              */

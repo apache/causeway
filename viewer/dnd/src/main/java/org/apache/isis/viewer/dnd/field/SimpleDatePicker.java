@@ -62,13 +62,9 @@ public class SimpleDatePicker extends AbstractView implements DatePicker {
         }
     }
 
-    private static final Button[] buttons = new Button[] { new Button('W', Calendar.WEEK_OF_YEAR, 1),
-        new Button('F', Calendar.WEEK_OF_YEAR, 2), new Button('M', Calendar.MONTH, 1),
-        new Button('Q', Calendar.MONTH, 3), new Button('Y', Calendar.YEAR, 1), new Button('D', Calendar.YEAR, 10),
+    private static final Button[] buttons = new Button[] { new Button('W', Calendar.WEEK_OF_YEAR, 1), new Button('F', Calendar.WEEK_OF_YEAR, 2), new Button('M', Calendar.MONTH, 1), new Button('Q', Calendar.MONTH, 3), new Button('Y', Calendar.YEAR, 1), new Button('D', Calendar.YEAR, 10),
 
-        new Button('w', Calendar.WEEK_OF_YEAR, -1), new Button('f', Calendar.WEEK_OF_YEAR, -2),
-        new Button('m', Calendar.MONTH, -1), new Button('q', Calendar.MONTH, -3), new Button('y', Calendar.YEAR, -1),
-        new Button('d', Calendar.YEAR, -10) };
+    new Button('w', Calendar.WEEK_OF_YEAR, -1), new Button('f', Calendar.WEEK_OF_YEAR, -2), new Button('m', Calendar.MONTH, -1), new Button('q', Calendar.MONTH, -3), new Button('y', Calendar.YEAR, -1), new Button('d', Calendar.YEAR, -10) };
     private static final int ROWS = 7;
     private static final int COLUMNS = 7;
     private static final int PADDING = 5;
@@ -130,7 +126,8 @@ public class SimpleDatePicker extends AbstractView implements DatePicker {
     /*
      * (non-Javadoc)
      * 
-     * @see org.nakedobjects.plugins.dnd.field.DatePicker#getRequiredSize(org.nakedobjects.plugins.dnd.drawing.Size)
+     * @see org.nakedobjects.plugins.dnd.field.DatePicker#getRequiredSize(org.
+     * nakedobjects.plugins.dnd.drawing.Size)
      */
     @Override
     public Size getRequiredSize(final Size availableSpace) {
@@ -140,7 +137,9 @@ public class SimpleDatePicker extends AbstractView implements DatePicker {
     /*
      * (non-Javadoc)
      * 
-     * @see org.nakedobjects.plugins.dnd.field.DatePicker#draw(org.nakedobjects.plugins.dnd.drawing.Canvas)
+     * @see
+     * org.nakedobjects.plugins.dnd.field.DatePicker#draw(org.nakedobjects.plugins
+     * .dnd.drawing.Canvas)
      */
     @Override
     public void draw(final Canvas canvas) {
@@ -163,8 +162,7 @@ public class SimpleDatePicker extends AbstractView implements DatePicker {
     private void drawBackground(final Canvas canvas, final int width, final int height) {
         canvas.drawSolidRectangle(0, 0, width - 1, headerHeight, Toolkit.getColor(ColorsAndFonts.COLOR_SECONDARY1));
         canvas.drawSolidRectangle(0, 0, labelWidth, height - 1, Toolkit.getColor(ColorsAndFonts.COLOR_SECONDARY1));
-        canvas.drawSolidRectangle(labelWidth, headerHeight, width - labelWidth - 1, height - cellHeight - 1,
-            Toolkit.getColor(ColorsAndFonts.COLOR_WINDOW));
+        canvas.drawSolidRectangle(labelWidth, headerHeight, width - labelWidth - 1, height - cellHeight - 1, Toolkit.getColor(ColorsAndFonts.COLOR_WINDOW));
         canvas.drawRectangle(0, 0, width - 1, height - 1, Toolkit.getColor(ColorsAndFonts.COLOR_SECONDARY1));
     }
 
@@ -183,8 +181,7 @@ public class SimpleDatePicker extends AbstractView implements DatePicker {
 
     private void drawDayMarker(final Canvas canvas) {
         if (mouseOverColumn >= 0 && mouseOverColumn < COLUMNS && mouseOverRow >= 0 && mouseOverRow < ROWS) {
-            canvas.drawRectangle(labelWidth + mouseOverColumn * cellWidth, headerHeight + mouseOverRow * cellHeight,
-                cellWidth, cellHeight, Toolkit.getColor(ColorsAndFonts.COLOR_PRIMARY3));
+            canvas.drawRectangle(labelWidth + mouseOverColumn * cellWidth, headerHeight + mouseOverRow * cellHeight, cellWidth, cellHeight, Toolkit.getColor(ColorsAndFonts.COLOR_PRIMARY3));
         }
     }
 
@@ -218,12 +215,10 @@ public class SimpleDatePicker extends AbstractView implements DatePicker {
             for (int column = 0; column < COLUMNS; column++) {
                 final String day = "" + d.get(Calendar.DAY_OF_MONTH);
                 if (currentDate != null && currentDate.equals(d)) {
-                    canvas.drawSolidRectangle(x, headerHeight + row * cellHeight, cellWidth, cellHeight,
-                        Toolkit.getColor(ColorsAndFonts.COLOR_PRIMARY2));
+                    canvas.drawSolidRectangle(x, headerHeight + row * cellHeight, cellWidth, cellHeight, Toolkit.getColor(ColorsAndFonts.COLOR_PRIMARY2));
                 }
                 if (today.getTime().equals(d.getTime())) {
-                    canvas.drawRectangle(x, headerHeight + row * cellHeight, cellWidth, cellHeight,
-                        Toolkit.getColor(ColorsAndFonts.COLOR_SECONDARY2));
+                    canvas.drawRectangle(x, headerHeight + row * cellHeight, cellWidth, cellHeight, Toolkit.getColor(ColorsAndFonts.COLOR_SECONDARY2));
                 }
                 canvas.drawText(day, x - PADDING / 2 + cellWidth - style.stringWidth(day), y, mainTextColor, style);
                 x += cellWidth;
@@ -248,8 +243,7 @@ public class SimpleDatePicker extends AbstractView implements DatePicker {
         }
     }
 
-    private void drawControl(final Canvas canvas, final int x, final int y, final int width, final int height,
-        final String label, final int over) {
+    private void drawControl(final Canvas canvas, final int x, final int y, final int width, final int height, final String label, final int over) {
         if (Toolkit.debug) {
             canvas.drawRectangle(x - 2, y, width + 4, height, Toolkit.getColor(ColorsAndFonts.COLOR_DEBUG_BOUNDS_VIEW));
         }
@@ -281,7 +275,9 @@ public class SimpleDatePicker extends AbstractView implements DatePicker {
     /*
      * (non-Javadoc)
      * 
-     * @see org.nakedobjects.plugins.dnd.field.DatePicker#mouseMoved(org.nakedobjects.plugins.dnd.drawing.Location)
+     * @see
+     * org.nakedobjects.plugins.dnd.field.DatePicker#mouseMoved(org.nakedobjects
+     * .plugins.dnd.drawing.Location)
      */
     @Override
     public void mouseMoved(final Location location) {
@@ -333,7 +329,9 @@ public class SimpleDatePicker extends AbstractView implements DatePicker {
     /*
      * (non-Javadoc)
      * 
-     * @see org.nakedobjects.plugins.dnd.field.DatePicker#firstClick(org.nakedobjects.plugins.dnd.view.Click)
+     * @see
+     * org.nakedobjects.plugins.dnd.field.DatePicker#firstClick(org.nakedobjects
+     * .plugins.dnd.view.Click)
      */
     @Override
     public void firstClick(final Click click) {
@@ -356,7 +354,8 @@ public class SimpleDatePicker extends AbstractView implements DatePicker {
                 ((TextParseableContent) content).parseTextEntry(value.titleString());
                 ((TextParseableContent) content).entryComplete();
                 /*
-                 * if (content.isObject()) { ((ObjectContent) content).setObject(value); }
+                 * if (content.isObject()) { ((ObjectContent)
+                 * content).setObject(value); }
                  */
                 // content.
                 getView().refresh();
@@ -378,7 +377,9 @@ public class SimpleDatePicker extends AbstractView implements DatePicker {
     /*
      * (non-Javadoc)
      * 
-     * @see org.nakedobjects.plugins.dnd.field.DatePicker#keyPressed(org.nakedobjects.plugins.dnd.view.KeyboardAction)
+     * @see
+     * org.nakedobjects.plugins.dnd.field.DatePicker#keyPressed(org.nakedobjects
+     * .plugins.dnd.view.KeyboardAction)
      */
     @Override
     public void keyPressed(final KeyboardAction key) {

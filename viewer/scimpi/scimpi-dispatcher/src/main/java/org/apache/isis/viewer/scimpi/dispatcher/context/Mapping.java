@@ -111,8 +111,7 @@ class PersistentObjectMapping implements Mapping {
 
     @Override
     public String debug() {
-        return oid + "  " + spec.getShortIdentifier() + "  "
-            + IsisContext.getPersistenceSession().getAdapterManager().getAdapterFor(oid);
+        return oid + "  " + spec.getShortIdentifier() + "  " + IsisContext.getPersistenceSession().getAdapterManager().getAdapterFor(oid);
     }
 
     @Override

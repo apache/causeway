@@ -25,8 +25,7 @@ import org.apache.isis.viewer.bdd.common.fixtures.perform.checkthat.collections.
 public class CheckAddToCollection extends PerformCheckThatAbstract {
 
     public CheckAddToCollection(final Perform.Mode mode) {
-        super("check add to collection", OnMemberColumn.REQUIRED, mode, new ProposedAddTo(AssertsValidity.VALID),
-            new ProposedAddTo(AssertsValidity.INVALID));
+        super("check add to collection", OnMemberColumn.REQUIRED, mode, new ProposedAddTo(AssertsValidity.VALID), new ProposedAddTo(AssertsValidity.INVALID));
     }
 
 }

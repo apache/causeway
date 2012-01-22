@@ -75,8 +75,7 @@ public abstract class AbstractFixturePeer {
     }
 
     protected ObjectStorePersistence getObjectStore() {
-        final PersistenceSessionObjectStore persistenceSession =
-            (PersistenceSessionObjectStore) getPersistenceSession();
+        final PersistenceSessionObjectStore persistenceSession = (PersistenceSessionObjectStore) getPersistenceSession();
         return persistenceSession.getObjectStore();
     }
 

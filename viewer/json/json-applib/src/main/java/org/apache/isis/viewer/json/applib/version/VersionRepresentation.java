@@ -22,9 +22,9 @@ import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.applib.domainobjects.DomainRepresentation;
 import org.codehaus.jackson.JsonNode;
 
-public class VersionRepresentation extends DomainRepresentation  {
+public class VersionRepresentation extends DomainRepresentation {
 
-    public VersionRepresentation(JsonNode jsonNode) {
+    public VersionRepresentation(final JsonNode jsonNode) {
         super(jsonNode);
     }
 

@@ -39,7 +39,7 @@ public class ListReprRenderer extends ReprRendererAbstract<ListReprRenderer, Col
         }
 
         @Override
-        public ReprRenderer<?, ?> newRenderer(ResourceContext resourceContext, LinkFollower linkFollower, JsonRepresentation representation) {
+        public ReprRenderer<?, ?> newRenderer(final ResourceContext resourceContext, final LinkFollower linkFollower, final JsonRepresentation representation) {
             return new ListReprRenderer(resourceContext, linkFollower, getRepresentationType(), representation);
         }
     }
@@ -49,65 +49,64 @@ public class ListReprRenderer extends ReprRendererAbstract<ListReprRenderer, Col
     private ObjectSpecification elementType;
     private ObjectSpecification returnType;
 
-    private ListReprRenderer(ResourceContext resourceContext, LinkFollower linkFollower, RepresentationType representationType, JsonRepresentation representation) {
+    private ListReprRenderer(final ResourceContext resourceContext, final LinkFollower linkFollower, final RepresentationType representationType, final JsonRepresentation representation) {
         super(resourceContext, linkFollower, representationType, representation);
         usingLinkToBuilder(new DomainObjectLinkTo());
     }
-    
-    public ListReprRenderer usingLinkToBuilder(ObjectAdapterLinkTo objectAdapterLinkToBuilder) {
+
+    public ListReprRenderer usingLinkToBuilder(final ObjectAdapterLinkTo objectAdapterLinkToBuilder) {
         this.linkTo = objectAdapterLinkToBuilder.usingResourceContext(resourceContext);
         return this;
     }
 
     @Override
-    public ListReprRenderer with(Collection<ObjectAdapter> objectAdapters) {
+    public ListReprRenderer with(final Collection<ObjectAdapter> objectAdapters) {
         this.objectAdapters = objectAdapters;
         return this;
     }
 
-    public ListReprRenderer withReturnType(ObjectSpecification returnType) {
+    public ListReprRenderer withReturnType(final ObjectSpecification returnType) {
         this.returnType = returnType;
         return this;
     }
 
-    public ListReprRenderer withElementType(ObjectSpecification elementType) {
+    public ListReprRenderer withElementType(final ObjectSpecification elementType) {
         this.elementType = elementType;
         return this;
     }
 
+    @Override
     public JsonRepresentation render() {
         addValue();
-        
+
         addLink(Rel.RETURN_TYPE, returnType);
         addLink(Rel.ELEMENT_TYPE, elementType);
-        
+
         getExtensions();
 
         return representation;
     }
 
     private void addValue() {
-        if(objectAdapters == null) {
+        if (objectAdapters == null) {
             return;
         }
-        
-        JsonRepresentation values = JsonRepresentation.newArray();
+
+        final JsonRepresentation values = JsonRepresentation.newArray();
         final LinkFollower linkFollower = getLinkFollower().follow("value");
 
-        for(ObjectAdapter adapter: objectAdapters) {
-            JsonRepresentation linkToObject = linkTo.with(adapter).builder().build();
+        for (final ObjectAdapter adapter : objectAdapters) {
+            final JsonRepresentation linkToObject = linkTo.with(adapter).builder().build();
             values.arrayAdd(linkToObject);
 
-            if(linkFollower.matches(linkToObject)) {
+            if (linkFollower.matches(linkToObject)) {
                 final RendererFactory factory = RendererFactoryRegistry.instance.find(RepresentationType.DOMAIN_OBJECT);
-                final DomainObjectReprRenderer renderer = 
-                        (DomainObjectReprRenderer) factory.newRenderer(getResourceContext(), linkFollower, JsonRepresentation.newMap());
-                JsonRepresentation domainObject = renderer.with(adapter).render();
+                final DomainObjectReprRenderer renderer = (DomainObjectReprRenderer) factory.newRenderer(getResourceContext(), linkFollower, JsonRepresentation.newMap());
+                final JsonRepresentation domainObject = renderer.with(adapter).render();
                 linkToObject.mapPut("value", domainObject);
             }
         }
         representation.mapPut("value", values);
     }
-
 
 }

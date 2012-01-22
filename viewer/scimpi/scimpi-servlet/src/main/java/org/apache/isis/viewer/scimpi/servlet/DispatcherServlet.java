@@ -42,28 +42,25 @@ public class DispatcherServlet extends HttpServlet {
     private DebugUsers debugUsers;
 
     @Override
-    protected void doPost(final HttpServletRequest request, final HttpServletResponse response)
-        throws ServletException, IOException {
+    protected void doPost(final HttpServletRequest request, final HttpServletResponse response) throws ServletException, IOException {
         LOG.debug("post " + request.getServletPath() + "  " + request.getQueryString());
         process(request, response);
     }
 
     @Override
-    protected void doGet(final HttpServletRequest request, final HttpServletResponse response) throws ServletException,
-        IOException {
+    protected void doGet(final HttpServletRequest request, final HttpServletResponse response) throws ServletException, IOException {
         LOG.debug("get  " + request.getServletPath() + "  " + request.getQueryString());
         process(request, response);
     }
 
-    private void process(final HttpServletRequest request, final HttpServletResponse response) throws ServletException,
-        IOException {
+    private void process(final HttpServletRequest request, final HttpServletResponse response) throws ServletException, IOException {
         try {
             final ServletRequestContext context = new ServletRequestContext(debugUsers);
             final HttpSession httpSession = request.getSession(false);
-            // TODO when using version 3.0 of Servlet API use the HttpOnly setting for improved security
+            // TODO when using version 3.0 of Servlet API use the HttpOnly
+            // setting for improved security
             if (httpSession != null) {
-                final HashMap<String, Object> data =
-                    (HashMap<String, Object>) httpSession.getAttribute("scimpi-context");
+                final HashMap<String, Object> data = (HashMap<String, Object>) httpSession.getAttribute("scimpi-context");
                 if (data != null) {
                     context.setSessionData(data);
                 }
@@ -82,10 +79,10 @@ public class DispatcherServlet extends HttpServlet {
 
         // TODO get directory from servlet parameter
         ImageLookup.setImageDirectory(getServletContext(), "images");
-        
+
         debugUsers = new DebugUsers();
         debugUsers.initialize();
-        
+
         dispatcher = new Dispatcher();
         final Enumeration initParameterNames = getInitParameterNames();
         while (initParameterNames.hasMoreElements()) {

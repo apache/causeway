@@ -41,8 +41,7 @@ public abstract class CellBinding {
     // Constructor
     // ///////////////////////////////////////////////////////////////
 
-    protected CellBinding(final String name, final boolean autoCreate, final boolean ditto, final boolean optional,
-        final String[] headTexts) {
+    protected CellBinding(final String name, final boolean autoCreate, final boolean ditto, final boolean optional, final String[] headTexts) {
         this.name = name;
         this.autoCreate = autoCreate;
         this.ditto = ditto;
@@ -86,8 +85,8 @@ public abstract class CellBinding {
     // ///////////////////////////////////////////////////////////////
 
     /**
-     * For the BDD framework integration to search whether this particular {@link CellBinding} corresponds to a
-     * particular head text.
+     * For the BDD framework integration to search whether this particular
+     * {@link CellBinding} corresponds to a particular head text.
      */
     public boolean matches(final String candidateText) {
         final String candidateTextCamelLower = StringUtils.camel(candidateText).toLowerCase();
@@ -104,7 +103,8 @@ public abstract class CellBinding {
     // ///////////////////////////////////////////////////////////////
 
     /**
-     * For the BDD framework integration to indicate the head column, but without no {@link #getHeadCell() head cell}.
+     * For the BDD framework integration to indicate the head column, but
+     * without no {@link #getHeadCell() head cell}.
      */
     public void setHeadColumn(final int column) {
         this.found = true;
@@ -112,7 +112,8 @@ public abstract class CellBinding {
     }
 
     /**
-     * For the BDD framework integration to indicate that the head cell has been found.
+     * For the BDD framework integration to indicate that the head cell has been
+     * found.
      */
     public void setHeadColumn(final int column, final ScenarioCell headCell) {
         this.found = true;
@@ -120,7 +121,8 @@ public abstract class CellBinding {
     }
 
     /**
-     * For the BDD framework integration to indicate that the head cell was not found and has been created.
+     * For the BDD framework integration to indicate that the head cell was not
+     * found and has been created.
      */
     public void createHeadCell(final int column, final ScenarioCell headCell) {
         setColumnAndHeadCell(column, headCell);
@@ -173,8 +175,9 @@ public abstract class CellBinding {
     private boolean dittoed;
 
     /**
-     * Captures the current value, but also checking that the column in which the {@link ScenarioCell value} has been
-     * provided corresponds to the {@link #getColumn() column} of this binding.
+     * Captures the current value, but also checking that the column in which
+     * the {@link ScenarioCell value} has been provided corresponds to the
+     * {@link #getColumn() column} of this binding.
      * 
      * @see #captureCurrent(ScenarioCell)
      */
@@ -189,7 +192,8 @@ public abstract class CellBinding {
      * Captures the current {@link ScenarioCell value} for this binding.
      * 
      * <p>
-     * For implementations where we already know that the value provided is for this particular binding.
+     * For implementations where we already know that the value provided is for
+     * this particular binding.
      */
     public void captureCurrent(final ScenarioCell cell) {
         final ScenarioCell previousCell = getCurrentCell();
@@ -205,7 +209,8 @@ public abstract class CellBinding {
     }
 
     /**
-     * Whether the most recent call to {@link #captureCurrent(ScenarioCell)} resulted in a ditto.
+     * Whether the most recent call to {@link #captureCurrent(ScenarioCell)}
+     * resulted in a ditto.
      */
     public boolean isDittoed() {
         return dittoed;

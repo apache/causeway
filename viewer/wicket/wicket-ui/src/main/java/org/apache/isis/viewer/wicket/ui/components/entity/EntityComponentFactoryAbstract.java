@@ -29,8 +29,9 @@ import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 
 /**
- * Convenience adapter for a number of {@link ComponentFactoryAbstract component factory}s that where the created
- * {@link Component} are backed by an {@link EntityModel}.
+ * Convenience adapter for a number of {@link ComponentFactoryAbstract component
+ * factory}s that where the created {@link Component} are backed by an
+ * {@link EntityModel}.
  */
 public abstract class EntityComponentFactoryAbstract extends ComponentFactoryAbstract {
 

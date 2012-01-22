@@ -65,12 +65,8 @@ public class LogoBackground implements Background {
                 x = viewSize.getWidth() / 2 - logoSize.getWidth() / 2;
                 y = viewSize.getHeight() / 2 - logoSize.getHeight() / 2;
             } else {
-                x =
-                    (location.getX() >= 0) ? location.getX() : viewSize.getWidth() + location.getX()
-                        - logoSize.getWidth();
-                y =
-                    (location.getY() >= 0) ? location.getY() : viewSize.getHeight() + location.getY()
-                        - logoSize.getHeight();
+                x = (location.getX() >= 0) ? location.getX() : viewSize.getWidth() + location.getX() - logoSize.getWidth();
+                y = (location.getY() >= 0) ? location.getY() : viewSize.getHeight() + location.getY() - logoSize.getHeight();
             }
             canvas.drawImage(logo, x, y, logoSize.getWidth(), logoSize.getHeight());
         }

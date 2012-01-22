@@ -40,8 +40,8 @@ import org.apache.wicket.model.Model;
 import com.google.common.collect.Lists;
 
 /**
- * {@link PanelAbstract Panel} that represents a {@link EntityCollectionModel collection of entity}s rendered using
- * {@link AjaxFallbackDefaultDataTable}.
+ * {@link PanelAbstract Panel} that represents a {@link EntityCollectionModel
+ * collection of entity}s rendered using {@link AjaxFallbackDefaultDataTable}.
  */
 public class CollectionContentsAsAjaxTable extends PanelAbstract<EntityCollectionModel> {
 
@@ -63,8 +63,7 @@ public class CollectionContentsAsAjaxTable extends PanelAbstract<EntityCollectio
         addSelectedButtonIfRequired(columns);
 
         final SortableDataProvider<ObjectAdapter> dataProvider = new CollectionContentsSortableDataProvider(model);
-        final AjaxFallbackDefaultDataTable<ObjectAdapter> dataTable =
-            new AjaxFallbackDefaultDataTable<ObjectAdapter>("table", columns, dataProvider, 8);
+        final AjaxFallbackDefaultDataTable<ObjectAdapter> dataTable = new AjaxFallbackDefaultDataTable<ObjectAdapter>("table", columns, dataProvider, 8);
         add(dataTable);
     }
 
@@ -77,8 +76,7 @@ public class CollectionContentsAsAjaxTable extends PanelAbstract<EntityCollectio
         if (getModel().hasSelectionHandler()) {
             return;
         }
-        final List<? extends ObjectAssociation> propertyList =
-            typeOfSpec.getAssociations(ObjectAssociationFilters.PROPERTIES);
+        final List<? extends ObjectAssociation> propertyList = typeOfSpec.getAssociations(ObjectAssociationFilters.PROPERTIES);
         for (final ObjectAssociation property : propertyList) {
             final ColumnAbstract<ObjectAdapter> nopc = createObjectAdapterPropertyColumn(property);
             columns.add(nopc);

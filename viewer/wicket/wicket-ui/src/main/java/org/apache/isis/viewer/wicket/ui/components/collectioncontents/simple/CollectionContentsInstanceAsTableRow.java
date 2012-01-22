@@ -36,7 +36,8 @@ import org.apache.wicket.markup.repeater.RepeatingView;
  * Renders a single entity instance within the HTML table.
  * 
  * <p>
- * TODO: it ought to be possible to in-line this into {@link CollectionContentsAsSimpleTable}.
+ * TODO: it ought to be possible to in-line this into
+ * {@link CollectionContentsAsSimpleTable}.
  */
 class CollectionContentsInstanceAsTableRow extends PanelAbstract<EntityModel> {
 
@@ -52,8 +53,7 @@ class CollectionContentsInstanceAsTableRow extends PanelAbstract<EntityModel> {
 
         final ObjectAdapter adapter = model.getObject();
         final ObjectSpecification typeOfSpec = model.getTypeOfSpecification();
-        final List<? extends ObjectAssociation> propertyList =
-            typeOfSpec.getAssociations(ObjectAssociationFilters.PROPERTIES);
+        final List<? extends ObjectAssociation> propertyList = typeOfSpec.getAssociations(ObjectAssociationFilters.PROPERTIES);
 
         add(new Label("title", adapter.titleString()));
 

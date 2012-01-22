@@ -34,25 +34,23 @@ import org.apache.log4j.Logger;
 import com.google.common.base.Objects;
 
 public class RegisterServlet extends AbstractHtmlViewerServlet {
-    
+
     private static final long serialVersionUID = 1L;
-    
+
     @SuppressWarnings("unused")
     private static final Logger LOG = Logger.getLogger(RegisterServlet.class);
-    
+
     @Override
     public void init() throws ServletException {
     }
 
     @Override
-    protected void doGet(final HttpServletRequest request, final HttpServletResponse response) throws ServletException,
-        IOException {
+    protected void doGet(final HttpServletRequest request, final HttpServletResponse response) throws ServletException, IOException {
         doPost(request, response);
     }
 
     @Override
-    protected void doPost(final HttpServletRequest request, final HttpServletResponse response)
-        throws ServletException, IOException {
+    protected void doPost(final HttpServletRequest request, final HttpServletResponse response) throws ServletException, IOException {
 
         // prompt
         final String user = request.getParameter("username");
@@ -85,10 +83,7 @@ public class RegisterServlet extends AbstractHtmlViewerServlet {
         response.sendRedirect(pathTo(HtmlServletConstants.LOGON_PAGE));
     }
 
-    private void renderPrompt(
-            final HttpServletResponse response, 
-            final String user, final String password, final String password2, 
-            final String message) throws IOException {
+    private void renderPrompt(final HttpServletResponse response, final String user, final String password, final String password2, final String message) throws IOException {
         response.setContentType("text/html");
         final HtmlComponentFactory factory = new HtmlComponentFactory(getPathBuilder());
         final RegisterFormPage page = factory.createRegisterPage(user, password, message);
@@ -98,6 +93,5 @@ public class RegisterServlet extends AbstractHtmlViewerServlet {
     private boolean register(final String user, final String password, final String password2) {
         return getAuthenticationManager().register(new RegistrationDetailsPassword(user, password));
     }
-
 
 }

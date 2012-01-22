@@ -61,8 +61,7 @@ public class SetProperty extends PerformAbstractTypeParams {
         final ObjectAdapter contextAdapter = otoa.get(onAdapter);
 
         // validate parameter
-        final ObjectAdapter toSetAdapter =
-            performContext.getPeer().getAdapter(contextAdapter, otoa.getSpecification(), arg0Binding, arg0Cell);
+        final ObjectAdapter toSetAdapter = performContext.getPeer().getAdapter(contextAdapter, otoa.getSpecification(), arg0Binding, arg0Cell);
         final Consent validConsent = otoa.isAssociationValid(onAdapter, toSetAdapter);
         if (validConsent.isVetoed()) {
             throw ScenarioBoundValueException.current(arg0Binding, validConsent.getReason());

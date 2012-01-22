@@ -29,7 +29,8 @@ public interface AliasRegistry extends Iterable<Map.Entry<String, ObjectAdapter>
     public String getAlias(final ObjectAdapter adapter);
 
     /**
-     * Holds a new {@link NakedObject adapter}, automatically assigning it a new heldAs alias.
+     * Holds a new {@link NakedObject adapter}, automatically assigning it a new
+     * heldAs alias.
      */
     public String aliasPrefixedAs(final String prefix, final ObjectAdapter adapter);
 

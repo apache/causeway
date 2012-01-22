@@ -35,13 +35,11 @@ public class About implements Action {
 
         content.add(context.getComponentFactory().createInlineBlock("about", AboutIsis.getApplicationName(), null));
         content.add(context.getComponentFactory().createInlineBlock("about", AboutIsis.getApplicationVersion(), null));
-        content.add(context.getComponentFactory().createInlineBlock("about", AboutIsis.getApplicationCopyrightNotice(),
-            null));
+        content.add(context.getComponentFactory().createInlineBlock("about", AboutIsis.getApplicationCopyrightNotice(), null));
 
         content.add(context.getComponentFactory().createInlineBlock("about", AboutIsis.getFrameworkName(), null));
         content.add(context.getComponentFactory().createInlineBlock("about", AboutIsis.getFrameworkVersion(), null));
-        content.add(context.getComponentFactory().createInlineBlock("about", AboutIsis.getFrameworkCopyrightNotice(),
-            null));
+        content.add(context.getComponentFactory().createInlineBlock("about", AboutIsis.getFrameworkCopyrightNotice(), null));
     }
 
     @Override

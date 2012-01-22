@@ -122,7 +122,9 @@ public class IndirectObjectMapping implements ObjectMapping {
     /*
      * (non-Javadoc)
      * 
-     * @see org.apache.isis.webapp.context.ObjectMapping#mappedObject(java.lang.String)
+     * @see
+     * org.apache.isis.webapp.context.ObjectMapping#mappedObject(java.lang.String
+     * )
      */
     @Override
     public ObjectAdapter mappedObject(final String id) {

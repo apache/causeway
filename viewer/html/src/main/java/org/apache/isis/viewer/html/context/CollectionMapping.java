@@ -33,7 +33,8 @@ import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 
 /**
- * Has value semantics based on the value semantics of the underlying list that it wraps.
+ * Has value semantics based on the value semantics of the underlying list that
+ * it wraps.
  */
 public class CollectionMapping {
     private final Vector list = new Vector();
@@ -77,7 +78,8 @@ public class CollectionMapping {
     }
 
     /**
-     * Value semantics based on the identity of the underlying list that this wraps.
+     * Value semantics based on the identity of the underlying list that this
+     * wraps.
      */
     @Override
     public int hashCode() {

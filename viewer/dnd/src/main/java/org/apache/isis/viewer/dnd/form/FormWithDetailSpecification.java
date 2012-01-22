@@ -43,8 +43,7 @@ public class FormWithDetailSpecification implements ViewSpecification {
 
     @Override
     public boolean canDisplay(final ViewRequirement requirement) {
-        return requirement.isObject() && requirement.isOpen() && !requirement.isSubview()
-            && containsEnoughFields(requirement.getContent());
+        return requirement.isObject() && requirement.isOpen() && !requirement.isSubview() && containsEnoughFields(requirement.getContent());
     }
 
     private boolean containsEnoughFields(final Content content) {
@@ -52,8 +51,7 @@ public class FormWithDetailSpecification implements ViewSpecification {
         final List<ObjectAssociation> associations = specification.getAssociations(new Filter<ObjectAssociation>() {
             @Override
             public boolean accept(final ObjectAssociation t) {
-                return t.isOneToManyAssociation()
-                    || (t.isOneToOneAssociation() && !((OneToOneAssociation) t).getSpecification().isParseable());
+                return t.isOneToManyAssociation() || (t.isOneToOneAssociation() && !((OneToOneAssociation) t).getSpecification().isParseable());
             }
         });
         return associations.size() >= 1;

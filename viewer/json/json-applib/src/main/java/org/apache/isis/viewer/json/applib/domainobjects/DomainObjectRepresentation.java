@@ -21,18 +21,16 @@ package org.apache.isis.viewer.json.applib.domainobjects;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.codehaus.jackson.JsonNode;
 
-
 public class DomainObjectRepresentation extends AbstractDomainObjectRepresentation {
 
-    public DomainObjectRepresentation(JsonNode jsonNode) {
+    public DomainObjectRepresentation(final JsonNode jsonNode) {
         super(jsonNode);
     }
-
 
     public String getOid() {
         return getString("oid");
     }
-    
+
     public JsonRepresentation getActions() {
         return getRepresentation("members[memberType=action]");
     }

@@ -62,7 +62,8 @@ public class PasswordField extends TextField {
     }
 
     /**
-     * Only allow deletion of last character, ie don;t allow editing of the internals of the password.
+     * Only allow deletion of last character, ie don;t allow editing of the
+     * internals of the password.
      */
     @Override
     public void delete() {
@@ -158,8 +159,7 @@ public class PasswordField extends TextField {
 
         final String[] lines = textContent.getDisplayLines();
         if (lines.length > 1) {
-            throw new IsisException("Password field should contain a string that contains no line breaks; contains "
-                + lines.length);
+            throw new IsisException("Password field should contain a string that contains no line breaks; contains " + lines.length);
         }
 
         final String chars = lines[0];

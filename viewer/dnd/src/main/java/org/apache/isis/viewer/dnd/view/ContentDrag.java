@@ -22,7 +22,8 @@ package org.apache.isis.viewer.dnd.view;
 import org.apache.isis.viewer.dnd.drawing.Location;
 
 /**
- * Details a drag event that affects a view's content (as opposed to the view itself).
+ * Details a drag event that affects a view's content (as opposed to the view
+ * itself).
  */
 public interface ContentDrag extends Drag {
 

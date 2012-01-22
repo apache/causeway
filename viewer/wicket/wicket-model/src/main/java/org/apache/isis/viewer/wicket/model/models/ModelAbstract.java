@@ -25,7 +25,8 @@ import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessi
 import org.apache.wicket.model.LoadableDetachableModel;
 
 /**
- * Adapter for {@link LoadableDetachableModel}s, providing access to some of the Isis' dependencies.
+ * Adapter for {@link LoadableDetachableModel}s, providing access to some of the
+ * Isis' dependencies.
  */
 public abstract class ModelAbstract<T> extends LoadableDetachableModel<T> {
 

@@ -51,9 +51,11 @@ public class IconizeViewOption extends UserActionAbstract {
         }
 
         /*
-         * // TODO change so that an iconized version of the window is created and displayed, which holds the original
-         * view. View iconView = new RootIconSpecification().createView(view.getContent(), null);
-         * iconView.setLocation(view.getLocation()); workspace.replaceView(view, iconView);
+         * // TODO change so that an iconized version of the window is created
+         * and displayed, which holds the original view. View iconView = new
+         * RootIconSpecification().createView(view.getContent(), null);
+         * iconView.setLocation(view.getLocation()); workspace.replaceView(view,
+         * iconView);
          */
     }
 

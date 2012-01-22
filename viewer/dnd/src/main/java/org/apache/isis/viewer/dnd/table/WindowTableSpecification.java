@@ -32,7 +32,8 @@ public class WindowTableSpecification extends AbstractTableSpecification {
             public View decorate(final View view, final Axes axes) {
                 final ScrollBorder scrollingView = new ScrollBorder(view);
                 final View viewWithWindowBorder = scrollingView;
-                // note - the next call needs to be after the creation of the window border so
+                // note - the next call needs to be after the creation of the
+                // window border so
                 // that it exists when the header is set up
                 scrollingView.setTopHeader(new TableHeader(view.getContent(), axes.getAxis(TableAxis.class)));
                 viewWithWindowBorder.setFocusManager(new TableFocusManager(viewWithWindowBorder));
@@ -43,20 +44,25 @@ public class WindowTableSpecification extends AbstractTableSpecification {
     }
 
     /*
-     * @Override public View doCreateView(final View view, final Content content, final ViewAxis axis) { if (true)
-     * return view;
+     * @Override public View doCreateView(final View view, final Content
+     * content, final ViewAxis axis) { if (true) return view;
      * 
-     * final ScrollBorder scrollingView = new ScrollBorder(view); View viewWithWindowBorder = scrollingView; // note -
-     * the next call needs to be after the creation of the window border so // that it exists when the header is set up
-     * scrollingView.setTopHeader(new TableHeader(content, view.getViewAxisForChildren()));
-     * viewWithWindowBorder.setFocusManager(new TableFocusManager(viewWithWindowBorder)); return viewWithWindowBorder; }
+     * final ScrollBorder scrollingView = new ScrollBorder(view); View
+     * viewWithWindowBorder = scrollingView; // note - the next call needs to be
+     * after the creation of the window border so // that it exists when the
+     * header is set up scrollingView.setTopHeader(new TableHeader(content,
+     * view.getViewAxisForChildren())); viewWithWindowBorder.setFocusManager(new
+     * TableFocusManager(viewWithWindowBorder)); return viewWithWindowBorder; }
      * 
      * protected View decorateView(View view) { super.decorateView(view);
      * 
-     * final ScrollBorder scrollingView = new ScrollBorder(view); View viewWithWindowBorder = scrollingView; // note -
-     * the next call needs to be after the creation of the window border so // that it exists when the header is set up
-     * scrollingView.setTopHeader(new TableHeader(view.getContent(), view.getViewAxisForChildren()));
-     * viewWithWindowBorder.setFocusManager(new TableFocusManager(viewWithWindowBorder)); return viewWithWindowBorder; }
+     * final ScrollBorder scrollingView = new ScrollBorder(view); View
+     * viewWithWindowBorder = scrollingView; // note - the next call needs to be
+     * after the creation of the window border so // that it exists when the
+     * header is set up scrollingView.setTopHeader(new
+     * TableHeader(view.getContent(), view.getViewAxisForChildren()));
+     * viewWithWindowBorder.setFocusManager(new
+     * TableFocusManager(viewWithWindowBorder)); return viewWithWindowBorder; }
      */
     @Override
     public String getName() {

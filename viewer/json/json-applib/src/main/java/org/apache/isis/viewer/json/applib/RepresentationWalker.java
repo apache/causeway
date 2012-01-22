@@ -38,9 +38,9 @@ public class RepresentationWalker {
         private final JsonRepresentation body;
         private final RestfulResponse<? extends JsonRepresentation> response;
         private String error;
-        private Exception exception;
+        private final Exception exception;
 
-        public Step(String key, LinkRepresentation link, JsonRepresentation body, RestfulResponse<? extends JsonRepresentation> response, String error, Exception exception) {
+        public Step(final String key, final LinkRepresentation link, final JsonRepresentation body, final RestfulResponse<? extends JsonRepresentation> response, final String error, final Exception exception) {
             this.key = key;
             this.link = link;
             this.body = body;
@@ -51,75 +51,75 @@ public class RepresentationWalker {
 
         @Override
         public String toString() {
-            return "Step [key=" + key + ", link=" + (link != null? link.getHref(): "(null)") + ", error=" + error + "]";
+            return "Step [key=" + key + ", link=" + (link != null ? link.getHref() : "(null)") + ", error=" + error + "]";
         }
-        
+
     }
-    
+
     private final RestfulClient restfulClient;
     private final List<Step> steps = Lists.newLinkedList();
 
-    public RepresentationWalker(RestfulClient restfulClient, Response response) {
+    public RepresentationWalker(final RestfulClient restfulClient, final Response response) {
         this.restfulClient = restfulClient;
-        RestfulResponse<JsonRepresentation> jsonResp = RestfulResponse.of(response);
+        final RestfulResponse<JsonRepresentation> jsonResp = RestfulResponse.of(response);
 
         addStep(null, null, null, jsonResp, null, null);
     }
 
-    private Step addStep(String key, LinkRepresentation link, JsonRepresentation body, RestfulResponse<JsonRepresentation> jsonResp, String error, Exception ex) {
-        Step step = new Step(key, link, body, jsonResp, error, ex);
+    private Step addStep(final String key, final LinkRepresentation link, final JsonRepresentation body, final RestfulResponse<JsonRepresentation> jsonResp, final String error, final Exception ex) {
+        final Step step = new Step(key, link, body, jsonResp, error, ex);
         steps.add(0, step);
-        if(error != null) {
-            if(jsonResp.getStatus().getFamily() != Family.SUCCESSFUL) {
+        if (error != null) {
+            if (jsonResp.getStatus().getFamily() != Family.SUCCESSFUL) {
                 step.error = "response status code: " + jsonResp.getStatus();
             }
         }
         return step;
     }
 
-    public void walk(String path) {
+    public void walk(final String path) {
         walk(path, null);
     }
 
-    public void walk(String path, JsonRepresentation invokeBody) {
-        Step previousStep = currentStep();
-        if(previousStep.error!=null) {
+    public void walk(final String path, final JsonRepresentation invokeBody) {
+        final Step previousStep = currentStep();
+        if (previousStep.error != null) {
             return;
         }
-        
-        RestfulResponse<? extends JsonRepresentation> jsonResponse = previousStep.response;
+
+        final RestfulResponse<? extends JsonRepresentation> jsonResponse = previousStep.response;
         JsonRepresentation entity;
         try {
             entity = jsonResponse.getEntity();
-        } catch (Exception e) {
+        } catch (final Exception e) {
             addStep(path, null, null, null, "exception: " + e.getMessage(), e);
             return;
         }
-        
+
         LinkRepresentation link;
         try {
             link = entity.getLink(path);
-        } catch (Exception e) {
+        } catch (final Exception e) {
             addStep(path, null, null, null, "exception: " + e.getMessage(), e);
             return;
         }
-        if(link == null) {
+        if (link == null) {
             addStep(path, null, null, null, "no such link '" + path + "'", null);
             return;
         }
-        
+
         final RestfulResponse<JsonRepresentation> response;
         try {
-            if(invokeBody != null) {
+            if (invokeBody != null) {
                 response = restfulClient.follow(link, invokeBody);
             } else {
                 response = restfulClient.follow(link);
             }
-        } catch (Exception e) {
+        } catch (final Exception e) {
             addStep(path, link, null, null, "failed to follow link: " + e.getMessage(), e);
             return;
         }
-        
+
         addStep(path, link, null, response, null, null);
     }
 
@@ -130,7 +130,7 @@ public class RepresentationWalker {
      * Will return null if the previous walk returned an error.
      */
     public JsonRepresentation getEntity() throws JsonParseException, JsonMappingException, IOException {
-        Step currentStep = currentStep();
+        final Step currentStep = currentStep();
         if (currentStep.response == null || currentStep.error != null) {
             return null;
         }
@@ -141,21 +141,21 @@ public class RepresentationWalker {
      * The response returned from the previous walk.
      * 
      * <p>
-     * Once a walk/performed has been attempted, is guaranteed to return a non-null value.
-     * (Conversely, will return <tt>null</tt> immediately after instantiation and prior 
-     * to a walk being attempted/performed).  
+     * Once a walk/performed has been attempted, is guaranteed to return a
+     * non-null value. (Conversely, will return <tt>null</tt> immediately after
+     * instantiation and prior to a walk being attempted/performed).
      */
-    public RestfulResponse<?> getResponse()  {
-        Step currentStep = currentStep();
-        return currentStep != null? currentStep.response: null;
+    public RestfulResponse<?> getResponse() {
+        final Step currentStep = currentStep();
+        return currentStep != null ? currentStep.response : null;
     }
 
     /**
      * The error (if any) that occurred from the previous walk.
      */
-    public String getError()  {
-        Step currentStep = currentStep();
-        return currentStep != null? currentStep.error: null;
+    public String getError() {
+        final Step currentStep = currentStep();
+        return currentStep != null ? currentStep.error : null;
     }
 
     /**
@@ -164,9 +164,9 @@ public class RepresentationWalker {
      * <p>
      * Will only ever be populated if {@link #getError()} is non-null.
      */
-    public Exception getException()  {
-        Step currentStep = currentStep();
-        return currentStep != null? currentStep.exception: null;
+    public Exception getException() {
+        final Step currentStep = currentStep();
+        return currentStep != null ? currentStep.exception : null;
     }
 
     /**

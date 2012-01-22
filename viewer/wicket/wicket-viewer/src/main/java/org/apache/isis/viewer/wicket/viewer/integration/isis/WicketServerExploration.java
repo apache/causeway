@@ -26,8 +26,9 @@ import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
  * {@link DeploymentType} for exploration usage.
  * 
  * <p>
- * TODO: this is currently only partly honoured; exploration actions are shown and the correct object store is defaulted
- * (ie in-memory); however Wicket Objects will always pop up a login dialog.
+ * TODO: this is currently only partly honoured; exploration actions are shown
+ * and the correct object store is defaulted (ie in-memory); however Wicket
+ * Objects will always pop up a login dialog.
  */
 public class WicketServerExploration extends DeploymentTypeAbstract {
 

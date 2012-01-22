@@ -47,8 +47,7 @@ public class AbstractBorder extends AbstractViewDecorator {
     }
 
     protected Bounds contentArea() {
-        return new Bounds(getLeft(), getTop(), getSize().getWidth() - getLeft() - getRight(), getSize().getHeight()
-            - getTop() - getBottom());
+        return new Bounds(getLeft(), getTop(), getSize().getWidth() - getLeft() - getRight(), getSize().getHeight() - getTop() - getBottom());
     }
 
     @Override
@@ -87,8 +86,7 @@ public class AbstractBorder extends AbstractViewDecorator {
     @Override
     public void draw(final Canvas canvas) {
         if (Toolkit.debug) {
-            canvas.drawDebugOutline(new Bounds(getSize()), getBaseline(),
-                Toolkit.getColor(ColorsAndFonts.COLOR_DEBUG_BOUNDS_BORDER));
+            canvas.drawDebugOutline(new Bounds(getSize()), getBaseline(), Toolkit.getColor(ColorsAndFonts.COLOR_DEBUG_BOUNDS_BORDER));
         }
         final int width = getSize().getWidth() - getRight();
         final int height = getSize().getHeight() - getBottom();
@@ -161,8 +159,7 @@ public class AbstractBorder extends AbstractViewDecorator {
     @Override
     protected void debugDetails(final DebugBuilder debug) {
         super.debugDetails(debug);
-        debug.appendln("border", getTop() + "/" + getBottom() + " " + getLeft() + "/" + getRight()
-            + " (top/bottom left/right)");
+        debug.appendln("border", getTop() + "/" + getBottom() + " " + getLeft() + "/" + getRight() + " (top/bottom left/right)");
         debug.appendln("contents", contentArea());
     }
 

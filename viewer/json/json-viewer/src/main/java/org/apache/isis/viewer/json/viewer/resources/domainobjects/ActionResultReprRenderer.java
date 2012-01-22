@@ -40,7 +40,7 @@ import org.apache.isis.viewer.json.viewer.representations.ReprRendererFactoryAbs
 public class ActionResultReprRenderer extends ReprRendererAbstract<ActionResultReprRenderer, ObjectAndActionInvocation> {
 
     private ObjectAdapterLinkTo adapterLinkTo = new DomainObjectLinkTo();
-    
+
     private ObjectAdapter objectAdapter;
     private ObjectAction action;
     private JsonRepresentation arguments;
@@ -53,18 +53,18 @@ public class ActionResultReprRenderer extends ReprRendererAbstract<ActionResultR
         }
 
         @Override
-        public ReprRenderer<?,?> newRenderer(ResourceContext resourceContext, LinkFollower linkFollower, JsonRepresentation representation) {
+        public ReprRenderer<?, ?> newRenderer(final ResourceContext resourceContext, final LinkFollower linkFollower, final JsonRepresentation representation) {
             return new ActionResultReprRenderer(resourceContext, linkFollower, getRepresentationType(), representation);
         }
     }
 
-    private ActionResultReprRenderer(ResourceContext resourceContext, LinkFollower linkFollower, RepresentationType representationType, JsonRepresentation representation) {
+    private ActionResultReprRenderer(final ResourceContext resourceContext, final LinkFollower linkFollower, final RepresentationType representationType, final JsonRepresentation representation) {
         super(resourceContext, linkFollower, representationType, representation);
     }
 
     @Override
-    public ActionResultReprRenderer with(ObjectAndActionInvocation objectAndActionInvocation) {
-        
+    public ActionResultReprRenderer with(final ObjectAndActionInvocation objectAndActionInvocation) {
+
         objectAdapter = objectAndActionInvocation.getObjectAdapter();
         action = objectAndActionInvocation.getAction();
         arguments = objectAndActionInvocation.getArguments();
@@ -75,19 +75,19 @@ public class ActionResultReprRenderer extends ReprRendererAbstract<ActionResultR
         return this;
     }
 
-    public void using(ObjectAdapterLinkTo adapterLinkTo) {
+    public void using(final ObjectAdapterLinkTo adapterLinkTo) {
         this.adapterLinkTo = adapterLinkTo.with(objectAdapter);
     }
 
-
+    @Override
     public JsonRepresentation render() {
 
         representationWithSelfFor(action, arguments);
 
         addResult(representation);
-        
+
         addExtensionsIsisProprietaryChangedObjects();
-        
+
         return representation;
     }
 
@@ -95,59 +95,56 @@ public class ActionResultReprRenderer extends ReprRendererAbstract<ActionResultR
         final JsonRepresentation result = JsonRepresentation.newMap();
         final ResultType resultType = addResultTo(result);
 
-        if(!resultType.isVoid()) {
+        if (!resultType.isVoid()) {
             putResultType(representation, resultType);
             representation.mapPut("result", result);
         }
     }
 
     private ResultType addResultTo(final JsonRepresentation result) {
-        
+
         final ObjectSpecification returnType = this.action.getReturnType();
-        
-        if(returnType.getCorrespondingClass() == void.class) {
+
+        if (returnType.getCorrespondingClass() == void.class) {
             // void
             return ResultType.VOID;
-        } 
-        
+        }
+
         final CollectionFacet collectionFacet = returnType.getFacet(CollectionFacet.class);
         if (collectionFacet != null) {
             // collection
-          
+
             final Collection<ObjectAdapter> collectionAdapters = collectionFacet.collection(returnedAdapter);
 
             final RendererFactory factory = getRendererFactoryRegistry().find(RepresentationType.LIST);
             final ListReprRenderer renderer = (ListReprRenderer) factory.newRenderer(resourceContext, null, result);
-            renderer.with(collectionAdapters)
-                    .withReturnType(action.getReturnType())
-                    .withElementType(returnedAdapter.getElementSpecification());
-            
+            renderer.with(collectionAdapters).withReturnType(action.getReturnType()).withElementType(returnedAdapter.getElementSpecification());
+
             renderer.render();
             return ResultType.LIST;
-        } 
-        
+        }
+
         final EncodableFacet encodableFacet = returnType.getFacet(EncodableFacet.class);
-        if(encodableFacet != null) {
+        if (encodableFacet != null) {
             // scalar
-            
+
             final RendererFactory factory = getRendererFactoryRegistry().find(RepresentationType.SCALAR_VALUE);
 
-            ScalarValueReprRenderer renderer = (ScalarValueReprRenderer) factory.newRenderer(resourceContext, null, result);
-            renderer.with(returnedAdapter)
-                    .withReturnType(action.getReturnType());
-            
+            final ScalarValueReprRenderer renderer = (ScalarValueReprRenderer) factory.newRenderer(resourceContext, null, result);
+            renderer.with(returnedAdapter).withReturnType(action.getReturnType());
+
             renderer.render();
             return ResultType.SCALAR_VALUE;
-            
-        } 
-        
+
+        }
+
         {
             // object
             final RendererFactory factory = getRendererFactoryRegistry().find(RepresentationType.DOMAIN_OBJECT);
             final DomainObjectReprRenderer renderer = (DomainObjectReprRenderer) factory.newRenderer(resourceContext, null, result);
 
             renderer.with(returnedAdapter).includesSelf();
-            
+
             renderer.render();
             return ResultType.DOMAIN_OBJECT;
         }
@@ -160,18 +157,18 @@ public class ActionResultReprRenderer extends ReprRendererAbstract<ActionResultR
     private JsonRepresentation representationWithSelfFor(final ObjectAction action, final JsonRepresentation bodyArgs) {
         final JsonRepresentation links = JsonRepresentation.newArray();
         representation.mapPut("links", links);
-        
+
         final LinkBuilder selfLinkBuilder = adapterLinkTo.memberBuilder(Rel.SELF, MemberType.ACTION, action, RepresentationType.ACTION_RESULT, "invoke");
-        
+
         // TODO: remove duplication with AbstractObjectMember#addLinkTo
         final MemberType memberType = MemberType.of(action);
-        Map<String, MutatorSpec> mutators = memberType.getMutators();
-        
+        final Map<String, MutatorSpec> mutators = memberType.getMutators();
+
         final ActionSemantics semantics = ActionSemantics.determine(getResourceContext(), action);
         final String mutator = semantics.getInvokeKey();
         final MutatorSpec mutatorSpec = mutators.get(mutator);
         selfLinkBuilder.withHttpMethod(mutatorSpec.httpMethod);
-        
+
         final JsonRepresentation selfLink = selfLinkBuilder.build();
 
         links.arrayAdd(selfLink);
@@ -179,12 +176,9 @@ public class ActionResultReprRenderer extends ReprRendererAbstract<ActionResultR
         return representation;
     }
 
-
     protected RendererFactoryRegistry getRendererFactoryRegistry() {
         // TODO: yuck
         return RendererFactoryRegistry.instance;
     }
-
-
 
 }

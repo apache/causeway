@@ -41,8 +41,7 @@ import org.apache.isis.viewer.html.context.Context;
 
 public class TableUtil {
 
-    public static Table createTable(final Context context, final String id, final ObjectAdapter object,
-        final OneToManyAssociation collectionField) {
+    public static Table createTable(final Context context, final String id, final ObjectAdapter object, final OneToManyAssociation collectionField) {
 
         final ObjectAdapter collection = collectionField.get(object);
         final String name = collectionField.getName();
@@ -52,12 +51,10 @@ public class TableUtil {
         return createTable(context, collectionField != null, collection, summary, type);
     }
 
-    public static Table createTable(final Context context, final boolean addSelector, final ObjectAdapter collection,
-        final String summary, final ObjectSpecification elementType) {
+    public static Table createTable(final Context context, final boolean addSelector, final ObjectAdapter collection, final String summary, final ObjectSpecification elementType) {
 
         final CollectionFacet facet = CollectionFacetUtils.getCollectionFacetFromSpec(collection);
-        final List<ObjectAssociation> columnAssociations =
-            elementType.getAssociations(Filters.and(STATICALLY_VISIBLE_ASSOCIATIONS, PROPERTIES));
+        final List<ObjectAssociation> columnAssociations = elementType.getAssociations(Filters.and(STATICALLY_VISIBLE_ASSOCIATIONS, PROPERTIES));
 
         final int len = columnAssociations.size();
 
@@ -94,14 +91,17 @@ public class TableUtil {
                 }
             }
             /*
-             * if (addSelector) { table.addCell(context.getFactory().createRemoveOption(id, elementId,
-             * collectionField.getId())); }
+             * if (addSelector) {
+             * table.addCell(context.getFactory().createRemoveOption(id,
+             * elementId, collectionField.getId())); }
              */
             // TODO add selection box
             // table.addCell();
             /*
-             * if (collectionField != null) { if (collectionField.isValidToRemove(object, element).isAllowed()) {
-             * table.addCell(context.getFactory().createRemoveOption(id, elementId, collectionField.getId())); } else {
+             * if (collectionField != null) { if
+             * (collectionField.isValidToRemove(object, element).isAllowed()) {
+             * table.addCell(context.getFactory().createRemoveOption(id,
+             * elementId, collectionField.getId())); } else {
              * table.addEmptyCell(); } }
              */
 

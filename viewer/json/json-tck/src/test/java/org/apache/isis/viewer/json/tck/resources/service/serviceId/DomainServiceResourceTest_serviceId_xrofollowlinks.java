@@ -55,7 +55,7 @@ public class DomainServiceResourceTest_serviceId_xrofollowlinks {
 
     @Before
     public void setUp() throws Exception {
-        WebServer webServer = webServerRule.getWebServer();
+        final WebServer webServer = webServerRule.getWebServer();
         client = new RestfulClient(webServer.getBase());
     }
 
@@ -63,36 +63,34 @@ public class DomainServiceResourceTest_serviceId_xrofollowlinks {
     public void withCriteria() throws Exception {
 
         final String href = givenHrefToService("simples");
-        
-        final RestfulRequest request = 
-                client.createRequest(HttpMethod.GET, href).withArg(RequestParameter.FOLLOW_LINKS, "members[id=%s].links[rel=details]", "list");
+
+        final RestfulRequest request = client.createRequest(HttpMethod.GET, href).withArg(RequestParameter.FOLLOW_LINKS, "members[id=%s].links[rel=details]", "list");
         final RestfulResponse<DomainObjectRepresentation> restfulResponse = request.executeT();
 
         assertThat(restfulResponse.getStatus(), is(HttpStatusCode.OK));
         final DomainObjectRepresentation repr = restfulResponse.getEntity();
-        
-        JsonRepresentation membersList = repr.getMembers();
+
+        final JsonRepresentation membersList = repr.getMembers();
         assertThat(membersList, isArray());
-        
+
         JsonRepresentation actionRepr;
-        
+
         actionRepr = membersList.getRepresentation("[id=%s]", "list");
         assertThat(actionRepr.getRepresentation("links[rel=details]"), is(not(nullValue())));
         assertThat(actionRepr.getRepresentation("links[rel=details].value"), is(not(nullValue()))); // followed
-        
+
         actionRepr = membersList.getRepresentation("[id=%s]", "newTransientEntity");
         assertThat(actionRepr.getRepresentation("links[rel=details]"), is(not(nullValue())));
-        assertThat(actionRepr.getRepresentation("links[rel=details].value"), is(nullValue())); // not followed
+        assertThat(actionRepr.getRepresentation("links[rel=details].value"), is(nullValue())); // not
+                                                                                               // followed
     }
 
-
-    private String givenHrefToService(String serviceId) throws JsonParseException, JsonMappingException, IOException {
+    private String givenHrefToService(final String serviceId) throws JsonParseException, JsonMappingException, IOException {
         final DomainServiceResource resource = client.getDomainServiceResource();
         final Response response = resource.services();
-        final ListRepresentation services = RestfulResponse.<ListRepresentation>ofT(response).getEntity();
+        final ListRepresentation services = RestfulResponse.<ListRepresentation> ofT(response).getEntity();
 
         return services.getRepresentation("values[id=%s]", serviceId).asLink().getHref();
     }
-
 
 }

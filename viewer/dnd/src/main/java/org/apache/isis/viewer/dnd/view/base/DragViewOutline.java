@@ -43,8 +43,7 @@ public class DragViewOutline extends AbstractView {
         final Bounds r = getBounds();
 
         for (int i = 0; i < thickness; i++) {
-            canvas.drawRectangle(i, i, r.getWidth() - i * 2 - 1, r.getHeight() - i * 2 - 1,
-                Toolkit.getColor(ColorsAndFonts.COLOR_SECONDARY1));
+            canvas.drawRectangle(i, i, r.getWidth() - i * 2 - 1, r.getHeight() - i * 2 - 1, Toolkit.getColor(ColorsAndFonts.COLOR_SECONDARY1));
         }
     }
 

@@ -39,38 +39,23 @@ import com.google.common.collect.Lists;
 
 public class UsingIsisViewerForConcordion extends AbstractFixture<UsingIsisViewerPeer> {
 
-    public UsingIsisViewerForConcordion(final AliasRegistry aliasesRegistry, final DeploymentType deploymentType,
-        final DateParser dateParser, final Perform.Mode mode) {
-        this(aliasesRegistry, deploymentType, dateParser, mode, CellBindingDefault
-            .builder(IsisViewerConstants.ON_OBJECT_NAME, IsisViewerConstants.ON_OBJECT_HEAD_SET).ditto().build(),
-            CellBindingDefault
-                .builder(IsisViewerConstants.ALIAS_RESULT_NAME, IsisViewerConstants.ALIAS_RESULT_HEAD_SET).optional()
-                .build(), CellBindingDefault
-                .builder(IsisViewerConstants.PERFORM_NAME, IsisViewerConstants.PERFORM_HEAD_SET).ditto().build(),
-            CellBindingDefault.builder(IsisViewerConstants.ON_MEMBER_NAME, IsisViewerConstants.ON_MEMBER_HEAD_SET)
-                .optional().build(), CellBindingDefault
-                .builder(IsisViewerConstants.THAT_IT_NAME, IsisViewerConstants.THAT_IT_HEAD_SET).ditto().optional()
-                .build(), CellBindingDefault
-                .builder(IsisViewerConstants.WITH_ARGUMENTS_NAME, IsisViewerConstants.WITH_ARGUMENTS_HEAD_SET)
-                .optional().build());
+    public UsingIsisViewerForConcordion(final AliasRegistry aliasesRegistry, final DeploymentType deploymentType, final DateParser dateParser, final Perform.Mode mode) {
+        this(aliasesRegistry, deploymentType, dateParser, mode, CellBindingDefault.builder(IsisViewerConstants.ON_OBJECT_NAME, IsisViewerConstants.ON_OBJECT_HEAD_SET).ditto().build(), CellBindingDefault.builder(IsisViewerConstants.ALIAS_RESULT_NAME, IsisViewerConstants.ALIAS_RESULT_HEAD_SET)
+                .optional().build(), CellBindingDefault.builder(IsisViewerConstants.PERFORM_NAME, IsisViewerConstants.PERFORM_HEAD_SET).ditto().build(), CellBindingDefault.builder(IsisViewerConstants.ON_MEMBER_NAME, IsisViewerConstants.ON_MEMBER_HEAD_SET).optional().build(), CellBindingDefault
+                .builder(IsisViewerConstants.THAT_IT_NAME, IsisViewerConstants.THAT_IT_HEAD_SET).ditto().optional().build(), CellBindingDefault.builder(IsisViewerConstants.WITH_ARGUMENTS_NAME, IsisViewerConstants.WITH_ARGUMENTS_HEAD_SET).optional().build());
     }
 
-    private UsingIsisViewerForConcordion(final AliasRegistry aliasesRegistry, final DeploymentType deploymentType,
-        final DateParser dateParser, final Perform.Mode mode, final CellBinding onObjectBinding,
-        final CellBinding aliasResultAsBinding, final CellBinding performBinding, final CellBinding onMemberBinding,
-        final CellBinding thatItBinding, final CellBinding arg0Binding) {
-        super(new UsingIsisViewerPeer(aliasesRegistry, deploymentType, dateParser, mode, onObjectBinding,
-            aliasResultAsBinding, performBinding, onMemberBinding, thatItBinding, arg0Binding));
+    private UsingIsisViewerForConcordion(final AliasRegistry aliasesRegistry, final DeploymentType deploymentType, final DateParser dateParser, final Perform.Mode mode, final CellBinding onObjectBinding, final CellBinding aliasResultAsBinding, final CellBinding performBinding,
+            final CellBinding onMemberBinding, final CellBinding thatItBinding, final CellBinding arg0Binding) {
+        super(new UsingIsisViewerPeer(aliasesRegistry, deploymentType, dateParser, mode, onObjectBinding, aliasResultAsBinding, performBinding, onMemberBinding, thatItBinding, arg0Binding));
     }
 
-    public String executeHeader(final String onObject, final String aliasResultAs, final String perform,
-        final String usingMember, final String thatIt, final String arg0, final String... remainingArgs) {
+    public String executeHeader(final String onObject, final String aliasResultAs, final String perform, final String usingMember, final String thatIt, final String arg0, final String... remainingArgs) {
 
         return setupHeader(onObject, aliasResultAs, perform, usingMember, thatIt, arg0);
     }
 
-    private String setupHeader(final String onObject, final String aliasResultAs, final String perform,
-        final String usingMember, final String thatIt, final String arg0) {
+    private String setupHeader(final String onObject, final String aliasResultAs, final String perform, final String usingMember, final String thatIt, final String arg0) {
         int colNum = 0;
         getPeer().getOnObjectBinding().setHeadColumn(colNum++);
         getPeer().getAliasResultAsBinding().setHeadColumn(colNum++);
@@ -86,8 +71,7 @@ public class UsingIsisViewerForConcordion extends AbstractFixture<UsingIsisViewe
         return ""; // ok
     }
 
-    public String executeRow(final String onObject, final String aliasResultAs, final String perform,
-        final String usingMember, final String thatIt, final String arg0, final String... remainingArgs) {
+    public String executeRow(final String onObject, final String aliasResultAs, final String perform, final String usingMember, final String thatIt, final String arg0, final String... remainingArgs) {
 
         setupHeader(onObject, aliasResultAs, perform, usingMember, thatIt, arg0);
 

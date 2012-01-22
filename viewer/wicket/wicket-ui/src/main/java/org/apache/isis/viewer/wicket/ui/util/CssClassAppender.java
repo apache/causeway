@@ -24,7 +24,8 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
 /**
- * Implementation of {@link AttributeAppender} that appends the provided CSS <tt>class</tt> attribute.
+ * Implementation of {@link AttributeAppender} that appends the provided CSS
+ * <tt>class</tt> attribute.
  */
 public class CssClassAppender extends AttributeAppender {
 

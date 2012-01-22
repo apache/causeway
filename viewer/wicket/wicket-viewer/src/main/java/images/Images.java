@@ -17,17 +17,17 @@
  *  under the License.
  */
 
-
 package images;
 
 import org.apache.wicket.markup.html.PackageResource;
 
 /**
- * This is a bit of a hack, but the Isis convention is to plonk all the
- * images in an images package.  This empty class allows Wicket to pick them up as
+ * This is a bit of a hack, but the Isis convention is to plonk all the images
+ * in an images package. This empty class allows Wicket to pick them up as
  * {@link PackageResource}s.
  */
 public final class Images {
 
-	private Images(){}
+    private Images() {
+    }
 }

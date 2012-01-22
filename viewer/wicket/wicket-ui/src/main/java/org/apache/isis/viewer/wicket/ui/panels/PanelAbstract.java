@@ -44,8 +44,7 @@ import com.google.inject.Inject;
 /**
  * Convenience adapter for {@link Panel}s built up using {@link ComponentType}s.
  */
-public abstract class PanelAbstract<T extends IModel<?>> extends Panel implements IHeaderContributor,
-    PersistenceSessionAccessor, AuthenticationSessionAccessor {
+public abstract class PanelAbstract<T extends IModel<?>> extends Panel implements IHeaderContributor, PersistenceSessionAccessor, AuthenticationSessionAccessor {
 
     private static final long serialVersionUID = 1L;
 
@@ -123,7 +122,8 @@ public abstract class PanelAbstract<T extends IModel<?>> extends Panel implement
     }
 
     /**
-     * Factored out to allow non-concrete subclasses to additionally render their own CSS if required.
+     * Factored out to allow non-concrete subclasses to additionally render
+     * their own CSS if required.
      */
     protected void renderHead(final IHeaderResponse response, final Class<?> cls) {
         final String url = cls.getSimpleName() + ".css";
@@ -135,7 +135,8 @@ public abstract class PanelAbstract<T extends IModel<?>> extends Panel implement
     // ///////////////////////////////////////////////////////////////////
 
     /**
-     * The underlying {@link AuthenticationSession Isis session} wrapped in the {@link #getWebSession() Wicket session}.
+     * The underlying {@link AuthenticationSession Isis session} wrapped in the
+     * {@link #getWebSession() Wicket session}.
      * 
      * @return
      */

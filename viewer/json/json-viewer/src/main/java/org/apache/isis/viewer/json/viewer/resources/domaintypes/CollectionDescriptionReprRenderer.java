@@ -36,19 +36,19 @@ public class CollectionDescriptionReprRenderer extends AbstractTypeMemberReprRen
         }
 
         @Override
-        public ReprRenderer<?,?> newRenderer(ResourceContext resourceContext, LinkFollower linkFollower, JsonRepresentation representation) {
+        public ReprRenderer<?, ?> newRenderer(final ResourceContext resourceContext, final LinkFollower linkFollower, final JsonRepresentation representation) {
             return new CollectionDescriptionReprRenderer(resourceContext, linkFollower, getRepresentationType(), representation);
         }
     }
 
-    public static LinkBuilder newLinkToBuilder(ResourceContext resourceContext, Rel rel, ObjectSpecification objectSpecification, OneToManyAssociation collection) {
-        String typeFullName = objectSpecification.getFullIdentifier();
-        String collectionId = collection.getId();
-        String url = "domainTypes/" + typeFullName + "/collections/" + collectionId;
+    public static LinkBuilder newLinkToBuilder(final ResourceContext resourceContext, final Rel rel, final ObjectSpecification objectSpecification, final OneToManyAssociation collection) {
+        final String typeFullName = objectSpecification.getFullIdentifier();
+        final String collectionId = collection.getId();
+        final String url = "domainTypes/" + typeFullName + "/collections/" + collectionId;
         return LinkBuilder.newBuilder(resourceContext, rel, RepresentationType.COLLECTION_DESCRIPTION, url);
     }
 
-    public CollectionDescriptionReprRenderer(ResourceContext resourceContext, LinkFollower linkFollower, RepresentationType representationType, JsonRepresentation representation) {
+    public CollectionDescriptionReprRenderer(final ResourceContext resourceContext, final LinkFollower linkFollower, final RepresentationType representationType, final JsonRepresentation representation) {
         super(resourceContext, linkFollower, representationType, representation);
     }
 
@@ -59,11 +59,10 @@ public class CollectionDescriptionReprRenderer extends AbstractTypeMemberReprRen
 
     private void addLinkToElementTypeIfAny() {
         final ObjectSpecification elementType = getObjectFeature().getSpecification();
-        if(elementType == null) {
+        if (elementType == null) {
             return;
         }
-        final LinkBuilder linkBuilder = 
-            DomainTypeReprRenderer.newLinkToBuilder(getResourceContext(), Rel.ELEMENT_TYPE, elementType);
+        final LinkBuilder linkBuilder = DomainTypeReprRenderer.newLinkToBuilder(getResourceContext(), Rel.ELEMENT_TYPE, elementType);
         getLinks().arrayAdd(linkBuilder.build());
     }
 
@@ -72,7 +71,5 @@ public class CollectionDescriptionReprRenderer extends AbstractTypeMemberReprRen
         putExtensionsName();
         putExtensionsDescriptionIfAvailable();
     }
-
-
 
 }

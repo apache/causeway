@@ -29,8 +29,7 @@ import org.apache.isis.viewer.dnd.view.border.ScrollBarRender;
 public class ScrollBar3DRender implements ScrollBarRender {
 
     @Override
-    public void draw(final Canvas canvas, final boolean isHorizontal, final int x, final int y, final int width,
-        final int height, final int scrollPosition, final int visibleAmount) {
+    public void draw(final Canvas canvas, final boolean isHorizontal, final int x, final int y, final int width, final int height, final int scrollPosition, final int visibleAmount) {
         final Color thumbColor = Toolkit.getColor(ColorsAndFonts.COLOR_PRIMARY2);
 
         // canvas.drawSolidRectangle(x + 1, y + 1, width - 2, height - 2,
@@ -48,10 +47,8 @@ public class ScrollBar3DRender implements ScrollBarRender {
             scrollHeight = visibleAmount;
         }
         canvas.drawSolidRectangle(x2 + 1, y2, scrollWidth - 2, scrollHeight, thumbColor);
-        canvas.drawRectangle(x2 + 1, y2, scrollWidth - 2, scrollHeight,
-            Toolkit.getColor(ColorsAndFonts.COLOR_SECONDARY1));
-        DrawingUtil.drawHatching(canvas, x2 + 3, y2 + 4, scrollWidth - 6, scrollHeight - 8,
-            Toolkit.getColor(ColorsAndFonts.COLOR_PRIMARY1), Toolkit.getColor(ColorsAndFonts.COLOR_PRIMARY3));
+        canvas.drawRectangle(x2 + 1, y2, scrollWidth - 2, scrollHeight, Toolkit.getColor(ColorsAndFonts.COLOR_SECONDARY1));
+        DrawingUtil.drawHatching(canvas, x2 + 3, y2 + 4, scrollWidth - 6, scrollHeight - 8, Toolkit.getColor(ColorsAndFonts.COLOR_PRIMARY1), Toolkit.getColor(ColorsAndFonts.COLOR_PRIMARY3));
         canvas.drawRectangle(x, y, width, height, Toolkit.getColor(ColorsAndFonts.COLOR_SECONDARY2));
     }
 

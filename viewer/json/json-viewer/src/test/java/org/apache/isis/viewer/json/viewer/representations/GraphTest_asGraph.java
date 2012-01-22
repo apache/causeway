@@ -28,49 +28,49 @@ import org.apache.isis.viewer.json.applib.util.Parser;
 import org.apache.isis.viewer.json.applib.util.PathNode;
 import org.junit.Test;
 
-@SuppressWarnings({"rawtypes", "unchecked"})
+@SuppressWarnings({ "rawtypes", "unchecked" })
 public class GraphTest_asGraph {
 
     @Test
     public void simple() throws Exception {
-        List<List<String>> links = asListOfLists("a.b.c,a.b.d,d.b,e,e");
+        final List<List<String>> links = asListOfLists("a.b.c,a.b.d,d.b,e,e");
         final Map<PathNode, Map> root = GraphUtil.asGraph(links);
-        
+
         assertThat(root.size(), is(3));
-        Map<String,Map> nodeA = root.get(PathNode.parse("a"));
+        final Map<String, Map> nodeA = root.get(PathNode.parse("a"));
         assertThat(nodeA.size(), is(1));
-        Map<String,Map> nodeAB = nodeA.get(PathNode.parse("b"));
+        final Map<String, Map> nodeAB = nodeA.get(PathNode.parse("b"));
         assertThat(nodeAB.size(), is(2));
-        Map<String,Map> nodeABC = nodeAB.get(PathNode.parse("c"));
+        final Map<String, Map> nodeABC = nodeAB.get(PathNode.parse("c"));
         assertThat(nodeABC.size(), is(0));
-        Map<String,Map> nodeABD = nodeAB.get(PathNode.parse("d"));
+        final Map<String, Map> nodeABD = nodeAB.get(PathNode.parse("d"));
         assertThat(nodeABD.size(), is(0));
-        
-        Map<String,Map> nodeD = root.get(PathNode.parse("d"));
+
+        final Map<String, Map> nodeD = root.get(PathNode.parse("d"));
         assertThat(nodeD.size(), is(1));
-        Map<String,Map> nodeDB = nodeD.get(PathNode.parse("b"));
+        final Map<String, Map> nodeDB = nodeD.get(PathNode.parse("b"));
         assertThat(nodeDB.size(), is(0));
-        
-        Map<String,Map> nodeE = root.get(PathNode.parse("e"));
+
+        final Map<String, Map> nodeE = root.get(PathNode.parse("e"));
         assertThat(nodeE.size(), is(0));
     }
 
     @Test
     public void empty() throws Exception {
-        List<List<String>> links = asListOfLists("");
+        final List<List<String>> links = asListOfLists("");
         final Map<PathNode, Map> root = GraphUtil.asGraph(links);
-        
+
         assertThat(root.size(), is(0));
     }
 
     @Test
     public void whenNull() throws Exception {
         final Map<PathNode, Map> root = GraphUtil.asGraph(null);
-        
+
         assertThat(root.size(), is(0));
     }
 
-    private List<List<String>> asListOfLists(String string) {
+    private List<List<String>> asListOfLists(final String string) {
         return Parser.forListOfListOfStrings().valueOf(string);
     }
 }

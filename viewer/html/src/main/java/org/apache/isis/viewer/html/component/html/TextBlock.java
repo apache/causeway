@@ -27,12 +27,12 @@ import org.apache.isis.viewer.html.component.ComponentAbstract;
 class TextBlock extends ComponentAbstract {
     StringBuffer buffer = new StringBuffer();
 
-    public TextBlock(PathBuilder pathBuilder, final String text) {
+    public TextBlock(final PathBuilder pathBuilder, final String text) {
         super(pathBuilder);
         append(text);
     }
 
-    public TextBlock(PathBuilder pathBuilder) {
+    public TextBlock(final PathBuilder pathBuilder) {
         super(pathBuilder);
     }
 

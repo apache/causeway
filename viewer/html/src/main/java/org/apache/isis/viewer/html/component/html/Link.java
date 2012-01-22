@@ -25,7 +25,7 @@ import org.apache.isis.viewer.html.PathBuilder;
 import org.apache.isis.viewer.html.component.Component;
 
 public class Link implements Component {
-    
+
     private final PathBuilder pathBuilder;
     private final String link;
     private final String name;

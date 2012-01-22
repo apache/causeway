@@ -56,8 +56,7 @@ public class AwtColor implements Color {
 
     public AwtColor(final String propertyName, final String defaultColor) {
         this.name = propertyName;
-        color =
-            IsisContext.getConfiguration().getColor(PROPERTY_STEM + propertyName, java.awt.Color.decode(defaultColor));
+        color = IsisContext.getConfiguration().getColor(PROPERTY_STEM + propertyName, java.awt.Color.decode(defaultColor));
     }
 
     public AwtColor(final String propertyName, final AwtColor defaultColor) {

@@ -42,7 +42,8 @@ public abstract class DragImpl extends PointerEvent implements DragEvent {
     public abstract void drag(final View target, final Location location, final int mods);
 
     /**
-     * Indicates the drag has properly ended (the mouse button has been released)
+     * Indicates the drag has properly ended (the mouse button has been
+     * released)
      * 
      */
     @Override

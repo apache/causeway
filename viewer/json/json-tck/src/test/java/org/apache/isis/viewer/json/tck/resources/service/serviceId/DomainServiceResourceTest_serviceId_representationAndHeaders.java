@@ -46,37 +46,35 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-
 public class DomainServiceResourceTest_serviceId_representationAndHeaders {
 
     @Rule
     public IsisWebServerRule webServerRule = new IsisWebServerRule();
-    
+
     private RestfulClient client;
     private DomainServiceResource resource;
 
     @Before
     public void setUp() throws Exception {
-        WebServer webServer = webServerRule.getWebServer();
+        final WebServer webServer = webServerRule.getWebServer();
         client = new RestfulClient(webServer.getBase());
-        
+
         resource = client.getDomainServiceResource();
     }
-
 
     @Test
     public void representation() throws Exception {
 
         // given
-        Response resp = resource.service("simples");
-        
+        final Response resp = resource.service("simples");
+
         // when
-        RestfulResponse<DomainObjectRepresentation> jsonResp = RestfulResponse.ofT(resp);
-        
+        final RestfulResponse<DomainObjectRepresentation> jsonResp = RestfulResponse.ofT(resp);
+
         // then
         assertThat(jsonResp.getStatus(), is(HttpStatusCode.OK));
 
-        DomainObjectRepresentation repr = jsonResp.getEntity();
+        final DomainObjectRepresentation repr = jsonResp.getEntity();
 
         assertThat(repr, isMap());
 
@@ -85,51 +83,46 @@ public class DomainServiceResourceTest_serviceId_representationAndHeaders {
         assertThat(repr.getTitle(), matches("Simples"));
 
         assertThat(repr.getMembers(), isArray());
-        
+
         assertThat(repr.getLinks(), isArray());
         assertThat(repr.getExtensions(), isMap());
     }
 
-
     @Test
     public void headers() throws Exception {
         // given
-        Response resp = resource.service("simples");
-        
+        final Response resp = resource.service("simples");
+
         // when
-        RestfulResponse<DomainObjectRepresentation> jsonResp = RestfulResponse.ofT(resp);
-        
+        final RestfulResponse<DomainObjectRepresentation> jsonResp = RestfulResponse.ofT(resp);
+
         // then
         assertThat(jsonResp.getStatus(), is(HttpStatusCode.OK));
         assertThat(jsonResp.getHeader(RestfulResponse.Header.CONTENT_TYPE), is(RepresentationType.DOMAIN_OBJECT.getMediaType()));
-        assertThat(jsonResp.getHeader(RestfulResponse.Header.CACHE_CONTROL).getMaxAge(), is(24*60*60));
+        assertThat(jsonResp.getHeader(RestfulResponse.Header.CACHE_CONTROL).getMaxAge(), is(24 * 60 * 60));
     }
 
     @Test
     public void self_isFollowable() throws Exception {
         // given
-        DomainObjectRepresentation repr = givenRepresentation("simples");
+        final DomainObjectRepresentation repr = givenRepresentation("simples");
 
         // when, then
         assertThat(repr, isFollowableLinkToSelf(client));
     }
 
-
     @Test
     public void links() throws Exception {
         // given, when
-        DomainObjectRepresentation repr = givenRepresentation("simples");
+        final DomainObjectRepresentation repr = givenRepresentation("simples");
 
         // then
         assertThat(repr.getLinks().size(), is(3));
     }
-    
 
-    private DomainObjectRepresentation givenRepresentation(String serviceId) throws JsonParseException, JsonMappingException, IOException {
-        RestfulResponse<DomainObjectRepresentation> jsonResp = RestfulResponse.ofT(resource.service(serviceId));
+    private DomainObjectRepresentation givenRepresentation(final String serviceId) throws JsonParseException, JsonMappingException, IOException {
+        final RestfulResponse<DomainObjectRepresentation> jsonResp = RestfulResponse.ofT(resource.service(serviceId));
         return jsonResp.getEntity();
     }
 
-
 }
-    

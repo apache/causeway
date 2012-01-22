@@ -31,7 +31,8 @@ public class TextSelection {
     }
 
     /**
-     * Determine if the selection is back to front. Returns true if the cursor position is before the start position.
+     * Determine if the selection is back to front. Returns true if the cursor
+     * position is before the start position.
      */
     private boolean backwardSelection() {
         return cursor.isBefore(start);
@@ -55,14 +56,16 @@ public class TextSelection {
     // private CursorPosition end = new CursorPosition(0,0);
 
     /**
-     * returns true is a selection exists - if the start and end locations are not the same
+     * returns true is a selection exists - if the start and end locations are
+     * not the same
      */
     public boolean hasSelection() {
         return !cursor.samePosition(start);
     }
 
     /**
-     * clears the selection so nothing is selected. The start and end points are set to the same values as the cursor.
+     * clears the selection so nothing is selected. The start and end points are
+     * set to the same values as the cursor.
      */
     public void resetTo(final CursorPosition pos) {
         start.asFor(pos);
@@ -91,7 +94,6 @@ public class TextSelection {
 
     @Override
     public String toString() {
-        return "Selection [from=" + start.getLine() + ":" + start.getCharacter() + ",to=" + cursor.getLine() + ":"
-            + cursor.getCharacter() + "]";
+        return "Selection [from=" + start.getLine() + ":" + start.getCharacter() + ",to=" + cursor.getLine() + ":" + cursor.getCharacter() + "]";
     }
 }

@@ -199,8 +199,7 @@ public class MinimizedView extends AbstractView {
     public MinimizedView(final View viewToMinimize) {
         super(viewToMinimize.getContent(), new Specification());
         this.minimizedView = viewToMinimize;
-        iconView =
-            new SubviewIconSpecification().createView(viewToMinimize.getContent(), viewToMinimize.getViewAxes(), -1);
+        iconView = new SubviewIconSpecification().createView(viewToMinimize.getContent(), viewToMinimize.getViewAxes(), -1);
         iconView.setParent(this);
         controls = new WindowControl[] { new RestoreWindowControl(this), new CloseWindowControl(this) };
     }
@@ -231,7 +230,8 @@ public class MinimizedView extends AbstractView {
             return super.dragStart(drag);
         }
         // View dragOverlay = new DragViewOutline(getView());
-        // return new ViewDrag(this, new Offset(drag.getLocation()), dragOverlay);
+        // return new ViewDrag(this, new Offset(drag.getLocation()),
+        // dragOverlay);
     }
 
     @Override
@@ -245,9 +245,7 @@ public class MinimizedView extends AbstractView {
         final int top = 3;
 
         final boolean hasFocus = containsFocus();
-        final Color lightColor =
-            hasFocus ? Toolkit.getColor(ColorsAndFonts.COLOR_SECONDARY1) : Toolkit
-                .getColor(ColorsAndFonts.COLOR_SECONDARY2);
+        final Color lightColor = hasFocus ? Toolkit.getColor(ColorsAndFonts.COLOR_SECONDARY1) : Toolkit.getColor(ColorsAndFonts.COLOR_SECONDARY2);
         clearBackground(canvas, Toolkit.getColor(ColorsAndFonts.COLOR_WINDOW));
         canvas.drawRectangle(1, 0, width - 2, height, lightColor);
         canvas.drawRectangle(0, 1, width, height - 2, lightColor);
@@ -257,13 +255,13 @@ public class MinimizedView extends AbstractView {
         final ViewState state = getState();
         if (state.isActive()) {
             final int i = left;
-            canvas.drawRectangle(i, top, width - 2 * i, height - 2 * i - top,
-                Toolkit.getColor(ColorsAndFonts.COLOR_ACTIVE));
+            canvas.drawRectangle(i, top, width - 2 * i, height - 2 * i - top, Toolkit.getColor(ColorsAndFonts.COLOR_ACTIVE));
         }
 
-        final int bw = controls[0].getLocation().getX() - 3; // controls.length * WindowControl.WIDTH;
-        canvas.drawSolidRectangle(bw, top, width - bw - 3, height - top * 2,
-            Toolkit.getColor(ColorsAndFonts.COLOR_SECONDARY3));
+        final int bw = controls[0].getLocation().getX() - 3; // controls.length
+                                                             // *
+                                                             // WindowControl.WIDTH;
+        canvas.drawSolidRectangle(bw, top, width - bw - 3, height - top * 2, Toolkit.getColor(ColorsAndFonts.COLOR_SECONDARY3));
         canvas.drawLine(bw - 1, top, bw - 1, height - top * 2, lightColor);
 
         for (int i = 0; controls != null && i < controls.length; i++) {
@@ -401,9 +399,11 @@ public class MinimizedView extends AbstractView {
         final View button = overControl(click.getLocation());
         if (button == null) {
             /*
-             * if (overBorder(click.getLocation())) { Workspace workspace = getWorkspace(); if (workspace != null) { if
-             * (click.button2()) { workspace.lower(getView()); } else if (click.button1()) { workspace.raise(getView());
-             * } } } else { super.firstClick(click); }
+             * if (overBorder(click.getLocation())) { Workspace workspace =
+             * getWorkspace(); if (workspace != null) { if (click.button2()) {
+             * workspace.lower(getView()); } else if (click.button1()) {
+             * workspace.raise(getView()); } } } else { super.firstClick(click);
+             * }
              */} else {
             button.firstClick(click);
         }

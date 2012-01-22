@@ -26,7 +26,8 @@ import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 
 public class Mark extends AbstractElementProcessor {
 
-    // TODO the return points should be pushed on to a stack so that there is traceable history.
+    // TODO the return points should be pushed on to a stack so that there is
+    // traceable history.
     @Override
     public void process(final Request request) {
         // String name = request.getOptionalProperty(NAME);

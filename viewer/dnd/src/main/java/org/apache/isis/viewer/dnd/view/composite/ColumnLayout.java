@@ -25,9 +25,11 @@ import org.apache.isis.viewer.dnd.view.View;
 import org.apache.isis.viewer.dnd.view.base.Layout;
 
 /**
- * A column layout places component views side by side. Each component is given the space it request. A components width
- * will be give a consistent width if that component's view specification's <code>isAligned</code> method returns
- * <code>true</code>, or the layout's <code>fixedWidth</code> flag is set (via the two parameter constructor).
+ * A column layout places component views side by side. Each component is given
+ * the space it request. A components width will be give a consistent width if
+ * that component's view specification's <code>isAligned</code> method returns
+ * <code>true</code>, or the layout's <code>fixedWidth</code> flag is set (via
+ * the two parameter constructor).
  */
 public class ColumnLayout implements Layout {
     private final boolean fixedWidth;

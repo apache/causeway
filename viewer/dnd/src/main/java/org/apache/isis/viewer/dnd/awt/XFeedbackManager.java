@@ -59,7 +59,8 @@ public class XFeedbackManager implements Feedback {
         return text.toString();
 
         // for debug
-        // return "[view: " + view + "] [action: " + action + "] [error: " + error + "] [message: " + message
+        // return "[view: " + view + "] [action: " + action + "] [error: " +
+        // error + "] [message: " + message
         // + "] [messages:" + messages + "]";
     }
 
@@ -72,7 +73,8 @@ public class XFeedbackManager implements Feedback {
         }
     }
 
-    // REVIEW why can only objects be set to busy? Specifically the service icon do not show as bust when a
+    // REVIEW why can only objects be set to busy? Specifically the service icon
+    // do not show as bust when a
     // long standing option is being set up when a menu is being created.
     @Override
     public void setBusy(final View view, final BackgroundTask task) {

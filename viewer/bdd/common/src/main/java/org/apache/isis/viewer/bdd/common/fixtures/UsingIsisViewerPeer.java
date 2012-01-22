@@ -113,12 +113,9 @@ public class UsingIsisViewerPeer extends AbstractFixturePeer {
 
     private final Map<String, Perform> commandByKey = new HashMap<String, Perform>();
 
-    public UsingIsisViewerPeer(final AliasRegistry aliasesRegistry, final DeploymentType deploymentType,
-        final DateParser dateParser, final Perform.Mode mode, final CellBinding onObjectBinding,
-        final CellBinding aliasResultAsBinding, final CellBinding performBinding, final CellBinding onMemberBinding,
-        final CellBinding thatItBinding, final CellBinding arg0Binding) {
-        super(aliasesRegistry, onObjectBinding, aliasResultAsBinding, performBinding, onMemberBinding, thatItBinding,
-            arg0Binding);
+    public UsingIsisViewerPeer(final AliasRegistry aliasesRegistry, final DeploymentType deploymentType, final DateParser dateParser, final Perform.Mode mode, final CellBinding onObjectBinding, final CellBinding aliasResultAsBinding, final CellBinding performBinding,
+            final CellBinding onMemberBinding, final CellBinding thatItBinding, final CellBinding arg0Binding) {
+        super(aliasesRegistry, onObjectBinding, aliasResultAsBinding, performBinding, onMemberBinding, thatItBinding, arg0Binding);
 
         this.onObjectBinding = onObjectBinding;
         this.aliasResultAsBinding = aliasResultAsBinding;
@@ -283,8 +280,7 @@ public class UsingIsisViewerPeer extends AbstractFixturePeer {
     // "perform" API
     // //////////////////////////////////////////////////////////////////
 
-    public void performCommand(final ObjectAdapter onAdapter, final String aliasAs, final ObjectMember objectMember,
-        final Perform performCommand, final List<ScenarioCell> argumentStoryCells) throws ScenarioBoundValueException {
+    public void performCommand(final ObjectAdapter onAdapter, final String aliasAs, final ObjectMember objectMember, final Perform performCommand, final List<ScenarioCell> argumentStoryCells) throws ScenarioBoundValueException {
         final PerformContext performContext = new PerformContext(this, onAdapter, objectMember, argumentStoryCells);
         try {
             performCommand.perform(performContext);
@@ -294,8 +290,7 @@ public class UsingIsisViewerPeer extends AbstractFixturePeer {
         aliasResultFromPerformCommand(performCommand, aliasAs);
     }
 
-    private void aliasResultFromPerformCommand(final Perform performCommand, final String aliasAs)
-        throws ScenarioBoundValueException {
+    private void aliasResultFromPerformCommand(final Perform performCommand, final String aliasAs) throws ScenarioBoundValueException {
         if (StringUtils.isNullOrEmpty(aliasAs)) {
             return;
         }
@@ -323,8 +318,7 @@ public class UsingIsisViewerPeer extends AbstractFixturePeer {
     /**
      * Not public API
      */
-    public ObjectAdapter getAdapter(final ObjectAdapter contextAdapter, final ObjectSpecification noSpec,
-        final CellBinding contextBinding, final ScenarioCell paramCell) throws ScenarioBoundValueException {
+    public ObjectAdapter getAdapter(final ObjectAdapter contextAdapter, final ObjectSpecification noSpec, final CellBinding contextBinding, final ScenarioCell paramCell) throws ScenarioBoundValueException {
 
         final String cellText = paramCell.getText();
 
@@ -337,7 +331,8 @@ public class UsingIsisViewerPeer extends AbstractFixturePeer {
                 throw ScenarioBoundValueException.arg(contextBinding, paramCell, "(cannot parse '" + cellText + "')");
             } catch (final IllegalArgumentException ex) {
                 // REVIEW: isn't what is thrown, but perhaps
-                // TextEntryParseException should inherit from IllegalArgumentException?
+                // TextEntryParseException should inherit from
+                // IllegalArgumentException?
                 throw ScenarioBoundValueException.arg(contextBinding, paramCell, "(cannot parse '" + cellText + "')");
             }
         }
@@ -355,16 +350,15 @@ public class UsingIsisViewerPeer extends AbstractFixturePeer {
      * Not public API
      * 
      * <p>
-     * Ensures that there are at least enough arguments for the number of parameters required.
+     * Ensures that there are at least enough arguments for the number of
+     * parameters required.
      */
-    public ObjectAdapter[] getAdapters(final ObjectAdapter onAdapter, final ObjectAction objectAction,
-        final CellBinding onMemberBinding, final List<ScenarioCell> argumentCells) throws ScenarioBoundValueException {
+    public ObjectAdapter[] getAdapters(final ObjectAdapter onAdapter, final ObjectAction objectAction, final CellBinding onMemberBinding, final List<ScenarioCell> argumentCells) throws ScenarioBoundValueException {
         final List<ObjectActionParameter> parameters = objectAction.getParameters();
 
         final int parameterCount = parameters.size();
         if (argumentCells.size() < parameterCount) {
-            throw ScenarioBoundValueException.current(onMemberBinding, "(action requires " + parameterCount
-                + " arguments)");
+            throw ScenarioBoundValueException.current(onMemberBinding, "(action requires " + parameterCount + " arguments)");
         }
         final ObjectAdapter[] adapters = new ObjectAdapter[parameterCount];
 

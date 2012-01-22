@@ -110,7 +110,8 @@ public abstract class ImageProviderAbstract implements ImageProvider {
     }
 
     /**
-     * Hook method for subclass to actually return the image, else <tt>null</tt>.
+     * Hook method for subclass to actually return the image, else <tt>null</tt>
+     * .
      * 
      * @param className
      *            - the short name of the class to search for.

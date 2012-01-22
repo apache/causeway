@@ -42,10 +42,13 @@ public class IconGridViewSpecification extends AbstractCollectionViewSpecificati
             public View createView(final Content content, final Axes axes, final int sequence) {
                 final View icon = new ImageViewSpecification().createView(content, axes, sequence);
                 /*
-                 * Icon icon = new Icon(content, IconGridViewSpecification.this); Text textStyle =
-                 * Toolkit.getText(ColorsAndFonts.TEXT_NORMAL); icon.setTitle(new ObjectTitleText(icon, textStyle));
-                 * icon.setSelectedGraphic(new IconGraphic(icon, 68)); icon.setUnselectedGraphic(new IconGraphic(icon,
-                 * 60)); icon.setVertical(true);
+                 * Icon icon = new Icon(content,
+                 * IconGridViewSpecification.this); Text textStyle =
+                 * Toolkit.getText(ColorsAndFonts.TEXT_NORMAL);
+                 * icon.setTitle(new ObjectTitleText(icon, textStyle));
+                 * icon.setSelectedGraphic(new IconGraphic(icon, 68));
+                 * icon.setUnselectedGraphic(new IconGraphic(icon, 60));
+                 * icon.setVertical(true);
                  * 
                  * // return icon;
                  */
@@ -74,8 +77,11 @@ public class IconGridViewSpecification extends AbstractCollectionViewSpecificati
 
     /*
      * private static final ObjectSpecification BOOK_SPECIFICATION =
-     * IsisContext.getSpecificationLoader().loadSpecification("org.apache.isis.example.library.dom.Book"); public
-     * boolean canDisplay(ViewRequirement requirement) { return super.canDisplay(requirement) &&
-     * requirement.getAdapter().getTypeOfFacet().valueSpec() == BOOK_SPECIFICATION; }
+     * IsisContext.getSpecificationLoader().loadSpecification(
+     * "org.apache.isis.example.library.dom.Book"); public boolean
+     * canDisplay(ViewRequirement requirement) { return
+     * super.canDisplay(requirement) &&
+     * requirement.getAdapter().getTypeOfFacet().valueSpec() ==
+     * BOOK_SPECIFICATION; }
      */
 }

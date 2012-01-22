@@ -22,10 +22,7 @@ import org.jboss.resteasy.client.ClientRequest;
 import org.jboss.resteasy.specimpl.UriBuilderImpl;
 
 public enum HttpMethod {
-    GET(javax.ws.rs.HttpMethod.GET, ArgStrategy.QUERY_STRING),
-    PUT(javax.ws.rs.HttpMethod.PUT, ArgStrategy.BODY),
-    DELETE(javax.ws.rs.HttpMethod.DELETE, ArgStrategy.QUERY_STRING),
-    POST(javax.ws.rs.HttpMethod.POST, ArgStrategy.BODY);
+    GET(javax.ws.rs.HttpMethod.GET, ArgStrategy.QUERY_STRING), PUT(javax.ws.rs.HttpMethod.PUT, ArgStrategy.BODY), DELETE(javax.ws.rs.HttpMethod.DELETE, ArgStrategy.QUERY_STRING), POST(javax.ws.rs.HttpMethod.POST, ArgStrategy.BODY);
 
     private enum ArgStrategy {
         /**
@@ -33,7 +30,7 @@ public enum HttpMethod {
          */
         QUERY_ARGS {
             @Override
-            void setUpArgs(ClientRequestConfigurer clientRequestConfigurer, JsonRepresentation requestArgs) {
+            void setUpArgs(final ClientRequestConfigurer clientRequestConfigurer, final JsonRepresentation requestArgs) {
                 clientRequestConfigurer.queryArgs(requestArgs);
             }
         },
@@ -42,23 +39,23 @@ public enum HttpMethod {
          */
         QUERY_STRING {
             @Override
-            void setUpArgs(ClientRequestConfigurer clientRequestConfigurer, JsonRepresentation requestArgs) {
+            void setUpArgs(final ClientRequestConfigurer clientRequestConfigurer, final JsonRepresentation requestArgs) {
                 clientRequestConfigurer.queryString(requestArgs);
             }
         },
         BODY {
             @Override
-            void setUpArgs(ClientRequestConfigurer clientRequestConfigurer, JsonRepresentation requestArgs) {
+            void setUpArgs(final ClientRequestConfigurer clientRequestConfigurer, final JsonRepresentation requestArgs) {
                 clientRequestConfigurer.body(requestArgs);
             }
         };
         abstract void setUpArgs(ClientRequestConfigurer clientRequestConfigurer, JsonRepresentation requestArgs);
     }
-    
+
     private final String javaxRsMethod;
     private final ArgStrategy argStrategy;
 
-    private HttpMethod(String javaxRsMethod, ArgStrategy argStrategy) {
+    private HttpMethod(final String javaxRsMethod, final ArgStrategy argStrategy) {
         this.javaxRsMethod = javaxRsMethod;
         this.argStrategy = argStrategy;
     }
@@ -68,19 +65,22 @@ public enum HttpMethod {
     }
 
     /**
-     * It's a bit nasty that we need to ask for the {@link UriBuilderImpl} as well as the {@link ClientRequest},
-     * but that's because the {@link ClientRequest} does not allow us to setup raw query strings (only query name/arg pairs)
+     * It's a bit nasty that we need to ask for the {@link UriBuilderImpl} as
+     * well as the {@link ClientRequest}, but that's because the
+     * {@link ClientRequest} does not allow us to setup raw query strings (only
+     * query name/arg pairs)
      * 
      * @param restEasyRequest
-     * @param uriBuilder - that sits underneath the restEasyRequest
+     * @param uriBuilder
+     *            - that sits underneath the restEasyRequest
      * @param requestArgs
      */
-    public void setUpArgs(ClientRequestConfigurer clientRequestConfigurer, JsonRepresentation requestArgs) {
+    public void setUpArgs(final ClientRequestConfigurer clientRequestConfigurer, final JsonRepresentation requestArgs) {
         clientRequestConfigurer.setHttpMethod(this);
-        if(requestArgs == null) {
+        if (requestArgs == null) {
             return;
         }
-        if(!requestArgs.isMap()) {
+        if (!requestArgs.isMap()) {
             throw new IllegalArgumentException("requestArgs must be a map; instead got: " + requestArgs);
         }
         argStrategy.setUpArgs(clientRequestConfigurer, requestArgs);

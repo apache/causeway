@@ -43,12 +43,10 @@ final class FindUsingLinkFactory implements CssMenuLinkFactory {
     }
 
     @Override
-    public LinkAndLabel newLink(final ObjectAdapterMemento adapterMemento, final ObjectAction action,
-        final String linkId) {
+    public LinkAndLabel newLink(final ObjectAdapterMemento adapterMemento, final ObjectAction action, final String linkId) {
         final ActionMemento actionMemento = new ActionMemento(action);
         final ActionModel.Mode actionMode = ActionModel.determineMode(action);
-        final ActionModel actionModel =
-            ActionModel.create(adapterMemento, actionMemento, actionMode, SingleResultsMode.SELECT);
+        final ActionModel actionModel = ActionModel.create(adapterMemento, actionMemento, actionMode, SingleResultsMode.SELECT);
 
         actionModel.setSelectionHandler(new SelectionHandler() {
             private static final long serialVersionUID = 1L;

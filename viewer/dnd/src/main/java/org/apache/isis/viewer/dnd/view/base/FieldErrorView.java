@@ -33,9 +33,11 @@ import org.apache.isis.viewer.dnd.view.ViewRequirement;
 import org.apache.isis.viewer.dnd.view.ViewSpecification;
 
 /**
- * Displays an error message in place of a normal field when a problem occurs, usually due to a programming error, and
- * the normal field cannot be created. A example of this is where value field is declared in an ObjectAdapter, but the
- * programmer forgot to instantiate the value object, causing null to be returned instead, which is an illegal value.
+ * Displays an error message in place of a normal field when a problem occurs,
+ * usually due to a programming error, and the normal field cannot be created. A
+ * example of this is where value field is declared in an ObjectAdapter, but the
+ * programmer forgot to instantiate the value object, causing null to be
+ * returned instead, which is an illegal value.
  */
 public class FieldErrorView extends AbstractView {
 
@@ -51,12 +53,9 @@ public class FieldErrorView extends AbstractView {
         super.draw(canvas);
 
         final Size size = getSize();
-        canvas.drawSolidRectangle(0, 0, size.getWidth() - 1, size.getHeight() - 1,
-            Toolkit.getColor(ColorsAndFonts.COLOR_WHITE));
-        canvas.drawRectangle(0, 0, size.getWidth() - 1, size.getHeight() - 1,
-            Toolkit.getColor(ColorsAndFonts.COLOR_BLACK));
-        canvas.drawText(error, 14, 20, Toolkit.getColor(ColorsAndFonts.COLOR_INVALID),
-            Toolkit.getText(ColorsAndFonts.TEXT_NORMAL));
+        canvas.drawSolidRectangle(0, 0, size.getWidth() - 1, size.getHeight() - 1, Toolkit.getColor(ColorsAndFonts.COLOR_WHITE));
+        canvas.drawRectangle(0, 0, size.getWidth() - 1, size.getHeight() - 1, Toolkit.getColor(ColorsAndFonts.COLOR_BLACK));
+        canvas.drawText(error, 14, 20, Toolkit.getColor(ColorsAndFonts.COLOR_INVALID), Toolkit.getText(ColorsAndFonts.TEXT_NORMAL));
     }
 
     @Override

@@ -35,7 +35,7 @@ public class RestfulResponse_HttpStatusCodeTest {
 
     @Test
     public void unknownStatusCode() {
-        HttpStatusCode statusFor = HttpStatusCode.statusFor(600);
+        final HttpStatusCode statusFor = HttpStatusCode.statusFor(600);
         assertThat(statusFor.getStatusCode(), is(600));
         assertThat(statusFor.getFamily(), is(Family.OTHER));
     }

@@ -35,19 +35,18 @@ import org.junit.Test;
 public class JsonRepresentationTest_mapIterable {
 
     private JsonRepresentation jsonRepresentation;
-    
+
     @Test
     public void forJsonRepresentation() throws JsonParseException, JsonMappingException, IOException {
         jsonRepresentation = new JsonRepresentation(readJson("map.json"));
         final Iterable<Entry<String, JsonRepresentation>> mapIterable = jsonRepresentation.mapIterable();
         final Iterator<Entry<String, JsonRepresentation>> mapIterator = mapIterable.iterator();
-        
-        for(int i=0; i<jsonRepresentation.asJsonNode().size(); i++) {
+
+        for (int i = 0; i < jsonRepresentation.asJsonNode().size(); i++) {
             assertThat(mapIterator.hasNext(), is(true));
             assertThat(mapIterator.next().getKey(), is(not(nullValue())));
         }
         assertThat(mapIterator.hasNext(), is(false));
     }
-
 
 }

@@ -123,8 +123,7 @@ public class Padding {
         if (obj instanceof Padding) {
             final Padding object = (Padding) obj;
 
-            return object.top == this.top && object.bottom == this.bottom && object.left == this.left
-                && object.right == this.right;
+            return object.top == this.top && object.bottom == this.bottom && object.left == this.left && object.right == this.right;
         }
 
         return false;

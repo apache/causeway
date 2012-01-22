@@ -22,17 +22,19 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 
 public abstract class ObjectAndMember<T extends ObjectMember> {
-    
-    private ObjectAdapter objectAdapter;
-    private T objectMember;
-    
-    public ObjectAndMember(ObjectAdapter objectAdapter, T objectMember) {
+
+    private final ObjectAdapter objectAdapter;
+    private final T objectMember;
+
+    public ObjectAndMember(final ObjectAdapter objectAdapter, final T objectMember) {
         this.objectAdapter = objectAdapter;
         this.objectMember = objectMember;
     }
+
     public ObjectAdapter getObjectAdapter() {
         return objectAdapter;
     }
+
     public T getMember() {
         return objectMember;
     }

@@ -33,25 +33,25 @@ public class PathNode {
     private static final Pattern NODE = Pattern.compile("^([^\\[]*)(\\[(.+)\\])?$");
     private static final Pattern WHITESPACE = Pattern.compile("\\s+");
     private static final Pattern KEY_VALUE = Pattern.compile("^([^=]+)=(.+)$");
-    
-    public static final PathNode NULL = new PathNode("", Collections.<String,String>emptyMap());
-    
-    public static PathNode parse(String path) {
-        Matcher nodeMatcher = NODE.matcher(path);
-        if(!nodeMatcher.matches()) {
+
+    public static final PathNode NULL = new PathNode("", Collections.<String, String> emptyMap());
+
+    public static PathNode parse(final String path) {
+        final Matcher nodeMatcher = NODE.matcher(path);
+        if (!nodeMatcher.matches()) {
             return null;
-        } 
+        }
         final int groupCount = nodeMatcher.groupCount();
-        if(groupCount < 1) {
+        if (groupCount < 1) {
             return null;
         }
         final String key = nodeMatcher.group(1);
         final Map<String, String> criteria = Maps.newHashMap();
         final String criteriaStr = nodeMatcher.group(3);
-        if(criteriaStr != null) {
-            for (String criterium : Splitter.on(WHITESPACE).split(criteriaStr)) {
+        if (criteriaStr != null) {
+            for (final String criterium : Splitter.on(WHITESPACE).split(criteriaStr)) {
                 final Matcher keyValueMatcher = KEY_VALUE.matcher(criterium);
-                if(keyValueMatcher.matches()) {
+                if (keyValueMatcher.matches()) {
                     criteria.put(keyValueMatcher.group(1), keyValueMatcher.group(2));
                 }
             }
@@ -59,16 +59,19 @@ public class PathNode {
 
         return new PathNode(key, criteria);
     }
-    
+
     private final String key;
-    private final Map<String,String> criteria;
-    private PathNode(String key, Map<String, String> criteria) {
+    private final Map<String, String> criteria;
+
+    private PathNode(final String key, final Map<String, String> criteria) {
         this.key = key;
         this.criteria = Collections.unmodifiableMap(criteria);
     }
+
     public String getKey() {
         return key;
     }
+
     public Map<String, String> getCriteria() {
         return criteria;
     }
@@ -77,14 +80,14 @@ public class PathNode {
         return !getCriteria().isEmpty();
     }
 
-    public boolean matches(JsonRepresentation repr) {
-        if(!repr.isMap()) {
+    public boolean matches(final JsonRepresentation repr) {
+        if (!repr.isMap()) {
             return false;
         }
-        for(Map.Entry<String,String> criterium: getCriteria().entrySet()) {
+        for (final Map.Entry<String, String> criterium : getCriteria().entrySet()) {
             final String requiredValue = criterium.getValue();
             final String actualValue = repr.getString(criterium.getKey());
-            if(!Objects.equal(requiredValue, actualValue)) {
+            if (!Objects.equal(requiredValue, actualValue)) {
                 return false;
             }
         }
@@ -98,27 +101,32 @@ public class PathNode {
         result = prime * result + ((key == null) ? 0 : key.hashCode());
         return result;
     }
+
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
+    public boolean equals(final Object obj) {
+        if (this == obj) {
             return true;
-        if (obj == null)
+        }
+        if (obj == null) {
             return false;
-        if (getClass() != obj.getClass())
+        }
+        if (getClass() != obj.getClass()) {
             return false;
-        PathNode other = (PathNode) obj;
+        }
+        final PathNode other = (PathNode) obj;
         if (key == null) {
-            if (other.key != null)
+            if (other.key != null) {
                 return false;
-        } else if (!key.equals(other.key))
+            }
+        } else if (!key.equals(other.key)) {
             return false;
+        }
         return true;
     }
-    
+
     @Override
     public String toString() {
-        return key + (criteria.isEmpty()?"":criteria);
+        return key + (criteria.isEmpty() ? "" : criteria);
     }
-    
-    
+
 }

@@ -30,8 +30,8 @@ import org.apache.wicket.model.IModel;
  * {@link ComponentFactory} to represent an action that returns void.
  * 
  * <p>
- * TODO: not yet implemented; what should we do here? Perhaps render the object on which the action was invoked, along
- * with an informational message?
+ * TODO: not yet implemented; what should we do here? Perhaps render the object
+ * on which the action was invoked, along with an informational message?
  */
 public class VoidReturnPanelFactory extends ComponentFactoryAbstract {
 

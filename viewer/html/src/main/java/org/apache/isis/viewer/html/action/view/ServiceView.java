@@ -26,8 +26,7 @@ import org.apache.isis.viewer.html.request.Request;
 
 public class ServiceView extends ObjectViewAbstract {
     @Override
-    protected void doExecute(final Context context, final ViewPane content, final ObjectAdapter object,
-        final String field) {
+    protected void doExecute(final Context context, final ViewPane content, final ObjectAdapter object, final String field) {
         context.setObjectCrumb(object);
     }
 

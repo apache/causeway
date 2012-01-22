@@ -41,7 +41,6 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-
 public class DomainServiceResourceTest_services_xrofollowlinks {
 
     @Rule
@@ -50,7 +49,7 @@ public class DomainServiceResourceTest_services_xrofollowlinks {
 
     @Before
     public void setUp() throws Exception {
-        WebServer webServer = webServerRule.getWebServer();
+        final WebServer webServer = webServerRule.getWebServer();
         client = new RestfulClient(webServer.getBase());
     }
 
@@ -60,11 +59,11 @@ public class DomainServiceResourceTest_services_xrofollowlinks {
         RestfulRequest request;
         RestfulResponse<ListRepresentation> restfulResponse;
         ListRepresentation repr;
-        
+
         request = client.createRequest(HttpMethod.GET, "services");
         restfulResponse = request.executeT();
         repr = restfulResponse.getEntity();
-        
+
         assertThat(repr.getValues(), isArray());
         assertThat(repr.getValues().size(), is(greaterThan(0)));
         assertThat(repr.getValues().arrayGet(0), isLink().novalue());
@@ -73,12 +72,8 @@ public class DomainServiceResourceTest_services_xrofollowlinks {
         restfulResponse = request.executeT();
         repr = restfulResponse.getEntity();
 
-        assertThat(repr.getValues().arrayGet(0), isLink().value(is(not(Matchers.<JsonRepresentation>nullValue()))));
+        assertThat(repr.getValues().arrayGet(0), isLink().value(is(not(Matchers.<JsonRepresentation> nullValue()))));
         assertThat(repr.getValues().arrayGet(0).getRepresentation("value"), isMap());
     }
-    
 
 }
-
-
-    

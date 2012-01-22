@@ -37,9 +37,10 @@ public class ContentDragImpl extends DragImpl implements ContentDrag {
     private final View source;
 
     /**
-     * Creates a new drag event. The source view has its pickup(), and then, exited() methods called on it. The view
-     * returned by the pickup method becomes this event overlay view, which is moved continuously so that it tracks the
-     * pointer,
+     * Creates a new drag event. The source view has its pickup(), and then,
+     * exited() methods called on it. The view returned by the pickup method
+     * becomes this event overlay view, which is moved continuously so that it
+     * tracks the pointer,
      * 
      * @param source
      *            the view over which the pointer was when this event started
@@ -56,7 +57,8 @@ public class ContentDragImpl extends DragImpl implements ContentDrag {
     }
 
     /**
-     * Cancels drag by calling dragOut() on the current target, and changes the cursor back to the default.
+     * Cancels drag by calling dragOut() on the current target, and changes the
+     * cursor back to the default.
      */
     @Override
     public void cancel(final Viewer viewer) {
@@ -101,7 +103,8 @@ public class ContentDragImpl extends DragImpl implements ContentDrag {
     }
 
     /**
-     * Ends the drag by calling drop() on the current target, and changes the cursor back to the default.
+     * Ends the drag by calling drop() on the current target, and changes the
+     * cursor back to the default.
      */
     @Override
     public void end(final Viewer viewer) {

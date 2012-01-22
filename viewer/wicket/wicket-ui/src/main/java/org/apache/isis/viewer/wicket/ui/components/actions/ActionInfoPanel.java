@@ -41,7 +41,8 @@ public class ActionInfoPanel extends PanelAbstract<ActionModel> {
         final ObjectAdapter targetAdapter = getModel().getTargetAdapter();
         final ObjectAction objectAction = getModel().getActionMemento().getAction();
 
-        // TODO: render instead as links (providing isn't a service; provide a component for this?)
+        // TODO: render instead as links (providing isn't a service; provide a
+        // component for this?)
         add(new Label(ID_TARGET, targetAdapter.titleString()));
         add(new Label(ID_ACTION_NAME, objectAction.getName()));
     }

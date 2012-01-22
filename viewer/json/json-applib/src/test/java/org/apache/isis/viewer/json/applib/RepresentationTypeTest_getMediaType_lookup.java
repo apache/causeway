@@ -31,7 +31,7 @@ public class RepresentationTypeTest_getMediaType_lookup {
 
     @Test
     public void roundtrip() {
-        for (RepresentationType repType : RepresentationType.values()) {
+        for (final RepresentationType repType : RepresentationType.values()) {
             final MediaType mediaType = repType.getMediaType();
             final RepresentationType lookup = RepresentationType.lookup(mediaType);
             assertSame(repType, lookup);
@@ -45,7 +45,7 @@ public class RepresentationTypeTest_getMediaType_lookup {
 
     @Test
     public void whenNull() {
-        assertThat(RepresentationType.lookup((MediaType)null), is(RepresentationType.GENERIC));
+        assertThat(RepresentationType.lookup((MediaType) null), is(RepresentationType.GENERIC));
     }
 
     @Test

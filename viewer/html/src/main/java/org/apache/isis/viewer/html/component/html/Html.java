@@ -28,7 +28,7 @@ class Html extends ComponentAbstract {
 
     private final String code;
 
-    public Html(PathBuilder pathBuilder, final String code) {
+    public Html(final PathBuilder pathBuilder, final String code) {
         super(pathBuilder);
         this.code = code;
     }

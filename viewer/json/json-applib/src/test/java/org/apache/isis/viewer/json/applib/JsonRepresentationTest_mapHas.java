@@ -35,16 +35,16 @@ public class JsonRepresentationTest_mapHas {
     @Test
     public void forMap() throws JsonParseException, JsonMappingException, IOException {
         jsonRepresentation = new JsonRepresentation(readJson("map.json"));
-        
+
         assertThat(jsonRepresentation.mapHas("aString"), is(true));
         assertThat(jsonRepresentation.mapHas("aSubMap.anInt"), is(true));
         assertThat(jsonRepresentation.mapHas("nonExistent"), is(false));
     }
 
-    @Test(expected=IllegalStateException.class)
+    @Test(expected = IllegalStateException.class)
     public void forList() throws JsonParseException, JsonMappingException, IOException {
         jsonRepresentation = new JsonRepresentation(readJson("list.json"));
-        
+
         jsonRepresentation.mapHas("aString");
     }
 

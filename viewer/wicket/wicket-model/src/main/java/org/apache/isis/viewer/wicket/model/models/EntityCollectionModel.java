@@ -38,12 +38,13 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 
 /**
- * Model representing a collection of entities, either {@link Type#STANDALONE standalone} (eg result of invoking an
- * action) or {@link Type#PARENTED parented} (contents of the collection of an entity).
+ * Model representing a collection of entities, either {@link Type#STANDALONE
+ * standalone} (eg result of invoking an action) or {@link Type#PARENTED
+ * parented} (contents of the collection of an entity).
  * 
  * <p>
- * So that the model is {@link Serializable}, the {@link ObjectAdapter}s within the collection are stored as
- * {@link ObjectAdapterMemento}s.
+ * So that the model is {@link Serializable}, the {@link ObjectAdapter}s within
+ * the collection are stored as {@link ObjectAdapterMemento}s.
  */
 public class EntityCollectionModel extends ModelAbstract<List<ObjectAdapter>> {
 
@@ -74,8 +75,7 @@ public class EntityCollectionModel extends ModelAbstract<List<ObjectAdapter>> {
 
                 final Iterable<Object> objectList = asIterable(collectionAsAdapter);
 
-                final Iterable<ObjectAdapter> adapterIterable =
-                    Iterables.transform(objectList, ObjectAdapters.fromPojo());
+                final Iterable<ObjectAdapter> adapterIterable = Iterables.transform(objectList, ObjectAdapters.fromPojo());
                 final List<ObjectAdapter> adapterList = Lists.newArrayList(adapterIterable);
 
                 return adapterList;
@@ -114,8 +114,7 @@ public class EntityCollectionModel extends ModelAbstract<List<ObjectAdapter>> {
     /**
      * Factory.
      */
-    public static EntityCollectionModel createParented(final ObjectAdapter adapter,
-        final OneToManyAssociation collection) {
+    public static EntityCollectionModel createParented(final ObjectAdapter adapter, final OneToManyAssociation collection) {
         return new EntityCollectionModel(adapter, collection);
     }
 
@@ -171,7 +170,8 @@ public class EntityCollectionModel extends ModelAbstract<List<ObjectAdapter>> {
     }
 
     /**
-     * The name of the collection (if has an entity, ie, if {@link #isParented() is parented}.)
+     * The name of the collection (if has an entity, ie, if
+     * {@link #isParented() is parented}.)
      * 
      * <p>
      * Will returns <tt>null</tt> otherwise.
@@ -210,8 +210,8 @@ public class EntityCollectionModel extends ModelAbstract<List<ObjectAdapter>> {
      * The {@link SelectionHandler}, if any.
      * 
      * <p>
-     * If specified, then view {@link Component}s are expected to render the collection so that one of the entities can
-     * be selected.
+     * If specified, then view {@link Component}s are expected to render the
+     * collection so that one of the entities can be selected.
      */
     public SelectionHandler getSelectionHandler() {
         return selectionHandler;

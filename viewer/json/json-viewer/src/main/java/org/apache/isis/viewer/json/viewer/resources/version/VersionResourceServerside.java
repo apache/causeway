@@ -35,35 +35,34 @@ import org.apache.isis.viewer.json.viewer.representations.RendererFactory;
 import org.apache.isis.viewer.json.viewer.resources.ResourceAbstract;
 
 /**
- * Implementation note: it seems to be necessary to annotate the implementation with {@link Path} rather than the
- * interface (at least under RestEasy 1.0.2 and 1.1-RC2).
+ * Implementation note: it seems to be necessary to annotate the implementation
+ * with {@link Path} rather than the interface (at least under RestEasy 1.0.2
+ * and 1.1-RC2).
  */
 @Path("/version")
 public class VersionResourceServerside extends ResourceAbstract implements VersionResource {
 
-
+    @Override
     @GET
-    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_VERSION})
+    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_VERSION })
     public Response version() {
         final RepresentationType representationType = RepresentationType.VERSION;
-        
+
         init(representationType);
         fakeRuntimeExceptionIfXFail();
 
         final RendererFactory factory = rendererFactoryRegistry.find(representationType);
-        final VersionReprRenderer renderer = 
-                (VersionReprRenderer) factory.newRenderer(getResourceContext(), null, JsonRepresentation.newMap());
+        final VersionReprRenderer renderer = (VersionReprRenderer) factory.newRenderer(getResourceContext(), null, JsonRepresentation.newMap());
         renderer.includesSelf();
-        
+
         return responseOfOk(renderer, Caching.ONE_DAY).build();
     }
 
     private void fakeRuntimeExceptionIfXFail() {
-        HttpHeaders httpHeaders = getResourceContext().getHttpHeaders();
-        if(httpHeaders.getRequestHeader("X-Fail") != null) {
+        final HttpHeaders httpHeaders = getResourceContext().getHttpHeaders();
+        if (httpHeaders.getRequestHeader("X-Fail") != null) {
             throw JsonApplicationException.create(HttpStatusCode.METHOD_FAILURE);
         }
     }
-
 
 }

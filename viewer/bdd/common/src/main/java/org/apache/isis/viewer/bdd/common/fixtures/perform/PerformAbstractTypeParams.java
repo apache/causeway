@@ -82,8 +82,7 @@ public abstract class PerformAbstractTypeParams extends PerformAbstract {
     private final Type type;
     private final NumParameters numParameters;
 
-    public PerformAbstractTypeParams(final String key, final Type type, final NumParameters numParameters,
-        final Perform.Mode mode) {
+    public PerformAbstractTypeParams(final String key, final Type type, final NumParameters numParameters, final Perform.Mode mode) {
         super(key, mode);
         this.type = type;
         this.numParameters = numParameters;
@@ -95,9 +94,10 @@ public abstract class PerformAbstractTypeParams extends PerformAbstract {
     }
 
     /**
-     * Can be overridden, but provides basic checking that member is of correct type and, if taking
-     * {@link NumParameters#ZERO zero} or {@link NumParameters#ONE one} parameter, that the correct number of actual
-     * arguments match.
+     * Can be overridden, but provides basic checking that member is of correct
+     * type and, if taking {@link NumParameters#ZERO zero} or
+     * {@link NumParameters#ONE one} parameter, that the correct number of
+     * actual arguments match.
      */
     @Override
     public void perform(final PerformContext performContext) throws ScenarioBoundValueException {
@@ -144,8 +144,9 @@ public abstract class PerformAbstractTypeParams extends PerformAbstract {
     }
 
     /**
-     * Hook method that does nothing; should be overridden if {@link #perform(PerformContextForFitNesse) handle(...)}
-     * method has not been.
+     * Hook method that does nothing; should be overridden if
+     * {@link #perform(PerformContextForFitNesse) handle(...)} method has not
+     * been.
      */
     protected void doHandle(final PerformContext performContext) throws ScenarioBoundValueException {
         // does nothing

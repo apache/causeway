@@ -20,48 +20,21 @@ package org.apache.isis.viewer.json.applib.links;
 
 public enum Rel {
     // IANA registered
-    SELF("self"),
-    DESCRIBEDBY("describedby"),
-    UP("up"), 
-    HELP("help"), 
-    ICON("icon"), 
-    
+    SELF("self"), DESCRIBEDBY("describedby"), UP("up"), HELP("help"), ICON("icon"),
+
     // Restful Objects namespace
-    ICON16("icon16"),
-    ICON32("icon32"),
-    OBJECT("object"), 
-    SERVICE("service"), 
-    CHOICE("choice"), 
-    DEFAULT("default"), 
-    DETAILS("details"), 
-    MODIFY("modify"), 
-    CLEAR("clear"), 
-    ADD_TO("addto"),
-    REMOVE_FROM("removefrom"), 
-    INVOKE("invoke"), 
-    PERSIST("persist"), 
-    PROPERTY("property"), 
-    COLLECTION("collection"), 
-    ACTION("action"), 
-    TYPE_ACTION("typeaction"), 
-    ACTION_PARAM("actionparam"), 
-    RETURN_TYPE("returntype"), 
-    ELEMENT_TYPE("elementtype"), 
-    VERSION("version"), 
-    USER("user"),
-    SERVICES("services"), 
-    TYPES("types"),
-    DOMAIN_TYPE("domaintype"),
-    
+    ICON16("icon16"), ICON32("icon32"), OBJECT("object"), SERVICE("service"), CHOICE("choice"), DEFAULT("default"), DETAILS("details"), MODIFY("modify"), CLEAR("clear"), ADD_TO("addto"), REMOVE_FROM("removefrom"), INVOKE("invoke"), PERSIST("persist"), PROPERTY("property"), COLLECTION("collection"), ACTION(
+            "action"), TYPE_ACTION("typeaction"), ACTION_PARAM("actionparam"), RETURN_TYPE("returntype"), ELEMENT_TYPE("elementtype"), VERSION("version"), USER("user"), SERVICES("services"), TYPES("types"), DOMAIN_TYPE("domaintype"),
+
     // implementation specific
-    CONTRIBUTED_BY("contributedby") 
-    ;
-    
+    CONTRIBUTED_BY("contributedby");
+
     private final String name;
-    private Rel(String name) {
+
+    private Rel(final String name) {
         this.name = name;
     }
-    
+
     public String getName() {
         return name;
     }

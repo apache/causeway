@@ -19,37 +19,31 @@
 
 package org.apache.isis.viewer.junit.internal;
 
-import org.junit.internal.runners.TestClass;
-
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.runtimes.dflt.profilestores.dflt.InMemoryUserProfileStoreInstaller;
 import org.apache.isis.runtimes.dflt.runtime.installerregistry.InstallerLookup;
 import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
 import org.apache.isis.runtimes.dflt.runtime.systemusinginstallers.IsisSystemUsingInstallers;
+import org.junit.internal.runners.TestClass;
 
 public class IsisSystemUsingInstallersWithinJunit extends IsisSystemUsingInstallers {
 
     private final TestClass testClass;
 
-    public IsisSystemUsingInstallersWithinJunit(final DeploymentType deploymentType,
-        final InstallerLookup installerLookup, final TestClass testClass) {
+    public IsisSystemUsingInstallersWithinJunit(final DeploymentType deploymentType, final InstallerLookup installerLookup, final TestClass testClass) {
         super(deploymentType, installerLookup);
         this.testClass = testClass;
 
-        AnnotationInstaller installer = new AnnotationInstaller();
+        final AnnotationInstaller installer = new AnnotationInstaller();
 
         try {
-            setAuthenticationInstaller(getInstallerLookup().injectDependenciesInto(
-                installer.addAuthenticatorAnnotatedOn(this.testClass.getJavaClass())));
+            setAuthenticationInstaller(getInstallerLookup().injectDependenciesInto(installer.addAuthenticatorAnnotatedOn(this.testClass.getJavaClass())));
 
-            setAuthorizationInstaller(getInstallerLookup().injectDependenciesInto(
-                installer.addAuthorizerAnnotatedOn(this.testClass.getJavaClass())));
+            setAuthorizationInstaller(getInstallerLookup().injectDependenciesInto(installer.addAuthorizerAnnotatedOn(this.testClass.getJavaClass())));
 
-            setPersistenceMechanismInstaller(getInstallerLookup().injectDependenciesInto(
-                installer.addPersistorAnnotatedOn(this.testClass.getJavaClass())));
+            setPersistenceMechanismInstaller(getInstallerLookup().injectDependenciesInto(installer.addPersistorAnnotatedOn(this.testClass.getJavaClass())));
 
-            setUserProfileStoreInstaller(getInstallerLookup().injectDependenciesInto(
-                new InMemoryUserProfileStoreInstaller()));
+            setUserProfileStoreInstaller(getInstallerLookup().injectDependenciesInto(new InMemoryUserProfileStoreInstaller()));
 
             // fixture installer
             final FixtureInstallerAnnotatedClass fixtureInstaller = new FixtureInstallerAnnotatedClass();

@@ -28,8 +28,7 @@ import org.apache.isis.viewer.bdd.common.CellBinding;
  */
 public enum AssertsValidity {
 
-    VALID(true, "is valid for", "is valid", "valid"), INVALID(false, "is not valid for", "is not valid", "not valid",
-                                                              "invalid");
+    VALID(true, "is valid for", "is valid", "valid"), INVALID(false, "is not valid for", "is not valid", "not valid", "invalid");
 
     private final String[] keys;
     private final boolean valid;

@@ -26,11 +26,12 @@ import javax.ws.rs.core.MediaType;
  * @see http://buzzword.org.uk/2009/draft-inkster-profile-parameter-00.html
  */
 public final class RestfulMediaType {
-    
-    private RestfulMediaType(){}
+
+    private RestfulMediaType() {
+    }
 
     private static final String BASE = MediaType.APPLICATION_JSON + ";profile=urn:org.restfulobjects/";
-    
+
     public final static String APPLICATION_JSON_HOME_PAGE = BASE + "homepage";
     public final static String APPLICATION_JSON_USER = BASE + "user";
     public final static String APPLICATION_JSON_VERSION = BASE + "version";
@@ -48,7 +49,7 @@ public final class RestfulMediaType {
     public final static String APPLICATION_JSON_PROPERTY_DESCRIPTION = BASE + "propertydescription";
     public final static String APPLICATION_JSON_COLLECTION_DESCRIPTION = BASE + "collectiondescription";
     public final static String APPLICATION_JSON_ACTION_DESCRIPTION = BASE + "actiondescription";
-    public final static String APPLICATION_JSON_ACTION_PARAMETER_DESCRIPTION = BASE + "actionparameterdescription"; 
+    public final static String APPLICATION_JSON_ACTION_PARAMETER_DESCRIPTION = BASE + "actionparameterdescription";
     public final static String APPLICATION_JSON_ERROR = BASE + "error";
 
 }

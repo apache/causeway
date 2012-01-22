@@ -31,7 +31,6 @@ import javax.ws.rs.core.UriInfo;
 
 import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
-import org.apache.isis.core.commons.exceptions.NotYetImplementedException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterLookup;
 import org.apache.isis.core.metamodel.adapter.oid.stringable.OidStringifier;
 import org.apache.isis.core.metamodel.spec.SpecificationLookup;
@@ -61,34 +60,25 @@ public class ResourceContext {
     private final PersistenceSession persistenceSession;
     private final ObjectAdapterLookup objectAdapterLookup;
     private final SpecificationLookup specificationLookup;
-    
+
     private List<List<String>> followLinks;
-    
+
     private final static Predicate<MediaType> MEDIA_TYPE_NOT_GENERIC_APPLICATION_JSON = new Predicate<MediaType>() {
         @Override
-        public boolean apply(MediaType mediaType) {
+        public boolean apply(final MediaType mediaType) {
             return !mediaType.equals(MediaType.APPLICATION_JSON_TYPE);
         }
     };
     private final static Predicate<MediaType> MEDIA_TYPE_CONTAINS_PROFILE = new Predicate<MediaType>() {
         @Override
-        public boolean apply(MediaType mediaType) {
+        public boolean apply(final MediaType mediaType) {
             return mediaType.getParameters().containsKey("profile");
         }
     };
     private JsonRepresentation readQueryStringAsMap;
 
-    public ResourceContext(
-            RepresentationType representationType, final HttpHeaders httpHeaders, final UriInfo uriInfo,
-            final Request request, final HttpServletRequest httpServletRequest,
-            final HttpServletResponse httpServletResponse, 
-            final SecurityContext securityContext, 
-            final OidStringifier oidStringifier, 
-            final Localization localization, 
-            final AuthenticationSession authenticationSession, 
-            final PersistenceSession persistenceSession, 
-            final ObjectAdapterLookup objectAdapterLookup, 
-            final SpecificationLookup specificationLookup) {
+    public ResourceContext(final RepresentationType representationType, final HttpHeaders httpHeaders, final UriInfo uriInfo, final Request request, final HttpServletRequest httpServletRequest, final HttpServletResponse httpServletResponse, final SecurityContext securityContext,
+            final OidStringifier oidStringifier, final Localization localization, final AuthenticationSession authenticationSession, final PersistenceSession persistenceSession, final ObjectAdapterLookup objectAdapterLookup, final SpecificationLookup specificationLookup) {
 
         this.httpHeaders = httpHeaders;
         this.uriInfo = uriInfo;
@@ -102,11 +92,11 @@ public class ResourceContext {
         this.persistenceSession = persistenceSession;
         this.objectAdapterLookup = objectAdapterLookup;
         this.specificationLookup = specificationLookup;
-        
+
         init(representationType);
     }
 
-    void init(RepresentationType representationType) {
+    void init(final RepresentationType representationType) {
         ensureCompatibleAcceptHeader(representationType);
         this.followLinks = Collections.unmodifiableList(getArg(RequestParameter.FOLLOW_LINKS));
     }
@@ -120,13 +110,13 @@ public class ResourceContext {
     }
 
     public JsonRepresentation getQueryStringAsJsonRepr() {
-        if(readQueryStringAsMap == null) {
+        if (readQueryStringAsMap == null) {
             readQueryStringAsMap = DomainResourceHelper.readQueryStringAsMap(getQueryString());
         }
         return readQueryStringAsMap;
     }
 
-    public <Q> Q getArg(RequestParameter<Q> requestParameter) {
+    public <Q> Q getArg(final RequestParameter<Q> requestParameter) {
         final JsonRepresentation queryStringJsonRepr = getQueryStringAsJsonRepr();
         return requestParameter.valueOf(queryStringJsonRepr);
     }
@@ -151,42 +141,41 @@ public class ResourceContext {
         return securityContext;
     }
 
-
-    private void ensureCompatibleAcceptHeader(RepresentationType representationType) {
-        if(representationType == null) {
+    private void ensureCompatibleAcceptHeader(final RepresentationType representationType) {
+        if (representationType == null) {
             return;
         }
         final MediaType producedType = representationType.getMediaType();
-        List<MediaType> acceptableMediaTypes = acceptableMediaTypes();
-        for (MediaType mediaType : acceptableMediaTypes) {
-            if(compatible(mediaType, representationType)) {
+        final List<MediaType> acceptableMediaTypes = acceptableMediaTypes();
+        for (final MediaType mediaType : acceptableMediaTypes) {
+            if (compatible(mediaType, representationType)) {
                 return;
             }
         }
-        if(!acceptableMediaTypes.contains(producedType)) {
+        if (!acceptableMediaTypes.contains(producedType)) {
             throw JsonApplicationException.create(HttpStatusCode.NOT_ACCEPTABLE, "Resource produces %s media type", representationType.getMediaTypeWithProfile());
         }
     }
 
     /**
-     * If no media type has a profile parameter, then simply return all the media types.
+     * If no media type has a profile parameter, then simply return all the
+     * media types.
      * 
      * <p>
-     * Otherwise, though, filter out the {@link MediaType#APPLICATION_JSON_TYPE generic application/json} 
-     * media type if it is present.
+     * Otherwise, though, filter out the {@link MediaType#APPLICATION_JSON_TYPE
+     * generic application/json} media type if it is present.
      */
     private List<MediaType> acceptableMediaTypes() {
         final List<MediaType> acceptableMediaTypes = getHttpHeaders().getAcceptableMediaTypes();
-        if(Collections2.filter(acceptableMediaTypes, MEDIA_TYPE_CONTAINS_PROFILE).isEmpty()) {
+        if (Collections2.filter(acceptableMediaTypes, MEDIA_TYPE_CONTAINS_PROFILE).isEmpty()) {
             return acceptableMediaTypes;
         }
-        return Lists.newArrayList(
-                Iterables.filter(acceptableMediaTypes, MEDIA_TYPE_NOT_GENERIC_APPLICATION_JSON));
+        return Lists.newArrayList(Iterables.filter(acceptableMediaTypes, MEDIA_TYPE_NOT_GENERIC_APPLICATION_JSON));
     }
 
-    private boolean compatible(MediaType acceptedMediaType, RepresentationType representationType) {
-        MediaType producedMediaType = representationType.getMediaType();
-        String profile = acceptedMediaType.getParameters().get("profile");
+    private boolean compatible(final MediaType acceptedMediaType, final RepresentationType representationType) {
+        final MediaType producedMediaType = representationType.getMediaType();
+        final String profile = acceptedMediaType.getParameters().get("profile");
         return profile == null ? acceptedMediaType.isCompatible(producedMediaType) : acceptedMediaType.equals(producedMediaType);
     }
 
@@ -194,11 +183,10 @@ public class ResourceContext {
         return followLinks;
     }
 
-    public String urlFor(String url) {
+    public String urlFor(final String url) {
         return getUriInfo().getBaseUri().toString() + url;
     }
 
-    
     public OidStringifier getOidStringifier() {
         return oidStringifier;
     }
@@ -222,11 +210,5 @@ public class ResourceContext {
     public SpecificationLookup getSpecificationLookup() {
         return specificationLookup;
     }
-
-
-
-
-
-
 
 }

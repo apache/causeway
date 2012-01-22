@@ -23,7 +23,7 @@ import org.codehaus.jackson.JsonNode;
 
 public class DomainTypeRepresentation extends DomainRepresentation {
 
-    public DomainTypeRepresentation(JsonNode jsonNode) {
+    public DomainTypeRepresentation(final JsonNode jsonNode) {
         super(jsonNode);
     }
 

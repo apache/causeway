@@ -64,8 +64,10 @@ public class ActionHelper {
         }
 
         /*
-         * int[] maxLength = action.getParameterMaxLengths(); int[] typicalLength = action.getParameterTypicalLengths();
-         * int[] noLines = action.getParameterNoLines(); boolean[] canWrap = action.canParametersWrap();
+         * int[] maxLength = action.getParameterMaxLengths(); int[]
+         * typicalLength = action.getParameterTypicalLengths(); int[] noLines =
+         * action.getParameterNoLines(); boolean[] canWrap =
+         * action.canParametersWrap();
          */
         return new ActionHelper(target, action, parameters, defaultValues, options);
     }
@@ -75,8 +77,7 @@ public class ActionHelper {
     private final ObjectAdapter target;
     private final ObjectAdapter[][] options;
 
-    private ActionHelper(final ObjectAdapter target, final ObjectAction action, final ObjectAdapter[] parameters,
-        final ObjectAdapter[] defaultValues, final ObjectAdapter[][] options) {
+    private ActionHelper(final ObjectAdapter target, final ObjectAction action, final ObjectAdapter[] parameters, final ObjectAdapter[] defaultValues, final ObjectAdapter[][] options) {
         this.target = target;
         this.action = action;
         this.parameters = parameters;
@@ -90,13 +91,10 @@ public class ActionHelper {
             final ObjectAdapter adapter = parameters[i];
             final ObjectSpecification specification = parameters2.get(i).getSpecification();
             if (specification.isParseable()) {
-                final ParseableEntryActionParameter parseableEntryActionParameter =
-                    (ParseableEntryActionParameter) parameters2.get(i);
-                parameterContents[i] =
-                    new TextParseableParameterImpl(parseableEntryActionParameter, adapter, options[i], i, this);
+                final ParseableEntryActionParameter parseableEntryActionParameter = (ParseableEntryActionParameter) parameters2.get(i);
+                parameterContents[i] = new TextParseableParameterImpl(parseableEntryActionParameter, adapter, options[i], i, this);
             } else {
-                parameterContents[i] =
-                    new ObjectParameterImpl((OneToOneActionParameter) parameters2.get(i), adapter, options[i], i, this);
+                parameterContents[i] = new ObjectParameterImpl((OneToOneActionParameter) parameters2.get(i), adapter, options[i], i, this);
             }
         }
 
@@ -104,7 +102,8 @@ public class ActionHelper {
     }
 
     public Consent disabled() {
-        // REVIEW this is no good as it lumps all the parameters together; I need to know which parameter is
+        // REVIEW this is no good as it lumps all the parameters together; I
+        // need to know which parameter is
         // disabled!
         return action.isProposedArgumentSetValid(target, parameters);
     }

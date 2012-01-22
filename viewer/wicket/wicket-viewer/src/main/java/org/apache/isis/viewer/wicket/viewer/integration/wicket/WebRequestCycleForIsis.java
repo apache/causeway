@@ -32,8 +32,9 @@ import org.apache.wicket.protocol.http.WebRequestCycle;
 import org.apache.wicket.protocol.http.request.WebClientInfo;
 
 /**
- * Isis-specific implementation of the Wicket's {@link WebRequestCycle}, automatically opening a {@link IsisSession} at
- * the beginning of the request and committing the transaction and closing the session at the end.
+ * Isis-specific implementation of the Wicket's {@link WebRequestCycle},
+ * automatically opening a {@link IsisSession} at the beginning of the request
+ * and committing the transaction and closing the session at the end.
  */
 public class WebRequestCycleForIsis extends WebRequestCycle {
 

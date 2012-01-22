@@ -170,11 +170,12 @@ public class Context {
     }
 
     /**
-     * Returns an array of instances of the specified type that are currently known in the current context, ie have been
-     * recently seen by the user.
+     * Returns an array of instances of the specified type that are currently
+     * known in the current context, ie have been recently seen by the user.
      * 
      * <p>
-     * These will be resolved if required, with a transaction created (and ended) if required.
+     * These will be resolved if required, with a transaction created (and
+     * ended) if required.
      */
     public ObjectAdapter[] getKnownInstances(final ObjectSpecification type) {
 
@@ -483,7 +484,8 @@ public class Context {
             return;
         }
 
-        // TODO refactor this for clarity: removes existing mapping and replaces it with a new one as it
+        // TODO refactor this for clarity: removes existing mapping and replaces
+        // it with a new one as it
         // contains the new version
         final String id = mapObject(adapter);
         if (id != null) {
@@ -503,7 +505,8 @@ public class Context {
                 final ArrayList<Crumb> relatedCrumbs = new ArrayList<Crumb>();
                 for (final Crumb crumb : getCrumbs()) {
                     /*
-                     * if (crumb.isFor(existingId)) { relatedCrumbs.add(crumb); }
+                     * if (crumb.isFor(existingId)) { relatedCrumbs.add(crumb);
+                     * }
                      */}
                 for (final Crumb crumb : relatedCrumbs) {
                     crumbs.remove(crumb);

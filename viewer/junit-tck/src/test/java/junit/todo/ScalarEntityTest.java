@@ -28,7 +28,6 @@ import org.apache.isis.viewer.junit.Fixtures;
 import org.junit.Before;
 import org.junit.Test;
 
-
 @Fixtures({ @Fixture(PrimitiveValuedEntityFixture.class) })
 public class ScalarEntityTest extends AbstractTest {
 
@@ -41,7 +40,7 @@ public class ScalarEntityTest extends AbstractTest {
     }
 
     @Test
-    public void dummy(){}
+    public void dummy() {
+    }
 
-    
 }

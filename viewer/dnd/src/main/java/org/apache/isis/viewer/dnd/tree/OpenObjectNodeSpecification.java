@@ -36,10 +36,11 @@ import org.apache.isis.viewer.dnd.view.composite.ObjectFieldBuilder;
 import org.apache.isis.viewer.dnd.view.composite.StackLayout;
 
 /**
- * Specification for a tree node that will display an open object as a root node or within an object.
+ * Specification for a tree node that will display an open object as a root node
+ * or within an object.
  * 
- * @see org.apache.isis.viewer.dnd.tree.ClosedObjectNodeSpecification for displaying a closed collection within an
- *      object.
+ * @see org.apache.isis.viewer.dnd.tree.ClosedObjectNodeSpecification for
+ *      displaying a closed collection within an object.
  */
 public class OpenObjectNodeSpecification extends CompositeNodeSpecification {
     private final SubviewDecorator decorator = new SelectObjectBorder.Factory();
@@ -54,16 +55,14 @@ public class OpenObjectNodeSpecification extends CompositeNodeSpecification {
     }
 
     /**
-     * This is only used to control root nodes. Therefore a object tree can only be displayed for an object with fields
-     * that are collections.
+     * This is only used to control root nodes. Therefore a object tree can only
+     * be displayed for an object with fields that are collections.
      */
     @Override
     public boolean canDisplay(final ViewRequirement requirement) {
         if (requirement.isObject() && requirement.hasReference()) {
             final ObjectAdapter object = requirement.getAdapter();
-            final List<ObjectAssociation> fields =
-                object.getSpecification().getAssociations(
-                    ObjectAssociationFilters.dynamicallyVisible(IsisContext.getAuthenticationSession(), object));
+            final List<ObjectAssociation> fields = object.getSpecification().getAssociations(ObjectAssociationFilters.dynamicallyVisible(IsisContext.getAuthenticationSession(), object));
             for (int i = 0; i < fields.size(); i++) {
                 if (fields.get(i).isOneToManyAssociation()) {
                     return true;

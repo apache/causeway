@@ -30,8 +30,7 @@ import org.apache.isis.viewer.dnd.view.Toolkit;
 import org.apache.isis.viewer.dnd.view.View;
 
 public class TextFieldResizeBorder extends ResizeBorder {
-    public static final int BORDER_WIDTH = IsisContext.getConfiguration().getInteger(
-        Properties.PROPERTY_BASE + "field-resize-border", 5);
+    public static final int BORDER_WIDTH = IsisContext.getConfiguration().getInteger(Properties.PROPERTY_BASE + "field-resize-border", 5);
 
     public TextFieldResizeBorder(final View view) {
         super(view, RIGHT + DOWN, 1, 1);

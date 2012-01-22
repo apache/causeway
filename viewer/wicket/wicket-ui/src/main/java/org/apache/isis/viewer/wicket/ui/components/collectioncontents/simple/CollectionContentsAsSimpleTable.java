@@ -32,8 +32,8 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.repeater.RepeatingView;
 
 /**
- * {@link PanelAbstract Panel} that represents a {@link EntityCollectionModel collection of entity}s rendered using a
- * simple HTML table.
+ * {@link PanelAbstract Panel} that represents a {@link EntityCollectionModel
+ * collection of entity}s rendered using a simple HTML table.
  */
 public class CollectionContentsAsSimpleTable extends PanelAbstract<EntityCollectionModel> {
 
@@ -56,8 +56,7 @@ public class CollectionContentsAsSimpleTable extends PanelAbstract<EntityCollect
         final RepeatingView propertyNames = new RepeatingView("propertyName");
         add(propertyNames);
 
-        final List<? extends ObjectAssociation> propertyList =
-            typeOfSpec.getAssociations(ObjectAssociationFilters.PROPERTIES);
+        final List<? extends ObjectAssociation> propertyList = typeOfSpec.getAssociations(ObjectAssociationFilters.PROPERTIES);
         for (final ObjectAssociation property : propertyList) {
             propertyNames.add(new Label(property.getId(), property.getName()));
         }

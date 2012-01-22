@@ -45,7 +45,8 @@ public class Attributes {
         final String variabelName = attribute.substring(2, end);
         final Object value = context.getVariable(variabelName);
         return value != null;
-        // return attribute != null && !context.replaceVariables(attribute).equals("");
+        // return attribute != null &&
+        // !context.replaceVariables(attribute).equals("");
     }
 
     public boolean isPropertySpecified(final String name) {

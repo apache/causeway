@@ -63,12 +63,13 @@ public abstract class AbstractTextParsableContent extends AbstractContent {
      * @param propertyOrParamValue
      *            the target property or parameter
      * @param propertyOrParam
-     *            the {@link ObjectAssociation} or {@link ParseableEntryActionParameter}
+     *            the {@link ObjectAssociation} or
+     *            {@link ParseableEntryActionParameter}
      * @param propertyOrParamTypeSpecification
-     *            the specification of the type of the property or parameter (for fallback).
+     *            the specification of the type of the property or parameter
+     *            (for fallback).
      */
-    protected String titleString(final ObjectAdapter propertyOrParamValue, final FacetHolder propertyOrParam,
-        final FacetHolder propertyOrParamTypeSpecification) {
+    protected String titleString(final ObjectAdapter propertyOrParamValue, final FacetHolder propertyOrParam, final FacetHolder propertyOrParamTypeSpecification) {
 
         final TitleFacet titleFacet = propertyOrParam.getFacet(TitleFacet.class);
         if (titleFacet != null) {

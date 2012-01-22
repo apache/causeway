@@ -31,40 +31,40 @@ public abstract class AbstractTypeFeatureReprRenderer<R extends ReprRendererAbst
     protected ObjectSpecification objectSpecification;
     protected T objectFeature;
 
-    public AbstractTypeFeatureReprRenderer(ResourceContext resourceContext, LinkFollower linkFollower, RepresentationType representationType, JsonRepresentation representation) {
+    public AbstractTypeFeatureReprRenderer(final ResourceContext resourceContext, final LinkFollower linkFollower, final RepresentationType representationType, final JsonRepresentation representation) {
         super(resourceContext, linkFollower, representationType, representation);
     }
 
     public ObjectSpecification getParentSpecification() {
         return objectSpecification;
     }
-    
+
     public T getObjectFeature() {
         return objectFeature;
     }
 
     @Override
-    public R with(ParentSpecAndFeature<T> specAndFeature) {
+    public R with(final ParentSpecAndFeature<T> specAndFeature) {
         objectSpecification = specAndFeature.getParentSpec();
         objectFeature = specAndFeature.getObjectFeature();
-        
+
         return cast(this);
     }
 
+    @Override
     public JsonRepresentation render() {
-        
+
         addLinkSelfIfRequired();
         addLinkUpToParent();
-        
+
         addPropertiesSpecificToFeature();
-        
+
         addLinksSpecificToFeature();
         putExtensionsSpecificToFeature();
 
         return representation;
     }
 
-    
     /**
      * Optional hook method.
      */
@@ -92,18 +92,16 @@ public abstract class AbstractTypeFeatureReprRenderer<R extends ReprRendererAbst
      */
     protected abstract void putExtensionsSpecificToFeature();
 
-    
     protected void putExtensionsName() {
-        String friendlyName = getObjectFeature().getName();
+        final String friendlyName = getObjectFeature().getName();
         getExtensions().mapPut("friendlyName", friendlyName);
     }
 
     protected void putExtensionsDescriptionIfAvailable() {
-        String description = getObjectFeature().getDescription();
-        if(!Strings.isNullOrEmpty(description)) {
+        final String description = getObjectFeature().getDescription();
+        if (!Strings.isNullOrEmpty(description)) {
             getExtensions().mapPut("description", description);
         }
     }
-
 
 }

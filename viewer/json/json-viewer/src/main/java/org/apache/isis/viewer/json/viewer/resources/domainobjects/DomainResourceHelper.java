@@ -64,50 +64,47 @@ import com.google.common.io.ByteStreams;
 
 public final class DomainResourceHelper {
 
-    private static final DateFormat ETAG_FORMAT = 
-            new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+    private static final DateFormat ETAG_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
 
     private final ResourceContext resourceContext;
     private ObjectAdapterLinkTo adapterLinkTo;
 
     private final ObjectAdapter objectAdapter;
 
-
-    public DomainResourceHelper(ResourceContext resourceContext, ObjectAdapter objectAdapter) {
+    public DomainResourceHelper(final ResourceContext resourceContext, final ObjectAdapter objectAdapter) {
         this.resourceContext = resourceContext;
         this.objectAdapter = objectAdapter;
         using(new DomainObjectLinkTo());
     }
 
-    public DomainResourceHelper using(ObjectAdapterLinkTo linkTo) {
+    public DomainResourceHelper using(final ObjectAdapterLinkTo linkTo) {
         adapterLinkTo = linkTo;
         adapterLinkTo.usingResourceContext(resourceContext).with(objectAdapter);
         return this;
     }
 
-    
     // //////////////////////////////////////////////////////////////
     // multiple properties (persist or multi-property update)
     // //////////////////////////////////////////////////////////////
 
-    static boolean copyOverProperties(ResourceContext resourceContext, ObjectAdapter objectAdapter, JsonRepresentation propertiesList) {
+    static boolean copyOverProperties(final ResourceContext resourceContext, final ObjectAdapter objectAdapter, final JsonRepresentation propertiesList) {
         final ObjectSpecification objectSpec = objectAdapter.getSpecification();
         final List<ObjectAssociation> properties = objectSpec.getAssociations(ObjectAssociationFilters.PROPERTIES);
         boolean allOk = true;
-        
-        for(ObjectAssociation association: properties) {
-            OneToOneAssociation property = (OneToOneAssociation) association;
+
+        for (final ObjectAssociation association : properties) {
+            final OneToOneAssociation property = (OneToOneAssociation) association;
             final ObjectSpecification propertySpec = property.getSpecification();
             final String id = property.getId();
             final JsonRepresentation propertyRepr = propertiesList.getRepresentation("[id=%s]", id);
             final JsonRepresentation valueRepr = propertyRepr.getRepresentation("value");
-            
+
             final ObjectAdapter valueAdapter = objectAdapterFor(resourceContext, propertySpec, valueRepr);
             final Consent consent = property.isAssociationValid(objectAdapter, valueAdapter);
-            if(consent.isAllowed()) {
+            if (consent.isAllowed()) {
                 try {
                     property.set(objectAdapter, valueAdapter);
-                } catch(IllegalArgumentException ex) {
+                } catch (final IllegalArgumentException ex) {
                     propertyRepr.mapPut("invalidReason", ex.getMessage());
                     allOk = false;
                 }
@@ -120,28 +117,24 @@ public final class DomainResourceHelper {
         return allOk;
     }
 
-
     // //////////////////////////////////////////////////////////////
     // propertyDetails
     // //////////////////////////////////////////////////////////////
 
     public Response objectRepresentation() {
-        final RendererFactory rendererFactory = 
-                getRendererFactoryRegistry().find(RepresentationType.DOMAIN_OBJECT);
-        
-        final DomainObjectReprRenderer renderer = 
-                (DomainObjectReprRenderer) rendererFactory.newRenderer(resourceContext, null, JsonRepresentation.newMap());
+        final RendererFactory rendererFactory = getRendererFactoryRegistry().find(RepresentationType.DOMAIN_OBJECT);
+
+        final DomainObjectReprRenderer renderer = (DomainObjectReprRenderer) rendererFactory.newRenderer(resourceContext, null, JsonRepresentation.newMap());
         renderer.with(objectAdapter).includesSelf();
-        
-        ResponseBuilder respBuilder = ResourceAbstract.responseOfOk(renderer, Caching.NONE);
-        
-        Version version = objectAdapter.getVersion();
+
+        final ResponseBuilder respBuilder = ResourceAbstract.responseOfOk(renderer, Caching.NONE);
+
+        final Version version = objectAdapter.getVersion();
         if (version != null && version.getTime() != null) {
             respBuilder.tag(ETAG_FORMAT.format(version.getTime()));
         }
         return respBuilder.build();
     }
-
 
     // //////////////////////////////////////////////////////////////
     // propertyDetails
@@ -150,38 +143,31 @@ public final class DomainResourceHelper {
     public enum MemberMode {
         NOT_MUTATING {
             @Override
-            public void apply(AbstractObjectMemberReprRenderer<?,?> renderer) {
+            public void apply(final AbstractObjectMemberReprRenderer<?, ?> renderer) {
                 renderer.asStandalone();
             }
         },
         MUTATING {
             @Override
-            public void apply(AbstractObjectMemberReprRenderer<?,?> renderer) {
+            public void apply(final AbstractObjectMemberReprRenderer<?, ?> renderer) {
                 renderer.asMutated();
             }
         };
 
-        public abstract void apply(AbstractObjectMemberReprRenderer<?,?> renderer);
+        public abstract void apply(AbstractObjectMemberReprRenderer<?, ?> renderer);
     }
-    
-    Response propertyDetails(
-            final ObjectAdapter objectAdapter,
-            final String propertyId, 
-            final MemberMode memberMode, 
-            final Caching caching) {
 
-        final OneToOneAssociation property = getPropertyThatIsVisibleAndUsable(
-                propertyId, Intent.ACCESS);
+    Response propertyDetails(final ObjectAdapter objectAdapter, final String propertyId, final MemberMode memberMode, final Caching caching) {
 
-        RendererFactory factory = getRendererFactoryRegistry().find(RepresentationType.OBJECT_PROPERTY);
-        final ObjectPropertyReprRenderer renderer = 
-                (ObjectPropertyReprRenderer) factory.newRenderer(resourceContext, null, JsonRepresentation.newMap());
-        
-        renderer.with(new ObjectAndProperty(objectAdapter, property))
-            .usingLinkTo(adapterLinkTo);
-        
+        final OneToOneAssociation property = getPropertyThatIsVisibleAndUsable(propertyId, Intent.ACCESS);
+
+        final RendererFactory factory = getRendererFactoryRegistry().find(RepresentationType.OBJECT_PROPERTY);
+        final ObjectPropertyReprRenderer renderer = (ObjectPropertyReprRenderer) factory.newRenderer(resourceContext, null, JsonRepresentation.newMap());
+
+        renderer.with(new ObjectAndProperty(objectAdapter, property)).usingLinkTo(adapterLinkTo);
+
         memberMode.apply(renderer);
-        
+
         return ResourceAbstract.responseOfOk(renderer, caching).build();
     }
 
@@ -189,48 +175,35 @@ public final class DomainResourceHelper {
     // collectionDetails
     // //////////////////////////////////////////////////////////////
 
-    Response collectionDetails(
-            final ObjectAdapter objectAdapter, 
-            final String collectionId, 
-            final MemberMode memberMode, 
-            final Caching caching) {
-        
-        final OneToManyAssociation collection = getCollectionThatIsVisibleAndUsable(
-                collectionId, Intent.ACCESS);
-        
-        RendererFactory factory = RendererFactoryRegistry.instance.find(RepresentationType.OBJECT_COLLECTION);
-        final ObjectCollectionReprRenderer renderer = 
-                (ObjectCollectionReprRenderer) factory.newRenderer(resourceContext, null, JsonRepresentation.newMap());
+    Response collectionDetails(final ObjectAdapter objectAdapter, final String collectionId, final MemberMode memberMode, final Caching caching) {
 
-        renderer.with(new ObjectAndCollection(objectAdapter, collection))
-            .usingLinkTo(adapterLinkTo);
-        
+        final OneToManyAssociation collection = getCollectionThatIsVisibleAndUsable(collectionId, Intent.ACCESS);
+
+        final RendererFactory factory = RendererFactoryRegistry.instance.find(RepresentationType.OBJECT_COLLECTION);
+        final ObjectCollectionReprRenderer renderer = (ObjectCollectionReprRenderer) factory.newRenderer(resourceContext, null, JsonRepresentation.newMap());
+
+        renderer.with(new ObjectAndCollection(objectAdapter, collection)).usingLinkTo(adapterLinkTo);
+
         memberMode.apply(renderer);
-        
+
         return ResourceAbstract.responseOfOk(renderer, caching).build();
     }
-
 
     // //////////////////////////////////////////////////////////////
     // action Prompt
     // //////////////////////////////////////////////////////////////
 
     Response actionPrompt(final String actionId) {
-        final ObjectAction action = getObjectActionThatIsVisibleAndUsable(
-                actionId, Intent.ACCESS);
+        final ObjectAction action = getObjectActionThatIsVisibleAndUsable(actionId, Intent.ACCESS);
 
-        RendererFactory factory = getRendererFactoryRegistry().find(RepresentationType.OBJECT_ACTION);
-        final ObjectActionReprRenderer renderer = 
-                (ObjectActionReprRenderer) factory.newRenderer(resourceContext, null, JsonRepresentation.newMap());
-        
-        renderer.with(new ObjectAndAction(objectAdapter, action))
-                .usingLinkTo(adapterLinkTo)
-                .asStandalone();
+        final RendererFactory factory = getRendererFactoryRegistry().find(RepresentationType.OBJECT_ACTION);
+        final ObjectActionReprRenderer renderer = (ObjectActionReprRenderer) factory.newRenderer(resourceContext, null, JsonRepresentation.newMap());
+
+        renderer.with(new ObjectAndAction(objectAdapter, action)).usingLinkTo(adapterLinkTo).asStandalone();
 
         return ResourceAbstract.responseOfOk(renderer, Caching.NONE).build();
     }
 
-    
     // //////////////////////////////////////////////////////////////
     // invoke action
     // //////////////////////////////////////////////////////////////
@@ -243,78 +216,66 @@ public final class DomainResourceHelper {
         }
     }
 
-    Response invokeActionQueryOnly(
-            final String actionId, 
-            final JsonRepresentation arguments) {
-        final ObjectAction action = getObjectActionThatIsVisibleAndUsable(
-                actionId, Intent.ACCESS);
+    Response invokeActionQueryOnly(final String actionId, final JsonRepresentation arguments) {
+        final ObjectAction action = getObjectActionThatIsVisibleAndUsable(actionId, Intent.ACCESS);
 
         final ActionSemantics actionSemantics = ActionSemantics.determine(resourceContext, action);
-        if(!actionSemantics.isQueryOnly()) {
-            throw JsonApplicationException.create(HttpStatusCode.METHOD_NOT_ALLOWED,
-                    "Method not allowed; action '%s' is not query only", action.getId());
+        if (!actionSemantics.isQueryOnly()) {
+            throw JsonApplicationException.create(HttpStatusCode.METHOD_NOT_ALLOWED, "Method not allowed; action '%s' is not query only", action.getId());
         }
 
         return invokeActionUsingAdapters(action, arguments);
     }
 
-    Response invokeActionIdempotent(
-            final String actionId, 
-            final InputStream body) {
-        
-        final ObjectAction action = getObjectActionThatIsVisibleAndUsable(
-                actionId, Intent.MUTATE);
+    Response invokeActionIdempotent(final String actionId, final InputStream body) {
+
+        final ObjectAction action = getObjectActionThatIsVisibleAndUsable(actionId, Intent.MUTATE);
 
         final ActionSemantics actionSemantics = ActionSemantics.determine(resourceContext, action);
-        if(!actionSemantics.isIdempotent()) {
-            throw JsonApplicationException.create(
-                    HttpStatusCode.METHOD_NOT_ALLOWED,
-                    "Method not allowed; action '%s' is not idempotent", action.getId());
+        if (!actionSemantics.isIdempotent()) {
+            throw JsonApplicationException.create(HttpStatusCode.METHOD_NOT_ALLOWED, "Method not allowed; action '%s' is not idempotent", action.getId());
         }
-        String bodyAsString = asStringUtf8(body);
+        final String bodyAsString = asStringUtf8(body);
         final JsonRepresentation arguments = readAsMap(bodyAsString);
 
         return invokeActionUsingAdapters(action, arguments);
     }
 
     Response invokeAction(final String actionId, final InputStream body) {
-        final ObjectAction action = getObjectActionThatIsVisibleAndUsable(
-                actionId, Intent.MUTATE);
-        
-        String bodyAsString = asStringUtf8(body);
+        final ObjectAction action = getObjectActionThatIsVisibleAndUsable(actionId, Intent.MUTATE);
+
+        final String bodyAsString = asStringUtf8(body);
         final JsonRepresentation arguments = readAsMap(bodyAsString);
 
         return invokeActionUsingAdapters(action, arguments);
     }
 
-    Response invokeActionUsingAdapters(
-        final ObjectAction action,
-        final JsonRepresentation arguments) {
-        
-        List<ObjectAdapter> argAdapters = parseArguments(action, arguments);
-        
+    Response invokeActionUsingAdapters(final ObjectAction action, final JsonRepresentation arguments) {
+
+        final List<ObjectAdapter> argAdapters = parseArguments(action, arguments);
+
         // validate individual args
-        List<ObjectActionParameter> parameters = action.getParameters();
+        final List<ObjectActionParameter> parameters = action.getParameters();
         for (int i = 0; i < parameters.size(); i++) {
-            ObjectActionParameter parameter = parameters.get(i);
-            ObjectAdapter argAdapter = argAdapters.get(i);
-            if(argAdapter == null) {
-                // can only happen if this is an optional parameter; nothing to do
+            final ObjectActionParameter parameter = parameters.get(i);
+            final ObjectAdapter argAdapter = argAdapters.get(i);
+            if (argAdapter == null) {
+                // can only happen if this is an optional parameter; nothing to
+                // do
                 continue;
-            } 
+            }
             if (argAdapter.getSpecification().containsFacet(ValueFacet.class)) {
-                Object arg = argAdapter.getObject();
-                String reasonNotValid = parameter.isValid(objectAdapter, arg);
+                final Object arg = argAdapter.getObject();
+                final String reasonNotValid = parameter.isValid(objectAdapter, arg);
                 if (reasonNotValid != null) {
                     throw JsonApplicationException.create(HttpStatusCode.NOT_ACCEPTABLE, reasonNotValid);
                 }
             }
         }
-        
+
         // validate all args
-        ObjectAdapter[] argArray = argAdapters.toArray(new ObjectAdapter[0]);
-        Consent consent = action.isProposedArgumentSetValid(objectAdapter,
-                argArray);
+        final ObjectAdapter[] argArray = argAdapters.toArray(new ObjectAdapter[0]);
+        final Consent consent = action.isProposedArgumentSetValid(objectAdapter, argArray);
         if (consent.isVetoed()) {
             throw JsonApplicationException.create(HttpStatusCode.NOT_ACCEPTABLE, consent.getReason());
         }
@@ -323,22 +284,19 @@ public final class DomainResourceHelper {
         final ObjectAdapter returnedAdapter = action.execute(objectAdapter, argArray);
 
         // response (void)
-        RendererFactory factory = getRendererFactoryRegistry().find(RepresentationType.ACTION_RESULT);
-        final ActionResultReprRenderer renderer = 
-                (ActionResultReprRenderer) factory.newRenderer(resourceContext, null, JsonRepresentation.newMap());
-        
+        final RendererFactory factory = getRendererFactoryRegistry().find(RepresentationType.ACTION_RESULT);
+        final ActionResultReprRenderer renderer = (ActionResultReprRenderer) factory.newRenderer(resourceContext, null, JsonRepresentation.newMap());
+
         renderer.with(new ObjectAndActionInvocation(objectAdapter, action, arguments, returnedAdapter)).using(adapterLinkTo);
-        
+
         final ResponseBuilder respBuilder = ResourceAbstract.responseOfOk(renderer, Caching.NONE);
-        
-        Version version = objectAdapter.getVersion();
+
+        final Version version = objectAdapter.getVersion();
         ResourceAbstract.addLastModifiedAndETagIfAvailable(respBuilder, version);
 
         return respBuilder.build();
     }
 
-
-    
     /**
      * 
      * @param resourceContext
@@ -348,32 +306,28 @@ public final class DomainResourceHelper {
      *            - expected to be either a String or a Map (ie from within a
      *            List, built by parsing a JSON structure).
      */
-    private static ObjectAdapter objectAdapterFor(
-            final ResourceContext resourceContext, 
-            final ObjectSpecification objectSpec, 
-            final JsonRepresentation representation) {
+    private static ObjectAdapter objectAdapterFor(final ResourceContext resourceContext, final ObjectSpecification objectSpec, final JsonRepresentation representation) {
 
-        if(representation == null) {
+        if (representation == null) {
             return null;
         }
-        
+
         // value (encodable)
         if (objectSpec.isEncodeable()) {
             return new JsonValueEncoder().asAdapter(objectSpec, representation);
         }
 
         // reference
-        if(!representation.isLink()) {
+        if (!representation.isLink()) {
             throw new ExpectedMapRepresentingLinkException();
         }
-        JsonRepresentation argLink = representation.asLink();
-        String oidFromHref = UrlParserUtils.oidFromLink(argLink);
-        if(oidFromHref == null) {
+        final JsonRepresentation argLink = representation.asLink();
+        final String oidFromHref = UrlParserUtils.oidFromLink(argLink);
+        if (oidFromHref == null) {
             throw new ExpectedMapRepresentingLinkException();
         }
 
-        ObjectAdapter objectAdapter = OidUtils.getObjectAdapter(
-                resourceContext, oidFromHref);
+        final ObjectAdapter objectAdapter = OidUtils.getObjectAdapter(resourceContext, oidFromHref);
         if (objectAdapter == null) {
             throw new UnknownOidException(oidFromHref);
         }
@@ -381,20 +335,19 @@ public final class DomainResourceHelper {
     }
 
     /**
-     * Similar to {@link #objectAdapterFor(ResourceContext, ObjectSpecification, Object)},
+     * Similar to
+     * {@link #objectAdapterFor(ResourceContext, ObjectSpecification, Object)},
      * however the object being interpreted is a String holding URL encoded JSON
      * (rather than having already been parsed into a Map representation).
      * 
-     * @throws IOException 
-     * @throws JsonMappingException 
-     * @throws JsonParseException 
+     * @throws IOException
+     * @throws JsonMappingException
+     * @throws JsonParseException
      */
-    ObjectAdapter objectAdapterFor(
-            final ObjectSpecification spec,
-            final String urlEncodedJson) throws JsonParseException, JsonMappingException, IOException {
+    ObjectAdapter objectAdapterFor(final ObjectSpecification spec, final String urlEncodedJson) throws JsonParseException, JsonMappingException, IOException {
 
         final String json = UrlDecoderUtils.urlDecode(urlEncodedJson);
-        JsonRepresentation representation = JsonMapper.instance().read(json);
+        final JsonRepresentation representation = JsonMapper.instance().read(json);
         return objectAdapterFor(resourceContext, spec, representation);
     }
 
@@ -405,7 +358,7 @@ public final class DomainResourceHelper {
     private static class UnknownOidException extends IllegalArgumentException {
         private static final long serialVersionUID = 1L;
 
-        public UnknownOidException(String oid) {
+        public UnknownOidException(final String oid) {
             super(UrlDecoderUtils.urlDecode(oid));
         }
     }
@@ -414,77 +367,57 @@ public final class DomainResourceHelper {
     // get{MemberType}ThatIsVisibleAndUsable
     // ///////////////////////////////////////////////////////////////////
 
-    protected OneToOneAssociation getPropertyThatIsVisibleAndUsable(
-        final String propertyId,
-        final Intent intent) {
-        
-        ObjectAssociation association = objectAdapter.getSpecification()
-                .getAssociation(propertyId);
+    protected OneToOneAssociation getPropertyThatIsVisibleAndUsable(final String propertyId, final Intent intent) {
+
+        final ObjectAssociation association = objectAdapter.getSpecification().getAssociation(propertyId);
         if (association == null || !association.isOneToOneAssociation()) {
             throwNotFoundException(propertyId, MemberType.PROPERTY);
         }
-        OneToOneAssociation property = (OneToOneAssociation) association;
+        final OneToOneAssociation property = (OneToOneAssociation) association;
         return memberThatIsVisibleAndUsable(property, MemberType.PROPERTY, intent);
     }
 
-    protected OneToManyAssociation getCollectionThatIsVisibleAndUsable(
-        final String collectionId,
-        final Intent intent) {
+    protected OneToManyAssociation getCollectionThatIsVisibleAndUsable(final String collectionId, final Intent intent) {
 
-        ObjectAssociation association = objectAdapter.getSpecification()
-                .getAssociation(collectionId);
+        final ObjectAssociation association = objectAdapter.getSpecification().getAssociation(collectionId);
         if (association == null || !association.isOneToManyAssociation()) {
             throwNotFoundException(collectionId, MemberType.COLLECTION);
         }
-        OneToManyAssociation collection = (OneToManyAssociation) association;
+        final OneToManyAssociation collection = (OneToManyAssociation) association;
         return memberThatIsVisibleAndUsable(collection, MemberType.COLLECTION, intent);
     }
 
-    protected ObjectAction getObjectActionThatIsVisibleAndUsable(
-            final String actionId,
-            Intent intent) {
+    protected ObjectAction getObjectActionThatIsVisibleAndUsable(final String actionId, final Intent intent) {
 
-        ObjectAction action = objectAdapter.getSpecification().getObjectAction(actionId);
+        final ObjectAction action = objectAdapter.getSpecification().getObjectAction(actionId);
         if (action == null) {
             throwNotFoundException(actionId, MemberType.ACTION);
         }
-        
+
         return memberThatIsVisibleAndUsable(action, MemberType.ACTION, intent);
     }
 
-    protected <T extends ObjectMember> T memberThatIsVisibleAndUsable(
-            T objectMember,
-            final MemberType memberType, final Intent intent) {
-        String memberId = objectMember.getId();
-        AuthenticationSession authenticationSession = resourceContext.getAuthenticationSession();
+    protected <T extends ObjectMember> T memberThatIsVisibleAndUsable(final T objectMember, final MemberType memberType, final Intent intent) {
+        final String memberId = objectMember.getId();
+        final AuthenticationSession authenticationSession = resourceContext.getAuthenticationSession();
         if (objectMember.isVisible(authenticationSession, objectAdapter).isVetoed()) {
             throwNotFoundException(memberId, memberType);
         }
         if (intent.isMutate()) {
-            Consent usable = objectMember.isUsable(authenticationSession, objectAdapter);
+            final Consent usable = objectMember.isUsable(authenticationSession, objectAdapter);
             if (usable.isVetoed()) {
-                String memberTypeStr = memberType.name().toLowerCase();
-                throw JsonApplicationException.create(
-                        HttpStatusCode.NOT_ACCEPTABLE,
-                        "%s is not usable: '%s' (%s)",
-                        memberTypeStr, memberId, usable.getReason());
+                final String memberTypeStr = memberType.name().toLowerCase();
+                throw JsonApplicationException.create(HttpStatusCode.NOT_ACCEPTABLE, "%s is not usable: '%s' (%s)", memberTypeStr, memberId, usable.getReason());
             }
         }
         return objectMember;
     }
 
-    protected static void throwNotFoundException(
-        final String memberId, MemberType memberType) {
-        String memberTypeStr = memberType.name().toLowerCase();
-        throw JsonApplicationException.create(
-                HttpStatusCode.NOT_FOUND,
-                "%s '%s' either does not exist or is not visible",
-                memberTypeStr, memberId);
+    protected static void throwNotFoundException(final String memberId, final MemberType memberType) {
+        final String memberTypeStr = memberType.name().toLowerCase();
+        throw JsonApplicationException.create(HttpStatusCode.NOT_FOUND, "%s '%s' either does not exist or is not visible", memberTypeStr, memberId);
     }
 
-
-    
-    
     // ///////////////////////////////////////////////////////////////////
     // parseBody
     // ///////////////////////////////////////////////////////////////////
@@ -492,38 +425,32 @@ public final class DomainResourceHelper {
     /**
      * 
      * @param objectSpec
-     * @param bodyAsString - as per {@link #asStringUtf8(InputStream)}
+     * @param bodyAsString
+     *            - as per {@link #asStringUtf8(InputStream)}
      * @return
      */
-    ObjectAdapter parseAsMapWithSingleValue(
-            final ObjectSpecification objectSpec, 
-            final String bodyAsString) {
-        JsonRepresentation arguments = readAsMap(bodyAsString);
-        
+    ObjectAdapter parseAsMapWithSingleValue(final ObjectSpecification objectSpec, final String bodyAsString) {
+        final JsonRepresentation arguments = readAsMap(bodyAsString);
+
         return parseAsMapWithSingleValue(objectSpec, arguments);
     }
 
-    ObjectAdapter parseAsMapWithSingleValue(final ObjectSpecification objectSpec, JsonRepresentation arguments) {
-        JsonRepresentation representation = arguments.getRepresentation("value");
+    ObjectAdapter parseAsMapWithSingleValue(final ObjectSpecification objectSpec, final JsonRepresentation arguments) {
+        final JsonRepresentation representation = arguments.getRepresentation("value");
         if (arguments.size() != 1 || representation == null) {
-            throw JsonApplicationException.create(
-                    HttpStatusCode.BAD_REQUEST,
-                    "Body should be a map with a single key 'value' whose value represents an instance of type '%s'",
-                    resourceFor(objectSpec));
+            throw JsonApplicationException.create(HttpStatusCode.BAD_REQUEST, "Body should be a map with a single key 'value' whose value represents an instance of type '%s'", resourceFor(objectSpec));
         }
 
         return objectAdapterFor(resourceContext, objectSpec, representation);
     }
 
-    private List<ObjectAdapter> parseArguments(
-            final ObjectAction action, 
-            final JsonRepresentation arguments) {
+    private List<ObjectAdapter> parseArguments(final ObjectAction action, final JsonRepresentation arguments) {
         return parseArguments(resourceContext, action, arguments);
     }
 
     public static List<ObjectAdapter> parseArguments(final ResourceContext resourceContext, final ObjectAction action, final JsonRepresentation arguments) {
         final List<JsonRepresentation> argList = argListFor(action, arguments);
-        
+
         final List<ObjectAdapter> argAdapters = Lists.newArrayList();
         final List<ObjectActionParameter> parameters = action.getParameters();
         for (int i = 0; i < argList.size(); i++) {
@@ -533,83 +460,70 @@ public final class DomainResourceHelper {
             try {
                 final ObjectAdapter objectAdapter = objectAdapterFor(resourceContext, paramSpec, arg);
                 argAdapters.add(objectAdapter);
-            } catch (ExpectedStringRepresentingValueException e) {
-                throw JsonApplicationException.create(
-                        HttpStatusCode.BAD_REQUEST,
-                        "Action '%s', argument %s should be a URL encoded string representing a value of type %s",
-                        action.getId(), paramName, resourceFor(paramSpec));
-            } catch (ExpectedMapRepresentingLinkException e) {
-                throw JsonApplicationException.create(
-                        HttpStatusCode.BAD_REQUEST,
-                        "Action '%s', argument %s should be a map representing a link to reference of type %s",
-                        action.getId(), paramName, resourceFor(paramSpec));
+            } catch (final ExpectedStringRepresentingValueException e) {
+                throw JsonApplicationException.create(HttpStatusCode.BAD_REQUEST, "Action '%s', argument %s should be a URL encoded string representing a value of type %s", action.getId(), paramName, resourceFor(paramSpec));
+            } catch (final ExpectedMapRepresentingLinkException e) {
+                throw JsonApplicationException.create(HttpStatusCode.BAD_REQUEST, "Action '%s', argument %s should be a map representing a link to reference of type %s", action.getId(), paramName, resourceFor(paramSpec));
             }
         }
         return argAdapters;
     }
 
+    private static List<JsonRepresentation> argListFor(final ObjectAction action, final JsonRepresentation arguments) {
+        final List<JsonRepresentation> argList = Lists.newArrayList();
 
-    private static List<JsonRepresentation> argListFor(final ObjectAction action, JsonRepresentation arguments) {
-        List<JsonRepresentation> argList = Lists.newArrayList();
-
-        
         // ensure that we have no arguments that are not parameters
-        for(Entry<String, JsonRepresentation> arg: arguments.mapIterable()) {
+        for (final Entry<String, JsonRepresentation> arg : arguments.mapIterable()) {
             final String argName = arg.getKey();
-            if(action.getParameterById(argName) == null) {
-                throw JsonApplicationException.create(
-                        HttpStatusCode.BAD_REQUEST,
-                        "Action '%s' does not have a parameter %s but an argument of that name was provided",
-                        action.getId(), argName);
+            if (action.getParameterById(argName) == null) {
+                throw JsonApplicationException.create(HttpStatusCode.BAD_REQUEST, "Action '%s' does not have a parameter %s but an argument of that name was provided", action.getId(), argName);
             }
         }
 
-        // ensure that an argument value has been provided for all non-optional parameters 
+        // ensure that an argument value has been provided for all non-optional
+        // parameters
         final List<ObjectActionParameter> parameters = action.getParameters();
-        for (ObjectActionParameter param : parameters) {
+        for (final ObjectActionParameter param : parameters) {
             final String paramId = param.getId();
             final JsonRepresentation argRepr = arguments.getRepresentation(paramId);
-            if(argRepr == null && !param.isOptional()) {
-                throw JsonApplicationException.create(
-                        HttpStatusCode.BAD_REQUEST,
-                        "Action '%s', no argument found for (mandatory) parameter '%s'",
-                        action.getId(), paramId);
+            if (argRepr == null && !param.isOptional()) {
+                throw JsonApplicationException.create(HttpStatusCode.BAD_REQUEST, "Action '%s', no argument found for (mandatory) parameter '%s'", action.getId(), paramId);
             }
             argList.add(argRepr);
         }
         return argList;
     }
 
-    public static JsonRepresentation readParameterMapAsMap(Map<String, String[]> parameterMap) {
+    public static JsonRepresentation readParameterMapAsMap(final Map<String, String[]> parameterMap) {
         final JsonRepresentation map = JsonRepresentation.newMap();
-        for(Map.Entry<String, String[]> parameter: parameterMap.entrySet()) {
+        for (final Map.Entry<String, String[]> parameter : parameterMap.entrySet()) {
             map.mapPut(parameter.getKey(), parameter.getValue()[0]);
         }
         return map;
     }
 
-    public static JsonRepresentation readQueryStringAsMap(String queryString) {
-        if(queryString == null) {
+    public static JsonRepresentation readQueryStringAsMap(final String queryString) {
+        if (queryString == null) {
             return JsonRepresentation.newMap();
         }
-        String queryStringTrimmed = queryString.trim();
-        if(queryStringTrimmed .isEmpty()) {
+        final String queryStringTrimmed = queryString.trim();
+        if (queryStringTrimmed.isEmpty()) {
             return JsonRepresentation.newMap();
         }
         final String queryStringUrlDecoded = UrlEncodingUtils.urlDecode(queryStringTrimmed);
-        if(queryStringUrlDecoded.isEmpty()) {
+        if (queryStringUrlDecoded.isEmpty()) {
             return JsonRepresentation.newMap();
         }
-        
+
         return read(queryStringUrlDecoded, "query string");
     }
 
-    public static JsonRepresentation readAsMap(String body) {
-        if(body == null) {
+    public static JsonRepresentation readAsMap(final String body) {
+        if (body == null) {
             return JsonRepresentation.newMap();
         }
         final String bodyTrimmed = body.trim();
-        if(bodyTrimmed.isEmpty()) {
+        if (bodyTrimmed.isEmpty()) {
             return JsonRepresentation.newMap();
         }
         return read(bodyTrimmed, "body");
@@ -618,60 +532,45 @@ public final class DomainResourceHelper {
     private static JsonRepresentation read(final String args, final String argsNature) {
         try {
             final JsonRepresentation jsonRepr = JsonMapper.instance().read(args);
-            if(!jsonRepr.isMap()) {
-                throw JsonApplicationException.create(
-                    HttpStatusCode.BAD_REQUEST,
-                    "could not read %s as a JSON map", argsNature);
+            if (!jsonRepr.isMap()) {
+                throw JsonApplicationException.create(HttpStatusCode.BAD_REQUEST, "could not read %s as a JSON map", argsNature);
             }
             return jsonRepr;
-        } catch (JsonParseException e) {
-            throw JsonApplicationException.create(
-                    HttpStatusCode.BAD_REQUEST, e,
-                    "could not parse %s", argsNature);
-        } catch (JsonMappingException e) {
-            throw JsonApplicationException.create(
-                    HttpStatusCode.BAD_REQUEST, e,
-                    "could not read %s as JSON", argsNature);
-        } catch (IOException e) {
-            throw JsonApplicationException.create(
-                    HttpStatusCode.BAD_REQUEST, e,
-                    "could not parse %s", argsNature);
+        } catch (final JsonParseException e) {
+            throw JsonApplicationException.create(HttpStatusCode.BAD_REQUEST, e, "could not parse %s", argsNature);
+        } catch (final JsonMappingException e) {
+            throw JsonApplicationException.create(HttpStatusCode.BAD_REQUEST, e, "could not read %s as JSON", argsNature);
+        } catch (final IOException e) {
+            throw JsonApplicationException.create(HttpStatusCode.BAD_REQUEST, e, "could not parse %s", argsNature);
         }
     }
 
     public static String asStringUtf8(final InputStream body) {
         try {
-            byte[] byteArray = ByteStreams.toByteArray(body);
+            final byte[] byteArray = ByteStreams.toByteArray(body);
             return new String(byteArray, Charsets.UTF_8);
-        } catch (IOException e) {
-            throw JsonApplicationException.create(
-                    HttpStatusCode.BAD_REQUEST, e,
-                    "could not read body");
+        } catch (final IOException e) {
+            throw JsonApplicationException.create(HttpStatusCode.BAD_REQUEST, e, "could not read body");
         }
     }
-
 
     // //////////////////////////////////////////////////////////////
     // misc
     // //////////////////////////////////////////////////////////////
 
-    private static String resourceFor(ObjectSpecification objectSpec) {
+    private static String resourceFor(final ObjectSpecification objectSpec) {
         // TODO: should return a string in the form
         // http://localhost:8080/types/xxx
         return objectSpec.getFullIdentifier();
     }
 
-    
     // //////////////////////////////////////////////////////////////
     // dependencies
     // //////////////////////////////////////////////////////////////
-
 
     protected RendererFactoryRegistry getRendererFactoryRegistry() {
         // TODO: yuck
         return RendererFactoryRegistry.instance;
     }
-
-
 
 }

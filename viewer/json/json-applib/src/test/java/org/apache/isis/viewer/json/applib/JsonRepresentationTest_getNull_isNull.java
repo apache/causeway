@@ -40,20 +40,20 @@ public class JsonRepresentationTest_getNull_isNull {
     public void setUp() throws Exception {
         jsonRepresentation = new JsonRepresentation(readJson("map.json"));
     }
-    
+
     @Test
     public void forNullValue() throws JsonParseException, JsonMappingException, IOException {
-        JsonRepresentation nullValue = jsonRepresentation.getNull("aNull");
+        final JsonRepresentation nullValue = jsonRepresentation.getNull("aNull");
         assertThat(nullValue, is(not(nullValue())));
         assertThat(nullValue.isNull(), is(true));
-        
-        Boolean isNull = jsonRepresentation.isNull("aNull");
+
+        final Boolean isNull = jsonRepresentation.isNull("aNull");
         assertThat(isNull, is(true));
     }
 
     @Test
     public void isNull_forArray() throws JsonParseException, JsonMappingException, IOException {
-        Boolean isNull = jsonRepresentation.isNull("anEmptyArray");
+        final Boolean isNull = jsonRepresentation.isNull("anEmptyArray");
         assertThat(isNull, is(false));
     }
 
@@ -62,14 +62,14 @@ public class JsonRepresentationTest_getNull_isNull {
         try {
             jsonRepresentation.getNull("anEmptyArray");
             fail();
-        } catch (IllegalArgumentException e) {
+        } catch (final IllegalArgumentException e) {
             assertThat(e.getMessage(), is("'anEmptyArray' is not the null value"));
         }
     }
 
     @Test
     public void isNull_forNonExistent() {
-        Boolean isNull = jsonRepresentation.isNull("nonExistent");
+        final Boolean isNull = jsonRepresentation.isNull("nonExistent");
         assertThat(isNull, is(nullValue())); // ie don't know whether is null
     }
 
@@ -80,7 +80,7 @@ public class JsonRepresentationTest_getNull_isNull {
 
     @Test
     public void isNull_forMap() throws JsonParseException, JsonMappingException, IOException {
-        Boolean isNull = jsonRepresentation.isNull("aSubMap");
+        final Boolean isNull = jsonRepresentation.isNull("aSubMap");
         assertThat(isNull, is(false));
     }
 
@@ -89,9 +89,9 @@ public class JsonRepresentationTest_getNull_isNull {
         try {
             jsonRepresentation.getNull("aSubMap");
             fail();
-        } catch (IllegalArgumentException e) {
+        } catch (final IllegalArgumentException e) {
             assertThat(e.getMessage(), is("'aSubMap' is not the null value"));
         }
     }
-    
+
 }

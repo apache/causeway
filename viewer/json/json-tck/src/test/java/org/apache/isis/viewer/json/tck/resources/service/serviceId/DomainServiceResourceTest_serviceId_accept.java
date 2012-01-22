@@ -52,7 +52,7 @@ public class DomainServiceResourceTest_serviceId_accept {
 
     @Before
     public void setUp() throws Exception {
-        WebServer webServer = webServerRule.getWebServer();
+        final WebServer webServer = webServerRule.getWebServer();
         client = new RestfulClient(webServer.getBase());
     }
 
@@ -60,9 +60,8 @@ public class DomainServiceResourceTest_serviceId_accept {
     public void applicationJson() throws Exception {
 
         final String href = givenLinkToService();
-        
-        final RestfulRequest request = 
-                client.createRequest(HttpMethod.GET, href).withHeader(RestfulRequest.Header.ACCEPT, MediaType.APPLICATION_JSON_TYPE);
+
+        final RestfulRequest request = client.createRequest(HttpMethod.GET, href).withHeader(RestfulRequest.Header.ACCEPT, MediaType.APPLICATION_JSON_TYPE);
         final RestfulResponse<DomainObjectRepresentation> restfulResponse = request.executeT();
 
         assertThat(restfulResponse.getStatus(), is(HttpStatusCode.OK));
@@ -73,8 +72,7 @@ public class DomainServiceResourceTest_serviceId_accept {
 
         final String href = givenLinkToService();
 
-        final RestfulRequest request = 
-                client.createRequest(HttpMethod.GET, href).withHeader(RestfulRequest.Header.ACCEPT, RepresentationType.DOMAIN_OBJECT.getMediaType());
+        final RestfulRequest request = client.createRequest(HttpMethod.GET, href).withHeader(RestfulRequest.Header.ACCEPT, RepresentationType.DOMAIN_OBJECT.getMediaType());
         final RestfulResponse<DomainObjectRepresentation> restfulResponse = request.executeT();
 
         assertThat(restfulResponse.getStatus(), is(HttpStatusCode.OK));
@@ -85,8 +83,7 @@ public class DomainServiceResourceTest_serviceId_accept {
 
         final String href = givenLinkToService();
 
-        final RestfulRequest request = 
-                client.createRequest(HttpMethod.GET, href).withHeader(RestfulRequest.Header.ACCEPT, RepresentationType.USER.getMediaType());
+        final RestfulRequest request = client.createRequest(HttpMethod.GET, href).withHeader(RestfulRequest.Header.ACCEPT, RepresentationType.USER.getMediaType());
         final RestfulResponse<DomainObjectRepresentation> restfulResponse = request.executeT();
 
         assertThat(restfulResponse.getStatus(), is(HttpStatusCode.NOT_ACCEPTABLE));
@@ -95,11 +92,10 @@ public class DomainServiceResourceTest_serviceId_accept {
     private String givenLinkToService() throws JsonParseException, JsonMappingException, IOException {
         final DomainServiceResource resource = client.getDomainServiceResource();
         final Response response = resource.services();
-        final ListRepresentation services = RestfulResponse.<ListRepresentation>ofT(response).getEntity();
+        final ListRepresentation services = RestfulResponse.<ListRepresentation> ofT(response).getEntity();
 
         final String href = services.getRepresentation("values[id=%s]", "simples").asLink().getHref();
         return href;
     }
-
 
 }

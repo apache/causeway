@@ -34,8 +34,7 @@ public class ObjectLink extends AbstractLink {
     @Override
     protected boolean valid(final Request request, final ObjectAdapter object) {
         final AuthenticationSession session = IsisContext.getAuthenticationSession();
-        final List<ObjectAssociation> visibleFields =
-            object.getSpecification().getAssociations(ObjectAssociationFilters.dynamicallyVisible(session, object));
+        final List<ObjectAssociation> visibleFields = object.getSpecification().getAssociations(ObjectAssociationFilters.dynamicallyVisible(session, object));
         return visibleFields.size() > 0;
     }
 

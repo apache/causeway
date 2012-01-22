@@ -46,99 +46,96 @@ public class ObjectActionReprRenderer extends AbstractObjectMemberReprRenderer<O
         }
 
         @Override
-        public ReprRenderer<?,?> newRenderer(ResourceContext resourceContext, LinkFollower linkFollower, JsonRepresentation representation) {
+        public ReprRenderer<?, ?> newRenderer(final ResourceContext resourceContext, final LinkFollower linkFollower, final JsonRepresentation representation) {
             return new ObjectActionReprRenderer(resourceContext, linkFollower, getRepresentationType(), representation);
         }
     }
 
-    private ObjectActionReprRenderer(ResourceContext resourceContext, LinkFollower linkFollower, RepresentationType representationType, JsonRepresentation representation) {
+    private ObjectActionReprRenderer(final ResourceContext resourceContext, final LinkFollower linkFollower, final RepresentationType representationType, final JsonRepresentation representation) {
         super(resourceContext, linkFollower, representationType, representation);
     }
 
+    @Override
     public JsonRepresentation render() {
         // id and memberType are rendered eagerly
-        
+
         renderMemberContent();
         putDisabledReasonIfDisabled();
-        
-        if(mode.isStandalone() || mode.isMutated()) {
+
+        if (mode.isStandalone() || mode.isMutated()) {
             addParameterDetails();
         }
 
         return representation;
     }
 
-
-    /////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////
     // details link
-    /////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////
 
     /**
      * Mandatory hook method to support x-ro-follow-links
      */
     @Override
-    protected void followDetailsLink(JsonRepresentation detailsLink) {
-        RendererFactory factory = RendererFactoryRegistry.instance.find(RepresentationType.OBJECT_ACTION);
-        final ObjectActionReprRenderer renderer = 
-                (ObjectActionReprRenderer) factory.newRenderer(getResourceContext(), getLinkFollower(), JsonRepresentation.newMap());
-        renderer.with(new ObjectAndAction(objectAdapter, objectMember))
-                .usingLinkTo(linkTo)
-                .asFollowed();
+    protected void followDetailsLink(final JsonRepresentation detailsLink) {
+        final RendererFactory factory = RendererFactoryRegistry.instance.find(RepresentationType.OBJECT_ACTION);
+        final ObjectActionReprRenderer renderer = (ObjectActionReprRenderer) factory.newRenderer(getResourceContext(), getLinkFollower(), JsonRepresentation.newMap());
+        renderer.with(new ObjectAndAction(objectAdapter, objectMember)).usingLinkTo(linkTo).asFollowed();
         detailsLink.mapPut("value", renderer.render());
     }
 
-    /////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////
     // mutators
-    /////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////
 
     @Override
     protected void addMutatorsIfEnabled() {
-        if(usability().isVetoed()) {
+        if (usability().isVetoed()) {
             return;
         }
-        Map<String, MutatorSpec> mutators = memberType.getMutators();
+        final Map<String, MutatorSpec> mutators = memberType.getMutators();
         final ActionSemantics semantics = ActionSemantics.determine(this.resourceContext, objectMember);
-        
+
         final String mutator = semantics.getInvokeKey();
         final MutatorSpec mutatorSpec = mutators.get(mutator);
-        
+
         addLinkFor(mutatorSpec);
     }
 
+    @Override
     protected ObjectAdapterLinkTo linkToForMutatorInvoke() {
-        if(!objectMember.isContributed()) {
+        if (!objectMember.isContributed()) {
             return super.linkToForMutatorInvoke();
         }
         final DomainServiceLinkTo linkTo = new DomainServiceLinkTo();
         return linkTo.usingResourceContext(getResourceContext()).with(contributingServiceAdapter());
     }
-    
-	private ObjectAdapter contributingServiceAdapter() {
-    	ObjectSpecification serviceType = objectMember.getOnType();
-    	List<ObjectAdapter> serviceAdapters = getPersistenceSession().getServices();
-    	for (ObjectAdapter serviceAdapter : serviceAdapters) {
-			if(serviceAdapter.getSpecification() == serviceType) {
-				return serviceAdapter;
-			}
-		}
-    	// fail fast
-    	throw new IllegalStateException("Unable to locate contributing service");
-	}
 
-	
+    private ObjectAdapter contributingServiceAdapter() {
+        final ObjectSpecification serviceType = objectMember.getOnType();
+        final List<ObjectAdapter> serviceAdapters = getPersistenceSession().getServices();
+        for (final ObjectAdapter serviceAdapter : serviceAdapters) {
+            if (serviceAdapter.getSpecification() == serviceType) {
+                return serviceAdapter;
+            }
+        }
+        // fail fast
+        throw new IllegalStateException("Unable to locate contributing service");
+    }
+
     @Override
-    protected JsonRepresentation mutatorArgs(MutatorSpec mutatorSpec) {
-        JsonRepresentation argMap = JsonRepresentation.newMap();
-        List<ObjectActionParameter> parameters = objectMember.getParameters();
-        for(int i=0; i<objectMember.getParameterCount(); i++) {
-            argMap.mapPut(parameters.get(i).getId(), argValueFor(i)); 
+    protected JsonRepresentation mutatorArgs(final MutatorSpec mutatorSpec) {
+        final JsonRepresentation argMap = JsonRepresentation.newMap();
+        final List<ObjectActionParameter> parameters = objectMember.getParameters();
+        for (int i = 0; i < objectMember.getParameterCount(); i++) {
+            argMap.mapPut(parameters.get(i).getId(), argValueFor(i));
         }
         return argMap;
     }
 
-    private Object argValueFor(int i) {
-        if(objectMember.isContributed()) {
-            ObjectActionParameter actionParameter = objectMember.getParameters().get(i);
+    private Object argValueFor(final int i) {
+        if (objectMember.isContributed()) {
+            final ObjectActionParameter actionParameter = objectMember.getParameters().get(i);
             if (actionParameter.getSpecification().isOfType(objectAdapter.getSpecification())) {
                 return DomainObjectReprRenderer.newLinkToBuilder(resourceContext, Rel.OBJECT, objectAdapter).build();
             }
@@ -147,82 +144,83 @@ public class ObjectActionReprRenderer extends AbstractObjectMemberReprRenderer<O
         return NullNode.getInstance();
     }
 
-
-    /////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////
     // parameter details
-    /////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////
 
     private ObjectActionReprRenderer addParameterDetails() {
-    	List<Object> parameters = Lists.newArrayList();
-		for (int i=0; i< objectMember.getParameterCount(); i++) {
-			ObjectActionParameter param = objectMember.getParameters().get(i);
-			parameters.add(paramDetails(param));
-		}
-		representation.mapPut("parameters", parameters);
-		return this;
-	}
+        final List<Object> parameters = Lists.newArrayList();
+        for (int i = 0; i < objectMember.getParameterCount(); i++) {
+            final ObjectActionParameter param = objectMember.getParameters().get(i);
+            parameters.add(paramDetails(param));
+        }
+        representation.mapPut("parameters", parameters);
+        return this;
+    }
 
-	private Object paramDetails(ObjectActionParameter param) {
-		final JsonRepresentation paramRep = JsonRepresentation.newMap();
-		paramRep.mapPut("num", param.getNumber());
-		paramRep.mapPut("id", param.getId());
-		paramRep.mapPut("name", param.getName());
-		paramRep.mapPut("description", param.getDescription());
-		Object paramChoices = choicesFor(param);
-		if(paramChoices != null) {
-			paramRep.mapPut("choices", paramChoices);
-		}
-		Object paramDefault = defaultFor(param);
-		if(paramDefault != null) {
-			paramRep.mapPut("default", paramDefault);
-		}
-		return paramRep;
-	}
+    private Object paramDetails(final ObjectActionParameter param) {
+        final JsonRepresentation paramRep = JsonRepresentation.newMap();
+        paramRep.mapPut("num", param.getNumber());
+        paramRep.mapPut("id", param.getId());
+        paramRep.mapPut("name", param.getName());
+        paramRep.mapPut("description", param.getDescription());
+        final Object paramChoices = choicesFor(param);
+        if (paramChoices != null) {
+            paramRep.mapPut("choices", paramChoices);
+        }
+        final Object paramDefault = defaultFor(param);
+        if (paramDefault != null) {
+            paramRep.mapPut("default", paramDefault);
+        }
+        return paramRep;
+    }
 
-	private Object choicesFor(ObjectActionParameter param) {
-		ObjectAdapter[] choiceAdapters = param.getChoices(objectAdapter);
-		if(choiceAdapters == null || choiceAdapters.length == 0) {
-			return null;
-		}
-        List<Object> list = Lists.newArrayList();
+    private Object choicesFor(final ObjectActionParameter param) {
+        final ObjectAdapter[] choiceAdapters = param.getChoices(objectAdapter);
+        if (choiceAdapters == null || choiceAdapters.length == 0) {
+            return null;
+        }
+        final List<Object> list = Lists.newArrayList();
         for (final ObjectAdapter choiceAdapter : choiceAdapters) {
-        	ObjectSpecification objectSpec = param.getSpecification();
-        	list.add(DomainObjectReprRenderer.valueOrRef(resourceContext, choiceAdapter, objectSpec));
+            final ObjectSpecification objectSpec = param.getSpecification();
+            list.add(DomainObjectReprRenderer.valueOrRef(resourceContext, choiceAdapter, objectSpec));
         }
         return list;
-	}
+    }
 
-	private Object defaultFor(ObjectActionParameter param) {
-		ObjectAdapter defaultAdapter = param.getDefault(objectAdapter);
-		if(defaultAdapter == null) {
-			return null;
-		}
-    	ObjectSpecification objectSpec = param.getSpecification();
-    	return DomainObjectReprRenderer.valueOrRef(resourceContext, defaultAdapter, objectSpec);
-	}
+    private Object defaultFor(final ObjectActionParameter param) {
+        final ObjectAdapter defaultAdapter = param.getDefault(objectAdapter);
+        if (defaultAdapter == null) {
+            return null;
+        }
+        final ObjectSpecification objectSpec = param.getSpecification();
+        return DomainObjectReprRenderer.valueOrRef(resourceContext, defaultAdapter, objectSpec);
+    }
 
-	
-	/////////////////////////////////////////////////////
-	// extensions and links
-    /////////////////////////////////////////////////////
-	
-     protected void addLinksToFormalDomainModel() {
-         getLinks().arrayAdd(ActionDescriptionReprRenderer.newLinkToBuilder(resourceContext, Rel.DESCRIBEDBY, objectAdapter.getSpecification(), objectMember).build());
-     }
-     
-     protected void addLinksIsisProprietary() {
-        if(objectMember.isContributed()) {
-            ObjectAdapter serviceAdapter = contributingServiceAdapter();
-            JsonRepresentation contributedByLink = DomainObjectReprRenderer.newLinkToBuilder(resourceContext, Rel.CONTRIBUTED_BY, serviceAdapter).build();
+    // ///////////////////////////////////////////////////
+    // extensions and links
+    // ///////////////////////////////////////////////////
+
+    @Override
+    protected void addLinksToFormalDomainModel() {
+        getLinks().arrayAdd(ActionDescriptionReprRenderer.newLinkToBuilder(resourceContext, Rel.DESCRIBEDBY, objectAdapter.getSpecification(), objectMember).build());
+    }
+
+    @Override
+    protected void addLinksIsisProprietary() {
+        if (objectMember.isContributed()) {
+            final ObjectAdapter serviceAdapter = contributingServiceAdapter();
+            final JsonRepresentation contributedByLink = DomainObjectReprRenderer.newLinkToBuilder(resourceContext, Rel.CONTRIBUTED_BY, serviceAdapter).build();
             getLinks().arrayAdd(contributedByLink);
         }
     }
 
-     protected void putExtensionsIsisProprietary() {
-         getExtensions().mapPut("actionType", objectMember.getType().name().toLowerCase());
-         
-         final ActionSemantics semantics = ActionSemantics.determine(resourceContext, objectMember);
-         getExtensions().mapPut("actionSemantics", semantics.getName());
-     }
+    @Override
+    protected void putExtensionsIsisProprietary() {
+        getExtensions().mapPut("actionType", objectMember.getType().name().toLowerCase());
+
+        final ActionSemantics semantics = ActionSemantics.determine(resourceContext, objectMember);
+        getExtensions().mapPut("actionSemantics", semantics.getName());
+    }
 
 }

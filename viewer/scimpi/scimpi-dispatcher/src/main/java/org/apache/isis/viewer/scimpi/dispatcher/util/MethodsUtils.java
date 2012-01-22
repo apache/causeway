@@ -41,15 +41,12 @@ import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext.Scope;
 public class MethodsUtils {
     public static final String SERVICE_PREFIX = "service:";
 
-    public static Consent canRunMethod(final ObjectAdapter target, final ObjectAction action,
-        final ObjectAdapter[] parameters) {
-        final Consent consent =
-            action.isProposedArgumentSetValid(target, parameters == null ? new ObjectAdapter[0] : parameters);
+    public static Consent canRunMethod(final ObjectAdapter target, final ObjectAction action, final ObjectAdapter[] parameters) {
+        final Consent consent = action.isProposedArgumentSetValid(target, parameters == null ? new ObjectAdapter[0] : parameters);
         return consent;
     }
 
-    public static boolean runMethod(final RequestContext context, final ObjectAction action,
-        final ObjectAdapter target, final ObjectAdapter[] parameters, String variable, Scope scope) {
+    public static boolean runMethod(final RequestContext context, final ObjectAction action, final ObjectAdapter target, final ObjectAdapter[] parameters, String variable, Scope scope) {
         scope = scope == null ? Scope.REQUEST : scope;
         variable = variable == null ? RequestContext.RESULT : variable;
 
@@ -59,13 +56,13 @@ public class MethodsUtils {
         } else {
             final String mappedId = context.mapObject(result, scope);
             context.addVariable(variable, mappedId, scope);
-            // context.addVariable(variable + "_type", action.getFacet(TypeOfFacet.class), scope);
+            // context.addVariable(variable + "_type",
+            // action.getFacet(TypeOfFacet.class), scope);
             return true;
         }
     }
 
-    public static boolean runMethod(final RequestContext context, final ObjectAction action,
-        final ObjectAdapter target, final ObjectAdapter[] parameters) {
+    public static boolean runMethod(final RequestContext context, final ObjectAction action, final ObjectAdapter target, final ObjectAdapter[] parameters) {
         return runMethod(context, action, target, parameters, null, null);
     }
 
@@ -74,13 +71,13 @@ public class MethodsUtils {
             throw new ScimpiException("Object not specified when looking for " + methodName);
         }
 
-        final List<ObjectAction> actions =
-            object.getSpecification().getObjectActions(Arrays.asList(ActionType.USER, ActionType.EXPLORATION, ActionType.PROTOTYPE,
-                ActionType.DEBUG), Contributed.INCLUDED);
+        final List<ObjectAction> actions = object.getSpecification().getObjectActions(Arrays.asList(ActionType.USER, ActionType.EXPLORATION, ActionType.PROTOTYPE, ActionType.DEBUG), Contributed.INCLUDED);
         final ObjectAction action = findAction(actions, methodName);
         /*
-         * if (action == null) { actions = object.getSpecification().getServiceActionsFor(ObjectActionType.USER,
-         * ObjectActionType.EXPLORATION, ObjectActionType.DEBUG); action = findAction(actions, methodName); }
+         * if (action == null) { actions =
+         * object.getSpecification().getServiceActionsFor(ObjectActionType.USER,
+         * ObjectActionType.EXPLORATION, ObjectActionType.DEBUG); action =
+         * findAction(actions, methodName); }
          */
         if (action == null) {
             throw new DispatchException("Failed to find action " + methodName + " on " + object);
@@ -138,8 +135,7 @@ public class MethodsUtils {
 
     public static boolean isVisibleAndUsable(final ObjectAdapter object, final ObjectAction action) {
         final boolean isVisible = action.isVisible(getAuthenticationSession(), object).isAllowed();
-        final boolean isUsable =
-            getSession() != null && action.isUsable(getAuthenticationSession(), object).isAllowed();
+        final boolean isUsable = getSession() != null && action.isUsable(getAuthenticationSession(), object).isAllowed();
         final boolean isVisibleAndUsable = isVisible && isUsable;
         return isVisibleAndUsable;
     }

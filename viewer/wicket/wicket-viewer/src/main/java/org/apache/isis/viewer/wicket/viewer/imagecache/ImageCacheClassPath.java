@@ -33,7 +33,8 @@ import com.google.common.collect.Maps;
 import com.google.inject.Singleton;
 
 /**
- * Caches images loaded up the <tt>images</tt> package (using the {@link Images} class).
+ * Caches images loaded up the <tt>images</tt> package (using the {@link Images}
+ * class).
  * 
  * <p>
  * Searches for a fixed set of suffixes: {@value #IMAGE_SUFFICES}.

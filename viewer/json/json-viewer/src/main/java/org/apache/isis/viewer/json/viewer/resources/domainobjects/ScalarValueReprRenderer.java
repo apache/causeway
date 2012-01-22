@@ -34,44 +34,45 @@ public class ScalarValueReprRenderer extends ReprRendererAbstract<ScalarValueRep
 
     private final JsonValueEncoder jsonValueEncoder = new JsonValueEncoder();
     private ObjectSpecification returnType;
-    
+
     public static class Factory extends ReprRendererFactoryAbstract {
         public Factory() {
             super(RepresentationType.SCALAR_VALUE);
         }
 
         @Override
-        public ReprRenderer<?, ?> newRenderer(ResourceContext resourceContext, LinkFollower linkFollower, JsonRepresentation representation) {
+        public ReprRenderer<?, ?> newRenderer(final ResourceContext resourceContext, final LinkFollower linkFollower, final JsonRepresentation representation) {
             return new ScalarValueReprRenderer(resourceContext, linkFollower, getRepresentationType(), representation);
         }
     }
 
-    private ScalarValueReprRenderer(final ResourceContext resourceContext, LinkFollower linkFollower, RepresentationType representationType, JsonRepresentation representation) {
+    private ScalarValueReprRenderer(final ResourceContext resourceContext, final LinkFollower linkFollower, final RepresentationType representationType, final JsonRepresentation representation) {
         super(resourceContext, linkFollower, representationType, representation);
     }
 
+    @Override
     public ScalarValueReprRenderer with(final ObjectAdapter objectAdapter) {
         final EncodableFacet facet = objectAdapter.getSpecification().getFacet(EncodableFacet.class);
-        if(facet == null) {
+        if (facet == null) {
             throw JsonApplicationException.create(HttpStatusCode.INTERNAL_SERVER_ERROR, "Not an (encodable) value", objectAdapter.titleString());
         }
         final Object value = jsonValueEncoder.asObject(objectAdapter);
-        
+
         representation.mapPut("value", value);
         return this;
     }
 
     @Override
     public JsonRepresentation render() {
- 
+
         addLinkToReturnType();
-        
+
         getExtensions();
 
         return representation;
     }
 
-    public ScalarValueReprRenderer withReturnType(ObjectSpecification returnType) {
+    public ScalarValueReprRenderer withReturnType(final ObjectSpecification returnType) {
         this.returnType = returnType;
         return this;
     }
@@ -80,6 +81,4 @@ public class ScalarValueReprRenderer extends ReprRendererAbstract<ScalarValueRep
         addLink(Rel.RETURN_TYPE, returnType);
     }
 
-
-    
 }

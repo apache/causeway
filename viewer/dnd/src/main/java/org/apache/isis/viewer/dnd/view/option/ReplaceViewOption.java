@@ -37,8 +37,7 @@ public class ReplaceViewOption extends UserActionAbstract {
 
     @Override
     public String getDescription(final View view) {
-        return "Replace this " + view.getSpecification().getName() + " view with a " + specification.getName()
-            + " view";
+        return "Replace this " + view.getSpecification().getName() + " view with a " + specification.getName() + " view";
     }
 
     @Override

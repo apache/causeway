@@ -51,7 +51,8 @@ import org.apache.isis.viewer.dnd.viewer.basic.MinimizedView;
 import org.apache.log4j.Logger;
 
 /**
- * This class holds all the different view types that all the different objects can be viewed as.
+ * This class holds all the different view types that all the different objects
+ * can be viewed as.
  */
 public class SkylarkViewFactory implements GlobalViewFactory {
     private static final ViewSpecification fallback = new FallbackView.Specification();
@@ -101,14 +102,17 @@ public class SkylarkViewFactory implements GlobalViewFactory {
         } else {
             spec = specification;
         }
-        // TODO this should be passed in so that factory created views can be related to the views that ask
+        // TODO this should be passed in so that factory created views can be
+        // related to the views that ask
         // for them
         final Axes axes = new Axes();
         View createView = spec.createView(content, axes, -1);
 
         /*
-         * ObjectSpecification contentSpecification = content.getSpecification(); if (contentSpecification != null) {
-         * Options viewOptions = Properties.getViewConfigurationOptions(spec); createView.loadOptions(viewOptions); }
+         * ObjectSpecification contentSpecification =
+         * content.getSpecification(); if (contentSpecification != null) {
+         * Options viewOptions = Properties.getViewConfigurationOptions(spec);
+         * createView.loadOptions(viewOptions); }
          */
         if (content.isObject()) {
             final ObjectAdapter adapter = content.getAdapter();
@@ -268,8 +272,7 @@ public class SkylarkViewFactory implements GlobalViewFactory {
         return viewsFor(requirement, designSpecifications);
     }
 
-    private Enumeration<ViewSpecification> viewsFor(final ViewRequirement requirement,
-        final List<ViewSpecification> viewSpecifications) {
+    private Enumeration<ViewSpecification> viewsFor(final ViewRequirement requirement, final List<ViewSpecification> viewSpecifications) {
         final Vector<ViewSpecification> v = new Vector<ViewSpecification>();
         for (final ViewSpecification specification : viewSpecifications) {
             if (specification.canDisplay(requirement)) {

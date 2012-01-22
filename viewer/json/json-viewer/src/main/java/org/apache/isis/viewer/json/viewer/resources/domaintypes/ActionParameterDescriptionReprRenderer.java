@@ -38,29 +38,28 @@ public class ActionParameterDescriptionReprRenderer extends AbstractTypeFeatureR
         }
 
         @Override
-        public ReprRenderer<?,?> newRenderer(ResourceContext resourceContext, LinkFollower linkFollower, JsonRepresentation representation) {
+        public ReprRenderer<?, ?> newRenderer(final ResourceContext resourceContext, final LinkFollower linkFollower, final JsonRepresentation representation) {
             return new ActionParameterDescriptionReprRenderer(resourceContext, linkFollower, getRepresentationType(), representation);
         }
     }
 
-    public static LinkBuilder newLinkToBuilder(ResourceContext resourceContext, Rel rel, ObjectSpecification objectSpecification, ObjectActionParameter objectActionParameter) {
-        String typeFullName = objectSpecification.getFullIdentifier();
+    public static LinkBuilder newLinkToBuilder(final ResourceContext resourceContext, final Rel rel, final ObjectSpecification objectSpecification, final ObjectActionParameter objectActionParameter) {
+        final String typeFullName = objectSpecification.getFullIdentifier();
         final ObjectAction objectAction = objectActionParameter.getAction();
-        String actionId = objectAction.getId();
+        final String actionId = objectAction.getId();
         final String paramName = objectActionParameter.getName();
-        String url = String.format("domainTypes/%s/actions/%s/params/%s", typeFullName, actionId, paramName);
-        return LinkBuilder.newBuilder(resourceContext, rel, RepresentationType.ACTION_PARAMETER_DESCRIPTION, url)
-                          .withId(deriveId(objectActionParameter));
+        final String url = String.format("domainTypes/%s/actions/%s/params/%s", typeFullName, actionId, paramName);
+        return LinkBuilder.newBuilder(resourceContext, rel, RepresentationType.ACTION_PARAMETER_DESCRIPTION, url).withId(deriveId(objectActionParameter));
     }
 
-    public ActionParameterDescriptionReprRenderer(ResourceContext resourceContext, LinkFollower linkFollower, RepresentationType representationType, JsonRepresentation representation) {
+    public ActionParameterDescriptionReprRenderer(final ResourceContext resourceContext, final LinkFollower linkFollower, final RepresentationType representationType, final JsonRepresentation representation) {
         super(resourceContext, linkFollower, representationType, representation);
     }
 
     @Override
-    public ActionParameterDescriptionReprRenderer with(ParentSpecAndFeature<ObjectActionParameter> specAndFeature) {
+    public ActionParameterDescriptionReprRenderer with(final ParentSpecAndFeature<ObjectActionParameter> specAndFeature) {
         super.with(specAndFeature);
-        
+
         // done eagerly so can use as criteria for x-ro-follow-links
         representation.mapPut("id", deriveId());
 
@@ -71,26 +70,23 @@ public class ActionParameterDescriptionReprRenderer extends AbstractTypeFeatureR
         return deriveId(getObjectFeature());
     }
 
-    private static String deriveId(ObjectActionParameter objectActionParameter) {
+    private static String deriveId(final ObjectActionParameter objectActionParameter) {
         return objectActionParameter.getAction().getId() + "-" + objectActionParameter.getName();
     }
 
-
     @Override
     protected void addLinkSelfIfRequired() {
-        if(!includesSelf) {
+        if (!includesSelf) {
             return;
         }
-        getLinks().arrayAdd( 
-                newLinkToBuilder(getResourceContext(), Rel.SELF, getParentSpecification(), getObjectFeature()).build());
+        getLinks().arrayAdd(newLinkToBuilder(getResourceContext(), Rel.SELF, getParentSpecification(), getObjectFeature()).build());
     }
 
     @Override
     protected void addLinkUpToParent() {
-        ObjectAction parentAction = this.objectFeature.getAction();
-        
-        final LinkBuilder parentLinkBuilder = 
-                ActionDescriptionReprRenderer.newLinkToBuilder(resourceContext, Rel.UP, objectSpecification, parentAction);
+        final ObjectAction parentAction = this.objectFeature.getAction();
+
+        final LinkBuilder parentLinkBuilder = ActionDescriptionReprRenderer.newLinkToBuilder(resourceContext, Rel.UP, objectSpecification, parentAction);
         getLinks().arrayAdd(parentLinkBuilder.build());
     }
 
@@ -100,23 +96,21 @@ public class ActionParameterDescriptionReprRenderer extends AbstractTypeFeatureR
         representation.mapPut("number", getObjectFeature().getNumber());
         representation.mapPut("optional", getObjectFeature().isOptional());
         final MaxLengthFacet maxLength = getObjectFeature().getFacet(MaxLengthFacet.class);
-        if(maxLength != null && !maxLength.isNoop()) {
+        if (maxLength != null && !maxLength.isNoop()) {
             representation.mapPut("maxLength", maxLength.value());
         }
     }
-    
+
     @Override
     protected void addLinksSpecificToFeature() {
-        final LinkBuilder linkBuilder = 
-                DomainTypeReprRenderer.newLinkToBuilder(resourceContext, Rel.RETURN_TYPE, objectFeature.getSpecification());
+        final LinkBuilder linkBuilder = DomainTypeReprRenderer.newLinkToBuilder(resourceContext, Rel.RETURN_TYPE, objectFeature.getSpecification());
         getLinks().arrayAdd(linkBuilder.build());
     }
-    
+
     @Override
     protected void putExtensionsSpecificToFeature() {
         putExtensionsName();
-        putExtensionsDescriptionIfAvailable();        
+        putExtensionsDescriptionIfAvailable();
     }
-
 
 }

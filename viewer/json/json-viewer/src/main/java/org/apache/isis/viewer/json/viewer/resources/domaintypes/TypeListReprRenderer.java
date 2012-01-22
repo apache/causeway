@@ -41,42 +41,40 @@ public class TypeListReprRenderer extends ReprRendererAbstract<TypeListReprRende
         }
 
         @Override
-        public ReprRenderer<?, ?> newRenderer(ResourceContext resourceContext, LinkFollower linkFollower, JsonRepresentation representation) {
+        public ReprRenderer<?, ?> newRenderer(final ResourceContext resourceContext, final LinkFollower linkFollower, final JsonRepresentation representation) {
             return new TypeListReprRenderer(resourceContext, linkFollower, getRepresentationType(), representation);
         }
     }
 
-    private TypeListReprRenderer(ResourceContext resourceContext, LinkFollower linkFollower, RepresentationType representationType, JsonRepresentation representation) {
+    private TypeListReprRenderer(final ResourceContext resourceContext, final LinkFollower linkFollower, final RepresentationType representationType, final JsonRepresentation representation) {
         super(resourceContext, linkFollower, representationType, representation);
     }
 
     @Override
-    public TypeListReprRenderer with(Collection<ObjectSpecification> specifications) {
+    public TypeListReprRenderer with(final Collection<ObjectSpecification> specifications) {
         this.specifications = specifications;
         return this;
     }
 
     @Override
     public JsonRepresentation render() {
-        
+
         // self
-        if(includesSelf) {
+        if (includesSelf) {
             withSelf("domainTypes");
         }
-        
-        JsonRepresentation specList = JsonRepresentation.newArray();
-        for (ObjectSpecification objectSpec : specifications) {
-            final LinkBuilder linkBuilder = 
-                    LinkBuilder.newBuilder(getResourceContext(), Rel.DOMAIN_TYPE, RepresentationType.DOMAIN_TYPE, "domainTypes/%s", objectSpec.getFullIdentifier());
+
+        final JsonRepresentation specList = JsonRepresentation.newArray();
+        for (final ObjectSpecification objectSpec : specifications) {
+            final LinkBuilder linkBuilder = LinkBuilder.newBuilder(getResourceContext(), Rel.DOMAIN_TYPE, RepresentationType.DOMAIN_TYPE, "domainTypes/%s", objectSpec.getFullIdentifier());
             specList.arrayAdd(linkBuilder.build());
         }
-        
+
         representation.mapPut("values", specList);
 
         getExtensions(); // empty
-        
+
         return representation;
     }
-
 
 }

@@ -141,8 +141,7 @@ public class ServletRequestContext extends RequestContext {
         return buf.toString();
     }
 
-    public void startRequest(final HttpServletRequest request, final HttpServletResponse response,
-        final ServletContext servletContext) {
+    public void startRequest(final HttpServletRequest request, final HttpServletResponse response, final ServletContext servletContext) {
         this.request = request;
         this.response = response;
         this.servletContext = servletContext;
@@ -314,7 +313,8 @@ public class ServletRequestContext extends RequestContext {
 
     @Override
     public String getUrlBase() {
-        // return request.getScheme() + request.getServerName() + request.getServerPort();
+        // return request.getScheme() + request.getServerName() +
+        // request.getServerPort();
         final StringBuffer url = request.getRequestURL();
         url.setLength(url.length() - request.getRequestURI().length());
         return url.toString();

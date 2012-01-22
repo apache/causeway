@@ -28,26 +28,29 @@ import org.codehaus.jackson.JsonNode;
 
 public abstract class DomainRepresentation extends JsonRepresentation implements LinksToSelf, HasLinks, HasExtensions {
 
-    public DomainRepresentation(JsonNode jsonNode) {
+    public DomainRepresentation(final JsonNode jsonNode) {
         super(jsonNode);
     }
 
+    @Override
     public LinkRepresentation getSelf() {
         return getLinkWithRel(Rel.SELF);
     }
 
+    @Override
     public JsonRepresentation getLinks() {
         return getArray("links").ensureArray();
     }
 
-    public LinkRepresentation getLinkWithRel(Rel rel) {
+    public LinkRepresentation getLinkWithRel(final Rel rel) {
         return getLinkWithRel(rel.getName());
     }
 
-    public LinkRepresentation getLinkWithRel(String rel) {
+    public LinkRepresentation getLinkWithRel(final String rel) {
         return getLink(String.format("links[rel=%s]", rel));
     }
 
+    @Override
     public JsonRepresentation getExtensions() {
         return getMap("extensions");
     }

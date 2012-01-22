@@ -54,8 +54,7 @@ public class CollectionElementBuilder extends AbstractViewBuilder {
         Assert.assertEquals(view.getView(), view);
 
         final Content content = view.getContent();
-        final OneToManyAssociation field =
-            content instanceof OneToManyField ? ((OneToManyField) content).getOneToManyAssociation() : null;
+        final OneToManyAssociation field = content instanceof OneToManyField ? ((OneToManyField) content).getOneToManyAssociation() : null;
 
         LOG.debug("rebuild view " + view + " for " + content);
 
@@ -66,8 +65,9 @@ public class CollectionElementBuilder extends AbstractViewBuilder {
         // addViewAxes(view);
 
         /*
-         * remove all subviews from the view and then work through the elements of the collection adding in a view for
-         * each element. Where a subview for the that element already exists it should be reused.
+         * remove all subviews from the view and then work through the elements
+         * of the collection adding in a view for each element. Where a subview
+         * for the that element already exists it should be reused.
          */
         final View[] subviews = view.getSubviews();
         final ObjectAdapter[] existingElements = new ObjectAdapter[subviews.length];
@@ -93,7 +93,8 @@ public class CollectionElementBuilder extends AbstractViewBuilder {
                     elementContent = new CollectionElement(element);
                 } else {
                     final ObjectAdapter obj = ((OneToManyField) view.getContent()).getParent();
-                    // ObjectAdapter obj = view.getParent().getContent().getAdapter();
+                    // ObjectAdapter obj =
+                    // view.getParent().getContent().getAdapter();
                     final ObjectAdapter parent = obj;
                     elementContent = new OneToManyFieldElementImpl(parent, element, field);
                 }

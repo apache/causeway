@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.wicket.viewer;
 
 import java.util.ServiceLoader;
@@ -76,39 +75,42 @@ import com.google.inject.Injector;
 import com.google.inject.Module;
 
 /**
- * Main application, subclassing the Wicket {@link Application} and bootstrapping
- * Isis.
- *
- * <p>
- * Its main responsibility is to allow the set of {@link ComponentFactory}s used to
- * render the domain objects to be registered.  This type of customisation is commonplace.
- * At a more fundamental level, also allows the {@link Page} implementation for each 
- * {@link PageType page type} to be overridden.  This is probably less common, because 
- * CSS can also be used for this purpose.
+ * Main application, subclassing the Wicket {@link Application} and
+ * bootstrapping Isis.
  * 
  * <p>
- * New {@link ComponentFactory}s can be specified in two ways.  The preferred approach is 
- * to use the {@link ServiceLoader} mechanism, whereby the {@link ComponentFactory} 
- * implementation class is specified in a file under <tt>META-INF/services</tt>.  
- * See <tt>views-gmaps2</tt> for an example of this.  Including a jar that uses this mechanism
- * on the classpath will automatically make the {@link ComponentFactory} defined within it
- * available.
+ * Its main responsibility is to allow the set of {@link ComponentFactory}s used
+ * to render the domain objects to be registered. This type of customisation is
+ * commonplace. At a more fundamental level, also allows the {@link Page}
+ * implementation for each {@link PageType page type} to be overridden. This is
+ * probably less common, because CSS can also be used for this purpose.
+ * 
+ * <p>
+ * New {@link ComponentFactory}s can be specified in two ways. The preferred
+ * approach is to use the {@link ServiceLoader} mechanism, whereby the
+ * {@link ComponentFactory} implementation class is specified in a file under
+ * <tt>META-INF/services</tt>. See <tt>views-gmaps2</tt> for an example of this.
+ * Including a jar that uses this mechanism on the classpath will automatically
+ * make the {@link ComponentFactory} defined within it available.
  * 
  * <p>
  * Alternatively, {@link ComponentFactory}s can be specified by overridding
- * {@link #newComponentFactoryList()}.  This offers more fine-grained control for the ordering,
- * but is more fiddly.
+ * {@link #newComponentFactoryList()}. This offers more fine-grained control for
+ * the ordering, but is more fiddly.
  * 
  * <p>
- * There are also a number of other pluggable hooks (similar way to other Wicket customizations)
+ * There are also a number of other pluggable hooks (similar way to other Wicket
+ * customizations)
  * <ul>
  * <li> {@link #newComponentFactoryList()} (mentioned above)</li>
- * <li> {@link #newComponentFactoryRegistry()} (uses the {@link ComponentFactoryList} provided by
- *       {@link #newComponentFactoryList()})</li>
+ * <li> {@link #newComponentFactoryRegistry()} (uses the
+ * {@link ComponentFactoryList} provided by {@link #newComponentFactoryList()})</li>
  * <li> {@link #newPageClassList()}</li>
- * <li> {@link #newPageRegistry()} (uses the {@link PageClassList} provided by {@link #newPageClassList()})</li>
+ * <li> {@link #newPageRegistry()} (uses the {@link PageClassList} provided by
+ * {@link #newPageClassList()})</li>
  * <li> {@link #newConverterLocator()} (probably should not be changed.)</li>
- * <li> {@link #newRequestCycle(Request, Response)} (probably should not be changed.)</li>
+ * <li> {@link #newRequestCycle(Request, Response)} (probably should not be
+ * changed.)</li>
  * </ul>
  */
 public class IsisWicketApplication extends AuthenticatedWebApplication implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, ImageCacheAccessor, ApplicationCssRenderer, AuthenticationSessionAccessor {
@@ -116,31 +118,31 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
     private static final long serialVersionUID = 1L;
 
     private static final String WICKET_CONFIGURATION_TYPE_DEVELOPMENT = Application.DEVELOPMENT;
-    
-	/**
-	 * Convenience locator, downcasts inherited functionality.
-	 */
-	public static IsisWicketApplication get() {
-		return (IsisWicketApplication) AuthenticatedWebApplication.get();
-	}
-	
-	/**
-	 * {@link Inject}ed when {@link #init() initialized}.
-	 */
-	@Inject 
-	private ComponentFactoryRegistry componentFactoryRegistry;
+
+    /**
+     * Convenience locator, downcasts inherited functionality.
+     */
+    public static IsisWicketApplication get() {
+        return (IsisWicketApplication) AuthenticatedWebApplication.get();
+    }
 
     /**
      * {@link Inject}ed when {@link #init() initialized}.
      */
-	@Inject
-	private ImageCacheClassPath imageCache;
-	
+    @Inject
+    private ComponentFactoryRegistry componentFactoryRegistry;
+
     /**
      * {@link Inject}ed when {@link #init() initialized}.
      */
-    @Inject 
-	private PageClassRegistry pageClassRegistry;
+    @Inject
+    private ImageCacheClassPath imageCache;
+
+    /**
+     * {@link Inject}ed when {@link #init() initialized}.
+     */
+    @Inject
+    private PageClassRegistry pageClassRegistry;
 
     /**
      * {@link Inject}ed when {@link #init() initialized}.
@@ -152,40 +154,38 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
     /**
      * {@link Inject}ed when {@link #init() initialized}.
      */
-    @Inject 
+    @Inject
     @SuppressWarnings("unused")
     private IsisSystem system;
 
+    // /////////////////////////////////////////////////
+    // constructor, init
+    // /////////////////////////////////////////////////
 
-	///////////////////////////////////////////////////
-	// constructor, init
-	///////////////////////////////////////////////////
+    public IsisWicketApplication() {
+    }
 
-	public IsisWicketApplication() {
-	}
-	
-	/**
-	 * Initializes the application; in particular, bootstrapping the 
-	 * Isis backend, and initializing the {@link ComponentFactoryRegistry}
-	 * to be used for rendering.
-	 */
-	@Override
-	protected void init() {
-		super.init();
+    /**
+     * Initializes the application; in particular, bootstrapping the Isis
+     * backend, and initializing the {@link ComponentFactoryRegistry} to be used
+     * for rendering.
+     */
+    @Override
+    protected void init() {
+        super.init();
         getResourceSettings().setParentFolderPlaceholder("$up$");
-		
-        DeploymentType deploymentType = determineDeploymentType();
-        
-        IsisConfigurationBuilder isisConfigurationBuilder = createConfigBuilder();
-        
+
+        final DeploymentType deploymentType = determineDeploymentType();
+
+        final IsisConfigurationBuilder isisConfigurationBuilder = createConfigBuilder();
+
         final IsisModule isisModule = new IsisModule(deploymentType, isisConfigurationBuilder);
         final Injector injector = Guice.createInjector(isisModule, newIsisWicketModule());
         injector.injectMembers(this);
-		
-        initWicketComponentInjection(injector);
-	}
 
-   
+        initWicketComponentInjection(injector);
+    }
+
     private DeploymentType determineDeploymentType() {
         if (getConfigurationType().equalsIgnoreCase(WICKET_CONFIGURATION_TYPE_DEVELOPMENT)) {
             return new WicketServerPrototype();
@@ -198,88 +198,88 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
         final ResourceStreamSource rssServletContext = new ResourceStreamSourceForWebInf(getServletContext());
         final ResourceStreamSource rssTcl = ResourceStreamSourceContextLoaderClassPath.create();
         final ResourceStreamSource rssClasspath = new ResourceStreamSourceCurrentClassClassPath();
-        IsisConfigurationBuilder isisConfigurationBuilder = new IsisConfigurationBuilderResourceStreams(rssTcl, rssClasspath, rssServletContext);
+        final IsisConfigurationBuilder isisConfigurationBuilder = new IsisConfigurationBuilderResourceStreams(rssTcl, rssClasspath, rssServletContext);
         return isisConfigurationBuilder;
     }
-
 
     protected void initWicketComponentInjection(final Injector injector) {
         addComponentInstantiationListener(new GuiceComponentInjector(this, injector));
     }
 
     /**
-	 * Override if required
-	 */
-	protected Module newIsisWicketModule() {
+     * Override if required
+     */
+    protected Module newIsisWicketModule() {
         return new IsisWicketModule();
     }
 
+    // /////////////////////////////////////////////////
+    // Wicket Hooks
+    // /////////////////////////////////////////////////
 
-	///////////////////////////////////////////////////
-	// Wicket Hooks
-	///////////////////////////////////////////////////
+    /**
+     * Installs a {@link AuthenticatedWebSessionForIsis custom implementation}
+     * of Wicket's own {@link AuthenticatedWebSession}, effectively associating
+     * the Wicket session with the Isis's equivalent session object.
+     * 
+     * <p>
+     * In general, it shouldn't be necessary to override this method.
+     */
+    @Override
+    protected Class<? extends AuthenticatedWebSession> getWebSessionClass() {
+        return AuthenticatedWebSessionForIsis.class;
+    }
 
-	/**
-	 * Installs a {@link AuthenticatedWebSessionForIsis custom implementation} of
-	 * Wicket's own {@link AuthenticatedWebSession}, effectively associating the
-	 * Wicket session with the Isis's equivalent session object.
-	 * 
-	 * <p>
-	 * In general, it shouldn't be necessary to override this method.
-	 */
-	@Override
-	protected Class<? extends AuthenticatedWebSession> getWebSessionClass() {
-		return AuthenticatedWebSessionForIsis.class;
-	}
-	
-	/**
-	 * Installs a {@link WebRequestCycleForIsis custom implementation} of
-	 * Wicket's own {@link RequestCycle}, hooking in to provide session and
-	 * transaction management across potentially multiple concurrent requests for
-	 * the same Wicket session.
-	 * 
-	 * <p>
-	 * In general, it shouldn't be necessary to override this method.
-	 */
-	@Override
-	public RequestCycle newRequestCycle(Request request, Response response) {
-		return new WebRequestCycleForIsis(this, (WebRequest) request, response);
-	}
+    /**
+     * Installs a {@link WebRequestCycleForIsis custom implementation} of
+     * Wicket's own {@link RequestCycle}, hooking in to provide session and
+     * transaction management across potentially multiple concurrent requests
+     * for the same Wicket session.
+     * 
+     * <p>
+     * In general, it shouldn't be necessary to override this method.
+     */
+    @Override
+    public RequestCycle newRequestCycle(final Request request, final Response response) {
+        return new WebRequestCycleForIsis(this, (WebRequest) request, response);
+    }
 
-	/**
-	 * Installs a {@link ConverterLocator} preconfigured with a number of implementations
-	 * to support Isis specific objects.
-	 * 
-	 * <p>
-	 * In general, it shouldn't be necessary to override this method.
-	 */
-	@Override
-	protected IConverterLocator newConverterLocator() {
-	    ConverterLocator converterLocator = new ConverterLocator();
-	    converterLocator.set(ObjectAdapter.class, new ConverterForObjectAdapter());
-	    converterLocator.set(ObjectAdapterMemento.class, new ConverterForObjectAdapterMemento());
-	    return converterLocator;
-	}
+    /**
+     * Installs a {@link ConverterLocator} preconfigured with a number of
+     * implementations to support Isis specific objects.
+     * 
+     * <p>
+     * In general, it shouldn't be necessary to override this method.
+     */
+    @Override
+    protected IConverterLocator newConverterLocator() {
+        final ConverterLocator converterLocator = new ConverterLocator();
+        converterLocator.set(ObjectAdapter.class, new ConverterForObjectAdapter());
+        converterLocator.set(ObjectAdapterMemento.class, new ConverterForObjectAdapterMemento());
+        return converterLocator;
+    }
 
-
-    ///////////////////////////////////////////////////
+    // /////////////////////////////////////////////////
     // Application Css
-    ///////////////////////////////////////////////////
+    // /////////////////////////////////////////////////
 
     protected String getApplicationCssUrl() {
         return applicationCssUrl;
     }
-    
+
     /**
-     * Renders the {@link #getApplicationCssUrl() application-supplied CSS}, if any.
+     * Renders the {@link #getApplicationCssUrl() application-supplied CSS}, if
+     * any.
      * 
      * <p>
-     * TODO: doing it this way, as opposed to simply {@link #addRenderHeadListener(IHeaderContributor) registering} an {@link IHeaderContributor}
-     * does mean that the header is not first in the list, so can override other page-level CSS.  However, it still comes after
+     * TODO: doing it this way, as opposed to simply
+     * {@link #addRenderHeadListener(IHeaderContributor) registering} an
+     * {@link IHeaderContributor} does mean that the header is not first in the
+     * list, so can override other page-level CSS. However, it still comes after
      * any component-level CSS, so is not ideal.
      */
     @Override
-    public void renderApplicationCss(HtmlHeaderContainer container) {
+    public void renderApplicationCss(final HtmlHeaderContainer container) {
         final String cssUrl = getApplicationCssUrl();
         if (cssUrl == null) {
             return;
@@ -288,68 +288,67 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
         headerResponse.renderCSSReference(cssUrl);
     }
 
+    // /////////////////////////////////////////////////
+    // Component Factories
+    // /////////////////////////////////////////////////
 
-	///////////////////////////////////////////////////
-	// Component Factories
-	///////////////////////////////////////////////////
-
-	/**
-	 * The {@link ComponentFactoryRegistry} created in {@link #newComponentFactoryRegistry()}.
-	 */
-	@Override
+    /**
+     * The {@link ComponentFactoryRegistry} created in
+     * {@link #newComponentFactoryRegistry()}.
+     */
+    @Override
     public final ComponentFactoryRegistry getComponentFactoryRegistry() {
-		return componentFactoryRegistry;
-	}
-	
+        return componentFactoryRegistry;
+    }
 
-	///////////////////////////////////////////////////
-	// Page Registry
-	///////////////////////////////////////////////////
+    // /////////////////////////////////////////////////
+    // Page Registry
+    // /////////////////////////////////////////////////
 
-	/**
-	 * Access to other page types.
-	 * 
-	 * <p>
-	 * Non-final only for testing purposes; should not typically be overridden.
-	 */
-	@Override
+    /**
+     * Access to other page types.
+     * 
+     * <p>
+     * Non-final only for testing purposes; should not typically be overridden.
+     */
+    @Override
     public PageClassRegistry getPageClassRegistry() {
-		return pageClassRegistry;
-	}
-	
-	/**
-	 * Delegates to the {@link #getPageClassRegistry() PageClassRegistry}.
-	 */
-	@Override
+        return pageClassRegistry;
+    }
+
+    /**
+     * Delegates to the {@link #getPageClassRegistry() PageClassRegistry}.
+     */
+    @Override
     public Class<? extends Page> getHomePage() {
-		return getPageClassRegistry().getPageClass(PageType.HOME);
-	}
-	
-	/**
-	 * Delegates to the {@link #getPageClassRegistry() PageClassRegistry}.
-	 */
-	@SuppressWarnings("unchecked")
-	@Override
+        return getPageClassRegistry().getPageClass(PageType.HOME);
+    }
+
+    /**
+     * Delegates to the {@link #getPageClassRegistry() PageClassRegistry}.
+     */
+    @SuppressWarnings("unchecked")
+    @Override
     public Class<? extends WebPage> getSignInPageClass() {
-		return (Class<? extends WebPage>) getPageClassRegistry().getPageClass(PageType.SIGN_IN);
-	}
+        return (Class<? extends WebPage>) getPageClassRegistry().getPageClass(PageType.SIGN_IN);
+    }
 
-	///////////////////////////////////////////////////
-	// Images
-	///////////////////////////////////////////////////
+    // /////////////////////////////////////////////////
+    // Images
+    // /////////////////////////////////////////////////
 
-	@Override
+    @Override
     public ImageCache getImageCache() {
-		return imageCache;
-	}
+        return imageCache;
+    }
 
-	///////////////////////////////////////////////////
+    // /////////////////////////////////////////////////
     // Authentication Session
-    ///////////////////////////////////////////////////
+    // /////////////////////////////////////////////////
 
-	@Override
+    @Override
     public AuthenticationSession getAuthenticationSession() {
-	    return IsisContext.getAuthenticationSession();
-	}
+        return IsisContext.getAuthenticationSession();
+    }
 
 }
