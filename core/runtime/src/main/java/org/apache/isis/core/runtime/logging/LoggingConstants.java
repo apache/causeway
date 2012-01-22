@@ -17,17 +17,17 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.runtime.logging;
 
 public final class LoggingConstants {
-	
-	public static final String LOGGING_CONFIG_FILE = "logging.properties";
+
+    public static final String LOGGING_CONFIG_FILE = "logging.properties";
 
     public static final String DEBUG_OPT = "debug";
     public static final String VERBOSE_OPT = "verbose";
     public static final String QUIET_OPT = "quiet";
 
-	private LoggingConstants() {}
+    private LoggingConstants() {
+    }
 
 }

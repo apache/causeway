@@ -33,12 +33,15 @@ import org.apache.isis.core.progmodel.facets.MethodFinderUtils;
 import org.apache.isis.core.progmodel.facets.MethodPrefixBasedFacetFactoryAbstract;
 
 /**
- * Installs the {@link HiddenObjectFacetViaHiddenMethod} on the {@link ObjectSpecification},
- * and copies this facet onto each {@link ObjectMember}.
- *
+ * Installs the {@link HiddenObjectFacetViaHiddenMethod} on the
+ * {@link ObjectSpecification}, and copies this facet onto each
+ * {@link ObjectMember}.
+ * 
  * <p>
- * This two-pass design is required because, at the time that the {@link #process(org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext) class is being processed},
- * the {@link ObjectMember member}s for the {@link ObjectSpecification spec} are not known.
+ * This two-pass design is required because, at the time that the
+ * {@link #process(org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext)
+ * class is being processed}, the {@link ObjectMember member}s for the
+ * {@link ObjectSpecification spec} are not known.
  */
 public class HiddenObjectViaHiddenMethodFacetFactory extends MethodPrefixBasedFacetFactoryAbstract {
 
@@ -52,8 +55,8 @@ public class HiddenObjectViaHiddenMethodFacetFactory extends MethodPrefixBasedFa
 
     @Override
     public void process(final ProcessClassContext processClassContext) {
-        for(Class<?> returnType: new Class<?>[]{Boolean.class, boolean.class}) {
-            if(addFacetIfMethodFound(processClassContext, returnType)) {
+        for (final Class<?> returnType : new Class<?>[] { Boolean.class, boolean.class }) {
+            if (addFacetIfMethodFound(processClassContext, returnType)) {
                 return;
             }
         }
@@ -61,12 +64,12 @@ public class HiddenObjectViaHiddenMethodFacetFactory extends MethodPrefixBasedFa
     }
 
     @Override
-    public void process(ProcessMethodContext processMethodContext) {
+    public void process(final ProcessMethodContext processMethodContext) {
         final FacetedMethod member = processMethodContext.getFacetHolder();
         final Class<?> owningClass = processMethodContext.getCls();
         final ObjectSpecification owningSpec = getSpecificationLookup().loadSpecification(owningClass);
         final HiddenObjectFacet facet = owningSpec.getFacet(HiddenObjectFacet.class);
-        if(facet != null) {
+        if (facet != null) {
             facet.copyOnto(member);
         }
     }
@@ -75,11 +78,10 @@ public class HiddenObjectViaHiddenMethodFacetFactory extends MethodPrefixBasedFa
         final Class<?> cls = processClassContext.getCls();
         final FacetHolder facetHolder = processClassContext.getFacetHolder();
 
-        final Method method =
-            MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, HIDDEN_PREFIX, returnType, NO_PARAMETERS_TYPES);
+        final Method method = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, HIDDEN_PREFIX, returnType, NO_PARAMETERS_TYPES);
         if (method == null) {
             return false;
-        } 
+        }
         FacetUtil.addFacet(new HiddenObjectFacetViaHiddenMethod(method, facetHolder));
         processClassContext.removeMethod(method);
         return true;

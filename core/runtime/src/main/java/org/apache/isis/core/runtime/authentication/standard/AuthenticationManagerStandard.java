@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.runtime.authentication.standard;
 
 import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
@@ -39,31 +38,28 @@ import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequest;
 import org.apache.isis.core.runtime.authentication.RegistrationDetails;
 
-import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
-
 public class AuthenticationManagerStandard implements AuthenticationManager, DebuggableWithTitle {
 
     private final Map<String, String> userByValidationCode = Maps.newHashMap();
-    
+
     /**
-     * Not final because may be set {@link #setAuthenticators(List) programmatically}.
+     * Not final because may be set {@link #setAuthenticators(List)
+     * programmatically}.
      */
     private List<Authenticator> authenticators = Lists.newArrayList();
 
     private RandomCodeGenerator randomCodeGenerator;
-    private IsisConfiguration configuration;
-
-    
+    private final IsisConfiguration configuration;
 
     // //////////////////////////////////////////////////////////
     // constructor
     // //////////////////////////////////////////////////////////
 
-    public AuthenticationManagerStandard(IsisConfiguration configuration) {
+    public AuthenticationManagerStandard(final IsisConfiguration configuration) {
         this.configuration = configuration;
     }
 
@@ -72,20 +68,22 @@ public class AuthenticationManagerStandard implements AuthenticationManager, Deb
     // //////////////////////////////////////////////////////////
 
     /**
-	 * Will default the {@link #setRandomCodeGenerator(RandomCodeGenerator) RandomCodeGenerator}, but
-	 * {@link Authenticator}(s) must have been {@link #addAuthenticator(Authenticator) added} or
-	 * {@link #setAuthenticators(List) injected}.
-	 */
-	public final void init() {
-	    defaultRandomCodeGeneratorIfNecessary();
-	    addDefaultAuthenticators();
-	    if (authenticators.size() == 0) {
-	        throw new IsisException("No authenticators specified");
-	    }
-	    for (Authenticator authenticator : authenticators) {
-	        authenticator.init();
-	    }
-	}
+     * Will default the {@link #setRandomCodeGenerator(RandomCodeGenerator)
+     * RandomCodeGenerator}, but {@link Authenticator}(s) must have been
+     * {@link #addAuthenticator(Authenticator) added} or
+     * {@link #setAuthenticators(List) injected}.
+     */
+    @Override
+    public final void init() {
+        defaultRandomCodeGeneratorIfNecessary();
+        addDefaultAuthenticators();
+        if (authenticators.size() == 0) {
+            throw new IsisException("No authenticators specified");
+        }
+        for (final Authenticator authenticator : authenticators) {
+            authenticator.init();
+        }
+    }
 
     private void defaultRandomCodeGeneratorIfNecessary() {
         if (randomCodeGenerator == null) {
@@ -99,9 +97,9 @@ public class AuthenticationManagerStandard implements AuthenticationManager, Deb
     protected void addDefaultAuthenticators() {
     }
 
-    
+    @Override
     public void shutdown() {
-        for (Authenticator authenticator : authenticators) {
+        for (final Authenticator authenticator : authenticators) {
             authenticator.shutdown();
         }
     }
@@ -110,14 +108,14 @@ public class AuthenticationManagerStandard implements AuthenticationManager, Deb
     // Session Management (including authenticate)
     // //////////////////////////////////////////////////////////
 
+    @Override
     public synchronized final AuthenticationSession authenticate(final AuthenticationRequest request) {
         if (request == null) {
             return null;
         }
 
-        final Collection<Authenticator> compatibleAuthenticators = 
-                Collections2.filter(authenticators, AuthenticatorFuncs.compatibleWith(request));
-        if(compatibleAuthenticators.size() == 0) {
+        final Collection<Authenticator> compatibleAuthenticators = Collections2.filter(authenticators, AuthenticatorFuncs.compatibleWith(request));
+        if (compatibleAuthenticators.size() == 0) {
             throw new NoAuthenticatorException("No authenticator available for processing " + request.getClass().getName());
         }
         for (final Authenticator authenticator : compatibleAuthenticators) {
@@ -139,17 +137,18 @@ public class AuthenticationManagerStandard implements AuthenticationManager, Deb
         return code;
     }
 
+    @Override
     public final boolean isSessionValid(final AuthenticationSession session) {
         final String userName = userByValidationCode.get(session.getValidationCode());
         return session.hasUserNameOf(userName);
     }
 
+    @Override
     public void closeSession(final AuthenticationSession session) {
         userByValidationCode.remove(session.getValidationCode());
     }
 
-
-	// //////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////////
     // Authenticators
     // //////////////////////////////////////////////////////////
 
@@ -157,8 +156,8 @@ public class AuthenticationManagerStandard implements AuthenticationManager, Deb
      * Adds an {@link Authenticator}.
      * 
      * <p>
-     * Use either this or alternatively {@link #setAuthenticators(List) inject} the full list of
-     * {@link Authenticator}s.
+     * Use either this or alternatively {@link #setAuthenticators(List) inject}
+     * the full list of {@link Authenticator}s.
      */
     public final void addAuthenticator(final Authenticator authenticator) {
         authenticators.add(authenticator);
@@ -175,7 +174,8 @@ public class AuthenticationManagerStandard implements AuthenticationManager, Deb
      * Provide direct injection.
      * 
      * <p>
-     * Use either this or programmatically {@link #addAuthenticator(Authenticator)}.
+     * Use either this or programmatically
+     * {@link #addAuthenticator(Authenticator)}.
      */
     public void setAuthenticators(final List<Authenticator> authenticators) {
         this.authenticators = authenticators;
@@ -185,15 +185,14 @@ public class AuthenticationManagerStandard implements AuthenticationManager, Deb
         return Collections.unmodifiableList(authenticators);
     }
 
-
     // //////////////////////////////////////////////////////////
     // register
     // //////////////////////////////////////////////////////////
 
     @Override
-    public boolean register(RegistrationDetails registrationDetails) {
-        for(final Registrar registrar: getRegistrars()) {
-            if(registrar.canRegister(registrationDetails.getClass())) {
+    public boolean register(final RegistrationDetails registrationDetails) {
+        for (final Registrar registrar : getRegistrars()) {
+            if (registrar.canRegister(registrationDetails.getClass())) {
                 return registrar.register(registrationDetails);
             }
         }
@@ -201,9 +200,9 @@ public class AuthenticationManagerStandard implements AuthenticationManager, Deb
     }
 
     @Override
-    public boolean supportsRegistration(Class<? extends RegistrationDetails> registrationDetailsClass) {
-        for(final Registrar registrar: getRegistrars()) {
-            if(registrar.canRegister(registrationDetailsClass)) {
+    public boolean supportsRegistration(final Class<? extends RegistrationDetails> registrationDetailsClass) {
+        for (final Registrar registrar : getRegistrars()) {
+            if (registrar.canRegister(registrationDetailsClass)) {
                 return true;
             }
         }
@@ -231,7 +230,8 @@ public class AuthenticationManagerStandard implements AuthenticationManager, Deb
     }
 
     /**
-     * For injection; will {@link #defaultRandomCodeGeneratorIfNecessary() default} otherwise.
+     * For injection; will {@link #defaultRandomCodeGeneratorIfNecessary()
+     * default} otherwise.
      */
     public void setRandomCodeGenerator(final RandomCodeGenerator randomCodeGenerator) {
         ensureThatArg(randomCodeGenerator, is(notNullValue()), "randomCodeGenerator cannot be null");
@@ -242,22 +242,23 @@ public class AuthenticationManagerStandard implements AuthenticationManager, Deb
     // Debugging
     // //////////////////////////////////////////////////////////
 
+    @Override
     public String debugTitle() {
         return "Authentication Manager";
     }
 
-	@Override
-	public void debugData(DebugBuilder debug) {
+    @Override
+    public void debugData(final DebugBuilder debug) {
         debug.appendTitle("Authenticators");
         debug.indent();
-        for (Authenticator authenticator : authenticators) {
+        for (final Authenticator authenticator : authenticators) {
             debug.appendln(authenticator.toString());
         }
         debug.unindent();
 
         debug.appendTitle("Users");
         debug.indent();
-        for (String userName : userByValidationCode.values()) {
+        for (final String userName : userByValidationCode.values()) {
             debug.appendln(userName);
         }
         debug.unindent();
@@ -279,6 +280,4 @@ public class AuthenticationManagerStandard implements AuthenticationManager, Deb
         return configuration;
     }
 
-
 }
-

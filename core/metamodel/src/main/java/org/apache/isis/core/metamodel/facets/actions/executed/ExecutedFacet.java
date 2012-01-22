@@ -27,11 +27,12 @@ import org.apache.isis.core.metamodel.facets.EnumerationAbstract;
 import org.apache.isis.core.metamodel.spec.Target;
 
 /**
- * Whether the action should be invoked locally, remotely, or on the default location depending on its persistence
- * state.
+ * Whether the action should be invoked locally, remotely, or on the default
+ * location depending on its persistence state.
  * 
  * <p>
- * In the standard Apache Isis Programming Model, corresponds to annotating the action method using <tt>@Executed</tt>.
+ * In the standard Apache Isis Programming Model, corresponds to annotating the
+ * action method using <tt>@Executed</tt>.
  */
 public interface ExecutedFacet extends Facet {
 

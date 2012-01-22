@@ -17,22 +17,20 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.value;
 
 import static org.junit.Assert.assertEquals;
-
-import org.jmock.Expectations;
-import org.jmock.integration.junit4.JMock;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
 
 import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.applib.value.Percentage;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.progmodel.facets.value.percentage.PercentageValueSemanticsProvider;
+import org.jmock.Expectations;
+import org.jmock.integration.junit4.JMock;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 
 @RunWith(JMock.class)
 public class PercentageValueSemanticsProviderTest extends ValueSemanticsProviderAbstractTestCase {
@@ -42,18 +40,20 @@ public class PercentageValueSemanticsProviderTest extends ValueSemanticsProvider
 
     @Before
     public void setUpObjects() throws Exception {
-    	mockery.checking(new Expectations(){{
-    		allowing(mockConfiguration).getString("isis.value.format.percentage");
-    		will(returnValue(null));
-    	}});
-    	
+        mockery.checking(new Expectations() {
+            {
+                allowing(mockConfiguration).getString("isis.value.format.percentage");
+                will(returnValue(null));
+            }
+        });
+
         setupSpecification(Percentage.class);
-        
+
         percentage = new Percentage(0.105f);
         allowMockAdapterToReturn(percentage);
-        
+
         holder = new FacetHolderImpl();
-        
+
         setValue(adapter = new PercentageValueSemanticsProvider(holder, mockConfiguration, mockContext));
     }
 
@@ -98,4 +98,3 @@ public class PercentageValueSemanticsProviderTest extends ValueSemanticsProvider
     }
 
 }
-

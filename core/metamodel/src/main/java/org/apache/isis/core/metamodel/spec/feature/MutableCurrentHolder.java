@@ -22,21 +22,25 @@ package org.apache.isis.core.metamodel.spec.feature;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 
 /**
- * Mix-in interface for {@link ObjectAction}s that reference or otherwise contain a 'current' value that moreover can be
- * changed.
+ * Mix-in interface for {@link ObjectAction}s that reference or otherwise
+ * contain a 'current' value that moreover can be changed.
  * 
  * <p>
- * Examples include {@link OneToOneAssociation properties} and {@link OneToOneActionParameter action parameter}s (but
- * not {@link ObjectAction action}s themselves) nor {@link OneToManyAssociation collection}s.
+ * Examples include {@link OneToOneAssociation properties} and
+ * {@link OneToOneActionParameter action parameter}s (but not
+ * {@link ObjectAction action}s themselves) nor {@link OneToManyAssociation
+ * collection}s.
  */
 public interface MutableCurrentHolder extends CurrentHolder {
 
     /**
-     * Updates the referenced {@link ObjectAdapter} for the owning {@link ObjectAdapter} with the new value provided, or
-     * clears the reference if null.
+     * Updates the referenced {@link ObjectAdapter} for the owning
+     * {@link ObjectAdapter} with the new value provided, or clears the
+     * reference if null.
      * 
      * <p>
-     * For example, if this is a {@link OneToOneAssociation}, then updates the object referenced .
+     * For example, if this is a {@link OneToOneAssociation}, then updates the
+     * object referenced .
      * 
      * @param owner
      * @param newValue

@@ -28,7 +28,8 @@ import org.apache.isis.core.metamodel.facets.actions.exploration.ExplorationFace
 import org.apache.isis.core.progmodel.facets.actions.invoke.ActionInvocationFacetFactory;
 
 /**
- * {@link ExplorationFacet} can also be installed via a naming convention, see {@link ActionInvocationFacetFactory}.
+ * {@link ExplorationFacet} can also be installed via a naming convention, see
+ * {@link ActionInvocationFacetFactory}.
  */
 public class ExplorationAnnotationFacetFactory extends AnnotationBasedFacetFactoryAbstract {
 

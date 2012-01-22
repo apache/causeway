@@ -25,8 +25,7 @@ import org.apache.isis.core.progmodel.facets.object.defaults.DefaultedFacetAbstr
 
 public class DefaultedFacetFromConfiguration extends DefaultedFacetAbstract {
 
-    public DefaultedFacetFromConfiguration(final String candidateProviderName, final FacetHolder holder,
-        final DependencyInjector dependencyInjector) {
+    public DefaultedFacetFromConfiguration(final String candidateProviderName, final FacetHolder holder, final DependencyInjector dependencyInjector) {
         super(candidateProviderName, null, holder, dependencyInjector);
 
     }

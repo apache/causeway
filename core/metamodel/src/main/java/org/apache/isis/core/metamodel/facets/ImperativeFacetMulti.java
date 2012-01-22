@@ -24,7 +24,8 @@ import java.lang.reflect.Method;
 public interface ImperativeFacetMulti extends ImperativeFacet {
 
     /**
-     * Associate an additional method, to be returned from {@link ImperativeFacet#getMethods()}.
+     * Associate an additional method, to be returned from
+     * {@link ImperativeFacet#getMethods()}.
      * 
      * @param method
      */

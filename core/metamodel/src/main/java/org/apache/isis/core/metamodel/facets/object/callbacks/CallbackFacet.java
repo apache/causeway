@@ -24,7 +24,8 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.ImperativeFacetMulti;
 
 /**
- * A {@link Facet} that represents some type of lifecycle callback on the object (eg about to be persisted).
+ * A {@link Facet} that represents some type of lifecycle callback on the object
+ * (eg about to be persisted).
  */
 public interface CallbackFacet extends Facet, ImperativeFacetMulti {
 

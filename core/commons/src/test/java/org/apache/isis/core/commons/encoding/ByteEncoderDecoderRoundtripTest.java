@@ -108,8 +108,7 @@ public class ByteEncoderDecoderRoundtripTest {
 
     @Test
     public void encodeAndDecodeObjectArray() throws IOException {
-        final EncodableObject[] array =
-            new EncodableObject[] { new EncodableObject(), new EncodableObject(), new EncodableObject() };
+        final EncodableObject[] array = new EncodableObject[] { new EncodableObject(), new EncodableObject(), new EncodableObject() };
         outputImpl.writeEncodables(array);
 
         final Encodable[] objects = inputImpl.readEncodables(Encodable.class);

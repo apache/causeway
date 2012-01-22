@@ -42,7 +42,8 @@ import org.apache.isis.core.metamodel.runtimecontext.DependencyInjector;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 /**
- * TODO: need to fix genericity of using Parser<?>, for now suppressing warnings.
+ * TODO: need to fix genericity of using Parser<?>, for now suppressing
+ * warnings.
  */
 public class ParseableFacetUsingParser extends FacetAbstract implements ParseableFacet {
 
@@ -52,9 +53,7 @@ public class ParseableFacetUsingParser extends FacetAbstract implements Parseabl
     private final AdapterMap adapterMap;
     private final AuthenticationSessionProvider authenticationSessionProvider;
 
-    public ParseableFacetUsingParser(@SuppressWarnings("unchecked") final Parser parser, final FacetHolder holder,
-        final AuthenticationSessionProvider authenticationSessionProvider, final DependencyInjector dependencyInjector,
-        final AdapterMap adapterManager) {
+    public ParseableFacetUsingParser(@SuppressWarnings("unchecked") final Parser parser, final FacetHolder holder, final AuthenticationSessionProvider authenticationSessionProvider, final DependencyInjector dependencyInjector, final AdapterMap adapterManager) {
         super(ParseableFacet.class, holder, false);
         this.parser = parser;
         this.authenticationSessionProvider = authenticationSessionProvider;
@@ -78,9 +77,7 @@ public class ParseableFacetUsingParser extends FacetAbstract implements Parseabl
         // (eg pick up any @RegEx on value type)
         if (getFacetHolder().containsFacet(ValueFacet.class)) {
             final ObjectAdapter entryAdapter = getAdapterMap().adapterFor(entry);
-            final ParseValueContext parseValueContext =
-                new ParseValueContext(getAuthenticationSessionProvider().getAuthenticationSession(),
-                    InteractionInvocationMethod.BY_USER, contextAdapter, getIdentified().getIdentifier(), entryAdapter);
+            final ParseValueContext parseValueContext = new ParseValueContext(getAuthenticationSessionProvider().getAuthenticationSession(), InteractionInvocationMethod.BY_USER, contextAdapter, getIdentified().getIdentifier(), entryAdapter);
             validate(parseValueContext);
         }
 
@@ -98,9 +95,7 @@ public class ParseableFacetUsingParser extends FacetAbstract implements Parseabl
             // (eg pick up any validate() methods on it)
             final ObjectAdapter adapter = getAdapterMap().adapterFor(parsed);
             final ObjectSpecification specification = adapter.getSpecification();
-            final ObjectValidityContext validateContext =
-                specification.createValidityInteractionContext(getAuthenticationSessionProvider()
-                    .getAuthenticationSession(), InteractionInvocationMethod.BY_USER, adapter);
+            final ObjectValidityContext validateContext = specification.createValidityInteractionContext(getAuthenticationSessionProvider().getAuthenticationSession(), InteractionInvocationMethod.BY_USER, adapter);
             validate(validateContext);
 
             return adapter;

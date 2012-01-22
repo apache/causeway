@@ -31,8 +31,7 @@ public class PropertyDefaultFacetDerivedFromDefaultedFacet extends FacetAbstract
     private final DefaultedFacet typeFacet;
     private final AdapterMap adapterMap;
 
-    public PropertyDefaultFacetDerivedFromDefaultedFacet(final DefaultedFacet typeFacet, final FacetHolder holder,
-        final AdapterMap adapterManager) {
+    public PropertyDefaultFacetDerivedFromDefaultedFacet(final DefaultedFacet typeFacet, final FacetHolder holder, final AdapterMap adapterManager) {
         super(PropertyDefaultFacet.class, holder, false);
         this.typeFacet = typeFacet;
         this.adapterMap = adapterManager;

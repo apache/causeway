@@ -22,10 +22,12 @@ package org.apache.isis.core.metamodel.facets.actions.debug;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 
 /**
- * Indicates that the action should only be available in a special <i>debug</i> mode.
+ * Indicates that the action should only be available in a special <i>debug</i>
+ * mode.
  * 
  * <p>
- * In the standard Apache Isis Programming Model, corresponds to annotating the action method using <tt>@Debug</tt>.
+ * In the standard Apache Isis Programming Model, corresponds to annotating the
+ * action method using <tt>@Debug</tt>.
  */
 public interface DebugFacet extends Facet {
 

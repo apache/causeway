@@ -17,19 +17,17 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.metamodelvalidator.dflt;
 
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorAbstract;
 
-
 public class MetaModelValidatorDefault extends MetaModelValidatorAbstract {
 
-	/**
-	 * Does nothing.
-	 */
-	public void validate() {
-	}
-	
+    /**
+     * Does nothing.
+     */
+    @Override
+    public void validate() {
+    }
 
 }

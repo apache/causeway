@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.object.ident.title;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -38,16 +37,16 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 @RunWith(JMock.class)
-public class TitleFacetViaMethodTest  {
+public class TitleFacetViaMethodTest {
 
-	private Mockery mockery = new JUnit4Mockery();
-	
+    private final Mockery mockery = new JUnit4Mockery();
+
     private TitleFacetViaTitleMethod facet;
-	private FacetHolder mockFacetHolder;
+    private FacetHolder mockFacetHolder;
 
-	private ObjectAdapter mockOwningAdapter;
+    private ObjectAdapter mockOwningAdapter;
 
-	private DomainObjectWithProblemInItsTitleMethod pojo;
+    private DomainObjectWithProblemInItsTitleMethod pojo;
 
     public static class DomainObjectWithProblemInItsTitleMethod {
         public String title() {
@@ -58,16 +57,18 @@ public class TitleFacetViaMethodTest  {
     @Before
     public void setUp() throws Exception {
 
-    	pojo = new DomainObjectWithProblemInItsTitleMethod();
-    	mockFacetHolder = mockery.mock(FacetHolder.class);
-    	mockOwningAdapter = mockery.mock(ObjectAdapter.class);
-        Method iconNameMethod = DomainObjectWithProblemInItsTitleMethod.class.getMethod("title");
-		facet = new TitleFacetViaTitleMethod(iconNameMethod, mockFacetHolder);
-		
-		mockery.checking(new Expectations(){{
-			allowing(mockOwningAdapter).getObject();
-			will(returnValue(pojo));
-		}});
+        pojo = new DomainObjectWithProblemInItsTitleMethod();
+        mockFacetHolder = mockery.mock(FacetHolder.class);
+        mockOwningAdapter = mockery.mock(ObjectAdapter.class);
+        final Method iconNameMethod = DomainObjectWithProblemInItsTitleMethod.class.getMethod("title");
+        facet = new TitleFacetViaTitleMethod(iconNameMethod, mockFacetHolder);
+
+        mockery.checking(new Expectations() {
+            {
+                allowing(mockOwningAdapter).getObject();
+                will(returnValue(pojo));
+            }
+        });
     }
 
     @After
@@ -77,9 +78,8 @@ public class TitleFacetViaMethodTest  {
 
     @Test
     public void testTitleThrowsException() {
-    	String title = facet.title(mockOwningAdapter, null);
-    	assertThat(title, is("Failed Title"));
+        final String title = facet.title(mockOwningAdapter, null);
+        assertThat(title, is("Failed Title"));
     }
 
 }
-

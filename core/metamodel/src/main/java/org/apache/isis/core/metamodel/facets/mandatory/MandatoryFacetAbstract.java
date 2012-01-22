@@ -44,7 +44,8 @@ public abstract class MandatoryFacetAbstract extends MarkerFacetAbstract impleme
             return null;
         }
         if (!(context instanceof ProposedHolder)) {
-            // shouldn't happen, since both the above should hold a proposed value/argument
+            // shouldn't happen, since both the above should hold a proposed
+            // value/argument
             return null;
         }
         final ProposedHolder proposedHolder = (ProposedHolder) context;

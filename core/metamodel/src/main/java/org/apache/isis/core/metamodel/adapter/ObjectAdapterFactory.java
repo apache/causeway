@@ -17,20 +17,18 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.adapter;
 
 import org.apache.isis.core.commons.components.Injectable;
 import org.apache.isis.core.commons.components.SessionScopedComponent;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 
-
 /**
  * Polymorphic instantiation of {@link ObjectAdapter}.
  * 
  * <p>
- * Introduced to allow subclasses of ObjectAdapter with support for {@link OneToOneAssociationInstance} 
- * and so on.
+ * Introduced to allow subclasses of ObjectAdapter with support for
+ * {@link OneToOneAssociationInstance} and so on.
  */
 public interface ObjectAdapterFactory extends SessionScopedComponent, Injectable {
 

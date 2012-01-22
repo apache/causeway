@@ -34,22 +34,24 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 
 /**
- * Typesafe writing and reading of fields, providing some level of integrity checking of encoded messages.
+ * Typesafe writing and reading of fields, providing some level of integrity
+ * checking of encoded messages.
  * 
  * <p>
- * The {@link #write(DataOutputExtended, Object)} writes out field type and then the data for that field type. The field
- * type is represented by this enumberation, with the {@link FieldType#getIdx() index} being what is written to the
- * stream (hence of type <tt>byte</tt> to keep small).
+ * The {@link #write(DataOutputExtended, Object)} writes out field type and then
+ * the data for that field type. The field type is represented by this
+ * enumberation, with the {@link FieldType#getIdx() index} being what is written
+ * to the stream (hence of type <tt>byte</tt> to keep small).
  * 
  * <p>
- * Conversely, the {@link #read(DataInputExtended)} reads the field type and then the data for that field type.
+ * Conversely, the {@link #read(DataInputExtended)} reads the field type and
+ * then the data for that field type.
  */
 public abstract class FieldType<T> {
 
     private static Logger LOG = Logger.getLogger(FieldType.class);
 
-    private static String LOG_INDENT =
-        ". . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . ";
+    private static String LOG_INDENT = ". . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . ";
     private static final int NULL_BIT = 64; // 2 to the 6
 
     private static Map<Byte, FieldType<?>> cache = new HashMap<Byte, FieldType<?>>();
@@ -59,8 +61,7 @@ public abstract class FieldType<T> {
         INDENT_ONLY, INDENT_AND_OUTDENT;
     }
 
-    public static FieldType<Boolean> BOOLEAN = new FieldType<Boolean>((byte) next++, Boolean.class,
-        Indenting.INDENT_ONLY) {
+    public static FieldType<Boolean> BOOLEAN = new FieldType<Boolean>((byte) next++, Boolean.class, Indenting.INDENT_ONLY) {
         @Override
         protected void doWrite(final DataOutputExtended output, final Boolean value) throws IOException {
             try {
@@ -93,8 +94,7 @@ public abstract class FieldType<T> {
         }
     };
 
-    public static FieldType<boolean[]> BOOLEAN_ARRAY = new FieldType<boolean[]>((byte) next++, boolean[].class,
-        Indenting.INDENT_AND_OUTDENT) {
+    public static FieldType<boolean[]> BOOLEAN_ARRAY = new FieldType<boolean[]>((byte) next++, boolean[].class, Indenting.INDENT_AND_OUTDENT) {
         @Override
         protected void doWrite(final DataOutputExtended output, final boolean[] values) throws IOException {
             try {
@@ -183,8 +183,7 @@ public abstract class FieldType<T> {
         }
     };
 
-    public static FieldType<byte[]> BYTE_ARRAY = new FieldType<byte[]>((byte) next++, byte[].class,
-        Indenting.INDENT_AND_OUTDENT) {
+    public static FieldType<byte[]> BYTE_ARRAY = new FieldType<byte[]>((byte) next++, byte[].class, Indenting.INDENT_AND_OUTDENT) {
         @Override
         protected void doWrite(final DataOutputExtended output, final byte[] values) throws IOException {
             try {
@@ -211,8 +210,7 @@ public abstract class FieldType<T> {
                 final DataInputStream inputStream = input.getDataInputStream();
                 final int length = inputStream.readInt();
                 if (LOG.isDebugEnabled()) {
-                    final StringBuilder msg =
-                        new StringBuilder().append("length:").append(length).append(" [BYTE ARRAY]");
+                    final StringBuilder msg = new StringBuilder().append("length:").append(length).append(" [BYTE ARRAY]");
                     log(this, msg);
                 }
 
@@ -266,8 +264,7 @@ public abstract class FieldType<T> {
         }
     };
 
-    public static FieldType<short[]> SHORT_ARRAY = new FieldType<short[]>((byte) next++, short[].class,
-        Indenting.INDENT_AND_OUTDENT) {
+    public static FieldType<short[]> SHORT_ARRAY = new FieldType<short[]>((byte) next++, short[].class, Indenting.INDENT_AND_OUTDENT) {
         @Override
         protected void doWrite(final DataOutputExtended output, final short[] values) throws IOException {
             try {
@@ -325,8 +322,7 @@ public abstract class FieldType<T> {
         }
     };
 
-    public static FieldType<Integer> INTEGER = new FieldType<Integer>((byte) next++, Integer.class,
-        Indenting.INDENT_ONLY) {
+    public static FieldType<Integer> INTEGER = new FieldType<Integer>((byte) next++, Integer.class, Indenting.INDENT_ONLY) {
         @Override
         protected void doWrite(final DataOutputExtended output, final Integer value) throws IOException {
             try {
@@ -359,8 +355,7 @@ public abstract class FieldType<T> {
         }
     };
 
-    public static FieldType<Integer> UNSIGNED_BYTE = new FieldType<Integer>((byte) next++, Integer.class,
-        Indenting.INDENT_ONLY) {
+    public static FieldType<Integer> UNSIGNED_BYTE = new FieldType<Integer>((byte) next++, Integer.class, Indenting.INDENT_ONLY) {
         @Override
         protected void doWrite(final DataOutputExtended output, final Integer value) throws IOException {
             try {
@@ -393,8 +388,7 @@ public abstract class FieldType<T> {
         }
     };
 
-    public static FieldType<Integer> UNSIGNED_SHORT = new FieldType<Integer>((byte) next++, Integer.class,
-        Indenting.INDENT_ONLY) {
+    public static FieldType<Integer> UNSIGNED_SHORT = new FieldType<Integer>((byte) next++, Integer.class, Indenting.INDENT_ONLY) {
         @Override
         protected void doWrite(final DataOutputExtended output, final Integer value) throws IOException {
             try {
@@ -427,8 +421,7 @@ public abstract class FieldType<T> {
         }
     };
 
-    public static FieldType<int[]> INTEGER_ARRAY = new FieldType<int[]>((byte) next++, int[].class,
-        Indenting.INDENT_AND_OUTDENT) {
+    public static FieldType<int[]> INTEGER_ARRAY = new FieldType<int[]>((byte) next++, int[].class, Indenting.INDENT_AND_OUTDENT) {
         @Override
         protected void doWrite(final DataOutputExtended output, final int[] values) throws IOException {
             try {
@@ -518,8 +511,7 @@ public abstract class FieldType<T> {
             }
         }
     };
-    public static FieldType<long[]> LONG_ARRAY = new FieldType<long[]>((byte) next++, long[].class,
-        Indenting.INDENT_AND_OUTDENT) {
+    public static FieldType<long[]> LONG_ARRAY = new FieldType<long[]>((byte) next++, long[].class, Indenting.INDENT_AND_OUTDENT) {
         @Override
         protected void doWrite(final DataOutputExtended output, final long[] values) throws IOException {
             try {
@@ -578,8 +570,7 @@ public abstract class FieldType<T> {
         }
     };
 
-    public static FieldType<Character> CHAR = new FieldType<Character>((byte) next++, Character.class,
-        Indenting.INDENT_ONLY) {
+    public static FieldType<Character> CHAR = new FieldType<Character>((byte) next++, Character.class, Indenting.INDENT_ONLY) {
         @Override
         protected void doWrite(final DataOutputExtended output, final Character value) throws IOException {
             try {
@@ -612,8 +603,7 @@ public abstract class FieldType<T> {
         }
     };
 
-    public static FieldType<char[]> CHAR_ARRAY = new FieldType<char[]>((byte) next++, char[].class,
-        Indenting.INDENT_AND_OUTDENT) {
+    public static FieldType<char[]> CHAR_ARRAY = new FieldType<char[]>((byte) next++, char[].class, Indenting.INDENT_AND_OUTDENT) {
         // TODO: could perhaps optimize by writing out as a string
         @Override
         protected void doWrite(final DataOutputExtended output, final char[] values) throws IOException {
@@ -705,8 +695,7 @@ public abstract class FieldType<T> {
         }
     };
 
-    public static FieldType<float[]> FLOAT_ARRAY = new FieldType<float[]>((byte) next++, float[].class,
-        Indenting.INDENT_AND_OUTDENT) {
+    public static FieldType<float[]> FLOAT_ARRAY = new FieldType<float[]>((byte) next++, float[].class, Indenting.INDENT_AND_OUTDENT) {
         @Override
         protected void doWrite(final DataOutputExtended output, final float[] values) throws IOException {
             try {
@@ -797,8 +786,7 @@ public abstract class FieldType<T> {
         }
     };
 
-    public static FieldType<double[]> DOUBLE_ARRAY = new FieldType<double[]>((byte) next++, double[].class,
-        Indenting.INDENT_AND_OUTDENT) {
+    public static FieldType<double[]> DOUBLE_ARRAY = new FieldType<double[]>((byte) next++, double[].class, Indenting.INDENT_AND_OUTDENT) {
         @Override
         protected void doWrite(final DataOutputExtended output, final double[] values) throws IOException {
             try {
@@ -888,8 +876,7 @@ public abstract class FieldType<T> {
             }
         }
     };
-    public static FieldType<String[]> STRING_ARRAY = new FieldType<String[]>((byte) next++, String[].class,
-        Indenting.INDENT_AND_OUTDENT) {
+    public static FieldType<String[]> STRING_ARRAY = new FieldType<String[]>((byte) next++, String[].class, Indenting.INDENT_AND_OUTDENT) {
         @Override
         protected void doWrite(final DataOutputExtended output, final String[] values) throws IOException {
             try {
@@ -949,8 +936,7 @@ public abstract class FieldType<T> {
         }
     };
 
-    public static FieldType<Encodable> ENCODABLE = new FieldType<Encodable>((byte) next++, Encodable.class,
-        Indenting.INDENT_AND_OUTDENT) {
+    public static FieldType<Encodable> ENCODABLE = new FieldType<Encodable>((byte) next++, Encodable.class, Indenting.INDENT_AND_OUTDENT) {
         @Override
         protected void doWrite(final DataOutputExtended output, final Encodable encodable) throws IOException {
             try {
@@ -1017,8 +1003,7 @@ public abstract class FieldType<T> {
         }
     };
 
-    public static FieldType<Encodable[]> ENCODABLE_ARRAY = new FieldType<Encodable[]>((byte) next++, Encodable[].class,
-        Indenting.INDENT_AND_OUTDENT) {
+    public static FieldType<Encodable[]> ENCODABLE_ARRAY = new FieldType<Encodable[]>((byte) next++, Encodable[].class, Indenting.INDENT_AND_OUTDENT) {
         @Override
         protected void doWrite(final DataOutputExtended output, final Encodable[] values) throws IOException {
             try {
@@ -1067,8 +1052,7 @@ public abstract class FieldType<T> {
         }
     };
 
-    public static FieldType<Serializable> SERIALIZABLE = new FieldType<Serializable>((byte) next++, Serializable.class,
-        Indenting.INDENT_ONLY) {
+    public static FieldType<Serializable> SERIALIZABLE = new FieldType<Serializable>((byte) next++, Serializable.class, Indenting.INDENT_ONLY) {
         @Override
         protected void doWrite(final DataOutputExtended output, final Serializable value) throws IOException {
             try {
@@ -1114,8 +1098,7 @@ public abstract class FieldType<T> {
         }
     };
 
-    public static FieldType<Serializable[]> SERIALIZABLE_ARRAY = new FieldType<Serializable[]>((byte) next++,
-        Serializable[].class, Indenting.INDENT_AND_OUTDENT) {
+    public static FieldType<Serializable[]> SERIALIZABLE_ARRAY = new FieldType<Serializable[]>((byte) next++, Serializable[].class, Indenting.INDENT_AND_OUTDENT) {
         @Override
         protected void doWrite(final DataOutputExtended output, final Serializable[] values) throws IOException {
             try {
@@ -1192,7 +1175,8 @@ public abstract class FieldType<T> {
      * Whether this implementation checks ordering in the stream.
      * 
      * <p>
-     * Broadly, the type safe ones do, the {@link Encodable} and {@link Serializable} ones do not.
+     * Broadly, the type safe ones do, the {@link Encodable} and
+     * {@link Serializable} ones do not.
      */
     protected boolean checksStream() {
         return true;
@@ -1211,7 +1195,8 @@ public abstract class FieldType<T> {
             }
 
             if (isNull && LOG.isDebugEnabled()) {
-                // only log if reading a null; otherwise actual value read logged later
+                // only log if reading a null; otherwise actual value read
+                // logged later
                 log(this, new StringBuilder().append("(null)"));
             }
 
@@ -1241,7 +1226,8 @@ public abstract class FieldType<T> {
             }
 
             if (isNull && LOG.isDebugEnabled()) {
-                // only log if reading a null; otherwise actual value read logged later
+                // only log if reading a null; otherwise actual value read
+                // logged later
                 log(this, new StringBuilder().append("(null)"));
             }
 
@@ -1273,7 +1259,8 @@ public abstract class FieldType<T> {
 
             outputStream.write(fieldTypeIdxAndNullability);
             if (isNull && LOG.isDebugEnabled()) {
-                // only log if writing a null; otherwise actual value logged later
+                // only log if writing a null; otherwise actual value logged
+                // later
                 log(this, new StringBuilder().append("(null)"));
             }
 

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.value;
 
 import static org.junit.Assert.assertEquals;
@@ -25,17 +24,16 @@ import static org.junit.Assert.fail;
 
 import java.math.BigInteger;
 
-import org.jmock.Expectations;
-import org.jmock.integration.junit4.JMock;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-
 import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facets.object.parseable.TextEntryParseException;
 import org.apache.isis.core.progmodel.facets.value.biginteger.BigIntegerValueSemanticsProvider;
+import org.jmock.Expectations;
+import org.jmock.integration.junit4.JMock;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 
 @RunWith(JMock.class)
 public class BigIntValueSemanticsProviderTest extends ValueSemanticsProviderAbstractTestCase {
@@ -48,11 +46,12 @@ public class BigIntValueSemanticsProviderTest extends ValueSemanticsProviderAbst
         bigInt = new BigInteger("132199");
         allowMockAdapterToReturn(bigInt);
 
-        mockery.checking(new Expectations(){{
-        	allowing(mockConfiguration).getString("isis.value.format.int");
-        	will(returnValue(null));
-        }});
-
+        mockery.checking(new Expectations() {
+            {
+                allowing(mockConfiguration).getString("isis.value.format.int");
+                will(returnValue(null));
+            }
+        });
 
         holder = new FacetHolderImpl();
         setValue(new BigIntegerValueSemanticsProvider(holder, mockConfiguration, mockContext));
@@ -69,7 +68,8 @@ public class BigIntValueSemanticsProviderTest extends ValueSemanticsProviderAbst
         try {
             getValue().parseTextEntry(null, "214xxx2342334");
             fail();
-        } catch (final TextEntryParseException expected) {}
+        } catch (final TextEntryParseException expected) {
+        }
     }
 
     @Test
@@ -89,4 +89,3 @@ public class BigIntValueSemanticsProviderTest extends ValueSemanticsProviderAbst
     }
 
 }
-

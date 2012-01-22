@@ -34,8 +34,9 @@ public interface TypedHolder extends FacetHolder {
     public FeatureType getFeatureType();
 
     /**
-     * The type of a {@link FeatureType#PROPERTY property}, the referenced type of a {@link FeatureType#COLLECTION
-     * collection}, the return type of an {@link FeatureType#ACTION action} and the type of a
+     * The type of a {@link FeatureType#PROPERTY property}, the referenced type
+     * of a {@link FeatureType#COLLECTION collection}, the return type of an
+     * {@link FeatureType#ACTION action} and the type of a
      * {@link FeatureType#ACTION_PARAMETER action parameter}.
      */
     public Class<?> getType();
@@ -44,8 +45,9 @@ public interface TypedHolder extends FacetHolder {
      * Type may not be known initially (eg {@link FeatureType#COLLECTION}s).
      * 
      * <p>
-     * For example, the accessor might return a raw type such as <tt>java.util.List</tt>, rather than a generic one such
-     * as <tt>java.util.List&lt;Customer&gt;</tt>.
+     * For example, the accessor might return a raw type such as
+     * <tt>java.util.List</tt>, rather than a generic one such as
+     * <tt>java.util.List&lt;Customer&gt;</tt>.
      */
     public void setType(Class<?> type);
 

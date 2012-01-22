@@ -88,93 +88,65 @@ public final class ResolveState {
     }
 
     /**
-     * Whether or not an object in this state could cause a resolve (database load) to occur if interacted with.
+     * Whether or not an object in this state could cause a resolve (database
+     * load) to occur if interacted with.
      */
     static enum ResolvePotential {
         COULD_RESOLVE, WILL_NEVER_RESOLVE
     }
 
-    public static final ResolveState NEW = new ResolveState("New", "N~~~", null, NOT_RESOLVABLE_FROM,
-        NOT_RESOLVABLE_INTO, NOT_DESERIALIZABLE_FROM, NOT_DESERIALIZABLE_INTO, DOES_NOT_RESPOND_TO_CHANGES,
-        DOES_NOT_REPRESENT_TRANSIENT, DOES_NOT_REPRESENT_PERSISTENT, DOES_NOT_REPRESENT_RESOLVING,
-        DOES_NOT_REPRESENT_SERIALIZING, WILL_NEVER_RESOLVE);
-    public static final ResolveState TRANSIENT = new ResolveState("Transient", "T~~~", null, NOT_RESOLVABLE_FROM,
-        NOT_RESOLVABLE_INTO, DESERIALIZABLE_FROM, NOT_DESERIALIZABLE_INTO, DOES_NOT_RESPOND_TO_CHANGES,
-        REPRESENTS_TRANSIENT, DOES_NOT_REPRESENT_PERSISTENT, DOES_NOT_REPRESENT_RESOLVING,
-        DOES_NOT_REPRESENT_SERIALIZING, WILL_NEVER_RESOLVE);
-    public static final ResolveState GHOST = new ResolveState("Ghost", "PG~~", null, RESOLVABLE_FROM,
-        NOT_RESOLVABLE_INTO, DESERIALIZABLE_FROM, NOT_DESERIALIZABLE_INTO, RESPONDS_TO_CHANGES,
-        DOES_NOT_REPRESENT_TRANSIENT, REPRESENTS_PERSISTENT, DOES_NOT_REPRESENT_RESOLVING,
-        DOES_NOT_REPRESENT_SERIALIZING, COULD_RESOLVE);
-    public static final ResolveState PART_RESOLVED = new ResolveState("Part Resolved", "Pr~~", null, RESOLVABLE_FROM,
-        NOT_RESOLVABLE_INTO, DESERIALIZABLE_FROM, NOT_DESERIALIZABLE_INTO, RESPONDS_TO_CHANGES,
-        DOES_NOT_REPRESENT_TRANSIENT, REPRESENTS_PERSISTENT, DOES_NOT_REPRESENT_RESOLVING,
-        DOES_NOT_REPRESENT_SERIALIZING, COULD_RESOLVE);
-    public static final ResolveState RESOLVED = new ResolveState("Resolved", "PR~~", null, RESOLVABLE_FROM,
-        NOT_RESOLVABLE_INTO, DESERIALIZABLE_FROM, NOT_DESERIALIZABLE_INTO, RESPONDS_TO_CHANGES,
-        DOES_NOT_REPRESENT_TRANSIENT, REPRESENTS_PERSISTENT, DOES_NOT_REPRESENT_RESOLVING,
-        DOES_NOT_REPRESENT_SERIALIZING, WILL_NEVER_RESOLVE);
-    public static final ResolveState RESOLVING = new ResolveState("Resolving", "P~R~", RESOLVED, NOT_RESOLVABLE_FROM,
-        RESOLVABLE_INTO, NOT_DESERIALIZABLE_FROM, DESERIALIZABLE_INTO, DOES_NOT_RESPOND_TO_CHANGES,
-        DOES_NOT_REPRESENT_TRANSIENT, REPRESENTS_PERSISTENT, REPRESENTS_RESOLVING, DOES_NOT_REPRESENT_SERIALIZING,
-        COULD_RESOLVE);
-    public static final ResolveState RESOLVING_PART = new ResolveState("Resolving Part", "P~r~", PART_RESOLVED,
-        NOT_RESOLVABLE_FROM, RESOLVABLE_INTO, NOT_DESERIALIZABLE_FROM, DESERIALIZABLE_INTO,
-        DOES_NOT_RESPOND_TO_CHANGES, DOES_NOT_REPRESENT_TRANSIENT, REPRESENTS_PERSISTENT, REPRESENTS_RESOLVING,
-        DOES_NOT_REPRESENT_SERIALIZING, COULD_RESOLVE);
-    public static final ResolveState SERIALIZING_GHOST = new ResolveState("Serializing Ghost", "PG~S", GHOST,
-        NOT_RESOLVABLE_FROM, NOT_RESOLVABLE_INTO, NOT_DESERIALIZABLE_FROM, NOT_DESERIALIZABLE_INTO,
-        DOES_NOT_RESPOND_TO_CHANGES, DOES_NOT_REPRESENT_TRANSIENT, REPRESENTS_PERSISTENT, DOES_NOT_REPRESENT_RESOLVING,
-        REPRESENTS_SERIALIZING, COULD_RESOLVE);
-    public static final ResolveState SERIALIZING_PART_RESOLVED = new ResolveState("Serializing Part Resolved", "Pr~S",
-        PART_RESOLVED, NOT_RESOLVABLE_FROM, NOT_RESOLVABLE_INTO, NOT_DESERIALIZABLE_FROM, NOT_DESERIALIZABLE_INTO,
-        DOES_NOT_RESPOND_TO_CHANGES, DOES_NOT_REPRESENT_TRANSIENT, REPRESENTS_PERSISTENT, DOES_NOT_REPRESENT_RESOLVING,
-        REPRESENTS_SERIALIZING, COULD_RESOLVE);
-    public static final ResolveState SERIALIZING_RESOLVED = new ResolveState("Serializing Resolved", "PR~S", RESOLVED,
-        NOT_RESOLVABLE_FROM, NOT_RESOLVABLE_INTO, NOT_DESERIALIZABLE_FROM, NOT_DESERIALIZABLE_INTO,
-        DOES_NOT_RESPOND_TO_CHANGES, DOES_NOT_REPRESENT_TRANSIENT, REPRESENTS_PERSISTENT, DOES_NOT_REPRESENT_RESOLVING,
-        REPRESENTS_SERIALIZING, WILL_NEVER_RESOLVE);
-    public static final ResolveState SERIALIZING_TRANSIENT = new ResolveState("Serializing Transient", "T~~S",
-        TRANSIENT, NOT_RESOLVABLE_FROM, NOT_RESOLVABLE_INTO, NOT_DESERIALIZABLE_FROM, DESERIALIZABLE_INTO,
-        DOES_NOT_RESPOND_TO_CHANGES, REPRESENTS_TRANSIENT, DOES_NOT_REPRESENT_PERSISTENT, DOES_NOT_REPRESENT_RESOLVING,
-        REPRESENTS_SERIALIZING, WILL_NEVER_RESOLVE);
-    public static final ResolveState UPDATING = new ResolveState("Updating", "PU~~", RESOLVED, NOT_RESOLVABLE_FROM,
-        RESOLVABLE_INTO, NOT_DESERIALIZABLE_FROM, DESERIALIZABLE_INTO, DOES_NOT_RESPOND_TO_CHANGES,
-        DOES_NOT_REPRESENT_TRANSIENT, REPRESENTS_PERSISTENT, DOES_NOT_REPRESENT_RESOLVING,
-        DOES_NOT_REPRESENT_SERIALIZING, COULD_RESOLVE);
-    public static final ResolveState DESTROYED = new ResolveState("Destroyed", "D~~~", null, NOT_RESOLVABLE_FROM,
-        NOT_RESOLVABLE_INTO, NOT_DESERIALIZABLE_FROM, NOT_DESERIALIZABLE_INTO, RESPONDS_TO_CHANGES,
-        DOES_NOT_REPRESENT_TRANSIENT, DOES_NOT_REPRESENT_PERSISTENT, DOES_NOT_REPRESENT_RESOLVING,
-        DOES_NOT_REPRESENT_SERIALIZING, WILL_NEVER_RESOLVE);
-    public static final ResolveState VALUE = new ResolveState("Value", "V~~~", null, NOT_RESOLVABLE_FROM,
-        NOT_RESOLVABLE_INTO, NOT_DESERIALIZABLE_FROM, NOT_DESERIALIZABLE_INTO, RESPONDS_TO_CHANGES,
-        DOES_NOT_REPRESENT_TRANSIENT, DOES_NOT_REPRESENT_PERSISTENT, DOES_NOT_REPRESENT_RESOLVING,
-        DOES_NOT_REPRESENT_SERIALIZING, WILL_NEVER_RESOLVE);
+    public static final ResolveState NEW = new ResolveState("New", "N~~~", null, NOT_RESOLVABLE_FROM, NOT_RESOLVABLE_INTO, NOT_DESERIALIZABLE_FROM, NOT_DESERIALIZABLE_INTO, DOES_NOT_RESPOND_TO_CHANGES, DOES_NOT_REPRESENT_TRANSIENT, DOES_NOT_REPRESENT_PERSISTENT, DOES_NOT_REPRESENT_RESOLVING,
+            DOES_NOT_REPRESENT_SERIALIZING, WILL_NEVER_RESOLVE);
+    public static final ResolveState TRANSIENT = new ResolveState("Transient", "T~~~", null, NOT_RESOLVABLE_FROM, NOT_RESOLVABLE_INTO, DESERIALIZABLE_FROM, NOT_DESERIALIZABLE_INTO, DOES_NOT_RESPOND_TO_CHANGES, REPRESENTS_TRANSIENT, DOES_NOT_REPRESENT_PERSISTENT, DOES_NOT_REPRESENT_RESOLVING,
+            DOES_NOT_REPRESENT_SERIALIZING, WILL_NEVER_RESOLVE);
+    public static final ResolveState GHOST = new ResolveState("Ghost", "PG~~", null, RESOLVABLE_FROM, NOT_RESOLVABLE_INTO, DESERIALIZABLE_FROM, NOT_DESERIALIZABLE_INTO, RESPONDS_TO_CHANGES, DOES_NOT_REPRESENT_TRANSIENT, REPRESENTS_PERSISTENT, DOES_NOT_REPRESENT_RESOLVING,
+            DOES_NOT_REPRESENT_SERIALIZING, COULD_RESOLVE);
+    public static final ResolveState PART_RESOLVED = new ResolveState("Part Resolved", "Pr~~", null, RESOLVABLE_FROM, NOT_RESOLVABLE_INTO, DESERIALIZABLE_FROM, NOT_DESERIALIZABLE_INTO, RESPONDS_TO_CHANGES, DOES_NOT_REPRESENT_TRANSIENT, REPRESENTS_PERSISTENT, DOES_NOT_REPRESENT_RESOLVING,
+            DOES_NOT_REPRESENT_SERIALIZING, COULD_RESOLVE);
+    public static final ResolveState RESOLVED = new ResolveState("Resolved", "PR~~", null, RESOLVABLE_FROM, NOT_RESOLVABLE_INTO, DESERIALIZABLE_FROM, NOT_DESERIALIZABLE_INTO, RESPONDS_TO_CHANGES, DOES_NOT_REPRESENT_TRANSIENT, REPRESENTS_PERSISTENT, DOES_NOT_REPRESENT_RESOLVING,
+            DOES_NOT_REPRESENT_SERIALIZING, WILL_NEVER_RESOLVE);
+    public static final ResolveState RESOLVING = new ResolveState("Resolving", "P~R~", RESOLVED, NOT_RESOLVABLE_FROM, RESOLVABLE_INTO, NOT_DESERIALIZABLE_FROM, DESERIALIZABLE_INTO, DOES_NOT_RESPOND_TO_CHANGES, DOES_NOT_REPRESENT_TRANSIENT, REPRESENTS_PERSISTENT, REPRESENTS_RESOLVING,
+            DOES_NOT_REPRESENT_SERIALIZING, COULD_RESOLVE);
+    public static final ResolveState RESOLVING_PART = new ResolveState("Resolving Part", "P~r~", PART_RESOLVED, NOT_RESOLVABLE_FROM, RESOLVABLE_INTO, NOT_DESERIALIZABLE_FROM, DESERIALIZABLE_INTO, DOES_NOT_RESPOND_TO_CHANGES, DOES_NOT_REPRESENT_TRANSIENT, REPRESENTS_PERSISTENT, REPRESENTS_RESOLVING,
+            DOES_NOT_REPRESENT_SERIALIZING, COULD_RESOLVE);
+    public static final ResolveState SERIALIZING_GHOST = new ResolveState("Serializing Ghost", "PG~S", GHOST, NOT_RESOLVABLE_FROM, NOT_RESOLVABLE_INTO, NOT_DESERIALIZABLE_FROM, NOT_DESERIALIZABLE_INTO, DOES_NOT_RESPOND_TO_CHANGES, DOES_NOT_REPRESENT_TRANSIENT, REPRESENTS_PERSISTENT,
+            DOES_NOT_REPRESENT_RESOLVING, REPRESENTS_SERIALIZING, COULD_RESOLVE);
+    public static final ResolveState SERIALIZING_PART_RESOLVED = new ResolveState("Serializing Part Resolved", "Pr~S", PART_RESOLVED, NOT_RESOLVABLE_FROM, NOT_RESOLVABLE_INTO, NOT_DESERIALIZABLE_FROM, NOT_DESERIALIZABLE_INTO, DOES_NOT_RESPOND_TO_CHANGES, DOES_NOT_REPRESENT_TRANSIENT,
+            REPRESENTS_PERSISTENT, DOES_NOT_REPRESENT_RESOLVING, REPRESENTS_SERIALIZING, COULD_RESOLVE);
+    public static final ResolveState SERIALIZING_RESOLVED = new ResolveState("Serializing Resolved", "PR~S", RESOLVED, NOT_RESOLVABLE_FROM, NOT_RESOLVABLE_INTO, NOT_DESERIALIZABLE_FROM, NOT_DESERIALIZABLE_INTO, DOES_NOT_RESPOND_TO_CHANGES, DOES_NOT_REPRESENT_TRANSIENT, REPRESENTS_PERSISTENT,
+            DOES_NOT_REPRESENT_RESOLVING, REPRESENTS_SERIALIZING, WILL_NEVER_RESOLVE);
+    public static final ResolveState SERIALIZING_TRANSIENT = new ResolveState("Serializing Transient", "T~~S", TRANSIENT, NOT_RESOLVABLE_FROM, NOT_RESOLVABLE_INTO, NOT_DESERIALIZABLE_FROM, DESERIALIZABLE_INTO, DOES_NOT_RESPOND_TO_CHANGES, REPRESENTS_TRANSIENT, DOES_NOT_REPRESENT_PERSISTENT,
+            DOES_NOT_REPRESENT_RESOLVING, REPRESENTS_SERIALIZING, WILL_NEVER_RESOLVE);
+    public static final ResolveState UPDATING = new ResolveState("Updating", "PU~~", RESOLVED, NOT_RESOLVABLE_FROM, RESOLVABLE_INTO, NOT_DESERIALIZABLE_FROM, DESERIALIZABLE_INTO, DOES_NOT_RESPOND_TO_CHANGES, DOES_NOT_REPRESENT_TRANSIENT, REPRESENTS_PERSISTENT, DOES_NOT_REPRESENT_RESOLVING,
+            DOES_NOT_REPRESENT_SERIALIZING, COULD_RESOLVE);
+    public static final ResolveState DESTROYED = new ResolveState("Destroyed", "D~~~", null, NOT_RESOLVABLE_FROM, NOT_RESOLVABLE_INTO, NOT_DESERIALIZABLE_FROM, NOT_DESERIALIZABLE_INTO, RESPONDS_TO_CHANGES, DOES_NOT_REPRESENT_TRANSIENT, DOES_NOT_REPRESENT_PERSISTENT, DOES_NOT_REPRESENT_RESOLVING,
+            DOES_NOT_REPRESENT_SERIALIZING, WILL_NEVER_RESOLVE);
+    public static final ResolveState VALUE = new ResolveState("Value", "V~~~", null, NOT_RESOLVABLE_FROM, NOT_RESOLVABLE_INTO, NOT_DESERIALIZABLE_FROM, NOT_DESERIALIZABLE_INTO, RESPONDS_TO_CHANGES, DOES_NOT_REPRESENT_TRANSIENT, DOES_NOT_REPRESENT_PERSISTENT, DOES_NOT_REPRESENT_RESOLVING,
+            DOES_NOT_REPRESENT_SERIALIZING, WILL_NEVER_RESOLVE);
 
     /**
-     * These cannot be passed into the constructor because cannot reference an instance until it has been declared.
+     * These cannot be passed into the constructor because cannot reference an
+     * instance until it has been declared.
      */
-    public static Map<ResolveState, ResolveState[]> changeToStatesByState =
-        new HashMap<ResolveState, ResolveState[]>() {
-            private static final long serialVersionUID = 1L;
-            {
-                put(GHOST, new ResolveState[] { DESTROYED, RESOLVING_PART, RESOLVING, UPDATING, SERIALIZING_GHOST });
-                put(NEW, new ResolveState[] { TRANSIENT, GHOST, VALUE });
-                put(TRANSIENT, new ResolveState[] { RESOLVED, SERIALIZING_TRANSIENT });
-                put(PART_RESOLVED, new ResolveState[] { RESOLVING_PART, RESOLVING, SERIALIZING_PART_RESOLVED, UPDATING,
-                    DESTROYED });
-                put(RESOLVED, new ResolveState[] { GHOST, SERIALIZING_RESOLVED, UPDATING, DESTROYED });
-                put(RESOLVING, new ResolveState[] { RESOLVED });
-                put(RESOLVING_PART, new ResolveState[] { PART_RESOLVED, RESOLVED });
-                put(SERIALIZING_GHOST, new ResolveState[] { GHOST });
-                put(SERIALIZING_PART_RESOLVED, new ResolveState[] { PART_RESOLVED });
-                put(SERIALIZING_RESOLVED, new ResolveState[] { RESOLVED });
-                put(SERIALIZING_TRANSIENT, new ResolveState[] { TRANSIENT });
-                put(UPDATING, new ResolveState[] { RESOLVED });
-                put(DESTROYED, new ResolveState[] {});
-                put(VALUE, new ResolveState[] {});
-            }
-        };
+    public static Map<ResolveState, ResolveState[]> changeToStatesByState = new HashMap<ResolveState, ResolveState[]>() {
+        private static final long serialVersionUID = 1L;
+        {
+            put(GHOST, new ResolveState[] { DESTROYED, RESOLVING_PART, RESOLVING, UPDATING, SERIALIZING_GHOST });
+            put(NEW, new ResolveState[] { TRANSIENT, GHOST, VALUE });
+            put(TRANSIENT, new ResolveState[] { RESOLVED, SERIALIZING_TRANSIENT });
+            put(PART_RESOLVED, new ResolveState[] { RESOLVING_PART, RESOLVING, SERIALIZING_PART_RESOLVED, UPDATING, DESTROYED });
+            put(RESOLVED, new ResolveState[] { GHOST, SERIALIZING_RESOLVED, UPDATING, DESTROYED });
+            put(RESOLVING, new ResolveState[] { RESOLVED });
+            put(RESOLVING_PART, new ResolveState[] { PART_RESOLVED, RESOLVED });
+            put(SERIALIZING_GHOST, new ResolveState[] { GHOST });
+            put(SERIALIZING_PART_RESOLVED, new ResolveState[] { PART_RESOLVED });
+            put(SERIALIZING_RESOLVED, new ResolveState[] { RESOLVED });
+            put(SERIALIZING_TRANSIENT, new ResolveState[] { TRANSIENT });
+            put(UPDATING, new ResolveState[] { RESOLVED });
+            put(DESTROYED, new ResolveState[] {});
+            put(VALUE, new ResolveState[] {});
+        }
+    };
 
     private final String code;
     private final ResolveState endState;
@@ -195,12 +167,8 @@ public final class ResolveState {
         return statesByName.get(name);
     }
 
-    private ResolveState(final String name, final String code, final ResolveState endState,
-        final ResolvableFrom resolvableFrom, final ResolvableInto resolvableInto,
-        final DeserializableFrom deserializableFrom, final DeserializableInto deserializableInto,
-        final RespondsToChanges respondsToChanges, final RepresentsTransient representsTransient,
-        final RepresentsPersistent representsPersistent, final Resolving resolving, final Serializing serializing,
-        final ResolvePotential resolvePotential) {
+    private ResolveState(final String name, final String code, final ResolveState endState, final ResolvableFrom resolvableFrom, final ResolvableInto resolvableInto, final DeserializableFrom deserializableFrom, final DeserializableInto deserializableInto, final RespondsToChanges respondsToChanges,
+            final RepresentsTransient representsTransient, final RepresentsPersistent representsPersistent, final Resolving resolving, final Serializing serializing, final ResolvePotential resolvePotential) {
         this.name = name;
         this.code = code;
         this.endState = endState;
@@ -247,7 +215,8 @@ public final class ResolveState {
      * <li>~</li> if not persistent
      * </ul>
      * </li>
-     * <li><tt>W</tt> (for non-standalone, not resolving, not updating, not destroyed) is the serialization state:
+     * <li><tt>W</tt> (for non-standalone, not resolving, not updating, not
+     * destroyed) is the serialization state:
      * <ul>
      * <li>~</li> not serializing
      * <li>S</li> is serializing
@@ -264,7 +233,8 @@ public final class ResolveState {
     }
 
     /**
-     * Returns <tt>true</tt> when an object is persistent (except for {@link #VALUE} adapters).
+     * Returns <tt>true</tt> when an object is persistent (except for
+     * {@link #VALUE} adapters).
      * 
      * <p>
      * Always returns <tt>false</tt> for {@link #VALUE}.
@@ -274,7 +244,8 @@ public final class ResolveState {
     }
 
     /**
-     * Returns <tt>true</tt> when an object has not yet been made persistent (except for {@link #VALUE} adapters)..
+     * Returns <tt>true</tt> when an object has not yet been made persistent
+     * (except for {@link #VALUE} adapters)..
      * 
      * <p>
      * Always returns <tt>false</tt> for {@link #VALUE}.
@@ -284,9 +255,10 @@ public final class ResolveState {
     }
 
     /**
-     * As per {@link #isValidToChangeTo(ResolveState)}, but will additionally throw a {@link ResolveException} if the
-     * requested state can never be transitioned into, and will return <tt>false</tt> if the current state can never be
-     * transitioned from.
+     * As per {@link #isValidToChangeTo(ResolveState)}, but will additionally
+     * throw a {@link ResolveException} if the requested state can never be
+     * transitioned into, and will return <tt>false</tt> if the current state
+     * can never be transitioned from.
      */
     public boolean canChangeTo(final ResolveState newState) {
         if (newState.resolvableInto == NOT_RESOLVABLE_INTO) {
@@ -362,10 +334,12 @@ public final class ResolveState {
     }
 
     /**
-     * Returns <tt>true</tt> if an object in this state could trigger some sort of database loading.
+     * Returns <tt>true</tt> if an object in this state could trigger some sort
+     * of database loading.
      * 
      * <p>
-     * Used to prevent calls to <tt>title()</tt> etc on objects that are not resolved.
+     * Used to prevent calls to <tt>title()</tt> etc on objects that are not
+     * resolved.
      * 
      * @see ResolvePotential
      */
@@ -378,8 +352,8 @@ public final class ResolveState {
     }
 
     /**
-     * Determines if the resolved state can be changed from this state to the specified state. Returns true if the
-     * change is valid.
+     * Determines if the resolved state can be changed from this state to the
+     * specified state. Returns true if the change is valid.
      */
     public boolean isValidToChangeTo(final ResolveState nextState) {
         cacheChangeToStatesIfNecessary();

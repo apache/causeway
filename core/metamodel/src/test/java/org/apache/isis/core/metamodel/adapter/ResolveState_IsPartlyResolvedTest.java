@@ -49,10 +49,8 @@ public class ResolveState_IsPartlyResolvedTest {
 
     @Parameters
     public static Collection<Object[]> data() {
-        return Arrays.asList(new Object[][] { { false, GHOST }, { false, NEW }, { true, PART_RESOLVED },
-            { false, RESOLVED }, { false, RESOLVING }, { false, RESOLVING_PART }, { false, TRANSIENT },
-            { false, DESTROYED }, { false, UPDATING }, { false, SERIALIZING_TRANSIENT }, { false, SERIALIZING_GHOST },
-            { false, SERIALIZING_PART_RESOLVED }, { false, SERIALIZING_RESOLVED }, { false, VALUE }, });
+        return Arrays.asList(new Object[][] { { false, GHOST }, { false, NEW }, { true, PART_RESOLVED }, { false, RESOLVED }, { false, RESOLVING }, { false, RESOLVING_PART }, { false, TRANSIENT }, { false, DESTROYED }, { false, UPDATING }, { false, SERIALIZING_TRANSIENT },
+                { false, SERIALIZING_GHOST }, { false, SERIALIZING_PART_RESOLVED }, { false, SERIALIZING_RESOLVED }, { false, VALUE }, });
     }
 
     private final boolean whetherIs;

@@ -42,27 +42,32 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
     public void toDefault(ObjectAdapter target);
 
     /**
-     * Returns a list of possible references/values for this field, which the user can choose from.
+     * Returns a list of possible references/values for this field, which the
+     * user can choose from.
      */
     public ObjectAdapter[] getChoices(ObjectAdapter object);
 
     /**
-     * Returns true if calculated from other data in the object, that is, should not be persisted.
+     * Returns true if calculated from other data in the object, that is, should
+     * not be persisted.
      */
     boolean isNotPersisted();
 
     /**
-     * Returns <code>true</code> if this field on the specified object is deemed to be empty, or has no content.
+     * Returns <code>true</code> if this field on the specified object is deemed
+     * to be empty, or has no content.
      */
     boolean isEmpty(ObjectAdapter target);
 
     /**
-     * Determines if this field must be complete before the object is in a valid state
+     * Determines if this field must be complete before the object is in a valid
+     * state
      */
     boolean isMandatory();
 
     /**
-     * Whether there are any choices provided (eg <tt>choicesXxx</tt> supporting method) for the association.
+     * Whether there are any choices provided (eg <tt>choicesXxx</tt> supporting
+     * method) for the association.
      */
     public boolean hasChoices();
 

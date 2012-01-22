@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.object.dirty;
 
 import java.lang.reflect.Method;
@@ -32,7 +31,6 @@ import org.apache.isis.core.progmodel.facets.object.dirty.method.ClearDirtyObjec
 import org.apache.isis.core.progmodel.facets.object.dirty.method.DirtyMethodsFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.dirty.method.IsDirtyObjectFacetViaMethod;
 import org.apache.isis.core.progmodel.facets.object.dirty.method.MarkDirtyObjectFacetViaMethod;
-
 
 public class DirtyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
@@ -51,11 +49,11 @@ public class DirtyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         super.tearDown();
     }
 
-
     public void testMarkDirtyMethodPickedUpOn() {
         class Customer {
             @SuppressWarnings("unused")
-            public void markDirty() {};
+            public void markDirty() {
+            };
         }
         final Method method = findMethod(Customer.class, "markDirty");
 
@@ -93,7 +91,8 @@ public class DirtyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
     public void testClearDirtyMethodPickedUpOn() {
         class Customer {
             @SuppressWarnings("unused")
-            public void clearDirty() {};
+            public void clearDirty() {
+            };
         }
         final Method method = findMethod(Customer.class, "clearDirty");
 
@@ -109,4 +108,3 @@ public class DirtyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
     }
 
 }
-

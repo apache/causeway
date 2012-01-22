@@ -24,8 +24,7 @@ import org.apache.isis.core.metamodel.spec.SpecificationLookup;
 
 public class TypeOfFacetInferredFromGenerics extends TypeOfFacetAbstract {
 
-    public TypeOfFacetInferredFromGenerics(final Class<?> type, final FacetHolder holder,
-        final SpecificationLookup specificationLookup) {
+    public TypeOfFacetInferredFromGenerics(final Class<?> type, final FacetHolder holder, final SpecificationLookup specificationLookup) {
         super(type, holder, specificationLookup);
     }
 

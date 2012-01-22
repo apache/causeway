@@ -49,10 +49,8 @@ public class ResolveState_RespondToChangesInPersistentObjectsTest {
 
     @Parameters
     public static Collection<Object[]> data() {
-        return Arrays.asList(new Object[][] { { true, GHOST }, { false, NEW }, { true, PART_RESOLVED },
-            { true, RESOLVED }, { false, RESOLVING }, { false, RESOLVING_PART }, { false, TRANSIENT },
-            { true, DESTROYED }, { false, UPDATING }, { false, SERIALIZING_TRANSIENT }, { false, SERIALIZING_GHOST },
-            { false, SERIALIZING_PART_RESOLVED }, { false, SERIALIZING_RESOLVED }, { true, VALUE }, });
+        return Arrays.asList(new Object[][] { { true, GHOST }, { false, NEW }, { true, PART_RESOLVED }, { true, RESOLVED }, { false, RESOLVING }, { false, RESOLVING_PART }, { false, TRANSIENT }, { true, DESTROYED }, { false, UPDATING }, { false, SERIALIZING_TRANSIENT },
+                { false, SERIALIZING_GHOST }, { false, SERIALIZING_PART_RESOLVED }, { false, SERIALIZING_RESOLVED }, { true, VALUE }, });
     }
 
     private final boolean whetherIs;

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 /**
  * Image Loading API.
  * 

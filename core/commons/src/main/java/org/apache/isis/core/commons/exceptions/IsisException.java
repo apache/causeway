@@ -31,7 +31,8 @@ public class IsisException extends RuntimeException {
     private static boolean THROWABLE_SUPPORTS_CAUSE;
 
     static {
-        // Java 1.4, and after, holds a cause; Java 1.1, 1.2 and .Net do not, so we need to
+        // Java 1.4, and after, holds a cause; Java 1.1, 1.2 and .Net do not, so
+        // we need to
         // do the work ourselves.
         final Class<?> c = Throwable.class;
         try {

@@ -47,8 +47,7 @@ public class RegExFacetAnnotationForParameterFacetFactory extends AnnotationBase
             return;
         }
 
-        final Annotation[] parameterAnnotations =
-            getParameterAnnotations(processParameterContext.getMethod())[processParameterContext.getParamNum()];
+        final Annotation[] parameterAnnotations = getParameterAnnotations(processParameterContext.getMethod())[processParameterContext.getParamNum()];
         for (final Annotation parameterAnnotation : parameterAnnotations) {
             if (parameterAnnotation instanceof RegEx) {
                 final RegEx annotation = (RegEx) parameterAnnotation;

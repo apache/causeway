@@ -57,8 +57,7 @@ public class ObjectAssociationFiltersTests {
         mockery.checking(new Expectations() {
             {
                 never(mockAssociation).containsFacet(HiddenFacet.class);
-                allowing(mockAssociation).isVisible(with(any(AuthenticationSession.class)),
-                    with(any(ObjectAdapter.class)));
+                allowing(mockAssociation).isVisible(with(any(AuthenticationSession.class)), with(any(ObjectAdapter.class)));
             }
         });
         final Filter<ObjectAssociation> filter = ObjectAssociationFilters.dynamicallyVisible(mockSession, mockTarget);

@@ -28,5 +28,4 @@ public class NotPersistedFacetAnnotationForCollection extends NotPersistedFacetA
         super(holder);
     }
 
-
 }

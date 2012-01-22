@@ -17,17 +17,10 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.value;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
-
-import org.jmock.Expectations;
-import org.jmock.integration.junit4.JMock;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
 
 import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -35,6 +28,11 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facets.object.parseable.TextEntryParseException;
 import org.apache.isis.core.progmodel.facets.value.shortint.ShortValueSemanticsProviderAbstract;
 import org.apache.isis.core.progmodel.facets.value.shortint.ShortWrapperValueSemanticsProvider;
+import org.jmock.Expectations;
+import org.jmock.integration.junit4.JMock;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 
 @RunWith(JMock.class)
 public class ShortValueSemanticsProviderTest extends ValueSemanticsProviderAbstractTestCase {
@@ -45,16 +43,17 @@ public class ShortValueSemanticsProviderTest extends ValueSemanticsProviderAbstr
 
     @Before
     public void setUpObjects() throws Exception {
-        mockery.checking(new Expectations(){{
-        	allowing(mockConfiguration).getString("isis.value.format.short");
-        	will(returnValue(null));
-        }});
+        mockery.checking(new Expectations() {
+            {
+                allowing(mockConfiguration).getString("isis.value.format.short");
+                will(returnValue(null));
+            }
+        });
 
-    	short1 = Short.valueOf((short) 32);
+        short1 = Short.valueOf((short) 32);
         allowMockAdapterToReturn(short1);
 
         holder = new FacetHolderImpl();
-
 
         setValue(value = new ShortWrapperValueSemanticsProvider(holder, mockConfiguration, mockContext));
     }
@@ -64,7 +63,8 @@ public class ShortValueSemanticsProviderTest extends ValueSemanticsProviderAbstr
         try {
             value.parseTextEntry(null, "one");
             fail();
-        } catch (final TextEntryParseException expected) {}
+        } catch (final TextEntryParseException expected) {
+        }
     }
 
     @Test

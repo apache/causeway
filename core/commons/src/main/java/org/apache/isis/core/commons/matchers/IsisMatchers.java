@@ -212,14 +212,14 @@ public final class IsisMatchers {
 
     public static Matcher<String> matches(final String regex) {
         return new TypeSafeMatcher<String>() {
-    
+
             @Override
-            public void describeTo(Description description) {
+            public void describeTo(final Description description) {
                 description.appendText("string matching " + regex);
             }
-    
+
             @Override
-            public boolean matchesSafely(String str) {
+            public boolean matchesSafely(final String str) {
                 return str.matches(regex);
             }
         };
@@ -229,12 +229,12 @@ public final class IsisMatchers {
         return new TypeSafeMatcher<Class<X>>() {
 
             @Override
-            public void describeTo(Description arg0) {
+            public void describeTo(final Description arg0) {
                 arg0.appendText("is subclass of ").appendText(cls.getName());
             }
 
             @Override
-            public boolean matchesSafely(Class<X> item) {
+            public boolean matchesSafely(final Class<X> item) {
                 return cls.isAssignableFrom(item);
             }
         };
@@ -244,12 +244,12 @@ public final class IsisMatchers {
         return new TypeSafeMatcher<List<T>>() {
 
             @Override
-            public void describeTo(Description description) {
+            public void describeTo(final Description description) {
                 description.appendText("same sequence as " + expected);
             }
 
             @Override
-            public boolean matchesSafely(List<T> actual) {
+            public boolean matchesSafely(final List<T> actual) {
                 return actual.containsAll(expected) && expected.containsAll(actual);
             }
         };

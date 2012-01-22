@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.object.callback;
 
 import java.lang.reflect.Method;
@@ -30,7 +29,6 @@ import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.progmodel.facets.object.callbacks.load.LoadCallbackFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.callbacks.load.LoadedCallbackFacetViaMethod;
 import org.apache.isis.core.progmodel.facets.object.callbacks.load.LoadingCallbackFacetViaMethod;
-
 
 public class LoadCallbackFacetFactoryTest extends AbstractFacetFactoryTest {
 
@@ -49,11 +47,11 @@ public class LoadCallbackFacetFactoryTest extends AbstractFacetFactoryTest {
         super.tearDown();
     }
 
-
     public void testLoadingLifecycleMethodPickedUpOn() {
         class Customer {
             @SuppressWarnings("unused")
-			public void loading() {};
+            public void loading() {
+            };
         }
         final Method method = findMethod(Customer.class, "loading");
 
@@ -71,7 +69,8 @@ public class LoadCallbackFacetFactoryTest extends AbstractFacetFactoryTest {
     public void testLoadedLifecycleMethodPickedUpOn() {
         class Customer {
             @SuppressWarnings("unused")
-			public void loaded() {};
+            public void loaded() {
+            };
         }
         final Method method = findMethod(Customer.class, "loaded");
 
@@ -86,6 +85,4 @@ public class LoadCallbackFacetFactoryTest extends AbstractFacetFactoryTest {
         assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(method));
     }
 
-
 }
-

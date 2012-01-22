@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.object.ident.title;
 
 import java.lang.reflect.Method;
@@ -30,7 +29,6 @@ import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.progmodel.facets.object.title.TitleFacetViaTitleMethod;
 import org.apache.isis.core.progmodel.facets.object.title.TitleFacetViaToStringMethod;
 import org.apache.isis.core.progmodel.facets.object.title.TitleMethodFacetFactory;
-
 
 public class TitleMethodFacetFactoryTest extends AbstractFacetFactoryTest {
 
@@ -48,7 +46,6 @@ public class TitleMethodFacetFactoryTest extends AbstractFacetFactoryTest {
         facetFactory = null;
         super.tearDown();
     }
-
 
     public void testTitleMethodPickedUpOnClassAndMethodRemoved() {
         class Customer {
@@ -91,15 +88,17 @@ public class TitleMethodFacetFactoryTest extends AbstractFacetFactoryTest {
     }
 
     /**
-     * This change means that it will be ignored by {@link ObjectSpecificationAbstract#getFacet(Class)}
-     * is the superclass has a none no-op implementation.
+     * This change means that it will be ignored by
+     * {@link ObjectSpecificationAbstract#getFacet(Class)} is the superclass has
+     * a none no-op implementation.
      */
     public void testTitleFacetMethodUsingToStringIsClassifiedAsANoop() {
         assertTrue(new TitleFacetViaToStringMethod(null, facetedMethod).isNoop());
     }
 
     public void testNoExplicitTitleOrToStringMethod() {
-        class Customer {}
+        class Customer {
+        }
 
         facetFactory.process(new ProcessClassContext(Customer.class, methodRemover, facetedMethod));
 
@@ -109,4 +108,3 @@ public class TitleMethodFacetFactoryTest extends AbstractFacetFactoryTest {
     }
 
 }
-

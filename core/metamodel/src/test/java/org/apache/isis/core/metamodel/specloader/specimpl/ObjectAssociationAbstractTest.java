@@ -69,62 +69,58 @@ public class ObjectAssociationAbstractTest {
     @Before
     public void setup() {
         facetedMethod = FacetedMethod.createProperty(Customer.class, "firstName");
-        objectAssociation =
-            new ObjectAssociationAbstract(facetedMethod, FeatureType.PROPERTY, new TestProxySpecification("test"),
-                new ObjectMemberContext(null, null, null, null, null)) {
+        objectAssociation = new ObjectAssociationAbstract(facetedMethod, FeatureType.PROPERTY, new TestProxySpecification("test"), new ObjectMemberContext(null, null, null, null, null)) {
 
-                @Override
-                public ObjectAdapter get(final ObjectAdapter fromObject) {
-                    return null;
-                }
+            @Override
+            public ObjectAdapter get(final ObjectAdapter fromObject) {
+                return null;
+            }
 
-                @Override
-                public boolean isEmpty(final ObjectAdapter adapter) {
-                    return false;
-                }
+            @Override
+            public boolean isEmpty(final ObjectAdapter adapter) {
+                return false;
+            }
 
-                @Override
-                public ObjectAdapter[] getChoices(final ObjectAdapter object) {
-                    return null;
-                }
+            @Override
+            public ObjectAdapter[] getChoices(final ObjectAdapter object) {
+                return null;
+            }
 
-                @Override
-                public ObjectAdapter getDefault(final ObjectAdapter adapter) {
-                    return null;
-                }
+            @Override
+            public ObjectAdapter getDefault(final ObjectAdapter adapter) {
+                return null;
+            }
 
-                @Override
-                public void toDefault(final ObjectAdapter target) {
-                }
+            @Override
+            public void toDefault(final ObjectAdapter target) {
+            }
 
-                @Override
-                public UsabilityContext<?> createUsableInteractionContext(final AuthenticationSession session,
-                    final InteractionInvocationMethod invocationMethod, final ObjectAdapter target) {
-                    return null;
-                }
+            @Override
+            public UsabilityContext<?> createUsableInteractionContext(final AuthenticationSession session, final InteractionInvocationMethod invocationMethod, final ObjectAdapter target) {
+                return null;
+            }
 
-                @Override
-                public VisibilityContext<?> createVisibleInteractionContext(final AuthenticationSession session,
-                    final InteractionInvocationMethod invocationMethod, final ObjectAdapter targetObjectAdapter) {
-                    return null;
-                }
+            @Override
+            public VisibilityContext<?> createVisibleInteractionContext(final AuthenticationSession session, final InteractionInvocationMethod invocationMethod, final ObjectAdapter targetObjectAdapter) {
+                return null;
+            }
 
-                @Override
-                public String debugData() {
-                    return null;
-                }
+            @Override
+            public String debugData() {
+                return null;
+            }
 
-                @Override
-                public Instance getInstance(final ObjectAdapter adapter) {
-                    return null;
-                }
+            @Override
+            public Instance getInstance(final ObjectAdapter adapter) {
+                return null;
+            }
 
-                @Override
-                public boolean containsDoOpFacet(final Class<? extends Facet> facetType) {
-                    // TODO Auto-generated method stub
-                    return false;
-                }
-            };
+            @Override
+            public boolean containsDoOpFacet(final Class<? extends Facet> facetType) {
+                // TODO Auto-generated method stub
+                return false;
+            }
+        };
     }
 
     @Test

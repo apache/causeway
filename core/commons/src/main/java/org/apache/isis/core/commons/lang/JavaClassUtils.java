@@ -93,11 +93,11 @@ public final class JavaClassUtils {
     }
 
     /**
-     * Returns the supplied Class so long as it implements (or is a subclass of) the required class, and also has either
-     * a constructor accepting the specified param type, or has a no-arg constructor.
+     * Returns the supplied Class so long as it implements (or is a subclass of)
+     * the required class, and also has either a constructor accepting the
+     * specified param type, or has a no-arg constructor.
      */
-    public static Class<?> implementingClassOrNull(final Class<?> classCandidate, final Class<?> requiredClass,
-        final Class<?> constructorParamType) {
+    public static Class<?> implementingClassOrNull(final Class<?> classCandidate, final Class<?> requiredClass, final Class<?> constructorParamType) {
         if (classCandidate == null) {
             return null;
         }
@@ -122,8 +122,7 @@ public final class JavaClassUtils {
         return classCandidate;
     }
 
-    public static Class<?> implementingClassOrNull(final String classCandidateName, final Class<?> requiredClass,
-        final Class<?> constructorParamType) {
+    public static Class<?> implementingClassOrNull(final String classCandidateName, final Class<?> requiredClass, final Class<?> constructorParamType) {
         if (classCandidateName == null) {
             return null;
         }

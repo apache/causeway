@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.naming.named;
 
 import java.lang.reflect.Method;
@@ -35,17 +34,16 @@ import org.apache.isis.core.progmodel.facets.members.named.annotation.NamedAnnot
 import org.apache.isis.core.progmodel.facets.object.named.annotation.NamedAnnotationOnTypeFacetFactory;
 import org.apache.isis.core.progmodel.facets.param.named.annotation.NamedAnnotationOnParameterFacetFactory;
 
-
 public class NamedAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 
-
     public void testNamedAnnotationPickedUpOnClass() {
-        
-        NamedAnnotationOnTypeFacetFactory facetFactory = new NamedAnnotationOnTypeFacetFactory();
+
+        final NamedAnnotationOnTypeFacetFactory facetFactory = new NamedAnnotationOnTypeFacetFactory();
         facetFactory.setSpecificationLookup(reflector);
 
         @Named("some name")
-        class Customer {}
+        class Customer {
+        }
         facetFactory.process(new ProcessClassContext(Customer.class, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(NamedFacet.class);
@@ -59,9 +57,9 @@ public class NamedAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 
     public void testNamedAnnotationPickedUpOnProperty() {
 
-        NamedAnnotationOnMemberFacetFactory facetFactory = new NamedAnnotationOnMemberFacetFactory();
+        final NamedAnnotationOnMemberFacetFactory facetFactory = new NamedAnnotationOnMemberFacetFactory();
         facetFactory.setSpecificationLookup(reflector);
-        
+
         class Customer {
             @SuppressWarnings("unused")
             @Named("some name")
@@ -83,7 +81,7 @@ public class NamedAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
     }
 
     public void testNamedAnnotationPickedUpOnCollection() {
-        NamedAnnotationOnMemberFacetFactory facetFactory = new NamedAnnotationOnMemberFacetFactory();
+        final NamedAnnotationOnMemberFacetFactory facetFactory = new NamedAnnotationOnMemberFacetFactory();
         facetFactory.setSpecificationLookup(reflector);
 
         class Customer {
@@ -106,12 +104,13 @@ public class NamedAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
     }
 
     public void testNamedAnnotationPickedUpOnAction() {
-        NamedAnnotationOnMemberFacetFactory facetFactory = new NamedAnnotationOnMemberFacetFactory();
+        final NamedAnnotationOnMemberFacetFactory facetFactory = new NamedAnnotationOnMemberFacetFactory();
         facetFactory.setSpecificationLookup(reflector);
 
         class Customer {
             @Named("some name")
-            public void someAction() {}
+            public void someAction() {
+            }
         }
         final Method actionMethod = findMethod(Customer.class, "someAction");
 
@@ -128,12 +127,13 @@ public class NamedAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 
     public void testNamedAnnotationPickedUpOnActionParameter() {
 
-        NamedAnnotationOnParameterFacetFactory facetFactory = new NamedAnnotationOnParameterFacetFactory();
+        final NamedAnnotationOnParameterFacetFactory facetFactory = new NamedAnnotationOnParameterFacetFactory();
         facetFactory.setSpecificationLookup(reflector);
 
         class Customer {
             @SuppressWarnings("unused")
-            public void someAction(@Named("some name") final int x) {}
+            public void someAction(@Named("some name") final int x) {
+            }
         }
         final Method actionMethod = findMethod(Customer.class, "someAction", new Class[] { int.class });
 
@@ -147,4 +147,3 @@ public class NamedAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
     }
 
 }
-

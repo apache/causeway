@@ -27,17 +27,17 @@ import org.apache.isis.core.commons.lang.PathUtils;
  * Loads the properties from the ContextClassLoader.
  * 
  * <p>
- * If this class is on the system class path, then the class loader obtained from this.getClassLoader() won't be able to
- * load resources from the application class path.
+ * If this class is on the system class path, then the class loader obtained
+ * from this.getClassLoader() won't be able to load resources from the
+ * application class path.
  */
 public class ResourceStreamSourceContextLoaderClassPath extends ResourceStreamSourceAbstract {
 
-    
     public static ResourceStreamSourceContextLoaderClassPath create() {
         return create("");
     }
 
-    public static ResourceStreamSourceContextLoaderClassPath create(String prefix) {
+    public static ResourceStreamSourceContextLoaderClassPath create(final String prefix) {
         return new ResourceStreamSourceContextLoaderClassPath(prefix);
     }
 
@@ -46,7 +46,6 @@ public class ResourceStreamSourceContextLoaderClassPath extends ResourceStreamSo
     private ResourceStreamSourceContextLoaderClassPath(final String prefix) {
         this.prefix = prefix;
     }
-
 
     @Override
     protected InputStream doReadResource(final String resourcePath) {

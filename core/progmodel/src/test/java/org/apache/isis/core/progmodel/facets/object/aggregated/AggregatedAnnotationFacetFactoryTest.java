@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.object.aggregated;
 
 import org.apache.isis.applib.annotation.Aggregated;
@@ -27,7 +26,6 @@ import org.apache.isis.core.metamodel.facets.object.aggregated.AggregatedFacet;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.progmodel.facets.object.aggregated.annotation.AggregatedAnnotationFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.aggregated.annotation.AggregatedFacetAnnotation;
-
 
 public class AggregatedAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 
@@ -46,10 +44,10 @@ public class AggregatedAnnotationFacetFactoryTest extends AbstractFacetFactoryTe
         super.tearDown();
     }
 
-
     public void testImmutableAnnotationPickedUpOnClassAndDefaultsToAlways() {
         @Aggregated
-        class Customer {}
+        class Customer {
+        }
 
         facetFactory.process(new ProcessClassContext(Customer.class, methodRemover, facetedMethod));
 
@@ -61,4 +59,3 @@ public class AggregatedAnnotationFacetFactoryTest extends AbstractFacetFactoryTe
     }
 
 }
-

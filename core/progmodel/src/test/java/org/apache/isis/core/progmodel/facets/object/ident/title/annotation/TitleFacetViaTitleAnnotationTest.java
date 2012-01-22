@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.object.ident.title.annotation;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -49,18 +48,18 @@ import org.junit.runner.RunWith;
 import com.google.common.collect.Lists;
 
 @RunWith(JMock.class)
-public class TitleFacetViaTitleAnnotationTest  {
+public class TitleFacetViaTitleAnnotationTest {
 
-	private Mockery context = new JUnit4Mockery();
-	private FacetHolder mockFacetHolder;
-	private ObjectAdapter mockOwningAdapter;
+    private final Mockery context = new JUnit4Mockery();
+    private FacetHolder mockFacetHolder;
+    private ObjectAdapter mockOwningAdapter;
     private SpecificationLookup mockSpecificationLookup;
     private AdapterMap mockAdapterMap;
     private LocalizationProvider mockLocalizationProvider;
 
     protected static class DomainObjectWithProblemInItsAnnotatedTitleMethod {
 
-    	@Title
+        @Title
         public String screwedTitle() {
             throw new NullPointerException();
         }
@@ -69,73 +68,76 @@ public class TitleFacetViaTitleAnnotationTest  {
 
     protected static class NormalDomainObject {
 
-    	@Title(sequence="1.0")
+        @Title(sequence = "1.0")
         public String titleElement1() {
             return "Normal";
         }
 
-    	@Title(sequence="2.0")
+        @Title(sequence = "2.0")
         public String titleElement2() {
             return "Domain";
         }
 
-    	@Title(sequence="3.0")
+        @Title(sequence = "3.0")
         public String titleElement3() {
             return "Object";
         }
-    	
+
     }
 
     @Before
     public void setUp() throws Exception {
-    	mockFacetHolder = context.mock(FacetHolder.class);
-    	mockOwningAdapter = context.mock(ObjectAdapter.class);
-    	mockSpecificationLookup = context.mock(SpecificationLookup.class);
-    	mockAdapterMap = context.mock(AdapterMap.class);
-    	mockLocalizationProvider = context.mock(LocalizationProvider.class);
+        mockFacetHolder = context.mock(FacetHolder.class);
+        mockOwningAdapter = context.mock(ObjectAdapter.class);
+        mockSpecificationLookup = context.mock(SpecificationLookup.class);
+        mockAdapterMap = context.mock(AdapterMap.class);
+        mockLocalizationProvider = context.mock(LocalizationProvider.class);
     }
 
     @Test
     public void testTitle() throws Exception {
-        List<Method> methods = Arrays.asList(NormalDomainObject.class.getMethod("titleElement1"), NormalDomainObject.class.getMethod("titleElement2"), NormalDomainObject.class.getMethod("titleElement3"));
+        final List<Method> methods = Arrays.asList(NormalDomainObject.class.getMethod("titleElement1"), NormalDomainObject.class.getMethod("titleElement2"), NormalDomainObject.class.getMethod("titleElement3"));
 
         final List<TitleComponent> components = Lists.transform(methods, TitleComponent.FROM_METHOD);
-        TitleFacetViaTitleAnnotation facet = new TitleFacetViaTitleAnnotation(components, mockFacetHolder, mockAdapterMap, mockLocalizationProvider);
-    	final NormalDomainObject normalPojo = new NormalDomainObject();
-    	final Sequence sequence = context.sequence("in-title-element-order");
-		context.checking(new Expectations(){{
-			allowing(mockOwningAdapter).getObject();
-			will(returnValue(normalPojo));
-			
-			allowing(mockAdapterMap).getAdapterFor("Normal");
-            inSequence(sequence);
+        final TitleFacetViaTitleAnnotation facet = new TitleFacetViaTitleAnnotation(components, mockFacetHolder, mockAdapterMap, mockLocalizationProvider);
+        final NormalDomainObject normalPojo = new NormalDomainObject();
+        final Sequence sequence = context.sequence("in-title-element-order");
+        context.checking(new Expectations() {
+            {
+                allowing(mockOwningAdapter).getObject();
+                will(returnValue(normalPojo));
 
-            allowing(mockAdapterMap).getAdapterFor("Domain");
-            inSequence(sequence);
+                allowing(mockAdapterMap).getAdapterFor("Normal");
+                inSequence(sequence);
 
-            allowing(mockAdapterMap).getAdapterFor("Object");
-            inSequence(sequence);
-		}});
-		
-    	String title = facet.title(mockOwningAdapter, null);
-    	assertThat(title, is("Normal Domain Object"));
+                allowing(mockAdapterMap).getAdapterFor("Domain");
+                inSequence(sequence);
+
+                allowing(mockAdapterMap).getAdapterFor("Object");
+                inSequence(sequence);
+            }
+        });
+
+        final String title = facet.title(mockOwningAdapter, null);
+        assertThat(title, is("Normal Domain Object"));
     }
 
     @Test
     public void titleThrowsException() {
-        List<Method> methods = MethodFinderUtils.findMethodsWithAnnotation(DomainObjectWithProblemInItsAnnotatedTitleMethod.class, MethodScope.OBJECT,
-        		Title.class);
+        final List<Method> methods = MethodFinderUtils.findMethodsWithAnnotation(DomainObjectWithProblemInItsAnnotatedTitleMethod.class, MethodScope.OBJECT, Title.class);
 
         final List<TitleComponent> components = Lists.transform(methods, TitleComponent.FROM_METHOD);
-        TitleFacetViaTitleAnnotation facet = new TitleFacetViaTitleAnnotation(components, mockFacetHolder, mockAdapterMap, mockLocalizationProvider);
-    	final DomainObjectWithProblemInItsAnnotatedTitleMethod screwedPojo = new DomainObjectWithProblemInItsAnnotatedTitleMethod();
-		context.checking(new Expectations(){{
-			allowing(mockOwningAdapter).getObject();
-			will(returnValue(screwedPojo));
-		}});
+        final TitleFacetViaTitleAnnotation facet = new TitleFacetViaTitleAnnotation(components, mockFacetHolder, mockAdapterMap, mockLocalizationProvider);
+        final DomainObjectWithProblemInItsAnnotatedTitleMethod screwedPojo = new DomainObjectWithProblemInItsAnnotatedTitleMethod();
+        context.checking(new Expectations() {
+            {
+                allowing(mockOwningAdapter).getObject();
+                will(returnValue(screwedPojo));
+            }
+        });
 
-    	String title = facet.title(mockOwningAdapter, null);
-    	assertThat(title, is("Failed Title"));
+        final String title = facet.title(mockOwningAdapter, null);
+        assertThat(title, is("Failed Title"));
     }
 
 }

@@ -22,8 +22,7 @@ package org.apache.isis.core.progmodel.facets.value.money;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.progmodel.facets.object.value.ValueUsingValueSemanticsProviderFacetFactory;
 
-public class MoneyValueTypeFacetFactory extends
-    ValueUsingValueSemanticsProviderFacetFactory<org.apache.isis.applib.value.Money> {
+public class MoneyValueTypeFacetFactory extends ValueUsingValueSemanticsProviderFacetFactory<org.apache.isis.applib.value.Money> {
 
     public MoneyValueTypeFacetFactory() {
         super(MoneyValueFacet.class);

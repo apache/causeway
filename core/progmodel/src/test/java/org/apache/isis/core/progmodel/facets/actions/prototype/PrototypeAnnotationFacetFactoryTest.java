@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.actions.prototype;
 
 import java.lang.reflect.Method;
@@ -28,7 +27,6 @@ import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.core.metamodel.facets.actions.prototype.PrototypeFacet;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.progmodel.facets.actions.prototype.annotation.PrototypeAnnotationFacetFactory;
-
 
 public class PrototypeAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 
@@ -50,8 +48,9 @@ public class PrototypeAnnotationFacetFactoryTest extends AbstractFacetFactoryTes
     public void testAnnotationPickedUp() {
         class Customer {
             @SuppressWarnings("unused")
-			@Prototype
-            public void someAction() {}
+            @Prototype
+            public void someAction() {
+            }
         }
         final Method actionMethod = findMethod(Customer.class, "someAction");
 
@@ -65,4 +64,3 @@ public class PrototypeAnnotationFacetFactoryTest extends AbstractFacetFactoryTes
     }
 
 }
-

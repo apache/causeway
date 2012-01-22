@@ -26,8 +26,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.interactions.CollectionAddToContext;
 import org.apache.isis.core.metamodel.interactions.ValidityContext;
 
-public abstract class CollectionValidateAddToFacetAbstract extends FacetAbstract implements
-    CollectionValidateAddToFacet {
+public abstract class CollectionValidateAddToFacetAbstract extends FacetAbstract implements CollectionValidateAddToFacet {
 
     public static Class<? extends Facet> type() {
         return CollectionValidateAddToFacet.class;

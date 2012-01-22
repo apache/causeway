@@ -45,8 +45,7 @@ public abstract class HiddenObjectFacetAbstract extends FacetAbstract implements
         final ObjectAdapter toValidate = ic.getTarget();
         return toValidate != null ? hiddenReason(toValidate) : null;
     }
-    
-    protected abstract String hiddenReason(ObjectAdapter toHide);
 
+    protected abstract String hiddenReason(ObjectAdapter toHide);
 
 }

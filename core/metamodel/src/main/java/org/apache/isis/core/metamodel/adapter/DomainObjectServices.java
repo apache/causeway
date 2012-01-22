@@ -108,7 +108,8 @@ public interface DomainObjectServices extends Injectable {
     // //////////////////////////////////////////////////////////////////
 
     /**
-     * Provided by {@link RuntimeContextAbstract} itself, cloned properties from {@link IsisConfiguration}.
+     * Provided by {@link RuntimeContextAbstract} itself, cloned properties from
+     * {@link IsisConfiguration}.
      * 
      * <p>
      * Called by <tt>DomainObjectContainerDefault</tt>.
@@ -116,7 +117,8 @@ public interface DomainObjectServices extends Injectable {
     String getProperty(String name);
 
     /**
-     * Provided by {@link RuntimeContextAbstract} itself, cloned properties from {@link IsisConfiguration}.
+     * Provided by {@link RuntimeContextAbstract} itself, cloned properties from
+     * {@link IsisConfiguration}.
      * 
      * <p>
      * Called by <tt>DomainObjectContainerDefault</tt>.

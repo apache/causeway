@@ -20,8 +20,9 @@
 package org.apache.isis.core.commons.components;
 
 /**
- * Indicate that the implementing component is scoped at application level (shared across multiple sessions) and might
- * also require initialization or being shutdown.
+ * Indicate that the implementing component is scoped at application level
+ * (shared across multiple sessions) and might also require initialization or
+ * being shutdown.
  * 
  * <p>
  * Analogous to Hibernate's <tt>SessionFactory</tt>.
@@ -37,7 +38,8 @@ public interface ApplicationScopedComponent extends Component {
     void init();
 
     /**
-     * Indicates to the component that it will no longer be used and should shut itself down cleanly.
+     * Indicates to the component that it will no longer be used and should shut
+     * itself down cleanly.
      */
     void shutdown();
 

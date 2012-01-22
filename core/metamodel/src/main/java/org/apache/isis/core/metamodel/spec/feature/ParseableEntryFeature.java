@@ -22,7 +22,8 @@ package org.apache.isis.core.metamodel.spec.feature;
 public interface ParseableEntryFeature extends OneToOneFeature {
 
     /**
-     * The typical length of each line for this value, as a number of characters.
+     * The typical length of each line for this value, as a number of
+     * characters.
      */
     int getTypicalLineLength();
 

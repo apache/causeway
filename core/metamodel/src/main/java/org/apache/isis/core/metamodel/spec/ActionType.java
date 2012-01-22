@@ -31,15 +31,29 @@ public enum ActionType {
         return name();
     }
 
-    public boolean matchesTypeOf(ObjectAction action) {
+    public boolean matchesTypeOf(final ObjectAction action) {
         return action != null && action.getType().equals(this);
     }
-    
-    public boolean isDebug() { return this == DEBUG; }
-    public boolean isSet() { return this == SET; }
-    public boolean isExploration() { return this == EXPLORATION; }
-    public boolean isPrototype() { return this == PROTOTYPE; }
-    public boolean isUser() { return this == USER; }
-    
+
+    public boolean isDebug() {
+        return this == DEBUG;
+    }
+
+    public boolean isSet() {
+        return this == SET;
+    }
+
+    public boolean isExploration() {
+        return this == EXPLORATION;
+    }
+
+    public boolean isPrototype() {
+        return this == PROTOTYPE;
+    }
+
+    public boolean isUser() {
+        return this == USER;
+    }
+
     public static final List<ActionType> ALL_EXCEPT_SET = Arrays.asList(DEBUG, EXPLORATION, PROTOTYPE, USER);
 }

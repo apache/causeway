@@ -24,11 +24,13 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract.Validating;
 
 /**
- * Mix-in interface for {@link Facet}s that can advise as to whether a proposed value is valid.
+ * Mix-in interface for {@link Facet}s that can advise as to whether a proposed
+ * value is valid.
  * 
  * <p>
- * For example, <tt>MaxLengthFacet</tt> does constrain the length of candidate values, whereas <tt>DebugFacet</tt> or
- * <tt>MemberOrderFacet</tt> do not - they are basically just UI hints.
+ * For example, <tt>MaxLengthFacet</tt> does constrain the length of candidate
+ * values, whereas <tt>DebugFacet</tt> or <tt>MemberOrderFacet</tt> do not -
+ * they are basically just UI hints.
  * 
  * @see DisablingInteractionAdvisor
  * @see HidingInteractionAdvisor
@@ -39,9 +41,11 @@ public interface ValidatingInteractionAdvisor extends InteractionAdvisorFacet, V
      * Whether the validation represented by this facet passes or fails.
      * 
      * <p>
-     * Implementations should use the provided {@link ValidityContext} to determine whether they declare the interaction
-     * invalid. They must however guard against a <tt>null</tt> {@link ValidityContext#getTarget() target} and
-     * {@link ValidityContext#getSession() session} - neither are guaranteed to be populated.
+     * Implementations should use the provided {@link ValidityContext} to
+     * determine whether they declare the interaction invalid. They must however
+     * guard against a <tt>null</tt> {@link ValidityContext#getTarget() target}
+     * and {@link ValidityContext#getSession() session} - neither are guaranteed
+     * to be populated.
      */
     String invalidates(final ValidityContext<? extends ValidityEvent> ic);
 }

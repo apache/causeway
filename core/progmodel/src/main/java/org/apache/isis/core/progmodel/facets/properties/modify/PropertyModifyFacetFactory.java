@@ -53,9 +53,7 @@ public class PropertyModifyFacetFactory extends MethodPrefixBasedFacetFactoryAbs
         final Class<?>[] paramTypes = new Class[] { returnType };
 
         final Class<?> cls = processMethodContext.getCls();
-        final Method modifyMethod =
-            MethodFinderUtils.findMethod(cls, MethodScope.OBJECT,
-                MethodPrefixConstants.MODIFY_PREFIX + capitalizedName, void.class, paramTypes);
+        final Method modifyMethod = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, MethodPrefixConstants.MODIFY_PREFIX + capitalizedName, void.class, paramTypes);
 
         if (modifyMethod == null) {
             return;

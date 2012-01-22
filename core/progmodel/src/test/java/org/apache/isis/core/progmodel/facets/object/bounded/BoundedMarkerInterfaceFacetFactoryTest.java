@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.object.bounded;
 
 import org.apache.isis.applib.marker.Bounded;
@@ -26,7 +25,6 @@ import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.metamodel.facets.object.bounded.BoundedFacet;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.progmodel.facets.object.bounded.markerifc.BoundedMarkerInterfaceFacetFactory;
-
 
 public class BoundedMarkerInterfaceFacetFactoryTest extends AbstractFacetFactoryTest {
 
@@ -45,9 +43,9 @@ public class BoundedMarkerInterfaceFacetFactoryTest extends AbstractFacetFactory
         super.tearDown();
     }
 
-
     public void testBoundedInterfaceAnnotationPickedUpOnClass() {
-        class Customer implements Bounded {}
+        class Customer implements Bounded {
+        }
 
         facetFactory.process(new ProcessClassContext(Customer.class, methodRemover, facetedMethod));
 
@@ -59,4 +57,3 @@ public class BoundedMarkerInterfaceFacetFactoryTest extends AbstractFacetFactory
     }
 
 }
-

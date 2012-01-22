@@ -32,31 +32,51 @@ public class FeatureTypeTest_identifierFor {
 
     public static class SomeDomainClass {
         private BigDecimal aBigDecimal;
+
         public BigDecimal getABigDecimal() {
             return aBigDecimal;
         }
-        public void setABigDecimal(BigDecimal aBigDecimal) {
+
+        public void setABigDecimal(final BigDecimal aBigDecimal) {
             this.aBigDecimal = aBigDecimal;
         }
+
         private BigDecimal anotherBigDecimal;
+
         public BigDecimal getAnotherBigDecimal() {
             return anotherBigDecimal;
         }
-        public void setAnotherBigDecimal(BigDecimal anotherBigDecimal) {
+
+        public void setAnotherBigDecimal(final BigDecimal anotherBigDecimal) {
             this.anotherBigDecimal = anotherBigDecimal;
         }
     }
-    
+
     @Test
     public void property_whenMethodNameIs_XYyyZzz() throws Exception {
-        Method method = SomeDomainClass.class.getMethod("getABigDecimal");
+        final Method method = SomeDomainClass.class.getMethod("getABigDecimal");
         final Identifier identifierFor = FeatureType.PROPERTY.identifierFor(SomeDomainClass.class, method);
-        assertThat(identifierFor.getMemberName(), is("ABigDecimal")); // very odd compared to anotherBigDecimal, but arises from Introspector class, so presumably part of the javabeans spec.
+        assertThat(identifierFor.getMemberName(), is("ABigDecimal")); // very
+                                                                      // odd
+                                                                      // compared
+                                                                      // to
+                                                                      // anotherBigDecimal,
+                                                                      // but
+                                                                      // arises
+                                                                      // from
+                                                                      // Introspector
+                                                                      // class,
+                                                                      // so
+                                                                      // presumably
+                                                                      // part of
+                                                                      // the
+                                                                      // javabeans
+                                                                      // spec.
     }
 
     @Test
     public void property_whenMethodNameIs_XxxxYyyZzz() throws Exception {
-        Method method = SomeDomainClass.class.getMethod("getAnotherBigDecimal");
+        final Method method = SomeDomainClass.class.getMethod("getAnotherBigDecimal");
         final Identifier identifierFor = FeatureType.PROPERTY.identifierFor(SomeDomainClass.class, method);
         assertThat(identifierFor.getMemberName(), is("anotherBigDecimal"));
     }

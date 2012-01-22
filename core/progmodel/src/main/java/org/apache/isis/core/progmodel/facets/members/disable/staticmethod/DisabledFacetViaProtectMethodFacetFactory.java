@@ -38,7 +38,8 @@ public class DisabledFacetViaProtectMethodFacetFactory extends MethodPrefixBased
     private static final String[] PREFIXES = { MethodPrefixConstants.PROTECT_PREFIX };
 
     /**
-     * Note that the {@link Facet}s registered are the generic ones from noa-architecture (where they exist)
+     * Note that the {@link Facet}s registered are the generic ones from
+     * noa-architecture (where they exist)
      */
     public DisabledFacetViaProtectMethodFacetFactory() {
         super(FeatureType.MEMBERS, PREFIXES);
@@ -62,9 +63,7 @@ public class DisabledFacetViaProtectMethodFacetFactory extends MethodPrefixBased
 
         final String capitalizedName = NameUtils.javaBaseNameStripAccessorPrefixIfRequired(method.getName());
 
-        final Method protectMethod =
-            MethodFinderUtils.findMethodWithOrWithoutParameters(type, MethodScope.CLASS,
-                MethodPrefixConstants.PROTECT_PREFIX + capitalizedName, boolean.class, paramTypes);
+        final Method protectMethod = MethodFinderUtils.findMethodWithOrWithoutParameters(type, MethodScope.CLASS, MethodPrefixConstants.PROTECT_PREFIX + capitalizedName, boolean.class, paramTypes);
         if (protectMethod == null) {
             return;
         }

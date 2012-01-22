@@ -36,8 +36,7 @@ public class MaxLengthAnnotationForParameterFacetFactory extends AnnotationBased
 
     @Override
     public void processParams(final ProcessParameterContext processParameterContext) {
-        final java.lang.annotation.Annotation[] parameterAnnotations =
-            getParameterAnnotations(processParameterContext.getMethod())[processParameterContext.getParamNum()];
+        final java.lang.annotation.Annotation[] parameterAnnotations = getParameterAnnotations(processParameterContext.getMethod())[processParameterContext.getParamNum()];
 
         for (final Annotation parameterAnnotation : parameterAnnotations) {
             if (parameterAnnotation instanceof MaxLength) {

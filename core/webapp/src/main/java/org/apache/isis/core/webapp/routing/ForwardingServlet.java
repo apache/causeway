@@ -34,17 +34,16 @@ public class ForwardingServlet extends HttpServlet {
     private String forwardTo;
 
     @Override
-    public void init(ServletConfig config) throws ServletException {
+    public void init(final ServletConfig config) throws ServletException {
         forwardTo = enslash(config.getInitParameter("forwardTo"));
     }
-    
-    private static String enslash(String str) {
-        return str.startsWith("/")?str:"/"+str;
+
+    private static String enslash(final String str) {
+        return str.startsWith("/") ? str : "/" + str;
     }
 
     @Override
-    protected void doGet(final HttpServletRequest request, final HttpServletResponse response) throws ServletException,
-        IOException {
+    protected void doGet(final HttpServletRequest request, final HttpServletResponse response) throws ServletException, IOException {
         final RequestDispatcher requestDispatcher = request.getRequestDispatcher(forwardTo);
         requestDispatcher.forward(request, response);
     }

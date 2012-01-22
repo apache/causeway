@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.object.stable;
 
 import org.apache.isis.applib.annotation.Stable;
@@ -47,7 +46,8 @@ public class StableAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 
     public void testStableAnnotationPickedUpOnClassAndDefaultsToAlways() {
         @Stable
-        class Customer {}
+        class Customer {
+        }
 
         facetFactory.process(new ProcessClassContext(Customer.class, methodRemover, facetedMethod));
 
@@ -59,4 +59,3 @@ public class StableAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
     }
 
 }
-

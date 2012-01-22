@@ -30,8 +30,7 @@ public abstract class TypeOfFacetAbstract extends SingleClassValueFacetAbstract 
         return TypeOfFacet.class;
     }
 
-    public TypeOfFacetAbstract(final Class<?> type, final FacetHolder holder,
-        final SpecificationLookup specificationLookup) {
+    public TypeOfFacetAbstract(final Class<?> type, final FacetHolder holder, final SpecificationLookup specificationLookup) {
         super(type(), holder, type, specificationLookup);
     }
 

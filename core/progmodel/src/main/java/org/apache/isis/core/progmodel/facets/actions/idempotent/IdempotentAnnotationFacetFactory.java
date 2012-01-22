@@ -38,7 +38,6 @@ public class IdempotentAnnotationFacetFactory extends AnnotationBasedFacetFactor
         FacetUtil.addFacet(create(annotation, processMethodContext.getFacetHolder()));
     }
 
-
     private IdempotentFacet create(final Idempotent annotation, final FacetHolder holder) {
         return annotation == null ? null : new IdempotentFacetAnnotation(holder);
     }

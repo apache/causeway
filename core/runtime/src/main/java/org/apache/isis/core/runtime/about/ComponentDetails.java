@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.runtime.about;
 
 public interface ComponentDetails {
@@ -31,4 +30,3 @@ public interface ComponentDetails {
     public abstract boolean isInstalled();
 
 }
-

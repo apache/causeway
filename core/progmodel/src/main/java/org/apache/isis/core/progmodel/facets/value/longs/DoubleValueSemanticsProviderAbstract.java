@@ -32,8 +32,7 @@ import org.apache.isis.core.metamodel.facets.object.parseable.TextEntryParseExce
 import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProviderAndFacetAbstract;
 import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProviderContext;
 
-public abstract class DoubleValueSemanticsProviderAbstract extends ValueSemanticsProviderAndFacetAbstract<Double>
-    implements DoubleFloatingPointValueFacet {
+public abstract class DoubleValueSemanticsProviderAbstract extends ValueSemanticsProviderAndFacetAbstract<Double> implements DoubleFloatingPointValueFacet {
 
     private static Class<? extends Facet> type() {
         return DoubleFloatingPointValueFacet.class;
@@ -46,10 +45,8 @@ public abstract class DoubleValueSemanticsProviderAbstract extends ValueSemantic
 
     private final NumberFormat format;
 
-    public DoubleValueSemanticsProviderAbstract(final FacetHolder holder, final Class<Double> adaptedClass,
-        final IsisConfiguration configuration, final ValueSemanticsProviderContext context) {
-        super(type(), holder, adaptedClass, TYPICAL_LENGTH, IMMUTABLE, EQUAL_BY_CONTENT, DEFAULT_VALUE, configuration,
-            context);
+    public DoubleValueSemanticsProviderAbstract(final FacetHolder holder, final Class<Double> adaptedClass, final IsisConfiguration configuration, final ValueSemanticsProviderContext context) {
+        super(type(), holder, adaptedClass, TYPICAL_LENGTH, IMMUTABLE, EQUAL_BY_CONTENT, DEFAULT_VALUE, configuration, context);
         format = determineNumberFormat("value.format.double");
     }
 

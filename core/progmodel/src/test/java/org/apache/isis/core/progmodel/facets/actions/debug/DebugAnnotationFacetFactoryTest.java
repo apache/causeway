@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.actions.debug;
 
 import java.lang.reflect.Method;
@@ -28,7 +27,6 @@ import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.core.metamodel.facets.actions.debug.DebugFacet;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.progmodel.facets.actions.debug.annotation.DebugAnnotationFacetFactory;
-
 
 public class DebugAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 
@@ -47,11 +45,11 @@ public class DebugAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
         super.tearDown();
     }
 
-
     public void testDebugAnnotationPickedUp() {
         class Customer {
             @Debug
-            public void someAction() {}
+            public void someAction() {
+            }
         }
         final Method actionMethod = findMethod(Customer.class, "someAction");
 
@@ -65,4 +63,3 @@ public class DebugAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
     }
 
 }
-

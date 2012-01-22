@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.value;
 
 import static org.junit.Assert.assertEquals;
@@ -25,16 +24,15 @@ import static org.junit.Assert.assertEquals;
 import java.sql.Time;
 import java.util.Calendar;
 
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
+import org.apache.isis.core.progmodel.facets.value.timesql.JavaSqlTimeValueSemanticsProvider;
 import org.jmock.Expectations;
 import org.jmock.integration.junit4.JMock;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
-import org.apache.isis.core.progmodel.facets.value.timesql.JavaSqlTimeValueSemanticsProvider;
 
 @RunWith(JMock.class)
 public class JavaSqlTimeValueSemanticsProviderTest extends ValueSemanticsProviderAbstractTestCase {
@@ -46,13 +44,15 @@ public class JavaSqlTimeValueSemanticsProviderTest extends ValueSemanticsProvide
 
     @Before
     public void setUpObjects() throws Exception {
-        mockery.checking(new Expectations(){{
-        	allowing(mockConfiguration).getString("isis.value.format.time");
-        	will(returnValue(null));
-        }});
+        mockery.checking(new Expectations() {
+            {
+                allowing(mockConfiguration).getString("isis.value.format.time");
+                will(returnValue(null));
+            }
+        });
 
         final Calendar c = Calendar.getInstance();
-        //c.setTimeZone(TestClock.timeZone);
+        // c.setTimeZone(TestClock.timeZone);
 
         c.set(Calendar.MILLISECOND, 0);
 
@@ -89,4 +89,3 @@ public class JavaSqlTimeValueSemanticsProviderTest extends ValueSemanticsProvide
         assertEquals("14:00:00", newValue.toString());
     }
 }
-

@@ -28,7 +28,8 @@ import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.exceptions.NotYetImplementedException;
 
 /**
- * Used as the {@link Oid} for collections, values and <tt>@Aggregated</tt> types.
+ * Used as the {@link Oid} for collections, values and <tt>@Aggregated</tt>
+ * types.
  */
 public final class AggregatedOid implements Oid, Serializable {
 

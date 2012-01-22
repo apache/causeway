@@ -153,8 +153,7 @@ public class I18nManagerUsingResourceBundle implements I18nManager {
     }
 
     private static String buildParameterTypeKey(final Identifier identifier, final String textType, final int paramNum) {
-        return identifier.getClassName() + "." + MEMBER_TYPE_ACTION + "." + identifier.getMemberName() + "."
-            + MEMBER_TYPE_PARAMETER + (paramNum + 1) + "." + textType;
+        return identifier.getClassName() + "." + MEMBER_TYPE_ACTION + "." + identifier.getMemberName() + "." + MEMBER_TYPE_PARAMETER + (paramNum + 1) + "." + textType;
     }
 
     // //////////////////////////////////////////////////////////////

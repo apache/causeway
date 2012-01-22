@@ -40,15 +40,15 @@ import org.apache.isis.core.progmodel.facets.MethodPrefixConstants;
 /**
  * Sets up all the {@link Facet}s for an action in a single shot.
  */
-public class ActionParameterDefaultsFacetFactory extends MethodPrefixBasedFacetFactoryAbstract implements
-    AdapterMapAware {
+public class ActionParameterDefaultsFacetFactory extends MethodPrefixBasedFacetFactoryAbstract implements AdapterMapAware {
 
     private static final String[] PREFIXES = {};
 
     private AdapterMap adapterMap;
 
     /**
-     * Note that the {@link Facet}s registered are the generic ones from noa-architecture (where they exist)
+     * Note that the {@link Facet}s registered are the generic ones from
+     * noa-architecture (where they exist)
      */
     public ActionParameterDefaultsFacetFactory() {
         super(FeatureType.ACTIONS_ONLY, PREFIXES);
@@ -67,8 +67,7 @@ public class ActionParameterDefaultsFacetFactory extends MethodPrefixBasedFacetF
         attachDefaultFacetForParametersIfDefaultsNumMethodIsFound(processMethodContext, holderList);
     }
 
-    private static void attachDefaultFacetForParametersIfDefaultsNumMethodIsFound(
-        final ProcessMethodContext processMethodContext, final List<FacetedMethodParameter> parameters) {
+    private static void attachDefaultFacetForParametersIfDefaultsNumMethodIsFound(final ProcessMethodContext processMethodContext, final List<FacetedMethodParameter> parameters) {
 
         if (parameters.isEmpty()) {
             return;
@@ -82,9 +81,7 @@ public class ActionParameterDefaultsFacetFactory extends MethodPrefixBasedFacetF
 
         for (int i = 0; i < paramTypes.length; i++) {
 
-            final Method defaultMethod =
-                MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, MethodPrefixConstants.DEFAULT_PREFIX + i
-                    + capitalizedName, paramTypes[i], new Class[0]);
+            final Method defaultMethod = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, MethodPrefixConstants.DEFAULT_PREFIX + i + capitalizedName, paramTypes[i], new Class[0]);
 
             if (defaultMethod == null) {
                 continue;
@@ -93,8 +90,7 @@ public class ActionParameterDefaultsFacetFactory extends MethodPrefixBasedFacetF
 
             final FacetedMethod facetedMethod = processMethodContext.getFacetHolder();
             if (facetedMethod.containsDoOpFacet(ActionDefaultsFacet.class)) {
-                throw new MetaModelException(cls + " uses both old and new default syntax for "
-                    + actionMethod.getName() + "(...) - must use one or other");
+                throw new MetaModelException(cls + " uses both old and new default syntax for " + actionMethod.getName() + "(...) - must use one or other");
             }
 
             // add facets directly to parameters, not to actions

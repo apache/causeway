@@ -26,8 +26,8 @@ import org.apache.isis.core.metamodel.facets.MarkerFacet;
  * will be backwards compatible.
  * 
  * <p>
- * In the standard Apache Isis Programming Model, typically corresponds to applying the <tt>@Stable</tt> annotation
- * at the class level.
+ * In the standard Apache Isis Programming Model, typically corresponds to
+ * applying the <tt>@Stable</tt> annotation at the class level.
  */
 public interface StableFacet extends MarkerFacet {
 

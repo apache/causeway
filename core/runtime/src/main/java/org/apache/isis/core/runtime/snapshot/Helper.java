@@ -17,12 +17,10 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.runtime.snapshot;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-
 
 /**
  * Stateless utility methods for manipulating XML documents.
@@ -37,7 +35,8 @@ public final class Helper {
     }
 
     /**
-     * Utility method that returns just the class's name for the supplied fully qualified class name.
+     * Utility method that returns just the class's name for the supplied fully
+     * qualified class name.
      * 
      * cf 'basename' in Unix.
      */
@@ -51,8 +50,9 @@ public final class Helper {
     }
 
     /**
-     * Utility method that returns the package name for the supplied fully qualified class name, or
-     * <code>default</code> if the class is in no namespace / in the default namespace.
+     * Utility method that returns the package name for the supplied fully
+     * qualified class name, or <code>default</code> if the class is in no
+     * namespace / in the default namespace.
      * 
      * cf 'dirname' in Unix.
      */
@@ -61,13 +61,14 @@ public final class Helper {
         if (fullNameLastPeriodIdx > 0) {
             return fullyQualifiedClassName.substring(0, fullNameLastPeriodIdx);
         } else {
-            return "default"; // TODO: should provide a better way to specify namespace.
+            return "default"; // TODO: should provide a better way to specify
+                              // namespace.
         }
     }
 
     /**
-     * Returns the root element for the element by looking up the owner document for the element, and from
-     * that its document element.
+     * Returns the root element for the element by looking up the owner document
+     * for the element, and from that its document element.
      * 
      * If no document element exists, just returns the supplied document.
      */

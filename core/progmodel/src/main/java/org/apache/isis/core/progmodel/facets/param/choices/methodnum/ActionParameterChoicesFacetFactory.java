@@ -41,15 +41,15 @@ import org.apache.isis.core.progmodel.facets.MethodPrefixConstants;
 /**
  * Sets up all the {@link Facet}s for an action in a single shot.
  */
-public class ActionParameterChoicesFacetFactory extends MethodPrefixBasedFacetFactoryAbstract implements
-    AdapterMapAware {
+public class ActionParameterChoicesFacetFactory extends MethodPrefixBasedFacetFactoryAbstract implements AdapterMapAware {
 
     private static final String[] PREFIXES = {};
 
     private AdapterMap adapterMap;
 
     /**
-     * Note that the {@link Facet}s registered are the generic ones from noa-architecture (where they exist)
+     * Note that the {@link Facet}s registered are the generic ones from
+     * noa-architecture (where they exist)
      */
     public ActionParameterChoicesFacetFactory() {
         super(FeatureType.ACTIONS_ONLY, PREFIXES);
@@ -69,8 +69,7 @@ public class ActionParameterChoicesFacetFactory extends MethodPrefixBasedFacetFa
 
     }
 
-    private void attachChoicesFacetForParametersIfChoicesNumMethodIsFound(
-        final ProcessMethodContext processMethodContext, final List<FacetedMethodParameter> parameters) {
+    private void attachChoicesFacetForParametersIfChoicesNumMethodIsFound(final ProcessMethodContext processMethodContext, final List<FacetedMethodParameter> parameters) {
 
         if (parameters.isEmpty()) {
             return;
@@ -100,13 +99,11 @@ public class ActionParameterChoicesFacetFactory extends MethodPrefixBasedFacetFa
 
             // add facets directly to parameters, not to actions
             final FacetedMethodParameter paramAsHolder = parameters.get(i);
-            FacetUtil.addFacet(new ActionParameterChoicesFacetViaMethod(choicesMethod, arrayOfParamType, paramAsHolder,
-                getSpecificationLookup(), getAdapterMap()));
+            FacetUtil.addFacet(new ActionParameterChoicesFacetViaMethod(choicesMethod, arrayOfParamType, paramAsHolder, getSpecificationLookup(), getAdapterMap()));
         }
     }
 
-    private Method findChoicesNumMethodReturning(final ProcessMethodContext processMethodContext, final int i,
-        final Class<?> arrayOfParamType) {
+    private Method findChoicesNumMethodReturning(final ProcessMethodContext processMethodContext, final int i, final Class<?> arrayOfParamType) {
 
         final Class<?> cls = processMethodContext.getCls();
         final Method actionMethod = processMethodContext.getMethod();

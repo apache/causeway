@@ -77,8 +77,7 @@ public class I18nFacetDecorator extends FacetDecoratorAbstract {
         if (i18nDescription == null) {
             return null;
         }
-        final DescribedAsFacetWrapI18n decoratingFacet =
-            new DescribedAsFacetWrapI18n(i18nDescription, facet.getFacetHolder());
+        final DescribedAsFacetWrapI18n decoratingFacet = new DescribedAsFacetWrapI18n(i18nDescription, facet.getFacetHolder());
         identifiedHolder.addFacet(decoratingFacet);
         return decoratingFacet;
     }

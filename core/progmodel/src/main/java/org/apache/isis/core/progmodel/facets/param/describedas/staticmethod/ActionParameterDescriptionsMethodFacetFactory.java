@@ -38,15 +38,15 @@ import org.apache.isis.core.progmodel.facets.MethodPrefixBasedFacetFactoryAbstra
 import org.apache.isis.core.progmodel.facets.MethodPrefixConstants;
 import org.apache.isis.core.progmodel.facets.members.describedas.staticmethod.DescribedAsFacetViaMethod;
 
-public class ActionParameterDescriptionsMethodFacetFactory extends MethodPrefixBasedFacetFactoryAbstract implements
-    AdapterMapAware {
+public class ActionParameterDescriptionsMethodFacetFactory extends MethodPrefixBasedFacetFactoryAbstract implements AdapterMapAware {
 
     private static final String[] PREFIXES = { MethodPrefixConstants.DESCRIPTION_PREFIX };
 
     private AdapterMap adapterMap;
 
     /**
-     * Note that the {@link Facet}s registered are the generic ones from noa-architecture (where they exist)
+     * Note that the {@link Facet}s registered are the generic ones from
+     * noa-architecture (where they exist)
      */
     public ActionParameterDescriptionsMethodFacetFactory() {
         super(FeatureType.ACTIONS_ONLY, PREFIXES);
@@ -65,8 +65,7 @@ public class ActionParameterDescriptionsMethodFacetFactory extends MethodPrefixB
         attachDescribedAsFacetForParametersIfParameterDescriptionsMethodIsFound(processMethodContext, holderList);
     }
 
-    private static void attachDescribedAsFacetForParametersIfParameterDescriptionsMethodIsFound(
-        final ProcessMethodContext processMethodContext, final List<FacetedMethodParameter> parameters) {
+    private static void attachDescribedAsFacetForParametersIfParameterDescriptionsMethodIsFound(final ProcessMethodContext processMethodContext, final List<FacetedMethodParameter> parameters) {
 
         if (parameters.isEmpty()) {
             return;
@@ -77,9 +76,7 @@ public class ActionParameterDescriptionsMethodFacetFactory extends MethodPrefixB
         final String capitalizedName = NameUtils.capitalizeName(actionMethod.getName());
 
         final Class<?> cls = processMethodContext.getCls();
-        final Method descriptionMethod =
-            MethodFinderUtils.findMethod(cls, MethodScope.CLASS, MethodPrefixConstants.DESCRIPTION_PREFIX
-                + capitalizedName, String[].class, new Class[0]);
+        final Method descriptionMethod = MethodFinderUtils.findMethod(cls, MethodScope.CLASS, MethodPrefixConstants.DESCRIPTION_PREFIX + capitalizedName, String[].class, new Class[0]);
         if (descriptionMethod == null) {
             return;
         }
@@ -100,8 +97,7 @@ public class ActionParameterDescriptionsMethodFacetFactory extends MethodPrefixB
             // ignore
         }
         if (descriptions == null || descriptions.length != numElementsRequired) {
-            throw new MetaModelException(descriptionMethod
-                + " must return an String[] array of same size as number of parameters of action");
+            throw new MetaModelException(descriptionMethod + " must return an String[] array of same size as number of parameters of action");
         }
         return descriptions;
     }

@@ -24,7 +24,8 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.map.AdapterMap;
 
 /**
- * Uses the Commons Collection API to transform {@link Object}s into {@link ObjectAdapter} adapters.
+ * Uses the Commons Collection API to transform {@link Object}s into
+ * {@link ObjectAdapter} adapters.
  * 
  */
 public final class ObjectToAdapterTransformer implements Transformer {

@@ -55,17 +55,14 @@ public class PropertyDefaultFacetFactory extends MethodPrefixBasedFacetFactoryAb
 
         final Class<?> cls = processMethodContext.getCls();
         final Class<?> returnType = getMethod.getReturnType();
-        final Method method =
-            MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, MethodPrefixConstants.DEFAULT_PREFIX
-                + capitalizedName, returnType, NO_PARAMETERS_TYPES);
+        final Method method = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, MethodPrefixConstants.DEFAULT_PREFIX + capitalizedName, returnType, NO_PARAMETERS_TYPES);
         if (method == null) {
             return;
         }
         processMethodContext.removeMethod(method);
 
         final FacetHolder property = processMethodContext.getFacetHolder();
-        FacetUtil.addFacet(new PropertyDefaultFacetViaMethod(method, property, getSpecificationLookup(),
-            getAdapterMap()));
+        FacetUtil.addFacet(new PropertyDefaultFacetViaMethod(method, property, getSpecificationLookup(), getAdapterMap()));
     }
 
     // ///////////////////////////////////////////////////////

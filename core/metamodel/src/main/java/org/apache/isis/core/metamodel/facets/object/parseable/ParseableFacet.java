@@ -32,8 +32,8 @@ public interface ParseableFacet extends MultipleValueFacet {
      * Parses a text entry made by a user and sets the domain object's value.
      * 
      * <p>
-     * Equivalent to <tt>Parser#parseTextEntry(Object, String)</tt>, though may be implemented through some other
-     * mechanism.
+     * Equivalent to <tt>Parser#parseTextEntry(Object, String)</tt>, though may
+     * be implemented through some other mechanism.
      * 
      * @throws InvalidEntryException
      * @throws TextEntryParseException
@@ -41,13 +41,14 @@ public interface ParseableFacet extends MultipleValueFacet {
     ObjectAdapter parseTextEntry(ObjectAdapter original, String text);
 
     /**
-     * A title for the object that is valid but which may be easier to edit than the title provided by a
-     * {@link TitleFacet}.
+     * A title for the object that is valid but which may be easier to edit than
+     * the title provided by a {@link TitleFacet}.
      * 
      * <p>
-     * The idea here is that the viewer can display a parseable title for an existing object when, for example, the user
-     * initially clicks in the field. So, a date might be rendered via a {@link TitleFacet} as <tt>May 2, 2007</tt>, but
-     * its parseable form might be <tt>20070502</tt>.
+     * The idea here is that the viewer can display a parseable title for an
+     * existing object when, for example, the user initially clicks in the
+     * field. So, a date might be rendered via a {@link TitleFacet} as
+     * <tt>May 2, 2007</tt>, but its parseable form might be <tt>20070502</tt>.
      */
     public String parseableTitle(ObjectAdapter obj);
 }

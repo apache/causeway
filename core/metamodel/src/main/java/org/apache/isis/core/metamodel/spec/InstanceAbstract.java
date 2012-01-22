@@ -60,8 +60,8 @@ public abstract class InstanceAbstract implements Instance {
     }
 
     /**
-     * Allows subclasses to get specification without necessarily triggering {@link #loadSpecification() loading} if not
-     * yet known.
+     * Allows subclasses to get specification without necessarily triggering
+     * {@link #loadSpecification() loading} if not yet known.
      */
     protected final Specification getSpecificationNoLoad() {
         return specification;

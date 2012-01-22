@@ -42,15 +42,11 @@ public class EncodableFacetAnnotation extends EncodableFacetAbstract {
         return annotation.encoderDecoderClass();
     }
 
-    public EncodableFacetAnnotation(final Class<?> annotatedClass, final IsisConfiguration configuration,
-        final FacetHolder holder, final AdapterMap adapterManager, final DependencyInjector dependencyInjector) {
-        this(encoderDecoderName(annotatedClass, configuration), encoderDecoderClass(annotatedClass), holder,
-            adapterManager, dependencyInjector);
+    public EncodableFacetAnnotation(final Class<?> annotatedClass, final IsisConfiguration configuration, final FacetHolder holder, final AdapterMap adapterManager, final DependencyInjector dependencyInjector) {
+        this(encoderDecoderName(annotatedClass, configuration), encoderDecoderClass(annotatedClass), holder, adapterManager, dependencyInjector);
     }
 
-    private EncodableFacetAnnotation(final String candidateEncoderDecoderName,
-        final Class<?> candidateEncoderDecoderClass, final FacetHolder holder, final AdapterMap adapterManager,
-        final DependencyInjector dependencyInjector) {
+    private EncodableFacetAnnotation(final String candidateEncoderDecoderName, final Class<?> candidateEncoderDecoderClass, final FacetHolder holder, final AdapterMap adapterManager, final DependencyInjector dependencyInjector) {
         super(candidateEncoderDecoderName, candidateEncoderDecoderClass, holder, adapterManager, dependencyInjector);
     }
 

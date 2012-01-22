@@ -37,8 +37,7 @@ import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProvider
 import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProviderContext;
 import org.apache.isis.core.progmodel.facets.value.floats.FloatingPointValueFacet;
 
-public class PercentageValueSemanticsProvider extends ValueSemanticsProviderAndFacetAbstract<Percentage> implements
-    FloatingPointValueFacet {
+public class PercentageValueSemanticsProvider extends ValueSemanticsProviderAndFacetAbstract<Percentage> implements FloatingPointValueFacet {
 
     private static final NumberFormat PERCENTAGE_FORMAT = NumberFormat.getPercentInstance();
     private static final NumberFormat DECIMAL_FORMAT = NumberFormat.getNumberInstance();
@@ -55,16 +54,15 @@ public class PercentageValueSemanticsProvider extends ValueSemanticsProviderAndF
     private NumberFormat format = PERCENTAGE_FORMAT;
 
     /**
-     * Required because implementation of {@link Parser} and {@link EncoderDecoder}.
+     * Required because implementation of {@link Parser} and
+     * {@link EncoderDecoder}.
      */
     public PercentageValueSemanticsProvider() {
         this(null, null, null);
     }
 
-    public PercentageValueSemanticsProvider(final FacetHolder holder, final IsisConfiguration configuration,
-        final ValueSemanticsProviderContext context) {
-        super(type(), holder, Percentage.class, TYPICAL_LENGTH, IMMUTABLE, EQUAL_BY_CONTENT, DEFAULT_VALUE,
-            configuration, context);
+    public PercentageValueSemanticsProvider(final FacetHolder holder, final IsisConfiguration configuration, final ValueSemanticsProviderContext context) {
+        super(type(), holder, Percentage.class, TYPICAL_LENGTH, IMMUTABLE, EQUAL_BY_CONTENT, DEFAULT_VALUE, configuration, context);
 
         final String formatRequired = configuration.getString(ConfigurationConstants.ROOT + "value.format.percentage");
         if (formatRequired == null) {

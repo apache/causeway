@@ -24,10 +24,12 @@ import org.apache.isis.core.metamodel.facets.SingleIntValueFacet;
 import org.apache.isis.core.metamodel.interactions.ValidatingInteractionAdvisor;
 
 /**
- * Whether the (string) property or a parameter's length must not exceed a certain length.
+ * Whether the (string) property or a parameter's length must not exceed a
+ * certain length.
  * 
  * <p>
- * In the standard Apache Isis Programming Model, corresponds to the <tt>@MaxLength</tt> annotation.
+ * In the standard Apache Isis Programming Model, corresponds to the
+ * <tt>@MaxLength</tt> annotation.
  */
 public interface MaxLengthFacet extends SingleIntValueFacet, ValidatingInteractionAdvisor {
 

@@ -23,7 +23,8 @@ package org.apache.isis.core.commons.exceptions;
  * Indicates an error raised by the application code.
  * 
  * <p>
- * The viewer is expected to render the message within the application in a user-friendly fashion.
+ * The viewer is expected to render the message within the application in a
+ * user-friendly fashion.
  */
 public class IsisApplicationException extends IsisException {
 

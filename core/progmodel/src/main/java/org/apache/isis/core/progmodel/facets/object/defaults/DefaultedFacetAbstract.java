@@ -35,33 +35,30 @@ public abstract class DefaultedFacetAbstract extends FacetAbstract implements De
 
     private final DependencyInjector dependencyInjector;
 
-    public DefaultedFacetAbstract(final String candidateEncoderDecoderName,
-        final Class<?> candidateEncoderDecoderClass, final FacetHolder holder,
-        final DependencyInjector dependencyInjector) {
+    public DefaultedFacetAbstract(final String candidateEncoderDecoderName, final Class<?> candidateEncoderDecoderClass, final FacetHolder holder, final DependencyInjector dependencyInjector) {
         super(DefaultedFacet.class, holder, false);
 
-        this.defaultsProviderClass =
-            DefaultsProviderUtil.defaultsProviderOrNull(candidateEncoderDecoderClass, candidateEncoderDecoderName);
+        this.defaultsProviderClass = DefaultsProviderUtil.defaultsProviderOrNull(candidateEncoderDecoderClass, candidateEncoderDecoderName);
         this.dependencyInjector = dependencyInjector;
         if (isValid()) {
-            final DefaultsProvider defaultsProvider =
-                (DefaultsProvider) ClassUtil.newInstance(defaultsProviderClass, FacetHolder.class, holder);
-            this.defaultedFacetUsingDefaultsProvider =
-                new DefaultedFacetUsingDefaultsProvider(defaultsProvider, holder, getDependencyInjector());
+            final DefaultsProvider defaultsProvider = (DefaultsProvider) ClassUtil.newInstance(defaultsProviderClass, FacetHolder.class, holder);
+            this.defaultedFacetUsingDefaultsProvider = new DefaultedFacetUsingDefaultsProvider(defaultsProvider, holder, getDependencyInjector());
         } else {
             this.defaultedFacetUsingDefaultsProvider = null;
         }
     }
 
     /**
-     * Discover whether either of the candidate defaults provider name or class is valid.
+     * Discover whether either of the candidate defaults provider name or class
+     * is valid.
      */
     public boolean isValid() {
         return defaultsProviderClass != null;
     }
 
     /**
-     * Guaranteed to implement the {@link EncoderDecoder} class, thanks to generics in the applib.
+     * Guaranteed to implement the {@link EncoderDecoder} class, thanks to
+     * generics in the applib.
      */
     public Class<?> getDefaultsProviderClass() {
         return defaultsProviderClass;

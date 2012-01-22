@@ -28,8 +28,7 @@ import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProvider
 
 public class ImageValueSemanticsProvider extends ImageValueSemanticsProviderAbstract<Image> {
 
-    public ImageValueSemanticsProvider(final FacetHolder holder, final IsisConfiguration configuration,
-        final ValueSemanticsProviderContext context) {
+    public ImageValueSemanticsProvider(final FacetHolder holder, final IsisConfiguration configuration, final ValueSemanticsProviderContext context) {
         super(holder, Image.class, configuration, context);
     }
 

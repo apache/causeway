@@ -26,8 +26,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.interactions.CollectionRemoveFromContext;
 import org.apache.isis.core.metamodel.interactions.ValidityContext;
 
-public abstract class CollectionValidateRemoveFromFacetAbstract extends FacetAbstract implements
-    CollectionValidateRemoveFromFacet {
+public abstract class CollectionValidateRemoveFromFacetAbstract extends FacetAbstract implements CollectionValidateRemoveFromFacet {
 
     public static Class<? extends Facet> type() {
         return CollectionValidateRemoveFromFacet.class;

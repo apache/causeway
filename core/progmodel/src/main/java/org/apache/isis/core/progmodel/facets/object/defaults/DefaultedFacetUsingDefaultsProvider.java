@@ -29,8 +29,7 @@ public class DefaultedFacetUsingDefaultsProvider extends FacetAbstract implement
     private final DefaultsProvider<?> defaultsProvider;
     private final DependencyInjector dependencyInjector;
 
-    public DefaultedFacetUsingDefaultsProvider(final DefaultsProvider<?> parser, final FacetHolder holder,
-        final DependencyInjector dependencyInjector) {
+    public DefaultedFacetUsingDefaultsProvider(final DefaultsProvider<?> parser, final FacetHolder holder, final DependencyInjector dependencyInjector) {
         super(DefaultedFacet.class, holder, false);
         this.defaultsProvider = parser;
         this.dependencyInjector = dependencyInjector;

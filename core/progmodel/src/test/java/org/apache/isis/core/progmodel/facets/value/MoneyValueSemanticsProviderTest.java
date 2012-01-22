@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.value;
 
 import static org.junit.Assert.assertEquals;
@@ -25,17 +24,16 @@ import static org.junit.Assert.fail;
 
 import java.util.Locale;
 
-import org.jmock.integration.junit4.JMock;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-
 import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.applib.value.Money;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facets.object.parseable.TextEntryParseException;
 import org.apache.isis.core.progmodel.facets.value.money.MoneyValueSemanticsProvider;
+import org.jmock.integration.junit4.JMock;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 
 @RunWith(JMock.class)
 public class MoneyValueSemanticsProviderTest extends ValueSemanticsProviderAbstractTestCase {
@@ -50,7 +48,7 @@ public class MoneyValueSemanticsProviderTest extends ValueSemanticsProviderAbstr
     public void setUpObjects() throws Exception {
         Locale.setDefault(Locale.UK);
         setupSpecification(Money.class);
-      //  originalMoney = new Money(10.5, "gbp");
+        // originalMoney = new Money(10.5, "gbp");
         holder = new FacetHolderImpl();
         setValue(adapter = new MoneyValueSemanticsProvider(holder, mockConfiguration, mockContext));
     }
@@ -110,7 +108,8 @@ public class MoneyValueSemanticsProviderTest extends ValueSemanticsProviderAbstr
 
     @Test
     public void testReplacementEntryForDefaultCurrency() {
-        // MoneyValueSemanticsProvider adapter = new MoneyValueSemanticsProvider(new Money(10.3, "gbp"));
+        // MoneyValueSemanticsProvider adapter = new
+        // MoneyValueSemanticsProvider(new Money(10.3, "gbp"));
         final Object parsed = adapter.parseTextEntry(originalMoney, POUND_SYMBOL + "80.90");
         assertEquals(new Money(80.90, "gbp"), parsed);
     }
@@ -123,7 +122,8 @@ public class MoneyValueSemanticsProviderTest extends ValueSemanticsProviderAbstr
 
     @Test
     public void testUsingLocalCurrencySymbol() {
-        // MoneyValueSemanticsProvider adapter = new MoneyValueSemanticsProvider(new Money(0L, "gbp"));
+        // MoneyValueSemanticsProvider adapter = new
+        // MoneyValueSemanticsProvider(new Money(0L, "gbp"));
         final Object parsed = adapter.parseTextEntry(originalMoney, POUND_SYMBOL + "3021.50");
         assertEquals(POUND_SYMBOL + "3,021.50", adapter.titleString(parsed, null));
     }
@@ -133,7 +133,8 @@ public class MoneyValueSemanticsProviderTest extends ValueSemanticsProviderAbstr
         try {
             adapter.parseTextEntry(originalMoney, "3021.50  XYZ");
             fail("invalid code accepted " + adapter);
-        } catch (final TextEntryParseException expected) {}
+        } catch (final TextEntryParseException expected) {
+        }
     }
 
     @Test
@@ -141,7 +142,8 @@ public class MoneyValueSemanticsProviderTest extends ValueSemanticsProviderAbstr
         try {
             adapter.parseTextEntry(originalMoney, EURO_SYMBOL + "3021.50");
             fail("invalid code accepted " + adapter);
-        } catch (final TextEntryParseException expected) {}
+        } catch (final TextEntryParseException expected) {
+        }
     }
 
     @Test
@@ -156,8 +158,8 @@ public class MoneyValueSemanticsProviderTest extends ValueSemanticsProviderAbstr
         try {
             adapter.parseTextEntry(money, "$3021.50");
             fail("invalid code accepted " + adapter);
-        } catch (final TextEntryParseException expected) {}
+        } catch (final TextEntryParseException expected) {
+        }
     }
 
 }
-

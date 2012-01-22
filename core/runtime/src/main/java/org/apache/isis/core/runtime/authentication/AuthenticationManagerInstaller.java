@@ -17,15 +17,13 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.runtime.authentication;
 
 import org.apache.isis.core.commons.components.Installer;
 
-
 public interface AuthenticationManagerInstaller extends Installer {
 
-	static String TYPE = "authentication";
+    static String TYPE = "authentication";
 
     AuthenticationManager createAuthenticationManager();
 

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.runtime.snapshot;
 
 import java.io.CharArrayWriter;
@@ -35,18 +34,18 @@ import javax.xml.transform.stream.StreamResult;
 
 import org.w3c.dom.Element;
 
-
 public class DomSerializerJaxp implements DomSerializer {
 
     private final TransformerFactory transformerFactory;
-	private final Transformer newTransformer;
+    private final Transformer newTransformer;
 
-	public DomSerializerJaxp() throws TransformerConfigurationException {
-    	this.transformerFactory = TransformerFactory.newInstance();
-    	this.newTransformer = transformerFactory.newTransformer();
-	}
-	
-	public String serialize(final Element domElement) {
+    public DomSerializerJaxp() throws TransformerConfigurationException {
+        this.transformerFactory = TransformerFactory.newInstance();
+        this.newTransformer = transformerFactory.newTransformer();
+    }
+
+    @Override
+    public String serialize(final Element domElement) {
         final CharArrayWriter caw = new CharArrayWriter();
         try {
             serializeTo(domElement, caw);
@@ -56,15 +55,17 @@ public class DomSerializerJaxp implements DomSerializer {
         }
     }
 
+    @Override
     public void serializeTo(final Element domElement, final OutputStream os) throws Exception {
         final OutputStreamWriter osw = new OutputStreamWriter(os);
         serializeTo(domElement, osw);
     }
 
+    @Override
     public void serializeTo(final Element domElement, final Writer writer) throws Exception {
-		Source source = new DOMSource(domElement);
-		Result result = new StreamResult(writer);
-		newTransformer.transform(source, result);
+        final Source source = new DOMSource(domElement);
+        final Result result = new StreamResult(writer);
+        newTransformer.transform(source, result);
     }
 
 }

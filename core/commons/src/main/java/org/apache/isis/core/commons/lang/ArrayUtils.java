@@ -48,7 +48,8 @@ public final class ArrayUtils {
                 combinedList.add(t);
             }
         }
-        return combinedList.toArray(arrays[0]); // using 1st element of arrays to specify the type
+        return combinedList.toArray(arrays[0]); // using 1st element of arrays
+                                                // to specify the type
     }
 
     /**
@@ -79,7 +80,8 @@ public final class ArrayUtils {
     }
 
     /**
-     * Creates a mutable list of the provided array, also appending the additional element(s).
+     * Creates a mutable list of the provided array, also appending the
+     * additional element(s).
      */
     public static <T> List<T> concat(final T[] elements, final T... elementsToAppend) {
         final List<T> result = new ArrayList<T>();
@@ -102,7 +104,8 @@ public final class ArrayUtils {
     }
 
     /**
-     * Creates a mutable list of the provided array, also appending the additional element(s).
+     * Creates a mutable list of the provided array, also appending the
+     * additional element(s).
      */
     public static <T> List<T> concat(final T[] elements, final List<T> elementsToAppend) {
         final List<T> result = new ArrayList<T>();

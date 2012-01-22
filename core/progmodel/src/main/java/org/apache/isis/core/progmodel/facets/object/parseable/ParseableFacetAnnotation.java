@@ -43,18 +43,12 @@ public class ParseableFacetAnnotation extends ParseableFacetAbstract {
         return annotation.parserClass();
     }
 
-    public ParseableFacetAnnotation(final Class<?> annotatedClass, final IsisConfiguration configuration,
-        final FacetHolder holder, final AuthenticationSessionProvider authenticationSessionProvider,
-        final AdapterMap adapterManager, final DependencyInjector dependencyInjector) {
-        this(parserName(annotatedClass, configuration), parserClass(annotatedClass), holder,
-            authenticationSessionProvider, adapterManager, dependencyInjector);
+    public ParseableFacetAnnotation(final Class<?> annotatedClass, final IsisConfiguration configuration, final FacetHolder holder, final AuthenticationSessionProvider authenticationSessionProvider, final AdapterMap adapterManager, final DependencyInjector dependencyInjector) {
+        this(parserName(annotatedClass, configuration), parserClass(annotatedClass), holder, authenticationSessionProvider, adapterManager, dependencyInjector);
     }
 
-    private ParseableFacetAnnotation(final String candidateParserName, final Class<?> candidateParserClass,
-        final FacetHolder holder, final AuthenticationSessionProvider authenticationSessionProvider,
-        final AdapterMap adapterManager, final DependencyInjector dependencyInjector) {
-        super(candidateParserName, candidateParserClass, holder, authenticationSessionProvider, dependencyInjector,
-            adapterManager);
+    private ParseableFacetAnnotation(final String candidateParserName, final Class<?> candidateParserClass, final FacetHolder holder, final AuthenticationSessionProvider authenticationSessionProvider, final AdapterMap adapterManager, final DependencyInjector dependencyInjector) {
+        super(candidateParserName, candidateParserClass, holder, authenticationSessionProvider, dependencyInjector, adapterManager);
     }
 
 }

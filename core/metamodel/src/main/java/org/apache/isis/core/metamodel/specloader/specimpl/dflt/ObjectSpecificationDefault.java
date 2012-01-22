@@ -109,10 +109,8 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
     // Constructor
     // //////////////////////////////////////////////////////////////////////
 
-    public ObjectSpecificationDefault(final Class<?> correspondingClass,
-        final FacetedMethodsBuilderContext facetedMethodsBuilderContext,
-        final IntrospectionContext introspectionContext, final SpecificationContext specContext,
-        final ObjectMemberContext objectMemberContext, final CreateObjectContext createObjectContext) {
+    public ObjectSpecificationDefault(final Class<?> correspondingClass, final FacetedMethodsBuilderContext facetedMethodsBuilderContext, final IntrospectionContext introspectionContext, final SpecificationContext specContext, final ObjectMemberContext objectMemberContext,
+            final CreateObjectContext createObjectContext) {
         super(correspondingClass, determineShortName(correspondingClass), specContext);
 
         this.facetedMethodsBuilder = new FacetedMethodsBuilder(this, facetedMethodsBuilderContext);
@@ -139,20 +137,20 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
         setSuperclass(superclass);
 
         // go no further if required
-        final boolean skipFurtherIntrospection =
-            JavaClassUtils.isJavaClass(getCorrespondingClass()) || isAppLibValue(getCorrespondingClass());
+        final boolean skipFurtherIntrospection = JavaClassUtils.isJavaClass(getCorrespondingClass()) || isAppLibValue(getCorrespondingClass());
         if (skipFurtherIntrospection) {
             if (LOG.isDebugEnabled()) {
-                LOG.debug("skipping introspection of interfaces, properties, actions and interfaces for "
-                    + getFullIdentifier() + " (java.xxx or applib value class)");
+                LOG.debug("skipping introspection of interfaces, properties, actions and interfaces for " + getFullIdentifier() + " (java.xxx or applib value class)");
             }
             return;
         }
 
         // walk superinterfaces
 
-        // REVIEW: the processing here isn't quite the same as with superclasses,
-        // in that with superclasses the superclass adds this type as its subclass,
+        // REVIEW: the processing here isn't quite the same as with
+        // superclasses,
+        // in that with superclasses the superclass adds this type as its
+        // subclass,
         // whereas here this type defines itself as the subtype.
         // it'd be nice to push the responsibility for adding subclasses to
         // the interface type... needs some tests around it, though, before
@@ -162,8 +160,7 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
         for (final Class<?> interfaceType : interfaceTypes) {
             final Class<?> substitutedInterfaceType = getClassSubstitutor().getClass(interfaceType);
             if (substitutedInterfaceType != null) {
-                final ObjectSpecification interfaceSpec =
-                    getSpecificationLookup().loadSpecification(substitutedInterfaceType);
+                final ObjectSpecification interfaceSpec = getSpecificationLookup().loadSpecification(substitutedInterfaceType);
                 interfaceSpecList.add(interfaceSpec);
             }
         }
@@ -176,8 +173,7 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
         final List<FacetedMethod> actionFacetedMethods = facetedMethodsBuilder.getActionFacetedMethods();
 
         // ordering
-        final OrderSet associationOrderSet =
-            getMemberLayoutArranger().createAssociationOrderSetFor(this, associationFacetedMethods);
+        final OrderSet associationOrderSet = getMemberLayoutArranger().createAssociationOrderSetFor(this, associationFacetedMethods);
         addAssociations(asAssociations(associationOrderSet));
 
         final OrderSet actionOrderSet = getMemberLayoutArranger().createActionOrderSetFor(this, actionFacetedMethods);
@@ -204,7 +200,8 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
     }
 
     /**
-     * TODO: review this, should be more general and check for value facet, surely?
+     * TODO: review this, should be more general and check for value facet,
+     * surely?
      */
     private boolean isAppLibValue(final Class<?> type) {
         return type.getName().startsWith("org.apache.isis.applib.value.");
@@ -288,8 +285,8 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
     }
 
     /**
-     * TODO: should ensure that service has at least one user action; fix when specification knows of its hidden
-     * methods.
+     * TODO: should ensure that service has at least one user action; fix when
+     * specification knows of its hidden methods.
      * 
      * <pre>
      * if (objectActions != null &amp;&amp; objectActions.length == 0) {
@@ -314,8 +311,7 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
             }
         }
         if (buf.length() > 0) {
-            throw new ObjectSpecificationException("Service object " + getFullIdentifier()
-                + " should have no fields, but has: " + buf);
+            throw new ObjectSpecificationException("Service object " + getFullIdentifier() + " should have no fields, but has: " + buf);
         }
     }
 
@@ -339,33 +335,29 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
     // //////////////////////////////////////////////////////////////////////
 
     @Override
-    public ObjectAction getObjectAction(final ActionType type, final String id,
-        final List<ObjectSpecification> parameters) {
-        final List<ObjectAction> availableActions =
-            ListUtils.combine(getObjectActions(Contributed.EXCLUDED), getContributedActions(type));
+    public ObjectAction getObjectAction(final ActionType type, final String id, final List<ObjectSpecification> parameters) {
+        final List<ObjectAction> availableActions = ListUtils.combine(getObjectActions(Contributed.EXCLUDED), getContributedActions(type));
         return getAction(availableActions, type, id, parameters);
     }
 
     @Override
     public ObjectAction getObjectAction(final ActionType type, final String id) {
-        final List<ObjectAction> availableActions =
-            ListUtils.combine(getObjectActions(type, Contributed.INCLUDED), getContributedActions(type));
+        final List<ObjectAction> availableActions = ListUtils.combine(getObjectActions(type, Contributed.INCLUDED), getContributedActions(type));
         return getAction(availableActions, type, id);
     }
 
     @Override
     public ObjectAction getObjectAction(final String id) {
-        for(ActionType type: ActionType.values()) {
-            ObjectAction action = getObjectAction(type, id);
-            if(action != null) {
+        for (final ActionType type : ActionType.values()) {
+            final ObjectAction action = getObjectAction(type, id);
+            if (action != null) {
                 return action;
             }
         }
         return null;
     }
 
-    private ObjectAction getAction(final List<ObjectAction> availableActions, final ActionType type,
-        final String actionName, final List<ObjectSpecification> parameters) {
+    private ObjectAction getAction(final List<ObjectAction> availableActions, final ActionType type, final String actionName, final List<ObjectSpecification> parameters) {
         outer: for (int i = 0; i < availableActions.size(); i++) {
             final ObjectAction action = availableActions.get(i);
             if (action.getActions().size() > 0) {
@@ -396,8 +388,7 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
         return null;
     }
 
-    private ObjectAction getAction(final List<ObjectAction> availableActions, final ActionType type,
-        final String id) {
+    private ObjectAction getAction(final List<ObjectAction> availableActions, final ActionType type, final String id) {
         if (id == null) {
             return null;
         }
@@ -416,10 +407,10 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
                 }
                 if (id.equals(action.getIdentifier().toNameParmsIdentityString())) {
                     return action;
-                } 
+                }
                 if (id.equals(action.getIdentifier().toNameIdentityString())) {
                     return action;
-                } 
+                }
                 continue outer;
             }
         }

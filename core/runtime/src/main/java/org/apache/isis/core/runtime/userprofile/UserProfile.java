@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.runtime.userprofile;
 
 import java.util.Collections;
@@ -30,14 +29,13 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import com.google.common.collect.Lists;
 
 public class UserProfile {
-	
 
-    public UserProfile() {}
+    public UserProfile() {
+    }
 
-    
-    /////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////
     // Perspective
-    /////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////
 
     private PerspectiveEntry entry;
 
@@ -52,7 +50,7 @@ public class UserProfile {
         return entry;
     }
 
-    public PerspectiveEntry newPerspective(String name) {
+    public PerspectiveEntry newPerspective(final String name) {
         entry = new PerspectiveEntry();
         entry.setName(name);
         entries.add(entry);
@@ -66,15 +64,14 @@ public class UserProfile {
         }
     }
 
-    
-    /////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////
     // Perspective Entries
-    /////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////
 
     private final List<PerspectiveEntry> entries = Lists.newArrayList();
 
-    public PerspectiveEntry getPerspective(String name) {
-        for (PerspectiveEntry entry : entries) {
+    public PerspectiveEntry getPerspective(final String name) {
+        for (final PerspectiveEntry entry : entries) {
             if (entry.getName().equals(name)) {
                 return entry;
             }
@@ -82,23 +79,22 @@ public class UserProfile {
         throw new IsisException("No perspective " + name);
     }
 
-    public void  addToPerspectives(PerspectiveEntry perspective) {
-        PerspectiveEntry e = new PerspectiveEntry();
+    public void addToPerspectives(final PerspectiveEntry perspective) {
+        final PerspectiveEntry e = new PerspectiveEntry();
         e.copy(perspective);
         entries.add(e);
     }
 
-
     public List<String> list() {
-        List<String> list = Lists.newArrayList();
-        for (PerspectiveEntry entry : entries) {
+        final List<String> list = Lists.newArrayList();
+        for (final PerspectiveEntry entry : entries) {
             list.add(entry.getName());
         }
         return list;
     }
 
-    public void select(String name) {
-        for (PerspectiveEntry entry : entries) {
+    public void select(final String name) {
+        for (final PerspectiveEntry entry : entries) {
             if (entry.getName().equals(name)) {
                 this.entry = entry;
                 break;
@@ -106,9 +102,9 @@ public class UserProfile {
         }
     }
 
-    public void copy(UserProfile template) {
-        for (PerspectiveEntry entry : template.entries) {
-            PerspectiveEntry e = new PerspectiveEntry();
+    public void copy(final UserProfile template) {
+        for (final PerspectiveEntry entry : template.entries) {
+            final PerspectiveEntry e = new PerspectiveEntry();
             e.copy(entry);
             entries.add(e);
         }
@@ -121,11 +117,10 @@ public class UserProfile {
     public List<PerspectiveEntry> getEntries() {
         return Collections.unmodifiableList(entries);
     }
-    
 
-    /////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////
     // Options
-    /////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////
 
     private final Options options = new Options();
 
@@ -133,36 +128,30 @@ public class UserProfile {
         return options;
     }
 
-    public void addToOptions(String name, String value) {
+    public void addToOptions(final String name, final String value) {
         options.addOption(name, value);
     }
-    
-    
-    /////////////////////////////////
+
+    // ///////////////////////////////
     // Localization
-    /////////////////////////////////
+    // ///////////////////////////////
 
     private Localization localization;
+
     public Localization getLocalization() {
         return localization;
     }
-    
-    public void setLocalization(Localization localization) {
+
+    public void setLocalization(final Localization localization) {
         this.localization = localization;
     }
 
-    
-
-    /////////////////////////////////
+    // ///////////////////////////////
     // Save
-    /////////////////////////////////
+    // ///////////////////////////////
 
-    public void saveObjects(List<ObjectAdapter> objects) {
+    public void saveObjects(final List<ObjectAdapter> objects) {
         entry.save(objects);
     }
 
-
-    
-
 }
-

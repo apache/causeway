@@ -27,8 +27,8 @@ import org.apache.isis.core.metamodel.facets.mandatory.MandatoryFacetAbstract;
  * Derived by presence of an <tt>optionalXxx</tt> method.
  * 
  * <p>
- * This implementation indicates that the {@link FacetHolder} is <i>not</i> mandatory, as per
- * {@link #isInvertedSemantics()}.
+ * This implementation indicates that the {@link FacetHolder} is <i>not</i>
+ * mandatory, as per {@link #isInvertedSemantics()}.
  */
 public class MandatoryFacetOptionalViaMethodForParameter extends MandatoryFacetAbstract {
 
@@ -37,7 +37,8 @@ public class MandatoryFacetOptionalViaMethodForParameter extends MandatoryFacetA
     }
 
     /**
-     * Always returns <tt>false</tt>, indicating that the facet holder is in fact optional.
+     * Always returns <tt>false</tt>, indicating that the facet holder is in
+     * fact optional.
      */
     @Override
     public boolean isRequiredButNull(final ObjectAdapter adapter) {

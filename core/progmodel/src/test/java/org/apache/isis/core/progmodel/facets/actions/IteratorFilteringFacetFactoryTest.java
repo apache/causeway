@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.actions;
 
 import java.lang.reflect.Method;
@@ -26,7 +25,6 @@ import java.util.Iterator;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.progmodel.facets.object.ignore.javalang.IteratorFilteringFacetFactory;
-
 
 public class IteratorFilteringFacetFactoryTest extends AbstractFacetFactoryTest {
 
@@ -45,11 +43,11 @@ public class IteratorFilteringFacetFactoryTest extends AbstractFacetFactoryTest 
         super.tearDown();
     }
 
-
     public void testRequestsRemoverToRemoveIteratorMethods() {
         class Customer {
             @SuppressWarnings("unused")
-            public void someAction() {}
+            public void someAction() {
+            }
         }
         facetFactory.process(new ProcessClassContext(Customer.class, methodRemover, facetedMethod));
 
@@ -58,7 +56,8 @@ public class IteratorFilteringFacetFactoryTest extends AbstractFacetFactoryTest 
 
     public void testNoIteratorMethodFiltered() {
         class Customer {
-            public void someAction() {}
+            public void someAction() {
+            }
         }
         final Method actionMethod = findMethod(Customer.class, "someAction");
 
@@ -66,11 +65,13 @@ public class IteratorFilteringFacetFactoryTest extends AbstractFacetFactoryTest 
     }
 
     /**
-     * Not tested; this facet factory is needed, I think, but only filters out stuff when generics are in use.
+     * Not tested; this facet factory is needed, I think, but only filters out
+     * stuff when generics are in use.
      */
     public void xxxtestIterableIteratorMethodFiltered() {
         class Customer implements Iterable {
-            public void someAction() {}
+            public void someAction() {
+            }
 
             @Override
             public Iterator iterator() {
@@ -83,4 +84,3 @@ public class IteratorFilteringFacetFactoryTest extends AbstractFacetFactoryTest 
     }
 
 }
-

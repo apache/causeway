@@ -32,8 +32,7 @@ public class TitleFacetUsingParser extends FacetAbstract implements TitleFacet {
     private final Parser parser;
     private final DependencyInjector dependencyInjector;
 
-    public TitleFacetUsingParser(final Parser parser, final FacetHolder holder,
-        final DependencyInjector dependencyInjector) {
+    public TitleFacetUsingParser(final Parser parser, final FacetHolder holder, final DependencyInjector dependencyInjector) {
         super(TitleFacet.class, holder, false);
         this.parser = parser;
         this.dependencyInjector = dependencyInjector;

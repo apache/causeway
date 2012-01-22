@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.object.ident.plural;
 
 import org.apache.isis.applib.annotation.Plural;
@@ -27,7 +26,6 @@ import org.apache.isis.core.metamodel.facets.object.plural.PluralFacet;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.progmodel.facets.object.plural.annotation.PluralAnnotationFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.plural.annotation.PluralFacetAnnotation;
-
 
 public class PluralAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 
@@ -46,10 +44,10 @@ public class PluralAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
         super.tearDown();
     }
 
-
     public void testPluralAnnotationMethodPickedUpOnClass() {
         @Plural("Some plural name")
-        class Customer {}
+        class Customer {
+        }
 
         facetFactory.process(new ProcessClassContext(Customer.class, methodRemover, facetedMethod));
 
@@ -63,4 +61,3 @@ public class PluralAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
     }
 
 }
-

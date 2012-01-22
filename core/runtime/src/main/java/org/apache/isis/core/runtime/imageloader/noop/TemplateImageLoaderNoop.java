@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.runtime.imageloader.noop;
 
 import org.apache.isis.core.commons.components.Noop;
@@ -29,12 +28,17 @@ import org.apache.isis.core.runtime.imageloader.TemplateImageLoader;
  */
 public class TemplateImageLoaderNoop implements TemplateImageLoader, Noop {
 
-    public TemplateImage getTemplateImage(String name) {
+    @Override
+    public TemplateImage getTemplateImage(final String name) {
         return null;
     }
-    public void init() {}
-    public void shutdown() {}
+
+    @Override
+    public void init() {
+    }
+
+    @Override
+    public void shutdown() {
+    }
 
 }
-
-

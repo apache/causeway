@@ -35,8 +35,7 @@ import org.apache.isis.core.metamodel.facets.object.parseable.TextEntryParseExce
 import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProviderAndFacetAbstract;
 import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProviderContext;
 
-public class BigDecimalValueSemanticsProvider extends ValueSemanticsProviderAndFacetAbstract<BigDecimal> implements
-    BigDecimalValueFacet {
+public class BigDecimalValueSemanticsProvider extends ValueSemanticsProviderAndFacetAbstract<BigDecimal> implements BigDecimalValueFacet {
 
     private static Class<? extends Facet> type() {
         return BigDecimalValueFacet.class;
@@ -50,16 +49,15 @@ public class BigDecimalValueSemanticsProvider extends ValueSemanticsProviderAndF
     private final NumberFormat format;
 
     /**
-     * Required because implementation of {@link Parser} and {@link EncoderDecoder}.
+     * Required because implementation of {@link Parser} and
+     * {@link EncoderDecoder}.
      */
     public BigDecimalValueSemanticsProvider() {
         this(null, null, null);
     }
 
-    public BigDecimalValueSemanticsProvider(final FacetHolder holder, final IsisConfiguration configuration,
-        final ValueSemanticsProviderContext context) {
-        super(type(), holder, BigDecimal.class, TYPICAL_LENGTH, IMMUTABLE, EQUAL_BY_CONTENT, DEFAULT_VALUE,
-            configuration, context);
+    public BigDecimalValueSemanticsProvider(final FacetHolder holder, final IsisConfiguration configuration, final ValueSemanticsProviderContext context) {
+        super(type(), holder, BigDecimal.class, TYPICAL_LENGTH, IMMUTABLE, EQUAL_BY_CONTENT, DEFAULT_VALUE, configuration, context);
         format = determineNumberFormat("value.format.decimal");
     }
 
@@ -97,7 +95,8 @@ public class BigDecimalValueSemanticsProvider extends ValueSemanticsProviderAndF
 
     @Override
     protected String doEncode(final Object object) {
-        // for dotnet compatibility - toString pre 1.3 was equivalent to toPlainString later.
+        // for dotnet compatibility - toString pre 1.3 was equivalent to
+        // toPlainString later.
         try {
             final Class<?> type = object.getClass();
             try {

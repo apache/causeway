@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.ordering.memberorder;
 
 import java.util.List;
@@ -25,16 +24,14 @@ import java.util.List;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
-import org.apache.log4j.Level;
-import org.apache.log4j.LogManager;
-
-import com.google.common.collect.ImmutableList;
-
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.layout.OrderSet;
 import org.apache.isis.core.metamodel.layout.memberorderfacet.DeweyOrderSet;
 import org.apache.isis.core.progmodel.facets.members.order.MemberOrderFacetAnnotation;
+import org.apache.log4j.Level;
+import org.apache.log4j.LogManager;
 
+import com.google.common.collect.ImmutableList;
 
 public class DeweyOrderSetTest extends TestCase {
 
@@ -48,33 +45,36 @@ public class DeweyOrderSetTest extends TestCase {
         private String houseNumber;
         private String streetName;
         private String postalTown;
+
         public String getLastName() {
             return lastName;
         }
+
         public String getFirstName() {
             return firstName;
         }
+
         public String getHouseNumber() {
             return houseNumber;
         }
+
         public String getStreetName() {
             return streetName;
         }
+
         public String getPostalTown() {
             return postalTown;
         }
     }
-    
-    private final FacetedMethod lastNameMember = FacetedMethod.createProperty(Customer.class,"Last Name");
-    private final FacetedMethod firstNameMember = FacetedMethod.createProperty(Customer.class,"First Name");
-    private final FacetedMethod houseNumberMember = FacetedMethod.createProperty(Customer.class,"House Number");
-    private final FacetedMethod streetNameMember = FacetedMethod.createProperty(Customer.class,"Street Name");
-    private final FacetedMethod postalTownMember = FacetedMethod.createProperty(Customer.class,"Postal Town");
-    private final List<FacetedMethod> lastNameAndFirstName = ImmutableList.of( lastNameMember, firstNameMember );
-    private final List<FacetedMethod> nameAndAddressMembers = ImmutableList.of( lastNameMember, firstNameMember,
-            houseNumberMember, streetNameMember, postalTownMember );
-    private final List<FacetedMethod> lastNameFirstNameAndPostalTown = ImmutableList.of( lastNameMember,
-            firstNameMember, postalTownMember );
+
+    private final FacetedMethod lastNameMember = FacetedMethod.createProperty(Customer.class, "Last Name");
+    private final FacetedMethod firstNameMember = FacetedMethod.createProperty(Customer.class, "First Name");
+    private final FacetedMethod houseNumberMember = FacetedMethod.createProperty(Customer.class, "House Number");
+    private final FacetedMethod streetNameMember = FacetedMethod.createProperty(Customer.class, "Street Name");
+    private final FacetedMethod postalTownMember = FacetedMethod.createProperty(Customer.class, "Postal Town");
+    private final List<FacetedMethod> lastNameAndFirstName = ImmutableList.of(lastNameMember, firstNameMember);
+    private final List<FacetedMethod> nameAndAddressMembers = ImmutableList.of(lastNameMember, firstNameMember, houseNumberMember, streetNameMember, postalTownMember);
+    private final List<FacetedMethod> lastNameFirstNameAndPostalTown = ImmutableList.of(lastNameMember, firstNameMember, postalTownMember);
 
     @Override
     protected void setUp() {
@@ -83,7 +83,8 @@ public class DeweyOrderSetTest extends TestCase {
     }
 
     @Override
-    protected void tearDown() throws Exception {}
+    protected void tearDown() throws Exception {
+    }
 
     public void testDefaultGroup() {
         lastNameMember.addFacet(new MemberOrderFacetAnnotation("", "1", lastNameMember));

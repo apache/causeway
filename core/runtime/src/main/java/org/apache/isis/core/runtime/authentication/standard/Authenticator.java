@@ -25,28 +25,28 @@ import org.apache.isis.core.runtime.authentication.AuthenticationRequest;
 
 public interface Authenticator extends ApplicationScopedComponent {
 
-	/**
-	 * Whether the provided {@link AuthenticationRequest} is recognized by this {@link Authenticator}.
-	 */
-	boolean canAuthenticate(Class<? extends AuthenticationRequest> authenticationRequestClass);
+    /**
+     * Whether the provided {@link AuthenticationRequest} is recognized by this
+     * {@link Authenticator}.
+     */
+    boolean canAuthenticate(Class<? extends AuthenticationRequest> authenticationRequestClass);
 
-	/**
-	 * Whether this {@link Authenticator} is valid in the running context (and
-	 * optionally with respect to the provided {@link AuthenticationRequest}).
-	 * 
-	 * <p>
-	 * For example, the <tt>ExplorationAuthenticator</tt> (in the default
-	 * runtime) is only available for authentication if running in
-	 * <i>exploration mode</i>.
-	 */
-	boolean isValid(AuthenticationRequest request);
+    /**
+     * Whether this {@link Authenticator} is valid in the running context (and
+     * optionally with respect to the provided {@link AuthenticationRequest}).
+     * 
+     * <p>
+     * For example, the <tt>ExplorationAuthenticator</tt> (in the default
+     * runtime) is only available for authentication if running in
+     * <i>exploration mode</i>.
+     */
+    boolean isValid(AuthenticationRequest request);
 
-	/**
-	 * @param code
-	 *            - a hint; is guaranteed to be unique, but the authenticator
-	 *            decides whether to use it or not.
-	 */
-	AuthenticationSession authenticate(AuthenticationRequest request,
-			String code);
+    /**
+     * @param code
+     *            - a hint; is guaranteed to be unique, but the authenticator
+     *            decides whether to use it or not.
+     */
+    AuthenticationSession authenticate(AuthenticationRequest request, String code);
 
 }

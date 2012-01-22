@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.runtime.authentication.standard;
 
 public interface RandomCodeGenerator {

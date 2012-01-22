@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.runtime.authentication;
 
 import java.util.List;
@@ -31,4 +30,3 @@ public interface AuthenticationRequest {
     void setRoles(List<String> roles);
 
 }
-

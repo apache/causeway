@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.propparam.specification;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -25,23 +24,23 @@ import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
-import org.junit.Test;
-
 import org.apache.isis.applib.spec.Specification;
 import org.apache.isis.applib.spec.SpecificationOr;
-
+import org.junit.Test;
 
 public class SpecificationOrTests {
 
-    private Specification alwaysSatisfied = new SpecificationAlwaysSatisfied();
-    private Specification neverSatisfied = new SpecificationNeverSatisfied();
+    private final Specification alwaysSatisfied = new SpecificationAlwaysSatisfied();
+    private final Specification neverSatisfied = new SpecificationNeverSatisfied();
 
     @Test
     public void satisfiedIfNone() {
         class MySpecOr extends SpecificationOr {
-            public MySpecOr() {}
-        };
-        Specification mySpecOr = new MySpecOr();
+            public MySpecOr() {
+            }
+        }
+        ;
+        final Specification mySpecOr = new MySpecOr();
         assertThat(mySpecOr.satisfies(null), is(nullValue()));
     }
 
@@ -51,8 +50,9 @@ public class SpecificationOrTests {
             public MySpecOr() {
                 super(alwaysSatisfied);
             }
-        };
-        Specification mySpecOr = new MySpecOr();
+        }
+        ;
+        final Specification mySpecOr = new MySpecOr();
         assertThat(mySpecOr.satisfies(null), is(nullValue()));
     }
 
@@ -62,8 +62,9 @@ public class SpecificationOrTests {
             public MySpecOr() {
                 super(neverSatisfied);
             }
-        };
-        Specification mySpecOr = new MySpecOr();
+        }
+        ;
+        final Specification mySpecOr = new MySpecOr();
         assertThat(mySpecOr.satisfies(null), is(not(nullValue())));
         assertThat(mySpecOr.satisfies(null), is("not satisfied"));
     }
@@ -74,8 +75,9 @@ public class SpecificationOrTests {
             public MySpecOr() {
                 super(alwaysSatisfied, neverSatisfied);
             }
-        };
-        Specification mySpecOr = new MySpecOr();
+        }
+        ;
+        final Specification mySpecOr = new MySpecOr();
         assertThat(mySpecOr.satisfies(null), is(nullValue()));
     }
 
@@ -85,8 +87,9 @@ public class SpecificationOrTests {
             public MySpecOr() {
                 super(alwaysSatisfied, alwaysSatisfied);
             }
-        };
-        Specification mySpecOr = new MySpecOr();
+        }
+        ;
+        final Specification mySpecOr = new MySpecOr();
         assertThat(mySpecOr.satisfies(null), is(nullValue()));
     }
 
@@ -96,8 +99,9 @@ public class SpecificationOrTests {
             public MySpecOr() {
                 super(neverSatisfied, neverSatisfied);
             }
-        };
-        Specification mySpecOr = new MySpecOr();
+        }
+        ;
+        final Specification mySpecOr = new MySpecOr();
         assertThat(mySpecOr.satisfies(null), is(not(nullValue())));
         assertThat(mySpecOr.satisfies(null), is("not satisfied; not satisfied"));
     }

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.runtime.imageloader.awt;
 
 import static org.apache.isis.core.commons.ensure.Ensure.ensureThatState;
@@ -43,15 +42,15 @@ import org.apache.isis.core.runtime.imageloader.TemplateImageImpl;
 import org.apache.isis.core.runtime.imageloader.TemplateImageLoader;
 import org.apache.log4j.Logger;
 
-
 /**
- * This class loads up file based images as resources (part of the classpath) or from the file system. Images
- * of type PNG, GIF and JPEG will be used. The default directory is images.
+ * This class loads up file based images as resources (part of the classpath) or
+ * from the file system. Images of type PNG, GIF and JPEG will be used. The
+ * default directory is images.
  */
 public class TemplateImageLoaderAwt implements TemplateImageLoader {
 
     private final static Logger LOG = Logger.getLogger(TemplateImageLoaderAwt.class);
-    
+
     private static final String LOAD_IMAGES_FROM_FILES_KEY = ImageConstants.PROPERTY_BASE + "load-images-from-files";
     private static final String[] EXTENSIONS = { "png", "gif", "jpg", "jpeg", "svg" };
     private final static String IMAGE_DIRECTORY = "images";
@@ -59,30 +58,29 @@ public class TemplateImageLoaderAwt implements TemplateImageLoader {
     private static final String SEPARATOR = "/";
 
     private boolean initialized;
-    
+
     private boolean alsoLoadAsFiles;
     protected final MediaTracker mt = new MediaTracker(new Canvas());
-    
+
     /**
      * A keyed list of core images, one for each name, keyed by the image path.
      */
-    private final Hashtable<String,TemplateImage> loadedImages = new Hashtable<String,TemplateImage>();
+    private final Hashtable<String, TemplateImage> loadedImages = new Hashtable<String, TemplateImage>();
     private final Vector<String> missingImages = new Vector<String>();
     private final IsisConfiguration configuration;
     private String directory;
 
-    //////////////////////////////////////////////////////////////
+    // ////////////////////////////////////////////////////////////
     // constructor
-    //////////////////////////////////////////////////////////////
+    // ////////////////////////////////////////////////////////////
 
-    public TemplateImageLoaderAwt(IsisConfiguration configuration) {
+    public TemplateImageLoaderAwt(final IsisConfiguration configuration) {
         this.configuration = configuration;
     }
 
-    
-    //////////////////////////////////////////////////////////////
+    // ////////////////////////////////////////////////////////////
     // init, shutdown
-    //////////////////////////////////////////////////////////////
+    // ////////////////////////////////////////////////////////////
 
     @Override
     public void init() {
@@ -92,60 +90,61 @@ public class TemplateImageLoaderAwt implements TemplateImageLoader {
         initialized = true;
     }
 
-
     @Override
-    public void shutdown() {}
+    public void shutdown() {
+    }
 
-    
     private void ensureNotInitialized() {
         ensureThatState(initialized, is(false));
     }
-    
+
     private void ensureInitialized() {
         ensureThatState(initialized, is(true));
     }
-    
 
-    //////////////////////////////////////////////////////////////
+    // ////////////////////////////////////////////////////////////
     // getTemplateImage
-    //////////////////////////////////////////////////////////////
+    // ////////////////////////////////////////////////////////////
 
     /**
-     * Returns an image template for the specified image (as specified by a path to a file or resource).
+     * Returns an image template for the specified image (as specified by a path
+     * to a file or resource).
      * 
      * <p>
-     * If the path has no extension (<tt>.gif</tt>, <tt>.png</tt> etc) then all valid {@link #EXTENSIONS extensions} 
-     * are searched for.
+     * If the path has no extension (<tt>.gif</tt>, <tt>.png</tt> etc) then all
+     * valid {@link #EXTENSIONS extensions} are searched for.
      * 
      * <p>
-     * This method attempts to load the image from the jar/zip file this class was loaded from ie, your
-     * application, and then from the file system as a file if can't be found as a resource. If neither method
-     * works the default image is returned.
+     * This method attempts to load the image from the jar/zip file this class
+     * was loaded from ie, your application, and then from the file system as a
+     * file if can't be found as a resource. If neither method works the default
+     * image is returned.
      * 
-     * @return returns a {@link TemplateImage} for the specified image file, or null if none found.
+     * @return returns a {@link TemplateImage} for the specified image file, or
+     *         null if none found.
      */
     @Override
     public TemplateImage getTemplateImage(final String name) {
         ensureInitialized();
-        
+
         if (loadedImages.containsKey(name)) {
             return loadedImages.get(name);
         }
-        
+
         if (missingImages.contains(name)) {
             return null;
         }
 
-        List<String> candidates = getCandidates(name);
-        for(String candidate: candidates) {
-            Image image = load(candidate);
-            TemplateImageImpl templateImage = TemplateImageImpl.create(image);
+        final List<String> candidates = getCandidates(name);
+        for (final String candidate : candidates) {
+            final Image image = load(candidate);
+            final TemplateImageImpl templateImage = TemplateImageImpl.create(image);
             if (templateImage != null) {
                 loadedImages.put(name, templateImage);
                 return templateImage;
             }
         }
-        
+
         if (LOG.isDebugEnabled()) {
             LOG.debug("failed to find image for " + name);
         }
@@ -153,37 +152,36 @@ public class TemplateImageLoaderAwt implements TemplateImageLoader {
         return null;
     }
 
-
-    //////////////////////////////////////////////////////////////
+    // ////////////////////////////////////////////////////////////
     // helpers: parsing path
-    //////////////////////////////////////////////////////////////
+    // ////////////////////////////////////////////////////////////
 
     private List<String> getCandidates(final String name) {
         boolean hasExtension = false;
-        for(String extension: EXTENSIONS) {
+        for (final String extension : EXTENSIONS) {
             hasExtension = hasExtension || name.endsWith(extension);
         }
 
-        List<String> candidates = new ArrayList<String>();
+        final List<String> candidates = new ArrayList<String>();
         if (hasExtension) {
             candidates.add(name);
         } else {
-            for(String extension: EXTENSIONS) {
+            for (final String extension : EXTENSIONS) {
                 candidates.add(name + "." + extension);
             }
         }
         return candidates;
     }
 
-    //////////////////////////////////////////////////////////////
+    // ////////////////////////////////////////////////////////////
     // helpers: loading
-    //////////////////////////////////////////////////////////////
+    // ////////////////////////////////////////////////////////////
 
     private Image load(final String name) {
         if (LOG.isDebugEnabled()) {
             LOG.debug("searching for image " + name);
         }
-        
+
         Image image = loadAsResource(name);
         if (image != null) {
             return image;
@@ -201,12 +199,13 @@ public class TemplateImageLoaderAwt implements TemplateImageLoader {
                 return image;
             }
         }
-        
+
         return null;
     }
 
     /**
-     * Get an Image object from the jar/zip file that this class was loaded from.
+     * Get an Image object from the jar/zip file that this class was loaded
+     * from.
      */
     protected Image loadAsResource(final String path) {
         final URL url = Resources.getResourceURL(path);
@@ -246,7 +245,8 @@ public class TemplateImageLoaderAwt implements TemplateImageLoader {
     }
 
     /**
-     * Get an {@link Image} object from the specified file path on the file system.
+     * Get an {@link Image} object from the specified file path on the file
+     * system.
      */
     private Image loadAsFile(final String path) {
         final File file = new File(path);
@@ -288,40 +288,38 @@ public class TemplateImageLoaderAwt implements TemplateImageLoader {
         return directory;
     }
 
-    //////////////////////////////////////////////////////////////
+    // ////////////////////////////////////////////////////////////
     // unused
-    //////////////////////////////////////////////////////////////
+    // ////////////////////////////////////////////////////////////
 
     /**
-     * This code was commented out.  I've reinstated it, even though it is unused,
-     * because it looks interesting and perhaps useful.
+     * This code was commented out. I've reinstated it, even though it is
+     * unused, because it looks interesting and perhaps useful.
      */
     @SuppressWarnings("unused")
     private Image createImage() {
-        byte[] pixels = new byte[128 * 128];
+        final byte[] pixels = new byte[128 * 128];
         for (int i = 0; i < pixels.length; i++) {
             pixels[i] = (byte) (i % 128);
         }
 
-        byte[] r = new byte[] { 0, 127 };
-        byte[] g = new byte[] { 0, 127 };
-        byte[] b = new byte[] { 0, 127 };
-        IndexColorModel colorModel = new IndexColorModel(1, 2, r, g, b);
+        final byte[] r = new byte[] { 0, 127 };
+        final byte[] g = new byte[] { 0, 127 };
+        final byte[] b = new byte[] { 0, 127 };
+        final IndexColorModel colorModel = new IndexColorModel(1, 2, r, g, b);
 
-        MemoryImageSource producer = new MemoryImageSource(128, 128, colorModel, pixels, 0, 128);
-        Image image = Toolkit.getDefaultToolkit().createImage(producer);
+        final MemoryImageSource producer = new MemoryImageSource(128, 128, colorModel, pixels, 0, 128);
+        final Image image = Toolkit.getDefaultToolkit().createImage(producer);
 
         return image;
     }
 
-    //////////////////////////////////////////////////////////////
+    // ////////////////////////////////////////////////////////////
     // dependencies (from singleton)
-    //////////////////////////////////////////////////////////////
+    // ////////////////////////////////////////////////////////////
 
     private IsisConfiguration getConfiguration() {
         return configuration;
     }
-
-
 
 }

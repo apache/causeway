@@ -47,14 +47,14 @@ public class TimeStampValueSemanticsProvider extends TimeStampValueSemanticsProv
     }
 
     /**
-     * Required because implementation of {@link Parser} and {@link EncoderDecoder}.
+     * Required because implementation of {@link Parser} and
+     * {@link EncoderDecoder}.
      */
     public TimeStampValueSemanticsProvider() {
         this(null, null, null);
     }
 
-    public TimeStampValueSemanticsProvider(final FacetHolder holder, final IsisConfiguration configuration,
-        final ValueSemanticsProviderContext context) {
+    public TimeStampValueSemanticsProvider(final FacetHolder holder, final IsisConfiguration configuration, final ValueSemanticsProviderContext context) {
         super(holder, TimeStamp.class, configuration, context);
     }
 

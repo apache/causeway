@@ -37,12 +37,12 @@ public final class When extends EnumerationAbstract {
     }
 
     /**
-     * Whether the state of the supplied {@link ObjectAdapter} corresponds to this 'when'.
+     * Whether the state of the supplied {@link ObjectAdapter} corresponds to
+     * this 'when'.
      */
     public boolean isNowFor(final ObjectAdapter targetAdapter) {
         final boolean isTransient = targetAdapter.isTransient();
-        return this == When.ALWAYS || this == When.ONCE_PERSISTED && !isTransient || this == When.UNTIL_PERSISTED
-            && isTransient;
+        return this == When.ALWAYS || this == When.ONCE_PERSISTED && !isTransient || this == When.UNTIL_PERSISTED && isTransient;
     }
 
     public static When forCorrespondingMarkerSubType(final Class<?> cls) {

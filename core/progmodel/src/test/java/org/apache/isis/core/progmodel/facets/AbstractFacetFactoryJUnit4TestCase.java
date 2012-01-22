@@ -17,17 +17,9 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets;
 
 import java.lang.reflect.Method;
-
-import org.jmock.Mockery;
-import org.jmock.integration.junit4.JMock;
-import org.jmock.integration.junit4.JUnit4Mockery;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.runner.RunWith;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -37,17 +29,22 @@ import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.specloader.ObjectReflector;
-
+import org.jmock.Mockery;
+import org.jmock.integration.junit4.JMock;
+import org.jmock.integration.junit4.JUnit4Mockery;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.runner.RunWith;
 
 @RunWith(JMock.class)
 public abstract class AbstractFacetFactoryJUnit4TestCase {
 
-	protected Mockery context = new JUnit4Mockery();
-	
+    protected Mockery context = new JUnit4Mockery();
+
     protected ObjectReflector reflector;
     protected MethodRemover methodRemover;
     protected FacetHolder facetHolder;
-    
+
     protected ObjectSpecification noSpec;
     protected OneToOneAssociation oneToOneAssociation;
     protected OneToManyAssociation oneToManyAssociation;
@@ -58,7 +55,7 @@ public abstract class AbstractFacetFactoryJUnit4TestCase {
         reflector = context.mock(ObjectReflector.class);
         methodRemover = context.mock(MethodRemover.class);
         facetHolder = context.mock(FacetHolder.class);
-        
+
         noSpec = context.mock(ObjectSpecification.class);
         oneToOneAssociation = context.mock(OneToOneAssociation.class);
         oneToManyAssociation = context.mock(OneToManyAssociation.class);
@@ -70,24 +67,23 @@ public abstract class AbstractFacetFactoryJUnit4TestCase {
         reflector = null;
         methodRemover = null;
         facetHolder = null;
-        
+
         noSpec = null;
         oneToOneAssociation = null;
         oneToManyAssociation = null;
         actionParameter = null;
     }
 
-
     protected boolean contains(final Class<?>[] types, final Class<?> type) {
-    	return Utils.contains(types, type);
+        return Utils.contains(types, type);
     }
 
     protected boolean contains(final FeatureType[] featureTypes, final FeatureType featureType) {
-    	return Utils.contains(featureTypes, featureType);
+        return Utils.contains(featureTypes, featureType);
     }
 
     protected Method findMethod(final Class<?> type, final String methodName, final Class<?>[] methodTypes) {
-    	return Utils.findMethod(type, methodName, methodTypes);
+        return Utils.findMethod(type, methodName, methodTypes);
     }
 
     protected Method findMethod(final Class<?> type, final String methodName) {
@@ -95,4 +91,3 @@ public abstract class AbstractFacetFactoryJUnit4TestCase {
     }
 
 }
-

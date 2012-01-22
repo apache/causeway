@@ -22,8 +22,7 @@ package org.apache.isis.core.progmodel.facets.value.password;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.progmodel.facets.object.value.ValueUsingValueSemanticsProviderFacetFactory;
 
-public class PasswordValueTypeFacetFactory extends
-    ValueUsingValueSemanticsProviderFacetFactory<org.apache.isis.applib.value.Password> {
+public class PasswordValueTypeFacetFactory extends ValueUsingValueSemanticsProviderFacetFactory<org.apache.isis.applib.value.Password> {
 
     public PasswordValueTypeFacetFactory() {
         super(PasswordValueFacet.class);

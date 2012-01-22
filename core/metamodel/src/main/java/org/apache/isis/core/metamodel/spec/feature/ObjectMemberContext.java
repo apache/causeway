@@ -30,13 +30,8 @@ public class ObjectMemberContext {
     private final QuerySubmitter querySubmitter;
     private final CollectionTypeRegistry collectionTypeRegistry;
 
-    public ObjectMemberContext(
-        final AuthenticationSessionProvider authenticationSessionProvider,
-        final SpecificationLookup specificationLookup, 
-        final AdapterMap adapterManager,
-        final QuerySubmitter querySubmitter, 
-        final CollectionTypeRegistry collectionTypeRegistry) {
-        
+    public ObjectMemberContext(final AuthenticationSessionProvider authenticationSessionProvider, final SpecificationLookup specificationLookup, final AdapterMap adapterManager, final QuerySubmitter querySubmitter, final CollectionTypeRegistry collectionTypeRegistry) {
+
         this.authenticationSessionProvider = authenticationSessionProvider;
         this.specificationLookup = specificationLookup;
         this.adapterManager = adapterManager;
@@ -59,7 +54,7 @@ public class ObjectMemberContext {
     public QuerySubmitter getQuerySubmitter() {
         return querySubmitter;
     }
-    
+
     public CollectionTypeRegistry getCollectionTypeRegistry() {
         return collectionTypeRegistry;
     }

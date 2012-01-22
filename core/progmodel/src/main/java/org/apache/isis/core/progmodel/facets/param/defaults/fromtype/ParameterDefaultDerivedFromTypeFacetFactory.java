@@ -33,8 +33,8 @@ public class ParameterDefaultDerivedFromTypeFacetFactory extends AnnotationBased
     }
 
     /**
-     * If there is a {@link DefaultedFacet} on any of the action's parameter types, then installs a
-     * {@link ActionDefaultsFacet} for the action.
+     * If there is a {@link DefaultedFacet} on any of the action's parameter
+     * types, then installs a {@link ActionDefaultsFacet} for the action.
      */
     @Override
     public void processParams(final ProcessParameterContext processParameterContext) {
@@ -53,8 +53,7 @@ public class ParameterDefaultDerivedFromTypeFacetFactory extends AnnotationBased
             hasAtLeastOneDefault = hasAtLeastOneDefault | (parameterTypeDefaultedFacets[i] != null);
         }
         if (hasAtLeastOneDefault) {
-            FacetUtil.addFacet(new ActionParameterDefaultFacetDerivedFromTypeFacets(parameterTypeDefaultedFacets,
-                processParameterContext.getFacetHolder()));
+            FacetUtil.addFacet(new ActionParameterDefaultFacetDerivedFromTypeFacets(parameterTypeDefaultedFacets, processParameterContext.getFacetHolder()));
         }
     }
 

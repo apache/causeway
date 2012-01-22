@@ -48,14 +48,14 @@ public class JavaSqlTimeStampValueSemanticsProvider extends TimeStampValueSemant
     }
 
     /**
-     * Required because implementation of {@link Parser} and {@link EncoderDecoder}.
+     * Required because implementation of {@link Parser} and
+     * {@link EncoderDecoder}.
      */
     public JavaSqlTimeStampValueSemanticsProvider() {
         this(null, null, null);
     }
 
-    public JavaSqlTimeStampValueSemanticsProvider(final FacetHolder holder, final IsisConfiguration configuration,
-        final ValueSemanticsProviderContext context) {
+    public JavaSqlTimeStampValueSemanticsProvider(final FacetHolder holder, final IsisConfiguration configuration, final ValueSemanticsProviderContext context) {
         super(holder, java.sql.Timestamp.class, configuration, context);
     }
 

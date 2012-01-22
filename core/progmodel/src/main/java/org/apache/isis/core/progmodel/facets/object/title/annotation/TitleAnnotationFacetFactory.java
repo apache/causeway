@@ -38,7 +38,6 @@ import org.apache.isis.core.progmodel.facets.MethodFinderUtils;
 import org.apache.isis.core.progmodel.facets.fallback.FallbackFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.title.annotation.TitleFacetViaTitleAnnotation.TitleComponent;
 
-import com.google.common.base.Function;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
 
@@ -52,19 +51,21 @@ public class TitleAnnotationFacetFactory extends FacetFactoryAbstract implements
     }
 
     /**
-     * If no method tagged with {@link Title} annotation then will use Facets provided by {@link FallbackFacetFactory} instead.
+     * If no method tagged with {@link Title} annotation then will use Facets
+     * provided by {@link FallbackFacetFactory} instead.
      */
     @Override
     public void process(final ProcessClassContext processClassContext) {
         final Class<?> cls = processClassContext.getCls();
         final FacetHolder facetHolder = processClassContext.getFacetHolder();
 
-        List<Method> methods = MethodFinderUtils.findMethodsWithAnnotation(cls, MethodScope.OBJECT, Title.class);
+        final List<Method> methods = MethodFinderUtils.findMethodsWithAnnotation(cls, MethodScope.OBJECT, Title.class);
 
         Collections.sort(methods, new Comparator<Method>() {
             Comparator<String> comparator = new SequenceComparator();
+
             @Override
-            public int compare(Method o1, Method o2) {
+            public int compare(final Method o1, final Method o2) {
                 final Title a1 = o1.getAnnotation(Title.class);
                 final Title a2 = o2.getAnnotation(Title.class);
                 return comparator.compare(a1.sequence(), a2.sequence());
@@ -72,16 +73,16 @@ public class TitleAnnotationFacetFactory extends FacetFactoryAbstract implements
         });
         if (methods.isEmpty()) {
             return;
-        } 
-        List<TitleComponent> titleComponents = Lists.transform(methods, TitleComponent.FROM_METHOD);
+        }
+        final List<TitleComponent> titleComponents = Lists.transform(methods, TitleComponent.FROM_METHOD);
         FacetUtil.addFacet(new TitleFacetViaTitleAnnotation(titleComponents, facetHolder, adapterMap, localizationProvider));
     }
-    
+
     static class SequenceComparator implements Comparator<String> {
 
         @Override
-        public int compare(String sequence1, String sequence2) {
-            
+        public int compare(final String sequence1, final String sequence2) {
+
             final List<String> components1 = componentsFor(sequence1);
             final List<String> components2 = componentsFor(sequence2);
 
@@ -126,19 +127,19 @@ public class TitleAnnotationFacetFactory extends FacetFactoryAbstract implements
             }
         }
 
-        private static List<String> componentsFor(String sequence) {
+        private static List<String> componentsFor(final String sequence) {
             return Lists.newArrayList(Splitter.on('.').split(sequence));
         }
-        
+
     }
 
     @Override
-    public void setLocalizationProvider(LocalizationProvider localizationProvider) {
+    public void setLocalizationProvider(final LocalizationProvider localizationProvider) {
         this.localizationProvider = localizationProvider;
     }
 
     @Override
-    public void setAdapterMap(AdapterMap adapterMap) {
+    public void setAdapterMap(final AdapterMap adapterMap) {
         this.adapterMap = adapterMap;
     }
 }

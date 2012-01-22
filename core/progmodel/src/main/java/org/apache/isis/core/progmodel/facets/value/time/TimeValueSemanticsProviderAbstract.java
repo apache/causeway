@@ -48,10 +48,8 @@ public abstract class TimeValueSemanticsProviderAbstract<T> extends ValueSemanti
     }
 
     @SuppressWarnings("unchecked")
-    public TimeValueSemanticsProviderAbstract(final FacetHolder holder, final Class<T> adaptedClass,
-        final IsisConfiguration configuration, final ValueSemanticsProviderContext context) {
-        super("time", holder, adaptedClass, TYPICAL_LENGTH, IMMUTABLE, EQUAL_BY_CONTENT, (T) DEFAULT_VALUE,
-            configuration, context);
+    public TimeValueSemanticsProviderAbstract(final FacetHolder holder, final Class<T> adaptedClass, final IsisConfiguration configuration, final ValueSemanticsProviderContext context) {
+        super("time", holder, adaptedClass, TYPICAL_LENGTH, IMMUTABLE, EQUAL_BY_CONTENT, (T) DEFAULT_VALUE, configuration, context);
 
         final String formatRequired = configuration.getString(ConfigurationConstants.ROOT + "value.format.time");
         if (formatRequired == null) {

@@ -27,7 +27,8 @@ import org.apache.isis.core.progmodel.facets.value.date.DateValueFacet;
 public class TimeStampValueTypeFacetFactory extends ValueUsingValueSemanticsProviderFacetFactory<TimeStamp> {
 
     public TimeStampValueTypeFacetFactory() {
-        super(DateValueFacet.class); // as per inherited DateTimeValueSemanticsProvider#facetType
+        super(DateValueFacet.class); // as per inherited
+                                     // DateTimeValueSemanticsProvider#facetType
         // (inherited)
     }
 

@@ -21,8 +21,6 @@ import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.log4j.Logger;
-
 import org.apache.isis.core.commons.lang.JavaClassUtils;
 import org.apache.isis.core.commons.lang.StringUtils;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
@@ -34,9 +32,9 @@ import org.apache.isis.core.metamodel.layout.ordermethod.SimpleOrderSet;
 import org.apache.isis.core.metamodel.methodutils.MethodFinderUtils;
 import org.apache.isis.core.metamodel.methodutils.MethodScope;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.log4j.Logger;
 
 public class MemberLayoutArrangerUsingOrderMethod implements MemberLayoutArranger {
-    
 
     private static final Logger LOG = Logger.getLogger(MemberLayoutArrangerUsingOrderMethod.class);
 
@@ -47,25 +45,23 @@ public class MemberLayoutArrangerUsingOrderMethod implements MemberLayoutArrange
 
     private static final String ACTION_PREFIX = null;
 
-
     // ////////////////////////////////////////////////////////////////////////////
     // constructor
     // ////////////////////////////////////////////////////////////////////////////
 
-    public MemberLayoutArrangerUsingOrderMethod() { }
-
+    public MemberLayoutArrangerUsingOrderMethod() {
+    }
 
     // ////////////////////////////////////////////////////////////////////////////
     // associations
     // ////////////////////////////////////////////////////////////////////////////
 
-
     @Override
-    public OrderSet createAssociationOrderSetFor(ObjectSpecification spec, final List<FacetedMethod> associationMethods) {
+    public OrderSet createAssociationOrderSetFor(final ObjectSpecification spec, final List<FacetedMethod> associationMethods) {
         if (LOG.isDebugEnabled()) {
             LOG.debug("MemberLayoutArrangerUsingOrderMethod: createAssociationOrderSetFor " + spec.getFullIdentifier());
         }
-        
+
         // ... and the ordering of the properties and collections
         final FieldOrderFacet fieldOrderFacet = spec.getFacet(FieldOrderFacet.class);
         String fieldOrder = fieldOrderFacet == null ? null : fieldOrderFacet.value();
@@ -76,13 +72,12 @@ public class MemberLayoutArrangerUsingOrderMethod implements MemberLayoutArrange
         return createOrderSet(fieldOrder, associationMethods);
     }
 
-
     // ////////////////////////////////////////////////////////////////////////////
     // actions
     // ////////////////////////////////////////////////////////////////////////////
-    
+
     @Override
-    public OrderSet createActionOrderSetFor(ObjectSpecification spec, List<FacetedMethod> actionFacetedMethodList) {
+    public OrderSet createActionOrderSetFor(final ObjectSpecification spec, final List<FacetedMethod> actionFacetedMethodList) {
         if (LOG.isDebugEnabled()) {
             LOG.debug("MemberLayoutArrangerUsingOrderMethod: createAssociationOrderSetFor " + spec.getFullIdentifier());
         }
@@ -94,40 +89,41 @@ public class MemberLayoutArrangerUsingOrderMethod implements MemberLayoutArrange
         }
         return createOrderSet(actionOrder, actionFacetedMethodList);
     }
-    
+
     // ////////////////////////////////////////////////////////////////////////////
     // helpers
     // ////////////////////////////////////////////////////////////////////////////
 
     /**
      * Invokes a method called <tt>xxxOrder()</tt>, returning a {@link String}.
-     * @param spec 
+     * 
+     * @param spec
      */
-    private String invokeSortOrderMethod(ObjectSpecification spec, final String methodNamePrefix) {
+    private String invokeSortOrderMethod(final ObjectSpecification spec, final String methodNamePrefix) {
         final List<Method> methods = Arrays.asList(spec.getCorrespondingClass().getMethods());
         final Method method = MethodFinderUtils.findMethod(methods, MethodScope.CLASS, (methodNamePrefix + "Order"), String.class, NO_PARAMETERS_TYPES);
         if (method == null) {
             return null;
-        } 
-        
+        }
+
         if (!JavaClassUtils.isStatic(method)) {
             LOG.warn("method " + spec.getFullIdentifier() + "." + methodNamePrefix + "Order() must be declared as static");
             return null;
-        } 
-        
+        }
+
         try {
-            String s = (String) method.invoke(null, NO_PARAMETERS);
+            final String s = (String) method.invoke(null, NO_PARAMETERS);
             if (StringUtils.isNullOrEmpty(s)) {
                 return null;
             }
             return s;
-        } catch (IllegalArgumentException e) {
+        } catch (final IllegalArgumentException e) {
             LOG.warn("method " + spec.getFullIdentifier() + "#" + method.getName() + "() should accept no parameters");
             return null;
-        } catch (IllegalAccessException e) {
+        } catch (final IllegalAccessException e) {
             LOG.warn("method " + spec.getFullIdentifier() + "#" + method.getName() + "() must be declared as public");
             return null;
-        } catch (InvocationTargetException e) {
+        } catch (final InvocationTargetException e) {
             LOG.warn("method " + spec.getFullIdentifier() + "#" + method.getName() + "() has thrown an exception");
             return null;
         }
@@ -136,7 +132,7 @@ public class MemberLayoutArrangerUsingOrderMethod implements MemberLayoutArrange
     private OrderSet createOrderSet(final String order, final List<FacetedMethod> members) {
         if (order == null) {
             return null;
-        } 
+        }
         return SimpleOrderSet.createOrderSet(order, members);
     }
 }

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facetdecorators.help.file.internal;
 
 import java.io.BufferedReader;
@@ -29,8 +28,6 @@ import junit.framework.TestCase;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
-import org.apache.isis.core.progmodel.facetdecorators.help.file.internal.HelpManagerUsingFiles;
-
 
 public class SimpleHelpManagerTest extends TestCase {
 
@@ -186,7 +183,7 @@ public class SimpleHelpManagerTest extends TestCase {
 }
 
 class TestHelpManager extends HelpManagerUsingFiles {
-    public TestHelpManager(IsisConfiguration configuration) {
+    public TestHelpManager(final IsisConfiguration configuration) {
         super(configuration);
     }
 

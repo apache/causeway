@@ -30,8 +30,8 @@ import java.util.SortedSet;
 import java.util.Vector;
 
 /**
- * Helpers to co-erce existing (Java 1.1 code) into type-safe generics without having to suppress compiler warnings all
- * over the place.
+ * Helpers to co-erce existing (Java 1.1 code) into type-safe generics without
+ * having to suppress compiler warnings all over the place.
  * 
  */
 public final class CastUtils {
@@ -85,8 +85,7 @@ public final class CastUtils {
     }
 
     @SuppressWarnings("unchecked")
-    public static <K, V> SortedMap<K, V> sortedMapOf(final Object obj, final Class<K> keyCastTo,
-        final Class<V> valueCastTo) {
+    public static <K, V> SortedMap<K, V> sortedMapOf(final Object obj, final Class<K> keyCastTo, final Class<V> valueCastTo) {
         return (SortedMap<K, V>) obj;
     }
 

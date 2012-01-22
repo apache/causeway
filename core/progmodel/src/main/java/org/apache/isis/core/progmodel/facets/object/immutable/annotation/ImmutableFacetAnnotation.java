@@ -32,7 +32,7 @@ public class ImmutableFacetAnnotation extends ImmutableFacetAbstract {
     }
 
     @Override
-    public void copyOnto(FacetHolder holder) {
+    public void copyOnto(final FacetHolder holder) {
         final Facet facet = new ImmutableFacetAnnotation(this.when(), holder);
         FacetUtil.addFacet(facet);
     }

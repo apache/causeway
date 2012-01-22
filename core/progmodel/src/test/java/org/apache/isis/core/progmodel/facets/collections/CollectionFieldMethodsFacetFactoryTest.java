@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.collections;
 
 import java.lang.reflect.Method;
@@ -70,14 +69,12 @@ import org.apache.isis.core.progmodel.facets.members.hide.staticmethod.HiddenFac
 import org.apache.isis.core.progmodel.facets.members.named.staticmethod.NamedFacetViaMethod;
 import org.apache.isis.core.progmodel.facets.members.named.staticmethod.NamedFacetViaNameMethodFacetFactory;
 
-
 public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
-
     public void testPropertyAccessorFacetIsInstalledForJavaUtilCollectionAndMethodRemoved() {
-        CollectionAccessorFacetFactory facetFactory = new CollectionAccessorFacetFactory();
+        final CollectionAccessorFacetFactory facetFactory = new CollectionAccessorFacetFactory();
         facetFactory.setSpecificationLookup(reflector);
-        
+
         class Customer {
             @SuppressWarnings({ "rawtypes", "unused" })
             public Collection getOrders() {
@@ -98,7 +95,7 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
     }
 
     public void testPropertyAccessorFacetIsInstalledForJavaUtilListAndMethodRemoved() {
-        CollectionAccessorFacetFactory facetFactory = new CollectionAccessorFacetFactory();
+        final CollectionAccessorFacetFactory facetFactory = new CollectionAccessorFacetFactory();
         facetFactory.setSpecificationLookup(reflector);
 
         class Customer {
@@ -121,7 +118,7 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
     }
 
     public void testPropertyAccessorFacetIsInstalledForJavaUtilSetAndMethodRemoved() {
-        CollectionAccessorFacetFactory facetFactory = new CollectionAccessorFacetFactory();
+        final CollectionAccessorFacetFactory facetFactory = new CollectionAccessorFacetFactory();
         facetFactory.setSpecificationLookup(reflector);
 
         class Customer {
@@ -144,7 +141,7 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
     }
 
     public void testPropertyAccessorFacetIsInstalledForObjectArrayAndMethodRemoved() {
-        CollectionAccessorFacetFactory facetFactory = new CollectionAccessorFacetFactory();
+        final CollectionAccessorFacetFactory facetFactory = new CollectionAccessorFacetFactory();
         facetFactory.setSpecificationLookup(reflector);
 
         class Customer {
@@ -167,11 +164,12 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
     }
 
     public void testPropertyAccessorFacetIsInstalledForOrderArrayAndMethodRemoved() {
-        CollectionAccessorFacetFactory facetFactory = new CollectionAccessorFacetFactory();
+        final CollectionAccessorFacetFactory facetFactory = new CollectionAccessorFacetFactory();
         facetFactory.setSpecificationLookup(reflector);
 
         @SuppressWarnings("hiding")
-        class Order {}
+        class Order {
+        }
         class Customer {
             @SuppressWarnings("unused")
             public Order[] getOrders() {
@@ -192,11 +190,12 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
     }
 
     public void testAddToFacetIsInstalledViaAccessorIfNoExplicitAddToMethodExists() {
-        CollectionAddRemoveAndValidateFacetFactory facetFactory = new CollectionAddRemoveAndValidateFacetFactory();
+        final CollectionAddRemoveAndValidateFacetFactory facetFactory = new CollectionAddRemoveAndValidateFacetFactory();
         facetFactory.setSpecificationLookup(reflector);
 
         @SuppressWarnings("hiding")
-        class Order {}
+        class Order {
+        }
         class Customer {
             @SuppressWarnings("unused")
             public Collection<Order> getOrders() {
@@ -215,11 +214,12 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
     }
 
     public void testCannotInferTypeOfFacetIfNoExplicitAddToOrRemoveFromMethods() {
-        CollectionAddRemoveAndValidateFacetFactory facetFactory = new CollectionAddRemoveAndValidateFacetFactory();
+        final CollectionAddRemoveAndValidateFacetFactory facetFactory = new CollectionAddRemoveAndValidateFacetFactory();
         facetFactory.setSpecificationLookup(reflector);
 
         @SuppressWarnings("hiding")
-        class Order{}
+        class Order {
+        }
         class Customer {
             @SuppressWarnings("unused")
             public Collection<Order> getOrders() {
@@ -234,11 +234,12 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
     }
 
     public void testRemoveFromFacetIsInstalledViaAccessorIfNoExplicitRemoveFromMethodExists() {
-        CollectionAddRemoveAndValidateFacetFactory facetFactory = new CollectionAddRemoveAndValidateFacetFactory();
+        final CollectionAddRemoveAndValidateFacetFactory facetFactory = new CollectionAddRemoveAndValidateFacetFactory();
         facetFactory.setSpecificationLookup(reflector);
 
         @SuppressWarnings("hiding")
-        class Order{}
+        class Order {
+        }
         class Customer {
             @SuppressWarnings("unused")
             public Collection<Order> getOrders() {
@@ -257,11 +258,12 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
     }
 
     public void testAddToFacetIsInstalledAndMethodRemoved() {
-        CollectionAddRemoveAndValidateFacetFactory facetFactory = new CollectionAddRemoveAndValidateFacetFactory();
+        final CollectionAddRemoveAndValidateFacetFactory facetFactory = new CollectionAddRemoveAndValidateFacetFactory();
         facetFactory.setSpecificationLookup(reflector);
 
         @SuppressWarnings("hiding")
-        class Order {}
+        class Order {
+        }
         class Customer {
             @SuppressWarnings("unused")
             public Collection<Order> getOrders() {
@@ -269,7 +271,8 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
             }
 
             @SuppressWarnings("unused")
-            public void addToOrders(final Order o) {};
+            public void addToOrders(final Order o) {
+            };
         }
         final Method collectionAccessorMethod = findMethod(Customer.class, "getOrders");
         final Method addToMethod = findMethod(Customer.class, "addToOrders", new Class[] { Order.class });
@@ -286,11 +289,12 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
     }
 
     public void testCanInferTypeOfFacetFromExplicitAddToMethod() {
-        CollectionAddRemoveAndValidateFacetFactory facetFactory = new CollectionAddRemoveAndValidateFacetFactory();
+        final CollectionAddRemoveAndValidateFacetFactory facetFactory = new CollectionAddRemoveAndValidateFacetFactory();
         facetFactory.setSpecificationLookup(reflector);
 
         @SuppressWarnings("hiding")
-        class Order {}
+        class Order {
+        }
         class Customer {
             @SuppressWarnings("unused")
             public Collection<Order> getOrders() {
@@ -298,7 +302,8 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
             }
 
             @SuppressWarnings("unused")
-            public void addToOrders(final Order o) {};
+            public void addToOrders(final Order o) {
+            };
         }
         final Method collectionAccessorMethod = findMethod(Customer.class, "getOrders");
 
@@ -312,11 +317,12 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
     }
 
     public void testRemoveFromFacetIsInstalledAndMethodRemoved() {
-        CollectionAddRemoveAndValidateFacetFactory facetFactory = new CollectionAddRemoveAndValidateFacetFactory();
+        final CollectionAddRemoveAndValidateFacetFactory facetFactory = new CollectionAddRemoveAndValidateFacetFactory();
         facetFactory.setSpecificationLookup(reflector);
 
         @SuppressWarnings("hiding")
-        class Order {}
+        class Order {
+        }
         class Customer {
             @SuppressWarnings({ "rawtypes", "unused" })
             public Collection getOrders() {
@@ -324,7 +330,8 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
             }
 
             @SuppressWarnings("unused")
-            public void removeFromOrders(final Order o) {};
+            public void removeFromOrders(final Order o) {
+            };
         }
         final Method collectionAccessorMethod = findMethod(Customer.class, "getOrders");
         final Method removeFromMethod = findMethod(Customer.class, "removeFromOrders", new Class[] { Order.class });
@@ -341,18 +348,21 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
     }
 
     public void testCanInferTypeOfFacetFromExplicitRemoveFromMethod() {
-        CollectionAddRemoveAndValidateFacetFactory facetFactory = new CollectionAddRemoveAndValidateFacetFactory();
+        final CollectionAddRemoveAndValidateFacetFactory facetFactory = new CollectionAddRemoveAndValidateFacetFactory();
         facetFactory.setSpecificationLookup(reflector);
 
         @SuppressWarnings("hiding")
-        class Order {}
+        class Order {
+        }
         class Customer {
             @SuppressWarnings("unused")
             public Collection<Order> getOrders() {
                 return null;
             };
+
             @SuppressWarnings("unused")
-            public void removeFromOrders(final Order o) {};
+            public void removeFromOrders(final Order o) {
+            };
         }
         final Method collectionAccessorMethod = findMethod(Customer.class, "getOrders");
 
@@ -366,11 +376,12 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
     }
 
     public void testClearFacetIsInstalledAndMethodRemoved() {
-        CollectionClearFacetFactory facetFactory = new CollectionClearFacetFactory();
+        final CollectionClearFacetFactory facetFactory = new CollectionClearFacetFactory();
         facetFactory.setSpecificationLookup(reflector);
 
         @SuppressWarnings({ "hiding", "unused" })
-        class Order {}
+        class Order {
+        }
         class Customer {
             @SuppressWarnings({ "rawtypes", "unused" })
             public Collection getOrders() {
@@ -378,7 +389,8 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
             }
 
             @SuppressWarnings("unused")
-            public void clearOrders() {};
+            public void clearOrders() {
+            };
         }
         final Method collectionAccessorMethod = findMethod(Customer.class, "getOrders");
         final Method clearMethod = findMethod(Customer.class, "clearOrders");
@@ -395,11 +407,12 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
     }
 
     public void testClearFacetIsInstalledViaAccessorIfNoExplicitClearMethod() {
-        CollectionClearFacetFactory facetFactory = new CollectionClearFacetFactory();
+        final CollectionClearFacetFactory facetFactory = new CollectionClearFacetFactory();
         facetFactory.setSpecificationLookup(reflector);
-        
+
         @SuppressWarnings({ "hiding", "unused" })
-        class Order {}
+        class Order {
+        }
         class Customer {
             @SuppressWarnings({ "rawtypes", "unused" })
             public Collection getOrders() {
@@ -418,11 +431,12 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
     }
 
     public void testValidateAddToFacetIsInstalledAndMethodRemoved() {
-        CollectionAddRemoveAndValidateFacetFactory facetFactory = new CollectionAddRemoveAndValidateFacetFactory();
+        final CollectionAddRemoveAndValidateFacetFactory facetFactory = new CollectionAddRemoveAndValidateFacetFactory();
         facetFactory.setSpecificationLookup(reflector);
-        
+
         @SuppressWarnings("hiding")
-        class Order {}
+        class Order {
+        }
         class Customer {
             @SuppressWarnings({ "rawtypes", "unused" })
             public Collection getOrders() {
@@ -430,7 +444,8 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
             }
 
             @SuppressWarnings("unused")
-            public void addToOrders(final Order o) {};
+            public void addToOrders(final Order o) {
+            };
 
             @SuppressWarnings("unused")
             public String validateAddToOrders(final Order o) {
@@ -452,11 +467,12 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
     }
 
     public void testValidateRemoveFromFacetIsInstalledAndMethodRemoved() {
-        CollectionAddRemoveAndValidateFacetFactory facetFactory = new CollectionAddRemoveAndValidateFacetFactory();
+        final CollectionAddRemoveAndValidateFacetFactory facetFactory = new CollectionAddRemoveAndValidateFacetFactory();
         facetFactory.setSpecificationLookup(reflector);
 
         @SuppressWarnings("hiding")
-        class Order {}
+        class Order {
+        }
         class Customer {
             @SuppressWarnings("unused")
             public Collection<Order> getOrders() {
@@ -464,7 +480,8 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
             }
 
             @SuppressWarnings("unused")
-            public void removeFromOrders(final Order o) {};
+            public void removeFromOrders(final Order o) {
+            };
 
             @SuppressWarnings("unused")
             public String validateRemoveFromOrders(final Order o) {
@@ -472,8 +489,7 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
             };
         }
         final Method collectionAccessorMethod = findMethod(Customer.class, "getOrders");
-        final Method validateRemoveFromMethod = findMethod(Customer.class, "validateRemoveFromOrders",
-                new Class[] { Order.class });
+        final Method validateRemoveFromMethod = findMethod(Customer.class, "validateRemoveFromOrders", new Class[] { Order.class });
 
         facetFactory.process(new ProcessMethodContext(Customer.class, collectionAccessorMethod, methodRemover, facetedMethod));
 
@@ -487,11 +503,12 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
     }
 
     public void testMethodFoundInSuperclass() {
-        CollectionAccessorFacetFactory facetFactory = new CollectionAccessorFacetFactory();
+        final CollectionAccessorFacetFactory facetFactory = new CollectionAccessorFacetFactory();
         facetFactory.setSpecificationLookup(reflector);
 
         @SuppressWarnings("hiding")
-        class Order {}
+        class Order {
+        }
         class Customer {
             @SuppressWarnings("unused")
             public Collection<Order> getOrders() {
@@ -501,7 +518,6 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
 
         class CustomerEx extends Customer {
         }
-
 
         final Method collectionAccessorMethod = findMethod(Customer.class, "getOrders");
 
@@ -515,13 +531,14 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
     }
 
     public void testMethodFoundInSuperclassButHelpeMethodsFoundInSubclasses() {
-        CollectionAccessorFacetFactory facetFactoryForAccessor = new CollectionAccessorFacetFactory();
+        final CollectionAccessorFacetFactory facetFactoryForAccessor = new CollectionAccessorFacetFactory();
         facetFactoryForAccessor.setSpecificationLookup(reflector);
-        CollectionAddRemoveAndValidateFacetFactory facetFactoryForHelpers = new CollectionAddRemoveAndValidateFacetFactory();
+        final CollectionAddRemoveAndValidateFacetFactory facetFactoryForHelpers = new CollectionAddRemoveAndValidateFacetFactory();
         facetFactoryForHelpers.setSpecificationLookup(reflector);
 
         @SuppressWarnings("hiding")
-        class Order {}
+        class Order {
+        }
         class Customer {
             @SuppressWarnings("unused")
             public Collection<Order> getOrders() {
@@ -531,7 +548,8 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
 
         class CustomerEx extends Customer {
             @SuppressWarnings("unused")
-            public void removeFromOrders(final Order o) {};
+            public void removeFromOrders(final Order o) {
+            };
 
             @SuppressWarnings("unused")
             public String validateRemoveFromOrders(final Order o) {
@@ -539,12 +557,9 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
             };
         }
 
-
         final Method collectionAccessorMethod = findMethod(Customer.class, "getOrders");
-        final Method removeFromMethod = findMethod(CustomerEx.class, "removeFromOrders",
-                new Class[] { Order.class });
-        final Method validateRemoveFromMethod = findMethod(CustomerEx.class, "validateRemoveFromOrders",
-                new Class[] { Order.class });
+        final Method removeFromMethod = findMethod(CustomerEx.class, "removeFromOrders", new Class[] { Order.class });
+        final Method validateRemoveFromMethod = findMethod(CustomerEx.class, "validateRemoveFromOrders", new Class[] { Order.class });
 
         facetFactoryForAccessor.process(new ProcessMethodContext(CustomerEx.class, collectionAccessorMethod, methodRemover, facetedMethod));
         facetFactoryForHelpers.process(new ProcessMethodContext(CustomerEx.class, collectionAccessorMethod, methodRemover, facetedMethod));
@@ -566,7 +581,8 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
         assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(validateRemoveFromMethod));
     }
 
-    static class Order {}
+    static class Order {
+    }
 
     public static class CustomerStatic {
         public Collection<Order> getOrders() {
@@ -597,7 +613,8 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
             return "disabled for this user";
         }
 
-        public static void getOtherOrders() {}
+        public static void getOtherOrders() {
+        }
 
         public static boolean alwaysHideOtherOrders() {
             return false;
@@ -609,7 +626,7 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
     }
 
     public void testInstallsNamedFacetUsingNameMethodAndRemovesMethod() {
-        NamedFacetViaNameMethodFacetFactory facetFactory = new NamedFacetViaNameMethodFacetFactory();
+        final NamedFacetViaNameMethodFacetFactory facetFactory = new NamedFacetViaNameMethodFacetFactory();
         facetFactory.setSpecificationLookup(reflector);
 
         final Method collectionAccessorMethod = findMethod(CustomerStatic.class, "getOrders");
@@ -627,9 +644,9 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
     }
 
     public void testInstallsDescribedAsFacetUsingDescriptionAndRemovesMethod() {
-        DescribedAsFacetViaDescriptionMethodFacetFactory facetFactory = new DescribedAsFacetViaDescriptionMethodFacetFactory();
+        final DescribedAsFacetViaDescriptionMethodFacetFactory facetFactory = new DescribedAsFacetViaDescriptionMethodFacetFactory();
         facetFactory.setSpecificationLookup(reflector);
-        
+
         final Method collectionAccessorMethod = findMethod(CustomerStatic.class, "getOrders");
         final Method descriptionMethod = findMethod(CustomerStatic.class, "descriptionOrders");
 
@@ -645,7 +662,7 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
     }
 
     public void testInstallsHiddenFacetUsingAlwaysHideAndRemovesMethod() {
-        HiddenFacetViaAlwaysHideMethodFacetFactory facetFactory = new HiddenFacetViaAlwaysHideMethodFacetFactory();
+        final HiddenFacetViaAlwaysHideMethodFacetFactory facetFactory = new HiddenFacetViaAlwaysHideMethodFacetFactory();
         facetFactory.setSpecificationLookup(reflector);
 
         final Method collectionAccessorMethod = findMethod(CustomerStatic.class, "getOrders");
@@ -663,7 +680,7 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
     }
 
     public void testInstallsHiddenFacetUsingAlwaysHideWhenNotAndRemovesMethod() {
-        HiddenFacetViaAlwaysHideMethodFacetFactory facetFactory = new HiddenFacetViaAlwaysHideMethodFacetFactory();
+        final HiddenFacetViaAlwaysHideMethodFacetFactory facetFactory = new HiddenFacetViaAlwaysHideMethodFacetFactory();
         facetFactory.setSpecificationLookup(reflector);
 
         final Method collectionAccessorMethod = findMethod(CustomerStatic.class, "getOtherOrders");
@@ -677,7 +694,7 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
     }
 
     public void testInstallsDisabledFacetUsingProtectAndRemovesMethod() {
-        DisabledFacetViaProtectMethodFacetFactory facetFactory = new DisabledFacetViaProtectMethodFacetFactory();
+        final DisabledFacetViaProtectMethodFacetFactory facetFactory = new DisabledFacetViaProtectMethodFacetFactory();
         facetFactory.setSpecificationLookup(reflector);
 
         final Method collectionAccessorMethod = findMethod(CustomerStatic.class, "getOrders");
@@ -695,7 +712,7 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
     }
 
     public void testDoesNotInstallDisabledFacetUsingProtectWhenNotAndRemovesMethod() {
-        DisabledFacetViaProtectMethodFacetFactory facetFactory = new DisabledFacetViaProtectMethodFacetFactory();
+        final DisabledFacetViaProtectMethodFacetFactory facetFactory = new DisabledFacetViaProtectMethodFacetFactory();
         facetFactory.setSpecificationLookup(reflector);
 
         final Method collectionAccessorMethod = findMethod(CustomerStatic.class, "getOtherOrders");
@@ -709,9 +726,9 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
     }
 
     public void testInstallsHiddenForSessionFacetAndRemovesMethod() {
-        HiddenFacetViaHideForSessionMethodFacetFactory facetFactory = new HiddenFacetViaHideForSessionMethodFacetFactory();
+        final HiddenFacetViaHideForSessionMethodFacetFactory facetFactory = new HiddenFacetViaHideForSessionMethodFacetFactory();
         facetFactory.setSpecificationLookup(reflector);
-        
+
         final Method collectionAccessorMethod = findMethod(CustomerStatic.class, "getOrders");
         final Method hideMethod = findMethod(CustomerStatic.class, "hideOrders", new Class[] { UserMemento.class });
 
@@ -727,7 +744,7 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
     }
 
     public void testInstallsDisabledForSessionFacetAndRemovesMethod() {
-        DisabledFacetViaDisableForSessionMethodFacetFactory facetFactory = new DisabledFacetViaDisableForSessionMethodFacetFactory();
+        final DisabledFacetViaDisableForSessionMethodFacetFactory facetFactory = new DisabledFacetViaDisableForSessionMethodFacetFactory();
         facetFactory.setSpecificationLookup(reflector);
 
         final Method collectionAccessorMethod = findMethod(CustomerStatic.class, "getOrders");
@@ -745,4 +762,3 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
     }
 
 }
-

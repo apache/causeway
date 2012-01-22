@@ -28,5 +28,4 @@ public class NotPersistableFacetInferred extends NotPersistedFacetAbstract {
         super(holder);
     }
 
-
 }

@@ -43,11 +43,13 @@ public interface FacetFactory {
     }
 
     /**
-     * The {@link FeatureType feature type}s that this facet factory can create {@link Facet}s for.
+     * The {@link FeatureType feature type}s that this facet factory can create
+     * {@link Facet}s for.
      * 
      * <p>
-     * Used by the Java5 Reflector's <tt>ProgrammingModel</tt> to reduce the number of {@link FacetFactory factory}s
-     * that are queried when building up the meta-model.
+     * Used by the Java5 Reflector's <tt>ProgrammingModel</tt> to reduce the
+     * number of {@link FacetFactory factory}s that are queried when building up
+     * the meta-model.
      */
     List<FeatureType> getFeatureTypes();
 
@@ -71,14 +73,12 @@ public interface FacetFactory {
         }
 
         @Override
-        public List<Method> removeMethods(final MethodScope methodScope, final String prefix,
-            final Class<?> returnType, final boolean canBeVoid, final int paramCount) {
+        public List<Method> removeMethods(final MethodScope methodScope, final String prefix, final Class<?> returnType, final boolean canBeVoid, final int paramCount) {
             return methodRemover.removeMethods(methodScope, prefix, returnType, canBeVoid, paramCount);
         }
 
         @Override
-        public void removeMethod(final MethodScope methodScope, final String methodName, final Class<?> returnType,
-            final Class<?>[] parameterTypes) {
+        public void removeMethod(final MethodScope methodScope, final String methodName, final Class<?> returnType, final Class<?>[] parameterTypes) {
             methodRemover.removeMethod(methodScope, methodName, returnType, parameterTypes);
         }
 
@@ -98,8 +98,7 @@ public interface FacetFactory {
         private final Method method;
         private final MethodRemover methodRemover;
 
-        public ProcessMethodContext(final Class<?> cls, final Method method, final MethodRemover methodRemover,
-            final FacetedMethod facetedMethod) {
+        public ProcessMethodContext(final Class<?> cls, final Method method, final MethodRemover methodRemover, final FacetedMethod facetedMethod) {
             super(facetedMethod);
             this.cls = cls;
             this.method = method;
@@ -115,14 +114,12 @@ public interface FacetFactory {
         }
 
         @Override
-        public List<Method> removeMethods(final MethodScope methodScope, final String prefix,
-            final Class<?> returnType, final boolean canBeVoid, final int paramCount) {
+        public List<Method> removeMethods(final MethodScope methodScope, final String prefix, final Class<?> returnType, final boolean canBeVoid, final int paramCount) {
             return methodRemover.removeMethods(methodScope, prefix, returnType, canBeVoid, paramCount);
         }
 
         @Override
-        public void removeMethod(final MethodScope methodScope, final String methodName, final Class<?> returnType,
-            final Class<?>[] parameterTypes) {
+        public void removeMethod(final MethodScope methodScope, final String methodName, final Class<?> returnType, final Class<?>[] parameterTypes) {
             methodRemover.removeMethod(methodScope, methodName, returnType, parameterTypes);
         }
 
@@ -146,8 +143,7 @@ public interface FacetFactory {
         private final Method method;
         private final int paramNum;
 
-        public ProcessParameterContext(final Method method, final int paramNum,
-            final FacetedMethodParameter facetedMethodParameter) {
+        public ProcessParameterContext(final Method method, final int paramNum, final FacetedMethodParameter facetedMethodParameter) {
             super(facetedMethodParameter);
             this.method = method;
             this.paramNum = paramNum;
@@ -163,7 +159,8 @@ public interface FacetFactory {
     }
 
     /**
-     * Process the parameters of the method, and return the correctly setup annotation if present.
+     * Process the parameters of the method, and return the correctly setup
+     * annotation if present.
      */
     void processParams(ProcessParameterContext processParameterContext);
 }

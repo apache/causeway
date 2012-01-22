@@ -32,8 +32,7 @@ import org.apache.isis.core.metamodel.facets.typeof.TypeOfFacetInferredFromGener
 import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistry;
 import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistryAware;
 
-public class TypeOfAnnotationForActionsFacetFactory extends AnnotationBasedFacetFactoryAbstract implements
-    CollectionTypeRegistryAware {
+public class TypeOfAnnotationForActionsFacetFactory extends AnnotationBasedFacetFactoryAbstract implements CollectionTypeRegistryAware {
     private CollectionTypeRegistry collectionTypeRegistry;
 
     public TypeOfAnnotationForActionsFacetFactory() {
@@ -46,22 +45,19 @@ public class TypeOfAnnotationForActionsFacetFactory extends AnnotationBasedFacet
         final TypeOf annotation = getAnnotation(processMethodContext.getMethod(), TypeOf.class);
 
         final Class<?> methodReturnType = processMethodContext.getMethod().getReturnType();
-        if (!collectionTypeRegistry.isCollectionType(methodReturnType)
-            && !collectionTypeRegistry.isArrayType(methodReturnType)) {
+        if (!collectionTypeRegistry.isCollectionType(methodReturnType) && !collectionTypeRegistry.isArrayType(methodReturnType)) {
             return;
         }
 
         final Class<?> returnType = processMethodContext.getMethod().getReturnType();
         if (returnType.isArray()) {
             final Class<?> componentType = returnType.getComponentType();
-            FacetUtil.addFacet(new TypeOfFacetInferredFromArray(componentType, processMethodContext.getFacetHolder(),
-                getSpecificationLookup()));
+            FacetUtil.addFacet(new TypeOfFacetInferredFromArray(componentType, processMethodContext.getFacetHolder(), getSpecificationLookup()));
             return;
         }
 
         if (annotation != null) {
-            FacetUtil.addFacet(new TypeOfFacetAnnotationForAction(annotation.value(), processMethodContext
-                .getFacetHolder(), getSpecificationLookup()));
+            FacetUtil.addFacet(new TypeOfFacetAnnotationForAction(annotation.value(), processMethodContext.getFacetHolder(), getSpecificationLookup()));
             return;
         }
 
@@ -79,8 +75,7 @@ public class TypeOfAnnotationForActionsFacetFactory extends AnnotationBasedFacet
         final Object actualTypeArgument = actualTypeArguments[0];
         if (actualTypeArgument instanceof Class) {
             final Class<?> actualType = (Class<?>) actualTypeArgument;
-            FacetUtil.addFacet(new TypeOfFacetInferredFromGenerics(actualType, processMethodContext.getFacetHolder(),
-                getSpecificationLookup()));
+            FacetUtil.addFacet(new TypeOfFacetInferredFromGenerics(actualType, processMethodContext.getFacetHolder(), getSpecificationLookup()));
             return;
         }
 

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.value;
 
 import static org.junit.Assert.assertEquals;
@@ -25,17 +24,16 @@ import static org.junit.Assert.fail;
 
 import java.math.BigDecimal;
 
-import org.jmock.Expectations;
-import org.jmock.integration.junit4.JMock;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-
 import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facets.object.parseable.TextEntryParseException;
 import org.apache.isis.core.progmodel.facets.value.bigdecimal.BigDecimalValueSemanticsProvider;
+import org.jmock.Expectations;
+import org.jmock.integration.junit4.JMock;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 
 @RunWith(JMock.class)
 public class BigDecimalValueSemanticsProviderTest extends ValueSemanticsProviderAbstractTestCase {
@@ -46,11 +44,13 @@ public class BigDecimalValueSemanticsProviderTest extends ValueSemanticsProvider
 
     @Before
     public void setUpObjects() throws Exception {
-    	mockery.checking(new Expectations(){{
-    		allowing(mockConfiguration).getString("isis.value.format.decimal");
-    		will(returnValue(null));
-    	}});
-    	
+        mockery.checking(new Expectations() {
+            {
+                allowing(mockConfiguration).getString("isis.value.format.decimal");
+                will(returnValue(null));
+            }
+        });
+
         bigDecimal = new BigDecimal("34132.199");
         allowMockAdapterToReturn(bigDecimal);
         holder = new FacetHolderImpl();
@@ -69,7 +69,8 @@ public class BigDecimalValueSemanticsProviderTest extends ValueSemanticsProvider
         try {
             value.parseTextEntry(null, "214xxx2342334");
             fail();
-        } catch (final TextEntryParseException expected) {}
+        } catch (final TextEntryParseException expected) {
+        }
     }
 
     @Test
@@ -88,6 +89,4 @@ public class BigDecimalValueSemanticsProviderTest extends ValueSemanticsProvider
         assertEquals(new BigDecimal("4322.89991"), newValue);
     }
 
-
 }
-

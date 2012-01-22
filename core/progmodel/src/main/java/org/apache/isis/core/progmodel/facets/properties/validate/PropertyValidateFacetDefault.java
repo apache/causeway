@@ -26,7 +26,8 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.interactions.ValidityContext;
 
 /**
- * Non checking property validation facet that provides default behaviour for all properties.
+ * Non checking property validation facet that provides default behaviour for
+ * all properties.
  */
 public class PropertyValidateFacetDefault extends FacetAbstract implements PropertyValidateFacet {
 

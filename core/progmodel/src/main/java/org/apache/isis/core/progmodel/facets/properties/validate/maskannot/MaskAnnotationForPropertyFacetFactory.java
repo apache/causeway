@@ -51,8 +51,7 @@ public class MaskAnnotationForPropertyFacetFactory extends AnnotationBasedFacetF
         }
 
         final Mask annotation = getAnnotation(processMethodContext.getMethod(), Mask.class);
-        addMaskFacetAndCorrespondingTitleFacet(processMethodContext.getFacetHolder(), annotation, processMethodContext
-            .getMethod().getReturnType());
+        addMaskFacetAndCorrespondingTitleFacet(processMethodContext.getFacetHolder(), annotation, processMethodContext.getMethod().getReturnType());
     }
 
     @Override
@@ -63,13 +62,11 @@ public class MaskAnnotationForPropertyFacetFactory extends AnnotationBasedFacetF
             return;
         }
 
-        final java.lang.annotation.Annotation[] parameterAnnotations =
-            getParameterAnnotations(processParameterContext.getMethod())[processParameterContext.getParamNum()];
+        final java.lang.annotation.Annotation[] parameterAnnotations = getParameterAnnotations(processParameterContext.getMethod())[processParameterContext.getParamNum()];
         for (int i = 0; i < parameterAnnotations.length; i++) {
             if (parameterAnnotations[i] instanceof Mask) {
                 final Mask annotation = (Mask) parameterAnnotations[i];
-                addMaskFacetAndCorrespondingTitleFacet(processParameterContext.getFacetHolder(), annotation,
-                    parameterTypes[i]);
+                addMaskFacetAndCorrespondingTitleFacet(processParameterContext.getFacetHolder(), annotation, parameterTypes[i]);
                 return;
             }
         }
@@ -79,8 +76,7 @@ public class MaskAnnotationForPropertyFacetFactory extends AnnotationBasedFacetF
         return annotation != null ? new MaskFacetAnnotationForProperty(annotation.value(), null, holder) : null;
     }
 
-    private boolean addMaskFacetAndCorrespondingTitleFacet(final FacetHolder holder, final Mask annotation,
-        final Class<?> cls) {
+    private boolean addMaskFacetAndCorrespondingTitleFacet(final FacetHolder holder, final Mask annotation, final Class<?> cls) {
         final MaskFacet maskFacet = createMaskFacet(annotation, holder);
         if (maskFacet == null) {
             return false;

@@ -23,7 +23,8 @@ import org.hamcrest.Matcher;
 import org.hamcrest.StringDescription;
 
 /**
- * Uses the {@link Matcher Hamcrest API} as a means of verifying arguments and so on.
+ * Uses the {@link Matcher Hamcrest API} as a means of verifying arguments and
+ * so on.
  */
 public final class Ensure {
 
@@ -65,7 +66,8 @@ public final class Ensure {
     }
 
     /**
-     * To ensure that the current state of this object (instance fields) is correct.
+     * To ensure that the current state of this object (instance fields) is
+     * correct.
      * 
      * @see #ensureThatArg(Object, Matcher)
      * @see #ensureThatContext(Object, Matcher)
@@ -82,7 +84,8 @@ public final class Ensure {
     }
 
     /**
-     * To ensure that the current state of this object (instance fields) is correct.
+     * To ensure that the current state of this object (instance fields) is
+     * correct.
      * 
      * @see #ensureThatArg(Object, Matcher)
      * @see #ensureThatContext(Object, Matcher)

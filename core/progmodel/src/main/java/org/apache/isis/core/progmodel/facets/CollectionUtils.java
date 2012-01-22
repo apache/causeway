@@ -29,8 +29,7 @@ public final class CollectionUtils {
     private CollectionUtils() {
     }
 
-    public static Object[] getCollectionAsObjectArray(final Object option, final ObjectSpecification spec,
-        final AdapterMap adapterMap) {
+    public static Object[] getCollectionAsObjectArray(final Object option, final ObjectSpecification spec, final AdapterMap adapterMap) {
         final ObjectAdapter collection = adapterMap.adapterFor(option);
         final CollectionFacet facet = CollectionFacetUtils.getCollectionFacetFromSpec(collection);
         final Object[] optionArray = new Object[facet.size(collection)];

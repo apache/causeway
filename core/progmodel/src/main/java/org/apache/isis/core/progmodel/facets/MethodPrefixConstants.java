@@ -45,8 +45,7 @@ public class MethodPrefixConstants {
     public static final String VALIDATE_ADD_TO_PREFIX = VALIDATE_PREFIX + ADD_TO_PREFIX;
     public static final String VALIDATE_ADD_TO_PREFIX_2 = VALIDATE_PREFIX + StringUtils.capitalize(ADD_TO_PREFIX);
     public static final String VALIDATE_REMOVE_FROM_PREFIX = VALIDATE_PREFIX + REMOVE_FROM_PREFIX;
-    public static final String VALIDATE_REMOVE_FROM_PREFIX_2 = VALIDATE_PREFIX
-        + StringUtils.capitalize(REMOVE_FROM_PREFIX);
+    public static final String VALIDATE_REMOVE_FROM_PREFIX_2 = VALIDATE_PREFIX + StringUtils.capitalize(REMOVE_FROM_PREFIX);
 
     public static final String FIELD_PREFIX = "field";
     public static final String ACTION_PREFIX = "action";

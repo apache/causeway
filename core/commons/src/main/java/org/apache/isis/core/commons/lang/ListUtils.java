@@ -130,8 +130,7 @@ public final class ListUtils {
         return appendDelimitedStringToList(commaSeparated, DEFAULT_DELIMITER, list);
     }
 
-    public static List<String> appendDelimitedStringToList(final String delimited, final String delimiter,
-        final List<String> list) {
+    public static List<String> appendDelimitedStringToList(final String delimited, final String delimiter, final List<String> list) {
         if (delimited == null) {
             return list;
         }

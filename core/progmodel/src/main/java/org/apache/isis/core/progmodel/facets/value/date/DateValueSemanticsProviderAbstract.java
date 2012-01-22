@@ -31,7 +31,6 @@ import org.apache.isis.core.progmodel.facets.value.ValueSemanticsProviderAbstrac
 
 import com.google.common.collect.Maps;
 
-
 public abstract class DateValueSemanticsProviderAbstract<T> extends ValueSemanticsProviderAbstractTemporal<T> {
 
     private static Map<String, DateFormat> formats = Maps.newHashMap();
@@ -44,9 +43,7 @@ public abstract class DateValueSemanticsProviderAbstract<T> extends ValueSemanti
         formats.put("short", DateFormat.getDateInstance(DateFormat.SHORT));
     }
 
-    public DateValueSemanticsProviderAbstract(final FacetHolder holder, final Class<T> adaptedClass,
-        final boolean immutable, final boolean equalByContent, final T defaultValue,
-        final IsisConfiguration configuration, final ValueSemanticsProviderContext context) {
+    public DateValueSemanticsProviderAbstract(final FacetHolder holder, final Class<T> adaptedClass, final boolean immutable, final boolean equalByContent, final T defaultValue, final IsisConfiguration configuration, final ValueSemanticsProviderContext context) {
         super("date", holder, adaptedClass, 12, immutable, equalByContent, defaultValue, configuration, context);
 
         final String formatRequired = configuration.getString(ConfigurationConstants.ROOT + "value.format.date");

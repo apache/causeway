@@ -17,19 +17,19 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.runtime.authentication.standard;
 
 import org.apache.isis.core.commons.exceptions.IsisException;
 
-
 /**
- * Indicates that there is no Authenticator available to authenticate a user based on this request.
+ * Indicates that there is no Authenticator available to authenticate a user
+ * based on this request.
  */
 public class NoAuthenticatorException extends IsisException {
     private static final long serialVersionUID = 1L;
 
-    public NoAuthenticatorException() {}
+    public NoAuthenticatorException() {
+    }
 
     public NoAuthenticatorException(final String msg) {
         super(msg);
@@ -44,4 +44,3 @@ public class NoAuthenticatorException extends IsisException {
     }
 
 }
-

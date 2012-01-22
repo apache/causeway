@@ -29,12 +29,15 @@ import org.apache.isis.core.metamodel.facets.mandatory.MandatoryFacetDefault;
 import org.apache.isis.core.metamodel.specloader.facetprocessor.FacetProcessor;
 
 /**
- * Simply installs a {@link MandatoryFacetDefault} onto all properties and parameters.
+ * Simply installs a {@link MandatoryFacetDefault} onto all properties and
+ * parameters.
  * 
  * <p>
- * The idea is that this {@link FacetFactory} is included early on in the {@link FacetProcessor}, but other
- * {@link MandatoryFacet} implementations which don't require mandatory semantics will potentially replace these where
- * the property or parameter is annotated or otherwise indicated as being optional.
+ * The idea is that this {@link FacetFactory} is included early on in the
+ * {@link FacetProcessor}, but other {@link MandatoryFacet} implementations
+ * which don't require mandatory semantics will potentially replace these where
+ * the property or parameter is annotated or otherwise indicated as being
+ * optional.
  */
 public class MandatoryDefaultForParametersFacetFactory extends FacetFactoryAbstract {
 

@@ -26,8 +26,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 public abstract class SingleStringValueFacetAbstract extends FacetAbstract implements SingleStringValueFacet {
     private final String value;
 
-    public SingleStringValueFacetAbstract(final Class<? extends Facet> facetType, final FacetHolder holder,
-        final String value) {
+    public SingleStringValueFacetAbstract(final Class<? extends Facet> facetType, final FacetHolder holder, final String value) {
         super(facetType, holder, false);
         this.value = value;
     }

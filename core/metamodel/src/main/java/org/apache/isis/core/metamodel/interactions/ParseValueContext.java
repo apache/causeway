@@ -29,14 +29,14 @@ import org.apache.isis.core.metamodel.consent.InteractionContextType;
 import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
 
 /**
- * See {@link InteractionContext} for overview; analogous to {@link ParseValueEvent}.
+ * See {@link InteractionContext} for overview; analogous to
+ * {@link ParseValueEvent}.
  */
 public class ParseValueContext extends ValidityContext<ParseValueEvent> implements ProposedHolder {
 
     private final ObjectAdapter proposed;
 
-    public ParseValueContext(final AuthenticationSession session, final InteractionInvocationMethod invocationMethod,
-        final ObjectAdapter target, final Identifier identifier, final ObjectAdapter proposed) {
+    public ParseValueContext(final AuthenticationSession session, final InteractionInvocationMethod invocationMethod, final ObjectAdapter target, final Identifier identifier, final ObjectAdapter proposed) {
         super(InteractionContextType.PARSE_VALUE, session, invocationMethod, identifier, target);
         this.proposed = proposed;
     }

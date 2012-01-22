@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.runtime.logging;
 
 import java.io.File;
@@ -29,17 +28,15 @@ import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-
 public class SnapshotWriter {
     private static final Format FORMAT = new SimpleDateFormat("yyyyMMdd-HHmmss-SSS");
     private final PrintStream os;
 
-    public SnapshotWriter(final String directoryPath, final String baseFileName, final String fileExtension, final String message)
-            throws IOException {
+    public SnapshotWriter(final String directoryPath, final String baseFileName, final String fileExtension, final String message) throws IOException {
         final File dir = new File(directoryPath == null || directoryPath.length() == 0 ? "." : directoryPath);
         if (!dir.exists()) {
             @SuppressWarnings("unused")
-            boolean created = dir.mkdirs();
+            final boolean created = dir.mkdirs();
         }
 
         final File indexFile = new File(dir, "index.txt");
@@ -64,4 +61,3 @@ public class SnapshotWriter {
         }
     }
 }
-

@@ -32,14 +32,14 @@ public class NotInServiceMenuFacetMethod extends NotInServiceMenuFacetAbstract {
 
     private final Method notInServiceMenuMethod;
 
-    public NotInServiceMenuFacetMethod(Method notInServiceMenuMethod, final FacetHolder holder) {
+    public NotInServiceMenuFacetMethod(final Method notInServiceMenuMethod, final FacetHolder holder) {
         super(holder);
         this.notInServiceMenuMethod = notInServiceMenuMethod;
     }
 
     @Override
-    public String hides(VisibilityContext<? extends VisibilityEvent> ic) {
-        ObjectAdapter owningAdapter = ic.getTarget();
+    public String hides(final VisibilityContext<? extends VisibilityEvent> ic) {
+        final ObjectAdapter owningAdapter = ic.getTarget();
         if (owningAdapter == null) {
             return null;
         }

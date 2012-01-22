@@ -58,15 +58,15 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
     private final ObjectActionImpl parentAction;
     private final TypedHolder peer;
 
-    protected ObjectActionParameterAbstract(final int number, final ObjectActionImpl objectAction,
-        final TypedHolder peer) {
+    protected ObjectActionParameterAbstract(final int number, final ObjectActionImpl objectAction, final TypedHolder peer) {
         this.number = number;
         this.parentAction = objectAction;
         this.peer = peer;
     }
 
     /**
-     * Subclasses should override either {@link #isObject()} or {@link #isCollection()}.
+     * Subclasses should override either {@link #isObject()} or
+     * {@link #isCollection()}.
      */
     @Override
     public boolean isObject() {
@@ -74,7 +74,8 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
     }
 
     /**
-     * Subclasses should override either {@link #isObject()} or {@link #isCollection()}.
+     * Subclasses should override either {@link #isObject()} or
+     * {@link #isCollection()}.
      */
     @Override
     public boolean isCollection() {
@@ -110,11 +111,11 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
         if (facet != null && facet.value() != null) {
             return StringUtils.camelLowerFirst(facet.value());
         }
-        String name = getSpecification().getSingularName();
-        List<ObjectActionParameter> parameters = this.getAction().getParameters(new Filter<ObjectActionParameter>() {
+        final String name = getSpecification().getSingularName();
+        final List<ObjectActionParameter> parameters = this.getAction().getParameters(new Filter<ObjectActionParameter>() {
 
             @Override
-            public boolean accept(ObjectActionParameter t) {
+            public boolean accept(final ObjectActionParameter t) {
                 return equalsShortIdentifier(t.getSpecification(), getSpecification());
             }
 
@@ -125,11 +126,10 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
         if (parameters.size() == 1) {
             return StringUtils.camelLowerFirst(name);
         }
-        int indexOf = parameters.indexOf(this);
-        return StringUtils.camelLowerFirst(name + (indexOf+1));
+        final int indexOf = parameters.indexOf(this);
+        return StringUtils.camelLowerFirst(name + (indexOf + 1));
     }
 
-    
     @Override
     public String getName() {
         final NamedFacet facet = getFacet(NamedFacet.class);
@@ -137,10 +137,10 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
             return facet.value();
         }
         final String name = getSpecification().getSingularName();
-        List<ObjectActionParameter> parameters = getAction().getParameters(new Filter<ObjectActionParameter>() {
+        final List<ObjectActionParameter> parameters = getAction().getParameters(new Filter<ObjectActionParameter>() {
 
             @Override
-            public boolean accept(ObjectActionParameter t) {
+            public boolean accept(final ObjectActionParameter t) {
                 return equalsShortIdentifier(t.getSpecification(), getSpecification());
             }
 
@@ -151,8 +151,8 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
         if (parameters.size() == 1) {
             return name;
         }
-        int indexOf = parameters.indexOf(this);
-        return name + " " + (indexOf+1);
+        final int indexOf = parameters.indexOf(this);
+        return name + " " + (indexOf + 1);
     }
 
     @Override
@@ -235,11 +235,8 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
     // //////////////////////////////////////////////////////////
 
     @Override
-    public ActionArgumentContext createProposedArgumentInteractionContext(final AuthenticationSession session,
-        final InteractionInvocationMethod invocationMethod, final ObjectAdapter targetObject,
-        final ObjectAdapter[] proposedArguments, final int position) {
-        return new ActionArgumentContext(getAuthenticationSession(), invocationMethod, targetObject, getIdentifier(),
-            proposedArguments, position);
+    public ActionArgumentContext createProposedArgumentInteractionContext(final AuthenticationSession session, final InteractionInvocationMethod invocationMethod, final ObjectAdapter targetObject, final ObjectAdapter[] proposedArguments, final int position) {
+        return new ActionArgumentContext(getAuthenticationSession(), invocationMethod, targetObject, getIdentifier(), proposedArguments, position);
     }
 
     @Override
@@ -268,13 +265,11 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
         }
     }
 
-    protected static void checkChoicesType(final SpecificationLookup specificationLookup, final Object[] objects,
-        final ObjectSpecification paramSpec) {
+    protected static void checkChoicesType(final SpecificationLookup specificationLookup, final Object[] objects, final ObjectSpecification paramSpec) {
         for (final Object object : objects) {
             final ObjectSpecification componentSpec = specificationLookup.loadSpecification(object.getClass());
             if (!componentSpec.isOfType(paramSpec)) {
-                throw new DomainModelException("Choice type incompatible with parameter type; expected "
-                    + paramSpec.getFullIdentifier() + ", but was " + componentSpec.getFullIdentifier());
+                throw new DomainModelException("Choice type incompatible with parameter type; expected " + paramSpec.getFullIdentifier() + ", but was " + componentSpec.getFullIdentifier());
             }
         }
     }
@@ -290,7 +285,8 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
         if (defaultsFacet != null) {
             final Object dflt = defaultsFacet.getDefault(parentAction.realTarget(adapter));
             if (dflt == null) {
-                // it's possible that even though there is a default facet, when invoked it
+                // it's possible that even though there is a default facet, when
+                // invoked it
                 // is unable to return a default.
                 return null;
             }

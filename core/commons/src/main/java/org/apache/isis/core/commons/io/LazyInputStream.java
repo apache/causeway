@@ -29,17 +29,19 @@ import java.io.InputStream;
 import org.apache.isis.core.commons.ensure.Ensure;
 
 /**
- * An input stream that reads from an underlying {@link InputStream}, deferring the interactions until needed.
+ * An input stream that reads from an underlying {@link InputStream}, deferring
+ * the interactions until needed.
  * 
  * <p>
- * This other stream is provided as needed by an {@link InputStreamProvider} so that the underlying stream is not
- * eagerly loaded.
+ * This other stream is provided as needed by an {@link InputStreamProvider} so
+ * that the underlying stream is not eagerly loaded.
  */
 public class LazyInputStream extends InputStream {
 
     /**
-     * An interface to be implemented by clients that wish to utilize {@link LazyInputStream}s. The implementation of
-     * this interface should defer obtaining the desired input stream until absolutely necessary.
+     * An interface to be implemented by clients that wish to utilize
+     * {@link LazyInputStream}s. The implementation of this interface should
+     * defer obtaining the desired input stream until absolutely necessary.
      */
     public static interface InputStreamProvider {
         InputStream getInputStream() throws IOException;

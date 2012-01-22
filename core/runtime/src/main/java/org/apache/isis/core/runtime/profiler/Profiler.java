@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.runtime.profiler;
 
 import java.text.NumberFormat;
@@ -26,12 +25,12 @@ import java.util.Locale;
 import java.util.Map;
 
 public class Profiler {
-    
+
     private final static String DELIMITER = "\t";
     private static NumberFormat FLOAT_FORMAT = NumberFormat.getNumberInstance(Locale.UK);
     private static NumberFormat INTEGER_FORMAT = NumberFormat.getNumberInstance(Locale.UK);
 
-    private final static Map<Thread,String> threads = new HashMap<Thread,String>();
+    private final static Map<Thread, String> threads = new HashMap<Thread, String>();
 
     private static int nextId = 0;
     private static int nextThread = 0;
@@ -40,6 +39,7 @@ public class Profiler {
 
     /**
      * Primarily for testing.
+     * 
      * @param profilerSystem
      */
     public static void setProfilerSystem(final ProfilerSystem profilerSystem) {
@@ -59,15 +59,15 @@ public class Profiler {
         return profilerSystem.memory();
     }
 
-    //////////////////////////////////////////////////////////////
+    // ////////////////////////////////////////////////////////////
     // Profiler instance, constructor
-    //////////////////////////////////////////////////////////////
+    // ////////////////////////////////////////////////////////////
 
     private final String thread;
 
     private final int id;
     private final String name;
-    
+
     private long elapsedTime = 0;
     private long memory;
     private long start = 0;
@@ -79,7 +79,7 @@ public class Profiler {
             this.id = nextId++;
         }
         final Thread t = Thread.currentThread();
-        final String thread = (String) threads.get(t);
+        final String thread = threads.get(t);
         if (thread != null) {
             this.thread = thread;
         } else {
@@ -93,9 +93,9 @@ public class Profiler {
         return name;
     }
 
-    //////////////////////////////////////////////////////////////
+    // ////////////////////////////////////////////////////////////
     // start, stop, reset
-    //////////////////////////////////////////////////////////////
+    // ////////////////////////////////////////////////////////////
 
     public void reset() {
         elapsedTime = 0;
@@ -114,9 +114,9 @@ public class Profiler {
         elapsedTime += end - start;
     }
 
-    //////////////////////////////////////////////////////////////
+    // ////////////////////////////////////////////////////////////
     // MemoryUsage, ElapsedTime
-    //////////////////////////////////////////////////////////////
+    // ////////////////////////////////////////////////////////////
 
     public long getElapsedTime() {
         return timing ? time() - start : elapsedTime;
@@ -126,9 +126,9 @@ public class Profiler {
         return memory() - memory;
     }
 
-    //////////////////////////////////////////////////////////////
+    // ////////////////////////////////////////////////////////////
     // logging
-    //////////////////////////////////////////////////////////////
+    // ////////////////////////////////////////////////////////////
 
     public String memoryUsageLog() {
         return INTEGER_FORMAT.format(getMemoryUsage()) + " bytes";
@@ -141,7 +141,6 @@ public class Profiler {
     public String log() {
         return id + DELIMITER + thread + DELIMITER + getName() + DELIMITER + getMemoryUsage() + DELIMITER + getElapsedTime();
     }
-
 
     @Override
     public String toString() {

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.propparam.validate.mandatory;
 
 import java.lang.reflect.Method;
@@ -33,12 +32,10 @@ import org.apache.isis.core.progmodel.facets.param.mandatory.annotation.Optional
 import org.apache.isis.core.progmodel.facets.properties.mandatory.annotation.MandatoryFacetInvertedByOptionalForProperty;
 import org.apache.isis.core.progmodel.facets.properties.mandatory.annotation.OptionalAnnotationForPropertyFacetFactory;
 
-
 public class OptionalAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 
-
     public void testOptionalAnnotationPickedUpOnProperty() {
-        OptionalAnnotationForPropertyFacetFactory facetFactory = new OptionalAnnotationForPropertyFacetFactory();
+        final OptionalAnnotationForPropertyFacetFactory facetFactory = new OptionalAnnotationForPropertyFacetFactory();
 
         class Customer {
             @SuppressWarnings("unused")
@@ -57,11 +54,12 @@ public class OptionalAnnotationFacetFactoryTest extends AbstractFacetFactoryTest
     }
 
     public void testOptionalAnnotationPickedUpOnActionParameter() {
-        OptionalAnnotationForParameterFacetFactory facetFactory = new OptionalAnnotationForParameterFacetFactory();
+        final OptionalAnnotationForParameterFacetFactory facetFactory = new OptionalAnnotationForParameterFacetFactory();
 
         class Customer {
             @SuppressWarnings("unused")
-            public void someAction(@Optional final String foo) {}
+            public void someAction(@Optional final String foo) {
+            }
         }
         final Method method = findMethod(Customer.class, "someAction", new Class[] { String.class });
 
@@ -73,7 +71,7 @@ public class OptionalAnnotationFacetFactoryTest extends AbstractFacetFactoryTest
     }
 
     public void testOptionalAnnotationIgnoredForPrimitiveOnProperty() {
-        OptionalAnnotationForPropertyFacetFactory facetFactory = new OptionalAnnotationForPropertyFacetFactory();
+        final OptionalAnnotationForPropertyFacetFactory facetFactory = new OptionalAnnotationForPropertyFacetFactory();
 
         class Customer {
             @SuppressWarnings("unused")
@@ -90,11 +88,12 @@ public class OptionalAnnotationFacetFactoryTest extends AbstractFacetFactoryTest
     }
 
     public void testOptionalAnnotationIgnoredForPrimitiveOnActionParameter() {
-        OptionalAnnotationForParameterFacetFactory facetFactory = new OptionalAnnotationForParameterFacetFactory();
+        final OptionalAnnotationForParameterFacetFactory facetFactory = new OptionalAnnotationForParameterFacetFactory();
 
         class Customer {
             @SuppressWarnings("unused")
-            public void someAction(@Optional final int foo) {}
+            public void someAction(@Optional final int foo) {
+            }
         }
         final Method method = findMethod(Customer.class, "someAction", new Class[] { int.class });
 
@@ -104,4 +103,3 @@ public class OptionalAnnotationFacetFactoryTest extends AbstractFacetFactoryTest
     }
 
 }
-

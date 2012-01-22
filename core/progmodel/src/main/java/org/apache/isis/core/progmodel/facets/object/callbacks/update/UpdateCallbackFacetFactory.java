@@ -34,8 +34,7 @@ import org.apache.isis.core.progmodel.facets.MethodPrefixConstants;
 
 public class UpdateCallbackFacetFactory extends MethodPrefixBasedFacetFactoryAbstract {
 
-    private static final String[] PREFIXES = { MethodPrefixConstants.UPDATED_PREFIX,
-        MethodPrefixConstants.UPDATING_PREFIX, };
+    private static final String[] PREFIXES = { MethodPrefixConstants.UPDATED_PREFIX, MethodPrefixConstants.UPDATING_PREFIX, };
 
     public UpdateCallbackFacetFactory() {
         super(FeatureType.OBJECTS_ONLY, PREFIXES);
@@ -50,17 +49,13 @@ public class UpdateCallbackFacetFactory extends MethodPrefixBasedFacetFactoryAbs
         final List<Method> methods = new ArrayList<Method>();
 
         Method method = null;
-        method =
-            MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, MethodPrefixConstants.UPDATING_PREFIX, void.class,
-                NO_PARAMETERS_TYPES);
+        method = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, MethodPrefixConstants.UPDATING_PREFIX, void.class, NO_PARAMETERS_TYPES);
         if (method != null) {
             methods.add(method);
             facets.add(new UpdatingCallbackFacetViaMethod(method, facetHolder));
         }
 
-        method =
-            MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, MethodPrefixConstants.UPDATED_PREFIX, void.class,
-                NO_PARAMETERS_TYPES);
+        method = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, MethodPrefixConstants.UPDATED_PREFIX, void.class, NO_PARAMETERS_TYPES);
         if (method != null) {
             methods.add(method);
             facets.add(new UpdatedCallbackFacetViaMethod(method, facetHolder));

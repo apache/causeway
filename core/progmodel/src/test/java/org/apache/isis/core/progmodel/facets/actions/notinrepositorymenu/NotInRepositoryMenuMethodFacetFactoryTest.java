@@ -60,8 +60,7 @@ public class NotInRepositoryMenuMethodFacetFactoryTest extends AbstractFacetFact
         final Method actionMethod = findMethod(CustomerRepository.class, "someAction");
 
         // when
-        facetFactory.process(new ProcessMethodContext(CustomerRepository.class, actionMethod, methodRemover,
-            facetedMethod));
+        facetFactory.process(new ProcessMethodContext(CustomerRepository.class, actionMethod, methodRemover, facetedMethod));
 
         // then
         final Facet facet = facetedMethod.getFacet(NotInServiceMenuFacet.class);

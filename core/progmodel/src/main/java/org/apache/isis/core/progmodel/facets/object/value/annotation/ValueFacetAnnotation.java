@@ -43,21 +43,17 @@ public class ValueFacetAnnotation extends ValueFacetAbstract {
         return annotation.semanticsProviderClass();
     }
 
-    public ValueFacetAnnotation(final Class<?> annotatedClass, final FacetHolder holder,
-        final IsisConfiguration configuration, final ValueSemanticsProviderContext context) {
-        this(semanticsProviderName(annotatedClass, configuration), semanticsProviderClass(annotatedClass), holder,
-            configuration, context);
+    public ValueFacetAnnotation(final Class<?> annotatedClass, final FacetHolder holder, final IsisConfiguration configuration, final ValueSemanticsProviderContext context) {
+        this(semanticsProviderName(annotatedClass, configuration), semanticsProviderClass(annotatedClass), holder, configuration, context);
     }
 
-    private ValueFacetAnnotation(final String candidateSemanticsProviderName,
-        final Class<?> candidateSemanticsProviderClass, final FacetHolder holder,
-        final IsisConfiguration configuration, final ValueSemanticsProviderContext context) {
-        super(ValueSemanticsProviderUtil.valueSemanticsProviderOrNull(candidateSemanticsProviderClass,
-            candidateSemanticsProviderName), AddFacetsIfInvalidStrategy.DO_ADD, holder, configuration, context);
+    private ValueFacetAnnotation(final String candidateSemanticsProviderName, final Class<?> candidateSemanticsProviderClass, final FacetHolder holder, final IsisConfiguration configuration, final ValueSemanticsProviderContext context) {
+        super(ValueSemanticsProviderUtil.valueSemanticsProviderOrNull(candidateSemanticsProviderClass, candidateSemanticsProviderName), AddFacetsIfInvalidStrategy.DO_ADD, holder, configuration, context);
     }
 
     /**
-     * Always valid, even if the specified semanticsProviderName might have been wrong.
+     * Always valid, even if the specified semanticsProviderName might have been
+     * wrong.
      */
     @Override
     public boolean isValid() {

@@ -31,8 +31,7 @@ import org.apache.isis.core.metamodel.facets.typeof.TypeOfFacetInferredFromGener
 import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistry;
 import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistryAware;
 
-public class CollectionFacetFactory extends FacetFactoryAbstract implements CollectionTypeRegistryAware,
-    AdapterMapAware {
+public class CollectionFacetFactory extends FacetFactoryAbstract implements CollectionTypeRegistryAware, AdapterMapAware {
 
     private CollectionTypeRegistry collectionTypeRegistry;
     private AdapterMap adapterMap;
@@ -57,9 +56,7 @@ public class CollectionFacetFactory extends FacetFactoryAbstract implements Coll
         final TypeOfFacet typeOfFacet = facetHolder.getFacet(TypeOfFacet.class);
         if (typeOfFacet == null) {
             final Class<?> collectionElementType = collectionElementType(processClassContaxt.getCls());
-            facetHolder.addFacet(collectionElementType != Object.class ? new TypeOfFacetInferredFromGenerics(
-                collectionElementType, facetHolder, getSpecificationLookup()) : new TypeOfFacetDefaultToObject(
-                facetHolder, getSpecificationLookup()));
+            facetHolder.addFacet(collectionElementType != Object.class ? new TypeOfFacetInferredFromGenerics(collectionElementType, facetHolder, getSpecificationLookup()) : new TypeOfFacetDefaultToObject(facetHolder, getSpecificationLookup()));
         } else {
             // nothing
         }
@@ -70,8 +67,7 @@ public class CollectionFacetFactory extends FacetFactoryAbstract implements Coll
     private void processAsArrayType(final ProcessClassContext processClassContaxt) {
         final FacetHolder facetHolder = processClassContaxt.getFacetHolder();
         facetHolder.addFacet(new JavaArrayFacet(facetHolder, getAdapterMap()));
-        facetHolder.addFacet(new TypeOfFacetInferredFromArray(processClassContaxt.getCls().getComponentType(),
-            facetHolder, getSpecificationLookup()));
+        facetHolder.addFacet(new TypeOfFacetInferredFromArray(processClassContaxt.getCls().getComponentType(), facetHolder, getSpecificationLookup()));
     }
 
     private Class<?> collectionElementType(final Class<?> cls) {

@@ -17,12 +17,10 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.runtime.authorization.standard;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.runtime.authorization.AuthorizationManager;
-
 
 public class AuthorizationFacetImpl extends AuthorizationFacetAbstract {
 
@@ -30,6 +28,4 @@ public class AuthorizationFacetImpl extends AuthorizationFacetAbstract {
         super(holder, authorizationManager);
     }
 
-
 }
-

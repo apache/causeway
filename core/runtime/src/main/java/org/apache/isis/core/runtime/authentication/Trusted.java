@@ -17,19 +17,16 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.runtime.authentication;
 
-
 /**
- * Marker interface intended to be mixed in with {@link AuthenticationRequest} implementations
- * as an indicator that the calling client should be trusted.
+ * Marker interface intended to be mixed in with {@link AuthenticationRequest}
+ * implementations as an indicator that the calling client should be trusted.
  * 
  * <p>
- * Implementations of {@link AuthenticationManager} are expected to honour this contract
- * in {@link AuthenticationManager#authenticate(AuthenticationRequest)}.
+ * Implementations of {@link AuthenticationManager} are expected to honour this
+ * contract in {@link AuthenticationManager#authenticate(AuthenticationRequest)}.
  */
-public interface Trusted  {
+public interface Trusted {
 
 }
-

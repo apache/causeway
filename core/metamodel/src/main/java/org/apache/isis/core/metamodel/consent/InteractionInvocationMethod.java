@@ -22,7 +22,8 @@ package org.apache.isis.core.metamodel.consent;
 import org.apache.isis.core.metamodel.interactions.InteractionContext;
 
 /**
- * Whether an {@link InteractionContext} was invoked by the user, or is programmatic.
+ * Whether an {@link InteractionContext} was invoked by the user, or is
+ * programmatic.
  */
 public enum InteractionInvocationMethod {
 

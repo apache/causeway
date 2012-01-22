@@ -55,15 +55,15 @@ public class FacetsAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
         }
 
         @Override
-        public void process(ProcessClassContext processClassContaxt) {
+        public void process(final ProcessClassContext processClassContaxt) {
         }
 
         @Override
-        public void process(ProcessMethodContext processMethodContext) {
+        public void process(final ProcessMethodContext processMethodContext) {
         }
 
         @Override
-        public void processParams(ProcessParameterContext processParameterContext) {
+        public void processParams(final ProcessParameterContext processParameterContext) {
         }
     }
 
@@ -74,22 +74,20 @@ public class FacetsAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
         }
 
         @Override
-        public void process(ProcessClassContext processClassContaxt) {
+        public void process(final ProcessClassContext processClassContaxt) {
         }
 
         @Override
-        public void process(ProcessMethodContext processMethodContext) {
+        public void process(final ProcessMethodContext processMethodContext) {
         }
 
         @Override
-        public void processParams(ProcessParameterContext processParameterContext) {
+        public void processParams(final ProcessParameterContext processParameterContext) {
         }
     }
 
     public void testFacetsFactoryNames() {
-        @Facets(facetFactoryNames = {
-            "org.apache.isis.core.progmodel.facets.object.facets.FacetsAnnotationFacetFactoryTest$CustomerFacetFactory",
-            "org.apache.isis.core.progmodel.facets.object.facets.FacetsAnnotationFacetFactoryTest$CustomerNotAFacetFactory" })
+        @Facets(facetFactoryNames = { "org.apache.isis.core.progmodel.facets.object.facets.FacetsAnnotationFacetFactoryTest$CustomerFacetFactory", "org.apache.isis.core.progmodel.facets.object.facets.FacetsAnnotationFacetFactoryTest$CustomerNotAFacetFactory" })
         class Customer {
         }
 
@@ -107,9 +105,7 @@ public class FacetsAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
     }
 
     public void testFacetsFactoryClass() {
-        @Facets(facetFactoryClasses = {
-            org.apache.isis.core.progmodel.facets.object.facets.FacetsAnnotationFacetFactoryTest.CustomerFacetFactory.class,
-            org.apache.isis.core.progmodel.facets.object.facets.FacetsAnnotationFacetFactoryTest.CustomerNotAFacetFactory.class })
+        @Facets(facetFactoryClasses = { org.apache.isis.core.progmodel.facets.object.facets.FacetsAnnotationFacetFactoryTest.CustomerFacetFactory.class, org.apache.isis.core.progmodel.facets.object.facets.FacetsAnnotationFacetFactoryTest.CustomerNotAFacetFactory.class })
         class Customer {
         }
 

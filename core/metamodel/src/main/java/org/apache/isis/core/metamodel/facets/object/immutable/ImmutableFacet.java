@@ -28,12 +28,12 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 
 /**
- * Indicates that the instances of this class are immutable and so may not be modified either through the viewer or
- * indeed programmatically.
+ * Indicates that the instances of this class are immutable and so may not be
+ * modified either through the viewer or indeed programmatically.
  * 
  * <p>
- * In the standard Apache Isis Programming Model, typically corresponds to applying the <tt>@Immutable</tt> annotation
- * at the class level.
+ * In the standard Apache Isis Programming Model, typically corresponds to
+ * applying the <tt>@Immutable</tt> annotation at the class level.
  * 
  * @see EqualByContentFacet
  * @see ValueFacet
@@ -44,8 +44,9 @@ public interface ImmutableFacet extends SingleWhenValueFacet, DisablingInteracti
      * Clone this facet onto another {@link FacetHolder}.
      * 
      * <p>
-     * Introduced to allow this facet to be installed onto the {@link ObjectSpecification}, and then
-     * copied down onto each of the spec's {@link ObjectMember}s. 
+     * Introduced to allow this facet to be installed onto the
+     * {@link ObjectSpecification}, and then copied down onto each of the spec's
+     * {@link ObjectMember}s.
      */
     void copyOnto(FacetHolder holder);
 

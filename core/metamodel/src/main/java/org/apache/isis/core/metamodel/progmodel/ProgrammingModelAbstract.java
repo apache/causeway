@@ -29,8 +29,7 @@ import org.apache.isis.core.metamodel.facets.FacetFactory;
 public abstract class ProgrammingModelAbstract implements ProgrammingModel {
 
     private final List<FacetFactory> facetFactories = new ArrayList<FacetFactory>();
-    private final List<Class<? extends FacetFactory>> facetFactoryClasses =
-        new ArrayList<Class<? extends FacetFactory>>();
+    private final List<Class<? extends FacetFactory>> facetFactoryClasses = new ArrayList<Class<? extends FacetFactory>>();
 
     @Override
     public final List<FacetFactory> getList() {

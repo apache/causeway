@@ -29,12 +29,12 @@ import org.apache.isis.core.metamodel.consent.InteractionContextType;
 import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
 
 /**
- * See {@link InteractionContext} for overview; analogous to {@link ActionVisibilityEvent}.
+ * See {@link InteractionContext} for overview; analogous to
+ * {@link ActionVisibilityEvent}.
  */
 public class ActionVisibilityContext extends VisibilityContext<ActionVisibilityEvent> {
 
-    public ActionVisibilityContext(final AuthenticationSession session,
-        final InteractionInvocationMethod invocationMethod, final ObjectAdapter target, final Identifier identifier) {
+    public ActionVisibilityContext(final AuthenticationSession session, final InteractionInvocationMethod invocationMethod, final ObjectAdapter target, final Identifier identifier) {
         super(InteractionContextType.ACTION_VISIBLE, session, invocationMethod, identifier, target);
     }
 

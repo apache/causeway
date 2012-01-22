@@ -17,16 +17,10 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.value;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
-
-import org.jmock.integration.junit4.JMock;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
 
 import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -34,6 +28,10 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facets.object.parseable.TextEntryParseException;
 import org.apache.isis.core.progmodel.facets.value.booleans.BooleanValueSemanticsProviderAbstract;
 import org.apache.isis.core.progmodel.facets.value.booleans.BooleanWrapperValueSemanticsProvider;
+import org.jmock.integration.junit4.JMock;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 
 @RunWith(JMock.class)
 public class BooleanValueSemanticsProviderTest extends ValueSemanticsProviderAbstractTestCase {
@@ -79,7 +77,8 @@ public class BooleanValueSemanticsProviderTest extends ValueSemanticsProviderAbs
         try {
             value.parseTextEntry(null, "yes");
             fail();
-        } catch (final TextEntryParseException expected) {}
+        } catch (final TextEntryParseException expected) {
+        }
     }
 
     @Test
@@ -115,4 +114,3 @@ public class BooleanValueSemanticsProviderTest extends ValueSemanticsProviderAbs
         assertEquals(false, value.isSet(mockAdapter));
     }
 }
-

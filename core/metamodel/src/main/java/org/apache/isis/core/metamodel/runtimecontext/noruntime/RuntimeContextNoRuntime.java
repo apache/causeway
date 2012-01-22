@@ -68,8 +68,9 @@ public class RuntimeContextNoRuntime extends RuntimeContextAbstract {
         dependencyInjector = new DependencyInjectorAbstract() {
 
             /**
-             * Unlike most of the methods in this implementation, does nothing (because this will always be called, even
-             * in a no-runtime context).
+             * Unlike most of the methods in this implementation, does nothing
+             * (because this will always be called, even in a no-runtime
+             * context).
              */
             @Override
             public void injectDependenciesInto(final Object domainObject) {
@@ -90,8 +91,7 @@ public class RuntimeContextNoRuntime extends RuntimeContextAbstract {
             }
 
             @Override
-            public ObjectAdapter adapterFor(final Object pojo, final ObjectAdapter ownerAdapter,
-                final IdentifiedHolder identifiedHolder) {
+            public ObjectAdapter adapterFor(final Object pojo, final ObjectAdapter ownerAdapter, final IdentifiedHolder identifiedHolder) {
                 throw new UnsupportedOperationException("Not supported by this implementation of RuntimeContext");
             }
 

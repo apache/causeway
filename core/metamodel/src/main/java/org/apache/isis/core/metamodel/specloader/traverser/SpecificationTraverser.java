@@ -29,7 +29,6 @@ public interface SpecificationTraverser extends ApplicationScopedComponent {
 
     void traverseTypes(Method method, List<Class<?>> discoveredTypes);
 
-    void traverseReferencedClasses(ObjectSpecification noSpec, List<Class<?>> discoveredTypes)
-        throws ClassNotFoundException;
+    void traverseReferencedClasses(ObjectSpecification noSpec, List<Class<?>> discoveredTypes) throws ClassNotFoundException;
 
 }

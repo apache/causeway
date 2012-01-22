@@ -30,8 +30,7 @@ public class TypicalLengthFacetUsingParser extends FacetAbstract implements Typi
     private final Parser<?> parser;
     private final DependencyInjector dependencyInjector;
 
-    public TypicalLengthFacetUsingParser(final Parser<?> parser, final FacetHolder holder,
-        final DependencyInjector dependencyInjector) {
+    public TypicalLengthFacetUsingParser(final Parser<?> parser, final FacetHolder holder, final DependencyInjector dependencyInjector) {
         super(TypicalLengthFacet.class, holder, false);
         this.parser = parser;
         this.dependencyInjector = dependencyInjector;

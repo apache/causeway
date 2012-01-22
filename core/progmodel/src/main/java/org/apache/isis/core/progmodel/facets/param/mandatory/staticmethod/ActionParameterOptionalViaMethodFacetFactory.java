@@ -43,7 +43,8 @@ public class ActionParameterOptionalViaMethodFacetFactory extends MethodPrefixBa
     private static final String[] PREFIXES = { MethodPrefixConstants.OPTIONAL_PREFIX };
 
     /**
-     * Note that the {@link Facet}s registered are the generic ones from noa-architecture (where they exist)
+     * Note that the {@link Facet}s registered are the generic ones from
+     * noa-architecture (where they exist)
      */
     public ActionParameterOptionalViaMethodFacetFactory() {
         super(FeatureType.ACTIONS_ONLY, PREFIXES);
@@ -59,8 +60,7 @@ public class ActionParameterOptionalViaMethodFacetFactory extends MethodPrefixBa
 
     }
 
-    private static void attachMandatoryFacetForParametersIfOptionalMethodIsFound(
-        final ProcessMethodContext processMethodContext, final List<FacetedMethodParameter> parameters) {
+    private static void attachMandatoryFacetForParametersIfOptionalMethodIsFound(final ProcessMethodContext processMethodContext, final List<FacetedMethodParameter> parameters) {
 
         if (parameters.isEmpty()) {
             return;
@@ -70,9 +70,7 @@ public class ActionParameterOptionalViaMethodFacetFactory extends MethodPrefixBa
         final String capitalizedName = NameUtils.capitalizeName(actionMethod.getName());
 
         final Class<?> cls = processMethodContext.getCls();
-        final Method optionalMethod =
-            MethodFinderUtils.findMethod(cls, MethodScope.CLASS, MethodPrefixConstants.OPTIONAL_PREFIX
-                + capitalizedName, boolean[].class, new Class[0]);
+        final Method optionalMethod = MethodFinderUtils.findMethod(cls, MethodScope.CLASS, MethodPrefixConstants.OPTIONAL_PREFIX + capitalizedName, boolean[].class, new Class[0]);
         if (optionalMethod == null) {
             return;
         }
@@ -98,8 +96,7 @@ public class ActionParameterOptionalViaMethodFacetFactory extends MethodPrefixBa
             // ignore, test below
         }
         if (optionals == null || optionals.length != numElementsRequired) {
-            throw new MetaModelException(optionalMethod
-                + " must return an boolean[] array of same size as number of parameters of action");
+            throw new MetaModelException(optionalMethod + " must return an boolean[] array of same size as number of parameters of action");
         }
         return optionals;
     }

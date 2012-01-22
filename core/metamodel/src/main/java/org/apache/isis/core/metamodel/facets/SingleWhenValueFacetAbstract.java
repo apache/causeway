@@ -26,8 +26,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 public abstract class SingleWhenValueFacetAbstract extends FacetAbstract implements SingleWhenValueFacet {
     private final When value;
 
-    public SingleWhenValueFacetAbstract(final Class<? extends Facet> facetType, final FacetHolder holder,
-        final When value) {
+    public SingleWhenValueFacetAbstract(final Class<? extends Facet> facetType, final FacetHolder holder, final When value) {
         super(facetType, holder, false);
         this.value = value;
     }

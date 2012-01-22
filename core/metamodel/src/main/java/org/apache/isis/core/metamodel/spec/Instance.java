@@ -25,8 +25,9 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
  * Represents an instance of some element of the meta-model.
  * 
  * <p>
- * Currently the only sub-interface is {@link ObjectAdapter}. However, the intention is for associations, actions and
- * action parameters to also inherit from this interface.
+ * Currently the only sub-interface is {@link ObjectAdapter}. However, the
+ * intention is for associations, actions and action parameters to also inherit
+ * from this interface.
  */
 public interface Instance {
 
@@ -39,7 +40,8 @@ public interface Instance {
      * The owning {@link ObjectAdapter} of this instance.
      * 
      * <p>
-     * In the case of the {@link ObjectAdapter} interface, just returns <tt>null</tt>.
+     * In the case of the {@link ObjectAdapter} interface, just returns
+     * <tt>null</tt>.
      */
     ObjectAdapter getOwner();
 

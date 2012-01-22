@@ -49,10 +49,8 @@ public class ResolveState_GetEndStateTest {
 
     @Parameters
     public static Collection<Object[]> data() {
-        return Arrays.asList(new Object[][] { { NEW, null }, { GHOST, null }, { TRANSIENT, null },
-            { RESOLVING_PART, PART_RESOLVED }, { PART_RESOLVED, null }, { RESOLVING, RESOLVED }, { RESOLVED, null },
-            { UPDATING, RESOLVED }, { SERIALIZING_TRANSIENT, TRANSIENT }, { SERIALIZING_PART_RESOLVED, PART_RESOLVED },
-            { SERIALIZING_RESOLVED, RESOLVED }, { SERIALIZING_GHOST, GHOST }, { VALUE, null }, { DESTROYED, null }, });
+        return Arrays.asList(new Object[][] { { NEW, null }, { GHOST, null }, { TRANSIENT, null }, { RESOLVING_PART, PART_RESOLVED }, { PART_RESOLVED, null }, { RESOLVING, RESOLVED }, { RESOLVED, null }, { UPDATING, RESOLVED }, { SERIALIZING_TRANSIENT, TRANSIENT },
+                { SERIALIZING_PART_RESOLVED, PART_RESOLVED }, { SERIALIZING_RESOLVED, RESOLVED }, { SERIALIZING_GHOST, GHOST }, { VALUE, null }, { DESTROYED, null }, });
     }
 
     private final ResolveState from;

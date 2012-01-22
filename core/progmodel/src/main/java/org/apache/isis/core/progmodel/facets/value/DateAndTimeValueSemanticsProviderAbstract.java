@@ -52,11 +52,8 @@ public abstract class DateAndTimeValueSemanticsProviderAbstract<T> extends Value
     private static final int TYPICAL_LENGTH = 18;
 
     @SuppressWarnings("unchecked")
-    public DateAndTimeValueSemanticsProviderAbstract(final FacetHolder holder, final Class<T> adaptedClass,
-        final boolean immutable, final boolean equalByContent, final IsisConfiguration configuration,
-        final ValueSemanticsProviderContext context) {
-        super("datetime", holder, adaptedClass, TYPICAL_LENGTH, immutable, equalByContent, (T) DEFAULT_VALUE,
-            configuration, context);
+    public DateAndTimeValueSemanticsProviderAbstract(final FacetHolder holder, final Class<T> adaptedClass, final boolean immutable, final boolean equalByContent, final IsisConfiguration configuration, final ValueSemanticsProviderContext context) {
+        super("datetime", holder, adaptedClass, TYPICAL_LENGTH, immutable, equalByContent, (T) DEFAULT_VALUE, configuration, context);
 
         final String formatRequired = configuration.getString(ConfigurationConstants.ROOT + "value.format.datetime");
         if (formatRequired == null) {
@@ -91,8 +88,7 @@ public abstract class DateAndTimeValueSemanticsProviderAbstract<T> extends Value
 
     @Override
     protected DateFormat format(final Localization localization) {
-        final DateFormat dateFormat =
-            DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT, localization.getLocale());
+        final DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT, localization.getLocale());
         dateFormat.setTimeZone(localization.getTimeZone());
         return dateFormat;
     }

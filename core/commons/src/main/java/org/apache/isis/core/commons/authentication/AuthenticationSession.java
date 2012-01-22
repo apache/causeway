@@ -44,14 +44,16 @@ public interface AuthenticationSession extends Encodable {
      * A unique code given to this session during authentication.
      * 
      * <p>
-     * This can be used to confirm that this session has been properly created and the user has been authenticated. It
-     * should return an empty string (<tt>""</tt>) if this is unauthenticated user (i.e., as created within an
+     * This can be used to confirm that this session has been properly created
+     * and the user has been authenticated. It should return an empty string (
+     * <tt>""</tt>) if this is unauthenticated user (i.e., as created within an
      * exploration system).
      */
     public String getValidationCode();
 
     /**
-     * For viewers (in particular) to store additional attributes, analogous to an <tt>HttpSession</tt>.
+     * For viewers (in particular) to store additional attributes, analogous to
+     * an <tt>HttpSession</tt>.
      */
     public Object getAttribute(String attributeName);
 

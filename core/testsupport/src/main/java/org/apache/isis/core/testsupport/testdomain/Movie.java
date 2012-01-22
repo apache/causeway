@@ -61,7 +61,8 @@ public class Movie {
     }
 
     /*
-     * public static void aboutActionFindMovie(ActionAbout about, String name, Person director, Person actor) {
-     * about.setParameter(0, "Name"); about.setParameter(1, "Director"); about.setParameter(2, "Actor"); }
+     * public static void aboutActionFindMovie(ActionAbout about, String name,
+     * Person director, Person actor) { about.setParameter(0, "Name");
+     * about.setParameter(1, "Director"); about.setParameter(2, "Actor"); }
      */
 }

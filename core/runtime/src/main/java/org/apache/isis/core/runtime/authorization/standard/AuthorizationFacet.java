@@ -17,18 +17,16 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.runtime.authorization.standard;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.interactions.DisablingInteractionAdvisor;
 import org.apache.isis.core.metamodel.interactions.HidingInteractionAdvisor;
 
-
 /**
- * Optionally hide or disable an object, property, collection or action depending on the authorization.
+ * Optionally hide or disable an object, property, collection or action
+ * depending on the authorization.
  */
 public interface AuthorizationFacet extends Facet, HidingInteractionAdvisor, DisablingInteractionAdvisor {
-
 
 }

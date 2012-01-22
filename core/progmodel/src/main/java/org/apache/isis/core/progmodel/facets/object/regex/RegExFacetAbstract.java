@@ -37,8 +37,7 @@ public abstract class RegExFacetAbstract extends MultipleValueFacetAbstract impl
     private final String format;
     private final boolean caseSensitive;
 
-    public RegExFacetAbstract(final String validation, final String format, final boolean caseSensitive,
-        final FacetHolder holder) {
+    public RegExFacetAbstract(final String validation, final String format, final boolean caseSensitive, final FacetHolder holder) {
         super(type(), holder);
         this.validation = validation;
         this.format = format;

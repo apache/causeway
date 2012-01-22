@@ -24,8 +24,7 @@ public final class DebugUtils {
     private DebugUtils() {
     }
 
-    private static final String SPACES =
-        "                                                                                                            ";
+    private static final String SPACES = "                                                                                                            ";
     private static final int NO_OF_SPACES = SPACES.length();
 
     public static String indentString(final int indentSpaces) {

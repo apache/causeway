@@ -17,23 +17,22 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.runtime.snapshot;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.w3c.dom.Element;
 
-
 /**
- * Represents a place in the graph to be navigated; really just wraps an object and an XML Element in its XML
- * document. Also provides the capability to extract the corresponding XSD element (associated with each XML
- * element).
+ * Represents a place in the graph to be navigated; really just wraps an object
+ * and an XML Element in its XML document. Also provides the capability to
+ * extract the corresponding XSD element (associated with each XML element).
  * 
- * The XML element (its children) is mutated as the graph of objects is navigated.
+ * The XML element (its children) is mutated as the graph of objects is
+ * navigated.
  */
 final class Place {
     private static final String USER_DATA_XSD_KEY = "XSD";
-	private final ObjectAdapter object;
+    private final ObjectAdapter object;
     private final Element element;
 
     Place(final ObjectAdapter object, final Element element) {

@@ -37,7 +37,8 @@ public class DisabledFacetViaDisableForSessionMethodFacetFactory extends MethodP
     private static final String[] PREFIXES = { MethodPrefixConstants.DISABLE_PREFIX };
 
     /**
-     * Note that the {@link Facet}s registered are the generic ones from noa-architecture (where they exist)
+     * Note that the {@link Facet}s registered are the generic ones from
+     * noa-architecture (where they exist)
      */
     public DisabledFacetViaDisableForSessionMethodFacetFactory() {
         super(FeatureType.MEMBERS, PREFIXES);
@@ -52,17 +53,13 @@ public class DisabledFacetViaDisableForSessionMethodFacetFactory extends MethodP
         attachDisableFacetIfDisableMethodForSessionIsFound(processMethodContext);
     }
 
-    public static void attachDisableFacetIfDisableMethodForSessionIsFound(
-        final ProcessMethodContext processMethodContext) {
+    public static void attachDisableFacetIfDisableMethodForSessionIsFound(final ProcessMethodContext processMethodContext) {
 
         final Method method = processMethodContext.getMethod();
         final String capitalizedName = NameUtils.javaBaseNameStripAccessorPrefixIfRequired(method.getName());
 
         final Class<?> cls = processMethodContext.getCls();
-        final Method disableForSessionMethod =
-            MethodFinderUtils
-                .findMethod(cls, MethodScope.CLASS, MethodPrefixConstants.DISABLE_PREFIX + capitalizedName,
-                    String.class, new Class[] { UserMemento.class });
+        final Method disableForSessionMethod = MethodFinderUtils.findMethod(cls, MethodScope.CLASS, MethodPrefixConstants.DISABLE_PREFIX + capitalizedName, String.class, new Class[] { UserMemento.class });
 
         if (disableForSessionMethod == null) {
             return;

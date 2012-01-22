@@ -20,7 +20,8 @@
 package org.apache.isis.core.metamodel.spec;
 
 /**
- * A runtime exception indicating an problem has occurred within the Apache Isis framework.
+ * A runtime exception indicating an problem has occurred within the Apache Isis
+ * framework.
  */
 public class ObjectSpecificationException extends RuntimeException {
     private static final long serialVersionUID = 1L;

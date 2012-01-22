@@ -27,12 +27,12 @@ import org.apache.isis.core.metamodel.consent.InteractionContextType;
 import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
 
 /**
- * See {@link InteractionContext} for overview; analogous to {@link AccessEvent}.
+ * See {@link InteractionContext} for overview; analogous to {@link AccessEvent}
+ * .
  */
 public abstract class AccessContext<T extends AccessEvent> extends InteractionContext<T> {
 
-    public AccessContext(final InteractionContextType interactionType, final AuthenticationSession session,
-        final InteractionInvocationMethod invocationMethod, final Identifier identifier, final ObjectAdapter target) {
+    public AccessContext(final InteractionContextType interactionType, final AuthenticationSession session, final InteractionInvocationMethod invocationMethod, final Identifier identifier, final ObjectAdapter target) {
         super(interactionType, session, invocationMethod, identifier, target);
     }
 

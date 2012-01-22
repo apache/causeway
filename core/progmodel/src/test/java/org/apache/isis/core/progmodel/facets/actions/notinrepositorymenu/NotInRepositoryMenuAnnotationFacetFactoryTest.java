@@ -29,7 +29,6 @@ import org.apache.isis.core.progmodel.facets.actions.notinservicemenu.NotInServi
 import org.apache.isis.core.progmodel.facets.actions.notinservicemenu.NotInServiceMenuFacetAbstract;
 import org.apache.isis.core.progmodel.facets.actions.notinservicemenu.annotation.NotInServiceMenuAnnotationFacetFactory;
 
-
 public class NotInRepositoryMenuAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 
     private NotInServiceMenuAnnotationFacetFactory facetFactory;
@@ -47,12 +46,12 @@ public class NotInRepositoryMenuAnnotationFacetFactoryTest extends AbstractFacet
         super.tearDown();
     }
 
-
     public void testAnnotationPickedUp() {
         class CustomerRepository {
             @SuppressWarnings("unused")
-			@NotInServiceMenu
-            public void someAction() {}
+            @NotInServiceMenu
+            public void someAction() {
+            }
         }
         final Method actionMethod = findMethod(CustomerRepository.class, "someAction");
 
@@ -66,4 +65,3 @@ public class NotInRepositoryMenuAnnotationFacetFactoryTest extends AbstractFacet
     }
 
 }
-

@@ -37,7 +37,7 @@ import org.apache.log4j.Logger;
 import com.google.common.base.Function;
 import com.google.common.base.Strings;
 
-public class TitleFacetViaTitleAnnotation extends TitleFacetAbstract  {
+public class TitleFacetViaTitleAnnotation extends TitleFacetAbstract {
 
     private static final Logger LOG = Logger.getLogger(TitleFacetViaTitleAnnotation.class);
     private final List<TitleComponent> components;
@@ -48,42 +48,46 @@ public class TitleFacetViaTitleAnnotation extends TitleFacetAbstract  {
         public static final Function<? super Method, ? extends TitleComponent> FROM_METHOD = new Function<Method, TitleComponent>() {
 
             @Override
-            public TitleComponent apply(Method input) {
+            public TitleComponent apply(final Method input) {
                 return TitleComponent.of(input);
             }
         };
-
 
         private final String prepend;
         private final String append;
         private final Method method;
         private final int abbreviateTo;
-        
-        private TitleComponent(String prepend, String append, Method method, int abbreviateTo) {
+
+        private TitleComponent(final String prepend, final String append, final Method method, final int abbreviateTo) {
             super();
             this.prepend = prepend;
             this.append = append;
             this.method = method;
             this.abbreviateTo = abbreviateTo;
         }
+
         public String getPrepend() {
             return prepend;
         }
+
         public String getAppend() {
             return append;
         }
+
         public Method getMethod() {
             return method;
         }
-        public static TitleComponent of(Method method) {
+
+        public static TitleComponent of(final Method method) {
             final Title annotation = method.getAnnotation(Title.class);
-            final String prepend = annotation!=null?annotation.prepend():" ";
-            final String append = annotation!=null?annotation.append():"";
-            final int abbreviateTo = annotation!=null?annotation.abbreviatedTo():Integer.MAX_VALUE;
+            final String prepend = annotation != null ? annotation.prepend() : " ";
+            final String append = annotation != null ? annotation.append() : "";
+            final int abbreviateTo = annotation != null ? annotation.abbreviatedTo() : Integer.MAX_VALUE;
             return new TitleComponent(prepend, append, method, abbreviateTo);
         }
     }
-    public TitleFacetViaTitleAnnotation(final List<TitleComponent> components, final FacetHolder holder, AdapterMap adapterMap, LocalizationProvider localizationProvider) {
+
+    public TitleFacetViaTitleAnnotation(final List<TitleComponent> components, final FacetHolder holder, final AdapterMap adapterMap, final LocalizationProvider localizationProvider) {
         super(holder);
         this.components = components;
         this.adapterMap = adapterMap;
@@ -92,31 +96,31 @@ public class TitleFacetViaTitleAnnotation extends TitleFacetAbstract  {
 
     @Override
     public String title(final ObjectAdapter owningAdapter, final Localization localization) {
-    	StringBuilder stringBuilder = new StringBuilder();
-    	
-        try {
-        	for (TitleComponent component : this.components) {
-        		String title = null;
-                final Object titlePart = AdapterInvokeUtils.invoke(component.getMethod(), owningAdapter);
-        		if(titlePart != null) {
-        		    // use either titleFacet...
-        		    title = titleOf(titlePart);
-        		    if (Strings.isNullOrEmpty(title)) {
-        		        // or the toString() otherwise
-        		        title = titlePart.toString().trim();
-        		    }
-                }
-        		if (Strings.isNullOrEmpty(title)) {
-        		    continue;
-        		}
-        		if(stringBuilder.length() > 0) {
-        		    stringBuilder.append(component.getPrepend());
-        		}
-        		stringBuilder.append(abbreviated(title, component.abbreviateTo));
-        		stringBuilder.append(component.getAppend());
-        	}
+        final StringBuilder stringBuilder = new StringBuilder();
 
-        	return stringBuilder.toString().trim();
+        try {
+            for (final TitleComponent component : this.components) {
+                String title = null;
+                final Object titlePart = AdapterInvokeUtils.invoke(component.getMethod(), owningAdapter);
+                if (titlePart != null) {
+                    // use either titleFacet...
+                    title = titleOf(titlePart);
+                    if (Strings.isNullOrEmpty(title)) {
+                        // or the toString() otherwise
+                        title = titlePart.toString().trim();
+                    }
+                }
+                if (Strings.isNullOrEmpty(title)) {
+                    continue;
+                }
+                if (stringBuilder.length() > 0) {
+                    stringBuilder.append(component.getPrepend());
+                }
+                stringBuilder.append(abbreviated(title, component.abbreviateTo));
+                stringBuilder.append(component.getAppend());
+            }
+
+            return stringBuilder.toString().trim();
         } catch (final RuntimeException ex) {
             LOG.warn("Title failure", ex);
             return "Failed Title";
@@ -125,11 +129,11 @@ public class TitleFacetViaTitleAnnotation extends TitleFacetAbstract  {
 
     private String titleOf(final Object domainObject) {
         final ObjectAdapter adapter = adapterMap.getAdapterFor(domainObject);
-        if(adapter == null) {
+        if (adapter == null) {
             return null;
-        } 
+        }
         final ObjectSpecification returnSpec = adapter.getSpecification();
-        if(!returnSpec.containsFacet(TitleFacet.class)) {
+        if (!returnSpec.containsFacet(TitleFacet.class)) {
             return null;
         }
         return returnSpec.getTitle(adapter, localizationProvider.getLocalization());
@@ -138,10 +142,9 @@ public class TitleFacetViaTitleAnnotation extends TitleFacetAbstract  {
     public List<TitleComponent> getComponents() {
         return components;
     }
-    
-    private static String abbreviated(String str, int maxLength) {
-        return str.length() < maxLength?str:str.substring(0, maxLength-3)+"...";
-    }
 
+    private static String abbreviated(final String str, final int maxLength) {
+        return str.length() < maxLength ? str : str.substring(0, maxLength - 3) + "...";
+    }
 
 }

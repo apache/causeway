@@ -62,8 +62,9 @@ public abstract class ClassSubstitutorAbstract implements ClassSubstitutor {
      * Hook method for subclasses to override if required.
      * 
      * <p>
-     * Default implementation will either return the class, unless has been registered as to be {@link #ignore(Class)
-     * ignore}d, in which case returns <tt>null</tt>.
+     * Default implementation will either return the class, unless has been
+     * registered as to be {@link #ignore(Class) ignore}d, in which case returns
+     * <tt>null</tt>.
      */
     @Override
     public Class<?> getClass(final Class<?> cls) {
@@ -85,7 +86,8 @@ public abstract class ClassSubstitutorAbstract implements ClassSubstitutor {
     // ////////////////////////////////////////////////////////////////////
 
     /**
-     * For any classes registered as ignored, {@link #getClass(Class)} will return <tt>null</tt>.
+     * For any classes registered as ignored, {@link #getClass(Class)} will
+     * return <tt>null</tt>.
      */
     protected boolean ignore(final Class<?> q) {
         return classesToIgnore.add(q);

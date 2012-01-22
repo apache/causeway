@@ -34,14 +34,14 @@ public class DateTimeValueSemanticsProvider extends DateAndTimeValueSemanticsPro
     private static final boolean EQUAL_BY_CONTENT = false;
 
     /**
-     * Required because implementation of {@link Parser} and {@link EncoderDecoder}.
+     * Required because implementation of {@link Parser} and
+     * {@link EncoderDecoder}.
      */
     public DateTimeValueSemanticsProvider() {
         this(null, null, null);
     }
 
-    public DateTimeValueSemanticsProvider(final FacetHolder holder, final IsisConfiguration configuration,
-        final ValueSemanticsProviderContext context) {
+    public DateTimeValueSemanticsProvider(final FacetHolder holder, final IsisConfiguration configuration, final ValueSemanticsProviderContext context) {
         super(holder, DateTime.class, IMMUTABLE, EQUAL_BY_CONTENT, configuration, context);
     }
 
@@ -52,8 +52,7 @@ public class DateTimeValueSemanticsProvider extends DateAndTimeValueSemanticsPro
     }
 
     @Override
-    protected DateTime add(final DateTime original, final int years, final int months, final int days, final int hours,
-        final int minutes) {
+    protected DateTime add(final DateTime original, final int years, final int months, final int days, final int hours, final int minutes) {
         DateTime date = original;
         date = date.add(years, months, days, hours, minutes);
         return date;

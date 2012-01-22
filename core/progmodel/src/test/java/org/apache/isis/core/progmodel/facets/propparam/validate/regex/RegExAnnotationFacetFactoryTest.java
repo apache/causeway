@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.propparam.validate.regex;
 
 import java.lang.reflect.Method;
@@ -36,14 +35,14 @@ import org.apache.isis.core.progmodel.facets.param.validate.regexannot.RegExFace
 import org.apache.isis.core.progmodel.facets.properties.validate.regexannot.RegExFacetAnnotationForProperty;
 import org.apache.isis.core.progmodel.facets.properties.validate.regexannot.RegExFacetAnnotationForPropertyFacetFactory;
 
-
 public class RegExAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 
     public void testRegExAnnotationPickedUpOnClass() {
-        RegExFacetAnnotationForTypeFacetFactory facetFactory = new RegExFacetAnnotationForTypeFacetFactory();
+        final RegExFacetAnnotationForTypeFacetFactory facetFactory = new RegExFacetAnnotationForTypeFacetFactory();
 
         @RegEx(validation = "^A.*", caseSensitive = false)
-        class Customer {}
+        class Customer {
+        }
         facetFactory.process(new ProcessClassContext(Customer.class, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(RegExFacet.class);
@@ -55,7 +54,7 @@ public class RegExAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
     }
 
     public void testRegExAnnotationPickedUpOnProperty() {
-        RegExFacetAnnotationForPropertyFacetFactory facetFactory = new RegExFacetAnnotationForPropertyFacetFactory();
+        final RegExFacetAnnotationForPropertyFacetFactory facetFactory = new RegExFacetAnnotationForPropertyFacetFactory();
 
         class Customer {
             @SuppressWarnings("unused")
@@ -77,11 +76,12 @@ public class RegExAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
     }
 
     public void testRegExAnnotationPickedUpOnActionParameter() {
-        RegExFacetAnnotationForParameterFacetFactory facetFactory = new RegExFacetAnnotationForParameterFacetFactory();
+        final RegExFacetAnnotationForParameterFacetFactory facetFactory = new RegExFacetAnnotationForParameterFacetFactory();
 
         class Customer {
             @SuppressWarnings("unused")
-            public void someAction(@RegEx(validation = "^A.*", caseSensitive = false) final String foo) {}
+            public void someAction(@RegEx(validation = "^A.*", caseSensitive = false) final String foo) {
+            }
         }
         final Method method = findMethod(Customer.class, "someAction", new Class[] { String.class });
 
@@ -96,7 +96,7 @@ public class RegExAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
     }
 
     public void testRegExAnnotationIgnoredForNonStringsProperty() {
-        RegExFacetAnnotationForParameterFacetFactory facetFactory = new RegExFacetAnnotationForParameterFacetFactory();
+        final RegExFacetAnnotationForParameterFacetFactory facetFactory = new RegExFacetAnnotationForParameterFacetFactory();
 
         class Customer {
             @SuppressWarnings("unused")
@@ -113,11 +113,12 @@ public class RegExAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
     }
 
     public void testRegExAnnotationIgnoredForPrimitiveOnActionParameter() {
-        RegExFacetAnnotationForParameterFacetFactory facetFactory = new RegExFacetAnnotationForParameterFacetFactory();
+        final RegExFacetAnnotationForParameterFacetFactory facetFactory = new RegExFacetAnnotationForParameterFacetFactory();
 
         class Customer {
             @SuppressWarnings("unused")
-            public void someAction(@RegEx(validation = "^A.*", caseSensitive = false) final int foo) {}
+            public void someAction(@RegEx(validation = "^A.*", caseSensitive = false) final int foo) {
+            }
         }
         final Method method = findMethod(Customer.class, "someAction", new Class[] { int.class });
 
@@ -127,4 +128,3 @@ public class RegExAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
     }
 
 }
-

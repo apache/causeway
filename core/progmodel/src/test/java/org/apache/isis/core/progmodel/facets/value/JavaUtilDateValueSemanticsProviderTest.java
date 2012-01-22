@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.value;
 
 import static org.junit.Assert.assertEquals;
@@ -27,17 +26,16 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.TimeZone;
 
-import org.jmock.Expectations;
-import org.jmock.integration.junit4.JMock;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-
 import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facets.object.parseable.TextEntryParseException;
 import org.apache.isis.core.progmodel.facets.value.dateutil.JavaUtilDateValueSemanticsProvider;
+import org.jmock.Expectations;
+import org.jmock.integration.junit4.JMock;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 
 @RunWith(JMock.class)
 public class JavaUtilDateValueSemanticsProviderTest extends ValueSemanticsProviderAbstractTestCase {
@@ -47,10 +45,12 @@ public class JavaUtilDateValueSemanticsProviderTest extends ValueSemanticsProvid
 
     @Before
     public void setUpObjects() throws Exception {
-    	mockery.checking(new Expectations(){{
-    		allowing(mockConfiguration).getString("isis.value.format.datetime");
-    		will(returnValue(null));
-    	}});
+        mockery.checking(new Expectations() {
+            {
+                allowing(mockConfiguration).getString("isis.value.format.datetime");
+                will(returnValue(null));
+            }
+        });
 
         TestClock.initialize();
         date = new java.util.Date(0);
@@ -69,12 +69,14 @@ public class JavaUtilDateValueSemanticsProviderTest extends ValueSemanticsProvid
         try {
             getValue().parseTextEntry(null, "invalid entry");
             fail();
-        } catch (final TextEntryParseException expected) {}
+        } catch (final TextEntryParseException expected) {
+        }
     }
 
     /**
-     * Something rather bizarre here, that the epoch formats as 01:00 rather than 00:00. It's obviously
-     * because of some sort of timezone issue, but I don't know where that dependency is coming from.
+     * Something rather bizarre here, that the epoch formats as 01:00 rather
+     * than 00:00. It's obviously because of some sort of timezone issue, but I
+     * don't know where that dependency is coming from.
      */
     @Test
     public void testTitleOf() {

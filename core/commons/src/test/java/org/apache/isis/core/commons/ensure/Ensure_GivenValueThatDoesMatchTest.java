@@ -67,8 +67,7 @@ public class Ensure_GivenValueThatDoesMatchTest {
     @Test
     public void whenCallEnsureThatContextWithOverloadedShouldReturnOriginalObject() {
         final String object = "foo";
-        final String returnedObject =
-            Ensure.ensureThatContext(object, is(not(nullValue(String.class))), "some message");
+        final String returnedObject = Ensure.ensureThatContext(object, is(not(nullValue(String.class))), "some message");
         assertThat(returnedObject, sameInstance(object));
     }
 

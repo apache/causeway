@@ -29,15 +29,14 @@ import org.apache.isis.core.metamodel.consent.InteractionContextType;
 import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
 
 /**
- * See {@link InteractionContext} for overview; analogous to {@link ActionInvocationEvent}.
+ * See {@link InteractionContext} for overview; analogous to
+ * {@link ActionInvocationEvent}.
  */
 public class ActionInvocationContext extends ValidityContext<ActionInvocationEvent> {
 
     private final ObjectAdapter[] args;
 
-    public ActionInvocationContext(final AuthenticationSession session,
-        final InteractionInvocationMethod invocationMethod, final ObjectAdapter target, final Identifier id,
-        final ObjectAdapter[] args) {
+    public ActionInvocationContext(final AuthenticationSession session, final InteractionInvocationMethod invocationMethod, final ObjectAdapter target, final Identifier id, final ObjectAdapter[] args) {
         super(InteractionContextType.ACTION_INVOKE, session, invocationMethod, id, target);
         this.args = args;
     }

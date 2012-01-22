@@ -17,19 +17,16 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.ordering.memberorder;
 
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
-import org.apache.log4j.Level;
-import org.apache.log4j.LogManager;
-
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.layout.memberorderfacet.MemberOrderComparator;
 import org.apache.isis.core.progmodel.facets.members.order.MemberOrderFacetAnnotation;
-
+import org.apache.log4j.Level;
+import org.apache.log4j.LogManager;
 
 public class MemberOrderComparatorTest extends TestCase {
 
@@ -41,10 +38,12 @@ public class MemberOrderComparatorTest extends TestCase {
 
     public static class Customer {
         private String abc;
+
         public String getAbc() {
             return abc;
         }
     }
+
     private final FacetedMethod m1 = FacetedMethod.createProperty(Customer.class, "abc");
     private final FacetedMethod m2 = FacetedMethod.createProperty(Customer.class, "abc");
 
@@ -57,7 +56,8 @@ public class MemberOrderComparatorTest extends TestCase {
     }
 
     @Override
-    protected void tearDown() throws Exception {}
+    protected void tearDown() throws Exception {
+    }
 
     public void testDefaultGroupOneComponent() {
         m1.addFacet(new MemberOrderFacetAnnotation("", "1", m1));

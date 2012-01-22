@@ -36,8 +36,7 @@ public class ObjectValidPropertiesFacetImpl extends ObjectValidPropertiesFacetAb
     public String invalidReason(final ObjectValidityContext context) {
         final StringBuilder buf = new StringBuilder();
         final ObjectAdapter adapter = context.getTarget();
-        for (final ObjectAssociation property : adapter.getSpecification().getAssociations(
-            ObjectAssociationFilters.PROPERTIES)) {
+        for (final ObjectAssociation property : adapter.getSpecification().getAssociations(ObjectAssociationFilters.PROPERTIES)) {
             // ignore hidden properties
             if (property.isVisible(context.getSession(), adapter).isVetoed()) {
                 continue;

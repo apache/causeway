@@ -39,8 +39,7 @@ public class PropertyDefaultFacetViaMethod extends PropertyDefaultFacetAbstract 
     private final SpecificationLookup specificationLookup;
     private final AdapterMap adapterMap;
 
-    public PropertyDefaultFacetViaMethod(final Method method, final FacetHolder holder,
-        final SpecificationLookup specificationLookup, final AdapterMap adapterManager) {
+    public PropertyDefaultFacetViaMethod(final Method method, final FacetHolder holder, final SpecificationLookup specificationLookup, final AdapterMap adapterManager) {
         super(holder);
         this.method = method;
         this.specificationLookup = specificationLookup;
@@ -48,7 +47,8 @@ public class PropertyDefaultFacetViaMethod extends PropertyDefaultFacetAbstract 
     }
 
     /**
-     * Returns a singleton list of the {@link Method} provided in the constructor.
+     * Returns a singleton list of the {@link Method} provided in the
+     * constructor.
      */
     @Override
     public List<Method> getMethods() {
@@ -68,7 +68,7 @@ public class PropertyDefaultFacetViaMethod extends PropertyDefaultFacetAbstract 
     @Override
     public ObjectAdapter getDefault(final ObjectAdapter owningAdapter) {
         final Object result = AdapterInvokeUtils.invoke(method, owningAdapter);
-        if(result == null) {
+        if (result == null) {
             return null;
         }
         return createAdapter(method.getReturnType(), result);

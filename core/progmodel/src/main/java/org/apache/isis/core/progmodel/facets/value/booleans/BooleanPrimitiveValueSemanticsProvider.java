@@ -27,20 +27,19 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.properties.defaults.PropertyDefaultFacet;
 import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProviderContext;
 
-public class BooleanPrimitiveValueSemanticsProvider extends BooleanValueSemanticsProviderAbstract implements
-    PropertyDefaultFacet {
+public class BooleanPrimitiveValueSemanticsProvider extends BooleanValueSemanticsProviderAbstract implements PropertyDefaultFacet {
 
     private static final Boolean DEFAULT_VALUE = Boolean.FALSE;
 
     /**
-     * Required because implementation of {@link Parser} and {@link EncoderDecoder}.
+     * Required because implementation of {@link Parser} and
+     * {@link EncoderDecoder}.
      */
     public BooleanPrimitiveValueSemanticsProvider() {
         this(null, null, null);
     }
 
-    public BooleanPrimitiveValueSemanticsProvider(final FacetHolder holder, final IsisConfiguration configuration,
-        final ValueSemanticsProviderContext context) {
+    public BooleanPrimitiveValueSemanticsProvider(final FacetHolder holder, final IsisConfiguration configuration, final ValueSemanticsProviderContext context) {
         super(holder, boolean.class, DEFAULT_VALUE, configuration, context);
     }
 

@@ -44,7 +44,8 @@ public class ActionDefaultsFacetFactory extends MethodPrefixBasedFacetFactoryAbs
     private AdapterMap adapterMap;
 
     /**
-     * Note that the {@link Facet}s registered are the generic ones from noa-architecture (where they exist)
+     * Note that the {@link Facet}s registered are the generic ones from
+     * noa-architecture (where they exist)
      */
     public ActionDefaultsFacetFactory() {
         super(FeatureType.ACTIONS_ONLY, PREFIXES);
@@ -60,8 +61,7 @@ public class ActionDefaultsFacetFactory extends MethodPrefixBasedFacetFactoryAbs
         attachActionDefaultsFacetIfParameterDefaultsMethodIsFound(processMethodContext);
     }
 
-    private static void attachActionDefaultsFacetIfParameterDefaultsMethodIsFound(
-        final ProcessMethodContext processMethodContext) {
+    private static void attachActionDefaultsFacetIfParameterDefaultsMethodIsFound(final ProcessMethodContext processMethodContext) {
 
         Method defaultsMethod = findDefaultsMethodReturning(processMethodContext, Object[].class);
         if (defaultsMethod == null) {
@@ -78,8 +78,7 @@ public class ActionDefaultsFacetFactory extends MethodPrefixBasedFacetFactoryAbs
         FacetUtil.addFacet(facet);
     }
 
-    private static Method findDefaultsMethodReturning(final ProcessMethodContext processMethodContext,
-        final Class<?> returnType) {
+    private static Method findDefaultsMethodReturning(final ProcessMethodContext processMethodContext, final Class<?> returnType) {
 
         final Method actionMethod = processMethodContext.getMethod();
         final String capitalizedName = NameUtils.capitalizeName(actionMethod.getName());

@@ -52,24 +52,27 @@ import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProvider
  * <p>
  * As a result, will always install the following facets:
  * <ul>
- * <li> {@link TitleFacet} - based on the <tt>title()</tt> method if present, otherwise uses <tt>toString()</tt></li>
- * <li> {@link IconFacet} - based on the <tt>iconName()</tt> method if present, otherwise derived from the class name</li>
+ * <li> {@link TitleFacet} - based on the <tt>title()</tt> method if present,
+ * otherwise uses <tt>toString()</tt></li>
+ * <li> {@link IconFacet} - based on the <tt>iconName()</tt> method if present,
+ * otherwise derived from the class name</li>
  * </ul>
  * <p>
  * In addition, the following facets may be installed:
  * <ul>
- * <li> {@link ParseableFacet} - if a {@link Parser} has been specified explicitly in the annotation (or is picked up
- * through an external configuration file)</li>
- * <li> {@link EncodableFacet} - if an {@link EncoderDecoder} has been specified explicitly in the annotation (or is
- * picked up through an external configuration file)</li>
+ * <li> {@link ParseableFacet} - if a {@link Parser} has been specified
+ * explicitly in the annotation (or is picked up through an external
+ * configuration file)</li>
+ * <li> {@link EncodableFacet} - if an {@link EncoderDecoder} has been specified
+ * explicitly in the annotation (or is picked up through an external
+ * configuration file)</li>
  * <li> {@link ImmutableFacet} - if specified explicitly in the annotation
  * <li> {@link EqualByContentFacet} - if specified explicitly in the annotation
  * </ul>
  * <p>
  * Note that {@link AggregatedFacet} is <i>not</i> installed.
  */
-public class ValueFacetFactory extends AnnotationBasedFacetFactoryAbstract implements IsisConfigurationAware,
-    AuthenticationSessionProviderAware, AdapterMapAware, DependencyInjectorAware {
+public class ValueFacetFactory extends AnnotationBasedFacetFactoryAbstract implements IsisConfigurationAware, AuthenticationSessionProviderAware, AdapterMapAware, DependencyInjectorAware {
 
     private IsisConfiguration configuration;
     private AuthenticationSessionProvider authenticationSessionProvider;
@@ -93,20 +96,16 @@ public class ValueFacetFactory extends AnnotationBasedFacetFactoryAbstract imple
         // create from annotation, if present
         final Value annotation = getAnnotation(cls, Value.class);
         if (annotation != null) {
-            final ValueFacetAnnotation facet =
-                new ValueFacetAnnotation(cls, holder, getIsisConfiguration(), createValueSemanticsProviderContext());
+            final ValueFacetAnnotation facet = new ValueFacetAnnotation(cls, holder, getIsisConfiguration(), createValueSemanticsProviderContext());
             if (facet.isValid()) {
                 return facet;
             }
         }
 
         // otherwise, try to create from configuration, if present
-        final String semanticsProviderName =
-            ValueSemanticsProviderUtil.semanticsProviderNameFromConfiguration(cls, configuration);
+        final String semanticsProviderName = ValueSemanticsProviderUtil.semanticsProviderNameFromConfiguration(cls, configuration);
         if (!StringUtils.isNullOrEmpty(semanticsProviderName)) {
-            final ValueFacetFromConfiguration facet =
-                new ValueFacetFromConfiguration(semanticsProviderName, holder, getIsisConfiguration(),
-                    createValueSemanticsProviderContext());
+            final ValueFacetFromConfiguration facet = new ValueFacetFromConfiguration(semanticsProviderName, holder, getIsisConfiguration(), createValueSemanticsProviderContext());
             if (facet.isValid()) {
                 return facet;
             }
@@ -117,8 +116,7 @@ public class ValueFacetFactory extends AnnotationBasedFacetFactoryAbstract imple
     }
 
     protected ValueSemanticsProviderContext createValueSemanticsProviderContext() {
-        return new ValueSemanticsProviderContext(getAuthenticationSessionProvider(), getSpecificationLookup(),
-            getAdapterManager(), getDependencyInjector());
+        return new ValueSemanticsProviderContext(getAuthenticationSessionProvider(), getSpecificationLookup(), getAdapterManager(), getDependencyInjector());
     }
 
     // ////////////////////////////////////////////////////////////////////

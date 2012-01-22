@@ -29,11 +29,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.log4j.Logger;
-
 import org.apache.isis.core.commons.lang.IoUtils;
 import org.apache.isis.core.commons.lang.Resources;
 import org.apache.isis.core.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
 
 public class ResourceServlet extends HttpServlet {
 
@@ -41,30 +40,26 @@ public class ResourceServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     @Override
-    protected void doPost(final HttpServletRequest request, final HttpServletResponse response)
-        throws ServletException, IOException {
+    protected void doPost(final HttpServletRequest request, final HttpServletResponse response) throws ServletException, IOException {
         processRequest(request, response);
     }
 
     @Override
-    protected void doGet(final HttpServletRequest request, final HttpServletResponse response) throws ServletException,
-        IOException {
+    protected void doGet(final HttpServletRequest request, final HttpServletResponse response) throws ServletException, IOException {
         processRequest(request, response);
     }
 
-    private void processRequest(final HttpServletRequest request, final HttpServletResponse response)
-        throws ServletException, IOException {
+    private void processRequest(final HttpServletRequest request, final HttpServletResponse response) throws ServletException, IOException {
         final String servletPath = StringUtils.stripLeadingSlash(request.getServletPath());
         if (LOG.isInfoEnabled()) {
-        	LOG.info("request: " + servletPath);	
+            LOG.info("request: " + servletPath);
         }
-        
 
         // try to load from filesystem
-        InputStream is2 = getRealPath(request);
+        final InputStream is2 = getRealPath(request);
         if (is2 != null) {
-            if(LOG.isDebugEnabled()) {
-            	LOG.debug("request: " + servletPath + " loaded from filesystem");
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("request: " + servletPath + " loaded from filesystem");
             }
             IoUtils.copy(is2, response.getOutputStream());
             is2.close();
@@ -72,11 +67,11 @@ public class ResourceServlet extends HttpServlet {
         }
 
         // otherwise, try to load from classpath
-        InputStream is = Resources.getResourceAsStream(servletPath);
+        final InputStream is = Resources.getResourceAsStream(servletPath);
         if (is != null) {
-        	if(LOG.isDebugEnabled()) {
-        		LOG.debug("request: " + servletPath + " loaded from classpath");
-        	}
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("request: " + servletPath + " loaded from classpath");
+            }
             IoUtils.copy(is, response.getOutputStream());
             is.close();
             return;
@@ -86,13 +81,13 @@ public class ResourceServlet extends HttpServlet {
     }
 
     private FileInputStream getRealPath(final HttpServletRequest request) {
-        String realPath = request.getSession().getServletContext().getRealPath(request.getServletPath());
+        final String realPath = request.getSession().getServletContext().getRealPath(request.getServletPath());
         if (realPath == null) {
             return null;
         }
         try {
             return new FileInputStream(realPath);
-        } catch (FileNotFoundException e) {
+        } catch (final FileNotFoundException e) {
             return null;
         }
     }

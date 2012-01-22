@@ -231,12 +231,12 @@ public class ObjectActionSet implements ObjectAction {
     }
 
     @Override
-    public ObjectActionParameter getParameterById(String paramId) {
+    public ObjectActionParameter getParameterById(final String paramId) {
         return null;
     }
 
     @Override
-    public ObjectActionParameter getParameterByName(String paramName) {
+    public ObjectActionParameter getParameterByName(final String paramName) {
         return null;
     }
 
@@ -273,8 +273,7 @@ public class ObjectActionSet implements ObjectAction {
      * Does nothing, but shouldn't be called.
      */
     @Override
-    public VisibilityContext<?> createVisibleInteractionContext(final AuthenticationSession session,
-        final InteractionInvocationMethod invocationMethod, final ObjectAdapter targetObjectAdapter) {
+    public VisibilityContext<?> createVisibleInteractionContext(final AuthenticationSession session, final InteractionInvocationMethod invocationMethod, final ObjectAdapter targetObjectAdapter) {
         return null;
     }
 
@@ -288,8 +287,7 @@ public class ObjectActionSet implements ObjectAction {
     // /////////////////////////////////////////////////////////////
 
     @Override
-    public UsabilityContext<?> createUsableInteractionContext(final AuthenticationSession session,
-        final InteractionInvocationMethod invocationMethod, final ObjectAdapter target) {
+    public UsabilityContext<?> createUsableInteractionContext(final AuthenticationSession session, final InteractionInvocationMethod invocationMethod, final ObjectAdapter target) {
         return null;
     }
 
@@ -303,9 +301,7 @@ public class ObjectActionSet implements ObjectAction {
     // /////////////////////////////////////////////////////////////
 
     @Override
-    public ActionInvocationContext createActionInvocationInteractionContext(final AuthenticationSession session,
-        final InteractionInvocationMethod invocationMethod, final ObjectAdapter object,
-        final ObjectAdapter[] candidateArguments) {
+    public ActionInvocationContext createActionInvocationInteractionContext(final AuthenticationSession session, final InteractionInvocationMethod invocationMethod, final ObjectAdapter object, final ObjectAdapter[] candidateArguments) {
         return null;
     }
 

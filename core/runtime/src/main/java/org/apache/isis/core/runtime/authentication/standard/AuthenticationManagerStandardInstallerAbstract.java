@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.runtime.authentication.standard;
 
 import java.util.List;
@@ -27,25 +26,24 @@ import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authentication.AuthenticationManagerInstaller;
 
+public abstract class AuthenticationManagerStandardInstallerAbstract extends InstallerAbstract implements AuthenticationManagerInstaller {
 
-public abstract class AuthenticationManagerStandardInstallerAbstract extends InstallerAbstract implements
-        AuthenticationManagerInstaller {
-
-    public AuthenticationManagerStandardInstallerAbstract(String name) {
+    public AuthenticationManagerStandardInstallerAbstract(final String name) {
         super(AuthenticationManagerInstaller.TYPE, name);
     }
 
+    @Override
     public final AuthenticationManager createAuthenticationManager() {
         final AuthenticationManagerStandard authenticationManager = createAuthenticationManagerStandard();
-        for(final Authenticator authenticator: createAuthenticators(getConfiguration())) {
+        for (final Authenticator authenticator : createAuthenticators(getConfiguration())) {
             authenticationManager.addAuthenticator(authenticator);
         }
         return authenticationManager;
     }
 
-	protected AuthenticationManagerStandard createAuthenticationManagerStandard() {
-		return new AuthenticationManagerStandard(getConfiguration());
-	}
+    protected AuthenticationManagerStandard createAuthenticationManagerStandard() {
+        return new AuthenticationManagerStandard(getConfiguration());
+    }
 
     /**
      * Hook method
@@ -56,7 +54,7 @@ public abstract class AuthenticationManagerStandardInstallerAbstract extends Ins
 
     @Override
     public List<Class<?>> getTypes() {
-    	return listOf(AuthenticationManager.class);
+        return listOf(AuthenticationManager.class);
     }
 
 }

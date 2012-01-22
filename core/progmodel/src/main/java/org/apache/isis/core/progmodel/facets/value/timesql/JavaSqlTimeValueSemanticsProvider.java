@@ -47,20 +47,19 @@ public class JavaSqlTimeValueSemanticsProvider extends TimeValueSemanticsProvide
     }
 
     /**
-     * Required because implementation of {@link Parser} and {@link EncoderDecoder}.
+     * Required because implementation of {@link Parser} and
+     * {@link EncoderDecoder}.
      */
     public JavaSqlTimeValueSemanticsProvider() {
         this(null, null, null);
     }
 
-    public JavaSqlTimeValueSemanticsProvider(final FacetHolder holder, final IsisConfiguration configuration,
-        final ValueSemanticsProviderContext context) {
+    public JavaSqlTimeValueSemanticsProvider(final FacetHolder holder, final IsisConfiguration configuration, final ValueSemanticsProviderContext context) {
         super(holder, java.sql.Time.class, configuration, context);
     }
 
     @Override
-    public Time add(final Time original, final int years, final int months, final int days, final int hours,
-        final int minutes) {
+    public Time add(final Time original, final int years, final int months, final int days, final int hours, final int minutes) {
         final java.sql.Time time = original;
         final Calendar cal = Calendar.getInstance();
         cal.setTime(time);

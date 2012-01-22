@@ -24,13 +24,11 @@ import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.adapters.ParsingException;
 import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.map.AdapterMap;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.parseable.TextEntryParseException;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.runtimecontext.DependencyInjector;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JUnit4Mockery;
@@ -39,11 +37,13 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class ParseableFacetUsingParserTest {
-    
-    protected Mockery mockery = new JUnit4Mockery() {{
-        setImposteriser(ClassImposteriser.INSTANCE);
-    }};
-    
+
+    protected Mockery mockery = new JUnit4Mockery() {
+        {
+            setImposteriser(ClassImposteriser.INSTANCE);
+        }
+    };
+
     private FacetHolder mockFacetHolder;
     private AuthenticationSessionProvider mockAuthenticationSessionProvider;
     private DependencyInjector mockDependencyInjector;
@@ -51,31 +51,33 @@ public class ParseableFacetUsingParserTest {
 
     private ParseableFacetUsingParser parseableFacetUsingParser;
 
-//    private ObjectAdapter mockAdapter;
+    // private ObjectAdapter mockAdapter;
 
-//    private ObjectSpecification mockSpecification;
+    // private ObjectSpecification mockSpecification;
 
     @Before
     public void setUp() throws Exception {
-        
+
         mockFacetHolder = mockery.mock(FacetHolder.class);
         mockDependencyInjector = mockery.mock(DependencyInjector.class);
         mockAdapterManager = mockery.mock(AdapterMap.class);
         mockAuthenticationSessionProvider = mockery.mock(AuthenticationSessionProvider.class);
 
+        mockery.checking(new Expectations() {
+            {
+                never(mockAuthenticationSessionProvider);
+                never(mockAdapterManager);
 
-        mockery.checking(new Expectations(){{
-            never(mockAuthenticationSessionProvider);
-            never(mockAdapterManager);
+                allowing(mockFacetHolder).containsFacet(ValueFacet.class);
+                will(returnValue(Boolean.FALSE));
 
-            allowing(mockFacetHolder).containsFacet(ValueFacet.class);
-            will(returnValue(Boolean.FALSE));
+                allowing(mockDependencyInjector).injectDependenciesInto(with(any(Object.class)));
+            }
+        });
 
-           allowing(mockDependencyInjector).injectDependenciesInto(with(any(Object.class)));
-        }});
-
-        Parser parser = new Parser<String>() {
-            public String parseTextEntry(Object contextPojo, String entry) {
+        final Parser parser = new Parser<String>() {
+            @Override
+            public String parseTextEntry(final Object contextPojo, final String entry) {
                 if (entry.equals("invalid")) {
                     throw new ParsingException();
                 }
@@ -88,66 +90,69 @@ public class ParseableFacetUsingParserTest {
                 return entry.toUpperCase();
             }
 
+            @Override
             public int typicalLength() {
                 return 0;
             }
 
-            public String displayTitleOf(String object, Localization localization) {
+            @Override
+            public String displayTitleOf(final String object, final Localization localization) {
                 return null;
             }
 
-            public String displayTitleOf(String object, String usingMask) {
+            @Override
+            public String displayTitleOf(final String object, final String usingMask) {
                 return null;
             }
 
-            public String parseableTitleOf(String existing) {
+            @Override
+            public String parseableTitleOf(final String existing) {
                 return null;
             }
-        };            
+        };
         parseableFacetUsingParser = new ParseableFacetUsingParser(parser, mockFacetHolder, mockAuthenticationSessionProvider, mockDependencyInjector, mockAdapterManager);
-        
-      //  mockAdapter = mockery.mock(ObjectAdapter.class);
-      //  mockSpecification = mockery.mock(ObjectSpecification.class);
+
+        // mockAdapter = mockery.mock(ObjectAdapter.class);
+        // mockSpecification = mockery.mock(ObjectSpecification.class);
     }
 
     @Test
     public void testParseNormalEntry() throws Exception {
         // TODO why is this so complicated to check!!!
         /*
-        final AuthenticationSession session = mockery.mock(AuthenticationSession.class);
-        
-        mockery.checking(new Expectations(){{
-            one(mockAdapterManager).adapterFor("XXX");
-            will(returnValue(mockAdapter));
-            
-            one(mockAdapter).getSpecification();
-            will(returnValue(mockSpecification));
-            
-            one(mockAuthenticationSessionProvider).getAuthenticationSession();
-            will(returnValue(session));
-            
-            allowing(mockSpecification).createValidityInteractionContext(session, InteractionInvocationMethod.BY_USER, mockAdapter);
-        }});
-        ObjectAdapter adapter = parseableFacetUsingParser.parseTextEntry(null, "xxx");
-        
-        adapter.getObject();
-        */
+         * final AuthenticationSession session =
+         * mockery.mock(AuthenticationSession.class);
+         * 
+         * mockery.checking(new Expectations(){{
+         * one(mockAdapterManager).adapterFor("XXX");
+         * will(returnValue(mockAdapter));
+         * 
+         * one(mockAdapter).getSpecification();
+         * will(returnValue(mockSpecification));
+         * 
+         * one(mockAuthenticationSessionProvider).getAuthenticationSession();
+         * will(returnValue(session));
+         * 
+         * allowing(mockSpecification).createValidityInteractionContext(session,
+         * InteractionInvocationMethod.BY_USER, mockAdapter); }}); ObjectAdapter
+         * adapter = parseableFacetUsingParser.parseTextEntry(null, "xxx");
+         * 
+         * adapter.getObject();
+         */
     }
-    
 
-    @Test(expected=TextEntryParseException.class)
+    @Test(expected = TextEntryParseException.class)
     public void parsingExceptionRethrown() throws Exception {
         parseableFacetUsingParser.parseTextEntry(null, "invalid");
     }
 
-    @Test(expected=TextEntryParseException.class)
+    @Test(expected = TextEntryParseException.class)
     public void numberFormatExceptionRethrown() throws Exception {
         parseableFacetUsingParser.parseTextEntry(null, "number");
     }
 
-    @Test(expected=TextEntryParseException.class)
+    @Test(expected = TextEntryParseException.class)
     public void illegalFormatExceptionRethrown() throws Exception {
         parseableFacetUsingParser.parseTextEntry(null, "format");
     }
 }
-

@@ -29,14 +29,14 @@ import org.apache.isis.core.metamodel.consent.InteractionContextType;
 import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
 
 /**
- * See {@link InteractionContext} for overview; analogous to {@link ObjectTitleEvent}.
+ * See {@link InteractionContext} for overview; analogous to
+ * {@link ObjectTitleEvent}.
  */
 public class ObjectTitleContext extends AccessContext<ObjectTitleEvent> {
 
     private final String title;
 
-    public ObjectTitleContext(final AuthenticationSession session, final InteractionInvocationMethod invocationMethod,
-        final ObjectAdapter target, final Identifier identifier, final String title) {
+    public ObjectTitleContext(final AuthenticationSession session, final InteractionInvocationMethod invocationMethod, final ObjectAdapter target, final Identifier identifier, final String title) {
         super(InteractionContextType.OBJECT_TITLE, session, invocationMethod, identifier, target);
         this.title = title;
     }

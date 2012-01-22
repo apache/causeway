@@ -36,8 +36,7 @@ public class TypicalLengthAnnotationOnParameterFacetFactory extends AnnotationBa
 
     @Override
     public void processParams(final ProcessParameterContext processParameterContext) {
-        final Annotation[] parameterAnnotations =
-            getParameterAnnotations(processParameterContext.getMethod())[processParameterContext.getParamNum()];
+        final Annotation[] parameterAnnotations = getParameterAnnotations(processParameterContext.getMethod())[processParameterContext.getParamNum()];
         for (final Annotation parameterAnnotation : parameterAnnotations) {
             if (parameterAnnotation instanceof TypicalLength) {
                 final TypicalLength annotation = (TypicalLength) parameterAnnotation;

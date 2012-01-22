@@ -24,12 +24,14 @@ import org.apache.isis.core.metamodel.facets.object.orderactions.ActionOrderFace
 import org.apache.isis.core.metamodel.facets.object.orderfields.FieldOrderFacet;
 
 /**
- * The preferred mechanism for determining the order in which the members of the object should be rendered.
+ * The preferred mechanism for determining the order in which the members of the
+ * object should be rendered.
  * 
  * <p>
- * In the standard Apache Isis Programming Model, corresponds to annotating each of the member methods with the
- * <tt>@MemberOrder</tt>. An alternative appraoch is to use the {@link ActionOrderFacet actionOrder} or
- * {@link FieldOrderFacet field order}.
+ * In the standard Apache Isis Programming Model, corresponds to annotating each
+ * of the member methods with the <tt>@MemberOrder</tt>. An alternative appraoch
+ * is to use the {@link ActionOrderFacet actionOrder} or {@link FieldOrderFacet
+ * field order}.
  * 
  * @see MemberOrderFacet
  * @see FieldOrderFacet

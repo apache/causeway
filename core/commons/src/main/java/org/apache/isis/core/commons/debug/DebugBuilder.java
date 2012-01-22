@@ -19,15 +19,16 @@
 package org.apache.isis.core.commons.debug;
 
 public interface DebugBuilder {
-    
+
     /**
-     * Concatenate the contents of the specified debug builder to the current builder.
+     * Concatenate the contents of the specified debug builder to the current
+     * builder.
      */
     void concat(DebugBuilder debug);
 
     /**
-     * Append the specified number within a space (number of spaces) specified by the width. E.g. "15 " where number is
-     * 15 and width is 4.
+     * Append the specified number within a space (number of spaces) specified
+     * by the width. E.g. "15 " where number is 15 and width is 4.
      */
     void append(final int number, final int width);
 
@@ -37,12 +38,14 @@ public interface DebugBuilder {
     void append(final Object object);
 
     /**
-     * Append the specified object by calling its <code>toString()</code> method, placing it within specified space.
+     * Append the specified object by calling its <code>toString()</code>
+     * method, placing it within specified space.
      */
     void append(final Object object, final int width);
 
     /**
-     * Append the specified number, displayed in hexadecimal notation, with the specified label, then start a new line.
+     * Append the specified number, displayed in hexadecimal notation, with the
+     * specified label, then start a new line.
      */
     void appendAsHexln(final String label, final long value);
 
@@ -69,39 +72,45 @@ public interface DebugBuilder {
     void appendPreformatted(final String text);
 
     /**
-     * Append the specified value, displayed as true or false, with the specified label, then start a new line.
+     * Append the specified value, displayed as true or false, with the
+     * specified label, then start a new line.
      */
     void appendln(final String label, final boolean value);
 
     /**
-     * Append the specified number with the specified label, then start a new line.
+     * Append the specified number with the specified label, then start a new
+     * line.
      */
     void appendln(final String label, final double value);
 
     /**
-     * Append the specified number, displayed in hexadecimal notation, with the specified label, then start a new line.
+     * Append the specified number, displayed in hexadecimal notation, with the
+     * specified label, then start a new line.
      */
     void appendln(final String label, final long value);
 
     /**
-     * Append the specified preformatted text with the specified label, then start a new line.
+     * Append the specified preformatted text with the specified label, then
+     * start a new line.
      */
     void appendPreformatted(final String label, final String text);
 
     /**
-     * Append the specified object with the specified label, then start a new line.
+     * Append the specified object with the specified label, then start a new
+     * line.
      */
     void appendln(final String label, final Object object);
 
     /**
-     * Append the elements of the specified array with the specified label. Each element is appended on its own line,
-     * and a new line is added after the last element.
+     * Append the elements of the specified array with the specified label. Each
+     * element is appended on its own line, and a new line is added after the
+     * last element.
      */
     void appendln(final String label, final Object[] objects);
 
     /**
-     * Append the specified title, then start a new line. A title is shown on two lines with the text on the first line
-     * and dashes on the second.
+     * Append the specified title, then start a new line. A title is shown on
+     * two lines with the text on the first line and dashes on the second.
      */
     void appendTitle(final String title);
 
@@ -110,7 +119,8 @@ public interface DebugBuilder {
     void endSection();
 
     /**
-     * Append a blank line only if there are existing lines and the previous line is not blank.
+     * Append a blank line only if there are existing lines and the previous
+     * line is not blank.
      */
     void blankLine();
 

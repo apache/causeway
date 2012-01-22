@@ -34,9 +34,11 @@ public final class FacetUtil {
     }
 
     /**
-     * Attaches the {@link Facet} to its {@link Facet#getFacetHolder() facet holder}.
+     * Attaches the {@link Facet} to its {@link Facet#getFacetHolder() facet
+     * holder}.
      * 
-     * @return <tt>true</tt> if a non-<tt>null</tt> facet was added, <tt>false</tt> otherwise.
+     * @return <tt>true</tt> if a non-<tt>null</tt> facet was added,
+     *         <tt>false</tt> otherwise.
      */
     public static boolean addFacet(final Facet facet) {
         if (facet == null) {
@@ -55,7 +57,8 @@ public final class FacetUtil {
     }
 
     /**
-     * Attaches each {@link Facet} to its {@link Facet#getFacetHolder() facet holder}.
+     * Attaches each {@link Facet} to its {@link Facet#getFacetHolder() facet
+     * holder}.
      * 
      * @return <tt>true</tt> if any facets were added, <tt>false</tt> otherwise.
      */
@@ -68,7 +71,8 @@ public final class FacetUtil {
     }
 
     /**
-     * Attaches each {@link Facet} to its {@link Facet#getFacetHolder() facet holder}.
+     * Attaches each {@link Facet} to its {@link Facet#getFacetHolder() facet
+     * holder}.
      * 
      * @return <tt>true</tt> if any facets were added, <tt>false</tt> otherwise.
      */
@@ -81,7 +85,8 @@ public final class FacetUtil {
     }
 
     /**
-     * Bit nasty, for use only by {@link FacetHolder}s that index their {@link Facet}s in a Map.
+     * Bit nasty, for use only by {@link FacetHolder}s that index their
+     * {@link Facet}s in a Map.
      * 
      * @param facetsByClass
      * @return
@@ -92,13 +97,13 @@ public final class FacetUtil {
     }
 
     /**
-     * Bit nasty, for use only by {@link FacetHolder}s that index their {@link Facet}s in a Map.
+     * Bit nasty, for use only by {@link FacetHolder}s that index their
+     * {@link Facet}s in a Map.
      * 
      * @param facetsByClass
      * @return
      */
-    public static List<Facet> getFacets(final Map<Class<? extends Facet>, Facet> facetsByClass,
-        final Filter<Facet> filter) {
+    public static List<Facet> getFacets(final Map<Class<? extends Facet>, Facet> facetsByClass, final Filter<Facet> filter) {
         final List<Facet> filteredFacets = Lists.newArrayList();
         final List<Facet> allFacets = new ArrayList<Facet>(facetsByClass.values());
         for (int i = 0; i < allFacets.size(); i++) {
@@ -114,8 +119,7 @@ public final class FacetUtil {
         removeFacet(facetsByClass, facet.facetType());
     }
 
-    public static void removeFacet(final Map<Class<? extends Facet>, Facet> facetsByClass,
-        final Class<? extends Facet> facetType) {
+    public static void removeFacet(final Map<Class<? extends Facet>, Facet> facetsByClass, final Class<? extends Facet> facetType) {
         final Facet facet = facetsByClass.get(facetType);
         if (facet == null) {
             return;

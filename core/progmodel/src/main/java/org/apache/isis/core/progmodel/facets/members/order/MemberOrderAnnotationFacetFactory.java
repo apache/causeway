@@ -40,8 +40,7 @@ public class MemberOrderAnnotationFacetFactory extends AnnotationBasedFacetFacto
     }
 
     private MemberOrderFacet create(final MemberOrder annotation, final FacetHolder holder) {
-        return annotation == null ? null : new MemberOrderFacetAnnotation(annotation.name(), annotation.sequence(),
-            holder);
+        return annotation == null ? null : new MemberOrderFacetAnnotation(annotation.name(), annotation.sequence(), holder);
     }
 
 }

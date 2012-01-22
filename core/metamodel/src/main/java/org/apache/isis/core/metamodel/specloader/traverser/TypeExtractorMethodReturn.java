@@ -22,7 +22,8 @@ package org.apache.isis.core.metamodel.specloader.traverser;
 import java.lang.reflect.Method;
 
 /**
- * Helper that finds all return types (including generic types) for the provided {@link Method}.
+ * Helper that finds all return types (including generic types) for the provided
+ * {@link Method}.
  * 
  * <p>
  * For example,

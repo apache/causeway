@@ -141,8 +141,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     // Constructor
     // //////////////////////////////////////////////////////////////////////
 
-    public ObjectSpecificationAbstract(final Class<?> introspectedClass, final String shortName,
-        final SpecificationContext specificationContext) {
+    public ObjectSpecificationAbstract(final Class<?> introspectedClass, final String shortName, final SpecificationContext specificationContext) {
 
         this.correspondingClass = introspectedClass;
         this.fullName = introspectedClass.getName();
@@ -168,10 +167,12 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
 
     /**
      * As provided explicitly within the
-     * {@link #IntrospectableSpecificationAbstract(Class, String, SpecificationContext) constructor}.
+     * {@link #IntrospectableSpecificationAbstract(Class, String, SpecificationContext)
+     * constructor}.
      * 
      * <p>
-     * Not API, but <tt>public</tt> so that {@link FacetedMethodsBuilder} can call it.
+     * Not API, but <tt>public</tt> so that {@link FacetedMethodsBuilder} can
+     * call it.
      */
     @Override
     public Class<?> getCorrespondingClass() {
@@ -180,7 +181,8 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
 
     /**
      * As provided explicitly within the
-     * {@link #IntrospectableSpecificationAbstract(Class, String, SpecificationContext) constructor}.
+     * {@link #IntrospectableSpecificationAbstract(Class, String, SpecificationContext)
+     * constructor}.
      */
     @Override
     public String getShortIdentifier() {
@@ -188,7 +190,8 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     }
 
     /**
-     * The {@link Class#getName() (full) name} of the {@link #getCorrespondingClass() class}.
+     * The {@link Class#getName() (full) name} of the
+     * {@link #getCorrespondingClass() class}.
      */
     @Override
     public String getFullIdentifier() {
@@ -196,8 +199,8 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     }
 
     /**
-     * Only if {@link #setIntrospected(boolean)} has been called (should be called within
-     * {@link #updateFromFacetValues()}.
+     * Only if {@link #setIntrospected(boolean)} has been called (should be
+     * called within {@link #updateFromFacetValues()}.
      */
     @Override
     public boolean isIntrospected() {
@@ -209,7 +212,8 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     // //////////////////////////////////////////////////////////////////////
 
     /**
-     * Intended to be called within {@link #introspectTypeHierarchyAndMembers()}.
+     * Intended to be called within {@link #introspectTypeHierarchyAndMembers()}
+     * .
      */
     protected void setSuperclass(final Class<?> superclass) {
         if (superclass == null) {
@@ -225,26 +229,30 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     }
 
     /**
-     * Intended to be called within {@link #introspectTypeHierarchyAndMembers()}.
+     * Intended to be called within {@link #introspectTypeHierarchyAndMembers()}
+     * .
      */
     protected void addInterfaces(final List<ObjectSpecification> interfaces) {
         this.interfaces.addAll(interfaces);
     }
 
     /**
-     * Intended to be called within {@link #introspectTypeHierarchyAndMembers()}.
+     * Intended to be called within {@link #introspectTypeHierarchyAndMembers()}
+     * .
      */
     protected void addAsSubclassTo(final ObjectSpecification supertypeSpec) {
         if (!(supertypeSpec instanceof ObjectSpecificationAbstract)) {
             return;
         }
-        // downcast required because addSubclass is (deliberately) not public API
+        // downcast required because addSubclass is (deliberately) not public
+        // API
         final ObjectSpecificationAbstract introspectableSpec = (ObjectSpecificationAbstract) supertypeSpec;
         introspectableSpec.addSubclass(this);
     }
 
     /**
-     * Intended to be called within {@link #introspectTypeHierarchyAndMembers()}.
+     * Intended to be called within {@link #introspectTypeHierarchyAndMembers()}
+     * .
      */
     protected void addAsSubclassTo(final List<ObjectSpecification> supertypeSpecs) {
         for (final ObjectSpecification supertypeSpec : supertypeSpecs) {
@@ -257,7 +265,8 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     }
 
     /**
-     * Intended to be called within {@link #introspectTypeHierarchyAndMembers()}.
+     * Intended to be called within {@link #introspectTypeHierarchyAndMembers()}
+     * .
      */
     protected void addAssociations(final List<ObjectAssociation> associations) {
         if (associations == null) {
@@ -267,7 +276,8 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     }
 
     /**
-     * Intended to be called within {@link #introspectTypeHierarchyAndMembers()}.
+     * Intended to be called within {@link #introspectTypeHierarchyAndMembers()}
+     * .
      */
     protected void addObjectActions(final List<ObjectAction> objectActions) {
         if (objectActions == null) {
@@ -309,7 +319,8 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     }
 
     /**
-     * Intended to be called (if at all) within {@link #updateFromFacetValues()}.
+     * Intended to be called (if at all) within {@link #updateFromFacetValues()}
+     * .
      */
     protected void setClearDirtyObjectFacet(final ClearDirtyObjectFacet clearDirtyObjectFacet) {
         this.clearDirtyObjectFacet = clearDirtyObjectFacet;
@@ -356,10 +367,12 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     // //////////////////////////////////////////////////////////////////////
 
     /**
-     * Determines if this class represents the same class, or a subclass, of the specified class.
+     * Determines if this class represents the same class, or a subclass, of the
+     * specified class.
      * 
      * <p>
-     * cf {@link Class#isAssignableFrom(Class)}, though target and parameter are the opposite way around, ie:
+     * cf {@link Class#isAssignableFrom(Class)}, though target and parameter are
+     * the opposite way around, ie:
      * 
      * <pre>
      * cls1.isAssignableFrom(cls2);
@@ -372,7 +385,8 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
      * </pre>
      * 
      * <p>
-     * Callable after {@link #introspectTypeHierarchyAndMembers()} has been called.
+     * Callable after {@link #introspectTypeHierarchyAndMembers()} has been
+     * called.
      */
     @Override
     public boolean isOfType(final ObjectSpecification specification) {
@@ -393,7 +407,8 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     // //////////////////////////////////////////////////////////////////////
 
     /**
-     * Expect to be populated using {@link #setSingularName(String)}, but has default name as well.
+     * Expect to be populated using {@link #setSingularName(String)}, but has
+     * default name as well.
      */
     @Override
     public String getSingularName() {
@@ -402,7 +417,8 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     }
 
     /**
-     * Expect to be populated using {@link #setPluralName(String)} but has default name as well.
+     * Expect to be populated using {@link #setPluralName(String)} but has
+     * default name as well.
      */
     @Override
     public String getPluralName() {
@@ -411,7 +427,8 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     }
 
     /**
-     * Expect to be populated using {@link #setDescribedAs(String)} but has default name as well.
+     * Expect to be populated using {@link #setDescribedAs(String)} but has
+     * default name as well.
      */
     @Override
     public String getDescription() {
@@ -420,7 +437,10 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         return describedAs == null ? "" : describedAs;
     }
 
-    /* help is typically a reference (eg a URL) and so should not default to a textual value if not set up */
+    /*
+     * help is typically a reference (eg a URL) and so should not default to a
+     * textual value if not set up
+     */
     @Override
     public String getHelp() {
         final HelpFacet helpFacet = getFacet(HelpFacet.class);
@@ -473,7 +493,8 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
             for (int i = 0; i < interfaces.size(); i++) {
                 final ObjectSpecification interfaceSpec = interfaces.get(i);
                 if (interfaceSpec == null) {
-                    // HACK: shouldn't happen, but occurring on occasion when running
+                    // HACK: shouldn't happen, but occurring on occasion when
+                    // running
                     // XATs under JUnit4. Some sort of race condition?
                     continue;
                 }
@@ -525,10 +546,8 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     // //////////////////////////////////////////////////////////////////
 
     @Override
-    public ObjectTitleContext createTitleInteractionContext(final AuthenticationSession session,
-        final InteractionInvocationMethod interactionMethod, final ObjectAdapter targetObjectAdapter) {
-        return new ObjectTitleContext(session, interactionMethod, targetObjectAdapter, getIdentifier(),
-            targetObjectAdapter.titleString());
+    public ObjectTitleContext createTitleInteractionContext(final AuthenticationSession session, final InteractionInvocationMethod interactionMethod, final ObjectAdapter targetObjectAdapter) {
+        return new ObjectTitleContext(session, interactionMethod, targetObjectAdapter, getIdentifier(), targetObjectAdapter.titleString());
     }
 
     // //////////////////////////////////////////////////////////////////////
@@ -573,14 +592,15 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
      * The association with the given {@link ObjectAssociation#getId() id}.
      * 
      * <p>
-     * This is overridable because {@link ObjectSpecificationForObjectList} simply returns <tt>null</tt>.
+     * This is overridable because {@link ObjectSpecificationForObjectList}
+     * simply returns <tt>null</tt>.
      * 
      * <p>
      * TODO put fields into hash.
      * 
      * <p>
-     * TODO: could this be made final? (ie does the framework ever call this method for an
-     * {@link ObjectSpecificationForObjectList})
+     * TODO: could this be made final? (ie does the framework ever call this
+     * method for an {@link ObjectSpecificationForObjectList})
      */
     @Override
     public ObjectAssociation getAssociation(final String id) {
@@ -621,7 +641,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     public List<OneToManyAssociation> getCollections() {
         final List<OneToManyAssociation> list = Lists.newArrayList();
         @SuppressWarnings("rawtypes")
-		final List associationList = getAssociations(ObjectAssociationFilters.COLLECTIONS);
+        final List associationList = getAssociations(ObjectAssociationFilters.COLLECTIONS);
         list.addAll(associationList);
         return list;
     }
@@ -631,17 +651,17 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     // //////////////////////////////////////////////////////////////////////
 
     @Override
-    public List<ObjectAction> getObjectActions(Contributed contributed) {
-    	if(contributed.isExcluded()) {
-    		// REVIEW: this special case almost certainly isn't required
-    		return Collections.unmodifiableList(objectActions);
-    	} else {
-    		return getObjectActions(ActionType.ALL_EXCEPT_SET, Contributed.INCLUDED);
-    	}
+    public List<ObjectAction> getObjectActions(final Contributed contributed) {
+        if (contributed.isExcluded()) {
+            // REVIEW: this special case almost certainly isn't required
+            return Collections.unmodifiableList(objectActions);
+        } else {
+            return getObjectActions(ActionType.ALL_EXCEPT_SET, Contributed.INCLUDED);
+        }
     }
 
     @Override
-    public List<ObjectAction> getObjectActions(final List<ActionType> requestedTypes, Contributed contributed) {
+    public List<ObjectAction> getObjectActions(final List<ActionType> requestedTypes, final Contributed contributed) {
         final List<ObjectAction> actions = Lists.newArrayList();
         for (final ActionType type : requestedTypes) {
             addActions(type, actions, contributed);
@@ -650,12 +670,12 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     }
 
     @Override
-    public List<ObjectAction> getObjectActions(final ActionType type, Contributed contributed) {
+    public List<ObjectAction> getObjectActions(final ActionType type, final Contributed contributed) {
         final List<ObjectAction> actions = Lists.newArrayList();
         return addActions(type, actions, contributed);
     }
 
-    private List<ObjectAction> addActions(final ActionType type, final List<ObjectAction> actionListToAppendTo, Contributed contributed) {
+    private List<ObjectAction> addActions(final ActionType type, final List<ObjectAction> actionListToAppendTo, final Contributed contributed) {
         if (!isService() && contributed.isIncluded()) {
             actionListToAppendTo.addAll(getContributedActions(type));
         }
@@ -684,10 +704,9 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         return actions;
     }
 
-    
     @Override
     public List<ObjectAction> getServiceActionsReturning(final ActionType type) {
-    	return getServiceActionsReturning(Collections.singletonList(type));
+        return getServiceActionsReturning(Collections.singletonList(type));
     }
 
     @Override
@@ -700,8 +719,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         return serviceActions;
     }
 
-    private void appendServiceActionsReturning(final ObjectAdapter serviceAdapter, final List<ActionType> types,
-        final List<ObjectAction> relatedActionsToAppendTo) {
+    private void appendServiceActionsReturning(final ObjectAdapter serviceAdapter, final List<ActionType> types, final List<ObjectAction> relatedActionsToAppendTo) {
         final List<ObjectAction> matchingActionsToAppendTo = Lists.newArrayList();
         for (final ActionType type : types) {
             final List<ObjectAction> serviceActions = serviceAdapter.getSpecification().getObjectActions(type, Contributed.INCLUDED);
@@ -710,14 +728,12 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
             }
         }
         if (matchingActionsToAppendTo.size() > 0) {
-            final ObjectActionSet set =
-                new ObjectActionSet("id", serviceAdapter.titleString(), matchingActionsToAppendTo);
+            final ObjectActionSet set = new ObjectActionSet("id", serviceAdapter.titleString(), matchingActionsToAppendTo);
             relatedActionsToAppendTo.add(set);
         }
     }
 
-    private void addIfReturnsSubtype(final ObjectAction serviceAction,
-        final List<ObjectAction> matchingActionsToAppendTo) {
+    private void addIfReturnsSubtype(final ObjectAction serviceAction, final List<ObjectAction> matchingActionsToAppendTo) {
         final ObjectSpecification returnType = serviceAction.getReturnType();
         if (returnType == null) {
             return;
@@ -733,8 +749,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         }
     }
 
-    private void addIfReturnsSubtype(final ObjectAction serviceAction, final ObjectSpecification actionType,
-        final List<ObjectAction> matchingActionsToAppendTo) {
+    private void addIfReturnsSubtype(final ObjectAction serviceAction, final ObjectSpecification actionType, final List<ObjectAction> matchingActionsToAppendTo) {
         if (actionType.isOfType(this)) {
             matchingActionsToAppendTo.add(serviceAction);
         }
@@ -748,10 +763,11 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
      * Finds all service actions that contribute to this spec, if any.
      * 
      * <p>
-     * If this specification {@link #isService() is actually for} a service, then returns an empty array.
+     * If this specification {@link #isService() is actually for} a service,
+     * then returns an empty array.
      * 
-     * @return an array of {@link ObjectActionSet}s (!!), each of which contains {@link ObjectAction}s of the requested
-     *         type.
+     * @return an array of {@link ObjectActionSet}s (!!), each of which contains
+     *         {@link ObjectAction}s of the requested type.
      * 
      */
     protected List<ObjectAction> getContributedActions(final ActionType actionType) {
@@ -760,7 +776,8 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         }
         List<ObjectAction> contributedActionSets = contributedActionSetsByType.get(actionType);
         if (contributedActionSets == null) {
-            // populate an ActionSet with all actions contributed by each service
+            // populate an ActionSet with all actions contributed by each
+            // service
             contributedActionSets = Lists.newArrayList();
             final List<ObjectAdapter> services = getServicesProvider().getServices();
             for (final ObjectAdapter serviceAdapter : services) {
@@ -770,9 +787,8 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         }
         return contributedActionSets;
     }
-    
-    private void addContributedActionsIfAny(final ObjectAdapter serviceAdapter, final ActionType actionType,
-        final List<ObjectAction> contributedActionSetsToAppendTo) {
+
+    private void addContributedActionsIfAny(final ObjectAdapter serviceAdapter, final ActionType actionType, final List<ObjectAction> contributedActionSetsToAppendTo) {
         final ObjectSpecification specification = serviceAdapter.getSpecification();
         if (specification == this) {
             return;
@@ -782,13 +798,11 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         if (contributedActions.size() == 0) {
             return;
         }
-        final ObjectActionSet contributedActionSet =
-            new ObjectActionSet("id", serviceAdapter.titleString(), contributedActions);
+        final ObjectActionSet contributedActionSet = new ObjectActionSet("id", serviceAdapter.titleString(), contributedActions);
         contributedActionSetsToAppendTo.add(contributedActionSet);
     }
 
-    private List<ObjectAction> findContributedActions(final ObjectSpecification specification,
-        final ActionType actionType) {
+    private List<ObjectAction> findContributedActions(final ObjectSpecification specification, final ActionType actionType) {
         final List<ObjectAction> contributedActions = Lists.newArrayList();
         final List<ObjectAction> serviceActions = specification.getObjectActions(actionType, Contributed.INCLUDED);
         for (final ObjectAction serviceAction : serviceActions) {
@@ -823,23 +837,21 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     }
 
     /**
-     * TODO: currently this method is hard-coded to assume all interactions are initiated
-     * {@link InteractionInvocationMethod#BY_USER by user}.
+     * TODO: currently this method is hard-coded to assume all interactions are
+     * initiated {@link InteractionInvocationMethod#BY_USER by user}.
      */
     @Override
     public InteractionResult isValidResult(final ObjectAdapter targetObjectAdapter) {
-        final ObjectValidityContext validityContext =
-            createValidityInteractionContext(getAuthenticationSession(), InteractionInvocationMethod.BY_USER,
-                targetObjectAdapter);
+        final ObjectValidityContext validityContext = createValidityInteractionContext(getAuthenticationSession(), InteractionInvocationMethod.BY_USER, targetObjectAdapter);
         return InteractionUtils.isValidResult(this, validityContext);
     }
 
     /**
-     * Create an {@link InteractionContext} representing an attempt to save the object.
+     * Create an {@link InteractionContext} representing an attempt to save the
+     * object.
      */
     @Override
-    public ObjectValidityContext createValidityInteractionContext(final AuthenticationSession session,
-        final InteractionInvocationMethod interactionMethod, final ObjectAdapter targetObjectAdapter) {
+    public ObjectValidityContext createValidityInteractionContext(final AuthenticationSession session, final InteractionInvocationMethod interactionMethod, final ObjectAdapter targetObjectAdapter) {
         return new ObjectValidityContext(session, interactionMethod, targetObjectAdapter, getIdentifier());
     }
 
@@ -927,8 +939,9 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     // //////////////////////////////////////////////////////////////////////
 
     /**
-     * convenience method to return the current {@link AuthenticationSession} from the
-     * {@link #getAuthenticationSessionProvider() injected} {@link AuthenticationSessionProvider}.
+     * convenience method to return the current {@link AuthenticationSession}
+     * from the {@link #getAuthenticationSessionProvider() injected}
+     * {@link AuthenticationSessionProvider}.
      */
     protected final AuthenticationSession getAuthenticationSession() {
         return getAuthenticationSessionProvider().getAuthenticationSession();

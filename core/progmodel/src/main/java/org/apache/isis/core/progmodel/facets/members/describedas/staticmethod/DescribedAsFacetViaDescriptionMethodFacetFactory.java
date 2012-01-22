@@ -35,14 +35,16 @@ import org.apache.isis.core.progmodel.facets.MethodPrefixBasedFacetFactoryAbstra
 import org.apache.isis.core.progmodel.facets.MethodPrefixConstants;
 
 /**
- * Sets up a {@link DescribedAsFacet} if a {@value MethodPrefixConstants#DESCRIPTION_PREFIX}-prefixed method is present.
+ * Sets up a {@link DescribedAsFacet} if a
+ * {@value MethodPrefixConstants#DESCRIPTION_PREFIX}-prefixed method is present.
  */
 public class DescribedAsFacetViaDescriptionMethodFacetFactory extends MethodPrefixBasedFacetFactoryAbstract {
 
     private static final String[] PREFIXES = { MethodPrefixConstants.DESCRIPTION_PREFIX };
 
     /**
-     * Note that the {@link Facet}s registered are the generic ones from noa-architecture (where they exist)
+     * Note that the {@link Facet}s registered are the generic ones from
+     * noa-architecture (where they exist)
      */
     public DescribedAsFacetViaDescriptionMethodFacetFactory() {
         super(FeatureType.MEMBERS, PREFIXES);
@@ -63,9 +65,7 @@ public class DescribedAsFacetViaDescriptionMethodFacetFactory extends MethodPref
         final String capitalizedName = NameUtils.javaBaseNameStripAccessorPrefixIfRequired(method.getName());
 
         final Class<?> cls = processMethodContext.getCls();
-        final Method descriptionMethod =
-            MethodFinderUtils.findMethod(cls, MethodScope.CLASS, MethodPrefixConstants.DESCRIPTION_PREFIX
-                + capitalizedName, String.class, new Class[0]);
+        final Method descriptionMethod = MethodFinderUtils.findMethod(cls, MethodScope.CLASS, MethodPrefixConstants.DESCRIPTION_PREFIX + capitalizedName, String.class, new Class[0]);
         if (descriptionMethod == null) {
             return;
         }

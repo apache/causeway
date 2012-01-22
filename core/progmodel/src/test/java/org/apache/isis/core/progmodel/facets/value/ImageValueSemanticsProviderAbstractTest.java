@@ -17,38 +17,36 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.value;
 
 import static org.junit.Assert.assertEquals;
 
 import java.awt.Image;
 
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
+import org.apache.isis.core.progmodel.facets.value.image.ImageValueSemanticsProviderAbstract;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JMock;
 import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
-import org.apache.isis.core.progmodel.facets.value.image.ImageValueSemanticsProviderAbstract;
-
 @RunWith(JMock.class)
 public class ImageValueSemanticsProviderAbstractTest {
-	
+
     protected Mockery mockery = new JUnit4Mockery();
 
     @Test
     public void testImageData() throws Exception {
-    	RuntimeContext mockRuntimeContext = mockery.mock(RuntimeContext.class);
-    	FacetHolder mockFacetHolder = mockery.mock(FacetHolder.class);
-    	final TestImageSemanticsProvider adapter = new TestImageSemanticsProvider(mockFacetHolder);
+        final RuntimeContext mockRuntimeContext = mockery.mock(RuntimeContext.class);
+        final FacetHolder mockFacetHolder = mockery.mock(FacetHolder.class);
+        final TestImageSemanticsProvider adapter = new TestImageSemanticsProvider(mockFacetHolder);
 
-    	String data = adapter.toEncodedString(null);
-        int[][] array = adapter.doRestore(data);
-        
+        final String data = adapter.toEncodedString(null);
+        final int[][] array = adapter.doRestore(data);
+
         assertEquals(0xFF000000, array[0][0]);
         assertEquals(0xFF3F218A, array[0][1]);
         assertEquals(0xFF123456, array[0][3]);
@@ -61,12 +59,12 @@ public class ImageValueSemanticsProviderAbstractTest {
 class TestImageSemanticsProvider extends ImageValueSemanticsProviderAbstract<int[][]> {
 
     TestImageSemanticsProvider(final FacetHolder holder) {
-		super(holder, null, null, null);
-	}
+        super(holder, null, null, null);
+    }
 
-	@Override
+    @Override
     protected int[][] getPixels(final Object object) {
-        int[][] array = new int[10][10];
+        final int[][] array = new int[10][10];
         array[0][1] = 0x3F218A;
         array[0][3] = 0x123456;
         array[0][4] = 0x7FFFFF;
@@ -105,8 +103,7 @@ class TestImageSemanticsProvider extends ImageValueSemanticsProviderAbstract<int
     }
 
     @Override
-    public ObjectAdapter createValue(Image image) {
+    public ObjectAdapter createValue(final Image image) {
         return null;
     }
 }
-

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.properties;
 
 import java.lang.reflect.Method;
@@ -75,12 +74,10 @@ import org.apache.isis.core.progmodel.facets.properties.validate.PropertyValidat
 import org.apache.isis.core.progmodel.facets.properties.validate.PropertyValidateFacetFactory;
 import org.apache.isis.core.progmodel.facets.properties.validate.PropertyValidateFacetViaMethod;
 
-
 public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
-
     public void testPropertyAccessorFacetIsInstalledAndMethodRemoved() {
-        PropertyAccessorFacetFactory facetFactory = new PropertyAccessorFacetFactory();
+        final PropertyAccessorFacetFactory facetFactory = new PropertyAccessorFacetFactory();
         facetFactory.setSpecificationLookup(reflector);
 
         class Customer {
@@ -103,7 +100,7 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
     }
 
     public void testSetterFacetIsInstalledForSetterMethodAndMethodRemoved() {
-        PropertySetAndClearFacetFactory facetFactory = new PropertySetAndClearFacetFactory();
+        final PropertySetAndClearFacetFactory facetFactory = new PropertySetAndClearFacetFactory();
         facetFactory.setSpecificationLookup(reflector);
 
         class Customer {
@@ -113,7 +110,8 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
             }
 
             @SuppressWarnings("unused")
-            public void setFirstName(final String firstName) {}
+            public void setFirstName(final String firstName) {
+            }
         }
         final Method propertyAccessorMethod = findMethod(Customer.class, "getFirstName");
         final Method propertySetterMethod = findMethod(Customer.class, "setFirstName", new Class[] { String.class });
@@ -130,7 +128,7 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
     }
 
     public void testInitializationFacetIsInstalledForSetterMethodAndMethodRemoved() {
-        PropertySetAndClearFacetFactory facetFactory = new PropertySetAndClearFacetFactory();
+        final PropertySetAndClearFacetFactory facetFactory = new PropertySetAndClearFacetFactory();
         facetFactory.setSpecificationLookup(reflector);
 
         class Customer {
@@ -140,7 +138,8 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
             }
 
             @SuppressWarnings("unused")
-            public void setFirstName(final String firstName) {}
+            public void setFirstName(final String firstName) {
+            }
         }
         final Method propertyAccessorMethod = findMethod(Customer.class, "getFirstName");
         final Method propertySetterMethod = findMethod(Customer.class, "setFirstName", new Class[] { String.class });
@@ -157,7 +156,7 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
     }
 
     public void testSetterFacetIsInstalledMeansNoDisabledOrDerivedFacetsInstalled() {
-        PropertySetAndClearFacetFactory facetFactory = new PropertySetAndClearFacetFactory();
+        final PropertySetAndClearFacetFactory facetFactory = new PropertySetAndClearFacetFactory();
         facetFactory.setSpecificationLookup(reflector);
 
         class Customer {
@@ -167,7 +166,8 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
             }
 
             @SuppressWarnings("unused")
-            public void setFirstName(final String firstName) {}
+            public void setFirstName(final String firstName) {
+            }
         }
         final Method propertyAccessorMethod = findMethod(Customer.class, "getFirstName");
 
@@ -178,10 +178,10 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
     }
 
     public void testSetterFacetIsInstalledForModifyMethodAndMethodRemoved() {
-        
-        PropertyModifyFacetFactory facetFactoryForModify = new PropertyModifyFacetFactory();
+
+        final PropertyModifyFacetFactory facetFactoryForModify = new PropertyModifyFacetFactory();
         facetFactoryForModify.setSpecificationLookup(reflector);
-        PropertySetAndClearFacetFactory facetFactoryForSetter = new PropertySetAndClearFacetFactory();
+        final PropertySetAndClearFacetFactory facetFactoryForSetter = new PropertySetAndClearFacetFactory();
         facetFactoryForSetter.setSpecificationLookup(reflector);
 
         class Customer {
@@ -191,7 +191,8 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
             }
 
             @SuppressWarnings("unused")
-            public void modifyFirstName(final String firstName) {}
+            public void modifyFirstName(final String firstName) {
+            }
         }
         final Method propertyAccessorMethod = findMethod(Customer.class, "getFirstName");
         final Method propertyModifyMethod = findMethod(Customer.class, "modifyFirstName", new Class[] { String.class });
@@ -210,9 +211,9 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
     }
 
     public void testModifyMethodWithNoSetterStillInstallsDisabledAndDerivedFacets() {
-        PropertySetAndClearFacetFactory facetFactory = new PropertySetAndClearFacetFactory();
+        final PropertySetAndClearFacetFactory facetFactory = new PropertySetAndClearFacetFactory();
         facetFactory.setSpecificationLookup(reflector);
-        PropertyModifyFacetFactory facetFactoryForModify = new PropertyModifyFacetFactory();
+        final PropertyModifyFacetFactory facetFactoryForModify = new PropertyModifyFacetFactory();
         facetFactoryForModify.setSpecificationLookup(reflector);
 
         class Customer {
@@ -222,7 +223,8 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
             }
 
             @SuppressWarnings("unused")
-            public void modifyFirstName(final String firstName) {}
+            public void modifyFirstName(final String firstName) {
+            }
         }
         final Method propertyAccessorMethod = findMethod(Customer.class, "getFirstName");
 
@@ -240,9 +242,9 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
     }
 
     public void testIfHaveSetterAndModifyFacetThenTheModifyFacetWinsOut() {
-        PropertySetAndClearFacetFactory facetFactory = new PropertySetAndClearFacetFactory();
+        final PropertySetAndClearFacetFactory facetFactory = new PropertySetAndClearFacetFactory();
         facetFactory.setSpecificationLookup(reflector);
-        PropertyModifyFacetFactory facetFactoryForModify = new PropertyModifyFacetFactory();
+        final PropertyModifyFacetFactory facetFactoryForModify = new PropertyModifyFacetFactory();
         facetFactoryForModify.setSpecificationLookup(reflector);
 
         class Customer {
@@ -252,10 +254,12 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
             }
 
             @SuppressWarnings("unused")
-            public void setFirstName(final String firstName) {}
+            public void setFirstName(final String firstName) {
+            }
 
             @SuppressWarnings("unused")
-            public void modifyFirstName(final String firstName) {}
+            public void modifyFirstName(final String firstName) {
+            }
         }
         final Method propertyAccessorMethod = findMethod(Customer.class, "getFirstName");
         final Method propertySetterMethod = findMethod(Customer.class, "setFirstName", new Class[] { String.class });
@@ -276,7 +280,7 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
     }
 
     public void testClearFacet() {
-        PropertySetAndClearFacetFactory facetFactory = new PropertySetAndClearFacetFactory();
+        final PropertySetAndClearFacetFactory facetFactory = new PropertySetAndClearFacetFactory();
         facetFactory.setSpecificationLookup(reflector);
 
         class Customer {
@@ -286,7 +290,8 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
             }
 
             @SuppressWarnings("unused")
-            public void clearFirstName() {}
+            public void clearFirstName() {
+            }
         }
         final Method propertyAccessorMethod = findMethod(Customer.class, "getFirstName");
         final Method propertyClearMethod = findMethod(Customer.class, "clearFirstName");
@@ -303,7 +308,7 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
     }
 
     public void testClearFacetViaSetterIfNoExplicitClearMethod() {
-        PropertySetAndClearFacetFactory facetFactory = new PropertySetAndClearFacetFactory();
+        final PropertySetAndClearFacetFactory facetFactory = new PropertySetAndClearFacetFactory();
         facetFactory.setSpecificationLookup(reflector);
 
         class Customer {
@@ -313,7 +318,8 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
             }
 
             @SuppressWarnings("unused")
-            public void setFirstName(final String firstName) {}
+            public void setFirstName(final String firstName) {
+            }
         }
         final Method propertyAccessorMethod = findMethod(Customer.class, "getFirstName");
         final Method propertySetterMethod = findMethod(Customer.class, "setFirstName", new Class[] { String.class });
@@ -328,7 +334,7 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
     }
 
     public void testChoicesFacetFoundAndMethodRemoved() {
-        PropertyChoicesFacetFactory facetFactory = new PropertyChoicesFacetFactory();
+        final PropertyChoicesFacetFactory facetFactory = new PropertyChoicesFacetFactory();
         facetFactory.setSpecificationLookup(reflector);
 
         class Customer {
@@ -357,7 +363,7 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
     }
 
     public void testDefaultFacetFoundAndMethodRemoved() {
-        PropertyDefaultFacetFactory facetFactory = new PropertyDefaultFacetFactory();
+        final PropertyDefaultFacetFactory facetFactory = new PropertyDefaultFacetFactory();
         facetFactory.setSpecificationLookup(reflector);
 
         class Customer {
@@ -386,7 +392,7 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
     }
 
     public void testValidateFacetFoundAndMethodRemoved() {
-        PropertyValidateFacetFactory facetFactory = new PropertyValidateFacetFactory();
+        final PropertyValidateFacetFactory facetFactory = new PropertyValidateFacetFactory();
         facetFactory.setSpecificationLookup(reflector);
 
         class Customer {
@@ -415,7 +421,7 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
     }
 
     public void testDisableFacetFoundAndMethodRemoved() {
-        DisabledFacetViaDisableMethodFacetFactory facetFactory = new DisabledFacetViaDisableMethodFacetFactory();
+        final DisabledFacetViaDisableMethodFacetFactory facetFactory = new DisabledFacetViaDisableMethodFacetFactory();
         facetFactory.setSpecificationLookup(reflector);
 
         class Customer {
@@ -430,7 +436,7 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
             }
         }
         final Method propertyAccessorMethod = findMethod(Customer.class, "getFirstName");
-        final Method propertyDisableMethod = findMethod(Customer.class, "disableFirstName", new Class[] { });
+        final Method propertyDisableMethod = findMethod(Customer.class, "disableFirstName", new Class[] {});
 
         facetFactory.process(new ProcessMethodContext(Customer.class, propertyAccessorMethod, methodRemover, facetedMethod));
 
@@ -444,7 +450,7 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
     }
 
     public void testDisableFacetNoArgsFoundAndMethodRemoved() {
-        DisabledFacetViaDisableMethodFacetFactory facetFactory = new DisabledFacetViaDisableMethodFacetFactory();
+        final DisabledFacetViaDisableMethodFacetFactory facetFactory = new DisabledFacetViaDisableMethodFacetFactory();
         facetFactory.setSpecificationLookup(reflector);
 
         class Customer {
@@ -473,7 +479,7 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
     }
 
     public void testHiddenFacetFoundAndMethodRemoved() {
-        HiddenFacetViaHideMethodFacetFactory facetFactory = new HiddenFacetViaHideMethodFacetFactory();
+        final HiddenFacetViaHideMethodFacetFactory facetFactory = new HiddenFacetViaHideMethodFacetFactory();
         facetFactory.setSpecificationLookup(reflector);
 
         class Customer {
@@ -488,7 +494,7 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
             }
         }
         final Method propertyAccessorMethod = findMethod(Customer.class, "getFirstName");
-        final Method propertyHideMethod = findMethod(Customer.class, "hideFirstName", new Class[] { });
+        final Method propertyHideMethod = findMethod(Customer.class, "hideFirstName", new Class[] {});
 
         facetFactory.process(new ProcessMethodContext(Customer.class, propertyAccessorMethod, methodRemover, facetedMethod));
 
@@ -502,7 +508,7 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
     }
 
     public void testHiddenFacetWithNoArgFoundAndMethodRemoved() {
-        HiddenFacetViaHideMethodFacetFactory facetFactory = new HiddenFacetViaHideMethodFacetFactory();
+        final HiddenFacetViaHideMethodFacetFactory facetFactory = new HiddenFacetViaHideMethodFacetFactory();
         facetFactory.setSpecificationLookup(reflector);
 
         class Customer {
@@ -531,7 +537,7 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
     }
 
     public void testPropertyFoundOnSuperclass() {
-        PropertyAccessorFacetFactory facetFactory = new PropertyAccessorFacetFactory();
+        final PropertyAccessorFacetFactory facetFactory = new PropertyAccessorFacetFactory();
         facetFactory.setSpecificationLookup(reflector);
 
         class Customer {
@@ -556,11 +562,11 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
     }
 
     public void testPropertyFoundOnSuperclassButHelperMethodFoundOnSubclass() {
-        PropertyAccessorFacetFactory facetFactory = new PropertyAccessorFacetFactory();
+        final PropertyAccessorFacetFactory facetFactory = new PropertyAccessorFacetFactory();
         facetFactory.setSpecificationLookup(reflector);
-        HiddenFacetViaHideMethodFacetFactory facetFactoryForHide = new HiddenFacetViaHideMethodFacetFactory();
+        final HiddenFacetViaHideMethodFacetFactory facetFactoryForHide = new HiddenFacetViaHideMethodFacetFactory();
         facetFactoryForHide.setSpecificationLookup(reflector);
-        DisabledFacetViaDisableMethodFacetFactory facetFactoryForDisable = new DisabledFacetViaDisableMethodFacetFactory();
+        final DisabledFacetViaDisableMethodFacetFactory facetFactoryForDisable = new DisabledFacetViaDisableMethodFacetFactory();
         facetFactoryForDisable.setSpecificationLookup(reflector);
 
         class Customer {
@@ -575,7 +581,6 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
             public boolean hideFirstName() {
                 return true;
             }
-
 
             @SuppressWarnings("unused")
             public String disableFirstName() {
@@ -611,7 +616,8 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         }
 
         // required otherwise marked as DisabledFacetAlways
-        public void setFirstName(final String firstName) {}
+        public void setFirstName(final String firstName) {
+        }
 
         public static String nameFirstName() {
             return "Given name";
@@ -642,7 +648,8 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         }
 
         // required otherwise marked as DisabledFacetAlways
-        public void setLastName(final String firstName) {}
+        public void setLastName(final String firstName) {
+        }
 
         public static boolean alwaysHideLastName() {
             return false;
@@ -654,7 +661,7 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
     }
 
     public void testInstallsNamedFacetUsingNameMethodAndRemovesMethod() {
-        NamedFacetViaNameMethodFacetFactory facetFactory = new NamedFacetViaNameMethodFacetFactory();
+        final NamedFacetViaNameMethodFacetFactory facetFactory = new NamedFacetViaNameMethodFacetFactory();
         facetFactory.setSpecificationLookup(reflector);
 
         final Method propertyAccessorMethod = findMethod(CustomerStatic.class, "getFirstName");
@@ -672,7 +679,7 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
     }
 
     public void testInstallsDescribedAsFacetUsingDescriptionAndRemovesMethod() {
-        DescribedAsFacetViaDescriptionMethodFacetFactory facetFactory = new DescribedAsFacetViaDescriptionMethodFacetFactory();
+        final DescribedAsFacetViaDescriptionMethodFacetFactory facetFactory = new DescribedAsFacetViaDescriptionMethodFacetFactory();
         facetFactory.setSpecificationLookup(reflector);
 
         final Method propertyAccessorMethod = findMethod(CustomerStatic.class, "getFirstName");
@@ -690,7 +697,7 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
     }
 
     public void testInstallsHiddenFacetUsingAlwaysHideAndRemovesMethod() {
-        HiddenFacetViaAlwaysHideMethodFacetFactory facetFactory = new HiddenFacetViaAlwaysHideMethodFacetFactory();
+        final HiddenFacetViaAlwaysHideMethodFacetFactory facetFactory = new HiddenFacetViaAlwaysHideMethodFacetFactory();
         facetFactory.setSpecificationLookup(reflector);
 
         final Method propertyAccessorMethod = findMethod(CustomerStatic.class, "getFirstName");
@@ -706,7 +713,7 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
     }
 
     public void testInstallsHiddenFacetUsingAlwaysHideWhenNotAndRemovesMethod() {
-        HiddenFacetViaAlwaysHideMethodFacetFactory facetFactory = new HiddenFacetViaAlwaysHideMethodFacetFactory();
+        final HiddenFacetViaAlwaysHideMethodFacetFactory facetFactory = new HiddenFacetViaAlwaysHideMethodFacetFactory();
         facetFactory.setSpecificationLookup(reflector);
 
         final Method propertyAccessorMethod = findMethod(CustomerStatic.class, "getLastName");
@@ -720,7 +727,7 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
     }
 
     public void testInstallsDisabledFacetUsingProtectAndRemovesMethod() {
-        DisabledFacetViaProtectMethodFacetFactory facetFactory = new DisabledFacetViaProtectMethodFacetFactory();
+        final DisabledFacetViaProtectMethodFacetFactory facetFactory = new DisabledFacetViaProtectMethodFacetFactory();
         facetFactory.setSpecificationLookup(reflector);
 
         final Method propertyAccessorMethod = findMethod(CustomerStatic.class, "getFirstName");
@@ -736,7 +743,7 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
     }
 
     public void testDoesNotInstallDisabledFacetUsingProtectWhenNotAndRemovesMethod() {
-        DisabledFacetViaProtectMethodFacetFactory facetFactory = new DisabledFacetViaProtectMethodFacetFactory();
+        final DisabledFacetViaProtectMethodFacetFactory facetFactory = new DisabledFacetViaProtectMethodFacetFactory();
         facetFactory.setSpecificationLookup(reflector);
 
         final Method propertyAccessorMethod = findMethod(CustomerStatic.class, "getLastName");
@@ -751,7 +758,7 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
     }
 
     public void testInstallsHiddenForSessionFacetAndRemovesMethod() {
-        HiddenFacetViaHideForSessionMethodFacetFactory facetFactory = new HiddenFacetViaHideForSessionMethodFacetFactory();
+        final HiddenFacetViaHideForSessionMethodFacetFactory facetFactory = new HiddenFacetViaHideForSessionMethodFacetFactory();
         facetFactory.setSpecificationLookup(reflector);
 
         final Method propertyAccessorMethod = findMethod(CustomerStatic.class, "getFirstName");
@@ -770,7 +777,7 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
     }
 
     public void testInstallsDisabledForSessionFacetAndRemovesMethod() {
-        DisabledFacetViaDisableForSessionMethodFacetFactory facetFactory = new DisabledFacetViaDisableForSessionMethodFacetFactory();
+        final DisabledFacetViaDisableForSessionMethodFacetFactory facetFactory = new DisabledFacetViaDisableForSessionMethodFacetFactory();
         facetFactory.setSpecificationLookup(reflector);
 
         final Method propertyAccessorMethod = findMethod(CustomerStatic.class, "getFirstName");
@@ -788,4 +795,3 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
     }
 
 }
-

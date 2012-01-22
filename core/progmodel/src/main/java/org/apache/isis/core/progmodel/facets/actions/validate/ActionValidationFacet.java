@@ -25,14 +25,16 @@ import org.apache.isis.core.metamodel.facets.actions.invoke.ActionInvocationFace
 import org.apache.isis.core.metamodel.interactions.ValidatingInteractionAdvisor;
 
 /**
- * The mechanism by which the set of parameters of the action can be validated before the action itself is invoked.
+ * The mechanism by which the set of parameters of the action can be validated
+ * before the action itself is invoked.
  * 
  * <p>
- * In the standard Apache Isis Programming Model, corresponds to invoking the <tt>validateXxx</tt> support method for an
- * action.
+ * In the standard Apache Isis Programming Model, corresponds to invoking the
+ * <tt>validateXxx</tt> support method for an action.
  * 
  * <p>
- * Note that the parameters may be validated independently first (eg a range check on a numeric parameter).
+ * Note that the parameters may be validated independently first (eg a range
+ * check on a numeric parameter).
  * 
  * @see ActionInvocationFacet
  */

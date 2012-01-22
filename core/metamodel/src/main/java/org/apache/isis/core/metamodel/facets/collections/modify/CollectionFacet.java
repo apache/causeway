@@ -32,15 +32,17 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
  * Attached to {@link ObjectSpecification}s that represent a collection.
  * 
  * <p>
- * Factories of (implementations of this) facet should ensure that a {@link TypeOfFacet} is also attached to the same
- * facet holder. The {@link #getTypeOfFacet()} is a convenience for this.
+ * Factories of (implementations of this) facet should ensure that a
+ * {@link TypeOfFacet} is also attached to the same facet holder. The
+ * {@link #getTypeOfFacet()} is a convenience for this.
  */
 public interface CollectionFacet extends Facet {
 
     int size(ObjectAdapter collection);
 
     /**
-     * @deprecated - use {@link #iterator(ObjectAdapter)} or {@link #iterable(ObjectAdapter)}.
+     * @deprecated - use {@link #iterator(ObjectAdapter)} or
+     *             {@link #iterable(ObjectAdapter)}.
      */
     @Deprecated
     Enumeration<ObjectAdapter> elements(ObjectAdapter collectionAdapter);
@@ -61,7 +63,8 @@ public interface CollectionFacet extends Facet {
     void init(ObjectAdapter collectionAdapter, ObjectAdapter[] initData);
 
     /**
-     * Convenience method that returns the {@link TypeOfFacet} on this facet's {@link #getFacetHolder() holder}.
+     * Convenience method that returns the {@link TypeOfFacet} on this facet's
+     * {@link #getFacetHolder() holder}.
      */
     TypeOfFacet getTypeOfFacet();
 

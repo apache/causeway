@@ -30,9 +30,9 @@ public class ImmutableFacetViaValueSemantics extends ImmutableFacetAbstract {
     public ImmutableFacetViaValueSemantics(final FacetHolder holder) {
         super(When.ALWAYS, holder);
     }
-    
+
     @Override
-    public void copyOnto(FacetHolder holder) {
+    public void copyOnto(final FacetHolder holder) {
         final Facet facet = new ImmutableFacetViaValueSemantics(holder);
         FacetUtil.addFacet(facet);
     }

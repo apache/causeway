@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.object.ident.plural;
 
 import java.lang.reflect.Method;
@@ -28,7 +27,6 @@ import org.apache.isis.core.metamodel.facets.object.plural.PluralFacet;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.progmodel.facets.object.plural.staticmethod.PluralFacetViaMethod;
 import org.apache.isis.core.progmodel.facets.object.plural.staticmethod.PluralMethodFacetFactory;
-
 
 public class PluralMethodFacetFactoryTest extends AbstractFacetFactoryTest {
 
@@ -46,7 +44,6 @@ public class PluralMethodFacetFactoryTest extends AbstractFacetFactoryTest {
         facetFactory = null;
         super.tearDown();
     }
-
 
     public static class Customer {
         public static String pluralName() {
@@ -69,4 +66,3 @@ public class PluralMethodFacetFactoryTest extends AbstractFacetFactoryTest {
     }
 
 }
-

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.propcoll.notpersisted;
 
 import java.lang.reflect.Method;
@@ -33,12 +32,10 @@ import org.apache.isis.core.progmodel.facets.collections.notpersisted.annotation
 import org.apache.isis.core.progmodel.facets.properties.notpersisted.annotation.NotPersistedAnnotationForPropertyFacetFactory;
 import org.apache.isis.core.progmodel.facets.properties.notpersisted.annotation.NotPersistedFacetAnnotationForProperty;
 
-
 public class NotPersistedAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 
-
     public void testNotPersistedAnnotationPickedUpOnProperty() {
-        NotPersistedAnnotationForPropertyFacetFactory facetFactory = new NotPersistedAnnotationForPropertyFacetFactory();
+        final NotPersistedAnnotationForPropertyFacetFactory facetFactory = new NotPersistedAnnotationForPropertyFacetFactory();
 
         class Customer {
             @SuppressWarnings("unused")
@@ -59,9 +56,10 @@ public class NotPersistedAnnotationFacetFactoryTest extends AbstractFacetFactory
     }
 
     public void testNotPersistedAnnotationPickedUpOnCollection() {
-        NotPersistedAnnotationForCollectionFacetFactory facetFactory = new NotPersistedAnnotationForCollectionFacetFactory();
+        final NotPersistedAnnotationForCollectionFacetFactory facetFactory = new NotPersistedAnnotationForCollectionFacetFactory();
 
-        class Order{}
+        class Order {
+        }
         class Customer {
             @SuppressWarnings("unused")
             @NotPersisted()
@@ -81,4 +79,3 @@ public class NotPersistedAnnotationFacetFactoryTest extends AbstractFacetFactory
     }
 
 }
-

@@ -57,9 +57,9 @@ public class DisabledObjectFacetViaDisabledMethod extends DisabledObjectFacetAbs
     }
 
     @Override
-    public String disabledReason(final ObjectAdapter owningAdapter, Identifier identifier) {
+    public String disabledReason(final ObjectAdapter owningAdapter, final Identifier identifier) {
         // String type = identifier.getType().toString();
-        Type type = identifier.getType();
+        final Type type = identifier.getType();
         return (String) AdapterInvokeUtils.invoke(method, owningAdapter, type);
     }
 
@@ -69,9 +69,8 @@ public class DisabledObjectFacetViaDisabledMethod extends DisabledObjectFacetAbs
     }
 
     @Override
-    public void copyOnto(FacetHolder holder) {
-        final DisabledObjectFacetViaDisabledMethod clonedFacet =
-            new DisabledObjectFacetViaDisabledMethod(this.method, holder);
+    public void copyOnto(final FacetHolder holder) {
+        final DisabledObjectFacetViaDisabledMethod clonedFacet = new DisabledObjectFacetViaDisabledMethod(this.method, holder);
         FacetUtil.addFacet(clonedFacet);
     }
 }

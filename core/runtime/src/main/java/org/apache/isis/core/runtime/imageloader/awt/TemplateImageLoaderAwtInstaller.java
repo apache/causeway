@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.runtime.imageloader.awt;
 
 import java.util.List;
@@ -26,21 +25,19 @@ import org.apache.isis.core.commons.config.InstallerAbstract;
 import org.apache.isis.core.runtime.imageloader.TemplateImageLoader;
 import org.apache.isis.core.runtime.imageloader.TemplateImageLoaderInstaller;
 
-
-
 public class TemplateImageLoaderAwtInstaller extends InstallerAbstract implements TemplateImageLoaderInstaller {
 
     public TemplateImageLoaderAwtInstaller() {
-		super(TemplateImageLoaderInstaller.TYPE, "awt");
-	}
-
-    public TemplateImageLoader createLoader() {
-    	return new TemplateImageLoaderAwt(getConfiguration());
+        super(TemplateImageLoaderInstaller.TYPE, "awt");
     }
-    
+
+    @Override
+    public TemplateImageLoader createLoader() {
+        return new TemplateImageLoaderAwt(getConfiguration());
+    }
+
     @Override
     public List<Class<?>> getTypes() {
-    	return listOf(TemplateImageLoader.class);
+        return listOf(TemplateImageLoader.class);
     }
 }
-

@@ -59,8 +59,10 @@ public class MaskEvaluator {
     private static List<Converter> converters = new ArrayList<Converter>() {
         {
             add("#", "[0-9]");
-            // add(".", "[\\" + DecimalFormatSymbols.getInstance().getDecimalSeparator()+"]");
-            // add(",", "["+DecimalFormatSymbols.getInstance().getGroupingSeparator()+"]");
+            // add(".", "[\\" +
+            // DecimalFormatSymbols.getInstance().getDecimalSeparator()+"]");
+            // add(",",
+            // "["+DecimalFormatSymbols.getInstance().getGroupingSeparator()+"]");
             add("&", "[A-Za-z]");
             add("?", "[A-Za-z]");
             add("A", "[A-Za-z0-9]");

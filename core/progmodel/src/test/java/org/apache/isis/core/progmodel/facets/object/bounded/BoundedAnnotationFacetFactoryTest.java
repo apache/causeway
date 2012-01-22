@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.object.bounded;
 
 import org.apache.isis.applib.annotation.Bounded;
@@ -26,7 +25,6 @@ import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.metamodel.facets.object.bounded.BoundedFacet;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.progmodel.facets.object.bounded.annotation.BoundedAnnotationFacetFactory;
-
 
 public class BoundedAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 
@@ -45,10 +43,10 @@ public class BoundedAnnotationFacetFactoryTest extends AbstractFacetFactoryTest 
         super.tearDown();
     }
 
-
     public void testBoundedAnnotationPickedUpOnClass() {
         @Bounded
-        class Customer {}
+        class Customer {
+        }
 
         facetFactory.process(new ProcessClassContext(Customer.class, methodRemover, facetedMethod));
 
@@ -60,4 +58,3 @@ public class BoundedAnnotationFacetFactoryTest extends AbstractFacetFactoryTest 
     }
 
 }
-

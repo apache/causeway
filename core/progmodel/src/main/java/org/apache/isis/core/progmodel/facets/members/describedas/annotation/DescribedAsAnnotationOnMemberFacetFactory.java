@@ -48,9 +48,7 @@ public class DescribedAsAnnotationOnMemberFacetFactory extends AnnotationBasedFa
         final Class<?> returnType = processMethodContext.getMethod().getReturnType();
         final DescribedAsFacet returnTypeDescribedAsFacet = getDescribedAsFacet(returnType);
         if (returnTypeDescribedAsFacet != null) {
-            facet =
-                new DescribedAsFacetForMemberDerivedFromType(returnTypeDescribedAsFacet,
-                    processMethodContext.getFacetHolder());
+            facet = new DescribedAsFacetForMemberDerivedFromType(returnTypeDescribedAsFacet, processMethodContext.getFacetHolder());
             FacetUtil.addFacet(facet);
         }
     }

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets;
 
 import java.util.Collection;
@@ -31,14 +30,14 @@ import org.apache.isis.core.metamodel.specloader.ObjectReflector;
 import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistry;
 import org.apache.isis.core.metamodel.specloader.speccache.SpecificationCache;
 
-
 public class ProgrammableReflector implements ObjectReflector {
 
-	
     @Override
-    public void init() {}
+    public void init() {
+    }
 
-    public void installServiceSpecification(final Class<?> cls) {}
+    public void installServiceSpecification(final Class<?> cls) {
+    }
 
     private Collection<ObjectSpecification> allSpecificationsReturn;
 
@@ -78,52 +77,54 @@ public class ProgrammableReflector implements ObjectReflector {
     }
 
     @Override
-    public void shutdown() {}
+    public void shutdown() {
+    }
 
-    public void setCache(SpecificationCache cache) {
+    public void setCache(final SpecificationCache cache) {
         throw new NotYetImplementedException();
     }
 
     @Override
-    public boolean loaded(Class<?> cls) {
+    public boolean loaded(final Class<?> cls) {
         throw new NotYetImplementedException();
     }
 
     @Override
-    public boolean loaded(String fullyQualifiedClassName) {
+    public boolean loaded(final String fullyQualifiedClassName) {
         throw new NotYetImplementedException();
     }
 
     @Override
-    public void injectInto(Object candidate) {}
+    public void injectInto(final Object candidate) {
+    }
 
-	@Override
-    public void setRuntimeContext(RuntimeContext runtimeContext) {
+    @Override
+    public void setRuntimeContext(final RuntimeContext runtimeContext) {
         // ignored
-	}
+    }
 
     @Override
-    public void debugData(DebugBuilder debug) {}
+    public void debugData(final DebugBuilder debug) {
+    }
 
     @Override
     public String debugTitle() {
         return null;
     }
 
-	@Override
-    public void setServiceClasses(List<Class<?>> serviceClasses) {
-		throw new NotYetImplementedException();
-	}
+    @Override
+    public void setServiceClasses(final List<Class<?>> serviceClasses) {
+        throw new NotYetImplementedException();
+    }
 
     @Override
-    public boolean loadSpecifications(List<Class<?>> typesToLoad, Class<?> typeToIgnore) {
+    public boolean loadSpecifications(final List<Class<?>> typesToLoad, final Class<?> typeToIgnore) {
         return false;
     }
 
     @Override
-    public boolean loadSpecifications(List<Class<?>> typesToLoad) {
+    public boolean loadSpecifications(final List<Class<?>> typesToLoad) {
         return false;
     }
 
 }
-

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.runtime.userprofile;
 
 import java.util.Enumeration;
@@ -27,44 +26,48 @@ import java.util.Properties;
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 
-
 public class Options implements DebuggableWithTitle {
 
     private final Properties properties = new Properties();
 
-    public void addOption(String name, String value) {
+    public void addOption(final String name, final String value) {
         properties.put(name, value);
     }
-    
-    public void addOptions(String name, Options options) {
+
+    public void addOptions(final String name, final Options options) {
         properties.put(name, options);
     }
 
     public Iterator<String> names() {
-    	final Enumeration<?> propertyNames = properties.propertyNames();
-    	return new Iterator<String>() {
-			public boolean hasNext() {
-				return propertyNames.hasMoreElements();
-			}
-			public String next() {
-				return (String) propertyNames.nextElement();
-			}
+        final Enumeration<?> propertyNames = properties.propertyNames();
+        return new Iterator<String>() {
+            @Override
+            public boolean hasNext() {
+                return propertyNames.hasMoreElements();
+            }
 
-			public void remove() {
-				throw new UnsupportedOperationException();
-			}};
+            @Override
+            public String next() {
+                return (String) propertyNames.nextElement();
+            }
+
+            @Override
+            public void remove() {
+                throw new UnsupportedOperationException();
+            }
+        };
     }
-    
-    public String getString(String name) {
+
+    public String getString(final String name) {
         return properties.getProperty(name);
     }
 
-    public String getString(String name, String defaultValue) {
+    public String getString(final String name, final String defaultValue) {
         return properties.getProperty(name, defaultValue);
     }
 
-    public int getInteger(String name, int defaultValue) {
-        String value = getString(name);
+    public int getInteger(final String name, final int defaultValue) {
+        final String value = getString(name);
         if (value == null) {
             return defaultValue;
         } else {
@@ -72,7 +75,7 @@ public class Options implements DebuggableWithTitle {
         }
     }
 
-    public Options getOptions(String name) {
+    public Options getOptions(final String name) {
         Options options = (Options) properties.get(name);
         if (options == null) {
             options = new Options();
@@ -81,32 +84,30 @@ public class Options implements DebuggableWithTitle {
         return options;
     }
 
-    public boolean isOptions(String name) {
+    public boolean isOptions(final String name) {
         return properties.get(name) instanceof Options;
     }
 
-    
-    public void copy(Options options) {
+    public void copy(final Options options) {
         properties.putAll(options.properties);
     }
 
-
-    /////////////////////////////////
+    // ///////////////////////////////
     // Debugging
-    /////////////////////////////////
+    // ///////////////////////////////
 
+    @Override
     public String debugTitle() {
         return "Options";
     }
 
-    public void debugData(DebugBuilder debug) {
-        Enumeration<Object> keys = properties.keys();
+    @Override
+    public void debugData(final DebugBuilder debug) {
+        final Enumeration<Object> keys = properties.keys();
         while (keys.hasMoreElements()) {
-            String name = (String) keys.nextElement();
+            final String name = (String) keys.nextElement();
             debug.appendln(name, properties.get(name));
         }
     }
 
-
 }
-

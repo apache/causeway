@@ -36,8 +36,7 @@ public abstract class ActionParameterChoicesFacetAbstract extends FacetAbstract 
     private final SpecificationLookup specificationLookup;
     private final AdapterMap adapterMap;
 
-    public ActionParameterChoicesFacetAbstract(final FacetHolder holder, final SpecificationLookup specificationLookup,
-        final AdapterMap adapterManager) {
+    public ActionParameterChoicesFacetAbstract(final FacetHolder holder, final SpecificationLookup specificationLookup, final AdapterMap adapterManager) {
         super(type(), holder, false);
         this.specificationLookup = specificationLookup;
         this.adapterMap = adapterManager;

@@ -49,8 +49,7 @@ public class ActionDefaultsFacetViaMethod extends ActionDefaultsFacetAbstract im
         Method method2;
         final Facet actionInvocationFacet = holder.getFacet(ActionInvocationFacet.class);
         if (actionInvocationFacet instanceof ActionInvocationFacetViaMethod) {
-            final ActionInvocationFacetViaMethod facetViaMethod =
-                (ActionInvocationFacetViaMethod) actionInvocationFacet;
+            final ActionInvocationFacetViaMethod facetViaMethod = (ActionInvocationFacetViaMethod) actionInvocationFacet;
             method2 = facetViaMethod.getMethods().get(0);
         } else {
             method2 = null;
@@ -59,7 +58,8 @@ public class ActionDefaultsFacetViaMethod extends ActionDefaultsFacetAbstract im
     }
 
     /**
-     * Returns a singleton list of the {@link Method} provided in the constructor.
+     * Returns a singleton list of the {@link Method} provided in the
+     * constructor.
      */
     @Override
     public List<Method> getMethods() {

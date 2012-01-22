@@ -17,17 +17,10 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.value;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
-
-import org.jmock.Expectations;
-import org.jmock.integration.junit4.JMock;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
 
 import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -35,6 +28,11 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facets.object.parseable.TextEntryParseException;
 import org.apache.isis.core.progmodel.facets.value.floats.FloatValueSemanticsProviderAbstract;
 import org.apache.isis.core.progmodel.facets.value.floats.FloatWrapperValueSemanticsProvider;
+import org.jmock.Expectations;
+import org.jmock.integration.junit4.JMock;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 
 @RunWith(JMock.class)
 public class FloatValueSemanticsProviderTest extends ValueSemanticsProviderAbstractTestCase {
@@ -45,14 +43,16 @@ public class FloatValueSemanticsProviderTest extends ValueSemanticsProviderAbstr
 
     @Before
     public void setUpObjects() throws Exception {
-        mockery.checking(new Expectations(){{
-        	allowing(mockConfiguration).getString("isis.value.format.float");
-        	will(returnValue(null));
-        }});
+        mockery.checking(new Expectations() {
+            {
+                allowing(mockConfiguration).getString("isis.value.format.float");
+                will(returnValue(null));
+            }
+        });
 
         float1 = new Float(32.5f);
         allowMockAdapterToReturn(float1);
-        
+
         holder = new FacetHolderImpl();
         setValue(value = new FloatWrapperValueSemanticsProvider(holder, mockConfiguration, mockContext));
     }
@@ -62,7 +62,8 @@ public class FloatValueSemanticsProviderTest extends ValueSemanticsProviderAbstr
         try {
             value.parseTextEntry(null, "one");
             fail();
-        } catch (final TextEntryParseException expected) {}
+        } catch (final TextEntryParseException expected) {
+        }
     }
 
     @Test

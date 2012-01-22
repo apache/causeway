@@ -27,12 +27,12 @@ import org.apache.isis.core.metamodel.consent.InteractionContextType;
 import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
 
 /**
- * See {@link InteractionContext} for overview; analogous to {@link ValidityEvent}
+ * See {@link InteractionContext} for overview; analogous to
+ * {@link ValidityEvent}
  */
 public abstract class ValidityContext<T extends ValidityEvent> extends InteractionContext<T> {
 
-    public ValidityContext(final InteractionContextType interactionType, final AuthenticationSession session,
-        final InteractionInvocationMethod invocationMethod, final Identifier identifier, final ObjectAdapter target) {
+    public ValidityContext(final InteractionContextType interactionType, final AuthenticationSession session, final InteractionInvocationMethod invocationMethod, final Identifier identifier, final ObjectAdapter target) {
         super(interactionType, session, invocationMethod, identifier, target);
     }
 

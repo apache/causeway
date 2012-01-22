@@ -32,7 +32,8 @@ import org.apache.isis.core.metamodel.exceptions.MetaModelException;
 import org.apache.isis.core.metamodel.methodutils.MethodFinderUtils;
 
 /**
- * TODO: remove duplication with {@link WrapperUtils} and {@link MethodFinderUtils}.
+ * TODO: remove duplication with {@link WrapperUtils} and
+ * {@link MethodFinderUtils}.
  */
 public class InvokeUtils {
 
@@ -120,8 +121,8 @@ public class InvokeUtils {
     }
 
     /**
-     * Returns the corresponding 'null' value for the primitives, or just <tt>null</tt> if the class represents a
-     * non-primitive type.
+     * Returns the corresponding 'null' value for the primitives, or just
+     * <tt>null</tt> if the class represents a non-primitive type.
      */
     private static Object nullOrDefaultFor(final Class<?> type) {
         return defaultByPrimitiveType.get(type);

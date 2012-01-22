@@ -36,8 +36,7 @@ import org.apache.isis.core.progmodel.facets.MethodPrefixConstants;
 
 public class PersistCallbackViaSaveMethodFacetFactory extends MethodPrefixBasedFacetFactoryAbstract {
 
-    private static final String[] PREFIXES =
-        { MethodPrefixConstants.SAVED_PREFIX, MethodPrefixConstants.SAVING_PREFIX, };
+    private static final String[] PREFIXES = { MethodPrefixConstants.SAVED_PREFIX, MethodPrefixConstants.SAVING_PREFIX, };
 
     public PersistCallbackViaSaveMethodFacetFactory() {
         super(FeatureType.OBJECTS_ONLY, PREFIXES);
@@ -52,9 +51,7 @@ public class PersistCallbackViaSaveMethodFacetFactory extends MethodPrefixBasedF
         final List<Method> methods = new ArrayList<Method>();
 
         Method method = null;
-        method =
-            MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, MethodPrefixConstants.SAVING_PREFIX, void.class,
-                NO_PARAMETERS_TYPES);
+        method = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, MethodPrefixConstants.SAVING_PREFIX, void.class, NO_PARAMETERS_TYPES);
         if (method != null) {
             methods.add(method);
             final PersistingCallbackFacet facet = facetHolder.getFacet(PersistingCallbackFacet.class);
@@ -65,9 +62,7 @@ public class PersistCallbackViaSaveMethodFacetFactory extends MethodPrefixBasedF
             }
         }
 
-        method =
-            MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, MethodPrefixConstants.SAVED_PREFIX, void.class,
-                NO_PARAMETERS_TYPES);
+        method = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, MethodPrefixConstants.SAVED_PREFIX, void.class, NO_PARAMETERS_TYPES);
         if (method != null) {
             methods.add(method);
             final PersistedCallbackFacet facet = facetHolder.getFacet(PersistedCallbackFacet.class);

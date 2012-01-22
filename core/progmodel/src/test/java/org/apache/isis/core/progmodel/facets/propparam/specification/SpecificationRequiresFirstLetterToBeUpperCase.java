@@ -17,23 +17,23 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.propparam.specification;
 
 import org.apache.isis.applib.spec.Specification;
 
 public class SpecificationRequiresFirstLetterToBeUpperCase implements Specification {
 
-    public String satisfies(Object obj) {
+    @Override
+    public String satisfies(final Object obj) {
         if (!(obj instanceof String)) {
             return null;
         }
-        String str = (String) obj;
+        final String str = (String) obj;
         if (str.length() < 0) {
             return "Must contain at least one letter";
         }
-        char firstLetter = str.charAt(0);
-        return Character.isUpperCase(firstLetter)? null: "Must start with upper case";
+        final char firstLetter = str.charAt(0);
+        return Character.isUpperCase(firstLetter) ? null : "Must start with upper case";
     }
 
 }

@@ -25,7 +25,8 @@ package org.apache.isis.core.metamodel.spec;
 public interface Described {
 
     /**
-     * Returns a description of how the member is used - this complements the help text.
+     * Returns a description of how the member is used - this complements the
+     * help text.
      * 
      * @see #getHelp()
      */

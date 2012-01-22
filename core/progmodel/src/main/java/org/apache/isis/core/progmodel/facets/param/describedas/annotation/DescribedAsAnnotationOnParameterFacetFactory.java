@@ -40,8 +40,7 @@ public class DescribedAsAnnotationOnParameterFacetFactory extends AnnotationBase
 
         final int paramNum = processParameterContext.getParamNum();
         final Class<?> parameterType = processParameterContext.getMethod().getParameterTypes()[paramNum];
-        final Annotation[] parameterAnnotations =
-            getParameterAnnotations(processParameterContext.getMethod())[paramNum];
+        final Annotation[] parameterAnnotations = getParameterAnnotations(processParameterContext.getMethod())[paramNum];
         for (final Annotation parameterAnnotation : parameterAnnotations) {
             if (parameterAnnotation instanceof DescribedAs) {
                 FacetUtil.addFacet(create((DescribedAs) parameterAnnotation, processParameterContext.getFacetHolder()));
@@ -49,11 +48,11 @@ public class DescribedAsAnnotationOnParameterFacetFactory extends AnnotationBase
             }
         }
 
-        // otherwise, fall back to a description on the parameter's type, if available
+        // otherwise, fall back to a description on the parameter's type, if
+        // available
         final DescribedAsFacet parameterTypeDescribedAsFacet = getDescribedAsFacet(parameterType);
         if (parameterTypeDescribedAsFacet != null) {
-            FacetUtil.addFacet(new DescribedAsFacetForParameterDerivedFromType(parameterTypeDescribedAsFacet,
-                processParameterContext.getFacetHolder()));
+            FacetUtil.addFacet(new DescribedAsFacetForParameterDerivedFromType(parameterTypeDescribedAsFacet, processParameterContext.getFacetHolder()));
             return;
         }
 

@@ -46,8 +46,7 @@ public class NotPersistableAnnotationFacetFactory extends AnnotationBasedFacetFa
     }
 
     private NotPersistableFacet create(final NotPersistable annotation, final FacetHolder holder) {
-        return annotation != null ? new NotPersistableFacetAnnotation(InitiatedBy.decodeBy(annotation.value()), holder)
-            : null;
+        return annotation != null ? new NotPersistableFacetAnnotation(InitiatedBy.decodeBy(annotation.value()), holder) : null;
     }
 
 }

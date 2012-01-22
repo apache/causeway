@@ -40,24 +40,26 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.progmodel.facets.MethodPrefixBasedFacetFactoryAbstract;
 
 /**
- * Sets up {@link ActionInvocationFacet}, along with a number of supporting facets that are based on the action's name.
+ * Sets up {@link ActionInvocationFacet}, along with a number of supporting
+ * facets that are based on the action's name.
  * 
  * <p>
- * The supporting methods are: {@link ExecutedFacet}, {@link ExplorationFacet} and {@link DebugFacet}. In addition a
- * {@link NamedFacet} is inferred from the name (taking into account the above well-known prefixes).
+ * The supporting methods are: {@link ExecutedFacet}, {@link ExplorationFacet}
+ * and {@link DebugFacet}. In addition a {@link NamedFacet} is inferred from the
+ * name (taking into account the above well-known prefixes).
  */
 public class ActionInvocationFacetFactory extends MethodPrefixBasedFacetFactoryAbstract implements AdapterMapAware {
 
     private static final String EXPLORATION_PREFIX = "Exploration";
     private static final String DEBUG_PREFIX = "Debug";
 
-    private static final String[] PREFIXES = { EXPLORATION_PREFIX, DEBUG_PREFIX, ExecutedFacet.Where.REMOTE_PREFIX,
-        ExecutedFacet.Where.LOCAL_PREFIX };
+    private static final String[] PREFIXES = { EXPLORATION_PREFIX, DEBUG_PREFIX, ExecutedFacet.Where.REMOTE_PREFIX, ExecutedFacet.Where.LOCAL_PREFIX };
 
     private AdapterMap adapterMap;
 
     /**
-     * Note that the {@link Facet}s registered are the generic ones from noa-architecture (where they exist)
+     * Note that the {@link Facet}s registered are the generic ones from
+     * noa-architecture (where they exist)
      */
     public ActionInvocationFacetFactory() {
         super(FeatureType.ACTIONS_ONLY, PREFIXES);
@@ -79,8 +81,12 @@ public class ActionInvocationFacetFactory extends MethodPrefixBasedFacetFactoryA
         attachExecutedFacetIfActionMethodNamePrefixed(processMethodContext);
 
         // inferred name
-        attachNamedFacetInferredFromMethodName(processMethodContext); // must be called after the
-                                                                      // attachinvocationFacet methods
+        attachNamedFacetInferredFromMethodName(processMethodContext); // must be
+                                                                      // called
+                                                                      // after
+                                                                      // the
+                                                                      // attachinvocationFacet
+                                                                      // methods
 
     }
 
@@ -99,16 +105,16 @@ public class ActionInvocationFacetFactory extends MethodPrefixBasedFacetFactoryA
             final ObjectSpecification typeSpec = getSpecificationLookup().loadSpecification(cls);
             final FacetHolder holder = processMethodContext.getFacetHolder();
 
-            FacetUtil.addFacet(new ActionInvocationFacetViaMethod(actionMethod, typeSpec, returnSpec, holder,
-                getAdapterMap()));
+            FacetUtil.addFacet(new ActionInvocationFacetViaMethod(actionMethod, typeSpec, returnSpec, holder, getAdapterMap()));
         } finally {
             processMethodContext.removeMethod(actionMethod);
         }
     }
 
     /**
-     * Adds the {@link ExecutedFacet} (indicating where the action should be executed, either {@link Where#LOCALLY
-     * locally} or {@link Where#REMOTELY remotely}.
+     * Adds the {@link ExecutedFacet} (indicating where the action should be
+     * executed, either {@link Where#LOCALLY locally} or {@link Where#REMOTELY
+     * remotely}.
      */
     private void attachExecutedFacetIfActionMethodNamePrefixed(final ProcessMethodContext processMethodContext) {
         final Method actionMethod = processMethodContext.getMethod();

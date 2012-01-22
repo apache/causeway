@@ -30,12 +30,11 @@ public class ImmutableFacetMarkerInterface extends ImmutableFacetAbstract {
     public ImmutableFacetMarkerInterface(final When value, final FacetHolder holder) {
         super(value, holder);
     }
-    
+
     @Override
-    public void copyOnto(FacetHolder holder) {
+    public void copyOnto(final FacetHolder holder) {
         final Facet facet = new ImmutableFacetMarkerInterface(this.when(), holder);
         FacetUtil.addFacet(facet);
     }
-
 
 }

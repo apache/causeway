@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.propparam.specification;
 
 import java.util.ArrayList;
@@ -27,14 +26,15 @@ import org.apache.isis.applib.spec.Specification;
 
 public final class Utils {
 
-    private Utils(){}
+    private Utils() {
+    }
 
     @SuppressWarnings("serial")
     public static List<Specification> listOf(final Specification specification) {
-        return new ArrayList<Specification>() {{
-            add(specification);
-        }};
+        return new ArrayList<Specification>() {
+            {
+                add(specification);
+            }
+        };
     }
 }
-
-

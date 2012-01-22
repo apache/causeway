@@ -29,10 +29,12 @@ import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.Collecti
 import org.apache.isis.core.progmodel.facets.collections.collection.CollectionFacetFactory;
 
 /**
- * All {@link CollectionTypeRegistry collection types} are intrinsically {@link AggregatedFacet aggregeted}.
+ * All {@link CollectionTypeRegistry collection types} are intrinsically
+ * {@link AggregatedFacet aggregeted}.
  * 
  * 
- * Must be registered in the {@link ProgrammingModel} after {@link CollectionFacetFactory}.
+ * Must be registered in the {@link ProgrammingModel} after
+ * {@link CollectionFacetFactory}.
  */
 public class AggregatedIfCollectionFacetFactory extends FacetFactoryAbstract {
 

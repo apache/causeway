@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.actions.exploration;
 
 import java.lang.reflect.Method;
@@ -28,7 +27,6 @@ import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.core.metamodel.facets.actions.exploration.ExplorationFacet;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.progmodel.facets.actions.exploration.annotation.ExplorationAnnotationFacetFactory;
-
 
 public class ExplorationAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 
@@ -47,12 +45,12 @@ public class ExplorationAnnotationFacetFactoryTest extends AbstractFacetFactoryT
         super.tearDown();
     }
 
-
     public void testExplorationAnnotationPickedUp() {
         class Customer {
             @SuppressWarnings("unused")
-			@Exploration
-            public void someAction() {}
+            @Exploration
+            public void someAction() {
+            }
         }
         final Method actionMethod = findMethod(Customer.class, "someAction");
 
@@ -66,4 +64,3 @@ public class ExplorationAnnotationFacetFactoryTest extends AbstractFacetFactoryT
     }
 
 }
-

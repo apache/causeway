@@ -27,12 +27,14 @@ import org.apache.isis.core.metamodel.interactions.HidingInteractionAdvisor;
  * Hide a property, collection or action.
  * 
  * <p>
- * In the standard Apache Isis Programming Model, corresponds to annotating the member with <tt>@Hidden</tt>.
+ * In the standard Apache Isis Programming Model, corresponds to annotating the
+ * member with <tt>@Hidden</tt>.
  */
 public interface HiddenFacet extends SingleWhenValueFacet, HidingInteractionAdvisor {
 
     /**
-     * The reason why the (feature of the) target object is currently hidden, or <tt>null</tt> if visible.
+     * The reason why the (feature of the) target object is currently hidden, or
+     * <tt>null</tt> if visible.
      */
     public String hiddenReason(ObjectAdapter target);
 

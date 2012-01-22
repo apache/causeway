@@ -22,7 +22,8 @@ package org.apache.isis.core.metamodel.spec;
 import org.apache.isis.core.commons.exceptions.IsisException;
 
 /**
- * Thrown when a problem is found with the domain model, and Isis cannot proceed.
+ * Thrown when a problem is found with the domain model, and Isis cannot
+ * proceed.
  */
 public class DomainModelException extends IsisException {
     private static final long serialVersionUID = 1L;

@@ -26,7 +26,7 @@ import org.apache.log4j.Logger;
 import com.google.common.collect.Lists;
 
 public abstract class MemberLayoutArrangerComposite implements MemberLayoutArranger {
-    
+
     private static final Logger LOG = Logger.getLogger(MemberLayoutArrangerComposite.class);
 
     private final List<MemberLayoutArranger> arrangers = Lists.newArrayList();
@@ -35,50 +35,47 @@ public abstract class MemberLayoutArrangerComposite implements MemberLayoutArran
     // constructor
     // ////////////////////////////////////////////////////////////////////////////
 
-    public MemberLayoutArrangerComposite(MemberLayoutArranger... arrangers ) {
+    public MemberLayoutArrangerComposite(final MemberLayoutArranger... arrangers) {
         this.arrangers.addAll(Arrays.asList(arrangers));
     }
-
 
     // ////////////////////////////////////////////////////////////////////////////
     // associations
     // ////////////////////////////////////////////////////////////////////////////
 
-
     @Override
-    public OrderSet createAssociationOrderSetFor(ObjectSpecification spec, final List<FacetedMethod> associationMethods) {
+    public OrderSet createAssociationOrderSetFor(final ObjectSpecification spec, final List<FacetedMethod> associationMethods) {
         if (LOG.isDebugEnabled()) {
             LOG.debug("MemberLayoutArrangerComposite: createAssociationOrderSetFor " + spec.getFullIdentifier());
         }
 
-        for (MemberLayoutArranger arranger : arrangers) {
+        for (final MemberLayoutArranger arranger : arrangers) {
             final OrderSet orderSet = arranger.createAssociationOrderSetFor(spec, associationMethods);
-            if(orderSet != null) {
+            if (orderSet != null) {
                 return orderSet;
             }
         }
         return null;
     }
-
 
     // ////////////////////////////////////////////////////////////////////////////
     // actions
     // ////////////////////////////////////////////////////////////////////////////
-    
+
     @Override
-    public OrderSet createActionOrderSetFor(ObjectSpecification spec, List<FacetedMethod> actionMethods) {
+    public OrderSet createActionOrderSetFor(final ObjectSpecification spec, final List<FacetedMethod> actionMethods) {
         if (LOG.isDebugEnabled()) {
             LOG.debug("MemberLayoutArrangerDefault: createAssociationOrderSetFor " + spec.getFullIdentifier());
         }
 
-        for (MemberLayoutArranger arranger : arrangers) {
+        for (final MemberLayoutArranger arranger : arrangers) {
             final OrderSet orderSet = arranger.createActionOrderSetFor(spec, actionMethods);
-            if(orderSet != null) {
+            if (orderSet != null) {
                 return orderSet;
             }
         }
         return null;
 
     }
-    
+
 }

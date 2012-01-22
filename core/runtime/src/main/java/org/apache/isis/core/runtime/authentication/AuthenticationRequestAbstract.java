@@ -17,18 +17,15 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.runtime.authentication;
 
 import java.util.Collections;
 import java.util.List;
 
-
 import com.google.common.collect.Lists;
 
-
 public abstract class AuthenticationRequestAbstract implements AuthenticationRequest {
-	
+
     private final String name;
     private final List<String> roles = Lists.newArrayList();
 
@@ -36,18 +33,20 @@ public abstract class AuthenticationRequestAbstract implements AuthenticationReq
         this.name = name;
     }
 
+    @Override
     public String getName() {
         return name;
     }
 
+    @Override
     public List<String> getRoles() {
         return Collections.unmodifiableList(roles);
     }
 
+    @Override
     public void setRoles(final List<String> roles) {
-    	this.roles.clear();
+        this.roles.clear();
         this.roles.addAll(roles);
     }
 
 }
-

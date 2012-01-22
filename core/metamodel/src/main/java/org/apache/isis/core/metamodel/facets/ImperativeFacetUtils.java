@@ -34,8 +34,9 @@ public final class ImperativeFacetUtils {
     }
 
     /**
-     * Returns the provided {@link Facet facet} as an {@link ImperativeFacet} if it either is one or if it is a
-     * {@link DecoratingFacet} that in turn wraps an {@link ImperativeFacet}.
+     * Returns the provided {@link Facet facet} as an {@link ImperativeFacet} if
+     * it either is one or if it is a {@link DecoratingFacet} that in turn wraps
+     * an {@link ImperativeFacet}.
      * 
      * <p>
      * Otherwise, returns <tt>null</tt>.

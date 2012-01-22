@@ -28,7 +28,8 @@ import org.apache.isis.core.metamodel.facets.actions.debug.DebugFacet;
 import org.apache.isis.core.progmodel.facets.actions.invoke.ActionInvocationFacetFactory;
 
 /**
- * {@link DebugFacet} can also be installed via a naming convention, see {@link ActionInvocationFacetFactory}.
+ * {@link DebugFacet} can also be installed via a naming convention, see
+ * {@link ActionInvocationFacetFactory}.
  */
 public class DebugAnnotationFacetFactory extends AnnotationBasedFacetFactoryAbstract {
 

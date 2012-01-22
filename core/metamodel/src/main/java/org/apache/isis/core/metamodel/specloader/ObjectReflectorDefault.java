@@ -81,26 +81,33 @@ import com.google.common.collect.Lists;
  * <p>
  * The implementation provides for a degree of pluggability:
  * <ul>
- * <li>The most important plug-in point is {@link ProgrammingModel} that specifies the set of {@link Facet} that make up
- * programming model. If not specified then defaults to {@link ProgrammingModelFacetsJava5} (which should be used as a
- * starting point for your own customizations).
- * <li>The only mandatory plug-in point is {@link ClassSubstitutor}, which allows the class to be loaded to be
- * substituted if required. This is used in conjunction with some <tt>PersistenceMechanism</tt>s that do class
+ * <li>The most important plug-in point is {@link ProgrammingModel} that
+ * specifies the set of {@link Facet} that make up programming model. If not
+ * specified then defaults to {@link ProgrammingModelFacetsJava5} (which should
+ * be used as a starting point for your own customizations).
+ * <li>The only mandatory plug-in point is {@link ClassSubstitutor}, which
+ * allows the class to be loaded to be substituted if required. This is used in
+ * conjunction with some <tt>PersistenceMechanism</tt>s that do class
  * enhancement.
- * <li>The {@link CollectionTypeRegistry} specifies the types that should be considered as collections. If not specified
- * then will {@link CollectionTypeRegistryDefault default}. (Note: this extension point has not been tested, so should
- * be considered more of a &quot;statement of intent&quot; than actual API. Also, we may use annotations (similar to the
+ * <li>The {@link CollectionTypeRegistry} specifies the types that should be
+ * considered as collections. If not specified then will
+ * {@link CollectionTypeRegistryDefault default}. (Note: this extension point
+ * has not been tested, so should be considered more of a &quot;statement of
+ * intent&quot; than actual API. Also, we may use annotations (similar to the
  * way in which Values are specified) as an alternative mechanism).
  * </ul>
  * 
  * <p>
- * In addition, the {@link RuntimeContext} can optionally be injected, but will default to
- * {@link RuntimeContextNoRuntime} if not provided prior to {@link #init() initialization}. The purpose of
- * {@link RuntimeContext} is to allow the metamodel to be used standalone, for example in a Maven plugin. The
- * {@link RuntimeContextNoRuntime} implementation will through an exception for any methods (such as finding an
- * {@link ObjectAdapter adapter}) because there is no runtime session. In the case of the metamodel being used by the
- * framework (that is, when there <i>is</i> a runtime), then the framework injects an implementation of
- * {@link RuntimeContext} that acts like a bridge to its <tt>IsisContext</tt>.
+ * In addition, the {@link RuntimeContext} can optionally be injected, but will
+ * default to {@link RuntimeContextNoRuntime} if not provided prior to
+ * {@link #init() initialization}. The purpose of {@link RuntimeContext} is to
+ * allow the metamodel to be used standalone, for example in a Maven plugin. The
+ * {@link RuntimeContextNoRuntime} implementation will through an exception for
+ * any methods (such as finding an {@link ObjectAdapter adapter}) because there
+ * is no runtime session. In the case of the metamodel being used by the
+ * framework (that is, when there <i>is</i> a runtime), then the framework
+ * injects an implementation of {@link RuntimeContext} that acts like a bridge
+ * to its <tt>IsisContext</tt>.
  */
 
 public class ObjectReflectorDefault implements ObjectReflector, DebuggableWithTitle {
@@ -130,20 +137,24 @@ public class ObjectReflectorDefault implements ObjectReflector, DebuggableWithTi
     private final FacetProcessor facetProcessor;
 
     /**
-     * Defaulted in the constructor, so can be added to via {@link #setFacetDecorators(FacetDecoratorSet)} or
+     * Defaulted in the constructor, so can be added to via
+     * {@link #setFacetDecorators(FacetDecoratorSet)} or
      * {@link #addFacetDecorator(FacetDecorator)}.
      * 
      * <p>
-     * {@link FacetDecorator}s must be added prior to {@link #init() initialization.}
+     * {@link FacetDecorator}s must be added prior to {@link #init()
+     * initialization.}
      */
     private final FacetDecoratorSet facetDecoratorSet;
 
     /**
-     * Can optionally be injected, but will default (to {@link RuntimeContextNoRuntime}) otherwise.
+     * Can optionally be injected, but will default (to
+     * {@link RuntimeContextNoRuntime}) otherwise.
      * 
      * <p>
-     * Should be injected when used by framework, but will default to a no-op implementation if the metamodel is being
-     * used standalone (eg for a code-generator).
+     * Should be injected when used by framework, but will default to a no-op
+     * implementation if the metamodel is being used standalone (eg for a
+     * code-generator).
      */
     private RuntimeContext runtimeContext;
 
@@ -166,10 +177,8 @@ public class ObjectReflectorDefault implements ObjectReflector, DebuggableWithTi
     // Constructor
     // /////////////////////////////////////////////////////////////
 
-    public ObjectReflectorDefault(final IsisConfiguration configuration, final ClassSubstitutor classSubstitutor,
-        final CollectionTypeRegistry collectionTypeRegistry, final SpecificationTraverser specificationTraverser,
-        final MemberLayoutArranger memberLayoutArranger, final ProgrammingModel programmingModel,
-        final Set<FacetDecorator> facetDecorators, final MetaModelValidator metaModelValidator) {
+    public ObjectReflectorDefault(final IsisConfiguration configuration, final ClassSubstitutor classSubstitutor, final CollectionTypeRegistry collectionTypeRegistry, final SpecificationTraverser specificationTraverser, final MemberLayoutArranger memberLayoutArranger,
+            final ProgrammingModel programmingModel, final Set<FacetDecorator> facetDecorators, final MetaModelValidator metaModelValidator) {
 
         ensureThatArg(configuration, is(notNullValue()));
         ensureThatArg(classSubstitutor, is(notNullValue()));
@@ -210,8 +219,8 @@ public class ObjectReflectorDefault implements ObjectReflector, DebuggableWithTi
     // /////////////////////////////////////////////////////////////
 
     /**
-     * Initializes and wires up, and primes the cache based on any service classes that may have been
-     * {@link #setServiceClasses(List) injected}.
+     * Initializes and wires up, and primes the cache based on any service
+     * classes that may have been {@link #setServiceClasses(List) injected}.
      */
     @Override
     public void init() {
@@ -246,8 +255,9 @@ public class ObjectReflectorDefault implements ObjectReflector, DebuggableWithTi
     }
 
     /**
-     * load the service specifications and then, using the {@link #getSpecificationTraverser() traverser}, keep loading
-     * all referenced specifications until we can find no more.
+     * load the service specifications and then, using the
+     * {@link #getSpecificationTraverser() traverser}, keep loading all
+     * referenced specifications until we can find no more.
      */
     private void primeCache() {
         for (final Class<?> serviceClass : serviceClasses) {
@@ -350,7 +360,8 @@ public class ObjectReflectorDefault implements ObjectReflector, DebuggableWithTi
     }
 
     /**
-     * Loads the specifications of the specified types except the one specified (to prevent an infinite loop).
+     * Loads the specifications of the specified types except the one specified
+     * (to prevent an infinite loop).
      */
     @Override
     public boolean loadSpecifications(final List<Class<?>> typesToLoad, final Class<?> typeToIgnore) {
@@ -378,33 +389,24 @@ public class ObjectReflectorDefault implements ObjectReflector, DebuggableWithTi
      */
     private ObjectSpecification createSpecification(final Class<?> cls) {
 
-        final AuthenticationSessionProvider authenticationSessionProvider =
-            getRuntimeContext().getAuthenticationSessionProvider();
+        final AuthenticationSessionProvider authenticationSessionProvider = getRuntimeContext().getAuthenticationSessionProvider();
         final SpecificationLookup specificationLookup = getRuntimeContext().getSpecificationLookup();
         final ServicesProvider servicesProvider = getRuntimeContext().getServicesProvider();
         final ObjectInstantiator objectInstantiator = getRuntimeContext().getObjectInstantiator();
 
-        final SpecificationContext specContext =
-            new SpecificationContext(authenticationSessionProvider, servicesProvider, objectInstantiator,
-                specificationLookup);
+        final SpecificationContext specContext = new SpecificationContext(authenticationSessionProvider, servicesProvider, objectInstantiator, specificationLookup);
 
         if (ObjectList.class.isAssignableFrom(cls)) {
             return new ObjectSpecificationForObjectList(specContext);
         } else {
             final SpecificationLoader specificationLoader = this;
             final AdapterMap adapterMap = getRuntimeContext().getAdapterMap();
-            final ObjectMemberContext objectMemberContext =
-                new ObjectMemberContext(authenticationSessionProvider, specificationLookup, adapterMap,
-                    getRuntimeContext().getQuerySubmitter(), collectionTypeRegistry);
-            final IntrospectionContext introspectionContext =
-                new IntrospectionContext(getClassSubstitutor(), getMemberLayoutArranger());
+            final ObjectMemberContext objectMemberContext = new ObjectMemberContext(authenticationSessionProvider, specificationLookup, adapterMap, getRuntimeContext().getQuerySubmitter(), collectionTypeRegistry);
+            final IntrospectionContext introspectionContext = new IntrospectionContext(getClassSubstitutor(), getMemberLayoutArranger());
             final DependencyInjector dependencyInjector = getRuntimeContext().getDependencyInjector();
             final CreateObjectContext createObjectContext = new CreateObjectContext(adapterMap, dependencyInjector);
-            final FacetedMethodsBuilderContext facetedMethodsBuilderContext =
-                new FacetedMethodsBuilderContext(specificationLoader, classSubstitutor, specificationTraverser,
-                    facetProcessor);
-            return new ObjectSpecificationDefault(cls, facetedMethodsBuilderContext, introspectionContext, specContext,
-                objectMemberContext, createObjectContext);
+            final FacetedMethodsBuilderContext facetedMethodsBuilderContext = new FacetedMethodsBuilderContext(specificationLoader, classSubstitutor, specificationTraverser, facetProcessor);
+            return new ObjectSpecificationDefault(cls, facetedMethodsBuilderContext, introspectionContext, specContext, objectMemberContext, createObjectContext);
         }
     }
 
@@ -448,7 +450,8 @@ public class ObjectReflectorDefault implements ObjectReflector, DebuggableWithTi
     // ////////////////////////////////////////////////////////////////////
 
     /**
-     * Injects self into candidate if required, and instructs its subcomponents to do so also.
+     * Injects self into candidate if required, and instructs its subcomponents
+     * to do so also.
      */
     @Override
     public void injectInto(final Object candidate) {

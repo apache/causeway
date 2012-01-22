@@ -17,16 +17,10 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.value;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
-
-import org.jmock.integration.junit4.JMock;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
 
 import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.applib.value.Color;
@@ -34,6 +28,10 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facets.object.parseable.TextEntryParseException;
 import org.apache.isis.core.progmodel.facets.value.color.ColorValueSemanticsProvider;
+import org.jmock.integration.junit4.JMock;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 
 @RunWith(JMock.class)
 public class ColorValueSemanticsProviderTest extends ValueSemanticsProviderAbstractTestCase {
@@ -62,7 +60,8 @@ public class ColorValueSemanticsProviderTest extends ValueSemanticsProviderAbstr
         try {
             value.parseTextEntry(null, "red");
             fail();
-        } catch (final TextEntryParseException expected) {}
+        } catch (final TextEntryParseException expected) {
+        }
     }
 
     @Test
@@ -79,7 +78,7 @@ public class ColorValueSemanticsProviderTest extends ValueSemanticsProviderAbstr
     public void testTitleOfWhite() {
         assertEquals("White", value.displayTitleOf(new Color(0xffffff), (Localization) null));
     }
-    
+
     @Test
     public void testEncode() {
         assertEquals("3366ff", value.toEncodedString(color));
@@ -91,6 +90,4 @@ public class ColorValueSemanticsProviderTest extends ValueSemanticsProviderAbstr
         assertEquals(color, newValue);
     }
 
-
 }
-

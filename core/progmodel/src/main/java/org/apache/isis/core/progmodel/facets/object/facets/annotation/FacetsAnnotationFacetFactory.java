@@ -39,8 +39,8 @@ public class FacetsAnnotationFacetFactory extends AnnotationBasedFacetFactoryAbs
     }
 
     /**
-     * Returns a {@link FacetsFacet} impl provided that at least one valid {@link FacetsFacet#facetFactories() factory}
-     * was specified.
+     * Returns a {@link FacetsFacet} impl provided that at least one valid
+     * {@link FacetsFacet#facetFactories() factory} was specified.
      */
     private FacetsFacet create(final Facets annotation, final FacetHolder holder) {
         if (annotation == null) {

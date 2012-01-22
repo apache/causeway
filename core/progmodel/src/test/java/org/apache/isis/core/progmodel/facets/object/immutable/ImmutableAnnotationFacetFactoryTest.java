@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.object.immutable;
 
 import org.apache.isis.applib.annotation.Immutable;
@@ -28,7 +27,6 @@ import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.progmodel.facets.object.immutable.annotation.ImmutableAnnotationFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.immutable.annotation.ImmutableFacetAnnotation;
-
 
 public class ImmutableAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 
@@ -49,7 +47,8 @@ public class ImmutableAnnotationFacetFactoryTest extends AbstractFacetFactoryTes
 
     public void testImmutableAnnotationPickedUpOnClassAndDefaultsToAlways() {
         @Immutable
-        class Customer {}
+        class Customer {
+        }
 
         facetFactory.process(new ProcessClassContext(Customer.class, methodRemover, facetedMethod));
 
@@ -64,7 +63,8 @@ public class ImmutableAnnotationFacetFactoryTest extends AbstractFacetFactoryTes
 
     public void testImmutableAnnotationAlwaysPickedUpOnClass() {
         @Immutable(When.ALWAYS)
-        class Customer {}
+        class Customer {
+        }
 
         facetFactory.process(new ProcessClassContext(Customer.class, methodRemover, facetedMethod));
 
@@ -79,7 +79,8 @@ public class ImmutableAnnotationFacetFactoryTest extends AbstractFacetFactoryTes
 
     public void testImmutableAnnotationNeverPickedUpOnClass() {
         @Immutable(When.NEVER)
-        class Customer {}
+        class Customer {
+        }
 
         facetFactory.process(new ProcessClassContext(Customer.class, methodRemover, facetedMethod));
 
@@ -94,7 +95,8 @@ public class ImmutableAnnotationFacetFactoryTest extends AbstractFacetFactoryTes
 
     public void testImmutableAnnotationOncePersistedPickedUpOnClass() {
         @Immutable(When.ONCE_PERSISTED)
-        class Customer {}
+        class Customer {
+        }
 
         facetFactory.process(new ProcessClassContext(Customer.class, methodRemover, facetedMethod));
 
@@ -109,7 +111,8 @@ public class ImmutableAnnotationFacetFactoryTest extends AbstractFacetFactoryTes
 
     public void testImmutableAnnotationUntilPersistedPickedUpOnClass() {
         @Immutable(When.UNTIL_PERSISTED)
-        class Customer {}
+        class Customer {
+        }
 
         facetFactory.process(new ProcessClassContext(Customer.class, methodRemover, facetedMethod));
 
@@ -123,4 +126,3 @@ public class ImmutableAnnotationFacetFactoryTest extends AbstractFacetFactoryTes
     }
 
 }
-

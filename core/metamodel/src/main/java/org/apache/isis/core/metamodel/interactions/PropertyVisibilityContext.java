@@ -29,12 +29,12 @@ import org.apache.isis.core.metamodel.consent.InteractionContextType;
 import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
 
 /**
- * See {@link InteractionContext} for overview; analogous to {@link PropertyVisibilityEvent}.
+ * See {@link InteractionContext} for overview; analogous to
+ * {@link PropertyVisibilityEvent}.
  */
 public class PropertyVisibilityContext extends VisibilityContext<PropertyVisibilityEvent> {
 
-    public PropertyVisibilityContext(final AuthenticationSession session,
-        final InteractionInvocationMethod invocationMethod, final ObjectAdapter target, final Identifier identifier) {
+    public PropertyVisibilityContext(final AuthenticationSession session, final InteractionInvocationMethod invocationMethod, final ObjectAdapter target, final Identifier identifier) {
         super(InteractionContextType.PROPERTY_VISIBLE, session, invocationMethod, identifier, target);
     }
 

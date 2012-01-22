@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.hide;
 
 import java.lang.reflect.Method;
@@ -31,7 +30,6 @@ import org.apache.isis.core.metamodel.facets.hide.HiddenFacet;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.progmodel.facets.members.hide.HiddenFacetAbstract;
 import org.apache.isis.core.progmodel.facets.members.hide.annotation.HiddenAnnotationForMemberFacetFactory;
-
 
 public class HiddenAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 
@@ -49,7 +47,6 @@ public class HiddenAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
         facetFactory = null;
         super.tearDown();
     }
-
 
     public void testHiddenAnnotationPickedUpOnProperty() {
         class Customer {
@@ -91,7 +88,8 @@ public class HiddenAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
     public void testHiddenAnnotationPickedUpOnAction() {
         class Customer {
             @Hidden
-            public void someAction() {}
+            public void someAction() {
+            }
         }
         final Method actionMethod = findMethod(Customer.class, "someAction");
 
@@ -107,7 +105,8 @@ public class HiddenAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
     public void testHiddenWhenAlwaysAnnotationPickedUpOn() {
         class Customer {
             @Hidden(When.ALWAYS)
-            public void someAction() {}
+            public void someAction() {
+            }
         }
         final Method actionMethod = findMethod(Customer.class, "someAction");
 
@@ -122,7 +121,8 @@ public class HiddenAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
     public void testHiddenWhenNeverAnnotationPickedUpOn() {
         class Customer {
             @Hidden(When.NEVER)
-            public void someAction() {}
+            public void someAction() {
+            }
         }
         final Method actionMethod = findMethod(Customer.class, "someAction");
 
@@ -137,7 +137,8 @@ public class HiddenAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
     public void testHiddenWhenOncePersistedAnnotationPickedUpOn() {
         class Customer {
             @Hidden(When.ONCE_PERSISTED)
-            public void someAction() {}
+            public void someAction() {
+            }
         }
         final Method actionMethod = findMethod(Customer.class, "someAction");
 
@@ -152,7 +153,8 @@ public class HiddenAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
     public void testDisabledWhenUntilPersistedAnnotationPickedUpOn() {
         class Customer {
             @Hidden(When.UNTIL_PERSISTED)
-            public void someAction() {}
+            public void someAction() {
+            }
         }
         final Method actionMethod = findMethod(Customer.class, "someAction");
 
@@ -165,4 +167,3 @@ public class HiddenAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
     }
 
 }
-

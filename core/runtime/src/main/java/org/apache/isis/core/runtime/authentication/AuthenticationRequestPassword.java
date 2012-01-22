@@ -17,15 +17,14 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.runtime.authentication;
 
 public class AuthenticationRequestPassword extends AuthenticationRequestAbstract {
-	
+
     private final String password;
 
     public AuthenticationRequestPassword(final String name, final String password) {
-    	super(name);
+        super(name);
         this.password = password;
     }
 
@@ -34,4 +33,3 @@ public class AuthenticationRequestPassword extends AuthenticationRequestAbstract
     }
 
 }
-

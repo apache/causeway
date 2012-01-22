@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.propparam.typicallength;
 
 import java.lang.reflect.Method;
@@ -33,11 +32,10 @@ import org.apache.isis.core.progmodel.facets.param.typicallen.annotation.Typical
 import org.apache.isis.core.progmodel.facets.properties.typicallen.annotation.TypicalLengthAnnotationOnPropertyFacetFactory;
 import org.apache.isis.core.progmodel.facets.properties.typicallen.annotation.TypicalLengthFacetAnnotationOnProperty;
 
-
 public class TypicalLengthAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 
     public void testTypicalLengthAnnotationPickedUpOnProperty() {
-        TypicalLengthAnnotationOnPropertyFacetFactory facetFactory = new TypicalLengthAnnotationOnPropertyFacetFactory();
+        final TypicalLengthAnnotationOnPropertyFacetFactory facetFactory = new TypicalLengthAnnotationOnPropertyFacetFactory();
 
         class Customer {
             @SuppressWarnings("unused")
@@ -58,12 +56,12 @@ public class TypicalLengthAnnotationFacetFactoryTest extends AbstractFacetFactor
     }
 
     public void testTypicalLengthAnnotationPickedUpOnActionParameter() {
-        TypicalLengthAnnotationOnParameterFacetFactory facetFactory = new TypicalLengthAnnotationOnParameterFacetFactory();
+        final TypicalLengthAnnotationOnParameterFacetFactory facetFactory = new TypicalLengthAnnotationOnParameterFacetFactory();
 
-        
         class Customer {
             @SuppressWarnings("unused")
-            public void someAction(@TypicalLength(20) final int foo) {}
+            public void someAction(@TypicalLength(20) final int foo) {
+            }
         }
         final Method method = findMethod(Customer.class, "someAction", new Class[] { int.class });
 
@@ -77,4 +75,3 @@ public class TypicalLengthAnnotationFacetFactoryTest extends AbstractFacetFactor
     }
 
 }
-

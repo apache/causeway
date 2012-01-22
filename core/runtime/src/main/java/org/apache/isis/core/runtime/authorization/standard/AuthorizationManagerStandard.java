@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.runtime.authorization.standard;
 
 import org.apache.isis.applib.Identifier;
@@ -30,56 +29,59 @@ public class AuthorizationManagerStandard extends AuthorizationManagerAbstract {
 
     private Authorizor authorizor;
 
-    ///////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////
     // Constructor
-    ///////////////////////////////////////////////////////////
-    
-	public AuthorizationManagerStandard(final IsisConfiguration configuration) {
-    	super(configuration);
-    	// avoid null pointers
-    	authorizor = new Authorizor(){
+    // /////////////////////////////////////////////////////////
 
-			@Override
-			public void init() {
-			}
+    public AuthorizationManagerStandard(final IsisConfiguration configuration) {
+        super(configuration);
+        // avoid null pointers
+        authorizor = new Authorizor() {
 
-			@Override
-			public void shutdown() {
-			}
+            @Override
+            public void init() {
+            }
 
-			@Override
-			public boolean isVisibleInRole(String user, Identifier identifier) {
-				return true;
-			}
+            @Override
+            public void shutdown() {
+            }
 
-			@Override
-			public boolean isUsableInRole(String role, Identifier identifier) {
-				return true;
-			}}; 
+            @Override
+            public boolean isVisibleInRole(final String user, final Identifier identifier) {
+                return true;
+            }
+
+            @Override
+            public boolean isUsableInRole(final String role, final Identifier identifier) {
+                return true;
+            }
+        };
     }
 
-    ///////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////
     // init, shutddown
-    ///////////////////////////////////////////////////////////
-	
+    // /////////////////////////////////////////////////////////
+
+    @Override
     public void init() {
         authorizor.init();
     }
 
+    @Override
     public void shutdown() {
         authorizor.shutdown();
     }
-	
-	
-    ///////////////////////////////////////////////////////////
-    // API
-    ///////////////////////////////////////////////////////////
 
-    public boolean isUsable(final AuthenticationSession session, ObjectAdapter target, final Identifier identifier) {
+    // /////////////////////////////////////////////////////////
+    // API
+    // /////////////////////////////////////////////////////////
+
+    @Override
+    public boolean isUsable(final AuthenticationSession session, final ObjectAdapter target, final Identifier identifier) {
         if (isPerspectiveMember(identifier)) {
             return true;
         }
-        for (String roleName: session.getRoles()) {
+        for (final String roleName : session.getRoles()) {
             if (authorizor.isUsableInRole(roleName, identifier)) {
                 return true;
             }
@@ -87,11 +89,12 @@ public class AuthorizationManagerStandard extends AuthorizationManagerAbstract {
         return false;
     }
 
-    public boolean isVisible(final AuthenticationSession session, ObjectAdapter target, final Identifier identifier) {
+    @Override
+    public boolean isVisible(final AuthenticationSession session, final ObjectAdapter target, final Identifier identifier) {
         if (isPerspectiveMember(identifier)) {
             return true;
         }
-        for (String roleName: session.getRoles()) {
+        for (final String roleName : session.getRoles()) {
             if (authorizor.isVisibleInRole(roleName, identifier)) {
                 return true;
             }
@@ -102,12 +105,11 @@ public class AuthorizationManagerStandard extends AuthorizationManagerAbstract {
     private boolean isPerspectiveMember(final Identifier identifier) {
         return (identifier.getClassName().equals(""));
     }
-    
-    
-    ////////////////////////////////////////////////////
-    // Dependencies (injected) 
-    ////////////////////////////////////////////////////
-    
+
+    // //////////////////////////////////////////////////
+    // Dependencies (injected)
+    // //////////////////////////////////////////////////
+
     protected void setAuthorizor(final Authorizor authorisor) {
         this.authorizor = authorisor;
     }

@@ -33,7 +33,8 @@ public class CollectionFacetForObjectList extends CollectionFacetAbstract {
     }
 
     /**
-     * Expected to be called with a {@link ObjectAdapter} wrapping a {@link ObjectList}.
+     * Expected to be called with a {@link ObjectAdapter} wrapping a
+     * {@link ObjectList}.
      */
     @Override
     public List<ObjectAdapter> collection(final ObjectAdapter wrappedObjectList) {
@@ -41,7 +42,8 @@ public class CollectionFacetForObjectList extends CollectionFacetAbstract {
     }
 
     /**
-     * Expected to be called with a {@link ObjectAdapter} wrapping a {@link ObjectList}.
+     * Expected to be called with a {@link ObjectAdapter} wrapping a
+     * {@link ObjectList}.
      */
     @Override
     public ObjectAdapter firstElement(final ObjectAdapter wrappedInstanceCollectionVector) {
@@ -50,7 +52,8 @@ public class CollectionFacetForObjectList extends CollectionFacetAbstract {
     }
 
     /**
-     * Expected to be called with a {@link ObjectAdapter} wrapping a {@link ObjectList}.
+     * Expected to be called with a {@link ObjectAdapter} wrapping a
+     * {@link ObjectList}.
      */
     @Override
     public int size(final ObjectAdapter wrappedInstanceCollectionVector) {

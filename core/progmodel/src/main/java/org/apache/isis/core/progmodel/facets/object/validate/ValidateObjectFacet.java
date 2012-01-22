@@ -26,15 +26,18 @@ import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatingCallbackFa
 import org.apache.isis.core.metamodel.interactions.ValidatingInteractionAdvisor;
 
 /**
- * Mechanism for determining whether this object is in a valid state, for example so that it can be persisted or
- * updated.
+ * Mechanism for determining whether this object is in a valid state, for
+ * example so that it can be persisted or updated.
  * 
  * <p>
- * Even though all the properties of an object may themselves be valid, there could be inter-property dependencies which
- * are invalid. For example <tt>fromDate</tt> > <tt>toDate</tt> would probably represent an invalid state.
+ * Even though all the properties of an object may themselves be valid, there
+ * could be inter-property dependencies which are invalid. For example
+ * <tt>fromDate</tt> > <tt>toDate</tt> would probably represent an invalid
+ * state.
  * 
  * <p>
- * In the standard Apache Isis Programming Model, typically corresponds to the <tt>validate</tt> method.
+ * In the standard Apache Isis Programming Model, typically corresponds to the
+ * <tt>validate</tt> method.
  * 
  * @see PersistingCallbackFacet
  * @see UpdatingCallbackFacet

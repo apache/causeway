@@ -40,11 +40,9 @@ public class MemberLayoutArrangerUsingMemberOrderFacet implements MemberLayoutAr
     // ////////////////////////////////////////////////////////////////////////////
 
     @Override
-    public OrderSet createAssociationOrderSetFor(final ObjectSpecification spec,
-        final List<FacetedMethod> associationMethods) {
+    public OrderSet createAssociationOrderSetFor(final ObjectSpecification spec, final List<FacetedMethod> associationMethods) {
         if (LOG.isDebugEnabled()) {
-            LOG.debug("MemberLayoutArrangerUsingMemberOrderFacet: createAssociationOrderSetFor "
-                + spec.getFullIdentifier());
+            LOG.debug("MemberLayoutArrangerUsingMemberOrderFacet: createAssociationOrderSetFor " + spec.getFullIdentifier());
         }
 
         return DeweyOrderSet.createOrderSet(associationMethods);
@@ -55,11 +53,9 @@ public class MemberLayoutArrangerUsingMemberOrderFacet implements MemberLayoutAr
     // ////////////////////////////////////////////////////////////////////////////
 
     @Override
-    public OrderSet createActionOrderSetFor(final ObjectSpecification spec,
-        final List<FacetedMethod> actionFacetedMethodList) {
+    public OrderSet createActionOrderSetFor(final ObjectSpecification spec, final List<FacetedMethod> actionFacetedMethodList) {
         if (LOG.isDebugEnabled()) {
-            LOG.debug("MemberLayoutArrangerUsingMemberOrderFacet: createAssociationOrderSetFor "
-                + spec.getFullIdentifier());
+            LOG.debug("MemberLayoutArrangerUsingMemberOrderFacet: createAssociationOrderSetFor " + spec.getFullIdentifier());
         }
 
         return DeweyOrderSet.createOrderSet(actionFacetedMethodList);

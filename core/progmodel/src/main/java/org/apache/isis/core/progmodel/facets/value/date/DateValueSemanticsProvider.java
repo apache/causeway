@@ -37,22 +37,20 @@ public class DateValueSemanticsProvider extends DateValueSemanticsProviderAbstra
     // // no default
 
     /**
-     * Required because implementation of {@link Parser} and {@link EncoderDecoder}.
+     * Required because implementation of {@link Parser} and
+     * {@link EncoderDecoder}.
      */
     @SuppressWarnings("NP_NULL_PARAM_DEREF_NONVIRTUAL")
     public DateValueSemanticsProvider() {
         this(null, null, null);
     }
 
-    public DateValueSemanticsProvider(final FacetHolder holder, final IsisConfiguration configuration,
-        final ValueSemanticsProviderContext context) {
-        super(holder, org.apache.isis.applib.value.Date.class, IMMUTABLE, EQUAL_BY_CONTENT, DEFAULT_VALUE,
-            configuration, context);
+    public DateValueSemanticsProvider(final FacetHolder holder, final IsisConfiguration configuration, final ValueSemanticsProviderContext context) {
+        super(holder, org.apache.isis.applib.value.Date.class, IMMUTABLE, EQUAL_BY_CONTENT, DEFAULT_VALUE, configuration, context);
     }
 
     @Override
-    protected org.apache.isis.applib.value.Date add(final org.apache.isis.applib.value.Date original, final int years,
-        final int months, final int days, final int hours, final int minutes) {
+    protected org.apache.isis.applib.value.Date add(final org.apache.isis.applib.value.Date original, final int years, final int months, final int days, final int hours, final int minutes) {
         final org.apache.isis.applib.value.Date date = original;
         return date.add(years, months, days);
     }

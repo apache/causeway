@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.propparam.specification;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -25,23 +24,23 @@ import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
-import org.junit.Test;
-
 import org.apache.isis.applib.spec.Specification;
 import org.apache.isis.applib.spec.SpecificationAnd;
-
+import org.junit.Test;
 
 public class SpecificationAndTests {
 
-    private Specification alwaysSatisfied = new SpecificationAlwaysSatisfied();
-    private Specification neverSatisfied = new SpecificationNeverSatisfied();
+    private final Specification alwaysSatisfied = new SpecificationAlwaysSatisfied();
+    private final Specification neverSatisfied = new SpecificationNeverSatisfied();
 
     @Test
     public void satisfiedIfNone() {
         class MySpecAnd extends SpecificationAnd {
-            public MySpecAnd() {}
-        };
-        Specification mySpecAnd = new MySpecAnd();
+            public MySpecAnd() {
+            }
+        }
+        ;
+        final Specification mySpecAnd = new MySpecAnd();
         assertThat(mySpecAnd.satisfies(null), is(nullValue()));
     }
 
@@ -51,8 +50,9 @@ public class SpecificationAndTests {
             public MySpecAnd() {
                 super(alwaysSatisfied);
             }
-        };
-        Specification mySpecAnd = new MySpecAnd();
+        }
+        ;
+        final Specification mySpecAnd = new MySpecAnd();
         assertThat(mySpecAnd.satisfies(null), is(nullValue()));
     }
 
@@ -62,8 +62,9 @@ public class SpecificationAndTests {
             public MySpecAnd() {
                 super(neverSatisfied);
             }
-        };
-        Specification mySpecAnd = new MySpecAnd();
+        }
+        ;
+        final Specification mySpecAnd = new MySpecAnd();
         assertThat(mySpecAnd.satisfies(null), is(not(nullValue())));
         assertThat(mySpecAnd.satisfies(null), is("not satisfied"));
     }
@@ -74,8 +75,9 @@ public class SpecificationAndTests {
             public MySpecAnd() {
                 super(alwaysSatisfied, neverSatisfied);
             }
-        };
-        Specification mySpecAnd = new MySpecAnd();
+        }
+        ;
+        final Specification mySpecAnd = new MySpecAnd();
         assertThat(mySpecAnd.satisfies(null), is(not(nullValue())));
         assertThat(mySpecAnd.satisfies(null), is("not satisfied"));
     }
@@ -86,8 +88,9 @@ public class SpecificationAndTests {
             public MySpecAnd() {
                 super(alwaysSatisfied, alwaysSatisfied);
             }
-        };
-        Specification mySpecAnd = new MySpecAnd();
+        }
+        ;
+        final Specification mySpecAnd = new MySpecAnd();
         assertThat(mySpecAnd.satisfies(null), is(nullValue()));
     }
 
@@ -97,8 +100,9 @@ public class SpecificationAndTests {
             public MySpecAnd() {
                 super(neverSatisfied, neverSatisfied);
             }
-        };
-        Specification mySpecAnd = new MySpecAnd();
+        }
+        ;
+        final Specification mySpecAnd = new MySpecAnd();
         assertThat(mySpecAnd.satisfies(null), is(not(nullValue())));
         assertThat(mySpecAnd.satisfies(null), is("not satisfied; not satisfied"));
     }

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets;
 
 import java.lang.reflect.Method;
@@ -25,26 +24,26 @@ import java.util.List;
 
 import junit.framework.TestCase;
 
-import org.apache.log4j.BasicConfigurator;
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
-
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.FacetedMethodParameter;
-
+import org.apache.log4j.BasicConfigurator;
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
 
 public abstract class AbstractFacetFactoryTest extends TestCase {
 
     public static class Customer {
-        
+
         private String firstName;
+
         public String getFirstName() {
             return firstName;
         }
-        public void setFirstName(String firstName) {
+
+        public void setFirstName(final String firstName) {
             this.firstName = firstName;
         }
     }
@@ -77,15 +76,15 @@ public abstract class AbstractFacetFactoryTest extends TestCase {
     }
 
     protected static boolean contains(final Class<?>[] types, final Class<?> type) {
-    	return Utils.contains(types, type);
+        return Utils.contains(types, type);
     }
 
     protected static boolean contains(final List<FeatureType> featureTypes, final FeatureType featureType) {
-    	return Utils.contains(featureTypes, featureType);
+        return Utils.contains(featureTypes, featureType);
     }
 
     protected static Method findMethod(final Class<?> type, final String methodName, final Class<?>[] methodTypes) {
-    	return Utils.findMethod(type, methodName, methodTypes);
+        return Utils.findMethod(type, methodName, methodTypes);
     }
 
     protected Method findMethod(final Class<?> type, final String methodName) {
@@ -98,4 +97,3 @@ public abstract class AbstractFacetFactoryTest extends TestCase {
     }
 
 }
-

@@ -33,8 +33,7 @@ import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.runtimecontext.DependencyInjector;
 import org.apache.isis.core.metamodel.runtimecontext.DependencyInjectorAware;
 
-public class EncodableAnnotationFacetFactory extends AnnotationBasedFacetFactoryAbstract implements
-    IsisConfigurationAware, DependencyInjectorAware, AdapterMapAware {
+public class EncodableAnnotationFacetFactory extends AnnotationBasedFacetFactoryAbstract implements IsisConfigurationAware, DependencyInjectorAware, AdapterMapAware {
 
     private IsisConfiguration configuration;
 
@@ -58,19 +57,16 @@ public class EncodableAnnotationFacetFactory extends AnnotationBasedFacetFactory
         // create from annotation, if present
         final Encodable annotation = getAnnotation(cls, Encodable.class);
         if (annotation != null) {
-            final EncodableFacetAnnotation facet =
-                new EncodableFacetAnnotation(cls, getIsisConfiguration(), holder, adapterManager, dependencyInjector);
+            final EncodableFacetAnnotation facet = new EncodableFacetAnnotation(cls, getIsisConfiguration(), holder, adapterManager, dependencyInjector);
             if (facet.isValid()) {
                 return facet;
             }
         }
 
         // otherwise, try to create from configuration, if present
-        final String encoderDecoderName =
-            EncoderDecoderUtil.encoderDecoderNameFromConfiguration(cls, getIsisConfiguration());
+        final String encoderDecoderName = EncoderDecoderUtil.encoderDecoderNameFromConfiguration(cls, getIsisConfiguration());
         if (!StringUtils.isNullOrEmpty(encoderDecoderName)) {
-            final EncodableFacetFromConfiguration facet =
-                new EncodableFacetFromConfiguration(encoderDecoderName, holder, adapterManager, dependencyInjector);
+            final EncodableFacetFromConfiguration facet = new EncodableFacetFromConfiguration(encoderDecoderName, holder, adapterManager, dependencyInjector);
             if (facet.isValid()) {
                 return facet;
             }

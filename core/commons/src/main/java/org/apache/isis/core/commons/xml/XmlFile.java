@@ -133,7 +133,8 @@ public class XmlFile {
     }
 
     /**
-     * The XML store is deemed to be initialised if the directory used to store the data has no xml files in it.
+     * The XML store is deemed to be initialised if the directory used to store
+     * the data has no xml files in it.
      */
     public boolean isFixturesInstalled() {
         final String[] list = directory.list(new FilenameFilter() {

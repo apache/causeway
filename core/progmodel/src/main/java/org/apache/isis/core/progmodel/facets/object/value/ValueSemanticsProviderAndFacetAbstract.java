@@ -46,8 +46,7 @@ import org.apache.isis.core.metamodel.runtimecontext.DependencyInjector;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLookup;
 
-public abstract class ValueSemanticsProviderAndFacetAbstract<T> extends FacetAbstract implements
-    ValueSemanticsProvider<T>, EncoderDecoder<T>, Parser<T>, DefaultsProvider<T> {
+public abstract class ValueSemanticsProviderAndFacetAbstract<T> extends FacetAbstract implements ValueSemanticsProvider<T>, EncoderDecoder<T>, Parser<T>, DefaultsProvider<T> {
 
     private final Class<T> adaptedClass;
     private final int typicalLength;
@@ -63,10 +62,8 @@ public abstract class ValueSemanticsProviderAndFacetAbstract<T> extends FacetAbs
     private final IsisConfiguration configuration;
     private final ValueSemanticsProviderContext context;
 
-    public ValueSemanticsProviderAndFacetAbstract(final Class<? extends Facet> adapterFacetType,
-        final FacetHolder holder, final Class<T> adaptedClass, final int typicalLength, final boolean immutable,
-        final boolean equalByContent, final T defaultValue, final IsisConfiguration configuration,
-        final ValueSemanticsProviderContext context) {
+    public ValueSemanticsProviderAndFacetAbstract(final Class<? extends Facet> adapterFacetType, final FacetHolder holder, final Class<T> adaptedClass, final int typicalLength, final boolean immutable, final boolean equalByContent, final T defaultValue, final IsisConfiguration configuration,
+            final ValueSemanticsProviderContext context) {
         super(adapterFacetType, holder, false);
         this.adaptedClass = adaptedClass;
         this.typicalLength = typicalLength;
@@ -89,8 +86,9 @@ public abstract class ValueSemanticsProviderAndFacetAbstract<T> extends FacetAbs
      * The underlying class that has been adapted.
      * 
      * <p>
-     * Used to determine whether an empty string can be parsed, (for primitive types a non-null entry is required, see
-     * {@link #mustHaveEntry()}), and potentially useful for debugging.
+     * Used to determine whether an empty string can be parsed, (for primitive
+     * types a non-null entry is required, see {@link #mustHaveEntry()}), and
+     * potentially useful for debugging.
      */
     public final Class<T> getAdaptedClass() {
         return adaptedClass;
@@ -100,7 +98,8 @@ public abstract class ValueSemanticsProviderAndFacetAbstract<T> extends FacetAbs
      * We don't replace any (none no-op) facets.
      * 
      * <p>
-     * For example, if there is already a {@link PropertyDefaultFacet} then we shouldn't replace it.
+     * For example, if there is already a {@link PropertyDefaultFacet} then we
+     * shouldn't replace it.
      */
     @Override
     public boolean alwaysReplace() {
@@ -159,7 +158,8 @@ public abstract class ValueSemanticsProviderAndFacetAbstract<T> extends FacetAbs
      * @param context
      *            - the underlying object, or <tt>null</tt>.
      * @param entry
-     *            - the proposed new object, as a string representation to be parsed
+     *            - the proposed new object, as a string representation to be
+     *            parsed
      */
     protected abstract T doParse(Object context, String entry);
 

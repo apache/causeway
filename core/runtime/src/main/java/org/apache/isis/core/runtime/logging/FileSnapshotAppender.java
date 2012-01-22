@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.runtime.logging;
 
 import java.io.FileNotFoundException;
@@ -25,7 +24,6 @@ import java.io.IOException;
 
 import org.apache.log4j.Logger;
 import org.apache.log4j.spi.TriggeringEventEvaluator;
-
 
 public class FileSnapshotAppender extends SnapshotAppender {
     private static final Logger LOG = Logger.getLogger(FileSnapshotAppender.class);
@@ -70,8 +68,7 @@ public class FileSnapshotAppender extends SnapshotAppender {
         SnapshotWriter s;
         try {
             final String contentType = layout.getContentType();
-            final String fileExtension = isEmpty(extension) ? contentType.substring(contentType
-                    .indexOf('/') + 1) : extension;
+            final String fileExtension = isEmpty(extension) ? contentType.substring(contentType.indexOf('/') + 1) : extension;
             s = new SnapshotWriter(directoryPath, fileName, fileExtension, message);
             s.appendLog(details);
             s.close();
@@ -82,7 +79,7 @@ public class FileSnapshotAppender extends SnapshotAppender {
         }
     }
 
-    private boolean isEmpty(String extension2) {
+    private boolean isEmpty(final String extension2) {
         return extension2 == null || extension2.length() == 0;
     }
 }

@@ -36,18 +36,15 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProviderAndFacetAbstract;
 import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProviderContext;
 
-public abstract class ImageValueSemanticsProviderAbstract<T> extends ValueSemanticsProviderAndFacetAbstract<T>
-    implements ImageValueFacet {
+public abstract class ImageValueSemanticsProviderAbstract<T> extends ValueSemanticsProviderAndFacetAbstract<T> implements ImageValueFacet {
 
     private static final boolean IMMUTABLE = false;
     private static final boolean EQUAL_BY_CONTENT = false;
     private static final Object DEFAULT_VALUE = null; // no default
     private static final int TYPICAL_LENGTH = 18;
 
-    private static final char[] BASE_64_CHARS = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',
-        'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j',
-        'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '0', '1', '2', '3', '4', '5',
-        '6', '7', '8', '9', '+', '/', };
+    private static final char[] BASE_64_CHARS = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x',
+            'y', 'z', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '+', '/', };
 
     protected static final byte[] REVERSE_BASE_64_CHARS = new byte[0x100];
 
@@ -63,10 +60,8 @@ public abstract class ImageValueSemanticsProviderAbstract<T> extends ValueSemant
     private FacetHolder facetHolder;
 
     @SuppressWarnings("unchecked")
-    public ImageValueSemanticsProviderAbstract(final FacetHolder holder, final Class<T> adaptedClass,
-        final IsisConfiguration configuration, final ValueSemanticsProviderContext context) {
-        super(ImageValueFacet.class, holder, adaptedClass, TYPICAL_LENGTH, IMMUTABLE, EQUAL_BY_CONTENT,
-            (T) DEFAULT_VALUE, configuration, context);
+    public ImageValueSemanticsProviderAbstract(final FacetHolder holder, final Class<T> adaptedClass, final IsisConfiguration configuration, final ValueSemanticsProviderContext context) {
+        super(ImageValueFacet.class, holder, adaptedClass, TYPICAL_LENGTH, IMMUTABLE, EQUAL_BY_CONTENT, (T) DEFAULT_VALUE, configuration, context);
     }
 
     /**
@@ -208,7 +203,8 @@ public abstract class ImageValueSemanticsProviderAbstract<T> extends ValueSemant
     }
 
     private void encodePixel(final int pixel, final StringBuffer encodeData) {
-        // TODO the encoding is poor as the negative numbers are not dealt with properly because the 6 MSBs
+        // TODO the encoding is poor as the negative numbers are not dealt with
+        // properly because the 6 MSBs
         // are not included.
         if (pixel > 0x7FFFFF || pixel < -0x7FFFFF) {
             // throw new IsisException("" + pixel);

@@ -29,9 +29,11 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
  * This is not API.
  * 
  * <p>
- * In an earlier version it was possible to inject the {@link SpecificationCache} into the
- * {@link ObjectReflectorAbstract reflector}. This was needed when the reflector was original (what is now called)
- * {@link SessionScopedComponent session scoped}, rather than {@link ApplicationScopedComponent application-scoped}.
+ * In an earlier version it was possible to inject the
+ * {@link SpecificationCache} into the {@link ObjectReflectorAbstract reflector}
+ * . This was needed when the reflector was original (what is now called)
+ * {@link SessionScopedComponent session scoped}, rather than
+ * {@link ApplicationScopedComponent application-scoped}.
  * 
  * <p>
  * This interface has been left in for now, but will likely be removed.
@@ -39,7 +41,8 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 public interface SpecificationCache {
 
     /**
-     * Returns the {@link ObjectSpecification}, or possibly <tt>null</tt> if has not been cached.
+     * Returns the {@link ObjectSpecification}, or possibly <tt>null</tt> if has
+     * not been cached.
      */
     ObjectSpecification get(String className);
 

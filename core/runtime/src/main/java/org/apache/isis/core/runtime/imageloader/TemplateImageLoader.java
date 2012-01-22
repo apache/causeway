@@ -17,17 +17,14 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.runtime.imageloader;
 
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
-
 
 /**
  * This interface defines how template images are found by name.
  */
 public interface TemplateImageLoader extends ApplicationScopedComponent {
-    
+
     TemplateImage getTemplateImage(final String name);
 }
-

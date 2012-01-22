@@ -59,7 +59,9 @@ public final class StringUtils {
             throw new IllegalArgumentException("string shorter than starting position provided");
         }
         final StringBuffer s = new StringBuffer(name.length() - startingPosition);
-        for (int j = startingPosition; j < name.length(); j++) { // process english name - add spaces
+        for (int j = startingPosition; j < name.length(); j++) { // process
+                                                                 // english name
+                                                                 // - add spaces
             if ((j > startingPosition) && isStartOfNewWord(name.charAt(j), name.charAt(j - 1))) {
                 s.append(' ');
             }
@@ -94,7 +96,8 @@ public final class StringUtils {
         b.append(t.nextToken());
         while (t.hasMoreTokens()) {
             final String token = t.nextToken();
-            b.append(token.substring(0, 1).toUpperCase()); // replace spaces with
+            b.append(token.substring(0, 1).toUpperCase()); // replace spaces
+                                                           // with
             // camelCase
             b.append(token.substring(1));
         }
@@ -108,7 +111,8 @@ public final class StringUtils {
         b.append(lowerFirst(t.nextToken()));
         while (t.hasMoreTokens()) {
             final String token = t.nextToken();
-            b.append(token.substring(0, 1).toUpperCase()); // replace spaces with camelCase
+            b.append(token.substring(0, 1).toUpperCase()); // replace spaces
+                                                           // with camelCase
             b.append(token.substring(1).toLowerCase());
         }
         return b.toString();
@@ -157,7 +161,6 @@ public final class StringUtils {
         final String[] split = line.split(" ");
         return split[0];
     }
-
 
     // ////////////////////////////////////////////////////////////
     // isNullOrEmpty, nullSafeEquals
@@ -276,7 +279,8 @@ public final class StringUtils {
     }
 
     // ////////////////////////////////////////////////////////////
-    // removeTabs, removeLeadingWhiteSpace, stripLeadingSlash, stripNewLines, normalize
+    // removeTabs, removeLeadingWhiteSpace, stripLeadingSlash, stripNewLines,
+    // normalize
     // ////////////////////////////////////////////////////////////
 
     public static String removeTabs(final String text) {
@@ -344,14 +348,13 @@ public final class StringUtils {
         }
     }
 
-    public static <T> T coalesce(T... strings) {
-        for(T str: strings) {
-            if(str != null) {
+    public static <T> T coalesce(final T... strings) {
+        for (final T str : strings) {
+            if (str != null) {
                 return str;
             }
         }
         return null;
     }
-
 
 }

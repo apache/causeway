@@ -116,8 +116,9 @@ public class IsisConfigurationDefault implements IsisConfiguration {
     // ////////////////////////////////////////////////
 
     /**
-     * Gets the boolean value for the specified name where no value or 'on' will result in true being returned; anything
-     * gives false. If no boolean property is specified with this name then false is returned.
+     * Gets the boolean value for the specified name where no value or 'on' will
+     * result in true being returned; anything gives false. If no boolean
+     * property is specified with this name then false is returned.
      * 
      * @param name
      *            the property name
@@ -128,8 +129,9 @@ public class IsisConfigurationDefault implements IsisConfiguration {
     }
 
     /**
-     * Gets the boolean value for the specified name. If no property is specified with this name then the specified
-     * default boolean value is returned.
+     * Gets the boolean value for the specified name. If no property is
+     * specified with this name then the specified default boolean value is
+     * returned.
      * 
      * @param name
      *            the property name
@@ -150,12 +152,12 @@ public class IsisConfigurationDefault implements IsisConfiguration {
             return false;
         }
 
-        throw new IsisConfigurationException("Illegal flag for " + name
-            + "; must be one of on, off, yes, no, true or false");
+        throw new IsisConfigurationException("Illegal flag for " + name + "; must be one of on, off, yes, no, true or false");
     }
 
     /**
-     * Gets the color for the specified name. If no color property is specified with this name then null is returned.
+     * Gets the color for the specified name. If no color property is specified
+     * with this name then null is returned.
      * 
      * @param name
      *            the property name
@@ -166,8 +168,8 @@ public class IsisConfigurationDefault implements IsisConfiguration {
     }
 
     /**
-     * Gets the color for the specified name. If no color property is specified with this name then the specified
-     * default color is returned.
+     * Gets the color for the specified name. If no color property is specified
+     * with this name then the specified default color is returned.
      * 
      * @param name
      *            the property name
@@ -204,7 +206,8 @@ public class IsisConfigurationDefault implements IsisConfiguration {
     }
 
     /**
-     * Gets the font for the specified name. If no font property is specified with this name then null is returned.
+     * Gets the font for the specified name. If no font property is specified
+     * with this name then null is returned.
      * 
      * @param name
      *            the property name
@@ -215,8 +218,8 @@ public class IsisConfigurationDefault implements IsisConfiguration {
     }
 
     /**
-     * Gets the font for the specified name. If no font property is specified with this name then the specified default
-     * font is returned.
+     * Gets the font for the specified name. If no font property is specified
+     * with this name then the specified default font is returned.
      * 
      * @param name
      *            the property name
@@ -235,7 +238,8 @@ public class IsisConfigurationDefault implements IsisConfiguration {
     }
 
     /**
-     * Gets the number value for the specified name. If no property is specified with this name then 0 is returned.
+     * Gets the number value for the specified name. If no property is specified
+     * with this name then 0 is returned.
      * 
      * @param name
      *            the property name
@@ -246,8 +250,8 @@ public class IsisConfigurationDefault implements IsisConfiguration {
     }
 
     /**
-     * Gets the number value for the specified name. If no property is specified with this name then the specified
-     * default number value is returned.
+     * Gets the number value for the specified name. If no property is specified
+     * with this name then the specified default number value is returned.
      * 
      * @param name
      *            the property name
@@ -315,8 +319,8 @@ public class IsisConfigurationDefault implements IsisConfiguration {
     }
 
     /**
-     * Returns the configuration property with the specified name. If there is no matching property then null is
-     * returned.
+     * Returns the configuration property with the specified name. If there is
+     * no matching property then null is returned.
      */
     @Override
     public String getString(final String name) {
@@ -345,8 +349,9 @@ public class IsisConfigurationDefault implements IsisConfiguration {
     }
 
     /**
-     * Returns as a String that the named property is refered to as. For example in a simple properties file the
-     * property z might be specified in the file as x.y.z.
+     * Returns as a String that the named property is refered to as. For example
+     * in a simple properties file the property z might be specified in the file
+     * as x.y.z.
      */
     private String referedToAs(final String name) {
         return name;

@@ -23,7 +23,8 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 
 /**
- * Helper that finds all parameter types (including generic types) for the provided {@link Method}.
+ * Helper that finds all parameter types (including generic types) for the
+ * provided {@link Method}.
  * 
  * <p>
  * For example,

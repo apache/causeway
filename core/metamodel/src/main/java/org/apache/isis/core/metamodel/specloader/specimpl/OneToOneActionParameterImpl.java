@@ -43,8 +43,9 @@ public class OneToOneActionParameterImpl extends ObjectActionParameterAbstract i
     }
 
     /**
-     * TODO: need to be able to validate parameters individually, eg if have <tt>RegEx</tt> annotation; should delegate
-     * to the Check framework instead.
+     * TODO: need to be able to validate parameters individually, eg if have
+     * <tt>RegEx</tt> annotation; should delegate to the Check framework
+     * instead.
      */
     @Override
     public String isValid(final ObjectAdapter adapter, final Object proposedValue) {
@@ -66,8 +67,9 @@ public class OneToOneActionParameterImpl extends ObjectActionParameterAbstract i
     // //////////////////////////////////////////////////////////////////////
 
     /**
-     * Gets the proposed value of the {@link Instance} (downcast as a {@link MutableProposed}, wrapping the proposed
-     * value into a {@link ObjectAdapter}.
+     * Gets the proposed value of the {@link Instance} (downcast as a
+     * {@link MutableProposed}, wrapping the proposed value into a
+     * {@link ObjectAdapter}.
      */
     @Override
     public ObjectAdapter get(final ObjectAdapter owner) {
@@ -77,8 +79,9 @@ public class OneToOneActionParameterImpl extends ObjectActionParameterAbstract i
     }
 
     /**
-     * Sets the proposed value of the {@link Instance} (downcast as a {@link MutableProposed}, unwrapped the proposed
-     * value from a {@link ObjectAdapter}.
+     * Sets the proposed value of the {@link Instance} (downcast as a
+     * {@link MutableProposed}, unwrapped the proposed value from a
+     * {@link ObjectAdapter}.
      */
     public void set(final ObjectAdapter owner, final ObjectAdapter newValue) {
         final MutableProposedHolder proposedHolder = getProposedHolder(owner);

@@ -42,8 +42,7 @@ public final class InteractionUtils {
         return result;
     }
 
-    public static InteractionResultSet isVisibleResultSet(final FacetHolder facetHolder,
-        final VisibilityContext<?> context, final InteractionResultSet resultSet) {
+    public static InteractionResultSet isVisibleResultSet(final FacetHolder facetHolder, final VisibilityContext<?> context, final InteractionResultSet resultSet) {
         return resultSet.add(isVisibleResult(facetHolder, context));
     }
 
@@ -58,8 +57,7 @@ public final class InteractionUtils {
         return result;
     }
 
-    public static InteractionResultSet isUsableResultSet(final FacetHolder facetHolder,
-        final UsabilityContext<?> context, final InteractionResultSet resultSet) {
+    public static InteractionResultSet isUsableResultSet(final FacetHolder facetHolder, final UsabilityContext<?> context, final InteractionResultSet resultSet) {
         return resultSet.add(isUsableResult(facetHolder, context));
     }
 
@@ -73,8 +71,7 @@ public final class InteractionUtils {
         return result;
     }
 
-    public static InteractionResultSet isValidResultSet(final FacetHolder facetHolder,
-        final ValidityContext<?> context, final InteractionResultSet resultSet) {
+    public static InteractionResultSet isValidResultSet(final FacetHolder facetHolder, final ValidityContext<?> context, final InteractionResultSet resultSet) {
         return resultSet.add(isValidResult(facetHolder, context));
     }
 

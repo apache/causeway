@@ -41,8 +41,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 
 public class FacetDecoratorSet implements ApplicationScopedComponent {
 
-    private final Map<Class<? extends Facet>, List<FacetDecorator>> facetDecoratorByFacetType =
-        new HashMap<Class<? extends Facet>, List<FacetDecorator>>();
+    private final Map<Class<? extends Facet>, List<FacetDecorator>> facetDecoratorByFacetType = new HashMap<Class<? extends Facet>, List<FacetDecorator>>();
     private final Set<FacetDecorator> facetDecoratorSet = new LinkedHashSet<FacetDecorator>();
 
     // ////////////////////////////////////////////////////////////
@@ -125,9 +124,11 @@ public class FacetDecoratorSet implements ApplicationScopedComponent {
     }
 
     /**
-     * REVIEW: the design is a little clumsy here. We want to decorate the provided {@link Facet}, but its owning
-     * {@link FacetHolder holder} turns out to be a runtime peer (eg <tt>JavaAction</tt>) rather than the metamodel (eg
-     * {@link ObjectAction}). Since we want to decorate the {@link ObjectAction}, we have to pass it through.
+     * REVIEW: the design is a little clumsy here. We want to decorate the
+     * provided {@link Facet}, but its owning {@link FacetHolder holder} turns
+     * out to be a runtime peer (eg <tt>JavaAction</tt>) rather than the
+     * metamodel (eg {@link ObjectAction}). Since we want to decorate the
+     * {@link ObjectAction}, we have to pass it through.
      */
     private void decorateFacet(final Facet facet, final FacetHolder requiredHolder) {
         final Class<? extends Facet> facetType = facet.facetType();
@@ -145,21 +146,14 @@ public class FacetDecoratorSet implements ApplicationScopedComponent {
         }
     }
 
-    private static void ensureDecoratorMetContract(final FacetDecorator facetDecorator, final Facet decoratingFacet,
-        final Class<? extends Facet> facetType, final FacetHolder originalFacetHolder) {
+    private static void ensureDecoratorMetContract(final FacetDecorator facetDecorator, final Facet decoratingFacet, final Class<? extends Facet> facetType, final FacetHolder originalFacetHolder) {
         if (decoratingFacet.facetType() != facetType) {
-            throw new MetaModelException(
-                MessageFormat
-                    .format(
-                        "Problem with facet decorator '{0}'; inconsistent decorating facetType() for {1}; was {2} but expectected facetType() of {3}",
-                        facetDecorator.getClass().getName(), decoratingFacet.getClass().getName(), decoratingFacet
-                            .facetType().getName(), facetType.getName()));
+            throw new MetaModelException(MessageFormat.format("Problem with facet decorator '{0}'; inconsistent decorating facetType() for {1}; was {2} but expectected facetType() of {3}", facetDecorator.getClass().getName(), decoratingFacet.getClass().getName(), decoratingFacet.facetType()
+                    .getName(), facetType.getName()));
         }
         final Facet facetForFacetType = originalFacetHolder.getFacet(decoratingFacet.facetType());
         if (facetForFacetType != decoratingFacet) {
-            throw new MetaModelException(MessageFormat.format(
-                "Problem with facet decorator '{0}'; has not replaced original facet for facetType() of {1}",
-                facetDecorator.getClass().getName(), facetType.getName()));
+            throw new MetaModelException(MessageFormat.format("Problem with facet decorator '{0}'; has not replaced original facet for facetType() of {1}", facetDecorator.getClass().getName(), facetType.getName()));
         }
     }
 

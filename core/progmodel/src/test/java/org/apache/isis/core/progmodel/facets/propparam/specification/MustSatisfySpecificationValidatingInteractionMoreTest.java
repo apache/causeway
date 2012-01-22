@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.propparam.specification;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -25,6 +24,11 @@ import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
+import org.apache.isis.core.metamodel.interactions.PropertyModifyContext;
+import org.apache.isis.core.progmodel.facets.object.validperspec.MustSatisfySpecificationOnTypeFacet;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JMock;
@@ -34,13 +38,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
-import org.apache.isis.core.metamodel.interactions.PropertyModifyContext;
-import org.apache.isis.core.progmodel.facets.object.validperspec.MustSatisfySpecificationOnTypeFacet;
-
 
 @RunWith(JMock.class)
 public class MustSatisfySpecificationValidatingInteractionMoreTest {
@@ -55,16 +52,16 @@ public class MustSatisfySpecificationValidatingInteractionMoreTest {
     private FacetHolder mockHolder;
 
     private PropertyModifyContext mockContext;
-    
+
     private ObjectAdapter mockProposedObjectAdapter;
 
     private SpecificationRequiresFirstLetterToBeUpperCase requiresFirstLetterToBeUpperCase;
-    
+
     @Before
     public void setUp() throws Exception {
         mockHolder = mockery.mock(IdentifiedHolder.class);
         requiresFirstLetterToBeUpperCase = new SpecificationRequiresFirstLetterToBeUpperCase();
-        
+
         facetForSpecificationFirstLetterUpperCase = new MustSatisfySpecificationOnTypeFacet(Utils.listOf(requiresFirstLetterToBeUpperCase), mockHolder);
 
         mockContext = mockery.mock(PropertyModifyContext.class);
@@ -78,14 +75,14 @@ public class MustSatisfySpecificationValidatingInteractionMoreTest {
         mockContext = null;
     }
 
-
     /**
-     * As in: 
+     * As in:
+     * 
      * <pre>
      * [at]ValidatedBy(SpecificationRequiresFirstLetterToBeUpperCase.class)
      * public void getLastName() { ... }
      * </pre>
-     *
+     * 
      * @see SpecificationRequiresFirstLetterToBeUpperCase
      */
     @Test
@@ -120,6 +117,5 @@ public class MustSatisfySpecificationValidatingInteractionMoreTest {
         assertThat(reason, is(not(nullValue())));
         assertThat(reason, is("Must start with upper case"));
     }
-
 
 }

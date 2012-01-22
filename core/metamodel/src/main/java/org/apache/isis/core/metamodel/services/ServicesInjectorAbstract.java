@@ -153,8 +153,7 @@ public abstract class ServicesInjectorAbstract implements ServicesInjector {
                     continue;
                 }
                 final Class<?>[] parameterTypes = methods[j].getParameterTypes();
-                if (parameterTypes.length != 1 || parameterTypes[0] == Object.class
-                    || !parameterTypes[0].isAssignableFrom(serviceClass)) {
+                if (parameterTypes.length != 1 || parameterTypes[0] == Object.class || !parameterTypes[0].isAssignableFrom(serviceClass)) {
                     continue;
                 }
 
@@ -169,13 +168,11 @@ public abstract class ServicesInjectorAbstract implements ServicesInjector {
         try {
             method.invoke(target, parameters);
         } catch (final SecurityException e) {
-            throw new MetaModelException(String.format("Cannot access the %s method in %s", method.getName(), target
-                .getClass().getName()));
+            throw new MetaModelException(String.format("Cannot access the %s method in %s", method.getName(), target.getClass().getName()));
         } catch (final IllegalArgumentException e1) {
             throw new MetaModelException(e1);
         } catch (final IllegalAccessException e1) {
-            throw new MetaModelException(String.format("Cannot access the %s method in %s", method.getName(), target
-                .getClass().getName()));
+            throw new MetaModelException(String.format("Cannot access the %s method in %s", method.getName(), target.getClass().getName()));
         } catch (final InvocationTargetException e) {
             final Throwable targetException = e.getTargetException();
             if (targetException instanceof RuntimeException) {

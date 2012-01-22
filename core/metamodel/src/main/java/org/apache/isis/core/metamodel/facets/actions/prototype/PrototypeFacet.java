@@ -22,10 +22,12 @@ package org.apache.isis.core.metamodel.facets.actions.prototype;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 
 /**
- * Indicates that the action should only be available in a special <i>prototype</i> mode.
+ * Indicates that the action should only be available in a special
+ * <i>prototype</i> mode.
  * 
  * <p>
- * In the standard Apache Isis Programming Model, corresponds to annotating the action method using <tt>@Prototype</tt>.
+ * In the standard Apache Isis Programming Model, corresponds to annotating the
+ * action method using <tt>@Prototype</tt>.
  */
 public interface PrototypeFacet extends Facet {
 

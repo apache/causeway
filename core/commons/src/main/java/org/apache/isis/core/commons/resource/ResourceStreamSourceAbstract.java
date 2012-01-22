@@ -42,16 +42,15 @@ public abstract class ResourceStreamSourceAbstract implements ResourceStreamSour
             }
         } catch (final IOException e) {
             if (LOG.isDebugEnabled()) {
-                LOG.debug("could not load resource path '" + resourcePath + "' from " + getName() + ", exception: "
-                    + e.getMessage());
+                LOG.debug("could not load resource path '" + resourcePath + "' from " + getName() + ", exception: " + e.getMessage());
             }
         }
         return null;
     }
 
     /**
-     * Mandatory hook method; subclasses can return either <tt>null</tt> or throw an exception if the resource could not
-     * be found.
+     * Mandatory hook method; subclasses can return either <tt>null</tt> or
+     * throw an exception if the resource could not be found.
      */
     protected abstract InputStream doReadResource(String resourcePath) throws IOException;
 

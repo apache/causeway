@@ -20,7 +20,8 @@
 package org.apache.isis.core.metamodel.spec.feature;
 
 /**
- * Equivalent to {@link ObjectAssociation}, but for parameter rather than properties.
+ * Equivalent to {@link ObjectAssociation}, but for parameter rather than
+ * properties.
  */
 public interface ParseableEntryActionParameter extends OneToOneActionParameter, ParseableEntryFeature {
 

@@ -22,7 +22,8 @@ package org.apache.isis.core.commons.lang;
 import java.lang.reflect.Array;
 
 /**
- * Collected methods which allow easy implementation of <code>hashCode</code>, based on Josh Bloch's Effective Java.
+ * Collected methods which allow easy implementation of <code>hashCode</code>,
+ * based on Josh Bloch's Effective Java.
  * 
  * <p>
  * Example use case:
@@ -46,8 +47,9 @@ public final class HashCodeUtils {
     }
 
     /**
-     * An initial value for a <code>hashCode</code>, to which is added contributions from fields. Using a non-zero value
-     * decreases collisons of <code>hashCode</code> values.
+     * An initial value for a <code>hashCode</code>, to which is added
+     * contributions from fields. Using a non-zero value decreases collisons of
+     * <code>hashCode</code> values.
      */
     public static final int SEED = 23;
 
@@ -69,7 +71,8 @@ public final class HashCodeUtils {
      * ints.
      * 
      * <p>
-     * Note that byte and short are handled by this method, through implicit conversion.
+     * Note that byte and short are handled by this method, through implicit
+     * conversion.
      */
     public static int hash(final int aSeed, final int aInt) {
         return firstTerm(aSeed) + aInt;
@@ -97,9 +100,11 @@ public final class HashCodeUtils {
     }
 
     /**
-     * <code>aObject</code> is a possibly-null object field, and possibly an array.
+     * <code>aObject</code> is a possibly-null object field, and possibly an
+     * array.
      * 
-     * If <code>aObject</code> is an array, then each element may be a primitive or a possibly-null object.
+     * If <code>aObject</code> is an array, then each element may be a primitive
+     * or a possibly-null object.
      */
     public static int hash(final int aSeed, final Object aObject) {
         int result = aSeed;

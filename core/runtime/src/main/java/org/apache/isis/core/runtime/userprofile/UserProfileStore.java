@@ -17,10 +17,7 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.runtime.userprofile;
-
-
 
 public interface UserProfileStore {
 
@@ -30,7 +27,4 @@ public interface UserProfileStore {
 
     UserProfile getUserProfile(String userName);
 
-
 }
-
-

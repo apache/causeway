@@ -40,11 +40,12 @@ import org.apache.isis.core.metamodel.spec.SpecificationLookup;
 public interface RuntimeContext extends Injectable {
 
     /**
-     * A mechanism for returning the <tt>current</tt> {@link AuthenticationSession}.
+     * A mechanism for returning the <tt>current</tt>
+     * {@link AuthenticationSession}.
      * 
      * <p>
-     * Note that the scope of {@link RuntimeContext} is global, whereas {@link AuthenticationSession} may change over
-     * time.
+     * Note that the scope of {@link RuntimeContext} is global, whereas
+     * {@link AuthenticationSession} may change over time.
      */
     public AuthenticationSessionProvider getAuthenticationSessionProvider();
 

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.object.callback;
 
 import java.lang.reflect.Method;
@@ -33,10 +32,9 @@ import org.apache.isis.core.progmodel.facets.object.callbacks.remove.RemoveCallb
 import org.apache.isis.core.progmodel.facets.object.callbacks.remove.RemovedCallbackFacetViaMethod;
 import org.apache.isis.core.progmodel.facets.object.callbacks.remove.RemovingCallbackFacetViaMethod;
 
-
 public class RemoveAndDeleteCallbackFacetFactoryTest extends AbstractFacetFactoryTest {
 
-	private RemoveCallbackFacetFactory removeFacetFactory;
+    private RemoveCallbackFacetFactory removeFacetFactory;
     private RemoveCallbackViaDeleteMethodFacetFactory deleteFacetFactory;
 
     @Override
@@ -46,7 +44,6 @@ public class RemoveAndDeleteCallbackFacetFactoryTest extends AbstractFacetFactor
         removeFacetFactory = new RemoveCallbackFacetFactory();
         deleteFacetFactory = new RemoveCallbackViaDeleteMethodFacetFactory();
     }
-
 
     @Override
     protected void tearDown() throws Exception {
@@ -58,9 +55,12 @@ public class RemoveAndDeleteCallbackFacetFactoryTest extends AbstractFacetFactor
     public void testSavingAndPersistingLifecycleMethodPickedUpOn() {
         class Customer {
             @SuppressWarnings("unused")
-			public void deleting() {};
+            public void deleting() {
+            };
+
             @SuppressWarnings("unused")
-			public void removing() {};
+            public void removing() {
+            };
         }
         final Method deleteMethod = findMethod(Customer.class, "deleting");
         final Method removeMethod = findMethod(Customer.class, "removing");
@@ -72,9 +72,9 @@ public class RemoveAndDeleteCallbackFacetFactoryTest extends AbstractFacetFactor
         assertNotNull(facet);
         assertTrue(facet instanceof RemovingCallbackFacetViaMethod);
         final RemovingCallbackFacetViaMethod removingCallbackFacetViaMethod = (RemovingCallbackFacetViaMethod) facet;
-        List<Method> methods = removingCallbackFacetViaMethod.getMethods();
-		assertTrue(methods.contains(deleteMethod));
-		assertTrue(methods.contains(removeMethod));
+        final List<Method> methods = removingCallbackFacetViaMethod.getMethods();
+        assertTrue(methods.contains(deleteMethod));
+        assertTrue(methods.contains(removeMethod));
 
         assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(deleteMethod));
     }
@@ -82,9 +82,12 @@ public class RemoveAndDeleteCallbackFacetFactoryTest extends AbstractFacetFactor
     public void testSavedAndPersistedLifecycleMethodPickedUpOn() {
         class Customer {
             @SuppressWarnings("unused")
-			public void deleted() {};
+            public void deleted() {
+            };
+
             @SuppressWarnings("unused")
-			public void removed() {};
+            public void removed() {
+            };
         }
         final Method removeMethod = findMethod(Customer.class, "removed");
         final Method deleteMethod = findMethod(Customer.class, "deleted");
@@ -96,12 +99,11 @@ public class RemoveAndDeleteCallbackFacetFactoryTest extends AbstractFacetFactor
         assertNotNull(facet);
         assertTrue(facet instanceof RemovedCallbackFacetViaMethod);
         final RemovedCallbackFacetViaMethod removedCallbackFacetViaMethod = (RemovedCallbackFacetViaMethod) facet;
-        List<Method> methods = removedCallbackFacetViaMethod.getMethods();
-		assertTrue(methods.contains(removeMethod));
-		assertTrue(methods.contains(deleteMethod));
+        final List<Method> methods = removedCallbackFacetViaMethod.getMethods();
+        assertTrue(methods.contains(removeMethod));
+        assertTrue(methods.contains(deleteMethod));
 
         assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(removeMethod));
     }
 
 }
-

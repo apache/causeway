@@ -26,9 +26,7 @@ import org.apache.isis.core.metamodel.runtimecontext.DependencyInjector;
 
 public class ParseableFacetFromConfiguration extends ParseableFacetAbstract {
 
-    public ParseableFacetFromConfiguration(final String candidateParserName, final FacetHolder holder,
-        final AuthenticationSessionProvider authenticationSessionProvider, final DependencyInjector dependencyInjector,
-        final AdapterMap adapterManager) {
+    public ParseableFacetFromConfiguration(final String candidateParserName, final FacetHolder holder, final AuthenticationSessionProvider authenticationSessionProvider, final DependencyInjector dependencyInjector, final AdapterMap adapterManager) {
         super(candidateParserName, null, holder, authenticationSessionProvider, dependencyInjector, adapterManager);
     }
 }

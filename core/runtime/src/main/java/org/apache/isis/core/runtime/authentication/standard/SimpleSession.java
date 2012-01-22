@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.runtime.authentication.standard;
 
 import java.io.IOException;
@@ -27,22 +26,21 @@ import java.util.List;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionAbstract;
 import org.apache.isis.core.commons.encoding.DataInputExtended;
 
-
 public final class SimpleSession extends AuthenticationSessionAbstract {
-    
-	private static final long serialVersionUID = 1L;
 
-    /////////////////////////////////////////////////////////////////
+    private static final long serialVersionUID = 1L;
+
+    // ///////////////////////////////////////////////////////////////
     // Constructor, encode
-    /////////////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////////////
 
-	/**
+    /**
      * as per {@link #SimpleSession(String, List)}.
      */
     public SimpleSession(final String name, final String[] roles) {
         this(name, Arrays.asList(roles));
     }
-    
+
     /**
      * Defaults {@link #getValidationCode()} to empty string (<tt>""</tt>).
      */
@@ -55,47 +53,45 @@ public final class SimpleSession extends AuthenticationSessionAbstract {
     }
 
     public SimpleSession(final String name, final List<String> roles, final String code) {
-    	super(name, roles, code);
+        super(name, roles, code);
     }
 
     public SimpleSession(final DataInputExtended input) throws IOException {
-    	super(input);
+        super(input);
     }
 
-    
-    /////////////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////////////
     // equals, hashCode
-    /////////////////////////////////////////////////////////////////
-    
-    
+    // ///////////////////////////////////////////////////////////////
+
     @Override
-    public boolean equals(Object obj) {
-    	if (obj == this) {
-			return true;
-		}
-    	if (obj == null) {
-			return false;
-		}
-    	if (obj.getClass() != getClass()) {
-    		return false;
-    	}
-    	SimpleSession other = (SimpleSession) obj;
-    	return equals(other);
+    public boolean equals(final Object obj) {
+        if (obj == this) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (obj.getClass() != getClass()) {
+            return false;
+        }
+        final SimpleSession other = (SimpleSession) obj;
+        return equals(other);
     }
-    
-    public boolean equals(SimpleSession other) {
-    	if (other == this) {
-			return true;
-		}
-    	if (other == null) {
-			return false;
-		}
-    	return getUserName().equals(other.getUserName());
+
+    public boolean equals(final SimpleSession other) {
+        if (other == this) {
+            return true;
+        }
+        if (other == null) {
+            return false;
+        }
+        return getUserName().equals(other.getUserName());
     }
 
     @Override
     public int hashCode() {
-    	return getUserName().hashCode();
+        return getUserName().hashCode();
     }
-    
+
 }

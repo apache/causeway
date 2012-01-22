@@ -29,14 +29,14 @@ import org.apache.isis.core.metamodel.facets.MultipleValueFacet;
 public interface EncodableFacet extends MultipleValueFacet {
 
     /**
-     * Equivalent to {@link EncoderDecoder#fromEncodedString(String)}, though may be implemented through some other
-     * equivalent mechanism.
+     * Equivalent to {@link EncoderDecoder#fromEncodedString(String)}, though
+     * may be implemented through some other equivalent mechanism.
      */
     ObjectAdapter fromEncodedString(String encodedData);
 
     /**
-     * Equivalent to {@link EncoderDecoder#toEncodedString(Object)}, though may be implemented through some other
-     * equivalent mechanism.
+     * Equivalent to {@link EncoderDecoder#toEncodedString(Object)}, though may
+     * be implemented through some other equivalent mechanism.
      */
     String toEncodedString(ObjectAdapter object);
 }
