@@ -188,8 +188,8 @@ public class OrderSet implements Comparable<OrderSet>, Iterable<Object> {
         return elements.iterator();
     }
 
-    protected void addAll(final SortedSet<DeweyOrderSet> sortedMembers) {
-        for (final DeweyOrderSet deweyOrderSet : sortedMembers) {
+    protected void addAll(final SortedSet<?> sortedMembers) {
+        for (final Object deweyOrderSet : sortedMembers) {
             this.addElement(deweyOrderSet);
         }
     }
