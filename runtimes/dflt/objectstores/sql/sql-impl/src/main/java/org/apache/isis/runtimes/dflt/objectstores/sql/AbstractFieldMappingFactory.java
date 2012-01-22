@@ -27,12 +27,12 @@ import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 
 public abstract class AbstractFieldMappingFactory implements FieldMappingFactory {
 
-    protected String getTypeOverride(ObjectSpecification object, final ObjectAssociation field, final String type) {
+    protected String getTypeOverride(final ObjectSpecification object, final ObjectAssociation field, final String type) {
         // isis.persistor.sql.automapper.default
         final IsisConfiguration configParameters = IsisContext.getConfiguration();
-        String find = object.getShortIdentifier() + "." + field.getId();
+        final String find = object.getShortIdentifier() + "." + field.getId();
         final String property = SqlObjectStore.BASE_NAME + ".automapper.type." + find;
-        String dataType = configParameters.getString(property, type);
+        final String dataType = configParameters.getString(property, type);
         return dataType;
     }
 }

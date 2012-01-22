@@ -30,8 +30,7 @@ import org.apache.isis.runtimes.dflt.runtime.system.transaction.IsisTransactionM
 import org.apache.isis.runtimes.dflt.runtime.transaction.TransactionalClosureWithReturnAbstract;
 import org.apache.log4j.Logger;
 
-public class ActionInvocationFacetWrapTransaction extends ActionInvocationFacetAbstract implements
-    DecoratingFacet<ActionInvocationFacet> {
+public class ActionInvocationFacetWrapTransaction extends ActionInvocationFacetAbstract implements DecoratingFacet<ActionInvocationFacet> {
 
     private final static Logger LOG = Logger.getLogger(ActionInvocationFacetWrapTransaction.class);
 
@@ -49,13 +48,12 @@ public class ActionInvocationFacetWrapTransaction extends ActionInvocationFacetA
 
     @Override
     public ObjectAdapter invoke(final ObjectAdapter targetAdapter, final ObjectAdapter[] parameterAdapters) {
-        return getTransactionManager().executeWithinTransaction(
-            new TransactionalClosureWithReturnAbstract<ObjectAdapter>() {
-                @Override
-                public ObjectAdapter execute() {
-                    return underlyingFacet.invoke(targetAdapter, parameterAdapters);
-                }
-            });
+        return getTransactionManager().executeWithinTransaction(new TransactionalClosureWithReturnAbstract<ObjectAdapter>() {
+            @Override
+            public ObjectAdapter execute() {
+                return underlyingFacet.invoke(targetAdapter, parameterAdapters);
+            }
+        });
     }
 
     @Override

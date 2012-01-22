@@ -158,13 +158,17 @@ public class DefaultPersistAlgorithmTest extends ProxyJunit3TestCase {
 
     public void testMakePersistentRecursesThroughReferenceFields() {
         /*
-         * fieldControl.expectAndReturn(oneToOneAssociation.isPersisted(), true);
-         * fieldControl.expectAndReturn(oneToOneAssociation.isValue(), false);
-         * fieldControl.expectAndReturn(oneToOneAssociation.get(object), fieldsObject);
-         * IsisContext.getObjectPersistor().getIdentityMap().madePersistent(object);
-         * IsisContext.getObjectPersistor().getIdentityMap().madePersistent(fieldsObject);
+         * fieldControl.expectAndReturn(oneToOneAssociation.isPersisted(),
+         * true); fieldControl.expectAndReturn(oneToOneAssociation.isValue(),
+         * false); fieldControl.expectAndReturn(oneToOneAssociation.get(object),
+         * fieldsObject);
+         * IsisContext.getObjectPersistor().getIdentityMap().madePersistent
+         * (object);
+         * IsisContext.getObjectPersistor().getIdentityMap().madePersistent
+         * (fieldsObject);
          * 
-         * adder.addPersistedObject(object); adder.addPersistedObject(fieldsObject);
+         * adder.addPersistedObject(object);
+         * adder.addPersistedObject(fieldsObject);
          */
 
         // replay();
@@ -174,11 +178,13 @@ public class DefaultPersistAlgorithmTest extends ProxyJunit3TestCase {
 
     public void testMakePersistentRecursesThroughReferenceFieldsSkippingNullReferences() {
         /*
-         * fieldControl.expectAndReturn(oneToOneAssociation.isPersisted(), true);
-         * fieldControl.expectAndReturn(oneToOneAssociation.isValue(), false);
-         * fieldControl.expectAndReturn(oneToOneAssociation.get(object), null);
+         * fieldControl.expectAndReturn(oneToOneAssociation.isPersisted(),
+         * true); fieldControl.expectAndReturn(oneToOneAssociation.isValue(),
+         * false); fieldControl.expectAndReturn(oneToOneAssociation.get(object),
+         * null);
          * 
-         * IsisContext.getObjectPersistor().getIdentityMap().madePersistent(object);
+         * IsisContext.getObjectPersistor().getIdentityMap().madePersistent(object
+         * );
          * 
          * adder.addPersistedObject(object);
          */
@@ -187,9 +193,11 @@ public class DefaultPersistAlgorithmTest extends ProxyJunit3TestCase {
 
     public void testMakePersistentRecursesThroughReferenceFieldsSkippingNonPersistentFields() {
         /*
-         * fieldControl.expectAndReturn(oneToOneAssociation.isPersisted(), false);
+         * fieldControl.expectAndReturn(oneToOneAssociation.isPersisted(),
+         * false);
          * 
-         * IsisContext.getObjectPersistor().getIdentityMap().madePersistent(object);
+         * IsisContext.getObjectPersistor().getIdentityMap().madePersistent(object
+         * );
          * 
          * adder.addPersistedObject(object);
          */
@@ -198,12 +206,13 @@ public class DefaultPersistAlgorithmTest extends ProxyJunit3TestCase {
 
     public void testMakePersistentRecursesThroughReferenceFieldsSkippingObjectsThatAreAlreadyPersistent() {
         /*
-         * fieldControl.expectAndReturn(oneToOneAssociation.isPersisted(), true);
-         * fieldControl.expectAndReturn(oneToOneAssociation.isValue(), false);
-         * fieldControl.expectAndReturn(oneToOneAssociation.get(object), fieldsObject);
-         * fieldsObject.setupResolveState(ResolveState.RESOLVED);
+         * fieldControl.expectAndReturn(oneToOneAssociation.isPersisted(),
+         * true); fieldControl.expectAndReturn(oneToOneAssociation.isValue(),
+         * false); fieldControl.expectAndReturn(oneToOneAssociation.get(object),
+         * fieldsObject); fieldsObject.setupResolveState(ResolveState.RESOLVED);
          * 
-         * IsisContext.getObjectPersistor().getIdentityMap().madePersistent(object);
+         * IsisContext.getObjectPersistor().getIdentityMap().madePersistent(object
+         * );
          * 
          * adder.addPersistedObject(object);
          */

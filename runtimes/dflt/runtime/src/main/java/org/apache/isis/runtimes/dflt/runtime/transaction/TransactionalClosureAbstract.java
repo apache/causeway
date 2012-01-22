@@ -22,7 +22,8 @@ package org.apache.isis.runtimes.dflt.runtime.transaction;
 import org.apache.isis.runtimes.dflt.runtime.system.transaction.TransactionalClosure;
 
 /**
- * Convenience adapter providing no-op implementations of {@link #onSuccess()} and {@link #onFailure()}.
+ * Convenience adapter providing no-op implementations of {@link #onSuccess()}
+ * and {@link #onFailure()}.
  */
 public abstract class TransactionalClosureAbstract implements TransactionalClosure {
 

@@ -39,9 +39,7 @@ public final class OptionHandlerAddress implements OptionHandler {
     @Override
     @SuppressWarnings("static-access")
     public void addOption(final Options options) {
-        final Option option =
-            OptionBuilder.withArgName("address").hasArg().withLongOpt(OptionHandlerAddress.ADDRESS_LONG_OPT)
-                .withDescription("address to listen on").create(OptionHandlerAddress.ADDRESS_OPT);
+        final Option option = OptionBuilder.withArgName("address").hasArg().withLongOpt(OptionHandlerAddress.ADDRESS_LONG_OPT).withDescription("address to listen on").create(OptionHandlerAddress.ADDRESS_OPT);
         options.addOption(option);
     }
 

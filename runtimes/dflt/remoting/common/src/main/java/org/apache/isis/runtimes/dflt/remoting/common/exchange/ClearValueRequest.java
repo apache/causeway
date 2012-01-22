@@ -33,8 +33,7 @@ public class ClearValueRequest extends RequestAbstract {
     private final String fieldIdentifier;
     private final IdentityData target;
 
-    public ClearValueRequest(final AuthenticationSession session, final String fieldIdentifier,
-        final IdentityData target) {
+    public ClearValueRequest(final AuthenticationSession session, final String fieldIdentifier, final IdentityData target) {
         super(session);
         this.fieldIdentifier = fieldIdentifier;
         this.target = target;
@@ -76,7 +75,8 @@ public class ClearValueRequest extends RequestAbstract {
     // ///////////////////////////////////////////////////////
 
     /**
-     * {@link #setResponse(Object) Sets a response} of {@link ObjectData}[] (array).
+     * {@link #setResponse(Object) Sets a response} of {@link ObjectData}[]
+     * (array).
      */
     @Override
     public void execute(final ServerFacade serverFacade) {

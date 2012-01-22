@@ -27,31 +27,34 @@ import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction
 import org.apache.isis.runtimes.dflt.runtime.system.transaction.IsisTransactionManager;
 
 /**
- * Interface for the {@link IsisTransactionManager} to interact with the {@link ObjectStore}.
+ * Interface for the {@link IsisTransactionManager} to interact with the
+ * {@link ObjectStore}.
  */
 public interface ObjectStoreTransactionManagement {
 
     /**
-     * Used by the {@link ObjectStoreTransactionManager} to tell the underlying {@link ObjectStore} to start a
-     * transaction.
+     * Used by the {@link ObjectStoreTransactionManager} to tell the underlying
+     * {@link ObjectStore} to start a transaction.
      */
     void startTransaction();
 
     /**
-     * Used by the current {@link ObjectStoreTransaction} to flush changes to the {@link ObjectStore} (either via a
-     * {@link IsisTransactionManager#flushTransaction()} or a {@link IsisTransactionManager#endTransaction()}).
+     * Used by the current {@link ObjectStoreTransaction} to flush changes to
+     * the {@link ObjectStore} (either via a
+     * {@link IsisTransactionManager#flushTransaction()} or a
+     * {@link IsisTransactionManager#endTransaction()}).
      */
     void execute(List<PersistenceCommand> unmodifiableList);
 
     /**
-     * Used by the {@link ObjectStoreTransactionManager} to tell the underlying {@link ObjectStore} to commit a
-     * transaction.
+     * Used by the {@link ObjectStoreTransactionManager} to tell the underlying
+     * {@link ObjectStore} to commit a transaction.
      */
     void endTransaction();
 
     /**
-     * Used by the {@link ObjectStoreTransactionManager} to tell the underlying {@link ObjectStore} to abort a
-     * transaction.
+     * Used by the {@link ObjectStoreTransactionManager} to tell the underlying
+     * {@link ObjectStore} to abort a transaction.
      */
     void abortTransaction();
 

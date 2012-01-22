@@ -28,8 +28,9 @@ public abstract class OidGeneratorAbstract implements OidGenerator {
     private final OidStringifier oidStringifier;
 
     /**
-     * Defaults to using the {@link OidStringifierHex} for {@link #getOidStringifier()}. Subclasses can replace by
-     * calling {@link #OidGeneratorAbstract(OidStringifier)} instead.
+     * Defaults to using the {@link OidStringifierHex} for
+     * {@link #getOidStringifier()}. Subclasses can replace by calling
+     * {@link #OidGeneratorAbstract(OidStringifier)} instead.
      */
     public OidGeneratorAbstract() {
         this(new OidStringifierHex());

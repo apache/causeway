@@ -79,8 +79,8 @@ public class HttpClientTransport extends TransportAbstract {
     // ///////////////////////////////////////////////////////////
 
     /**
-     * Returns an {@link OutputStream} that writes into the request body of an HTTP POST, and will send on
-     * {@link OutputStream#flush() flush}.
+     * Returns an {@link OutputStream} that writes into the request body of an
+     * HTTP POST, and will send on {@link OutputStream#flush() flush}.
      */
     @Override
     public OutputStream getOutputStream() {
@@ -88,10 +88,12 @@ public class HttpClientTransport extends TransportAbstract {
     }
 
     /**
-     * When first called, executes the HTTP POST, then returns the response body.
+     * When first called, executes the HTTP POST, then returns the response
+     * body.
      * 
      * <p>
-     * Subsequent calls return the same input stream, at whatever position they have been processed.
+     * Subsequent calls return the same input stream, at whatever position they
+     * have been processed.
      */
     @Override
     public InputStream getInputStream() throws IOException {
@@ -102,8 +104,7 @@ public class HttpClientTransport extends TransportAbstract {
                     final PostMethod postMethod = new PostMethod(url);
 
                     // copy over
-                    final InputStreamRequestEntity requestEntity =
-                        new InputStreamRequestEntity(new ByteArrayInputStream(outputStream.toByteArray()));
+                    final InputStreamRequestEntity requestEntity = new InputStreamRequestEntity(new ByteArrayInputStream(outputStream.toByteArray()));
                     postMethod.setRequestEntity(requestEntity);
 
                     // execute

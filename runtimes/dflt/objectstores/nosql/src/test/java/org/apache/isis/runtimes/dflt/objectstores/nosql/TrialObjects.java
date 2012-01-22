@@ -65,8 +65,7 @@ public class TrialObjects {
             }
 
             @Override
-            public ObjectAdapter adapterFor(final Object pojo, final ObjectAdapter ownerAdapter,
-                final IdentifiedHolder identifiedHolder) {
+            public ObjectAdapter adapterFor(final Object pojo, final ObjectAdapter ownerAdapter, final IdentifiedHolder identifiedHolder) {
                 if (adapters.get(pojo) != null) {
                     return adapters.get(pojo);
                 } else {
@@ -89,10 +88,7 @@ public class TrialObjects {
             }
         };
 
-        reflector =
-            new ObjectReflectorDefault(configuration, new TestClassSubstitutor(), new CollectionTypeRegistryDefault(),
-                new SpecificationTraverserDefault(), new MemberLayoutArrangerDefault(),
-                new ProgrammingModelFacetsJava5(), new HashSet<FacetDecorator>(), new MetaModelValidatorDefault());
+        reflector = new ObjectReflectorDefault(configuration, new TestClassSubstitutor(), new CollectionTypeRegistryDefault(), new SpecificationTraverserDefault(), new MemberLayoutArrangerDefault(), new ProgrammingModelFacetsJava5(), new HashSet<FacetDecorator>(), new MetaModelValidatorDefault());
         reflector.setRuntimeContext(new RuntimeContextNoRuntime() {
 
             @Override
@@ -106,8 +102,7 @@ public class TrialObjects {
             @Override
             public ObjectAdapter createAdapter(final Object pojo, final Oid oid) {
                 final ObjectSpecification specification = reflector.loadSpecification(pojo.getClass());
-                final ResolveState state =
-                    oid == null ? ResolveState.VALUE : oid.isTransient() ? ResolveState.TRANSIENT : ResolveState.GHOST;
+                final ResolveState state = oid == null ? ResolveState.VALUE : oid.isTransient() ? ResolveState.TRANSIENT : ResolveState.GHOST;
 
                 final TestProxyAdapter objectAdapter = new TestProxyAdapter();
                 objectAdapter.setupResolveState(state);

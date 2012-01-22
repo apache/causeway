@@ -73,17 +73,14 @@ public class SqlIntegrationTestSingleton {
     private SqlDataClassFactory sqlDataClassFactory = null;
     private TestProxySystemIII system = null;
 
-    public void initNOF(final String propertiesDirectory, final String propertiesFileName)
-        throws FileNotFoundException, IOException, SQLException, ClassNotFoundException, InstantiationException,
-        IllegalAccessException {
+    public void initNOF(final String propertiesDirectory, final String propertiesFileName) throws FileNotFoundException, IOException, SQLException, ClassNotFoundException, InstantiationException, IllegalAccessException {
 
         final Properties properties = new Properties();
         properties.load(new FileInputStream(propertiesDirectory + "/" + propertiesFileName));
         this.initNOF(properties);
     }
 
-    public void initNOF(final Properties properties) throws SQLException, ClassNotFoundException,
-        InstantiationException, IllegalAccessException {
+    public void initNOF(final Properties properties) throws SQLException, ClassNotFoundException, InstantiationException, IllegalAccessException {
         final IsisConfigurationDefault configuration = new IsisConfigurationDefault();
         configuration.add(properties);
         persistorName = configuration.getString("isis.persistor");
@@ -107,8 +104,7 @@ public class SqlIntegrationTestSingleton {
     private PolyTestClass polyTestClass;
 
     @SuppressWarnings("unchecked")
-    private void resetPersistorState(final IsisConfigurationDefault IsisConfigurationDefault) throws SQLException,
-        ClassNotFoundException, InstantiationException, IllegalAccessException {
+    private void resetPersistorState(final IsisConfigurationDefault IsisConfigurationDefault) throws SQLException, ClassNotFoundException, InstantiationException, IllegalAccessException {
         final String jdbcClassName = IsisConfigurationDefault.getString(SqlObjectStore.BASE_NAME + ".jdbc.driver");
         if (jdbcClassName == null) {
             c = null;
@@ -120,11 +116,7 @@ public class SqlIntegrationTestSingleton {
         DriverManager.registerDriver(driver);
 
         // jdbc - connect to DB and drop tables.
-        c =
-            DriverManager.getConnection(
-                IsisConfigurationDefault.getString(SqlObjectStore.BASE_NAME + ".jdbc.connection"),
-                IsisConfigurationDefault.getString(SqlObjectStore.BASE_NAME + ".jdbc.user"),
-                IsisConfigurationDefault.getString(SqlObjectStore.BASE_NAME + ".jdbc.password"));
+        c = DriverManager.getConnection(IsisConfigurationDefault.getString(SqlObjectStore.BASE_NAME + ".jdbc.connection"), IsisConfigurationDefault.getString(SqlObjectStore.BASE_NAME + ".jdbc.user"), IsisConfigurationDefault.getString(SqlObjectStore.BASE_NAME + ".jdbc.password"));
         s = c.createStatement();
 
         // dropTable(SqlObjectStore.getTableName());

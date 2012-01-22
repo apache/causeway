@@ -43,8 +43,7 @@ public class SqlOidGenerator extends OidGeneratorAbstract {
 
         public synchronized long nextPersistentId(final DatabaseConnectorPool connectionPool) {
             if (lastId > newBatchAt) {
-                throw new SqlObjectStoreException("ID exception, last id (" + lastId + ") past new batch boundary ("
-                    + newBatchAt + ")");
+                throw new SqlObjectStoreException("ID exception, last id (" + lastId + ") past new batch boundary (" + newBatchAt + ")");
             }
             if (lastId == newBatchAt) {
                 prepareNewBatch(connectionPool);
@@ -65,8 +64,7 @@ public class SqlOidGenerator extends OidGeneratorAbstract {
                     db.update("insert into " + tableName + " values (" + newBatchAt + ")");
                     LOG.debug("Initial ID batch created, from " + lastId + " to " + newBatchAt);
                 } else {
-                    if (db.update("update " + tableName + " set " + numberColumn + " = " + numberColumn + " + "
-                        + BATCH_SIZE) != 1) {
+                    if (db.update("update " + tableName + " set " + numberColumn + " = " + numberColumn + " + " + BATCH_SIZE) != 1) {
                         throw new SqlObjectStoreException("failed to update serial id table; no rows updated");
                     }
                     final Results rs = db.select("select " + numberColumn + " from " + tableName);

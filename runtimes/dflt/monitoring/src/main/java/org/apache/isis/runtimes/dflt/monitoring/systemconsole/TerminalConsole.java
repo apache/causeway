@@ -26,7 +26,8 @@ import java.io.InputStreamReader;
 import org.apache.log4j.Logger;
 
 /**
- * Marked as final because starts a thread in the {@link #TerminalConsole() constructor}.
+ * Marked as final because starts a thread in the {@link #TerminalConsole()
+ * constructor}.
  */
 public final class TerminalConsole implements ServerConsole, Runnable {
     private static final Logger LOG = Logger.getLogger(TerminalConsole.class);
@@ -58,11 +59,11 @@ public final class TerminalConsole implements ServerConsole, Runnable {
         /*
          * try { Enumeration e = server.getObjectStore().classes();
          * 
-         * log("Loaded classes:-"); while (e.hasMoreElements()) { ObjectSpecification object = (ObjectSpecification)
-         * e.nextElement();
+         * log("Loaded classes:-"); while (e.hasMoreElements()) {
+         * ObjectSpecification object = (ObjectSpecification) e.nextElement();
          * 
-         * log(" " + object); } } catch (ObjectStoreException e) { LOG.error("Error listing classes " + e.getMessage());
-         * }
+         * log(" " + object); } } catch (ObjectStoreException e) {
+         * LOG.error("Error listing classes " + e.getMessage()); }
          */
     }
 

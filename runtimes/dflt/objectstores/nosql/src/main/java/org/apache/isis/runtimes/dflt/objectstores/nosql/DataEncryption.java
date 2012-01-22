@@ -21,15 +21,13 @@ package org.apache.isis.runtimes.dflt.objectstores.nosql;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 
 public interface DataEncryption {
-    
+
     String getType();
-    
+
     void init(IsisConfiguration configuration);
 
     String encrypt(String plainText);
-    
+
     String decrypt(String encryptedText);
 
-
 }
-

@@ -29,8 +29,7 @@ final class NoSqlDestroyObjectCommand implements DestroyObjectCommand {
     private final KeyCreator keyCreator;
     private final VersionCreator versionCreator;
 
-    public NoSqlDestroyObjectCommand(final KeyCreator keyCreator, final VersionCreator versionCreator,
-        final ObjectAdapter object) {
+    public NoSqlDestroyObjectCommand(final KeyCreator keyCreator, final VersionCreator versionCreator, final ObjectAdapter object) {
         this.keyCreator = keyCreator;
         this.versionCreator = versionCreator;
         this.object = object;

@@ -34,8 +34,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 /**
- * Tested in style of <i>Working Effectively with Legacy Code</i> (Feathers) and <i>Growing Object-Oriented Software</i>
- * (Freeman &amp; Pryce).
+ * Tested in style of <i>Working Effectively with Legacy Code</i> (Feathers) and
+ * <i>Growing Object-Oriented Software</i> (Freeman &amp; Pryce).
  */
 @RunWith(JMock.class)
 public class InMemoryObjectStore_openAndClose {
@@ -102,8 +102,7 @@ public class InMemoryObjectStore_openAndClose {
     }
 
     @Test
-    public void whenOpenSubsequentlyThenObtainsPersistedObjectsFromObjectStoreFactoryAndRecreatesAdapters()
-        throws Exception {
+    public void whenOpenSubsequentlyThenObtainsPersistedObjectsFromObjectStoreFactoryAndRecreatesAdapters() throws Exception {
         neverInteractsDirectlyWithPersistenceSession();
         context.checking(new Expectations() {
             {
@@ -125,8 +124,7 @@ public class InMemoryObjectStore_openAndClose {
 
         context.checking(new Expectations() {
             {
-                one(mockInMemoryPersistenceSessionFactory).attach(with(mockPersistenceSession),
-                    with(mockObjectStorePersistedObjects));
+                one(mockInMemoryPersistenceSessionFactory).attach(with(mockPersistenceSession), with(mockObjectStorePersistedObjects));
                 never(mockPersistenceSession);
             }
         });

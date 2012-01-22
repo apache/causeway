@@ -21,13 +21,12 @@ package org.apache.isis.runtimes.dflt.objectstores.sql;
 
 import java.util.Calendar;
 
+import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.joda.time.DateTimeZone;
 
-import org.apache.isis.core.commons.config.IsisConfiguration;
-
 /**
- * Provides objectstore defaults. Most significantly, maintains the object store default TimeZone, and maintains
- * Calendar.
+ * Provides objectstore defaults. Most significantly, maintains the object store
+ * default TimeZone, and maintains Calendar.
  * 
  * 
  * @version $Rev$ $Date$
@@ -43,7 +42,7 @@ public class Defaults {
      *            by default, @link {@link SqlObjectStore#BASE_NAME}
      * @param isisConfiguration
      */
-    public static void initialise(String propertiesBase, IsisConfiguration isisConfiguration) {
+    public static void initialise(final String propertiesBase, final IsisConfiguration isisConfiguration) {
         Defaults.propertiesBase = propertiesBase; // "isis.persistor.sql"
         setTimeZone(DateTimeZone.UTC);
 
@@ -71,14 +70,13 @@ public class Defaults {
      * @param property
      * @return
      */
-    protected static String getStringProperty(String propertiesBase, final IsisConfiguration configParameters,
-        String property) {
+    protected static String getStringProperty(final String propertiesBase, final IsisConfiguration configParameters, final String property) {
         return configParameters.getString(propertiesBase + ".default." + property, property);
     }
 
     /**
-     * Returns a string value by looking up "isis.persistor.sql.default.XXXX", returning the specified default, if no
-     * value was found.
+     * Returns a string value by looking up "isis.persistor.sql.default.XXXX",
+     * returning the specified default, if no value was found.
      * 
      * @param propertiesBase
      * @param configParameters
@@ -86,14 +84,13 @@ public class Defaults {
      * @param defaultValue
      * @return
      */
-    protected static String getStringProperty(String propertiesBase, final IsisConfiguration configParameters,
-        String property, String defaultValue) {
+    protected static String getStringProperty(final String propertiesBase, final IsisConfiguration configParameters, final String property, final String defaultValue) {
         return configParameters.getString(propertiesBase + ".default." + property, defaultValue);
     }
 
     /**
-     * Returns an integer value by looking up "isis.persistor.sql.default.XXXX", returning the specified default, if no
-     * value was found.
+     * Returns an integer value by looking up "isis.persistor.sql.default.XXXX",
+     * returning the specified default, if no value was found.
      * 
      * @param propertiesBase
      * @param configParameters
@@ -101,8 +98,7 @@ public class Defaults {
      * @param defaultValue
      * @return
      */
-    protected static int getIntProperty(String propertiesBase, final IsisConfiguration configParameters,
-        String property, int defaultValue) {
+    protected static int getIntProperty(final String propertiesBase, final IsisConfiguration configParameters, final String property, final int defaultValue) {
         return configParameters.getInteger(propertiesBase + ".default." + property, defaultValue);
     }
 
@@ -145,7 +141,7 @@ public class Defaults {
     // {{ Primary Key label, defaults to "pk_id"
     private static String pkIdLabel;
 
-    public static void setPkIdLabel(String pkIdLabel) {
+    public static void setPkIdLabel(final String pkIdLabel) {
         Defaults.pkIdLabel = pkIdLabel;
     }
 
@@ -158,7 +154,7 @@ public class Defaults {
     // {{ Id Column, defaults to "id"
     private static String idColumn;
 
-    public static void setIdColumn(String idColumn) {
+    public static void setIdColumn(final String idColumn) {
         Defaults.idColumn = idColumn;
     }
 
@@ -199,9 +195,11 @@ public class Defaults {
     static String TYPE_DEFAULT;
 
     /**
-     * Default SQL data types used to define the fields in the database. By providing this method, we allow the user an
-     * opportunity to override these types by specifying alternatives in sql.properties (or which ever). For example,
-     * Postgresql does not know about DATETIME, but can use TIMESTAMP instead.
+     * Default SQL data types used to define the fields in the database. By
+     * providing this method, we allow the user an opportunity to override these
+     * types by specifying alternatives in sql.properties (or which ever). For
+     * example, Postgresql does not know about DATETIME, but can use TIMESTAMP
+     * instead.
      * 
      * @param dataTypes
      * @param baseName
@@ -289,7 +287,7 @@ public class Defaults {
     // {{ Versioning
     private static boolean useVersioning;
 
-    public static void useVersioning(boolean useVersioning) {
+    public static void useVersioning(final boolean useVersioning) {
         Defaults.useVersioning = useVersioning;
     }
 
@@ -297,12 +295,11 @@ public class Defaults {
         return useVersioning;
     }
 
-    public static boolean useVersioning(String shortIdentifier) {
+    public static boolean useVersioning(final String shortIdentifier) {
         if (useVersioning() == false) {
             return false;
         }
-        final String useVersioningProperty =
-            getStringProperty(propertiesBase, isisConfiguration, "versioning." + shortIdentifier, "true");
+        final String useVersioningProperty = getStringProperty(propertiesBase, isisConfiguration, "versioning." + shortIdentifier, "true");
         return (useVersioningProperty.compareToIgnoreCase("true") == 0);
     }
     // }}

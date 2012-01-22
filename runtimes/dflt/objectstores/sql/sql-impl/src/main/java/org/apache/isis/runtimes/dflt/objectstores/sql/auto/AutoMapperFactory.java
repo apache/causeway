@@ -26,8 +26,7 @@ import org.apache.isis.runtimes.dflt.objectstores.sql.ObjectMappingLookup;
 
 public class AutoMapperFactory implements ObjectMappingFactory {
     @Override
-    public ObjectMapping createMapper(final String className, final String propertiesBase,
-        final FieldMappingLookup lookup, final ObjectMappingLookup objectMapperLookup) {
+    public ObjectMapping createMapper(final String className, final String propertiesBase, final FieldMappingLookup lookup, final ObjectMappingLookup objectMapperLookup) {
         return new AutoMapper(className, propertiesBase, lookup, objectMapperLookup);
     }
 }

@@ -70,8 +70,7 @@ public abstract class AbstractJdbcFieldMapping implements FieldMapping {
         appendEqualsClause(connector, sql, object, "=");
     }
 
-    protected void appendEqualsClause(final DatabaseConnector connector, final StringBuffer sql,
-        final ObjectAdapter object, final String condition) {
+    protected void appendEqualsClause(final DatabaseConnector connector, final StringBuffer sql, final ObjectAdapter object, final String condition) {
         sql.append(Sql.sqlFieldName(field.getId()));
         sql.append(condition);
         final ObjectAdapter fieldValue = field.get(object);
@@ -92,8 +91,8 @@ public abstract class AbstractJdbcFieldMapping implements FieldMapping {
     }
 
     @Override
-    public void appendWhereObject(DatabaseConnector connector, ObjectAdapter objectAdapter) {
-        Object object = preparedStatementObject(objectAdapter);
+    public void appendWhereObject(final DatabaseConnector connector, final ObjectAdapter objectAdapter) {
+        final Object object = preparedStatementObject(objectAdapter);
         connector.addToQueryValues(object);
     }
 

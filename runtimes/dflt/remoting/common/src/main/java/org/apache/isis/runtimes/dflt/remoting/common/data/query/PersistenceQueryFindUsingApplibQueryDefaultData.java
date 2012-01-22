@@ -27,7 +27,8 @@ import org.apache.isis.runtimes.dflt.remoting.common.data.common.ObjectData;
 import org.apache.isis.runtimes.dflt.runtime.persistence.query.PersistenceQueryFindUsingApplibQueryDefault;
 
 /**
- * Serializable representation of {@link PersistenceQueryFindUsingApplibQueryDefault}.
+ * Serializable representation of
+ * {@link PersistenceQueryFindUsingApplibQueryDefault}.
  */
 public class PersistenceQueryFindUsingApplibQueryDefaultData extends PersistenceQueryDataAbstract {
 
@@ -36,8 +37,7 @@ public class PersistenceQueryFindUsingApplibQueryDefaultData extends Persistence
     private final QueryCardinality cardinality;
     private final String queryName;
 
-    public PersistenceQueryFindUsingApplibQueryDefaultData(final ObjectSpecification noSpec, final String queryName,
-        final Map<String, ObjectData> argumentDatasByParameterName, final QueryCardinality cardinality) {
+    public PersistenceQueryFindUsingApplibQueryDefaultData(final ObjectSpecification noSpec, final String queryName, final Map<String, ObjectData> argumentDatasByParameterName, final QueryCardinality cardinality) {
         super(noSpec);
         this.queryName = queryName;
         this.argumentDatasByParameterName = argumentDatasByParameterName;

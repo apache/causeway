@@ -46,8 +46,7 @@ public class AuthorizationManagerProxy extends AuthorizationManagerAbstract {
     // Constructor
     // ////////////////////////////////////////////////////////////////
 
-    public AuthorizationManagerProxy(final IsisConfiguration configuration, final ServerFacade serverFacade,
-        final ObjectEncoderDecoder encoderDecoder) {
+    public AuthorizationManagerProxy(final IsisConfiguration configuration, final ServerFacade serverFacade, final ObjectEncoderDecoder encoderDecoder) {
         super(configuration);
         this.serverFacade = serverFacade;
         this.encoderDecoder = encoderDecoder;
@@ -75,8 +74,7 @@ public class AuthorizationManagerProxy extends AuthorizationManagerAbstract {
 
         final String idString = identifier.toIdentityString(Identifier.CLASS_MEMBERNAME_PARAMETERS);
         if (!usabilityCache.containsKey(idString)) {
-            final AuthorizationResponse response =
-                serverFacade.authorizeUsability(new AuthorizationRequestUsability(session, targetData, idString));
+            final AuthorizationResponse response = serverFacade.authorizeUsability(new AuthorizationRequestUsability(session, targetData, idString));
             final Boolean authorized = isAuthorized(response);
             usabilityCache.put(idString, authorized);
         }
@@ -84,14 +82,12 @@ public class AuthorizationManagerProxy extends AuthorizationManagerAbstract {
     }
 
     @Override
-    public boolean isVisible(final AuthenticationSession session, final ObjectAdapter target,
-        final Identifier identifier) {
+    public boolean isVisible(final AuthenticationSession session, final ObjectAdapter target, final Identifier identifier) {
         final IdentityData targetData = encoderDecoder.encodeIdentityData(target);
 
         final String idString = identifier.toIdentityString(Identifier.CLASS_MEMBERNAME_PARAMETERS);
         if (!visibilityCache.containsKey(idString)) {
-            final AuthorizationRequestVisibility request =
-                new AuthorizationRequestVisibility(session, targetData, idString);
+            final AuthorizationRequestVisibility request = new AuthorizationRequestVisibility(session, targetData, idString);
             final AuthorizationResponse response = serverFacade.authorizeVisibility(request);
             final Boolean authorized = isAuthorized(response);
             visibilityCache.put(idString, authorized);

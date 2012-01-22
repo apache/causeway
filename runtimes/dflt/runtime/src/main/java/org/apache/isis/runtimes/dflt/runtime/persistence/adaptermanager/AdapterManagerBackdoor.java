@@ -24,11 +24,13 @@ import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessionHydrator;
 
 /**
- * Not part of the standard API, but used by the <tt>MemoryObjectStore</tt> to add pre-existing {@link ObjectAdapter
- * adapter}s straight into the identity maps.
+ * Not part of the standard API, but used by the <tt>MemoryObjectStore</tt> to
+ * add pre-existing {@link ObjectAdapter adapter}s straight into the identity
+ * maps.
  * 
  * <p>
- * Don't think this is used anymore; see instead {@link PersistenceSessionHydrator}.
+ * Don't think this is used anymore; see instead
+ * {@link PersistenceSessionHydrator}.
  */
 public interface AdapterManagerBackdoor extends AdapterManager {
 

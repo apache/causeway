@@ -19,6 +19,10 @@
 
 package org.apache.isis.runtimes.dflt.objectstores.nosql;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -40,10 +44,6 @@ import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.junit.Before;
 import org.junit.Test;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 
 public class NoSqlObjectStoreTest {
 
@@ -78,26 +78,30 @@ public class NoSqlObjectStoreTest {
         });
         keyCreator = context.mock(KeyCreator.class);
         versionCreator = context.mock(VersionCreator.class);
-        
-        Map<String, DataEncryption> dataEncrypter = new HashMap<String, DataEncryption>();
-        DataEncryption dataEncrypter1 = new DataEncryption() {
+
+        final Map<String, DataEncryption> dataEncrypter = new HashMap<String, DataEncryption>();
+        final DataEncryption dataEncrypter1 = new DataEncryption() {
+            @Override
             public String getType() {
                 return "etc";
             }
 
-            public void init(IsisConfiguration configuration) {}
-            
-            public String encrypt(String plainText) {
+            @Override
+            public void init(final IsisConfiguration configuration) {
+            }
+
+            @Override
+            public String encrypt(final String plainText) {
                 throw new UnexpectedCallException();
             }
 
-            public String decrypt(String encryptedText) {
+            @Override
+            public String decrypt(final String encryptedText) {
                 return encryptedText.substring(3);
             }
         };
         dataEncrypter.put(dataEncrypter1.getType(), dataEncrypter1);
 
-        
         store = new NoSqlObjectStore(db, new NoSqlOidGenerator(db), keyCreator, versionCreator, null, dataEncrypter);
     }
 

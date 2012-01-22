@@ -32,8 +32,7 @@ import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 public class AggregateAdapters implements Iterable<ObjectAdapter> {
 
     private final ObjectAdapter rootAdapter;
-    private final Map<OneToManyAssociation, ObjectAdapter> collectionAdapters =
-        new LinkedHashMap<OneToManyAssociation, ObjectAdapter>();
+    private final Map<OneToManyAssociation, ObjectAdapter> collectionAdapters = new LinkedHashMap<OneToManyAssociation, ObjectAdapter>();
 
     public AggregateAdapters(final ObjectAdapter rootAdapter) {
         Assert.assertNotNull(rootAdapter);
@@ -55,8 +54,10 @@ public class AggregateAdapters implements Iterable<ObjectAdapter> {
     }
 
     /**
-     * Iterate over the {@link #addCollectionAdapter(OneToManyAssociation, ObjectAdapter) collection adapter}s (does not
-     * include the {@link #getRootAdapter() root adapter}.
+     * Iterate over the
+     * {@link #addCollectionAdapter(OneToManyAssociation, ObjectAdapter)
+     * collection adapter}s (does not include the {@link #getRootAdapter() root
+     * adapter}.
      */
     @Override
     public Iterator<ObjectAdapter> iterator() {

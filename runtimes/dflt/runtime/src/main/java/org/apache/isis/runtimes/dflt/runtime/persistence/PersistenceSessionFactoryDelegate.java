@@ -23,13 +23,15 @@ import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessi
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessionFactory;
 
 /**
- * Creates a {@link PersistenceSession} on behalf of a {@link PersistenceSessionFactory}.
+ * Creates a {@link PersistenceSession} on behalf of a
+ * {@link PersistenceSessionFactory}.
  */
 public interface PersistenceSessionFactoryDelegate {
 
     /**
-     * As per {@link PersistenceSessionFactory#createPersistenceSession()}, but passing a
-     * {@link PersistenceSessionFactory} to act as the {@link PersistenceSession}'s
+     * As per {@link PersistenceSessionFactory#createPersistenceSession()}, but
+     * passing a {@link PersistenceSessionFactory} to act as the
+     * {@link PersistenceSession}'s
      * {@link PersistenceSession#getPersistenceSessionFactory() owning factory}.
      */
     PersistenceSession createPersistenceSession(PersistenceSessionFactory persistenceSessionFactory);

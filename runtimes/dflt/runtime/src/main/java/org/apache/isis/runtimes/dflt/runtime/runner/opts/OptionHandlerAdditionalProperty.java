@@ -39,9 +39,7 @@ public class OptionHandlerAdditionalProperty extends OptionHandlerAbstract {
     @Override
     @SuppressWarnings("static-access")
     public void addOption(final Options options) {
-        final Option option =
-            OptionBuilder.withArgName("property=value").hasArg().withValueSeparator()
-                .withDescription("use value for given property").create(ADDITIONAL_PROPERTY);
+        final Option option = OptionBuilder.withArgName("property=value").hasArg().withValueSeparator().withDescription("use value for given property").create(ADDITIONAL_PROPERTY);
         option.setArgs(Option.UNLIMITED_VALUES);
         options.addOption(option);
     }
@@ -57,8 +55,7 @@ public class OptionHandlerAdditionalProperty extends OptionHandlerAbstract {
         addConfigurationProperties(isisConfigurationBuilder, additionalProperties);
     }
 
-    private void addConfigurationProperties(final IsisConfigurationBuilder isisConfigurationBuilder,
-        final List<String> additionalProperties) {
+    private void addConfigurationProperties(final IsisConfigurationBuilder isisConfigurationBuilder, final List<String> additionalProperties) {
         if (additionalProperties == null) {
             return;
         }

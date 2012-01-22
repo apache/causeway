@@ -26,12 +26,12 @@ import org.apache.isis.runtimes.dflt.runtime.Isis;
 import org.apache.isis.runtimes.dflt.runtime.viewer.IsisViewer;
 
 /**
- * Implementation of a {@link IsisViewer} providing the ability to run from server as a {@link Isis command line}
- * application.
+ * Implementation of a {@link IsisViewer} providing the ability to run from
+ * server as a {@link Isis command line} application.
  * 
  * <p>
- * To run, use the <tt>--viewer serializing-sockets</tt> flag. The client-side should run using
- * <tt>--connector serializing-sockets</tt> flag.
+ * To run, use the <tt>--viewer serializing-sockets</tt> flag. The client-side
+ * should run using <tt>--connector serializing-sockets</tt> flag.
  */
 public class SerializingOverSocketsViewerInstaller extends SocketsViewerInstallerAbstract {
 
@@ -42,7 +42,8 @@ public class SerializingOverSocketsViewerInstaller extends SocketsViewerInstalle
     @Override
     protected void addConfigurationResources(final List<String> configurationResources) {
         super.addConfigurationResources(configurationResources);
-        // TODO: this (small) hack is because we don't load up the Protocol (Marshaller)
+        // TODO: this (small) hack is because we don't load up the Protocol
+        // (Marshaller)
         // and Transport using the installers.
         configurationResources.add("protocol.properties");
         configurationResources.add("protocol_serializing.properties");

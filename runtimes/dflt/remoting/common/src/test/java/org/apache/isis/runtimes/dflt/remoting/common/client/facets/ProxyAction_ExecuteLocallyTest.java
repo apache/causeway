@@ -89,9 +89,7 @@ public class ProxyAction_ExecuteLocallyTest {
             }
         });
 
-        proxy =
-            new ActionInvocationFacetWrapProxy(mockActionInvocationFacet, mockDistribution, mockEncoder,
-                mockObjectAction);
+        proxy = new ActionInvocationFacetWrapProxy(mockActionInvocationFacet, mockDistribution, mockEncoder, mockObjectAction);
 
     }
 

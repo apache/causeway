@@ -41,8 +41,7 @@ public class PersistenceQueryFindUsingApplibQueryDefault extends PersistenceQuer
     private final QueryCardinality cardinality;
     private final Map<String, ObjectAdapter> argumentsAdaptersByParameterName;
 
-    public PersistenceQueryFindUsingApplibQueryDefault(final ObjectSpecification specification, final String queryName,
-        final Map<String, ObjectAdapter> argumentsAdaptersByParameterName, final QueryCardinality cardinality) {
+    public PersistenceQueryFindUsingApplibQueryDefault(final ObjectSpecification specification, final String queryName, final Map<String, ObjectAdapter> argumentsAdaptersByParameterName, final QueryCardinality cardinality) {
         super(specification);
         this.queryName = queryName;
         this.cardinality = cardinality;

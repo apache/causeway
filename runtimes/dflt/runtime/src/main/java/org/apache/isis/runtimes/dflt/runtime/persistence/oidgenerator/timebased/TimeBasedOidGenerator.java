@@ -28,8 +28,8 @@ import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.simple.Sim
  * Generates {@link Oid}s based on the system clock.
  * 
  * <p>
- * The same algorithm and {@link Oid} implementation as {@link SimpleOidGenerator} is used; it just seeds with a
- * different value.
+ * The same algorithm and {@link Oid} implementation as
+ * {@link SimpleOidGenerator} is used; it just seeds with a different value.
  */
 public class TimeBasedOidGenerator extends SimpleOidGenerator {
 

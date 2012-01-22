@@ -39,8 +39,7 @@ public class PersistenceQueryFindByTitleEncoder extends PersistenceQueryEncoderA
     }
 
     @Override
-    protected PersistenceQuery doDecode(final ObjectSpecification specification,
-        final PersistenceQueryData persistenceQueryData) {
+    protected PersistenceQuery doDecode(final ObjectSpecification specification, final PersistenceQueryData persistenceQueryData) {
         final String title = (downcast(persistenceQueryData)).getTitle();
         return new PersistenceQueryFindByTitle(specification, title);
     }

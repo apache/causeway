@@ -29,7 +29,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class JsonStateReader implements StateReader {
-    // private static final Logger LOG = Logger.getLogger(FileStateReader.class);
+    // private static final Logger LOG =
+    // Logger.getLogger(FileStateReader.class);
     private JSONObject instance;
 
     public JsonStateReader(final String data) {
@@ -112,7 +113,7 @@ public class JsonStateReader implements StateReader {
             throw new NoSqlStoreException("failed to read field _encrypt", e);
         }
     }
-        
+
     @Override
     public String readUser() {
         return readRequiredField("_user");
@@ -136,7 +137,7 @@ public class JsonStateReader implements StateReader {
     public List<StateReader> readCollection(final String id) {
         final JSONArray array = instance.optJSONArray(id);
         final List<StateReader> readers = new ArrayList<StateReader>();
-        if (array !=null) {
+        if (array != null) {
             final int size = array.length();
             for (int i = 0; i < size; i++) {
                 readers.add(new JsonStateReader(array.optJSONObject(i)));

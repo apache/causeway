@@ -38,8 +38,7 @@ public class PersistenceQueryFindAllInstancesEncoder extends PersistenceQueryEnc
     }
 
     @Override
-    protected PersistenceQuery doDecode(final ObjectSpecification specification,
-        final PersistenceQueryData persistenceQueryData) {
+    protected PersistenceQuery doDecode(final ObjectSpecification specification, final PersistenceQueryData persistenceQueryData) {
         return new PersistenceQueryFindAllInstances(specification);
     }
 

@@ -28,8 +28,8 @@ import org.apache.isis.runtimes.dflt.runtime.systemdependencyinjector.SystemDepe
 import com.google.inject.Inject;
 
 /**
- * Implementation of {@link IsisSystemFactory} that uses {@link InstallerLookup} to convert the names of components into
- * actual component instances.
+ * Implementation of {@link IsisSystemFactory} that uses {@link InstallerLookup}
+ * to convert the names of components into actual component instances.
  */
 public class IsisSystemThatUsesInstallersFactory implements IsisSystemFactory {
 

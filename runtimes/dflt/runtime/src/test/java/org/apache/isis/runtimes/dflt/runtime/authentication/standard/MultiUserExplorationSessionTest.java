@@ -117,8 +117,7 @@ public class MultiUserExplorationSessionTest {
             }
         });
         authenticator = new ExplorationAuthenticator(mockConfiguration);
-        final AuthenticationSession authSession =
-            authenticator.authenticate(new AuthenticationRequestExploration(), "");
+        final AuthenticationSession authSession = authenticator.authenticate(new AuthenticationRequestExploration(), "");
 
         assertThat(authSession, is(MultiUserExplorationSession.class));
 
@@ -134,8 +133,7 @@ public class MultiUserExplorationSessionTest {
             }
         });
         authenticator = new ExplorationAuthenticator(mockConfiguration);
-        final AuthenticationSession authSession =
-            authenticator.authenticate(new AuthenticationRequestExploration(), "");
+        final AuthenticationSession authSession = authenticator.authenticate(new AuthenticationRequestExploration(), "");
         assertThat(authSession, is(SimpleSession.class));
 
         assertThat(authSession.getUserName(), is(equalTo("sven")));
@@ -151,8 +149,7 @@ public class MultiUserExplorationSessionTest {
         });
         authenticator = new ExplorationAuthenticator(mockConfiguration);
 
-        final AuthenticationSession authSession =
-            authenticator.authenticate(new AuthenticationRequestExploration(), "");
+        final AuthenticationSession authSession = authenticator.authenticate(new AuthenticationRequestExploration(), "");
         assertThat(authSession, is(ExplorationSession.class));
     }
 
@@ -165,8 +162,7 @@ public class MultiUserExplorationSessionTest {
             }
         });
         authenticator = new ExplorationAuthenticator(mockConfiguration);
-        this.session =
-            (MultiUserExplorationSession) authenticator.authenticate(new AuthenticationRequestExploration(), "");
+        this.session = (MultiUserExplorationSession) authenticator.authenticate(new AuthenticationRequestExploration(), "");
 
         final Set<String> availableSessions = session.getUserNames();
         Assert.assertEquals(4, availableSessions.size());
@@ -185,8 +181,7 @@ public class MultiUserExplorationSessionTest {
             }
         });
         authenticator = new ExplorationAuthenticator(mockConfiguration);
-        this.session =
-            (MultiUserExplorationSession) authenticator.authenticate(new AuthenticationRequestExploration(), "");
+        this.session = (MultiUserExplorationSession) authenticator.authenticate(new AuthenticationRequestExploration(), "");
 
         session.setCurrentSession("bob");
         Assert.assertEquals("bob", session.getUserName());
@@ -201,8 +196,7 @@ public class MultiUserExplorationSessionTest {
             }
         });
         authenticator = new ExplorationAuthenticator(mockConfiguration);
-        this.session =
-            (MultiUserExplorationSession) authenticator.authenticate(new AuthenticationRequestExploration(), "");
+        this.session = (MultiUserExplorationSession) authenticator.authenticate(new AuthenticationRequestExploration(), "");
 
         session.setCurrentSession("sven");
         final List<String> roles = session.getRoles();

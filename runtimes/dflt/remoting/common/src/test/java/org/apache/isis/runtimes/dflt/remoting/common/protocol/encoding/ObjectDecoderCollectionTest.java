@@ -49,7 +49,8 @@ public class ObjectDecoderCollectionTest extends ProxyJunit3TestCase {
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-        final FieldOrderCache fieldOrderCache = null; // TODO: should provide a mock here?
+        final FieldOrderCache fieldOrderCache = null; // TODO: should provide a
+                                                      // mock here?
         deserializer = new ObjectDeserializer(fieldOrderCache);
 
         final TestProxySpecification specification = system.getSpecification(Vector.class);
@@ -90,9 +91,7 @@ public class ObjectDecoderCollectionTest extends ProxyJunit3TestCase {
     public void testRecreateEmptyCollection() {
         final TestProxyOid collectionOid = new TestProxyOid(123);
         final ReferenceData[] elementData = null;
-        final CollectionData data =
-            new DummyCollectionData(collectionOid, Vector.class.getName(), TestPojo.class.getName(), elementData,
-                new TestProxyVersion());
+        final CollectionData data = new DummyCollectionData(collectionOid, Vector.class.getName(), TestPojo.class.getName(), elementData, new TestProxyVersion());
 
         final ObjectAdapter adapter = deserializer.deserialize(data);
 
@@ -111,9 +110,7 @@ public class ObjectDecoderCollectionTest extends ProxyJunit3TestCase {
         elements[1] = new DummyObjectData(element1Oid, TestPojo.class.getName(), false, new TestProxyVersion(7));
 
         final TestProxyOid collectionOid = new TestProxyOid(123);
-        final CollectionData data =
-            new DummyCollectionData(collectionOid, Vector.class.getName(), TestPojo.class.getName(), elements,
-                new TestProxyVersion());
+        final CollectionData data = new DummyCollectionData(collectionOid, Vector.class.getName(), TestPojo.class.getName(), elements, new TestProxyVersion());
 
         final ObjectAdapter adapter = deserializer.deserialize(data);
 

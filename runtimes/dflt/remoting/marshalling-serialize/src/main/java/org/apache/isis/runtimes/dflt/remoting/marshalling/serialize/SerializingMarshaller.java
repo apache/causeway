@@ -34,7 +34,6 @@ import org.apache.isis.runtimes.dflt.remoting.transport.ConnectionException;
 import org.apache.isis.runtimes.dflt.remoting.transport.Transport;
 import org.apache.log4j.Logger;
 
-
 public class SerializingMarshaller extends MarshallerAbstract {
 
     private static final Logger LOG = Logger.getLogger(SerializingMarshaller.class);
@@ -82,9 +81,11 @@ public class SerializingMarshaller extends MarshallerAbstract {
             }
             return object;
             /*
-             * } catch (StreamCorruptedException e) { try { int available = input.available();
-             * LOG.debug("error in reading; skipping bytes: " + available); input.skip(available); } catch (IOException
-             * e1) { e1.printStackTrace(); } throw new ConnectionException(e.getMessage(), e);
+             * } catch (StreamCorruptedException e) { try { int available =
+             * input.available(); LOG.debug("error in reading; skipping bytes: "
+             * + available); input.skip(available); } catch (IOException e1) {
+             * e1.printStackTrace(); } throw new
+             * ConnectionException(e.getMessage(), e);
              */
         } catch (final ClassNotFoundException e) {
             throw new ConnectionException("Failed request", e);

@@ -27,12 +27,15 @@ import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.runtimes.dflt.webapp.IsisSessionFilter;
 
 /**
- * Decouples the {@link IsisSessionFilter} from the mechanism of obtaining the {@link AuthenticationSession}.
+ * Decouples the {@link IsisSessionFilter} from the mechanism of obtaining the
+ * {@link AuthenticationSession}.
  */
 public interface AuthenticationSessionStrategy {
 
     /**
-     * Returns a {@link AuthenticationManager#isSessionValid(AuthenticationSession) still-valid} {@link AuthenticationSession}.
+     * Returns a
+     * {@link AuthenticationManager#isSessionValid(AuthenticationSession)
+     * still-valid} {@link AuthenticationSession}.
      */
     AuthenticationSession lookupValid(ServletRequest servletRequest, ServletResponse servletResponse);
 

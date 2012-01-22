@@ -51,14 +51,12 @@ public class DataFactoryDefault implements DataFactory {
     }
 
     @Override
-    public ObjectData createObjectData(final String type, final Oid oid, final boolean hasCompleteData,
-        final Version version) {
+    public ObjectData createObjectData(final String type, final Oid oid, final boolean hasCompleteData, final Version version) {
         return new ObjectDataImpl(oid, type, hasCompleteData, version);
     }
 
     @Override
-    public CollectionData createCollectionData(final String collectionType, final String elementType, final Oid oid,
-        final ReferenceData[] elements, final boolean hasAllElements, final Version version) {
+    public CollectionData createCollectionData(final String collectionType, final String elementType, final Oid oid, final ReferenceData[] elements, final boolean hasAllElements, final Version version) {
         return new CollectionDataImpl(oid, collectionType, elementType, elements, hasAllElements, version);
     }
 

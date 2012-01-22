@@ -47,23 +47,27 @@ public abstract class PersistAlgorithmAbstract implements PersistAlgorithm {
      * There are various reasons why an object should not be persisted:
      * <ul>
      * <li>it is already persisted
-     * <li>its {@link ObjectSpecification specification} indicates instances of its type should not be persisted.
+     * <li>its {@link ObjectSpecification specification} indicates instances of
+     * its type should not be persisted.
      * <li>it is {@link ResolveState#VALUE standalone}
      * <li>it is a {@link ObjectSpecification#isService() service}.
      * </ul>
      * 
      * <p>
-     * Implementation note: the only reason that this method has not been combined with the weaker check in
-     * {@link #alreadyPersistedOrNotPersistable(ObjectAdapter)} is because of existing code that throws an exception if
-     * the latter is not fulfilled. <b><i>REVIEW: should try to combine and remove the other method</i></b>.
+     * Implementation note: the only reason that this method has not been
+     * combined with the weaker check in
+     * {@link #alreadyPersistedOrNotPersistable(ObjectAdapter)} is because of
+     * existing code that throws an exception if the latter is not fulfilled.
+     * <b><i>REVIEW: should try to combine and remove the other method</i></b>.
      */
     protected boolean alreadyPersistedOrNotPersistableOrServiceOrStandalone(final ObjectAdapter adapter) {
         return objectIsStandalone(adapter) || objectSpecIsService(adapter) || alreadyPersistedOrNotPersistable(adapter);
     }
 
     /**
-     * If has a {@link ResolveState} that is already persisted or has a {@link ObjectSpecification specification} that
-     * indicates instances of its type should not be persisted.
+     * If has a {@link ResolveState} that is already persisted or has a
+     * {@link ObjectSpecification specification} that indicates instances of its
+     * type should not be persisted.
      * 
      * @see #alreadyPersistedOrNotPersistableOrServiceOrStandalone(ObjectAdapter)
      */
@@ -72,13 +76,12 @@ public abstract class PersistAlgorithmAbstract implements PersistAlgorithm {
     }
 
     /**
-     * As per {@link #alreadyPersistedOrNotPersistable(ObjectAdapter)}, ensures object can be persisted else throws
-     * {@link NotPersistableException}.
+     * As per {@link #alreadyPersistedOrNotPersistable(ObjectAdapter)}, ensures
+     * object can be persisted else throws {@link NotPersistableException}.
      */
     protected void assertObjectNotPersistentAndPersistable(final ObjectAdapter object) {
         if (alreadyPersistedOrNotPersistable(object)) {
-            throw new NotPersistableException("can't make object persistent - either already persistent, "
-                + "or transient only: " + object);
+            throw new NotPersistableException("can't make object persistent - either already persistent, " + "or transient only: " + object);
         }
     }
 

@@ -77,14 +77,11 @@ public class PersistenceSessionObjectStore extends PersistenceSessionAbstract im
     private final Map<String, Oid> services = new HashMap<String, Oid>();
 
     /**
-     * Initialize the object store so that calls to this object store access persisted objects and persist changes to
-     * the object that are saved.
+     * Initialize the object store so that calls to this object store access
+     * persisted objects and persist changes to the object that are saved.
      */
-    public PersistenceSessionObjectStore(final PersistenceSessionFactory persistenceSessionFactory,
-        final ObjectAdapterFactory adapterFactory, final ObjectFactory objectFactory,
-        final ServicesInjector servicesInjector, final OidGenerator oidGenerator,
-        final AdapterManagerExtended identityMap, final PersistAlgorithm persistAlgorithm,
-        final ObjectStorePersistence objectStore) {
+    public PersistenceSessionObjectStore(final PersistenceSessionFactory persistenceSessionFactory, final ObjectAdapterFactory adapterFactory, final ObjectFactory objectFactory, final ServicesInjector servicesInjector, final OidGenerator oidGenerator, final AdapterManagerExtended identityMap,
+            final PersistAlgorithm persistAlgorithm, final ObjectStorePersistence objectStore) {
 
         super(persistenceSessionFactory, adapterFactory, objectFactory, servicesInjector, oidGenerator, identityMap);
         if (LOG.isDebugEnabled()) {
@@ -120,12 +117,15 @@ public class PersistenceSessionObjectStore extends PersistenceSessionAbstract im
     }
 
     /**
-     * Returns the cached value of {@link ObjectStore#isFixturesInstalled() whether fixtures are installed} from the
-     * {@link PersistenceSessionFactory} (provided it implements {@link FixturesInstalledFlag}), otherwise queries
-     * {@link ObjectStore} directly.
+     * Returns the cached value of {@link ObjectStore#isFixturesInstalled()
+     * whether fixtures are installed} from the
+     * {@link PersistenceSessionFactory} (provided it implements
+     * {@link FixturesInstalledFlag}), otherwise queries {@link ObjectStore}
+     * directly.
      * <p>
-     * This caching is important because if we've determined, for a given run, that fixtures are not installed, then we
-     * don't want to change our mind by asking the object store again in another session.
+     * This caching is important because if we've determined, for a given run,
+     * that fixtures are not installed, then we don't want to change our mind by
+     * asking the object store again in another session.
      * 
      * @see FixturesInstalledFlag
      */
@@ -181,13 +181,12 @@ public class PersistenceSessionObjectStore extends PersistenceSessionAbstract im
     private ObjectAdapter loadObjectFromPersistenceLayer(final Oid oid, final ObjectSpecification hintSpec) {
         // the object store will map for us, using its hydrator (calls back
         // to #recreateAdapter)
-        return getTransactionManager().executeWithinTransaction(
-            new TransactionalClosureWithReturnAbstract<ObjectAdapter>() {
-                @Override
-                public ObjectAdapter execute() {
-                    return objectStore.getObject(oid, hintSpec);
-                }
-            });
+        return getTransactionManager().executeWithinTransaction(new TransactionalClosureWithReturnAbstract<ObjectAdapter>() {
+            @Override
+            public ObjectAdapter execute() {
+                return objectStore.getObject(oid, hintSpec);
+            }
+        });
     }
 
     /**
@@ -216,9 +215,9 @@ public class PersistenceSessionObjectStore extends PersistenceSessionAbstract im
             Assert.assertTrue("only resolve object that is persistent", adapter, adapter.isPersistent());
             resolveImmediatelyFromPersistenceLayer(adapter);
             if (LOG.isDebugEnabled()) {
-                // don't log object - its toString() may use the unresolved field, or unresolved collection
-                LOG.debug("resolved: " + adapter.getSpecification().getShortIdentifier() + " " + resolveState.code()
-                    + " " + adapter.getOid());
+                // don't log object - its toString() may use the unresolved
+                // field, or unresolved collection
+                LOG.debug("resolved: " + adapter.getSpecification().getShortIdentifier() + " " + resolveState.code() + " " + adapter.getOid());
             }
         }
     }
@@ -249,8 +248,7 @@ public class PersistenceSessionObjectStore extends PersistenceSessionAbstract im
 
     @Override
     public void resolveField(final ObjectAdapter objectAdapter, final ObjectAssociation field) {
-        if (field.isNotPersisted() || field.isOneToManyAssociation()
-            || field.getSpecification().isCollectionOrIsAggregated()) {
+        if (field.isNotPersisted() || field.isOneToManyAssociation() || field.getSpecification().isCollectionOrIsAggregated()) {
             return;
         }
         final ObjectAdapter referenceAdapter = field.get(objectAdapter);
@@ -263,9 +261,7 @@ public class PersistenceSessionObjectStore extends PersistenceSessionAbstract im
         if (LOG.isInfoEnabled()) {
             // don't log object - it's toString() may use the unresolved field
             // or unresolved collection
-            LOG.info("resolve field " + objectAdapter.getSpecification().getShortIdentifier() + "." + field.getId()
-                + ": " + referenceAdapter.getSpecification().getShortIdentifier() + " "
-                + referenceAdapter.getResolveState().code() + " " + referenceAdapter.getOid());
+            LOG.info("resolve field " + objectAdapter.getSpecification().getShortIdentifier() + "." + field.getId() + ": " + referenceAdapter.getSpecification().getShortIdentifier() + " " + referenceAdapter.getResolveState().code() + " " + referenceAdapter.getOid());
         }
         resolveFieldFromPersistenceLayer(objectAdapter, field);
     }
@@ -284,17 +280,20 @@ public class PersistenceSessionObjectStore extends PersistenceSessionAbstract im
     // ////////////////////////////////////////////////////////////////
 
     /**
-     * Makes an {@link ObjectAdapter} persistent. The specified object should be stored away via this object store's
-     * persistence mechanism, and have an new and unique OID assigned to it. The object, should also be added to the
-     * {@link AdapterManager} as the object is implicitly 'in use'.
+     * Makes an {@link ObjectAdapter} persistent. The specified object should be
+     * stored away via this object store's persistence mechanism, and have an
+     * new and unique OID assigned to it. The object, should also be added to
+     * the {@link AdapterManager} as the object is implicitly 'in use'.
      * 
      * <p>
-     * If the object has any associations then each of these, where they aren't already persistent, should also be made
-     * persistent by recursively calling this method.
+     * If the object has any associations then each of these, where they aren't
+     * already persistent, should also be made persistent by recursively calling
+     * this method.
      * 
      * <p>
-     * If the object to be persisted is a collection, then each element of that collection, that is not already
-     * persistent, should be made persistent by recursively calling this method.
+     * If the object to be persisted is a collection, then each element of that
+     * collection, that is not already persistent, should be made persistent by
+     * recursively calling this method.
      * 
      * @see #remapAsPersistent(ObjectAdapter)
      */
@@ -353,10 +352,12 @@ public class PersistenceSessionObjectStore extends PersistenceSessionAbstract im
         if (adapter.getResolveState().respondToChangesInPersistentObjects()) {
             if (isImmutable(adapter)) {
                 // previously used to throw
-                // new ObjectPersistenceException("cannot change immutable object");
+                // new
+                // ObjectPersistenceException("cannot change immutable object");
                 // however, since the the bytecode enhancers effectively make
                 // calling objectChanged() the responsibility of the framework,
-                // we may as well now do the check here and ignore if doesn't apply.
+                // we may as well now do the check here and ignore if doesn't
+                // apply.
                 return;
             }
 
@@ -406,8 +407,8 @@ public class PersistenceSessionObjectStore extends PersistenceSessionAbstract im
     // ///////////////////////////////////////////////////////////////////////////
 
     /**
-     * Removes the specified object from the system. The specified object's data should be removed from the persistence
-     * mechanism.
+     * Removes the specified object from the system. The specified object's data
+     * should be removed from the persistence mechanism.
      */
     @Override
     public void destroyObject(final ObjectAdapter adapter) {
@@ -430,8 +431,7 @@ public class PersistenceSessionObjectStore extends PersistenceSessionAbstract im
             @Override
             public void execute() {
                 if (adapter.getVersion() == null) {
-                    throw new ObjectPersistenceException(
-                        "Object to be deleted does not have a version (maybe it should be resolved first): " + adapter);
+                    throw new ObjectPersistenceException("Object to be deleted does not have a version (maybe it should be resolved first): " + adapter);
                 }
                 final DestroyObjectCommand command = objectStore.createDestroyObjectCommand(adapter);
                 getTransactionManager().addCommand(command);
@@ -454,21 +454,25 @@ public class PersistenceSessionObjectStore extends PersistenceSessionAbstract im
     // ///////////////////////////////////////////////////////////////////////////
 
     /**
-     * Callback from the {@link PersistAlgorithm} (or equivalent; some object stores such as Hibernate will use
-     * listeners instead) to indicate that the {@link ObjectAdapter adapter} is persisted, and the adapter maps should
+     * Callback from the {@link PersistAlgorithm} (or equivalent; some object
+     * stores such as Hibernate will use listeners instead) to indicate that the
+     * {@link ObjectAdapter adapter} is persisted, and the adapter maps should
      * be updated.
      * 
      * <p>
-     * The object store is expected to have already updated the {@link Oid} state and the {@link ResolveState} . Some
-     * object stores (again, we're thinking Hibernate here) might also have updated collections, both the Oid of the
-     * collection and the pojo wrapped by the adapter.
+     * The object store is expected to have already updated the {@link Oid}
+     * state and the {@link ResolveState} . Some object stores (again, we're
+     * thinking Hibernate here) might also have updated collections, both the
+     * Oid of the collection and the pojo wrapped by the adapter.
      * 
      * <p>
-     * The {@link PersistAlgorithm} is called from {@link #makePersistent(ObjectAdapter)}.
+     * The {@link PersistAlgorithm} is called from
+     * {@link #makePersistent(ObjectAdapter)}.
      * 
      * <p>
-     * TODO: the <tt>PersistenceSessionProxy</tt> doesn't have this method; should document better why this is the case,
-     * and where the equivalent functionality is (somewhere in the marshalling stuff, I think).
+     * TODO: the <tt>PersistenceSessionProxy</tt> doesn't have this method;
+     * should document better why this is the case, and where the equivalent
+     * functionality is (somewhere in the marshalling stuff, I think).
      * 
      * @see #remapAsPersistent(ObjectAdapter)
      */
@@ -490,18 +494,17 @@ public class PersistenceSessionObjectStore extends PersistenceSessionAbstract im
     }
 
     private ObjectAdapter[] getInstancesFromPersistenceLayer(final PersistenceQuery persistenceQuery) {
-        return getTransactionManager().executeWithinTransaction(
-            new TransactionalClosureWithReturnAbstract<ObjectAdapter[]>() {
-                @Override
-                public ObjectAdapter[] execute() {
-                    return objectStore.getInstances(persistenceQuery);
-                }
+        return getTransactionManager().executeWithinTransaction(new TransactionalClosureWithReturnAbstract<ObjectAdapter[]>() {
+            @Override
+            public ObjectAdapter[] execute() {
+                return objectStore.getInstances(persistenceQuery);
+            }
 
-                @Override
-                public void onSuccess() {
-                    clearAllDirty();
-                }
-            });
+            @Override
+            public void onSuccess() {
+                clearAllDirty();
+            }
+        });
     }
 
     // ///////////////////////////////////////////////////////////////////////////
@@ -509,9 +512,10 @@ public class PersistenceSessionObjectStore extends PersistenceSessionAbstract im
     // ///////////////////////////////////////////////////////////////////////////
 
     /**
-     * Checks whether there are any instances of the specified type. The object store should look for instances of the
-     * type represented by <variable>type </variable> and return <code>true</code> if there are, or <code>false</code>
-     * if there are not.
+     * Checks whether there are any instances of the specified type. The object
+     * store should look for instances of the type represented by <variable>type
+     * </variable> and return <code>true</code> if there are, or
+     * <code>false</code> if there are not.
      */
     @Override
     public boolean hasInstances(final ObjectSpecification specification) {
@@ -566,8 +570,10 @@ public class PersistenceSessionObjectStore extends PersistenceSessionAbstract im
     }
 
     /**
-     * Uses the {@link ObjectStore} to {@link ObjectStore#createCreateObjectCommand(ObjectAdapter) create} a
-     * {@link CreateObjectCommand}, and adds to the {@link IsisTransactionManager}.
+     * Uses the {@link ObjectStore} to
+     * {@link ObjectStore#createCreateObjectCommand(ObjectAdapter) create} a
+     * {@link CreateObjectCommand}, and adds to the
+     * {@link IsisTransactionManager}.
      */
     @Override
     public void addPersistedObject(final ObjectAdapter object) {

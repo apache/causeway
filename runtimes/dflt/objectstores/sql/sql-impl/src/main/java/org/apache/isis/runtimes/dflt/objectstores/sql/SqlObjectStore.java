@@ -22,8 +22,6 @@ package org.apache.isis.runtimes.dflt.objectstores.sql;
 import java.util.List;
 import java.util.Vector;
 
-import org.apache.log4j.Logger;
-
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.commons.exceptions.IsisException;
@@ -47,6 +45,7 @@ import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceQuery
 import org.apache.isis.runtimes.dflt.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.runtimes.dflt.runtime.system.transaction.MessageBroker;
 import org.apache.isis.runtimes.dflt.runtime.system.transaction.UpdateNotifier;
+import org.apache.log4j.Logger;
 
 public final class SqlObjectStore implements ObjectStore {
 
@@ -196,12 +195,12 @@ public final class SqlObjectStore implements ObjectStore {
                 LOG.debug("  save object " + object);
                 if (object.getSpecification().isCollectionOrIsAggregated()) {
 
-                    ObjectAdapter parent = object.getAggregateRoot();
+                    final ObjectAdapter parent = object.getAggregateRoot();
                     LOG.debug("change to internal collection being persisted through parent");
 
-                    Oid oid = object.getOid();
+                    final Oid oid = object.getOid();
                     if (oid instanceof AggregatedOid) {
-                        AggregatedOid aoid = (AggregatedOid) oid;
+                        final AggregatedOid aoid = (AggregatedOid) oid;
                         final ObjectMapping mapping2 = objectMappingLookup.getMapping(parent, connection);
 
                         if (mapping2.saveCollection(connection, parent, aoid.getId()) == false) {
@@ -212,19 +211,24 @@ public final class SqlObjectStore implements ObjectStore {
                     } else {
                         throw new NotYetImplementedException(object.toString());
                     }
-                    // / ObjectAssociation assoc = parent.getSpecification().getAssociation(aoid.getId());
+                    // / ObjectAssociation assoc =
+                    // parent.getSpecification().getAssociation(aoid.getId());
 
                     // / ObjectAdapter realObject = assoc.get(parent);
 
-                    // for (final CollectionMapper collectionMapper : collectionMappers) {
-                    // collectionMapper.saveInternalCollection(connector, object);
+                    // for (final CollectionMapper collectionMapper :
+                    // collectionMappers) {
+                    // collectionMapper.saveInternalCollection(connector,
+                    // object);
                     // }
                     // /}
 
-                    // TODO a better plan would be ask the mapper to save the collection
+                    // TODO a better plan would be ask the mapper to save the
+                    // collection
                     // -saveCollection(parent,collection)
 
-                    // mapperLookup.getMapper(connection, parent).save(connection, parent);
+                    // mapperLookup.getMapper(connection,
+                    // parent).save(connection, parent);
                     // connectionPool.release(connection);
 
                     // throw new NotYetImplementedException(object.toString());
@@ -276,8 +280,7 @@ public final class SqlObjectStore implements ObjectStore {
         final IsisTransactionManager transactionManager = IsisContext.getTransactionManager();
         final MessageBroker messageBroker = IsisContext.getMessageBroker();
         final UpdateNotifier updateNotifier = IsisContext.getUpdateNotifier();
-        final SqlExecutionContext context =
-            new SqlExecutionContext(connector, transactionManager, messageBroker, updateNotifier);
+        final SqlExecutionContext context = new SqlExecutionContext(connector, transactionManager, messageBroker, updateNotifier);
         try {
             for (final PersistenceCommand command : commands) {
                 command.execute(context);
@@ -325,18 +328,17 @@ public final class SqlObjectStore implements ObjectStore {
         return instanceArray;
     }
 
-    private void addSpecQueryInstances(ObjectSpecification specification, DatabaseConnector connector,
-        PersistenceQueryFindByPattern query, Vector<ObjectAdapter> matchingInstances) {
+    private void addSpecQueryInstances(final ObjectSpecification specification, final DatabaseConnector connector, final PersistenceQueryFindByPattern query, final Vector<ObjectAdapter> matchingInstances) {
 
         if (specification.isAbstract() == false) {
             final ObjectMapping mapper = objectMappingLookup.getMapping(specification, connector);
-            Vector<ObjectAdapter> instances = mapper.getInstances(connector, specification, query);
+            final Vector<ObjectAdapter> instances = mapper.getInstances(connector, specification, query);
             matchingInstances.addAll(instances);
 
         }
         if (specification.hasSubclasses()) {
             final List<ObjectSpecification> subclasses = specification.subclasses();
-            for (ObjectSpecification subclassSpec : subclasses) {
+            for (final ObjectSpecification subclassSpec : subclasses) {
                 addSpecQueryInstances(subclassSpec, connector, query, matchingInstances);
             }
         }
@@ -360,8 +362,7 @@ public final class SqlObjectStore implements ObjectStore {
         return instanceArray;
     }
 
-    private void addSpecInstances(ObjectSpecification spec, DatabaseConnector connector,
-        Vector<ObjectAdapter> matchingInstances) {
+    private void addSpecInstances(final ObjectSpecification spec, final DatabaseConnector connector, final Vector<ObjectAdapter> matchingInstances) {
 
         if (spec.isAbstract() == false) {
             final ObjectMapping mapper = objectMappingLookup.getMapping(spec, connector);
@@ -371,7 +372,7 @@ public final class SqlObjectStore implements ObjectStore {
 
         if (spec.hasSubclasses()) {
             final List<ObjectSpecification> subclasses = spec.subclasses();
-            for (ObjectSpecification subclassSpec : subclasses) {
+            for (final ObjectSpecification subclassSpec : subclasses) {
                 addSpecInstances(subclassSpec, connector, matchingInstances);
             }
         }

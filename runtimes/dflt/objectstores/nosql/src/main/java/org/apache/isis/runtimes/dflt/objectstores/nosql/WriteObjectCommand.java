@@ -41,12 +41,7 @@ class WriteObjectCommand implements PersistenceCommand {
     private final DataEncryption dataEncrypter;
     private final boolean isUpdate;
 
-    WriteObjectCommand(
-            final boolean isUpdate,
-            final KeyCreator keyCreator,
-            final VersionCreator versionCreator,
-            final DataEncryption dataEncrypter,
-            final ObjectAdapter object) {
+    WriteObjectCommand(final boolean isUpdate, final KeyCreator keyCreator, final VersionCreator versionCreator, final DataEncryption dataEncrypter, final ObjectAdapter object) {
         this.isUpdate = isUpdate;
         this.keyCreator = keyCreator;
         this.versionCreator = versionCreator;
@@ -64,8 +59,7 @@ class WriteObjectCommand implements PersistenceCommand {
         final String user = IsisContext.getAuthenticationSession().getUserName();
 
         final Version currentVersion = object.getVersion();
-        final Version newVersion =
-            isUpdate ? versionCreator.nextVersion(currentVersion) : versionCreator.newVersion(user);
+        final Version newVersion = isUpdate ? versionCreator.nextVersion(currentVersion) : versionCreator.newVersion(user);
         object.setOptimisticLock(newVersion);
         if (newVersion != null) {
             final String version = currentVersion == null ? null : versionCreator.versionString(currentVersion);
@@ -103,8 +97,7 @@ class WriteObjectCommand implements PersistenceCommand {
         }
     }
 
-    private void writeAggregatedObject(final StateWriter writer, final ObjectAssociation association,
-        final ObjectAdapter field, final KeyCreator keyCreator) {
+    private void writeAggregatedObject(final StateWriter writer, final ObjectAssociation association, final ObjectAdapter field, final KeyCreator keyCreator) {
         if (field == null) {
             writer.writeField(association.getId(), null);
         } else if (field.getOid() instanceof AggregatedOid) {
@@ -113,13 +106,11 @@ class WriteObjectCommand implements PersistenceCommand {
             aggregateWriter.writeId(((AggregatedOid) field.getOid()).getId());
             writeFields(aggregateWriter, specName, field);
         } else {
-            throw new NoSqlStoreException("Object type is inconsistent with it OID - it should have an AggregatedOid: "
-                + field);
+            throw new NoSqlStoreException("Object type is inconsistent with it OID - it should have an AggregatedOid: " + field);
         }
     }
 
-    private void writeReference(final StateWriter writer, final ObjectAssociation association,
-        final ObjectAdapter reference, final KeyCreator keyCreator) {
+    private void writeReference(final StateWriter writer, final ObjectAssociation association, final ObjectAdapter reference, final KeyCreator keyCreator) {
         if (reference == null) {
             writer.writeField(association.getId(), null);
         } else {
@@ -135,13 +126,12 @@ class WriteObjectCommand implements PersistenceCommand {
         } else {
             final EncodableFacet encodeableFacet = value.getSpecification().getFacet(EncodableFacet.class);
             data = encodeableFacet.toEncodedString(value);
-            data  = dataEncrypter.encrypt(data);
+            data = dataEncrypter.encrypt(data);
         }
         writer.writeField(association.getId(), data);
     }
 
-    private void writeCollection(final StateWriter writer, final ObjectAssociation association,
-        final ObjectAdapter collection, final KeyCreator keyCreator) {
+    private void writeCollection(final StateWriter writer, final ObjectAssociation association, final ObjectAdapter collection, final KeyCreator keyCreator) {
         final CollectionFacet collectionFacet = collection.getSpecification().getFacet(CollectionFacet.class);
         if (association.getSpecification().isAggregated()) {
             final List<StateWriter> elements = new ArrayList<StateWriter>();
@@ -156,9 +146,7 @@ class WriteObjectCommand implements PersistenceCommand {
             String refs = "";
             for (final ObjectAdapter element : collectionFacet.iterable(collection)) {
                 if (element.isAggregated()) {
-                    throw new DomainModelException(
-                        "Can't store an aggregated object within a collection that is not exoected aggregates: "
-                            + element + " (" + collection + ")");
+                    throw new DomainModelException("Can't store an aggregated object within a collection that is not exoected aggregates: " + element + " (" + collection + ")");
                 }
                 refs += keyCreator.reference(element) + "|";
             }

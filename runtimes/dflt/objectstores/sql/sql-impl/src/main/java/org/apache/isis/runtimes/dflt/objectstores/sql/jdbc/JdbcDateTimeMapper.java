@@ -35,8 +35,8 @@ public class JdbcDateTimeMapper extends AbstractJdbcFieldMapping {
 
     public static class Factory extends AbstractFieldMappingFactory {
         @Override
-        public FieldMapping createFieldMapping(ObjectSpecification object, final ObjectAssociation field) {
-            String dataType = getTypeOverride(object, field, Defaults.TYPE_DATETIME());
+        public FieldMapping createFieldMapping(final ObjectSpecification object, final ObjectAssociation field) {
+            final String dataType = getTypeOverride(object, field, Defaults.TYPE_DATETIME());
             return new JdbcDateTimeMapper(field, dataType);
         }
     }

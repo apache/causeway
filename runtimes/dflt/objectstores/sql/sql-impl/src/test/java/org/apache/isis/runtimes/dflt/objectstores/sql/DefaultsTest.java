@@ -21,17 +21,16 @@ package org.apache.isis.runtimes.dflt.objectstores.sql;
 
 import static org.hamcrest.Matchers.is;
 
-import org.junit.Assert;
-import org.junit.Test;
-
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
+import org.junit.Assert;
+import org.junit.Test;
 
 public class DefaultsTest {
     @Test
     public void tablePrefixDefaultsTo_Isis() {
         final String prefix = "isis.persistor.sql";
-        IsisConfiguration config = new IsisConfigurationDefault();
+        final IsisConfiguration config = new IsisConfigurationDefault();
         Defaults.initialise(prefix, config);
         Assert.assertThat(Defaults.getTablePrefix(), is("isis_"));
     }
@@ -40,7 +39,7 @@ public class DefaultsTest {
     public void tablePrefixCanBeReplaced() {
         final String prefix = "isis.persistor.sql";
         final String key = "isis.persistor.sql.default.tableprefix";
-        IsisConfigurationDefault config = new IsisConfigurationDefault();
+        final IsisConfigurationDefault config = new IsisConfigurationDefault();
         config.add(key, "");
         Defaults.initialise(prefix, config);
         Assert.assertThat(Defaults.getTablePrefix(), is(""));

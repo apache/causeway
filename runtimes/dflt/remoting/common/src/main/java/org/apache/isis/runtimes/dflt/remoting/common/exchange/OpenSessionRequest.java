@@ -75,7 +75,8 @@ public class OpenSessionRequest extends RequestAbstract {
     // ///////////////////////////////////////////////////////
 
     /**
-     * {@link #setResponse(Object) Sets a response} of an {@link AuthenticationSession}.
+     * {@link #setResponse(Object) Sets a response} of an
+     * {@link AuthenticationSession}.
      */
     @Override
     public void execute(final ServerFacade serverFacade) {

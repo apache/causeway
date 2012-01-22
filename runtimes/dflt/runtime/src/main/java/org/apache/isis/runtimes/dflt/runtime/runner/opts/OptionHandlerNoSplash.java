@@ -53,7 +53,8 @@ public class OptionHandlerNoSplash extends OptionHandlerAbstract {
         if (noSplash) {
             isisConfigurationBuilder.add(SystemConstants.NOSPLASH_KEY, "true");
         }
-        // configurationBuilder.add(SystemConstants.NOSPLASH_KEY, noSplash ? "true" : "false");
+        // configurationBuilder.add(SystemConstants.NOSPLASH_KEY, noSplash ?
+        // "true" : "false");
     }
 
 }

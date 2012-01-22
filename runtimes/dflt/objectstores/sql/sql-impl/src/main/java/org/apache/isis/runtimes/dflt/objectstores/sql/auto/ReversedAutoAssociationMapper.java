@@ -23,8 +23,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.log4j.Logger;
-
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
@@ -41,16 +39,19 @@ import org.apache.isis.runtimes.dflt.objectstores.sql.VersionMapping;
 import org.apache.isis.runtimes.dflt.objectstores.sql.mapping.FieldMapping;
 import org.apache.isis.runtimes.dflt.objectstores.sql.mapping.ObjectReferenceMapping;
 import org.apache.isis.runtimes.dflt.runtime.persistence.PersistorUtil;
+import org.apache.log4j.Logger;
 
-/** used where there is a one to many association, and the elements are only known to parent */
+/**
+ * used where there is a one to many association, and the elements are only
+ * known to parent
+ */
 public class ReversedAutoAssociationMapper extends AbstractAutoMapper implements CollectionMapper {
     private static final Logger LOG = Logger.getLogger(ReversedAutoAssociationMapper.class);
     private final ObjectAssociation field;
     private final ObjectReferenceMapping idMapping;
     private final VersionMapping versionMapping;
 
-    public ReversedAutoAssociationMapper(final String elemenType, final ObjectAssociation field,
-        final String parameterBase, final FieldMappingLookup lookup, final ObjectMappingLookup objectLookup) {
+    public ReversedAutoAssociationMapper(final String elemenType, final ObjectAssociation field, final String parameterBase, final FieldMappingLookup lookup, final ObjectMappingLookup objectLookup) {
         super(elemenType, parameterBase, lookup, objectLookup);
 
         this.field = field;
@@ -86,8 +87,7 @@ public class ReversedAutoAssociationMapper extends AbstractAutoMapper implements
     }
 
     @Override
-    public void loadInternalCollection(final DatabaseConnector connector, final ObjectAdapter parent,
-        final boolean makeResolved) {
+    public void loadInternalCollection(final DatabaseConnector connector, final ObjectAdapter parent, final boolean makeResolved) {
         final ObjectAdapter collection = field.get(parent);
         if (collection.getResolveState().canChangeTo(ResolveState.RESOLVING)) {
             LOG.debug("loading internal collection " + field);
@@ -124,8 +124,8 @@ public class ReversedAutoAssociationMapper extends AbstractAutoMapper implements
             mapping.initializeField(object, rs);
         }
         /*
-         * for (int i = 0; i < oneToManyProperties.length; i++) { /* Need to set up collection to be a ghost before we
-         * access as below
+         * for (int i = 0; i < oneToManyProperties.length; i++) { /* Need to set
+         * up collection to be a ghost before we access as below
          */
         // CollectionAdapter collection = (CollectionAdapter)
         /*
@@ -148,8 +148,7 @@ public class ReversedAutoAssociationMapper extends AbstractAutoMapper implements
         reinsertElements(connector, parent, collection);
     }
 
-    private void reinsertElements(final DatabaseConnector connector, final ObjectAdapter parent,
-        final ObjectAdapter collection) {
+    private void reinsertElements(final DatabaseConnector connector, final ObjectAdapter parent, final ObjectAdapter collection) {
         final StringBuffer sql = new StringBuffer();
         sql.append("insert into " + table + " (");
         idMapping.appendColumnNames(sql);

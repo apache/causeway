@@ -46,7 +46,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 /**
- * TODO: remove dependency on {@link TestProxySystemII} and move back to runtime.
+ * TODO: remove dependency on {@link TestProxySystemII} and move back to
+ * runtime.
  */
 public class ObjectFixtureFilePersistorTest {
 
@@ -73,8 +74,7 @@ public class ObjectFixtureFilePersistorTest {
 
     @Test
     public void loadInstance() throws Exception {
-        final StringReader reader =
-            new StringReader(PACKAGE_BASE + ".testdomain.Person#1\n  name: Fred Smith\n  date: 08-Mar-2010 00:00");
+        final StringReader reader = new StringReader(PACKAGE_BASE + ".testdomain.Person#1\n  name: Fred Smith\n  date: 08-Mar-2010 00:00");
         final Set<Object> objects = persistor.loadData(reader);
 
         Assert.assertEquals(1, objects.size());
@@ -122,8 +122,7 @@ public class ObjectFixtureFilePersistorTest {
         final StringWriter out = new StringWriter();
         persistor.save(objects, out);
         final String string1 = PACKAGE_BASE + ".testdomain.Person#2\n  date: 08-Mar-2010 00:00\n  name: Fred Smith\n";
-        final String string2 =
-            PACKAGE_BASE + ".testdomain.Person#2\r\n  date: 08-Mar-2010 00:00\r\n  name: Fred Smith\r\n";
+        final String string2 = PACKAGE_BASE + ".testdomain.Person#2\r\n  date: 08-Mar-2010 00:00\r\n  name: Fred Smith\r\n";
         // *nix vs Windows?
         if ((out.toString().compareTo(string1) != 0) && (out.toString().compareTo(string2) != 0)) {
             Assert.assertEquals(string1, out.toString());
@@ -154,12 +153,8 @@ public class ObjectFixtureFilePersistorTest {
         persistor.save(objects, out);
 
         // *nix vs Windows?
-        final String string1 =
-            PACKAGE_BASE + ".testdomain.Person#2\n  date: 08-Mar-2010 00:00\n  name: Fred Smith\n" + PACKAGE_BASE
-                + ".testdomain.Person#3\n  date: \n  name: \n";
-        final String string2 =
-            PACKAGE_BASE + ".testdomain.Person#2\r\n  date: 08-Mar-2010 00:00\r\n  name: Fred Smith\r\n" + PACKAGE_BASE
-                + ".testdomain.Person#3\r\n  date: \r\n  name: \r\n";
+        final String string1 = PACKAGE_BASE + ".testdomain.Person#2\n  date: 08-Mar-2010 00:00\n  name: Fred Smith\n" + PACKAGE_BASE + ".testdomain.Person#3\n  date: \n  name: \n";
+        final String string2 = PACKAGE_BASE + ".testdomain.Person#2\r\n  date: 08-Mar-2010 00:00\r\n  name: Fred Smith\r\n" + PACKAGE_BASE + ".testdomain.Person#3\r\n  date: \r\n  name: \r\n";
         if ((out.toString().compareTo(string1) != 0) && (out.toString().compareTo(string2) != 0)) {
             Assert.assertEquals(string1, out.toString());
         }
@@ -188,14 +183,8 @@ public class ObjectFixtureFilePersistorTest {
 
         final StringWriter out = new StringWriter();
         persistor.save(objects, out);
-        final String string1 =
-            PACKAGE_BASE + ".testdomain.Movie#2\n  director: " + PACKAGE_BASE
-                + ".testdomain.Person#3\n  name: The Blockbuster\n  roles: \n" + PACKAGE_BASE
-                + ".testdomain.Person#3\n  date: 08-Mar-2010 00:00\n  name: Fred Smith\n";
-        final String string2 =
-            PACKAGE_BASE + ".testdomain.Movie#2\r\n  director: " + PACKAGE_BASE
-                + ".testdomain.Person#3\r\n  name: The Blockbuster\r\n  roles: \r\n" + PACKAGE_BASE
-                + ".testdomain.Person#3\r\n  date: 08-Mar-2010 00:00\r\n  name: Fred Smith\r\n";
+        final String string1 = PACKAGE_BASE + ".testdomain.Movie#2\n  director: " + PACKAGE_BASE + ".testdomain.Person#3\n  name: The Blockbuster\n  roles: \n" + PACKAGE_BASE + ".testdomain.Person#3\n  date: 08-Mar-2010 00:00\n  name: Fred Smith\n";
+        final String string2 = PACKAGE_BASE + ".testdomain.Movie#2\r\n  director: " + PACKAGE_BASE + ".testdomain.Person#3\r\n  name: The Blockbuster\r\n  roles: \r\n" + PACKAGE_BASE + ".testdomain.Person#3\r\n  date: 08-Mar-2010 00:00\r\n  name: Fred Smith\r\n";
         if ((out.toString().compareTo(string1) != 0) && (out.toString().compareTo(string2) != 0)) {
             Assert.assertEquals(string1, out.toString());
         }

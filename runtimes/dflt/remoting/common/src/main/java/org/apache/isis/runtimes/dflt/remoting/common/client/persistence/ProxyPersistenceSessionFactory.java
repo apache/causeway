@@ -25,8 +25,7 @@ import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
 
 public class ProxyPersistenceSessionFactory extends PersistenceSessionFactoryDelegating {
 
-    public ProxyPersistenceSessionFactory(final DeploymentType deploymentType,
-        final PersistenceSessionFactoryDelegate persistenceSessionFactoryDelegate) {
+    public ProxyPersistenceSessionFactory(final DeploymentType deploymentType, final PersistenceSessionFactoryDelegate persistenceSessionFactoryDelegate) {
         super(deploymentType, persistenceSessionFactoryDelegate);
     }
 

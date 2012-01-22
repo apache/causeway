@@ -33,7 +33,8 @@ import org.apache.isis.runtimes.dflt.runtime.system.persistence.OidGenerator;
  * Generates OIDs based on monotonically.
  * 
  * <p>
- * Specifies the {@link OidStringifierDirect} as the {@link #getOidStringifier() OID stringifier} ({@link SerialOid} is
+ * Specifies the {@link OidStringifierDirect} as the
+ * {@link #getOidStringifier() OID stringifier} ({@link SerialOid} is
  * conformant)).
  */
 public class SimpleOidGenerator extends OidGeneratorAbstract {
@@ -69,8 +70,8 @@ public class SimpleOidGenerator extends OidGeneratorAbstract {
     }
 
     /**
-     * Persistent {@link Oid}s count up from the provided seed parameter, while {@link Oid#isTransient()} transient
-     * {@link Oid}s count down.
+     * Persistent {@link Oid}s count up from the provided seed parameter, while
+     * {@link Oid#isTransient()} transient {@link Oid}s count down.
      */
     public SimpleOidGenerator(final long seed) {
         this(seed, Long.MIN_VALUE + seed);
@@ -101,7 +102,8 @@ public class SimpleOidGenerator extends OidGeneratorAbstract {
 
     @Override
     public synchronized SerialOid createTransientOid(final Object object) {
-        return SerialOid.createTransient(transientSerialNumber--); // counts down
+        return SerialOid.createTransient(transientSerialNumber--); // counts
+                                                                   // down
     }
 
     @Override
@@ -131,8 +133,8 @@ public class SimpleOidGenerator extends OidGeneratorAbstract {
      * Reset to a {@link Memento} previously obtained via {@link #getMemento()}.
      * 
      * <p>
-     * Used in particular by the <tt>InMemoryObjectStore</tt> to reset (a new {@link OidGenerator} is created each
-     * time).
+     * Used in particular by the <tt>InMemoryObjectStore</tt> to reset (a new
+     * {@link OidGenerator} is created each time).
      */
     public void resetTo(final Memento memento) {
         this.persistentSerialNumber = memento.getPersistentSerialNumber();

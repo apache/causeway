@@ -35,8 +35,8 @@ public class DataFileReader {
     private final String version;
 
     /**
-     * Opens the file for the specified id. The top line contains: type id version newline The remainder contains the
-     * data.
+     * Opens the file for the specified id. The top line contains: type id
+     * version newline The remainder contains the data.
      */
     public DataFileReader(final String type, final String id) throws IOException {
         final File file = Util.dataFile(type, id);
@@ -48,8 +48,7 @@ public class DataFileReader {
         final String[] split = line.split(" ");
         this.id = split[1];
         if (!id.equals(id)) {
-            throw new FileServerException("Id in file (" + this.id + ") not the same as the file name: "
-                + file.getAbsolutePath());
+            throw new FileServerException("Id in file (" + this.id + ") not the same as the file name: " + file.getAbsolutePath());
         }
         version = split[2];
     }

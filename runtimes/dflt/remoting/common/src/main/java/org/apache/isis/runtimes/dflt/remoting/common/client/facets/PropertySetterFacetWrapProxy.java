@@ -38,25 +38,26 @@ import org.apache.isis.runtimes.dflt.runtime.persistence.ConcurrencyException;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 
 /**
- * A reflection peer for changing one-to-many fields remotely, instead of on the local machine. Any requests to add or
- * remove elements from the field will be passed over the network to the server for completion. Only requests on
- * persistent objects are passed to the server; on a transient object the request will always be dealt with locally.
+ * A reflection peer for changing one-to-many fields remotely, instead of on the
+ * local machine. Any requests to add or remove elements from the field will be
+ * passed over the network to the server for completion. Only requests on
+ * persistent objects are passed to the server; on a transient object the
+ * request will always be dealt with locally.
  * 
  * <p>
- * If any of the objects involved have been changed on the server by another process then a ConcurrencyException will be
- * passed back to the client and re-thrown.
+ * If any of the objects involved have been changed on the server by another
+ * process then a ConcurrencyException will be passed back to the client and
+ * re-thrown.
  * </p>
  */
-public final class PropertySetterFacetWrapProxy extends PropertySetterFacetAbstract implements
-    DecoratingFacet<PropertySetterFacet> {
+public final class PropertySetterFacetWrapProxy extends PropertySetterFacetAbstract implements DecoratingFacet<PropertySetterFacet> {
 
     private final ServerFacade serverFacade;
     private final ObjectEncoderDecoder encoder;
     private final PropertySetterFacet underlyingFacet;
     private final String name;
 
-    public PropertySetterFacetWrapProxy(final PropertySetterFacet underlyingFacet, final ServerFacade distribution,
-        final ObjectEncoderDecoder encoder, final String name) {
+    public PropertySetterFacetWrapProxy(final PropertySetterFacet underlyingFacet, final ServerFacade distribution, final ObjectEncoderDecoder encoder, final String name) {
         super(underlyingFacet.getFacetHolder());
         this.underlyingFacet = underlyingFacet;
         this.serverFacade = distribution;
@@ -81,15 +82,12 @@ public final class PropertySetterFacetWrapProxy extends PropertySetterFacetAbstr
                     ObjectData[] updates;
                     if (!associatedSpec.isValueOrIsAggregated()) {
                         final IdentityData associateReference = encoder.encodeIdentityData(associateAdapter);
-                        final SetAssociationRequest request =
-                            new SetAssociationRequest(getAuthenticationSession(), name, targetReference,
-                                associateReference);
+                        final SetAssociationRequest request = new SetAssociationRequest(getAuthenticationSession(), name, targetReference, associateReference);
                         final SetAssociationResponse response = serverFacade.setAssociation(request);
                         updates = response.getUpdates();
                     } else {
                         final EncodableObjectData val = encoder.encodeAsValue(associateAdapter);
-                        final SetValueRequest request =
-                            new SetValueRequest(getAuthenticationSession(), name, targetReference, val);
+                        final SetValueRequest request = new SetValueRequest(getAuthenticationSession(), name, targetReference, val);
                         final SetValueResponse response = serverFacade.setValue(request);
                         updates = response.getUpdates();
                     }

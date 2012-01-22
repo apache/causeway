@@ -64,8 +64,7 @@ public final class SerialOid implements Encodable, Serializable, DirectlyStringa
 
     private static final String ENSTRING_SERIAL_NUM_PREFIX = ":";
     private static final String ENSTRING_PREVIOUS_CONCAT = "~";
-    private static Pattern DESTRING_PATTERN = Pattern.compile("^(T?)OID" + ENSTRING_SERIAL_NUM_PREFIX
-        + "(-?[0-9A-F]+)(" + ENSTRING_PREVIOUS_CONCAT + "(T?)OID" + ENSTRING_SERIAL_NUM_PREFIX + "(-?[0-9A-F]+))?$");
+    private static Pattern DESTRING_PATTERN = Pattern.compile("^(T?)OID" + ENSTRING_SERIAL_NUM_PREFIX + "(-?[0-9A-F]+)(" + ENSTRING_PREVIOUS_CONCAT + "(T?)OID" + ENSTRING_SERIAL_NUM_PREFIX + "(-?[0-9A-F]+))?$");
 
     // ////////////////////////////////////////////
     // Constructor
@@ -119,8 +118,7 @@ public final class SerialOid implements Encodable, Serializable, DirectlyStringa
     public static SerialOid deString(final String oidStr) {
         final Matcher matcher = DESTRING_PATTERN.matcher(oidStr);
         if (!matcher.matches()) {
-            throw new IllegalArgumentException("Could not parse OID '" + oidStr + "'; should match pattern: "
-                + DESTRING_PATTERN.toString());
+            throw new IllegalArgumentException("Could not parse OID '" + oidStr + "'; should match pattern: " + DESTRING_PATTERN.toString());
         }
 
         final String transientStr = matcher.group(1);
@@ -145,14 +143,16 @@ public final class SerialOid implements Encodable, Serializable, DirectlyStringa
     }
 
     /**
-     * Returns a well-defined format which can be converted back using {@link #deString(String)}.
+     * Returns a well-defined format which can be converted back using
+     * {@link #deString(String)}.
      * 
      * <p>
      * The options are:
      * <ul>
-     * <li>For transient with no previous: <tt>TOID#12AB</tt> where the initial T indicates transient and after the # is
-     * the serial number in hex.</li>
-     * <li>For persistent with previous: <tt>OID#12ED+TOID#12AB</tt> where after the + is the previous OID, encoded</li>
+     * <li>For transient with no previous: <tt>TOID#12AB</tt> where the initial
+     * T indicates transient and after the # is the serial number in hex.</li>
+     * <li>For persistent with previous: <tt>OID#12ED+TOID#12AB</tt> where after
+     * the + is the previous OID, encoded</li>
      * <li>For persistent with no previous: <tt>OID#12ED</tt>.</li>
      * 
      * @see DirectlyStringableOid
@@ -239,7 +239,8 @@ public final class SerialOid implements Encodable, Serializable, DirectlyStringa
         hashCode = 37 * hashCode + (int) (serialNo ^ (serialNo >>> 32));
         hashCode = 37 * hashCode + (isTransient() ? 0 : 1);
         toString = asString(this, TOSTRING_SERIAL_NUM_PREFIX) + (previous == null ? "" : TOSTRING_PREVIOUS_CONCAT);
-        // enString = asString(this, ENSTRING_SERIAL_NUM_PREFIX) + (previous == null ? "" : ENSTRING_PREVIOUS_CONCAT +
+        // enString = asString(this, ENSTRING_SERIAL_NUM_PREFIX) + (previous ==
+        // null ? "" : ENSTRING_PREVIOUS_CONCAT +
         // asString(previous, ENSTRING_SERIAL_NUM_PREFIX));
         enString = asString(this, ENSTRING_SERIAL_NUM_PREFIX);
     }
@@ -249,7 +250,8 @@ public final class SerialOid implements Encodable, Serializable, DirectlyStringa
     }
 
     /*
-     * public void setPrevious(SerialOid previous) { Assert.assertNull(previous); this.previous = previous; }
+     * public void setPrevious(SerialOid previous) {
+     * Assert.assertNull(previous); this.previous = previous; }
      */
 
     @Override
@@ -267,8 +269,9 @@ public final class SerialOid implements Encodable, Serializable, DirectlyStringa
     }
 
     /**
-     * Overloaded to allow compiler to link directly if we know the compile-time type. (possible performance improvement
-     * - called 166,000 times in normal ref data fixture.
+     * Overloaded to allow compiler to link directly if we know the compile-time
+     * type. (possible performance improvement - called 166,000 times in normal
+     * ref data fixture.
      */
     public boolean equals(final SerialOid other) {
         return other.serialNo == serialNo && other.state == state;

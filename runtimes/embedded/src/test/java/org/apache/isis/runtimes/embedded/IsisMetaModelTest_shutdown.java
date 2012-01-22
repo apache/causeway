@@ -26,8 +26,6 @@ import org.apache.isis.core.metamodel.facetdecorator.FacetDecorator;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.specloader.classsubstitutor.ClassSubstitutor;
 import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistry;
-import org.apache.isis.runtimes.embedded.dom.claim.ClaimRepositoryImpl;
-import org.apache.isis.runtimes.embedded.dom.employee.EmployeeRepositoryImpl;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JMock;
 import org.jmock.integration.junit4.JUnit4Mockery;

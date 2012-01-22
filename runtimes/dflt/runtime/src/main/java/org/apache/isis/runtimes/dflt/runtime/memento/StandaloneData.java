@@ -82,8 +82,7 @@ public class StandaloneData extends Data {
             return;
         }
 
-        throw new IllegalArgumentException(
-            "Object wrapped by standalone adapter is not serializable and its specificatoin does not have an EncodeableFacet");
+        throw new IllegalArgumentException("Object wrapped by standalone adapter is not serializable and its specificatoin does not have an EncodeableFacet");
     }
 
     public StandaloneData(final DataInputExtended input) throws IOException {

@@ -39,8 +39,7 @@ public class XStreamOverSocketsViewer extends SocketsViewerAbstract {
     }
 
     @Override
-    protected ServerConnection createServerConnection(final InputStream input, final OutputStream output,
-        final ServerFacade distribution) {
+    protected ServerConnection createServerConnection(final InputStream input, final OutputStream output, final ServerFacade distribution) {
         final SimpleTransport transport = new SimpleTransport(getConfiguration(), input, output);
         final XStreamMarshaller serverMarshaller = new XStreamMarshaller(getConfiguration(), transport);
         try {

@@ -24,8 +24,7 @@ import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
 
 public class SqlPersistenceSessionFactory extends PersistenceSessionFactoryDelegating {
 
-    public SqlPersistenceSessionFactory(final DeploymentType deploymentType,
-        final SqlPersistorInstaller sqlPersistorInstaller) {
+    public SqlPersistenceSessionFactory(final DeploymentType deploymentType, final SqlPersistorInstaller sqlPersistorInstaller) {
         super(deploymentType, sqlPersistorInstaller);
     }
 }

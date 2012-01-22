@@ -26,10 +26,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
-import org.junit.Test;
-
 import org.apache.isis.applib.value.Color;
 import org.apache.isis.applib.value.Date;
 import org.apache.isis.applib.value.DateTime;
@@ -45,16 +41,21 @@ import org.apache.isis.runtimes.dflt.objectstores.sql.testsystem.dataclasses.Num
 import org.apache.isis.runtimes.dflt.objectstores.sql.testsystem.dataclasses.SimpleClass;
 import org.apache.isis.runtimes.dflt.objectstores.sql.testsystem.dataclasses.SimpleClassTwo;
 import org.apache.isis.runtimes.dflt.objectstores.sql.testsystem.dataclasses.SqlDataClass;
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
+import org.junit.Test;
 
 /**
  * @author Kevin kevin@kmz.co.za
  * 
- *         The Singleton class {@link SqlIntegrationTestSingleton} is used to preserve values between tests. If
- *         {@link SqlIntegrationTestSingleton} state is 0, then a full NOF context is recreated. If
- *         {@link SqlIntegrationTestSingleton} state is 1, then the previous context is re-used.
+ *         The Singleton class {@link SqlIntegrationTestSingleton} is used to
+ *         preserve values between tests. If {@link SqlIntegrationTestSingleton}
+ *         state is 0, then a full NOF context is recreated. If
+ *         {@link SqlIntegrationTestSingleton} state is 1, then the previous
+ *         context is re-used.
  * 
- *         The state of 1 is used to separate tests into stand-alone methods, for clarity purposes - without reloading
- *         the entire framework.
+ *         The state of 1 is used to separate tests into stand-alone methods,
+ *         for clarity purposes - without reloading the entire framework.
  * 
  */
 public abstract class SqlIntegrationTestCommon extends SqlIntegrationTestCommonBase {
@@ -68,19 +69,23 @@ public abstract class SqlIntegrationTestCommon extends SqlIntegrationTestCommonB
     static {
         /*
          * 
-         * // For testing -ve offset timezone local regions. GMTm2_TIME_ZONE = TimeZone.getTimeZone("GMT-0200");
-         * //GMTm2_TIME_ZONE = TimeZone.getTimeZone("UTC"); TimeZone.setDefault(GMTm2_TIME_ZONE);
+         * // For testing -ve offset timezone local regions. GMTm2_TIME_ZONE =
+         * TimeZone.getTimeZone("GMT-0200"); //GMTm2_TIME_ZONE =
+         * TimeZone.getTimeZone("UTC"); TimeZone.setDefault(GMTm2_TIME_ZONE);
          */
 
         /*
-         * TimeZone timeZone = TimeZone.getTimeZone("Etc/UTC"); if (timeZone == null) { timeZone =
-         * TimeZone.getTimeZone("UTC"); } UTC_TIME_ZONE = timeZone;
+         * TimeZone timeZone = TimeZone.getTimeZone("Etc/UTC"); if (timeZone ==
+         * null) { timeZone = TimeZone.getTimeZone("UTC"); } UTC_TIME_ZONE =
+         * timeZone;
          */
 
         /*
-         * There is still an issue assigning a java.sql.Date variable from a calendar. final Calendar cal =
-         * Calendar.getInstance(); cal.setTimeZone(UTC_TIME_ZONE); cal.clear(); cal.set(Calendar.YEAR, 2011);
-         * cal.set(Calendar.MONTH, 4-1); cal.set(Calendar.DAY_OF_MONTH, 8);
+         * There is still an issue assigning a java.sql.Date variable from a
+         * calendar. final Calendar cal = Calendar.getInstance();
+         * cal.setTimeZone(UTC_TIME_ZONE); cal.clear(); cal.set(Calendar.YEAR,
+         * 2011); cal.set(Calendar.MONTH, 4-1); cal.set(Calendar.DAY_OF_MONTH,
+         * 8);
          */
         // 2011-4-8 = 1270684800000
         final Date date20100308 = new Date(2010, 4, 8);
@@ -88,7 +93,8 @@ public abstract class SqlIntegrationTestCommon extends SqlIntegrationTestCommonB
     }
 
     // {{ Setup
-    private static final Date applibDate = new Date(2010, 3, 5); // 2010-03-05 = 1267747200000
+    private static final Date applibDate = new Date(2010, 3, 5); // 2010-03-05 =
+                                                                 // 1267747200000
     private static final DateTime dateTime = new DateTime(2010, 3, 5, 1, 23);
     private static final TimeStamp timeStamp = new TimeStamp(dateTime.millisSinceEpoch());
     private static final Time time = new Time(14, 56);
@@ -114,8 +120,7 @@ public abstract class SqlIntegrationTestCommon extends SqlIntegrationTestCommonB
 
     // Collection mapper tests
     private static final List<String> stringList1 = Arrays.asList("Baking", "Bakery", "Canned", "Dairy");
-    private static final List<String> stringList2 = Arrays.asList("Fridge", "Deli", "Fresh Produce", "Frozen",
-        "Household", "Other..");
+    private static final List<String> stringList2 = Arrays.asList("Fridge", "Deli", "Fresh Produce", "Frozen", "Household", "Other..");
     private static List<SimpleClass> simpleClassList1 = new ArrayList<SimpleClass>();
     private static List<SimpleClass> simpleClassList2 = new ArrayList<SimpleClass>();
 
@@ -140,7 +145,7 @@ public abstract class SqlIntegrationTestCommon extends SqlIntegrationTestCommonB
      * @throws Exception
      */
     public void testCreate() throws Exception {
-        for (String tableName : getTableNames()) {
+        for (final String tableName : getTableNames()) {
             SqlIntegrationTestSingleton.drop(tableName);
         }
 
@@ -283,12 +288,14 @@ public abstract class SqlIntegrationTestCommon extends SqlIntegrationTestCommonB
         LOG.log(Level.INFO, "sqlDataClass.getDate().getTime() as Long: " + sqlDataClass.getDate().getMillisSinceEpoch());
 
         if (!applibDate.isEqualTo(sqlDataClass.getDate())) {
-            fail("Applib date: Test '2010-3-5', expected " + applibDate.toString() + ", but got "
-                + sqlDataClass.getDate().toString() + ". Check log for more info.");
-            // LOG.log(Level.INFO, "Applib date: Test '2011-3-5', expected " + applibDate.toString() + ", but got "
-            // + sqlDataClass.getDate().toString()+". Check log for more info.");
+            fail("Applib date: Test '2010-3-5', expected " + applibDate.toString() + ", but got " + sqlDataClass.getDate().toString() + ". Check log for more info.");
+            // LOG.log(Level.INFO, "Applib date: Test '2011-3-5', expected " +
+            // applibDate.toString() + ", but got "
+            // +
+            // sqlDataClass.getDate().toString()+". Check log for more info.");
         } else {
-            // LOG.log(Level.INFO, "SQL applib.value.date: test passed! Woohoo!");
+            // LOG.log(Level.INFO,
+            // "SQL applib.value.date: test passed! Woohoo!");
         }
 
     }
@@ -306,19 +313,23 @@ public abstract class SqlIntegrationTestCommon extends SqlIntegrationTestCommonB
         LOG.log(Level.INFO, "Test: testSqlDate() '2011-4-8' == 1302220800000");
 
         // 2011-4-8 = 1302220800000
-        LOG.log(Level.INFO, "sqlDate.toString() as String:" + sqlDate); // shows as 2011-04-07
+        LOG.log(Level.INFO, "sqlDate.toString() as String:" + sqlDate); // shows
+                                                                        // as
+                                                                        // 2011-04-07
         LOG.log(Level.INFO, "sqlDate.getTime() as Long:" + sqlDate.getTime());
 
         // 2011-4-8 = 1302220800000
-        LOG.log(Level.INFO, "sqlDataClass.getSqlDate() as String:" + sqlDataClass.getSqlDate()); // shows as
+        LOG.log(Level.INFO, "sqlDataClass.getSqlDate() as String:" + sqlDataClass.getSqlDate()); // shows
+                                                                                                 // as
         // 2011-04-07
         LOG.log(Level.INFO, "sqlDataClass.getSqlDate().getTime() as Long:" + sqlDataClass.getSqlDate().getTime());
 
         if (sqlDate.compareTo(sqlDataClass.getSqlDate()) != 0) {
-            fail("SQL date: Test '2011-4-8', expected " + sqlDate.toString() + ", but got "
-                + sqlDataClass.getSqlDate().toString() + ". Check log for more info.");
-            // LOG.log(Level.INFO, "SQL date: Test '2011-4-8', expected " + sqlDate.toString() + ", and got "
-            // + sqlDataClass.getSqlDate().toString() +". Check log for more info.");
+            fail("SQL date: Test '2011-4-8', expected " + sqlDate.toString() + ", but got " + sqlDataClass.getSqlDate().toString() + ". Check log for more info.");
+            // LOG.log(Level.INFO, "SQL date: Test '2011-4-8', expected " +
+            // sqlDate.toString() + ", and got "
+            // + sqlDataClass.getSqlDate().toString()
+            // +". Check log for more info.");
         } else {
             // LOG.log(Level.INFO, "SQL date: test passed! Woohoo!");
         }
@@ -327,25 +338,31 @@ public abstract class SqlIntegrationTestCommon extends SqlIntegrationTestCommonB
 
     public void testDateTimezoneIssue() {
         /*
-         * At the moment, applib Date and java.sql.Date are restored from ValueSemanticsProviderAbstractTemporal with an
-         * explicit hourly offset that comes from the timezone. I.e. in South Africa, with TZ +2h00, they have an
-         * implicit time of 02h00 (2AM). This can potentially seriously screw up GMT-X dates, which, I suspect, will
-         * actually be set to the dat BEFORE.
+         * At the moment, applib Date and java.sql.Date are restored from
+         * ValueSemanticsProviderAbstractTemporal with an explicit hourly offset
+         * that comes from the timezone. I.e. in South Africa, with TZ +2h00,
+         * they have an implicit time of 02h00 (2AM). This can potentially
+         * seriously screw up GMT-X dates, which, I suspect, will actually be
+         * set to the dat BEFORE.
          * 
-         * This test is a simple test to confirm that date/time before and after checks work as expected.
+         * This test is a simple test to confirm that date/time before and after
+         * checks work as expected.
          */
         /*
          * *
          * SqlDataClass sqlDataClass = SqlIntegrationTestSingleton.getPerson();
          * 
-         * DateTime dateTime = sqlDataClass.getDateTime(); // new DateTime(2010, 3, 5, 1, 23); Date date =
-         * sqlDataClass.getDate(); // new Date(2010, 3, 5);
+         * DateTime dateTime = sqlDataClass.getDateTime(); // new DateTime(2010,
+         * 3, 5, 1, 23); Date date = sqlDataClass.getDate(); // new Date(2010,
+         * 3, 5);
          * 
          * //java.sql.Date sqlDate = sqlDataClass.getSqlDate(); // "2010-03-05"
-         * //assertTrue("dateTime's value ("+dateTime.dateValue()+ // ") should be after java.sql.date's ("+ sqlDate
-         * +")", dateTime.dateValue().after(sqlDate));
+         * //assertTrue("dateTime's value ("+dateTime.dateValue()+ //
+         * ") should be after java.sql.date's ("+ sqlDate +")",
+         * dateTime.dateValue().after(sqlDate));
          * 
-         * assertTrue("dateTime's value ("+dateTime.dateValue()+ ") should be after date's ("+ date +")",
+         * assertTrue("dateTime's value ("+dateTime.dateValue()+
+         * ") should be after date's ("+ date +")",
          * dateTime.dateValue().after(date.dateValue()));
          */
     }
@@ -357,7 +374,8 @@ public abstract class SqlIntegrationTestCommon extends SqlIntegrationTestCommonB
     public void testMoney() {
         final SqlDataClass sqlDataClass = SqlIntegrationTestSingleton.getDataClass();
         assertEquals(money, sqlDataClass.getMoney());
-        // assertTrue("Money " + money.toString() + " is not equal to " + sqlDataClass.getMoney().toString(),
+        // assertTrue("Money " + money.toString() + " is not equal to " +
+        // sqlDataClass.getMoney().toString(),
         // money.equals(sqlDataClass.getMoney()));
     }
 
@@ -371,8 +389,7 @@ public abstract class SqlIntegrationTestCommon extends SqlIntegrationTestCommonB
         LOG.log(Level.INFO, "sqlDataClass.getDateTime() as String:" + sqlDataClass.getDateTime());
         LOG.log(Level.INFO, "dateTime.toString() as String:" + dateTime);
 
-        LOG.log(Level.INFO, "sqlDataClass.getDateTime().getTime() as Long:"
-            + sqlDataClass.getDateTime().millisSinceEpoch());
+        LOG.log(Level.INFO, "sqlDataClass.getDateTime().getTime() as Long:" + sqlDataClass.getDateTime().millisSinceEpoch());
         LOG.log(Level.INFO, "dateTime.getTime() as Long:" + dateTime.millisSinceEpoch());
 
         if (!dateTime.equals(sqlDataClass.getDateTime())) {
@@ -385,8 +402,7 @@ public abstract class SqlIntegrationTestCommon extends SqlIntegrationTestCommonB
      */
     public void testTimeStamp() {
         final SqlDataClass sqlDataClass = SqlIntegrationTestSingleton.getDataClass();
-        assertTrue("TimeStamp " + timeStamp.toString() + " is not equal to " + sqlDataClass.getTimeStamp().toString(),
-            timeStamp.isEqualTo(sqlDataClass.getTimeStamp()));
+        assertTrue("TimeStamp " + timeStamp.toString() + " is not equal to " + sqlDataClass.getTimeStamp().toString(), timeStamp.isEqualTo(sqlDataClass.getTimeStamp()));
     }
 
     /**
@@ -397,8 +413,7 @@ public abstract class SqlIntegrationTestCommon extends SqlIntegrationTestCommonB
         final SqlDataClass sqlDataClass = SqlIntegrationTestSingleton.getDataClass();
         assertNotNull("sqlDataClass is null", sqlDataClass);
         assertNotNull("getTime() is null", sqlDataClass.getTime());
-        assertTrue("Time 14h56: expected " + time.toString() + ", but got " + sqlDataClass.getTime().toString(),
-            time.isEqualTo(sqlDataClass.getTime()));
+        assertTrue("Time 14h56: expected " + time.toString() + ", but got " + sqlDataClass.getTime().toString(), time.isEqualTo(sqlDataClass.getTime()));
     }
 
     /**/
@@ -409,7 +424,8 @@ public abstract class SqlIntegrationTestCommon extends SqlIntegrationTestCommonB
     public void testColor() {
         final SqlDataClass sqlDataClass = SqlIntegrationTestSingleton.getDataClass();
         assertEquals(color, sqlDataClass.getColor());
-        // assertTrue("Color Black, expected " + color.toString() + " but got " + sqlDataClass.getColor().toString(),
+        // assertTrue("Color Black, expected " + color.toString() + " but got "
+        // + sqlDataClass.getColor().toString(),
         // color.isEqualTo(sqlDataClass.getColor()));
     }
 
@@ -418,15 +434,20 @@ public abstract class SqlIntegrationTestCommon extends SqlIntegrationTestCommonB
      */
     // TODO: Images are not equal...
     /*
-     * public void testImage(){ SqlDataClass sqlDataClass = SqlIntegrationTestSingleton.getPerson(); Image image2 =
+     * public void testImage(){ SqlDataClass sqlDataClass =
+     * SqlIntegrationTestSingleton.getPerson(); Image image2 =
      * sqlDataClass.getImage(); assertEqual(image, image2); }
      * 
-     * private void assertEqual(Image image2, Image image3) { assertEquals(image2.getHeight(), image3.getHeight());
-     * assertEquals(image2.getWidth(), image3.getWidth()); boolean same = true; int i=0,j=0; int p1=0, p2=0; String
-     * error = ""; int [][] i1 = image2.getImage(), i2 = image3.getImage(); for(i = 0; same &&
-     * i<image2.getHeight();i++){ int [] r1 = i1[i], r2 = i2[i]; for (j = 0; same && j < image2.getWidth(); j++){ if
-     * (r1[j] != r2[j]){ same = false; p1 = r1[j]; p2 = r2[j]; error = "Images differ at i = "+i+", j = "+j+", "+p1+
-     * " is not "+p2+"!"; break; } } } assertTrue(error, same); }
+     * private void assertEqual(Image image2, Image image3) {
+     * assertEquals(image2.getHeight(), image3.getHeight());
+     * assertEquals(image2.getWidth(), image3.getWidth()); boolean same = true;
+     * int i=0,j=0; int p1=0, p2=0; String error = ""; int [][] i1 =
+     * image2.getImage(), i2 = image3.getImage(); for(i = 0; same &&
+     * i<image2.getHeight();i++){ int [] r1 = i1[i], r2 = i2[i]; for (j = 0;
+     * same && j < image2.getWidth(); j++){ if (r1[j] != r2[j]){ same = false;
+     * p1 = r1[j]; p2 = r2[j]; error =
+     * "Images differ at i = "+i+", j = "+j+", "+p1+ " is not "+p2+"!"; break; }
+     * } } assertTrue(error, same); }
      */
 
     /**
@@ -452,7 +473,11 @@ public abstract class SqlIntegrationTestCommon extends SqlIntegrationTestCommonB
         assertEquals(shortMaxValue, numericTestMaxClass.getShortValue());
         assertEquals(intMaxValue, numericTestMaxClass.getIntValue());
         assertEquals(longMaxValue, numericTestMaxClass.getLongValue());
-        assertEquals(doubleMaxValue, numericTestMaxClass.getDoubleValue()); // fails in MySQL = infinity
+        assertEquals(doubleMaxValue, numericTestMaxClass.getDoubleValue()); // fails
+                                                                            // in
+                                                                            // MySQL
+                                                                            // =
+                                                                            // infinity
         assertEquals(floatMaxValue, numericTestMaxClass.getFloatValue());
     }
 
@@ -463,7 +488,11 @@ public abstract class SqlIntegrationTestCommon extends SqlIntegrationTestCommonB
         assertEquals(shortMinValue, numericTestMinClass.getShortValue());
         assertEquals(intMinValue, numericTestMinClass.getIntValue());
         assertEquals(longMinValue, numericTestMinClass.getLongValue());
-        assertEquals(doubleMinValue, numericTestMinClass.getDoubleValue()); // fails in MySQL = infinity
+        assertEquals(doubleMinValue, numericTestMinClass.getDoubleValue()); // fails
+                                                                            // in
+                                                                            // MySQL
+                                                                            // =
+                                                                            // infinity
         assertEquals(floatMinValue, numericTestMinClass.getFloatValue());
     }
 
@@ -471,9 +500,11 @@ public abstract class SqlIntegrationTestCommon extends SqlIntegrationTestCommonB
      * Test {@link StringCollection} type.
      */
     /*
-     * public void testStringCollection(){ SqlDataClass sqlDataClass = SqlIntegrationTestSingleton.getPerson();
-     * List<String> collection = sqlDataClass.getStringCollection(); int i = 0; for (String string : collection) {
-     * assertEquals(SqlIntegrationTestCommon.stringList.get(i++), string); } }
+     * public void testStringCollection(){ SqlDataClass sqlDataClass =
+     * SqlIntegrationTestSingleton.getPerson(); List<String> collection =
+     * sqlDataClass.getStringCollection(); int i = 0; for (String string :
+     * collection) { assertEquals(SqlIntegrationTestCommon.stringList.get(i++),
+     * string); } }
      */
 
     public void testSingleReferenceLazy() {
@@ -492,8 +523,7 @@ public abstract class SqlIntegrationTestCommon extends SqlIntegrationTestCommonB
         final SqlDataClass sqlDataClass = SqlIntegrationTestSingleton.getDataClass();
         final List<SimpleClass> collection = sqlDataClass.getSimpleClasses1();
 
-        assertEquals("collection size is not equal!", SqlIntegrationTestCommon.simpleClassList1.size(),
-            collection.size());
+        assertEquals("collection size is not equal!", SqlIntegrationTestCommon.simpleClassList1.size(), collection.size());
 
         int i = 0;
         for (final SimpleClass simpleClass : SqlIntegrationTestCommon.simpleClassList1) {
@@ -509,8 +539,7 @@ public abstract class SqlIntegrationTestCommon extends SqlIntegrationTestCommonB
         final SqlDataClass sqlDataClass = SqlIntegrationTestSingleton.getDataClass();
         final List<SimpleClass> collection = sqlDataClass.getSimpleClasses2();
 
-        assertEquals("collection size is not equal!", SqlIntegrationTestCommon.simpleClassList2.size(),
-            collection.size());
+        assertEquals("collection size is not equal!", SqlIntegrationTestCommon.simpleClassList2.size(), collection.size());
 
         int i = 0;
         for (final SimpleClass simpleClass : SqlIntegrationTestCommon.simpleClassList2) {
@@ -592,10 +621,10 @@ public abstract class SqlIntegrationTestCommon extends SqlIntegrationTestCommonB
         final SqlDataClassFactory factory = SqlIntegrationTestSingleton.getSqlDataClassFactory();
 
         final List<SqlDataClass> sqlDataClasses = factory.allDataClasses();
-        SqlDataClass sqlDataClass = sqlDataClasses.get(0);
+        final SqlDataClass sqlDataClass = sqlDataClasses.get(0);
 
         final List<SimpleClass> collection = sqlDataClass.getSimpleClasses1();
-        SimpleClass simpleClass1 = collection.get(0);
+        final SimpleClass simpleClass1 = collection.get(0);
         // simpleClass1.setString(stringList1.get(3));
 
         collection.remove(simpleClass1);

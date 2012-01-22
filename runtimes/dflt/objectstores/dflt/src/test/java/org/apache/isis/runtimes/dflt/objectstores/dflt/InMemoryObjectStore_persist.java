@@ -46,8 +46,7 @@ public class InMemoryObjectStore_persist extends AbstractInMemoryObjectStoreTest
     public void testSaveInstance() throws Exception {
 
         final ObjectSpecification specification = object.getSpecification();
-        ObjectAdapter[] retrievedInstance =
-            store.getInstances(new PersistenceQueryFindByTitle(specification, "changed"));
+        ObjectAdapter[] retrievedInstance = store.getInstances(new PersistenceQueryFindByTitle(specification, "changed"));
         assertEquals(0, retrievedInstance.length);
 
         ((TestProxyAdapter) object).setupTitleString("changed title");

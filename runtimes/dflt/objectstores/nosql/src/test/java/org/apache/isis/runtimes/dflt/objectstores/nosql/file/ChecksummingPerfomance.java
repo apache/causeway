@@ -26,14 +26,13 @@ import java.util.zip.CheckedInputStream;
 
 import org.apache.isis.runtimes.dflt.objectstores.nosql.file.server.Util;
 
-
 public class ChecksummingPerfomance {
 
-    public static void main(String[] args) throws Exception {
+    public static void main(final String[] args) throws Exception {
 
-        CRC32 inputChecksum = new CRC32();
-        CheckedInputStream in = new CheckedInputStream(new FileInputStream("test.data"), inputChecksum);
-        BufferedReader reader = new BufferedReader(new InputStreamReader(in, Util.ENCODING));
+        final CRC32 inputChecksum = new CRC32();
+        final CheckedInputStream in = new CheckedInputStream(new FileInputStream("test.data"), inputChecksum);
+        final BufferedReader reader = new BufferedReader(new InputStreamReader(in, Util.ENCODING));
 
         for (int i = 0; i < 30; i++) {
             long time = System.currentTimeMillis();
@@ -80,36 +79,35 @@ public class ChecksummingPerfomance {
 
     }
 
-    private static void testArray(StringBuffer buf) {
-        byte[] data = buf.toString().getBytes();
+    private static void testArray(final StringBuffer buf) {
+        final byte[] data = buf.toString().getBytes();
 
-        CRC32 inputChecksum = new CRC32();
+        final CRC32 inputChecksum = new CRC32();
         inputChecksum.reset();
         inputChecksum.update(data);
 
         // System.out.println(inputChecksum.getValue());
     }
 
-
-    private static byte[] extractArray(StringBuffer buf) {
-        byte[] data = buf.toString().getBytes();
+    private static byte[] extractArray(final StringBuffer buf) {
+        final byte[] data = buf.toString().getBytes();
         return data;
     }
-    
-    private static void checksumArray(byte[] data) {
-        CRC32 inputChecksum = new CRC32();
+
+    private static void checksumArray(final byte[] data) {
+        final CRC32 inputChecksum = new CRC32();
         inputChecksum.reset();
         inputChecksum.update(data);
 
         // System.out.println(inputChecksum.getValue());
     }
 
-    private static StringBuffer readChecksummedFile(int i) throws Exception {
-        CRC32 inputChecksum = new CRC32();
-        CheckedInputStream in = new CheckedInputStream(new FileInputStream("test" + i % 3 + ".data"), inputChecksum);
-        BufferedReader reader = new BufferedReader(new InputStreamReader(in, Util.ENCODING));
+    private static StringBuffer readChecksummedFile(final int i) throws Exception {
+        final CRC32 inputChecksum = new CRC32();
+        final CheckedInputStream in = new CheckedInputStream(new FileInputStream("test" + i % 3 + ".data"), inputChecksum);
+        final BufferedReader reader = new BufferedReader(new InputStreamReader(in, Util.ENCODING));
 
-        StringBuffer buf = new StringBuffer();
+        final StringBuffer buf = new StringBuffer();
         String line;
         while ((line = reader.readLine()) != null) {
             buf.append(line);
@@ -123,10 +121,10 @@ public class ChecksummingPerfomance {
         return buf;
     }
 
-    private static StringBuffer readFile(int i) throws Exception {
-        BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream("test" + i % 3 + ".data"), Util.ENCODING));
+    private static StringBuffer readFile(final int i) throws Exception {
+        final BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream("test" + i % 3 + ".data"), Util.ENCODING));
 
-        StringBuffer buf = new StringBuffer();
+        final StringBuffer buf = new StringBuffer();
         String line;
         while ((line = reader.readLine()) != null) {
             buf.append(line);

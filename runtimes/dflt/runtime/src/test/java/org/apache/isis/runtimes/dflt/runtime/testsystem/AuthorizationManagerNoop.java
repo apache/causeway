@@ -40,8 +40,7 @@ public class AuthorizationManagerNoop implements AuthorizationManager {
     }
 
     @Override
-    public boolean isVisible(final AuthenticationSession session, final ObjectAdapter target,
-        final Identifier identifier) {
+    public boolean isVisible(final AuthenticationSession session, final ObjectAdapter target, final Identifier identifier) {
         return true;
     }
 

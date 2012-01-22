@@ -83,7 +83,7 @@ public class SqlDataClassFactory extends AbstractFactoryAndRepository {
         return allInstances(SimpleClass.class);
     }
 
-    public List<SimpleClass> allSimpleClassesThatMatch(SimpleClass simpleClassMatch) {
+    public List<SimpleClass> allSimpleClassesThatMatch(final SimpleClass simpleClassMatch) {
         return allMatches(SimpleClass.class, simpleClassMatch);
     }
 
@@ -107,7 +107,7 @@ public class SqlDataClassFactory extends AbstractFactoryAndRepository {
         return object;
     }
 
-    public List<NumericTestClass> allNumericTestClassesThatMatch(NumericTestClass match) {
+    public List<NumericTestClass> allNumericTestClassesThatMatch(final NumericTestClass match) {
         return allMatches(NumericTestClass.class, match);
     }
 
@@ -157,11 +157,11 @@ public class SqlDataClassFactory extends AbstractFactoryAndRepository {
         return allInstances(PolyInterface.class);
     }
 
-    public List<PolyInterface> queryPolyInterfaces(PolyInterface query) {
+    public List<PolyInterface> queryPolyInterfaces(final PolyInterface query) {
         return allMatches(PolyInterface.class, query);
     }
 
-    public List<EmptyInterface> allEmptyInterfacesThatMatch(EmptyInterface match) {
+    public List<EmptyInterface> allEmptyInterfacesThatMatch(final EmptyInterface match) {
         return allMatches(EmptyInterface.class, match);
     }
 

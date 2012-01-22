@@ -88,14 +88,16 @@ public abstract class IsisTransactionManagerAbstract<T extends IsisTransaction> 
     }
 
     /**
-     * Convenience method returning the {@link UpdateNotifier} of the {@link #getTransaction() current transaction}.
+     * Convenience method returning the {@link UpdateNotifier} of the
+     * {@link #getTransaction() current transaction}.
      */
     protected UpdateNotifier getUpdateNotifier() {
         return getTransaction().getUpdateNotifier();
     }
 
     /**
-     * Convenience method returning the {@link MessageBroker} of the {@link #getTransaction() current transaction}.
+     * Convenience method returning the {@link MessageBroker} of the
+     * {@link #getTransaction() current transaction}.
      */
     protected MessageBroker getMessageBroker() {
         return getTransaction().getMessageBroker();
@@ -169,7 +171,8 @@ public abstract class IsisTransactionManagerAbstract<T extends IsisTransaction> 
     // ////////////////////////////////////////////////////////////////
 
     /**
-     * Creates a new transaction and saves, to be accessible in {@link #getTransaction()}.
+     * Creates a new transaction and saves, to be accessible in
+     * {@link #getTransaction()}.
      */
     protected final T createTransaction() {
         this.transaction = createTransaction(createMessageBroker(), createUpdateNotifier());
@@ -180,8 +183,9 @@ public abstract class IsisTransactionManagerAbstract<T extends IsisTransaction> 
      * Overridable hook.
      * 
      * <p>
-     * The provided {@link MessageBroker} and {@link UpdateNotifier} are obtained from the hook methods (
-     * {@link #createMessageBroker()} and {@link #createUpdateNotifier()}).
+     * The provided {@link MessageBroker} and {@link UpdateNotifier} are
+     * obtained from the hook methods ( {@link #createMessageBroker()} and
+     * {@link #createUpdateNotifier()}).
      * 
      * @see #createMessageBroker()
      * @see #createUpdateNotifier()
@@ -189,7 +193,8 @@ public abstract class IsisTransactionManagerAbstract<T extends IsisTransaction> 
     protected abstract T createTransaction(MessageBroker messageBroker, UpdateNotifier updateNotifier);
 
     /**
-     * Overridable hook, used in {@link #createTransaction(MessageBroker, UpdateNotifier)
+     * Overridable hook, used in
+     * {@link #createTransaction(MessageBroker, UpdateNotifier)
      * 
      * <p> Called when a new {@link IsisTransaction} is created.
      */
@@ -198,7 +203,8 @@ public abstract class IsisTransactionManagerAbstract<T extends IsisTransaction> 
     }
 
     /**
-     * Overridable hook, used in {@link #createTransaction(MessageBroker, UpdateNotifier)
+     * Overridable hook, used in
+     * {@link #createTransaction(MessageBroker, UpdateNotifier)
      * 
      * <p> Called when a new {@link IsisTransaction} is created.
      */
@@ -211,13 +217,11 @@ public abstract class IsisTransactionManagerAbstract<T extends IsisTransaction> 
     // ////////////////////////////////////////////////////////////////
 
     protected void ensureTransactionInProgress() {
-        ensureThatState(getTransaction() != null && !getTransaction().getState().isComplete(), is(true),
-            "No transaction in progress");
+        ensureThatState(getTransaction() != null && !getTransaction().getState().isComplete(), is(true), "No transaction in progress");
     }
 
     protected void ensureTransactionNotInProgress() {
-        ensureThatState(getTransaction() != null && !getTransaction().getState().isComplete(), is(false),
-            "Transaction in progress");
+        ensureThatState(getTransaction() != null && !getTransaction().getState().isComplete(), is(false), "Transaction in progress");
     }
 
     // ////////////////////////////////////////////////////////////////////

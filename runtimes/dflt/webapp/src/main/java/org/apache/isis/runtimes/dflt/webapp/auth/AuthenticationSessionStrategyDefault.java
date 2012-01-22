@@ -35,19 +35,22 @@ import org.apache.isis.runtimes.dflt.webapp.WebAppConstants;
 
 /**
  * Returns a valid {@link AuthenticationSession} through a number of mechanisms;
- * supports caching of the {@link AuthenticationSession} onto the {@link HttpSession}.
+ * supports caching of the {@link AuthenticationSession} onto the
+ * {@link HttpSession}.
  * 
  * <p>
  * The session is looked-up as follows:
  * <ul>
  * <li>it looks up from the {@link HttpSession} using the value
  * {@value WebAppConstants#HTTP_SESSION_AUTHENTICATION_SESSION_KEY}</li>
- * <li>failing that, if in exploration mode, then returns an exploration session</li>
- * <li>failing that, if a {@link LogonFixture} has been provided and not already used,
- * will provide an session for that fixture.  The {@link HttpSession} also stores the value
- * {@value WebAppConstants#HTTP_SESSION_LOGGED_ON_PREVIOUSLY_USING_LOGON_FIXTURE_KEY} in the session
- * to track whether this has been done</li>
- * </ul> 
+ * <li>failing that, if in exploration mode, then returns an exploration session
+ * </li>
+ * <li>failing that, if a {@link LogonFixture} has been provided and not already
+ * used, will provide an session for that fixture. The {@link HttpSession} also
+ * stores the value
+ * {@value WebAppConstants#HTTP_SESSION_LOGGED_ON_PREVIOUSLY_USING_LOGON_FIXTURE_KEY}
+ * in the session to track whether this has been done</li>
+ * </ul>
  * <p>
  */
 public class AuthenticationSessionStrategyDefault extends AuthenticationSessionStrategyAbstract {
@@ -57,7 +60,7 @@ public class AuthenticationSessionStrategyDefault extends AuthenticationSessionS
 
         final AuthenticationManager authenticationManager = getAuthenticationManager();
         final HttpSession httpSession = getHttpSession(servletRequest);
-        
+
         // use previously authenticated session if available
         AuthenticationSession authSession = (AuthenticationSession) httpSession.getAttribute(WebAppConstants.HTTP_SESSION_AUTHENTICATION_SESSION_KEY);
         if (authSession != null) {
@@ -84,13 +87,12 @@ public class AuthenticationSessionStrategyDefault extends AuthenticationSessionS
             }
         }
 
-        final boolean loggedInUsingLogonFixture =
-            httpSession.getAttribute(WebAppConstants.HTTP_SESSION_LOGGED_ON_PREVIOUSLY_USING_LOGON_FIXTURE_KEY) != null;
+        final boolean loggedInUsingLogonFixture = httpSession.getAttribute(WebAppConstants.HTTP_SESSION_LOGGED_ON_PREVIOUSLY_USING_LOGON_FIXTURE_KEY) != null;
         if (logonFixture != null && !loggedInUsingLogonFixture) {
             httpSession.setAttribute(WebAppConstants.HTTP_SESSION_LOGGED_ON_PREVIOUSLY_USING_LOGON_FIXTURE_KEY, true);
             return authenticationManager.authenticate(new AuthenticationRequestLogonFixture(logonFixture));
         }
-        
+
         return null;
     }
 

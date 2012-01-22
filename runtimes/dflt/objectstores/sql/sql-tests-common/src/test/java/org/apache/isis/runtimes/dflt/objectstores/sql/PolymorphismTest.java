@@ -84,7 +84,8 @@ public class PolymorphismTest extends SqlIntegrationTestCommonBase {
     @Override
     public Properties getProperties() {
         Properties properties = super.getProperties();
-        if (properties == null) { // Only used if properties file does not exist.
+        if (properties == null) { // Only used if properties file does not
+                                  // exist.
             properties = new Properties();
             properties.put(SqlObjectStore.BASE_NAME + ".jdbc.driver", "org.hsqldb.jdbcDriver");
             properties.put(SqlObjectStore.BASE_NAME + ".jdbc.connection", "jdbc:hsqldb:file:hsql-db/polytests");
@@ -131,19 +132,19 @@ public class PolymorphismTest extends SqlIntegrationTestCommonBase {
         polyTestClass.setString("polyTestClassString");
 
         // {{ Setup self-referencing collection
-        PolySelfRefClass polySelfRefClassParent = factory.newPolySelfRefClass();
+        final PolySelfRefClass polySelfRefClassParent = factory.newPolySelfRefClass();
         polySelfRefClassParent.setString("Parent");
 
-        PolySelfRefClass polySelfRefClassChild1 = factory.newPolySelfRefClass();
+        final PolySelfRefClass polySelfRefClassChild1 = factory.newPolySelfRefClass();
         polySelfRefClassChild1.setString(CHILD_1);
         polySelfRefClassParent.addToPolySelfRefClasses(polySelfRefClassChild1);
 
-        PolySelfRefClass polySelfRefClassChild2 = factory.newPolySelfRefClass();
+        final PolySelfRefClass polySelfRefClassChild2 = factory.newPolySelfRefClass();
         polySelfRefClassChild2.setString("Child 2");
         polySelfRefClassParent.addToPolySelfRefClasses(polySelfRefClassChild2);
         factory.save(polySelfRefClassChild2);
 
-        PolySelfRefClass polySelfRefClassChild3 = factory.newPolySelfRefClass();
+        final PolySelfRefClass polySelfRefClassChild3 = factory.newPolySelfRefClass();
         polySelfRefClassChild3.setString("Child 1 of Child 1");
         polySelfRefClassChild1.addToPolySelfRefClasses(polySelfRefClassChild3);
 
@@ -165,15 +166,15 @@ public class PolymorphismTest extends SqlIntegrationTestCommonBase {
         polyTestClass.getPolyInterfaces().add(polyIntImpA);
 
         // setup the polyTestClass
-        PolySubClassOne polySubClassOne = factory.newPolySubClassOne();
+        final PolySubClassOne polySubClassOne = factory.newPolySubClassOne();
         polySubClassOne.setStringBase("PolySubClassOne 1");
         polySubClassOne.setStringClassOne("Class 1");
 
-        PolySubClassTwo polySubClassTwo = factory.newPolySubClassTwo();
+        final PolySubClassTwo polySubClassTwo = factory.newPolySubClassTwo();
         polySubClassTwo.setStringBase("PolySubClassTwo 1");
         polySubClassTwo.setStringClassTwo("Class 2");
 
-        PolySubClassThree polySubClassThree = factory.newPolySubClassThree();
+        final PolySubClassThree polySubClassThree = factory.newPolySubClassThree();
         polySubClassThree.setStringBase("PolySubClassThree 1");
         polySubClassThree.setStringClassThree("Another String");
         polySubClassThree.setStringClassTwo("Class 3");
@@ -211,7 +212,7 @@ public class PolymorphismTest extends SqlIntegrationTestCommonBase {
     public void testPolymorphicLoad() {
         final PolyTestClass polyTestClass = SqlIntegrationTestSingleton.getStaticPolyTestClass();
 
-        List<PolyBaseClass> polyBaseClasses = polyTestClass.getPolyBaseClasses();
+        final List<PolyBaseClass> polyBaseClasses = polyTestClass.getPolyBaseClasses();
         assertEquals(3, polyBaseClasses.size());
 
         PolyBaseClass polyClassBase = polyBaseClasses.get(0);
@@ -236,7 +237,7 @@ public class PolymorphismTest extends SqlIntegrationTestCommonBase {
         final SqlDataClassFactory factory = SqlIntegrationTestSingleton.getSqlDataClassFactory();
         final PolyTestClass polyTestClass = SqlIntegrationTestSingleton.getStaticPolyTestClass();
 
-        PolyInterface loaded = polyTestClass.getPolyInterfaceType();
+        final PolyInterface loaded = polyTestClass.getPolyInterfaceType();
         factory.resolve(loaded);
         assertEquals(polyIntImpA.getString(), loaded.getString());
     }
@@ -244,12 +245,12 @@ public class PolymorphismTest extends SqlIntegrationTestCommonBase {
     public void testLoadSelfReferencingCollection() {
         final PolyTestClass polyTestClass = SqlIntegrationTestSingleton.getStaticPolyTestClass();
 
-        PolySelfRefClass polySelfRefParent = polyTestClass.getPolySelfRefClass();
-        List<PolySelfRefClass> list = polySelfRefParent.getPolySelfRefClasses();
+        final PolySelfRefClass polySelfRefParent = polyTestClass.getPolySelfRefClass();
+        final List<PolySelfRefClass> list = polySelfRefParent.getPolySelfRefClasses();
         assertEquals(2, list.size());
 
         PolySelfRefClass polySelfRefChild1 = null;
-        for (PolySelfRefClass polySelfRefClass : list) {
+        for (final PolySelfRefClass polySelfRefClass : list) {
             if (polySelfRefClass.getString().equals(CHILD_1)) {
                 polySelfRefChild1 = polySelfRefClass;
             }
@@ -267,16 +268,16 @@ public class PolymorphismTest extends SqlIntegrationTestCommonBase {
 
     public void testInterfaceLoadProperty() {
         final PolyTestClass polyTestClass = SqlIntegrationTestSingleton.getStaticPolyTestClass();
-        PolyInterface loaded = polyTestClass.getPolyInterfaceType();
+        final PolyInterface loaded = polyTestClass.getPolyInterfaceType();
         assertEquals(polyIntImpA.getString(), loaded.getString());
     }
 
     public void testInterfaceLoadCollection() {
         final PolyTestClass polyTestClass = SqlIntegrationTestSingleton.getStaticPolyTestClass();
-        List<PolyInterface> list = polyTestClass.getPolyInterfaces();
+        final List<PolyInterface> list = polyTestClass.getPolyInterfaces();
 
         assertEquals(1, list.size());
-        PolyInterface loaded = list.get(0);
+        final PolyInterface loaded = list.get(0);
 
         assertEquals(polyIntImpA.getString(), loaded.getString());
     }
@@ -300,13 +301,13 @@ public class PolymorphismTest extends SqlIntegrationTestCommonBase {
         testLoad(); // reload data
 
         final PolyTestClass polyTestClass = SqlIntegrationTestSingleton.getStaticPolyTestClass();
-        PolyInterface loaded = polyTestClass.getPolyInterfaceType();
+        final PolyInterface loaded = polyTestClass.getPolyInterfaceType();
         assertEquals(polyIntImpB.getString(), loaded.getString());
     }
 
     public void testAllInterfacesInstancesLoaded() {
         final SqlDataClassFactory factory = SqlIntegrationTestSingleton.getSqlDataClassFactory();
-        List<PolyInterface> list = factory.allPolyInterfaces();
+        final List<PolyInterface> list = factory.allPolyInterfaces();
         assertEquals(2, list.size());
     }
 
@@ -314,19 +315,19 @@ public class PolymorphismTest extends SqlIntegrationTestCommonBase {
         final SqlDataClassFactory factory = SqlIntegrationTestSingleton.getSqlDataClassFactory();
         // PolyInterface query = polyIntImpA;
 
-        PolyInterfaceEx query = new PolyInterfaceEx();
+        final PolyInterfaceEx query = new PolyInterfaceEx();
         query.setString(IMPL_A_STRING);
 
-        List<PolyInterface> list = factory.queryPolyInterfaces(query);
+        final List<PolyInterface> list = factory.queryPolyInterfaces(query);
         assertEquals(1, list.size());
     }
 
     public void testInterfacesLoadedByQuerySpecial() {
         final SqlDataClassFactory factory = SqlIntegrationTestSingleton.getSqlDataClassFactory();
 
-        PolyInterfaceEx query = new PolyInterfaceEx();
+        final PolyInterfaceEx query = new PolyInterfaceEx();
 
-        List<PolyInterface> list = factory.queryPolyInterfaces(query);
+        final List<PolyInterface> list = factory.queryPolyInterfaces(query);
         assertEquals(2, list.size());
     }
 
@@ -336,8 +337,8 @@ public class PolymorphismTest extends SqlIntegrationTestCommonBase {
         final List<EmptyInterface> matches = factory.allEmptyInterfacesThatMatch(match);
         assertEquals(1, matches.size());
 
-        EmptyInterface emptyInterface = matches.get(0);
-        PolyInterfaceImplB imp = (PolyInterfaceImplB) emptyInterface;
+        final EmptyInterface emptyInterface = matches.get(0);
+        final PolyInterfaceImplB imp = (PolyInterfaceImplB) emptyInterface;
         assertEquals(IMPL_B_STRING, imp.getString());
     }
 

@@ -36,8 +36,7 @@ public class ExecuteClientActionResponse implements Encodable, Serializable {
     private final Version[] changedVersion;
     private final ObjectData[] updates;
 
-    public ExecuteClientActionResponse(final ReferenceData[] madePersistent, final Version[] changedVersion,
-        final ObjectData[] updates) {
+    public ExecuteClientActionResponse(final ReferenceData[] madePersistent, final Version[] changedVersion, final ObjectData[] updates) {
         this.madePersistent = madePersistent;
         this.changedVersion = changedVersion;
         this.updates = updates;
@@ -67,23 +66,26 @@ public class ExecuteClientActionResponse implements Encodable, Serializable {
     // ///////////////////////////////////////////////////////
 
     /**
-     * Return the ObjectDatas for the persisted objects (in the same seqence as passed to the server). This is used to
-     * update the client's copies with the new OIDs and Versions
+     * Return the ObjectDatas for the persisted objects (in the same seqence as
+     * passed to the server). This is used to update the client's copies with
+     * the new OIDs and Versions
      */
     public ReferenceData[] getPersisted() {
         return madePersistent;
     }
 
     /**
-     * Return the Versions for the objects that were saved by the server for the action. These are used to update the
-     * versions of the client's copies so they align with the servers copies.
+     * Return the Versions for the objects that were saved by the server for the
+     * action. These are used to update the versions of the client's copies so
+     * they align with the servers copies.
      */
     public Version[] getChanged() {
         return changedVersion;
     }
 
     /**
-     * Return the set of ObjectData for any objects that where changed by the server while executing the action.
+     * Return the set of ObjectData for any objects that where changed by the
+     * server while executing the action.
      */
     public ObjectData[] getUpdates() {
         return updates;

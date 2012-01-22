@@ -34,7 +34,8 @@ public class TestObjectFactory extends ObjectFactoryAbstract {
     }
 
     /**
-     * Simply instantiates reflectively, does not enhance bytecode etc in any way.
+     * Simply instantiates reflectively, does not enhance bytecode etc in any
+     * way.
      */
     @Override
     protected <T> T doInstantiate(final Class<T> cls) throws ObjectInstantiationException {

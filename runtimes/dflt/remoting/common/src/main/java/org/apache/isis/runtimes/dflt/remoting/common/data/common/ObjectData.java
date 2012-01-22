@@ -22,8 +22,8 @@ package org.apache.isis.runtimes.dflt.remoting.common.data.common;
 import org.apache.isis.runtimes.dflt.remoting.common.data.Data;
 
 /**
- * ObjectData is data transfer object that contains all the data for an object in a form that can be passed over the
- * network between a client and a server.
+ * ObjectData is data transfer object that contains all the data for an object
+ * in a form that can be passed over the network between a client and a server.
  */
 public interface ObjectData extends ReferenceData {
     Data[] getFieldContent();

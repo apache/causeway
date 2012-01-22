@@ -44,11 +44,12 @@ import org.apache.isis.runtimes.dflt.runtime.system.transaction.IsisTransactionM
 import org.apache.log4j.Logger;
 
 /**
- * Analogous to a Hibernate <tt>Session</tt>, holds the current set of components for a specific execution context (such
- * as on a thread).
+ * Analogous to a Hibernate <tt>Session</tt>, holds the current set of
+ * components for a specific execution context (such as on a thread).
  * 
  * <p>
- * The <tt>IsisContext</tt> class (in <tt>nof-core</tt>) is responsible for locating the current execution context.
+ * The <tt>IsisContext</tt> class (in <tt>nof-core</tt>) is responsible for
+ * locating the current execution context.
  * 
  * @see IsisSessionFactory
  */
@@ -62,16 +63,15 @@ public class IsisSessionDefault implements IsisSession {
     private final IsisSessionFactory executionContextFactory;
 
     private final AuthenticationSession authenticationSession;
-    private PersistenceSession persistenceSession; // only non-final so can be replaced in tests.
+    private PersistenceSession persistenceSession; // only non-final so can be
+                                                   // replaced in tests.
     private final UserProfile userProfile;
 
     private final int id;
     private long accessTime;
     private String debugSnapshot;
 
-    public IsisSessionDefault(final IsisSessionFactory sessionFactory,
-        final AuthenticationSession authenticationSession, final PersistenceSession persistenceSession,
-        final UserProfile userProfile) {
+    public IsisSessionDefault(final IsisSessionFactory sessionFactory, final AuthenticationSession authenticationSession, final PersistenceSession persistenceSession, final UserProfile userProfile) {
 
         // global context
         ensureThatArg(sessionFactory, is(not(nullValue())), "execution context factory is required");
@@ -173,7 +173,8 @@ public class IsisSessionDefault implements IsisSession {
     // //////////////////////////////////////////////////////
 
     /**
-     * Returns the security session representing this user for this execution context.
+     * Returns the security session representing this user for this execution
+     * context.
      */
     @Override
     public AuthenticationSession getAuthenticationSession() {
@@ -231,7 +232,8 @@ public class IsisSessionDefault implements IsisSession {
     // //////////////////////////////////////////////////////
 
     /**
-     * Convenience method that returns the {@link IsisTransaction} of the session, if any.
+     * Convenience method that returns the {@link IsisTransaction} of the
+     * session, if any.
      */
     @Override
     public IsisTransaction getCurrentTransaction() {

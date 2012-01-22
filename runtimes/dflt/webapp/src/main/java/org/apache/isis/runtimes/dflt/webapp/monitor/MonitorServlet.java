@@ -37,8 +37,7 @@ public class MonitorServlet extends HttpServlet {
     private MonitorListenerImpl monitor;
 
     @Override
-    protected void doGet(final HttpServletRequest request, final HttpServletResponse response) throws ServletException,
-        IOException {
+    protected void doGet(final HttpServletRequest request, final HttpServletResponse response) throws ServletException, IOException {
         final String queryString = request.getQueryString();
         final String query = queryString == null ? "Overview" : URLDecoder.decode(queryString, "UTF-8");
         response.setContentType("text/html");
@@ -61,17 +60,19 @@ public class MonitorServlet extends HttpServlet {
     private static String listSessions() {
         final StringBuffer str = new StringBuffer();
         /*
-         * final Iterator<?> it = SessionAccess.getSessions().iterator(); while (it.hasNext()) { final HttpSession
-         * session = (HttpSession) it.next(); final String id = session.getId(); str.append(id); str.append(" \t");
+         * final Iterator<?> it = SessionAccess.getSessions().iterator(); while
+         * (it.hasNext()) { final HttpSession session = (HttpSession) it.next();
+         * final String id = session.getId(); str.append(id); str.append(" \t");
          * 
-         * final long creationTime = session.getCreationTime(); str.append(new Date(creationTime)); str.append(" \t");
+         * final long creationTime = session.getCreationTime(); str.append(new
+         * Date(creationTime)); str.append(" \t");
          * 
-         * final long lastAccessedTime = session.getLastAccessedTime(); str.append(new Date(lastAccessedTime));
-         * str.append(" \t");
+         * final long lastAccessedTime = session.getLastAccessedTime();
+         * str.append(new Date(lastAccessedTime)); str.append(" \t");
          * 
          * final AuthenticationSession nofSession = (AuthenticationSession)
-         * session.getAttribute("NOF_SESSION_ATTRIBUTE"); if (nofSession != null) {
-         * str.append(nofSession.getUserName()); }
+         * session.getAttribute("NOF_SESSION_ATTRIBUTE"); if (nofSession !=
+         * null) { str.append(nofSession.getUserName()); }
          * 
          * str.append("\n"); }
          */

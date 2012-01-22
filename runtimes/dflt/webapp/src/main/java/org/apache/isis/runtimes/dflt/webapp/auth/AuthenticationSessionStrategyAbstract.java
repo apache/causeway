@@ -37,7 +37,7 @@ public abstract class AuthenticationSessionStrategyAbstract implements Authentic
         final HttpSession httpSession = getHttpSession(servletRequest);
         return httpSession.getServletContext();
     }
-    
+
     @Override
     public void bind(final ServletRequest servletRequest, final ServletResponse servletResponse, final AuthenticationSession authSession) {
         // no-op

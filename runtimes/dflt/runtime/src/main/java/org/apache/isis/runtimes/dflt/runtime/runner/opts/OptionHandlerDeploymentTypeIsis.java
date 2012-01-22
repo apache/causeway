@@ -32,8 +32,7 @@ public class OptionHandlerDeploymentTypeIsis extends OptionHandlerDeploymentType
     public static final String TYPE_SERVER = DeploymentType.SERVER.friendlyName();
 
     public OptionHandlerDeploymentTypeIsis() {
-        super(DeploymentType.PROTOTYPE, TYPE_EXPLORATION + "; " + TYPE_PROTOTYPE + " (default); " + TYPE_SINGLE_USER
-            + "; " + TYPE_CLIENT + "; " + TYPE_SERVER_EXPLORATION + "; " + TYPE_SERVER_PROTOTYPE + "; " + TYPE_SERVER);
+        super(DeploymentType.PROTOTYPE, TYPE_EXPLORATION + "; " + TYPE_PROTOTYPE + " (default); " + TYPE_SINGLE_USER + "; " + TYPE_CLIENT + "; " + TYPE_SERVER_EXPLORATION + "; " + TYPE_SERVER_PROTOTYPE + "; " + TYPE_SERVER);
     }
 
 }

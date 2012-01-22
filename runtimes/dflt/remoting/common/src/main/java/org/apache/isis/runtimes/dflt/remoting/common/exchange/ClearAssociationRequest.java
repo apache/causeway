@@ -28,8 +28,8 @@ import org.apache.isis.runtimes.dflt.remoting.common.data.common.IdentityData;
 import org.apache.isis.runtimes.dflt.remoting.common.facade.ServerFacade;
 
 /**
- * REVIEW: should we split? the OTMA will need to specify the associate to remove, but the OTOA should not need to
- * provide the associate to clear.
+ * REVIEW: should we split? the OTMA will need to specify the associate to
+ * remove, but the OTOA should not need to provide the associate to clear.
  * 
  * @param request
  *            TODO
@@ -41,8 +41,7 @@ public class ClearAssociationRequest extends RequestAbstract {
     private final IdentityData target;
     private final IdentityData associate;
 
-    public ClearAssociationRequest(final AuthenticationSession session, final String fieldIdentifier,
-        final IdentityData target, final IdentityData associate) {
+    public ClearAssociationRequest(final AuthenticationSession session, final String fieldIdentifier, final IdentityData target, final IdentityData associate) {
         super(session);
         this.fieldIdentifier = fieldIdentifier;
         this.target = target;
@@ -91,7 +90,8 @@ public class ClearAssociationRequest extends RequestAbstract {
     // ///////////////////////////////////////////////////////
 
     /**
-     * {@link #setResponse(Object) Sets a response} of a {@link ClearAssociationResponse}.
+     * {@link #setResponse(Object) Sets a response} of a
+     * {@link ClearAssociationResponse}.
      */
     @Override
     public void execute(final ServerFacade serverFacade) {

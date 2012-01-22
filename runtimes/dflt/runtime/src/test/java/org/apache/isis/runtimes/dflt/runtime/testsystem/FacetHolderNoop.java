@@ -30,7 +30,8 @@ import org.apache.isis.core.metamodel.facetapi.MultiTypedFacet;
 import com.google.common.collect.Lists;
 
 /**
- * Has no functionality but makes it easier to write tests that require an instance of an {@link Identifier}.
+ * Has no functionality but makes it easier to write tests that require an
+ * instance of an {@link Identifier}.
  */
 public class FacetHolderNoop implements FacetHolder {
 
@@ -78,7 +79,9 @@ public class FacetHolderNoop implements FacetHolder {
     /*
      * (non-Javadoc)
      * 
-     * @see org.apache.isis.core.metamodel.facetapi.FacetHolder#containsDoOpFacet(java.lang.Class)
+     * @see
+     * org.apache.isis.core.metamodel.facetapi.FacetHolder#containsDoOpFacet
+     * (java.lang.Class)
      */
     @Override
     public boolean containsDoOpFacet(final Class<? extends Facet> facetType) {

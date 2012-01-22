@@ -52,8 +52,7 @@ abstract class AbstractXmlPersistenceCommand extends PersistenceCommandAbstract 
         }
 
         final ObjectSpecification adapterSpec = adapter.getSpecification();
-        final ObjectData data =
-            new ObjectData(adapterSpec, (SerialOid) adapter.getOid(), (FileVersion) adapter.getVersion());
+        final ObjectData data = new ObjectData(adapterSpec, (SerialOid) adapter.getOid(), (FileVersion) adapter.getVersion());
 
         final List<ObjectAssociation> associations = adapterSpec.getAssociations();
         for (final ObjectAssociation association : associations) {
@@ -77,18 +76,15 @@ abstract class AbstractXmlPersistenceCommand extends PersistenceCommandAbstract 
         return data;
     }
 
-    private void saveReference(final ObjectData data, final String associationId, final ObjectAdapter associatedObject,
-        final boolean ensurePersistent) {
+    private void saveReference(final ObjectData data, final String associationId, final ObjectAdapter associatedObject, final boolean ensurePersistent) {
         data.addAssociation(associatedObject, associationId, ensurePersistent);
     }
 
-    private void saveCollection(final String associationId, final ObjectData data,
-        final ObjectAdapter associatedObject, final boolean ensurePersistent) {
+    private void saveCollection(final String associationId, final ObjectData data, final ObjectAdapter associatedObject, final boolean ensurePersistent) {
         data.addInternalCollection(associatedObject, associationId, ensurePersistent);
     }
 
-    private void saveEncoded(final ObjectData data, final String associationId, final ObjectAdapter associatedObject,
-        final boolean isEmpty) {
+    private void saveEncoded(final ObjectData data, final String associationId, final ObjectAdapter associatedObject, final boolean isEmpty) {
         if (associatedObject == null || isEmpty) {
             data.saveValue(associationId, isEmpty, null);
         } else {

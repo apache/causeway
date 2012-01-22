@@ -33,8 +33,7 @@ public class InMemoryPersistenceSessionFactory extends PersistenceSessionFactory
 
     private ObjectStorePersistedObjects persistedObjects;
 
-    public InMemoryPersistenceSessionFactory(final DeploymentType deploymentType,
-        final PersistenceSessionFactoryDelegate persistenceSessionFactoryDelegate) {
+    public InMemoryPersistenceSessionFactory(final DeploymentType deploymentType, final PersistenceSessionFactoryDelegate persistenceSessionFactoryDelegate) {
         super(deploymentType, persistenceSessionFactoryDelegate);
     }
 
@@ -57,14 +56,16 @@ public class InMemoryPersistenceSessionFactory extends PersistenceSessionFactory
     }
 
     /**
-     * Not API - called when {@link InMemoryObjectStore} first {@link InMemoryObjectStore#open() open}ed.
+     * Not API - called when {@link InMemoryObjectStore} first
+     * {@link InMemoryObjectStore#open() open}ed.
      */
     public ObjectStorePersistedObjects createPersistedObjects() {
         return new ObjectStorePersistedObjectsDefault();
     }
 
     /**
-     * Not API - called when {@link InMemoryObjectStore} is {@link InMemoryObjectStore#close() close}d.
+     * Not API - called when {@link InMemoryObjectStore} is
+     * {@link InMemoryObjectStore#close() close}d.
      */
     public void attach(final PersistenceSession persistenceSession, final ObjectStorePersistedObjects persistedObjects) {
         final OidGenerator oidGenerator = persistenceSession.getOidGenerator();

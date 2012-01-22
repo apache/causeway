@@ -35,7 +35,8 @@ public interface PersistenceSessionFactory extends ApplicationScopedComponent, S
     DeploymentType getDeploymentType();
 
     /**
-     * Creates a {@link PersistenceSession} with the implementing object as the {@link PersistenceSession}'s
+     * Creates a {@link PersistenceSession} with the implementing object as the
+     * {@link PersistenceSession}'s
      * {@link PersistenceSession#getPersistenceSessionFactory() owning factory}.
      */
     PersistenceSession createPersistenceSession();

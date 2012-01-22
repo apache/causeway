@@ -98,8 +98,7 @@ public class PojoAdapterHashMap implements PojoAdapterMap {
     @Override
     public void reset() {
         LOG.debug("reset");
-        for (final Iterator<Map.Entry<Object, ObjectAdapter>> iterator = adapterByPojoMap.entrySet().iterator(); iterator
-            .hasNext();) {
+        for (final Iterator<Map.Entry<Object, ObjectAdapter>> iterator = adapterByPojoMap.entrySet().iterator(); iterator.hasNext();) {
             final Map.Entry<Object, ObjectAdapter> entry = iterator.next();
             final ObjectAdapter adapter = entry.getValue();
             if (!adapter.getSpecification().isService()) {

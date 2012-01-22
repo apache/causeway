@@ -62,8 +62,8 @@ import org.apache.isis.runtimes.dflt.runtime.system.transaction.MessageBroker;
 import org.apache.isis.runtimes.dflt.runtime.system.transaction.UpdateNotifier;
 
 /**
- * Provides services to the metamodel based on the currently running {@link IsisSession session} (primarily the
- * {@link PersistenceSession}).
+ * Provides services to the metamodel based on the currently running
+ * {@link IsisSession session} (primarily the {@link PersistenceSession}).
  */
 public class RuntimeContextFromSession extends RuntimeContextAbstract {
 
@@ -108,8 +108,7 @@ public class RuntimeContextFromSession extends RuntimeContextAbstract {
             };
 
             @Override
-            public ObjectAdapter adapterFor(final Object pojo, final ObjectAdapter ownerAdapter,
-                final IdentifiedHolder identifiedHolder) {
+            public ObjectAdapter adapterFor(final Object pojo, final ObjectAdapter ownerAdapter, final IdentifiedHolder identifiedHolder) {
                 return getRuntimeAdapterManager().adapterFor(pojo, ownerAdapter, identifiedHolder);
             }
         };
@@ -232,7 +231,7 @@ public class RuntimeContextFromSession extends RuntimeContextAbstract {
             }
         };
         this.localizationProvider = new LocalizationProviderAbstract() {
-            
+
             @Override
             public Localization getLocalization() {
                 return IsisContext.getLocalization();
@@ -269,10 +268,11 @@ public class RuntimeContextFromSession extends RuntimeContextAbstract {
         return servicesProvider;
     }
 
+    @Override
     public LocalizationProviderAbstract getLocalizationProvider() {
         return localizationProvider;
     }
-    
+
     @Override
     public ObjectDirtier getObjectDirtier() {
         return objectDirtier;

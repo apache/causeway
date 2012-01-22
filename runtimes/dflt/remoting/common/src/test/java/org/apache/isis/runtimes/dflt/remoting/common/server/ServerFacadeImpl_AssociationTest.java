@@ -69,8 +69,9 @@ public class ServerFacadeImpl_AssociationTest extends ProxyJunit4TestCase {
     private ObjectEncoderDecoder mockObjectEncoder;
 
     /*
-     * Testing the Distribution implementation ServerDistribution. This uses the encoder to unmarshall objects and then
-     * calls the persistor and reflector; all of which should be mocked.
+     * Testing the Distribution implementation ServerDistribution. This uses the
+     * encoder to unmarshall objects and then calls the persistor and reflector;
+     * all of which should be mocked.
      */
     @Before
     public void setUp() throws Exception {
@@ -107,13 +108,14 @@ public class ServerFacadeImpl_AssociationTest extends ProxyJunit4TestCase {
     @Test
     public void testClearAssociation() {
         /*
-         * other tests for clear: - clear collection element - fails if unauthorised - fails if unavailable
+         * other tests for clear: - clear collection element - fails if
+         * unauthorised - fails if unavailable
          * 
-         * could place all these clear test in one class; test other methods in other classes
+         * could place all these clear test in one class; test other methods in
+         * other classes
          */
         IsisContext.getTransactionManager().startTransaction();
-        final ClearAssociationRequest request =
-            new ClearAssociationRequest(authenticationSession, "director", movieData, personData);
+        final ClearAssociationRequest request = new ClearAssociationRequest(authenticationSession, "director", movieData, personData);
         final ClearAssociationResponse response = server.clearAssociation(request);
         final ObjectData[] updatesData = response.getUpdates();
         IsisContext.getTransactionManager().endTransaction();
@@ -125,8 +127,7 @@ public class ServerFacadeImpl_AssociationTest extends ProxyJunit4TestCase {
     @Test
     public void testSetAssociation() {
         IsisContext.getTransactionManager().startTransaction();
-        final SetAssociationRequest request =
-            new SetAssociationRequest(authenticationSession, "director", movieData, personData);
+        final SetAssociationRequest request = new SetAssociationRequest(authenticationSession, "director", movieData, personData);
         final SetAssociationResponse response = server.setAssociation(request);
         final ObjectData[] updates = response.getUpdates();
         IsisContext.getTransactionManager().endTransaction();
@@ -140,8 +141,7 @@ public class ServerFacadeImpl_AssociationTest extends ProxyJunit4TestCase {
         // version should be different, causing concurrency exception
         movieAdapter.setOptimisticLock(new TestProxyVersion(6));
         try {
-            final SetAssociationRequest request =
-                new SetAssociationRequest(authenticationSession, "director", movieData, personData);
+            final SetAssociationRequest request = new SetAssociationRequest(authenticationSession, "director", movieData, personData);
             server.setAssociation(request);
             fail();
         } catch (final ConcurrencyException expected) {
@@ -152,8 +152,7 @@ public class ServerFacadeImpl_AssociationTest extends ProxyJunit4TestCase {
     public void testSetAssociationFailsWhenInvisible() {
         nameField.setUpIsVisible(false);
         try {
-            final SetAssociationRequest request =
-                new SetAssociationRequest(authenticationSession, "director", movieData, personData);
+            final SetAssociationRequest request = new SetAssociationRequest(authenticationSession, "director", movieData, personData);
             server.setAssociation(request);
             fail();
         } catch (final IsisException expected) {
@@ -165,8 +164,7 @@ public class ServerFacadeImpl_AssociationTest extends ProxyJunit4TestCase {
     public void testSetAssociationFailsWhenUnavailable() {
         nameField.setUpIsUnusableFor(movieAdapter);
         try {
-            final SetAssociationRequest request =
-                new SetAssociationRequest(authenticationSession, "director", movieData, personData);
+            final SetAssociationRequest request = new SetAssociationRequest(authenticationSession, "director", movieData, personData);
             server.setAssociation(request);
             fail();
         } catch (final IsisException expected) {
@@ -179,8 +177,7 @@ public class ServerFacadeImpl_AssociationTest extends ProxyJunit4TestCase {
         // version should be different, causing concurrency exception
         personAdapter.setOptimisticLock(new TestProxyVersion(6));
         try {
-            final SetAssociationRequest request =
-                new SetAssociationRequest(authenticationSession, "director", movieData, personData);
+            final SetAssociationRequest request = new SetAssociationRequest(authenticationSession, "director", movieData, personData);
             server.setAssociation(request);
             fail();
         } catch (final ConcurrencyException expected) {

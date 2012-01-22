@@ -29,8 +29,8 @@ import org.apache.isis.runtimes.dflt.runtime.system.transaction.UpdateNotifier;
 import org.apache.isis.runtimes.dflt.runtime.transaction.IsisTransactionAbstract;
 
 /**
- * Encapsulates a transaction occurring on the client, where each of the actions (add, remove and change) are then
- * passed to the server as an atomic unit.
+ * Encapsulates a transaction occurring on the client, where each of the actions
+ * (add, remove and change) are then passed to the server as an atomic unit.
  * 
  * <p>
  * Each action is captured as an {@link ClientTransactionEvent} object.
@@ -43,8 +43,7 @@ public class ClientSideTransaction extends IsisTransactionAbstract {
     // Constructor
     // //////////////////////////////////////////////////////////////
 
-    public ClientSideTransaction(final IsisTransactionManager transactionManager, final MessageBroker messageBroker,
-        final UpdateNotifier updateNotifier) {
+    public ClientSideTransaction(final IsisTransactionManager transactionManager, final MessageBroker messageBroker, final UpdateNotifier updateNotifier) {
         super(transactionManager, messageBroker, updateNotifier);
     }
 

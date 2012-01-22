@@ -25,41 +25,44 @@ import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.runtimes.dflt.objectstores.nosql.DataEncryption;
 import org.apache.isis.runtimes.dflt.objectstores.nosql.NoSqlStoreException;
 
-
 public abstract class BlowfishEncryptionAbstract implements DataEncryption {
 
     private static final String BLOWFISH = "Blowfish";
     private byte[] specKey;
-    
-    public void init(IsisConfiguration configuration) {
+
+    @Override
+    public void init(final IsisConfiguration configuration) {
         specKey = secretKey(configuration);
     }
 
     public abstract byte[] secretKey(IsisConfiguration configuration);
 
+    @Override
     public String getType() {
         return BLOWFISH;
     }
 
+    @Override
     public String encrypt(final String plainText) {
         try {
-            SecretKeySpec key = new SecretKeySpec(specKey, BLOWFISH);
-            Cipher cipher = Cipher.getInstance(BLOWFISH);
+            final SecretKeySpec key = new SecretKeySpec(specKey, BLOWFISH);
+            final Cipher cipher = Cipher.getInstance(BLOWFISH);
             cipher.init(Cipher.ENCRYPT_MODE, key);
             return new String(cipher.doFinal(plainText.getBytes()));
-        } catch (Exception e) {
+        } catch (final Exception e) {
             throw new NoSqlStoreException(e);
         }
     }
 
+    @Override
     public String decrypt(final String encryptedText) {
         try {
-            SecretKeySpec key = new SecretKeySpec(specKey, BLOWFISH);
-            Cipher cipher = Cipher.getInstance(BLOWFISH);
+            final SecretKeySpec key = new SecretKeySpec(specKey, BLOWFISH);
+            final Cipher cipher = Cipher.getInstance(BLOWFISH);
             cipher.init(Cipher.DECRYPT_MODE, key);
-            byte[] decrypted = cipher.doFinal(encryptedText.getBytes());
+            final byte[] decrypted = cipher.doFinal(encryptedText.getBytes());
             return new String(decrypted);
-        } catch (Exception e) {
+        } catch (final Exception e) {
             throw new NoSqlStoreException(e);
         }
     }

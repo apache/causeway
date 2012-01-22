@@ -35,9 +35,9 @@ public class JdbcObjectReferenceFieldMapping extends JdbcObjectReferenceMapping 
 
     public static class Factory extends AbstractFieldMappingFactory {
         @Override
-        public FieldMapping createFieldMapping(ObjectSpecification object, final ObjectAssociation field) {
+        public FieldMapping createFieldMapping(final ObjectSpecification object, final ObjectAssociation field) {
             if (field.getSpecification().isAbstract()) {
-                String dataType = getTypeOverride(object, field, Defaults.TYPE_LONG_STRING());
+                final String dataType = getTypeOverride(object, field, Defaults.TYPE_LONG_STRING());
                 return new JdbcAbstractReferenceFieldMapping(field, dataType);
             }
             return new JdbcObjectReferenceFieldMapping(field);
@@ -53,7 +53,7 @@ public class JdbcObjectReferenceFieldMapping extends JdbcObjectReferenceMapping 
     }
 
     @Override
-    public void appendWhereObject(DatabaseConnector connector, ObjectAdapter objectAdapter) {
+    public void appendWhereObject(final DatabaseConnector connector, final ObjectAdapter objectAdapter) {
         final ObjectAdapter fieldValue = field.get(objectAdapter);
         connector.addToQueryValues(primaryKeyAsObject(fieldValue.getOid()));
     }

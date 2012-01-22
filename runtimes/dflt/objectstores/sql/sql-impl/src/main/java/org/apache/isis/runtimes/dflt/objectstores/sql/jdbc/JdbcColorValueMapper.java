@@ -42,7 +42,7 @@ public class JdbcColorValueMapper extends AbstractJdbcFieldMapping {
 
         @Override
         public FieldMapping createFieldMapping(final ObjectSpecification object, final ObjectAssociation field) {
-            String dataType = getTypeOverride(object, field, type);
+            final String dataType = getTypeOverride(object, field, type);
             return new JdbcColorValueMapper(field, dataType);
         }
     }
@@ -57,7 +57,9 @@ public class JdbcColorValueMapper extends AbstractJdbcFieldMapping {
     /*
      * (non-Javadoc)
      * 
-     * @see org.apache.isis.runtimes.dflt.objectstores.sql.jdbc.AbstractJdbcFieldMapping#columnType()
+     * @see
+     * org.apache.isis.runtimes.dflt.objectstores.sql.jdbc.AbstractJdbcFieldMapping
+     * #columnType()
      */
     @Override
     protected String columnType() {
@@ -68,7 +70,8 @@ public class JdbcColorValueMapper extends AbstractJdbcFieldMapping {
      * (non-Javadoc)
      * 
      * @see
-     * org.apache.isis.runtimes.dflt.objectstores.sql.jdbc.AbstractJdbcFieldMapping#preparedStatementObject(org.apache
+     * org.apache.isis.runtimes.dflt.objectstores.sql.jdbc.AbstractJdbcFieldMapping
+     * #preparedStatementObject(org.apache
      * .isis.core.metamodel.adapter.ObjectAdapter)
      */
     @Override
@@ -81,13 +84,13 @@ public class JdbcColorValueMapper extends AbstractJdbcFieldMapping {
      * (non-Javadoc)
      * 
      * @see
-     * org.apache.isis.runtimes.dflt.objectstores.sql.jdbc.AbstractJdbcFieldMapping#setFromDBColumn(org.apache.isis.
-     * runtimes.dflt.objectstores.sql.Results, java.lang.String,
+     * org.apache.isis.runtimes.dflt.objectstores.sql.jdbc.AbstractJdbcFieldMapping
+     * #setFromDBColumn(org.apache.isis. runtimes.dflt.objectstores.sql.Results,
+     * java.lang.String,
      * org.apache.isis.core.metamodel.spec.feature.ObjectAssociation)
      */
     @Override
-    protected ObjectAdapter setFromDBColumn(final Results results, final String columnName,
-        final ObjectAssociation field) {
+    protected ObjectAdapter setFromDBColumn(final Results results, final String columnName, final ObjectAssociation field) {
         ObjectAdapter restoredValue;
         final int intValue = results.getInt(columnName);
         final Color colorValue = new Color(intValue);

@@ -37,9 +37,11 @@ public class ExpectedCallsTest extends TestCase {
         /*
          * calls.addExpectedMethod("testMethod1");
          * 
-         * calls.addExpectedMethod("testMethod2"); calls.addExpectedParameter("param1");
+         * calls.addExpectedMethod("testMethod2");
+         * calls.addExpectedParameter("param1");
          * 
-         * calls.addExpectedMethod("testMethod3"); calls.addExpectedParameter("param1");
+         * calls.addExpectedMethod("testMethod3");
+         * calls.addExpectedParameter("param1");
          * calls.addExpectedParameter("param2");
          */
         calls.addExpectedMethod("testMethod4");
@@ -64,9 +66,12 @@ public class ExpectedCallsTest extends TestCase {
         /*
          * calls.addActualMethod("testMethod1");
          * 
-         * calls.addActualMethod("testMethod2"); calls.addActualParameter("param1");
+         * calls.addActualMethod("testMethod2");
+         * calls.addActualParameter("param1");
          * 
-         * calls.addActualMethod("testMethod3"); calls.addActualParameter("param1"); calls.addActualParameter("param2");
+         * calls.addActualMethod("testMethod3");
+         * calls.addActualParameter("param1");
+         * calls.addActualParameter("param2");
          */
         calls.addActualMethod("testMethod4");
         calls.addActualParameter("param1");

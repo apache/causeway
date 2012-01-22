@@ -22,8 +22,6 @@ package org.apache.isis.runtimes.dflt.objectstores.sql.auto;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
-
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
@@ -41,6 +39,7 @@ import org.apache.isis.runtimes.dflt.objectstores.sql.Sql;
 import org.apache.isis.runtimes.dflt.objectstores.sql.jdbc.JdbcObjectReferenceMapping;
 import org.apache.isis.runtimes.dflt.objectstores.sql.mapping.ObjectReferenceMapping;
 import org.apache.isis.runtimes.dflt.runtime.persistence.PersistorUtil;
+import org.apache.log4j.Logger;
 
 public class AutoCollectionMapper extends AbstractMapper implements CollectionMapper {
     private static final Logger LOG = Logger.getLogger(AutoCollectionMapper.class);
@@ -49,8 +48,7 @@ public class AutoCollectionMapper extends AbstractMapper implements CollectionMa
     private final ObjectReferenceMapping elementMapping;
     private final IdMapping idMapping;
 
-    public AutoCollectionMapper(final ObjectSpecification specification, final ObjectAssociation field,
-        final FieldMappingLookup lookup) {
+    public AutoCollectionMapper(final ObjectSpecification specification, final ObjectAssociation field, final FieldMappingLookup lookup) {
         this.field = field;
 
         final ObjectSpecification spec = field.getFacet(TypeOfFacet.class).valueSpec();
@@ -82,8 +80,7 @@ public class AutoCollectionMapper extends AbstractMapper implements CollectionMa
     }
 
     @Override
-    public void loadInternalCollection(final DatabaseConnector connector, final ObjectAdapter parent,
-        final boolean makeResolved) {
+    public void loadInternalCollection(final DatabaseConnector connector, final ObjectAdapter parent, final boolean makeResolved) {
         final ObjectAdapter collection = field.get(parent);
         if (collection.getResolveState().canChangeTo(ResolveState.RESOLVING)) {
             LOG.debug("loading internal collection " + field);

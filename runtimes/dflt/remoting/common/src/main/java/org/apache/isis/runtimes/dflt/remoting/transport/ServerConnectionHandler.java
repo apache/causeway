@@ -36,12 +36,12 @@ import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.log4j.Logger;
 
 /**
- * Standard processing for processing an inbound {@link Request} and generating an outbound {@link ResponseEnvelope} (or
- * some sort of {@link Exception}).
+ * Standard processing for processing an inbound {@link Request} and generating
+ * an outbound {@link ResponseEnvelope} (or some sort of {@link Exception}).
  * 
  * <p>
- * Used by the (socket transport) {@link Worker} and originally inlined; now factored out so can be reused by other
- * transports, notably http.
+ * Used by the (socket transport) {@link Worker} and originally inlined; now
+ * factored out so can be reused by other transports, notably http.
  */
 public class ServerConnectionHandler {
 
@@ -102,8 +102,7 @@ public class ServerConnectionHandler {
             }
 
             if (!(request instanceof OpenSessionRequest)) {
-                throw new IsisException(
-                    "AuthenticationSession required for all requests (except the initial Authenticate request)");
+                throw new IsisException("AuthenticationSession required for all requests (except the initial Authenticate request)");
             }
         } else {
             IsisContext.openSession(authenticationSession);
@@ -118,8 +117,7 @@ public class ServerConnectionHandler {
     }
 
     private void monitorRequest(final AuthenticationSession authenticationSession, final Request request) {
-        final String userName =
-            authenticationSession != null ? authenticationSession.getUserName() : "**AUTHENTICATING**";
+        final String userName = authenticationSession != null ? authenticationSession.getUserName() : "**AUTHENTICATING**";
         final String message = "{" + userName + "|" + this + "}  " + request.toString();
         ACCESS_LOG.info(message);
         Monitor.addEvent("REQUEST", message, debugSessionInfo);

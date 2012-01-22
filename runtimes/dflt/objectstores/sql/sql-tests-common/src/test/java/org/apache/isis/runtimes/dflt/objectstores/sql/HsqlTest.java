@@ -31,7 +31,8 @@ public class HsqlTest extends SqlIntegrationTestCommon {
     @Override
     public Properties getProperties() {
         Properties properties = super.getProperties();
-        if (properties == null) { // Only used if properties file does not exist.
+        if (properties == null) { // Only used if properties file does not
+                                  // exist.
             properties = new Properties();
             properties.put(SqlObjectStore.BASE_NAME + ".jdbc.driver", "org.hsqldb.jdbcDriver");
             properties.put(SqlObjectStore.BASE_NAME + ".jdbc.connection", "jdbc:hsqldb:file:hsql-db/tests");

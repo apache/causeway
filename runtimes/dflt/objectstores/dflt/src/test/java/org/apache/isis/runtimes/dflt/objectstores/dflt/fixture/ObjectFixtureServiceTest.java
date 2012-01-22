@@ -41,7 +41,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 /**
- * TODO: remove dependency on {@link TestProxySystemII} and move back to runtime.
+ * TODO: remove dependency on {@link TestProxySystemII} and move back to
+ * runtime.
  */
 public class ObjectFixtureServiceTest {
 

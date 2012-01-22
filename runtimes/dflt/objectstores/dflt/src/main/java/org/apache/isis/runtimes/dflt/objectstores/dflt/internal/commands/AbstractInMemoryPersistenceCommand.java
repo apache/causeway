@@ -33,8 +33,7 @@ public abstract class AbstractInMemoryPersistenceCommand extends PersistenceComm
 
     private final ObjectStorePersistedObjects persistedObjects;
 
-    public AbstractInMemoryPersistenceCommand(final ObjectAdapter adapter,
-        final ObjectStorePersistedObjects persistedObjects) {
+    public AbstractInMemoryPersistenceCommand(final ObjectAdapter adapter, final ObjectStorePersistedObjects persistedObjects) {
         super(adapter);
         this.persistedObjects = persistedObjects;
     }

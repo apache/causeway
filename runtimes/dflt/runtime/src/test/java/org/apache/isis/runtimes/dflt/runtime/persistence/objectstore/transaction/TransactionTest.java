@@ -196,7 +196,8 @@ public class TransactionTest {
     public void testAddCreateCommandsButIgnoreSaveForSameObject() throws Exception {
         t.addCommand(createCreateCommand(object1, "create object 1"));
         /*
-         * The next command should be ignored as the above create will have already saved the next object
+         * The next command should be ignored as the above create will have
+         * already saved the next object
          */
         t.addCommand(createSaveCommand(object1, "save object 1"));
         t.addCommand(createSaveCommand(object2, "save object 2"));

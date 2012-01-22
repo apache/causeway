@@ -154,11 +154,11 @@ public class AWTConsole extends Frame implements ServerConsole {
         /*
          * Enumeration e = server.getObjectStore().cache();
          * 
-         * log("Cached objects:-"); while (e.hasMoreElements()) { ObjectAdapter object = (ObjectAdapter)
-         * e.nextElement();
+         * log("Cached objects:-"); while (e.hasMoreElements()) { ObjectAdapter
+         * object = (ObjectAdapter) e.nextElement();
          * 
-         * log(" " + object.getClassName() + "[" + (object.isResolved() ? "" : "~") + object.getOid() + "] " +
-         * object.title()); } log();
+         * log(" " + object.getClassName() + "[" + (object.isResolved() ? "" :
+         * "~") + object.getOid() + "] " + object.title()); } log();
          */
     }
 
@@ -166,11 +166,11 @@ public class AWTConsole extends Frame implements ServerConsole {
         /*
          * try { Enumeration e = server.getObjectStore().classes();
          * 
-         * log("Loaded classes:-"); while (e.hasMoreElements()) { ObjectSpecification object = (ObjectSpecification)
-         * e.nextElement();
+         * log("Loaded classes:-"); while (e.hasMoreElements()) {
+         * ObjectSpecification object = (ObjectSpecification) e.nextElement();
          * 
-         * log(" " + object); } log(); } catch (ObjectStoreException e) { LOG.error("Error listing classes " +
-         * e.getMessage()); }
+         * log(" " + object); } log(); } catch (ObjectStoreException e) {
+         * LOG.error("Error listing classes " + e.getMessage()); }
          */
     }
 

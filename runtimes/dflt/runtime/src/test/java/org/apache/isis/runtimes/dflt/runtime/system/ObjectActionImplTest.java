@@ -91,9 +91,7 @@ public class ObjectActionImplTest extends ProxyJunit3TestCase {
             }
         });
 
-        action =
-            new ObjectActionImpl(mockFacetedMethod, new ObjectMemberContext(mockAuthenticationSessionProvider,
-                mockSpecificationLookup, mockAdapterManager, mockQuerySubmitter, mockCollectionTypeRegistry), mockServicesProvider);
+        action = new ObjectActionImpl(mockFacetedMethod, new ObjectMemberContext(mockAuthenticationSessionProvider, mockSpecificationLookup, mockAdapterManager, mockQuerySubmitter, mockCollectionTypeRegistry), mockServicesProvider);
     }
 
     @Test

@@ -50,8 +50,7 @@ class ServiceHandler extends DefaultHandler {
     Vector services = new Vector();
 
     @Override
-    public void startElement(final String ns, final String name, final String tagName, final Attributes attrs)
-        throws SAXException {
+    public void startElement(final String ns, final String name, final String tagName, final Attributes attrs) throws SAXException {
         if (tagName.equals("service")) {
             final long oid = Long.valueOf(attrs.getValue("oid"), 16).longValue();
             final String id = attrs.getValue("id");

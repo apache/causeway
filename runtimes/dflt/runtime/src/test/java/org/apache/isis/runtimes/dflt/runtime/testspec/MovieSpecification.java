@@ -33,7 +33,6 @@ import org.apache.isis.core.metamodel.interactions.InteractionContext;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.core.metamodel.spec.feature.ObjectActionContainer.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.testspec.TestProxySpecification;
 import org.apache.isis.core.testsupport.testdomain.Movie;
@@ -105,7 +104,9 @@ class MovieDirectorField extends OneToOneAssociationTest {
     /*
      * (non-Javadoc)
      * 
-     * @see org.apache.isis.core.metamodel.spec.feature.ObjectFeature#getFeatureType()
+     * @see
+     * org.apache.isis.core.metamodel.spec.feature.ObjectFeature#getFeatureType
+     * ()
      */
     @Override
     public FeatureType getFeatureType() {
@@ -208,13 +209,12 @@ public class MovieSpecification extends TestProxySpecification {
     }
 
     @Override
-    public ObjectAction getObjectAction(final ActionType type, final String name,
-        final List<ObjectSpecification> parameters) {
+    public ObjectAction getObjectAction(final ActionType type, final String name, final List<ObjectSpecification> parameters) {
         return null;
     }
 
     @Override
-    public List<ObjectAction> getObjectActions(final ActionType type, Contributed contributed) {
+    public List<ObjectAction> getObjectActions(final ActionType type, final Contributed contributed) {
         return null;
     }
 
@@ -248,13 +248,11 @@ public class MovieSpecification extends TestProxySpecification {
         return new Movie();
     }
 
-    public InteractionContext createVisibleInteractionContext(final AuthenticationSession session,
-        final ObjectAdapter target, final InteractionInvocationMethod invocationMethod) {
+    public InteractionContext createVisibleInteractionContext(final AuthenticationSession session, final ObjectAdapter target, final InteractionInvocationMethod invocationMethod) {
         return null;
     }
 
-    public InteractionContext createUsableInteractionContext(final AuthenticationSession session,
-        final ObjectAdapter target, final InteractionInvocationMethod invocationMethod) {
+    public InteractionContext createUsableInteractionContext(final AuthenticationSession session, final ObjectAdapter target, final InteractionInvocationMethod invocationMethod) {
         return null;
     }
 

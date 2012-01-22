@@ -18,6 +18,8 @@
  */
 package org.apache.isis.runtimes.dflt.objectstores.nosql.file;
 
+import static org.junit.Assert.assertEquals;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,30 +27,16 @@ import org.apache.isis.runtimes.dflt.objectstores.nosql.StateReader;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-
-
 public class JsonStateReaderTest {
-    
+
     private JsonStateReader reader;
 
     @Before
     public void setup() {
-        reader = new JsonStateReader("{" + 
-                "\"_encrypt\": \"etc1\"," +
-                "\"_id\": \"#2\"," +
-                "\"_type\": \"com.planchaser.ClassName\"," +
-                "\"_time\": \"ddmmyy\"," +
-                "\"_user\": \"fred\"," +
-                "\"_version\": \"2\"," +
-                "\"field-1\": \"1234\"," +
-                "\"field-2\": \"data\"," +
-                "\"field-3\": null," +
-                "\"list\": [{}, {}]," +
-                "\"aggregate\": {\"_id\": \"#3\"}," +
-                "}");
+        reader = new JsonStateReader("{" + "\"_encrypt\": \"etc1\"," + "\"_id\": \"#2\"," + "\"_type\": \"com.planchaser.ClassName\"," + "\"_time\": \"ddmmyy\"," + "\"_user\": \"fred\"," + "\"_version\": \"2\"," + "\"field-1\": \"1234\"," + "\"field-2\": \"data\"," + "\"field-3\": null,"
+                + "\"list\": [{}, {}]," + "\"aggregate\": {\"_id\": \"#3\"}," + "}");
     }
-    
+
     @Test
     public void readEncryptionType() throws Exception {
         assertEquals("etc1", reader.readEncrytionType());
@@ -63,17 +51,17 @@ public class JsonStateReaderTest {
     public void readObjectType() throws Exception {
         assertEquals("com.planchaser.ClassName", reader.readObjectType());
     }
-    
+
     @Test
     public void readTime() throws Exception {
         assertEquals("ddmmyy", reader.readTime());
     }
-    
+
     @Test
     public void readUser() throws Exception {
         assertEquals("fred", reader.readUser());
     }
-    
+
     @Test
     public void readVersion() throws Exception {
         assertEquals("2", reader.readVersion());
@@ -106,15 +94,14 @@ public class JsonStateReaderTest {
 
     @Test
     public void readList() throws Exception {
-        List<StateReader> collection = reader.readCollection("list");
+        final List<StateReader> collection = reader.readCollection("list");
         assertEquals(2, collection.size());
-//        assertEquals(null, reader.readField("field-4"));
-    }    
+        // assertEquals(null, reader.readField("field-4"));
+    }
 
     @Test
     public void readAggregate() throws Exception {
-        StateReader aggregate = reader.readAggregate("aggregate");
+        final StateReader aggregate = reader.readAggregate("aggregate");
         assertEquals("#3", aggregate.readId());
     }
 }
-

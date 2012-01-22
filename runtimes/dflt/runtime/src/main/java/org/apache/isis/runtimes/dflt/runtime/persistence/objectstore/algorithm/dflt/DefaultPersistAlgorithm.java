@@ -83,8 +83,7 @@ public class DefaultPersistAlgorithm extends PersistAlgorithmAbstract {
                 if (field.isOneToManyAssociation()) {
                     final ObjectAdapter collection = field.get(object);
                     if (collection == null) {
-                        throw new ObjectPersistenceException("Collection " + field.getName() + " does not exist in "
-                            + object.getSpecification().getFullIdentifier());
+                        throw new ObjectPersistenceException("Collection " + field.getName() + " does not exist in " + object.getSpecification().getFullIdentifier());
                     }
                     makePersistent(collection, toPersistObjectSet);
                 } else {

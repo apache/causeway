@@ -41,17 +41,13 @@ public class PersistenceQueryFindUsingApplibQueryDefaultEncoder extends Persiste
     @Override
     public PersistenceQueryData encode(final PersistenceQuery persistenceQuery) {
         final PersistenceQueryFindUsingApplibQueryDefault findByQuery = downcast(persistenceQuery);
-        return new PersistenceQueryFindUsingApplibQueryDefaultData(findByQuery.getSpecification(),
-            findByQuery.getQueryName(), encode(findByQuery.getArgumentsAdaptersByParameterName()),
-            findByQuery.getCardinality());
+        return new PersistenceQueryFindUsingApplibQueryDefaultData(findByQuery.getSpecification(), findByQuery.getQueryName(), encode(findByQuery.getArgumentsAdaptersByParameterName()), findByQuery.getCardinality());
     }
 
     @Override
-    protected PersistenceQuery doDecode(final ObjectSpecification specification,
-        final PersistenceQueryData persistenceQueryData) {
+    protected PersistenceQuery doDecode(final ObjectSpecification specification, final PersistenceQueryData persistenceQueryData) {
         final PersistenceQueryFindUsingApplibQueryDefaultData findByQueryData = downcast(persistenceQueryData);
-        return new PersistenceQueryFindUsingApplibQueryDefault(specification, findByQueryData.getQueryName(),
-            decode(findByQueryData.getArgumentDatasByParameterName()), (findByQueryData.getCardinality()));
+        return new PersistenceQueryFindUsingApplibQueryDefault(specification, findByQueryData.getQueryName(), decode(findByQueryData.getArgumentDatasByParameterName()), (findByQueryData.getCardinality()));
     }
 
     private Map<String, ObjectData> encode(final Map<String, ObjectAdapter> argumentsAdaptersByParameterName) {

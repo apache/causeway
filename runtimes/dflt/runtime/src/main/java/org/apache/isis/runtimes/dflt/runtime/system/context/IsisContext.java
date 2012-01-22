@@ -47,9 +47,11 @@ import org.apache.isis.runtimes.dflt.runtime.system.transaction.UpdateNotifier;
 import org.apache.log4j.Logger;
 
 /**
- * Provides singleton <i>access to</i> the current (session scoped) {@link IsisSession}, along with convenience methods
- * to obtain application-scoped components and also any transaction-scoped components {@link TransactionScopedComponent}
- * s if a {@link IsisTransaction} {@link IsisSession#getCurrentTransaction() is in progress}.
+ * Provides singleton <i>access to</i> the current (session scoped)
+ * {@link IsisSession}, along with convenience methods to obtain
+ * application-scoped components and also any transaction-scoped components
+ * {@link TransactionScopedComponent} s if a {@link IsisTransaction}
+ * {@link IsisSession#getCurrentTransaction() is in progress}.
  * 
  * <p>
  * Somewhat analogous to (the static methods in) <tt>HibernateUtil</tt>.
@@ -105,7 +107,8 @@ public abstract class IsisContext implements DebuggableWithTitle {
     }
 
     /**
-     * Whether the {@link IsisContext#getInstance() singleton} itself may be replaced.
+     * Whether the {@link IsisContext#getInstance() singleton} itself may be
+     * replaced.
      */
     protected static enum ContextReplacePolicy {
         NOT_REPLACEABLE, REPLACEABLE
@@ -115,11 +118,10 @@ public abstract class IsisContext implements DebuggableWithTitle {
      * Creates a new instance of the {@link IsisSession} holder.
      * 
      * <p>
-     * Will throw an exception if an instance has already been created and is not
-     * {@link ContextReplacePolicy#REPLACEABLE}.
+     * Will throw an exception if an instance has already been created and is
+     * not {@link ContextReplacePolicy#REPLACEABLE}.
      */
-    protected IsisContext(final ContextReplacePolicy replacePolicy, final SessionClosePolicy sessionClosePolicy,
-        final IsisSessionFactory sessionFactory) {
+    protected IsisContext(final ContextReplacePolicy replacePolicy, final SessionClosePolicy sessionClosePolicy, final IsisSessionFactory sessionFactory) {
         if (singleton != null && !singleton.isContextReplaceable()) {
             throw new IsisException("Isis Context already set up and cannot be replaced");
         }
@@ -152,7 +154,8 @@ public abstract class IsisContext implements DebuggableWithTitle {
     }
 
     /**
-     * Whether any open session can be automatically {@link #closeSessionInstance() close}d on
+     * Whether any open session can be automatically
+     * {@link #closeSessionInstance() close}d on
      * {@link #openSessionInstance(AuthenticationSession) open}.
      */
     public final boolean isSessionAutocloseable() {
@@ -160,7 +163,8 @@ public abstract class IsisContext implements DebuggableWithTitle {
     }
 
     /**
-     * Helper method for subclasses' implementation of {@link #openSessionInstance(AuthenticationSession)}.
+     * Helper method for subclasses' implementation of
+     * {@link #openSessionInstance(AuthenticationSession)}.
      */
     protected void applySessionClosePolicy() {
         if (getSessionInstance() == null) {
@@ -191,10 +195,12 @@ public abstract class IsisContext implements DebuggableWithTitle {
      * Ignored if already closed.
      * 
      * <p>
-     * This method is <i>not</i> marked <tt>final</tt> so it can be overridden if necessarily. Generally speaking this
-     * shouldn't be necessary; one case where it might though is if an implementation has multiple concurrent uses of a
-     * session, in which case "closing" the session really means just deregistering the usage of it by a particular
-     * thread; only when all threads have finished with a session can it really be closed.
+     * This method is <i>not</i> marked <tt>final</tt> so it can be overridden
+     * if necessarily. Generally speaking this shouldn't be necessary; one case
+     * where it might though is if an implementation has multiple concurrent
+     * uses of a session, in which case "closing" the session really means just
+     * deregistering the usage of it by a particular thread; only when all
+     * threads have finished with a session can it really be closed.
      */
     public void closeSessionInstance() {
         if (getSessionInstance() != null) {
@@ -204,12 +210,12 @@ public abstract class IsisContext implements DebuggableWithTitle {
     }
 
     /**
-     * Overridable hook method called from {@link #closeSessionInstance()}, allowing subclasses to clean up (for example
-     * datastructures).
+     * Overridable hook method called from {@link #closeSessionInstance()},
+     * allowing subclasses to clean up (for example datastructures).
      * 
      * <p>
-     * The {@link #getSessionInstance() current} {@link IsisSession} will already have been {@link IsisSession#close()
-     * closed}.
+     * The {@link #getSessionInstance() current} {@link IsisSession} will
+     * already have been {@link IsisSession#close() closed}.
      */
     protected void doClose() {
     }
@@ -227,8 +233,8 @@ public abstract class IsisContext implements DebuggableWithTitle {
      * Locates the current {@link IsisSession}.
      * 
      * <p>
-     * This might just be a singleton (eg {@link IsisContextStatic}), or could be retrieved from the thread (eg
-     * {@link IsisContextThreadLocal}).
+     * This might just be a singleton (eg {@link IsisContextStatic}), or could
+     * be retrieved from the thread (eg {@link IsisContextThreadLocal}).
      */
     public abstract IsisSession getSessionInstance();
 
@@ -268,7 +274,8 @@ public abstract class IsisContext implements DebuggableWithTitle {
     }
 
     /**
-     * Convenience method to return {@link IsisSession} for specified {@link IsisSession#getId()}.
+     * Convenience method to return {@link IsisSession} for specified
+     * {@link IsisSession#getId()}.
      * 
      * <p>
      * Provided primarily for debugging.
@@ -295,7 +302,8 @@ public abstract class IsisContext implements DebuggableWithTitle {
     // ///////////////////////////////////////////////////////////
 
     /**
-     * Convenience method returning the {@link IsisSessionFactory} of the current {@link #getSession() session}.
+     * Convenience method returning the {@link IsisSessionFactory} of the
+     * current {@link #getSession() session}.
      */
     public static IsisSessionFactory getSessionFactory() {
         return getInstance().getSessionFactoryInstance();
@@ -393,8 +401,8 @@ public abstract class IsisContext implements DebuggableWithTitle {
     }
 
     /**
-     * Convenience method to return the {@link #getSession() current} {@link IsisSession}'s {@link IsisSession#getId()
-     * id}.
+     * Convenience method to return the {@link #getSession() current}
+     * {@link IsisSession}'s {@link IsisSession#getId() id}.
      * 
      * @see IsisSession#getId()
      */
@@ -456,11 +464,12 @@ public abstract class IsisContext implements DebuggableWithTitle {
     }
 
     /**
-     * Convenience method, returning the current {@link IsisTransaction transaction} (if any).
+     * Convenience method, returning the current {@link IsisTransaction
+     * transaction} (if any).
      * 
      * <p>
-     * Transactions are managed using the {@link IsisTransactionManager} obtainable from the {@link IsisSession's}
-     * {@link PersistenceSession}.
+     * Transactions are managed using the {@link IsisTransactionManager}
+     * obtainable from the {@link IsisSession's} {@link PersistenceSession}.
      * 
      * @see IsisSession#getCurrentTransaction()
      * @see PersistenceSession#getTransactionManager()
@@ -470,16 +479,16 @@ public abstract class IsisContext implements DebuggableWithTitle {
     }
 
     /**
-     * Convenience method, returning the {@link MessageBroker} of the {@link #getCurrentTransaction() current
-     * transaction}.
+     * Convenience method, returning the {@link MessageBroker} of the
+     * {@link #getCurrentTransaction() current transaction}.
      */
     public static MessageBroker getMessageBroker() {
         return getCurrentTransaction().getMessageBroker();
     }
 
     /**
-     * Convenience method, returning the {@link UpdateNotifier} of the {@link #getCurrentTransaction() current
-     * transaction}.
+     * Convenience method, returning the {@link UpdateNotifier} of the
+     * {@link #getCurrentTransaction() current transaction}.
      */
     public static UpdateNotifier getUpdateNotifier() {
         return getCurrentTransaction().getUpdateNotifier();

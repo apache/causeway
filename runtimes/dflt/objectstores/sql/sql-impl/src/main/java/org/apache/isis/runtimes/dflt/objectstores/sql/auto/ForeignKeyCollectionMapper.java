@@ -23,8 +23,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.log4j.Logger;
-
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
@@ -45,10 +43,12 @@ import org.apache.isis.runtimes.dflt.objectstores.sql.VersionMapping;
 import org.apache.isis.runtimes.dflt.objectstores.sql.mapping.FieldMapping;
 import org.apache.isis.runtimes.dflt.objectstores.sql.mapping.ObjectReferenceMapping;
 import org.apache.isis.runtimes.dflt.runtime.persistence.PersistorUtil;
+import org.apache.log4j.Logger;
 
 /**
- * Stores 1-to-many collections by creating a foreign-key column in the table for the incoming objectAssociation class.
- * This assumes this the class is only ever in 1 collection parent.
+ * Stores 1-to-many collections by creating a foreign-key column in the table
+ * for the incoming objectAssociation class. This assumes this the class is only
+ * ever in 1 collection parent.
  * 
  * @version $Rev$ $Date$
  */
@@ -64,8 +64,7 @@ public class ForeignKeyCollectionMapper extends AbstractAutoMapper implements Co
 
     private ObjectMapping originalMapping = null;
 
-    public ForeignKeyCollectionMapper(final ObjectAssociation objectAssociation, final String parameterBase,
-        final FieldMappingLookup lookup, final ObjectMappingLookup objectMapperLookup) {
+    public ForeignKeyCollectionMapper(final ObjectAssociation objectAssociation, final String parameterBase, final FieldMappingLookup lookup, final ObjectMappingLookup objectMapperLookup) {
         super(objectAssociation.getSpecification().getFullIdentifier(), parameterBase, lookup, objectMapperLookup);
 
         this.field = objectAssociation;
@@ -82,8 +81,7 @@ public class ForeignKeyCollectionMapper extends AbstractAutoMapper implements Co
         foreignKeyMapping = lookup.createMapping(columnName, specification);
     }
 
-    protected ForeignKeyCollectionMapper(final FieldMappingLookup lookup, final AbstractAutoMapper abstractAutoMapper,
-        final ObjectAssociation field) {
+    protected ForeignKeyCollectionMapper(final FieldMappingLookup lookup, final AbstractAutoMapper abstractAutoMapper, final ObjectAssociation field) {
         super(lookup, abstractAutoMapper, field.getSpecification().getFullIdentifier());
 
         this.field = field;
@@ -170,17 +168,15 @@ public class ForeignKeyCollectionMapper extends AbstractAutoMapper implements Co
         return idMapping;
     }
 
-    protected void appendCollectionUpdateColumnsToNull(StringBuffer sql) {
+    protected void appendCollectionUpdateColumnsToNull(final StringBuffer sql) {
         sql.append(foreignKeyName + "=NULL ");
     }
 
-    protected void appendCollectionWhereValues(final DatabaseConnector connector, final ObjectAdapter parent,
-        final StringBuffer sql) {
+    protected void appendCollectionWhereValues(final DatabaseConnector connector, final ObjectAdapter parent, final StringBuffer sql) {
         foreignKeyMapping.appendUpdateValues(connector, sql, parent);
     }
 
-    protected void appendCollectionUpdateValues(final DatabaseConnector connector, final ObjectAdapter parent,
-        final StringBuffer sql) {
+    protected void appendCollectionUpdateValues(final DatabaseConnector connector, final ObjectAdapter parent, final StringBuffer sql) {
         appendCollectionWhereValues(connector, parent, sql);
     }
 
@@ -189,8 +185,7 @@ public class ForeignKeyCollectionMapper extends AbstractAutoMapper implements Co
     }
 
     @Override
-    public void loadInternalCollection(final DatabaseConnector connector, final ObjectAdapter parent,
-        final boolean makeResolved) {
+    public void loadInternalCollection(final DatabaseConnector connector, final ObjectAdapter parent, final boolean makeResolved) {
 
         final ObjectAdapter collection = field.get(parent);
         if (collection.getResolveState().canChangeTo(ResolveState.RESOLVING)) {
@@ -199,18 +194,20 @@ public class ForeignKeyCollectionMapper extends AbstractAutoMapper implements Co
 
             final List<ObjectAdapter> list = new ArrayList<ObjectAdapter>();
 
-            loadCollectionIntoList(connector, parent, makeResolved, table, specification, getIdMapping(),
-                fieldMappings, versionMapping, list);
+            loadCollectionIntoList(connector, parent, makeResolved, table, specification, getIdMapping(), fieldMappings, versionMapping, list);
 
             final CollectionFacet collectionFacet = collection.getSpecification().getFacet(CollectionFacet.class);
             collectionFacet.init(collection, list.toArray(new ObjectAdapter[list.size()]));
             PersistorUtil.end(collection);
 
-            // TODO: Need to finalise this behaviour. At the moment, all collections will get infinitely resolved. I
-            // don't think this is desirable. Sub-collections should be left "Partially Resolved".
+            // TODO: Need to finalise this behaviour. At the moment, all
+            // collections will get infinitely resolved. I
+            // don't think this is desirable. Sub-collections should be left
+            // "Partially Resolved".
             if (makeResolved) {
-                for (ObjectAdapter field : list) {
-                    // final ObjectMapping mapping = objectMappingLookup.getMapping(field, connector);
+                for (final ObjectAdapter field : list) {
+                    // final ObjectMapping mapping =
+                    // objectMappingLookup.getMapping(field, connector);
                     if (field.getSpecification().isOfType(parent.getSpecification())) {
                         loadInternalCollection(connector, field, true);
                     }
@@ -219,10 +216,8 @@ public class ForeignKeyCollectionMapper extends AbstractAutoMapper implements Co
         }
     }
 
-    protected void loadCollectionIntoList(final DatabaseConnector connector, final ObjectAdapter parent,
-        final boolean makeResolved, final String table, ObjectSpecification specification,
-        final IdMappingAbstract idMappingAbstract, final List<FieldMapping> fieldMappings,
-        final VersionMapping versionMapping, final List<ObjectAdapter> list) {
+    protected void loadCollectionIntoList(final DatabaseConnector connector, final ObjectAdapter parent, final boolean makeResolved, final String table, final ObjectSpecification specification, final IdMappingAbstract idMappingAbstract, final List<FieldMapping> fieldMappings,
+            final VersionMapping versionMapping, final List<ObjectAdapter> list) {
 
         final StringBuffer sql = new StringBuffer();
         sql.append("select ");
@@ -251,8 +246,7 @@ public class ForeignKeyCollectionMapper extends AbstractAutoMapper implements Co
         rs.close();
     }
 
-    protected void loadFields(final ObjectAdapter object, final Results rs, final boolean makeResolved,
-        final List<FieldMapping> fieldMappings) {
+    protected void loadFields(final ObjectAdapter object, final Results rs, final boolean makeResolved, final List<FieldMapping> fieldMappings) {
         if (object.getResolveState().canChangeTo(ResolveState.RESOLVING)) {
             PersistorUtil.start(object, ResolveState.RESOLVING);
             for (final FieldMapping mapping : fieldMappings) {
@@ -266,8 +260,8 @@ public class ForeignKeyCollectionMapper extends AbstractAutoMapper implements Co
     }
 
     /**
-     * Override this in the Polymorphic case to return just the elements that are appropriate for the subclass currently
-     * being handled.
+     * Override this in the Polymorphic case to return just the elements that
+     * are appropriate for the subclass currently being handled.
      * 
      * @param collection
      * @return those elements that ought to be used.
@@ -285,7 +279,8 @@ public class ForeignKeyCollectionMapper extends AbstractAutoMapper implements Co
 
         final Iterator<ObjectAdapter> elements = getElementsForCollectionAsIterator(collection);
 
-        // TODO What is needed to allow a collection update (add/remove) to mark the collection as dirty?
+        // TODO What is needed to allow a collection update (add/remove) to mark
+        // the collection as dirty?
         // checkIfDirty(collection);
 
         if (elements.hasNext() == false) {
@@ -309,8 +304,7 @@ public class ForeignKeyCollectionMapper extends AbstractAutoMapper implements Co
         connector.update(sql.toString());
     }
 
-    protected void resetCollectionParent(final DatabaseConnector connector, final ObjectAdapter parent,
-        final Iterator<ObjectAdapter> elements) {
+    protected void resetCollectionParent(final DatabaseConnector connector, final ObjectAdapter parent, final Iterator<ObjectAdapter> elements) {
         // Reinstall collection parent
         final StringBuffer update = new StringBuffer();
         update.append("update ");
@@ -324,8 +318,8 @@ public class ForeignKeyCollectionMapper extends AbstractAutoMapper implements Co
         update.append(" IN (");
 
         int count = 0;
-        for (Iterator<ObjectAdapter> iterator = elements; iterator.hasNext();) {
-            ObjectAdapter element = iterator.next();
+        for (final Iterator<ObjectAdapter> iterator = elements; iterator.hasNext();) {
+            final ObjectAdapter element = iterator.next();
 
             if (count++ > 0) {
                 update.append(",");
@@ -340,7 +334,7 @@ public class ForeignKeyCollectionMapper extends AbstractAutoMapper implements Co
 
     protected void checkIfDirty(final ObjectAdapter collection) {
         // Test: is dirty?
-        ObjectSpecification collectionSpecification = collection.getSpecification();
+        final ObjectSpecification collectionSpecification = collection.getSpecification();
         if (collectionSpecification.isDirty(collection)) {
             LOG.debug(collection.getOid() + " is dirty");
         } else {

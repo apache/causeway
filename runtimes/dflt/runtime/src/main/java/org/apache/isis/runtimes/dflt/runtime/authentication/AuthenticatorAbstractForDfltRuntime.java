@@ -35,13 +35,13 @@ public abstract class AuthenticatorAbstractForDfltRuntime extends AuthenticatorA
     // //////////////////////////////////////////////////////
 
     /**
-     * Helper method for convenience of implementations that depend on the {@link DeploymentType}.
+     * Helper method for convenience of implementations that depend on the
+     * {@link DeploymentType}.
      */
     public DeploymentType getDeploymentType() {
         final String deploymentTypeStr = getConfiguration().getString(SystemConstants.DEPLOYMENT_TYPE_KEY);
         if (deploymentTypeStr == null) {
-            throw new IllegalStateException("Expect value for '" + SystemConstants.DEPLOYMENT_TYPE_KEY
-                + "' to be bound into IsisConfiguration");
+            throw new IllegalStateException("Expect value for '" + SystemConstants.DEPLOYMENT_TYPE_KEY + "' to be bound into IsisConfiguration");
         }
         return DeploymentType.lookup(deploymentTypeStr);
     }

@@ -61,9 +61,11 @@ public class Sql {
         return name.replace(' ', '_').toLowerCase();
 
         /*
-         * int length = name.length(); StringBuffer convertedName = new StringBuffer(length); for (int i = 0; i <
-         * length; i++) { char ch = name.charAt(i); if (ch == ' ') { i++; //ch = name.charAt(i);
-         * //Character.toUpperCase(ch); ch = '_'; } convertedName.append(ch); } return convertedName.toString();
+         * int length = name.length(); StringBuffer convertedName = new
+         * StringBuffer(length); for (int i = 0; i < length; i++) { char ch =
+         * name.charAt(i); if (ch == ' ') { i++; //ch = name.charAt(i);
+         * //Character.toUpperCase(ch); ch = '_'; } convertedName.append(ch); }
+         * return convertedName.toString();
          */
     }
 

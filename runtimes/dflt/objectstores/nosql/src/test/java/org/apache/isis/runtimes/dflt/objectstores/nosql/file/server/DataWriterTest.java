@@ -68,8 +68,7 @@ public class DataWriterTest {
         final DataFileWriter writer = new DataFileWriter(files);
         writer.writeData();
 
-        BufferedReader reader =
-            new BufferedReader(new FileReader(TARGET_DIRECTORY + FULLY_QUALIFIED_CLASSNAME + "/1023.data"));
+        BufferedReader reader = new BufferedReader(new FileReader(TARGET_DIRECTORY + FULLY_QUALIFIED_CLASSNAME + "/1023.data"));
         Assert.assertEquals("org.domain.Class 1023 2", reader.readLine());
         Assert.assertEquals("{data1}", reader.readLine());
 

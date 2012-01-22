@@ -93,7 +93,8 @@ public class TestProxyReflector implements ObjectReflector {
             specificationByFullName.put(specification.getFullIdentifier(), specification);
             return specification;
 
-            // throw new ObjectAdapterRuntimeException("no specification for " + name);
+            // throw new ObjectAdapterRuntimeException("no specification for " +
+            // name);
         }
     }
 

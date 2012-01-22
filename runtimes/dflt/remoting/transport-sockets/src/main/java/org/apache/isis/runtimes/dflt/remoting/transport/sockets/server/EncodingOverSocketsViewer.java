@@ -37,8 +37,7 @@ public class EncodingOverSocketsViewer extends SocketsViewerAbstract {
     }
 
     @Override
-    protected ServerConnectionDefault createServerConnection(final InputStream input, final OutputStream output,
-        final ServerFacade serverFacade) {
+    protected ServerConnectionDefault createServerConnection(final InputStream input, final OutputStream output, final ServerFacade serverFacade) {
         final SimpleTransport transport = new SimpleTransport(getConfiguration(), input, output);
         final EncodingMarshaller marshaller = new EncodingMarshaller(getConfiguration(), transport);
         try {

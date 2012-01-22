@@ -78,7 +78,8 @@ public class PersistenceSessionProxy extends PersistenceSessionAbstract {
     private final ObjectEncoderDecoder encoderDecoder;
 
     /**
-     * Keyed on an adapter wrapping a <tt>java.util.List</tt> (or equiv), ie with a {@link CollectionFacet}.
+     * Keyed on an adapter wrapping a <tt>java.util.List</tt> (or equiv), ie
+     * with a {@link CollectionFacet}.
      */
     private final Map<ObjectSpecification, ObjectAdapter> cache = new HashMap<ObjectSpecification, ObjectAdapter>();
     private final HashMap<String, Oid> serviceOidByNameCache = new HashMap<String, Oid>();
@@ -87,10 +88,8 @@ public class PersistenceSessionProxy extends PersistenceSessionAbstract {
     // Constructor
     // ////////////////////////////////////////////////////////////////
 
-    public PersistenceSessionProxy(final PersistenceSessionFactory persistenceSessionFactory,
-        final ObjectAdapterFactory adapterFactory, final ObjectFactory objectFactory,
-        final ServicesInjector containerInjector, final OidGenerator oidGenerator,
-        final AdapterManagerExtended adapterManager, final ServerFacade serverFacade, final ObjectEncoderDecoder encoder) {
+    public PersistenceSessionProxy(final PersistenceSessionFactory persistenceSessionFactory, final ObjectAdapterFactory adapterFactory, final ObjectFactory objectFactory, final ServicesInjector containerInjector, final OidGenerator oidGenerator, final AdapterManagerExtended adapterManager,
+            final ServerFacade serverFacade, final ObjectEncoderDecoder encoder) {
         super(persistenceSessionFactory, adapterFactory, objectFactory, containerInjector, oidGenerator, adapterManager);
         this.serverFacade = serverFacade;
         this.encoderDecoder = encoder;
@@ -101,7 +100,8 @@ public class PersistenceSessionProxy extends PersistenceSessionAbstract {
     // ////////////////////////////////////////////////////////////////
 
     /**
-     * TODO: mismatch between {@link SessionScopedComponent} (open) and {@link ApplicationScopedComponent} (init).
+     * TODO: mismatch between {@link SessionScopedComponent} (open) and
+     * {@link ApplicationScopedComponent} (init).
      */
     @Override
     public void doOpen() {
@@ -109,7 +109,8 @@ public class PersistenceSessionProxy extends PersistenceSessionAbstract {
     }
 
     /**
-     * TODO: mismatch between {@link SessionScopedComponent} (open) and {@link ApplicationScopedComponent} (init).
+     * TODO: mismatch between {@link SessionScopedComponent} (open) and
+     * {@link ApplicationScopedComponent} (init).
      */
     @Override
     public void doClose() {
@@ -138,18 +139,18 @@ public class PersistenceSessionProxy extends PersistenceSessionAbstract {
     }
 
     private ObjectAdapter loadObjectFromPersistenceLayer(final Oid oid, final ObjectSpecification specHint) {
-        return getTransactionManager().executeWithinTransaction(
-            new TransactionalClosureWithReturnAbstract<ObjectAdapter>() {
-                @Override
-                public ObjectAdapter execute() {
-                    // NB: I think that the auth session must be null because we may not yet have logged in if
-                    // retrieving the services.
-                    final GetObjectRequest request = new GetObjectRequest(null, oid, specHint.getFullIdentifier());
-                    final GetObjectResponse response = serverFacade.getObject(request);
-                    final ObjectData data = response.getObjectData();
-                    return encoderDecoder.decode(data);
-                }
-            });
+        return getTransactionManager().executeWithinTransaction(new TransactionalClosureWithReturnAbstract<ObjectAdapter>() {
+            @Override
+            public ObjectAdapter execute() {
+                // NB: I think that the auth session must be null because we may
+                // not yet have logged in if
+                // retrieving the services.
+                final GetObjectRequest request = new GetObjectRequest(null, oid, specHint.getFullIdentifier());
+                final GetObjectResponse response = serverFacade.getObject(request);
+                final ObjectData data = response.getObjectData();
+                return encoderDecoder.decode(data);
+            }
+        });
     }
 
     @Override
@@ -194,8 +195,10 @@ public class PersistenceSessionProxy extends PersistenceSessionAbstract {
             @Override
             public void execute() {
                 final ResolveObjectRequest request = new ResolveObjectRequest(getAuthenticationSession(), adapterData);
-                // unlike the server-side implementation we don't invoke the callbacks
-                // for loading and loaded (they will already have been called in the server)
+                // unlike the server-side implementation we don't invoke the
+                // callbacks
+                // for loading and loaded (they will already have been called in
+                // the server)
                 final ResolveObjectResponse response = serverFacade.resolveImmediately(request);
                 final ObjectData data = response.getObjectData();
                 encoderDecoder.decode(data);
@@ -227,8 +230,7 @@ public class PersistenceSessionProxy extends PersistenceSessionAbstract {
         getTransactionManager().executeWithinTransaction(new TransactionalClosureAbstract() {
             @Override
             public void execute() {
-                final ResolveFieldRequest request =
-                    new ResolveFieldRequest(getAuthenticationSession(), adapterData, fieldId);
+                final ResolveFieldRequest request = new ResolveFieldRequest(getAuthenticationSession(), adapterData, fieldId);
                 final ResolveFieldResponse response = serverFacade.resolveField(request);
                 final Data data = response.getData();
                 encoderDecoder.decode(data);
@@ -241,8 +243,9 @@ public class PersistenceSessionProxy extends PersistenceSessionAbstract {
     // ////////////////////////////////////////////////////////////////
 
     /**
-     * REVIEW: we should perhaps have a little more symmetry here, and have the {@link ServerFacade} callback to the
-     * {@link PersistenceSession} (the <tt>PersistenceSessionPersist</tt> API) to handle remapping of adapters.
+     * REVIEW: we should perhaps have a little more symmetry here, and have the
+     * {@link ServerFacade} callback to the {@link PersistenceSession} (the
+     * <tt>PersistenceSessionPersist</tt> API) to handle remapping of adapters.
      */
     @Override
     public synchronized void makePersistent(final ObjectAdapter object) {
@@ -354,8 +357,8 @@ public class PersistenceSessionProxy extends PersistenceSessionAbstract {
     }
 
     /**
-     * TODO: this code is not currently in use because there is no way to set up the cache. We may want to change what
-     * the cache is keyed on.
+     * TODO: this code is not currently in use because there is no way to set up
+     * the cache. We may want to change what the cache is keyed on.
      */
     private ObjectAdapter[] getInstancesFromCache(final PersistenceQuery persistenceQuery) {
         final ObjectSpecification noSpec = persistenceQuery.getSpecification();
@@ -377,26 +380,24 @@ public class PersistenceSessionProxy extends PersistenceSessionAbstract {
 
     private ObjectAdapter[] findInstancesFromPersistenceLayer(final PersistenceQuery persistenceQuery) {
         final PersistenceQueryData criteriaData = encoderDecoder.encodePersistenceQuery(persistenceQuery);
-        return getTransactionManager().executeWithinTransaction(
-            new TransactionalClosureWithReturnAbstract<ObjectAdapter[]>() {
-                @Override
-                public ObjectAdapter[] execute() {
-                    final FindInstancesRequest request =
-                        new FindInstancesRequest(getAuthenticationSession(), criteriaData);
-                    final FindInstancesResponse response = serverFacade.findInstances(request);
-                    final ObjectData[] instancesAsObjectData = response.getInstances();
-                    final ObjectAdapter[] instances = new ObjectAdapter[instancesAsObjectData.length];
-                    for (int i = 0; i < instancesAsObjectData.length; i++) {
-                        instances[i] = encoderDecoder.decode(instancesAsObjectData[i]);
-                    }
-                    return instances;
+        return getTransactionManager().executeWithinTransaction(new TransactionalClosureWithReturnAbstract<ObjectAdapter[]>() {
+            @Override
+            public ObjectAdapter[] execute() {
+                final FindInstancesRequest request = new FindInstancesRequest(getAuthenticationSession(), criteriaData);
+                final FindInstancesResponse response = serverFacade.findInstances(request);
+                final ObjectData[] instancesAsObjectData = response.getInstances();
+                final ObjectAdapter[] instances = new ObjectAdapter[instancesAsObjectData.length];
+                for (int i = 0; i < instancesAsObjectData.length; i++) {
+                    instances[i] = encoderDecoder.decode(instancesAsObjectData[i]);
                 }
+                return instances;
+            }
 
-                @Override
-                public void onSuccess() {
-                    clearAllDirty();
-                }
-            });
+            @Override
+            public void onSuccess() {
+                clearAllDirty();
+            }
+        });
     }
 
     // ////////////////////////////////////////////////////////////////
@@ -440,7 +441,8 @@ public class PersistenceSessionProxy extends PersistenceSessionAbstract {
     // ////////////////////////////////////////////////////////////////
 
     /**
-     * TODO: not symmetric with {@link PersistenceSessionObjectStore}; we have a cache but it does not?
+     * TODO: not symmetric with {@link PersistenceSessionObjectStore}; we have a
+     * cache but it does not?
      */
     @Override
     public Oid getOidForService(final String name) {
@@ -460,7 +462,8 @@ public class PersistenceSessionProxy extends PersistenceSessionAbstract {
     }
 
     /**
-     * TODO: not symmetric with {@link PersistenceSessionObjectStore}; we have a cache but it does not?
+     * TODO: not symmetric with {@link PersistenceSessionObjectStore}; we have a
+     * cache but it does not?
      */
     @Override
     public void registerService(final String name, final Oid oid) {

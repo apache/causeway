@@ -36,17 +36,19 @@ import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.log4j.Logger;
 
 /**
- * A reflection peer for changing one-to-many fields remotely, instead of on the local machine. Any requests to add or
- * remove elements from the field will be passed over the network to the server for completion. Only requests on
- * persistent objects are passed to the server; on a transient object the request will always be dealt with locally.
+ * A reflection peer for changing one-to-many fields remotely, instead of on the
+ * local machine. Any requests to add or remove elements from the field will be
+ * passed over the network to the server for completion. Only requests on
+ * persistent objects are passed to the server; on a transient object the
+ * request will always be dealt with locally.
  * 
  * <p>
- * If any of the objects involved have been changed on the server by another process then a ConcurrencyException will be
- * passed back to the client and re-thrown.
+ * If any of the objects involved have been changed on the server by another
+ * process then a ConcurrencyException will be passed back to the client and
+ * re-thrown.
  * </p>
  */
-public final class CollectionAddToFacetWrapProxy extends CollectionAddToFacetAbstract implements
-    DecoratingFacet<CollectionAddToFacet> {
+public final class CollectionAddToFacetWrapProxy extends CollectionAddToFacetAbstract implements DecoratingFacet<CollectionAddToFacet> {
 
     private final static Logger LOG = Logger.getLogger(CollectionAddToFacetWrapProxy.class);
     private final ServerFacade serverFacade;
@@ -54,8 +56,7 @@ public final class CollectionAddToFacetWrapProxy extends CollectionAddToFacetAbs
     private final CollectionAddToFacet underlyingFacet;
     private final String name;
 
-    public CollectionAddToFacetWrapProxy(final CollectionAddToFacet underlyingFacet, final ServerFacade connection,
-        final ObjectEncoderDecoder encoderDecoder, final String name) {
+    public CollectionAddToFacetWrapProxy(final CollectionAddToFacet underlyingFacet, final ServerFacade connection, final ObjectEncoderDecoder encoderDecoder, final String name) {
         super(underlyingFacet.getFacetHolder());
         this.underlyingFacet = underlyingFacet;
         this.serverFacade = connection;
@@ -74,8 +75,7 @@ public final class CollectionAddToFacetWrapProxy extends CollectionAddToFacetAbs
             try {
                 final IdentityData targetReference = encoderDecoder.encodeIdentityData(inObject);
                 final IdentityData associateReference = encoderDecoder.encodeIdentityData(referencedAdapter);
-                final SetAssociationRequest request =
-                    new SetAssociationRequest(getAuthenticationSession(), name, targetReference, associateReference);
+                final SetAssociationRequest request = new SetAssociationRequest(getAuthenticationSession(), name, targetReference, associateReference);
                 final SetAssociationResponse response = serverFacade.setAssociation(request);
                 final ObjectData[] updates = response.getUpdates();
                 encoderDecoder.decode(updates);

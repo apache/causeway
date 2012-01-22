@@ -86,9 +86,7 @@ public class PersistenceSessionObjectStoreTest {
         adapterManager = (AdapterManagerExtended) system.getAdapterManager();
         adapterFactory = system.getAdapterFactory();
 
-        persistenceSession =
-            new PersistenceSessionObjectStore(mockPersistenceSessionFactory, adapterFactory, new TestObjectFactory(),
-                servicesInjector, new TestProxyOidGenerator(), adapterManager, new DummyPersistAlgorithm(), objectStore);
+        persistenceSession = new PersistenceSessionObjectStore(mockPersistenceSessionFactory, adapterFactory, new TestObjectFactory(), servicesInjector, new TestProxyOidGenerator(), adapterManager, new DummyPersistAlgorithm(), objectStore);
         transactionManager = new ObjectStoreTransactionManager(persistenceSession, objectStore);
         transactionManager.injectInto(persistenceSession);
 

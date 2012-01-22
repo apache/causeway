@@ -38,16 +38,15 @@ import org.mortbay.jetty.webapp.WebAppContext;
 public class WebServer {
 
     public static enum StartupMode {
-        FOREGROUND,
-        BACKGROUND;
+        FOREGROUND, BACKGROUND;
 
-        public static StartupMode lookup(String value) {
-            if(value == null) {
+        public static StartupMode lookup(final String value) {
+            if (value == null) {
                 return null;
             }
             try {
                 return valueOf(value.toUpperCase());
-            } catch (Exception e) {
+            } catch (final Exception e) {
                 return null;
             }
         }
@@ -71,10 +70,10 @@ public class WebServer {
     /**
      * Originally introduced to allow the WebServer to be used by tests.
      */
-    public void run(int port) {
+    public void run(final int port) {
         String[] args = new String[0];
-        args = OptionHandlerStartupMode.appendArg(args,StartupMode.BACKGROUND);
-        args = OptionHandlerPort.appendArg(args,port);
+        args = OptionHandlerStartupMode.appendArg(args, StartupMode.BACKGROUND);
+        args = OptionHandlerPort.appendArg(args, port);
         run(args);
     }
 
@@ -91,18 +90,18 @@ public class WebServer {
             return;
         }
 
-        WebServerBootstrapper bootstrapper = new WebServerBootstrapper(runner);
+        final WebServerBootstrapper bootstrapper = new WebServerBootstrapper(runner);
         runner.bootstrap(bootstrapper);
         jettyServer = bootstrapper.getJettyServer();
     }
 
     public void stop() {
-        if(jettyServer == null) {
+        if (jettyServer == null) {
             return;
         }
         try {
             jettyServer.stop();
-        } catch (Exception e) {
+        } catch (final Exception e) {
             e.printStackTrace(System.err);
         }
     }
@@ -111,23 +110,23 @@ public class WebServer {
         return URI.create(baseFor(jettyServer));
     }
 
-    private String baseFor(Server jettyServer) {
-        Connector connector = jettyServer.getConnectors()[0];
-        String scheme = "http";
-        String host = StringUtils.coalesce(connector.getHost(), "localhost");
-        int port = connector.getPort();
+    private String baseFor(final Server jettyServer) {
+        final Connector connector = jettyServer.getConnectors()[0];
+        final String scheme = "http";
+        final String host = StringUtils.coalesce(connector.getHost(), "localhost");
+        final int port = connector.getPort();
 
-        WebAppContext handler = (WebAppContext) jettyServer.getHandler();
-        String contextPath = handler.getContextPath();
+        final WebAppContext handler = (WebAppContext) jettyServer.getHandler();
+        final String contextPath = handler.getContextPath();
 
         final StringBuilder buf = new StringBuilder();
-        Formatter formatter = new Formatter(buf);
+        final Formatter formatter = new Formatter(buf);
         formatter.format("%s://%s:%d/%s", scheme, host, port, contextPath);
         return appendSlashIfRequired(buf).toString();
     }
 
-    private static StringBuilder appendSlashIfRequired(StringBuilder buf) {
-        if(buf.charAt(buf.length()-1) != '/') {
+    private static StringBuilder appendSlashIfRequired(final StringBuilder buf) {
+        if (buf.charAt(buf.length() - 1) != '/') {
             buf.append('/');
         }
         return buf;

@@ -33,7 +33,8 @@ import org.apache.isis.runtimes.dflt.runtime.system.transaction.IsisTransactionM
 public interface PersistenceSessionTransactionManagement {
 
     /**
-     * Mark as {@link #objectChanged(ObjectAdapter) changed } all {@link Dirtiable} objects that have been
+     * Mark as {@link #objectChanged(ObjectAdapter) changed } all
+     * {@link Dirtiable} objects that have been
      * {@link Dirtiable#markDirty(ObjectAdapter) manually marked} as dirty.
      * 
      * <p>

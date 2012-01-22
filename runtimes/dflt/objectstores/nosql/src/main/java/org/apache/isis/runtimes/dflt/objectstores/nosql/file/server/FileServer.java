@@ -61,7 +61,6 @@ import org.apache.isis.runtimes.dflt.objectstores.nosql.NoSqlStoreException;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 
-
 public class FileServer {
 
     private static final Logger LOG = Logger.getLogger(FileServer.class);
@@ -79,15 +78,15 @@ public class FileServer {
         options.addOption("h", "help", false, "Show this help");
         options.addOption("m", "mode", true, "mode: normal | secondary | recovery | archive");
 
-        CommandLineParser parser = new BasicParser();
-        CommandLine cmd = parser.parse(options, args);
+        final CommandLineParser parser = new BasicParser();
+        final CommandLine cmd = parser.parse(options, args);
 
         if (cmd.hasOption('h')) {
             printHelp(options);
             return;
         }
 
-        String mode = cmd.getOptionValue("m");
+        final String mode = cmd.getOptionValue("m");
 
         if ("recovery".equals(mode)) {
             final FileServer fileServer = new FileServer();
@@ -107,7 +106,7 @@ public class FileServer {
     }
 
     private static void printHelp(final Options options) {
-        HelpFormatter help = new HelpFormatter();
+        final HelpFormatter help = new HelpFormatter();
         help.printHelp("FileSever [OPTIONS] [FIRST RECOVERY FILES] [LAST RECOVERY FILES]", options);
     }
 
@@ -142,22 +141,26 @@ public class FileServer {
 
     private void startNormal() {
         new Thread("control") {
+            @Override
             public void run() {
                 startControl();
             };
         }.start();
         new Thread("service") {
+            @Override
             public void run() {
                 startService();
             };
         }.start();
         new Thread("log-rolling") {
+            @Override
             public void run() {
                 startLogRolling();
             }
         }.start();
         if (config.getBoolean("fileserver.sync", false)) {
             new Thread("sync") {
+                @Override
                 public void run() {
                     startSyncing();
                 };
@@ -169,10 +172,10 @@ public class FileServer {
     }
 
     private void startService() {
-        String serviceHost = config.getString("fileserver.host", DEFAULT_HOST);
-        int servicePort = config.getInt("fileserver.port", DEFAULT_SERVICE_PORT);
-        int connectionTimeout = config.getInt("fileserver.connection.timeout", 5000);
-        int readTimeout = config.getInt("fileserver.read.timeout", 5000);
+        final String serviceHost = config.getString("fileserver.host", DEFAULT_HOST);
+        final int servicePort = config.getInt("fileserver.port", DEFAULT_SERVICE_PORT);
+        final int connectionTimeout = config.getInt("fileserver.connection.timeout", 5000);
+        final int readTimeout = config.getInt("fileserver.read.timeout", 5000);
 
         ServerSocket socket = null;
         try {
@@ -182,10 +185,10 @@ public class FileServer {
             socket.setSoTimeout(connectionTimeout);
             LOG.info("listenting on " + socket.getInetAddress().getHostAddress() + " port " + socket.getLocalPort());
             LOG.debug("listenting on " + socket);
-            LogRange logFileRange = Util.logFileRange();
+            final LogRange logFileRange = Util.logFileRange();
             if (!logFileRange.noLogFile()) {
-                long lastRecoveryFile = logFileRange.getLast();
-                File file = Util.logFile(lastRecoveryFile);
+                final long lastRecoveryFile = logFileRange.getLast();
+                final File file = Util.logFile(lastRecoveryFile);
                 LOG.info("replaying last recovery file: " + file.getAbsolutePath());
                 recover(file);
             }
@@ -205,13 +208,15 @@ public class FileServer {
                 while (isQuiescent) {
                     try {
                         Thread.sleep(300);
-                    } catch (InterruptedException ignore) {}
+                    } catch (final InterruptedException ignore) {
+                    }
                 }
                 final Socket connection = socket.accept();
                 LOG.debug("connection from " + connection);
                 connection.setSoTimeout(readTimeout);
                 serviceConnection(connection, readTimeout);
-            } catch (final SocketTimeoutException expected) {} catch (final IOException e) {
+            } catch (final SocketTimeoutException expected) {
+            } catch (final IOException e) {
                 LOG.error("networking problem", e);
             }
         } while (awaitConnections);
@@ -245,9 +250,9 @@ public class FileServer {
     }
 
     private void startSyncing() {
-        String syncHost = config.getString("fileserver.sync-host", DEFAULT_HOST);
-        int syncPort = config.getInt("fileserver.sync-port", DEFAULT_SYNC_PORT);
-        int connectionTimeout = config.getInt("fileserver.connection.timeout", 5000);
+        final String syncHost = config.getString("fileserver.sync-host", DEFAULT_HOST);
+        final int syncPort = config.getInt("fileserver.sync-port", DEFAULT_SYNC_PORT);
+        final int connectionTimeout = config.getInt("fileserver.connection.timeout", 5000);
 
         LOG.info("preparing to sync to secondary server on " + syncHost + " port " + syncPort);
 
@@ -266,14 +271,14 @@ public class FileServer {
                 socket = new Socket(address, syncPort);
                 LOG.info("sync connected to " + socket.getInetAddress().getHostAddress() + " port " + socket.getLocalPort());
 
-                CRC32 crc32 = new CRC32();
-                DataOutput output = new DataOutputStream(new CheckedOutputStream(socket.getOutputStream(), crc32));
-                DataInput input = new DataInputStream(socket.getInputStream());
+                final CRC32 crc32 = new CRC32();
+                final DataOutput output = new DataOutputStream(new CheckedOutputStream(socket.getOutputStream(), crc32));
+                final DataInput input = new DataInputStream(socket.getInputStream());
                 output.writeByte(INIT);
                 long logId = input.readLong();
                 do {
-                    long nextLogId = logId + 1;
-                    File file = Util.logFile(nextLogId);
+                    final long nextLogId = logId + 1;
+                    final File file = Util.logFile(nextLogId);
                     if (file.exists() && server.getLogger().isWritten(nextLogId)) {
                         logId++;
 
@@ -282,9 +287,9 @@ public class FileServer {
                         output.writeLong(logId);
 
                         LOG.info("sending recovery file: " + file.getName());
-                        BufferedInputStream fileInput = new BufferedInputStream(new FileInputStream(file));
+                        final BufferedInputStream fileInput = new BufferedInputStream(new FileInputStream(file));
 
-                        byte[] buffer = new byte[8092];
+                        final byte[] buffer = new byte[8092];
                         int read;
                         while ((read = fileInput.read(buffer)) > 0) {
                             output.writeInt(read);
@@ -296,12 +301,14 @@ public class FileServer {
                     }
                     try {
                         Thread.sleep(300);
-                    } catch (InterruptedException ignore) {}
+                    } catch (final InterruptedException ignore) {
+                    }
 
                     while (isQuiescent) {
                         try {
                             Thread.sleep(300);
-                        } catch (InterruptedException ignore) {}
+                        } catch (final InterruptedException ignore) {
+                        }
                     }
                 } while (awaitConnections);
 
@@ -309,26 +316,29 @@ public class FileServer {
                 LOG.warn("not yet connected to secondary server at " + syncHost + " port " + syncPort);
                 try {
                     Thread.sleep(connectionTimeout);
-                } catch (InterruptedException ignore) {}
+                } catch (final InterruptedException ignore) {
+                }
             } catch (final IOException e) {
                 LOG.error("start failure - networking not set up for " + syncHost, e);
                 try {
                     Thread.sleep(300);
-                } catch (InterruptedException ignore) {}
+                } catch (final InterruptedException ignore) {
+                }
             } catch (final RuntimeException e) {
                 LOG.error("start failure", e);
                 try {
                     Thread.sleep(300);
-                } catch (InterruptedException ignore) {}
+                } catch (final InterruptedException ignore) {
+                }
             }
         }
 
     }
 
     private void startControl() {
-        String controlHost = config.getString("fileserver.control-host", DEFAULT_HOST);
-        int controlPort = config.getInt("fileserver.control-port", DEFAULT_CONTROL_PORT);
-        int connectionTimeout = config.getInt("fileserver.connection.timeout", 5000);
+        final String controlHost = config.getString("fileserver.control-host", DEFAULT_HOST);
+        final int controlPort = config.getInt("fileserver.control-port", DEFAULT_CONTROL_PORT);
+        final int connectionTimeout = config.getInt("fileserver.connection.timeout", 5000);
 
         ServerSocket socket = null;
         try {
@@ -353,7 +363,8 @@ public class FileServer {
                 final Socket connection = socket.accept();
                 LOG.info("control connection from " + connection);
                 controlConnection(connection);
-            } catch (final SocketTimeoutException expected) {} catch (final IOException e) {
+            } catch (final SocketTimeoutException expected) {
+            } catch (final IOException e) {
                 LOG.error("networking problem", e);
             }
         } while (awaitConnections);
@@ -377,7 +388,7 @@ public class FileServer {
                     break;
                 } else if ("quiesce".equals(line)) {
                     isQuiescent = true;
-                    String message = "Placing server in a quiescent state";
+                    final String message = "Placing server in a quiescent state";
                     LOG.info(message);
                     print.println(message);
                     print.print("> ");
@@ -385,7 +396,7 @@ public class FileServer {
                 } else if ("resume".equals(line)) {
                     if (isQuiescent) {
                         isQuiescent = false;
-                        String message = "Resuming from a quiescent state";
+                        final String message = "Resuming from a quiescent state";
                         LOG.info(message);
                         print.println(message);
                     } else {
@@ -421,20 +432,20 @@ public class FileServer {
         }
     }
 
-    private void startRecovery(List list) {
+    private void startRecovery(final List list) {
         LOG.info("starting recovery");
         final LogRange logFileRange = Util.logFileRange();
         if (logFileRange.noLogFile()) {
             System.err.println("No recovery files found");
             System.exit(0);
         }
-        long lastId = logFileRange.getLast();
+        final long lastId = logFileRange.getLast();
         LOG.info("last log file is " + Util.logFile(lastId).getName());
 
         long startId = lastId;
         long endId = lastId;
 
-        int size = list.size();
+        final int size = list.size();
         if (size > 0) {
             startId = Long.valueOf((String) list.get(0));
             if (size > 1) {
@@ -452,27 +463,26 @@ public class FileServer {
 
         Util.ensureDirectoryExists();
         for (long id = startId; id <= endId; id++) {
-            File file = Util.logFile(id);
+            final File file = Util.logFile(id);
             LOG.info("recovering data from " + file.getName());
             recover(file);
         }
         LOG.info("recovery complete");
     }
 
-
-    private void startArchive(List list) {
+    private void startArchive(final List list) {
         LOG.info("starting archiving");
         final LogRange logFileRange = Util.logFileRange();
         if (logFileRange.noLogFile()) {
             System.err.println("No recovery files found");
             System.exit(0);
         }
-        long lastId = logFileRange.getLast();
+        final long lastId = logFileRange.getLast();
         LOG.info("last log file is " + Util.logFile(lastId).getName());
 
         long endId = lastId - 1;
 
-        int size = list.size();
+        final int size = list.size();
         if (size > 0) {
             endId = Long.valueOf((String) list.get(0));
         }
@@ -480,20 +490,20 @@ public class FileServer {
             System.err.println("File ID invalid: they must be less that " + lastId);
             System.exit(0);
         }
-        long startId = logFileRange.getFirst();
+        final long startId = logFileRange.getFirst();
         for (long id = startId; id <= endId; id++) {
-            File file = Util.logFile(id);
+            final File file = Util.logFile(id);
             LOG.info("moving " + file.getName());
-            File destination = Util.archiveLogFile(id);
+            final File destination = Util.archiveLogFile(id);
             file.renameTo(destination);
         }
         LOG.info("archive complete");
 
     }
-    
+
     private void startSecondary() {
-        String serviceHost = config.getString("fileserver.sync-host", DEFAULT_HOST);
-        int servicePort = config.getInt("fileserver.sync-port", DEFAULT_SYNC_PORT);
+        final String serviceHost = config.getString("fileserver.sync-host", DEFAULT_HOST);
+        final int servicePort = config.getInt("fileserver.sync-port", DEFAULT_SYNC_PORT);
 
         Util.ensureDirectoryExists();
         ServerSocket socket = null;
@@ -528,20 +538,20 @@ public class FileServer {
                 return;
             }
 
-            LogRange logFileRange = Util.logFileRange();
-            long lastId = logFileRange.noLogFile() ? -1 : logFileRange.getLast();
+            final LogRange logFileRange = Util.logFileRange();
+            final long lastId = logFileRange.noLogFile() ? -1 : logFileRange.getLast();
             output.writeLong(lastId);
             do {
                 if (input.readByte() != RECOVERY_LOG) {
                     return;
                 }
                 crc32.reset();
-                long logId = input.readLong();
-                File file = Util.tmpLogFile(logId);
+                final long logId = input.readLong();
+                final File file = Util.tmpLogFile(logId);
                 LOG.info("syncing recovery file: " + file.getName());
-                BufferedOutputStream fileOutput = new BufferedOutputStream(new FileOutputStream(file));
+                final BufferedOutputStream fileOutput = new BufferedOutputStream(new FileOutputStream(file));
 
-                byte[] buffer = new byte[8092];
+                final byte[] buffer = new byte[8092];
                 int length;
                 while ((length = input.readInt()) > 0) {
                     input.readFully(buffer, 0, length);
@@ -549,14 +559,14 @@ public class FileServer {
                 }
                 fileOutput.close();
 
-                long calculatedChecksum = crc32.getValue();
-                long sentChecksum = input.readLong();
+                final long calculatedChecksum = crc32.getValue();
+                final long sentChecksum = input.readLong();
                 if (calculatedChecksum != sentChecksum) {
                     throw new NoSqlStoreException("Checksum didn't match during download of " + file.getName());
                 }
 
                 recover(file);
-                File renameTo = Util.logFile(logId);
+                final File renameTo = Util.logFile(logId);
                 file.renameTo(renameTo);
             } while (true);
         } catch (final NoSqlStoreException e) {
@@ -576,13 +586,13 @@ public class FileServer {
         // TODO restart
     }
 
-    private void recover(File file) {
+    private void recover(final File file) {
         LineNumberReader reader = null;
         try {
             reader = new LineNumberReader(new InputStreamReader(new FileInputStream(file), Util.ENCODING));
 
             while (true) {
-                String line = reader.readLine();
+                final String line = reader.readLine();
                 if (line == null) {
                     break;
                 }
@@ -591,13 +601,13 @@ public class FileServer {
                 }
                 readTransaction(reader);
             }
-        } catch (IOException e) {
+        } catch (final IOException e) {
             throw new NoSqlStoreException(e);
         } finally {
             if (reader != null) {
                 try {
                     reader.close();
-                } catch (IOException e) {
+                } catch (final IOException e) {
                     throw new NoSqlStoreException(e);
                 }
             }
@@ -633,12 +643,11 @@ public class FileServer {
                 files.add(elementData);
             }
         }
-        LOG.warn("transaction has no ending marker so is incomplete and will not be restored (ending " + reader.getLineNumber()
-                + ")");
+        LOG.warn("transaction has no ending marker so is incomplete and will not be restored (ending " + reader.getLineNumber() + ")");
     }
 
     private FileContent readElementData(final String header, final LineNumberReader reader) throws IOException {
-        StringBuffer content = new StringBuffer();
+        final StringBuffer content = new StringBuffer();
         String line;
         while ((line = reader.readLine()) != null) {
             if (line.length() == 0) {
@@ -657,17 +666,18 @@ public class FileServer {
     }
 
     private void startLogRolling() {
-        int rollPeriod = config.getInt("fileserver.log-period", 5);
-        long sleepTime = rollPeriod * 60 * 1000;
+        final int rollPeriod = config.getInt("fileserver.log-period", 5);
+        final long sleepTime = rollPeriod * 60 * 1000;
 
         while (awaitConnections) {
-            LogWriter logger = server.getLogger();
+            final LogWriter logger = server.getLogger();
             if (logger != null) {
                 logger.startNewFile();
             }
             try {
                 Thread.sleep(sleepTime);
-            } catch (InterruptedException ignore) {}
+            } catch (final InterruptedException ignore) {
+            }
         }
     }
 }

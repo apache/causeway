@@ -24,8 +24,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
-
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.exceptions.NotYetImplementedException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -43,6 +41,7 @@ import org.apache.isis.runtimes.dflt.objectstores.sql.SqlObjectStoreException;
 import org.apache.isis.runtimes.dflt.objectstores.sql.mapping.FieldMapping;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
+import org.apache.log4j.Logger;
 
 public abstract class AbstractAutoMapper extends AbstractMapper {
     private static final Logger LOG = Logger.getLogger(AbstractAutoMapper.class);
@@ -52,13 +51,11 @@ public abstract class AbstractAutoMapper extends AbstractMapper {
     final FieldMappingLookup lookup;
     final ObjectMappingLookup objectMapperLookup;
 
-    protected AbstractAutoMapper(final String className, final String parameterBase, final FieldMappingLookup lookup,
-        final ObjectMappingLookup objectMapperLookup) {
+    protected AbstractAutoMapper(final String className, final String parameterBase, final FieldMappingLookup lookup, final ObjectMappingLookup objectMapperLookup) {
         specification = IsisContext.getSpecificationLoader().loadSpecification(className);
         if (specification.getProperties() == null || specification.getProperties().size() == 0) {
             if (specification.isAbstract() == false) {
-                throw new SqlObjectStoreException(specification.getFullIdentifier() + " has no fields: "
-                    + specification);
+                throw new SqlObjectStoreException(specification.getFullIdentifier() + " has no fields: " + specification);
             }
         }
         this.className = className;
@@ -67,8 +64,7 @@ public abstract class AbstractAutoMapper extends AbstractMapper {
         this.objectMapperLookup = objectMapperLookup;
     }
 
-    protected AbstractAutoMapper(final FieldMappingLookup lookup, final AbstractAutoMapper abstractAutoMapper,
-        String className) {
+    protected AbstractAutoMapper(final FieldMappingLookup lookup, final AbstractAutoMapper abstractAutoMapper, final String className) {
 
         this.className = className;
         specification = IsisContext.getSpecificationLoader().loadSpecification(className);
@@ -91,8 +87,7 @@ public abstract class AbstractAutoMapper extends AbstractMapper {
     protected List<FieldMapping> fieldMappings = new ArrayList<FieldMapping>();
     protected Map<ObjectAssociation, FieldMapping> fieldMappingLookup = new HashMap<ObjectAssociation, FieldMapping>();
 
-    private void setUpFieldMappers(final FieldMappingLookup lookup, final ObjectMappingLookup objectMapperLookup,
-        final String className, final String parameterBase) {
+    private void setUpFieldMappers(final FieldMappingLookup lookup, final ObjectMappingLookup objectMapperLookup, final String className, final String parameterBase) {
         final IsisConfiguration configParameters = IsisContext.getConfiguration();
         table = configParameters.getString(parameterBase + ".table." + className);
         if (table == null) {
@@ -106,23 +101,23 @@ public abstract class AbstractAutoMapper extends AbstractMapper {
         if (configParameters.getBoolean(parameterBase + "all-fields", true)) {
             setupFullMapping(lookup, objectMapperLookup, className, configParameters, parameterBase);
         } else {
-            // setupSpecifiedMapping(specification, configParameters, parameterBase);
+            // setupSpecifiedMapping(specification, configParameters,
+            // parameterBase);
         }
 
         LOG.info("table mapping: " + table + " (" + columnList(fieldMappings) + ")");
     }
 
-    protected String getTableNameFromSpecification(ObjectSpecification objectSpecification) {
+    protected String getTableNameFromSpecification(final ObjectSpecification objectSpecification) {
         return Sql.tableIdentifier(Sql.sqlName(Defaults.getTablePrefix() + objectSpecification.getShortIdentifier()));
     }
 
     protected List<ObjectAssociation> fields = new ArrayList<ObjectAssociation>();
 
-    protected void getExtraFields(List<ObjectAssociation> fields) {
+    protected void getExtraFields(final List<ObjectAssociation> fields) {
     }
 
-    private void setupFullMapping(final FieldMappingLookup lookup, final ObjectMappingLookup objectMapperLookup,
-        final String className, final IsisConfiguration configParameters, final String parameterBase) {
+    private void setupFullMapping(final FieldMappingLookup lookup, final ObjectMappingLookup objectMapperLookup, final String className, final IsisConfiguration configParameters, final String parameterBase) {
 
         fields.addAll(specification.getAssociations());
 
@@ -151,26 +146,32 @@ public abstract class AbstractAutoMapper extends AbstractMapper {
             } else if (field.isOneToManyAssociation()) {
                 oneToManyProperties[collectionFieldNo] = field;
 
-                // TODO: Replace "new ForeignKeyCollectionMapper" with a factory method(?) to allow a different
+                // TODO: Replace "new ForeignKeyCollectionMapper" with a factory
+                // method(?) to allow a different
                 // default CollectionMapper
 
-                // TODO: I think the default order should be changed - and I think I (KAM) have dropped support for the
-                // original "association-table" implementation. This means the current checks are misleading.
+                // TODO: I think the default order should be changed - and I
+                // think I (KAM) have dropped support for the
+                // original "association-table" implementation. This means the
+                // current checks are misleading.
                 final String type = subset.getString(field.getId());
                 if (type == null || type.equals("association-table")) {
-                    // collectionMappers[collectionFieldNo] = new AutoCollectionMapper(specification,
+                    // collectionMappers[collectionFieldNo] = new
+                    // AutoCollectionMapper(specification,
                     // oneToManyProperties[collectionFieldNo], lookup);
                     // collectionMappers[collectionFieldNo] = new
-                    // ForeignKeyCollectionMapper(oneToManyProperties[collectionFieldNo], parameterBase, lookup,
+                    // ForeignKeyCollectionMapper(oneToManyProperties[collectionFieldNo],
+                    // parameterBase, lookup,
                     // objectMapperLookup);
 
                     CollectionMapper collectionMapper = null;
 
                     // Trying to detect recursion, here.
-                    // Let ForeignKeyInChildCollectionMapper find itself when a field is a collection of the current
+                    // Let ForeignKeyInChildCollectionMapper find itself when a
+                    // field is a collection of the current
                     // field type.
                     if (this instanceof ForeignKeyInChildCollectionMapper) {
-                        ForeignKeyInChildCollectionMapper mc = (ForeignKeyInChildCollectionMapper) this;
+                        final ForeignKeyInChildCollectionMapper mc = (ForeignKeyInChildCollectionMapper) this;
 
                         if (mc.priorField == field) {
                             collectionMapper = mc;
@@ -178,19 +179,15 @@ public abstract class AbstractAutoMapper extends AbstractMapper {
                     }
 
                     if (collectionMapper == null) {
-                        // TODO: Polymorphism - is it sufficient for the collectionMapper to handle the subclasses?
+                        // TODO: Polymorphism - is it sufficient for the
+                        // collectionMapper to handle the subclasses?
                         final ObjectSpecification fieldSpecification = field.getSpecification();
                         if (fieldSpecification.hasSubclasses() || fieldSpecification.isAbstract()) {
                             // PolymorphicForeignKeyInChildCollectionBaseMapper
                             // Or PolymorphicForeignKeyInChildCollectionMapper
-                            collectionMapper =
-                                new PolymorphicForeignKeyInChildCollectionBaseMapper(
-                                    oneToManyProperties[collectionFieldNo], parameterBase, lookup, objectMapperLookup,
-                                    this, field);
+                            collectionMapper = new PolymorphicForeignKeyInChildCollectionBaseMapper(oneToManyProperties[collectionFieldNo], parameterBase, lookup, objectMapperLookup, this, field);
                         } else {
-                            ForeignKeyInChildCollectionMapper mapper =
-                                new ForeignKeyInChildCollectionMapper(oneToManyProperties[collectionFieldNo],
-                                    parameterBase, lookup, objectMapperLookup, this, field);
+                            final ForeignKeyInChildCollectionMapper mapper = new ForeignKeyInChildCollectionMapper(oneToManyProperties[collectionFieldNo], parameterBase, lookup, objectMapperLookup, this, field);
                             mapper.setUpFieldMappers();
                             collectionMapper = mapper;
                         }
@@ -206,8 +203,10 @@ public abstract class AbstractAutoMapper extends AbstractMapper {
                         throw new SqlObjectStoreException("Expected property " + property);
                     }
                     /*
-                     * collectionMappers[collectionFieldNo] = new ForeignKeyCollectionMapper(elementType,
-                     * oneToManyProperties[collectionFieldNo], parameterBase, lookup, objectMapperLookup);
+                     * collectionMappers[collectionFieldNo] = new
+                     * ForeignKeyCollectionMapper(elementType,
+                     * oneToManyProperties[collectionFieldNo], parameterBase,
+                     * lookup, objectMapperLookup);
                      */
                 } else {
                     // TODO use other mappers where necessary
@@ -233,31 +232,43 @@ public abstract class AbstractAutoMapper extends AbstractMapper {
     }
 
     /*
-     * private void setupSpecifiedMapping( final ObjectSpecification specification, final IsisConfiguration
-     * configParameters, final String parameterBase) { IsisConfiguration columnMappings =
-     * IsisContext.getConfiguration().createSubset(parameterBase + "column"); int columnsSize = columnMappings.size();
-     * // columnNames = new String[columnsSize]; oneToOneProperties = new ObjectAssociation[columnsSize];
+     * private void setupSpecifiedMapping( final ObjectSpecification
+     * specification, final IsisConfiguration configParameters, final String
+     * parameterBase) { IsisConfiguration columnMappings =
+     * IsisContext.getConfiguration().createSubset(parameterBase + "column");
+     * int columnsSize = columnMappings.size(); // columnNames = new
+     * String[columnsSize]; oneToOneProperties = new
+     * ObjectAssociation[columnsSize];
      * 
-     * int i = 0; for (Enumeration names = columnMappings.propertyNames(); names.hasMoreElements(); i++) { String
-     * columnName = (String) names.nextElement(); String fieldName = columnMappings.getString(columnName);
-     * oneToOneProperties[i] = specification.getAssociation(fieldName); // columnNames[i] = columnName; }
+     * int i = 0; for (Enumeration names = columnMappings.propertyNames();
+     * names.hasMoreElements(); i++) { String columnName = (String)
+     * names.nextElement(); String fieldName =
+     * columnMappings.getString(columnName); oneToOneProperties[i] =
+     * specification.getAssociation(fieldName); // columnNames[i] = columnName;
+     * }
      * 
-     * IsisConfiguration collectionMappings = IsisContext.getConfiguration().createSubset( parameterBase +
-     * "collection"); int collectionsSize = collectionMappings.size(); collectionMappers = new
-     * AutoCollectionMapper[collectionsSize]; oneToManyProperties = new ObjectAssociation[collectionsSize];
+     * IsisConfiguration collectionMappings =
+     * IsisContext.getConfiguration().createSubset( parameterBase +
+     * "collection"); int collectionsSize = collectionMappings.size();
+     * collectionMappers = new AutoCollectionMapper[collectionsSize];
+     * oneToManyProperties = new ObjectAssociation[collectionsSize];
      * 
-     * int j = 0; for (Enumeration names = collectionMappings.propertyNames(); names.hasMoreElements(); j++) { String
-     * propertyName = (String) names.nextElement(); String collectionName = collectionMappings.getString(propertyName);
-     * String type = collectionMappings.getString(collectionName);
+     * int j = 0; for (Enumeration names = collectionMappings.propertyNames();
+     * names.hasMoreElements(); j++) { String propertyName = (String)
+     * names.nextElement(); String collectionName =
+     * collectionMappings.getString(propertyName); String type =
+     * collectionMappings.getString(collectionName);
      * 
-     * oneToManyProperties[j] = specification.getAssociation(collectionName); if (type.equals("auto")) {
-     * collectionMappers[j] = new AutoCollectionMapper(this, specification, oneToManyProperties[j], getLookup()); } else
-     * { // TODO use other mappers where necessary // new ReversedAutoAssociationMapper(specification, collectionName,
+     * oneToManyProperties[j] = specification.getAssociation(collectionName); if
+     * (type.equals("auto")) { collectionMappers[j] = new
+     * AutoCollectionMapper(this, specification, oneToManyProperties[j],
+     * getLookup()); } else { // TODO use other mappers where necessary // new
+     * ReversedAutoAssociationMapper(specification, collectionName,
      * parameterBase);
      * 
      * throw new NotYetImplementedException(); } } }
      */
-    protected String columnList(List<FieldMapping> fieldMappings) {
+    protected String columnList(final List<FieldMapping> fieldMappings) {
         final StringBuffer sql = new StringBuffer();
         for (final FieldMapping mapping : fieldMappings) {
             if (sql.length() > 0) {
@@ -294,8 +305,7 @@ public abstract class AbstractAutoMapper extends AbstractMapper {
 
     @Override
     public String toString() {
-        return "AbstractAutoMapper [table=" + table + ",noColumns=" + fieldMappings.size() + ",specification="
-            + specification.getFullIdentifier() + "]";
+        return "AbstractAutoMapper [table=" + table + ",noColumns=" + fieldMappings.size() + ",specification=" + specification.getFullIdentifier() + "]";
     }
 
     protected String values(final DatabaseConnector connector, final ObjectAdapter object) {

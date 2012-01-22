@@ -33,8 +33,7 @@ class FileContent {
     final String data;
     final String type;
 
-    public FileContent(final char command, final String id, final String currentVersion, final String newVersion,
-        final String type, final String buf) {
+    public FileContent(final char command, final String id, final String currentVersion, final String newVersion, final String type, final String buf) {
         this.command = command;
         this.id = id;
         this.currentVersion = currentVersion;
@@ -43,7 +42,7 @@ class FileContent {
         this.data = buf;
     }
 
-    public void write(OutputStream output) throws IOException {
+    public void write(final OutputStream output) throws IOException {
         output.write(type.getBytes(ENCODING));
         output.write(' ');
         output.write(id.getBytes(ENCODING));

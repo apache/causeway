@@ -29,14 +29,12 @@ public class ExpectedCalls {
     private final Vector actualObjects = new Vector();
 
     private void assertExpectedNoMoreThanActuals() {
-        Assert.assertTrue("More actuals than expected; didn't expect call " + actualObjects.lastElement(),
-            actualObjects.size() <= expectedObjects.size());
+        Assert.assertTrue("More actuals than expected; didn't expect call " + actualObjects.lastElement(), actualObjects.size() <= expectedObjects.size());
     }
 
     public void verify() {
         assertLastMethodsParametersCorrect();
-        Assert.assertTrue("Too few calls added\n  Expected " + expectedObjects,
-            actualObjects.size() == expectedObjects.size());
+        Assert.assertTrue("Too few calls added\n  Expected " + expectedObjects, actualObjects.size() == expectedObjects.size());
     }
 
     private void assertLastMethodsParametersCorrect() {
@@ -47,8 +45,7 @@ public class ExpectedCalls {
 
             final int actualParameterSize = lastActualCall.paramters.size();
             final int expectedParameterSize = lastExpectedCall.paramters.size();
-            Assert.assertEquals("Method " + lastExpectedCall.name + " parameters incorrect; ", expectedParameterSize,
-                actualParameterSize);
+            Assert.assertEquals("Method " + lastExpectedCall.name + " parameters incorrect; ", expectedParameterSize, actualParameterSize);
         }
     }
 
@@ -87,13 +84,11 @@ public class ExpectedCalls {
 
         final int expectedParameterSize = expectedCall.paramters.size();
         if (parameterElement >= expectedParameterSize) {
-            Assert.fail("Unexpected number of parameters; expected " + expectedParameterSize + ", but got "
-                + actual.paramters.size());
+            Assert.fail("Unexpected number of parameters; expected " + expectedParameterSize + ", but got " + actual.paramters.size());
         }
 
         final Object expected = expectedCall.parameterAt(parameterElement);
-        Assert.assertEquals("Actual parameter (" + parameterElement + ") in " + expectedCall.name
-            + " does not match expected.\n", expected, value);
+        Assert.assertEquals("Actual parameter (" + parameterElement + ") in " + expectedCall.name + " does not match expected.\n", expected, value);
     }
 
 }

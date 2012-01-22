@@ -22,8 +22,6 @@ package org.apache.isis.runtimes.dflt.objectstores.sql;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
-
 import org.apache.isis.core.commons.exceptions.NotYetImplementedException;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
@@ -33,17 +31,16 @@ import org.apache.isis.runtimes.dflt.objectstores.sql.mapping.FieldMappingFactor
 import org.apache.isis.runtimes.dflt.objectstores.sql.mapping.ObjectReferenceMapping;
 import org.apache.isis.runtimes.dflt.objectstores.sql.mapping.ObjectReferenceMappingFactory;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
+import org.apache.log4j.Logger;
 
 public class FieldMappingLookup {
     private static final Logger LOG = Logger.getLogger(FieldMappingLookup.class);
-    private final Map<ObjectSpecification, FieldMappingFactory> fieldMappings =
-        new HashMap<ObjectSpecification, FieldMappingFactory>();
-    private final Map<ObjectSpecification, ObjectReferenceMappingFactory> referenceMappings =
-        new HashMap<ObjectSpecification, ObjectReferenceMappingFactory>();
+    private final Map<ObjectSpecification, FieldMappingFactory> fieldMappings = new HashMap<ObjectSpecification, FieldMappingFactory>();
+    private final Map<ObjectSpecification, ObjectReferenceMappingFactory> referenceMappings = new HashMap<ObjectSpecification, ObjectReferenceMappingFactory>();
     private FieldMappingFactory referenceFieldMappingfactory;
     private ObjectReferenceMappingFactory objectReferenceMappingfactory;
 
-    public FieldMapping createMapping(ObjectSpecification object, final ObjectAssociation field) {
+    public FieldMapping createMapping(final ObjectSpecification object, final ObjectAssociation field) {
         final ObjectSpecification spec = field.getSpecification();
         FieldMappingFactory factory = fieldMappings.get(spec);
         if (factory != null) {
@@ -57,7 +54,8 @@ public class FieldMappingLookup {
             addFieldMappingFactory(spec, factory);
             return factory.createFieldMapping(object, field);
             // } else {
-            // throw new IsisException("No mapper for " + spec + " (no default mapper)");
+            // throw new IsisException("No mapper for " + spec +
+            // " (no default mapper)");
         }
     }
 
@@ -75,9 +73,11 @@ public class FieldMappingLookup {
         } else {// if (true /* TODO test for reference */) {
             factory = objectReferenceMappingfactory;
             // add(spec, factory);
-            return factory.createReferenceMapping(columnName, spec); // TODO: here
+            return factory.createReferenceMapping(columnName, spec); // TODO:
+                                                                     // here
             // } else {
-            // throw new IsisException("No mapper for " + spec + " (no default mapper)");
+            // throw new IsisException("No mapper for " + spec +
+            // " (no default mapper)");
         }
     }
 
@@ -91,8 +91,7 @@ public class FieldMappingLookup {
         fieldMappings.put(specification, mapper);
     }
 
-    public void addReferenceMappingFactory(final ObjectSpecification specification,
-        final ObjectReferenceMappingFactory mapper) {
+    public void addReferenceMappingFactory(final ObjectSpecification specification, final ObjectReferenceMappingFactory mapper) {
         LOG.debug("add mapper " + mapper + " for " + specification);
         referenceMappings.put(specification, mapper);
     }

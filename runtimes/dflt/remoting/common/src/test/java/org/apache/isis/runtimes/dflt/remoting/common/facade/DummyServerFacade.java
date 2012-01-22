@@ -59,8 +59,7 @@ import org.apache.isis.runtimes.dflt.remoting.common.exchange.SetValueResponse;
  * previously called <tt>DummyDistribution</tt>.
  */
 public class DummyServerFacade implements ServerFacade {
-    public ObjectData[] allInstances(final AuthenticationSession session, final String fullName,
-        final boolean includeSubclasses) {
+    public ObjectData[] allInstances(final AuthenticationSession session, final String fullName, final boolean includeSubclasses) {
         return null;
     }
 

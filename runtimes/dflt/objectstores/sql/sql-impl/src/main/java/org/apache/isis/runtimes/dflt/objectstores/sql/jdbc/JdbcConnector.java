@@ -29,10 +29,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.log4j.Logger;
-import org.joda.time.DateTimeZone;
-import org.joda.time.LocalDate;
-
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.runtimes.dflt.objectstores.sql.AbstractDatabaseConnector;
@@ -41,6 +37,9 @@ import org.apache.isis.runtimes.dflt.objectstores.sql.SqlMetaData;
 import org.apache.isis.runtimes.dflt.objectstores.sql.SqlObjectStore;
 import org.apache.isis.runtimes.dflt.objectstores.sql.SqlObjectStoreException;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
+import org.apache.log4j.Logger;
+import org.joda.time.DateTimeZone;
+import org.joda.time.LocalDate;
 
 public class JdbcConnector extends AbstractDatabaseConnector {
     private static final Logger LOG = Logger.getLogger(JdbcConnector.class);
@@ -51,7 +50,7 @@ public class JdbcConnector extends AbstractDatabaseConnector {
         baseName = SqlObjectStore.BASE_NAME;
     }
 
-    public JdbcConnector(String propertyBase) {
+    public JdbcConnector(final String propertyBase) {
         baseName = propertyBase;
     }
 
@@ -132,36 +131,47 @@ public class JdbcConnector extends AbstractDatabaseConnector {
     }
 
     /*
-     * public void executeStoredProcedure(final StoredProcedure storedProcedure) { Parameter[] parameters =
-     * storedProcedure.getParameters(); StringBuffer sql = new StringBuffer("{call ");
-     * sql.append(storedProcedure.getName()); sql.append(" ("); for (int i = 0, no = parameters.length; i < no; i++) {
-     * sql.append(i == 0 ? "?" : ",?"); } sql.append(")}"); LOG.debug("SQL: " + sql);
+     * public void executeStoredProcedure(final StoredProcedure storedProcedure)
+     * { Parameter[] parameters = storedProcedure.getParameters(); StringBuffer
+     * sql = new StringBuffer("{call "); sql.append(storedProcedure.getName());
+     * sql.append(" ("); for (int i = 0, no = parameters.length; i < no; i++) {
+     * sql.append(i == 0 ? "?" : ",?"); } sql.append(")}"); LOG.debug("SQL: " +
+     * sql);
      * 
-     * CallableStatement statement; try { statement = connection.prepareCall(sql.toString());
+     * CallableStatement statement; try { statement =
+     * connection.prepareCall(sql.toString());
      * 
-     * for (int i = 0; i < parameters.length; i++) { LOG.debug(" setup param " + i + " " + parameters[i]);
-     * parameters[i].setupParameter(i + 1, parameters[i].getName(), storedProcedure); } LOG.debug(" execute ");
-     * statement.execute(); for (int i = 0; i < parameters.length; i++) { parameters[i].retrieve(i + 1,
-     * parameters[i].getName(), storedProcedure); LOG.debug(" retrieve param " + i + " " + parameters[i]); } } catch
+     * for (int i = 0; i < parameters.length; i++) { LOG.debug(" setup param " +
+     * i + " " + parameters[i]); parameters[i].setupParameter(i + 1,
+     * parameters[i].getName(), storedProcedure); } LOG.debug(" execute ");
+     * statement.execute(); for (int i = 0; i < parameters.length; i++) {
+     * parameters[i].retrieve(i + 1, parameters[i].getName(), storedProcedure);
+     * LOG.debug(" retrieve param " + i + " " + parameters[i]); } } catch
      * (SQLException e) { throw new ObjectAdapterRuntimeException(e); }
      * 
      * }
      * 
      * 
-     * public MultipleResults executeStoredProcedure(final String name, final Parameter[] parameters) { StringBuffer sql
-     * = new StringBuffer("{call "); sql.append(name); sql.append(" ("); for (int i = 0; i < parameters.length; i++) {
-     * sql.append(i == 0 ? "?" : ",?"); } sql.append(")}"); LOG.debug("SQL: " + sql);
+     * public MultipleResults executeStoredProcedure(final String name, final
+     * Parameter[] parameters) { StringBuffer sql = new StringBuffer("{call ");
+     * sql.append(name); sql.append(" ("); for (int i = 0; i <
+     * parameters.length; i++) { sql.append(i == 0 ? "?" : ",?"); }
+     * sql.append(")}"); LOG.debug("SQL: " + sql);
      * 
-     * CallableStatement statement; try { statement = connection.prepareCall(sql.toString());
+     * CallableStatement statement; try { statement =
+     * connection.prepareCall(sql.toString());
      * 
      * StoredProcedure storedProcedure = new JdbcStoredProcedure(statement);
      * 
-     * for (int i = 0; i < parameters.length; i++) { LOG.debug(" setup param " + i + " " + parameters[i]);
-     * parameters[i].setupParameter(i + 1, parameters[i].getName(), storedProcedure); } LOG.debug(" execute ");
-     * statement.execute(); for (int i = 0; i < parameters.length; i++) { parameters[i].retrieve(i + 1,
-     * parameters[i].getName(), storedProcedure); LOG.debug(" retrieve param " + i + " " + parameters[i]); }
+     * for (int i = 0; i < parameters.length; i++) { LOG.debug(" setup param " +
+     * i + " " + parameters[i]); parameters[i].setupParameter(i + 1,
+     * parameters[i].getName(), storedProcedure); } LOG.debug(" execute ");
+     * statement.execute(); for (int i = 0; i < parameters.length; i++) {
+     * parameters[i].retrieve(i + 1, parameters[i].getName(), storedProcedure);
+     * LOG.debug(" retrieve param " + i + " " + parameters[i]); }
      * 
-     * return new JdbcResults(statement); } catch (SQLException e) { throw new ObjectAdapterRuntimeException(e); } }
+     * return new JdbcResults(statement); } catch (SQLException e) { throw new
+     * ObjectAdapterRuntimeException(e); } }
      */
 
     @Override
@@ -210,12 +220,12 @@ public class JdbcConnector extends AbstractDatabaseConnector {
                         try {
                             statement.setObject(i, value, java.sql.Types.DATE);
                         } catch (final SQLException e) {
-                            // TODO This daft catch is required my MySQL, which also requires the TimeZone offset to be
+                            // TODO This daft catch is required my MySQL, which
+                            // also requires the TimeZone offset to be
                             // "undone"
                             final LocalDate localDate = (LocalDate) value;
                             final int millisOffset = -DateTimeZone.getDefault().getOffset(null);
-                            final Date javaDate =
-                                localDate.toDateTimeAtStartOfDay(DateTimeZone.forOffsetMillis(millisOffset)).toDate();
+                            final Date javaDate = localDate.toDateTimeAtStartOfDay(DateTimeZone.forOffsetMillis(millisOffset)).toDate();
 
                             statement.setObject(i, javaDate, java.sql.Types.DATE);
                         }
@@ -225,8 +235,7 @@ public class JdbcConnector extends AbstractDatabaseConnector {
                     i++;
                 }
             } catch (final SQLException e) {
-                LOG.error("Error adding prepared value " + i + " of type "
-                    + queryValues.get(i - 1).getClass().getSimpleName(), e);
+                LOG.error("Error adding prepared value " + i + " of type " + queryValues.get(i - 1).getClass().getSimpleName(), e);
                 throw e;
             }
         }
@@ -279,7 +288,8 @@ public class JdbcConnector extends AbstractDatabaseConnector {
             statement = connection.prepareStatement(sql);
             statement.executeUpdate();
             /*
-             * require 3.0 ResultSet rs = statement.getGeneratedKeys(); if(rs.next()) { int id = rs.getInt(1); }
+             * require 3.0 ResultSet rs = statement.getGeneratedKeys();
+             * if(rs.next()) { int id = rs.getInt(1); }
              */statement.close();
         } catch (final SQLException e) {
             throw new SqlObjectStoreException("SQL error", e);
@@ -340,8 +350,7 @@ public class JdbcConnector extends AbstractDatabaseConnector {
             final DatabaseMetaData metaData = connection.getMetaData();
             debug.appendln("Product", metaData.getDatabaseProductName() + "  " + metaData.getDatabaseProductVersion());
             try {
-                debug.appendln("Product Version",
-                    metaData.getDatabaseMajorVersion() + "." + metaData.getDatabaseMinorVersion());
+                debug.appendln("Product Version", metaData.getDatabaseMajorVersion() + "." + metaData.getDatabaseMinorVersion());
             } catch (final AbstractMethodError ignore) {
             }
             debug.appendln("Drive", metaData.getDriverName() + "  " + metaData.getDriverVersion());

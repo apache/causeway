@@ -72,7 +72,7 @@ public class MongoStateReader implements StateReader {
     public String readEncrytionType() {
         return (String) instance.get("_encrypt");
     }
-    
+
     @Override
     public String readObjectType() {
         return (String) instance.get("_type");

@@ -30,11 +30,12 @@ import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessi
 import org.apache.isis.runtimes.dflt.runtime.system.transaction.IsisTransaction;
 
 /**
- * Analogous to a Hibernate <tt>Session</tt>, holds the current set of components for a specific execution context (such
- * as on a thread).
+ * Analogous to a Hibernate <tt>Session</tt>, holds the current set of
+ * components for a specific execution context (such as on a thread).
  * 
  * <p>
- * The <tt>IsisContext</tt> class (in <tt>nof-core</tt>) is responsible for locating the current execution context.
+ * The <tt>IsisContext</tt> class (in <tt>nof-core</tt>) is responsible for
+ * locating the current execution context.
  * 
  * @see IsisSessionFactory
  */
@@ -48,8 +49,9 @@ public interface IsisSession extends SessionScopedComponent {
      * The creating {@link IsisSessionFactory factory}.
      * 
      * <p>
-     * Note that from the factory we can {@link IsisSessionFactory#getIsisSystem() get to} the {@link IsisSystem}, and
-     * thus other {@link ApplicationScopedComponent}s.
+     * Note that from the factory we can
+     * {@link IsisSessionFactory#getIsisSystem() get to} the {@link IsisSystem},
+     * and thus other {@link ApplicationScopedComponent}s.
      */
     public IsisSessionFactory getSessionFactory();
 
@@ -58,8 +60,10 @@ public interface IsisSession extends SessionScopedComponent {
     // //////////////////////////////////////////////////////
 
     /**
-     * Normal lifecycle is managed using callbacks in {@link SessionScopedComponent}. This method is to allow the outer
-     * {@link ApplicationScopedComponent}s to shutdown, closing any and all running {@link IsisSession}s.
+     * Normal lifecycle is managed using callbacks in
+     * {@link SessionScopedComponent}. This method is to allow the outer
+     * {@link ApplicationScopedComponent}s to shutdown, closing any and all
+     * running {@link IsisSession}s.
      */
     public void closeAll();
 
@@ -77,7 +81,8 @@ public interface IsisSession extends SessionScopedComponent {
     // //////////////////////////////////////////////////////
 
     /**
-     * Returns the {@link AuthenticationSession} representing this user for this {@link IsisSession}.
+     * Returns the {@link AuthenticationSession} representing this user for this
+     * {@link IsisSession}.
      */
     public AuthenticationSession getAuthenticationSession();
 
@@ -89,7 +94,8 @@ public interface IsisSession extends SessionScopedComponent {
      * The {@link PersistenceSession} within this {@link IsisSession}.
      * 
      * <p>
-     * Would have been created by the {@link #getSessionFactory() owning factory}'s
+     * Would have been created by the {@link #getSessionFactory() owning
+     * factory}'s
      * 
      */
     public PersistenceSession getPersistenceSession();
@@ -99,8 +105,8 @@ public interface IsisSession extends SessionScopedComponent {
     // //////////////////////////////////////////////////////
 
     /**
-     * Returns the {@link ObjectAdapter adapted} <tt>Perspective</tt> for the user who is using this {@link IsisSession}
-     * .
+     * Returns the {@link ObjectAdapter adapted} <tt>Perspective</tt> for the
+     * user who is using this {@link IsisSession} .
      */
 
     public UserProfile getUserProfile();

@@ -77,17 +77,21 @@ public class ProxyAction_ExecuteRemotelyTest {
         // mockObjectActionPeer = mockery.mock(ObjectActionPeer.class);
         // mockEncoder = mockery.mock(ObjectEncoder.class);
         // mockDistribution = mockery.mock(Distribution.class);
-        // mockActionInvocationFacet = mockery.mock(ActionInvocationFacet.class);
+        // mockActionInvocationFacet =
+        // mockery.mock(ActionInvocationFacet.class);
         //
         // identifier = Identifier.propertyOrCollectionIdentifier("A", "b");
         //
         // mockObjectActionPeer.getIdentifier();
         // expectLastCall().andStubReturn(identifier);
-        // identifierString = identifier.getClassName() + "#" + identifier.getMemberName();
+        // identifierString = identifier.getClassName() + "#" +
+        // identifier.getMemberName();
         // target = system.createTransientTestObject();
         // parameters = new ObjectAdapter[] { param1, param1 };
-        // final ObjectSpecification[] parameterTypes = new ObjectSpecification[] {
-        // system.getSpecification(TestPojo.class), system.getSpecification(TestPojo.class) };
+        // final ObjectSpecification[] parameterTypes = new
+        // ObjectSpecification[] {
+        // system.getSpecification(TestPojo.class),
+        // system.getSpecification(TestPojo.class) };
         //
         // // actionPeer.getParameterTypes();
         // // expectLastCall().andStubReturn(parameterTypes);
@@ -99,7 +103,8 @@ public class ProxyAction_ExecuteRemotelyTest {
         //
         // targetData = new DummyReferenceData();
         // parameterData = new Data[] { null, null };
-        // mockEncoder.createParameters(parameterTypes, parameters, encodersKnownObjects);
+        // mockEncoder.createParameters(parameterTypes, parameters,
+        // encodersKnownObjects);
         // expectLastCall().andReturn(parameterData);
         //
         // mockEncoder.createActionTarget(target, encodersKnownObjects);
@@ -121,13 +126,9 @@ public class ProxyAction_ExecuteRemotelyTest {
         // actionPeer.getTarget();
         // expectLastCall().andStubReturn(ObjectAction.REMOTE);
 
-        final ExecuteServerActionRequest request =
-            new ExecuteServerActionRequest(IsisContext.getAuthenticationSession(), ActionType.USER, identifierString,
-                targetData, parameterData);
+        final ExecuteServerActionRequest request = new ExecuteServerActionRequest(IsisContext.getAuthenticationSession(), ActionType.USER, identifierString, targetData, parameterData);
         mockDistribution.executeServerAction(request);
-        final ExecuteServerActionResponse result =
-            new ExecuteServerActionResponse(new DummyNullValue("type"), new ObjectData[0], new ReferenceData[0], null,
-                new ObjectData[2], new String[0], new String[0]);
+        final ExecuteServerActionResponse result = new ExecuteServerActionResponse(new DummyNullValue("type"), new ObjectData[0], new ReferenceData[0], null, new ObjectData[2], new String[0], new String[0]);
         expectLastCall().andReturn(result);
 
         mockEncoder.madePersistent(target, null);
@@ -146,13 +147,9 @@ public class ProxyAction_ExecuteRemotelyTest {
 
         IsisContext.getPersistenceSession().makePersistent(target);
 
-        final ExecuteServerActionRequest request =
-            new ExecuteServerActionRequest(IsisContext.getAuthenticationSession(), ActionType.USER, identifierString,
-                targetData, parameterData);
+        final ExecuteServerActionRequest request = new ExecuteServerActionRequest(IsisContext.getAuthenticationSession(), ActionType.USER, identifierString, targetData, parameterData);
         mockDistribution.executeServerAction(request);
-        final ExecuteServerActionResponse result =
-            new ExecuteServerActionResponse(new DummyNullValue("type"), new ObjectData[0], new ReferenceData[0], null,
-                new ObjectData[2], new String[0], new String[0]);
+        final ExecuteServerActionResponse result = new ExecuteServerActionResponse(new DummyNullValue("type"), new ObjectData[0], new ReferenceData[0], null, new ObjectData[2], new String[0], new String[0]);
         expectLastCall().andReturn(result);
 
         replay(mockObjectActionPeer, mockEncoder, mockDistribution);
@@ -170,16 +167,10 @@ public class ProxyAction_ExecuteRemotelyTest {
 
         final ObjectAdapter object = system.createPersistentTestObject();
 
-        final ExecuteServerActionRequest request =
-            new ExecuteServerActionRequest(IsisContext.getAuthenticationSession(), ActionType.USER, identifierString,
-                targetData, parameterData);
+        final ExecuteServerActionRequest request = new ExecuteServerActionRequest(IsisContext.getAuthenticationSession(), ActionType.USER, identifierString, targetData, parameterData);
         mockDistribution.executeServerAction(request);
-        final ReferenceData[] disposedReferenceData =
-            new ReferenceData[] { new DummyReferenceData(object.getOid(),
-                object.getSpecification().getFullIdentifier(), null) };
-        final ExecuteServerActionResponse result =
-            new ExecuteServerActionResponse(new DummyNullValue("type"), new ObjectData[0], disposedReferenceData, null,
-                new ObjectData[2], new String[0], new String[0]);
+        final ReferenceData[] disposedReferenceData = new ReferenceData[] { new DummyReferenceData(object.getOid(), object.getSpecification().getFullIdentifier(), null) };
+        final ExecuteServerActionResponse result = new ExecuteServerActionResponse(new DummyNullValue("type"), new ObjectData[0], disposedReferenceData, null, new ObjectData[2], new String[0], new String[0]);
         expectLastCall().andReturn(result);
 
         replay(mockObjectActionPeer, mockEncoder, mockDistribution);

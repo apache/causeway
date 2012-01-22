@@ -33,11 +33,8 @@ public final class OptionValidatorForPersistor implements OptionValidator {
     @Override
     public Maybe<String> validate(final DeploymentType deploymentType) {
         final String objectPersistorName = optionHandlerPersistor.getPersistorName();
-        final boolean fail =
-            (!StringUtils.isNullOrEmpty(objectPersistorName)) && !deploymentType.canSpecifyObjectStore();
-        final String failMsg =
-            String.format("Error: cannot specify an object store (persistor) for deployment type %s\n", deploymentType
-                .name().toLowerCase());
+        final boolean fail = (!StringUtils.isNullOrEmpty(objectPersistorName)) && !deploymentType.canSpecifyObjectStore();
+        final String failMsg = String.format("Error: cannot specify an object store (persistor) for deployment type %s\n", deploymentType.name().toLowerCase());
         return Maybe.setIf(fail, failMsg);
     }
 }

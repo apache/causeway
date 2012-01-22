@@ -54,7 +54,7 @@ public class FileServerProcessor {
         locks.waitUntilAllRealeased();
         logger.shutdown();
     }
-    
+
     LogWriter getLogger() {
         return logger;
     }
@@ -65,41 +65,41 @@ public class FileServerProcessor {
                 connection.readCommand();
                 final char command = connection.getCommand();
                 switch (command) {
-                    case 'L':
-                        list(connection);
-                        break;
+                case 'L':
+                    list(connection);
+                    break;
 
-                    case 'R':
-                        read(connection);
-                        break;
+                case 'R':
+                    read(connection);
+                    break;
 
-                    case 'W':
-                        write(connection);
-                        break;
+                case 'W':
+                    write(connection);
+                    break;
 
-                    case 'I':
-                        hasInstances(connection);
-                        break;
+                case 'I':
+                    hasInstances(connection);
+                    break;
 
-                    case 'S':
-                        service(connection);
-                        break;
+                case 'S':
+                    service(connection);
+                    break;
 
-                    case 'T':
-                        saveService(connection);
-                        break;
+                case 'T':
+                    saveService(connection);
+                    break;
 
-                    case 'N':
-                        nextSerialBatch(connection);
-                        break;
+                case 'N':
+                    nextSerialBatch(connection);
+                    break;
 
-                    case 'X':
-                        status(connection);
-                        break;
+                case 'X':
+                    status(connection);
+                    break;
 
-                    default:
-                        LOG.warn("Unrecognised command " + command);
-                        connection.error("Unrecognised command " + command);
+                default:
+                    LOG.warn("Unrecognised command " + command);
+                    connection.error("Unrecognised command " + command);
                 }
             } else {
                 connection.abort();
@@ -177,8 +177,7 @@ public class FileServerProcessor {
 
     }
 
-    private DataFileReader findInstance(final String type, final String id, final ServerConnection connection)
-        throws IOException {
+    private DataFileReader findInstance(final String type, final String id, final ServerConnection connection) throws IOException {
         LOG.debug("reading file " + id);
         locks.acquireRead(id, getTransactionId());
         try {
@@ -247,8 +246,7 @@ public class FileServerProcessor {
                 if (!version.equals(item.currentVersion)) {
                     // String data = dataReader.getData();
                     dataReader.close();
-                    return "mismatch between FileContent version (" + item.currentVersion
-                        + ") and DataReader version (" + version + ")";
+                    return "mismatch between FileContent version (" + item.currentVersion + ") and DataReader version (" + version + ")";
                 }
                 dataReader.close();
             }
@@ -317,8 +315,7 @@ public class FileServerProcessor {
         connection.ok();
     }
 
-    void saveService(final String key, final String name) throws FileNotFoundException, IOException,
-            UnsupportedEncodingException {
+    void saveService(final String key, final String name) throws FileNotFoundException, IOException, UnsupportedEncodingException {
         FileOutputStream fileOut = null;
         final File file = Util.serviceFile(name);
         try {
@@ -350,8 +347,7 @@ public class FileServerProcessor {
             nextId = 1;
             LOG.info("Initial ID batch created at " + nextId);
         } else {
-            final BufferedReader reader =
-                new BufferedReader(new InputStreamReader(new FileInputStream(file), Util.ENCODING));
+            final BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), Util.ENCODING));
             nextId = Long.valueOf(reader.readLine()).longValue();
             reader.close();
             LOG.info("New ID batch allocated, from " + nextId);
@@ -359,7 +355,7 @@ public class FileServerProcessor {
 
         final long newBatchAt = nextId + batchSize;
         logger.logNextSerialBatch(name, newBatchAt);
-        
+
         saveNextBatch(file, newBatchAt);
 
         // TODO remove lock
@@ -373,7 +369,7 @@ public class FileServerProcessor {
         fileOutput.close();
     }
 
-    public void saveNextBatch(String name, long nextBatch) throws IOException {
+    public void saveNextBatch(final String name, final long nextBatch) throws IOException {
         saveNextBatch(Util.serialNumberFile(name), nextBatch);
     }
 

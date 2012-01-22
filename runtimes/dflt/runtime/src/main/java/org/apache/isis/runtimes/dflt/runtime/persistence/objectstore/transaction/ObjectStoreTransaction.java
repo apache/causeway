@@ -39,8 +39,7 @@ public class ObjectStoreTransaction extends IsisTransactionAbstract {
     private final ObjectStoreTransactionManagement objectStore;
     private final List<PersistenceCommand> commands = new ArrayList<PersistenceCommand>();
 
-    public ObjectStoreTransaction(final IsisTransactionManager transactionManager, final MessageBroker messageBroker,
-        final UpdateNotifier updateNotifier, final ObjectStoreTransactionManagement objectStore) {
+    public ObjectStoreTransaction(final IsisTransactionManager transactionManager, final MessageBroker messageBroker, final UpdateNotifier updateNotifier, final ObjectStoreTransactionManagement objectStore) {
         super(transactionManager, messageBroker, updateNotifier);
         this.objectStore = objectStore;
         if (LOG.isDebugEnabled()) {
@@ -53,7 +52,8 @@ public class ObjectStoreTransaction extends IsisTransactionAbstract {
     // //////////////////////////////////////////////////////////
 
     /**
-     * Add the non-null command to the list of commands to execute at the end of the transaction.
+     * Add the non-null command to the list of commands to execute at the end of
+     * the transaction.
      */
     public void addCommand(final PersistenceCommand command) {
         if (command == null) {

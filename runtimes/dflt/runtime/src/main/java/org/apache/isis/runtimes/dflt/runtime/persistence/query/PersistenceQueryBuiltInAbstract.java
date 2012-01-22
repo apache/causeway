@@ -28,8 +28,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 /**
  * Corresponds to {@link QueryBuiltInAbstract}.
  */
-public abstract class PersistenceQueryBuiltInAbstract extends PersistenceQueryAbstract implements
-    PersistenceQueryBuiltIn {
+public abstract class PersistenceQueryBuiltInAbstract extends PersistenceQueryAbstract implements PersistenceQueryBuiltIn {
 
     public PersistenceQueryBuiltInAbstract(final ObjectSpecification specification) {
         super(specification);

@@ -26,7 +26,8 @@ import org.apache.isis.core.commons.components.TransactionScopedComponent;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 
 /**
- * UpdateNotifier provides updates to client making available lists of the latest changed and disposed objects.
+ * UpdateNotifier provides updates to client making available lists of the
+ * latest changed and disposed objects.
  */
 public interface UpdateNotifier extends TransactionScopedComponent, Injectable {
 
@@ -43,8 +44,9 @@ public interface UpdateNotifier extends TransactionScopedComponent, Injectable {
      * Returns an immutable {@link List} of changed objects.
      * 
      * <p>
-     * Each changed object that was added is only ever provided during one call to this method so the list must be
-     * processed fully to avoid missing updates.
+     * Each changed object that was added is only ever provided during one call
+     * to this method so the list must be processed fully to avoid missing
+     * updates.
      */
     List<ObjectAdapter> getChangedObjects();
 
@@ -61,8 +63,9 @@ public interface UpdateNotifier extends TransactionScopedComponent, Injectable {
      * Returns an immutable {@link List} of disposed objects.
      * 
      * <p>
-     * Each object that was disposed of is only ever provided during one call to this method so the list must be
-     * processed fully to avoid missing deletions.
+     * Each object that was disposed of is only ever provided during one call to
+     * this method so the list must be processed fully to avoid missing
+     * deletions.
      */
     public List<ObjectAdapter> getDisposedObjects();
 

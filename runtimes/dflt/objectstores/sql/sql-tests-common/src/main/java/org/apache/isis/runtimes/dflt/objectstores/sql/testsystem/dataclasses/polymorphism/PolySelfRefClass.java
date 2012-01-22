@@ -25,9 +25,11 @@ import java.util.List;
 import org.apache.isis.applib.AbstractDomainObject;
 
 /**
- * This test class is used to test that a class can contain a collection of itself.
+ * This test class is used to test that a class can contain a collection of
+ * itself.
  * 
- * Caveat: Every class instance can only be contained by 1 parent collection, and will only be contained once.
+ * Caveat: Every class instance can only be contained by 1 parent collection,
+ * and will only be contained once.
  * 
  * @author Kevin
  * 

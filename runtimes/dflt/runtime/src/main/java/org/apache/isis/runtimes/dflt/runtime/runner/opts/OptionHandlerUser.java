@@ -43,9 +43,7 @@ public class OptionHandlerUser extends OptionHandlerAbstract {
     @Override
     @SuppressWarnings("static-access")
     public void addOption(final Options options) {
-        final Option option =
-            OptionBuilder.withArgName("user name").hasArg().withLongOpt(USER_LONG_OPT)
-                .withDescription("user name to log in with").create(USER_OPT);
+        final Option option = OptionBuilder.withArgName("user name").hasArg().withLongOpt(USER_LONG_OPT).withDescription("user name to log in with").create(USER_OPT);
         options.addOption(option);
 
     }

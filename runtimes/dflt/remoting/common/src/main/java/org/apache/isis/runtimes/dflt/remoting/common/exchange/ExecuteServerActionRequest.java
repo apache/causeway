@@ -38,8 +38,7 @@ public class ExecuteServerActionRequest extends RequestAbstract {
     private final ReferenceData target;
     private final Data[] parameters;
 
-    public ExecuteServerActionRequest(final AuthenticationSession session, final ActionType actionType,
-        final String actionIdentifier, final ReferenceData target, final Data[] parameters) {
+    public ExecuteServerActionRequest(final AuthenticationSession session, final ActionType actionType, final String actionIdentifier, final ReferenceData target, final Data[] parameters) {
         super(session);
         this.actionType = actionType;
         this.actionIdentifier = actionIdentifier;
@@ -95,7 +94,8 @@ public class ExecuteServerActionRequest extends RequestAbstract {
     // ///////////////////////////////////////////////////////
 
     /**
-     * {@link #setResponse(Object) Sets a response} of a {@link ExecuteServerActionResponse}.
+     * {@link #setResponse(Object) Sets a response} of a
+     * {@link ExecuteServerActionResponse}.
      */
     @Override
     public void execute(final ServerFacade serverFacade) {

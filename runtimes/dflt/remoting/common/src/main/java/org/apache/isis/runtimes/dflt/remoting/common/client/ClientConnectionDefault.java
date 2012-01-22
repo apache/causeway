@@ -30,8 +30,9 @@ import org.apache.isis.runtimes.dflt.runtime.persistence.ConcurrencyException;
 import org.apache.log4j.Logger;
 
 /**
- * Default implementation of {@link ClientConnection} that delegates to {@link ClientMarshaller} supplied in
- * {@link ClientConnectionDefault constructor}.
+ * Default implementation of {@link ClientConnection} that delegates to
+ * {@link ClientMarshaller} supplied in {@link ClientConnectionDefault
+ * constructor}.
  */
 public class ClientConnectionDefault implements ClientConnection {
 

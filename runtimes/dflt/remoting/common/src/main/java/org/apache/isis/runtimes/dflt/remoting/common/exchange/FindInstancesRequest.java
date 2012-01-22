@@ -67,7 +67,8 @@ public class FindInstancesRequest extends RequestAbstract {
     // ///////////////////////////////////////////////////////
 
     /**
-     * {@link #setResponse(Object) Sets a response} of a {@link FindInstancesResponse}.
+     * {@link #setResponse(Object) Sets a response} of a
+     * {@link FindInstancesResponse}.
      */
     @Override
     public void execute(final ServerFacade serverFacade) {

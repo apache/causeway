@@ -22,7 +22,8 @@ package org.apache.isis.runtimes.dflt.runtime.transaction;
 import org.apache.isis.runtimes.dflt.runtime.system.transaction.TransactionalClosureWithReturn;
 
 /**
- * Convenience adapter providing no-op implementations of {@link #onSuccess()} and {@link #onFailure()}.
+ * Convenience adapter providing no-op implementations of {@link #onSuccess()}
+ * and {@link #onFailure()}.
  */
 public abstract class TransactionalClosureWithReturnAbstract<T> implements TransactionalClosureWithReturn<T> {
 

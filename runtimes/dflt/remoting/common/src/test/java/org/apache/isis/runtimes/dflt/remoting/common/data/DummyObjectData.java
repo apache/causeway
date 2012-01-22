@@ -62,7 +62,8 @@ public class DummyObjectData extends DummyReferenceData implements ObjectData {
     }
 
     /*
-     * public String toString() { ToString str = new ToString(this); toString(str); return str.toString(); }
+     * public String toString() { ToString str = new ToString(this);
+     * toString(str); return str.toString(); }
      */
     @Override
     protected void toString(final ToString str) {
@@ -70,8 +71,9 @@ public class DummyObjectData extends DummyReferenceData implements ObjectData {
         str.append("resolved", hasCompleteData);
         str.append("fields", fieldContent == null ? 0 : fieldContent.length);
         /*
-         * if(fieldContent == null) { str.append("fields", "none"); } else { for (int i = 0; i < fieldContent.length;
-         * i++) { str.append("field" + i + ": " + fieldContent[i].); }
+         * if(fieldContent == null) { str.append("fields", "none"); } else { for
+         * (int i = 0; i < fieldContent.length; i++) { str.append("field" + i +
+         * ": " + fieldContent[i].); }
          */
     }
 

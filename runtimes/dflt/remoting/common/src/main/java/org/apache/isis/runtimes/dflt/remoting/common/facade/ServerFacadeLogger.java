@@ -162,8 +162,7 @@ public class ServerFacadeLogger extends Logger implements ServerFacade {
         final IdentityData targetData = request.getTarget();
         final IdentityData associateData = request.getAssociate();
 
-        log("set association " + fieldIdentifier + indentedNewLine() + "target: " + dump(targetData)
-            + indentedNewLine() + "associate: " + dump(associateData));
+        log("set association " + fieldIdentifier + indentedNewLine() + "target: " + dump(targetData) + indentedNewLine() + "associate: " + dump(associateData));
         final SetAssociationResponse response = decorated.setAssociation(request);
         final ObjectData[] changes = response.getUpdates();
         log("  <-- changes: " + dump(changes));
@@ -177,8 +176,7 @@ public class ServerFacadeLogger extends Logger implements ServerFacade {
         final IdentityData target = request.getTarget();
         final EncodableObjectData value = request.getValue();
 
-        log("set value " + fieldIdentifier + indentedNewLine() + "target: " + dump(target) + indentedNewLine()
-            + "value: " + value);
+        log("set value " + fieldIdentifier + indentedNewLine() + "target: " + dump(target) + indentedNewLine() + "value: " + value);
         final SetValueResponse response = decorated.setValue(request);
         final ObjectData[] updates = response.getUpdates();
         log("  <-- changes: " + dump(updates));
@@ -191,8 +189,7 @@ public class ServerFacadeLogger extends Logger implements ServerFacade {
         final IdentityData target = request.getTarget();
         final IdentityData associate = request.getAssociate();
 
-        log("clear association " + fieldIdentifier + indentedNewLine() + "target: " + dump(target) + indentedNewLine()
-            + "associate: " + dump(associate));
+        log("clear association " + fieldIdentifier + indentedNewLine() + "target: " + dump(target) + indentedNewLine() + "associate: " + dump(associate));
         final ClearAssociationResponse response = decorated.clearAssociation(request);
         final ObjectData[] updates = response.getUpdates();
         log("  <-- changes: " + dump(updates));
@@ -224,8 +221,7 @@ public class ServerFacadeLogger extends Logger implements ServerFacade {
         final ReferenceData target = request.getTarget();
         final Data[] parameters = request.getParameters();
 
-        log("execute action " + actionIdentifier + "/" + actionType + indentedNewLine() + "target: " + dump(target)
-            + indentedNewLine() + "parameters: " + dump(parameters));
+        log("execute action " + actionIdentifier + "/" + actionType + indentedNewLine() + "target: " + dump(target) + indentedNewLine() + "parameters: " + dump(parameters));
         ExecuteServerActionResponse result;
         try {
             result = decorated.executeServerAction(request);
@@ -255,15 +251,15 @@ public class ServerFacadeLogger extends Logger implements ServerFacade {
             str.append(i + 1);
             str.append("] ");
             switch (types[i]) {
-                case ClientTransactionEvent.ADD:
-                    str.append("persisted: ");
-                    break;
-                case ClientTransactionEvent.CHANGE:
-                    str.append("changed: ");
-                    break;
-                case ClientTransactionEvent.DELETE:
-                    str.append("deleted: ");
-                    break;
+            case ClientTransactionEvent.ADD:
+                str.append("persisted: ");
+                break;
+            case ClientTransactionEvent.CHANGE:
+                str.append("changed: ");
+                break;
+            case ClientTransactionEvent.DELETE:
+                str.append("deleted: ");
+                break;
             }
             dump(str, data[i], 3, complete);
         }
@@ -281,19 +277,20 @@ public class ServerFacadeLogger extends Logger implements ServerFacade {
             str.append(i + 1);
             str.append("] ");
             switch (types[i]) {
-                case ClientTransactionEvent.ADD:
-                    str.append("persisted: ");
-                    dump(str, persistedUpdates[i], 3, complete);
-                    break;
-                case ClientTransactionEvent.CHANGE:
-                    str.append("changed: ");
-                    str.append(changedVersions[i]);
-                    break;
+            case ClientTransactionEvent.ADD:
+                str.append("persisted: ");
+                dump(str, persistedUpdates[i], 3, complete);
+                break;
+            case ClientTransactionEvent.CHANGE:
+                str.append("changed: ");
+                str.append(changedVersions[i]);
+                break;
             }
         }
         log(" <--- execute client action results" + str);
         /*
-         * log(" <-- persisted: " + dump(results.getPersisted())); log(" <-- changed: " + dump(results.getChanged()));
+         * log(" <-- persisted: " + dump(results.getPersisted()));
+         * log(" <-- changed: " + dump(results.getChanged()));
          */
         return results;
     }
@@ -425,12 +422,10 @@ public class ServerFacadeLogger extends Logger implements ServerFacade {
             str.append("NULL (NullData object)");
         } else if (data instanceof EncodableObjectData) {
             final EncodableObjectData encodeableObjectData = ((EncodableObjectData) data);
-            str.append("ValueData@" + Integer.toHexString(encodeableObjectData.hashCode()) + " "
-                + encodeableObjectData.getType() + ":" + encodeableObjectData.getEncodedObjectData());
+            str.append("ValueData@" + Integer.toHexString(encodeableObjectData.hashCode()) + " " + encodeableObjectData.getType() + ":" + encodeableObjectData.getEncodedObjectData());
         } else if (data instanceof IdentityData) {
             final IdentityData referenceData = (IdentityData) data;
-            str.append("ReferenceData@" + Integer.toHexString(referenceData.hashCode()) + " " + referenceData.getType()
-                + ":" + referenceData.getOid() + ":" + referenceData.getVersion());
+            str.append("ReferenceData@" + Integer.toHexString(referenceData.hashCode()) + " " + referenceData.getType() + ":" + referenceData.getOid() + ":" + referenceData.getVersion());
         } else if (data instanceof ObjectData) {
             dumpObjectData(str, data, indent, complete);
         } else if (data instanceof CollectionData) {
@@ -440,11 +435,9 @@ public class ServerFacadeLogger extends Logger implements ServerFacade {
         }
     }
 
-    private void dumpCollectionData(final StringBuilder str, final Data data, final int indent,
-        final List<Data> complete) {
+    private void dumpCollectionData(final StringBuilder str, final Data data, final int indent, final List<Data> complete) {
         final CollectionData objectData = ((CollectionData) data);
-        str.append("CollectionData@" + Integer.toHexString(objectData.hashCode()) + " " + objectData.getType() + ":"
-            + objectData.getOid() + ":" + (objectData.hasAllElements() ? "A" : "-") + ":" + objectData.getVersion());
+        str.append("CollectionData@" + Integer.toHexString(objectData.hashCode()) + " " + objectData.getType() + ":" + objectData.getOid() + ":" + (objectData.hasAllElements() ? "A" : "-") + ":" + objectData.getVersion());
         final Object[] elements = objectData.getElements();
         for (int i = 0; elements != null && i < elements.length; i++) {
             str.append("\n");
@@ -457,8 +450,7 @@ public class ServerFacadeLogger extends Logger implements ServerFacade {
 
     private void dumpObjectData(final StringBuilder str, final Data data, final int indent, final List<Data> complete) {
         final ObjectData objectData = ((ObjectData) data);
-        str.append("ObjectData@" + Integer.toHexString(objectData.hashCode()) + " " + objectData.getType() + ":"
-            + objectData.getOid() + ":" + (objectData.hasCompleteData() ? "C" : "-") + ":" + objectData.getVersion());
+        str.append("ObjectData@" + Integer.toHexString(objectData.hashCode()) + " " + objectData.getType() + ":" + objectData.getOid() + ":" + (objectData.hasCompleteData() ? "C" : "-") + ":" + objectData.getVersion());
 
         if (complete.contains(objectData)) {
             str.append(" (already detailed)");

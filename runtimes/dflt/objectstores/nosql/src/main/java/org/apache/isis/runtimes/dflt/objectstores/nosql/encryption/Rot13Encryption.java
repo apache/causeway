@@ -23,21 +23,26 @@ import org.apache.isis.runtimes.dflt.objectstores.nosql.DataEncryption;
 
 public class Rot13Encryption implements DataEncryption {
 
+    @Override
     public String getType() {
         return "rot13";
     }
 
-    public void init(IsisConfiguration configuration) {}
-    
-    public String encrypt(String plainText) {
+    @Override
+    public void init(final IsisConfiguration configuration) {
+    }
+
+    @Override
+    public String encrypt(final String plainText) {
         return encode(plainText);
     }
 
-    public String decrypt(String encryptedText) {
+    @Override
+    public String decrypt(final String encryptedText) {
         return encode(encryptedText);
     }
 
-    private String encode(String plainText) {
+    private String encode(final String plainText) {
         if (plainText == null) {
             return plainText;
         }

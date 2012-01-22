@@ -96,8 +96,7 @@ public class LogonFixtureAuthenticatorTest {
     }
 
     @Test
-    public void isNotValidExplorationRequestWhenRunningInSomethingOtherThanExplorationOrPrototypeMode()
-        throws Exception {
+    public void isNotValidExplorationRequestWhenRunningInSomethingOtherThanExplorationOrPrototypeMode() throws Exception {
         mockery.checking(new Expectations() {
             {
                 allowing(mockConfiguration).getString("isis.deploymentType");

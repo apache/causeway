@@ -27,23 +27,23 @@ import org.apache.isis.core.commons.config.ConfigurationConstants;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.runtimes.dflt.objectstores.nosql.NoSqlStoreException;
 
-
 public class BlowfishEncryptionUsingKeyFile extends BlowfishEncryptionAbstract {
 
     private static final String ENCRYPTION_KEY_FILE = ConfigurationConstants.ROOT + "nosql.encryption.blowfish-key-file";
 
-    public byte[] secretKey(IsisConfiguration configuration) {
-        String fileName = configuration.getString(ENCRYPTION_KEY_FILE, "./blowfish.key");
-        File file = new File(fileName);
+    @Override
+    public byte[] secretKey(final IsisConfiguration configuration) {
+        final String fileName = configuration.getString(ENCRYPTION_KEY_FILE, "./blowfish.key");
+        final File file = new File(fileName);
         if (file.exists()) {
             try {
-                InputStream fileInput = new FileInputStream(file);
-                byte[] buffer = new byte[1024];
-                int length = fileInput.read(buffer);
-                byte[] key = new byte[length];
+                final InputStream fileInput = new FileInputStream(file);
+                final byte[] buffer = new byte[1024];
+                final int length = fileInput.read(buffer);
+                final byte[] key = new byte[length];
                 System.arraycopy(buffer, 0, key, 0, length);
                 return key;
-            } catch (IOException e) {
+            } catch (final IOException e) {
                 throw new NoSqlStoreException("Failed to read in encryption file: " + file.getAbsolutePath(), e);
             }
         } else {

@@ -90,15 +90,13 @@ public class IsisStoreLogger extends Logger implements ObjectStore {
     }
 
     @Override
-    public ObjectAdapter[] getInstances(final PersistenceQuery criteria) throws ObjectPersistenceException,
-        UnsupportedFindException {
+    public ObjectAdapter[] getInstances(final PersistenceQuery criteria) throws ObjectPersistenceException, UnsupportedFindException {
         log("get instances matching " + criteria);
         return decorated.getInstances(criteria);
     }
 
     @Override
-    public ObjectAdapter getObject(final Oid oid, final ObjectSpecification hint) throws ObjectNotFoundException,
-        ObjectPersistenceException {
+    public ObjectAdapter getObject(final Oid oid, final ObjectSpecification hint) throws ObjectNotFoundException, ObjectPersistenceException {
         final ObjectAdapter object = decorated.getObject(oid, hint);
         log("get object for " + oid + " (of type " + hint.getShortIdentifier() + ")", object.getObject());
         return object;
@@ -143,8 +141,7 @@ public class IsisStoreLogger extends Logger implements ObjectStore {
     }
 
     @Override
-    public void resolveField(final ObjectAdapter object, final ObjectAssociation field)
-        throws ObjectPersistenceException {
+    public void resolveField(final ObjectAdapter object, final ObjectAssociation field) throws ObjectPersistenceException {
         log("resolve eagerly object in field " + field + " of " + object);
         decorated.resolveField(object, field);
     }

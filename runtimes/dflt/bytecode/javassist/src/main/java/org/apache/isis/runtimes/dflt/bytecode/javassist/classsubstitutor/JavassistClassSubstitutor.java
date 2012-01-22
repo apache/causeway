@@ -31,8 +31,9 @@ public class JavassistClassSubstitutor extends ClassSubstitutorAbstract {
     }
 
     /**
-     * If {@link JavassistEnhanced} then return superclass, else as per {@link ClassSubstitutorAbstract#getClass(Class)
-     * superclass'} implementation.
+     * If {@link JavassistEnhanced} then return superclass, else as per
+     * {@link ClassSubstitutorAbstract#getClass(Class) superclass'}
+     * implementation.
      */
     @Override
     public Class<?> getClass(final Class<?> cls) {

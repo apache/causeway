@@ -26,7 +26,8 @@ import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.runtimes.dflt.remoting.transport.TransportAbstract;
 
 /**
- * Simple implementation that simply wraps an already existing {@link InputStream} and {@link OutputStream}.
+ * Simple implementation that simply wraps an already existing
+ * {@link InputStream} and {@link OutputStream}.
  * 
  * <p>
  * Originally written to assist with refactoring.
@@ -36,8 +37,7 @@ public class SimpleTransport extends TransportAbstract {
     private final InputStream inputStream;
     private final OutputStream outputStream;
 
-    public SimpleTransport(final IsisConfiguration configuration, final InputStream inputStream,
-        final OutputStream outputStream) {
+    public SimpleTransport(final IsisConfiguration configuration, final InputStream inputStream, final OutputStream outputStream) {
         super(configuration);
         this.inputStream = inputStream;
         this.outputStream = outputStream;

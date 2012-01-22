@@ -42,8 +42,7 @@ public class SqlPersistorInstaller extends ObjectStorePersistenceMechanismInstal
     }
 
     @Override
-    protected ObjectStore createObjectStore(final IsisConfiguration configuration,
-        final ObjectAdapterFactory objectFactory, final AdapterManager adapterManager) {
+    protected ObjectStore createObjectStore(final IsisConfiguration configuration, final ObjectAdapterFactory objectFactory, final AdapterManager adapterManager) {
 
         if (objectStore == null) {
             final FieldMappingLookup fieldMappingLookup = new FieldMappingLookup();
@@ -89,7 +88,7 @@ public class SqlPersistorInstaller extends ObjectStorePersistenceMechanismInstal
      * 
      * 
      * 
-     * @Override protected AdapterManagerExtended createAdapterManager(final IsisConfiguration configuration) { return
-     * new XmlAdapterManager(); }
+     * @Override protected AdapterManagerExtended createAdapterManager(final
+     * IsisConfiguration configuration) { return new XmlAdapterManager(); }
      */
 }

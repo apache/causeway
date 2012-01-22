@@ -28,27 +28,35 @@ import org.apache.isis.core.commons.authentication.AuthenticationSession;
 public interface EmbeddedContext {
 
     AuthenticationSession getAuthenticationSession();
+
     Localization getLocalization();
 
     Object instantiate(Class<?> type);
-    
+
     void resolve(Object parent);
+
     void resolve(Object parent, Object field);
 
     void makePersistent(Object object);
+
     void objectChanged(Object object);
+
     void remove(Object object);
 
     PersistenceState getPersistenceState(Object object);
 
     <T> List<T> allMatchingQuery(Query<T> query);
+
     <T> T firstMatchingQuery(Query<T> query);
 
     boolean flush();
+
     void commit();
 
     void informUser(String message);
+
     void warnUser(String message);
+
     void raiseError(String message);
 
 }

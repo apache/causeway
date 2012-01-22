@@ -263,8 +263,8 @@ public class TestProxyCollectionAdapter implements ObjectAdapter {
      * (non-Javadoc)
      * 
      * @see
-     * org.apache.isis.core.metamodel.spec.ObjectMetaModel#setElementTypeProvider(org.apache.isis.core.metamodel.spec
-     * .ElementTypeProvider)
+     * org.apache.isis.core.metamodel.spec.ObjectMetaModel#setElementTypeProvider
+     * (org.apache.isis.core.metamodel.spec .ElementTypeProvider)
      */
     @Override
     public void setElementSpecificationProvider(final ElementSpecificationProvider elementSpecificationProvider) {

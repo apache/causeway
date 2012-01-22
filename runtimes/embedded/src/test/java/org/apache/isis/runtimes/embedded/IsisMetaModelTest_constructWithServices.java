@@ -68,14 +68,14 @@ public class IsisMetaModelTest_constructWithServices {
         return new TypeSafeMatcher<List<Object>>() {
 
             @Override
-            public void describeTo(Description desc) {
+            public void describeTo(final Description desc) {
                 desc.appendText("contains instance of type " + cls.getName());
             }
 
             @Override
-            public boolean matchesSafely(List<Object> items) {
-                for (Object object : items) {
-                    if(cls.isAssignableFrom(object.getClass())) {
+            public boolean matchesSafely(final List<Object> items) {
+                for (final Object object : items) {
+                    if (cls.isAssignableFrom(object.getClass())) {
                         return true;
                     }
                 }

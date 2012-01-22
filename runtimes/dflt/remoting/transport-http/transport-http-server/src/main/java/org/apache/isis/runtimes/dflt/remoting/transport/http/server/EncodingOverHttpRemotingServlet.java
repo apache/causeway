@@ -40,7 +40,8 @@ import org.apache.isis.runtimes.dflt.runtime.system.IsisSystem;
 import org.apache.isis.runtimes.dflt.webapp.IsisWebAppBootstrapper;
 
 /**
- * Analogous to {@link SocketsViewerAbstract}; both ultimately delegate to {@link ServerConnectionHandler}.
+ * Analogous to {@link SocketsViewerAbstract}; both ultimately delegate to
+ * {@link ServerConnectionHandler}.
  */
 public class EncodingOverHttpRemotingServlet extends HttpServlet {
 
@@ -62,8 +63,7 @@ public class EncodingOverHttpRemotingServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPost(final HttpServletRequest request, final HttpServletResponse response)
-        throws ServletException, IOException {
+    protected void doPost(final HttpServletRequest request, final HttpServletResponse response) throws ServletException, IOException {
         final ServletInputStream inputStream = request.getInputStream();
         final ServletOutputStream outputStream = response.getOutputStream();
 
@@ -80,8 +80,7 @@ public class EncodingOverHttpRemotingServlet extends HttpServlet {
         }
     }
 
-    private ServerConnection createConnection(final ServletInputStream inputStream,
-        final ServletOutputStream outputStream) throws IOException {
+    private ServerConnection createConnection(final ServletInputStream inputStream, final ServletOutputStream outputStream) throws IOException {
 
         // TODO: should use installers to create these,
         // provides the opportunity to read in installer-specific config files.

@@ -98,5 +98,4 @@ public class EmbeddedContextNoop implements EmbeddedContext {
     public void raiseError(final String message) {
     }
 
-
 }

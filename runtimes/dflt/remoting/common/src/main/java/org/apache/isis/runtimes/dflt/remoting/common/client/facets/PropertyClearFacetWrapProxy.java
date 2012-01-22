@@ -34,28 +34,29 @@ import org.apache.isis.runtimes.dflt.runtime.persistence.ConcurrencyException;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 
 /**
- * A reflection peer for changing one-to-many fields remotely, instead of on the local machine.
+ * A reflection peer for changing one-to-many fields remotely, instead of on the
+ * local machine.
  * 
  * <p>
- * Any requests to add or remove elements from the field will be passed over the network to the server for completion.
- * Only requests on persistent objects are passed to the server; on a transient object the request will always be dealt
+ * Any requests to add or remove elements from the field will be passed over the
+ * network to the server for completion. Only requests on persistent objects are
+ * passed to the server; on a transient object the request will always be dealt
  * with locally.
  * 
  * <p>
- * If any of the objects involved have been changed on the server by another process then a {@link ConcurrencyException}
- * will be passed back to the client and re-thrown.
+ * If any of the objects involved have been changed on the server by another
+ * process then a {@link ConcurrencyException} will be passed back to the client
+ * and re-thrown.
  * </p>
  */
-public final class PropertyClearFacetWrapProxy extends PropertyClearFacetAbstract implements
-    DecoratingFacet<PropertyClearFacet> {
+public final class PropertyClearFacetWrapProxy extends PropertyClearFacetAbstract implements DecoratingFacet<PropertyClearFacet> {
 
     private final ServerFacade serverFacade;
     private final ObjectEncoderDecoder encoder;
     private final PropertyClearFacet underlyingFacet;
     private final String name;
 
-    public PropertyClearFacetWrapProxy(final PropertyClearFacet underlyingFacet, final ServerFacade serverFacade,
-        final ObjectEncoderDecoder encoderDecoder, final String name) {
+    public PropertyClearFacetWrapProxy(final PropertyClearFacet underlyingFacet, final ServerFacade serverFacade, final ObjectEncoderDecoder encoderDecoder, final String name) {
         super(underlyingFacet.getFacetHolder());
         this.underlyingFacet = underlyingFacet;
         this.serverFacade = serverFacade;
@@ -74,9 +75,9 @@ public final class PropertyClearFacetWrapProxy extends PropertyClearFacetAbstrac
             final IdentityData targetReference = encoder.encodeIdentityData(inObject);
             ObjectData[] updates;
             try {
-                final IdentityData nullData = encoder.encodeIdentityData(null); // not used.
-                final ClearAssociationRequest request =
-                    new ClearAssociationRequest(getAuthenticationSession(), name, targetReference, nullData);
+                final IdentityData nullData = encoder.encodeIdentityData(null); // not
+                                                                                // used.
+                final ClearAssociationRequest request = new ClearAssociationRequest(getAuthenticationSession(), name, targetReference, nullData);
                 final ClearAssociationResponse response = serverFacade.clearAssociation(request);
                 updates = response.getUpdates();
             } catch (final ConcurrencyException e) {

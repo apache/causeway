@@ -25,9 +25,10 @@ import org.apache.isis.runtimes.dflt.runtime.system.session.IsisSession;
 import org.apache.isis.runtimes.dflt.runtime.system.session.IsisSessionFactory;
 
 /**
- * A specialised IsisContext implementation that provides two sets of components: one for the server; and one for the
- * client. This simply determines the current thread and if that thread is the server thread then it provides server
- * data. For any other thread the client data is used.
+ * A specialised IsisContext implementation that provides two sets of
+ * components: one for the server; and one for the client. This simply
+ * determines the current thread and if that thread is the server thread then it
+ * provides server data. For any other thread the client data is used.
  */
 public class IsisContextPipe extends IsisContextMultiUser {
 

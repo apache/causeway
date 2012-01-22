@@ -130,25 +130,32 @@ public class MementoTest2_Test {
                 /*
                  * atLeast(1).of(oid).isTransient(); will(returnValue(false));
                  * 
-                 * atLeast(1).of(rootAdapter).getObject(); will(returnValue(rootObject));
+                 * atLeast(1).of(rootAdapter).getObject();
+                 * will(returnValue(rootObject));
                  * 
-                 * one(mockPersistenceSession).recreateAdapter(oid, rootSpecification);
-                 * will(returnValue(recreatedAdapter));.
+                 * one(mockPersistenceSession).recreateAdapter(oid,
+                 * rootSpecification); will(returnValue(recreatedAdapter));.
                  * 
-                 * atLeast(1).of(recreatedAdapter).getOid(); will(returnValue(oid));
+                 * atLeast(1).of(recreatedAdapter).getOid();
+                 * will(returnValue(oid));
                  * 
-                 * one(recreatedAdapter).getResolveState(); will(returnValue(ResolveState.GHOST));
+                 * one(recreatedAdapter).getResolveState();
+                 * will(returnValue(ResolveState.GHOST));
                  * 
                  * one(recreatedAdapter).changeState(ResolveState.UPDATING);
                  * 
-                 * atLeast(1).of(recreatedAdapter).getSpecification(); will(returnValue(rootSpecification));
+                 * atLeast(1).of(recreatedAdapter).getSpecification();
+                 * will(returnValue(rootSpecification));
                  * 
-                 * atLeast(1).of(recreatedAdapter).getObject(); will(returnValue(recreatedObject));
+                 * atLeast(1).of(recreatedAdapter).getObject();
+                 * will(returnValue(recreatedObject));
                  * 
-                 * /* one(mockAdapterManager).adapterFor("Harry", originalAdapter,
-                 * specification.getAssociation("name")); will(returnValue(nameAdapter));
+                 * /* one(mockAdapterManager).adapterFor("Harry",
+                 * originalAdapter, specification.getAssociation("name"));
+                 * will(returnValue(nameAdapter));
                  * 
-                 * atLeast(1).of(nameAdapter).getObject(); will(returnValue("Harry"));
+                 * atLeast(1).of(nameAdapter).getObject();
+                 * will(returnValue("Harry"));
                  */
             }
         });
@@ -159,46 +166,61 @@ public class MementoTest2_Test {
                 /*
                  * atLeast(1).of(oid).isTransient(); will(returnValue(false));
                  * 
-                 * atLeast(1).of(rootAdapter).getObject(); will(returnValue(rootObject)); /*
-                 * one(mockPersistenceSession).recreateAdapter(oid, rootSpecification);
-                 * will(returnValue(recreatedAdapter));
+                 * atLeast(1).of(rootAdapter).getObject();
+                 * will(returnValue(rootObject)); /*
+                 * one(mockPersistenceSession).recreateAdapter(oid,
+                 * rootSpecification); will(returnValue(recreatedAdapter));
                  * 
-                 * atLeast(1).of(recreatedAdapter).getOid(); will(returnValue(oid));
+                 * atLeast(1).of(recreatedAdapter).getOid();
+                 * will(returnValue(oid));
                  * 
-                 * one(recreatedAdapter).getResolveState(); will(returnValue(ResolveState.GHOST));
+                 * one(recreatedAdapter).getResolveState();
+                 * will(returnValue(ResolveState.GHOST));
                  * 
                  * one(recreatedAdapter).changeState(ResolveState.UPDATING);
                  * 
-                 * atLeast(1).of(recreatedAdapter).getSpecification(); will(returnValue(rootSpecification));
+                 * atLeast(1).of(recreatedAdapter).getSpecification();
+                 * will(returnValue(rootSpecification));
                  * 
-                 * atLeast(1).of(recreatedAdapter).getObject(); will(returnValue(recreatedObject));
+                 * atLeast(1).of(recreatedAdapter).getObject();
+                 * will(returnValue(recreatedObject));
                  * 
-                 * /* one(mockAdapterManager).adapterFor("Harry", originalAdapter,
-                 * specification.getAssociation("name")); will(returnValue(nameAdapter));
+                 * /* one(mockAdapterManager).adapterFor("Harry",
+                 * originalAdapter, specification.getAssociation("name"));
+                 * will(returnValue(nameAdapter));
                  * 
-                 * atLeast(1).of(nameAdapter).getObject(); will(returnValue("Harry"));
+                 * atLeast(1).of(nameAdapter).getObject();
+                 * will(returnValue("Harry"));
                  */
             }
         });
 
         // Persistence Session
-        // final ObjectReflector reflector = mockery.mock(ObjectReflector.class);
-        // final PersistenceSession mockPersistenceSession = mockery.mock(PersistenceSession.class);
+        // final ObjectReflector reflector =
+        // mockery.mock(ObjectReflector.class);
+        // final PersistenceSession mockPersistenceSession =
+        // mockery.mock(PersistenceSession.class);
         final IsisSessionFactory sessionFactory = mockery.mock(IsisSessionFactory.class);
-        // final AuthenticationSession mockSession = mockery.mock(AuthenticationSession.class);
+        // final AuthenticationSession mockSession =
+        // mockery.mock(AuthenticationSession.class);
         // final IsisSession session = mockery.mock(IsisSession.class);
-        // final AdapterManager mockAdapterManager = mockery.mock(AdapterManager.class);
+        // final AdapterManager mockAdapterManager =
+        // mockery.mock(AdapterManager.class);
         /**
-         * mockery.checking(new Expectations() { { atLeast(1).of(sessionFactory).getSpecificationLoader();
+         * mockery.checking(new Expectations() { {
+         * atLeast(1).of(sessionFactory).getSpecificationLoader();
          * will(returnValue(reflector));
          * 
-         * atLeast(1).of(sessionFactory).openSession(mockSession); will(returnValue(session));
+         * atLeast(1).of(sessionFactory).openSession(mockSession);
+         * will(returnValue(session));
          * 
-         * atLeast(1).of(reflector).loadSpecification(TestObject.class.getName()); will(returnValue(rootSpecification));
+         * atLeast(1).of(reflector).loadSpecification(TestObject.class.getName()
+         * ); will(returnValue(rootSpecification));
          * 
          * atLeast(1).of(session).open();
          * 
-         * atLeast(1).of(session).getPersistenceSession(); will(returnValue(mockPersistenceSession));
+         * atLeast(1).of(session).getPersistenceSession();
+         * will(returnValue(mockPersistenceSession));
          * 
          * }});
          */
@@ -207,21 +229,24 @@ public class MementoTest2_Test {
 
         // IsisContextStatic.getInstance().openSessionInstance(mockSession);
 
-        // final ObjectAdapter recreatedAdapter = mockery.mock(ObjectAdapter.class, "recreated");
+        // final ObjectAdapter recreatedAdapter =
+        // mockery.mock(ObjectAdapter.class, "recreated");
 
         // recreatedObject = new TestObject();
 
         /*
-         * returnedAdapter = mockery.mock(ObjectAdapter.class, "recreated adapter"); final Oid returnedOid =
-         * mockery.mock(Oid.class, "recreated oid");
+         * returnedAdapter = mockery.mock(ObjectAdapter.class,
+         * "recreated adapter"); final Oid returnedOid = mockery.mock(Oid.class,
+         * "recreated oid");
          * 
          * mockery.checking(new Expectations() { {
          * 
          * 
-         * atLeast(1).of(mockPersistenceSession).recreateAdapter(oid, rootSpecification);
-         * will(returnValue(returnedAdapter));
+         * atLeast(1).of(mockPersistenceSession).recreateAdapter(oid,
+         * rootSpecification); will(returnValue(returnedAdapter));
          * 
-         * atLeast(1).of(returnedAdapter).getOid(); will(returnValue(returnedOid));
+         * atLeast(1).of(returnedAdapter).getOid();
+         * will(returnValue(returnedOid));
          * 
          * }});
          */
@@ -276,58 +301,70 @@ public class MementoTest2_Test {
     }
 
     /*
-     * @Test public void testDifferentAdaptersReturned() throws Exception { final Memento memento = new
-     * Memento(rootAdapter); returnedAdapter = memento.recreateObject();
+     * @Test public void testDifferentAdaptersReturned() throws Exception {
+     * final Memento memento = new Memento(rootAdapter); returnedAdapter =
+     * memento.recreateObject();
      * 
      * rootAdapter.getObject(); returnedAdapter.getObject();
      * 
-     * assertNotSame(rootAdapter, returnedAdapter); mockery.assertIsSatisfied(); }
+     * assertNotSame(rootAdapter, returnedAdapter); mockery.assertIsSatisfied();
+     * }
      * 
-     * @Test public void testDifferentObjectsReturned() throws Exception { final Memento memento = new
-     * Memento(rootAdapter); returnedAdapter = memento.recreateObject(); assertNotSame(rootAdapter.getObject(),
+     * @Test public void testDifferentObjectsReturned() throws Exception { final
+     * Memento memento = new Memento(rootAdapter); returnedAdapter =
+     * memento.recreateObject(); assertNotSame(rootAdapter.getObject(),
      * returnedAdapter.getObject()); mockery.assertIsSatisfied(); }
      * 
-     * @Test public void testHaveSameOid() throws Exception { final Memento memento = new Memento(rootAdapter);
-     * returnedAdapter = memento.recreateObject();
+     * @Test public void testHaveSameOid() throws Exception { final Memento
+     * memento = new Memento(rootAdapter); returnedAdapter =
+     * memento.recreateObject();
      * 
      * rootAdapter.getObject(); returnedAdapter.getObject();
      * 
-     * assertEquals(rootAdapter.getOid(), returnedAdapter.getOid()); mockery.assertIsSatisfied(); }
+     * assertEquals(rootAdapter.getOid(), returnedAdapter.getOid());
+     * mockery.assertIsSatisfied(); }
      * 
-     * @Test public void testHaveSameSpecification() throws Exception { final Memento memento = new
-     * Memento(rootAdapter); returnedAdapter = memento.recreateObject();
+     * @Test public void testHaveSameSpecification() throws Exception { final
+     * Memento memento = new Memento(rootAdapter); returnedAdapter =
+     * memento.recreateObject();
      * 
      * rootAdapter.getObject(); returnedAdapter.getObject();
      * 
-     * assertEquals(rootAdapter.getSpecificatio assertEquals("", ((ObjectData) data).getEntry("name-field")); n(),
-     * returnedAdapter.getSpecification()); mockery.assertIsSatisfied(); }
+     * assertEquals(rootAdapter.getSpecificatio assertEquals("", ((ObjectData)
+     * data).getEntry("name-field")); n(), returnedAdapter.getSpecification());
+     * mockery.assertIsSatisfied(); }
      */
 
     /*
-     * @Test public void testEncoding() throws Exception { final TransferableWriter writer =
-     * mockery.mock(TransferableWriter.class); final Transferable object = mockery.mock(Transferable.class);
+     * @Test public void testEncoding() throws Exception { final
+     * TransferableWriter writer = mockery.mock(TransferableWriter.class); final
+     * Transferable object = mockery.mock(Transferable.class);
      * mockery.checking(new Expectations() { { one(writer).writeObject(object );
      * 
      * ignoring(object); } });
      * 
-     * final Memento memento = new Memento(rootAdapter); memento.writeData(writer); mockery.assertIsSatisfied();
+     * final Memento memento = new Memento(rootAdapter);
+     * memento.writeData(writer); mockery.assertIsSatisfied();
      * 
      * }
      */
     /*
-     * @Test public void testName() throws Exception { final Memento memento = new Memento(rootAdapter); returnedAdapter
-     * = memento.recreateObject(); assertEquals("Harry", ((TestObject) rootAdapter.getObject()).getName());
-     * assertEquals("Harry", ((TestObject) returnedAdapter.getObject()).getName()); }
+     * @Test public void testName() throws Exception { final Memento memento =
+     * new Memento(rootAdapter); returnedAdapter = memento.recreateObject();
+     * assertEquals("Harry", ((TestObject) rootAdapter.getObject()).getName());
+     * assertEquals("Harry", ((TestObject)
+     * returnedAdapter.getObject()).getName()); }
      */
 
     /*
-     * @Test public void testNull2() throws Exception { final Memento memento = new Memento(null); Data data =
-     * memento.getData();
+     * @Test public void testNull2() throws Exception { final Memento memento =
+     * new Memento(null); Data data = memento.getData();
      * 
      * assertEquals(null, data); // mockery.assertIsSatisfied(); }
      * 
-     * @Test public void testNull() throws Exception { final Memento memento = new Memento(null); returnedAdapter =
-     * memento.recreateObject(); Assert.assertNull(returnedAdapter); // mockery.assertIsSatisfied(); }
+     * @Test public void testNull() throws Exception { final Memento memento =
+     * new Memento(null); returnedAdapter = memento.recreateObject();
+     * Assert.assertNull(returnedAdapter); // mockery.assertIsSatisfied(); }
      */
 
 }

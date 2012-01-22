@@ -38,7 +38,7 @@ public class JdbcTimeMapper extends AbstractJdbcFieldMapping {
 
         @Override
         public FieldMapping createFieldMapping(final ObjectSpecification object, final ObjectAssociation field) {
-            String dataType = getTypeOverride(object, field, Defaults.TYPE_TIME());
+            final String dataType = getTypeOverride(object, field, Defaults.TYPE_TIME());
             return new JdbcTimeMapper(field, dataType);
         }
     }
@@ -57,9 +57,12 @@ public class JdbcTimeMapper extends AbstractJdbcFieldMapping {
     @Override
     public ObjectAdapter setFromDBColumn(final Results results, final String columnName, final ObjectAssociation field) {
         /*
-         * Long hour = Long.decode(encodedValue.substring(0, 2)); Long minute = Long.decode(encodedValue.substring(3,
-         * 5)); Long millis = (minute + hour * 60) * 60 * 1000; String valueString = "T" + Long.toString(millis); return
-         * field.getSpecification().getFacet(EncodableFacet.class) .fromEncodedString(valueString);
+         * Long hour = Long.decode(encodedValue.substring(0, 2)); Long minute =
+         * Long.decode(encodedValue.substring(3, 5)); Long millis = (minute +
+         * hour * 60) * 60 * 1000; String valueString = "T" +
+         * Long.toString(millis); return
+         * field.getSpecification().getFacet(EncodableFacet.class)
+         * .fromEncodedString(valueString);
          */
         ObjectAdapter restoredValue;
         final Class<?> correspondingClass = field.getSpecification().getCorrespondingClass();

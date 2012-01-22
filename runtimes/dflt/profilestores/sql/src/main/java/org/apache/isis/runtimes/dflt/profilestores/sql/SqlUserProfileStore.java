@@ -16,11 +16,11 @@
  */
 package org.apache.isis.runtimes.dflt.profilestores.sql;
 
-import com.google.inject.Inject;
-
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.runtime.userprofile.UserProfile;
 import org.apache.isis.core.runtime.userprofile.UserProfileStore;
+
+import com.google.inject.Inject;
 
 /**
  * 
@@ -41,13 +41,13 @@ public class SqlUserProfileStore implements UserProfileStore {
     }
 
     @Override
-    public void save(String userName, UserProfile userProfile) {
+    public void save(final String userName, final UserProfile userProfile) {
         // TODO Auto-generated method stub
 
     }
 
     @Override
-    public UserProfile getUserProfile(String userName) {
+    public UserProfile getUserProfile(final String userName) {
         // TODO Auto-generated method stub
         return null;
     }

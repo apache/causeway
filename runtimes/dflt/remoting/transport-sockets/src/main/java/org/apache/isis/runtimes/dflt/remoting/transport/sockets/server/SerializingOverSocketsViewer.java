@@ -38,8 +38,7 @@ public class SerializingOverSocketsViewer extends SocketsViewerAbstract {
     }
 
     @Override
-    protected ServerConnection createServerConnection(final InputStream input, final OutputStream output,
-        final ServerFacade serverFacade) {
+    protected ServerConnection createServerConnection(final InputStream input, final OutputStream output, final ServerFacade serverFacade) {
         final SimpleTransport transport = new SimpleTransport(getConfiguration(), input, output);
         final SerializingMarshaller serverMarshaller = new SerializingMarshaller(getConfiguration(), transport);
         try {

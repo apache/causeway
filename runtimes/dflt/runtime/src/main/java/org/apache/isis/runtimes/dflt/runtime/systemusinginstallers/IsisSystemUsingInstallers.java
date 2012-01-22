@@ -86,7 +86,9 @@ public class IsisSystemUsingInstallers extends IsisSystemAbstract {
     // ///////////////////////////////////////////
 
     /**
-     * As per {@link #IsisSystemUsingInstallers(DeploymentType, InstallerLookup) constructor}.
+     * As per
+     * {@link #IsisSystemUsingInstallers(DeploymentType, InstallerLookup)
+     * constructor}.
      */
     public SystemDependencyInjector getInstallerLookup() {
         return installerLookup;
@@ -104,16 +106,15 @@ public class IsisSystemUsingInstallers extends IsisSystemAbstract {
     }
 
     /**
-     * Overloaded version designed to be called by subclasses that need to explicitly specify different persistence
-     * mechanisms.
+     * Overloaded version designed to be called by subclasses that need to
+     * explicitly specify different persistence mechanisms.
      * 
      * <p>
-     * This is <i>not</i> a hook method, rather it is designed to be called <i>from</i> the
-     * {@link #doCreateSessionFactory(DeploymentType) hook method}.
+     * This is <i>not</i> a hook method, rather it is designed to be called
+     * <i>from</i> the {@link #doCreateSessionFactory(DeploymentType) hook
+     * method}.
      */
-    protected final IsisSessionFactory createSessionFactory(final DeploymentType deploymentType,
-        final UserProfileLoader userProfileLoader, final PersistenceSessionFactory persistenceSessionFactory)
-        throws IsisSystemException {
+    protected final IsisSessionFactory createSessionFactory(final DeploymentType deploymentType, final UserProfileLoader userProfileLoader, final PersistenceSessionFactory persistenceSessionFactory) throws IsisSystemException {
 
         final IsisConfiguration configuration = getConfiguration();
         final AuthenticationManager authenticationManager = obtainAuthenticationManager(deploymentType);
@@ -127,8 +128,7 @@ public class IsisSystemUsingInstallers extends IsisSystemAbstract {
         // REVIEW: misplaced? seems like a side-effect...
         reflector.setRuntimeContext(new RuntimeContextFromSession());
 
-        return new IsisSessionFactoryDefault(deploymentType, configuration, templateImageLoader, reflector,
-            authenticationManager, authorizationManager, userProfileLoader, persistenceSessionFactory, servicesList);
+        return new IsisSessionFactoryDefault(deploymentType, configuration, templateImageLoader, reflector, authenticationManager, authorizationManager, userProfileLoader, persistenceSessionFactory, servicesList);
 
     }
 
@@ -137,8 +137,8 @@ public class IsisSystemUsingInstallers extends IsisSystemAbstract {
     // ///////////////////////////////////////////
 
     /**
-     * Returns a <i>snapshot</i> of the {@link IsisConfiguration configuration} held by the
-     * {@link #getInstallerLookup() installer lookup}.
+     * Returns a <i>snapshot</i> of the {@link IsisConfiguration configuration}
+     * held by the {@link #getInstallerLookup() installer lookup}.
      * 
      * @see InstallerLookup#getConfiguration()
      */
@@ -164,8 +164,7 @@ public class IsisSystemUsingInstallers extends IsisSystemAbstract {
     }
 
     private void lookupAndSetAuthenticatorAndAuthorizationUsingClientConnectionInstaller(final String connection) {
-        final ClientConnectionInstaller clientConnectionInstaller =
-            installerLookup.clientConnectionInstaller(connection);
+        final ClientConnectionInstaller clientConnectionInstaller = installerLookup.clientConnectionInstaller(connection);
         if (clientConnectionInstaller == null) {
             return;
         }
@@ -175,19 +174,15 @@ public class IsisSystemUsingInstallers extends IsisSystemAbstract {
 
     private void lookupAndSetAuthenticatorAndAuthorizationInstallers(final DeploymentType deploymentType) {
         // use the one specified in configuration
-        final String authenticationManagerKey =
-            getConfiguration().getString(SystemConstants.AUTHENTICATION_INSTALLER_KEY);
-        final AuthenticationManagerInstaller authenticationInstaller =
-            installerLookup.authenticationManagerInstaller(authenticationManagerKey, deploymentType);
+        final String authenticationManagerKey = getConfiguration().getString(SystemConstants.AUTHENTICATION_INSTALLER_KEY);
+        final AuthenticationManagerInstaller authenticationInstaller = installerLookup.authenticationManagerInstaller(authenticationManagerKey, deploymentType);
         if (authenticationInstaller != null) {
             setAuthenticationInstaller(authenticationInstaller);
         }
 
         // use the one specified in configuration
-        final String authorizationManagerKey =
-            getConfiguration().getString(SystemConstants.AUTHORIZATION_INSTALLER_KEY);
-        final AuthorizationManagerInstaller authorizationInstaller =
-            installerLookup.authorizationManagerInstaller(authorizationManagerKey, deploymentType);
+        final String authorizationManagerKey = getConfiguration().getString(SystemConstants.AUTHORIZATION_INSTALLER_KEY);
+        final AuthorizationManagerInstaller authorizationInstaller = installerLookup.authorizationManagerInstaller(authorizationManagerKey, deploymentType);
         if (authorizationInstaller != null) {
             setAuthorizationInstaller(authorizationInstaller);
         }
@@ -197,9 +192,10 @@ public class IsisSystemUsingInstallers extends IsisSystemAbstract {
      * Set the type of connection to used to access the server.
      * 
      * <p>
-     * Note that the {@link IsisSessionFactoryUsingInstallers} also checks the {@link ClientConnectionInstaller} twice
-     * over: to see if a <tt>PersistenceSessionProxy</tt> should be used as a persistor, and for any
-     * {@link FacetDecoratorInstaller}s.
+     * Note that the {@link IsisSessionFactoryUsingInstallers} also checks the
+     * {@link ClientConnectionInstaller} twice over: to see if a
+     * <tt>PersistenceSessionProxy</tt> should be used as a persistor, and for
+     * any {@link FacetDecoratorInstaller}s.
      */
     public void setAuthenticationInstaller(final AuthenticationManagerInstaller authenticationManagerInstaller) {
         this.authenticationInstaller = authenticationManagerInstaller;
@@ -209,9 +205,10 @@ public class IsisSystemUsingInstallers extends IsisSystemAbstract {
      * Set the type of connection to used to access the server.
      * 
      * <p>
-     * Note that the {@link IsisSessionFactoryUsingInstallers} also checks the {@link ClientConnectionInstaller} twice
-     * over: to see if a <tt>PersistenceSessionProxy</tt> should be used as a persistor, and for any
-     * {@link FacetDecoratorInstaller}s.
+     * Note that the {@link IsisSessionFactoryUsingInstallers} also checks the
+     * {@link ClientConnectionInstaller} twice over: to see if a
+     * <tt>PersistenceSessionProxy</tt> should be used as a persistor, and for
+     * any {@link FacetDecoratorInstaller}s.
      */
     public void setAuthorizationInstaller(final AuthorizationManagerInstaller authorizationManagerInstaller) {
         this.authorizationInstaller = authorizationManagerInstaller;
@@ -254,13 +251,13 @@ public class IsisSystemUsingInstallers extends IsisSystemAbstract {
     // ///////////////////////////////////////////
 
     /**
-     * Uses the {@link TemplateImageLoader} configured in {@link InstallerLookup}, if available, else falls back to that
-     * of the superclass.
+     * Uses the {@link TemplateImageLoader} configured in
+     * {@link InstallerLookup}, if available, else falls back to that of the
+     * superclass.
      */
     @Override
     protected TemplateImageLoader obtainTemplateImageLoader() {
-        final TemplateImageLoaderInstaller templateImageLoaderInstaller =
-            installerLookup.templateImageLoaderInstaller(null);
+        final TemplateImageLoaderInstaller templateImageLoaderInstaller = installerLookup.templateImageLoaderInstaller(null);
         if (templateImageLoaderInstaller != null) {
             return templateImageLoaderInstaller.createLoader();
         } else {
@@ -282,18 +279,16 @@ public class IsisSystemUsingInstallers extends IsisSystemAbstract {
             final String fromCmdLine = getConfiguration().getString(SystemConstants.REFLECTOR_KEY);
             reflectorInstaller = installerLookup.reflectorInstaller(fromCmdLine);
         }
-        ensureThatState(reflectorInstaller, is(not(nullValue())),
-            "reflector installer has not been injected and could not be looked up");
+        ensureThatState(reflectorInstaller, is(not(nullValue())), "reflector installer has not been injected and could not be looked up");
 
         // add in transaction support (if already in set then will be ignored)
-        reflectorInstaller.addFacetDecoratorInstaller(installerLookup
-            .getInstaller(TransactionFacetDecoratorInstaller.class));
+        reflectorInstaller.addFacetDecoratorInstaller(installerLookup.getInstaller(TransactionFacetDecoratorInstaller.class));
 
-        // if there is a client connection installer, then add facet decorator installer also
+        // if there is a client connection installer, then add facet decorator
+        // installer also
         final String connection = getConfiguration().getString(SystemConstants.CLIENT_CONNECTION_KEY);
         if (connection != null) {
-            final FacetDecoratorInstaller clientConnectionInstaller =
-                installerLookup.clientConnectionInstaller(connection);
+            final FacetDecoratorInstaller clientConnectionInstaller = installerLookup.clientConnectionInstaller(connection);
             reflectorInstaller.addFacetDecoratorInstaller(clientConnectionInstaller);
         }
 
@@ -313,8 +308,7 @@ public class IsisSystemUsingInstallers extends IsisSystemAbstract {
         if (servicesInstaller == null) {
             servicesInstaller = installerLookup.servicesInstaller(null);
         }
-        ensureThatState(servicesInstaller, is(not(nullValue())),
-            "services installer has not been injected and could not be looked up");
+        ensureThatState(servicesInstaller, is(not(nullValue())), "services installer has not been injected and could not be looked up");
 
         return servicesInstaller.getServices(getDeploymentType());
     }
@@ -327,8 +321,7 @@ public class IsisSystemUsingInstallers extends IsisSystemAbstract {
         final IsisConfiguration configuration = installerLookup.getConfiguration();
         final String persistor = configuration.getString(SystemConstants.PROFILE_PERSISTOR_INSTALLER_KEY);
 
-        final UserProfileStoreInstaller userProfilePersistenceMechanismInstaller =
-            installerLookup.userProfilePersistenceMechanismInstaller(persistor, getDeploymentType());
+        final UserProfileStoreInstaller userProfilePersistenceMechanismInstaller = installerLookup.userProfilePersistenceMechanismInstaller(persistor, getDeploymentType());
         if (userProfilePersistenceMechanismInstaller != null) {
             setUserProfileStoreInstaller(userProfilePersistenceMechanismInstaller);
         }
@@ -352,8 +345,7 @@ public class IsisSystemUsingInstallers extends IsisSystemAbstract {
     }
 
     @Override
-    protected PersistenceSessionFactory obtainPersistenceSessionFactory(final DeploymentType deploymentType)
-        throws IsisSystemException {
+    protected PersistenceSessionFactory obtainPersistenceSessionFactory(final DeploymentType deploymentType) throws IsisSystemException {
 
         // attempt to look up connection (that is, a ProxyPersistor)
         final String connection = getConfiguration().getString(SystemConstants.CLIENT_CONNECTION_KEY);
@@ -363,14 +355,11 @@ public class IsisSystemUsingInstallers extends IsisSystemAbstract {
 
         // if nothing, look for a object store persistor
         if (persistenceMechanismInstaller == null) {
-            final String persistenceMechanism =
-                getConfiguration().getString(SystemConstants.OBJECT_PERSISTOR_INSTALLER_KEY);
-            persistenceMechanismInstaller =
-                installerLookup.persistenceMechanismInstaller(persistenceMechanism, deploymentType);
+            final String persistenceMechanism = getConfiguration().getString(SystemConstants.OBJECT_PERSISTOR_INSTALLER_KEY);
+            persistenceMechanismInstaller = installerLookup.persistenceMechanismInstaller(persistenceMechanism, deploymentType);
         }
 
-        ensureThatState(persistenceMechanismInstaller, is(not(nullValue())),
-            "persistor installer has not been injected and could not be looked up");
+        ensureThatState(persistenceMechanismInstaller, is(not(nullValue())), "persistor installer has not been injected and could not be looked up");
 
         return persistenceMechanismInstaller.createPersistenceSessionFactory(deploymentType);
     }

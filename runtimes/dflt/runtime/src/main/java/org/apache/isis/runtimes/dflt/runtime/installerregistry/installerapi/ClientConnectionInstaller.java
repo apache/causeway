@@ -23,8 +23,7 @@ import org.apache.isis.core.metamodel.specloader.FacetDecoratorInstaller;
 import org.apache.isis.core.runtime.authentication.AuthenticationManagerInstaller;
 import org.apache.isis.core.runtime.authorization.AuthorizationManagerInstaller;
 
-public interface ClientConnectionInstaller extends PersistenceMechanismInstaller, FacetDecoratorInstaller,
-    AuthenticationManagerInstaller, AuthorizationManagerInstaller {
+public interface ClientConnectionInstaller extends PersistenceMechanismInstaller, FacetDecoratorInstaller, AuthenticationManagerInstaller, AuthorizationManagerInstaller {
 
     static String TYPE = "connector";
 

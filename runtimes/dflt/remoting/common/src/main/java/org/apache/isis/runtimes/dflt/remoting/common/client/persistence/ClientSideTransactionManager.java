@@ -56,9 +56,7 @@ public class ClientSideTransactionManager extends IsisTransactionManagerAbstract
     // Constructor
     // //////////////////////////////////////////////////////////////
 
-    public ClientSideTransactionManager(final AdapterManagerProxy adapterManager,
-        final PersistenceSessionTransactionManagement transactionManagement, final ServerFacade connection,
-        final ObjectEncoderDecoder encoder) {
+    public ClientSideTransactionManager(final AdapterManagerProxy adapterManager, final PersistenceSessionTransactionManagement transactionManagement, final ServerFacade connection, final ObjectEncoderDecoder encoder) {
         this.adapterManager = adapterManager;
         this.transactionManagement = transactionManagement;
         this.connection = connection;
@@ -86,15 +84,15 @@ public class ClientSideTransactionManager extends IsisTransactionManagerAbstract
      * Overridable hook.
      * 
      * <p>
-     * The provided {@link MessageBroker} and {@link UpdateNotifier} are obtained from the hook methods (
-     * {@link #createMessageBroker()} and {@link #createUpdateNotifier()}).
+     * The provided {@link MessageBroker} and {@link UpdateNotifier} are
+     * obtained from the hook methods ( {@link #createMessageBroker()} and
+     * {@link #createUpdateNotifier()}).
      * 
      * @see #createMessageBroker()
      * @see #createUpdateNotifier()
      */
     @Override
-    protected ClientSideTransaction createTransaction(final MessageBroker messageBroker,
-        final UpdateNotifier updateNotifier) {
+    protected ClientSideTransaction createTransaction(final MessageBroker messageBroker, final UpdateNotifier updateNotifier) {
         return new ClientSideTransaction(this, messageBroker, updateNotifier);
     }
 
@@ -135,8 +133,7 @@ public class ClientSideTransactionManager extends IsisTransactionManagerAbstract
 
         ExecuteClientActionResponse results;
         try {
-            final ExecuteClientActionRequest request =
-                new ExecuteClientActionRequest(getAuthenticationSession(), referenceData, eventTypes);
+            final ExecuteClientActionRequest request = new ExecuteClientActionRequest(getAuthenticationSession(), referenceData, eventTypes);
             results = connection.executeClientAction(request);
         } catch (final ConcurrencyException e) {
             if (LOG.isInfoEnabled()) {
@@ -147,8 +144,7 @@ public class ClientSideTransactionManager extends IsisTransactionManagerAbstract
                 throw e;
             } else {
                 final ObjectAdapter failedObject = transactionManagement.reload(oid);
-                throw new ConcurrencyException("Object automatically reloaded: "
-                    + failedObject.getSpecification().getTitle(failedObject, null), e);
+                throw new ConcurrencyException("Object automatically reloaded: " + failedObject.getSpecification().getTitle(failedObject, null), e);
             }
         }
 
@@ -175,15 +171,15 @@ public class ClientSideTransactionManager extends IsisTransactionManagerAbstract
 
         for (int i = 0; i < numberOfEvents; i++) {
             switch (entries[i].getType()) {
-                case ClientTransactionEvent.ADD:
-                    data[i] = encoder.encodeMakePersistentGraph(entries[i].getObject(), knownObjects);
-                    break;
-                case ClientTransactionEvent.CHANGE:
-                    data[i] = encoder.encodeGraphForChangedObject(entries[i].getObject(), knownObjects);
-                    break;
-                case ClientTransactionEvent.DELETE:
-                    data[i] = encoder.encodeIdentityData(entries[i].getObject());
-                    break;
+            case ClientTransactionEvent.ADD:
+                data[i] = encoder.encodeMakePersistentGraph(entries[i].getObject(), knownObjects);
+                break;
+            case ClientTransactionEvent.CHANGE:
+                data[i] = encoder.encodeGraphForChangedObject(entries[i].getObject(), knownObjects);
+                break;
+            case ClientTransactionEvent.DELETE:
+                data[i] = encoder.encodeIdentityData(entries[i].getObject());
+                break;
             }
         }
         return data;
@@ -200,22 +196,22 @@ public class ClientSideTransactionManager extends IsisTransactionManagerAbstract
 
         for (int i = 0; i < numberOfEvents; i++) {
             switch (eventTypes[i]) {
-                case ClientTransactionEvent.ADD:
-                    // causes OID to be updated
-                    final ReferenceData update = persistedUpdates[i];
+            case ClientTransactionEvent.ADD:
+                // causes OID to be updated
+                final ReferenceData update = persistedUpdates[i];
 
-                    final Oid updatedOid = update.getOid();
-                    adapterManager.remapUpdated(updatedOid);
-                    final ObjectAdapter adapter = adapterManager.getAdapterFor(updatedOid);
+                final Oid updatedOid = update.getOid();
+                adapterManager.remapUpdated(updatedOid);
+                final ObjectAdapter adapter = adapterManager.getAdapterFor(updatedOid);
 
-                    adapter.changeState(ResolveState.RESOLVED);
-                    entries[i].getObject().setOptimisticLock(update.getVersion());
+                adapter.changeState(ResolveState.RESOLVED);
+                entries[i].getObject().setOptimisticLock(update.getVersion());
 
-                    break;
-                case ClientTransactionEvent.CHANGE:
-                    entries[i].getObject().setOptimisticLock(changedVersions[i]);
-                    getUpdateNotifier().addChangedObject(entries[i].getObject());
-                    break;
+                break;
+            case ClientTransactionEvent.CHANGE:
+                entries[i].getObject().setOptimisticLock(changedVersions[i]);
+                getUpdateNotifier().addChangedObject(entries[i].getObject());
+                break;
             }
         }
 
@@ -229,9 +225,9 @@ public class ClientSideTransactionManager extends IsisTransactionManagerAbstract
 
         for (int i = 0; i < numberOfEvents; i++) {
             switch (eventTypes[i]) {
-                case ClientTransactionEvent.DELETE:
-                    getUpdateNotifier().addDisposedObject(entries[i].getObject());
-                    break;
+            case ClientTransactionEvent.DELETE:
+                getUpdateNotifier().addDisposedObject(entries[i].getObject());
+                break;
             }
         }
     }

@@ -71,11 +71,12 @@ public class ServerFacadeImpl_ParseableAssociationsTest extends ProxyJunit4TestC
     private ObjectEncoderDecoder mockObjectEncoder;
 
     /**
-     * Testing the {@link ServerFacadeImpl} implementation of {@link ServerFacade}.
+     * Testing the {@link ServerFacadeImpl} implementation of
+     * {@link ServerFacade}.
      * 
      * <p>
-     * This uses the encoder to unmarshall objects and then calls the persistor and reflector; all of which should be
-     * mocked.
+     * This uses the encoder to unmarshall objects and then calls the persistor
+     * and reflector; all of which should be mocked.
      */
     @Before
     public void setUp() throws Exception {
@@ -103,10 +104,12 @@ public class ServerFacadeImpl_ParseableAssociationsTest extends ProxyJunit4TestC
     }
 
     /**
-     * TODO: other tests for clear: - clear collection element - fails if unauthorised - fails if unavailable
+     * TODO: other tests for clear: - clear collection element - fails if
+     * unauthorised - fails if unavailable
      * 
      * <p>
-     * could place all these clear test in one class; test other methods in other classes
+     * could place all these clear test in one class; test other methods in
+     * other classes
      */
     @Test
     public void testClearAssociation() {
@@ -176,8 +179,7 @@ public class ServerFacadeImpl_ParseableAssociationsTest extends ProxyJunit4TestC
         });
 
         IsisContext.getTransactionManager().startTransaction();
-        final SetValueRequest request =
-            new SetValueRequest(session, "name", movieData, new DummyEncodeableObjectData("name of movie"));
+        final SetValueRequest request = new SetValueRequest(session, "name", movieData, new DummyEncodeableObjectData("name of movie"));
         final SetValueResponse response = server.setValue(request);
         final ObjectData[] updates = response.getUpdates();
         IsisContext.getTransactionManager().endTransaction();
@@ -190,8 +192,7 @@ public class ServerFacadeImpl_ParseableAssociationsTest extends ProxyJunit4TestC
     public void testSetAssociationFailsWithNonCurrentTarget() {
         try {
             object.setOptimisticLock(new TestProxyVersion(2));
-            final SetValueRequest request =
-                new SetValueRequest(session, "name", movieData, new DummyEncodeableObjectData("name of movie"));
+            final SetValueRequest request = new SetValueRequest(session, "name", movieData, new DummyEncodeableObjectData("name of movie"));
             server.setValue(request);
             fail();
         } catch (final ConcurrencyException expected) {
@@ -202,8 +203,7 @@ public class ServerFacadeImpl_ParseableAssociationsTest extends ProxyJunit4TestC
     public void testSetAssociationFailsWhenInvisible() {
         nameField.setUpIsVisible(false);
         try {
-            final SetValueRequest request =
-                new SetValueRequest(session, "name", movieData, new DummyEncodeableObjectData("name of movie"));
+            final SetValueRequest request = new SetValueRequest(session, "name", movieData, new DummyEncodeableObjectData("name of movie"));
             server.setValue(request);
             fail();
         } catch (final IsisException expected) {
@@ -215,8 +215,7 @@ public class ServerFacadeImpl_ParseableAssociationsTest extends ProxyJunit4TestC
     public void testSetAssociationFailsWhenUnavailable() {
         nameField.setUpIsUnusableFor(object);
         try {
-            final SetValueRequest request =
-                new SetValueRequest(session, "name", movieData, new DummyEncodeableObjectData("test data"));
+            final SetValueRequest request = new SetValueRequest(session, "name", movieData, new DummyEncodeableObjectData("test data"));
             server.setValue(request);
             fail();
         } catch (final IsisException expected) {

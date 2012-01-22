@@ -36,10 +36,7 @@ public final class OptionHandlerResourceBase implements OptionHandler {
     @Override
     @SuppressWarnings("static-access")
     public void addOption(final Options options) {
-        final Option option =
-            OptionBuilder.withArgName("webapp directory").hasArg()
-                .withLongOpt(OptionHandlerResourceBase.RESOURCE_BASE_LONG_OPT)
-                .withDescription("directory holding webapp").create(OptionHandlerResourceBase.RESOURCE_BASE_OPT);
+        final Option option = OptionBuilder.withArgName("webapp directory").hasArg().withLongOpt(OptionHandlerResourceBase.RESOURCE_BASE_LONG_OPT).withDescription("directory holding webapp").create(OptionHandlerResourceBase.RESOURCE_BASE_OPT);
         options.addOption(option);
     }
 

@@ -77,8 +77,7 @@ public class UserProfileDataHandler extends DefaultHandler {
     }
 
     @Override
-    public void startElement(final String ns, final String name, final String tagName, final Attributes attributes)
-        throws SAXException {
+    public void startElement(final String ns, final String name, final String tagName, final Attributes attributes) throws SAXException {
 
         if (isProfile) {
             if (isOptions) {

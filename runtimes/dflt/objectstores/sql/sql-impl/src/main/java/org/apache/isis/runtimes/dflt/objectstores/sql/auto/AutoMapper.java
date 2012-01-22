@@ -23,8 +23,6 @@ import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Vector;
 
-import org.apache.log4j.Logger;
-
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
@@ -56,6 +54,7 @@ import org.apache.isis.runtimes.dflt.runtime.persistence.PersistorUtil;
 import org.apache.isis.runtimes.dflt.runtime.persistence.query.PersistenceQueryFindByPattern;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
+import org.apache.log4j.Logger;
 
 public class AutoMapper extends AbstractAutoMapper implements ObjectMapping, DebuggableWithTitle {
     private static final Logger LOG = Logger.getLogger(AutoMapper.class);
@@ -65,8 +64,7 @@ public class AutoMapper extends AbstractAutoMapper implements ObjectMapping, Deb
     private final boolean useVersioning;
     final AdapterManager adapterManager;
 
-    public AutoMapper(final String className, final String parameterBase, final FieldMappingLookup lookup,
-        final ObjectMappingLookup objectMapperLookup) {
+    public AutoMapper(final String className, final String parameterBase, final FieldMappingLookup lookup, final ObjectMappingLookup objectMapperLookup) {
         super(className, parameterBase, lookup, objectMapperLookup);
         idMapping = lookup.createIdMapping();
         versionMapping = lookup.createVersionMapping();
@@ -169,8 +167,7 @@ public class AutoMapper extends AbstractAutoMapper implements ObjectMapping, Deb
     }
 
     @Override
-    public Vector<ObjectAdapter> getInstances(final DatabaseConnector connector, final ObjectSpecification spec,
-        final PersistenceQueryFindByPattern query) {
+    public Vector<ObjectAdapter> getInstances(final DatabaseConnector connector, final ObjectSpecification spec, final PersistenceQueryFindByPattern query) {
         final Vector<ObjectAdapter> instances = new Vector<ObjectAdapter>();
 
         final StringBuffer sql = createSelectStatement();
@@ -179,11 +176,12 @@ public class AutoMapper extends AbstractAutoMapper implements ObjectMapping, Deb
         int foundFields = 0;
         final ObjectAdapter pattern = query.getPattern();
 
-        // for all fields in the query.getPattern, build a SQL select clause for this spec.
+        // for all fields in the query.getPattern, build a SQL select clause for
+        // this spec.
         final Object o = pattern.getObject();
         final ObjectSpecification patternSpec = pattern.getSpecification();
         final List<ObjectAssociation> patternAssociations = patternSpec.getAssociations();
-        for (ObjectAssociation patternAssoc : patternAssociations) {
+        for (final ObjectAssociation patternAssoc : patternAssociations) {
             final Method method;
             final Identifier identifier = patternAssoc.getIdentifier();
             final String memberName = identifier.getMemberName();
@@ -193,14 +191,14 @@ public class AutoMapper extends AbstractAutoMapper implements ObjectMapping, Deb
                 if (true) {
                     final ObjectAdapter field = patternAssoc.get(pattern);
                     if (field != null) {
-                        String id = patternAssoc.getId();
+                        final String id = patternAssoc.getId();
                         try {
-                            ObjectAssociation oa = spec.getAssociation(id);
-                            NotPersistedFacet fc = oa.getFacet(NotPersistedFacet.class);
+                            final ObjectAssociation oa = spec.getAssociation(id);
+                            final NotPersistedFacet fc = oa.getFacet(NotPersistedFacet.class);
                             if (fc != null) {
                                 continue;
                             }
-                        } catch (ObjectSpecificationException e) {
+                        } catch (final ObjectSpecificationException e) {
                             // this is OK
                         }
 
@@ -217,14 +215,16 @@ public class AutoMapper extends AbstractAutoMapper implements ObjectMapping, Deb
                         if (fieldMapping != null) {
                             fieldMapping.appendWhereClause(connector, sql, pattern);
                         } else {
-                            // Have to use getXXX method if the fieldMapping is null..
+                            // Have to use getXXX method if the fieldMapping is
+                            // null..
                             final ObjectSpecification specification = patternAssoc.getSpecification();
 
                             method = o.getClass().getMethod("get" + methodName, (Class<?>[]) null);
                             final Object res = InvokeUtils.invoke(method, o);
 
                             if (specification.isValue()) {
-                                // If the property (memberName) is a value type, use the value.
+                                // If the property (memberName) is a value type,
+                                // use the value.
                                 final String fieldName = Sql.sqlFieldName(identifier.getMemberName());
                                 sql.append(fieldName + "=?");
                                 connector.addToQueryValues(res);
@@ -235,9 +235,9 @@ public class AutoMapper extends AbstractAutoMapper implements ObjectMapping, Deb
                         foundFields++;
                     }
                 }
-            } catch (SecurityException e) {
+            } catch (final SecurityException e) {
                 LOG.debug(e.getMessage());
-            } catch (NoSuchMethodException e) {
+            } catch (final NoSuchMethodException e) {
                 LOG.info("Unable to invode method: get" + methodName + " in getInstances");
                 LOG.debug(e.getMessage());
             }
@@ -249,8 +249,7 @@ public class AutoMapper extends AbstractAutoMapper implements ObjectMapping, Deb
     }
 
     @Override
-    public Vector<ObjectAdapter> getInstances(final DatabaseConnector connector, final ObjectSpecification spec,
-        final String title) {
+    public Vector<ObjectAdapter> getInstances(final DatabaseConnector connector, final ObjectSpecification spec, final String title) {
         final Vector<ObjectAdapter> instances = new Vector<ObjectAdapter>();
 
         final StringBuffer sql = createSelectStatement();
@@ -294,7 +293,8 @@ public class AutoMapper extends AbstractAutoMapper implements ObjectMapping, Deb
         sql.append(" from " + table);
         return sql;
     } /*
-       * if (whereClause != null) { sql.append(" WHERE "); sql.append(whereClause); } else if (whereClause != null) {
+       * if (whereClause != null) { sql.append(" WHERE ");
+       * sql.append(whereClause); } else if (whereClause != null) {
        * sql.append(" WHERE "); idMapping.appendWhereClause(sql, oid); }
        */
 
@@ -310,8 +310,8 @@ public class AutoMapper extends AbstractAutoMapper implements ObjectMapping, Deb
             mapping.initializeField(object, rs);
         }
         /*
-         * for (int i = 0; i < oneToManyProperties.length; i++) { /* Need to set up collection to be a ghost before we
-         * access as below
+         * for (int i = 0; i < oneToManyProperties.length; i++) { /* Need to set
+         * up collection to be a ghost before we access as below
          */
         // CollectionAdapter collection = (CollectionAdapter)
         /*
@@ -329,8 +329,7 @@ public class AutoMapper extends AbstractAutoMapper implements ObjectMapping, Deb
         }
     }
 
-    private void loadInstancesToVector(final DatabaseConnector connector, final ObjectSpecification cls,
-        final String selectStatment, Vector<ObjectAdapter> instances) {
+    private void loadInstancesToVector(final DatabaseConnector connector, final ObjectSpecification cls, final String selectStatment, final Vector<ObjectAdapter> instances) {
         LOG.debug("loading instances from SQL " + table);
 
         try {
@@ -342,8 +341,9 @@ public class AutoMapper extends AbstractAutoMapper implements ObjectMapping, Deb
                 instances.addElement(instance);
             }
             rs.close();
-        } catch (SqlObjectStoreException e) {
-            // Invalid SELECT means no object found.. don't worry about it, here.
+        } catch (final SqlObjectStoreException e) {
+            // Invalid SELECT means no object found.. don't worry about it,
+            // here.
         }
     }
 
@@ -379,14 +379,12 @@ public class AutoMapper extends AbstractAutoMapper implements ObjectMapping, Deb
             }
         } else {
             rs.close();
-            throw new SqlObjectStoreException("Unable to load data from " + table + " with id "
-                + idMapping.primaryKey(object.getOid()));
+            throw new SqlObjectStoreException("Unable to load data from " + table + " with id " + idMapping.primaryKey(object.getOid()));
         }
     }
 
     @Override
-    public void resolveCollection(final DatabaseConnector connector, final ObjectAdapter object,
-        final ObjectAssociation field) {
+    public void resolveCollection(final DatabaseConnector connector, final ObjectAdapter object, final ObjectAssociation field) {
         if (collectionMappers.length > 0) {
             final DatabaseConnector secondConnector = connector.getConnectionPool().acquire();
             for (final CollectionMapper collectionMapper : collectionMappers) {
@@ -445,11 +443,11 @@ public class AutoMapper extends AbstractAutoMapper implements ObjectMapping, Deb
     }
 
     @Override
-    public boolean saveCollection(DatabaseConnector connection, ObjectAdapter parent, String fieldName) {
+    public boolean saveCollection(final DatabaseConnector connection, final ObjectAdapter parent, final String fieldName) {
         int i = 0;
-        for (String collectionFieldName : collectionMapperFields) {
+        for (final String collectionFieldName : collectionMapperFields) {
             if (collectionFieldName.equals(fieldName)) {
-                CollectionMapper fieldMapper = collectionMappers[i];
+                final CollectionMapper fieldMapper = collectionMappers[i];
                 fieldMapper.saveInternalCollection(connection, parent);
                 return true;
             }
@@ -460,8 +458,7 @@ public class AutoMapper extends AbstractAutoMapper implements ObjectMapping, Deb
 
     @Override
     public String toString() {
-        return "AutoMapper [table=" + table + ",id=" + idMapping + ",noColumns=" + fieldMappings.size()
-            + ",specification=" + specification.getFullIdentifier() + "]";
+        return "AutoMapper [table=" + table + ",id=" + idMapping + ",noColumns=" + fieldMappings.size() + ",specification=" + specification.getFullIdentifier() + "]";
     }
 
     @Override

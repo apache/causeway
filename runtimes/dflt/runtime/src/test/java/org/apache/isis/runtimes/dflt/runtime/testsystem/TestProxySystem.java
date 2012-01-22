@@ -108,10 +108,7 @@ public class TestProxySystem {
     public void init() {
         reflector.setRuntimeContext(new RuntimeContextFromSession());
 
-        final IsisSessionFactory sessionFactory =
-            new IsisSessionFactoryDefault(DeploymentType.EXPLORATION, configuration, noopTemplateImageLoader,
-                reflector, authenticationManager, authorizationManager, userProfileLoader, persistenceSessionFactory,
-                servicesList);
+        final IsisSessionFactory sessionFactory = new IsisSessionFactoryDefault(DeploymentType.EXPLORATION, configuration, noopTemplateImageLoader, reflector, authenticationManager, authorizationManager, userProfileLoader, persistenceSessionFactory, servicesList);
 
         persistenceSession.setSpecificationLoader(reflector);
         // this implementation of persistenceSession will automatically inject
@@ -120,7 +117,8 @@ public class TestProxySystem {
         sessionFactory.init();
         context = IsisContextStatic.createRelaxedInstance(sessionFactory);
 
-        // commented out cos think now redundant since calling openExecutionContext below
+        // commented out cos think now redundant since calling
+        // openExecutionContext below
         // persistor.open();
 
         IsisContext.openSession(new TestProxySession());
@@ -160,12 +158,14 @@ public class TestProxySystem {
     }
 
     // commented out since never used locally
-    // private void setUpSpecification(final TestPojo pojo, final TestProxyAdapter adapter) {
+    // private void setUpSpecification(final TestPojo pojo, final
+    // TestProxyAdapter adapter) {
     // adapter.setupSpecification(reflector.loadSpecification(pojo.getClass()));
     // }
 
     // commented out since never used locally
-    // private void addAdapterToIdentityMap(final Object domainObject, final ObjectAdapter adapter) {
+    // private void addAdapterToIdentityMap(final Object domainObject, final
+    // ObjectAdapter adapter) {
     // ((PersistenceSessionSpy) persistor).addAdapter(domainObject, adapter);
     // }
 

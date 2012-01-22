@@ -37,7 +37,7 @@ public class JdbcTimestampMapper extends AbstractJdbcFieldMapping {
 
         @Override
         public FieldMapping createFieldMapping(final ObjectSpecification object, final ObjectAssociation field) {
-            String dataType = getTypeOverride(object, field, Defaults.TYPE_TIMESTAMP());
+            final String dataType = getTypeOverride(object, field, Defaults.TYPE_TIMESTAMP());
             return new JdbcTimestampMapper(field, dataType);
         }
     }

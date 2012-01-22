@@ -49,7 +49,8 @@ public class MongoStateReaderTest {
         try {
             m.dropDatabase("mydb");
         } catch (final Exception e) {
-            assumeThat(true, is(false));// ie ignore test because we've had an exception
+            assumeThat(true, is(false));// ie ignore test because we've had an
+                                        // exception
             return;
         }
 

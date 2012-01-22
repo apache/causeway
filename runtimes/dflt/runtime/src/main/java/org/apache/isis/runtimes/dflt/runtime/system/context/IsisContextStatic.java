@@ -27,8 +27,9 @@ import org.apache.isis.runtimes.dflt.runtime.system.session.IsisSession;
 import org.apache.isis.runtimes.dflt.runtime.system.session.IsisSessionFactory;
 
 /**
- * Provides <i>access to</i> the current {@link IsisSession} in a single-user {@link DeploymentType deployment} (and
- * thus implemented as a <tt>static</tt> singleton).
+ * Provides <i>access to</i> the current {@link IsisSession} in a single-user
+ * {@link DeploymentType deployment} (and thus implemented as a <tt>static</tt>
+ * singleton).
  */
 public class IsisContextStatic extends IsisContext {
 
@@ -39,19 +40,18 @@ public class IsisContextStatic extends IsisContext {
     // //////////////////////////////////////////////
 
     public static IsisContext createInstance(final IsisSessionFactory sessionFactory) {
-        return new IsisContextStatic(ContextReplacePolicy.NOT_REPLACEABLE, SessionClosePolicy.EXPLICIT_CLOSE,
-            sessionFactory);
+        return new IsisContextStatic(ContextReplacePolicy.NOT_REPLACEABLE, SessionClosePolicy.EXPLICIT_CLOSE, sessionFactory);
     }
 
     /**
-     * Intended for testing; the singleton can be replaced and sessions are autoclosed.
+     * Intended for testing; the singleton can be replaced and sessions are
+     * autoclosed.
      */
     public static IsisContext createRelaxedInstance(final IsisSessionFactory sessionFactory) {
         return new IsisContextStatic(ContextReplacePolicy.REPLACEABLE, SessionClosePolicy.AUTO_CLOSE, sessionFactory);
     }
 
-    protected IsisContextStatic(final ContextReplacePolicy replacePolicy, final SessionClosePolicy sessionClosePolicy,
-        final IsisSessionFactory sessionFactory) {
+    protected IsisContextStatic(final ContextReplacePolicy replacePolicy, final SessionClosePolicy sessionClosePolicy, final IsisSessionFactory sessionFactory) {
         super(replacePolicy, sessionClosePolicy, sessionFactory);
     }
 

@@ -52,7 +52,8 @@ public class FixturesInstallerDelegate {
     private final UserProfileService perspectivePersistenceService = new ProfileServiceImpl();
 
     /**
-     * Optionally injected in {@link #FixtureBuilderImpl(PersistenceSession) constructor}.
+     * Optionally injected in {@link #FixtureBuilderImpl(PersistenceSession)
+     * constructor}.
      */
     private final PersistenceSession persistenceSession;
 
@@ -60,8 +61,9 @@ public class FixturesInstallerDelegate {
      * The requested {@link LogonFixture}, if any.
      * 
      * <p>
-     * Each fixture is inspected as it is {@link #installFixture(Object)}; if it implements {@link LogonFixture} then it
-     * is remembered so that it can be used later to automatically logon.
+     * Each fixture is inspected as it is {@link #installFixture(Object)}; if it
+     * implements {@link LogonFixture} then it is remembered so that it can be
+     * used later to automatically logon.
      */
     private LogonFixture logonFixture;
 
@@ -70,14 +72,16 @@ public class FixturesInstallerDelegate {
     // /////////////////////////////////////////////////////////
 
     /**
-     * The {@link PersistenceSession} used will be that from {@link IsisContext#getPersistenceSession() IsisContext}.
+     * The {@link PersistenceSession} used will be that from
+     * {@link IsisContext#getPersistenceSession() IsisContext}.
      */
     public FixturesInstallerDelegate() {
         this(null);
     }
 
     /**
-     * For testing, supply own {@link PersistenceSession} rather than lookup from context.
+     * For testing, supply own {@link PersistenceSession} rather than lookup
+     * from context.
      * 
      * @param persistenceSession
      */
@@ -90,7 +94,8 @@ public class FixturesInstallerDelegate {
     // /////////////////////////////////////////////////////////
 
     /**
-     * Automatically flattens any {@link List}s, recursively (depth-first) if necessary.
+     * Automatically flattens any {@link List}s, recursively (depth-first) if
+     * necessary.
      */
     public void addFixture(final Object fixture) {
         if (fixture instanceof List) {
@@ -122,11 +127,13 @@ public class FixturesInstallerDelegate {
     // /////////////////////////////////////////////////////////
 
     /**
-     * Installs all {{@link #addFixture(Object) added fixtures} fixtures (ie as returned by {@link #getFixtures()}).
+     * Installs all {{@link #addFixture(Object) added fixtures} fixtures (ie as
+     * returned by {@link #getFixtures()}).
      * 
      * <p>
-     * The set of fixtures (as per {@link #getFixtures()}) is <i>not</i> cleared after installation; this allows the
-     * {@link FixtureBuilderAbstract} to be reused across multiple tests.
+     * The set of fixtures (as per {@link #getFixtures()}) is <i>not</i> cleared
+     * after installation; this allows the {@link FixtureBuilderAbstract} to be
+     * reused across multiple tests.
      */
     public final void installFixtures() {
         preInstallFixtures(getPersistenceSession());
@@ -263,12 +270,15 @@ public class FixturesInstallerDelegate {
     // /////////////////////////////////////////////////////////
 
     /**
-     * Returns either the {@link IsisContext#getPersistenceSession() singleton } persistor or the persistor
-     * {@link #AbstractFixtureBuilder(PersistenceSession) specified by the constructor} if specified.
+     * Returns either the {@link IsisContext#getPersistenceSession() singleton }
+     * persistor or the persistor
+     * {@link #AbstractFixtureBuilder(PersistenceSession) specified by the
+     * constructor} if specified.
      * 
      * <p>
-     * Note: if a {@link PersistenceSession persistor} was specified via the constructor, this is not cached (to do so
-     * would cause the usage of tests that use the singleton to break).
+     * Note: if a {@link PersistenceSession persistor} was specified via the
+     * constructor, this is not cached (to do so would cause the usage of tests
+     * that use the singleton to break).
      */
     private PersistenceSession getPersistenceSession() {
         return persistenceSession != null ? persistenceSession : IsisContext.getPersistenceSession();

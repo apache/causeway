@@ -38,8 +38,7 @@ public abstract class ObjectResolveAndObjectChangedEnhancerAbstract {
     protected final ObjectChanger objectChanger;
     protected final SpecificationLoader specificationLoader;
 
-    public ObjectResolveAndObjectChangedEnhancerAbstract(final ObjectResolver objectResolver,
-        final ObjectChanger objectChanger, final SpecificationLoader specificationLoader) {
+    public ObjectResolveAndObjectChangedEnhancerAbstract(final ObjectResolver objectResolver, final ObjectChanger objectChanger, final SpecificationLoader specificationLoader) {
         ensureThatArg(objectResolver, is(notNullValue()));
         ensureThatArg(objectChanger, is(notNullValue()));
         ensureThatArg(specificationLoader, is(notNullValue()));
@@ -50,7 +49,8 @@ public abstract class ObjectResolveAndObjectChangedEnhancerAbstract {
     }
 
     /**
-     * Subclasses should call from their constructor, and setup their implementation-specific callback mechanism.
+     * Subclasses should call from their constructor, and setup their
+     * implementation-specific callback mechanism.
      */
     protected abstract void createCallback();
 
@@ -61,8 +61,7 @@ public abstract class ObjectResolveAndObjectChangedEnhancerAbstract {
     protected ObjectSpecificationDefault getJavaSpecification(final Class<?> cls) {
         final ObjectSpecification nos = getSpecification(cls);
         if (!(nos instanceof ObjectSpecificationDefault)) {
-            throw new UnsupportedOperationException("Only Java is supported (specification is '"
-                + nos.getClass().getCanonicalName() + "')");
+            throw new UnsupportedOperationException("Only Java is supported (specification is '" + nos.getClass().getCanonicalName() + "')");
         }
         return (ObjectSpecificationDefault) nos;
     }

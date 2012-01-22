@@ -18,6 +18,11 @@
  */
 package org.apache.isis.runtimes.dflt.objectstores.nosql.file;
 
+import static org.hamcrest.Matchers.containsString;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
+
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 
@@ -30,12 +35,6 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import static org.hamcrest.Matchers.containsString;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.fail;
-
-
 public class ClientConnectionTest {
 
     private InputStream input;
@@ -45,12 +44,12 @@ public class ClientConnectionTest {
     @Before
     public void setup() throws Exception {
         Logger.getRootLogger().setLevel(Level.OFF);
-    
+
         input = IoUtils.asUtf8ByteStream("org.domain.Class false true 1025\n{data...}\n\n102334");
         output = new ByteArrayOutputStream();
         connection = new ClientConnection(input, output);
     }
-    
+
     @Ignore
     @Test
     public void testRequest() throws Exception {
@@ -58,14 +57,14 @@ public class ClientConnectionTest {
         connection.close();
         assertEquals("Dxxx yyy\n", output.toString());
     }
-    
+
     @Test
     public void testRequestData() throws Exception {
         connection.requestData("{data...}");
         connection.close();
- //       assertEquals("{data...}\n\n5de98274", output.toString());
+        // assertEquals("{data...}\n\n5de98274", output.toString());
     }
-    
+
     @Test
     public void testResponseHeaders() throws Exception {
         connection.getReponseHeader();
@@ -74,7 +73,7 @@ public class ClientConnectionTest {
         assertEquals(true, connection.getResponseAsBoolean());
         assertEquals(1025L, connection.getResponseAsLong());
     }
-    
+
     @Test
     public void tooManyResponseHeadersExpected() throws Exception {
         connection.getReponseHeader();
@@ -85,46 +84,44 @@ public class ClientConnectionTest {
         try {
             connection.getResponse();
             fail();
-        }catch (RemotingException e) {
+        } catch (final RemotingException e) {
             assertThat(e.getMessage(), containsString("are only 4"));
         }
     }
-    
+
     @Test
     public void testResponseData() throws Exception {
         connection.getReponseHeader();
-        String data = connection.getResponseData();
+        final String data = connection.getResponseData();
         assertEquals("{data...}\n", data);
     }
-    
+
     @Test
     public void validateResponseOk() throws Exception {
         input = IoUtils.asUtf8ByteStream("ok xx xx\n{data...}");
         connection = new ClientConnection(input, output);
         connection.validateRequest();
     }
-    
-    @Test(expected=RemotingException.class) 
+
+    @Test(expected = RemotingException.class)
     public void validateResponseError() throws Exception {
         input = IoUtils.asUtf8ByteStream("error message about it\n");
         connection = new ClientConnection(input, output);
         connection.validateRequest();
     }
-    
-    @Test(expected=ObjectNotFoundException.class) 
+
+    @Test(expected = ObjectNotFoundException.class)
     public void validateObjectNotFound() throws Exception {
         input = IoUtils.asUtf8ByteStream("not-found message about it\n");
         connection = new ClientConnection(input, output);
         connection.validateRequest();
     }
-    
-    @Test(expected=ConcurrencyException.class) 
+
+    @Test(expected = ConcurrencyException.class)
     public void validateConcurrencyException() throws Exception {
         input = IoUtils.asUtf8ByteStream("concurrency message about it\n");
         connection = new ClientConnection(input, output);
         connection.validateRequest();
     }
-    
-    
-}
 
+}

@@ -30,13 +30,12 @@ import org.apache.isis.core.metamodel.spec.SpecificationLoaderAware;
 import org.apache.isis.runtimes.dflt.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.runtimes.dflt.runtime.system.transaction.IsisTransactionManagerAware;
 
-public interface PersistenceSession extends PersistenceSessionContainer, PersistenceSessionForceReloader,
-    PersistenceSessionAdaptedServiceManager, PersistenceSessionTransactionManagement, PersistenceSessionHydrator,
-    PersistenceSessionTestSupport, SpecificationLoaderAware, IsisTransactionManagerAware, SessionScopedComponent,
-    Injectable, DebuggableWithTitle {
+public interface PersistenceSession extends PersistenceSessionContainer, PersistenceSessionForceReloader, PersistenceSessionAdaptedServiceManager, PersistenceSessionTransactionManagement, PersistenceSessionHydrator, PersistenceSessionTestSupport, SpecificationLoaderAware,
+        IsisTransactionManagerAware, SessionScopedComponent, Injectable, DebuggableWithTitle {
 
     /**
-     * The {@link PersistenceSessionFactory} that created this {@link PersistenceSession}.
+     * The {@link PersistenceSessionFactory} that created this
+     * {@link PersistenceSession}.
      */
     public PersistenceSessionFactory getPersistenceSessionFactory();
 
@@ -51,11 +50,14 @@ public interface PersistenceSession extends PersistenceSessionContainer, Persist
     public void close();
 
     /**
-     * Determine if the object store has been initialized with its set of start up objects.
+     * Determine if the object store has been initialized with its set of start
+     * up objects.
      * 
      * <p>
-     * This method is called only once after the {@link ApplicationScopedComponent#init()} has been called. If this flag
-     * returns <code>false</code> the framework will run the fixtures to initialise the persistor.
+     * This method is called only once after the
+     * {@link ApplicationScopedComponent#init()} has been called. If this flag
+     * returns <code>false</code> the framework will run the fixtures to
+     * initialise the persistor.
      */
     boolean isFixturesInstalled();
 
@@ -94,8 +96,9 @@ public interface PersistenceSession extends PersistenceSessionContainer, Persist
      * Inject the {@link IsisTransactionManager}.
      * 
      * <p>
-     * This must be injected using setter-based injection rather than through the constructor because there is a
-     * bidirectional relationship between the {@link PersistenceSessionHydrator} and the {@link IsisTransactionManager}.
+     * This must be injected using setter-based injection rather than through
+     * the constructor because there is a bidirectional relationship between the
+     * {@link PersistenceSessionHydrator} and the {@link IsisTransactionManager}.
      * 
      * @see #getTransactionManager()
      */
@@ -113,8 +116,10 @@ public interface PersistenceSession extends PersistenceSessionContainer, Persist
      * Inject the {@link SpecificationLoader}.
      * 
      * <p>
-     * The need to inject the reflector was introduced to support the HibernateObjectStore, which installs its own
-     * <tt>HibernateClassStrategy</tt> to cope with the proxy classes that Hibernate wraps around lists, sets and maps.
+     * The need to inject the reflector was introduced to support the
+     * HibernateObjectStore, which installs its own
+     * <tt>HibernateClassStrategy</tt> to cope with the proxy classes that
+     * Hibernate wraps around lists, sets and maps.
      */
     @Override
     void setSpecificationLoader(SpecificationLoader specificationLoader);

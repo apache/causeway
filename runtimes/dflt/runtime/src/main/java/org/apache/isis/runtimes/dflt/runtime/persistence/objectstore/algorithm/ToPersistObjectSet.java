@@ -26,7 +26,8 @@ import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessi
  * Set of {@link ObjectAdapter}s that require persisting.
  * 
  * <p>
- * Is consumed by {@link PersistAlgorithm}, and is ultimately implemented by {@link PersistenceSession}.
+ * Is consumed by {@link PersistAlgorithm}, and is ultimately implemented by
+ * {@link PersistenceSession}.
  */
 public interface ToPersistObjectSet {
 

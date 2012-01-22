@@ -72,8 +72,7 @@ public class InMemoryObjectStore_retrieve extends AbstractInMemoryObjectStoreTes
         addObjectToStoreAndDiscardAdapters();
 
         final ObjectSpecification specification = originalAdapter.getSpecification();
-        final ObjectAdapter[] retrievedInstance =
-            store.getInstances(new PersistenceQueryFindByTitle(specification, "le STR"));
+        final ObjectAdapter[] retrievedInstance = store.getInstances(new PersistenceQueryFindByTitle(specification, "le STR"));
         assertEquals(1, retrievedInstance.length);
         assertNotSame(originalAdapter, retrievedInstance[0]);
         assertSame(originalAdapter.getObject(), retrievedInstance[0].getObject());
@@ -83,8 +82,7 @@ public class InMemoryObjectStore_retrieve extends AbstractInMemoryObjectStoreTes
         addObjectToStoreAndDiscardAdapters();
 
         final ObjectSpecification specification = originalAdapter.getSpecification();
-        final ObjectAdapter[] retrievedAdapters =
-            store.getInstances(new PersistenceQueryFindAllInstances(specification));
+        final ObjectAdapter[] retrievedAdapters = store.getInstances(new PersistenceQueryFindAllInstances(specification));
         assertEquals(1, retrievedAdapters.length);
         assertSame(originalAdapter.getObject(), retrievedAdapters[0].getObject());
         assertNotSame(originalAdapter, retrievedAdapters[0]);

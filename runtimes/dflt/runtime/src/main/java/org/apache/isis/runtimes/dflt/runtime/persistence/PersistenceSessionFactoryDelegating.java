@@ -33,7 +33,8 @@ import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessi
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessionFactory;
 
 /**
- * Implementation that just delegates to a supplied {@link PersistenceSessionFactory}.
+ * Implementation that just delegates to a supplied
+ * {@link PersistenceSessionFactory}.
  */
 public abstract class PersistenceSessionFactoryDelegating implements PersistenceSessionFactory, FixturesInstalledFlag {
 
@@ -44,8 +45,7 @@ public abstract class PersistenceSessionFactoryDelegating implements Persistence
 
     private Boolean fixturesInstalled;
 
-    public PersistenceSessionFactoryDelegating(final DeploymentType deploymentType,
-        final PersistenceSessionFactoryDelegate persistenceSessionFactoryDelegate) {
+    public PersistenceSessionFactoryDelegating(final DeploymentType deploymentType, final PersistenceSessionFactoryDelegate persistenceSessionFactoryDelegate) {
         this.deploymentType = deploymentType;
         this.persistenceSessionFactoryDelegate = persistenceSessionFactoryDelegate;
     }
@@ -70,9 +70,12 @@ public abstract class PersistenceSessionFactoryDelegating implements Persistence
         ensureThatState(specificationLoader, is(notNullValue()));
         ensureThatState(serviceList, is(notNullValue()));
 
-        // a bit of a workaround, but required if anything in the metamodel (for example, a
-        // ValueSemanticsProvider for a date value type) needs to use the Clock singleton
-        // we do this after loading the services to allow a service to prime a different clock
+        // a bit of a workaround, but required if anything in the metamodel (for
+        // example, a
+        // ValueSemanticsProvider for a date value type) needs to use the Clock
+        // singleton
+        // we do this after loading the services to allow a service to prime a
+        // different clock
         // implementation (eg to use an NTP time service).
         if (!deploymentType.isProduction() && !Clock.isInitialized()) {
             FixtureClock.initialize();

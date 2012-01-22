@@ -26,8 +26,7 @@ import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction
 import org.apache.isis.runtimes.dflt.runtime.transaction.ObjectPersistenceException;
 import org.apache.log4j.Logger;
 
-public final class InMemoryDestroyObjectCommand extends AbstractInMemoryPersistenceCommand implements
-    DestroyObjectCommand {
+public final class InMemoryDestroyObjectCommand extends AbstractInMemoryPersistenceCommand implements DestroyObjectCommand {
     private final static Logger LOG = Logger.getLogger(InMemoryDestroyObjectCommand.class);
 
     public InMemoryDestroyObjectCommand(final ObjectAdapter adapter, final ObjectStorePersistedObjects persistedObjects) {

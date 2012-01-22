@@ -60,9 +60,7 @@ public class SocketTransport extends TransportAbstract {
     public void init() {
         port = getConfiguration().getInteger(SocketTransportConstants.PORT_KEY, PORT_DEFAULT);
         host = getConfiguration().getString(SocketTransportConstants.HOST_KEY, SocketTransportConstants.HOST_DEFAULT);
-        profiling =
-            getConfiguration().getBoolean(SocketTransportConstants.PROFILING_KEY,
-                SocketTransportConstants.PROFILING_DEFAULT);
+        profiling = getConfiguration().getBoolean(SocketTransportConstants.PROFILING_KEY, SocketTransportConstants.PROFILING_DEFAULT);
         LOG.info("connections will be made to " + host + " " + port);
     }
 

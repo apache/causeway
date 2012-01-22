@@ -27,8 +27,9 @@ import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
 public interface ServicesInstaller extends Installer {
 
     /**
-     * NB: this has the suffix '-installer' because in the command line we must distinguish from the '--services' flag
-     * meaning a particular set of services to use (whereas this flag means how to locate them).
+     * NB: this has the suffix '-installer' because in the command line we must
+     * distinguish from the '--services' flag meaning a particular set of
+     * services to use (whereas this flag means how to locate them).
      */
     static String TYPE = "services-installer";
 

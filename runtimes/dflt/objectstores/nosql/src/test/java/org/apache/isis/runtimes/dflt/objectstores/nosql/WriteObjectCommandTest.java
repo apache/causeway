@@ -97,19 +97,24 @@ public class WriteObjectCommandTest {
                 will(returnValue("1057"));
             }
         });
-        
+
         dataEncrypter = new DataEncryption() {
+            @Override
             public String getType() {
                 return "etc1";
             }
-            
-            public void init(IsisConfiguration configuration) {}
-            
-            public String encrypt(String plainText) {
+
+            @Override
+            public void init(final IsisConfiguration configuration) {
+            }
+
+            @Override
+            public String encrypt(final String plainText) {
                 return "ENC" + plainText;
             }
 
-            public String decrypt(String encryptedText) {
+            @Override
+            public String decrypt(final String encryptedText) {
                 throw new UnexpectedCallException();
             }
         };
@@ -136,7 +141,7 @@ public class WriteObjectCommandTest {
                 one(writer).writeUser("username");
                 one(writer).writeTime("1057");
                 one(writer).writeEncryptionType("etc1");
-                
+
                 one(commandContext).insert(writer);
 
             }

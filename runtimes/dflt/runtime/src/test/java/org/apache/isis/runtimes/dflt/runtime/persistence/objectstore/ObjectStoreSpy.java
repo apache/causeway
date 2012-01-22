@@ -109,8 +109,7 @@ public class ObjectStoreSpy implements ObjectStore, ObjectStoreTransactionManage
     }
 
     @Override
-    public ObjectAdapter getObject(final Oid oid, final ObjectSpecification hint) throws ObjectNotFoundException,
-        ObjectPersistenceException {
+    public ObjectAdapter getObject(final Oid oid, final ObjectSpecification hint) throws ObjectNotFoundException, ObjectPersistenceException {
         if (getObject == null) {
             Assert.fail("no object expected");
         }
@@ -123,8 +122,7 @@ public class ObjectStoreSpy implements ObjectStore, ObjectStoreTransactionManage
     }
 
     @Override
-    public void resolveField(final ObjectAdapter object, final ObjectAssociation field)
-        throws ObjectPersistenceException {
+    public void resolveField(final ObjectAdapter object, final ObjectAssociation field) throws ObjectPersistenceException {
     }
 
     @Override
@@ -133,8 +131,7 @@ public class ObjectStoreSpy implements ObjectStore, ObjectStoreTransactionManage
     }
 
     @Override
-    public ObjectAdapter[] getInstances(final PersistenceQuery criteria) throws ObjectPersistenceException,
-        UnsupportedFindException {
+    public ObjectAdapter[] getInstances(final PersistenceQuery criteria) throws ObjectPersistenceException, UnsupportedFindException {
         actions.addElement("getInstances " + criteria);
         return new ObjectAdapter[0];
     }

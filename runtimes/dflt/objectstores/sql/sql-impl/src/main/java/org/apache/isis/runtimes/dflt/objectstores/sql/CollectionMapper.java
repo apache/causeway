@@ -24,8 +24,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 
 public interface CollectionMapper {
 
-    public void loadInternalCollection(final DatabaseConnector connector, final ObjectAdapter parent,
-        final boolean makeResolved);
+    public void loadInternalCollection(final DatabaseConnector connector, final ObjectAdapter parent, final boolean makeResolved);
 
     public void saveInternalCollection(final DatabaseConnector connector, final ObjectAdapter parent);
 
