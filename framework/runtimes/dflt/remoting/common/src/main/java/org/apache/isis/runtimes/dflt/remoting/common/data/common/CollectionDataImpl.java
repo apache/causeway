@@ -39,8 +39,7 @@ public class CollectionDataImpl implements CollectionData, Encodable, Serializab
     private final boolean hasAllElements;
     private final String elementType;
 
-    public CollectionDataImpl(final Oid oid, final String collectionType, final String elementType,
-        final ReferenceData[] elements, final boolean hasAllElements, final Version version) {
+    public CollectionDataImpl(final Oid oid, final String collectionType, final String elementType, final ReferenceData[] elements, final boolean hasAllElements, final Version version) {
         this.collectionType = collectionType;
         this.elementType = elementType;
         this.oid = oid;

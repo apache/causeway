@@ -110,7 +110,8 @@ final class RuntimeBootstrapper implements IsisBootstrapper {
     }
 
     /**
-     * Starts all the web {@link IsisViewer viewer}s in an instance of an {@link EmbeddedWebServer}.
+     * Starts all the web {@link IsisViewer viewer}s in an instance of an
+     * {@link EmbeddedWebServer}.
      */
     private void startWebViewers(final Injector injector, final List<IsisViewer> webViewers) {
         if (webViewers.size() == 0) {
@@ -120,8 +121,7 @@ final class RuntimeBootstrapper implements IsisBootstrapper {
         final InstallerLookup installerLookup = injector.getInstance(InstallerLookup.class);
 
         // TODO: we could potentially offer pluggability here
-        final EmbeddedWebServerInstaller webServerInstaller =
-            installerLookup.embeddedWebServerInstaller(Isis.DEFAULT_EMBEDDED_WEBSERVER);
+        final EmbeddedWebServerInstaller webServerInstaller = installerLookup.embeddedWebServerInstaller(Isis.DEFAULT_EMBEDDED_WEBSERVER);
         final EmbeddedWebServer embeddedWebServer = webServerInstaller.createEmbeddedWebServer();
         for (final IsisViewer viewer : webViewers) {
             final WebAppSpecification webContainerRequirements = viewer.getWebAppSpecification();

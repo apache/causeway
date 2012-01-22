@@ -53,8 +53,7 @@ public class InMemoryPersistenceMechanismInstaller extends ObjectStorePersistenc
      * Hook method to return {@link ObjectStore}.
      */
     @Override
-    protected ObjectStore createObjectStore(final IsisConfiguration configuration,
-        final ObjectAdapterFactory adapterFactory, final AdapterManager adapterManager) {
+    protected ObjectStore createObjectStore(final IsisConfiguration configuration, final ObjectAdapterFactory adapterFactory, final AdapterManager adapterManager) {
         return new InMemoryObjectStore();
     }
 

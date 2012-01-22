@@ -39,8 +39,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 /**
- * Tested in style of <i>Working Effectively with Legacy Code</i> (Feathers) and <i>Growing Object-Oriented Software</i>
- * (Freeman &amp; Pryce).
+ * Tested in style of <i>Working Effectively with Legacy Code</i> (Feathers) and
+ * <i>Growing Object-Oriented Software</i> (Freeman &amp; Pryce).
  */
 @RunWith(JMock.class)
 public class ObjectStoreInstances_save {

@@ -151,9 +151,11 @@ public class ServerConnection {
     }
 
     /*
-     * public void getTermination() { try { String line = reader.readLine(); if (line == null || !line.equals("***")) {
-     * logFailure(); throw new RemotingException("stream ended abruptly while reading data, aborting request"); } }
-     * catch (IOException e) { logFailure(); throw new RemotingException(e); }
+     * public void getTermination() { try { String line = reader.readLine(); if
+     * (line == null || !line.equals("***")) { logFailure(); throw new
+     * RemotingException
+     * ("stream ended abruptly while reading data, aborting request"); } } catch
+     * (IOException e) { logFailure(); throw new RemotingException(e); }
      * 
      * }
      */

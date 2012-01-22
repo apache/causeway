@@ -54,7 +54,7 @@ public class AuthenticatorAbstractForDfltRuntimeTest {
             }
 
             @Override
-            public boolean canAuthenticate(Class<? extends AuthenticationRequest> authenticationRequestClass) {
+            public boolean canAuthenticate(final Class<? extends AuthenticationRequest> authenticationRequestClass) {
                 return false;
             }
         };

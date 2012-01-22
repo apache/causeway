@@ -31,8 +31,7 @@ public final class AdapterUtils {
     private AdapterUtils() {
     }
 
-    public static ObjectAdapter createAdapter(final Class<?> type, final Object object,
-        final AdapterManager adapterManager, final SpecificationLoader specificationLoader) {
+    public static ObjectAdapter createAdapter(final Class<?> type, final Object object, final AdapterManager adapterManager, final SpecificationLoader specificationLoader) {
         final ObjectSpecification specification = specificationLoader.loadSpecification(type);
         if (specification.isNotCollection()) {
             return adapterManager.adapterFor(object);
@@ -41,8 +40,7 @@ public final class AdapterUtils {
         }
     }
 
-    public static Object[] getCollectionAsObjectArray(final Object option, final ObjectSpecification spec,
-        final AdapterManager adapterManager) {
+    public static Object[] getCollectionAsObjectArray(final Object option, final ObjectSpecification spec, final AdapterManager adapterManager) {
         final ObjectAdapter collection = adapterManager.adapterFor(option);
         final CollectionFacet facet = CollectionFacetUtils.getCollectionFacetFromSpec(collection);
         final Object[] optionArray = new Object[facet.size(collection)];

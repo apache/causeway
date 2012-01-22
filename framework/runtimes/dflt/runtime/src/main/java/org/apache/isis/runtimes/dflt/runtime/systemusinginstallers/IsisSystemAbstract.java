@@ -54,8 +54,7 @@ public abstract class IsisSystemAbstract extends IsisSystemFixturesHookAbstract 
         super(deploymentType, new IsisLocaleInitializer(), new IsisTimeZoneInitializer());
     }
 
-    public IsisSystemAbstract(final DeploymentType deploymentType, final IsisLocaleInitializer localeInitializer,
-        final IsisTimeZoneInitializer timeZoneInitializer) {
+    public IsisSystemAbstract(final DeploymentType deploymentType, final IsisLocaleInitializer localeInitializer, final IsisTimeZoneInitializer timeZoneInitializer) {
         super(deploymentType, localeInitializer, timeZoneInitializer);
     }
 
@@ -94,12 +93,14 @@ public abstract class IsisSystemAbstract extends IsisSystemFixturesHookAbstract 
     // ///////////////////////////////////////////
 
     /**
-     * This is the only {@link Installer} that is used by any (all) subclass implementations, because it effectively
-     * <i>is</i> the component we need (as opposed to a builder/factory of the component we need).
+     * This is the only {@link Installer} that is used by any (all) subclass
+     * implementations, because it effectively <i>is</i> the component we need
+     * (as opposed to a builder/factory of the component we need).
      * 
      * <p>
-     * The fact that the component <i>is</i> an installer (and therefore can be {@link InstallerLookup} looked up} is at
-     * this level really just an incidental implementation detail useful for the subclass that uses
+     * The fact that the component <i>is</i> an installer (and therefore can be
+     * {@link InstallerLookup} looked up} is at this level really just an
+     * incidental implementation detail useful for the subclass that uses
      * {@link InstallerLookup} to create the other components.
      */
     protected abstract FixturesInstaller obtainFixturesInstaller() throws IsisSystemException;
@@ -116,9 +117,10 @@ public abstract class IsisSystemAbstract extends IsisSystemFixturesHookAbstract 
      * The {@link LogonFixture}, if any, obtained by running fixtures.
      * 
      * <p>
-     * Intended to be used when for {@link DeploymentType#EXPLORATION exploration} (instead of an
-     * {@link ExplorationSession}) or {@link DeploymentType#PROTOTYPE prototype} deployments (saves logging in). Should
-     * be <i>ignored</i> in other {@link DeploymentType}s.
+     * Intended to be used when for {@link DeploymentType#EXPLORATION
+     * exploration} (instead of an {@link ExplorationSession}) or
+     * {@link DeploymentType#PROTOTYPE prototype} deployments (saves logging
+     * in). Should be <i>ignored</i> in other {@link DeploymentType}s.
      */
     @Override
     public LogonFixture getLogonFixture() {

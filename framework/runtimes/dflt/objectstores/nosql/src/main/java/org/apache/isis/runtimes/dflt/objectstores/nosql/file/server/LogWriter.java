@@ -36,13 +36,13 @@ public class LogWriter {
 
     public void startNewFile() {
         // don't start new file if old one is empty
-        File file = Util.logFile(nextLogIdToWrite);
+        final File file = Util.logFile(nextLogIdToWrite);
         if (file.exists() && file.length() > 0) {
             startNewFile = true;
         }
     }
 
-    public synchronized void logNextSerialBatch(String name, long newBatchAt) {
+    public synchronized void logNextSerialBatch(final String name, final long newBatchAt) {
         startNewFileIfNeeded();
         try {
             writer.write(("#transaction started - " + new Date().toString() + "\n").getBytes());
@@ -60,7 +60,7 @@ public class LogWriter {
 
     }
 
-    public synchronized void logServiceEntry(String key, String name) {
+    public synchronized void logServiceEntry(final String key, final String name) {
         startNewFileIfNeeded();
         try {
             writer.write(("#transaction started - " + new Date().toString() + "\n").getBytes());
@@ -103,14 +103,14 @@ public class LogWriter {
 
     private void openNewFile() {
         nextLogIdToWrite++;
-        File file = Util.logFile(nextLogIdToWrite);
+        final File file = Util.logFile(nextLogIdToWrite);
         if (file.exists()) {
             throw new NoSqlStoreException("Log file already exists");
         }
         openFile(file);
     }
 
-    private void openFile(File file) {
+    private void openFile(final File file) {
         try {
             writer = new DataOutputStream(new FileOutputStream(file));
             startNewFile = false;
@@ -123,7 +123,7 @@ public class LogWriter {
         nextLogIdToWrite = Util.logFileRange().getLast();
         startNewFile();
         if (!startNewFile) {
-            File file = Util.logFile(nextLogIdToWrite);
+            final File file = Util.logFile(nextLogIdToWrite);
             openFile(file);
         } else {
             openNewFile();
@@ -142,7 +142,7 @@ public class LogWriter {
         }
     }
 
-    public synchronized boolean isWritten(long logId) {
+    public synchronized boolean isWritten(final long logId) {
         startNewFileIfNeeded();
         return logId < nextLogIdToWrite;
     }

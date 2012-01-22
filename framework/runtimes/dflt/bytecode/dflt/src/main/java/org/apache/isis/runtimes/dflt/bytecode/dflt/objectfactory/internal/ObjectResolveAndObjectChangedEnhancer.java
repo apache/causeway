@@ -48,8 +48,7 @@ public class ObjectResolveAndObjectChangedEnhancer extends ObjectResolveAndObjec
      */
     private final Map<Class<?>, Enhancer> enhancerByClass = new HashMap<Class<?>, Enhancer>();
 
-    public ObjectResolveAndObjectChangedEnhancer(final ObjectResolver objectResolver,
-        final ObjectChanger objectChanger, final SpecificationLoader specificationLoader) {
+    public ObjectResolveAndObjectChangedEnhancer(final ObjectResolver objectResolver, final ObjectChanger objectChanger, final SpecificationLoader specificationLoader) {
         super(objectResolver, objectChanger, specificationLoader);
 
         createCallback();
@@ -60,8 +59,7 @@ public class ObjectResolveAndObjectChangedEnhancer extends ObjectResolveAndObjec
         this.callback = new MethodInterceptor() {
 
             @Override
-            public Object intercept(final Object proxied, final Method proxiedMethod, final Object[] args,
-                final MethodProxy proxyMethod) throws Throwable {
+            public Object intercept(final Object proxied, final Method proxiedMethod, final Object[] args, final MethodProxy proxyMethod) throws Throwable {
 
                 final boolean ignore = proxiedMethod.getDeclaringClass().equals(Object.class);
                 ImperativeFacetFlags flags = null;

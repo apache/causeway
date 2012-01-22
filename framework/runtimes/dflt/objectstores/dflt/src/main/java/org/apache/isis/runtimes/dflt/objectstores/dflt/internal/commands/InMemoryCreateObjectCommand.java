@@ -26,8 +26,7 @@ import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction
 import org.apache.isis.runtimes.dflt.runtime.transaction.ObjectPersistenceException;
 import org.apache.log4j.Logger;
 
-public final class InMemoryCreateObjectCommand extends AbstractInMemoryPersistenceCommand implements
-    CreateObjectCommand {
+public final class InMemoryCreateObjectCommand extends AbstractInMemoryPersistenceCommand implements CreateObjectCommand {
     private final static Logger LOG = Logger.getLogger(InMemoryCreateObjectCommand.class);
 
     public InMemoryCreateObjectCommand(final ObjectAdapter object, final ObjectStorePersistedObjects persistedObjects) {

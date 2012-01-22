@@ -42,7 +42,7 @@ public class JdbcGeneralValueMapper extends AbstractJdbcFieldMapping {
 
         @Override
         public FieldMapping createFieldMapping(final ObjectSpecification object, final ObjectAssociation field) {
-            String dataType = getTypeOverride(object, field, type);
+            final String dataType = getTypeOverride(object, field, type);
             return new JdbcGeneralValueMapper(field, dataType);
         }
     }

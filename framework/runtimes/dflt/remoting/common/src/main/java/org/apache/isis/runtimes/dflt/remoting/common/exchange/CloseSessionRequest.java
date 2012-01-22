@@ -48,7 +48,8 @@ public class CloseSessionRequest extends RequestAbstract {
     // ///////////////////////////////////////////////////////
 
     /**
-     * {@link #setResponse(Object) Sets a response} to {@link CloseSessionResponse}.
+     * {@link #setResponse(Object) Sets a response} to
+     * {@link CloseSessionResponse}.
      */
     @Override
     public void execute(final ServerFacade serverFacade) {

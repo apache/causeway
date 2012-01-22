@@ -50,14 +50,7 @@ public class OptionHandlerConnector extends OptionHandlerAbstract {
     @SuppressWarnings("static-access")
     public void addOption(final Options options) {
         final Object[] connectors = installerRepository.getInstallers(IsisViewerInstaller.class);
-        final Option option =
-            OptionBuilder
-                .withArgName("name|class name")
-                .hasArg()
-                .withLongOpt(CONNECTOR_LONG_OPT)
-                .withDescription(
-                    "connector to use for client requests, or for server to listen on: "
-                        + availableInstallers(connectors)).create(CONNECTOR_OPT);
+        final Option option = OptionBuilder.withArgName("name|class name").hasArg().withLongOpt(CONNECTOR_LONG_OPT).withDescription("connector to use for client requests, or for server to listen on: " + availableInstallers(connectors)).create(CONNECTOR_OPT);
         options.addOption(option);
 
     }

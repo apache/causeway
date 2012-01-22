@@ -27,7 +27,6 @@ import org.apache.isis.core.commons.config.ConfigurationConstants;
 import org.apache.isis.runtimes.dflt.runtime.system.IsisSystem;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 
-
 public class SocketServerMonitor extends AbstractServerMonitor {
     private static final int DEFAULT_PORT = 8009;
     private static final String PORT = ConfigurationConstants.ROOT + "monitor.telnet.port";

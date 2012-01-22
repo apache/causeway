@@ -37,7 +37,8 @@ public interface Request extends Encodable {
      * Unique identifier for the request.
      * 
      * <p>
-     * REVIEW: rather than using a simple <tt>int</tt>, wouldn't a {@link UUID} be preferable?
+     * REVIEW: rather than using a simple <tt>int</tt>, wouldn't a {@link UUID}
+     * be preferable?
      */
     int getId();
 

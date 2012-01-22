@@ -50,8 +50,8 @@ import org.apache.isis.runtimes.dflt.runtime.transaction.IsisTransactionDefault;
 import org.apache.isis.runtimes.dflt.runtime.transaction.IsisTransactionManagerAbstract;
 
 /**
- * Static mock implementation of {@link PersistenceSession} that provides some partial implementation but also has
- * methods to spy on interactions.
+ * Static mock implementation of {@link PersistenceSession} that provides some
+ * partial implementation but also has methods to spy on interactions.
  * 
  * <p>
  * Is an alternative is to using the JMock mocking library.
@@ -67,49 +67,45 @@ public class TestProxyPersistenceSession extends PersistenceSessionAbstract {
             final TestProxyAdapter testProxyObjectAdapter = new TestProxyAdapter();
             testProxyObjectAdapter.setupObject(pojo);
             testProxyObjectAdapter.setupOid(oid);
-            testProxyObjectAdapter.setupResolveState(oid == null ? ResolveState.VALUE : oid.isTransient()
-                ? ResolveState.TRANSIENT : ResolveState.GHOST);
+            testProxyObjectAdapter.setupResolveState(oid == null ? ResolveState.VALUE : oid.isTransient() ? ResolveState.TRANSIENT : ResolveState.GHOST);
 
-            testProxyObjectAdapter.setupSpecification(IsisContext.getSpecificationLoader().loadSpecification(
-                pojo.getClass()));
+            testProxyObjectAdapter.setupSpecification(IsisContext.getSpecificationLoader().loadSpecification(pojo.getClass()));
 
             return testProxyObjectAdapter;
         }
     }
 
-    private final IsisTransactionManager transactionManager =
-        new IsisTransactionManagerAbstract<IsisTransactionDefault>() {
+    private final IsisTransactionManager transactionManager = new IsisTransactionManagerAbstract<IsisTransactionDefault>() {
 
-            @Override
-            public void startTransaction() {
-                actions.addElement("start transaction");
-                createTransaction();
-            }
+        @Override
+        public void startTransaction() {
+            actions.addElement("start transaction");
+            createTransaction();
+        }
 
-            @Override
-            protected IsisTransactionDefault createTransaction(final MessageBroker messageBroker,
-                final UpdateNotifier updateNotifier) {
-                return new IsisTransactionDefault(this, messageBroker, updateNotifier);
-            }
+        @Override
+        protected IsisTransactionDefault createTransaction(final MessageBroker messageBroker, final UpdateNotifier updateNotifier) {
+            return new IsisTransactionDefault(this, messageBroker, updateNotifier);
+        }
 
-            @Override
-            public boolean flushTransaction() {
-                actions.addElement("flush transaction");
-                return false;
-            }
+        @Override
+        public boolean flushTransaction() {
+            actions.addElement("flush transaction");
+            return false;
+        }
 
-            @Override
-            public void abortTransaction() {
-                getTransaction().abort();
-            }
+        @Override
+        public void abortTransaction() {
+            getTransaction().abort();
+        }
 
-            @Override
-            public void endTransaction() {
-                actions.addElement("end transaction");
-                getTransaction().commit();
-            }
+        @Override
+        public void endTransaction() {
+            actions.addElement("end transaction");
+            getTransaction().commit();
+        }
 
-        };
+    };
 
     private final Vector<String> actions = new Vector<String>();
 
@@ -152,13 +148,16 @@ public class TestProxyPersistenceSession extends PersistenceSessionAbstract {
         ObjectAdapter adapter = getAdapterManager().getAdapterFor(oid);
 
         if (adapter == null) {
-            // the objectstore or client proxy implementations will load from object store.
-            // This test implementation similarly looks in its persisted objects map.
+            // the objectstore or client proxy implementations will load from
+            // object store.
+            // This test implementation similarly looks in its persisted objects
+            // map.
             adapter = persistedObjects.get(oid);
         }
 
         if (adapter == null) {
-            // the objectstore or client proxy implementations will returns null if none found.
+            // the objectstore or client proxy implementations will returns null
+            // if none found.
             // This test implementation *however* throws an exception.
             throw new TestProxyException("No persisted object to get for " + oid);
         }
@@ -169,11 +168,14 @@ public class TestProxyPersistenceSession extends PersistenceSessionAbstract {
     @Override
     public void makePersistent(final ObjectAdapter object) {
 
-        // the object store implementation calls to the PersistAlgorithm that interacts with
-        // the ObjectStore and then ultimately for each object invokes madePersistent.
+        // the object store implementation calls to the PersistAlgorithm that
+        // interacts with
+        // the ObjectStore and then ultimately for each object invokes
+        // madePersistent.
         getAdapterManager().remapAsPersistent(object);
 
-        // this is done here explicitly; in the object store impl it is a responsibility of
+        // this is done here explicitly; in the object store impl it is a
+        // responsibility of
         // the object store.
         object.setOptimisticLock(new TestProxyVersion(1));
     }

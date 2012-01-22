@@ -35,7 +35,8 @@ public interface IsisTransactionManager extends SessionScopedComponent, Injectab
      * The owning {@link IsisSession}.
      * 
      * <p>
-     * Will be non-<tt>null</tt> when {@link #open() open}ed, but <tt>null</tt> if {@link #close() close}d .
+     * Will be non-<tt>null</tt> when {@link #open() open}ed, but <tt>null</tt>
+     * if {@link #close() close}d .
      */
     IsisSession getSession();
 
@@ -64,22 +65,28 @@ public interface IsisTransactionManager extends SessionScopedComponent, Injectab
     // ////////////////////////////////////////////////////////////////////
 
     /**
-     * Run the supplied {@link Runnable block of code (closure)} in a {@link IsisTransaction transaction}.
+     * Run the supplied {@link Runnable block of code (closure)} in a
+     * {@link IsisTransaction transaction}.
      * 
      * <p>
-     * If a transaction is {@link IsisContext#inTransaction() in progress}, then uses that. Otherwise will
-     * {@link #startTransaction() start} a transaction before running the block and {@link #endTransaction() commit} it
-     * at the end. If the closure throws an exception, then will {@link #abortTransaction() abort} the transaction.
+     * If a transaction is {@link IsisContext#inTransaction() in progress}, then
+     * uses that. Otherwise will {@link #startTransaction() start} a transaction
+     * before running the block and {@link #endTransaction() commit} it at the
+     * end. If the closure throws an exception, then will
+     * {@link #abortTransaction() abort} the transaction.
      */
     public void executeWithinTransaction(TransactionalClosure closure);
 
     /**
-     * Run the supplied {@link Runnable block of code (closure)} in a {@link IsisTransaction transaction}.
+     * Run the supplied {@link Runnable block of code (closure)} in a
+     * {@link IsisTransaction transaction}.
      * 
      * <p>
-     * If a transaction is {@link IsisContext#inTransaction() in progress}, then uses that. Otherwise will
-     * {@link #startTransaction() start} a transaction before running the block and {@link #endTransaction() commit} it
-     * at the end. If the closure throws an exception, then will {@link #abortTransaction() abort} the transaction.
+     * If a transaction is {@link IsisContext#inTransaction() in progress}, then
+     * uses that. Otherwise will {@link #startTransaction() start} a transaction
+     * before running the block and {@link #endTransaction() commit} it at the
+     * end. If the closure throws an exception, then will
+     * {@link #abortTransaction() abort} the transaction.
      */
     public <T> T executeWithinTransaction(TransactionalClosureWithReturn<T> closure);
 

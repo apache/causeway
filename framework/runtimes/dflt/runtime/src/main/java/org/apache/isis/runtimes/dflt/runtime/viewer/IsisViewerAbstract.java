@@ -50,7 +50,8 @@ public abstract class IsisViewerAbstract implements IsisViewer {
     private IsisConfigurationBuilder isisConfigurationBuilder;
 
     /**
-     * Optionally set, see {@link #setAuthenticationRequestViaArgs(AuthenticationRequest)}
+     * Optionally set, see
+     * {@link #setAuthenticationRequestViaArgs(AuthenticationRequest)}
      */
     private AuthenticationRequest authenticationRequestViaArgs;
 
@@ -88,7 +89,8 @@ public abstract class IsisViewerAbstract implements IsisViewer {
     }
 
     /**
-     * Default implementation to return null, indicating that this viewer should not be run in a web container.
+     * Default implementation to return null, indicating that this viewer should
+     * not be run in a web container.
      */
     @Override
     public WebAppSpecification getWebAppSpecification() {

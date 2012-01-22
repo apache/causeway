@@ -43,7 +43,8 @@ public class InMemoryObjectStore_interactionWithAdapterManager extends ProxyJuni
     }
 
     /**
-     * Testing, indirectly, that the adapter manager doesn't automatically save objects in the objectstore.
+     * Testing, indirectly, that the adapter manager doesn't automatically save
+     * objects in the objectstore.
      */
     public void testObjectNotPersistedWhenCreated() throws Exception {
         final ObjectAdapter object = system.createPersistentTestObject();

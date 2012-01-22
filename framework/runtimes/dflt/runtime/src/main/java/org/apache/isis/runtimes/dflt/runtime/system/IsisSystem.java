@@ -36,8 +36,9 @@ public interface IsisSystem extends DebugSelection, ApplicationScopedComponent {
     public IsisSessionFactory getSessionFactory();
 
     /**
-     * Returns a <i>snapshot</i> of the {@link IsisConfiguration configuration} (although once the {@link IsisSystem} is
-     * completely initialized, will effectively be immutable).
+     * Returns a <i>snapshot</i> of the {@link IsisConfiguration configuration}
+     * (although once the {@link IsisSystem} is completely initialized, will
+     * effectively be immutable).
      */
     IsisConfiguration getConfiguration();
 

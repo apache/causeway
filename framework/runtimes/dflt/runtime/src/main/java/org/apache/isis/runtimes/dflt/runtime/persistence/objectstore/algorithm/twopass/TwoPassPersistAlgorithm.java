@@ -87,12 +87,18 @@ public class TwoPassPersistAlgorithm extends PersistAlgorithmAbstract {
                     final ObjectAdapter collection = field.get(object);
                     makeCollectionPersistent(collection, toPersistObjectSet);
                     /**
-                     * if (collection == null) { throw new ObjectPersistenceException("Collection " + field.getName() +
-                     * " does not exist in " + object.getSpecification().getFullName()); } makePersistent(collection,
-                     * toPersistObjectSet); final CollectionFacet facet =
-                     * CollectionFacetUtils.getCollectionFacetFromSpec(collection); final Enumeration elements =
-                     * facet.elements(collection); while (elements.hasMoreElements()) { makePersistent((ObjectAdapter)
-                     * elements.nextElement(), toPersistObjectSet); }
+                     * if (collection == null) { throw new
+                     * ObjectPersistenceException("Collection " +
+                     * field.getName() + " does not exist in " +
+                     * object.getSpecification().getFullName()); }
+                     * makePersistent(collection, toPersistObjectSet); final
+                     * CollectionFacet facet =
+                     * CollectionFacetUtils.getCollectionFacetFromSpec
+                     * (collection); final Enumeration elements =
+                     * facet.elements(collection); while
+                     * (elements.hasMoreElements()) {
+                     * makePersistent((ObjectAdapter) elements.nextElement(),
+                     * toPersistObjectSet); }
                      */
                 } else {
                     // skip in second pass

@@ -36,7 +36,8 @@ public class EncodingOverSocketsProxyInstaller extends ProxyInstallerAbstract {
     @Override
     protected void addConfigurationResources(final List<String> configurationResources) {
         super.addConfigurationResources(configurationResources);
-        // TODO: this (small) hack is because we don't load up the Protocol (Marshaller)
+        // TODO: this (small) hack is because we don't load up the Protocol
+        // (Marshaller)
         // and Transport using the installers.
         configurationResources.add("protocol.properties");
         configurationResources.add("protocol_encoding.properties");

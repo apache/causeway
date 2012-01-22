@@ -47,14 +47,7 @@ public class OptionHandlerUserProfileStore extends OptionHandlerAbstract {
     @SuppressWarnings("static-access")
     public void addOption(final Options options) {
         final Object[] persistenceMechanisms = installerRepository.getInstallers(UserProfileStoreInstaller.class);
-        final Option option =
-            OptionBuilder
-                .withArgName("name|class name")
-                .hasArg()
-                .withLongOpt(USER_PROFILE_STORE_LONG_OPT)
-                .withDescription(
-                    "user profile store to use: " + availableInstallers(persistenceMechanisms) + "; or class name")
-                .create(USER_PROFILE_STORE_OPT);
+        final Option option = OptionBuilder.withArgName("name|class name").hasArg().withLongOpt(USER_PROFILE_STORE_LONG_OPT).withDescription("user profile store to use: " + availableInstallers(persistenceMechanisms) + "; or class name").create(USER_PROFILE_STORE_OPT);
         options.addOption(option);
     }
 

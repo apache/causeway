@@ -26,8 +26,9 @@ import org.apache.isis.runtimes.dflt.remoting.common.marshalling.ClientMarshalle
 import org.apache.isis.runtimes.dflt.remoting.server.ServerConnection;
 
 /**
- * Mediates between a running system (which has {@link Request}s that need servicing) and the {@link ClientMarshaller}
- * that pushes the requests onto the network and pulls them back.
+ * Mediates between a running system (which has {@link Request}s that need
+ * servicing) and the {@link ClientMarshaller} that pushes the requests onto the
+ * network and pulls them back.
  * 
  * @see ServerConnection
  */

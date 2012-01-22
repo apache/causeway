@@ -36,7 +36,8 @@ public abstract class ServicesInstallerAbstract extends InstallerAbstract implem
     }
 
     /**
-     * Add this service, automatically unravelling if is a {@link Collection} of services.
+     * Add this service, automatically unravelling if is a {@link Collection} of
+     * services.
      * 
      * @param service
      */

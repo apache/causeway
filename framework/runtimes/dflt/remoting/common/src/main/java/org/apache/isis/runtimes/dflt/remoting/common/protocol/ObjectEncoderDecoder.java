@@ -48,8 +48,9 @@ public interface ObjectEncoderDecoder {
     // ////////////////////////////////////////////////
 
     /**
-     * Returns the agreed order to transfer fields within data objects. Both remote parties need to process the fields
-     * in the same order, this is that order.
+     * Returns the agreed order to transfer fields within data objects. Both
+     * remote parties need to process the fields in the same order, this is that
+     * order.
      */
     ObjectAssociation[] getFieldOrder(ObjectSpecification specification);
 
@@ -71,40 +72,39 @@ public interface ObjectEncoderDecoder {
 
     ReferenceData encodeActionTarget(ObjectAdapter targetAdapter, KnownObjectsRequest knownObjects);
 
-    Data[] encodeActionParameters(ObjectSpecification[] parameterTypes, ObjectAdapter[] parameterAdapters,
-        KnownObjectsRequest knownObjects);
+    Data[] encodeActionParameters(ObjectSpecification[] parameterTypes, ObjectAdapter[] parameterAdapters, KnownObjectsRequest knownObjects);
 
-    ExecuteServerActionResponse encodeServerActionResult(ObjectAdapter resultAdapter, ObjectData[] updatedData,
-        ReferenceData[] disposedData, ObjectData persistedTargetData, ObjectData[] persistedParameterData,
-        String[] messages, String[] warnings);
+    ExecuteServerActionResponse encodeServerActionResult(ObjectAdapter resultAdapter, ObjectData[] updatedData, ReferenceData[] disposedData, ObjectData persistedTargetData, ObjectData[] persistedParameterData, String[] messages, String[] warnings);
 
-    ExecuteClientActionResponse encodeClientActionResult(ReferenceData[] madePersistent, Version[] changedVersion,
-        ObjectData[] updates);
+    ExecuteClientActionResponse encodeClientActionResult(ReferenceData[] madePersistent, Version[] changedVersion, ObjectData[] updates);
 
     // ////////////////////////////////////////////////
     // Graphs
     // ////////////////////////////////////////////////
 
     /**
-     * Creates an {@link ObjectData} that contains all the data for all the transient objects in the specified transient
-     * object.
+     * Creates an {@link ObjectData} that contains all the data for all the
+     * transient objects in the specified transient object.
      * 
      * <p>
-     * For any referenced persistent object in the graph, only the reference is passed across.
+     * For any referenced persistent object in the graph, only the reference is
+     * passed across.
      */
     ObjectData encodeMakePersistentGraph(ObjectAdapter adapter, KnownObjectsRequest knownObjects);
 
     ObjectData encodeGraphForChangedObject(ObjectAdapter adapter, KnownObjectsRequest knownObjects);
 
     /**
-     * Creates a graph of ReferenceData objects (mirroring the graph of transient objects) to transfer the OIDs and
-     * Versions for each object that was made persistent during the makePersistent call.
+     * Creates a graph of ReferenceData objects (mirroring the graph of
+     * transient objects) to transfer the OIDs and Versions for each object that
+     * was made persistent during the makePersistent call.
      */
     ObjectData encodeMadePersistentGraph(ObjectData originalData, ObjectAdapter adapter);
 
     /**
-     * Creates an ObjectData that contains all the data for all the objects in the graph. This allows the client to
-     * receive all data it might need without having to return to the server to get referenced objects.
+     * Creates an ObjectData that contains all the data for all the objects in
+     * the graph. This allows the client to receive all data it might need
+     * without having to return to the server to get referenced objects.
      */
     ObjectData encodeCompletePersistentGraph(ObjectAdapter object);
 
@@ -119,8 +119,8 @@ public interface ObjectEncoderDecoder {
     // ////////////////////////////////////////////////
 
     /**
-     * Creates an {@link ObjectData} that contains the data for the specified object, but not the data for any
-     * referenced objects.
+     * Creates an {@link ObjectData} that contains the data for the specified
+     * object, but not the data for any referenced objects.
      * 
      * <p>
      * For each referenced object only the reference is passed across.

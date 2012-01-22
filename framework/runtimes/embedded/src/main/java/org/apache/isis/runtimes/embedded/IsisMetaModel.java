@@ -67,7 +67,7 @@ public class IsisMetaModel implements ApplicationScopedComponent {
 
     private final EmbeddedContext context;
     private final List<Object> services = Lists.newArrayList();
-    
+
     private State state = State.NOT_INITIALIZED;
 
     private ObjectReflectorDefault reflector;
@@ -82,7 +82,7 @@ public class IsisMetaModel implements ApplicationScopedComponent {
     private Set<FacetDecorator> facetDecorators;
     private MetaModelValidator metaModelValidator;
 
-	private DomainObjectContainer container;
+    private DomainObjectContainer container;
 
     public IsisMetaModel(final EmbeddedContext context, final Object... services) {
         this(context, Arrays.asList(services));
@@ -91,24 +91,26 @@ public class IsisMetaModel implements ApplicationScopedComponent {
     public IsisMetaModel(final EmbeddedContext context, final List<Object> services) {
         this.services.addAll(services);
         setConfiguration(new IsisConfigurationDefault());
-        setClassSubstitutor(new ClassSubstitutorAbstract(){});
+        setClassSubstitutor(new ClassSubstitutorAbstract() {
+        });
         setCollectionTypeRegistry(new CollectionTypeRegistryDefault());
         setSpecificationTraverser(new SpecificationTraverserDefault());
         setMemberLayoutArranger(new MemberLayoutArrangerDefault());
         setFacetDecorators(new TreeSet<FacetDecorator>());
         setProgrammingModelFacets(new ProgrammingModelFacetsJava5());
-        
+
         setMetaModelValidator(new MetaModelValidatorDefault());
-        
+
         this.context = context;
     }
 
     /**
-     * The list of classes representing services, as specified in the {@link #IsisMetaModel(EmbeddedContext, Class...)
-     * constructor}.
+     * The list of classes representing services, as specified in the
+     * {@link #IsisMetaModel(EmbeddedContext, Class...) constructor}.
      * 
      * <p>
-     * To obtain the instantiated services, use the {@link ServicesInjector#getRegisteredServices()} (available from
+     * To obtain the instantiated services, use the
+     * {@link ServicesInjector#getRegisteredServices()} (available from
      * {@link #getServicesInjector()}).
      */
     public List<Object> getServices() {
@@ -122,9 +124,7 @@ public class IsisMetaModel implements ApplicationScopedComponent {
     @Override
     public void init() {
         ensureNotInitialized();
-        reflector =
-            new ObjectReflectorDefault(configuration, classSubstitutor, collectionTypeRegistry, specificationTraverser,
-                memberLayoutArranger, programmingModel, facetDecorators, metaModelValidator);
+        reflector = new ObjectReflectorDefault(configuration, classSubstitutor, collectionTypeRegistry, specificationTraverser, memberLayoutArranger, programmingModel, facetDecorators, metaModelValidator);
 
         runtimeContext = new RuntimeContextForEmbeddedMetaModel(context, services);
         this.container = new DomainObjectContainerDefault();
@@ -178,7 +178,8 @@ public class IsisMetaModel implements ApplicationScopedComponent {
     // ///////////////////////////////////////////////////////
 
     /**
-     * The {@link ServicesInjector}; can use to obtain the set of registered services.
+     * The {@link ServicesInjector}; can use to obtain the set of registered
+     * services.
      * 
      * <p>
      * Available once {@link #init() initialized}.
@@ -233,8 +234,9 @@ public class IsisMetaModel implements ApplicationScopedComponent {
     }
 
     /**
-     * The {@link CollectionTypeRegistry} in force, either defaulted or specified
-     * {@link #setCollectionTypeRegistry(CollectionTypeRegistry) explicitly.}
+     * The {@link CollectionTypeRegistry} in force, either defaulted or
+     * specified {@link #setCollectionTypeRegistry(CollectionTypeRegistry)
+     * explicitly.}
      */
     public CollectionTypeRegistry getCollectionTypeRegistry() {
         return collectionTypeRegistry;
@@ -253,8 +255,9 @@ public class IsisMetaModel implements ApplicationScopedComponent {
     }
 
     /**
-     * The {@link SpecificationTraverser} in force, either defaulted or specified
-     * {@link #setSpecificationTraverser(SpecificationTraverser) explicitly}.
+     * The {@link SpecificationTraverser} in force, either defaulted or
+     * specified {@link #setSpecificationTraverser(SpecificationTraverser)
+     * explicitly}.
      */
     public SpecificationTraverser getSpecificationTraverser() {
         return specificationTraverser;
@@ -295,7 +298,8 @@ public class IsisMetaModel implements ApplicationScopedComponent {
     }
 
     /**
-     * The {@link FacetDecorator}s in force, either defaulted or specified {@link #setFacetDecorators(Set) explicitly}.
+     * The {@link FacetDecorator}s in force, either defaulted or specified
+     * {@link #setFacetDecorators(Set) explicitly}.
      */
     public Set<FacetDecorator> getFacetDecorators() {
         return Collections.unmodifiableSet(facetDecorators);

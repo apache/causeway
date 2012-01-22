@@ -31,9 +31,7 @@ public class ConcurrencyException extends ObjectPersistenceException {
     private Oid source;
 
     public ConcurrencyException(final ObjectAdapter object, final Version updated) {
-        this(object.getVersion().getUser() + " changed " + object.titleString() + " at "
-            + DateFormat.getDateTimeInstance().format(object.getVersion().getTime()) + "\n\n" + object.getVersion()
-            + " ~ " + updated + "", object.getOid());
+        this(object.getVersion().getUser() + " changed " + object.titleString() + " at " + DateFormat.getDateTimeInstance().format(object.getVersion().getTime()) + "\n\n" + object.getVersion() + " ~ " + updated + "", object.getOid());
     }
 
     public ConcurrencyException(final String message, final Oid source) {

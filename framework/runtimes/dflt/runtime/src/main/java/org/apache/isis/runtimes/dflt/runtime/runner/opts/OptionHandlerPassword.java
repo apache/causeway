@@ -43,9 +43,7 @@ public class OptionHandlerPassword extends OptionHandlerAbstract {
     @Override
     @SuppressWarnings("static-access")
     public void addOption(final Options options) {
-        final Option option =
-            OptionBuilder.withArgName("password").hasArg().withLongOpt(PASSWORD_LONG_OPT)
-                .withDescription("password to automatically log in with").create(PASSWORD_OPT);
+        final Option option = OptionBuilder.withArgName("password").hasArg().withLongOpt(PASSWORD_LONG_OPT).withDescription("password to automatically log in with").create(PASSWORD_OPT);
         options.addOption(option);
     }
 

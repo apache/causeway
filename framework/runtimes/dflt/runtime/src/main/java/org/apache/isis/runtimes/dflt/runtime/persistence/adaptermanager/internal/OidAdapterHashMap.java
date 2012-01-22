@@ -73,8 +73,7 @@ public class OidAdapterHashMap implements OidAdapterMap {
     @Override
     public void reset() {
         LOG.debug("reset");
-        for (final Iterator<Map.Entry<Oid, ObjectAdapter>> iterator = adapterByOidMap.entrySet().iterator(); iterator
-            .hasNext();) {
+        for (final Iterator<Map.Entry<Oid, ObjectAdapter>> iterator = adapterByOidMap.entrySet().iterator(); iterator.hasNext();) {
             final Map.Entry<Oid, ObjectAdapter> entry = iterator.next();
             final ObjectAdapter adapter = entry.getValue();
             if (!adapter.getSpecification().isService()) {
@@ -93,10 +92,11 @@ public class OidAdapterHashMap implements OidAdapterMap {
         adapterByOidMap.put(oid, adapter);
         // log at end so that if toString needs adapters they're in maps.
         if (LOG.isDebugEnabled()) {
-            // do not call toString() on adapter because would call hashCode on the pojo,
-            // which for Hibernate PersistentCollections would trigger a resolve.
-            LOG.debug("add oid: " + oid + " ; oid.hashCode: + #" + Long.toHexString(oid.hashCode())
-                + " ; adapter.hashCode(): #" + Long.toHexString(adapter.hashCode()));
+            // do not call toString() on adapter because would call hashCode on
+            // the pojo,
+            // which for Hibernate PersistentCollections would trigger a
+            // resolve.
+            LOG.debug("add oid: " + oid + " ; oid.hashCode: + #" + Long.toHexString(oid.hashCode()) + " ; adapter.hashCode(): #" + Long.toHexString(adapter.hashCode()));
         }
     }
 

@@ -41,8 +41,7 @@ public class ObjectResolveAndObjectChangedEnhancer extends ObjectResolveAndObjec
 
     private MethodHandler methodHandler;
 
-    public ObjectResolveAndObjectChangedEnhancer(final ObjectResolver objectResolver,
-        final ObjectChanger objectChanger, final SpecificationLoader specificationLoader) {
+    public ObjectResolveAndObjectChangedEnhancer(final ObjectResolver objectResolver, final ObjectChanger objectChanger, final SpecificationLoader specificationLoader) {
         super(objectResolver, objectChanger, specificationLoader);
 
         createCallback();
@@ -52,8 +51,7 @@ public class ObjectResolveAndObjectChangedEnhancer extends ObjectResolveAndObjec
     protected void createCallback() {
         this.methodHandler = new MethodHandler() {
             @Override
-            public Object invoke(final Object proxied, final Method proxyMethod, final Method proxiedMethod,
-                final Object[] args) throws Throwable {
+            public Object invoke(final Object proxied, final Method proxyMethod, final Method proxiedMethod, final Object[] args) throws Throwable {
 
                 final boolean ignore = proxyMethod.getDeclaringClass().equals(Object.class);
                 ImperativeFacetFlags flags = null;
@@ -69,7 +67,10 @@ public class ObjectResolveAndObjectChangedEnhancer extends ObjectResolveAndObjec
                     }
                 }
 
-                final Object proxiedReturn = proxiedMethod.invoke(proxied, args); // execute the original method.
+                final Object proxiedReturn = proxiedMethod.invoke(proxied, args); // execute
+                                                                                  // the
+                                                                                  // original
+                                                                                  // method.
 
                 if (!ignore && flags.impliesObjectChanged()) {
                     objectChanger.objectChanged(proxied);

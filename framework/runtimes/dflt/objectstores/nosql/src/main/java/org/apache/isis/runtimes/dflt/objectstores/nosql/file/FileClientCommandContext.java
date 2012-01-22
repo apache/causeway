@@ -63,14 +63,14 @@ class FileClientCommandContext implements NoSqlCommandContext {
 
     private void write(final char command, final JsonStateWriter writer) {
         connection.request(command, writer.getRequest());
-        String data = writer.getData();
+        final String data = writer.getData();
 
-        CRC32 inputChecksum = new CRC32();
+        final CRC32 inputChecksum = new CRC32();
         inputChecksum.update(data.getBytes());
         inputChecksum.update('\n');
-        long checksum = inputChecksum.getValue();
-        String code = Long.toHexString(checksum);
-        
+        final long checksum = inputChecksum.getValue();
+        final String code = Long.toHexString(checksum);
+
         connection.requestData("00000000".substring(0, 8 - code.length()) + code + data);
         connection.endRequestSection();
     }

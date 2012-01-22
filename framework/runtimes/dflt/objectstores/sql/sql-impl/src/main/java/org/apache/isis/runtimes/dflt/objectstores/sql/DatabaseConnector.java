@@ -23,7 +23,8 @@ import org.apache.isis.core.commons.debug.DebugBuilder;
 
 public interface DatabaseConnector {
     /*
-     * @deprecated Results callStoredProcedure(String name, Parameter[] parameters);
+     * @deprecated Results callStoredProcedure(String name, Parameter[]
+     * parameters);
      */
     void close();
 
@@ -31,7 +32,8 @@ public interface DatabaseConnector {
 
     void delete(String sql);
 
-    // MultipleResults executeStoredProcedure(String name, Parameter[] parameters);
+    // MultipleResults executeStoredProcedure(String name, Parameter[]
+    // parameters);
 
     boolean hasTable(String tableName);
 
@@ -44,7 +46,8 @@ public interface DatabaseConnector {
     Results select(String sql);
 
     /**
-     * Updates the database using the specified sql statement, and returns the number of rows affected.
+     * Updates the database using the specified sql statement, and returns the
+     * number of rows affected.
      */
     int update(String sql);
 

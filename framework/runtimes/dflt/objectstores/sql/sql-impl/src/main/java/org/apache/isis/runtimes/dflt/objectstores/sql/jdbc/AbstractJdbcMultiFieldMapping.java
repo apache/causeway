@@ -39,11 +39,15 @@ public abstract class AbstractJdbcMultiFieldMapping extends AbstractJdbcFieldMap
      * @param field
      *            the field object association.
      * @param columnCount
-     *            the number of columns required to store this field. See the abstract methods ,
-     *            {@link AbstractJdbcFieldMapping#preparedStatementObject(int i, ObjectAdapter fieldValue)},
-     *            {@link AbstractJdbcFieldMapping#getObjectFromResults(Results results)},
+     *            the number of columns required to store this field. See the
+     *            abstract methods ,
+     *            {@link AbstractJdbcFieldMapping#preparedStatementObject(int i, ObjectAdapter fieldValue)}
+     *            ,
+     *            {@link AbstractJdbcFieldMapping#getObjectFromResults(Results results)}
+     *            ,
      * @param types
-     *            the list of SQL data types, 1 per columnCount, to represent the value type.
+     *            the list of SQL data types, 1 per columnCount, to represent
+     *            the value type.
      */
     public AbstractJdbcMultiFieldMapping(final ObjectAssociation field, final int columnCount, final String... types) {
         super(field);
@@ -116,8 +120,7 @@ public abstract class AbstractJdbcMultiFieldMapping extends AbstractJdbcFieldMap
         appendUpdateValues(connector, sql, object);
     }
 
-    private void appendEqualsClause(final DatabaseConnector connector, final int index, final StringBuffer sql,
-        final Object object, final String condition) {
+    private void appendEqualsClause(final DatabaseConnector connector, final int index, final StringBuffer sql, final Object object, final String condition) {
 
         final Object oPart = preparedStatementObject(index, object);
 
@@ -133,8 +136,14 @@ public abstract class AbstractJdbcMultiFieldMapping extends AbstractJdbcFieldMap
     public ObjectAdapter setFromDBColumn(final Results results, final String columnName, final ObjectAssociation field) {
         ObjectAdapter restoredValue;
         final Object objectValue = getObjectFromResults(results);
-        restoredValue = adapterManager.adapterFor(objectValue); // NOTE: If this fails, then fetch back the declaration
-                                                                // from the constructor to here.
+        restoredValue = adapterManager.adapterFor(objectValue); // NOTE: If this
+                                                                // fails, then
+                                                                // fetch back
+                                                                // the
+                                                                // declaration
+                                                                // from the
+                                                                // constructor
+                                                                // to here.
         return restoredValue;
     }
 
@@ -164,8 +173,8 @@ public abstract class AbstractJdbcMultiFieldMapping extends AbstractJdbcFieldMap
     }
 
     /**
-     * Return an object suitable for passing to the SQL prepared statement constructor, to handle field "index". Will be
-     * called "columnCount" times.
+     * Return an object suitable for passing to the SQL prepared statement
+     * constructor, to handle field "index". Will be called "columnCount" times.
      * 
      * @param index
      *            0 based index

@@ -77,8 +77,7 @@ public class ObjectFixtureFilePersistor {
             ObjectAdapter object = idMap.get(id);
             if (object == null) {
                 final String className = data.substring(0, pos);
-                final ObjectSpecification specification =
-                    IsisContext.getSpecificationLoader().loadSpecification(className);
+                final ObjectSpecification specification = IsisContext.getSpecificationLoader().loadSpecification(className);
                 object = IsisContext.getPersistenceSession().createInstance(specification);
                 idMap.put(id, object);
                 objects.add(object.getObject());

@@ -81,13 +81,19 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
         if (LOG.isDebugEnabled()) {
 
             // be careful not to touch the pojo
-            // this method is called by the FinalizerThread so could be called at any time.
-            // for Hibernate-based object stores (and similar), it may no longer be valid to
-            // touch the pojo (although arguably, closing the session should detach these pojos)
+            // this method is called by the FinalizerThread so could be called
+            // at any time.
+            // for Hibernate-based object stores (and similar), it may no longer
+            // be valid to
+            // touch the pojo (although arguably, closing the session should
+            // detach these pojos)
 
-            // we also mustn't touch the adapter's specification. That's because the loading
-            // of specifications isn't threadsafe, due to the way in which we put non-introspected
-            // specifications into the SpecificationCache to prevent infinite loops.
+            // we also mustn't touch the adapter's specification. That's because
+            // the loading
+            // of specifications isn't threadsafe, due to the way in which we
+            // put non-introspected
+            // specifications into the SpecificationCache to prevent infinite
+            // loops.
 
             // better safe than sorry, though
             // LOG.debug("finalizing pojo, oid: " + getOid());
@@ -124,8 +130,9 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
     }
 
     /**
-     * Sometimes it is necessary to manage the replacement of the underlying domain object (by another component such as
-     * an object store). This method allows the adapter to be kept while the domain object is replaced.
+     * Sometimes it is necessary to manage the replacement of the underlying
+     * domain object (by another component such as an object store). This method
+     * allows the adapter to be kept while the domain object is replaced.
      */
     @Override
     public void replacePojo(final Object pojo) {
@@ -145,18 +152,18 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
     public void changeState(final ResolveState newState) {
 
         final boolean validToChangeTo = resolveState.isValidToChangeTo(newState);
-        // don't call toString() since that could hit titleString() and we might be
+        // don't call toString() since that could hit titleString() and we might
+        // be
         // in the process of transitioning to ghost
-        Assert.assertTrue(
-            "oid= " + this.getOid() + "; can't change from " + resolveState.name() + " to " + newState.name(),
-            validToChangeTo);
+        Assert.assertTrue("oid= " + this.getOid() + "; can't change from " + resolveState.name() + " to " + newState.name(), validToChangeTo);
 
         if (LOG.isTraceEnabled()) {
             String oidString;
             if (oid == null) {
                 oidString = "";
             } else {
-                // don't call toString() in case in process of transitioning to ghost
+                // don't call toString() in case in process of transitioning to
+                // ghost
                 oidString = "for " + this.getOid() + " ";
             }
             LOG.trace(oidString + "changing resolved state to " + newState.name());
@@ -223,7 +230,6 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
         }
     }
 
-
     // ///////////////////////////////////////////////////////////////////
     // Version
     // ///////////////////////////////////////////////////////////////////
@@ -260,9 +266,11 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
      * Returns the title from the underlying business object.
      * 
      * <p>
-     * If the object has not yet been resolved the specification will be asked for a unresolved title, which could of
-     * been persisted by the persistence mechanism. If either of the above provides null as the title then this method
-     * will return a title relating to the name of the object type, e.g. "A Customer", "A Product".
+     * If the object has not yet been resolved the specification will be asked
+     * for a unresolved title, which could of been persisted by the persistence
+     * mechanism. If either of the above provides null as the title then this
+     * method will return a title relating to the name of the object type, e.g.
+     * "A Customer", "A Product".
      */
     @Override
     public String titleString() {
@@ -305,25 +313,25 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
         final ObjectSpecification elementSpecification = getElementSpecification();
         if (elementSpecification == null || elementSpecification.getFullIdentifier().equals(Object.class.getName())) {
             switch (size) {
-                case -1:
-                    return "Objects";
-                case 0:
-                    return "No objects";
-                case 1:
-                    return "1 object";
-                default:
-                    return size + " objects";
+            case -1:
+                return "Objects";
+            case 0:
+                return "No objects";
+            case 1:
+                return "1 object";
+            default:
+                return size + " objects";
             }
         } else {
             switch (size) {
-                case -1:
-                    return elementSpecification.getPluralName();
-                case 0:
-                    return "No " + elementSpecification.getPluralName();
-                case 1:
-                    return "1 " + elementSpecification.getSingularName();
-                default:
-                    return size + " " + elementSpecification.getPluralName();
+            case -1:
+                return elementSpecification.getPluralName();
+            case 0:
+                return "No " + elementSpecification.getPluralName();
+            case 1:
+                return "1 " + elementSpecification.getSingularName();
+            default:
+                return size + " " + elementSpecification.getPluralName();
             }
         }
     }
@@ -333,7 +341,8 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
         final ToString str = new ToString(this);
         toString(str);
 
-        // don't do title of any entities. For persistence entities, might forces an unwanted resolve
+        // don't do title of any entities. For persistence entities, might
+        // forces an unwanted resolve
         // of the object. For transient objects, may not be fully initialized.
 
         str.append("pojo-toString", pojo.toString());
@@ -409,11 +418,12 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
     // ///////////////////////////////////////////////////////////////////
 
     /**
-     * Guaranteed to be called whenever this object is known to have changed (specifically, by the
-     * <tt>ObjectStorePersistor</tt>).
+     * Guaranteed to be called whenever this object is known to have changed
+     * (specifically, by the <tt>ObjectStorePersistor</tt>).
      * 
      * <p>
-     * This implementation does nothing, but subclasses (for example <tt>PojoAdapterX</tt>) might provide listeners.
+     * This implementation does nothing, but subclasses (for example
+     * <tt>PojoAdapterX</tt>) might provide listeners.
      */
     @Override
     public void fireChangedEvent() {

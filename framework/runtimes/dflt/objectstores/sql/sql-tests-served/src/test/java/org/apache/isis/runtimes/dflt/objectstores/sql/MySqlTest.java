@@ -38,8 +38,7 @@ public class MySqlTest extends SqlIntegrationTestCommon {
             properties.put(SqlObjectStore.BASE_NAME + ".jdbc.driver", "com.mysql.jdbc.Driver");
             // properties.put(SqlObjectStore.BASE_NAME + ".jdbc.connection",
             // "jdbc:mysql://abacus/noftest&useTimezone=true&serverTimezone=GMT");
-            properties.put(SqlObjectStore.BASE_NAME + ".jdbc.connection",
-                "jdbc:mysql://abacus/noftest&useLegacyDatetimeCode=false");
+            properties.put(SqlObjectStore.BASE_NAME + ".jdbc.connection", "jdbc:mysql://abacus/noftest&useLegacyDatetimeCode=false");
             properties.put(SqlObjectStore.BASE_NAME + ".jdbc.user", "nof");
             properties.put(SqlObjectStore.BASE_NAME + ".jdbc.jdbc.password", "");
         }

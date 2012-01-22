@@ -57,7 +57,8 @@ public class EncodingMarshaller extends MarshallerAbstract {
 
             @Override
             public <T> T readObject(final DataInputExtended input, final Class<T> cls) throws IOException {
-                // not quite symmetrical with write; the byte has already been read from stream
+                // not quite symmetrical with write; the byte has already been
+                // read from stream
                 // to determine which As instance to delegate to
                 return input.readEncodable(cls);
             }
@@ -71,7 +72,8 @@ public class EncodingMarshaller extends MarshallerAbstract {
 
             @Override
             public <T> T readObject(final DataInputExtended input, final Class<T> cls) throws IOException {
-                // not quite symmetrical with write; the byte has already been read from stream
+                // not quite symmetrical with write; the byte has already been
+                // read from stream
                 // to determine which As instance to delegate to
                 return input.readSerializable(cls);
             }
@@ -121,8 +123,7 @@ public class EncodingMarshaller extends MarshallerAbstract {
     @Override
     public void init() {
         super.init();
-        debugging =
-            getConfiguration().getBoolean(MarshallingConstants.DEBUGGING_KEY, MarshallingConstants.DEBUGGING_DEFAULT);
+        debugging = getConfiguration().getBoolean(MarshallingConstants.DEBUGGING_KEY, MarshallingConstants.DEBUGGING_DEFAULT);
         if (LOG.isInfoEnabled()) {
             LOG.info("debugging=" + debugging);
         }

@@ -49,9 +49,7 @@ public abstract class OptionHandlerDeploymentType extends OptionHandlerAbstract 
     @Override
     @SuppressWarnings("static-access")
     public void addOption(final Options options) {
-        final Option option =
-            OptionBuilder.withArgName("name").hasArg().withLongOpt(TYPE_LONG_OPT)
-                .withDescription("deployment type: " + types).create(TYPE_OPT);
+        final Option option = OptionBuilder.withArgName("name").hasArg().withLongOpt(TYPE_LONG_OPT).withDescription("deployment type: " + types).create(TYPE_OPT);
         options.addOption(option);
     }
 

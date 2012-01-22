@@ -28,8 +28,7 @@ import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessi
 import org.apache.isis.runtimes.dflt.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.runtimes.dflt.runtime.transaction.TransactionalClosureAbstract;
 
-public class CollectionAddToFacetWrapTransaction extends CollectionAddToFacetAbstract implements
-    DecoratingFacet<CollectionAddToFacet> {
+public class CollectionAddToFacetWrapTransaction extends CollectionAddToFacetAbstract implements DecoratingFacet<CollectionAddToFacet> {
 
     private final CollectionAddToFacet underlyingFacet;
 

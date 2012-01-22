@@ -50,19 +50,18 @@ import org.apache.isis.runtimes.dflt.runtime.systemdependencyinjector.SystemDepe
 import org.apache.log4j.Logger;
 
 /**
- * An abstract implementation of {@link PersistenceMechanismInstaller} that will lookup the {@link ObjectAdapterFactory}
- * and {@link ObjectFactory} from the supplied {@link IsisConfiguration}.
+ * An abstract implementation of {@link PersistenceMechanismInstaller} that will
+ * lookup the {@link ObjectAdapterFactory} and {@link ObjectFactory} from the
+ * supplied {@link IsisConfiguration}.
  * 
  * <p>
  * If none can be found, then will default to the {@link PojoAdapterFactory} and
- * {@link PersistenceConstants#OBJECT_FACTORY_CLASS_NAME_DEFAULT default}link ObjectFactory} (cglib at time of writing).
- * respectively.
+ * {@link PersistenceConstants#OBJECT_FACTORY_CLASS_NAME_DEFAULT default}link
+ * ObjectFactory} (cglib at time of writing). respectively.
  */
-public abstract class PersistenceMechanismInstallerAbstract extends InstallerAbstract implements
-    PersistenceMechanismInstaller, InstallerLookupAware {
+public abstract class PersistenceMechanismInstallerAbstract extends InstallerAbstract implements PersistenceMechanismInstaller, InstallerLookupAware {
 
-    private static final String LOGGING_PROPERTY = org.apache.isis.core.runtime.logging.Logger.PROPERTY_ROOT
-        + "persistenceSession";
+    private static final String LOGGING_PROPERTY = org.apache.isis.core.runtime.logging.Logger.PROPERTY_ROOT + "persistenceSession";
     private static final Logger LOG = Logger.getLogger(PersistenceMechanismInstallerAbstract.class);
 
     private SystemDependencyInjector installerLookup;
@@ -79,10 +78,12 @@ public abstract class PersistenceMechanismInstallerAbstract extends InstallerAbs
     }
 
     /**
-     * Creates a {@link PersistenceSession} that is initialized with the various hook methods.
+     * Creates a {@link PersistenceSession} that is initialized with the various
+     * hook methods.
      * 
-     * @see #createPersistenceSession(PersistenceSessionFactory, AdapterManagerExtended, ObjectAdapterFactory,
-     *      ObjectFactory, OidGenerator, ServicesInjector)
+     * @see #createPersistenceSession(PersistenceSessionFactory,
+     *      AdapterManagerExtended, ObjectAdapterFactory, ObjectFactory,
+     *      OidGenerator, ServicesInjector)
      * @see #createAdapterFactory(IsisConfiguration)
      * @see #createAdapterManager(IsisConfiguration)
      * @see #createContainer(IsisConfiguration)
@@ -125,9 +126,7 @@ public abstract class PersistenceMechanismInstallerAbstract extends InstallerAbs
         servicesInjector.setServices(serviceList);
         persistenceSessionFactory.getSpecificationLoader().injectInto(runtimeContext);
 
-        PersistenceSession persistenceSession =
-            createPersistenceSession(persistenceSessionFactory, adapterManager, adapterFactory, objectFactory,
-                oidGenerator, servicesInjector);
+        PersistenceSession persistenceSession = createPersistenceSession(persistenceSessionFactory, adapterManager, adapterFactory, objectFactory, oidGenerator, servicesInjector);
 
         if (getConfiguration().getBoolean(LOGGING_PROPERTY, false)) {
             final String level = getConfiguration().getString(LOGGING_PROPERTY + ".level", "debug");
@@ -142,78 +141,80 @@ public abstract class PersistenceMechanismInstallerAbstract extends InstallerAbs
     // ///////////////////////////////////////////
 
     /**
-     * Mandatory hook method called by {@link #createPersistenceSession(PersistenceSessionFactory)}, passing the
+     * Mandatory hook method called by
+     * {@link #createPersistenceSession(PersistenceSessionFactory)}, passing the
      * components created by the other (optional) hooks.
      * 
      * @see #createPersistenceSession(PersistenceSessionFactory)
      */
-    protected abstract PersistenceSession createPersistenceSession(
-        final PersistenceSessionFactory persistenceSessionFactory, final AdapterManagerExtended adapterManager,
-        final ObjectAdapterFactory adapterFactory, final ObjectFactory objectFactory, final OidGenerator oidGenerator,
-        final ServicesInjector servicesInjector);
+    protected abstract PersistenceSession createPersistenceSession(final PersistenceSessionFactory persistenceSessionFactory, final AdapterManagerExtended adapterManager, final ObjectAdapterFactory adapterFactory, final ObjectFactory objectFactory, final OidGenerator oidGenerator,
+            final ServicesInjector servicesInjector);
 
     // ///////////////////////////////////////////
     // Optional hook methods
     // ///////////////////////////////////////////
 
     /**
-     * Hook method to allow subclasses to specify a different implementation of {@link ObjectAdapterFactory}.
+     * Hook method to allow subclasses to specify a different implementation of
+     * {@link ObjectAdapterFactory}.
      * 
      * <p>
-     * By default, looks up implementation from provided {@link IsisConfiguration} using
-     * {@link PersistenceConstants#ADAPTER_FACTORY_CLASS_NAME}. If no implementation is specified, then defaults to
+     * By default, looks up implementation from provided
+     * {@link IsisConfiguration} using
+     * {@link PersistenceConstants#ADAPTER_FACTORY_CLASS_NAME}. If no
+     * implementation is specified, then defaults to
      * {@value PersistenceConstants#ADAPTER_FACTORY_CLASS_NAME_DEFAULT}.
      */
     protected ObjectAdapterFactory createAdapterFactory(final IsisConfiguration configuration) {
-        final String configuredClassName =
-            configuration.getString(PersistenceConstants.ADAPTER_FACTORY_CLASS_NAME,
-                PersistenceConstants.ADAPTER_FACTORY_CLASS_NAME_DEFAULT);
+        final String configuredClassName = configuration.getString(PersistenceConstants.ADAPTER_FACTORY_CLASS_NAME, PersistenceConstants.ADAPTER_FACTORY_CLASS_NAME_DEFAULT);
         return InstanceUtil.createInstance(configuredClassName, ObjectAdapterFactory.class);
     }
 
     /**
-     * Hook method to allow subclasses to specify a different implementation of {@link ObjectFactory}.
+     * Hook method to allow subclasses to specify a different implementation of
+     * {@link ObjectFactory}.
      * 
      * <p>
-     * By default, looks up implementation from provided {@link IsisConfiguration} using
-     * {@link PersistenceConstants#OBJECT_FACTORY_CLASS_NAME}. If no implementation is specified, then defaults to
+     * By default, looks up implementation from provided
+     * {@link IsisConfiguration} using
+     * {@link PersistenceConstants#OBJECT_FACTORY_CLASS_NAME}. If no
+     * implementation is specified, then defaults to
      * {@value PersistenceConstants#OBJECT_FACTORY_CLASS_NAME_DEFAULT}.
      */
     protected ObjectFactory createObjectFactory(final IsisConfiguration configuration) {
-        final String configuredClassName =
-            configuration.getString(PersistenceConstants.OBJECT_FACTORY_CLASS_NAME,
-                PersistenceConstants.OBJECT_FACTORY_CLASS_NAME_DEFAULT);
-        return InstanceUtil.createInstance(configuredClassName, PersistenceConstants.OBJECT_FACTORY_CLASS_NAME_DEFAULT,
-            ObjectFactory.class);
+        final String configuredClassName = configuration.getString(PersistenceConstants.OBJECT_FACTORY_CLASS_NAME, PersistenceConstants.OBJECT_FACTORY_CLASS_NAME_DEFAULT);
+        return InstanceUtil.createInstance(configuredClassName, PersistenceConstants.OBJECT_FACTORY_CLASS_NAME_DEFAULT, ObjectFactory.class);
     }
 
     /**
-     * Hook method to allow subclasses to specify a different implementation of {@link ServicesInjector}
+     * Hook method to allow subclasses to specify a different implementation of
+     * {@link ServicesInjector}
      * 
      * <p>
-     * By default, looks up implementation from provided {@link IsisConfiguration} using
-     * {@link PersistenceConstants#SERVICES_INJECTOR_CLASS_NAME}. If no implementation is specified, then defaults to
+     * By default, looks up implementation from provided
+     * {@link IsisConfiguration} using
+     * {@link PersistenceConstants#SERVICES_INJECTOR_CLASS_NAME}. If no
+     * implementation is specified, then defaults to
      * {@value PersistenceConstants#SERVICES_INJECTOR_CLASS_NAME_DEFAULT}.
      */
     protected ServicesInjector createServicesInjector(final IsisConfiguration configuration) {
-        final String configuredClassName =
-            configuration.getString(PersistenceConstants.SERVICES_INJECTOR_CLASS_NAME,
-                PersistenceConstants.SERVICES_INJECTOR_CLASS_NAME_DEFAULT);
+        final String configuredClassName = configuration.getString(PersistenceConstants.SERVICES_INJECTOR_CLASS_NAME, PersistenceConstants.SERVICES_INJECTOR_CLASS_NAME_DEFAULT);
         return InstanceUtil.createInstance(configuredClassName, ServicesInjector.class);
     }
 
     /**
-     * Hook method to allow subclasses to specify a different implementation of {@link OidGenerator}
+     * Hook method to allow subclasses to specify a different implementation of
+     * {@link OidGenerator}
      * 
      * <p>
-     * By default, looks up implementation from provided {@link IsisConfiguration} using
-     * {@link PersistenceConstants#OID_GENERATOR_CLASS_NAME}. If no implementation is specified, then defaults to
+     * By default, looks up implementation from provided
+     * {@link IsisConfiguration} using
+     * {@link PersistenceConstants#OID_GENERATOR_CLASS_NAME}. If no
+     * implementation is specified, then defaults to
      * {@value PersistenceConstants#OID_GENERATOR_CLASS_NAME_DEFAULT}.
      */
     protected OidGenerator createOidGenerator(final IsisConfiguration configuration) {
-        final String oidGeneratorClassName =
-            configuration.getString(PersistenceConstants.OID_GENERATOR_CLASS_NAME,
-                PersistenceConstants.OID_GENERATOR_CLASS_NAME_DEFAULT);
+        final String oidGeneratorClassName = configuration.getString(PersistenceConstants.OID_GENERATOR_CLASS_NAME, PersistenceConstants.OID_GENERATOR_CLASS_NAME_DEFAULT);
         return InstanceUtil.createInstance(oidGeneratorClassName, OidGenerator.class);
     }
 
@@ -250,16 +251,15 @@ public abstract class PersistenceMechanismInstallerAbstract extends InstallerAbs
      * Hook method to return a {@link DomainObjectContainer}.
      * 
      * <p>
-     * By default, looks up implementation from provided {@link IsisConfiguration} using
-     * {@link PersistenceConstants#DOMAIN_OBJECT_CONTAINER_CLASS_NAME}. If no implementation is specified, then defaults
-     * to {@value PersistenceConstants#DOMAIN_OBJECT_CONTAINER_NAME_DEFAULT}.
+     * By default, looks up implementation from provided
+     * {@link IsisConfiguration} using
+     * {@link PersistenceConstants#DOMAIN_OBJECT_CONTAINER_CLASS_NAME}. If no
+     * implementation is specified, then defaults to
+     * {@value PersistenceConstants#DOMAIN_OBJECT_CONTAINER_NAME_DEFAULT}.
      */
     protected DomainObjectContainer createContainer(final IsisConfiguration configuration) {
-        final String configuredClassName =
-            configuration.getString(PersistenceConstants.DOMAIN_OBJECT_CONTAINER_CLASS_NAME,
-                PersistenceConstants.DOMAIN_OBJECT_CONTAINER_NAME_DEFAULT);
-        return InstanceUtil.createInstance(configuredClassName,
-            PersistenceConstants.DOMAIN_OBJECT_CONTAINER_NAME_DEFAULT, DomainObjectContainer.class);
+        final String configuredClassName = configuration.getString(PersistenceConstants.DOMAIN_OBJECT_CONTAINER_CLASS_NAME, PersistenceConstants.DOMAIN_OBJECT_CONTAINER_NAME_DEFAULT);
+        return InstanceUtil.createInstance(configuredClassName, PersistenceConstants.DOMAIN_OBJECT_CONTAINER_NAME_DEFAULT, DomainObjectContainer.class);
     }
 
     // /////////////////////////////////////////////////////

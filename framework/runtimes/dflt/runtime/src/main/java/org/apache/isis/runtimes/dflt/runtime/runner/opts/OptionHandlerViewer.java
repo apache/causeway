@@ -50,14 +50,7 @@ public class OptionHandlerViewer extends OptionHandlerAbstract {
     @SuppressWarnings("static-access")
     public void addOption(final Options options) {
         final Object[] viewers = installerRepository.getInstallers(IsisViewerInstaller.class);
-        final Option option =
-            OptionBuilder
-                .withArgName("name|class name")
-                .hasArg()
-                .withLongOpt(VIEWER_LONG_OPT)
-                .withDescription(
-                    "viewer to use, or for server to listen on: " + availableInstallers(viewers) + "; or class name")
-                .create(VIEWER_OPT);
+        final Option option = OptionBuilder.withArgName("name|class name").hasArg().withLongOpt(VIEWER_LONG_OPT).withDescription("viewer to use, or for server to listen on: " + availableInstallers(viewers) + "; or class name").create(VIEWER_OPT);
         options.addOption(option);
 
     }

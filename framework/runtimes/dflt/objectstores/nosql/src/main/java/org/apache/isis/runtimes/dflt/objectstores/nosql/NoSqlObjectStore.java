@@ -43,7 +43,6 @@ import org.apache.isis.runtimes.dflt.runtime.system.persistence.OidGenerator;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceQuery;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 
-
 public class NoSqlObjectStore implements ObjectStore {
     private final NoSqlDataDatabase database;
     private final Map<String, Oid> serviceCache = new HashMap<String, Oid>();
@@ -55,13 +54,7 @@ public class NoSqlObjectStore implements ObjectStore {
     private final Map<String, DataEncryption> availableDataEncrypters;
     private final boolean isDataLoaded;
 
-    public NoSqlObjectStore(
-            final NoSqlDataDatabase db,
-            final NoSqlOidGenerator oidGenerator,
-            final KeyCreator keyCreator,
-            final VersionCreator versionCreator,
-            final DataEncryption writingDataEncrypter,
-            final Map<String, DataEncryption> availableDataEncrypters) {
+    public NoSqlObjectStore(final NoSqlDataDatabase db, final NoSqlOidGenerator oidGenerator, final KeyCreator keyCreator, final VersionCreator versionCreator, final DataEncryption writingDataEncrypter, final Map<String, DataEncryption> availableDataEncrypters) {
         this.database = db;
         this.oidGenerator = oidGenerator;
         this.keyCreator = keyCreator;
@@ -80,7 +73,8 @@ public class NoSqlObjectStore implements ObjectStore {
 
     @Override
     public CreateObjectCommand createCreateObjectCommand(final ObjectAdapter object) {
-        // TODO should this be done at a higher level so it is applicable for all OSes
+        // TODO should this be done at a higher level so it is applicable for
+        // all OSes
         if (object.getSpecification().isAggregated()) {
             // throw new
             // UnexpectedCallException("Aggregated objects should not be created outside of their owner");
@@ -101,7 +95,8 @@ public class NoSqlObjectStore implements ObjectStore {
 
     @Override
     public SaveObjectCommand createSaveObjectCommand(final ObjectAdapter adapter) {
-        // TODO should this be done at a higher level so it is applicable for all OSes
+        // TODO should this be done at a higher level so it is applicable for
+        // all OSes
         final ObjectAdapter rootAdapter = aggregateRootAdapterFor(adapter);
         if (rootAdapter.getOid() instanceof AggregatedOid) {
             throw new NoSqlStoreException("Unexpected aggregated object to save: " + rootAdapter + " (" + adapter + ")");
@@ -129,10 +124,7 @@ public class NoSqlObjectStore implements ObjectStore {
         return instances.toArray(new ObjectAdapter[instances.size()]);
     }
 
-    private void instances(
-            final PersistenceQuery persistenceQuery,
-            final ObjectSpecification specification,
-            final List<ObjectAdapter> instances) {
+    private void instances(final PersistenceQuery persistenceQuery, final ObjectSpecification specification, final List<ObjectAdapter> instances) {
         String specificationName = specification.getFullIdentifier();
         final Iterator<StateReader> instanceData = database.instancesOf(specificationName);
         while (instanceData.hasNext()) {
@@ -187,7 +179,8 @@ public class NoSqlObjectStore implements ObjectStore {
     }
 
     @Override
-    public void reset() {}
+    public void reset() {
+    }
 
     @Override
     public void resolveField(final ObjectAdapter object, final ObjectAssociation field) {
@@ -202,7 +195,9 @@ public class NoSqlObjectStore implements ObjectStore {
         final Oid oid = object.getOid();
         ;
         if (oid instanceof AggregatedOid) {
-            // throw new UnexpectedCallException("Aggregated objects should not need to be resolved: " +
+            // throw new
+            // UnexpectedCallException("Aggregated objects should not need to be resolved: "
+            // +
             // object);
         } else {
             final String specificationName = object.getSpecification().getFullIdentifier();
@@ -238,13 +233,16 @@ public class NoSqlObjectStore implements ObjectStore {
     }
 
     @Override
-    public void abortTransaction() {}
+    public void abortTransaction() {
+    }
 
     @Override
-    public void endTransaction() {}
+    public void endTransaction() {
+    }
 
     @Override
-    public void startTransaction() {}
+    public void startTransaction() {
+    }
 
     // ////////////////////////////////////////////////////////////////
     // Dependencies (from context)

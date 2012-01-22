@@ -68,7 +68,8 @@ public class UserProfileContentWriter implements ContentWriter {
                 final DataOutputStreamExtended outputImpl = new DataOutputStreamExtended(out);
                 adapter.getOid().encode(outputImpl);
                 // FIX need to sort out encoding
-                // xml.append("      <object>" + out.toString() + "</object>\n");
+                // xml.append("      <object>" + out.toString() +
+                // "</object>\n");
                 xml.append("        <object>" + "not yet encoding properly" + "</object>\n");
             }
             xml.append("      </objects>\n");
@@ -96,8 +97,7 @@ public class UserProfileContentWriter implements ContentWriter {
                 if (options.isOptions(name)) {
                     writeOptions(xml, options.getOptions(name), name, level + 1);
                 } else {
-                    xml.append(spaces + "    <option" + attribute("id", name) + ">" + options.getString(name)
-                        + "</option>\n");
+                    xml.append(spaces + "    <option" + attribute("id", name) + ">" + options.getString(name) + "</option>\n");
                 }
             }
             xml.append(spaces + "  </options>\n");

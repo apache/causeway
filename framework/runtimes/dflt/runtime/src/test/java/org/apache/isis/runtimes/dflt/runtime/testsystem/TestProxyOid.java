@@ -145,8 +145,7 @@ public class TestProxyOid implements Oid {
 
     @Override
     public String toString() {
-        return "Oid#" + id + (isTransient ? " T" : "")
-            + (hasPrevious() ? " (" + previous + ")" : "; hashCode=" + hashCode);
+        return "Oid#" + id + (isTransient ? " T" : "") + (hasPrevious() ? " (" + previous + ")" : "; hashCode=" + hashCode);
     }
 
 }

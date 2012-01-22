@@ -110,9 +110,10 @@ public class ObjectEncoderImplTest extends ProxyJunit4TestCase {
         });
 
         /*
-         * TestProxySpecification specification = new MovieSpecification(); specification.setupFields(new ObjectField[]
-         * { new TestProxyField("name", system.getSpecification(String.class)), new TestProxyField("person",
-         * system.getSpecification(Person.class)) });
+         * TestProxySpecification specification = new MovieSpecification();
+         * specification.setupFields(new ObjectField[] { new
+         * TestProxyField("name", system.getSpecification(String.class)), new
+         * TestProxyField("person", system.getSpecification(Person.class)) });
          */
     }
 
@@ -123,11 +124,11 @@ public class ObjectEncoderImplTest extends ProxyJunit4TestCase {
 
     @Test
     public void testRestoreCreatesNewAdapter() {
-        final DummyObjectData data =
-            new DummyObjectData(new TestProxyOid(5, true), Movie.class.getName(), true, new TestProxyVersion(3));
+        final DummyObjectData data = new DummyObjectData(new TestProxyOid(5, true), Movie.class.getName(), true, new TestProxyVersion(3));
         final DummyEncodeableObjectData name = new DummyEncodeableObjectData("ET", "java.lang.String");
         final DummyNullValue reference = new DummyNullValue(Person.class.getName());
-        // note - the order of the fields is by name, not the order that are defined in the specification
+        // note - the order of the fields is by name, not the order that are
+        // defined in the specification
         data.setFieldContent(new Data[] { reference, name });
 
         final ObjectAdapter object = encoder.decode(data);
@@ -143,8 +144,7 @@ public class ObjectEncoderImplTest extends ProxyJunit4TestCase {
 
     @Test
     public void testRestoreCreatesNewAdapterInUnresolvedState() {
-        final DummyObjectData data =
-            new DummyObjectData(new TestProxyOid(5, true), Movie.class.getName(), false, new TestProxyVersion(3));
+        final DummyObjectData data = new DummyObjectData(new TestProxyOid(5, true), Movie.class.getName(), false, new TestProxyVersion(3));
 
         final ObjectAdapter object = encoder.decode(data);
 
@@ -160,8 +160,7 @@ public class ObjectEncoderImplTest extends ProxyJunit4TestCase {
         final ObjectAdapter adapter = system.createPersistentTestObject(movie);
         adapter.changeState(ResolveState.RESOLVED);
 
-        final DummyObjectData data =
-            new DummyObjectData(adapter.getOid(), Movie.class.getName(), true, new TestProxyVersion(3));
+        final DummyObjectData data = new DummyObjectData(adapter.getOid(), Movie.class.getName(), true, new TestProxyVersion(3));
         final DummyEncodeableObjectData name = new DummyEncodeableObjectData("ET", "java.lang.String");
         final DummyNullValue reference = new DummyNullValue(Person.class.getName());
         data.setFieldContent(new Data[] { reference, name });
@@ -181,8 +180,7 @@ public class ObjectEncoderImplTest extends ProxyJunit4TestCase {
         final ObjectAdapter adapter = system.createPersistentTestObject(movie);
         adapter.changeState(ResolveState.RESOLVED);
 
-        final DummyObjectData data =
-            new DummyObjectData(adapter.getOid(), Movie.class.getName(), false, new TestProxyVersion(3));
+        final DummyObjectData data = new DummyObjectData(adapter.getOid(), Movie.class.getName(), false, new TestProxyVersion(3));
 
         final ObjectAdapter object = encoder.decode(data);
 

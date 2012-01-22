@@ -89,8 +89,7 @@ public class XmlDataManager implements DataManager {
         }
 
         @Override
-        public void startElement(final String ns, final String name, final String tagName, final Attributes attributes)
-            throws SAXException {
+        public void startElement(final String ns, final String name, final String tagName, final Attributes attributes) throws SAXException {
             if (object != null) {
                 if (tagName.equals("value")) {
                     fieldName = attributes.getValue("field");
@@ -144,8 +143,7 @@ public class XmlDataManager implements DataManager {
         }
 
         @Override
-        public void startElement(final String ns, final String name, final String tagName, final Attributes attrs)
-            throws SAXException {
+        public void startElement(final String ns, final String name, final String tagName, final Attributes attrs) throws SAXException {
             if (tagName.equals("instance")) {
                 final long oid = Long.valueOf(attrs.getValue("id"), 16).longValue();
                 instances.addElement(SerialOid.createPersistent(oid));
@@ -165,8 +163,7 @@ public class XmlDataManager implements DataManager {
         }
 
         @Override
-        public void startElement(final String ns, final String name, final String tagName, final Attributes attrs)
-            throws SAXException {
+        public void startElement(final String ns, final String name, final String tagName, final Attributes attrs) throws SAXException {
             captureValue = tagName.equals("number");
         }
     }
@@ -248,8 +245,9 @@ public class XmlDataManager implements DataManager {
     }
 
     /**
-     * A helper that determines if two sets of data match. A match occurs when the types are the same and any field in
-     * the pattern also occurs in the data set under test.
+     * A helper that determines if two sets of data match. A match occurs when
+     * the types are the same and any field in the pattern also occurs in the
+     * data set under test.
      */
     // TODO we need to be able to find collection instances as well
     protected boolean matchesPattern(final ObjectData patternData, final ObjectData candidateData) {
@@ -463,8 +461,7 @@ public class XmlDataManager implements DataManager {
             for (int i = 0; i < size; i++) {
                 final Object oid = references.elementAt(i);
                 if (((SerialOid) oid).isTransient()) {
-                    throw new ObjectPersistenceException("Can't add tranisent OID (" + oid + ") to " + field
-                        + " element.");
+                    throw new ObjectPersistenceException("Can't add tranisent OID (" + oid + ") to " + field + " element.");
                 }
                 xml.append("    <element ");
                 xml.append("ref=\"" + encodedOid((SerialOid) oid) + "\"/>\n");

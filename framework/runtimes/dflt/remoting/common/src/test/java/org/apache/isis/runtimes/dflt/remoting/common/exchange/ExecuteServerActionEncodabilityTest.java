@@ -47,8 +47,7 @@ public class ExecuteServerActionEncodabilityTest extends EncodabilityContractTes
 
     @Override
     protected Encodable createEncodable() {
-        return new ExecuteServerActionRequest(mockAuthSession, ActionType.USER, "placeOrder", mockTargetData,
-            new Data[0]);
+        return new ExecuteServerActionRequest(mockAuthSession, ActionType.USER, "placeOrder", mockTargetData, new Data[0]);
     }
 
     @Override

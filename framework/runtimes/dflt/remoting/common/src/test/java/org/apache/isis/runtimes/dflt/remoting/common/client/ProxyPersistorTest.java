@@ -126,13 +126,10 @@ public class ProxyPersistorTest extends ProxyJunit4TestCase {
         final ServicesInjectorDefault servicesInjector = new ServicesInjectorDefault();
         servicesInjector.setContainer(container);
 
-        persistenceSessionProxy =
-            new PersistenceSessionProxy(mockPersistenceSessionFactory, adapterFactory, objectFactory, servicesInjector,
-                oidGenerator, adapterManager, mockDistribution, mockEncoder);
+        persistenceSessionProxy = new PersistenceSessionProxy(mockPersistenceSessionFactory, adapterFactory, objectFactory, servicesInjector, oidGenerator, adapterManager, mockDistribution, mockEncoder);
 
         persistenceSessionProxy.setSpecificationLoader(system.getReflector());
-        transactionManager =
-            new ClientSideTransactionManager(adapterManager, persistenceSessionProxy, mockDistribution, mockEncoder);
+        transactionManager = new ClientSideTransactionManager(adapterManager, persistenceSessionProxy, mockDistribution, mockEncoder);
         transactionManager.injectInto(persistenceSessionProxy);
 
         session = IsisContext.getAuthenticationSession();
@@ -167,9 +164,9 @@ public class ProxyPersistorTest extends ProxyJunit4TestCase {
     @Test
     public void testFindInstances() throws Exception {
 
-        // The remote interface is asked for instances, which are returned as data objects
-        final DummyObjectData instanceData =
-            new DummyObjectData(new TestProxyOid(12, true), Movie.class.getName(), true, new TestProxyVersion(3));
+        // The remote interface is asked for instances, which are returned as
+        // data objects
+        final DummyObjectData instanceData = new DummyObjectData(new TestProxyOid(12, true), Movie.class.getName(), true, new TestProxyVersion(3));
 
         // The data then needs to be decoded into the ObjectAdapter
         final TestProxyAdapter dummyObjectAdapter = new TestProxyAdapter();
@@ -198,7 +195,8 @@ public class ProxyPersistorTest extends ProxyJunit4TestCase {
 
         final ObjectAdapter instances = persistenceSessionProxy.findInstances(criteria);
 
-        // the proxy should return one instance, which will be the dummy object created by the encoder's
+        // the proxy should return one instance, which will be the dummy object
+        // created by the encoder's
         // restore call
         final ObjectList objects = (ObjectList) instances.getObject();
         assertEquals(1, objects.size());
@@ -253,8 +251,9 @@ public class ProxyPersistorTest extends ProxyJunit4TestCase {
 
         /*
          * 
-         * assertEquals("ET", movie.getName()); assertEquals(new DummyOid(5), object.getOid()); assertEquals(new
-         * DummyVersion(3), object.getVersion());
+         * assertEquals("ET", movie.getName()); assertEquals(new DummyOid(5),
+         * object.getOid()); assertEquals(new DummyVersion(3),
+         * object.getVersion());
          */
     }
 
@@ -319,8 +318,7 @@ public class ProxyPersistorTest extends ProxyJunit4TestCase {
         // test starts here
         mockery.checking(new Expectations() {
             {
-                final DummyIdentityData identityOfObjectToDelete =
-                    encoderShouldCreateIdentityDataForMovie(movieAdapter);
+                final DummyIdentityData identityOfObjectToDelete = encoderShouldCreateIdentityDataForMovie(movieAdapter);
                 distributionShouldExecuteClientActionForDeletedMovie(identityOfObjectToDelete);
             }
 
@@ -332,8 +330,7 @@ public class ProxyPersistorTest extends ProxyJunit4TestCase {
                 return identityOfObjectToDelete;
             }
 
-            private void distributionShouldExecuteClientActionForDeletedMovie(
-                final DummyIdentityData identityOfObjectToDelete) {
+            private void distributionShouldExecuteClientActionForDeletedMovie(final DummyIdentityData identityOfObjectToDelete) {
                 final Version[] versionUpdates = new Version[] {};
                 one(mockDistribution).executeClientAction(with(any(ExecuteClientActionRequest.class)));
                 will(returnValue(new ExecuteClientActionResponse(new ObjectData[] {}, versionUpdates, new ObjectData[0])));
@@ -371,13 +368,9 @@ public class ProxyPersistorTest extends ProxyJunit4TestCase {
             }
 
             private DummyObjectData encoderShouldCreateGraphForChangedMovie(final TestProxyAdapter movieAdapter) {
-                final DummyObjectData movieData =
-                    new DummyObjectData(new TestProxyOid(12, true), Movie.class.getName(), true,
-                        new TestProxyVersion(4));
-                final DummyEncodeableObjectData expectedMovieName =
-                    new DummyEncodeableObjectData("War of the Worlds", String.class.getName());
-                final DummyReferenceData expectedDirectorRef =
-                    new DummyReferenceData(new TestProxyOid(14, true), Person.class.getName(), new TestProxyVersion(8));
+                final DummyObjectData movieData = new DummyObjectData(new TestProxyOid(12, true), Movie.class.getName(), true, new TestProxyVersion(4));
+                final DummyEncodeableObjectData expectedMovieName = new DummyEncodeableObjectData("War of the Worlds", String.class.getName());
+                final DummyReferenceData expectedDirectorRef = new DummyReferenceData(new TestProxyOid(14, true), Person.class.getName(), new TestProxyVersion(8));
                 movieData.setFieldContent(new Data[] { expectedDirectorRef, expectedMovieName });
 
                 one(mockEncoder).encodeGraphForChangedObject(movieAdapter, new KnownObjectsRequest());
@@ -386,11 +379,8 @@ public class ProxyPersistorTest extends ProxyJunit4TestCase {
             }
 
             private DummyObjectData encoderShouldCreateGraphForChangedDirector(final TestProxyAdapter directorAdapter) {
-                final DummyObjectData directorData =
-                    new DummyObjectData(new TestProxyOid(14, true), Person.class.getName(), true, new TestProxyVersion(
-                        8));
-                final DummyEncodeableObjectData expectedDirectorName =
-                    new DummyEncodeableObjectData("Unknown", String.class.getName());
+                final DummyObjectData directorData = new DummyObjectData(new TestProxyOid(14, true), Person.class.getName(), true, new TestProxyVersion(8));
+                final DummyEncodeableObjectData expectedDirectorName = new DummyEncodeableObjectData("Unknown", String.class.getName());
                 directorData.setFieldContent(new Data[] { expectedDirectorName });
 
                 one(mockEncoder).encodeGraphForChangedObject(directorAdapter, new KnownObjectsRequest());
@@ -398,16 +388,17 @@ public class ProxyPersistorTest extends ProxyJunit4TestCase {
                 return directorData;
             }
 
-            private void distributionShouldExecuteClientActionForBothChangedObjects(final DummyObjectData movieData,
-                final DummyObjectData directorData) {
-                // final ObjectData[] changes = new ObjectData[] { movieData, directorData };
-                // final int[] types = new int[] { ClientTransactionEvent.CHANGE, ClientTransactionEvent.CHANGE };
+            private void distributionShouldExecuteClientActionForBothChangedObjects(final DummyObjectData movieData, final DummyObjectData directorData) {
+                // final ObjectData[] changes = new ObjectData[] { movieData,
+                // directorData };
+                // final int[] types = new int[] {
+                // ClientTransactionEvent.CHANGE, ClientTransactionEvent.CHANGE
+                // };
 
                 one(mockDistribution).executeClientAction(with(any(ExecuteClientActionRequest.class)));
 
                 final Version[] versionUpdates = new Version[] { new TestProxyVersion(5), new TestProxyVersion(9) };
-                will(returnValue(new ExecuteClientActionResponse(new ObjectData[] { movieData, directorData },
-                    versionUpdates, new ObjectData[0])));
+                will(returnValue(new ExecuteClientActionResponse(new ObjectData[] { movieData, directorData }, versionUpdates, new ObjectData[0])));
             }
         });
         // TODO: should look inside the request object and ensure:
@@ -442,11 +433,11 @@ public class ProxyPersistorTest extends ProxyJunit4TestCase {
                 newOid.setupPrevious(previousOid);
                 final DummyReferenceData updateData = new DummyReferenceData(newOid, "type", new TestProxyVersion(456));
 
-                // the server is called with data (movieData) for the object to be persisted
+                // the server is called with data (movieData) for the object to
+                // be persisted
                 one(mockDistribution).executeClientAction(with(any(ExecuteClientActionRequest.class)));
 
-                will(returnValue(new ExecuteClientActionResponse(new ReferenceData[] { updateData }, null,
-                    new ObjectData[0])));
+                will(returnValue(new ExecuteClientActionResponse(new ReferenceData[] { updateData }, null, new ObjectData[0])));
             }
 
         });
@@ -460,8 +451,7 @@ public class ProxyPersistorTest extends ProxyJunit4TestCase {
         // client needs to encode the object's transient aspects
         mockery.checking(new Expectations() {
             {
-                one(mockEncoder).encodeMakePersistentGraph(with(equalTo(transientObject)),
-                    with(any(KnownObjectsRequest.class)));
+                one(mockEncoder).encodeMakePersistentGraph(with(equalTo(transientObject)), with(any(KnownObjectsRequest.class)));
                 will(returnValue(movieData));
             }
         });

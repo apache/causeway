@@ -44,8 +44,7 @@ public class XmlPersistenceMechanismInstaller extends ObjectStorePersistenceMech
     }
 
     @Override
-    protected ObjectStore createObjectStore(final IsisConfiguration configuration,
-        final ObjectAdapterFactory objectFactory, final AdapterManager adapterManager) {
+    protected ObjectStore createObjectStore(final IsisConfiguration configuration, final ObjectAdapterFactory objectFactory, final AdapterManager adapterManager) {
         if (objectStore == null) {
             objectStore = new XmlObjectStore(configuration);
             objectStore.setClock(new DefaultClock());

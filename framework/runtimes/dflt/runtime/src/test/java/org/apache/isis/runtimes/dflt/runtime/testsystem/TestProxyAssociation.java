@@ -63,7 +63,8 @@ public class TestProxyAssociation extends FacetHolderNoop implements OneToOneAss
         runtimeContext = new RuntimeContextNoRuntime();
     }
 
-    // TODO: this is inconsistent with #get that casts the value to a ObjectAdapter
+    // TODO: this is inconsistent with #get that casts the value to a
+    // ObjectAdapter
     @Override
     public void clearAssociation(final ObjectAdapter inObject) {
         values.put(inObject, "NULL");
@@ -216,21 +217,17 @@ public class TestProxyAssociation extends FacetHolderNoop implements OneToOneAss
     }
 
     @Override
-    public VisibilityContext<?> createVisibleInteractionContext(final AuthenticationSession session,
-        final InteractionInvocationMethod invocationMethod, final ObjectAdapter targetObjectAdapter) {
+    public VisibilityContext<?> createVisibleInteractionContext(final AuthenticationSession session, final InteractionInvocationMethod invocationMethod, final ObjectAdapter targetObjectAdapter) {
         return null;
     }
 
     @Override
-    public UsabilityContext<?> createUsableInteractionContext(final AuthenticationSession session,
-        final InteractionInvocationMethod invocationMethod, final ObjectAdapter target) {
+    public UsabilityContext<?> createUsableInteractionContext(final AuthenticationSession session, final InteractionInvocationMethod invocationMethod, final ObjectAdapter target) {
         return null;
     }
 
     @Override
-    public ValidityContext<?> createValidateInteractionContext(final AuthenticationSession session,
-        final InteractionInvocationMethod invocationMethod, final ObjectAdapter owningObjectAdapter,
-        final ObjectAdapter newValue) {
+    public ValidityContext<?> createValidateInteractionContext(final AuthenticationSession session, final InteractionInvocationMethod invocationMethod, final ObjectAdapter owningObjectAdapter, final ObjectAdapter newValue) {
         return null;
     }
 
@@ -247,8 +244,7 @@ public class TestProxyAssociation extends FacetHolderNoop implements OneToOneAss
     }
 
     @Override
-    public PropertyAccessContext createAccessInteractionContext(final AuthenticationSession session,
-        final InteractionInvocationMethod interactionMethod, final ObjectAdapter targetObjectAdapter) {
+    public PropertyAccessContext createAccessInteractionContext(final AuthenticationSession session, final InteractionInvocationMethod interactionMethod, final ObjectAdapter targetObjectAdapter) {
         return null;
     }
 

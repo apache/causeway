@@ -60,7 +60,8 @@ public class MongoDbTest {
             m.dropDatabase("testdb");
             testDb = m.getDB("testdb");
         } catch (final Exception e) {
-            assumeThat(true, is(false)); // ignore if no MongoDB instance to connect to
+            assumeThat(true, is(false)); // ignore if no MongoDB instance to
+                                         // connect to
             return;
         }
 

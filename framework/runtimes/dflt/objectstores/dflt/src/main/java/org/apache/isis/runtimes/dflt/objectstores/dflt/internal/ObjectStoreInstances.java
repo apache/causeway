@@ -128,9 +128,11 @@ public class ObjectStoreInstances {
     // ///////////////////////////////////////////////////////
 
     /**
-     * If the pojo exists in the object store, then looks up the {@link ObjectAdapter adapter} from the
-     * {@link AdapterManager}, and only if none found does it
-     * {@link PersistenceSessionHydrator#recreateAdapter(Oid, Object) recreate} a new {@link ObjectAdapter adapter}.
+     * If the pojo exists in the object store, then looks up the
+     * {@link ObjectAdapter adapter} from the {@link AdapterManager}, and only
+     * if none found does it
+     * {@link PersistenceSessionHydrator#recreateAdapter(Oid, Object) recreate}
+     * a new {@link ObjectAdapter adapter}.
      */
     public ObjectAdapter retrieveObject(final Oid oid) {
         final Object pojo = getObjectInstances().get(oid);
@@ -153,10 +155,10 @@ public class ObjectStoreInstances {
     // ///////////////////////////////////////////////////////
 
     /**
-     * Not API, but <tt>public</tt> so can be called by {@link InMemoryObjectStore}.
+     * Not API, but <tt>public</tt> so can be called by
+     * {@link InMemoryObjectStore}.
      */
-    public void findInstancesAndAdd(final PersistenceQueryBuiltIn persistenceQuery,
-        final List<ObjectAdapter> foundInstances) {
+    public void findInstancesAndAdd(final PersistenceQueryBuiltIn persistenceQuery, final List<ObjectAdapter> foundInstances) {
         if (persistenceQuery instanceof PersistenceQueryFindByTitle) {
             for (final Oid oid : titleByOidMap.keySet()) {
                 final String title = titleByOidMap.get(oid);
@@ -214,48 +216,60 @@ public class ObjectStoreInstances {
     // ///////////////////////////////////////////////////////
 
     /**
-     * Must use {@link IsisContext context}, because although this object is recreated with each
-     * {@link PersistenceSession session}, the persisted objects that get
-     * {@link #attachPersistedObjects(MemoryObjectStorePersistedObjects) attached} to it span multiple sessions.
+     * Must use {@link IsisContext context}, because although this object is
+     * recreated with each {@link PersistenceSession session}, the persisted
+     * objects that get
+     * {@link #attachPersistedObjects(MemoryObjectStorePersistedObjects)
+     * attached} to it span multiple sessions.
      * 
      * <p>
-     * The alternative design would be to laboriously inject this object via the {@link InMemoryObjectStore}.
+     * The alternative design would be to laboriously inject this object via the
+     * {@link InMemoryObjectStore}.
      */
     protected PersistenceSession getPersistenceSession() {
         return IsisContext.getPersistenceSession();
     }
 
     /**
-     * Must use {@link IsisContext context}, because although this object is recreated with each
-     * {@link PersistenceSession session}, the persisted objects that get
-     * {@link #attachPersistedObjects(MemoryObjectStorePersistedObjects) attached} to it span multiple sessions.
+     * Must use {@link IsisContext context}, because although this object is
+     * recreated with each {@link PersistenceSession session}, the persisted
+     * objects that get
+     * {@link #attachPersistedObjects(MemoryObjectStorePersistedObjects)
+     * attached} to it span multiple sessions.
      * 
      * <p>
-     * The alternative design would be to laboriously inject this object via the {@link InMemoryObjectStore}.
+     * The alternative design would be to laboriously inject this object via the
+     * {@link InMemoryObjectStore}.
      */
     protected AdapterManager getAdapterManager() {
         return getPersistenceSession().getAdapterManager();
     }
 
     /**
-     * Must use {@link IsisContext context}, because although this object is recreated with each
-     * {@link PersistenceSession session}, the persisted objects that get
-     * {@link #attachPersistedObjects(MemoryObjectStorePersistedObjects) attached} to it span multiple sessions.
+     * Must use {@link IsisContext context}, because although this object is
+     * recreated with each {@link PersistenceSession session}, the persisted
+     * objects that get
+     * {@link #attachPersistedObjects(MemoryObjectStorePersistedObjects)
+     * attached} to it span multiple sessions.
      * 
      * <p>
-     * The alternative design would be to laboriously inject this object via the {@link InMemoryObjectStore}.
+     * The alternative design would be to laboriously inject this object via the
+     * {@link InMemoryObjectStore}.
      */
     protected PersistenceSessionHydrator getHydrator() {
         return getPersistenceSession();
     }
 
     /**
-     * Must use {@link IsisContext context}, because although this object is recreated with each
-     * {@link PersistenceSession session}, the persisted objects that get
-     * {@link #attachPersistedObjects(MemoryObjectStorePersistedObjects) attached} to it span multiple sessions.
+     * Must use {@link IsisContext context}, because although this object is
+     * recreated with each {@link PersistenceSession session}, the persisted
+     * objects that get
+     * {@link #attachPersistedObjects(MemoryObjectStorePersistedObjects)
+     * attached} to it span multiple sessions.
      * 
      * <p>
-     * The alternative design would be to laboriously inject this object via the {@link InMemoryObjectStore}.
+     * The alternative design would be to laboriously inject this object via the
+     * {@link InMemoryObjectStore}.
      */
     protected AuthenticationSession getAuthenticationSession() {
         return IsisContext.getAuthenticationSession();

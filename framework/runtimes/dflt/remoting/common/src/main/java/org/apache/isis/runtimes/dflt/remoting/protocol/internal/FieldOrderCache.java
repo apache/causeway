@@ -27,11 +27,13 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 
 /**
- * Caches a sorted version of the fields for a specified ObjectSpecification. This is used to counteract any differences
- * in field ordering that the specification might have across different tiers
+ * Caches a sorted version of the fields for a specified ObjectSpecification.
+ * This is used to counteract any differences in field ordering that the
+ * specification might have across different tiers
  * 
  * <p>
- * TODO: shouldn't this responsibility simply move onto {@link ObjectSpecification} ?
+ * TODO: shouldn't this responsibility simply move onto
+ * {@link ObjectSpecification} ?
  */
 public class FieldOrderCache {
 

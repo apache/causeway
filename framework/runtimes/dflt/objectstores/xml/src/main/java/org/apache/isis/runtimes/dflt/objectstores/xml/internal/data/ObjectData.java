@@ -120,11 +120,12 @@ public class ObjectData extends Data {
         set(fieldId, fieldContent == null ? null : fieldContent.getOid());
     }
 
-    public void addInternalCollection(final ObjectAdapter collection, final String fieldId,
-        final boolean ensurePersistent) {
+    public void addInternalCollection(final ObjectAdapter collection, final String fieldId, final boolean ensurePersistent) {
         /*
-         * if (ensurePersistent && collection != null && collection.getOid() == null) { throw new
-         * IllegalStateException("Cannot save a collection that is not persistent: " + collection); }
+         * if (ensurePersistent && collection != null && collection.getOid() ==
+         * null) { throw new
+         * IllegalStateException("Cannot save a collection that is not persistent: "
+         * + collection); }
          */
 
         initCollection(fieldId);
@@ -144,9 +145,11 @@ public class ObjectData extends Data {
         }
 
         /*
-         * while (e.hasMoreElements()) { ObjectAdapter element = (ObjectAdapter) e.nextElement(); //
-         * LOG.debug("adding element to internal collection field " + fieldId +" " + element); Object elementOid =
-         * element.getOid(); if (elementOid == null) { throw new IllegalStateException("Element is not persistent
+         * while (e.hasMoreElements()) { ObjectAdapter element = (ObjectAdapter)
+         * e.nextElement(); //
+         * LOG.debug("adding element to internal collection field " + fieldId
+         * +" " + element); Object elementOid = element.getOid(); if (elementOid
+         * == null) { throw new IllegalStateException("Element is not persistent
          * "+element); }
          * 
          * addElement(fieldId, (SimpleOid) elementOid); }

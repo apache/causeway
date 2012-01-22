@@ -101,8 +101,7 @@ public class MonitorListenerImpl implements MonitorListener {
         writer.println("</BODY></HTML>");
     }
 
-    private void appendNavigationLink(final StringBuffer navigation, final String name, final boolean appendDivider)
-        throws UnsupportedEncodingException {
+    private void appendNavigationLink(final StringBuffer navigation, final String name, final boolean appendDivider) throws UnsupportedEncodingException {
         if (appendDivider) {
             navigation.append(" | ");
         }
@@ -145,6 +144,7 @@ public class MonitorListenerImpl implements MonitorListener {
         // writer.println();
     }
     /*
-     * public void setTarget(final DebugSelection debugInfo2) { target = debugInfo2; }
+     * public void setTarget(final DebugSelection debugInfo2) { target =
+     * debugInfo2; }
      */
 }

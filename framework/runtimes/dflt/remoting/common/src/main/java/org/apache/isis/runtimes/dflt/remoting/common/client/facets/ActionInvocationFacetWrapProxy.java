@@ -55,19 +55,22 @@ import org.apache.isis.runtimes.dflt.runtime.transaction.messagebroker.WarningLi
 import org.apache.log4j.Logger;
 
 /**
- * A reflection peer for executing actions remotely, instead of on the local machine. Any calls to <code>execute</code>
- * are passed over the network to the server for invocation. There are two cases where the request is not passed to the
- * server, ie it is executed locally: 1) where the method is static, ie is on the class rather than an instance; 2) if
- * the instance is not persistent; 3) if the method is marked as 'local'. If a method is marked as being 'remote' then
- * static methods and methods on transient objects will be passed to the server.
+ * A reflection peer for executing actions remotely, instead of on the local
+ * machine. Any calls to <code>execute</code> are passed over the network to the
+ * server for invocation. There are two cases where the request is not passed to
+ * the server, ie it is executed locally: 1) where the method is static, ie is
+ * on the class rather than an instance; 2) if the instance is not persistent;
+ * 3) if the method is marked as 'local'. If a method is marked as being
+ * 'remote' then static methods and methods on transient objects will be passed
+ * to the server.
  * 
  * <p>
- * If any of the objects involved have been changed on the server by another process then a ConcurrencyException will be
- * passed back to the client and re-thrown.
+ * If any of the objects involved have been changed on the server by another
+ * process then a ConcurrencyException will be passed back to the client and
+ * re-thrown.
  * </p>
  */
-public final class ActionInvocationFacetWrapProxy extends ActionInvocationFacetAbstract implements
-    DecoratingFacet<ActionInvocationFacet> {
+public final class ActionInvocationFacetWrapProxy extends ActionInvocationFacetAbstract implements DecoratingFacet<ActionInvocationFacet> {
 
     private final static Logger LOG = Logger.getLogger(ActionInvocationFacetWrapProxy.class);
     private final ServerFacade serverFacade;
@@ -75,8 +78,7 @@ public final class ActionInvocationFacetWrapProxy extends ActionInvocationFacetA
     private final ActionInvocationFacet underlyingFacet;
     private final ObjectAction objectAction;
 
-    public ActionInvocationFacetWrapProxy(final ActionInvocationFacet underlyingFacet, final ServerFacade connection,
-        final ObjectEncoderDecoder encoder, final ObjectAction objectAction) {
+    public ActionInvocationFacetWrapProxy(final ActionInvocationFacet underlyingFacet, final ServerFacade connection, final ObjectEncoderDecoder encoder, final ObjectAction objectAction) {
         super(underlyingFacet.getFacetHolder());
         this.underlyingFacet = underlyingFacet;
         this.serverFacade = connection;
@@ -93,7 +95,8 @@ public final class ActionInvocationFacetWrapProxy extends ActionInvocationFacetA
     public ObjectAdapter invoke(final ObjectAdapter target, final ObjectAdapter[] parameters) {
         if (isToBeExecutedRemotely(target)) {
             /*
-             * NOTE - only remotely executing actions on objects not collection - due to collections not having OIDs yet
+             * NOTE - only remotely executing actions on objects not collection
+             * - due to collections not having OIDs yet
              */
             return executeRemotely(target, parameters);
         } else {
@@ -123,13 +126,10 @@ public final class ActionInvocationFacetWrapProxy extends ActionInvocationFacetA
 
         final KnownObjectsRequest knownObjects = new KnownObjectsRequest();
         final Data[] parameterObjectData = parameterValues(parameterAdapters, knownObjects);
-        final ReferenceData targetReference =
-            targetAdapter == null ? null : encoder.encodeActionTarget(targetAdapter, knownObjects);
+        final ReferenceData targetReference = targetAdapter == null ? null : encoder.encodeActionTarget(targetAdapter, knownObjects);
         ExecuteServerActionResponse response;
         try {
-            final ExecuteServerActionRequest request =
-                new ExecuteServerActionRequest(getAuthenticationSession(), ActionType.USER, objectAction
-                    .getIdentifier().toNameParmsIdentityString(), targetReference, parameterObjectData);
+            final ExecuteServerActionRequest request = new ExecuteServerActionRequest(getAuthenticationSession(), ActionType.USER, objectAction.getIdentifier().toNameParmsIdentityString(), targetReference, parameterObjectData);
             response = serverFacade.executeServerAction(request);
 
             // must deal with transient-now-persistent objects first
@@ -229,8 +229,7 @@ public final class ActionInvocationFacetWrapProxy extends ActionInvocationFacetA
         return encoder.encodeActionParameters(parameterTypes, parameters, knownObjects);
     }
 
-    private static String debug(final String message, final Identifier identifier, final ObjectAdapter target,
-        final ObjectAdapter[] parameters) {
+    private static String debug(final String message, final Identifier identifier, final ObjectAdapter target, final ObjectAdapter[] parameters) {
         if (!LOG.isDebugEnabled()) {
             return "";
         }

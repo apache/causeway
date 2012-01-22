@@ -35,8 +35,7 @@ public class SetAssociationRequest extends RequestAbstract {
     private final IdentityData target;
     private final IdentityData associate;
 
-    public SetAssociationRequest(final AuthenticationSession session, final String fieldIdentifier,
-        final IdentityData target, final IdentityData associate) {
+    public SetAssociationRequest(final AuthenticationSession session, final String fieldIdentifier, final IdentityData target, final IdentityData associate) {
         super(session);
         this.fieldIdentifier = fieldIdentifier;
         this.target = target;
@@ -85,7 +84,8 @@ public class SetAssociationRequest extends RequestAbstract {
     // ///////////////////////////////////////////////////////
 
     /**
-     * {@link #setResponse(Object) Sets a response} of {@link SetAssociationResponse}.
+     * {@link #setResponse(Object) Sets a response} of
+     * {@link SetAssociationResponse}.
      */
     @Override
     public void execute(final ServerFacade serverFacade) {

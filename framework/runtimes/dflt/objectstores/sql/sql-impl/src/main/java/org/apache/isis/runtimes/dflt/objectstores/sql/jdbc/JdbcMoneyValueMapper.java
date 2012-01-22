@@ -28,7 +28,8 @@ import org.apache.isis.runtimes.dflt.objectstores.sql.mapping.FieldMapping;
 import org.apache.isis.runtimes.dflt.objectstores.sql.mapping.FieldMappingFactory;
 
 /**
- * Money needs to implement a two-column persistence, 1 for amount, 1 for 3-digit currency
+ * Money needs to implement a two-column persistence, 1 for amount, 1 for
+ * 3-digit currency
  * 
  * @version $Rev$ $Date$
  */
@@ -44,7 +45,7 @@ public class JdbcMoneyValueMapper extends AbstractJdbcMultiFieldMapping {
         }
 
         @Override
-        public FieldMapping createFieldMapping(ObjectSpecification object, final ObjectAssociation field) {
+        public FieldMapping createFieldMapping(final ObjectSpecification object, final ObjectAssociation field) {
             return new JdbcMoneyValueMapper(field, type1, type2);
         }
     }
@@ -63,8 +64,7 @@ public class JdbcMoneyValueMapper extends AbstractJdbcMultiFieldMapping {
                 return ((Money) o).getCurrency();
             }
         } else {
-            throw new PersistFailedException("Invalid object type " + o.getClass().getCanonicalName()
-                + " for MoneyValueMapper");
+            throw new PersistFailedException("Invalid object type " + o.getClass().getCanonicalName() + " for MoneyValueMapper");
         }
     }
 

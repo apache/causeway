@@ -31,11 +31,11 @@ import org.apache.isis.runtimes.dflt.webserver.WebServer.StartupMode;
 import org.apache.isis.runtimes.dflt.webserver.WebServerConstants;
 
 public final class OptionHandlerStartupMode implements OptionHandler {
-    
+
     static final String STARTUP_MODE_LONG_OPT = "startup";
     static final String STARTUP_MODE_BASE_OPT = "a";
 
-    public static String[] appendArg(String[] args, StartupMode startupMode) {
+    public static String[] appendArg(final String[] args, final StartupMode startupMode) {
         return ArrayUtils.append(args, "--" + STARTUP_MODE_LONG_OPT, "" + startupMode.name());
     }
 
@@ -44,10 +44,7 @@ public final class OptionHandlerStartupMode implements OptionHandler {
     @Override
     @SuppressWarnings("static-access")
     public void addOption(final Options options) {
-        final Option option =
-            OptionBuilder.withArgName("startup mode").hasArg()
-                .withLongOpt(OptionHandlerStartupMode.STARTUP_MODE_LONG_OPT)
-                .withDescription("start in foreground (sync) or background (async)").create(OptionHandlerStartupMode.STARTUP_MODE_BASE_OPT);
+        final Option option = OptionBuilder.withArgName("startup mode").hasArg().withLongOpt(OptionHandlerStartupMode.STARTUP_MODE_LONG_OPT).withDescription("start in foreground (sync) or background (async)").create(OptionHandlerStartupMode.STARTUP_MODE_BASE_OPT);
         options.addOption(option);
     }
 
@@ -59,7 +56,7 @@ public final class OptionHandlerStartupMode implements OptionHandler {
 
     @Override
     public void primeConfigurationBuilder(final IsisConfigurationBuilder isisConfigurationBuilder) {
-        if(startupMode != null) {
+        if (startupMode != null) {
             isisConfigurationBuilder.add(WebServerConstants.EMBEDDED_WEB_SERVER_STARTUP_MODE_KEY, startupMode.name());
         }
     }

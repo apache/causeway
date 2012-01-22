@@ -40,8 +40,8 @@ public class LogonFixtureAuthenticator extends AuthenticatorAbstractForDfltRunti
     }
 
     /**
-     * Valid providing running in {@link DeploymentType#isExploring() exploration} or
-     * {@link DeploymentType#isPrototyping() prototyping} mode.
+     * Valid providing running in {@link DeploymentType#isExploring()
+     * exploration} or {@link DeploymentType#isPrototyping() prototyping} mode.
      */
     @Override
     public final boolean isValid(final AuthenticationRequest request) {

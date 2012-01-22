@@ -31,8 +31,7 @@ public class IsisTransactionDefault extends IsisTransactionAbstract {
         this(transactionManager, new MessageBrokerDefault(), new UpdateNotifierDefault());
     }
 
-    public IsisTransactionDefault(final IsisTransactionManager transactionManager, final MessageBroker messageBroker,
-        final UpdateNotifier updateNotifier) {
+    public IsisTransactionDefault(final IsisTransactionManager transactionManager, final MessageBroker messageBroker, final UpdateNotifier updateNotifier) {
         super(transactionManager, messageBroker, updateNotifier);
     }
 

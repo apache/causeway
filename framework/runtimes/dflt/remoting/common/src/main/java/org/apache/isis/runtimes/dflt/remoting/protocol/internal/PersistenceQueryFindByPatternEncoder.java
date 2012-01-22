@@ -43,8 +43,7 @@ public class PersistenceQueryFindByPatternEncoder extends PersistenceQueryEncode
     }
 
     @Override
-    protected PersistenceQuery doDecode(final ObjectSpecification specification,
-        final PersistenceQueryData persistenceQueryData) {
+    protected PersistenceQuery doDecode(final ObjectSpecification specification, final PersistenceQueryData persistenceQueryData) {
         final ObjectData patternData = downcast(persistenceQueryData).getPatternData();
         final ObjectAdapter patternObject = decodeObject(patternData);
         return new PersistenceQueryFindByPattern(specification, patternObject);

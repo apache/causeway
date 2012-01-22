@@ -62,11 +62,8 @@ public class UserProfileDataHandlerTest {
         final ArrayList<Object> servicesList = new ArrayList<Object>();
         service = new TestServiceObject1();
         servicesList.add(service);
-        final IsisSessionFactory executionContextFactory =
-            new IsisSessionFactoryDefault(DeploymentType.EXPLORATION, new IsisConfigurationDefault(),
-                mockery.mock(TemplateImageLoader.class), mockery.mock(SpecificationLoader.class),
-                mockery.mock(AuthenticationManager.class), mockery.mock(AuthorizationManager.class),
-                mockery.mock(UserProfileLoader.class), mockery.mock(PersistenceSessionFactory.class), servicesList);
+        final IsisSessionFactory executionContextFactory = new IsisSessionFactoryDefault(DeploymentType.EXPLORATION, new IsisConfigurationDefault(), mockery.mock(TemplateImageLoader.class), mockery.mock(SpecificationLoader.class), mockery.mock(AuthenticationManager.class),
+                mockery.mock(AuthorizationManager.class), mockery.mock(UserProfileLoader.class), mockery.mock(PersistenceSessionFactory.class), servicesList);
 
         IsisContextStatic.createRelaxedInstance(executionContextFactory);
 

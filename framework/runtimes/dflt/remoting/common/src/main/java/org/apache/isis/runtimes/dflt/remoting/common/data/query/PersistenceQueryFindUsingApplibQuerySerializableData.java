@@ -27,7 +27,8 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.runtimes.dflt.runtime.persistence.query.PersistenceQueryFindUsingApplibQuerySerializable;
 
 /**
- * Serializable representation of {@link PersistenceQueryFindUsingApplibQuerySerializable}.
+ * Serializable representation of
+ * {@link PersistenceQueryFindUsingApplibQuerySerializable}.
  */
 public class PersistenceQueryFindUsingApplibQuerySerializableData extends PersistenceQueryDataAbstract {
 
@@ -35,8 +36,7 @@ public class PersistenceQueryFindUsingApplibQuerySerializableData extends Persis
     private final Serializable querySerializable;
     private final QueryCardinality cardinality;
 
-    public PersistenceQueryFindUsingApplibQuerySerializableData(final ObjectSpecification noSpec,
-        final Query applibQuery, final QueryCardinality cardinality) {
+    public PersistenceQueryFindUsingApplibQuerySerializableData(final ObjectSpecification noSpec, final Query applibQuery, final QueryCardinality cardinality) {
         super(noSpec);
         querySerializable = applibQuery;
         this.cardinality = cardinality;

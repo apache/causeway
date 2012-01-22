@@ -54,12 +54,12 @@ public abstract class ObjectStorePersistenceMechanismInstallerAbstract extends P
     }
 
     /**
-     * Will return a {@link PersistenceSessionObjectStore}; subclasses are free to downcast if required.
+     * Will return a {@link PersistenceSessionObjectStore}; subclasses are free
+     * to downcast if required.
      */
     @Override
-    protected PersistenceSession createPersistenceSession(final PersistenceSessionFactory persistenceSessionFactory,
-        final AdapterManagerExtended adapterManager, final ObjectAdapterFactory adapterFactory,
-        final ObjectFactory objectFactory, final OidGenerator oidGenerator, final ServicesInjector servicesInjector) {
+    protected PersistenceSession createPersistenceSession(final PersistenceSessionFactory persistenceSessionFactory, final AdapterManagerExtended adapterManager, final ObjectAdapterFactory adapterFactory, final ObjectFactory objectFactory, final OidGenerator oidGenerator,
+            final ServicesInjector servicesInjector) {
 
         final PersistAlgorithm persistAlgorithm = createPersistAlgorithm(getConfiguration());
         ObjectStore objectStore = createObjectStore(getConfiguration(), adapterFactory, adapterManager);
@@ -72,9 +72,7 @@ public abstract class ObjectStorePersistenceMechanismInstallerAbstract extends P
             objectStore = new IsisStoreLogger(objectStore, level);
         }
 
-        final PersistenceSessionObjectStore persistenceSession =
-            createObjectStorePersistor(persistenceSessionFactory, adapterFactory, objectFactory, servicesInjector,
-                oidGenerator, adapterManager, persistAlgorithm, objectStore);
+        final PersistenceSessionObjectStore persistenceSession = createObjectStorePersistor(persistenceSessionFactory, adapterFactory, objectFactory, servicesInjector, oidGenerator, adapterManager, persistAlgorithm, objectStore);
 
         final IsisTransactionManager transactionManager = createTransactionManager(persistenceSession, objectStore);
 
@@ -93,15 +91,12 @@ public abstract class ObjectStorePersistenceMechanismInstallerAbstract extends P
     // ///////////////////////////////////////////
 
     /**
-     * Can optionally be overridden, but by default creates an {@link PersistenceSessionObjectStore}.
+     * Can optionally be overridden, but by default creates an
+     * {@link PersistenceSessionObjectStore}.
      */
-    protected PersistenceSessionObjectStore createObjectStorePersistor(
-        final PersistenceSessionFactory persistenceSessionFactory, final ObjectAdapterFactory adapterFactory,
-        final ObjectFactory objectFactory, final ServicesInjector servicesInjector, final OidGenerator oidGenerator,
-        final AdapterManagerExtended adapterManager, final PersistAlgorithm persistAlgorithm,
-        final ObjectStorePersistence objectStore) {
-        return new PersistenceSessionObjectStore(persistenceSessionFactory, adapterFactory, objectFactory,
-            servicesInjector, oidGenerator, adapterManager, persistAlgorithm, objectStore);
+    protected PersistenceSessionObjectStore createObjectStorePersistor(final PersistenceSessionFactory persistenceSessionFactory, final ObjectAdapterFactory adapterFactory, final ObjectFactory objectFactory, final ServicesInjector servicesInjector, final OidGenerator oidGenerator,
+            final AdapterManagerExtended adapterManager, final PersistAlgorithm persistAlgorithm, final ObjectStorePersistence objectStore) {
+        return new PersistenceSessionObjectStore(persistenceSessionFactory, adapterFactory, objectFactory, servicesInjector, oidGenerator, adapterManager, persistAlgorithm, objectStore);
     }
 
     /**
@@ -120,8 +115,7 @@ public abstract class ObjectStorePersistenceMechanismInstallerAbstract extends P
      * <p>
      * By default returns a {@link ObjectStoreTransactionManager}.
      */
-    protected IsisTransactionManager createTransactionManager(final PersistenceSessionTransactionManagement persistor,
-        final ObjectStoreTransactionManagement objectStore) {
+    protected IsisTransactionManager createTransactionManager(final PersistenceSessionTransactionManagement persistor, final ObjectStoreTransactionManagement objectStore) {
         return new ObjectStoreTransactionManager(persistor, objectStore);
     }
 
@@ -132,7 +126,6 @@ public abstract class ObjectStorePersistenceMechanismInstallerAbstract extends P
     /**
      * Hook method to return {@link ObjectStore}.
      */
-    protected abstract ObjectStore createObjectStore(IsisConfiguration configuration,
-        ObjectAdapterFactory adapterFactory, AdapterManager adapterManager);
+    protected abstract ObjectStore createObjectStore(IsisConfiguration configuration, ObjectAdapterFactory adapterFactory, AdapterManager adapterManager);
 
 }

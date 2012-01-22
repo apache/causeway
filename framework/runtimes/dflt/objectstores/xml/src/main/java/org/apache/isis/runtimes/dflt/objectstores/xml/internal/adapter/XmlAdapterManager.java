@@ -27,8 +27,7 @@ import org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager.AdapterM
 public class XmlAdapterManager extends AdapterManagerDefault {
 
     @Override
-    protected ObjectAdapter createAggregatedAdapter(final Object pojo, final ObjectAdapter ownerAdapter,
-        final IdentifiedHolder identifiedHolder) {
+    protected ObjectAdapter createAggregatedAdapter(final Object pojo, final ObjectAdapter ownerAdapter, final IdentifiedHolder identifiedHolder) {
         if (identifiedHolder instanceof OneToOneAssociation) {
             // do not yet support AggregatedOids for aggregated associations
             return adapterFor(pojo);

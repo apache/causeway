@@ -26,8 +26,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.log4j.Logger;
-
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
@@ -38,12 +36,15 @@ import org.apache.isis.runtimes.dflt.objectstores.sql.ObjectMapping;
 import org.apache.isis.runtimes.dflt.objectstores.sql.ObjectMappingLookup;
 import org.apache.isis.runtimes.dflt.objectstores.sql.VersionMapping;
 import org.apache.isis.runtimes.dflt.objectstores.sql.mapping.FieldMapping;
+import org.apache.log4j.Logger;
 
 /**
- * Used to map 1-to-many collections by creating, in the child table, 1 column per parent collection. The column is
- * named by combining the final part of the parent class name and the collection variable name.
+ * Used to map 1-to-many collections by creating, in the child table, 1 column
+ * per parent collection. The column is named by combining the final part of the
+ * parent class name and the collection variable name.
  * 
- * You have a choice between this class and {@link PolymorphicForeignKeyInChildCollectionBaseMapper}
+ * You have a choice between this class and
+ * {@link PolymorphicForeignKeyInChildCollectionBaseMapper}
  * 
  * @author Kevin
  */
@@ -69,9 +70,7 @@ public class PolymorphicForeignKeyInChildCollectionMapper extends ForeignKeyInCh
     final ObjectMappingLookup objectMapperLookup;
     final String fieldClassName;
 
-    public PolymorphicForeignKeyInChildCollectionMapper(final ObjectAssociation objectAssociation,
-        final String parameterBase, final FieldMappingLookup lookup, final ObjectMappingLookup objectMapperLookup,
-        final AbstractAutoMapper abstractAutoMapper, final ObjectAssociation field) {
+    public PolymorphicForeignKeyInChildCollectionMapper(final ObjectAssociation objectAssociation, final String parameterBase, final FieldMappingLookup lookup, final ObjectMappingLookup objectMapperLookup, final AbstractAutoMapper abstractAutoMapper, final ObjectAssociation field) {
 
         super(lookup, abstractAutoMapper, field);
 
@@ -90,25 +89,25 @@ public class PolymorphicForeignKeyInChildCollectionMapper extends ForeignKeyInCh
         addSubSpecificationsToTable(specification);
     }
 
-    protected void addSubSpecificationsToTable(ObjectSpecification objectSpecification) {
+    protected void addSubSpecificationsToTable(final ObjectSpecification objectSpecification) {
         if (objectSpecification.isAbstract() == false) {
             final String tableNameFromSpecification = getTableNameFromSpecification(objectSpecification);
             tables.add(tableNameFromSpecification);
             tableSpecifications.add(objectSpecification);
 
-            ObjectMapping autoMapper = objectMapperLookup.getMapping(objectSpecification, null);
+            final ObjectMapping autoMapper = objectMapperLookup.getMapping(objectSpecification, null);
             subClassMappers.add(autoMapper);
         }
         if (objectSpecification.hasSubclasses()) {
-            for (ObjectSpecification subSpecification : objectSpecification.subclasses()) {
+            for (final ObjectSpecification subSpecification : objectSpecification.subclasses()) {
                 addSubSpecificationsToTable(subSpecification);
             }
         }
     }
 
     @Override
-    public boolean needsTables(DatabaseConnector connection) {
-        for (String subTableName : tables) {
+    public boolean needsTables(final DatabaseConnector connection) {
+        for (final String subTableName : tables) {
             table = subTableName;
             if (super.needsTables(connection)) {
                 // Stop on first table that is needed.
@@ -120,7 +119,7 @@ public class PolymorphicForeignKeyInChildCollectionMapper extends ForeignKeyInCh
 
     @Override
     public void createTables(final DatabaseConnector connection) {
-        for (String subTableName : tables) {
+        for (final String subTableName : tables) {
             table = subTableName;
             if (super.needsTables(connection)) {
                 super.createTables(connection);
@@ -141,7 +140,7 @@ public class PolymorphicForeignKeyInChildCollectionMapper extends ForeignKeyInCh
         currentCollection = new ArrayList<ObjectAdapter>();
         currentIterator = super.getElementsForCollectionAsIterator(collection);
         for (; currentIterator.hasNext();) {
-            ObjectAdapter item = currentIterator.next();
+            final ObjectAdapter item = currentIterator.next();
             currentCollection.add(item);
         }
 
@@ -154,7 +153,7 @@ public class PolymorphicForeignKeyInChildCollectionMapper extends ForeignKeyInCh
                 @Override
                 public boolean hasNext() {
                     for (int i = currentIndexStart; i < currentCollection.size(); i++) {
-                        ObjectAdapter thisObjectAdapter = currentCollection.get(i);
+                        final ObjectAdapter thisObjectAdapter = currentCollection.get(i);
                         if (thisObjectAdapter.getSpecification().isOfType(currentTableSpecification)) {
                             currentIndexStart = currentIndex = i;
                             return true;
@@ -181,19 +180,16 @@ public class PolymorphicForeignKeyInChildCollectionMapper extends ForeignKeyInCh
     }
 
     @Override
-    protected void loadCollectionIntoList(final DatabaseConnector connector, final ObjectAdapter parent,
-        final boolean makeResolved, final String table, final ObjectSpecification specification,
-        final IdMappingAbstract idMappingAbstract, final List<FieldMapping> fieldMappings,
-        final VersionMapping versionMapping, final List<ObjectAdapter> superList) {
+    protected void loadCollectionIntoList(final DatabaseConnector connector, final ObjectAdapter parent, final boolean makeResolved, final String table, final ObjectSpecification specification, final IdMappingAbstract idMappingAbstract, final List<FieldMapping> fieldMappings,
+            final VersionMapping versionMapping, final List<ObjectAdapter> superList) {
         final List<ObjectAdapter> list = new ArrayList<ObjectAdapter>();
         for (int i = 0; i < tables.size(); i++) {
 
             currentTableSpecification = tableSpecifications.get(i);
-            AutoMapper mapper = (AutoMapper) subClassMappers.get(i);
-            String mapperTable = tables.get(i);
+            final AutoMapper mapper = (AutoMapper) subClassMappers.get(i);
+            final String mapperTable = tables.get(i);
 
-            super.loadCollectionIntoList(connector, parent, makeResolved, mapperTable, currentTableSpecification,
-                mapper.getIdMapping(), mapper.fieldMappings, mapper.getVersionMapping(), list);
+            super.loadCollectionIntoList(connector, parent, makeResolved, mapperTable, currentTableSpecification, mapper.getIdMapping(), mapper.fieldMappings, mapper.getVersionMapping(), list);
 
             superList.addAll(list);
             list.clear();

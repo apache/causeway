@@ -37,7 +37,8 @@ public class DemoMongo {
         }
 
         /*
-         * Mongo m = new Mongo( "localhost" ); Mongo m = new Mongo( "localhost" , 27017 );
+         * Mongo m = new Mongo( "localhost" ); Mongo m = new Mongo( "localhost"
+         * , 27017 );
          */
         m.dropDatabase("mydb");
 
@@ -48,7 +49,8 @@ public class DemoMongo {
 
         final DB db = m.getDB("mydb");
         /*
-         * DBCollection coll = db.getCollection("testCollection1"); coll = db.getCollection("testCollection2");
+         * DBCollection coll = db.getCollection("testCollection1"); coll =
+         * db.getCollection("testCollection2");
          */
 
         final DBCollection coll = db.getCollection("testCollection1");

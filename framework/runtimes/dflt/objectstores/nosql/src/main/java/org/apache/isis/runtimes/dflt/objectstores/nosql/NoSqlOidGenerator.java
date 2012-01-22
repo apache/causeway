@@ -52,8 +52,7 @@ public class NoSqlOidGenerator extends OidGeneratorAbstract {
 
         public synchronized long nextSubId(final NoSqlDataDatabase connectionPool) {
             if (nextSubId > newSubIdBatchAt) {
-                final String message =
-                    "ID exception, last id (" + nextSubId + ") past new batch boundary (" + newSubIdBatchAt + ")";
+                final String message = "ID exception, last id (" + nextSubId + ") past new batch boundary (" + newSubIdBatchAt + ")";
                 throw new NoSqlStoreException(message);
             }
             if (nextSubId == newSubIdBatchAt) {
@@ -66,8 +65,7 @@ public class NoSqlOidGenerator extends OidGeneratorAbstract {
 
         public synchronized long nextPersistentId(final NoSqlDataDatabase connectionPool) {
             if (nextId > newIdBatchAt) {
-                final String message =
-                    "ID exception, last id (" + nextId + ") past new batch boundary (" + newIdBatchAt + ")";
+                final String message = "ID exception, last id (" + nextId + ") past new batch boundary (" + newIdBatchAt + ")";
                 throw new NoSqlStoreException(message);
             }
             if (nextId == newIdBatchAt) {

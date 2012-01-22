@@ -29,7 +29,8 @@ import org.apache.isis.runtimes.dflt.runtime.system.session.IsisSessionFactory;
 import org.apache.log4j.Logger;
 
 /**
- * Basic multi-user implementation of Isis that stores a set of components for each thread in use.
+ * Basic multi-user implementation of Isis that stores a set of components for
+ * each thread in use.
  */
 public class IsisContextThreadLocal extends IsisContextMultiUser {
 
@@ -121,10 +122,12 @@ public class IsisContextThreadLocal extends IsisContextMultiUser {
     // /////////////////////////////////////////////////////////
 
     /**
-     * Is only intended to be called through {@link IsisContext#openSession(AuthenticationSession)}.
+     * Is only intended to be called through
+     * {@link IsisContext#openSession(AuthenticationSession)}.
      * 
      * <p>
-     * Implementation note: an alternative design would have just been to bind onto a thread local.
+     * Implementation note: an alternative design would have just been to bind
+     * onto a thread local.
      */
     @Override
     public IsisSession openSessionInstance(final AuthenticationSession authenticationSession) {
@@ -132,8 +135,7 @@ public class IsisContextThreadLocal extends IsisContextMultiUser {
         synchronized (sessionsByThread) {
             applySessionClosePolicy();
             final IsisSession session = getSessionFactoryInstance().openSession(authenticationSession);
-            LOG.debug("  opening session " + session + " (count " + sessionsByThread.size() + ") for "
-                + authenticationSession.getUserName());
+            LOG.debug("  opening session " + session + " (count " + sessionsByThread.size() + ") for " + authenticationSession.getUserName());
             saveSession(thread, session);
             session.open();
             return session;
@@ -143,8 +145,7 @@ public class IsisContextThreadLocal extends IsisContextMultiUser {
     protected IsisSession createAndOpenSession(final Thread thread, final AuthenticationSession authenticationSession) {
         final IsisSession session = getSessionFactoryInstance().openSession(authenticationSession);
         session.open();
-        LOG.info("  opening session " + session + " (count " + sessionsByThread.size() + ") for "
-            + authenticationSession.getUserName());
+        LOG.info("  opening session " + session + " (count " + sessionsByThread.size() + ") for " + authenticationSession.getUserName());
         return session;
     }
 

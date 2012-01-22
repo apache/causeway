@@ -28,8 +28,8 @@ import org.apache.isis.runtimes.dflt.runtime.web.EmbeddedWebServer;
 import org.apache.isis.runtimes.dflt.runtime.web.EmbeddedWebViewer;
 
 /**
- * Not to be confused with {@link IsisViewerInstaller}, this installer is for a component to <i>host</i> any
- * {@link EmbeddedWebViewer} implementations.
+ * Not to be confused with {@link IsisViewerInstaller}, this installer is for a
+ * component to <i>host</i> any {@link EmbeddedWebViewer} implementations.
  */
 public class JettyEmbeddedWebServerInstaller extends InstallerAbstract implements EmbeddedWebServerInstaller {
 

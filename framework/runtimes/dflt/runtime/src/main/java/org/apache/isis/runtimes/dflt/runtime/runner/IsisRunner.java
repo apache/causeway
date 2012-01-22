@@ -106,7 +106,8 @@ public class IsisRunner {
     }
 
     /**
-     * Adds additional option handlers; may also require additional {@link OptionValidator validator}s to be
+     * Adds additional option handlers; may also require additional
+     * {@link OptionValidator validator}s to be
      * {@link #addValidator(OptionValidator) add}ed.
      * <p>
      * An adjustment (as per GOOS book).
@@ -116,7 +117,8 @@ public class IsisRunner {
     }
 
     /**
-     * Adds additional validators; typically goes hand-in-hand will calls to {@link #addOptionHandler(OptionHandler)}.
+     * Adds additional validators; typically goes hand-in-hand will calls to
+     * {@link #addOptionHandler(OptionHandler)}.
      * <p>
      * An adjustment (as per GOOS book).
      */
@@ -125,15 +127,19 @@ public class IsisRunner {
     }
 
     /**
-     * The default implementation is a {@link IsisConfigurationBuilderDefault}, which looks to the <tt>config/</tt>
-     * directory, the <tt>src/main/webapp/WEB-INF</tt> directory, and then finally to the classpath. However, this could
-     * be a security concern in a production environment; a user could edit the <tt>isis.properties</tt> config files to
-     * disable security, for example.
+     * The default implementation is a {@link IsisConfigurationBuilderDefault},
+     * which looks to the <tt>config/</tt> directory, the
+     * <tt>src/main/webapp/WEB-INF</tt> directory, and then finally to the
+     * classpath. However, this could be a security concern in a production
+     * environment; a user could edit the <tt>isis.properties</tt> config files
+     * to disable security, for example.
      * <p>
-     * This method therefore allows this system to be configured using a different {@link IsisConfigurationBuilder}. For
-     * example, a security-conscious subclass could return a {@link IsisConfigurationBuilder} that only reads from the
-     * classpath. This would allow the application to be deployed as a single sealed JAR that could not be tampered
-     * with.
+     * This method therefore allows this system to be configured using a
+     * different {@link IsisConfigurationBuilder}. For example, a
+     * security-conscious subclass could return a
+     * {@link IsisConfigurationBuilder} that only reads from the classpath. This
+     * would allow the application to be deployed as a single sealed JAR that
+     * could not be tampered with.
      * <p>
      * An adjustment (as per GOOS book).
      */
@@ -201,15 +207,12 @@ public class IsisRunner {
 
         final DeploymentType deploymentType = optionHandlerDeploymentType.getDeploymentType();
 
-        this.globalInjector =
-            createGuiceInjector(deploymentType, isisConfigurationBuilder, installerLookup, optionHandlers);
+        this.globalInjector = createGuiceInjector(deploymentType, isisConfigurationBuilder, installerLookup, optionHandlers);
 
         bootstrapper.bootstrap(globalInjector);
     }
 
-    private Injector createGuiceInjector(final DeploymentType deploymentType,
-        final IsisConfigurationBuilder isisConfigurationBuilder, final InstallerLookup installerLookup,
-        final List<OptionHandler> optionHandlers) {
+    private Injector createGuiceInjector(final DeploymentType deploymentType, final IsisConfigurationBuilder isisConfigurationBuilder, final InstallerLookup installerLookup, final List<OptionHandler> optionHandlers) {
         final IsisModule isisModule = new IsisModule(deploymentType, isisConfigurationBuilder, installerLookup);
         isisModule.addConfigurationPrimers(optionHandlers);
         isisModule.addViewerNames(optionHandlerViewer.getViewerNames());

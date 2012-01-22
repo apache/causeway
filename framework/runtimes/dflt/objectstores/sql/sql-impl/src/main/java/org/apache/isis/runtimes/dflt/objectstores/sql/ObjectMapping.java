@@ -36,8 +36,7 @@ public interface ObjectMapping {
 
     Vector<ObjectAdapter> getInstances(DatabaseConnector connector, ObjectSpecification spec, String title);
 
-    Vector<ObjectAdapter> getInstances(DatabaseConnector connector, ObjectSpecification spec,
-        PersistenceQueryFindByPattern query);
+    Vector<ObjectAdapter> getInstances(DatabaseConnector connector, ObjectSpecification spec, PersistenceQueryFindByPattern query);
 
     ObjectAdapter getObject(DatabaseConnector connector, Oid oid, ObjectSpecification hint);
 

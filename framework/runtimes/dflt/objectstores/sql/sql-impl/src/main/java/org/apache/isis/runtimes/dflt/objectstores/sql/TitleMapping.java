@@ -62,8 +62,7 @@ public class TitleMapping {
         sql.append(Sql.escapeAndQuoteValue(titleString));
     }
 
-    public void appendUpdateAssignment(final DatabaseConnector connector, final StringBuffer sql,
-        final ObjectAdapter object) {
+    public void appendUpdateAssignment(final DatabaseConnector connector, final StringBuffer sql, final ObjectAdapter object) {
         sql.append(column);
         sql.append(" = ");
         appendInsertValues(connector, sql, object);

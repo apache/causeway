@@ -43,8 +43,9 @@ public class PersistorUtil {
     }
 
     /**
-     * Marks the specified object as loaded: resolved, partly resolve or updated as specified by the second parameter.
-     * Attempting to specify any other state throws a run time exception.
+     * Marks the specified object as loaded: resolved, partly resolve or updated
+     * as specified by the second parameter. Attempting to specify any other
+     * state throws a run time exception.
      */
     public static void end(final ObjectAdapter object) {
         final ResolveState endState = object.getResolveState().getEndState();

@@ -31,8 +31,7 @@ public abstract class AuthorizationRequestAbstract extends RequestAbstract {
     private final String dataStr;
     private final IdentityData targetData;
 
-    public AuthorizationRequestAbstract(final AuthenticationSession session, final IdentityData targetData,
-        final String data) {
+    public AuthorizationRequestAbstract(final AuthenticationSession session, final IdentityData targetData, final String data) {
         super(session);
         this.targetData = targetData;
         this.dataStr = data;

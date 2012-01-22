@@ -109,10 +109,7 @@ public class IsisContextTest {
 
         IsisContext.setConfiguration(configuration);
 
-        final IsisSessionFactory sessionFactory =
-            new IsisSessionFactoryDefault(DeploymentType.EXPLORATION, configuration, mockTemplateImageLoader,
-                reflector, mockAuthenticationManager, mockAuthorizationManager, mockUserProfileLoader,
-                mockPersistenceSessionFactory, servicesList);
+        final IsisSessionFactory sessionFactory = new IsisSessionFactoryDefault(DeploymentType.EXPLORATION, configuration, mockTemplateImageLoader, reflector, mockAuthenticationManager, mockAuthorizationManager, mockUserProfileLoader, mockPersistenceSessionFactory, servicesList);
         IsisContextStatic.createRelaxedInstance(sessionFactory);
         sessionFactory.init();
 

@@ -29,7 +29,8 @@ import org.json.JSONObject;
 
 public class JsonStateWriter implements StateWriter {
 
-    // private static final Logger LOG = Logger.getLogger(FileStateWriter.class);
+    // private static final Logger LOG =
+    // Logger.getLogger(FileStateWriter.class);
 
     private final JSONObject dbObject;
     private String type;
@@ -65,10 +66,10 @@ public class JsonStateWriter implements StateWriter {
     }
 
     @Override
-    public void writeEncryptionType(String type) {
+    public void writeEncryptionType(final String type) {
         writeField("_encrypt", type);
     }
-    
+
     @Override
     public void writeVersion(final String currentVersion, final String newVersion) {
         this.currentVersion = currentVersion;

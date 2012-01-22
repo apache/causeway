@@ -28,7 +28,7 @@ public interface StateWriter {
     void writeId(String oid);
 
     void writeType(String type);
-    
+
     void writeEncryptionType(String type);
 
     void writeField(String id, String data);

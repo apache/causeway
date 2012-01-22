@@ -26,10 +26,9 @@ import java.util.Properties;
 
 import junit.framework.TestCase;
 
+import org.apache.isis.runtimes.dflt.objectstores.sql.singleton.SqlIntegrationTestSingleton;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
-
-import org.apache.isis.runtimes.dflt.objectstores.sql.singleton.SqlIntegrationTestSingleton;
 
 public abstract class SqlIntegrationTestCommonBase extends TestCase {
 
@@ -54,16 +53,16 @@ public abstract class SqlIntegrationTestCommonBase extends TestCase {
     public abstract String getPropertiesFilename();
 
     /**
-     * This method can be used to do any DB specific actions the first time the test framework is setup. e.g. In the XML
-     * test, it must delete all XML files in the data store directory.
+     * This method can be used to do any DB specific actions the first time the
+     * test framework is setup. e.g. In the XML test, it must delete all XML
+     * files in the data store directory.
      */
     public void initialiseTests() {
     }
 
     // Set-up the test environment
     @Override
-    public void setUp() throws FileNotFoundException, IOException, ClassNotFoundException, InstantiationException,
-        IllegalAccessException, SQLException {
+    public void setUp() throws FileNotFoundException, IOException, ClassNotFoundException, InstantiationException, IllegalAccessException, SQLException {
         Logger.getRootLogger().setLevel(Level.INFO);
 
         // Initialise the framework

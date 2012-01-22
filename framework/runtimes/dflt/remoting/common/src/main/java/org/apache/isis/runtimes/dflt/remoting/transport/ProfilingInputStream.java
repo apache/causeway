@@ -25,8 +25,8 @@ import java.io.InputStream;
 import org.apache.log4j.Logger;
 
 /**
- * Collection of timing and quantity data for the stream. Note that as the reads block the clock does not start until
- * the first read has completed.
+ * Collection of timing and quantity data for the stream. Note that as the reads
+ * block the clock does not start until the first read has completed.
  */
 public class ProfilingInputStream extends InputStream {
 

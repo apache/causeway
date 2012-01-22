@@ -60,10 +60,12 @@ public class MementoTest extends ProxyJunit4TestCase {
     // @Test
     // public void testName() throws Exception {
     // @SuppressWarnings("unused")
-    // final TestPojoSimple originalPojo = (TestPojoSimple) originalAdapter.getObject();
+    // final TestPojoSimple originalPojo = (TestPojoSimple)
+    // originalAdapter.getObject();
     //
     // @SuppressWarnings("unused")
-    // final TestPojoSimple returnedPojo = (TestPojoSimple) returnedAdapter.getObject();
+    // final TestPojoSimple returnedPojo = (TestPojoSimple)
+    // returnedAdapter.getObject();
     //
     // // assertEquals(originalPojo.getName(), returnedPojo.getName());
     // }

@@ -143,8 +143,7 @@ public class XmlObjectStoreTest extends ProxyJunit4TestCase {
     public void validatesObjectStoreGetObject() throws Exception {
         final SaveObjectCommand command = objectStore.createSaveObjectCommand(adapter);
         objectStore.execute(Collections.<PersistenceCommand> singletonList(command));
-        assertTrue(objectStore.getObject(adapter.getOid(), adapter.getSpecification()).getOid()
-            .equals(adapter.getOid()));
+        assertTrue(objectStore.getObject(adapter.getOid(), adapter.getSpecification()).getOid().equals(adapter.getOid()));
     }
 
     @Test

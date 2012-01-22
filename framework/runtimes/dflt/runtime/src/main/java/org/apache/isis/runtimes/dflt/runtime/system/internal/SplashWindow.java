@@ -152,7 +152,8 @@ public class SplashWindow extends Window implements Runnable {
 
         if (logo != null) {
             g.drawImage(logo, PADDING, PADDING, this);
-            // g.drawRect(PADDING, PADDING, logo.getWidth(this) - 1, logo.getHeight(this) - 1);
+            // g.drawRect(PADDING, PADDING, logo.getWidth(this) - 1,
+            // logo.getHeight(this) - 1);
         } else {
             g.setFont(logoFont);
             final FontMetrics fm = g.getFontMetrics();
@@ -195,7 +196,8 @@ public class SplashWindow extends Window implements Runnable {
     }
 
     /**
-     * leaves the screen up for the specified period (in seconds) and then removes it.
+     * leaves the screen up for the specified period (in seconds) and then
+     * removes it.
      */
     public void removeAfterDelay(final int seconds) {
         this.delay = seconds * 1000;

@@ -58,8 +58,7 @@ import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessi
 import org.apache.isis.runtimes.dflt.runtime.system.transaction.IsisTransactionManager;
 import org.apache.log4j.Logger;
 
-public abstract class ProxyInstallerAbstract extends PersistenceMechanismInstallerAbstract implements
-    ClientConnectionInstaller {
+public abstract class ProxyInstallerAbstract extends PersistenceMechanismInstallerAbstract implements ClientConnectionInstaller {
 
     @SuppressWarnings("unused")
     private static final Logger LOG = Logger.getLogger(ProxyInstallerAbstract.class);
@@ -109,8 +108,9 @@ public abstract class ProxyInstallerAbstract extends PersistenceMechanismInstall
      * Creates the {@link #getServerFacade()} as required.
      * 
      * <p>
-     * Overridable, but default implementation calls the {@link #createTransport()} and
-     * {@link #createMarshaller(Transport)} hooks.
+     * Overridable, but default implementation calls the
+     * {@link #createTransport()} and {@link #createMarshaller(Transport)}
+     * hooks.
      */
     protected ServerFacade createServerFacade() {
         final Transport transport = createTransport();
@@ -157,16 +157,12 @@ public abstract class ProxyInstallerAbstract extends PersistenceMechanismInstall
     }
 
     @Override
-    protected PersistenceSession createPersistenceSession(final PersistenceSessionFactory persistenceSessionFactory,
-        final AdapterManagerExtended adapterManager, final ObjectAdapterFactory adapterFactory,
-        final ObjectFactory objectFactory, final OidGenerator oidGenerator, final ServicesInjector servicesInjector) {
+    protected PersistenceSession createPersistenceSession(final PersistenceSessionFactory persistenceSessionFactory, final AdapterManagerExtended adapterManager, final ObjectAdapterFactory adapterFactory, final ObjectFactory objectFactory, final OidGenerator oidGenerator,
+            final ServicesInjector servicesInjector) {
 
-        final PersistenceSessionProxy persistenceSession =
-            new PersistenceSessionProxy(persistenceSessionFactory, adapterFactory, objectFactory, servicesInjector,
-                oidGenerator, adapterManager, getServerFacade(), getEncoderDecoder());
+        final PersistenceSessionProxy persistenceSession = new PersistenceSessionProxy(persistenceSessionFactory, adapterFactory, objectFactory, servicesInjector, oidGenerator, adapterManager, getServerFacade(), getEncoderDecoder());
 
-        final IsisTransactionManager transactionManager =
-            createTransactionManager(getConfiguration(), persistenceSession.getAdapterManager(), persistenceSession);
+        final IsisTransactionManager transactionManager = createTransactionManager(getConfiguration(), persistenceSession.getAdapterManager(), persistenceSession);
 
         ensureThatArg(persistenceSession, is(not(nullValue())));
         ensureThatArg(transactionManager, is(not(nullValue())));
@@ -183,10 +179,8 @@ public abstract class ProxyInstallerAbstract extends PersistenceMechanismInstall
      * <p>
      * Called from {@link #createPersistenceSession(PersistenceSessionFactory)}.
      */
-    protected IsisTransactionManager createTransactionManager(final IsisConfiguration configuration,
-        final AdapterManagerProxy adapterManager, final PersistenceSessionTransactionManagement transactionManagement) {
-        return new ClientSideTransactionManager(adapterManager, transactionManagement, getServerFacade(),
-            getEncoderDecoder());
+    protected IsisTransactionManager createTransactionManager(final IsisConfiguration configuration, final AdapterManagerProxy adapterManager, final PersistenceSessionTransactionManagement transactionManagement) {
+        return new ClientSideTransactionManager(adapterManager, transactionManagement, getServerFacade(), getEncoderDecoder());
     }
 
     // /////////////////////////////////////////////////////////////////
@@ -195,8 +189,7 @@ public abstract class ProxyInstallerAbstract extends PersistenceMechanismInstall
 
     @Override
     public List<FacetDecorator> createDecorators() {
-        return Arrays.<FacetDecorator> asList(new ProxyFacetDecorator(getConfiguration(), getServerFacade(),
-            getEncoderDecoder()));
+        return Arrays.<FacetDecorator> asList(new ProxyFacetDecorator(getConfiguration(), getServerFacade(), getEncoderDecoder()));
     }
 
 }

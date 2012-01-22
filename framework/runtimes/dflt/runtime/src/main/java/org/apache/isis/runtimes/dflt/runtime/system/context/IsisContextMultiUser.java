@@ -23,7 +23,8 @@ import org.apache.isis.runtimes.dflt.runtime.system.session.IsisSession;
 import org.apache.isis.runtimes.dflt.runtime.system.session.IsisSessionFactory;
 
 /**
- * Provides <i>access to</i> the current {@link IsisSession} in a multi-user deployment.
+ * Provides <i>access to</i> the current {@link IsisSession} in a multi-user
+ * deployment.
  */
 public abstract class IsisContextMultiUser extends IsisContext {
 
@@ -35,8 +36,7 @@ public abstract class IsisContextMultiUser extends IsisContext {
         this(ContextReplacePolicy.NOT_REPLACEABLE, SessionClosePolicy.EXPLICIT_CLOSE, sessionFactory);
     }
 
-    protected IsisContextMultiUser(final ContextReplacePolicy contextReplacePolicy,
-        final SessionClosePolicy sessionClosePolicy, final IsisSessionFactory sessionFactory) {
+    protected IsisContextMultiUser(final ContextReplacePolicy contextReplacePolicy, final SessionClosePolicy sessionClosePolicy, final IsisSessionFactory sessionFactory) {
         super(contextReplacePolicy, sessionClosePolicy, sessionFactory);
     }
 

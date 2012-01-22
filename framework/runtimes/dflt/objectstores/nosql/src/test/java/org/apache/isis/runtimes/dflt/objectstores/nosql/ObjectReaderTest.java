@@ -19,6 +19,9 @@
 
 package org.apache.isis.runtimes.dflt.objectstores.nosql;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -38,9 +41,6 @@ import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.junit.Before;
 import org.junit.Test;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
 
 public class ObjectReaderTest {
 
@@ -63,21 +63,25 @@ public class ObjectReaderTest {
         objectReader = new ObjectReader();
         keyCreator = context.mock(KeyCreator.class);
         versionCreator = context.mock(VersionCreator.class);
-        
-        
+
         dataEncrypter = new HashMap<String, DataEncryption>();
-        DataEncryption dataEncrypter1 = new DataEncryption() {
+        final DataEncryption dataEncrypter1 = new DataEncryption() {
+            @Override
             public String getType() {
                 return "etc1";
             }
 
-            public void init(IsisConfiguration configuration) {}
-            
-            public String encrypt(String plainText) {
+            @Override
+            public void init(final IsisConfiguration configuration) {
+            }
+
+            @Override
+            public String encrypt(final String plainText) {
                 throw new UnexpectedCallException();
             }
 
-            public String decrypt(String encryptedText) {
+            @Override
+            public String decrypt(final String encryptedText) {
                 return encryptedText.substring(3);
             }
         };
@@ -176,8 +180,7 @@ public class ObjectReaderTest {
 
     @Test
     public void testReadingCollection() throws Exception {
-        final ObjectSpecification specification =
-            IsisContext.getSpecificationLoader().loadSpecification(ExampleValuePojo.class);
+        final ObjectSpecification specification = IsisContext.getSpecificationLoader().loadSpecification(ExampleValuePojo.class);
         reader2 = context.mock(StateReader.class, "reader 2");
         context.checking(new Expectations() {
             {
@@ -250,8 +253,7 @@ public class ObjectReaderTest {
         });
 
         final ObjectSpecification specification = IsisContext.getSpecificationLoader().loadSpecification(ExampleValuePojo.class);
-        final ObjectAdapter readObject = IsisContext.getPersistenceSession().recreateAdapter(SerialOid.createPersistent(4),
-                specification);
+        final ObjectAdapter readObject = IsisContext.getPersistenceSession().recreateAdapter(SerialOid.createPersistent(4), specification);
 
         objectReader.update(reader1, keyCreator, versionCreator, dataEncrypter, readObject);
 

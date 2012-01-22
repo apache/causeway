@@ -32,37 +32,41 @@ public class AesEncryption implements DataEncryption {
 
     private static final String AES = "AES";
     private final byte[] specKey;
-    
+
     public AesEncryption() {
-        specKey = new byte[] { 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09,
-                0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f, 0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17 };
+        specKey = new byte[] { 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f, 0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17 };
     }
 
-    public void init(IsisConfiguration configuration) {}
-    
+    @Override
+    public void init(final IsisConfiguration configuration) {
+    }
+
+    @Override
     public String getType() {
         return AES;
     }
 
-    public String encrypt(String plainText) {
+    @Override
+    public String encrypt(final String plainText) {
         try {
-            SecretKeySpec key = new SecretKeySpec(specKey, AES);
-            Cipher cipher = Cipher.getInstance("AES/ECB/PKCS7Padding");
+            final SecretKeySpec key = new SecretKeySpec(specKey, AES);
+            final Cipher cipher = Cipher.getInstance("AES/ECB/PKCS7Padding");
             cipher.init(Cipher.ENCRYPT_MODE, key);
             return new String(cipher.doFinal(plainText.getBytes()));
-        } catch (Exception e) {
+        } catch (final Exception e) {
             throw new NoSqlStoreException(e);
         }
     }
 
-    public String decrypt(String encryptedText) {
+    @Override
+    public String decrypt(final String encryptedText) {
         try {
-            SecretKeySpec key = new SecretKeySpec(specKey, AES);
-            Cipher cipher = Cipher.getInstance("AES/ECB/PKCS7Padding");
+            final SecretKeySpec key = new SecretKeySpec(specKey, AES);
+            final Cipher cipher = Cipher.getInstance("AES/ECB/PKCS7Padding");
             cipher.init(Cipher.DECRYPT_MODE, key);
-            byte[] decrypted = cipher.doFinal(encryptedText.getBytes());
+            final byte[] decrypted = cipher.doFinal(encryptedText.getBytes());
             return new String(decrypted);
-        } catch (Exception e) {
+        } catch (final Exception e) {
             throw new NoSqlStoreException(e);
         }
     }

@@ -30,13 +30,11 @@ public class AuthenticationManagerProxy extends AuthenticationManagerStandardFor
 
     private final ServerFacade serverFacade;
 
-    public AuthenticationManagerProxy(final IsisConfiguration configuration, final ServerFacade serverFacade,
-        final ObjectEncoderDecoder encoderDecoder) {
+    public AuthenticationManagerProxy(final IsisConfiguration configuration, final ServerFacade serverFacade, final ObjectEncoderDecoder encoderDecoder) {
         super(configuration);
         this.serverFacade = serverFacade;
 
-        final ProxyAuthenticator authenticator =
-            new ProxyAuthenticator(getConfiguration(), serverFacade, encoderDecoder);
+        final ProxyAuthenticator authenticator = new ProxyAuthenticator(getConfiguration(), serverFacade, encoderDecoder);
         addAuthenticator(authenticator);
     }
 

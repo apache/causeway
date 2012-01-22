@@ -47,8 +47,7 @@ public class UserProfileContentWriterTest {
     @Test
     public void emptyStructure() throws Exception {
         writeContent();
-        assertEquals("<profile>\n  <options>\n  </options>\n  <perspectives>\n  </perspectives>\n</profile>\n",
-            writer.toString());
+        assertEquals("<profile>\n  <options>\n  </options>\n  <perspectives>\n  </perspectives>\n</profile>\n", writer.toString());
     }
 
     @Test
@@ -84,10 +83,7 @@ public class UserProfileContentWriterTest {
         profile.addToPerspectives(perspective);
         // debug();
         writeContent();
-        assertEquals(
-            "<profile>\n  <options>\n  </options>\n  <perspectives>\n"
-                + "    <perspective name=\"test\">\n      <services>\n      </services>\n      <objects>\n      </objects>\n    </perspective>\n"
-                + "  </perspectives>\n</profile>\n", writer.toString());
+        assertEquals("<profile>\n  <options>\n  </options>\n  <perspectives>\n" + "    <perspective name=\"test\">\n      <services>\n      </services>\n      <objects>\n      </objects>\n    </perspective>\n" + "  </perspectives>\n</profile>\n", writer.toString());
     }
 
     // // Helpers

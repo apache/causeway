@@ -145,8 +145,7 @@ public class TestProxyIdentityMapOriginal implements AdapterManagerExtended {
     }
 
     @Override
-    public ObjectAdapter adapterFor(final Object pojo, final ObjectAdapter ownerAdapter,
-        final IdentifiedHolder identifiedHolder) {
+    public ObjectAdapter adapterFor(final Object pojo, final ObjectAdapter ownerAdapter, final IdentifiedHolder identifiedHolder) {
         throw new NotYetImplementedException();
     }
 

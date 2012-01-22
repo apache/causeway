@@ -37,7 +37,7 @@ public final class OptionHandlerPort implements OptionHandler {
     static final String PORT_LONG_OPT = "port";
     static final String PORT_OPT = "p";
 
-    public static String[] appendArg(String[] args, int port) {
+    public static String[] appendArg(final String[] args, final int port) {
         return ArrayUtils.append(args, "--" + PORT_LONG_OPT, "" + port);
     }
 
@@ -45,9 +45,7 @@ public final class OptionHandlerPort implements OptionHandler {
     @SuppressWarnings("static-access")
     public void addOption(final Options options) {
         OptionBuilder.withArgName("port");
-        final Option option =
-            OptionBuilder.hasArg().withLongOpt(OptionHandlerPort.PORT_LONG_OPT).withDescription("port to listen on")
-                .create(OptionHandlerPort.PORT_OPT);
+        final Option option = OptionBuilder.hasArg().withLongOpt(OptionHandlerPort.PORT_LONG_OPT).withDescription("port to listen on").create(OptionHandlerPort.PORT_OPT);
         options.addOption(option);
     }
 

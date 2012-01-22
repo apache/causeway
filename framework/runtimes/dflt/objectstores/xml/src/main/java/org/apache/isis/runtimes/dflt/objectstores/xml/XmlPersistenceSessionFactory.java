@@ -25,8 +25,7 @@ import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
 
 public class XmlPersistenceSessionFactory extends PersistenceSessionFactoryDelegating {
 
-    public XmlPersistenceSessionFactory(final DeploymentType deploymentType,
-        final PersistenceSessionFactoryDelegate persistenceSessionFactoryDelegate) {
+    public XmlPersistenceSessionFactory(final DeploymentType deploymentType, final PersistenceSessionFactoryDelegate persistenceSessionFactoryDelegate) {
         super(deploymentType, persistenceSessionFactoryDelegate);
     }
 }

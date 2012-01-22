@@ -44,10 +44,12 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 
 /**
- * Initialize the {@link IsisSystem} when the web application starts, and destroys it when it ends.
+ * Initialize the {@link IsisSystem} when the web application starts, and
+ * destroys it when it ends.
  * <p>
- * Implementation note: we use a number of helper builders to keep this class as small and focused as possible. The
- * builders are available for reuse by other bootstrappers.
+ * Implementation note: we use a number of helper builders to keep this class as
+ * small and focused as possible. The builders are available for reuse by other
+ * bootstrappers.
  */
 public class IsisWebAppBootstrapper implements ServletContextListener {
 
@@ -77,9 +79,7 @@ public class IsisWebAppBootstrapper implements ServletContextListener {
             loggingConfigurer.configureLogging(webInfDir, new String[0]);
 
             // will load either from WEB-INF or from the classpath.
-            final IsisConfigurationBuilder isisConfigurationBuilder =
-                new IsisConfigurationBuilderResourceStreams(new ResourceStreamSourceForWebInf(servletContext),
-                    ResourceStreamSourceContextLoaderClassPath.create());
+            final IsisConfigurationBuilder isisConfigurationBuilder = new IsisConfigurationBuilderResourceStreams(new ResourceStreamSourceForWebInf(servletContext), ResourceStreamSourceContextLoaderClassPath.create());
 
             primeConfigurationBuilder(isisConfigurationBuilder, servletContext);
 
@@ -106,18 +106,14 @@ public class IsisWebAppBootstrapper implements ServletContextListener {
         LOG.info("server started");
     }
 
-    private Injector createGuiceInjector(final IsisConfigurationBuilder isisConfigurationBuilder,
-        final DeploymentType deploymentType, final InstallerLookup installerLookup) {
+    private Injector createGuiceInjector(final IsisConfigurationBuilder isisConfigurationBuilder, final DeploymentType deploymentType, final InstallerLookup installerLookup) {
         final IsisModule isisModule = new IsisModule(deploymentType, isisConfigurationBuilder, installerLookup);
         return Guice.createInjector(isisModule);
     }
 
     @SuppressWarnings("unchecked")
-    private void primeConfigurationBuilder(final IsisConfigurationBuilder isisConfigurationBuilder,
-        final ServletContext servletContext) {
-        final List<IsisConfigurationBuilderPrimer> isisConfigurationBuilderPrimers =
-            (List<IsisConfigurationBuilderPrimer>) servletContext
-                .getAttribute(WebAppConstants.CONFIGURATION_PRIMERS_KEY);
+    private void primeConfigurationBuilder(final IsisConfigurationBuilder isisConfigurationBuilder, final ServletContext servletContext) {
+        final List<IsisConfigurationBuilderPrimer> isisConfigurationBuilderPrimers = (List<IsisConfigurationBuilderPrimer>) servletContext.getAttribute(WebAppConstants.CONFIGURATION_PRIMERS_KEY);
         if (isisConfigurationBuilderPrimers == null) {
             return;
         }
@@ -127,16 +123,17 @@ public class IsisWebAppBootstrapper implements ServletContextListener {
     }
 
     /**
-     * Checks {@link IsisConfigurationBuilder configuration} for {@value SystemConstants#DEPLOYMENT_TYPE_KEY}, (that is,
-     * from the command line), but otherwise searches in the {@link ServletContext}, first for
-     * {@value WebAppConstants#DEPLOYMENT_TYPE_KEY} and also {@value SystemConstants#DEPLOYMENT_TYPE_KEY}.
+     * Checks {@link IsisConfigurationBuilder configuration} for
+     * {@value SystemConstants#DEPLOYMENT_TYPE_KEY}, (that is, from the command
+     * line), but otherwise searches in the {@link ServletContext}, first for
+     * {@value WebAppConstants#DEPLOYMENT_TYPE_KEY} and also
+     * {@value SystemConstants#DEPLOYMENT_TYPE_KEY}.
      * <p>
-     * If no setting is found, defaults to {@value WebAppConstants#DEPLOYMENT_TYPE_DEFAULT}.
+     * If no setting is found, defaults to
+     * {@value WebAppConstants#DEPLOYMENT_TYPE_DEFAULT}.
      */
-    private DeploymentType determineDeploymentType(final IsisConfigurationBuilder isisConfigurationBuilder,
-        final ServletContext servletContext) {
-        String deploymentTypeStr =
-            isisConfigurationBuilder.getConfiguration().getString(SystemConstants.DEPLOYMENT_TYPE_KEY);
+    private DeploymentType determineDeploymentType(final IsisConfigurationBuilder isisConfigurationBuilder, final ServletContext servletContext) {
+        String deploymentTypeStr = isisConfigurationBuilder.getConfiguration().getString(SystemConstants.DEPLOYMENT_TYPE_KEY);
         if (deploymentTypeStr == null) {
             deploymentTypeStr = servletContext.getInitParameter(WebAppConstants.DEPLOYMENT_TYPE_KEY);
         }
@@ -149,8 +146,7 @@ public class IsisWebAppBootstrapper implements ServletContextListener {
         return DeploymentType.lookup(deploymentTypeStr);
     }
 
-    private void addConfigurationResourcesForDeploymentType(final IsisConfigurationBuilder configurationLoader,
-        final DeploymentType deploymentType) {
+    private void addConfigurationResourcesForDeploymentType(final IsisConfigurationBuilder configurationLoader, final DeploymentType deploymentType) {
         final String type = deploymentType.name().toLowerCase();
         configurationLoader.addConfigurationResource(type + ".properties", NotFoundPolicy.CONTINUE);
     }
@@ -163,14 +159,12 @@ public class IsisWebAppBootstrapper implements ServletContextListener {
         }
     }
 
-    private void addConfigurationResourcesForViewers(final IsisConfigurationBuilder configurationLoader,
-        final ServletContext servletContext) {
+    private void addConfigurationResourcesForViewers(final IsisConfigurationBuilder configurationLoader, final ServletContext servletContext) {
         addConfigurationResourcesForContextParam(configurationLoader, servletContext, "isis.viewers");
         addConfigurationResourcesForContextParam(configurationLoader, servletContext, "isis.viewer");
     }
 
-    private void addConfigurationResourcesForContextParam(final IsisConfigurationBuilder configurationLoader,
-        final ServletContext servletContext, final String name) {
+    private void addConfigurationResourcesForContextParam(final IsisConfigurationBuilder configurationLoader, final ServletContext servletContext, final String name) {
         final String viewers = servletContext.getInitParameter(name);
         if (viewers == null) {
             return;

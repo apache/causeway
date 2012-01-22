@@ -46,16 +46,8 @@ public class OptionHandlerPersistor extends OptionHandlerAbstract {
     @Override
     @SuppressWarnings("static-access")
     public void addOption(final Options options) {
-        final Object[] objectPersistenceMechanisms =
-            installerRepository.getInstallers(PersistenceMechanismInstaller.class);
-        final Option option =
-            OptionBuilder
-                .withArgName("name|class name")
-                .hasArg()
-                .withLongOpt(OBJECT_PERSISTENCE_LONG_OPT)
-                .withDescription(
-                    "object persistence mechanism to use (ignored if type is prototype or client): "
-                        + availableInstallers(objectPersistenceMechanisms) + "; or class name")
+        final Object[] objectPersistenceMechanisms = installerRepository.getInstallers(PersistenceMechanismInstaller.class);
+        final Option option = OptionBuilder.withArgName("name|class name").hasArg().withLongOpt(OBJECT_PERSISTENCE_LONG_OPT).withDescription("object persistence mechanism to use (ignored if type is prototype or client): " + availableInstallers(objectPersistenceMechanisms) + "; or class name")
                 .create(OBJECT_PERSISTENCE_OPT);
         options.addOption(option);
     }

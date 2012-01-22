@@ -27,8 +27,7 @@ import org.apache.isis.runtimes.dflt.runtime.system.transaction.UpdateNotifier;
 public class SqlExecutionContext implements PersistenceCommandContext {
     private final DatabaseConnector connection;
 
-    public SqlExecutionContext(final DatabaseConnector connection, final IsisTransactionManager transactionManager,
-        final MessageBroker messageBroker, final UpdateNotifier updateNotifier) {
+    public SqlExecutionContext(final DatabaseConnector connection, final IsisTransactionManager transactionManager, final MessageBroker messageBroker, final UpdateNotifier updateNotifier) {
         this.connection = connection;
     }
 

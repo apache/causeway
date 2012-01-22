@@ -28,16 +28,17 @@ import org.apache.isis.runtimes.dflt.runtime.viewer.web.WebAppSpecification;
 import org.apache.isis.runtimes.dflt.runtime.web.EmbeddedWebViewer;
 
 /**
- * Convenience implementation of a {@link IsisViewer} providing the ability to run a Jetty web server configured for
- * http remoting from the {@link Isis command line}.
+ * Convenience implementation of a {@link IsisViewer} providing the ability to
+ * run a Jetty web server configured for http remoting from the {@link Isis
+ * command line}.
  * 
  * <p>
- * To run, use the <tt>--viewer encoding-http</tt> flag. The client-side should run using
- * <tt>--connector encoding-http</tt> flag.
+ * To run, use the <tt>--viewer encoding-http</tt> flag. The client-side should
+ * run using <tt>--connector encoding-http</tt> flag.
  * 
  * <p>
- * In a production deployment the configuration represented by the {@link WebAppSpecification} would be specified in the
- * <tt>web.xml<tt> file.
+ * In a production deployment the configuration represented by the
+ * {@link WebAppSpecification} would be specified in the <tt>web.xml<tt> file.
  */
 public class EncodingOverHttpRemotingViewerInstaller extends IsisViewerInstallerAbstract {
 
@@ -50,7 +51,8 @@ public class EncodingOverHttpRemotingViewerInstaller extends IsisViewerInstaller
     @Override
     protected void addConfigurationResources(final List<String> configurationResources) {
         super.addConfigurationResources(configurationResources);
-        // TODO: this (small) hack is because we don't load up the Protocol (Marshaller)
+        // TODO: this (small) hack is because we don't load up the Protocol
+        // (Marshaller)
         // and Transport using the installers.
         configurationResources.add("protocol.properties");
         configurationResources.add("protocol_encoding.properties");

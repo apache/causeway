@@ -46,8 +46,7 @@ public abstract class MarshallerAbstract implements ClientMarshaller, ServerMars
     @Override
     public void init() {
         transport.init();
-        keepAlive =
-            getConfiguration().getBoolean(MarshallingConstants.KEEPALIVE_KEY, MarshallingConstants.KEEPALIVE_DEFAULT);
+        keepAlive = getConfiguration().getBoolean(MarshallingConstants.KEEPALIVE_KEY, MarshallingConstants.KEEPALIVE_DEFAULT);
         if (LOG.isInfoEnabled()) {
             LOG.info("keepAlive=" + keepAlive);
         }
@@ -82,7 +81,8 @@ public abstract class MarshallerAbstract implements ClientMarshaller, ServerMars
     }
 
     /**
-     * Not API. Whether reconnects are performed depends on the marshaller/protocol.
+     * Not API. Whether reconnects are performed depends on the
+     * marshaller/protocol.
      */
     protected void reconnect() throws IOException {
         disconnect();

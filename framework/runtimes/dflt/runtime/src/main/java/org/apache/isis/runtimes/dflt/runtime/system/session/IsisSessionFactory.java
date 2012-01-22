@@ -46,39 +46,47 @@ public interface IsisSessionFactory extends ApplicationScopedComponent {
     IsisSession openSession(final AuthenticationSession session);
 
     /**
-     * The {@link ApplicationScopedComponent application-scoped} {@link DeploymentType}.
+     * The {@link ApplicationScopedComponent application-scoped}
+     * {@link DeploymentType}.
      */
     public DeploymentType getDeploymentType();
 
     /**
-     * The {@link ApplicationScopedComponent application-scoped} {@link IsisConfiguration}.
+     * The {@link ApplicationScopedComponent application-scoped}
+     * {@link IsisConfiguration}.
      */
     public IsisConfiguration getConfiguration();
 
     /**
-     * The {@link ApplicationScopedComponent application-scoped} {@link SpecificationLoader}.
+     * The {@link ApplicationScopedComponent application-scoped}
+     * {@link SpecificationLoader}.
      */
     public SpecificationLoader getSpecificationLoader();
 
     /**
-     * The {@link ApplicationScopedComponent application-scoped} {@link TemplateImageLoader}.
+     * The {@link ApplicationScopedComponent application-scoped}
+     * {@link TemplateImageLoader}.
      */
     public TemplateImageLoader getTemplateImageLoader();
 
     /**
-     * The {@link AuthenticationManager} that will be used to authenticate and create {@link AuthenticationSession}s
-     * {@link IsisSession#getAuthenticationSession() within} the {@link IsisSession}.
+     * The {@link AuthenticationManager} that will be used to authenticate and
+     * create {@link AuthenticationSession}s
+     * {@link IsisSession#getAuthenticationSession() within} the
+     * {@link IsisSession}.
      */
     public AuthenticationManager getAuthenticationManager();
 
     /**
-     * The {@link AuthorizationManager} that will be used to authorize access to domain objects.
+     * The {@link AuthorizationManager} that will be used to authorize access to
+     * domain objects.
      */
     public AuthorizationManager getAuthorizationManager();
 
     /**
-     * The {@link PersistenceSessionFactory} that will be used to create {@link PersistenceSession}
-     * {@link IsisSession#getPersistenceSession() within} the {@link IsisSession}.
+     * The {@link PersistenceSessionFactory} that will be used to create
+     * {@link PersistenceSession} {@link IsisSession#getPersistenceSession()
+     * within} the {@link IsisSession}.
      */
     public PersistenceSessionFactory getPersistenceSessionFactory();
 

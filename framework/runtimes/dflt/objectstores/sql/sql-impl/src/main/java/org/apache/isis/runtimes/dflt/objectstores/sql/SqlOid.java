@@ -177,8 +177,7 @@ public final class SqlOid implements Oid, Serializable {
 
     @Override
     public String toString() {
-        return (isTransient() ? "T" : "") + "OID#" + primaryKey.stringValue() + "/" + className
-            + (previous == null ? "" : "+");
+        return (isTransient() ? "T" : "") + "OID#" + primaryKey.stringValue() + "/" + className + (previous == null ? "" : "+");
     }
 
 }

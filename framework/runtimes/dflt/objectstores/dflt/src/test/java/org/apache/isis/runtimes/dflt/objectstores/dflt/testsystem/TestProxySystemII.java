@@ -60,7 +60,8 @@ public class TestProxySystemII {
         servicesList = Collections.emptyList();
 
         final TemplateImageLoader mockTemplateImageLoader = mockery.mock(TemplateImageLoader.class);
-        // final SpecificationLoader mockSpecificationLoader = mockery.mock(SpecificationLoader.class);
+        // final SpecificationLoader mockSpecificationLoader =
+        // mockery.mock(SpecificationLoader.class);
         // final PersistenceSessionFactory mockPersistenceSessionFactory =
         // mockery.mock(PersistenceSessionFactory.class);
         final UserProfileLoader mockUserProfileLoader = mockery.mock(UserProfileLoader.class);
@@ -87,18 +88,13 @@ public class TestProxySystemII {
 
         ((ObjectReflectorDefault) mockSpecificationLoader).setRuntimeContext(new RuntimeContextFromSession());
 
-        final InMemoryPersistenceMechanismInstaller persistenceMechanismInstaller =
-            new InMemoryPersistenceMechanismInstaller();
+        final InMemoryPersistenceMechanismInstaller persistenceMechanismInstaller = new InMemoryPersistenceMechanismInstaller();
         persistenceMechanismInstaller.setConfiguration(configuration);
-        final PersistenceSessionFactory mockPersistenceSessionFactory =
-            persistenceMechanismInstaller.createPersistenceSessionFactory(DeploymentType.PROTOTYPE);
+        final PersistenceSessionFactory mockPersistenceSessionFactory = persistenceMechanismInstaller.createPersistenceSessionFactory(DeploymentType.PROTOTYPE);
 
         // mockPersistenceSessionFactory.init();
 
-        final IsisSessionFactoryDefault sessionFactory =
-            new IsisSessionFactoryDefault(DeploymentType.EXPLORATION, configuration, mockTemplateImageLoader,
-                mockSpecificationLoader, mockAuthenticationManager, mockAuthorizationManager, mockUserProfileLoader,
-                mockPersistenceSessionFactory, servicesList);
+        final IsisSessionFactoryDefault sessionFactory = new IsisSessionFactoryDefault(DeploymentType.EXPLORATION, configuration, mockTemplateImageLoader, mockSpecificationLoader, mockAuthenticationManager, mockAuthorizationManager, mockUserProfileLoader, mockPersistenceSessionFactory, servicesList);
         final IsisContext context = IsisContextStatic.createRelaxedInstance(sessionFactory);
         IsisContext.setConfiguration(sessionFactory.getConfiguration());
         sessionFactory.init();

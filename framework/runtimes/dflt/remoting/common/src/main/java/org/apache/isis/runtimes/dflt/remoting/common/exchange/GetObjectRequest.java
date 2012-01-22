@@ -76,7 +76,8 @@ public class GetObjectRequest extends RequestAbstract {
     // ///////////////////////////////////////////////////////
 
     /**
-     * {@link #setResponse(Object) Sets a response} of a {@link GetObjectResponse}.
+     * {@link #setResponse(Object) Sets a response} of a
+     * {@link GetObjectResponse}.
      */
     @Override
     public void execute(final ServerFacade serverFacade) {

@@ -62,8 +62,7 @@ public class InstallerVersion implements ComponentDetails {
     private String findVersion(final String moduleId) {
         try {
             final String module = moduleId.replace(":", "/");
-            final InputStream resourceAsStream =
-                AboutIsis.class.getClassLoader().getResourceAsStream("META-INF/maven/" + module + "/pom.properties");
+            final InputStream resourceAsStream = AboutIsis.class.getClassLoader().getResourceAsStream("META-INF/maven/" + module + "/pom.properties");
             if (resourceAsStream == null) {
                 return "no version";
             }

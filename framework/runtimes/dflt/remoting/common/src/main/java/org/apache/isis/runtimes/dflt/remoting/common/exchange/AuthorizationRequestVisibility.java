@@ -29,8 +29,7 @@ import org.apache.isis.runtimes.dflt.remoting.common.facade.ServerFacade;
 public class AuthorizationRequestVisibility extends AuthorizationRequestAbstract {
     private static final long serialVersionUID = 1L;
 
-    public AuthorizationRequestVisibility(final AuthenticationSession session, final IdentityData targetData,
-        final String data) {
+    public AuthorizationRequestVisibility(final AuthenticationSession session, final IdentityData targetData, final String data) {
         super(session, targetData, data);
         initialized();
     }
@@ -49,7 +48,8 @@ public class AuthorizationRequestVisibility extends AuthorizationRequestAbstract
     // ///////////////////////////////////////////////////////
 
     /**
-     * {@link #setResponse(Object) Sets a response} of an {@link AuthorizationResponse}.
+     * {@link #setResponse(Object) Sets a response} of an
+     * {@link AuthorizationResponse}.
      */
     @Override
     public void execute(final ServerFacade serverFacade) {

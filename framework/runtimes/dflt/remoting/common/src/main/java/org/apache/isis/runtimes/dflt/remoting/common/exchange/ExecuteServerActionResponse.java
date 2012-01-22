@@ -47,9 +47,7 @@ public class ExecuteServerActionResponse implements Encodable, Serializable, Mes
     private final ObjectData persistedTarget;
     private final ObjectData[] persistedParameters;
 
-    public ExecuteServerActionResponse(final Data result, final ObjectData[] updatesData,
-        final ReferenceData[] disposed, final ObjectData persistedTarget, final ObjectData[] persistedParameters,
-        final String[] messages, final String[] warnings) {
+    public ExecuteServerActionResponse(final Data result, final ObjectData[] updatesData, final ReferenceData[] disposed, final ObjectData persistedTarget, final ObjectData[] persistedParameters, final String[] messages, final String[] warnings) {
         this.result = result;
         this.updatesData = updatesData;
         this.disposedData = disposed;
@@ -105,15 +103,16 @@ public class ExecuteServerActionResponse implements Encodable, Serializable, Mes
     }
 
     /**
-     * Return the ObjectDatas for any of the parameters (in the same seqence as passed to the server) if they were was
-     * persisited by the server.
+     * Return the ObjectDatas for any of the parameters (in the same seqence as
+     * passed to the server) if they were was persisited by the server.
      */
     public ObjectData[] getPersistedParameters() {
         return persistedParameters;
     }
 
     /**
-     * Return the set of ObjectData for any objects that where changed by the server while executing the action.
+     * Return the set of ObjectData for any objects that where changed by the
+     * server while executing the action.
      */
     public ObjectData[] getUpdates() {
         return updatesData;

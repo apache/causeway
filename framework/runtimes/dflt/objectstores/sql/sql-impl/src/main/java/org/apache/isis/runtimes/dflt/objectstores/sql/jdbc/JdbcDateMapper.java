@@ -19,8 +19,6 @@
 
 package org.apache.isis.runtimes.dflt.objectstores.sql.jdbc;
 
-import org.joda.time.LocalDate;
-
 import org.apache.isis.applib.PersistFailedException;
 import org.apache.isis.applib.value.Date;
 import org.apache.isis.core.commons.exceptions.IsisApplicationException;
@@ -33,9 +31,11 @@ import org.apache.isis.runtimes.dflt.objectstores.sql.Results;
 import org.apache.isis.runtimes.dflt.objectstores.sql.mapping.FieldMapping;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
+import org.joda.time.LocalDate;
 
 /**
- * Handles reading and writing java.sql.Date and org.apache.isis.applib.value.Date values to and from the data store.
+ * Handles reading and writing java.sql.Date and
+ * org.apache.isis.applib.value.Date values to and from the data store.
  * 
  * 
  * @version $Rev$ $Date$
@@ -47,8 +47,8 @@ public class JdbcDateMapper extends AbstractJdbcFieldMapping {
 
     public static class Factory extends AbstractFieldMappingFactory {
         @Override
-        public FieldMapping createFieldMapping(ObjectSpecification object, final ObjectAssociation field) {
-            String dataType = getTypeOverride(object, field, Defaults.TYPE_DATE());
+        public FieldMapping createFieldMapping(final ObjectSpecification object, final ObjectAssociation field) {
+            final String dataType = getTypeOverride(object, field, Defaults.TYPE_DATE());
             return new JdbcDateMapper(field, dataType);
         }
     }
@@ -70,8 +70,7 @@ public class JdbcDateMapper extends AbstractJdbcFieldMapping {
             final Date asDate = (Date) value.getObject();
             return new LocalDate(asDate.getMillisSinceEpoch());
         } else {
-            throw new IsisApplicationException("Unimplemented JdbcDateMapper instance type: "
-                + value.getClass().toString());
+            throw new IsisApplicationException("Unimplemented JdbcDateMapper instance type: " + value.getClass().toString());
         }
     }
 

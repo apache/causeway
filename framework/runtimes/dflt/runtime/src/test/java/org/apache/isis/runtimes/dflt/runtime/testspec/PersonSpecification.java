@@ -30,7 +30,6 @@ import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.core.metamodel.spec.feature.ObjectActionContainer.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.testspec.TestProxySpecification;
 import org.apache.isis.core.testsupport.testdomain.Person;
@@ -120,13 +119,12 @@ public class PersonSpecification extends TestProxySpecification {
     }
 
     @Override
-    public ObjectAction getObjectAction(final ActionType type, final String name,
-        final List<ObjectSpecification> parameters) {
+    public ObjectAction getObjectAction(final ActionType type, final String name, final List<ObjectSpecification> parameters) {
         return null;
     }
 
     @Override
-    public List<ObjectAction> getObjectActions(final ActionType type, Contributed contributed) {
+    public List<ObjectAction> getObjectActions(final ActionType type, final Contributed contributed) {
         return null;
     }
 

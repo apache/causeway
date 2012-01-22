@@ -28,8 +28,10 @@ import java.util.List;
 import org.apache.isis.applib.AbstractDomainObject;
 
 /**
- * This class is the collection point of all the polymorphism and related tests. There is nothing really special about
- * it, it is just a placeholder for the various tests related to polymorphism or recursion (JIRA ISIS-117 and ISIS-118).
+ * This class is the collection point of all the polymorphism and related tests.
+ * There is nothing really special about it, it is just a placeholder for the
+ * various tests related to polymorphism or recursion (JIRA ISIS-117 and
+ * ISIS-118).
  * 
  * @author Kevin
  * 
@@ -91,7 +93,8 @@ public class PolyTestClass extends AbstractDomainObject {
 
     // }}
 
-    // {{ PolySelfRefClass: Can we store / restore classes that contain self-referencing collections?
+    // {{ PolySelfRefClass: Can we store / restore classes that contain
+    // self-referencing collections?
     private PolySelfRefClass polySelfRefClass;
 
     public PolySelfRefClass getPolySelfRefClass() {

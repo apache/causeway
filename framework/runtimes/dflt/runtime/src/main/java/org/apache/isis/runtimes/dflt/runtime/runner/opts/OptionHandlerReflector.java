@@ -47,14 +47,7 @@ public class OptionHandlerReflector extends OptionHandlerAbstract {
     @SuppressWarnings("static-access")
     public void addOption(final Options options) {
         final Object[] reflectors = installerRepository.getInstallers(ObjectReflectorInstaller.class);
-        final Option option =
-            OptionBuilder
-                .withArgName("name|class name")
-                .hasArg()
-                .withLongOpt(REFLECTOR_LONG_OPT)
-                .withDescription(
-                    "reflector to use (ignored if type is prototype or client): " + availableInstallers(reflectors)
-                        + "; or class name").create(REFLECTOR_OPT);
+        final Option option = OptionBuilder.withArgName("name|class name").hasArg().withLongOpt(REFLECTOR_LONG_OPT).withDescription("reflector to use (ignored if type is prototype or client): " + availableInstallers(reflectors) + "; or class name").create(REFLECTOR_OPT);
         options.addOption(option);
 
     }

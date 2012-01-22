@@ -71,7 +71,8 @@ public abstract class ContextCategory {
     public abstract void initContext(IsisSessionFactory sessionFactory);
 
     /**
-     * Whether the list of connector names provided is compatible with this {@link ContextCategory}.
+     * Whether the list of connector names provided is compatible with this
+     * {@link ContextCategory}.
      */
     public abstract boolean canSpecifyViewers(List<String> viewers);
 

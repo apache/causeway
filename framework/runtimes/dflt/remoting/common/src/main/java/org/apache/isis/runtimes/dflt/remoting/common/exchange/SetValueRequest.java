@@ -34,8 +34,7 @@ public class SetValueRequest extends RequestAbstract {
     private final EncodableObjectData value;
     private final IdentityData target;
 
-    public SetValueRequest(final AuthenticationSession session, final String fieldIdentifier,
-        final IdentityData target, final EncodableObjectData value) {
+    public SetValueRequest(final AuthenticationSession session, final String fieldIdentifier, final IdentityData target, final EncodableObjectData value) {
         super(session);
         this.fieldIdentifier = fieldIdentifier;
         this.target = target;

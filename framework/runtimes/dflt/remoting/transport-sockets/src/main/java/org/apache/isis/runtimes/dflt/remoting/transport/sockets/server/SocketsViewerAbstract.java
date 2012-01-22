@@ -68,14 +68,14 @@ public abstract class SocketsViewerAbstract extends IsisViewerAbstract implement
     // ////////////////////////////////////////////////////////////////
 
     /**
-     * TODO: generalize so can listen on multi-homed hosts using new Socket(port, 2, address);
+     * TODO: generalize so can listen on multi-homed hosts using new
+     * Socket(port, 2, address);
      */
     @Override
     public void init() {
         super.init();
 
-        final int port =
-            getConfiguration().getInteger(SocketsViewerConstants.SERVER_PORT, SocketTransportConstants.PORT_DEFAULT);
+        final int port = getConfiguration().getInteger(SocketsViewerConstants.SERVER_PORT, SocketTransportConstants.PORT_DEFAULT);
 
         workerPool = new WorkerPool(5);
 
@@ -125,7 +125,8 @@ public abstract class SocketsViewerAbstract extends IsisViewerAbstract implement
                 worker.setIncomingConnection(connection);
                 // worker.start();
 
-                // main thread accepts new connection - have a connection - therefore implicitly a request
+                // main thread accepts new connection - have a connection -
+                // therefore implicitly a request
                 // get worker; associate with connection
 
                 // receive request
@@ -209,8 +210,7 @@ public abstract class SocketsViewerAbstract extends IsisViewerAbstract implement
     /**
      * Hook method.
      */
-    protected abstract ServerConnection createServerConnection(final InputStream input, final OutputStream output,
-        final ServerFacade serverFacade);
+    protected abstract ServerConnection createServerConnection(final InputStream input, final OutputStream output, final ServerFacade serverFacade);
 
     // ////////////////////////////////////////////////////////////////
     // debugging

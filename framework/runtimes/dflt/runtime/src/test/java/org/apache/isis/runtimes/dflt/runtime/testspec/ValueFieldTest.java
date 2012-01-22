@@ -162,27 +162,22 @@ public abstract class ValueFieldTest extends FacetHolderNoop implements OneToOne
     }
 
     @Override
-    public VisibilityContext<?> createVisibleInteractionContext(final AuthenticationSession session,
-        final InteractionInvocationMethod invocationMethod, final ObjectAdapter targetObjectAdapter) {
+    public VisibilityContext<?> createVisibleInteractionContext(final AuthenticationSession session, final InteractionInvocationMethod invocationMethod, final ObjectAdapter targetObjectAdapter) {
         return null;
     }
 
     @Override
-    public UsabilityContext<?> createUsableInteractionContext(final AuthenticationSession session,
-        final InteractionInvocationMethod invocationMethod, final ObjectAdapter target) {
+    public UsabilityContext<?> createUsableInteractionContext(final AuthenticationSession session, final InteractionInvocationMethod invocationMethod, final ObjectAdapter target) {
         return null;
     }
 
     @Override
-    public ValidityContext<?> createValidateInteractionContext(final AuthenticationSession session,
-        final InteractionInvocationMethod invocationMethod, final ObjectAdapter owningObjectAdapter,
-        final ObjectAdapter newValue) {
+    public ValidityContext<?> createValidateInteractionContext(final AuthenticationSession session, final InteractionInvocationMethod invocationMethod, final ObjectAdapter owningObjectAdapter, final ObjectAdapter newValue) {
         return null;
     }
 
     @Override
-    public PropertyAccessContext createAccessInteractionContext(final AuthenticationSession session,
-        final InteractionInvocationMethod interactionMethod, final ObjectAdapter targetObjectAdapter) {
+    public PropertyAccessContext createAccessInteractionContext(final AuthenticationSession session, final InteractionInvocationMethod interactionMethod, final ObjectAdapter targetObjectAdapter) {
         return null;
     }
 

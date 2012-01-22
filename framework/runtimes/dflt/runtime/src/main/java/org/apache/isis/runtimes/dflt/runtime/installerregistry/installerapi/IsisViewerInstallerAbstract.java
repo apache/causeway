@@ -40,7 +40,8 @@ public abstract class IsisViewerInstallerAbstract extends InstallerAbstract impl
     }
 
     /**
-     * Subclasses should override (or else override {@link #createViewer()} if they need to do anything more elaborate.
+     * Subclasses should override (or else override {@link #createViewer()} if
+     * they need to do anything more elaborate.
      */
     protected IsisViewer doCreateViewer() {
         return null;

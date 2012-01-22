@@ -56,8 +56,10 @@ public class PersistenceQueryFindByPattern extends PersistenceQueryBuiltInAbstra
         for (int f = 0; f < fields.size(); f++) {
             final ObjectAssociation fld = fields.get(f);
 
-            // are ignoring internal collections - these probably should be considered
-            // ignore non-persistent fields - there is no persisted field to compare against
+            // are ignoring internal collections - these probably should be
+            // considered
+            // ignore non-persistent fields - there is no persisted field to
+            // compare against
             if (fld.isNotPersisted()) {
                 continue;
             }
@@ -88,7 +90,8 @@ public class PersistenceQueryFindByPattern extends PersistenceQueryBuiltInAbstra
                     // find the objects
                     final ObjectAdapter reqd = fld.get(pattern);
 
-                    // if pattern contains null reference then it matches anything
+                    // if pattern contains null reference then it matches
+                    // anything
                     if (reqd == null) {
                         continue;
                     }

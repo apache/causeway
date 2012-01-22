@@ -35,8 +35,7 @@ public abstract class AbstractServletOrFilterMapping {
         this(servletOrFilterClass, Collections.EMPTY_MAP, pathSpecs);
     }
 
-    public AbstractServletOrFilterMapping(final Class<?> servletOrFilterClass, final Map<String, String> initParams,
-        final String... pathSpecs) {
+    public AbstractServletOrFilterMapping(final Class<?> servletOrFilterClass, final Map<String, String> initParams, final String... pathSpecs) {
         this.servletOrFilterClass = servletOrFilterClass;
         this.initParams = initParams;
         this.pathSpecs = new ArrayList<String>(Arrays.asList(pathSpecs));

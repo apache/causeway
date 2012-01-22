@@ -64,16 +64,17 @@ public class ObjectStorePersistedObjectsDefault implements ObjectStorePersistedO
         final Oid oidLookedUpByName = serviceOidByIdMap.get(name);
         if (oidLookedUpByName != null) {
             if (oidLookedUpByName.equals(oid)) {
-                throw new IsisException("Already another service registered as name: " + name + " (existing Oid: "
-                    + oidLookedUpByName + ", " + "intended: " + oid + ")");
+                throw new IsisException("Already another service registered as name: " + name + " (existing Oid: " + oidLookedUpByName + ", " + "intended: " + oid + ")");
             }
         } else {
             serviceOidByIdMap.put(name, oid);
         }
     }
 
-    // TODO: this is where the clever logic needs to go to determine how to save into our custom Map.
-    // also think we shouldn't surface the entire Map, just the API we require (keySet, values etc).
+    // TODO: this is where the clever logic needs to go to determine how to save
+    // into our custom Map.
+    // also think we shouldn't surface the entire Map, just the API we require
+    // (keySet, values etc).
     @Override
     public ObjectStoreInstances instancesFor(final ObjectSpecification spec) {
         ObjectStoreInstances ins = instancesBySpecMap.get(spec);

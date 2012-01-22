@@ -36,8 +36,7 @@ public class PersistenceQueryFindUsingApplibQuerySerializable extends Persistenc
     private final Query<?> query;
     private final QueryCardinality cardinality;
 
-    public PersistenceQueryFindUsingApplibQuerySerializable(final ObjectSpecification specification,
-        final Query<?> query, final QueryCardinality cardinality) {
+    public PersistenceQueryFindUsingApplibQuerySerializable(final ObjectSpecification specification, final Query<?> query, final QueryCardinality cardinality) {
         super(specification);
         this.query = query;
         this.cardinality = cardinality;

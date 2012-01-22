@@ -75,7 +75,8 @@ public class ExecuteClientActionRequest extends RequestAbstract {
     // ///////////////////////////////////////////////////////
 
     /**
-     * {@link #setResponse(Object) Sets a response} of a {@link ExecuteClientActionResponse}.
+     * {@link #setResponse(Object) Sets a response} of a
+     * {@link ExecuteClientActionResponse}.
      */
     @Override
     public void execute(final ServerFacade serverFacade) {

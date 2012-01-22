@@ -27,8 +27,7 @@ public final class OptionValidatorUserAndPasswordCombo implements OptionValidato
     private final OptionHandlerUser optionHandlerUser;
     private final OptionHandlerPassword optionHandlerPassword;
 
-    public OptionValidatorUserAndPasswordCombo(final OptionHandlerUser optionHandlerUser,
-        final OptionHandlerPassword optionHandlerPassword) {
+    public OptionValidatorUserAndPasswordCombo(final OptionHandlerUser optionHandlerUser, final OptionHandlerPassword optionHandlerPassword) {
         this.optionHandlerPassword = optionHandlerPassword;
         this.optionHandlerUser = optionHandlerUser;
     }

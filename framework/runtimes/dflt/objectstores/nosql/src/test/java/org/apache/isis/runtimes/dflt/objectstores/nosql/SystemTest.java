@@ -42,8 +42,7 @@ public class SystemTest {
 
     @Test
     public void test() {
-        final ObjectSpecification specification =
-            IsisContext.getSpecificationLoader().loadSpecification(ExampleReferencePojo.class);
+        final ObjectSpecification specification = IsisContext.getSpecificationLoader().loadSpecification(ExampleReferencePojo.class);
         final ObjectAdapter object = IsisContext.getPersistenceSession().createInstance(specification);
 
         final DebugBuilder debug = new DebugString();
@@ -52,7 +51,8 @@ public class SystemTest {
         /*
          * System.out.println(debug);
          * 
-         * System.out.println(Dump.adapter(object)); System.out.println(Dump.specification(object));
+         * System.out.println(Dump.adapter(object));
+         * System.out.println(Dump.specification(object));
          */
     }
 }

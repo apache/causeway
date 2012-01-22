@@ -34,10 +34,12 @@ public final class WebServerConstants {
     public static final String EMBEDDED_WEB_SERVER_ADDRESS_DEFAULT = "localhost";
 
     public static final String EMBEDDED_WEB_SERVER_RESOURCE_BASE_KEY = ROOT + "webapp";
-    public static final String EMBEDDED_WEB_SERVER_RESOURCE_BASE_DEFAULT = ""; // or "webapp" ??
+    public static final String EMBEDDED_WEB_SERVER_RESOURCE_BASE_DEFAULT = ""; // or
+                                                                               // "webapp"
+                                                                               // ??
 
     public static final String EMBEDDED_WEB_SERVER_STARTUP_MODE_KEY = ROOT + "startupMode";
-    public static final String EMBEDDED_WEB_SERVER_STARTUP_MODE_DEFAULT = StartupMode.FOREGROUND.name(); 
+    public static final String EMBEDDED_WEB_SERVER_STARTUP_MODE_DEFAULT = StartupMode.FOREGROUND.name();
 
     private WebServerConstants() {
     }

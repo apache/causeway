@@ -92,12 +92,12 @@ public class TestProxyAction extends FacetHolderNoop implements ObjectAction {
     }
 
     @Override
-    public ObjectActionParameter getParameterById(String paramId) {
+    public ObjectActionParameter getParameterById(final String paramId) {
         return null;
     }
 
     @Override
-    public ObjectActionParameter getParameterByName(String paramName) {
+    public ObjectActionParameter getParameterByName(final String paramName) {
         return null;
     }
 
@@ -201,21 +201,17 @@ public class TestProxyAction extends FacetHolderNoop implements ObjectAction {
     }
 
     @Override
-    public VisibilityContext<?> createVisibleInteractionContext(final AuthenticationSession session,
-        final InteractionInvocationMethod invocationMethod, final ObjectAdapter targetObjectAdapter) {
+    public VisibilityContext<?> createVisibleInteractionContext(final AuthenticationSession session, final InteractionInvocationMethod invocationMethod, final ObjectAdapter targetObjectAdapter) {
         return null;
     }
 
     @Override
-    public UsabilityContext<?> createUsableInteractionContext(final AuthenticationSession session,
-        final InteractionInvocationMethod invocationMethod, final ObjectAdapter target) {
+    public UsabilityContext<?> createUsableInteractionContext(final AuthenticationSession session, final InteractionInvocationMethod invocationMethod, final ObjectAdapter target) {
         return null;
     }
 
     @Override
-    public ActionInvocationContext createActionInvocationInteractionContext(final AuthenticationSession session,
-        final InteractionInvocationMethod invocationMethod, final ObjectAdapter object,
-        final ObjectAdapter[] candidateArguments) {
+    public ActionInvocationContext createActionInvocationInteractionContext(final AuthenticationSession session, final InteractionInvocationMethod invocationMethod, final ObjectAdapter object, final ObjectAdapter[] candidateArguments) {
         return null;
     }
 
@@ -264,6 +260,5 @@ public class TestProxyAction extends FacetHolderNoop implements ObjectAction {
     public FeatureType getFeatureType() {
         return FeatureType.ACTION;
     }
-
 
 }

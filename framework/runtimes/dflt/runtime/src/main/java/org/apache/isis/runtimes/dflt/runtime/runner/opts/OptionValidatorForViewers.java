@@ -36,10 +36,7 @@ public final class OptionValidatorForViewers implements OptionValidator {
         final List<String> viewerNames = optionHandlerViewer.getViewerNames();
 
         final boolean fail = !deploymentType.canSpecifyViewers(viewerNames);
-        final String failMsg =
-            String.format("Error: cannot specify %s viewer%s for deployment type %s\n",
-                Strings.plural(viewerNames, "more than one", "any"), Strings.plural(viewerNames, "", "s"),
-                deploymentType.nameLowerCase());
+        final String failMsg = String.format("Error: cannot specify %s viewer%s for deployment type %s\n", Strings.plural(viewerNames, "more than one", "any"), Strings.plural(viewerNames, "", "s"), deploymentType.nameLowerCase());
         return Maybe.setIf(fail, failMsg);
     }
 }

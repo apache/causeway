@@ -36,10 +36,7 @@ public final class OptionValidatorForConnector implements OptionValidator {
         final List<String> connectorNames = optionHandlerClientConnection.getConnectorNames();
 
         final boolean fail = !deploymentType.canSpecifyConnectors(connectorNames);
-        final String failMsg =
-            String.format("Error: cannot specify %s connector%s for deployment type %s\n",
-                Strings.plural(connectorNames, "more than one", "any"), Strings.plural(connectorNames, "", "s"),
-                deploymentType.nameLowerCase());
+        final String failMsg = String.format("Error: cannot specify %s connector%s for deployment type %s\n", Strings.plural(connectorNames, "more than one", "any"), Strings.plural(connectorNames, "", "s"), deploymentType.nameLowerCase());
         return Maybe.setIf(fail, failMsg);
     }
 }

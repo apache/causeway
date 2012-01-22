@@ -57,8 +57,7 @@ public class ClassEnhancerTest {
         mockObjectChanger = mockery.mock(ObjectChanger.class);
         mockSpecificationLoader = mockery.mock(SpecificationLoader.class);
 
-        classEnhancer =
-            new ObjectResolveAndObjectChangedEnhancer(mockObjectResolver, mockObjectChanger, mockSpecificationLoader);
+        classEnhancer = new ObjectResolveAndObjectChangedEnhancer(mockObjectResolver, mockObjectChanger, mockSpecificationLoader);
 
         sdo = classEnhancer.newInstance(SomeDomainObject.class);
     }

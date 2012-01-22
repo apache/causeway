@@ -91,18 +91,23 @@ public class MementoTest3_Test {
 
                 /*
                  * 
-                 * atLeast(1).of(nameField).isPersisted(); will(returnValue(true));
+                 * atLeast(1).of(nameField).isPersisted();
+                 * will(returnValue(true));
                  * 
-                 * atLeast(1).of(nameField).isOneToManyAssociation(); will(returnValue(false));
+                 * atLeast(1).of(nameField).isOneToManyAssociation();
+                 * will(returnValue(false));
                  * 
-                 * atLeast(1).of(nameField).getSpecification(); will(returnValue(elementSpecification));
+                 * atLeast(1).of(nameField).getSpecification();
+                 * will(returnValue(elementSpecification));
                  * 
-                 * atLeast(1).of(nameField).getId(); will(returnValue("name-field"));
+                 * atLeast(1).of(nameField).getId();
+                 * will(returnValue("name-field"));
                  * 
-                 * atLeast(1).of(elementSpecification).isEncodeable(); will(returnValue(true));
+                 * atLeast(1).of(elementSpecification).isEncodeable();
+                 * will(returnValue(true));
                  * 
-                 * atLeast(1).of(elementSpecification).getFacet(EncodeableFacet.class);
-                 * will(returnValue(encodeableFacet));
+                 * atLeast(1).of(elementSpecification).getFacet(EncodeableFacet.
+                 * class); will(returnValue(encodeableFacet));
                  */
             }
         });
@@ -110,7 +115,8 @@ public class MementoTest3_Test {
         // Root object
         rootAdapter = mockery.mock(ObjectAdapter.class);
         // rootObject = new TestObject("Harry");
-        // final ObjectAdapter nameAdapter = mockery.mock(ObjectAdapter.class, "name");
+        // final ObjectAdapter nameAdapter = mockery.mock(ObjectAdapter.class,
+        // "name");
         oid = mockery.mock(Oid.class);
 
         final TypeOfFacet typeOfFacet = mockery.mock(TypeOfFacet.class, "element 1");
@@ -159,7 +165,8 @@ public class MementoTest3_Test {
                 atLeast(1).of(rootAdapter).getResolveState();
                 will(returnValue(ResolveState.RESOLVED));
                 /*
-                 * atLeast(1).of(nameField).get(rootAdapter); will(returnValue(nameAdapter));
+                 * atLeast(1).of(nameField).get(rootAdapter);
+                 * will(returnValue(nameAdapter));
                  */
                 // one(encodeableFacet).toEncodedString(nameAdapter);
                 // will(returnValue("_HARRY_"));
@@ -167,25 +174,32 @@ public class MementoTest3_Test {
                 /*
                  * atLeast(1).of(oid).isTransient(); will(returnValue(false));
                  * 
-                 * atLeast(1).of(rootAdapter).getObject(); will(returnValue(rootObject));
+                 * atLeast(1).of(rootAdapter).getObject();
+                 * will(returnValue(rootObject));
                  * 
-                 * one(mockPersistenceSession).recreateAdapter(oid, rootSpecification);
-                 * will(returnValue(recreatedAdapter));
+                 * one(mockPersistenceSession).recreateAdapter(oid,
+                 * rootSpecification); will(returnValue(recreatedAdapter));
                  * 
-                 * atLeast(1).of(recreatedAdapter).getOid(); will(returnValue(oid));
+                 * atLeast(1).of(recreatedAdapter).getOid();
+                 * will(returnValue(oid));
                  * 
-                 * one(recreatedAdapter).getResolveState(); will(returnValue(ResolveState.GHOST));
+                 * one(recreatedAdapter).getResolveState();
+                 * will(returnValue(ResolveState.GHOST));
                  * 
                  * one(recreatedAdapter).changeState(ResolveState.UPDATING);
                  * 
-                 * atLeast(1).of(recreatedAdapter).getSpecification(); will(returnValue(rootSpecification));
+                 * atLeast(1).of(recreatedAdapter).getSpecification();
+                 * will(returnValue(rootSpecification));
                  * 
-                 * atLeast(1).of(recreatedAdapter).getObject(); will(returnValue(recreatedObject));
+                 * atLeast(1).of(recreatedAdapter).getObject();
+                 * will(returnValue(recreatedObject));
                  * 
-                 * /* one(mockAdapterManager).adapterFor("Harry", originalAdapter,
-                 * specification.getAssociation("name")); will(returnValue(nameAdapter));
+                 * /* one(mockAdapterManager).adapterFor("Harry",
+                 * originalAdapter, specification.getAssociation("name"));
+                 * will(returnValue(nameAdapter));
                  * 
-                 * atLeast(1).of(nameAdapter).getObject(); will(returnValue("Harry"));
+                 * atLeast(1).of(nameAdapter).getObject();
+                 * will(returnValue("Harry"));
                  */
             }
         });
@@ -196,46 +210,61 @@ public class MementoTest3_Test {
                 /*
                  * atLeast(1).of(oid).isTransient(); will(returnValue(false));
                  * 
-                 * atLeast(1).of(rootAdapter).getObject(); will(returnValue(rootObject)); /*
-                 * one(mockPersistenceSession).recreateAdapter(oid, rootSpecification);
-                 * will(returnValue(recreatedAdapter));
+                 * atLeast(1).of(rootAdapter).getObject();
+                 * will(returnValue(rootObject)); /*
+                 * one(mockPersistenceSession).recreateAdapter(oid,
+                 * rootSpecification); will(returnValue(recreatedAdapter));
                  * 
-                 * atLeast(1).of(recreatedAdapter).getOid(); will(returnValue(oid));
+                 * atLeast(1).of(recreatedAdapter).getOid();
+                 * will(returnValue(oid));
                  * 
-                 * one(recreatedAdapter).getResolveState(); will(returnValue(ResolveState.GHOST));
+                 * one(recreatedAdapter).getResolveState();
+                 * will(returnValue(ResolveState.GHOST));
                  * 
                  * one(recreatedAdapter).changeState(ResolveState.UPDATING);
                  * 
-                 * atLeast(1).of(recreatedAdapter).getSpecification(); will(returnValue(rootSpecification));
+                 * atLeast(1).of(recreatedAdapter).getSpecification();
+                 * will(returnValue(rootSpecification));
                  * 
-                 * atLeast(1).of(recreatedAdapter).getObject(); will(returnValue(recreatedObject));
+                 * atLeast(1).of(recreatedAdapter).getObject();
+                 * will(returnValue(recreatedObject));
                  * 
-                 * /* one(mockAdapterManager).adapterFor("Harry", originalAdapter,
-                 * specification.getAssociation("name")); will(returnValue(nameAdapter));
+                 * /* one(mockAdapterManager).adapterFor("Harry",
+                 * originalAdapter, specification.getAssociation("name"));
+                 * will(returnValue(nameAdapter));
                  * 
-                 * atLeast(1).of(nameAdapter).getObject(); will(returnValue("Harry"));
+                 * atLeast(1).of(nameAdapter).getObject();
+                 * will(returnValue("Harry"));
                  */
             }
         });
 
         // Persistence Session
-        // final ObjectReflector reflector = mockery.mock(ObjectReflector.class);
-        // final PersistenceSession mockPersistenceSession = mockery.mock(PersistenceSession.class);
+        // final ObjectReflector reflector =
+        // mockery.mock(ObjectReflector.class);
+        // final PersistenceSession mockPersistenceSession =
+        // mockery.mock(PersistenceSession.class);
         final IsisSessionFactory sessionFactory = mockery.mock(IsisSessionFactory.class);
-        // final AuthenticationSession mockSession = mockery.mock(AuthenticationSession.class);
+        // final AuthenticationSession mockSession =
+        // mockery.mock(AuthenticationSession.class);
         // final IsisSession session = mockery.mock(IsisSession.class);
-        // final AdapterManager mockAdapterManager = mockery.mock(AdapterManager.class);
+        // final AdapterManager mockAdapterManager =
+        // mockery.mock(AdapterManager.class);
         /**
-         * mockery.checking(new Expectations() { { atLeast(1).of(sessionFactory).getSpecificationLoader();
+         * mockery.checking(new Expectations() { {
+         * atLeast(1).of(sessionFactory).getSpecificationLoader();
          * will(returnValue(reflector));
          * 
-         * atLeast(1).of(sessionFactory).openSession(mockSession); will(returnValue(session));
+         * atLeast(1).of(sessionFactory).openSession(mockSession);
+         * will(returnValue(session));
          * 
-         * atLeast(1).of(reflector).loadSpecification(TestObject.class.getName()); will(returnValue(rootSpecification));
+         * atLeast(1).of(reflector).loadSpecification(TestObject.class.getName()
+         * ); will(returnValue(rootSpecification));
          * 
          * atLeast(1).of(session).open();
          * 
-         * atLeast(1).of(session).getPersistenceSession(); will(returnValue(mockPersistenceSession));
+         * atLeast(1).of(session).getPersistenceSession();
+         * will(returnValue(mockPersistenceSession));
          * 
          * }});
          */
@@ -244,21 +273,24 @@ public class MementoTest3_Test {
 
         // IsisContextStatic.getInstance().openSessionInstance(mockSession);
 
-        // final ObjectAdapter recreatedAdapter = mockery.mock(ObjectAdapter.class, "recreated");
+        // final ObjectAdapter recreatedAdapter =
+        // mockery.mock(ObjectAdapter.class, "recreated");
 
         // recreatedObject = new TestObject();
 
         /*
-         * returnedAdapter = mockery.mock(ObjectAdapter.class, "recreated adapter"); final Oid returnedOid =
-         * mockery.mock(Oid.class, "recreated oid");
+         * returnedAdapter = mockery.mock(ObjectAdapter.class,
+         * "recreated adapter"); final Oid returnedOid = mockery.mock(Oid.class,
+         * "recreated oid");
          * 
          * mockery.checking(new Expectations() { {
          * 
          * 
-         * atLeast(1).of(mockPersistenceSession).recreateAdapter(oid, rootSpecification);
-         * will(returnValue(returnedAdapter));
+         * atLeast(1).of(mockPersistenceSession).recreateAdapter(oid,
+         * rootSpecification); will(returnValue(returnedAdapter));
          * 
-         * atLeast(1).of(returnedAdapter).getOid(); will(returnValue(returnedOid));
+         * atLeast(1).of(returnedAdapter).getOid();
+         * will(returnValue(returnedOid));
          * 
          * }});
          */
@@ -349,7 +381,8 @@ public class MementoTest3_Test {
                 one(mockOutputImpl).writeEncodable(oid2);
 
                 /*
-                 * one(encoder).add("S"); one(encoder).add("name-field"); one(encoder).add("_HARRY_");
+                 * one(encoder).add("S"); one(encoder).add("name-field");
+                 * one(encoder).add("_HARRY_");
                  */
             }
         });

@@ -161,24 +161,20 @@ public class TestProxyField extends FacetHolderImpl implements ObjectAssociation
     }
 
     @Override
-    public VisibilityContext<?> createVisibleInteractionContext(final AuthenticationSession session,
-        final InteractionInvocationMethod invocationMethod, final ObjectAdapter targetObjectAdapter) {
+    public VisibilityContext<?> createVisibleInteractionContext(final AuthenticationSession session, final InteractionInvocationMethod invocationMethod, final ObjectAdapter targetObjectAdapter) {
         return null;
     }
 
     @Override
-    public UsabilityContext<?> createUsableInteractionContext(final AuthenticationSession session,
-        final InteractionInvocationMethod invocationMethod, final ObjectAdapter target) {
+    public UsabilityContext<?> createUsableInteractionContext(final AuthenticationSession session, final InteractionInvocationMethod invocationMethod, final ObjectAdapter target) {
         return null;
     }
 
-    public ValidityContext<?> createValidateInteractionContext(final AuthenticationSession session,
-        final ObjectAdapter parent, final ObjectAdapter newValue) {
+    public ValidityContext<?> createValidateInteractionContext(final AuthenticationSession session, final ObjectAdapter parent, final ObjectAdapter newValue) {
         return null;
     }
 
-    public InteractionResultSet isAssociationValidResultSet(final ObjectAdapter targetObject,
-        final ObjectAdapter newValue) {
+    public InteractionResultSet isAssociationValidResultSet(final ObjectAdapter targetObject, final ObjectAdapter newValue) {
         return new InteractionResultSet();
     }
 

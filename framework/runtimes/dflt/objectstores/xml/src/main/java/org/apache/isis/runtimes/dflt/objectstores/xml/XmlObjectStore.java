@@ -174,8 +174,7 @@ public class XmlObjectStore implements ObjectStore {
         }
     }
 
-    private void initObjectSetupReference(final ObjectAdapter object, final ObjectData data,
-        final ObjectAssociation field) {
+    private void initObjectSetupReference(final ObjectAdapter object, final ObjectData data, final ObjectAssociation field) {
         final SerialOid referenceOid = (SerialOid) data.get(field.getId());
         LOG.debug("setting up field " + field + " with " + referenceOid);
         if (referenceOid == null) {
@@ -185,42 +184,44 @@ public class XmlObjectStore implements ObjectStore {
         final Data fieldData = dataManager.loadData(referenceOid);
 
         if (fieldData == null) {
-            final ObjectAdapter adapter =
-                getPersistenceSession().recreateAdapter(referenceOid, field.getSpecification());
+            final ObjectAdapter adapter = getPersistenceSession().recreateAdapter(referenceOid, field.getSpecification());
             if (!adapter.getResolveState().isDestroyed()) {
                 adapter.changeState(ResolveState.DESTROYED);
             }
             ((OneToOneAssociation) field).initAssociation(object, adapter);
 
-            LOG.warn("No data found for " + referenceOid + " so field '" + field.getName() + "' not set in object '"
-                + object.titleString() + "'");
+            LOG.warn("No data found for " + referenceOid + " so field '" + field.getName() + "' not set in object '" + object.titleString() + "'");
         } else {
             final ObjectAdapter reference = getPersistenceSession().recreateAdapter(referenceOid, specFor(fieldData));
             ((OneToOneAssociation) field).initAssociation(object, reference);
         }
 
         /*
-         * if (loadedObjects().isLoaded(referenceOid)) { ObjectAdapter loadedObject =
-         * loadedObjects().getLoadedObject(referenceOid); LOG.debug("using loaded object " + loadedObject);
-         * object.initAssociation((OneToOneAssociation) field, loadedObject); } else { ObjectAdapter fieldObject; Data
-         * fieldData = (Data) dataManager.loadData((SerialOid) referenceOid);
+         * if (loadedObjects().isLoaded(referenceOid)) { ObjectAdapter
+         * loadedObject = loadedObjects().getLoadedObject(referenceOid);
+         * LOG.debug("using loaded object " + loadedObject);
+         * object.initAssociation((OneToOneAssociation) field, loadedObject); }
+         * else { ObjectAdapter fieldObject; Data fieldData = (Data)
+         * dataManager.loadData((SerialOid) referenceOid);
          * 
-         * if (fieldData != null) { fieldObject = (ObjectAdapter) specFor(fieldData).acquireInstance(); } else {
-         * fieldObject = (ObjectAdapter) field.getSpecification().acquireInstance(); }
+         * if (fieldData != null) { fieldObject = (ObjectAdapter)
+         * specFor(fieldData).acquireInstance(); } else { fieldObject =
+         * (ObjectAdapter) field.getSpecification().acquireInstance(); }
          * 
          * fieldObject.setOid(referenceOid);
          * 
-         * if (fieldObject instanceof CollectionAdapter) { fieldObject.setResolved(); }
+         * if (fieldObject instanceof CollectionAdapter) {
+         * fieldObject.setResolved(); }
          * 
-         * loadedObjects().loaded(fieldObject); object.initAssociation((OneToOneAssociation) field, fieldObject); }
+         * loadedObjects().loaded(fieldObject);
+         * object.initAssociation((OneToOneAssociation) field, fieldObject); }
          */
     }
 
-    private void initObjectSetupCollection(final ObjectAdapter object, final ObjectData data,
-        final ObjectAssociation field) {
+    private void initObjectSetupCollection(final ObjectAdapter object, final ObjectData data, final ObjectAssociation field) {
         /*
-         * The internal collection is already a part of the object, and therefore cannot be recreated, but its oid must
-         * be set
+         * The internal collection is already a part of the object, and
+         * therefore cannot be recreated, but its oid must be set
          */
         final ReferenceVector refs = (ReferenceVector) data.get(field.getId());
         final ObjectAdapter collection = field.get(object);
@@ -330,8 +331,8 @@ public class XmlObjectStore implements ObjectStore {
     }
 
     /*
-     * The ObjectData holds all references for internal collections, so the object should haves its internal collection
-     * populated by this method.
+     * The ObjectData holds all references for internal collections, so the
+     * object should haves its internal collection populated by this method.
      */
     private ObjectAdapter recreateObject(final ObjectData data) {
         final SerialOid oid = data.getOid();
@@ -349,9 +350,7 @@ public class XmlObjectStore implements ObjectStore {
     public ObjectAdapter[] getInstances(final PersistenceQuery persistenceQuery) {
 
         if (!(persistenceQuery instanceof PersistenceQueryBuiltIn)) {
-            throw new IllegalArgumentException(MessageFormat.format(
-                "Provided PersistenceQuery not supported; was {0}; " + "the XML object store only supports {1}",
-                persistenceQuery.getClass().getName(), PersistenceQueryBuiltIn.class.getName()));
+            throw new IllegalArgumentException(MessageFormat.format("Provided PersistenceQuery not supported; was {0}; " + "the XML object store only supports {1}", persistenceQuery.getClass().getName(), PersistenceQueryBuiltIn.class.getName()));
         }
         final PersistenceQueryBuiltIn builtIn = (PersistenceQueryBuiltIn) persistenceQuery;
 
@@ -425,7 +424,8 @@ public class XmlObjectStore implements ObjectStore {
     // /////////////////////////////////////////////////////////
 
     /**
-     * Set the clock used to generate sequence numbers and last changed dates for version objects.
+     * Set the clock used to generate sequence numbers and last changed dates
+     * for version objects.
      */
     public void setClock(final Clock clock) {
         FileVersion.setClock(clock);

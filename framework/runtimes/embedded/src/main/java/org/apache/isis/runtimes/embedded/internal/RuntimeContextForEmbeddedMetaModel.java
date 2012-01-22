@@ -60,8 +60,9 @@ import org.apache.isis.runtimes.embedded.EmbeddedContext;
 import org.apache.isis.runtimes.embedded.PersistenceState;
 
 /**
- * Acts as a bridge between the {@link RuntimeContext} (as used internally within the meta-model) and the
- * {@link EmbeddedContext} provided by the embedder (which deals only with pojos).
+ * Acts as a bridge between the {@link RuntimeContext} (as used internally
+ * within the meta-model) and the {@link EmbeddedContext} provided by the
+ * embedder (which deals only with pojos).
  */
 public class RuntimeContextForEmbeddedMetaModel extends RuntimeContextAbstract implements ApplicationScopedComponent {
 
@@ -102,15 +103,13 @@ public class RuntimeContextForEmbeddedMetaModel extends RuntimeContextAbstract i
         this.adapterMap = new AdapterMapAbstract() {
             @Override
             public ObjectAdapter adapterFor(final Object domainObject) {
-                final ObjectSpecification domainObjectSpec =
-                    getSpecificationLookup().loadSpecification(domainObject.getClass());
+                final ObjectSpecification domainObjectSpec = getSpecificationLookup().loadSpecification(domainObject.getClass());
                 final PersistenceState persistenceState = context.getPersistenceState(domainObject);
                 return new StandaloneAdapter(domainObjectSpec, domainObject, persistenceState);
             }
 
             @Override
-            public ObjectAdapter adapterFor(final Object domainObject, final ObjectAdapter ownerAdapter,
-                final IdentifiedHolder identifiedHolder) {
+            public ObjectAdapter adapterFor(final Object domainObject, final ObjectAdapter ownerAdapter, final IdentifiedHolder identifiedHolder) {
                 return adapterFor(domainObject);
             }
 
@@ -226,13 +225,13 @@ public class RuntimeContextForEmbeddedMetaModel extends RuntimeContextAbstract i
         };
 
         this.localizationProvider = new LocalizationProviderAbstract() {
-            
+
             @Override
             public Localization getLocalization() {
                 return context.getLocalization();
             }
         };
-        
+
         this.dependencyInjector = new DependencyInjectorAbstract() {
             @Override
             public void injectDependenciesInto(final Object domainObject) {
@@ -314,7 +313,7 @@ public class RuntimeContextForEmbeddedMetaModel extends RuntimeContextAbstract i
     public LocalizationProvider getLocalizationProvider() {
         return localizationProvider;
     }
-    
+
     @Override
     public QuerySubmitter getQuerySubmitter() {
         return querySubmitter;

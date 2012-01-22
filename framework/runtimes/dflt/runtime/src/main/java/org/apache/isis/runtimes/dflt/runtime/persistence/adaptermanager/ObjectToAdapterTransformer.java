@@ -26,7 +26,8 @@ import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 
 /**
- * Uses the Commons Collection API to transform {@link Object}s into {@link ObjectAdapter} adapters.
+ * Uses the Commons Collection API to transform {@link Object}s into
+ * {@link ObjectAdapter} adapters.
  * 
  */
 public final class ObjectToAdapterTransformer implements Transformer {

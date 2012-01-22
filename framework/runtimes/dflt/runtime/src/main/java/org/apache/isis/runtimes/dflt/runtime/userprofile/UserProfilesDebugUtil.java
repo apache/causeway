@@ -29,8 +29,8 @@ import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 
 /**
- * Introduced in order to remove the dependency between {@link UserProfile} and {@link PerspectiveEntry} on
- * <tt>runtimes:dflt</tt>.
+ * Introduced in order to remove the dependency between {@link UserProfile} and
+ * {@link PerspectiveEntry} on <tt>runtimes:dflt</tt>.
  */
 public final class UserProfilesDebugUtil {
 

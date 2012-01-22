@@ -59,8 +59,7 @@ import org.apache.isis.runtimes.dflt.runtime.system.persistence.OidGenerator;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 import org.apache.log4j.Logger;
 
-public class AdapterManagerDefault extends AdapterManagerAbstract implements AdapterFactoryAware,
-    SpecificationLoaderAware, OidGeneratorAware, ServicesInjectorAware, DebuggableWithTitle {
+public class AdapterManagerDefault extends AdapterManagerAbstract implements AdapterFactoryAware, SpecificationLoaderAware, OidGeneratorAware, ServicesInjectorAware, DebuggableWithTitle {
 
     private static final Logger LOG = Logger.getLogger(AdapterManagerDefault.class);
 
@@ -221,8 +220,7 @@ public class AdapterManagerDefault extends AdapterManagerAbstract implements Ada
     }
 
     @Override
-    public ObjectAdapter adapterFor(final Object pojo, final ObjectAdapter ownerAdapter,
-        final IdentifiedHolder identifiedHolder) {
+    public ObjectAdapter adapterFor(final Object pojo, final ObjectAdapter ownerAdapter, final IdentifiedHolder identifiedHolder) {
 
         // attempt to locate adapter for the pojo
         final ObjectAdapter adapter = getAdapterFor(pojo);
@@ -238,10 +236,12 @@ public class AdapterManagerDefault extends AdapterManagerAbstract implements Ada
             return createStandaloneAdapter(pojo);
         }
 
-        // aggregated objects are either intrinsically aggregate (on their spec) or
+        // aggregated objects are either intrinsically aggregate (on their spec)
+        // or
         // the reference to them are aggregated.
         //
-        // can only do this if have been given an ownerAdapter & identified arguments to act as context.
+        // can only do this if have been given an ownerAdapter & identified
+        // arguments to act as context.
         if (ownerAdapter != null && identifiedHolder != null) {
             if (specIsAggregated(noSpec) || referenceIsAggregated(identifiedHolder)) {
                 final ObjectAdapter newAdapter = createAggregatedAdapter(pojo, ownerAdapter, identifiedHolder);
@@ -317,15 +317,18 @@ public class AdapterManagerDefault extends AdapterManagerAbstract implements Ada
     // //////////////////////////////////////////////////////////////////
 
     /**
-     * Removes the specified object from both the identity-adapter map, and the pojo-adapter map.
+     * Removes the specified object from both the identity-adapter map, and the
+     * pojo-adapter map.
      * 
      * <p>
-     * This indicates that the object is no longer in use, and therefore that no objects exists within the system.
+     * This indicates that the object is no longer in use, and therefore that no
+     * objects exists within the system.
      * 
      * <p>
-     * If an {@link ObjectAdapter adapter} is removed while its pojo still is referenced then a subsequent interaction
-     * of that pojo will create a different {@link ObjectAdapter adapter}, in a {@link ResolveState#TRANSIENT transient}
-     * state.
+     * If an {@link ObjectAdapter adapter} is removed while its pojo still is
+     * referenced then a subsequent interaction of that pojo will create a
+     * different {@link ObjectAdapter adapter}, in a
+     * {@link ResolveState#TRANSIENT transient} state.
      * 
      * <p>
      * TODO: should do a cascade remove of any aggregated objects.
@@ -349,9 +352,11 @@ public class AdapterManagerDefault extends AdapterManagerAbstract implements Ada
      * {@inheritDoc}
      * 
      * <p>
-     * Note that there is no management of {@link Version}s here. That is because the {@link PersistenceSession} is
-     * expected to manage this. (In practice this is done by the <tt>ObjectAdapterStore</tt> implementation delegated by
-     * the <tt>PersistenceSessionObjectStore</tt>, and propogated back to client-side as required).
+     * Note that there is no management of {@link Version}s here. That is
+     * because the {@link PersistenceSession} is expected to manage this. (In
+     * practice this is done by the <tt>ObjectAdapterStore</tt> implementation
+     * delegated by the <tt>PersistenceSessionObjectStore</tt>, and propogated
+     * back to client-side as required).
      */
     @Override
     public void remapAsPersistent(final ObjectAdapter adapter) {
@@ -370,7 +375,8 @@ public class AdapterManagerDefault extends AdapterManagerAbstract implements Ada
             final AggregatedOid aggregatedOid = new AggregatedOid(rootOid, otma.getName());
             final ObjectAdapter collectionAdapter = getAdapterFor(aggregatedOid);
             if (collectionAdapter != null) {
-                // collection adapters are lazily created and so there may not be one.
+                // collection adapters are lazily created and so there may not
+                // be one.
                 aggregateAdapters.addCollectionAdapter(otma, collectionAdapter);
             }
         }
@@ -380,7 +386,8 @@ public class AdapterManagerDefault extends AdapterManagerAbstract implements Ada
     private void remapAsPersistent(final AggregateAdapters aggregateAdapters) {
 
         final ObjectAdapter rootAdapter = aggregateAdapters.getRootAdapter();
-        // although the Oid reference doesn't change, the Oid internal values will change
+        // although the Oid reference doesn't change, the Oid internal values
+        // will change
         final Oid oid = rootAdapter.getOid();
         if (LOG.isDebugEnabled()) {
             LOG.debug("remapAsPersistent: " + oid);
@@ -453,8 +460,7 @@ public class AdapterManagerDefault extends AdapterManagerAbstract implements Ada
     }
 
     public Object getCollectionPojo(final OneToManyAssociation association, final ObjectAdapter ownerAdapter) {
-        final PropertyOrCollectionAccessorFacet accessor =
-            association.getFacet(PropertyOrCollectionAccessorFacet.class);
+        final PropertyOrCollectionAccessorFacet accessor = association.getFacet(PropertyOrCollectionAccessorFacet.class);
         return accessor.getProperty(ownerAdapter);
     }
 
@@ -468,8 +474,7 @@ public class AdapterManagerDefault extends AdapterManagerAbstract implements Ada
     @Override
     public ObjectAdapter testCreateTransient(final Object pojo, final Oid oid) {
         if (!oid.isTransient()) {
-            throw new IllegalArgumentException(
-                "Oid should be transient; use standard API to recreate adapters for persistent Oids");
+            throw new IllegalArgumentException("Oid should be transient; use standard API to recreate adapters for persistent Oids");
         }
         return map(createOrRecreateRootAdapter(pojo, oid));
     }
@@ -479,7 +484,8 @@ public class AdapterManagerDefault extends AdapterManagerAbstract implements Ada
     // ///////////////////////////////////////////////////////////////////////////
 
     /**
-     * Creates a new root {@link ObjectAdapter adapter} for the supplied domain object.
+     * Creates a new root {@link ObjectAdapter adapter} for the supplied domain
+     * object.
      * 
      * @see #createOid(Object)
      */
@@ -489,29 +495,33 @@ public class AdapterManagerDefault extends AdapterManagerAbstract implements Ada
     }
 
     /**
-     * The default implementation will always create a new transient {@link ObjectAdapter adapter}, using the
-     * {@link OidGenerator}. However, the method has <tt>protected</tt> visibility so can be overridden if required. For
-     * example, some object stores (eg Hibernate) may be able to infer from the pojo itself what the {@link Oid} and
-     * persistence state of the object is.
+     * The default implementation will always create a new transient
+     * {@link ObjectAdapter adapter}, using the {@link OidGenerator}. However,
+     * the method has <tt>protected</tt> visibility so can be overridden if
+     * required. For example, some object stores (eg Hibernate) may be able to
+     * infer from the pojo itself what the {@link Oid} and persistence state of
+     * the object is.
      */
     protected Oid createOid(final Object pojo) {
         return getOidGenerator().createTransientOid(pojo);
     }
 
     /**
-     * Creates an {@link ObjectAdapter adapter} with an {@link AggregatedOid} (so that its version and its persistence
-     * are the same as its owning parent).
+     * Creates an {@link ObjectAdapter adapter} with an {@link AggregatedOid}
+     * (so that its version and its persistence are the same as its owning
+     * parent).
      * 
      * <p>
-     * Should only be called if the pojo is known not to be {@link #getAdapterFor(Object) mapped}.
+     * Should only be called if the pojo is known not to be
+     * {@link #getAdapterFor(Object) mapped}.
      * 
      * <p>
-     * Helper method, but <tt>protected</tt> so can be overridden if required. For example, some object stores
-     * (specifically, the XML object store at time of writing) do not support aggregated Oids for anything other than
+     * Helper method, but <tt>protected</tt> so can be overridden if required.
+     * For example, some object stores (specifically, the XML object store at
+     * time of writing) do not support aggregated Oids for anything other than
      * collections.
      */
-    protected ObjectAdapter createAggregatedAdapter(final Object pojo, final ObjectAdapter ownerAdapter,
-        final IdentifiedHolder identifiedHolder) {
+    protected ObjectAdapter createAggregatedAdapter(final Object pojo, final ObjectAdapter ownerAdapter, final IdentifiedHolder identifiedHolder) {
 
         final Identifier identifier = identifiedHolder.getIdentifier();
         ensureMapsConsistent(ownerAdapter);
@@ -526,11 +536,11 @@ public class AdapterManagerDefault extends AdapterManagerAbstract implements Ada
         final ObjectAdapter aggregatedAdapter = createOrRecreateAdapter(pojo, aggregatedOid);
 
         // we copy over the type onto the adapter itself
-        // [not sure why this is really needed, surely we have enough info in the adapter
+        // [not sure why this is really needed, surely we have enough info in
+        // the adapter
         // to look this up on the fly?]
         final TypeOfFacet facet = identifiedHolder.getFacet(TypeOfFacet.class);
-        aggregatedAdapter
-            .setElementSpecificationProvider(ElementSpecificationProviderFromTypeOfFacet.createFrom(facet));
+        aggregatedAdapter.setElementSpecificationProvider(ElementSpecificationProviderFromTypeOfFacet.createFrom(facet));
 
         // same locking as parent
         aggregatedAdapter.setOptimisticLock(ownerAdapter.getVersion());
@@ -542,23 +552,28 @@ public class AdapterManagerDefault extends AdapterManagerAbstract implements Ada
      * Creates a {@link ObjectAdapter adapter} with no {@link Oid}.
      * 
      * <p>
-     * Should only be called if the pojo is known not to be {@link #getAdapterFor(Object) mapped}, and for immutable
-     * value types referenced.
+     * Should only be called if the pojo is known not to be
+     * {@link #getAdapterFor(Object) mapped}, and for immutable value types
+     * referenced.
      */
     private ObjectAdapter createStandaloneAdapter(final Object pojo) {
         return createOrRecreateAdapter(pojo, null);
     }
 
     /**
-     * Helper method that creates but does not {@link #mapAndInjectServices(ObjectAdapter) add}) the root
-     * {@link ObjectAdapter adapter} along with adapters for all collections, an {@link ObjectAdapter adapter}, and sets
-     * its {@link ResolveState} based on the {@link Oid}.
+     * Helper method that creates but does not
+     * {@link #mapAndInjectServices(ObjectAdapter) add}) the root
+     * {@link ObjectAdapter adapter} along with adapters for all collections, an
+     * {@link ObjectAdapter adapter}, and sets its {@link ResolveState} based on
+     * the {@link Oid}.
      * 
      * <p>
      * The {@link ResolveState} state will be:
      * <ul>
-     * <li> {@link ResolveState#TRANSIENT} if the {@link Oid} is {@link Oid#isTransient() transient}.
-     * <li> {@link ResolveState#GHOST} if the {@link Oid} is persistent (not {@link Oid#isTransient() transient}).
+     * <li> {@link ResolveState#TRANSIENT} if the {@link Oid} is
+     * {@link Oid#isTransient() transient}.
+     * <li> {@link ResolveState#GHOST} if the {@link Oid} is persistent (not
+     * {@link Oid#isTransient() transient}).
      * <li> {@link ResolveState#VALUE} if no {@link Oid} was supplied.
      * </ul>
      */
@@ -567,15 +582,15 @@ public class AdapterManagerDefault extends AdapterManagerAbstract implements Ada
 
         final AggregateAdapters aggregateAdapters = new AggregateAdapters(rootAdapter);
 
-        // failed experiment to try to ensure that all adapters are loaded for the root;
+        // failed experiment to try to ensure that all adapters are loaded for
+        // the root;
         // left in in case we want to re-instate
         // eagerlyCreateCollectionAdapters(rootAdapter, aggregateAdapters);
         return aggregateAdapters;
     }
 
     @SuppressWarnings("unused")
-    private void eagerlyCreateCollectionAdapters(final ObjectAdapter rootAdapter,
-        final AggregateAdapters aggregateAdapters) {
+    private void eagerlyCreateCollectionAdapters(final ObjectAdapter rootAdapter, final AggregateAdapters aggregateAdapters) {
         for (final OneToManyAssociation otma : rootAdapter.getSpecification().getCollections()) {
             final Object referencedCollection = getCollectionPojo(otma, rootAdapter);
             final ObjectAdapter collectionAdapter = createAggregatedAdapter(referencedCollection, rootAdapter, otma);
@@ -616,7 +631,8 @@ public class AdapterManagerDefault extends AdapterManagerAbstract implements Ada
         if (LOG.isDebugEnabled()) {
             // don't interact with the underlying object because may be a ghost
             // and would trigger a resolve
-            // don't call toString() on adapter because calls hashCode on underlying object,
+            // don't call toString() on adapter because calls hashCode on
+            // underlying object,
             // may also trigger a resolve.
             LOG.debug("adding identity for adapter with oid=" + adapter.getOid());
         }
@@ -663,10 +679,13 @@ public class AdapterManagerDefault extends AdapterManagerAbstract implements Ada
      * Fail early if any problems.
      */
     private void ensureMapsConsistent(final ObjectAdapter adapter) {
-        // it isn't possible to guaranteee that the Oid will have no previous, because
-        // if running standalone or server-side then we don't know that we can clear the previous
+        // it isn't possible to guaranteee that the Oid will have no previous,
+        // because
+        // if running standalone or server-side then we don't know that we can
+        // clear the previous
         //
-        // ensureThat(adapter.getOid().hasPrevious(), is(false), "adapter's Oid has a previous value.");
+        // ensureThat(adapter.getOid().hasPrevious(), is(false),
+        // "adapter's Oid has a previous value.");
 
         if (adapter.getResolveState().isValue()) {
             return;
@@ -684,10 +703,13 @@ public class AdapterManagerDefault extends AdapterManagerAbstract implements Ada
     private void ensureMapsConsistent(final Oid oid) {
         ensureThatArg(oid, is(notNullValue()));
 
-        // it isn't possible to guaranteee that the Oid will have no previous, because
-        // if running standalone or server-side then we don't know that we can clear the previous
+        // it isn't possible to guaranteee that the Oid will have no previous,
+        // because
+        // if running standalone or server-side then we don't know that we can
+        // clear the previous
         //
-        // ensureThat(oid.hasPrevious(), is(false), "adapter's Oid has a previous value.");
+        // ensureThat(oid.hasPrevious(), is(false),
+        // "adapter's Oid has a previous value.");
 
         final ObjectAdapter adapter = getOidAdapterMap().getAdapter(oid);
         if (adapter == null) {
@@ -700,17 +722,13 @@ public class AdapterManagerDefault extends AdapterManagerAbstract implements Ada
     private void ensurePojoAdapterMapConsistent(final ObjectAdapter adapter) {
         final Object adapterPojo = adapter.getObject();
         final ObjectAdapter adapterAccordingToPojoAdapterMap = getPojoAdapterMap().getAdapter(adapterPojo);
-        ensureThatArg(adapter, is(adapterAccordingToPojoAdapterMap), "mismatch in PojoAdapterMap: adapter's Pojo: "
-            + adapterPojo + ", \n" + "provided adapter: " + adapter + "; \n" + " but map's adapter was : "
-            + adapterAccordingToPojoAdapterMap);
+        ensureThatArg(adapter, is(adapterAccordingToPojoAdapterMap), "mismatch in PojoAdapterMap: adapter's Pojo: " + adapterPojo + ", \n" + "provided adapter: " + adapter + "; \n" + " but map's adapter was : " + adapterAccordingToPojoAdapterMap);
     }
 
     private void ensureOidAdapterMapConsistent(final ObjectAdapter adapter) {
         final Oid adapterOid = adapter.getOid();
         final ObjectAdapter adapterAccordingToOidAdapterMap = getOidAdapterMap().getAdapter(adapterOid);
-        ensureThatArg(adapter, is(adapterAccordingToOidAdapterMap), "mismatch in OidAdapter map: " + "adapter's Oid: "
-            + adapterOid + ", " + "provided adapter: " + adapter + "; " + "map's adapter: "
-            + adapterAccordingToOidAdapterMap);
+        ensureThatArg(adapter, is(adapterAccordingToOidAdapterMap), "mismatch in OidAdapter map: " + "adapter's Oid: " + adapterOid + ", " + "provided adapter: " + adapter + "; " + "map's adapter: " + adapterAccordingToOidAdapterMap);
     }
 
     // //////////////////////////////////////////////////////////////////
@@ -727,7 +745,8 @@ public class AdapterManagerDefault extends AdapterManagerAbstract implements Ada
 
     // replacing this code, just commented out for now to act as a reference.
 
-    // public ObjectAdapter adapterFor(final Object domainObject, final Oid oid, final Version version) {
+    // public ObjectAdapter adapterFor(final Object domainObject, final Oid oid,
+    // final Version version) {
     // if (oid != null) {
     // return adapterFor(domainObject, oid);
     // }
@@ -747,25 +766,35 @@ public class AdapterManagerDefault extends AdapterManagerAbstract implements Ada
     // replacing this code, just commented out for now to act as a reference.
 
     // /**
-    // * Creates a new adapter with a new transient OID, and then added to the identity map.
+    // * Creates a new adapter with a new transient OID, and then added to the
+    // identity map.
     // *
     // * <p>
-    // * The {@link ObjectAdapter adapter's} {@link ObjectAdapter#getResolveState() resolve state}
-    // * is set to either {@link ResolveState#TRANSIENT} or {@link ResolveState#STANDALONE}
+    // * The {@link ObjectAdapter adapter's} {@link
+    // ObjectAdapter#getResolveState() resolve state}
+    // * is set to either {@link ResolveState#TRANSIENT} or {@link
+    // ResolveState#STANDALONE}
     // * as required.
     // *
     // * <p>
     // * <b><i>REVIEW: think this is wrong; we should set to
-    // * {@link ResolveState#STANDALONE} is the {@link ObjectAdapter adapter} has been created
-    // * with no identity ({@link ObjectAdapter#getOid() is null}), not based on the {@link
+    // * {@link ResolveState#STANDALONE} is the {@link ObjectAdapter adapter}
+    // has been created
+    // * with no identity ({@link ObjectAdapter#getOid() is null}), not based on
+    // the {@link
     // ObjectSpecification#isAggregated()}</i></b>
     // */
-    // private ObjectAdapter createAdapterForNewObjectAndMap(final Object domainObject) {
-    // final Oid transientOid = getOidGenerator().createTransientOid(domainObject);
-    // final ObjectAdapter adapter = getAdapterFactory().createAdapter(domainObject, transientOid);
+    // private ObjectAdapter createAdapterForNewObjectAndMap(final Object
+    // domainObject) {
+    // final Oid transientOid =
+    // getOidGenerator().createTransientOid(domainObject);
+    // final ObjectAdapter adapter =
+    // getAdapterFactory().createAdapter(domainObject, transientOid);
     // if (LOG.isDebugEnabled()) {
-    // // don't call toString() because may still be a ghost and any interaction could resolve
-    // LOG.debug("creating adapter (transient) for adapter with oid=" + adapter.getOid());
+    // // don't call toString() because may still be a ghost and any interaction
+    // could resolve
+    // LOG.debug("creating adapter (transient) for adapter with oid=" +
+    // adapter.getOid());
     // }
     // identityMap.addAdapter(adapter);
     //
@@ -781,16 +810,19 @@ public class AdapterManagerDefault extends AdapterManagerAbstract implements Ada
 
     // replacing this code, just commented out for now to act as a reference.
 
-    // private ObjectAdapter adapterFor(final Object domainObject, final Oid oid) {
+    // private ObjectAdapter adapterFor(final Object domainObject, final Oid
+    // oid) {
     // ObjectAdapter adapter = getAdapterFor(oid);
     // if (adapter != null) {
     //
-    // // TODO: REVIEW: was tripping the exception setting a Boolean on a @NotPersistable.
+    // // TODO: REVIEW: was tripping the exception setting a Boolean on a
+    // @NotPersistable.
     // // is it safe for immutable values to use equals(.) instead?
     //
     // ObjectSpecification noSpec = adapter.getSpecification();
     // ValueFacet valueFacet = noSpec.getFacet(ValueFacet.class);
-    // ImmutableFacet immutableFacet = valueFacet != null? valueFacet.getFacet(ImmutableFacet.class): null;
+    // ImmutableFacet immutableFacet = valueFacet != null?
+    // valueFacet.getFacet(ImmutableFacet.class): null;
     // if (immutableFacet != null) {
     // if (!adapter.getObject().equals(domainObject)) {
     // throw new
@@ -799,7 +831,9 @@ public class AdapterManagerDefault extends AdapterManagerAbstract implements Ada
     // }
     // } else {
     // if (adapter.getObject() != domainObject) {
-    // throw new AdapterException("Mapped adapter is for different domain object: " + domainObject + "; " +
+    // throw new
+    // AdapterException("Mapped adapter is for different domain object: " +
+    // domainObject + "; " +
     // adapter);
     // }
     // }
@@ -809,7 +843,8 @@ public class AdapterManagerDefault extends AdapterManagerAbstract implements Ada
     // adapter = getAdapterFor(domainObject);
     // if (adapter != null) {
     // if (!adapter.getOid().equals(oid)) {
-    // throw new AdapterException("Mapped adapter has oid: " + oid + "; " + adapter);
+    // throw new AdapterException("Mapped adapter has oid: " + oid + "; " +
+    // adapter);
     // }
     // return adapter;
     // }
@@ -817,10 +852,12 @@ public class AdapterManagerDefault extends AdapterManagerAbstract implements Ada
     // }
 
     // /**
-    // * Should only be called if it is known that the domainObject and Oid do not
+    // * Should only be called if it is known that the domainObject and Oid do
+    // not
     // * correspond to any existing {@link ObjectAdapter}.
     // */
-    // private ObjectAdapter createAdapterAndMap(final Object domainObject, final Oid oid) {
+    // private ObjectAdapter createAdapterAndMap(final Object domainObject,
+    // final Oid oid) {
     // return map(createAdapter(domainObject, oid));
     // }
 

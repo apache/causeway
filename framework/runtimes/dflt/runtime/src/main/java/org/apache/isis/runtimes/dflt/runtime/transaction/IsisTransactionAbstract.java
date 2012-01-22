@@ -44,8 +44,7 @@ public abstract class IsisTransactionAbstract implements IsisTransaction {
 
     private RuntimeException cause;
 
-    public IsisTransactionAbstract(final IsisTransactionManager transactionManager, final MessageBroker messageBroker,
-        final UpdateNotifier updateNotifier) {
+    public IsisTransactionAbstract(final IsisTransactionManager transactionManager, final MessageBroker messageBroker, final UpdateNotifier updateNotifier) {
 
         ensureThatArg(transactionManager, is(not(nullValue())), "transaction manager is required");
         ensureThatArg(messageBroker, is(not(nullValue())), "message broker is required");
@@ -154,11 +153,13 @@ public abstract class IsisTransactionAbstract implements IsisTransaction {
     protected abstract void doFlush();
 
     /**
-     * Mandatory hook method for subclasses to perform additional processing on abort.
+     * Mandatory hook method for subclasses to perform additional processing on
+     * abort.
      * 
      * <p>
-     * After this call the {@link #getState() state} will always be set to {@link State#ABORTED}, irrespective of
-     * whether an exception is thrown or not.
+     * After this call the {@link #getState() state} will always be set to
+     * {@link State#ABORTED}, irrespective of whether an exception is thrown or
+     * not.
      */
     protected abstract void doAbort();
 
@@ -174,7 +175,8 @@ public abstract class IsisTransactionAbstract implements IsisTransaction {
      * The cause (if any) for the transaction being aborted.
      * 
      * <p>
-     * There will be a cause if an exception is thrown either by {@link #doFlush()} or {@link #doAbort()}.
+     * There will be a cause if an exception is thrown either by
+     * {@link #doFlush()} or {@link #doAbort()}.
      */
     @Override
     public RuntimeException getAbortCause() {

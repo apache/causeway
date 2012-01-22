@@ -44,8 +44,8 @@ import org.apache.isis.runtimes.dflt.runtime.persistence.PersistorUtil;
 /**
  * Utility class to create Data objects representing a graph of Isis.
  * 
- * As each object is serialised its resolved state is changed to SERIALIZING; any object that is marked as SERIALIZING
- * is skipped.
+ * As each object is serialised its resolved state is changed to SERIALIZING;
+ * any object that is marked as SERIALIZING is skipped.
  */
 public final class ObjectSerializer {
 
@@ -57,20 +57,17 @@ public final class ObjectSerializer {
         this.dataFactory = dataFactory;
     }
 
-    public final ReferenceData serializeAdapter(final ObjectAdapter adapter, final int depth,
-        final KnownObjectsRequest knownObjects) {
+    public final ReferenceData serializeAdapter(final ObjectAdapter adapter, final int depth, final KnownObjectsRequest knownObjects) {
         Assert.assertNotNull(adapter);
         return (ReferenceData) serializeObject2(adapter, depth, knownObjects);
     }
 
     public final EncodableObjectData serializeEncodeable(final ObjectAdapter adapter) {
         final EncodableFacet facet = adapter.getSpecification().getFacet(EncodableFacet.class);
-        return this.dataFactory.createValueData(adapter.getSpecification().getFullIdentifier(),
-            facet.toEncodedString(adapter));
+        return this.dataFactory.createValueData(adapter.getSpecification().getFullIdentifier(), facet.toEncodedString(adapter));
     }
 
-    private final Data serializeObject2(final ObjectAdapter adapter, final int graphDepth,
-        final KnownObjectsRequest knownObjects) {
+    private final Data serializeObject2(final ObjectAdapter adapter, final int graphDepth, final KnownObjectsRequest knownObjects) {
         Assert.assertNotNull(adapter);
 
         final ResolveState resolveState = adapter.getResolveState();
@@ -78,15 +75,13 @@ public final class ObjectSerializer {
 
         if (!isTransient && (resolveState.isSerializing() || resolveState.isGhost() || graphDepth <= 0)) {
             Assert.assertNotNull("OID needed for reference", adapter, adapter.getOid());
-            return this.dataFactory.createIdentityData(adapter.getSpecification().getFullIdentifier(),
-                adapter.getOid(), adapter.getVersion());
+            return this.dataFactory.createIdentityData(adapter.getSpecification().getFullIdentifier(), adapter.getOid(), adapter.getVersion());
         }
         if (isTransient && knownObjects.containsKey(adapter)) {
             return knownObjects.get(adapter);
         }
 
-        final boolean withCompleteData =
-            resolveState == ResolveState.TRANSIENT || resolveState == ResolveState.RESOLVED;
+        final boolean withCompleteData = resolveState == ResolveState.TRANSIENT || resolveState == ResolveState.RESOLVED;
 
         final String type = adapter.getSpecification().getFullIdentifier();
         final Oid oid = adapter.getOid();
@@ -116,9 +111,7 @@ public final class ObjectSerializer {
 
             } else if (fields[i].isOneToOneAssociation()) {
                 if (field == null) {
-                    fieldContent[i] =
-                        !withCompleteData ? null : this.dataFactory.createNullData(fields[i].getSpecification()
-                            .getFullIdentifier());
+                    fieldContent[i] = !withCompleteData ? null : this.dataFactory.createNullData(fields[i].getSpecification().getFullIdentifier());
                 } else {
                     fieldContent[i] = serializeObject2(field, graphDepth - 1, knownObjects);
                 }
@@ -132,8 +125,7 @@ public final class ObjectSerializer {
         return data;
     }
 
-    public CollectionData serializeCollection(final ObjectAdapter collectionAdapter, final int graphDepth,
-        final KnownObjectsRequest knownObjects) {
+    public CollectionData serializeCollection(final ObjectAdapter collectionAdapter, final int graphDepth, final KnownObjectsRequest knownObjects) {
         final Oid oid = collectionAdapter.getOid();
         final String collectionType = collectionAdapter.getSpecification().getFullIdentifier();
         final TypeOfFacet typeOfFacet = collectionAdapter.getSpecification().getFacet(TypeOfFacet.class);
@@ -141,8 +133,7 @@ public final class ObjectSerializer {
             throw new IsisException("No type of facet for collection " + collectionAdapter);
         }
         final String elementType = typeOfFacet.value().getName();
-        final boolean hasAllElements =
-            collectionAdapter.isTransient() || collectionAdapter.getResolveState().isResolved();
+        final boolean hasAllElements = collectionAdapter.isTransient() || collectionAdapter.getResolveState().isResolved();
         ReferenceData[] elements;
 
         if (hasAllElements) {
@@ -158,8 +149,7 @@ public final class ObjectSerializer {
             elements = new ObjectData[0];
         }
 
-        return this.dataFactory.createCollectionData(collectionType, elementType, oid, elements, hasAllElements,
-            collectionAdapter.getVersion());
+        return this.dataFactory.createCollectionData(collectionType, elementType, oid, elements, hasAllElements, collectionAdapter.getVersion());
     }
 
 }

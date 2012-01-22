@@ -44,7 +44,8 @@ import org.apache.isis.runtimes.dflt.runtime.system.session.IsisSessionFactory;
 import org.apache.log4j.Logger;
 
 /**
- * An implementation of {@link IsisSystem} that has a hook for installing fixtures but does not install them itself.
+ * An implementation of {@link IsisSystem} that has a hook for installing
+ * fixtures but does not install them itself.
  */
 public abstract class IsisSystemFixturesHookAbstract implements IsisSystem {
 
@@ -70,8 +71,7 @@ public abstract class IsisSystemFixturesHookAbstract implements IsisSystem {
         this(deploymentType, new IsisLocaleInitializer(), new IsisTimeZoneInitializer());
     }
 
-    public IsisSystemFixturesHookAbstract(final DeploymentType deploymentType,
-        final IsisLocaleInitializer localeInitializer, final IsisTimeZoneInitializer timeZoneInitializer) {
+    public IsisSystemFixturesHookAbstract(final DeploymentType deploymentType, final IsisLocaleInitializer localeInitializer, final IsisTimeZoneInitializer timeZoneInitializer) {
         this.deploymentType = deploymentType;
         this.localeInitializer = localeInitializer;
         this.timeZoneInitializer = timeZoneInitializer;
@@ -115,7 +115,8 @@ public abstract class IsisSystemFixturesHookAbstract implements IsisSystem {
             sessionFactory = doCreateSessionFactory(deploymentType);
 
             // temporarily make a configuration available
-            // REVIEW: would rather inject this, or perhaps even the ConfigurationBuilder
+            // REVIEW: would rather inject this, or perhaps even the
+            // ConfigurationBuilder
             IsisContext.setConfiguration(getConfiguration());
 
             initContext(sessionFactory);
@@ -147,15 +148,16 @@ public abstract class IsisSystemFixturesHookAbstract implements IsisSystem {
     // ///////////////////////////////////////////
 
     /**
-     * Hook method; the returned implementation is expected to use the same general approach as the subclass itself.
+     * Hook method; the returned implementation is expected to use the same
+     * general approach as the subclass itself.
      * 
      * <p>
-     * So, for example, <tt>IsisSystemUsingInstallers</tt> uses the {@link InstallerLookup} mechanism to find its
-     * components. The corresponding <tt>ExecutionContextFactoryUsingInstallers</tt> object returned by this method
-     * should use {@link InstallerLookup} likewise.
+     * So, for example, <tt>IsisSystemUsingInstallers</tt> uses the
+     * {@link InstallerLookup} mechanism to find its components. The
+     * corresponding <tt>ExecutionContextFactoryUsingInstallers</tt> object
+     * returned by this method should use {@link InstallerLookup} likewise.
      */
-    protected abstract IsisSessionFactory doCreateSessionFactory(final DeploymentType deploymentType)
-        throws IsisSystemException;
+    protected abstract IsisSessionFactory doCreateSessionFactory(final DeploymentType deploymentType) throws IsisSystemException;
 
     // ///////////////////////////////////////////
     // Configuration
@@ -181,7 +183,8 @@ public abstract class IsisSystemFixturesHookAbstract implements IsisSystem {
     // ///////////////////////////////////////////
 
     /**
-     * Just returns a {@link TemplateImageLoaderAwt}; subclasses may override if required.
+     * Just returns a {@link TemplateImageLoaderAwt}; subclasses may override if
+     * required.
      */
     protected TemplateImageLoader obtainTemplateImageLoader() {
         return new TemplateImageLoaderAwt(getConfiguration());
@@ -197,15 +200,15 @@ public abstract class IsisSystemFixturesHookAbstract implements IsisSystem {
     // PersistenceSessionFactory
     // ///////////////////////////////////////////
 
-    protected abstract PersistenceSessionFactory obtainPersistenceSessionFactory(DeploymentType deploymentType)
-        throws IsisSystemException;
+    protected abstract PersistenceSessionFactory obtainPersistenceSessionFactory(DeploymentType deploymentType) throws IsisSystemException;
 
     // ///////////////////////////////////////////
     // Fixtures (hooks)
     // ///////////////////////////////////////////
 
     /**
-     * Optional hook for appending debug information pertaining to fixtures installer if required.
+     * Optional hook for appending debug information pertaining to fixtures
+     * installer if required.
      */
     protected void appendFixturesInstallerDebug(final DebugBuilder debug) {
     }
@@ -214,9 +217,10 @@ public abstract class IsisSystemFixturesHookAbstract implements IsisSystem {
      * The {@link LogonFixture}, if any, obtained by running fixtures.
      * 
      * <p>
-     * Intended to be used when for {@link DeploymentType#EXPLORATION exploration} (instead of an
-     * {@link ExplorationSession}) or {@link DeploymentType#PROTOTYPE prototype} deployments (saves logging in). Should
-     * be <i>ignored</i> in other {@link DeploymentType}s.
+     * Intended to be used when for {@link DeploymentType#EXPLORATION
+     * exploration} (instead of an {@link ExplorationSession}) or
+     * {@link DeploymentType#PROTOTYPE prototype} deployments (saves logging
+     * in). Should be <i>ignored</i> in other {@link DeploymentType}s.
      * 
      * <p>
      * This implementation always returns <tt>null</tt>.
@@ -239,8 +243,7 @@ public abstract class IsisSystemFixturesHookAbstract implements IsisSystem {
     // Authentication Manager
     // ///////////////////////////////////////////
 
-    protected abstract AuthenticationManager obtainAuthenticationManager(DeploymentType deploymentType)
-        throws IsisSystemException;
+    protected abstract AuthenticationManager obtainAuthenticationManager(DeploymentType deploymentType) throws IsisSystemException;
 
     // ///////////////////////////////////////////
     // UserProfileLoader
@@ -260,8 +263,7 @@ public abstract class IsisSystemFixturesHookAbstract implements IsisSystem {
 
     private void showSplash(final TemplateImageLoader imageLoader) {
 
-        final boolean vetoSplashFromConfig =
-            getConfiguration().getBoolean(SystemConstants.NOSPLASH_KEY, SystemConstants.NOSPLASH_DEFAULT);
+        final boolean vetoSplashFromConfig = getConfiguration().getBoolean(SystemConstants.NOSPLASH_KEY, SystemConstants.NOSPLASH_DEFAULT);
         if (!vetoSplashFromConfig && getDeploymentType().shouldShowSplash()) {
             splashWindow = new SplashWindow(imageLoader);
         }
@@ -299,10 +301,13 @@ public abstract class IsisSystemFixturesHookAbstract implements IsisSystem {
         if (selectionName.equals("Configuration")) {
             return getConfiguration();
         } /*
-           * else if (selectionName.equals("Overview")) { debugOverview(debug); } else if
-           * (selectionName.equals("Authenticator")) { deb = IsisContext.getAuthenticationManager(); } else if
-           * (selectionName.equals("Reflector")) { deb = IsisContext.getSpecificationLoader(); } else if
-           * (selectionName.equals("Contexts")) { deb = debugListContexts(debug); } else { deb =
+           * else if (selectionName.equals("Overview")) { debugOverview(debug);
+           * } else if (selectionName.equals("Authenticator")) { deb =
+           * IsisContext.getAuthenticationManager(); } else if
+           * (selectionName.equals("Reflector")) { deb =
+           * IsisContext.getSpecificationLoader(); } else if
+           * (selectionName.equals("Contexts")) { deb =
+           * debugListContexts(debug); } else { deb =
            * debugDisplayContext(selectionName, debug); }
            */
         return null;
@@ -330,8 +335,7 @@ public abstract class IsisSystemFixturesHookAbstract implements IsisSystem {
 
     @Override
     public String[] debugSectionNames() {
-        final String[] general =
-            new String[] { "Overview", "Authenticator", "Configuration", "Reflector", "Requests", "Contexts" };
+        final String[] general = new String[] { "Overview", "Authenticator", "Configuration", "Reflector", "Requests", "Contexts" };
         final String[] contextIds = IsisContext.getInstance().allSessionIds();
         final String[] combined = new String[general.length + contextIds.length];
         System.arraycopy(general, 0, combined, 0, general.length);
@@ -351,9 +355,7 @@ public abstract class IsisSystemFixturesHookAbstract implements IsisSystem {
             }
 
             final String user = System.getProperty("user.name");
-            final String system =
-                System.getProperty("os.name") + " (" + System.getProperty("os.arch") + ") "
-                    + System.getProperty("os.version");
+            final String system = System.getProperty("os.name") + " (" + System.getProperty("os.arch") + ") " + System.getProperty("os.version");
             final String java = System.getProperty("java.vm.name") + " " + System.getProperty("java.vm.version");
             debug.appendln("user: " + user);
             debug.appendln("os: " + system);

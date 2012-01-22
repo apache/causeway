@@ -26,7 +26,8 @@ public class HttpRemotingConstants {
     private static final String ROOT = ConfigurationConstants.ROOT + "transport.http.";
 
     /**
-     * Key used to lookup URL to which the <tt>EncodingOverHttpRemotingServlet</tt> is mapped.
+     * Key used to lookup URL to which the
+     * <tt>EncodingOverHttpRemotingServlet</tt> is mapped.
      */
     public static final String URL_KEY = ROOT + "url";
     /**

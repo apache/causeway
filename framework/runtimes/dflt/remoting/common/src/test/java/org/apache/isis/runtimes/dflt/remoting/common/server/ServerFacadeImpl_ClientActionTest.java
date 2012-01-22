@@ -69,8 +69,9 @@ public class ServerFacadeImpl_ClientActionTest {
     private TestProxySystem system;
 
     /*
-     * Testing the Distribution implementation ServerDistribution. This uses the encoder to unmarshall objects and then
-     * calls the persistor and reflector; all of which should be mocked.
+     * Testing the Distribution implementation ServerDistribution. This uses the
+     * encoder to unmarshall objects and then calls the persistor and reflector;
+     * all of which should be mocked.
      */
     @Before
     public void setUp() throws Exception {
@@ -101,14 +102,12 @@ public class ServerFacadeImpl_ClientActionTest {
 
         mockery.checking(new Expectations() {
             {
-                one(mockEncoder).encodeClientActionResult(with(equalTo(new ObjectData[0])),
-                    with(equalTo(new Version[0])), with(equalTo(new ObjectData[0])));
+                one(mockEncoder).encodeClientActionResult(with(equalTo(new ObjectData[0])), with(equalTo(new Version[0])), with(equalTo(new ObjectData[0])));
                 will(returnValue(new ExecuteClientActionResponse(new ObjectData[0], new Version[0], null)));
             }
         });
 
-        final ExecuteClientActionRequest request =
-            new ExecuteClientActionRequest(session, new ReferenceData[0], new int[0]);
+        final ExecuteClientActionRequest request = new ExecuteClientActionRequest(session, new ReferenceData[0], new int[0]);
 
         // don't start xactn here, since within call.
         final ExecuteClientActionResponse result = server.executeClientAction(request);
@@ -133,23 +132,18 @@ public class ServerFacadeImpl_ClientActionTest {
         });
 
         // results returned in their own container
-        final ExecuteClientActionResponse results =
-            new ExecuteClientActionResponse(new ObjectData[0], new Version[0], null);
+        final ExecuteClientActionResponse results = new ExecuteClientActionResponse(new ObjectData[0], new Version[0], null);
         mockery.checking(new Expectations() {
             {
-                one(mockEncoder).encodeClientActionResult(with(equalTo(new ReferenceData[1])),
-                    with(equalTo(new Version[] { new TestProxyVersion(2) })), with(equalTo(new ObjectData[0])));
+                one(mockEncoder).encodeClientActionResult(with(equalTo(new ReferenceData[1])), with(equalTo(new Version[] { new TestProxyVersion(2) })), with(equalTo(new ObjectData[0])));
                 will(returnValue(results));
             }
         });
 
-        final ExecuteClientActionRequest request =
-            new ExecuteClientActionRequest(session, new ReferenceData[] { data },
-                new int[] { ClientTransactionEvent.CHANGE });
+        final ExecuteClientActionRequest request = new ExecuteClientActionRequest(session, new ReferenceData[] { data }, new int[] { ClientTransactionEvent.CHANGE });
         // don't start xactn here, since within call.
         final ExecuteClientActionResponse result = server.executeClientAction(request);
-        final ObjectAdapter object =
-            IsisContext.getPersistenceSession().loadObject(adapter.getOid(), adapter.getSpecification());
+        final ObjectAdapter object = IsisContext.getPersistenceSession().loadObject(adapter.getOid(), adapter.getSpecification());
 
         assertEquals(new TestProxyVersion(2), object.getVersion());
 
@@ -174,25 +168,20 @@ public class ServerFacadeImpl_ClientActionTest {
         });
 
         // return results
-        final ExecuteClientActionResponse results =
-            new ExecuteClientActionResponse(new ObjectData[0], new Version[0], new ObjectData[0]);
+        final ExecuteClientActionResponse results = new ExecuteClientActionResponse(new ObjectData[0], new Version[0], new ObjectData[0]);
         mockery.checking(new Expectations() {
             {
-                one(mockEncoder).encodeClientActionResult(with(equalTo(new ReferenceData[1])),
-                    with(equalTo(new Version[1])), with(equalTo(new ObjectData[0])));
+                one(mockEncoder).encodeClientActionResult(with(equalTo(new ReferenceData[1])), with(equalTo(new Version[1])), with(equalTo(new ObjectData[0])));
                 will(returnValue(results));
             }
         });
 
         // don't start xactn here, since within call.
 
-        final ExecuteClientActionRequest request =
-            new ExecuteClientActionRequest(session, new ReferenceData[] { data },
-                new int[] { ClientTransactionEvent.ADD });
+        final ExecuteClientActionRequest request = new ExecuteClientActionRequest(session, new ReferenceData[] { data }, new int[] { ClientTransactionEvent.ADD });
         final ExecuteClientActionResponse response = server.executeClientAction(request);
 
-        final ObjectAdapter object =
-            IsisContext.getPersistenceSession().loadObject(adapter.getOid(), adapter.getSpecification());
+        final ObjectAdapter object = IsisContext.getPersistenceSession().loadObject(adapter.getOid(), adapter.getSpecification());
 
         assertEquals(results, response);
         assertEquals(adapter, object);
@@ -205,13 +194,10 @@ public class ServerFacadeImpl_ClientActionTest {
         adapter.setOptimisticLock(new TestProxyVersion(7));
 
         final Oid oid = adapter.getOid();
-        final DummyIdentityData identityData =
-            new DummyIdentityData(oid, TestProxyAdapter.class.getName(), new TestProxyVersion(6));
+        final DummyIdentityData identityData = new DummyIdentityData(oid, TestProxyAdapter.class.getName(), new TestProxyVersion(6));
 
         try {
-            final ExecuteClientActionRequest request =
-                new ExecuteClientActionRequest(new TestProxySession(), new ReferenceData[] { identityData },
-                    new int[] { ClientTransactionEvent.DELETE });
+            final ExecuteClientActionRequest request = new ExecuteClientActionRequest(new TestProxySession(), new ReferenceData[] { identityData }, new int[] { ClientTransactionEvent.DELETE });
             server.executeClientAction(request);
             fail();
         } catch (final ConcurrencyException expected) {
@@ -223,24 +209,19 @@ public class ServerFacadeImpl_ClientActionTest {
         final ObjectAdapter adapter = system.createPersistentTestObject();
 
         final Oid oid = adapter.getOid();
-        final DummyIdentityData identityData =
-            new DummyIdentityData(oid, TestProxyAdapter.class.getName(), new TestProxyVersion(1));
+        final DummyIdentityData identityData = new DummyIdentityData(oid, TestProxyAdapter.class.getName(), new TestProxyVersion(1));
 
         // return results
-        final ExecuteClientActionResponse results =
-            new ExecuteClientActionResponse(new ObjectData[0], new Version[0], null);
+        final ExecuteClientActionResponse results = new ExecuteClientActionResponse(new ObjectData[0], new Version[0], null);
         mockery.checking(new Expectations() {
             {
-                one(mockEncoder).encodeClientActionResult(with(equalTo(new ReferenceData[1])),
-                    with(equalTo(new Version[1])), with(equalTo(new ObjectData[0])));
+                one(mockEncoder).encodeClientActionResult(with(equalTo(new ReferenceData[1])), with(equalTo(new Version[1])), with(equalTo(new ObjectData[0])));
                 will(returnValue(results));
             }
         });
 
         // don't start xactn here, since within call.
-        final ExecuteClientActionRequest request =
-            new ExecuteClientActionRequest(new TestProxySession(), new ReferenceData[] { identityData },
-                new int[] { ClientTransactionEvent.DELETE });
+        final ExecuteClientActionRequest request = new ExecuteClientActionRequest(new TestProxySession(), new ReferenceData[] { identityData }, new int[] { ClientTransactionEvent.DELETE });
         final ExecuteClientActionResponse result = server.executeClientAction(request);
 
         assertEquals(results, result);

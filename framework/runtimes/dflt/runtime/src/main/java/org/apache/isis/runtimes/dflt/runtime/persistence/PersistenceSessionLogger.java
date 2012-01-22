@@ -61,8 +61,7 @@ public class PersistenceSessionLogger extends Logger implements PersistenceSessi
     }
 
     @Override
-    public ObjectAdapter findInstances(final Query query, final QueryCardinality cardinality)
-        throws UnsupportedFindException {
+    public ObjectAdapter findInstances(final Query query, final QueryCardinality cardinality) throws UnsupportedFindException {
         log("find instances matching " + query.getDescription());
         return underlying.findInstances(query, cardinality);
     }

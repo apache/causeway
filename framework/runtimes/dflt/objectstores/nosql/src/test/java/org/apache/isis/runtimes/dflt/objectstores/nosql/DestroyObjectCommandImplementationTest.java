@@ -45,8 +45,7 @@ public class DestroyObjectCommandImplementationTest {
 
     @Test
     public void testname() throws Exception {
-        final ObjectSpecification specification =
-            IsisContext.getSpecificationLoader().loadSpecification(ExampleReferencePojo.class);
+        final ObjectSpecification specification = IsisContext.getSpecificationLoader().loadSpecification(ExampleReferencePojo.class);
         final ObjectAdapter object = IsisContext.getPersistenceSession().createInstance(specification);
         IsisContext.getPersistenceSession().makePersistent(object);
         object.setOptimisticLock(new SerialNumberVersion(3, "username", new Date(1000)));
@@ -62,8 +61,7 @@ public class DestroyObjectCommandImplementationTest {
             }
         });
 
-        final NoSqlDestroyObjectCommand command =
-            new NoSqlDestroyObjectCommand(new SerialKeyCreator(), new SerialNumberVersionCreator(), object);
+        final NoSqlDestroyObjectCommand command = new NoSqlDestroyObjectCommand(new SerialKeyCreator(), new SerialNumberVersionCreator(), object);
         command.execute(commandContext);
     }
 }

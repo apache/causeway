@@ -40,7 +40,7 @@ public abstract class NoSqlPersistorMechanismInstaller extends ObjectStorePersis
 
     private static final Logger LOG = Logger.getLogger(NoSqlPersistorMechanismInstaller.class);
 
-    private static final String NAKEDOBJECTS_ENCRYPTION_CLASSES = ConfigurationConstants.ROOT  + "nosql.encryption";
+    private static final String NAKEDOBJECTS_ENCRYPTION_CLASSES = ConfigurationConstants.ROOT + "nosql.encryption";
 
     private NoSqlObjectStore objectStore;
 
@@ -49,8 +49,7 @@ public abstract class NoSqlPersistorMechanismInstaller extends ObjectStorePersis
     }
 
     @Override
-    protected ObjectStore createObjectStore(final IsisConfiguration configuration,
-        final ObjectAdapterFactory objectFactory, final AdapterManager adapterManager) {
+    protected ObjectStore createObjectStore(final IsisConfiguration configuration, final ObjectAdapterFactory objectFactory, final AdapterManager adapterManager) {
         return getObjectStore(configuration);
     }
 
@@ -71,8 +70,8 @@ public abstract class NoSqlPersistorMechanismInstaller extends ObjectStorePersis
             final VersionCreator versionCreator = createVersionCreator();
             final NoSqlDataDatabase db = createNoSqlDatabase(configuration);
             final NoSqlOidGenerator oidGenerator = createOidGenerator(db);
-            
-            Map<String, DataEncryption> availableDataEncryption = new HashMap<String, DataEncryption>();
+
+            final Map<String, DataEncryption> availableDataEncryption = new HashMap<String, DataEncryption>();
             try {
                 final String[] encryptionClasses = getConfiguration().getList(NAKEDOBJECTS_ENCRYPTION_CLASSES);
                 DataEncryption writeWithEncryption = null;

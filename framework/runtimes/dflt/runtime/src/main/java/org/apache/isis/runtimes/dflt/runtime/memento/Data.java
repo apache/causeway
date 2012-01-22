@@ -46,7 +46,8 @@ public class Data implements Encodable, Serializable {
 
     public Data(final DataInputExtended input) throws IOException {
         this.className = input.readUTF();
-        this.resolveState = input.readUTF(); // TODO: make ResolveState encodable?
+        this.resolveState = input.readUTF(); // TODO: make ResolveState
+                                             // encodable?
         this.oid = input.readEncodable(Oid.class);
         initialized();
     }
@@ -67,7 +68,8 @@ public class Data implements Encodable, Serializable {
     // ///////////////////////////////////////////////////////
 
     /**
-     * Note: could be <tt>null</tt> if represents a {@link ResolveState#isValue() standalone} adapter.
+     * Note: could be <tt>null</tt> if represents a
+     * {@link ResolveState#isValue() standalone} adapter.
      */
     public Oid getOid() {
         return oid;

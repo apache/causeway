@@ -39,9 +39,7 @@ public class OptionHandlerConfiguration extends OptionHandlerAbstract {
     @Override
     @SuppressWarnings("static-access")
     public void addOption(final Options options) {
-        final Option option =
-            OptionBuilder.withArgName("config file").hasArg().withLongOpt(CONFIGURATION_LONG_OPT)
-                .withDescription("read in configuration file (as well as isis.properties)").create(CONFIGURATION_OPT);
+        final Option option = OptionBuilder.withArgName("config file").hasArg().withLongOpt(CONFIGURATION_LONG_OPT).withDescription("read in configuration file (as well as isis.properties)").create(CONFIGURATION_OPT);
         options.addOption(option);
     }
 

@@ -33,8 +33,7 @@ public class DummyCollectionData extends DummyReferenceData implements Collectio
     private final ReferenceData[] elements;
     private final String elementType;
 
-    public DummyCollectionData(final Oid oid, final String collectionType, final String elementType,
-        final ReferenceData[] elements, final Version version) {
+    public DummyCollectionData(final Oid oid, final String collectionType, final String elementType, final ReferenceData[] elements, final Version version) {
         super(oid, collectionType, version);
         this.elementType = elementType;
         this.elements = elements;

@@ -26,8 +26,7 @@ import org.apache.isis.runtimes.dflt.objectstores.sql.mapping.ObjectReferenceMap
 public class JdbcObjectReferenceMappingFactory implements ObjectReferenceMappingFactory {
 
     @Override
-    public ObjectReferenceMapping createReferenceMapping(final String columnName,
-        final ObjectSpecification specification) {
+    public ObjectReferenceMapping createReferenceMapping(final String columnName, final ObjectSpecification specification) {
         return new JdbcObjectReferenceMapping(columnName, specification);
     }
 

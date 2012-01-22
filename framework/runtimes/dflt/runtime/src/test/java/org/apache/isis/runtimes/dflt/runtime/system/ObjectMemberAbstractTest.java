@@ -203,8 +203,7 @@ class ObjectMemberAbstractImpl extends ObjectMemberAbstract {
     }
 
     protected ObjectMemberAbstractImpl(final String id) {
-        super(FacetedMethod.createProperty(Customer.class, "firstName"), FeatureType.PROPERTY, new ObjectMemberContext(
-            null, null, null, null, null));
+        super(FacetedMethod.createProperty(Customer.class, "firstName"), FeatureType.PROPERTY, new ObjectMemberContext(null, null, null, null, null));
     }
 
     @Override
@@ -222,14 +221,12 @@ class ObjectMemberAbstractImpl extends ObjectMemberAbstract {
     }
 
     @Override
-    public UsabilityContext<?> createUsableInteractionContext(final AuthenticationSession session,
-        final InteractionInvocationMethod invocationMethod, final ObjectAdapter target) {
+    public UsabilityContext<?> createUsableInteractionContext(final AuthenticationSession session, final InteractionInvocationMethod invocationMethod, final ObjectAdapter target) {
         return new PropertyUsabilityContext(session, invocationMethod, target, getIdentifier());
     }
 
     @Override
-    public VisibilityContext<?> createVisibleInteractionContext(final AuthenticationSession session,
-        final InteractionInvocationMethod invocationMethod, final ObjectAdapter targetObjectAdapter) {
+    public VisibilityContext<?> createVisibleInteractionContext(final AuthenticationSession session, final InteractionInvocationMethod invocationMethod, final ObjectAdapter targetObjectAdapter) {
         return new PropertyVisibilityContext(session, invocationMethod, targetObjectAdapter, getIdentifier());
     }
 

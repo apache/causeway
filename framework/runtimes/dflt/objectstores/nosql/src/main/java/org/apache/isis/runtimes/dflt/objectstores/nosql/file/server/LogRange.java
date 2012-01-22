@@ -21,11 +21,11 @@ package org.apache.isis.runtimes.dflt.objectstores.nosql.file.server;
 class LogRange {
     private long first = Long.MAX_VALUE;
     private long last = 0;
-   
+
     public long getFirst() {
         return first;
     }
-    
+
     public long getLast() {
         return last;
     }
@@ -34,9 +34,8 @@ class LogRange {
         return first == Long.MAX_VALUE && last == 0;
     }
 
-    public void add(long sequence) {
+    public void add(final long sequence) {
         last = Math.max(last, sequence);
         first = Math.min(first, sequence);
     }
 }
-

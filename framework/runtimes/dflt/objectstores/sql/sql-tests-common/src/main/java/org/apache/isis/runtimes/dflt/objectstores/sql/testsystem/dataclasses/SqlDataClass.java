@@ -36,10 +36,12 @@ import org.apache.isis.applib.value.TimeStamp;
 import org.apache.isis.runtimes.dflt.objectstores.sql.common.SqlIntegrationTestCommon;
 
 /**
- * The SqlDataClass is a test class used in the sql-persistor integration tests. It's properties are stored and
- * retrieved using the persistor, to confirm accurate persistence behaviour.
+ * The SqlDataClass is a test class used in the sql-persistor integration tests.
+ * It's properties are stored and retrieved using the persistor, to confirm
+ * accurate persistence behaviour.
  * 
- * Each property here requires an equivalent test in {@link SqlIntegrationTestCommon}
+ * Each property here requires an equivalent test in
+ * {@link SqlIntegrationTestCommon}
  * 
  * @author Kevin Meyer
  * 

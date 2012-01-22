@@ -37,7 +37,7 @@ public class JdbcPolymorphicObjectReferenceMapping extends IdMappingAbstract imp
         setColumn(idColumn);
     }
 
-    public void setObjectSpecification(ObjectSpecification specification) {
+    public void setObjectSpecification(final ObjectSpecification specification) {
         this.specification = specification;
     }
 

@@ -27,8 +27,9 @@ import org.apache.isis.runtimes.dflt.remoting.common.data.common.ObjectData;
 import com.google.common.collect.Maps;
 
 /**
- * A lookup of the objects that are part of a request or response. As only one instance of data per object should be
- * passed from node to node this object provides a way of ensuring this.
+ * A lookup of the objects that are part of a request or response. As only one
+ * instance of data per object should be passed from node to node this object
+ * provides a way of ensuring this.
  */
 public class KnownObjectsRequest {
 
@@ -106,7 +107,8 @@ public class KnownObjectsRequest {
     // if (obj instanceof KnownObjectsRequest) {
     // final KnownObjectsRequest other = (KnownObjectsRequest) obj;
     //
-    // return other.dataToObjectMap.equals(dataToObjectMap) && other.objectToDataMap.equals(objectToDataMap);
+    // return other.dataToObjectMap.equals(dataToObjectMap) &&
+    // other.objectToDataMap.equals(objectToDataMap);
     // }
     //
     // return false;

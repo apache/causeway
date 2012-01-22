@@ -41,7 +41,6 @@ import org.apache.isis.core.metamodel.spec.Instance;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.Persistability;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.core.metamodel.spec.feature.ObjectActionContainer.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationFilters;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
@@ -172,8 +171,7 @@ public class TestSpecification extends FacetHolderNoop implements ObjectSpecific
     }
 
     @Override
-    public ObjectAction getObjectAction(final ActionType type, final String name,
-        final List<ObjectSpecification> parameters) {
+    public ObjectAction getObjectAction(final ActionType type, final String name, final List<ObjectSpecification> parameters) {
         if (action != null && action.getId().equals(name)) {
             return action;
         }
@@ -191,7 +189,7 @@ public class TestSpecification extends FacetHolderNoop implements ObjectSpecific
     }
 
     @Override
-    public List<ObjectAction> getObjectActions(final ActionType type, Contributed contributed) {
+    public List<ObjectAction> getObjectActions(final ActionType type, final Contributed contributed) {
         return null;
     }
 
@@ -279,8 +277,7 @@ public class TestSpecification extends FacetHolderNoop implements ObjectSpecific
     }
 
     public Object newInstance() {
-        throw new IsisException("Not able to create instance of " + getFullIdentifier()
-            + "; newInstance() method should be overridden");
+        throw new IsisException("Not able to create instance of " + getFullIdentifier() + "; newInstance() method should be overridden");
     }
 
     @Override
@@ -358,14 +355,12 @@ public class TestSpecification extends FacetHolderNoop implements ObjectSpecific
     }
 
     @Override
-    public ObjectValidityContext createValidityInteractionContext(final AuthenticationSession session,
-        final InteractionInvocationMethod invocationMethod, final ObjectAdapter targetObjectAdapter) {
+    public ObjectValidityContext createValidityInteractionContext(final AuthenticationSession session, final InteractionInvocationMethod invocationMethod, final ObjectAdapter targetObjectAdapter) {
         return null;
     }
 
     @Override
-    public ObjectTitleContext createTitleInteractionContext(final AuthenticationSession session,
-        final InteractionInvocationMethod invocationMethod, final ObjectAdapter targetObjectAdapter) {
+    public ObjectTitleContext createTitleInteractionContext(final AuthenticationSession session, final InteractionInvocationMethod invocationMethod, final ObjectAdapter targetObjectAdapter) {
         return null;
     }
 
@@ -405,13 +400,13 @@ public class TestSpecification extends FacetHolderNoop implements ObjectSpecific
     }
 
     @Override
-    public List<ObjectAction> getObjectActions(Contributed contributed) {
+    public List<ObjectAction> getObjectActions(final Contributed contributed) {
         return null;
     }
 
-	@Override
-	public List<ObjectAction> getObjectActions(List<ActionType> types, Contributed contributed) {
-		return null;
-	}
+    @Override
+    public List<ObjectAction> getObjectActions(final List<ActionType> types, final Contributed contributed) {
+        return null;
+    }
 
 }

@@ -29,8 +29,7 @@ import org.apache.isis.core.metamodel.facets.collections.modify.CollectionRemove
 import org.apache.isis.core.metamodel.facets.properties.modify.PropertyClearFacet;
 import org.apache.isis.core.metamodel.facets.properties.modify.PropertySetterFacet;
 
-public abstract class TransactionFacetDecoratorAbstract extends FacetDecoratorAbstract implements
-    TransactionFacetDecorator {
+public abstract class TransactionFacetDecoratorAbstract extends FacetDecoratorAbstract implements TransactionFacetDecorator {
 
     private final IsisConfiguration configuration;
 
@@ -44,7 +43,6 @@ public abstract class TransactionFacetDecoratorAbstract extends FacetDecoratorAb
 
     @Override
     public Class<? extends Facet>[] getFacetTypes() {
-        return new Class[] { ActionInvocationFacet.class, PropertyClearFacet.class, PropertySetterFacet.class,
-            CollectionAddToFacet.class, CollectionRemoveFromFacet.class, CollectionClearFacet.class };
+        return new Class[] { ActionInvocationFacet.class, PropertyClearFacet.class, PropertySetterFacet.class, CollectionAddToFacet.class, CollectionRemoveFromFacet.class, CollectionClearFacet.class };
     }
 }

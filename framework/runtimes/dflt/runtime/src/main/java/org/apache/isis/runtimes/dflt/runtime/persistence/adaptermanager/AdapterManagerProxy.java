@@ -30,11 +30,13 @@ import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessi
 public interface AdapterManagerProxy extends ObjectAdapterLookup {
 
     /**
-     * Remaps an {@link Oid} that has been {@link Oid#getPrevious() updated} so that its {@link ObjectAdapter adapter}
-     * (if any) is mapped to that {@link Oid}.
+     * Remaps an {@link Oid} that has been {@link Oid#getPrevious() updated} so
+     * that its {@link ObjectAdapter adapter} (if any) is mapped to that
+     * {@link Oid}.
      * 
      * <p>
-     * Part of public API so that the proxy persistor can maintain its maps when it processes a newly persisted object.
+     * Part of public API so that the proxy persistor can maintain its maps when
+     * it processes a newly persisted object.
      * 
      * @see AdapterManagerPersist#remapAsPersistent(ObjectAdapter)
      */

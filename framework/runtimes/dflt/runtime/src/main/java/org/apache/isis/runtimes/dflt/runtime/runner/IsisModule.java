@@ -69,8 +69,7 @@ public class IsisModule extends AbstractModule {
         this(deploymentType, defaultConfigurationBuider(), installerLookup);
     }
 
-    public IsisModule(final DeploymentType deploymentType, final IsisConfigurationBuilder isisConfigurationBuilder,
-        final InstallerLookup installerLookup) {
+    public IsisModule(final DeploymentType deploymentType, final IsisConfigurationBuilder isisConfigurationBuilder, final InstallerLookup installerLookup) {
         this.installerLookup = installerLookup;
         this.isisConfigurationBuilder = isisConfigurationBuilder;
         this.deploymentType = deploymentType;
@@ -120,8 +119,7 @@ public class IsisModule extends AbstractModule {
     /**
      * Adjustment (as per GOOS book)
      */
-    public void addConfigurationPrimers(
-        final List<? extends IsisConfigurationBuilderPrimer> isisConfigurationBuilderPrimers) {
+    public void addConfigurationPrimers(final List<? extends IsisConfigurationBuilderPrimer> isisConfigurationBuilderPrimers) {
         this.isisConfigurationBuilderPrimers.addAll(isisConfigurationBuilderPrimers);
     }
 
@@ -144,8 +142,7 @@ public class IsisModule extends AbstractModule {
     @Inject
     @Singleton
     private IsisSystemFactory provideIsisSystemFactory(final InstallerLookup installerLookup) {
-        final IsisSystemThatUsesInstallersFactory systemFactory =
-            new IsisSystemThatUsesInstallersFactory(installerLookup);
+        final IsisSystemThatUsesInstallersFactory systemFactory = new IsisSystemThatUsesInstallersFactory(installerLookup);
         systemFactory.init();
         return systemFactory;
     }

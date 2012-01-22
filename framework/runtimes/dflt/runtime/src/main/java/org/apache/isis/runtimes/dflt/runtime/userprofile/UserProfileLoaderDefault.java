@@ -179,8 +179,7 @@ public class UserProfileLoaderDefault implements UserProfileLoader, DebuggableWi
 
     private UserProfile createDefaultProfile(final String userName) {
         final UserProfile profile = new UserProfile();
-        profile.newPerspective(DEFAULT_PERSPECTIVE_NAME
-            + (IsisContext.getDeploymentType().isExploring() ? EXPLORATION : ""));
+        profile.newPerspective(DEFAULT_PERSPECTIVE_NAME + (IsisContext.getDeploymentType().isExploring() ? EXPLORATION : ""));
 
         final List<Object> services = getServices();
         if (services.size() == 0 && mode == Mode.STRICT) {

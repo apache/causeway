@@ -22,7 +22,8 @@ package org.apache.isis.runtimes.dflt.remoting.transport;
 import org.apache.isis.core.commons.exceptions.IsisException;
 
 /**
- * Indicates that a connection could not be established between the client and the server.
+ * Indicates that a connection could not be established between the client and
+ * the server.
  */
 public class ConnectionException extends IsisException {
     private static final long serialVersionUID = 1L;

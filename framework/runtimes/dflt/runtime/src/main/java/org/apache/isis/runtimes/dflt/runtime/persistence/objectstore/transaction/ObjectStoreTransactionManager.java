@@ -41,8 +41,7 @@ public class ObjectStoreTransactionManager extends IsisTransactionManagerAbstrac
     // package level visibility so tests can look at directly
     int transactionLevel;
 
-    public ObjectStoreTransactionManager(final PersistenceSessionTransactionManagement objectPersistor,
-        final ObjectStoreTransactionManagement objectStore) {
+    public ObjectStoreTransactionManager(final PersistenceSessionTransactionManagement objectPersistor, final ObjectStoreTransactionManagement objectStore) {
         this.objectPersistor = objectPersistor;
         this.objectStore = objectStore;
     }
@@ -66,12 +65,7 @@ public class ObjectStoreTransactionManager extends IsisTransactionManagerAbstrac
         transactionLevel++;
 
         if (LOG.isDebugEnabled()) {
-            LOG.debug("startTransaction: level "
-                + (transactionLevel - 1)
-                + "->"
-                + (transactionLevel)
-                + (noneInProgress ? " (no transaction in progress or was previously completed; transaction created)"
-                    : ""));
+            LOG.debug("startTransaction: level " + (transactionLevel - 1) + "->" + (transactionLevel) + (noneInProgress ? " (no transaction in progress or was previously completed; transaction created)" : ""));
         }
     }
 
@@ -130,8 +124,7 @@ public class ObjectStoreTransactionManager extends IsisTransactionManagerAbstrac
     // //////////////////////////////////////////////////////////////
 
     @Override
-    protected ObjectStoreTransaction createTransaction(final MessageBroker messageBroker,
-        final UpdateNotifier updateNotifier) {
+    protected ObjectStoreTransaction createTransaction(final MessageBroker messageBroker, final UpdateNotifier updateNotifier) {
         ensureThatArg(messageBroker, is(not(nullValue())));
         ensureThatArg(updateNotifier, is(not(nullValue())));
 

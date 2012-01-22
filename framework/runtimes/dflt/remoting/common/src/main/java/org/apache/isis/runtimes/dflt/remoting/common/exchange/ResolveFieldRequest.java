@@ -75,7 +75,8 @@ public class ResolveFieldRequest extends RequestAbstract {
     // ///////////////////////////////////////////////////////
 
     /**
-     * {@link #setResponse(Object) Sets a response} of a {@link ResolveFieldResponse}.
+     * {@link #setResponse(Object) Sets a response} of a
+     * {@link ResolveFieldResponse}.
      */
     @Override
     public void execute(final ServerFacade serverFacade) {

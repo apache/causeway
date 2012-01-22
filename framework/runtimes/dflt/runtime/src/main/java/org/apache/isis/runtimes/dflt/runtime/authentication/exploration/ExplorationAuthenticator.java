@@ -33,17 +33,21 @@ import org.apache.isis.runtimes.dflt.runtime.authentication.AuthenticatorAbstrac
 import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
 
 /**
- * Creates a session suitable for {@link DeploymentType#EXPLORATION exploration} mode.
+ * Creates a session suitable for {@link DeploymentType#EXPLORATION exploration}
+ * mode.
  * 
  * <p>
- * If the {@link IsisConfiguration} contains the key {@value ExplorationAuthenticatorConstants#USERS} then
- * returns a {@link MultiUserExplorationSession} which encapsulates the details of several users (and their roles).
- * Viewers that are aware of this capability can offer the convenient ability to switch between these users. For viewers
- * that are not aware, the {@link MultiUserExplorationSession} appears as a regular {@link SimpleSession session}, with
- * the Id of the first user listed.
+ * If the {@link IsisConfiguration} contains the key
+ * {@value ExplorationAuthenticatorConstants#USERS} then returns a
+ * {@link MultiUserExplorationSession} which encapsulates the details of several
+ * users (and their roles). Viewers that are aware of this capability can offer
+ * the convenient ability to switch between these users. For viewers that are
+ * not aware, the {@link MultiUserExplorationSession} appears as a regular
+ * {@link SimpleSession session}, with the Id of the first user listed.
  * 
  * <p>
- * The format of the {@value ExplorationAuthenticatorConstants#USERS} key should be:
+ * The format of the {@value ExplorationAuthenticatorConstants#USERS} key should
+ * be:
  * 
  * <pre>
  * &amp;lt:userName&gt; [:&lt;role&gt;[|&lt;role&gt;]...], &lt;userName&gt;...
@@ -108,7 +112,8 @@ public class ExplorationAuthenticator extends AuthenticatorAbstractForDfltRuntim
     }
 
     /**
-     * Valid providing running in {@link DeploymentType#isExploring() exploration} mode.
+     * Valid providing running in {@link DeploymentType#isExploring()
+     * exploration} mode.
      */
     @Override
     public final boolean isValid(final AuthenticationRequest request) {
@@ -117,11 +122,9 @@ public class ExplorationAuthenticator extends AuthenticatorAbstractForDfltRuntim
 
     @Override
     public AuthenticationSession authenticate(final AuthenticationRequest request, final String code) {
-        final AuthenticationRequestExploration authenticationRequestExploration =
-            (AuthenticationRequestExploration) request;
+        final AuthenticationRequestExploration authenticationRequestExploration = (AuthenticationRequestExploration) request;
         if (!authenticationRequestExploration.isDefaultUser()) {
-            registeredSessions.add(createSimpleSession(authenticationRequestExploration.getName(),
-                authenticationRequestExploration.getRoles()));
+            registeredSessions.add(createSimpleSession(authenticationRequestExploration.getName(), authenticationRequestExploration.getRoles()));
         }
         if (registeredSessions.size() > 1) {
             return new MultiUserExplorationSession(registeredSessions, code);

@@ -31,47 +31,44 @@ import com.google.common.collect.Lists;
  * Whether running on client or server side etc.
  * 
  * <p>
- * Previously this was an <tt>enum</tt>, but it is now a regular class. The change has been made to provide more
- * flexibility in setting up the <tt>IsisContext</tt> lookup.
+ * Previously this was an <tt>enum</tt>, but it is now a regular class. The
+ * change has been made to provide more flexibility in setting up the
+ * <tt>IsisContext</tt> lookup.
  * 
  * 
- * implementation can be created, specifying in turn a custom {@link ContextCategory} (also now a regular class) can be
- * specified, allowing different was of setting up the .
+ * implementation can be created, specifying in turn a custom
+ * {@link ContextCategory} (also now a regular class) can be specified, allowing
+ * different was of setting up the .
  * 
  * <p>
  * To use this capability:
  * <ul>
- * <li>Write your new implementation of <tt>IsisContext</tt>, along with a static factory method (cf
+ * <li>Write your new implementation of <tt>IsisContext</tt>, along with a
+ * static factory method (cf
  * <tt>IsisContextStatic#createInstance(IsisSessionFactory)</tt>)
- * <li>Create a new subclass of {@link ContextCategory} (also now a regular class rather than an <tt>enum</tt>); this is
- * where your code goes to instantiate your <tt>IsisContext</tt> implementation</li>
- * <li>Create a new subclass of {@link DeploymentType}, passing in the custom {@link ContextCategory} in its constructor
- * </li>
- * <li>In your bootstrap code, instantiate your new {@link DeploymentType} subclass</li>
- * <li>When you run your app, don't forget to specify your custom {@link DeploymentType}, eg using the <tt>--type</tt>
- * command line arg</li>
+ * <li>Create a new subclass of {@link ContextCategory} (also now a regular
+ * class rather than an <tt>enum</tt>); this is where your code goes to
+ * instantiate your <tt>IsisContext</tt> implementation</li>
+ * <li>Create a new subclass of {@link DeploymentType}, passing in the custom
+ * {@link ContextCategory} in its constructor</li>
+ * <li>In your bootstrap code, instantiate your new {@link DeploymentType}
+ * subclass</li>
+ * <li>When you run your app, don't forget to specify your custom
+ * {@link DeploymentType}, eg using the <tt>--type</tt> command line arg</li>
  * </ul>
  */
 public class DeploymentType {
 
     private static List<DeploymentType> deploymentTypes = Lists.newArrayList();
 
-    public static DeploymentType EXPLORATION = new DeploymentType("EXPLORATION", DeploymentCategory.EXPLORING,
-        ContextCategory.STATIC_RELAXED, SystemConstants.VIEWER_DEFAULT, Splash.SHOW);
-    public static DeploymentType PROTOTYPE = new DeploymentType("PROTOTYPE", DeploymentCategory.PROTOTYPING,
-        ContextCategory.STATIC_RELAXED, SystemConstants.VIEWER_DEFAULT, Splash.SHOW);
-    public static DeploymentType CLIENT = new DeploymentType("CLIENT", DeploymentCategory.PRODUCTION,
-        ContextCategory.STATIC, SystemConstants.VIEWER_DEFAULT, Splash.SHOW);
-    public static DeploymentType SERVER = new DeploymentType("SERVER", DeploymentCategory.PRODUCTION,
-        ContextCategory.THREADLOCAL, null, Splash.NO_SHOW);
-    public static DeploymentType SERVER_EXPLORATION = new DeploymentType("SERVER_EXPLORATION",
-        DeploymentCategory.EXPLORING, ContextCategory.THREADLOCAL, null, Splash.NO_SHOW);
-    public static DeploymentType SERVER_PROTOTYPE = new DeploymentType("SERVER_PROTOTYPE",
-        DeploymentCategory.PROTOTYPING, ContextCategory.THREADLOCAL, null, Splash.NO_SHOW);
-    public static DeploymentType SINGLE_USER = new DeploymentType("SINGLE_USER", DeploymentCategory.PRODUCTION,
-        ContextCategory.STATIC, SystemConstants.VIEWER_DEFAULT, Splash.NO_SHOW);
-    public static DeploymentType UTILITY = new DeploymentType("UTILITY", DeploymentCategory.EXPLORING,
-        ContextCategory.STATIC, null, Splash.NO_SHOW);
+    public static DeploymentType EXPLORATION = new DeploymentType("EXPLORATION", DeploymentCategory.EXPLORING, ContextCategory.STATIC_RELAXED, SystemConstants.VIEWER_DEFAULT, Splash.SHOW);
+    public static DeploymentType PROTOTYPE = new DeploymentType("PROTOTYPE", DeploymentCategory.PROTOTYPING, ContextCategory.STATIC_RELAXED, SystemConstants.VIEWER_DEFAULT, Splash.SHOW);
+    public static DeploymentType CLIENT = new DeploymentType("CLIENT", DeploymentCategory.PRODUCTION, ContextCategory.STATIC, SystemConstants.VIEWER_DEFAULT, Splash.SHOW);
+    public static DeploymentType SERVER = new DeploymentType("SERVER", DeploymentCategory.PRODUCTION, ContextCategory.THREADLOCAL, null, Splash.NO_SHOW);
+    public static DeploymentType SERVER_EXPLORATION = new DeploymentType("SERVER_EXPLORATION", DeploymentCategory.EXPLORING, ContextCategory.THREADLOCAL, null, Splash.NO_SHOW);
+    public static DeploymentType SERVER_PROTOTYPE = new DeploymentType("SERVER_PROTOTYPE", DeploymentCategory.PROTOTYPING, ContextCategory.THREADLOCAL, null, Splash.NO_SHOW);
+    public static DeploymentType SINGLE_USER = new DeploymentType("SINGLE_USER", DeploymentCategory.PRODUCTION, ContextCategory.STATIC, SystemConstants.VIEWER_DEFAULT, Splash.NO_SHOW);
+    public static DeploymentType UTILITY = new DeploymentType("UTILITY", DeploymentCategory.EXPLORING, ContextCategory.STATIC, null, Splash.NO_SHOW);
 
     private final String name;
     private final DeploymentCategory deploymentCategory;
@@ -79,8 +76,7 @@ public class DeploymentType {
     private final String defaultViewer;
     private final Splash splash;
 
-    public DeploymentType(final String name, final DeploymentCategory category, final ContextCategory contextCategory,
-        final String defaultViewer, final Splash splash) {
+    public DeploymentType(final String name, final DeploymentCategory category, final ContextCategory contextCategory, final String defaultViewer, final Splash splash) {
         this.deploymentCategory = category;
         this.contextCategory = contextCategory;
         this.defaultViewer = defaultViewer;
@@ -117,7 +113,8 @@ public class DeploymentType {
     }
 
     /**
-     * Whether the list of viewers names provided is compatible with this {@link DeploymentType}.
+     * Whether the list of viewers names provided is compatible with this
+     * {@link DeploymentType}.
      * 
      * @see ContextCategory#canSpecifyViewers(List)
      */
@@ -126,7 +123,8 @@ public class DeploymentType {
     }
 
     /**
-     * Whether the list of connector names provided is compatible with this {@link DeploymentType}.
+     * Whether the list of connector names provided is compatible with this
+     * {@link DeploymentType}.
      * 
      * <p>
      * Only a {@link #CLIENT} may have connectors.
@@ -136,7 +134,8 @@ public class DeploymentType {
     }
 
     /**
-     * Whether specifying an object store is compatible with this {@link DeploymentType}.
+     * Whether specifying an object store is compatible with this
+     * {@link DeploymentType}.
      * 
      * <p>
      * Only a {@link #CLIENT} may NOT have an object store.
@@ -146,7 +145,8 @@ public class DeploymentType {
     }
 
     /**
-     * Whether specifying fixtures is compatible with this {@link DeploymentType}.
+     * Whether specifying fixtures is compatible with this
+     * {@link DeploymentType}.
      * 
      * <p>
      * Only a {@link #CLIENT} may NOT have an object store.
@@ -185,8 +185,9 @@ public class DeploymentType {
      * Look up {@link DeploymentType} by their {@link #name()}.
      * 
      * <p>
-     * Can substitute <tt>'-'</tt> instead of <tt>'_'</tt>; for example <tt>server_exploration</tt> will lookup the same
-     * as <tt>server-exploration</tt>.
+     * Can substitute <tt>'-'</tt> instead of <tt>'_'</tt>; for example
+     * <tt>server_exploration</tt> will lookup the same as
+     * <tt>server-exploration</tt>.
      */
     public static DeploymentType lookup(final String str) {
         final String underscoredStr = str.replace('-', '_').toUpperCase();

@@ -41,28 +41,27 @@ public abstract class PersistenceQueryEncoderAbstract implements PersistenceQuer
         return doDecode(loadSpecification(typeName), persistenceQueryData);
     }
 
-    protected abstract PersistenceQuery doDecode(ObjectSpecification specification,
-        PersistenceQueryData persistenceQueryData);
+    protected abstract PersistenceQuery doDecode(ObjectSpecification specification, PersistenceQueryData persistenceQueryData);
 
     private ObjectSpecification loadSpecification(final String typeName) {
         return getSpecificationLoader().loadSpecification(typeName);
     }
 
     /**
-     * Convenience method for any implementations that need to map over {@link ObjectAdapter}s.
+     * Convenience method for any implementations that need to map over
+     * {@link ObjectAdapter}s.
      * 
      * @see #decodeObject(ObjectData)
      */
     protected ObjectData encodeObject(final ObjectAdapter adapter) {
         // REVIEW: this implementation is a bit of a hack...
-        final Data[] datas =
-            getObjectEncoder().encodeActionParameters(new ObjectSpecification[] { adapter.getSpecification() },
-                new ObjectAdapter[] { adapter }, new KnownObjectsRequest());
+        final Data[] datas = getObjectEncoder().encodeActionParameters(new ObjectSpecification[] { adapter.getSpecification() }, new ObjectAdapter[] { adapter }, new KnownObjectsRequest());
         return (ObjectData) datas[0];
     }
 
     /**
-     * Convenience method for any implementations that need to map over {@link ObjectAdapter}s.
+     * Convenience method for any implementations that need to map over
+     * {@link ObjectAdapter}s.
      * 
      * @see #encodeObject(ObjectAdapter)
      */

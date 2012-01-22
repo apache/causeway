@@ -31,8 +31,9 @@ public interface PersistenceQueryEncoder {
     Class<?> getPersistenceQueryClass();
 
     /**
-     * Injected directly after instantiation (note that encoders can potentially be loaded reflectively, from the
-     * {@link IsisConfiguration configuration} using the {@value ProtocolConstants#ENCODER_CLASS_NAME_LIST} key.
+     * Injected directly after instantiation (note that encoders can potentially
+     * be loaded reflectively, from the {@link IsisConfiguration configuration}
+     * using the {@value ProtocolConstants#ENCODER_CLASS_NAME_LIST} key.
      */
     void setObjectEncoder(ObjectEncoderDecoder objectEncoder);
 

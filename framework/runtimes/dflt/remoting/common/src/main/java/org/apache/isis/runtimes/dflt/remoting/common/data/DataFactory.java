@@ -29,13 +29,13 @@ import org.apache.isis.runtimes.dflt.remoting.common.data.common.ObjectData;
 import org.apache.isis.runtimes.dflt.remoting.common.data.common.ReferenceData;
 
 /**
- * Create serializable objects that are used to carry messages across the network. This assumes that the Oid and Version
- * implementations are also serializable.
+ * Create serializable objects that are used to carry messages across the
+ * network. This assumes that the Oid and Version implementations are also
+ * serializable.
  */
 public interface DataFactory {
 
-    CollectionData createCollectionData(String collectionType, String elementType, Oid oid, ReferenceData[] elements,
-        boolean hasAllElements, Version version);
+    CollectionData createCollectionData(String collectionType, String elementType, Oid oid, ReferenceData[] elements, boolean hasAllElements, Version version);
 
     NullData createNullData(String type);
 

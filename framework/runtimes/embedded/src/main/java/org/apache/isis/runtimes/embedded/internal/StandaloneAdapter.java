@@ -31,7 +31,8 @@ import org.apache.isis.core.metamodel.spec.Specification;
 import org.apache.isis.runtimes.embedded.PersistenceState;
 
 /**
- * Only provides a concrete implementation of the methods corresponding to the {@link ObjectMetaModel} interface.
+ * Only provides a concrete implementation of the methods corresponding to the
+ * {@link ObjectMetaModel} interface.
  */
 public class StandaloneAdapter implements ObjectAdapter {
 
@@ -41,8 +42,7 @@ public class StandaloneAdapter implements ObjectAdapter {
 
     private ElementSpecificationProvider elementSpecificationProvider;
 
-    public StandaloneAdapter(final ObjectSpecification spec, final Object domainObject,
-        final PersistenceState persistenceState) {
+    public StandaloneAdapter(final ObjectSpecification spec, final Object domainObject, final PersistenceState persistenceState) {
         this.spec = spec;
         this.domainObject = domainObject;
         this.persistenceState = persistenceState;
@@ -236,7 +236,7 @@ public class StandaloneAdapter implements ObjectAdapter {
 
     @Override
     public ObjectAdapter getAggregateRoot() {
-    	throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException();
     }
 
 }

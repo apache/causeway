@@ -45,7 +45,8 @@ public class JavassistObjectFactory extends ObjectFactoryAbstract {
         final ObjectResolver objectResolver = new ObjectResolver() {
             @Override
             public void resolve(final Object domainObject, final String propertyName) {
-                // TODO: could do better than this by maintaining a map of resolved
+                // TODO: could do better than this by maintaining a map of
+                // resolved
                 // properties on the ObjectAdapter adapter.
                 resolver.resolve(domainObject);
             }
@@ -57,8 +58,7 @@ public class JavassistObjectFactory extends ObjectFactoryAbstract {
             }
         };
 
-        classEnhancer =
-            new ObjectResolveAndObjectChangedEnhancer(objectResolver, objectChanger, getSpecificationLoader());
+        classEnhancer = new ObjectResolveAndObjectChangedEnhancer(objectResolver, objectChanger, getSpecificationLoader());
     }
 
     @Override

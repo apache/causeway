@@ -28,8 +28,9 @@ import org.apache.isis.runtimes.dflt.remoting.common.facade.ServerFacade;
 import org.apache.isis.runtimes.dflt.remoting.common.marshalling.ServerMarshaller;
 
 /**
- * Acts as the mediator between the {@link ServerMarshaller} (which pulls stuff off the transport and pushes stuff on)
- * and the {@link ServerFacade}, ie the rest of the Apache Isis System.
+ * Acts as the mediator between the {@link ServerMarshaller} (which pulls stuff
+ * off the transport and pushes stuff on) and the {@link ServerFacade}, ie the
+ * rest of the Apache Isis System.
  * 
  * @see ClientConnection
  */

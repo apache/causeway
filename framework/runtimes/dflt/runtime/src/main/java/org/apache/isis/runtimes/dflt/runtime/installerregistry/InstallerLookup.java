@@ -42,14 +42,14 @@ import org.apache.isis.runtimes.dflt.runtime.systemdependencyinjector.SystemDepe
 import org.apache.isis.runtimes.dflt.runtime.userprofile.UserProfileStoreInstaller;
 
 /**
- * The installers correspond more-or-less to the configurable top-level components of {@link IsisSystem}.
+ * The installers correspond more-or-less to the configurable top-level
+ * components of {@link IsisSystem}.
  * 
  * <p>
- * The methods of {@link InstallerRepository} may be called without {@link #init() initializing} this class, but other
- * methods may not.
+ * The methods of {@link InstallerRepository} may be called without
+ * {@link #init() initializing} this class, but other methods may not.
  */
-public interface InstallerLookup extends InstallerRepository, ApplicationScopedComponent,
-    IsisConfigurationBuilderAware, Injectable, SystemDependencyInjector {
+public interface InstallerLookup extends InstallerRepository, ApplicationScopedComponent, IsisConfigurationBuilderAware, Injectable, SystemDependencyInjector {
 
     // /////////////////////////////////////////////////////////
     // metamodel
@@ -71,11 +71,9 @@ public interface InstallerLookup extends InstallerRepository, ApplicationScopedC
 
     TemplateImageLoaderInstaller templateImageLoaderInstaller(String requested);
 
-    PersistenceMechanismInstaller persistenceMechanismInstaller(final String requested,
-        final DeploymentType deploymentType);
+    PersistenceMechanismInstaller persistenceMechanismInstaller(final String requested, final DeploymentType deploymentType);
 
-    UserProfileStoreInstaller userProfilePersistenceMechanismInstaller(final String requested,
-        DeploymentType deploymentType);
+    UserProfileStoreInstaller userProfilePersistenceMechanismInstaller(final String requested, DeploymentType deploymentType);
 
     IsisViewerInstaller viewerInstaller(final String requested, final String defaultName);
 
@@ -87,11 +85,14 @@ public interface InstallerLookup extends InstallerRepository, ApplicationScopedC
      * <p>
      * Note that this lookup is called in three different contexts:
      * <ul>
-     * <li>the <tt>IsisExecutionContextFactoryUsingInstallers</tt> uses this to lookup the
-     * {@link PersistenceMechanismInstaller} (may be a <tt>ProxyPersistor</tt>)</li>
-     * <li>the <tt>IsisExecutionContextFactoryUsingInstallers</tt> also uses this to lookup the
-     * {@link FacetDecoratorInstaller}; adds in remoting facets.</li>
-     * <li>the <tt>IsisSystemUsingInstallers</tt> uses this to lookup the {@link AuthenticationManagerInstaller}.</li>
+     * <li>the <tt>IsisExecutionContextFactoryUsingInstallers</tt> uses this to
+     * lookup the {@link PersistenceMechanismInstaller} (may be a
+     * <tt>ProxyPersistor</tt>)</li>
+     * <li>the <tt>IsisExecutionContextFactoryUsingInstallers</tt> also uses
+     * this to lookup the {@link FacetDecoratorInstaller}; adds in remoting
+     * facets.</li>
+     * <li>the <tt>IsisSystemUsingInstallers</tt> uses this to lookup the
+     * {@link AuthenticationManagerInstaller}.</li>
      * </ul>
      */
     ClientConnectionInstaller clientConnectionInstaller(final String requested);
@@ -116,7 +117,8 @@ public interface InstallerLookup extends InstallerRepository, ApplicationScopedC
      * Returns a <i>snapshot</i> of the current {@link IsisConfiguration}.
      * 
      * <p>
-     * The {@link IsisConfiguration} could subsequently be appended to if further {@link Installer}s are loaded.
+     * The {@link IsisConfiguration} could subsequently be appended to if
+     * further {@link Installer}s are loaded.
      */
     IsisConfiguration getConfiguration();
 

@@ -30,7 +30,6 @@ import java.nio.charset.Charset;
 import org.apache.isis.runtimes.dflt.objectstores.nosql.NoSqlStoreException;
 import org.apache.log4j.Logger;
 
-
 public class Util {
 
     private static final Logger LOG = Logger.getLogger(Util.class);
@@ -171,21 +170,22 @@ public class Util {
         return new File(logDirectory, "recovery" + id + ".log.tmp");
     }
 
-    public static File archiveLogFile(long id) {
+    public static File archiveLogFile(final long id) {
         return new File(logArchiveDirectory, "recovery" + id + ".log");
     }
 
     static LogRange logFileRange() {
-        LogRange logRange = new LogRange();
-        File[] listFiles = logDirectory.listFiles();
+        final LogRange logRange = new LogRange();
+        final File[] listFiles = logDirectory.listFiles();
         if (listFiles != null) {
-            for (File file : listFiles) {
-                String name = file.getName();
-                String substring = name.substring(8, name.length() - 4);
+            for (final File file : listFiles) {
+                final String name = file.getName();
+                final String substring = name.substring(8, name.length() - 4);
                 try {
-                    long sequence = Long.parseLong(substring);
+                    final long sequence = Long.parseLong(substring);
                     logRange.add(sequence);
-                } catch (NumberFormatException ignore) {}
+                } catch (final NumberFormatException ignore) {
+                }
             }
         }
         return logRange;
@@ -220,7 +220,8 @@ public class Util {
 
             private void log(final int b) {
                 log.append(b < 32 ? ("<" + b + ">" + (char) b) : (char) b);
-                // System.out.print(b < 32 ? ("<" + b + ">" + (char) b) : (char) b);
+                // System.out.print(b < 32 ? ("<" + b + ">" + (char) b) : (char)
+                // b);
             }
 
             @Override
@@ -276,7 +277,8 @@ public class Util {
 
             private void log(final int b) {
                 log.append(b < 32 ? ("<" + b + ">" + (char) b) : (char) b);
-                // System.out.print(b < 32 ? ("<" + b + ">" + (char) b) : (char) b);
+                // System.out.print(b < 32 ? ("<" + b + ">" + (char) b) : (char)
+                // b);
             }
 
             @Override

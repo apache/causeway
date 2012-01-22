@@ -92,8 +92,8 @@ public class ObjectDeserializer {
         final ObjectSpecification collectionSpecification = getSpecificationLoader().loadSpecification(collectionType);
 
         /*
-         * if we are to deal with internal collections then we need to be able to get the collection from it's parent
-         * via its field
+         * if we are to deal with internal collections then we need to be able
+         * to get the collection from it's parent via its field
          */
         final ObjectAdapter collection = getPersistenceSession().createInstance(collectionSpecification);
         if (data.getElements() == null) {
@@ -141,12 +141,12 @@ public class ObjectDeserializer {
         }
     }
 
-    private ObjectAdapter deserializeObjectFromIdentityData(final IdentityData data,
-        final KnownObjectsRequest knownObjects) {
+    private ObjectAdapter deserializeObjectFromIdentityData(final IdentityData data, final KnownObjectsRequest knownObjects) {
         final Oid oid = data.getOid();
         /*
-         * either create a new transient object, get an existing object and update it if data is for resolved object, or
-         * create new object and set it
+         * either create a new transient object, get an existing object and
+         * update it if data is for resolved object, or create new object and
+         * set it
          */
         ObjectAdapter adapter = getAdapterManager().getAdapterFor(oid);
         if (adapter == null) {
@@ -163,8 +163,9 @@ public class ObjectDeserializer {
 
         final Oid oid = data.getOid();
         /*
-         * either create a new transient object, get an existing object and update it if data is for resolved object, or
-         * create new object and set it
+         * either create a new transient object, get an existing object and
+         * update it if data is for resolved object, or create new object and
+         * set it
          */
         ObjectAdapter adapter = getAdapterManager().getAdapterFor(oid);
         if (adapter != null) {
@@ -190,8 +191,7 @@ public class ObjectDeserializer {
         return adapter;
     }
 
-    private ObjectAdapter deserializePersistentObject(final ObjectData data, final Oid oid,
-        final KnownObjectsRequest knownObjects) {
+    private ObjectAdapter deserializePersistentObject(final ObjectData data, final Oid oid, final KnownObjectsRequest knownObjects) {
         // unknown object; create an instance
         final ObjectSpecification specification = getSpecificationLoader().loadSpecification(data.getType());
 
@@ -222,9 +222,9 @@ public class ObjectDeserializer {
     // Helpers: updateLoadedObject
     // ///////////////////////////////////////////////////////
 
-    private void updateLoadedObject(final ObjectAdapter adapter, final ObjectData adapterData,
-        final KnownObjectsRequest knownObjects) {
-        // object known and we have all the latest data; update/resolve the object
+    private void updateLoadedObject(final ObjectAdapter adapter, final ObjectData adapterData, final KnownObjectsRequest knownObjects) {
+        // object known and we have all the latest data; update/resolve the
+        // object
         if (adapterData.getFieldContent() != null) {
             adapter.setOptimisticLock(adapterData.getVersion());
             final ResolveState state = nextState(adapter.getResolveState(), adapterData.hasCompleteData());
@@ -244,9 +244,7 @@ public class ObjectDeserializer {
     // Helpers: setupFields
     // ///////////////////////////////////////////////////////
 
-    private void setUpCollectionField(final ObjectAdapter adapter, final ObjectData parentData,
-        final ObjectAssociation field, final CollectionData collectionContentData,
-        final KnownObjectsRequest knownObjects) {
+    private void setUpCollectionField(final ObjectAdapter adapter, final ObjectData parentData, final ObjectAssociation field, final CollectionData collectionContentData, final KnownObjectsRequest knownObjects) {
         if (collectionContentData.hasAllElements()) {
             setUpCollectionFieldForEntireContents(adapter, field, collectionContentData, knownObjects);
         } else {
@@ -254,8 +252,7 @@ public class ObjectDeserializer {
         }
     }
 
-    private void setUpCollectionFieldForNoContents(final ObjectData parentData, final ObjectAdapter adapter,
-        final ObjectAssociation field) {
+    private void setUpCollectionFieldForNoContents(final ObjectData parentData, final ObjectAdapter adapter, final ObjectAssociation field) {
         final ObjectAdapter collection = field.get(adapter);
         if (collection.getResolveState() == ResolveState.GHOST) {
             return;
@@ -269,8 +266,7 @@ public class ObjectDeserializer {
         final Version parentVersion = parentData.getVersion();
         if (adapterVersion.different(parentVersion)) {
             if (LOG.isDebugEnabled()) {
-                LOG.debug("clearing collection as versions differ: " + adapter.getVersion() + " "
-                    + parentData.getVersion());
+                LOG.debug("clearing collection as versions differ: " + adapter.getVersion() + " " + parentData.getVersion());
             }
             final CollectionFacet facet = CollectionFacetUtils.getCollectionFacetFromSpec(collection);
             facet.init(collection, new ObjectAdapter[0]);
@@ -278,8 +274,7 @@ public class ObjectDeserializer {
         }
     }
 
-    private void setUpCollectionFieldForEntireContents(final ObjectAdapter adapter, final ObjectAssociation field,
-        final CollectionData collectionContentData, final KnownObjectsRequest knownObjects) {
+    private void setUpCollectionFieldForEntireContents(final ObjectAdapter adapter, final ObjectAssociation field, final CollectionData collectionContentData, final KnownObjectsRequest knownObjects) {
         final int size = collectionContentData.getElements().length;
         final ObjectAdapter[] elements = new ObjectAdapter[size];
         for (int j = 0; j < elements.length; j++) {
@@ -303,8 +298,7 @@ public class ObjectDeserializer {
         }
     }
 
-    private void setupFields(final ObjectAdapter adapter, final ObjectData adapterData, final ResolveState state,
-        final KnownObjectsRequest knownObjects) {
+    private void setupFields(final ObjectAdapter adapter, final ObjectData adapterData, final ResolveState state, final KnownObjectsRequest knownObjects) {
         if (adapter.getResolveState().isDeserializable(state)) {
             PersistorUtil.start(adapter, state);
             setUpFields(adapter, adapterData, knownObjects);
@@ -312,14 +306,12 @@ public class ObjectDeserializer {
         }
     }
 
-    private void setUpFields(final ObjectAdapter adapter, final ObjectData adapterData,
-        final KnownObjectsRequest knownObjects) {
+    private void setUpFields(final ObjectAdapter adapter, final ObjectData adapterData, final KnownObjectsRequest knownObjects) {
         final Data[] fieldContent = adapterData.getFieldContent();
         if (fieldContent != null && fieldContent.length > 0) {
             final ObjectAssociation[] fields = fieldOrderCache.getFields(adapter.getSpecification());
             if (fields.length != fieldContent.length) {
-                throw new IsisRemoteException("Data received for different number of fields; expected " + fields.length
-                    + ", but was " + fieldContent.length);
+                throw new IsisRemoteException("Data received for different number of fields; expected " + fields.length + ", but was " + fieldContent.length);
             }
             for (int i = 0; i < fields.length; i++) {
                 final ObjectAssociation field = fields[i];
@@ -340,8 +332,7 @@ public class ObjectDeserializer {
         }
     }
 
-    private void setUpReferenceField(final ObjectAdapter adapter, final OneToOneAssociation field, final Data data,
-        final KnownObjectsRequest knownObjects) {
+    private void setUpReferenceField(final ObjectAdapter adapter, final OneToOneAssociation field, final Data data, final KnownObjectsRequest knownObjects) {
         ObjectAdapter associate;
         associate = deserializeObject(data, knownObjects);
         if (LOG.isDebugEnabled()) {
@@ -370,7 +361,8 @@ public class ObjectDeserializer {
     // ///////////////////////////////////////////////////////
 
     /**
-     * Equivalent to {@link PersistenceSessionObjectStore#remapAsPersistent(ObjectAdapter)}.
+     * Equivalent to
+     * {@link PersistenceSessionObjectStore#remapAsPersistent(ObjectAdapter)}.
      */
     public void madePersistent(final ObjectAdapter adapter, final ObjectData adapterData) {
         if (adapterData == null) {
@@ -379,7 +371,10 @@ public class ObjectDeserializer {
 
         if (adapter.isTransient() && adapter.getSpecification().persistability() != Persistability.TRANSIENT) {
 
-            getAdapterManager().getAdapterFor(adapterData.getOid()); // causes OID to be updated
+            getAdapterManager().getAdapterFor(adapterData.getOid()); // causes
+                                                                     // OID to
+                                                                     // be
+                                                                     // updated
             adapter.setOptimisticLock(adapterData.getVersion());
             adapter.changeState(ResolveState.RESOLVED);
         }

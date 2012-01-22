@@ -34,8 +34,7 @@ import com.google.common.collect.Lists;
  * Builds an {@link XmlSnapshot} using a fluent use through a builder:
  * 
  * <pre>
- * XmlSnapshot snapshot = XmlSnapshotBuilder.create(customer).includePath(&quot;placeOfBirth&quot;).includePath(&quot;orders/product&quot;)
- *     .build();
+ * XmlSnapshot snapshot = XmlSnapshotBuilder.create(customer).includePath(&quot;placeOfBirth&quot;).includePath(&quot;orders/product&quot;).build();
  * Element customerAsXml = snapshot.toXml();
  * </pre>
  */

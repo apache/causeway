@@ -38,13 +38,11 @@ public class PersistenceQueryFindUsingApplibQuerySerializableEncoder extends Per
     @Override
     public PersistenceQueryData encode(final PersistenceQuery persistenceQuery) {
         final PersistenceQueryFindUsingApplibQuerySerializable query = downcast(persistenceQuery);
-        return new PersistenceQueryFindUsingApplibQuerySerializableData(query.getSpecification(),
-            query.getApplibQuery(), query.getCardinality());
+        return new PersistenceQueryFindUsingApplibQuerySerializableData(query.getSpecification(), query.getApplibQuery(), query.getCardinality());
     }
 
     @Override
-    protected PersistenceQuery doDecode(final ObjectSpecification specification,
-        final PersistenceQueryData persistenceQueryData) {
+    protected PersistenceQuery doDecode(final ObjectSpecification specification, final PersistenceQueryData persistenceQueryData) {
         final PersistenceQueryFindUsingApplibQuerySerializableData data = downcast(persistenceQueryData);
         final Query query = (Query) data.getApplibQuerySerializable();
         final QueryCardinality cardinality = data.getCardinality();
@@ -55,8 +53,7 @@ public class PersistenceQueryFindUsingApplibQuerySerializableEncoder extends Per
         return (PersistenceQueryFindUsingApplibQuerySerializable) persistenceQuery;
     }
 
-    private PersistenceQueryFindUsingApplibQuerySerializableData downcast(
-        final PersistenceQueryData persistenceQueryData) {
+    private PersistenceQueryFindUsingApplibQuerySerializableData downcast(final PersistenceQueryData persistenceQueryData) {
         return (PersistenceQueryFindUsingApplibQuerySerializableData) persistenceQueryData;
     }
 

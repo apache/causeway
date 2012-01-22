@@ -34,36 +34,38 @@ import org.apache.isis.runtimes.dflt.runtime.system.persistence.OidGenerator;
 public final class PersistenceConstants {
 
     /**
-     * Key used to lookup implementation of {@link ObjectAdapterFactory} in {@link IsisConfiguration}.
+     * Key used to lookup implementation of {@link ObjectAdapterFactory} in
+     * {@link IsisConfiguration}.
      */
     public static final String ADAPTER_FACTORY_CLASS_NAME = ConfigurationConstants.ROOT + "persistor.adapter-factory";
     public static final String ADAPTER_FACTORY_CLASS_NAME_DEFAULT = PojoAdapterFactory.class.getName();
 
     /**
-     * Key used to lookup implementation of {@link OidGenerator} in {@link IsisConfiguration}.
+     * Key used to lookup implementation of {@link OidGenerator} in
+     * {@link IsisConfiguration}.
      */
     public static final String OID_GENERATOR_CLASS_NAME = ConfigurationConstants.ROOT + "persistor.oid-generator";
     public static final String OID_GENERATOR_CLASS_NAME_DEFAULT = SimpleOidGenerator.class.getName();
 
     /**
-     * Key used to lookup implementation of {@link ObjectFactory} in {@link IsisConfiguration}.
+     * Key used to lookup implementation of {@link ObjectFactory} in
+     * {@link IsisConfiguration}.
      */
     public static final String OBJECT_FACTORY_CLASS_NAME = ConfigurationConstants.ROOT + "persistor.object-factory";
-    public static final String OBJECT_FACTORY_CLASS_NAME_DEFAULT =
-        "org.apache.isis.runtimes.dflt.bytecode.dflt.objectfactory.CglibObjectFactory";
+    public static final String OBJECT_FACTORY_CLASS_NAME_DEFAULT = "org.apache.isis.runtimes.dflt.bytecode.dflt.objectfactory.CglibObjectFactory";
 
     /**
-     * Key used to lookup implementation of {@link ServicesInjector} in {@link IsisConfiguration}.
+     * Key used to lookup implementation of {@link ServicesInjector} in
+     * {@link IsisConfiguration}.
      */
-    public static final String SERVICES_INJECTOR_CLASS_NAME = ConfigurationConstants.ROOT
-        + "persistor.services-injector";
+    public static final String SERVICES_INJECTOR_CLASS_NAME = ConfigurationConstants.ROOT + "persistor.services-injector";
     public static final String SERVICES_INJECTOR_CLASS_NAME_DEFAULT = ServicesInjectorDefault.class.getName();
 
     /**
-     * Key used to lookup implementation of {@link DomainObjectContainer} in {@link IsisConfiguration}.
+     * Key used to lookup implementation of {@link DomainObjectContainer} in
+     * {@link IsisConfiguration}.
      */
-    public static final String DOMAIN_OBJECT_CONTAINER_CLASS_NAME = ConfigurationConstants.ROOT
-        + "persistor.domain-object-container";
+    public static final String DOMAIN_OBJECT_CONTAINER_CLASS_NAME = ConfigurationConstants.ROOT + "persistor.domain-object-container";
     public static final String DOMAIN_OBJECT_CONTAINER_NAME_DEFAULT = DomainObjectContainerDefault.class.getName();
 
     private PersistenceConstants() {

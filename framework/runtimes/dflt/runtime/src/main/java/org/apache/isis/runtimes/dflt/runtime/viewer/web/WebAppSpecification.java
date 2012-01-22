@@ -72,8 +72,7 @@ public final class WebAppSpecification {
         servletSpecifications.add(new ServletSpecification(servletClass, pathSpecs));
     }
 
-    public void addServletSpecification(final Class<?> servletClass, final Map<String, String> initParams,
-        final String... pathSpecs) {
+    public void addServletSpecification(final Class<?> servletClass, final Map<String, String> initParams, final String... pathSpecs) {
         servletSpecifications.add(new ServletSpecification(servletClass, initParams, pathSpecs));
     }
 
@@ -89,8 +88,7 @@ public final class WebAppSpecification {
         filterSpecifications.add(new FilterSpecification(filterClass, pathSpecs));
     }
 
-    public void addFilterSpecification(final Class<?> filterClass, final Map<String, String> initParams,
-        final String... pathSpecs) {
+    public void addFilterSpecification(final Class<?> filterClass, final Map<String, String> initParams, final String... pathSpecs) {
         filterSpecifications.add(new FilterSpecification(filterClass, initParams, pathSpecs));
     }
 

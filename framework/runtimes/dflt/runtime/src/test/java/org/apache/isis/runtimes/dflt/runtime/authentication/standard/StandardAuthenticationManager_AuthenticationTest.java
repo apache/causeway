@@ -30,9 +30,6 @@ import org.apache.isis.core.runtime.authentication.AuthenticationRequestPassword
 import org.apache.isis.core.runtime.authentication.standard.AuthenticationManagerStandard;
 import org.apache.isis.core.runtime.authentication.standard.Authenticator;
 import org.apache.isis.core.runtime.authentication.standard.RandomCodeGenerator;
-import org.hamcrest.Description;
-import org.hamcrest.Matcher;
-import org.hamcrest.TypeSafeMatcher;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JMock;
@@ -69,8 +66,7 @@ public class StandardAuthenticationManager_AuthenticationTest {
                 allowing(mockAuthenticator).canAuthenticate(with(IsisMatchers.anySubclassOf(AuthenticationRequest.class)));
                 will(returnValue(true));
 
-                allowing(mockAuthenticator).authenticate(with(any(AuthenticationRequest.class)),
-                    with(any(String.class)));
+                allowing(mockAuthenticator).authenticate(with(any(AuthenticationRequest.class)), with(any(String.class)));
                 will(returnValue(mockAuthSession));
 
                 allowing(mockRandomCodeGenerator).generateRandomCode();

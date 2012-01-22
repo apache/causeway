@@ -29,8 +29,7 @@ import org.apache.isis.runtimes.dflt.remoting.common.facade.ServerFacade;
 public class AuthorizationRequestUsability extends AuthorizationRequestAbstract {
     private static final long serialVersionUID = 1L;
 
-    public AuthorizationRequestUsability(final AuthenticationSession session, final IdentityData targetData,
-        final String dataStr) {
+    public AuthorizationRequestUsability(final AuthenticationSession session, final IdentityData targetData, final String dataStr) {
         super(session, targetData, dataStr);
         initialized();
     }

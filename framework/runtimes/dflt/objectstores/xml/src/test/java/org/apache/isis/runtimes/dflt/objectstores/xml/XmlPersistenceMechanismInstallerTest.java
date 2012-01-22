@@ -38,9 +38,7 @@ public class XmlPersistenceMechanismInstallerTest extends ProxyJunit4TestCase {
 
     @Before
     public void setUp() throws Exception {
-        deploymentType =
-            new DeploymentType("SINGLE_USER", DeploymentCategory.PRODUCTION, ContextCategory.STATIC,
-                SystemConstants.VIEWER_DEFAULT, Splash.NO_SHOW);
+        deploymentType = new DeploymentType("SINGLE_USER", DeploymentCategory.PRODUCTION, ContextCategory.STATIC, SystemConstants.VIEWER_DEFAULT, Splash.NO_SHOW);
         installer = new XmlPersistenceMechanismInstaller();
     }
 

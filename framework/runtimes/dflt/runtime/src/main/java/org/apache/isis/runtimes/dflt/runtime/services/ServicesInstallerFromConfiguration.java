@@ -77,8 +77,7 @@ public class ServicesInstallerFromConfiguration extends InstallerAbstract implem
             list = new ArrayList<Object>();
         }
         if (configuration.getBoolean(root + EXPLORATION_OBJECTS)) {
-            final DeploymentType deploymentType =
-                DeploymentType.lookup(configuration.getString(SystemConstants.DEPLOYMENT_TYPE_KEY));
+            final DeploymentType deploymentType = DeploymentType.lookup(configuration.getString(SystemConstants.DEPLOYMENT_TYPE_KEY));
             if (deploymentType.isExploring()) {
                 list.add(new ObjectFixtureService());
             }
@@ -111,8 +110,9 @@ public class ServicesInstallerFromConfiguration extends InstallerAbstract implem
     }
 
     /**
-     * In the format <tt>xxx#aaa.bbb.ccc.DddEee</tt> where <tt>xxx</tt> is the name of the repository, and
-     * <tt>aaa.bbb.ccc.DddEee</tt> is the fully qualified class name.
+     * In the format <tt>xxx#aaa.bbb.ccc.DddEee</tt> where <tt>xxx</tt> is the
+     * name of the repository, and <tt>aaa.bbb.ccc.DddEee</tt> is the fully
+     * qualified class name.
      * 
      */
     private Object createSimpleRepository(final String prefix, final String name) {
@@ -153,14 +153,11 @@ public class ServicesInstallerFromConfiguration extends InstallerAbstract implem
         try {
             return serviceType.newInstance();
         } catch (final NoClassDefFoundError e) {
-            throw new InstanceCreationClassException("Class found '" + serviceType
-                + "', but is missing a dependent class", e);
+            throw new InstanceCreationClassException("Class found '" + serviceType + "', but is missing a dependent class", e);
         } catch (final InstantiationException e) {
-            throw new InstanceCreationException("Could not instantiate an object of class '" + serviceType.getName()
-                + "'; " + e.getMessage());
+            throw new InstanceCreationException("Could not instantiate an object of class '" + serviceType.getName() + "'; " + e.getMessage());
         } catch (final IllegalAccessException e) {
-            throw new InstanceCreationException("Could not access the class '" + serviceType.getName() + "'; "
-                + e.getMessage());
+            throw new InstanceCreationException("Could not access the class '" + serviceType.getName() + "'; " + e.getMessage());
         }
     }
 

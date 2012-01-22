@@ -75,7 +75,8 @@ public class EmbeddedWebServerJetty extends EmbeddedWebServerAbstract {
         sessionHandler.setHandler(servletHandler);
         handlers.addHandler(sessionHandler);
 
-        // commenting out; this grabs '/' but we might want to use it ourselves, instead?
+        // commenting out; this grabs '/' but we might want to use it ourselves,
+        // instead?
         // handlers.addHandler(new DefaultHandler());
 
         // TODO use properties to set up
@@ -95,8 +96,8 @@ public class EmbeddedWebServerJetty extends EmbeddedWebServerAbstract {
      * TODO: the welcome files don't seem to be picked up.
      * 
      * <p>
-     * not sure if meant to add welcome files here or at the context handler level, in fact, doesn't seem to work even
-     * when register in both...
+     * not sure if meant to add welcome files here or at the context handler
+     * level, in fact, doesn't seem to work even when register in both...
      * 
      * @see #setWelcomeFiles(ContextHandler)
      */
@@ -174,8 +175,7 @@ public class EmbeddedWebServerJetty extends EmbeddedWebServerAbstract {
     private void addServletContextListeners(final ContextHandler contextHandler) {
         for (final WebAppSpecification specification : getSpecifications()) {
             for (final Class<?> servletContextListenerClass : specification.getServletContextListeners()) {
-                final ServletContextListener servletContext =
-                    (ServletContextListener) InstanceUtil.createInstance(servletContextListenerClass);
+                final ServletContextListener servletContext = (ServletContextListener) InstanceUtil.createInstance(servletContextListenerClass);
                 contextHandler.addEventListener(servletContext);
             }
         }
@@ -185,8 +185,8 @@ public class EmbeddedWebServerJetty extends EmbeddedWebServerAbstract {
      * TODO: this doesn't seem to be being picked up
      * 
      * <p>
-     * not sure if meant to add welcome files here or at the resource base level, in fact, doesn't seem to work even
-     * when register in both...
+     * not sure if meant to add welcome files here or at the resource base
+     * level, in fact, doesn't seem to work even when register in both...
      * 
      * @see #addResourcesAndWelcomeFiles(HandlerList)
      */
@@ -197,9 +197,7 @@ public class EmbeddedWebServerJetty extends EmbeddedWebServerAbstract {
     }
 
     private void startServer(final ContextHandler contextHandler) {
-        final int port =
-            getConfiguration().getInteger(WebServerConstants.EMBEDDED_WEB_SERVER_PORT_KEY,
-                WebServerConstants.EMBEDDED_WEB_SERVER_PORT_DEFAULT);
+        final int port = getConfiguration().getInteger(WebServerConstants.EMBEDDED_WEB_SERVER_PORT_KEY, WebServerConstants.EMBEDDED_WEB_SERVER_PORT_DEFAULT);
         if (LOG.isInfoEnabled()) {
             LOG.info("Starting web server on http://localhost:" + port);
             for (final WebAppSpecification specification : getSpecifications()) {

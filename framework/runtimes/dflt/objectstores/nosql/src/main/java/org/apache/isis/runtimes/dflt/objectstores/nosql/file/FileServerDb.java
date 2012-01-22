@@ -122,15 +122,15 @@ public class FileServerDb implements NoSqlDataDatabase {
     }
 
     private String checkData(final String data) {
-        String objectData = data.substring(8);
-        
-        CRC32 inputChecksum = new CRC32();
+        final String objectData = data.substring(8);
+
+        final CRC32 inputChecksum = new CRC32();
         inputChecksum.update(objectData.getBytes());
-        long actualChecksum = inputChecksum.getValue();
-        
-        String encodedChecksum = data.substring(0, 8);
-        long expectedChecksum = Long.valueOf(encodedChecksum, 16);
-        
+        final long actualChecksum = inputChecksum.getValue();
+
+        final String encodedChecksum = data.substring(0, 8);
+        final long expectedChecksum = Long.valueOf(encodedChecksum, 16);
+
         if (actualChecksum != expectedChecksum) {
             throw new NoSqlStoreException("Data integrity error; checksums different");
         }

@@ -53,7 +53,8 @@ public class GetPropertiesRequest extends RequestAbstract {
     // ///////////////////////////////////////////////////////
 
     /**
-     * {@link #setResponse(Object) Sets a response} of a {@link GetPropertiesResponse}.
+     * {@link #setResponse(Object) Sets a response} of a
+     * {@link GetPropertiesResponse}.
      */
     @Override
     public void execute(final ServerFacade serverFacade) {

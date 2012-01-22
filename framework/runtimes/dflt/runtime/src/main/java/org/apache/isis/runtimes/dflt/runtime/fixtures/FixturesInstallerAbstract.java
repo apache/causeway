@@ -44,7 +44,8 @@ public abstract class FixturesInstallerAbstract extends InstallerAbstract implem
     }
 
     /**
-     * Add fixtures to {@link FixturesInstallerDelegate#addFixture(Object) delegate}; these are then installed.
+     * Add fixtures to {@link FixturesInstallerDelegate#addFixture(Object)
+     * delegate}; these are then installed.
      */
     protected abstract void addFixturesTo(FixturesInstallerDelegate delegate);
 

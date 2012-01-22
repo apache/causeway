@@ -102,18 +102,19 @@ public class Employee extends AbstractDomainObject implements Claimant, Approver
     public void setApprover(final Approver approver) {
         this.approver = approver;
     }
+
     // }}
 
-    
     // {{ injected: EmployeeRepository
     private EmployeeRepository employeeRepository;
+
     public EmployeeRepository getEmployeeRepository() {
         return employeeRepository;
     }
+
     public void setEmployeeRepository(final EmployeeRepository employeeRepository) {
         this.employeeRepository = employeeRepository;
     }
     // }}
-
 
 }

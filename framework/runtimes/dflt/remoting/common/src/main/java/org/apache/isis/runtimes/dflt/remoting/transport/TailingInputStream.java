@@ -23,8 +23,8 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /**
- * Collection of timing and quantity data for the stream. Note that as the reads block the clock does not start until
- * the first read has completed.
+ * Collection of timing and quantity data for the stream. Note that as the reads
+ * block the clock does not start until the first read has completed.
  */
 public class TailingInputStream extends InputStream {
     private final InputStream wrapped;

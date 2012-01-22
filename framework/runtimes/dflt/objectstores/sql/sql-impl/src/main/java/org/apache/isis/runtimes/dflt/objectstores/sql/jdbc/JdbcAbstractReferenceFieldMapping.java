@@ -37,8 +37,9 @@ import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 /**
  * Provides support for persisting abstract classes and interfaces.
  * 
- * Provides two columns: the first is the standard property field. The second is initialised only when the field is
- * "saved", and contains the actual classname of the persisted concrete class.
+ * Provides two columns: the first is the standard property field. The second is
+ * initialised only when the field is "saved", and contains the actual classname
+ * of the persisted concrete class.
  * 
  * 
  * @version $Rev$ $Date$
@@ -55,12 +56,12 @@ public class JdbcAbstractReferenceFieldMapping extends JdbcObjectReferenceFieldM
 
         @Override
         public FieldMapping createFieldMapping(final ObjectSpecification object, final ObjectAssociation field) {
-            String dataType = getTypeOverride(object, field, Defaults.TYPE_LONG_STRING());
+            final String dataType = getTypeOverride(object, field, Defaults.TYPE_LONG_STRING());
             return new JdbcAbstractReferenceFieldMapping(field, dataType);
         }
     }
 
-    public JdbcAbstractReferenceFieldMapping(final ObjectAssociation field, String dataType) {
+    public JdbcAbstractReferenceFieldMapping(final ObjectAssociation field, final String dataType) {
         super(field);
         this.dataType = dataType;
         classnameColumn = Sql.identifier(getColumn() + "_cls");
@@ -101,7 +102,7 @@ public class JdbcAbstractReferenceFieldMapping extends JdbcObjectReferenceFieldM
         super.appendInsertValues(connector, sql, object);
         sql.append(",?");
 
-        ObjectAdapter objectAdapter = field.get(object);
+        final ObjectAdapter objectAdapter = field.get(object);
         if (objectAdapter != null) {
             connector.addToQueryValues(objectAdapter.getSpecification().getFullIdentifier());
         } else {
@@ -117,7 +118,7 @@ public class JdbcAbstractReferenceFieldMapping extends JdbcObjectReferenceFieldM
         sql.append(classnameColumn);
         sql.append(" = ?");
 
-        ObjectAdapter objectAdapter = field.get(object);
+        final ObjectAdapter objectAdapter = field.get(object);
         if (objectAdapter != null) {
             connector.addToQueryValues(objectAdapter.getSpecification().getFullIdentifier());
         } else {
@@ -127,7 +128,7 @@ public class JdbcAbstractReferenceFieldMapping extends JdbcObjectReferenceFieldM
 
     @Override
     public void initializeField(final ObjectAdapter object, final Results rs) {
-        String className = rs.getString(classnameColumn);
+        final String className = rs.getString(classnameColumn);
         if (className != null) {
             final ObjectSpecification specification = getReflector().loadSpecification(className);
 

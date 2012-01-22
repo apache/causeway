@@ -27,8 +27,7 @@ public final class FilterSpecification extends AbstractServletOrFilterMapping {
      * @param filterClass
      *            - should extend <tt>javax.servlet.Filter</tt>
      */
-    public FilterSpecification(final Class<?> filterClass, final Map<String, String> initParams,
-        final String... mappings) {
+    public FilterSpecification(final Class<?> filterClass, final Map<String, String> initParams, final String... mappings) {
         super(filterClass, initParams, mappings);
     }
 

@@ -44,7 +44,6 @@ public class ClientConnection {
     private String[] headers;
     private int header;
 
-
     public ClientConnection(final InputStream input, final OutputStream output) {
         outputStream = Util.trace(output, true);
         writer = new PrintWriter(new OutputStreamWriter(outputStream, Util.ENCODING));
@@ -89,7 +88,8 @@ public class ClientConnection {
             throw new ObjectNotFoundException(message);
         } else if (status.equals("concurrency")) {
             final String data = getResponseData();
-            // TODO create better exceptions (requires way to restore object/version)
+            // TODO create better exceptions (requires way to restore
+            // object/version)
             if (data.startsWith("{")) {
                 throw new ConcurrencyException(data, (Throwable) null);
 
@@ -160,8 +160,7 @@ public class ClientConnection {
 
     private String readNext() {
         if (header >= headers.length) {
-            throw new RemotingException("attempting to reader header property (index) " + header
-                + " when there are only " + headers.length);
+            throw new RemotingException("attempting to reader header property (index) " + header + " when there are only " + headers.length);
         }
         return headers[header++];
     }

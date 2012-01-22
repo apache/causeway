@@ -28,8 +28,7 @@ import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessi
 import org.apache.isis.runtimes.dflt.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.runtimes.dflt.runtime.transaction.TransactionalClosureAbstract;
 
-public class PropertyClearFacetWrapTransaction extends PropertyClearFacetAbstract implements
-    DecoratingFacet<PropertyClearFacet> {
+public class PropertyClearFacetWrapTransaction extends PropertyClearFacetAbstract implements DecoratingFacet<PropertyClearFacet> {
 
     private final PropertyClearFacet underlyingFacet;
 

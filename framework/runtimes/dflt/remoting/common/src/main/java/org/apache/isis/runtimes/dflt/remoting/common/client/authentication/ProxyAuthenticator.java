@@ -42,8 +42,7 @@ public final class ProxyAuthenticator extends PasswordRequestAuthenticatorAbstra
     private final ServerFacade serverFacade;
     private final ObjectEncoderDecoder encoderDecoder;
 
-    public ProxyAuthenticator(final IsisConfiguration configuration, final ServerFacade serverFacade,
-        final ObjectEncoderDecoder encoderDecoder) {
+    public ProxyAuthenticator(final IsisConfiguration configuration, final ServerFacade serverFacade, final ObjectEncoderDecoder encoderDecoder) {
         super(configuration);
         Ensure.ensureThatArg(serverFacade, is(not(nullValue())));
         Ensure.ensureThatArg(encoderDecoder, is(not(nullValue())));
@@ -52,8 +51,10 @@ public final class ProxyAuthenticator extends PasswordRequestAuthenticatorAbstra
     }
 
     /**
-     * Whereas the default implementation of {@link AuthenticatorAbstract#authenticate(AuthenticationRequest, String)}
-     * delegates to this method, this implementation has it the other way around.
+     * Whereas the default implementation of
+     * {@link AuthenticatorAbstract#authenticate(AuthenticationRequest, String)}
+     * delegates to this method, this implementation has it the other way
+     * around.
      */
     @Override
     public boolean isValid(final AuthenticationRequest request) {
@@ -62,11 +63,15 @@ public final class ProxyAuthenticator extends PasswordRequestAuthenticatorAbstra
     }
 
     /**
-     * Delegates to the provided {@link ServerFacade} to {@link ServerFacade#authenticate(String)}.
+     * Delegates to the provided {@link ServerFacade} to
+     * {@link ServerFacade#authenticate(String)}.
      * 
      * <p>
-     * Compare to the {@link AuthenticatorAbstract#authenticate(AuthenticationRequest, String) default implementation}
-     * which calls {@link #isValid(AuthenticationRequest)} and then returns a {@link SimpleSession}.
+     * Compare to the
+     * {@link AuthenticatorAbstract#authenticate(AuthenticationRequest, String)
+     * default implementation} which calls
+     * {@link #isValid(AuthenticationRequest)} and then returns a
+     * {@link SimpleSession}.
      */
     @Override
     public AuthenticationSession authenticate(final AuthenticationRequest authRequest, final String code) {

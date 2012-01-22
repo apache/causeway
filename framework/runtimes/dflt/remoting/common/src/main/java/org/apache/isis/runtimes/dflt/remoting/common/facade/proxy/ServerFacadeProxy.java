@@ -232,8 +232,7 @@ public class ServerFacadeProxy implements ServerFacade {
         synchronized (connection) {
             final ResponseEnvelope response = connection.executeRemotely(request);
             if (request.getId() != response.getId()) {
-                throw new IsisRemoteException("Response out of sequence with respect to the request: "
-                    + request.getId() + " & " + response.getId() + " respectively");
+                throw new IsisRemoteException("Response out of sequence with respect to the request: " + request.getId() + " & " + response.getId() + " respectively");
             }
             if (LOG.isDebugEnabled()) {
                 LOG.debug("response " + response);

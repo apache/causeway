@@ -42,14 +42,17 @@ import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessi
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessionFactory;
 
 /**
- * Creates an implementation of {@link IsisSessionFactory#openSession(AuthenticationSession)} to create an
- * {@link IsisSession}, but delegates to subclasses to actually obtain the components that make up that
- * {@link IsisSession}.
+ * Creates an implementation of
+ * {@link IsisSessionFactory#openSession(AuthenticationSession)} to create an
+ * {@link IsisSession}, but delegates to subclasses to actually obtain the
+ * components that make up that {@link IsisSession}.
  * 
  * <p>
- * The idea is that one subclass can use the {@link InstallerLookup} design to lookup installers for components (and
- * hence create the components themselves), whereas another subclass might simply use Spring (or another DI container)
- * to inject in the components according to some Spring-configured application context.
+ * The idea is that one subclass can use the {@link InstallerLookup} design to
+ * lookup installers for components (and hence create the components
+ * themselves), whereas another subclass might simply use Spring (or another DI
+ * container) to inject in the components according to some Spring-configured
+ * application context.
  */
 public abstract class IsisSessionFactoryAbstract implements IsisSessionFactory {
 
@@ -63,11 +66,8 @@ public abstract class IsisSessionFactoryAbstract implements IsisSessionFactory {
     private final UserProfileLoader userProfileLoader;
     private final List<Object> serviceList;
 
-    public IsisSessionFactoryAbstract(final DeploymentType deploymentType, final IsisConfiguration configuration,
-        final SpecificationLoader specificationLoader, final TemplateImageLoader templateImageLoader,
-        final AuthenticationManager authenticationManager, final AuthorizationManager authorizationManager,
-        final UserProfileLoader userProfileLoader, final PersistenceSessionFactory persistenceSessionFactory,
-        final List<Object> serviceList) {
+    public IsisSessionFactoryAbstract(final DeploymentType deploymentType, final IsisConfiguration configuration, final SpecificationLoader specificationLoader, final TemplateImageLoader templateImageLoader, final AuthenticationManager authenticationManager,
+            final AuthorizationManager authorizationManager, final UserProfileLoader userProfileLoader, final PersistenceSessionFactory persistenceSessionFactory, final List<Object> serviceList) {
 
         ensureThatArg(deploymentType, is(not(nullValue())));
         ensureThatArg(configuration, is(not(nullValue())));
@@ -95,7 +95,8 @@ public abstract class IsisSessionFactoryAbstract implements IsisSessionFactory {
     // ///////////////////////////////////////////
 
     /**
-     * Wires components as necessary, and then {@link ApplicationScopedComponent#init() init}ializes all.
+     * Wires components as necessary, and then
+     * {@link ApplicationScopedComponent#init() init}ializes all.
      */
     @Override
     public void init() {
@@ -132,11 +133,11 @@ public abstract class IsisSessionFactoryAbstract implements IsisSessionFactory {
         final UserProfile userProfile = userProfileLoader.getProfile(authenticationSession);
         ensureThatArg(userProfile, is(not(nullValue())));
 
-        // inject into persistenceSession any/all application-scoped components that it requires
+        // inject into persistenceSession any/all application-scoped components
+        // that it requires
         getSpecificationLoader().injectInto(persistenceSession);
 
-        final IsisSessionDefault isisSessionDefault =
-            new IsisSessionDefault(this, authenticationSession, persistenceSession, userProfile);
+        final IsisSessionDefault isisSessionDefault = new IsisSessionDefault(this, authenticationSession, persistenceSession, userProfile);
 
         return isisSessionDefault;
     }

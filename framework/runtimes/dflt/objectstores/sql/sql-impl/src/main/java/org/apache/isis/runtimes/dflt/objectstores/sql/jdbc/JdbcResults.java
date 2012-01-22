@@ -95,8 +95,10 @@ public class JdbcResults implements Results {
         try {
             // 2010-03-05 = 1267747200000
             // 2010-04-08 = 1270684800000
-            // This is really painful! Java refuses to create java.util.Date in UTC!
-            // It creates java.util.Dates in Local time-zone, but assumes the DB date is UTC.
+            // This is really painful! Java refuses to create java.util.Date in
+            // UTC!
+            // It creates java.util.Dates in Local time-zone, but assumes the DB
+            // date is UTC.
             final String string = set.getString(columnName);
             final DateTime utcDate = new DateTime(string, Defaults.getTimeZone());
             final java.sql.Date date = new java.sql.Date(utcDate.getMillis());
@@ -145,8 +147,10 @@ public class JdbcResults implements Results {
         try {
             // 2010-03-05 = 1267747200000
             // 2010-04-08 = 1270684800000
-            // This is really painful! Java refuses to create java.util.Date in UTC!
-            // It creates java.util.Dates in Local time-zone, but assumes the DB date is UTC.
+            // This is really painful! Java refuses to create java.util.Date in
+            // UTC!
+            // It creates java.util.Dates in Local time-zone, but assumes the DB
+            // date is UTC.
             final String string = set.getString(columnName);
             final DateTime utcDate = new DateTime(string, Defaults.getTimeZone());
             return new Date(utcDate);

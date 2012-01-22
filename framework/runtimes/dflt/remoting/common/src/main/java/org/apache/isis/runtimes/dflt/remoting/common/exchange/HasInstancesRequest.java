@@ -66,7 +66,8 @@ public class HasInstancesRequest extends RequestAbstract {
     // ///////////////////////////////////////////////////////
 
     /**
-     * {@link #setResponse(Object) Sets a response} of a {@link HasInstancesResponse}.
+     * {@link #setResponse(Object) Sets a response} of a
+     * {@link HasInstancesResponse}.
      */
     @Override
     public void execute(final ServerFacade serverFacade) {

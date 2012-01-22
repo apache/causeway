@@ -18,15 +18,14 @@
  */
 package org.apache.isis.runtimes.dflt.objectstores.nosql.file;
 
+import static org.junit.Assert.assertEquals;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.isis.runtimes.dflt.objectstores.nosql.StateWriter;
 import org.junit.Before;
 import org.junit.Test;
-
-import static org.junit.Assert.*;
-
 
 public class JsonStateWriterTest {
 
@@ -78,26 +77,26 @@ public class JsonStateWriterTest {
 
     @Test
     public void addAggregate() throws Exception {
-        StateWriter aggregate = writer.addAggregate("#4");
+        final StateWriter aggregate = writer.addAggregate("#4");
         aggregate.writeField("number", "string-data");
         assertEquals("{\"#4\": {\"number\": \"string-data\"}}", writer.getData());
     }
 
     @Test
     public void elementData() throws Exception {
-        List<StateWriter> elements = new ArrayList<StateWriter>();
-        StateWriter elementWriter1 = writer.createElementWriter();
+        final List<StateWriter> elements = new ArrayList<StateWriter>();
+        final StateWriter elementWriter1 = writer.createElementWriter();
         elementWriter1.writeField("number", "1");
         elements.add(elementWriter1);
-        StateWriter elementWriter2 = writer.createElementWriter();
+        final StateWriter elementWriter2 = writer.createElementWriter();
         elementWriter2.writeField("number", "4");
         elements.add(elementWriter2);
-        
+
         writer.writeCollection("coll", elements);
-        
+
         assertEquals("{\"coll\": [\n    {\"number\": \"1\"},\n    {\"number\": \"4\"}\n]}", writer.getData());
     }
-    
+
     @Test
     public void requestData() throws Exception {
         writer.writeType("com.planchase.ClassName");

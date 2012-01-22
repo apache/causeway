@@ -24,7 +24,8 @@ import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessi
 
 /**
  * For {@link PersistenceSessionFactory} implementations that can cache the
- * {@link PersistenceSession#isFixturesInstalled()} so is only called once per application scope.
+ * {@link PersistenceSession#isFixturesInstalled()} so is only called once per
+ * application scope.
  */
 public interface FixturesInstalledFlag {
 

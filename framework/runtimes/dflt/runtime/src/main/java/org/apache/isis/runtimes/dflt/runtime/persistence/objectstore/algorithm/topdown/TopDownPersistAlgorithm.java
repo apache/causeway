@@ -70,8 +70,7 @@ public class TopDownPersistAlgorithm extends PersistAlgorithmAbstract {
                 } else if (field instanceof OneToManyAssociation) {
                     final ObjectAdapter collection = field.get(object);
                     if (collection == null) {
-                        throw new ObjectPersistenceException("Collection " + field.getName() + " does not exist in "
-                            + object.getSpecification().getFullIdentifier());
+                        throw new ObjectPersistenceException("Collection " + field.getName() + " does not exist in " + object.getSpecification().getFullIdentifier());
                     }
                     makePersistent(collection, toPersistObjectSet);
                 } else {
