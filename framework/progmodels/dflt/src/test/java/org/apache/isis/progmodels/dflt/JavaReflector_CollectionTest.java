@@ -21,13 +21,14 @@ package org.apache.isis.progmodels.dflt;
 
 import java.util.Vector;
 
+import org.junit.Assert;
+import org.junit.Test;
+
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.ObjectReflectorDefault;
-import org.junit.Assert;
-import org.junit.Test;
 
 public class JavaReflector_CollectionTest extends JavaReflectorTestAbstract {
 

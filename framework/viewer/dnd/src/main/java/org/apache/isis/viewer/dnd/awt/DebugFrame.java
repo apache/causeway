@@ -43,10 +43,11 @@ import java.awt.event.WindowEvent;
 import java.net.URL;
 import java.util.Vector;
 
+import org.apache.log4j.Logger;
+
 import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.viewer.dnd.view.debug.DebugOutput;
-import org.apache.log4j.Logger;
 
 /**
  * A specialised frame for displaying the details of an object and its display

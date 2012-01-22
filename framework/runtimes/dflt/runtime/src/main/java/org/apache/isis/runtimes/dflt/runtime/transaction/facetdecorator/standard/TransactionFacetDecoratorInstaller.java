@@ -21,11 +21,11 @@ package org.apache.isis.runtimes.dflt.runtime.transaction.facetdecorator.standar
 
 import java.util.List;
 
+import com.google.common.collect.Lists;
+
 import org.apache.isis.core.commons.config.InstallerAbstract;
 import org.apache.isis.core.metamodel.facetdecorator.FacetDecorator;
 import org.apache.isis.core.metamodel.specloader.FacetDecoratorInstaller;
-
-import com.google.common.collect.Lists;
 
 public class TransactionFacetDecoratorInstaller extends InstallerAbstract implements FacetDecoratorInstaller {
 

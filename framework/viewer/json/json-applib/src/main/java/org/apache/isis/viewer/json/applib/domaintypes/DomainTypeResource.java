@@ -26,8 +26,9 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.apache.isis.viewer.json.applib.RestfulMediaType;
 import org.jboss.resteasy.annotations.ClientResponseType;
+
+import org.apache.isis.viewer.json.applib.RestfulMediaType;
 
 @Path("/domainTypes")
 public interface DomainTypeResource {

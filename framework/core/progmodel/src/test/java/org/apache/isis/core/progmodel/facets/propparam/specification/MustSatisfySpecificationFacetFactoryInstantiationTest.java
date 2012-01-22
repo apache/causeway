@@ -19,8 +19,9 @@
 
 package org.apache.isis.core.progmodel.facets.propparam.specification;
 
-import org.apache.isis.core.progmodel.facets.object.validperspec.MustSatisfySpecificationOnTypeFacetFactory;
 import org.junit.Test;
+
+import org.apache.isis.core.progmodel.facets.object.validperspec.MustSatisfySpecificationOnTypeFacetFactory;
 
 public class MustSatisfySpecificationFacetFactoryInstantiationTest {
 

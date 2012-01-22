@@ -21,9 +21,6 @@ package org.apache.isis.viewer.wicket.viewer.app.wicket;
 
 import static org.junit.Assert.fail;
 
-import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2;
-import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2.Mode;
-import org.apache.isis.viewer.wicket.viewer.integration.wicket.WebRequestCycleForIsis;
 import org.apache.wicket.Response;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.protocol.http.WebRequest;
@@ -31,6 +28,10 @@ import org.jmock.auto.Mock;
 import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
+
+import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2;
+import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2.Mode;
+import org.apache.isis.viewer.wicket.viewer.integration.wicket.WebRequestCycleForIsis;
 
 public class WebRequestCycleForIsisTest {
 

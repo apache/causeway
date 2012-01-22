@@ -19,17 +19,18 @@
 
 package org.apache.isis.viewer.wicket.viewer.integration.wicket;
 
-import org.apache.isis.core.commons.authentication.AuthenticationSession;
-import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
-import org.apache.isis.runtimes.dflt.runtime.system.session.IsisSession;
-import org.apache.isis.runtimes.dflt.runtime.system.transaction.IsisTransaction;
-import org.apache.isis.runtimes.dflt.runtime.system.transaction.IsisTransactionManager;
 import org.apache.log4j.Logger;
 import org.apache.wicket.Response;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.protocol.http.WebRequest;
 import org.apache.wicket.protocol.http.WebRequestCycle;
 import org.apache.wicket.protocol.http.request.WebClientInfo;
+
+import org.apache.isis.core.commons.authentication.AuthenticationSession;
+import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
+import org.apache.isis.runtimes.dflt.runtime.system.session.IsisSession;
+import org.apache.isis.runtimes.dflt.runtime.system.transaction.IsisTransaction;
+import org.apache.isis.runtimes.dflt.runtime.system.transaction.IsisTransactionManager;
 
 /**
  * Isis-specific implementation of the Wicket's {@link WebRequestCycle},

@@ -21,10 +21,10 @@ package org.apache.isis.runtimes.dflt.remoting.common.exchange;
 
 import java.util.Map;
 
+import com.google.common.collect.Maps;
+
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.runtimes.dflt.remoting.common.data.common.ObjectData;
-
-import com.google.common.collect.Maps;
 
 /**
  * A lookup of the objects that are part of a request or response. As only one

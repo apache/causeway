@@ -19,10 +19,11 @@
 
 package org.apache.isis.progmodels.dflt;
 
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.specloader.ObjectReflectorDefault;
 import org.junit.Assert;
 import org.junit.Test;
+
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.specloader.ObjectReflectorDefault;
 
 public class JavaReflector_ValueTest extends JavaReflectorTestAbstract {
 

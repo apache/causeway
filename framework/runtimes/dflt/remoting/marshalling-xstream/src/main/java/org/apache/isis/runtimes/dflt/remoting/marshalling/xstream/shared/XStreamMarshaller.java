@@ -25,6 +25,10 @@ import java.io.ObjectOutputStream;
 import java.io.StreamCorruptedException;
 import java.net.SocketException;
 
+import com.thoughtworks.xstream.XStream;
+
+import org.apache.log4j.Logger;
+
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.runtimes.dflt.remoting.common.exchange.Request;
@@ -32,9 +36,6 @@ import org.apache.isis.runtimes.dflt.remoting.common.marshalling.MarshallerAbstr
 import org.apache.isis.runtimes.dflt.remoting.common.protocol.IllegalRequestException;
 import org.apache.isis.runtimes.dflt.remoting.transport.ConnectionException;
 import org.apache.isis.runtimes.dflt.remoting.transport.Transport;
-import org.apache.log4j.Logger;
-
-import com.thoughtworks.xstream.XStream;
 
 public class XStreamMarshaller extends MarshallerAbstract {
 

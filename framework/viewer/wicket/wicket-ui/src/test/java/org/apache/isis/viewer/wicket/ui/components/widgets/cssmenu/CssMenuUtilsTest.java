@@ -27,6 +27,20 @@ import static org.junit.Assert.assertThat;
 import java.util.Collections;
 import java.util.List;
 
+import com.google.common.collect.Lists;
+
+import org.apache.wicket.markup.html.link.Link;
+import org.apache.wicket.util.tester.WicketTester;
+import org.jmock.Mockery;
+import org.jmock.integration.junit4.JMock;
+import org.jmock.integration.junit4.JUnit4Mockery;
+import org.jmock.lib.legacy.ClassImposteriser;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Ignore;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
@@ -41,19 +55,6 @@ import org.apache.isis.viewer.wicket.ui.fixtures.AdapterFixtures;
 import org.apache.isis.viewer.wicket.ui.fixtures.Customers;
 import org.apache.isis.viewer.wicket.ui.fixtures.SpecFixtures;
 import org.apache.isis.viewer.wicket.ui.fixtures.SystemFixtures;
-import org.apache.wicket.markup.html.link.Link;
-import org.apache.wicket.util.tester.WicketTester;
-import org.jmock.Mockery;
-import org.jmock.integration.junit4.JMock;
-import org.jmock.integration.junit4.JUnit4Mockery;
-import org.jmock.lib.legacy.ClassImposteriser;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-
-import com.google.common.collect.Lists;
 
 @RunWith(JMock.class)
 public class CssMenuUtilsTest {

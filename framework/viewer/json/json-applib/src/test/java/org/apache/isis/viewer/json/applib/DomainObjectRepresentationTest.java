@@ -26,11 +26,12 @@ import static org.junit.Assert.assertThat;
 
 import java.io.IOException;
 
-import org.apache.isis.viewer.json.applib.domainobjects.DomainObjectRepresentation;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.junit.Before;
 import org.junit.Test;
+
+import org.apache.isis.viewer.json.applib.domainobjects.DomainObjectRepresentation;
 
 public class DomainObjectRepresentationTest {
 

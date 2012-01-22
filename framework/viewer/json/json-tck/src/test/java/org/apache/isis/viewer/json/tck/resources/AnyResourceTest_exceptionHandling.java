@@ -23,6 +23,12 @@ import static org.junit.Assert.assertThat;
 
 import javax.ws.rs.core.MediaType;
 
+import org.jboss.resteasy.client.ClientRequest;
+import org.jboss.resteasy.client.ClientResponse;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
+
 import org.apache.isis.runtimes.dflt.webserver.WebServer;
 import org.apache.isis.viewer.json.applib.HttpMethod;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
@@ -35,11 +41,6 @@ import org.apache.isis.viewer.json.applib.RestfulResponse.HttpStatusCode;
 import org.apache.isis.viewer.json.applib.homepage.HomePageRepresentation;
 import org.apache.isis.viewer.json.applib.util.Parser;
 import org.apache.isis.viewer.json.tck.IsisWebServerRule;
-import org.jboss.resteasy.client.ClientRequest;
-import org.jboss.resteasy.client.ClientResponse;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
 
 public class AnyResourceTest_exceptionHandling {
 

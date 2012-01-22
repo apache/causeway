@@ -21,11 +21,11 @@ package org.apache.isis.runtimes.dflt.runtime.system;
 
 import java.util.List;
 
+import com.google.common.collect.Lists;
+
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.runtimes.dflt.runtime.system.session.IsisSessionFactory;
-
-import com.google.common.collect.Lists;
 
 /**
  * Whether running on client or server side etc.

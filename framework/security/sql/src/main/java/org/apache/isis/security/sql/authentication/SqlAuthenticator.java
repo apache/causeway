@@ -29,6 +29,11 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.StringTokenizer;
 
+import com.google.common.base.Strings;
+import com.google.inject.Inject;
+
+import org.apache.log4j.Logger;
+
 import org.apache.isis.applib.ApplicationException;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.ensure.Assert;
@@ -36,10 +41,6 @@ import org.apache.isis.core.runtime.authentication.AuthenticationRequest;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequestPassword;
 import org.apache.isis.core.runtime.authentication.standard.PasswordRequestAuthenticatorAbstract;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
-import org.apache.log4j.Logger;
-
-import com.google.common.base.Strings;
-import com.google.inject.Inject;
 
 public class SqlAuthenticator extends PasswordRequestAuthenticatorAbstract {
     private static final Logger LOG = Logger.getLogger(SqlAuthenticator.class);

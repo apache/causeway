@@ -3730,7 +3730,21 @@ public class FooBar {
         <sect2>
           <title>Fix Line Endings and Subversion Properties</title>
 
-          <para>The </para>
+          <para>All Isis code should be saved with UNIX line endings; for
+          contributors that use Windows, the <command>dos2unix</command>
+          command should be used to convert line endings.</para>
+
+          <para>In addition, the <varname>svn:eol-style</varname> property
+          should be set to <classname>native</classname>, and
+          <varname>svn:mime-type</varname> property should be set
+          appropriately, as per this <ulink
+          url="http://www.apache.org/dev/version-control.html#https-svn-config">Apache
+          guidance</ulink>,</para>
+
+          <para>Both line endings and Subversion properties can be set by
+          running the provided script:</para>
+
+          <programlisting>$ ./fix-lineendings-and-svnprops.sh</programlisting>
         </sect2>
 
         <sect2>
@@ -3810,11 +3824,11 @@ public class FooBar {
   resources.txt site.vm \
   *.project *.classpath *.launch *.importorder \
   *.java.hsp \
-  *.ucd *.ucls \
+  *.ucd *.ucls *.euml2 *.umlproject \
   fop-cust.xsl html-cust.xsl *.ent *.dtd *.pdn catalog.xml \
   *.mod usage.txt screen.css docbook.cat \
   org.apache.isis.viewer.wicket.ui.ComponentFactory \
-  fixture-data test.data example.ldif slapd.conf \
+  *.json fixture-data test.data example.ldif slapd.conf \
   .plxarc MANIFEST.MF \
   .log \
   &gt;/tmp/rat.txt</programlisting>
@@ -3834,6 +3848,11 @@ public class FooBar {
             </listitem>
 
             <listitem>
+              <para><filename>.json</filename> are test JSON files (JSON does
+              not support comments)</para>
+            </listitem>
+
+            <listitem>
               <para><filename>.java.hsp</filename> are the <ulink
               url="http://www.headwaysoftware.com/products/?code=Structure101">Structure101</ulink>
               project files</para>
@@ -3842,7 +3861,9 @@ public class FooBar {
             <listitem>
               <para><filename>.ucd</filename> and <filename>.ucls</filename>
               are <ulink url="http://www.soyatec.com/euml2/">Soyatec
-              (<acronym>UML</acronym> plugin)</ulink> project files</para>
+              (<acronym>UML</acronym> plugin)</ulink> project files,
+              <filename>.euml2</filename> and <filename>.umlproject</filename>
+              are similar</para>
             </listitem>
 
             <listitem>
@@ -3857,7 +3878,7 @@ public class FooBar {
             </listitem>
 
             <listitem>
-              <para><filename>fixture-data test.data example.ldif
+              <para><filename>*.json, fixture-data, test.data, example.ldif,
               slapd.conf</filename> are test resource files</para>
             </listitem>
 

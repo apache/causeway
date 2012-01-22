@@ -22,11 +22,11 @@ package org.apache.isis.core.progmodel.facets.object.ignore.javalang;
 import java.lang.reflect.Method;
 import java.util.List;
 
+import com.google.common.collect.Lists;
+
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.methodutils.MethodScope;
-
-import com.google.common.collect.Lists;
 
 /**
  * Removes all methods inherited specified class.

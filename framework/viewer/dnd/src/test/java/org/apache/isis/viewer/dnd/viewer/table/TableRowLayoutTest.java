@@ -21,6 +21,10 @@ package org.apache.isis.viewer.dnd.viewer.table;
 
 import junit.framework.Assert;
 
+import org.jmock.Expectations;
+import org.jmock.Mockery;
+import org.junit.Test;
+
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.testsystem.TestProxyConfiguration;
 import org.apache.isis.viewer.dnd.DummyView;
@@ -29,9 +33,6 @@ import org.apache.isis.viewer.dnd.drawing.Size;
 import org.apache.isis.viewer.dnd.table.TableAxis;
 import org.apache.isis.viewer.dnd.table.TableRowLayout;
 import org.apache.isis.viewer.dnd.view.View;
-import org.jmock.Expectations;
-import org.jmock.Mockery;
-import org.junit.Test;
 
 public class TableRowLayoutTest {
 

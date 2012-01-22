@@ -22,6 +22,8 @@ package org.apache.isis.runtimes.dflt.runtime.system;
 import java.io.File;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import org.apache.isis.applib.fixtures.LogonFixture;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.debug.DebugBuilder;
@@ -41,7 +43,6 @@ import org.apache.isis.runtimes.dflt.runtime.system.internal.SplashWindow;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessionFactory;
 import org.apache.isis.runtimes.dflt.runtime.system.session.IsisSession;
 import org.apache.isis.runtimes.dflt.runtime.system.session.IsisSessionFactory;
-import org.apache.log4j.Logger;
 
 /**
  * An implementation of {@link IsisSystem} that has a hook for installing

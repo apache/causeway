@@ -21,6 +21,8 @@ package org.apache.isis.runtimes.dflt.runtime.system.context;
 
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.components.TransactionScopedComponent;
@@ -44,7 +46,6 @@ import org.apache.isis.runtimes.dflt.runtime.system.transaction.IsisTransaction;
 import org.apache.isis.runtimes.dflt.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.runtimes.dflt.runtime.system.transaction.MessageBroker;
 import org.apache.isis.runtimes.dflt.runtime.system.transaction.UpdateNotifier;
-import org.apache.log4j.Logger;
 
 /**
  * Provides singleton <i>access to</i> the current (session scoped)

@@ -21,6 +21,8 @@ package org.apache.isis.viewer.bdd.common.components;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.google.common.collect.Iterables;
+
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.facets.object.cached.CachedFacet;
@@ -28,8 +30,6 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.runtimes.dflt.objectstores.dflt.internal.ObjectStoreInstances;
 import org.apache.isis.runtimes.dflt.objectstores.dflt.internal.ObjectStorePersistedObjects;
 import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.simple.SimpleOidGenerator.Memento;
-
-import com.google.common.collect.Iterables;
 
 /**
  * Stores instances in one of two maps, based on whether have their

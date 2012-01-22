@@ -21,10 +21,10 @@ package org.apache.isis.core.commons.authentication;
 
 import java.util.List;
 
+import com.google.common.collect.Lists;
+
 import org.apache.isis.applib.security.RoleMemento;
 import org.apache.isis.applib.security.UserMemento;
-
-import com.google.common.collect.Lists;
 
 public final class AuthenticationSessionUtils {
 

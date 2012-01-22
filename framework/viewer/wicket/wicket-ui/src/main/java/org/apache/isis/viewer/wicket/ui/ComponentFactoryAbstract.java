@@ -19,11 +19,12 @@
 
 package org.apache.isis.viewer.wicket.ui;
 
+import org.apache.wicket.Component;
+import org.apache.wicket.model.IModel;
+
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.nof.SpecificationLoaderAccessor;
-import org.apache.wicket.Component;
-import org.apache.wicket.model.IModel;
 
 /**
  * Adapter implementation for {@link ComponentFactory}.

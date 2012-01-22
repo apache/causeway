@@ -18,13 +18,14 @@
  */
 package org.apache.isis.viewer.json.applib.domainobjects;
 
+import org.codehaus.jackson.JsonNode;
+
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.applib.JsonRepresentation.HasExtensions;
 import org.apache.isis.viewer.json.applib.JsonRepresentation.HasLinks;
 import org.apache.isis.viewer.json.applib.JsonRepresentation.LinksToSelf;
 import org.apache.isis.viewer.json.applib.links.LinkRepresentation;
 import org.apache.isis.viewer.json.applib.links.Rel;
-import org.codehaus.jackson.JsonNode;
 
 public abstract class DomainRepresentation extends JsonRepresentation implements LinksToSelf, HasLinks, HasExtensions {
 

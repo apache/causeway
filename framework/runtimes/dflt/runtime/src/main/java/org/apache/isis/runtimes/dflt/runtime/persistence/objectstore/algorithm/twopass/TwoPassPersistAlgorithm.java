@@ -22,6 +22,8 @@ package org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.algorithm.
 import java.util.Enumeration;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import org.apache.isis.core.commons.lang.ToString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
@@ -34,7 +36,6 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.algorithm.PersistAlgorithmAbstract;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.algorithm.ToPersistObjectSet;
-import org.apache.log4j.Logger;
 
 public class TwoPassPersistAlgorithm extends PersistAlgorithmAbstract {
     private static final Logger LOG = Logger.getLogger(TwoPassPersistAlgorithm.class);

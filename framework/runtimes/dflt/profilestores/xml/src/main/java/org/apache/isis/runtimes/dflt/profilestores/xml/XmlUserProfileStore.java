@@ -19,6 +19,8 @@
 
 package org.apache.isis.runtimes.dflt.profilestores.xml;
 
+import com.google.inject.Inject;
+
 import org.apache.isis.core.commons.config.ConfigurationConstants;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.xml.XmlFile;
@@ -27,8 +29,6 @@ import org.apache.isis.core.runtime.userprofile.UserProfileStore;
 import org.apache.isis.runtimes.dflt.profilestores.xml.internal.UserProfileContentWriter;
 import org.apache.isis.runtimes.dflt.profilestores.xml.internal.UserProfileDataHandler;
 import org.apache.isis.runtimes.dflt.profilestores.xml.internal.XmlFileUtil;
-
-import com.google.inject.Inject;
 
 public class XmlUserProfileStore implements UserProfileStore {
 

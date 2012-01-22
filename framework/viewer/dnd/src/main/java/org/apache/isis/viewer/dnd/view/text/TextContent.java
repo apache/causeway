@@ -22,11 +22,12 @@ package org.apache.isis.viewer.dnd.view.text;
 import java.util.Enumeration;
 import java.util.Vector;
 
+import org.apache.log4j.Logger;
+
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.lang.ToString;
 import org.apache.isis.viewer.dnd.drawing.Location;
-import org.apache.log4j.Logger;
 
 public class TextContent {
     private static final Logger LOG = Logger.getLogger(TextContent.class);

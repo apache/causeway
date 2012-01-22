@@ -24,6 +24,8 @@ import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
 
+import com.google.common.collect.Lists;
+
 import org.apache.isis.core.commons.encoding.DataInputExtended;
 import org.apache.isis.core.commons.encoding.DataOutputExtended;
 import org.apache.isis.core.commons.encoding.Encodable;
@@ -32,8 +34,6 @@ import org.apache.isis.runtimes.dflt.remoting.common.data.common.ObjectData;
 import org.apache.isis.runtimes.dflt.remoting.common.data.common.ReferenceData;
 import org.apache.isis.runtimes.dflt.runtime.transaction.messagebroker.MessageList;
 import org.apache.isis.runtimes.dflt.runtime.transaction.messagebroker.WarningList;
-
-import com.google.common.collect.Lists;
 
 public class ExecuteServerActionResponse implements Encodable, Serializable, MessageList, WarningList {
 

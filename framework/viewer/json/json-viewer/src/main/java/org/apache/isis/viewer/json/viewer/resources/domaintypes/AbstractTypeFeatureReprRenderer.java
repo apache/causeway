@@ -16,6 +16,8 @@
  */
 package org.apache.isis.viewer.json.viewer.resources.domaintypes;
 
+import com.google.common.base.Strings;
+
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
@@ -23,8 +25,6 @@ import org.apache.isis.viewer.json.applib.RepresentationType;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
 import org.apache.isis.viewer.json.viewer.representations.LinkFollower;
 import org.apache.isis.viewer.json.viewer.representations.ReprRendererAbstract;
-
-import com.google.common.base.Strings;
 
 public abstract class AbstractTypeFeatureReprRenderer<R extends ReprRendererAbstract<R, ParentSpecAndFeature<T>>, T extends ObjectFeature> extends ReprRendererAbstract<R, ParentSpecAndFeature<T>> {
 

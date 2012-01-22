@@ -31,8 +31,9 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.isis.runtimes.dflt.objectstores.nosql.NoSqlStoreException;
 import org.apache.log4j.Logger;
+
+import org.apache.isis.runtimes.dflt.objectstores.nosql.NoSqlStoreException;
 
 public class FileServerProcessor {
 

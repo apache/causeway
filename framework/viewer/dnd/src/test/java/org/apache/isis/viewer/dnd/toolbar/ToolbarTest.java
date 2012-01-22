@@ -21,6 +21,12 @@ package org.apache.isis.viewer.dnd.toolbar;
 
 import static org.junit.Assert.assertEquals;
 
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
+import org.junit.Before;
+import org.junit.Ignore;
+import org.junit.Test;
+
 import org.apache.isis.runtimes.dflt.objectstores.dflt.testsystem.TestProxySystemII;
 import org.apache.isis.viewer.dnd.DummyView;
 import org.apache.isis.viewer.dnd.TestToolkit;
@@ -29,11 +35,6 @@ import org.apache.isis.viewer.dnd.drawing.Size;
 import org.apache.isis.viewer.dnd.view.View;
 import org.apache.isis.viewer.dnd.view.content.NullContent;
 import org.apache.isis.viewer.dnd.view.look.LookFactory;
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
 
 public class ToolbarTest {
 

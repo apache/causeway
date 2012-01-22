@@ -23,16 +23,17 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.Enumeration;
 
-import org.apache.isis.viewer.dnd.TestToolkit;
-import org.apache.isis.viewer.dnd.view.Content;
-import org.apache.isis.viewer.dnd.view.ViewRequirement;
-import org.apache.isis.viewer.dnd.view.collection.CollectionContent;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.junit.Before;
 import org.junit.Test;
+
+import org.apache.isis.viewer.dnd.TestToolkit;
+import org.apache.isis.viewer.dnd.view.Content;
+import org.apache.isis.viewer.dnd.view.ViewRequirement;
+import org.apache.isis.viewer.dnd.view.collection.CollectionContent;
 
 public class ConfigurableListViewSpecificationTest {
     private GridListSpecification viewSpecification;

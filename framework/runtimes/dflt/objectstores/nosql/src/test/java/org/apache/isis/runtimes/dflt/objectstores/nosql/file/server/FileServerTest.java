@@ -36,11 +36,12 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.InputStream;
 
-import org.apache.isis.core.commons.lang.IoUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+
+import org.apache.isis.core.commons.lang.IoUtils;
 
 public class FileServerTest {
     private FileServerProcessor server;

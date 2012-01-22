@@ -23,6 +23,10 @@ import java.io.IOException;
 import java.io.Writer;
 import java.util.Vector;
 
+import org.xml.sax.Attributes;
+import org.xml.sax.SAXException;
+import org.xml.sax.helpers.DefaultHandler;
+
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.xml.ContentWriter;
@@ -40,9 +44,6 @@ import org.apache.isis.runtimes.dflt.runtime.persistence.ObjectNotFoundException
 import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.simple.SerialOid;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.transaction.ObjectPersistenceException;
-import org.xml.sax.Attributes;
-import org.xml.sax.SAXException;
-import org.xml.sax.helpers.DefaultHandler;
 
 public class XmlDataManager implements DataManager {
     private final XmlFile xmlFile;

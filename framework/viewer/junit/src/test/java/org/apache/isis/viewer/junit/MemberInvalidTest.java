@@ -24,6 +24,8 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 
+import org.junit.Test;
+
 import org.apache.isis.core.metamodel.facets.mandatory.MandatoryFacetDefault;
 import org.apache.isis.core.progmodel.facets.actions.validate.method.ActionValidationFacetViaMethod;
 import org.apache.isis.core.progmodel.facets.collections.validate.CollectionValidateAddToFacetViaMethod;
@@ -33,7 +35,6 @@ import org.apache.isis.core.progmodel.facets.properties.validate.maxlenannot.Max
 import org.apache.isis.core.progmodel.facets.properties.validate.regexannot.RegExFacetAnnotationForProperty;
 import org.apache.isis.progmodel.wrapper.applib.InvalidException;
 import org.apache.isis.viewer.junit.sample.domain.Country;
-import org.junit.Test;
 
 public class MemberInvalidTest extends AbstractTest {
 

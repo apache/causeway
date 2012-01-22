@@ -19,10 +19,11 @@
 
 package org.apache.isis.viewer.wicket.ui.components.welcome;
 
+import org.apache.wicket.markup.html.basic.Label;
+
 import org.apache.isis.viewer.wicket.model.models.WelcomeModel;
 import org.apache.isis.viewer.wicket.ui.pages.home.HomePage;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
-import org.apache.wicket.markup.html.basic.Label;
 
 /**
  * {@link PanelAbstract Panel} displaying welcome message (as used on

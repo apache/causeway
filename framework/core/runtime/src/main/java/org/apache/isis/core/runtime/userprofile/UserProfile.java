@@ -22,11 +22,11 @@ package org.apache.isis.core.runtime.userprofile;
 import java.util.Collections;
 import java.util.List;
 
+import com.google.common.collect.Lists;
+
 import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-
-import com.google.common.collect.Lists;
 
 public class UserProfile {
 

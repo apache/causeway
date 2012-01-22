@@ -20,13 +20,14 @@ package org.apache.isis.viewer.json.applib;
 
 import java.io.IOException;
 
-import org.apache.isis.viewer.json.applib.util.JsonMapper;
+import com.google.common.base.Charsets;
+import com.google.common.io.Resources;
+
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 
-import com.google.common.base.Charsets;
-import com.google.common.io.Resources;
+import org.apache.isis.viewer.json.applib.util.JsonMapper;
 
 class JsonFixture {
 

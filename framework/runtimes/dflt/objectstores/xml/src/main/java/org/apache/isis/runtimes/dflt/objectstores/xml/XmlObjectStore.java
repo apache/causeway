@@ -22,6 +22,8 @@ package org.apache.isis.runtimes.dflt.objectstores.xml;
 import java.text.MessageFormat;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import org.apache.isis.core.commons.config.ConfigurationConstants;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.debug.DebugBuilder;
@@ -67,7 +69,6 @@ import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceQuery;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.runtimes.dflt.runtime.transaction.ObjectPersistenceException;
-import org.apache.log4j.Logger;
 
 public class XmlObjectStore implements ObjectStore {
 

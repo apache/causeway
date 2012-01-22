@@ -29,14 +29,15 @@ import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.List;
 
+import com.google.common.collect.Lists;
+
+import org.apache.log4j.Logger;
+
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.lang.CastUtils;
 import org.apache.isis.core.commons.lang.ToString;
 import org.apache.isis.core.metamodel.exceptions.MetaModelException;
-import org.apache.log4j.Logger;
-
-import com.google.common.collect.Lists;
 
 public abstract class ServicesInjectorAbstract implements ServicesInjector {
 

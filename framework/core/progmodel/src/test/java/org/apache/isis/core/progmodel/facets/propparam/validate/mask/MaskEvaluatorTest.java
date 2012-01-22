@@ -26,13 +26,14 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Locale;
 
-import org.apache.isis.core.progmodel.facets.object.mask.MaskEvaluator;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
+
+import org.apache.isis.core.progmodel.facets.object.mask.MaskEvaluator;
 
 @RunWith(Parameterized.class)
 public class MaskEvaluatorTest {

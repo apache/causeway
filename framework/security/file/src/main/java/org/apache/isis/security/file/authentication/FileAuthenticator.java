@@ -26,6 +26,9 @@ import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.StringTokenizer;
 
+import com.google.common.base.Strings;
+import com.google.inject.Inject;
+
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.exceptions.IsisException;
@@ -34,9 +37,6 @@ import org.apache.isis.core.commons.resource.ResourceStreamSource;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequest;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequestPassword;
 import org.apache.isis.core.runtime.authentication.standard.PasswordRequestAuthenticatorAbstract;
-
-import com.google.common.base.Strings;
-import com.google.inject.Inject;
 
 public class FileAuthenticator extends PasswordRequestAuthenticatorAbstract {
 

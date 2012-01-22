@@ -29,6 +29,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.jboss.resteasy.annotations.ClientResponseType;
+
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -46,7 +48,6 @@ import org.apache.isis.viewer.json.viewer.resources.ResourceAbstract;
 import org.apache.isis.viewer.json.viewer.resources.domainobjects.DomainResourceHelper.Intent;
 import org.apache.isis.viewer.json.viewer.resources.domainobjects.DomainResourceHelper.MemberMode;
 import org.apache.isis.viewer.json.viewer.util.UrlParserUtils;
-import org.jboss.resteasy.annotations.ClientResponseType;
 
 @Path("/objects")
 public class DomainObjectResourceServerside extends ResourceAbstract implements DomainObjectResource {

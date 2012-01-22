@@ -21,6 +21,8 @@ package org.apache.isis.viewer.bdd.concordion.internal.fixtures;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.common.collect.Lists;
+
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
@@ -34,8 +36,6 @@ import org.apache.isis.viewer.bdd.common.ScenarioCellDefault;
 import org.apache.isis.viewer.bdd.common.fixtures.UsingIsisViewerPeer;
 import org.apache.isis.viewer.bdd.common.fixtures.perform.Perform;
 import org.apache.isis.viewer.bdd.common.parsers.DateParser;
-
-import com.google.common.collect.Lists;
 
 public class UsingIsisViewerForConcordion extends AbstractFixture<UsingIsisViewerPeer> {
 

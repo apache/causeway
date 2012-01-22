@@ -24,14 +24,15 @@ import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertThat;
 
+import org.apache.wicket.Page;
+import org.junit.Before;
+import org.junit.Test;
+
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.ui.pages.PageType;
 import org.apache.isis.viewer.wicket.ui.pages.action.ActionPage;
 import org.apache.isis.viewer.wicket.viewer.registries.pages.PageClassListDefault;
 import org.apache.isis.viewer.wicket.viewer.registries.pages.PageClassRegistryDefault;
-import org.apache.wicket.Page;
-import org.junit.Before;
-import org.junit.Test;
 
 public class PageClassListDefault_RegistrationAndCaching {
 

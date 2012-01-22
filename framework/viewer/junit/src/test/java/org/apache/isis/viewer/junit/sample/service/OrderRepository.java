@@ -23,11 +23,12 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import org.apache.isis.applib.AbstractFactoryAndRepository;
 import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.viewer.junit.sample.domain.Customer;
 import org.apache.isis.viewer.junit.sample.domain.Order;
-import org.apache.log4j.Logger;
 
 @Named("Orders")
 public class OrderRepository extends AbstractFactoryAndRepository {

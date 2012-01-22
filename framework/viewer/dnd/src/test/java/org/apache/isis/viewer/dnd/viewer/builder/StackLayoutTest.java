@@ -21,14 +21,15 @@ package org.apache.isis.viewer.dnd.viewer.builder;
 
 import junit.framework.Assert;
 
+import org.junit.Before;
+import org.junit.Test;
+
 import org.apache.isis.viewer.dnd.DummyView;
 import org.apache.isis.viewer.dnd.DummyViewSpecification;
 import org.apache.isis.viewer.dnd.DummyWorkspaceView;
 import org.apache.isis.viewer.dnd.drawing.Size;
 import org.apache.isis.viewer.dnd.view.View;
 import org.apache.isis.viewer.dnd.view.composite.StackLayout;
-import org.junit.Before;
-import org.junit.Test;
 
 public class StackLayoutTest {
     private StackLayout layout;

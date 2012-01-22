@@ -28,11 +28,12 @@ import java.util.Set;
 
 import javax.servlet.ServletContext;
 
+import org.apache.log4j.Logger;
+
 import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.log4j.Logger;
 
 /**
  * ImageLookup provides an efficient way of finding the most suitable image to

@@ -24,9 +24,10 @@ import static org.junit.Assert.assertThat;
 import java.util.List;
 import java.util.Map;
 
+import org.junit.Test;
+
 import org.apache.isis.viewer.json.applib.util.Parser;
 import org.apache.isis.viewer.json.applib.util.PathNode;
-import org.junit.Test;
 
 @SuppressWarnings({ "rawtypes", "unchecked" })
 public class GraphTest_asGraph {

@@ -19,11 +19,12 @@
 
 package org.apache.isis.viewer.wicket.ui.pages;
 
+import org.apache.wicket.Page;
+import org.apache.wicket.markup.html.WebPage;
+
 import org.apache.isis.viewer.wicket.ui.pages.action.ActionPage;
 import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 import org.apache.isis.viewer.wicket.ui.pages.home.HomePage;
-import org.apache.wicket.Page;
-import org.apache.wicket.markup.html.WebPage;
 
 /**
  * Enumerates the different types of pages that can be rendered.

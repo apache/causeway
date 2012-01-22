@@ -23,16 +23,17 @@ import static org.junit.Assert.assertThat;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.jmock.Expectations;
+import org.jmock.auto.Mock;
+import org.junit.Rule;
+import org.junit.Test;
+
 import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2;
 import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2.Mode;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.applib.RepresentationType;
 import org.apache.isis.viewer.json.applib.RestfulRequest.RequestParameter;
 import org.apache.isis.viewer.json.applib.util.UrlEncodingUtils;
-import org.jmock.Expectations;
-import org.jmock.auto.Mock;
-import org.junit.Rule;
-import org.junit.Test;
 
 public class ResourceContextTest_getArg {
 

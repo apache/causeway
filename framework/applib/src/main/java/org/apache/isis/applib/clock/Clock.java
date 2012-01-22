@@ -22,10 +22,11 @@ package org.apache.isis.applib.clock;
 import java.util.Calendar;
 import java.util.Date;
 
+import org.joda.time.DateTime;
+
 import org.apache.isis.applib.ApplicationException;
 import org.apache.isis.applib.Defaults;
 import org.apache.isis.applib.fixtures.FixtureClock;
-import org.joda.time.DateTime;
 
 /**
  * Provides a mechanism to get (and possible to set) the current time.

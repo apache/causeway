@@ -19,10 +19,11 @@
 
 package org.apache.isis.viewer.dnd.view.control;
 
+import org.apache.log4j.Logger;
+
 import org.apache.isis.viewer.dnd.drawing.Location;
 import org.apache.isis.viewer.dnd.view.View;
 import org.apache.isis.viewer.dnd.view.Workspace;
-import org.apache.log4j.Logger;
 
 public class CancelAction extends AbstractButtonAction {
     private static final Logger LOG = Logger.getLogger(CancelAction.class);

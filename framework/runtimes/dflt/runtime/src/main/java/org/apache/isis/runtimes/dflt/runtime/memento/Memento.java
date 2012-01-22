@@ -23,6 +23,10 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
 
+import com.google.common.collect.Lists;
+
+import org.apache.log4j.Logger;
+
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.encoding.DataInputStreamExtended;
 import org.apache.isis.core.commons.encoding.DataOutputStreamExtended;
@@ -45,9 +49,6 @@ import org.apache.isis.runtimes.dflt.runtime.persistence.PersistorUtil;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessionHydrator;
-import org.apache.log4j.Logger;
-
-import com.google.common.collect.Lists;
 
 /**
  * Holds the state for the specified object in serializable form.

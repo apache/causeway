@@ -19,9 +19,9 @@
 
 package org.apache.isis.core.runtime.authentication.standard;
 
-import org.apache.isis.core.runtime.authentication.AuthenticationRequest;
-
 import com.google.common.base.Predicate;
+
+import org.apache.isis.core.runtime.authentication.AuthenticationRequest;
 
 public final class AuthenticatorFuncs {
 

@@ -22,6 +22,11 @@ package org.apache.isis.core.metamodel.specloader.specimpl;
 import java.util.Collections;
 import java.util.List;
 
+import com.google.common.base.Objects;
+import com.google.common.collect.Lists;
+
+import org.apache.log4j.Logger;
+
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.applib.query.QueryFindAllInstances;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
@@ -65,10 +70,6 @@ import org.apache.isis.core.metamodel.spec.Target;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMemberContext;
-import org.apache.log4j.Logger;
-
-import com.google.common.base.Objects;
-import com.google.common.collect.Lists;
 
 public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectAction {
     private final static Logger LOG = Logger.getLogger(ObjectActionImpl.class);

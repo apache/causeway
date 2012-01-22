@@ -26,9 +26,10 @@ import java.util.Properties;
 
 import junit.framework.TestCase;
 
-import org.apache.isis.runtimes.dflt.objectstores.sql.singleton.SqlIntegrationTestSingleton;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
+
+import org.apache.isis.runtimes.dflt.objectstores.sql.singleton.SqlIntegrationTestSingleton;
 
 public abstract class SqlIntegrationTestCommonBase extends TestCase {
 

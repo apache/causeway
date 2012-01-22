@@ -27,6 +27,8 @@ import static org.hamcrest.CoreMatchers.nullValue;
 import java.util.List;
 import java.util.Properties;
 
+import org.apache.log4j.Logger;
+
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.core.commons.config.InstallerAbstract;
 import org.apache.isis.core.commons.config.IsisConfiguration;
@@ -47,7 +49,6 @@ import org.apache.isis.runtimes.dflt.runtime.system.persistence.OidGenerator;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessionFactory;
 import org.apache.isis.runtimes.dflt.runtime.systemdependencyinjector.SystemDependencyInjector;
-import org.apache.log4j.Logger;
 
 /**
  * An abstract implementation of {@link PersistenceMechanismInstaller} that will

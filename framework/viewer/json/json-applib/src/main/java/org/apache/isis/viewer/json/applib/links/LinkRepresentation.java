@@ -20,15 +20,16 @@ package org.apache.isis.viewer.json.applib.links;
 
 import javax.ws.rs.core.MediaType;
 
+import org.codehaus.jackson.JsonNode;
+import org.codehaus.jackson.node.JsonNodeFactory;
+import org.codehaus.jackson.node.ObjectNode;
+import org.jboss.resteasy.client.ClientExecutor;
+
 import org.apache.isis.viewer.json.applib.ClientRequestConfigurer;
 import org.apache.isis.viewer.json.applib.HttpMethod;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.applib.RestfulRequest;
 import org.apache.isis.viewer.json.applib.RestfulResponse;
-import org.codehaus.jackson.JsonNode;
-import org.codehaus.jackson.node.JsonNodeFactory;
-import org.codehaus.jackson.node.ObjectNode;
-import org.jboss.resteasy.client.ClientExecutor;
 
 public final class LinkRepresentation extends JsonRepresentation {
 

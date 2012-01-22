@@ -23,15 +23,16 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
 
-import org.apache.isis.core.commons.config.IsisConfigurationBuilder;
-import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
-import org.apache.isis.runtimes.dflt.runtime.system.IsisSystem;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
+
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import com.google.inject.Guice;
-import com.google.inject.Injector;
+import org.apache.isis.core.commons.config.IsisConfigurationBuilder;
+import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
+import org.apache.isis.runtimes.dflt.runtime.system.IsisSystem;
 
 public class IsisWicket_providers {
 

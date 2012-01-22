@@ -21,6 +21,8 @@ package org.apache.isis.viewer.dnd.view.composite;
 
 import java.util.Vector;
 
+import org.apache.log4j.Logger;
+
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.lang.ToString;
@@ -38,7 +40,6 @@ import org.apache.isis.viewer.dnd.view.View;
 import org.apache.isis.viewer.dnd.view.ViewAreaType;
 import org.apache.isis.viewer.dnd.view.ViewSpecification;
 import org.apache.isis.viewer.dnd.view.base.ObjectView;
-import org.apache.log4j.Logger;
 
 public abstract class CompositeView extends ObjectView {
     private static final Logger LOG = Logger.getLogger(CompositeView.class);

@@ -21,14 +21,6 @@ package org.apache.isis.runtimes.dflt.remoting.common.client.facets;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 
-import org.apache.isis.applib.Identifier;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.actions.invoke.ActionInvocationFacet;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.runtimes.dflt.remoting.common.facade.ServerFacade;
-import org.apache.isis.runtimes.dflt.remoting.common.protocol.ObjectEncoderDecoder;
-import org.apache.isis.runtimes.dflt.runtime.testsystem.TestProxySystem;
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Level;
 import org.apache.log4j.LogManager;
@@ -40,6 +32,15 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import org.apache.isis.applib.Identifier;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.actions.invoke.ActionInvocationFacet;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.runtimes.dflt.remoting.common.facade.ServerFacade;
+import org.apache.isis.runtimes.dflt.remoting.common.protocol.ObjectEncoderDecoder;
+import org.apache.isis.runtimes.dflt.runtime.testsystem.TestProxySystem;
 
 @RunWith(JMock.class)
 public class ProxyAction_ExecuteLocallyTest {

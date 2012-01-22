@@ -19,13 +19,14 @@
 
 package org.apache.isis.applib.value;
 
-import org.apache.isis.applib.Defaults;
-import org.apache.isis.applib.annotation.Value;
-import org.apache.isis.applib.clock.Clock;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeFieldType;
 import org.joda.time.Period;
 import org.joda.time.format.DateTimeFormat;
+
+import org.apache.isis.applib.Defaults;
+import org.apache.isis.applib.annotation.Value;
+import org.apache.isis.applib.clock.Clock;
 
 /**
  * Value object representing a date (not time) value.

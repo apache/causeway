@@ -25,8 +25,9 @@ import static org.junit.Assert.assertThat;
 
 import java.io.UnsupportedEncodingException;
 
-import org.apache.isis.viewer.json.applib.HttpMethod;
 import org.junit.Test;
+
+import org.apache.isis.viewer.json.applib.HttpMethod;
 
 public class LinkRepresentationTest_equals {
 

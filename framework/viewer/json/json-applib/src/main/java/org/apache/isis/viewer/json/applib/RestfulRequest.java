@@ -26,10 +26,11 @@ import java.util.Map;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.apache.isis.viewer.json.applib.util.Parser;
+import com.google.common.collect.Maps;
+
 import org.jboss.resteasy.client.core.BaseClientResponse;
 
-import com.google.common.collect.Maps;
+import org.apache.isis.viewer.json.applib.util.Parser;
 
 public final class RestfulRequest {
 

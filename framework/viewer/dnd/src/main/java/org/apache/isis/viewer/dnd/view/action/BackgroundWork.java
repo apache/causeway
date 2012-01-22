@@ -19,10 +19,11 @@
 
 package org.apache.isis.viewer.dnd.view.action;
 
+import org.apache.log4j.Logger;
+
 import org.apache.isis.core.commons.exceptions.IsisApplicationException;
 import org.apache.isis.viewer.dnd.view.BackgroundTask;
 import org.apache.isis.viewer.dnd.view.View;
-import org.apache.log4j.Logger;
 
 public final class BackgroundWork {
     private static final Logger LOG = Logger.getLogger(BackgroundTask.class);

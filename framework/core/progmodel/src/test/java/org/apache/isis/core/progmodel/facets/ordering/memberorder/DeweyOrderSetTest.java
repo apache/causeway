@@ -24,14 +24,15 @@ import java.util.List;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
+import com.google.common.collect.ImmutableList;
+
+import org.apache.log4j.Level;
+import org.apache.log4j.LogManager;
+
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.layout.OrderSet;
 import org.apache.isis.core.metamodel.layout.memberorderfacet.DeweyOrderSet;
 import org.apache.isis.core.progmodel.facets.members.order.MemberOrderFacetAnnotation;
-import org.apache.log4j.Level;
-import org.apache.log4j.LogManager;
-
-import com.google.common.collect.ImmutableList;
 
 public class DeweyOrderSetTest extends TestCase {
 

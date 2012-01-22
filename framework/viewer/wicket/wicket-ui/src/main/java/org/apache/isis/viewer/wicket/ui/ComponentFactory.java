@@ -21,9 +21,10 @@ package org.apache.isis.viewer.wicket.ui;
 
 import java.io.Serializable;
 
-import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
+
+import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 
 /**
  * Creates {@link Component}s of a specified {@link ComponentType}, optionally

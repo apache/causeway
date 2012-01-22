@@ -23,9 +23,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-
 import com.google.common.collect.Maps;
+
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 public final class ClassLoaders {
 

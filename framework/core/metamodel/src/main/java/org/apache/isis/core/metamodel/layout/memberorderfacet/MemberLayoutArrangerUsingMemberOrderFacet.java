@@ -18,11 +18,12 @@ package org.apache.isis.core.metamodel.layout.memberorderfacet;
 
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.layout.MemberLayoutArranger;
 import org.apache.isis.core.metamodel.layout.OrderSet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.log4j.Logger;
 
 public class MemberLayoutArrangerUsingMemberOrderFacet implements MemberLayoutArranger {
 

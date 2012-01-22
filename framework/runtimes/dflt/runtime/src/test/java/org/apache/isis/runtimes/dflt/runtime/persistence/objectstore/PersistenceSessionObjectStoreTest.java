@@ -23,6 +23,16 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.Collections;
 
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
+import org.jmock.Mockery;
+import org.jmock.integration.junit4.JMock;
+import org.jmock.integration.junit4.JUnit4Mockery;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterFactory;
 import org.apache.isis.core.metamodel.services.ServicesInjectorDefault;
@@ -35,15 +45,6 @@ import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessi
 import org.apache.isis.runtimes.dflt.runtime.testsystem.TestObjectFactory;
 import org.apache.isis.runtimes.dflt.runtime.testsystem.TestProxyOidGenerator;
 import org.apache.isis.runtimes.dflt.runtime.testsystem.TestProxySystem;
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
-import org.jmock.Mockery;
-import org.jmock.integration.junit4.JMock;
-import org.jmock.integration.junit4.JUnit4Mockery;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
 
 @RunWith(JMock.class)
 public class PersistenceSessionObjectStoreTest {

@@ -24,6 +24,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
+
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.commons.exceptions.IsisApplicationException;
@@ -66,7 +68,6 @@ import org.apache.isis.viewer.html.request.Request;
 import org.apache.isis.viewer.html.task.InvokeMethod;
 import org.apache.isis.viewer.html.task.TaskLookupException;
 import org.apache.isis.viewer.html.task.TaskStep;
-import org.apache.log4j.Logger;
 
 public class WebController {
 

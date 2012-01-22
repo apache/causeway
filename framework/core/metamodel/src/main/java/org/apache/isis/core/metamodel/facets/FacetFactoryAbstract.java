@@ -21,11 +21,11 @@ package org.apache.isis.core.metamodel.facets;
 
 import java.util.List;
 
+import com.google.common.collect.ImmutableList;
+
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.spec.SpecificationLookup;
 import org.apache.isis.core.metamodel.spec.SpecificationLookupAware;
-
-import com.google.common.collect.ImmutableList;
 
 public abstract class FacetFactoryAbstract implements FacetFactory, SpecificationLookupAware {
 

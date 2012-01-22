@@ -21,8 +21,9 @@ package org.apache.isis.viewer.wicket.model.common;
 
 import java.io.Serializable;
 
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.wicket.Component;
+
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 
 /**
  * Decouples the mechanism for selecting entities returned in collections.

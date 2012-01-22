@@ -25,6 +25,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 
+import org.apache.log4j.Logger;
+
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -48,7 +50,6 @@ import org.apache.isis.viewer.dnd.view.border.DisposedObjectBorder;
 import org.apache.isis.viewer.dnd.view.collection.CollectionContent;
 import org.apache.isis.viewer.dnd.viewer.basic.FallbackView;
 import org.apache.isis.viewer.dnd.viewer.basic.MinimizedView;
-import org.apache.log4j.Logger;
 
 /**
  * This class holds all the different view types that all the different objects

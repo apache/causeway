@@ -1,10 +1,11 @@
 package org.apache.isis.core.testsupport.jmock;
 
-import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2.Mode;
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
 import org.junit.Rule;
 import org.junit.Test;
+
+import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2.Mode;
 
 public class JUnit4RuleMockery2Test {
 

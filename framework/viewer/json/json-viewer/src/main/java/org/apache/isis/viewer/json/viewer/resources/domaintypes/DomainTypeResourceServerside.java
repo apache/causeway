@@ -28,6 +28,10 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import com.google.common.base.Strings;
+
+import org.jboss.resteasy.annotations.ClientResponseType;
+
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -48,9 +52,6 @@ import org.apache.isis.viewer.json.viewer.resources.ResourceAbstract;
 import org.apache.isis.viewer.json.viewer.resources.domainobjects.DomainObjectReprRenderer;
 import org.apache.isis.viewer.json.viewer.resources.domainobjects.DomainResourceHelper;
 import org.apache.isis.viewer.json.viewer.util.UrlParserUtils;
-import org.jboss.resteasy.annotations.ClientResponseType;
-
-import com.google.common.base.Strings;
 
 /**
  * Implementation note: it seems to be necessary to annotate the implementation

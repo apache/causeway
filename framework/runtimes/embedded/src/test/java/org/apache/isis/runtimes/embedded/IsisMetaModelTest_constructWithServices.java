@@ -24,8 +24,6 @@ import static org.junit.Assert.assertThat;
 
 import java.util.List;
 
-import org.apache.isis.runtimes.embedded.dom.claim.ClaimRepositoryImpl;
-import org.apache.isis.runtimes.embedded.dom.employee.EmployeeRepositoryImpl;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
@@ -35,6 +33,9 @@ import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import org.apache.isis.runtimes.embedded.dom.claim.ClaimRepositoryImpl;
+import org.apache.isis.runtimes.embedded.dom.employee.EmployeeRepositoryImpl;
 
 @RunWith(JMock.class)
 public class IsisMetaModelTest_constructWithServices {

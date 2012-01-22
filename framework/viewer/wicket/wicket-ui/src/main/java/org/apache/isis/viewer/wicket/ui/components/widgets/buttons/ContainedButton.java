@@ -21,7 +21,8 @@ package org.apache.isis.viewer.wicket.ui.components.widgets.buttons;
 
 import java.util.List;
 
-import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
+import com.google.common.collect.Lists;
+
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
@@ -31,7 +32,7 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.internal.HtmlHeaderContainer;
 import org.apache.wicket.model.Model;
 
-import com.google.common.collect.Lists;
+import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 
 /**
  * A button contained within its own form.

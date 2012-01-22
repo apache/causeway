@@ -27,6 +27,15 @@ import java.io.InputStream;
 import java.util.Collections;
 import java.util.List;
 
+import com.google.common.base.Function;
+import com.google.common.collect.Iterables;
+
+import org.concordion.Concordion;
+import org.concordion.api.ResultSummary;
+import org.concordion.internal.ConcordionBuilder;
+import org.concordion.internal.FileTarget;
+import org.junit.Test;
+
 import org.apache.isis.core.commons.lang.IoUtils;
 import org.apache.isis.core.commons.lang.StringUtils;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -42,14 +51,6 @@ import org.apache.isis.viewer.bdd.concordion.internal.fixtures.CheckCollectionCo
 import org.apache.isis.viewer.bdd.concordion.internal.fixtures.CheckListForConcordion;
 import org.apache.isis.viewer.bdd.concordion.internal.fixtures.SetUpObjectsForConcordion;
 import org.apache.isis.viewer.bdd.concordion.internal.fixtures.UsingIsisViewerForConcordion;
-import org.concordion.Concordion;
-import org.concordion.api.ResultSummary;
-import org.concordion.internal.ConcordionBuilder;
-import org.concordion.internal.FileTarget;
-import org.junit.Test;
-
-import com.google.common.base.Function;
-import com.google.common.collect.Iterables;
 
 public abstract class AbstractIsisConcordionScenario {
 

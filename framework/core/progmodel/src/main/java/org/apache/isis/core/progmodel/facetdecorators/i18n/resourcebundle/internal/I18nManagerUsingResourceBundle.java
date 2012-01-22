@@ -23,13 +23,14 @@ import java.util.List;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
+import com.google.common.collect.Lists;
+
+import org.apache.log4j.Logger;
+
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.lang.StringUtils;
 import org.apache.isis.core.progmodel.facetdecorators.i18n.I18nManager;
-import org.apache.log4j.Logger;
-
-import com.google.common.collect.Lists;
 
 /**
  * REVIEW: why isn't there a type for collections also?

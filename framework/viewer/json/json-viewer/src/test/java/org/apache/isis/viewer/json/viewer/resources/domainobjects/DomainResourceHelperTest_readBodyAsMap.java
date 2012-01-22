@@ -21,9 +21,10 @@ package org.apache.isis.viewer.json.viewer.resources.domainobjects;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
+import org.junit.Test;
+
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.viewer.JsonApplicationException;
-import org.junit.Test;
 
 public class DomainResourceHelperTest_readBodyAsMap {
 

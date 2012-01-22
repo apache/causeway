@@ -19,8 +19,9 @@
 
 package org.apache.isis.viewer.wicket.ui.tabs;
 
-import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.wicket.model.IModel;
+
+import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 
 public class TabAbstract<T extends IModel<?>> extends PanelAbstract<T> {
 

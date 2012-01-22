@@ -31,6 +31,8 @@ import java.util.Map.Entry;
 import java.util.TreeSet;
 
 import org.apache.commons.lang.StringEscapeUtils;
+import org.apache.log4j.Logger;
+
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.factory.InstanceUtil;
@@ -45,7 +47,6 @@ import org.apache.isis.viewer.scimpi.dispatcher.Dispatcher;
 import org.apache.isis.viewer.scimpi.dispatcher.ScimpiException;
 import org.apache.isis.viewer.scimpi.dispatcher.action.PropertyException;
 import org.apache.isis.viewer.scimpi.dispatcher.debug.DebugUsers;
-import org.apache.log4j.Logger;
 
 public abstract class RequestContext {
     private static final Logger LOG = Logger.getLogger(RequestContext.class);

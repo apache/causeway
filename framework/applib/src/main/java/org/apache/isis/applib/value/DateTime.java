@@ -23,11 +23,12 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 
+import org.joda.time.DateTimeZone;
+import org.joda.time.Period;
+
 import org.apache.isis.applib.Defaults;
 import org.apache.isis.applib.annotation.Value;
 import org.apache.isis.applib.clock.Clock;
-import org.joda.time.DateTimeZone;
-import org.joda.time.Period;
 
 /**
  * Value object representing a date and time value. By default, the time is

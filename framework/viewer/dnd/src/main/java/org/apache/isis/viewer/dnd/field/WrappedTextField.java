@@ -19,6 +19,8 @@
 
 package org.apache.isis.viewer.dnd.field;
 
+import org.apache.log4j.Logger;
+
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.viewer.dnd.drawing.Canvas;
 import org.apache.isis.viewer.dnd.drawing.Color;
@@ -29,7 +31,6 @@ import org.apache.isis.viewer.dnd.view.ViewSpecification;
 import org.apache.isis.viewer.dnd.view.content.TextParseableContent;
 import org.apache.isis.viewer.dnd.view.text.CursorPosition;
 import org.apache.isis.viewer.dnd.view.text.TextContent;
-import org.apache.log4j.Logger;
 
 public class WrappedTextField extends TextField {
     private static final Logger LOG = Logger.getLogger(WrappedTextField.class);

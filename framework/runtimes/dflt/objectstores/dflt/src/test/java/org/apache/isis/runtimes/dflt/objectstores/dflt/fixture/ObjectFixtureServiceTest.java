@@ -29,16 +29,17 @@ import java.util.Set;
 
 import junit.framework.Assert;
 
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
+import org.junit.Before;
+import org.junit.Test;
+
 import org.apache.isis.core.commons.config.ConfigurationConstants;
 import org.apache.isis.core.testsupport.testdomain.Movie;
 import org.apache.isis.core.testsupport.testdomain.Person;
 import org.apache.isis.core.testsupport.testdomain.Role;
 import org.apache.isis.runtimes.dflt.objectstores.dflt.testsystem.TestProxySystemII;
 import org.apache.isis.runtimes.dflt.runtime.fixturedomainservice.ObjectFixtureService;
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
-import org.junit.Before;
-import org.junit.Test;
 
 /**
  * TODO: remove dependency on {@link TestProxySystemII} and move back to

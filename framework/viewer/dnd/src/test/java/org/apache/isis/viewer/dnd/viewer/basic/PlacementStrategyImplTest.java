@@ -19,6 +19,10 @@
 
 package org.apache.isis.viewer.dnd.viewer.basic;
 
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.testsystem.TestProxyConfiguration;
 import org.apache.isis.viewer.dnd.DummyView;
@@ -26,9 +30,6 @@ import org.apache.isis.viewer.dnd.DummyWorkspaceView;
 import org.apache.isis.viewer.dnd.drawing.Location;
 import org.apache.isis.viewer.dnd.drawing.Size;
 import org.apache.isis.viewer.dnd.view.PlacementStrategyImpl;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
 
 public class PlacementStrategyImplTest {
 

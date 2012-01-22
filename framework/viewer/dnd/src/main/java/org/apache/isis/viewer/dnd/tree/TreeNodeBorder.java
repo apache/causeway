@@ -19,6 +19,8 @@
 
 package org.apache.isis.viewer.dnd.tree;
 
+import org.apache.log4j.Logger;
+
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
@@ -56,7 +58,6 @@ import org.apache.isis.viewer.dnd.view.field.OneToManyField;
 import org.apache.isis.viewer.dnd.view.option.UserActionAbstract;
 import org.apache.isis.viewer.dnd.view.text.ObjectTitleText;
 import org.apache.isis.viewer.dnd.view.text.TitleText;
-import org.apache.log4j.Logger;
 
 // TODO use ObjectBorder to provide the basic border functionality
 public class TreeNodeBorder extends AbstractBorder {

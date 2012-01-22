@@ -22,8 +22,6 @@ package org.apache.isis.runtimes.dflt.objectstores.dflt;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
-import org.apache.isis.runtimes.dflt.objectstores.dflt.internal.ObjectStorePersistedObjects;
-import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JMock;
@@ -32,6 +30,9 @@ import org.jmock.lib.legacy.ClassImposteriser;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import org.apache.isis.runtimes.dflt.objectstores.dflt.internal.ObjectStorePersistedObjects;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 
 /**
  * Tested in style of <i>Working Effectively with Legacy Code</i> (Feathers) and

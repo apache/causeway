@@ -21,12 +21,13 @@ package junit.todo;
 
 import junit.AbstractTest;
 
+import org.junit.Before;
+import org.junit.Test;
+
 import org.apache.isis.tck.dom.scalars.PrimitiveValuedEntity;
 import org.apache.isis.tck.fixture.scalars.PrimitiveValuedEntityFixture;
 import org.apache.isis.viewer.junit.Fixture;
 import org.apache.isis.viewer.junit.Fixtures;
-import org.junit.Before;
-import org.junit.Test;
 
 @Fixtures({ @Fixture(PrimitiveValuedEntityFixture.class) })
 public class ScalarEntityTest extends AbstractTest {

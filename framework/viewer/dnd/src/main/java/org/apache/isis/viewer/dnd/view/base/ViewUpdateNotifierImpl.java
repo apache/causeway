@@ -25,6 +25,8 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.Vector;
 
+import org.apache.log4j.Logger;
+
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -38,7 +40,6 @@ import org.apache.isis.viewer.dnd.view.ObjectContent;
 import org.apache.isis.viewer.dnd.view.View;
 import org.apache.isis.viewer.dnd.view.ViewUpdateNotifier;
 import org.apache.isis.viewer.dnd.view.collection.RootCollection;
-import org.apache.log4j.Logger;
 
 public class ViewUpdateNotifierImpl implements ViewUpdateNotifier {
     private static final Logger LOG = Logger.getLogger(ViewUpdateNotifierImpl.class);

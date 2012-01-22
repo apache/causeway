@@ -24,12 +24,13 @@ package org.apache.isis.runtimes.dflt.objectstores.sql.auto;
 
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.specloader.specimpl.OneToManyAssociationImpl;
 import org.apache.isis.runtimes.dflt.objectstores.sql.FieldMappingLookup;
 import org.apache.isis.runtimes.dflt.objectstores.sql.ObjectMappingLookup;
-import org.apache.log4j.Logger;
 
 /**
  * Used to map 1-to-many collections by creating, in the child table, 1 column

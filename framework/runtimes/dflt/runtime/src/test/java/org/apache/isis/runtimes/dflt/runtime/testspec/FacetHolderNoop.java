@@ -21,13 +21,13 @@ package org.apache.isis.runtimes.dflt.runtime.testspec;
 
 import java.util.List;
 
+import com.google.common.collect.Lists;
+
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.MultiTypedFacet;
-
-import com.google.common.collect.Lists;
 
 /**
  * Has no functionality but makes it easier to write tests that require an

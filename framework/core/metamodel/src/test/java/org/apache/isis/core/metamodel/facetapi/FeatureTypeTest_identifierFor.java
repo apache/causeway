@@ -25,8 +25,9 @@ import static org.junit.Assert.assertThat;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
 
-import org.apache.isis.applib.Identifier;
 import org.junit.Test;
+
+import org.apache.isis.applib.Identifier;
 
 public class FeatureTypeTest_identifierFor {
 

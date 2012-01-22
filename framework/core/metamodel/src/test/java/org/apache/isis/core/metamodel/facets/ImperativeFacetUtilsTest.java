@@ -26,10 +26,8 @@ import static org.junit.Assert.assertThat;
 
 import java.lang.reflect.Method;
 
-import org.apache.isis.applib.filter.Filter;
-import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facets.ImperativeFacetUtils.ImperativeFacetFlags;
-import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
+import com.google.common.collect.Lists;
+
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JMock;
@@ -39,7 +37,10 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import com.google.common.collect.Lists;
+import org.apache.isis.applib.filter.Filter;
+import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facets.ImperativeFacetUtils.ImperativeFacetFlags;
+import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 
 @RunWith(JMock.class)
 public class ImperativeFacetUtilsTest {

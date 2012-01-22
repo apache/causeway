@@ -19,14 +19,15 @@
 
 package org.apache.isis.viewer.wicket.ui.fixtures;
 
+import org.apache.wicket.markup.html.link.Link;
+import org.jmock.Expectations;
+import org.jmock.Mockery;
+
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.stringable.OidStringifier;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssMenuLinkFactory;
-import org.apache.wicket.markup.html.link.Link;
-import org.jmock.Expectations;
-import org.jmock.Mockery;
 
 public final class SystemFixtures {
 

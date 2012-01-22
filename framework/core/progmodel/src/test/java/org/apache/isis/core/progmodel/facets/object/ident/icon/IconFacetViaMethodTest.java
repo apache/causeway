@@ -25,9 +25,6 @@ import static org.junit.Assert.assertThat;
 
 import java.lang.reflect.Method;
 
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.progmodel.facets.object.icon.method.IconFacetViaMethod;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JMock;
@@ -36,6 +33,10 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.progmodel.facets.object.icon.method.IconFacetViaMethod;
 
 @RunWith(JMock.class)
 public class IconFacetViaMethodTest {

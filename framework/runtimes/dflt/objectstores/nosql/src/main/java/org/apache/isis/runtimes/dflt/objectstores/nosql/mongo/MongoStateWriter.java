@@ -21,13 +21,14 @@ package org.apache.isis.runtimes.dflt.objectstores.nosql.mongo;
 
 import java.util.List;
 
-import org.apache.isis.core.commons.exceptions.UnexpectedCallException;
-import org.apache.isis.runtimes.dflt.objectstores.nosql.StateWriter;
-import org.apache.log4j.Logger;
-
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
+
+import org.apache.log4j.Logger;
+
+import org.apache.isis.core.commons.exceptions.UnexpectedCallException;
+import org.apache.isis.runtimes.dflt.objectstores.nosql.StateWriter;
 
 public class MongoStateWriter implements StateWriter {
     private static final Logger LOG = Logger.getLogger(MongoStateWriter.class);

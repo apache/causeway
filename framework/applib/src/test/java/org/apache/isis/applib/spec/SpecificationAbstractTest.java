@@ -24,9 +24,10 @@ import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
+import org.junit.Test;
+
 import org.apache.isis.applib.spec.AbstractSpecification.Nullability;
 import org.apache.isis.applib.spec.AbstractSpecification.TypeChecking;
-import org.junit.Test;
 
 public class SpecificationAbstractTest {
 

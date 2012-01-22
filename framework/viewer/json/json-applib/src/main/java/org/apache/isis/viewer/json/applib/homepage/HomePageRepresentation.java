@@ -18,9 +18,10 @@
  */
 package org.apache.isis.viewer.json.applib.homepage;
 
+import org.codehaus.jackson.JsonNode;
+
 import org.apache.isis.viewer.json.applib.domainobjects.DomainRepresentation;
 import org.apache.isis.viewer.json.applib.links.LinkRepresentation;
-import org.codehaus.jackson.JsonNode;
 
 public class HomePageRepresentation extends DomainRepresentation {
 

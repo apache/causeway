@@ -24,10 +24,11 @@ import java.util.Iterator;
 import java.util.Map;
 
 import org.apache.commons.collections.map.IdentityMap;
+import org.apache.log4j.Logger;
+
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.lang.ToString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.log4j.Logger;
 
 /**
  * TODO: an alternative might be to use {@link IdentityMap}.

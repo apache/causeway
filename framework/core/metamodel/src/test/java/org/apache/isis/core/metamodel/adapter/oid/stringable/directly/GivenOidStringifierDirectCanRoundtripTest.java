@@ -24,10 +24,11 @@ import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
-import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
+import org.apache.isis.core.metamodel.adapter.oid.Oid;
 
 public class GivenOidStringifierDirectCanRoundtripTest {
 

@@ -24,6 +24,9 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import com.google.common.base.Splitter;
+import com.google.common.collect.Lists;
+
 import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.core.metamodel.adapter.LocalizationProvider;
 import org.apache.isis.core.metamodel.adapter.LocalizationProviderAware;
@@ -37,9 +40,6 @@ import org.apache.isis.core.metamodel.methodutils.MethodScope;
 import org.apache.isis.core.progmodel.facets.MethodFinderUtils;
 import org.apache.isis.core.progmodel.facets.fallback.FallbackFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.title.annotation.TitleFacetViaTitleAnnotation.TitleComponent;
-
-import com.google.common.base.Splitter;
-import com.google.common.collect.Lists;
 
 public class TitleAnnotationFacetFactory extends FacetFactoryAbstract implements AdapterMapAware, LocalizationProviderAware {
 

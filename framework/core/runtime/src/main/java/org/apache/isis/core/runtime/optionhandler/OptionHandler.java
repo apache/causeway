@@ -21,6 +21,7 @@ package org.apache.isis.core.runtime.optionhandler;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Options;
+
 import org.apache.isis.core.commons.config.IsisConfigurationBuilderPrimer;
 
 public interface OptionHandler extends IsisConfigurationBuilderPrimer {

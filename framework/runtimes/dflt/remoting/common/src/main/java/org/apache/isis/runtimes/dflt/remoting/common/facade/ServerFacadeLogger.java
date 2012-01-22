@@ -24,6 +24,8 @@ import java.util.List;
 import java.util.Properties;
 import java.util.Vector;
 
+import com.google.common.collect.Lists;
+
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.version.Version;
@@ -75,8 +77,6 @@ import org.apache.isis.runtimes.dflt.remoting.common.exchange.SetValueRequest;
 import org.apache.isis.runtimes.dflt.remoting.common.exchange.SetValueResponse;
 import org.apache.isis.runtimes.dflt.remoting.common.protocol.ObjectEncoderDecoder;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
-
-import com.google.common.collect.Lists;
 
 /**
  * previously called <tt>DistributionLogger</tt>.

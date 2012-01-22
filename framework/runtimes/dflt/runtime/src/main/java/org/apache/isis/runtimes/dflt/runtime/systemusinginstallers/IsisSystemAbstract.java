@@ -19,6 +19,8 @@
 
 package org.apache.isis.runtimes.dflt.runtime.systemusinginstallers;
 
+import org.apache.log4j.Logger;
+
 import org.apache.isis.applib.fixtures.LogonFixture;
 import org.apache.isis.core.commons.components.Installer;
 import org.apache.isis.core.commons.components.Noop;
@@ -33,7 +35,6 @@ import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.internal.InitialisationSession;
 import org.apache.isis.runtimes.dflt.runtime.system.internal.IsisLocaleInitializer;
 import org.apache.isis.runtimes.dflt.runtime.system.internal.IsisTimeZoneInitializer;
-import org.apache.log4j.Logger;
 
 /**
  * 

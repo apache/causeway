@@ -19,11 +19,12 @@ package org.apache.isis.core.metamodel.layout;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.isis.core.metamodel.facets.FacetedMethod;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import com.google.common.collect.Lists;
+
 import org.apache.log4j.Logger;
 
-import com.google.common.collect.Lists;
+import org.apache.isis.core.metamodel.facets.FacetedMethod;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 public abstract class MemberLayoutArrangerComposite implements MemberLayoutArranger {
 

@@ -21,10 +21,11 @@ package org.apache.isis.viewer.dnd.viewer.drawing;
 
 import junit.framework.TestCase;
 
-import org.apache.isis.viewer.dnd.drawing.Padding;
-import org.apache.isis.viewer.dnd.drawing.Size;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
+
+import org.apache.isis.viewer.dnd.drawing.Padding;
+import org.apache.isis.viewer.dnd.drawing.Size;
 
 public class SizeTest extends TestCase {
 

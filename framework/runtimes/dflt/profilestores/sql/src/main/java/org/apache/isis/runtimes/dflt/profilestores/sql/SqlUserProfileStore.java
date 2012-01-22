@@ -16,11 +16,11 @@
  */
 package org.apache.isis.runtimes.dflt.profilestores.sql;
 
+import com.google.inject.Inject;
+
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.runtime.userprofile.UserProfile;
 import org.apache.isis.core.runtime.userprofile.UserProfileStore;
-
-import com.google.inject.Inject;
 
 /**
  * 

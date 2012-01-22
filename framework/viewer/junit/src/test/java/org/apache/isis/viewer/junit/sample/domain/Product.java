@@ -22,6 +22,8 @@ package org.apache.isis.viewer.junit.sample.domain;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import org.apache.isis.applib.AbstractDomainObject;
 import org.apache.isis.applib.annotation.Disabled;
 import org.apache.isis.applib.annotation.Immutable;
@@ -30,7 +32,6 @@ import org.apache.isis.applib.annotation.Optional;
 import org.apache.isis.applib.annotation.TypicalLength;
 import org.apache.isis.applib.annotation.When;
 import org.apache.isis.applib.util.TitleBuffer;
-import org.apache.log4j.Logger;
 
 @Immutable
 public class Product extends AbstractDomainObject {

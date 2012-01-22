@@ -24,6 +24,10 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.apache.commons.httpclient.HttpClient;
+import org.jboss.resteasy.client.ClientExecutor;
+import org.jboss.resteasy.client.ClientRequestFactory;
+import org.jboss.resteasy.client.core.executors.ApacheHttpClientExecutor;
+
 import org.apache.isis.viewer.json.applib.domainobjects.DomainObjectResource;
 import org.apache.isis.viewer.json.applib.domainobjects.DomainServiceResource;
 import org.apache.isis.viewer.json.applib.domaintypes.DomainTypeResource;
@@ -31,9 +35,6 @@ import org.apache.isis.viewer.json.applib.homepage.HomePageResource;
 import org.apache.isis.viewer.json.applib.links.LinkRepresentation;
 import org.apache.isis.viewer.json.applib.user.UserResource;
 import org.apache.isis.viewer.json.applib.version.VersionResource;
-import org.jboss.resteasy.client.ClientExecutor;
-import org.jboss.resteasy.client.ClientRequestFactory;
-import org.jboss.resteasy.client.core.executors.ApacheHttpClientExecutor;
 
 public class RestfulClient {
 

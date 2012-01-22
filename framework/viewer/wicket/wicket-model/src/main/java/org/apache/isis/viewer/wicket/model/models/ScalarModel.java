@@ -23,6 +23,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import org.apache.wicket.Session;
+
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
@@ -38,7 +40,6 @@ import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.mementos.PropertyMemento;
 import org.apache.isis.viewer.wicket.model.nof.AuthenticationSessionAccessor;
 import org.apache.isis.viewer.wicket.model.util.ClassLoaders;
-import org.apache.wicket.Session;
 
 /**
  * Represents a scalar of an entity, either a {@link Kind#PROPERTY property} or

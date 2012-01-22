@@ -22,6 +22,8 @@ package org.apache.isis.viewer.dnd.view.menu;
 import java.awt.event.KeyEvent;
 import java.util.Vector;
 
+import org.apache.log4j.Logger;
+
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
@@ -54,7 +56,6 @@ import org.apache.isis.viewer.dnd.view.base.AbstractView;
 import org.apache.isis.viewer.dnd.view.content.AbstractContent;
 import org.apache.isis.viewer.dnd.view.content.NullContent;
 import org.apache.isis.viewer.dnd.view.window.SubviewFocusManager;
-import org.apache.log4j.Logger;
 
 public class PopupMenu extends AbstractView {
 

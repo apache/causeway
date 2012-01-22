@@ -19,9 +19,10 @@
 
 package org.apache.isis.viewer.wicket.model.mementos;
 
-import org.apache.isis.viewer.wicket.model.util.Strings;
 import org.apache.wicket.PageParameters;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
+
+import org.apache.isis.viewer.wicket.model.util.Strings;
 
 /**
  * For building {@link BookmarkablePageLink}s.

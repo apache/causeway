@@ -24,13 +24,14 @@ package org.apache.isis.viewer.wicket.ui.selector;
 
 import java.util.List;
 
-import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+
+import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 
 /**
  * {@link ComponentFactory} for rendering a selection of

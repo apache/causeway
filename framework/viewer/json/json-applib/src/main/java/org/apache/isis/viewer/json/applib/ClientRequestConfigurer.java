@@ -24,12 +24,13 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.UriBuilder;
 
-import org.apache.isis.viewer.json.applib.RestfulRequest.RequestParameter;
-import org.apache.isis.viewer.json.applib.links.LinkRepresentation;
-import org.apache.isis.viewer.json.applib.util.UrlEncodingUtils;
 import org.jboss.resteasy.client.ClientExecutor;
 import org.jboss.resteasy.client.ClientRequest;
 import org.jboss.resteasy.specimpl.UriBuilderImpl;
+
+import org.apache.isis.viewer.json.applib.RestfulRequest.RequestParameter;
+import org.apache.isis.viewer.json.applib.links.LinkRepresentation;
+import org.apache.isis.viewer.json.applib.util.UrlEncodingUtils;
 
 /**
  * Configures the body, query string etc of a {@link ClientRequest}.

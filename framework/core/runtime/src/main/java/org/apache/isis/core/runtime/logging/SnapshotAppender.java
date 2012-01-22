@@ -21,7 +21,6 @@ package org.apache.isis.core.runtime.logging;
 
 import java.util.Date;
 
-import org.apache.isis.core.runtime.about.AboutIsis;
 import org.apache.log4j.AppenderSkeleton;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
@@ -29,6 +28,8 @@ import org.apache.log4j.helpers.CyclicBuffer;
 import org.apache.log4j.helpers.OptionConverter;
 import org.apache.log4j.spi.LoggingEvent;
 import org.apache.log4j.spi.TriggeringEventEvaluator;
+
+import org.apache.isis.core.runtime.about.AboutIsis;
 
 class DefaultEvaluator implements TriggeringEventEvaluator {
     @Override

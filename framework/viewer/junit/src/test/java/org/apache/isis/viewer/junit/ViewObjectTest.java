@@ -26,10 +26,11 @@ import static org.junit.Assert.assertThat;
 
 import java.util.List;
 
+import org.junit.Test;
+
 import org.apache.isis.progmodel.wrapper.applib.WrapperObject;
 import org.apache.isis.viewer.junit.sample.domain.Country;
 import org.apache.isis.viewer.junit.sample.domain.Customer;
-import org.junit.Test;
 
 public class ViewObjectTest extends AbstractTest {
 

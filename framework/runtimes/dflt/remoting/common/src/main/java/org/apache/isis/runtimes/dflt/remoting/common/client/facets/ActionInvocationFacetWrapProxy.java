@@ -21,6 +21,8 @@ package org.apache.isis.runtimes.dflt.remoting.common.client.facets;
 
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.exceptions.IsisException;
@@ -52,7 +54,6 @@ import org.apache.isis.runtimes.dflt.runtime.system.transaction.MessageBroker;
 import org.apache.isis.runtimes.dflt.runtime.system.transaction.UpdateNotifier;
 import org.apache.isis.runtimes.dflt.runtime.transaction.messagebroker.MessageList;
 import org.apache.isis.runtimes.dflt.runtime.transaction.messagebroker.WarningList;
-import org.apache.log4j.Logger;
 
 /**
  * A reflection peer for executing actions remotely, instead of on the local

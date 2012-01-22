@@ -28,11 +28,12 @@ import java.io.IOException;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
 
-import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Before;
 import org.junit.Test;
+
+import org.apache.isis.core.commons.authentication.AuthenticationSession;
 
 public abstract class EncodabilityContractTest {
 

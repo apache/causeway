@@ -19,6 +19,9 @@
 
 package org.apache.isis.viewer.wicket.ui.fixtures;
 
+import org.jmock.Expectations;
+import org.jmock.Mockery;
+
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -27,8 +30,6 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.jmock.Expectations;
-import org.jmock.Mockery;
 
 public final class ActionFixtures {
 

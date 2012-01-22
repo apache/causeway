@@ -19,6 +19,8 @@
 
 package org.apache.isis.runtimes.dflt.objectstores.nosql;
 
+import org.apache.log4j.Logger;
+
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.exceptions.NotYetImplementedException;
@@ -26,7 +28,6 @@ import org.apache.isis.core.metamodel.adapter.oid.AggregatedOid;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.OidGeneratorAbstract;
 import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.simple.SerialOid;
-import org.apache.log4j.Logger;
 
 public class NoSqlOidGenerator extends OidGeneratorAbstract {
     private static final Logger LOG = Logger.getLogger(NoSqlOidGenerator.class);

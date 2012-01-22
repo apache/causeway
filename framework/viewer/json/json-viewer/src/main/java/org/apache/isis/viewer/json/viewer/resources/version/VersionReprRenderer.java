@@ -20,6 +20,8 @@ package org.apache.isis.viewer.json.viewer.resources.version;
 
 import java.nio.charset.Charset;
 
+import com.google.common.io.Resources;
+
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.applib.RepresentationType;
 import org.apache.isis.viewer.json.viewer.JsonApplication;
@@ -28,8 +30,6 @@ import org.apache.isis.viewer.json.viewer.representations.LinkFollower;
 import org.apache.isis.viewer.json.viewer.representations.ReprRenderer;
 import org.apache.isis.viewer.json.viewer.representations.ReprRendererAbstract;
 import org.apache.isis.viewer.json.viewer.representations.ReprRendererFactoryAbstract;
-
-import com.google.common.io.Resources;
 
 public class VersionReprRenderer extends ReprRendererAbstract<VersionReprRenderer, Void> {
 

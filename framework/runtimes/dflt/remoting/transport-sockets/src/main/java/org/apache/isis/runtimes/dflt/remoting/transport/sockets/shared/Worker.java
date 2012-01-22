@@ -22,10 +22,11 @@ package org.apache.isis.runtimes.dflt.remoting.transport.sockets.shared;
 import java.io.IOException;
 import java.net.SocketException;
 
+import org.apache.log4j.Logger;
+
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.runtimes.dflt.remoting.server.ServerConnection;
 import org.apache.isis.runtimes.dflt.remoting.transport.ServerConnectionHandler;
-import org.apache.log4j.Logger;
 
 public class Worker implements Runnable {
     private static final Logger LOG = Logger.getLogger(Worker.class);

@@ -19,6 +19,8 @@
 
 package org.apache.isis.runtimes.dflt.remoting.common.client.persistence;
 
+import org.apache.log4j.Logger;
+
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
@@ -41,7 +43,6 @@ import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessi
 import org.apache.isis.runtimes.dflt.runtime.system.transaction.MessageBroker;
 import org.apache.isis.runtimes.dflt.runtime.system.transaction.UpdateNotifier;
 import org.apache.isis.runtimes.dflt.runtime.transaction.IsisTransactionManagerAbstract;
-import org.apache.log4j.Logger;
 
 public class ClientSideTransactionManager extends IsisTransactionManagerAbstract<ClientSideTransaction> {
 

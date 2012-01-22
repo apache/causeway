@@ -20,6 +20,8 @@ package org.apache.isis.runtimes.dflt.runtime.snapshot;
 
 import java.util.List;
 
+import com.google.common.collect.Lists;
+
 import org.apache.isis.applib.snapshot.Snapshottable;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.map.AdapterMap;
@@ -27,8 +29,6 @@ import org.apache.isis.core.runtime.snapshot.XmlSchema;
 import org.apache.isis.core.runtime.snapshot.XmlSnapshot;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
-
-import com.google.common.collect.Lists;
 
 /**
  * Builds an {@link XmlSnapshot} using a fluent use through a builder:

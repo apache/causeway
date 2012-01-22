@@ -22,6 +22,8 @@ package org.apache.isis.runtimes.dflt.runtime.persistence.adapterfactory.pojo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 
+import org.apache.log4j.Logger;
+
 import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.ensure.Ensure;
@@ -43,7 +45,6 @@ import org.apache.isis.runtimes.dflt.runtime.persistence.ConcurrencyException;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
-import org.apache.log4j.Logger;
 
 public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
 

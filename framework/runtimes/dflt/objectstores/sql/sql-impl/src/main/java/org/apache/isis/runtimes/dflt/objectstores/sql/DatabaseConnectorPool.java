@@ -21,8 +21,9 @@ package org.apache.isis.runtimes.dflt.objectstores.sql;
 
 import java.util.Vector;
 
-import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.log4j.Logger;
+
+import org.apache.isis.core.commons.debug.DebugBuilder;
 
 public class DatabaseConnectorPool {
     private static final Logger LOG = Logger.getLogger(DatabaseConnectorPool.class);

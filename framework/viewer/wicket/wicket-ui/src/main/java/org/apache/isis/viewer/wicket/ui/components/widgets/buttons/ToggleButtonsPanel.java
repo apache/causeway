@@ -21,9 +21,10 @@ package org.apache.isis.viewer.wicket.ui.components.widgets.buttons;
 
 import java.io.Serializable;
 
+import org.apache.wicket.Component;
+
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
-import org.apache.wicket.Component;
 
 /**
  * Abstraction of show/hide, ie two buttons only one of which is visible.

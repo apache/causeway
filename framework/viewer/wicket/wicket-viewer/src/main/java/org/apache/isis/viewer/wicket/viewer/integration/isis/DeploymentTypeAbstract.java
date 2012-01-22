@@ -19,11 +19,12 @@
 
 package org.apache.isis.viewer.wicket.viewer.integration.isis;
 
+import org.apache.wicket.Application;
+
 import org.apache.isis.runtimes.dflt.runtime.system.ContextCategory;
 import org.apache.isis.runtimes.dflt.runtime.system.DeploymentCategory;
 import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
 import org.apache.isis.runtimes.dflt.runtime.system.Splash;
-import org.apache.wicket.Application;
 
 /**
  * Simple adapter for Isis' {@link DeploymentType} class, specifying that the

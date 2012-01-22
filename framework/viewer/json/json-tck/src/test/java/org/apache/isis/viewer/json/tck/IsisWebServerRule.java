@@ -18,10 +18,11 @@
  */
 package org.apache.isis.viewer.json.tck;
 
-import org.apache.isis.runtimes.dflt.webserver.WebServer;
 import org.junit.rules.MethodRule;
 import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.Statement;
+
+import org.apache.isis.runtimes.dflt.webserver.WebServer;
 
 public class IsisWebServerRule implements MethodRule {
 

@@ -23,9 +23,10 @@ import static org.junit.Assert.assertEquals;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.isis.runtimes.dflt.objectstores.nosql.StateReader;
 import org.junit.Before;
 import org.junit.Test;
+
+import org.apache.isis.runtimes.dflt.objectstores.nosql.StateReader;
 
 public class JsonStateReaderTest {
 

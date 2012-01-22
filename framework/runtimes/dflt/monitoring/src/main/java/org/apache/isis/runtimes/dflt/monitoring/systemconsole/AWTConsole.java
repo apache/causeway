@@ -31,8 +31,9 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.log4j.Logger;
+
+import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 
 public class AWTConsole extends Frame implements ServerConsole {
     private static final long serialVersionUID = 1L;

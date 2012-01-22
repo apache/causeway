@@ -19,6 +19,9 @@
 
 package org.apache.isis.viewer.wicket.ui.components.widgets.entitylink;
 
+import org.apache.wicket.Component;
+import org.apache.wicket.markup.html.link.Link;
+
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.wicket.model.common.NoResultsHandler;
@@ -29,8 +32,6 @@ import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.ActionModel.SingleResultsMode;
 import org.apache.isis.viewer.wicket.model.util.Actions;
 import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssMenuLinkFactory;
-import org.apache.wicket.Component;
-import org.apache.wicket.markup.html.link.Link;
 
 final class FindUsingLinkFactory implements CssMenuLinkFactory {
 

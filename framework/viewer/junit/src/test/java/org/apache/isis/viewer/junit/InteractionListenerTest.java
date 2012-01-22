@@ -23,12 +23,13 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
 
+import org.junit.Test;
+
 import org.apache.isis.applib.events.InteractionEvent;
 import org.apache.isis.applib.events.PropertyAccessEvent;
 import org.apache.isis.progmodel.wrapper.applib.listeners.InteractionAdapter;
 import org.apache.isis.progmodel.wrapper.applib.listeners.InteractionListener;
 import org.apache.isis.viewer.junit.sample.domain.Customer;
-import org.junit.Test;
 
 public class InteractionListenerTest extends AbstractTest {
 

@@ -26,11 +26,12 @@ import static org.junit.Assert.fail;
 
 import java.util.List;
 
+import org.junit.Test;
+
 import org.apache.isis.core.progmodel.facets.members.disable.annotation.DisabledFacetAnnotation;
 import org.apache.isis.core.progmodel.facets.members.disable.method.DisableForContextFacetViaMethod;
 import org.apache.isis.progmodel.wrapper.applib.DisabledException;
 import org.apache.isis.viewer.junit.sample.domain.Order;
-import org.junit.Test;
 
 public class MemberDisabledTest extends AbstractTest {
 

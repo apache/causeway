@@ -24,10 +24,11 @@ import static org.junit.Assert.assertThat;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 
-import org.apache.isis.viewer.json.applib.links.LinkRepresentation;
+import com.google.common.base.Charsets;
+
 import org.junit.Test;
 
-import com.google.common.base.Charsets;
+import org.apache.isis.viewer.json.applib.links.LinkRepresentation;
 
 public class JsonRepresentationTest_urlEncoding {
 

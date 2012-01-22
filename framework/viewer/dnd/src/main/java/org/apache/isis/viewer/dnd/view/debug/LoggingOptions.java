@@ -19,6 +19,9 @@
 
 package org.apache.isis.viewer.dnd.view.debug;
 
+import org.apache.log4j.Level;
+import org.apache.log4j.LogManager;
+
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.ConsentAbstract;
 import org.apache.isis.core.metamodel.spec.ActionType;
@@ -28,8 +31,6 @@ import org.apache.isis.viewer.dnd.view.UserActionSet;
 import org.apache.isis.viewer.dnd.view.View;
 import org.apache.isis.viewer.dnd.view.Workspace;
 import org.apache.isis.viewer.dnd.view.option.UserActionAbstract;
-import org.apache.log4j.Level;
-import org.apache.log4j.LogManager;
 
 public class LoggingOptions implements MenuOptions {
 

@@ -21,6 +21,12 @@ package org.apache.isis.viewer.wicket.ui.components.entity.blocks.summary;
 
 import java.util.List;
 
+import com.google.inject.Inject;
+
+import org.apache.wicket.markup.html.PackageResource;
+import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.image.Image;
+
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.object.icon.IconFacet;
 import org.apache.isis.core.metamodel.spec.ActionType;
@@ -37,11 +43,6 @@ import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssMenuBuilde
 import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssMenuPanel;
 import org.apache.isis.viewer.wicket.ui.pages.action.ActionPage;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
-import org.apache.wicket.markup.html.PackageResource;
-import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.image.Image;
-
-import com.google.inject.Inject;
 
 /**
  * {@link PanelAbstract Panel} representing the summary details (title, icon and

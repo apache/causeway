@@ -24,12 +24,13 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 
+import org.junit.Test;
+
 import org.apache.isis.core.progmodel.facets.members.hide.annotation.HiddenFacetForMemberAnnotation;
 import org.apache.isis.core.progmodel.facets.members.hide.forsession.HideForSessionFacetViaMethod;
 import org.apache.isis.core.progmodel.facets.members.hide.method.HideForContextFacetViaMethod;
 import org.apache.isis.progmodel.wrapper.applib.HiddenException;
 import org.apache.isis.viewer.junit.sample.domain.Country;
-import org.junit.Test;
 
 public class MemberHiddenTest extends AbstractTest {
 

@@ -21,9 +21,10 @@ package org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu;
 
 import java.io.Serializable;
 
+import org.apache.wicket.markup.html.link.Link;
+
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
-import org.apache.wicket.markup.html.link.Link;
 
 /**
  * Abstracts out the creation of the links within the CSS menu.
