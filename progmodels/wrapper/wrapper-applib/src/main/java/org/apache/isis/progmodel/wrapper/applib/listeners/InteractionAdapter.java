@@ -37,8 +37,8 @@ import org.apache.isis.applib.events.PropertyUsabilityEvent;
 import org.apache.isis.applib.events.PropertyVisibilityEvent;
 
 /**
- * Provides no-op implementations of each of the methods within {@link InteractionListener}, to simplify the creation of
- * new listeners.
+ * Provides no-op implementations of each of the methods within
+ * {@link InteractionListener}, to simplify the creation of new listeners.
  */
 public class InteractionAdapter implements InteractionListener {
 

@@ -51,8 +51,7 @@ public class DomainObjectBuilder<T> extends ObjectGraphBuilder {
         final NewInstanceResolver instanceResolver = new DefaultNewInstanceResolver() {
             @SuppressWarnings("unchecked")
             @Override
-            public Object newInstance(final Class cls, final Map attributes) throws InstantiationException,
-                IllegalAccessException {
+            public Object newInstance(final Class cls, final Map attributes) throws InstantiationException, IllegalAccessException {
                 return container.newTransientInstance(cls);
             }
         };

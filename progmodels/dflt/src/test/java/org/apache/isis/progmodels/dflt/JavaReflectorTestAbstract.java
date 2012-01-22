@@ -96,21 +96,19 @@ public abstract class JavaReflectorTestAbstract {
             }
         });
 
-        final ObjectReflectorDefault reflector =
-            new ObjectReflectorDefault(configuration, new TestClassSubstitutor(), new CollectionTypeRegistryDefault(),
-                new SpecificationTraverserDefault(), new MemberLayoutArrangerDefault(),
-                new ProgrammingModelFacetsJava5(), new HashSet<FacetDecorator>(), new MetaModelValidatorDefault());
+        final ObjectReflectorDefault reflector = new ObjectReflectorDefault(configuration, new TestClassSubstitutor(), new CollectionTypeRegistryDefault(), new SpecificationTraverserDefault(), new MemberLayoutArrangerDefault(), new ProgrammingModelFacetsJava5(), new HashSet<FacetDecorator>(),
+                new MetaModelValidatorDefault());
         reflector.setRuntimeContext(new RuntimeContextFromSession());
         reflector.init();
 
-        // not sure if this is needed since we have now moved Reflector out to global scope,
+        // not sure if this is needed since we have now moved Reflector out to
+        // global scope,
         // not specific to an ExecutionContext.
-        final IsisSessionFactory executionContextFactory =
-            new IsisSessionFactoryDefault(DeploymentType.EXPLORATION, configuration, mockTemplateImageLoader,
-                reflector, mockAuthenticationManager, mockAuthorizationManager, mockUserProfileLoader,
-                mockPersistenceSessionFactory, servicesList);
+        final IsisSessionFactory executionContextFactory = new IsisSessionFactoryDefault(DeploymentType.EXPLORATION, configuration, mockTemplateImageLoader, reflector, mockAuthenticationManager, mockAuthorizationManager, mockUserProfileLoader, mockPersistenceSessionFactory, servicesList);
         IsisContextStatic.createRelaxedInstance(executionContextFactory);
-        IsisContextStatic.getInstance().getSessionInstance(); // cause an Execution Context to load
+        IsisContextStatic.getInstance().getSessionInstance(); // cause an
+                                                              // Execution
+                                                              // Context to load
 
         specification = loadSpecification(reflector);
     }

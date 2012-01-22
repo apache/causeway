@@ -83,16 +83,14 @@ public class RemoveGroovyMethodsFacetFactory extends FacetFactoryAbstract implem
 
     @Override
     public void process(final ProcessClassContext processClassContext) {
-        MethodSpec.specFor("invokeMethod").param(String.class, Object.class).ret(Object.class)
-            .remove(processClassContext);
+        MethodSpec.specFor("invokeMethod").param(String.class, Object.class).ret(Object.class).remove(processClassContext);
         MethodSpec.specFor("getMetaClass").ret(groovy.lang.MetaClass.class).remove(processClassContext);
         MethodSpec.specFor("setMetaClass").param(groovy.lang.MetaClass.class).remove(processClassContext);
         MethodSpec.specFor("getProperty").param(String.class).ret(Object.class).remove(processClassContext);
 
         final int depth = determineDepth();
         for (int i = 1; i < depth; i++) {
-            MethodSpec.specFor("this$dist$invoke$%d", i).param(String.class, Object.class).ret(Object.class)
-                .remove(processClassContext);
+            MethodSpec.specFor("this$dist$invoke$%d", i).param(String.class, Object.class).ret(Object.class).remove(processClassContext);
             MethodSpec.specFor("this$dist$set$%d", i).param(String.class, Object.class).remove(processClassContext);
             MethodSpec.specFor("this$dist$get$%d", i).param(String.class).ret(Object.class).remove(processClassContext);
         }

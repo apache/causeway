@@ -22,16 +22,11 @@ package org.apache.isis.progmodel.wrapper;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
-import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2;
 import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2.Mode;
 import org.apache.isis.progmodel.wrapper.applib.DisabledException;
 import org.apache.isis.progmodel.wrapper.applib.WrapperFactory;
-import org.apache.isis.progmodel.wrapper.dom.claim.ClaimRepository;
-import org.apache.isis.progmodel.wrapper.dom.claim.ClaimRepositoryImpl;
 import org.apache.isis.progmodel.wrapper.dom.employee.Employee;
-import org.apache.isis.progmodel.wrapper.dom.employee.EmployeeRepository;
-import org.apache.isis.progmodel.wrapper.dom.employee.EmployeeRepositoryImpl;
 import org.apache.isis.progmodel.wrapper.metamodel.internal.WrapperFactoryDefault;
 import org.jmock.auto.Mock;
 import org.junit.Before;
@@ -45,58 +40,52 @@ public class WrappedFactoryDefaultTest_wrappedObject_transient {
     public final JUnitRuleMockery2 mockery = JUnitRuleMockery2.createFor(Mode.INTERFACES_ONLY);
 
     @Mock
-    //private AuthenticationSession mockAuthenticationSession;
-
-    //private EmployeeRepository employeeRepository;
-    //private ClaimRepository claimRepository;
-    
+    // private AuthenticationSession mockAuthenticationSession;
+    // private EmployeeRepository employeeRepository;
+    // private ClaimRepository claimRepository;
     private Employee employeeDO;
     private Employee employeeWO;
 
     private WrapperFactory wrapperFactory;
 
-    
     @Before
     public void setUp() {
 
-        //employeeRepository = new EmployeeRepositoryImpl();
-        //claimRepository = new ClaimRepositoryImpl();
+        // employeeRepository = new EmployeeRepositoryImpl();
+        // claimRepository = new ClaimRepositoryImpl();
 
         employeeDO = new Employee();
         employeeDO.setName("Smith");
-        //employeeDO.setEmployeeRepository(employeeRepository); // would be done by the EmbeddedContext impl
+        // employeeDO.setEmployeeRepository(employeeRepository); // would be
+        // done by the EmbeddedContext impl
 
         wrapperFactory = new WrapperFactoryDefault();
 
         employeeWO = wrapperFactory.wrap(employeeDO);
     }
 
-
     @Ignore("TODO - moved from embedded runtime, need to re-enable")
     @Test(expected = DisabledException.class)
     public void shouldNotBeAbleToModifyPropertyIfPersistent() {
-        
+
         // given
-        //initializedMetaModelWhereEmployeeIs(PersistenceState.PERSISTENT);
-        
+        // initializedMetaModelWhereEmployeeIs(PersistenceState.PERSISTENT);
+
         // when
         employeeWO.setPassword("12345678");
         // then should throw exception
     }
 
-
     @Ignore("TODO - moved from embedded runtime, need to re-enable")
     @Test
     public void canModifyPropertyIfTransient() {
         // given
-        //initializedMetaModelWhereEmployeeIs(PersistenceState.TRANSIENT);
-        
+        // initializedMetaModelWhereEmployeeIs(PersistenceState.TRANSIENT);
+
         // when
         employeeWO.setPassword("12345678");
         // then be allowed
         assertThat(employeeWO.getPassword(), is("12345678"));
     }
-
-    
 
 }

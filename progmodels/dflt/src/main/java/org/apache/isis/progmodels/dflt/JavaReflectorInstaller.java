@@ -80,7 +80,9 @@ public class JavaReflectorInstaller extends InstallerAbstract implements ObjectR
     // /////////////////////////////////////////////////////
 
     /**
-     * Should call {@link #addFacetDecoratorInstaller(ReflectorDecoratorInstaller)} prior to calling this.
+     * Should call
+     * {@link #addFacetDecoratorInstaller(ReflectorDecoratorInstaller)} prior to
+     * calling this.
      */
     @Override
     public ObjectReflectorDefault createReflector() {
@@ -92,30 +94,29 @@ public class JavaReflectorInstaller extends InstallerAbstract implements ObjectR
         final Set<FacetDecorator> facetDecorators = createFacetDecorators(getConfiguration());
         final MetaModelValidator metaModelValidator = createMetaModelValidator(getConfiguration());
 
-        final ObjectReflectorDefault reflector =
-            doCreateReflector(getConfiguration(), classSubstitutor, collectionTypeRegistry, specificationTraverser,
-                memberLayoutArranger, programmingModel, facetDecorators, metaModelValidator);
+        final ObjectReflectorDefault reflector = doCreateReflector(getConfiguration(), classSubstitutor, collectionTypeRegistry, specificationTraverser, memberLayoutArranger, programmingModel, facetDecorators, metaModelValidator);
 
         return reflector;
     }
 
     /**
-     * Hook method to allow subclasses to specify a different implementation of {@link ClassSubstitutor}.
+     * Hook method to allow subclasses to specify a different implementation of
+     * {@link ClassSubstitutor}.
      * 
      * <p>
-     * By default, looks up implementation from provided {@link IsisConfiguration} using
-     * {@link ReflectorConstants#CLASS_SUBSTITUTOR_CLASS_NAME_LIST}. If not specified, then defaults to
+     * By default, looks up implementation from provided
+     * {@link IsisConfiguration} using
+     * {@link ReflectorConstants#CLASS_SUBSTITUTOR_CLASS_NAME_LIST}. If not
+     * specified, then defaults to
      * {@value ReflectorConstants#CLASS_SUBSTITUTOR_CLASS_NAME_DEFAULT}.
      * 
      * <p>
      * 
      */
     protected ClassSubstitutor createClassSubstitutor(final IsisConfiguration configuration) {
-        final String[] configuredClassNames =
-            configuration.getList(ReflectorConstants.CLASS_SUBSTITUTOR_CLASS_NAME_LIST);
+        final String[] configuredClassNames = configuration.getList(ReflectorConstants.CLASS_SUBSTITUTOR_CLASS_NAME_LIST);
         if (configuredClassNames == null || configuredClassNames.length == 0) {
-            return InstanceUtil.createInstance(ReflectorConstants.CLASS_SUBSTITUTOR_CLASS_NAME_DEFAULT,
-                ClassSubstitutor.class);
+            return InstanceUtil.createInstance(ReflectorConstants.CLASS_SUBSTITUTOR_CLASS_NAME_DEFAULT, ClassSubstitutor.class);
         }
         final List<ClassSubstitutor> substitutors = Lists.newArrayList();
         for (final String className : configuredClassNames) {
@@ -126,52 +127,56 @@ public class JavaReflectorInstaller extends InstallerAbstract implements ObjectR
     }
 
     /**
-     * Hook method to allow subclasses to specify a different implementation of {@link SpecificationTraverser}.
+     * Hook method to allow subclasses to specify a different implementation of
+     * {@link SpecificationTraverser}.
      * 
      * <p>
-     * By default, looks up implementation from provided {@link IsisConfiguration} using
-     * {@link ReflectorConstants#SPECIFICATION_TRAVERSER_CLASS_NAME}. If not specified, then defaults to
+     * By default, looks up implementation from provided
+     * {@link IsisConfiguration} using
+     * {@link ReflectorConstants#SPECIFICATION_TRAVERSER_CLASS_NAME}. If not
+     * specified, then defaults to
      * {@value ReflectorConstants#SPECIFICATION_TRAVERSER_CLASS_NAME_DEFAULT}.
      */
     protected SpecificationTraverser createSpecificationTraverser(final IsisConfiguration configuration) {
-        final String specificationTraverserClassName =
-            configuration.getString(ReflectorConstants.SPECIFICATION_TRAVERSER_CLASS_NAME,
-                ReflectorConstants.SPECIFICATION_TRAVERSER_CLASS_NAME_DEFAULT);
-        final SpecificationTraverser specificationTraverser =
-            InstanceUtil.createInstance(specificationTraverserClassName, SpecificationTraverser.class);
+        final String specificationTraverserClassName = configuration.getString(ReflectorConstants.SPECIFICATION_TRAVERSER_CLASS_NAME, ReflectorConstants.SPECIFICATION_TRAVERSER_CLASS_NAME_DEFAULT);
+        final SpecificationTraverser specificationTraverser = InstanceUtil.createInstance(specificationTraverserClassName, SpecificationTraverser.class);
         return specificationTraverser;
     }
 
     /**
-     * Hook method to allow subclasses to specify a different implementation of {@link MemberLayoutArranger}.
+     * Hook method to allow subclasses to specify a different implementation of
+     * {@link MemberLayoutArranger}.
      * 
      * <p>
-     * By default, looks up implementation from provided {@link IsisConfiguration} using
-     * {@link ReflectorConstants#MEMBER_LAYOUT_ARRANGER_CLASS_NAME}. If not specified, then defaults to
+     * By default, looks up implementation from provided
+     * {@link IsisConfiguration} using
+     * {@link ReflectorConstants#MEMBER_LAYOUT_ARRANGER_CLASS_NAME}. If not
+     * specified, then defaults to
      * {@value ReflectorConstants#MEMBER_LAYOUT_ARRANGER_CLASS_NAME_DEFAULT}.
      */
     protected MemberLayoutArranger createMemberLayoutArranger(final IsisConfiguration configuration) {
-        final String memberLayoutArrangerClassName =
-            configuration.getString(ReflectorConstants.MEMBER_LAYOUT_ARRANGER_CLASS_NAME,
-                ReflectorConstants.MEMBER_LAYOUT_ARRANGER_CLASS_NAME_DEFAULT);
-        final MemberLayoutArranger memberLayoutArranger =
-            InstanceUtil.createInstance(memberLayoutArrangerClassName, MemberLayoutArranger.class);
+        final String memberLayoutArrangerClassName = configuration.getString(ReflectorConstants.MEMBER_LAYOUT_ARRANGER_CLASS_NAME, ReflectorConstants.MEMBER_LAYOUT_ARRANGER_CLASS_NAME_DEFAULT);
+        final MemberLayoutArranger memberLayoutArranger = InstanceUtil.createInstance(memberLayoutArrangerClassName, MemberLayoutArranger.class);
         return memberLayoutArranger;
     }
 
     /**
-     * Hook method to allow subclasses to specify a different implementations (that is, sets of {@link ProgrammingModel}
-     * .
+     * Hook method to allow subclasses to specify a different implementations
+     * (that is, sets of {@link ProgrammingModel} .
      * 
      * <p>
-     * By default, looks up implementation from provided {@link IsisConfiguration} using
-     * {@link ReflectorConstants#PROGRAMMING_MODEL_FACETS_CLASS_NAME}. If not specified, then defaults to
+     * By default, looks up implementation from provided
+     * {@link IsisConfiguration} using
+     * {@link ReflectorConstants#PROGRAMMING_MODEL_FACETS_CLASS_NAME}. If not
+     * specified, then defaults to
      * {@value ReflectorConstants#PROGRAMMING_MODEL_FACETS_CLASS_NAME_DEFAULT}.
      * 
      * <p>
-     * The list of facets can be adjusted using {@link ReflectorConstants#FACET_FACTORY_INCLUDE_CLASS_NAME_LIST} to
+     * The list of facets can be adjusted using
+     * {@link ReflectorConstants#FACET_FACTORY_INCLUDE_CLASS_NAME_LIST} to
      * specify additional {@link FacetFactory factories} to include, and
-     * {@link ReflectorConstants#FACET_FACTORY_EXCLUDE_CLASS_NAME_LIST} to exclude.
+     * {@link ReflectorConstants#FACET_FACTORY_EXCLUDE_CLASS_NAME_LIST} to
+     * exclude.
      */
     protected ProgrammingModel createProgrammingModelFacets(final IsisConfiguration configuration) {
         final ProgrammingModel programmingModel = lookupAndCreateProgrammingModelFacets(configuration);
@@ -181,52 +186,50 @@ public class JavaReflectorInstaller extends InstallerAbstract implements ObjectR
     }
 
     private ProgrammingModel lookupAndCreateProgrammingModelFacets(final IsisConfiguration configuration) {
-        final String progModelFacetsClassName =
-            configuration.getString(ReflectorConstants.PROGRAMMING_MODEL_FACETS_CLASS_NAME,
-                ReflectorConstants.PROGRAMMING_MODEL_FACETS_CLASS_NAME_DEFAULT);
-        final ProgrammingModel programmingModel =
-            InstanceUtil.createInstance(progModelFacetsClassName, ProgrammingModel.class);
+        final String progModelFacetsClassName = configuration.getString(ReflectorConstants.PROGRAMMING_MODEL_FACETS_CLASS_NAME, ReflectorConstants.PROGRAMMING_MODEL_FACETS_CLASS_NAME_DEFAULT);
+        final ProgrammingModel programmingModel = InstanceUtil.createInstance(progModelFacetsClassName, ProgrammingModel.class);
         return programmingModel;
     }
 
     /**
-     * Factored out of {@link #createProgrammingModelFacets(IsisConfiguration)} so that subclasses that choose to
-     * override can still support customization of their {@link ProgrammingModel} in a similar way.
+     * Factored out of {@link #createProgrammingModelFacets(IsisConfiguration)}
+     * so that subclasses that choose to override can still support
+     * customization of their {@link ProgrammingModel} in a similar way.
      */
     protected void includeFacetFactories(final IsisConfiguration configuration, final ProgrammingModel programmingModel) {
-        final String[] facetFactoriesIncludeClassNames =
-            configuration.getList(ReflectorConstants.FACET_FACTORY_INCLUDE_CLASS_NAME_LIST);
+        final String[] facetFactoriesIncludeClassNames = configuration.getList(ReflectorConstants.FACET_FACTORY_INCLUDE_CLASS_NAME_LIST);
         if (facetFactoriesIncludeClassNames != null) {
             for (final String facetFactoryClassName : facetFactoriesIncludeClassNames) {
-                final Class<? extends FacetFactory> facetFactory =
-                    InstanceUtil.loadClass(facetFactoryClassName, FacetFactory.class);
+                final Class<? extends FacetFactory> facetFactory = InstanceUtil.loadClass(facetFactoryClassName, FacetFactory.class);
                 programmingModel.addFactory(facetFactory);
             }
         }
     }
 
     /**
-     * Factored out of {@link #createProgrammingModelFacets(IsisConfiguration)} so that subclasses that choose to
-     * override can still support customization of their {@link ProgrammingModel} in a similar way.
+     * Factored out of {@link #createProgrammingModelFacets(IsisConfiguration)}
+     * so that subclasses that choose to override can still support
+     * customization of their {@link ProgrammingModel} in a similar way.
      */
     protected void excludeFacetFactories(final IsisConfiguration configuration, final ProgrammingModel programmingModel) {
-        final String[] facetFactoriesExcludeClassNames =
-            configuration.getList(ReflectorConstants.FACET_FACTORY_EXCLUDE_CLASS_NAME_LIST);
+        final String[] facetFactoriesExcludeClassNames = configuration.getList(ReflectorConstants.FACET_FACTORY_EXCLUDE_CLASS_NAME_LIST);
         for (final String facetFactoryClassName : facetFactoriesExcludeClassNames) {
-            final Class<? extends FacetFactory> facetFactory =
-                InstanceUtil.loadClass(facetFactoryClassName, FacetFactory.class);
+            final Class<? extends FacetFactory> facetFactory = InstanceUtil.loadClass(facetFactoryClassName, FacetFactory.class);
             programmingModel.removeFactory(facetFactory);
         }
     }
 
     /**
-     * Hook method to allow subclasses to specify a different sets of {@link FacetDecorator}s.
+     * Hook method to allow subclasses to specify a different sets of
+     * {@link FacetDecorator}s.
      * 
      * <p>
-     * By default, returns the {@link FacetDecorator}s that are specified in the {@link IsisConfiguration} (using
-     * {@link ReflectorConstants#FACET_DECORATOR_CLASS_NAMES}) along with any {@link FacetDecorator}s explicitly
-     * registered using {@link #addFacetDecoratorInstaller(FacetDecoratorInstaller)}. created using the
-     * {@link FacetDecoratorInstaller}s.
+     * By default, returns the {@link FacetDecorator}s that are specified in the
+     * {@link IsisConfiguration} (using
+     * {@link ReflectorConstants#FACET_DECORATOR_CLASS_NAMES}) along with any
+     * {@link FacetDecorator}s explicitly registered using
+     * {@link #addFacetDecoratorInstaller(FacetDecoratorInstaller)}. created
+     * using the {@link FacetDecoratorInstaller}s.
      */
     protected Set<FacetDecorator> createFacetDecorators(final IsisConfiguration configuration) {
         addFacetDecoratorInstallers(configuration);
@@ -261,46 +264,46 @@ public class JavaReflectorInstaller extends InstallerAbstract implements ObjectR
     }
 
     /**
-     * Hook method to allow subclasses to specify a different implementation of {@link MetaModelValidator}.
+     * Hook method to allow subclasses to specify a different implementation of
+     * {@link MetaModelValidator}.
      * 
      * <p>
-     * By default, looks up implementation from provided {@link IsisConfiguration} using
-     * {@link ReflectorConstants#META_MODEL_VALIDATOR_CLASS_NAME}. If not specified, then defaults to
+     * By default, looks up implementation from provided
+     * {@link IsisConfiguration} using
+     * {@link ReflectorConstants#META_MODEL_VALIDATOR_CLASS_NAME}. If not
+     * specified, then defaults to
      * {@value ReflectorConstants#META_MODEL_VALIDATOR_CLASS_NAME_DEFAULT}.
      */
     protected MetaModelValidator createMetaModelValidator(final IsisConfiguration configuration) {
-        final String metaModelValidatorClassName =
-            configuration.getString(ReflectorConstants.META_MODEL_VALIDATOR_CLASS_NAME,
-                ReflectorConstants.META_MODEL_VALIDATOR_CLASS_NAME_DEFAULT);
-        final MetaModelValidator metaModelValidator =
-            InstanceUtil.createInstance(metaModelValidatorClassName, MetaModelValidator.class);
+        final String metaModelValidatorClassName = configuration.getString(ReflectorConstants.META_MODEL_VALIDATOR_CLASS_NAME, ReflectorConstants.META_MODEL_VALIDATOR_CLASS_NAME_DEFAULT);
+        final MetaModelValidator metaModelValidator = InstanceUtil.createInstance(metaModelValidatorClassName, MetaModelValidator.class);
         return metaModelValidator;
     }
 
     /**
-     * Creates the {@link CollectionTypeRegistry}, hardcoded to be the {@link CollectionTypeRegistryDefault}.
+     * Creates the {@link CollectionTypeRegistry}, hardcoded to be the
+     * {@link CollectionTypeRegistryDefault}.
      * 
      * <p>
-     * Note: the intention is to remove this interface and instead to use a mechanism similar to the <tt>@Value</tt>
-     * annotation to specify which types represent collections. For now, have factored out this method similar to be
-     * similar to the creation methods of other subcomponents such as the
-     * {@link #createClassSubstitutor(IsisConfiguration) ClassSubstitutor}. Note however that this method is
-     * <tt>final</tt> so that it cannot be overridden.
+     * Note: the intention is to remove this interface and instead to use a
+     * mechanism similar to the <tt>@Value</tt> annotation to specify which
+     * types represent collections. For now, have factored out this method
+     * similar to be similar to the creation methods of other subcomponents such
+     * as the {@link #createClassSubstitutor(IsisConfiguration)
+     * ClassSubstitutor}. Note however that this method is <tt>final</tt> so
+     * that it cannot be overridden.
      */
     protected final CollectionTypeRegistry createCollectionTypeRegistry(final IsisConfiguration configuration) {
         return new CollectionTypeRegistryDefault();
     }
 
     /**
-     * Hook method to allow for other implementations (still based on {@link ObjectReflectorDefault}).
+     * Hook method to allow for other implementations (still based on
+     * {@link ObjectReflectorDefault}).
      */
-    protected ObjectReflectorDefault doCreateReflector(final IsisConfiguration configuration,
-        final ClassSubstitutor classSubstitutor, final CollectionTypeRegistry collectionTypeRegistry,
-        final SpecificationTraverser specificationTraverser, final MemberLayoutArranger memberLayoutArranger,
-        final ProgrammingModel programmingModel, final Set<FacetDecorator> facetDecorators,
-        final MetaModelValidator metaModelValidator) {
-        return new ObjectReflectorDefault(configuration, classSubstitutor, collectionTypeRegistry,
-            specificationTraverser, memberLayoutArranger, programmingModel, facetDecorators, metaModelValidator);
+    protected ObjectReflectorDefault doCreateReflector(final IsisConfiguration configuration, final ClassSubstitutor classSubstitutor, final CollectionTypeRegistry collectionTypeRegistry, final SpecificationTraverser specificationTraverser, final MemberLayoutArranger memberLayoutArranger,
+            final ProgrammingModel programmingModel, final Set<FacetDecorator> facetDecorators, final MetaModelValidator metaModelValidator) {
+        return new ObjectReflectorDefault(configuration, classSubstitutor, collectionTypeRegistry, specificationTraverser, memberLayoutArranger, programmingModel, facetDecorators, metaModelValidator);
     }
 
     // /////////////////////////////////////////////////////
@@ -320,8 +323,8 @@ public class JavaReflectorInstaller extends InstallerAbstract implements ObjectR
     // /////////////////////////////////////////////////////
 
     /**
-     * Adds in {@link FacetDecoratorInstaller}; if <tt>null</tt> or if already added then request will be silently
-     * ignored.
+     * Adds in {@link FacetDecoratorInstaller}; if <tt>null</tt> or if already
+     * added then request will be silently ignored.
      */
     @Override
     public void addFacetDecoratorInstaller(final FacetDecoratorInstaller decoratorInstaller) {

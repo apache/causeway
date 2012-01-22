@@ -55,16 +55,14 @@ public class CgLibProxy<T> {
             interfaces.remove(Factory.class); // if there.
             interfaces.add(WrapperObject.class);
 
-            return (T) Enhancer.create(origSuperclass, interfaces.toArray(new Class[] {}),
-                new InvocationHandlerMethodInterceptor(handler));
+            return (T) Enhancer.create(origSuperclass, interfaces.toArray(new Class[] {}), new InvocationHandlerMethodInterceptor(handler));
         }
 
         final Class<T> clazz = (Class<T>) toProxy.getClass();
 
         T proxy = null;
         try {
-            final IProxyFactory<T> proxyFactory =
-                clazz.isInterface() ? new JavaProxyFactory<T>() : new CgLibClassProxyFactory<T>();
+            final IProxyFactory<T> proxyFactory = clazz.isInterface() ? new JavaProxyFactory<T>() : new CgLibClassProxyFactory<T>();
             proxy = proxyFactory.createProxy(clazz, handler);
         } catch (final RuntimeExceptionWrapper e) {
             throw (RuntimeException) e.getRuntimeException().fillInStackTrace();
