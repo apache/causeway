@@ -39,7 +39,8 @@ public abstract class MaxLengthFacetAbstract extends SingleIntValueFacetAbstract
     }
 
     /**
-     * Whether the provided argument exceeds the {@link #value() maximum length}.
+     * Whether the provided argument exceeds the {@link #value() maximum length}
+     * .
      */
     @Override
     public boolean exceeds(final ObjectAdapter adapter) {

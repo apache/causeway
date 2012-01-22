@@ -33,7 +33,7 @@ public final class CallbackUtils {
         if (facet != null) {
             try {
                 facet.invoke(object);
-            } catch (RuntimeException e) {
+            } catch (final RuntimeException e) {
                 throw new DomainModelException("Callback failed.  Calling " + facet + " on " + object, e);
             }
         }

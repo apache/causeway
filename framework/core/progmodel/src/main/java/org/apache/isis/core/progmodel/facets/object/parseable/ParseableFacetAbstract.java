@@ -36,17 +36,13 @@ public abstract class ParseableFacetAbstract extends FacetAbstract implements Pa
     // to delegate to
     private final ParseableFacetUsingParser parseableFacetUsingParser;
 
-    public ParseableFacetAbstract(final String candidateParserName, final Class<?> candidateParserClass,
-        final FacetHolder holder, final AuthenticationSessionProvider authenticationSessionProvider,
-        final DependencyInjector dependencyInjector, final AdapterMap adapterManager) {
+    public ParseableFacetAbstract(final String candidateParserName, final Class<?> candidateParserClass, final FacetHolder holder, final AuthenticationSessionProvider authenticationSessionProvider, final DependencyInjector dependencyInjector, final AdapterMap adapterManager) {
         super(ParseableFacet.class, holder, false);
 
         this.parserClass = ParserUtil.parserOrNull(candidateParserClass, candidateParserName);
         if (isValid()) {
             final Parser parser = (Parser) ClassUtil.newInstance(parserClass, FacetHolder.class, holder);
-            this.parseableFacetUsingParser =
-                new ParseableFacetUsingParser(parser, holder, authenticationSessionProvider, dependencyInjector,
-                    adapterManager);
+            this.parseableFacetUsingParser = new ParseableFacetUsingParser(parser, holder, authenticationSessionProvider, dependencyInjector, adapterManager);
         } else {
             this.parseableFacetUsingParser = null;
         }
@@ -60,7 +56,8 @@ public abstract class ParseableFacetAbstract extends FacetAbstract implements Pa
     }
 
     /**
-     * Guaranteed to implement the {@link Parser} class, thanks to generics in the applib.
+     * Guaranteed to implement the {@link Parser} class, thanks to generics in
+     * the applib.
      */
     public Class<?> getParserClass() {
         return parserClass;

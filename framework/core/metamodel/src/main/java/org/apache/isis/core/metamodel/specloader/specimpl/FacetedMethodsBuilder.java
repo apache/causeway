@@ -67,14 +67,12 @@ public class FacetedMethodsBuilder {
         }
 
         @Override
-        public void removeMethod(final MethodScope methodScope, final String methodName, final Class<?> returnType,
-            final Class<?>[] parameterTypes) {
+        public void removeMethod(final MethodScope methodScope, final String methodName, final Class<?> returnType, final Class<?>[] parameterTypes) {
             MethodFinderUtils.removeMethod(methods, methodScope, methodName, returnType, parameterTypes);
         }
 
         @Override
-        public List<Method> removeMethods(final MethodScope methodScope, final String prefix,
-            final Class<?> returnType, final boolean canBeVoid, final int paramCount) {
+        public List<Method> removeMethods(final MethodScope methodScope, final String prefix, final Class<?> returnType, final boolean canBeVoid, final int paramCount) {
             return MethodFinderUtils.removeMethods(methods, methodScope, prefix, returnType, canBeVoid, paramCount);
         }
 
@@ -131,8 +129,7 @@ public class FacetedMethodsBuilder {
     // Constructor & finalize
     // ////////////////////////////////////////////////////////////////////////////
 
-    public FacetedMethodsBuilder(final ObjectSpecificationAbstract spec,
-        final FacetedMethodsBuilderContext facetedMethodsBuilderContext) {
+    public FacetedMethodsBuilder(final ObjectSpecificationAbstract spec, final FacetedMethodsBuilderContext facetedMethodsBuilderContext) {
         if (LOG.isDebugEnabled()) {
             LOG.debug("creating JavaIntrospector for " + spec.getFullIdentifier());
         }
@@ -179,7 +176,8 @@ public class FacetedMethodsBuilder {
         // this will also remove some methods, such as the superclass methods.
         getFacetProcessor().process(introspectedClass, methodRemover, spec);
 
-        // if this class has additional facets (as per @Facets), then process them.
+        // if this class has additional facets (as per @Facets), then process
+        // them.
         final FacetsFacet facetsFacet = spec.getFacet(FacetsFacet.class);
         if (facetsFacet != null) {
             final Class<? extends FacetFactory>[] facetFactories = facetsFacet.facetFactories();
@@ -203,8 +201,8 @@ public class FacetedMethodsBuilder {
     // ////////////////////////////////////////////////////////////////////////////
 
     /**
-     * Returns a {@link List} of {@link FacetedMethod}s representing object actions, lazily creating them first if
-     * required.
+     * Returns a {@link List} of {@link FacetedMethod}s representing object
+     * actions, lazily creating them first if required.
      */
     public List<FacetedMethod> getAssociationFacetedMethods() {
         if (associationFacetMethods == null) {
@@ -217,8 +215,7 @@ public class FacetedMethodsBuilder {
         if (LOG.isDebugEnabled()) {
             LOG.debug("introspecting " + getClassName() + ": properties and collections");
         }
-        final Set<Method> associationCandidateMethods =
-            getFacetProcessor().findAssociationCandidateAccessors(methods, new HashSet<Method>());
+        final Set<Method> associationCandidateMethods = getFacetProcessor().findAssociationCandidateAccessors(methods, new HashSet<Method>());
 
         // Ensure all return types are known
         final List<Class<?>> typesToLoad = Lists.newArrayList();
@@ -236,16 +233,15 @@ public class FacetedMethodsBuilder {
         return Collections.unmodifiableList(associationFacetedMethods);
     }
 
-    private void findAndRemoveCollectionAccessorsAndCreateCorrespondingFacetedMethods(
-        final List<FacetedMethod> associationPeers) {
+    private void findAndRemoveCollectionAccessorsAndCreateCorrespondingFacetedMethods(final List<FacetedMethod> associationPeers) {
         final List<Method> collectionAccessors = Lists.newArrayList();
         getFacetProcessor().findAndRemoveCollectionAccessors(methodRemover, collectionAccessors);
         createCollectionFacetedMethodsFromAccessors(collectionAccessors, associationPeers);
     }
 
     /**
-     * Since the value properties and collections have already been processed, this will pick up the remaining reference
-     * properties.
+     * Since the value properties and collections have already been processed,
+     * this will pick up the remaining reference properties.
      */
     private void findAndRemovePropertyAccessorsAndCreateCorrespondingFacetedMethods(final List<FacetedMethod> fields) {
         final List<Method> propertyAccessors = Lists.newArrayList();
@@ -257,18 +253,15 @@ public class FacetedMethodsBuilder {
         createPropertyFacetedMethodsFromAccessors(propertyAccessors, fields);
     }
 
-    private void createCollectionFacetedMethodsFromAccessors(final List<Method> accessorMethods,
-        final List<FacetedMethod> facetMethodsToAppendto) {
+    private void createCollectionFacetedMethodsFromAccessors(final List<Method> accessorMethods, final List<FacetedMethod> facetMethodsToAppendto) {
         for (final Method accessorMethod : accessorMethods) {
             if (LOG.isDebugEnabled()) {
                 LOG.debug("  identified accessor method representing collection: " + accessorMethod);
             }
 
             // create property and add facets
-            final FacetedMethod facetedMethod =
-                FacetedMethod.createCollectionFacetedMethod(introspectedClass, accessorMethod);
-            getFacetProcessor().process(introspectedClass, accessorMethod, methodRemover, facetedMethod,
-                FeatureType.COLLECTION);
+            final FacetedMethod facetedMethod = FacetedMethod.createCollectionFacetedMethod(introspectedClass, accessorMethod);
+            getFacetProcessor().process(introspectedClass, accessorMethod, methodRemover, facetedMethod, FeatureType.COLLECTION);
 
             // figure out what the type is
             Class<?> elementType = Object.class;
@@ -287,8 +280,7 @@ public class FacetedMethodsBuilder {
         }
     }
 
-    private void createPropertyFacetedMethodsFromAccessors(final List<Method> accessorMethods,
-        final List<FacetedMethod> facetedMethodsToAppendto) throws MetaModelException {
+    private void createPropertyFacetedMethodsFromAccessors(final List<Method> accessorMethods, final List<FacetedMethod> facetedMethodsToAppendto) throws MetaModelException {
 
         for (final Method accessorMethod : accessorMethods) {
             LOG.debug("  identified accessor method representing property: " + accessorMethod);
@@ -301,12 +293,10 @@ public class FacetedMethodsBuilder {
             }
 
             // create a 1:1 association peer
-            final FacetedMethod facetedMethod =
-                FacetedMethod.createPropertyFacetedMethod(introspectedClass, accessorMethod);
+            final FacetedMethod facetedMethod = FacetedMethod.createPropertyFacetedMethod(introspectedClass, accessorMethod);
 
             // process facets for the 1:1 association
-            getFacetProcessor().process(introspectedClass, accessorMethod, methodRemover, facetedMethod,
-                FeatureType.PROPERTY);
+            getFacetProcessor().process(introspectedClass, accessorMethod, methodRemover, facetedMethod, FeatureType.PROPERTY);
 
             facetedMethodsToAppendto.add(facetedMethod);
         }
@@ -317,8 +307,8 @@ public class FacetedMethodsBuilder {
     // ////////////////////////////////////////////////////////////////////////////
 
     /**
-     * Returns a {@link List} of {@link FacetedMethod}s representing object actions, lazily creating them first if
-     * required.
+     * Returns a {@link List} of {@link FacetedMethod}s representing object
+     * actions, lazily creating them first if required.
      */
     public List<FacetedMethod> getActionFacetedMethods() {
         if (actionFacetedMethods == null) {
@@ -344,15 +334,12 @@ public class FacetedMethodsBuilder {
         if (LOG.isDebugEnabled()) {
             LOG.debug("introspecting " + getClassName() + ": actions");
         }
-        final List<FacetedMethod> actionFacetedMethods1 =
-            findActionFacetedMethods(methodScope, RecognisedHelpersStrategy.SKIP);
-        final List<FacetedMethod> actionFacetedMethods2 =
-            findActionFacetedMethods(methodScope, RecognisedHelpersStrategy.DONT_SKIP);
+        final List<FacetedMethod> actionFacetedMethods1 = findActionFacetedMethods(methodScope, RecognisedHelpersStrategy.SKIP);
+        final List<FacetedMethod> actionFacetedMethods2 = findActionFacetedMethods(methodScope, RecognisedHelpersStrategy.DONT_SKIP);
         return ListUtils.combine(actionFacetedMethods1, actionFacetedMethods2);
     }
 
-    private List<FacetedMethod> findActionFacetedMethods(final MethodScope methodScope,
-        final RecognisedHelpersStrategy recognisedHelpersStrategy) {
+    private List<FacetedMethod> findActionFacetedMethods(final MethodScope methodScope, final RecognisedHelpersStrategy recognisedHelpersStrategy) {
         if (LOG.isDebugEnabled()) {
             LOG.debug("  looking for action methods");
         }
@@ -374,8 +361,7 @@ public class FacetedMethodsBuilder {
         return actionFacetedMethods;
     }
 
-    private FacetedMethod findActionMethodPeer(final MethodScope methodScope,
-        final RecognisedHelpersStrategy recognisedHelpersStrategy, final Method actionMethod) {
+    private FacetedMethod findActionMethodPeer(final MethodScope methodScope, final RecognisedHelpersStrategy recognisedHelpersStrategy, final Method actionMethod) {
 
         if (!representsAction(actionMethod, methodScope, recognisedHelpersStrategy)) {
             return null;
@@ -413,8 +399,7 @@ public class FacetedMethodsBuilder {
         return true;
     }
 
-    private boolean representsAction(final Method actionMethod, final MethodScope methodScope,
-        final RecognisedHelpersStrategy recognisedHelpersStrategy) {
+    private boolean representsAction(final Method actionMethod, final MethodScope methodScope, final RecognisedHelpersStrategy recognisedHelpersStrategy) {
 
         if (!MethodFinderUtils.inScope(methodScope, actionMethod)) {
             return false;
@@ -471,26 +456,25 @@ public class FacetedMethodsBuilder {
     // ////////////////////////////////////////////////////////////////////////////
 
     /**
-     * As per {@link #findAndRemovePrefixedNonVoidMethods(boolean, String, Class, int)}, but appends to provided
-     * {@link List} (collecting parameter pattern).
+     * As per
+     * {@link #findAndRemovePrefixedNonVoidMethods(boolean, String, Class, int)}
+     * , but appends to provided {@link List} (collecting parameter pattern).
      */
-    private void findAndRemovePrefixedNonVoidMethods(final MethodScope methodScope, final String prefix,
-        final Class<?> returnType, final int paramCount, final List<Method> methodListToAppendTo) {
-        final List<Method> matchingMethods =
-            findAndRemovePrefixedMethods(methodScope, prefix, returnType, false, paramCount);
+    private void findAndRemovePrefixedNonVoidMethods(final MethodScope methodScope, final String prefix, final Class<?> returnType, final int paramCount, final List<Method> methodListToAppendTo) {
+        final List<Method> matchingMethods = findAndRemovePrefixedMethods(methodScope, prefix, returnType, false, paramCount);
         methodListToAppendTo.addAll(matchingMethods);
     }
 
     /**
-     * Searches for all methods matching the prefix and returns them, also removing it from the {@link #methods array of
-     * methods} if found.
+     * Searches for all methods matching the prefix and returns them, also
+     * removing it from the {@link #methods array of methods} if found.
      * 
      * @param objectFactory
      * 
-     * @see MethodFinderUtils#removeMethods(Method[], boolean, String, Class, boolean, int, ClassSubstitutor)
+     * @see MethodFinderUtils#removeMethods(Method[], boolean, String, Class,
+     *      boolean, int, ClassSubstitutor)
      */
-    private List<Method> findAndRemovePrefixedMethods(final MethodScope methodScope, final String prefix,
-        final Class<?> returnType, final boolean canBeVoid, final int paramCount) {
+    private List<Method> findAndRemovePrefixedMethods(final MethodScope methodScope, final String prefix, final Class<?> returnType, final boolean canBeVoid, final int paramCount) {
         return MethodFinderUtils.removeMethods(methods, methodScope, prefix, returnType, canBeVoid, paramCount);
     }
 

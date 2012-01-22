@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets;
 
 import java.lang.reflect.Method;
@@ -25,12 +24,11 @@ import java.util.List;
 
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 
-
 class Utils {
 
     protected static boolean contains(final Class<?>[] array, final Class<?> val) {
-        for (int i = 0; i < array.length; i++) {
-            if (array[i] == val) {
+        for (final Class<?> element : array) {
+            if (element == val) {
                 return true;
             }
         }
@@ -38,8 +36,8 @@ class Utils {
     }
 
     protected static boolean contains(final FeatureType[] array, final FeatureType val) {
-        for (int i = 0; i < array.length; i++) {
-            if (array[i] == val) {
+        for (final FeatureType element : array) {
+            if (element == val) {
                 return true;
             }
         }
@@ -65,4 +63,3 @@ class Utils {
     }
 
 }
-

@@ -34,7 +34,8 @@ import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.TypedHolder;
 
 /**
- * Central point for providing some kind of default for any {@link Facet}s required by the Apache Isis framework itself.
+ * Central point for providing some kind of default for any {@link Facet}s
+ * required by the Apache Isis framework itself.
  * 
  */
 public class FallbackFacetFactory extends FacetFactoryAbstract {
@@ -76,9 +77,10 @@ public class FallbackFacetFactory extends FacetFactoryAbstract {
         final TitleFacetNone titleFacet = new TitleFacetNone(facetHolder);
 
         final Facet[] facets = new Facet[] { describedAsFacet,
-            // commenting these out, think this whole isNoop business is a little bogus
-            // new ImmutableFacetNever(holder),
-            notPersistableFacet, titleFacet, };
+                // commenting these out, think this whole isNoop business is a
+                // little bogus
+                // new ImmutableFacetNever(holder),
+                notPersistableFacet, titleFacet, };
         FacetUtil.addFacets(facets);
     }
 

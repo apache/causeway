@@ -27,12 +27,14 @@ public final class NameUtils {
     }
 
     /**
-     * Returns the name of a Java entity without any prefix. A prefix is defined as the first set of lowercase letters
-     * and the name is characters from, and including, the first upper case letter. If no upper case letter is found
-     * then an empty string is returned.
+     * Returns the name of a Java entity without any prefix. A prefix is defined
+     * as the first set of lowercase letters and the name is characters from,
+     * and including, the first upper case letter. If no upper case letter is
+     * found then an empty string is returned.
      * 
      * <p>
-     * Calling this method with the following Java names will produce these results:
+     * Calling this method with the following Java names will produce these
+     * results:
      * 
      * <pre>
      *                     getCarRegistration        -&gt; CarRegistration
@@ -112,8 +114,9 @@ public final class NameUtils {
     }
 
     /**
-     * Returns a word spaced version of the specified name, so there are spaces between the words, where each word
-     * starts with a capital letter. E.g., "NextAvailableDate" is returned as "Next Available Date".
+     * Returns a word spaced version of the specified name, so there are spaces
+     * between the words, where each word starts with a capital letter. E.g.,
+     * "NextAvailableDate" is returned as "Next Available Date".
      */
     public static String naturalName(final String name) {
 
@@ -126,7 +129,9 @@ public final class NameUtils {
         final StringBuffer naturalName = new StringBuffer(length);
 
         char previousCharacter;
-        char character = Character.toUpperCase(name.charAt(0));// ensure first character is upper case
+        char character = Character.toUpperCase(name.charAt(0));// ensure first
+                                                               // character is
+                                                               // upper case
         naturalName.append(character);
         char nextCharacter = name.charAt(1);
 
@@ -139,8 +144,7 @@ public final class NameUtils {
                 if (Character.isUpperCase(character) && !Character.isUpperCase(previousCharacter)) {
                     naturalName.append(NameUtils.SPACE);
                 }
-                if (Character.isUpperCase(character) && Character.isLowerCase(nextCharacter)
-                    && Character.isUpperCase(previousCharacter)) {
+                if (Character.isUpperCase(character) && Character.isLowerCase(nextCharacter) && Character.isUpperCase(previousCharacter)) {
                     naturalName.append(NameUtils.SPACE);
                 }
                 if (Character.isDigit(character) && !Character.isDigit(previousCharacter)) {

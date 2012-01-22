@@ -29,8 +29,7 @@ import org.apache.isis.core.progmodel.facets.value.image.ImageValueSemanticsProv
 
 public class JavaAwtImageValueSemanticsProvider extends ImageValueSemanticsProviderAbstract<Image> {
 
-    public JavaAwtImageValueSemanticsProvider(final FacetHolder holder, final IsisConfiguration configuration,
-        final ValueSemanticsProviderContext context) {
+    public JavaAwtImageValueSemanticsProvider(final FacetHolder holder, final IsisConfiguration configuration, final ValueSemanticsProviderContext context) {
         super(holder, Image.class, configuration, context);
     }
 

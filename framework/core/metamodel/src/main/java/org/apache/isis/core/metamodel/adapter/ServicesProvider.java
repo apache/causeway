@@ -26,7 +26,8 @@ public interface ServicesProvider extends Injectable {
      * Provided by <tt>PersistenceSession</tt> when used by framework.
      * 
      * <p>
-     * Called by <tt>IntrospectableSpecification</tt>, <tt>JavaSpecification</tt>
+     * Called by <tt>IntrospectableSpecification</tt>,
+     * <tt>JavaSpecification</tt>
      */
     List<ObjectAdapter> getServices();
 

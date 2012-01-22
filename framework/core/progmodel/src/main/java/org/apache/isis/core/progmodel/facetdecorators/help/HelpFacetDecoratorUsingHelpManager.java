@@ -52,8 +52,7 @@ public class HelpFacetDecoratorUsingHelpManager extends FacetDecoratorAbstract i
 
         final String helpText = helpManager.getHelpText(identifier);
         if (helpText != null) {
-            final HelpFacetLookedUpViaHelpManager decoratingFacet =
-                new HelpFacetLookedUpViaHelpManager(helpText, facet.getFacetHolder());
+            final HelpFacetLookedUpViaHelpManager decoratingFacet = new HelpFacetLookedUpViaHelpManager(helpText, facet.getFacetHolder());
             identifiedHolder.addFacet(decoratingFacet);
             return decoratingFacet;
         }

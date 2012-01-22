@@ -31,7 +31,7 @@ public class NotInServiceMenuFacetAnnotation extends NotInServiceMenuFacetAbstra
     }
 
     @Override
-    public String hides(VisibilityContext<? extends VisibilityEvent> ic) {
+    public String hides(final VisibilityContext<? extends VisibilityEvent> ic) {
         return "@NotInServiceMenu annotation present";
     }
 

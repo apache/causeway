@@ -28,14 +28,14 @@ import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProvider
 public class ByteWrapperValueSemanticsProvider extends ByteValueSemanticsProviderAbstract {
 
     /**
-     * Required because implementation of {@link Parser} and {@link EncoderDecoder}.
+     * Required because implementation of {@link Parser} and
+     * {@link EncoderDecoder}.
      */
     public ByteWrapperValueSemanticsProvider() {
         this(null, null, null);
     }
 
-    public ByteWrapperValueSemanticsProvider(final FacetHolder holder, final IsisConfiguration configuration,
-        final ValueSemanticsProviderContext context) {
+    public ByteWrapperValueSemanticsProvider(final FacetHolder holder, final IsisConfiguration configuration, final ValueSemanticsProviderContext context) {
         super(holder, Byte.class, configuration, context);
     }
 

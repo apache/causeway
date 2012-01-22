@@ -22,49 +22,48 @@ package org.apache.isis.core.testsupport.jmock;
 import org.jmock.Expectations;
 import org.jmock.integration.junit4.JUnitRuleMockery;
 import org.jmock.lib.legacy.ClassImposteriser;
-import org.junit.runners.model.FrameworkMethod;
-import org.junit.runners.model.Statement;
 
 /**
- * Use as a <tt>@Rule</tt>, meaning that the <tt>@RunWith(JMock.class)</tt>
- * can be ignored.
+ * Use as a <tt>@Rule</tt>, meaning that the <tt>@RunWith(JMock.class)</tt> can
+ * be ignored.
  * 
  * <pre>
  * public class MyTest {
  * 
- *     @Rule
+ *     &#064;Rule
  *     public final Junit4Mockery2 context = Junit4Mockery2.createFor(Mode.INTERFACES);
- *
+ * 
  * }
  * </pre>
  * 
  * <p>
- * The class also adds some convenience methods, and uses a factory method
- * to make it explicit whether the context can mock only interfaces or
- * interfaces and classes.
+ * The class also adds some convenience methods, and uses a factory method to
+ * make it explicit whether the context can mock only interfaces or interfaces
+ * and classes.
  */
 public class JUnitRuleMockery2 extends JUnitRuleMockery {
-    
+
     public static enum Mode {
-        INTERFACES_ONLY,
-        INTERFACES_AND_CLASSES;
+        INTERFACES_ONLY, INTERFACES_AND_CLASSES;
     }
 
     /**
      * Factory method.
      */
-    public static JUnitRuleMockery2 createFor(Mode mode) {
-        JUnitRuleMockery2 jUnitRuleMockery2 = new JUnitRuleMockery2();
-        if(mode == Mode.INTERFACES_AND_CLASSES) {
+    public static JUnitRuleMockery2 createFor(final Mode mode) {
+        final JUnitRuleMockery2 jUnitRuleMockery2 = new JUnitRuleMockery2();
+        if (mode == Mode.INTERFACES_AND_CLASSES) {
             jUnitRuleMockery2.setImposteriser(ClassImposteriser.INSTANCE);
         }
         return jUnitRuleMockery2;
     }
-    
-    private JUnitRuleMockery2() {}
-    
+
+    private JUnitRuleMockery2() {
+    }
+
     /**
-     * Ignoring any interaction with the mock; an allowing/ignoring mock will be returned in turn.
+     * Ignoring any interaction with the mock; an allowing/ignoring mock will be
+     * returned in turn.
      */
     public <T> T ignoring(final T mock) {
         checking(new Expectations() {
@@ -76,7 +75,8 @@ public class JUnitRuleMockery2 extends JUnitRuleMockery {
     }
 
     /**
-     * Allow any interaction with the mock; an allowing mock will be returned in turn.
+     * Allow any interaction with the mock; an allowing mock will be returned in
+     * turn.
      */
     public <T> T allowing(final T mock) {
         checking(new Expectations() {

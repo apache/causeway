@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.object.callback;
 
 import java.lang.reflect.Method;
@@ -33,7 +32,6 @@ import org.apache.isis.core.progmodel.facets.object.callbacks.persist.PersistCal
 import org.apache.isis.core.progmodel.facets.object.callbacks.persist.PersistedCallbackFacetViaMethod;
 import org.apache.isis.core.progmodel.facets.object.callbacks.persist.PersistingCallbackFacetViaMethod;
 
-
 public class PersistAndSaveCallbackFacetFactoryTest extends AbstractFacetFactoryTest {
 
     private PersistCallbackViaSaveMethodFacetFactory saveFacetFactory;
@@ -47,7 +45,6 @@ public class PersistAndSaveCallbackFacetFactoryTest extends AbstractFacetFactory
         persistFacetFactory = new PersistCallbackFacetFactory();
     }
 
-
     @Override
     protected void tearDown() throws Exception {
         saveFacetFactory = null;
@@ -58,9 +55,12 @@ public class PersistAndSaveCallbackFacetFactoryTest extends AbstractFacetFactory
     public void testSavingAndPersistingLifecycleMethodPickedUpOn() {
         class Customer {
             @SuppressWarnings("unused")
-			public void saving() {};
+            public void saving() {
+            };
+
             @SuppressWarnings("unused")
-			public void persisting() {};
+            public void persisting() {
+            };
         }
         final Method saveMethod = findMethod(Customer.class, "saving");
         final Method persistMethod = findMethod(Customer.class, "persisting");
@@ -72,9 +72,9 @@ public class PersistAndSaveCallbackFacetFactoryTest extends AbstractFacetFactory
         assertNotNull(facet);
         assertTrue(facet instanceof PersistingCallbackFacetViaMethod);
         final PersistingCallbackFacetViaMethod persistingCallbackFacetViaMethod = (PersistingCallbackFacetViaMethod) facet;
-        List<Method> methods = persistingCallbackFacetViaMethod.getMethods();
-		assertTrue(methods.contains(saveMethod));
-		assertTrue(methods.contains(persistMethod));
+        final List<Method> methods = persistingCallbackFacetViaMethod.getMethods();
+        assertTrue(methods.contains(saveMethod));
+        assertTrue(methods.contains(persistMethod));
 
         assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(saveMethod));
     }
@@ -82,9 +82,12 @@ public class PersistAndSaveCallbackFacetFactoryTest extends AbstractFacetFactory
     public void testSavedAndPersistedLifecycleMethodPickedUpOn() {
         class Customer {
             @SuppressWarnings("unused")
-			public void saved() {};
+            public void saved() {
+            };
+
             @SuppressWarnings("unused")
-			public void persisted() {};
+            public void persisted() {
+            };
         }
         final Method saveMethod = findMethod(Customer.class, "saved");
         final Method persistMethod = findMethod(Customer.class, "persisted");
@@ -96,12 +99,11 @@ public class PersistAndSaveCallbackFacetFactoryTest extends AbstractFacetFactory
         assertNotNull(facet);
         assertTrue(facet instanceof PersistedCallbackFacetViaMethod);
         final PersistedCallbackFacetViaMethod persistedCallbackFacetViaMethod = (PersistedCallbackFacetViaMethod) facet;
-        List<Method> methods = persistedCallbackFacetViaMethod.getMethods();
-		assertTrue(methods.contains(saveMethod));
-		assertTrue(methods.contains(persistMethod));
+        final List<Method> methods = persistedCallbackFacetViaMethod.getMethods();
+        assertTrue(methods.contains(saveMethod));
+        assertTrue(methods.contains(persistMethod));
 
         assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(saveMethod));
     }
 
 }
-

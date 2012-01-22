@@ -46,10 +46,8 @@ public abstract class TimeStampValueSemanticsProviderAbstract<T> extends ValueSe
     }
 
     @SuppressWarnings("unchecked")
-    public TimeStampValueSemanticsProviderAbstract(final FacetHolder holder, final Class<T> adaptedClass,
-        final IsisConfiguration configuration, final ValueSemanticsProviderContext context) {
-        super("timestamp", holder, adaptedClass, TYPICAL_LENGTH, IMMUTABLE, EQUAL_BY_CONTENT, (T) DEFAULT_VALUE,
-            configuration, context);
+    public TimeStampValueSemanticsProviderAbstract(final FacetHolder holder, final Class<T> adaptedClass, final IsisConfiguration configuration, final ValueSemanticsProviderContext context) {
+        super("timestamp", holder, adaptedClass, TYPICAL_LENGTH, IMMUTABLE, EQUAL_BY_CONTENT, (T) DEFAULT_VALUE, configuration, context);
         final String formatRequired = configuration.getString(ConfigurationConstants.ROOT + "value.format.timestamp");
         if (formatRequired == null) {
             format = formats().get(defaultFormat());
@@ -64,8 +62,7 @@ public abstract class TimeStampValueSemanticsProviderAbstract<T> extends ValueSe
     }
 
     @Override
-    protected T add(final T original, final int years, final int months, final int days, final int hours,
-        final int minutes) {
+    protected T add(final T original, final int years, final int months, final int days, final int hours, final int minutes) {
         return original;
     }
 

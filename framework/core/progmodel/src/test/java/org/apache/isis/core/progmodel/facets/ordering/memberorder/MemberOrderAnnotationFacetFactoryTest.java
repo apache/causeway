@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.ordering.memberorder;
 
 import java.lang.reflect.Method;
@@ -30,7 +29,6 @@ import org.apache.isis.core.metamodel.facets.members.order.MemberOrderFacet;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.progmodel.facets.members.order.MemberOrderAnnotationFacetFactory;
 import org.apache.isis.core.progmodel.facets.members.order.MemberOrderFacetAnnotation;
-
 
 public class MemberOrderAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 
@@ -48,7 +46,6 @@ public class MemberOrderAnnotationFacetFactoryTest extends AbstractFacetFactoryT
         facetFactory = null;
         super.tearDown();
     }
-
 
     public void testMemberOrderAnnotationPickedUpOnProperty() {
         class Customer {
@@ -72,7 +69,8 @@ public class MemberOrderAnnotationFacetFactoryTest extends AbstractFacetFactoryT
     }
 
     public void testMemberOrderAnnotationPickedUpOnCollection() {
-        class Order {}
+        class Order {
+        }
         class Customer {
             @SuppressWarnings("unused")
             @MemberOrder(sequence = "2")
@@ -80,7 +78,8 @@ public class MemberOrderAnnotationFacetFactoryTest extends AbstractFacetFactoryT
                 return null;
             }
 
-            public void addToOrders(final Order o) {}
+            public void addToOrders(final Order o) {
+            }
         }
         final Method method = findMethod(Customer.class, "getOrders");
 
@@ -99,7 +98,8 @@ public class MemberOrderAnnotationFacetFactoryTest extends AbstractFacetFactoryT
         class Customer {
             @SuppressWarnings("unused")
             @MemberOrder(sequence = "3")
-            public void someAction() {}
+            public void someAction() {
+            }
         }
         final Method method = findMethod(Customer.class, "someAction");
 
@@ -115,4 +115,3 @@ public class MemberOrderAnnotationFacetFactoryTest extends AbstractFacetFactoryT
     }
 
 }
-

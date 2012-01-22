@@ -41,8 +41,7 @@ public class PropertyChoicesFacetViaMethod extends PropertyChoicesFacetAbstract 
 
     private final AdapterMap adapterMap;
 
-    public PropertyChoicesFacetViaMethod(final Method method, final Class<?> choicesClass, final FacetHolder holder,
-        final SpecificationLookup specificationLookup, final AdapterMap adapterManager) {
+    public PropertyChoicesFacetViaMethod(final Method method, final Class<?> choicesClass, final FacetHolder holder, final SpecificationLookup specificationLookup, final AdapterMap adapterManager) {
         super(holder, specificationLookup);
         this.method = method;
         this.choicesClass = choicesClass;
@@ -50,7 +49,8 @@ public class PropertyChoicesFacetViaMethod extends PropertyChoicesFacetAbstract 
     }
 
     /**
-     * Returns a singleton list of the {@link Method} provided in the constructor.
+     * Returns a singleton list of the {@link Method} provided in the
+     * constructor.
      */
     @Override
     public List<Method> getMethods() {

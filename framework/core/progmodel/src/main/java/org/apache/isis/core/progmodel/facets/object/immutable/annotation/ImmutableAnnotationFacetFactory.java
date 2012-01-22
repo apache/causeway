@@ -26,7 +26,6 @@ import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.AnnotationBasedFacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.When;
-import org.apache.isis.core.metamodel.facets.hide.HiddenObjectFacet;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
@@ -41,14 +40,14 @@ public class ImmutableAnnotationFacetFactory extends AnnotationBasedFacetFactory
         final Immutable annotation = getAnnotation(processClassContaxt.getCls(), Immutable.class);
         FacetUtil.addFacet(create(annotation, processClassContaxt.getFacetHolder()));
     }
-    
+
     @Override
-    public void process(ProcessMethodContext processMethodContext) {
+    public void process(final ProcessMethodContext processMethodContext) {
         final FacetedMethod member = processMethodContext.getFacetHolder();
         final Class<?> owningClass = processMethodContext.getCls();
         final ObjectSpecification owningSpec = getSpecificationLookup().loadSpecification(owningClass);
         final ImmutableFacet facet = owningSpec.getFacet(ImmutableFacet.class);
-        if(facet != null) {
+        if (facet != null) {
             facet.copyOnto(member);
         }
     }

@@ -53,9 +53,7 @@ public class PropertyValidateFacetFactory extends MethodPrefixBasedFacetFactoryA
         final Class<?>[] paramTypes = new Class[] { returnType };
 
         final Class<?> cls = processMethodContext.getCls();
-        final Method method =
-            MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, MethodPrefixConstants.VALIDATE_PREFIX
-                + capitalizedName, String.class, paramTypes);
+        final Method method = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, MethodPrefixConstants.VALIDATE_PREFIX + capitalizedName, String.class, paramTypes);
         if (method == null) {
             return;
         }

@@ -53,17 +53,14 @@ public class PropertyOptionalFacetFactory extends MethodPrefixBasedFacetFactoryA
         final Class<?> returnType = method.getReturnType();
 
         final Class<?> cls = processMethodContext.getCls();
-        final Method optionalMethod =
-            MethodFinderUtils.findMethod(cls, MethodScope.CLASS, MethodPrefixConstants.OPTIONAL_PREFIX
-                + capitalizedName, boolean.class, NO_PARAMETERS_TYPES);
+        final Method optionalMethod = MethodFinderUtils.findMethod(cls, MethodScope.CLASS, MethodPrefixConstants.OPTIONAL_PREFIX + capitalizedName, boolean.class, NO_PARAMETERS_TYPES);
         processMethodContext.removeMethod(optionalMethod);
 
         if (!indicatesOptional(optionalMethod)) {
             return;
         }
         if (returnType.isPrimitive()) {
-            throw new MetaModelException(cls.getName() + "#" + capitalizedName
-                + " cannot be an optional property as it is of a primitive type");
+            throw new MetaModelException(cls.getName() + "#" + capitalizedName + " cannot be an optional property as it is of a primitive type");
         }
         final FacetHolder property = processMethodContext.getFacetHolder();
         FacetUtil.addFacet(new MandatoryFacetOptionalViaMethodForProperty(property));

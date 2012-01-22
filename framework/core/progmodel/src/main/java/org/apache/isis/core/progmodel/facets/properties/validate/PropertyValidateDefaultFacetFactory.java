@@ -30,9 +30,10 @@ import org.apache.isis.core.metamodel.specloader.facetprocessor.FacetProcessor;
  * Simply installs a {@link PropertyValidateFacet} onto all properties.
  * 
  * <p>
- * The idea is that this {@link FacetFactory} is included early on in the {@link FacetProcessor}, but other
- * {@link PropertyValidateFacet} implementations will potentially replace these where the property is annotated or
- * otherwise provides a validation mechanism.
+ * The idea is that this {@link FacetFactory} is included early on in the
+ * {@link FacetProcessor}, but other {@link PropertyValidateFacet}
+ * implementations will potentially replace these where the property is
+ * annotated or otherwise provides a validation mechanism.
  */
 public class PropertyValidateDefaultFacetFactory extends FacetFactoryAbstract {
 

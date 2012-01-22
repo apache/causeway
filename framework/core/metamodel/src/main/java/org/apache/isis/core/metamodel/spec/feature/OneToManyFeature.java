@@ -22,13 +22,13 @@ package org.apache.isis.core.metamodel.spec.feature;
 import java.util.Collection;
 import java.util.Queue;
 
-
 /**
  * Base interface for {@link OneToManyAssociation} only.
  * 
  * <p>
- * Introduced for symmetry with {@link OneToOneFeature}; if we ever support collections as parameters then would also be
- * the base interface for a <tt>OneToManyActionParameter</tt>.
+ * Introduced for symmetry with {@link OneToOneFeature}; if we ever support
+ * collections as parameters then would also be the base interface for a
+ * <tt>OneToManyActionParameter</tt>.
  * 
  * <p>
  * Is also the route up to the {@link ObjectFeature} superinterface.
@@ -37,21 +37,31 @@ import java.util.Queue;
 public interface OneToManyFeature extends ObjectFeature {
 
     public enum CollectionSemantics {
-        LIST,
-        ARRAY,
-        SET,
-        OTHER;
+        LIST, ARRAY, SET, OTHER;
 
         /**
          * The corresponding class is not a subclass of {@link Collection}.
          */
-        public boolean isArray() { return this == ARRAY; } 
-        public boolean isList() { return this == LIST; }
-        public boolean isSet() { return this == SET; }
+        public boolean isArray() {
+            return this == ARRAY;
+        }
+
+        public boolean isList() {
+            return this == LIST;
+        }
+
+        public boolean isSet() {
+            return this == SET;
+        }
+
         /**
-         * For example, {@link Queue}, or some other 3rdparty implementation of {@link Collection}.
+         * For example, {@link Queue}, or some other 3rdparty implementation of
+         * {@link Collection}.
          */
-        public boolean isOther() { return this == OTHER; }
+        public boolean isOther() {
+            return this == OTHER;
+        }
+
         public boolean isListOrArray() {
             return isList() || isArray();
         }

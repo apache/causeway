@@ -20,7 +20,8 @@
 package org.apache.isis.core.metamodel.spec.feature;
 
 /**
- * Modelled after {@link OneToOneAssociation} as a subinterface of {@link ObjectAssociation}.
+ * Modelled after {@link OneToOneAssociation} as a subinterface of
+ * {@link ObjectAssociation}.
  */
 public interface OneToOneActionParameter extends ObjectActionParameter, OneToOneFeature {
 

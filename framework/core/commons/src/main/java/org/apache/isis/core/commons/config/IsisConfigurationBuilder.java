@@ -29,10 +29,11 @@ import org.apache.isis.core.commons.resource.ResourceStreamSourceComposite;
  * Holds a mutable set of properties representing the configuration.
  * 
  * <p>
- * Mutable/immutable pair with the {@link IsisConfiguration}. To obtain the configuration, use
- * {@link #getConfiguration()}.
+ * Mutable/immutable pair with the {@link IsisConfiguration}. To obtain the
+ * configuration, use {@link #getConfiguration()}.
  * 
- * @see IsisConfiguration for more details on the mutable/immutable pair pattern.
+ * @see IsisConfiguration for more details on the mutable/immutable pair
+ *      pattern.
  */
 public interface IsisConfigurationBuilder extends Injectable {
 
@@ -48,7 +49,8 @@ public interface IsisConfigurationBuilder extends Injectable {
     public abstract void add(final String key, final String value);
 
     /**
-     * The underlying {@link ResourceStreamSource} from which the configuration is being read.
+     * The underlying {@link ResourceStreamSource} from which the configuration
+     * is being read.
      * 
      * <p>
      * Note that this may be a {@link ResourceStreamSourceComposite composite}.

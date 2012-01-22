@@ -24,8 +24,7 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
-public abstract class PropertyOrCollectionAccessorFacetAbstract extends FacetAbstract implements
-    PropertyOrCollectionAccessorFacet {
+public abstract class PropertyOrCollectionAccessorFacetAbstract extends FacetAbstract implements PropertyOrCollectionAccessorFacet {
 
     public static Class<? extends Facet> type() {
         return PropertyOrCollectionAccessorFacet.class;

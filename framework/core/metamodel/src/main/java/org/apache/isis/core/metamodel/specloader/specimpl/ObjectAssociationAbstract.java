@@ -35,8 +35,7 @@ public abstract class ObjectAssociationAbstract extends ObjectMemberAbstract imp
 
     private final ObjectSpecification specification;
 
-    public ObjectAssociationAbstract(final FacetedMethod facetedMethod, final FeatureType featureType,
-        final ObjectSpecification specification, final ObjectMemberContext parameterObject) {
+    public ObjectAssociationAbstract(final FacetedMethod facetedMethod, final FeatureType featureType, final ObjectSpecification specification, final ObjectMemberContext parameterObject) {
         super(facetedMethod, featureType, parameterObject);
         if (specification == null) {
             throw new IllegalArgumentException("field type for '" + getId() + "' must exist");
@@ -48,9 +47,10 @@ public abstract class ObjectAssociationAbstract extends ObjectMemberAbstract imp
     public abstract ObjectAdapter get(final ObjectAdapter fromObject);
 
     /**
-     * Return the specification of the object (or objects) that this field holds. For a value are one-to-one reference
-     * this will be type that the accessor returns. For a collection it will be the type of element, not the type of
-     * collection.
+     * Return the specification of the object (or objects) that this field
+     * holds. For a value are one-to-one reference this will be type that the
+     * accessor returns. For a collection it will be the type of element, not
+     * the type of collection.
      */
     @Override
     public ObjectSpecification getSpecification() {

@@ -25,8 +25,9 @@ import org.apache.isis.core.commons.resource.ResourceStreamSourceFileSystem;
 import org.apache.log4j.Logger;
 
 /**
- * Convenience implementation of {@link IsisConfigurationBuilder} that loads configuration resource from a specified
- * directory (or directories) on the filesystem.
+ * Convenience implementation of {@link IsisConfigurationBuilder} that loads
+ * configuration resource from a specified directory (or directories) on the
+ * filesystem.
  * 
  * @see ResourceStreamSourceFileSystem
  */

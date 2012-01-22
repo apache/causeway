@@ -17,17 +17,14 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
-import org.junit.Test;
-
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectAdapterUtils;
-
+import org.junit.Test;
 
 public class ObjectAdapterUtilsTest {
 
@@ -80,4 +77,3 @@ public class ObjectAdapterUtilsTest {
     }
 
 }
-

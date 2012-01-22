@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.runtime.logging;
 
 import java.io.BufferedReader;
@@ -31,7 +30,6 @@ import java.util.Properties;
 
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
-
 
 public class SnapshotServer {
     private static final String SNAPSHOT_PROPERTIES = "snapshot.properties";

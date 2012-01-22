@@ -32,22 +32,24 @@ public abstract class AnnotationBasedFacetFactoryAbstract extends FacetFactoryAb
     }
 
     /**
-     * Always returns <tt>false</tt>; {@link FacetFactory}s that look for annotations won't recognize methods with
-     * prefixes.
+     * Always returns <tt>false</tt>; {@link FacetFactory}s that look for
+     * annotations won't recognize methods with prefixes.
      */
     public boolean recognizes(final Method method) {
         return false;
     }
 
     /**
-     * For convenience of the several annotations that apply only to {@link String}s.
+     * For convenience of the several annotations that apply only to
+     * {@link String}s.
      */
     protected boolean isString(final Class<?> cls) {
         return cls.equals(String.class);
     }
 
     /**
-     * Searches for annotation on provided class, and if not found for the superclass.
+     * Searches for annotation on provided class, and if not found for the
+     * superclass.
      * 
      * <p>
      * Added to allow bytecode-mangling libraries such as CGLIB to be supported.
@@ -86,7 +88,8 @@ public abstract class AnnotationBasedFacetFactoryAbstract extends FacetFactoryAb
     }
 
     /**
-     * Searches for annotation on provided method, and if not found for any inherited methods up from the superclass.
+     * Searches for annotation on provided method, and if not found for any
+     * inherited methods up from the superclass.
      * 
      * <p>
      * Added to allow bytecode-mangling libraries such as CGLIB to be supported.
@@ -131,7 +134,8 @@ public abstract class AnnotationBasedFacetFactoryAbstract extends FacetFactoryAb
     }
 
     /**
-     * Searches for annotation on provided method, and if not found for any inherited methods up from the superclass.
+     * Searches for annotation on provided method, and if not found for any
+     * inherited methods up from the superclass.
      * 
      * <p>
      * Added to allow bytecode-mangling libraries such as CGLIB to be supported.
@@ -176,8 +180,8 @@ public abstract class AnnotationBasedFacetFactoryAbstract extends FacetFactoryAb
     }
 
     /**
-     * Searches for parameter annotations on provided method, and if not found for any inherited methods up from the
-     * superclass.
+     * Searches for parameter annotations on provided method, and if not found
+     * for any inherited methods up from the superclass.
      * 
      * <p>
      * Added to allow bytecode-mangling libraries such as CGLIB to be supported.

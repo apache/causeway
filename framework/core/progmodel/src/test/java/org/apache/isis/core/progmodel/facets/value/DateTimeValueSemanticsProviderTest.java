@@ -22,16 +22,15 @@ package org.apache.isis.core.progmodel.facets.value;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
+import org.apache.isis.applib.value.DateTime;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
+import org.apache.isis.core.progmodel.facets.value.datetime.DateTimeValueSemanticsProvider;
 import org.jmock.Expectations;
 import org.jmock.integration.junit4.JMock;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
-import org.apache.isis.applib.value.DateTime;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
-import org.apache.isis.core.progmodel.facets.value.datetime.DateTimeValueSemanticsProvider;
 
 @RunWith(JMock.class)
 public class DateTimeValueSemanticsProviderTest extends ValueSemanticsProviderAbstractTestCase {
@@ -76,8 +75,7 @@ public class DateTimeValueSemanticsProviderTest extends ValueSemanticsProviderAb
         // assertEquals("21-May-2007 10:30", adapter.titleString(null));
     }
 
-    private void assertEntry(final String entry, final int year, final int month, final int day, final int hour,
-        final int minute, final int second) {
+    private void assertEntry(final String entry, final int year, final int month, final int day, final int hour, final int minute, final int second) {
         final Object object = adapter.parseTextEntry(null, entry);
         assertEquals(new DateTime(year, month, day, hour, minute, second), object);
     }

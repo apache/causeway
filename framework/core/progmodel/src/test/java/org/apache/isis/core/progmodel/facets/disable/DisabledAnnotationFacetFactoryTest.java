@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.disable;
 
 import java.lang.reflect.Method;
@@ -31,7 +30,6 @@ import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.progmodel.facets.members.disable.DisabledFacet;
 import org.apache.isis.core.progmodel.facets.members.disable.DisabledFacetAbstract;
 import org.apache.isis.core.progmodel.facets.members.disable.annotation.DisabledAnnotationFacetFactory;
-
 
 public class DisabledAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 
@@ -49,7 +47,6 @@ public class DisabledAnnotationFacetFactoryTest extends AbstractFacetFactoryTest
         facetFactory = null;
         super.tearDown();
     }
-
 
     public void testDisabledAnnotationPickedUpOnProperty() {
         class Customer {
@@ -90,7 +87,8 @@ public class DisabledAnnotationFacetFactoryTest extends AbstractFacetFactoryTest
     public void testDisabledAnnotationPickedUpOnAction() {
         class Customer {
             @Disabled
-            public void someAction() {}
+            public void someAction() {
+            }
         }
         final Method actionMethod = findMethod(Customer.class, "someAction");
 
@@ -106,7 +104,8 @@ public class DisabledAnnotationFacetFactoryTest extends AbstractFacetFactoryTest
     public void testDisabledWhenAlwaysAnnotationPickedUpOn() {
         class Customer {
             @Disabled(When.ALWAYS)
-            public void someAction() {}
+            public void someAction() {
+            }
         }
         final Method actionMethod = findMethod(Customer.class, "someAction");
 
@@ -121,7 +120,8 @@ public class DisabledAnnotationFacetFactoryTest extends AbstractFacetFactoryTest
     public void testDisabledWhenNeverAnnotationPickedUpOn() {
         class Customer {
             @Disabled(When.NEVER)
-            public void someAction() {}
+            public void someAction() {
+            }
         }
         final Method actionMethod = findMethod(Customer.class, "someAction");
 
@@ -136,7 +136,8 @@ public class DisabledAnnotationFacetFactoryTest extends AbstractFacetFactoryTest
     public void testDisabledWhenOncePersistedAnnotationPickedUpOn() {
         class Customer {
             @Disabled(When.ONCE_PERSISTED)
-            public void someAction() {}
+            public void someAction() {
+            }
         }
         final Method actionMethod = findMethod(Customer.class, "someAction");
 
@@ -152,7 +153,8 @@ public class DisabledAnnotationFacetFactoryTest extends AbstractFacetFactoryTest
         class Customer {
             @SuppressWarnings("unused")
             @Disabled(When.UNTIL_PERSISTED)
-            public void someAction() {}
+            public void someAction() {
+            }
         }
         final Method actionMethod = findMethod(Customer.class, "someAction");
 
@@ -165,4 +167,3 @@ public class DisabledAnnotationFacetFactoryTest extends AbstractFacetFactoryTest
     }
 
 }
-

@@ -28,8 +28,7 @@ public class TypicalLengthFacetForParameterDerivedFromType extends TypicalLength
 
     private final TypicalLengthFacet typicalLengthFacet;
 
-    public TypicalLengthFacetForParameterDerivedFromType(final TypicalLengthFacet typicalLengthFacet,
-        final FacetHolder holder) {
+    public TypicalLengthFacetForParameterDerivedFromType(final TypicalLengthFacet typicalLengthFacet, final FacetHolder holder) {
         super(holder, true);
         this.typicalLengthFacet = typicalLengthFacet;
     }

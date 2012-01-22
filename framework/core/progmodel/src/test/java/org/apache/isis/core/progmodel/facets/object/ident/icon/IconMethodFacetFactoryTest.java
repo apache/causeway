@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.object.ident.icon;
 
 import java.lang.reflect.Method;
@@ -28,7 +27,6 @@ import org.apache.isis.core.metamodel.facets.object.icon.IconFacet;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.progmodel.facets.object.icon.method.IconFacetViaMethod;
 import org.apache.isis.core.progmodel.facets.object.icon.method.IconMethodFacetFactory;
-
 
 public class IconMethodFacetFactoryTest extends AbstractFacetFactoryTest {
 
@@ -46,7 +44,6 @@ public class IconMethodFacetFactoryTest extends AbstractFacetFactoryTest {
         facetFactory = null;
         super.tearDown();
     }
-
 
     public void testIconNameMethodPickedUpOnClassAndMethodRemoved() {
         class Customer {
@@ -67,4 +64,3 @@ public class IconMethodFacetFactoryTest extends AbstractFacetFactoryTest {
     }
 
 }
-

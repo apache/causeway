@@ -17,14 +17,14 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.propparam.specification;
 
 import org.apache.isis.applib.spec.Specification;
 
 public class SpecificationAlwaysSatisfied implements Specification {
 
-    public String satisfies(Object obj) {
+    @Override
+    public String satisfies(final Object obj) {
         return null;
     }
 

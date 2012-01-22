@@ -47,8 +47,7 @@ public class ActionInvocationFacetViaMethod extends ActionInvocationFacetAbstrac
 
     private final AdapterMap adapterMap;
 
-    public ActionInvocationFacetViaMethod(final Method method, final ObjectSpecification onType,
-        final ObjectSpecification returnType, final FacetHolder holder, final AdapterMap adapterMap) {
+    public ActionInvocationFacetViaMethod(final Method method, final ObjectSpecification onType, final ObjectSpecification returnType, final FacetHolder holder, final AdapterMap adapterMap) {
         super(holder);
         this.method = method;
         this.paramCount = method.getParameterTypes().length;
@@ -58,7 +57,8 @@ public class ActionInvocationFacetViaMethod extends ActionInvocationFacetAbstrac
     }
 
     /**
-     * Returns a singleton list of the {@link Method} provided in the constructor.
+     * Returns a singleton list of the {@link Method} provided in the
+     * constructor.
      */
     @Override
     public List<Method> getMethods() {
@@ -98,16 +98,14 @@ public class ActionInvocationFacetViaMethod extends ActionInvocationFacetAbstrac
 
             final ObjectAdapter resultAdapter = getAdapterMap().adapterFor(result);
             final TypeOfFacet typeOfFacet = getFacetHolder().getFacet(TypeOfFacet.class);
-            resultAdapter.setElementSpecificationProvider(ElementSpecificationProviderFromTypeOfFacet
-                .createFrom(typeOfFacet));
+            resultAdapter.setElementSpecificationProvider(ElementSpecificationProviderFromTypeOfFacet.createFrom(typeOfFacet));
             return resultAdapter;
 
         } catch (final IllegalArgumentException e) {
             throw e;
         } catch (final InvocationTargetException e) {
             if (e.getTargetException() instanceof IllegalStateException) {
-                throw new ReflectiveActionException("IllegalStateException thrown while executing " + method + " "
-                    + e.getTargetException().getMessage(), e.getTargetException());
+                throw new ReflectiveActionException("IllegalStateException thrown while executing " + method + " " + e.getTargetException().getMessage(), e.getTargetException());
             } else {
                 InvokeUtils.invocationException("Exception executing " + method, e);
                 return null;

@@ -17,11 +17,9 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.runtime.imageloader.awt;
 
 import org.apache.isis.core.commons.config.ConfigurationConstants;
-
 
 public class ImageConstants {
 

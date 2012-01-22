@@ -17,11 +17,9 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.runtime.imageloader;
 
 import java.awt.Image;
-
 
 /**
  * A template image is an image that is used to create other images from.
@@ -34,4 +32,3 @@ public interface TemplateImage {
 
     Image getIcon(final int height);
 }
-

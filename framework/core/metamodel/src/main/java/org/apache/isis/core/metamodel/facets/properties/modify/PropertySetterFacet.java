@@ -27,7 +27,8 @@ import org.apache.isis.core.metamodel.facets.accessor.PropertyOrCollectionAccess
  * The mechanism by which the value of the property can be set.
  * 
  * <p>
- * In the standard Apache Isis Programming Model, corresponds to invoking the mutator method for a property.
+ * In the standard Apache Isis Programming Model, corresponds to invoking the
+ * mutator method for a property.
  * 
  * @see PropertyOrCollectionAccessorFacet
  * @see PropertyClearFacet

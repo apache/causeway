@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.object.notpersistable;
 
 import org.apache.isis.applib.marker.NonPersistable;
@@ -26,7 +25,6 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.metamodel.facets.object.notpersistable.NotPersistableFacet;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
-
 
 public class NotPersistableMarkerInterfaceFacetFactoryTest extends AbstractFacetFactoryTest {
 
@@ -45,9 +43,9 @@ public class NotPersistableMarkerInterfaceFacetFactoryTest extends AbstractFacet
         super.tearDown();
     }
 
-
     public void testProgramPersistableMeansNotPersistableByUser() {
-        class Customer implements ProgramPersistable {}
+        class Customer implements ProgramPersistable {
+        }
 
         facetFactory.process(new ProcessClassContext(Customer.class, methodRemover, facetedMethod));
 
@@ -62,7 +60,8 @@ public class NotPersistableMarkerInterfaceFacetFactoryTest extends AbstractFacet
     }
 
     public void testNotPersistable() {
-        class Customer implements NonPersistable {}
+        class Customer implements NonPersistable {
+        }
 
         facetFactory.process(new ProcessClassContext(Customer.class, methodRemover, facetedMethod));
 
@@ -77,4 +76,3 @@ public class NotPersistableMarkerInterfaceFacetFactoryTest extends AbstractFacet
     }
 
 }
-

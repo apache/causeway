@@ -65,8 +65,10 @@ public final class Dump {
     }
 
     /**
-     * Convenience overload of {@link #specification(ObjectSpecification, DebugBuilder)} that takes the
-     * {@link ObjectSpecification} ( {@link ObjectAdapter#getSpecification()}) of the provided {@link ObjectAdapter}
+     * Convenience overload of
+     * {@link #specification(ObjectSpecification, DebugBuilder)} that takes the
+     * {@link ObjectSpecification} ( {@link ObjectAdapter#getSpecification()})
+     * of the provided {@link ObjectAdapter}
      * 
      * @see #specification(ObjectAdapter)
      * @see #specification(ObjectSpecification, DebugBuilder)
@@ -147,8 +149,7 @@ public final class Dump {
         return names;
     }
 
-    private static void specificationActionMethods(final ObjectSpecification specification,
-        final DebugBuilder debugBuilder) {
+    private static void specificationActionMethods(final ObjectSpecification specification, final DebugBuilder debugBuilder) {
         try {
             final List<ObjectAction> userActions = specification.getObjectActions(ActionType.USER, Contributed.INCLUDED);
             final List<ObjectAction> explActions = specification.getObjectActions(ActionType.EXPLORATION, Contributed.INCLUDED);
@@ -160,8 +161,7 @@ public final class Dump {
         }
     }
 
-    private static void specificationServiceMethods(final ObjectSpecification specification,
-        final DebugBuilder debugBuilder) {
+    private static void specificationServiceMethods(final ObjectSpecification specification, final DebugBuilder debugBuilder) {
         try {
             final List<ObjectAction> userActions = specification.getServiceActionsReturning(ActionType.USER);
             final List<ObjectAction> explActions = specification.getServiceActionsReturning(ActionType.EXPLORATION);
@@ -182,8 +182,7 @@ public final class Dump {
         }
         debugBuilder.unindent();
 
-        final List<ObjectAssociation> fields2 =
-            specification.getAssociations(ObjectAssociationFilters.STATICALLY_VISIBLE_ASSOCIATIONS);
+        final List<ObjectAssociation> fields2 = specification.getAssociations(ObjectAssociationFilters.STATICALLY_VISIBLE_ASSOCIATIONS);
         debugBuilder.appendln("Static");
         debugBuilder.indent();
         for (int i = 0; i < fields2.size(); i++) {
@@ -208,24 +207,18 @@ public final class Dump {
                     }
                     final String help = field.getHelp();
                     if (help != null && !help.equals("")) {
-                        debugBuilder.appendln("Help", help.substring(0, Math.min(30, help.length()))
-                            + (help.length() > 30 ? "..." : ""));
+                        debugBuilder.appendln("Help", help.substring(0, Math.min(30, help.length())) + (help.length() > 30 ? "..." : ""));
                     }
 
                     debugBuilder.appendln("ID", field.getIdentifier());
                     debugBuilder.appendln("Short ID", field.getId());
                     debugBuilder.appendln("Name", field.getName());
-                    final String type =
-                        field.isOneToManyAssociation() ? "Collection" : field.isOneToOneAssociation() ? "Object"
-                            : "Unknown";
+                    final String type = field.isOneToManyAssociation() ? "Collection" : field.isOneToOneAssociation() ? "Object" : "Unknown";
                     debugBuilder.appendln("Type", type);
                     debugBuilder.appendln("Has identity", !field.getSpecification().isCollectionOrIsAggregated());
                     debugBuilder.appendln("Spec", field.getSpecification().getFullIdentifier());
 
-                    debugBuilder
-                        .appendln("Flags", (field.isAlwaysHidden() ? "" : "Visible ")
-                            + (field.isNotPersisted() ? "Not Persisted " : " ")
-                            + (field.isMandatory() ? "Mandatory " : ""));
+                    debugBuilder.appendln("Flags", (field.isAlwaysHidden() ? "" : "Visible ") + (field.isNotPersisted() ? "Not Persisted " : " ") + (field.isMandatory() ? "Mandatory " : ""));
 
                     final Class<? extends Facet>[] facets = field.getFacetTypes();
                     if (facets.length > 0) {
@@ -253,11 +246,8 @@ public final class Dump {
 
     }
 
-    private static void specificationMethods(final List<ObjectAction> userActions,
-        final List<ObjectAction> explActions, final List<ObjectAction> prototypeActions,
-        final List<ObjectAction> debugActions, final DebugBuilder debugBuilder) {
-        if (userActions.size() == 0 && explActions.size() == 0 && prototypeActions.size() == 0
-            && debugActions.size() == 0) {
+    private static void specificationMethods(final List<ObjectAction> userActions, final List<ObjectAction> explActions, final List<ObjectAction> prototypeActions, final List<ObjectAction> debugActions, final DebugBuilder debugBuilder) {
+        if (userActions.size() == 0 && explActions.size() == 0 && prototypeActions.size() == 0 && debugActions.size() == 0) {
             debugBuilder.appendln("no actions...");
         } else {
             appendActionDetails(debugBuilder, "User actions", userActions);
@@ -267,8 +257,7 @@ public final class Dump {
         }
     }
 
-    private static void appendActionDetails(final DebugBuilder debug, final String desc,
-        final List<ObjectAction> actions) {
+    private static void appendActionDetails(final DebugBuilder debug, final String desc, final List<ObjectAction> actions) {
         debug.appendln(desc);
         debug.indent();
         for (int i = 0; i < actions.size(); i++) {
@@ -277,10 +266,8 @@ public final class Dump {
         debug.unindent();
     }
 
-    private static void actionDetails(final ObjectAction objectAction, final int indent, final int count,
-        final DebugBuilder debugBuilder) {
-        debugBuilder
-            .appendln((count + 1) + "." + objectAction.getId() + " (" + objectAction.getClass().getName() + ")");
+    private static void actionDetails(final ObjectAction objectAction, final int indent, final int count, final DebugBuilder debugBuilder) {
+        debugBuilder.appendln((count + 1) + "." + objectAction.getId() + " (" + objectAction.getClass().getName() + ")");
         debugBuilder.indent();
         final int newIndent = indent + 4;
         try {
@@ -295,7 +282,8 @@ public final class Dump {
                     debugBuilder.appendln("Description", objectAction.getDescription());
                 }
                 debugBuilder.appendln("ID", objectAction.getId());
-                // debug.appendln(12, "Returns", f.getReturnType() == null ? "Nothing" :
+                // debug.appendln(12, "Returns", f.getReturnType() == null ?
+                // "Nothing" :
                 // f.getReturnType().getFullName());
 
                 debugBuilder.appendln(objectAction.debugData());
@@ -410,7 +398,8 @@ public final class Dump {
     // /////////////////////////////////////////////////////////////////////
 
     /**
-     * Creates an ascii object graph diagram for the specified object, up to three levels deep.
+     * Creates an ascii object graph diagram for the specified object, up to
+     * three levels deep.
      * 
      * @see #graph(ObjectAdapter, AuthenticationSession, DebugBuilder)
      */
@@ -421,12 +410,12 @@ public final class Dump {
     }
 
     /**
-     * As {@link #graph(ObjectAdapter, AuthenticationSession)}, but appending to the provided {@link DebugBuilder}.
+     * As {@link #graph(ObjectAdapter, AuthenticationSession)}, but appending to
+     * the provided {@link DebugBuilder}.
      * 
      * @see #graph(ObjectAdapter, AuthenticationSession)
      */
-    public static void graph(final ObjectAdapter object, final AuthenticationSession authenticationSession,
-        final DebugBuilder debugBuilder) {
+    public static void graph(final ObjectAdapter object, final AuthenticationSession authenticationSession, final DebugBuilder debugBuilder) {
         simpleObject(object, debugBuilder);
         debugBuilder.appendln();
         debugBuilder.append(object);
@@ -463,9 +452,7 @@ public final class Dump {
         }
     }
 
-    private static void collectionGraph(final ObjectAdapter collectionAdapter, final int level,
-        final List<ObjectAdapter> ignoreAdapters, final AuthenticationSession authenticationSession,
-        final DebugBuilder debugBuilder) {
+    private static void collectionGraph(final ObjectAdapter collectionAdapter, final int level, final List<ObjectAdapter> ignoreAdapters, final AuthenticationSession authenticationSession, final DebugBuilder debugBuilder) {
 
         if (ignoreAdapters.contains(collectionAdapter)) {
             debugBuilder.append("*\n");
@@ -484,8 +471,7 @@ public final class Dump {
         }
     }
 
-    private static void graph(final ObjectAdapter adapter, final int level, final List<ObjectAdapter> ignoreAdapters,
-        final AuthenticationSession authenticationSession, final DebugBuilder debugBuilder) {
+    private static void graph(final ObjectAdapter adapter, final int level, final List<ObjectAdapter> ignoreAdapters, final AuthenticationSession authenticationSession, final DebugBuilder debugBuilder) {
         if (level > 3) {
             debugBuilder.appendln("..."); // only go 3 levels?
         } else {
@@ -507,9 +493,7 @@ public final class Dump {
         debugBuilder.append(DebugUtils.indentString(4) + "+--");
     }
 
-    private static void objectGraph(final ObjectAdapter adapter, final int level,
-        final List<ObjectAdapter> ignoreAdapters, final DebugBuilder s,
-        final AuthenticationSession authenticationSession) {
+    private static void objectGraph(final ObjectAdapter adapter, final int level, final List<ObjectAdapter> ignoreAdapters, final DebugBuilder s, final AuthenticationSession authenticationSession) {
         ignoreAdapters.add(adapter);
 
         try {
@@ -528,7 +512,8 @@ public final class Dump {
                     if (obj == null) {
                         s.append(name + ": null\n");
                         /*
-                         * } else if (obj.getSpecification().isParseable()) { s.append(name + ": " + obj.titleString());
+                         * } else if (obj.getSpecification().isParseable()) {
+                         * s.append(name + ": " + obj.titleString());
                          * s.append("\n");
                          */} else {
                         if (ignoreAdapters.contains(obj)) {

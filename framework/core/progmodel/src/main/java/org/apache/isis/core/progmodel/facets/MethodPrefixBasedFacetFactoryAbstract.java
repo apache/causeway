@@ -27,8 +27,7 @@ import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.MethodPrefixBasedFacetFactory;
 
-public abstract class MethodPrefixBasedFacetFactoryAbstract extends FacetFactoryAbstract implements
-    MethodPrefixBasedFacetFactory {
+public abstract class MethodPrefixBasedFacetFactoryAbstract extends FacetFactoryAbstract implements MethodPrefixBasedFacetFactory {
 
     private final List<String> prefixes;
 

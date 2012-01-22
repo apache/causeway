@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.runtime.userprofile;
 
 import java.util.List;
@@ -27,64 +26,53 @@ import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 
 /**
- * Intended to acts like a bridge, loading the profile from the underlying store.
+ * Intended to acts like a bridge, loading the profile from the underlying
+ * store.
  * 
  * <p>
- * This is an interface only to make it easy to mock in tests.  In practice
- * there is only a single implementation, {@link UserProfileLoaderDefault}.
+ * This is an interface only to make it easy to mock in tests. In practice there
+ * is only a single implementation, {@link UserProfileLoaderDefault}.
  */
 public interface UserProfileLoader extends ApplicationScopedComponent {
-	
-    
-    ////////////////////////////////////////////////////////
+
+    // //////////////////////////////////////////////////////
     // Fixtures
-    ////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////
 
     /**
      * @see PersistenceSession#isFixturesInstalled()
      */
     public boolean isFixturesInstalled();
 
-
-    ////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////
     // saveAs...
-    ////////////////////////////////////////////////////////
-    
+    // //////////////////////////////////////////////////////
+
     public void saveAsDefault(UserProfile userProfile);
 
     public void saveForUser(String userName, UserProfile userProfile);
 
-    
-    ////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////
     // saveSession
-    ////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////
 
     public void saveSession(List<ObjectAdapter> objects);
 
-    
-    ////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////
     // getProfile
-    ////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////
 
     public UserProfile getProfile(AuthenticationSession session);
 
-    
     @Deprecated
     public UserProfile getProfile();
 
-
-    ////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////
     // Services
-    ////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////
 
-	public void setServices(List<Object> servicesList);
-	
-	
+    public void setServices(List<Object> servicesList);
+
     public List<Object> getServices();
 
-
-    
-
 }
-
-

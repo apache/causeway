@@ -26,18 +26,18 @@ import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 
 public interface Registrar extends Authenticator, ApplicationScopedComponent {
-	
+
     static Predicate<Registrar> NON_NULL = new Predicate<Registrar>() {
         @Override
-        public boolean apply(Registrar input) {
+        public boolean apply(final Registrar input) {
             return input != null;
         }
     };
-    
+
     static Function<Authenticator, Registrar> AS_REGISTRAR_ELSE_NULL = new Function<Authenticator, Registrar>() {
         @Override
-        public Registrar apply(Authenticator input) {
-            if(input instanceof Registrar) {
+        public Registrar apply(final Authenticator input) {
+            if (input instanceof Registrar) {
                 return (Registrar) input;
             }
             return null;
@@ -45,10 +45,11 @@ public interface Registrar extends Authenticator, ApplicationScopedComponent {
     };
 
     /**
-	 * Whether the provided {@link RegistrationDetails} is recognized by this {@link Registrar}.
-	 */
-	boolean canRegister(Class<? extends RegistrationDetails> registrationDetailsClass);
+     * Whether the provided {@link RegistrationDetails} is recognized by this
+     * {@link Registrar}.
+     */
+    boolean canRegister(Class<? extends RegistrationDetails> registrationDetailsClass);
 
-	boolean register(RegistrationDetails registrationDetails);
+    boolean register(RegistrationDetails registrationDetails);
 
 }

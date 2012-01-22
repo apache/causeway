@@ -22,11 +22,12 @@ package org.apache.isis.core.metamodel.facets.actions.exploration;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 
 /**
- * Indicates that the action should only be available in a special <i>exploration</i> mode.
+ * Indicates that the action should only be available in a special
+ * <i>exploration</i> mode.
  * 
  * <p>
- * In the standard Apache Isis Programming Model, corresponds to annotating the action method using
- * <tt>@Exploration</tt>.
+ * In the standard Apache Isis Programming Model, corresponds to annotating the
+ * action method using <tt>@Exploration</tt>.
  */
 public interface ExplorationFacet extends Facet {
 

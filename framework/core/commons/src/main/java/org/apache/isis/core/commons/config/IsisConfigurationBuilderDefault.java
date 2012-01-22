@@ -30,8 +30,9 @@ import org.apache.log4j.Logger;
 import com.google.common.collect.Lists;
 
 /**
- * Convenience implementation of {@link IsisConfigurationBuilder} that loads configuration resource as per
- * {@link IsisConfigurationBuilderFileSystem} and otherwise from the {@link ResourceStreamSourceContextLoaderClassPath
+ * Convenience implementation of {@link IsisConfigurationBuilder} that loads
+ * configuration resource as per {@link IsisConfigurationBuilderFileSystem} and
+ * otherwise from the {@link ResourceStreamSourceContextLoaderClassPath
  * classpath}.
  * 
  * @see ResourceStreamSourceFileSystem
@@ -54,12 +55,7 @@ public class IsisConfigurationBuilderDefault extends IsisConfigurationBuilderRes
         if (firstDirectory != null) {
             rssList.add(fromFileSystem(firstDirectory));
         }
-        rssList.addAll(Arrays.asList(
-                fromFileSystem(ConfigurationConstants.DEFAULT_CONFIG_DIRECTORY),
-                fromFileSystem(ConfigurationConstants.WEBINF_FULL_DIRECTORY), 
-                fromClassPath(), 
-                fromClassPath(ConfigurationConstants.WEBINF_DIRECTORY))
-            );
+        rssList.addAll(Arrays.asList(fromFileSystem(ConfigurationConstants.DEFAULT_CONFIG_DIRECTORY), fromFileSystem(ConfigurationConstants.WEBINF_FULL_DIRECTORY), fromClassPath(), fromClassPath(ConfigurationConstants.WEBINF_DIRECTORY)));
         return rssList.toArray(new ResourceStreamSource[0]);
     }
 

@@ -26,9 +26,7 @@ public class SpecificationContext {
     private final ObjectInstantiator objectInstantiator;
     private final SpecificationLookup specificationLookup;
 
-    public SpecificationContext(final AuthenticationSessionProvider authenticationSessionProvider,
-        final ServicesProvider servicesProvider, final ObjectInstantiator objectInstantiator,
-        final SpecificationLookup specificationLookup) {
+    public SpecificationContext(final AuthenticationSessionProvider authenticationSessionProvider, final ServicesProvider servicesProvider, final ObjectInstantiator objectInstantiator, final SpecificationLookup specificationLookup) {
         this.authenticationSessionProvider = authenticationSessionProvider;
         this.servicesProvider = servicesProvider;
         this.objectInstantiator = objectInstantiator;

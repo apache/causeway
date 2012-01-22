@@ -26,8 +26,7 @@ import org.apache.isis.core.metamodel.spec.SpecificationLookup;
 
 public class ActionParameterChoicesFacetNone extends ActionParameterChoicesFacetAbstract {
 
-    public ActionParameterChoicesFacetNone(final FacetHolder holder, final SpecificationLookup specificationLookup,
-        final AdapterMap adapterManager) {
+    public ActionParameterChoicesFacetNone(final FacetHolder holder, final SpecificationLookup specificationLookup, final AdapterMap adapterManager) {
         super(holder, specificationLookup, adapterManager);
     }
 

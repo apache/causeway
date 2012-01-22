@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.runtime.imageloader;
 
 import java.awt.Canvas;
@@ -26,11 +25,10 @@ import java.awt.MediaTracker;
 
 import org.apache.log4j.Logger;
 
-
 /**
- * Many icons are based on the same image, but in different sizes and possibly different colours. The
- * ImageTemplate class loads and holds them image, and can provide it clients with the full sized images or
- * scaled images.
+ * Many icons are based on the same image, but in different sizes and possibly
+ * different colours. The ImageTemplate class loads and holds them image, and
+ * can provide it clients with the full sized images or scaled images.
  */
 public class TemplateImageImpl implements TemplateImage {
     private final static Logger LOG = Logger.getLogger(TemplateImageImpl.class);
@@ -56,17 +54,19 @@ public class TemplateImageImpl implements TemplateImage {
         this.image = image;
     }
 
+    @Override
     public Image getImage() {
         return image;
     }
 
+    @Override
     public Image getIcon(final int height) {
         Image iconImage;
 
         if (height == image.getHeight(null)) {
             return image;
-        } 
-        
+        }
+
         iconImage = image.getScaledInstance(-1, height, java.awt.Image.SCALE_SMOOTH);
 
         if (iconImage != null) {

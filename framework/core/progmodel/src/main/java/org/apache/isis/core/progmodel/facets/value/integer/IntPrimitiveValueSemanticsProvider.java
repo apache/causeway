@@ -27,18 +27,17 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.properties.defaults.PropertyDefaultFacet;
 import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProviderContext;
 
-public class IntPrimitiveValueSemanticsProvider extends IntValueSemanticsProviderAbstract implements
-    PropertyDefaultFacet {
+public class IntPrimitiveValueSemanticsProvider extends IntValueSemanticsProviderAbstract implements PropertyDefaultFacet {
 
     /**
-     * Required because implementation of {@link Parser} and {@link EncoderDecoder}.
+     * Required because implementation of {@link Parser} and
+     * {@link EncoderDecoder}.
      */
     public IntPrimitiveValueSemanticsProvider() {
         this(null, null, null);
     }
 
-    public IntPrimitiveValueSemanticsProvider(final FacetHolder holder, final IsisConfiguration configuration,
-        final ValueSemanticsProviderContext context) {
+    public IntPrimitiveValueSemanticsProvider(final FacetHolder holder, final IsisConfiguration configuration, final ValueSemanticsProviderContext context) {
         super(holder, int.class, configuration, context);
     }
 

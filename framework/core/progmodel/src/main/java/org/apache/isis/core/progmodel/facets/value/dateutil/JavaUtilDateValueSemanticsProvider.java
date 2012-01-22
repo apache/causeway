@@ -33,7 +33,8 @@ import org.apache.isis.core.progmodel.facets.value.datesql.JavaSqlDateValueSeman
 import org.apache.isis.core.progmodel.facets.value.timesql.JavaSqlTimeValueSemanticsProvider;
 
 /**
- * An adapter that handles {@link java.util.Date} as both a date AND time component.
+ * An adapter that handles {@link java.util.Date} as both a date AND time
+ * component.
  * 
  * @see JavaSqlDateValueSemanticsProvider
  * @see JavaSqlTimeValueSemanticsProvider
@@ -44,14 +45,14 @@ public class JavaUtilDateValueSemanticsProvider extends DateAndTimeValueSemantic
     private static final boolean EQUAL_BY_CONTENT = false;
 
     /**
-     * Required because implementation of {@link Parser} and {@link EncoderDecoder}.
+     * Required because implementation of {@link Parser} and
+     * {@link EncoderDecoder}.
      */
     public JavaUtilDateValueSemanticsProvider() {
         this(null, null, null);
     }
 
-    public JavaUtilDateValueSemanticsProvider(final FacetHolder holder, final IsisConfiguration configuration,
-        final ValueSemanticsProviderContext context) {
+    public JavaUtilDateValueSemanticsProvider(final FacetHolder holder, final IsisConfiguration configuration, final ValueSemanticsProviderContext context) {
         super(holder, Date.class, IMMUTABLE, EQUAL_BY_CONTENT, configuration, context);
     }
 
@@ -61,8 +62,7 @@ public class JavaUtilDateValueSemanticsProvider extends DateAndTimeValueSemantic
     }
 
     @Override
-    protected Date add(final Date original, final int years, final int months, final int days, final int hours,
-        final int minutes) {
+    protected Date add(final Date original, final int years, final int months, final int days, final int hours, final int minutes) {
         final Date date = original;
         final Calendar cal = Calendar.getInstance();
         cal.setTime(date);

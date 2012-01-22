@@ -45,20 +45,19 @@ public class JavaSqlDateValueSemanticsProvider extends DateValueSemanticsProvide
     private static final Date DEFAULT_VALUE = null; // no default
 
     /**
-     * Required because implementation of {@link Parser} and {@link EncoderDecoder}.
+     * Required because implementation of {@link Parser} and
+     * {@link EncoderDecoder}.
      */
     public JavaSqlDateValueSemanticsProvider() {
         this(null, null, null);
     }
 
-    public JavaSqlDateValueSemanticsProvider(final FacetHolder holder, final IsisConfiguration configuration,
-        final ValueSemanticsProviderContext context) {
+    public JavaSqlDateValueSemanticsProvider(final FacetHolder holder, final IsisConfiguration configuration, final ValueSemanticsProviderContext context) {
         super(holder, Date.class, IMMUTABLE, EQUAL_BY_CONTENT, DEFAULT_VALUE, configuration, context);
     }
 
     @Override
-    protected Date add(final Date original, final int years, final int months, final int days, final int hours,
-        final int minutes) {
+    protected Date add(final Date original, final int years, final int months, final int days, final int hours, final int minutes) {
         final Date date = original;
         final Calendar cal = Calendar.getInstance();
         cal.setTime(date);

@@ -43,8 +43,7 @@ public class MultiLineAnnotationOnPropertyFacetFactory extends AnnotationBasedFa
     }
 
     private MultiLineFacet create(final MultiLine annotation, final FacetHolder holder) {
-        return (annotation != null) ? new MultiLineFacetAnnotationOnProperty(annotation.numberOfLines(),
-            annotation.preventWrapping(), holder) : null;
+        return (annotation != null) ? new MultiLineFacetAnnotationOnProperty(annotation.numberOfLines(), annotation.preventWrapping(), holder) : null;
     }
 
 }

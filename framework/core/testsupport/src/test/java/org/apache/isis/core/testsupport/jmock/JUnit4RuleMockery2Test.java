@@ -15,26 +15,29 @@ public class JUnit4RuleMockery2Test {
         public void doOtherStuff() {
         }
     }
+
     public static class ClassUnderTest {
         private final Collaborator collaborator;
 
-        private ClassUnderTest(Collaborator collaborator) {
+        private ClassUnderTest(final Collaborator collaborator) {
             this.collaborator = collaborator;
         }
-        
+
         public void doStuff() {
             collaborator.doOtherStuff();
         }
     }
-    
+
     @Mock
     private Collaborator collaborator;
-    
+
     @Test
     public void poke() {
-        context.checking(new Expectations(){{
-            one(collaborator).doOtherStuff();
-        }});
+        context.checking(new Expectations() {
+            {
+                one(collaborator).doOtherStuff();
+            }
+        });
         new ClassUnderTest(collaborator).doStuff();
     }
 }

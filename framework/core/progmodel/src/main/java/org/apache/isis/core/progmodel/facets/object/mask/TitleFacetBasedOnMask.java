@@ -38,8 +38,7 @@ public class TitleFacetBasedOnMask extends TitleFacetAbstract {
     @Override
     public String title(final ObjectAdapter object, final Localization localization) {
         final String mask = maskFacet.value();
-        final TitleFacetUsingParser titleFacetUsingParser =
-            (TitleFacetUsingParser) underlyingTitleFacet.getUnderlyingFacet();
+        final TitleFacetUsingParser titleFacetUsingParser = (TitleFacetUsingParser) underlyingTitleFacet.getUnderlyingFacet();
         if (titleFacetUsingParser != null) {
             final String titleString = titleFacetUsingParser.title(object, mask);
             return titleString;

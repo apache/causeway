@@ -26,7 +26,6 @@ import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 
 public interface SpecificationLoader extends ApplicationScopedComponent, DebuggableWithTitle, SpecificationLookup {
 
-
     /**
      * @see #loadSpecification(String)
      */
@@ -34,7 +33,8 @@ public interface SpecificationLoader extends ApplicationScopedComponent, Debugga
     ObjectSpecification loadSpecification(Class<?> cls);
 
     /**
-     * Loads the specifications of the specified types except the one specified (to prevent an infinite loop).
+     * Loads the specifications of the specified types except the one specified
+     * (to prevent an infinite loop).
      */
     public boolean loadSpecifications(List<Class<?>> typesToLoad, final Class<?> typeToIgnore);
 
@@ -42,8 +42,8 @@ public interface SpecificationLoader extends ApplicationScopedComponent, Debugga
      * Return the specification for the specified class of object.
      * 
      * <p>
-     * It is possible for this method to return <tt>null</tt>, for example if the configured
-     * {@link #getClassSubstitutor()} has filtered out the class.
+     * It is possible for this method to return <tt>null</tt>, for example if
+     * the configured {@link #getClassSubstitutor()} has filtered out the class.
      */
     ObjectSpecification loadSpecification(String fullyQualifiedClassName);
 

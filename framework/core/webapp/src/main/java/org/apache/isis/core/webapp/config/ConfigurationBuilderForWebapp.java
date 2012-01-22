@@ -17,30 +17,26 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.webapp.config;
 
 import javax.servlet.ServletContext;
 
-import org.apache.log4j.Logger;
-
 import org.apache.isis.core.commons.config.IsisConfigurationBuilder;
 import org.apache.isis.core.commons.config.IsisConfigurationBuilderFileSystem;
 import org.apache.isis.core.commons.config.IsisConfigurationBuilderResourceStreams;
+import org.apache.log4j.Logger;
 
 /**
- * Convenience implementation of {@link IsisConfigurationBuilder} that
- * loads configuration resource using the {@link ResourceStreamSourceForWebInf}.
+ * Convenience implementation of {@link IsisConfigurationBuilder} that loads
+ * configuration resource using the {@link ResourceStreamSourceForWebInf}.
  */
-public class ConfigurationBuilderForWebapp extends
-		IsisConfigurationBuilderResourceStreams {
+public class ConfigurationBuilderForWebapp extends IsisConfigurationBuilderResourceStreams {
 
-	@SuppressWarnings("unused")
-	private static final Logger LOG = Logger
-			.getLogger(IsisConfigurationBuilderFileSystem.class);
-	
-	public ConfigurationBuilderForWebapp(final ServletContext servletContext) {
-		super(new ResourceStreamSourceForWebInf(servletContext));
-	}
+    @SuppressWarnings("unused")
+    private static final Logger LOG = Logger.getLogger(IsisConfigurationBuilderFileSystem.class);
+
+    public ConfigurationBuilderForWebapp(final ServletContext servletContext) {
+        super(new ResourceStreamSourceForWebInf(servletContext));
+    }
 
 }

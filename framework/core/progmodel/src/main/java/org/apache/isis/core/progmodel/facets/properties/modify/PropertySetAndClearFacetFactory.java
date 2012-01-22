@@ -52,8 +52,10 @@ public class PropertySetAndClearFacetFactory extends MethodPrefixBasedFacetFacto
     }
 
     /**
-     * Sets up the {@link PropertySetterFacetViaSetterMethod} to invoke the property's setter if available, but if none
-     * then marks the property as {@link NotPersistableFacet not-persistable} and {@link DisabledFacet disabled} otherwise.
+     * Sets up the {@link PropertySetterFacetViaSetterMethod} to invoke the
+     * property's setter if available, but if none then marks the property as
+     * {@link NotPersistableFacet not-persistable} and {@link DisabledFacet
+     * disabled} otherwise.
      */
     private static Method attachPropertyModifyFacetIfSetterIsFound(final ProcessMethodContext processMethodContext) {
 
@@ -63,9 +65,7 @@ public class PropertySetAndClearFacetFactory extends MethodPrefixBasedFacetFacto
         final Class<?> cls = processMethodContext.getCls();
         final Class<?> returnType = getMethod.getReturnType();
         final Class<?>[] paramTypes = new Class[] { returnType };
-        final Method setMethod =
-            MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, MethodPrefixConstants.SET_PREFIX + capitalizedName,
-                void.class, paramTypes);
+        final Method setMethod = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, MethodPrefixConstants.SET_PREFIX + capitalizedName, void.class, paramTypes);
         processMethodContext.removeMethod(setMethod);
 
         final FacetHolder property = processMethodContext.getFacetHolder();
@@ -86,9 +86,7 @@ public class PropertySetAndClearFacetFactory extends MethodPrefixBasedFacetFacto
         final FacetHolder property = processMethodContext.getFacetHolder();
 
         final String capitalizedName = NameUtils.javaBaseName(getMethod.getName());
-        final Method clearMethod =
-            MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, MethodPrefixConstants.CLEAR_PREFIX + capitalizedName,
-                void.class, NO_PARAMETERS_TYPES);
+        final Method clearMethod = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, MethodPrefixConstants.CLEAR_PREFIX + capitalizedName, void.class, NO_PARAMETERS_TYPES);
 
         if (clearMethod == null) {
             return null;
@@ -100,8 +98,7 @@ public class PropertySetAndClearFacetFactory extends MethodPrefixBasedFacetFacto
         return clearMethod;
     }
 
-    private static void attachPropertyClearFacetUsingSetterIfRequired(final ProcessMethodContext processMethodContext,
-        final Method setMethod, final Method clearMethod) {
+    private static void attachPropertyClearFacetUsingSetterIfRequired(final ProcessMethodContext processMethodContext, final Method setMethod, final Method clearMethod) {
 
         if (clearMethod != null) {
             return;

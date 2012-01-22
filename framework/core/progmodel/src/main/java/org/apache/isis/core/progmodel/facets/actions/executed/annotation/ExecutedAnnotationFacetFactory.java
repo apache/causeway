@@ -28,10 +28,12 @@ import org.apache.isis.core.metamodel.facets.actions.executed.ExecutedFacet;
 import org.apache.isis.core.progmodel.facets.actions.invoke.ActionInvocationFacetFactory;
 
 /**
- * Creates an {@link ExecutedFacet} based on the presence of an {@link Executed} annotation.
+ * Creates an {@link ExecutedFacet} based on the presence of an {@link Executed}
+ * annotation.
  * 
  * <p>
- * {@link ExecutedFacet} can also be installed via a naming convention, see {@link ActionInvocationFacetFactory}.
+ * {@link ExecutedFacet} can also be installed via a naming convention, see
+ * {@link ActionInvocationFacetFactory}.
  */
 public class ExecutedAnnotationFacetFactory extends AnnotationBasedFacetFactoryAbstract {
 

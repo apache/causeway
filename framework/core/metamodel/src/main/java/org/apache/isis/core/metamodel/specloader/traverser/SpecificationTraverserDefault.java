@@ -55,7 +55,8 @@ public class SpecificationTraverserDefault implements SpecificationTraverser, Sp
      * Traverses the return types of each method.
      * 
      * <p>
-     * It's possible for there to be multiple return types: the generic type, and the parameterized type.
+     * It's possible for there to be multiple return types: the generic type,
+     * and the parameterized type.
      */
     @Override
     public void traverseTypes(final Method method, final List<Class<?>> discoveredTypes) {
@@ -69,8 +70,7 @@ public class SpecificationTraverserDefault implements SpecificationTraverser, Sp
      * Does nothing.
      */
     @Override
-    public void traverseReferencedClasses(final ObjectSpecification noSpec, final List<Class<?>> discoveredTypes)
-        throws ClassNotFoundException {
+    public void traverseReferencedClasses(final ObjectSpecification noSpec, final List<Class<?>> discoveredTypes) throws ClassNotFoundException {
     }
 
     // ////////////////////////////////////////////////////////////////////

@@ -47,8 +47,9 @@ public abstract class ConsentAbstract implements Serializable, Consent {
     private final String reason;
 
     /**
-     * Can be subsequently {@link #setDescription(String) modified}, but is only a description of the event to which
-     * this consent applies and does not change whether the Consent represents an allow or a veto.
+     * Can be subsequently {@link #setDescription(String) modified}, but is only
+     * a description of the event to which this consent applies and does not
+     * change whether the Consent represents an allow or a veto.
      */
     private String description;
 
@@ -62,21 +63,24 @@ public abstract class ConsentAbstract implements Serializable, Consent {
     /**
      * 
      * @param interactionResult
-     *            - if <tt>null</tt> then defaults to an {@link #isAllowed() allowing} {@link Consent}.
+     *            - if <tt>null</tt> then defaults to an {@link #isAllowed()
+     *            allowing} {@link Consent}.
      */
     protected ConsentAbstract(final InteractionResult interactionResult) {
         this(interactionResult, null, determineReason(interactionResult));
     }
 
     /**
-     * Enable legacy {@link Consent}s (not created using an {@link InteractionResult}) to create an {@link Consent},
-     * specifying a {@link #getDescription() description} of the event and the {@link #getReason() reason} (if any) that
-     * the consent is vetoed.
+     * Enable legacy {@link Consent}s (not created using an
+     * {@link InteractionResult}) to create an {@link Consent}, specifying a
+     * {@link #getDescription() description} of the event and the
+     * {@link #getReason() reason} (if any) that the consent is vetoed.
      * 
      * @param description
      *            - a description of the event to which this consent relates
      * @param reason
-     *            - if not <tt>null</tt> and not empty, is the reason this consent is vetoed.
+     *            - if not <tt>null</tt> and not empty, is the reason this
+     *            consent is vetoed.
      */
     protected ConsentAbstract(final String description, final String reason) {
         this(null, description, reason);
@@ -104,8 +108,8 @@ public abstract class ConsentAbstract implements Serializable, Consent {
     }
 
     /**
-     * Returns <tt>true</tt> if this object is giving permission (if the {@link #getReason() reason} is <tt>null</tt> or
-     * empty.
+     * Returns <tt>true</tt> if this object is giving permission (if the
+     * {@link #getReason() reason} is <tt>null</tt> or empty.
      * 
      * @see #getReason()
      */
@@ -125,7 +129,8 @@ public abstract class ConsentAbstract implements Serializable, Consent {
     }
 
     /**
-     * Underlying {@link InteractionResult} that created this {@link Consent} (may be <tt>null</tt>).
+     * Underlying {@link InteractionResult} that created this {@link Consent}
+     * (may be <tt>null</tt>).
      * 
      */
     @Override
@@ -137,9 +142,10 @@ public abstract class ConsentAbstract implements Serializable, Consent {
      * Description of the action allowed by this event.
      * 
      * <p>
-     * (Previously, {@link Allow} consents overloaded the {@link #getReason() reason} property with a description of the
-     * event. This has now been changed so that a non-<tt>null</tt> reason always implies a {@link Veto}. This property
-     * captures the description.
+     * (Previously, {@link Allow} consents overloaded the {@link #getReason()
+     * reason} property with a description of the event. This has now been
+     * changed so that a non-<tt>null</tt> reason always implies a {@link Veto}.
+     * This property captures the description.
      * 
      * @return
      */

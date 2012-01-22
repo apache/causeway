@@ -28,14 +28,14 @@ import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProvider
 public class ShortWrapperValueSemanticsProvider extends ShortValueSemanticsProviderAbstract {
 
     /**
-     * Required because implementation of {@link Parser} and {@link EncoderDecoder}.
+     * Required because implementation of {@link Parser} and
+     * {@link EncoderDecoder}.
      */
     public ShortWrapperValueSemanticsProvider() {
         this(null, null, null);
     }
 
-    public ShortWrapperValueSemanticsProvider(final FacetHolder holder, final IsisConfiguration configuration,
-        final ValueSemanticsProviderContext context) {
+    public ShortWrapperValueSemanticsProvider(final FacetHolder holder, final IsisConfiguration configuration, final ValueSemanticsProviderContext context) {
         super(holder, Short.class, configuration, context);
     }
 

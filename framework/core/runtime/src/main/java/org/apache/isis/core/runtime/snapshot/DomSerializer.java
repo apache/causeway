@@ -17,14 +17,12 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.runtime.snapshot;
 
 import java.io.OutputStream;
 import java.io.Writer;
 
 import org.w3c.dom.Element;
-
 
 public interface DomSerializer {
     public String serialize(final Element domElement);

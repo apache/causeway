@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.ordering.fieldorder;
 
 import org.apache.isis.applib.annotation.FieldOrder;
@@ -27,7 +26,6 @@ import org.apache.isis.core.metamodel.facets.object.orderfields.FieldOrderFacet;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.progmodel.facets.object.orderfields.FieldOrderAnnotationFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.orderfields.FieldOrderFacetAnnotation;
-
 
 public class FieldOrderAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 
@@ -48,7 +46,8 @@ public class FieldOrderAnnotationFacetFactoryTest extends AbstractFacetFactoryTe
 
     public void testFieldOrderAnnotationPickedUpOnClass() {
         @FieldOrder("foo,bar")
-        class Customer {}
+        class Customer {
+        }
 
         facetFactory.process(new ProcessClassContext(Customer.class, methodRemover, facetedMethod));
 
@@ -62,4 +61,3 @@ public class FieldOrderAnnotationFacetFactoryTest extends AbstractFacetFactoryTe
     }
 
 }
-

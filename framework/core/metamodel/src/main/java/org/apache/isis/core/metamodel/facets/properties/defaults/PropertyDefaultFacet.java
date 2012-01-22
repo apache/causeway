@@ -27,11 +27,13 @@ import org.apache.isis.core.metamodel.facets.object.callbacks.CreatedCallbackFac
  * Provides a default value for a property of a newly created object.
  * 
  * <p>
- * In the standard Apache Isis Programming Model, corresponds to the <tt>defaultXxx</tt> supporting method for the
- * property with accessor <tt>getXxx</tt>.
+ * In the standard Apache Isis Programming Model, corresponds to the
+ * <tt>defaultXxx</tt> supporting method for the property with accessor
+ * <tt>getXxx</tt>.
  * 
  * <p>
- * Note: an alternative mechanism may be to specify the value in the created callback.
+ * Note: an alternative mechanism may be to specify the value in the created
+ * callback.
  * 
  * @see CreatedCallbackFacet
  */

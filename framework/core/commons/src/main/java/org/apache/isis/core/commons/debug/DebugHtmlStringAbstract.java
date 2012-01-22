@@ -35,7 +35,8 @@ public abstract class DebugHtmlStringAbstract implements DebugBuilder {
     public void concat(final DebugBuilder debug) {
         appendHtml(debug.toString());
     }
-    
+
+    @Override
     public void append(final int number, final int width) {
     }
 
@@ -87,10 +88,11 @@ public abstract class DebugHtmlStringAbstract implements DebugBuilder {
 
     @Override
     public void appendPreformatted(final String label, final String object) {
-        String value = object == null ? "null" : object.toString();
+        final String value = object == null ? "null" : object.toString();
         appendln(label, "<pre>" + value + "</pre>");
     };
 
+    @Override
     public void appendln(final String label, final Object object) {
         final String value = object == null ? "null" : object.toString();
         appendln(label, value);
@@ -142,14 +144,9 @@ public abstract class DebugHtmlStringAbstract implements DebugBuilder {
             appendHtml("<head>");
             appendHtml("<title>Debug Details</title>");
             appendHtml("<style type=\"text/css\">");
-            appendHtml("body { margin: 15px; }\n"
-                + "links { font-size: 80%; padding-bottom:5px; }\n"
-                + "td {vertical-align: top; margin-left: 15px;}\n"
-                + "td.error {color: red; font-style: italic; }\n"
-                + "td.code {white-space: pre; font-family: monospace;}\n"
-                + "th.title {text-align: left; padding: 0.3em 1em; font-style: italic; background: #AED1FF; }\n"
-                + "td.label {width: 14em; text-align: right; padding-right: 1.5em; padding-top: 0.2em; font-size: 80%; font-weight: bold; }\n"
-                + "span.facet-type { font-weight: bold; padding-right: 10px; }\n");
+            appendHtml("body { margin: 15px; }\n" + "links { font-size: 80%; padding-bottom:5px; }\n" + "td {vertical-align: top; margin-left: 15px;}\n" + "td.error {color: red; font-style: italic; }\n" + "td.code {white-space: pre; font-family: monospace;}\n"
+                    + "th.title {text-align: left; padding: 0.3em 1em; font-style: italic; background: #AED1FF; }\n" + "td.label {width: 14em; text-align: right; padding-right: 1.5em; padding-top: 0.2em; font-size: 80%; font-weight: bold; }\n"
+                    + "span.facet-type { font-weight: bold; padding-right: 10px; }\n");
             appendHtml("</style>");
             appendHtml("</head>");
             appendHtml("<body>");
@@ -224,9 +221,9 @@ public abstract class DebugHtmlStringAbstract implements DebugBuilder {
             tableLevel--;
         }
     }
-    
+
     @Override
-    public void appendPreformatted(String text) {
+    public void appendPreformatted(final String text) {
         appendln("<pre>" + text + "</pre>");
     }
 

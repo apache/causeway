@@ -25,8 +25,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 
-public class ParameterChoicesFacetDerivedFromChoicesFacetFacetFactory extends FacetFactoryAbstract implements
-    AdapterMapAware {
+public class ParameterChoicesFacetDerivedFromChoicesFacetFacetFactory extends FacetFactoryAbstract implements AdapterMapAware {
 
     private AdapterMap adapterMap;
 
@@ -36,15 +35,13 @@ public class ParameterChoicesFacetDerivedFromChoicesFacetFacetFactory extends Fa
 
     @Override
     public void processParams(final ProcessParameterContext processParameterContext) {
-        final Class<?> paramType =
-            processParameterContext.getMethod().getParameterTypes()[processParameterContext.getParamNum()];
+        final Class<?> paramType = processParameterContext.getMethod().getParameterTypes()[processParameterContext.getParamNum()];
 
         if (!paramType.isEnum()) {
             return;
         }
 
-        FacetUtil.addFacet(new ActionParameterChoicesFacetDerivedFromChoicesFacet(processParameterContext
-            .getFacetHolder(), getSpecificationLookup(), getAdapterMap()));
+        FacetUtil.addFacet(new ActionParameterChoicesFacetDerivedFromChoicesFacet(processParameterContext.getFacetHolder(), getSpecificationLookup(), getAdapterMap()));
     }
 
     // /////////////////////////////////////////////

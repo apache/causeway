@@ -33,15 +33,15 @@ import org.apache.isis.core.progmodel.facets.MethodFinderUtils;
 import org.apache.isis.core.progmodel.facets.MethodPrefixBasedFacetFactoryAbstract;
 import org.apache.isis.core.progmodel.facets.MethodPrefixConstants;
 
-public class DisabledFacetViaDisableMethodFacetFactory extends MethodPrefixBasedFacetFactoryAbstract implements
-    AdapterMapAware {
+public class DisabledFacetViaDisableMethodFacetFactory extends MethodPrefixBasedFacetFactoryAbstract implements AdapterMapAware {
 
     private static final String[] PREFIXES = { MethodPrefixConstants.DISABLE_PREFIX };
 
     private AdapterMap adapterMap;
 
     /**
-     * Note that the {@link Facet}s registered are the generic ones from noa-architecture (where they exist)
+     * Note that the {@link Facet}s registered are the generic ones from
+     * noa-architecture (where they exist)
      */
     public DisabledFacetViaDisableMethodFacetFactory() {
         super(FeatureType.MEMBERS, PREFIXES);
@@ -62,9 +62,7 @@ public class DisabledFacetViaDisableMethodFacetFactory extends MethodPrefixBased
         final String capitalizedName = NameUtils.javaBaseNameStripAccessorPrefixIfRequired(method.getName());
 
         final Class<?> cls = processMethodContext.getCls();
-        final Method disableMethod =
-            MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, MethodPrefixConstants.DISABLE_PREFIX
-                + capitalizedName, String.class, new Class[] {});
+        final Method disableMethod = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, MethodPrefixConstants.DISABLE_PREFIX + capitalizedName, String.class, new Class[] {});
         if (disableMethod == null) {
             return;
         }

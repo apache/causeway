@@ -42,7 +42,8 @@ public class TitleMethodFacetFactory extends MethodPrefixBasedFacetFactoryAbstra
     }
 
     /**
-     * If no title or toString can be used then will use Facets provided by {@link FallbackFacetFactory} instead.
+     * If no title or toString can be used then will use Facets provided by
+     * {@link FallbackFacetFactory} instead.
      */
     @Override
     public void process(final ProcessClassContext processClassContext) {

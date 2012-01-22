@@ -40,7 +40,8 @@ public class HideForSessionFacetViaMethod extends HideForSessionFacetAbstract im
     }
 
     /**
-     * Returns a singleton list of the {@link Method} provided in the constructor.
+     * Returns a singleton list of the {@link Method} provided in the
+     * constructor.
      */
     @Override
     public List<Method> getMethods() {
@@ -58,7 +59,8 @@ public class HideForSessionFacetViaMethod extends HideForSessionFacetAbstract im
     }
 
     /**
-     * Will only check provided that a {@link AuthenticationSession} has been provided.
+     * Will only check provided that a {@link AuthenticationSession} has been
+     * provided.
      */
     @Override
     public String hiddenReason(final AuthenticationSession session) {

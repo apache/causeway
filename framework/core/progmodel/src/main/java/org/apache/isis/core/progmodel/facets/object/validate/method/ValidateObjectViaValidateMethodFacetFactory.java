@@ -43,8 +43,7 @@ public class ValidateObjectViaValidateMethodFacetFactory extends MethodPrefixBas
         final Class<?> cls = processClassContext.getCls();
         final FacetHolder facetHolder = processClassContext.getFacetHolder();
 
-        final Method method =
-            MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, VALIDATE_PREFIX, String.class, NO_PARAMETERS_TYPES);
+        final Method method = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, VALIDATE_PREFIX, String.class, NO_PARAMETERS_TYPES);
         if (method != null) {
             FacetUtil.addFacet(new ValidateObjectFacetViaValidateMethod(method, facetHolder));
             processClassContext.removeMethod(method);

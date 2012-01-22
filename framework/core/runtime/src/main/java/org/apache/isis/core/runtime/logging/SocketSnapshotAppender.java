@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.runtime.logging;
 
 import java.io.BufferedWriter;
@@ -27,7 +26,6 @@ import java.net.Socket;
 
 import org.apache.log4j.Logger;
 import org.apache.log4j.spi.TriggeringEventEvaluator;
-
 
 public class SocketSnapshotAppender extends SnapshotAppender {
     private static final Logger LOG = Logger.getLogger(SmtpSnapshotAppender.class);

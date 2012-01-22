@@ -32,8 +32,7 @@ import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.runtimecontext.DependencyInjector;
 import org.apache.isis.core.metamodel.runtimecontext.DependencyInjectorAware;
 
-public abstract class ValueUsingValueSemanticsProviderFacetFactory<T> extends FacetFactoryAbstract implements
-    IsisConfigurationAware, AuthenticationSessionProviderAware, AdapterMapAware, DependencyInjectorAware {
+public abstract class ValueUsingValueSemanticsProviderFacetFactory<T> extends FacetFactoryAbstract implements IsisConfigurationAware, AuthenticationSessionProviderAware, AdapterMapAware, DependencyInjectorAware {
 
     private IsisConfiguration configuration;
     private AuthenticationSessionProvider authenticationSessionProvider;
@@ -49,8 +48,7 @@ public abstract class ValueUsingValueSemanticsProviderFacetFactory<T> extends Fa
     }
 
     protected void addFacets(final ValueSemanticsProviderAndFacetAbstract<T> adapter) {
-        final ValueFacetUsingSemanticsProvider facet =
-            new ValueFacetUsingSemanticsProvider(adapter, adapter, getContext());
+        final ValueFacetUsingSemanticsProvider facet = new ValueFacetUsingSemanticsProvider(adapter, adapter, getContext());
         FacetUtil.addFacet(facet);
     }
 
@@ -64,9 +62,7 @@ public abstract class ValueUsingValueSemanticsProviderFacetFactory<T> extends Fa
 
     public ValueSemanticsProviderContext getContext() {
         if (context == null) {
-            context =
-                new ValueSemanticsProviderContext(authenticationSessionProvider, getSpecificationLookup(),
-                    adapterManager, dependencyInjector);
+            context = new ValueSemanticsProviderContext(authenticationSessionProvider, getSpecificationLookup(), adapterManager, dependencyInjector);
         }
         return context;
     }

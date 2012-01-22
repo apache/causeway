@@ -45,19 +45,19 @@ import com.google.common.collect.Lists;
 public class ObjectActionParameterAbstractTest_getId_and_getName {
 
     private final static class ObjectActionParameterAbstractToTest extends ObjectActionParameterAbstract {
-        private ObjectActionParameterAbstractToTest(int number, ObjectActionImpl objectAction, TypedHolder peer) {
+        private ObjectActionParameterAbstractToTest(final int number, final ObjectActionImpl objectAction, final TypedHolder peer) {
             super(number, objectAction, peer);
         }
 
         private ObjectSpecification objectSpec;
 
         @Override
-        public ObjectAdapter get(ObjectAdapter owner) {
+        public ObjectAdapter get(final ObjectAdapter owner) {
             return null;
         }
 
         @Override
-        public Instance getInstance(ObjectAdapter adapter) {
+        public Instance getInstance(final ObjectAdapter adapter) {
             return null;
         }
 
@@ -67,7 +67,7 @@ public class ObjectActionParameterAbstractTest_getId_and_getName {
         }
 
         @Override
-        public String isValid(ObjectAdapter adapter, Object proposedValue) {
+        public String isValid(final ObjectAdapter adapter, final Object proposedValue) {
             return null;
         }
 
@@ -76,7 +76,7 @@ public class ObjectActionParameterAbstractTest_getId_and_getName {
             return objectSpec;
         }
 
-        public void setSpecification(ObjectSpecification objectSpec) {
+        public void setSpecification(final ObjectSpecification objectSpec) {
             this.objectSpec = objectSpec;
         }
     }
@@ -197,8 +197,7 @@ public class ObjectActionParameterAbstractTest_getId_and_getName {
                 will(returnValue(null));
 
                 one(parentAction).getParameters((Filter<ObjectActionParameter>) with(anything()));
-                will(returnValue(Lists.newArrayList(stubObjectActionParameterString, objectActionParameter,
-                    stubObjectActionParameterString2)));
+                will(returnValue(Lists.newArrayList(stubObjectActionParameterString, objectActionParameter, stubObjectActionParameterString2)));
             }
         });
 
@@ -217,13 +216,11 @@ public class ObjectActionParameterAbstractTest_getId_and_getName {
                 will(returnValue(null));
 
                 one(parentAction).getParameters((Filter<ObjectActionParameter>) with(anything()));
-                will(returnValue(Lists.newArrayList(stubObjectActionParameterString, objectActionParameter,
-                    stubObjectActionParameterString2)));
+                will(returnValue(Lists.newArrayList(stubObjectActionParameterString, objectActionParameter, stubObjectActionParameterString2)));
             }
         });
 
         assertThat(objectActionParameter.getName(), is("string 2"));
     }
-
 
 }

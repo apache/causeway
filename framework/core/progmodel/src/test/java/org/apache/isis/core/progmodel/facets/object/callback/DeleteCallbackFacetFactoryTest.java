@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.object.callback;
 
 import java.lang.reflect.Method;
@@ -30,7 +29,6 @@ import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.progmodel.facets.object.callbacks.remove.RemoveCallbackViaDeleteMethodFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.callbacks.remove.RemovedCallbackFacetViaMethod;
 import org.apache.isis.core.progmodel.facets.object.callbacks.remove.RemovingCallbackFacetViaMethod;
-
 
 public class DeleteCallbackFacetFactoryTest extends AbstractFacetFactoryTest {
 
@@ -49,12 +47,11 @@ public class DeleteCallbackFacetFactoryTest extends AbstractFacetFactoryTest {
         super.tearDown();
     }
 
-
-
     public void testDeletingLifecycleMethodPickedUpOn() {
         class Customer {
             @SuppressWarnings("unused")
-			public void deleting() {};
+            public void deleting() {
+            };
         }
         final Method method = findMethod(Customer.class, "deleting");
 
@@ -72,7 +69,8 @@ public class DeleteCallbackFacetFactoryTest extends AbstractFacetFactoryTest {
     public void testDeletedLifecycleMethodPickedUpOn() {
         class Customer {
             @SuppressWarnings("unused")
-			public void deleted() {};
+            public void deleted() {
+            };
         }
         final Method method = findMethod(Customer.class, "deleted");
 
@@ -88,4 +86,3 @@ public class DeleteCallbackFacetFactoryTest extends AbstractFacetFactoryTest {
     }
 
 }
-

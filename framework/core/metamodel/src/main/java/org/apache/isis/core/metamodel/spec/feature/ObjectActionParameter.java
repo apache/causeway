@@ -42,8 +42,9 @@ public interface ObjectActionParameter extends ObjectFeature, CurrentHolder {
     boolean isObject();
 
     /**
-     * Only for symmetry with {@link ObjectAssociation}, however since the NOF does not support collections as actions
-     * all implementations should return <tt>false</tt>.
+     * Only for symmetry with {@link ObjectAssociation}, however since the NOF
+     * does not support collections as actions all implementations should return
+     * <tt>false</tt>.
      */
     boolean isCollection();
 
@@ -53,7 +54,8 @@ public interface ObjectActionParameter extends ObjectFeature, CurrentHolder {
     ObjectAction getAction();
 
     /**
-     * Returns a flag indicating if it can be left unset when the action can be invoked.
+     * Returns a flag indicating if it can be left unset when the action can be
+     * invoked.
      */
     boolean isOptional();
 
@@ -66,21 +68,22 @@ public interface ObjectActionParameter extends ObjectFeature, CurrentHolder {
      * Returns the name of this parameter.
      * 
      * <p>
-     * Because Java's reflection API does not allow us to access the code name of
-     * the parameter, we have to do figure out the name of the parameter ourselves:
+     * Because Java's reflection API does not allow us to access the code name
+     * of the parameter, we have to do figure out the name of the parameter
+     * ourselves:
      * <ul>
-     * <li>If there is a {@link NamedFacet} associated with this parameter then we infer
-     * a name from this, eg "First Name" becomes "firstName".
+     * <li>If there is a {@link NamedFacet} associated with this parameter then
+     * we infer a name from this, eg "First Name" becomes "firstName".
      * <li>Otherwise we use the type, eg "string".
-     * <li>If there is more than one parameter
-     * of the same type, then we use a numeric suffix (eg "string1", "string2").  Wrappers
-     * and primitives are considered to be the same type.
+     * <li>If there is more than one parameter of the same type, then we use a
+     * numeric suffix (eg "string1", "string2"). Wrappers and primitives are
+     * considered to be the same type.
      * </ul>
      */
+    @Override
     String getName();
 
-    ActionArgumentContext createProposedArgumentInteractionContext(AuthenticationSession session,
-        InteractionInvocationMethod invocationMethod, ObjectAdapter targetObject, ObjectAdapter[] args, int position);
+    ActionArgumentContext createProposedArgumentInteractionContext(AuthenticationSession session, InteractionInvocationMethod invocationMethod, ObjectAdapter targetObject, ObjectAdapter[] args, int position);
 
     /**
      * Whether proposed value for this parameter is valid.

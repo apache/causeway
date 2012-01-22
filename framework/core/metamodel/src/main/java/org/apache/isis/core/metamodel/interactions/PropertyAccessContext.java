@@ -29,15 +29,14 @@ import org.apache.isis.core.metamodel.consent.InteractionContextType;
 import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
 
 /**
- * See {@link InteractionContext} for overview; analogous to {@link PropertyAccessEvent}.
+ * See {@link InteractionContext} for overview; analogous to
+ * {@link PropertyAccessEvent}.
  */
 public class PropertyAccessContext extends AccessContext<PropertyAccessEvent> {
 
     private final ObjectAdapter value;
 
-    public PropertyAccessContext(final AuthenticationSession session,
-        final InteractionInvocationMethod invocationMethod, final ObjectAdapter target, final Identifier id,
-        final ObjectAdapter value) {
+    public PropertyAccessContext(final AuthenticationSession session, final InteractionInvocationMethod invocationMethod, final ObjectAdapter target, final Identifier id, final ObjectAdapter value) {
         super(InteractionContextType.PROPERTY_READ, session, invocationMethod, id, target);
 
         this.value = value;

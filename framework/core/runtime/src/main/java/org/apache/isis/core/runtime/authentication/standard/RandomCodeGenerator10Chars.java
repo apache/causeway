@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.runtime.authentication.standard;
 
 public class RandomCodeGenerator10Chars implements RandomCodeGenerator {
@@ -25,6 +24,7 @@ public class RandomCodeGenerator10Chars implements RandomCodeGenerator {
     private static final int NUMBER_CHARACTERS = 10;
     private static final String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
 
+    @Override
     public String generateRandomCode() {
         final StringBuilder buf = new StringBuilder(NUMBER_CHARACTERS);
         for (int i = 0; i < NUMBER_CHARACTERS; i++) {

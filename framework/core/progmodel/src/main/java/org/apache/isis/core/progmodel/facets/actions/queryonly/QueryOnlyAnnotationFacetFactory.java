@@ -34,10 +34,10 @@ public class QueryOnlyAnnotationFacetFactory extends AnnotationBasedFacetFactory
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
         final QueryOnly annotation = getAnnotation(processMethodContext.getMethod(), QueryOnly.class);
-        if(annotation == null) {
+        if (annotation == null) {
             return;
         }
-        FacetedMethod facetHolder = processMethodContext.getFacetHolder();
+        final FacetedMethod facetHolder = processMethodContext.getFacetHolder();
         FacetUtil.addFacet(new QueryOnlyFacetAnnotation(facetHolder));
         FacetUtil.addFacet(new IdempotentFacetInferredFromQueryOnly(facetHolder));
     }

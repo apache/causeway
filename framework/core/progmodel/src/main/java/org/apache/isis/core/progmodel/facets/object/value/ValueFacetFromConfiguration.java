@@ -24,10 +24,8 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
 public class ValueFacetFromConfiguration extends ValueFacetAbstract {
 
-    public ValueFacetFromConfiguration(final String candidateSemanticsProviderName, final FacetHolder holder,
-        final IsisConfiguration configuration, final ValueSemanticsProviderContext context) {
-        super(ValueSemanticsProviderUtil.valueSemanticsProviderOrNull(null, candidateSemanticsProviderName),
-            AddFacetsIfInvalidStrategy.DONT_ADD, holder, configuration, context);
+    public ValueFacetFromConfiguration(final String candidateSemanticsProviderName, final FacetHolder holder, final IsisConfiguration configuration, final ValueSemanticsProviderContext context) {
+        super(ValueSemanticsProviderUtil.valueSemanticsProviderOrNull(null, candidateSemanticsProviderName), AddFacetsIfInvalidStrategy.DONT_ADD, holder, configuration, context);
     }
 
 }

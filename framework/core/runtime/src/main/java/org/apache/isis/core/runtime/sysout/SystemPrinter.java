@@ -72,7 +72,7 @@ public class SystemPrinter {
             final String property = properties.getProperty(name);
             final StringBuilder buf = new StringBuilder();
             if (name.endsWith(".path") || name.endsWith(".dirs")) {
-                String[] split = property.split(":");
+                final String[] split = property.split(":");
                 buf.append(split[0]);
                 for (int i = 1; i < split.length; i++) {
                     buf.append("\n\t\t" + split[i]);
@@ -85,13 +85,13 @@ public class SystemPrinter {
         if (file.isDirectory()) {
             final String[] files = file.list(new FilenameFilter() {
                 @Override
-                public boolean accept(File dir, String name) {
+                public boolean accept(final File dir, final String name) {
                     return name.endsWith(".jar");
                 }
             });
             printBlock("Libs");
-            for (int i = 0; i < files.length; i++) {
-                print(files[i]);
+            for (final String file2 : files) {
+                print(file2);
             }
         }
 
@@ -103,28 +103,28 @@ public class SystemPrinter {
         if (file.isDirectory()) {
             final String[] files = file.list(new FilenameFilter() {
                 @Override
-                public boolean accept(File dir, String name) {
+                public boolean accept(final File dir, final String name) {
                     return new File(dir, name).isFile();
                 }
             });
             printBlock("Config files");
-            for (int i = 0; i < files.length; i++) {
-                print(files[i]);
+            for (final String file2 : files) {
+                print(file2);
             }
 
-            for (int i = 0; i < files.length; i++) {
+            for (final String file2 : files) {
                 print("");
                 print("--------------------------------------------------------------------------------------------------------");
-                print(files[i]);
+                print(file2);
                 print("");
                 LineNumberReader fileInputStream = null;
                 try {
-                    fileInputStream = new LineNumberReader(new FileReader(new File(file, files[i])));
+                    fileInputStream = new LineNumberReader(new FileReader(new File(file, file2)));
                     String line;
                     while ((line = fileInputStream.readLine()) != null) {
                         print(fileInputStream.getLineNumber() + "  " + line);
                     }
-                } catch (Exception e) {
+                } catch (final Exception e) {
                     throw new IsisException(e);
                 } finally {
                     IoUtils.closeSafely(fileInputStream);
@@ -141,7 +141,7 @@ public class SystemPrinter {
         print(AboutIsis.getFrameworkName() + ", " + AboutIsis.getFrameworkVersion() + compileDate);
     }
 
-    public void printErrorMessage(String message) {
+    public void printErrorMessage(final String message) {
         output.println("Error: " + message);
     }
 

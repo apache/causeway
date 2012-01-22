@@ -29,12 +29,12 @@ import org.apache.isis.core.metamodel.consent.InteractionContextType;
 import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
 
 /**
- * See {@link InteractionContext} for overview; analogous to {@link ObjectValidityEvent}.
+ * See {@link InteractionContext} for overview; analogous to
+ * {@link ObjectValidityEvent}.
  */
 public class ObjectValidityContext extends ValidityContext<ObjectValidityEvent> implements ProposedHolder {
 
-    public ObjectValidityContext(final AuthenticationSession session,
-        final InteractionInvocationMethod invocationMethod, final ObjectAdapter target, final Identifier identifier) {
+    public ObjectValidityContext(final AuthenticationSession session, final InteractionInvocationMethod invocationMethod, final ObjectAdapter target, final Identifier identifier) {
         super(InteractionContextType.OBJECT_VALIDATE, session, invocationMethod, identifier, target);
     }
 

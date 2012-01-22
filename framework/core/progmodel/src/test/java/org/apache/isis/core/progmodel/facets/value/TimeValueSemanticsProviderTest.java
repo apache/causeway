@@ -22,18 +22,17 @@ package org.apache.isis.core.progmodel.facets.value;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
+import org.apache.isis.applib.adapters.EncodingException;
+import org.apache.isis.applib.value.Time;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
+import org.apache.isis.core.progmodel.facets.value.time.TimeValueSemanticsProvider;
 import org.jmock.Expectations;
 import org.jmock.integration.junit4.JMock;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
-import org.apache.isis.applib.adapters.EncodingException;
-import org.apache.isis.applib.value.Time;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
-import org.apache.isis.core.progmodel.facets.value.time.TimeValueSemanticsProvider;
 
 @RunWith(JMock.class)
 public class TimeValueSemanticsProviderTest extends ValueSemanticsProviderAbstractTestCase {
@@ -72,9 +71,18 @@ public class TimeValueSemanticsProviderTest extends ValueSemanticsProviderAbstra
     @Test
     @Ignore
     public void testParseEntryOfHoursMinutesSecondsText() throws Exception {
-        final Object parsed = adapter.parseTextEntry(null, "8:30:45"); // I can't get the text parser to parse HH:mm:ss
-                                                                       // before HH:mm!!
-        Time expected = new Time(8, 30, 45);
+        final Object parsed = adapter.parseTextEntry(null, "8:30:45"); // I
+                                                                       // can't
+                                                                       // get
+                                                                       // the
+                                                                       // text
+                                                                       // parser
+                                                                       // to
+                                                                       // parse
+                                                                       // HH:mm:ss
+                                                                       // before
+                                                                       // HH:mm!!
+        final Time expected = new Time(8, 30, 45);
         assertEquals(expected, parsed);
     }
 
@@ -110,7 +118,7 @@ public class TimeValueSemanticsProviderTest extends ValueSemanticsProviderAbstra
 
     @Test
     public void testRestoreTime() throws Exception {
-        Time expected = new Time(21, 30);
+        final Time expected = new Time(21, 30);
         final Object parsed = adapter.fromEncodedString("213000000");
         assertEquals(expected, parsed);
     }

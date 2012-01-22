@@ -36,13 +36,14 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.specloader.specimpl.ObjectSpecificationAbstract;
 
 /**
- * A custom {@link ObjectSpecification} that is designed to treat the {@link ObjectList} class as a "standalone"
- * collection.
+ * A custom {@link ObjectSpecification} that is designed to treat the
+ * {@link ObjectList} class as a "standalone" collection.
  */
 public class ObjectSpecificationForObjectList extends ObjectSpecificationAbstract {
 
     /**
-     * Used as {@link #getShortIdentifier()}, {@link #getName()} and {@link #getPluralName()}.
+     * Used as {@link #getShortIdentifier()}, {@link #getName()} and
+     * {@link #getPluralName()}.
      */
     private static final String NAME = "Instances";
     private static final String DESCRIBED_AS = "Typed instances";
@@ -57,8 +58,9 @@ public class ObjectSpecificationForObjectList extends ObjectSpecificationAbstrac
     // /////////////////////////////////////////////////////////
 
     /**
-     * Review: wouldn't it be better to have a FacetFactory that specifically recognized {@link ObjectList} as a type
-     * and installed a {@link CollectionFacet} for it.
+     * Review: wouldn't it be better to have a FacetFactory that specifically
+     * recognized {@link ObjectList} as a type and installed a
+     * {@link CollectionFacet} for it.
      */
     @Override
     public boolean isCollectionOrIsAggregated() {
@@ -96,7 +98,8 @@ public class ObjectSpecificationForObjectList extends ObjectSpecificationAbstrac
      * No-op.
      * 
      * <p>
-     * Review: is this ever called for an instance of this class? If not, then no need to override.
+     * Review: is this ever called for an instance of this class? If not, then
+     * no need to override.
      */
     @Override
     public void markAsService() {
@@ -112,7 +115,8 @@ public class ObjectSpecificationForObjectList extends ObjectSpecificationAbstrac
     // /////////////////////////////////////////////////////
 
     /**
-     * Review: is this ever called for an instance of this class? If not, then no need to override.
+     * Review: is this ever called for an instance of this class? If not, then
+     * no need to override.
      */
     @Override
     public ObjectAssociation getAssociation(final String id) {
@@ -141,8 +145,7 @@ public class ObjectSpecificationForObjectList extends ObjectSpecificationAbstrac
      * Review: is it necessary to override for this subclass?
      */
     @Override
-    public ObjectAction getObjectAction(final ActionType type, final String id,
-        final List<ObjectSpecification> parameters) {
+    public ObjectAction getObjectAction(final ActionType type, final String id, final List<ObjectSpecification> parameters) {
         return null;
     }
 
@@ -161,7 +164,6 @@ public class ObjectSpecificationForObjectList extends ObjectSpecificationAbstrac
     public ObjectAction getObjectAction(final String nameParmsIdentityString) {
         return null;
     }
-
 
     // /////////////////////////////////////////////////////
     // Service Actions

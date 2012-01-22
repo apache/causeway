@@ -44,8 +44,7 @@ public class MultiLineAnnotationOnParameterFacetFactory extends AnnotationBasedF
         if (!isString(parameterTypes[processParameterContext.getParamNum()])) {
             return;
         }
-        final Annotation[] parameterAnnotations =
-            getParameterAnnotations(processParameterContext.getMethod())[processParameterContext.getParamNum()];
+        final Annotation[] parameterAnnotations = getParameterAnnotations(processParameterContext.getMethod())[processParameterContext.getParamNum()];
         for (final Annotation parameterAnnotation : parameterAnnotations) {
             if (parameterAnnotation instanceof MultiLine) {
                 final MultiLine annotation = (MultiLine) parameterAnnotation;
@@ -56,8 +55,7 @@ public class MultiLineAnnotationOnParameterFacetFactory extends AnnotationBasedF
     }
 
     private MultiLineFacet create(final MultiLine annotation, final FacetHolder holder) {
-        return (annotation != null) ? new MultiLineFacetAnnotationOnParameter(annotation.numberOfLines(),
-            annotation.preventWrapping(), holder) : null;
+        return (annotation != null) ? new MultiLineFacetAnnotationOnParameter(annotation.numberOfLines(), annotation.preventWrapping(), holder) : null;
     }
 
 }

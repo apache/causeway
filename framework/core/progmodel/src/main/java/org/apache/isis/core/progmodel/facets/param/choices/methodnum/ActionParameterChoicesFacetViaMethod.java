@@ -34,21 +34,20 @@ import org.apache.isis.core.metamodel.spec.SpecificationLookup;
 import org.apache.isis.core.progmodel.facets.CollectionUtils;
 import org.apache.isis.core.progmodel.facets.param.choices.ActionParameterChoicesFacetAbstract;
 
-public class ActionParameterChoicesFacetViaMethod extends ActionParameterChoicesFacetAbstract implements
-    ImperativeFacet {
+public class ActionParameterChoicesFacetViaMethod extends ActionParameterChoicesFacetAbstract implements ImperativeFacet {
 
     private final Method method;
     private final Class<?> choicesType;
 
-    public ActionParameterChoicesFacetViaMethod(final Method method, final Class<?> choicesType,
-        final FacetHolder holder, final SpecificationLookup specificationLookup, final AdapterMap adapterManager) {
+    public ActionParameterChoicesFacetViaMethod(final Method method, final Class<?> choicesType, final FacetHolder holder, final SpecificationLookup specificationLookup, final AdapterMap adapterManager) {
         super(holder, specificationLookup, adapterManager);
         this.method = method;
         this.choicesType = choicesType;
     }
 
     /**
-     * Returns a singleton list of the {@link Method} provided in the constructor.
+     * Returns a singleton list of the {@link Method} provided in the
+     * constructor.
      */
     @Override
     public List<Method> getMethods() {

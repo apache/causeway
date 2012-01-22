@@ -19,7 +19,6 @@
 
 package org.apache.isis.core.progmodel.facets.object.ignore.javalang;
 
-
 /**
  * Removes all methods inherited from {@link Object}.
  */
@@ -28,6 +27,5 @@ public class RemoveJavaLangComparableMethodsFacetFactory extends AbstractRemoveM
     public RemoveJavaLangComparableMethodsFacetFactory() {
         super(Comparable.class);
     }
-
 
 }

@@ -29,8 +29,7 @@ import org.apache.isis.core.progmodel.facets.properties.choices.PropertyChoicesF
 
 public class PropertyChoicesFacetDerivedFromChoicesFacet extends PropertyChoicesFacetAbstract {
 
-    public PropertyChoicesFacetDerivedFromChoicesFacet(final FacetHolder holder,
-        final SpecificationLookup specificationLookup) {
+    public PropertyChoicesFacetDerivedFromChoicesFacet(final FacetHolder holder, final SpecificationLookup specificationLookup) {
         super(holder, specificationLookup);
     }
 

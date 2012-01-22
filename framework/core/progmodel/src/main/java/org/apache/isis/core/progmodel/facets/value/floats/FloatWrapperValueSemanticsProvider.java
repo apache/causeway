@@ -28,14 +28,14 @@ import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProvider
 public class FloatWrapperValueSemanticsProvider extends FloatValueSemanticsProviderAbstract {
 
     /**
-     * Required because implementation of {@link Parser} and {@link EncoderDecoder}.
+     * Required because implementation of {@link Parser} and
+     * {@link EncoderDecoder}.
      */
     public FloatWrapperValueSemanticsProvider() {
         this(null, null, null);
     }
 
-    public FloatWrapperValueSemanticsProvider(final FacetHolder holder, final IsisConfiguration configuration,
-        final ValueSemanticsProviderContext context) {
+    public FloatWrapperValueSemanticsProvider(final FacetHolder holder, final IsisConfiguration configuration, final ValueSemanticsProviderContext context) {
         super(holder, Float.class, configuration, context);
     }
 

@@ -42,8 +42,7 @@ public class ActionChoicesFacetViaMethod extends ActionChoicesFacetAbstract impl
     private final SpecificationLookup specificationLookup;
     private final AdapterMap adapterMap;
 
-    public ActionChoicesFacetViaMethod(final Method method, final Class<?> choicesType, final FacetHolder holder,
-        final SpecificationLookup specificationLookup, final AdapterMap adapterManager) {
+    public ActionChoicesFacetViaMethod(final Method method, final Class<?> choicesType, final FacetHolder holder, final SpecificationLookup specificationLookup, final AdapterMap adapterManager) {
         super(holder);
         this.method = method;
         this.choicesType = choicesType;
@@ -52,7 +51,8 @@ public class ActionChoicesFacetViaMethod extends ActionChoicesFacetAbstract impl
     }
 
     /**
-     * Returns a singleton list of the {@link Method} provided in the constructor.
+     * Returns a singleton list of the {@link Method} provided in the
+     * constructor.
      */
     @Override
     public List<Method> getMethods() {
@@ -73,9 +73,7 @@ public class ActionChoicesFacetViaMethod extends ActionChoicesFacetAbstract impl
     public Object[][] getChoices(final ObjectAdapter owningAdapter) {
         final Object invoke = AdapterInvokeUtils.invoke(method, owningAdapter);
         if (!(invoke instanceof Object[])) {
-            throw new DomainModelException(
-                "Expected an array of collections (Object[]) containing choices for all parameters, but got " + invoke
-                    + " instead. Perhaps the parameter number is missing!");
+            throw new DomainModelException("Expected an array of collections (Object[]) containing choices for all parameters, but got " + invoke + " instead. Perhaps the parameter number is missing!");
         }
         final Object[] options = (Object[]) invoke;
         final Object[][] results = new Object[options.length][];

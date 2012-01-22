@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.webapp.config;
 
 import java.io.IOException;
@@ -30,27 +29,29 @@ import org.apache.isis.core.commons.resource.ResourceStreamSourceAbstract;
 
 public class ResourceStreamSourceForWebInf extends ResourceStreamSourceAbstract {
 
-	public static final String DEFAULT_WEBINF_DIRECTORY = "/WEB-INF";
-	
-	private final ServletContext servletContext;
-	private final String configurationDirectory;
+    public static final String DEFAULT_WEBINF_DIRECTORY = "/WEB-INF";
 
-	public ResourceStreamSourceForWebInf(ServletContext servletContext) {
-		this(servletContext, DEFAULT_WEBINF_DIRECTORY);
-	}
-	
-	public ResourceStreamSourceForWebInf(ServletContext servletContext, String configurationDirectory) {
-		this.servletContext = servletContext;
-		this.configurationDirectory = configurationDirectory;
-	}
-	
-	public String getName() {
-		return "servlet context ('" + configurationDirectory + "')";
-	}
+    private final ServletContext servletContext;
+    private final String configurationDirectory;
 
-	public InputStream doReadResource(String resourcePath) throws IOException {
-		String fullyQualifiedResourcePath = PathUtils.combine(configurationDirectory, resourcePath);
-		return servletContext.getResourceAsStream(fullyQualifiedResourcePath);
-	}
+    public ResourceStreamSourceForWebInf(final ServletContext servletContext) {
+        this(servletContext, DEFAULT_WEBINF_DIRECTORY);
+    }
+
+    public ResourceStreamSourceForWebInf(final ServletContext servletContext, final String configurationDirectory) {
+        this.servletContext = servletContext;
+        this.configurationDirectory = configurationDirectory;
+    }
+
+    @Override
+    public String getName() {
+        return "servlet context ('" + configurationDirectory + "')";
+    }
+
+    @Override
+    public InputStream doReadResource(final String resourcePath) throws IOException {
+        final String fullyQualifiedResourcePath = PathUtils.combine(configurationDirectory, resourcePath);
+        return servletContext.getResourceAsStream(fullyQualifiedResourcePath);
+    }
 
 }

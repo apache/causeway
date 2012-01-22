@@ -35,14 +35,13 @@ public class RedirectServlet extends HttpServlet {
     private String redirectTo;
 
     @Override
-    public void init(ServletConfig config) throws ServletException {
+    public void init(final ServletConfig config) throws ServletException {
         redirectTo = config.getInitParameter("redirectTo");
     }
 
     @Override
-    protected void doGet(final HttpServletRequest request, final HttpServletResponse response) throws ServletException,
-        IOException {
-        
+    protected void doGet(final HttpServletRequest request, final HttpServletResponse response) throws ServletException, IOException {
+
         response.sendRedirect(PathUtils.combine(request.getContextPath(), redirectTo));
     }
 

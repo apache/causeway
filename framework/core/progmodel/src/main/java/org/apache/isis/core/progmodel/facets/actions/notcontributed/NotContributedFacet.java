@@ -22,11 +22,12 @@ package org.apache.isis.core.progmodel.facets.actions.notcontributed;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 
 /**
- * Indicates that the (repository) action should not be contributed to any objects.
+ * Indicates that the (repository) action should not be contributed to any
+ * objects.
  * 
  * <p>
- * In the standard Apache Isis Programming Model, corresponds to annotating the action method using
- * <tt>@NotContributed</tt>.
+ * In the standard Apache Isis Programming Model, corresponds to annotating the
+ * action method using <tt>@NotContributed</tt>.
  */
 public interface NotContributedFacet extends Facet {
 

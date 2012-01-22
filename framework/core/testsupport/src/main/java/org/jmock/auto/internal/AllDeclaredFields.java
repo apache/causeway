@@ -24,17 +24,17 @@ BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
 CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY
 WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
 DAMAGE.
-*/
+ */
 package org.jmock.auto.internal;
+
+import static java.util.Arrays.asList;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
-import static java.util.Arrays.asList;
-
 public class AllDeclaredFields {
-    public static List<Field> in(Class<?> clazz) {
+    public static List<Field> in(final Class<?> clazz) {
         final ArrayList<Field> fields = new ArrayList<Field>();
         for (Class<?> c = clazz; c != Object.class; c = c.getSuperclass()) {
             fields.addAll(asList(c.getDeclaredFields()));

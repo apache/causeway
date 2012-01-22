@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.runtime.snapshot;
 
 import java.util.Collections;
@@ -51,20 +50,28 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-
 /**
- * Traverses object graph from specified root, so that an XML representation of the graph can be returned.
- *
+ * Traverses object graph from specified root, so that an XML representation of
+ * the graph can be returned.
+ * 
  * <p>
  * Initially designed to allow snapshots to be easily created.
  * 
  * <p>
  * Typical use:
+ * 
  * <pre>
- * XmlSnapshot snapshot = new XmlSnapshot(customer); // where customer is a reference to an ObjectAdapter
- * Element customerAsXml = snapshot.toXml(); // returns customer's fields, titles of simple references, number of items in collections
- * snapshot.include(&quot;placeOfBirth&quot;); // navigates to another object represented by simple reference &quot;placeOfBirth&quot;
- * snapshot.include(&quot;orders/product&quot;); // navigates to all <tt>Order</tt>s of <tt>Customer</tt>, and from them for their <tt>Product</tt>s 
+ * XmlSnapshot snapshot = new XmlSnapshot(customer); // where customer is a
+ *                                                   // reference to an
+ *                                                   // ObjectAdapter
+ * Element customerAsXml = snapshot.toXml(); // returns customer's fields, titles
+ *                                           // of simple references, number of
+ *                                           // items in collections
+ * snapshot.include(&quot;placeOfBirth&quot;); // navigates to another object represented by
+ *                                   // simple reference &quot;placeOfBirth&quot;
+ * snapshot.include(&quot;orders/product&quot;); // navigates to all &lt;tt&gt;Order&lt;/tt&gt;s of
+ *                                     // &lt;tt&gt;Customer&lt;/tt&gt;, and from them for
+ *                                     // their &lt;tt&gt;Product&lt;/tt&gt;s
  * </pre>
  */
 public class XmlSnapshot {
@@ -109,9 +116,9 @@ public class XmlSnapshot {
      */
     public XmlSnapshot(final ObjectAdapter rootAdapter, final XmlSchema schema) {
 
-    	if (LOG.isDebugEnabled()) {
-    		LOG.debug(".ctor(" + log("rootObj", rootAdapter) + andlog("schema", schema) + andlog("addOids", "" + true) + ")");
-    	}
+        if (LOG.isDebugEnabled()) {
+            LOG.debug(".ctor(" + log("rootObj", rootAdapter) + andlog("schema", schema) + andlog("addOids", "" + true) + ")");
+        }
 
         this.isisMetaModel = new IsisSchema();
         this.xsMeta = new XsMetaModel();
@@ -135,24 +142,22 @@ public class XmlSnapshot {
             throw new IsisException(e);
         }
 
-		for(String path: getPathsFor(rootAdapter.getObject())) {
-			include(path);
-		}
+        for (final String path : getPathsFor(rootAdapter.getObject())) {
+            include(path);
+        }
 
     }
 
-	private List<String> getPathsFor(Object object) {
-		if (!(object instanceof SnapshottableWithInclusions)) {
-			return Collections.emptyList();
-		}
-		List<String> paths = 
-			((SnapshottableWithInclusions) object).snapshotInclusions();
-		if (paths == null) {
-			return Collections.emptyList();
-		}
-		return paths;
-	}
-	
+    private List<String> getPathsFor(final Object object) {
+        if (!(object instanceof SnapshottableWithInclusions)) {
+            return Collections.emptyList();
+        }
+        final List<String> paths = ((SnapshottableWithInclusions) object).snapshotInclusions();
+        if (paths == null) {
+            return Collections.emptyList();
+        }
+        return paths;
+    }
 
     private String andlog(final String label, final ObjectAdapter object) {
         return ", " + log(label, object);
@@ -163,18 +168,20 @@ public class XmlSnapshot {
     }
 
     /**
-     * Creates an Element representing this object, and appends it as the root element of the Document.
+     * Creates an Element representing this object, and appends it as the root
+     * element of the Document.
      * 
-     * The Document must not yet have a root element Additionally, the supplied schemaManager must be
-     * populated with any application-level namespaces referenced in the document that the parentElement
-     * resides within. (Normally this is achieved simply by using appendXml passing in a new schemaManager -
-     * see {@link #toXml()}or {@link XmlSnapshot}).
+     * The Document must not yet have a root element Additionally, the supplied
+     * schemaManager must be populated with any application-level namespaces
+     * referenced in the document that the parentElement resides within.
+     * (Normally this is achieved simply by using appendXml passing in a new
+     * schemaManager - see {@link #toXml()}or {@link XmlSnapshot}).
      */
     private Place appendXml(final ObjectAdapter object) {
 
-    	if(LOG.isDebugEnabled()) {
-    		LOG.debug("appendXml(" + log("obj", object) + "')");
-    	}
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("appendXml(" + log("obj", object) + "')");
+        }
 
         final String fullyQualifiedClassName = object.getSpecification().getFullIdentifier();
 
@@ -190,29 +197,29 @@ public class XmlSnapshot {
         final Element element = place.getXmlElement();
         final Element xsElementElement = place.getXsdElement();
 
-        if(LOG.isDebugEnabled()) {
-        	LOG.debug("appendXml(NO): add as element to XML doc");
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("appendXml(NO): add as element to XML doc");
         }
         getXmlDocument().appendChild(element);
 
-        if(LOG.isDebugEnabled()) {
-        	LOG.debug("appendXml(NO): add as xs:element to xs:schema of the XSD document");
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("appendXml(NO): add as xs:element to xs:schema of the XSD document");
         }
         getXsdElement().appendChild(xsElementElement);
 
-        if(LOG.isDebugEnabled()) {
-        	LOG.debug("appendXml(NO): set target name in XSD, derived from FQCN of obj");
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("appendXml(NO): set target name in XSD, derived from FQCN of obj");
         }
         schema.setTargetNamespace(getXsdDocument(), fullyQualifiedClassName);
 
-        if(LOG.isDebugEnabled()) {
-        	LOG.debug("appendXml(NO): set schema location file name to XSD, derived from FQCN of obj");
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("appendXml(NO): set schema location file name to XSD, derived from FQCN of obj");
         }
         final String schemaLocationFileName = fullyQualifiedClassName + ".xsd";
         schema.assignSchema(getXmlDocument(), fullyQualifiedClassName, schemaLocationFileName);
 
-        if(LOG.isDebugEnabled()) {
-        	LOG.debug("appendXml(NO): copy into snapshot obj");
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("appendXml(NO): copy into snapshot obj");
         }
         setXmlElement(element);
         setSchemaLocationFileName(schemaLocationFileName);
@@ -221,21 +228,25 @@ public class XmlSnapshot {
     }
 
     /**
-     * Creates an Element representing this object, and appends it to the supplied parentElement, provided
-     * that an element for the object is not already appended.
+     * Creates an Element representing this object, and appends it to the
+     * supplied parentElement, provided that an element for the object is not
+     * already appended.
      * 
-     * The method uses the OID to determine if an object's element is already present. If the object is not
-     * yet persistent, then the hashCode is used instead.
+     * The method uses the OID to determine if an object's element is already
+     * present. If the object is not yet persistent, then the hashCode is used
+     * instead.
      * 
-     * The parentElement must have an owner document, and should define the nof namespace. Additionally, the
-     * supplied schemaManager must be populated with any application-level namespaces referenced in the
-     * document that the parentElement resides within. (Normally this is achieved simply by using appendXml
-     * passing in a rootElement and a new schemaManager - see {@link #toXml()}or {@link XmlSnapshot}).
+     * The parentElement must have an owner document, and should define the nof
+     * namespace. Additionally, the supplied schemaManager must be populated
+     * with any application-level namespaces referenced in the document that the
+     * parentElement resides within. (Normally this is achieved simply by using
+     * appendXml passing in a rootElement and a new schemaManager - see
+     * {@link #toXml()}or {@link XmlSnapshot}).
      */
     private Element appendXml(final Place parentPlace, final ObjectAdapter childObject) {
 
-        if(LOG.isDebugEnabled()) {
-        	LOG.debug("appendXml(" + log("parentPlace", parentPlace) + andlog("childObj", childObject) + ")");
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("appendXml(" + log("parentPlace", parentPlace) + andlog("childObj", childObject) + ")");
         }
 
         final Element parentElement = parentPlace.getXmlElement();
@@ -245,37 +256,31 @@ public class XmlSnapshot {
             throw new IllegalArgumentException("parent XML Element must have snapshot's XML document as its owner");
         }
 
-        if(LOG.isDebugEnabled()) {
-        	LOG.debug("appendXml(Pl, NO): invoking objectToElement() for " + log("childObj", childObject));
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("appendXml(Pl, NO): invoking objectToElement() for " + log("childObj", childObject));
         }
         final Place childPlace = objectToElement(childObject);
         Element childElement = childPlace.getXmlElement();
         final Element childXsElement = childPlace.getXsdElement();
 
-        if(LOG.isDebugEnabled()) {
-        	LOG.debug("appendXml(Pl, NO): invoking mergeTree of parent with child");
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("appendXml(Pl, NO): invoking mergeTree of parent with child");
         }
         childElement = mergeTree(parentElement, childElement);
 
-        if(LOG.isDebugEnabled()) {
-        	LOG.debug("appendXml(Pl, NO): adding XS Element to schema if required");
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("appendXml(Pl, NO): adding XS Element to schema if required");
         }
         schema.addXsElementIfNotPresent(parentXsElement, childXsElement);
 
         return childElement;
     }
 
-    private boolean appendXmlThenIncludeRemaining(
-            final Place parentPlace,
-            final ObjectAdapter referencedObject,
-            final Vector fieldNames,
-            final String annotation) {
+    private boolean appendXmlThenIncludeRemaining(final Place parentPlace, final ObjectAdapter referencedObject, final Vector fieldNames, final String annotation) {
 
-        if(LOG.isDebugEnabled()) {
-	        LOG.debug("appendXmlThenIncludeRemaining(: " + log("parentPlace", parentPlace)
-	                + andlog("referencedObj", referencedObject) + andlog("fieldNames", fieldNames) + andlog("annotation", annotation)
-	                + ")");
-	        LOG.debug("appendXmlThenIncludeRemaining(..): invoking appendXml(parentPlace, referencedObject)");
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("appendXmlThenIncludeRemaining(: " + log("parentPlace", parentPlace) + andlog("referencedObj", referencedObject) + andlog("fieldNames", fieldNames) + andlog("annotation", annotation) + ")");
+            LOG.debug("appendXmlThenIncludeRemaining(..): invoking appendXml(parentPlace, referencedObject)");
         }
 
         final Element referencedElement = appendXml(parentPlace, referencedObject);
@@ -283,9 +288,8 @@ public class XmlSnapshot {
 
         final boolean includedField = includeField(referencedPlace, fieldNames, annotation);
 
-        if(LOG.isDebugEnabled()) {
-        	LOG.debug("appendXmlThenIncludeRemaining(..): invoked includeField(referencedPlace, fieldNames)"
-                + andlog("returned", "" + includedField));
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("appendXmlThenIncludeRemaining(..): invoked includeField(referencedPlace, fieldNames)" + andlog("returned", "" + includedField));
         }
 
         return includedField;
@@ -318,8 +322,8 @@ public class XmlSnapshot {
     /**
      * The name of the <code>xsi:schemaLocation</code> in the XML document.
      * 
-     * Taken from the <code>fullyQualifiedClassName</code> (which also is used as the basis for the
-     * <code>targetNamespace</code>.
+     * Taken from the <code>fullyQualifiedClassName</code> (which also is used
+     * as the basis for the <code>targetNamespace</code>.
      * 
      * Populated in {@link #appendXml(ObjectAdapter)}.
      */
@@ -332,8 +336,8 @@ public class XmlSnapshot {
     }
 
     /**
-     * The root element of {@link #getXmlDocument()}. Returns <code>null</code> until the snapshot has
-     * actually been built.
+     * The root element of {@link #getXmlDocument()}. Returns <code>null</code>
+     * until the snapshot has actually been built.
      */
     public Element getXmlElement() {
         return xmlElement;
@@ -344,8 +348,8 @@ public class XmlSnapshot {
     }
 
     /**
-     * The root element of {@link #getXsdDocument()}. Returns <code>null</code> until the snapshot has
-     * actually been built.
+     * The root element of {@link #getXsdDocument()}. Returns <code>null</code>
+     * until the snapshot has actually been built.
      */
     public Element getXsdElement() {
         return xsdElement;
@@ -362,32 +366,32 @@ public class XmlSnapshot {
         for (final StringTokenizer tok = new StringTokenizer(path, "/"); tok.hasMoreTokens();) {
             final String token = tok.nextToken();
 
-            if(LOG.isDebugEnabled()) {
-            	LOG.debug("include(..): " + log("token", token));
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("include(..): " + log("token", token));
             }
             fieldNames.addElement(token);
         }
 
-        if(LOG.isDebugEnabled()) {
-        	LOG.debug("include(..): " + log("fieldNames", fieldNames));
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("include(..): " + log("fieldNames", fieldNames));
         }
 
         // navigate first field, from the root.
-        if(LOG.isDebugEnabled()) {
-        	LOG.debug("include(..): invoking includeField");
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("include(..): invoking includeField");
         }
         includeField(rootPlace, fieldNames, annotation);
     }
 
     /**
-     * @return true if able to navigate the complete vector of field names successfully; false if a field
-     *         could not be located or it turned out to be a value.
+     * @return true if able to navigate the complete vector of field names
+     *         successfully; false if a field could not be located or it turned
+     *         out to be a value.
      */
     private boolean includeField(final Place place, final Vector fieldNames, final String annotation) {
 
-        if(LOG.isDebugEnabled()) {
-	        LOG.debug("includeField(: " + log("place", place) + andlog("fieldNames", fieldNames) + andlog("annotation", annotation)
-	                + ")");
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("includeField(: " + log("place", place) + andlog("fieldNames", fieldNames) + andlog("annotation", annotation) + ")");
         }
 
         final ObjectAdapter object = place.getObject();
@@ -410,8 +414,8 @@ public class XmlSnapshot {
         final String fieldName = (String) names.elementAt(0);
         names.removeElementAt(0);
 
-        if(LOG.isDebugEnabled()) {
-        	LOG.debug("includeField(Pl, Vec, Str):" + log("processing field", fieldName) + andlog("left", "" + names.size()));
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("includeField(Pl, Vec, Str):" + log("processing field", fieldName) + andlog("left", "" + names.size()));
         }
 
         // locate the field in the object's class
@@ -422,8 +426,8 @@ public class XmlSnapshot {
             // check first.
             field = nos.getAssociation(fieldName);
         } catch (final ObjectSpecificationException ex) {
-            if(LOG.isInfoEnabled()) {
-            	LOG.info("includeField(Pl, Vec, Str): could not locate field, skipping");
+            if (LOG.isInfoEnabled()) {
+                LOG.info("includeField(Pl, Vec, Str): could not locate field, skipping");
             }
             return false;
         }
@@ -431,14 +435,13 @@ public class XmlSnapshot {
         // locate the corresponding XML element
         // (the corresponding XSD element will later be attached to xmlElement
         // as its userData)
-        if(LOG.isDebugEnabled()) {
-        	LOG.debug("includeField(Pl, Vec, Str): locating corresponding XML element");
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("includeField(Pl, Vec, Str): locating corresponding XML element");
         }
         final Vector xmlFieldElements = elementsUnder(xmlElement, field.getId());
         if (xmlFieldElements.size() != 1) {
-            if(LOG.isInfoEnabled()) {
-	            LOG.info("includeField(Pl, Vec, Str): could not locate " + log("field", field.getId())
-	                    + andlog("xmlFieldElements.size", "" + xmlFieldElements.size()));
+            if (LOG.isInfoEnabled()) {
+                LOG.info("includeField(Pl, Vec, Str): could not locate " + log("field", field.getId()) + andlog("xmlFieldElements.size", "" + xmlFieldElements.size()));
             }
             return false;
         }
@@ -453,14 +456,14 @@ public class XmlSnapshot {
 
         if (field instanceof OneToOneAssociation) {
             if (field.getSpecification().getAssociations().size() == 0) {
-            	if(LOG.isDebugEnabled()) {
-            		LOG.debug("includeField(Pl, Vec, Str): field is value; done");
-            	}
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug("includeField(Pl, Vec, Str): field is value; done");
+                }
                 return false;
             }
 
-            if(LOG.isDebugEnabled()) {
-            	LOG.debug("includeField(Pl, Vec, Str): field is 1->1");
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("includeField(Pl, Vec, Str): field is 1->1");
             }
 
             final OneToOneAssociation oneToOneAssociation = ((OneToOneAssociation) field);
@@ -470,35 +473,32 @@ public class XmlSnapshot {
                 return true; // not a failure if the reference was null
             }
 
-            final boolean appendedXml = appendXmlThenIncludeRemaining(fieldPlace, referencedObject, names,
-                    annotation);
-            if(LOG.isDebugEnabled()) {
-	            LOG.debug("includeField(Pl, Vec, Str): 1->1: invoked appendXmlThenIncludeRemaining for "
-	                    + log("referencedObj", referencedObject) + andlog("returned", "" + appendedXml));
+            final boolean appendedXml = appendXmlThenIncludeRemaining(fieldPlace, referencedObject, names, annotation);
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("includeField(Pl, Vec, Str): 1->1: invoked appendXmlThenIncludeRemaining for " + log("referencedObj", referencedObject) + andlog("returned", "" + appendedXml));
             }
 
             return appendedXml;
 
         } else if (field instanceof OneToManyAssociation) {
-        	if(LOG.isDebugEnabled()) {
-        		LOG.debug("includeField(Pl, Vec, Str): field is 1->M");
-        	}
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("includeField(Pl, Vec, Str): field is 1->M");
+            }
 
             final OneToManyAssociation oneToManyAssociation = (OneToManyAssociation) field;
             final ObjectAdapter collection = oneToManyAssociation.get(fieldPlace.getObject());
             final CollectionFacet facet = collection.getSpecification().getFacet(CollectionFacet.class);
 
-            if(LOG.isDebugEnabled()) {
-            	LOG.debug("includeField(Pl, Vec, Str): 1->M: " + log("collection.size", "" + facet.size(collection)));
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("includeField(Pl, Vec, Str): 1->M: " + log("collection.size", "" + facet.size(collection)));
             }
             boolean allFieldsNavigated = true;
             final Enumeration elements = facet.elements(collection);
             while (elements.hasMoreElements()) {
                 final ObjectAdapter referencedObject = (ObjectAdapter) elements.nextElement();
                 final boolean appendedXml = appendXmlThenIncludeRemaining(fieldPlace, referencedObject, names, annotation);
-                if(LOG.isDebugEnabled()) {
-                	LOG.debug("includeField(Pl, Vec, Str): 1->M: + invoked appendXmlThenIncludeRemaining for "
-                        + log("referencedObj", referencedObject) + andlog("returned", "" + appendedXml));
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug("includeField(Pl, Vec, Str): 1->M: + invoked appendXmlThenIncludeRemaining for " + log("referencedObj", referencedObject) + andlog("returned", "" + appendedXml));
                 }
                 allFieldsNavigated = allFieldsNavigated && appendedXml;
             }
@@ -519,33 +519,35 @@ public class XmlSnapshot {
     }
 
     /**
-     * Merges the tree of Elements whose root is <code>childElement</code> underneath the
-     * <code>parentElement</code>.
+     * Merges the tree of Elements whose root is <code>childElement</code>
+     * underneath the <code>parentElement</code>.
      * 
-     * If the <code>parentElement</code> already has an element that matches the <code>childElement</code>,
-     * then recursively attaches the grandchildren instead.
+     * If the <code>parentElement</code> already has an element that matches the
+     * <code>childElement</code>, then recursively attaches the grandchildren
+     * instead.
      * 
-     * The element returned will be either the supplied <code>childElement</code>, or an existing child
-     * element if one already existed under <code>parentElement</code>.
+     * The element returned will be either the supplied
+     * <code>childElement</code>, or an existing child element if one already
+     * existed under <code>parentElement</code>.
      */
     private Element mergeTree(final Element parentElement, final Element childElement) {
 
-    	if(LOG.isDebugEnabled()) {
-    		LOG.debug("mergeTree(" + log("parent", parentElement) + andlog("child", childElement));
-    	}
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("mergeTree(" + log("parent", parentElement) + andlog("child", childElement));
+        }
 
         final String childElementOid = isisMetaModel.getAttribute(childElement, "oid");
 
-        if(LOG.isDebugEnabled()) {
-        	LOG.debug("mergeTree(El,El): " + log("childOid", childElementOid));
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("mergeTree(El,El): " + log("childOid", childElementOid));
         }
         if (childElementOid != null) {
 
             // before we add the child element, check to see if it is already
             // there
-        	if(LOG.isDebugEnabled()) {
-        		LOG.debug("mergeTree(El,El): check if child already there");
-        	}
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("mergeTree(El,El): check if child already there");
+            }
             final Vector existingChildElements = elementsUnder(parentElement, childElement.getLocalName());
             for (final Enumeration childEnum = existingChildElements.elements(); childEnum.hasMoreElements();) {
                 final Element possibleMatchingElement = (Element) childEnum.nextElement();
@@ -555,8 +557,8 @@ public class XmlSnapshot {
                     continue;
                 }
 
-                if(LOG.isDebugEnabled()) {
-                	LOG.debug("mergeTree(El,El): child already there; merging grandchildren");
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug("mergeTree(El,El): child already there; merging grandchildren");
                 }
 
                 // match: transfer the children of the child (grandchildren) to
@@ -568,8 +570,8 @@ public class XmlSnapshot {
                     final Element grandchildElement = (Element) grandchildEnum.nextElement();
                     childElement.removeChild(grandchildElement);
 
-                    if(LOG.isDebugEnabled()) {
-                    	LOG.debug("mergeTree(El,El): merging " + log("grandchild", grandchildElement));
+                    if (LOG.isDebugEnabled()) {
+                        LOG.debug("mergeTree(El,El): merging " + log("grandchild", grandchildElement));
                     }
 
                     mergeTree(existingChildElement, grandchildElement);
@@ -584,26 +586,25 @@ public class XmlSnapshot {
 
     Place objectToElement(final ObjectAdapter object) {
 
-    	if(LOG.isDebugEnabled()) {
-    		LOG.debug("objectToElement(" + log("object", object) + ")");
-    	}
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("objectToElement(" + log("object", object) + ")");
+        }
 
         final ObjectSpecification nos = object.getSpecification();
 
-        if(LOG.isDebugEnabled()) {
-        	LOG.debug("objectToElement(NO): create element and nof:title");
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("objectToElement(NO): create element and nof:title");
         }
-        final Element element = schema.createElement(getXmlDocument(), nos.getShortIdentifier(), nos.getFullIdentifier(), nos
-                .getSingularName(), nos.getPluralName());
+        final Element element = schema.createElement(getXmlDocument(), nos.getShortIdentifier(), nos.getFullIdentifier(), nos.getSingularName(), nos.getPluralName());
         isisMetaModel.appendNofTitle(element, object.titleString());
 
-        if(LOG.isDebugEnabled()) {
-        	LOG.debug("objectToElement(NO): create XS element for NOF class");
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("objectToElement(NO): create XS element for NOF class");
         }
-        final Element xsElement = schema.createXsElementForNofClass(getXsdDocument(), element, topLevelElementWritten, FacetUtil
-                .getFacetsByType(nos));
+        final Element xsElement = schema.createXsElementForNofClass(getXsdDocument(), element, topLevelElementWritten, FacetUtil.getFacetsByType(nos));
 
-        // hack: every element in the XSD schema apart from first needs minimum cardinality setting.
+        // hack: every element in the XSD schema apart from first needs minimum
+        // cardinality setting.
         topLevelElementWritten = true;
 
         final Place place = new Place(object, element);
@@ -611,15 +612,15 @@ public class XmlSnapshot {
         isisMetaModel.setAttributesForClass(element, oidOrHashCode(object).toString());
 
         final List<ObjectAssociation> fields = nos.getAssociations();
-        if(LOG.isDebugEnabled()) {
-        	LOG.debug("objectToElement(NO): processing fields");
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("objectToElement(NO): processing fields");
         }
         eachField: for (int i = 0; i < fields.size(); i++) {
             final ObjectAssociation field = fields.get(i);
             final String fieldName = field.getId();
 
-            if(LOG.isDebugEnabled()) {
-            	LOG.debug("objectToElement(NO): " + log("field", fieldName));
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("objectToElement(NO): " + log("field", fieldName));
             }
 
             // Skip field if we have seen the name already
@@ -641,7 +642,9 @@ public class XmlSnapshot {
                 }
             }
 
-            Element xmlFieldElement = getXmlDocument().createElementNS(schema.getUri(), // scoped by namespace
+            Element xmlFieldElement = getXmlDocument().createElementNS(schema.getUri(), // scoped
+                                                                                        // by
+                                                                                        // namespace
                     // of class of
                     // containing object
                     schema.getPrefix() + ":" + fieldName);
@@ -649,9 +652,9 @@ public class XmlSnapshot {
             Element xsdFieldElement = null;
 
             if (field.getSpecification().containsFacet(ValueFacet.class)) {
-            	if(LOG.isDebugEnabled()) {
-            		LOG.debug("objectToElement(NO): " + log("field", fieldName) + " is value");
-            	}
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug("objectToElement(NO): " + log("field", fieldName) + " is value");
+                }
 
                 final ObjectSpecification fieldNos = field.getSpecification();
                 // skip fields of type XmlValue
@@ -663,7 +666,10 @@ public class XmlSnapshot {
                 }
 
                 final OneToOneAssociation valueAssociation = ((OneToOneAssociation) field);
-                final Element xmlValueElement = xmlFieldElement; // more meaningful locally scoped name
+                final Element xmlValueElement = xmlFieldElement; // more
+                                                                 // meaningful
+                                                                 // locally
+                                                                 // scoped name
 
                 ObjectAdapter value;
                 try {
@@ -676,17 +682,17 @@ public class XmlSnapshot {
 
                     // return parsed string, else encoded string, else title.
                     String valueStr;
-                    ParseableFacet parseableFacet = fieldNos.getFacet(ParseableFacet.class);
-                    EncodableFacet encodeableFacet = fieldNos.getFacet(EncodableFacet.class);
-                    if(parseableFacet != null) {
-                    	valueStr = parseableFacet.parseableTitle(value);
-                    } else if(encodeableFacet != null) {
-                    	valueStr = encodeableFacet.toEncodedString(value);
+                    final ParseableFacet parseableFacet = fieldNos.getFacet(ParseableFacet.class);
+                    final EncodableFacet encodeableFacet = fieldNos.getFacet(EncodableFacet.class);
+                    if (parseableFacet != null) {
+                        valueStr = parseableFacet.parseableTitle(value);
+                    } else if (encodeableFacet != null) {
+                        valueStr = encodeableFacet.toEncodedString(value);
                     } else {
-                    	valueStr = value.titleString();
+                        valueStr = value.titleString();
                     }
-                    
-					final boolean notEmpty = (valueStr.length() > 0);
+
+                    final boolean notEmpty = (valueStr.length() > 0);
                     if (notEmpty) {
                         xmlValueElement.appendChild(getXmlDocument().createTextNode(valueStr));
                     } else {
@@ -694,23 +700,25 @@ public class XmlSnapshot {
                     }
 
                 } catch (final Exception ex) {
-                    LOG.warn("objectToElement(NO): " + log("field", fieldName)
-                            + ": getField() threw exception - skipping XML generation");
+                    LOG.warn("objectToElement(NO): " + log("field", fieldName) + ": getField() threw exception - skipping XML generation");
                 }
 
                 // XSD
-                xsdFieldElement = schema.createXsElementForNofValue(xsElement, xmlValueElement, FacetUtil
-                        .getFacetsByType(valueAssociation));
+                xsdFieldElement = schema.createXsElementForNofValue(xsElement, xmlValueElement, FacetUtil.getFacetsByType(valueAssociation));
 
             } else if (field instanceof OneToOneAssociation) {
 
-            	if(LOG.isDebugEnabled()) {
-            		LOG.debug("objectToElement(NO): " + log("field", fieldName) + " is OneToOneAssociation");
-            	}
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug("objectToElement(NO): " + log("field", fieldName) + " is OneToOneAssociation");
+                }
 
                 final OneToOneAssociation oneToOneAssociation = ((OneToOneAssociation) field);
                 final String fullyQualifiedClassName = nos.getFullIdentifier();
-                final Element xmlReferenceElement = xmlFieldElement; // more meaningful locally scoped name
+                final Element xmlReferenceElement = xmlFieldElement; // more
+                                                                     // meaningful
+                                                                     // locally
+                                                                     // scoped
+                                                                     // name
 
                 ObjectAdapter referencedObjectAdapter;
 
@@ -727,22 +735,24 @@ public class XmlSnapshot {
                     }
 
                 } catch (final Exception ex) {
-                    LOG.warn("objectToElement(NO): " + log("field", fieldName)
-                            + ": getAssociation() threw exception - skipping XML generation");
+                    LOG.warn("objectToElement(NO): " + log("field", fieldName) + ": getAssociation() threw exception - skipping XML generation");
                 }
 
                 // XSD
-                xsdFieldElement = schema.createXsElementForNofReference(xsElement, xmlReferenceElement, oneToOneAssociation
-                        .getSpecification().getFullIdentifier(), FacetUtil.getFacetsByType(oneToOneAssociation));
+                xsdFieldElement = schema.createXsElementForNofReference(xsElement, xmlReferenceElement, oneToOneAssociation.getSpecification().getFullIdentifier(), FacetUtil.getFacetsByType(oneToOneAssociation));
 
             } else if (field instanceof OneToManyAssociation) {
 
-            	if(LOG.isDebugEnabled()) {
-            		LOG.debug("objectToElement(NO): " + log("field", fieldName) + " is OneToManyAssociation");
-            	}
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug("objectToElement(NO): " + log("field", fieldName) + " is OneToManyAssociation");
+                }
 
                 final OneToManyAssociation oneToManyAssociation = (OneToManyAssociation) field;
-                final Element xmlCollectionElement = xmlFieldElement; // more meaningful locally scoped name
+                final Element xmlCollectionElement = xmlFieldElement; // more
+                                                                      // meaningful
+                                                                      // locally
+                                                                      // scoped
+                                                                      // name
 
                 ObjectAdapter collection;
                 try {
@@ -753,18 +763,16 @@ public class XmlSnapshot {
                     // XML
                     isisMetaModel.setIsisCollection(xmlCollectionElement, schema.getPrefix(), fullyQualifiedClassName, collection);
                 } catch (final Exception ex) {
-                    LOG.warn("objectToElement(NO): " + log("field", fieldName)
-                            + ": get(obj) threw exception - skipping XML generation");
+                    LOG.warn("objectToElement(NO): " + log("field", fieldName) + ": get(obj) threw exception - skipping XML generation");
                 }
 
                 // XSD
-                xsdFieldElement = schema.createXsElementForNofCollection(xsElement, xmlCollectionElement, oneToManyAssociation
-                        .getSpecification().getFullIdentifier(), FacetUtil.getFacetsByType(oneToManyAssociation));
+                xsdFieldElement = schema.createXsElementForNofCollection(xsElement, xmlCollectionElement, oneToManyAssociation.getSpecification().getFullIdentifier(), FacetUtil.getFacetsByType(oneToManyAssociation));
 
             } else {
-            	if(LOG.isInfoEnabled()) {
-            		LOG.info("objectToElement(NO): " + log("field", fieldName) + " is unknown type; ignored");
-            	}
+                if (LOG.isInfoEnabled()) {
+                    LOG.info("objectToElement(NO): " + log("field", fieldName) + " is unknown type; ignored");
+                }
                 continue;
             }
 
@@ -773,16 +781,16 @@ public class XmlSnapshot {
             }
 
             // XML
-            if(LOG.isDebugEnabled()) {
-            	LOG.debug("objectToElement(NO): invoking mergeTree for field");
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("objectToElement(NO): invoking mergeTree for field");
             }
             xmlFieldElement = mergeTree(element, xmlFieldElement);
 
             // XSD
             if (xsdFieldElement != null) {
-            	if(LOG.isDebugEnabled()) {
-            		LOG.debug("objectToElement(NO): adding XS element for field to schema");
-            	}
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug("objectToElement(NO): adding XS element for field to schema");
+                }
                 schema.addFieldXsElement(xsElement, xsdFieldElement);
             }
         }
@@ -796,14 +804,14 @@ public class XmlSnapshot {
          * if (oid == null) { return "" + object.hashCode(); }
          */
         if (oid instanceof DirectlyStringableOid) {
-			DirectlyStringableOid directlyStringableOid = (DirectlyStringableOid) oid;
-        	return directlyStringableOid.enString();
+            final DirectlyStringableOid directlyStringableOid = (DirectlyStringableOid) oid;
+            return directlyStringableOid.enString();
         } else {
-        	return oid.toString();
+            return oid.toString();
         }
         /*
-         * InlineTransferableWriter itw = new InlineTransferableWriter(); oid.writeData(itw); itw.close();
-         * return itw.toString();
+         * InlineTransferableWriter itw = new InlineTransferableWriter();
+         * oid.writeData(itw); itw.close(); return itw.toString();
          */
     }
 
@@ -822,5 +830,5 @@ public class XmlSnapshot {
     private void setXmlElement(final Element xmlElement) {
         this.xmlElement = xmlElement;
     }
-    
+
 }

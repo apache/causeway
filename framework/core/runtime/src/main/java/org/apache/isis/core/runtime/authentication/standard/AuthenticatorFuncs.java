@@ -24,17 +24,17 @@ import org.apache.isis.core.runtime.authentication.AuthenticationRequest;
 import com.google.common.base.Predicate;
 
 public final class AuthenticatorFuncs {
-    
-    private AuthenticatorFuncs(){}
+
+    private AuthenticatorFuncs() {
+    }
 
     public static Predicate<Authenticator> compatibleWith(final AuthenticationRequest request) {
         return new Predicate<Authenticator>() {
             @Override
-            public boolean apply(Authenticator authenticator) {
+            public boolean apply(final Authenticator authenticator) {
                 return authenticator.canAuthenticate(request.getClass());
             }
         };
     }
-
 
 }

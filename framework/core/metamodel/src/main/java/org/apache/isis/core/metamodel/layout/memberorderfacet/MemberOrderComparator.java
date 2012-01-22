@@ -28,14 +28,17 @@ import org.apache.isis.core.metamodel.facets.members.order.MemberOrderFacet;
 import org.apache.isis.core.metamodel.layout.OrderSet;
 
 /**
- * Compares by {@link MemberOrderFacet} obtained from each {@link FacetedMethod}).
+ * Compares by {@link MemberOrderFacet} obtained from each {@link FacetedMethod}
+ * ).
  * 
  * <p>
- * Will also compare {@link OrderSet}s; these are put after any {@link FacetedMethod}s. If there is more than one
- * OrderSet then these are compared by an {@link OrderSetGroupNameComparator}.
+ * Will also compare {@link OrderSet}s; these are put after any
+ * {@link FacetedMethod}s. If there is more than one OrderSet then these are
+ * compared by an {@link OrderSetGroupNameComparator}.
  * 
  * <p>
- * If there is no annotation on either member, then will compare the members by name instead.
+ * If there is no annotation on either member, then will compare the members by
+ * name instead.
  * 
  * <p>
  * Can specify if requires that members are in the same (group) name.
@@ -93,7 +96,7 @@ public class MemberOrderComparator implements Comparator<Object> {
 
         final String sequence1 = m1.sequence();
         final String sequence2 = m2.sequence();
-        
+
         final String[] components1 = componentsFor(sequence1);
         final String[] components2 = componentsFor(sequence2);
 

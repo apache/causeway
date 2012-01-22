@@ -65,8 +65,7 @@ public class SimpleOrderSet extends OrderSet {
         parent = null;
     }
 
-    private SimpleOrderSet(final SimpleOrderSet set, final String groupName, final String name,
-        final List<FacetedMethod> members) {
+    private SimpleOrderSet(final SimpleOrderSet set, final String groupName, final String name, final List<FacetedMethod> members) {
         super(groupName);
         parent = set;
         parent.addElement(this);

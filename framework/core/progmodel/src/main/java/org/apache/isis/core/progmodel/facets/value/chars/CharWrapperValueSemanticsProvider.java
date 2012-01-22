@@ -28,14 +28,14 @@ import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProvider
 public class CharWrapperValueSemanticsProvider extends CharValueSemanticsProviderAbstract {
 
     /**
-     * Required because implementation of {@link Parser} and {@link EncoderDecoder}.
+     * Required because implementation of {@link Parser} and
+     * {@link EncoderDecoder}.
      */
     public CharWrapperValueSemanticsProvider() {
         this(null, null, null);
     }
 
-    public CharWrapperValueSemanticsProvider(final FacetHolder holder, final IsisConfiguration configuration,
-        final ValueSemanticsProviderContext context) {
+    public CharWrapperValueSemanticsProvider(final FacetHolder holder, final IsisConfiguration configuration, final ValueSemanticsProviderContext context) {
         super(holder, Character.class, configuration, context);
     }
 

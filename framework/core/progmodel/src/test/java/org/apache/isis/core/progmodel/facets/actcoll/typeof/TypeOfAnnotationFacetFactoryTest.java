@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.actcoll.typeof;
 
 import java.lang.reflect.Method;
@@ -35,7 +34,6 @@ import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.Collecti
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.progmodel.facets.collections.typeof.TypeOfAnnotationForCollectionsFacetFactory;
 import org.apache.isis.core.progmodel.facets.collections.typeof.TypeOfFacetAnnotationForCollection;
-
 
 public class TypeOfAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 
@@ -55,9 +53,9 @@ public class TypeOfAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
         super.tearDown();
     }
 
-
     public void testTypeOfFacetInferredForActionWithJavaUtilCollectionReturnType() {
-        class Order {}
+        class Order {
+        }
         class Customer {
             @SuppressWarnings("unused")
             @TypeOf(Order.class)
@@ -79,7 +77,8 @@ public class TypeOfAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
     }
 
     public void testTypeOfFacetInferredForCollectionWithJavaUtilCollectionReturnType() {
-        class Order {}
+        class Order {
+        }
         class Customer {
             @SuppressWarnings("unused")
             @TypeOf(Order.class)
@@ -101,7 +100,8 @@ public class TypeOfAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
     }
 
     public void testTypeOfFacetInferredForActionWithGenericCollectionReturnType() {
-        class Order {}
+        class Order {
+        }
         class Customer {
             @SuppressWarnings("unused")
             public Collection<Order> someAction() {
@@ -121,7 +121,8 @@ public class TypeOfAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
     }
 
     public void testTypeOfFacetInferredForCollectionWithGenericCollectionReturnType() {
-        class Order {}
+        class Order {
+        }
         class Customer {
             @SuppressWarnings("unused")
             public Collection<Order> getOrders() {
@@ -141,7 +142,8 @@ public class TypeOfAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
     }
 
     public void testTypeOfFacetInferredForActionWithJavaUtilListReturnType() {
-        class Order {}
+        class Order {
+        }
         class Customer {
             @SuppressWarnings("unused")
             @TypeOf(Order.class)
@@ -163,7 +165,8 @@ public class TypeOfAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
     }
 
     public void testTypeOfFacetInferredForCollectionWithJavaUtilListReturnType() {
-        class Order {}
+        class Order {
+        }
         class Customer {
             @SuppressWarnings("unused")
             @TypeOf(Order.class)
@@ -185,7 +188,8 @@ public class TypeOfAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
     }
 
     public void testTypeOfFacetInferredForActionWithJavaUtilSetReturnType() {
-        class Order {}
+        class Order {
+        }
         class Customer {
             @SuppressWarnings("unused")
             @TypeOf(Order.class)
@@ -207,7 +211,8 @@ public class TypeOfAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
     }
 
     public void testTypeOfFacetInferredForCollectionWithJavaUtilSetReturnType() {
-        class Order {}
+        class Order {
+        }
         class Customer {
             @SuppressWarnings("unused")
             @TypeOf(Order.class)
@@ -229,7 +234,8 @@ public class TypeOfAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
     }
 
     public void testTypeOfFacetInferredForActionWithArrayReturnType() {
-        class Order {}
+        class Order {
+        }
         class Customer {
             @SuppressWarnings("unused")
             public Order[] someAction() {
@@ -250,7 +256,8 @@ public class TypeOfAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
     }
 
     public void testTypeOfFacetIsInferredForCollectionFromOrderArray() {
-        class Order {}
+        class Order {
+        }
         class Customer {
             @SuppressWarnings("unused")
             public Order[] getOrders() {
@@ -270,7 +277,8 @@ public class TypeOfAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
     }
 
     public void testTypeOfAnnotationIgnoredForActionIfReturnTypeIsntACollectionType() {
-        class Order {}
+        class Order {
+        }
         class Customer {
             @SuppressWarnings("unused")
             @TypeOf(Order.class)
@@ -288,4 +296,3 @@ public class TypeOfAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
     }
 
 }
-

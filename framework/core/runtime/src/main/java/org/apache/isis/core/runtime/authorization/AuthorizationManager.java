@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.runtime.authorization;
 
 import org.apache.isis.applib.Identifier;
@@ -25,23 +24,24 @@ import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 
-
 /**
  * Authorises the user in the current session view and use members of an object.
  */
 public interface AuthorizationManager extends ApplicationScopedComponent {
 
     /**
-     * Returns true when the user represented by the specified session is authorised to view the member of the
-     * class/object represented by the member identifier. Normally the view of the specified field, or the
+     * Returns true when the user represented by the specified session is
+     * authorised to view the member of the class/object represented by the
+     * member identifier. Normally the view of the specified field, or the
      * display of the action will be suppress if this returns false.
      */
     boolean isVisible(AuthenticationSession session, ObjectAdapter target, Identifier identifier);
 
     /**
-     * Returns true when the use represented by the specified session is authorised to change the field
-     * represented by the member identifier. Normally the specified field will be not appear editable if this
-     * returns false.
+     * Returns true when the use represented by the specified session is
+     * authorised to change the field represented by the member identifier.
+     * Normally the specified field will be not appear editable if this returns
+     * false.
      */
     boolean isUsable(AuthenticationSession session, ObjectAdapter target, Identifier identifier);
 }

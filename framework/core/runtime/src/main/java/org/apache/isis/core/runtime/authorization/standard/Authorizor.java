@@ -17,23 +17,21 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.runtime.authorization.standard;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 
-
 public interface Authorizor extends ApplicationScopedComponent {
 
-	/**
-	 * Checked for each of the user's roles.
-	 */
+    /**
+     * Checked for each of the user's roles.
+     */
     public boolean isVisibleInRole(final String user, final Identifier identifier);
 
-	/**
-	 * Checked for each of the user's roles.
-	 */
+    /**
+     * Checked for each of the user's roles.
+     */
     public boolean isUsableInRole(final String role, final Identifier identifier);
 
 }

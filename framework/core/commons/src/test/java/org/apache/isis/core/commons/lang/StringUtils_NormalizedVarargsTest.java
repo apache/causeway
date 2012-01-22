@@ -35,8 +35,7 @@ public class StringUtils_NormalizedVarargsTest {
 
     @Parameters
     public static Collection<Object[]> data() {
-        return Arrays.asList(new Object[][] { { new String[] { "yada Foobar", "Yada\r \tFoo \n\tbar  Baz" },
-            new String[] { "yada Foobar", "Yada Foo bar Baz" }, }, });
+        return Arrays.asList(new Object[][] { { new String[] { "yada Foobar", "Yada\r \tFoo \n\tbar  Baz" }, new String[] { "yada Foobar", "Yada Foo bar Baz" }, }, });
     }
 
     private final String[] input;

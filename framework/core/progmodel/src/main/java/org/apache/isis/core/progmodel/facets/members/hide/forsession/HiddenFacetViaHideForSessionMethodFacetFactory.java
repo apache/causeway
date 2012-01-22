@@ -37,7 +37,8 @@ public class HiddenFacetViaHideForSessionMethodFacetFactory extends MethodPrefix
     private static final String[] PREFIXES = { MethodPrefixConstants.HIDE_PREFIX };
 
     /**
-     * Note that the {@link Facet}s registered are the generic ones from noa-architecture (where they exist)
+     * Note that the {@link Facet}s registered are the generic ones from
+     * noa-architecture (where they exist)
      */
     public HiddenFacetViaHideForSessionMethodFacetFactory() {
         super(FeatureType.MEMBERS, PREFIXES);
@@ -60,9 +61,7 @@ public class HiddenFacetViaHideForSessionMethodFacetFactory extends MethodPrefix
         final String capitalizedName = NameUtils.javaBaseNameStripAccessorPrefixIfRequired(method.getName());
 
         final Class<?> cls = processMethodContext.getCls();
-        final Method hideForSessionMethod =
-            MethodFinderUtils.findMethod(cls, MethodScope.CLASS, MethodPrefixConstants.HIDE_PREFIX + capitalizedName,
-                boolean.class, new Class[] { UserMemento.class });
+        final Method hideForSessionMethod = MethodFinderUtils.findMethod(cls, MethodScope.CLASS, MethodPrefixConstants.HIDE_PREFIX + capitalizedName, boolean.class, new Class[] { UserMemento.class });
 
         if (hideForSessionMethod == null) {
             return;

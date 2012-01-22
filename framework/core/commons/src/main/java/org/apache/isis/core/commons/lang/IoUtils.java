@@ -34,9 +34,11 @@ public final class IoUtils {
     }
 
     /**
-     * Copy bytes from an <code>InputStream</code> to an <code>OutputStream</code>.
+     * Copy bytes from an <code>InputStream</code> to an
+     * <code>OutputStream</code>.
      * <p>
-     * This method buffers the input internally, so there is no need to use a <code>BufferedInputStream</code>.
+     * This method buffers the input internally, so there is no need to use a
+     * <code>BufferedInputStream</code>.
      * 
      * @param input
      *            the <code>InputStream</code> to read from

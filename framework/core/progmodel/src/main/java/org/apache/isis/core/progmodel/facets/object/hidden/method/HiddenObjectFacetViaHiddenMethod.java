@@ -32,19 +32,19 @@ import org.apache.isis.core.progmodel.facets.object.hidden.HiddenObjectFacetAbst
 public class HiddenObjectFacetViaHiddenMethod extends HiddenObjectFacetAbstract {
     private final Method method;
 
-    public HiddenObjectFacetViaHiddenMethod(Method method, FacetHolder holder) {
+    public HiddenObjectFacetViaHiddenMethod(final Method method, final FacetHolder holder) {
         super(holder);
         this.method = method;
     }
 
     @Override
-    public String hides(VisibilityContext<? extends VisibilityEvent> ic) {
+    public String hides(final VisibilityContext<? extends VisibilityEvent> ic) {
         final ObjectAdapter toValidate = ic.getTarget();
         return toValidate != null ? hiddenReason(toValidate) : null;
     }
 
     @Override
-    public String hiddenReason(ObjectAdapter target) {
+    public String hiddenReason(final ObjectAdapter target) {
         if (target == null) {
             return null;
         }
@@ -53,7 +53,7 @@ public class HiddenObjectFacetViaHiddenMethod extends HiddenObjectFacetAbstract 
     }
 
     @Override
-    public void copyOnto(FacetHolder holder) {
+    public void copyOnto(final FacetHolder holder) {
         final HiddenObjectFacetViaHiddenMethod clonedFacet = new HiddenObjectFacetViaHiddenMethod(this.method, holder);
         FacetUtil.addFacet(clonedFacet);
     }

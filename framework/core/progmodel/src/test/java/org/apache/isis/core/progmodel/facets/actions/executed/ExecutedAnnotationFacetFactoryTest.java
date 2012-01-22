@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.actions.executed;
 
 import java.lang.reflect.Method;
@@ -31,7 +30,6 @@ import org.apache.isis.core.metamodel.facets.actions.executed.ExecutedFacetAbstr
 import org.apache.isis.core.metamodel.spec.Target;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.progmodel.facets.actions.executed.annotation.ExecutedAnnotationFacetFactory;
-
 
 public class ExecutedAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 
@@ -50,12 +48,12 @@ public class ExecutedAnnotationFacetFactoryTest extends AbstractFacetFactoryTest
         super.tearDown();
     }
 
-
     public void testExecutedLocallyAnnotationPickedUp() {
         class Customer {
             @SuppressWarnings("unused")
             @Executed(Where.LOCALLY)
-            public void someAction() {}
+            public void someAction() {
+            }
         }
         final Method actionMethod = findMethod(Customer.class, "someAction");
 
@@ -73,7 +71,8 @@ public class ExecutedAnnotationFacetFactoryTest extends AbstractFacetFactoryTest
     public void testExecutedRemotelyAnnotationPickedUp() {
         class Customer {
             @Executed(Where.REMOTELY)
-            public void someAction() {}
+            public void someAction() {
+            }
         }
         final Method actionMethod = findMethod(Customer.class, "someAction");
 
@@ -89,4 +88,3 @@ public class ExecutedAnnotationFacetFactoryTest extends AbstractFacetFactoryTest
     }
 
 }
-

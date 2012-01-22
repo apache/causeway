@@ -17,16 +17,14 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.runtime.authorization;
 
 import org.apache.isis.core.commons.components.Installer;
 
-
 public interface AuthorizationManagerInstaller extends Installer {
 
-	static String TYPE = "authorization";
-	
+    static String TYPE = "authorization";
+
     AuthorizationManager createAuthorizationManager();
 
 }

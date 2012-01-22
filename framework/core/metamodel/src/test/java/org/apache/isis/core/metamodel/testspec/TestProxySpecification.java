@@ -194,8 +194,7 @@ public class TestProxySpecification extends FacetHolderImpl implements ObjectSpe
     }
 
     @Override
-    public ObjectAction getObjectAction(final ActionType type, final String name,
-        final List<ObjectSpecification> parameters) {
+    public ObjectAction getObjectAction(final ActionType type, final String name, final List<ObjectSpecification> parameters) {
         if (action != null && action.getId().equals(name)) {
             return action;
         }
@@ -209,15 +208,15 @@ public class TestProxySpecification extends FacetHolderImpl implements ObjectSpe
     }
 
     @Override
-    public List<ObjectAction> getObjectActions(final ActionType type, Contributed contributed) {
+    public List<ObjectAction> getObjectActions(final ActionType type, final Contributed contributed) {
         return null;
     }
 
     @Override
     public ObjectAction getObjectAction(final String nameParmsIdentityString) {
-        for(ActionType type: ActionType.values()) {
-            ObjectAction action = getObjectAction(type, nameParmsIdentityString);
-            if(action != null) {
+        for (final ActionType type : ActionType.values()) {
+            final ObjectAction action = getObjectAction(type, nameParmsIdentityString);
+            if (action != null) {
                 return action;
             }
         }
@@ -418,14 +417,12 @@ public class TestProxySpecification extends FacetHolderImpl implements ObjectSpe
     }
 
     @Override
-    public ObjectValidityContext createValidityInteractionContext(final AuthenticationSession session,
-        final InteractionInvocationMethod invocationMethod, final ObjectAdapter targetObjectAdapter) {
+    public ObjectValidityContext createValidityInteractionContext(final AuthenticationSession session, final InteractionInvocationMethod invocationMethod, final ObjectAdapter targetObjectAdapter) {
         return null;
     }
 
     @Override
-    public ObjectTitleContext createTitleInteractionContext(final AuthenticationSession session,
-        final InteractionInvocationMethod invocationMethod, final ObjectAdapter targetObjectAdapter) {
+    public ObjectTitleContext createTitleInteractionContext(final AuthenticationSession session, final InteractionInvocationMethod invocationMethod, final ObjectAdapter targetObjectAdapter) {
         return null;
     }
 
@@ -469,13 +466,13 @@ public class TestProxySpecification extends FacetHolderImpl implements ObjectSpe
     }
 
     @Override
-    public List<ObjectAction> getObjectActions(Contributed contributed) {
+    public List<ObjectAction> getObjectActions(final Contributed contributed) {
         return null;
     }
 
-	@Override
-	public List<ObjectAction> getObjectActions(List<ActionType> types, Contributed contributed) {
-		return null;
-	}
+    @Override
+    public List<ObjectAction> getObjectActions(final List<ActionType> types, final Contributed contributed) {
+        return null;
+    }
 
 }

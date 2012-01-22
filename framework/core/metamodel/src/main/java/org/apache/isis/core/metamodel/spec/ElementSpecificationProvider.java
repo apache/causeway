@@ -17,10 +17,12 @@
 package org.apache.isis.core.metamodel.spec;
 
 /**
- * A mechanism to provide the {@link ObjectSpecification type} of a (stand-alone) collection.
+ * A mechanism to provide the {@link ObjectSpecification type} of a
+ * (stand-alone) collection.
  * 
  * <p>
- * Introduced to decouple the <tt>facets</tt> package from the <tt>spec</tt> package.
+ * Introduced to decouple the <tt>facets</tt> package from the <tt>spec</tt>
+ * package.
  */
 public interface ElementSpecificationProvider {
 

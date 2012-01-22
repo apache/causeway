@@ -28,7 +28,8 @@ import org.apache.isis.core.metamodel.facetapi.MethodRemover;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 
 /**
- * Removes all superclass methods of the class, but doesn't add any {@link Facet}s.
+ * Removes all superclass methods of the class, but doesn't add any
+ * {@link Facet}s.
  */
 public class RemoveSuperclassMethodsFacetFactory extends FacetFactoryAbstract {
 

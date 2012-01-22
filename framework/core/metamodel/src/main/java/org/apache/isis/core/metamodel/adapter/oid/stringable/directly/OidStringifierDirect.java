@@ -43,19 +43,15 @@ public class OidStringifierDirect implements OidStringifier {
         try {
             deStringMethod = oidClass.getMethod("deString", String.class);
         } catch (final SecurityException ex) {
-            throw new IllegalArgumentException("Trying to obtain 'deString(String)' method from  Oid class '"
-                + oidClass.getName() + "'", ex);
+            throw new IllegalArgumentException("Trying to obtain 'deString(String)' method from  Oid class '" + oidClass.getName() + "'", ex);
         } catch (final NoSuchMethodException ex) {
-            throw new IllegalArgumentException("Trying to obtain 'deString(String)' method from  Oid class '"
-                + oidClass.getName() + "'", ex);
+            throw new IllegalArgumentException("Trying to obtain 'deString(String)' method from  Oid class '" + oidClass.getName() + "'", ex);
         }
         if (!JavaClassUtils.isStatic(deStringMethod)) {
-            throw new IllegalArgumentException("'deString(String)' method for Oid class '" + oidClass.getName()
-                + "' must be static");
+            throw new IllegalArgumentException("'deString(String)' method for Oid class '" + oidClass.getName() + "' must be static");
         }
         if (!JavaClassUtils.isPublic(deStringMethod)) {
-            throw new IllegalArgumentException("'deString(String)' method for Oid class '" + oidClass.getName()
-                + "' must be public");
+            throw new IllegalArgumentException("'deString(String)' method for Oid class '" + oidClass.getName() + "' must be public");
         }
     }
 

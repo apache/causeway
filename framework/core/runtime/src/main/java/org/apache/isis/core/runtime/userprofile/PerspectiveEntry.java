@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.runtime.userprofile;
 
 import java.util.List;
@@ -28,19 +27,20 @@ import com.google.common.collect.Lists;
 
 public class PerspectiveEntry {
 
-    public PerspectiveEntry() {}
+    public PerspectiveEntry() {
+    }
 
-    /////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////
     // Name & Title
-    /////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////
 
     private String name;
 
     public String getName() {
         return name;
     }
-    
-    public void setName(String name) {
+
+    public void setName(final String name) {
         this.name = name;
     }
 
@@ -48,39 +48,37 @@ public class PerspectiveEntry {
         return name + " (" + services.size() + " classes)";
     }
 
-
-    /////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////
     // Objects, save
-    /////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////
 
     private final List<Object> objects = Lists.newArrayList();
-
 
     // REVIEW should this deal with Isis, and the services with IDs (or Isis)
     public List<Object> getObjects() {
         return objects;
     }
 
-    public void addToObjects(Object obj) {
+    public void addToObjects(final Object obj) {
         if (!objects.contains(obj)) {
             objects.add(obj);
         }
     }
 
-    public void removeFromObjects(Object obj) {
+    public void removeFromObjects(final Object obj) {
         objects.remove(obj);
     }
 
-    public void save(List<ObjectAdapter> adapters) {
+    public void save(final List<ObjectAdapter> adapters) {
         this.objects.clear();
-        for (ObjectAdapter adapter : adapters) {
+        for (final ObjectAdapter adapter : adapters) {
             addToObjects(adapter.getObject());
         }
     }
 
-    /////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////
     // Services
-    /////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////
 
     private final List<Object> services = Lists.newArrayList();
 
@@ -88,34 +86,30 @@ public class PerspectiveEntry {
         return services;
     }
 
-    public void addToServices(Object service) {
+    public void addToServices(final Object service) {
         if (service != null && !services.contains(service)) {
             services.add(service);
         }
     }
 
-    public void removeFromServices(Object service) {
+    public void removeFromServices(final Object service) {
         if (service != null && services.contains(service)) {
             services.remove(service);
         }
     }
 
-
-    /////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////
     // copy
-    /////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////
 
-    public void copy(PerspectiveEntry template) {
+    public void copy(final PerspectiveEntry template) {
         name = template.getName();
-        for (Object service : template.getServices()) {
+        for (final Object service : template.getServices()) {
             addToServices(service);
         }
-        for (Object obj : template.getObjects()) {
+        for (final Object obj : template.getObjects()) {
             addToObjects(obj);
         }
     }
 
-
 }
-
-

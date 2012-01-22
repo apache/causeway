@@ -35,7 +35,8 @@ public class HelpManagerUsingFiles extends HelpManagerAbstract {
     private static final Logger LOG = Logger.getLogger(HelpManagerUsingFiles.class);
 
     /**
-     * The name of the file used unless overridden with {@link #setFileName(String)}.
+     * The name of the file used unless overridden with
+     * {@link #setFileName(String)}.
      */
     public static final String DEFAULT_FILE_NAME = "help.txt";
     private static final String CLASS_PREFIX = "c:";

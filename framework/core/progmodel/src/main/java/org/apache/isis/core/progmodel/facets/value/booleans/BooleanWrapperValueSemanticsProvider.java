@@ -31,14 +31,14 @@ public class BooleanWrapperValueSemanticsProvider extends BooleanValueSemanticsP
     private static final Boolean DEFAULT_PROVIDER = Boolean.FALSE;
 
     /**
-     * Required because implementation of {@link Parser} and {@link EncoderDecoder}.
+     * Required because implementation of {@link Parser} and
+     * {@link EncoderDecoder}.
      */
     public BooleanWrapperValueSemanticsProvider() {
         this(null, null, null);
     }
 
-    public BooleanWrapperValueSemanticsProvider(final FacetHolder holder, final IsisConfiguration configuration,
-        final ValueSemanticsProviderContext context) {
+    public BooleanWrapperValueSemanticsProvider(final FacetHolder holder, final IsisConfiguration configuration, final ValueSemanticsProviderContext context) {
         super(holder, Boolean.class, DEFAULT_PROVIDER, configuration, context);
     }
 

@@ -41,7 +41,8 @@ public interface I18nManager extends ApplicationScopedComponent {
     String getName(Identifier identifier);
 
     /**
-     * Get the localized description for the specified identified action/property.
+     * Get the localized description for the specified identified
+     * action/property.
      * 
      * <p>
      * Returns null if no description available.
@@ -57,12 +58,14 @@ public interface I18nManager extends ApplicationScopedComponent {
     String getHelp(Identifier identifier);
 
     /**
-     * Get the localized parameter names for the specified identified action/property.
+     * Get the localized parameter names for the specified identified
+     * action/property.
      * 
      * <p>
-     * Returns null if no parameters are available. Otherwise returns an array of String objects the size of the number
-     * of parameters, where each element is the localised name for the corresponding parameter, or is null if no
-     * parameter name is available.
+     * Returns null if no parameters are available. Otherwise returns an array
+     * of String objects the size of the number of parameters, where each
+     * element is the localised name for the corresponding parameter, or is null
+     * if no parameter name is available.
      */
     List<String> getParameterNames(Identifier identifier);
 }

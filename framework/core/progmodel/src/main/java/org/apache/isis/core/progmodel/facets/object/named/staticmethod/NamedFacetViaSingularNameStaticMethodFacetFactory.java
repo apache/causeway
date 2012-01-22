@@ -43,9 +43,7 @@ public class NamedFacetViaSingularNameStaticMethodFacetFactory extends MethodPre
         final Class<?> cls = processClassContext.getCls();
         final FacetHolder facetHolder = processClassContext.getFacetHolder();
 
-        final Method method =
-            MethodFinderUtils.findMethod(cls, MethodScope.CLASS, MethodPrefixConstants.SINGULAR_NAME, String.class,
-                NO_PARAMETERS_TYPES);
+        final Method method = MethodFinderUtils.findMethod(cls, MethodScope.CLASS, MethodPrefixConstants.SINGULAR_NAME, String.class, NO_PARAMETERS_TYPES);
         if (method != null) {
             final String name = (String) InvokeUtils.invokeStatic(method);
             processClassContext.removeMethod(method);

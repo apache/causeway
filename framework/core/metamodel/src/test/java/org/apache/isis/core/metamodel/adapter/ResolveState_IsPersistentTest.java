@@ -49,10 +49,8 @@ public class ResolveState_IsPersistentTest {
 
     @Parameters
     public static Collection<Object[]> data() {
-        return Arrays.asList(new Object[][] { { true, GHOST }, { false, NEW }, { true, PART_RESOLVED },
-            { true, RESOLVED }, { true, RESOLVING }, { true, RESOLVING_PART }, { false, TRANSIENT },
-            { false, DESTROYED }, { true, UPDATING }, { false, SERIALIZING_TRANSIENT }, { true, SERIALIZING_GHOST },
-            { true, SERIALIZING_PART_RESOLVED }, { true, SERIALIZING_RESOLVED }, { false, VALUE }, });
+        return Arrays.asList(new Object[][] { { true, GHOST }, { false, NEW }, { true, PART_RESOLVED }, { true, RESOLVED }, { true, RESOLVING }, { true, RESOLVING_PART }, { false, TRANSIENT }, { false, DESTROYED }, { true, UPDATING }, { false, SERIALIZING_TRANSIENT }, { true, SERIALIZING_GHOST },
+                { true, SERIALIZING_PART_RESOLVED }, { true, SERIALIZING_RESOLVED }, { false, VALUE }, });
     }
 
     private final boolean whetherIs;

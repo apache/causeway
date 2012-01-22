@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.layout;
 
 import java.util.ArrayList;
@@ -31,7 +30,6 @@ import org.apache.isis.core.metamodel.layout.memberorderfacet.DeweyOrderSet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 
 import com.google.common.collect.Lists;
-
 
 /**
  * This represents a particular layout of {@link ObjectMember}s.
@@ -49,8 +47,8 @@ public class OrderSet implements Comparable<OrderSet>, Iterable<Object> {
     private OrderSet parent;
 
     /**
-     * A staging area until we are ready to add the child sets to the collection of elements owned by the
-     * superclass.
+     * A staging area until we are ready to add the child sets to the collection
+     * of elements owned by the superclass.
      */
     protected SortedSet<DeweyOrderSet> childOrderSets = new TreeSet<DeweyOrderSet>();
 
@@ -64,12 +62,14 @@ public class OrderSet implements Comparable<OrderSet>, Iterable<Object> {
     // ///////////////// Group Name etc ////////////////////
 
     /**
-     * Last component of the comma-separated group name supplied in the constructor (analogous to the file
-     * name extracted from a fully qualified file name).
-     *
+     * Last component of the comma-separated group name supplied in the
+     * constructor (analogous to the file name extracted from a fully qualified
+     * file name).
+     * 
      * <p>
-     * For example, if supplied <tt>abc,def,ghi</tt> in the constructor, then this will return <tt>ghi</tt>.
-     *
+     * For example, if supplied <tt>abc,def,ghi</tt> in the constructor, then
+     * this will return <tt>ghi</tt>.
+     * 
      * @return
      */
     public String getGroupName() {
@@ -77,13 +77,13 @@ public class OrderSet implements Comparable<OrderSet>, Iterable<Object> {
     }
 
     /**
-     * The group name exactly as it was supplied in the constructor (analogous to a fully qualified file
-     * name).
-     *
+     * The group name exactly as it was supplied in the constructor (analogous
+     * to a fully qualified file name).
+     * 
      * <p>
-     * For example, if supplied <tt>abc,def,ghi</tt> in the constructor, then this will return the same string
-     * <tt>abc,def,ghi</tt>.
-     *
+     * For example, if supplied <tt>abc,def,ghi</tt> in the constructor, then
+     * this will return the same string <tt>abc,def,ghi</tt>.
+     * 
      * @return
      */
     public String getGroupFullName() {
@@ -91,13 +91,14 @@ public class OrderSet implements Comparable<OrderSet>, Iterable<Object> {
     }
 
     /**
-     * Represents the parent groups, derived from the group name supplied in the constructor (analogous to the
-     * directory portion of a fully qualified file name).
-     *
+     * Represents the parent groups, derived from the group name supplied in the
+     * constructor (analogous to the directory portion of a fully qualified file
+     * name).
+     * 
      * <p>
-     * For example, if supplied <tt>abc,def,ghi</tt> in the constructor, then this will return
-     * <tt>abc,def</tt>.
-     *
+     * For example, if supplied <tt>abc,def,ghi</tt> in the constructor, then
+     * this will return <tt>abc,def</tt>.
+     * 
      * @return
      */
     public String getGroupPath() {
@@ -106,7 +107,7 @@ public class OrderSet implements Comparable<OrderSet>, Iterable<Object> {
 
     /**
      * Splits name by comma, then title case the last component.
-     *
+     * 
      * @param groupFullName
      * @return
      */
@@ -127,7 +128,7 @@ public class OrderSet implements Comparable<OrderSet>, Iterable<Object> {
 
     /**
      * Everything upto the last comma, else empty string if none.
-     *
+     * 
      * @param groupFullName
      * @return
      */
@@ -141,7 +142,6 @@ public class OrderSet implements Comparable<OrderSet>, Iterable<Object> {
 
     // ///////////////////// Parent & Children ///////////////////
 
-
     protected void setParent(final DeweyOrderSet parent) {
         this.parent = parent;
     }
@@ -149,7 +149,6 @@ public class OrderSet implements Comparable<OrderSet>, Iterable<Object> {
     public OrderSet getParent() {
         return parent;
     }
-
 
     protected void addChild(final DeweyOrderSet childOrderSet) {
         childOrderSets.add(childOrderSet);
@@ -169,7 +168,7 @@ public class OrderSet implements Comparable<OrderSet>, Iterable<Object> {
 
     /**
      * Returns a copy of the elements, in sequence.
-     *
+     * 
      * @return
      */
     public List<Object> elementList() {
@@ -190,8 +189,8 @@ public class OrderSet implements Comparable<OrderSet>, Iterable<Object> {
     }
 
     protected void addAll(final SortedSet<DeweyOrderSet> sortedMembers) {
-        for (final Iterator<DeweyOrderSet> iter = sortedMembers.iterator(); iter.hasNext();) {
-            this.addElement(iter.next());
+        for (final DeweyOrderSet deweyOrderSet : sortedMembers) {
+            this.addElement(deweyOrderSet);
         }
     }
 
@@ -202,24 +201,31 @@ public class OrderSet implements Comparable<OrderSet>, Iterable<Object> {
      */
     @Override
     public int compareTo(final OrderSet o) {
-        if (this.equals(o)) { return 0; }
+        if (this.equals(o)) {
+            return 0;
+        }
         return groupFullName.compareTo(o.groupFullName);
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
+    public boolean equals(final Object obj) {
+        if (this == obj) {
             return true;
-        if (obj == null)
+        }
+        if (obj == null) {
             return false;
-        if (getClass() != obj.getClass())
+        }
+        if (getClass() != obj.getClass()) {
             return false;
-        OrderSet other = (OrderSet) obj;
+        }
+        final OrderSet other = (OrderSet) obj;
         if (groupFullName == null) {
-            if (other.groupFullName != null)
+            if (other.groupFullName != null) {
                 return false;
-        } else if (!groupFullName.equals(other.groupFullName))
+            }
+        } else if (!groupFullName.equals(other.groupFullName)) {
             return false;
+        }
         return true;
     }
 
@@ -231,6 +237,4 @@ public class OrderSet implements Comparable<OrderSet>, Iterable<Object> {
         return result;
     }
 
-
 }
-

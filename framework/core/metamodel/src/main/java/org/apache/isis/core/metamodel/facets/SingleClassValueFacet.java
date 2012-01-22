@@ -27,7 +27,8 @@ public interface SingleClassValueFacet extends Facet {
     public Class<?> value();
 
     /**
-     * Convenience to return the {@link ObjectSpecification} corresponding to this facet's {@link #value() class}.
+     * Convenience to return the {@link ObjectSpecification} corresponding to
+     * this facet's {@link #value() class}.
      */
     public ObjectSpecification valueSpec();
 

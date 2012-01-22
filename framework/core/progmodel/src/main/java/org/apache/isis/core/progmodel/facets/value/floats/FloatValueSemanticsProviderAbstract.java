@@ -32,8 +32,7 @@ import org.apache.isis.core.metamodel.facets.object.parseable.TextEntryParseExce
 import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProviderAndFacetAbstract;
 import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProviderContext;
 
-public class FloatValueSemanticsProviderAbstract extends ValueSemanticsProviderAndFacetAbstract<Float> implements
-    FloatingPointValueFacet {
+public class FloatValueSemanticsProviderAbstract extends ValueSemanticsProviderAndFacetAbstract<Float> implements FloatingPointValueFacet {
 
     public static Class<? extends Facet> type() {
         return FloatingPointValueFacet.class;
@@ -46,10 +45,8 @@ public class FloatValueSemanticsProviderAbstract extends ValueSemanticsProviderA
 
     private final NumberFormat format;
 
-    public FloatValueSemanticsProviderAbstract(final FacetHolder holder, final Class<Float> adaptedClass,
-        final IsisConfiguration configuration, final ValueSemanticsProviderContext context) {
-        super(type(), holder, adaptedClass, TYPICAL_LENGTH, IMMUTABLE, EQUAL_BY_CONTENT, DEFAULT_VALUE, configuration,
-            context);
+    public FloatValueSemanticsProviderAbstract(final FacetHolder holder, final Class<Float> adaptedClass, final IsisConfiguration configuration, final ValueSemanticsProviderContext context) {
+        super(type(), holder, adaptedClass, TYPICAL_LENGTH, IMMUTABLE, EQUAL_BY_CONTENT, DEFAULT_VALUE, configuration, context);
         format = determineNumberFormat("value.format.float");
     }
 

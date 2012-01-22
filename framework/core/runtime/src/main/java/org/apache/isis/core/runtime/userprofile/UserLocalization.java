@@ -28,18 +28,19 @@ public class UserLocalization implements Localization {
     private final TimeZone timeZone;
     private final Locale locale;
 
-    public UserLocalization(Locale locale, TimeZone timeZone) {
+    public UserLocalization(final Locale locale, final TimeZone timeZone) {
         this.locale = locale == null ? Locale.getDefault() : locale;
         this.timeZone = timeZone == null ? TimeZone.getDefault() : timeZone;
     }
 
+    @Override
     public Locale getLocale() {
         return locale;
     }
 
+    @Override
     public TimeZone getTimeZone() {
         return timeZone;
     }
 
 }
-

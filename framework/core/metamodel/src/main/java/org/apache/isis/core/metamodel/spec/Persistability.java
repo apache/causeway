@@ -21,7 +21,8 @@ package org.apache.isis.core.metamodel.spec;
 
 public enum Persistability {
     /**
-     * Marks a class as being persistable, but only by under application program control.
+     * Marks a class as being persistable, but only by under application program
+     * control.
      */
     PROGRAM_PERSISTABLE("Program Persistable", true),
     /**
@@ -29,7 +30,8 @@ public enum Persistability {
      */
     TRANSIENT("Transient", false),
     /**
-     * Marks a class as being persistable by the user (or under application program control).
+     * Marks a class as being persistable by the user (or under application
+     * program control).
      */
     USER_PERSISTABLE("User Persistable", true);
 

@@ -28,8 +28,7 @@ import org.apache.isis.core.metamodel.adapter.util.AdapterInvokeUtils;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 
-public class CollectionValidateRemoveFromFacetViaMethod extends CollectionValidateRemoveFromFacetAbstract implements
-    ImperativeFacet {
+public class CollectionValidateRemoveFromFacetViaMethod extends CollectionValidateRemoveFromFacetAbstract implements ImperativeFacet {
 
     private final Method method;
 
@@ -39,7 +38,8 @@ public class CollectionValidateRemoveFromFacetViaMethod extends CollectionValida
     }
 
     /**
-     * Returns a singleton list of the {@link Method} provided in the constructor.
+     * Returns a singleton list of the {@link Method} provided in the
+     * constructor.
      */
     @Override
     public List<Method> getMethods() {

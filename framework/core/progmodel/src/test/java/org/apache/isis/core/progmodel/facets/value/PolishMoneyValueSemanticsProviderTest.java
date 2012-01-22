@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.value;
 
 import static org.junit.Assert.assertEquals;
@@ -25,21 +24,21 @@ import static org.junit.Assert.fail;
 
 import java.util.Locale;
 
-import org.jmock.integration.junit4.JMock;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-
 import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.applib.value.Money;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facets.object.parseable.TextEntryParseException;
 import org.apache.isis.core.progmodel.facets.value.money.MoneyValueSemanticsProvider;
+import org.jmock.integration.junit4.JMock;
+import org.junit.Before;
+import org.junit.Ignore;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 
-
-@Ignore // TODO once the sematics provide has a way to reset the formatters for the new local then this test can be reinstated.
+@Ignore
+// TODO once the sematics provide has a way to reset the formatters for the new
+// local then this test can be reinstated.
 @RunWith(JMock.class)
 public class PolishMoneyValueSemanticsProviderTest extends ValueSemanticsProviderAbstractTestCase {
 
@@ -124,7 +123,8 @@ public class PolishMoneyValueSemanticsProviderTest extends ValueSemanticsProvide
 
     @Test
     public void testUsingLocalCurrencySymbol() {
-        // MoneyValueSemanticsProvider adapter = new MoneyValueSemanticsProvider(new Money(0L, "gbp"));
+        // MoneyValueSemanticsProvider adapter = new
+        // MoneyValueSemanticsProvider(new Money(0L, "gbp"));
         final Object parsed = adapter.parseTextEntry(originalMoney, "3021,50 " + ZLOTYCH_SYMBOL);
         assertEquals("3" + CURRENCY_SPACE + "021,5 " + ZLOTYCH_SYMBOL, adapter.titleString(parsed, (Localization) null));
     }
@@ -140,7 +140,8 @@ public class PolishMoneyValueSemanticsProviderTest extends ValueSemanticsProvide
         try {
             adapter.parseTextEntry(originalMoney, EURO_SYMBOL + "3021.50");
             fail("invalid code accepted " + adapter);
-        } catch (final TextEntryParseException expected) {}
+        } catch (final TextEntryParseException expected) {
+        }
     }
 
     @Test
@@ -155,8 +156,8 @@ public class PolishMoneyValueSemanticsProviderTest extends ValueSemanticsProvide
         try {
             adapter.parseTextEntry(money, "$3021.50");
             fail("invalid code accepted " + adapter);
-        } catch (final TextEntryParseException expected) {}
+        } catch (final TextEntryParseException expected) {
+        }
     }
 
 }
-

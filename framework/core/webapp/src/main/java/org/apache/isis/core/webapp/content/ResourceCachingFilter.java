@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.webapp.content;
 
 import java.io.IOException;
@@ -38,10 +37,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Adapted from {@link http://www.digitalsanctuary.com/tech-blog/java/jboss/setting-cache-headers-from-jboss.html}
+ * Adapted from {@link http
+ * ://www.digitalsanctuary.com/tech-blog/java/jboss/setting
+ * -cache-headers-from-jboss.html}
  * 
  * <p>
  * Usage:
+ * 
  * <pre>
  * &lt;filter>
  *   &lt;filter-name>ResourceCachingFilter&lt;/filter-name>
@@ -77,7 +79,8 @@ import javax.servlet.http.HttpServletResponse;
 public class ResourceCachingFilter implements Filter {
 
     /**
-     * Attribute set on {@link HttpServletRequest} if the filter has been applied.
+     * Attribute set on {@link HttpServletRequest} if the filter has been
+     * applied.
      * 
      * <p>
      * This is intended to inform other filters.
@@ -85,15 +88,17 @@ public class ResourceCachingFilter implements Filter {
     private static final String REQUEST_ATTRIBUTE = ResourceCachingFilter.class.getName() + ".resource";
 
     /**
-     * To allow other filters to ask whether a request is mapped to the resource caching filter.
+     * To allow other filters to ask whether a request is mapped to the resource
+     * caching filter.
      * 
      * <p>
-     * For example, the <tt>IsisSessionFilter</tt> uses this in order to skip any session handling.
+     * For example, the <tt>IsisSessionFilter</tt> uses this in order to skip
+     * any session handling.
      */
-    public static boolean isCachedResource(HttpServletRequest request) {
+    public static boolean isCachedResource(final HttpServletRequest request) {
         return request.getAttribute(REQUEST_ATTRIBUTE) != null;
     }
-    
+
     /**
      * The Constant MILLISECONDS_IN_SECOND.
      */
@@ -133,7 +138,7 @@ public class ResourceCachingFilter implements Filter {
     private static final String CACHE_TIME_PARAM_NAME = "CacheTime";
 
     /** The default for {@link #CACHE_TIME_PARAM_NAME}. */
-    private static final String CACHE_TIME_PARAM_NAME_DEFAULT = "" + 86400 ;
+    private static final String CACHE_TIME_PARAM_NAME_DEFAULT = "" + 86400;
 
     /** The reply headers. */
     private String[][] mReplyHeaders = { {} };
@@ -142,16 +147,19 @@ public class ResourceCachingFilter implements Filter {
     private Long cacheTime = 0L;
 
     /**
-     * Initializes the Servlet filter with the cache time and sets up the unchanging headers.
-     *
-     * @param pConfig the config
-     *
+     * Initializes the Servlet filter with the cache time and sets up the
+     * unchanging headers.
+     * 
+     * @param pConfig
+     *            the config
+     * 
      * @see javax.servlet.Filter#init(javax.servlet.FilterConfig)
      */
+    @Override
     public void init(final FilterConfig pConfig) {
         final ArrayList<String[]> newReplyHeaders = new ArrayList<String[]>();
-        String cacheTime = pConfig.getInitParameter(CACHE_TIME_PARAM_NAME);
-		this.cacheTime = Long.parseLong(cacheTime != null? cacheTime: CACHE_TIME_PARAM_NAME_DEFAULT);
+        final String cacheTime = pConfig.getInitParameter(CACHE_TIME_PARAM_NAME);
+        this.cacheTime = Long.parseLong(cacheTime != null ? cacheTime : CACHE_TIME_PARAM_NAME_DEFAULT);
         if (this.cacheTime > 0L) {
             newReplyHeaders.add(new String[] { CACHE_CONTROL_HEADER, MAX_AGE_VALUE + this.cacheTime.longValue() });
             newReplyHeaders.add(new String[] { CACHE_CONTROL_HEADER, PRE_CHECK_VALUE + this.cacheTime.longValue() });
@@ -166,24 +174,26 @@ public class ResourceCachingFilter implements Filter {
         newReplyHeaders.toArray(this.mReplyHeaders);
     }
 
-    
-    
-    
     /**
      * Do filter.
-     *
-     * @param servletRequest the request
-     * @param servletResponse the response
-     * @param chain the chain
-     *
-     * @throws IOException Signals that an I/O exception has occurred.
-     * @throws ServletException the servlet exception
-     *
-     * @see javax.servlet.Filter#doFilter(javax.servlet.ServletRequest, javax.servlet.ServletResponse,
-     *      javax.servlet.FilterChain)
+     * 
+     * @param servletRequest
+     *            the request
+     * @param servletResponse
+     *            the response
+     * @param chain
+     *            the chain
+     * 
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     * @throws ServletException
+     *             the servlet exception
+     * 
+     * @see javax.servlet.Filter#doFilter(javax.servlet.ServletRequest,
+     *      javax.servlet.ServletResponse, javax.servlet.FilterChain)
      */
-    public void doFilter(final ServletRequest servletRequest, final ServletResponse servletResponse, final FilterChain chain)
-            throws IOException, ServletException {
+    @Override
+    public void doFilter(final ServletRequest servletRequest, final ServletResponse servletResponse, final FilterChain chain) throws IOException, ServletException {
         // Apply the headers
         final HttpServletRequest httpRequest = (HttpServletRequest) servletRequest;
         final HttpServletResponse httpResponse = (HttpServletResponse) servletResponse;
@@ -197,8 +207,7 @@ public class ResourceCachingFilter implements Filter {
             final DateFormat httpDateFormat = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss z", Locale.US);
             httpDateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
             httpResponse.addHeader(LAST_MODIFIED_HEADER, httpDateFormat.format(new Date(now)));
-            httpResponse.addHeader(EXPIRES_HEADER, httpDateFormat.format(new Date(now
-                    + (this.cacheTime.longValue() * MILLISECONDS_IN_SECOND))));
+            httpResponse.addHeader(EXPIRES_HEADER, httpDateFormat.format(new Date(now + (this.cacheTime.longValue() * MILLISECONDS_IN_SECOND))));
         }
         httpRequest.setAttribute(REQUEST_ATTRIBUTE, true);
         chain.doFilter(servletRequest, servletResponse);
@@ -206,9 +215,10 @@ public class ResourceCachingFilter implements Filter {
 
     /**
      * Destroy all humans!
-     *
+     * 
      * @see javax.servlet.Filter#destroy()
      */
+    @Override
     public void destroy() {
     }
 

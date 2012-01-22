@@ -60,9 +60,10 @@ public class ObjectAssociationFilters {
     };
 
     /**
-     * Filters only properties that are visible statically, ie have not been unconditionally hidden at compile time.
-     * Note this list will include properties marked as hidden once persisted and until persisted, but not those marked
-     * hidden always.
+     * Filters only properties that are visible statically, ie have not been
+     * unconditionally hidden at compile time. Note this list will include
+     * properties marked as hidden once persisted and until persisted, but not
+     * those marked hidden always.
      */
     public static final Filter<ObjectAssociation> STATICALLY_VISIBLE_ASSOCIATIONS = new Filter<ObjectAssociation>() {
         @Override
@@ -72,10 +73,10 @@ public class ObjectAssociationFilters {
     };
 
     /**
-     * Filters only properties that are visible statically, ie have not been hidden at compile time.
+     * Filters only properties that are visible statically, ie have not been
+     * hidden at compile time.
      */
-    public static Filter<ObjectAssociation> dynamicallyVisible(final AuthenticationSession session,
-        final ObjectAdapter target) {
+    public static Filter<ObjectAssociation> dynamicallyVisible(final AuthenticationSession session, final ObjectAdapter target) {
         return new Filter<ObjectAssociation>() {
             @Override
             public boolean accept(final ObjectAssociation objectAssociation) {

@@ -27,9 +27,7 @@ public class FacetedMethodsBuilderContext {
     public final FacetProcessor facetProcessor;
     public final ClassSubstitutor classSubstitutor;
 
-    public FacetedMethodsBuilderContext(final SpecificationLoader specificationLoader,
-        final ClassSubstitutor classSubstitutor, final SpecificationTraverser specificationTraverser,
-        final FacetProcessor facetProcessor) {
+    public FacetedMethodsBuilderContext(final SpecificationLoader specificationLoader, final ClassSubstitutor classSubstitutor, final SpecificationTraverser specificationTraverser, final FacetProcessor facetProcessor) {
         this.specificationLoader = specificationLoader;
         this.classSubstitutor = classSubstitutor;
         this.specificationTraverser = specificationTraverser;

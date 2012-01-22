@@ -29,15 +29,14 @@ import org.apache.isis.core.metamodel.consent.InteractionContextType;
 import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
 
 /**
- * See {@link InteractionContext} for overview; analogous to {@link PropertyModifyEvent}.
+ * See {@link InteractionContext} for overview; analogous to
+ * {@link PropertyModifyEvent}.
  */
 public class PropertyModifyContext extends ValidityContext<PropertyModifyEvent> implements ProposedHolder {
 
     private final ObjectAdapter proposed;
 
-    public PropertyModifyContext(final AuthenticationSession session,
-        final InteractionInvocationMethod invocationMethod, final ObjectAdapter target, final Identifier id,
-        final ObjectAdapter proposed) {
+    public PropertyModifyContext(final AuthenticationSession session, final InteractionInvocationMethod invocationMethod, final ObjectAdapter target, final Identifier id, final ObjectAdapter proposed) {
         super(InteractionContextType.PROPERTY_MODIFY, session, invocationMethod, id, target);
 
         this.proposed = proposed;

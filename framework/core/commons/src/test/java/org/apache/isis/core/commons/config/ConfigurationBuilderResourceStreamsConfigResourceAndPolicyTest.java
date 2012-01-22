@@ -28,23 +28,19 @@ public class ConfigurationBuilderResourceStreamsConfigResourceAndPolicyTest {
 
     @Test
     public void toStringWhenNull() throws Exception {
-        final IsisConfigurationBuilderResourceStreams.ConfigurationResourceAndPolicy configurationResourceAndPolicy =
-            new IsisConfigurationBuilderResourceStreams.ConfigurationResourceAndPolicy(null, null);
+        final IsisConfigurationBuilderResourceStreams.ConfigurationResourceAndPolicy configurationResourceAndPolicy = new IsisConfigurationBuilderResourceStreams.ConfigurationResourceAndPolicy(null, null);
         assertThat(configurationResourceAndPolicy.toString(), is("null{null}"));
     }
 
     @Test
     public void toStringWhenConfigResourceNotNull() throws Exception {
-        final IsisConfigurationBuilderResourceStreams.ConfigurationResourceAndPolicy configurationResourceAndPolicy =
-            new IsisConfigurationBuilderResourceStreams.ConfigurationResourceAndPolicy("foo.properties", null);
+        final IsisConfigurationBuilderResourceStreams.ConfigurationResourceAndPolicy configurationResourceAndPolicy = new IsisConfigurationBuilderResourceStreams.ConfigurationResourceAndPolicy("foo.properties", null);
         assertThat(configurationResourceAndPolicy.toString(), is("foo.properties{null}"));
     }
 
     @Test
     public void toStringWhenAllSpecified() throws Exception {
-        final IsisConfigurationBuilderResourceStreams.ConfigurationResourceAndPolicy configurationResourceAndPolicy =
-            new IsisConfigurationBuilderResourceStreams.ConfigurationResourceAndPolicy("foo.properties",
-                NotFoundPolicy.CONTINUE);
+        final IsisConfigurationBuilderResourceStreams.ConfigurationResourceAndPolicy configurationResourceAndPolicy = new IsisConfigurationBuilderResourceStreams.ConfigurationResourceAndPolicy("foo.properties", NotFoundPolicy.CONTINUE);
         assertThat(configurationResourceAndPolicy.toString(), is("foo.properties{CONTINUE}"));
     }
 

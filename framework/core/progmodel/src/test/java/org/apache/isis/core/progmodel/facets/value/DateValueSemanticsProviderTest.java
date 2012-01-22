@@ -17,17 +17,10 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.value;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
-
-import org.jmock.Expectations;
-import org.jmock.integration.junit4.JMock;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
 
 import org.apache.isis.applib.adapters.EncodingException;
 import org.apache.isis.applib.value.Date;
@@ -35,6 +28,11 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facets.object.parseable.TextEntryParseException;
 import org.apache.isis.core.progmodel.facets.value.date.DateValueSemanticsProvider;
+import org.jmock.Expectations;
+import org.jmock.integration.junit4.JMock;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 
 @RunWith(JMock.class)
 public class DateValueSemanticsProviderTest extends ValueSemanticsProviderAbstractTestCase {
@@ -45,12 +43,14 @@ public class DateValueSemanticsProviderTest extends ValueSemanticsProviderAbstra
 
     @Before
     public void setUpObjects() throws Exception {
-    	mockery.checking(new Expectations(){{
-    		allowing(mockConfiguration).getString("isis.value.format.date");
-    		will(returnValue(null));
-    	}});
+        mockery.checking(new Expectations() {
+            {
+                allowing(mockConfiguration).getString("isis.value.format.date");
+                will(returnValue(null));
+            }
+        });
 
-    	TestClock.initialize();
+        TestClock.initialize();
         setupSpecification(Date.class);
         date = new Date(2001, 2, 4);
         holder = new FacetHolderImpl();
@@ -140,7 +140,7 @@ public class DateValueSemanticsProviderTest extends ValueSemanticsProviderAbstra
         assertEquals(new Date(2003, 4, 17), parsed);
     }
 
-    @Test(expected=TextEntryParseException.class)
+    @Test(expected = TextEntryParseException.class)
     public void illegalEntry() throws Exception {
         adapter.parseTextEntry(null, "xxx");
     }
@@ -150,8 +150,8 @@ public class DateValueSemanticsProviderTest extends ValueSemanticsProviderAbstra
         try {
             adapter.fromEncodedString("2003may12");
             fail();
-        } catch (final EncodingException expected) {}
+        } catch (final EncodingException expected) {
+        }
     }
 
 }
-

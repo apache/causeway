@@ -32,8 +32,7 @@ import org.apache.isis.core.metamodel.facets.object.parseable.TextEntryParseExce
 import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProviderAndFacetAbstract;
 import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProviderContext;
 
-public abstract class LongValueSemanticsProviderAbstract extends ValueSemanticsProviderAndFacetAbstract<Long> implements
-    LongValueFacet {
+public abstract class LongValueSemanticsProviderAbstract extends ValueSemanticsProviderAndFacetAbstract<Long> implements LongValueFacet {
 
     public static Class<? extends Facet> type() {
         return LongValueFacet.class;
@@ -46,10 +45,8 @@ public abstract class LongValueSemanticsProviderAbstract extends ValueSemanticsP
 
     private final NumberFormat format;
 
-    public LongValueSemanticsProviderAbstract(final FacetHolder holder, final Class<Long> adaptedClass,
-        final IsisConfiguration configuration, final ValueSemanticsProviderContext context) {
-        super(type(), holder, adaptedClass, TYPICAL_LENGTH, IMMUTABLE, EQUAL_BY_CONTENT, DEFAULT_VALUE, configuration,
-            context);
+    public LongValueSemanticsProviderAbstract(final FacetHolder holder, final Class<Long> adaptedClass, final IsisConfiguration configuration, final ValueSemanticsProviderContext context) {
+        super(type(), holder, adaptedClass, TYPICAL_LENGTH, IMMUTABLE, EQUAL_BY_CONTENT, DEFAULT_VALUE, configuration, context);
         format = determineNumberFormat("value.format.long");
     }
 

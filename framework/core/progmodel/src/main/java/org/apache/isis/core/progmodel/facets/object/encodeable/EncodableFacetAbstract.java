@@ -38,34 +38,31 @@ public abstract class EncodableFacetAbstract extends FacetAbstract implements En
     private final AdapterMap adapterMap;
     private final DependencyInjector dependencyInjector;
 
-    public EncodableFacetAbstract(final String candidateEncoderDecoderName,
-        final Class<?> candidateEncoderDecoderClass, final FacetHolder holder, final AdapterMap adapterManager,
-        final DependencyInjector dependencyInjector) {
+    public EncodableFacetAbstract(final String candidateEncoderDecoderName, final Class<?> candidateEncoderDecoderClass, final FacetHolder holder, final AdapterMap adapterManager, final DependencyInjector dependencyInjector) {
         super(EncodableFacet.class, holder, false);
         this.adapterMap = adapterManager;
         this.dependencyInjector = dependencyInjector;
 
-        this.encoderDecoderClass =
-            EncoderDecoderUtil.encoderDecoderOrNull(candidateEncoderDecoderClass, candidateEncoderDecoderName);
+        this.encoderDecoderClass = EncoderDecoderUtil.encoderDecoderOrNull(candidateEncoderDecoderClass, candidateEncoderDecoderName);
         if (isValid()) {
-            final EncoderDecoder encoderDecoder =
-                (EncoderDecoder<?>) ClassUtil.newInstance(encoderDecoderClass, FacetHolder.class, holder);
-            this.encodeableFacetUsingEncoderDecoder =
-                new EncodableFacetUsingEncoderDecoder(encoderDecoder, holder, getAdapterMap(), getDependencyInjector());
+            final EncoderDecoder encoderDecoder = (EncoderDecoder<?>) ClassUtil.newInstance(encoderDecoderClass, FacetHolder.class, holder);
+            this.encodeableFacetUsingEncoderDecoder = new EncodableFacetUsingEncoderDecoder(encoderDecoder, holder, getAdapterMap(), getDependencyInjector());
         } else {
             this.encodeableFacetUsingEncoderDecoder = null;
         }
     }
 
     /**
-     * Discover whether either of the candidate encoder/decoder name or class is valid.
+     * Discover whether either of the candidate encoder/decoder name or class is
+     * valid.
      */
     public boolean isValid() {
         return encoderDecoderClass != null;
     }
 
     /**
-     * Guaranteed to implement the {@link EncoderDecoder} class, thanks to generics in the applib.
+     * Guaranteed to implement the {@link EncoderDecoder} class, thanks to
+     * generics in the applib.
      */
     public Class<?> getEncoderDecoderClass() {
         return encoderDecoderClass;

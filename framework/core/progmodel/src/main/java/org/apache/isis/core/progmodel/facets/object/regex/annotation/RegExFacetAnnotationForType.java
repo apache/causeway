@@ -28,8 +28,7 @@ public class RegExFacetAnnotationForType extends RegExFacetAbstract {
 
     private final Pattern pattern;
 
-    public RegExFacetAnnotationForType(final String validation, final String format, final boolean caseSensitive,
-        final FacetHolder holder) {
+    public RegExFacetAnnotationForType(final String validation, final String format, final boolean caseSensitive, final FacetHolder holder) {
         super(validation, format, caseSensitive, holder);
         pattern = Pattern.compile(validation(), patternFlags());
     }

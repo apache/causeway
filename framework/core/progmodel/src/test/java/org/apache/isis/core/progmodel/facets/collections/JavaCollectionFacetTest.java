@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.collections;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -27,6 +26,10 @@ import static org.junit.Assert.assertThat;
 import java.util.Collection;
 import java.util.Iterator;
 
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.map.AdapterMap;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.progmodel.facets.collections.collection.JavaCollectionFacet;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JMock;
@@ -36,27 +39,21 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.map.AdapterMap;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.progmodel.facets.collections.collection.JavaCollectionFacet;
-
-
 @RunWith(JMock.class)
-public class JavaCollectionFacetTest  {
+public class JavaCollectionFacetTest {
 
     private JavaCollectionFacet facet;
 
-    private Mockery mockery = new JUnit4Mockery();
+    private final Mockery mockery = new JUnit4Mockery();
 
     private FacetHolder mockFacetHolder;
-    
+
     private ObjectAdapter mockCollection;
     private Collection<ObjectAdapter> mockWrappedCollection;
     private Iterator<ObjectAdapter> mockIterator;
 
     private AdapterMap mockAdapterManager;
-    
+
     @Before
     public void setUp() throws Exception {
         mockFacetHolder = mockery.mock(FacetHolder.class);
@@ -75,22 +72,22 @@ public class JavaCollectionFacetTest  {
 
     @Test
     public void firstElementForEmptyCollectionIsNull() {
-        mockery.checking(new Expectations(){{
-            one(mockCollection).getObject();
-            will(returnValue(mockWrappedCollection));
-            
-            one(mockWrappedCollection).size();
-            will(returnValue(0));
+        mockery.checking(new Expectations() {
+            {
+                one(mockCollection).getObject();
+                will(returnValue(mockWrappedCollection));
 
-            one(mockWrappedCollection).iterator();
-            will(returnValue(mockIterator));
+                one(mockWrappedCollection).size();
+                will(returnValue(0));
 
-            one(mockIterator).hasNext();
-            will(returnValue(false));
-        }});
+                one(mockWrappedCollection).iterator();
+                will(returnValue(mockIterator));
+
+                one(mockIterator).hasNext();
+                will(returnValue(false));
+            }
+        });
         assertThat(facet.firstElement(mockCollection), is(nullValue()));
     }
 
-
 }
-

@@ -50,8 +50,10 @@ public class Resources {
         }
 
         // try system class loader (could return null)
-        // wrapping in a try...catch because when running tests by Maven for a non-existing
-        // resource, seems to bomb out. Is okay when run from Eclipse. A bit of a puzzle.
+        // wrapping in a try...catch because when running tests by Maven for a
+        // non-existing
+        // resource, seems to bomb out. Is okay when run from Eclipse. A bit of
+        // a puzzle.
         try {
             return ClassLoader.getSystemResource(resource);
         } catch (final NullPointerException ignore) {
@@ -76,7 +78,8 @@ public class Resources {
         }
 
         // try system class loader (could return null)
-        // have wrapped in a try...catch because for same reason as getResourceURL
+        // have wrapped in a try...catch because for same reason as
+        // getResourceURL
         try {
             return ClassLoader.getSystemResourceAsStream(resource);
         } catch (final NullPointerException ignore) {

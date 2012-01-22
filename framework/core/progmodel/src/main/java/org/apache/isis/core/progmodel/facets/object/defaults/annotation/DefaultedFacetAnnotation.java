@@ -43,13 +43,11 @@ public class DefaultedFacetAnnotation extends DefaultedFacetAbstract {
         return annotation.defaultsProviderClass();
     }
 
-    public DefaultedFacetAnnotation(final Class<?> annotatedClass, final IsisConfiguration configuration,
-        final FacetHolder holder, final DependencyInjector dependencyInjector) {
+    public DefaultedFacetAnnotation(final Class<?> annotatedClass, final IsisConfiguration configuration, final FacetHolder holder, final DependencyInjector dependencyInjector) {
         this(providerName(annotatedClass, configuration), providerClass(annotatedClass), holder, dependencyInjector);
     }
 
-    private DefaultedFacetAnnotation(final String candidateProviderName, final Class<?> candidateProviderClass,
-        final FacetHolder holder, final DependencyInjector dependencyInjector) {
+    private DefaultedFacetAnnotation(final String candidateProviderName, final Class<?> candidateProviderClass, final FacetHolder holder, final DependencyInjector dependencyInjector) {
         super(candidateProviderName, candidateProviderClass, holder, dependencyInjector);
     }
 

@@ -24,30 +24,33 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.Specification;
 
 /**
- * A specification representing a non-{@link FeatureType#OBJECT object}, that therefore has an underlying type (the type
- * of the property, collection)
+ * A specification representing a non-{@link FeatureType#OBJECT object}, that
+ * therefore has an underlying type (the type of the property, collection)
  * 
  * <p>
- * For a property or action parameter, is the type. For a collection is the element type. For an action it is always
- * <tt>null</tt>.
+ * For a property or action parameter, is the type. For a collection is the
+ * element type. For an action it is always <tt>null</tt>.
  */
 public interface ObjectFeature extends Specification {
 
     /**
-     * Returns the identifier of the member, which must not change. This should be all camel-case with no spaces: so if
-     * the member is called 'Return Date' then the a suitable id would be 'ReturnDate'.
+     * Returns the identifier of the member, which must not change. This should
+     * be all camel-case with no spaces: so if the member is called 'Return
+     * Date' then the a suitable id would be 'ReturnDate'.
      */
     String getId();
 
     /**
-     * Return the name for this member - the field or action. This is based on the name of this member.
+     * Return the name for this member - the field or action. This is based on
+     * the name of this member.
      * 
      * @see #getIdentifier()
      */
     String getName();
 
     /**
-     * Returns a description of how the member is used - this complements the help text.
+     * Returns a description of how the member is used - this complements the
+     * help text.
      * 
      * @see #getHelp()
      */
@@ -60,13 +63,15 @@ public interface ObjectFeature extends Specification {
      * <p>
      * For example:
      * <ul>
-     * <li>for a {@link OneToOneAssociation property}, will return the {@link ObjectSpecification} of the type that the
-     * accessor returns.
-     * <li>for a {@link OneToManyAssociation collection} it will be the type of element the collection holds (not the
-     * type of collection).
-     * <li>for a {@link ObjectAction action}, will always return <tt>null</tt>. See instead
-     * {@link ObjectAction#getReturnType()} and {@link ObjectAction#getParameterTypes()}.
-     * <li>for a {@link ObjectActionParameter action}, will return the type of the parameter}.
+     * <li>for a {@link OneToOneAssociation property}, will return the
+     * {@link ObjectSpecification} of the type that the accessor returns.
+     * <li>for a {@link OneToManyAssociation collection} it will be the type of
+     * element the collection holds (not the type of collection).
+     * <li>for a {@link ObjectAction action}, will always return <tt>null</tt>.
+     * See instead {@link ObjectAction#getReturnType()} and
+     * {@link ObjectAction#getParameterTypes()}.
+     * <li>for a {@link ObjectActionParameter action}, will return the type of
+     * the parameter}.
      * </ul>
      */
     ObjectSpecification getSpecification();

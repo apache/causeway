@@ -49,8 +49,7 @@ public class SyntheticMethodFilteringFacetFactory extends FacetFactoryAbstract i
         try {
             final Class<?> type = method.getClass();
             try {
-                return ((Boolean) type.getMethod("isSynthetic", (Class[]) null).invoke(method, (Object[]) null))
-                    .booleanValue();
+                return ((Boolean) type.getMethod("isSynthetic", (Class[]) null).invoke(method, (Object[]) null)).booleanValue();
             } catch (final NoSuchMethodException nsm) {
                 // pre java 5
                 return false;

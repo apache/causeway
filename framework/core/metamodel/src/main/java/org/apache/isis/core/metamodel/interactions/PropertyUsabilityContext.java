@@ -29,12 +29,12 @@ import org.apache.isis.core.metamodel.consent.InteractionContextType;
 import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
 
 /**
- * See {@link InteractionContext} for overview; analogous to {@link PropertyUsabilityEvent}.
+ * See {@link InteractionContext} for overview; analogous to
+ * {@link PropertyUsabilityEvent}.
  */
 public class PropertyUsabilityContext extends UsabilityContext<PropertyUsabilityEvent> {
 
-    public PropertyUsabilityContext(final AuthenticationSession session,
-        final InteractionInvocationMethod invocationMethod, final ObjectAdapter target, final Identifier identifier) {
+    public PropertyUsabilityContext(final AuthenticationSession session, final InteractionInvocationMethod invocationMethod, final ObjectAdapter target, final Identifier identifier) {
         super(InteractionContextType.PROPERTY_USABLE, session, invocationMethod, identifier, target);
     }
 

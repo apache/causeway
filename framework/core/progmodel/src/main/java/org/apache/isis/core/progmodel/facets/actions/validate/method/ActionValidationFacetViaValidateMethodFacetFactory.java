@@ -40,7 +40,8 @@ public class ActionValidationFacetViaValidateMethodFacetFactory extends MethodPr
     private static final String[] PREFIXES = { MethodPrefixConstants.VALIDATE_PREFIX };
 
     /**
-     * Note that the {@link Facet}s registered are the generic ones from noa-architecture (where they exist)
+     * Note that the {@link Facet}s registered are the generic ones from
+     * noa-architecture (where they exist)
      */
     public ActionValidationFacetViaValidateMethodFacetFactory() {
         super(FeatureType.ACTIONS_ONLY, PREFIXES);
@@ -64,9 +65,7 @@ public class ActionValidationFacetViaValidateMethodFacetFactory extends MethodPr
         final Class<?>[] paramTypes = actionMethod.getParameterTypes();
         final MethodScope onClass = MethodScope.scopeFor(actionMethod);
 
-        final Method validateMethod =
-            MethodFinderUtils.findMethod(cls, onClass, MethodPrefixConstants.VALIDATE_PREFIX + capitalizedName,
-                String.class, paramTypes);
+        final Method validateMethod = MethodFinderUtils.findMethod(cls, onClass, MethodPrefixConstants.VALIDATE_PREFIX + capitalizedName, String.class, paramTypes);
         if (validateMethod == null) {
             return;
         }

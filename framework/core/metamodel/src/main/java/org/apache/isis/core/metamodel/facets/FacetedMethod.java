@@ -32,7 +32,6 @@ import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
 
 import com.google.common.collect.Lists;
 
-
 /**
  * non-final only so it can be mocked if need be.
  */
@@ -43,8 +42,7 @@ public class FacetedMethod extends TypedHolderDefault implements IdentifiedHolde
     // //////////////////////////////////////////////////
 
     public static FacetedMethod createPropertyFacetedMethod(final Class<?> declaringType, final Method method) {
-        return new FacetedMethod(FeatureType.PROPERTY, declaringType, method, method.getReturnType(),
-            emptyParameterList());
+        return new FacetedMethod(FeatureType.PROPERTY, declaringType, method, method.getReturnType(), emptyParameterList());
     }
 
     /**
@@ -66,8 +64,7 @@ public class FacetedMethod extends TypedHolderDefault implements IdentifiedHolde
     }
 
     public static FacetedMethod createActionFacetedMethod(final Class<?> declaringType, final Method method) {
-        return new FacetedMethod(FeatureType.ACTION, declaringType, method, method.getReturnType(),
-            getParameters(method));
+        return new FacetedMethod(FeatureType.ACTION, declaringType, method, method.getReturnType(), getParameters(method));
     }
 
     private static List<FacetedMethodParameter> getParameters(final Method actionMethod) {
@@ -97,8 +94,7 @@ public class FacetedMethod extends TypedHolderDefault implements IdentifiedHolde
         return Collections.unmodifiableList(emptyList);
     }
 
-    private FacetedMethod(final FeatureType featureType, final Class<?> declaringType, final Method method,
-        final Class<?> type, final List<FacetedMethodParameter> parameters) {
+    private FacetedMethod(final FeatureType featureType, final Class<?> declaringType, final Method method, final Class<?> type, final List<FacetedMethodParameter> parameters) {
         super(featureType, type);
         this.owningType = declaringType;
         this.method = method;
@@ -107,19 +103,22 @@ public class FacetedMethod extends TypedHolderDefault implements IdentifiedHolde
     }
 
     /**
-     * The {@link Class} that owns this {@link Method} (as per {@link Class#getMethods()}, returning the {@link Method}s
-     * both of this class and of its superclasses).
+     * The {@link Class} that owns this {@link Method} (as per
+     * {@link Class#getMethods()}, returning the {@link Method}s both of this
+     * class and of its superclasses).
      * 
      * <p>
-     * Note: we don't call this the 'declaring type' because {@link Class#getDeclaredMethods()} does not return methods
-     * from superclasses.
+     * Note: we don't call this the 'declaring type' because
+     * {@link Class#getDeclaredMethods()} does not return methods from
+     * superclasses.
      */
     public Class<?> getOwningType() {
         return owningType;
     }
 
     /**
-     * A {@link Method} obtained from the {@link #getOwningType() owning type} using {@link Class#getMethods()}.
+     * A {@link Method} obtained from the {@link #getOwningType() owning type}
+     * using {@link Class#getMethods()}.
      */
     public Method getMethod() {
         return method;
@@ -136,8 +135,7 @@ public class FacetedMethod extends TypedHolderDefault implements IdentifiedHolde
 
     @Override
     public String toString() {
-        return getFeatureType().name() + " Peer [identifier=\"" + getIdentifier() + "\",type=" + getType().getName()
-            + " ]";
+        return getFeatureType().name() + " Peer [identifier=\"" + getIdentifier() + "\",type=" + getType().getName() + " ]";
     }
 
     @Override

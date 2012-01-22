@@ -32,8 +32,7 @@ public final class Assert {
     }
 
     public static void assertEquals(final String message, final Object expected, final Object actual) {
-        assertTrue(message + ": expected " + expected + " but was " + actual, (expected == null && actual == null)
-            || (expected != null && expected.equals(actual)));
+        assertTrue(message + ": expected " + expected + " but was " + actual, (expected == null && actual == null) || (expected != null && expected.equals(actual)));
     }
 
     public static void assertFalse(final boolean flag) {

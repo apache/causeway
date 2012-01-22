@@ -24,8 +24,7 @@ import org.apache.isis.core.metamodel.facets.multiline.MultiLineFacetAbstract;
 
 public class MultiLineFacetAnnotationOnType extends MultiLineFacetAbstract {
 
-    public MultiLineFacetAnnotationOnType(final int numberOfLines, final boolean preventWrapping,
-        final FacetHolder holder) {
+    public MultiLineFacetAnnotationOnType(final int numberOfLines, final boolean preventWrapping, final FacetHolder holder) {
         super(numberOfLines, preventWrapping, holder);
     }
 

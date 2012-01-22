@@ -25,8 +25,10 @@ import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.query.QueryBuiltInAbstract;
 
 /**
- * Although implements {@link Query} and thus is ought to be {@link Serializable}, it will be converted into a
- * <tt>PersistenceQuery</tt> in the runtime for remoting purposes and so does not need to be (and indeed isn't).
+ * Although implements {@link Query} and thus is ought to be
+ * {@link Serializable}, it will be converted into a <tt>PersistenceQuery</tt>
+ * in the runtime for remoting purposes and so does not need to be (and indeed
+ * isn't).
  * 
  * <p>
  * See discussion in {@link QueryBuiltInAbstract} for further details.

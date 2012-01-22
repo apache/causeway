@@ -28,24 +28,25 @@ import org.apache.log4j.spi.LoggingEvent;
 import org.apache.log4j.spi.TriggeringEventEvaluator;
 
 public class SmtpExtendedAppender extends SMTPAppender {
-    
+
     public SmtpExtendedAppender() {
         super();
     }
 
-    public SmtpExtendedAppender(TriggeringEventEvaluator evaluator) {
+    public SmtpExtendedAppender(final TriggeringEventEvaluator evaluator) {
         super(evaluator);
     }
 
-    public void append(LoggingEvent event) {
-        if(evaluator.isTriggeringEvent(event)) {
+    @Override
+    public void append(final LoggingEvent event) {
+        if (evaluator.isTriggeringEvent(event)) {
             try {
-                String subject = limitToFirstLine( String.valueOf(event.getMessage()));
-                String encodedSubject = MimeUtility.encodeText(subject, "UTF-8", null);
+                final String subject = limitToFirstLine(String.valueOf(event.getMessage()));
+                final String encodedSubject = MimeUtility.encodeText(subject, "UTF-8", null);
                 msg.setSubject(encodedSubject);
-            } catch (UnsupportedEncodingException e) {
+            } catch (final UnsupportedEncodingException e) {
                 // ???
-            } catch (MessagingException e) {
+            } catch (final MessagingException e) {
                 // ???
             }
         }
@@ -53,14 +54,13 @@ public class SmtpExtendedAppender extends SMTPAppender {
     }
 
     private String limitToFirstLine(String subject) {
-        int newline = subject.indexOf('\n');
-        int carriageReturn= subject.indexOf('\r');
+        final int newline = subject.indexOf('\n');
+        final int carriageReturn = subject.indexOf('\r');
         if (newline != -1 || carriageReturn != -1) {
-            int pos = Math.max(newline, carriageReturn);
+            final int pos = Math.max(newline, carriageReturn);
             subject = subject.substring(0, pos);
         }
         return subject;
     }
 
 }
-

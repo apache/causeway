@@ -49,10 +49,8 @@ public class ResolveState_IsSerializingTest {
 
     @Parameters
     public static Collection<Object[]> data() {
-        return Arrays.asList(new Object[][] { { false, GHOST }, { false, NEW }, { false, PART_RESOLVED },
-            { false, RESOLVED }, { false, RESOLVING }, { false, RESOLVING_PART }, { false, TRANSIENT },
-            { false, DESTROYED }, { false, UPDATING }, { true, SERIALIZING_TRANSIENT }, { true, SERIALIZING_GHOST },
-            { true, SERIALIZING_PART_RESOLVED }, { true, SERIALIZING_RESOLVED }, { false, VALUE }, });
+        return Arrays.asList(new Object[][] { { false, GHOST }, { false, NEW }, { false, PART_RESOLVED }, { false, RESOLVED }, { false, RESOLVING }, { false, RESOLVING_PART }, { false, TRANSIENT }, { false, DESTROYED }, { false, UPDATING }, { true, SERIALIZING_TRANSIENT },
+                { true, SERIALIZING_GHOST }, { true, SERIALIZING_PART_RESOLVED }, { true, SERIALIZING_RESOLVED }, { false, VALUE }, });
     }
 
     private final boolean whetherIs;

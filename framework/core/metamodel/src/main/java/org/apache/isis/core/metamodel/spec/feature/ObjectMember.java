@@ -34,13 +34,13 @@ import org.apache.isis.core.metamodel.interactions.VisibilityContext;
  */
 public interface ObjectMember extends ObjectFeature {
 
-
     // /////////////////////////////////////////////////////////////
     // Name, Description, Help (convenience for facets)
     // /////////////////////////////////////////////////////////////
 
     /**
-     * Return the help text for this member - the field or action - to complement the description.
+     * Return the help text for this member - the field or action - to
+     * complement the description.
      * 
      * @see #getDescription()
      */
@@ -56,16 +56,17 @@ public interface ObjectMember extends ObjectFeature {
     boolean isAlwaysHidden();
 
     /**
-     * Create an {@link InteractionContext} to represent an attempt to view this member (that is, to check if it is
-     * visible or not).
+     * Create an {@link InteractionContext} to represent an attempt to view this
+     * member (that is, to check if it is visible or not).
      * 
      * <p>
-     * Typically it is easier to just call {@link #isVisible(AuthenticationSession, ObjectAdapter)} or
-     * {@link #isVisibleResult(AuthenticationSession, ObjectAdapter)}; this is provided as API for symmetry with
-     * interactions (such as {@link AccessContext} accesses) have no corresponding vetoing methods.
+     * Typically it is easier to just call
+     * {@link #isVisible(AuthenticationSession, ObjectAdapter)} or
+     * {@link #isVisibleResult(AuthenticationSession, ObjectAdapter)}; this is
+     * provided as API for symmetry with interactions (such as
+     * {@link AccessContext} accesses) have no corresponding vetoing methods.
      */
-    VisibilityContext<?> createVisibleInteractionContext(AuthenticationSession session,
-        InteractionInvocationMethod invocationMethod, ObjectAdapter targetObjectAdapter);
+    VisibilityContext<?> createVisibleInteractionContext(AuthenticationSession session, InteractionInvocationMethod invocationMethod, ObjectAdapter targetObjectAdapter);
 
     /**
      * Determines if this member is visible, represented as a {@link Consent}.
@@ -82,19 +83,22 @@ public interface ObjectMember extends ObjectFeature {
     // /////////////////////////////////////////////////////////////
 
     /**
-     * Create an {@link InteractionContext} to represent an attempt to {@link InteractionContextType#MEMBER_USABLE use
-     * this member} (that is, to check if it is usable or not).
+     * Create an {@link InteractionContext} to represent an attempt to
+     * {@link InteractionContextType#MEMBER_USABLE use this member} (that is, to
+     * check if it is usable or not).
      * 
      * <p>
-     * Typically it is easier to just call {@link #isUsable(AuthenticationSession, ObjectAdapter)} or
-     * {@link #isUsableResult(AuthenticationSession, ObjectAdapter)}; this is provided as API for symmetry with
-     * interactions (such as {@link AccessContext} accesses) have no corresponding vetoing methods.
+     * Typically it is easier to just call
+     * {@link #isUsable(AuthenticationSession, ObjectAdapter)} or
+     * {@link #isUsableResult(AuthenticationSession, ObjectAdapter)}; this is
+     * provided as API for symmetry with interactions (such as
+     * {@link AccessContext} accesses) have no corresponding vetoing methods.
      */
-    UsabilityContext<?> createUsableInteractionContext(AuthenticationSession session,
-        InteractionInvocationMethod invocationMethod, ObjectAdapter target);
+    UsabilityContext<?> createUsableInteractionContext(AuthenticationSession session, InteractionInvocationMethod invocationMethod, ObjectAdapter target);
 
     /**
-     * Determines whether this member is usable, represented as a {@link Consent}.
+     * Determines whether this member is usable, represented as a
+     * {@link Consent}.
      * 
      * @param target
      *            may be <tt>null</tt> if just checking for authorization.

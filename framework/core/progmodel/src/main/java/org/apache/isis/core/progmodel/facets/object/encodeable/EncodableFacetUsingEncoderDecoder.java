@@ -34,8 +34,7 @@ public class EncodableFacetUsingEncoderDecoder extends FacetAbstract implements 
     private final DependencyInjector dependencyInjector;
     private final AdapterMap adapterManager;
 
-    public EncodableFacetUsingEncoderDecoder(final EncoderDecoder encoderDecoder, final FacetHolder holder,
-        final AdapterMap adapterManager, final DependencyInjector dependencyInjector) {
+    public EncodableFacetUsingEncoderDecoder(final EncoderDecoder encoderDecoder, final FacetHolder holder, final AdapterMap adapterManager, final DependencyInjector dependencyInjector) {
         super(EncodableFacet.class, holder, false);
         this.encoderDecoder = encoderDecoder;
         this.dependencyInjector = dependencyInjector;

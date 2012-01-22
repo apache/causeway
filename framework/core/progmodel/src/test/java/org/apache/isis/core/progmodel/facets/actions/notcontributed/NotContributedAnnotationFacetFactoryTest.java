@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.actions.notcontributed;
 
 import java.lang.reflect.Method;
@@ -27,7 +26,6 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.progmodel.facets.actions.notcontributed.annotation.NotContributedAnnotationFacetFactory;
-
 
 public class NotContributedAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 
@@ -46,12 +44,12 @@ public class NotContributedAnnotationFacetFactoryTest extends AbstractFacetFacto
         super.tearDown();
     }
 
-
     public void testAnnotationPickedUp() {
         class CustomerRepository {
             @SuppressWarnings("unused")
-			@NotContributed
-            public void someAction() {}
+            @NotContributed
+            public void someAction() {
+            }
         }
         final Method actionMethod = findMethod(CustomerRepository.class, "someAction");
 
@@ -65,4 +63,3 @@ public class NotContributedAnnotationFacetFactoryTest extends AbstractFacetFacto
     }
 
 }
-

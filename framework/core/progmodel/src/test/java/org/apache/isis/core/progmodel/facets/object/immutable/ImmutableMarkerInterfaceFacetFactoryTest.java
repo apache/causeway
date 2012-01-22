@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.object.immutable;
 
 import org.apache.isis.applib.marker.AlwaysImmutable;
@@ -30,7 +29,6 @@ import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.progmodel.facets.object.immutable.markerifc.ImmutableFacetMarkerInterface;
 import org.apache.isis.core.progmodel.facets.object.immutable.markerifc.ImmutableMarkerInterfacesFacetFactory;
-
 
 public class ImmutableMarkerInterfaceFacetFactoryTest extends AbstractFacetFactoryTest {
 
@@ -49,9 +47,9 @@ public class ImmutableMarkerInterfaceFacetFactoryTest extends AbstractFacetFacto
         super.tearDown();
     }
 
-
     public void testAlwaysImmutable() {
-        class Customer implements AlwaysImmutable {}
+        class Customer implements AlwaysImmutable {
+        }
 
         facetFactory.process(new ProcessClassContext(Customer.class, methodRemover, facetedMethod));
 
@@ -65,7 +63,8 @@ public class ImmutableMarkerInterfaceFacetFactoryTest extends AbstractFacetFacto
     }
 
     public void testImmutableOncePersisted() {
-        class Customer implements ImmutableOncePersisted {}
+        class Customer implements ImmutableOncePersisted {
+        }
 
         facetFactory.process(new ProcessClassContext(Customer.class, methodRemover, facetedMethod));
 
@@ -79,7 +78,8 @@ public class ImmutableMarkerInterfaceFacetFactoryTest extends AbstractFacetFacto
     }
 
     public void testImmutableUntilPersisted() {
-        class Customer implements ImmutableUntilPersisted {}
+        class Customer implements ImmutableUntilPersisted {
+        }
 
         facetFactory.process(new ProcessClassContext(Customer.class, methodRemover, facetedMethod));
 
@@ -93,7 +93,8 @@ public class ImmutableMarkerInterfaceFacetFactoryTest extends AbstractFacetFacto
     }
 
     public void testNeverImmutable() {
-        class Customer implements NeverImmutable {}
+        class Customer implements NeverImmutable {
+        }
 
         facetFactory.process(new ProcessClassContext(Customer.class, methodRemover, facetedMethod));
 
@@ -107,4 +108,3 @@ public class ImmutableMarkerInterfaceFacetFactoryTest extends AbstractFacetFacto
     }
 
 }
-

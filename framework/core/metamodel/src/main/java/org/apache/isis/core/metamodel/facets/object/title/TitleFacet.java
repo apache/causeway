@@ -26,11 +26,12 @@ import org.apache.isis.core.metamodel.facets.object.icon.IconFacet;
 import org.apache.isis.core.metamodel.facets.object.plural.PluralFacet;
 
 /**
- * Mechanism for obtaining the title of an instance of a class, used to label the instance in the viewer (usually
- * alongside an icon representation).
+ * Mechanism for obtaining the title of an instance of a class, used to label
+ * the instance in the viewer (usually alongside an icon representation).
  * 
  * <p>
- * In the standard Apache Isis Programming Model, typically corresponds to a method named <tt>title</tt>.
+ * In the standard Apache Isis Programming Model, typically corresponds to a
+ * method named <tt>title</tt>.
  * 
  * @see IconFacet
  * @see PluralFacet

@@ -34,7 +34,7 @@ public final class AdapterInvokeUtils {
     }
 
     public static Object invoke(final Method method, final ObjectAdapter adapter, final Object arg0) {
-        Object[] args = new Object[1];
+        final Object[] args = new Object[1];
         args[0] = arg0;
         return InvokeUtils.invoke(method, AdapterUtils.unwrap(adapter), args);
     }
@@ -44,8 +44,7 @@ public final class AdapterInvokeUtils {
     }
 
     public static Object invoke(final Method method, final ObjectAdapter adapter, final ObjectAdapter arg0Adapter) {
-        return InvokeUtils.invoke(method, AdapterUtils.unwrap(adapter),
-            new Object[] { AdapterUtils.unwrap(arg0Adapter) });
+        return InvokeUtils.invoke(method, AdapterUtils.unwrap(adapter), new Object[] { AdapterUtils.unwrap(arg0Adapter) });
     }
 
     public static Object invoke(final Method method, final ObjectAdapter adapter, final ObjectAdapter[] argumentAdapters) {

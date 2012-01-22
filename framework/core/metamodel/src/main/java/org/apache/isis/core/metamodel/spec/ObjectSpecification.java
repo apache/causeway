@@ -52,42 +52,40 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationContainer;
 import com.google.common.base.Function;
 
 /**
- * Represents an entity or value (cf {@link java.lang.Class}) within the metamodel.
+ * Represents an entity or value (cf {@link java.lang.Class}) within the
+ * metamodel.
  * 
  * <p>
- * As specifications are cyclic (specifically a class will reference its subclasses, which in turn reference their
- * superclass) they need be created first, and then later work out its internals. Hence we create
+ * As specifications are cyclic (specifically a class will reference its
+ * subclasses, which in turn reference their superclass) they need be created
+ * first, and then later work out its internals. Hence we create
  * {@link ObjectSpecification}s as we need them, and then introspect them later.
  * 
  * <p>
  * REVIEW: why is there no Help method for classes?
  */
-public interface ObjectSpecification extends Specification, ObjectActionContainer, ObjectAssociationContainer,
-    Hierarchical, Dirtiable, DefaultProvider {
+public interface ObjectSpecification extends Specification, ObjectActionContainer, ObjectAssociationContainer, Hierarchical, Dirtiable, DefaultProvider {
 
     public final static List<ObjectSpecification> EMPTY_LIST = Collections.emptyList();
 
-    public final static Function<ObjectSpecification, String> FUNCTION_FULLY_QUALIFIED_CLASS_NAME =
-        new Function<ObjectSpecification, String>() {
-            @Override
-            public String apply(final ObjectSpecification from) {
-                return from.getFullIdentifier();
-            }
-        };
-    public final static Comparator<ObjectSpecification> COMPARATOR_FULLY_QUALIFIED_CLASS_NAME =
-        new Comparator<ObjectSpecification>() {
-            @Override
-            public int compare(final ObjectSpecification o1, final ObjectSpecification o2) {
-                return o1.getFullIdentifier().compareTo(o2.getFullIdentifier());
-            }
-        };
-    public final static Comparator<ObjectSpecification> COMPARATOR_SHORT_IDENTIFIER_IGNORE_CASE =
-        new Comparator<ObjectSpecification>() {
-            @Override
-            public int compare(final ObjectSpecification s1, final ObjectSpecification s2) {
-                return s1.getShortIdentifier().compareToIgnoreCase(s2.getShortIdentifier());
-            }
-        };
+    public final static Function<ObjectSpecification, String> FUNCTION_FULLY_QUALIFIED_CLASS_NAME = new Function<ObjectSpecification, String>() {
+        @Override
+        public String apply(final ObjectSpecification from) {
+            return from.getFullIdentifier();
+        }
+    };
+    public final static Comparator<ObjectSpecification> COMPARATOR_FULLY_QUALIFIED_CLASS_NAME = new Comparator<ObjectSpecification>() {
+        @Override
+        public int compare(final ObjectSpecification o1, final ObjectSpecification o2) {
+            return o1.getFullIdentifier().compareTo(o2.getFullIdentifier());
+        }
+    };
+    public final static Comparator<ObjectSpecification> COMPARATOR_SHORT_IDENTIFIER_IGNORE_CASE = new Comparator<ObjectSpecification>() {
+        @Override
+        public int compare(final ObjectSpecification s1, final ObjectSpecification s2) {
+            return s1.getShortIdentifier().compareToIgnoreCase(s2.getShortIdentifier());
+        }
+    };
 
     /**
      * @return
@@ -98,8 +96,8 @@ public interface ObjectSpecification extends Specification, ObjectActionContaine
      * Returns an (immutable) "full" identifier for this specification.
      * 
      * <p>
-     * This will be the fully qualified name of the Class object that this object represents (i.e. it includes the
-     * package name).
+     * This will be the fully qualified name of the Class object that this
+     * object represents (i.e. it includes the package name).
      */
     String getFullIdentifier();
 
@@ -107,7 +105,8 @@ public interface ObjectSpecification extends Specification, ObjectActionContaine
      * Returns an (immutable) "short" identifier for this specification.
      * 
      * <p>
-     * This will be the class name without the package; any text up to and including the last period is removed.
+     * This will be the class name without the package; any text up to and
+     * including the last period is removed.
      */
     String getShortIdentifier();
 
@@ -115,7 +114,8 @@ public interface ObjectSpecification extends Specification, ObjectActionContaine
      * Returns the (singular) name for objects of this specification.
      * 
      * <p>
-     * Corresponds to the {@link NamedFacet#value()} of {@link NamedFacet}; is not necessarily immutable.
+     * Corresponds to the {@link NamedFacet#value()} of {@link NamedFacet}; is
+     * not necessarily immutable.
      */
     String getSingularName();
 
@@ -123,7 +123,8 @@ public interface ObjectSpecification extends Specification, ObjectActionContaine
      * Returns the plural name for objects of this specification.
      * 
      * <p>
-     * Corresponds to the {@link PluralFacet#value() value} of {@link PluralFacet}; is not necessarily immutable.
+     * Corresponds to the {@link PluralFacet#value() value} of
+     * {@link PluralFacet}; is not necessarily immutable.
      */
     String getPluralName();
 
@@ -131,8 +132,8 @@ public interface ObjectSpecification extends Specification, ObjectActionContaine
      * Returns the description, if any, of the specification.
      * 
      * <p>
-     * Corresponds to the {@link DescribedAsFacet#value()) value} of {@link DescribedAsFacet}; is not necessarily
-     * immutable.
+     * Corresponds to the {@link DescribedAsFacet#value()) value} of
+     * {@link DescribedAsFacet}; is not necessarily immutable.
      */
     @Override
     String getDescription();
@@ -141,7 +142,8 @@ public interface ObjectSpecification extends Specification, ObjectActionContaine
      * Returns a help string or lookup reference, if any, of the specification.
      * 
      * <p>
-     * Corresponds to the {@link HelpFacet#value()) value} of {@link HelpFacet}; is not necessarily immutable.
+     * Corresponds to the {@link HelpFacet#value()) value} of {@link HelpFacet};
+     * is not necessarily immutable.
      */
     String getHelp();
 
@@ -149,7 +151,8 @@ public interface ObjectSpecification extends Specification, ObjectActionContaine
      * Returns the title string for the specified object.
      * 
      * <p>
-     * Corresponds to the {@link TitleFacet#value()) value} of {@link TitleFacet}; is not necessarily immutable.
+     * Corresponds to the {@link TitleFacet#value()) value} of
+     * {@link TitleFacet}; is not necessarily immutable.
      */
     String getTitle(ObjectAdapter adapter, Localization localization);
 
@@ -157,8 +160,8 @@ public interface ObjectSpecification extends Specification, ObjectActionContaine
      * Returns the name of an icon to use for the specified object.
      * 
      * <p>
-     * Corresponds to the {@link IconFacet#iconName(ObjectAdapter)) icon name} returned by the {@link IconFacet}; is not
-     * necessarily immutable.
+     * Corresponds to the {@link IconFacet#iconName(ObjectAdapter)) icon name}
+     * returned by the {@link IconFacet}; is not necessarily immutable.
      */
     String getIconName(ObjectAdapter object);
 
@@ -169,30 +172,30 @@ public interface ObjectSpecification extends Specification, ObjectActionContaine
     // //////////////////////////////////////////////////////////////
 
     /**
-     * Create an {@link InteractionContext} representing an attempt to read the object's title.
+     * Create an {@link InteractionContext} representing an attempt to read the
+     * object's title.
      */
-    ObjectTitleContext createTitleInteractionContext(AuthenticationSession session,
-        InteractionInvocationMethod invocationMethod, ObjectAdapter targetObjectAdapter);
+    ObjectTitleContext createTitleInteractionContext(AuthenticationSession session, InteractionInvocationMethod invocationMethod, ObjectAdapter targetObjectAdapter);
 
     // //////////////////////////////////////////////////////////////
     // ValidityContext, Validity
     // //////////////////////////////////////////////////////////////
 
     /**
-     * Create an {@link InteractionContext} representing an attempt to save the object.
+     * Create an {@link InteractionContext} representing an attempt to save the
+     * object.
      */
-    ObjectValidityContext createValidityInteractionContext(AuthenticationSession session,
-        InteractionInvocationMethod invocationMethod, ObjectAdapter targetObjectAdapter);
+    ObjectValidityContext createValidityInteractionContext(AuthenticationSession session, InteractionInvocationMethod invocationMethod, ObjectAdapter targetObjectAdapter);
 
     /**
-     * Determines whether the specified object is in a valid state (for example, so can be persisted); represented as a
-     * {@link Consent}.
+     * Determines whether the specified object is in a valid state (for example,
+     * so can be persisted); represented as a {@link Consent}.
      */
     Consent isValid(ObjectAdapter adapter);
 
     /**
-     * Determines whether the specified object is in a valid state (for example, so can be persisted); represented as a
-     * {@link InteractionResult}.
+     * Determines whether the specified object is in a valid state (for example,
+     * so can be persisted); represented as a {@link InteractionResult}.
      */
     InteractionResult isValidResult(ObjectAdapter adapter);
 
@@ -201,10 +204,12 @@ public interface ObjectSpecification extends Specification, ObjectActionContaine
     // //////////////////////////////////////////////////////////////
 
     /**
-     * Determines if objects of this specification can be persisted or not. If it can be persisted (i.e. it return
-     * something other than {@link Persistability}.TRANSIENT ObjectAdapter.isPersistent() will indicated whether the
-     * object is persistent or not. If they cannot be persisted then {@link ObjectAdapter}. {@link #persistability()}
-     * should be ignored.
+     * Determines if objects of this specification can be persisted or not. If
+     * it can be persisted (i.e. it return something other than
+     * {@link Persistability}.TRANSIENT ObjectAdapter.isPersistent() will
+     * indicated whether the object is persistent or not. If they cannot be
+     * persisted then {@link ObjectAdapter}. {@link #persistability()} should be
+     * ignored.
      */
     Persistability persistability();
 
@@ -212,8 +217,8 @@ public interface ObjectSpecification extends Specification, ObjectActionContaine
      * Determines if the object represents an value or object.
      * 
      * <p>
-     * In effect, means that it doesn't have the {@link CollectionFacet}, and therefore will return NOT
-     * {@link #isCollection()}
+     * In effect, means that it doesn't have the {@link CollectionFacet}, and
+     * therefore will return NOT {@link #isCollection()}
      * 
      * @see #isCollection().
      */
@@ -223,17 +228,20 @@ public interface ObjectSpecification extends Specification, ObjectActionContaine
      * Determines if objects represents a collection.
      * 
      * <p>
-     * In effect, means has got {@link CollectionFacet}, and therefore will return NOT {@link #isNotCollection()}.
+     * In effect, means has got {@link CollectionFacet}, and therefore will
+     * return NOT {@link #isNotCollection()}.
      * 
      * @see #isNotCollection()
      */
     boolean isCollection();
 
     /**
-     * Whether objects of this type are a collection or are intrinsically aggregated.
+     * Whether objects of this type are a collection or are intrinsically
+     * aggregated.
      * 
      * <p>
-     * In effect, means has got a {@link CollectionFacet} and/or got the {@link AggregatedFacet}.
+     * In effect, means has got a {@link CollectionFacet} and/or got the
+     * {@link AggregatedFacet}.
      */
     boolean isCollectionOrIsAggregated();
 
@@ -262,7 +270,8 @@ public interface ObjectSpecification extends Specification, ObjectActionContaine
     boolean isValueOrIsAggregated();
 
     /**
-     * Determines if objects of this type can be set up from a text entry string.
+     * Determines if objects of this type can be set up from a text entry
+     * string.
      * 
      * <p>
      * In effect, means has got a {@link ParseableFacet}.
@@ -296,7 +305,8 @@ public interface ObjectSpecification extends Specification, ObjectActionContaine
      */
     public enum CreationMode {
         /**
-         * Default all properties and call any {@link CreatedCallbackFacet created callbacks}.
+         * Default all properties and call any {@link CreatedCallbackFacet
+         * created callbacks}.
          */
         INITIALIZE, NO_INITIALIZE
     }
@@ -307,7 +317,8 @@ public interface ObjectSpecification extends Specification, ObjectActionContaine
     Object createObject(CreationMode creationMode);
 
     /**
-     * Create and optionally {@link CreationMode#INITIALIZE initialize} an aggregated object with a parent.
+     * Create and optionally {@link CreationMode#INITIALIZE initialize} an
+     * aggregated object with a parent.
      */
     Object createAggregatedObject(ObjectAdapter parent, CreationMode creationMode);
 
@@ -335,14 +346,14 @@ public interface ObjectSpecification extends Specification, ObjectActionContaine
      * Is called after to running the <tt>FacetDecoratorSet</tt>.
      * 
      * <p>
-     * TODO: it's possible that this could be merged with {@link #introspectTypeHierarchyAndMembers()}; need to check
-     * though, because this would cause facets to be decorated at the end of introspection, rather than midway as is
-     * currently.
+     * TODO: it's possible that this could be merged with
+     * {@link #introspectTypeHierarchyAndMembers()}; need to check though,
+     * because this would cause facets to be decorated at the end of
+     * introspection, rather than midway as is currently.
      * 
      */
     public void updateFromFacetValues();
 
     public boolean isIntrospected();
-
 
 }

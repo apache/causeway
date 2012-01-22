@@ -32,8 +32,7 @@ import org.apache.isis.core.metamodel.spec.SpecificationLoaderAware;
 import org.apache.isis.core.metamodel.spec.SpecificationLookup;
 import org.apache.isis.core.metamodel.spec.SpecificationLookupDelegator;
 
-public abstract class RuntimeContextAbstract implements RuntimeContext, SpecificationLoaderAware,
-    DomainObjectContainerAware {
+public abstract class RuntimeContextAbstract implements RuntimeContext, SpecificationLoaderAware, DomainObjectContainerAware {
 
     private final SpecificationLookupDelegator specificationLookupDelegator;
     private DomainObjectContainer container;
@@ -72,7 +71,8 @@ public abstract class RuntimeContextAbstract implements RuntimeContext, Specific
     }
 
     /**
-     * Is injected into when the reflector is {@link ObjectReflectorAbstract#init() initialized}.
+     * Is injected into when the reflector is
+     * {@link ObjectReflectorAbstract#init() initialized}.
      */
     @Override
     public void setSpecificationLoader(final SpecificationLoader specificationLoader) {
@@ -100,7 +100,8 @@ public abstract class RuntimeContextAbstract implements RuntimeContext, Specific
     }
 
     /**
-     * So that {@link #injectDependenciesInto(Object)} can also inject the {@link DomainObjectContainer}.
+     * So that {@link #injectDependenciesInto(Object)} can also inject the
+     * {@link DomainObjectContainer}.
      */
     @Override
     public void setContainer(final DomainObjectContainer container) {

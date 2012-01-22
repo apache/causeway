@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.runtime.logging;
 
 import java.io.BufferedReader;
@@ -29,7 +28,6 @@ import java.net.Socket;
 
 import org.apache.log4j.Logger;
 import org.apache.log4j.spi.TriggeringEventEvaluator;
-
 
 public class SmtpSnapshotAppender extends SnapshotAppender {
     private static final Logger LOG = Logger.getLogger(SmtpSnapshotAppender.class);
@@ -89,7 +87,7 @@ public class SmtpSnapshotAppender extends SnapshotAppender {
             // warning : some mail server validate the sender address
             // in the MAIL FROm command, put your real address here
 
-            send(in, out, "MAIL FROM: <no-reply@" + senderDomain+ ">");
+            send(in, out, "MAIL FROM: <no-reply@" + senderDomain + ">");
             send(in, out, "RCPT TO: " + recipient);
             send(in, out, "DATA");
             send(out, "Subject: " + message);
@@ -112,8 +110,8 @@ public class SmtpSnapshotAppender extends SnapshotAppender {
         out.write(s + "\r\n");
         out.flush();
         System.out.println(">  " + s);
-        String r = in.readLine();
-        System.out.println("<  "+ r);
+        final String r = in.readLine();
+        System.out.println("<  " + r);
     }
 
     private void send(final BufferedWriter out, final String s) throws IOException {

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -29,20 +28,23 @@ import org.apache.isis.core.metamodel.spec.Instance;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.Specification;
 
-
 /**
- * Has no functionality but makes it easier to write tests that require an instance of an {@link ObjectAdapter}.
+ * Has no functionality but makes it easier to write tests that require an
+ * instance of an {@link ObjectAdapter}.
  */
 public class ObjectNoop implements ObjectAdapter {
 
     @Override
-    public void changeState(final ResolveState newState) {}
+    public void changeState(final ResolveState newState) {
+    }
 
     @Override
-    public void checkLock(final Version version) {}
+    public void checkLock(final Version version) {
+    }
 
     @Override
-    public void fireChangedEvent() {}
+    public void fireChangedEvent() {
+    }
 
     @Override
     public String getIconName() {
@@ -75,10 +77,12 @@ public class ObjectNoop implements ObjectAdapter {
     }
 
     @Override
-    public void replacePojo(final Object pojo) {}
+    public void replacePojo(final Object pojo) {
+    }
 
     @Override
-    public void setOptimisticLock(final Version version) {}
+    public void setOptimisticLock(final Version version) {
+    }
 
     @Override
     public String titleString() {
@@ -91,9 +95,8 @@ public class ObjectNoop implements ObjectAdapter {
     }
 
     @Override
-    public void setElementSpecificationProvider(ElementSpecificationProvider elementSpecificationProvider) {
+    public void setElementSpecificationProvider(final ElementSpecificationProvider elementSpecificationProvider) {
     }
-
 
     @Override
     public ObjectAdapter getOwner() {
@@ -101,7 +104,7 @@ public class ObjectNoop implements ObjectAdapter {
     }
 
     @Override
-    public Instance getInstance(Specification specification) {
+    public Instance getInstance(final Specification specification) {
         return null;
     }
 
@@ -110,21 +113,19 @@ public class ObjectNoop implements ObjectAdapter {
         return false;
     }
 
-	@Override
+    @Override
     public boolean isPersistent() {
-		return false;
-	}
+        return false;
+    }
 
-	@Override
+    @Override
     public boolean isTransient() {
-		return false;
-	}
+        return false;
+    }
 
     @Override
     public ObjectAdapter getAggregateRoot() {
         return null;
     }
 
-
 }
-

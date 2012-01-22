@@ -17,15 +17,11 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.runtime.userprofile;
 
-
 public interface OptionsClient {
-    
+
     void loadOptions(Options viewOptions);
-    
+
     void saveOptions(Options viewOptions);
 }
-
-

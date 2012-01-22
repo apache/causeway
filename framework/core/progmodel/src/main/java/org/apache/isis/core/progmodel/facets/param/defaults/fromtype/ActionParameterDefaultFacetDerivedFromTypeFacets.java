@@ -28,8 +28,7 @@ public class ActionParameterDefaultFacetDerivedFromTypeFacets extends ActionDefa
 
     private final DefaultedFacet[] defaultedFacets;
 
-    public ActionParameterDefaultFacetDerivedFromTypeFacets(final DefaultedFacet[] defaultedFacets,
-        final FacetHolder holder) {
+    public ActionParameterDefaultFacetDerivedFromTypeFacets(final DefaultedFacet[] defaultedFacets, final FacetHolder holder) {
         super(holder, true);
         this.defaultedFacets = defaultedFacets;
     }
@@ -38,7 +37,8 @@ public class ActionParameterDefaultFacetDerivedFromTypeFacets extends ActionDefa
      * Return the defaults.
      * 
      * <p>
-     * Note that we get the defaults fresh each time in case the defaults might conceivably change.
+     * Note that we get the defaults fresh each time in case the defaults might
+     * conceivably change.
      */
     @Override
     public Object[] getDefaults(final ObjectAdapter inObject) {

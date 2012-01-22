@@ -41,14 +41,14 @@ public class TimeValueSemanticsProvider extends TimeValueSemanticsProviderAbstra
     }
 
     /**
-     * Required because implementation of {@link Parser} and {@link EncoderDecoder}.
+     * Required because implementation of {@link Parser} and
+     * {@link EncoderDecoder}.
      */
     public TimeValueSemanticsProvider() {
         this(null, null, null);
     }
 
-    public TimeValueSemanticsProvider(final FacetHolder holder, final IsisConfiguration configuration,
-        final ValueSemanticsProviderContext context) {
+    public TimeValueSemanticsProvider(final FacetHolder holder, final IsisConfiguration configuration, final ValueSemanticsProviderContext context) {
         super(holder, org.apache.isis.applib.value.Time.class, configuration, context);
     }
 
@@ -63,8 +63,7 @@ public class TimeValueSemanticsProvider extends TimeValueSemanticsProviderAbstra
     }
 
     @Override
-    protected Time add(final Time original, final int years, final int months, final int days, final int hours,
-        final int minutes) {
+    protected Time add(final Time original, final int years, final int months, final int days, final int hours, final int minutes) {
         Time time = original;
         time = time.add(hours, minutes);
         return time;

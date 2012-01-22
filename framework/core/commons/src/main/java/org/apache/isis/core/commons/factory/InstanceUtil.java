@@ -54,8 +54,7 @@ public final class InstanceUtil {
             } catch (final ClassNotFoundException e) {
                 throw new UnavailableClassException("The default type '" + defaultTypeName + "' cannot be found");
             } catch (final NoClassDefFoundError e) {
-                throw new InstanceCreationClassException("Default type '" + defaultTypeName
-                    + "' found, but is missing a dependent class: " + e.getMessage(), e);
+                throw new InstanceCreationClassException("Default type '" + defaultTypeName + "' found, but is missing a dependent class: " + e.getMessage(), e);
             }
         }
         return createInstance(className, defaultType, requiredType);
@@ -73,15 +72,13 @@ public final class InstanceUtil {
             } catch (final ClassNotFoundException e) {
                 throw new UnavailableClassException("The default type '" + defaultTypeName + "' cannot be found");
             } catch (final NoClassDefFoundError e) {
-                throw new InstanceCreationClassException("Default type '" + defaultTypeName
-                    + "' found, but is missing a dependent class: " + e.getMessage(), e);
+                throw new InstanceCreationClassException("Default type '" + defaultTypeName + "' found, but is missing a dependent class: " + e.getMessage(), e);
             }
         }
         return createInstance(cls, defaultType, requiredType);
     }
 
-    public static <T> T createInstance(final String className, final Class<? extends T> defaultType,
-        final Class<T> requiredType) {
+    public static <T> T createInstance(final String className, final Class<? extends T> defaultType, final Class<T> requiredType) {
         Assert.assertNotNull("Class to instantiate must be specified", className);
         Class<?> cls = null;
         try {
@@ -96,28 +93,23 @@ public final class InstanceUtil {
             }
             throw new UnavailableClassException("The class '" + className + "' cannot be found");
         } catch (final NoClassDefFoundError e) {
-            throw new InstanceCreationClassException("Class '" + className
-                + "' found , but is missing a dependent class: " + e.getMessage(), e);
+            throw new InstanceCreationClassException("Class '" + className + "' found , but is missing a dependent class: " + e.getMessage(), e);
         }
     }
 
-    public static <T> T createInstance(final Class<?> cls, final Class<? extends T> defaultType,
-        final Class<T> requiredType) {
+    public static <T> T createInstance(final Class<?> cls, final Class<? extends T> defaultType, final Class<T> requiredType) {
         Assert.assertNotNull("Class to instantiate must be specified", cls);
         try {
             if (requiredType == null || requiredType.isAssignableFrom(cls)) {
                 final Class<T> tClass = CastUtils.cast(cls);
                 return tClass.newInstance();
             } else {
-                throw new InstanceCreationClassException("Class '" + cls.getName() + "' is not of type '"
-                    + requiredType + "'");
+                throw new InstanceCreationClassException("Class '" + cls.getName() + "' is not of type '" + requiredType + "'");
             }
         } catch (final NoClassDefFoundError e) {
-            throw new InstanceCreationClassException("Class '" + cls + "'found , but is missing a dependent class: "
-                + e.getMessage(), e);
+            throw new InstanceCreationClassException("Class '" + cls + "'found , but is missing a dependent class: " + e.getMessage(), e);
         } catch (final InstantiationException e) {
-            throw new InstanceCreationException("Could not instantiate an object of class '" + cls.getName() + "'; "
-                + e.getMessage());
+            throw new InstanceCreationException("Could not instantiate an object of class '" + cls.getName() + "'; " + e.getMessage());
         } catch (final IllegalAccessException e) {
             throw new InstanceCreationException("Could not access the class '" + cls.getName() + "'; " + e.getMessage());
         }
@@ -130,8 +122,7 @@ public final class InstanceUtil {
         } catch (final ClassNotFoundException e) {
             throw new UnavailableClassException("The default type '" + className + "' cannot be found");
         } catch (final NoClassDefFoundError e) {
-            throw new InstanceCreationClassException("Default type '" + className
-                + "' found, but is missing a dependent class: " + e.getMessage(), e);
+            throw new InstanceCreationClassException("Default type '" + className + "' found, but is missing a dependent class: " + e.getMessage(), e);
         }
     }
 
@@ -140,13 +131,11 @@ public final class InstanceUtil {
         try {
             final Class<?> loadedClass = loadClass(className);
             if (requiredType != null && !requiredType.isAssignableFrom(loadedClass)) {
-                throw new InstanceCreationClassException("Class '" + className + "' is not of type '" + requiredType
-                    + "'");
+                throw new InstanceCreationClassException("Class '" + className + "' is not of type '" + requiredType + "'");
             }
             return CastUtils.cast(loadedClass);
         } catch (final NoClassDefFoundError e) {
-            throw new InstanceCreationClassException("Default type '" + className
-                + "' found, but is missing a dependent class: " + e.getMessage(), e);
+            throw new InstanceCreationClassException("Default type '" + className + "' found, but is missing a dependent class: " + e.getMessage(), e);
         }
     }
 

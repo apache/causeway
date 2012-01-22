@@ -35,8 +35,7 @@ public class TypicalLengthFacetForParameterDerivedFromTypeFacetFactory extends F
 
     @Override
     public void processParams(final ProcessParameterContext processParameterContext) {
-        final Class<?> type =
-            processParameterContext.getMethod().getParameterTypes()[processParameterContext.getParamNum()];
+        final Class<?> type = processParameterContext.getMethod().getParameterTypes()[processParameterContext.getParamNum()];
         final FacetedMethodParameter facetHolder = processParameterContext.getFacetHolder();
         addFacetDerivedFromTypeIfPresent(facetHolder, type);
     }

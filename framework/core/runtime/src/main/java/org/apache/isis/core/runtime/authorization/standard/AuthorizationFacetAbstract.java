@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.runtime.authorization.standard;
 
 import org.apache.isis.applib.events.UsabilityEvent;
@@ -29,28 +28,27 @@ import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 import org.apache.isis.core.runtime.authorization.AuthorizationManager;
 
-
 public abstract class AuthorizationFacetAbstract extends FacetAbstract implements AuthorizationFacet {
 
     public static Class<? extends Facet> type() {
         return AuthorizationFacet.class;
     }
 
-	private AuthorizationManager authorizationManager;
+    private final AuthorizationManager authorizationManager;
 
     public AuthorizationFacetAbstract(final FacetHolder holder, final AuthorizationManager authorizationManager) {
         super(type(), holder, false);
         this.authorizationManager = authorizationManager;
     }
 
+    @Override
     public String hides(final VisibilityContext<? extends VisibilityEvent> ic) {
-    	return authorizationManager.isVisible(ic.getSession(), ic.getTarget(), ic.getIdentifier()) ? 
-    			null : "Not authorized to view";
+        return authorizationManager.isVisible(ic.getSession(), ic.getTarget(), ic.getIdentifier()) ? null : "Not authorized to view";
     }
 
+    @Override
     public String disables(final UsabilityContext<? extends UsabilityEvent> ic) {
-        return authorizationManager.isUsable(ic.getSession(), ic.getTarget(), ic.getIdentifier()) ? 
-        		null : "Not authorized to edit";
+        return authorizationManager.isUsable(ic.getSession(), ic.getTarget(), ic.getIdentifier()) ? null : "Not authorized to edit";
     }
 
 }

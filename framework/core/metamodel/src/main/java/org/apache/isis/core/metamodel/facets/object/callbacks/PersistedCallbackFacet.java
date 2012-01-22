@@ -20,10 +20,12 @@
 package org.apache.isis.core.metamodel.facets.object.callbacks;
 
 /**
- * Represents the mechanism to inform the object that it has been persisted to the object store for the first time.
+ * Represents the mechanism to inform the object that it has been persisted to
+ * the object store for the first time.
  * 
  * <p>
- * In the standard Apache Isis Programming Model, this is represented by a <tt>saved</tt> method.
+ * In the standard Apache Isis Programming Model, this is represented by a
+ * <tt>saved</tt> method.
  * 
  * <p>
  * 

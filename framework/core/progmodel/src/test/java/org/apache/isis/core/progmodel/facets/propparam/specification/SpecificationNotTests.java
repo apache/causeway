@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.propparam.specification;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -25,16 +24,14 @@ import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
-import org.junit.Test;
-
 import org.apache.isis.applib.spec.Specification;
 import org.apache.isis.applib.spec.SpecificationNot;
-
+import org.junit.Test;
 
 public class SpecificationNotTests {
 
-    private Specification alwaysSatisfied = new SpecificationAlwaysSatisfied();
-    private Specification neverSatisfied = new SpecificationNeverSatisfied();
+    private final Specification alwaysSatisfied = new SpecificationAlwaysSatisfied();
+    private final Specification neverSatisfied = new SpecificationNeverSatisfied();
 
     @Test
     public void notSatisfiedIfUnderlyingIs() {
@@ -42,12 +39,12 @@ public class SpecificationNotTests {
             public MySpecNot() {
                 super(alwaysSatisfied);
             }
-        };
-        Specification mySpecOr = new MySpecNot();
+        }
+        ;
+        final Specification mySpecOr = new MySpecNot();
         assertThat(mySpecOr.satisfies(null), is(not(nullValue())));
         assertThat(mySpecOr.satisfies(null), is("not satisfied"));
     }
-
 
     @Test
     public void satisfiedIfUnderlyingIsNot() {
@@ -55,8 +52,9 @@ public class SpecificationNotTests {
             public MySpecNot() {
                 super(neverSatisfied);
             }
-        };
-        Specification mySpecOr = new MySpecNot();
+        }
+        ;
+        final Specification mySpecOr = new MySpecNot();
         assertThat(mySpecOr.satisfies(null), is(nullValue()));
     }
 

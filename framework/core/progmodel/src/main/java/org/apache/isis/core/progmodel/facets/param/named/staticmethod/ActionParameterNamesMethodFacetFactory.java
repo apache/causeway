@@ -41,15 +41,15 @@ import org.apache.isis.core.progmodel.facets.members.named.staticmethod.NamedFac
 /**
  * Sets up all the {@link Facet}s for an action in a single shot.
  */
-public class ActionParameterNamesMethodFacetFactory extends MethodPrefixBasedFacetFactoryAbstract implements
-    AdapterMapAware {
+public class ActionParameterNamesMethodFacetFactory extends MethodPrefixBasedFacetFactoryAbstract implements AdapterMapAware {
 
     private static final String[] PREFIXES = { MethodPrefixConstants.NAME_PREFIX };
 
     private AdapterMap adapterMap;
 
     /**
-     * Note that the {@link Facet}s registered are the generic ones from noa-architecture (where they exist)
+     * Note that the {@link Facet}s registered are the generic ones from
+     * noa-architecture (where they exist)
      */
     public ActionParameterNamesMethodFacetFactory() {
         super(FeatureType.ACTIONS_ONLY, PREFIXES);
@@ -68,8 +68,7 @@ public class ActionParameterNamesMethodFacetFactory extends MethodPrefixBasedFac
         attachNamedFacetForParametersIfParameterNamesMethodIsFound(processMethodContext, holderList);
     }
 
-    private static void attachNamedFacetForParametersIfParameterNamesMethodIsFound(
-        final ProcessMethodContext processMethodContext, final List<FacetedMethodParameter> parameters) {
+    private static void attachNamedFacetForParametersIfParameterNamesMethodIsFound(final ProcessMethodContext processMethodContext, final List<FacetedMethodParameter> parameters) {
 
         if (parameters.isEmpty()) {
             return;
@@ -79,9 +78,7 @@ public class ActionParameterNamesMethodFacetFactory extends MethodPrefixBasedFac
         final String capitalizedName = NameUtils.capitalizeName(actionMethod.getName());
 
         final Class<?> cls = processMethodContext.getCls();
-        final Method namesMethod =
-            MethodFinderUtils.findMethod(cls, MethodScope.CLASS, MethodPrefixConstants.NAME_PREFIX + capitalizedName,
-                String[].class, new Class[0]);
+        final Method namesMethod = MethodFinderUtils.findMethod(cls, MethodScope.CLASS, MethodPrefixConstants.NAME_PREFIX + capitalizedName, String[].class, new Class[0]);
         if (namesMethod == null) {
             return;
         }
@@ -104,8 +101,7 @@ public class ActionParameterNamesMethodFacetFactory extends MethodPrefixBasedFac
             // ignore
         }
         if (names == null || names.length != numElementsRequired) {
-            throw new MetaModelException(namesMethod
-                + " must return an String[] array of same size as number of parameters of action");
+            throw new MetaModelException(namesMethod + " must return an String[] array of same size as number of parameters of action");
         }
         return names;
     }

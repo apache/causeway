@@ -34,11 +34,12 @@ import org.apache.log4j.Logger;
 import com.google.common.base.Objects;
 
 /**
- * Adapter for {@link IsisConfigurationBuilder}, loading the specified configuration resource (file) from the given
- * {@link ResourceStreamSource}(s).
+ * Adapter for {@link IsisConfigurationBuilder}, loading the specified
+ * configuration resource (file) from the given {@link ResourceStreamSource}(s).
  * 
  * <p>
- * If a property is in multiple configuration resources then the latter resources will overwrite the former.
+ * If a property is in multiple configuration resources then the latter
+ * resources will overwrite the former.
  */
 public class IsisConfigurationBuilderResourceStreams implements IsisConfigurationBuilder {
 
@@ -69,13 +70,13 @@ public class IsisConfigurationBuilderResourceStreams implements IsisConfiguratio
 
     private final ResourceStreamSource resourceStreamSource;
 
-    private final List<ConfigurationResourceAndPolicy> configurationResources =
-        new ArrayList<ConfigurationResourceAndPolicy>();
+    private final List<ConfigurationResourceAndPolicy> configurationResources = new ArrayList<ConfigurationResourceAndPolicy>();
     private final Properties additionalProperties = new Properties();
     private boolean includeSystemProperties = false;
 
     /**
-     * Most recent snapshot of {@link IsisConfiguration} obtained from {@link #configurationLoader}.
+     * Most recent snapshot of {@link IsisConfiguration} obtained from
+     * {@link #configurationLoader}.
      * 
      * <p>
      * Whenever further configuration is merged in, this cache is invalidated.
@@ -132,19 +133,19 @@ public class IsisConfigurationBuilderResourceStreams implements IsisConfiguratio
     // ////////////////////////////////////////////////////////////
 
     /**
-     * Registers the configuration resource (usually, a file) with the specified name from the first
-     * {@link ResourceStreamSource} available.
+     * Registers the configuration resource (usually, a file) with the specified
+     * name from the first {@link ResourceStreamSource} available.
      * 
      * <p>
-     * If the configuration resource cannot be found then the provided {@link NotFoundPolicy} determines whether an
-     * exception is thrown or not.
+     * If the configuration resource cannot be found then the provided
+     * {@link NotFoundPolicy} determines whether an exception is thrown or not.
      * 
      * <p>
-     * Must be called before {@link #getConfiguration()}; the resource is actually read on {@link #getConfiguration()}.
+     * Must be called before {@link #getConfiguration()}; the resource is
+     * actually read on {@link #getConfiguration()}.
      */
     @Override
-    public synchronized void addConfigurationResource(final String configurationResource,
-        final NotFoundPolicy notFoundPolicy) {
+    public synchronized void addConfigurationResource(final String configurationResource, final NotFoundPolicy notFoundPolicy) {
         configurationResources.add(new ConfigurationResourceAndPolicy(configurationResource, notFoundPolicy));
         invalidateCache();
     }
@@ -211,30 +212,26 @@ public class IsisConfigurationBuilderResourceStreams implements IsisConfiguratio
         }
     }
 
-    private void loadConfigurationResource(final IsisConfigurationDefault configuration,
-        final ConfigurationResourceAndPolicy configResourceAndPolicy) {
+    private void loadConfigurationResource(final IsisConfigurationDefault configuration, final ConfigurationResourceAndPolicy configResourceAndPolicy) {
         final String configurationResource = configResourceAndPolicy.getConfigurationResource();
         final NotFoundPolicy notFoundPolicy = configResourceAndPolicy.getNotFoundPolicy();
         if (LOG.isDebugEnabled()) {
-            LOG.debug("loading configuration resource: " + configurationResource + ", notFoundPolicy: "
-                + notFoundPolicy);
+            LOG.debug("loading configuration resource: " + configurationResource + ", notFoundPolicy: " + notFoundPolicy);
         }
         loadConfigurationResource(configuration, configurationResource, notFoundPolicy);
     }
 
     /**
-     * Loads the configuration resource (usually, a file) with the specified name from the first
-     * {@link ResourceStreamSource} available.
+     * Loads the configuration resource (usually, a file) with the specified
+     * name from the first {@link ResourceStreamSource} available.
      * 
      * <p>
-     * If the configuration resource cannot be found then the provided {@link NotFoundPolicy} determines whether an
-     * exception is thrown or not.
+     * If the configuration resource cannot be found then the provided
+     * {@link NotFoundPolicy} determines whether an exception is thrown or not.
      */
-    protected void loadConfigurationResource(final IsisConfigurationDefault configuration,
-        final String configurationResource, final NotFoundPolicy notFoundPolicy) {
+    protected void loadConfigurationResource(final IsisConfigurationDefault configuration, final String configurationResource, final NotFoundPolicy notFoundPolicy) {
         try {
-            final PropertiesReader propertiesReader =
-                loadConfigurationResource(resourceStreamSource, configurationResource);
+            final PropertiesReader propertiesReader = loadConfigurationResource(resourceStreamSource, configurationResource);
             addProperties(configuration, propertiesReader.getProperties());
             if (LOG.isInfoEnabled()) {
                 LOG.info("'" + configurationResource + "' FOUND");
@@ -244,8 +241,7 @@ public class IsisConfigurationBuilderResourceStreams implements IsisConfiguratio
             // keep going
         }
         if (notFoundPolicy == NotFoundPolicy.FAIL_FAST) {
-            throw new IsisException("failed to load '" + configurationResource + "'; tried using: "
-                + resourceStreamSource.getName());
+            throw new IsisException("failed to load '" + configurationResource + "'; tried using: " + resourceStreamSource.getName());
         } else {
             if (LOG.isInfoEnabled()) {
                 LOG.info("'" + configurationResource + "' not found, but not needed");
@@ -253,8 +249,7 @@ public class IsisConfigurationBuilderResourceStreams implements IsisConfiguratio
         }
     }
 
-    private PropertiesReader loadConfigurationResource(final ResourceStreamSource resourceStreamSource,
-        final String configurationResource) throws IOException {
+    private PropertiesReader loadConfigurationResource(final ResourceStreamSource resourceStreamSource, final String configurationResource) throws IOException {
         return new PropertiesReader(resourceStreamSource, configurationResource);
     }
 
@@ -296,8 +291,7 @@ public class IsisConfigurationBuilderResourceStreams implements IsisConfiguratio
 
     @Override
     public String toString() {
-        return Objects.toStringHelper(this).add("resourceStream", resourceStreamSource)
-            .add("configResources", configurationResources).toString();
+        return Objects.toStringHelper(this).add("resourceStream", resourceStreamSource).add("configResources", configurationResources).toString();
     }
 
 }

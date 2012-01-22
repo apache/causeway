@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.propparam.specification;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -25,6 +24,11 @@ import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
+import org.apache.isis.core.metamodel.interactions.PropertyModifyContext;
+import org.apache.isis.core.progmodel.facets.object.validperspec.MustSatisfySpecificationOnTypeFacet;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JMock;
@@ -34,13 +38,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
-import org.apache.isis.core.metamodel.interactions.PropertyModifyContext;
-import org.apache.isis.core.progmodel.facets.object.validperspec.MustSatisfySpecificationOnTypeFacet;
-
 
 @RunWith(JMock.class)
 public class MustSatisfySpecificationValidatingInteractionTest {
@@ -56,19 +53,19 @@ public class MustSatisfySpecificationValidatingInteractionTest {
     private FacetHolder mockHolder;
 
     private PropertyModifyContext mockContext;
-    
+
     private ObjectAdapter mockProposedObjectAdapter;
     private Object mockProposedObject;
 
     private SpecificationAlwaysSatisfied specificationAlwaysSatisfied;
     private SpecificationNeverSatisfied specificationNeverSatisfied;
-    
+
     @Before
     public void setUp() throws Exception {
         mockHolder = mockery.mock(IdentifiedHolder.class);
         specificationAlwaysSatisfied = new SpecificationAlwaysSatisfied();
         specificationNeverSatisfied = new SpecificationNeverSatisfied();
-        
+
         facetForSpecificationAlwaysSatisfied = new MustSatisfySpecificationOnTypeFacet(Utils.listOf(specificationAlwaysSatisfied), mockHolder);
         facetForSpecificationNeverSatisfied = new MustSatisfySpecificationOnTypeFacet(Utils.listOf(specificationNeverSatisfied), mockHolder);
 
@@ -107,6 +104,5 @@ public class MustSatisfySpecificationValidatingInteractionTest {
         assertThat(reason, is(not(nullValue())));
         assertThat(reason, is("not satisfied"));
     }
-
 
 }

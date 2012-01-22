@@ -39,7 +39,8 @@ public class DisableForContextFacetViaMethod extends DisableForContextFacetAbstr
     }
 
     /**
-     * Returns a singleton list of the {@link Method} provided in the constructor.
+     * Returns a singleton list of the {@link Method} provided in the
+     * constructor.
      */
     @Override
     public List<Method> getMethods() {

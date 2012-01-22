@@ -25,10 +25,12 @@ import org.apache.isis.core.metamodel.interactions.ValidatingInteractionAdvisor;
 import org.apache.isis.core.progmodel.facets.object.regex.RegExFacet;
 
 /**
- * Whether the (string) property or a parameter must correspond to a specific mask.
+ * Whether the (string) property or a parameter must correspond to a specific
+ * mask.
  * 
  * <p>
- * In the standard Apache Isis Programming Model, corresponds to the <tt>@Mask</tt> annotation.
+ * In the standard Apache Isis Programming Model, corresponds to the
+ * <tt>@Mask</tt> annotation.
  * 
  * <p>
  * TODO: not yet implemented by the framework or any viewer.

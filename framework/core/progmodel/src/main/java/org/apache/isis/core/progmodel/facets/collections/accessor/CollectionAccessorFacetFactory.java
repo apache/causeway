@@ -73,8 +73,8 @@ public class CollectionAccessorFacetFactory extends PropertyOrCollectionIdentify
     }
 
     /**
-     * The method way well represent a reference property, but this facet factory does not have any opinion on the
-     * matter.
+     * The method way well represent a reference property, but this facet
+     * factory does not have any opinion on the matter.
      */
     @Override
     public boolean isPropertyAccessor(final Method method) {
@@ -82,26 +82,24 @@ public class CollectionAccessorFacetFactory extends PropertyOrCollectionIdentify
     }
 
     /**
-     * The method way well represent a value property, but this facet factory does not have any opinion on the matter.
+     * The method way well represent a value property, but this facet factory
+     * does not have any opinion on the matter.
      */
     public boolean isValuePropertyAccessor(final Method method) {
         return false;
     }
 
     @Override
-    public void findAndRemoveCollectionAccessors(final MethodRemover methodRemover,
-        final List<Method> methodListToAppendTo) {
+    public void findAndRemoveCollectionAccessors(final MethodRemover methodRemover, final List<Method> methodListToAppendTo) {
         final Class<?>[] collectionClasses = getCollectionTypeRepository().getCollectionType();
         for (final Class<?> returnType : collectionClasses) {
-            final List<Method> list =
-                methodRemover.removeMethods(MethodScope.OBJECT, MethodPrefixConstants.GET_PREFIX, returnType, false, 0);
+            final List<Method> list = methodRemover.removeMethods(MethodScope.OBJECT, MethodPrefixConstants.GET_PREFIX, returnType, false, 0);
             methodListToAppendTo.addAll(list);
         }
     }
 
     @Override
-    public void findAndRemovePropertyAccessors(final MethodRemover methodRemover,
-        final List<Method> methodListToAppendTo) {
+    public void findAndRemovePropertyAccessors(final MethodRemover methodRemover, final List<Method> methodListToAppendTo) {
         // does nothing
     }
 

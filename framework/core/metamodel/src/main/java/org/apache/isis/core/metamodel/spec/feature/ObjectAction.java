@@ -39,25 +39,29 @@ public interface ObjectAction extends ObjectMember {
     // //////////////////////////////////////////////////////
 
     /**
-     * Returns where the action should be executed: explicitly locally on the client; explicitly remotely on the server;
-     * or where it normally should be executed. By default instance methods should execute on the server, static methods
-     * should execute on the client.
+     * Returns where the action should be executed: explicitly locally on the
+     * client; explicitly remotely on the server; or where it normally should be
+     * executed. By default instance methods should execute on the server,
+     * static methods should execute on the client.
      */
     Target getTarget();
 
     /**
-     * Determine the real target for this action. If this action represents an object action than the target is
-     * returned. If this action is on a service then that service will be returned.
+     * Determine the real target for this action. If this action represents an
+     * object action than the target is returned. If this action is on a service
+     * then that service will be returned.
      */
     ObjectAdapter realTarget(ObjectAdapter target);
 
     /**
-     * Returns the specification for the type of object that this action can be invoked upon.
+     * Returns the specification for the type of object that this action can be
+     * invoked upon.
      */
     ObjectSpecification getOnType();
 
     /**
-     * Return true if the action is run on a service object using the target object as a parameter.
+     * Return true if the action is run on a service object using the target
+     * object as a parameter.
      */
     boolean isContributed();
 
@@ -68,8 +72,8 @@ public interface ObjectAction extends ObjectMember {
     // //////////////////////////////////////////////////////////////////
 
     /**
-     * Returns the {@link ActionType type} of action: user, exploration, prototype or debug, or that it is a set of
-     * actions.
+     * Returns the {@link ActionType type} of action: user, exploration,
+     * prototype or debug, or that it is a set of actions.
      */
     ActionType getType();
 
@@ -83,7 +87,8 @@ public interface ObjectAction extends ObjectMember {
     ObjectSpecification getReturnType();
 
     /**
-     * Returns true if the represented action returns something, else returns false.
+     * Returns true if the represented action returns something, else returns
+     * false.
      */
     boolean hasReturn();
 
@@ -92,7 +97,8 @@ public interface ObjectAction extends ObjectMember {
     // //////////////////////////////////////////////////////////////////
 
     /**
-     * Invokes the action's method on the target object given the specified set of parameters.
+     * Invokes the action's method on the target object given the specified set
+     * of parameters.
      */
     ObjectAdapter execute(ObjectAdapter target, ObjectAdapter[] parameters);
 
@@ -101,18 +107,23 @@ public interface ObjectAction extends ObjectMember {
     // //////////////////////////////////////////////////////////////////
 
     /**
-     * Creates an {@link ActionInvocationContext interaction context} representing an attempt to invoke this action.
+     * Creates an {@link ActionInvocationContext interaction context}
+     * representing an attempt to invoke this action.
      * 
      * <p>
-     * Typically it is easier to just call {@link #isProposedArgumentSetValid(ObjectAdapter, ObjectAdapter[]) {
-     * @link #isProposedArgumentSetValidResultSet(ObjectAdapter, ObjectAdapter[])}; this is provided as API for
-     * symmetry with interactions (such as {@link AccessContext} accesses) have no corresponding vetoing methods.
+     * Typically it is easier to just call
+     * {@link #isProposedArgumentSetValid(ObjectAdapter, ObjectAdapter[])
+     * 
+     * @link #isProposedArgumentSetValidResultSet(ObjectAdapter,
+     *       ObjectAdapter[])}; this is provided as API for symmetry with
+     *       interactions (such as {@link AccessContext} accesses) have no
+     *       corresponding vetoing methods.
      */
-    public ActionInvocationContext createActionInvocationInteractionContext(AuthenticationSession session,
-        InteractionInvocationMethod invocationMethod, ObjectAdapter targetObject, ObjectAdapter[] proposedArguments);
+    public ActionInvocationContext createActionInvocationInteractionContext(AuthenticationSession session, InteractionInvocationMethod invocationMethod, ObjectAdapter targetObject, ObjectAdapter[] proposedArguments);
 
     /**
-     * Whether the provided argument set is valid, represented as a {@link Consent}.
+     * Whether the provided argument set is valid, represented as a
+     * {@link Consent}.
      */
     Consent isProposedArgumentSetValid(ObjectAdapter object, ObjectAdapter[] proposedArguments);
 
@@ -124,7 +135,8 @@ public interface ObjectAction extends ObjectMember {
      * Lists the sub-actions that are available under this name.
      * 
      * <p>
-     * If any actions are returned then this action is only a set and not an action itself.
+     * If any actions are returned then this action is only a set and not an
+     * action itself.
      */
     List<ObjectAction> getActions();
 
@@ -148,7 +160,8 @@ public interface ObjectAction extends ObjectMember {
     List<ObjectActionParameter> getParameters();
 
     /**
-     * Returns the {@link ObjectSpecification type} of each of the {@link #getParameters() parameters}.
+     * Returns the {@link ObjectSpecification type} of each of the
+     * {@link #getParameters() parameters}.
      */
     List<ObjectSpecification> getParameterTypes();
 
@@ -179,9 +192,9 @@ public interface ObjectAction extends ObjectMember {
     ObjectAdapter[] getDefaults(ObjectAdapter target);
 
     /**
-     * Returns a list of possible references/values for each parameter, which the user can choose from.
+     * Returns a list of possible references/values for each parameter, which
+     * the user can choose from.
      */
     ObjectAdapter[][] getChoices(ObjectAdapter target);
-
 
 }

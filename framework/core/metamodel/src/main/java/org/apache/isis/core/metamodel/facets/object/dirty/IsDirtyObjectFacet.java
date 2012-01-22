@@ -22,10 +22,12 @@ package org.apache.isis.core.metamodel.facets.object.dirty;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 
 /**
- * Determine whether this object has been explicitly {@link MarkDirtyObjectFacet marked as dirty}.
+ * Determine whether this object has been explicitly
+ * {@link MarkDirtyObjectFacet marked as dirty}.
  * 
  * <p>
- * In the standard Apache Isis Programming Model, typically corresponds to method named <tt>isDirty</tt>.
+ * In the standard Apache Isis Programming Model, typically corresponds to
+ * method named <tt>isDirty</tt>.
  * 
  * @see ClearDirtyObjectFacet
  * @see MarkDirtyObjectFacet

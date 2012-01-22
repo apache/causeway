@@ -22,10 +22,12 @@ package org.apache.isis.core.metamodel.facets.object.dirty;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 
 /**
- * Explicitly indicate that this object is no longer dirty and so does not need to be persisted.
+ * Explicitly indicate that this object is no longer dirty and so does not need
+ * to be persisted.
  * 
  * <p>
- * In the standard Apache Isis Programming Model, typically corresponds to method named <tt>markDirty</tt>.
+ * In the standard Apache Isis Programming Model, typically corresponds to
+ * method named <tt>markDirty</tt>.
  * 
  * @see IsDirtyObjectFacet
  * @see MarkDirtyObjectFacet

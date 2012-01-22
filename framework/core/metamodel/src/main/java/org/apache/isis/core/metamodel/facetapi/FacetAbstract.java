@@ -36,7 +36,8 @@ public abstract class FacetAbstract implements Facet {
     private FacetHolder holder;
 
     /**
-     * Populated in {@link #setFacetHolder(FacetHolder)} if the provided holder implements {@link IdentifiedHolder}.
+     * Populated in {@link #setFacetHolder(FacetHolder)} if the provided holder
+     * implements {@link IdentifiedHolder}.
      * 
      * <p>
      * Otherwise is <tt>null</tt>.
@@ -66,8 +67,9 @@ public abstract class FacetAbstract implements Facet {
     }
 
     /**
-     * Convenience method that returns {@link #getFacetHolder()} downcast to {@link IdentifiedHolder} if the
-     * implementation does indeed inherit from {@link IdentifiedHolder}, otherwise <tt>null</tt>.
+     * Convenience method that returns {@link #getFacetHolder()} downcast to
+     * {@link IdentifiedHolder} if the implementation does indeed inherit from
+     * {@link IdentifiedHolder}, otherwise <tt>null</tt>.
      */
     public IdentifiedHolder getIdentified() {
         return identifiedHolder;
@@ -96,11 +98,12 @@ public abstract class FacetAbstract implements Facet {
     }
 
     /**
-     * Default implementation of this method that returns <tt>true</tt>, ie should replace (none {@link #isNoop() no-op}
-     * implementations.
+     * Default implementation of this method that returns <tt>true</tt>, ie
+     * should replace (none {@link #isNoop() no-op} implementations.
      * 
      * <p>
-     * Implementations that don't wish to replace none no-op implementations should override and return <tt>false</tt>.
+     * Implementations that don't wish to replace none no-op implementations
+     * should override and return <tt>false</tt>.
      */
     @Override
     public boolean alwaysReplace() {

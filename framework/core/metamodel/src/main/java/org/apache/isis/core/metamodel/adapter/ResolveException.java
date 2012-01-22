@@ -22,8 +22,8 @@ package org.apache.isis.core.metamodel.adapter;
 import org.apache.isis.core.commons.exceptions.IsisException;
 
 /**
- * Indicates that a request to resolve an object has failed. Unresolved objects should never be used as they will cause
- * further errors.
+ * Indicates that a request to resolve an object has failed. Unresolved objects
+ * should never be used as they will cause further errors.
  */
 public class ResolveException extends IsisException {
     private static final long serialVersionUID = 1L;

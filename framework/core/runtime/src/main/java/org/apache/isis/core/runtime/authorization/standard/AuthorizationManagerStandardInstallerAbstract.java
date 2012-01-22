@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.runtime.authorization.standard;
 
 import java.util.List;
@@ -27,16 +26,15 @@ import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.runtime.authorization.AuthorizationManager;
 import org.apache.isis.core.runtime.authorization.AuthorizationManagerInstaller;
 
-
 public abstract class AuthorizationManagerStandardInstallerAbstract extends InstallerAbstract implements AuthorizationManagerInstaller {
 
-    public AuthorizationManagerStandardInstallerAbstract(String name) {
-    	super(AuthorizationManagerInstaller.TYPE, name);
+    public AuthorizationManagerStandardInstallerAbstract(final String name) {
+        super(AuthorizationManagerInstaller.TYPE, name);
     }
-    
-	public AuthorizationManager createAuthorizationManager() {
-        final AuthorizationManagerStandard authorizationManager = 
-        	new AuthorizationManagerStandard(getConfiguration());
+
+    @Override
+    public AuthorizationManager createAuthorizationManager() {
+        final AuthorizationManagerStandard authorizationManager = new AuthorizationManagerStandard(getConfiguration());
         final Authorizor authorizor = createAuthorizor(getConfiguration());
         authorizationManager.setAuthorizor(authorizor);
         return authorizationManager;
@@ -44,13 +42,14 @@ public abstract class AuthorizationManagerStandardInstallerAbstract extends Inst
 
     /**
      * Hook method
+     * 
      * @return
      */
     protected abstract Authorizor createAuthorizor(final IsisConfiguration configuration);
 
     @Override
     public List<Class<?>> getTypes() {
-    	return listOf(AuthorizationManager.class);
+        return listOf(AuthorizationManager.class);
     }
 
 }

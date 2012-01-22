@@ -64,18 +64,18 @@ public class CollectionTypeRegistryDefault extends CollectionTypeRegistryAbstrac
         return collectionTypesAsArray;
     }
 
-    public CollectionSemantics semanticsOf(Class<?> underlyingClass) {
-        if(!Collection.class.isAssignableFrom(underlyingClass)) {
+    @Override
+    public CollectionSemantics semanticsOf(final Class<?> underlyingClass) {
+        if (!Collection.class.isAssignableFrom(underlyingClass)) {
             return CollectionSemantics.ARRAY;
         }
-        if(List.class.isAssignableFrom(underlyingClass)) {
-           return CollectionSemantics.LIST; 
+        if (List.class.isAssignableFrom(underlyingClass)) {
+            return CollectionSemantics.LIST;
         }
-        if(Set.class.isAssignableFrom(underlyingClass)) {
-            return CollectionSemantics.SET; 
+        if (Set.class.isAssignableFrom(underlyingClass)) {
+            return CollectionSemantics.SET;
         }
         return CollectionSemantics.OTHER;
     }
-
 
 }

@@ -37,7 +37,8 @@ public class NamedFacetViaMethod extends NamedFacetAbstract implements Imperativ
     }
 
     /**
-     * Returns a singleton list of the {@link Method} provided in the constructor.
+     * Returns a singleton list of the {@link Method} provided in the
+     * constructor.
      */
     @Override
     public List<Method> getMethods() {

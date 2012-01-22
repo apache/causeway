@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.object.notpersistable;
 
 import org.apache.isis.applib.annotation.NotPersistable;
@@ -26,7 +25,6 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.metamodel.facets.object.notpersistable.NotPersistableFacet;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
-
 
 public class NotPersistableAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 
@@ -45,10 +43,10 @@ public class NotPersistableAnnotationFacetFactoryTest extends AbstractFacetFacto
         super.tearDown();
     }
 
-
     public void testNotPersistableAnnotationPickedUpOnClassAndDefaultsToUserOrProgram() {
         @NotPersistable
-        class Customer {}
+        class Customer {
+        }
 
         facetFactory.process(new ProcessClassContext(Customer.class, methodRemover, facetedMethod));
 
@@ -64,7 +62,8 @@ public class NotPersistableAnnotationFacetFactoryTest extends AbstractFacetFacto
 
     public void testNotPersistableAnnotationUserOrProgramPickedUpOn() {
         @NotPersistable(By.USER_OR_PROGRAM)
-        class Customer {}
+        class Customer {
+        }
 
         facetFactory.process(new ProcessClassContext(Customer.class, methodRemover, facetedMethod));
 
@@ -80,7 +79,8 @@ public class NotPersistableAnnotationFacetFactoryTest extends AbstractFacetFacto
 
     public void testNotPersistableAnnotationUserPickedUpOn() {
         @NotPersistable(By.USER)
-        class Customer {}
+        class Customer {
+        }
 
         facetFactory.process(new ProcessClassContext(Customer.class, methodRemover, facetedMethod));
 
@@ -95,4 +95,3 @@ public class NotPersistableAnnotationFacetFactoryTest extends AbstractFacetFacto
     }
 
 }
-

@@ -30,8 +30,7 @@ public abstract class SingleClassValueFacetAbstract extends FacetAbstract implem
     private final Class<?> value;
     private final SpecificationLookup specificationLookup;
 
-    public SingleClassValueFacetAbstract(final Class<? extends Facet> facetType, final FacetHolder holder,
-        final Class<?> value, final SpecificationLookup specificationLookup) {
+    public SingleClassValueFacetAbstract(final Class<? extends Facet> facetType, final FacetHolder holder, final Class<?> value, final SpecificationLookup specificationLookup) {
         super(facetType, holder, false);
         this.value = value;
         this.specificationLookup = specificationLookup;

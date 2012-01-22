@@ -31,8 +31,9 @@ import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
  * Base interface for elements of the metamodel.
  * 
  * <p>
- * The most significant subinterfaces of this are {@link ObjectSpecification} and {@link ObjectFeature} (which brings in
- * {@link ObjectMember} and {@link ObjectActionParameter}.
+ * The most significant subinterfaces of this are {@link ObjectSpecification}
+ * and {@link ObjectFeature} (which brings in {@link ObjectMember} and
+ * {@link ObjectActionParameter}.
  * 
  * <p>
  * Introduces so that viewers can deal with abstract Instances of said.
@@ -43,22 +44,27 @@ public interface Specification extends IdentifiedHolder {
     FeatureType getFeatureType();
 
     /**
-     * Returns a description of how the member is used - this complements the help text.
+     * Returns a description of how the member is used - this complements the
+     * help text.
      * 
      * @see #getHelp()
      */
     String getDescription();
 
     /**
-     * Return an {@link Instance} of this {@link Specification} with respect to the provided {@link ObjectAdapter}.
+     * Return an {@link Instance} of this {@link Specification} with respect to
+     * the provided {@link ObjectAdapter}.
      * 
      * <p>
-     * For example, if the {@link Specification} is a {@link OneToOneAssociation}, then is an {@link Instance}
-     * implementation representing the { {@link ObjectAdapter}/ {@link OneToOneAssociation} tuple.
+     * For example, if the {@link Specification} is a
+     * {@link OneToOneAssociation}, then is an {@link Instance} implementation
+     * representing the { {@link ObjectAdapter}/ {@link OneToOneAssociation}
+     * tuple.
      * 
      * <p>
-     * Implementations are expected to use a double-dispatch back to the provided {@link ObjectAdapter} (passing
-     * themselves as a parameter), using {@link ObjectAdapter#getInstance(Specification)}.
+     * Implementations are expected to use a double-dispatch back to the
+     * provided {@link ObjectAdapter} (passing themselves as a parameter), using
+     * {@link ObjectAdapter#getInstance(Specification)}.
      * 
      * <p>
      * Note: this method may throw an {@link UnsupportedOperationException}; see

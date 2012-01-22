@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.runtime.logging;
 
 import java.io.IOException;
@@ -32,7 +31,6 @@ import java.net.UnknownHostException;
 
 import org.apache.log4j.Logger;
 import org.apache.log4j.spi.TriggeringEventEvaluator;
-
 
 public class WebSnapshotAppender extends SnapshotAppender {
     private static class HttpQueryWriter extends OutputStreamWriter {
@@ -72,10 +70,12 @@ public class WebSnapshotAppender extends SnapshotAppender {
     private String url_spec = "http://development.isis.net/errors/log.php";
 
     /**
-     * The default constructor will instantiate the appender with a {@link TriggeringEventEvaluator} that will
-     * trigger on events with level ERROR or higher.
+     * The default constructor will instantiate the appender with a
+     * {@link TriggeringEventEvaluator} that will trigger on events with level
+     * ERROR or higher.
      */
-    public WebSnapshotAppender() {}
+    public WebSnapshotAppender() {
+    }
 
     public WebSnapshotAppender(final TriggeringEventEvaluator evaluator) {
         super(evaluator);

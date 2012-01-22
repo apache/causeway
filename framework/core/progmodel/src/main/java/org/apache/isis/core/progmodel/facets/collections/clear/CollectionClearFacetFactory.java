@@ -35,8 +35,7 @@ import org.apache.isis.core.progmodel.facets.MethodFinderUtils;
 import org.apache.isis.core.progmodel.facets.MethodPrefixBasedFacetFactoryAbstract;
 import org.apache.isis.core.progmodel.facets.MethodPrefixConstants;
 
-public class CollectionClearFacetFactory extends MethodPrefixBasedFacetFactoryAbstract implements AdapterMapAware,
-    ObjectDirtierAware {
+public class CollectionClearFacetFactory extends MethodPrefixBasedFacetFactoryAbstract implements AdapterMapAware, ObjectDirtierAware {
 
     private static final String[] PREFIXES = { MethodPrefixConstants.CLEAR_PREFIX };
 
@@ -59,17 +58,14 @@ public class CollectionClearFacetFactory extends MethodPrefixBasedFacetFactoryAb
         final String capitalizedName = NameUtils.javaBaseName(getMethod.getName());
 
         final Class<?> cls = processMethodContext.getCls();
-        final Method method =
-            MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, MethodPrefixConstants.CLEAR_PREFIX + capitalizedName,
-                void.class, null);
+        final Method method = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, MethodPrefixConstants.CLEAR_PREFIX + capitalizedName, void.class, null);
         processMethodContext.removeMethod(method);
 
         final FacetHolder collection = processMethodContext.getFacetHolder();
         FacetUtil.addFacet(createCollectionClearFacet(method, getMethod, collection));
     }
 
-    private CollectionClearFacet createCollectionClearFacet(final Method clearMethodIfAny, final Method accessorMethod,
-        final FacetHolder collection) {
+    private CollectionClearFacet createCollectionClearFacet(final Method clearMethodIfAny, final Method accessorMethod, final FacetHolder collection) {
         if (clearMethodIfAny != null) {
             return new CollectionClearFacetViaMethod(clearMethodIfAny, collection);
         } else {

@@ -35,14 +35,16 @@ import org.apache.isis.core.progmodel.facets.MethodPrefixBasedFacetFactoryAbstra
 import org.apache.isis.core.progmodel.facets.MethodPrefixConstants;
 
 /**
- * Sets up a {@link NamedFacet} if a {@value MethodPrefixConstants#NAME_PREFIX}-prefixed method is present.
+ * Sets up a {@link NamedFacet} if a {@value MethodPrefixConstants#NAME_PREFIX}
+ * -prefixed method is present.
  */
 public class NamedFacetViaNameMethodFacetFactory extends MethodPrefixBasedFacetFactoryAbstract {
 
     private static final String[] PREFIXES = { MethodPrefixConstants.NAME_PREFIX };
 
     /**
-     * Note that the {@link Facet}s registered are the generic ones from noa-architecture (where they exist)
+     * Note that the {@link Facet}s registered are the generic ones from
+     * noa-architecture (where they exist)
      */
     public NamedFacetViaNameMethodFacetFactory() {
         super(FeatureType.MEMBERS, PREFIXES);
@@ -65,9 +67,7 @@ public class NamedFacetViaNameMethodFacetFactory extends MethodPrefixBasedFacetF
         final String capitalizedName = NameUtils.javaBaseNameStripAccessorPrefixIfRequired(method.getName());
 
         final Class<?> cls = processMethodContext.getCls();
-        final Method nameMethod =
-            MethodFinderUtils.findMethod(cls, MethodScope.CLASS, MethodPrefixConstants.NAME_PREFIX + capitalizedName,
-                String.class, new Class[0]);
+        final Method nameMethod = MethodFinderUtils.findMethod(cls, MethodScope.CLASS, MethodPrefixConstants.NAME_PREFIX + capitalizedName, String.class, new Class[0]);
 
         if (nameMethod == null) {
             return;

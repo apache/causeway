@@ -27,7 +27,8 @@ import org.apache.isis.core.metamodel.methodutils.MethodScope;
  * Removes any static getter or setter methods.
  * 
  * <p>
- * TODO: this is probably redundant given we also have {@link RemoveJavaLangObjectMethodsFacetFactory}.
+ * TODO: this is probably redundant given we also have
+ * {@link RemoveJavaLangObjectMethodsFacetFactory}.
  */
 public class RemoveGetClassMethodFacetFactory extends FacetFactoryAbstract {
 

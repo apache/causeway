@@ -22,11 +22,11 @@ package org.apache.isis.core.progmodel.facets.value.date;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.progmodel.facets.object.value.ValueUsingValueSemanticsProviderFacetFactory;
 
-public class DateValueTypeFacetFactory extends
-    ValueUsingValueSemanticsProviderFacetFactory<org.apache.isis.applib.value.Date> {
+public class DateValueTypeFacetFactory extends ValueUsingValueSemanticsProviderFacetFactory<org.apache.isis.applib.value.Date> {
 
     public DateValueTypeFacetFactory() {
-        super(DateValueFacet.class); // as per inherited DateTimeValueSemanticsProvider#facetType
+        super(DateValueFacet.class); // as per inherited
+                                     // DateTimeValueSemanticsProvider#facetType
         // (inherited)
     }
 

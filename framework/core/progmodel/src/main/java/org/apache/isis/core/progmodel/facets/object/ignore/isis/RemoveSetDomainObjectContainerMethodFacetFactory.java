@@ -35,10 +35,8 @@ public class RemoveSetDomainObjectContainerMethodFacetFactory extends FacetFacto
 
     @Override
     public void process(final ProcessClassContext processClassContext) {
-        processClassContext.removeMethod(MethodScope.OBJECT, "setContainer", void.class,
-            new Class[] { DomainObjectContainer.class });
-        processClassContext.removeMethod(MethodScope.OBJECT, "set_Container", void.class,
-            new Class[] { DomainObjectContainer.class });
+        processClassContext.removeMethod(MethodScope.OBJECT, "setContainer", void.class, new Class[] { DomainObjectContainer.class });
+        processClassContext.removeMethod(MethodScope.OBJECT, "set_Container", void.class, new Class[] { DomainObjectContainer.class });
     }
 
 }

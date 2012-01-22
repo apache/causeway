@@ -29,7 +29,8 @@ import org.apache.isis.core.metamodel.consent.InteractionContextType;
 import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
 
 /**
- * See {@link InteractionContext} for overview; analogous to {@link ActionArgumentEvent}.
+ * See {@link InteractionContext} for overview; analogous to
+ * {@link ActionArgumentEvent}.
  */
 public class ActionArgumentContext extends ValidityContext<ActionArgumentEvent> implements ProposedHolder {
 
@@ -37,9 +38,7 @@ public class ActionArgumentContext extends ValidityContext<ActionArgumentEvent> 
     private final int position;
     private final ObjectAdapter proposed;
 
-    public ActionArgumentContext(final AuthenticationSession session,
-        final InteractionInvocationMethod invocationMethod, final ObjectAdapter target, final Identifier id,
-        final ObjectAdapter[] args, final int position) {
+    public ActionArgumentContext(final AuthenticationSession session, final InteractionInvocationMethod invocationMethod, final ObjectAdapter target, final Identifier id, final ObjectAdapter[] args, final int position) {
         super(InteractionContextType.ACTION_PROPOSED_ARGUMENT, session, invocationMethod, id, target);
 
         this.args = args;

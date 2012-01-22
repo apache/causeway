@@ -44,14 +44,11 @@ public abstract class ValueFacetAbstract extends MultipleValueFacetAbstract impl
         return ValueFacet.class;
     }
 
-    private static ValueSemanticsProvider<?> newValueSemanticsProviderOrNull(final Class<?> semanticsProviderClass,
-        final FacetHolder holder, final IsisConfiguration configuration, final ValueSemanticsProviderContext context) {
+    private static ValueSemanticsProvider<?> newValueSemanticsProviderOrNull(final Class<?> semanticsProviderClass, final FacetHolder holder, final IsisConfiguration configuration, final ValueSemanticsProviderContext context) {
         if (semanticsProviderClass == null) {
             return null;
         }
-        return (ValueSemanticsProvider<?>) ClassUtil.newInstance(semanticsProviderClass, new Class<?>[] {
-            FacetHolder.class, IsisConfiguration.class, ValueSemanticsProviderContext.class }, new Object[] { holder,
-            configuration, context });
+        return (ValueSemanticsProvider<?>) ClassUtil.newInstance(semanticsProviderClass, new Class<?>[] { FacetHolder.class, IsisConfiguration.class, ValueSemanticsProviderContext.class }, new Object[] { holder, configuration, context });
     }
 
     // to look after the facets (since MultiTyped)
@@ -74,34 +71,34 @@ public abstract class ValueFacetAbstract extends MultipleValueFacetAbstract impl
         }
     }
 
-    public ValueFacetAbstract(final Class<?> semanticsProviderClass,
-        final AddFacetsIfInvalidStrategy addFacetsIfInvalid, final FacetHolder holder,
-        final IsisConfiguration configuration, final ValueSemanticsProviderContext context) {
-        this(newValueSemanticsProviderOrNull(semanticsProviderClass, holder, configuration, context),
-            addFacetsIfInvalid, holder, context);
+    public ValueFacetAbstract(final Class<?> semanticsProviderClass, final AddFacetsIfInvalidStrategy addFacetsIfInvalid, final FacetHolder holder, final IsisConfiguration configuration, final ValueSemanticsProviderContext context) {
+        this(newValueSemanticsProviderOrNull(semanticsProviderClass, holder, configuration, context), addFacetsIfInvalid, holder, context);
     }
 
-    public ValueFacetAbstract(final ValueSemanticsProvider<?> semanticsProvider,
-        final AddFacetsIfInvalidStrategy addFacetsIfInvalid, final FacetHolder holder,
-        final ValueSemanticsProviderContext context) {
+    public ValueFacetAbstract(final ValueSemanticsProvider<?> semanticsProvider, final AddFacetsIfInvalidStrategy addFacetsIfInvalid, final FacetHolder holder, final ValueSemanticsProviderContext context) {
         super(type(), holder);
 
         this.semanticsProvider = semanticsProvider;
         this.context = context;
 
-        // note: we can't use the runtimeContext to inject dependencies into the semanticsProvider,
-        // because there won't be any PersistenceSession when initially building the metamodel.
+        // note: we can't use the runtimeContext to inject dependencies into the
+        // semanticsProvider,
+        // because there won't be any PersistenceSession when initially building
+        // the metamodel.
         // so, we defer until we use the parser.
 
         if (!isValid() && !addFacetsIfInvalid.shouldAddFacetsIfInvalid()) {
             return;
         }
 
-        // we now figure add all the facets supported. Note that we do not use FacetUtil.addFacet,
-        // because we need to add them explicitly to our delegate facetholder but have the
+        // we now figure add all the facets supported. Note that we do not use
+        // FacetUtil.addFacet,
+        // because we need to add them explicitly to our delegate facetholder
+        // but have the
         // facets themselves reference this value's holder.
 
-        facetHolder.addFacet((Facet) this); // add just ValueFacet.class initially.
+        facetHolder.addFacet((Facet) this); // add just ValueFacet.class
+                                            // initially.
 
         // we used to add aggregated here, but this was wrong.
         // An immutable value is not aggregated, it is shared.
@@ -123,15 +120,14 @@ public abstract class ValueFacetAbstract extends MultipleValueFacetAbstract impl
             // install the EncodeableFacet if we've been given an EncoderDecoder
             final EncoderDecoder<?> encoderDecoder = semanticsProvider.getEncoderDecoder();
             if (encoderDecoder != null) {
-                facetHolder.addFacet(new EncodableFacetUsingEncoderDecoder(encoderDecoder, holder, getAdapterMap(),
-                    getDependencyInjector()));
+                facetHolder.addFacet(new EncodableFacetUsingEncoderDecoder(encoderDecoder, holder, getAdapterMap(), getDependencyInjector()));
             }
 
-            // install the ParseableFacet and other facets if we've been given a Parser
+            // install the ParseableFacet and other facets if we've been given a
+            // Parser
             final Parser<?> parser = semanticsProvider.getParser();
             if (parser != null) {
-                facetHolder.addFacet(new ParseableFacetUsingParser(parser, holder, getAuthenticationSessionProvider(),
-                    getDependencyInjector(), getAdapterMap()));
+                facetHolder.addFacet(new ParseableFacetUsingParser(parser, holder, getAuthenticationSessionProvider(), getDependencyInjector(), getAdapterMap()));
                 facetHolder.addFacet(new TitleFacetUsingParser(parser, holder, getDependencyInjector()));
                 facetHolder.addFacet(new TypicalLengthFacetUsingParser(parser, holder, getDependencyInjector()));
             }
@@ -139,8 +135,7 @@ public abstract class ValueFacetAbstract extends MultipleValueFacetAbstract impl
             // install the DefaultedFacet if we've been given a DefaultsProvider
             final DefaultsProvider<?> defaultsProvider = semanticsProvider.getDefaultsProvider();
             if (defaultsProvider != null) {
-                facetHolder.addFacet(new DefaultedFacetUsingDefaultsProvider(defaultsProvider, holder,
-                    getDependencyInjector()));
+                facetHolder.addFacet(new DefaultedFacetUsingDefaultsProvider(defaultsProvider, holder, getDependencyInjector()));
             }
         }
     }

@@ -17,26 +17,24 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.runtime.authorization;
 
 import org.apache.isis.core.commons.config.IsisConfiguration;
 
-
 public abstract class AuthorizationManagerAbstract implements AuthorizationManager {
 
-	private final IsisConfiguration configuration;
+    private final IsisConfiguration configuration;
 
-    ///////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////
     // Constructor
-    ///////////////////////////////////////////////////////////
-    
-	public AuthorizationManagerAbstract(final IsisConfiguration configuration) {
-    	this.configuration = configuration;
+    // /////////////////////////////////////////////////////////
+
+    public AuthorizationManagerAbstract(final IsisConfiguration configuration) {
+        this.configuration = configuration;
     }
 
-	public IsisConfiguration getConfiguration() {
-		return configuration;
-	}
+    public IsisConfiguration getConfiguration() {
+        return configuration;
+    }
 
 }

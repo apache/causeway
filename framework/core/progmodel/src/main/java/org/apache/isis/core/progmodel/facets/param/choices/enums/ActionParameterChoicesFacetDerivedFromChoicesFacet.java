@@ -30,8 +30,7 @@ import org.apache.isis.core.progmodel.facets.param.choices.ActionParameterChoice
 
 public class ActionParameterChoicesFacetDerivedFromChoicesFacet extends ActionParameterChoicesFacetAbstract {
 
-    public ActionParameterChoicesFacetDerivedFromChoicesFacet(final FacetHolder holder,
-        final SpecificationLookup specificationLookup, final AdapterMap adapterManager) {
+    public ActionParameterChoicesFacetDerivedFromChoicesFacet(final FacetHolder holder, final SpecificationLookup specificationLookup, final AdapterMap adapterManager) {
         super(holder, specificationLookup, adapterManager);
     }
 

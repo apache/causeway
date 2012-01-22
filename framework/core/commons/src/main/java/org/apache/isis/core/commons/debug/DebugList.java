@@ -17,14 +17,11 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.commons.debug;
 
 import java.util.List;
 
 import com.google.common.collect.Lists;
-
-
 
 public class DebugList {
     private final List<DebuggableWithTitle> debuggableList = Lists.newArrayList();
@@ -33,7 +30,7 @@ public class DebugList {
     public DebugList(final String name) {
         debuggableList.add(new DebuggableWithTitle() {
             @Override
-            public void debugData(DebugBuilder debug) {
+            public void debugData(final DebugBuilder debug) {
                 debug.append(summary.toString());
             }
 
@@ -44,8 +41,8 @@ public class DebugList {
         });
     }
 
-    public void add(String name, Object object) {
-        boolean b = object instanceof DebuggableWithTitle;
+    public void add(final String name, final Object object) {
+        final boolean b = object instanceof DebuggableWithTitle;
         if (b) {
             debuggableList.add((DebuggableWithTitle) object);
         }
@@ -58,4 +55,3 @@ public class DebugList {
         return debuggableList.toArray(new DebuggableWithTitle[debuggableList.size()]);
     }
 }
-

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.object.ident.icon;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -26,6 +25,9 @@ import static org.junit.Assert.assertThat;
 
 import java.lang.reflect.Method;
 
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.progmodel.facets.object.icon.method.IconFacetViaMethod;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JMock;
@@ -35,21 +37,17 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.progmodel.facets.object.icon.method.IconFacetViaMethod;
-
 @RunWith(JMock.class)
-public class IconFacetViaMethodTest  {
+public class IconFacetViaMethodTest {
 
-	private Mockery mockery = new JUnit4Mockery();
-	
+    private final Mockery mockery = new JUnit4Mockery();
+
     private IconFacetViaMethod facet;
-	private FacetHolder mockFacetHolder;
+    private FacetHolder mockFacetHolder;
 
-	private ObjectAdapter mockOwningAdapter;
+    private ObjectAdapter mockOwningAdapter;
 
-	private DomainObjectWithProblemInIconNameMethod pojo;
+    private DomainObjectWithProblemInIconNameMethod pojo;
 
     public static class DomainObjectWithProblemInIconNameMethod {
         public String iconName() {
@@ -60,16 +58,18 @@ public class IconFacetViaMethodTest  {
     @Before
     public void setUp() throws Exception {
 
-    	pojo = new DomainObjectWithProblemInIconNameMethod();
-    	mockFacetHolder = mockery.mock(FacetHolder.class);
-    	mockOwningAdapter = mockery.mock(ObjectAdapter.class);
-        Method iconNameMethod = DomainObjectWithProblemInIconNameMethod.class.getMethod("iconName");
-		facet = new IconFacetViaMethod(iconNameMethod, mockFacetHolder);
-		
-		mockery.checking(new Expectations(){{
-			allowing(mockOwningAdapter).getObject();
-			will(returnValue(pojo));
-		}});
+        pojo = new DomainObjectWithProblemInIconNameMethod();
+        mockFacetHolder = mockery.mock(FacetHolder.class);
+        mockOwningAdapter = mockery.mock(ObjectAdapter.class);
+        final Method iconNameMethod = DomainObjectWithProblemInIconNameMethod.class.getMethod("iconName");
+        facet = new IconFacetViaMethod(iconNameMethod, mockFacetHolder);
+
+        mockery.checking(new Expectations() {
+            {
+                allowing(mockOwningAdapter).getObject();
+                will(returnValue(pojo));
+            }
+        });
     }
 
     @After
@@ -79,9 +79,8 @@ public class IconFacetViaMethodTest  {
 
     @Test
     public void testIconNameThrowsException() {
-    	String iconName = facet.iconName(mockOwningAdapter);
-    	assertThat(iconName, is(nullValue()));
+        final String iconName = facet.iconName(mockOwningAdapter);
+        assertThat(iconName, is(nullValue()));
     }
 
 }
-

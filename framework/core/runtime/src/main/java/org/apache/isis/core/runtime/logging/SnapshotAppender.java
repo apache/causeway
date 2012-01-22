@@ -17,11 +17,11 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.runtime.logging;
 
 import java.util.Date;
 
+import org.apache.isis.core.runtime.about.AboutIsis;
 import org.apache.log4j.AppenderSkeleton;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
@@ -29,10 +29,9 @@ import org.apache.log4j.helpers.CyclicBuffer;
 import org.apache.log4j.helpers.OptionConverter;
 import org.apache.log4j.spi.LoggingEvent;
 import org.apache.log4j.spi.TriggeringEventEvaluator;
-import org.apache.isis.core.runtime.about.AboutIsis;
-
 
 class DefaultEvaluator implements TriggeringEventEvaluator {
+    @Override
     public boolean isTriggeringEvent(final LoggingEvent event) {
         return event.getLevel().isGreaterOrEqual(Level.ERROR);
     }
@@ -46,8 +45,9 @@ public abstract class SnapshotAppender extends AppenderSkeleton {
     private boolean addInfo;
 
     /**
-     * The default constructor will instantiate the appender with a {@link TriggeringEventEvaluator} that will
-     * trigger on events with level ERROR or higher.
+     * The default constructor will instantiate the appender with a
+     * {@link TriggeringEventEvaluator} that will trigger on events with level
+     * ERROR or higher.
      */
     public SnapshotAppender() {
         this(new DefaultEvaluator());
@@ -88,13 +88,11 @@ public abstract class SnapshotAppender extends AppenderSkeleton {
 
         if (addInfo) {
             final String user = System.getProperty("user.name");
-            final String system = System.getProperty("os.name") + " (" + System.getProperty("os.arch") + ") "
-                    + System.getProperty("os.version");
+            final String system = System.getProperty("os.name") + " (" + System.getProperty("os.arch") + ") " + System.getProperty("os.version");
             final String java = System.getProperty("java.vm.name") + " " + System.getProperty("java.vm.version");
             final String version = AboutIsis.getFrameworkVersion();
 
-            final LoggingEvent infoEvent = new LoggingEvent("", Logger.getRootLogger(), Level.INFO, "Snapshot:- " + new Date()
-                    + "\n\t" + user + "\n\t" + system + "\n\t" + java + "\n\t" + version, null);
+            final LoggingEvent infoEvent = new LoggingEvent("", Logger.getRootLogger(), Level.INFO, "Snapshot:- " + new Date() + "\n\t" + user + "\n\t" + system + "\n\t" + java + "\n\t" + version, null);
             details.append(layout.format(infoEvent));
         }
 
@@ -107,8 +105,8 @@ public abstract class SnapshotAppender extends AppenderSkeleton {
             if (layout.ignoresThrowable()) {
                 final String[] s = event.getThrowableStrRep();
                 if (s != null) {
-                    for (int j = 0; j < s.length; j++) {
-                        details.append(s[j]);
+                    for (final String element : s) {
+                        details.append(element);
                         details.append('\n');
                     }
                 }
@@ -125,6 +123,7 @@ public abstract class SnapshotAppender extends AppenderSkeleton {
 
     protected abstract void writeSnapshot(final String message, final String details);
 
+    @Override
     synchronized public void close() {
         this.closed = true;
     }
@@ -142,8 +141,10 @@ public abstract class SnapshotAppender extends AppenderSkeleton {
     }
 
     /**
-     * returns true to show that this appender requires a {@linkorg.apache.log4j.Layout layout}.
+     * returns true to show that this appender requires a
+     * {@linkorg.apache.log4j.Layout layout}.
      */
+    @Override
     public boolean requiresLayout() {
         return true;
     }
@@ -154,8 +155,7 @@ public abstract class SnapshotAppender extends AppenderSkeleton {
     }
 
     public void setEvaluatorClass(final String value) {
-        triggerEvaluator = (TriggeringEventEvaluator) OptionConverter.instantiateByClassName(value,
-                TriggeringEventEvaluator.class, triggerEvaluator);
+        triggerEvaluator = (TriggeringEventEvaluator) OptionConverter.instantiateByClassName(value, TriggeringEventEvaluator.class, triggerEvaluator);
     }
 
     public void setAddInfo(final boolean addInfo) {

@@ -33,8 +33,7 @@ public class ProgrammableMethodRemover implements MethodRemover {
     // ////////////////////////////////////////////////////////////
 
     static class RemoveMethodArgs {
-        public RemoveMethodArgs(final MethodScope methodScope, final String methodName, final Class<?> returnType,
-            final Class<?>[] parameterTypes) {
+        public RemoveMethodArgs(final MethodScope methodScope, final String methodName, final Class<?> returnType, final Class<?>[] parameterTypes) {
             this.methodScope = methodScope;
             this.methodName = methodName;
             this.returnType = returnType;
@@ -50,8 +49,7 @@ public class ProgrammableMethodRemover implements MethodRemover {
     private final List<RemoveMethodArgs> removeMethodArgsCalls = new ArrayList<RemoveMethodArgs>();
 
     @Override
-    public void removeMethod(final MethodScope methodScope, final String methodName, final Class<?> returnType,
-        final Class<?>[] parameterTypes) {
+    public void removeMethod(final MethodScope methodScope, final String methodName, final Class<?> returnType, final Class<?>[] parameterTypes) {
         removeMethodArgsCalls.add(new RemoveMethodArgs(methodScope, methodName, returnType, parameterTypes));
     }
 
@@ -85,8 +83,7 @@ public class ProgrammableMethodRemover implements MethodRemover {
     }
 
     static class RemoveMethodsArgs {
-        public RemoveMethodsArgs(final MethodScope methodScope, final String prefix, final Class<?> returnType,
-            final boolean canBeVoid, final int paramCount) {
+        public RemoveMethodsArgs(final MethodScope methodScope, final String prefix, final Class<?> returnType, final boolean canBeVoid, final int paramCount) {
             this.methodScope = methodScope;
             this.prefix = prefix;
             this.returnType = returnType;
@@ -104,8 +101,7 @@ public class ProgrammableMethodRemover implements MethodRemover {
     private final List<RemoveMethodsArgs> removeMethodsArgs = new ArrayList<RemoveMethodsArgs>();
 
     @Override
-    public List<Method> removeMethods(final MethodScope methodScope, final String prefix, final Class<?> returnType,
-        final boolean canBeVoid, final int paramCount) {
+    public List<Method> removeMethods(final MethodScope methodScope, final String prefix, final Class<?> returnType, final boolean canBeVoid, final int paramCount) {
         removeMethodsArgs.add(new RemoveMethodsArgs(methodScope, prefix, returnType, canBeVoid, paramCount));
         return removeMethodsReturn;
     }
@@ -116,7 +112,7 @@ public class ProgrammableMethodRemover implements MethodRemover {
 
     @Override
     public void removeMethods(final List<Method> methods) {
-        for (Method method : methods) {
+        for (final Method method : methods) {
             removeMethod(method);
         }
     }

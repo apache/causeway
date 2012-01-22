@@ -17,23 +17,20 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.runtime.authorization.standard;
 
 import org.apache.isis.core.commons.config.IsisConfiguration;
 
-
 public abstract class AuthorizorAbstract implements Authorizor {
-	
-	private final IsisConfiguration configuration;
-	
-	public AuthorizorAbstract(final IsisConfiguration configuration) {
-		this.configuration = configuration;
-	}
 
-	public IsisConfiguration getConfiguration() {
-		return configuration;
-	}
-	
+    private final IsisConfiguration configuration;
+
+    public AuthorizorAbstract(final IsisConfiguration configuration) {
+        this.configuration = configuration;
+    }
+
+    public IsisConfiguration getConfiguration() {
+        return configuration;
+    }
 
 }

@@ -44,8 +44,7 @@ public class PluralMethodFacetFactory extends MethodPrefixBasedFacetFactoryAbstr
         final Class<?> type = processClassContext.getCls();
         final FacetHolder facetHolder = processClassContext.getFacetHolder();
 
-        final Method method =
-            MethodFinderUtils.findMethod(type, MethodScope.CLASS, PLURAL_NAME, String.class, NO_PARAMETERS_TYPES);
+        final Method method = MethodFinderUtils.findMethod(type, MethodScope.CLASS, PLURAL_NAME, String.class, NO_PARAMETERS_TYPES);
         if (method != null) {
             final String name = (String) InvokeUtils.invokeStatic(method);
             processClassContext.removeMethod(method);

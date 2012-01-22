@@ -24,7 +24,7 @@ BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
 CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY
 WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
 DAMAGE.
-*/
+ */
 package org.jmock.auto.internal;
 
 import java.lang.reflect.Field;
@@ -36,66 +36,55 @@ import org.jmock.States;
 import org.jmock.auto.Auto;
 import org.jmock.auto.Mock;
 
-
 public class Mockomatic {
     private final Mockery mockery;
 
-    public Mockomatic(Mockery mockery) {
+    public Mockomatic(final Mockery mockery) {
         this.mockery = mockery;
     }
 
-    public void fillIn(Object object) {
+    public void fillIn(final Object object) {
         fillIn(object, AllDeclaredFields.in(object.getClass()));
     }
 
-    public void fillIn(Object object, final List<Field> knownFields) {
-        for (Field field : knownFields) {
+    public void fillIn(final Object object, final List<Field> knownFields) {
+        for (final Field field : knownFields) {
             if (field.isAnnotationPresent(Mock.class)) {
                 autoMock(object, field);
-            }
-            else if (field.isAnnotationPresent(Auto.class)) {
+            } else if (field.isAnnotationPresent(Auto.class)) {
                 autoInstantiate(object, field);
             }
         }
     }
 
-    private void autoMock(Object object, Field field) {
-        setAutoField(field, object, 
-                     mockery.mock(field.getType(), field.getName()),
-                     "auto-mock field " + field.getName());
+    private void autoMock(final Object object, final Field field) {
+        setAutoField(field, object, mockery.mock(field.getType(), field.getName()), "auto-mock field " + field.getName());
     }
 
-    private void autoInstantiate(Object object, Field field) {
+    private void autoInstantiate(final Object object, final Field field) {
         final Class<?> type = field.getType();
         if (type == States.class) {
             autoInstantiateStates(field, object);
-        }
-        else if (type == Sequence.class) {
+        } else if (type == Sequence.class) {
             autoInstantiateSequence(field, object);
-        }
-        else {
+        } else {
             throw new IllegalStateException("cannot auto-instantiate field of type " + type.getName());
         }
     }
 
-    private void autoInstantiateStates(Field field, Object object) {
-        setAutoField(field, object, 
-                     mockery.states(field.getName()), 
-                     "auto-instantiate States field " + field.getName());
-    }
-    
-    private void autoInstantiateSequence(Field field, Object object) {
-        setAutoField(field, object, 
-                     mockery.sequence(field.getName()), 
-                     "auto-instantiate Sequence field " + field.getName());
+    private void autoInstantiateStates(final Field field, final Object object) {
+        setAutoField(field, object, mockery.states(field.getName()), "auto-instantiate States field " + field.getName());
     }
 
-    private void setAutoField(Field field, Object object, Object value, String description) {
+    private void autoInstantiateSequence(final Field field, final Object object) {
+        setAutoField(field, object, mockery.sequence(field.getName()), "auto-instantiate Sequence field " + field.getName());
+    }
+
+    private void setAutoField(final Field field, final Object object, final Object value, final String description) {
         try {
             field.setAccessible(true);
             field.set(object, value);
-        }
-        catch (IllegalAccessException e) {
+        } catch (final IllegalAccessException e) {
             throw new IllegalStateException("cannot " + description, e);
         }
     }

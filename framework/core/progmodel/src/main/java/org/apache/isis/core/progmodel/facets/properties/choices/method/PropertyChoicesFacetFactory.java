@@ -55,17 +55,14 @@ public class PropertyChoicesFacetFactory extends MethodPrefixBasedFacetFactoryAb
 
         final Class<?> cls = processMethodContext.getCls();
         final Class<?> returnType = getMethod.getReturnType();
-        final Method choicesMethod =
-            MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, MethodPrefixConstants.CHOICES_PREFIX
-                + capitalizedName, null, NO_PARAMETERS_TYPES);
+        final Method choicesMethod = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, MethodPrefixConstants.CHOICES_PREFIX + capitalizedName, null, NO_PARAMETERS_TYPES);
         if (choicesMethod == null) {
             return;
         }
         processMethodContext.removeMethod(choicesMethod);
 
         final FacetHolder property = processMethodContext.getFacetHolder();
-        FacetUtil.addFacet(new PropertyChoicesFacetViaMethod(choicesMethod, returnType, property,
-            getSpecificationLookup(), getAdapterMap()));
+        FacetUtil.addFacet(new PropertyChoicesFacetViaMethod(choicesMethod, returnType, property, getSpecificationLookup(), getAdapterMap()));
     }
 
     // ///////////////////////////////////////////////////////

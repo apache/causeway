@@ -25,7 +25,8 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
  * Explicitly indicate that this object is dirty and needs to be persisted.
  * 
  * <p>
- * In the standard Apache Isis Programming Model, typically corresponds to method named <tt>markDirty</tt>.
+ * In the standard Apache Isis Programming Model, typically corresponds to
+ * method named <tt>markDirty</tt>.
  * 
  * @see ClearDirtyObjectFacet
  * @see IsDirtyObjectFacet

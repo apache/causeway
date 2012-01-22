@@ -36,7 +36,8 @@ public abstract class AbstractRemoveMethodsFacetFactory extends FacetFactoryAbst
     private static class MethodAndParameterTypes {
         private final String methodName;
         private final Class<?>[] methodParameters;
-        public MethodAndParameterTypes(String methodName, Class<?>[] methodParameters) {
+
+        public MethodAndParameterTypes(final String methodName, final Class<?>[] methodParameters) {
             this.methodName = methodName;
             this.methodParameters = methodParameters;
         }
@@ -49,16 +50,14 @@ public abstract class AbstractRemoveMethodsFacetFactory extends FacetFactoryAbst
         super(FeatureType.OBJECTS_ONLY);
         this.typeToIgnore = typeToIgnore;
         final Method[] methods = typeToIgnore.getMethods();
-        for (int i = 0; i < methods.length; i++) {
-            final Method method = methods[i];
+        for (final Method method : methods) {
             methodList.add(new MethodAndParameterTypes(method.getName(), method.getParameterTypes()));
         }
     }
 
-
     @Override
     public void process(final ProcessClassContext processClassContext) {
-        for(MethodAndParameterTypes mapt: methodList) {
+        for (final MethodAndParameterTypes mapt : methodList) {
             processClassContext.removeMethod(MethodScope.OBJECT, mapt.methodName, null, mapt.methodParameters);
         }
     }

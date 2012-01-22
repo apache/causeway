@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.runtime.optionhandler;
 
 import java.util.ArrayList;
@@ -27,11 +26,10 @@ import org.apache.commons.cli.CommandLine;
 import org.apache.isis.core.commons.components.Installer;
 import org.apache.isis.core.commons.lang.ListUtils;
 
-
 public abstract class OptionHandlerAbstract implements OptionHandler {
-	
-	public OptionHandlerAbstract() {
-	}
+
+    public OptionHandlerAbstract() {
+    }
 
     protected StringBuffer availableInstallers(final Object[] factories) {
         final StringBuffer types = new StringBuffer();
@@ -44,17 +42,15 @@ public abstract class OptionHandlerAbstract implements OptionHandler {
         return types;
     }
 
-    protected List<String> getOptionValues(CommandLine commandLine, String opt) {
-        List<String> list = new ArrayList<String>();
-        String[] optionValues = commandLine.getOptionValues(opt);
+    protected List<String> getOptionValues(final CommandLine commandLine, final String opt) {
+        final List<String> list = new ArrayList<String>();
+        final String[] optionValues = commandLine.getOptionValues(opt);
         if (optionValues != null) {
-            for (String optionValue : optionValues) {
+            for (final String optionValue : optionValues) {
                 ListUtils.appendDelimitedStringToList(optionValue, list);
             }
         }
         return list;
     }
-
-
 
 }

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.object.ident.singular;
 
 import java.lang.reflect.Method;
@@ -28,7 +27,6 @@ import org.apache.isis.core.metamodel.facets.named.NamedFacet;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.progmodel.facets.object.named.staticmethod.NamedFacetViaSingularNameStaticMethod;
 import org.apache.isis.core.progmodel.facets.object.named.staticmethod.NamedFacetViaSingularNameStaticMethodFacetFactory;
-
 
 public class SingularMethodFacetFactoryTest extends AbstractFacetFactoryTest {
 
@@ -46,7 +44,6 @@ public class SingularMethodFacetFactoryTest extends AbstractFacetFactoryTest {
         facetFactory = null;
         super.tearDown();
     }
-
 
     public static class Customer {
         public static String singularName() {
@@ -69,4 +66,3 @@ public class SingularMethodFacetFactoryTest extends AbstractFacetFactoryTest {
     }
 
 }
-

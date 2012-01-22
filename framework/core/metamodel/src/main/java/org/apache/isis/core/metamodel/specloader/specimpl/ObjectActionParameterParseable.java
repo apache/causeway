@@ -37,8 +37,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.ParseableEntryActionParameter;
 
-public class ObjectActionParameterParseable extends ObjectActionParameterAbstract implements
-    ParseableEntryActionParameter {
+public class ObjectActionParameterParseable extends ObjectActionParameterAbstract implements ParseableEntryActionParameter {
 
     public ObjectActionParameterParseable(final int index, final ObjectActionImpl action, final TypedHolder peer) {
         super(index, action, peer);
@@ -92,9 +91,7 @@ public class ObjectActionParameterParseable extends ObjectActionParameterAbstrac
         final ParseableFacet p = parameterSpecification.getFacet(ParseableFacet.class);
         final ObjectAdapter newValue = p.parseTextEntry(null, proposedString);
 
-        final ValidityContext<?> ic =
-            parameter.createProposedArgumentInteractionContext(getAuthenticationSession(),
-                InteractionInvocationMethod.BY_USER, adapter, arguments(newValue), getNumber());
+        final ValidityContext<?> ic = parameter.createProposedArgumentInteractionContext(getAuthenticationSession(), InteractionInvocationMethod.BY_USER, adapter, arguments(newValue), getNumber());
 
         final InteractionResultSet buf = new InteractionResultSet();
         InteractionUtils.isValidResultSet(parameter, ic, buf);
@@ -106,9 +103,10 @@ public class ObjectActionParameterParseable extends ObjectActionParameterAbstrac
     }
 
     /**
-     * TODO: this is not ideal, because we can only populate the array for single argument, rather than the entire
-     * argument set. Instead, we ought to do this in two passes, one to build up the argument set as a single unit, and
-     * then validate each in turn.
+     * TODO: this is not ideal, because we can only populate the array for
+     * single argument, rather than the entire argument set. Instead, we ought
+     * to do this in two passes, one to build up the argument set as a single
+     * unit, and then validate each in turn.
      * 
      * @param proposedValue
      * @return
@@ -135,8 +133,9 @@ public class ObjectActionParameterParseable extends ObjectActionParameterAbstrac
     // //////////////////////////////////////////////////////////////////////
 
     /**
-     * Gets the proposed value of the {@link Instance} (downcast as a {@link MutableProposed}, wrapping the proposed
-     * value into a {@link ObjectAdapter}.
+     * Gets the proposed value of the {@link Instance} (downcast as a
+     * {@link MutableProposed}, wrapping the proposed value into a
+     * {@link ObjectAdapter}.
      */
     @Override
     public ObjectAdapter get(final ObjectAdapter owner) {
@@ -146,8 +145,9 @@ public class ObjectActionParameterParseable extends ObjectActionParameterAbstrac
     }
 
     /**
-     * Sets the proposed value of the {@link Instance} (downcast as a {@link MutableProposed}, unwrapped the proposed
-     * value from a {@link ObjectAdapter}.
+     * Sets the proposed value of the {@link Instance} (downcast as a
+     * {@link MutableProposed}, unwrapped the proposed value from a
+     * {@link ObjectAdapter}.
      */
     public void set(final ObjectAdapter owner, final ObjectAdapter newValue) {
         final MutableProposedHolder proposedHolder = getProposedHolder(owner);

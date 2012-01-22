@@ -17,64 +17,60 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.runtime.authentication.standard;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequest;
 
-
-
 public abstract class AuthenticatorAbstract implements Authenticator {
 
-	private final IsisConfiguration configuration;
-	
-	////////////////////////////////////////////////////////
-	// constructor
-	////////////////////////////////////////////////////////
+    private final IsisConfiguration configuration;
 
-    public AuthenticatorAbstract(IsisConfiguration configuration) {
-    	this.configuration = configuration;
+    // //////////////////////////////////////////////////////
+    // constructor
+    // //////////////////////////////////////////////////////
+
+    public AuthenticatorAbstract(final IsisConfiguration configuration) {
+        this.configuration = configuration;
     }
 
+    // //////////////////////////////////////////////////////
+    // init, shutdown
+    // //////////////////////////////////////////////////////
 
-	////////////////////////////////////////////////////////
-	// init, shutdown
-	////////////////////////////////////////////////////////
-    
-	public void init() {
-		// does nothing.
-	}
-
-	public void shutdown() {
-		// does nothing.
-	}
-
-
-	////////////////////////////////////////////////////////
-	// API
-	////////////////////////////////////////////////////////
-
-	/**
-	 * Default implementation returns a {@link SimpleSession};
-	 * can be overridden if required.
-	 */
-    public AuthenticationSession authenticate(AuthenticationRequest request, String code) {
-    	if (!isValid(request)) {
-    		return null;
-    	}
-    	return new SimpleSession(request.getName(), request.getRoles(), code);
+    @Override
+    public void init() {
+        // does nothing.
     }
 
+    @Override
+    public void shutdown() {
+        // does nothing.
+    }
 
-	////////////////////////////////////////////////////////
-	// Injected (via constructor)
-	////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////
+    // API
+    // //////////////////////////////////////////////////////
 
-	public IsisConfiguration getConfiguration() {
-		return configuration;
-	}
-	
+    /**
+     * Default implementation returns a {@link SimpleSession}; can be overridden
+     * if required.
+     */
+    @Override
+    public AuthenticationSession authenticate(final AuthenticationRequest request, final String code) {
+        if (!isValid(request)) {
+            return null;
+        }
+        return new SimpleSession(request.getName(), request.getRoles(), code);
+    }
+
+    // //////////////////////////////////////////////////////
+    // Injected (via constructor)
+    // //////////////////////////////////////////////////////
+
+    public IsisConfiguration getConfiguration() {
+        return configuration;
+    }
+
 }
-

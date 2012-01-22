@@ -53,8 +53,7 @@ import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.Collecti
 
 public abstract class ObjectMemberAbstract implements ObjectMember {
 
-    public static ObjectSpecification getSpecification(final SpecificationLookup specificationLookup,
-        final Class<?> type) {
+    public static ObjectSpecification getSpecification(final SpecificationLookup specificationLookup, final Class<?> type) {
         return type == null ? null : specificationLookup.loadSpecification(type);
     }
 
@@ -68,8 +67,7 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
     private final QuerySubmitter querySubmitter;
     private final CollectionTypeRegistry collectionTypeRegistry;
 
-    protected ObjectMemberAbstract(final FacetedMethod facetedMethod, final FeatureType featureType,
-        final ObjectMemberContext objectMemberContext) {
+    protected ObjectMemberAbstract(final FacetedMethod facetedMethod, final FeatureType featureType, final ObjectMemberContext objectMemberContext) {
         final String id = facetedMethod.getIdentifier().getMemberName();
         if (id == null) {
             throw new IllegalArgumentException("Name must always be set");
@@ -166,14 +164,15 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
     // /////////////////////////////////////////////////////////////
 
     /**
-     * Return the default label for this member. This is based on the name of this member.
+     * Return the default label for this member. This is based on the name of
+     * this member.
      * 
      * @see #getId()
      */
     @Override
     public String getName() {
         final NamedFacet facet = getFacet(NamedFacet.class);
-        String name = facet.value();
+        final String name = facet.value();
         return name != null ? name : defaultName;
     }
 
@@ -199,12 +198,12 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
     }
 
     /**
-     * Loops over all {@link HidingInteractionAdvisor} {@link Facet}s and returns <tt>true</tt> only if none hide the
-     * member.
+     * Loops over all {@link HidingInteractionAdvisor} {@link Facet}s and
+     * returns <tt>true</tt> only if none hide the member.
      * 
      * <p>
-     * TODO: currently this method is hard-coded to assume all interactions are initiated
-     * {@link InteractionInvocationMethod#BY_USER by user}.
+     * TODO: currently this method is hard-coded to assume all interactions are
+     * initiated {@link InteractionInvocationMethod#BY_USER by user}.
      */
     @Override
     public Consent isVisible(final AuthenticationSession session, final ObjectAdapter target) {
@@ -212,8 +211,7 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
     }
 
     private InteractionResult isVisibleResult(final AuthenticationSession session, final ObjectAdapter target) {
-        final VisibilityContext<?> ic =
-            createVisibleInteractionContext(session, InteractionInvocationMethod.BY_USER, target);
+        final VisibilityContext<?> ic = createVisibleInteractionContext(session, InteractionInvocationMethod.BY_USER, target);
         return InteractionUtils.isVisibleResult(this, ic);
     }
 
@@ -222,12 +220,12 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
     // /////////////////////////////////////////////////////////////
 
     /**
-     * Loops over all {@link DisablingInteractionAdvisor} {@link Facet}s and returns <tt>true</tt> only if none disables
-     * the member.
+     * Loops over all {@link DisablingInteractionAdvisor} {@link Facet}s and
+     * returns <tt>true</tt> only if none disables the member.
      * 
      * <p>
-     * TODO: currently this method is hard-coded to assume all interactions are initiated
-     * {@link InteractionInvocationMethod#BY_USER by user}.
+     * TODO: currently this method is hard-coded to assume all interactions are
+     * initiated {@link InteractionInvocationMethod#BY_USER by user}.
      */
     @Override
     public Consent isUsable(final AuthenticationSession session, final ObjectAdapter target) {
@@ -235,8 +233,7 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
     }
 
     private InteractionResult isUsableResult(final AuthenticationSession session, final ObjectAdapter target) {
-        final UsabilityContext<?> ic =
-            createUsableInteractionContext(session, InteractionInvocationMethod.BY_USER, target);
+        final UsabilityContext<?> ic = createUsableInteractionContext(session, InteractionInvocationMethod.BY_USER, target);
         return InteractionUtils.isUsableResult(this, ic);
     }
 
@@ -269,7 +266,8 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
     // //////////////////////////////////////////////////////////////////
 
     /**
-     * The current {@link AuthenticationSession} (can change over time so do not cache).
+     * The current {@link AuthenticationSession} (can change over time so do not
+     * cache).
      */
     protected AuthenticationSession getAuthenticationSession() {
         return authenticationSessionProvider.getAuthenticationSession();

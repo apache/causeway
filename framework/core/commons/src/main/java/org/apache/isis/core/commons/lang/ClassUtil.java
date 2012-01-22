@@ -29,17 +29,16 @@ public final class ClassUtil {
     private ClassUtil() {
     }
 
-    public static Object newInstance(final Class<?> type, final Class<?> constructorParamType,
-        final Object constructorArg) {
+    public static Object newInstance(final Class<?> type, final Class<?> constructorParamType, final Object constructorArg) {
         return ClassUtil.newInstance(type, new Class[] { constructorParamType }, new Object[] { constructorArg });
     }
 
     /**
-     * Tries to instantiate using a constructor accepting the supplied arguments; if no such constructor then falls back
-     * to trying the no-arg constructor.
+     * Tries to instantiate using a constructor accepting the supplied
+     * arguments; if no such constructor then falls back to trying the no-arg
+     * constructor.
      */
-    public static Object newInstance(final Class<?> type, final Class<?>[] constructorParamTypes,
-        final Object[] constructorArgs) {
+    public static Object newInstance(final Class<?> type, final Class<?>[] constructorParamTypes, final Object[] constructorArgs) {
         try {
             Constructor<?> constructor;
             try {

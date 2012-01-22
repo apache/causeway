@@ -25,8 +25,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 
-public class PropertyChoicesFacetDerivedFromChoicesFacetFacetFactory extends FacetFactoryAbstract implements
-    AdapterMapAware {
+public class PropertyChoicesFacetDerivedFromChoicesFacetFacetFactory extends FacetFactoryAbstract implements AdapterMapAware {
 
     private AdapterMap adapterMap;
 
@@ -43,8 +42,7 @@ public class PropertyChoicesFacetDerivedFromChoicesFacetFacetFactory extends Fac
             return;
         }
 
-        FacetUtil.addFacet(new PropertyChoicesFacetDerivedFromChoicesFacet(processMethodContext.getFacetHolder(),
-            getSpecificationLookup()));
+        FacetUtil.addFacet(new PropertyChoicesFacetDerivedFromChoicesFacet(processMethodContext.getFacetHolder(), getSpecificationLookup()));
     }
 
     // /////////////////////////////////////////////

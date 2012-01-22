@@ -25,26 +25,29 @@ import java.util.Date;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 
 /**
- * An instance of this class is held by each {@link ObjectAdapter} and is used to represent a particular version (at a
- * point in time) of domain object wrapped by that adapter.
+ * An instance of this class is held by each {@link ObjectAdapter} and is used
+ * to represent a particular version (at a point in time) of domain object
+ * wrapped by that adapter.
  * 
  * <p>
- * This is normally done using some form of incrementing number or timestamp, which would be held within the
- * implementing class. The numbers, timestamps, etc should change for each changed object, and the different() method
- * should indicate that the two Version objects are different.
+ * This is normally done using some form of incrementing number or timestamp,
+ * which would be held within the implementing class. The numbers, timestamps,
+ * etc should change for each changed object, and the different() method should
+ * indicate that the two Version objects are different.
  * 
  * <p>
- * The user's name and a timestamp should alos be kept so that when an message is passed to the user it can be of the
- * form "user has change object at time"
+ * The user's name and a timestamp should alos be kept so that when an message
+ * is passed to the user it can be of the form "user has change object at time"
  */
 public interface Version extends Serializable {
 
     /**
-     * Compares this version against the specified version and returns true if they are different versions.
+     * Compares this version against the specified version and returns true if
+     * they are different versions.
      * 
      * <p>
-     * This is use for optimistic checking, where the existence of a different version will normally cause a concurrency
-     * exception.
+     * This is use for optimistic checking, where the existence of a different
+     * version will normally cause a concurrency exception.
      */
     boolean different(Version version);
 

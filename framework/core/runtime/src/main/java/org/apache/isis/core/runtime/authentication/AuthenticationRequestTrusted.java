@@ -17,16 +17,15 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.runtime.authentication;
 
 /**
  * Subinterface of {@link AuthenticationRequest} that is also {@link Trusted}.
  * 
  * <p>
+ * 
  * @see AuthenticationManager#authenticate(AuthenticationRequest).
  */
-public interface AuthenticationRequestTrusted extends AuthenticationRequest, Trusted{
+public interface AuthenticationRequestTrusted extends AuthenticationRequest, Trusted {
 
 }
-

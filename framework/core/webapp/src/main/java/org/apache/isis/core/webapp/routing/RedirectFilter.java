@@ -36,27 +36,26 @@ public class RedirectFilter implements Filter {
 
     private String redirectTo;
 
-    protected void doGet(final HttpServletRequest request, final HttpServletResponse response) throws ServletException,
-        IOException {
-        
+    protected void doGet(final HttpServletRequest request, final HttpServletResponse response) throws ServletException, IOException {
+
     }
 
     @Override
-    public void init(FilterConfig filterConfig) throws ServletException {
+    public void init(final FilterConfig filterConfig) throws ServletException {
         redirectTo = filterConfig.getInitParameter("redirectTo");
     }
 
     @Override
-    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-        final HttpServletRequest httpServletRequest = (HttpServletRequest)request;
-        final HttpServletResponse httpServletResponse = (HttpServletResponse)response;
-        
+    public void doFilter(final ServletRequest request, final ServletResponse response, final FilterChain chain) throws IOException, ServletException {
+        final HttpServletRequest httpServletRequest = (HttpServletRequest) request;
+        final HttpServletResponse httpServletResponse = (HttpServletResponse) response;
+
         httpServletResponse.sendRedirect(PathUtils.combine(httpServletRequest.getContextPath(), redirectTo));
     }
 
     @Override
     public void destroy() {
-        
+
     }
 
 }

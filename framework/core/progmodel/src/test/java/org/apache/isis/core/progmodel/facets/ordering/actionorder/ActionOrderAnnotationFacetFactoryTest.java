@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.ordering.actionorder;
 
 import org.apache.isis.applib.annotation.ActionOrder;
@@ -27,7 +26,6 @@ import org.apache.isis.core.metamodel.facets.object.orderactions.ActionOrderFace
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.progmodel.facets.object.orderactions.ActionOrderAnnotationFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.orderactions.ActionOrderFacetAnnotation;
-
 
 public class ActionOrderAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 
@@ -46,10 +44,10 @@ public class ActionOrderAnnotationFacetFactoryTest extends AbstractFacetFactoryT
         super.tearDown();
     }
 
-
     public void testActionOrderAnnotationPickedUpOnClass() {
         @ActionOrder("foo,bar")
-        class Customer {}
+        class Customer {
+        }
 
         facetFactory.process(new ProcessClassContext(Customer.class, methodRemover, facetedMethod));
 
@@ -63,4 +61,3 @@ public class ActionOrderAnnotationFacetFactoryTest extends AbstractFacetFactoryT
     }
 
 }
-

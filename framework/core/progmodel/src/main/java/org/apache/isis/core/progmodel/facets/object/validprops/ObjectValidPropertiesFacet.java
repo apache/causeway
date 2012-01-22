@@ -25,8 +25,9 @@ import org.apache.isis.core.metamodel.interactions.ObjectValidityContext;
 import org.apache.isis.core.metamodel.interactions.ValidatingInteractionAdvisor;
 
 /**
- * Object-level {@link ValidatingInteractionAdvisor validator} that ensures that all {@link MandatoryFacet mandatory}
- * properties are entered prior to persisting the object.
+ * Object-level {@link ValidatingInteractionAdvisor validator} that ensures that
+ * all {@link MandatoryFacet mandatory} properties are entered prior to
+ * persisting the object.
  */
 public interface ObjectValidPropertiesFacet extends Facet, ValidatingInteractionAdvisor {
 

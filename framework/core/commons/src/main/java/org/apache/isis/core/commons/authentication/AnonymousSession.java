@@ -25,11 +25,12 @@ import java.util.Arrays;
 import org.apache.isis.core.commons.encoding.DataInputExtended;
 
 /**
- * Originally designed for webapp viewers that want to provide access without requiring that the
- * user logs on.
+ * Originally designed for webapp viewers that want to provide access without
+ * requiring that the user logs on.
  * 
  * <p>
- * For example, a webapp want to have a registration/sign-up page, or a 'lost password' page.
+ * For example, a webapp want to have a registration/sign-up page, or a 'lost
+ * password' page.
  */
 public class AnonymousSession extends AuthenticationSessionAbstract {
 
@@ -38,9 +39,9 @@ public class AnonymousSession extends AuthenticationSessionAbstract {
     private static final String USER_NAME = "__web_default";
     private static final String ROLE = "not-logged-in";
     private static final String CODE = "";
-    
+
     public AnonymousSession() {
-        super(USER_NAME, Arrays.asList( ROLE ), CODE);
+        super(USER_NAME, Arrays.asList(ROLE), CODE);
     }
 
     public AnonymousSession(final DataInputExtended input) throws IOException {

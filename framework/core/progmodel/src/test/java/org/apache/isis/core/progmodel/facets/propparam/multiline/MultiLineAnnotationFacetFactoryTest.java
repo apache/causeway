@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.propparam.multiline;
 
 import java.lang.reflect.Method;
@@ -36,14 +35,14 @@ import org.apache.isis.core.progmodel.facets.param.multiline.annotation.MultiLin
 import org.apache.isis.core.progmodel.facets.properties.multiline.annotation.MultiLineAnnotationOnPropertyFacetFactory;
 import org.apache.isis.core.progmodel.facets.properties.multiline.annotation.MultiLineFacetAnnotationOnProperty;
 
-
 public class MultiLineAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 
     public void testMultiLineAnnotationPickedUpOnClass() {
-        MultiLineAnnotationOnTypeFacetFactory facetFactory = new MultiLineAnnotationOnTypeFacetFactory();
+        final MultiLineAnnotationOnTypeFacetFactory facetFactory = new MultiLineAnnotationOnTypeFacetFactory();
 
         @MultiLine(numberOfLines = 3, preventWrapping = false)
-        class Customer {}
+        class Customer {
+        }
 
         facetFactory.process(new ProcessClassContext(Customer.class, methodRemover, facetedMethod));
 
@@ -56,7 +55,7 @@ public class MultiLineAnnotationFacetFactoryTest extends AbstractFacetFactoryTes
     }
 
     public void testMultiLineAnnotationPickedUpOnProperty() {
-        MultiLineAnnotationOnPropertyFacetFactory facetFactory = new MultiLineAnnotationOnPropertyFacetFactory();
+        final MultiLineAnnotationOnPropertyFacetFactory facetFactory = new MultiLineAnnotationOnPropertyFacetFactory();
 
         class Customer {
             @SuppressWarnings("unused")
@@ -78,11 +77,12 @@ public class MultiLineAnnotationFacetFactoryTest extends AbstractFacetFactoryTes
     }
 
     public void testMultiLineAnnotationPickedUpOnActionParameter() {
-        MultiLineAnnotationOnParameterFacetFactory facetFactory = new MultiLineAnnotationOnParameterFacetFactory();
-        
+        final MultiLineAnnotationOnParameterFacetFactory facetFactory = new MultiLineAnnotationOnParameterFacetFactory();
+
         class Customer {
             @SuppressWarnings("unused")
-            public void someAction(@MultiLine(numberOfLines = 8, preventWrapping = false) final String foo) {}
+            public void someAction(@MultiLine(numberOfLines = 8, preventWrapping = false) final String foo) {
+            }
         }
         final Method method = findMethod(Customer.class, "someAction", new Class[] { String.class });
 
@@ -97,10 +97,11 @@ public class MultiLineAnnotationFacetFactoryTest extends AbstractFacetFactoryTes
     }
 
     public void testMultiLineAnnotationDefaults() {
-        MultiLineAnnotationOnTypeFacetFactory facetFactory = new MultiLineAnnotationOnTypeFacetFactory();
+        final MultiLineAnnotationOnTypeFacetFactory facetFactory = new MultiLineAnnotationOnTypeFacetFactory();
 
         @MultiLine
-        class Customer {}
+        class Customer {
+        }
 
         facetFactory.process(new ProcessClassContext(Customer.class, methodRemover, facetedMethod));
 
@@ -111,7 +112,7 @@ public class MultiLineAnnotationFacetFactoryTest extends AbstractFacetFactoryTes
     }
 
     public void testMultiLineAnnotationIgnoredForNonStringProperties() {
-        MultiLineAnnotationOnPropertyFacetFactory facetFactory = new MultiLineAnnotationOnPropertyFacetFactory();
+        final MultiLineAnnotationOnPropertyFacetFactory facetFactory = new MultiLineAnnotationOnPropertyFacetFactory();
 
         class Customer {
             @SuppressWarnings("unused")
@@ -129,11 +130,12 @@ public class MultiLineAnnotationFacetFactoryTest extends AbstractFacetFactoryTes
     }
 
     public void testMultiLineAnnotationIgnoredForNonStringActionParameters() {
-        MultiLineAnnotationOnParameterFacetFactory facetFactory = new MultiLineAnnotationOnParameterFacetFactory();
-        
+        final MultiLineAnnotationOnParameterFacetFactory facetFactory = new MultiLineAnnotationOnParameterFacetFactory();
+
         class Customer {
             @SuppressWarnings("unused")
-            public void someAction(@MultiLine(numberOfLines = 8, preventWrapping = false) final int foo) {}
+            public void someAction(@MultiLine(numberOfLines = 8, preventWrapping = false) final int foo) {
+            }
         }
         final Method method = findMethod(Customer.class, "someAction", new Class[] { int.class });
 
@@ -143,4 +145,3 @@ public class MultiLineAnnotationFacetFactoryTest extends AbstractFacetFactoryTes
     }
 
 }
-

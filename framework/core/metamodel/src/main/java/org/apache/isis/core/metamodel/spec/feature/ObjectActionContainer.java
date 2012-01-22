@@ -27,14 +27,18 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 public interface ObjectActionContainer {
 
-	public enum Contributed {
-		INCLUDED,
-		EXCLUDED;
-		
-		public boolean isIncluded() { return this == INCLUDED; }
-		public boolean isExcluded() { return this == EXCLUDED; }
-	}
-	
+    public enum Contributed {
+        INCLUDED, EXCLUDED;
+
+        public boolean isIncluded() {
+            return this == INCLUDED;
+        }
+
+        public boolean isExcluded() {
+            return this == EXCLUDED;
+        }
+    }
+
     /**
      * Returns the action of the specified type with the specified signature.
      */
@@ -44,45 +48,47 @@ public interface ObjectActionContainer {
      * Get the action object represented by the specified identity string.
      * 
      * <p>
-     * The identity string can be either fully specified with parameters
-     * (as per {@link Identifier#toNameParmsIdentityString()} or in 
-     * abbreviated form ({@link Identifier#toNameIdentityString()}).
+     * The identity string can be either fully specified with parameters (as per
+     * {@link Identifier#toNameParmsIdentityString()} or in abbreviated form (
+     * {@link Identifier#toNameIdentityString()}).
      * 
      * @see #getObjectAction(String)
      */
     ObjectAction getObjectAction(ActionType type, String id);
 
     /**
-     * Get the action object represented by the specified identity string, irrespective of {@link ActionType}.
+     * Get the action object represented by the specified identity string,
+     * irrespective of {@link ActionType}.
      * 
      * <p>
-     * The identity string can be either fully specified with parameters
-     * (as per {@link Identifier#toNameParmsIdentityString()} or in 
-     * abbreviated form ({@link Identifier#toNameIdentityString()}).
+     * The identity string can be either fully specified with parameters (as per
+     * {@link Identifier#toNameParmsIdentityString()} or in abbreviated form (
+     * {@link Identifier#toNameIdentityString()}).
      * 
      * @see #getObjectAction(ActionType, String)
      */
     ObjectAction getObjectAction(String id);
 
     /**
-     * Returns an array of actions of the specified type, including or excluding contributed actions as required.
+     * Returns an array of actions of the specified type, including or excluding
+     * contributed actions as required.
      */
     List<ObjectAction> getObjectActions(ActionType type, Contributed contributed);
 
     /**
-     * Returns an array of actions of the specified types, including or excluding contributed actions as required.
+     * Returns an array of actions of the specified types, including or
+     * excluding contributed actions as required.
      */
     List<ObjectAction> getObjectActions(List<ActionType> types, Contributed contributed);
 
     /**
-     * Returns a list of all object actions, including or excluding contributed actions as required.
+     * Returns a list of all object actions, including or excluding contributed
+     * actions as required.
      */
     List<ObjectAction> getObjectActions(Contributed contributed);
-    
+
     List<ObjectAction> getServiceActionsReturning(ActionType type);
 
     List<ObjectAction> getServiceActionsReturning(List<ActionType> type);
-
-    
 
 }

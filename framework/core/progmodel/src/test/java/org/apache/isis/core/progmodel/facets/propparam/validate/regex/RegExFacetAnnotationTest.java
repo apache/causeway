@@ -17,12 +17,13 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.propparam.validate.regex;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertThat;
 
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.progmodel.facets.object.regex.annotation.RegExFacetAnnotationForType;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JMock;
 import org.jmock.integration.junit4.JUnit4Mockery;
@@ -30,10 +31,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.progmodel.facets.object.regex.annotation.RegExFacetAnnotationForType;
-
 
 @RunWith(JMock.class)
 public class RegExFacetAnnotationTest {
@@ -62,19 +59,25 @@ public class RegExFacetAnnotationTest {
     @Test
     public void shouldAllowDotStar() {
         regExFacetAnnotationForType = new RegExFacetAnnotationForType(".*", "", true, facetHolder);
-        assertThat(regExFacetAnnotationForType.doesNotMatch("abc"), equalTo(false)); // ie does match
+        assertThat(regExFacetAnnotationForType.doesNotMatch("abc"), equalTo(false)); // ie
+                                                                                     // does
+                                                                                     // match
     }
 
     @Test
     public void shouldAllowWhenCaseSensitive() {
         regExFacetAnnotationForType = new RegExFacetAnnotationForType("^abc$", "", true, facetHolder);
-        assertThat(regExFacetAnnotationForType.doesNotMatch("abc"), equalTo(false)); // ie does match
+        assertThat(regExFacetAnnotationForType.doesNotMatch("abc"), equalTo(false)); // ie
+                                                                                     // does
+                                                                                     // match
     }
 
     @Test
     public void shouldAllowWhenCaseInsensitive() {
         regExFacetAnnotationForType = new RegExFacetAnnotationForType("^abc$", "", false, facetHolder);
-        assertThat(regExFacetAnnotationForType.doesNotMatch("ABC"), equalTo(false)); // ie does match
+        assertThat(regExFacetAnnotationForType.doesNotMatch("ABC"), equalTo(false)); // ie
+                                                                                     // does
+                                                                                     // match
     }
 
     @Test
@@ -96,4 +99,3 @@ public class RegExFacetAnnotationTest {
         assertThat(regExFacetAnnotationForType.format("123456"), equalTo("12-34-56"));
     }
 }
-

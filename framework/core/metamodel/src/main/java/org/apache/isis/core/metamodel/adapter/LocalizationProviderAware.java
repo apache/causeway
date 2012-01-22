@@ -19,7 +19,6 @@
 
 package org.apache.isis.core.metamodel.adapter;
 
-
 public interface LocalizationProviderAware {
 
     void setLocalizationProvider(LocalizationProvider localizationProvider);

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.value;
 
 import static org.apache.isis.core.testsupport.jmock.ReturnArgumentJMockAction.returnArgument;
@@ -26,16 +25,6 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.fail;
 
 import java.util.Locale;
-
-import org.jmock.Expectations;
-import org.jmock.Mockery;
-import org.jmock.integration.junit4.JMock;
-import org.jmock.integration.junit4.JUnit4Mockery;
-import org.jmock.lib.legacy.ClassImposteriser;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
 
 import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
@@ -51,24 +40,34 @@ import org.apache.isis.core.progmodel.facets.object.encodeable.EncodableFacetUsi
 import org.apache.isis.core.progmodel.facets.object.parseable.ParseableFacetUsingParser;
 import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProviderAndFacetAbstract;
 import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProviderContext;
-
+import org.jmock.Expectations;
+import org.jmock.Mockery;
+import org.jmock.integration.junit4.JMock;
+import org.jmock.integration.junit4.JUnit4Mockery;
+import org.jmock.lib.legacy.ClassImposteriser;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 
 @RunWith(JMock.class)
 public abstract class ValueSemanticsProviderAbstractTestCase {
-    
-    protected Mockery mockery = new JUnit4Mockery() {{
-        setImposteriser(ClassImposteriser.INSTANCE);
-    }};
+
+    protected Mockery mockery = new JUnit4Mockery() {
+        {
+            setImposteriser(ClassImposteriser.INSTANCE);
+        }
+    };
 
     private ValueSemanticsProviderAndFacetAbstract<?> valueSemanticsProvider;
     private EncodableFacetUsingEncoderDecoder encodeableFacet;
     private ParseableFacetUsingParser parseableFacet;
-    
+
     protected FacetHolder mockFacetHolder;
-    
+
     protected IsisConfiguration mockConfiguration;
     protected ValueSemanticsProviderContext mockContext;
-    
+
     protected SpecificationLoader mockSpecificationLoader;
     protected DependencyInjector mockDependencyInjector;
     protected AdapterMap mockAdapterManager;
@@ -78,33 +77,35 @@ public abstract class ValueSemanticsProviderAbstractTestCase {
     @Before
     public void setUp() throws Exception {
         Locale.setDefault(Locale.UK);
-        
+
         mockFacetHolder = mockery.mock(FacetHolder.class);
         mockConfiguration = mockery.mock(IsisConfiguration.class);
-        
+
         mockContext = mockery.mock(ValueSemanticsProviderContext.class);
-        
+
         mockDependencyInjector = mockery.mock(DependencyInjector.class);
         mockAdapterManager = mockery.mock(AdapterMap.class);
         mockAuthenticationSessionProvider = mockery.mock(AuthenticationSessionProvider.class);
         mockSpecificationLoader = mockery.mock(SpecificationLoader.class);
 
-        mockery.checking(new Expectations(){{
-        	allowing(mockConfiguration).getString(with(any(String.class)), with(any(String.class)));
-        	will(returnArgument(1));
-        	
-        	allowing(mockConfiguration).getBoolean(with(any(String.class)), with(any(Boolean.class)));
-        	will(returnArgument(1));
+        mockery.checking(new Expectations() {
+            {
+                allowing(mockConfiguration).getString(with(any(String.class)), with(any(String.class)));
+                will(returnArgument(1));
 
-        	allowing(mockConfiguration).getString("isis.locale");
-        	will(returnValue(null));
-        	
-        	allowing(mockDependencyInjector).injectDependenciesInto(with(any(Object.class)));
-        	
-        	never(mockAuthenticationSessionProvider);
-            
-            never(mockAdapterManager);
-        }});
+                allowing(mockConfiguration).getBoolean(with(any(String.class)), with(any(Boolean.class)));
+                will(returnArgument(1));
+
+                allowing(mockConfiguration).getString("isis.locale");
+                will(returnValue(null));
+
+                allowing(mockDependencyInjector).injectDependenciesInto(with(any(Object.class)));
+
+                never(mockAuthenticationSessionProvider);
+
+                never(mockAdapterManager);
+            }
+        });
 
         mockAdapter = mockery.mock(ObjectAdapter.class);
     }
@@ -114,12 +115,14 @@ public abstract class ValueSemanticsProviderAbstractTestCase {
         mockery.assertIsSatisfied();
     }
 
-	protected void allowMockAdapterToReturn(final Object pojo) {
-		mockery.checking(new Expectations(){{
-        	allowing(mockAdapter).getObject();
-			will(returnValue( pojo ));
-        }});
-	}
+    protected void allowMockAdapterToReturn(final Object pojo) {
+        mockery.checking(new Expectations() {
+            {
+                allowing(mockAdapter).getObject();
+                will(returnValue(pojo));
+            }
+        });
+    }
 
     protected void setValue(final ValueSemanticsProviderAndFacetAbstract<?> value) {
         this.valueSemanticsProvider = value;
@@ -127,7 +130,7 @@ public abstract class ValueSemanticsProviderAbstractTestCase {
         this.parseableFacet = new ParseableFacetUsingParser(value, mockFacetHolder, mockAuthenticationSessionProvider, mockDependencyInjector, mockAdapterManager);
     }
 
-	protected ValueSemanticsProviderAndFacetAbstract<?> getValue() {
+    protected ValueSemanticsProviderAndFacetAbstract<?> getValue() {
         return valueSemanticsProvider;
     }
 
@@ -139,15 +142,15 @@ public abstract class ValueSemanticsProviderAbstractTestCase {
         return parseableFacet;
     }
 
-
     protected void setupSpecification(final Class<?> type) {
-//        final TestProxySpecification specification = system.getSpecification(cls);
-//        specification.setupHasNoIdentity(true);
+        // final TestProxySpecification specification =
+        // system.getSpecification(cls);
+        // specification.setupHasNoIdentity(true);
     }
 
     protected ObjectAdapter createAdapter(final Object object) {
-        //return system.createAdapterForTransient(object);
-    	return mockAdapter;
+        // return system.createAdapterForTransient(object);
+        return mockAdapter;
     }
 
     @Test
@@ -155,7 +158,8 @@ public abstract class ValueSemanticsProviderAbstractTestCase {
         try {
             valueSemanticsProvider.parseTextEntry(null, null);
             fail();
-        } catch (final IllegalArgumentException expected) {}
+        } catch (final IllegalArgumentException expected) {
+        }
     }
 
     @Test
@@ -179,7 +183,5 @@ public abstract class ValueSemanticsProviderAbstractTestCase {
     public void testTitleOfForNullObject() {
         assertEquals("", valueSemanticsProvider.displayTitleOf(null, (Localization) null));
     }
-    
-    
 
 }

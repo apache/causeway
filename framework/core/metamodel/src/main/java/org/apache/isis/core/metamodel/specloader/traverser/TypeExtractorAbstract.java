@@ -28,7 +28,8 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- * Abstract base class factoring out common functionality for helper methods that extract parameterized types.
+ * Abstract base class factoring out common functionality for helper methods
+ * that extract parameterized types.
  * 
  */
 abstract class TypeExtractorAbstract implements Iterable<Class<?>> {
@@ -65,7 +66,8 @@ abstract class TypeExtractorAbstract implements Iterable<Class<?>> {
     }
 
     /**
-     * The {@link Method} provided in the {@link #TypeExtractorAbstract(Method) constructor.}
+     * The {@link Method} provided in the {@link #TypeExtractorAbstract(Method)
+     * constructor.}
      */
     protected Method getMethod() {
         return method;

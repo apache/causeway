@@ -26,8 +26,8 @@ import org.apache.isis.core.metamodel.facets.object.notpersistable.NotPersistabl
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 
 /**
- * Installed by the {@link FallbackFacetFactory}, and means that this class <i>is</i> persistable (ie not
- * {@link NotPersistableFacet not persistable}).
+ * Installed by the {@link FallbackFacetFactory}, and means that this class
+ * <i>is</i> persistable (ie not {@link NotPersistableFacet not persistable}).
  */
 public class NotPersistableFacetNull extends NotPersistableFacetAbstract {
 

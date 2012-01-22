@@ -38,8 +38,7 @@ import org.apache.isis.core.metamodel.facets.properties.defaults.PropertyDefault
 import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProviderAndFacetAbstract;
 import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProviderContext;
 
-public class MoneyValueSemanticsProvider extends ValueSemanticsProviderAndFacetAbstract<Money> implements
-    MoneyValueFacet {
+public class MoneyValueSemanticsProvider extends ValueSemanticsProviderAndFacetAbstract<Money> implements MoneyValueFacet {
 
     private static Class<? extends Facet> type() {
         return MoneyValueFacet.class;
@@ -76,16 +75,15 @@ public class MoneyValueSemanticsProvider extends ValueSemanticsProviderAndFacetA
     }
 
     /**
-     * Required because implementation of {@link Parser} and {@link EncoderDecoder}.
+     * Required because implementation of {@link Parser} and
+     * {@link EncoderDecoder}.
      */
     public MoneyValueSemanticsProvider() {
         this(null, null, null);
     }
 
-    public MoneyValueSemanticsProvider(final FacetHolder holder, final IsisConfiguration configuration,
-        final ValueSemanticsProviderContext context) {
-        super(type(), holder, Money.class, TYPICAL_LENGTH, IMMUTABLE, EQUAL_BY_CONTENT, DEFAULT_VALUE, configuration,
-            context);
+    public MoneyValueSemanticsProvider(final FacetHolder holder, final IsisConfiguration configuration, final ValueSemanticsProviderContext context) {
+        super(type(), holder, Money.class, TYPICAL_LENGTH, IMMUTABLE, EQUAL_BY_CONTENT, DEFAULT_VALUE, configuration, context);
 
         final String property = ConfigurationConstants.ROOT + "value.money.currency";
         defaultCurrencyCode = configuration.getString(property, LOCAL_CURRENCY_CODE);
@@ -110,9 +108,7 @@ public class MoneyValueSemanticsProvider extends ValueSemanticsProviderAndFacetA
 
     private boolean endsWithCurrencyCode(final String entry, final int pos) {
         final String suffix = entry.substring(pos + 1);
-        final boolean isCurrencyCode =
-            suffix.length() == 3 && Character.isLetter(suffix.charAt(0)) && Character.isLetter(suffix.charAt(1))
-                && Character.isLetter(suffix.charAt(2));
+        final boolean isCurrencyCode = suffix.length() == 3 && Character.isLetter(suffix.charAt(0)) && Character.isLetter(suffix.charAt(1)) && Character.isLetter(suffix.charAt(2));
         return isCurrencyCode;
     }
 

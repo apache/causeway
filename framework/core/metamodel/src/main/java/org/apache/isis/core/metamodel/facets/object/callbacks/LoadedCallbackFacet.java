@@ -20,10 +20,12 @@
 package org.apache.isis.core.metamodel.facets.object.callbacks;
 
 /**
- * Represents the mechanism to inform the object that it has just been loaded from the object store.
+ * Represents the mechanism to inform the object that it has just been loaded
+ * from the object store.
  * 
  * <p>
- * In the standard Apache Isis Programming Model, this is represented by a <tt>loaded</tt> method.
+ * In the standard Apache Isis Programming Model, this is represented by a
+ * <tt>loaded</tt> method.
  * 
  * <p>
  * 

@@ -30,8 +30,7 @@ import org.apache.isis.core.metamodel.facets.object.parseable.TextEntryParseExce
 import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProviderAndFacetAbstract;
 import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProviderContext;
 
-public abstract class BooleanValueSemanticsProviderAbstract extends ValueSemanticsProviderAndFacetAbstract<Boolean>
-    implements BooleanValueFacet {
+public abstract class BooleanValueSemanticsProviderAbstract extends ValueSemanticsProviderAndFacetAbstract<Boolean> implements BooleanValueFacet {
 
     private static Class<? extends Facet> type() {
         return BooleanValueFacet.class;
@@ -41,10 +40,8 @@ public abstract class BooleanValueSemanticsProviderAbstract extends ValueSemanti
     private static final boolean IMMUTABLE = true;
     private static final boolean EQUAL_BY_CONTENT = true;
 
-    public BooleanValueSemanticsProviderAbstract(final FacetHolder holder, final Class<Boolean> adaptedClass,
-        final Boolean defaultValue, final IsisConfiguration configuration, final ValueSemanticsProviderContext context) {
-        super(type(), holder, adaptedClass, TYPICAL_LENGTH, IMMUTABLE, EQUAL_BY_CONTENT, defaultValue, configuration,
-            context);
+    public BooleanValueSemanticsProviderAbstract(final FacetHolder holder, final Class<Boolean> adaptedClass, final Boolean defaultValue, final IsisConfiguration configuration, final ValueSemanticsProviderContext context) {
+        super(type(), holder, adaptedClass, TYPICAL_LENGTH, IMMUTABLE, EQUAL_BY_CONTENT, defaultValue, configuration, context);
     }
 
     // //////////////////////////////////////////////////////////////////
@@ -87,22 +84,21 @@ public abstract class BooleanValueSemanticsProviderAbstract extends ValueSemanti
         final int dataLength = data.length();
         if (dataLength == 1) {
             switch (data.charAt(0)) {
-                case 'T':
-                    return Boolean.TRUE;
-                case 'F':
-                    return Boolean.FALSE;
-                default:
-                    throw new IsisException("Invalid data for logical, expected 'T', 'F' or 'N, but got "
-                        + data.charAt(0));
+            case 'T':
+                return Boolean.TRUE;
+            case 'F':
+                return Boolean.FALSE;
+            default:
+                throw new IsisException("Invalid data for logical, expected 'T', 'F' or 'N, but got " + data.charAt(0));
             }
         } else if (dataLength == 4 || dataLength == 5) {
             switch (data.charAt(0)) {
-                case 't':
-                    return Boolean.TRUE;
-                case 'f':
-                    return Boolean.FALSE;
-                default:
-                    throw new IsisException("Invalid data for logical, expected 't' or 'f', but got " + data.charAt(0));
+            case 't':
+                return Boolean.TRUE;
+            case 'f':
+                return Boolean.FALSE;
+            default:
+                throw new IsisException("Invalid data for logical, expected 't' or 'f', but got " + data.charAt(0));
             }
         }
         throw new IsisException("Invalid data for logical, expected 1, 4 or 5 bytes, got " + dataLength + ": " + data);

@@ -25,7 +25,7 @@ import java.util.TimeZone;
 import org.apache.isis.applib.profiles.Localization;
 
 public final class LocalizationDefault implements Localization {
-    
+
     @Override
     public Locale getLocale() {
         return Locale.getDefault();

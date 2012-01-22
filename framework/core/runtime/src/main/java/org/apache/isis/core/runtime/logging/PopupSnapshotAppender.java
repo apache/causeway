@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.runtime.logging;
 
 import java.awt.BorderLayout;
@@ -34,7 +33,6 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 import org.apache.log4j.spi.TriggeringEventEvaluator;
-
 
 public class PopupSnapshotAppender extends SnapshotAppender {
 
@@ -77,6 +75,7 @@ class SubmitDialog extends Frame {
 
         final Button ok = new Button("Close");
         ok.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(final ActionEvent e) {
                 ok(true);
             }
@@ -84,8 +83,10 @@ class SubmitDialog extends Frame {
         buttonPanel.add(ok);
 
         /*
-         * Button cancel = new Button("Save and Close"); cancel .addActionListener(new ActionListener() {
-         * public void actionPerformed(final ActionEvent e) { ok(false); } }); buttonPanel.add(cancel);
+         * Button cancel = new Button("Save and Close"); cancel
+         * .addActionListener(new ActionListener() { public void
+         * actionPerformed(final ActionEvent e) { ok(false); } });
+         * buttonPanel.add(cancel);
          */
         addWindowListener(new WindowAdapter() {
             @Override

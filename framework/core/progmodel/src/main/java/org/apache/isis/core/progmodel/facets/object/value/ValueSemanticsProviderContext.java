@@ -27,9 +27,7 @@ public class ValueSemanticsProviderContext {
     private final AdapterMap adapterManager;
     private final DependencyInjector dependencyInjector;
 
-    public ValueSemanticsProviderContext(final AuthenticationSessionProvider authenticationSessionProvider,
-        final SpecificationLookup specificationLookup, final AdapterMap adapterManager,
-        final DependencyInjector dependencyInjector) {
+    public ValueSemanticsProviderContext(final AuthenticationSessionProvider authenticationSessionProvider, final SpecificationLookup specificationLookup, final AdapterMap adapterManager, final DependencyInjector dependencyInjector) {
         this.authenticationSessionProvider = authenticationSessionProvider;
         this.specificationLookup = specificationLookup;
         this.adapterManager = adapterManager;

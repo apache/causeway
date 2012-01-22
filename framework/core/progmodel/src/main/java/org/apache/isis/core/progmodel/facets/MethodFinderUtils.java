@@ -30,27 +30,25 @@ public final class MethodFinderUtils {
     private MethodFinderUtils() {
     }
 
-    public static Method findMethodWithOrWithoutParameters(final Class<?> type, final MethodScope classMethod,
-        final String name, final Class<?> returnType, final Class<?>[] paramTypes) {
+    public static Method findMethodWithOrWithoutParameters(final Class<?> type, final MethodScope classMethod, final String name, final Class<?> returnType, final Class<?>[] paramTypes) {
         Method method = MethodFinderUtils.findMethod(type, classMethod, name, returnType, paramTypes);
         if (method == null) {
-            method =
-                MethodFinderUtils.findMethod(type, classMethod, name, returnType,
-                    MethodPrefixBasedFacetFactoryAbstract.NO_PARAMETERS_TYPES);
+            method = MethodFinderUtils.findMethod(type, classMethod, name, returnType, MethodPrefixBasedFacetFactoryAbstract.NO_PARAMETERS_TYPES);
         }
         return method;
     }
 
     /**
-     * Returns a specific public methods that: have the specified prefix; have the specified return type, or void, if
-     * canBeVoid is true; and has the specified number of parameters. If the returnType is specified as null then the
-     * return type is ignored.
+     * Returns a specific public methods that: have the specified prefix; have
+     * the specified return type, or void, if canBeVoid is true; and has the
+     * specified number of parameters. If the returnType is specified as null
+     * then the return type is ignored.
      * 
      * @param paramTypes
-     *            the set of parameters the method should have, if null then is ignored
+     *            the set of parameters the method should have, if null then is
+     *            ignored
      */
-    public static Method findMethod(final Class<?> type, final MethodScope methodScope, final String name,
-        final Class<?> returnType, final Class<?>[] paramTypes) {
+    public static Method findMethod(final Class<?> type, final MethodScope methodScope, final String name, final Class<?> returnType, final Class<?>[] paramTypes) {
         Method method;
         try {
             method = type.getMethod(name, paramTypes);
@@ -103,8 +101,7 @@ public final class MethodFinderUtils {
         return methodScope.doesNotMatchScope(method);
     }
 
-    public static Method findMethod(final Class<?> type, final MethodScope methodScope, final String name,
-        final Class<?> returnType) {
+    public static Method findMethod(final Class<?> type, final MethodScope methodScope, final String name, final Class<?> returnType) {
         try {
             final Method[] methods = type.getMethods();
             for (final Method method2 : methods) {
@@ -137,28 +134,27 @@ public final class MethodFinderUtils {
         return null;
     }
 
-    public static List<Method> findMethodsWithAnnotation(final Class<?> type, final MethodScope methodScope,
-    		Class<? extends Annotation> annotationClass) {
+    public static List<Method> findMethodsWithAnnotation(final Class<?> type, final MethodScope methodScope, final Class<? extends Annotation> annotationClass) {
 
-    	List<Method> methods = new ArrayList<Method>();
+        final List<Method> methods = new ArrayList<Method>();
 
-    	// Validate arguments
-    	if ( (type == null) || (methodScope == null) || (annotationClass == null)) {
-    		throw new IllegalArgumentException("One or more arguments are 'null' valued");
-    	}
+        // Validate arguments
+        if ((type == null) || (methodScope == null) || (annotationClass == null)) {
+            throw new IllegalArgumentException("One or more arguments are 'null' valued");
+        }
 
-    	// Find methods annotated with the specified annotation
-    	for (Method method : type.getMethods()) {
+        // Find methods annotated with the specified annotation
+        for (final Method method : type.getMethods()) {
             if (!methodScope.matchesScopeOf(method)) {
                 continue;
             }
 
-    		if (method.isAnnotationPresent(annotationClass)) {
-    			methods.add(method);
-    		}
-    	}
+            if (method.isAnnotationPresent(annotationClass)) {
+                methods.add(method);
+            }
+        }
 
-    	return methods;
+        return methods;
     }
 
     public static void removeMethod(final MethodRemover methodRemover, final Method method) {

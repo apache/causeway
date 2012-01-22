@@ -70,7 +70,8 @@ public class PropertyAccessorFacetFactory extends PropertyOrCollectionIdentifyin
     }
 
     /**
-     * The method way well represent a collection, but this facet factory does not have any opinion on the matter.
+     * The method way well represent a collection, but this facet factory does
+     * not have any opinion on the matter.
      */
     @Override
     public boolean isCollectionAccessor(final Method method) {
@@ -87,20 +88,17 @@ public class PropertyAccessorFacetFactory extends PropertyOrCollectionIdentifyin
     }
 
     @Override
-    public void findAndRemovePropertyAccessors(final MethodRemover methodRemover,
-        final List<Method> methodListToAppendTo) {
+    public void findAndRemovePropertyAccessors(final MethodRemover methodRemover, final List<Method> methodListToAppendTo) {
         appendMatchingMethods(methodRemover, MethodPrefixConstants.IS_PREFIX, boolean.class, methodListToAppendTo);
         appendMatchingMethods(methodRemover, MethodPrefixConstants.GET_PREFIX, Object.class, methodListToAppendTo);
     }
 
-    private static void appendMatchingMethods(final MethodRemover methodRemover, final String prefix,
-        final Class<?> returnType, final List<Method> methodListToAppendTo) {
+    private static void appendMatchingMethods(final MethodRemover methodRemover, final String prefix, final Class<?> returnType, final List<Method> methodListToAppendTo) {
         methodListToAppendTo.addAll(methodRemover.removeMethods(MethodScope.OBJECT, prefix, returnType, false, 0));
     }
 
     @Override
-    public void findAndRemoveCollectionAccessors(final MethodRemover methodRemover,
-        final List<Method> methodListToAppendTo) {
+    public void findAndRemoveCollectionAccessors(final MethodRemover methodRemover, final List<Method> methodListToAppendTo) {
         // does nothing
     }
 

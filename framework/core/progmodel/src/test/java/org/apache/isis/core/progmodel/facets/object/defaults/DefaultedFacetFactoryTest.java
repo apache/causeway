@@ -46,7 +46,6 @@ public class DefaultedFacetFactoryTest extends AbstractFacetFactoryTest {
         super.tearDown();
     }
 
-
     public void testFacetPickedUp() {
         facetFactory.process(new ProcessClassContext(MyDefaultedUsingDefaultsProvider.class, methodRemover, facetedMethod));
 
@@ -99,8 +98,7 @@ public class DefaultedFacetFactoryTest extends AbstractFacetFactoryTest {
     }
 
     @Defaulted(defaultsProviderClass = MyDefaultedUsingDefaultsProviderClass.class)
-    public static class MyDefaultedUsingDefaultsProviderClass extends
-        DefaultsProviderNoop<MyDefaultedUsingDefaultsProviderClass> {
+    public static class MyDefaultedUsingDefaultsProviderClass extends DefaultsProviderNoop<MyDefaultedUsingDefaultsProviderClass> {
 
         /**
          * Required since is a DefaultsProvider.
@@ -121,13 +119,13 @@ public class DefaultedFacetFactoryTest extends AbstractFacetFactoryTest {
     }
 
     public void testDefaultedMustBeADefaultsProvider() {
-        // no test, because compiler prevents us from nominating a class that doesn't
+        // no test, because compiler prevents us from nominating a class that
+        // doesn't
         // implement DefaultsProvider
     }
 
     @Defaulted(defaultsProviderClass = MyDefaultedWithoutNoArgConstructor.class)
-    public static class MyDefaultedWithoutNoArgConstructor extends
-        DefaultsProviderNoop<MyDefaultedWithoutNoArgConstructor> {
+    public static class MyDefaultedWithoutNoArgConstructor extends DefaultsProviderNoop<MyDefaultedWithoutNoArgConstructor> {
 
         // no no-arg constructor
 
@@ -148,8 +146,7 @@ public class DefaultedFacetFactoryTest extends AbstractFacetFactoryTest {
     }
 
     @Defaulted(defaultsProviderClass = MyDefaultedWithoutPublicNoArgConstructor.class)
-    public static class MyDefaultedWithoutPublicNoArgConstructor extends
-        DefaultsProviderNoop<MyDefaultedWithoutPublicNoArgConstructor> {
+    public static class MyDefaultedWithoutPublicNoArgConstructor extends DefaultsProviderNoop<MyDefaultedWithoutPublicNoArgConstructor> {
 
         // no public no-arg constructor
         MyDefaultedWithoutPublicNoArgConstructor() {
@@ -172,8 +169,7 @@ public class DefaultedFacetFactoryTest extends AbstractFacetFactoryTest {
     }
 
     @Defaulted()
-    public static class MyDefaultedWithDefaultsProviderSpecifiedUsingConfiguration extends
-        DefaultsProviderNoop<MyDefaultedWithDefaultsProviderSpecifiedUsingConfiguration> {
+    public static class MyDefaultedWithDefaultsProviderSpecifiedUsingConfiguration extends DefaultsProviderNoop<MyDefaultedWithDefaultsProviderSpecifiedUsingConfiguration> {
 
         /**
          * Required since is a DefaultsProvider.
@@ -188,18 +184,15 @@ public class DefaultedFacetFactoryTest extends AbstractFacetFactoryTest {
     }
 
     public void testDefaultedProviderNameCanBePickedUpFromConfiguration() {
-        final String className =
-            "org.apache.isis.core.progmodel.facets.object.defaults.DefaultedFacetFactoryTest$MyDefaultedWithDefaultsProviderSpecifiedUsingConfiguration";
-        isisConfigurationDefault.add(DefaultsProviderUtil.DEFAULTS_PROVIDER_NAME_KEY_PREFIX + canonical(className)
-            + DefaultsProviderUtil.DEFAULTS_PROVIDER_NAME_KEY_SUFFIX, className);
+        final String className = "org.apache.isis.core.progmodel.facets.object.defaults.DefaultedFacetFactoryTest$MyDefaultedWithDefaultsProviderSpecifiedUsingConfiguration";
+        isisConfigurationDefault.add(DefaultsProviderUtil.DEFAULTS_PROVIDER_NAME_KEY_PREFIX + canonical(className) + DefaultsProviderUtil.DEFAULTS_PROVIDER_NAME_KEY_SUFFIX, className);
         facetFactory.process(new ProcessClassContext(MyDefaultedWithDefaultsProviderSpecifiedUsingConfiguration.class, methodRemover, facetedMethod));
         final DefaultedFacetAbstract facet = (DefaultedFacetAbstract) facetedMethod.getFacet(DefaultedFacet.class);
         assertNotNull(facet);
         assertEquals(MyDefaultedWithDefaultsProviderSpecifiedUsingConfiguration.class, facet.getDefaultsProviderClass());
     }
 
-    public static class NonAnnotatedDefaultedDefaultsProviderSpecifiedUsingConfiguration extends
-        DefaultsProviderNoop<NonAnnotatedDefaultedDefaultsProviderSpecifiedUsingConfiguration> {
+    public static class NonAnnotatedDefaultedDefaultsProviderSpecifiedUsingConfiguration extends DefaultsProviderNoop<NonAnnotatedDefaultedDefaultsProviderSpecifiedUsingConfiguration> {
 
         /**
          * Required since is a DefaultsProvider.
@@ -214,15 +207,12 @@ public class DefaultedFacetFactoryTest extends AbstractFacetFactoryTest {
     }
 
     public void testNonAnnotatedDefaultedCanBePickedUpFromConfiguration() {
-        final String className =
-            "org.apache.isis.core.progmodel.facets.object.defaults.DefaultedFacetFactoryTest$NonAnnotatedDefaultedDefaultsProviderSpecifiedUsingConfiguration";
-        isisConfigurationDefault.add(DefaultsProviderUtil.DEFAULTS_PROVIDER_NAME_KEY_PREFIX + canonical(className)
-            + DefaultsProviderUtil.DEFAULTS_PROVIDER_NAME_KEY_SUFFIX, className);
+        final String className = "org.apache.isis.core.progmodel.facets.object.defaults.DefaultedFacetFactoryTest$NonAnnotatedDefaultedDefaultsProviderSpecifiedUsingConfiguration";
+        isisConfigurationDefault.add(DefaultsProviderUtil.DEFAULTS_PROVIDER_NAME_KEY_PREFIX + canonical(className) + DefaultsProviderUtil.DEFAULTS_PROVIDER_NAME_KEY_SUFFIX, className);
         facetFactory.process(new ProcessClassContext(NonAnnotatedDefaultedDefaultsProviderSpecifiedUsingConfiguration.class, methodRemover, facetedMethod));
         final DefaultedFacetAbstract facet = (DefaultedFacetAbstract) facetedMethod.getFacet(DefaultedFacet.class);
         assertNotNull(facet);
-        assertEquals(NonAnnotatedDefaultedDefaultsProviderSpecifiedUsingConfiguration.class,
-            facet.getDefaultsProviderClass());
+        assertEquals(NonAnnotatedDefaultedDefaultsProviderSpecifiedUsingConfiguration.class, facet.getDefaultsProviderClass());
     }
 
     private String canonical(final String className) {

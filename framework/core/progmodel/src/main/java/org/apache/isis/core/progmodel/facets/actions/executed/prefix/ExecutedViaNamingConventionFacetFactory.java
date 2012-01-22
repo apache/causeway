@@ -34,7 +34,8 @@ import org.apache.isis.core.progmodel.facets.actions.invoke.ExecutedFacetViaNami
  * Creates an {@link ExecutedFacet} based on the prefix of the action's name.
  * 
  * <p>
- * TODO: think that this prefix is handled by the {@link ActionInvocationFacetFactory}.
+ * TODO: think that this prefix is handled by the
+ * {@link ActionInvocationFacetFactory}.
  */
 public class ExecutedViaNamingConventionFacetFactory extends FacetFactoryAbstract {
 
@@ -53,9 +54,7 @@ public class ExecutedViaNamingConventionFacetFactory extends FacetFactoryAbstrac
             return;
         }
 
-        FacetUtil.addFacets(new Facet[] {
-            new ExecutedFacetViaNamingConvention(ExecutedFacet.Where.LOCALLY, processMethodContext.getFacetHolder()),
-            new NamedFacetInferred(capitalizedName.substring(5), processMethodContext.getFacetHolder()) });
+        FacetUtil.addFacets(new Facet[] { new ExecutedFacetViaNamingConvention(ExecutedFacet.Where.LOCALLY, processMethodContext.getFacetHolder()), new NamedFacetInferred(capitalizedName.substring(5), processMethodContext.getFacetHolder()) });
     }
 
     public boolean recognizes(final Method method) {

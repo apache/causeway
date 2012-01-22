@@ -30,7 +30,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 /**
- * Contract test for value types ({@link #equals(Object)} and {@link #hashCode()}).
+ * Contract test for value types ({@link #equals(Object)} and
+ * {@link #hashCode()}).
  */
 public abstract class ValueTypeContractTestAbstract<T> {
 

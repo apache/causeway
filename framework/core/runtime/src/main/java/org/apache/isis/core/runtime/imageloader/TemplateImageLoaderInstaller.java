@@ -17,16 +17,13 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.runtime.imageloader;
 
 import org.apache.isis.core.commons.components.Installer;
 
-
 public interface TemplateImageLoaderInstaller extends Installer {
 
-	static String TYPE = "template-image-loader";
-	
+    static String TYPE = "template-image-loader";
+
     TemplateImageLoader createLoader();
 }
-

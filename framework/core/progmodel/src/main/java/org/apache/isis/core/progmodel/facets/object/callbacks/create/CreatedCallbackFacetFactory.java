@@ -49,9 +49,7 @@ public class CreatedCallbackFacetFactory extends MethodPrefixBasedFacetFactoryAb
         final List<Method> methods = new ArrayList<Method>();
 
         Method method = null;
-        method =
-            MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, MethodPrefixConstants.CREATED_PREFIX, void.class,
-                NO_PARAMETERS_TYPES);
+        method = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, MethodPrefixConstants.CREATED_PREFIX, void.class, NO_PARAMETERS_TYPES);
         if (method != null) {
             methods.add(method);
             facets.add(new CreatedCallbackFacetViaMethod(method, holder));

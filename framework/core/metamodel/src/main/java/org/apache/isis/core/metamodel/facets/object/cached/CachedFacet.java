@@ -25,11 +25,13 @@ import org.apache.isis.core.metamodel.facets.MarkerFacet;
  * Whether the instances of this class are cached.
  * 
  * <p>
- * In the standard Apache Isis Programming Model, corresponds to annotating the member with <tt>@Cached</tt>.
+ * In the standard Apache Isis Programming Model, corresponds to annotating the
+ * member with <tt>@Cached</tt>.
  * 
  * <p>
- * Cached does not necessarily imply immutable. The idea though is that the developer is indicating that the performance
- * cost of obtaining all instances of an instance is low; viewer implementations might be able to exploit this
+ * Cached does not necessarily imply immutable. The idea though is that the
+ * developer is indicating that the performance cost of obtaining all instances
+ * of an instance is low; viewer implementations might be able to exploit this
  * information.
  * 
  * <p>

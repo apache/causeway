@@ -33,8 +33,7 @@ class PropertiesReader {
 
     private final Properties properties = new Properties();
 
-    public PropertiesReader(final ResourceStreamSource resourceStream, final String configurationResource)
-        throws IOException {
+    public PropertiesReader(final ResourceStreamSource resourceStream, final String configurationResource) throws IOException {
 
         InputStream in = null;
         try {

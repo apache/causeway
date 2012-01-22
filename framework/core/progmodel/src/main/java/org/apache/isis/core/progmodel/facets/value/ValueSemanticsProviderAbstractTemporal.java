@@ -43,11 +43,11 @@ import org.apache.isis.core.progmodel.facets.value.date.DateValueFacet;
 
 import com.google.common.collect.Maps;
 
-public abstract class ValueSemanticsProviderAbstractTemporal<T> extends ValueSemanticsProviderAndFacetAbstract<T>
-    implements DateValueFacet {
+public abstract class ValueSemanticsProviderAbstractTemporal<T> extends ValueSemanticsProviderAndFacetAbstract<T> implements DateValueFacet {
 
     /**
-     * Introduced to allow BDD tests to provide a different format string "mid-flight".
+     * Introduced to allow BDD tests to provide a different format string
+     * "mid-flight".
      */
     public static void setFormat(final String propertyType, final String formatStr) {
         FORMATS.get().put(propertyType, formatStr);
@@ -92,27 +92,22 @@ public abstract class ValueSemanticsProviderAbstractTemporal<T> extends ValueSem
     /**
      * Uses {@link #type()} as the facet type.
      */
-    public ValueSemanticsProviderAbstractTemporal(final String propertyName, final FacetHolder holder,
-        final Class<T> adaptedClass, final int typicalLength, final boolean immutable, final boolean equalByContent,
-        final T defaultValue, final IsisConfiguration configuration, final ValueSemanticsProviderContext context) {
-        this(propertyName, type(), holder, adaptedClass, typicalLength, immutable, equalByContent, defaultValue,
-            configuration, context);
+    public ValueSemanticsProviderAbstractTemporal(final String propertyName, final FacetHolder holder, final Class<T> adaptedClass, final int typicalLength, final boolean immutable, final boolean equalByContent, final T defaultValue, final IsisConfiguration configuration,
+            final ValueSemanticsProviderContext context) {
+        this(propertyName, type(), holder, adaptedClass, typicalLength, immutable, equalByContent, defaultValue, configuration, context);
     }
 
     /**
-     * Allows the specific facet subclass to be specified (rather than use {@link #type()}.
+     * Allows the specific facet subclass to be specified (rather than use
+     * {@link #type()}.
      */
-    public ValueSemanticsProviderAbstractTemporal(final String propertyType, final Class<? extends Facet> facetType,
-        final FacetHolder holder, final Class<T> adaptedClass, final int typicalLength, final boolean immutable,
-        final boolean equalByContent, final T defaultValue, final IsisConfiguration configuration,
-        final ValueSemanticsProviderContext context) {
-        super(facetType, holder, adaptedClass, typicalLength, immutable, equalByContent, defaultValue, configuration,
-            context);
+    public ValueSemanticsProviderAbstractTemporal(final String propertyType, final Class<? extends Facet> facetType, final FacetHolder holder, final Class<T> adaptedClass, final int typicalLength, final boolean immutable, final boolean equalByContent, final T defaultValue,
+            final IsisConfiguration configuration, final ValueSemanticsProviderContext context) {
+        super(facetType, holder, adaptedClass, typicalLength, immutable, equalByContent, defaultValue, configuration, context);
         configureFormats();
 
         this.propertyType = propertyType;
-        configuredFormat =
-            getConfiguration().getString(FORMAT_KEY_PREFIX + propertyType, defaultFormat()).toLowerCase().trim();
+        configuredFormat = getConfiguration().getString(FORMAT_KEY_PREFIX + propertyType, defaultFormat()).toLowerCase().trim();
         buildFormat(configuredFormat);
 
         encodingFormat = formats().get(ISO_ENCODING_FORMAT);

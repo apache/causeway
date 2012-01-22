@@ -59,18 +59,17 @@ public class AboutIsis {
 
     public static String findVersion() {
         try {
-            String moduleId = "org.apache.isis.plugins:dndviewer";
-            String module = moduleId.replace(":", "/");
-            InputStream resourceAsStream =
-                AboutIsis.class.getClassLoader().getResourceAsStream("META-INF/maven/" + module + "/pom.properties");
+            final String moduleId = "org.apache.isis.plugins:dndviewer";
+            final String module = moduleId.replace(":", "/");
+            final InputStream resourceAsStream = AboutIsis.class.getClassLoader().getResourceAsStream("META-INF/maven/" + module + "/pom.properties");
             if (resourceAsStream == null) {
                 return "no version";
             }
-            Properties p = new Properties();
+            final Properties p = new Properties();
             p.load(resourceAsStream);
-            String version = p.getProperty("version");
+            final String version = p.getProperty("version");
             return version;
-        } catch (IOException e) {
+        } catch (final IOException e) {
             throw new IsisException(e);
         }
 
@@ -105,10 +104,11 @@ public class AboutIsis {
     }
 
     public static String getFrameworkVersion() {
-        String version = "Version " + select(frameworkVersion, "unreleased");
+        final String version = "Version " + select(frameworkVersion, "unreleased");
         /*
-         * NOT in use yet: for (ComponentDetails details : componentDetails) { version += "\n" + details.getName() + " "
-         * + details.getModule() + " " + details.getVersion(); }
+         * NOT in use yet: for (ComponentDetails details : componentDetails) {
+         * version += "\n" + details.getName() + " " + details.getModule() + " "
+         * + details.getVersion(); }
          */
         return version;
     }
@@ -134,7 +134,7 @@ public class AboutIsis {
         AboutIsis.applicationVersion = applicationVersion;
     }
 
-    public static void setComponentDetails(List<ComponentDetails> componentDetails) {
+    public static void setComponentDetails(final List<ComponentDetails> componentDetails) {
         AboutIsis.componentDetails = componentDetails;
     }
 

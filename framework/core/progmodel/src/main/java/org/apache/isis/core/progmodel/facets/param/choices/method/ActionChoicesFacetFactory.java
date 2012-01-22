@@ -41,7 +41,8 @@ public class ActionChoicesFacetFactory extends MethodPrefixBasedFacetFactoryAbst
     private AdapterMap adapterMap;
 
     /**
-     * Note that the {@link Facet}s registered are the generic ones from noa-architecture (where they exist)
+     * Note that the {@link Facet}s registered are the generic ones from
+     * noa-architecture (where they exist)
      */
     public ActionChoicesFacetFactory() {
         super(FeatureType.ACTIONS_ONLY, PREFIXES);
@@ -82,14 +83,11 @@ public class ActionChoicesFacetFactory extends MethodPrefixBasedFacetFactoryAbst
 
         final Class<?> returnType = actionMethod.getReturnType();
         final FacetHolder action = processMethodContext.getFacetHolder();
-        final ActionChoicesFacetViaMethod facet =
-            new ActionChoicesFacetViaMethod(choicesMethod, returnType, action, getSpecificationLookup(),
-                getAdapterMap());
+        final ActionChoicesFacetViaMethod facet = new ActionChoicesFacetViaMethod(choicesMethod, returnType, action, getSpecificationLookup(), getAdapterMap());
         FacetUtil.addFacet(facet);
     }
 
-    protected Method findChoicesMethodReturning(final ProcessMethodContext processMethodContext,
-        final Class<?> returnType2) {
+    protected Method findChoicesMethodReturning(final ProcessMethodContext processMethodContext, final Class<?> returnType2) {
         Method choicesMethod;
         final Class<?> cls = processMethodContext.getCls();
 

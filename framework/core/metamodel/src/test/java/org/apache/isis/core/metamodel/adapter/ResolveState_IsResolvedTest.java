@@ -49,10 +49,8 @@ public class ResolveState_IsResolvedTest {
 
     @Parameters
     public static Collection<Object[]> data() {
-        return Arrays.asList(new Object[][] { { false, GHOST }, { false, NEW }, { false, PART_RESOLVED },
-            { true, RESOLVED }, { false, RESOLVING }, { false, RESOLVING_PART }, { false, TRANSIENT },
-            { false, DESTROYED }, { false, UPDATING }, { false, SERIALIZING_TRANSIENT }, { false, SERIALIZING_GHOST },
-            { false, SERIALIZING_PART_RESOLVED }, { false, SERIALIZING_RESOLVED }, { false, VALUE }, });
+        return Arrays.asList(new Object[][] { { false, GHOST }, { false, NEW }, { false, PART_RESOLVED }, { true, RESOLVED }, { false, RESOLVING }, { false, RESOLVING_PART }, { false, TRANSIENT }, { false, DESTROYED }, { false, UPDATING }, { false, SERIALIZING_TRANSIENT },
+                { false, SERIALIZING_GHOST }, { false, SERIALIZING_PART_RESOLVED }, { false, SERIALIZING_RESOLVED }, { false, VALUE }, });
     }
 
     private final boolean whetherIs;

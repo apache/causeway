@@ -34,8 +34,7 @@ import org.apache.isis.core.metamodel.facets.AnnotationBasedFacetFactoryAbstract
 import org.apache.isis.core.metamodel.runtimecontext.DependencyInjector;
 import org.apache.isis.core.metamodel.runtimecontext.DependencyInjectorAware;
 
-public class ParseableFacetFactory extends AnnotationBasedFacetFactoryAbstract implements IsisConfigurationAware,
-    AuthenticationSessionProviderAware, AdapterMapAware, DependencyInjectorAware {
+public class ParseableFacetFactory extends AnnotationBasedFacetFactoryAbstract implements IsisConfigurationAware, AuthenticationSessionProviderAware, AdapterMapAware, DependencyInjectorAware {
 
     private IsisConfiguration configuration;
 
@@ -57,9 +56,7 @@ public class ParseableFacetFactory extends AnnotationBasedFacetFactoryAbstract i
 
         // create from annotation, if present
         if (annotation != null) {
-            final ParseableFacetAnnotation facet =
-                new ParseableFacetAnnotation(cls, getIsisConfiguration(), holder, authenticationSessionProvider,
-                    adapterManager, dependencyInjector);
+            final ParseableFacetAnnotation facet = new ParseableFacetAnnotation(cls, getIsisConfiguration(), holder, authenticationSessionProvider, adapterManager, dependencyInjector);
             if (facet.isValid()) {
                 return facet;
             }
@@ -68,9 +65,7 @@ public class ParseableFacetFactory extends AnnotationBasedFacetFactoryAbstract i
         // otherwise, try to create from configuration, if present
         final String parserName = ParserUtil.parserNameFromConfiguration(cls, getIsisConfiguration());
         if (!StringUtils.isNullOrEmpty(parserName)) {
-            final ParseableFacetFromConfiguration facet =
-                new ParseableFacetFromConfiguration(parserName, holder, authenticationSessionProvider,
-                    dependencyInjector, adapterManager);
+            final ParseableFacetFromConfiguration facet = new ParseableFacetFromConfiguration(parserName, holder, authenticationSessionProvider, dependencyInjector, adapterManager);
             if (facet.isValid()) {
                 return facet;
             }

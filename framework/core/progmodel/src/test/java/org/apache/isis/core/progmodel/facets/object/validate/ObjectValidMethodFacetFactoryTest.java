@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.object.validate;
 
 import java.lang.reflect.Method;
@@ -27,7 +26,6 @@ import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.progmodel.facets.object.validate.method.ValidateObjectFacetViaValidateMethod;
 import org.apache.isis.core.progmodel.facets.object.validate.method.ValidateObjectViaValidateMethodFacetFactory;
-
 
 public class ObjectValidMethodFacetFactoryTest extends AbstractFacetFactoryTest {
 
@@ -45,7 +43,6 @@ public class ObjectValidMethodFacetFactoryTest extends AbstractFacetFactoryTest 
         facetFactory = null;
         super.tearDown();
     }
-
 
     public void testValidateMethodPickedUpAndMethodRemoved() {
         class Customer {
@@ -67,4 +64,3 @@ public class ObjectValidMethodFacetFactoryTest extends AbstractFacetFactoryTest 
     }
 
 }
-

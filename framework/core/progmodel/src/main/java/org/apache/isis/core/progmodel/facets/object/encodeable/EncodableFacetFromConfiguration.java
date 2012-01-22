@@ -25,8 +25,7 @@ import org.apache.isis.core.metamodel.runtimecontext.DependencyInjector;
 
 public class EncodableFacetFromConfiguration extends EncodableFacetAbstract {
 
-    public EncodableFacetFromConfiguration(final String candidateEncoderDecoderName, final FacetHolder holder,
-        final AdapterMap adapterManager, final DependencyInjector dependencyInjector) {
+    public EncodableFacetFromConfiguration(final String candidateEncoderDecoderName, final FacetHolder holder, final AdapterMap adapterManager, final DependencyInjector dependencyInjector) {
         super(candidateEncoderDecoderName, null, holder, adapterManager, dependencyInjector);
 
     }

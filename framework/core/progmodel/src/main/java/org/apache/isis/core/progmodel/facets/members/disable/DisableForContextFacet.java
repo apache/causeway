@@ -24,11 +24,12 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.interactions.DisablingInteractionAdvisor;
 
 /**
- * Disable a property, collection or action based on the state of the target {@link ObjectAdapter object}.
+ * Disable a property, collection or action based on the state of the target
+ * {@link ObjectAdapter object}.
  * 
  * <p>
- * In the standard Apache Isis Programming Model, corresponds to invoking the <tt>disableXxx</tt> support method for the
- * member.
+ * In the standard Apache Isis Programming Model, corresponds to invoking the
+ * <tt>disableXxx</tt> support method for the member.
  */
 public interface DisableForContextFacet extends Facet, DisablingInteractionAdvisor {
 

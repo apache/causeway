@@ -21,4 +21,3 @@ package org.apache.isis.core.progmodel.facets.object.parseable;
 public class ValueProxy {
 
 }
-

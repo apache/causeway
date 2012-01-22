@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.runtime.logging;
 
 import java.io.FileInputStream;
@@ -35,7 +34,6 @@ import org.apache.log4j.Logger;
 import org.apache.log4j.PatternLayout;
 import org.apache.log4j.PropertyConfigurator;
 
-
 public class IsisLoggingConfigurer {
 
     private boolean loggingSetup;
@@ -46,7 +44,7 @@ public class IsisLoggingConfigurer {
      * <p>
      * The root logging level can also be adjusted using command line arguments.
      */
-    public void configureLogging(final String configDirectory, String[] args) {
+    public void configureLogging(final String configDirectory, final String[] args) {
         if (loggingSetup) {
             return;
         }
@@ -55,30 +53,32 @@ public class IsisLoggingConfigurer {
         applyLoggingLevelFromCommandLine(args);
     }
 
-    private static void applyLoggingLevelFromCommandLine(String[] args) {
-        Level loggingLevel = loggingLevel(args);
+    private static void applyLoggingLevelFromCommandLine(final String[] args) {
+        final Level loggingLevel = loggingLevel(args);
         if (loggingLevel != null) {
             Logger.getRootLogger().setLevel(loggingLevel);
         }
     }
 
     /**
-     * Sets up logging using either a logging file or (if cannot be found) some sensible defaults.
+     * Sets up logging using either a logging file or (if cannot be found) some
+     * sensible defaults.
      * 
      * <p>
-     * If a {@link LoggingConstants#LOGGING_CONFIG_FILE logging config file} can be located in the provided
-     * directory, then that is used. Otherwise, will set up the {@link Logger#getRootLogger() root logger} to
-     * {@link Level#WARN warning}, a typical {@link PatternLayout} and logging to the {@link ConsoleAppender
-     * console}.
+     * If a {@link LoggingConstants#LOGGING_CONFIG_FILE logging config file} can
+     * be located in the provided directory, then that is used. Otherwise, will
+     * set up the {@link Logger#getRootLogger() root logger} to
+     * {@link Level#WARN warning}, a typical {@link PatternLayout} and logging
+     * to the {@link ConsoleAppender console}.
      */
     private static void configureLogging(final String configDirectory) {
-        Properties properties = new Properties();
-        String path = configDirectory + "/" + LoggingConstants.LOGGING_CONFIG_FILE;
+        final Properties properties = new Properties();
+        final String path = configDirectory + "/" + LoggingConstants.LOGGING_CONFIG_FILE;
         FileInputStream inStream = null;
         try {
             inStream = new FileInputStream(path);
             properties.load(inStream);
-        } catch (IOException ignore) {
+        } catch (final IOException ignore) {
             // ignore
         } finally {
             IoUtils.closeSafely(inStream);
@@ -87,13 +87,13 @@ public class IsisLoggingConfigurer {
         if (properties.size() == 0) {
             InputStream inStream2 = null;
             try {
-                ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+                final ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
                 inStream2 = classLoader.getResourceAsStream(path);
                 if (inStream2 != null) {
                     properties.load(inStream2);
                 }
-            } catch (IOException ignore) {}
-            finally {
+            } catch (final IOException ignore) {
+            } finally {
                 IoUtils.closeSafely(inStream2);
             }
         }
@@ -115,14 +115,14 @@ public class IsisLoggingConfigurer {
 
     private static Level loggingLevel(final String[] args) {
         Level level = null;
-        for (int i = 0; i < args.length; i++) {
-            if (args[i].equals("-" + LoggingConstants.DEBUG_OPT)) {
+        for (final String arg : args) {
+            if (arg.equals("-" + LoggingConstants.DEBUG_OPT)) {
                 level = Level.DEBUG;
                 break;
-            } else if (args[i].equals("-" + LoggingConstants.QUIET_OPT)) {
+            } else if (arg.equals("-" + LoggingConstants.QUIET_OPT)) {
                 level = Level.ERROR;
                 break;
-            } else if (args[i].equals("-" + LoggingConstants.VERBOSE_OPT)) {
+            } else if (arg.equals("-" + LoggingConstants.VERBOSE_OPT)) {
                 level = Level.INFO;
                 break;
             }
@@ -131,4 +131,3 @@ public class IsisLoggingConfigurer {
     }
 
 }
-

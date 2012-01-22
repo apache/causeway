@@ -22,7 +22,6 @@ package org.apache.isis.core.metamodel.adapter;
 import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.commons.components.Injectable;
 
-
 public interface LocalizationProvider extends Injectable {
 
     Localization getLocalization();

@@ -21,9 +21,10 @@ package org.apache.isis.core.commons.config;
 
 import java.util.Collections;
 import java.util.List;
-import com.google.common.collect.*;
 
 import org.apache.isis.core.commons.components.Installer;
+
+import com.google.common.collect.Lists;
 
 public abstract class InstallerAbstract implements Installer, IsisConfigurationBuilderAware {
 
@@ -34,12 +35,14 @@ public abstract class InstallerAbstract implements Installer, IsisConfigurationB
     private IsisConfiguration configuration;
 
     /**
-     * Subclasses should pass in the type defined as a constant in the subinterface of Installer.
+     * Subclasses should pass in the type defined as a constant in the
+     * subinterface of Installer.
      * 
      * <p>
-     * For example, <tt>PersistenceMechanismInstaller</tt> has a constant <tt>PersistenceMechanismInstaller#TYPE</tt>.
-     * Any implementation of <tt>PersistenceMechanismInstaller</tt> should pass this constant value up to this
-     * constructor.
+     * For example, <tt>PersistenceMechanismInstaller</tt> has a constant
+     * <tt>PersistenceMechanismInstaller#TYPE</tt>. Any implementation of
+     * <tt>PersistenceMechanismInstaller</tt> should pass this constant value up
+     * to this constructor.
      */
     public InstallerAbstract(final String type, final String name) {
         this.type = type;
@@ -60,7 +63,8 @@ public abstract class InstallerAbstract implements Installer, IsisConfigurationB
      * Returns <tt>[type.properties, type_name.properties</tt>.
      * 
      * <p>
-     * For example, <tt>[persistor.properties, persistor_in-memory.properties]</tt>.
+     * For example,
+     * <tt>[persistor.properties, persistor_in-memory.properties]</tt>.
      * 
      * @see #getType()
      * @see #getName()
@@ -77,7 +81,8 @@ public abstract class InstallerAbstract implements Installer, IsisConfigurationB
     }
 
     /**
-     * Optional hook method to allow subclasses to specify any additional config resources.
+     * Optional hook method to allow subclasses to specify any additional config
+     * resources.
      */
     protected void addConfigurationResources(final List<String> configurationResources) {
     }
@@ -103,12 +108,12 @@ public abstract class InstallerAbstract implements Installer, IsisConfigurationB
     }
 
     /**
-     * Either this method or {@link #setConfiguration(IsisConfiguration)} should be called prior to calling
-     * {@link #getConfiguration()}.
+     * Either this method or {@link #setConfiguration(IsisConfiguration)} should
+     * be called prior to calling {@link #getConfiguration()}.
      * 
      * <p>
-     * If a {@link #setConfiguration(IsisConfiguration) configuration} has already been provided, then throws
-     * {@link IllegalStateException}.
+     * If a {@link #setConfiguration(IsisConfiguration) configuration} has
+     * already been provided, then throws {@link IllegalStateException}.
      */
     @Override
     public void setConfigurationBuilder(final IsisConfigurationBuilder isisConfigurationBuilder) {
@@ -119,12 +124,14 @@ public abstract class InstallerAbstract implements Installer, IsisConfigurationB
     }
 
     /**
-     * Either this method or {@link #setConfigurationBuilder(IsisConfigurationBuilder)} should be called prior to
-     * calling {@link #getConfiguration()}.
+     * Either this method or
+     * {@link #setConfigurationBuilder(IsisConfigurationBuilder)} should be
+     * called prior to calling {@link #getConfiguration()}.
      * 
      * <p>
-     * If a {@link #setConfigurationBuilder(IsisConfigurationBuilder) configuration builder} has already been provided,
-     * then throws {@link IllegalStateException}.
+     * If a {@link #setConfigurationBuilder(IsisConfigurationBuilder)
+     * configuration builder} has already been provided, then throws
+     * {@link IllegalStateException}.
      */
     public void setConfiguration(final IsisConfiguration configuration) {
         if (isisConfigurationBuilder != null) {
@@ -135,10 +142,12 @@ public abstract class InstallerAbstract implements Installer, IsisConfigurationB
 
     /**
      * Returns a <i>snapshot</i> of the current configuration provided by the
-     * {@link #setConfigurationBuilder(IsisConfigurationBuilder) injected} {@link IsisConfigurationBuilder}.
+     * {@link #setConfigurationBuilder(IsisConfigurationBuilder) injected}
+     * {@link IsisConfigurationBuilder}.
      * 
      * <p>
-     * Implementation note: the implementation is in fact just {@link InstallerLookupDefault}.
+     * Implementation note: the implementation is in fact just
+     * {@link InstallerLookupDefault}.
      */
     public IsisConfiguration getConfiguration() {
         if (isisConfigurationBuilder != null) {

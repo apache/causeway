@@ -26,8 +26,10 @@ import java.io.InputStream;
  * Load from this class' ClassLoader.
  * 
  * <p>
- * This is useful if (a) the contextClassLoader is not available and (b) the contextClassLoader does not load from this
- * classes ClassLoader (for example when running under Ant while running unit tests as part of an automated build).
+ * This is useful if (a) the contextClassLoader is not available and (b) the
+ * contextClassLoader does not load from this classes ClassLoader (for example
+ * when running under Ant while running unit tests as part of an automated
+ * build).
  */
 public class ResourceStreamSourceCurrentClassClassPath extends ResourceStreamSourceAbstract {
 
