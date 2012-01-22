@@ -29,11 +29,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.StringTokenizer;
 
-import com.google.common.base.Strings;
-import com.google.inject.Inject;
-
-import org.apache.log4j.Logger;
-
 import org.apache.isis.applib.ApplicationException;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.ensure.Assert;
@@ -41,6 +36,10 @@ import org.apache.isis.core.runtime.authentication.AuthenticationRequest;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequestPassword;
 import org.apache.isis.core.runtime.authentication.standard.PasswordRequestAuthenticatorAbstract;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
+import org.apache.log4j.Logger;
+
+import com.google.common.base.Strings;
+import com.google.inject.Inject;
 
 public class SqlAuthenticator extends PasswordRequestAuthenticatorAbstract {
     private static final Logger LOG = Logger.getLogger(SqlAuthenticator.class);
@@ -52,7 +51,7 @@ public class SqlAuthenticator extends PasswordRequestAuthenticatorAbstract {
     }
 
     // Override this method if dbPasswords are encoded.
-    protected boolean verifyPasswordsAreEqual(String loginPassword, String dbPassword) {
+    protected boolean verifyPasswordsAreEqual(final String loginPassword, final String dbPassword) {
         return dbPassword.equals(loginPassword);
     }
 
@@ -65,10 +64,10 @@ public class SqlAuthenticator extends PasswordRequestAuthenticatorAbstract {
     protected String getRoles(final ResultSet results, final String roles) {
         try {
             if (userRoleField != null) {
-                String dbRoles = results.getString(userRoleField);
+                final String dbRoles = results.getString(userRoleField);
                 return roles + "|" + dbRoles;
             }
-        } catch (SQLException e) {
+        } catch (final SQLException e) {
             LOG.warn("Error fetching role", e);
         }
         return roles;
@@ -201,10 +200,9 @@ public class SqlAuthenticator extends PasswordRequestAuthenticatorAbstract {
     }
 
     private boolean isPasswordValidForUser(final AuthenticationRequest request, final String user, final String password) {
-        ResultSet results = loadUserDetails(user, password);
+        final ResultSet results = loadUserDetails(user, password);
         if (results != null) {
-            final String roles =
-                getRoles(results, "org.apache.isis.viewer.wicket.roles.USER|org.starobjects.wicket.roles.USER");
+            final String roles = getRoles(results, "org.apache.isis.viewer.wicket.roles.USER|org.starobjects.wicket.roles.USER");
             setRoles(request, roles);
 
             return true;
@@ -213,17 +211,17 @@ public class SqlAuthenticator extends PasswordRequestAuthenticatorAbstract {
     }
 
     protected ResultSet loadUserDetails(final String user, final String password) {
-        String sql = "SELECT * FROM " + userTable + " WHERE UPPER(" + userNameField + ") = ?";
+        final String sql = "SELECT * FROM " + userTable + " WHERE UPPER(" + userNameField + ") = ?";
         addToQueryValues(user.toUpperCase());
-        ResultSet results = select(sql);
+        final ResultSet results = select(sql);
         try {
             while (results.next()) {
-                String dbPassword = results.getString(passwordField);
+                final String dbPassword = results.getString(passwordField);
                 if (verifyPasswordsAreEqual(password, dbPassword)) {
                     return postProcessLogin(user, password, results);
                 }
             }
-        } catch (SQLException e) {
+        } catch (final SQLException e) {
             LOG.error("Error loading user details: " + sql);
             throw new ApplicationException("Error loading user details", e);
         }
@@ -245,7 +243,7 @@ public class SqlAuthenticator extends PasswordRequestAuthenticatorAbstract {
     }
 
     // {{ JDBC Connection SQL helpers
-    protected int update(String sql) {
+    protected int update(final String sql) {
         LOG.debug("SQL: " + sql);
         PreparedStatement statement;
         try {
@@ -263,7 +261,7 @@ public class SqlAuthenticator extends PasswordRequestAuthenticatorAbstract {
 
     }
 
-    private ResultSet select(String sql) {
+    private ResultSet select(final String sql) {
         LOG.debug("SQL: " + sql);
         PreparedStatement statement;
         try {
@@ -298,8 +296,7 @@ public class SqlAuthenticator extends PasswordRequestAuthenticatorAbstract {
                     i++;
                 }
             } catch (final SQLException e) {
-                LOG.error("Error adding prepared value " + i + " of type "
-                    + queryValues.get(i - 1).getClass().getSimpleName(), e);
+                LOG.error("Error adding prepared value " + i + " of type " + queryValues.get(i - 1).getClass().getSimpleName(), e);
                 throw e;
             }
         }

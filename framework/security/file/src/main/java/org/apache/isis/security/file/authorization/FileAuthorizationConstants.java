@@ -25,8 +25,7 @@ import org.apache.isis.core.runtime.authorization.standard.AuthorizationConstant
 
 public final class FileAuthorizationConstants {
 
-    private static final String ROOT = ConfigurationConstants.ROOT + AuthorizationManagerInstaller.TYPE + "."
-        + FileAuthorizationManagerInstaller.NAME + ".";
+    private static final String ROOT = ConfigurationConstants.ROOT + AuthorizationManagerInstaller.TYPE + "." + FileAuthorizationManagerInstaller.NAME + ".";
 
     public static final String WHITELIST_RESOURCE_KEY = ROOT + "whitelist";
     public static final String WHITELIST_RESOURCE_DEFAULT = "security_file.allow";

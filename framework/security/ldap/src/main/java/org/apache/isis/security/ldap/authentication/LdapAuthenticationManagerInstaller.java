@@ -37,6 +37,6 @@ public class LdapAuthenticationManagerInstaller extends AuthenticationManagerSta
 
     @Override
     protected List<Authenticator> createAuthenticators(final IsisConfiguration configuration) {
-        return Lists.<Authenticator>newArrayList(new LdapAuthenticator(configuration));
+        return Lists.<Authenticator> newArrayList(new LdapAuthenticator(configuration));
     }
 }

@@ -76,15 +76,10 @@ public class FileAuthorizor extends AuthorizorAbstract implements FileAuthorizor
         // read from config
         this.resourceStreamSource = getConfiguration().getResourceStreamSource();
 
-        this.learn =
-            getConfiguration().getBoolean(FileAuthorizationConstants.LEARN, FileAuthorizationConstants.LEARN_DEFAULT);
-        whiteListResourceName =
-            getConfiguration().getString(FileAuthorizationConstants.WHITELIST_RESOURCE_KEY,
-                FileAuthorizationConstants.WHITELIST_RESOURCE_DEFAULT);
+        this.learn = getConfiguration().getBoolean(FileAuthorizationConstants.LEARN, FileAuthorizationConstants.LEARN_DEFAULT);
+        whiteListResourceName = getConfiguration().getString(FileAuthorizationConstants.WHITELIST_RESOURCE_KEY, FileAuthorizationConstants.WHITELIST_RESOURCE_DEFAULT);
         Assert.assertTrue(whiteListResourceName.length() > 0);
-        blackListResourceName =
-            getConfiguration().getString(FileAuthorizationConstants.BLACKLIST_RESOURCE_KEY,
-                FileAuthorizationConstants.BLACKLIST_RESOURCE_DEFAULT);
+        blackListResourceName = getConfiguration().getString(FileAuthorizationConstants.BLACKLIST_RESOURCE_KEY, FileAuthorizationConstants.BLACKLIST_RESOURCE_DEFAULT);
 
         findResources();
     }
@@ -98,8 +93,7 @@ public class FileAuthorizor extends AuthorizorAbstract implements FileAuthorizor
         if (blackListResourceName.length() > 0) {
             this.blackListInputResource = resourceStreamSource.readResource(blackListResourceName);
             if (blackListInputResource == null) {
-                throw new IsisException("Blacklist authorization file exists, but it cannot be read: "
-                    + blackListResourceName);
+                throw new IsisException("Blacklist authorization file exists, but it cannot be read: " + blackListResourceName);
             }
         } else {
             blackListInputResource = null;
@@ -239,11 +233,11 @@ public class FileAuthorizor extends AuthorizorAbstract implements FileAuthorizor
     }
 
     /*
-     * Work through the available entries from most specific to least. When one exists then determine the result of this
-     * method by looking for a compatible role between the entry and required role.
+     * Work through the available entries from most specific to least. When one
+     * exists then determine the result of this method by looking for a
+     * compatible role between the entry and required role.
      */
-    private boolean isListed(final Map<String, List<String>> map, final String role, final Identifier identifier,
-        final List<String> qualifiers) {
+    private boolean isListed(final Map<String, List<String>> map, final String role, final Identifier identifier, final List<String> qualifiers) {
         if (map.isEmpty()) {// quick fail
             return false;
         }

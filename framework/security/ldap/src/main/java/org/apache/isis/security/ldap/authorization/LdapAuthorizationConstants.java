@@ -26,8 +26,7 @@ import org.apache.isis.security.ldap.authentication.LdapAuthenticationConstants;
 
 public final class LdapAuthorizationConstants {
 
-    private static final String ROOT = ConfigurationConstants.ROOT + AuthorizationManagerInstaller.TYPE + "."
-        + LdapAuthorizationManagerInstaller.NAME + ".";
+    private static final String ROOT = ConfigurationConstants.ROOT + AuthorizationManagerInstaller.TYPE + "." + LdapAuthorizationManagerInstaller.NAME + ".";
 
     public static final String SERVER_KEY = ROOT + "server";
     public static final String SERVER_DEFAULT = LdapAuthenticationConstants.SERVER_DEFAULT;

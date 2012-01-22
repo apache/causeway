@@ -24,8 +24,7 @@ import org.apache.isis.core.runtime.authentication.AuthenticationManagerInstalle
 
 public final class LdapAuthenticationConstants {
 
-    public static final String ROOT = ConfigurationConstants.ROOT + AuthenticationManagerInstaller.TYPE + "."
-        + LdapAuthenticationManagerInstaller.NAME + ".";
+    public static final String ROOT = ConfigurationConstants.ROOT + AuthenticationManagerInstaller.TYPE + "." + LdapAuthenticationManagerInstaller.NAME + ".";
 
     public static final String SERVER_KEY = ROOT + "server";
     public static final String SERVER_DEFAULT = "com.sun.jndi.ldap.LdapCtxFactory";
