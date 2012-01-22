@@ -17,13 +17,11 @@
  *  under the License.
  */
 
-
 package org.apache.isis.tck.fixture.assocs;
 
 import org.apache.isis.applib.fixtures.AbstractFixture;
 import org.apache.isis.tck.dom.assocs.ParentEntity;
 import org.apache.isis.tck.dom.assocs.ParentEntityRepository;
-
 
 public class ParentAndChildEntityFixture extends AbstractFixture {
 
@@ -35,18 +33,18 @@ public class ParentAndChildEntityFixture extends AbstractFixture {
         createEntity("parent 4");
         createEntity("parent 5");
     }
-    
-    private ParentEntity createEntity(String name) {
+
+    private ParentEntity createEntity(final String name) {
         final ParentEntity parent = parentEntityRepository.newEntity(name);
         parent.newChild("child 1");
         parent.newChild("child 2");
         return parent;
     }
 
-    
     private ParentEntityRepository parentEntityRepository;
-    public void setParentEntityRepository(ParentEntityRepository parentEntityRepository) {
+
+    public void setParentEntityRepository(final ParentEntityRepository parentEntityRepository) {
         this.parentEntityRepository = parentEntityRepository;
     }
-    
+
 }

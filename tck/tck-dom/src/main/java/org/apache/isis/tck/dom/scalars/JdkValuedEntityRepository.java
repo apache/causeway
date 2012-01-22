@@ -27,10 +27,10 @@ import org.apache.isis.applib.annotation.Named;
 @Named("JdkValues")
 public interface JdkValuedEntityRepository {
 
-    @MemberOrder(sequence="1")
+    @MemberOrder(sequence = "1")
     public List<JdkValuedEntity> list();
 
-    @MemberOrder(sequence="2")
+    @MemberOrder(sequence = "2")
     public JdkValuedEntity newEntity();
 
 }

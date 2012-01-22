@@ -17,14 +17,11 @@
  *  under the License.
  */
 
-
 package org.apache.isis.tck.fixture.scalars;
 
 import org.apache.isis.applib.fixtures.AbstractFixture;
 import org.apache.isis.tck.dom.scalars.WrapperValuedEntity;
 import org.apache.isis.tck.dom.scalars.WrapperValuedEntityRepository;
-
-
 
 public class WrapperValuedEntityFixture extends AbstractFixture {
 
@@ -36,15 +33,15 @@ public class WrapperValuedEntityFixture extends AbstractFixture {
         createEntity();
         createEntity();
     }
-    
+
     private WrapperValuedEntity createEntity() {
         return wrapperValuesEntityRepository.newEntity();
     }
 
-    
     private WrapperValuedEntityRepository wrapperValuesEntityRepository;
-    public void setPrimitiveValuesEntityRepository(WrapperValuedEntityRepository wrapperValuesEntityRepository) {
+
+    public void setPrimitiveValuesEntityRepository(final WrapperValuedEntityRepository wrapperValuesEntityRepository) {
         this.wrapperValuesEntityRepository = wrapperValuesEntityRepository;
     }
-    
+
 }

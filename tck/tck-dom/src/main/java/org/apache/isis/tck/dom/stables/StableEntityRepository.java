@@ -30,16 +30,14 @@ import org.apache.isis.applib.annotation.QueryOnly;
 public interface StableEntityRepository {
 
     @QueryOnly
-    @MemberOrder(sequence="1")
+    @MemberOrder(sequence = "1")
     public List<StableEntity> list();
 
-    @MemberOrder(sequence="2")
+    @MemberOrder(sequence = "2")
     public StableEntity newTransientEntity();
 
     @Idempotent
-    @MemberOrder(sequence="2")
-    public StableEntity newPersistentEntity(
-        @Named("name") String name);
-
+    @MemberOrder(sequence = "2")
+    public StableEntity newPersistentEntity(@Named("name") String name);
 
 }

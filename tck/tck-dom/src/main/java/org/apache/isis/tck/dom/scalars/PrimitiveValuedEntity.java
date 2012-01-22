@@ -28,6 +28,7 @@ public class PrimitiveValuedEntity extends AbstractDomainObject {
     public String title() {
         return null;
     }
+
     // }}
 
     // {{ BooleanProperty
@@ -38,11 +39,12 @@ public class PrimitiveValuedEntity extends AbstractDomainObject {
         return booleanProperty;
     }
 
-    public void setBooleanProperty(boolean booleanProperty) {
+    public void setBooleanProperty(final boolean booleanProperty) {
         this.booleanProperty = booleanProperty;
     }
+
     // }}
-    
+
     // {{ ByteProperty
     private byte byteProperty;
 
@@ -54,6 +56,7 @@ public class PrimitiveValuedEntity extends AbstractDomainObject {
     public void setByteProperty(final byte byteProperty) {
         this.byteProperty = byteProperty;
     }
+
     // }}
 
     // {{ ShortProperty
@@ -67,6 +70,7 @@ public class PrimitiveValuedEntity extends AbstractDomainObject {
     public void setShortProperty(final short shortProperty) {
         this.shortProperty = shortProperty;
     }
+
     // }}
 
     // {{ IntProperty
@@ -80,6 +84,7 @@ public class PrimitiveValuedEntity extends AbstractDomainObject {
     public void setIntProperty(final int intProperty) {
         this.intProperty = intProperty;
     }
+
     // }}
 
     // {{ LongProperty
@@ -93,6 +98,7 @@ public class PrimitiveValuedEntity extends AbstractDomainObject {
     public void setLongProperty(final long longProperty) {
         this.longProperty = longProperty;
     }
+
     // }}
 
     // {{ FloatProperty
@@ -106,6 +112,7 @@ public class PrimitiveValuedEntity extends AbstractDomainObject {
     public void setFloatProperty(final float floatProperty) {
         this.floatProperty = floatProperty;
     }
+
     // }}
 
     // {{ DoubleProperty

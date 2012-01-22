@@ -27,10 +27,10 @@ import org.apache.isis.applib.annotation.Named;
 @Named("WrapperValues")
 public interface WrapperValuedEntityRepository {
 
-    @MemberOrder(sequence="1")
+    @MemberOrder(sequence = "1")
     public List<WrapperValuedEntity> list();
 
-    @MemberOrder(sequence="2")
+    @MemberOrder(sequence = "2")
     public WrapperValuedEntity newEntity();
 
 }

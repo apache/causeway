@@ -39,6 +39,7 @@ public class SimpleEntity extends AbstractDomainObject {
     public void setName(final String name) {
         this.name = name;
     }
+
     // }}
 
     // {{ Flag (boolean)
@@ -52,6 +53,7 @@ public class SimpleEntity extends AbstractDomainObject {
     public void setFlag(final boolean flag) {
         this.flag = flag;
     }
+
     // }}
 
     // {{ AnotherBoolean (Boolean)
@@ -66,8 +68,9 @@ public class SimpleEntity extends AbstractDomainObject {
     public void setAnotherBoolean(final Boolean anotherBoolean) {
         this.anotherBoolean = anotherBoolean;
     }
+
     // }}
-    
+
     // {{ AnInt (int)
     private int anInt;
 
@@ -79,8 +82,9 @@ public class SimpleEntity extends AbstractDomainObject {
     public void setAnInt(final int anInt) {
         this.anInt = anInt;
     }
+
     // }}
-    
+
     // {{ AnotherInt (Integer)
     private Integer anotherInt;
 
@@ -93,10 +97,12 @@ public class SimpleEntity extends AbstractDomainObject {
     public void setAnotherInt(final Integer anotherInt) {
         this.anotherInt = anotherInt;
     }
+
     // }}
 
     // {{ ALong (long)
     private long aLong;
+
     @MemberOrder(sequence = "1")
     public long getALong() {
         return aLong;
@@ -105,6 +111,7 @@ public class SimpleEntity extends AbstractDomainObject {
     public void setALong(final long aLong) {
         this.aLong = aLong;
     }
+
     // }}
 
     // {{ AnotherLong
@@ -119,8 +126,8 @@ public class SimpleEntity extends AbstractDomainObject {
     public void setAnotherLong(final Long anotherLong) {
         this.anotherLong = anotherLong;
     }
-    // }}
 
+    // }}
 
     // {{ ADouble (double)
     private double aDouble;
@@ -133,6 +140,7 @@ public class SimpleEntity extends AbstractDomainObject {
     public void setADouble(final double aDouble) {
         this.aDouble = aDouble;
     }
+
     // }}
 
     // {{ AnotherDouble (Double)
@@ -147,8 +155,8 @@ public class SimpleEntity extends AbstractDomainObject {
     public void setAnotherDouble(final Double anotherDouble) {
         this.anotherDouble = anotherDouble;
     }
-    // }}
 
+    // }}
 
     // {{ ABigInteger
     private BigInteger aBigInteger;
@@ -162,6 +170,7 @@ public class SimpleEntity extends AbstractDomainObject {
     public void setABigInteger(final BigInteger aBigInteger) {
         this.aBigInteger = aBigInteger;
     }
+
     // }}
 
     // {{ ABigDecimal

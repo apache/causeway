@@ -32,39 +32,24 @@ import org.apache.isis.applib.annotation.QueryOnly;
 public interface SimpleEntityRepository {
 
     @QueryOnly
-    @MemberOrder(sequence="1")
+    @MemberOrder(sequence = "1")
     public List<SimpleEntity> list();
 
     @QueryOnly
-    @MemberOrder(sequence="2")
+    @MemberOrder(sequence = "2")
     public int count();
 
-    @MemberOrder(sequence="3")
+    @MemberOrder(sequence = "3")
     public SimpleEntity newTransientEntity();
 
     @Idempotent
-    @MemberOrder(sequence="4")
-    public SimpleEntity newPersistentEntity(
-        @Named("name") String name, 
-        @Named("flag") Boolean flag);
+    @MemberOrder(sequence = "4")
+    public SimpleEntity newPersistentEntity(@Named("name") String name, @Named("flag") Boolean flag);
 
-    @MemberOrder(sequence="5")
-    public void toggle(
-        @Named("object") SimpleEntity object);
+    @MemberOrder(sequence = "5")
+    public void toggle(@Named("object") SimpleEntity object);
 
-    @MemberOrder(sequence="5")
-    public SimpleEntity update(
-        @Named("object") SimpleEntity object,
-        String name,
-        boolean flag,
-        Boolean anotherBoolean,
-        int anInt,
-        Integer anotherInt,
-        long aLong,
-        Long anotherLong,
-        double aDouble,
-        Double anotherDouble,
-        BigInteger aBigInteger,
-        BigDecimal aBigDecimal);
+    @MemberOrder(sequence = "5")
+    public SimpleEntity update(@Named("object") SimpleEntity object, String name, boolean flag, Boolean anotherBoolean, int anInt, Integer anotherInt, long aLong, Long anotherLong, double aDouble, Double anotherDouble, BigInteger aBigInteger, BigDecimal aBigDecimal);
 
 }

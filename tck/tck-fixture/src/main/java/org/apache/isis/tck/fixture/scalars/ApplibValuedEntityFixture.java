@@ -17,14 +17,11 @@
  *  under the License.
  */
 
-
 package org.apache.isis.tck.fixture.scalars;
 
 import org.apache.isis.applib.fixtures.AbstractFixture;
 import org.apache.isis.tck.dom.scalars.ApplibValuedEntity;
 import org.apache.isis.tck.dom.scalars.ApplibValuedEntityRepository;
-
-
 
 public class ApplibValuedEntityFixture extends AbstractFixture {
 
@@ -36,15 +33,15 @@ public class ApplibValuedEntityFixture extends AbstractFixture {
         createEntity();
         createEntity();
     }
-    
+
     private ApplibValuedEntity createEntity() {
         return applibValuesEntityRepository.newEntity();
     }
 
-    
     private ApplibValuedEntityRepository applibValuesEntityRepository;
-    public void setApplibValuesEntityRepository(ApplibValuedEntityRepository applibValuesEntityRepository) {
+
+    public void setApplibValuesEntityRepository(final ApplibValuedEntityRepository applibValuesEntityRepository) {
         this.applibValuesEntityRepository = applibValuesEntityRepository;
     }
-    
+
 }

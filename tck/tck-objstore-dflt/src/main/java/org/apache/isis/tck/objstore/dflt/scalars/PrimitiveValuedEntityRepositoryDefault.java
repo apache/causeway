@@ -33,16 +33,17 @@ public class PrimitiveValuedEntityRepositoryDefault extends AbstractFactoryAndRe
         return "primitiveValuedEntities";
     }
 
+    @Override
     @QueryOnly
     public List<PrimitiveValuedEntity> list() {
         return allInstances(PrimitiveValuedEntity.class);
     }
 
+    @Override
     public PrimitiveValuedEntity newEntity() {
-        PrimitiveValuedEntity entity = newTransientInstance(PrimitiveValuedEntity.class);
+        final PrimitiveValuedEntity entity = newTransientInstance(PrimitiveValuedEntity.class);
         persist(entity);
         return entity;
     }
-
 
 }

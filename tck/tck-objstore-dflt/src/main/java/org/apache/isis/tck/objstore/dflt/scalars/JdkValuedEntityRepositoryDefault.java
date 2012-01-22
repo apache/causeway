@@ -33,16 +33,17 @@ public class JdkValuedEntityRepositoryDefault extends AbstractFactoryAndReposito
         return "jdkValuedEntities";
     }
 
+    @Override
     @QueryOnly
     public List<JdkValuedEntity> list() {
         return allInstances(JdkValuedEntity.class);
     }
 
+    @Override
     public JdkValuedEntity newEntity() {
-        JdkValuedEntity entity = newTransientInstance(JdkValuedEntity.class);
+        final JdkValuedEntity entity = newTransientInstance(JdkValuedEntity.class);
         persist(entity);
         return entity;
     }
-
 
 }

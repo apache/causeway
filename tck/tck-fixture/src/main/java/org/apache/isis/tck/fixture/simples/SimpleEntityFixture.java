@@ -22,7 +22,6 @@ import org.apache.isis.applib.fixtures.AbstractFixture;
 import org.apache.isis.tck.dom.simples.SimpleEntity;
 import org.apache.isis.tck.dom.simples.SimpleEntityRepository;
 
-
 public class SimpleEntityFixture extends AbstractFixture {
 
     @Override
@@ -33,11 +32,10 @@ public class SimpleEntityFixture extends AbstractFixture {
         createEntity("Sally", true);
         createEntity("Diedre", true);
     }
-    
-    private SimpleEntity createEntity(String name, Boolean flag) {
+
+    private SimpleEntity createEntity(final String name, final Boolean flag) {
         return simpleEntityRepository.newPersistentEntity(name, flag);
     }
-
 
     // {{ injected: SimpleEntityRepository
     private SimpleEntityRepository simpleEntityRepository;
@@ -47,6 +45,4 @@ public class SimpleEntityFixture extends AbstractFixture {
     }
     // }}
 
-
-    
 }

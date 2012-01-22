@@ -28,21 +28,23 @@ import org.apache.isis.tck.dom.assocs.ParentEntityRepository;
 
 public class ParentEntityRepositoryDefault extends AbstractFactoryAndRepository implements ParentEntityRepository {
 
-    
+    @Override
     public String getId() {
         return "parentEntities";
     }
 
+    @Override
     @QueryOnly
     public List<ParentEntity> list() {
         return allInstances(ParentEntity.class);
     }
 
-    public ParentEntity newEntity(String name) {
-        ParentEntity entity = newTransientInstance(ParentEntity.class);
+    @Override
+    public ParentEntity newEntity(final String name) {
+        final ParentEntity entity = newTransientInstance(ParentEntity.class);
         entity.setName(name);
         persist(entity);
         return entity;
     }
-    
+
 }

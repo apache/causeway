@@ -20,7 +20,6 @@
 package org.apache.isis.tck.dom.assocs;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import org.apache.isis.applib.AbstractDomainObject;
@@ -36,8 +35,8 @@ public class ParentEntity extends AbstractDomainObject {
         buf.append(getName());
         return buf.toString();
     }
-    // }}
 
+    // }}
 
     // {{ Name
     private String name;
@@ -51,9 +50,9 @@ public class ParentEntity extends AbstractDomainObject {
     public void setName(final String name) {
         this.name = name;
     }
+
     // }}
 
-    
     // {{ Children
     private List<ChildEntity> children = new ArrayList<ChildEntity>();
 
@@ -65,10 +64,11 @@ public class ParentEntity extends AbstractDomainObject {
     public void setChildren(final List<ChildEntity> children) {
         this.children = children;
     }
+
     // }}
 
     // {{ newChild (action)
-    public ChildEntity newChild(String name) {
+    public ChildEntity newChild(final String name) {
         final ChildEntity childEntity = newTransientInstance(ChildEntity.class);
         childEntity.setName(name);
         childEntity.setParent(this);
@@ -76,19 +76,21 @@ public class ParentEntity extends AbstractDomainObject {
         persistIfNotAlready(childEntity);
         return childEntity;
     }
+
     // }}
 
     // {{ removeChild (action)
-    public ParentEntity removeChild(ChildEntity childEntity) {
-        if(children.contains(childEntity)) {
+    public ParentEntity removeChild(final ChildEntity childEntity) {
+        if (children.contains(childEntity)) {
             children.remove(childEntity);
             childEntity.setParent(null);
         }
         return this;
     }
+
     public List<ChildEntity> choices0RemoveChild() {
         return getChildren();
     }
     // }}
-    
+
 }

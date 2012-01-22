@@ -27,10 +27,10 @@ import org.apache.isis.applib.annotation.Named;
 @Named("PrimitiveValues")
 public interface PrimitiveValuedEntityRepository {
 
-    @MemberOrder(sequence="1")
+    @MemberOrder(sequence = "1")
     public List<PrimitiveValuedEntity> list();
 
-    @MemberOrder(sequence="2")
+    @MemberOrder(sequence = "2")
     public PrimitiveValuedEntity newEntity();
 
 }
