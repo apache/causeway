@@ -154,11 +154,18 @@ class ObjectReader {
         if (ref == null || ref.equals("null")) {
             fieldObject = null;
         } else {
+            if (ref.equals("")) {
+                throw new NoSqlStoreException("Invalid reference field (an empty string) in data for " + association.getName() + "  in " + object);
+            }
             final Oid oid = keyCreator.oidFromReference(ref);
             final ObjectSpecification specification = keyCreator.specificationFromReference(ref);
             fieldObject = getAdapter(specification, oid);
         }
-        association.initAssociation(object, fieldObject);
+        try {
+            association.initAssociation(object, fieldObject);
+        } catch (IllegalArgumentException e) {
+            throw new NoSqlStoreException("Failed to process field data for " + association.getName() + "  in " + object + ": " + ref);
+        }
     }
 
     private void readCollection(final StateReader reader, final KeyCreator keyCreator, final DataEncryption dataEncrypter, final OneToManyAssociation association, final ObjectAdapter object) {
