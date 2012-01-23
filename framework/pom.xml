@@ -719,6 +719,7 @@
                         <preparationGoals>clean install</preparationGoals>
                         <autoVersionSubmodules>true</autoVersionSubmodules>
                         <tagBase>https://svn.apache.org/repos/asf/incubator/isis/tags/</tagBase>
+                        <waitBeforeTagging>15</waitBeforeTagging>
                     </configuration>
                     <!-- goal:clean (for aggregator modules) has no bindings; 
                         cleans up release.properties and any backup POM files -->
