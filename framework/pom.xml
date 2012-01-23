@@ -1158,12 +1158,6 @@ archetype includes this explicit dependency.
                     </exclusion>
                 </exclusions>
             </dependency>
-            <dependency>
-                <groupId>org.jboss.resteasy</groupId>
-                <artifactId>resteasy-client</artifactId>
-                <version>1.0-beta-8</version>
-            </dependency>
-
 
             <!-- predicate libraries -->
             <dependency>
