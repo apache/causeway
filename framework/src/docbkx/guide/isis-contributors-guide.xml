@@ -4336,7 +4336,7 @@ What is the release version for "Apache Isis"? (org.apache.isis:isis) 0.n.n-incu
           <para>Then, run the prepare step (skipping tests will reduce the
           elapsed time):</para>
 
-          <programlisting>mvn release:prepare -P apache-release,integration-tests -D resume=false -D skipTests=true</programlisting>
+          <programlisting>mvn release:prepare -P apache-release,integration-tests -D skipTests=true -D resume=false </programlisting>
 
           <note>
             <para>Again, the <code>-P integration-tests</code> flag is
@@ -4378,7 +4378,7 @@ What is the release version for "Apache Isis"? (org.apache.isis:isis) 0.n.n-incu
             </listitem>
           </itemizedlist>
 
-          <para>If you are in Europe the <code>mvn release:prepare</code>
+          <para>If you are running outside the US, then the <code>mvn release:prepare</code>
           command almost always fails at the last step, with a message
           like:</para>
 
@@ -4426,6 +4426,11 @@ svn: No such revision 1126567</programlisting>
             </listitem>
           </itemizedlist>
 
+          <note>
+           <para>The configuration for the maven-release-plugin in the parent <code>pom.xml</code> now uses 
+           the waitBeforeTagging setting to wait a while; hopefully this error will be less commonplace in the future.</para>
+          </note>
+         
           <para>On the other hand, if things go wrong before the tagging, then
           <code>mvn release:clean</code> will do most of the cleaning up in
           the event of failures.</para>
