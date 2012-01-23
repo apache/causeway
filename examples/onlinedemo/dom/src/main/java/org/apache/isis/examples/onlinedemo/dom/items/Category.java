@@ -19,14 +19,14 @@
 
 package org.apache.isis.examples.onlinedemo.dom.items;
 
+import com.google.common.base.Objects;
+
 import org.apache.isis.applib.AbstractDomainObject;
 import org.apache.isis.applib.annotation.Bounded;
 import org.apache.isis.applib.annotation.Immutable;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.applib.filter.Filter;
-
-import com.google.common.base.Objects;
 
 @Immutable
 // cannot be modified through the UI

@@ -19,9 +19,10 @@
 
 package org.apache.isis.examples.embeddedinspring.webserver;
 
-import org.apache.isis.core.commons.exceptions.IsisException;
 import org.mortbay.jetty.Server;
 import org.mortbay.jetty.webapp.WebAppContext;
+
+import org.apache.isis.core.commons.exceptions.IsisException;
 
 /**
  * For bootstrapping the app from the command line.

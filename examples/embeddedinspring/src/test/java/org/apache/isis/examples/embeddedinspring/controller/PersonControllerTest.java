@@ -7,7 +7,6 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 
-import org.apache.isis.examples.embeddedinspring.model.Person;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,6 +15,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.servlet.ModelAndView;
+
+import org.apache.isis.examples.embeddedinspring.model.Person;
 
 @ContextConfiguration({ "/test-context.xml", "/test-isis.xml" })
 @RunWith(SpringJUnit4ClassRunner.class)

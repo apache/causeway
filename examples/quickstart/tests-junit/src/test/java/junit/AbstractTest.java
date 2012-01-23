@@ -19,7 +19,12 @@
 
 package junit;
 
+import dom.todo.ToDoItems;
 import objstore.dflt.todo.ToDoItemsDefault;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.runner.RunWith;
 
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.progmodel.wrapper.applib.WrapperFactory;
@@ -28,11 +33,6 @@ import org.apache.isis.viewer.junit.ConfigDir;
 import org.apache.isis.viewer.junit.IsisTestRunner;
 import org.apache.isis.viewer.junit.Service;
 import org.apache.isis.viewer.junit.Services;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.runner.RunWith;
-
-import dom.todo.ToDoItems;
 
 @RunWith(IsisTestRunner.class)
 @ConfigDir("../webapp/src/main/webapp/WEB-INF")

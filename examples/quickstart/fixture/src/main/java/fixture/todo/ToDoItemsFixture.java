@@ -19,10 +19,10 @@
 
 package fixture.todo;
 
-import org.apache.isis.applib.fixtures.AbstractFixture;
-
 import dom.todo.ToDoItem;
 import dom.todo.ToDoItems;
+
+import org.apache.isis.applib.fixtures.AbstractFixture;
 
 public class ToDoItemsFixture extends AbstractFixture {
 

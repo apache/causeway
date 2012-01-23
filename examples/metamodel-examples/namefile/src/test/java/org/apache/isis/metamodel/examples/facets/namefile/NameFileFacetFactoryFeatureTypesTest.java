@@ -25,10 +25,11 @@ import static org.junit.Assert.assertThat;
 
 import java.util.List;
 
-import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
+import org.apache.isis.core.metamodel.facetapi.FeatureType;
 
 public class NameFileFacetFactoryFeatureTypesTest {
 

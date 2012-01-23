@@ -21,6 +21,9 @@ package org.apache.isis.examples.onlinedemo.auth;
 
 import java.util.Map;
 
+import com.google.common.base.Objects;
+import com.google.common.collect.Maps;
+
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequest;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequestPassword;
@@ -28,9 +31,6 @@ import org.apache.isis.core.runtime.authentication.RegistrationDetails;
 import org.apache.isis.core.runtime.authentication.standard.AuthenticatorAbstract;
 import org.apache.isis.core.runtime.authentication.standard.Registrar;
 import org.apache.isis.core.runtime.authentication.standard.RegistrationDetailsPassword;
-
-import com.google.common.base.Objects;
-import com.google.common.collect.Maps;
 
 public class AuthenticatorInMemory extends AuthenticatorAbstract implements Registrar {
 

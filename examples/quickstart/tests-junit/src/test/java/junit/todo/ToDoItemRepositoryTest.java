@@ -27,13 +27,13 @@ import static org.junit.Assert.assertThat;
 import java.util.List;
 
 import junit.AbstractTest;
+import dom.todo.ToDoItem;
+import fixture.todo.ToDoItemsFixture;
+
+import org.junit.Test;
 
 import org.apache.isis.viewer.junit.Fixture;
 import org.apache.isis.viewer.junit.Fixtures;
-import org.junit.Test;
-
-import dom.todo.ToDoItem;
-import fixture.todo.ToDoItemsFixture;
 
 @Fixtures({ @Fixture(ToDoItemsFixture.class) })
 public class ToDoItemRepositoryTest extends AbstractTest {

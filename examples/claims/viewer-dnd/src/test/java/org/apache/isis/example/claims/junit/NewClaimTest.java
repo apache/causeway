@@ -22,11 +22,12 @@ package org.apache.isis.example.claims.junit;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
+import org.junit.Test;
+
 import org.apache.isis.example.claims.dom.claim.Claim;
 import org.apache.isis.example.claims.fixture.ClaimsFixture;
 import org.apache.isis.viewer.junit.Fixture;
 import org.apache.isis.viewer.junit.Fixtures;
-import org.junit.Test;
 
 @Fixtures({ @Fixture(ClaimsFixture.class) })
 public class NewClaimTest extends AbstractTest {

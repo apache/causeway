@@ -6,9 +6,10 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
-import org.apache.isis.examples.embeddedinspring.model.Person;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+
+import org.apache.isis.examples.embeddedinspring.model.Person;
 
 @Component
 @Scope("prototype")

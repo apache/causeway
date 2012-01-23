@@ -189,18 +189,6 @@
 
             <dependency>
                 <groupId>${project.groupId}</groupId>
-                <artifactId>quickstart-viewer-html</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>${project.groupId}</groupId>
-                <artifactId>quickstart-viewer-json</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>${project.groupId}</groupId>
                 <artifactId>quickstart-tests-bdd</artifactId>
                 <version>${project.version}</version>
             </dependency>

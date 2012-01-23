@@ -25,13 +25,14 @@ import static org.junit.Assert.fail;
 
 import java.util.List;
 
+import org.junit.Test;
+
 import org.apache.isis.example.claims.dom.claim.Approver;
 import org.apache.isis.example.claims.dom.claim.Claim;
 import org.apache.isis.example.claims.fixture.ClaimsFixture;
 import org.apache.isis.progmodel.wrapper.applib.DisabledException;
 import org.apache.isis.viewer.junit.Fixture;
 import org.apache.isis.viewer.junit.Fixtures;
-import org.junit.Test;
 
 @Fixtures({ @Fixture(ClaimsFixture.class) })
 public class ClaimSubmitTest extends AbstractTest {

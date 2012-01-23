@@ -5,9 +5,10 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
-import org.apache.isis.examples.embeddedinspring.model.Person;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+
+import org.apache.isis.examples.embeddedinspring.model.Person;
 
 @Repository("personRepo")
 public class PersonDao {

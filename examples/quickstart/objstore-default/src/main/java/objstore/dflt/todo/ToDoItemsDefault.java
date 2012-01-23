@@ -21,11 +21,11 @@ package objstore.dflt.todo;
 
 import java.util.List;
 
-import org.apache.isis.applib.AbstractFactoryAndRepository;
-import org.apache.isis.applib.filter.Filter;
-
 import dom.todo.ToDoItem;
 import dom.todo.ToDoItems;
+
+import org.apache.isis.applib.AbstractFactoryAndRepository;
+import org.apache.isis.applib.filter.Filter;
 
 public class ToDoItemsDefault extends AbstractFactoryAndRepository implements ToDoItems {
 

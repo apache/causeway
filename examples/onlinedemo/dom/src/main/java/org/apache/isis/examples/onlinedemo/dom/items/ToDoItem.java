@@ -21,6 +21,8 @@ package org.apache.isis.examples.onlinedemo.dom.items;
 
 import java.util.List;
 
+import com.google.common.base.Objects;
+
 import org.apache.isis.applib.annotation.Disabled;
 import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.applib.annotation.Ignore;
@@ -33,8 +35,6 @@ import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.applib.filter.Filters;
 import org.apache.isis.applib.util.TitleBuffer;
 import org.apache.isis.applib.value.Date;
-
-import com.google.common.base.Objects;
 
 /**
  * A todo item (task) owned by a particular user.
