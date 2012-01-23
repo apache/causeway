@@ -698,7 +698,7 @@
         </sect2>
 
         <sect2>
-          <title>Smoke Test</title>
+          <title>Smoke Test (Quickstart Archetype)</title>
 
           <para>Once you've build the source code, you might want to run a
           smoke test.</para>
