@@ -181,7 +181,8 @@ public class ParserTest {
         for (final CacheControl v : new CacheControl[] { cc1, cc2 }) {
             final String asString = parser.asString(v);
             final CacheControl valueOf = parser.valueOf(asString);
-            assertThat(v, is(equalTo(valueOf)));
+            assertThat(v.getMaxAge(), is(equalTo(valueOf.getMaxAge())));
+            assertThat(v.isNoCache(), is(equalTo(valueOf.isNoCache())));
         }
     }
 
