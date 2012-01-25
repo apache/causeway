@@ -69,8 +69,9 @@ public class HiddenAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 
     public void testHiddenAnnotationPickedUpOnCollection() {
         class Customer {
+            @SuppressWarnings("unused")
             @Hidden
-            public Collection getOrders() {
+            public Collection<?> getOrders() {
                 return null;
             }
         }
@@ -87,6 +88,7 @@ public class HiddenAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 
     public void testHiddenAnnotationPickedUpOnAction() {
         class Customer {
+            @SuppressWarnings("unused")
             @Hidden
             public void someAction() {
             }
@@ -104,6 +106,7 @@ public class HiddenAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 
     public void testHiddenWhenAlwaysAnnotationPickedUpOn() {
         class Customer {
+            @SuppressWarnings("unused")
             @Hidden(When.ALWAYS)
             public void someAction() {
             }
@@ -120,6 +123,7 @@ public class HiddenAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 
     public void testHiddenWhenNeverAnnotationPickedUpOn() {
         class Customer {
+            @SuppressWarnings("unused")
             @Hidden(When.NEVER)
             public void someAction() {
             }
@@ -136,6 +140,7 @@ public class HiddenAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 
     public void testHiddenWhenOncePersistedAnnotationPickedUpOn() {
         class Customer {
+            @SuppressWarnings("unused")
             @Hidden(When.ONCE_PERSISTED)
             public void someAction() {
             }
@@ -152,6 +157,7 @@ public class HiddenAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 
     public void testDisabledWhenUntilPersistedAnnotationPickedUpOn() {
         class Customer {
+            @SuppressWarnings("unused")
             @Hidden(When.UNTIL_PERSISTED)
             public void someAction() {
             }

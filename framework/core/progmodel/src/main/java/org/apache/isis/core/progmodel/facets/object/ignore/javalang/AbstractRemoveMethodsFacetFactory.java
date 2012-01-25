@@ -44,11 +44,9 @@ public abstract class AbstractRemoveMethodsFacetFactory extends FacetFactoryAbst
     }
 
     private final List<MethodAndParameterTypes> methodList = Lists.newArrayList();
-    private final Class<?> typeToIgnore;
 
     public AbstractRemoveMethodsFacetFactory(final Class<?> typeToIgnore) {
         super(FeatureType.OBJECTS_ONLY);
-        this.typeToIgnore = typeToIgnore;
         final Method[] methods = typeToIgnore.getMethods();
         for (final Method method : methods) {
             methodList.add(new MethodAndParameterTypes(method.getName(), method.getParameterTypes()));

@@ -40,12 +40,13 @@ public abstract class ParseableFacetAbstract extends FacetAbstract implements Pa
         super(ParseableFacet.class, holder, false);
 
         this.parserClass = ParserUtil.parserOrNull(candidateParserClass, candidateParserName);
-        if (isValid()) {
-            final Parser parser = (Parser) ClassUtil.newInstance(parserClass, FacetHolder.class, holder);
-            this.parseableFacetUsingParser = new ParseableFacetUsingParser(parser, holder, authenticationSessionProvider, dependencyInjector, adapterManager);
-        } else {
-            this.parseableFacetUsingParser = null;
-        }
+        this.parseableFacetUsingParser = isValid()?
+                createParser(holder, authenticationSessionProvider, dependencyInjector, adapterManager):null;
+    }
+
+    private ParseableFacetUsingParser createParser(final FacetHolder holder, final AuthenticationSessionProvider authenticationSessionProvider, final DependencyInjector dependencyInjector, final AdapterMap adapterManager) {
+        final Parser<?> parser = (Parser<?>) ClassUtil.newInstance(parserClass, FacetHolder.class, holder);
+        return new ParseableFacetUsingParser(parser, holder, authenticationSessionProvider, dependencyInjector, adapterManager);
     }
 
     /**

@@ -23,8 +23,6 @@ import java.lang.reflect.Method;
 import java.util.List;
 
 import org.apache.isis.core.commons.lang.NameUtils;
-import org.apache.isis.core.metamodel.adapter.map.AdapterMap;
-import org.apache.isis.core.metamodel.adapter.map.AdapterMapAware;
 import org.apache.isis.core.metamodel.adapter.util.InvokeUtils;
 import org.apache.isis.core.metamodel.exceptions.MetaModelException;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -41,11 +39,9 @@ import org.apache.isis.core.progmodel.facets.members.named.staticmethod.NamedFac
 /**
  * Sets up all the {@link Facet}s for an action in a single shot.
  */
-public class ActionParameterNamesMethodFacetFactory extends MethodPrefixBasedFacetFactoryAbstract implements AdapterMapAware {
+public class ActionParameterNamesMethodFacetFactory extends MethodPrefixBasedFacetFactoryAbstract {
 
     private static final String[] PREFIXES = { MethodPrefixConstants.NAME_PREFIX };
-
-    private AdapterMap adapterMap;
 
     /**
      * Note that the {@link Facet}s registered are the generic ones from
@@ -105,18 +101,4 @@ public class ActionParameterNamesMethodFacetFactory extends MethodPrefixBasedFac
         }
         return names;
     }
-
-    // ///////////////////////////////////////////////////////////////
-    // Dependencies
-    // ///////////////////////////////////////////////////////////////
-
-    @Override
-    public void setAdapterMap(final AdapterMap adapterMap) {
-        this.adapterMap = adapterMap;
-    }
-
-    private AdapterMap getAdapterMap() {
-        return adapterMap;
-    }
-
 }

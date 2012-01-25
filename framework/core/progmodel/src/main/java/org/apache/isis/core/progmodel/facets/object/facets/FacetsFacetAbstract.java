@@ -80,11 +80,11 @@ public abstract class FacetsFacetAbstract extends FacetAbstract implements Facet
     }
 
     @SuppressWarnings("unchecked")
-    private Class<? extends FacetFactory> facetFactoryOrNull(final Class classCandidate) {
+    private Class<? extends FacetFactory> facetFactoryOrNull(final Class<?> classCandidate) {
         if (classCandidate == null) {
             return null;
         }
-        return FacetFactory.class.isAssignableFrom(classCandidate) ? classCandidate : null;
+        return (Class<? extends FacetFactory>) (FacetFactory.class.isAssignableFrom(classCandidate) ? classCandidate : null);
     }
 
 }

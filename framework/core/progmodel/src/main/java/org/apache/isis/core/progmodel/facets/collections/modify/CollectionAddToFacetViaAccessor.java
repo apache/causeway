@@ -71,8 +71,10 @@ public class CollectionAddToFacetViaAccessor extends CollectionAddToFacetAbstrac
 
     @Override
     public void add(final ObjectAdapter owningAdapter, final ObjectAdapter elementAdapter) {
-        final Collection collection = (Collection) AdapterInvokeUtils.invoke(method, owningAdapter);
-        collection.add(AdapterUtils.unwrap(elementAdapter));
+        @SuppressWarnings("unchecked")
+        final Collection<? super Object> collection = (Collection<? super Object>) AdapterInvokeUtils.invoke(method, owningAdapter);
+        final Object elementPojo = AdapterUtils.unwrap(elementAdapter);
+        collection.add(elementPojo);
         getObjectDirtier().objectChanged(owningAdapter);
     }
 
