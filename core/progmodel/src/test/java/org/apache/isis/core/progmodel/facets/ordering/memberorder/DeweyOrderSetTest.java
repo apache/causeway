@@ -158,7 +158,7 @@ public class DeweyOrderSetTest extends TestCase {
         postalTownMember.addFacet(new MemberOrderFacetAnnotation("address", "3", postalTownMember));
 
         final DeweyOrderSet orderSet = DeweyOrderSet.createOrderSet(nameAndAddressMembers);
-        final List children = orderSet.children();
+        final List<?> children = orderSet.children();
         final OrderSet childOrderSet = (OrderSet) children.get(0);
         assertEquals("Address", childOrderSet.getGroupName());
         assertEquals("address", childOrderSet.getGroupFullName());

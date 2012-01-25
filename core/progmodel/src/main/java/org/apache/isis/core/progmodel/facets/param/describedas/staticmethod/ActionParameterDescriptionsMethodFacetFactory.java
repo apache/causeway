@@ -23,8 +23,6 @@ import java.lang.reflect.Method;
 import java.util.List;
 
 import org.apache.isis.core.commons.lang.NameUtils;
-import org.apache.isis.core.metamodel.adapter.map.AdapterMap;
-import org.apache.isis.core.metamodel.adapter.map.AdapterMapAware;
 import org.apache.isis.core.metamodel.adapter.util.InvokeUtils;
 import org.apache.isis.core.metamodel.exceptions.MetaModelException;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -38,11 +36,9 @@ import org.apache.isis.core.progmodel.facets.MethodPrefixBasedFacetFactoryAbstra
 import org.apache.isis.core.progmodel.facets.MethodPrefixConstants;
 import org.apache.isis.core.progmodel.facets.members.describedas.staticmethod.DescribedAsFacetViaMethod;
 
-public class ActionParameterDescriptionsMethodFacetFactory extends MethodPrefixBasedFacetFactoryAbstract implements AdapterMapAware {
+public class ActionParameterDescriptionsMethodFacetFactory extends MethodPrefixBasedFacetFactoryAbstract {
 
     private static final String[] PREFIXES = { MethodPrefixConstants.DESCRIPTION_PREFIX };
-
-    private AdapterMap adapterMap;
 
     /**
      * Note that the {@link Facet}s registered are the generic ones from
@@ -100,19 +96,6 @@ public class ActionParameterDescriptionsMethodFacetFactory extends MethodPrefixB
             throw new MetaModelException(descriptionMethod + " must return an String[] array of same size as number of parameters of action");
         }
         return descriptions;
-    }
-
-    // ///////////////////////////////////////////////////////////////
-    // Dependencies
-    // ///////////////////////////////////////////////////////////////
-
-    @Override
-    public void setAdapterMap(final AdapterMap adapterMap) {
-        this.adapterMap = adapterMap;
-    }
-
-    private AdapterMap getAdapterMap() {
-        return adapterMap;
     }
 
 }

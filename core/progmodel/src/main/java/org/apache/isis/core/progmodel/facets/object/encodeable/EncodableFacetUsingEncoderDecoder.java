@@ -30,11 +30,11 @@ import org.apache.isis.core.metamodel.runtimecontext.DependencyInjector;
 
 public class EncodableFacetUsingEncoderDecoder extends FacetAbstract implements EncodableFacet {
 
-    private final EncoderDecoder encoderDecoder;
+    private final EncoderDecoder<?> encoderDecoder;
     private final DependencyInjector dependencyInjector;
     private final AdapterMap adapterManager;
 
-    public EncodableFacetUsingEncoderDecoder(final EncoderDecoder encoderDecoder, final FacetHolder holder, final AdapterMap adapterManager, final DependencyInjector dependencyInjector) {
+    public EncodableFacetUsingEncoderDecoder(final EncoderDecoder<?> encoderDecoder, final FacetHolder holder, final AdapterMap adapterManager, final DependencyInjector dependencyInjector) {
         super(EncodableFacet.class, holder, false);
         this.encoderDecoder = encoderDecoder;
         this.dependencyInjector = dependencyInjector;
@@ -64,9 +64,15 @@ public class EncodableFacetUsingEncoderDecoder extends FacetAbstract implements 
     }
 
     @Override
-    public String toEncodedString(final ObjectAdapter object) {
+    public String toEncodedString(final ObjectAdapter adapter) {
         getDependencyInjector().injectDependenciesInto(encoderDecoder);
-        return object == null ? ENCODED_NULL : encoderDecoder.toEncodedString(object.getObject());
+        return adapter == null ? ENCODED_NULL: encode(encoderDecoder, adapter.getObject());
+    }
+
+    private static <T> String encode(final EncoderDecoder<T> encoderDecoder, final Object pojo) {
+        @SuppressWarnings("unchecked")
+        T pojoAsT = (T) pojo;
+        return encoderDecoder.toEncodedString(pojoAsT);
     }
 
     // //////////////////////////////////////////////////////

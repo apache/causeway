@@ -71,7 +71,8 @@ public class CollectionRemoveFromFacetViaAccessor extends CollectionRemoveFromFa
 
     @Override
     public void remove(final ObjectAdapter owningAdapter, final ObjectAdapter elementAdapter) {
-        final Collection collection = (Collection) AdapterInvokeUtils.invoke(method, owningAdapter);
+        @SuppressWarnings("unchecked")
+        final Collection<? super Object> collection = (Collection<? super Object>) AdapterInvokeUtils.invoke(method, owningAdapter);
         collection.remove(AdapterUtils.unwrap(elementAdapter));
         getObjectDirtier().objectChanged(owningAdapter);
     }

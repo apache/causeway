@@ -35,6 +35,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.StringTokenizer;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 import org.apache.log4j.Logger;
@@ -302,28 +303,35 @@ public class FileAuthorizor extends AuthorizorAbstract implements FileAuthorizor
                 LOG.debug("writing authorisation details to " + whiteListResourceName);
                 printedDebug = true; // just to stop flooding log
             }
+            
+            final Set<Entry<String, List<String>>> entrySet = whiteListMap.entrySet();
+            final List<Entry<String, List<String>>> entryList = Lists.newArrayList(entrySet);
+            
             final OutputStreamWriter fileWriter = new OutputStreamWriter(whiteListOutputResource);
             final BufferedWriter buffWriter = new BufferedWriter(fileWriter);
-            final Set<Entry<String, List<String>>> entrySet = whiteListMap.entrySet();
-            for (int i = 0; i < entrySet.size(); i++) {
-                final Map.Entry<String, List<String>> entry = (Map.Entry<String, List<String>>) entrySet.toArray()[i];
-                final StringBuffer buff = new StringBuffer();
-                buff.append(entry.getKey()).append(":");
-                final List<String> roles = entry.getValue();
-                for (int j = 0; j < roles.size(); j++) {
-                    buff.append(roles.get(j));
-                    if (j < roles.size() - 1) {
-                        buff.append("|");
-                    }
-                }
-                buffWriter.write(buff.toString());
-                buffWriter.newLine();
+            for(final Map.Entry<String, List<String>> entry: entryList) {
+                writeTo(entry, buffWriter);
             }
             buffWriter.flush();
             buffWriter.close();
+            
         } catch (final IOException e) {
             throw new IsisException(e);
         }
+    }
+
+    public void writeTo(final Map.Entry<String, List<String>> entry, final BufferedWriter buffWriter) throws IOException {
+        final StringBuffer buff = new StringBuffer();
+        buff.append(entry.getKey()).append(":");
+        final List<String> roles = entry.getValue();
+        for (int j = 0; j < roles.size(); j++) {
+            buff.append(roles.get(j));
+            if (j < roles.size() - 1) {
+                buff.append("|");
+            }
+        }
+        buffWriter.write(buff.toString());
+        buffWriter.newLine();
     }
 
 }

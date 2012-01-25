@@ -38,10 +38,8 @@ import org.apache.isis.core.progmodel.facets.object.mask.MaskEvaluator;
 @RunWith(Parameterized.class)
 public class MaskEvaluatorTest {
 
-    private MaskEvaluator maskEvaluator;
-
     @Parameters
-    public static Collection data() {
+    public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][] { { "AAA", "aby", true }, { "A", "A", true }, { "A", "Z", true }, { "A", "a", true }, { "A", "z", true }, { "A", "0", true }, { "A", "9", true }, { "A", "@", false }, { "A", "~", false }, { "a", "A", true }, { "a", "Z", true }, { "a", "a", true },
                 { "a", "z", true }, { "a", "0", true }, { "a", "9", true }, { "a", " ", true }, { "a", "~", false }, { "9", "z", false }, { "9", "0", true }, { "9", "9", true }, { "9", " ", true }, { "9", "~", false }, { "&", "A", true }, { "&", "Z", true }, { "&", "a", true }, { "&", "z", true },
                 { "&", "9", false }, { "?", "A", true }, { "?", "Z", true }, { "?", "a", true }, { "?", "z", true }, { "U", "A", true }, { "U", "Z", true }, { "U", "a", false }, { "L", "a", true }, { "L", "z", true }, { "L", "A", false }, { "#", "0", true }, { "#", "9", true }, { "#", "X", false },

@@ -22,8 +22,6 @@ package org.apache.isis.core.progmodel.facets.object.disabled;
 import java.lang.reflect.Method;
 
 import org.apache.isis.core.commons.lang.NameUtils;
-import org.apache.isis.core.metamodel.adapter.map.AdapterMap;
-import org.apache.isis.core.metamodel.adapter.map.AdapterMapAware;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
@@ -34,11 +32,9 @@ import org.apache.isis.core.progmodel.facets.MethodPrefixBasedFacetFactoryAbstra
 import org.apache.isis.core.progmodel.facets.MethodPrefixConstants;
 import org.apache.isis.core.progmodel.facets.members.disable.method.DisableForContextFacetViaMethod;
 
-public class DisabledFacetViaDisabledMethodFacetFactory extends MethodPrefixBasedFacetFactoryAbstract implements AdapterMapAware {
+public class DisabledFacetViaDisabledMethodFacetFactory extends MethodPrefixBasedFacetFactoryAbstract {
 
     private static final String[] PREFIXES = { MethodPrefixConstants.DISABLE_PREFIX };
-
-    private AdapterMap adapterMap;
 
     /**
      * Note that the {@link Facet}s registered are the generic ones from
@@ -72,15 +68,6 @@ public class DisabledFacetViaDisabledMethodFacetFactory extends MethodPrefixBase
 
         final FacetHolder facetHolder = processMethodContext.getFacetHolder();
         FacetUtil.addFacet(new DisableForContextFacetViaMethod(disableMethod, facetHolder));
-    }
-
-    // ///////////////////////////////////////////////////////////////
-    // Dependencies
-    // ///////////////////////////////////////////////////////////////
-
-    @Override
-    public void setAdapterMap(final AdapterMap adapterMap) {
-        this.adapterMap = adapterMap;
     }
 
 }

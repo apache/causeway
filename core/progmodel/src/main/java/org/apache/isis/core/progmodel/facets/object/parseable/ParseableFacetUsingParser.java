@@ -47,7 +47,6 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
  */
 public class ParseableFacetUsingParser extends FacetAbstract implements ParseableFacet {
 
-    @SuppressWarnings("unchecked")
     private final Parser parser;
     private final DependencyInjector dependencyInjector;
     private final AdapterMap adapterMap;

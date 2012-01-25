@@ -70,6 +70,7 @@ public class ExecutedAnnotationFacetFactoryTest extends AbstractFacetFactoryTest
 
     public void testExecutedRemotelyAnnotationPickedUp() {
         class Customer {
+            @SuppressWarnings("unused")
             @Executed(Where.REMOTELY)
             public void someAction() {
             }

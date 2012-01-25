@@ -50,6 +50,7 @@ public class DisabledAnnotationFacetFactoryTest extends AbstractFacetFactoryTest
 
     public void testDisabledAnnotationPickedUpOnProperty() {
         class Customer {
+            @SuppressWarnings("unused")
             @Disabled
             public int getNumberOfOrders() {
                 return 0;
@@ -68,8 +69,9 @@ public class DisabledAnnotationFacetFactoryTest extends AbstractFacetFactoryTest
 
     public void testDisabledAnnotationPickedUpOnCollection() {
         class Customer {
+            @SuppressWarnings("unused")
             @Disabled
-            public Collection getOrders() {
+            public Collection<?> getOrders() {
                 return null;
             }
         }
@@ -86,6 +88,7 @@ public class DisabledAnnotationFacetFactoryTest extends AbstractFacetFactoryTest
 
     public void testDisabledAnnotationPickedUpOnAction() {
         class Customer {
+            @SuppressWarnings("unused")
             @Disabled
             public void someAction() {
             }
@@ -103,6 +106,7 @@ public class DisabledAnnotationFacetFactoryTest extends AbstractFacetFactoryTest
 
     public void testDisabledWhenAlwaysAnnotationPickedUpOn() {
         class Customer {
+            @SuppressWarnings("unused")
             @Disabled(When.ALWAYS)
             public void someAction() {
             }
@@ -119,6 +123,7 @@ public class DisabledAnnotationFacetFactoryTest extends AbstractFacetFactoryTest
 
     public void testDisabledWhenNeverAnnotationPickedUpOn() {
         class Customer {
+            @SuppressWarnings("unused")
             @Disabled(When.NEVER)
             public void someAction() {
             }
@@ -135,6 +140,7 @@ public class DisabledAnnotationFacetFactoryTest extends AbstractFacetFactoryTest
 
     public void testDisabledWhenOncePersistedAnnotationPickedUpOn() {
         class Customer {
+            @SuppressWarnings("unused")
             @Disabled(When.ONCE_PERSISTED)
             public void someAction() {
             }

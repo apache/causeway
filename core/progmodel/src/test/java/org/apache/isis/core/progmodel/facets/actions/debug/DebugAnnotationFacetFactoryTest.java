@@ -47,6 +47,7 @@ public class DebugAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 
     public void testDebugAnnotationPickedUp() {
         class Customer {
+            @SuppressWarnings("unused")
             @Debug
             public void someAction() {
             }

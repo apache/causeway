@@ -78,6 +78,7 @@ public class MemberOrderAnnotationFacetFactoryTest extends AbstractFacetFactoryT
                 return null;
             }
 
+            @SuppressWarnings("unused")
             public void addToOrders(final Order o) {
             }
         }

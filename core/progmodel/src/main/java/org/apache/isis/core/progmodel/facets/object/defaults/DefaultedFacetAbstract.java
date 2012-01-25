@@ -41,7 +41,7 @@ public abstract class DefaultedFacetAbstract extends FacetAbstract implements De
         this.defaultsProviderClass = DefaultsProviderUtil.defaultsProviderOrNull(candidateEncoderDecoderClass, candidateEncoderDecoderName);
         this.dependencyInjector = dependencyInjector;
         if (isValid()) {
-            final DefaultsProvider defaultsProvider = (DefaultsProvider) ClassUtil.newInstance(defaultsProviderClass, FacetHolder.class, holder);
+            final DefaultsProvider<?> defaultsProvider = (DefaultsProvider<?>) ClassUtil.newInstance(defaultsProviderClass, FacetHolder.class, holder);
             this.defaultedFacetUsingDefaultsProvider = new DefaultedFacetUsingDefaultsProvider(defaultsProvider, holder, getDependencyInjector());
         } else {
             this.defaultedFacetUsingDefaultsProvider = null;

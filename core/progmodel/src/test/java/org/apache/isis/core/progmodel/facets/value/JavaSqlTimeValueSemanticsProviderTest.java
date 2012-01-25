@@ -30,7 +30,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.progmodel.facets.value.timesql.JavaSqlTimeValueSemanticsProvider;
@@ -39,7 +38,6 @@ import org.apache.isis.core.progmodel.facets.value.timesql.JavaSqlTimeValueSeman
 public class JavaSqlTimeValueSemanticsProviderTest extends ValueSemanticsProviderAbstractTestCase {
 
     private Time twoOClock;
-    private ObjectAdapter twoOClockNO;
     private JavaSqlTimeValueSemanticsProvider value;
     private FacetHolder holder;
 
@@ -66,7 +64,6 @@ public class JavaSqlTimeValueSemanticsProviderTest extends ValueSemanticsProvide
         c.set(Calendar.SECOND, 0);
 
         twoOClock = new Time(c.getTimeInMillis());
-        twoOClockNO = createAdapter(twoOClock);
 
         holder = new FacetHolderImpl();
         setValue(value = new JavaSqlTimeValueSemanticsProvider(holder, mockConfiguration, mockContext));

@@ -57,7 +57,8 @@ public class TypeOfAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
         class Order {
         }
         class Customer {
-            @SuppressWarnings("unused")
+            // rawtypes are intention for this test
+            @SuppressWarnings({ "unused", "rawtypes" }) 
             @TypeOf(Order.class)
             public Collection someAction() {
                 return null;
@@ -80,7 +81,8 @@ public class TypeOfAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
         class Order {
         }
         class Customer {
-            @SuppressWarnings("unused")
+            // rawtypes are intention for this test
+            @SuppressWarnings({ "unused", "rawtypes" })
             @TypeOf(Order.class)
             public Collection getOrders() {
                 return null;
@@ -145,7 +147,8 @@ public class TypeOfAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
         class Order {
         }
         class Customer {
-            @SuppressWarnings("unused")
+            // rawTypes is intentional here
+            @SuppressWarnings({ "unused", "rawtypes" })
             @TypeOf(Order.class)
             public List someAction() {
                 return null;
@@ -168,7 +171,8 @@ public class TypeOfAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
         class Order {
         }
         class Customer {
-            @SuppressWarnings("unused")
+            // rawTypes is intentional here
+            @SuppressWarnings({ "unused", "rawtypes" })
             @TypeOf(Order.class)
             public List getOrders() {
                 return null;

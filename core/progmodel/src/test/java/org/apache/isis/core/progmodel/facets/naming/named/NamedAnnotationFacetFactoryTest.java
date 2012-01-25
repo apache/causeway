@@ -85,8 +85,9 @@ public class NamedAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
         facetFactory.setSpecificationLookup(reflector);
 
         class Customer {
+            @SuppressWarnings("unused")
             @Named("some name")
-            public Collection getOrders() {
+            public Collection<?> getOrders() {
                 return null;
             }
         }
@@ -108,6 +109,7 @@ public class NamedAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
         facetFactory.setSpecificationLookup(reflector);
 
         class Customer {
+            @SuppressWarnings("unused")
             @Named("some name")
             public void someAction() {
             }

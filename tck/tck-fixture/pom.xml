@@ -26,7 +26,7 @@
     </parent>
 
 	<artifactId>tck-fixture</artifactId>
-	<name>Quickstart Fixtures</name>
+	<name>TCK Fixtures</name>
 
 	<dependencies>
 		<dependency>

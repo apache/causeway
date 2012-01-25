@@ -57,20 +57,21 @@ public class JavaCollectionFacet extends CollectionFacetAbstract {
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public void init(final ObjectAdapter collection, final ObjectAdapter[] initData) {
-        final Collection javaCollection = collectionOfUnderlying(collection);
+        final Collection<? super Object> javaCollection = collectionOfUnderlying(collection);
         javaCollection.clear();
         for (final ObjectAdapter element : initData) {
-            javaCollection.add(element.getObject());
+            final Object pojo = element.getObject();
+            javaCollection.add(pojo);
         }
     }
 
     /**
      * The underlying collection of objects (not {@link ObjectAdapter}s).
      */
-    private Collection<?> collectionOfUnderlying(final ObjectAdapter wrappedCollection) {
-        return (Collection<?>) wrappedCollection.getObject();
+    @SuppressWarnings("unchecked")
+    private Collection<? super Object> collectionOfUnderlying(final ObjectAdapter wrappedCollection) {
+        return (Collection<? super Object>) wrappedCollection.getObject();
     }
 
     // //////////////////////////////////////////////////////////////////////

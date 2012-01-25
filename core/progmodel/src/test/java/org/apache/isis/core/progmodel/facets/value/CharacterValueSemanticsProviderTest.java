@@ -28,7 +28,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import org.apache.isis.applib.profiles.Localization;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facets.object.parseable.InvalidEntryException;
@@ -41,14 +40,12 @@ public class CharacterValueSemanticsProviderTest extends ValueSemanticsProviderA
     private CharValueSemanticsProviderAbstract value;
 
     private Character character;
-    private ObjectAdapter characterNO;
 
     private FacetHolder holder;
 
     @Before
     public void setUpObjects() throws Exception {
         character = Character.valueOf('r');
-        characterNO = createAdapter(character);
         holder = new FacetHolderImpl();
         setValue(value = new CharWrapperValueSemanticsProvider(holder, mockConfiguration, mockContext));
     }
