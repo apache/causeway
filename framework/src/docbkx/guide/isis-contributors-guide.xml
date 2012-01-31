@@ -4743,7 +4743,7 @@ The artifacts have been staged to staging repository on repository.apache.org:
 * https://repository.apache.org/content/repositories/orgapacheisis-zzz/org/apache/isis/isis/0.x.x-incubating/isis-0.x.x-incubating-source-release.zip (zip file)
 * https://repository.apache.org/content/repositories/orgapacheisis-zzz/org/apache/isis/isis/0.x.x-incubating/isis-0.x.x-incubating-source-release.zip.asc (signature)
 
-In Subversion the code has been tagged as tags/0.x.x-incubating.
+In Subversion the code has been tagged as tags/isis-0.x.x-incubating.
 
 I've also uploaded a new version of the site at http://incubator.apache.org/isis-0.x.x-incubating.  
 The contributors guide on the site contains some suggestions of how to verify the release, see

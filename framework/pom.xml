@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Licensed to the Apache Software Foundation (ASF) under one or more contributor 
+<!--
+    Licensed to the Apache Software Foundation (ASF) under one or more contributor 
     license agreements. See the NOTICE file distributed with this work for additional 
     information regarding copyright ownership. The ASF licenses this file to 
     you under the Apache License, Version 2.0 (the "License"); you may not use 
@@ -8,7 +9,8 @@
     by applicable law or agreed to in writing, software distributed under the 
     License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS 
     OF ANY KIND, either express or implied. See the License for the specific 
-    language governing permissions and limitations under the License. -->
+    language governing permissions and limitations under the License. 
+-->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
@@ -104,6 +106,13 @@
             <post>isis-dev@incubator.apache.org</post>
             <subscribe>isis-dev-subscribe@incubator.apache.org</subscribe>
             <unsubscribe>isis-dev-unsubscribe@incubator.apache.org</unsubscribe>
+        </mailingList>
+        <mailingList>
+            <name>users</name>
+            <archive>http://mail-archives.apache.org/mod_mbox/incubator-isis-users/</archive>
+            <post>isis-users@incubator.apache.org</post>
+            <subscribe>isis-users-subscribe@incubator.apache.org</subscribe>
+            <unsubscribe>isis-users-unsubscribe@incubator.apache.org</unsubscribe>
         </mailingList>
     </mailingLists>
 
@@ -290,9 +299,7 @@
                 <plugin>
                     <groupId>org.apache.rat</groupId>
                     <artifactId>apache-rat-plugin</artifactId>
-                    <version>0.7</version>
-                    <!-- <executions> <execution> <phase>verify</phase> <goals> 
-                        <goal>check</goal> </goals> </execution> </executions> -->
+                    <version>0.8</version>
                 </plugin>
 
 
@@ -833,23 +840,42 @@ archetype includes this explicit dependency.
                 </executions>
             </plugin>
 
+            <!--
+            run using:
+            mvn org.apache.rat.apache-rat-plugin:check
+             -->
             <plugin>
                 <groupId>org.apache.rat</groupId>
                 <artifactId>apache-rat-plugin</artifactId>
-                <!-- <executions> <execution> <phase>verify</phase> <goals> 
-                    <goal>check</goal> </goals> </execution> </executions> -->
                 <configuration>
                     <excludeSubProjects>false</excludeSubProjects>
                     <numUnapprovedLicenses>0</numUnapprovedLicenses>
-                    <!-- these don't seem to work, unfortunately -->
                     <excludes>
-                        <exclude>*.hsp</exclude>
-                        <exclude>.project</exclude>
+                        <exclude>*.java.hsp</exclude>
                         <exclude>*.svg</exclude>
-                        <exclude>*.classpath</exclude>
-                        <exclude>*.project</exclude>
                         <exclude>*.ucd</exclude>
                     </excludes>
+                    <licenses>
+		              <license implementation="org.apache.rat.analysis.license.SimplePatternBasedLicense">
+		                <licenseFamilyCategory>DocBook</licenseFamilyCategory>
+		                <licenseFamilyName>DocBook 4.5</licenseFamilyName>
+		                <notes></notes>
+		                <patterns>
+		                  <pattern>Permission to copy in any form is granted for use</pattern>
+                          <pattern>Permission to use, copy, modify and distribute the DocBook DTD</pattern>
+                          <pattern>is hereby granted in perpetuity, provided that the above copyright</pattern>
+                          <pattern>This is the catalog data file for DocBook XML V4.5. It is provided as</pattern>
+                          <pattern>XML Catalog data for DocBook XML V4.5</pattern>
+                          <pattern>DocBook additional general entities V4.5</pattern>
+                          <pattern>XML EXCHANGE TABLE MODEL DECLARATION MODULE</pattern>
+		                </patterns>
+		              </license>
+		            </licenses>
+		            <licenseFamilies>
+		              <licenseFamily implementation="org.apache.rat.license.SimpleLicenseFamily">
+		                <familyName>DocBook 4.5</familyName>
+		              </licenseFamily>
+		            </licenseFamilies>
                 </configuration>
             </plugin>
 
@@ -1176,19 +1202,18 @@ archetype includes this explicit dependency.
                 <groupId>org.mortbay.jetty</groupId>
                 <artifactId>jetty</artifactId>
                 <version>6.1.26</version>
+                <exclusions>
+                    <exclusion>
+		                <groupId>org.mortbay.jetty</groupId>
+		                <artifactId>servlet-api</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
-			<dependency>
-		        <groupId>org.mortbay.jetty</groupId>
-		        <artifactId>jsp-2.1</artifactId>
-		        <version>6.1.14</version>
-		        <type>jar</type>
-		    </dependency>
-		    <dependency>
-		        <groupId>org.mortbay.jetty</groupId>
-		        <artifactId>jsp-api-2.1</artifactId>
-		        <version>6.1.14</version>
-		        <type>jar</type>
-		    </dependency>
+	        <dependency>
+	            <groupId>org.apache.geronimo.specs</groupId>
+                <artifactId>geronimo-jsp_2.1_spec</artifactId>
+	            <version>1.0.1</version>
+	        </dependency>
             
             <dependency>
                 <groupId>org.htmlparser</groupId>

@@ -3,7 +3,7 @@
    <property name="hide-externals" value="true" />
    <property name="show-needs-to-compile" value="false" />
    <property name="detail-mode" value="false" />
-   <classpath>
+   <classpath relativeto="D:\SVN\ai\trunk\framework\core">
       <classpathentry kind="lib" path="target/classes" />
    </classpath>
    <sourcepaths>

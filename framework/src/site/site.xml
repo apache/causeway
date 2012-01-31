@@ -76,6 +76,8 @@
                     href="mailto:isis-users-subscribe@incubator.apache.org" />
                 <item name="Markmail (RSS)"
                     href="http://incubator.markmail.org/search/?q=isis-users" />
+                <item name="Gmane (NNTP)"
+                    href="http://blog.gmane.org/gmane.comp.apache.incubator.isis.users" />
             </item>
             <item name="Wiki" href="https://cwiki.apache.org/confluence/display/ISIS/Index" />
             <item name="JIRA" href="https://issues.apache.org/jira/browse/ISIS" />
@@ -145,6 +147,18 @@
             <item name="Contributor's Guide" href="#">
                 <item name="PDF" href="docbkx/pdf/${docbkxGuideName}.pdf" />
                 <item name="HTML" href="docbkx/html/guide/${docbkxGuideName}.html" />
+            </item>
+            <item name="Dev Mailing List" href="mail-lists.html" >
+                <item name="Post to"
+                    href="mailto:isis-dev@incubator.apache.org" />
+                <item name="Archives"
+                    href="http://mail-archives.apache.org/mod_mbox/incubator-isis-dev/" />
+                <item name="Subscribe"
+                    href="mailto:isis-dev-subscribe@incubator.apache.org" />
+                <item name="Markmail (RSS)"
+                    href="http://incubator.markmail.org/search/?q=isis-dev" />
+                <item name="Gmane (NNTP)"
+                    href="http://blog.gmane.org/gmane.comp.apache.incubator.isis.devel" />
             </item>
             <item name="Dev Mailing List" href="mail-lists.html" >
                 <item name="Post to"

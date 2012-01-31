@@ -3,8 +3,8 @@
    <property name="hide-externals" value="true" />
    <property name="show-needs-to-compile" value="false" />
    <property name="detail-mode" value="false" />
-   <classpath>
-      <classpathentry kind="lib" path="D:\SVN\ai\isis\trunk\core\metamodel\target\classes" />
+   <classpath relativeto="D:\SVN\ai\trunk\framework\core\metamodel">
+      <classpathentry kind="lib" path="target\classes" />
    </classpath>
    <sourcepaths>
       <pathentry type="file" path="src/main/java" />

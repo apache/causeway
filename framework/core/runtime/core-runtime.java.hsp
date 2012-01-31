@@ -3,8 +3,8 @@
   <property name="hide-externals" value="true" />
   <property name="show-needs-to-compile" value="false" />
   <property name="detail-mode" value="false" />
-  <classpath>
-    <classpathentry kind="lib" path="D:\SVN\ai\trunk\core\runtime\target\classes" />
+  <classpath relativeto="D:\SVN\ai\trunk\framework\core\runtime">
+    <classpathentry kind="lib" path="target\classes" />
   </classpath>
   <restructuring>
     <set version="1" name="Sandbox 1" hiview="Codemap" active="true" todo="false" />
