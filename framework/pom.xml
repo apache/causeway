@@ -848,16 +848,17 @@ archetype includes this explicit dependency.
                 <groupId>org.apache.rat</groupId>
                 <artifactId>apache-rat-plugin</artifactId>
                 <configuration>
+                    <addDefaultLicenseMatchers>true</addDefaultLicenseMatchers>
                     <excludeSubProjects>false</excludeSubProjects>
                     <numUnapprovedLicenses>0</numUnapprovedLicenses>
                     <excludes>
-                        <exclude>*.java.hsp</exclude>
-                        <exclude>*.svg</exclude>
-                        <exclude>*.ucd</exclude>
+                        <exclude>**/*.java.hsp</exclude>
+                        <exclude>**/*.svg</exclude>
+                        <exclude>**/*.ucd</exclude>
                     </excludes>
                     <licenses>
 		              <license implementation="org.apache.rat.analysis.license.SimplePatternBasedLicense">
-		                <licenseFamilyCategory>DocBook</licenseFamilyCategory>
+		                <licenseFamilyCategory>DOCBK</licenseFamilyCategory>
 		                <licenseFamilyName>DocBook 4.5</licenseFamilyName>
 		                <notes></notes>
 		                <patterns>
@@ -870,11 +871,22 @@ archetype includes this explicit dependency.
                           <pattern>XML EXCHANGE TABLE MODEL DECLARATION MODULE</pattern>
 		                </patterns>
 		              </license>
+                      <license implementation="org.apache.rat.analysis.license.SimplePatternBasedLicense">
+                        <licenseFamilyCategory>AL2  </licenseFamilyCategory>
+                        <licenseFamilyName>Apache License 2.0</licenseFamilyName>
+                        <notes></notes>
+                        <patterns>
+                          <pattern>Licensed to the Apache Software Foundation (ASF) under one</pattern>
+                        </patterns>
+                      </license>
 		            </licenses>
 		            <licenseFamilies>
 		              <licenseFamily implementation="org.apache.rat.license.SimpleLicenseFamily">
 		                <familyName>DocBook 4.5</familyName>
 		              </licenseFamily>
+                      <licenseFamily implementation="org.apache.rat.license.SimpleLicenseFamily">
+                        <familyName>Apache License 2.0</familyName>
+                      </licenseFamily>
 		            </licenseFamilies>
                 </configuration>
             </plugin>
