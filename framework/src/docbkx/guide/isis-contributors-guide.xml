@@ -3798,124 +3798,259 @@ public class FooBar {
           designed to perform a number of basic checks, most signifcant being
           missing copyright header files.</para>
 
-          <para>In theory the RAT tool can be run from Maven (<code>mvn
-          rat:check</code>), with the <filename>maven-rat-plugin</filename>
-          being inherited from the Apache parent <acronym>POM</acronym>.
-          However, although the plugin is configured in the
-          <emphasis>Isis</emphasis> parent <acronym>POM</acronym> to exclude
-          certain files (eg <filename>.java.hsp</filename> project files for
-          Structure101), unfortunately the plugin seems to ignore any
-          configured exclusions, making this method of performing a check
-          somewhat useless.</para>
+          <para>The <emphasis>Isis</emphasis> parent <acronym>POM</acronym>
+          specifies the RAT Maven plugin, with the following custom
+          configuration:</para>
 
-          <para>Instead, the tool can be run from the command-line (you'll
-          find a snapshot copy of the <acronym>JAR</acronym> is in the root of
-          the <emphasis>Isis </emphasis><acronym>SVN</acronym> repository; or
-          you can build the binary yourself).</para>
+          <table>
+            <title>RAT plugin Configuration Exclusions</title>
 
-          <para>First, clean up any generated artifacts:</para>
+            <tgroup cols="3">
+              <thead>
+                <row>
+                  <entry align="center">Subtype</entry>
+
+                  <entry align="center">File path(s)</entry>
+
+                  <entry align="center">Description</entry>
+                </row>
+              </thead>
+
+              <tbody>
+                <row>
+                  <entry>IDE-specific</entry>
+
+                  <entry>**/.project, **/.classpath, **/.settings/**</entry>
+
+                  <entry>Eclipse project files</entry>
+                </row>
+
+                <row>
+                  <entry></entry>
+
+                  <entry>**/*.launch</entry>
+
+                  <entry>Eclipse launch configuration file</entry>
+                </row>
+
+                <row>
+                  <entry></entry>
+
+                  <entry>src/site/resources/ide/eclipse/**</entry>
+
+                  <entry>Various Eclipse config files for contributors'
+                  use</entry>
+                </row>
+
+                <row>
+                  <entry></entry>
+
+                  <entry>**/*java.hsp</entry>
+
+                  <entry><ulink
+                  url="http://www.headwaysoftware.com/products/?code=Structure101">Structure101</ulink>
+                  project file</entry>
+                </row>
+
+                <row>
+                  <entry></entry>
+
+                  <entry>**/*.ucd, **/*.ucls</entry>
+
+                  <entry><ulink url="http://www.soyatec.com/euml2/">Soyatec
+                  (<acronym>UML</acronym> plugin)</ulink> project
+                  files</entry>
+                </row>
+
+                <row>
+                  <entry>Image formats</entry>
+
+                  <entry>**/*.svg</entry>
+
+                  <entry>Scalable Vector Graphics</entry>
+                </row>
+
+                <row>
+                  <entry></entry>
+
+                  <entry>**/*.pdn</entry>
+
+                  <entry>Paint.NET format</entry>
+                </row>
+
+                <row>
+                  <entry>Data files</entry>
+
+                  <entry>**/*.json</entry>
+
+                  <entry>JSON (test) data</entry>
+                </row>
+
+                <row>
+                  <entry></entry>
+
+                  <entry>**/isis.log</entry>
+
+                  <entry>Isis' log file (byproduct of tests)</entry>
+                </row>
+
+                <row>
+                  <entry></entry>
+
+                  <entry>**/rat.txt</entry>
+
+                  <entry>RAT's own audit file</entry>
+                </row>
+
+                <row>
+                  <entry></entry>
+
+                  <entry>**/fixture-data</entry>
+
+                  <entry>SQL Object Store fixture data</entry>
+                </row>
+
+                <row>
+                  <entry></entry>
+
+                  <entry>**/test.data</entry>
+
+                  <entry>SQL Object Store fixture data</entry>
+                </row>
+
+                <row>
+                  <entry></entry>
+
+                  <entry>**/xml/**/*.xml</entry>
+
+                  <entry>XML Object Store fixture data</entry>
+                </row>
+
+                <row>
+                  <entry></entry>
+
+                  <entry>tmp/tests/*.xml</entry>
+
+                  <entry>XML Object Store fixture data</entry>
+                </row>
+
+                <row>
+                  <entry></entry>
+
+                  <entry>**/ldap-conf/**</entry>
+
+                  <entry>LDAP Security fixture data</entry>
+                </row>
+
+                <row>
+                  <entry>Archetype Support</entry>
+
+                  <entry>**/src/main/resources/resources.txt</entry>
+
+                  <entry>Resource file</entry>
+                </row>
+
+                <row>
+                  <entry></entry>
+
+                  <entry>**/src/main/appended-resources/<para>
+                  supplemental-models.xml</para></entry>
+
+                  <entry>(Empty) supplemental models</entry>
+                </row>
+
+                <row>
+                  <entry>Program formats</entry>
+
+                  <entry>**/*.min.js</entry>
+
+                  <entry>Minified Javascript (note that the non-Minified
+                  Javascript equivalents is checked for its license)</entry>
+                </row>
+              </tbody>
+            </tgroup>
+          </table>
+
+          <para>In addition, a number of licenses are configured:</para>
+
+          <table>
+            <title>RAT plugin Configuration Additional Licenses</title>
+
+            <tgroup cols="2">
+              <thead>
+                <row>
+                  <entry align="center">License</entry>
+
+                  <entry align="center">Description</entry>
+                </row>
+              </thead>
+
+              <tbody>
+                <row>
+                  <entry>Apache 2.0</entry>
+
+                  <entry>The RAT tool searches for an older version of the
+                  Apache license header. This additional license reconfigures
+                  RAT to use the current form of words </entry>
+                </row>
+
+                <row>
+                  <entry>MIT</entry>
+
+                  <entry>JQuery (bundled with Isis) is dual licensed under
+                  MIT</entry>
+                </row>
+
+                <row>
+                  <entry>DocBook</entry>
+
+                  <entry>Like many other Apache projects, Isis generates its
+                  documentation in DocBook form. In order to speed up
+                  generation, Isis has a local copy of the DocBook DTDs,
+                  Entities etc. Key phrases from these files are configured so
+                  that RAT identifies these files as valid to use.</entry>
+                </row>
+
+                <row>
+                  <entry>XHTML</entry>
+
+                  <entry>Isis also has a dependency on the XHTML-strict DTD.
+                  </entry>
+                </row>
+              </tbody>
+            </tgroup>
+          </table>
+
+          <para>To run the RAT tool, first clean up any generated
+          artifacts:</para>
 
           <programlisting>mvn clean -P integration-tests</programlisting>
 
           <para>Then, run the tool using:</para>
 
-          <programlisting>java -jar ../apache-rat-0.8-SNAPSHOT.jar \
-  -d . --exclude \
-  resources.txt site.vm \
-  *.project *.classpath *.launch *.importorder \
-  *.odg \
-  *.java.hsp \
-  *.ucd *.ucls *.euml2 *.umlproject \
-  fop-cust.xsl html-cust.xsl *.ent *.dtd *.pdn catalog.xml \
-  *.mod usage.txt screen.css docbook.cat \
-  org.apache.isis.viewer.wicket.ui.ComponentFactory \
-  *.json fixture-data test.data example.ldif slapd.conf \
-  .plxarc MANIFEST.MF \
-  .log \
-  &gt;/tmp/rat.txt</programlisting>
+          <programlisting>mvn org.apache.rat:apache-rat-plugin:check</programlisting>
 
-          <para>where:</para>
+          <para><note>
+              <para>Do <emphasis>not</emphasis> use mvn rat:check; depending
+              on your local Maven configuratoin this may bring down the
+              obsolete mvn-rat-plugin from Codehaus repo.</para>
+            </note>All being well the command should succeed:</para>
 
-          <itemizedlist>
-            <listitem>
-              <para><filename>resources.txt, site.vm</filename> are resources
-              to do with site generation</para>
-            </listitem>
+          <programlisting>...
+[INFO] JUnit Viewer ...................................... SUCCESS [0.162s]
+[INFO] JUnit Tests for TCK ............................... SUCCESS [0.039s]
+[INFO] quickstart-archetype .............................. SUCCESS [0.382s]
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time: 30.796s
+[INFO] Finished at: Wed Feb 01 00:36:25 GMT 2012
+[INFO] Final Memory: 41M/967M
+[INFO] ------------------------------------------------------------------------p</programlisting>
 
-            <listitem>
-              <para><filename>.project, .classpath, .launch</filename> and
-              <filename>.importorder</filename> are Eclipse
-              <acronym>IDE</acronym> project files</para>
-            </listitem>
-
-            <listitem>
-              <para><filename>.json</filename> are test JSON files (JSON does
-              not support comments)</para>
-            </listitem>
-
-            <listitem>
-              <para><filename>.odg</filename> are OpenOffice diagram
-              files</para>
-            </listitem>
-
-            <listitem>
-              <para><filename>.java.hsp</filename> are the <ulink
-              url="http://www.headwaysoftware.com/products/?code=Structure101">Structure101</ulink>
-              project files</para>
-            </listitem>
-
-            <listitem>
-              <para><filename>.ucd</filename> and <filename>.ucls</filename>
-              are <ulink url="http://www.soyatec.com/euml2/">Soyatec
-              (<acronym>UML</acronym> plugin)</ulink> project files,
-              <filename>.euml2</filename> and <filename>.umlproject</filename>
-              are similar</para>
-            </listitem>
-
-            <listitem>
-              <para><filename>fop-cust.xsl html-cust.xsl *.ent *.dtd *.pdn
-              catalog.xml *.mod usage.txt screen.css docbook.cat</filename>
-              are files related to DocBook generation</para>
-            </listitem>
-
-            <listitem>
-              <para><filename>org.apache.isis.viewer.wicket.ui.ComponentFactory</filename>
-              is a manifest file required for dynamic classloading</para>
-            </listitem>
-
-            <listitem>
-              <para><filename>*.json, fixture-data, test.data, example.ldif,
-              slapd.conf</filename> are test resource files</para>
-            </listitem>
-
-            <listitem>
-              <para><filename>.plxarc</filename> and
-              <filename>MANIFEST.MF</filename> are artifacts generated by
-              various Maven goals</para>
-            </listitem>
-
-            <listitem>
-              <para><filename>.log</filename> are any generated log
-              files</para>
-            </listitem>
-          </itemizedlist>
-
-          <para>Then, review any missing license notes using:</para>
-
-          <programlisting>cat /tmp/rat.txt \
-   | grep '^ !???' \
-   | grep -v "jquery.*.js" \
-   | grep -v "tests-common/.*\.xml" \
-   | grep -v "tests-common/.*/tests\..*" \
-   | grep -v "tests-common/.*\.xml" \
-   | grep -v "tests-common/.*\.script" \
-   | grep -v "tests/.*\.xml" \
-   | grep -v "isis.log" \
-   | grep -v "target" \
-   | grep -v "test/.*\.json" \
-   | grep -v "hsql-db"</programlisting>
-
-          <para>where:</para>
+          <para>If it does not, then review the <filename>rat.txt</filename>
+          file in the failing module's <filename>target</filename> directory.
+          Missing license notes are indicated using the key:</para>
 
           <itemizedlist>
             <listitem>
@@ -4378,9 +4513,9 @@ What is the release version for "Apache Isis"? (org.apache.isis:isis) 0.n.n-incu
             </listitem>
           </itemizedlist>
 
-          <para>If you are running outside the US, then the <code>mvn release:prepare</code>
-          command almost always fails at the last step, with a message
-          like:</para>
+          <para>If you are running outside the US, then the <code>mvn
+          release:prepare</code> command almost always fails at the last step,
+          with a message like:</para>
 
           <programlisting>[INFO] Checking in modified POMs...
 [INFO] Executing: cmd.exe /X /C "svn --non-interactive 
@@ -4427,10 +4562,12 @@ svn: No such revision 1126567</programlisting>
           </itemizedlist>
 
           <note>
-           <para>The configuration for the maven-release-plugin in the parent <code>pom.xml</code> now uses 
-           the waitBeforeTagging setting to wait a while; hopefully this error will be less commonplace in the future.</para>
+            <para>The configuration for the maven-release-plugin in the parent
+            <code>pom.xml</code> now uses the waitBeforeTagging setting to
+            wait a while; hopefully this error will be less commonplace in the
+            future.</para>
           </note>
-         
+
           <para>On the other hand, if things go wrong before the tagging, then
           <code>mvn release:clean</code> will do most of the cleaning up in
           the event of failures.</para>
