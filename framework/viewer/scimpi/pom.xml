@@ -23,7 +23,7 @@
 	<parent>
 		<groupId>org.apache.isis</groupId>
 		<artifactId>viewer</artifactId>
-		<version>0.2.0-incubating-SNAPSHOT</version>
+		<version>0.2.0-incubating</version>
 	</parent>
 
 	<groupId>org.apache.isis.viewer</groupId>
@@ -83,7 +83,7 @@
             <dependency>
                 <groupId>org.apache.isis.runtimes</groupId>
                 <artifactId>dflt</artifactId>
-                <version>0.2.0-incubating-SNAPSHOT</version>
+                <version>0.2.0-incubating</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -91,13 +91,13 @@
 	        <dependency>
 	            <groupId>org.apache.isis.viewer</groupId>
 	            <artifactId>scimpi-dispatcher</artifactId>
-	            <version>0.2.0-incubating-SNAPSHOT</version>
+	            <version>0.2.0-incubating</version>
 	        </dependency>
 
 	        <dependency>
 	            <groupId>org.apache.isis.viewer</groupId>
 	            <artifactId>scimpi-servlet</artifactId>
-	            <version>0.2.0-incubating-SNAPSHOT</version>
+	            <version>0.2.0-incubating</version>
 	        </dependency>
 
 		</dependencies>

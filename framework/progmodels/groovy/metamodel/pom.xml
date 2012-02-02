@@ -24,7 +24,7 @@
 	<parent>
 		<groupId>org.apache.isis.progmodels</groupId>
 		<artifactId>groovy</artifactId>
-		<version>0.2.0-incubating-SNAPSHOT</version>
+		<version>0.2.0-incubating</version>
 	</parent>
 
 	<artifactId>groovy-metamodel</artifactId>
