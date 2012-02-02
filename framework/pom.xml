@@ -909,6 +909,14 @@ archetype includes this explicit dependency.
                         </patterns>
                       </license>
                       <license implementation="org.apache.rat.analysis.license.SimplePatternBasedLicense">
+                        <licenseFamilyCategory>JMOCK</licenseFamilyCategory>
+                        <licenseFamilyName>JMock</licenseFamilyName>
+                        <notes></notes>
+                        <patterns>
+                          <pattern>Copyright (c) 2000-2007, jMock.org</pattern>
+                        </patterns>
+                      </license>
+                      <license implementation="org.apache.rat.analysis.license.SimplePatternBasedLicense">
                         <licenseFamilyCategory>DOCBK</licenseFamilyCategory>
                         <licenseFamilyName>DocBook 4.5</licenseFamilyName>
                         <notes></notes>
@@ -937,6 +945,9 @@ archetype includes this explicit dependency.
                       </licenseFamily>
                       <licenseFamily implementation="org.apache.rat.license.SimpleLicenseFamily">
                         <familyName>MIT</familyName>
+                      </licenseFamily>
+                      <licenseFamily implementation="org.apache.rat.license.SimpleLicenseFamily">
+                        <familyName>JMock</familyName>
                       </licenseFamily>
                       <licenseFamily implementation="org.apache.rat.license.SimpleLicenseFamily">
                         <familyName>DocBook 4.5</familyName>

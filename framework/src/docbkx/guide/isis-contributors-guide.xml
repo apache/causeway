@@ -3991,7 +3991,7 @@ public class FooBar {
 
                   <entry>The RAT tool searches for an older version of the
                   Apache license header. This additional license reconfigures
-                  RAT to use the current form of words </entry>
+                  RAT to use the current form of words</entry>
                 </row>
 
                 <row>
@@ -3999,6 +3999,13 @@ public class FooBar {
 
                   <entry>JQuery (bundled with Isis) is dual licensed under
                   MIT</entry>
+                </row>
+
+                <row>
+                  <entry>JMock</entry>
+
+                  <entry>Isis bundles up source code from the still-to-be
+                  released JMock 2.6-RC2 codebase.</entry>
                 </row>
 
                 <row>
@@ -4014,8 +4021,8 @@ public class FooBar {
                 <row>
                   <entry>XHTML</entry>
 
-                  <entry>Isis also has a dependency on the XHTML-strict DTD.
-                  </entry>
+                  <entry>Isis also has a dependency on the XHTML-strict
+                  DTD.</entry>
                 </row>
               </tbody>
             </tgroup>
