@@ -29,7 +29,7 @@ import org.apache.isis.viewer.scimpi.dispatcher.ElementProcessor;
 import org.apache.isis.viewer.scimpi.dispatcher.debug.DebugUsersView;
 import org.apache.isis.viewer.scimpi.dispatcher.view.HelpLink;
 import org.apache.isis.viewer.scimpi.dispatcher.view.History;
-import org.apache.isis.viewer.scimpi.dispatcher.view.RevisionNumber;
+import org.apache.isis.viewer.scimpi.dispatcher.view.VersionNumber;
 import org.apache.isis.viewer.scimpi.dispatcher.view.action.ActionButton;
 import org.apache.isis.viewer.scimpi.dispatcher.view.action.ActionForm;
 import org.apache.isis.viewer.scimpi.dispatcher.view.action.ActionLink;
@@ -176,7 +176,7 @@ public class ProcessorLookup {
         addElementProcessor(new RadioListField());
         addElementProcessor(new Redirect());
         addElementProcessor(new RemoveElement());
-        addElementProcessor(new RevisionNumber());
+        addElementProcessor(new VersionNumber());
         addElementProcessor(new RunAction());
         addElementProcessor(new ScopeTag());
         addElementProcessor(new Secure());

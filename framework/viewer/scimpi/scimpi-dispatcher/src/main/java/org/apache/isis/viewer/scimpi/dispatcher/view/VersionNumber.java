@@ -27,25 +27,24 @@ import org.apache.isis.viewer.scimpi.dispatcher.ScimpiException;
 import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 
-public class RevisionNumber extends AbstractElementProcessor {
+public class VersionNumber extends AbstractElementProcessor {
 
     private static final String MARKER = "Implementation-Build: ";
     private static final String FILE = "/META-INF/MANIFEST.MF";
-    private String revision;
+    private String version;
 
     @Override
     public String getName() {
-        return "revision-number";
+        return "version-number";
     }
 
     @Override
     public void process(final Request request) {
-        if (revision == null) {
-            revision = "0000"; // default revision number
+        if (version == null) {
+            version = "0000"; // default revision number
             loadRevisonNumber(request.getContext());
-            revision = "#" + revision;
         }
-        request.appendHtml(revision);
+        request.appendHtml(version);
     }
 
     private void loadRevisonNumber(final RequestContext context) {
@@ -58,7 +57,7 @@ public class RevisionNumber extends AbstractElementProcessor {
             String line;
             while ((line = reader.readLine()) != null) {
                 if (line.startsWith(MARKER)) {
-                    revision = line.substring(MARKER.length());
+                    version = line.substring(MARKER.length());
                     break;
                 }
             }
