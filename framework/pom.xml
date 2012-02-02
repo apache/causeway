@@ -97,9 +97,9 @@
     </properties>
 
     <scm>
-        <connection>scm:svn:http://svn.apache.org/repos/asf/incubator/isis/trunk/framework/</connection>
-        <developerConnection>scm:svn:https://svn.apache.org/repos/asf/incubator/isis/trunk/framework/</developerConnection>
-        <url>http://svn.apache.org/repos/asf/incubator/isis/trunk/framework/</url>
+        <connection>scm:svn:http://svn.apache.org/repos/asf/incubator/isis/branches/0.2.0-incubating/framework/</connection>
+        <developerConnection>scm:svn:https://svn.apache.org/repos/asf/incubator/isis/branches/0.2.0-incubating/framework/</developerConnection>
+        <url>http://svn.apache.org/repos/asf/incubator/isis/branches/0.2.0-incubating/framework/</url>
     </scm>
 
     <!-- used in Site generation for relative references. -->
