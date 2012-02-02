@@ -274,7 +274,9 @@ public class ToDoItem implements Comparable<ToDoItem> {
         return new Filter<ToDoItem>() {
             @Override
             public boolean accept(final ToDoItem eachToDoItem) {
-                return Objects.equal(toDoItem.getCategory(), eachToDoItem.getCategory()) && eachToDoItem != toDoItem;
+                return Objects.equal(toDoItem.getCategory(), eachToDoItem.getCategory()) && 
+                       Objects.equal(toDoItem.getUserName(), eachToDoItem.getUserName()) &&
+                       eachToDoItem != toDoItem;
             }
 
         };
