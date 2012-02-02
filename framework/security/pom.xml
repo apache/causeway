@@ -23,7 +23,7 @@
 	<parent>
 		<groupId>org.apache.isis</groupId>
 		<artifactId>isis</artifactId>
-		<version>0.2.0-incubating</version>
+		<version>0.3.0-incubating-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>security</artifactId>
@@ -92,7 +92,7 @@
 			<dependency>
 				<groupId>org.apache.isis</groupId>
 				<artifactId>core</artifactId>
-				<version>0.2.0-incubating</version>
+				<version>0.3.0-incubating-SNAPSHOT</version>
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
@@ -101,48 +101,48 @@
             <dependency>
                 <groupId>org.apache.isis.security</groupId>
                 <artifactId>dflt</artifactId>
-                <version>0.2.0-incubating</version>
+                <version>0.3.0-incubating-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.security</groupId>
                 <artifactId>dflt</artifactId>
-                <version>0.2.0-incubating</version>
+                <version>0.3.0-incubating-SNAPSHOT</version>
                 <type>test-jar</type>
             </dependency>
             
             <dependency>
                 <groupId>org.apache.isis.security</groupId>
                 <artifactId>file</artifactId>
-                <version>0.2.0-incubating</version>
+                <version>0.3.0-incubating-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.security</groupId>
                 <artifactId>file</artifactId>
-                <version>0.2.0-incubating</version>
+                <version>0.3.0-incubating-SNAPSHOT</version>
                 <type>test-jar</type>
             </dependency>
 
             <dependency>
                 <groupId>org.apache.isis.security</groupId>
                 <artifactId>ldap</artifactId>
-                <version>0.2.0-incubating</version>
+                <version>0.3.0-incubating-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.security</groupId>
                 <artifactId>ldap</artifactId>
-                <version>0.2.0-incubating</version>
+                <version>0.3.0-incubating-SNAPSHOT</version>
                 <type>test-jar</type>
             </dependency>
 
             <dependency>
                 <groupId>org.apache.isis.security</groupId>
                 <artifactId>sql</artifactId>
-                <version>0.2.0-incubating</version>
+                <version>0.3.0-incubating-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.security</groupId>
                 <artifactId>sql</artifactId>
-                <version>0.2.0-incubating</version>
+                <version>0.3.0-incubating-SNAPSHOT</version>
                 <type>test-jar</type>
             </dependency>
 
