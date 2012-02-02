@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+-->
+<!DOCTYPE article PUBLIC "-//OASIS//DTD Simplified DocBook XML V1.1//EN"
+"http://www.oasis-open.org/docbook/xml/simple/1.1/sdocbook.dtd">
+<article>
+  <articleinfo>
+    <title></title>
+
+    <author>
+      <firstname></firstname>
+
+      <surname></surname>
+
+      <affiliation>
+        <orgname></orgname>
+      </affiliation>
+    </author>
+
+    <pubdate></pubdate>
+  </articleinfo>
+
+  <section>
+    <title>Dynamic fixture service</title>
+
+    <para>When developing applications it is nice to ready prepared objects so
+    you don't have to continually create them every time you run in
+    exploration mode. As you read already these can be created using fixtures,
+    but that requires coding specific classes. Whilst turing on persistence
+    means that you get back what you had last time, but that probably includes
+    objects that you didn't want to keep. A better solution is to use the new
+    fixture service that allows you to save specific objects on the desktop
+    and have them, and only them, recreated when you next start up.</para>
+
+    <para></para>
+
+    <section>
+      <title>Configuration</title>
+
+      <para>Add the following property to
+      <filename>isis.properties</filename> to enable this feature.
+      Better still create and add it to a file called
+      <filename>exploration.properties</filename> so it is only used in
+      exploration mode.</para>
+
+      <literallayout>isis.exploration-objects=true</literallayout>
+
+      <para>There is a second property that allows you specify where your data
+      file is stored.</para>
+
+      <literallayout>isis.exploration-objects.file=tmp/data</literallayout>
+
+      <section>
+        <title></title>
+
+        <para></para>
+      </section>
+    </section>
+
+    <section>
+      <title></title>
+
+      <para>Data for an object is </para>
+    </section>
+  </section>
+</article>

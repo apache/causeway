@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+         http://www.apache.org/licenses/LICENSE-2.0
+         
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+-->
+<document xmlns="http://maven.apache.org/XDOC/2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
+	<properties>
+		<title>Maven Archetype</title>
+
+		<author email="isis-contributors@lists.sourceforge.net">[[NAME]] Contributors</author>
+	</properties>
+
+	<body>
+		<section name="Resources &amp; Programming">
+
+			<p>
+				This series of screencasts (originally posted on <a
+							href="http://danhaywood.com">Dan Haywood's blog</a>) all relate to the 'claims'
+				example application, available in the
+				<a href="./downloads.html">download</a>.  This app is a cut-down version of the expenses application shown
+				<a href="./expenses-movies.html">elsewhere</a>.
+			</p>
+
+			<p>
+				Although in the screencasts it is generally the
+				<a href="./plugins/dnd-viewer/index.html">DnD viewer</a>
+				that is shown, you should find that you can make the same
+				changes and run them under the
+				<a href="./plugins/html-viewer/index.html">HTML viewer</a>
+				(or any other viewer) also.
+			</p>
+
+			<ul>
+				<li>
+					<p>
+						Example ‘claims’ app and other resources
+					</p>
+					<p>
+						In this
+						<a href="./screencasts/example-claims-app.html">screencast</a>
+						we see how to import and then run the 'claims' example application into Eclipse.  We also see some of the other
+						resources available.
+					</p>
+				</li>
+
+				<li>
+					<p>
+						Properties and Choices
+					</p>
+					<p>
+						This
+						<a href="./screencasts/properties-and-choices.html">screencast</a>
+						shows how to add a property to a domain
+						object, and provide a list of choices (a drop-down list) for that
+						property.
+					</p>
+				</li>
+
+				<li>
+				
+					<p>
+					Property Business Rules
+						
+					</p>
+					<p>
+						One of the aims of [[NAME]] is to ensure that our domain
+						objects
+						are behaviourally-complete: that they encapsulate a coherent set of
+						responsibilities. Not anaemic domain models, but OO like your
+						mother
+						taught you.
+
+						So in this
+						<a href="./screencasts/property-business-rules.html">screencast</a>
+						we extend the example to add in various
+						validation business rules for a property. We also specify whether the
+						property is enabled, and even if it is visible.
+					</p>
+				</li>
+
+				<li>
+					<p>
+						Bounded Classes
+					</p>
+					<p>
+						In earlier screencasts we've seen how [[NAME]] allows us to
+						write supporting
+						<tt>validateXxx()</tt>
+						and
+						<tt>choicesXxx()</tt>
+						methods which we can use to limit the
+						set of values that can be taken for a property, (eg "visa",
+						"mastercard", or "amex"). But suppose there were two different
+						classes
+						that both had the same rules? That would suggest there's a concept
+						missing from our ubiquitous language (eg
+						<tt>PaymentMethodType</tt>
+						). What the
+						values then represent are the bounded set of instances of that type
+						(just like an enum).
+
+						So in this <a href="./screencasts/property-business-rules.html">screencast</a> we extend the previous example and replace a
+						simple string property with one that references a new bounded
+						(entity) class. And that sets us up to start pushing functionality
+						onto it.
+					</p>
+				</li>
+			</ul>
+
+		</section>
+		<section name="What Next?">
+			<p>
+				Next, you might want to go into
+				<a href="./how-it-works.html">more detail</a>
+				on the programming model. Alternatively, go back to the
+				<a href="./index.html">home page</a>
+				for other resources.
+			</p>
+		</section>
+	</body>
+</document>

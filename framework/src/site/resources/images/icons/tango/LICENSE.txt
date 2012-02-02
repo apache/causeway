@@ -1,0 +1,13 @@
+These icons are taken from the Tango project (tango.freedesktop.org), released into the public domain, and therefore available to use freely.
+
+created by:
+
+Ulisse Perusin <uli.peru@gmail.com>
+Steven Garrity <sgarrity@silverorange.com>
+Lapo Calamandrei <calamandrei@gmail.com>
+Ryan Collier <rcollier@novell.com>
+Rodney Dawes <dobey@novell.com>
+Andreas Nilsson <nisses.mail@home.se>
+Tuomas Kuosmanen <tigert@tigert.com>
+Garrett LeSage <garrett@novell.com>
+Jakub Steiner <jimmac@novell.com>

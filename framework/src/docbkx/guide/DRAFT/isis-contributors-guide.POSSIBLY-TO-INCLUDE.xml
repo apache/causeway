@@ -1,0 +1,711 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+-->
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
+"file:./src/docbkx/dtd-4.5/docbookx.dtd">
+<book>
+  <bookinfo>
+    <title><?eval ${docbkxGuideTitle}?></title>
+
+    <subtitle><?eval ${docbkxGuideSubTitle}?></subtitle>
+
+    <releaseinfo><?eval ${project.version}?></releaseinfo>
+
+    <authorgroup>
+      <author>
+        <firstname>Dan</firstname>
+
+        <surname>Haywood</surname>
+      </author>
+    </authorgroup>
+
+    <legalnotice>
+      <para>Permission is granted to make and distribute verbatim copies of
+      this manual provided that the copyright notice and this permission
+      notice are preserved on all copies.</para>
+    </legalnotice>
+  </bookinfo>
+
+  <!-- front matter -->
+
+  <toc></toc>
+
+  <!-- main content -->
+
+  <part>
+    <title></title>
+
+    <chapter>
+      <title></title>
+
+      <sect1>
+        <title>Overview</title>
+
+        <para>Customization for Maven sites is accomplished by:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>customizing the menu bar and general look-n-feel (see <xref
+            linkend="sec.customizing-the-site-descriptor" />)</para>
+
+            <para>This is done by editing the site descriptor for each module,
+            namely, <filename>src/site/site.xml</filename>. The exact content
+            of the site descriptor varies, generally parent modules (and
+            standalone modules) will have more content than child modules.
+            This is in part because child modules inherit certain information
+            from the parent.</para>
+          </listitem>
+
+          <listitem>
+            <para>writing additional site content (see <xref
+            linkend="sec.additional-site-content" />)</para>
+
+            <para>The additional content lives under
+            <filename>src/site/xxx</filename>, where <filename>xxx</filename>
+            represents the file format. These files can be linked to from the
+            menu bar using <filename>site.xml</filename>. Any document that
+            corresponds to <filename>index.html</filename> (for example
+            <filename>src/site/apt/index.apt</filename>) need not be
+            explicitly linked to because it will be the default for the
+            site.</para>
+          </listitem>
+
+          <listitem>
+            <para>specifying the list of reports to produce (see <xref
+            linkend="sec.generated-reports" />)</para>
+
+            <para>This is done in the <filename>pom.xml</filename>. For sister
+            projects the configuration is inherited from the corporate
+            <acronym>POM</acronym>.</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>The following sections provide further detail on these
+        steps.</para>
+
+        <para>For details on actually building, checking and deploying the
+        site, see <xref
+        linkend="chp.building-checking-and-deploying-the-site" />.</para>
+      </sect1>
+
+      <sect1 id="sec.customizing-the-site-descriptor">
+        <title>Customizing the Site Descriptor (site.xml)</title>
+
+        <para>Generally speaking sister projects should have site
+        documentation alongside the code artifacts for each Maven module (so
+        that there is a <filename>src/site</filename> directory alongside
+        <filename>src/main/java</filename> and
+        <filename>src/test/java</filename>).</para>
+
+        <para>The parent module is the top-level module that contains the main
+        <filename>index.html</filename> entry page along with a hierarchy of
+        subsites corresponding to the submodules defined in the
+        <sgmltag>&lt;modules&gt;</sgmltag> element of the
+        <acronym>POM</acronym>, for example:</para>
+
+        <screen>&lt;modules&gt;
+    &lt;module&gt;fixtures&lt;/module&gt;
+    &lt;module&gt;documentation&lt;/module&gt;
+&lt;/modules&gt;</screen>
+
+        <para>The child modules are then the modules referenced by the parent
+        module.</para>
+
+        <para>Some sister projects may have separate standalone modules that
+        just contain site content (typically with no code artifacts of their
+        own). These can be thought of as parent modules with no children
+        modules.</para>
+
+        <para>The customization required depends on whether the site is a
+        parent/standalone module or a child module.</para>
+
+        <sect2 id="sec.parent-module-and-standalone-modules">
+          <title>Parent Module and Standalone Modules</title>
+
+          <sect3>
+            <title>Project Name</title>
+
+            <para>The project name should use
+            <varname>${project.name}</varname>, being taken from the
+            <filename>pom.xml</filename>.</para>
+
+            <screen>&lt;project name="${project.name}"&gt;
+   ...
+&lt;/project&gt;</screen>
+
+            <para>The name will appear in any child modules sites linking back
+            to the parent module (see <xref
+            linkend="sec.child-module-site-body-and-menu-references" />). It
+            must be short enough to fit in the space provided.</para>
+          </sect3>
+
+          <sect3>
+            <title>Version Position and Banner</title>
+
+            <para>The version should be positioned to the right, and the logo
+            should use a version of
+            <filename>hal-logo-for-maven-site.jpg</filename> customised for
+            the sister project (there is a
+            <filename>hal-logo-for-maven-site.pdn</filename> <ulink
+            url="http://getpaint.net">Paint.NET</ulink> master available in
+            the Star Objects umbrella project):</para>
+
+            <screen>&lt;project name="${project.name}"&gt;
+  &lt;version position="right"/&gt;
+
+  &lt;bannerLeft&gt;
+    &lt;name&gt;HAL&lt;/name&gt;
+    &lt;src&gt;images/hal-logo-for-maven-site.jpg&lt;/src&gt;
+    &lt;href&gt;.&lt;/href&gt;
+  &lt;/bannerLeft&gt;
+
+  ...
+&lt;/project&gt;</screen>
+          </sect3>
+
+          <sect3>
+            <title>Powered By Logo</title>
+
+            <para>The <sgmltag>&lt;poweredBy&gt;</sgmltag> element (which adds
+            a logo at the bottom of the menu bar) should be specified to use
+            the <filename>NO-powered-by-logo.png</filename>:</para>
+
+            <screen>&lt;project name="${project.name}"&gt;
+  ...
+  &lt;poweredBy&gt;
+     &lt;logo name="Naked Objects" href="http://nakedobjects.org"
+           img="images/NO-powered-by-logo.png"/&gt;
+  &lt;/poweredBy&gt;
+  ...
+&lt;/project&gt;</screen>
+
+            <para>Note that the theme expects that the
+            <filename>.png</filename> image should be scalable to 100 x 62
+            (see <filename>maven-theme.css</filename> in Star Objects'
+            <filename>trunk/skin/src/main/resources/css</filename>).</para>
+          </sect3>
+
+          <sect3 id="sec.defining-the-skin">
+            <title>Skin</title>
+
+            <para>The skin should be specified as the corporate Maven
+            skin:</para>
+
+            <screen>&lt;project name="${project.name}"&gt;
+  ...
+  &lt;skin&gt;
+    &lt;groupId&gt;org.starobjects.star&lt;/groupId&gt;
+    &lt;artifactId&gt;skin&lt;/artifactId&gt;
+    &lt;version&gt;1&lt;/version&gt;
+  &lt;/skin&gt;
+  ...
+&lt;/project&gt;</screen>
+
+            <para>Note that section <xref
+            linkend="chp.BuildingAndDeployingTheMavenSkin" /> of this document
+            describes how this skin is deployed. Sister projects should be
+            able to take it for granted that this skin is available.</para>
+          </sect3>
+
+          <sect3>
+            <title>Body and Menu Items</title>
+
+            <para>The <sgmltag>&lt;body&gt;</sgmltag> element defines menu
+            items (and optionally links)</para>
+
+            <screen>&lt;project name="${project.name}"&gt;
+  ...
+  &lt;body&gt;
+    ...
+  &lt;/body&gt;
+&lt;/project&gt;</screen>
+          </sect3>
+
+          <sect3>
+            <title>Link items (parent modules only)</title>
+
+            <para>(For parent modules), link item (appearing in the top
+            border) should reference Naked Objects and other sister
+            projects:</para>
+
+            <screen>  &lt;body&gt;
+     &lt;links&gt;
+       &lt;item name="Naked Objects" href="http://www.nakedobjects.org/"/&gt;
+       &lt;item name="Sister Projects" href="http://starobjects.sourceforge.net"/&gt;
+      &lt;/links&gt;
+    ...
+  &lt;/body&gt;</screen>
+          </sect3>
+
+          <sect3>
+            <title>Menu item linking to Child Modules (parent modules
+            only)</title>
+
+            <para>(For parent modules), a menu item should reference child
+            modules, providing navigability to the subsites of these
+            modules:</para>
+
+            <screen>  &lt;body&gt;
+    ...
+    &lt;menu ref="modules" inherit="top"/&gt;
+    ...
+  &lt;/body&gt;</screen>
+          </sect3>
+
+          <sect3>
+            <title>Menu item linking to Module-specific Content</title>
+
+            <para>If there is any specific content (such as overview pages,
+            screencasts, FAQ pages and so on) then they should be referenced
+            here. At the time of writing none of the sister projects had this
+            requirement, but the Naked Objects site, also built with Maven,
+            does show how:</para>
+
+            <screen>  &lt;body&gt;
+    ...
+    &lt;menu name="Developing with Naked Objects"&gt;
+      &lt;item name="Forums" href="http://sourceforge.net/projects/nakedobjects/forums/" /&gt;
+      &lt;item name="Blog/News" href="http://blog.nakedobjects.org/" /&gt;
+      &lt;item name="Manual" href="manual.html" collapse="true"&gt;
+        &lt;item name="Tutorial" href="tutorial.html" /&gt;
+        &lt;item name="Application manual" href="application.html" /&gt;
+        &lt;item name="Filename conventions" href="file-nameconvention.html" /&gt;
+        &lt;item name="Installing NOF" href="installing-nof.html" /&gt;
+      &lt;/item&gt;
+    &lt;/menu&gt;
+    ...
+  &lt;/body&gt;</screen>
+          </sect3>
+
+          <sect3>
+            <title>Menu item linking to Reports (if source code)</title>
+
+            <para>Neither parent sites nor standalone sites are expected to
+            include source code. If they do, though, then a menu item to
+            reference generated reports should be added:</para>
+
+            <screen>  &lt;body&gt;
+    ...
+    &lt;menu ref="reports"/&gt;
+    ...
+  &lt;/body&gt;</screen>
+          </sect3>
+
+          <sect3 id="sec.AddingGeneratedDocumentationToSite">
+            <title>Menu items linking to Documentation (parent modules
+            only)</title>
+
+            <para>Many parent modules will have a
+            <package>documentation</package> (sub)module which is used to
+            create DocBook documentation (as discussed in <xref
+            linkend="chp.WritingDocBookDocumentation" />). The following links
+            allow the generated documentation to be referenced directly from
+            the parent site:</para>
+
+            <screen>  &lt;body&gt;
+    ...
+    &lt;menu name="Documentation"&gt;
+      &lt;item name="User Guide (PDF)"
+        href="documentation/docbkx/pdf/user-guide.pdf"/&gt;
+      &lt;item name="User Guide (HTML)"
+        href="documentation/docbkx/html/user-guide/user-guide.html"/&gt;
+      &lt;item name="Developers Guide (PDF)"
+        href="documentation/docbkx/pdf/developers-guide.pdf"/&gt;
+      &lt;item name="Developers Guide (HTML)" 
+        href="documentation/docbkx/html/developers-guide/developers-guide.html"/&gt;
+    &lt;/menu&gt;
+    ...
+  &lt;/body&gt;</screen>
+
+            <para>These links pick up generated documentation that is copied
+            from each the documentation project's
+            <filename>target/docbkx</filename> directory into its
+            <filename>target/site/docbkx</filename> directory. The copying
+            itself is defined in the corporate <acronym>POM</acronym>, as part
+            of the <sgmltag>&lt;postProcess&gt;</sgmltag> configuration of the
+            <package>docbkx-maven-plugin</package> plugin:</para>
+
+            <screen>&lt;plugin&gt;
+  &lt;groupId&gt;com.agilejava.docbkx&lt;/groupId&gt;
+  &lt;artifactId&gt;docbkx-maven-plugin&lt;/artifactId&gt;
+  &lt;version&gt;2.0.8&lt;/version&gt;
+  ...
+  &lt;executions&gt;
+    &lt;execution&gt;
+      &lt;id&gt;html-docs&lt;/id&gt;
+      ...
+      &lt;configuration&gt;
+        ...
+        &lt;postProcess&gt;
+          &lt;copy todir="target/site/docbkx/html" failonerror="false"&gt;
+             &lt;fileset dir="target/docbkx/html"&gt;
+               &lt;include name="**/*"/&gt;
+             &lt;/fileset&gt;
+          &lt;/copy&gt;
+        &lt;/postProcess&gt;
+      &lt;/configuration&gt;
+    &lt;/execution&gt;
+
+    ...
+  &lt;/executions&gt;
+&lt;/plugin&gt;</screen>
+
+            <para>There's a similar <sgmltag>&lt;postProcess&gt;</sgmltag>
+            element for <acronym>PDF</acronym> documents too.</para>
+
+            <para>Note that some sister projects may only have user guide
+            and/or documentation guide. For example, Star Objects umbrella
+            project only provides a developers guide (this guide!). In such
+            cases, only add the links required.</para>
+          </sect3>
+
+          <sect3>
+            <title>Menu items linking to Project Resources</title>
+
+            <para>Project resources provide pointers to resources hosted
+            elsewhere (typically SourceForge). For example, Tested Objects
+            has:</para>
+
+            <screen>  &lt;body&gt;
+    ...
+    &lt;menu name="Project Resources"&gt;
+      &lt;item name="SF Trac Wiki" href="http://sourceforge.net/apps/trac/testedobjects"/&gt;
+      &lt;item name="SF Project Page" href="http://sourceforge.net/projects/testedobjects"/&gt;
+    &lt;/menu&gt;
+    ...
+  &lt;/body&gt;</screen>
+
+            <para>The "Maven Repo" link perhaps needs a little more
+            explanation. Each of the sister projects has its own staging Maven
+            repository on SourceForge. The "Maven Repo" link allows this
+            repository to be browsed.</para>
+          </sect3>
+
+          <sect3>
+            <title>Menu items linking to Sister Projects</title>
+
+            <para>All sister projects should have a set of menu items pointing
+            to other sister projects (home page, and the Maven repo):</para>
+
+            <screen>  &lt;body&gt;
+    ...
+    &lt;menu name="Sister Projects"&gt;
+      &lt;item name="Home" href="http://starobjects.sourceforge.net"/&gt;
+      &lt;item name="Maven Repo" href="http://sourceforge.net/projects/starobjects/m2-repo"/&gt;
+    &lt;/menu&gt;
+    ...
+  &lt;/body&gt;</screen>
+          </sect3>
+
+          <sect3>
+            <title>Menu items linking to any other resources</title>
+
+            <para>Other resources provide pointers to related projects, blogs
+            and so forth, also hosted elsewhere. The standard set for all
+            sister projects are:</para>
+
+            <screen>  &lt;body&gt;
+    ...
+    &lt;menu name="Other Resources"&gt;
+      &lt;item name="Dan Haywood's blog" href="http://danhaywood.com"/&gt;
+      &lt;item name="Naked Objects" href="http://www.nakedobjects.org/"/&gt;
+      &lt;item name="Naked Objects for .NET" href="http://www.nakedobjects.net/"/&gt;
+      &lt;item name="Naked Objects blog" href="http://blog.nakedobjects.org/"/&gt;
+      &lt;item name="Scimpi" href="http://www.scimpi.org/" /&gt;
+    &lt;/menu&gt;
+  &lt;/body&gt;</screen>
+          </sect3>
+        </sect2>
+
+        <sect2>
+          <title>Child Modules</title>
+
+          <para>Child modules inherit site definitions from the parent, but
+          override the <sgmltag>&lt;body&gt;</sgmltag> element to customize
+          the contents of the menu items. Pretty much everything else (such as
+          the logo and skin definition) is unchanged.</para>
+
+          <sect3>
+            <title>Project Name</title>
+
+            <para>The project name should use
+            <varname>${project.name}</varname>, being taken from the
+            <filename>pom.xml</filename>.</para>
+
+            <screen>&lt;project name="${project.name}"&gt;
+   ...
+&lt;/project&gt;</screen>
+
+            <para>The name will appear in any child sites linking back to the
+            parent module (see <xref
+            linkend="sec.parent-module-and-standalone-modules" />), so it must
+            be short enough to fit in the space provided.</para>
+          </sect3>
+
+          <sect3 id="sec.child-module-site-body-and-menu-references">
+            <title>Body and Menu Items</title>
+
+            <para>The <sgmltag>&lt;body&gt;</sgmltag> element defines menu
+            items (and optionally links)</para>
+
+            <screen>&lt;project name="${project.name}"&gt;
+  ...
+  &lt;body&gt;
+    ...
+  &lt;/body&gt;
+&lt;/project&gt;</screen>
+          </sect3>
+
+          <sect3>
+            <title>Menu link referencing the Parent Module</title>
+
+            <para>The child modules should reference the parent module,
+            providing navigability back from the child's subsite to the
+            parent's site:</para>
+
+            <screen>  &lt;body&gt;
+    &lt;menu ref="parent"/&gt;
+    ...
+  &lt;/body&gt;</screen>
+          </sect3>
+
+          <sect3>
+            <title>Menu item linking to Module-specific Content</title>
+
+            <para>If there is any specific content for the child module then
+            they should be referenced here. At the time of writing none of the
+            sister projects had this requirement, but the Naked Objects site,
+            also built with Maven, does show how:</para>
+
+            <screen>  &lt;body&gt;
+    ...
+    &lt;menu name="Developing with Naked Objects"&gt;
+      &lt;item name="Forums" href="http://sourceforge.net/projects/nakedobjects/forums/" /&gt;
+      &lt;item name="Blog/News" href="http://blog.nakedobjects.org/" /&gt;
+      &lt;item name="Manual" href="manual.html" collapse="true"&gt;
+        &lt;item name="Tutorial" href="tutorial.html" /&gt;
+        &lt;item name="Application manual" href="application.html" /&gt;
+        &lt;item name="Filename conventions" href="file-nameconvention.html" /&gt;
+        &lt;item name="Installing NOF" href="installing-nof.html" /&gt;
+      &lt;/item&gt;
+    &lt;/menu&gt;
+    ...
+  &lt;/body&gt;</screen>
+          </sect3>
+
+          <sect3>
+            <title>Links to Generated Reports</title>
+
+            <para>All child modules are expected to contain source code. They
+            should therefore include a reference to generated reports from
+            that source code:</para>
+
+            <screen>  &lt;body&gt;
+    ...
+    &lt;menu ref="reports"/&gt;
+  &lt;/body&gt;</screen>
+          </sect3>
+
+          <sect3>
+            <title>Documentation Links (documentation child module
+            only)</title>
+
+            <para>Since all sister projects should have a
+            <package>documentation</package> module, this module should also
+            link to the documentation. The text for this is similar to that on
+            the parent module, but one level deeper in the directory (ie
+            remove the "documentation/" from the path):</para>
+
+            <screen>  &lt;body&gt;
+    ...
+    &lt;menu name="Documentation"&gt;
+      &lt;item name="User Guide (PDF)"
+        href="docbkx/pdf/user-guide.pdf"/&gt;
+      &lt;item name="User Guide (HTML)"
+        href="docbkx/html/user-guide/user-guide.html"/&gt;
+      &lt;item name="Developers Guide (PDF)"
+        href="docbkx/pdf/developers-guide.pdf"/&gt;
+      &lt;item name="Developers Guide (HTML)" 
+        href="docbkx/html/developers-guide/developers-guide.html"/&gt;
+    &lt;/menu&gt;
+    ...
+  &lt;/body&gt;</screen>
+          </sect3>
+        </sect2>
+      </sect1>
+
+      <sect1 id="sec.generated-reports">
+        <title>Generated Reports</title>
+
+        <para>The reports are defined by the
+        <sgmltag>&lt;reporting&gt;</sgmltag> section of the corporate
+        <acronym>POM</acronym>. These only appear in a module's site if there
+        is a <sgmltag>&lt;menu ref="reports"/&gt;</sgmltag> link; generally
+        this <emphasis>is</emphasis> the case for child modules and is
+        <emphasis>not</emphasis> the case for parent modules.</para>
+
+        <para>At the time of writing, the reports defined were:</para>
+
+        <screen>&lt;reporting&gt;
+  &lt;plugins&gt;
+    &lt;plugin&gt;
+      &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
+      &lt;artifactId&gt;maven-project-info-reports-plugin&lt;/artifactId&gt;
+      ...
+    &lt;/plugin&gt;
+
+    &lt;plugin&gt;
+       &lt;groupId&gt;org.codehaus.mojo&lt;/groupId&gt;
+       &lt;artifactId&gt;cobertura-maven-plugin&lt;/artifactId&gt;
+    &lt;/plugin&gt;
+
+    &lt;plugin&gt;
+      &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
+      &lt;artifactId&gt;maven-surefire-report-plugin&lt;/artifactId&gt;
+    &lt;/plugin&gt;
+
+    &lt;plugin&gt;
+      &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
+      &lt;artifactId&gt;maven-checkstyle-plugin&lt;/artifactId&gt;
+      ...
+    &lt;/plugin&gt;
+
+    &lt;plugin&gt;
+      &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
+      &lt;artifactId&gt;maven-pmd-plugin&lt;/artifactId&gt;
+      ...
+    &lt;/plugin&gt;
+
+    &lt;plugin&gt;
+       &lt;groupId&gt;org.codehaus.mojo&lt;/groupId&gt;
+       &lt;artifactId&gt;taglist-maven-plugin&lt;/artifactId&gt;
+    &lt;/plugin&gt;
+
+    &lt;plugin&gt;
+      &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
+      &lt;artifactId&gt;maven-jxr-plugin&lt;/artifactId&gt;
+      ...
+    &lt;/plugin&gt;
+
+    &lt;plugin&gt;
+      &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
+      &lt;artifactId&gt;maven-javadoc-plugin&lt;/artifactId&gt;
+      ...
+    &lt;/plugin&gt;
+  &lt;/plugins&gt;
+&lt;/reporting&gt;</screen>
+
+        <para>The <package>maven-project-info-reports-plugin</package> plugin
+        generates the submenu under the "Project Information" menu
+        item:</para>
+
+        <screenshot>
+          <screeninfo>project information</screeninfo>
+
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="images/site/project-information.png"
+                         scale="60" />
+            </imageobject>
+          </mediaobject>
+        </screenshot>
+
+        <para>The remaining plugins each generate a submenu item under the
+        "Project Reports" menu item:</para>
+
+        <screenshot>
+          <screeninfo>project reports</screeninfo>
+
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="images/site/project-reports.png" scale="60" />
+            </imageobject>
+          </mediaobject>
+        </screenshot>
+      </sect1>
+
+      <sect1 id="sec.CheckingSiteDocumentation">
+        <title>Checking the Site by Deploying it Locally</title>
+
+        <para>To check any changes to the site it is necessary to build and
+        deploy it locally.</para>
+
+        <sect2>
+          <title>Prerequisites</title>
+
+          <para>See <xref linkend="apx.DeploymentPrerequisites" />, which
+          describes prerequisite configuration needed prior to performing any
+          deployment.</para>
+        </sect2>
+
+        <sect2>
+          <title>Performing the Local Deploy</title>
+
+          <para>To build a site and deploy it locally, use:</para>
+
+          <screen>mvn site-deploy -D dist=local</screen>
+
+          <para>The generated site can be browsed by navigating to the
+          location specified in the corporate POM, namely
+          <filename>/tmp/m2-sites/${distMgmtArtifactId}</filename>. For
+          example, Star Objects' own site is deployed to
+          <filename>/tmp/m2-sites/starobjects</filename>.</para>
+
+          <para>The screenshot below shows what a typical generated site looks
+          like:</para>
+
+          <para><screenshot>
+              <screeninfo>sisterobjects skin example</screeninfo>
+
+              <mediaobject>
+                <imageobject>
+                  <imagedata fileref="images/dev-env/maven-application-skin-example.png"
+                             scale="40" />
+                </imageobject>
+              </mediaobject>
+            </screenshot></para>
+        </sect2>
+      </sect1>
+    </chapter>
+  </part>
+
+  <part>
+    <title>Continuous Integration and Release Management</title>
+
+    <chapter>
+      <title>CI Configuration</title>
+
+      <abstract>
+        <para>Hudson is used for CI</para>
+      </abstract>
+
+      <para></para>
+    </chapter>
+
+    <chapter>
+      <title>Release Management</title>
+
+      <abstract>
+        <para>The process and steps required to make a new release.</para>
+      </abstract>
+
+      <para></para>
+    </chapter>
+  </part>
+</book>

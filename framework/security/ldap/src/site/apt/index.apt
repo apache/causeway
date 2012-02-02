@@ -1,0 +1,44 @@
+~~  Licensed to the Apache Software Foundation (ASF) under one
+~~  or more contributor license agreements.  See the NOTICE file
+~~  distributed with this work for additional information
+~~  regarding copyright ownership.  The ASF licenses this file
+~~  to you under the Apache License, Version 2.0 (the
+~~  "License"); you may not use this file except in compliance
+~~  with the License.  You may obtain a copy of the License at
+~~
+~~        http://www.apache.org/licenses/LICENSE-2.0
+~~
+~~  Unless required by applicable law or agreed to in writing,
+~~  software distributed under the License is distributed on an
+~~  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+~~  KIND, either express or implied.  See the License for the
+~~  specific language governing permissions and limitations
+~~  under the License.
+
+
+
+Security LDAP Implementation
+
+ The <ldap security> module provides an implementation of Isis' authentication and
+ authorization APIs where credentials are stored in a well-known LDAP server.
+ 
+ This makes the LDAP security implementation suitable for deployment where an
+ LDAP exists.  Optionally it may be combined with other implementations (for example
+ the authorization might be performed using the file-based implementation).
+ 
+ See the security 
+ {{{../docbkx/html/guide/isis-security.html}HTML}} or 
+ {{{../docbkx/pdf/isis-security.pdf}PDF}} documentation for more detail.
+ 
+Alternatives
+
+  Alternatives include:
+  
+  * the {{{../dflt/index.html}default}} (no-op) security implementation, for prototyping use only
+
+  * the {{{../file/index.html}file-based}} security (reading from simple flat files)
+
+  * the {{{../sql/index.html}SQL}} security (reading from simple SQL tables)
+
+  []
+  

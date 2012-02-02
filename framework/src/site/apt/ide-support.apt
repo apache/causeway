@@ -1,0 +1,81 @@
+~~  Licensed to the Apache Software Foundation (ASF) under one
+~~  or more contributor license agreements.  See the NOTICE file
+~~  distributed with this work for additional information
+~~  regarding copyright ownership.  The ASF licenses this file
+~~  to you under the Apache License, Version 2.0 (the
+~~  "License"); you may not use this file except in compliance
+~~  with the License.  You may obtain a copy of the License at
+~~
+~~        http://www.apache.org/licenses/LICENSE-2.0
+~~
+~~  Unless required by applicable law or agreed to in writing,
+~~  software distributed under the License is distributed on an
+~~  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+~~  KIND, either express or implied.  See the License for the
+~~  specific language governing permissions and limitations
+~~  under the License.
+
+
+
+  We've developed a few simple utilities to help speed up your coding efforts. 
+ 
+Eclipse
+
+* Java Editor Templates
+
+ Download the following links to a temporary directory:
+
+ * {{{./ide/eclipse/templates/isis-templates.xml}isis-templates.xml}}
+
+ * {{{./ide/eclipse/templates/junit4-templates.xml}junit4-templates.xml}}
+
+ * {{{./ide/eclipse/templates/jmock2-templates.xml}jmock2-templates.xml}}
+
+ []
+  
+ Now, import using <<Windows > Preferences > Java > Editor > Templates>> and then choose <<Import>>
+ 
+ The Isis templates are prefixed <<<is>>>, the JUnit templates are prefixed <<<ju4>>>, and the JMock templates prefixed <<<jm2>>>.
+ 
+
+* Code Folding
+
+  The Isis code templates that we ship are designed to be used with the Coffee Bytes code folder, with <<<\{\{>>> and 
+  <<<\}\}>>> being used to define custom regions.
+  
+  Unfortunately, though the original code-folding plugin stopped working somewhere around Eclipse 3.3.  
+  All is not lost though; Kevin Meyer has helpfully recompiled it against Eclipse 3.5 (tested through to Eclipse 3.7).
+  To use it:
+  
+  * download this {{{./com.cb.eclipse.folding.KAM-3.5.zip}zip}}
+  
+  * unzip into Eclipse's plugins folder
+  
+  * restart Eclipse
+  
+  []
+  
+  Then, use <<Windows > Preferences > Java > Editor > Folding>> and specify user-defined regions.
+
+* Other Plugins
+
+  The {{{./docbkx/html/guide/ch01.html}Contributors Guide}} also has suggestions for a number of other plugins
+  that you might wish to use.
+  
+IntelliJ IDEA
+
+ If your preferred IDE is IntelliJ Idea, then you can use the {{{http://code.google.com/p/eclipse2idea/}eclipse2idea}} project to
+ convert the above Eclipse templates into IDEA's own templates.  Thanks to Alexander Krasnukhin for putting this together.
+ 
+
+Other Tooling
+
+  In the future we hope to revive some Eclipse plugins that was worked on a few 
+  years ago, making it easy to apply annotations for example, or refactor 
+  methods <and> their supporting methods.
+  
+  Another tool on the roadmap is a Maven plugin to allow metamodel validators
+  to be run.  For example, this might allow orphaned supporting methods to be 
+  identified.
+ 
+   

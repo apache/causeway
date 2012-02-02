@@ -1,0 +1,52 @@
+~~  Licensed to the Apache Software Foundation (ASF) under one
+~~  or more contributor license agreements.  See the NOTICE file
+~~  distributed with this work for additional information
+~~  regarding copyright ownership.  The ASF licenses this file
+~~  to you under the Apache License, Version 2.0 (the
+~~  "License"); you may not use this file except in compliance
+~~  with the License.  You may obtain a copy of the License at
+~~
+~~        http://www.apache.org/licenses/LICENSE-2.0
+~~
+~~  Unless required by applicable law or agreed to in writing,
+~~  software distributed under the License is distributed on an
+~~  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+~~  KIND, either express or implied.  See the License for the
+~~  specific language governing permissions and limitations
+~~  under the License.
+
+Deploy <Isis> as an auto-generated webapp
+
+  One of the original motivations for Isis itself was to be able 
+  automatically generate a user interface for a domain object model.
+  
+  The {{{../viewer/html/index.html}HTML viewer}} provides a straight-forward 
+  webapp for a domain model, but is one that nonetheless provides access and honours all of the business 
+  logic that may be encoded within those domain objects.  
+  
+  The viewer makes minimal use of Javascript, as it was originally written
+  to comply with governmental standards that forbid the use of such.  The
+  viewer supports customization only to the extent that its CSS can be changed.
+  
+* {Isis persistence}
+
+  The easiest way to deploy Isis with the HTML viewer is using Isis' own persistence
+  mechanisms.  These are provided by the {{{../runtimes/dflt/index.html}default runtime}}, and
+  offer in turn a number of {{{../runtimes/dflt/objectstores/index.html}object stores}}.
+
+* {Custom persistence}
+
+  Isis persistence API is pluggable, so if it does not provide the integration already then
+  you could implementing to its object store API.
+   
+  At the time of writing (v0.2.0) the HTML viewer has a hard-coded dependency on Isis
+  {{{../runtimes/dflt/index.html}Default Runtime}}; this means that it cannot easily be hosted 
+  on your own framework (in conjunction with the {{{../runtimes/embedded/index.html}Embedded Runtime}}.
+  In the future we hope to break this dependency, allowing you to use the RESTful viewer with any
+  persistence framework.
+
+* {Other Viewers}
+
+  Note that Isis does have a number of other (human-usable) viewers.  See 
+  {{{../viewer/index.html#Other_viewers}other viewers}} for details. 
+  

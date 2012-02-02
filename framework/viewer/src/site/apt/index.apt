@@ -1,0 +1,94 @@
+~~  Licensed to the Apache Software Foundation (ASF) under one
+~~  or more contributor license agreements.  See the NOTICE file
+~~  distributed with this work for additional information
+~~  regarding copyright ownership.  The ASF licenses this file
+~~  to you under the Apache License, Version 2.0 (the
+~~  "License"); you may not use this file except in compliance
+~~  with the License.  You may obtain a copy of the License at
+~~
+~~        http://www.apache.org/licenses/LICENSE-2.0
+~~
+~~  Unless required by applicable law or agreed to in writing,
+~~  software distributed under the License is distributed on an
+~~  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+~~  KIND, either express or implied.  See the License for the
+~~  specific language governing permissions and limitations
+~~  under the License.
+
+
+
+{Deployable viewers}
+ 
+ The <viewer> module is the parent of the different viewer implementations.
+
+ * {{{./json/index.html}JSON (Restful) viewer}}
+
+  The <json> viewer provides the RESTful API to the domain object model, 
+  providing JSON representations of domain objects.  This is great as a back-end
+  where the client is either a custom UI (written using JQuery, say), or for
+  data integration scenarios.
+  
+ * {{{./html/index.html}HTML viewer}}
+
+  The HTML viewer provides a simple, minimally customizable webapp interface
+  for interacting with an Isis domain model.  We find it's great for prototyping,
+  or for exploring the REST API.  Or, if your user base are "experts" in the
+  domain then you may also consider deploying it directly into production.
+
+* {Testing support}
+
+ Isis' testing support is also provided by viewer implementations.  That may seem
+ slightly odd terminology, but consider the test as a client of the domain model, 
+ and exposing through its API a representation of the domain model.  This is
+ basically the same role as the other viewers; there just isn't a GUI.
+ 
+ Isis supports testing in two different ways:
+
+ * {{{./bdd/index.html}BDD Framework Integration}}
+
+  The <BDD> framework integration provides the ability to story-test the 
+  functionality in your domain objects, using a behaviour-driven design (BDD) 
+  framework.
+
+  Currently the only supported framework supported is 
+  {{{http://concordion.org}Concordion}}, but the design is such that support 
+  for other frameworks can easily be added.
+
+ * {{{./junit/index.html}JUnit Integration}}
+
+  The <JUnit> viewer module provides {{{http://junit.org}JUnit4}} integration, 
+  allowing unit tests to be written exercising business rules by catching the 
+  exceptions thrown by proxied domain objects.
+ 
+
+{Other viewers}
+
+ There are a number of other viewers that should be considered as being of alpha-quality.
+ That means that they are either incomplete implementations, inadequately documented, or 
+ just require a little attention (ie are broken).
+ 
+ That said, you are welcome to use them.  If you do, let us know of any shortcomings 
+ and we'll endeavour to fix them.
+  
+ * {{{./dnd/index.html}Drag-n-Drop viewer}}
+
+   The Drag and Drop (DnD) viewer is non-web graphical user interface that employs a 
+   desktop metaphor for interacting with domain objects.
+
+ * {{{./scimpi/index.html}Scimpi}}
+
+  The <scimpi> viewer is a webapp viewer that out-of-the-box provides a similar 
+  interface to that provided by the {{{./html/index.html}HTML viewer}}.  However, unlike the
+  HTML viewer it allows the user interface to be extensively customized.
+  
+  The scimpi viewer works reasonably well, however its documentation is somewhat lacking.  
+
+ * {{{./wicket/index.html}Wicket viewer}}
+
+  The <wicket> viewer is a customizable webapp viewer for an Isis domain model, implemented 
+  using the {{{http://wicket.apache.org}Apache Wicket}} web framework.
+  
+  This implementation is incomplete in a number of areas (though its documentation is 
+  reasonably complete).
+
+ []
