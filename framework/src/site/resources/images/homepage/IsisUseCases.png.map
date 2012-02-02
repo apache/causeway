@@ -1,0 +1,44 @@
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+-->
+<img style="display: block; margin-left: auto; margin-right: auto;" src="images/homepage/IsisUseCases.png" width="737" height="290" border="0" usemap="#map" />
+
+<map name="map">
+
+<area shape="rect" coords="12,107,143,181" alt="Develop your domain model" href="./use-cases/develop.html" />
+<area shape="rect" coords="0,192,158,208" alt="Develop your domain model using the Isis Programming Model" href="./use-cases/develop.html#Isis_programming_model" />
+<area shape="rect" coords="15,228,149,246" alt="Develop your domain model using Custom Extensions to the Isis Programming Model" href="./use-cases/develop.html#Custom_extensions" />
+
+
+<area shape="rect" coords="229,107,362,181" alt="Specify and test your domain model" href="./use-cases/specify-and-test.html" />
+<area shape="rect" coords="240,191,353,210" alt="Test your domain model using JUnit" href="./use-cases/specify-and-test.html#Junit_integration" />
+<area shape="rect" coords="241,210,351,229" alt="Specify your domain model using BDD (Concordion)" href="./use-cases/specify-and-test.html#BDD_integration" />
+
+<area shape="rect" coords="438,5,568,79" alt="Deploy as the domain model in your preferred framework" href="./use-cases/deploy-own-framework.html" />
+<area shape="rect" coords="574,24,680,43" alt="Deploy as the domain model in your preferred framework with a custom UI" href="./use-cases/deploy-own-framework.html#Custom_UI" />
+<area shape="rect" coords="576,46,738,64" alt="Deploy as the domain model in your preferred framework with custom persistence" href="./use-cases/deploy-own-framework.html#Custom_persistence" />
+
+<area shape="rect" coords="438,107,568,181" alt="Deploy as an auto-generated REST web service" href="./use-cases/deploy-as-rest.html" />
+<area shape="rect" coords="575,116,718,138" alt="Deploy as an auto-generated REST web service using Isis' persistence mechanism" href="./use-cases/deploy-as-rest.html#Isis_persistence" />
+<area shape="rect" coords="577,154,738,172" alt="Deploy as an auto-generated REST web service using a custom persistence mechanism" href="./use-cases/deploy-as-rest.html#Custom_persistence" />
+
+<area shape="rect" coords="438,208,568,283" alt="Deploy as an auto-generated webapp" href="./use-cases/deploy-as-webapp.html" />
+<area shape="rect" coords="575,220,715,240" alt="Deploy as an auto-generated webapp using Isis' persistence mechanism" href="./use-cases/deploy-as-webapp.html#Isis_persistence" />
+<area shape="rect" coords="574,252,737,275" alt="Deploy as an auto-generated webapp using a custom persistence mechanism" href="./use-cases/deploy-as-webapp.html#Custom_persistence" />
+
+</map>

@@ -1,0 +1,63 @@
+~~  Licensed to the Apache Software Foundation (ASF) under one
+~~  or more contributor license agreements.  See the NOTICE file
+~~  distributed with this work for additional information
+~~  regarding copyright ownership.  The ASF licenses this file
+~~  to you under the Apache License, Version 2.0 (the
+~~  "License"); you may not use this file except in compliance
+~~  with the License.  You may obtain a copy of the License at
+~~
+~~        http://www.apache.org/licenses/LICENSE-2.0
+~~
+~~  Unless required by applicable law or agreed to in writing,
+~~  software distributed under the License is distributed on an
+~~  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+~~  KIND, either express or implied.  See the License for the
+~~  specific language governing permissions and limitations
+~~  under the License.
+
+Use <Isis> for Prototyping and Development
+
+  Isis is great for rapid prototyping, because all you need to write
+  in order to get an application up-and-running is the domain model
+  objects.
+
+  By focussing just on the domain, you'll also find that you start to
+  develop a <ubiquitous language> - a set of terms and concepts that the
+  entire team (business and technologists alike) have a shared
+  understanding.
+  
+  Once you've sketched out your domain model, you can then either 
+  start-over using your preferred framework, or you might choose to 
+  take the domain model forward into more formal {{{./specify-and-test.html}specification
+  and testing}}.       
+  
+* {Isis programming model}
+
+  Isis defines a set of programming conventions - a programming model - from
+  which it infers the structure of your domain objects.
+  
+  This programming model is essentially POJOs, supplemented with a number of
+  annotations and method naming conventions.  It is fully documented in the 
+  Isis application library, (the {{{../applib/index.html}applib}}).  Most of the
+  important conventions are documented in the {{{../IsisCheatSheet.pdf}cheat sheet}}. 
+  
+* {Custom extensions}
+
+  As well as the conventions that Isis defines, you are free to also define your 
+  own programming conventions.  Each aspect - or facet - of the programming model is 
+  defined through the 
+  {{{./core/metamodel/xref/org/apache/isis/core/metamodel/facets/FacetFactory.html}FacetFactory}} 
+  API, and the set of active <<<FacetFactory>>>s is specified through the 
+  {{{./core/metamodel/xref/org/apache/isis/core/metamodel/progmodel/ProgrammingModel.html}ProgrammingModel}}
+  API.
+  
+  We expect that most developers won't bother to customise the programming model,
+  and even if you do, you'll probably just want to tweak Isis' defaults, rather than
+  replace them wholesale.  It's good to know you have the option though.  One reason
+  you might want to do this is to write domain models that are compatible with some
+  other framework.
+  
+  Isis customisability is also the basis by which the framework supports other programming
+  languages.  For example, the {{{../progmodels/groovy/index.html}Groovy}} progmodel allows
+  you to write your domain objects using the {{{http://groovy.codehaus.org}Groovy}} programming language.   
+  

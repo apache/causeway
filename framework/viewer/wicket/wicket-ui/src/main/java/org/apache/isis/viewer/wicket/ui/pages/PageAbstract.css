@@ -1,0 +1,295 @@
+/*
+ *  Licensed to the Apache Software Foundation (ASF) under one
+ *  or more contributor license agreements.  See the NOTICE file
+ *  distributed with this work for additional information
+ *  regarding copyright ownership.  The ASF licenses this file
+ *  to you under the Apache License, Version 2.0 (the
+ *  "License"); you may not use this file except in compliance
+ *  with the License.  You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing,
+ *  software distributed under the License is distributed on an
+ *  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ *  KIND, either express or implied.  See the License for the
+ *  specific language governing permissions and limitations
+ *  under the License.
+ */
+/********** ID's **********/
+
+#header {
+	width: 100%;
+	height: 125px;
+	background: url(banner.png) left no-repeat;
+}
+
+#header h1 {
+	display: none;
+}
+
+#footer {
+	padding-top: 4px;
+	padding-bottom: 4px;
+	clear: both;
+	width: 100%;
+	height: 30px;
+}
+
+#container {
+	margin-left: auto;
+	margin-right: auto;
+	background-color: white;
+	padding: 4px 4px 800px 4px;
+	width: 800px;
+}
+
+
+/********** CLASSes **********/
+
+
+.feedbackPanel {
+}
+
+.leftSide {
+	float: left;
+	width: 220px;
+	height: 500px;
+}
+
+.rightSide {
+	float: right;
+	width: 520px;
+}
+
+
+/**************** ELEMENTS **************/
+
+body {
+	background-color: #C4D9EA;
+	background-image: url('wicket-bg.png');
+	background-repeat: repeat-x;
+	color: #A66144;
+	font-family: 'Tahoma', 'Lucida Sans', 'Arial', 'Helvetica', 'Sans-serif', 'sans';
+	font-size: 10pt;
+	line-height: 1.4em;
+	padding: 0px 10px 10px 10px;
+	margin: 10px 10px 10px 10px;
+}
+
+.panel, fieldset {
+	/* background-color: #D7E7F5; */
+	margin: 3px 0px;
+}
+.panel {
+	padding: 4px;
+}
+
+
+div {
+	margin: 0;
+	padding: 0;
+}
+
+#body {
+	min-height: 400px;
+}
+
+#footer {
+    background-color: #C4D9EA;
+}
+
+h3 {
+	margin-top: 9px;
+	margin-bottom: 0px;
+}
+
+p {
+	margin-top: 0px;
+	margin-bottom: 0px;
+}
+
+form fieldset .okButton {
+	margin-top: 2em;
+}
+
+
+/************************************************************ *********/
+
+
+
+h1,h2,h3,h4,h5,h6,h7,h8 {
+	color: #A66144;
+	font-weight: normal;
+}
+
+h1,h2 {
+	letter-spacing: -1px;
+	font-family: 'Trebuchet MS';
+}
+
+#extitle {
+	font-size: 12pt;
+	font-weight: bold;
+	color: #A66144;
+	padding: 10px 10px 10px 10px;
+}
+
+.mark {
+	background-color: yellow;
+	margin: 5px;	
+}
+
+.feedbackPanelERROR {
+	color: red;
+	list-style: circle;
+	font-weight: bold;
+}
+
+.feedbackPanelINFO {
+	color: green;
+	list-style: circle;
+	font-weight: bold;
+}
+.nospam {
+	display : none;
+}
+
+.block {
+	padding: 10px;
+}
+
+
+h2 {
+	font-size: 1.25em;
+}
+
+h3 {
+	font-size: 1em;
+}
+
+a {
+	color: #A66144;
+	font-weight: bold;
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+	cursor: pointer;
+}
+
+img {
+	border: none;
+}
+
+pre {
+	font-family: 'Lucida Sans', 'Helvetica', 'Sans serif', 'sans';
+}
+
+th {
+	background: #C4D9EA;
+	color: #407098;
+	font-weight: bold;
+}
+
+tr.b {
+	background: #C4D9EA;
+}
+
+tr.a {
+	background: #E6E6E5;
+}
+
+tr.none {
+	background: transparent;
+}
+
+a.none {
+	background: transparent;
+	padding-right: 0px;
+}
+
+.inputForm label.non {
+	display: inline !important;
+}
+
+.inputFormTable td {
+	padding: 2px;
+}
+
+div.tabRowContent {
+	border-style: solid;
+	border-width: 1px;
+	margin: 4px;
+	padding: 4px;
+}
+
+tr.section td {
+	padding-top: 0.75em;
+}
+
+
+/*************** Styling Entity Forms and Parameters ********************/
+
+fieldset.propertiesAndOrCollections {
+	padding-top: 1em;
+	padding-bottom: 1em;
+	/* background-color: #D7E7F5; */
+}
+
+
+.even, .odd {
+	margin-left: 1em;
+	margin-right: 1em;
+}
+
+.even {
+	background-color: #FFF4D3;
+}
+
+.odd {
+	background-color: #C4D9EA;
+}
+
+
+.propertyOrCollection, .parameter {
+	clear: both;
+}
+
+.scalarName, .collectionName, .scalarValue, .collectionContents {
+	padding-top: 0.5em;
+	padding-bottom: 0.5em;
+}
+
+.scalarName, .collectionName {
+	float: left;
+	font-style: italic;
+	text-align: right;
+	width: 15%;
+}
+
+.scalarName:after, .collectionName:after {
+	content: " :";
+	font-style: normal;
+}
+.scalarValue, .collectionContents  {
+	padding-left: 0.5em;
+	float: left;
+	width: 83%;
+}
+
+
+div.odd, div.even {
+	display: block;
+}
+
+div.scalarPanel {
+	display: inline;
+}
+	
+.buttons {
+	padding: 1em;
+	clear: both;
+	display: block;
+}	
