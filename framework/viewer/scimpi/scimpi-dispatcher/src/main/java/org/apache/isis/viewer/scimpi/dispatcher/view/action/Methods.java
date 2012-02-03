@@ -146,7 +146,7 @@ public class Methods extends AbstractElementProcessor {
                     // parameters.id = request.getOptionalProperty(ID);
                     ActionForm.createForm(request, params, true);
                 } else {
-                    request.appendHtml("<a class=\"button\" href=\"_generic_action." + Dispatcher.EXTENSION + "?_result=" + objectId + "&amp;" + VERSION + "=" + version + "&_method=" + action.getId());
+                    request.appendHtml("<a class=\"button\" href=\"_generic_action." + Dispatcher.EXTENSION + "?_result=" + objectId + "&amp;_" + VERSION + "=" + version + "&_=" + METHOD + action.getId());
                     if (cancelTo != null) {
                         request.appendHtml("&_cancel-to=");
                         request.appendAsHtmlEncoded("cancel-to=\"" + cancelTo + "\"");

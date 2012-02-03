@@ -35,6 +35,7 @@ public class InputField {
     private String helpReference;
     private String errorText;
     private final String name;
+    private String dataType;
 
     private int maxLength = 0;
     private int width;
@@ -63,6 +64,10 @@ public class InputField {
         return description;
     }
 
+    public String getDataType() {
+        return dataType;
+    }
+    
     public String getHelpReference() {
         return helpReference;
     }
@@ -185,6 +190,10 @@ public class InputField {
         this.type = type;
     }
 
+    public void setDataType(String dataType) {
+        this.dataType = dataType;
+    }
+    
     @Override
     public String toString() {
         final ToString str = new ToString(this);
@@ -205,6 +214,7 @@ public class InputField {
             break;
         }
         str.append("type", typeName);
+        str.append("datatype", dataType);
         str.append("editable", isEditable);
         str.append("hidden", isHidden);
         str.append("required", isRequired);

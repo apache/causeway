@@ -40,6 +40,7 @@ public class FieldFactory {
 
         field.setLabel(param.getName());
         field.setDescription(param.getDescription());
+        field.setDataType(param.getSpecification().getShortIdentifier());
         if (param instanceof ObjectMember) {
             field.setHelpReference(((ObjectMember) param).getHelp());
         } else {

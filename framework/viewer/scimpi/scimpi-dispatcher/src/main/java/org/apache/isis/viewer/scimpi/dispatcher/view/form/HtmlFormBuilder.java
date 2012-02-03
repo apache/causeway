@@ -29,7 +29,7 @@ public class HtmlFormBuilder {
             final String errors, final String cancelTo) {
 
         String classSegment = " class=\"" + className + (id == null ? "\"" : "\" id=\"" + id + "\"");
-        request.appendHtml("<form " + classSegment + " action=\"" + action + "\" method=\"post\" accept-charset=\"ISO-8859-1\">\n");
+        request.appendHtml("<form " + classSegment + " action=\"" + action + "\" method=\"post\" accept-charset=\"UTF-8\">\n");
         if (formTitle != null && formTitle.trim().length() > 0) {
             classSegment = " class=\"title\"";
             request.appendHtml("<div" + classSegment + ">");
@@ -149,7 +149,8 @@ public class HtmlFormBuilder {
         final String maxLengthSegment = field.getMaxLength() == 0 ? "" : " maxlength=\"" + field.getMaxLength() + "\"";
         final String requiredSegment = !field.isRequired() ? "" : " <span class=\"required\">*</span>";
         final String disabled = field.isEditable() ? "" : " disabled=\"disabled\"";
-        return "<input type=\"" + type + "\" name=\"" + field.getName() + "\"" + valueSegment + lengthSegment + maxLengthSegment + disabled + additionalAttributes + " />" + requiredSegment;
+        return "<input class=\"" + field.getDataType() + "\" + type=\"" + type + "\" name=\"" + field.getName() + "\"" + 
+                valueSegment + lengthSegment + maxLengthSegment + disabled + additionalAttributes + " />" + requiredSegment;
     }
 
     private static String createCheckbox(final InputField field) {
