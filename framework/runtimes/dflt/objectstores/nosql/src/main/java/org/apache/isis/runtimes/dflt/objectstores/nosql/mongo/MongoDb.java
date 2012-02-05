@@ -23,6 +23,15 @@ import java.net.UnknownHostException;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.isis.runtimes.dflt.objectstores.nosql.KeyCreator;
+import org.apache.isis.runtimes.dflt.objectstores.nosql.NoSqlCommandContext;
+import org.apache.isis.runtimes.dflt.objectstores.nosql.NoSqlDataDatabase;
+import org.apache.isis.runtimes.dflt.objectstores.nosql.NoSqlStoreException;
+import org.apache.isis.runtimes.dflt.objectstores.nosql.StateReader;
+import org.apache.isis.runtimes.dflt.objectstores.nosql.StateWriter;
+import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.PersistenceCommand;
+import org.apache.log4j.Logger;
+
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
@@ -31,17 +40,6 @@ import com.mongodb.DBObject;
 import com.mongodb.Mongo;
 import com.mongodb.MongoException;
 import com.mongodb.ObjectId;
-
-import org.apache.log4j.Logger;
-
-import org.apache.isis.core.commons.exceptions.NotYetImplementedException;
-import org.apache.isis.runtimes.dflt.objectstores.nosql.KeyCreator;
-import org.apache.isis.runtimes.dflt.objectstores.nosql.NoSqlCommandContext;
-import org.apache.isis.runtimes.dflt.objectstores.nosql.NoSqlDataDatabase;
-import org.apache.isis.runtimes.dflt.objectstores.nosql.NoSqlStoreException;
-import org.apache.isis.runtimes.dflt.objectstores.nosql.StateReader;
-import org.apache.isis.runtimes.dflt.objectstores.nosql.StateWriter;
-import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.PersistenceCommand;
 
 public class MongoDb implements NoSqlDataDatabase {
     private static final Logger LOG = Logger.getLogger(MongoDb.class);
@@ -93,10 +91,12 @@ public class MongoDb implements NoSqlDataDatabase {
 
     @Override
     public long nextSerialNumberBatch(final String name, final int batchSize) {
-        throw new NotYetImplementedException();
+        long next = readSerialNumber();
+        writeSerialNumber(next + batchSize);
+        return next + 1;
     }
 
-    public void writeSerialNumber(final long serialNumber) {
+    private void writeSerialNumber(final long serialNumber) {
         final DBCollection system = db.getCollection("serialnumbers");
         DBObject object = system.findOne();
         if (object == null) {
@@ -107,7 +107,7 @@ public class MongoDb implements NoSqlDataDatabase {
         LOG.info("serial number written: " + serialNumber);
     }
 
-    public long readSerialNumber() {
+    private long readSerialNumber() {
         final DBCollection system = db.getCollection("serialnumbers");
         final DBObject data = system.findOne();
         if (data == null) {
@@ -168,6 +168,10 @@ public class MongoDb implements NoSqlDataDatabase {
 
     @Override
     public void write(final List<PersistenceCommand> commands) {
+        final NoSqlCommandContext context = new MongoClientCommandContext(db);
+        for (final PersistenceCommand command : commands) {
+            command.execute(context);
+        }
     }
 
     @Override

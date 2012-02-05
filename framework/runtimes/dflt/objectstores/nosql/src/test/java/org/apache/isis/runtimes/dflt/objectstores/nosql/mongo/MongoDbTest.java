@@ -84,9 +84,8 @@ public class MongoDbTest {
 
     @Test
     public void serialNumberSaved() throws Exception {
-        assertEquals(0, db.readSerialNumber());
-        db.writeSerialNumber(1023);
-        assertEquals(1023, db.readSerialNumber());
+        assertEquals(1, db.nextSerialNumberBatch("oid", 10));
+        assertEquals(11, db.nextSerialNumberBatch("oid", 10));
     }
 
     @Test

@@ -31,8 +31,8 @@ import org.apache.isis.core.commons.exceptions.UnexpectedCallException;
 import org.apache.isis.runtimes.dflt.objectstores.nosql.StateReader;
 import org.apache.isis.runtimes.dflt.runtime.persistence.ObjectNotFoundException;
 
-public class MongoStateReader implements StateReader {
-    private static final Logger LOG = Logger.getLogger(MongoStateReader.class);
+public class MongoStateReader implements StateReader, PropertyNames {
+     private static final Logger LOG = Logger.getLogger(MongoStateReader.class);
     private final DBObject instance;
 
     public MongoStateReader(final DB db, final String specName, final String key) {
@@ -71,32 +71,32 @@ public class MongoStateReader implements StateReader {
 
     @Override
     public String readEncrytionType() {
-        return (String) instance.get("_encrypt");
+        return (String) instance.get(ENCRYPT);
     }
 
     @Override
     public String readObjectType() {
-        return (String) instance.get("_type");
+        return (String) instance.get(TYPE);
     }
 
     @Override
     public String readId() {
-        return readField("_id");
+        return readField(ID);
     }
 
     @Override
     public String readVersion() {
-        return null;
+        return readField(VERSION);
     }
 
     @Override
     public String readUser() {
-        return null;
+        return readField(USER);
     }
 
     @Override
     public String readTime() {
-        return null;
+        return readField(TIME);
     }
 
     @Override

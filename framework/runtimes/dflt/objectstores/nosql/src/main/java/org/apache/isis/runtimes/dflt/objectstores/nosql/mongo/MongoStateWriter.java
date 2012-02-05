@@ -30,7 +30,7 @@ import org.apache.log4j.Logger;
 import org.apache.isis.core.commons.exceptions.UnexpectedCallException;
 import org.apache.isis.runtimes.dflt.objectstores.nosql.StateWriter;
 
-public class MongoStateWriter implements StateWriter {
+public class MongoStateWriter implements StateWriter, PropertyNames {
     private static final Logger LOG = Logger.getLogger(MongoStateWriter.class);
     private final BasicDBObject dbObject;
     private final DBCollection instances;
@@ -47,12 +47,12 @@ public class MongoStateWriter implements StateWriter {
 
     @Override
     public void writeId(final String oid) {
-        writeField("_id", oid);
+        writeField(ID, oid);
     }
 
     @Override
     public void writeType(final String type) {
-        writeField("_type", type);
+        writeField(TYPE, type);
     }
 
     @Override
@@ -67,18 +67,22 @@ public class MongoStateWriter implements StateWriter {
 
     @Override
     public void writeEncryptionType(final String type) {
+        writeField(ENCRYPT, type);
     }
 
     @Override
     public void writeVersion(final String currentVersion, final String newVersion) {
+         writeField(VERSION, newVersion);
     }
 
     @Override
     public void writeTime(final String time) {
+        writeField(TIME, time);
     }
 
     @Override
     public void writeUser(final String user) {
+        writeField(USER, user);
     }
 
     @Override
