@@ -33,6 +33,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.scimpi.dispatcher.DispatchException;
@@ -40,7 +41,6 @@ import org.apache.isis.viewer.scimpi.dispatcher.ScimpiException;
 import org.apache.isis.viewer.scimpi.dispatcher.ScimpiNotFoundException;
 import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext;
 import org.apache.isis.viewer.scimpi.dispatcher.debug.DebugUsers;
-import org.apache.isis.viewer.scimpi.dispatcher.debug.DebugWriter;
 
 public class ServletRequestContext extends RequestContext {
     private HttpServletRequest request;
@@ -52,7 +52,7 @@ public class ServletRequestContext extends RequestContext {
         super(debugUsers);
     }
 
-    public void append(final DebugWriter view) {
+    public void append(final DebugBuilder view) {
         /*
          * view.divider("System"); Runtime.getRuntime().
          */

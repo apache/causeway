@@ -259,7 +259,7 @@ public abstract class RequestContext {
         debug.startSection("Request");
         debug.appendTitle("User");
         final AuthenticationSession session = getSession();
-        debug.appendln("Session", session);
+        debug.appendln("Authentication Session", session);
         if (session != null) {
             debug.appendln("Name", session.getUserName());
             debug.appendln("Roles", session.getRoles());
@@ -374,7 +374,7 @@ public abstract class RequestContext {
 
     public void addVariable(String name, final Object value, final Scope scope) {
         name = name != null ? name : RESULT;
-        if (scope == Scope.SESSION && !(value instanceof Serializable)) {
+        if (scope == Scope.SESSION && value != null && !(value instanceof Serializable)) {
             throw new ScimpiException("SESSION scoped variable (" + name + ") must be serializable: " + value);
         }
         removeExistingVariable(name);

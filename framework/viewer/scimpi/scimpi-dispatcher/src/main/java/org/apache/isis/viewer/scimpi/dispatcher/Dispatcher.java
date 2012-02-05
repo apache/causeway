@@ -147,7 +147,9 @@ public class Dispatcher {
 
             final Throwable ex = e instanceof TagProcessingException ? e.getCause() : e;
             if (ex instanceof ForbiddenException) {
-                context.addVariable("_security-context", ((TagProcessingException) e).getContext(), Scope.ERROR);
+                if (e instanceof TagProcessingException) {
+                    context.addVariable("_security-context", ((TagProcessingException) e).getContext(), Scope.ERROR);
+                }
                 context.addVariable("_security-error", ex.getMessage(), Scope.ERROR);
                 context.addVariable("_security-identifier", ((ForbiddenException) ex).getIdentifier(), Scope.ERROR);
                 context.addVariable("_security-roles", ((ForbiddenException) ex).getRoles(), Scope.ERROR);

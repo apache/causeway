@@ -144,8 +144,8 @@ public abstract class DebugHtmlStringAbstract implements DebugBuilder {
             appendHtml("<head>");
             appendHtml("<title>Debug Details</title>");
             appendHtml("<style type=\"text/css\">");
-            appendHtml("body { margin: 15px; }\n" + "links { font-size: 80%; padding-bottom:5px; }\n" + "td {vertical-align: top; margin-left: 15px;}\n" + "td.error {color: red; font-style: italic; }\n" + "td.code {white-space: pre; font-family: monospace;}\n"
-                    + "th.title {text-align: left; padding: 0.3em 1em; font-style: italic; background: #AED1FF; }\n" + "td.label {width: 14em; text-align: right; padding-right: 1.5em; padding-top: 0.2em; font-size: 80%; font-weight: bold; }\n"
+            appendHtml("body { margin: 15px; }\n" + ".links { background: #ddd; font-size: 80%; padding-bottom:5px; }\n" + ".links > p { display: inline-block; }\n" + "td {vertical-align: top; margin-left: 15px;}\n" + "td.error {color: red; font-style: italic; }\n" + "td.code {white-space: pre; font-family: monospace;}\n"
+                    + "th.title {text-align: left; padding: 0.3em 1em; font-style: italic; background: #AED1FF; }\n" + "td.label {width: 16em; text-align: right; padding-right: 1.5em; padding-top: 0.2em; font-size: 80%; font-weight: bold; }\n"
                     + "span.facet-type { font-weight: bold; padding-right: 10px; }\n");
             appendHtml("</style>");
             appendHtml("</head>");
