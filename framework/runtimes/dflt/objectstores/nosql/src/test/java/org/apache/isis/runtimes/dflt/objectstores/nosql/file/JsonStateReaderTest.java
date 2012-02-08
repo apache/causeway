@@ -34,7 +34,7 @@ public class JsonStateReaderTest {
 
     @Before
     public void setup() {
-        reader = new JsonStateReader("{" + "\"_encrypt\": \"etc1\"," + "\"_id\": \"#2\"," + "\"_type\": \"com.planchaser.ClassName\"," + "\"_time\": \"ddmmyy\"," + "\"_user\": \"fred\"," + "\"_version\": \"2\"," + "\"field-1\": \"1234\"," + "\"field-2\": \"data\"," + "\"field-3\": null,"
+        reader = new JsonStateReader("{" + "\"_encrypt\": \"etc1\"," + "\"_id\": \"#2\"," + "\"_type\": \"com.package.ClassName\"," + "\"_time\": \"ddmmyy\"," + "\"_user\": \"fred\"," + "\"_version\": \"2\"," + "\"field-1\": \"1234\"," + "\"field-2\": \"data\"," + "\"field-3\": null,"
                 + "\"list\": [{}, {}]," + "\"aggregate\": {\"_id\": \"#3\"}," + "}");
     }
 
@@ -50,7 +50,7 @@ public class JsonStateReaderTest {
 
     @Test
     public void readObjectType() throws Exception {
-        assertEquals("com.planchaser.ClassName", reader.readObjectType());
+        assertEquals("com.package.ClassName", reader.readObjectType());
     }
 
     @Test
