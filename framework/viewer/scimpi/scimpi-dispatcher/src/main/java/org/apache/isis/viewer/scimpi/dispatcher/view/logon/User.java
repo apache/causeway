@@ -19,7 +19,6 @@
 
 package org.apache.isis.viewer.scimpi.dispatcher.view.logon;
 
-import org.apache.isis.core.commons.authentication.AnonymousSession;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.scimpi.dispatcher.AbstractElementProcessor;
 import org.apache.isis.viewer.scimpi.dispatcher.Dispatcher;
@@ -33,9 +32,9 @@ public class User extends AbstractElementProcessor {
 
     @Override
     public void process(final Request request) {
-        final boolean isLoggedIn = !(IsisContext.getSession().getAuthenticationSession() instanceof AnonymousSession);
+        final boolean isAuthenticatedn = request.getContext().isUserAuthenticated();
         request.appendHtml("<div class=\"user\">");
-        if (isLoggedIn) {
+        if (isAuthenticatedn) {
             displayUserAndLogoutLink(request);
         } else {
             displayLoginForm(request);
@@ -57,6 +56,9 @@ public class User extends AbstractElementProcessor {
 
     public void displayUserAndLogoutLink(final Request request) {
         String user = request.getOptionalProperty(NAME);
+        if (user == null) {
+            user = (String) request.getContext().getVariable("_username");
+        }
         if (user == null) {
             user = IsisContext.getAuthenticationSession().getUserName();
         }

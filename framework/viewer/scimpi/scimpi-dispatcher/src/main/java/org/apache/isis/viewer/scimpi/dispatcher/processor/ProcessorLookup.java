@@ -78,6 +78,7 @@ import org.apache.isis.viewer.scimpi.dispatcher.view.field.ExcludeField;
 import org.apache.isis.viewer.scimpi.dispatcher.view.field.IncludeField;
 import org.apache.isis.viewer.scimpi.dispatcher.view.field.LinkField;
 import org.apache.isis.viewer.scimpi.dispatcher.view.logon.Logon;
+import org.apache.isis.viewer.scimpi.dispatcher.view.logon.RestrictAccess;
 import org.apache.isis.viewer.scimpi.dispatcher.view.logon.Secure;
 import org.apache.isis.viewer.scimpi.dispatcher.view.logon.User;
 import org.apache.isis.viewer.scimpi.dispatcher.view.simple.BlockDefine;
@@ -178,6 +179,7 @@ public class ProcessorLookup {
         addElementProcessor(new RemoveElement());
         addElementProcessor(new VersionNumber());
         addElementProcessor(new RunAction());
+        addElementProcessor(new RestrictAccess());
         addElementProcessor(new ScopeTag());
         addElementProcessor(new Secure());
         addElementProcessor(new SelectedObject());

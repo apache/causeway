@@ -20,17 +20,25 @@
 package org.apache.isis.viewer.scimpi.dispatcher.logon;
 
 import java.io.IOException;
+import java.util.List;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.debug.DebugBuilder;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequestPassword;
 import org.apache.isis.viewer.scimpi.dispatcher.Action;
 import org.apache.isis.viewer.scimpi.dispatcher.Dispatcher;
+import org.apache.isis.viewer.scimpi.dispatcher.ScimpiException;
 import org.apache.isis.viewer.scimpi.dispatcher.UserManager;
 import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext;
 import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext.Scope;
 import org.apache.isis.viewer.scimpi.dispatcher.edit.FieldEditState;
 import org.apache.isis.viewer.scimpi.dispatcher.edit.FormState;
+import org.apache.isis.viewer.scimpi.dispatcher.util.MethodsUtils;
+
 
 // TODO this should work like EditAction so that logon page is repopulated
 public class LogonAction implements Action {
@@ -39,11 +47,61 @@ public class LogonAction implements Action {
     public void process(final RequestContext context) throws IOException {
         final String username = context.getParameter("username");
         final String password = context.getParameter("password");
-        final AuthenticationSession session = UserManager.authenticate(new AuthenticationRequestPassword(username, password));
+        final String actualFormId = context.getParameter("_" + FORM_ID);
+        final String expectedFormId = context.getParameter(LOGON_FORM_ID);
+        boolean isDomainLogon = expectedFormId != null && expectedFormId.equals(actualFormId);
+        boolean isValid;
+
+        AuthenticationSession session = null;
+        if (username.length() == 0 || password.length() == 0) {
+            isValid = false;
+        } else {
+            if (isDomainLogon) {
+                final String objectId = context.getParameter(LOGON_OBJECT);
+                final String scope = context.getParameter(LOGON_SCOPE);
+                final String methodName = context.getParameter(LOGON_METHOD);
+                String resultName = context.getParameter(LOGON_RESULT_NAME);
+                resultName = resultName == null ? "_" + USER : resultName;
+
+                final ObjectAdapter object = MethodsUtils.findObject(context, objectId);
+                final ObjectAction action = MethodsUtils.findAction(object, methodName);
+                final int parameterCount = action.getParameterCount();
+                final ObjectAdapter[] parameters = new ObjectAdapter[parameterCount];
+                List<ObjectActionParameter> parameters2 = action.getParameters();
+                if (parameters.length != 2) {
+                    throw new ScimpiException("Expected two parameters for the log-on method: " + methodName);
+                }
+
+                ParseableFacet facet = parameters2.get(0).getSpecification().getFacet(ParseableFacet.class);
+                parameters[0] = facet.parseTextEntry(null, username);
+                facet = parameters2.get(1).getSpecification().getFacet(ParseableFacet.class);
+                parameters[1] = facet.parseTextEntry(null, password);
+                final ObjectAdapter result = action.execute(object, parameters);
+                isValid = result != null;
+                if (isValid) {
+                    Scope scope2 = scope == null ? Scope.SESSION : RequestContext.scope(scope);
+                    final String resultId = context.mapObject(result, scope2);
+                    context.addVariable(resultName, resultId, scope);
+                    context.addVariable("_username", username, Scope.SESSION);
+                    
+                    context.clearVariable(LOGON_OBJECT, Scope.SESSION);
+                    context.clearVariable(LOGON_METHOD, Scope.SESSION);
+                    context.clearVariable(LOGON_RESULT_NAME, Scope.SESSION);
+                    context.clearVariable(LOGON_SCOPE, Scope.SESSION);
+                    context.clearVariable(PREFIX + "isis-user", Scope.SESSION);
+                    context.clearVariable(LOGON_FORM_ID, Scope.SESSION);
+                }
+                session = context.getSession();
+            } else {
+                session = UserManager.authenticate(new AuthenticationRequestPassword(username, password));
+                isValid = session != null;
+            }
+        }
 
         String view;
-        if (session == null) {
+        if (!isValid) {
             final FormState formState = new FormState();
+            formState.setForm(actualFormId);
             formState.setError("Failed to login. Check the username and ensure that your password was entered correctly");
             FieldEditState fieldState = formState.createField("username", username);
             if (username.length() == 0) {
@@ -58,12 +116,13 @@ public class LogonAction implements Action {
             }
             context.addVariable(ENTRY_FIELDS, formState, Scope.REQUEST);
 
-            view = context.getParameter("error");
+            view = context.getParameter(ERROR);
             context.setRequestPath("/" + view, Dispatcher.ACTION);
         } else {
             context.setSession(session);
             context.startHttpSession();
-            view = context.getParameter("view");
+            context.setUserAuthenticated(true);
+            view = context.getParameter(VIEW);
             if (view == null) {
                 // REVIEW this is duplicated in Logon.java
                 view = "start." + Dispatcher.EXTENSION;
@@ -78,10 +137,8 @@ public class LogonAction implements Action {
     }
 
     @Override
-    public void init() {
-    }
+    public void init() {}
 
     @Override
-    public void debug(final DebugBuilder debug) {
-    }
+    public void debug(final DebugBuilder debug) {}
 }

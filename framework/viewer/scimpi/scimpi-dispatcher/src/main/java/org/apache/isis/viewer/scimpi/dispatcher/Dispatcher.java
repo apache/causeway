@@ -509,7 +509,7 @@ public class Dispatcher {
     }
 
     public void debug(final DebugBuilder debug) {
-        debug.appendTitle("Actions");
+        debug.startSection("Actions");
         final Set<String> keySet = actions.keySet();
         final ArrayList<String> list = new ArrayList<String>(keySet);
         Collections.sort(list);

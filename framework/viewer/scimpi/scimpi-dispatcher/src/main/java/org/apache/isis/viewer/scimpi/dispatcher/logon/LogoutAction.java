@@ -41,13 +41,16 @@ public class LogoutAction implements Action {
 
     @Override
     public void process(final RequestContext context) throws IOException {
-        final AuthenticationSession session = context.getSession();
-        if (session != null) {
-            IsisContext.getUpdateNotifier().clear();
-            UserManager.logoffUser(session);
+        if (context.isUserAuthenticated()) {
+            final AuthenticationSession session = context.getSession();
+            if (session != null) {
+                IsisContext.getUpdateNotifier().clear();
+                UserManager.logoffUser(session);
+            }
             context.endHttpSession();
+            context.setUserAuthenticated(false);
         }
-
+        
         String view = context.getParameter("view");
         if (view == null) {
             view = context.getContextPath();

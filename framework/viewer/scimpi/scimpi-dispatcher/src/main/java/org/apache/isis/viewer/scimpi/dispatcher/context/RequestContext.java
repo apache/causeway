@@ -101,6 +101,7 @@ public abstract class RequestContext {
     private String resourceFile;
     private String resourceParentPath;
     private ObjectAdapter collection;
+    private boolean isUserAuthenticated;
 
     public RequestContext(final DebugUsers debugUsers) {
         this.debugUsers = debugUsers;
@@ -256,7 +257,8 @@ public abstract class RequestContext {
     // Debug
     // ////////////////////////////
     public void append(final DebugBuilder debug) {
-        debug.startSection("Request");
+        debug.startSection("Scimpi Request");
+        
         debug.appendTitle("User");
         final AuthenticationSession session = getSession();
         debug.appendln("Authentication Session", session);
@@ -376,6 +378,9 @@ public abstract class RequestContext {
         name = name != null ? name : RESULT;
         if (scope == Scope.SESSION && value != null && !(value instanceof Serializable)) {
             throw new ScimpiException("SESSION scoped variable (" + name + ") must be serializable: " + value);
+        }
+        if (scope == Scope.SESSION) {
+            startHttpSession();
         }
         removeExistingVariable(name);
         variables.get(scope).put(name, value);
@@ -755,6 +760,7 @@ public abstract class RequestContext {
 
     public void setSession(final AuthenticationSession session) {
         this.session = session;
+        addVariable("_auth_session", session, Scope.SESSION);
     }
 
     public AuthenticationSession getSession() {
@@ -771,7 +777,9 @@ public abstract class RequestContext {
 
     public void setSessionData(final Map<String, Object> hashMap) {
         variables.put(Scope.SESSION, hashMap);
-        setSession((AuthenticationSession) getVariable("_auth_session"));
+        session = (AuthenticationSession) getVariable("_auth_session");
+        Boolean authenticated = (Boolean) getVariable("_authenticated");
+        isUserAuthenticated = authenticated != null && authenticated.booleanValue();
     }
 
     public Map<String, Object> getSessionData() {
@@ -808,5 +816,14 @@ public abstract class RequestContext {
     }
 
     public void reset() {
+    }
+
+    public boolean isUserAuthenticated() {
+        return isUserAuthenticated;
+    }
+    
+    public void setUserAuthenticated(boolean isUserAuthenticated) {
+        this.isUserAuthenticated = isUserAuthenticated;
+        addVariable("_authenticated", isUserAuthenticated, Scope.SESSION);
     }
 }

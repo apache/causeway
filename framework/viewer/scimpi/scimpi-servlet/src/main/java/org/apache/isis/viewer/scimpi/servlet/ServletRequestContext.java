@@ -53,10 +53,12 @@ public class ServletRequestContext extends RequestContext {
     }
 
     public void append(final DebugBuilder view) {
+        super.append(view);
+
         /*
          * view.divider("System"); Runtime.getRuntime().
          */
-        view.appendTitle("Request");
+        view.startSection("HTTP Serviet Request");
         view.appendln("Auth type", request.getAuthType());
         view.appendln("Character encoding", request.getCharacterEncoding());
         view.appendln("Class", request.getClass());
@@ -117,8 +119,6 @@ public class ServletRequestContext extends RequestContext {
         view.appendln("Attributes", getAttributes(context));
         view.appendln("Init parameters", getParameters(context));
         view.appendln("Real path", context.getRealPath("/"));
-
-        super.append(view);
     }
 
     private String getAttributes(final ServletContext context) {
@@ -206,13 +206,15 @@ public class ServletRequestContext extends RequestContext {
         }
         return in;
     }
-
+    
     @Override
     public void startHttpSession() {
-        addVariable("_auth_session", getSession(), Scope.SESSION);
         final HttpSession httpSession = request.getSession(true);
-        final Map<String, Object> sessionData = getSessionData();
-        httpSession.setAttribute("scimpi-context", sessionData);
+        if (!httpSession.getAttributeNames().hasMoreElements()) {
+            final Map<String, Object> sessionData = getSessionData();
+            httpSession.setAttribute("scimpi-context", sessionData);
+            addVariable("_authenticated", false, Scope.SESSION);
+        }
     }
 
     @Override

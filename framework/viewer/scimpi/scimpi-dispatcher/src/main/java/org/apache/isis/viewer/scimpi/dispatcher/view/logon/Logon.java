@@ -25,6 +25,8 @@ import java.util.List;
 import org.apache.isis.core.commons.authentication.AnonymousSession;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.scimpi.dispatcher.AbstractElementProcessor;
+import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext;
+import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext.Scope;
 import org.apache.isis.viewer.scimpi.dispatcher.edit.FieldEditState;
 import org.apache.isis.viewer.scimpi.dispatcher.edit.FormState;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
@@ -37,35 +39,56 @@ public class Logon extends AbstractElementProcessor {
     @Override
     public void process(final Request request) {
         String view = request.getOptionalProperty(VIEW);
+        RequestContext context = request.getContext();
         if (view == null) {
-            view = (String) request.getContext().getVariable("login-path");
+            view = (String) context.getVariable("login-path");
         }
 
         final boolean isNotLoggedIn = IsisContext.getSession().getAuthenticationSession() instanceof AnonymousSession;
-        if (isNotLoggedIn) {
+        if (isNotLoggedIn) {            
             loginForm(request, view);
         }
     }
 
     public static void loginForm(final Request request, final String view) {
-        // String message = (String)
-        // request.getContext().examplegetVariable("login-failure");
+        String object = request.getOptionalProperty(OBJECT);
+        String method = request.getOptionalProperty(METHOD, "logon");
+        String result = request.getOptionalProperty(RESULT_NAME, "_user");
+        String resultScope = request.getOptionalProperty(SCOPE, Scope.SESSION.name());
+        String isisUser = request.getOptionalProperty("isis-user", "_web_default");
+        String formId = request.getOptionalProperty(FORM_ID, request.nextFormId());
 
+        // TODO error if all values are not set (not if use type is not set and all others are still defaults);
+
+        if (object != null) {
+            RequestContext context = request.getContext();
+            context.addVariable(LOGON_OBJECT, object, Scope.SESSION);
+            context.addVariable(LOGON_METHOD, method, Scope.SESSION);
+            context.addVariable(LOGON_RESULT_NAME, result, Scope.SESSION);
+            context.addVariable(LOGON_SCOPE, resultScope, Scope.SESSION);
+            context.addVariable(PREFIX + "isis-user", isisUser, Scope.SESSION);
+            context.addVariable(LOGON_FORM_ID, formId, Scope.SESSION);
+        }
+        
         final String error = request.getOptionalProperty(ERROR, request.getContext().getRequestedFile());
         final List<HiddenInputField> hiddenFields = new ArrayList<HiddenInputField>();
         hiddenFields.add(new HiddenInputField(ERROR, error));
         if (view != null) {
             hiddenFields.add(new HiddenInputField(VIEW, view));
         }
+        hiddenFields.add(new HiddenInputField("_" + FORM_ID, formId));
 
         final FormState entryState = (FormState) request.getContext().getVariable(ENTRY_FIELDS);
-        final InputField nameField = createdField("username", "User Name", InputField.TEXT, entryState);
+        boolean isforThisForm = entryState != null && entryState.isForForm(formId);
+        if (entryState != null && entryState.isForForm(formId)) {
+        }
+        final InputField nameField = createdField("username", "User Name", InputField.TEXT, isforThisForm ? entryState : null);
         final String width = request.getOptionalProperty("width");
         if (width != null) {
             final int w = Integer.valueOf(width).intValue();
             nameField.setWidth(w);
         }
-        final InputField passwordField = createdField("password", "Password", InputField.PASSWORD, entryState);
+        final InputField passwordField = createdField("password", "Password", InputField.PASSWORD, isforThisForm ? entryState : null);
         final InputField[] fields = new InputField[] { nameField, passwordField, };
 
         final String formTitle = request.getOptionalProperty(FORM_TITLE);
@@ -73,7 +96,9 @@ public class Logon extends AbstractElementProcessor {
         final String className = request.getOptionalProperty(CLASS, "login");
         final String id = request.getOptionalProperty(ID);
 
-        HtmlFormBuilder.createForm(request, "logon.app", hiddenFields.toArray(new HiddenInputField[hiddenFields.size()]), fields, className, id, formTitle, null, null, loginButtonTitle, entryState == null ? null : entryState.getError(), null);
+        HtmlFormBuilder.createForm(request, "logon.app", hiddenFields.toArray(new HiddenInputField[hiddenFields.size()]), fields,
+                className, id, formTitle, null, null, loginButtonTitle,
+                isforThisForm && entryState != null ? entryState.getError() : null , null);        
     }
 
     protected static InputField createdField(final String fieldName, final String fieldLabel, final int type, final FormState entryState) {

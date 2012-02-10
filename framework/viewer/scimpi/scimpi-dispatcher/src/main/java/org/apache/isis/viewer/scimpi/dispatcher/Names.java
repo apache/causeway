@@ -20,6 +20,8 @@
 package org.apache.isis.viewer.scimpi.dispatcher;
 
 public interface Names {
+    static final String PREFIX = "_logon-";
+
     static final String BUTTON_TITLE = "button-title";
     static final String CANCEL_TO = "cancel-to";
     static final String COLLECTION = "collection";
@@ -69,7 +71,17 @@ public interface Names {
     static final String VIEW = "view";
     static final String VALUE = "value";
     static final String VERSION = "version";
+    static final String USER = "user";
     static final String VOID = "void";
     static final String WHEN = "when";
-    public static final String ENTRY_FIELDS = "entry-fields";
+    static final String ENTRY_FIELDS = "entry-fields";
+    
+    
+    static final String LOGON_OBJECT = PREFIX + OBJECT;
+    static final String LOGON_METHOD = PREFIX + METHOD;
+    static final String LOGON_SCOPE = PREFIX + SCOPE;
+    static final String LOGON_RESULT_NAME = PREFIX + RESULT_NAME;
+    static final String LOGON_FORM_ID = PREFIX + "form-id";
+    
+
 }

@@ -60,11 +60,7 @@ public class Debug extends AbstractElementProcessor {
         if (request.getContext().isDebugDisabled()) {
             return;
         }
-
-        // Application | System | Specifications | Dispatcher | Context |
-        // Variables | Object | I18N File | Authorization
-        // File | Hide Debug
-
+        
         final String type = request.getOptionalProperty(TYPE);
 
         final boolean alwaysShow = request.isRequested("force", false);
