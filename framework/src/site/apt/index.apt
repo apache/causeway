@@ -1,0 +1,57 @@
+~~  Licensed to the Apache Software Foundation (ASF) under one
+~~  or more contributor license agreements.  See the NOTICE file
+~~  distributed with this work for additional information
+~~  regarding copyright ownership.  The ASF licenses this file
+~~  to you under the Apache License, Version 2.0 (the
+~~  "License"); you may not use this file except in compliance
+~~  with the License.  You may obtain a copy of the License at
+~~
+~~        http://www.apache.org/licenses/LICENSE-2.0
+~~
+~~  Unless required by applicable law or agreed to in writing,
+~~  software distributed under the License is distributed on an
+~~  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+~~  KIND, either express or implied.  See the License for the
+~~  specific language governing permissions and limitations
+~~  under the License.
+
+ <Apache Isis> is a framework to let you rapidly develop domain-driven 
+ apps in Java.  It defines a clean programming model, has BDD and JUnit
+ testing support, and can dynamically (at runtime) generate a representation 
+ of that domain model using various presentation technologies.
+ 
+ You can use Apache Isis in a variety of ways, from initial prototyping
+ all the way through to final deployment:
+ 
+%{snippet|verbatim=false|file=src/site/resources/images/homepage/IsisUseCases.png.map}
+
+ []
+  
+Isis in action
+  
+  We've deployed a {{{http://mmyco.co.uk:8180/isis-onlinedemo}simple demo app}}, so you can see 
+  Isis in action.  The app is deployed with both the RESTful web service and the
+  auto-generated webapp, running against an in-memory object store.  To use, you'll need to
+  register an account (the credentials are stored only in memory and are reset nightly).
+  
+  The webapp has full documentation to guide you further.  It also links to the 
+  {{{http://mmyco.co.uk:8180/isis-onlinedemo/doc/xref/index.html}application's source}} 
+  so you can see how little code you need to write to get an application up and running with Isis.
+  
+Getting Started
+ 
+  Isis is built with Maven and has a {{{./quick-start.html}quickstart archetype}} 
+  to get you going quickly.  This will generate a simple one-class domain model, configured
+  to run like the online demo (but with no security).
+  
+  After that, please consult the various resources linked from the site menu on the left-hand side. 
+
+Disclaimer
+  
+  <Apache Isis> is an effort undergoing incubation at The Apache Software Foundation (ASF), 
+  sponsored by the Incubator project. Incubation is required of all newly accepted projects
+  until a further review indicates that the infrastructure, communications, and decision 
+  making process have stabilized in a manner consistent with other successful ASF projects. 
+  While incubation status is not necessarily a reflection of the completeness or stability 
+  of the code, it does indicate that the project has yet to be fully endorsed by the ASF.>
+  

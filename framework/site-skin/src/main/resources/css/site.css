@@ -1,0 +1,241 @@
+/*
+ *  Licensed to the Apache Software Foundation (ASF) under one
+ *  or more contributor license agreements.  See the NOTICE file
+ *  distributed with this work for additional information
+ *  regarding copyright ownership.  The ASF licenses this file
+ *  to you under the Apache License, Version 2.0 (the
+ *  "License"); you may not use this file except in compliance
+ *  with the License.  You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing,
+ *  software distributed under the License is distributed on an
+ *  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ *  KIND, either express or implied.  See the License for the
+ *  specific language governing permissions and limitations
+ *  under the License.
+ */
+body {
+  background: #4A6074;
+  text-align: center;
+}
+#wrapper {
+  width: 980px;
+  border:3px solid white;
+  margin:8px auto;
+  text-align: left;
+  background: white;
+}
+
+.gsc-branding {
+	display: none;
+}
+
+#searchBox {
+	text-align: right;
+}
+
+#bannerFull {
+  background: url(../images/logos/banner.png) left top no-repeat;
+  height: 100px;
+  width: 980px;
+  float: left;
+}
+
+img.wrap-left {
+    float: left;
+    padding-top: 2px;
+    padding-bottom: 10px;
+}
+
+img.wrap-right {
+    float: right;
+}
+
+
+#links:before {
+    content: "Related sites: ";
+}
+
+a:link {
+    color:#4477AA;
+}
+
+a {
+    text-decoration:none;
+}
+
+p, ul, table, img {
+    margin-top: 0.5em;
+    margin-bottom: 1.2em;
+    line-height: 1.3em;
+}
+
+p, li, td {
+    
+}
+
+li {
+    margin-bottom: 2px;
+}
+
+a #externalLink {
+    after: "EXT" url('../images/external.png');
+}
+
+img {
+    padding-left: 4px;
+    float: none;
+}
+
+table.bodyTable th, 
+table.bodyTable td {
+    padding:6px 6px;
+    vertical-align:top;
+}
+
+
+tr.a {
+    background-color: #eeeeee;
+}
+
+tr.b {
+    background-color: #fafafa;
+}
+
+dl {
+    background-color:#ffffff;
+    border:none;
+    padding:4px 24px 4px 18px;
+}
+
+contentBox + section {
+    padding-top: -1em;
+}
+
+.section {
+    padding:4px 0;
+}
+
+#breadcrumbs {
+    background: #f0f0f0;
+    padding: 5px 9px;
+}
+
+#leftColumn {
+    width:14em;
+    padding-top: 10px;
+    margin: 12px 0 0 10px;
+    background-color:transparent;
+    border: none;
+    border-right:1px solid #EEEEEE;
+    min-height: 800px; 
+}
+
+#navcolumn {
+    padding: 0 8px;
+}
+
+#navcolumn ul {
+    padding-bottom: 8px;
+}
+
+
+#navcolumn ul li.expanded ul {
+    padding-bottom: 0px;
+}
+
+#navcolumn h5 {
+	padding-left: 10px;
+	border: none;
+	color:#4477AA;
+	font-size:smaller;
+	font-weight: bold;
+	padding-top:2px;
+	padding-bottom: 2px;
+}
+
+
+#navcolumn li {
+    padding-top: 3px;
+    padding-left: 10px;
+    margin-bottom: 0px;
+}
+
+#navcolumn a:link, 
+#navcolumn a:visited {
+	color: #000000;
+}
+
+#navcolumn a:hover {
+	color: #4477AA;
+}
+
+
+#bodyColumn {
+    margin-left:18em;
+    margin-top: 10px;
+    padding-top: 0px;
+}
+
+#search {
+    background-color:White;
+    float:right;
+    padding-bottom:10px;
+    padding-left:55px;
+    padding-right:10px;
+}
+
+h1,h2,h3,h4,h5 {
+    background-color: transparent;
+    border: none;
+    border-bottom:1px solid #AAAAAA;
+    color:#6699CC;
+    font-weight:normal;
+    padding: 4px 0px;
+    margin-bottom: 3px;
+    margin-top: 2px;
+}
+
+#bodyColumn h1 {
+    font-size: large;
+    font-weight: bold;
+}
+
+#bodyColumn h2 {
+    font-size: small;
+    font-weight: bold;
+    margin:0 0 16px;
+    border-bottom: none;
+}
+        
+#bodyColumn h3 {
+    font-size: small;
+    font-weight: normal;
+}
+      
+#bodyColumn h4 {
+    font-size: 110%;
+}
+
+#bodyColumn h5 {
+    font-size: 90%;
+}
+
+div.source {
+    background-color:#fdfffd;
+}
+
+#poweredby {
+    
+}
+
+
+#gadget span#title {
+	display: none;
+}
+
+#gadget iframe font {
+	display: none;
+}

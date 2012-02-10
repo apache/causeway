@@ -1,0 +1,5659 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+-->
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
+"file:./src/docbkx/dtd-4.5/docbookx.dtd">
+<book>
+  <bookinfo>
+    <title><?eval ${docbkxGuideTitle}?></title>
+
+    <subtitle><?eval ${docbkxGuideSubTitle}?></subtitle>
+
+    <releaseinfo><?eval ${project.version}?></releaseinfo>
+
+    <authorgroup>
+      <author>
+        <firstname>Robert</firstname>
+
+        <surname>Matthews</surname>
+      </author>
+    </authorgroup>
+
+    <legalnotice>
+      <para>Permission is granted to make and distribute verbatim copies of
+      this manual provided that the copyright notice and this permission
+      notice are preserved on all copies.</para>
+    </legalnotice>
+  </bookinfo>
+
+  <!-- front matter -->
+
+  <toc></toc>
+
+  <preface id="preface">
+    <title>Preface</title>
+
+    <para><emphasis>Apache Isis</emphasis> is designed to allow programmers
+    rapidly develop domain-driven applications following the <ulink
+    url="http://en.wikipedia.org/wiki/Naked_Objects">Naked Objects</ulink>
+    pattern. It is made up of a core framework plus a number of alternate
+    implementations, and supports various viewers and object stores. Apache
+    Isis is hosted at the <ulink url="http://incubator.apache.org/isis">Apache
+    Foundation</ulink>, and is licensed under <ulink
+    url="http://www.apache.org/licenses/LICENSE-2.0.html">Apache Software
+    License v2</ulink>.</para>
+
+    <para>This guide is written for programmers looking to customize,
+    configure and deploy <emphasis>Apache Isis</emphasis> applications using
+    the <emphasis>Scimpi viewer</emphasis> as the primary user
+    interface.</para>
+  </preface>
+
+  <!-- main content -->
+
+  <part>
+    <title>Using Scimpi</title>
+
+    <chapter>
+      <title>Exploring the Example App</title>
+
+      <abstract>
+        <para>In this chapter we learn about Scimpi by using and exploring an
+        example application.</para>
+      </abstract>
+
+      <note>
+        <para>THIS IS A WORK-IN-PROGRESS... being taken from the donated
+        framework. The instructions given here do not currently work.</para>
+      </note>
+
+      <section>
+        <title>Load the example app</title>
+
+        <para>*** example/apps/shoppingcart</para>
+
+        <para>x-ref appendix for code</para>
+
+        <para></para>
+      </section>
+
+      <section>
+        <title>Running the example app</title>
+
+        <para>Eclipse's Web Standard Tools (WST) and J2EE Standard Tools (JST)
+        provides tooling for building and running web applications including
+        running a Servlet Container from within Eclipse.</para>
+
+        <para>Before running such a web application is necessary to ensure
+        that related projects are added to the server's classpath. This is
+        done via the properties for the web application project under the
+        <emphasis>J2EE Module Dependencies</emphasis> section. In there tick
+        the projects that are needed to run Scimpi, at the time of writing
+        these are <emphasis>scimpi-dispatcher</emphasis> and
+        <emphasis>scimpi-servlet</emphasis>.</para>
+
+        <para>To run the examples with Eclipse right-click on the cart-demo
+        project and from the <option>Run As</option> menu select the
+        <option>Run on Server</option> option. The dialog that pops up should
+        be correctly set for the local server. (If there are no servers set up
+        they can be added via the preferences, see the section
+        Server/Installed Runtimes and use the Add button to add a server that
+        you have installed on your machine.) Press <literal
+        moreinfo="none">Next</literal> to move to the second page where you
+        add all the other projects as web applications, or <literal
+        moreinfo="none">Finish</literal> to run the server.</para>
+      </section>
+
+      <section>
+        <title>Generic views</title>
+
+        <para>Access the main page by entering the
+        <emphasis>http://localhost:8080/example</emphasis> in the address
+        field and pressing the Go button. The opening screen of the browser
+        shows the actions of all the services that the application provides,
+        i.e., the methods defined in the <link
+        linkend="ClaimantRepository_class"><literal>ClaimantRepository</literal></link>
+        and <link
+        linkend="ClaimRepository_class"><literal>ClaimRepository</literal></link>
+        service classes. As for most web applications this is the welcome page
+        and in this case maps to <filename
+        moreinfo="none">index.shtml</filename>.</para>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="images/example/opening.png" width="12.5cm" />
+          </imageobject>
+        </mediaobject>
+
+        <para>Clicking on the links/buttons will invoke the selected method
+        and display a generic view. For example the <guibutton
+        moreinfo="none">All Claimants</guibutton> button above generates
+        invokes the <literal>allClaimants</literal> method on the claimants
+        repository service object, which returns a collection. This displays
+        the list of claimants as shown below. This uses the template <filename
+        moreinfo="none">generic/collection.shtml</filename> to create the
+        page.</para>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="images/example/listing.png" width="12.5cm" />
+          </imageobject>
+        </mediaobject>
+
+        <para>Clicking on the select link will use another generic page
+        (<filename moreinfo="none">generic/object.shtml</filename>) to show
+        you detail of the object, while clicking on the edit link will use the
+        template <filename moreinfo="none">generic/edit.shtml</filename> to
+        provide a page containing an HTML form for editing the object. Here
+        you can change the name of the employee.</para>
+
+        <graphic fileref="images/example/generic-edit.png" width="12.5cm" />
+
+        <para>If we now use the same technique to view all the claims and then
+        open up a specific one using the select link, the claim viewing page
+        (still <filename moreinfo="none">generic/object.shtml</filename>)
+        shows the complete claim including a list of the expense items. Notice
+        that at bottom of the page there is a second link (below edit), this
+        is the action method defined in the <literal>Claim</literal> class
+        called <literal>submit</literal>.</para>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="images/example/object-with-method.png"
+                       width="12.5cm" />
+          </imageobject>
+        </mediaobject>
+
+        <para>Clicking such a link will either invoke the method immediately
+        if it has no parameters or, as in this case, it will open up a generic
+        action form (<filename
+        moreinfo="none">generic/action.shtml</filename>) to allow the user to
+        set the parameters before the method is executed. Below we see the
+        page that we get after pressing the link on the page above. The
+        approver parameter is set to the default value as specified in the
+        domain model.</para>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="images/example/generic-action.png"
+                       width="12.5cm" />
+          </imageobject>
+        </mediaobject>
+
+        <para>After pressing the <guibutton moreinfo="none">OK</guibutton>
+        button you are returned to the home page as the method return nothing
+        to process. Had the method returned an object then that object would
+        displayed. If you navigate back to the claim you will see that the
+        approver has been set up and the status changed to
+        <emphasis>Submitted</emphasis>.</para>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="images/example/changed-object.png"
+                       width="12.5cm" />
+          </imageobject>
+        </mediaobject>
+
+        <para>All the above was achieved through generic views, no HTML or
+        template pages were written. In the next section we will look at how
+        we create our own pages to create a targeted and stylised user
+        interface.</para>
+      </section>
+
+      <section>
+        <title>Basic Scimpi pages</title>
+
+        <para>If we now create a new page called <filename
+        moreinfo="none">example.shtml</filename> (placed in the <filename
+        moreinfo="none">example/webapp</filename> directory) with the
+        following markup we will be getting Scimpi to run an action and list
+        the results to us. This shows us a number of important things about
+        Scimpi pages. First, all files with the extension <filename
+        moreinfo="none">shtml</filename> are Scimpi files and are processed on
+        the server before being sent to the client. These files are
+        essentially HTML files with addition Scimpi tags that will replaced
+        with dynamic content when processed. Second, all Scimpi tags are of
+        the form <markup>&lt;swf:<replaceable>command</replaceable>
+        <replaceable>attributes</replaceable>&gt;</markup>.</para>
+
+        <programlisting format="linespecific">&lt;html&gt;
+&lt;head&gt;
+    &lt;link rel="stylesheet" href="style/screen.css" type="text/css"/&gt;
+    &lt;title&gt;Claims&lt;/title&gt;
+&lt;/head&gt;
+
+&lt;body&gt;
+    &lt;h1&gt;Claims&lt;/h1&gt;
+    <emphasis role="strong">&lt;swf:run-action object="service:claims" method="allClaims" /&gt;
+    &lt;swf:list type="disc"/&gt;</emphasis>
+&lt;/body&gt;
+&lt;/html&gt;</programlisting>
+
+        <para>Depending on how you are running Scimpi you may need to rebuild
+        the web application, redeploy it or restart the web server. (Using Ant
+        and the provided web server, as described above, you should run Ant
+        again (to copy the new file across) and restart the web
+        server.)</para>
+
+        <para>This example uses two Scimpi tags to interact with the
+        <emphasis>Apache Isis</emphasis> runtime and generate some dynamic
+        <acronym>HTML</acronym>. The first tag invokes the action
+        <emphasis>allProducts</emphasis> on the service object known as
+        <emphasis>claims</emphasis>, which is the claims repository; the
+        <emphasis>service:</emphasis> prefix indicates the object is a service
+        and <emphasis>claims</emphasis> is the name of the service object as
+        provided by its <literal>getId</literal> method. The second tag
+        generates an unordered list (OL tag) with a set of list items (within
+        LI tags) from the collection that was returned by the previous tag.
+        The browser shows the following when the <filename
+        moreinfo="none">example.shtml</filename> page is requested.</para>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="images/example/list-tag.png" width="12.5cm" />
+          </imageobject>
+        </mediaobject>
+
+        <para>By replacing <literal moreinfo="none">tag &lt;swf:list
+        type="disc"/&gt;</literal> with <literal
+        moreinfo="none">&lt;swf:table/&gt;</literal> an HTML table will be
+        generated instead of a list.</para>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="images/example/table-tag.png" width="12.5cm" />
+          </imageobject>
+        </mediaobject>
+
+        <para>As well as tags that practically do all the work of generating
+        things likes lists, tables and forms, Scimpi provides tags to allow
+        you to build your own. The next example uses the
+        <markup>collection</markup> tag in place of <markup>table</markup> to
+        control the processing of the contained block. This tag will iterate
+        through the collection and for each element will process the contained
+        elements so that the elements title and <property
+        moreinfo="none">claimant</property> field is displayed along with a
+        table showing the <property moreinfo="none">items</property>
+        field.</para>
+
+        <programlisting format="linespecific">    &lt;h1&gt;Claims&lt;/h1&gt;
+    &lt;swf:run-action object="service:claims" method="allClaims" /&gt;
+    &lt;swf:collection&gt;
+        &lt;div&gt;
+            &lt;h3&gt;&lt;swf:title icon="off"/&gt;, for &lt;swf:field field="claimant" icon="off"/&gt;&lt;/h3&gt;
+            &lt;swf:table field="items"/&gt;
+        &lt;/div&gt;
+    &lt;/swf:collection&gt;</programlisting>
+
+        <para>The result of this page are the same three elements as before
+        but the layout and detail have been specified in detail.</para>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="images/example/designed-collection.png"
+                       width="12.5cm" />
+          </imageobject>
+        </mediaobject>
+      </section>
+    </chapter>
+
+    <chapter>
+      <title>Getting Started with the QuickStart Archetype</title>
+
+      <para></para>
+
+      <para>*** instead, update this to use Isis' quickstart archetype</para>
+
+      <para></para>
+
+      <section>
+        <title>Building a new web application with Maven</title>
+
+        <para>*** x-erf</para>
+
+        <para></para>
+
+        <para>You can use <emphasis>Isis</emphasis>' Maven quickstart
+        archetype to quickly set up an Isis application; this will include a
+        module that allows the application to be run as a webapp with the
+        Scimpi viewer:</para>
+
+        <literallayout>$ mvn archetype-plugin:generate \
+  -D archetypeGroupId=org.apache.isis \
+  -D archetypeArtifactId=quickstart-archetype \
+  -D groupId=<emphasis>[my group id]</emphasis> \
+  -D artifactId=<emphasis>[my artifact id]</emphasis></literallayout>
+
+        <para>The resulting directory (with the name from the artifact ID)
+        contains a Maven style project for a complete example web application.
+        For example, if the artifact ID was given as <literal
+        moreinfo="none">conference</literal> then the directory would also be
+        <filename moreinfo="none">conference</filename>.</para>
+
+        <para>From within the artifact directory you can build the application
+        by running Maven with</para>
+
+        <literallayout>$ mvn install</literallayout>
+
+        <para>The newly created <filename moreinfo="none">target</filename>
+        directory contains a war file with the name of the artifact, e.g.
+        <filename moreinfo="none">conference-1.0-SNAPSHOT.war</filename>. This
+        file can then be manually deployed to a suitable web server or Maven
+        can run a web server for you.</para>
+      </section>
+
+      <section>
+        <title>Running the App</title>
+
+        <para>From the IDE:</para>
+
+        <para>*** eg Eclipse: scimpi's ide/eclipse/launch/</para>
+
+        <para>or using IDE's built-in support for webapps:</para>
+
+        <para>*** eg Eclipse WTP</para>
+
+        <para>or using Maven:</para>
+
+        <literallayout>$ mvn jetty:run</literallayout>
+
+        <para>Once set up the source code for the domain model, in <filename
+        moreinfo="none">src/main/java/</filename>, can be replaced or
+        modified, and specific views can be added to <filename
+        moreinfo="none">src/main/webapp/</filename>. Rebuild and redeploy
+        through the same process to see the results.</para>
+
+        <para></para>
+      </section>
+    </chapter>
+
+    <chapter>
+      <title>Developing Scimpi Web Apps</title>
+
+      <abstract>
+        <para>This chapter describes the steps for customizing Scimpi web
+        apps.</para>
+      </abstract>
+
+      <section>
+        <title>Domain model</title>
+
+        <para>The Scimpi viewer understands all of Isis' default programming
+        model. See the applib programming guide for further details.</para>
+      </section>
+
+      <section>
+        <title>Directory structure</title>
+
+        <para>Each Scimpi application builds upon the following directory
+        structure, which is based on the standard layout required by Servlet
+        and JSP based Java web applications.</para>
+
+        <literallayout>webapp/
+    index.shtml
+    login.shtml
+    generic/
+        action.shtml
+        collection.shtml
+        edit.shtml
+        object.shtml
+    images/
+        banner.jpg
+        bg-button.gif
+        Claim.gif
+        ClaimItem.gif
+        Default.png
+        Employee.gif
+        logo.png
+    style/
+        screen.css
+        template.shtml
+    WEB-INF/
+        lib/
+        logging.properties
+        isis.properties
+        passwords
+        web.xml</literallayout>
+
+        <para>where:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>the file <filename moreinfo="none">index.shtml</filename> is
+            the welcome file for the web application; the welcome file is the
+            file that is served when no files is specified.</para>
+
+            <para>For example <uri>http://localhost:8080/expenses</uri> will
+            return the file <filename moreinfo="none">index.shtml</filename>
+            file from expenses webapp directory.</para>
+          </listitem>
+
+          <listitem>
+            <para>the file <filename moreinfo="none">login.shtml</filename> is
+            a log on page that is used to authenticate the user via the
+            <emphasis>Apache Isis</emphasis> runtime</para>
+          </listitem>
+
+          <listitem>
+            <para>the <filename moreinfo="none">images</filename> directory is
+            used for both the icons for objects and for images used by the
+            style sheet and templates.</para>
+          </listitem>
+
+          <listitem>
+            <para>the <filename moreinfo="none">WEB-INF</filename> directory
+            contains all the configuration files.</para>
+          </listitem>
+
+          <listitem>
+            <para>the <filename moreinfo="none">generic</filename> directory
+            holds default pages for viewing, editing and running actions on
+            objects.</para>
+          </listitem>
+        </itemizedlist>
+      </section>
+
+      <section>
+        <title>Requested resources</title>
+
+        <para>Scimpi processes requests for resources that have the extensions
+        <filename moreinfo="none">shtml</filename> and <filename
+        moreinfo="none">app</filename> specially. All other resources, such
+        images, text files and HTML documents, are assumed to be files and
+        return directly as such. Specially handled request are handled by
+        Scimpi's dispatcher where the resources with the <filename
+        moreinfo="none">app</filename> extension are mapped to Scimpi actions
+        and those with the <filename moreinfo="none">shtml</filename>
+        extension cause the corresponding file to be read in and processed as
+        Scimpi templates containing Scimpi tags that are to be replaced by the
+        processor.</para>
+
+        <para>However, when a request is made for a generic page (as
+        <uri>_generic.shtml</uri>, <uri>_generic_edit.shtml</uri> and
+        <uri>_generic_action.shtml</uri>) Scimpi seeks the most suitable file
+        to process the request. The request is based on the object reference
+        held by the RESULT variable. Using this object it first looks for a
+        directory named after the objects class, and if it exists will look
+        for a suitable file. If no such directory exists then a file in the
+        <filename moreinfo="none">generic</filename> directory is used. The
+        file, from either the <filename moreinfo="none">generic</filename> or
+        class named directory, depends on the generic page name. For
+        <uri>_generic.shtml</uri> a file called <filename
+        moreinfo="none">objects.shtml</filename> or <filename
+        moreinfo="none">collection.shtml</filename> is used depending on
+        whether the referenced object is an object or a collection. For
+        <uri>_generic_edit.shtml</uri> a file called <filename
+        moreinfo="none">edit.shtml</filename> is used. When the request is
+        <uri>_generic_action.shtml</uri> Scimpi looks for an <filename
+        moreinfo="none">shtml</filename> file with the same name as requested
+        in the <parameter moreinfo="none">method</parameter> parameter.</para>
+      </section>
+
+      <section>
+        <title>Variables</title>
+
+        <para>All web applications are built on HTTP, which is stateless, so
+        Scimpi provides a way maintaining state between requests on your
+        behalf. By asking Scimpi to store values for you, either implicitly or
+        explicitly, your web application can easily refer to objects and other
+        data that were used previously. Without such a capability each request
+        would effectively be the first request and all needed information
+        would have to be encoded within the web page. Every variable in Scimpi
+        is known by its given name and is kept for a set duration, known as
+        its scope. In addition to the variables that are defined by the web
+        application there are others that are automatically provided by the
+        system.</para>
+
+        <para>The <markup>variable</markup> tag allows a variable to be
+        explicitly set up. This tag simply stores the content of the block
+        with the associated name. So the following markup creates a variable
+        called <emphasis>duration</emphasis> and stores the value "1250"
+        within it (note that it is a string, not a number, as it is taken from
+        the HTML page).</para>
+
+        <programlisting format="linespecific">&lt;swf:variable name="duration"&gt;1250&lt;/swf:variable&gt;</programlisting>
+
+        <para>Once a variable has been declared it can be used within the
+        HTML, as markup itself or as attribute, by wrapping the name with
+        <emphasis>${</emphasis> and <emphasis>}</emphasis>. So now, for
+        example, we can output the value variable in a bold form using the
+        following</para>
+
+        <programlisting format="linespecific">&lt;b&gt;${value}&lt;/b&gt;</programlisting>
+
+        <para>that will result in the following HTML being received by the
+        browser.</para>
+
+        <programlisting format="linespecific">&lt;b&gt;1250&lt;/b&gt;</programlisting>
+
+        <para>Most commonly it is the tags that implicitly set up variables
+        with the results of their actions or with references to objects. The
+        following example shows an action that places its result, a collection
+        of claims, into the <varname>claims</varname> variable, after which
+        the <markup>table</markup> tag refers to the collection via the same
+        variable (which is written as <emphasis>${claims}</emphasis> to show
+        that it is a variable).</para>
+
+        <programlisting format="linespecific">&lt;swf:run-action object="service:claims" method="allClaims" result-name="claims"/&gt;
+&lt;swf:table collection="${claims}"/&gt;</programlisting>
+
+        <para>Note that if you didn't specify a variable for the result to be
+        put in then the default variable RESULT would be used instead. The
+        same applies to the table tag, which would use the variable RESULT to
+        find the claim. This is the same for all other tags the have an
+        attribute for a variable name, or that need to refer to an object or
+        collection.</para>
+
+        <formalpara>
+          <title>Scope</title>
+
+          <para>In the previous examples the two variables that we declared
+          would only be available while the current page is being prepared and
+          would not exist when the subsequent page is requested. These
+          variable therefore have narrowest scope. From the widest to
+          narrowest the four available scopes are:-</para>
+        </formalpara>
+
+        <variablelist>
+          <varlistentry>
+            <term>global</term>
+
+            <listitem>
+              <para>exists for the lifetime of the server;</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>session</term>
+
+            <listitem>
+              <para>exists for the period that the user is logged in;</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>interaction</term>
+
+            <listitem>
+              <para>spans two requests: the first request prepares a view; and
+              the second is based on data in that first view;</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>request</term>
+
+            <listitem>
+              <para>exists only for the current request; will not be available
+              during the subsequent request.</para>
+            </listitem>
+          </varlistentry>
+        </variablelist>
+
+        <para>To specific a scope when specifying a variable simply add a
+        <parameter moreinfo="none">scope</parameter> attribute with one of the
+        four scope names.</para>
+      </section>
+
+      <section>
+        <title>References</title>
+
+        <para>The Scimpi viewer provide a mechanism to refer to objects that
+        are held by the <emphasis>Isis</emphasis> runtime from within a web
+        page, or as part of a URL. An implementation of
+        <literal>ObjectMapping</literal> generates a textual string from the
+        object's OID. This can then be used as the <parameter
+        moreinfo="none">object</parameter> attribute for many of the tags.
+        Most commonly these references are stored in, and used from variables,
+        this is why for tags that produce results you need to specify a
+        variable for the reference to be placed into.</para>
+
+        <para>If an <markup>object</markup> <markup>attribute</markup> starts
+        with <emphasis>service:</emphasis> Scimpi will find the service object
+        with the identifier as specified after that prefix. The example shows
+        how to run a method on the service identified as
+        <emphasis>Claims</emphasis>, which is the claims repository</para>
+
+        <programlisting format="linespecific">&lt;swf:run-action object="service:Claims" method="myRecentClaims" /&gt;</programlisting>
+
+        <formalpara>
+          <title>Using the RESULT variable</title>
+
+          <para>When the <markup>object</markup>/<markup>collection</markup>
+          attribute is not specified within a tag that must refer to an object
+          Scimpi uses the reference held by the RESULT variable instead. This
+          special variable is set up when a tag, which produces a results
+          (such as the action tags, <markup>collection</markup> or
+          <markup>link</markup>), also has no <parameter
+          moreinfo="none">variable</parameter> attribute (e.g.
+          <markup>result-name</markup> or <markup>element-name</markup>)
+          specified. This allows us to use have code like</para>
+        </formalpara>
+
+        <programlisting format="linespecific">&lt;swf:run-action object="service:Claims" method="myRecentClaims" /&gt;
+&lt;swf:table/&gt;</programlisting>
+
+        <para>instead of the more verbose</para>
+
+        <programlisting format="linespecific">&lt;swf:run-action object="service:Claims" method="myRecentClaims" <emphasis>result-name="claims"</emphasis> /&gt;
+&lt;swf:table <emphasis>collection="claims"</emphasis>/&gt;</programlisting>
+
+        <para>This special variable is only available during the request and
+        will be replaced by the next tag that produces a result. For example
+        the following will fail on the last line as RESULT will contain the
+        reference to the last element in the collection as set by the
+        <emphasis>collection</emphasis> tag and not the collection as
+        originally set by the <emphasis>run-action</emphasis> tag.</para>
+
+        <programlisting format="linespecific">&lt;swf:run-action object="service:claims" method="allClaims" /&gt;
+&lt;swf:collection&gt;
+  &lt;li&gt;&lt;swf:title icon="off"/&gt;&lt;/li&gt;
+&lt;/swf:collection&gt;
+<emphasis>&lt;swf:table/&gt; &lt;!--this line will fail--&gt;</emphasis></programlisting>
+
+        <para>To fix this the <markup>run-action </markup>should specify a
+        <parameter moreinfo="none">result-name</parameter> attribute and both
+        the <markup>collection</markup> and <markup>table</markup> tags should
+        specify a <parameter moreinfo="none">collection</parameter> attribute
+        that uses the variable as specified in <parameter
+        moreinfo="none">result-name</parameter> attribute.<programlisting
+        format="linespecific">&lt;swf:run-action object="service:claims" method="allClaims" <emphasis>result-name="claims"</emphasis>/&gt;
+&lt;swf:collection <emphasis>collection="${claims}"</emphasis>&gt;
+  &lt;li&gt;&lt;swf:title icon="off"/&gt;&lt;/li&gt;
+&lt;/swf:collection&gt;
+&lt;swf:table <emphasis>collection="${claims}"</emphasis>/&gt;</programlisting><parameter
+        moreinfo="none">The alternative fix is </parameter>to specify an
+        <parameter moreinfo="none">element-name</parameter> attribute for the
+        collection and use that variable in the <markup>object</markup>
+        attribute of the <markup>title</markup> tag.</para>
+      </section>
+
+      <section>
+        <title>Page references</title>
+
+        <para>As Scimpi has a mechanism for finding the most appropriate page
+        for rendering a view of an object (the generic pages, such as
+        <filename moreinfo="none">_generic.html</filename>) there are some
+        details about page references that you should be aware of.
+        Essentially, because the page that was requested might not be the page
+        that was served, the relative location of referenced files might not
+        be as first expected.</para>
+
+        <para>To make this concrete we will use a simple example. Consider a
+        claims page generated in response to a request
+        like<emphasis>http://localhost:8080/expenses/Claim/object.shtml?claim=...</emphasis>
+        that contains a list of expenses whose hyper-links a<markup>re defined
+        as _generic.html</markup> so that the most suitable page will be used.
+        When such a link is clicked on the URL used by the browser would,
+        therefore, be something like
+        <emphasis>http://localhost:8080/expenses/Claim/_generic.shtml?_result=...</emphasis>.
+        Now as the page that is returned would be generated from the most
+        suitable template it would use the file <filename
+        moreinfo="none">object.shtml</filename> from the <filename
+        moreinfo="none">ExpenseItem</filename> directory rather than the
+        <filename moreinfo="none">Claim</filename> directory. However, the
+        generated page when displayed by the browser will still have a base
+        URL of <emphasis>http://localhost:8080/expenses/Claim/</emphasis>. An
+        image tag on that page, such as <markup>&lt;img
+        src="person.png"/&gt;</markup>, will, therefore, result in a request
+        from the browser of
+        <uri>http://localhost:8080/expenses/Claim/person.png</uri>. This
+        obviously will not find the file as it is <filename
+        moreinfo="none">ExpenseItem</filename> directory; so a URL intended to
+        be relative to the current page ends up being relative to the page in
+        the previous request.</para>
+
+        <para>To get round such a problem the URL specified should use the
+        system variables <varname>_context</varname> and
+        <varname>_directory</varname> to set up the full path. So returning to
+        our above example <markup>img</markup> tag should be changed to</para>
+
+        <programlisting format="linespecific">&lt;img src="${_context}${_directory}person.png"/&gt;</programlisting>
+
+        <para>so that web application context name and the directory that the
+        template file is actually in are appended with the image name creating
+        a path that absolutely identifies the resource as the resultant HTML
+        shows.</para>
+
+        <literallayout>&lt;img src="/expenses/Claim/person.png"/&gt;</literallayout>
+
+        <para>There are four such system variables that relate to URLs:</para>
+
+        <variablelist>
+          <varlistentry>
+            <term>_base</term>
+
+            <listitem>
+              <para>the complete URL for the current resource;</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>_context</term>
+
+            <listitem>
+              <para>the web application context name, used to distinguish one
+              web application from another and forming the first part of the
+              pathname in the URL;</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>_directory</term>
+
+            <listitem>
+              <para>the directory containing the current resource;</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>_this</term>
+
+            <listitem>
+              <para>the filename of the current resource.</para>
+            </listitem>
+          </varlistentry>
+        </variablelist>
+
+        <para>Such issues can also arise when creating links that are intended
+        to show a particular object or run an action. As you not only have to
+        get the location correct but also pass over the reference to the
+        object to be shown and, for actions, pass over the method name, all by
+        creating a long URL it is simpler to use one of the Scimpi link tags
+        that takes care of all this for you. So instead of an
+        <markup>a</markup> tag like</para>
+
+        <programlisting format="linespecific">&lt;a href="_generic_edit.shtml?_result=${item}"&gt;edit&lt;/a&gt;</programlisting>
+
+        <para>use the Scimpi <markup>edit-link</markup> tag as follows.</para>
+
+        <programlisting format="linespecific">&lt;swf:edit-link object="${item}"&gt;edit&lt;/swf:edit-link&gt;&lt;/a&gt;</programlisting>
+
+        <para>Other link tags are <markup>object-link</markup>,
+        <markup>action-link</markup> and
+        <markup>new-action-link</markup>.</para>
+      </section>
+
+      <section>
+        <title>Scimpi tags</title>
+
+        <para>Each tag is used in the form</para>
+
+        <programlisting format="linespecific">&lt;swf:<emphasis>tag-name</emphasis> <emphasis>attribute-name</emphasis>="<emphasis>attribute value</emphasis>" /&gt;</programlisting>
+
+        <para>for an empty tag, while a tag containing other tags will be of
+        the form</para>
+
+        <para><programlisting format="linespecific">&lt;swf:<emphasis>tag-name</emphasis> <emphasis>attribute-name</emphasis>="<emphasis>attribute value</emphasis>"&gt;
+    <emphasis>enclosed text or tags</emphasis>
+&lt;/swf:<emphasis>tag-name</emphasis>&gt;</programlisting></para>
+
+        <para>Scimpi markup, being XML embedded in XHTML pages, is case
+        sensitive. All tag and attribute names must be lower case.</para>
+
+        <section>
+          <title>Page layout</title>
+
+          <para>Scimpi pages can import chunks of markup from other files as
+          well use a template to form the basis of a page. The
+          <markup>import</markup> tag simply reads in a specified file for
+          inclusion at the point of the tag. If the file has an <filename
+          moreinfo="none">shtml</filename> extension that file is also
+          processed. This is useful for including common elements in file such
+          as a header or footer.</para>
+
+          <para>The <markup>template</markup> tag similarly reads in a
+          specified file, but while it is reading it in it looks for a
+          <markup>content</markup> tag and suspends reading when it finds one.
+          The remainder of current file is then read in and processed before
+          the reading of the template file is completed. So given the two
+          files, <filename moreinfo="none">my-template.html</filename> and
+          <filename moreinfo="none">my-page.shtml,</filename> as listed
+          here</para>
+
+          <programlisting format="linespecific">&lt;hmtl&gt;
+&lt;head&gt;
+  &lt;title&gt;Scimpi Page&lt;/title&gt;
+&lt;/head&gt;
+
+&lt;body&gt;
+  &lt;swf:content /&gt;
+&lt;/body&gt;
+&lt;/html&gt;</programlisting>
+
+          <programlisting format="linespecific">&lt;swf:template  file="my-template.shtml" /&gt;
+&lt;h1&gt;My new page&lt;/h1&gt;</programlisting>
+
+          <para>the resultant markup will be as follows,</para>
+
+          <programlisting format="linespecific">&lt;hmtl&gt;
+&lt;head&gt;
+  &lt;title&gt;Scimpi Page&lt;/title&gt;
+&lt;/head&gt;
+
+&lt;body&gt;
+  <emphasis role="strong">&lt;h1&gt;My new page&lt;/h1&gt;</emphasis>
+&lt;/body&gt;
+&lt;/html&gt;</programlisting>
+
+          <para>where the content tag has been replaced with content of the
+          original file (but without the <markup>template</markup>
+          tag).</para>
+
+          <para>Another tool for minimising page size is move common markup
+          into separate files and import those block into the multiple files
+          when needed using the <markup>import</markup> tag. When using this
+          technique it is useful to indicate in the segments file name that it
+          is in an import; we place an underscore at beginning of such
+          files.</para>
+        </section>
+
+        <section>
+          <title>Form views</title>
+
+          <para>Scimpi has a number of tags that allow objects, and parts of
+          objects, to displayed. The whole object can be displayed using the
+          <markup>short-form</markup> and <markup>long-form</markup> tags; the
+          difference between these two is the short version does not display
+          properties that are collections while long version shows these as
+          tables.</para>
+
+          <formalpara>
+            <title>Linking properties</title>
+
+            <para>Each reference property can be marked so it provides a link
+            to a page that shows more details about that object. For each
+            property that requires a link add a <markup>link</markup> tag to
+            the <markup>short-form</markup>/<markup>long-form</markup> block
+            specifying the name of the property in the <parameter
+            moreinfo="none">name</parameter> attribute. By default the page
+            that you will be linked to is the most appropriate one for that
+            type of object; alternatively you can specify a <parameter
+            moreinfo="none">view</parameter> attribute so the links is to a
+            specific page. The following example ensures that the approver
+            field is hyper-linked and the user will be taken the generic
+            object view page.</para>
+          </formalpara>
+
+          <programlisting format="linespecific">&lt;swf:long-form&gt;
+    &lt;swf:link name="approver"/&gt;
+&lt;/swf:long-form&gt;</programlisting>
+
+          <formalpara>
+            <title>Specifying object properties to include</title>
+
+            <para>By default all properties are shown for these tags, but an
+            explicit list of properties can be specified using the
+            <markup>include</markup> and <markup>exclude</markup> tags. When a
+            <markup>include</markup> tag is added all other properties that do
+            not also have an include tag will be excluded. The following
+            example shows how the claimant property can be removed by using a
+            exclude tag.</para>
+          </formalpara>
+
+          <programlisting format="linespecific">&lt;swf:long-form&gt;
+    &lt;swf:exclude name="claimant"/&gt;
+&lt;/swf:long-form&gt;</programlisting>
+
+          <formalpara>
+            <title>Fields and labels</title>
+
+            <para>In addition to displaying the complete or partial object
+            using the form tags a property's label and content can also be
+            accessed directly allowing an object's view to be constructed
+            manually. The <markup>label</markup> tag gets the field's proper
+            name while the <markup>field</markup> tag get the field's
+            contents. Both take the name of the field in the <parameter
+            moreinfo="none">field</parameter> attribute. The following example
+            creates a simple colon separated view of the current object,
+            showing the claimant, description and status labels and field
+            contents.</para>
+          </formalpara>
+
+          <programlisting format="linespecific">&lt;div class="form"&gt;
+    &lt;div&gt;&lt;swf:label field="claimant"/&gt;: &lt;swf:field field="claimant"/&gt;&lt;/div&gt;
+    &lt;div&gt;&lt;swf:label field="description"/&gt;: &lt;swf:field field="description"/&gt;&lt;/div&gt;
+    &lt;div&gt;&lt;swf:label field="status"/&gt;: &lt;swf:field field="status"/&gt;&lt;/div&gt;
+&lt;/div&gt;</programlisting>
+        </section>
+
+        <section>
+          <title>Lists and tables</title>
+
+          <para>List and table views of collections can be most simply created
+          using the <markup>list</markup> and <markup>table</markup> tags.
+          These tags can be used to create a view from either an explicit
+          collection or a collection property within an object. If the
+          <parameter moreinfo="none">field</parameter> attribute is specified
+          then a collection is deemed to be an object's property otherwise it
+          is an explicit collection. When no <parameter
+          moreinfo="none">collection</parameter> or <parameter
+          moreinfo="none">object</parameter> attribute is specified the RESULT
+          variable is used.</para>
+
+          <para>The <markup>list</markup> tag creates a numbered list of the
+          form</para>
+
+          <literallayout>&lt;ol&gt;&lt;li&gt;Submitted - Meeting with client&lt;/li&gt;
+&lt;li&gt;Submitted - Meeting in city office&lt;/li&gt;
+&lt;li&gt;New - Meeting at clients&lt;/li&gt;
+&lt;/ol&gt;</literallayout>
+
+          <para>but it can also show as bulleted form (as a
+          <markup>ul</markup> block) by specifying the <parameter
+          moreinfo="none">type</parameter> attribute.</para>
+
+          <para>The <markup>table</markup> tag creates a table with a row for
+          each element and a column for each association/value property;
+          collection properties are not shown. By default each column has a
+          header that shows the name of the property, but this can be
+          prevented via the <parameter moreinfo="none">heading</parameter>
+          attribute.</para>
+
+          <formalpara>
+            <title>Linking collection elements</title>
+
+            <para>Within list and tables we can provide links to pages that
+            show or manipulate the individual items. By adding a <parameter
+            moreinfo="none">link</parameter> attribute Scimpi will create a
+            hyper-link (an <markup>a</markup> tag) to the specified page that
+            includes a reference to the current element. This Scimpi
+            markup</para>
+          </formalpara>
+
+          <programlisting format="linespecific">&lt;swf:list type="circle" link="_generic.shtml"/&gt;</programlisting>
+
+          <para>therefore generates the following HTML markup instead of the
+          first element in the example above.</para>
+
+          <literallayout>&lt;li&gt;&lt;a href="_generic.shtml?_result=Porg.apache.isis.app.cart.Claim@fdzsbkg0"&gt;
+Submitted - Meeting with client&lt;/a&gt;&lt;/li&gt;</literallayout>
+
+          <para>The parameter name can be specified using the <parameter
+          moreinfo="none">element-name</parameter> attribute and, as can seen
+          in the example, this defaults to RESULT.</para>
+
+          <para>As tables can show the element, as a row, and other objects,
+          as the columns, it is possible to make the objects link to other
+          pages instead of the row. For each column that should be linked a
+          <markup>link</markup> tag should be added to the
+          <markup>table</markup> block and the <parameter
+          moreinfo="none">name</parameter> attribute set to identify the
+          property to provide the link on. The following example creates a
+          link that lets us view the approver in detail.</para>
+
+          <programlisting format="linespecific">&lt;swf:table&gt;
+    &lt;swf:link name="approver" view="_generic.shtml"/&gt;
+&lt;/swf:table&gt;</programlisting>
+
+          <formalpara>
+            <title>Specifying the columns in a table</title>
+
+            <para>The columns displayed in a table can be controlled by adding
+            <markup>include</markup> and <markup>exclude</markup> tag to the
+            <markup>table</markup> block. By using an <markup>exclude</markup>
+            tag you indicate that a named property is not be shown thereby
+            reducing the number of columns shown as needed. The
+            <markup>include</markup> tag indicates that you want to show a
+            named property but not any others thereby allowing the exact
+            number of columns specified. The following example excludes the
+            approver and claimant columns so all the rest still show.</para>
+          </formalpara>
+
+          <programlisting format="linespecific">&lt;swf:table heading="no" &gt;
+   &lt;swf:exclude name="approver"/&gt;
+   &lt;swf:exclude name="claimant"/&gt;
+&lt;/swf:table&gt;</programlisting>
+        </section>
+
+        <section>
+          <title>Collections</title>
+
+          <para>While the <markup>list</markup> and <markup>table</markup>
+          tags provide a quick and simple way of displaying a collection the
+          <markup>collection</markup> tag provides the mechanism for building
+          up your own view of a collection element by element. The
+          <markup>collection</markup> tag takes the same attributes for
+          determining the collection as the <markup>list</markup> and
+          <markup>table</markup> tags do. The content between the opening and
+          closing tags is processed for each element of the collection. By
+          default the element's reference is put in the RESULT variable, but
+          this can be changed by adding the <parameter
+          moreinfo="none">element-name</parameter> attribute. The following
+          example shows a <markup>collection</markup> tag used within a
+          <markup>ul</markup> tag to create a series of <markup>li</markup>
+          elements from the current collection object.</para>
+
+          <programlisting format="linespecific">&lt;ul&gt;&lt;swf:collection&gt;
+    &lt;li&gt;&lt;swf:title icon="off"/&gt;&lt;/li&gt;
+&lt;/swf:collection&gt;&lt;/ul&gt;</programlisting>
+
+          <literallayout>&lt;ol&gt;
+    &lt;li&gt;Submitted - Meeting with client&lt;/li&gt;
+    &lt;li&gt;Submitted - Meeting in city office&lt;/li&gt;
+    &lt;li&gt;New - Meeting at clients&lt;/li&gt;
+&lt;/ol&gt;</literallayout>
+        </section>
+
+        <section>
+          <title>Element type</title>
+
+          <para>The <markup>element-type</markup> tag can be used to get hold
+          of the type of elements a collection holds. If the system is
+          configured with internationalization then the name will be
+          localized.</para>
+        </section>
+
+        <section>
+          <title>Titles</title>
+
+          <para>An object's title can be displayed using the
+          <markup>title</markup> tag. The default version displays an icon
+          image as well as the title text, but this can be prevented by
+          setting the <parameter moreinfo="none">icon</parameter> attribute to
+          <emphasis>no</emphasis>. The following example displays an icon and
+          title text as a level three heading.</para>
+
+          <programlisting format="linespecific">&lt;h3&gt;&lt;swf:title/&gt;&lt;/h3&gt;</programlisting>
+
+          <literallayout>&lt;h3&gt;&lt;img class="title-icon" src="/example/images/Default.png" /&gt;Submitted - 
+Meeting with client&lt;/h3&gt;</literallayout>
+        </section>
+
+        <section id="edit_forms">
+          <title>Edit forms</title>
+
+          <para>Using the <markup>edit</markup> tag we can display an HTML
+          form for an object. Any disabled or uneditable properties are simply
+          shown by title while the fields to be edited have the most suitable
+          input field created for them.</para>
+
+          <para>Reference fields won't work particularly well in the default
+          tag as there is no other available references to set the field to
+          unless that field has some options or a default defined for it in
+          the model. To make it possible for the user to select a suitable
+          reference to set the field with the <markup>selector</markup> tag
+          can be used to create a drop-down or options list with suitable
+          choices. This tag can either take a collection or an object and a
+          method that results in a collection and will create an object
+          selection widget. The following example shows how the default
+          approver field can be replaced by a list showing all the claimants
+          as provided by the claimants repository.</para>
+
+          <programlisting format="linespecific">&lt;swf:edit&gt;
+    &lt;swf:selector field="approver" object="service:claimants" method="allClaimants" type="list"/&gt;
+&lt;/swf:edit&gt;</programlisting>
+
+          <para>If we want to the give the user some control over what is
+          selectable, instead of providing a long and too comprehensive list,
+          we can first prompt the user for criteria that can be used when
+          calling a method that has one or more parameters. Scimpi then
+          creates a form that collected the parameters for that method and
+          after the user presses the search button it will create a selection
+          list based on the method call using those parameters. In the
+          following example the <markup>selector</markup> tag uses the
+          <literal>findClaimants</literal> method that takes a
+          <literal>String</literal> parameter. This results in a single field
+          form that invokes the search method and generates a drop-down list
+          (the default type of selector).</para>
+
+          <programlisting format="linespecific">&lt;swf:edit&gt;
+    &lt;swf:selector field="approver" object="service:claimants" method="findClaimants"/&gt;
+&lt;/swf:edit&gt;</programlisting>
+
+          <para>If more control over the entry field is required then you can
+          define your own field within a <markup>form-field</markup> tag. This
+          tag simply replaces the auto-generated field with contained block of
+          markup leaving you with the responsibility of setting it up
+          correctly. This typically means you need to determine the options
+          and ensure that the HTML field has a name that matches the property
+          in the object. The following simplified example creates a drop-down
+          list for the <property moreinfo="none">name</property> property; the
+          <parameter moreinfo="none">field</parameter> attribute of the Scimpi
+          tag and the <parameter moreinfo="none">name</parameter> attribute of
+          the HTML tag must have the same field name.</para>
+
+          <programlisting format="linespecific">&lt;swf:form-field field="name"&gt;
+    &lt;select name="name"&gt;
+         &lt;option&gt;best&lt;/option&gt;
+         &lt;option&gt;average&lt;/option&gt;
+         &lt;option&gt;worst&lt;/option&gt;
+    &lt;/select&gt;
+&lt;/swf:form-field&gt;</programlisting>
+
+          <formalpara>
+            <title>Controlling the visible fields</title>
+
+            <para>Like the object views, the properties shown in the edit form
+            can be controlled using the <markup>include</markup> and
+            <markup>exclude</markup> tags. The <markup>exclude</markup> tag
+            simply removes the named field from the complete set of fields,
+            while a set of <markup>include</markup> tags defines the complete
+            list of fields to be shown. It is important to remember that the
+            object cannot be saved if all the required properties are not set,
+            or if entries are invalid. This can happen when you exclude such
+            fields unless they have a default value. The following example
+            removes the status and claimant fields from the property
+            set.</para>
+          </formalpara>
+
+          <programlisting format="linespecific">&lt;swf:edit&gt;
+    &lt;swf:exclude name="status"/&gt;
+    &lt;swf:exclude name="claimant"/&gt;
+&lt;/swf:edit&gt;</programlisting>
+        </section>
+
+        <section>
+          <title>Actions</title>
+
+          <para>Two special tags provide access to all actions for an object
+          and for all the actions on all the service objects. These tags -
+          <markup>methods</markup> and <markup>services</markup> - are
+          typically used for generic pages but can be used on specific pages
+          as a way of minimising the amount of tags required to make a number
+          of your actions available. The <markup>methods</markup> tag will,
+          except on service objects, also provide an edit option that will
+          open up an edit view. By default all the actions are displayed,
+          either as buttons or links to action pages, but the list can be
+          controlled using the <markup>include</markup> and
+          <markup>exclude</markup> tags. The following example will provide
+          access to all the methods from the claimant service except the
+          <literal>allClaimants</literal> one; there will be no edit option
+          also as it is for a service.</para>
+
+          <programlisting format="linespecific">&lt;swf:methods object="service:claimants" &gt;
+    &lt;swf:exclude name="allClaimants"/&gt;
+&lt;/swf:methods&gt;</programlisting>
+
+          <formalpara>
+            <title>Common attributes</title>
+
+            <para>All the other action tags target a specific object to run a
+            specific action on. These are specified by the <parameter
+            moreinfo="none">object</parameter> and <parameter
+            moreinfo="none">method</parameter> attributes respectively. Also
+            the name of the variable that will hold the results can be
+            specified with the <parameter
+            moreinfo="none">result-name</parameter> attribute, with its scope
+            being set via the <parameter moreinfo="none">scope</parameter>
+            attribute. For all the tags that will forward you to another page
+            after executing can specify that page when: the result is returned
+            (<parameter moreinfo="none">the view</parameter> attribute); when
+            no result is returned (void); and when an error (such as a
+            validation failure) occurs (<parameter
+            moreinfo="none">error</parameter>).</para>
+          </formalpara>
+
+          <formalpara>
+            <title>In-line actions</title>
+
+            <para>Actions can be run as they are come across while processing
+            a page using the <markup>run-action</markup> tag. These are
+            typically used when details are needed for other tags in the page.
+            The following example shows how a table of all the claims can be
+            displayed by running the <literal>allClaims</literal> method on
+            the claims repository.</para>
+          </formalpara>
+
+          <programlisting format="linespecific">&lt;swf:run-action object="service:claims" method="allClaims"/&gt;
+&lt;swf:table/&gt;</programlisting>
+
+          <formalpara>
+            <title>Immediate actions</title>
+
+            <para>Some actions can be invoked by the user immediately while
+            others require input from the user before they can be run (these
+            are covered next). Web users expect links to take them to another
+            page while buttons will make a change to the state of the system,
+            so Scimpi provides the <markup>action-link</markup> and
+            <markup>action-button</markup> tags to allow the appropriate
+            rendering. Both tags operate in the same way but while one is
+            rendered as a hyper-link the other is a form with no fields, just
+            a button. These tags are typically used with methods that do not
+            have parameters as the following example shows.</para>
+          </formalpara>
+
+          <programlisting format="linespecific">&lt;swf:action-link object="service:claimants" method="allClaimants"/&gt;</programlisting>
+
+          <para>If a method has parameters and they either have a suitable
+          default value or you have access to suitable value through the page
+          then these tags can also be used for these parameterised methods. If
+          the tag specifies a method with parameters it will expect a
+          <markup>parameter</markup> tag to specify the parameter's value or
+          will use the default value as specified by the model. If neither of
+          these exists then an error will be generated. The following example
+          creates a form with a button that runs the one parameter submit
+          method where the parameter value is that held by the approver
+          variable.</para>
+
+          <programlisting format="linespecific">&lt;swf:action-button object="${claim}" method="submit"&gt;
+    &lt;swf:parameter number="1" value="${approver}"/&gt;
+&lt;/swf:action-button&gt;</programlisting>
+
+          <formalpara>
+            <title>Prompted actions</title>
+
+            <para>When an action requires input from the user the
+            <markup>action-form</markup> tag should be used to create an HTML
+            form with fields for the parameters. Each parameter is displayed
+            as an appropriate entry field and, by default, all the parameters
+            made visible but this can be controlled using the
+            <markup>include</markup> and <markup>exclude</markup> tags. Using
+            <markup>include</markup> you can build up a list of all the
+            parameters you want to be shown (any parameter then not specified
+            through an include is excluded by default), while by using
+            <markup>exclude</markup>, specific parameters can be removed from
+            the full list. Only parameters that are optional or have a default
+            value should, however, be excluded as otherwise the action will
+            not be able to be run.</para>
+          </formalpara>
+
+          <para>By default the most suitable HTML field is used for each
+          particular parameter but it is possible to provide your own fields
+          when needed. The simplest option is to use the
+          <markup>selector</markup> tag to provide a selection option - as a
+          drop-down, list or set of radio buttons - to the user instead of the
+          default field. The use of the <markup>selector</markup> tag is
+          discussed in the previous section (see <xref
+          linkend="edit_forms" />). The alternative is to create your own
+          input field using the <markup>form-field</markup> tag, again this is
+          described above (see <xref linkend="edit_forms" />). The following
+          example shows the <markup>selector</markup> tag in use to provide a
+          list of possible approvers.</para>
+
+          <programlisting format="linespecific">&lt;swf:action-form method="submit" view="_generic.shtml" void="../index.shtml"&gt;
+    &lt;swf:selector field="param0" object="service:claimants" method="allClaimants"/&gt;
+&lt;/swf:action-form&gt;</programlisting>
+        </section>
+      </section>
+    </chapter>
+
+    <chapter>
+      <title>Configuring and Deploying Scimpi Web Apps</title>
+
+      <para></para>
+
+      <para>The Scimpi viewer currently runs only with <emphasis>Apache
+      Isis</emphasis> default runtime.</para>
+
+      <para></para>
+
+      <section>
+        <title>Isis (Default) Runtime Configuration</title>
+
+        <para></para>
+
+        <para></para>
+
+        <para>There are a number of configuration files for each web
+        application and these are placed in the <filename>WEB-INF</filename>
+        directory. This section describes the common settings that are used.
+        Most configuration aspects affect the <emphasis>Apache Isis</emphasis>
+        framework and are detailed within its guide for the <emphasis>default
+        runtime</emphasis></para>
+
+        <formalpara>
+          <title>Services</title>
+
+          <para>The service objects that the <emphasis>Isis</emphasis> runtime
+          instantiates and makes available to your web application are listed
+          in the <filename moreinfo="none">isis.properties</filename> file
+          with the <property moreinfo="none">services</property> properties.
+          The example segment below will make the classes
+          <literal>org.example.services.ClaimantRepository</literal> and
+          <literal>org.example.services.ClaimRepository</literal>
+          available.</para>
+        </formalpara>
+
+        <literallayout>isis.services.prefix=org.example.services
+isis.services=ClaimantRepository, ClaimRepository</literallayout>
+
+        <formalpara>
+          <title>Fixtures</title>
+
+          <para>Fixtures are run the first time that your web application is
+          started and can be used to prime the object store with an initial
+          set of domain objects such as reference or demo objects. Fixtures
+          are specified in the <filename
+          moreinfo="none">isis.properties</filename> file with the <property
+          moreinfo="none">fixtures</property> properties. The following
+          snippet loads up the
+          <literal>org.apache.isis.app.cart.fixtures.ClaimsFixture</literal>
+          class on the first startup.</para>
+        </formalpara>
+
+        <literallayout>isis.fixtures=org.apache.isis.app.cart.fixtures.ClaimsFixture</literallayout>
+
+        <formalpara>
+          <title>XML object store</title>
+
+          <para>The template code provided is designed to run with the
+          <acronym>XML</acronym> object store; other persistence layers can be
+          used and are outlined in Isis' <emphasis>default runtime</emphasis>
+          documentation. As this is a file based store the place it expects to
+          find its files must remain both consistence and in existence. The
+          problem comes down to the servlet container and the root path it
+          gives its web application. Typically the only reliable system
+          independent place is the web applications extraction directory but
+          this is replaced each time a web application is redeployed. As there
+          are no other guaranteed cross-platform directories we can default to
+          it is best to specify where the object store should be placed. The
+          location of the <acronym>XML</acronym> object store files are
+          specified in the <filename
+          moreinfo="none">isis.properties</filename> file with the <property
+          moreinfo="none">xmlos.dir</property> property. The following snippet
+          places the files in the <filename
+          moreinfo="none">tmp/example-data</filename> directory, which on
+          Tomcat will be relative the startup directory (a better option is to
+          use a rooted path that absolutely identifies where the files are to
+          be placed).</para>
+        </formalpara>
+
+        <literallayout>isis.xmlos.dir=tmp/example-data</literallayout>
+
+        <formalpara>
+          <title>Passwords</title>
+
+          <para>The default authentication for the template code is through a
+          password file using Isis' file-based security implementation; other
+          authentication methods can be used and are outlined in their
+          respective guides. The <filename
+          moreinfo="none">passwords</filename> file contains a set of user
+          names and passwords that allow user to log in with. The example
+          below defines a set of users; that is the users are users of the
+          system and not just Scimpi.</para>
+        </formalpara>
+
+        <literallayout># username:password
+sven:pass
+dick:pass
+bob:pass</literallayout>
+      </section>
+
+      <section>
+        <title>Autologin configuration</title>
+
+        <para>If the users are defined by the web application it becomes the
+        domain model's responsibility to identify and authenticate the users.
+        To allow for this the <filename moreinfo="none">password</filename>
+        file must contain a system user, and Scimpi must automatically connect
+        as that user. This is done via servlet initialisation parameters that
+        are set in the <filename moreinfo="none">web.xml</filename>
+        configuration file, which the servlet container processes. In the
+        <markup>servlet</markup> block two <markup>init-parameter</markup>
+        blocks are added to specify the user name and password. The following
+        snippet shows the <markup>servlet</markup> block once the two
+        parameters have been added.</para>
+
+        <programlisting format="linespecific">&lt;servlet&gt;
+    &lt;servlet-name&gt;dispatcher&lt;/servlet-name&gt;
+    &lt;servlet-class&gt;org.apache.isis.webapp.servlet.DispatcherServlet&lt;/servlet-class&gt;
+    &lt;load-on-startup&gt;1&lt;/load-on-startup&gt;
+    &lt;init-param&gt;
+        &lt;param-name&gt;username&lt;/param-name&gt;
+        &lt;param-value&gt;webapp&lt;/param-value&gt;
+    &lt;/init-param&gt;
+    &lt;init-param&gt;
+        &lt;param-name&gt;password&lt;/param-name&gt;
+        &lt;param-value&gt;pass&lt;/param-value&gt;
+    &lt;/init-param&gt;
+&lt;/servlet&gt;</programlisting>
+
+        <para>The user name and password specified for auto-login should then
+        be added to the password file so that the system user can be
+        authenticated. This can be done by adding the following line to the
+        <filename moreinfo="none">password</filename> file.</para>
+
+        <programlisting format="linespecific">webapp:pass</programlisting>
+
+        <para></para>
+      </section>
+    </chapter>
+  </part>
+
+  <part>
+    <title>Extending Scimpi</title>
+
+    <chapter>
+      <title>Defining Tags</title>
+
+      <para>This chapter looks at setting up a development environment
+      (Eclipse) to allow development of the Scimpi framework itself. This is
+      the setup for developers of the framework, developers who are writing
+      extensions to the framework.</para>
+
+      <para></para>
+
+      <para>*** x-ref Isis contributors guide</para>
+
+      <para></para>
+
+      <section>
+        <title>How Scimpi works</title>
+
+        <para>The Scimpi viewer is used to build Java web applications that
+        run in a servlet container such Tomcat or JRun. Using the Apache Isis
+        framework to access a Java domain model, the Scimpi viewer can be used
+        to create dynamic web pages that access and manipulate that domain
+        model.</para>
+
+        <para>Pages are generated by Scimpi by processing template files (with
+        the extension <filename moreinfo="none">shtml</filename>) that contain
+        special tags that instruct the framework to do particular things (all
+        other files with extensions other than <filename
+        moreinfo="none">shtml</filename> are passed to the browser unchanged).
+        The template files are essentially HTML files interspersed with Scimpi
+        tags that are processed and will typically generate some HTML code to
+        replace the tag in the file that is passed to browser. Like most other
+        web applications the template files, and all other browser requestable
+        resources are placed in the <emphasis>webapp</emphasis>
+        directory.</para>
+
+        <literallayout>webapp/
+    generic/
+        action.shtml
+        collection.shtml
+        edit.shtml
+        object.shtml
+    images/
+        Default.png
+        logo.png
+    style/
+        screen.css
+        template.shtml
+    WEB-INF/
+        isis.properties
+        passwords
+        web.xml
+    index.shtml</literallayout>
+
+        <formalpara>
+          <title>Bootstrapping Apache Isis</title>
+
+          <para>When the servlet container loads the Scimpi based web
+          application it starts off by bootstrapping <emphasis>Apache
+          Isis</emphasis> and introspecting the domain model. This is
+          controlled by the <filename
+          moreinfo="none">isis.properties</filename> file. A basic
+          configuration, like the one shown below, will list the service
+          objects that <emphasis>Isis</emphasis> should make available and the
+          fixtures that should be run the first time the web application is
+          started to populate the object store with the initial set of domain
+          objects.</para>
+        </formalpara>
+
+        <literallayout>isis.services.prefix=org.apache.isis.app.cart.services
+isis.services=ClaimantRepository, ClaimRepository
+
+isis.fixtures.prefix=org.apache.isis.app.cart.fixtures
+isis.fixtures=ClaimsFixture</literallayout>
+
+        <formalpara>
+          <title>Default security</title>
+
+          <para><emphasis>Apache Isis</emphasis> is <emphasis>user</emphasis>
+          orientated, that is it expects the interactions with it to be on
+          behalf of a user. To this end the system must authorise a user
+          before anything can be done, this is the same principle as a
+          database engine. The <filename moreinfo="none">passwords</filename>
+          file contains a set of user names and passwords for Isis's
+          file-based security implementation. The example below defines a set
+          of actual users for applications that will be based on Isis] users,
+          and a system user (<emphasis>webapp</emphasis>) for applications
+          that either have no concepts of users or provide for it within the
+          domain model.</para>
+        </formalpara>
+
+        <literallayout># username:password
+sven:pass
+dick:pass
+bob:pass
+
+webapp:pass</literallayout>
+
+        <formalpara>
+          <title>web application configuration</title>
+
+          <para>The web application configuration file for a Scimpi
+          application is rather simple and varies little from application to
+          application. The change that needs to be made only applies to
+          applications that use Isis (system-level) users, for which the to
+          parameters for the dispatcher servlet should be removed so that web
+          application does not log-in automatically when a session is
+          started.</para>
+        </formalpara>
+
+        <literallayout>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;web-app id="WebApp_ID" version="2.4" xmlns="http://java.sun.com/xml/ns/j2ee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"&gt;
+    &lt;display-name&gt;example&lt;/display-name&gt;
+
+    &lt;welcome-file-list&gt;
+        &lt;welcome-file&gt;index.shtml&lt;/welcome-file&gt;
+    &lt;/welcome-file-list&gt;
+
+    &lt;listener&gt;
+        &lt;listener-class&gt;org.apache.isis.webapp.servlet.SystemInitializer&lt;/listener-class&gt;
+    &lt;/listener&gt;
+
+    &lt;servlet&gt;
+        &lt;servlet-name&gt;dispatcher&lt;/servlet-name&gt;
+        &lt;servlet-class&gt;org.apache.isis.webapp.servlet.DispatcherServlet&lt;/servlet-class&gt;
+        <emphasis>&lt;init-param&gt;
+            &lt;param-name&gt;username&lt;/param-name&gt;
+            &lt;param-value&gt;webapp&lt;/param-value&gt;
+        &lt;/init-param&gt;
+        &lt;init-param&gt;
+            &lt;param-name&gt;password&lt;/param-name&gt;
+            &lt;param-value&gt;pass&lt;/param-value&gt;
+        &lt;/init-param&gt;</emphasis>
+        &lt;load-on-startup&gt;1&lt;/load-on-startup&gt;
+    &lt;/servlet&gt;
+
+    &lt;servlet-mapping&gt;
+        &lt;servlet-name&gt;dispatcher&lt;/servlet-name&gt;
+        &lt;url-pattern&gt;*.shtml&lt;/url-pattern&gt;
+    &lt;/servlet-mapping&gt;
+
+    &lt;servlet-mapping&gt;
+        &lt;servlet-name&gt;dispatcher&lt;/servlet-name&gt;
+        &lt;url-pattern&gt;*.app&lt;/url-pattern&gt;
+    &lt;/servlet-mapping&gt;
+&lt;/web-app&gt;
+</literallayout>
+
+        <formalpara>
+          <title>Controllers</title>
+
+          <para>Scimpi provides a single dispatcher servlet and a set of
+          controllers. Other controllers can be added if needed.</para>
+        </formalpara>
+
+        <para>The built-in controllers are:-</para>
+
+        <variablelist>
+          <varlistentry>
+            <term>logon</term>
+
+            <listitem>
+              <para>processes a username and password parameter and requests
+              an <emphasis>Isis</emphasis> runtime session from the underlying
+              framework.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>logout</term>
+
+            <listitem>
+              <para>End the <emphasis>Isis</emphasis> session from the
+              underlying runtime, and clears the request context.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>debug</term>
+
+            <listitem>
+              <para>creates a debug page displaying internal details and state
+              of the Scimpi viewer and Isis runtime.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>edit</term>
+
+            <listitem>
+              <para>process a set of fields from an <acronym>HTML</acronym>
+              form for a specified object and sets those fields of that object
+              held by the <emphasis>Isis</emphasis> runtime.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>action</term>
+
+            <listitem>
+              <para>process a set of fields from an <acronym>HTML</acronym>
+              form for a specified method on a domain object or service object
+              and invokes that method.</para>
+            </listitem>
+          </varlistentry>
+        </variablelist>
+
+        <section>
+          <title>Objects</title>
+
+          <para>The domain objects handled by the <emphasis>Apache
+          Isis</emphasis> runtime are wrapped in adapters that allow those
+          domain objects to be processed transparently by the framework with
+          the domain objects be redefined to deal with technical aspects of
+          enterprise systems such as security and persistence. Each domain
+          object is given an object identifier (<acronym>OID</acronym>) so the
+          it can be referred to across machines. The Scimpi viewer works with
+          this mechanism by mapping <acronym>HTML</acronym> friendly
+          identifiers to the <acronym>OID</acronym>s.</para>
+        </section>
+      </section>
+
+      <section>
+        <title>Actions</title>
+
+        <para>All included actions are added in
+        <literal>Dispatcher.init()</literal>. Other action can be added
+        dynamically and are loaded from the <literal>actions</literal> element
+        of the config file, which is loaded by the
+        <literal>Dispatcher.loadConfigFile()</literal> method.</para>
+
+        <para>All included tag processors are added by the
+        <literal>ProcessorLookup.init()</literal> method. Other processors can
+        be added dynamically and are loaded from the
+        <literal>processors</literal> element of the config file, which is
+        loaded by the <literal>Dispatcher.loadConfigFile()</literal>
+        method.</para>
+
+        <para>A debug action is provided to give you a view of the internals
+        of the system. These are accessed using the
+        <literal>debug.app</literal> request, eg
+        <literal>http://localhost/debug.app</literal>.</para>
+      </section>
+
+      <section>
+        <title>Element Processors</title>
+
+        <para>The Scimpi viewer can be extended by adding new tags and/or
+        actions.</para>
+
+        <para>Adding a new tag only requires the implementation of a
+        <literal>ElementProcessor</literal> class and its registration within
+        the webapp.</para>
+
+        <para>An element processor does two things. It gives a name to the
+        element, which is used to write the element in the webpages in the
+        form <literal>&lt;swf:<replaceable>name</replaceable>&gt;</literal>.
+        Second it processes the tag and generates <acronym>HTML</acronym>
+        code. The following is the most basic processor you can create for a
+        new tag <literal>&lt;swf:count /&gt;</literal>.</para>
+
+        <programlisting>package org.apache.isis.webapp.view.collection;
+
+import org.apache.isis.webapp.ElementProcessor;
+import org.apache.isis.webapp.processor.Request;
+
+
+public class CountElements implements ElementProcessor {
+
+    public void process(Request request) {
+        request.appendHtml("&lt;b&gt;count goes here&lt;/b&gt;");
+    }
+
+    public String getName() {
+        return "count";
+    }
+
+}</programlisting>
+
+        <para>To make this available add the class name needs to be registered
+        to the <emphasis>processors</emphasis> list in a suitable
+        configuration file. Assuming there is currently no cofiguration file
+        then one must be specified in the <filename>WEB-INF/web.xml</filename>
+        file first. Add an <emphasis>init parameter</emphasis> to the
+        dispatcher servlet element as below:</para>
+
+        <literallayout>    :
+    :
+    &lt;servlet&gt;
+        &lt;servlet-name&gt;dispatcher&lt;/servlet-name&gt;
+        &lt;servlet-class&gt;org.apache.isis.webapp.servlet.DispatcherServlet&lt;/servlet-class&gt;
+        &lt;init-param&gt;
+            &lt;param-name&gt;config&lt;/param-name&gt;
+            &lt;param-value&gt;config.xml&lt;/param-value&gt;
+        &lt;/init-param&gt;
+        :
+        :</literallayout>
+
+        <para>The name must be <emphasis>config</emphasis>, but the file name
+        can be changed to suit.</para>
+
+        <para>Next, create that file in the WEB-INF directory and specify the
+        full class name of the processor. Here is the
+        <filename>WEB-INF/config.xml</filename> file for this example.</para>
+
+        <literallayout>&lt;config&gt;
+    &lt;processors&gt;
+        &lt;processor&gt;org.apache.isis.webapp.view.collection.CountElements&lt;/processor&gt;
+    &lt;/processors&gt;
+&lt;/config&gt;</literallayout>
+
+        <para></para>
+
+        <para>Check this has been added by looking at the list of elements on
+        the Dispatcher page:
+        <literal>http://localhost:8080/debug.app?action=dispatcher</literal>.</para>
+      </section>
+    </chapter>
+  </part>
+
+  <part>
+    <title>Appendices</title>
+
+    <appendix id="tags">
+      <title>Tag reference</title>
+
+      <para>This section outlines each of the available tags showing what
+      attributes they support and gives examples of their use.</para>
+
+      <section id="action-button">
+        <title>action-button</title>
+
+        <para>Creates an empty form with just a button that invokes the
+        specified method when pressed, forwarding the results to the specified
+        view.</para>
+
+        <table>
+          <title><markup>action-button</markup> attributes</title>
+
+          <tgroup cols="4">
+            <colspec colwidth="1*" />
+
+            <colspec colwidth="3*" />
+
+            <colspec colwidth="0.8*" />
+
+            <colspec colwidth="1*" />
+
+            <thead>
+              <row>
+                <entry align="center">Name</entry>
+
+                <entry align="center">Description</entry>
+
+                <entry align="center">Required</entry>
+
+                <entry align="center">Default</entry>
+              </row>
+            </thead>
+
+            <tbody>
+              <row>
+                <entry>object</entry>
+
+                <entry>Identifier for a specific object, or a service
+                identifier prefixed by "service:".</entry>
+
+                <entry>no</entry>
+
+                <entry>RESULT</entry>
+              </row>
+
+              <row>
+                <entry>method</entry>
+
+                <entry>Method on the object or service to invoke when the user
+                presses the submit button.</entry>
+
+                <entry>yes</entry>
+
+                <entry></entry>
+              </row>
+
+              <row>
+                <entry>view</entry>
+
+                <entry>View to be forwarded to after submission and an object
+                is returned.</entry>
+
+                <entry>no</entry>
+
+                <entry>_generic.html</entry>
+              </row>
+
+              <row>
+                <entry>void</entry>
+
+                <entry>View to be forwarded to after submission and no object
+                is returned.</entry>
+
+                <entry>no</entry>
+
+                <entry>_generic.html</entry>
+              </row>
+
+              <row>
+                <entry>error</entry>
+
+                <entry>View to be forwarded to if the action causes an error
+                (such as validation failure or missing entry). </entry>
+
+                <entry>no</entry>
+
+                <entry>the current page</entry>
+              </row>
+
+              <row>
+                <entry>result-name</entry>
+
+                <entry>Name of variable to store the resultant object.</entry>
+
+                <entry>no</entry>
+
+                <entry>RESULT</entry>
+              </row>
+
+              <row>
+                <entry>result-override</entry>
+
+                <entry>value passed into the next page as the result variable
+                (${_result} by default) instead of the returned value or the
+                target.</entry>
+
+                <entry>no</entry>
+
+                <entry></entry>
+              </row>
+
+              <row>
+                <entry>scope</entry>
+
+                <entry>How long the variable should be kept for.</entry>
+
+                <entry>no</entry>
+
+                <entry>request</entry>
+              </row>
+
+              <row>
+                <entry>title</entry>
+
+                <entry>Title for the submission button.</entry>
+
+                <entry>no</entry>
+
+                <entry>the action's name</entry>
+              </row>
+
+              <row>
+                <entry>show-message</entry>
+
+                <entry>allow validation message to be shown if the action is
+                not shown because it is not available</entry>
+
+                <entry>no</entry>
+
+                <entry>false</entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+
+        <para>The <markup>action-button</markup> element can contain one or
+        more <link linkend="parameter"><markup>parameter</markup></link>
+        elements.</para>
+
+        <para>The following example creates an HTML form with no visible
+        fields and a button that invokes the myRecentClaims method on the
+        claims services when the button is pressed.</para>
+
+        <programlisting format="linespecific">&lt;swf:action-button object="service:Claims" method="myRecentClaims" /&gt;</programlisting>
+
+        <para>See also: <xref linkend="action-form" />, <xref
+        linkend="run-action" /> and <xref linkend="action-link" /></para>
+      </section>
+
+      <section id="action-form">
+        <title>action-form</title>
+
+        <para>Creates a form with entry fields for each of the action's
+        parameters. When the user presses the submit button the action will be
+        invoked, if all the parameter are valid, and the result forwarded to
+        the specified page. If the parameters are invalid control will be
+        forwarded to the specified error page.</para>
+
+        <para>If the specified action is not visible or usable no form will be
+        displayed.</para>
+
+        <table>
+          <title><markup>action-form</markup> attributes</title>
+
+          <tgroup cols="4">
+            <colspec colwidth="1*" />
+
+            <colspec colwidth="3*" />
+
+            <colspec colwidth="0.8*" />
+
+            <colspec colwidth="1*" />
+
+            <thead>
+              <row>
+                <entry align="center">Name</entry>
+
+                <entry align="center">Description</entry>
+
+                <entry align="center">Required</entry>
+
+                <entry align="center">Default</entry>
+              </row>
+            </thead>
+
+            <tbody>
+              <row>
+                <entry>object</entry>
+
+                <entry>Identifier for a specific object, or a service
+                identifier prefixed by "service:".</entry>
+
+                <entry>no</entry>
+
+                <entry>RESULT</entry>
+              </row>
+
+              <row>
+                <entry>method</entry>
+
+                <entry>Method on the object or service to invoke when the user
+                has provided the necessary parameters in the generated form
+                and has pressed the submit button.</entry>
+
+                <entry>yes</entry>
+
+                <entry></entry>
+              </row>
+
+              <row>
+                <entry>view</entry>
+
+                <entry>View to be forwarded to after submission and an object
+                is returned.</entry>
+
+                <entry>no</entry>
+
+                <entry>_generic.html</entry>
+              </row>
+
+              <row>
+                <entry>void</entry>
+
+                <entry>View to be forwarded to after submission and no object
+                is returned.</entry>
+
+                <entry>no</entry>
+
+                <entry>_generic.html</entry>
+              </row>
+
+              <row>
+                <entry>error</entry>
+
+                <entry>View to be forwarded to after validation failure
+                prevents the action from being invoked.</entry>
+
+                <entry>no</entry>
+
+                <entry>_generic.html</entry>
+              </row>
+
+              <row>
+                <entry>result-name</entry>
+
+                <entry>Name of variable to store the resultant object.</entry>
+
+                <entry>no</entry>
+
+                <entry>RESULT</entry>
+              </row>
+
+              <row>
+                <entry>scope</entry>
+
+                <entry>How long the results variable should be kept
+                for.</entry>
+
+                <entry>no</entry>
+
+                <entry>request</entry>
+              </row>
+
+              <row>
+                <entry>button-title</entry>
+
+                <entry>Title for the submission button. If blank ("") then
+                "OK" is used.</entry>
+
+                <entry>no</entry>
+
+                <entry>the action's name</entry>
+              </row>
+
+              <row>
+                <entry>title</entry>
+
+                <entry>Title for the generated form.</entry>
+
+                <entry>no</entry>
+
+                <entry>the action's name </entry>
+              </row>
+
+              <row>
+                <entry>show-message</entry>
+
+                <entry>allow validation message to be shown if the action is
+                not shown because it is not available</entry>
+
+                <entry>no</entry>
+
+                <entry>false</entry>
+              </row>
+
+              <row>
+                <entry>message</entry>
+
+                <entry>Message to show user on completion of action</entry>
+
+                <entry>no</entry>
+
+                <entry></entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+
+        <para>The <markup>action-form</markup> element can contain one or more
+        of the following elements</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><link
+            linkend="include"><markup>include</markup></link></para>
+          </listitem>
+
+          <listitem>
+            <para><link
+            linkend="exclude"><markup>exclude</markup></link></para>
+          </listitem>
+
+          <listitem>
+            <para><link
+            linkend="selector"><markup>selector</markup></link></para>
+          </listitem>
+        </itemizedlist>
+
+        <para>The following example creates an HTML form that will provide
+        fields for each of the parameters of the createNewClaim method on the
+        claims service. When the submit button is pressed the method will be
+        invoked with the provided fields and the generic form will be used (as
+        no view attribute was specified) to display the result.</para>
+
+        <programlisting format="linespecific">&lt;swf:action-form object="service:Claims" method="createNewClaim" /&gt;</programlisting>
+
+        <para>See also: <xref linkend="run-action" os="" />, <xref
+        linkend="action-button" /> and <xref linkend="action-link" /></para>
+      </section>
+
+      <section id="action-link">
+        <title>action-link</title>
+
+        <para>Creates a hyper-link that will run the specified method, when
+        the user clicks the link, and will forward the result to the specified
+        view. This tag should only be used for actions that do not change the
+        state of the system as hyper-links are for accessing information not
+        processing data.</para>
+
+        <table>
+          <title><markup>action-link</markup> attributes</title>
+
+          <tgroup cols="4">
+            <colspec colwidth="1*" />
+
+            <colspec colwidth="3*" />
+
+            <colspec colwidth="0.8*" />
+
+            <colspec colwidth="1*" />
+
+            <thead>
+              <row>
+                <entry align="center">Name</entry>
+
+                <entry align="center">Description</entry>
+
+                <entry align="center">Required</entry>
+
+                <entry align="center">Default</entry>
+              </row>
+            </thead>
+
+            <tbody>
+              <row>
+                <entry>object</entry>
+
+                <entry>Identifier for a specific object, or a service
+                identifier prefixed by "service:".</entry>
+
+                <entry>no</entry>
+
+                <entry>RESULT</entry>
+              </row>
+
+              <row>
+                <entry>method</entry>
+
+                <entry>Method on the object or service to invoke when the user
+                clicks the link.</entry>
+
+                <entry>yes</entry>
+
+                <entry></entry>
+              </row>
+
+              <row>
+                <entry>view</entry>
+
+                <entry>View to be forwarded to after the method has be
+                executed.</entry>
+
+                <entry>no</entry>
+
+                <entry>the current page</entry>
+              </row>
+
+              <row>
+                <entry>result-name</entry>
+
+                <entry>Name of variable to store the resultant object.</entry>
+
+                <entry>no</entry>
+
+                <entry>RESULT</entry>
+              </row>
+
+              <row>
+                <entry>scope</entry>
+
+                <entry>How long the variable should be kept for.</entry>
+
+                <entry>no</entry>
+
+                <entry>request</entry>
+              </row>
+
+              <row>
+                <entry>confirm</entry>
+
+                <entry>To be implemented - not in use yet!</entry>
+
+                <entry>no</entry>
+
+                <entry></entry>
+              </row>
+
+              <row>
+                <entry>message</entry>
+
+                <entry>Message to show user on completion of action</entry>
+
+                <entry>no</entry>
+
+                <entry></entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+
+        <para>The <markup>action-link</markup> element can contain one or more
+        <link linkend="parameter"><markup>parameter</markup></link>
+        elements</para>
+
+        <para>The following example creates a hyper-link of the text "Show All
+        Recent Claims", and will execute the method myRecentClaims on the
+        claims service when the user clicks on it.</para>
+
+        <programlisting format="linespecific">&lt;swf:action-link object="service:Claims" method="myRecentClaims"&gt;Show All Recent Claims&lt;/swf:action-link&gt;</programlisting>
+
+        <para>See also: <xref linkend="action-form" />, <xref
+        linkend="action-button" /> and <xref linkend="run-action" /></para>
+      </section>
+
+      <section id="action-name">
+        <title>action-name</title>
+
+        <para>Provides the name of the specified action on an object or
+        service. This will be name derived from the method or a proper name
+        added to the method via the programming model. Additionally, if the
+        system is set to internationalized the name and descriptions then the
+        returned name will be the localized version.</para>
+
+        <table>
+          <title><markup>action-name</markup> attributes</title>
+
+          <tgroup cols="4">
+            <colspec colwidth="1*" />
+
+            <colspec colwidth="3*" />
+
+            <colspec colwidth="0.8*" />
+
+            <colspec colwidth="1*" />
+
+            <thead>
+              <row>
+                <entry align="center">Name</entry>
+
+                <entry align="center">Description</entry>
+
+                <entry align="center">Required</entry>
+
+                <entry align="center">Default</entry>
+              </row>
+            </thead>
+
+            <tbody>
+              <row>
+                <entry>object</entry>
+
+                <entry>Identifier for a specific object, or a service
+                identifier prefixed by "service:".</entry>
+
+                <entry>yes</entry>
+
+                <entry></entry>
+              </row>
+
+              <row>
+                <entry>method</entry>
+
+                <entry>Method on the object or service to find the name
+                for.</entry>
+
+                <entry>yes</entry>
+
+                <entry></entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+
+        <para>The following example finds the name for the
+        createNewExpenseItem method on the object reference by the claim
+        variable.</para>
+
+        <programlisting format="linespecific">&lt;swf:action-name object="${claim}" method="createNewExpenseItem" /&gt;</programlisting>
+      </section>
+
+      <section id="collection">
+        <title>collection</title>
+
+        <para>The collection element iterates over a collection outputting the
+        contents of the contained block for each element in the
+        collection.</para>
+
+        <table>
+          <title><markup>collection</markup> attributes</title>
+
+          <tgroup cols="4">
+            <colspec colwidth="1*" />
+
+            <colspec colwidth="3*" />
+
+            <colspec colwidth="0.8*" />
+
+            <colspec colwidth="1*" />
+
+            <thead>
+              <row>
+                <entry align="center">Name</entry>
+
+                <entry align="center">Description</entry>
+
+                <entry align="center">Required</entry>
+
+                <entry align="center">Default</entry>
+              </row>
+            </thead>
+
+            <tbody>
+              <row>
+                <entry>collection</entry>
+
+                <entry>Identifier for a specific collection. If the field
+                attribute is set then the collection will be ignored.</entry>
+
+                <entry>no</entry>
+
+                <entry>RESULT</entry>
+              </row>
+
+              <row>
+                <entry>object</entry>
+
+                <entry>Identifier for a specific object.</entry>
+
+                <entry>no</entry>
+
+                <entry>RESULT</entry>
+              </row>
+
+              <row>
+                <entry>field</entry>
+
+                <entry>Name of the field to get the collection from within the
+                specified object.</entry>
+
+                <entry>no</entry>
+
+                <entry></entry>
+              </row>
+
+              <row>
+                <entry>element-name</entry>
+
+                <entry>The name of the variable to assign the rows object ID
+                to when the row is selected.</entry>
+
+                <entry>no</entry>
+
+                <entry>RESULT</entry>
+              </row>
+
+              <row>
+                <entry>row-classes</entry>
+
+                <entry>List of classes (separated by a comma (,), slash (/) or
+                bar (|)) to iterate through repeatedly as the rows are
+                created. Sets the variable ${row-class} for each
+                iteration.</entry>
+
+                <entry>no</entry>
+
+                <entry>odd-row|even-row</entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+
+        <para>The <markup>collection</markup> element can contain one or more
+        of the following</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>text</para>
+          </listitem>
+
+          <listitem>
+            <para>HTML elements</para>
+          </listitem>
+
+          <listitem>
+            <para>scimpi elements</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>The following example creates an HTML table by creating a row
+        for each element in the collection. The collection that is being used
+        is from the <property moreinfo="none">items</property> field in the
+        claim object as referenced by the <varname>claim</varname> variable.
+        The current element is stored in the variable
+        <varname>entry</varname>.</para>
+
+        <programlisting format="linespecific">&lt;table&gt;
+  &lt;swf:collection object="${claim}" field="items" element-name="item"&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;swf:field object="${item}" field="date" /&gt;&lt;/td&gt;
+      &lt;td&lt;swf:field object="${item}" field="description" ="180" /&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;swf:field object="${item}" field="amout" /&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/swf:collection&gt;
+&lt;table&gt;</programlisting>
+
+        <para>See also: <xref linkend="element-type" />, <xref
+        linkend="table" /> and <xref linkend="list" /></para>
+      </section>
+
+      <section id="content">
+        <title id="content-element">content</title>
+
+        <para>The <code>content</code> element marks the point within a
+        template file (see <xref linkend="template" />) where the generated
+        content will be placed when it is produced. This element is only
+        processed when a <code>template</code> element is being processed, and
+        should only occur with a template file.</para>
+      </section>
+
+      <section id="debug">
+        <title>debug</title>
+
+        <para>Inserts debug details into the page.</para>
+
+        <table>
+          <title><markup>debug</markup> attributes</title>
+
+          <tgroup cols="4">
+            <colspec colwidth="1*" />
+
+            <colspec colwidth="3*" />
+
+            <colspec colwidth="0.8*" />
+
+            <colspec colwidth="1*" />
+
+            <thead>
+              <row>
+                <entry align="center">Name</entry>
+
+                <entry align="center">Description</entry>
+
+                <entry align="center">Required</entry>
+
+                <entry align="center">Default</entry>
+              </row>
+            </thead>
+
+            <tbody>
+              <row>
+                <entry>object</entry>
+
+                <entry>Identifier of object to display</entry>
+
+                <entry>no</entry>
+
+                <entry></entry>
+              </row>
+
+              <row>
+                <entry>variable</entry>
+
+                <entry>Name of variable</entry>
+
+                <entry>no</entry>
+
+                <entry></entry>
+              </row>
+
+              <row>
+                <entry>value</entry>
+
+                <entry>Literal value</entry>
+
+                <entry>no</entry>
+
+                <entry></entry>
+              </row>
+
+              <row>
+                <entry>list</entry>
+
+                <entry>list the variables, parameters or mappings.</entry>
+
+                <entry>no</entry>
+
+                <entry></entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+
+        <para>The following example displays all the variables held by the
+        context for the request, interaction, session and also
+        globally.</para>
+
+        <programlisting format="linespecific">&lt;swf:debug list="variables" /&gt;</programlisting>
+
+        <para>See also: <xref linkend="diagnostics" /> and <xref lang=""
+        linkend="specification" /></para>
+      </section>
+
+      <section id="diagnostics">
+        <title>diagnostics</title>
+
+        <para>Displays some basic diagnostic information, such as the URI and
+        set variables, when debug flag is set. To set the debug flag append
+        <uri>&amp;debug=on</uri> to a URL, to turn off append
+        <uri>&amp;debug=off</uri>.</para>
+
+        <para>See also: <xref linkend="debug" /> and <xref
+        linkend="specification" /></para>
+      </section>
+
+      <section id="edit">
+        <title>edit</title>
+
+        <para>Creates a form with a set of fields for the properties of an
+        object and a button that updates the object with the entered
+        values.</para>
+
+        <table>
+          <title><markup>edit</markup> attributes</title>
+
+          <tgroup cols="4">
+            <colspec colwidth="1*" />
+
+            <colspec colwidth="3*" />
+
+            <colspec colwidth="0.8*" />
+
+            <colspec colwidth="1*" />
+
+            <thead>
+              <row>
+                <entry align="center">Name</entry>
+
+                <entry align="center">Description</entry>
+
+                <entry align="center">Required</entry>
+
+                <entry align="center">Default</entry>
+              </row>
+            </thead>
+
+            <tbody>
+              <row>
+                <entry>object</entry>
+
+                <entry>Identifier for a specific object.</entry>
+
+                <entry>no</entry>
+
+                <entry>RESULT</entry>
+              </row>
+
+              <row>
+                <entry>view</entry>
+
+                <entry>View to be forwarded to after submission.</entry>
+
+                <entry>no</entry>
+
+                <entry>_generic.html</entry>
+              </row>
+
+              <row>
+                <entry>error</entry>
+
+                <entry>View to be forwarded to if any field does not
+                validate.</entry>
+
+                <entry>no</entry>
+
+                <entry>the current page</entry>
+              </row>
+
+              <row>
+                <entry>button-title</entry>
+
+                <entry>Title for the submission button.</entry>
+
+                <entry>no</entry>
+
+                <entry>Save</entry>
+              </row>
+
+              <row>
+                <entry>title</entry>
+
+                <entry>Title for the generated form.</entry>
+
+                <entry>no</entry>
+
+                <entry></entry>
+              </row>
+
+              <row>
+                <entry>result-name</entry>
+
+                <entry>Name of variable to store the edited object.</entry>
+
+                <entry>no</entry>
+
+                <entry>RESULT</entry>
+              </row>
+
+              <row>
+                <entry>scope</entry>
+
+                <entry>How long the variable should be kept for.</entry>
+
+                <entry>no</entry>
+
+                <entry>request</entry>
+              </row>
+
+              <row>
+                <entry>class</entry>
+
+                <entry><code><code>class</code></code> attribute given to HTML
+                form element</entry>
+
+                <entry>no</entry>
+
+                <entry>edit full</entry>
+              </row>
+
+              <row>
+                <entry>id</entry>
+
+                <entry><code>id</code> attribute given to HTML form element
+                </entry>
+
+                <entry>no</entry>
+
+                <entry></entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+
+        <para>The <markup>edit</markup> element can contain one or more of the
+        following elements</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><link
+            linkend="include"><markup>include</markup></link></para>
+          </listitem>
+
+          <listitem>
+            <para><link
+            linkend="exclude"><markup>exclude</markup></link></para>
+          </listitem>
+
+          <listitem>
+            <para><link linkend="selector">selector</link></para>
+          </listitem>
+        </itemizedlist>
+
+        <para>The following example creates a simple edit form for a claimant
+        that does not include the normal approver field.</para>
+
+        <programlisting format="linespecific">&lt;swf:edit object="${claimant}" view="my-claims.html"&gt;
+    &lt;swf:exclude field="normalApprover" /&gt;
+&lt;/swf:edit&gt;</programlisting>
+      </section>
+
+      <section id="edit-link">
+        <title>edit-link</title>
+
+        <para>Creates a hyper-link to a specified object edit page with the
+        specified object embedded in the URL.</para>
+
+        <table>
+          <title><markup>edit-link</markup> attributes</title>
+
+          <tgroup cols="4">
+            <colspec colwidth="1*" />
+
+            <colspec colwidth="3*" />
+
+            <colspec colwidth="0.8*" />
+
+            <colspec colwidth="1*" />
+
+            <thead>
+              <row>
+                <entry align="center">Name</entry>
+
+                <entry align="center">Description</entry>
+
+                <entry align="center">Required</entry>
+
+                <entry align="center">Default</entry>
+              </row>
+            </thead>
+
+            <tbody>
+              <row>
+                <entry>object</entry>
+
+                <entry>Identity of the object to be passed on to the
+                view.</entry>
+
+                <entry>no</entry>
+
+                <entry>RESULT</entry>
+              </row>
+
+              <row>
+                <entry>view</entry>
+
+                <entry>View to be forwarded to.</entry>
+
+                <entry>no</entry>
+
+                <entry>_generic_edit.html</entry>
+              </row>
+
+              <row>
+                <entry>param-name</entry>
+
+                <entry>Name of parameter to pass the object identifier across
+                as.</entry>
+
+                <entry>no</entry>
+
+                <entry>RESULT</entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+
+        <para>The <markup>edit-link</markup> element can contain one or more
+        of the following elements</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>text</para>
+          </listitem>
+
+          <listitem>
+            <para>HTML elements</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>The following example creates a hyper-link to the page <filename
+        moreinfo="none">edit-me.html</filename>, passing across the identifier
+        for the current object as it does so.</para>
+
+        <programlisting format="linespecific">&lt;swf:edit-link view="edit-me.html"&gt;Edit claimant&lt;/swf:object-link&gt;</programlisting>
+
+        <para>See also: <xref linkend="edit-link" /> and <xref
+        linkend="action-link" /></para>
+      </section>
+
+      <section id="element-type">
+        <title>element-type</title>
+
+        <para>Retrieves the type of element that a collection holds.</para>
+
+        <table>
+          <title><markup>element-type</markup> attributes</title>
+
+          <tgroup cols="4">
+            <colspec colwidth="1*" />
+
+            <colspec colwidth="3*" />
+
+            <colspec colwidth="0.8*" />
+
+            <colspec colwidth="1*" />
+
+            <thead>
+              <row>
+                <entry align="center">Name</entry>
+
+                <entry align="center">Description</entry>
+
+                <entry align="center">Required</entry>
+
+                <entry align="center">Default</entry>
+              </row>
+            </thead>
+
+            <tbody>
+              <row>
+                <entry>collection</entry>
+
+                <entry>Identifier for a specific collection. If the field
+                attribute is set then the collection will be ignored.</entry>
+
+                <entry>no</entry>
+
+                <entry>RESULT</entry>
+              </row>
+
+              <row>
+                <entry>object</entry>
+
+                <entry>Identifier for a specific object.</entry>
+
+                <entry>no</entry>
+
+                <entry>RESULT</entry>
+              </row>
+
+              <row>
+                <entry>field</entry>
+
+                <entry>Name of the field to get the collection from within the
+                specified object.</entry>
+
+                <entry>no</entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+
+        <para>The following example gets the type of element that the
+        claimant's items collection holds.</para>
+
+        <programlisting format="linespecific">&lt;swf:element-type object="${claimant}" field="items"/&gt;</programlisting>
+      </section>
+
+      <section id="exclude">
+        <title>exclude</title>
+
+        <para>Marks a field so that it will not be displayed when displaying a
+        form or table etc.</para>
+
+        <table>
+          <title><markup>exclude</markup> attributes</title>
+
+          <tgroup cols="4">
+            <colspec colwidth="1*" />
+
+            <colspec colwidth="3*" />
+
+            <colspec colwidth="0.8*" />
+
+            <colspec colwidth="1*" />
+
+            <thead>
+              <row>
+                <entry align="center">Name</entry>
+
+                <entry align="center">Description</entry>
+
+                <entry align="center">Required</entry>
+
+                <entry align="center">Default</entry>
+              </row>
+            </thead>
+
+            <tbody>
+              <row>
+                <entry>name</entry>
+
+                <entry>Name of the field to be excluded</entry>
+
+                <entry>yes</entry>
+
+                <entry></entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+
+        <para>The <markup>exclude</markup> element can be placed within
+        following elements</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><link linkend="table"><markup>table</markup></link></para>
+          </listitem>
+
+          <listitem>
+            <para><link
+            linkend="short-form"><markup>short-form</markup></link></para>
+          </listitem>
+
+          <listitem>
+            <para><link
+            linkend="long-form"><markup>long-form</markup></link></para>
+          </listitem>
+
+          <listitem>
+            <para><link linkend="edit"><markup>edit</markup></link></para>
+          </listitem>
+        </itemizedlist>
+
+        <para>The following example would produce a form that shows all the
+        properties except for the contact from the current object.</para>
+
+        <programlisting format="linespecific">&lt;swf:short-form&gt;
+  &lt;swf:exclude name="contact"/&gt;
+&lt;/swf:short-form&gt;</programlisting>
+
+        <para>See also: <xref linkend="exclude" /> and <xref
+        linkend="link" /></para>
+      </section>
+
+      <section id="feedback">
+        <title>feedback</title>
+
+        <para>Displays both collected warnings and messages</para>
+
+        <para>See also: <xref linkend="warnings" /> and <xref
+        linkend="messages" /></para>
+      </section>
+
+      <section id="field">
+        <title>field</title>
+
+        <para>Retrieves the title of the field within a specified
+        object.</para>
+
+        <table>
+          <title><markup>field</markup> attributes</title>
+
+          <tgroup cols="4">
+            <colspec colwidth="1*" />
+
+            <colspec colwidth="3*" />
+
+            <colspec colwidth="0.8*" />
+
+            <colspec colwidth="1*" />
+
+            <thead>
+              <row>
+                <entry align="center">Name</entry>
+
+                <entry align="center">Description</entry>
+
+                <entry align="center">Required</entry>
+
+                <entry align="center">Default</entry>
+              </row>
+            </thead>
+
+            <tbody>
+              <row>
+                <entry>object</entry>
+
+                <entry>Identifier for a specific object.</entry>
+
+                <entry>no</entry>
+
+                <entry>RESULT</entry>
+              </row>
+
+              <row>
+                <entry>field</entry>
+
+                <entry>Name of the field to be displayed.</entry>
+
+                <entry>yes</entry>
+
+                <entry></entry>
+              </row>
+
+              <row>
+                <entry>icon</entry>
+
+                <entry>If icon is set to "true", "yes" or "on" an icon will
+                also be displayed as well as the text. If set to "false", "no"
+                or "off" no Icon will be shown.</entry>
+
+                <entry>no</entry>
+
+                <entry>yes</entry>
+              </row>
+
+              <row>
+                <entry>truncate</entry>
+
+                <entry>Limit the text to a specified number of characters. If
+                set to 0 then no truncation occurs.</entry>
+
+                <entry>no</entry>
+
+                <entry>0</entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+
+        <para>See also: <xref linkend="label" /></para>
+      </section>
+
+      <section id="form-field">
+        <title>form-field</title>
+
+        <para>Adds the enclosed block alongside the field in an edit or action
+        form.</para>
+
+        <table>
+          <title><markup>field</markup> attributes</title>
+
+          <tgroup cols="4">
+            <colspec colwidth="1*" />
+
+            <colspec colwidth="3*" />
+
+            <colspec colwidth="0.8*" />
+
+            <colspec colwidth="1*" />
+
+            <thead>
+              <row>
+                <entry align="center">Name</entry>
+
+                <entry align="center">Description</entry>
+
+                <entry align="center">Required</entry>
+
+                <entry align="center">Default</entry>
+              </row>
+            </thead>
+
+            <tbody>
+              <row>
+                <entry>field</entry>
+
+                <entry>Name of the field/parameter to be placed with.</entry>
+
+                <entry>yes</entry>
+
+                <entry></entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+
+        <para>The following example adds in an HTML select widget (a drop
+        down) that has the three options: alpha, beta and gamma. When the user
+        selects one of the options from the drop-down the grade property will
+        be set with that value.</para>
+
+        <programlisting format="linespecific">&lt;swf:edit object="${claimant}"&gt;
+    &lt;swf:form-field field="grade"&gt;
+         &lt;select name="grade"&gt;
+              &lt;option&gt;alpha&lt;/option&gt;
+              &lt;option&gt;beta&lt;/option&gt;
+              &lt;option&gt;gamma&lt;/option&gt;
+         &lt;/select&gt;           
+    &lt;swf:form-field/&gt;
+&lt;/swf:edit&gt;</programlisting>
+
+        <para>See also: <xref linkend="selector" /></para>
+      </section>
+
+      <section id="import">
+        <title>import</title>
+
+        <para>Inserts the contents of the specified file.</para>
+
+        <table>
+          <title><code>import</code> attributes</title>
+
+          <tgroup cols="4">
+            <colspec colwidth="1*" />
+
+            <colspec colwidth="3*" />
+
+            <colspec colwidth="0.8*" />
+
+            <colspec colwidth="1*" />
+
+            <thead>
+              <row>
+                <entry align="center">Name</entry>
+
+                <entry align="center">Description</entry>
+
+                <entry align="center">Required</entry>
+
+                <entry align="center">Default</entry>
+              </row>
+            </thead>
+
+            <tbody>
+              <row>
+                <entry>file</entry>
+
+                <entry>Name of file to read in</entry>
+
+                <entry>yes</entry>
+
+                <entry></entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+
+        <para>The following example will load in the file <filename
+        moreinfo="none">header.html</filename>.</para>
+
+        <programlisting format="linespecific">&lt;swf:import file="header.html" /&gt;</programlisting>
+
+        <para>See also: <xref linkend="template" /></para>
+      </section>
+
+      <section id="include">
+        <title>include</title>
+
+        <para>Marks a field so that it will be included when displaying a form
+        or table etc. When a field is included all other fields not also
+        explicitly included will be excluded.</para>
+
+        <table>
+          <title><markup>include</markup> attributes</title>
+
+          <tgroup cols="4">
+            <colspec colwidth="1*" />
+
+            <colspec colwidth="3*" />
+
+            <colspec colwidth="0.8*" />
+
+            <colspec colwidth="1*" />
+
+            <thead>
+              <row>
+                <entry align="center">Name</entry>
+
+                <entry align="center">Description</entry>
+
+                <entry align="center">Required</entry>
+
+                <entry align="center">Default</entry>
+              </row>
+            </thead>
+
+            <tbody>
+              <row>
+                <entry>name</entry>
+
+                <entry>Name of the field to be included</entry>
+
+                <entry>yes</entry>
+
+                <entry></entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+
+        <para>The <markup>include</markup> element can be placed within
+        following elements</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><link linkend="table"><markup>table</markup></link></para>
+          </listitem>
+
+          <listitem>
+            <para><link
+            linkend="short-form"><markup>short-form</markup></link></para>
+          </listitem>
+
+          <listitem>
+            <para><link
+            linkend="long-form"><markup>long-form</markup></link></para>
+          </listitem>
+
+          <listitem>
+            <para><link linkend="edit"><markup>edit</markup></link></para>
+          </listitem>
+        </itemizedlist>
+
+        <para>The following example would produce a form that only shows the
+        <property moreinfo="none">contact</property> and <property
+        moreinfo="none">date</property> properties from the current
+        object.</para>
+
+        <programlisting format="linespecific">&lt;swf:short-form&gt;
+  &lt;swf:include name="contact"/&gt;
+  &lt;swf:include name="date"/&gt;
+&lt;/swf:short-form&gt;</programlisting>
+
+        <para>See also: <xref linkend="exclude" /> and <xref
+        linkend="link" /></para>
+      </section>
+
+      <section id="initialize">
+        <title>initialize</title>
+
+        <para>Conditionally sets up a variable when the current RESULT state
+        is set and matches the specified type. If the RESULT state is not set
+        or the type is not the one specified then the variable is not
+        changed/set.</para>
+
+        <para>If the RESULT state is not set or the type is not the one
+        specified then and the a variable already exists for the specified
+        name, but with a different scope, then that value is copied across to
+        a variable with the specified scope.<table>
+            <title>initialize attributes</title>
+
+            <tgroup cols="4">
+              <colspec colwidth="1*" />
+
+              <colspec colwidth="3*" />
+
+              <colspec colwidth="0.8*" />
+
+              <colspec colwidth="1*" />
+
+              <thead>
+                <row>
+                  <entry align="center">Name</entry>
+
+                  <entry align="center">Description</entry>
+
+                  <entry align="center">Required</entry>
+
+                  <entry align="center">Default</entry>
+                </row>
+              </thead>
+
+              <tbody>
+                <row>
+                  <entry>name</entry>
+
+                  <entry>Name of variable to initialize</entry>
+
+                  <entry>yes</entry>
+
+                  <entry></entry>
+                </row>
+
+                <row>
+                  <entry>scope</entry>
+
+                  <entry>How long the variable should be kept for</entry>
+
+                  <entry>no</entry>
+
+                  <entry>request</entry>
+                </row>
+
+                <row>
+                  <entry>type</entry>
+
+                  <entry>The class name of the type of object that should be
+                  used to initialize the variable. This is used to check that
+                  RESULT reference is of the correct type.</entry>
+
+                  <entry>yes</entry>
+
+                  <entry></entry>
+                </row>
+              </tbody>
+            </tgroup>
+          </table></para>
+
+        <para>The following will set up the claim variable for the session if
+        the RESULT is a claim object. If the RESULT is not a claim object then
+        the variable will not be set.</para>
+
+        <programlisting format="linespecific">&lt;swf:initialize name="claim" scope="session" type="org.scimpi.example.Claim" /&gt;
+</programlisting>
+
+        <para>See also: <xref linkend="variable" /></para>
+      </section>
+
+      <section id="label">
+        <title>label</title>
+
+        <para>Retrieves the name and description of the field within a
+        specified object, and creates an HTML span element containing the name
+        and a title (rendered as a tool tip) from the description.</para>
+
+        <table>
+          <title><markup>label</markup> attributes</title>
+
+          <tgroup cols="4">
+            <colspec colwidth="1*" />
+
+            <colspec colwidth="3*" />
+
+            <colspec colwidth="0.8*" />
+
+            <colspec colwidth="1*" />
+
+            <thead>
+              <row>
+                <entry align="center">Name</entry>
+
+                <entry align="center">Description</entry>
+
+                <entry align="center">Required</entry>
+
+                <entry align="center">Default</entry>
+              </row>
+            </thead>
+
+            <tbody>
+              <row>
+                <entry>object</entry>
+
+                <entry>Identifier for a specific object.</entry>
+
+                <entry>no</entry>
+
+                <entry>RESULT</entry>
+              </row>
+
+              <row>
+                <entry>field</entry>
+
+                <entry>Name of the field to be display the label for.</entry>
+
+                <entry>yes</entry>
+
+                <entry></entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+
+        <para>See also: <xref linkend="field" /></para>
+      </section>
+
+      <section id="link">
+        <title>link</title>
+
+        <para>Marks a field so that it is hyper-linked when displaying a form
+        or table.</para>
+
+        <table>
+          <title><markup>link</markup> attributes</title>
+
+          <tgroup cols="4">
+            <colspec colwidth="1*" />
+
+            <colspec colwidth="3*" />
+
+            <colspec colwidth="0.8*" />
+
+            <colspec colwidth="1*" />
+
+            <thead>
+              <row>
+                <entry align="center">Name</entry>
+
+                <entry align="center">Description</entry>
+
+                <entry align="center">Required</entry>
+
+                <entry align="center">Default</entry>
+              </row>
+            </thead>
+
+            <tbody>
+              <row>
+                <entry>name</entry>
+
+                <entry>Name of the field to be hyper-linked</entry>
+
+                <entry>yes</entry>
+
+                <entry></entry>
+              </row>
+
+              <row>
+                <entry>view</entry>
+
+                <entry>The page to forward to</entry>
+
+                <entry>no</entry>
+
+                <entry>the current page</entry>
+              </row>
+
+              <row>
+                <entry>reference-name</entry>
+
+                <entry>Name of the variable to set up with this field's
+                reference</entry>
+
+                <entry>no</entry>
+
+                <entry>RESULT</entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+
+        <para>The <markup>link</markup> element can be placed within following
+        elements</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>table</para>
+          </listitem>
+
+          <listitem>
+            <para>short-form</para>
+          </listitem>
+
+          <listitem>
+            <para>edit</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>See also: <xref linkend="include" /> and <xref
+        linkend="exclude" /></para>
+      </section>
+
+      <section id="list">
+        <title>list</title>
+
+        <para>Creates an list of an object's collection with the collection's
+        object's title displayed in a list.</para>
+
+        <table>
+          <title><markup>list</markup> attributes</title>
+
+          <tgroup cols="4">
+            <colspec colwidth="1*" />
+
+            <colspec colwidth="3*" />
+
+            <colspec colwidth="0.8*" />
+
+            <colspec colwidth="1*" />
+
+            <thead>
+              <row>
+                <entry align="center">Name</entry>
+
+                <entry align="center">Description</entry>
+
+                <entry align="center">Required</entry>
+
+                <entry align="center">Default</entry>
+              </row>
+            </thead>
+
+            <tbody>
+              <row>
+                <entry>object</entry>
+
+                <entry>Identifier for a specific collection, an object that
+                contains a collection, or a service identifier prefixed by
+                "service:".</entry>
+
+                <entry>no</entry>
+
+                <entry>RESULT</entry>
+              </row>
+
+              <row>
+                <entry>field</entry>
+
+                <entry>Name of the field within an object that will provide a
+                collection.</entry>
+
+                <entry>yes</entry>
+
+                <entry></entry>
+              </row>
+
+              <row>
+                <entry>type</entry>
+
+                <entry>Bullet type - <emphasis>disc</emphasis>,
+                <emphasis>circle</emphasis> or <emphasis>square</emphasis>. If
+                omitted the list will be a number list (HTML OL tag) otherwise
+                a the bullet type is used (HTML UL tag).</entry>
+
+                <entry>no</entry>
+
+                <entry>disc</entry>
+              </row>
+
+              <row>
+                <entry>link</entry>
+
+                <entry>View to forward to if the line is selected. The row is
+                only given a hyper-link if this attribute was
+                specified.</entry>
+
+                <entry>no</entry>
+
+                <entry></entry>
+              </row>
+
+              <row>
+                <entry>element-name</entry>
+
+                <entry>The name of the variable to assign the row's object ID
+                to when the row is selected.</entry>
+
+                <entry>no</entry>
+
+                <entry>RESULT</entry>
+              </row>
+
+              <row>
+                <entry>scope</entry>
+
+                <entry>How long the linked variable should be kept
+                for.</entry>
+
+                <entry>no</entry>
+
+                <entry>request</entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+
+        <para>See also: <xref linkend="element-type" />, <xref
+        linkend="table" /> and <xref linkend="collection" /></para>
+      </section>
+
+      <section id="logon">
+        <title>logon</title>
+
+        <para>Creates an logon form prompting for username and password. Form
+        passes control to the <emphasis>logon</emphasis> action, which will
+        attempt to authenticate the user through the <emphasis>Apache
+        Isis</emphasis> framework.</para>
+
+        <table>
+          <title><markup>logon</markup> attributes</title>
+
+          <tgroup cols="4">
+            <colspec colwidth="1*" />
+
+            <colspec colwidth="3*" />
+
+            <colspec colwidth="0.8*" />
+
+            <colspec colwidth="1*" />
+
+            <thead>
+              <row>
+                <entry align="center">Name</entry>
+
+                <entry align="center">Description</entry>
+
+                <entry align="center">Required</entry>
+
+                <entry align="center">Default</entry>
+              </row>
+            </thead>
+
+            <tbody>
+              <row>
+                <entry>legend</entry>
+
+                <entry>Title for form</entry>
+
+                <entry>no</entry>
+
+                <entry></entry>
+              </row>
+
+              <row>
+                <entry>title</entry>
+
+                <entry>Title used for the submit button.</entry>
+
+                <entry>no</entry>
+
+                <entry>Log in</entry>
+              </row>
+
+              <row>
+                <entry>view</entry>
+
+                <entry>View to be forwarded to once the user has logged
+                on.</entry>
+
+                <entry>no</entry>
+
+                <entry></entry>
+              </row>
+
+              <row>
+                <entry>errors</entry>
+
+                <entry>View to be forwarded to if the log in fails. By default
+                returns to the same view.</entry>
+
+                <entry>no</entry>
+
+                <entry></entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+
+        <para>See also: <xref linkend="user" /></para>
+      </section>
+
+      <section id="long-form">
+        <title>long-form</title>
+
+        <para>As for <link
+        linkend="short-form"><markup>short-form</markup></link>, except that
+        collections are displayed (as in-line tables)</para>
+
+        <table>
+          <title><markup>short-form</markup> attributes</title>
+
+          <tgroup cols="4">
+            <colspec colwidth="1*" />
+
+            <colspec colwidth="3*" />
+
+            <colspec colwidth="0.8*" />
+
+            <colspec colwidth="1*" />
+
+            <thead>
+              <row>
+                <entry align="center">Name</entry>
+
+                <entry align="center">Description</entry>
+
+                <entry align="center">Required</entry>
+
+                <entry align="center">Default</entry>
+              </row>
+            </thead>
+
+            <tbody>
+              <row>
+                <entry>table-class</entry>
+
+                <entry>Class attribute given to HTML <code>table</code>
+                element.</entry>
+
+                <entry>no</entry>
+
+                <entry></entry>
+              </row>
+
+              <row>
+                <entry>row-classes</entry>
+
+                <entry>List of classes (separated by a comma (,), slash (/) or
+                bar (|)) to iterate through repeatedly as the rows are
+                created. Sets the variable ${row-class} for each
+                iteration.</entry>
+
+                <entry>no</entry>
+
+                <entry>odd-row|even-row</entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+      </section>
+
+      <section id="messages">
+        <title>messages</title>
+
+        <para>Displays collected messages</para>
+
+        <para>See also: <xref linkend="warnings" /> and <xref
+        linkend="feedback" /></para>
+      </section>
+
+      <section id="methods">
+        <title>methods</title>
+
+        <para>Lists all of the methods for a specified object, where each one
+        is displayed as hyper-link, if it is a zero parameter method, or an
+        action button if it has one or more parameters.</para>
+
+        <table>
+          <title><markup>methods</markup> attributes</title>
+
+          <tgroup cols="4">
+            <colspec colwidth="1*" />
+
+            <colspec colwidth="3*" />
+
+            <colspec colwidth="0.8*" />
+
+            <colspec colwidth="1*" />
+
+            <thead>
+              <row>
+                <entry align="center">Name</entry>
+
+                <entry align="center">Description</entry>
+
+                <entry align="center">Required</entry>
+
+                <entry align="center">Default</entry>
+              </row>
+            </thead>
+
+            <tbody>
+              <row>
+                <entry>object</entry>
+
+                <entry>Identifier for a specific object, or a service
+                identifier prefixed by "service:".</entry>
+
+                <entry>no</entry>
+
+                <entry>RESULT</entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+
+        <para>The <markup>methods</markup> element can contain one or more of
+        the following elements</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><link
+            linkend="include"><markup>include</markup></link></para>
+          </listitem>
+
+          <listitem>
+            <para><link
+            linkend="exclude"><markup>exclude</markup></link></para>
+          </listitem>
+        </itemizedlist>
+      </section>
+
+      <section id="new-object-link">
+        <title>new-action-link</title>
+
+        <para>Creates a hyper-link to a specified action page with the
+        specified object and method embedded in the URL.</para>
+
+        <table>
+          <title><markup>object-link</markup> attributes</title>
+
+          <tgroup cols="4">
+            <colspec colwidth="1*" />
+
+            <colspec colwidth="3*" />
+
+            <colspec colwidth="0.8*" />
+
+            <colspec colwidth="1*" />
+
+            <thead>
+              <row>
+                <entry align="center">Name</entry>
+
+                <entry align="center">Description</entry>
+
+                <entry align="center">Required</entry>
+
+                <entry align="center">Default</entry>
+              </row>
+            </thead>
+
+            <tbody>
+              <row>
+                <entry>object</entry>
+
+                <entry>Identity of the object to be passed on to the
+                view.</entry>
+
+                <entry>no</entry>
+
+                <entry>RESULT</entry>
+              </row>
+
+              <row>
+                <entry>method</entry>
+
+                <entry>The method to be executed by the forwarded
+                view.</entry>
+
+                <entry>yes</entry>
+
+                <entry></entry>
+              </row>
+
+              <row>
+                <entry>view</entry>
+
+                <entry>View to be forwarded to.</entry>
+
+                <entry>no</entry>
+
+                <entry>_generic.html</entry>
+              </row>
+
+              <row>
+                <entry>param-name</entry>
+
+                <entry>Name of parameter to pass the object identifier across
+                as.</entry>
+
+                <entry>no</entry>
+
+                <entry>RESULT</entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+
+        <para>The <markup>object-link</markup> element can contain one or more
+        of the following elements</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>text</para>
+          </listitem>
+
+          <listitem>
+            <para>HTML elements</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>The following example creates a hyper-link to the page <filename
+        moreinfo="none">exit.shtml</filename>, passing across the identifier
+        for the claimant object as it does so.</para>
+
+        <programlisting format="linespecific">&lt;swf:object-link object="${claimant}" view="edit.shtml"&gt;View claimant&lt;/swf:object-link&gt;</programlisting>
+
+        <para>See also: <xref linkend="action-link" /></para>
+      </section>
+
+      <section id="object-link">
+        <title>object-link</title>
+
+        <para>Creates a hyper-link to a specified object viewing page with the
+        specified object embedded in the URL.</para>
+
+        <table>
+          <title><markup>object-link</markup> attributes</title>
+
+          <tgroup cols="4">
+            <colspec colwidth="1*" />
+
+            <colspec colwidth="3*" />
+
+            <colspec colwidth="0.8*" />
+
+            <colspec colwidth="1*" />
+
+            <thead>
+              <row>
+                <entry align="center">Name</entry>
+
+                <entry align="center">Description</entry>
+
+                <entry align="center">Required</entry>
+
+                <entry align="center">Default</entry>
+              </row>
+            </thead>
+
+            <tbody>
+              <row>
+                <entry>object</entry>
+
+                <entry>Identity of the object to be passed on to the
+                view.</entry>
+
+                <entry>no</entry>
+
+                <entry>RESULT</entry>
+              </row>
+
+              <row>
+                <entry>view</entry>
+
+                <entry>View to be forwarded to.</entry>
+
+                <entry>no</entry>
+
+                <entry>_generic.html</entry>
+              </row>
+
+              <row>
+                <entry>param-name</entry>
+
+                <entry>Name of parameter to pass the object identifier across
+                as.</entry>
+
+                <entry>no</entry>
+
+                <entry>RESULT</entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+
+        <para>The <markup>object-link</markup> element can contain one or more
+        of the following elements</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>text</para>
+          </listitem>
+
+          <listitem>
+            <para>HTML elements</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>The following example creates a hyper-link to the page <filename
+        moreinfo="none">exit.shtml</filename>, passing across the identifier
+        for the claimant object as it does so.</para>
+
+        <programlisting format="linespecific">&lt;swf:object-link object="${claimant}" view="edit.shtml"&gt;View claimant&lt;/swf:object-link&gt;</programlisting>
+
+        <para>See also: <xref linkend="edit-link" /> and <xref
+        linkend="action-link" /></para>
+      </section>
+
+      <section id="page-title">
+        <title>page-title</title>
+
+        <para>Sets the variable <literal moreinfo="none">title</literal> from
+        the given body. This variable is typically used by page templates to
+        set up the <emphasis>title</emphasis> element in the
+        <emphasis>head</emphasis>. During the remainder of the request the
+        variable can be accessed via <varname>${title}</varname>.</para>
+
+        <para>The page-title element can contain one or more of the following
+        elements</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>Text</para>
+          </listitem>
+
+          <listitem>
+            <para>Scimpi tags</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>The example below causes the title to be set with the text
+        "Claim " and the date of the claim referenced by the claim
+        variable.</para>
+
+        <programlisting format="linespecific">&lt;swf:page-title&gt;Claim &lt;swf:field object="${claim}" field="dateCreated" /&gt;&lt;/swf:page-title&gt;</programlisting>
+
+        <note>
+          <para>While this tag process the contained elements it also includes
+          any text and HTML tags. This means that white space and line will
+          appear in your title. Always place the variable start and end tags
+          on the same line and only add spaces and new lines within the title
+          where they are actually needed.</para>
+        </note>
+
+        <para>See also: <xref linkend="variable" /></para>
+      </section>
+
+      <section id="parameter">
+        <title>parameter</title>
+
+        <para>The <markup>parameter</markup> element specifies a parameter
+        value or reference to be used when invoking an action method.</para>
+
+        <table>
+          <title><markup>parameter</markup> attributes</title>
+
+          <tgroup cols="4">
+            <colspec colwidth="1*" />
+
+            <colspec colwidth="3*" />
+
+            <colspec colwidth="0.8*" />
+
+            <colspec colwidth="1*" />
+
+            <thead>
+              <row>
+                <entry align="center">Name</entry>
+
+                <entry align="center">Description</entry>
+
+                <entry align="center">Required</entry>
+
+                <entry align="center">Default</entry>
+              </row>
+            </thead>
+
+            <tbody>
+              <row>
+                <entry>number</entry>
+
+                <entry>The parameter number (1 through
+                number-of-parameters).</entry>
+
+                <entry>no</entry>
+
+                <entry></entry>
+              </row>
+
+              <row>
+                <entry>value</entry>
+
+                <entry>The value for the parameter</entry>
+
+                <entry>yes</entry>
+
+                <entry></entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+
+        <para>The <markup>parameter</markup> element can be placed within
+        following elements</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><link
+            linkend="run-action"><markup>run-action</markup></link></para>
+          </listitem>
+
+          <listitem>
+            <para><link
+            linkend="action-link"><markup>action-link</markup></link></para>
+          </listitem>
+
+          <listitem>
+            <para><link
+            linkend="action-button"><markup>action-button</markup></link></para>
+          </listitem>
+
+          <listitem>
+            <para><link
+            linkend="action-form"><markup>action-form</markup></link></para>
+          </listitem>
+        </itemizedlist>
+
+        <para>The following example sets up the first parameter to the
+        reference held by the claimant variable when the recentClaims method
+        is invoked.</para>
+
+        <programlisting format="linespecific">&lt;swf:run-action object="service:Claims" method="recentClaims" /&gt;
+    &lt;swf:parameter value="${claimant}" /&gt;
+&lt;/swf:run-action&gt;</programlisting>
+      </section>
+
+      <section id="run-action">
+        <title>run-action</title>
+
+        <para>Runs the specified action on an object or service.</para>
+
+        <para>Where no parameter elements are specified the default values for
+        that parameter will be used.</para>
+
+        <table>
+          <title><markup>run-action</markup> attributes</title>
+
+          <tgroup cols="4">
+            <colspec colwidth="1*" />
+
+            <colspec colwidth="3*" />
+
+            <colspec colwidth="0.8*" />
+
+            <colspec colwidth="1*" />
+
+            <thead>
+              <row>
+                <entry align="center">Name</entry>
+
+                <entry align="center">Description</entry>
+
+                <entry align="center">Required</entry>
+
+                <entry align="center">Default</entry>
+              </row>
+            </thead>
+
+            <tbody>
+              <row>
+                <entry>object</entry>
+
+                <entry>Identifier for a specific object, or a service
+                identifier prefixed by "service:".</entry>
+
+                <entry>no</entry>
+
+                <entry>RESULT</entry>
+              </row>
+
+              <row>
+                <entry>method</entry>
+
+                <entry>Method on the object or service to invoke when this tag
+                is processed.</entry>
+
+                <entry>yes</entry>
+
+                <entry></entry>
+              </row>
+
+              <row>
+                <entry>result-name</entry>
+
+                <entry>Name of variable to store the resultant object.</entry>
+
+                <entry>no</entry>
+
+                <entry>RESULT</entry>
+              </row>
+
+              <row>
+                <entry>scope</entry>
+
+                <entry>How long the variable should be kept for</entry>
+
+                <entry>no</entry>
+
+                <entry>request</entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+
+        <para>The <markup>run-action</markup> element can contain one or more
+        of the following elements</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><link
+            linkend="parameter"><markup>parameter</markup></link></para>
+          </listitem>
+        </itemizedlist>
+
+        <para>The following example invokes the myRecentClaims method on the
+        claims service and places the result into the RESULT variable.</para>
+
+        <programlisting format="linespecific">&lt;swf:run-action object="service:Claims" method="myRecentClaims" /&gt;</programlisting>
+
+        <para>See also: <xref linkend="action-form" />, <xref
+        linkend="action-button" /> and <xref linkend="action-link" /></para>
+      </section>
+
+      <section id="scope">
+        <title>scope</title>
+
+        <para>Changes the scope on a variable, for example can upgrade a
+        request based variable to session scope.</para>
+
+        <table>
+          <title><code>variable</code> attributes</title>
+
+          <tgroup cols="4">
+            <colspec colwidth="1*" />
+
+            <colspec colwidth="3*" />
+
+            <colspec colwidth="0.8*" />
+
+            <colspec colwidth="1*" />
+
+            <thead>
+              <row>
+                <entry align="center">Name</entry>
+
+                <entry align="center">Description</entry>
+
+                <entry align="center">Required</entry>
+
+                <entry align="center">Default</entry>
+              </row>
+            </thead>
+
+            <tbody>
+              <row>
+                <entry>name</entry>
+
+                <entry>Name of file to read in</entry>
+
+                <entry>yes</entry>
+
+                <entry></entry>
+              </row>
+
+              <row>
+                <entry>scope</entry>
+
+                <entry>How long the variable should be kept for</entry>
+
+                <entry>no</entry>
+
+                <entry>request</entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+
+        <para>The following example assigns the <code>dateCreated</code>
+        property to the date variable, which will be accessible for the
+        remainder of the request. Within the page the variable can be accessed
+        via <varname>${date}</varname>.</para>
+
+        <para>See also: <xref linkend="initialize" /> and <xref
+        linkend="variable" /></para>
+      </section>
+
+      <section id="services">
+        <title>services</title>
+
+        <para>Lists all of the methods for all of the service objects, where
+        each one is displayed as hyper-link, if it is a zero parameter method,
+        or an action button if it has one or more parameters.</para>
+
+        <para>The <markup>services</markup> element can contain one or more of
+        the following elements</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><link
+            linkend="include"><markup>include</markup></link></para>
+          </listitem>
+
+          <listitem>
+            <para><link
+            linkend="exclude"><markup>exclude</markup></link></para>
+          </listitem>
+        </itemizedlist>
+      </section>
+
+      <section id="selector">
+        <title>selector</title>
+
+        <para>Creates a selection widget within an action form or object edit
+        widget. This allows the user to select a reference object for a
+        specified field. In addition to simply providing an option list the
+        selector can also prompt the user for properties used to build the
+        selection list.</para>
+
+        <table>
+          <title><markup>selector</markup> attributes</title>
+
+          <tgroup cols="4">
+            <colspec colwidth="1*" />
+
+            <colspec colwidth="3*" />
+
+            <colspec colwidth="0.8*" />
+
+            <colspec colwidth="1*" />
+
+            <thead>
+              <row>
+                <entry align="center">Name</entry>
+
+                <entry align="center">Description</entry>
+
+                <entry align="center">Required</entry>
+
+                <entry align="center">Default</entry>
+              </row>
+            </thead>
+
+            <tbody>
+              <row>
+                <entry>field</entry>
+
+                <entry>Name of the field or parameter number (param1, param2
+                etc) to add the selection list for.</entry>
+
+                <entry>no</entry>
+
+                <entry></entry>
+              </row>
+
+              <row>
+                <entry>collection</entry>
+
+                <entry>Identifier of collection to build the list of options
+                from. If method is specified then collection will be
+                ignored.</entry>
+
+                <entry>no</entry>
+
+                <entry>RESULT</entry>
+              </row>
+
+              <row>
+                <entry>object</entry>
+
+                <entry>Identifier of object to run the search method
+                on.</entry>
+
+                <entry>no</entry>
+
+                <entry>RESULT</entry>
+              </row>
+
+              <row>
+                <entry>method</entry>
+
+                <entry>Search method to run on the specified object.</entry>
+
+                <entry>no</entry>
+
+                <entry></entry>
+              </row>
+
+              <row>
+                <entry>id</entry>
+
+                <entry>This attribute is passed to the HTML form
+                element.</entry>
+
+                <entry>no</entry>
+
+                <entry></entry>
+              </row>
+
+              <row>
+                <entry>class</entry>
+
+                <entry>This attribute is passed to the HTML form
+                element.</entry>
+
+                <entry>no</entry>
+
+                <entry>selector</entry>
+              </row>
+
+              <row>
+                <entry>type</entry>
+
+                <entry>Type of selection widget to create: radio; list; or
+                dropdown</entry>
+
+                <entry>no</entry>
+
+                <entry>dropdown</entry>
+              </row>
+
+              <row>
+                <entry>size</entry>
+
+                <entry>Size of list before it must scroll</entry>
+
+                <entry>no</entry>
+
+                <entry>5</entry>
+              </row>
+
+              <row>
+                <entry>error</entry>
+
+                <entry>View to be forwarded to when the search fails.</entry>
+
+                <entry>no</entry>
+
+                <entry>_generic.html</entry>
+              </row>
+
+              <row>
+                <entry>title</entry>
+
+                <entry>Title for the submission button.</entry>
+
+                <entry>no</entry>
+
+                <entry>"Search"</entry>
+              </row>
+
+              <row>
+                <entry>legend</entry>
+
+                <entry>Title for the generated search form.</entry>
+
+                <entry>no</entry>
+
+                <entry>the action's name</entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+
+        <para>The <markup>radio-list</markup> element can be placed within
+        following elements</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><link lang=""
+            linkend="edit"><markup>edit</markup></link></para>
+          </listitem>
+
+          <listitem>
+            <para><link
+            linkend="action-form"><markup>action-form</markup></link></para>
+          </listitem>
+        </itemizedlist>
+
+        <para>The following example will make the normal approver field a drop
+        down list that is populated with the elements of the collection
+        returned from the allClaimants method.</para>
+
+        <programlisting format="linespecific">&lt;swf:edit object="${claimant}"&gt;
+    &lt;swf:selector field="normalApprover" object="service:claimants" method="allClaimants"/&gt;
+&lt;/swf:edit&gt;</programlisting>
+
+        <para>See also: <xref linkend="form-field" /></para>
+      </section>
+
+      <section id="short-form">
+        <title>short-form</title>
+
+        <para>Creates a view of an object with its fields laid out in two
+        columns showing the label and value. Fields that are collections are
+        not displayed in this version.</para>
+
+        <table>
+          <title><markup>short-form</markup> attributes</title>
+
+          <tgroup cols="4">
+            <colspec colwidth="1*" />
+
+            <colspec colwidth="3*" />
+
+            <colspec colwidth="0.8*" />
+
+            <colspec colwidth="1*" />
+
+            <thead>
+              <row>
+                <entry align="center">Name</entry>
+
+                <entry align="center">Description</entry>
+
+                <entry align="center">Required</entry>
+
+                <entry align="center">Default</entry>
+              </row>
+            </thead>
+
+            <tbody>
+              <row>
+                <entry>object</entry>
+
+                <entry>Identifier for a specific object.</entry>
+
+                <entry>no</entry>
+
+                <entry>RESULT</entry>
+              </row>
+
+              <row>
+                <entry>title</entry>
+
+                <entry>Title to be passed through to the HTML table.</entry>
+
+                <entry>no</entry>
+
+                <entry></entry>
+              </row>
+
+              <row>
+                <entry>odd-row</entry>
+
+                <entry>HTML class to give each odd row of the form; used by
+                CSS to decorated the odd rows.</entry>
+
+                <entry>no</entry>
+
+                <entry>odd-row</entry>
+              </row>
+
+              <row>
+                <entry>even-row</entry>
+
+                <entry>HTML class to give each even row of the form; used by
+                CSS to decorated the even rows.</entry>
+
+                <entry>no</entry>
+
+                <entry>even-row</entry>
+              </row>
+
+              <row>
+                <entry>link</entry>
+
+                <entry>View to forward to when the hyper-linked row is
+                selected. If no link attribute is specified then the rows are
+                not hyper-linked.</entry>
+
+                <entry>no</entry>
+
+                <entry></entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+
+        <para>The <markup>short-form</markup> element can contain one or more
+        of the following elements</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><link
+            linkend="include"><markup>include</markup></link></para>
+          </listitem>
+
+          <listitem>
+            <para><link
+            linkend="exclude"><markup>exclude</markup></link></para>
+          </listitem>
+
+          <listitem>
+            <para><link lang="" linkend="link"
+            os=""><markup>link</markup></link></para>
+          </listitem>
+        </itemizedlist>
+
+        <para>See also: <xref linkend="long-form" /></para>
+      </section>
+
+      <section id="specification">
+        <title>specification</title>
+
+        <para>Displays details about the object including the class name and
+        names and types of its fields.</para>
+
+        <table>
+          <title><markup>selector</markup> attributes</title>
+
+          <tgroup cols="4">
+            <colspec colwidth="1*" />
+
+            <colspec colwidth="3*" />
+
+            <colspec colwidth="0.8*" />
+
+            <colspec colwidth="1*" />
+
+            <thead>
+              <row>
+                <entry align="center">Name</entry>
+
+                <entry align="center">Description</entry>
+
+                <entry align="center">Required</entry>
+
+                <entry align="center">Default</entry>
+              </row>
+            </thead>
+
+            <tbody>
+              <row>
+                <entry>always</entry>
+
+                <entry>Set to yes if the specification details are to be
+                always shown</entry>
+
+                <entry>no</entry>
+
+                <entry>no</entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+
+        <para>See also: <xref linkend="diagnostics" /> and <xref
+        linkend="debug" /></para>
+      </section>
+
+      <section id="table">
+        <title>table</title>
+
+        <para>Creates a table view of a collection with the collection's
+        fields used to determine the columns.</para>
+
+        <table>
+          <title><markup>table</markup> attributes</title>
+
+          <tgroup cols="4">
+            <colspec colwidth="1*" />
+
+            <colspec colwidth="3*" />
+
+            <colspec colwidth="0.8*" />
+
+            <colspec colwidth="1*" />
+
+            <thead>
+              <row>
+                <entry align="center">Name</entry>
+
+                <entry align="center">Description</entry>
+
+                <entry align="center">Required</entry>
+
+                <entry align="center">Default</entry>
+              </row>
+            </thead>
+
+            <tbody>
+              <row>
+                <entry>collection</entry>
+
+                <entry>Identifier for a specific collection. If the field
+                attribute is set then the collection will be ignored.</entry>
+
+                <entry>no</entry>
+
+                <entry>RESULT</entry>
+              </row>
+
+              <row>
+                <entry>object</entry>
+
+                <entry>Identifier for a specific object.</entry>
+
+                <entry>no</entry>
+
+                <entry>RESULT</entry>
+              </row>
+
+              <row>
+                <entry>field</entry>
+
+                <entry>Name of the field to get the collection from within the
+                specified object.</entry>
+
+                <entry>no</entry>
+
+                <entry></entry>
+              </row>
+
+              <row>
+                <entry>link</entry>
+
+                <entry>View to forward to if the line is selected. The row is
+                only given a hyper-link if the this attribute is
+                specified.</entry>
+
+                <entry>no</entry>
+
+                <entry></entry>
+              </row>
+
+              <row>
+                <entry>element-name</entry>
+
+                <entry>The name of the variable to assign the row's object ID
+                to when the row is selected.</entry>
+
+                <entry>no</entry>
+
+                <entry>RESULT</entry>
+              </row>
+
+              <row>
+                <entry>scope</entry>
+
+                <entry>How long the linked variable should be kept
+                for.</entry>
+
+                <entry>no</entry>
+
+                <entry>request</entry>
+              </row>
+
+              <row>
+                <entry>heading</entry>
+
+                <entry>Determines if column headers should be
+                displayed.</entry>
+
+                <entry>no</entry>
+
+                <entry>yes</entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+
+        <para>The <markup>table</markup> element can contain one or more of
+        the following elements</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><link
+            linkend="include"><markup>include</markup></link></para>
+          </listitem>
+
+          <listitem>
+            <para><link
+            linkend="exclude"><markup>exclude</markup></link></para>
+          </listitem>
+
+          <listitem>
+            <para><link linkend="link"><markup>link</markup></link></para>
+          </listitem>
+        </itemizedlist>
+
+        <para>See also: <xref linkend="element-type" />, <xref
+        linkend="table" /> and <xref linkend="collection" /></para>
+      </section>
+
+      <section id="template">
+        <title>template</title>
+
+        <para>The <code>template</code> element causes the specified file to
+        be read in before the rest of the current file is processed. The rest
+        of the current file is then inserted at the point where the
+        <code>content</code> element (see <xref linkend="content" />) appears
+        within the imported file.</para>
+
+        <table>
+          <title><code>import</code> attributes</title>
+
+          <tgroup cols="4">
+            <colspec colwidth="1*" />
+
+            <colspec colwidth="3*" />
+
+            <colspec colwidth="0.8*" />
+
+            <colspec colwidth="1*" />
+
+            <thead>
+              <row>
+                <entry align="center">Name</entry>
+
+                <entry align="center">Description</entry>
+
+                <entry align="center">Required</entry>
+
+                <entry align="center">Default</entry>
+              </row>
+            </thead>
+
+            <tbody>
+              <row>
+                <entry>file</entry>
+
+                <entry>Name of file to read in</entry>
+
+                <entry>yes</entry>
+
+                <entry></entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+
+        <para>See also: <xref linkend="import" /></para>
+      </section>
+
+      <section>
+        <title>title</title>
+
+        <para>Retrieves the title of the specified object.</para>
+
+        <table>
+          <title><markup>title</markup> attributes</title>
+
+          <tgroup cols="4">
+            <colspec colwidth="1*" />
+
+            <colspec colwidth="3*" />
+
+            <colspec colwidth="0.8*" />
+
+            <colspec colwidth="1*" />
+
+            <thead>
+              <row>
+                <entry align="center">Name</entry>
+
+                <entry align="center">Description</entry>
+
+                <entry align="center">Required</entry>
+
+                <entry align="center">Default</entry>
+              </row>
+            </thead>
+
+            <tbody>
+              <row>
+                <entry>object</entry>
+
+                <entry>Identifier for a specific object, or a service
+                identifier prefixed by "service:".</entry>
+
+                <entry>no</entry>
+
+                <entry>RESULT</entry>
+              </row>
+
+              <row>
+                <entry>icon</entry>
+
+                <entry>If icon is set to "true", "yes" or "on" an icon will
+                also be displayed as well as the text. If set to "false", "no"
+                or "off" no Icon will be shown.</entry>
+
+                <entry>no</entry>
+
+                <entry>yes</entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+
+        <para>The following example generates the title for the claimant
+        object, without an image.</para>
+
+        <programlisting format="linespecific">&lt;swf:title object="${claimant}" icon="no"/&gt;</programlisting>
+      </section>
+
+      <section id="unless">
+        <title>unless</title>
+
+        <para>Processes the contained block when the specified condition is
+        not met.</para>
+
+        <para>One of <code>set, </code><code>field-editable</code>,
+        <code>field-set</code>, <code>empty</code>, or
+        <code>field-empty</code> should be specified, but no more than
+        one.</para>
+
+        <table>
+          <title><code>unless</code> attributes</title>
+
+          <tgroup cols="4">
+            <colspec colwidth="1*" />
+
+            <colspec colwidth="3*" />
+
+            <colspec colwidth="0.8*" />
+
+            <colspec colwidth="1*" />
+
+            <thead>
+              <row>
+                <entry align="center">Name</entry>
+
+                <entry align="center">Description</entry>
+
+                <entry align="center">Required</entry>
+
+                <entry align="center">Default</entry>
+              </row>
+            </thead>
+
+            <tbody>
+              <row>
+                <entry>set</entry>
+
+                <entry>If this attribute is specified but evaluates an empty
+                string then the block will be processed; if non-empty the
+                block is skipped.</entry>
+
+                <entry>no</entry>
+
+                <entry></entry>
+              </row>
+
+              <row>
+                <entry>empty</entry>
+
+                <entry>If the collection referenced by this attribute contains
+                any elements then the body of this block will not be
+                processed</entry>
+
+                <entry>no</entry>
+
+                <entry></entry>
+              </row>
+
+              <row>
+                <entry>object</entry>
+
+                <entry>Identifier for a specific object when specifying one of
+                the <emphasis>field-</emphasis> attributes.</entry>
+
+                <entry>no</entry>
+
+                <entry>_result</entry>
+              </row>
+
+              <row>
+                <entry>field-editable</entry>
+
+                <entry>Name of the field within the specified object that
+                should not be editable.</entry>
+
+                <entry>no</entry>
+
+                <entry></entry>
+              </row>
+
+              <row>
+                <entry>field-set</entry>
+
+                <entry>Name of boolean field within the object to check; the
+                block is processed if the boolean value is false.</entry>
+
+                <entry>no</entry>
+
+                <entry></entry>
+              </row>
+
+              <row>
+                <entry>field-empty</entry>
+
+                <entry>If the field of the specified object is empty - has no
+                reference or the collection has no elements - this block will
+                not be processed.</entry>
+
+                <entry>no</entry>
+
+                <entry></entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+
+        <para>The <code>unless</code> element can contain one or more of the
+        following elements</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>Text</para>
+          </listitem>
+
+          <listitem>
+            <para>HTML tags</para>
+          </listitem>
+
+          <listitem>
+            <para>Scimpi tags</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>The following example uses the <code>unless</code> element to
+        show a message when no claim exits.</para>
+
+        <programlisting format="linespecific">&lt;swf:unless set="${claim}"&gt;
+    &lt;p&gt;No claim selected&lt;/p&gt;
+&lt;/swf:unless&gt;</programlisting>
+
+        <para>See also: <xref linkend="when" /></para>
+      </section>
+
+      <section id="user">
+        <title>user</title>
+
+        <para>Manages the login process (into the <emphasis>Apache
+        Isis</emphasis> runtime rather than within the domain model) by
+        providing either a log in or log out link and showing the current
+        user.</para>
+
+        <table>
+          <title><markup>user</markup> attributes</title>
+
+          <tgroup cols="4">
+            <colspec colwidth="1*" />
+
+            <colspec colwidth="3*" />
+
+            <colspec colwidth="0.8*" />
+
+            <colspec colwidth="1*" />
+
+            <thead>
+              <row>
+                <entry align="center">Name</entry>
+
+                <entry align="center">Description</entry>
+
+                <entry align="center">Required</entry>
+
+                <entry align="center">Default</entry>
+              </row>
+            </thead>
+
+            <tbody>
+              <row>
+                <entry>login-view</entry>
+
+                <entry>View to be forwarded to when the user clicks the logon
+                link.</entry>
+
+                <entry>no</entry>
+
+                <entry>login.shtml</entry>
+              </row>
+
+              <row>
+                <entry>logout-view</entry>
+
+                <entry>View to be forwarded to when the user logs out via the
+                log out link.</entry>
+
+                <entry>no</entry>
+
+                <entry>logout.shtml</entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+
+        <para>The following example will provide a hyper-links to the default
+        login.shtml page when no user is logged in, and to the home page,
+        index.shtml, for logging out.</para>
+
+        <programlisting format="linespecific">&lt;swf:user logout-view="index.shtml" /&gt;</programlisting>
+
+        <para>See also: <xref lang="" linkend="logon" /></para>
+      </section>
+
+      <section id="variable">
+        <title>variable</title>
+
+        <para>The <markup>variable</markup> element assigns the content of the
+        element to a variable held on the server.</para>
+
+        <table>
+          <title><code>variable</code> attributes</title>
+
+          <tgroup cols="4">
+            <colspec colwidth="1*" />
+
+            <colspec colwidth="3*" />
+
+            <colspec colwidth="0.8*" />
+
+            <colspec colwidth="1*" />
+
+            <thead>
+              <row>
+                <entry align="center">Name</entry>
+
+                <entry align="center">Description</entry>
+
+                <entry align="center">Required</entry>
+
+                <entry align="center">Default</entry>
+              </row>
+            </thead>
+
+            <tbody>
+              <row>
+                <entry>name</entry>
+
+                <entry>Name of file to read in</entry>
+
+                <entry>yes</entry>
+
+                <entry></entry>
+              </row>
+
+              <row>
+                <entry>scope</entry>
+
+                <entry>How long the variable should be kept for</entry>
+
+                <entry>no</entry>
+
+                <entry>request</entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+
+        <para>The <code>variable</code> element can contain one or more of the
+        following elements</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>Text</para>
+          </listitem>
+
+          <listitem>
+            <para><acronym>HTML</acronym> tags</para>
+          </listitem>
+
+          <listitem>
+            <para>Scimpi tags</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>The following example assigns the <code>dateCreated</code>
+        property to the date variable, which will be accessible for the
+        remainder of the request. Within the page the variable can be accessed
+        via <varname>${date}</varname>.</para>
+
+        <programlisting format="linespecific">&lt;swf:variable name="date"&gt;
+  &lt;swf:field object="${claim}" field="dateCreated" /&gt;
+&lt;/swf:variable&gt;</programlisting>
+
+        <note>
+          <para>While this tag processes the contained elements it also
+          includes any text or <acronym>HTML</acronym> tags. The text may
+          includes white space and line feeds so care is needed if the
+          variable is to be used in textual context as these characters will
+          be displayed also. To avoid this problem place the
+          <markup>variable</markup> start and end tags on the same line and
+          only add spaces and new lines where they will be needed when the
+          variable is used.</para>
+
+          <para>This is not, however, an issue when the variable is used to
+          reference an object as Scimpi will remove any leading and trailing
+          spaces from the variable first.</para>
+        </note>
+
+        <para>See also: <xref linkend="initialize" />, <xref
+        linkend="scope" /> and <xref linkend="page-title" /></para>
+      </section>
+
+      <section id="warnings">
+        <title>warnings</title>
+
+        <para>Displays collected warnings</para>
+
+        <para>See also: <xref linkend="feedback" /> and <xref
+        linkend="messages" /></para>
+      </section>
+
+      <section id="when">
+        <title>when</title>
+
+        <para>Processes the contained block when the specified condition is
+        meet.</para>
+
+        <para>One of <code>set, </code><code>field-editable</code>,
+        <code>field-set</code>, <code>empty</code>, or
+        <code>field-empty</code> should be specified, but no more than
+        one.</para>
+
+        <table>
+          <title><code>when</code> attributes</title>
+
+          <tgroup cols="4">
+            <colspec colwidth="1*" />
+
+            <colspec colwidth="3*" />
+
+            <colspec colwidth="0.8*" />
+
+            <colspec colwidth="1*" />
+
+            <thead>
+              <row>
+                <entry align="center">Name</entry>
+
+                <entry align="center">Description</entry>
+
+                <entry align="center">Required</entry>
+
+                <entry align="center">Default</entry>
+              </row>
+            </thead>
+
+            <tbody>
+              <row>
+                <entry>set</entry>
+
+                <entry>If this attribute is specified but evaluates to a
+                non-empty string then the block will be processed; if empty
+                the block is skipped.</entry>
+
+                <entry>no</entry>
+
+                <entry></entry>
+              </row>
+
+              <row>
+                <entry>empty</entry>
+
+                <entry>If the collection referenced by this attribute contains
+                any elements then the body of this block will be
+                processed.</entry>
+
+                <entry>no</entry>
+
+                <entry></entry>
+              </row>
+
+              <row>
+                <entry>object</entry>
+
+                <entry>Identifier for a specific object when specifying one of
+                the <emphasis>field-</emphasis> attributes.</entry>
+
+                <entry>no</entry>
+
+                <entry>_result</entry>
+              </row>
+
+              <row>
+                <entry>field-editable</entry>
+
+                <entry>Name of the field within the specified object that
+                should be editable.</entry>
+
+                <entry>no</entry>
+
+                <entry></entry>
+              </row>
+
+              <row>
+                <entry>field-set</entry>
+
+                <entry>Name of boolean field within the object to check; the
+                block is processed if the boolean value is true.</entry>
+
+                <entry>no</entry>
+
+                <entry></entry>
+              </row>
+
+              <row>
+                <entry>field-empty</entry>
+
+                <entry>If the field of the specified object is empty - has no
+                reference or the collection has no elements - this block will
+                be processed.</entry>
+
+                <entry>no</entry>
+
+                <entry></entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+
+        <para>The <code>when</code> element can contain one or more of the
+        following elements</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>Text</para>
+          </listitem>
+
+          <listitem>
+            <para>HTML tags</para>
+          </listitem>
+
+          <listitem>
+            <para>Scimpi tags</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>The following example uses the <code>when</code> element to show
+        a title and the claim only when the claim exits.</para>
+
+        <programlisting format="linespecific">&lt;swf:when set="${claim}"&gt;
+    &lt;h2&gt;Claim&lt;/h2&gt;
+    &lt;swf:short-form object="${claim}"/&gt;
+&lt;/swf:when&gt;</programlisting>
+
+        <para>See also: <xref linkend="unless" /></para>
+      </section>
+    </appendix>
+
+    <appendix>
+      <title>Example code</title>
+
+      <para></para>
+
+      <section>
+        <title>Domain objects</title>
+
+        <para></para>
+
+        <section>
+          <title>Employee</title>
+
+          <para>An employee has a name and knows who it approver is.</para>
+
+          <programlisting format="linespecific">package org.apache.isis.app.cart;
+
+import org.apache.isis.applib.AbstractDomainObject;
+import org.apache.isis.applib.annotation.MemberOrder;
+
+public class Employee extends AbstractDomainObject {
+    private String name;
+    private Employee approver;
+
+    @MemberOrder(sequence="1")
+    public String getName() {
+        resolve(name);
+        return name;
+    }
+    
+    public void setName(String lastName) {
+        this.name = lastName;
+        objectChanged();
+    }
+
+    @MemberOrder(sequence="2")
+    public Employee getApprover() {
+        resolve(approver);
+        return approver;
+    }
+    
+    public void setApprover(Employee approver) {
+        this.approver = approver;
+        objectChanged();
+    }
+    
+    public String title() {
+        return getName();
+    }
+}</programlisting>
+        </section>
+
+        <section>
+          <title>Claim</title>
+
+          <para>The main domain class, Claim is for a specific employee and
+          contains a number of expenses (ClaimItem) that are being
+          claimed.</para>
+
+          <programlisting format="linespecific">package org.apache.isis.app.cart;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.isis.applib.AbstractDomainObject;
+import org.apache.isis.applib.annotation.Disabled;
+import org.apache.isis.applib.annotation.MemberOrder;
+import org.apache.isis.applib.annotation.Named;
+
+
+public class Claim extends AbstractDomainObject {
+    private Employee claimant;
+    private Employee approver;
+    private String description;
+    private String status;
+    private List&lt;ClaimItem&gt; items = new ArrayList&lt;ClaimItem&gt;();
+
+    public void created() {
+        status = "New";
+    }
+
+    @MemberOrder(sequence = "4")
+    public String getDescription() {
+        resolve(description);
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+        objectChanged();
+    }
+
+    @Disabled
+    @MemberOrder(sequence = "1")
+    public String getStatus() {
+        resolve(status);
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+        objectChanged();
+    }
+
+    @Disabled
+    @MemberOrder(sequence = "2")
+    public Employee getClaimant() {
+        resolve(claimant);
+        return claimant;
+    }
+
+    public void setClaimant(Employee claimant) {
+        this.claimant = claimant;
+        objectChanged();
+    }
+
+    @Disabled
+    @MemberOrder(sequence = "3")
+    public Employee getApprover() {
+        resolve(approver);
+        return approver;
+    }
+
+    public void setApprover(Employee approver) {
+        this.approver = approver;
+        objectChanged();
+    }
+
+    @MemberOrder(sequence = "5")
+    public List&lt;ClaimItem&gt; getItems() {
+        return items;
+    }
+
+    public void addToItems(ClaimItem item) {
+        items.add(item);
+    }
+
+    public void submit(@Named("Approver") Employee approver) {
+        setStatus("Submitted");
+        setApprover(approver);
+    }
+
+    public String disableSubmit() {
+        return getStatus().equals("New") ? null : "Claim has already been submitted";
+    }
+
+    public Object[] defaultSubmit() {
+        return new Object[] { getClaimant().getApprover() };
+    }
+    
+    public String title() {
+        return getStatus() + " - " + getDescription();
+    }
+}</programlisting>
+        </section>
+
+        <section>
+          <title>ClaimItem</title>
+
+          <para>The ClaimItem represent an expense incurred on a specific
+          day.</para>
+
+          <programlisting format="linespecific">package org.apache.isis.app.cart;
+
+import org.apache.isis.applib.AbstractDomainObject;
+import org.apache.isis.applib.annotation.MemberOrder;
+import org.apache.isis.applib.value.Date;
+import org.apache.isis.applib.value.Money;
+
+
+public class ClaimItem extends AbstractDomainObject {
+    private Date dateIncurred;
+    private String description;
+    private Money amount;
+
+    @MemberOrder(sequence="1")
+    public Date getDateIncurred() {
+        resolve(dateIncurred);
+        return dateIncurred;
+    }
+    
+    public void setDateIncurred(Date dateIncurred) {
+        this.dateIncurred = dateIncurred;
+        objectChanged();
+    }
+    
+    @MemberOrder(sequence="2")
+    public String getDescription() {
+        resolve(description);
+        return description;
+    }
+    
+    public void setDescription(String description) {
+        this.description = description;
+        objectChanged();
+    }
+    
+    @MemberOrder(sequence="3")
+    public Money getAmount() {
+        resolve(amount);
+        return amount;
+    }
+
+    public void setAmount(Money price) {
+        this.amount = price;
+        objectChanged();
+    }
+
+    public String title() {
+        return getDescription();
+    }
+}</programlisting>
+        </section>
+      </section>
+
+      <section>
+        <title>Services</title>
+
+        <para></para>
+
+        <section id="ClaimRepository_class">
+          <title>Claim repository</title>
+
+          <para></para>
+
+          <programlisting format="linespecific">package org.apache.isis.app.cart.services;
+
+import java.util.List;
+
+import org.apache.isis.app.cart.Claim;
+import org.apache.isis.app.cart.Employee;
+import org.apache.isis.applib.AbstractFactoryAndRepository;
+import org.apache.isis.applib.annotation.Named;
+
+
+public class ClaimRepository extends AbstractFactoryAndRepository {
+
+    public String getId() {
+        return "claims";
+    }
+
+    public List&lt;Claim&gt; allClaims() {
+        return allInstances(Claim.class, false);
+    }
+
+    public List&lt;Claim&gt; findClaims(@Named("Description") String description) {
+        return allMatches(Claim.class, description, false);
+    }
+    
+    public List&lt;Claim&gt; claimsFor(@Named("Claimant") Employee claimant) {
+        Claim pattern = newTransientInstance(Claim.class);
+        pattern.setStatus(null);
+        pattern.setClaimant(claimant);
+        return allMatches(Claim.class, pattern, false);
+    }
+}</programlisting>
+        </section>
+
+        <section id="ClaimantRepository_class">
+          <title>Claimant repository</title>
+
+          <para>The claimant repository allows the user and the DOM to find
+          employee objects</para>
+
+          <programlisting format="linespecific">package org.apache.isis.app.cart.services;
+
+import java.util.List;
+
+import org.apache.isis.app.cart.Employee;
+import org.apache.isis.applib.AbstractFactoryAndRepository;
+import org.apache.isis.applib.annotation.Named;
+
+
+public class ClaimantRepository extends AbstractFactoryAndRepository {
+
+    public String getId() {
+        return "claimants";
+    }
+
+    public List&lt;Employee&gt; allClaimants() {
+        return allInstances(Employee.class, false);
+    }
+
+    public List&lt;Employee&gt; findClaimants(@Named("Name") String name) {
+        return allMatches(Employee.class, name, false);
+    }
+}</programlisting>
+
+          <funcsynopsis>
+            <funcsynopsisinfo format="linespecific">p</funcsynopsisinfo>
+          </funcsynopsis>
+        </section>
+      </section>
+
+      <section>
+        <title>Fixture</title>
+
+        <para>This fixture class is used to initialise the system with some
+        demonstration data.</para>
+
+        <programlisting format="linespecific">package org.apache.isis.app.c.fixtures;
+
+import org.apache.isis.app.cart.Claim;
+import org.apache.isis.app.cart.ClaimItem;
+import org.apache.isis.app.cart.Employee;
+import org.apache.isis.applib.fixtures.AbstractFixture;
+import org.apache.isis.applib.value.Date;
+import org.apache.isis.applib.value.Money;
+import org.apache.isis.nof.reflect.java.value.DateAdapter;
+
+
+public class ClaimsFixture extends AbstractFixture {
+    private final DateAdapter dateAdapter = new DateAdapter();
+
+    @Override
+    public void install() {
+        Employee fred = createCustomer("Fred Smith", null);
+        Employee tom = createCustomer("Tom Brown", fred);
+        createCustomer("Sam Jones", fred);
+
+        Claim claim = createClaim(tom, "-2w", "Meeting with client");
+        addItem(claim, "-2w -2d", 38.50, "Lunch with client");
+        addItem(claim, "-2w -2d", 16.50, "Euston - Mayfair (return)");
+        
+        claim = createClaim(tom, "-2w 3d", "Meeting in city office");
+        addItem(claim, "-2w 2d", 18.00, "Car parking");
+        addItem(claim, "-2w 2d", 26.50, "Reading - London (return)");
+
+        claim = createClaim(fred, "-2w", "Meeting at clients");
+        addItem(claim, "-2w", 18.00, "Car parking");
+        addItem(claim, "-2w", 26.50, "Reading - London (return)");
+
+    }
+    
+    private Employee createCustomer(String name, Employee approver) {
+        Employee claimant;
+        claimant = newTransientInstance(Employee.class);
+        claimant.setName(name);
+        claimant.setApprover(approver);
+        makePersistent(claimant);
+        return claimant;
+    }
+
+    private Claim createClaim(Employee claimant, String date, String description) {
+        Claim claim = newTransientInstance(Claim.class);
+        claim.setClaimant(claimant);
+        claim.setDescription(description);
+        makePersistent(claim);
+        return claim;
+    }
+
+    private void addItem(Claim claim, String date, double amount, String description) {
+        ClaimItem claimItem = newTransientInstance(ClaimItem.class);
+        claimItem.setDateIncurred(date(date));
+        claimItem.setDescription(description);
+        claimItem.setAmount(new Money(amount, "USD"));
+        makePersistent(claimItem);
+        claim.addToItems(claimItem);
+    }
+    
+    private Date date(String date) {
+        dateAdapter.parseTextEntry(date);
+        return (Date) dateAdapter.getObject();
+    }
+
+}</programlisting>
+
+        <para></para>
+      </section>
+    </appendix>
+  </part>
+</book>

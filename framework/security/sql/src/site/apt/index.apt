@@ -1,0 +1,124 @@
+~~  Licensed to the Apache Software Foundation (ASF) under one
+~~  or more contributor license agreements.  See the NOTICE file
+~~  distributed with this work for additional information
+~~  regarding copyright ownership.  The ASF licenses this file
+~~  to you under the Apache License, Version 2.0 (the
+~~  "License"); you may not use this file except in compliance
+~~  with the License.  You may obtain a copy of the License at
+~~
+~~        http://www.apache.org/licenses/LICENSE-2.0
+~~
+~~  Unless required by applicable law or agreed to in writing,
+~~  software distributed under the License is distributed on an
+~~  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+~~  KIND, either express or implied.  See the License for the
+~~  specific language governing permissions and limitations
+~~  under the License.
+
+
+
+Security SQL Implementation
+ 
+ The <SQL security> module is a simple implementation of Isis' authentication and
+ authorization APIs, that uses flat SQL tables to store user/passwords/roles (for authentication)
+ and role-based permissions (for authorization).
+ 
+ No additional helpers are provided to maintain the SQL tables used, so you will have
+ to find your own table viewers/editors to maintain them.
+
+ At the moment, authorisation learning has not been implemented.
+ 
+ The SqlAuthenticator classes use jdbc to access the database tables, with no reliance on the 
+ Isis SqlObjectStore.
+ 
+ 
+Alternatives
+
+  Alternatives include:
+  
+  * the {{{../dflt/index.html}default}} (no-op) security implementation, for prototyping use only
+
+  * the {{{../file/index.html}file}} security
+
+  * the {{{../ldap/index.html}LDAP}} security
+  
+ See the security 
+ {{{../docbkx/html/guide/isis-security.html}HTML}} or 
+ {{{../docbkx/pdf/isis-security.pdf}PDF}} documentation for more details on these others.
+
+Setup
+ 
+ The SQL Authenticator is relatively easy to setup - just add the following to isis.properties:
+ Change the connection, userTable, etc, definitions, to reflect that of your configuration.
+ 
++--
+ isis.authentication=sql
+ isis.authentication.sql.jdbc.driver=org.hsqldb.jdbcDriver
+
+ # Connection string: e.g.
+ isis.authentication.sql.jdbc.connection=jdbc:hsqldb:file:hsql-db/authentication
+
+ # Connection authentication
+ isis.authentication.sql.jdbc.user=sa
+ isis.authentication.sql.jdbc.password=
+
+ isis.authentication.sql.userTable=RealNameOfUserTable 
+ isis.authentication.sql.userNameField=RealFieldThatContainsUsernames
+ isis.authentication.sql.passwordField=RealFieldThatContainsPassword 
+
+ # The following property is optional, for specifying roles:
+ # Roles are of the forms ROLE1|ROLE2|ROLE3
+ isis.authentication.sql.roleField=RealFieldThatContainsRoles
+ 
+  # Optional: If you wish to override the default SqlAuthenticator, you can specify 
+  # your own, by providing the fully qualified class name of your class that extends
+  # PasswordRequestAuthenticatorAbstract:
+  isis.authentication.authenticator=domain.package.MyCustomSqlAuthenticator
++--
+
+  * Operation
+  
+  The default SqlAuthenticator loads the record set from <<isis.authentication.sql.userTable>> with
+  values where <<isis.authentication.sql.userNameField>> matches the login form's username (converted to
+  upper-case, so the match is case-<<in>>sensitive). 
+  
+  A simple case-sensitive string comparison is performed to match the login form's password with the value
+  in <<isis.authentication.sql.passwordField>>.
+  
+  If a match is found, the user roles are loaded from the field 
+  <<isis.authentication.sql.roleField>>, if specified.      
+  
+Custom Authenticator
+  
+  If you want to replace or extend the current behaviour, you need to 
+  extend <<org.apache.isis.security.sql.authentication.SqlAuthenticator>> and optionally override 
+  whichever of the following methods you need to:
+  
++--
+  boolean verifyPasswordsAreEqual(String userPassword, String dbPassword)
+  ResultSet postProcessLogin(String user, String password, ResultSet results)
+  String getRoles(final ResultSet results, final String roles)
++--  
+
+  * <<verifyPasswordsAreEqual>>
+  
+  Lets you override the default password comparison check, which is a simple <loginPassword.equals(dbPassword)> check.
+  
+  Use this if your database passwords are encrypted.
+  
+  This method is called before postProcessLogin, which is only called if this method returns true.
+
+  * <<postProcessLogin>>
+  
+  Lets you perform additional processing to see if the found RecordSet (which has already been verified to match the
+  provided username and password, should be allowed to login.
+  
+  Simply return the results RecordSet, if so, else return null.
+  
+  * <<getRoles>>
+  
+  Lets you add additional roles to the default. Simply return your custom roles appended to the provided roles String.
+  Separate roles with a "|", e.g. <return roles+"|ROLE1|ROLE2">.    
+
+  []
+ 

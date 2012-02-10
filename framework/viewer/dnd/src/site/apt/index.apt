@@ -1,0 +1,37 @@
+~~  Licensed to the Apache Software Foundation (ASF) under one
+~~  or more contributor license agreements.  See the NOTICE file
+~~  distributed with this work for additional information
+~~  regarding copyright ownership.  The ASF licenses this file
+~~  to you under the Apache License, Version 2.0 (the
+~~  "License"); you may not use this file except in compliance
+~~  with the License.  You may obtain a copy of the License at
+~~
+~~        http://www.apache.org/licenses/LICENSE-2.0
+~~
+~~  Unless required by applicable law or agreed to in writing,
+~~  software distributed under the License is distributed on an
+~~  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+~~  KIND, either express or implied.  See the License for the
+~~  specific language governing permissions and limitations
+~~  under the License.
+
+
+
+DnD Viewer
+
+ The Drag and Drop (DnD) viewer is non-web graphical user interface that employs a 
+ desktop metaphor for interacting with domain objects.  It renders each domain object 
+ as an icon or a window and allows the user to manage and manipulate them using the mouse
+ and keyboard. Dragging and dropping domain objects plays a major role in
+ this interface, hence its name.
+ 
+Customization
+
+  The DnD viewer defines its own API to allow new views to be defined.  These can be for
+  entities, for entity properties (and action parameters), for entity collections, and
+  for collections of entities.
+  
+Further Info
+  
+  See this module's {{{./apidocs/index.html}Javadoc}} and the {{{./docbkx/html/guide/isis-dnd-viewer.html}user guide}} for more information.
+  

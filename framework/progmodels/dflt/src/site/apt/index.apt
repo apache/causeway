@@ -1,0 +1,46 @@
+~~  Licensed to the Apache Software Foundation (ASF) under one
+~~  or more contributor license agreements.  See the NOTICE file
+~~  distributed with this work for additional information
+~~  regarding copyright ownership.  The ASF licenses this file
+~~  to you under the Apache License, Version 2.0 (the
+~~  "License"); you may not use this file except in compliance
+~~  with the License.  You may obtain a copy of the License at
+~~
+~~        http://www.apache.org/licenses/LICENSE-2.0
+~~
+~~  Unless required by applicable law or agreed to in writing,
+~~  software distributed under the License is distributed on an
+~~  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+~~  KIND, either express or implied.  See the License for the
+~~  specific language governing permissions and limitations
+~~  under the License.
+
+
+
+Default Programming Model (Java)
+ 
+ The <default progmodel> module defines an implementation of the default programming model as described by the
+ {{{../../applib/index.html}applib}} documentation.
+ 
+ This programming model is defined by specifying a collection of <<<FacetFactory>>>s, which are
+ used to build up the metamodel.  The actual <<<FacetFactory>>>s are defined within the
+ {{{../../core/index.html}core}} framework (in the <<<progmodel>>> module).
+ 
+Alternatives
+
+  Alternatives include:
+  
+  * the {{{../wrapper/index.html}wrapper}} programming model.
+  
+    This extends the default programming model by providing the ability for domain objects to
+    interact with each other <as if> through the user interface (that is, obeying any business
+    rules that would otherwise be enforced at the application layer).
+
+  * the {{{../groovy/index.html}Groovy}} programming model.
+  
+    This provides the ability to write domain objects using {{{http://groovy.codehaus.org}Groovy}}.
+
+  []
+
+  Note that these are <i>not</i> necessarily mutually exclusive (they can be combined). 
+  

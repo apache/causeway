@@ -1,0 +1,45 @@
+~~  Licensed to the Apache Software Foundation (ASF) under one
+~~  or more contributor license agreements.  See the NOTICE file
+~~  distributed with this work for additional information
+~~  regarding copyright ownership.  The ASF licenses this file
+~~  to you under the Apache License, Version 2.0 (the
+~~  "License"); you may not use this file except in compliance
+~~  with the License.  You may obtain a copy of the License at
+~~
+~~        http://www.apache.org/licenses/LICENSE-2.0
+~~
+~~  Unless required by applicable law or agreed to in writing,
+~~  software distributed under the License is distributed on an
+~~  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+~~  KIND, either express or implied.  See the License for the
+~~  specific language governing permissions and limitations
+~~  under the License.
+
+
+
+Wrapper Programming Model
+ 
+ The <wrapper> programming model allows a domain object to be "wrapped" so that when another domain object interact with it,
+ it is <as if> through a viewer.  That is, if a property or action is unusable on the wrapped domain object, then the 
+ calling domain object will be receive an exception indicating the fact.
+ 
+ The wrapper programming model is provided as an implementation of Isis' <<<DomainObjectContainer>>> interface (in the
+ {{{../../applib/index.html}applib}}.  
+ This can be downcast into a <<<WrapperFactory>>>, from which the domain object is wrapped using a {{{http://cglib.sourceforge.net/}CgLib}} proxy.  
+ This proxy implements the checks to ensure that the wrapped object is visible, is not disabled, and the interaction is
+ valid ("see it, use it, do it").
+
+Alternatives
+
+  Alternatives include:
+  
+  * the {{{../dflt/index.html}default}} programming model.
+  
+  * the {{{../groovy/index.html}wrapper}} programming model.
+  
+    For domain objects written with Groovy.
+
+  []
+  
+  Note that these are <i>not</i> necessarily mutually exclusive (they can be combined). 
+ 

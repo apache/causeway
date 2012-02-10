@@ -1,0 +1,1258 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+-->
+<!DOCTYPE article PUBLIC "-//OASIS//DTD Simplified DocBook XML V1.1//EN"
+"http://www.oasis-open.org/docbook/xml/simple/1.1/sdocbook.dtd">
+<article>
+  <articleinfo>
+    <title></title>
+
+    <author>
+      <firstname></firstname>
+
+      <surname></surname>
+
+      <affiliation>
+        <orgname></orgname>
+      </affiliation>
+    </author>
+
+    <pubdate></pubdate>
+  </articleinfo>
+
+  <section>
+    <title>Understanding how a [[NAME]] application works</title>
+
+    <para>[[NAME]] creates the user interface for an application directly
+    from the definitions of the domain model. In this section we will look at
+    that relationship in more detail, with reference to the Expenses
+    Processing example application supplied as part of the download. As we
+    showed in the previous section, any domain model written for [[NAME]]
+    may be run with any of the viewers - there is no specific coding required,
+    and the domain model has no knowledge of which viewer is being used.
+    However, each viewer will have different gestures or mechanisms for
+    providing the same functionality. To illustrate this, we will show the
+    same objects being accessed through both the DND and the HTML viewers,
+    side by side.</para>
+
+    <para>The application code for the Expenses Processing example, like any
+    [[NAME]] application, consists of two things: domain objects and
+    services. The domain objects form the lion's share of that code, so we'll
+    look at how those work first.</para>
+
+    <para>The code for examples we will be looking at can be found in the
+    directory <filename
+    moreinfo="none">examples/expenses/expenses-dom/src</filename> in the
+    downloaded files.</para>
+
+    <section>
+      <title>Domain objects</title>
+
+      <para>The domain objects are the entities - the nouns - that represent
+      the application domain: employee, claim, expense item, project code,
+      currency, and so forth. In the course of using the application, a user
+      will view and manipulate many instances of these domain objects. To
+      understand how [[NAME]] handles domain objects, we'll start by
+      looking at an Employee object:</para>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata contentwidth="40%" fileref="images/employee-views.png"
+                     format="PNG" />
+        </imageobject>
+      </mediaobject>
+
+      <para>Every object presented in the user interface will have a
+      corresponding Java class in the domain model - in this case it is
+      <literal>org.apache.isis.example.expenses.employee.Employee</literal>.
+      Below we can see the code for the <literal>Employee</literal> object, as
+      presented in Eclipse, with the object's list of methods presented on the
+      left hand side.</para>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata contentwidth="40%" fileref="images/employee-code.png"
+                     format="PNG" />
+        </imageobject>
+      </mediaobject>
+
+      <para>The first thing to note is that the type of the object as shown in
+      the user views is derived directly from the class name in Java. The
+      framework inserts spaces before capital letters, so that the class
+      <literal>TemporaryEmployee</literal> would be presented to the user as
+      'Temporary Employee'. However we will see later that the name may be
+      over-ridden where necessary, for example if we want the name to include
+      punctuation or other characters not allowed in Java class names. (Note
+      that there is a separate mechanism for dealing with
+      internationalisation).</para>
+
+      <para>Secondly, we can see that <literal>Employee</literal> extends
+      <literal>AbstractDomainObject</literal> - a class provided within the
+      [[NAME]] application library. This is not a requirement: your
+      domain objects may be Plain Old Java Objects (POJOs) - they do not need
+      to extend any class in the framework. However, extending from <literal
+      moreinfo="none">AbstractDomainObject</literal> will save us having to
+      write a few lines of code in each case, as we'll see later.</para>
+
+      <para>Note also that in the body of the object we use 'code folding'
+      (the plug-in used here is <ulink
+      url="http://www.realjenius.com/platform_support">Coffee Bytes</ulink>)
+      to break the object's code into regions, each typically containing one
+      or more related methods that together fulfill a high-level
+      responsibility of the object. This is just a coding convention, not a
+      requirement.</para>
+    </section>
+
+    <section>
+      <title>Properties</title>
+
+      <para>In both of the user views of an Employee we can see a field called
+      'Name'. Within the <literal>Employee</literal> class there is a <literal
+      moreinfo="none">Name</literal> region of code, expanded here:</para>
+
+      <programlisting format="linespecific">// {{ Name
+    private String name;
+
+    @MemberOrder(sequence="1")
+    @Disabled
+    public String getName() {
+        return this.name;
+    }
+    public void setName(String name) {
+        this.name = name;
+    }
+// }}</programlisting>
+
+      <para>The <literal moreinfo="none">Name</literal> region contains a
+      simple property, of type <literal moreinfo="none">String</literal>,
+      defined by a <literal moreinfo="none">getName</literal> and a <literal
+      moreinfo="none">setName</literal> method. This is sufficient information
+      to allow the viewers to display a field containing a textual value. Note
+      that if the property is to be persisted, then it will need both a
+      <literal moreinfo="none">get</literal> and a <literal
+      moreinfo="none">set</literal> method - per the standard JavaBeans
+      convention. If you wish to display a field that is derived automatically
+      from other information in the object, and do not require this to be
+      persisted, then a <literal moreinfo="none">get</literal> alone will
+      suffice.</para>
+
+      <para>As with the name of the object, the field name is derived
+      automatically from the name of the property - though we'll see later
+      that this may be over-ridden if needed.</para>
+
+      <para>The <literal moreinfo="none">getName</literal> has been marked up
+      with two Java annotations, both defined in the [[NAME]] application
+      library. Annotations allow the programmer to enrich the information
+      available to the framework. On properties, any [[NAME]] annotations
+      are always associated with the <literal moreinfo="none">get</literal>
+      method. However, annotations are not mandatory - you can write a simple
+      [[NAME]] application without using any annotations at all.</para>
+
+      <para>By default, any property with both a <literal
+      moreinfo="none">get</literal> and <literal moreinfo="none">set</literal>
+      method will be editable by the user. <literal
+      moreinfo="none">@Disabled</literal> tells the framework that this
+      particular property may never be altered by the user (though it may be
+      altered programmatically). Later we'll see how to make a property
+      modifiable on certain conditions.</para>
+
+      <para><literal moreinfo="none">@MemberOrder(sequence="1")
+      </literal>tells the framework that this property should be the first
+      field displayed in any view of the Employee - irrespective of where it
+      is defined within the code. This ordering information has been observed
+      by both the viewers.</para>
+
+      <para>The next region of the code contains another <literal
+      moreinfo="none">String</literal> property, called <literal
+      moreinfo="none">UserName</literal>:</para>
+
+      <programlisting format="linespecific">// {{ UserName field
+    private String userName;
+
+    @Hidden
+    public String getUserName() {
+        return userName;
+    }
+    public void setUserName(final String variable) {
+        this.userName = variable;
+    }
+// }}</programlisting>
+
+      <para>Note that <literal moreinfo="none">getUserName</literal> has been
+      marked up with <literal moreinfo="none">@Hidden</literal>. This tells
+      the framework that this property should never be shown in user views of
+      the object (check this against the two user views above). Later on we'll
+      see how it is possible to hide a property in certain
+      circumstances.</para>
+
+      <para>Next we'll look at the <literal
+      moreinfo="none">EmailAddress</literal> region:</para>
+
+      <programlisting format="linespecific">// {{ EmailAddress
+    private String emailAddress;
+    
+    @MemberOrder(sequence = "2")
+    @Optional
+    @RegEx(validation = "(\\w+\\.)*\\w+@(\\w+\\.)+[A-Za-z]+")
+    public String getEmailAddress() {
+        return this.emailAddress;
+    }
+    public void setEmailAddress(final String emailAddress) {
+        this.emailAddress = emailAddress;
+    }
+    public void modifyEmailAddress(final String emailAddress) {
+        getRecordActionService().recordFieldChange(this, "Email Address", getEmailAddress(), emailAddress);
+        setEmailAddress(emailAddress);
+    }
+    public void clearEmailAddress() {
+        getRecordActionService().recordFieldChange(this, "Email Address", getEmailAddress(), "EMPTY");
+        setEmailAddress(null);
+    }
+    public boolean hideEmailAddress() {
+        return !employeeIsCurrentUser();
+    }
+    private boolean employeeIsCurrentUser() {
+        return getUserFinder().currentUserAsObject() == this;
+    }
+// }}</programlisting>
+
+      <para>As well as <literal moreinfo="none">@MemberOrder</literal>, this
+      property is marked up with <literal moreinfo="none">@Optional</literal>
+      and <literal moreinfo="none">@RegEx</literal> annotations. By default,
+      all properties are taken to be mandatory - if the user creates or edits
+      an object then they will be required to specify the contents of each
+      field. <literal moreinfo="none">@Optional</literal> overrides this
+      default behaviour - indicating here that the object may be saved without
+      an email address.</para>
+
+      <para><literal moreinfo="none">@RegEx</literal> is applicable only to
+      <literal moreinfo="none">String</literal> properties. In this case the
+      annotation specifies a Regular Expression that will be used to validate
+      any value that the user types into the field. In a conventional
+      architecture, this functionality would typically be found in the user
+      interface code. The [[NAME]] argument is that this functionality
+      should apply to any user interface that might want to change the
+      property, so its proper place is in the object. <literal
+      moreinfo="none">@RegEx</literal> may also be used to reformat a String
+      that has been entered by the user.</para>
+
+      <para>The two screens below show how two different viewers make use of
+      the functionality in different ways. In both cases the user has typed in
+      a value that does not match the RegEx specification (they have typed in
+      an email address that contains a space), so the new value has not been
+      accepted or saved.</para>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata contentwidth="40%"
+                     fileref="images/employee-email-invalid.png" format="PNG" />
+        </imageobject>
+      </mediaobject>
+
+      <para>In addition to <literal moreinfo="none">getEmailAddress</literal>
+      and <literal moreinfo="none">setEmailAddress</literal>, there are
+      <literal moreinfo="none">modifyEmailAddress</literal>, <literal
+      moreinfo="none">clearEmailAddress</literal> and <literal
+      moreinfo="none">hideEmailAddress</literal> methods. [[NAME]]
+      recognises the <literal moreinfo="none">modify</literal>, <literal
+      moreinfo="none">clear</literal> and <literal
+      moreinfo="none">hide</literal> prefixes (and a few others that we shall
+      see later) as specifying additional functionality relating to the
+      <literal moreinfo="none">EmailAddress</literal> property.</para>
+
+      <para>If a property has a corresponding <literal
+      moreinfo="none">modify&lt;propertyName&gt;</literal> method, then
+      whenever the user modifies the field, this will be called rather than
+      the <literal moreinfo="none">set</literal>. In this case the <literal
+      moreinfo="none">modify</literal> method uses the <literal
+      moreinfo="none">RecordActionService</literal> to record the details of
+      the change, and then calls <literal
+      moreinfo="none">setEmailAddress</literal> to change the value. The
+      reason for adopting this pattern, rather than including the
+      functionality in the <literal moreinfo="none">set</literal> itself, is
+      that the <literal moreinfo="none">set</literal> will be called by the
+      object store each time the object is retrieved. So we use a <literal
+      moreinfo="none">modify</literal> method where we want to do something
+      (such as add to a total) only when the user changes a field.</para>
+
+      <para><literal moreinfo="none">clearEmailAddress</literal> is called, in
+      a similar manner, if the user clears the contents of the field. Again,
+      it is optional - added where we want to perform some logic only when the
+      user clears the property. On the <literal
+      moreinfo="none">UserName</literal> field we saw that <literal
+      moreinfo="none">@Hidden</literal> hides a property from the user
+      permanently. We may, however, want to hide fields under certain
+      circumstances. The visibility of all classes, properties and methods may
+      be controlled via conventional authorization techniques, based on the
+      user's role(s). In rarer cases, we want to control visibility at an
+      instance level. In this case, for privacy reasons we do not want the
+      email address to be visible, except to that person. This is what the
+      <literal moreinfo="none">hideEmailAddress()</literal>method is doing. If
+      the method returns true, the field will be hidden from the user.</para>
+
+      <para>Next we will look at the <literal
+      moreinfo="none">NormalApprover</literal> region:</para>
+
+      <programlisting format="linespecific">// {{ NormalApprover
+    private Employee normalApprover;
+    
+    @MemberOrder(sequence="4")
+    public Employee getNormalApprover() {
+        return this.normalApprover;
+    }
+    public void setNormalApprover(final Employee normalAuthoriser) {
+        this.normalApprover = normalAuthoriser;
+    }
+    public void modifyNormalApprover(final Employee normalAuthoriser) {
+        getRecordActionService().recordFieldChange(this, "Normal Approver", getNormalApprover(), normalApprover);
+        setNormalApprover(normalAuthoriser);
+    }
+    public void clearNormalApprover() {
+        getRecordActionService().recordFieldChange(this, "Normal Approver", getNormalApprover(), "EMPTY");
+        setNormalApprover(null);
+    }
+    public String validateNormalApprover(Employee newApprover) {
+        return newApprover == this ? CANT_BE_APPROVER_FOR_OWN_CLAIMS: null;
+    }
+    public String disableNormalApprover() {
+        return employeeIsCurrentUser() ? null: NOT_MODIFIABLE;
+    }
+    
+    public static final String NOT_MODIFIABLE = "Not modifiable by current user";
+    public static final String CANT_BE_APPROVER_FOR_OWN_CLAIMS = "Can't be the approver for your own claims";
+// }}</programlisting>
+
+      <para>The <literal moreinfo="none">NormalApprover</literal> property
+      takes an object of type <literal moreinfo="none">Employee</literal>.
+      Assuming that this field is not disabled, the user may specify an
+      Employee object for this field. [[NAME]] will prevent the user from
+      trying to associate the wrong type of object with this field. This is
+      illustrated in the two screens below:</para>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata contentwidth="40%"
+                     fileref="images/employee-approver-views.png" format="PNG" />
+        </imageobject>
+      </mediaobject>
+
+      <para>In the left-hand screen (DND) we can see the user dropping an
+      Employee object into the empty field, and the field is flashing green to
+      indicate that this will succeed. If the user attempted to drop another
+      type of object into the empty field, then the field would flash red, and
+      the drop would not update the field. A successful drop will call the
+      <literal moreinfo="none">set</literal> method, or, if a <literal
+      moreinfo="none">modify&lt;propertyName&gt;</literal> method is provided
+      (as it is here), it will call that instead. Note that on the DND viewer,
+      if a field already contains an object, then this may be cleared by
+      right-clicking on that object and selecting 'Clear Association'. This
+      will set the property to <literal moreinfo="none">null</literal>. If
+      there is a <literal moreinfo="none">clear&lt;propertyName&gt;</literal>
+      field (as there is in this example) then that will be called rather than
+      the <literal moreinfo="none">set</literal> method. Alternatively a new
+      reference can be dropped on to the field's label, which combines both
+      the clearing and the subsequent setting of the field.</para>
+
+      <para>In the HTML viewer (right-hand screen) drag and drop is not
+      possible. In a reference field such as this one, the user will be given
+      a drop-down list of objects of the appropriate type (i.e. Employees
+      here) that the user has recently viewed. If the required Employee object
+      is not in that list then the user may go and find that object (e.g. from
+      the Employees tab) and then return to the context - this time the newly
+      viewed Employee will have been added to the list automatically. (Note:
+      This is a generic capability provided by the HTML viewer. In other
+      contexts, the programmer may want to specify an explicit list of objects
+      to appear in a drop-down list. This would be achieved by means of a
+      <literal moreinfo="none">choices&lt;propertyName&gt;</literal>
+      method).</para>
+
+      <para>The <literal moreinfo="none">validateNormalApprover</literal>
+      method enforces any rules concerning the specific instances of <literal
+      moreinfo="none">Employee</literal> that may be associated with this
+      field. In this particular example, it prevents the user from specifying
+      an Employee as their own approver. Note that this method returns a
+      <literal moreinfo="none">String</literal>. If the specific Employee
+      instance being passed into the method is acceptable, the method should
+      return <literal moreinfo="none">null</literal>; if unacceptable then the
+      method should return a <literal moreinfo="none">String</literal> message
+      that will be made available to the user to advise them why the action
+      will not succeed. (On the DND this appears at the bottom of the
+      screen.)</para>
+
+      <para>The <literal moreinfo="none">disableNormalApprover</literal>
+      method prevents the user from modifying the field in certain
+      circumstances. In this example the method enforces the rule that only
+      the Employee themselves may change this field. Like the <literal
+      moreinfo="none">validate</literal> method, it returns a <literal
+      moreinfo="none">null</literal> if the user may modify the field (subject
+      to the validate rules), or returns a <literal
+      moreinfo="none">String</literal> message if they may not. (Note that
+      this method, along with hide (seen earlier) allow for 'instance-based
+      authorization'. Most applications can manage with 'class-based
+      authorization' - in which the classes, properties and actions made
+      available to a user are based on their roles. Class-based authorization
+      in [[NAME]] is administered externally to the application and does
+      not require any coding within the domain objects.)</para>
+    </section>
+
+    <section>
+      <title>Title</title>
+
+      <para>In the next screen we will look at the <literal
+      moreinfo="none">title</literal> region of the Employee object.</para>
+
+      <programlisting format="linespecific">// {{ Title
+    public String title() {
+        return getName();
+    }
+// }}</programlisting>
+
+      <para>The <literal moreinfo="none">title</literal> method specifies the
+      title for the object - which, on both the DND and HTML viewers appears
+      next to the icon. The title is there to help the user identify objects.
+      [[NAME]] also provides an easy mechanism to retrieve objects from
+      the object store by their title. Other methods of finding/searching may
+      require repository methods to be written. If no <literal
+      moreinfo="none">title</literal> method is specified, [[NAME]] will
+      use the object's <literal moreinfo="none">toString</literal> method as a
+      title. Titles are usually based on one or more of the persisted
+      properties - in this case on the Name. When constructing a title from
+      multiple elements, the [[NAME]] application library provides a
+      helper object: <literal>TitleBuffer</literal>.</para>
+    </section>
+
+    <section>
+      <title>Actions</title>
+
+      <para>The screen below shows the action menu for the Taxi object, as
+      rendered by the two different user interfaces:</para>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata contentwidth="40%" fileref="images/taxi-menu.png"
+                     format="PNG" />
+        </imageobject>
+      </mediaobject>
+
+      <para>By default, any <literal moreinfo="none">public</literal> instance
+      methods on an object, included inherited public methods, will be
+      rendered as a user-action. The exceptions to this rule are:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>Any methods that are recognised by [[NAME]] as having a
+          specific intent. We've seen a number of these already, including
+          <literal moreinfo="none">get</literal> and <literal
+          moreinfo="none">set</literal> methods, <literal
+          moreinfo="none">title</literal>, and the methods prefixed by
+          <literal moreinfo="none">modify</literal>, <literal
+          moreinfo="none">clear</literal>, <literal
+          moreinfo="none">validate</literal>, <literal
+          moreinfo="none">disable</literal> and so on. There is a full list of
+          recognised methods included in the section on <ulink
+          url="recognised-methods.html">recognised methods</ulink>.</para>
+        </listitem>
+
+        <listitem>
+          <para>Any methods that the programmer has specified should be hidden
+          from the user, either statically with <literal
+          moreinfo="none">@Hidden</literal>, or dynamically with a <literal
+          moreinfo="none">hide&lt;methodName&gt;</literal> method.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para><literal moreinfo="none">private</literal>, <literal
+      moreinfo="none">protected</literal>, and <literal
+      moreinfo="none">static</literal> methods are ignored by [[NAME]]
+      Objects.</para>
+
+      <para>For example, the action 'Copy From' on the Taxi object, is derived
+      from this method on the <literal>AbstractExpenseItem</literal> class
+      (from which <literal>Taxi</literal> inherits):</para>
+
+      <programlisting format="linespecific">    @MemberOrder(sequence="5")
+    public void copyFrom(final ExpenseItem otherItem) {
+        if (belongsToSameClaim(otherItem)) {
+            if (dateIncurred == null) {
+                modifyDateIncurred(otherItem.getDateIncurred());
+            }
+        } else if (getClass().isInstance(otherItem)) {
+            copyAllSameClassFields(otherItem);
+        }
+    }</programlisting>
+
+      <para>Again, we can see that the method has been marked up with <literal
+      moreinfo="none">@MemberOrder</literal>, which will govern the relative
+      location of this action on the action menu.</para>
+
+      <para>Because the <literal moreinfo="none">copyFrom</literal> method
+      takes a parameter, when the user invokes the corresponding menu action
+      they will be presented with a dialog, wherein each of the parameters may
+      be specified. This is shown below on the two user interfaces:</para>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata contentwidth="40%" fileref="images/taxi-copy-dialog.png"
+                     format="PNG" />
+        </imageobject>
+      </mediaobject>
+
+      <para>Editing a dialog is similar to editing an object: though there are
+      differences in the way they are rendered (for example a dialog has an
+      'OK' button in both the DND and HTML user interfaces). Parameters that
+      take value types (such as <literal>String</literal> or
+      <literal>Date</literal>) are rendered as fields that the user can type
+      into. Where a parameter is a domain object class or interface, as in
+      this case with <literal>ExpenseItem</literal>, then the user must
+      specify an object of that type. In the DND user interface, the user may
+      drag and drop an object into the parameter field. In the HTML user
+      interface, the user is automatically presented with a drop-down list of
+      objects of that type that they have recently viewed. If the desired
+      object doesn't appear, they may go and find the object (by navigating
+      from another object, or using a find method on one of the start points)
+      and then return to the dialog, where the recently-located object should
+      now appear on the list.</para>
+
+      <para>Adjacent to the <literal moreinfo="none">copyFrom</literal> method
+      on <literal>AbstractExpenseItem</literal> we can also find the following
+      two methods:</para>
+
+      <programlisting format="linespecific">    public String disableCopyFrom() {
+        return disabledIfLocked();
+    }
+
+    public String validateCopyFrom(final ExpenseItem otherItem) {
+        if (belongsToSameClaim(otherItem) || (getClass().equals(otherItem.getClass()))) {
+            return null;
+        }
+        return COPY_WARN;
+    }
+    private final static String COPY_WARN = "Cannot copy";</programlisting>
+
+      <para><literal moreinfo="none">disableCopyFrom</literal> and <literal
+      moreinfo="none">validateCopyFrom</literal> are other examples of
+      recognised methods (see section on <ulink
+      url="recognised-methods.html">recognised methods</ulink>). They work in
+      a similar manner to the <literal
+      moreinfo="none">disable&lt;propertyName&gt;</literal> and <literal
+      moreinfo="none">validate&lt;propertyName&gt;</literal> methods that we
+      have previously seen - in this case disabling the action under certain
+      conditions, and validating the parameters of the action. For both the
+      user-interfaces shown, disabling the action will result in it being
+      greyed-out on the menu. If the entered set of parameters does not pass
+      the validity test, this will be brought to the user's attention when
+      they attempt to execute the action (e.g. by hitting the OK button),
+      along with an explanatory message.</para>
+
+      <para>By default, the user will be required to specify each of the
+      parameters within the dialog. The programmer may, however, use the
+      <literal moreinfo="none">@Optional </literal>annotation in-line (i.e.
+      immediately before any parameter in the method signature) to specify
+      that that parameter may be left empty.</para>
+    </section>
+
+    <section>
+      <title>Defining Services</title>
+
+      <para>As stated previously all the application code consists either of
+      domain objects or services, with the former typically representing the
+      lions share of the code. Now we'll look at the services.</para>
+
+      <para>Services perform two roles in a [[NAME]] application. First,
+      they provide a place to put functionality that cannot be placed on an
+      instance of a domain object, of which the two most obvious examples
+      are:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>Finding one or more domain objects where you don't have an
+          associated object to navigate from e.g. finding a Customer object by
+          their name or customer number.</para>
+        </listitem>
+
+        <listitem>
+          <para>Creating a new instance of a domain object class, where you
+          don't have an existing object to create it from. Thus, although you
+          might decide that it makes sense to create a new Order object by
+          means of an action on Customer, you will probably want to be able to
+          create a new Customer object without necessarily having any
+          Order.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>To fulfill these requirements we could create two separate
+      services, called, say, CustomerFinder and CustomerFactory. Or we could
+      create a single service called, say, Customers, which has methods to
+      cover both requirements. There's no hard-and-fast rule about how
+      services should be partitioned.</para>
+
+      <para>The second role that services perform within a [[NAME]]
+      application is to bridge domains. The following are examples of what we
+      mean by bridging domains:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>Linking to functionality that already exists, or has to exist,
+          outside of the [[NAME]] application, such as pre-existing
+          services, or functionality within legacy systems.</para>
+        </listitem>
+
+        <listitem>
+          <para>Bridging between technical domains, such as between the object
+          domain and the relational database domain, or the email
+          domain.</para>
+        </listitem>
+
+        <listitem>
+          <para>(Less commonly) Bridging between isolated modelling domains.
+          The [[NAME]] philosophy is to aim, where possible, for a single
+          coherent enterprise object model running within the same application
+          space. Where this is not possible (e.g. for technical or for
+          political reasons), then services may be used to communicate between
+          the domains without requiring common object definitions and/or
+          identities.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>In this section we'll look at how services are defined, and in the
+      next section at how they are used.</para>
+
+      <para>Services are implemented as Java classes, as are domain objects,
+      but they are handled differently by the framework.</para>
+
+      <para>It is good practice to define services as Java interfaces. That
+      way it is possible for the implementation of the service to change over
+      time, without affecting any of the objects that use the service. During
+      development it is often useful to develop a simple 'mock' implementation
+      of a service that can be used either for prototyping or testing
+      purposes; this can then be replaced with a proper implementation as
+      development progresses towards deployment. For example, within the
+      Expenses Processing application, the following Java interface defines a
+      service for sending an email:</para>
+
+      <programlisting format="linespecific">    package org.apache.isis.example.expenses.services;
+
+    public interface EmailSender {
+
+        void sendTextEmail(final String toEmailAddress, final String text);
+    }</programlisting>
+
+      <para>This service definition has just one method, but it could easily
+      have more, such as methods that take a <literal
+      moreinfo="none">List</literal> of recipient addresses, or that can
+      accommodate file attachments. <literal
+      moreinfo="none">JavaMailSender</literal> is an implementation of that
+      service:</para>
+
+      <programlisting format="linespecific">public class JavaMailSender extends AbstractService implements EmailSender {
+
+    private static final String SMTP_HOST_NAME = "localhost";
+    private static final String SMTP_AUTH_USER = "expenses@donotreply.org";
+    private static final String SMTP_AUTH_PWD = "";
+    private static final boolean authenticate = false;
+
+    private class SMTPAuthenticator extends javax.mail.Authenticator {
+        public PasswordAuthentication getPasswordAuthentication() {
+            final String username = SMTP_AUTH_USER;
+            final String password = SMTP_AUTH_PWD;
+            return new PasswordAuthentication(username, password);
+        }
+    }
+
+    public void sendTextEmail(final String toEmailAddress, final String text) {
+        try {
+            final Properties properties = new Properties();
+            properties.put("mail.smtp.host", SMTP_HOST_NAME);
+            properties.put("mail.smtp.auth", authenticate ? "true" : "false");
+            final Authenticator authenticator = authenticate ? new SMTPAuthenticator() : null;
+            final Session session = Session.getDefaultInstance(properties, authenticator);
+            final Message message = new MimeMessage(session);
+            final InternetAddress fromAddress = new InternetAddress(SMTP_AUTH_USER);
+            final InternetAddress toAddress = new InternetAddress(toEmailAddress);
+            message.setFrom(fromAddress);
+            message.setRecipient(Message.RecipientType.TO, toAddress);
+            message.setSubject("Expenses notification");
+            message.setContent(text, "text/plain");
+            Transport.send(message);
+        } catch (AddressException e) {
+            throw new ApplicationException("Invalid email address", e);
+        } catch (MessagingException e) {
+            throw new ApplicationException("Problem sending email", e);
+        }
+    }
+}</programlisting>
+
+      <para>We can see that this service performs a technical bridging role:
+      it bridges between the object domain and an external SMTP server.</para>
+
+      <para>Since there could be multiple implementations of any one service
+      within our code base, [[NAME]] needs to be informed of which
+      services it is to reference when running an application. This is done
+      within the properties files. For example, the <filename
+      class="directory" moreinfo="none">isis.properties</filename>
+      file, which may be found within the <literal
+      moreinfo="none">expenses.app.client\config</literal> directory, contains
+      the property specification:</para>
+
+      <programlisting format="linespecific">isis.services.prefix=org.apache.isis.example.expenses
+isis.services=services.JavaMailSender</programlisting>
+
+      <para>This specifies that the class JavaMailSender is to be referenced
+      as a service within the application. You will find a list of other
+      services being referenced there also. Many of those services are
+      'repositories', and though there is no technical difference between a
+      repository and any other kind of service, repositories play such an
+      important role in [[NAME]] applications, that they are worth
+      exploring in more detail.</para>
+
+      <section>
+        <title>Repositories</title>
+
+        <para>[[NAME]] handles the basic object lifecycle (create, read,
+        update, delete) automatically - there is no need to define your own
+        methods for saving or updating objects, or for retrieving an object
+        that you have a reference to. These mechanisms work the same way
+        irrespective of what technology you are using to persist the objects -
+        such as via Hibernate, natively to a relational database, or via the
+        'XML Object Store'.</para>
+
+        <para>[[NAME]] even provides some simple mechanisms for searching
+        for persisted objects - that also operate the same way, irrespective
+        of the object store. However, a business application will also need
+        more complex search queries that, for reasons of efficiency, will need
+        to be written specifically for the type of object store you are
+        working with.</para>
+
+        <para>Best practice in application design suggests that such queries
+        should be implemented on 'Repository' classes, rather than within the
+        domain classes directly. That way if you change the persistent object
+        store, you can just create a new implementation of the affected
+        Repositories, without having to change any domain classes. [[NAME]]
+        Objects supports this concept. Within the Expenses application you
+        will find the following three repository definitions:</para>
+
+        <programlisting format="linespecific">org.apache.isis.example.expenses.claims.ClaimRepository
+org.apache.isis.example.expenses.employee.EmployeeRepository;
+org.apache.isis.example.expenses.recordedAction.impl.RecordedActionRepository;</programlisting>
+
+        <para>In each case the repository is defined as a Java interface,
+        anticipating the possibility of different implementations. We'll look
+        at the <literal>ClaimRepository</literal> definition:</para>
+
+        <programlisting format="linespecific">public interface ClaimRepository {
+    final static int MAX_CLAIMS = 20;
+    final static int MAX_ITEMS = 10;
+
+    List&lt;Claim&gt; findClaims(final Employee employee, final ClaimStatus status, final String description);
+
+    List&lt;Claim&gt; findRecentClaims(final Employee employee);
+
+    boolean descriptionIsUniqueForClaimant(final Employee employee, final String initialDescription);
+
+    List&lt;ExpenseItem&gt; findExpenseItemsLike(final ExpenseItem item);
+
+    List&lt;Claim&gt; findClaimsAwaitingApprovalBy(Employee approver);
+    
+    ClaimStatus findClaimStatus(String title);
+
+    ExpenseItemStatus findExpenseItemStatus(String title);
+}</programlisting>
+
+        <para>This interface defines some seven method signatures for
+        retrieving <literal>Claim</literal>s and
+        <literal>ExpenseItem</literal>s. Note that there is no hard rule about
+        the scope of a single Repository - we could have decided to separate
+        this into a <literal>ClaimRepository</literal> and an <literal
+        moreinfo="none">ExpenseItemRepository</literal> if that offered us
+        some advantage.</para>
+
+        <para>The example application contains two concrete implementations of
+        <literal>ClaimRepository</literal>:</para>
+
+        <programlisting format="linespecific">org.apache.isis.example.expenses.services.inmemory.ClaimRepositoryInMemory
+org.apache.isis.example.expenses.services.hibernate.ClaimRepositoryHibernate</programlisting>
+
+        <para>The first of these is intended for use with a standalone
+        prototype - with a relatively small number of object instances, all
+        held in memory. So the finder methods can be written 'naively' - to
+        enumerate through all the objects in a class and find the match(es).
+        The following is its implementation of the
+        <literal>findClaimsAwaitingApprovalBy</literal> method:</para>
+
+        <programlisting format="linespecific">    public List&lt;Claim&gt; findClaimsAwaitingApprovalBy( final Employee approver ) {
+        return allMatches(
+            Claim.class, 
+            new Filter() {
+                public boolean accept(final Object obj) {
+                    Claim claim = (Claim) obj;
+                    return claim.getStatus().isSubmitted() &amp;&amp; claim.getApprover() == approver;
+                }
+            });
+    }</programlisting>
+
+        <para>This delegates to an <literal>allMatches</literal> method,
+        inherited from <literal>AbstractFactoryAndRepository</literal>, and
+        use a <literal>Filter</literal> object (created in-line) to compare to
+        each instance of <literal>Claim</literal> held in memory. Such methods
+        are very simple to write and debug (because they can invoke methods on
+        the objects being searched, such as <literal>isSubmitted</literal>
+        here), but they would not operate efficiently for large numbers of
+        objects.</para>
+
+        <para><literal>ClaimRepositoryHibernate</literal> is written to work
+        with the Hibernate Object Store and can work efficiently at large
+        scale. Here is its the <literal>findClaimsAwaitingApprovalBy</literal>
+        method:</para>
+
+        <programlisting format="linespecific">public List&lt;Claim&gt; findClaimsAwaitingApprovalBy( final Employee approver ) {
+    final Criteria criteria = hibernateHelper.createCriteria(Claim.class);
+    criteria.
+        add(Restrictions.eq("approver", approver)).
+        createCriteria("status").
+        add(Restrictions.eq("titleString", ClaimStatus.SUBMITTED));
+    return hibernateHelper.findByCriteria(criteria, Claim.class);
+}</programlisting>
+
+        <para>This implementation uses a <literal>Criteria</literal> object, a
+        class provided by the <ulink url="www.hibernate.org">Hibernate</ulink>
+        framework.</para>
+
+        <para>Both <literal>ClaimRepositoryInMemory</literal> and
+        <literal>ClaimRepositoryHibernate</literal> inherit from
+        <literal>ClaimRepositoryAbstract</literal>, which inherits from
+        <literal>AbstractFactoryAndRepository</literal> and also implements
+        the <literal>ClaimRepository</literal> interface. This pattern is not
+        a requirement - the implementations do not need to inherit from any
+        framework class, they can just implement the required Repository
+        interface natively. However the advantage of this pattern is that some
+        simple query methods can be written generically, as shown in these two
+        examples:</para>
+
+        <programlisting format="linespecific">public List&lt;ExpenseItem&gt; findExpenseItemsOfType(final Employee employee, final ExpenseType type) {
+    final List&lt;Claim&gt; claims = findClaims(employee, null, null);
+    final List&lt;ExpenseItem&gt; items = new ArrayList&lt;ExpenseItem&gt;();
+    for (final Claim claim : claims) {
+        ExpenseItem pattern = (ExpenseItem) newTransientInstance((Class) type.correspondingClass());
+        pattern.setClaim(claim);
+        List list = (List) uniqueMatch((Class) type.correspondingClass(), pattern, EXCLUDING_SUBCLASSES);
+        items.addAll(list);
+    }
+    return items;
+}
+
+public ClaimStatus findClaimStatus(String title) {
+    return uniqueMatch(ClaimStatus.class, title, EXCLUDING_SUBCLASSES);
+}</programlisting>
+
+        <para>These two query methods both delegate to
+        <literal>uniqueMatch</literal>, inherited from
+        <literal>AbstractFactoryAndRepository</literal>, but different,
+        overloaded, versions of that method.
+        <literal>findExpenseItemsOfType</literal> invokes
+        <literal>uniqueMatch</literal> with a pattern - an instance of
+        <literal>ExpenseItem</literal> that has been set up with the fields
+        where a match is required. <literal>findClaimStatus</literal> invokes
+        <literal>uniqueMatch</literal> with a <literal>String</literal>
+        representing the title of the object required. The implementation of
+        both of these forms of query is delegated to the object store, in a
+        manner that is transparent to the application programmer. So, if the
+        nature of the query can be represented in the form of a find by title,
+        or a find by pattern, then it is advantageous to use these methods on
+        <literal>AbstractFactoryAndRepository</literal>. Otherwise you can
+        write specialised methods on the respective repository
+        implementations.</para>
+
+        <para>As with all services, we need to inform the framework of the
+        existence and intent of these implementations, via the properties
+        files. Within <filename class="directory"
+        moreinfo="none">isis.properties</filename> you will
+        find:</para>
+
+        <programlisting format="linespecific">isis.services=services.inmemory.ClaimRepositoryInMemory</programlisting>
+
+        <para>and within <filename class="directory"
+        moreinfo="none">persistor_hibernate.properties</filename> you will
+        find:</para>
+
+        <programlisting format="linespecific">isis.services = services.hibernate.ClaimRepositoryHibernate</programlisting>
+
+        <para><filename class="directory"
+        moreinfo="none">persistor_hibernate.properties</filename> is only
+        referenced if the application is run with the Hibernate Object Store,
+        in which case the framework will recognise that
+        <literal>ClaimRepositoryHibernate</literal> is intended to replace
+        <literal>ClaimRepositoryInMemory</literal> as the implementation to
+        use.</para>
+      </section>
+
+      <section>
+        <title>Factories</title>
+
+        <para>A Factory is just the name we give to a kind of service that
+        specialises in the creation of new objects, of one or more kinds. It
+        is not necessary to use a Factory in order to create objects within
+        [[NAME]]: we may invoke the methods
+        <literal>newTransientInstance</literal> from within a method on a
+        domain object or within any service.</para>
+
+        <para>However, if there is a need to create a type of object from
+        several different places in the application, and there are common
+        steps involved, then it is good practice to delegate this to a
+        Factory. Within [[NAME]] a Factory is just another service, it
+        doesn't have any special status. For example, within the Expenses
+        application, new <literal>Claim</literal>s and new
+        <literal>ExpenseItem</literal>s are created via the
+        <literal>ClaimFactory</literal>. However, new
+        <literal>RecordedAction</literal>s are created in the
+        <literal>RecordedActionService</literal>. Note that
+        <literal>ClaimFactory</literal> is specified as a class rather than an
+        interface, because we have no particular reason to anticipate
+        different implementations of the factory.</para>
+      </section>
+    </section>
+
+    <section>
+      <title>Using services</title>
+
+      <para>Services are used within [[NAME]] in three ways:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>Injected into domain objects</para>
+        </listitem>
+
+        <listitem>
+          <para>Directly accessible to the user</para>
+        </listitem>
+
+        <listitem>
+          <para>To contribute actions to domain objects</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>We'll look at these three in turn.</para>
+
+      <section>
+        <title>Injecting Services into domain objects</title>
+
+        <para>Objects may need access to services, such as repositories for
+        finding related objects, or for calling functionality from outside the
+        domain model. [[NAME]] uses the 'dependency injection' model.
+        Each object merely needs to provide a <literal
+        moreinfo="none">set</literal> method for each type of service that it
+        requires. For example, within the Employee object there is a code
+        region labelled <literal moreinfo="none">Injected
+        Services</literal>:</para>
+
+        <programlisting format="linespecific">// {{ Injected Services
+    // {{ Injected: RecordActionService
+    private RecordActionService recordActionService;
+
+    protected RecordActionService getRecordActionService() {
+        return this.recordActionService;
+    }
+
+    public void setRecordActionService(final RecordActionService recordActionService) {
+        this.recordActionService = recordActionService;
+    }
+    // }}
+
+    // {{ Injected: UserFinder
+    private UserFinder userFinder;
+
+    protected UserFinder getUserFinder() {
+        return this.userFinder;
+    }
+
+    public void setUserFinder(final UserFinder userFinder) {
+        this.userFinder = userFinder;
+    }
+    // }}
+// }}</programlisting>
+
+        <para>In this case, the Employee object has specified that it requires
+        two services to be injected: a <literal
+        moreinfo="none">RecordActionService</literal> and a <literal
+        moreinfo="none">UserFinder</literal>. Whenever an instance of Employee
+        is created, or retrieved from the object store, [[NAME]] will
+        inject the implementation that it knows about (as specified in
+        properties) for each type of service required. Note that, unlike the
+        other properties we have looked at, <literal
+        moreinfo="none">get</literal> methods may be <literal
+        moreinfo="none">protected</literal>, because the property is not
+        displayed. (Strictly speaking a <literal moreinfo="none">get</literal>
+        is often not needed here - as the injected service may be accessed via
+        the variable - but it is considered to be good practice.)</para>
+
+        <para>From within the object we can then call any of the methods
+        defined for those types of service. For example, we can see that the
+        <literal>hideEmailAddress</literal> method makes a call (via
+        <literal>employeeIsCurrentUser</literal>) to the
+        <literal>UserFinder</literal> service:</para>
+
+        <programlisting format="linespecific">public boolean hideEmailAddress() {
+    return !employeeIsCurrentUser();
+}
+
+private boolean employeeIsCurrentUser() {
+    return getUserFinder().currentUserAsObject() == this;
+}</programlisting>
+      </section>
+
+      <section>
+        <title>Making services directly accessible to the user</title>
+
+        <para>Services may be made available directly to the user. On the DND
+        user interface these appear as the large icons on the desktop; on the
+        HTML user interface (that is, as styled by the default CSS) these
+        appear as the tabs across the top of the screen. Which services are
+        made available to a particular user are defined in 'perspectives'
+        within a user profile. Within the Fixture project the class
+        <literal>ExplorationUserProfileFixture</literal> defines the
+        perspectives for various defined prototype users:</para>
+
+        <programlisting format="linespecific">public class ExplorationUserProfileFixture extends UserProfileFixture {
+
+    @Override
+    protected void installProfiles() {
+        ...
+        Profile svenProfile = newUserProfile();
+        Perspective claimsPerspective = svenProfile.newPerspective("Claims");
+        claimsPerspective.addToServices(Claims.class);
+        claimsPerspective.addToServices(Employees.class);
+        saveForUser("sven", svenProfile);
+        ...
+
+    }
+}</programlisting>
+
+        <para>The above example specifies that the user 'sven' is to be given
+        a perspective called 'Claims', which gives him direct access to two
+        services: <literal>ClaimStartPoints</literal> and
+        <literal>EmployeeStartPoints</literal>. If we look at the second of
+        those, we can see that it defines two actions:
+        <literal>findEmployeeByName</literal> and
+        <literal>me</literal>:</para>
+
+        <programlisting format="linespecific">  @Named("Employees")
+  public class EmployeeStartPoints extends AbstractService {
+      // {{ Title &amp; ID
+
+      // {{ Injected Services
+
+      @MemberOrder(sequence = "2")
+      public List&lt;Employee&gt; findEmployeeByName(@Named("Name (or start of Name)")
+      final String name) {
+          List&lt;Employee&gt; results = employeeRepository.findEmployeeByName(name);
+          if (results.isEmpty()) {
+              warnUser("No employees found matching name: " + name);
+              return null;
+          }
+          return results;
+      }
+
+      @Executed(Executed.Where.LOCALLY)
+      public Employee me() {
+          Employee me = employeeRepository.me();
+          if (me == null) {
+              warnUser("No Employee representing current user");
+          }
+          return me;
+      }
+  }</programlisting>
+
+        <para>Both of these methods delegate to methods on the
+        <literal>EmployeeRepository</literal>, which has been injected
+        (services may be injected into other services, just as into domain
+        objects). Note that it is not necessary to define specific services to
+        be provided directly to the user - we could provide the user with
+        direct access to the Repositories, Factories or other services
+        specified within the application. Creating dedicated user-oriented
+        service definitions just helps us to separate the concerns. Calling
+        them 'Start Points' is also just a convention.</para>
+      </section>
+
+      <section>
+        <title>Using services to contribute actions to domain objects</title>
+
+        <para>The screens below show the action menu on the Claim object, as
+        rendered by the two different user interfaces:</para>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata align="center" contentwidth="40%"
+                       fileref="images/claim-contributed-actions.png"
+                       format="PNG" />
+          </imageobject>
+        </mediaobject>
+
+        <para>This menu has a sub-menu, entitled 'Recorded Actions',
+        containing, in this case, a single method 'All Recorded Actions'.
+        Sub-menus in [[NAME]] are 'contributed' by services; the actions
+        in the sub-menus are described as 'contributed actions'. In this case
+        the actions are contributed the service
+        <literal>RecordedActionContributedActions</literal>:</para>
+
+        <programlisting format="linespecific">  @Named("Recorded Actions")
+  public class RecordedActionContributedActions extends AbstractService {
+
+      // {{ Injected Services
+ 
+      public List&lt;RecordedAction&gt; allRecordedActions(RecordedActionContext context) {
+          return recordedActionRepository.allRecordedActions(context);
+      }
+  }</programlisting>
+
+        <para>The method <literal>allRecordedActions</literal> takes a
+        <literal>RecordedActionContext</literal> as a parameter, and will
+        return all the <literal>RecordedAction</literal>s associated with that
+        object. Note that <literal>RecordedActionContext</literal> is an
+        interface that defines no methods - it is purely a type
+        definition:</para>
+
+        <programlisting format="linespecific">public interface RecordedActionContext {
+}</programlisting>
+
+        <para>However, this interface is implemented by two classes:
+        <literal>Employee</literal> and <literal>Claim</literal>. The net
+        result of this is that the action 'All Recorded Actions' will be
+        contributed to each instance of <literal>Employee</literal> and of
+        <literal>Claim</literal>. By default, this would appear in a sub-menu
+        named after the service on which the method was defined (i.e.
+        'Recorded Action Contributed Actions'), but in this case we have used
+        the <literal moreinfo="none">@Named</literal> annotation to override
+        this and render the service name, and hence the sub-menu name, simply
+        as 'Recorded Actions'.</para>
+
+        <para>We can also see that this method delegates its execution to the
+        <literal>RecordedActionRepository</literal>, which has been injected
+        as a service. You are not required to follow this pattern, or this
+        naming convention. In fact, if the
+        <literal>allRecordedActions</literal> method on
+        <literal>RecordedActionRepository</literal> was not
+        <literal>@Hidden</literal>, then it would have been contributed
+        automatically - without the need for defining
+        <literal>RecordedActionContributedActions</literal>. We have defined
+        the latter purely to help convey intent and manage our code
+        base.</para>
+
+        <para>The rule is that any method defined on any service that the user
+        is authorised to access <!-- 
+         (see section on <ulink
+        url="managing-security.html">authorization</ulink>) 
+         -->
+        and is not hidden,
+        will be contributed to any object of a type that features as any of
+        the parameters to that method.</para>
+
+        <para>This is a very powerful feature of [[NAME]], but it is one
+        that takes a bit of getting used to. In some respects it is a little
+        bit like Aspect Oriented Programming (AOP), in that it allows an
+        object effectively to inherit capabilities from several different
+        sources. However, this all takes place at run-time, not at compile
+        time.</para>
+
+        <para>In a more complex application, it might well be that a domain
+        object might have several contributed sub-menus, each containing
+        several methods. Designing an application this way allows us to keep
+        the model well partitioned. In this very simple example, it has
+        allowed us to keep the part of the model concerned with recording
+        actions very separate from the other parts of the model.</para>
+      </section>
+    </section>
+
+    <section>
+      <title>Fixtures</title>
+
+      <para>Fixtures are used to set up objects within the code based,
+      principally for use within prototyping and or testing. [[NAME]]
+      provides specific support for using fixtures. The following code shows a
+      fixture class that sets up one claim:</para>
+
+      <programlisting format="linespecific">public class SvenClaim1NewStatus extends AbstractClaimFixture {
+    
+    public static Employee SVEN;
+    public static Employee DICK;
+    public static Claim SVEN_CLAIM_1;
+
+    @Override
+    public void install() {
+        SVEN = EmployeeFixture.SVEN;
+        DICK = EmployeeFixture.DICK;
+
+        SVEN_CLAIM_1 =createNewClaim(SVEN, DICK, "28th Mar - Sales call, London", ProjectCodeFixture.CODE1, new Date(2007,4,3));
+        Date mar28th = new Date(2007,3,28);
+        addTaxi(SVEN_CLAIM_1, mar28th, null, 8.50, "Euston", "Mayfair", false);
+        addMeal(SVEN_CLAIM_1, mar28th, "Lunch with client", 31.90);
+        addTaxi(SVEN_CLAIM_1, mar28th, null, 11.00, "Mayfair", "City", false);
+    } 
+}</programlisting>
+
+      <para>This inherits from <literal>AbstractClaimFixture</literal>, which
+      provides the helper methods such as <literal>createNewClaim</literal>,
+      and which inherits in turn from <literal>AbstractFixture</literal>, a
+      class in the [[NAME]] application library. However, there is no
+      need to follow this pattern: a fixture may be any class that has an
+      <literal>install</literal> method.</para>
+
+      <para>Fixtures may be composite, as we can see in this example:</para>
+
+      <programlisting format="linespecific">public class SvenClaims_All extends AbstractClaimFixture {
+    
+    public SvenClaims_All() {
+        addFixture(new SvenClaim1NewStatus());
+        addFixture(new SvenClaim2Submitted());
+        addFixture(new SvenClaim5New());
+        addFixture(new SvenClaim3Returned());
+        addFixture(new SvenClaim4Approved());
+    }  
+    
+    public void install() {}
+}</programlisting>
+
+      <para>This fixture has had five other fixtures added to it. The
+      <literal>install</literal> method is empty: [[NAME]] will
+      automatically call <literal>install</literal> on each of the fixtures
+      that has been added to this composite fixture. This pattern makes it
+      easy to manage large fixtures, and multiple sets of (potentially
+      overlapping) fixtures, both for prototyping and for testing.</para>
+
+      <para>As with services, [[NAME]] needs to be instructed which
+      fixtures it should use when running an application. This may be done in
+      the properties files, for example:</para>
+
+      <programlisting format="linespecific">isis.fixtures.prefix=org.apache.isis.example.expenses.fixtures
+isis.fixtures=ExplorationPerspectiveFixture, RefdataFixture, EmployeeFixture,  SvenClaims_All</programlisting>
+
+      <para>Note that this also specifies the
+      <literal>ExplorationPerspectiveFixture</literal>, which we looked at
+      earlier.</para>
+
+      <para>Fixtures may also be specified as a command line parameter 
+      <!-- 
+       (see
+      section on <ulink url="command-line-parameters.html">command line
+      parameters</ulink>) 
+       -->
+      when launching the application from the command
+      line; composite fixtures are especially handy in this
+      circumstance.</para>
+    </section>
+  </section>
+</article>

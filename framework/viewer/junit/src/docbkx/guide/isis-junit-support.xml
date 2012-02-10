@@ -1,0 +1,427 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
+"file:./src/docbkx/dtd-4.5/docbookx.dtd">
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+-->
+<book>
+  <bookinfo>
+    <title><?eval ${docbkxGuideTitle}?></title>
+
+    <subtitle><?eval ${docbkxGuideSubTitle}?></subtitle>
+
+    <releaseinfo><?eval ${project.version}?></releaseinfo>
+
+    <authorgroup>
+      <author>
+        <firstname>Dan</firstname>
+
+        <surname>Haywood</surname>
+      </author>
+
+      <author>
+        <firstname>Kevin</firstname>
+
+        <surname>Meyer</surname>
+      </author>
+    </authorgroup>
+
+    <legalnotice>
+      <para>Permission is granted to make and distribute verbatim copies of
+      this manual provided that the copyright notice and this permission
+      notice are preserved on all copies.</para>
+    </legalnotice>
+  </bookinfo>
+
+  <!-- front matter -->
+
+  <toc></toc>
+
+  <preface id="preface">
+    <title>Preface</title>
+
+    <para><emphasis>Apache Isis</emphasis> is designed to allow programmers
+    rapidly develop domain-driven applications following the <ulink
+    url="http://en.wikipedia.org/wiki/Naked_Objects">Naked Objects</ulink>
+    pattern. It is made up of a core framework plus a number of alternate
+    implementations, and supports various viewers and object stores. Apache
+    Isis is hosted at the <ulink url="http://incubator.apache.org/isis">Apache
+    Foundation</ulink>, and is licensed under <ulink
+    url="http://www.apache.org/licenses/LICENSE-2.0.html">Apache Software
+    License v2</ulink>.</para>
+
+    <para>This guide is written for programmers looking to test
+    <emphasis>Apache Isis</emphasis> applications using JUnit.</para>
+  </preface>
+
+  <!-- main content -->
+
+  <chapter id="chp.Intro">
+    <title>Introduction</title>
+
+    <abstract>
+      <para>What's it for?</para>
+    </abstract>
+
+    <sect1>
+      <title>Unit tests vs Acceptance tests vs End-to-end tests</title>
+
+      <para>Pick up any good book on Test Driven Design (TDD) or attend any
+      course of developing software using tests, and you should find a
+      reasonable definition of a "unit test".</para>
+
+      <para>A unit test is usually a simple test that confirms that a
+      particular class method returns an expected value, sometimes based on
+      the class state, sometimes based only on input parameters. The point is
+      that the unit test does not make any assumptions about usability from an
+      end-user's perspective.</para>
+
+      <para>An acceptance test (see GOSS, <footnote>
+          <para>"Growing Object-Oriented Software, Guided By Tests" by Steve
+          Freeman and Nat Pryce, ISBN 987-0-321-50362-6</para>
+        </footnote>) is more about confirming that the customer's (end user /
+      your boss) expectations are being satisfied. As discussed in GOSS [page
+      10], sometimes the role of acceptance tests can be fulfilled by
+      "end-to-end tests", which exercise the entire application.</para>
+
+      <para>A key difference between a unit test and an acceptance test is
+      that the latter test the code from the <emphasis>end-user's
+      perspective</emphasis>.</para>
+
+      <para>The Isis JUnit viewer fulfils this purpose very nicely.</para>
+
+      <para>The JUnit viewer uses JUnit integrations and supporting classes of
+      the Wrapper programming model . The idea of these utilities is to wrap
+      your domain objects in proxies that apply the same rules as an
+      <emphasis>Apache Isis</emphasis> viewer. For example, if you try to
+      change a property or invoke an action that is disabled, then the proxy
+      will throw an exception. You write your test to pass if the exception is
+      thrown, and failed otherwise (e.g. using
+      <code>@Test(expected=DisabledException.class)</code>).</para>
+    </sect1>
+  </chapter>
+
+  <chapter>
+    <title>The JUnit Viewer</title>
+
+    <abstract>
+      <para>Basics</para>
+    </abstract>
+
+    <sect1>
+      <title>Wrapping your domain classes and injected services</title>
+
+      <para>To ensure that your domain classes (and injected services) are
+      checked to ensure that "Can you see it, can you use it, can you do it"
+      are enforced, the relevant class instances must be wrapped:</para>
+
+      <para>Include the following in your test class to have the Isis test
+      framework inject a WrapperFactory instance:</para>
+
+      <para><programlisting>    private WrapperFactory wrapperFactory;
+
+    protected WrapperFactory getWrapperFactory() {
+        return wrapperFactory;
+    }
+
+    public void setWrapperFactory(WrapperFactory wrapperFactory) {
+        this.wrapperFactory = wrapperFactory;
+    }
+
+    protected &lt;T&gt; T wrapped(T obj) {
+        return wrapperFactory.wrap(obj);
+    }</programlisting></para>
+
+      <para>Then, to wrap your domain classes, for example:</para>
+
+      <programlisting>  public Member findMember(String initials, String surname) {
+   Member member = wrapped(members.findMember(initials, surname)); 
+   return member; 
+  } </programlisting>
+
+      <para>Now, when your test calls code that the user would not be able to,
+      the wrapped class throws an exception!</para>
+    </sect1>
+  </chapter>
+
+  <chapter>
+    <title>Inspecting Domain Behaviour</title>
+
+    <abstract>
+      <para>Learning from code coverage results</para>
+    </abstract>
+
+    <sect1>
+      <title>A domain example: Member.java</title>
+
+      <para>Consider the following class fragment:</para>
+
+      <programlisting>public class Member {
+    // {{ MemberLevel
+    private MemberLevel memberLevel;
+
+    public MemberLevel getMemberLevel() {
+        return memberLevel;
+    }
+
+    public void setMemberLevel(final MemberLevel memberLevel) {
+        this.memberLevel = memberLevel;
+    }
+
+    public MemberLevel defaultMemberLevel() {
+        return MemberLevel.GUEST;
+    }
+
+    public boolean hideMemberLevel() {
+         if (authentication.hasSecretaryRights()) {
+            return false;
+        }
+        return true;
+   }
+
+    public String disableMemberLevel() {
+        if (this.equals(authentication.loggedInMember())) {
+            if (authentication.hasSecretaryRights()){
+                return "Can not edit own member level";
+            }
+        }
+        return null;
+    }
+}</programlisting>
+
+      <para>ToDo: Unit tests can be written to ensure 100% code coverage
+      without consideration of whether the tests are
+      <emphasis>meaningful</emphasis>.</para>
+
+      <para>In the above example, a unit test with 100% coverage will call the
+      <code><methodname>disableMemberLevel</methodname></code> method with
+      <code>authentication.hasSecretaryRights</code> true and false, without
+      possibly realising that the hideMemberLevel will ensure that the
+      property is hidden from non-Secretaries!</para>
+
+      <para>While it is not guaranteed (it depends on how the checks are
+      structured), the JUnit viewer, implementing acceptance tests, will
+      demonstrate, in this case, that the <code><code>if
+      (authentication.hasSecretaryRights())</code></code> check is not needed
+      in <methodname>disableMemberLevel</methodname> (even though all login
+      combinations are tried, that condition will never be called)!</para>
+    </sect1>
+
+    <sect1>
+      <title>Unit Tests</title>
+
+      <para></para>
+    </sect1>
+  </chapter>
+
+  <appendix>
+    <title>Replacing Services</title>
+
+    <para>The default test runner (IsisTestRunner) uses No-op services for
+    authenticator, authorization and it uses the in-memory object
+    store.</para>
+
+    <para>These can be replaced by annotations: </para>
+
+    <sect1>
+      <title>Replacing the Persistor</title>
+
+      <para>If, for example, you wish to use a real database, and you want to
+      run your tests against that database, then you'll want to use the real
+      SQL Objectstore, for example. In order to do so, you'll need to provide
+      a replacement installer. There is subtlety here - you need to override
+      the <methodname>createContainer</methodname> method so that it installs
+      wrapped container, for example, using the
+      "<classname>SqlPersistorInstaller</classname>":</para>
+
+      <para><programlisting>public class SqlPersistorInstallerWithinJunit extends SqlPersistorInstaller {
+    /**
+     * Returns a {@link DomainObjectContainerHeadlessViewer}.
+     */
+    @Override
+    protected DomainObjectContainer createContainer(final IsisConfiguration configuration) {
+        return new DomainObjectContainerWrapperFactory();
+    }
+
+}</programlisting>Then you can run your test with:</para>
+
+      <para><programlisting>@RunWith(IsisTestRunner.class)
+@Persistor(SqlPersistorInstallerWithinJunit.class)
+public class RealDatabaseTester {
+ ...
+}</programlisting></para>
+    </sect1>
+
+    <sect1>
+      <title>Replacing the Authenticator</title>
+
+      <para>If you've written a new Authenticator, you'll want to test
+      it.</para>
+
+      <para>You'll need to specify your replacement
+      <classname>AuthenticationManagerInstaller</classname>:</para>
+
+      <programlisting>public class RestAuthenticatorInstaller extends AuthenticationManagerStandardInstallerAbstractForDfltRuntime {
+
+    public static final String NAME = "rest";
+
+    public RestAuthenticatorInstaller() {
+        super(NAME);
+    }
+
+    @Override
+    protected List&lt;Authenticator&gt; createAuthenticators(final IsisConfiguration configuration) {
+        return Lists.&lt;Authenticator&gt; newArrayList(new RestAuthenticator(configuration));
+    }
+
+}</programlisting>
+
+      <para>where "<classname>RestAuthenticator</classname>" is the new
+      authenticator you want to test.</para>
+
+      <para>Then you can run your test with:</para>
+
+      <para><programlisting>@RunWith(IsisTestRunner.class)
+@Authenticator(RestAuthenticatorInstaller.class)
+public class RealAuthenticatorTester {
+ ...
+}</programlisting>Or you can just specify the default authenticator installer,
+      e.g. "<classname>FileAuthenticationManagerInstaller</classname>"</para>
+    </sect1>
+
+    <sect1>
+      <title>Authorizer</title>
+
+      <para>Follow the same process to install your desired
+      AuthorizationManagerInstaller.</para>
+    </sect1>
+  </appendix>
+
+  <appendix>
+    <title>Example</title>
+
+    <abstract>
+      <para>Class Fragments</para>
+    </abstract>
+
+    <sect1 id="sec.module-ui">
+      <title>Abstract Test Class</title>
+
+      <para>Specify the test class to use, and the domain
+      services:<programlisting>@RunWith(IsisTestRunner.class)
+
+@Services({ @Service(MemberRepositoryDefault.class), @Service(AuthenticationFixtureClass.class) })
+
+public abstract class AbstractMemberTest { 
+    // Test support
+    private WrapperFactory wrapperFactory;
+
+    protected WrapperFactory getWrapperFactory() {
+        return wrapperFactory;
+    }
+
+    public void setWrapperFactory(WrapperFactory wrapperFactory) {
+        this.wrapperFactory = wrapperFactory;
+    }
+
+    protected &lt;T&gt; T wrapped(T obj) {
+        return wrapperFactory.wrap(obj);
+    }
+
+    // domain specific
+    protected Members members;
+    protected Members unWrappedMembers;
+
+    protected Member unWrappedLoggedInMember;
+    protected Member wrappedLoggedInMember;
+
+    protected Authentication authentication;
+    protected Authentication unWrappedAuthentication;
+
+
+    // Test support - domain
+    public void setMemberRepository(final Members members) {
+        this.unWrappedMembers = members;
+    }
+
+    public void setAuthentication(final Authentication authentication) {
+        this.unWrappedAuthentication = authentication;
+    }
+
+
+    @Before
+    public void wrapInjectedServices() throws Exception {
+        members = wrapped(unWrappedMembers);
+        authentication = wrapped(unWrappedAuthentication);
+    }
+
+    // Domain specific - login requires authentication.
+    public Member doLogin(String username) {
+        Member member = unWrappedMembers.findMember(username);
+        unWrappedLoggedInMember = unWrappedAuthentication.login(member);
+        wrappedLoggedInMember = wrapped(unWrappedLoggedInMember);
+        return wrappedLoggedInMember;
+    }
+}</programlisting></para>
+
+      <para>The Isis application framework automatically injects the Members
+      repository and the Authentication class, as specified by the
+      line:</para>
+
+      <programlisting>@Services({ @Service(MemberRepositoryDefault.class), @Service(AuthenticationFixtureClass.class) })</programlisting>
+
+      <para>Then, the test class wraps them (thus enabling enforcement of
+      applib rules):</para>
+
+      <programlisting>    @Before
+    public void wrapInjectedServices() throws Exception {
+        members = wrapped(unWrappedMembers);
+        authentication = wrapped(unWrappedAuthentication);
+    }</programlisting>
+
+      <para>The "doLogin" function is a helper method used by the
+      AbstractMember implementations, to login a specific user (which, in
+      turn, determines the user roles and hence what functionality is to be
+      enabled, etc.).</para>
+    </sect1>
+
+    <sect1>
+      <title>Domain Test Class</title>
+
+      <para>A simple domain test to confirm that a "normal" member can not
+      edit their own initials (only the institute secretary can edit certain
+      details, which require proof of identity).<programlisting>// Specify the fixtures to load:
+@Fixtures({ @Fixture(MembershipFixture.class)}) 
+
+public class MemberNormalTest extends AbstractMemberTest {
+
+    @Before
+    public void setUp() {
+        doLogin("voter@saip");
+    }
+
+    @Test(expected = DisabledException.class)
+    public void memberCanNotChangeOwnInitials() throws Exception {
+        wrappedLoggedInMember.setInitials("X");
+        fail("Should have been disabled");
+    }
+
+}</programlisting></para>
+    </sect1>
+  </appendix>
+</book>

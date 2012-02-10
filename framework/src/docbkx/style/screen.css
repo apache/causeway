@@ -1,0 +1,244 @@
+/*
+    Licensed to the Apache Software Foundation (ASF) under one or more contributor 
+    license agreements. See the NOTICE file distributed with this work for additional 
+    information regarding copyright ownership. The ASF licenses this file to 
+    you under the Apache License, Version 2.0 (the "License"); you may not use 
+    this file except in compliance with the License. You may obtain a copy of 
+    the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required 
+    by applicable law or agreed to in writing, software distributed under the 
+    License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS 
+    OF ANY KIND, either express or implied. See the License for the specific 
+    language governing permissions and limitations under the License. 
+*/
+
+BODY {
+	font-family: Tahoma, Arial, Sans-Serif;
+	margin-left: 50px;
+	margin-right: 70px;
+}
+
+/*
+div.figure 
+{
+    display: block;
+    margin-left: 3em;
+    margin-right: 3em;
+    margin-bottom: 3em;
+    padding: 1em;
+    font-size: 80%;
+    text-decoration: none;
+    border: 1px solid #330099;  
+}
+*/
+h1,h2,h3,h4 {
+	color: #330099;
+}
+
+H1 {
+	font-size: 140%;
+	margin-top: -8px;
+}
+
+H2 {
+	margin-top: 25px;
+}
+
+H3 {
+	font-size: 100%;
+	border-bottom: 1px solid #003399;
+}
+
+H4 {
+	font-size: 80%;
+	border-bottom: 0px solid lightgray;
+}
+
+path {
+	color: #6600CC;
+	font: monospaced;
+}
+
+p.block-label {
+	font-size: 80%;
+	font-style: italic;
+	margin-bottom: -13px;
+}
+
+div.block {
+	margin-left: 10px;
+}
+
+/*
+table { 		width: 100%;}
+
+td.layout {		font-size: 100% ;background-color: white; border: 0px; align: top;}
+
+td.header {		padding-top: 10px;
+			padding-bottom: 13px;}
+
+td.footer { 	background-color: white; border: 0px;}
+
+td.footer p { 	font-size: 70%; color: #666; margin-top: 30px;
+			margin-bottom: 20px;}
+
+tr.layout {		background-color: red; margin-top: 50px; margin-bottom: 50px; }
+
+td {			font-size: 80%;  background-color: #ddd;
+   			padding-left: 1em; padding-right: 1em; }
+
+th {			font-size: 80%; background-color: #aaa;
+  			text-decoration: none;}
+*/
+img.layout {
+	margin-left: -10px;
+}
+
+p {
+	margin-top: 0px;
+}
+
+p,li {
+	font-size: 100%;
+}
+
+p.b {
+	color: #333;
+}
+
+ul {
+	margin-bottom: 10px;
+}
+
+li {
+	margin-bottom: 0px;
+	clear: both;
+}
+
+img {
+	margin: 0;
+	margin-left: 6px;
+}
+
+img.border {
+	margin-left: 0px;
+}
+
+img.wrapped {
+	margin-right: 10px;
+	margin-bottom: 10px;
+	float: left;
+	clear: left;
+}
+
+pre {
+	background: #eeeeee none repeat scroll 0%;
+	border: 1px solid #dddddd;
+	color: #330099;
+	font-family:  Andale Mono, Lucida Typewriter, Monospaced, Courier;
+	font-size: 90%;	margin-left: 0.0in;
+	margin-right: 0.25in;
+	padding: 8px;
+	clear: both;
+}
+
+pre.b {
+	color: black;
+}
+
+pre.property-listing {
+	background: #ffdddd;
+}
+
+pre.command-listing {
+	background: #ddffdd;
+}
+
+pre.program-listing {
+	background: #ddddff;
+}
+
+pre.output-listing {
+	background: #ffddff;
+}
+
+code {
+	color: #6600CC;
+	font-family: Andale Mono, Lucida Typewriter, Monospaced, Courier;
+}
+
+.class,.method {
+	font-family: Andale Mono, Lucida Typewriter, Monospaced, Courier;
+	color: blue
+}
+
+.path {
+	font-family: Andale Mono, Lucida Typewriter, Monospaced, Courier;
+	color: green
+}
+/*
+div.navigation {
+	font-size: 80%;
+	margin:5px 0 35px 0;
+	color: black;
+	text-align:center;
+	width:100%;
+}
+
+a.navigation {
+	margin: 0 20px;
+	color: darkGray;
+}
+
+a.navigation:hover {
+	color: blue;
+}
+
+ul.content {
+	border:1px solid blue;
+	clear:right;
+	content:"Contents";
+	float:right;
+	margin:8px;
+	padding:4px;
+	position:relative;
+}
+*/
+
+
+
+dl {
+	margin-left: 20px;
+}
+
+dt {
+	font-style: italic;
+	margin: 0;
+}
+
+dd {
+	margin-left: 25px;
+}
+
+variablelist.title {
+	font-style: italic;
+	font-size: 80%;
+	margin 0px;
+}
+
+
+
+table {
+	border-collapse: collapse;
+}
+
+td, th {
+	border: none;
+	padding: 4px 30px 4px 8px;
+
+}
+
+.mediaobject img {
+    border: 1px solid #330099;
+    margin-bottom: 2em;
+    width: 50%;
+} 

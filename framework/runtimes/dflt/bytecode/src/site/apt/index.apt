@@ -1,0 +1,44 @@
+~~  Licensed to the Apache Software Foundation (ASF) under one
+~~  or more contributor license agreements.  See the NOTICE file
+~~  distributed with this work for additional information
+~~  regarding copyright ownership.  The ASF licenses this file
+~~  to you under the Apache License, Version 2.0 (the
+~~  "License"); you may not use this file except in compliance
+~~  with the License.  You may obtain a copy of the License at
+~~
+~~        http://www.apache.org/licenses/LICENSE-2.0
+~~
+~~  Unless required by applicable law or agreed to in writing,
+~~  software distributed under the License is distributed on an
+~~  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+~~  KIND, either express or implied.  See the License for the
+~~  specific language governing permissions and limitations
+~~  under the License.
+
+
+
+Bytecode Implementations
+ 
+ This module is the parent for a
+ number of implementations for the bytecode enhancement API
+ as defined within the {{{../../dflt/index.html}default runtime}}:
+
+ * {{{./dflt/index.html}CGLib}}
+
+   The <dflt> (default) bytecode module provides an implementation of the bytecode
+   enhancement API using {{{http://cglib.sourceforge.net/}CGLib}}.
+
+ * {{{./javassist/index.html}Javassist}}
+
+   The <javassist> bytecode module provides an implementation of the bytecode
+   enhancement API using {{{http://www.javassist.org/}Javassist}}.
+
+ * {{{./identity/index.html}Identity}}
+
+   The <identity> bytecode module provides a do-nothing implementation of 
+   the bytecode enhancement API.  This is required by some object stores
+   that perform equivalent bytecode enhancement.  It's also relevant if the 
+   programmer prefers to code the calls for lazy loading and object dirtying 
+   directly (perhaps using an AOP technology).
+ 
+ []

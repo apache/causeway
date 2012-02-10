@@ -1,0 +1,55 @@
+~~  Licensed to the Apache Software Foundation (ASF) under one
+~~  or more contributor license agreements.  See the NOTICE file
+~~  distributed with this work for additional information
+~~  regarding copyright ownership.  The ASF licenses this file
+~~  to you under the Apache License, Version 2.0 (the
+~~  "License"); you may not use this file except in compliance
+~~  with the License.  You may obtain a copy of the License at
+~~
+~~        http://www.apache.org/licenses/LICENSE-2.0
+~~
+~~  Unless required by applicable law or agreed to in writing,
+~~  software distributed under the License is distributed on an
+~~  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+~~  KIND, either express or implied.  See the License for the
+~~  specific language governing permissions and limitations
+~~  under the License.
+
+
+
+ObjectStore Implementations
+ 
+ The <objectstores> module is the parent for implementations of the 
+ {{{../index.html}default runtime}}'s object store API:
+
+ * {{{./dflt/index.html}Default (in-memory) object store}}
+ 
+   The <dflt> (default) object store persists objects only within memory.
+   It is suitable for prototyping or testing purposes only.
+
+ * {{{./xml/index.html}XML object store}}
+ 
+   The <xml> object store provides a simple way to persist domain objects to 
+   file storage. The format of this file is a proprietary XML schema.
+
+ * {{{./sql/index.html}SQL object store}}
+ 
+  The <sql> object store module provides the ability to persist domain objects 
+  into an RDBMS. It has no explicit external dependencies, using simply JDBC. 
+
+  You will have to add appropriate drivers to support connecting to the 
+  database server of your choosing.
+ 
+ * {{{./nosql/index.html}NoSQL object store}}
+
+  The <nosql> object store module enables objects to be persisted in JSON
+  format. 
+
+ []
+
+Documentation
+
+ See the {{{../index.html}default runtime}} documentation 
+ ({{{../docbkx/html/guide/isis-default-runtime.html}HTML}} or 
+ {{{../docbkx/pdf/isis-default-runtime.pdf}PDF}}).  Each object store also
+ has its own supplemental documentation.

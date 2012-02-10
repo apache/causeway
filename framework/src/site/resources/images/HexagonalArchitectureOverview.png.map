@@ -1,0 +1,63 @@
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+-->
+<img src="images/HexagonalArchitectureOverview.png" width="720" height="514" border="0" usemap="#map" />
+
+<map name="map">
+<!-- #$-:Image map file created by GIMP Image Map plug-in -->
+<!-- #$-:GIMP Image Map plug-in by Maurits Rijk -->
+<!-- #$-:Please do not edit lines starting with "#$" -->
+<!-- #$VERSION:2.3 -->
+<!-- #$AUTHOR:alexander -->
+<area shape="polygon" coords="260,120,410,120,480,240,410,375,260,375,190,240" alt="Core" href="./core/index.html" />
+
+<area shape="rect" coords="20,175,119,197" alt="DnD" href="./viewer/dnd/index.html" />
+<area shape="rect" coords="20,210,120,221" alt="HTML" href="./viewer/html/index.html" />
+<area shape="rect" coords="20,235,120,256" alt="Scimpi" href="./viewer/scimpi/index.html" />
+<area shape="rect" coords="20,261,120,283" alt="Wicket" href="./viewer/wicket/index.html" />
+<area shape="rect" coords="20,287,120,309" alt="XHTML" href="./viewer/xhtml/index.html" />
+<area shape="rect" coords="20,312,120,333" alt="JSON" href="./viewer/json/index.html" />
+<area shape="rect" coords="20,345,120,366" alt="BDD" href="./viewer/bdd/index.html" />
+<area shape="rect" coords="20,370,120,391" alt="JUnit" href="./viewer/junit/index.html" />
+
+<area shape="rect" coords="20,460,103,482" alt="Applib" href="./applib/index.html" />
+<area shape="rect" coords="186,478,287,501" alt="Dflt (Java5)" href="./progmodels/dflt/index.html" />
+<area shape="rect" coords="128,447,229,470" alt="Groovy" href="./progmodels/groovy/index.html" />
+<area shape="rect" coords="242,446,343,470" alt="Wrapper" href="./progmodels/wrapper/index.html" />
+
+<area shape="rect" coords="365,446,465,469" alt="Javassist" href="./runtimes/dflt/bytecode/javassist/index.html" />
+<area shape="rect" coords="423,476,524,497" alt="Dflt (cglib)" href="./runtimes/dflt/bytecode/dflt/index.html" />
+<area shape="rect" coords="479,446,581,469" alt="Identity" href="./runtimes/dflt/bytecode/identity/index.html" />
+
+<area shape="rect" coords="583,254,684,277" alt="NoSQL" href="./runtimes/dflt/objectstores/nosql/index.html" />
+<area shape="rect" coords="582,228,683,253" alt="SQL" href="./runtimes/dflt/objectstores/sql/index.html" />
+<area shape="rect" coords="582,203,683,226" alt="XML" href="./runtimes/dflt/objectstores/xml/index.html" />
+<area shape="rect" coords="582,177,683,198" alt="Dflt (in-mem)" href="./runtimes/dflt/objectstores/dflt/index.html" />
+
+<area shape="rect" coords="88,112,189,135" alt="Sockets" href="./runtimes/dflt/remoting/transport-sockets/index.html" />
+<area shape="rect" coords="88,138,189,160" alt="Http" href="./runtimes/dflt/remoting/transport-http/index.html" />
+<area shape="rect" coords="516,139,618,161" alt="Sockets" href="./runtimes/dflt/remoting/transport-sockets/index.html" />
+<area shape="rect" coords="517,112,618,135" alt="Http" href="./runtimes/dflt/remoting/transport-http/index.html" />
+
+<area shape="rect" coords="533,293,633,314" alt="Dflt (in-mem)" href="./runtimes/dflt/profilestores/dflt/index.html" />
+<area shape="rect" coords="533,319,633,340" alt="XML" href="./runtimes/dflt/profilestores/xml/index.html" />
+
+<area shape="rect" coords="300,49,401,71" alt="LDAP" href="./security/ldap/index.html" />
+<area shape="rect" coords="239,20,341,43" alt="Noop" href="./security/dflt/index.html" />
+<area shape="rect" coords="183,48,283,72" alt="File" href="./security/file/index.html" />
+</map>
