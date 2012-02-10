@@ -30,7 +30,8 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProviderAndFacetAbstract;
 import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProviderContext;
 
-public class PasswordValueSemanticsProvider extends ValueSemanticsProviderAndFacetAbstract<Password> implements PasswordValueFacet {
+public class PasswordValueSemanticsProvider extends ValueSemanticsProviderAndFacetAbstract<Password> implements
+    PasswordValueFacet {
 
     public static Class<? extends Facet> type() {
         return PasswordValueFacet.class;
@@ -42,15 +43,16 @@ public class PasswordValueSemanticsProvider extends ValueSemanticsProviderAndFac
     private static final boolean EQUAL_BY_CONTENT = true;
 
     /**
-     * Required because implementation of {@link Parser} and
-     * {@link EncoderDecoder}.
+     * Required because implementation of {@link Parser} and {@link EncoderDecoder}.
      */
     public PasswordValueSemanticsProvider() {
         this(null, null, null);
     }
 
-    public PasswordValueSemanticsProvider(final FacetHolder holder, final IsisConfiguration configuration, final ValueSemanticsProviderContext context) {
-        super(type(), holder, Password.class, TYPICAL_LENGTH, IMMUTABLE, EQUAL_BY_CONTENT, DEFAULT_VALUE, configuration, context);
+    public PasswordValueSemanticsProvider(final FacetHolder holder, final IsisConfiguration configuration,
+        final ValueSemanticsProviderContext context) {
+        super(type(), holder, Password.class, TYPICAL_LENGTH, IMMUTABLE, EQUAL_BY_CONTENT, DEFAULT_VALUE,
+            configuration, context);
     }
 
     // //////////////////////////////////////////////////////////////////
@@ -106,7 +108,11 @@ public class PasswordValueSemanticsProvider extends ValueSemanticsProviderAndFac
     }
 
     private Password password(final Object object) {
-        return (Password) object;
+        if (object instanceof ObjectAdapter) {
+            return (Password) ((ObjectAdapter) object).getObject();
+        } else {
+            return (Password) object;
+        }
     }
 
     // /////// toString ///////
