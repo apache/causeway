@@ -160,18 +160,7 @@
                 <item name="Gmane (NNTP)"
                     href="http://blog.gmane.org/gmane.comp.apache.incubator.isis.devel" />
             </item>
-            <item name="Dev Mailing List" href="mail-lists.html" >
-                <item name="Post to"
-                    href="mailto:isis-dev@incubator.apache.org" />
-                <item name="Archives"
-                    href="http://mail-archives.apache.org/mod_mbox/incubator-isis-dev/" />
-                <item name="Subscribe"
-                    href="mailto:isis-dev-subscribe@incubator.apache.org" />
-                <item name="Markmail (RSS)"
-                    href="http://incubator.markmail.org/search/?q=isis-dev" />
-                <item name="Gmane (NNTP)"
-                    href="http://blog.gmane.org/gmane.comp.apache.incubator.isis.devel" />
-            </item>
+            <item name="For Newbie Contributors" href="newbies.html"/>
         </menu>
 
         <menu name="Project Info" ref="reports"/>
