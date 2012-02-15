@@ -49,7 +49,7 @@ public class ResourceContextTest_getArg {
 
     @Test
     public void whenArgExists() throws Exception {
-        queryString = UrlEncodingUtils.asUrlEncoded(JsonRepresentation.newMap("x-ro-page", "123").asJsonNode());
+        queryString = UrlEncodingUtils.urlEncode(JsonRepresentation.newMap("x-ro-page", "123").asJsonNode());
 
         context.checking(new Expectations() {
             {
@@ -69,7 +69,7 @@ public class ResourceContextTest_getArg {
 
     @Test
     public void whenArgDoesNotExist() throws Exception {
-        queryString = UrlEncodingUtils.asUrlEncoded(JsonRepresentation.newMap("xxx", "123").asJsonNode());
+        queryString = UrlEncodingUtils.urlEncode(JsonRepresentation.newMap("xxx", "123").asJsonNode());
 
         context.checking(new Expectations() {
             {

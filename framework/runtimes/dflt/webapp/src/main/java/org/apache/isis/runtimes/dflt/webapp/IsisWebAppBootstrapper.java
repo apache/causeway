@@ -98,6 +98,8 @@ public class IsisWebAppBootstrapper implements ServletContextListener {
             injector = createGuiceInjector(isisConfigurationBuilder, deploymentType, installerLookup);
 
             final IsisSystem system = injector.getInstance(IsisSystem.class);
+            
+            isisConfigurationBuilder.dumpResourcesToLog();
 
             servletContext.setAttribute(WebAppConstants.ISIS_SYSTEM_KEY, system);
         } catch (final RuntimeException e) {

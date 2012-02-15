@@ -27,26 +27,29 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.core.metamodel.adapter.oid.AggregatedOid;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.core.metamodel.adapter.oid.stringable.directly.OidWithSpecification;
 import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationContainer;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 
 class ObjectReader {
 
     public ObjectAdapter load(final StateReader reader, final KeyCreator keyCreator, final VersionCreator versionCreator, final Map<String, DataEncryption> dataEncrypters) {
         final String className = reader.readObjectType();
-        final ObjectSpecification specification = IsisContext.getSpecificationLoader().loadSpecification(className);
+        final ObjectSpecification specification = getSpecificationLoader().loadSpecification(className);
         final String id = reader.readId();
-        final Oid oid = keyCreator.oid(id);
-
-        final ObjectAdapter object = getAdapter(specification, oid);
+        final OidWithSpecification oid = keyCreator.oid(specification, id);
+        
+        final ObjectAdapter object = getAdapter(oid);
         if (object.getResolveState().isResolved()) {
             Version version = null;
             final String versionString = reader.readVersion();
@@ -123,7 +126,7 @@ class ObjectReader {
 
     private ObjectAdapter restoreAggregatedObject(final StateReader aggregateReader, final Oid oid, final KeyCreator keyCreator, final DataEncryption dataEncrypter) {
         final String objectType = aggregateReader.readObjectType();
-        final ObjectSpecification specification = IsisContext.getSpecificationLoader().loadSpecification(objectType);
+        final ObjectSpecification specification = getSpecificationLoader().loadSpecification(objectType);
         final ObjectAdapter fieldObject = getAdapter(specification, oid);
         if (fieldObject.getResolveState().isGhost()) {
             final ResolveState resolveState = ResolveState.RESOLVING;
@@ -157,7 +160,7 @@ class ObjectReader {
             if (ref.equals("")) {
                 throw new NoSqlStoreException("Invalid reference field (an empty string) in data for " + association.getName() + "  in " + object);
             }
-            final Oid oid = keyCreator.oidFromReference(ref);
+            final OidWithSpecification oid = keyCreator.oidFromReference(ref);
             final ObjectSpecification specification = keyCreator.specificationFromReference(ref);
             fieldObject = getAdapter(specification, oid);
         }
@@ -198,19 +201,37 @@ class ObjectReader {
         final ObjectAdapter[] elements = new ObjectAdapter[references.length];
         for (int i = 0; i < references.length; i++) {
             final ObjectSpecification specification = keyCreator.specificationFromReference(references[i]);
-            final Oid oid = keyCreator.oidFromReference(references[i]);
+            final OidWithSpecification oid = keyCreator.oidFromReference(references[i]);
             elements[i] = getAdapter(specification, oid);
         }
         return elements;
     }
 
     protected ObjectAdapter getAdapter(final ObjectSpecification specification, final Oid oid) {
-        final AdapterManager objectLoader = IsisContext.getPersistenceSession().getAdapterManager();
+        final AdapterManager objectLoader = getPersistenceSession().getAdapterManager();
         final ObjectAdapter adapter = objectLoader.getAdapterFor(oid);
         if (adapter != null) {
             return adapter;
-        } else {
-            return IsisContext.getPersistenceSession().recreateAdapter(oid, specification);
-        }
+        } 
+        return getPersistenceSession().recreateAdapter(oid, specification);
     }
+
+    protected ObjectAdapter getAdapter(final OidWithSpecification oid) {
+        final AdapterManager objectLoader = getPersistenceSession().getAdapterManager();
+        final ObjectAdapter adapter = objectLoader.getAdapterFor(oid);
+        if (adapter != null) {
+            return adapter;
+        } 
+        return getPersistenceSession().recreateAdapter(oid);
+    }
+
+    protected PersistenceSession getPersistenceSession() {
+        return IsisContext.getPersistenceSession();
+    }
+    
+    protected SpecificationLoader getSpecificationLoader() {
+        return IsisContext.getSpecificationLoader();
+    }
+
+
 }

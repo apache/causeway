@@ -33,18 +33,26 @@ import org.json.JSONObject;
 
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.exceptions.IsisException;
+import org.apache.isis.core.commons.factory.InstanceUtil;
+import org.apache.isis.core.commons.lang.ClassUtil;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.AggregatedOid;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.core.metamodel.adapter.oid.stringable.OidStringifier;
+import org.apache.isis.core.metamodel.adapter.oid.stringable.directly.DirectlyStringableOidWithSpecification;
+import org.apache.isis.core.metamodel.adapter.oid.stringable.directly.OidWithSpecification;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification.CreationMode;
+import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.simple.SerialOid;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.viewer.scimpi.dispatcher.ScimpiException;
 import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext.Scope;
 
@@ -107,33 +115,17 @@ public class DefaultOidObjectMapping implements ObjectMapping {
         }
     }
 
-    private JSONObject encodeTransientData(final ObjectAdapter object, final List<ObjectAdapter> savedObject) throws JSONException {
-        if (savedObject.contains(object)) {
+    private JSONObject encodeTransientData(final ObjectAdapter adapter, final List<ObjectAdapter> savedObject) throws JSONException {
+        if (savedObject.contains(adapter)) {
             return null;
         }
-        savedObject.add(object);
+        savedObject.add(adapter);
 
-        final JSONObject data = new JSONObject();
-        final ObjectSpecification specification = object.getSpecification();
-        data.put("_class", specification.getFullIdentifier());
+        final JSONObject data = createJsonObject(adapter);
 
-        final Oid oid = object.getOid();
-        String encodedOid;
-        if (oid instanceof AggregatedOid) {
-            final AggregatedOid aoid = (AggregatedOid) oid;
-            final Oid parentOid = aoid.getParentOid();
-            final String aggregatedId = aoid.getId();
-            encodedOid = Long.toString(((SerialOid) parentOid).getSerialNo(), 16) + "@" + aggregatedId;
-        } else if (oid instanceof SerialOid) {
-            encodedOid = Long.toString(((SerialOid) oid).getSerialNo(), 16);
-        } else {
-            throw new ScimpiException("Unsupportred OID type " + oid);
-        }
-
-        data.put("_id", encodedOid);
-
+        final ObjectSpecification specification = adapter.getSpecification();
         for (final ObjectAssociation association : specification.getAssociations()) {
-            final ObjectAdapter fieldValue = association.get(object);
+            final ObjectAdapter fieldValue = association.get(adapter);
             final String fieldName = association.getId();
             if (fieldValue == null) {
                 data.put(fieldName, (Object) null);
@@ -163,6 +155,40 @@ public class DefaultOidObjectMapping implements ObjectMapping {
         return data;
     }
 
+    public JSONObject createJsonObject(final ObjectAdapter adapter) throws JSONException {
+        final JSONObject data = new JSONObject();
+
+        final Oid oid = adapter.getOid();
+        data.put("_oidType", oid.getClass().getName());
+        
+        if(oid instanceof OidWithSpecification) {
+            OidWithSpecification ows = (OidWithSpecification) oid;
+            data.put("_class", ows.getClassName());
+            data.put("_id", enString(ows)); // can be used to recreate
+            return data;
+        }
+        
+        // original behaviour, deals with SerialOid and also enhanced to handles if the parentOid is an OWS
+        final ObjectSpecification objectSpec = adapter.getSpecification();
+        data.put("_class", objectSpec.getFullIdentifier());
+
+        String encodedOid;
+        if (oid instanceof AggregatedOid) {
+            final AggregatedOid aoid = (AggregatedOid) oid;
+            final Oid parentOid = aoid.getParentOid();
+            final String aggregatedId = aoid.getId();
+            
+            encodedOid = enString(parentOid, aggregatedId);
+        } else if (oid instanceof SerialOid) {
+            encodedOid = Long.toString(((SerialOid) oid).getSerialNo(), 16);
+        } else {
+            throw new ScimpiException("Unsupported OID type " + oid);
+        }
+
+        data.put("_id", encodedOid);
+        return data;
+    }
+
     @Override
     public String mapObject(final ObjectAdapter inObject, final Scope scope) {
         // TODO need to ensure that transient objects are remapped each time so
@@ -170,28 +196,33 @@ public class DefaultOidObjectMapping implements ObjectMapping {
         // session data
         // continue work here.....here
 
-        ObjectAdapter object = inObject;
+        ObjectAdapter adapter = inObject;
 
-        final Oid oid = object.getOid();
+        final Oid oid = adapter.getOid();
         if (oidType == null) {
             oidType = oid.getClass();
         }
 
         String encodedOid;
-        if (oid instanceof AggregatedOid) {
+        if(oid instanceof OidWithSpecification) {
+            OidWithSpecification ows = (OidWithSpecification) oid;
+            encodedOid = enString(ows);
+        } else if (oid instanceof AggregatedOid) {
             final AggregatedOid aoid = (AggregatedOid) oid;
-            final Oid parentOid = aoid.getParentOid();
-            object = IsisContext.getPersistenceSession().getAdapterManager().getAdapterFor(parentOid);
             final String aggregatedId = aoid.getId();
-            encodedOid = Long.toString(((SerialOid) parentOid).getSerialNo(), 16) + "@" + aggregatedId;
+            final Oid parentOid = aoid.getParentOid();
+            adapter = getAdapterManager().getAdapterFor(parentOid);
+            
+            encodedOid = enString(parentOid, aggregatedId);
         } else if (oid instanceof SerialOid) {
             encodedOid = Long.toString(((SerialOid) oid).getSerialNo(), 16);
         } else {
-            encodedOid = IsisContext.getPersistenceSession().getOidGenerator().getOidStringifier().enString(oid);
+            throw new ScimpiException("Unsupported OID type " + oid);
         }
 
-        final boolean isTransient = object.isTransient();
-        final String transferableId = (isTransient ? "T" : "P") + object.getSpecification().getFullIdentifier() + "@" + encodedOid;
+        
+        final boolean isTransient = adapter.isTransient();
+        final String transferableId = (isTransient ? "T" : "P") + adapter.getSpecification().getFullIdentifier() + "@" + encodedOid;
         LOG.debug("encoded " + oid + " as " + transferableId + " ~ " + encodedOid);
 
         if (inObject.isTransient()) {
@@ -220,28 +251,18 @@ public class DefaultOidObjectMapping implements ObjectMapping {
 
         try {
             final JSONObject jsonObject = new JSONObject(objectData);
-            final ObjectAdapter object = restoreTransientObject(jsonObject);
-            return object;
+            return restoreTransientObject(jsonObject);
         } catch (final JSONException e) {
             throw new ScimpiException("Problem reading data: " + data, e);
         }
     }
 
     private ObjectAdapter restoreTransientObject(final JSONObject jsonObject) throws JSONException {
-        final String cls = jsonObject.getString("_class");
-        final String id = jsonObject.getString("_id");
 
-        ObjectAdapter object;
-        final ObjectSpecification specification = IsisContext.getSpecificationLoader().loadSpecification(cls);
-        if (specification.isAggregated() && !specification.isCollection()) {
-            final String[] split = id.split("@");
-            final SerialOid parentOid = SerialOid.createTransient(Long.parseLong(split[0], 16));
-            final AggregatedOid oid = new AggregatedOid(parentOid, split[1]);
-            object = IsisContext.getPersistenceSession().recreateAdapter(oid, specification);
-        } else {
-            object = mappedObject("T" + cls + "@" + id);
-        }
-
+        ObjectAdapter adapter = getAdapter(jsonObject);
+        
+        final String clsName = jsonObject.getString("_class");
+        final ObjectSpecification specification = getSpecification(clsName);
         for (final ObjectAssociation association : specification.getAssociations()) {
             final String fieldName = association.getId();
 
@@ -249,18 +270,18 @@ public class DefaultOidObjectMapping implements ObjectMapping {
 
             if (association.getSpecification().isEncodeable()) {
                 if (fieldValue == null) {
-                    ((OneToOneAssociation) association).initAssociation(object, null);
+                    ((OneToOneAssociation) association).initAssociation(adapter, null);
                 } else {
                     final EncodableFacet encodeableFacet = association.getSpecification().getFacet(EncodableFacet.class);
                     final ObjectAdapter fromEncodedString = encodeableFacet.fromEncodedString((String) fieldValue);
-                    ((OneToOneAssociation) association).initAssociation(object, fromEncodedString);
+                    ((OneToOneAssociation) association).initAssociation(adapter, fromEncodedString);
                 }
             } else if (association instanceof OneToManyAssociation) {
                 final JSONArray collection = (JSONArray) fieldValue;
                 for (int i = 0; i < collection.length(); i++) {
                     final JSONObject jsonElement = (JSONObject) collection.get(i);
                     final ObjectAdapter objectToAdd = restoreTransientObject(jsonElement);
-                    ((OneToManyAssociation) association).addElement(object, objectToAdd);
+                    ((OneToManyAssociation) association).addElement(adapter, objectToAdd);
                 }
 
                 /*
@@ -273,68 +294,99 @@ public class DefaultOidObjectMapping implements ObjectMapping {
                  */
             } else {
                 if (fieldValue == null) {
-                    ((OneToOneAssociation) association).initAssociation(object, null);
+                    ((OneToOneAssociation) association).initAssociation(adapter, null);
                 } else {
                     if (fieldValue instanceof JSONObject) {
                         final ObjectAdapter fieldObject = restoreTransientObject((JSONObject) fieldValue);
-                        ((OneToOneAssociation) association).initAssociation(object, fieldObject);
+                        ((OneToOneAssociation) association).initAssociation(adapter, fieldObject);
                     } else {
                         final ObjectAdapter field = mappedObject((String) fieldValue);
-                        ((OneToOneAssociation) association).initAssociation(object, field);
+                        ((OneToOneAssociation) association).initAssociation(adapter, field);
                     }
                 }
             }
         }
-        return object;
+        return adapter;
+    }
+
+    private ObjectAdapter getAdapter(final JSONObject jsonObject) throws JSONException {
+        final String cls = jsonObject.getString("_class");
+        final String id = jsonObject.getString("_id");
+        final String oidTypeStr = jsonObject.getString("_oidType");
+        final Class<?> oidType = InstanceUtil.loadClass(oidTypeStr);
+
+        ObjectAdapter adapter;
+        final ObjectSpecification objectSpec = getSpecification(cls);
+        if (objectSpec.isAggregated() && !objectSpec.isCollection()) {
+            final String[] split = id.split("@");
+            final String parentOidStr = split[0];
+            final String aggregatedId = split[1];
+            
+            Oid parentOid;
+            if(OidWithSpecification.class.isAssignableFrom(oidType)) {
+                parentOid = getOidStringifier().deString(parentOidStr);
+            } else if (SerialOid.class.isAssignableFrom(oidType)) {
+                parentOid = SerialOid.createTransient(Long.parseLong(parentOidStr, 16));
+            } else {
+                throw new ScimpiException("Unsupported OID type " + oidType);
+            }
+                
+            final AggregatedOid oid = new AggregatedOid(parentOid, aggregatedId);
+            adapter = getPersistenceSession().recreateAdapter(oid, objectSpec);
+        } else {
+            adapter = mappedObject("T" + cls + "@" + id);
+        }
+        return adapter;
     }
 
     @Override
     public ObjectAdapter mappedObject(final String id) {
         final char type = id.charAt(0);
+        final String[] split = id.split("@");
+        final String cls = split[0].substring(1);
+        final String oidData = split[1];
+        final String aggregatedId = split.length > 2?split[2]:null;
+            
+        // HACK - to remove after fix!
+        if (oidType == null) {
+            oidType = getPersistenceSession().getServices().get(0).getOid().getClass();
+        }
+
+        final ObjectSpecification spec = getSpecificationLoader().loadSpecification(cls);
+
+        
         if ((type == 'T')) {
             TransientObjectMapping mapping = sessionTransients.get(id);
             if (mapping == null) {
                 mapping = requestTransients.get(id);
             }
             if (mapping == null) {
-                final String[] split = id.split("@");
-                final ObjectSpecification spec = IsisContext.getSpecificationLoader().loadSpecification(split[0].substring(1));
+                
                 final Object pojo = spec.createObject(CreationMode.NO_INITIALIZE);
-                final String oidData = split[1];
-                final SerialOid oid = SerialOid.createTransient(Long.valueOf(oidData, 16).longValue());
-                return IsisContext.getPersistenceSession().recreateAdapter(oid, pojo);
+
+                Oid oid = deString(oidData, State.TRANSIENT);
+                return getPersistenceSession().recreateAdapter(oid, pojo);
             }
+            
             final ObjectAdapter mappedTransientObject = mapping.getObject();
             LOG.debug("retrieved " + mappedTransientObject.getOid() + " for " + id);
             return mappedTransientObject;
+            
         } else {
-            final String[] split = id.split("@");
-            final ObjectSpecification spec = IsisContext.getSpecificationLoader().loadSpecification(split[0].substring(1));
-
+            
             try {
-                final String oidData = split[1];
                 LOG.debug("decoding " + oidData);
 
-                ObjectAdapter loadObject;
-                Oid oid;
-                // HACK - to remove after fix!
-                if (oidType == null) {
-                    oidType = IsisContext.getPersistenceSession().getServices().get(0).getOid().getClass();
-                }
-                if (split.length > 2) {
-                    final SerialOid parentOid = SerialOid.createPersistent(Long.parseLong(oidData, 16));
-                    oid = new AggregatedOid(parentOid, split[2]);
-                    IsisContext.getPersistenceSession().loadObject(parentOid, spec);
-                    loadObject = IsisContext.getPersistenceSession().getAdapterManager().getAdapterFor(oid);
-                } else if (oidType.isAssignableFrom(SerialOid.class)) {
-                    oid = SerialOid.createPersistent(Long.parseLong(oidData, 16));
-                    loadObject = IsisContext.getPersistenceSession().loadObject(oid, spec);
-                } else {
-                    oid = IsisContext.getPersistenceSession().getOidGenerator().getOidStringifier().deString(oidData);
-                    loadObject = IsisContext.getPersistenceSession().loadObject(oid, spec);
-                }
+                if (aggregatedId != null) {
+                    final Oid parentOid = deString(oidData, State.PERSISTENT);
+                    Oid oid = new AggregatedOid(parentOid, aggregatedId);
+                    getPersistenceSession().loadObject(parentOid, spec);
+                    return getAdapterManager().getAdapterFor(oid);
+                } 
 
-                return loadObject;
+                Oid oid = deString(oidData, State.PERSISTENT);
+                return getPersistenceSession().loadObject(oid, spec);
+
             } catch (final SecurityException e) {
                 throw new IsisException(e);
             }
@@ -355,5 +407,77 @@ public class DefaultOidObjectMapping implements ObjectMapping {
         sessionTransients.remove(object.getOid());
         requestTransients.remove(object.getOid());
     }
+
+
+    ///////////////////////////////////////
+    // helpers
+    ///////////////////////////////////////
+
+    enum State { TRANSIENT, PERSISTENT }
+    
+    private Oid deString(final String oidData, State stateHint) {
+        if(OidWithSpecification.class.isAssignableFrom(oidType)) {
+            return getOidStringifier().deString(oidData);
+        } else if (SerialOid.class.isAssignableFrom(oidType)) {
+            final long value = Long.valueOf(oidData, 16).longValue();
+            if(stateHint == State.TRANSIENT) {
+                return SerialOid.createTransient(value);
+            } else {
+                return SerialOid.createPersistent(value);
+            }
+        } else {
+            throw new ScimpiException("Unsupported OID type " + oidType);
+        }
+    }
+
+
+    private String enString(OidWithSpecification ows) {
+        return getOidStringifier().enString(ows);
+    }
+
+    private String enString(final Oid parentOid, final String aggregatedId) {
+        return enString(parentOid) + "@" + aggregatedId;
+    }
+
+    private String enString(final Oid oid) {
+        final String parentOidStr;
+        if(oid instanceof OidWithSpecification) {
+            OidWithSpecification ows = (OidWithSpecification) oid;
+            parentOidStr = enString(ows);
+        } else if (oid instanceof SerialOid) {
+            final SerialOid parentSerialOid = (SerialOid) oid;
+            parentOidStr = Long.toString(parentSerialOid.getSerialNo(), 16);
+        } else {
+            throw new ScimpiException("Unsupported OID type " + oid);
+        }
+        return parentOidStr;
+    }
+
+    private ObjectSpecification getSpecification(final String cls) {
+        return getSpecificationLoader().loadSpecification(cls);
+    }
+    
+    
+    ///////////////////////////////////////
+    // from context
+    ///////////////////////////////////////
+    
+    protected OidStringifier getOidStringifier() {
+        return getPersistenceSession().getOidGenerator().getOidStringifier();
+    }
+    
+    protected SpecificationLoader getSpecificationLoader() {
+        return IsisContext.getSpecificationLoader();
+    }
+
+    protected PersistenceSession getPersistenceSession() {
+        return IsisContext.getPersistenceSession();
+    }
+
+    protected AdapterManager getAdapterManager() {
+        return getPersistenceSession().getAdapterManager();
+    }
+
+
 
 }

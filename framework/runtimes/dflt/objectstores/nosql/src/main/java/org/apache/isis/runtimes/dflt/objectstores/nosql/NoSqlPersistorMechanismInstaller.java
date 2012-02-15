@@ -109,8 +109,8 @@ public abstract class NoSqlPersistorMechanismInstaller extends ObjectStorePersis
 
     protected abstract NoSqlDataDatabase createNoSqlDatabase(IsisConfiguration configuration);
 
-    protected SerialKeyCreator createKeyCreator() {
-        return new SerialKeyCreator();
+    protected NoSqlKeyCreator createKeyCreator() {
+        return new NoSqlKeyCreator();
     }
 
     private VersionCreator createVersionCreator() {

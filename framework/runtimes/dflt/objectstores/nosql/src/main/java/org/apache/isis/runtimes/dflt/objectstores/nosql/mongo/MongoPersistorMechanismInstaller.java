@@ -24,7 +24,7 @@ import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.runtimes.dflt.objectstores.nosql.KeyCreator;
 import org.apache.isis.runtimes.dflt.objectstores.nosql.NoSqlDataDatabase;
 import org.apache.isis.runtimes.dflt.objectstores.nosql.NoSqlPersistorMechanismInstaller;
-import org.apache.isis.runtimes.dflt.objectstores.nosql.SerialKeyCreator;
+import org.apache.isis.runtimes.dflt.objectstores.nosql.NoSqlKeyCreator;
 
 public class MongoPersistorMechanismInstaller extends NoSqlPersistorMechanismInstaller {
 
@@ -43,7 +43,7 @@ public class MongoPersistorMechanismInstaller extends NoSqlPersistorMechanismIns
         final String host = configuration.getString(DB_HOST, "localhost");
         final int port = configuration.getInteger(DB_PORT, 0);
         final String name = configuration.getString(DB_NAME, "isis");
-        final KeyCreator keyCreator = new SerialKeyCreator();
+        final KeyCreator keyCreator = new NoSqlKeyCreator();
         db = new MongoDb(host, port, name, keyCreator);
         return db;
     }

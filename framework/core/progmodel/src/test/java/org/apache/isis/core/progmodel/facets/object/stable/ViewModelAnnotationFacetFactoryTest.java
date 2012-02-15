@@ -19,23 +19,23 @@
 
 package org.apache.isis.core.progmodel.facets.object.stable;
 
-import org.apache.isis.applib.annotation.Stable;
+import org.apache.isis.applib.annotation.ViewModel;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
-import org.apache.isis.core.metamodel.facets.object.stable.StableFacet;
+import org.apache.isis.core.metamodel.facets.object.stable.ViewModelFacet;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
-import org.apache.isis.core.progmodel.facets.object.stable.annotation.StableAnnotationFacetFactory;
-import org.apache.isis.core.progmodel.facets.object.stable.annotation.StableFacetAnnotation;
+import org.apache.isis.core.progmodel.facets.object.stable.annotation.ViewModelAnnotationFacetFactory;
+import org.apache.isis.core.progmodel.facets.object.stable.annotation.ViewModelFacetAnnotation;
 
-public class StableAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
+public class ViewModelAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 
-    private StableAnnotationFacetFactory facetFactory;
+    private ViewModelAnnotationFacetFactory facetFactory;
 
     @Override
     protected void setUp() throws Exception {
         super.setUp();
 
-        facetFactory = new StableAnnotationFacetFactory();
+        facetFactory = new ViewModelAnnotationFacetFactory();
     }
 
     @Override
@@ -45,15 +45,15 @@ public class StableAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
     }
 
     public void testStableAnnotationPickedUpOnClassAndDefaultsToAlways() {
-        @Stable
+        @ViewModel
         class Customer {
         }
 
         facetFactory.process(new ProcessClassContext(Customer.class, methodRemover, facetedMethod));
 
-        final Facet facet = facetedMethod.getFacet(StableFacet.class);
+        final Facet facet = facetedMethod.getFacet(ViewModelFacet.class);
         assertNotNull(facet);
-        assertTrue(facet instanceof StableFacetAnnotation);
+        assertTrue(facet instanceof ViewModelFacetAnnotation);
 
         assertNoMethodsRemoved();
     }

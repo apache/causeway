@@ -166,8 +166,8 @@ public abstract class IsisStoreDelegating implements ObjectStore {
     // ////////////////////////////////////////////////
 
     @Override
-    public Oid getOidForService(final String name) {
-        return underlying.getOidForService(name);
+    public Oid getOidForService(ObjectSpecification serviceSpecification, final String name) {
+        return underlying.getOidForService(serviceSpecification, name);
     }
 
     @Override

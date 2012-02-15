@@ -199,7 +199,7 @@ public class ResourceContext {
         return authenticationSession;
     }
 
-    public ObjectAdapterLookup getAdapterManager() {
+    public ObjectAdapterLookup getObjectAdapterLookup() {
         return objectAdapterLookup;
     }
 

@@ -540,14 +540,14 @@ public class PersistenceSessionObjectStore extends PersistenceSessionAbstract im
     // ///////////////////////////////////////////////////////////////////////////
 
     @Override
-    protected Oid getOidForService(final String name) {
-        return getOidForServiceFromPersistenceLayer(name);
+    protected Oid getOidForService(ObjectSpecification serviceSpecification, final String name) {
+        return getOidForServiceFromPersistenceLayer(serviceSpecification, name);
     }
 
-    private Oid getOidForServiceFromPersistenceLayer(final String name) {
+    private Oid getOidForServiceFromPersistenceLayer(ObjectSpecification serviceSpecification, final String name) {
         Oid oid = services.get(name);
         if (oid == null) {
-            oid = objectStore.getOidForService(name);
+            oid = objectStore.getOidForService(serviceSpecification, name);
             services.put(name, oid);
         }
         return oid;

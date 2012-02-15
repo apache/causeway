@@ -24,6 +24,7 @@ import org.apache.log4j.Logger;
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.core.metamodel.adapter.oid.stringable.directly.OidStringifierDirect;
 import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.OidGeneratorAbstract;
 import org.apache.isis.runtimes.dflt.runtime.transaction.ObjectPersistenceException;
 
@@ -93,6 +94,7 @@ public class SqlOidGenerator extends OidGeneratorAbstract {
     private final IdNumbers ids = new IdNumbers();
 
     public SqlOidGenerator(final DatabaseConnectorPool connectionPool) {
+        super(new OidStringifierDirect(SqlOid.class));
         this.connectionPool = connectionPool;
     }
 

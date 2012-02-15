@@ -317,16 +317,17 @@ public final class SqlObjectStore implements ObjectStore {
         final ObjectSpecification specification = query.getSpecification();// query.getPattern().getSpecification();//
                                                                            // getSpecification();
         final DatabaseConnector connector = connectionPool.acquire();
+        try {
+            final Vector<ObjectAdapter> matchingInstances = new Vector<ObjectAdapter>();
 
-        final Vector<ObjectAdapter> matchingInstances = new Vector<ObjectAdapter>();
-
-        addSpecQueryInstances(specification, connector, query, matchingInstances);
-
-        connectionPool.release(connector);
-
-        final ObjectAdapter[] instanceArray = new ObjectAdapter[matchingInstances.size()];
-        matchingInstances.copyInto(instanceArray);
-        return instanceArray;
+            addSpecQueryInstances(specification, connector, query, matchingInstances);
+            final ObjectAdapter[] instanceArray = new ObjectAdapter[matchingInstances.size()];
+            matchingInstances.copyInto(instanceArray);
+            return instanceArray;
+            
+        } finally {
+            connectionPool.release(connector);
+        }
     }
 
     private void addSpecQueryInstances(final ObjectSpecification specification, final DatabaseConnector connector, final PersistenceQueryFindByPattern query, final Vector<ObjectAdapter> matchingInstances) {
@@ -401,7 +402,7 @@ public final class SqlObjectStore implements ObjectStore {
     }
 
     @Override
-    public Oid getOidForService(final String name) {
+    public Oid getOidForService(ObjectSpecification serviceSpecification, final String name) {
         final DatabaseConnector connector = connectionPool.acquire();
 
         final StringBuffer sql = new StringBuffer();

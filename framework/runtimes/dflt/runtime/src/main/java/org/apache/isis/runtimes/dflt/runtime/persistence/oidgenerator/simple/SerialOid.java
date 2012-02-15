@@ -64,8 +64,16 @@ public final class SerialOid implements Encodable, Serializable, DirectlyStringa
     private static final String TOSTRING_PREVIOUS_CONCAT = "+";
 
     private static final String ENSTRING_SERIAL_NUM_PREFIX = ":";
-    private static final String ENSTRING_PREVIOUS_CONCAT = "~";
-    private static Pattern DESTRING_PATTERN = Pattern.compile("^(T?)OID" + ENSTRING_SERIAL_NUM_PREFIX + "(-?[0-9A-F]+)(" + ENSTRING_PREVIOUS_CONCAT + "(T?)OID" + ENSTRING_SERIAL_NUM_PREFIX + "(-?[0-9A-F]+))?$");
+    private static final String ENSTRING_SERIAL_NUM_CONCAT = "~";
+    
+
+    private static Pattern DESTRING_PATTERN = 
+            Pattern.compile("^" +
+            		"(T?)OID" + ENSTRING_SERIAL_NUM_PREFIX + "(-?[0-9A-F]+)" +
+            		"(" 
+            		    + ENSTRING_SERIAL_NUM_CONCAT + "(T?)OID" + ENSTRING_SERIAL_NUM_PREFIX + "(-?[0-9A-F]+)" +
+            		")?" +
+            		"$");
 
     // ////////////////////////////////////////////
     // Constructor
@@ -124,9 +132,10 @@ public final class SerialOid implements Encodable, Serializable, DirectlyStringa
 
         final String transientStr = matcher.group(1);
         final String serialNumInHexStr = matcher.group(2);
-        final SerialOid oid = createOid(transientStr, serialNumInHexStr);
-
         final String previousStr = matcher.group(3);
+        
+        final SerialOid oid = createOid(transientStr, serialNumInHexStr);
+        
         if (!StringUtils.isEmpty(previousStr)) {
             final String previousTransientStr = matcher.group(4);
             final String previousSerialNumInHexStr = matcher.group(5);
@@ -231,6 +240,7 @@ public final class SerialOid implements Encodable, Serializable, DirectlyStringa
         return serialNo;
     }
 
+    
     // ////////////////////////////////////////////
     // equals, hashCode
     // ////////////////////////////////////////////
@@ -240,10 +250,10 @@ public final class SerialOid implements Encodable, Serializable, DirectlyStringa
         hashCode = 37 * hashCode + (int) (serialNo ^ (serialNo >>> 32));
         hashCode = 37 * hashCode + (isTransient() ? 0 : 1);
         toString = asString(this, TOSTRING_SERIAL_NUM_PREFIX) + (previous == null ? "" : TOSTRING_PREVIOUS_CONCAT);
-        // enString = asString(this, ENSTRING_SERIAL_NUM_PREFIX) + (previous ==
-        // null ? "" : ENSTRING_PREVIOUS_CONCAT +
-        // asString(previous, ENSTRING_SERIAL_NUM_PREFIX));
-        enString = asString(this, ENSTRING_SERIAL_NUM_PREFIX);
+        
+        enString = asString(this, ENSTRING_SERIAL_NUM_PREFIX) + (previous == null ? "" : ENSTRING_SERIAL_NUM_CONCAT + asString(previous, ENSTRING_SERIAL_NUM_PREFIX));
+        
+        //enString = asString(this, ENSTRING_SERIAL_NUM_PREFIX); //?? what was this
     }
 
     private String asString(final SerialOid x, final String serialNumPrefix) {
@@ -287,5 +297,6 @@ public final class SerialOid implements Encodable, Serializable, DirectlyStringa
     public String toString() {
         return toString;
     }
+
 
 }

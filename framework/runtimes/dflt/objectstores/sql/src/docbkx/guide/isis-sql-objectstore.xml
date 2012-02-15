@@ -478,7 +478,7 @@
         <blockquote>
           <para>isis.persistor.sql.datatypes.timestamp=TIMESTAMP</para>
 
-          <para>isis.persistor.sql.datatypes.datetime=TIMESTAMP</para>
+          <para>isis.persistor.sql.datatypes.datetme=TIMESTAMP</para>
 
           <para>isis.persistor.sql.datatypes.double=DOUBLE PRECISION</para>
         </blockquote>

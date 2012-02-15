@@ -24,8 +24,10 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Properties;
+import java.util.Set;
 
 import com.google.common.base.Objects;
+import com.google.common.collect.Sets;
 
 import org.apache.log4j.Logger;
 
@@ -46,6 +48,9 @@ public class IsisConfigurationBuilderResourceStreams implements IsisConfiguratio
 
     private static final Logger LOG = Logger.getLogger(IsisConfigurationBuilderResourceStreams.class);
 
+    private final Set<String> configurationResourcesFound = Sets.newLinkedHashSet();
+    private final Set<String> configurationResourcesNotFound = Sets.newLinkedHashSet();
+    
     static class ConfigurationResourceAndPolicy {
         private final String configurationResource;
         private final NotFoundPolicy notFoundPolicy;
@@ -234,8 +239,9 @@ public class IsisConfigurationBuilderResourceStreams implements IsisConfiguratio
         try {
             final PropertiesReader propertiesReader = loadConfigurationResource(resourceStreamSource, configurationResource);
             addProperties(configuration, propertiesReader.getProperties());
-            if (LOG.isInfoEnabled()) {
-                LOG.info("'" + configurationResource + "' FOUND");
+            configurationResourcesFound.add(configurationResource);
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("'" + configurationResource + "' FOUND");
             }
             return;
         } catch (final IOException ex) {
@@ -244,8 +250,9 @@ public class IsisConfigurationBuilderResourceStreams implements IsisConfiguratio
         if (notFoundPolicy == NotFoundPolicy.FAIL_FAST) {
             throw new IsisException("failed to load '" + configurationResource + "'; tried using: " + resourceStreamSource.getName());
         } else {
-            if (LOG.isInfoEnabled()) {
-                LOG.info("'" + configurationResource + "' not found, but not needed");
+            configurationResourcesNotFound.add(configurationResource);
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("'" + configurationResource + "' not found, but not needed");
             }
         }
     }
@@ -277,6 +284,29 @@ public class IsisConfigurationBuilderResourceStreams implements IsisConfiguratio
     private void invalidateCache() {
         cachedConfiguration = null;
     }
+
+
+    
+    // ////////////////////////////////////////////////////////////
+    // Logging
+    // ////////////////////////////////////////////////////////////
+
+    @Override
+    public void dumpResourcesToLog() {
+        if (LOG.isInfoEnabled()) {
+            LOG.info("Configuration resources FOUND:");
+            for (String resource : configurationResourcesFound) {
+                LOG.info("*  " + resource);
+            }
+        }
+        if (LOG.isInfoEnabled()) {
+            LOG.info("Configuration resources NOT FOUND (but not needed):");
+            for (String resource : configurationResourcesNotFound) {
+                LOG.info("*  " + resource);
+            }
+        }
+    }
+
 
     // ////////////////////////////////////////////////////////////
     // Injectable

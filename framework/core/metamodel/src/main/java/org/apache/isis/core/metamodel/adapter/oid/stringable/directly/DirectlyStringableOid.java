@@ -27,9 +27,13 @@ import org.apache.isis.core.metamodel.adapter.oid.Oid;
  * that can be encoded/decoded from strings.
  * 
  * <p>
- * This is inspired by the DSFA's implementation that uses <tt>CUS|1234567A</tt>
- * as the string representation of their <tt>OStoreOid</tt>, representing a
- * Customer.
+ * Implementations must also provide a static deString(String) factory method.
+ * 
+ * <p>
+ * Somewhat akin to DSP's oid that is of the form <tt>CUS|1234567A</tt>,
+ * where the overall form is a simple string.
+ * 
+ * @see OidWithSpecification
  */
 public interface DirectlyStringableOid extends Oid {
 

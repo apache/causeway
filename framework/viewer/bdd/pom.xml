@@ -89,7 +89,7 @@
             <dependency>
               <groupId>junit</groupId>
               <artifactId>junit</artifactId>
-              <version>4.8.1</version>
+              <version>4.10</version>
             </dependency>
         
             <dependency>
@@ -107,9 +107,8 @@
 		    <dependency>
 			    <groupId>com.google.guava</groupId>
                 <artifactId>guava</artifactId>
-                <version>r08</version>
+                <version>11.0</version>
 		    </dependency>
-
          </dependencies>
     </dependencyManagement>
     

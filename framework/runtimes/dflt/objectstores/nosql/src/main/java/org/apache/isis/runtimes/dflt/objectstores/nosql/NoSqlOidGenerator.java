@@ -26,8 +26,12 @@ import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.exceptions.NotYetImplementedException;
 import org.apache.isis.core.metamodel.adapter.oid.AggregatedOid;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.core.metamodel.adapter.oid.stringable.directly.OidStringifierDirect;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.OidGeneratorAbstract;
 import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.simple.SerialOid;
+import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 
 public class NoSqlOidGenerator extends OidGeneratorAbstract {
     private static final Logger LOG = Logger.getLogger(NoSqlOidGenerator.class);
@@ -92,13 +96,16 @@ public class NoSqlOidGenerator extends OidGeneratorAbstract {
     }
 
     public NoSqlOidGenerator(final NoSqlDataDatabase database, final int initialTransientId, final int batchSize) {
+        super(new OidStringifierDirect(NoSqlOid.class));
         this.database = database;
         ids = new IdNumbers(initialTransientId, batchSize);
     }
 
     @Override
-    public SerialOid createTransientOid(final Object object) {
-        return SerialOid.createTransient(ids.nextTransientId());
+    public NoSqlOid createTransientOid(final Object object) {
+        final ObjectSpecification objectSpec = getSpecificationLoader().loadSpecification(object.getClass());
+        final String className = objectSpec.getCorrespondingClass().getName();
+        return new NoSqlOid(className, SerialOid.createTransient(ids.nextTransientId()));
     }
 
     @Override
@@ -114,8 +121,9 @@ public class NoSqlOidGenerator extends OidGeneratorAbstract {
             return;
         }
         final long persistentId = ids.nextPersistentId(database);
-        ((SerialOid) oid).setId(persistentId);
-        ((SerialOid) oid).makePersistent();
+        final NoSqlOid noSqlOid = (NoSqlOid) oid;
+        noSqlOid.setId(persistentId);
+        noSqlOid.makePersistent();
     }
 
     public void convertPersistentToTransientOid(final Oid oid) {
@@ -138,4 +146,10 @@ public class NoSqlOidGenerator extends OidGeneratorAbstract {
     public String debugTitle() {
         return "NoSql OID Generator";
     }
+    
+    protected SpecificationLoader getSpecificationLoader() {
+        return IsisContext.getSpecificationLoader();
+    }
+
+
 }

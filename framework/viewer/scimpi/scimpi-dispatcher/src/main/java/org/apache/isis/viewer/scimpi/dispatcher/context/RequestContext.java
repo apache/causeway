@@ -187,44 +187,44 @@ public abstract class RequestContext {
                 IsisContext.getPersistenceSession().resolveImmediately(mappedObject);
             }
             return mappedObject;
-        } else {
-            final ObjectAdapter parentObject = objectMapping.mappedObject(idParts[0] + "@" + idParts[1]);
-            if (parentObject instanceof ObjectAdapter) {
-                IsisContext.getPersistenceSession().resolveImmediately(parentObject);
-            }
+        }
+        
+        final ObjectAdapter parentObject = objectMapping.mappedObject(idParts[0] + "@" + idParts[1]);
+        if (parentObject instanceof ObjectAdapter) {
+            IsisContext.getPersistenceSession().resolveImmediately(parentObject);
+        }
 
-            final AggregatedOid aggregatedOid = new AggregatedOid(parentObject.getOid(), idParts[2]);
+        final AggregatedOid aggregatedOid = new AggregatedOid(parentObject.getOid(), idParts[2]);
 
-            ObjectAdapter aggregatedAdapter = null;
-            outer: for (final ObjectAssociation association : parentObject.getSpecification().getAssociations()) {
-                if (association.getSpecification().isAggregated()) {
-                    final ObjectAdapter objectAdapter = association.get(parentObject);
-                    if (objectAdapter == null) {
-                        continue;
-                    }
-                    if (association.isOneToManyAssociation()) {
-                        final ObjectAdapter coll = objectAdapter;
-                        final CollectionFacet facet = coll.getSpecification().getFacet(CollectionFacet.class);
-                        for (final ObjectAdapter element : facet.iterable(coll)) {
-                            if (element.getOid().equals(aggregatedOid)) {
-                                aggregatedAdapter = element;
-                                break outer;
-                            }
-                        }
-                    } else {
-                        if (objectAdapter.getOid().equals(aggregatedOid)) {
-                            aggregatedAdapter = objectAdapter;
-                            break;
+        ObjectAdapter aggregatedAdapter = null;
+        outer: for (final ObjectAssociation association : parentObject.getSpecification().getAssociations()) {
+            if (association.getSpecification().isAggregated()) {
+                final ObjectAdapter objectAdapter = association.get(parentObject);
+                if (objectAdapter == null) {
+                    continue;
+                }
+                if (association.isOneToManyAssociation()) {
+                    final ObjectAdapter coll = objectAdapter;
+                    final CollectionFacet facet = coll.getSpecification().getFacet(CollectionFacet.class);
+                    for (final ObjectAdapter element : facet.iterable(coll)) {
+                        if (element.getOid().equals(aggregatedOid)) {
+                            aggregatedAdapter = element;
+                            break outer;
                         }
                     }
-                } else if (association.isOneToManyAssociation()) {
-                    if (association.getId().equals(idParts[2])) {
-                        return association.get(parentObject);
+                } else {
+                    if (objectAdapter.getOid().equals(aggregatedOid)) {
+                        aggregatedAdapter = objectAdapter;
+                        break;
                     }
                 }
+            } else if (association.isOneToManyAssociation()) {
+                if (association.getId().equals(idParts[2])) {
+                    return association.get(parentObject);
+                }
             }
-            return aggregatedAdapter;
         }
+        return aggregatedAdapter;
     }
 
     public boolean isInternalRequest() {

@@ -30,6 +30,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.google.common.collect.Lists;
+
 import org.apache.log4j.Logger;
 
 import org.apache.isis.applib.query.Query;
@@ -40,6 +42,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterFactory;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.core.metamodel.adapter.oid.stringable.directly.OidWithSpecification;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacetUtils;
 import org.apache.isis.core.metamodel.services.ServiceUtil;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
@@ -226,10 +229,10 @@ public abstract class PersistenceSessionAbstract implements PersistenceSession {
     private void createServiceAdapters() {
         getTransactionManager().startTransaction();
         for (final Object service : servicesInjector.getRegisteredServices()) {
-            final ObjectSpecification serviceNoSpec = specificationLoader.loadSpecification(service.getClass());
-            serviceNoSpec.markAsService();
+            final ObjectSpecification serviceSpecification = specificationLoader.loadSpecification(service.getClass());
+            serviceSpecification.markAsService();
             final String serviceId = ServiceUtil.id(service);
-            final Oid existingOid = getOidForService(serviceId);
+            final Oid existingOid = getOidForService(serviceSpecification, serviceId);
             ObjectAdapter adapter;
             if (existingOid == null) {
                 adapter = getAdapterManager().adapterFor(service);
@@ -328,6 +331,13 @@ public abstract class PersistenceSessionAbstract implements PersistenceSession {
             adapter.changeState(ResolveState.RESOLVED);
         }
         return adapter;
+    }
+
+    @Override
+    public final ObjectAdapter recreateAdapter(final OidWithSpecification oid) {
+        final String className = oid.getClassName();
+        final ObjectSpecification objectSpec = getSpecificationLoader().loadSpecification(className);
+        return recreateAdapter(oid, objectSpec);
     }
 
     @Override
@@ -528,7 +538,7 @@ public abstract class PersistenceSessionAbstract implements PersistenceSession {
      * be given the same OID that it had when it was created in a different
      * session.
      */
-    protected abstract Oid getOidForService(String name);
+    protected abstract Oid getOidForService(ObjectSpecification serviceSpecification, String name);
 
     /**
      * Registers the specified service as having the specified OID.
@@ -552,16 +562,17 @@ public abstract class PersistenceSessionAbstract implements PersistenceSession {
     @Override
     public List<ObjectAdapter> getServices() {
         final List<Object> services = servicesInjector.getRegisteredServices();
-        final List<ObjectAdapter> serviceAdapters = new ArrayList<ObjectAdapter>();
-        for (final Object service : services) {
-            serviceAdapters.add(getService(service));
+        final List<ObjectAdapter> serviceAdapters = Lists.newArrayList();
+        for (final Object servicePojo : services) {
+            serviceAdapters.add(getService(servicePojo));
         }
         return serviceAdapters;
     }
 
-    private ObjectAdapter getService(final Object service) {
-        final Oid oid = getOidForService(ServiceUtil.id(service));
-        return recreateAdapterForExistingService(oid, service);
+    private ObjectAdapter getService(final Object servicePojo) {
+        final ObjectSpecification serviceSpecification = getSpecificationLoader().loadSpecification(servicePojo.getClass());
+        final Oid oid = getOidForService(serviceSpecification, ServiceUtil.id(servicePojo));
+        return recreateAdapterForExistingService(oid, servicePojo);
     }
 
     /**
@@ -625,10 +636,12 @@ public abstract class PersistenceSessionAbstract implements PersistenceSession {
         debug.appendln();
 
         debug.appendTitle("Services");
-        for (final Object service : servicesInjector.getRegisteredServices()) {
-            final String id = ServiceUtil.id(service);
-            final String serviceClassName = service.getClass().getName();
-            final Oid oidForService = getOidForService(id);
+        for (final Object servicePojo : servicesInjector.getRegisteredServices()) {
+            final String id = ServiceUtil.id(servicePojo);
+            final Class<? extends Object> serviceClass = servicePojo.getClass();
+            final ObjectSpecification serviceSpecification = getSpecificationLoader().loadSpecification(serviceClass);
+            final String serviceClassName = serviceClass.getName();
+            final Oid oidForService = getOidForService(serviceSpecification, id);
             final String serviceId = id + (id.equals(serviceClassName) ? "" : " (" + serviceClassName + ")");
             debug.appendln(oidForService != null ? oidForService.toString() : "[NULL]", serviceId);
         }

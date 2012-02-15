@@ -28,7 +28,7 @@ public final class FileAuthorizationConstants {
     private static final String ROOT = ConfigurationConstants.ROOT + AuthorizationManagerInstaller.TYPE + "." + FileAuthorizationManagerInstaller.NAME + ".";
 
     public static final String WHITELIST_RESOURCE_KEY = ROOT + "whitelist";
-    public static final String WHITELIST_RESOURCE_DEFAULT = "security_file.allow";
+    public static final String WHITELIST_RESOURCE_DEFAULT = "authorization_file.allow";
 
     public static final String BLACKLIST_RESOURCE_KEY = ROOT + "blacklist";
     public static final String BLACKLIST_RESOURCE_DEFAULT = "";

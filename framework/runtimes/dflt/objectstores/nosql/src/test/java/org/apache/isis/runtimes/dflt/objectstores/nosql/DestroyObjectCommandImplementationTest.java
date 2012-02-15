@@ -62,7 +62,7 @@ public class DestroyObjectCommandImplementationTest {
             }
         });
 
-        final NoSqlDestroyObjectCommand command = new NoSqlDestroyObjectCommand(new SerialKeyCreator(), new SerialNumberVersionCreator(), object);
+        final NoSqlDestroyObjectCommand command = new NoSqlDestroyObjectCommand(new NoSqlKeyCreator(), new SerialNumberVersionCreator(), object);
         command.execute(commandContext);
     }
 }

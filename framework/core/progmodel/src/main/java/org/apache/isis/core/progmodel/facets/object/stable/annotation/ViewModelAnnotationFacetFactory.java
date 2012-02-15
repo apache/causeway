@@ -19,27 +19,27 @@
 
 package org.apache.isis.core.progmodel.facets.object.stable.annotation;
 
-import org.apache.isis.applib.annotation.Stable;
+import org.apache.isis.applib.annotation.ViewModel;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.AnnotationBasedFacetFactoryAbstract;
-import org.apache.isis.core.metamodel.facets.object.stable.StableFacet;
+import org.apache.isis.core.metamodel.facets.object.stable.ViewModelFacet;
 
-public class StableAnnotationFacetFactory extends AnnotationBasedFacetFactoryAbstract {
+public class ViewModelAnnotationFacetFactory extends AnnotationBasedFacetFactoryAbstract {
 
-    public StableAnnotationFacetFactory() {
+    public ViewModelAnnotationFacetFactory() {
         super(FeatureType.OBJECTS_ONLY);
     }
 
     @Override
     public void process(final ProcessClassContext processClassContaxt) {
-        final Stable annotation = getAnnotation(processClassContaxt.getCls(), Stable.class);
+        final ViewModel annotation = getAnnotation(processClassContaxt.getCls(), ViewModel.class);
         FacetUtil.addFacet(create(annotation, processClassContaxt.getFacetHolder()));
     }
 
-    private StableFacet create(final Stable annotation, final FacetHolder holder) {
-        return annotation == null ? null : new StableFacetAnnotation(holder);
+    private ViewModelFacet create(final ViewModel annotation, final FacetHolder holder) {
+        return annotation == null ? null : new ViewModelFacetAnnotation(holder);
     }
 
 }

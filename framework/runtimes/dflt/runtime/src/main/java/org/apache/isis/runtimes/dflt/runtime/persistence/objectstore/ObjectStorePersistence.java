@@ -186,11 +186,12 @@ public interface ObjectStorePersistence extends DebuggableWithTitle, SessionScop
     // Services
     // ///////////////////////////////////////////////////////
 
-    void registerService(String name, Oid oid);
+    void registerService(String id, Oid oid);
 
     /**
      * Returns the OID for the adapted service.
+     * @param serviceSpecification TODO
      */
-    Oid getOidForService(String name);
+    Oid getOidForService(ObjectSpecification serviceSpecification, String id);
 
 }

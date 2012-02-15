@@ -111,15 +111,15 @@ public class JdbcConnector extends AbstractDatabaseConnector {
                 throw new SqlObjectStoreException("No connection URL specified to database");
             }
             if (user == null) {
-                throw new SqlObjectStoreException("No user specified for database connection");
-            }
-            if (password == null) {
-                throw new SqlObjectStoreException("No password specified for database connection");
+                LOG.info("No user specified; will attempt to login with no credentials");
+            } else {
+                if (password == null) {
+                    throw new SqlObjectStoreException("No password specified for database connection");
+                }
             }
 
             Class.forName(driver);
-            LOG.info("Connecting to " + url + " as " + user);
-            connection = DriverManager.getConnection(url, user, password);
+            connection = getConnection(url, user, password);
             if (connection == null) {
                 throw new SqlObjectStoreException("No connection established to " + url);
             }
@@ -129,6 +129,16 @@ public class JdbcConnector extends AbstractDatabaseConnector {
             throw new SqlObjectStoreException("Could not find database driver", e);
         }
 
+    }
+
+    private static Connection getConnection(final String url, final String user, final String password) throws SQLException {
+        if(user != null) {
+            LOG.info("Connecting to " + url + " as " + user);
+            return DriverManager.getConnection(url, user, password);
+        } else {
+            LOG.info("Connecting to " + url + " with no credentials");
+            return DriverManager.getConnection(url);
+        }
     }
 
     /*

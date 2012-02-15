@@ -371,7 +371,7 @@ public class InMemoryObjectStore implements ObjectStore {
     // ///////////////////////////////////////////////////////
 
     @Override
-    public Oid getOidForService(final String name) {
+    public Oid getOidForService(ObjectSpecification serviceSpecification, final String name) {
         return persistedObjects.getService(name);
     }
 

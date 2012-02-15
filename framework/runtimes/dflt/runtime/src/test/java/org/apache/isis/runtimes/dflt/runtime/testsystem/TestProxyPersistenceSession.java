@@ -220,7 +220,7 @@ public class TestProxyPersistenceSession extends PersistenceSessionAbstract {
     }
 
     @Override
-    protected Oid getOidForService(final String name) {
+    protected Oid getOidForService(ObjectSpecification serviceSpecification, final String name) {
         throw new NotYetImplementedException();
     }
 

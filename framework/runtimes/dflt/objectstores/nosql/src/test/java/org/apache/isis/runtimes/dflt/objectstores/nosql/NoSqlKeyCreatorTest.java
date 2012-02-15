@@ -33,12 +33,13 @@ import org.apache.isis.runtimes.dflt.objectstores.dflt.testsystem.TestProxySyste
 import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.simple.SerialOid;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 
-public class SerialKeyCreatorTest {
+public class NoSqlKeyCreatorTest {
 
     private ObjectSpecification specification;
     private ObjectAdapter object;
     private final String reference = ExampleReferencePojo.class.getName() + "@3";
-    private SerialKeyCreator serialKeyCreator;
+    private NoSqlKeyCreator noSqlKeyCreator;
+    private final NoSqlOid oid3 = new NoSqlOid(ExampleReferencePojo.class.getName(), SerialOid.createPersistent(3));
 
     @Before
     public void setup() {
@@ -46,7 +47,7 @@ public class SerialKeyCreatorTest {
         final TestProxySystemII system = new TestProxySystemII();
         system.init();
 
-        serialKeyCreator = new SerialKeyCreator();
+        noSqlKeyCreator = new NoSqlKeyCreator();
     }
 
     @Test
@@ -56,19 +57,20 @@ public class SerialKeyCreatorTest {
         ((SerialOid) object.getOid()).setId(3);
         object.getOid().makePersistent();
 
-        assertEquals(reference, serialKeyCreator.reference(object));
+        assertEquals(reference, noSqlKeyCreator.reference(object));
     }
 
     @Test
     public void oid() throws Exception {
-        final Oid oid = serialKeyCreator.oidFromReference(reference);
-        assertEquals(SerialOid.createPersistent(3), oid);
+        final NoSqlOid oid = (NoSqlOid) noSqlKeyCreator.oidFromReference(reference);
+        assertEquals(oid3.getSerialNo(), oid.getSerialNo());
+        assertEquals(oid3.getClassName(), oid.getClassName());
     }
 
     @Test
     public void specification() throws Exception {
         specification = IsisContext.getSpecificationLoader().loadSpecification(ExampleReferencePojo.class);
-        final ObjectSpecification spec = serialKeyCreator.specificationFromReference(reference);
+        final ObjectSpecification spec = noSqlKeyCreator.specificationFromReference(reference);
         assertEquals(specification, spec);
     }
 }

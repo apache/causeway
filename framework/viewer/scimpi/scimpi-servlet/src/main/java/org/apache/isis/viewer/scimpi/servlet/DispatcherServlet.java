@@ -61,6 +61,7 @@ public class DispatcherServlet extends HttpServlet {
             // TODO when using version 3.0 of Servlet API use the HttpOnly
             // setting for improved security
             if (httpSession != null) {
+                @SuppressWarnings("unchecked")
                 final HashMap<String, Object> data = (HashMap<String, Object>) httpSession.getAttribute("scimpi-context");
                 if (data != null) {
                     context.setSessionData(data);

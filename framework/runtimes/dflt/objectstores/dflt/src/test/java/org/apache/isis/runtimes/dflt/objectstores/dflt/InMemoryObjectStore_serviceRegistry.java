@@ -19,23 +19,36 @@
 
 package org.apache.isis.runtimes.dflt.objectstores.dflt;
 
+import org.jmock.Mockery;
+import org.jmock.integration.junit4.JUnit4Mockery;
+import org.junit.Before;
+
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.runtimes.dflt.runtime.testsystem.TestProxyOid;
 
 public class InMemoryObjectStore_serviceRegistry extends AbstractInMemoryObjectStoreTest {
 
+    private Mockery context = new JUnit4Mockery();
+    
     private TestProxyOid oid14;
+    private ObjectSpecification serviceSpecification;
 
-    public void noServicesRegisteredWhenEmpty() throws Exception {
-        final Oid oidForService = store.getOidForService("service name");
+    public void setUp() throws Exception {
+        super.setUp();
+        serviceSpecification = context.mock(ObjectSpecification.class);
+    }
+    
+    public void testServicesRegisteredWhenEmpty() throws Exception {
+        final Oid oidForService = store.getOidForService(serviceSpecification, "service name");
         assertEquals(null, oidForService);
     }
 
     public void testOidForService() throws Exception {
         registerService14();
 
-        final Oid oidForService = store.getOidForService("service name");
+        final Oid oidForService = store.getOidForService(serviceSpecification, "service name");
         assertEquals(oid14, oidForService);
     }
 

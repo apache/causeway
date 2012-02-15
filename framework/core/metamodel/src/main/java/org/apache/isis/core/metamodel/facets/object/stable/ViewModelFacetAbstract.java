@@ -17,24 +17,20 @@
  *  under the License.
  */
 
-package org.apache.isis.applib.annotation;
+package org.apache.isis.core.metamodel.facets.object.stable;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Inherited;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.MarkerFacetAbstract;
 
-/**
- * Indicates that an entity's definition is stable, such that any changes to its
- * structure will be backwardly compatible.
- * 
- * <p>
- * Originally introduced to support the json-viewer's RESTful support for
- * application-defined mime types.
- */
-@Inherited
-@Target({ ElementType.TYPE })
-@Retention(RetentionPolicy.RUNTIME)
-public @interface Stable {
+public abstract class ViewModelFacetAbstract extends MarkerFacetAbstract implements ViewModelFacet {
+
+    public static Class<? extends Facet> type() {
+        return ViewModelFacet.class;
+    }
+
+    public ViewModelFacetAbstract(final FacetHolder holder) {
+        super(type(), holder);
+    }
+
 }

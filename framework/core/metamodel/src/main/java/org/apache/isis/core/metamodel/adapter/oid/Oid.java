@@ -31,6 +31,9 @@ public interface Oid extends Encodable {
      * After this call the {@link #hashCode()} return by both the specified
      * object and this object will be the same, and both objects will be
      * {@link #equals(Object) equal}.
+     * 
+     * <p>
+     * Only ever used by client-server remoting.
      */
     void copyFrom(Oid oid);
 

@@ -17,18 +17,23 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.object.stable;
+package org.apache.isis.core.metamodel.adapter.oid.stringable.directly;
 
-import org.apache.isis.core.metamodel.facets.MarkerFacet;
+import org.apache.isis.core.metamodel.adapter.oid.Oid;
 
 /**
- * Indicates that this class is stable, that is, any changes to its structure
- * will be backwards compatible.
+ * Defines an {@link Oid} implementation that is self-describing,
+ * such that it can be used to recreate an adapter/pojo with
+ * no further information.
  * 
  * <p>
- * In the standard Apache Isis Programming Model, typically corresponds to
- * applying the <tt>@Stable</tt> annotation at the class level.
+ * Somewhat akin to DSP's oid that is of the form <tt>CUS|1234567A</tt>,
+ * where the "CUS" stands for the specification.
+ * 
+ * @see DirectlyStringableOid
  */
-public interface StableFacet extends MarkerFacet {
+public interface OidWithSpecification extends Oid {
+
+    String getClassName();
 
 }

@@ -446,16 +446,16 @@ public class PersistenceSessionProxy extends PersistenceSessionAbstract {
      * cache but it does not?
      */
     @Override
-    public Oid getOidForService(final String name) {
+    public Oid getOidForService(ObjectSpecification serviceSpecification, final String name) {
         Oid oid = serviceOidByNameCache.get(name);
         if (oid == null) {
-            oid = getOidForServiceFromPersistenceLayer(name);
+            oid = getOidForServiceFromPersistenceLayer(serviceSpecification, name);
             registerService(name, oid);
         }
         return oid;
     }
 
-    private Oid getOidForServiceFromPersistenceLayer(final String serviceId) {
+    private Oid getOidForServiceFromPersistenceLayer(ObjectSpecification serviceSpecification, final String serviceId) {
         final OidForServiceRequest request = new OidForServiceRequest(getAuthenticationSession(), serviceId);
         final OidForServiceResponse response = serverFacade.oidForService(request);
         final IdentityData data = response.getOidData();

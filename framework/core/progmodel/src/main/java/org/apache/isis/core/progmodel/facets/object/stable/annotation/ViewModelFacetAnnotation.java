@@ -17,20 +17,15 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.object.stable;
+package org.apache.isis.core.progmodel.facets.object.stable.annotation;
 
-import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.MarkerFacetAbstract;
+import org.apache.isis.core.metamodel.facets.object.stable.ViewModelFacetAbstract;
 
-public abstract class StableFacetAbstract extends MarkerFacetAbstract implements StableFacet {
+public class ViewModelFacetAnnotation extends ViewModelFacetAbstract {
 
-    public static Class<? extends Facet> type() {
-        return StableFacet.class;
-    }
-
-    public StableFacetAbstract(final FacetHolder holder) {
-        super(type(), holder);
+    public ViewModelFacetAnnotation(final FacetHolder holder) {
+        super(holder);
     }
 
 }

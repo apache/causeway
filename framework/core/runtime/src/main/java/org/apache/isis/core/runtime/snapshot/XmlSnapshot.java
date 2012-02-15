@@ -511,12 +511,12 @@ public class XmlSnapshot {
         // case.
     }
 
-    private String log(final String label, final ObjectAdapter object) {
-        return log(label, (object == null ? "(null)" : object.titleString() + "[" + oidOrHashCode(object) + "]"));
+    private String log(final String label, final ObjectAdapter adapter) {
+        return log(label, (adapter == null ? "(null)" : adapter.titleString() + "[" + oidAsString(adapter) + "]"));
     }
 
-    private String log(final String label, final Object object) {
-        return (label == null ? "?" : label) + "='" + (object == null ? "(null)" : object.toString()) + "'";
+    private String log(final String label, final Object pojo) {
+        return (label == null ? "?" : label) + "='" + (pojo == null ? "(null)" : pojo.toString()) + "'";
     }
 
     /**
@@ -610,7 +610,7 @@ public class XmlSnapshot {
 
         final Place place = new Place(object, element);
 
-        isisMetaModel.setAttributesForClass(element, oidOrHashCode(object).toString());
+        isisMetaModel.setAttributesForClass(element, oidAsString(object).toString());
 
         final List<ObjectAssociation> fields = nos.getAssociations();
         if (LOG.isDebugEnabled()) {
@@ -799,21 +799,13 @@ public class XmlSnapshot {
         return place;
     }
 
-    private String oidOrHashCode(final ObjectAdapter object) {
+    private String oidAsString(final ObjectAdapter object) {
         final Oid oid = object.getOid();
-        /*
-         * if (oid == null) { return "" + object.hashCode(); }
-         */
         if (oid instanceof DirectlyStringableOid) {
             final DirectlyStringableOid directlyStringableOid = (DirectlyStringableOid) oid;
             return directlyStringableOid.enString();
-        } else {
-            return oid.toString();
-        }
-        /*
-         * InlineTransferableWriter itw = new InlineTransferableWriter();
-         * oid.writeData(itw); itw.close(); return itw.toString();
-         */
+        } 
+        return oid.toString();
     }
 
     /**

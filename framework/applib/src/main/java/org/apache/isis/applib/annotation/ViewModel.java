@@ -17,27 +17,23 @@
  *  under the License.
  */
 
-package org.apache.isis.tck.dom.stables;
+package org.apache.isis.applib.annotation;
 
-import java.util.List;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Inherited;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-import org.apache.isis.applib.annotation.Idempotent;
-import org.apache.isis.applib.annotation.MemberOrder;
-import org.apache.isis.applib.annotation.Named;
-import org.apache.isis.applib.annotation.QueryOnly;
-
-@Named("Stables")
-public interface StableEntityRepository {
-
-    @QueryOnly
-    @MemberOrder(sequence = "1")
-    public List<StableEntity> list();
-
-    @MemberOrder(sequence = "2")
-    public StableEntity newTransientEntity();
-
-    @Idempotent
-    @MemberOrder(sequence = "2")
-    public StableEntity newPersistentEntity(@Named("name") String name);
-
+/**
+ * Indicates that a domain object is intended to be used as a view model,
+ * such that any changes to its structure will be backwardly compatible.
+ * 
+ * <p>
+ * Originally introduced to support the json-viewer's RESTful support.
+ */
+@Inherited
+@Target({ ElementType.TYPE })
+@Retention(RetentionPolicy.RUNTIME)
+public @interface ViewModel {
 }

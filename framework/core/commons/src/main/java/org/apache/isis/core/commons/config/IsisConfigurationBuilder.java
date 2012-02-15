@@ -56,4 +56,9 @@ public interface IsisConfigurationBuilder extends Injectable {
      * Note that this may be a {@link ResourceStreamSourceComposite composite}.
      */
     public ResourceStreamSource getResourceStreamSource();
+    
+    /**
+     * Log a summary of resources found or not found.
+     */
+    public void dumpResourcesToLog();
 }

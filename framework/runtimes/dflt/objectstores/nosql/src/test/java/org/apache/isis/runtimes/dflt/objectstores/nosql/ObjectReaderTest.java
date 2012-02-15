@@ -30,8 +30,9 @@ import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.hamcrest.CoreMatchers;
 import org.jmock.Expectations;
-import org.jmock.Mockery;
+import org.jmock.auto.Mock;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 
 import org.apache.isis.core.commons.config.IsisConfiguration;
@@ -39,19 +40,37 @@ import org.apache.isis.core.commons.exceptions.UnexpectedCallException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2;
+import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2.Mode;
 import org.apache.isis.runtimes.dflt.objectstores.dflt.testsystem.TestProxySystemII;
 import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.simple.SerialOid;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 
 public class ObjectReaderTest {
 
+    @Rule
+    public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_ONLY);
+
+    @Mock
+    private KeyCreator keyCreator;
+    @Mock
+    private VersionCreator versionCreator;
+    
+    private ObjectSpecification exampleValuePojoSpec;
+    private ObjectSpecification exampleReferencePojoSpec;
+    private ObjectSpecification exampleCollectionPojoSpec;
+    
     private ObjectReader objectReader;
+    
     private StateReader reader1;
     private StateReader reader2;
-    private Mockery context;
-    private KeyCreator keyCreator;
-    private VersionCreator versionCreator;
+    
     private Map<String, DataEncryption> dataEncrypter;
+
+    private final NoSqlOid oid3 = new NoSqlOid(ExampleValuePojo.class.getName(), SerialOid.createPersistent(3));
+    private final NoSqlOid oid4 = new NoSqlOid(ExampleReferencePojo.class.getName(), SerialOid.createPersistent(4));
+    private final NoSqlOid oid5 = new NoSqlOid(ExampleCollectionPojo.class.getName(), SerialOid.createPersistent(5));
+
 
     @Before
     public void setup() {
@@ -59,11 +78,11 @@ public class ObjectReaderTest {
         final TestProxySystemII system = new TestProxySystemII();
         system.init();
 
-        context = new Mockery();
-
+        exampleValuePojoSpec = IsisContext.getSpecificationLoader().loadSpecification(ExampleValuePojo.class);
+        exampleReferencePojoSpec = IsisContext.getSpecificationLoader().loadSpecification(ExampleReferencePojo.class);
+        exampleCollectionPojoSpec = IsisContext.getSpecificationLoader().loadSpecification(ExampleCollectionPojo.class);
+                
         objectReader = new ObjectReader();
-        keyCreator = context.mock(KeyCreator.class);
-        versionCreator = context.mock(VersionCreator.class);
 
         dataEncrypter = new HashMap<String, DataEncryption>();
         final DataEncryption dataEncrypter1 = new DataEncryption() {
@@ -111,15 +130,15 @@ public class ObjectReaderTest {
                 one(reader1).readTime();
                 will(returnValue("1020"));
                 one(versionCreator).version("3", "username", "1020");
-                one(keyCreator).oid("3");
-
-                will(returnValue(SerialOid.createPersistent(3)));
+                
+                one(keyCreator).oid(exampleValuePojoSpec, "3");
+                will(returnValue(oid3));
                 ;
             }
         });
 
         final ObjectAdapter readObject = objectReader.load(reader1, keyCreator, versionCreator, dataEncrypter);
-        assertEquals(SerialOid.createPersistent(3), readObject.getOid());
+        assertEquals(oid3, readObject.getOid());
         assertEquals(ResolveState.RESOLVED, readObject.getResolveState());
 
         final ExampleValuePojo pojo = (ExampleValuePojo) readObject.getObject();
@@ -150,8 +169,8 @@ public class ObjectReaderTest {
                 will(returnValue("1020"));
                 one(versionCreator).version("3", "username", "1020");
 
-                one(keyCreator).oid("4");
-                will(returnValue(SerialOid.createPersistent(4)));
+                one(keyCreator).oid(exampleReferencePojoSpec, "4");
+                will(returnValue(oid4));
                 ;
 
                 one(reader2).readField("reference1");
@@ -161,15 +180,15 @@ public class ObjectReaderTest {
                 will(returnValue("null"));
 
                 one(keyCreator).oidFromReference("ref@3");
-                will(returnValue(SerialOid.createPersistent(3)));
+                will(returnValue(oid3));
                 ;
                 one(keyCreator).specificationFromReference("ref@3");
-                will(returnValue(IsisContext.getSpecificationLoader().loadSpecification(ExampleValuePojo.class)));
+                will(returnValue(exampleValuePojoSpec));
             }
         });
 
         final ObjectAdapter readObject = objectReader.load(reader2, keyCreator, versionCreator, dataEncrypter);
-        assertEquals(SerialOid.createPersistent(4), readObject.getOid());
+        assertEquals(oid4, readObject.getOid());
         assertEquals(ResolveState.RESOLVED, readObject.getResolveState());
 
         final ExampleReferencePojo pojo = (ExampleReferencePojo) readObject.getObject();
@@ -201,8 +220,8 @@ public class ObjectReaderTest {
                 will(returnValue("1020"));
                 one(versionCreator).version("3", "username", "1020");
 
-                one(keyCreator).oid("5");
-                will(returnValue(SerialOid.createPersistent(5)));
+                one(keyCreator).oid(exampleCollectionPojoSpec, "5");
+                will(returnValue(oid5));
                 ;
 
                 one(reader2).readField("hetrogenousCollection");
@@ -213,16 +232,16 @@ public class ObjectReaderTest {
                 one(keyCreator).specificationFromReference("ref@3");
                 will(returnValue(specification));
                 one(keyCreator).oidFromReference("ref@3");
-                will(returnValue(SerialOid.createPersistent(3)));
+                will(returnValue(oid3));
                 one(keyCreator).specificationFromReference("ref@4");
                 will(returnValue(specification));
                 one(keyCreator).oidFromReference("ref@4");
-                will(returnValue(SerialOid.createPersistent(4)));
+                will(returnValue(oid4));
             }
         });
 
         final ObjectAdapter readObject = objectReader.load(reader2, keyCreator, versionCreator, dataEncrypter);
-        assertEquals(SerialOid.createPersistent(5), readObject.getOid());
+        assertEquals(oid5, readObject.getOid());
         assertEquals(ResolveState.RESOLVED, readObject.getResolveState());
 
         final ExampleCollectionPojo pojo = (ExampleCollectionPojo) readObject.getObject();

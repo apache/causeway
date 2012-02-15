@@ -688,7 +688,7 @@ public class JsonRepresentation {
     // ///////////////////////////////////////////////////////////////////////
 
     public String asUrlEncoded() {
-        return UrlEncodingUtils.asUrlEncoded(asJsonNode());
+        return UrlEncodingUtils.urlEncode(asJsonNode());
     }
 
     // ///////////////////////////////////////////////////////////////////////

@@ -28,6 +28,7 @@ import java.lang.reflect.Method;
 
 import org.apache.isis.core.commons.ensure.Ensure;
 import org.apache.isis.core.commons.lang.JavaClassUtils;
+import org.apache.isis.core.commons.url.UrlEncodingUtils;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.stringable.OidStringifier;
 
@@ -61,11 +62,14 @@ public class OidStringifierDirect implements OidStringifier {
             throw new IllegalArgumentException("Must be DirectlyStringableOid; oid class: " + oid.getClass().getName());
         }
         final DirectlyStringableOid directlyStringableOid = (DirectlyStringableOid) oid;
+        // it isn't necessary to URL encode here; the browser will do encoding for us
         return directlyStringableOid.enString();
     }
 
     @Override
-    public Oid deString(final String oidStr) {
+    public Oid deString(final String urlEncodedOidStr) {
+        // we do need to URL decode here, though.
+        final String oidStr = UrlEncodingUtils.urlDecode(urlEncodedOidStr);
         try {
             return (Oid) deStringMethod.invoke(null, oidStr);
         } catch (final IllegalAccessException ex) {

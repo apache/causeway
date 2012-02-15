@@ -17,26 +17,19 @@
  *  under the License.
  */
 
-package org.apache.isis.tck.dom.stables;
+package org.apache.isis.core.metamodel.adapter.oid.stringable.directly;
 
-import org.apache.isis.applib.AbstractDomainObject;
-import org.apache.isis.applib.annotation.MemberOrder;
-import org.apache.isis.applib.annotation.Stable;
 
-@Stable
-public class StableEntity extends AbstractDomainObject {
-
-    // {{ Name
-    private String name;
-
-    @MemberOrder(sequence = "1")
-    public String getName() {
-        return name;
-    }
-
-    public void setName(final String name) {
-        this.name = name;
-    }
-    // }}
+/**
+ * Combines {@link DirectlyStringableOid} and {@link OidWithSpecification}.
+ * 
+ * <p>
+ * As such, is directly akin to the DSP's oid that is of the form 
+ * <tt>CUS|1234567A</tt>, where the overall form is a simple string
+ * and also identifies the type of the object.
+ * 
+ * @see OidWithSpecification
+ */
+public interface DirectlyStringableOidWithSpecification extends DirectlyStringableOid, OidWithSpecification {
 
 }

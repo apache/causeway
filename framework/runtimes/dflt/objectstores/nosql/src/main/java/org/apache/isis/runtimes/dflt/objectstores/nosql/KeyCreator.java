@@ -21,6 +21,7 @@ package org.apache.isis.runtimes.dflt.objectstores.nosql;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.core.metamodel.adapter.oid.stringable.directly.OidWithSpecification;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 public interface KeyCreator {
@@ -29,9 +30,9 @@ public interface KeyCreator {
 
     String reference(ObjectAdapter object);
 
-    Oid oid(String id);
+    OidWithSpecification oid(ObjectSpecification objectSpecification, String id);
 
-    Oid oidFromReference(String ref);
+    OidWithSpecification oidFromReference(String ref);
 
     ObjectSpecification specificationFromReference(String ref);
 

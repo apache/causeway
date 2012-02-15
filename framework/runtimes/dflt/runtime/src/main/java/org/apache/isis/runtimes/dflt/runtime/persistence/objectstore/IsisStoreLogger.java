@@ -103,8 +103,8 @@ public class IsisStoreLogger extends Logger implements ObjectStore {
     }
 
     @Override
-    public Oid getOidForService(final String name) {
-        final Oid oid = decorated.getOidForService(name);
+    public Oid getOidForService(ObjectSpecification serviceSpecification, final String name) {
+        final Oid oid = decorated.getOidForService(serviceSpecification, name);
         log("get OID for service " + name + ": " + oid);
         return oid;
     }

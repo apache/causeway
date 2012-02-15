@@ -220,7 +220,7 @@ public class ObjectStoreSpy implements ObjectStore, ObjectStoreTransactionManage
     }
 
     @Override
-    public Oid getOidForService(final String name) {
+    public Oid getOidForService(ObjectSpecification serviceSpecification, final String name) {
         return null;
     }
 

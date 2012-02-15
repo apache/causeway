@@ -4661,9 +4661,18 @@ svn: No such revision 1126567</programlisting>
         <sect2>
           <title>Perform the Release</title>
 
-          <para>The command to stage the release is:</para>
+          <para>The command to stage the release (assuming that
+          <filename>release.properties</filename> is still available in the
+          root directory) is:</para>
 
           <programlisting>mvn release:perform -P apache-release</programlisting>
+
+          <para>If, for any reason, the
+          <filename>release.properties</filename> file is not available, the
+          release can still be performed using:</para>
+
+          <programlisting>mvn release:perform -P apache-release \
+    -D connectionUrl=scm:svn:http://svn.apache.org/repos/asf/incubator/isis/tags/isis-0.x.x-incubating/framework</programlisting>
 
           <para>The command starts off by checking out the codebase from the
           tag:</para>
@@ -4671,7 +4680,7 @@ svn: No such revision 1126567</programlisting>
           <programlisting>[INFO] [release:perform {execution: default-cli}]
 [INFO] Checking out the project to perform the release ...
 [INFO] Executing: cmd.exe /X /C 
-       "svn --non-interactive checkout https://svn.apache.org/repos/asf/incubator/isis/tags/isis-0.x.x-incubating 
+       "svn --non-interactive checkout https://svn.apache.org/repos/asf/incubator/isis/tags/isis-0.x.x-incubating/framework 
         /users/uuuuuuuu/ai/branches/0.x.x-incubating/framework/target/checkout"
 [INFO] Working directory: /users/uuuuuuuu/ai/branches/0.x.x-incubating/framework/target/
 ...</programlisting>

@@ -17,15 +17,18 @@
  *  under the License.
  */
 
-package org.apache.isis.core.progmodel.facets.object.stable.annotation;
+package org.apache.isis.core.metamodel.facets.object.stable;
 
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.object.stable.StableFacetAbstract;
+import org.apache.isis.core.metamodel.facets.MarkerFacet;
 
-public class StableFacetAnnotation extends StableFacetAbstract {
-
-    public StableFacetAnnotation(final FacetHolder holder) {
-        super(holder);
-    }
+/**
+ * Indicates that this class is a view model, that is, any changes to its structure
+ * will be backwards compatible.
+ * 
+ * <p>
+ * In the standard Apache Isis Programming Model, typically corresponds to
+ * applying the <tt>@ViewModel</tt> annotation at the class level.
+ */
+public interface ViewModelFacet extends MarkerFacet {
 
 }

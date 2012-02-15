@@ -17,13 +17,26 @@
  *  under the License.
  */
 
-package org.apache.isis.security.file.authentication;
+package org.apache.isis.tck.dom.viewmodels;
 
-public class FileAuthenticationConstants {
+import org.apache.isis.applib.AbstractDomainObject;
+import org.apache.isis.applib.annotation.MemberOrder;
+import org.apache.isis.applib.annotation.ViewModel;
 
-    public static final String PASSWORDS_FILE = "authentication_file.passwords";
+@ViewModel
+public class SimpleViewModel extends AbstractDomainObject {
 
-    private FileAuthenticationConstants() {
+    // {{ Name
+    private String name;
+
+    @MemberOrder(sequence = "1")
+    public String getName() {
+        return name;
     }
+
+    public void setName(final String name) {
+        this.name = name;
+    }
+    // }}
 
 }

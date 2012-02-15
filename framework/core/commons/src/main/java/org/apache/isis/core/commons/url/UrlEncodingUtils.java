@@ -16,19 +16,14 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.json.applib.util;
+package org.apache.isis.core.commons.url;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
-import java.util.Arrays;
-import java.util.List;
 
 import com.google.common.base.Charsets;
 import com.google.common.base.Function;
-import com.google.common.collect.Lists;
-
-import org.codehaus.jackson.JsonNode;
 
 public final class UrlEncodingUtils {
 
@@ -49,19 +44,6 @@ public final class UrlEncodingUtils {
 
     public static String urlDecode(final String string) {
         return FUNCTION.apply(string);
-    }
-
-    public static List<String> urlDecode(final List<String> values) {
-        return Lists.transform(values, FUNCTION);
-    }
-
-    public static String[] urlDecode(final String[] values) {
-        final List<String> asList = Arrays.asList(values);
-        return urlDecode(asList).toArray(new String[] {});
-    }
-
-    public static String urlEncode(final JsonNode jsonNode) {
-        return UrlEncodingUtils.urlEncode(jsonNode.toString());
     }
 
     public static String urlEncode(final String str) {

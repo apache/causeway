@@ -138,7 +138,7 @@ public class ClientRequestConfigurer {
         if (requestArgs.size() == 0) {
             return this;
         }
-        final String queryString = UrlEncodingUtils.asUrlEncoded(requestArgs.toString());
+        final String queryString = UrlEncodingUtils.urlEncode(requestArgs.toString());
         uriBuilder.replaceQuery(queryString);
         return this;
     }
@@ -152,7 +152,7 @@ public class ClientRequestConfigurer {
         for (final Map.Entry<String, JsonRepresentation> entry : requestArgs.mapIterable()) {
             final String param = entry.getKey();
             final JsonRepresentation argRepr = entry.getValue();
-            final String arg = UrlEncodingUtils.asUrlEncoded(argRepr.asArg());
+            final String arg = UrlEncodingUtils.urlEncode(argRepr.asArg());
             queryParameters.add(param, arg);
         }
         return this;

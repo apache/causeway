@@ -26,45 +26,77 @@ import static org.junit.Assert.assertTrue;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.jmock.Expectations;
-import org.jmock.Mockery;
+import org.jmock.auto.Mock;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 
-import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.simple.SerialOid;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.SpecificationLoader;
+import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2;
+import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2.Mode;
 
 public class NoSqlOidGeneratorTest {
 
-    private Mockery context;
-    private NoSqlDataDatabase db;
-    private NoSqlOidGenerator oidGenerator;
-    private SerialOid oid;
+    public static class ExamplePojo {}
+    
+    @Rule
+    public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_ONLY);
 
+    @Mock
+    private NoSqlDataDatabase db;
+    @Mock
+    private SpecificationLoader mockSpecificationLoader;
+    @Mock
+    private ObjectSpecification mockSpecification;
+    
+    private NoSqlOid oid;
+    private NoSqlOidGenerator oidGenerator;
+
+
+    
     @Before
     public void setup() {
         Logger.getRootLogger().setLevel(Level.OFF);
 
-        context = new Mockery();
-        db = context.mock(NoSqlDataDatabase.class);
-        context.checking(new Expectations() {
-            {
-                one(db).nextSerialNumberBatch("_id", 4);
-                will(returnValue(1L));
+        // allowingExamplePojoLoadedIntoSpecificationLoader
+        context.checking(new Expectations() {{
+           allowing(mockSpecificationLoader).loadSpecification(with(ExamplePojo.class));
+           will(returnValue(mockSpecification));
+
+           allowing(mockSpecification).getCorrespondingClass();
+           will(returnValue(ExamplePojo.class));
+        }});
+        
+        oidGenerator = new NoSqlOidGenerator(db, -999, 4) {
+            @Override
+            protected SpecificationLoader getSpecificationLoader() {
+                return mockSpecificationLoader;
             }
-        });
-        oidGenerator = new NoSqlOidGenerator(db, -999, 4);
-        oid = oidGenerator.createTransientOid(null);
+        };
+        oid = oidGenerator.createTransientOid(new ExamplePojo());
     }
 
     @Test
     public void transientOid() throws Exception {
+        
+        // TODO: REVIEW: how did this ever call db.nextSerialNumberBatch?
+        
         assertEquals(-999, oid.getSerialNo());
         assertTrue(oid.isTransient());
-        oid = oidGenerator.createTransientOid(null);
+        oid = oidGenerator.createTransientOid(new ExamplePojo());
         assertEquals(-998, oid.getSerialNo());
     }
 
     @Test
     public void batchCreated() throws Exception {
+          context.checking(new Expectations() {
+              {
+                  one(db).nextSerialNumberBatch("_id", 4);
+                  will(returnValue(1L));
+              }
+          });
+
         oidGenerator.convertTransientToPersistentOid(oid);
         assertFalse(oid.isTransient());
         assertEquals(1, oid.getSerialNo());
@@ -73,8 +105,15 @@ public class NoSqlOidGeneratorTest {
 
     @Test
     public void batchReused() throws Exception {
+        context.checking(new Expectations() {
+            {
+                one(db).nextSerialNumberBatch("_id", 4);
+                will(returnValue(1L));
+            }
+        });
+
         oidGenerator.convertTransientToPersistentOid(oid);
-        oid = oidGenerator.createTransientOid(null);
+        oid = oidGenerator.createTransientOid(new ExamplePojo());
         oidGenerator.convertTransientToPersistentOid(oid);
         assertFalse(oid.isTransient());
         assertEquals(2, oid.getSerialNo());
@@ -83,11 +122,18 @@ public class NoSqlOidGeneratorTest {
 
     @Test
     public void secondbatchCreated() throws Exception {
+        context.checking(new Expectations() {
+            {
+                one(db).nextSerialNumberBatch("_id", 4);
+                will(returnValue(1L));
+            }
+        });
+
         oidGenerator.convertTransientToPersistentOid(oid);
-        oidGenerator.convertTransientToPersistentOid(oid = oidGenerator.createTransientOid(null));
-        oidGenerator.convertTransientToPersistentOid(oid = oidGenerator.createTransientOid(null));
+        oidGenerator.convertTransientToPersistentOid(oid = oidGenerator.createTransientOid(new ExamplePojo()));
+        oidGenerator.convertTransientToPersistentOid(oid = oidGenerator.createTransientOid(new ExamplePojo()));
         assertEquals(3, oid.getSerialNo());
-        oidGenerator.convertTransientToPersistentOid(oid = oidGenerator.createTransientOid(null));
+        oidGenerator.convertTransientToPersistentOid(oid = oidGenerator.createTransientOid(new ExamplePojo()));
         assertEquals(4, oid.getSerialNo());
 
         context.checking(new Expectations() {
@@ -96,7 +142,7 @@ public class NoSqlOidGeneratorTest {
                 will(returnValue(5L));
             }
         });
-        oidGenerator.convertTransientToPersistentOid(oid = oidGenerator.createTransientOid(null));
+        oidGenerator.convertTransientToPersistentOid(oid = oidGenerator.createTransientOid(new ExamplePojo()));
         assertFalse(oid.isTransient());
         assertEquals(5, oid.getSerialNo());
         context.assertIsSatisfied();

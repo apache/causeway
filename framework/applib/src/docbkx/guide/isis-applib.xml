@@ -7134,31 +7134,6 @@ y}</programlisting>
       </sect1>
 
       <sect1>
-        <title>@Stable</title>
-
-        <para>The <classname>@Stable</classname> annotation allows the
-        developer to declare that any changes to an entity's structure are
-        guaranteed to be backwardly compatible.</para>
-
-        <para>It was originally introduced to support a requirement of the
-        RESTful viewers (json viewer) which directly expose the domain objects
-        as RESTful representations. The presence of this annotation allows the
-        viewer to return an application-defined media type. This would
-        typically be annotated only on non-persisted domain objects acting as
-        view models.</para>
-
-        <para>For example, a domain object that represents a summary of a
-        <classname>Customer</classname> and their most recent
-        <classname>Order</classname>s might be annotated as:</para>
-
-        <programlisting format="linespecific">@NotPersistable
-@Stable
-public class CustomerAndOrdersViewModel {
-   ...
-}</programlisting>
-      </sect1>
-
-      <sect1>
         <title>@Title</title>
 
         <para>The <literal moreinfo="none">@Title</literal> annotation is used
@@ -7281,6 +7256,29 @@ public class ComplexNumber {
         framework to interact with the value, parsing strings and displaying
         as text, and encoding/decoding (for serialization). For more
         information, see <xref linkend="chp.ValueTypes" />.</para>
+      </sect1>
+
+      <sect1>
+        <title>@ViewModel</title>
+
+        <para>The <classname>@ViewModel</classname> annotation allows the
+        developer to declare that a domain object is intended to be used as a
+        view model. As such, any changes to its structure are guaranteed to be
+        backwardly compatible.</para>
+
+        <para>The annotation was originally introduced to support a
+        requirement of the RESTful viewers (json viewer) which directly expose
+        the domain objects as RESTful representations</para>
+
+        <para>For example, a domain object that represents a summary of a
+        <classname>Customer</classname> and their most recent
+        <classname>Order</classname>s might be annotated as:</para>
+
+        <programlisting format="linespecific">@NotPersistable
+@ViewModel
+public class CustomerAndOrdersViewModel {
+   ...
+}</programlisting>
       </sect1>
     </appendix>
 

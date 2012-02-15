@@ -44,6 +44,7 @@ import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceQuery
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 
 public class NoSqlObjectStore implements ObjectStore {
+    
     private final NoSqlDataDatabase database;
     private final Map<String, Oid> serviceCache = new HashMap<String, Oid>();
     private final KeyCreator keyCreator;
@@ -152,11 +153,11 @@ public class NoSqlObjectStore implements ObjectStore {
     }
 
     @Override
-    public Oid getOidForService(final String name) {
+    public Oid getOidForService(ObjectSpecification serviceSpecification, final String name) {
         Oid oid = serviceCache.get(name);
         if (oid == null) {
             final String id = database.getService(name);
-            oid = id == null ? null : keyCreator.oid(id);
+            oid = id == null ? null : keyCreator.oid(serviceSpecification, id);
             serviceCache.put(name, oid);
         }
         return oid;

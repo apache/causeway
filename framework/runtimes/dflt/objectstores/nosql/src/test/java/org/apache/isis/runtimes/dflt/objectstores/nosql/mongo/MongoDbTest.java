@@ -39,7 +39,7 @@ import org.junit.Test;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.runtimes.dflt.objectstores.nosql.ExampleValuePojo;
-import org.apache.isis.runtimes.dflt.objectstores.nosql.SerialKeyCreator;
+import org.apache.isis.runtimes.dflt.objectstores.nosql.NoSqlKeyCreator;
 import org.apache.isis.runtimes.dflt.objectstores.nosql.TrialObjects;
 import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.simple.SerialOid;
 
@@ -66,7 +66,7 @@ public class MongoDbTest {
             return;
         }
 
-        db = new MongoDb("localhost", 0, "testdb", new SerialKeyCreator());
+        db = new MongoDb("localhost", 0, "testdb", new NoSqlKeyCreator());
         db.open();
 
         final ExampleValuePojo pojo = new ExampleValuePojo();

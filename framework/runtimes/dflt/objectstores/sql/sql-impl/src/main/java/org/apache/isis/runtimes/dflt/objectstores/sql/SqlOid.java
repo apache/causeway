@@ -24,10 +24,15 @@ import java.io.Serializable;
 
 import org.apache.isis.core.commons.encoding.DataInputExtended;
 import org.apache.isis.core.commons.encoding.DataOutputExtended;
+import org.apache.isis.core.commons.encoding.HexUtils;
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.core.metamodel.adapter.oid.stringable.directly.DirectlyStringableOid;
+import org.apache.isis.core.metamodel.adapter.oid.stringable.directly.DirectlyStringableOidWithSpecification;
+import org.apache.isis.core.metamodel.adapter.oid.stringable.directly.OidWithSpecification;
 
-public final class SqlOid implements Oid, Serializable {
+public final class SqlOid implements DirectlyStringableOidWithSpecification, Serializable {
+    
     private static final long serialVersionUID = 1L;
 
     public static enum State {
@@ -63,7 +68,6 @@ public final class SqlOid implements Oid, Serializable {
         this.className = className;
         this.primaryKey = primaryKey;
         this.state = state;
-        initialized();
     }
 
     public SqlOid(final DataInputExtended input) throws IOException {
@@ -72,7 +76,6 @@ public final class SqlOid implements Oid, Serializable {
         this.newPrimaryKey = input.readSerializable(PrimaryKey.class);
         this.previous = input.readEncodable(SqlOid.class);
         this.state = input.readSerializable(State.class);
-        initialized();
     }
 
     @Override
@@ -84,9 +87,6 @@ public final class SqlOid implements Oid, Serializable {
         output.writeSerializable(state);
     }
 
-    private void initialized() {
-        // nothing to do
-    }
 
     // //////////////////////////////////////////////////
     // impl
@@ -147,6 +147,26 @@ public final class SqlOid implements Oid, Serializable {
         previous = null;
     }
 
+    // ////////////////////////////////////////////
+    // Directly Stringable
+    // ////////////////////////////////////////////
+
+    public static SqlOid deString(String oidStr) {
+        final String[] split = oidStr.split("~");
+        // redundantly store the classname twice; once before the @ and once in encoded form after
+        // must not use a '@' as separator, else would break Scimpi
+        return HexUtils.decoded(split[1], SqlOid.class);
+    }
+    
+    @Override
+    public String enString() {
+        // redundantly store the classname twice; once before the @ and once in encoded form after
+        // must not use a '@' as separator, else would break Scimpi
+        return className + "~" + HexUtils.encoded(this);
+    }
+
+
+
     // //////////////////////////////////////////////////
     // equals, hashCode
     // //////////////////////////////////////////////////
@@ -179,5 +199,6 @@ public final class SqlOid implements Oid, Serializable {
     public String toString() {
         return (isTransient() ? "T" : "") + "OID#" + primaryKey.stringValue() + "/" + className + (previous == null ? "" : "+");
     }
+
 
 }
