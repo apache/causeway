@@ -49,9 +49,9 @@ generic.dataTypeFor = function(memberItem) {
 generic.pageAndOptions = function(page, view, dataUrl, transition) {
   var pageAndOptions = {
       "page": page,
-      "allowSamePageTransition": true,
       "options": { 
          "dataUrl": "#" + view + "?dataUrl=" + util.urlencode(dataUrl),
+         "allowSamePageTransition": true,
          "transition": transition
        }
     }

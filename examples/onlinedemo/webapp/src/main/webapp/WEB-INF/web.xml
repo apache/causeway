@@ -121,7 +121,7 @@
     <!-- redirect to /doc/index.html if accessing "/" using web browser -->
     <filter>
         <filter-name>RedirectToDocsFilter</filter-name>
-        <filter-class>org.apache.isis.examples.onlinedemo.filters.RedirectToDocsFilter</filter-class>
+        <filter-class>org.apache.isis.core.webapp.routing.RedirectToDocsFilter</filter-class>
         <init-param>
             <param-name>redirectTo</param-name>
             <param-value>/doc/index.html</param-value>
@@ -189,11 +189,13 @@
     </filter>
     <filter-mapping>
         <filter-name>IsisSessionFilterForHtml</filter-name>
-        <url-pattern>*.htmlviewer</url-pattern>
+        <servlet-name>HtmlLogon</servlet-name>
+        <servlet-name>HtmlRegister</servlet-name>
+        <servlet-name>HtmlController</servlet-name>
     </filter-mapping>
 
     <servlet>
-        <servlet-name>Logon</servlet-name>
+        <servlet-name>HtmlLogon</servlet-name>
         <servlet-class>org.apache.isis.viewer.html.servlet.LogonServlet</servlet-class>
         <init-param>
             <param-name>authenticationSessionStrategy</param-name>
@@ -205,25 +207,25 @@
         </init-param>
     </servlet>
     <servlet-mapping>
-        <servlet-name>Logon</servlet-name>
+        <servlet-name>HtmlLogon</servlet-name>
         <url-pattern>/logon.htmlviewer</url-pattern>
     </servlet-mapping>
 
     <servlet>
-        <servlet-name>Register</servlet-name>
+        <servlet-name>HtmlRegister</servlet-name>
         <servlet-class>org.apache.isis.viewer.html.servlet.RegisterServlet</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>Register</servlet-name>
+        <servlet-name>HtmlRegister</servlet-name>
         <url-pattern>/register.htmlviewer</url-pattern>
     </servlet-mapping>
 
     <servlet>
-        <servlet-name>Controller</servlet-name>
+        <servlet-name>HtmlController</servlet-name>
         <servlet-class>org.apache.isis.viewer.html.servlet.ControllerServlet</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>Controller</servlet-name>
+        <servlet-name>HtmlController</servlet-name>
         <url-pattern>*.htmlviewer</url-pattern>
     </servlet-mapping>
 
@@ -263,27 +265,25 @@
             <param-name>whenNoSession</param-name>
             <param-value>basicAuthChallenge</param-value>
         </init-param>
-        <init-param>
-            <!-- ignores any requests to the HTML viewer resources -->
-            <param-name>ignoreExtensions</param-name>
-            <param-value>htmlviewer</param-value>
-        </init-param>
     </filter>
     <filter-mapping>
         <!-- this is mapped to the entire app; however the IsisSessionFilter will "notice" if the session filter has already been
              executed for the request pipeline, and if so will do nothing -->
         <filter-name>IsisSessionFilterForJson</filter-name>
-        <url-pattern>*</url-pattern>
+        <servlet-name>JsonDispatcher</servlet-name>
     </filter-mapping>
 
-
     <servlet>
-        <servlet-name>RestEasy</servlet-name>
+        <servlet-name>JsonDispatcher</servlet-name>
         <servlet-class>org.jboss.resteasy.plugins.server.servlet.HttpServletDispatcher</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>RestEasy</servlet-name>
+        <servlet-name>JsonDispatcher</servlet-name>
         <url-pattern>/</url-pattern>
     </servlet-mapping>
-	
+
+    
 </web-app>
+
+
+
