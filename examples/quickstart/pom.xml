@@ -148,7 +148,9 @@
     <modules>
         <module>dom</module>
         <module>fixture</module>
-        <module>objstore-default</module>
+        <module>objstore-dflt</module>
+        <module>objstore-mongodb</module>
+        <module>objstore-sql</module>
         <module>webapp</module>
         <module>tests-junit</module>
         <module>tests-bdd</module>

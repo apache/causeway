@@ -35,7 +35,7 @@ import org.apache.isis.viewer.junit.Service;
 import org.apache.isis.viewer.junit.Services;
 
 @RunWith(IsisTestRunner.class)
-@ConfigDir("../webapp/src/main/webapp/WEB-INF")
+@ConfigDir("../webapp/src/main/webapp/WEB-INF") // acts as default, but can be overridden by annotations
 @Services({ @Service(ToDoItemsDefault.class) })
 public abstract class AbstractTest {
 

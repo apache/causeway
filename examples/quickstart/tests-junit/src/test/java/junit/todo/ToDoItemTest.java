@@ -24,6 +24,7 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 import junit.AbstractTest;
 import dom.todo.ToDoItem;
+import fixture.LogonAsSvenFixture;
 import fixture.todo.ToDoItemsFixture;
 
 import org.junit.Before;
@@ -33,7 +34,7 @@ import org.apache.isis.progmodel.wrapper.applib.DisabledException;
 import org.apache.isis.viewer.junit.Fixture;
 import org.apache.isis.viewer.junit.Fixtures;
 
-@Fixtures({ @Fixture(ToDoItemsFixture.class) })
+@Fixtures({ @Fixture(ToDoItemsFixture.class), @Fixture(LogonAsSvenFixture.class) })
 public class ToDoItemTest extends AbstractTest {
 
     private ToDoItem toDoItem;

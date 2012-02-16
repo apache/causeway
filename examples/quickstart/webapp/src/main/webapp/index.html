@@ -61,11 +61,11 @@ th {
         <table>
             <tr><th>Object Store</th><th>Description</th><th>Further Documentation</th></tr>
             <tr><td>In-memory objectstore</td><td>for rapid prototyping</td><td>(none)</td></tr>
-            <tr><td>NoSQL objectstore</td><td>for persisting to a MongoDB instance</td><td>(none currently)</td></tr>
+            <tr><td>NoSQL MongoDB objectstore</td><td>for persisting to a MongoDB instance</td><td>(none currently)</td></tr>
             <tr><td>SQL objectstore</td><td>for persisting to a relational database</td><td><a href="http://incubator.apache.org/isis/runtimes/dflt/objectstores/sql/docbkx/html/guide/isis-sql-objectstore.html">Config and Deployment guide</a></td></tr>
         </table>
         
-        <p>The in-memory objectstore is the default (as it takes no additional setup).</p>
+        <p>The in-memory objectstore is the default, as it takes no additional setup.</p>
 
         <h2>What next?</h2>
 
@@ -74,14 +74,41 @@ th {
         that you no longer need.  You'll probably also want to delete this file, and remove the 
         <tt>&lt;filter&gt;RedirectToDocsFilter&lt;/filter&gt;</tt> entry in <tt>web.xml</tt>.
         
-        <p>Then, decide which objectstore you want to use. While doing initial prototyping you may find
-        that the default in-memory objectstore suffices; the <tt>isis.fixtures</tt> property in
-        the <tt>WEB-INF/isis.properties</tt> configuration file the initial data set that is used to
-        seed the database.  If you decide to use the NoSQL or SQL databases, follow the more detailed comments in
-        the <tt>WEB-INF/isis.properties</tt> config file.
+        <p>Also, decide which objectstore you want to use to persist your domain objects.  As noted above, the in-memory object store is the default.  
+        If you decide to use the NoSQL (MongoDB) or SQL object stores, you'll need to make a number of configuration changes:
+        <ul>
+            <li>in the <tt>WEB-INF/isis.properties</tt> config file:
+                <ul>
+                    <li>modify the <tt>isis.services</tt>/<tt>isis.services.prefix</tt> keys, to pick up the domain service implementation for the object store</li>
+                    <li>modify the <tt>isis.persistor</tt> key, to specify the appropriate object store component
+                </ul>
+            </li>
+            <li>in the <tt>WEB-INF/persistor_xxx.properties</tt> file, verify the configuration of the server (hostname, port, etc)</li>
+            <li>modify the pom.xml, to depend on the corresponding <tt>objectstore-xxx</tt> module</li>
+            <li>if using SQL object store, modify the pom.xml of the corresponding <tt>objectstore-xxx</tt> to bring in JDBC drivers</li>
+        </ul>
 
-        <p>Finally, don't forget that there is more information at the <a href="http://incubator.apache.org/isis">Apache Isis website</a>, and more help on the
-        Apache Isis mailing lists (<a href="mailto:isis-users-subscribe@incubator.apache.org">subscribe here</a>, <a href="mailto:isis-users@incubator.apache.org">post here</a>)</p>        
+        <p>While doing initial prototyping you may find that the default in-memory objectstore suffices; the <tt>isis.fixtures</tt> / <tt>isis.fixtures.prefix</tt> 
+        properties in the <tt>WEB-INF/isis.properties</tt> configuration file define an the initial data set with which to seed the database.  
+        <p>For both the NoSQL and SQL object stores, these fixtures are loaded the very first time that the system is bootstrapped, but are then
+        not loaded thereafter.
+
+        <h2>Running Tests</h2>
+        
+        <p>In addition to app, the archetype also generates some simple tests:
+        <ul>
+            <li>JUnit tests exercise the domain objects using the JUnit viewer.  Domain object are interacted with "as if" through the user interface;
+                a CGLib proxy wraps each domain object in order to enforce business rules and validation</li>
+            <li>BDD tests exercise the domain object through an integration with the <a href="http://concordion.org">Concordion</a> BDD framework.
+                These tests are specified using XHTML, and running them generates a browsable website that indicates whether the tests pass.  By default
+                the site is generated in <tt>/tmp/concordion</tt> (specifically, <tt>/tmp/concordion/viewer/bdd/stories/todo/Index.html</tt>).</li>     
+        </ul>
+        <p>These tests are configured to run within Maven (eg using <tt>mvn test</tt>).</p> 
+
+        <h2>What if I need more help?</h2>
+
+        <p>If you get stuck, don't forget that there is more information at the <a href="http://incubator.apache.org/isis">Apache Isis website</a>, and you
+        can always find more help on the Apache Isis mailing lists (<a href="mailto:isis-users-subscribe@incubator.apache.org">subscribe here</a>, <a href="mailto:isis-users@incubator.apache.org">post here</a>)</p>        
         
         <h2><a id="toc">Static Resources</a></h2>
         
@@ -108,6 +135,9 @@ th {
             <tr><td>WEB-INF/authorization_file.properties</td><td>File-based authorization mechanism's configuration file</td></tr>
             <tr><td>WEB-INF/authorization_file.allow</td><td>File-based authorization mechanism's supporting configuration file (whitelist)</td></tr>
             <tr><td>WEB-INF/persistor_in-memory.properties</td><td>In-memory objectstore configuration file</td></tr>
+            <tr><td>WEB-INF/persistor_mongodb.properties</td><td>MongoDB objectstore configuration file</td></tr>
+            <tr><td>WEB-INF/persistor_sql.properties</td><td>SQL objectstore configuration file</td></tr>
+            <tr><td>WEB-INF/user-profile-store_in-memory.properties</td><td>In-memory user profile store configuration file</td></tr>
             <tr><td>WEB-INF/viewer_html.properties</td><td>HTML viewer configuration file</td></tr>
             <tr><td>WEB-INF/viewer_json.properties</td><td>JSON viewer configuration file</td></tr>
             <tr><td>WEB-INF/viewer_scimpi.properties</td><td>Scimpi viewer configuration file</td></tr>

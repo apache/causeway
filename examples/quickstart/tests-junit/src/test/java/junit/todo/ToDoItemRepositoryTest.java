@@ -28,6 +28,7 @@ import java.util.List;
 
 import junit.AbstractTest;
 import dom.todo.ToDoItem;
+import fixture.LogonAsSvenFixture;
 import fixture.todo.ToDoItemsFixture;
 
 import org.junit.Test;
@@ -35,7 +36,7 @@ import org.junit.Test;
 import org.apache.isis.viewer.junit.Fixture;
 import org.apache.isis.viewer.junit.Fixtures;
 
-@Fixtures({ @Fixture(ToDoItemsFixture.class) })
+@Fixtures({ @Fixture(ToDoItemsFixture.class), @Fixture(LogonAsSvenFixture.class) })
 public class ToDoItemRepositoryTest extends AbstractTest {
 
     @Test
@@ -46,7 +47,7 @@ public class ToDoItemRepositoryTest extends AbstractTest {
 
     @Test
     public void canCreateToDoItem() throws Exception {
-        final ToDoItem newItem = toDoItems.newToDo("item description", "Professional", "sven");
+        final ToDoItem newItem = toDoItems.newToDo("item description", "Professional");
         assertThat(newItem, is(not(nullValue())));
         assertThat(newItem.getDescription(), is("item description"));
         assertThat(getDomainObjectContainer().isPersistent(newItem), is(true));

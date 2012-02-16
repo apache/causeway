@@ -26,8 +26,8 @@
         <version>0.2.0-incubating-SNAPSHOT</version>
     </parent>
 
-	<artifactId>quickstart-objstore-dflt</artifactId>
-	<name>Quickstart Repositories (for ObjectStore Default)</name>
+	<artifactId>quickstart-objstore-mongodb</artifactId>
+	<name>Quickstart Repositories (for MongoDB)</name>
 
 	<dependencies>
 	
@@ -36,6 +36,13 @@
 			<groupId>${project.groupId}</groupId>
 			<artifactId>quickstart-dom</artifactId>
 		</dependency>
+
+
+        <!-- isis nosql-mongodb objectstore -->
+        <dependency>
+            <groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
+            <artifactId>nosql</artifactId>
+        </dependency>
 		
 	</dependencies>
 
