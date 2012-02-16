@@ -21,6 +21,8 @@ package objstore.dflt.todo;
 
 import java.util.List;
 
+import com.google.common.base.Objects;
+
 import dom.todo.ToDoItem;
 import dom.todo.ToDoItems;
 
@@ -43,22 +45,49 @@ public class ToDoItemsDefault extends AbstractFactoryAndRepository implements To
 
     @Override
     public List<ToDoItem> notYetDone() {
+        final String userName = getContainer().getUser().getName();
         return allMatches(ToDoItem.class, new Filter<ToDoItem>() {
             @Override
             public boolean accept(final ToDoItem t) {
-                return !t.isComplete();
+                return Objects.equal(t.getOwnedBy(), userName) && !t.isDone();
             }
         });
     }
 
-    // {{ NewToDo
+    // {{ NewToDo  (action)
     @Override
-    public ToDoItem newToDo(final String description) {
+    public ToDoItem newToDo(final String description, String category) {
+        final String ownedBy = getContainer().getUser().getName();
+        return newToDo(description, category, ownedBy);
+    }
+    public List<String> choices1NewToDo() {
+        return ToDoItem.CATEGORIES;
+    }
+    // }}
+
+    // {{ NewToDo  (hidden)
+    @Override
+    public ToDoItem newToDo(final String description, String category, String ownedBy) {
         final ToDoItem toDoItem = newTransientInstance(ToDoItem.class);
         toDoItem.setDescription(description);
+        toDoItem.setCategory(category);
+        toDoItem.setOwnedBy(ownedBy);
         persist(toDoItem);
         return toDoItem;
     }
     // }}
+
+    // {{ SimilarTo (action)
+    @Override
+    public List<ToDoItem> similarTo(final ToDoItem toDoItem) {
+        return allMatches(ToDoItem.class, new Filter<ToDoItem>() {
+            @Override
+            public boolean accept(ToDoItem t) {
+                return t != toDoItem && Objects.equal(toDoItem.getCategory(), t.getCategory()) ;
+            }
+        });
+    }
+    // }}
+
 
 }

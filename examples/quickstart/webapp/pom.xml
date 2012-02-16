@@ -16,7 +16,8 @@
   KIND, either express or implied.  See the License for the
   specific language governing permissions and limitations
   under the License.
---><project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
     <parent>
@@ -97,26 +98,97 @@
             <artifactId>json-viewer</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>org.apache.isis.viewer</groupId>
+            <artifactId>scimpi-servlet</artifactId>
+        </dependency>
+
         <!-- isis runtime -->
         <dependency>
             <groupId>org.apache.isis.runtimes.dflt.bytecode</groupId>
             <artifactId>dflt</artifactId>
         </dependency>
+        
         <dependency>
             <groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
             <artifactId>dflt</artifactId>
         </dependency>
+        
+        <!--
+         - uncomment in order to use mongodb object store
+         - 
         <dependency>
             <groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
-            <artifactId>xml</artifactId>
+            <artifactId>nosql</artifactId>
         </dependency>
+        -->
+        
+        <!--
+         - uncomment in order to use sql object store
+         - 
+        <dependency>
+            <groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
+            <artifactId>sql-impl</artifactId>
+        </dependency>
+        -->
+
+        <!--
+         - uncomment to use HSQLDB
+         - in conjunction with sql object store
+         - 
+        <dependency>
+            <groupId>org.hsqldb</groupId>
+            <artifactId>hsqldb</artifactId>
+            <version>1.8.0.10</version>
+        </dependency>
+        -->
+
+        <!--
+         - uncomment to use MS SQL Server JDBC driver
+         - in conjunction with sql object store
+         -
+         - since this JDBC driver is not available via Maven central repo, it must
+         - also be installed into your local .m2 repository, using:
+         -
+           mvn install:install-file         \
+              -D groupId=com.microsoft      \
+              -D artifactId=sqljdbc4        \
+              -D version=3.0                \
+              -D packaging=jar              \
+              -D file=/path/to/sqljdbc4.jar 
+         - 
+        <dependency>
+            <groupId>com.microsoft</groupId>
+            <artifactId>sqljdbc4</artifactId>
+            <version>3.0</version>
+        </dependency>
+        -->        
+
+
+        <!--
+         - uncomment to use Ingres JDBC driver
+         - in conjunction with sql object store
+         - 
+         - since this JDBC driver is not available via Maven central repo, it must
+         - also be installed into your local .m2 repository, using:
+         -
+           mvn install:install-file         \
+              -D groupId=com.ingres         \
+              -D artifactId=iijdbc          \
+              -D version=10.0               \
+              -D packaging=jar              \
+              -D file=/path/to/iijdbc.jar 
+         - 
+        <dependency>
+            <groupId>com.ingres</groupId>
+            <artifactId>iijdbc</artifactId>
+            <version>10.0</version>
+        </dependency>
+         -->
+
         <dependency>
             <groupId>org.apache.isis.runtimes.dflt.profilestores</groupId>
             <artifactId>dflt</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.isis.runtimes.dflt.profilestores</groupId>
-            <artifactId>xml</artifactId>
         </dependency>
         
         <!-- isis progmodel -->
@@ -148,6 +220,7 @@
             <artifactId>geronimo-servlet_2.5_spec</artifactId>
             <version>1.2</version>
         </dependency>
+
 
 	</dependencies>
 

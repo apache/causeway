@@ -28,15 +28,16 @@ public class ToDoItemsFixture extends AbstractFixture {
 
     @Override
     public void install() {
-        createToDoItem("Buy milk");
-        createToDoItem("Pick up laundry");
-        createToDoItem("Buy stamps");
-        createToDoItem("Write blog post");
-        createToDoItem("Organize brown bag");
+        String ownedBy = "sven";
+        createToDoItem("Buy milk", "Domestic", ownedBy);
+        createToDoItem("Pick up laundry", "Domestic", ownedBy);
+        createToDoItem("Buy stamps", "Domestic", ownedBy);
+        createToDoItem("Write blog post", "Professional", ownedBy);
+        createToDoItem("Organize brown bag", "Professional", ownedBy);
     }
 
-    private ToDoItem createToDoItem(final String description) {
-        return toDoItems.newToDo(description);
+    private ToDoItem createToDoItem(final String description, String category, String ownedBy) {
+        return toDoItems.newToDo(description, category, ownedBy);
     }
 
     private ToDoItems toDoItems;

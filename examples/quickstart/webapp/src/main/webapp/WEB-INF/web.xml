@@ -24,6 +24,39 @@
     <display-name>Apache Isis Webapp</display-name>
 
 
+    <welcome-file-list>
+        <welcome-file>index.html</welcome-file>
+    </welcome-file-list>
+    
+    <context-param>
+        <param-name>deploymentType</param-name>
+        <param-value>SERVER</param-value>
+    </context-param>
+    
+    
+   <!--
+    -
+    -
+    - config for archetype only
+    -
+    -
+    -->
+
+    <!-- redirect to /doc/index.html if accessing "/" using web browser -->
+    <filter>
+        <filter-name>RedirectToDocsFilter</filter-name>
+        <filter-class>org.apache.isis.core.webapp.routing.RedirectToDocsFilter</filter-class>
+        <init-param>
+            <param-name>redirectTo</param-name>
+            <param-value>/index.html</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>RedirectToDocsFilter</filter-name>
+        <url-pattern>/</url-pattern>
+    </filter-mapping>
+    
+    
     <!--
     -
     -
@@ -40,7 +73,7 @@
     <!-- which (optional) configuration file(s) to load -->
     <context-param>
         <param-name>isis.viewers</param-name>
-        <param-value>html,json</param-value>
+        <param-value>html,json,scimpi</param-value>
     </context-param>
 
     <!-- cache static resources for 1 day -->
@@ -159,11 +192,12 @@
     </filter>
     <filter-mapping>
         <filter-name>IsisSessionFilterForHtml</filter-name>
-        <url-pattern>*.htmlviewer</url-pattern>
+        <servlet-name>HtmlLogin</servlet-name>
+        <servlet-name>HtmlDispatcher</servlet-name>
     </filter-mapping>
 
     <servlet>
-        <servlet-name>Logon</servlet-name>
+        <servlet-name>HtmlLogon</servlet-name>
         <servlet-class>org.apache.isis.viewer.html.servlet.LogonServlet</servlet-class>
         <init-param>
             <param-name>authenticationSessionStrategy</param-name>
@@ -175,17 +209,42 @@
         </init-param>
     </servlet>
     <servlet-mapping>
-        <servlet-name>Logon</servlet-name>
+        <servlet-name>HtmlLogon</servlet-name>
         <url-pattern>/logon.htmlviewer</url-pattern>
     </servlet-mapping>
 
     <servlet>
-        <servlet-name>Controller</servlet-name>
+        <servlet-name>HtmlDispatcher</servlet-name>
         <servlet-class>org.apache.isis.viewer.html.servlet.ControllerServlet</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>Controller</servlet-name>
+        <servlet-name>HtmlDispatcher</servlet-name>
         <url-pattern>*.htmlviewer</url-pattern>
+    </servlet-mapping>
+
+
+
+
+    <!--
+    -
+    -
+    - config specific to the scimpi-viewer
+    -
+    -
+    -->
+    <servlet>
+        <servlet-name>ScimpiDispatcher</servlet-name>
+        <servlet-class>org.apache.isis.viewer.scimpi.servlet.DispatcherServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+        <init-param>
+             <param-name>view</param-name>
+             <param-value>login.shtml</param-value>
+        </init-param>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ScimpiDispatcher</servlet-name>
+        <url-pattern>*.shtml</url-pattern>
+        <url-pattern>*.app</url-pattern>
     </servlet-mapping>
 
 
@@ -224,26 +283,21 @@
             <param-name>whenNoSession</param-name>
             <param-value>basicAuthChallenge</param-value>
         </init-param>
-        <init-param>
-            <!-- ignores any requests to the HTML viewer resources -->
-            <param-name>ignoreExtensions</param-name>
-            <param-value>htmlviewer</param-value>
-        </init-param>
     </filter>
     <filter-mapping>
         <!-- this is mapped to the entire app; however the IsisSessionFilter will "notice" if the session filter has already been
              executed for the request pipeline, and if so will do nothing -->
         <filter-name>IsisSessionFilterForJson</filter-name>
-        <url-pattern>*</url-pattern>
+        <servlet-name>JsonDispatcher</servlet-name>
     </filter-mapping>
 
 
     <servlet>
-        <servlet-name>RestEasy</servlet-name>
+        <servlet-name>JsonDispatcher</servlet-name>
         <servlet-class>org.jboss.resteasy.plugins.server.servlet.HttpServletDispatcher</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>RestEasy</servlet-name>
+        <servlet-name>JsonDispatcher</servlet-name>
         <url-pattern>/</url-pattern>
     </servlet-mapping>
 	

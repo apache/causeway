@@ -152,11 +152,6 @@
         <module>webapp</module>
         <module>tests-junit</module>
         <module>tests-bdd</module>
-        <!-- 
-        <module>quickrun</module>
-        <module>viewer-scimpi</module>
-        <module>viewer-wicket</module>
-        -->
     </modules>
 
     <dependencyManagement>
@@ -198,26 +193,6 @@
                 <artifactId>tests-junit</artifactId>
                 <version>${project.version}</version>
             </dependency>
-
-            <!-- 
-            <dependency>
-                <groupId>${project.groupId}</groupId>
-                <artifactId>quickstart-quickrun</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>${project.groupId}</groupId>
-                <artifactId>quickstart-viewer-scimpi</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>${project.groupId}</groupId>
-                <artifactId>quickstart-viewer-wicket</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            -->
 
 
             <!-- isis: applib -->
@@ -381,13 +356,11 @@
             </dependency>
 
             <!-- isis: runtimes-dflt: objectstores: nosql -->
-            <!-- 
             <dependency>
                 <groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
                 <artifactId>nosql</artifactId>
                 <version>${isis.version}</version>
             </dependency>
-            -->
 
 
             <!-- isis: runtimes-dflt: profilestores: dflt -->
@@ -513,7 +486,6 @@
 
 
             <!-- isis: viewer: scimpi -->
-            <!-- 
             <dependency>
                 <groupId>org.apache.isis.viewer</groupId>
                 <artifactId>scimpi</artifactId>
@@ -529,7 +501,6 @@
                 <artifactId>scimpi-servlet</artifactId>
                 <version>${isis.version}</version>
             </dependency>
-            -->
 
 
             <!-- isis: viewer: dnd -->

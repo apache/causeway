@@ -46,7 +46,7 @@ public class ToDoItemRepositoryTest extends AbstractTest {
 
     @Test
     public void canCreateToDoItem() throws Exception {
-        final ToDoItem newItem = toDoItems.newToDo("item description");
+        final ToDoItem newItem = toDoItems.newToDo("item description", "Professional", "sven");
         assertThat(newItem, is(not(nullValue())));
         assertThat(newItem.getDescription(), is("item description"));
         assertThat(getDomainObjectContainer().isPersistent(newItem), is(true));

@@ -40,12 +40,6 @@ BODY {
 	font-family: Arial, Sans-Serif;
 	margin: 0 0 10px 0;
 	color: black;
-
-/*
-	background: url(default-images/poweredby-logo.png);
-	background-repeat: no-repeat;
-	background-position: 95% 95%;
-*/
 }
 
 IMG {
@@ -73,7 +67,7 @@ div#site-header:after {
 }
 
 div#site-header {
-	background: url(images/banner-bg.png); 
+	background: url(../images/banner-bg.png); 
 	background-repeat: repeat-x white-space :   nowrap;
 	list-style: none;
 	margin: 0px;
@@ -81,7 +75,7 @@ div#site-header {
 }
 
 div#site-logo {
-	background: url(images/banner.png);
+	background: url(../images/banner.png);
 	background-repeat: no-repeat;
 	background-position: left;
 	position: absolute;
@@ -91,7 +85,7 @@ div#site-logo {
 }
 
 div#page-header {
-	display: none;
+	/*display: none;*/
 }
 
 /* END Heading */
@@ -415,6 +409,10 @@ div#help-bar {
 	height: 22px;
 }
 */
+#view {
+    min-height: 400px;
+}
+
 DIV#body DIV#view {
 	position: relative;
 	top: 0px;
@@ -822,7 +820,6 @@ DIV.submenu-item DIV.menu-item a:hover {
 
 /* End of Object Menu */
 DIV.page-footer {
-	position: absolute;
 	right: 10px;
 	bottom: 10px;
 	font-size: 50%;
@@ -902,10 +899,6 @@ DIV#debug DIV.detail {
 	margin: 0 5px 0 10px;
 }
 
-DIV#page-footer {
-	display: none;
-}
-
 SPAN.message {
 	position: relative;
 	top: 30px;
@@ -914,11 +907,6 @@ SPAN.message {
 	margin: 40px 0 0 0;
 	padding: 10px;
 }
-/* Think this is now redundant
-DIV.items {
-	position: relative;
-} 
-*/
 
 
 SPAN.about {

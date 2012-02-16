@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="initial-scale=1, width=device-width, target-densitydpi=device-dpi"/>
+
+<title>Apache Isis Online Demo</title>
+
+<link rel="stylesheet" href="../jquery.mobile/jquery.mobile-1.0.css" />
+
+<script src="../jquery/jquery-1.6.4.js"></script>
+<script src="../jquery.mobile/jquery.mobile-1.0.js"></script>
+<script src="../jquery.tmpl/jquery.tmpl-vBeta1.0.0.js"></script>
+
+<link rel="stylesheet" type="text/css" href="app.css" />
+
+<script type="text/javascript" src="namespace.js"></script>
+<script type="text/javascript" src="util.js"></script>
+<script type="text/javascript" src="generic.js"></script>
+<script type="text/javascript" src="app.js"></script>
+</head>
+
+<body id="pageHolder">
+	<div data-role="page" id="home">
+
+		<div data-role="header">
+			<h1>Home</h1>
+		</div>
+
+		<div data-role="content">
+            <br/>
+            <button>Tasks</button>
+            <ul data-role="listview" class="tasks"></ul>
+		</div>
+
+        <script class="tmpl" type="text/x-jquery-tmpl">
+            <li>
+                <a href="${href}">${title}</a>
+            </li>
+        </script>
+        
+        <script type="text/javascript">
+            $("#home button").click(function(){
+                $.mobile.changePage("../services/toDoItems/actions/notYetDone/invoke", "pop")
+            });
+        </script>
+
+        <div data-role="footer" data-id="global-footer" data-position="fixed">
+            <a href="../index.html"  rel="external">home</a>&nbsp;|&nbsp;<a href="../services" rel="external">rest</a>&nbsp;|&nbsp;<a href="../logon.htmlviewer" rel="external">html</a>&nbsp;|&nbsp;<a href="../index.shtml" rel="external">scimpi</a>
+        </div>
+	</div>
+
+    <div data-role="page" id="genericListView">
+
+        <div data-role="header">
+            <a data-icon="back" data-rel="back">Back</a>
+            <h1>List</h1>
+        </div>
+
+        <div data-role="content">
+            <br/>
+            <ul data-filter="true" data-role="listview"></ul>
+        </div>
+
+        <script class="tmpl" type="text/x-jquery-tmpl">
+            <li>
+                <a href="${href}">${title}</a>
+            </li>
+        </script>
+
+        <div data-role="footer" data-id="global-footer" data-position="fixed">
+            <a href="../index.html"  rel="external">home</a>&nbsp;|&nbsp;<a href="../services" rel="external">rest</a>&nbsp;|&nbsp;<a href="../logon.htmlviewer" rel="external">html</a>&nbsp;|&nbsp;<a href="../index.shtml" rel="external">scimpi</a>
+        </div>
+    </div>
+
+    <div data-role="page" id="genericObjectCollectionView">
+
+        <div data-role="header">
+            <a data-icon="back" data-rel="back">Back</a>
+            <h1>Collection</h1>
+        </div>
+
+        <div data-role="content">
+            <br/>
+            <ul data-filter="true" data-role="listview"></ul>
+        </div>
+
+        <script class="tmpl" type="text/x-jquery-tmpl">
+            <li>
+                <a href="${href}">${title}</a>
+            </li>
+        </script>
+
+        <div data-role="footer" data-id="global-footer" data-position="fixed">
+            <a href="../index.html"  rel="external">home</a>&nbsp;|&nbsp;<a href="../services" rel="external">rest</a>&nbsp;|&nbsp;<a href="../logon.htmlviewer" rel="external">html</a>&nbsp;|&nbsp;<a href="../index.shtml" rel="external">scimpi</a>
+        </div>
+    </div>
+
+    <div data-role="page" id="genericDomainObjectView">
+
+        <div data-role="header">
+            <a data-icon="back" data-rel="back">Back</a>
+            <h1>Object</h1>
+        </div>
+
+        <div data-role="content">
+            <div class="valueProperties"></div>
+            <br/>
+            <p>References</p>
+            <ul data-role="listview" data-inset="true" class="referenceProperties"></ul>
+            <br/>
+            <p>Collections</p>
+            <ul data-role="listview" data-inset="true" class="collections"></ul>
+        </div>
+
+        <script class="valueProperties-tmpl" type="text/x-jquery-tmpl">
+            {{if dataTypeIsString}}
+                <label for="${id}">${id}:</label>
+                <input type="text"
+                    name="${id}" id="${id}" value="${value}" placeholder="${id}"
+                    class="required"/>
+            {{/if}}
+            {{if dataTypeIsBoolean}}
+                <div data-role="fieldcontain">
+                    <fieldset data-role="controlgroup">
+                        <legend>${id}?</legend>
+                        <input type="checkbox" 
+                            name="${id}" id="${id}" value="${value}"
+                            class="required"/>
+                        <label for="${id}">${id}</label>
+                    </fieldset>
+                </div>
+            {{/if}}
+         </script>
+
+        <script class="referenceProperties-tmpl" type="text/x-jquery-tmpl">
+            <li>
+                <a data-transition="slide" href="${value.href}">
+                    <p>${id}</p>
+                    <p><b>${value.title}</b></p>
+                </a>
+            </li>
+         </script>
+
+        <script class="collections-tmpl" type="text/x-jquery-tmpl">
+            <li>
+                <a data-transition="slideup" href="${href}">${id}</a>
+            </li>
+         </script>
+
+        <div data-role="footer" data-id="global-footer" data-position="fixed">
+            <a href="../index.html"  rel="external">home</a>&nbsp;|&nbsp;<a href="../services" rel="external">rest</a>&nbsp;|&nbsp;<a href="../logon.htmlviewer" rel="external">html</a>&nbsp;|&nbsp;<a href="../index.shtml" rel="external">scimpi</a>
+        </div>
+    </div>
+
+	<div data-role="page" id="settings" data-add-back-btn="true">
+
+		<div data-role="header">
+			<h1>Settings</h1>
+		</div>
+
+		<div data-role="content">
+            
+            <fieldset id="settings-theme">
+                <legend>Theme:</legend>
+                    <input type="radio" name="settings-theme" id="settings-theme-a" value="a" checked="checked" />
+                    <label for="settings-theme-a">Dark</label>
+        
+                    <input type="radio" name="settings-theme" id="settings-theme-b" value="b"/>
+                    <label for="settings-theme-b">Blue</label>
+        
+                    <input type="radio" name="settings-theme" id="settings-theme-c" value="c"/>
+                    <label for="settings-theme-c">Grey</label>
+        
+                    <input type="radio" name="settings-theme" id="settings-theme-d" value="d"/>
+                    <label for="settings-theme-d">White</label>
+        
+                    <input type="radio" name="settings-theme" id="settings-theme-e" value="e"/>
+                    <label for="settings-theme-e">Yellow</label>
+            </fieldset>
+
+        </div>
+        
+        <script type="text/javascript">
+            $("#settings input").change(function(e){
+                var theme = $(this).attr("value");
+                $("div").filter( function() {
+                    var divDataRole = $(this).attr("data-role")
+                    var isPage = (divDataRole === "page"); 
+                    return isPage;
+                }).attr("data-theme", theme);
+            });
+        </script>
+
+        <div data-role="footer" data-id="global-footer" data-position="fixed">
+            <a href="../index.html"  rel="external">home</a>&nbsp;|&nbsp;<a href="../services" rel="external">rest</a>&nbsp;|&nbsp;<a href="../logon.htmlviewer" rel="external">html</a>&nbsp;|&nbsp;<a href="../index.shtml" rel="external">scimpi</a>
+        </div>
+	</div>
+
+</body>
+</html>
