@@ -28,12 +28,20 @@ public class ToDoItemsFixture extends AbstractFixture {
 
     @Override
     public void install() {
-        String ownedBy = "sven";
-        createToDoItem("Buy milk", "Domestic", ownedBy);
-        createToDoItem("Pick up laundry", "Domestic", ownedBy);
-        createToDoItem("Buy stamps", "Domestic", ownedBy);
-        createToDoItem("Write blog post", "Professional", ownedBy);
-        createToDoItem("Organize brown bag", "Professional", ownedBy);
+        createToDoItem("Buy milk", "Domestic", "sven");
+        createToDoItem("Pick up laundry", "Domestic", "sven");
+        createToDoItem("Buy stamps", "Domestic", "sven");
+        createToDoItem("Write blog post", "Professional", "sven");
+        createToDoItem("Organize brown bag", "Professional", "sven");
+        
+        createToDoItem("Book car in for service", "Domestic", "dick");
+        createToDoItem("Buy birthday present for sven", "Domestic", "dick");
+        createToDoItem("Write presentation for conference", "Professional", "dick");
+
+        createToDoItem("Write thank you notes", "Domestic", "bob");
+        createToDoItem("Look into solar panels", "Domestic", "bob");
+
+        createToDoItem("Pitch book idea to publisher", "Professional", "joe");
     }
 
     private ToDoItem createToDoItem(final String description, String category, String ownedBy) {
