@@ -21,46 +21,56 @@ package org.apache.isis.runtimes.dflt.objectstores.nosql;
 
 import static org.junit.Assert.assertEquals;
 
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
+import org.jmock.Expectations;
+import org.jmock.auto.Mock;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.runtimes.dflt.objectstores.dflt.testsystem.TestProxySystemII;
+import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2;
+import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2.Mode;
 import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.simple.SerialOid;
-import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 
-public class NoSqlKeyCreatorTest {
+public class NoSqlKeyCreatorTest_reference {
 
-    private final int id = 3;
-    private final String reference = ExampleReferencePojo.class.getName() + "@" + id;
-    private final NoSqlOid oid3 = new NoSqlOid(ExampleReferencePojo.class.getName(), SerialOid.createPersistent(id));
-    
+    @Rule
+    public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_ONLY);
+
+
+    @Mock
     private ObjectSpecification specification;
+    @Mock
+    private ObjectAdapter adapter;
+    
+    private final String className = "com.foo.bar.SomeClass";
+    private final SerialOid serialOid = SerialOid.createPersistent(123);
+    private final NoSqlOid noSqlOid = new NoSqlOid(className, serialOid);
     
     private NoSqlKeyCreator noSqlKeyCreator;
 
     @Before
     public void setup() {
-        Logger.getRootLogger().setLevel(Level.OFF);
-        final TestProxySystemII system = new TestProxySystemII();
-        system.init();
-        specification = IsisContext.getSpecificationLoader().loadSpecification(ExampleReferencePojo.class);
-
         noSqlKeyCreator = new NoSqlKeyCreator();
+        
+        context.checking(new Expectations() {
+            {
+                allowing(adapter).getSpecification();
+                will(returnValue(specification));
+
+                allowing(adapter).getOid();
+                will(returnValue(noSqlOid));
+
+                allowing(specification).getFullIdentifier();
+                will(returnValue(className));
+            }
+        });
     }
 
     @Test
-    public void oid() throws Exception {
-        final NoSqlOid oid = (NoSqlOid) noSqlKeyCreator.oidFromReference(reference);
-        assertEquals(oid3.getSerialNo(), oid.getSerialNo());
-        assertEquals(oid3.getClassName(), oid.getClassName());
-    }
-
-    @Test
-    public void specification() throws Exception {
-        final ObjectSpecification spec = noSqlKeyCreator.specificationFromReference(reference);
-        assertEquals(specification, spec);
+    public void reference() throws Exception {
+        final String expectedReference = className + "@" + Long.toString(serialOid.getSerialNo(), 16);
+        assertEquals(expectedReference, noSqlKeyCreator.reference(adapter));
     }
 }

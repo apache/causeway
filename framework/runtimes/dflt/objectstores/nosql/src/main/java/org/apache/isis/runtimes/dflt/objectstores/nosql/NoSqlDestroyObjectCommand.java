@@ -25,35 +25,35 @@ import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.PersistenceCommandContext;
 
 final class NoSqlDestroyObjectCommand implements DestroyObjectCommand {
-    private final ObjectAdapter object;
+    private final ObjectAdapter adapter;
     private final KeyCreator keyCreator;
     private final VersionCreator versionCreator;
 
     public NoSqlDestroyObjectCommand(final KeyCreator keyCreator, final VersionCreator versionCreator, final ObjectAdapter object) {
         this.keyCreator = keyCreator;
         this.versionCreator = versionCreator;
-        this.object = object;
+        this.adapter = object;
     }
 
     @Override
     public void execute(final PersistenceCommandContext context) {
-        final String key = keyCreator.key(object.getOid());
-        final String version = versionCreator.versionString(object.getVersion());
-        final String specificationName = object.getSpecification().getFullIdentifier();
+        final String key = keyCreator.key(adapter.getOid());
+        final String version = versionCreator.versionString(adapter.getVersion());
+        final String specificationName = adapter.getSpecification().getFullIdentifier();
 
         ((NoSqlCommandContext) context).delete(specificationName, key, version);
     }
 
     @Override
     public ObjectAdapter onObject() {
-        return object;
+        return adapter;
     }
 
     @Override
     public String toString() {
         final ToString toString = new ToString(this);
-        toString.append("spec", object.getSpecification().getFullIdentifier());
-        toString.append("oid", object.getOid());
+        toString.append("spec", adapter.getSpecification().getFullIdentifier());
+        toString.append("oid", adapter.getOid());
         return toString.toString();
     }
 }
