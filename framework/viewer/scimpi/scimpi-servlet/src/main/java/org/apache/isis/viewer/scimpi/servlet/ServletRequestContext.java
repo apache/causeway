@@ -210,7 +210,7 @@ public class ServletRequestContext extends RequestContext {
     @Override
     public void startHttpSession() {
         final HttpSession httpSession = request.getSession(true);
-        if (!httpSession.getAttributeNames().hasMoreElements()) {
+        if (httpSession.getAttribute("scimpi-context") == null) {
             final Map<String, Object> sessionData = getSessionData();
             httpSession.setAttribute("scimpi-context", sessionData);
             addVariable("_authenticated", false, Scope.SESSION);
