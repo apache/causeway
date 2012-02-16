@@ -83,7 +83,7 @@ public class ToDoItemsMongo extends AbstractFactoryAndRepository implements ToDo
         return allMatches(ToDoItem.class, new Filter<ToDoItem>() {
             @Override
             public boolean accept(ToDoItem t) {
-                return t != toDoItem && Objects.equal(toDoItem.getCategory(), t.getCategory()) ;
+                return t != toDoItem && Objects.equal(toDoItem.getCategory(), t.getCategory()) && Objects.equal(toDoItem.getOwnedBy(), t.getOwnedBy());
             }
         });
     }
