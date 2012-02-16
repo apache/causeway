@@ -30,6 +30,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 
 import org.apache.log4j.Logger;
@@ -87,7 +88,7 @@ public class InstallerLookupDefault implements InstallerLookup {
 
     private static final Logger LOG = Logger.getLogger(InstallerLookupDefault.class);
 
-    private final List<Installer> installerList = new ArrayList<Installer>();
+    private final List<Installer> installerList = Lists.newArrayList();
 
     /**
      * A mutable representation of the {@link IsisConfiguration configuration},

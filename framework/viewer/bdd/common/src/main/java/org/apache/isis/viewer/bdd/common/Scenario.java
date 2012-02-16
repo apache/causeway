@@ -31,6 +31,8 @@ import java.util.Map;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 
+import org.apache.log4j.FileAppender;
+
 import org.apache.isis.applib.fixtures.LogonFixture;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationBuilder;

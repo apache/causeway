@@ -30,6 +30,9 @@ import java.util.List;
 import com.google.common.base.Function;
 import com.google.common.collect.Iterables;
 
+import org.apache.log4j.BasicConfigurator;
+import org.apache.log4j.Level;
+import org.apache.log4j.LogManager;
 import org.concordion.Concordion;
 import org.concordion.api.ResultSummary;
 import org.concordion.internal.ConcordionBuilder;
@@ -90,6 +93,8 @@ public abstract class AbstractIsisConcordionScenario {
 
     @Test
     public void runScenario() throws Throwable {
+        BasicConfigurator.configure();
+        LogManager.getRootLogger().setLevel(Level.INFO);
         try {
             final Concordion concordion = createConcordion();
             final ResultSummary resultSummary = concordion.process(this);

@@ -51,9 +51,3 @@ Deploy <Isis> as a RESTful web service
 
   Isis persistence API is pluggable, so if it does not provide the integration already then
   you could implementing to its object store API.
-   
-  At the time of writing (v0.2.0) the RESTful viewer has a hard-coded dependency on Isis
-  {{{../runtimes/dflt/index.html}Default Runtime}}; this means that it cannot easily be hosted 
-  on your own framework (in conjunction with the {{{../runtimes/embedded/index.html}Embedded Runtime}}.
-  In the future we hope to break this dependency, allowing you to use the RESTful viewer with any
-  persistence framework.

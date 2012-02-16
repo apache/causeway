@@ -21,12 +21,17 @@ Deploy <Isis> as an auto-generated webapp
   automatically generate a user interface for a domain object model.
   
   The {{{../viewer/html/index.html}HTML viewer}} provides a straight-forward 
-  webapp for a domain model, but is one that nonetheless provides access and honours all of the business 
-  logic that may be encoded within those domain objects.  
-  
-  The viewer makes minimal use of Javascript, as it was originally written
+  webapp for a domain model, but is one that nonetheless provides access and 
+  honours all of the business logic that may be encoded within those domain objects.  
+  The HTML viewer makes minimal use of Javascript, as it was originally written
   to comply with governmental standards that forbid the use of such.  The
   viewer supports customization only to the extent that its CSS can be changed.
+
+  If you need something a little more sophisticated, then the 
+  {{{../viewer/scimpi/index.html}Scimpi viewer}} provides a similar webapp user interface,
+  but one that allows the views of objects to be progressively enhanced as required.
+  The programming model is akin to JSF, with a set of tags indicating the contents
+  of the custom views.
   
 * {Isis persistence}
 
@@ -39,12 +44,6 @@ Deploy <Isis> as an auto-generated webapp
   Isis persistence API is pluggable, so if it does not provide the integration already then
   you could implementing to its object store API.
    
-  At the time of writing (v0.2.0) the HTML viewer has a hard-coded dependency on Isis
-  {{{../runtimes/dflt/index.html}Default Runtime}}; this means that it cannot easily be hosted 
-  on your own framework (in conjunction with the {{{../runtimes/embedded/index.html}Embedded Runtime}}.
-  In the future we hope to break this dependency, allowing you to use the RESTful viewer with any
-  persistence framework.
-
 * {Other Viewers}
 
   Note that Isis does have a number of other (human-usable) viewers.  See 

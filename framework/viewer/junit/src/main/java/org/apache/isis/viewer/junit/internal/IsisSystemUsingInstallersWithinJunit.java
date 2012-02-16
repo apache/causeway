@@ -33,6 +33,8 @@ public class IsisSystemUsingInstallersWithinJunit extends IsisSystemUsingInstall
 
     public IsisSystemUsingInstallersWithinJunit(final DeploymentType deploymentType, final InstallerLookup installerLookup, final TestClass testClass) {
         super(deploymentType, installerLookup);
+        installerLookup.getConfigurationBuilder().add("isis.deploymentType", deploymentType.nameLowerCase());
+        
         this.testClass = testClass;
 
         final AnnotationInstaller installer = new AnnotationInstaller();

@@ -70,38 +70,45 @@ App Structure
   generated application (eg rename "ToDoItem" to "Customer") without having 
   to waste time deleting lots of generated code.
   
-*----------------------+---------------------------------------------------------+
-| Module               | Description                                             |
-*----------------------+---------------------------------------------------------+
-| myapp                | The parent (aggregator) module                          |
-*----------------------+---------------------------------------------------------+
-| myapp-dom            | The domain object model, consisting of ToDoItem and     |
-|                      | ToDoItems (repository) interface.                           |
-*----------------------+---------------------------------------------------------+
-| myapp-fixture        | Domain object fixtures used for initializing the system |
-|                      | when being demo'ed or for unit testing.                 |
-*----------------------+---------------------------------------------------------+
-| myapp-objstore-dflt  | Implementation of ToDoItems repository, for the default   |
-|                      | (in-memory) object store.                               |
-*----------------------+---------------------------------------------------------+
-| myapp-webapp         | Run as a webapp (from web.xml) using either the         |
-|                      | {{{./viewer/html/index.html}HTML viewer}} or the        |
-|                      | {{{./viewer/json/index.html}JSON (RESTful) viewer}}     |
-*----------------------+---------------------------------------------------------+
-| myapp-tests-bdd      | Run domain object tests using Isis'                     |
-|                      | {{{./viewer/bdd/index.html}integration}}                |
-|                      | with the {{{http://concordion.org}Concordion}} BDD      |
-|                      | framework.                                              |
-*----------------------+---------------------------------------------------------+
-| myapp-tests-junit    | Run domain object tests using Isis'                     |
-|                      | {{{./viewer/junit/index.html}custom test runner}}       |
-|                      | for {{{http://junit.org}JUnit}} runner                  |
-*----------------------+---------------------------------------------------------+
+*------------------------+-------------------------------------------------------------+
+| Module                 | Description                                                 |
+*------------------------+-------------------------------------------------------------+
+| myapp                  | The parent (aggregator) module                              |
+*------------------------+-------------------------------------------------------------+
+| myapp-dom              | The domain object model, consisting of ToDoItem and         |
+|                        | ToDoItems (repository) interface.                           |
+*------------------------+-------------------------------------------------------------+
+| myapp-fixture          | Domain object fixtures used for initializing the system     |
+|                        | when being demo'ed or for unit testing.                     |
+*------------------------+-------------------------------------------------------------+
+| myapp-objstore-dflt    | Implementation of ToDoItems repository, for the default     |
+|                        | (in-memory) object store.                                   |
+*------------------------+-------------------------------------------------------------+
+| myapp-objstore-mongodb | Implementation of ToDoItems repository, for the             |
+|                        | NoSQL MongoDB object store.                                 |
+*------------------------+-------------------------------------------------------------+
+| myapp-objstore-sql     | Implementation of ToDoItems repository, for the             |
+|                        | SQL object store.                                           |
+*------------------------+-------------------------------------------------------------+
+| myapp-tests-bdd        | Run domain object tests using Isis'                         |
+|                        | {{{./viewer/bdd/index.html}integration}} with the           |
+|                        | {{{http://concordion.org}Concordion}} BDD framework         |
+*------------------------+-------------------------------------------------------------+
+| myapp-tests-junit      | Run domain object tests using Isis'                         |
+|                        | {{{./viewer/junit/index.html}custom test runner}}           |
+|                        | for {{{http://junit.org}JUnit}} runner                      |
+*------------------------+-------------------------------------------------------------+
+| myapp-webapp           | Run as a webapp (from web.xml) using either the             |
+|                        | {{{./viewer/html/index.html}HTML viewer}}, the              |
+|                        | {{{./viewer/scimpi/index.html}Scimpi viewer}}, or the       |
+|                        | {{{./viewer/json/index.html}JSON (RESTful) viewer}}.        |
+|                        | Also includes a simple demo mobile app using the JSON viewer|
+*------------------------+-------------------------------------------------------------+
 
-  The most significant omission with the generated application is that it is
-  configured only to support the default in-memory object store.  What this
-  means is that any changes you make to objects will not be persisted between
-  runs.  If you'd like to use other viewers and object stores, ask for help on the
+  Out of the box the generated app is configured to run with the support the default 
+  in-memory object store, but can easily be configured to work with the NoSQL or the
+  SQL object stores.  The app includes an index.html with further information on this.
+  And, you can always ask for help on the 
   {{{mailto:isis-users@incubator.apache.org}isis-users}} mailing list.    
 
 Compiling the App
@@ -147,26 +154,14 @@ mvn jetty:run
   The webapp is configured to support two of Isis' viewers, the {{{./viewer/html/index.html}HTML viewer}}
   and the {{{./viewer/json/index.html}JSON (RESTful) viewer}}.  
 
-Accessing the webapp using the HTML viewer
+Accessing the webapp
   
-  The {{{./viewer/html/index.html}HTML viewer}} provides a basic, non-customizable web view
-  of the domain model.  It's accessible from {{{http://localhost:8080/htmlviewer}http://localhost:8080/htmlviewer}}.
+  Browse to the <a href="http://localhost:8080">index page</a> for details of how to access
+  the configured viewers. 
 
-  Security (authentication) is configurable within Isis, but is turned off 
-  within the application generated by the archetype.  You should therefore be taken to the home
-  page (logged in as the default user, "sven").
+  Security (authentication) is configurable within Isis, and is enabled.  You can log in using
+  the username/password of sven/pass.
   
-Accessing the JSON (Restful) viewer
-
-  The application can also be accessed using the {{{./viewer/json/index.html}JSON (RESTful) viewer}}.
-  This exposes the domain model as a set of resources, in a JSON representation.  It's accessible from
-  the root of the webapp, {{{http://localhost:8080/}http://localhost:8080/}}.
-
-  Whereas the HTML viewer is intended for use by humans, the JSON viewer is intended to be consumed
-  by applications.  Even so, you can access the JSON viewer using a web browser.  The Chrome and Firefox
-  browsers have plugins such as JSONView and REST Console that let you exercise the REST API directly
-  from a browser.  
-
   []
       
 Running the app's JUnit tests
@@ -180,7 +175,6 @@ Running the app's JUnit tests
 cd tests-junit
 mvn test
 +------------------------------------------------------------
-
 
 Running the app's BDD (Concordion) tests
 
