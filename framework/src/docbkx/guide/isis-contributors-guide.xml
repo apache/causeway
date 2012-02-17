@@ -3592,7 +3592,7 @@ public class FooBar {
           url="https://repository.apache.org">https://repository.apache.org</ulink>
           and search for "isis".</para>
 
-          <para>Be warned: this is liable will take a long time.</para>
+          <para>Be warned: this is liable take a long time.</para>
         </sect2>
       </sect1>
     </chapter>
@@ -6014,13 +6014,15 @@ gpg --armor --export nnnnnnnn &gt;&gt;KEYS</programlisting>
 [INFO] ------------------------------------------------------------------------
 [INFO] Reactor Summary:
 [INFO]
-[INFO] Quickstart App .................................... SUCCESS [0.518s]
-[INFO] Quickstart DOM .................................... SUCCESS [1.873s]
-[INFO] Quickstart Repositories (for ObjectStore Default) . SUCCESS [0.778s]
-[INFO] Quickstart Fixtures ............................... SUCCESS [0.646s]
-[INFO] Quickstart Webapp with HTML+JSON Viewers .......... SUCCESS [8.014s]
-[INFO] Quickstart JUnit Tests ............................ SUCCESS [3.071s]
-[INFO] Quickstart BDD (Concordion) Tests ................. SUCCESS [3.567s]
+[INFO] Quickstart App .................................... SUCCESS [0.583s]
+[INFO] Quickstart DOM .................................... SUCCESS [2.322s]
+[INFO] Quickstart Fixtures ............................... SUCCESS [1.814s]
+[INFO] Quickstart Repositories (for ObjectStore Default) . SUCCESS [2.652s]
+[INFO] Quickstart Repositories (for MongoDB) ............. SUCCESS [2.657s]
+[INFO] Quickstart Repositories (for SQL) ................. SUCCESS [1.811s]
+[INFO] Quickstart Webapp ................................. SUCCESS [9.018s]
+[INFO] Quickstart JUnit Tests ............................ SUCCESS [5.223s]
+[INFO] Quickstart BDD (Concordion) Tests ................. SUCCESS [6.107s]
 [INFO] ------------------------------------------------------------------------
 [INFO] BUILD SUCCESS
 [INFO] ------------------------------------------------------------------------
@@ -6038,7 +6040,7 @@ gpg --armor --export nnnnnnnn &gt;&gt;KEYS</programlisting>
             for the surefire plugin).</para>
 
             <para>For example, the
-            <filename>tests-bdd/target/concordion/viewer/bdd/stories/todo/ScenarioMarkItemAsComplete.html</filename>
+            <filename>tests-bdd/target/concordion/viewer/bdd/stories/todo/ScenarioMarkItemAsDone.html</filename>
             should look something like:</para>
 
             <mediaobject>
@@ -6337,7 +6339,7 @@ $ mvn eclipse:clean clean archetype:create-from-project</programlisting>
         just use:</para>
 
         <programlisting>$ cd ..
-$ groovy updateGeneratedArchetypeSource.groovy
+$ groovy updateGeneratedArchetypeSources.groovy
 $ cd quickstart</programlisting>
 
         <para>If you want to check this has worked, switch into

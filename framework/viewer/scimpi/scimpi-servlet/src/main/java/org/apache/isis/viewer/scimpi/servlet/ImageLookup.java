@@ -56,7 +56,8 @@ public class ImageLookup {
         imageDirectory = (imageDirectory.startsWith("/") ? "" : "/") + imageDirectory + "/";
         final Set resourcePaths = context.getResourcePaths(imageDirectory);
         if (resourcePaths == null || resourcePaths.size() == 0) {
-            throw new IsisException("No image directory found: " + imageDirectory);
+            //throw new IsisException("No image directory found: " + imageDirectory);
+            LOG.warn("No image directory found: " + imageDirectory);
         }
         LOG.info("image directory set to: " + imageDirectory);
         ImageLookup.imageDirectory = imageDirectory;
