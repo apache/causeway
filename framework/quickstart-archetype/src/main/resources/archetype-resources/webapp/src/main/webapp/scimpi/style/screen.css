@@ -1,0 +1,338 @@
+/*
+ *  Licensed to the Apache Software Foundation (ASF) under one
+ *  or more contributor license agreements.  See the NOTICE file
+ *  distributed with this work for additional information
+ *  regarding copyright ownership.  The ASF licenses this file
+ *  to you under the Apache License, Version 2.0 (the
+ *  "License"); you may not use this file except in compliance
+ *  with the License.  You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing,
+ *  software distributed under the License is distributed on an
+ *  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ *  KIND, either express or implied.  See the License for the
+ *  specific language governing permissions and limitations
+ *  under the License.
+ */
+body {
+	font-family: Arial, Sans-Serif;
+	margin: 0 0 10px 0;
+	color: black;
+	background-color: #0;
+	font-size: 16px;
+}
+em {
+	font-style: italic;
+}
+strong {
+	font-weight: bold;
+}
+h1, h2, h3, div#title, form .title {
+	margin-bottom: 0.8em;
+	font-weight: bold;'
+	letter-spacing: 2px;
+    text-shadow: 0.1em 0.1em 0.1em #bbb;
+}
+h1 {
+	font-size: 200%;
+}
+h2, form .title {
+	margin-top: 1.5em;
+	font-size: 160%;
+}
+ol, ul {
+	margin: 1em 0 2em 0
+}
+li {
+	margin: 0.3em 0;
+}
+/*
+* Overall Layout
+*/
+div#banner {
+	background-color: #dde; 
+	width: 100%;
+	height: 76px;
+	border-bottom: 10px solid gray;
+}
+div#content {
+	position: absolute;
+}
+div#side {
+	height: 100%;
+	width: 300px;
+	margin-right: 30px;
+	padding-left: 20px;
+	min-height: 400px;
+	border-bottom: 70px transparent solid; /* should be the same as the #footer height */
+}
+div#main {
+	position: absolute;
+	min-width: 500px;
+	left: 321px; /* should math the width of #side */	
+	top: 0;
+	border-bottom: 70px transparent solid; /* should be the same as the #footer height */
+}
+div#footer {
+	position: fixed;
+	width: 100%;
+	height: 70px;
+	bottom: 0;
+	padding-left: 20px;
+	background-color: #eee;
+	border-top: 1px solid gray;
+}
+/*
+* Banner
+*/
+div#logo {
+	position: absolute;
+	right: 30px;	
+}
+div#title {
+    padding-top: 20px;
+    padding-left: 20px;
+	font-size: 200%;
+	font-weight: bold;
+	font-style: italic;
+}
+div#title a {
+	color: black;
+	text-decoration: none;
+}
+div.user {
+	position: absolute;
+	top: 4px;
+	right: 18em;
+	font-size: 70%;
+}
+form.login .field {
+	display: inline;
+}
+form.login .field * {
+	display: inline;
+	position: relative;
+	margin: 0;
+}
+form.login .field input {
+	margin-left: 0.6em;	
+}
+
+
+
+/*
+* Footer
+*/
+div#debug {
+	padding: 10px 0;
+}
+div#debug > * {
+	font-size: 70%;
+	margin: 5px 0;
+}
+
+/*
+* Side bar
+*/
+div#side ol {
+	padding-left: 0px;
+}
+div#side li {
+	list-style: none;
+	line-height: 1.5em
+}
+xxdiv#side li a {
+	text-decoration: none;
+	color: inherit;
+}
+xxdiv#side li a:HOVER {
+	text-decoration: underline;
+}
+xxdiv#side li a:VISITED {
+	color: inherit;
+}
+
+
+
+a {
+	text-decoration: none;
+	color: inherit;
+}
+a:HOVER {
+	text-decoration: underline;
+}
+a:VISITED {
+	color: inherit;
+}
+
+
+
+/*
+* Forms
+*/
+.form {
+	margin-bottom: 2em;
+}
+.field {
+	position: relative;
+	min-height: 1.5em;
+	margin-bottom: 1em;
+}
+.field > * {
+	display: inline-block;
+	font-size: 100%;
+}
+.field > * {
+	margin-left: 10em;
+}
+.field > .label  {
+	margin-left: 0;
+	position: absolute;
+	padding-top: 0.4em;
+	font-style: italic;
+	font-size: 90%;
+}
+.field > .value  {
+	white-space: pre-wrap;
+}
+.field > .required {
+	margin-left: 0;
+	vertical-align: top;
+}
+textarea {
+	font-family: Arial, Sans-Serif;
+}
+	
+
+.actions {
+	margin-bottom: 2.5em;
+}
+.action {
+	margin-bottom: 1em;
+	min-height: 20px;
+}
+
+xxxform.action a.button, 
+xxxform.action,
+form.full input.button {
+	xxxmargin-top: 1em;
+	margin-left: 12.5em;
+}
+form.full input.button + input.button {
+	xxxmargin-top: 1em;
+	margin-left: 0.5em;
+}
+.action .form .label, 
+.action.field label {
+	xxxvertical-align: 2px;
+	xxxpadding-top: 12px;
+	font-style: italic;
+}
+a.action > .button {
+	font-size: 90%;
+	border:1px red solid;
+}
+.edit > .button,
+.action > .button,
+.action > .disabled,
+.controls > .button,
+.controls > form > .button {
+	shadow:  1px 1px black;
+	border: 1px solid gray;
+	border-radius: 4px;
+	font-size: 80%;
+	text-decoration: none;
+	cursor: default;
+	padding: 5px 12px;
+	xxxsmin-height: 1em;
+}
+.edit > .button,
+.action > .button,
+.controls > .button,
+.controls > form > .button {
+	background-color: #666;
+	text-shadow: 1px 1px black;
+	color: #ddd
+}
+td input.button,
+td a.button {
+	vertical-align: 2px;
+}
+td form.element-delete {
+	margin-left: 4px;
+}
+.controls > form {
+	display: inline;
+}
+.action > .disabled {
+	background-color: #aaa;
+	xxtext-shadow: 1px 1px white;
+	color: #666;
+}
+xxxform#newToDo .title {
+	font-size: 140%;
+	font-weight: bold;
+	margin-top: 1.5em;
+	margin-bottom: 0.5em;
+}
+xxxform#newToDo label {
+	display: none;
+}
+xxxxform#newToDo input {
+	margin-left: 0;
+}
+p.alternative {
+	margin-top: 80px;
+	font-size: 80%;
+	font-style: italic;
+}
+table {
+	width: 100%;
+}
+thead, tfoot {
+	background-color: #aaa;
+	color: #fff;
+	font-size: 70%;
+}
+tr.even-row {
+	background-color: #eee;
+}
+tr.odd-row {
+	border-bottom: 1px solid #bbb;
+}
+tr.odd-row td {
+	border-bottom: 1px solid #bbb;
+}
+tr:HOVER {
+	background-color: #efe;
+}
+tr:HOVER a {
+	text-decoration: underline;
+}
+td, th {
+	padding: 7px 10px;
+	min-width: 150px;
+	max-width: 300px;
+}
+td.controls {
+	font-size: 80%;
+}
+th {
+	xxxfont-weight: bold;
+}
+span.error,
+.errors {
+	color: red;
+	font-size: 80%;
+}
+span.error {
+	maring-left: 6px;
+}
+
+
+
+input {
+	xxxborder: 1px red solid;
+}
