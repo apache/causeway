@@ -23,7 +23,7 @@
     <parent>
         <groupId>org.apache.isis.examples</groupId>
         <artifactId>quickstart</artifactId>
-        <version>0.2.0-incubating-SNAPSHOT</version>
+        <version>0.3.0-incubating-SNAPSHOT</version>
     </parent>
 
 	<artifactId>quickstart-webapp</artifactId>
@@ -105,7 +105,7 @@
          - 
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>quickstart-objstore-mongbdo</artifactId>
+            <artifactId>quickstart-objstore-mongodb</artifactId>
         </dependency>
         -->
         

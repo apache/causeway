@@ -193,6 +193,9 @@
     <filter-mapping>
         <filter-name>IsisSessionFilterForHtml</filter-name>
         <servlet-name>HtmlLogin</servlet-name>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>IsisSessionFilterForHtml</filter-name>
         <servlet-name>HtmlDispatcher</servlet-name>
     </filter-mapping>
 
@@ -235,15 +238,18 @@
     <servlet>
         <servlet-name>ScimpiDispatcher</servlet-name>
         <servlet-class>org.apache.isis.viewer.scimpi.servlet.DispatcherServlet</servlet-class>
-        <load-on-startup>1</load-on-startup>
         <init-param>
              <param-name>view</param-name>
              <param-value>login.shtml</param-value>
         </init-param>
+        <load-on-startup>1</load-on-startup>
     </servlet>
     <servlet-mapping>
         <servlet-name>ScimpiDispatcher</servlet-name>
         <url-pattern>*.shtml</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ScimpiDispatcher</servlet-name>
         <url-pattern>*.app</url-pattern>
     </servlet-mapping>
 

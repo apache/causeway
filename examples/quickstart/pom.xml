@@ -23,14 +23,14 @@
 
     <groupId>org.apache.isis.examples</groupId>
     <artifactId>quickstart</artifactId>
-    <version>0.2.0-incubating-SNAPSHOT</version>
+    <version>0.3.0-incubating-SNAPSHOT</version>
 
     <name>Quickstart App</name>
 
     <packaging>pom</packaging>
     
     <properties>
-        <isis.version>0.2.0-incubating-SNAPSHOT</isis.version>
+        <isis.version>0.3.0-incubating-SNAPSHOT</isis.version>
     </properties>
 
     <repositories>
@@ -175,6 +175,18 @@
             <dependency>
                 <groupId>${project.groupId}</groupId>
                 <artifactId>quickstart-objstore-dflt</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>quickstart-objstore-mongodb</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>quickstart-objstore-sql</artifactId>
                 <version>${project.version}</version>
             </dependency>
 

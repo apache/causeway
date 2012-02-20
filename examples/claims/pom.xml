@@ -15,7 +15,7 @@
 
 	<groupId>org.apache.isis.examples.apps</groupId>
 	<artifactId>claims</artifactId>
-	<version>0.2.0-incubating-SNAPSHOT</version>
+	<version>0.3.0-incubating-SNAPSHOT</version>
 
 	<name>Example Claims</name>
 	<description>Example of a claims submitting application</description>
@@ -23,7 +23,7 @@
 	<packaging>pom</packaging>
 
     <properties>
-        <isis.version>0.2.0-incubating-SNAPSHOT</isis.version>
+        <isis.version>0.3.0-incubating-SNAPSHOT</isis.version>
     </properties>
 
 	<build>

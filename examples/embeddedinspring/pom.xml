@@ -4,7 +4,7 @@
 	<groupId>org.apache.isis.examples</groupId>
 	<artifactId>embeddedinspring</artifactId>
 	<packaging>war</packaging>
-	<version>0.2.0-incubating-SNAPSHOT</version>
+	<version>0.3.0-incubating-SNAPSHOT</version>
 	<name>embeddedinspring</name>
 
 	<properties>
@@ -176,7 +176,7 @@
 		<dependency>
 			<groupId>org.apache.isis.runtimes</groupId>
 			<artifactId>embedded</artifactId>
-			<version>0.2.0-incubating-SNAPSHOT</version>
+			<version>0.3.0-incubating-SNAPSHOT</version>
 			<type>jar</type>
 			<scope>compile</scope>
 		</dependency>
@@ -186,7 +186,7 @@
         <dependency>
             <groupId>org.apache.isis.runtimes.dflt</groupId>
             <artifactId>webserver</artifactId>
-            <version>0.2.0-incubating-SNAPSHOT</version>
+            <version>0.3.0-incubating-SNAPSHOT</version>
             <scope>runtime</scope>
             <optional>true</optional>
         </dependency>
