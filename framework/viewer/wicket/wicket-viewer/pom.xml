@@ -24,7 +24,7 @@
 	<parent>
 		<groupId>org.apache.isis.viewer</groupId>
 		<artifactId>wicket</artifactId>
-		<version>0.2.0-incubating-SNAPSHOT</version>
+		<version>0.3.0-incubating-SNAPSHOT</version>
 	</parent>
 
 	<name>Wicket Viewer Implementation</name>

@@ -28,7 +28,7 @@
     <packaging>pom</packaging>
     
     <properties>
-        <isis.version>0.2.0-incubating-SNAPSHOT</isis.version>
+        <isis.version>0.3.0-incubating-SNAPSHOT</isis.version>
     </properties>
 
     <repositories>
@@ -161,6 +161,18 @@
             <dependency>
                 <groupId>${project.groupId}</groupId>
                 <artifactId>${rootArtifactId}-objstore-dflt</artifactId>
+                <version>${version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>${rootArtifactId}-objstore-mongodb</artifactId>
+                <version>${version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>${rootArtifactId}-objstore-sql</artifactId>
                 <version>${version}</version>
             </dependency>
 

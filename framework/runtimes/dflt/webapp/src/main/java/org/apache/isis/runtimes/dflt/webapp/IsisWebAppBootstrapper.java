@@ -136,12 +136,15 @@ public class IsisWebAppBootstrapper implements ServletContextListener {
      * {@value WebAppConstants#DEPLOYMENT_TYPE_DEFAULT}.
      */
     private DeploymentType determineDeploymentType(final IsisConfigurationBuilder isisConfigurationBuilder, final ServletContext servletContext) {
-        String deploymentTypeStr = isisConfigurationBuilder.getConfiguration().getString(SystemConstants.DEPLOYMENT_TYPE_KEY);
+        String deploymentTypeStr = null;
         if (deploymentTypeStr == null) {
             deploymentTypeStr = servletContext.getInitParameter(WebAppConstants.DEPLOYMENT_TYPE_KEY);
         }
         if (deploymentTypeStr == null) {
             deploymentTypeStr = servletContext.getInitParameter(SystemConstants.DEPLOYMENT_TYPE_KEY);
+        }
+        if (deploymentTypeStr == null) {
+            deploymentTypeStr = isisConfigurationBuilder.getConfiguration().getString(SystemConstants.DEPLOYMENT_TYPE_KEY);
         }
         if (deploymentTypeStr == null) {
             deploymentTypeStr = WebAppConstants.DEPLOYMENT_TYPE_DEFAULT;

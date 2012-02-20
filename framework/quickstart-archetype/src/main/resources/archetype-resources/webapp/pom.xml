@@ -104,7 +104,7 @@
          - 
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>quickstart-objstore-mongbdo</artifactId>
+            <artifactId>quickstart-objstore-mongodb</artifactId>
         </dependency>
         -->
         

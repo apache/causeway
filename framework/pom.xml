@@ -16,9 +16,7 @@
     KIND, either express or implied. See the License for the 
     specific language governing permissions and limitations 
     under the License. 
--->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+--><project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
@@ -29,7 +27,7 @@
 
     <groupId>org.apache.isis</groupId>
     <artifactId>isis</artifactId>
-    <version>0.2.0-incubating-SNAPSHOT</version>
+    <version>0.3.0-incubating-SNAPSHOT</version>
 
     <packaging>pom</packaging>
 
@@ -71,7 +69,7 @@
 
     <properties>
         <siteBaseDir>.</siteBaseDir>
-        <relativeUrl></relativeUrl>
+        <relativeUrl/>
         <compileSource>1.6</compileSource>
         <compileTarget>1.6</compileTarget>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -188,11 +186,11 @@
             <notifier>
                 <type>mail</type>
                 <address>isis-dev@incubator.apache.org</address>
-                <sendOnError />
-                <sendOnFailure />
-                <sendOnSuccess />
-                <sendOnWarning />
-                <configuration />
+                <sendOnError/>
+                <sendOnFailure/>
+                <sendOnSuccess/>
+                <sendOnWarning/>
+                <configuration/>
             </notifier>
         </notifiers>
     </ciManagement>
@@ -596,19 +594,17 @@
                                 <highlightSource>1</highlightSource>
 
                                 <postProcess>
-                                    <copy todir="target/docbkx/html/guide"
-                                        failonerror="false">
+                                    <copy todir="target/docbkx/html/guide" failonerror="false">
                                         <fileset dir="src/docbkx/guide">
-                                            <include name="images/**/*" />
+                                            <include name="images/**/*"/>
                                         </fileset>
                                         <fileset dir="src/docbkx/style">
-                                            <include name="*.css" />
+                                            <include name="*.css"/>
                                         </fileset>
                                     </copy>
-                                    <copy todir="target/site/docbkx/html"
-                                        failonerror="false">
+                                    <copy todir="target/site/docbkx/html" failonerror="false">
                                         <fileset dir="target/docbkx/html">
-                                            <include name="**/*" />
+                                            <include name="**/*"/>
                                         </fileset>
                                     </copy>
                                 </postProcess>
@@ -633,23 +629,20 @@
                                 <preProcess>
                                     <copy todir="${basedir}/target/docbkx/pdf">
                                         <fileset dir="${basedir}/src/docbkx">
-                                            <include name="images/**/*" />
+                                            <include name="images/**/*"/>
                                         </fileset>
                                     </copy>
 
-                                    <copy todir="${basedir}/target/docbkx/pdf"
-                                        failonerror="false">
-                                        <fileset
-                                            dir="${basedir}/src/docbkx/guide">
-                                            <include name="images/**/*" />
+                                    <copy todir="${basedir}/target/docbkx/pdf" failonerror="false">
+                                        <fileset dir="${basedir}/src/docbkx/guide">
+                                            <include name="images/**/*"/>
                                         </fileset>
                                     </copy>
                                 </preProcess>
                                 <postProcess>
-                                    <copy todir="target/site/docbkx/pdf"
-                                        failonerror="false">
+                                    <copy todir="target/site/docbkx/pdf" failonerror="false">
                                         <fileset dir="target/docbkx/pdf">
-                                            <include name="**/*" />
+                                            <include name="**/*"/>
                                         </fileset>
                                     </copy>
                                 </postProcess>
@@ -895,7 +888,7 @@ archetype includes this explicit dependency.
                       <license implementation="org.apache.rat.analysis.license.SimplePatternBasedLicense">
                         <licenseFamilyCategory>AL2  </licenseFamilyCategory>
                         <licenseFamilyName>Apache License 2.0</licenseFamilyName>
-                        <notes></notes>
+                        <notes/>
                         <patterns>
                           <pattern>Licensed to the Apache Software Foundation (ASF) under one</pattern>
                         </patterns>
@@ -903,7 +896,7 @@ archetype includes this explicit dependency.
                       <license implementation="org.apache.rat.analysis.license.SimplePatternBasedLicense">
                         <licenseFamilyCategory>JQRY</licenseFamilyCategory>
                         <licenseFamilyName>MIT  </licenseFamilyName>
-                        <notes></notes>
+                        <notes/>
                         <patterns>
                           <pattern>Dual licensed under the MIT or GPL Version 2 licenses.</pattern>
                         </patterns>
@@ -911,7 +904,7 @@ archetype includes this explicit dependency.
                       <license implementation="org.apache.rat.analysis.license.SimplePatternBasedLicense">
                         <licenseFamilyCategory>JMOCK</licenseFamilyCategory>
                         <licenseFamilyName>JMock</licenseFamilyName>
-                        <notes></notes>
+                        <notes/>
                         <patterns>
                           <pattern>Copyright (c) 2000-2007, jMock.org</pattern>
                         </patterns>
@@ -919,7 +912,7 @@ archetype includes this explicit dependency.
                       <license implementation="org.apache.rat.analysis.license.SimplePatternBasedLicense">
                         <licenseFamilyCategory>DOCBK</licenseFamilyCategory>
                         <licenseFamilyName>DocBook 4.5</licenseFamilyName>
-                        <notes></notes>
+                        <notes/>
                         <patterns>
                           <pattern>Permission to copy in any form is granted for use</pattern>
                           <pattern>Permission to use, copy, modify and distribute the DocBook DTD</pattern>
@@ -933,7 +926,7 @@ archetype includes this explicit dependency.
                       <license implementation="org.apache.rat.analysis.license.SimplePatternBasedLicense">
                         <licenseFamilyCategory>W3C  </licenseFamilyCategory>
                         <licenseFamilyName>XHTML</licenseFamilyName>
-                        <notes></notes>
+                        <notes/>
                         <patterns>
                           <pattern>Copyright (c) 1998-2002 W3C (MIT, INRIA, Keio),</pattern>
                         </patterns>
@@ -1053,12 +1046,12 @@ archetype includes this explicit dependency.
             <dependency>
                 <groupId>org.apache.isis</groupId>
                 <artifactId>applib</artifactId>
-                <version>0.2.0-incubating-SNAPSHOT</version>
+                <version>0.3.0-incubating-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis</groupId>
                 <artifactId>applib</artifactId>
-                <version>0.2.0-incubating-SNAPSHOT</version>
+                <version>0.3.0-incubating-SNAPSHOT</version>
                 <type>test-jar</type>
             </dependency>
 
@@ -1066,42 +1059,42 @@ archetype includes this explicit dependency.
             <dependency>
                 <groupId>org.apache.isis</groupId>
                 <artifactId>core</artifactId>
-                <version>0.2.0-incubating-SNAPSHOT</version>
+                <version>0.3.0-incubating-SNAPSHOT</version>
             </dependency>
 
             <!-- isis: progmodels -->
             <dependency>
                 <groupId>org.apache.isis</groupId>
                 <artifactId>progmodels</artifactId>
-                <version>0.2.0-incubating-SNAPSHOT</version>
+                <version>0.3.0-incubating-SNAPSHOT</version>
             </dependency>
 
             <!-- isis: security -->
             <dependency>
                 <groupId>org.apache.isis</groupId>
                 <artifactId>security</artifactId>
-                <version>0.2.0-incubating-SNAPSHOT</version>
+                <version>0.3.0-incubating-SNAPSHOT</version>
             </dependency>
 
             <!-- isis: runtime -->
             <dependency>
                 <groupId>org.apache.isis</groupId>
                 <artifactId>runtimes</artifactId>
-                <version>0.2.0-incubating-SNAPSHOT</version>
+                <version>0.3.0-incubating-SNAPSHOT</version>
             </dependency>
 
             <!-- isis: viewer -->
             <dependency>
                 <groupId>org.apache.isis</groupId>
                 <artifactId>viewer</artifactId>
-                <version>0.2.0-incubating-SNAPSHOT</version>
+                <version>0.3.0-incubating-SNAPSHOT</version>
             </dependency>
 
             <!-- isis: tck -->
             <dependency>
                 <groupId>org.apache.isis</groupId>
                 <artifactId>tck</artifactId>
-                <version>0.2.0-incubating-SNAPSHOT</version>
+                <version>0.3.0-incubating-SNAPSHOT</version>
             </dependency>
 
 

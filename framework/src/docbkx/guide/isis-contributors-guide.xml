@@ -5162,8 +5162,9 @@ $ find isis -exec touch {} \;</programlisting>
         <sect2>
           <title>Announce the release</title>
 
-          <para>Announce the release to
-          <emphasis>isis-dev@incubator.a.o</emphasis> mailing list.</para>
+          <para>Announce the release to the
+          <emphasis>isis-users@incubator.a.o</emphasis> and
+          <emphasis>isis-dev@incubator.a.o</emphasis> mailing lists.</para>
 
           <para>Use the following subject:</para>
 
