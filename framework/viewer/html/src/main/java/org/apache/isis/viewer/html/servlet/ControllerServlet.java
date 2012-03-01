@@ -32,7 +32,6 @@ import org.apache.log4j.Logger;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.viewer.html.component.Page;
-import org.apache.isis.viewer.html.component.html.HtmlComponentFactory;
 import org.apache.isis.viewer.html.context.Context;
 import org.apache.isis.viewer.html.request.Request;
 import org.apache.isis.viewer.html.request.ServletRequest;
@@ -43,7 +42,7 @@ public class ControllerServlet extends AbstractHtmlViewerServlet {
     private static final long serialVersionUID = 1L;
     private static final Logger LOG = Logger.getLogger(ControllerServlet.class);
 
-    private String encoding = HtmlServletConstants.ENCODING_DEFAULT;
+    private String encoding;
     private WebController controller;
 
     // //////////////////////////////////////////////////////////////////
@@ -53,15 +52,14 @@ public class ControllerServlet extends AbstractHtmlViewerServlet {
     @Override
     public void init(final ServletConfig servletConfig) throws ServletException {
         super.init(servletConfig);
-        encoding = getConfiguration().getString(HtmlServletConstants.ENCODING_KEY, encoding);
+        encoding = getConfiguration().getString(HtmlServletConstants.ENCODING_KEY, HtmlServletConstants.ENCODING_DEFAULT);
 
-        controller = getNewWebController();
-        controller.setDebug(getConfiguration().getBoolean(HtmlServletConstants.DEBUG_KEY));
+        controller = new WebController(getPathBuilder());
+        
+        final boolean debugEnabled = getConfiguration().getBoolean(HtmlServletConstants.DEBUG_KEY);
+        controller.setDebug(debugEnabled);
+        
         controller.init();
-    }
-
-    protected WebController getNewWebController() {
-        return new WebController(getPathBuilder());
     }
 
     // //////////////////////////////////////////////////////////////////
@@ -100,18 +98,13 @@ public class ControllerServlet extends AbstractHtmlViewerServlet {
     }
 
     private Context getContextForRequest(final HttpServletRequest request) {
-        final AuthenticationSession authenticationSession = getAuthenticationSession();
-        Context context = (Context) authenticationSession.getAttribute(HtmlServletConstants.AUTHENTICATION_SESSION_CONTEXT_KEY);
+        final AuthenticationSession authSession = getAuthenticationSession();
+        Context context = (Context) authSession.getAttribute(HtmlServletConstants.AUTHENTICATION_SESSION_CONTEXT_KEY);
         if (context == null || !context.isValid()) {
-            // TODO reuse the component factory
-            context = new Context(getNewHtmlComponentFactory());
-            authenticationSession.setAttribute(HtmlServletConstants.AUTHENTICATION_SESSION_CONTEXT_KEY, context);
+            context = new Context(getHtmlComponentFactory());
+            authSession.setAttribute(HtmlServletConstants.AUTHENTICATION_SESSION_CONTEXT_KEY, context);
         }
         return context;
-    }
-
-    protected HtmlComponentFactory getNewHtmlComponentFactory() {
-        return new HtmlComponentFactory(getPathBuilder());
     }
 
     private void processRequest(final HttpServletRequest request, final HttpServletResponse response, final Request req, final Context context) throws IOException, ServletException {
@@ -120,28 +113,17 @@ public class ControllerServlet extends AbstractHtmlViewerServlet {
         // no need to check if logged in; the IsisSessionFilter would
         // have prevented us from getting here.
 
-        try {
-            // REVIEW: why was this commented out?
-            // SessionAccess.startRequest(context.getSession());
-            final Page page = controller.generatePage(context, req);
-            if (context.isValid()) {
-                if (controller.isDebug()) {
-                    controller.addDebug(page, req);
-                    addDebug(request, page);
-                }
-                PrintWriter writer;
-                writer = response.getWriter();
-                page.write(writer);
-            } else {
-                response.sendRedirect(getLogonPage());
+        final Page page = controller.generatePage(context, req);
+        if (context.isValid()) {
+            if (controller.isDebug()) {
+                controller.addDebug(page, req);
+                addDebug(request, page);
             }
-        } finally {
-            // REVIEW: why was this commented out?
-            // SessionAccess.endRequest(context.getSession());
-            if (!context.isLoggedIn()) {
-                final HttpSession httpSession = request.getSession(false);
-                LOG.info("dropping session: " + httpSession);
-            }
+            PrintWriter writer;
+            writer = response.getWriter();
+            page.write(writer);
+        } else {
+            response.sendRedirect(getLogonPage());
         }
     }
 

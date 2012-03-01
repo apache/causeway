@@ -20,14 +20,13 @@
 package org.apache.isis.viewer.html.context;
 
 import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
 import java.util.Stack;
+
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 
 import org.apache.log4j.Logger;
 
@@ -42,6 +41,8 @@ import org.apache.isis.core.runtime.userprofile.UserProfile;
 import org.apache.isis.runtimes.dflt.runtime.persistence.ConcurrencyException;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
+import org.apache.isis.runtimes.dflt.runtime.system.transaction.UpdateNotifier;
 import org.apache.isis.viewer.html.component.Block;
 import org.apache.isis.viewer.html.component.ComponentFactory;
 import org.apache.isis.viewer.html.crumb.CollectionCrumb;
@@ -53,35 +54,137 @@ import org.apache.isis.viewer.html.request.Request;
 import org.apache.isis.viewer.html.task.Task;
 
 public class Context {
+
     private static final Logger LOG = Logger.getLogger(Context.class);
-    private final Map actionMap = new HashMap();
+    
     private final ComponentFactory componentFactory;
     private final ObjectHistory history = new ObjectHistory();
-    private boolean isValid;
-    private int max;
-    private final Map<String, CollectionMapping> collectionMap = new HashMap<String, CollectionMapping>();
-    private final Map<String, ObjectMapping> objectMap = new HashMap<String, ObjectMapping>();
-    private final Map<String, ObjectMapping> serviceMap = new HashMap<String, ObjectMapping>();
+    
+    private final Map<String, ObjectMapping> objectMap = Maps.newHashMap();
+    private final Map<String, ObjectMapping> serviceMap = Maps.newHashMap();
+    private final Map<String, CollectionMapping> collectionMap = Maps.newHashMap();
+    private final Map<String, ObjectAction> actionMap = Maps.newHashMap();
+    
     private final Stack<Crumb> crumbs = new Stack<Crumb>();
     private final List<String> messages = new ArrayList<String>();
     private final List<String> warnings = new ArrayList<String>();
 
     private AuthenticationSession session;
+    private boolean isValid;
+    private int max;
 
-    public Context(final ComponentFactory factory) {
-        componentFactory = factory;
-        isValid = true;
+    // ////////////////////////////////////////////////////
+    // constructor, init
+    // ////////////////////////////////////////////////////
+
+    public Context(final ComponentFactory componentFactory) {
+        this.componentFactory = componentFactory;
+        this.isValid = true;
         clearMessagesAndWarnings();
-        LOG.debug(this + " created with " + factory);
+        LOG.debug(this + " created with " + componentFactory);
     }
 
-    public void setObjectCrumb(final ObjectAdapter object) {
-        while (crumbs.size() > 0 && !(crumbs.lastElement() instanceof TaskCrumb)) {
+    public void init() {
+        final AdapterManager adapterManager = getAdapterManager();
+        final List<Object> services = getUserProfile().getPerspective().getServices();
+        for (final Object service : services) {
+            final ObjectAdapter serviceAdapter = adapterManager.adapterFor(service);
+            if (serviceAdapter == null) {
+                LOG.warn("unable to find service: " + service + "; skipping");
+                continue;
+            }
+            mapObject(serviceAdapter);
+        }
+        serviceMap.putAll(objectMap);
+    }
+
+
+    public ComponentFactory getComponentFactory() {
+        return componentFactory;
+    }
+
+
+    // ////////////////////////////////////////////////////
+    // validity 
+    // ////////////////////////////////////////////////////
+
+    public boolean isValid() {
+        return isValid;
+    }
+
+    public void invalidate() {
+        isValid = false;
+    }
+    
+    
+    // ////////////////////////////////////////////////////
+    // session 
+    // ////////////////////////////////////////////////////
+
+    public boolean isLoggedIn() {
+        return session != null;
+    }
+
+    public void setSession(final AuthenticationSession currentSession) {
+        this.session = currentSession;
+    }
+
+    public AuthenticationSession getSession() {
+        return session;
+    }
+
+
+    // ////////////////////////////////////////////////////
+    // processChanges 
+    // ////////////////////////////////////////////////////
+
+    public void processChanges() {
+        final List<ObjectAdapter> disposedObjects = getUpdateNotifier().getDisposedObjects();
+        for (final ObjectAdapter adapter : disposedObjects) {
+            final ObjectMapping mapping = persistentOrTransientObjectMappingFor(adapter);
+            if (objectMap.containsValue(mapping)) {
+                processChangeFor(mapping);
+            }
+        }
+    }
+
+    private void processChangeFor(final ObjectMapping mapping) {
+        final String existingId = findExistingInMap(objectMap, mapping);
+        history.remove(existingId);
+
+        final List<Crumb> relatedCrumbs = Lists.newArrayList();
+        for (final Crumb crumb : getCrumbs()) {
+            /*
+             * if (crumb.isFor(existingId)) { relatedCrumbs.add(crumb);
+             * }
+             */}
+        for (final Crumb crumb : relatedCrumbs) {
+            crumbs.remove(crumb);
+        }
+
+        for (final CollectionMapping collection : collectionMap.values()) {
+            collection.remove(existingId);
+        }
+        objectMap.remove(existingId);
+    }
+
+    // ////////////////////////////////////////////////////
+    // changeContext 
+    // ////////////////////////////////////////////////////
+
+    public Request changeContext(final int id) {
+        while (crumbs.size() - 1 > id) {
             crumbs.pop();
         }
-        final String id = mapObject(object);
-        crumbs.push(new ObjectCrumb(id, object));
+        final Crumb c = crumbs.lastElement();
+        return c.changeContext();
     }
+
+
+    
+    // ////////////////////////////////////////////////////
+    // Crumbs
+    // ////////////////////////////////////////////////////
 
     public void addCollectionFieldCrumb(final String collectionFieldName) {
         crumbs.push(new ObjectFieldCrumb(collectionFieldName));
@@ -94,6 +197,15 @@ public class Context {
         crumbs.push(new CollectionCrumb(id, getMappedCollection(id)));
     }
 
+    public void setObjectCrumb(final ObjectAdapter object) {
+        while (crumbs.size() > 0 && !(crumbs.lastElement() instanceof TaskCrumb)) {
+            crumbs.pop();
+        }
+        final String id = mapObject(object);
+        crumbs.push(new ObjectCrumb(id, object));
+    }
+
+
     public void addTaskCrumb(final Task task) {
         while (crumbs.size() > 1 && !(crumbs.lastElement() instanceof ObjectCrumb)) {
             crumbs.pop();
@@ -103,6 +215,333 @@ public class Context {
         task.init(this);
         crumbs.push(new TaskCrumb(task));
     }
+
+    
+    public Crumb[] getCrumbs() {
+        final int size = crumbs.size();
+        final Crumb[] taskList = new Crumb[size];
+        for (int i = 0; i < crumbs.size(); i++) {
+            taskList[i] = crumbs.get(i);
+        }
+        return taskList;
+    }
+
+    public boolean[] isLinked() {
+        final int size = crumbs.size();
+        final boolean[] isLinked = new boolean[size];
+        for (int i = size - 1; i >= 0; i--) {
+            final boolean isTask = crumbs.elementAt(i) instanceof TaskCrumb;
+            isLinked[i] = i != size - 1;
+            if (isTask) {
+                break;
+            }
+        }
+        return isLinked;
+    }
+
+
+    // ////////////////////////////////////////////////////
+    // Mappings
+    // ////////////////////////////////////////////////////
+
+    public String mapAction(final ObjectAction action) {
+        return findExistingOrAddToMap(actionMap, action);
+    }
+
+    public String mapObject(final ObjectAdapter adapter) {
+        return findExistingOrAddToMap(objectMap, persistentOrTransientObjectMappingFor(adapter));
+    }
+
+    public String mapCollection(final ObjectAdapter collection) {
+        return findExistingOrAddToMap(collectionMap, new CollectionMapping(this, collection));
+    }
+
+    public ObjectAction getMappedAction(final String id) {
+        return getMappedInstance(actionMap, id);
+    }
+
+    public ObjectAdapter getMappedCollection(final String id) {
+        final CollectionMapping map = getMappedInstance(collectionMap, id);
+        return map.getCollection(this);
+    }
+
+    public ObjectAdapter getMappedObject(final String id) {
+        final ObjectMapping mappedObject = getMappedInstance(objectMap, id);
+        final ObjectAdapter object = mappedObject.getObject();
+
+        // ensure resolved if currently a ghost;
+        // start/end xactn if required
+        if (object.isPersistent() && object.getResolveState().isGhost()) {
+            getPersistenceSession().resolveImmediately(object);
+        }
+
+        try {
+            mappedObject.checkVersion(object);
+        } catch (final ConcurrencyException e) {
+            LOG.info("concurrency conflict: " + e.getMessage());
+            messages.clear();
+            messages.add(e.getMessage());
+            messages.add("Reloaded object " + object.titleString());
+            updateVersion(object);
+        }
+        return object;
+    }
+
+    
+    private <T> String findExistingOrAddToMap(final Map<String,T> map, final T object) {
+        Assert.assertNotNull(object);
+        if (map.containsValue(object)) {
+            return findExistingInMap(map, object);
+        } else {
+            return addToMap(map, object);
+        }
+    }
+
+    private <T> String addToMap(final Map<String,T> map, final T object) {
+        max++;
+        final String id = "" + max;
+        map.put(id, object);
+
+        final String mapName = map == objectMap ? "object" : (map == collectionMap ? "collection" : "action");
+        LOG.debug("add " + object + " to " + mapName + " as #" + id);
+
+        return id;
+    }
+
+    private <T> String findExistingInMap(final Map<String, T> map, final Object object) {
+        for (final String id : map.keySet()) {
+            if (object.equals(map.get(id))) {
+                return id;
+            }
+        }
+        throw new IsisException();
+    }
+
+    private <T> T getMappedInstance(final Map<String,T> map, final String id) {
+        final T object = map.get(id);
+        if (object == null) {
+            final String mapName = mapNameFor(map);
+            throw new ObjectLookupException("No object in " + mapName + " map with id " + id);
+        }
+        return object;
+    }
+
+    private <T> String mapNameFor(final Map<String, T> map) {
+        return (map == objectMap) ? "object" : (map == collectionMap ? "collection" : "action");
+    }
+
+    private static ObjectMapping persistentOrTransientObjectMappingFor(final ObjectAdapter adapter) {
+        return adapter.isTransient() ? new TransientObjectMapping(adapter) : new PersistentObjectMapping(adapter);
+    }
+
+    
+
+    // ////////////////////////////////////////////////////
+    // Instances 
+    // ////////////////////////////////////////////////////
+
+    /**
+     * Returns an array of instances of the specified type that are currently
+     * known in the current context, ie have been recently seen by the user.
+     * 
+     * <p>
+     * These will be resolved if required, with a transaction created (and
+     * ended) if required.
+     */
+    public ObjectAdapter[] getKnownInstances(final ObjectSpecification type) {
+
+        final List<ObjectAdapter> instances = Lists.newArrayList();
+
+        for (final String id : objectMap.keySet()) {
+            final ObjectAdapter adapter = getMappedObject(id);
+            
+            getPersistenceSession().resolveImmediately(adapter);
+            if (adapter.getSpecification().isOfType(type)) {
+                instances.add(adapter);
+            }
+        }
+
+        final ObjectAdapter[] array = new ObjectAdapter[instances.size()];
+        instances.toArray(array);
+        return array;
+    }
+
+    public void restoreAllObjectsToLoader() {
+        for (Map.Entry<String, ObjectMapping> mapEntry : objectMap.entrySet()) {
+            final ObjectMapping objectMapping = mapEntry.getValue();
+            objectMapping.restoreToLoader();
+        }
+    }
+
+    public void purgeObjectsAndCollections() {
+        
+        clearMessagesAndWarnings();
+
+        final Map<String, CollectionMapping> collMappingById = Maps.newHashMap();
+        final Map<String, ObjectMapping> objectMappingById = Maps.newHashMap();
+
+        for (HistoryEntry entry : history) {
+            if (entry.type == HistoryEntry.OBJECT) {
+                copyObjectMapping(objectMappingById, entry);
+            } else if (entry.type == HistoryEntry.COLLECTION) {
+                copyCollectionMapping(collMappingById, objectMappingById, entry);
+            }
+        }
+
+        collectionMap.clear();
+        collectionMap.putAll(collMappingById);
+        objectMap.clear();
+        objectMap.putAll(objectMappingById);
+        objectMap.putAll(serviceMap);
+    }
+
+    private void copyObjectMapping(final Map<String, ObjectMapping> objectMappingById, HistoryEntry entry) {
+        final ObjectMapping item = objectMap.get(entry.id);
+        objectMappingById.put(entry.id, item);
+        
+        LOG.debug("copied object map " + entry.id + " for " + item);
+        item.updateVersion();
+    }
+    
+    private void copyCollectionMapping(final Map<String, CollectionMapping> collMappingById, final Map<String, ObjectMapping> objectMappingById, HistoryEntry entry) {
+        
+        final CollectionMapping coll = collectionMap.get(entry.id);
+        collMappingById.put(entry.id, coll);
+        LOG.debug("copied collection map for " + coll);
+        
+        for (String elementId : coll) {
+            final ObjectMapping objMapping = objectMap.get(elementId);
+            
+            if (objMapping != null) {
+                objectMappingById.put(elementId, objMapping);
+                
+                LOG.debug("copied object map " + elementId + " for " + objMapping);
+                objMapping.updateVersion();
+            }
+        }
+    }
+
+    // ////////////////////////////////////////////////////
+    // Tasks 
+    // ////////////////////////////////////////////////////
+
+    public Task getTask(final String taskId) {
+        Task task = null;
+        for (int i = crumbs.size() - 1; i >= 0; i--) {
+            final Object crumb = crumbs.get(i);
+            if (crumb instanceof TaskCrumb) {
+                final TaskCrumb taskCrumb = (TaskCrumb) crumb;
+                final String id = taskCrumb.getTask().getId();
+                if (taskId.equals(id)) {
+                    task = taskCrumb.getTask();
+                    break;
+                }
+            }
+        }
+        return task;
+    }
+
+    public void endTask(final Task task) {
+        for (int i = crumbs.size() - 1; i >= 0; i--) {
+            final Object crumb = crumbs.get(i);
+            if (crumb instanceof TaskCrumb) {
+                final TaskCrumb taskCrumb = (TaskCrumb) crumb;
+                if (taskCrumb.getTask() == task) {
+                    crumbs.remove(taskCrumb);
+                    return;
+                }
+            }
+        }
+        throw new IsisException("No crumb found for " + task);
+    }
+
+
+    public Request cancelTask(final Task task) {
+        if (task != null) {
+            endTask(task);
+        }
+
+        // REVIEW does this take us back to the right object?
+        final Crumb crumb = crumbs.get(crumbs.size() - 1);
+        return crumb.changeContext();
+    }
+
+    private boolean isTask() {
+        final int index = crumbs.size() - 1;
+        return index >= 0 && crumbs.get(index) instanceof TaskCrumb;
+    }
+
+    
+
+    // ////////////////////////////////////////////////////
+    // Messages 
+    // ////////////////////////////////////////////////////
+
+    public List<String> getMessages() {
+        return messages;
+    }
+
+    public String getMessage(final int i) {
+        return messages.get(i);
+    }
+
+    public List<String> getWarnings() {
+        return warnings;
+    }
+
+    public String getWarning(final int i) {
+        return warnings.get(i);
+    }
+
+    public void setMessagesAndWarnings(final List<String> messages, final List<String> warnings) {
+        this.messages.clear();
+        this.messages.addAll(messages);
+        this.warnings.clear();
+        this.warnings.addAll(warnings);
+    }
+
+    public void clearMessagesAndWarnings() {
+        messages.clear();
+        warnings.clear();
+    }
+
+
+    public void listHistory(final Context context, final Block navigation) {
+        history.listObjects(context, navigation);
+    }
+
+    public void addObjectToHistory(final String idString) {
+        history.addObject(idString);
+    }
+
+    public void addCollectionToHistory(final String idString) {
+        history.addCollection(idString);
+    }
+
+    // ////////////////////////////////////////////////////
+    // 
+    // ////////////////////////////////////////////////////
+
+
+    public void updateVersion(final ObjectAdapter adapter) {
+        if (adapter.isTransient()) {
+            return;
+        }
+
+        // TODO refactor this for clarity: removes existing mapping and replaces
+        // it with a new one as it
+        // contains the new version
+        final String id = mapObject(adapter);
+        if (id != null) {
+            final ObjectMapping mapping = new PersistentObjectMapping(adapter);
+            objectMap.put(id, mapping);
+        }
+    }
+
+
+    // ////////////////////////////////////////////////////
+    // Debug 
+    // ////////////////////////////////////////////////////
 
     public void debug(final DebugBuilder debug) {
         debug.startSection("Web Session Context");
@@ -154,379 +593,36 @@ public class Context {
         debug.endSection();
     }
 
-    private void debugMap(final DebugBuilder debug, final Map map) {
-        final Iterator names = map.keySet().iterator();
+    private void debugMap(final DebugBuilder debug, final Map<String,?> map) {
+        final Iterator<String> names = map.keySet().iterator();
         while (names.hasNext()) {
-            final String name = (String) names.next();
+            final String name = names.next();
             debug.appendln(name + " -> " + map.get(name));
         }
     }
 
-    public ObjectAction getMappedAction(final String id) {
-        return (ObjectAction) getMappedInstance(actionMap, id);
-    }
-
-    public ComponentFactory getComponentFactory() {
-        return componentFactory;
-    }
-
-    /**
-     * Returns an array of instances of the specified type that are currently
-     * known in the current context, ie have been recently seen by the user.
-     * 
-     * <p>
-     * These will be resolved if required, with a transaction created (and
-     * ended) if required.
-     */
-    public ObjectAdapter[] getKnownInstances(final ObjectSpecification type) {
-
-        final List<ObjectAdapter> instances = new ArrayList<ObjectAdapter>();
-
-        for (final String id : objectMap.keySet()) {
-            final ObjectAdapter adapter = getMappedObject(id);
-            IsisContext.getPersistenceSession().resolveImmediately(adapter);
-            if (adapter.getSpecification().isOfType(type)) {
-                instances.add(adapter);
-            }
-        }
-
-        final ObjectAdapter[] array = new ObjectAdapter[instances.size()];
-        instances.toArray(array);
-        return array;
-    }
-
-    private String addToMap(final Map map, final Object object) {
-        Assert.assertNotNull(object);
-        if (map.containsValue(object)) {
-            return findExistingId(map, object);
-        } else {
-            return mapNewObject(map, object);
-        }
-    }
-
-    private String mapNewObject(final Map map, final Object object) {
-        max++;
-        final String id = "" + max;
-        map.put(id, object);
-
-        final String mapName = map == objectMap ? "object" : (map == collectionMap ? "collection" : "action");
-        LOG.debug("add " + object + " to " + mapName + " as #" + id);
-
-        return id;
-    }
-
-    private String findExistingId(final Map<String, ?> map, final Object object) {
-        for (final String id : map.keySet()) {
-            if (object.equals(map.get(id))) {
-                return id;
-            }
-        }
-        throw new IsisException();
-    }
-
-    private Object getMappedInstance(final Map map, final String id) {
-        final Object object = map.get(id);
-        if (object == null) {
-            final String mapName = (map == objectMap) ? "object" : (map == collectionMap ? "collection" : "action");
-            throw new ObjectLookupException("No object in " + mapName + " map with id " + id);
-        }
-        return object;
-    }
-
-    public ObjectAdapter getMappedCollection(final String id) {
-        final CollectionMapping map = (CollectionMapping) getMappedInstance(collectionMap, id);
-        return map.getCollection(this);
-    }
-
-    public ObjectAdapter getMappedObject(final String id) {
-        final ObjectMapping mappedObject = (ObjectMapping) getMappedInstance(objectMap, id);
-        final ObjectAdapter object = mappedObject.getObject();
-
-        // ensure resolved if currently a ghost;
-        // start/end xactn if required
-        if (object.isPersistent() && object.getResolveState().isGhost()) {
-            IsisContext.getPersistenceSession().resolveImmediately(object);
-        }
-
-        try {
-            mappedObject.checkVersion(object);
-        } catch (final ConcurrencyException e) {
-            LOG.info("concurrency conflict: " + e.getMessage());
-            messages.clear();
-            messages.add(e.getMessage());
-            messages.add("Reloaded object " + object.titleString());
-            updateVersion(object);
-        }
-        return object;
-    }
-
-    public Task getTask(final String taskId) {
-        Task task = null;
-        for (int i = crumbs.size() - 1; i >= 0; i--) {
-            final Object crumb = crumbs.get(i);
-            if (crumb instanceof TaskCrumb) {
-                final TaskCrumb taskCrumb = (TaskCrumb) crumb;
-                final String id = taskCrumb.getTask().getId();
-                if (taskId.equals(id)) {
-                    task = taskCrumb.getTask();
-                    break;
-                }
-            }
-        }
-        return task;
-    }
-
-    public Request cancelTask(final Task task) {
-        if (task != null) {
-            endTask(task);
-        }
-
-        // REVIEW does this take us back to the right object?
-        final Crumb crumb = crumbs.get(crumbs.size() - 1);
-        return crumb.changeContext();
-    }
-
-    public void invalidate() {
-        isValid = false;
-    }
-
-    public boolean isValid() {
-        return isValid;
-    }
-
-    public boolean isLoggedIn() {
-        return session != null;
-    }
-
-    public String mapAction(final ObjectAction action) {
-        return addToMap(actionMap, action);
-    }
-
-    public String mapObject(final ObjectAdapter adapter) {
-        final ObjectMapping mapping = objectMapping(adapter);
-        return addToMap(objectMap, mapping);
-    }
-
-    private ObjectMapping objectMapping(final ObjectAdapter adapter) {
-        ObjectMapping mapping;
-        if (adapter.isTransient()) {
-            mapping = new TransientObjectMapping(adapter);
-        } else {
-            mapping = new PersistentObjectMapping(adapter);
-        }
-        return mapping;
-    }
-
-    public String mapCollection(final ObjectAdapter collection) {
-        final CollectionMapping map = new CollectionMapping(this, collection);
-        return addToMap(collectionMap, map);
-    }
-
-    public void endTask(final Task task) {
-        for (int i = crumbs.size() - 1; i >= 0; i--) {
-            final Object crumb = crumbs.get(i);
-            if (crumb instanceof TaskCrumb) {
-                final TaskCrumb taskCrumb = (TaskCrumb) crumb;
-                if (taskCrumb.getTask() == task) {
-                    crumbs.remove(taskCrumb);
-                    return;
-                }
-            }
-        }
-        throw new IsisException("No crumb found for " + task);
-    }
-
-    public Crumb[] getCrumbs() {
-        final int size = crumbs.size();
-        final Crumb[] taskList = new Crumb[size];
-        for (int i = 0; i < crumbs.size(); i++) {
-            taskList[i] = crumbs.get(i);
-        }
-        return taskList;
-    }
-
-    public boolean[] isLinked() {
-        final int size = crumbs.size();
-        final boolean[] isLinked = new boolean[size];
-        for (int i = size - 1; i >= 0; i--) {
-            final boolean isTask = crumbs.elementAt(i) instanceof TaskCrumb;
-            isLinked[i] = i != size - 1;
-            if (isTask) {
-                break;
-            }
-        }
-        return isLinked;
-    }
-
-    public List<String> getMessages() {
-        return messages;
-    }
-
-    public String getMessage(final int i) {
-        return messages.get(i);
-    }
-
-    public List<String> getWarnings() {
-        return warnings;
-    }
-
-    public String getWarning(final int i) {
-        return warnings.get(i);
-    }
-
-    public void setMessagesAndWarnings(final List<String> messages, final List<String> warnings) {
-        this.messages.clear();
-        this.messages.addAll(messages);
-        this.warnings.clear();
-        this.warnings.addAll(warnings);
-    }
-
-    public void clearMessagesAndWarnings() {
-        messages.clear();
-        warnings.clear();
-    }
-
-    private boolean isTask() {
-        final int index = crumbs.size() - 1;
-        return index >= 0 && crumbs.get(index) instanceof TaskCrumb;
-    }
-
-    public Request changeContext(final int id) {
-        while (crumbs.size() - 1 > id) {
-            crumbs.pop();
-        }
-        final Crumb c = crumbs.lastElement();
-        return c.changeContext();
-    }
-
-    public void setSession(final AuthenticationSession currentSession) {
-        this.session = currentSession;
-    }
-
-    public AuthenticationSession getSession() {
-        return session;
-    }
-
-    public void purge() {
-        actionMap.clear();
-        clearMessagesAndWarnings();
-
-        final Map newCollectionMap = new HashMap();
-        final Map newObjectMap = new HashMap();
-
-        final Iterator<HistoryEntry> elements = history.elements();
-        while (elements.hasNext()) {
-            final HistoryEntry entry = elements.next();
-            if (entry.type == HistoryEntry.OBJECT) {
-                final Object item = objectMap.get(entry.id);
-                newObjectMap.put(entry.id, item);
-                LOG.debug("copied object map " + entry.id + " for " + item);
-                ((ObjectMapping) item).updateVersion();
-            } else if (entry.type == HistoryEntry.COLLECTION) {
-                final CollectionMapping coll = collectionMap.get(entry.id);
-                newCollectionMap.put(entry.id, coll);
-                LOG.debug("copied collection map for " + coll);
-                final Enumeration e1 = coll.elements();
-                while (e1.hasMoreElements()) {
-                    final String id1 = (String) e1.nextElement();
-                    final Object item = objectMap.get(id1);
-                    if (item != null) {
-                        newObjectMap.put(id1, item);
-                        LOG.debug("copied object map " + id1 + " for " + item);
-                        ((ObjectMapping) item).updateVersion();
-                    }
-                }
-            }
-        }
-
-        collectionMap.clear();
-        collectionMap.putAll(newCollectionMap);
-        objectMap.clear();
-        objectMap.putAll(newObjectMap);
-        objectMap.putAll(serviceMap);
-    }
-
-    public void restoreAllObjectsToLoader() {
-        final Set oidSet = objectMap.entrySet();
-        for (final Iterator it = oidSet.iterator(); it.hasNext();) {
-            final ObjectMapping mapping = (ObjectMapping) ((Entry) it.next()).getValue();
-            mapping.restoreToLoader();
-        }
-    }
-
-    public void listHistory(final Context context, final Block navigation) {
-        history.listObjects(context, navigation);
-    }
-
-    public void addObjectToHistory(final String idString) {
-        history.addObject(idString);
-    }
-
-    public void addCollectionToHistory(final String idString) {
-        history.addCollection(idString);
-    }
-
-    public void init() {
-        final AdapterManager adapterManager = IsisContext.getPersistenceSession().getAdapterManager();
-        final List<Object> services = getUserProfile().getPerspective().getServices();
-        for (final Object service : services) {
-            final ObjectAdapter serviceAdapter = adapterManager.adapterFor(service);
-            if (serviceAdapter == null) {
-                LOG.warn("unable to find service: " + service + "; skipping");
-                continue;
-            }
-            mapObject(serviceAdapter);
-        }
-        serviceMap.putAll(objectMap);
-    }
-
-    public void updateVersion(final ObjectAdapter adapter) {
-        if (adapter.isTransient()) {
-            return;
-        }
-
-        // TODO refactor this for clarity: removes existing mapping and replaces
-        // it with a new one as it
-        // contains the new version
-        final String id = mapObject(adapter);
-        if (id != null) {
-            final ObjectMapping mapping = new PersistentObjectMapping(adapter);
-            objectMap.put(id, mapping);
-        }
-    }
-
-    public void processChanges() {
-        final List<ObjectAdapter> disposedObjects = IsisContext.getUpdateNotifier().getDisposedObjects();
-        for (final ObjectAdapter adapter : disposedObjects) {
-            final ObjectMapping mapping = objectMapping(adapter);
-            if (objectMap.containsValue(mapping)) {
-                final String existingId = findExistingId(objectMap, mapping);
-                history.remove(existingId);
-
-                final ArrayList<Crumb> relatedCrumbs = new ArrayList<Crumb>();
-                for (final Crumb crumb : getCrumbs()) {
-                    /*
-                     * if (crumb.isFor(existingId)) { relatedCrumbs.add(crumb);
-                     * }
-                     */}
-                for (final Crumb crumb : relatedCrumbs) {
-                    crumbs.remove(crumb);
-                }
-
-                for (final CollectionMapping collection : collectionMap.values()) {
-                    collection.remove(existingId);
-                }
-                objectMap.remove(existingId);
-            }
-        }
-    }
 
     // ////////////////////////////////////////////////////
     // Dependencies (from context)
     // ////////////////////////////////////////////////////
 
-    private static UserProfile getUserProfile() {
+    protected UserProfile getUserProfile() {
         return IsisContext.getUserProfile();
     }
+
+    protected AdapterManager getAdapterManager() {
+        return getPersistenceSession().getAdapterManager();
+    }
+
+
+    protected PersistenceSession getPersistenceSession() {
+        return IsisContext.getPersistenceSession();
+    }
+
+    protected UpdateNotifier getUpdateNotifier() {
+        return IsisContext.getUpdateNotifier();
+    }
+
+
 
 }

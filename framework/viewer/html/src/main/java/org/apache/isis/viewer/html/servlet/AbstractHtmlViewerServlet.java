@@ -28,12 +28,21 @@ import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.html.PathBuilder;
 import org.apache.isis.viewer.html.PathBuilderDefault;
+import org.apache.isis.viewer.html.component.html.HtmlComponentFactory;
 
 public abstract class AbstractHtmlViewerServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
 
     private PathBuilder pathBuilder;
+    private HtmlComponentFactory componentFactory;
+
+    protected HtmlComponentFactory getHtmlComponentFactory() {
+        if(componentFactory == null) {
+            componentFactory = new HtmlComponentFactory(getPathBuilder());
+        }
+        return componentFactory;
+    }
 
     protected PathBuilder getPathBuilder() {
         if (pathBuilder != null) {
@@ -41,6 +50,7 @@ public abstract class AbstractHtmlViewerServlet extends HttpServlet {
         }
         return pathBuilder = new PathBuilderDefault(getServletContext());
     }
+
 
     /**
      * Convenience.

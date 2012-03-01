@@ -54,7 +54,7 @@ public abstract class ObjectViewAbstract implements Action {
             context.addObjectToHistory(idString);
         }
 
-        context.purge();
+        context.purgeObjectsAndCollections();
 
         content.setMenu(MenuUtil.menu(adapter, idString, context));
 

@@ -25,19 +25,21 @@ import org.apache.isis.viewer.html.servlet.HtmlServletConstants;
 
 public class PathBuilderDefault implements PathBuilder {
 
+    private static final long serialVersionUID = 1L;
+    
     private final String suffix;
+
+    private static String getSuffixInitParam(final ServletContext servletContext) {
+        final String suffixInitParam = servletContext.getInitParameter(HtmlServletConstants.SUFFIX_INIT_PARAM);
+        return suffixInitParam != null ? suffixInitParam : HtmlServletConstants.SUFFIX_INIT_PARAM_VALUE_DEFAULT;
+    }
 
     public PathBuilderDefault(final ServletContext servletContext) {
         this(getSuffixInitParam(servletContext));
     }
 
-    private PathBuilderDefault(final String suffix) {
+    public PathBuilderDefault(final String suffix) {
         this.suffix = suffix;
-    }
-
-    private static String getSuffixInitParam(final ServletContext servletContext) {
-        final String suffixInitParam = servletContext.getInitParameter(HtmlServletConstants.SUFFIX_INIT_PARAM);
-        return suffixInitParam != null ? suffixInitParam : HtmlServletConstants.SUFFIX_INIT_PARAM_VALUE_DEFAULT;
     }
 
     @Override

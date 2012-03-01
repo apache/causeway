@@ -19,7 +19,9 @@
 
 package org.apache.isis.viewer.html;
 
-public interface PathBuilder {
+import java.io.Serializable;
+
+public interface PathBuilder extends Serializable {
 
     public String getSuffix();
 

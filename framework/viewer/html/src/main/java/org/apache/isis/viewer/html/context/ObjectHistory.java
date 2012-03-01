@@ -33,7 +33,8 @@ import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.html.component.Block;
 import org.apache.isis.viewer.html.component.Component;
 
-public class ObjectHistory {
+public class ObjectHistory implements Iterable<HistoryEntry> {
+
     private static final Logger LOG = Logger.getLogger(ObjectHistory.class);
     private static final int MAX = 8;
     private final List<HistoryEntry> history = new ArrayList<HistoryEntry>();
@@ -92,7 +93,7 @@ public class ObjectHistory {
         add(new HistoryEntry(idString, HistoryEntry.COLLECTION));
     }
 
-    public Iterator<HistoryEntry> elements() {
+    public Iterator<HistoryEntry> iterator() {
         return history.iterator();
     }
 

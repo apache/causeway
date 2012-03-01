@@ -27,6 +27,7 @@ import com.google.inject.Injector;
 
 import org.apache.wicket.settings.IResourceSettings;
 import org.apache.wicket.settings.ISecuritySettings;
+import org.jmock.auto.Mock;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Rule;
@@ -42,13 +43,15 @@ public class IsisWicketApplication_init {
 
     private IsisWicketApplication application;
 
+    @Mock
     private ISecuritySettings mockSecuritySettings;
+    @Mock
     private IResourceSettings mockResourceSettings;
 
     @Before
     public void setUp() throws Exception {
-        mockSecuritySettings = context.mockAndIgnoring(ISecuritySettings.class);
-        mockResourceSettings = context.mockAndIgnoring(IResourceSettings.class);
+        context.ignoring(mockSecuritySettings);
+        context.ignoring(mockResourceSettings);
 
         application = new IsisWicketApplication() {
             private static final long serialVersionUID = 1L;

@@ -33,12 +33,6 @@ public class LogOut implements Action {
         if (authSession != null) {
             getAuthenticationManager().closeSession(authSession);
         }
-        context.setSession(null); // setSession is probably redundant since now
-                                  // always available via IsisContext
-                                  // can't rely on it being set because Filter
-                                  // may set httpSession
-                                  // (if in exploration mode) rather than ever
-                                  // hitting the LogonServlet
         context.invalidate();
     }
 

@@ -49,79 +49,50 @@ import org.apache.isis.viewer.html.component.Table;
 
 public class HtmlComponentFactory implements ComponentFactory {
 
+    private static final long serialVersionUID = 1L;
+    
     protected final String footer;
     protected final String header;
     protected final String styleSheet;
+    
     private final PathBuilder pathBuilder;
 
     public HtmlComponentFactory(final PathBuilder pathBuilder) {
+        this(pathBuilder, getConfiguration());
+    }
+
+    public HtmlComponentFactory(final PathBuilder pathBuilder, final IsisConfiguration configuration) {
         this.pathBuilder = pathBuilder;
-        final IsisConfiguration configuration = getConfiguration();
-        styleSheet = configuration.getString(STYLE_SHEET);
-        String file = configuration.getString(HEADER_FILE);
-        header = file == null ? configuration.getString(HEADER) : loadFile(file);
-        file = configuration.getString(FOOTER_FILE);
-        footer = file == null ? configuration.getString(FOOTER) : loadFile(file);
+        this.styleSheet = configuration.getString(STYLE_SHEET);
+        this.header = loadFileElseDefault(configuration, HEADER_FILE, HEADER);
+        this.footer = loadFileElseDefault(configuration, FOOTER_FILE, FOOTER);
     }
 
-    @Override
-    public Block createBlock(final String style, final String description) {
-        return new Div(this, style, description);
-    }
+    
+    // /////////////////////////////////////////////////////////////
+    // Pages
+    // /////////////////////////////////////////////////////////////
 
     @Override
-    public Component createBreadCrumbs(final String[] names, final boolean[] isLinked) {
-        return new BreadCrumbs(this, names, isLinked);
+    public Page createPage() {
+        return new DynamicHtmlPage(this, styleSheet, header, footer);
     }
 
-    @Override
-    public Component createCollectionIcon(final ObjectAssociation field, final ObjectAdapter collection, final String id) {
-        return new CollectionLink(this, field, collection, field.getDescription(), id);
+    public LogonFormPage createLogonPage(final String user, final String password, final boolean registerLink, final String error) {
+        return new LogonFormPage(this, styleSheet, header, footer, user, password, registerLink, error);
     }
 
-    @Override
-    public DebugPane createDebugPane() {
-        return new HtmlDebug();
+    public RegisterFormPage createRegisterPage(final String user, final String password, final String error) {
+        return new RegisterFormPage(this, styleSheet, header, footer, user, password, error);
     }
 
-    @Override
-    public Component createEditOption(final String id) {
-        return new ActionComponent(this, "edit", "Edit Object", "Edit the current object", id, null, null);
-    }
+    // /////////////////////////////////////////////////////////////
+    // Menus
+    // /////////////////////////////////////////////////////////////
 
     @Override
-    public Component createRemoveOption(final String id, final String elementId, final String fieldName) {
-        return new ActionComponent(this, "remove", "Remove", "Remove item from collection", id, elementId, fieldName);
-    }
-
-    @Override
-    public Component createAddOption(final String id, final String fieldName) {
-        return new ActionComponent(this, "add", "Add Item", "Add item to collection", id, null, fieldName);
-    }
-
-    @Override
-    public Component createErrorMessage(final Exception e, final boolean isDebug) {
-        return new ErrorMessage(e, isDebug);
-    }
-
-    @Override
-    public Form createForm(final String id, final String actionName, final int step, final int noOfPages, final boolean isEditing) {
-        return new HtmlForm(this, id, actionName, step, noOfPages, isEditing);
-    }
-
-    @Override
-    public Component createHeading(final String name) {
-        return new Heading(this, name, 4);
-    }
-
-    @Override
-    public Component createInlineBlock(final String style, final String text, final String description) {
-        return new Span(style, text, description);
-    }
-
-    @Override
-    public Component createCheckboxBlock(final boolean isEditable, final boolean isSet) {
-        return new Checkbox(isSet, isEditable);
+    public Component createMenuItem(final String actionId, final String name, final String description, final String reasonDisabled, final ActionType type, final boolean hasParameters, final String targetObjectId) {
+        return new MenuItem(this, actionId, name, description, reasonDisabled, type, hasParameters, targetObjectId);
     }
 
     @Override
@@ -129,14 +100,14 @@ public class HtmlComponentFactory implements ComponentFactory {
         return new Submenu(menuName, items);
     }
 
-    @Override
-    public Component createLink(final String link, final String name, final String description) {
-        return new Link(this, link, name, description);
-    }
+
+    // /////////////////////////////////////////////////////////////
+    // Icons
+    // /////////////////////////////////////////////////////////////
 
     @Override
-    public Component createMenuItem(final String actionId, final String name, final String description, final String reasonDisabled, final ActionType type, final boolean hasParameters, final String targetObjectId) {
-        return new MenuItem(this, actionId, name, description, reasonDisabled, type, hasParameters, targetObjectId);
+    public Component createCollectionIcon(final ObjectAssociation field, final ObjectAdapter collection, final String id) {
+        return new CollectionLink(this, field, collection, field.getDescription(), id);
     }
 
     @Override
@@ -154,34 +125,56 @@ public class HtmlComponentFactory implements ComponentFactory {
         return new ObjectIcon(this, object, field.getDescription(), objectId, style);
     }
 
+
+    // /////////////////////////////////////////////////////////////
+    // Options
+    // /////////////////////////////////////////////////////////////
+
     @Override
-    public Page createPage() {
-        return new DynamicHtmlPage(this, styleSheet, header, footer);
-    }
-
-    public LogonFormPage createLogonPage(final String user, final String password, final boolean registerLink, final String error) {
-        return new LogonFormPage(this, styleSheet, header, footer, user, password, registerLink, error);
-    }
-
-    public RegisterFormPage createRegisterPage(final String user, final String password, final String error) {
-        return new RegisterFormPage(this, styleSheet, header, footer, user, password, error);
+    public Component createEditOption(final String id) {
+        return new ActionComponent(this, "edit", "Edit Object", "Edit the current object", id, null, null);
     }
 
     @Override
-    public Component createService(final String objectId, final String title, final String iconName) {
-        return new ServiceComponent(this, objectId, title, iconName);
+    public Component createRemoveOption(final String id, final String elementId, final String fieldName) {
+        return new ActionComponent(this, "remove", "Remove", "Remove item from collection", id, elementId, fieldName);
     }
 
     @Override
-    public Table createTable(final int noColumns, final boolean withSelectorColumn) {
-        return new HtmlTable(this, noColumns, withSelectorColumn);
+    public Component createAddOption(final String id, final String fieldName) {
+        return new ActionComponent(this, "add", "Add Item", "Add item to collection", id, null, fieldName);
+    }
+
+
+    // /////////////////////////////////////////////////////////////
+    // Messages
+    // /////////////////////////////////////////////////////////////
+
+    @Override
+    public Component createErrorMessage(final Exception e, final boolean isDebug) {
+        return new ErrorMessage(e, isDebug);
+    }
+
+
+    // /////////////////////////////////////////////////////////////
+    // Form & Form Widgets
+    // /////////////////////////////////////////////////////////////
+
+    @Override
+    public Form createForm(final String id, final String actionName, final int step, final int noOfPages, final boolean isEditing) {
+        return new HtmlForm(this, id, actionName, step, noOfPages, isEditing);
     }
 
     @Override
-    public Component createUserSwap(final String name) {
-        return new UserSwapLink(this, name);
-
+    public Component createCheckboxBlock(final boolean isEditable, final boolean isSet) {
+        return new Checkbox(isSet, isEditable);
     }
+
+    @Override
+    public Component createLink(final String link, final String name, final String description) {
+        return new Link(this, link, name, description);
+    }
+
 
     @Override
     public Component createParseableField(final ObjectAssociation field, final ObjectAdapter value, final boolean isEditable) {
@@ -202,7 +195,83 @@ public class HtmlComponentFactory implements ComponentFactory {
         }
     }
 
-    private String loadFile(final String file) {
+    @Override
+    public Table createTable(final int noColumns, final boolean withSelectorColumn) {
+        return new HtmlTable(this, noColumns, withSelectorColumn);
+    }
+
+
+    // /////////////////////////////////////////////////////////////
+    // Furniture
+    // /////////////////////////////////////////////////////////////
+
+    @Override
+    public Block createBlock(final String style, final String description) {
+        return new Div(this, style, description);
+    }
+
+    @Override
+    public Component createBreadCrumbs(final String[] names, final boolean[] isLinked) {
+        return new BreadCrumbs(this, names, isLinked);
+    }
+
+    @Override
+    public Component createInlineBlock(final String style, final String text, final String description) {
+        return new Span(style, text, description);
+    }
+
+    @Override
+    public Component createHeading(final String name) {
+        return new Heading(this, name, 4);
+    }
+
+    @Override
+    public Component createService(final String objectId, final String title, final String iconName) {
+        return new ServiceComponent(this, objectId, title, iconName);
+    }
+
+    @Override
+    public Component createUserSwap(final String name) {
+        return new UserSwapLink(this, name);
+
+    }
+
+    // /////////////////////////////////////////////////////////////
+    // Debug
+    // /////////////////////////////////////////////////////////////
+
+    @Override
+    public DebugPane createDebugPane() {
+        return new HtmlDebug();
+    }
+
+
+    // /////////////////////////////////////////////////////////////
+    // PathBuilder impl
+    // /////////////////////////////////////////////////////////////
+
+    @Override
+    public String getSuffix() {
+        return pathBuilder.getSuffix();
+    }
+
+    @Override
+    public String pathTo(final String prefix) {
+        return pathBuilder.pathTo(prefix);
+    }
+
+    
+    // /////////////////////////////////////////////////////////////
+    // helpers
+    // /////////////////////////////////////////////////////////////
+
+    private static String loadFileElseDefault(final IsisConfiguration configuration, final String fileConstant, final String literalConstant) {
+        final String fileName = configuration.getString(fileConstant);
+        return fileName != null ? loadFile(fileName) : configuration.getString(literalConstant);
+    }
+
+
+    private static String loadFile(final String file) {
         final StringBuffer content = new StringBuffer();
         BufferedReader reader = null;
         try {
@@ -227,21 +296,13 @@ public class HtmlComponentFactory implements ComponentFactory {
         return content.toString();
     }
 
-    @Override
-    public String getSuffix() {
-        return pathBuilder.getSuffix();
-    }
-
-    @Override
-    public String pathTo(final String prefix) {
-        return pathBuilder.pathTo(prefix);
-    }
+    
 
     // /////////////////////////////////////////////////////////////
     // injected services
     // /////////////////////////////////////////////////////////////
 
-    protected IsisConfiguration getConfiguration() {
+    private static IsisConfiguration getConfiguration() {
         return IsisContext.getConfiguration();
     }
 

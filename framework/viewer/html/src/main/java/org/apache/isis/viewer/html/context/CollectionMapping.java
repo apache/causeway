@@ -19,8 +19,10 @@
 
 package org.apache.isis.viewer.html.context;
 
-import java.util.Enumeration;
-import java.util.Vector;
+import java.util.Iterator;
+import java.util.List;
+
+import com.google.common.collect.Lists;
 
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -36,8 +38,9 @@ import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessi
  * Has value semantics based on the value semantics of the underlying list that
  * it wraps.
  */
-public class CollectionMapping {
-    private final Vector list = new Vector();
+public class CollectionMapping implements Iterable<String> {
+    
+    private final List<String> list = Lists.newArrayList();
     private final ObjectSpecification elementSpecification;
 
     public CollectionMapping(final Context context, final ObjectAdapter collection) {
@@ -45,37 +48,69 @@ public class CollectionMapping {
         elementSpecification = typeOfFacet.valueSpec();
 
         final CollectionFacet collectionFacet = CollectionFacetUtils.getCollectionFacetFromSpec(collection);
-        final Enumeration elements = collectionFacet.elements(collection);
-        while (elements.hasMoreElements()) {
-            final ObjectAdapter element = (ObjectAdapter) elements.nextElement();
-            list.add(context.mapObject(element));
+        
+        for (ObjectAdapter element : collectionFacet.iterable(collection)) {
+            final String objectId = context.mapObject(element);
+            list.add(objectId);
         }
     }
 
     public ObjectAdapter getCollection(final Context context) {
-        final Vector elements = new Vector();
-        final Enumeration e = list.elements();
-        while (e.hasMoreElements()) {
-            final String elementId = (String) e.nextElement();
+        final List<Object> elementPojos = Lists.newArrayList();
+        
+        for (String elementId : list) {
             final ObjectAdapter adapter = context.getMappedObject(elementId);
-            elements.add(adapter.getObject());
+            final Object pojo = adapter.getObject();
+            elementPojos.add(pojo);
         }
-        return getAdapterManager().adapterFor(elements);
+        return getAdapterManager().adapterFor(elementPojos);
     }
 
     public ObjectSpecification getElementSpecification() {
         return elementSpecification;
     }
 
+    
+    public Iterator<String> iterator() {
+        return list.iterator();
+    }
+
+    public boolean contains(final String id) {
+        for (String elementId : list) {
+            if (elementId.equals(id)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void remove(final String existingId) {
+        for (final String elementId: list) {
+            if (elementId.equals(existingId)) {
+                list.remove(existingId);
+                break;
+            }
+        }
+    }
+
+
+    // //////////////////////////////////////////////////////
+    // debugging
+    // //////////////////////////////////////////////////////
+
     public void debug(final DebugBuilder debug) {
         debug.indent();
-        final Enumeration e = list.elements();
-        while (e.hasMoreElements()) {
-            final String elementId = (String) e.nextElement();
+        for (String elementId : list) {
             debug.appendln(elementId);
         }
         debug.unindent();
     }
+
+
+
+    // //////////////////////////////////////////////////////
+    // equals, hashCode
+    // //////////////////////////////////////////////////////
 
     /**
      * Value semantics based on the identity of the underlying list that this
@@ -102,30 +137,6 @@ public class CollectionMapping {
 
     public boolean equals(final CollectionMapping other) {
         return this.list.equals(other.list);
-    }
-
-    public boolean contains(final String id) {
-        final Enumeration e = list.elements();
-        while (e.hasMoreElements()) {
-            final String elementId = (String) e.nextElement();
-            if (elementId.equals(id)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public Enumeration elements() {
-        return list.elements();
-    }
-
-    public void remove(final String existingId) {
-        for (final Object entry : list) {
-            if (entry.equals(existingId)) {
-                list.remove(existingId);
-                break;
-            }
-        }
     }
 
     // //////////////////////////////////////////////////////

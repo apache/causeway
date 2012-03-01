@@ -30,6 +30,9 @@ import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 
 public class TransientObjectMapping implements ObjectMapping {
+    
+    private static final long serialVersionUID = 1L;
+    
     private final Oid oid;
     private final Memento memento;
 
