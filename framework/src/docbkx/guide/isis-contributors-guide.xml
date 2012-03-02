@@ -5104,7 +5104,14 @@ Please verify the release and cast your vote.  The vote will be open for 72 hour
           signature file from the staging repo, and the dist directory already
           exists, use scp to copy the files up:</para>
 
-          <programlisting>scp isis-x.x.x-incubating-source-release.* people.apache.org:/www/www.apache.org/dist/incubator/isis/.</programlisting>
+          <programlisting>scp isis-x.x.x-incubating-source-release.* people.apache.org:/www/www.apache.org/dist/incubator/isis/x.x.x-incubating/.</programlisting>
+
+          <para>Then, ssh onto people.apache.org and confirm the permissions
+          are set correctly:</para>
+
+          <programlisting>ssh people.apache.org
+cd /www/www.apache.org/dist/incubator/isis/x.x.x-incubating/
+chmod 644 *</programlisting>
         </sect2>
 
         <sect2 id="sec.PromoteAndUpdateWebsite">

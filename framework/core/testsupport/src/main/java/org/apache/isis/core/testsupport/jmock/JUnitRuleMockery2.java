@@ -98,28 +98,4 @@ public class JUnitRuleMockery2 extends JUnitRuleMockery {
         });
         return mock;
     }
-
-    public <T> T mockAndIgnoring(final Class<T> typeToMock) {
-        return ignoring(mock(typeToMock));
-    }
-
-    public <T> T mockAndIgnoring(final Class<T> typeToMock, final String name) {
-        return ignoring(mock(typeToMock, name));
-    }
-
-    public <T> T mockAndAllowing(final Class<T> typeToMock) {
-        return allowing(mock(typeToMock));
-    }
-
-    public <T> T mockAndAllowing(final Class<T> typeToMock, final String name) {
-        return allowing(mock(typeToMock, name));
-    }
-
-    public <T> T mockAndNever(final Class<T> typeToMock) {
-        return never(mock(typeToMock));
-    }
-
-    public <T> T mockAndNever(final Class<T> typeToMock, final String name) {
-        return never(mock(typeToMock, name));
-    }
 }

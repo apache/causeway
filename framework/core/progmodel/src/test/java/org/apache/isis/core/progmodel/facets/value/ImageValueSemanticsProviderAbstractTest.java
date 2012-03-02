@@ -23,27 +23,34 @@ import static org.junit.Assert.assertEquals;
 
 import java.awt.Image;
 
-import org.jmock.Mockery;
-import org.jmock.integration.junit4.JMock;
-import org.jmock.integration.junit4.JUnit4Mockery;
+import org.jmock.auto.Mock;
+import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.core.progmodel.facets.value.image.ImageValueSemanticsProviderAbstract;
+import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2;
+import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2.Mode;
 
-@RunWith(JMock.class)
 public class ImageValueSemanticsProviderAbstractTest {
 
-    protected Mockery mockery = new JUnit4Mockery();
+    @Rule
+    public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_ONLY);
 
+    @Mock
+    private FacetHolder mockFacetHolder;
+
+    private TestImageSemanticsProvider adapter;
+
+    @Before
+    public void setUp() throws Exception {
+        adapter = new TestImageSemanticsProvider(mockFacetHolder);
+    }
+    
     @Test
     public void testImageData() throws Exception {
-        final RuntimeContext mockRuntimeContext = mockery.mock(RuntimeContext.class);
-        final FacetHolder mockFacetHolder = mockery.mock(FacetHolder.class);
-        final TestImageSemanticsProvider adapter = new TestImageSemanticsProvider(mockFacetHolder);
 
         final String data = adapter.toEncodedString(null);
         final int[][] array = adapter.doRestore(data);

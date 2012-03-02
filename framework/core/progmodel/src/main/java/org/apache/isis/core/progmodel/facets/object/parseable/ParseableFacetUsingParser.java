@@ -41,18 +41,14 @@ import org.apache.isis.core.metamodel.interactions.ValidityContext;
 import org.apache.isis.core.metamodel.runtimecontext.DependencyInjector;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
-/**
- * TODO: need to fix genericity of using Parser<?>, for now suppressing
- * warnings.
- */
 public class ParseableFacetUsingParser extends FacetAbstract implements ParseableFacet {
 
-    private final Parser parser;
+    private final Parser<?> parser;
     private final DependencyInjector dependencyInjector;
     private final AdapterMap adapterMap;
     private final AuthenticationSessionProvider authenticationSessionProvider;
 
-    public ParseableFacetUsingParser(@SuppressWarnings("unchecked") final Parser parser, final FacetHolder holder, final AuthenticationSessionProvider authenticationSessionProvider, final DependencyInjector dependencyInjector, final AdapterMap adapterManager) {
+    public ParseableFacetUsingParser(final Parser<?> parser, final FacetHolder holder, final AuthenticationSessionProvider authenticationSessionProvider, final DependencyInjector dependencyInjector, final AdapterMap adapterManager) {
         super(ParseableFacet.class, holder, false);
         this.parser = parser;
         this.authenticationSessionProvider = authenticationSessionProvider;
@@ -115,13 +111,17 @@ public class ParseableFacetUsingParser extends FacetAbstract implements Parseabl
         }
     }
 
+    /**
+     * TODO: need to fix genericity of using Parser<?>, for now suppressing
+     * warnings.
+     */
     @Override
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     public String parseableTitle(final ObjectAdapter contextAdapter) {
         final Object pojo = AdapterUtils.unwrap(contextAdapter);
 
         getDependencyInjector().injectDependenciesInto(parser);
-        return parser.parseableTitleOf(pojo);
+        return ((Parser)parser).parseableTitleOf(pojo);
     }
 
     // /////////////////////////////////////////////////////////

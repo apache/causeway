@@ -270,14 +270,6 @@ public final class ResolveState {
         return false;
     }
 
-    /**
-     * @deprecated - renamed to {@link #canChangeTo(ResolveState)}.
-     */
-    @Deprecated()
-    public boolean isResolvable(final ResolveState newState) {
-        return canChangeTo(newState);
-    }
-
     public boolean isDeserializable(final ResolveState newState) {
         if (newState == null) {
             throw new ResolveException("new state must be specified");

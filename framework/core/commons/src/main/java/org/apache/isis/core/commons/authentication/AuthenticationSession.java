@@ -19,6 +19,7 @@
 
 package org.apache.isis.core.commons.authentication;
 
+import java.io.Serializable;
 import java.util.List;
 
 import org.apache.isis.core.commons.encoding.Encodable;
@@ -26,7 +27,7 @@ import org.apache.isis.core.commons.encoding.Encodable;
 /**
  * The representation within the system of an authenticated user.
  */
-public interface AuthenticationSession extends Encodable {
+public interface AuthenticationSession extends Encodable, Serializable {
 
     /**
      * The name of the authenticated user; for display purposes only.

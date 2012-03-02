@@ -26,7 +26,6 @@
       <version>0.3.0-incubating-SNAPSHOT</version>
   </parent>
 
-  <groupId>org.apache.isis</groupId>
   <artifactId>quickstart-archetype</artifactId>
   <packaging>maven-archetype</packaging>
 

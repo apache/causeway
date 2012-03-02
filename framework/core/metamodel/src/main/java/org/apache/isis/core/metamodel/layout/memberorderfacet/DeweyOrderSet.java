@@ -123,7 +123,7 @@ public class DeweyOrderSet extends OrderSet {
      * @param orderSetsByGroup
      * @param deweyOrderSet
      */
-    private static void ensureParentFor(final SortedMap orderSetsByGroup, final DeweyOrderSet deweyOrderSet) {
+    private static void ensureParentFor(final SortedMap<String,DeweyOrderSet> orderSetsByGroup, final DeweyOrderSet deweyOrderSet) {
         final String parentGroup = deweyOrderSet.getGroupPath();
         DeweyOrderSet parentOrderSet = (DeweyOrderSet) orderSetsByGroup.get(parentGroup);
         if (parentOrderSet == null) {

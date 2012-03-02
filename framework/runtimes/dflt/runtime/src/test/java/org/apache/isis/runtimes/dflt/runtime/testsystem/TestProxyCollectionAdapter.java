@@ -25,6 +25,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 
+import com.google.common.collect.Iterables;
+
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.EnumerationUtils;
 import org.apache.commons.collections.iterators.IteratorEnumeration;
@@ -344,8 +346,11 @@ class TestProxyCollectionFacet implements CollectionFacet {
     }
 
     @Override
-    public Iterator<ObjectAdapter> iterator(final ObjectAdapter wrappedCollection) {
-        throw new NotYetImplementedException();
+    public Iterator<ObjectAdapter> iterator(final ObjectAdapter collection) {
+        final TestProxyCollectionAdapter collectionDowncasted = collectionDowncasted(collection);
+        final List list = EnumerationUtils.toList(collectionDowncasted.elements());
+        final Collection transformedCollection = CollectionUtils.collect(list, new ObjectToAdapterTransformer());
+        return transformedCollection.iterator();
     }
 
     @Override
@@ -355,7 +360,13 @@ class TestProxyCollectionFacet implements CollectionFacet {
 
     @Override
     public Iterable<ObjectAdapter> iterable(final ObjectAdapter collectionAdapter) {
-        throw new NotYetImplementedException();
+        return new Iterable<ObjectAdapter>() {
+            
+            @Override
+            public Iterator<ObjectAdapter> iterator() {
+                return TestProxyCollectionFacet.this.iterator(collectionAdapter);
+            }
+        };
     }
 
     @Override

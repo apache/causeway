@@ -46,7 +46,7 @@ import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
 @RunWith(Parameterized.class)
-public class ResolveState_IsResolvableOrDeserializableTest {
+public class ResolveState_IsDeserializableTest {
 
     @Parameters
     public static Collection<Object[]> data() {
@@ -107,30 +107,14 @@ public class ResolveState_IsResolvableOrDeserializableTest {
         });
     }
 
-    private final Boolean whetherIsResolvable;
     private final Boolean whetherIsDeserializable;
     private final ResolveState from;
     private final ResolveState to;
 
-    public ResolveState_IsResolvableOrDeserializableTest(final Boolean whetherIsResolvable, final Boolean whetherIsDeserializable, final ResolveState from, final ResolveState to) {
-        this.whetherIsResolvable = whetherIsResolvable;
+    public ResolveState_IsDeserializableTest(final Boolean whetherIsResolvable, final Boolean whetherIsDeserializable, final ResolveState from, final ResolveState to) {
         this.whetherIsDeserializable = whetherIsDeserializable;
         this.from = from;
         this.to = to;
-    }
-
-    @Test
-    public void testIsResolvable() {
-        if (whetherIsResolvable != null) {
-            assertThat(from.isResolvable(to), is(whetherIsResolvable));
-        } else {
-            try {
-                from.isResolvable(to);
-                fail();
-            } catch (final ResolveException ex) {
-                // expected
-            }
-        }
     }
 
     @Test

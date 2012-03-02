@@ -25,13 +25,10 @@ import static org.junit.Assert.assertThat;
 import com.google.common.collect.Lists;
 
 import org.jmock.Expectations;
-import org.jmock.Mockery;
-import org.jmock.integration.junit4.JMock;
-import org.jmock.integration.junit4.JUnit4Mockery;
-import org.jmock.lib.legacy.ClassImposteriser;
+import org.jmock.auto.Mock;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -41,9 +38,28 @@ import org.apache.isis.core.metamodel.facets.named.NamedFacet;
 import org.apache.isis.core.metamodel.spec.Instance;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
+import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2;
+import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2.Mode;
 
-@RunWith(JMock.class)
 public class ObjectActionParameterAbstractTest_getId_and_getName {
+
+    @Rule
+    public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
+
+    @Mock
+    private ObjectActionImpl parentAction;
+    @Mock
+    private TypedHolder actionParamPeer;
+    @Mock
+    private NamedFacet namedFacet;
+
+    @Mock
+    private ObjectSpecification stubSpecForString;
+    @Mock
+    private ObjectActionParameter stubObjectActionParameterString;
+    @Mock
+    private ObjectActionParameter stubObjectActionParameterString2;
+
 
     private final static class ObjectActionParameterAbstractToTest extends ObjectActionParameterAbstract {
         private ObjectActionParameterAbstractToTest(final int number, final ObjectActionImpl objectAction, final TypedHolder peer) {
@@ -83,46 +99,17 @@ public class ObjectActionParameterAbstractTest_getId_and_getName {
     }
 
     private ObjectActionParameterAbstractToTest objectActionParameter;
-    private ObjectActionParameter stubObjectActionParameterString;
-    private ObjectActionParameter stubObjectActionParameterString2;
-
-    private final Mockery context = new JUnit4Mockery() {
-        {
-            setImposteriser(ClassImposteriser.INSTANCE);
-        }
-    };
-
-    private ObjectActionImpl parentAction;
-    private TypedHolder actionParamPeer;
-    private NamedFacet namedFacet;
-
-    private ObjectSpecification stubSpecForString, stubSpecForInt;
 
     @Before
     public void setUp() throws Exception {
-        parentAction = context.mock(ObjectActionImpl.class);
-        actionParamPeer = context.mock(TypedHolder.class);
-        namedFacet = context.mock(NamedFacet.class);
-
-        stubSpecForString = context.mock(ObjectSpecification.class, "specForString");
         context.checking(new Expectations() {
             {
                 allowing(stubSpecForString).getSingularName();
                 will(returnValue("string"));
-            }
-        });
 
-        stubObjectActionParameterString = context.mock(ObjectActionParameter.class, "actionParamString");
-        context.checking(new Expectations() {
-            {
                 allowing(stubObjectActionParameterString).getSpecification();
                 will(returnValue(stubSpecForString));
-            }
-        });
 
-        stubObjectActionParameterString2 = context.mock(ObjectActionParameter.class, "actionParamOtherString");
-        context.checking(new Expectations() {
-            {
                 allowing(stubObjectActionParameterString2).getSpecification();
                 will(returnValue(stubSpecForString));
             }
