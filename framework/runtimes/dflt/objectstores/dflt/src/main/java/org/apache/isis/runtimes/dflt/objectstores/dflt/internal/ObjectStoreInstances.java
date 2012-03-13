@@ -37,7 +37,6 @@ import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.runtimes.dflt.objectstores.dflt.InMemoryObjectStore;
 import org.apache.isis.runtimes.dflt.runtime.persistence.query.PersistenceQueryBuiltIn;
-import org.apache.isis.runtimes.dflt.runtime.persistence.query.PersistenceQueryFindByTitle;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
@@ -51,7 +50,6 @@ import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessi
 public class ObjectStoreInstances {
 
     private final Map<Oid, Object> pojoByOidMap = new HashMap<Oid, Object>();
-    private final Map<Oid, String> titleByOidMap = new HashMap<Oid, String>();
     private final Map<Oid, SerialNumberVersion> versionByOidMap = new HashMap<Oid, SerialNumberVersion>();
 
     @SuppressWarnings("unused")
@@ -94,7 +92,6 @@ public class ObjectStoreInstances {
 
     public void shutdown() {
         pojoByOidMap.clear();
-        titleByOidMap.clear();
         versionByOidMap.clear();
     }
 
@@ -104,7 +101,6 @@ public class ObjectStoreInstances {
 
     public void save(final ObjectAdapter adapter) {
         pojoByOidMap.put(adapter.getOid(), adapter.getObject());
-        titleByOidMap.put(adapter.getOid(), adapter.titleString().toLowerCase());
 
         final SerialNumberVersion version = versionByOidMap.get(adapter.getOid());
         final SerialNumberVersion nextVersion = nextVersion(version);
@@ -119,7 +115,6 @@ public class ObjectStoreInstances {
 
     public void remove(final Oid oid) {
         pojoByOidMap.remove(oid);
-        titleByOidMap.remove(oid);
         versionByOidMap.remove(oid);
     }
 
@@ -159,17 +154,6 @@ public class ObjectStoreInstances {
      * {@link InMemoryObjectStore}.
      */
     public void findInstancesAndAdd(final PersistenceQueryBuiltIn persistenceQuery, final List<ObjectAdapter> foundInstances) {
-        if (persistenceQuery instanceof PersistenceQueryFindByTitle) {
-            for (final Oid oid : titleByOidMap.keySet()) {
-                final String title = titleByOidMap.get(oid);
-                if (((PersistenceQueryFindByTitle) persistenceQuery).matches(title)) {
-                    final ObjectAdapter adapter = retrieveObject(oid);
-                    foundInstances.add(adapter);
-                }
-            }
-            return;
-        }
-
         for (final ObjectAdapter element : elements()) {
             if (persistenceQuery.matches(element)) {
                 foundInstances.add(element);
@@ -203,7 +187,8 @@ public class ObjectStoreInstances {
             debug.appendln("no instances");
         }
         for (final Oid oid : getObjectInstances().keySet()) {
-            final String title = titleByOidMap.get(oid);
+            final ObjectAdapter objectAdapter = retrieveObject(oid);
+            final String title = objectAdapter.titleString();
             final Object object = getObjectInstances().get(oid);
             debug.appendln(oid.toString(), object + " (" + title + ")");
         }
