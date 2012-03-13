@@ -40,19 +40,27 @@ import com.mongodb.DBObject;
 import com.mongodb.Mongo;
 import com.mongodb.MongoException;
 import com.mongodb.ObjectId;
+import com.mongodb.DB.WriteConcern;
 
 public class MongoDb implements NoSqlDataDatabase {
-    private static final Logger LOG = Logger.getLogger(MongoDb.class);
+
+	private static final String SERIALNUMBERS_COLLECTION_NAME = "serialnumbers";
+
+	private static final Logger LOG = Logger.getLogger(MongoDb.class);
+	
+	private static final int DEFAULT_PORT = 27017;
 
     private final String host;
     private final int port;
     private final String dbName;
     private final KeyCreator keyCreator;
-    private DB db;
+    
+	private Mongo mongo;
+	private DB db;
 
     public MongoDb(final String host, final int port, final String name, final KeyCreator keyCreator) {
         this.host = host;
-        this.port = port == 0 ? 27017 : port;
+        this.port = port == 0 ? DEFAULT_PORT : port;
         this.dbName = name;
         this.keyCreator = keyCreator;
     }
@@ -61,16 +69,13 @@ public class MongoDb implements NoSqlDataDatabase {
         return keyCreator;
     }
 
-    public NoSqlCommandContext createTransactionContext() {
-        return null;
-    }
-
     @Override
     public void open() {
-        Mongo m;
         try {
-            m = new Mongo(host, port);
-            db = m.getDB(dbName);
+        	mongo = new Mongo(host, port);
+            db = mongo.getDB(dbName);
+            db.setWriteConcern(WriteConcern.STRICT);
+            
             LOG.info("opened database (" + dbName + "): " + db);
         } catch (final UnknownHostException e) {
             throw new NoSqlStoreException(e);
@@ -84,11 +89,24 @@ public class MongoDb implements NoSqlDataDatabase {
         // TODO is there a close mechanism?
     }
 
+    public NoSqlCommandContext createTransactionContext() {
+        return null;
+    }
+
+    //////////////////////////////////////////////////
+    // contains data
+    //////////////////////////////////////////////////
+
     @Override
     public boolean containsData() {
         return db.getCollectionNames().size() > 0;
     }
 
+    
+    //////////////////////////////////////////////////
+    // serial numbers
+    //////////////////////////////////////////////////
+    
     @Override
     public long nextSerialNumberBatch(final String name, final int batchSize) {
         long next = readSerialNumber();
@@ -97,7 +115,7 @@ public class MongoDb implements NoSqlDataDatabase {
     }
 
     private void writeSerialNumber(final long serialNumber) {
-        final DBCollection system = db.getCollection("serialnumbers");
+        final DBCollection system = db.getCollection(SERIALNUMBERS_COLLECTION_NAME);
         DBObject object = system.findOne();
         if (object == null) {
             object = new BasicDBObject();
@@ -108,7 +126,7 @@ public class MongoDb implements NoSqlDataDatabase {
     }
 
     private long readSerialNumber() {
-        final DBCollection system = db.getCollection("serialnumbers");
+        final DBCollection system = db.getCollection(SERIALNUMBERS_COLLECTION_NAME);
         final DBObject data = system.findOne();
         if (data == null) {
             return 0;
@@ -118,6 +136,10 @@ public class MongoDb implements NoSqlDataDatabase {
             return Long.valueOf(number);
         }
     }
+
+    //////////////////////////////////////////////////
+    // hasInstances, instancesOf
+    //////////////////////////////////////////////////
 
     @Override
     public boolean hasInstances(final String specificationName) {
@@ -149,13 +171,26 @@ public class MongoDb implements NoSqlDataDatabase {
         };
     }
 
+    @Override
+    public StateReader getInstance(final String key, final String specName) {
+        return new MongoStateReader(db, specName, key);
+    }
+
+    //////////////////////////////////////////////////
+    // write, delete
+    //////////////////////////////////////////////////
+
     public StateWriter createStateWriter(final String specName) {
         return new MongoStateWriter(db, specName);
     }
 
+
     @Override
-    public StateReader getInstance(final String key, final String specName) {
-        return new MongoStateReader(db, specName, key);
+    public void write(final List<PersistenceCommand> commands) {
+        final NoSqlCommandContext context = new MongoClientCommandContext(db);
+        for (final PersistenceCommand command : commands) {
+            command.execute(context);
+        }
     }
 
     public void delete(final String specificationName, final String key) {
@@ -166,13 +201,10 @@ public class MongoDb implements NoSqlDataDatabase {
         LOG.info("removed " + key);
     }
 
-    @Override
-    public void write(final List<PersistenceCommand> commands) {
-        final NoSqlCommandContext context = new MongoClientCommandContext(db);
-        for (final PersistenceCommand command : commands) {
-            command.execute(context);
-        }
-    }
+
+    //////////////////////////////////////////////////
+    // services
+    //////////////////////////////////////////////////
 
     @Override
     public void addService(final String name, final String key) {
