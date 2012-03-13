@@ -25,13 +25,13 @@
     <name>Email service</name>
     <groupId>org.apache.isis.service</groupId>
     <artifactId>email</artifactId>
-    <version>0.2.0-incubating-SNAPSHOT</version>
+    <version>0.3.0-incubating-SNAPSHOT</version>
     
 
     <parent>
       <groupId>org.apache.isis</groupId>
-      <artifactId>isis-parent</artifactId>
-      <version>0.2.0-incubating-SNAPSHOT</version>
+      <artifactId>service</artifactId>
+      <version>0.3.0-incubating-SNAPSHOT</version>
     </parent>
 
     <properties>
@@ -66,7 +66,7 @@
         <dependency>
             <groupId>org.apache.isis</groupId>
             <artifactId>applib</artifactId>
-	    <version>0.2.0-incubating-SNAPSHOT</version>
+	    <version>0.3.0-incubating-SNAPSHOT</version>
         </dependency>
         
         <dependency>
