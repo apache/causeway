@@ -29,6 +29,7 @@ Where to Start?
 mvn archetype:generate  \
     -D archetypeGroupId=org.apache.isis \
     -D archetypeArtifactId=quickstart-archetype \
+    -D archetypeVersion=${project.version} \
     -D groupId=com.mycompany \
     -D artifactId=myapp
 +------------------------------------------------------------

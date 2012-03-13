@@ -4831,13 +4831,13 @@ svn: No such revision 1126567</programlisting>
           </itemizedlist>
 
           <para>Then, copy the exploded <acronym>ZIP</acronym> into
-          /www/incubator.apache.org:</para>
+          /www/incubator.apache.org/content:</para>
 
           <itemizedlist>
             <listitem>
               <para>Switch to the destination directory:</para>
 
-              <programlisting>$ cd /www/incubator.apache.org</programlisting>
+              <programlisting>$ cd /www/incubator.apache.org/content</programlisting>
             </listitem>
 
             <listitem>
@@ -4846,8 +4846,7 @@ svn: No such revision 1126567</programlisting>
               <programlisting>$ mv ~/isis isis-0.x.x-incubating</programlisting>
 
               <para>where <emphasis>0.x.x</emphasis> should be replaced with
-              the appropriate version number, eg 0.2.0 or 0.3.0-RC1,
-              etc.</para>
+              the appropriate version number, eg 0.2.0 or 0.3.0, etc.</para>
             </listitem>
 
             <listitem>
