@@ -21,8 +21,6 @@ package org.apache.isis.viewer.html.image;
 
 import java.io.File;
 import java.io.FilenameFilter;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 import org.apache.isis.core.commons.debug.DebugBuilder;
@@ -30,11 +28,15 @@ import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
+import com.google.common.collect.Maps;
+
 public class ImageProviderDirectoryBased implements ImageProvider {
 
-    private final String UNKNOWN_IMAGE = "Default";
-    private final String[] EXTENSIONS = { "png", "gif", "jpg", "jpeg" };
-    private final Map images = new HashMap();
+	private final static String UNKNOWN_IMAGE = "Default";
+    private final static String[] EXTENSIONS = { "png", "gif", "jpg", "jpeg" };
+    
+    private final Map<String,String> images = Maps.newHashMap();
+    
     private File imageDirectory;
     private String unknownImageFile;
 
@@ -46,53 +48,9 @@ public class ImageProviderDirectoryBased implements ImageProvider {
         unknownImageFile = imageFile(UNKNOWN_IMAGE);
     }
 
-    @Override
-    public void debug(final DebugBuilder debug) {
-        debug.appendTitle("Image Lookup");
-        debug.indent();
-        final Iterator keys = images.keySet().iterator();
-        while (keys.hasNext()) {
-            final Object key = keys.next();
-            final Object value = images.get(key);
-            debug.appendln(key + " -> " + value);
-        }
-        debug.unindent();
-    }
-
-    private String imageFile(final String imageName) {
-        final String[] files = imageDirectory.list(new FilenameFilter() {
-            @Override
-            public boolean accept(final File dir, final String name) {
-                final int dot = name.lastIndexOf('.');
-                if (dot > 0) {
-                    for (final String element : EXTENSIONS) {
-                        if (name.substring(0, dot).equalsIgnoreCase(imageName) && name.substring(dot + 1).equalsIgnoreCase(element)) {
-                            return true;
-                        }
-                    }
-                }
-                return false;
-            }
-        });
-
-        return files.length == 0 ? null : files[0];
-    }
-
-    private String findImage(final ObjectSpecification specification) {
-        final String name = specification.getShortIdentifier();
-        final String fileName = imageFile(name);
-        if (fileName != null) {
-            images.put(name, fileName);
-            return fileName;
-        } else {
-            final ObjectSpecification superclass = specification.superclass();
-            if (superclass != null) {
-                return findImage(superclass);
-            } else {
-                return unknownImageFile;
-            }
-        }
-    }
+    ///////////////////////////////////////////////////
+    // API
+    ///////////////////////////////////////////////////
 
     /**
      * For an object, the icon name from the object is return if it is not null,
@@ -133,4 +91,70 @@ public class ImageProviderDirectoryBased implements ImageProvider {
         }
     }
 
+
+    ///////////////////////////////////////////////////
+    // helpers
+    ///////////////////////////////////////////////////
+
+    private String imageFile(final String imageName) {
+        final String[] files = imageDirectory.list(new FilenameMatchesNamePlusExtension(imageName));
+
+        return files.length == 0 ? null : files[0];
+    }
+
+    private String findImage(final ObjectSpecification specification) {
+        final String name = specification.getShortIdentifier();
+        final String fileName = imageFile(name);
+        if (fileName != null) {
+            images.put(name, fileName);
+            return fileName;
+        } 
+        
+        final ObjectSpecification superclass = specification.superclass();
+		if (superclass != null) {
+		    return findImage(superclass);
+		}
+		
+		return unknownImageFile;
+    }
+
+
+    final static class FilenameMatchesNamePlusExtension implements FilenameFilter {
+		private final String imageName;
+
+		private FilenameMatchesNamePlusExtension(final String imageName) {
+			this.imageName = imageName;
+		}
+
+		@Override
+		public boolean accept(final File dir, final String name) {
+		    final int dot = name.lastIndexOf('.');
+		    if (dot <= 0) {
+		    	return false;
+		    }
+		    for (final String extension : EXTENSIONS) {
+			    if (name.substring(0, dot).equalsIgnoreCase(imageName) && name.substring(dot + 1).equalsIgnoreCase(extension)) {
+			        return true;
+			    }
+			}
+			return false;
+		}
+	}
+
+
+    ///////////////////////////////////////////////////
+    // debugging
+    ///////////////////////////////////////////////////
+
+    @Override
+    public void debug(final DebugBuilder debug) {
+        debug.appendTitle("Image Lookup");
+        debug.indent();
+        for (Map.Entry<String, String> entry: images.entrySet()) {
+            debug.appendln(entry.getKey() + " -> " + entry.getValue());
+        }
+        debug.unindent();
+    }
+
+    
 }
