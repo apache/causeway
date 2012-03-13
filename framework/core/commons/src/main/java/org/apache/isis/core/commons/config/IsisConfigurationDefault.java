@@ -32,6 +32,8 @@ import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.resource.ResourceStreamSource;
 
+import com.google.common.base.Joiner;
+
 public class IsisConfigurationDefault implements IsisConfiguration {
     private static final Logger LOG = Logger.getLogger(IsisConfigurationDefault.class);
     private final Properties properties = new Properties();
@@ -71,10 +73,9 @@ public class IsisConfigurationDefault implements IsisConfiguration {
      * Add the properties from an existing Properties object.
      */
     public void add(final Properties properties) {
-        final Enumeration<?> e = properties.propertyNames();
-        while (e.hasMoreElements()) {
-            final String name = (String) e.nextElement();
-            this.properties.put(name, properties.getProperty(name));
+        for(Object key: properties.keySet()) {
+        	Object value = properties.get(key);
+        	add((String)key, (String)value);
         }
     }
 
@@ -85,10 +86,10 @@ public class IsisConfigurationDefault implements IsisConfiguration {
         if (key == null) {
             return;
         }
-        if (properties.containsKey(key)) {
-            LOG.info("replacing " + key + "=" + properties.get(key) + " with " + value);
-        }
-        properties.put(key, value);
+    	if (properties.containsKey(key)) {
+    		LOG.info("replacing " + key + "=" + properties.get(key) + " with " + value);
+    	}
+    	properties.put(key, value);
     }
 
     @Override
@@ -101,9 +102,8 @@ public class IsisConfigurationDefault implements IsisConfiguration {
         }
         final int prefixLength = startsWith.length();
 
-        final Enumeration<?> e = properties.keys();
-        while (e.hasMoreElements()) {
-            final String key = (String) e.nextElement();
+        for(Object keyObj: properties.keySet()) {
+            final String key = (String)keyObj;
             if (key.startsWith(startsWith)) {
                 final String modifiedKey = key.substring(prefixLength);
                 subset.properties.put(modifiedKey, properties.get(key));
