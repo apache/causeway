@@ -24,20 +24,30 @@ public final class Filters {
     private Filters() {
     }
 
-    public static <T> Filter<T> and(final Filter<T> f1, final Filter<T> f2) {
+    public static <T> Filter<T> and(final Filter<T>... filters) {
         return new Filter<T>() {
             @Override
             public boolean accept(final T f) {
-                return f1.accept(f) && f2.accept(f);
+                for(final Filter<T> filter: filters) {
+                    if(!filter.accept(f)) { 
+                        return false;
+                    }
+                }
+                return true;
             }
         };
     }
 
-    public static <T> Filter<T> or(final Filter<T> f1, final Filter<T> f2) {
+    public static <T> Filter<T> or(final Filter<T>... filters) {
         return new Filter<T>() {
             @Override
             public boolean accept(final T f) {
-                return f1.accept(f) || f2.accept(f);
+                for(final Filter<T> filter: filters) {
+                    if(filter.accept(f)) { 
+                        return true;
+                    }
+                }
+                return false;
             }
         };
     }
@@ -53,7 +63,6 @@ public final class Filters {
 
     public static <T> Filter<T> any() {
         return new Filter<T>() {
-
             @Override
             public boolean accept(final T t) {
                 return true;
