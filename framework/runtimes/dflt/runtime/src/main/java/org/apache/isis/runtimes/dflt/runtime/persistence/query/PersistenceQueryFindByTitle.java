@@ -41,7 +41,7 @@ public class PersistenceQueryFindByTitle extends PersistenceQueryBuiltInAbstract
 
     @Override
     public boolean matches(final ObjectAdapter object) {
-        final String titleString = object.titleString();
+        final String titleString = object.titleString().toLowerCase();
         return matches(titleString);
     }
 
