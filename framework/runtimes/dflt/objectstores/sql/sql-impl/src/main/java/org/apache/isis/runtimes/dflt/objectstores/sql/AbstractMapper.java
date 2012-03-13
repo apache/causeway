@@ -28,7 +28,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.runtimes.dflt.objectstores.sql.SqlOid.State;
 
 public abstract class AbstractMapper {
-    private FieldMappingLookup objectMapperLookup;
+    private FieldMappingLookup fieldMappingLookup;
     private final Hashtable<String, PrimaryKeyMapper> keyMapping = new Hashtable<String, PrimaryKeyMapper>();
 
     public abstract void createTables(final DatabaseConnector connector);
@@ -40,15 +40,15 @@ public abstract class AbstractMapper {
     public final void shutdown() {
     }
 
-    public void startup(final DatabaseConnector connector, final FieldMappingLookup objectMapperLookup) {
-        this.objectMapperLookup = objectMapperLookup;
+    public void startup(final DatabaseConnector connector, final FieldMappingLookup fieldMappingLookup) {
+        this.fieldMappingLookup = fieldMappingLookup;
         if (needsTables(connector)) {
             createTables(connector);
         }
     }
 
     protected FieldMappingLookup getFieldMappingLookup() {
-        return objectMapperLookup;
+        return fieldMappingLookup;
     }
 
     // TODO remove

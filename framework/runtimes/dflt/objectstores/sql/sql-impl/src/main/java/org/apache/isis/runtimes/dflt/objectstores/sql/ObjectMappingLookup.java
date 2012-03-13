@@ -43,10 +43,11 @@ public class ObjectMappingLookup implements DebuggableWithTitle {
     private FieldMappingLookup fieldMappingLookup;
 
     public ObjectMapping getMapping(final ObjectSpecification spec, final DatabaseConnector connection) {
+    	String fullName = spec.getFullIdentifier();
         ObjectMapping mapping = mappings.get(spec);
         if (mapping == null) {
             final String propertiesBase = SqlObjectStore.BASE_NAME + ".automapper.default";
-            mapping = objectMappingFactory.createMapper(spec.getFullIdentifier(), propertiesBase, fieldMappingLookup, this);
+            mapping = objectMappingFactory.createMapper(fullName, propertiesBase, fieldMappingLookup, this);
             add(spec, mapping, connection);
         }
         LOG.debug("  mapper for " + spec.getSingularName() + " -> " + mapping);

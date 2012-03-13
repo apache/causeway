@@ -236,7 +236,7 @@ public class JdbcConnector extends AbstractDatabaseConnector {
                             // "undone"
                             final LocalDate localDate = (LocalDate) value;
                             final int millisOffset = -DateTimeZone.getDefault().getOffset(null);
-                            final Date javaDate = localDate.toDateTimeAtStartOfDay(DateTimeZone.forOffsetMillis(millisOffset)).toDate();
+                            final java.util.Date javaDate = localDate.toDateTimeAtStartOfDay(DateTimeZone.forOffsetMillis(millisOffset)).toDate();
 
                             statement.setObject(i, javaDate, java.sql.Types.DATE);
                         }
