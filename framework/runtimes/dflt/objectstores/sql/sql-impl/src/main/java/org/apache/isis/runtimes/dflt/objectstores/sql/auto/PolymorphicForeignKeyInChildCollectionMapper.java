@@ -25,6 +25,7 @@ package org.apache.isis.runtimes.dflt.objectstores.sql.auto;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 
@@ -38,6 +39,8 @@ import org.apache.isis.runtimes.dflt.objectstores.sql.ObjectMapping;
 import org.apache.isis.runtimes.dflt.objectstores.sql.ObjectMappingLookup;
 import org.apache.isis.runtimes.dflt.objectstores.sql.VersionMapping;
 import org.apache.isis.runtimes.dflt.objectstores.sql.mapping.FieldMapping;
+
+import com.google.common.collect.Lists;
 
 /**
  * Used to map 1-to-many collections by creating, in the child table, 1 column
@@ -181,16 +184,16 @@ public class PolymorphicForeignKeyInChildCollectionMapper extends ForeignKeyInCh
     }
 
     @Override
-    protected void loadCollectionIntoList(final DatabaseConnector connector, final ObjectAdapter parent, final boolean makeResolved, final String table, final ObjectSpecification specification, final IdMappingAbstract idMappingAbstract, final List<FieldMapping> fieldMappings,
+    protected void loadCollectionIntoList(final DatabaseConnector connector, final ObjectAdapter parent, final boolean makeResolved, final String table, final ObjectSpecification specification, final IdMappingAbstract idMappingAbstract, final Map<ObjectAssociation, FieldMapping> fieldMappingByField,
             final VersionMapping versionMapping, final List<ObjectAdapter> superList) {
-        final List<ObjectAdapter> list = new ArrayList<ObjectAdapter>();
+        final List<ObjectAdapter> list = Lists.newArrayList();
+        
         for (int i = 0; i < tables.size(); i++) {
-
             currentTableSpecification = tableSpecifications.get(i);
             final AutoMapper mapper = (AutoMapper) subClassMappers.get(i);
             final String mapperTable = tables.get(i);
 
-            super.loadCollectionIntoList(connector, parent, makeResolved, mapperTable, currentTableSpecification, mapper.getIdMapping(), mapper.fieldMappings, mapper.getVersionMapping(), list);
+            super.loadCollectionIntoList(connector, parent, makeResolved, mapperTable, currentTableSpecification, mapper.getIdMapping(), mapper.fieldMappingByField, mapper.getVersionMapping(), list);
 
             superList.addAll(list);
             list.clear();

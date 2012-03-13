@@ -72,7 +72,7 @@ public class ReversedAutoAssociationMapper extends AbstractAutoMapper implements
             sql.append(" (");
             idMapping.appendColumnDefinitions(sql);
             sql.append(", ");
-            for (final FieldMapping mapping : fieldMappings) {
+            for (final FieldMapping mapping : fieldMappingByField.values()) {
                 mapping.appendColumnDefinitions(sql);
                 sql.append(",");
             }
@@ -97,7 +97,7 @@ public class ReversedAutoAssociationMapper extends AbstractAutoMapper implements
             sql.append("select ");
             idMapping.appendColumnNames(sql);
             sql.append(", ");
-            sql.append(columnList(fieldMappings));
+            sql.append(columnList(fieldMappingByField));
             sql.append(" from ");
             sql.append(table);
             sql.append(" where ");
@@ -121,7 +121,7 @@ public class ReversedAutoAssociationMapper extends AbstractAutoMapper implements
 
     protected void loadFields(final ObjectAdapter object, final Results rs, final boolean makeResolved) {
         PersistorUtil.start(object, ResolveState.RESOLVING);
-        for (final FieldMapping mapping : fieldMappings) {
+        for (final FieldMapping mapping : fieldMappingByField.values()) {
             mapping.initializeField(object, rs);
         }
         /*
@@ -154,7 +154,7 @@ public class ReversedAutoAssociationMapper extends AbstractAutoMapper implements
         sql.append("insert into " + table + " (");
         idMapping.appendColumnNames(sql);
         sql.append(", ");
-        final String columnList = columnList(fieldMappings);
+        final String columnList = columnList(fieldMappingByField);
         if (columnList.length() > 0) {
             sql.append(columnList);
             sql.append(", ");

@@ -29,6 +29,7 @@ import org.apache.isis.runtimes.dflt.objectstores.sql.Sql;
 import org.apache.isis.runtimes.dflt.objectstores.sql.mapping.FieldMapping;
 
 public abstract class AbstractJdbcFieldMapping implements FieldMapping {
+	
     private final String columnName;
     protected final ObjectAssociation field;
 
@@ -37,6 +38,11 @@ public abstract class AbstractJdbcFieldMapping implements FieldMapping {
         columnName = Sql.sqlFieldName(field.getId());
     }
 
+    @Override
+    public ObjectAssociation getField() {
+    	return field;
+    }
+    
     @Override
     public void appendColumnDefinitions(final StringBuffer sql) {
         sql.append(columnName);

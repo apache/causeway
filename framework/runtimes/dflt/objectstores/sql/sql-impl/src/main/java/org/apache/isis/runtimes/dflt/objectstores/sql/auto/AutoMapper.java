@@ -23,8 +23,6 @@ import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Vector;
 
-import org.apache.log4j.Logger;
-
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
@@ -54,24 +52,23 @@ import org.apache.isis.runtimes.dflt.runtime.persistence.ConcurrencyException;
 import org.apache.isis.runtimes.dflt.runtime.persistence.ObjectNotFoundException;
 import org.apache.isis.runtimes.dflt.runtime.persistence.PersistorUtil;
 import org.apache.isis.runtimes.dflt.runtime.persistence.query.PersistenceQueryFindByPattern;
-import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
-import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
+import org.apache.log4j.Logger;
 
 public class AutoMapper extends AbstractAutoMapper implements ObjectMapping, DebuggableWithTitle {
+	
     private static final Logger LOG = Logger.getLogger(AutoMapper.class);
     private final IdMapping idMapping;
     private final VersionMapping versionMapping;
     private final TitleMapping titleMapping;
     private final boolean useVersioning;
-    final AdapterManager adapterManager;
-
+    
+    
     public AutoMapper(final String className, final String parameterBase, final FieldMappingLookup lookup, final ObjectMappingLookup objectMapperLookup) {
         super(className, parameterBase, lookup, objectMapperLookup);
         idMapping = lookup.createIdMapping();
         versionMapping = lookup.createVersionMapping();
         titleMapping = lookup.createTitleMapping();
 
-        adapterManager = IsisContext.getPersistenceSession().getAdapterManager();
         useVersioning = Defaults.useVersioning(specification.getShortIdentifier());
 
         setUpFieldMappers();
@@ -94,7 +91,7 @@ public class AutoMapper extends AbstractAutoMapper implements ObjectMapping, Deb
             sql.append(" (");
             idMapping.appendCreateColumnDefinitions(sql);
             sql.append(", ");
-            for (final FieldMapping mapping : fieldMappings) {
+            for (final FieldMapping mapping : fieldMappingByField.values()) {
                 mapping.appendColumnDefinitions(sql);
                 sql.append(",");
             }
@@ -120,7 +117,7 @@ public class AutoMapper extends AbstractAutoMapper implements ObjectMapping, Deb
         sql.append("insert into " + table + " (");
         idMapping.appendColumnNames(sql);
         sql.append(", ");
-        final String columnList = columnList(fieldMappings);
+        final String columnList = columnList(fieldMappingByField);
         if (columnList.length() > 0) {
             sql.append(columnList);
             sql.append(", ");
@@ -285,7 +282,7 @@ public class AutoMapper extends AbstractAutoMapper implements ObjectMapping, Deb
         sql.append("select ");
         idMapping.appendColumnNames(sql);
         sql.append(", ");
-        final String columnList = columnList(fieldMappings);
+        final String columnList = columnList(fieldMappingByField);
         if (columnList.length() > 0) {
             sql.append(columnList);
             sql.append(", ");
@@ -307,7 +304,7 @@ public class AutoMapper extends AbstractAutoMapper implements ObjectMapping, Deb
 
     protected void loadFields(final ObjectAdapter object, final Results rs) {
         PersistorUtil.start(object, ResolveState.RESOLVING);
-        for (final FieldMapping mapping : fieldMappings) {
+        for (final FieldMapping mapping : fieldMappingByField.values()) {
             mapping.initializeField(object, rs);
         }
         /*
@@ -364,7 +361,7 @@ public class AutoMapper extends AbstractAutoMapper implements ObjectMapping, Deb
         LOG.debug("loading data from SQL " + table + " for " + object);
         final StringBuffer sql = new StringBuffer();
         sql.append("select ");
-        sql.append(columnList(fieldMappings));
+        sql.append(columnList(fieldMappingByField));
         sql.append(",");
         sql.append(versionMapping.appendColumnNames());
         sql.append(" from " + table + " WHERE ");
@@ -414,7 +411,7 @@ public class AutoMapper extends AbstractAutoMapper implements ObjectMapping, Deb
 
         final StringBuffer sql = new StringBuffer();
         sql.append("UPDATE " + table + " SET ");
-        for (final FieldMapping mapping : fieldMappings) {
+        for (final FieldMapping mapping : fieldMappingByField.values()) {
             mapping.appendUpdateValues(connector, sql, object);
             sql.append(", ");
         }
@@ -457,17 +454,17 @@ public class AutoMapper extends AbstractAutoMapper implements ObjectMapping, Deb
         return false;
     }
 
-    @Override
-    public String toString() {
-        return "AutoMapper [table=" + table + ",id=" + idMapping + ",noColumns=" + fieldMappings.size() + ",specification=" + specification.getFullIdentifier() + "]";
-    }
 
+    ////////////////////////////////////////////////////////////////
+    // debugging, toString
+    ////////////////////////////////////////////////////////////////
+    
     @Override
     public void debugData(final DebugBuilder debug) {
         debug.appendln("ID mapping", idMapping);
         debug.appendln("ID mapping", versionMapping);
         debug.appendln("ID mapping", titleMapping);
-        for (final FieldMapping mapping : fieldMappings) {
+        for (final FieldMapping mapping : fieldMappingByField.values()) {
             mapping.debugData(debug);
         }
         for (final CollectionMapper collectionMapper : collectionMappers) {
@@ -479,6 +476,12 @@ public class AutoMapper extends AbstractAutoMapper implements ObjectMapping, Deb
     @Override
     public String debugTitle() {
         return toString();
+    }
+
+    
+    @Override
+    public String toString() {
+        return "AutoMapper [table=" + table + ",id=" + idMapping + ",noColumns=" + fieldMappingByField.size() + ",specification=" + specification.getFullIdentifier() + "]";
     }
 
 }

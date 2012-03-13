@@ -24,6 +24,7 @@ package org.apache.isis.runtimes.dflt.objectstores.sql.auto;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 
@@ -184,7 +185,7 @@ public class PolymorphicForeignKeyInChildCollectionBaseMapper extends ForeignKey
     }
 
     @Override
-    protected void loadCollectionIntoList(final DatabaseConnector connector, final ObjectAdapter parent, final boolean makeResolved, final String table, final ObjectSpecification specification, final IdMappingAbstract idMappingAbstract, final List<FieldMapping> fieldMappings,
+    protected void loadCollectionIntoList(final DatabaseConnector connector, final ObjectAdapter parent, final boolean makeResolved, final String table, final ObjectSpecification specification, final IdMappingAbstract idMappingAbstract, final Map<ObjectAssociation, FieldMapping> fieldMappingByField,
             final VersionMapping versionMapping, final List<ObjectAdapter> list) {
         LOG.debug("Loading polymorphic list");
 
@@ -211,7 +212,7 @@ public class PolymorphicForeignKeyInChildCollectionBaseMapper extends ForeignKey
             idMapping.setObjectSpecification(itemSpecification);
 
             // Load new recordSet for the actual class
-            final ObjectMapping itemMapper = objectMapperLookup.getMapping(itemSpecification, connector);
+            final ObjectMapping itemMapper = objectMappingLookup.getMapping(itemSpecification, connector);
             final Oid oid = idMapping.recreateOid(rs, itemSpecification);
             final ObjectAdapter loadedObject = itemMapper.getObject(connector, oid, itemSpecification);
 

@@ -20,18 +20,18 @@
 package org.apache.isis.runtimes.dflt.objectstores.sql.auto;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-
-import org.apache.log4j.Logger;
 
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.exceptions.NotYetImplementedException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
+import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.runtimes.dflt.objectstores.sql.AbstractMapper;
 import org.apache.isis.runtimes.dflt.objectstores.sql.CollectionMapper;
 import org.apache.isis.runtimes.dflt.objectstores.sql.DatabaseConnector;
@@ -43,53 +43,62 @@ import org.apache.isis.runtimes.dflt.objectstores.sql.SqlObjectStoreException;
 import org.apache.isis.runtimes.dflt.objectstores.sql.mapping.FieldMapping;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
+import org.apache.log4j.Logger;
+
+import com.google.common.collect.Maps;
 
 public abstract class AbstractAutoMapper extends AbstractMapper {
+	
     private static final Logger LOG = Logger.getLogger(AbstractAutoMapper.class);
 
-    final String className;
-    final String parameterBase;
-    final FieldMappingLookup lookup;
-    final ObjectMappingLookup objectMapperLookup;
-
-    protected AbstractAutoMapper(final String className, final String parameterBase, final FieldMappingLookup lookup, final ObjectMappingLookup objectMapperLookup) {
-        specification = IsisContext.getSpecificationLoader().loadSpecification(className);
-        if (specification.getProperties() == null || specification.getProperties().size() == 0) {
-            if (specification.isAbstract() == false) {
-                throw new SqlObjectStoreException(specification.getFullIdentifier() + " has no fields: " + specification);
-            }
-        }
-        this.className = className;
-        this.parameterBase = parameterBase;
-        this.lookup = lookup;
-        this.objectMapperLookup = objectMapperLookup;
-    }
-
-    protected AbstractAutoMapper(final FieldMappingLookup lookup, final AbstractAutoMapper abstractAutoMapper, final String className) {
-
-        this.className = className;
-        specification = IsisContext.getSpecificationLoader().loadSpecification(className);
-
-        this.parameterBase = null;
-        this.lookup = null;
-        this.objectMapperLookup = null;
-    }
-
-    protected void setUpFieldMappers() {
-        setUpFieldMappers(lookup, objectMapperLookup, className, parameterBase);
-    }
-
+    protected final Map<ObjectAssociation, FieldMapping> fieldMappingByField = Maps.newLinkedHashMap();
+    
     protected CollectionMapper collectionMappers[];
     protected String collectionMapperFields[];
     protected boolean dbCreatesId;
 
     protected ObjectSpecification specification;
     protected String table;
-    protected List<FieldMapping> fieldMappings = new ArrayList<FieldMapping>();
-    protected Map<ObjectAssociation, FieldMapping> fieldMappingLookup = new HashMap<ObjectAssociation, FieldMapping>();
 
-    private void setUpFieldMappers(final FieldMappingLookup lookup, final ObjectMappingLookup objectMapperLookup, final String className, final String parameterBase) {
-        final IsisConfiguration configParameters = IsisContext.getConfiguration();
+    final String className;
+    final String parameterBase;
+    final FieldMappingLookup lookup;
+    final ObjectMappingLookup objectMappingLookup;
+
+    protected AbstractAutoMapper(final String className, final String parameterBase, final FieldMappingLookup lookup, final ObjectMappingLookup objectMappingLookup) {
+    	this.specification = specificationFor(className);
+        this.className = className;
+        this.parameterBase = parameterBase;
+        this.lookup = lookup;
+        this.objectMappingLookup = objectMappingLookup;
+    }
+
+    protected AbstractAutoMapper(final FieldMappingLookup lookup, final AbstractAutoMapper abstractAutoMapper, final String className) {
+
+        this.specification = getSpecificationLoader().loadSpecification(className);
+        this.className = className;
+
+        this.parameterBase = null;
+        this.lookup = null;
+        this.objectMappingLookup = null;
+    }
+
+	private static ObjectSpecification specificationFor(final String className) {
+		ObjectSpecification specification = IsisContext.getSpecificationLoader().loadSpecification(className);
+        List<OneToOneAssociation> properties = specification.getProperties();
+		if (isNullOrEmpty(properties) && !specification.isAbstract()) {
+            throw new SqlObjectStoreException(specification.getFullIdentifier() + " has no fields: " + specification);
+        }
+		return specification;
+	}
+    
+
+    protected void setUpFieldMappers() {
+        setUpFieldMappers(lookup, objectMappingLookup, className, parameterBase);
+    }
+
+    private void setUpFieldMappers(final FieldMappingLookup lookup, final ObjectMappingLookup objectMappingLookup, final String className, final String parameterBase) {
+        final IsisConfiguration configParameters = getConfiguration();
         table = configParameters.getString(parameterBase + ".table." + className);
         if (table == null) {
             final String name = getTableNameFromSpecification(specification);
@@ -100,13 +109,13 @@ public abstract class AbstractAutoMapper extends AbstractMapper {
 
         dbCreatesId = configParameters.getBoolean(parameterBase + "db-ids", false);
         if (configParameters.getBoolean(parameterBase + "all-fields", true)) {
-            setupFullMapping(lookup, objectMapperLookup, className, configParameters, parameterBase);
+            setupFullMapping(lookup, objectMappingLookup, className, configParameters, parameterBase);
         } else {
             // setupSpecifiedMapping(specification, configParameters,
             // parameterBase);
         }
 
-        LOG.info("table mapping: " + table + " (" + columnList(fieldMappings) + ")");
+        LOG.info("table mapping: " + table + " (" + columnList(fieldMappingByField) + ")");
     }
 
     protected String getTableNameFromSpecification(final ObjectSpecification objectSpecification) {
@@ -138,7 +147,7 @@ public abstract class AbstractAutoMapper extends AbstractMapper {
         final ObjectAssociation[] oneToManyProperties = new ObjectAssociation[collectionFieldCount];
         collectionMappers = new CollectionMapper[collectionFieldCount];
         collectionMapperFields = new String[collectionFieldCount];
-        final IsisConfiguration subset = IsisContext.getConfiguration().createSubset(parameterBase + ".mapper.");
+        final IsisConfiguration subset = getConfiguration().createSubset(parameterBase + ".mapper.");
 
         for (int i = 0, simpleFieldNo = 0, collectionFieldNo = 0; i < fields.size(); i++) {
             final ObjectAssociation field = fields.get(i);
@@ -224,12 +233,18 @@ public abstract class AbstractAutoMapper extends AbstractMapper {
             }
         }
 
+        
         for (final ObjectAssociation field : oneToOneProperties) {
-            final FieldMapping mapping = lookup.createMapping(specification, field);
-            fieldMappings.add(mapping);
-            fieldMappingLookup.put(field, mapping);
+        	if(fieldMappingByField.containsKey(field)) {
+        		continue;
+        	}
+        	final FieldMapping mapping = lookup.createMapping(specification, field);
+            fieldMappingByField.put(field, mapping);
         }
+    }
 
+    protected String columnList(final Map<ObjectAssociation, FieldMapping> fieldMappingByField) {
+    	return columnList(fieldMappingByField.values());
     }
 
     /*
@@ -269,7 +284,7 @@ public abstract class AbstractAutoMapper extends AbstractMapper {
      * 
      * throw new NotYetImplementedException(); } } }
      */
-    protected String columnList(final List<FieldMapping> fieldMappings) {
+    protected String columnList(final Collection<FieldMapping> fieldMappings) {
         final StringBuffer sql = new StringBuffer();
         for (final FieldMapping mapping : fieldMappings) {
             if (sql.length() > 0) {
@@ -291,7 +306,7 @@ public abstract class AbstractAutoMapper extends AbstractMapper {
     }
 
     protected FieldMapping fieldMappingFor(final ObjectAssociation field) {
-        return fieldMappingLookup.get(field);
+        return fieldMappingByField.get(field);
     }
 
     @Override
@@ -304,17 +319,34 @@ public abstract class AbstractAutoMapper extends AbstractMapper {
         return !connection.hasTable(table);
     }
 
-    @Override
-    public String toString() {
-        return "AbstractAutoMapper [table=" + table + ",noColumns=" + fieldMappings.size() + ",specification=" + specification.getFullIdentifier() + "]";
-    }
-
     protected String values(final DatabaseConnector connector, final ObjectAdapter object) {
         final StringBuffer sql = new StringBuffer();
-        for (final FieldMapping mapping : fieldMappings) {
+        for (final FieldMapping mapping : fieldMappingByField.values()) {
             mapping.appendInsertValues(connector, sql, object);
             sql.append(",");
         }
         return sql.toString();
     }
+
+    
+    private static boolean isNullOrEmpty(List<?> list) {
+    	return list == null || list.size() == 0;
+    }
+
+
+
+    @Override
+    public String toString() {
+        return "AbstractAutoMapper [table=" + table + ",noColumns=" + fieldMappingByField.size() + ",specification=" + specification.getFullIdentifier() + "]";
+    }
+
+	protected SpecificationLoader getSpecificationLoader() {
+		return IsisContext.getSpecificationLoader();
+	}
+
+	protected IsisConfiguration getConfiguration() {
+		return IsisContext.getConfiguration();
+	}
+
+
 }

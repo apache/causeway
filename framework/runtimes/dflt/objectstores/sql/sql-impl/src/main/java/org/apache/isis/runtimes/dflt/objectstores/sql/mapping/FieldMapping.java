@@ -21,10 +21,14 @@ package org.apache.isis.runtimes.dflt.objectstores.sql.mapping;
 
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.runtimes.dflt.objectstores.sql.DatabaseConnector;
 import org.apache.isis.runtimes.dflt.objectstores.sql.Results;
 
 public interface FieldMapping {
+	
+    public ObjectAssociation getField();
+
     void appendColumnDefinitions(StringBuffer sql);
 
     void appendColumnNames(StringBuffer sql);

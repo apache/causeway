@@ -47,6 +47,11 @@ public class JdbcObjectReferenceFieldMapping extends JdbcObjectReferenceMapping 
     protected final ObjectAssociation field;
 
     @Override
+    public ObjectAssociation getField() {
+		return field;
+	}
+    
+    @Override
     public void appendWhereClause(final DatabaseConnector connector, final StringBuffer sql, final ObjectAdapter object) {
         final ObjectAdapter fieldValue = field.get(object);
         appendWhereClause(connector, sql, fieldValue.getOid());

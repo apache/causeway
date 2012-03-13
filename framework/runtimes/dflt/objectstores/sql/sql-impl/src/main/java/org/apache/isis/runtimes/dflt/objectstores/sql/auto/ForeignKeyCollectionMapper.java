@@ -22,6 +22,7 @@ package org.apache.isis.runtimes.dflt.objectstores.sql.auto;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 
@@ -32,6 +33,7 @@ import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
+import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.runtimes.dflt.objectstores.sql.CollectionMapper;
 import org.apache.isis.runtimes.dflt.objectstores.sql.DatabaseConnector;
 import org.apache.isis.runtimes.dflt.objectstores.sql.FieldMappingLookup;
@@ -125,7 +127,7 @@ public class ForeignKeyCollectionMapper extends AbstractAutoMapper implements Co
     @Override
     public void startup(final DatabaseConnector connector, final FieldMappingLookup lookup) {
         if (originalMapping == null) {
-            originalMapping = objectMapperLookup.getMapping(specification, null);
+            originalMapping = objectMappingLookup.getMapping(specification, null);
         }
         originalMapping.startup(connector, objectMapperLookup2);
         super.startup(connector, lookup);
@@ -195,7 +197,7 @@ public class ForeignKeyCollectionMapper extends AbstractAutoMapper implements Co
 
             final List<ObjectAdapter> list = new ArrayList<ObjectAdapter>();
 
-            loadCollectionIntoList(connector, parent, makeResolved, table, specification, getIdMapping(), fieldMappings, versionMapping, list);
+            loadCollectionIntoList(connector, parent, makeResolved, table, specification, getIdMapping(), fieldMappingByField, versionMapping, list);
 
             final CollectionFacet collectionFacet = collection.getSpecification().getFacet(CollectionFacet.class);
             collectionFacet.init(collection, list.toArray(new ObjectAdapter[list.size()]));
@@ -217,7 +219,7 @@ public class ForeignKeyCollectionMapper extends AbstractAutoMapper implements Co
         }
     }
 
-    protected void loadCollectionIntoList(final DatabaseConnector connector, final ObjectAdapter parent, final boolean makeResolved, final String table, final ObjectSpecification specification, final IdMappingAbstract idMappingAbstract, final List<FieldMapping> fieldMappings,
+    protected void loadCollectionIntoList(final DatabaseConnector connector, final ObjectAdapter parent, final boolean makeResolved, final String table, final ObjectSpecification specification, final IdMappingAbstract idMappingAbstract, final Map<ObjectAssociation, FieldMapping> fieldMappingByField,
             final VersionMapping versionMapping, final List<ObjectAdapter> list) {
 
         final StringBuffer sql = new StringBuffer();
@@ -225,7 +227,7 @@ public class ForeignKeyCollectionMapper extends AbstractAutoMapper implements Co
         idMappingAbstract.appendColumnNames(sql);
 
         sql.append(", ");
-        final String columnList = columnList(fieldMappings);
+        final String columnList = columnList(fieldMappingByField);
         if (columnList.length() > 0) {
             sql.append(columnList);
             sql.append(", ");
@@ -240,17 +242,17 @@ public class ForeignKeyCollectionMapper extends AbstractAutoMapper implements Co
         while (rs.next()) {
             final Oid oid = idMappingAbstract.recreateOid(rs, specification);
             final ObjectAdapter element = getAdapter(specification, oid);
-            loadFields(element, rs, makeResolved, fieldMappings);
+            loadFields(element, rs, makeResolved, fieldMappingByField);
             LOG.debug("  element  " + element.getOid());
             list.add(element);
         }
         rs.close();
     }
 
-    protected void loadFields(final ObjectAdapter object, final Results rs, final boolean makeResolved, final List<FieldMapping> fieldMappings) {
+    protected void loadFields(final ObjectAdapter object, final Results rs, final boolean makeResolved, final Map<ObjectAssociation, FieldMapping> fieldMappingByField) {
         if (object.getResolveState().canChangeTo(ResolveState.RESOLVING)) {
             PersistorUtil.start(object, ResolveState.RESOLVING);
-            for (final FieldMapping mapping : fieldMappings) {
+            for (final FieldMapping mapping : fieldMappingByField.values()) {
                 mapping.initializeField(object, rs);
             }
             object.setOptimisticLock(versionMapping.getLock(rs));
