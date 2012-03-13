@@ -57,7 +57,7 @@ public final class MethodTask extends Task {
             }
 
         }
-
+        
         // String[] names = action.getParameterNames();
         // String[] descriptions = action.getParameterDescriptions();
         // ObjectSpecification[] types = action.getParameterTypes();
@@ -68,9 +68,11 @@ public final class MethodTask extends Task {
             // this.descriptions[i] = descriptions[i];
             // this.fieldSpecifications[i] = types[i];
             // this.optional[i] = optional[i];
-            if (defaultParameterValues[i] == null) {
-                // TODO use new promptForParameters method instead of all this
-                if (action.isContributed()) {
+
+        	if (defaultParameterValues[i] == null) {
+
+        		// TODO: review; this isn't sufficient, because could provide an invalid value for a reference type, I think?
+                if (action.isContributed() && parameters.get(i).isObject()) {
                     initialState[i] = target;
                 } else {
                     initialState[i] = null;
