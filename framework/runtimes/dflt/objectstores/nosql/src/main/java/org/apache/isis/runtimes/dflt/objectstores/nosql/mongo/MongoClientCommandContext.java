@@ -19,10 +19,10 @@
 
 package org.apache.isis.runtimes.dflt.objectstores.nosql.mongo;
 
+import com.mongodb.DB;
+
 import org.apache.isis.runtimes.dflt.objectstores.nosql.NoSqlCommandContext;
 import org.apache.isis.runtimes.dflt.objectstores.nosql.StateWriter;
-
-import com.mongodb.DB;
 
 
 public class MongoClientCommandContext implements NoSqlCommandContext {

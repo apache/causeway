@@ -20,13 +20,10 @@
 package org.apache.isis.core.progmodel.facets;
 
 import java.lang.reflect.Method;
+import java.util.List;
 
-import org.jmock.Mockery;
-import org.jmock.integration.junit4.JMock;
-import org.jmock.integration.junit4.JUnit4Mockery;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.runner.RunWith;
+import org.jmock.auto.Mock;
+import org.junit.Rule;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -36,50 +33,39 @@ import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.specloader.ObjectReflector;
+import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2;
+import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2.Mode;
 
-@RunWith(JMock.class)
 public abstract class AbstractFacetFactoryJUnit4TestCase {
 
-    protected Mockery context = new JUnit4Mockery();
+    @Rule
+    public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_ONLY);
 
+    @Mock
     protected ObjectReflector reflector;
+    @Mock
     protected MethodRemover methodRemover;
+    @Mock
     protected FacetHolder facetHolder;
 
-    protected ObjectSpecification noSpec;
+    @Mock
+    protected ObjectSpecification mockObjSpec;
+    @Mock
     protected OneToOneAssociation oneToOneAssociation;
+    @Mock
     protected OneToManyAssociation oneToManyAssociation;
+    @Mock
     protected OneToOneActionParameter actionParameter;
-
-    @Before
-    public void setUp() throws Exception {
-        reflector = context.mock(ObjectReflector.class);
-        methodRemover = context.mock(MethodRemover.class);
-        facetHolder = context.mock(FacetHolder.class);
-
-        noSpec = context.mock(ObjectSpecification.class);
-        oneToOneAssociation = context.mock(OneToOneAssociation.class);
-        oneToManyAssociation = context.mock(OneToManyAssociation.class);
-        actionParameter = context.mock(OneToOneActionParameter.class);
-    }
-
-    @After
-    public void tearDown() throws Exception {
-        reflector = null;
-        methodRemover = null;
-        facetHolder = null;
-
-        noSpec = null;
-        oneToOneAssociation = null;
-        oneToManyAssociation = null;
-        actionParameter = null;
-    }
 
     protected boolean contains(final Class<?>[] types, final Class<?> type) {
         return Utils.contains(types, type);
     }
 
     protected boolean contains(final FeatureType[] featureTypes, final FeatureType featureType) {
+        return Utils.contains(featureTypes, featureType);
+    }
+
+    protected static boolean contains(final List<FeatureType> featureTypes, final FeatureType featureType) {
         return Utils.contains(featureTypes, featureType);
     }
 

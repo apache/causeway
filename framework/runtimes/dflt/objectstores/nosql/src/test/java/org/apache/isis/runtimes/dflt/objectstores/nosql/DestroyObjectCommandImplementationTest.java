@@ -19,8 +19,6 @@
 
 package org.apache.isis.runtimes.dflt.objectstores.nosql;
 
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
 import org.junit.Before;

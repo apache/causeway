@@ -1099,6 +1099,11 @@ archetype includes this explicit dependency.
 
 
             <!-- Logging -->
+	        <dependency>
+	            <groupId>org.slf4j</groupId>
+	            <artifactId>slf4j-log4j12</artifactId>
+                <version>1.6.4</version>
+	        </dependency>
             <dependency>
                 <groupId>log4j</groupId>
                 <artifactId>log4j</artifactId>
@@ -1146,7 +1151,7 @@ archetype includes this explicit dependency.
             <dependency>
                 <groupId>com.google.guava</groupId>
                 <artifactId>guava</artifactId>
-                <version>11.0</version>
+                <version>11.0.2</version>
             </dependency>
 
             <!-- Google Guice (dependency injection) -->

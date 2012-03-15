@@ -23,8 +23,8 @@ import org.apache.isis.core.commons.config.ConfigurationConstants;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.runtimes.dflt.objectstores.nosql.KeyCreator;
 import org.apache.isis.runtimes.dflt.objectstores.nosql.NoSqlDataDatabase;
-import org.apache.isis.runtimes.dflt.objectstores.nosql.NoSqlPersistorMechanismInstaller;
 import org.apache.isis.runtimes.dflt.objectstores.nosql.NoSqlKeyCreator;
+import org.apache.isis.runtimes.dflt.objectstores.nosql.NoSqlPersistorMechanismInstaller;
 
 public class MongoPersistorMechanismInstaller extends NoSqlPersistorMechanismInstaller {
 
