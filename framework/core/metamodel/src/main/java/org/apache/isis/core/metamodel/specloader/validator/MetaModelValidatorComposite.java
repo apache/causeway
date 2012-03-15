@@ -19,13 +19,14 @@
 
 package org.apache.isis.core.metamodel.specloader.validator;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import com.google.common.collect.Lists;
+
 public class MetaModelValidatorComposite extends MetaModelValidatorAbstract {
 
-    private final List<MetaModelValidator> validators = new ArrayList<MetaModelValidator>();
+    private final List<MetaModelValidator> validators = Lists.newArrayList();
 
     @Override
     public void validate() throws MetaModelInvalidException {

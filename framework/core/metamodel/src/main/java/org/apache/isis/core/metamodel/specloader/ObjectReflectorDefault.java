@@ -23,13 +23,16 @@ import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 
 import org.apache.log4j.Logger;
 
@@ -47,6 +50,7 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetdecorator.FacetDecorator;
 import org.apache.isis.core.metamodel.facetdecorator.FacetDecoratorSet;
 import org.apache.isis.core.metamodel.facets.object.bounded.BoundedFacetUtils;
+import org.apache.isis.core.metamodel.facets.object.objecttype.ObjectTypeFacet;
 import org.apache.isis.core.metamodel.layout.MemberLayoutArranger;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.runtimecontext.DependencyInjector;
@@ -66,14 +70,13 @@ import org.apache.isis.core.metamodel.specloader.classsubstitutor.ClassSubstitut
 import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistry;
 import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistryDefault;
 import org.apache.isis.core.metamodel.specloader.facetprocessor.FacetProcessor;
-import org.apache.isis.core.metamodel.specloader.speccache.SpecificationCache;
-import org.apache.isis.core.metamodel.specloader.speccache.SpecificationCacheDefault;
 import org.apache.isis.core.metamodel.specloader.specimpl.CreateObjectContext;
 import org.apache.isis.core.metamodel.specloader.specimpl.FacetedMethodsBuilderContext;
 import org.apache.isis.core.metamodel.specloader.specimpl.IntrospectionContext;
 import org.apache.isis.core.metamodel.specloader.specimpl.dflt.ObjectSpecificationDefault;
 import org.apache.isis.core.metamodel.specloader.specimpl.objectlist.ObjectSpecificationForObjectList;
 import org.apache.isis.core.metamodel.specloader.traverser.SpecificationTraverser;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelInvalidException;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
 
 /**
@@ -172,7 +175,7 @@ public class ObjectReflectorDefault implements ObjectReflector, DebuggableWithTi
     /**
      * Defaulted in the constructor.
      */
-    private final SpecificationCache cache;
+    private final SpecificationCacheDefault cache = new SpecificationCacheDefault();
 
     // /////////////////////////////////////////////////////////////
     // Constructor
@@ -205,8 +208,6 @@ public class ObjectReflectorDefault implements ObjectReflector, DebuggableWithTi
         this.metaModelValidator = metaModelValidator;
 
         this.facetProcessor = new FacetProcessor(configuration, collectionTypeRegistry, programmingModel);
-
-        this.cache = new SpecificationCacheDefault();
     }
 
     @Override
@@ -300,7 +301,7 @@ public class ObjectReflectorDefault implements ObjectReflector, DebuggableWithTi
     }
 
     // /////////////////////////////////////////////////////////////
-    // install, load, allSpecifications
+    // install, load, allSpecifications, lookup
     // /////////////////////////////////////////////////////////////
 
     /**
@@ -339,7 +340,7 @@ public class ObjectReflectorDefault implements ObjectReflector, DebuggableWithTi
         Assert.assertNotNull(type);
         final String typeName = type.getName();
 
-        final SpecificationCache specificationCache = getCache();
+        final SpecificationCacheDefault specificationCache = getCache();
         synchronized (specificationCache) {
             final ObjectSpecification spec = specificationCache.get(typeName);
             if (spec != null) {
@@ -446,6 +447,12 @@ public class ObjectReflectorDefault implements ObjectReflector, DebuggableWithTi
         return spec;
     }
 
+    @Override
+    public ObjectSpecification lookupByObjectType(String objectType) {
+        return getCache().getByObjectType(objectType);
+    }
+
+
     // ////////////////////////////////////////////////////////////////////
     // injectInto
     // ////////////////////////////////////////////////////////////////////
@@ -468,7 +475,6 @@ public class ObjectReflectorDefault implements ObjectReflector, DebuggableWithTi
 
         getClassSubstitutor().injectInto(candidate);
         getCollectionTypeRegistry().injectInto(candidate);
-
     }
 
     // /////////////////////////////////////////////////////////////
@@ -520,7 +526,7 @@ public class ObjectReflectorDefault implements ObjectReflector, DebuggableWithTi
         return facetProcessor;
     }
 
-    private SpecificationCache getCache() {
+    private SpecificationCacheDefault getCache() {
         return cache;
     }
 
@@ -591,5 +597,26 @@ public class ObjectReflectorDefault implements ObjectReflector, DebuggableWithTi
     protected Set<FacetDecorator> getFacetDecoratorSet() {
         return facetDecoratorSet.getFacetDecorators();
     }
+
+    @Override
+    public void validateSpecifications() {
+        final Map<String, ObjectSpecification> specByObjectType = Maps.newHashMap();
+        for (final ObjectSpecification objSpec : allSpecifications()) {
+            final ObjectTypeFacet facet = objSpec.getFacet(ObjectTypeFacet.class);
+            if (facet == null) {
+                continue;
+            }
+            final String objectTypeValue = facet.value();
+            final ObjectSpecification existingSpec = specByObjectType.put(objectTypeValue, objSpec);
+            if (existingSpec == null) {
+                continue;
+            }
+            throw new MetaModelInvalidException(MessageFormat.format("Cannot have two entities with same object type (@ObjectType facet or equivalent) Value; " + "both {0} and {1} are annotated with value of ''{2}''.", existingSpec.getFullIdentifier(), objSpec.getFullIdentifier(), objectTypeValue));
+        }
+        
+        getCache().setCacheByObjectType(specByObjectType);
+    }
+
+
 
 }

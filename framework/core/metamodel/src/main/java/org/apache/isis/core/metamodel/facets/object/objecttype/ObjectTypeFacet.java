@@ -1,4 +1,4 @@
-package org.apache.isis.core.progmodel.facets.object.objecttype;
+package org.apache.isis.core.metamodel.facets.object.objecttype;
 
 
 import org.apache.isis.core.metamodel.facets.SingleStringValueFacet;

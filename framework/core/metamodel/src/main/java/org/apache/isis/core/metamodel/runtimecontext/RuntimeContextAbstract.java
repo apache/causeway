@@ -63,6 +63,7 @@ public abstract class RuntimeContextAbstract implements RuntimeContext, Specific
         getQuerySubmitter().injectInto(candidate);
         getServicesProvider().injectInto(candidate);
         getSpecificationLookup().injectInto(candidate);
+        
     }
 
     @Override
@@ -91,6 +92,11 @@ public abstract class RuntimeContextAbstract implements RuntimeContext, Specific
             @Override
             public Collection<ObjectSpecification> allSpecifications() {
                 return specificationLoader.allSpecifications();
+            }
+
+            @Override
+            public ObjectSpecification lookupByObjectType(String objectType) {
+                return specificationLoader.lookupByObjectType(objectType);
             }
         });
     }

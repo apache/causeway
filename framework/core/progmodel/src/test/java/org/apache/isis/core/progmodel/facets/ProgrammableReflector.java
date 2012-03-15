@@ -28,7 +28,6 @@ import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.ObjectReflector;
 import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistry;
-import org.apache.isis.core.metamodel.specloader.speccache.SpecificationCache;
 
 public class ProgrammableReflector implements ObjectReflector {
 
@@ -80,10 +79,6 @@ public class ProgrammableReflector implements ObjectReflector {
     public void shutdown() {
     }
 
-    public void setCache(final SpecificationCache cache) {
-        throw new NotYetImplementedException();
-    }
-
     @Override
     public boolean loaded(final Class<?> cls) {
         throw new NotYetImplementedException();
@@ -113,11 +108,6 @@ public class ProgrammableReflector implements ObjectReflector {
     }
 
     @Override
-    public void setServiceClasses(final List<Class<?>> serviceClasses) {
-        throw new NotYetImplementedException();
-    }
-
-    @Override
     public boolean loadSpecifications(final List<Class<?>> typesToLoad, final Class<?> typeToIgnore) {
         return false;
     }
@@ -125,6 +115,21 @@ public class ProgrammableReflector implements ObjectReflector {
     @Override
     public boolean loadSpecifications(final List<Class<?>> typesToLoad) {
         return false;
+    }
+
+    @Override
+    public ObjectSpecification lookupByObjectType(String objectType) {
+        return null;
+    }
+
+    @Override
+    public void setServiceClasses(final List<Class<?>> serviceClasses) {
+        throw new NotYetImplementedException();
+    }
+
+    @Override
+    public void validateSpecifications() {
+        throw new NotYetImplementedException();
     }
 
 }

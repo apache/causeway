@@ -43,4 +43,16 @@ public class SpecificationLookupDelegator extends SpecificationLookupAbstract {
         return specificationLookupDelegate.allSpecifications();
     }
 
+    @Override
+    public ObjectSpecification lookupByObjectType(String objectType) {
+        return specificationLookupDelegate.lookupByObjectType(objectType);
+    }
+
+    @Override
+    public void injectInto(Object candidate) {
+        super.injectInto(candidate);
+        if(specificationLookupDelegate != null) {
+            specificationLookupDelegate.injectInto(candidate);
+        }
+    }
 }

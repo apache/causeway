@@ -28,6 +28,11 @@ public class MetaModelValidatorDefault extends MetaModelValidatorAbstract {
      */
     @Override
     public void validate() {
+        validateSpecifications();
+    }
+
+    private void validateSpecifications() {
+        getSpecificationLoader().validateSpecifications();
     }
 
 }

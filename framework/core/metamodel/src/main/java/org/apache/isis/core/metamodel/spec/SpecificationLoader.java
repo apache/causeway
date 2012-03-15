@@ -23,6 +23,7 @@ import java.util.List;
 
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
 
 public interface SpecificationLoader extends ApplicationScopedComponent, DebuggableWithTitle, SpecificationLookup {
 
@@ -66,5 +67,10 @@ public interface SpecificationLoader extends ApplicationScopedComponent, Debugga
      * Loads the specifications of the specified types.
      */
     boolean loadSpecifications(List<Class<?>> typesToLoad);
+
+    /**
+     * Populated as a result of running {@link MetaModelValidator#validate() validation} after all specs have been loaded. 
+     */
+    void validateSpecifications();
 
 }

@@ -24,6 +24,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.AnnotationBasedFacetFactoryAbstract;
+import org.apache.isis.core.metamodel.facets.object.objecttype.ObjectTypeFacet;
 
 public class ObjectTypeAnnotationFacetFactory extends AnnotationBasedFacetFactoryAbstract {
 

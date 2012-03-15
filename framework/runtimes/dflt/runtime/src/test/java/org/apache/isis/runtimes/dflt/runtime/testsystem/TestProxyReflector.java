@@ -34,7 +34,6 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderAware;
 import org.apache.isis.core.metamodel.specloader.ObjectReflector;
 import org.apache.isis.core.metamodel.specloader.classsubstitutor.ClassSubstitutor;
-import org.apache.isis.core.metamodel.specloader.speccache.SpecificationCache;
 import org.apache.isis.core.metamodel.testspec.TestProxySpecification;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.ObjectFactory;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
@@ -114,10 +113,6 @@ public class TestProxyReflector implements ObjectReflector {
         return objectFactory;
     }
 
-    public void setCache(final SpecificationCache cache) {
-        // ignored.
-    }
-
     public void setObjectPersistor(final PersistenceSession objectPersistor) {
         // ignored.
     }
@@ -162,6 +157,16 @@ public class TestProxyReflector implements ObjectReflector {
     @Override
     public boolean loadSpecifications(final List<Class<?>> typesToLoad) {
         return false;
+    }
+
+    @Override
+    public ObjectSpecification lookupByObjectType(String objectType) {
+        return null;
+    }
+
+    @Override
+    public void validateSpecifications() {
+        // ignored
     }
 
 }

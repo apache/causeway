@@ -29,6 +29,7 @@ import org.junit.Test;
 
 import org.apache.isis.applib.annotation.ObjectType;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
+import org.apache.isis.core.metamodel.facets.object.objecttype.ObjectTypeFacet;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryJUnit4TestCase;
 
 public class ObjectTypeAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4TestCase {

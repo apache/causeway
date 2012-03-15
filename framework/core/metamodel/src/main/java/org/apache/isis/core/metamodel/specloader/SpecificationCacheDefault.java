@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.specloader.speccache;
+package org.apache.isis.core.metamodel.specloader;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -26,28 +26,42 @@ import java.util.Map;
 import com.google.common.collect.Maps;
 
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
 
-public class SpecificationCacheDefault implements SpecificationCache {
+class SpecificationCacheDefault {
+    
     private final Map<String, ObjectSpecification> specByClassName = Maps.newHashMap();
+    private Map<String, ObjectSpecification> specByObjectType;
 
-    @Override
     public ObjectSpecification get(final String className) {
         return specByClassName.get(className);
     }
 
-    @Override
     public void cache(final String className, final ObjectSpecification spec) {
         specByClassName.put(className, spec);
     }
 
-    @Override
     public void clear() {
         specByClassName.clear();
     }
 
-    @Override
     public Collection<ObjectSpecification> allSpecifications() {
         return Collections.unmodifiableCollection(specByClassName.values());
+    }
+
+    public ObjectSpecification getByObjectType(String objectType) {
+        if (specByObjectType == null) {
+            throw new IllegalStateException("SpecificationCache by object type has not yet been initialized");
+        }
+        return specByObjectType.get(objectType);
+    }
+
+    /**
+     * Populated as a result of running {@link MetaModelValidator#validate() validation} after all specs have been loaded. 
+     */
+    void setCacheByObjectType(Map<String, ObjectSpecification> specByObjectType) {
+        this.specByObjectType = Maps.newHashMap();
+        this.specByObjectType.putAll(specByObjectType);
     }
 
 }
