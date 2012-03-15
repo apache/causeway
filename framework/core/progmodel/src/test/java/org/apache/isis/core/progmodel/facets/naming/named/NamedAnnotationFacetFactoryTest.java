@@ -19,23 +19,31 @@
 
 package org.apache.isis.core.progmodel.facets.naming.named;
 
+import static org.hamcrest.CoreMatchers.*;
+import static org.junit.Assert.assertThat;
+
 import java.lang.reflect.Method;
 import java.util.Collection;
 
+import org.junit.Test;
+
 import org.apache.isis.applib.annotation.Named;
+import org.apache.isis.core.commons.matchers.IsisMatchers;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessParameterContext;
 import org.apache.isis.core.metamodel.facets.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.named.NamedFacetAbstract;
+import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryJUnit4TestCase;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.progmodel.facets.members.named.annotation.NamedAnnotationOnMemberFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.named.annotation.NamedAnnotationOnTypeFacetFactory;
 import org.apache.isis.core.progmodel.facets.param.named.annotation.NamedAnnotationOnParameterFacetFactory;
 
-public class NamedAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
+public class NamedAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4TestCase {
 
+    @Test
     public void testNamedAnnotationPickedUpOnClass() {
 
         final NamedAnnotationOnTypeFacetFactory facetFactory = new NamedAnnotationOnTypeFacetFactory();
@@ -44,17 +52,19 @@ public class NamedAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
         @Named("some name")
         class Customer {
         }
+        
+        expectNoMethodsRemoved();
+        
         facetFactory.process(new ProcessClassContext(Customer.class, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(NamedFacet.class);
-        assertNotNull(facet);
-        assertTrue(facet instanceof NamedFacetAbstract);
+        assertThat(facet, is(not(nullValue())));
+        assertThat(facet instanceof NamedFacetAbstract, is(true));
         final NamedFacetAbstract namedFacetAbstract = (NamedFacetAbstract) facet;
-        assertEquals("some name", namedFacetAbstract.value());
-
-        assertNoMethodsRemoved();
+        assertThat(namedFacetAbstract.value(), equalTo("some name"));
     }
 
+    @Test
     public void testNamedAnnotationPickedUpOnProperty() {
 
         final NamedAnnotationOnMemberFacetFactory facetFactory = new NamedAnnotationOnMemberFacetFactory();
@@ -69,15 +79,15 @@ public class NamedAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
         }
         final Method actionMethod = findMethod(Customer.class, "getNumberOfOrders");
 
+        expectNoMethodsRemoved();
+
         facetFactory.process(new ProcessMethodContext(Customer.class, actionMethod, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(NamedFacet.class);
-        assertNotNull(facet);
-        assertTrue(facet instanceof NamedFacetAbstract);
+        assertThat(facet, is(not(nullValue())));
+        assertThat(facet instanceof NamedFacetAbstract, is(true));
         final NamedFacetAbstract namedFacetAbstract = (NamedFacetAbstract) facet;
-        assertEquals("some name", namedFacetAbstract.value());
-
-        assertNoMethodsRemoved();
+        assertThat(namedFacetAbstract.value(), equalTo("some name"));
     }
 
     public void testNamedAnnotationPickedUpOnCollection() {
@@ -93,15 +103,15 @@ public class NamedAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
         }
         final Method actionMethod = findMethod(Customer.class, "getOrders");
 
+        expectNoMethodsRemoved();
+
         facetFactory.process(new ProcessMethodContext(Customer.class, actionMethod, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(NamedFacet.class);
-        assertNotNull(facet);
-        assertTrue(facet instanceof NamedFacetAbstract);
+        assertThat(facet, is(not(nullValue())));
+        assertThat(facet instanceof NamedFacetAbstract, is(true));
         final NamedFacetAbstract namedFacetAbstract = (NamedFacetAbstract) facet;
-        assertEquals("some name", namedFacetAbstract.value());
-
-        assertNoMethodsRemoved();
+        assertThat(namedFacetAbstract.value(), equalTo("some name"));
     }
 
     public void testNamedAnnotationPickedUpOnAction() {
@@ -116,15 +126,15 @@ public class NamedAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
         }
         final Method actionMethod = findMethod(Customer.class, "someAction");
 
+        expectNoMethodsRemoved();
+
         facetFactory.process(new ProcessMethodContext(Customer.class, actionMethod, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(NamedFacet.class);
-        assertNotNull(facet);
-        assertTrue(facet instanceof NamedFacetAbstract);
+        assertThat(facet, is(not(nullValue())));
+        assertThat(facet instanceof NamedFacetAbstract, is(true));
         final NamedFacetAbstract namedFacetAbstract = (NamedFacetAbstract) facet;
-        assertEquals("some name", namedFacetAbstract.value());
-
-        assertNoMethodsRemoved();
+        assertThat(namedFacetAbstract.value(), equalTo("some name"));
     }
 
     public void testNamedAnnotationPickedUpOnActionParameter() {
@@ -139,13 +149,15 @@ public class NamedAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
         }
         final Method actionMethod = findMethod(Customer.class, "someAction", new Class[] { int.class });
 
+        expectNoMethodsRemoved();
+
         facetFactory.processParams(new ProcessParameterContext(actionMethod, 0, facetedMethodParameter));
 
         final Facet facet = facetedMethodParameter.getFacet(NamedFacet.class);
-        assertNotNull(facet);
-        assertTrue(facet instanceof NamedFacetAbstract);
+        assertThat(facet, is(not(nullValue())));
+        assertThat(facet instanceof NamedFacetAbstract, is(true));
         final NamedFacetAbstract namedFacetAbstract = (NamedFacetAbstract) facet;
-        assertEquals("some name", namedFacetAbstract.value());
+        assertThat(namedFacetAbstract.value(), equalTo("some name"));
     }
 
 }

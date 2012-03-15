@@ -44,21 +44,21 @@ public class GivenJpaNamedQueryAnnotationFacetFactoryWhenHasAnnotationsTest
     public void testNamedQueryAnnotationPickedUpOnClass() {
         expectJpaNamedQueryFacet();
 
-        facetFactory.process(new FacetFactory.ProcessClassContext(SimpleObjectWithNamedQuery.class, methodRemover, mockObjSpec));
+        facetFactory.process(new FacetFactory.ProcessClassContext(SimpleObjectWithNamedQuery.class, methodRemover, objSpec));
     }
 
     @Test
     public void testNamedQueriesAnnotationPickedUpOnClass() {
         expectJpaNamedQueriesFacet();
 
-        facetFactory.process(new FacetFactory.ProcessClassContext(SimpleObjectWithNamedQueries.class, methodRemover, mockObjSpec));
+        facetFactory.process(new FacetFactory.ProcessClassContext(SimpleObjectWithNamedQueries.class, methodRemover, objSpec));
     }
 
     @Test
     public void testNamedQueryAnnotationValueType() {
         expectJpaNamedQueryFacet();
 
-        facetFactory.process(new FacetFactory.ProcessClassContext(SimpleObjectWithNamedQuery.class, methodRemover, mockObjSpec));
+        facetFactory.process(new FacetFactory.ProcessClassContext(SimpleObjectWithNamedQuery.class, methodRemover, objSpec));
 
         final List<NamedQuery> namedQueries = facet.getNamedQueries();
         assertEquals(1, namedQueries.size());
@@ -72,7 +72,7 @@ public class GivenJpaNamedQueryAnnotationFacetFactoryWhenHasAnnotationsTest
     public void testNamedQueriesAnnotationValueType() {
         expectJpaNamedQueriesFacet();
 
-        facetFactory.process(new FacetFactory.ProcessClassContext(SimpleObjectWithNamedQueries.class, methodRemover, mockObjSpec));
+        facetFactory.process(new FacetFactory.ProcessClassContext(SimpleObjectWithNamedQueries.class, methodRemover, objSpec));
 
         final List<NamedQuery> namedQueries = facet.getNamedQueries();
         assertEquals(2, namedQueries.size());
@@ -90,7 +90,7 @@ public class GivenJpaNamedQueryAnnotationFacetFactoryWhenHasAnnotationsTest
     public void testWhenAnnotatedWithBothNamedQueriesAndNamedQueryWillIgnoreTheNamedQuery() {
         expectJpaNamedQueriesFacet();
 
-        facetFactory.process(new FacetFactory.ProcessClassContext(SimpleObjectWithNamedQueriesAndNamedQuery.class, methodRemover, mockObjSpec));
+        facetFactory.process(new FacetFactory.ProcessClassContext(SimpleObjectWithNamedQueriesAndNamedQuery.class, methodRemover, objSpec));
 
         final List<NamedQuery> namedQueries = facet.getNamedQueries();
         assertEquals(2, namedQueries.size());
@@ -109,7 +109,7 @@ public class GivenJpaNamedQueryAnnotationFacetFactoryWhenHasAnnotationsTest
         expectJpaNamedQueryFacet();
         expectMethodRemoverNeverCalled();
 
-        facetFactory.process(new FacetFactory.ProcessClassContext(SimpleObjectWithNamedQuery.class, methodRemover, mockObjSpec));
+        facetFactory.process(new FacetFactory.ProcessClassContext(SimpleObjectWithNamedQuery.class, methodRemover, objSpec));
     }
 
     @Test
@@ -117,7 +117,7 @@ public class GivenJpaNamedQueryAnnotationFacetFactoryWhenHasAnnotationsTest
         expectJpaNamedQueriesFacet();
         expectMethodRemoverNeverCalled();
 
-        facetFactory.process(new FacetFactory.ProcessClassContext(SimpleObjectWithNamedQueries.class, methodRemover, mockObjSpec));
+        facetFactory.process(new FacetFactory.ProcessClassContext(SimpleObjectWithNamedQueries.class, methodRemover, objSpec));
     }
 
 
@@ -135,7 +135,7 @@ public class GivenJpaNamedQueryAnnotationFacetFactoryWhenHasAnnotationsTest
     private void expectJpaNamedQueryFacet() {
         context.checking(new Expectations() {
             {
-                one(mockObjSpec)
+                one(objSpec)
                         .addFacet(
                         with(IsisMatchers
                         .anInstanceOf(JpaNamedQueryFacetAnnotation.class)));
@@ -147,7 +147,7 @@ public class GivenJpaNamedQueryAnnotationFacetFactoryWhenHasAnnotationsTest
     private void expectJpaNamedQueriesFacet() {
         context.checking(new Expectations() {
             {
-                one(mockObjSpec)
+                one(objSpec)
                         .addFacet(
                         with(IsisMatchers
                         .anInstanceOf(JpaNamedQueriesFacetAnnotation.class)));

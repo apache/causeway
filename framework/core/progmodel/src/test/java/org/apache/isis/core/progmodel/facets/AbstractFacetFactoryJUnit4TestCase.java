@@ -19,20 +19,30 @@
 
 package org.apache.isis.core.progmodel.facets;
 
+import static org.hamcrest.CoreMatchers.*;
+import static org.junit.Assert.assertThat;
+
 import java.lang.reflect.Method;
 import java.util.List;
 
+import org.jmock.Expectations;
 import org.jmock.auto.Mock;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Rule;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MethodRemover;
+import org.apache.isis.core.metamodel.facets.FacetedMethod;
+import org.apache.isis.core.metamodel.facets.FacetedMethodParameter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.specloader.ObjectReflector;
+import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest.Customer;
 import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2;
 import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2.Mode;
 
@@ -48,8 +58,10 @@ public abstract class AbstractFacetFactoryJUnit4TestCase {
     @Mock
     protected FacetHolder facetHolder;
 
+    protected FacetHolder facetHolderImpl;
+
     @Mock
-    protected ObjectSpecification mockObjSpec;
+    protected ObjectSpecification objSpec;
     @Mock
     protected OneToOneAssociation oneToOneAssociation;
     @Mock
@@ -57,6 +69,23 @@ public abstract class AbstractFacetFactoryJUnit4TestCase {
     @Mock
     protected OneToOneActionParameter actionParameter;
 
+    protected FacetedMethod facetedMethod;
+    protected FacetedMethodParameter facetedMethodParameter;
+
+    @Before
+    public void setUpFacetedMethodAndParameter() throws Exception {
+        facetHolderImpl = new FacetHolderImpl();
+        facetedMethod = FacetedMethod.createProperty(Customer.class, "firstName");
+        facetedMethodParameter = new FacetedMethodParameter(String.class);
+    }
+    
+    @After
+    public void tearDown() throws Exception {
+        facetHolderImpl = null;
+        facetedMethod = null;
+        facetedMethodParameter = null;
+    }
+    
     protected boolean contains(final Class<?>[] types, final Class<?> type) {
         return Utils.contains(types, type);
     }
@@ -75,6 +104,10 @@ public abstract class AbstractFacetFactoryJUnit4TestCase {
 
     protected Method findMethod(final Class<?> type, final String methodName) {
         return Utils.findMethod(type, methodName);
+    }
+
+    protected void expectNoMethodsRemoved() {
+        context.never(methodRemover);
     }
 
 }

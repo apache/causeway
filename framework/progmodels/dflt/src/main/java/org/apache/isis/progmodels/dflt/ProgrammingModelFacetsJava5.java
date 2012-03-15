@@ -94,6 +94,8 @@ import org.apache.isis.core.progmodel.facets.object.named.annotation.NamedAnnota
 import org.apache.isis.core.progmodel.facets.object.named.staticmethod.NamedFacetViaSingularNameStaticMethodFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.notpersistable.NotPersistableAnnotationFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.notpersistable.NotPersistableMarkerInterfacesFacetFactory;
+import org.apache.isis.core.progmodel.facets.object.objecttype.ObjectTypeAnnotationFacetFactory;
+import org.apache.isis.core.progmodel.facets.object.objecttype.ObjectTypeDerivedFromClassNameFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.orderactions.ActionOrderAnnotationFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.orderfields.FieldOrderAnnotationFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.parseable.ParseableFacetFactory;
@@ -186,7 +188,8 @@ public class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract {
         // must be first, so any Facets created can be replaced by other
         // FacetFactorys later.
         addFactory(FallbackFacetFactory.class);
-
+        addFactory(ObjectTypeDerivedFromClassNameFacetFactory.class);
+        
         addFactory(IteratorFilteringFacetFactory.class);
         addFactory(SyntheticMethodFilteringFacetFactory.class);
         addFactory(RemoveSuperclassMethodsFacetFactory.class);
@@ -209,6 +212,7 @@ public class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract {
         addFactory(EnumFacetFactory.class);
         addFactory(ParameterChoicesFacetDerivedFromChoicesFacetFacetFactory.class);
         addFactory(PropertyChoicesFacetDerivedFromChoicesFacetFacetFactory.class);
+
 
         // properties
         addFactory(PropertyAccessorFacetFactory.class);
@@ -245,6 +249,8 @@ public class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract {
         addFactory(HiddenFacetViaAlwaysHideMethodFacetFactory.class);
         addFactory(HiddenFacetViaHideMethodFacetFactory.class);
 
+        // objects
+        addFactory(ObjectTypeAnnotationFacetFactory.class);
         addFactory(IconMethodFacetFactory.class);
 
         addFactory(CreatedCallbackFacetFactory.class);
@@ -290,7 +296,6 @@ public class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract {
         addFactory(HiddenAnnotationForTypeFacetFactory.class);
         addFactory(HiddenAnnotationForMemberFacetFactory.class);
 
-        // KAM
         addFactory(HiddenObjectViaHiddenMethodFacetFactory.class);
         addFactory(DisabledObjectViaDisabledMethodFacetFactory.class);
 

@@ -6958,6 +6958,29 @@ public class InputForm {
       </sect1>
 
       <sect1>
+        <title>@ObjectType</title>
+
+        <para>The <classname>@ObjectType</classname> annotation is used to
+        provide a unique abbreviation for the object's class name. This is
+        used internally to generate a string representation of an objects
+        identity (the Oid).</para>
+
+        <para>For example:</para>
+
+        <programlisting format="linespecific">@ObjectType("ORD")
+public class Order {
+
+    ...
+}</programlisting>
+
+        <para>If no <code>@ObjectType</code> annotation is present, then the
+        framework uses the fully-qualified class name.</para>
+
+        <para>If an <code>@ObjectType</code> is not unique, then the framework
+        will fail to boot.</para>
+      </sect1>
+
+      <sect1>
         <title>@Optional</title>
 
         <para>By default, the system assumes that all properties of an object

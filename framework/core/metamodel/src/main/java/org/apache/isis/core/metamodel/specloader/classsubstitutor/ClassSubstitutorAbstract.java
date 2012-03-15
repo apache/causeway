@@ -105,7 +105,7 @@ public abstract class ClassSubstitutorAbstract implements ClassSubstitutor {
     public void injectInto(final Object candidate) {
         if (ClassSubstitutorAware.class.isAssignableFrom(candidate.getClass())) {
             final ClassSubstitutorAware cast = ClassSubstitutorAware.class.cast(candidate);
-            cast.setClassInstrumentor(this);
+            cast.setClassSubstitutor(this);
         }
     }
 

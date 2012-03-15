@@ -17,9 +17,24 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.specloader.classsubstitutor;
+package org.apache.isis.applib.annotation;
 
-public interface ClassSubstitutorAware {
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Inherited;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-    public void setClassSubstitutor(ClassSubstitutor classSubstitutor);
+/**
+ * Provides a unique abbreviation for the object type, eg &quot;CUS&quot; for Customer.
+ * 
+ * <p>
+ * This value, if specified, is used in the serialized form of the object's OID.  An OID is
+ * used by the framework to unique identify an object over time (same concept as a URN). 
+ */
+@Inherited
+@Target({ ElementType.TYPE })
+@Retention(RetentionPolicy.RUNTIME)
+public @interface ObjectType {
+    String value();
 }
