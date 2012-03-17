@@ -81,17 +81,18 @@ public final class SqlObjectStore implements ObjectStore {
         objectMappingLookup.init();
 
         final DatabaseConnector connector = connectionPool.acquire();
-        isInitialized = connector.hasColumn(Sql.tableIdentifier(TABLE_NAME), Defaults.getPkIdLabel());
+        final String tableIdentifier = Sql.tableIdentifier(TABLE_NAME);
+        isInitialized = connector.hasColumn(tableIdentifier, Defaults.getPkIdLabel());
         if (!isInitialized) {
-            if (connector.hasTable(Sql.tableIdentifier(TABLE_NAME))) {
+            if (connector.hasTable(tableIdentifier)) {
                 final StringBuffer sql = new StringBuffer();
                 sql.append("drop table ");
-                sql.append(Sql.tableIdentifier(TABLE_NAME));
+                sql.append(tableIdentifier);
                 connector.update(sql.toString());
             }
             final StringBuffer sql = new StringBuffer();
             sql.append("create table ");
-            sql.append(Sql.tableIdentifier(TABLE_NAME));
+            sql.append(tableIdentifier);
             sql.append(" (");
             sql.append(Defaults.getPkIdLabel());
             sql.append(" int, ");
@@ -271,6 +272,15 @@ public final class SqlObjectStore implements ObjectStore {
 
     @Override
     public void endTransaction() {
+        final DatabaseConnector connector = connectionPool.acquire();
+        try {
+            connector.begin();
+            connector.update("COMMIT;");
+            connector.commit();
+            // connector.close();
+        } finally {
+            connectionPool.release(connector);
+        }
     }
 
     @Override
@@ -281,7 +291,8 @@ public final class SqlObjectStore implements ObjectStore {
         final IsisTransactionManager transactionManager = IsisContext.getTransactionManager();
         final MessageBroker messageBroker = IsisContext.getMessageBroker();
         final UpdateNotifier updateNotifier = IsisContext.getUpdateNotifier();
-        final SqlExecutionContext context = new SqlExecutionContext(connector, transactionManager, messageBroker, updateNotifier);
+        final SqlExecutionContext context =
+            new SqlExecutionContext(connector, transactionManager, messageBroker, updateNotifier);
         try {
             for (final PersistenceCommand command : commands) {
                 command.execute(context);
@@ -330,7 +341,8 @@ public final class SqlObjectStore implements ObjectStore {
         }
     }
 
-    private void addSpecQueryInstances(final ObjectSpecification specification, final DatabaseConnector connector, final PersistenceQueryFindByPattern query, final Vector<ObjectAdapter> matchingInstances) {
+    private void addSpecQueryInstances(final ObjectSpecification specification, final DatabaseConnector connector,
+        final PersistenceQueryFindByPattern query, final Vector<ObjectAdapter> matchingInstances) {
 
         if (specification.isAbstract() == false) {
             final ObjectMapping mapper = objectMappingLookup.getMapping(specification, connector);
@@ -364,7 +376,8 @@ public final class SqlObjectStore implements ObjectStore {
         return instanceArray;
     }
 
-    private void addSpecInstances(final ObjectSpecification spec, final DatabaseConnector connector, final Vector<ObjectAdapter> matchingInstances) {
+    private void addSpecInstances(final ObjectSpecification spec, final DatabaseConnector connector,
+        final Vector<ObjectAdapter> matchingInstances) {
 
         if (spec.isAbstract() == false) {
             final ObjectMapping mapper = objectMappingLookup.getMapping(spec, connector);
