@@ -26,8 +26,8 @@ import org.joda.time.DateTimeZone;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 
 /**
- * Provides objectstore defaults. Most significantly, maintains the object store
- * default TimeZone, and maintains Calendar.
+ * Provides objectstore defaults. Most significantly, maintains the object store default TimeZone, and maintains
+ * Calendar.
  * 
  * 
  * @version $Rev$ $Date$
@@ -57,6 +57,8 @@ public class Defaults {
         final int isTrue = useVersioningProperty.compareToIgnoreCase("true");
         useVersioning(isTrue == 0);
 
+        defineDatabaseCommands();
+
         final String BASE_DATATYPE = propertiesBase + ".datatypes.";
         final IsisConfiguration dataTypes = isisConfiguration.getProperties(BASE_DATATYPE);
         populateSqlDataTypes(dataTypes, BASE_DATATYPE);
@@ -71,13 +73,14 @@ public class Defaults {
      * @param property
      * @return
      */
-    protected static String getStringProperty(final String propertiesBase, final IsisConfiguration configParameters, final String property) {
+    protected static String getStringProperty(final String propertiesBase, final IsisConfiguration configParameters,
+        final String property) {
         return configParameters.getString(propertiesBase + ".default." + property, property);
     }
 
     /**
-     * Returns a string value by looking up "isis.persistor.sql.default.XXXX",
-     * returning the specified default, if no value was found.
+     * Returns a string value by looking up "isis.persistor.sql.default.XXXX", returning the specified default, if no
+     * value was found.
      * 
      * @param propertiesBase
      * @param configParameters
@@ -85,13 +88,14 @@ public class Defaults {
      * @param defaultValue
      * @return
      */
-    protected static String getStringProperty(final String propertiesBase, final IsisConfiguration configParameters, final String property, final String defaultValue) {
+    protected static String getStringProperty(final String propertiesBase, final IsisConfiguration configParameters,
+        final String property, final String defaultValue) {
         return configParameters.getString(propertiesBase + ".default." + property, defaultValue);
     }
 
     /**
-     * Returns an integer value by looking up "isis.persistor.sql.default.XXXX",
-     * returning the specified default, if no value was found.
+     * Returns an integer value by looking up "isis.persistor.sql.default.XXXX", returning the specified default, if no
+     * value was found.
      * 
      * @param propertiesBase
      * @param configParameters
@@ -99,7 +103,8 @@ public class Defaults {
      * @param defaultValue
      * @return
      */
-    protected static int getIntProperty(final String propertiesBase, final IsisConfiguration configParameters, final String property, final int defaultValue) {
+    protected static int getIntProperty(final String propertiesBase, final IsisConfiguration configParameters,
+        final String property, final int defaultValue) {
         return configParameters.getInteger(propertiesBase + ".default." + property, defaultValue);
     }
 
@@ -196,11 +201,9 @@ public class Defaults {
     static String TYPE_DEFAULT;
 
     /**
-     * Default SQL data types used to define the fields in the database. By
-     * providing this method, we allow the user an opportunity to override these
-     * types by specifying alternatives in sql.properties (or which ever). For
-     * example, Postgresql does not know about DATETIME, but can use TIMESTAMP
-     * instead.
+     * Default SQL data types used to define the fields in the database. By providing this method, we allow the user an
+     * opportunity to override these types by specifying alternatives in sql.properties (or which ever). For example,
+     * Postgresql does not know about DATETIME, but can use TIMESTAMP instead.
      * 
      * @param dataTypes
      * @param baseName
@@ -300,8 +303,38 @@ public class Defaults {
         if (useVersioning() == false) {
             return false;
         }
-        final String useVersioningProperty = getStringProperty(propertiesBase, isisConfiguration, "versioning." + shortIdentifier, "true");
+        final String useVersioningProperty =
+            getStringProperty(propertiesBase, isisConfiguration, "versioning." + shortIdentifier, "true");
         return (useVersioningProperty.compareToIgnoreCase("true") == 0);
+    }
+
+    // }}
+
+    // {{ Database commands
+
+    private static String START_TRANSACTION;
+    private static String ABORT_TRANSACTION;
+    private static String COMMIT_TRANSACTION;
+
+    private static void defineDatabaseCommands() {
+        START_TRANSACTION =
+            getStringProperty(propertiesBase, isisConfiguration, "command.beginTransaction", "START TRANSACTION;");
+        ABORT_TRANSACTION =
+            getStringProperty(propertiesBase, isisConfiguration, "command.abortTransaction", "ROLLBACK;");
+        COMMIT_TRANSACTION =
+            getStringProperty(propertiesBase, isisConfiguration, "command.commitTransaction", "COMMIT;");
+    }
+
+    public static String START_TRANSACTION() {
+        return START_TRANSACTION;
+    }
+
+    public static String ABORT_TRANSACTION() {
+        return ABORT_TRANSACTION;
+    }
+
+    public static String COMMIT_TRANSACTION() {
+        return COMMIT_TRANSACTION;
     }
     // }}
 

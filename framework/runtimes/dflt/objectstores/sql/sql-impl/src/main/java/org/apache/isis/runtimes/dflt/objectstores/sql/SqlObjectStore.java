@@ -139,7 +139,30 @@ public final class SqlObjectStore implements ObjectStore {
     }
 
     @Override
+    public void startTransaction() {
+        executeSql(Defaults.START_TRANSACTION());
+    }
+
+    @Override
     public void abortTransaction() {
+        executeSql(Defaults.ABORT_TRANSACTION());
+    }
+
+    @Override
+    public void endTransaction() {
+        executeSql(Defaults.COMMIT_TRANSACTION());
+    }
+
+    private void executeSql(String sql) {
+        final DatabaseConnector connector = connectionPool.acquire();
+        try {
+            connector.begin();
+            connector.update(sql);
+            connector.commit();
+            // connector.close();
+        } finally {
+            connectionPool.release(connector);
+        }
     }
 
     @Override
@@ -271,19 +294,6 @@ public final class SqlObjectStore implements ObjectStore {
     }
 
     @Override
-    public void endTransaction() {
-        final DatabaseConnector connector = connectionPool.acquire();
-        try {
-            connector.begin();
-            connector.update("COMMIT;");
-            connector.commit();
-            // connector.close();
-        } finally {
-            connectionPool.release(connector);
-        }
-    }
-
-    @Override
     public void execute(final List<PersistenceCommand> commands) {
         final DatabaseConnector connector = connectionPool.acquire();
         connector.begin();
@@ -335,7 +345,7 @@ public final class SqlObjectStore implements ObjectStore {
             final ObjectAdapter[] instanceArray = new ObjectAdapter[matchingInstances.size()];
             matchingInstances.copyInto(instanceArray);
             return instanceArray;
-            
+
         } finally {
             connectionPool.release(connector);
         }
@@ -475,10 +485,6 @@ public final class SqlObjectStore implements ObjectStore {
 
     public void setMapperLookup(final ObjectMappingLookup mapperLookup) {
         this.objectMappingLookup = mapperLookup;
-    }
-
-    @Override
-    public void startTransaction() {
     }
 
     public static String getTableName() {

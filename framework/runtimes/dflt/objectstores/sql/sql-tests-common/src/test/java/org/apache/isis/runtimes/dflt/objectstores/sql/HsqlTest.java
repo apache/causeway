@@ -39,6 +39,9 @@ public class HsqlTest extends SqlIntegrationTestCommon {
             properties.put(SqlObjectStore.BASE_NAME + ".jdbc.user", "sa");
             properties.put(SqlObjectStore.BASE_NAME + ".jdbc.password", "");
             properties.put("isis.logging.objectstore", "on");
+            properties.put(SqlObjectStore.BASE_NAME + ".default.command.beginTransaction", "");
+            // properties.put(SqlObjectStore.BASE_NAME + ".command.abortTransaction", "");
+            // properties.put(SqlObjectStore.BASE_NAME + ".command.commitTransaction", "");
         }
 
         return properties;

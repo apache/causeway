@@ -92,6 +92,7 @@ public class PolymorphismTest extends SqlIntegrationTestCommonBase {
             properties.put(SqlObjectStore.BASE_NAME + ".jdbc.user", "sa");
             properties.put(SqlObjectStore.BASE_NAME + ".jdbc.password", "");
             properties.put("isis.logging.objectstore", "on");
+            properties.put(SqlObjectStore.BASE_NAME + ".default.command.beginTransaction", "");
         }
 
         return properties;
