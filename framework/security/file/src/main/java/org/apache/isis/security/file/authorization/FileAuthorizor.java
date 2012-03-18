@@ -65,6 +65,7 @@ public class FileAuthorizor extends AuthorizorAbstract implements FileAuthorizor
 
     private final String whiteListResourceName;
     private InputStream whiteListInputResource;
+    private final boolean whiteListEmptyAllowed;
 
     private final String blackListResourceName;
     private InputStream blackListInputResource;
@@ -78,10 +79,20 @@ public class FileAuthorizor extends AuthorizorAbstract implements FileAuthorizor
         // read from config
         this.resourceStreamSource = getConfiguration().getResourceStreamSource();
 
-        this.learn = getConfiguration().getBoolean(FileAuthorizationConstants.LEARN, FileAuthorizationConstants.LEARN_DEFAULT);
-        whiteListResourceName = getConfiguration().getString(FileAuthorizationConstants.WHITELIST_RESOURCE_KEY, FileAuthorizationConstants.WHITELIST_RESOURCE_DEFAULT);
+        this.learn =
+            getConfiguration().getBoolean(FileAuthorizationConstants.LEARN, FileAuthorizationConstants.LEARN_DEFAULT);
+        whiteListResourceName =
+            getConfiguration().getString(FileAuthorizationConstants.WHITELIST_RESOURCE_KEY,
+                FileAuthorizationConstants.WHITELIST_RESOURCE_DEFAULT);
         Assert.assertTrue(whiteListResourceName.length() > 0);
-        blackListResourceName = getConfiguration().getString(FileAuthorizationConstants.BLACKLIST_RESOURCE_KEY, FileAuthorizationConstants.BLACKLIST_RESOURCE_DEFAULT);
+
+        whiteListEmptyAllowed =
+            getConfiguration().getBoolean(FileAuthorizationConstants.WHITELIST_EMPTY,
+                FileAuthorizationConstants.WHITELIST_EMPTY_DEFAULT);
+
+        blackListResourceName =
+            getConfiguration().getString(FileAuthorizationConstants.BLACKLIST_RESOURCE_KEY,
+                FileAuthorizationConstants.BLACKLIST_RESOURCE_DEFAULT);
 
         findResources();
     }
@@ -95,7 +106,8 @@ public class FileAuthorizor extends AuthorizorAbstract implements FileAuthorizor
         if (blackListResourceName.length() > 0) {
             this.blackListInputResource = resourceStreamSource.readResource(blackListResourceName);
             if (blackListInputResource == null) {
-                throw new IsisException("Blacklist authorization file exists, but it cannot be read: " + blackListResourceName);
+                throw new IsisException("Blacklist authorization file exists, but it cannot be read: "
+                    + blackListResourceName);
             }
         } else {
             blackListInputResource = null;
@@ -115,9 +127,9 @@ public class FileAuthorizor extends AuthorizorAbstract implements FileAuthorizor
         if (learn) {
             return;
         }
-        cacheAuthorizationDetails(whiteListMap, whiteListInputResource);
+        cacheAuthorizationDetails(whiteListMap, whiteListInputResource, whiteListResourceName);
         if (blackListInputResource != null) {
-            cacheAuthorizationDetails(blackListMap, blackListInputResource);
+            cacheAuthorizationDetails(blackListMap, blackListInputResource, blackListResourceName);
         }
 
         JmxBeanServer.getInstance().register("file-authorizer", this);
@@ -129,18 +141,19 @@ public class FileAuthorizor extends AuthorizorAbstract implements FileAuthorizor
         final Map<String, List<String>> blackListMap = Maps.newHashMap();
 
         findResources();
-        cacheAuthorizationDetails(whiteListMap, whiteListInputResource);
+        cacheAuthorizationDetails(whiteListMap, whiteListInputResource, null);
         if (blackListInputResource != null) {
-            cacheAuthorizationDetails(blackListMap, blackListInputResource);
+            cacheAuthorizationDetails(blackListMap, blackListInputResource, null);
             this.blackListMap = blackListMap;
         }
         this.whiteListMap = whiteListMap;
     }
 
-    private void cacheAuthorizationDetails(final Map<String, List<String>> map, final InputStream inputStream) {
+    private void cacheAuthorizationDetails(final Map<String, List<String>> map, final InputStream inputStream,
+        String resourceName) {
         try {
             if (LOG.isInfoEnabled()) {
-                LOG.info("loading authorization details from " + whiteListResourceName);
+                LOG.info("loading authorization details from " + resourceName);
             }
             final BufferedReader buffReader = new BufferedReader(new InputStreamReader(inputStream));
             for (String line; (line = buffReader.readLine()) != null;) {
@@ -223,25 +236,27 @@ public class FileAuthorizor extends AuthorizorAbstract implements FileAuthorizor
         if (learn) {
             return learn(role, member);
         }
-        return isWhiteListed(role, member, qualifiers) && !isBlackListed(role, member, qualifiers);
+        return isWhiteListed(role, member, qualifiers, whiteListEmptyAllowed)
+            && !isBlackListed(role, member, qualifiers);
     }
 
-    private boolean isWhiteListed(final String role, final Identifier member, final List<String> qualifiers) {
-        return isListed(whiteListMap, role, member, qualifiers);
+    private boolean isWhiteListed(final String role, final Identifier member, final List<String> qualifiers,
+        boolean defaultIfEmpty) {
+        return isListed(whiteListMap, role, member, qualifiers, defaultIfEmpty);
     }
 
     private boolean isBlackListed(final String role, final Identifier member, final List<String> qualifiers) {
-        return isListed(blackListMap, role, member, qualifiers);
+        return isListed(blackListMap, role, member, qualifiers, false);
     }
 
     /*
-     * Work through the available entries from most specific to least. When one
-     * exists then determine the result of this method by looking for a
-     * compatible role between the entry and required role.
+     * Work through the available entries from most specific to least. When one exists then determine the result of this
+     * method by looking for a compatible role between the entry and required role.
      */
-    private boolean isListed(final Map<String, List<String>> map, final String role, final Identifier identifier, final List<String> qualifiers) {
+    private boolean isListed(final Map<String, List<String>> map, final String role, final Identifier identifier,
+        final List<String> qualifiers, boolean defaultIfEmpty) {
         if (map.isEmpty()) {// quick fail
-            return false;
+            return defaultIfEmpty;
         }
         List<String> roles;
         roles = rolesFor(map, identifier.toIdentityString(Identifier.CLASS_MEMBERNAME_PARAMETERS));
@@ -303,24 +318,25 @@ public class FileAuthorizor extends AuthorizorAbstract implements FileAuthorizor
                 LOG.debug("writing authorisation details to " + whiteListResourceName);
                 printedDebug = true; // just to stop flooding log
             }
-            
+
             final Set<Entry<String, List<String>>> entrySet = whiteListMap.entrySet();
             final List<Entry<String, List<String>>> entryList = Lists.newArrayList(entrySet);
-            
+
             final OutputStreamWriter fileWriter = new OutputStreamWriter(whiteListOutputResource);
             final BufferedWriter buffWriter = new BufferedWriter(fileWriter);
-            for(final Map.Entry<String, List<String>> entry: entryList) {
+            for (final Map.Entry<String, List<String>> entry : entryList) {
                 writeTo(entry, buffWriter);
             }
             buffWriter.flush();
             buffWriter.close();
-            
+
         } catch (final IOException e) {
             throw new IsisException(e);
         }
     }
 
-    public void writeTo(final Map.Entry<String, List<String>> entry, final BufferedWriter buffWriter) throws IOException {
+    public void writeTo(final Map.Entry<String, List<String>> entry, final BufferedWriter buffWriter)
+        throws IOException {
         final StringBuffer buff = new StringBuffer();
         buff.append(entry.getKey()).append(":");
         final List<String> roles = entry.getValue();
