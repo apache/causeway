@@ -1,0 +1,43 @@
+~~  Licensed to the Apache Software Foundation (ASF) under one
+~~  or more contributor license agreements.  See the NOTICE file
+~~  distributed with this work for additional information
+~~  regarding copyright ownership.  The ASF licenses this file
+~~  to you under the Apache License, Version 2.0 (the
+~~  "License"); you may not use this file except in compliance
+~~  with the License.  You may obtain a copy of the License at
+~~
+~~        http://www.apache.org/licenses/LICENSE-2.0
+~~
+~~  Unless required by applicable law or agreed to in writing,
+~~  software distributed under the License is distributed on an
+~~  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+~~  KIND, either express or implied.  See the License for the
+~~  specific language governing permissions and limitations
+~~  under the License.
+
+
+
+Jottings
+ 
+  This page is to capture any random jottings relating to this module prior 
+  to being moved into formal documentation. 
+
+Support for viewer config files 
+
+  The "Installer" architecture will automatically load configFiles, following 
+  the convention "xxx_yyy.properties".  When run from org.apache.isis.Isis or
+  org.apache.isis.WebServer, a "viewer installer" is also specified, meaning
+  that a config file for this viewer is also loaded (eg viewer_html.properties).
+  However, while IsisWebAppBootstrapper uses the installer architecture for
+  "back-end" components (security, persistor etc), it is not used for the viewers.
+  
+  Therefore, the IsisWebAppBootstrapper will load additional config files for
+  viewers if required, by searching for the "isis.viewers" context-param.
+  
+  For example:
+
+     <context-param>
+        <param-name>isis.viewers</param-name>
+        <param-value>restful</param-value>
+     </context-param>
+ 
