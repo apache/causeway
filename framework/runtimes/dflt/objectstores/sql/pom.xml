@@ -120,6 +120,15 @@
                 <artifactId>sql-tests-served</artifactId>
                 <version>0.3.0-incubating-SNAPSHOT</version>
             </dependency>
+
+			<!-- Test environment -->            
+		    <dependency>
+		      <groupId>org.mockito</groupId>
+		      <artifactId>mockito-all</artifactId>
+		      <version>1.9.0-rc1</version>
+		      <scope>test</scope>
+		    </dependency>
+            
         </dependencies>
     </dependencyManagement>
 

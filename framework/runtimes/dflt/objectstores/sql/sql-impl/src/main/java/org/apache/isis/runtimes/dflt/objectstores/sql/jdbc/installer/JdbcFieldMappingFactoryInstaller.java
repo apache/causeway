@@ -38,6 +38,7 @@ import org.apache.isis.runtimes.dflt.objectstores.sql.jdbc.JdbcGeneralValueMappe
 import org.apache.isis.runtimes.dflt.objectstores.sql.jdbc.JdbcMoneyValueMapper;
 import org.apache.isis.runtimes.dflt.objectstores.sql.jdbc.JdbcObjectReferenceFieldMapping;
 import org.apache.isis.runtimes.dflt.objectstores.sql.jdbc.JdbcObjectReferenceMappingFactory;
+import org.apache.isis.runtimes.dflt.objectstores.sql.jdbc.JdbcPasswordValueMapper;
 import org.apache.isis.runtimes.dflt.objectstores.sql.jdbc.JdbcTimeMapper;
 import org.apache.isis.runtimes.dflt.objectstores.sql.jdbc.JdbcTimestampMapper;
 
@@ -55,7 +56,8 @@ public class JdbcFieldMappingFactoryInstaller implements FieldMappingFactoryInst
 
         lookup.addFieldMappingFactory(Money.class, new JdbcMoneyValueMapper.Factory("FLOAT", "VARCHAR(3)"));
         lookup.addFieldMappingFactory(Percentage.class, new JdbcGeneralValueMapper.Factory("FLOAT"));
-        lookup.addFieldMappingFactory(Password.class, new JdbcGeneralValueMapper.Factory(Defaults.TYPE_PASSWORD()));
+        lookup.addFieldMappingFactory(Password.class, new JdbcPasswordValueMapper.Factory(Defaults.TYPE_PASSWORD(),
+            Defaults.PASSWORD_SEED(), Defaults.PASSWORD_ENC_LENGTH()));
         lookup.addFieldMappingFactory(Color.class, new JdbcColorValueMapper.Factory(Defaults.TYPE_LONG()));
         lookup.addFieldMappingFactory(String.class, new JdbcGeneralValueMapper.Factory(Defaults.TYPE_STRING()));
 

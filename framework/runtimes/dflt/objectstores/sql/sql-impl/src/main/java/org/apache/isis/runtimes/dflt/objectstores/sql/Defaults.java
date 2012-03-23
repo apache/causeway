@@ -198,6 +198,8 @@ public class Defaults {
     static String TYPE_STRING;
     static String TYPE_LONG_STRING;
     static String TYPE_PASSWORD;
+    static String PASSWORD_SEED;
+    static Integer PASSWORD_ENC_LENGTH;
     static String TYPE_DEFAULT;
 
     /**
@@ -222,7 +224,9 @@ public class Defaults {
         TYPE_PK = dataTypes.getString(baseName + "primarykey", "INTEGER");
         TYPE_STRING = dataTypes.getString(baseName + "string", "VARCHAR(65)");
         TYPE_LONG_STRING = dataTypes.getString(baseName + "longstring", "VARCHAR(128)");
-        TYPE_PASSWORD = dataTypes.getString(baseName + "password", "VARCHAR(12)");
+        TYPE_PASSWORD = dataTypes.getString(baseName + "password", "VARCHAR(128)");
+        PASSWORD_SEED = dataTypes.getString(baseName + "password.seed");
+        PASSWORD_ENC_LENGTH = dataTypes.getInteger(baseName + "password.length", 120);
         TYPE_DEFAULT = dataTypes.getString(baseName + "default", "VARCHAR(65)");
     }
 
@@ -268,6 +272,14 @@ public class Defaults {
 
     public static String TYPE_PASSWORD() {
         return TYPE_PASSWORD;
+    }
+
+    public static String PASSWORD_SEED() {
+        return PASSWORD_SEED;
+    }
+
+    public static Integer PASSWORD_ENC_LENGTH() {
+        return PASSWORD_ENC_LENGTH;
     }
 
     public static String TYPE_DEFAULT() {
