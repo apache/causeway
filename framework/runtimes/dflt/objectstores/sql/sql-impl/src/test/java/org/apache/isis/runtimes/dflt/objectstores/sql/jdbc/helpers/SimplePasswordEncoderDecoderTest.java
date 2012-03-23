@@ -14,63 +14,52 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.apache.isis.runtimes.dflt.objectstores.sql.jdbc;
+package org.apache.isis.runtimes.dflt.objectstores.sql.jdbc.helpers;
 
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
-
-import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 
 /**
  * 
  * 
  * @version $Rev$ $Date$
  */
-public class JdbcPasswordValueMapperTest {
+public class SimplePasswordEncoderDecoderTest {
 
     private static final String testSeed = "randomString12345";
     private static final Integer encLength = 120;
-    private final ObjectAssociation field = mock(ObjectAssociation.class);
-
-    @Before
-    public void setup() {
-        when(field.getId()).thenReturn("id");
-    }
 
     @Test
     public void testEncodingValueFromString() {
-        JdbcPasswordValueMapper mapper = new JdbcPasswordValueMapper(field, "VARCHAR(128)", testSeed, encLength);
+        SimplePasswordEncoderDecoder encdec = new SimplePasswordEncoderDecoder(testSeed, encLength);
         String input = "password";
-        String encoded = mapper.encodeRawValueIntoEncodedString(input);
+        String encoded = encdec.encodeRawValueIntoEncodedString(input);
         Assert.assertThat(encoded, is(not(input)));
         Assert.assertThat(encoded.length(), is(120));
     }
 
     @Test
     public void testDecodingEncodedValue() {
-        JdbcPasswordValueMapper mapper = new JdbcPasswordValueMapper(field, "VARCHAR(128)", testSeed, encLength);
+        SimplePasswordEncoderDecoder encdec = new SimplePasswordEncoderDecoder(testSeed, encLength);
         String input = "password";
-        String encoded = mapper.encodeRawValueIntoEncodedString(input);
+        String encoded = encdec.encodeRawValueIntoEncodedString(input);
         Assert.assertThat(encoded, is(not(input)));
 
-        String decoded = mapper.decodeEncodedValueIntoRawString(encoded);
+        String decoded = encdec.decodeEncodedValueIntoRawString(encoded);
         Assert.assertThat(decoded, is(input));
     }
 
     @Test
     public void testNoSeedDoesNothing() {
-        JdbcPasswordValueMapper mapper = new JdbcPasswordValueMapper(field, "VARCHAR(128)", null, encLength);
+        SimplePasswordEncoderDecoder encdec = new SimplePasswordEncoderDecoder(null, encLength);
         String input = "password";
-        String encoded = mapper.encodeRawValueIntoEncodedString(input);
+        String encoded = encdec.encodeRawValueIntoEncodedString(input);
         Assert.assertThat(encoded, is(input));
 
-        String decoded = mapper.decodeEncodedValueIntoRawString(encoded);
+        String decoded = encdec.decodeEncodedValueIntoRawString(encoded);
         Assert.assertThat(decoded, is(input));
     }
 
