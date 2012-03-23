@@ -212,7 +212,7 @@
           </simplelist></para>
 
         <para><simplelist>
-            <member>isis.persistor.sql.datatypes.password (VARCHAR(12))
+            <member>isis.persistor.sql.datatypes.password (VARCHAR(120))
             [Password]</member>
           </simplelist></para>
 
@@ -419,6 +419,41 @@
 
       <para><property>isis.persistor.sql.default.versioning.members=false</property></para>
     </sect1>
+
+    <sect1>
+      <title>Password values</title>
+
+      <para>The <code>JdbcPasswordValueMapper</code> value mapper has the
+      ability to (weakly) encode the password value strings stored in the
+      database tables.</para>
+
+      <para>By adding the following property values:</para>
+
+      <blockquote>
+        <para><property>isis.persistor.sql.default.password.seed=&lt;random
+        string&gt;</property></para>
+
+        <para><property>isis.persistor.sql.default.password.length=&lt;integer
+        length&gt;</property></para>
+      </blockquote>
+
+      <para>You can enable a weak password encoding/decoding scheme that will
+      obscure password values from casual browsers of your database
+      tables.</para>
+
+      <para>The length of all stored passwords is the same, and determined by
+      the <property>isis.persistor.sql.default.password.length</property>
+      property. This length must not exceed the SQL storage, as defined in
+      <xref linkend="sec.mappers.modifiable-values" />.</para>
+
+      <para>The passwords are convolved with the value of the string given by
+      the <property>isis.persistor.sql.default.password.seed</property>
+      property, and the resulting string is stored in the database
+      table.</para>
+
+      <para>If <property>isis.persistor.sql.default.password.seed</property>
+      is undefined (null), the passwords are stored as plain text.</para>
+    </sect1>
   </chapter>
 
   <chapter id="ch.supported.dbs">
@@ -505,8 +540,26 @@
       <sect2>
         <title>Microsoft SQL Server 2008</title>
 
-        <para>Missing. Tested at the office, documentation at home!
-        Argh.</para>
+        <para>The sourceforge driver seemed to work well enough for
+        testing.</para>
+
+        <para>The tested connection parameters were:</para>
+
+        <para><blockquote>
+            <para># SQL Server </para>
+
+            <para>#isis.persistence.sql.jdbc.driver=com.microsoft.sqlserver.jdbc.SQLServerDriver</para>
+
+            <para>isis.persistence.sql.jdbc.driver=net.sourceforge.jtds.jdbc.Driver</para>
+
+            <para>isis.persistence.sql.jdbc.connection=jdbc:jtds:sqlserver://&lt;server&gt;;databaseName=&lt;database&gt;</para>
+
+            <para>isis.persistence.sql.jdbc.user=&lt;user&gt;</para>
+
+            <para>isis.persistence.sql.jdbc.password=&lt;password&gt;</para>
+          </blockquote></para>
+
+        <para></para>
       </sect2>
 
       <sect2>
@@ -514,7 +567,23 @@
 
         <para>Beware! This version of DB2 has a very small limit on table and
         column names. You will have to keep your domain class and property
-        names short to suit, especially collections (see ..).</para>
+        names short to suit, especially collections!</para>
+
+        <para>The tested connection parameters were:</para>
+
+        <blockquote>
+          <para># DB2 test</para>
+
+          <para>
+          isis.persistence.sql.jdbc.driver=com.ibm.db2.jcc.DB2Driver</para>
+
+          <para>
+          isis.persistence.sql.jdbc.connection=jdbc:db2://&lt;host&gt;:50000/&lt;database&gt;</para>
+
+          <para> isis.persistence.sql.jdbc.user=&lt;user&gt;</para>
+
+          <para> isis.persistence.sql.jdbc.password=&lt;password&gt;</para>
+        </blockquote>
       </sect2>
     </sect1>
 
@@ -547,15 +616,14 @@
             </listitem>
 
             <listitem>
-              <para>blah Time, DateTime (DATETIME), java.sql.Time,
-              java.util.Date, java.sql.Timestamp (DATETIME), TimeStamp
-              (DATETIME) blah</para>
+              <para>Time, DateTime (DATETIME), java.sql.Time, java.util.Date,
+              java.sql.Timestamp (DATETIME), TimeStamp (DATETIME) blah</para>
             </listitem>
           </itemizedlist>
         </listitem>
 
         <listitem>
-          <para>blah</para>
+          <para></para>
         </listitem>
       </itemizedlist>
 
