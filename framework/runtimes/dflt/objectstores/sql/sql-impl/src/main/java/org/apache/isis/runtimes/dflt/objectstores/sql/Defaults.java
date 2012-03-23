@@ -225,9 +225,10 @@ public class Defaults {
         TYPE_STRING = dataTypes.getString(baseName + "string", "VARCHAR(65)");
         TYPE_LONG_STRING = dataTypes.getString(baseName + "longstring", "VARCHAR(128)");
         TYPE_PASSWORD = dataTypes.getString(baseName + "password", "VARCHAR(128)");
-        PASSWORD_SEED = dataTypes.getString(baseName + "password.seed");
-        PASSWORD_ENC_LENGTH = dataTypes.getInteger(baseName + "password.length", 120);
+        PASSWORD_ENC_LENGTH = getIntProperty(propertiesBase, isisConfiguration, "password.length", 120);
+        PASSWORD_SEED = getStringProperty(propertiesBase, isisConfiguration, "password.seed");
         TYPE_DEFAULT = dataTypes.getString(baseName + "default", "VARCHAR(65)");
+
     }
 
     public static String TYPE_TIMESTAMP() {

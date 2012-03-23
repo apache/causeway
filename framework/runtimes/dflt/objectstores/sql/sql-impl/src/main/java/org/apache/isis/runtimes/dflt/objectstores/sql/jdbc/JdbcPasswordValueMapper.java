@@ -88,7 +88,8 @@ public class JdbcPasswordValueMapper extends AbstractJdbcFieldMapping {
         if (value == null) {
             return null;
         }
-        final String rawPassword = ((Password) value).getPassword();
+        final Object o = value.getObject();
+        final String rawPassword = ((Password) o).getPassword();
         return encodeRawValueIntoEncodedString(rawPassword);
     }
 
