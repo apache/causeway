@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+-->
+<!DOCTYPE article PUBLIC "-//OASIS//DTD Simplified DocBook XML V1.1//EN"
+"http://www.oasis-open.org/docbook/xml/simple/1.1/sdocbook.dtd">
+<article>
+  <articleinfo>
+    <title></title>
+
+    <author>
+      <firstname></firstname>
+
+      <surname></surname>
+
+      <affiliation>
+        <orgname></orgname>
+      </affiliation>
+    </author>
+
+    <pubdate></pubdate>
+  </articleinfo>
+
+  <section>
+    <title>Submitting patches</title>
+
+    <para>Patches for bug fixes, improvements and extension are welcomed and
+    sought by the [[NAME]] development team. The process is simple: get
+    the latest code; make your changes; create a patch file; and email it to
+    us. As most development is done within the Eclipse IDE that is the best
+    place to create the patches, although patches created in other ways (as
+    long as they following the standard structure) are fine too. We will look
+    at using both Eclipse and Subversion here.</para>
+
+    <section>
+      <title>Getting the latest code</title>
+
+      <para>It is important that you make changes against the latest version
+      of the development code so that it easier merge. Code that is easier to
+      merge gets incorporated more quickly.</para>
+
+      <para>The latest version of the source can be checked out of the
+      Subversion repository using the following command:</para>
+
+      <literallayout>$ svn co http://apache.isis.svn/svnroot/trunk isis</literallayout>
+
+      <para>or, assuming you have already checked it out, then ensure that it
+      up-to-date:</para>
+
+      <literallayout>$ cd isis
+$ svn up</literallayout>
+    </section>
+
+    <section>
+      <title>Changing the code</title>
+
+      <para>Make the changes to your local copy ensuring that you use the same
+      coding style and formatting (see <ulink
+      url="http://isis.apache.org/framework.html">code style</ulink> for
+      details and for the location of the Eclipse settings to assist
+      you).</para>
+    </section>
+
+    <section>
+      <title>Creating the patch</title>
+
+      <para>A patch is just a special file that details what files are
+      affected and what the changes are. This way a set of related changes can
+      be grouped together and the size of the file is minimal.</para>
+
+      <section>
+        <title>Creating from within Eclipse</title>
+
+        <para>Creating a patch from within Eclipse can be done easily, but
+        only if you are have one of the Subversion plug-ins installed and the
+        project is shared (see the <option>Team/Share...</option>
+        option).</para>
+
+        <para>From within Eclipse open up the contextual menu (right-click) on
+        the file, package or project that has been changed and select the
+        <option>Team/Create Patch...</option> option. In the dialog (shown
+        below) that comes up specify a <emphasis
+        role="strong">descriptive</emphasis> file name and confirm that all
+        the files that are checked are the ones that you want to submit. Press
+        the <option>Finish</option> button to create the patch file.</para>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="images/create-patch-dialog.png" />
+          </imageobject>
+        </mediaobject>
+      </section>
+
+      <section>
+        <title>Creating using Subversion</title>
+
+        <para>Subversion's <command>diff</command> command will do a similar
+        thing, but of course you need to use the command line. (You can also
+        use other Subversion clients, such as Tortoise, but you need to find
+        out which menu items correspond to the diff command). Use the
+        following command with a specific project (as shown here), package or
+        file identified to create the patch and redirect the output to a file.
+        Here we are creating a patch for the whole of the runtime project and
+        placing it in the file <filename>fixture-patch.txt</filename>.</para>
+
+        <literallayout>$ svn diff core/runtime &gt; fixture-patch.txt</literallayout>
+
+        <para>NOTE - when using Subversion's diff command only those files
+        that are under Subversion's control are included. Specifically new
+        files are not part of that set until they have been added (using
+        <literal>svn add</literal>). So to submit new files either add them
+        with the appropriate <literal>svn</literal> command or submit them
+        separately.</para>
+      </section>
+
+      <section>
+        <title>An example file</title>
+
+        <para>The result of this is a file like this (which has been truncated
+        to save space):</para>
+
+        <literallayout>Index: /home/rcm/no-development/workspace_DEV_4.0/isis/core/runtime/src/main/java/org/apache/isis/runtime/fixture/ObjectFixtureService.java
+===================================================================
+--- /home/rcm/no-development/workspace_DEV_4.0/isis/core/runtime/src/main/java/org/apache/isis/runtime/fixture/ObjectFixtureService.java	(revision 14471)
++++ /home/rcm/no-development/workspace_DEV_4.0/isis/core/runtime/src/main/java/org/apache/isis/runtime/fixture/ObjectFixtureService.java	(working copy)
+@@ -2,10 +2,12 @@
+ 
+ import java.io.BufferedReader;
+ import java.io.File;
++import java.io.FileNotFoundException;
+ import java.io.FileReader;
+ import java.io.FileWriter;
+ import java.io.IOException;
+ import java.io.PrintWriter;
++import java.io.Reader;
+ import java.util.HashMap;
+ import java.util.HashSet;
+ import java.util.Map;
+@@ -28,6 +30,7 @@
+ import org.apache.isis.metamodel.spec.feature.OneToOneAssociation;
+ import org.apache.isis.metamodel.util.CollectionFacetUtils;
+ import org.apache.isis.runtime.context.IsisContext;
++import org.apache.isis.runtime.fixturesinstaller.FixtureException;
+ 
+ 
+ public class ObjectFixtureService {
+@@ -55,6 +58,9 @@
+ 
+         public ObjectAdapter get(String data) {
+             int pos = data.indexOf('#');
++            if (pos == -1) {
++                throw new FixtureException("read failed - object spec: " + data);
++            }
+             String id = data.substring(pos + 1);
+             ObjectAdapter object = idMap.get(id);
+             if (object == null) {</literallayout>
+
+        <para>This was produced using Subversion. The file produced by Eclipse
+        is the same except it has a couple of comments at the top, one of
+        which indicates which project the changes come from.</para>
+      </section>
+    </section>
+
+    <section>
+      <title>Submitting the patch</title>
+
+      <para>Now simply email the patch to us. The email address is <ulink
+      url="mailto:patches@isis.apache.org">patches@isis.apache.org</ulink>.
+      The subject line should start with the text <emphasis
+      role="strong">PATCH:</emphasis> so that they are not picked out as Spam.
+      Attach the files to the email and in the body explain what the patch is
+      for and what changes it makes. This will help the developers assess the
+      patches and apply them quickly. Please also ensure your email address is
+      correct so that we can contact you if necessary.</para>
+
+      <para>When we receive a patch we will load it up using Eclipse and can
+      immediately see what changes will be made. After checking the changes
+      they will be applied to the code and checked in. If you have requested a
+      response we will then email you to let you know what change has been
+      applied.</para>
+    </section>
+  </section>
+</article>

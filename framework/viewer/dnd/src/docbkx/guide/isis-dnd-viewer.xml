@@ -1,0 +1,1298 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
+"file:./src/docbkx/dtd-4.5/docbookx.dtd">
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+-->
+<book>
+  <bookinfo>
+    <title><?eval ${docbkxGuideTitle}?></title>
+
+    <subtitle><?eval ${docbkxGuideSubTitle}?></subtitle>
+
+    <releaseinfo><?eval ${project.version}?></releaseinfo>
+
+    <authorgroup>
+      <author>
+        <firstname>Robert</firstname>
+
+        <surname>Matthews</surname>
+      </author>
+    </authorgroup>
+
+    <legalnotice>
+      <para>Permission is granted to make and distribute verbatim copies of
+      this manual provided that the copyright notice and this permission
+      notice are preserved on all copies.</para>
+    </legalnotice>
+  </bookinfo>
+
+  <!-- front matter -->
+
+  <toc></toc>
+
+  <preface id="preface">
+    <title>Preface</title>
+
+    <para><emphasis>Apache Isis</emphasis> is designed to allow programmers
+    rapidly develop domain-driven applications following the <ulink
+    url="http://en.wikipedia.org/wiki/Naked_Objects">Naked Objects</ulink>
+    pattern. It is made up of a core framework plus a number of alternate
+    implementations, and supports various viewers and object stores. Apache
+    Isis is hosted at the <ulink url="http://incubator.apache.org/isis">Apache
+    Foundation</ulink>, and is licensed under <ulink
+    url="http://www.apache.org/licenses/LICENSE-2.0.html">Apache Software
+    License v2</ulink>.</para>
+
+    <para>This guide is written for programmers looking to customize,
+    configure and deploy <emphasis>Apache Isis</emphasis> applications using
+    the <emphasis>DnD viewer</emphasis> as the primary user interface.
+    Deployment takes in both standalone operation and running in client/server
+    mode.</para>
+  </preface>
+
+  <!-- main content -->
+
+  <part>
+    <title>Users Guide</title>
+
+    <chapter>
+      <title>Using the DnD Viewer</title>
+
+      <abstract>
+        <para>*** yada</para>
+      </abstract>
+
+      <section>
+        <title>*** yada</title>
+
+        <para></para>
+      </section>
+
+      <section>
+        <title>Using Perspectives</title>
+
+        <para>A perspective represents an end-users' desktop perspective; that
+        is icons/links for domain services and domain objects). The
+        <emphasis>dnd viewer</emphasis> allows users to customize their
+        perspective:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>To remove a service icon right-click on the grey border and
+            select the close option.</para>
+          </listitem>
+
+          <listitem>
+            <para>To add a service select the Services... option from the
+            application menu (accessed by right-clicking on the application
+            background) and drag the required service onto the desktop.</para>
+          </listitem>
+        </itemizedlist>
+
+        <para></para>
+
+        <para></para>
+
+        <para></para>
+      </section>
+    </chapter>
+  </part>
+
+  <part>
+    <title>Programmers Guide</title>
+
+    <partintro>
+      <para>This part of the documentation is for programmers who are
+      developing applications using Isis, and wish to configure or customize
+      the DnD viewer for their needs.</para>
+    </partintro>
+
+    <chapter>
+      <title>***</title>
+
+      <abstract>
+        <para>*** yada yada</para>
+      </abstract>
+
+      <sect1>
+        <title>***</title>
+
+        <para><emphasis>*** yada yada</emphasis></para>
+      </sect1>
+
+      <sect1>
+        <title>Viewer Properties</title>
+
+        <para>The look of the viewing mechanism can be changed by using
+        different fonts, colours and icons. All viewer properties for the drag
+        and drop user interface have a common root of
+        <methodname>isis.viewer.dnd</methodname> and for the HTML interface
+        <methodname>isis.viewer.html</methodname>.</para>
+
+        <sect2>
+          <title>Initial size and location</title>
+
+          <para>The size and location of the application within the windowing
+          systems can be specified using the
+          <methodname>initial.size</methodname> and
+          <methodname>initial.location</methodname> properties. If not
+          specified the size defaults to nearly full screen and location to
+          near the top-left corner.</para>
+
+          <programlisting format="linespecific">isis.viewer.dnd.initial.size = 800 x 600
+isis.viewer.dnd.initial.location = 100, 200</programlisting>
+        </sect2>
+
+        <sect2>
+          <title>Large icon size</title>
+
+          <para>The width of the resource icons (as shown on the desktop) can
+          be specified using the <methodname>large-icon-size</methodname>
+          property. If not specified it will default to 34 pixels.</para>
+
+          <programlisting format="linespecific">isis.viewer.dnd.large-icon-size = 48</programlisting>
+        </sect2>
+
+        <sect2>
+          <title>Resize border</title>
+
+          <para>The amount of space allocated for the resize border on a text
+          field can be set using the
+          <methodname>field-resize-border</methodname> property. Unless set
+          this will default to 5 pixels.</para>
+
+          <programlisting format="linespecific">isis.viewer.dnd.field-resize-border = 3</programlisting>
+
+          <para>The amount of space allocated for the resize border on a tree
+          view can be set using the
+          <methodname>tree-resize-border</methodname> property. Unless set
+          this will default to 5 pixels.</para>
+
+          <programlisting format="linespecific">isis.viewer.dnd.tree-resize-border = 3</programlisting>
+        </sect2>
+
+        <sect2>
+          <title>Exploration menu options</title>
+
+          <para>To turn off exploration menus set the
+          <methodname>show-exploration</methodname> property to
+          <emphasis>off</emphasis>.</para>
+
+          <programlisting format="linespecific">isis.viewer.dnd.show-exploration = off</programlisting>
+        </sect2>
+
+        <sect2>
+          <title>Double buffering</title>
+
+          <para>The whole viewer is double buffered by default, but this can
+          be turned off by setting the <methodname>double-buffer</methodname>
+          property to <emphasis>off</emphasis>.</para>
+
+          <programlisting format="linespecific">isis.viewer.dnd.double-buffer = off</programlisting>
+        </sect2>
+
+        <sect2>
+          <title>Background logo</title>
+
+          <para>A background logo can be added to the workspace using the
+          <methodname>logo-background</methodname> properties. The image
+          sub-property indicates that a logo should be displayed and what
+          image to use. The size and location are then optional.</para>
+
+          <programlisting format="linespecific">isis.viewer.dnd.logo-background.image = background.jpg
+isis.viewer.dnd.logo-background.size = 400 x 300
+isis.viewer.dnd.logo-background.location = 100, 200</programlisting>
+        </sect2>
+
+        <sect2>
+          <title>Loading images from files</title>
+
+          <para>Images are normally loaded directly from the Java resources
+          (accessed via the class path) or as files within the <filename
+          class="directory" moreinfo="none">images</filename> directory. If
+          necessary the loading of files can be suspended so they are only
+          loaded from resources. This is done via the
+          <methodname>load-images-from-files</methodname> property.</para>
+
+          <programlisting format="linespecific">isis.viewer.dnd.load-images-from-files = false</programlisting>
+        </sect2>
+
+        <sect2>
+          <title>Padding</title>
+
+          <programlisting format="linespecific">isis.viewer.dnd.hpadding = 5
+isis.viewer.dnd.vpadding = 5</programlisting>
+        </sect2>
+
+        <sect2>
+          <title>Default image</title>
+
+          <para>The default image is the one used if the image file/resource
+          that should be used cannot be found. This simply ensures that an
+          image is available for all icons. The default image can be changed
+          using the <methodname>default-image</methodname> property.</para>
+
+          <programlisting format="linespecific">isis.viewer.dnd.default-image = square.png</programlisting>
+        </sect2>
+
+        <sect2>
+          <title>Image directory</title>
+
+          <para>The directory in which the images are to be found can be
+          specified via the <methodname>image-directory</methodname>
+          property.</para>
+
+          <programlisting format="linespecific">isis.viewer.dnd.image-directory = graphics</programlisting>
+        </sect2>
+
+        <sect2>
+          <title>View specifications</title>
+
+          <para>The views used to render objects and collection are created by
+          view specifications. These specifications are installed at start up
+          and can be added to. The <methodname>specification.view</methodname>
+          property lists the specifications to load.</para>
+
+          <programlisting format="linespecific">isis.viewer.dnd.specification.view = org.apache.isis.viewer.skylark.basic.FormSpecification, \
+        org.apache.isis.viewer.skylark.basic.ListSpecification</programlisting>
+
+          <para>The viewer has a set of default set of views that it loads up,
+          these include specifications for forms, lists, tree browsers and
+          tables. To disable this default set, normally so you can explicitly
+          set up the specification list as above, use the
+          <methodname>specification.defaults</methodname> property with the
+          <emphasis>false</emphasis> value.</para>
+
+          <programlisting format="linespecific">isis.viewer.dnd.specification.defaults =off
+</programlisting>
+
+          <para>Specific field and subview types can be also specified, so
+          they no longer use the built-in default. These all have the same
+          property name root of
+          <methodname>isis.viewer.dnd.specification</methodname> and
+          are:-</para>
+
+          <itemizedlist>
+            <listitem>
+              <para><property moreinfo="none">field.image</property></para>
+            </listitem>
+
+            <listitem>
+              <para><property moreinfo="none">field.color</property></para>
+            </listitem>
+
+            <listitem>
+              <para><property moreinfo="none">field.password</property></para>
+            </listitem>
+
+            <listitem>
+              <para><property
+              moreinfo="none">field.wrappedtext</property></para>
+            </listitem>
+
+            <listitem>
+              <para><property moreinfo="none">field.checkbox</property></para>
+            </listitem>
+
+            <listitem>
+              <para><property moreinfo="none">field.text</property></para>
+            </listitem>
+
+            <listitem>
+              <para><property moreinfo="none">field.empty</property></para>
+            </listitem>
+
+            <listitem>
+              <para><property moreinfo="none">icon.subview</property></para>
+            </listitem>
+
+            <listitem>
+              <para><property moreinfo="none">icon.object</property></para>
+            </listitem>
+
+            <listitem>
+              <para><property moreinfo="none">icon.resource</property></para>
+            </listitem>
+          </itemizedlist>
+
+          <para>The following example causes all logical properties to be
+          shown using the standard text field rather than the default check
+          box.</para>
+
+          <programlisting format="linespecific">isis.viewer.dnd.specification.field.checkbox = \
+        org.apache.isis.viewer.skylark.basic.TextFieldSpecification</programlisting>
+        </sect2>
+
+        <sect2>
+          <title>Fonts</title>
+
+          <para>Fonts can be specified using the following font property
+          names:-</para>
+
+          <itemizedlist>
+            <listitem>
+              <para><methodname>control</methodname>, for the text in control
+              widgets such as buttons</para>
+            </listitem>
+
+            <listitem>
+              <para><methodname>label</methodname>, for the field
+              labels</para>
+            </listitem>
+
+            <listitem>
+              <para><methodname>large-icon</methodname>, for the icons on the
+              desktop such as resources</para>
+            </listitem>
+
+            <listitem>
+              <para><methodname>menu</methodname>, for the menu options</para>
+            </listitem>
+
+            <listitem>
+              <para><methodname>normal</methodname>, for edit fields and
+              object labels in fields</para>
+            </listitem>
+
+            <listitem>
+              <para><methodname>small-title</methodname>, for windows
+              bars</para>
+            </listitem>
+
+            <listitem>
+              <para><methodname>status</methodname>, for text on the status
+              bar</para>
+            </listitem>
+
+            <listitem>
+              <para><methodname>title</methodname>, for titling objects</para>
+            </listitem>
+          </itemizedlist>
+
+          <para>A particular font can be specified for an area by
+          specifying</para>
+
+          <programlisting format="linespecific">org.apache.isis.viewer.dnd.font.&lt;area&gt;=&lt;font&gt;</programlisting>
+
+          <para>Where the <methodname>&lt;area&gt;</methodname> is the name
+          and the <methodname>&lt;font&gt;</methodname> is specified according
+          the <methodname>Font.decode()</methodname> specification
+          (<classname>see java.awt.Font</classname>). This essentially is a
+          concatenation of the name, style and size as below:</para>
+
+          <programlisting format="linespecific">&lt;logical font name&gt;-&lt;style&gt;-&lt;point size&gt;</programlisting>
+
+          <para>In addition to the font the amount of space between lines of
+          text can also be specified.</para>
+
+          <programlisting format="linespecific">org.apache.isis.viewer.dnd.spacing.&lt;area&gt;=&lt;pixels&gt;</programlisting>
+        </sect2>
+
+        <sect2>
+          <title>Colours</title>
+
+          <para>The colour properties are prefixed with
+          <methodname>isis.viewer.dnd.color</methodname> and take a numerical
+          value. The most useful form is in hexadecimal where the six digits
+          are grouped into twos to represent the red, green and blue
+          components. The following example specifies the colours green, red
+          and black respectively.</para>
+
+          <screen format="linespecific">isis.viewer.dnd.color.normal=0x0000FF
+isis.viewer.dnd.color.label=0xFF0000
+isis.viewer.dnd.color.text.edit=0xFFFFFF</screen>
+
+          <para>The basic colour scheme is made up of a palette of eight
+          colours: three primary, three secondary and black and white. These
+          form the basis for many of the other colour properties. The colour
+          property names are:-</para>
+
+          <itemizedlist>
+            <listitem>
+              <para><methodname>black</methodname></para>
+            </listitem>
+
+            <listitem>
+              <para><methodname>white</methodname></para>
+            </listitem>
+
+            <listitem>
+              <para><methodname>primary1</methodname></para>
+            </listitem>
+
+            <listitem>
+              <para><methodname>secondary1</methodname></para>
+            </listitem>
+
+            <listitem>
+              <para><methodname>primary2</methodname></para>
+            </listitem>
+
+            <listitem>
+              <para><methodname>secondary2</methodname></para>
+            </listitem>
+
+            <listitem>
+              <para><methodname>primary3</methodname></para>
+            </listitem>
+
+            <listitem>
+              <para><methodname>secondary3</methodname></para>
+            </listitem>
+          </itemizedlist>
+
+          <para>The backgrounds of the application, the windows and the menus
+          can be set with the following properties:-</para>
+
+          <itemizedlist>
+            <listitem>
+              <para><methodname>background.application</methodname></para>
+            </listitem>
+
+            <listitem>
+              <para><methodname>background.window</methodname></para>
+            </listitem>
+
+            <listitem>
+              <para><methodname>background.content-menu</methodname></para>
+            </listitem>
+
+            <listitem>
+              <para><methodname>background.value-menu</methodname></para>
+            </listitem>
+
+            <listitem>
+              <para><methodname>background.view-menu</methodname></para>
+            </listitem>
+
+            <listitem>
+              <para><methodname>background.workspace-menu</methodname></para>
+            </listitem>
+          </itemizedlist>
+
+          <para>In addition to the setting of a colour for all window
+          backgrounds you can also set the colour for a specific view
+          type.</para>
+
+          <programlisting format="linespecific">isis.viewer.dnd.color.background.window.List=0x00ffff</programlisting>
+
+          <para>The colours of the text on the menus can be specified with the
+          following properties:-</para>
+
+          <itemizedlist>
+            <listitem>
+              <para><methodname>menu.normal</methodname></para>
+            </listitem>
+
+            <listitem>
+              <para><methodname>menu.disabled</methodname></para>
+            </listitem>
+
+            <listitem>
+              <para><methodname>menu.reversed</methodname></para>
+            </listitem>
+          </itemizedlist>
+
+          <para>The state of the views can be reflected by its colour. The
+          following colour properties can be specified (only the identified
+          property is based on the core colour scheme, all others are unique
+          by default):-</para>
+
+          <itemizedlist>
+            <listitem>
+              <para><methodname>identified</methodname></para>
+            </listitem>
+
+            <listitem>
+              <para><methodname>valid</methodname></para>
+            </listitem>
+
+            <listitem>
+              <para><methodname>invalid</methodname></para>
+            </listitem>
+
+            <listitem>
+              <para><methodname>active</methodname></para>
+            </listitem>
+
+            <listitem>
+              <para><methodname>error</methodname></para>
+            </listitem>
+
+            <listitem>
+              <para><methodname>out-of-synch</methodname></para>
+            </listitem>
+          </itemizedlist>
+
+          <para>There are a number of properties relating to text for text
+          fields. These are the colour of text when editing it, the cursor's
+          colour, the colour of the highlight when selecting text, and the
+          colour of text when it has focus for editing but has not been
+          changed yet.</para>
+
+          <itemizedlist>
+            <listitem>
+              <para><methodname>text.edit</methodname></para>
+            </listitem>
+
+            <listitem>
+              <para><methodname>text.cursor</methodname></para>
+            </listitem>
+
+            <listitem>
+              <para><methodname>text.highlight</methodname></para>
+            </listitem>
+
+            <listitem>
+              <para><methodname>text.saved</methodname></para>
+            </listitem>
+          </itemizedlist>
+        </sect2>
+
+        <sect2>
+          <title>Echo character</title>
+
+          <para>The single character used to represent an entered character in
+          a password field can be specified with the
+          <methodname>echo</methodname> property, for example to change it
+          from the default * to a hash specify the following:</para>
+
+          <programlisting format="linespecific">isis.viewer.dnd.echo=#</programlisting>
+        </sect2>
+      </sect1>
+    </chapter>
+  </part>
+
+  <chapter>
+    <title>Diagnostics</title>
+
+    <para></para>
+
+    <sect1>
+      <title>Debugging from within the DND viewer</title>
+
+      <para>While using the NOF through the Skylark viewer you a have a number
+      of ways of looking at the state of the system. Every view, including the
+      desktop, has debug options that can be accessed by
+      Crtl-Shift-right-clicking. The following options might be useful to
+      you.</para>
+
+      <sect2>
+        <title>From the desktop menu</title>
+
+        <para></para>
+
+        <itemizedlist>
+          <listitem>
+            <para><emphasis>Log Level
+            OFF/ERROR/WARN/INFO/DEBUG</emphasis></para>
+
+            <para>Change the log level in Log4j</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>Debug graphics on/off</emphasis></para>
+
+            <para>Turn on or off the debug drawing within the viewer. This
+            sets/clears the <varname>AbstractView.debug </varname>variable,
+            which is used within draw methods to do additional drawing for
+            debug purposes.</para>
+
+            <mediaobject>
+              <imageobject>
+                <imagedata fileref="images/debug-graphics.png" />
+              </imageobject>
+            </mediaobject>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>Show mouse spy</emphasis></para>
+
+            <para>Brings up a debug window showing details about the mouse and
+            it position within the view hierarchy.</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>Restart object loader/persistor</emphasis></para>
+
+            <para>Calls <methodname>reset</methodname> on the
+            <classname>ObjectAdapterLoader</classname> and
+            <classname>ObjectAdapterPersistor</classname> objects. This should
+            clear all the objects and adapters from memory, forcing them to be
+            reloaded from persistent storage. It is important not have any
+            open objects on the screen as these will no longer be linked to
+            the known objects and might cause problems.</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>Debug system</emphasis></para>
+
+            <para>Brings up a debug frame showing debug details for the main
+            components of the system. These include the persistor, loader,
+            configuration, and specification loader.</para>
+
+            <mediaobject>
+              <imageobject>
+                <imagedata fileref="images/debug-system.png" />
+              </imageobject>
+            </mediaobject>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>Debug viewer</emphasis></para>
+
+            <para>Brings up a debug frame showing debug details for the
+            Skylark viewer.</para>
+
+            <mediaobject>
+              <imageobject>
+                <imagedata fileref="images/debug-viewer.png" />
+              </imageobject>
+            </mediaobject>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>Dump log to snapshot</emphasis></para>
+
+            <para>Creates a Log4j snapshot, which is send to each of the
+            snapshot appenders. This is only enabled if Log4j is setup with
+            one or more snapshot appenders.</para>
+          </listitem>
+        </itemizedlist>
+      </sect2>
+
+      <sect2>
+        <title>From the view</title>
+
+        <para></para>
+
+        <para>1. From a view we have these debug options available on the
+        <emphasis>view</emphasis> menu:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><emphasis>Refresh view</emphasis></para>
+
+            <para>Causes the view to be redisplayed after rereading the state
+            of the view's content. This only affects the values and not the
+            reference objects.</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>Invalidate content</emphasis></para>
+
+            <para>Flag the view's content as invalid causing the view to be
+            recreated.</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>Invalidate layout</emphasis></para>
+
+            <para>Flag the view's layout as invalid causing the view to be
+            relaid out.</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>Debug view</emphasis></para>
+
+            <para>Brings up a debug frame showing debug details for the
+            current view/object. These include the adapter's state, the domain
+            object graph, the object specification, the view's content object,
+            the structure of the view, and a full listing of the drawing done
+            to render the view.</para>
+
+            <mediaobject>
+              <imageobject>
+                <imagedata fileref="images/debug-view.png" />
+              </imageobject>
+            </mediaobject>
+          </listitem>
+        </itemizedlist>
+
+        <para>2. Also from the view we have these debug options available on
+        the <emphasis>object</emphasis> menu:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><emphasis>Destroy object</emphasis></para>
+
+            <para>Forces a destory call to the object persistor.</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>Clear resolve</emphasis></para>
+
+            <para>Forces the object's resolve state back to
+            <emphasis>Ghost</emphasis>.</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>Debug view</emphasis></para>
+
+            <para>Brings up a debug frame showing debug details for the
+            current view/object (see above).</para>
+          </listitem>
+        </itemizedlist>
+      </sect2>
+
+      <sect2>
+        <title>The DebugInfo interface and the debug viewer</title>
+
+        <para>The framework provides a viewer for showing the debug details
+        about any object in the system that implements the
+        <classname>DebugInfo</classname> interface. The
+        <classname>InfoDebugFrame</classname> shows one or more tabs of
+        <classname>DebugInfo</classname> objects. As it is Java Frame it can
+        be set up as follows.</para>
+
+        <programlisting format="linespecific">import org.apache.isis.viewer.dnd.awt.InfoDebugFrame;
+:
+:
+InfoDebugFrame frame = new InfoDebugFrame();
+frame.setInfo(objectSupportingDebugInfo);
+frame.show();</programlisting>
+
+        <para>The <methodname>setInfo</methodname> mehtod is overloaded to
+        take an array of debug objects.</para>
+
+        <para>To make an object displayable implement the
+        <classname>DebugInfo</classname> interface. The
+        <methodname>debugTitle()</methodname> should return a simple title,
+        and the <methodname>debugData(DebugString)</methodname> should add
+        details to the <classname>DebugString</classname> object to build up
+        suitable debug output. <classname>DebugString</classname> is an
+        appender, like <classname>StringBuffer</classname>, but which provides
+        indentation and a way to add label and detail pairs.</para>
+      </sect2>
+    </sect1>
+  </chapter>
+
+  <part>
+    <title>Contributors Guide</title>
+
+    <partintro>
+      <para>This part of the documentation is for committers or contributors
+      who wish to enhance, extend (or just bugfix) the DnD viewer
+      itself.</para>
+    </partintro>
+
+    <chapter>
+      <title>Design</title>
+
+      <para>The DND viewer basically displays a set of
+      <classname>View</classname> objects, where each view is render its
+      assigned <classname>Content</classname> object. A content is something
+      like a message, a service object, a domain object or a field within a
+      domain object. If a view is to show more than one thing (eg the contents
+      of a list, or the properties of an object) then the view must provide a
+      set of subviews and arrange those views is some orderly fashion. The
+      viewer provides <classname>AbstractCompositeView</classname> for this
+      purpose. A further subclass,
+      <classname>CompositeViewBuilder</classname>, provides an even better
+      mechanism by allowing a ViewBuilder to be assigned to create and add the
+      subviews, while an <classname>AbstractBuilderDecorator</classname> can
+      be assigned to layout the subviews. Many builders and layouts are
+      provided that can be combined to create specific views.</para>
+
+      <para>In addtion to this creation process the views themselves can be
+      decorated to provide specific behaviour and looks.</para>
+
+      <section>
+        <title>Specification</title>
+
+        <para>Each available view is created via a
+        <classname>ViewSpecification</classname> instance. An instance of each
+        specification is registered with the view factory, either directly
+        (via the <classname>ViewFactory</classname> instance) or indirectly
+        via the configuration file. To register a view specification at
+        runtime add something like the following to the
+        <filename>isis.properties</filename>, or other properties,
+        file.</para>
+
+        <programlisting>isis.viewer.dnd.specification.view=org.apache.isis.viewer.dnd.view.calendar.CalendarSpecification, \
+    org.apache.isis.viewer.dnd.view.form.WindowExpandableFormSpecification
+</programlisting>
+
+        <para>Each specification determines if it can display a particular
+        object, by returning <literal>true</literal>/<literal>false</literal>
+        from the <methodname>canDisplay(Content)</methodname> method.</para>
+
+        <para>The name of the specification, provided via the
+        <methodname>getName</methodname> method, is used to create a list of
+        available views that the user can select from.</para>
+
+        <para>An open view (<methodname>isOpen</methodname> returning
+        <literal>true</literal>) indicates that the view shows content of the
+        object, as opposed to just the object itself.</para>
+
+        <para>A subview (<methodname>isSubview</methodname> returning
+        <literal>true</literal>) indicates that the view can be used as a
+        child part of another view. Otherwise the view is a root view,
+        standing by itself.</para>
+
+        <para>A view that can be replaced by another view within the screen
+        area is indicated by <methodname>isReplaceable</methodname> returning
+        <literal>true</literal>.</para>
+
+        <para>TODO what is <methodname>isAligned</methodname>?</para>
+      </section>
+
+      <section>
+        <title>View</title>
+
+        <para>Displayed objects are rendered using an instance of
+        <classname>View</classname>. View classes are typically created by
+        subclassing <classname>AbstractView.</classname></para>
+
+        <para>Views are designed so that the can be decorated to add looks and
+        behaviour. Such decorators are typically created by subclassing
+        AbstractViewDecorator.</para>
+
+        <para></para>
+
+        <section>
+          <title>Sizing</title>
+
+          <para>Views can request a specific area to render themselves within.
+          The parent view, starting from the top-level workspace, asks each
+          component view by calling the view's
+          <methodname>getRequiredSize</methodname> method. The parent passes
+          in the maximum size so that component can make the most of the
+          available space.</para>
+        </section>
+
+        <section>
+          <title>Layout</title>
+
+          <para>Each view provides a layout mechanism (via the
+          <methodname>layout(Size)</methodname> method) that should size and
+          position each of its subviews. This is not applicable to node views,
+          which by definition have no children. The size passed in the amount
+          of space available to the view. Before the layout method is called
+          the getRequiredSize method is called to determine the optimum size
+          to provide for the view. The laying out of a view should only occur
+          when the contents have changed so a flag should be maintained to
+          track this. The <methodname>invalidateLayout</methodname> method
+          should set this flag so the the viewer can indicate when a view
+          needs to be re-laid out. It should also pass up the request to
+          ensure that any work done by the superclass will also be completed.
+          The example below shows a typical layout scenario.</para>
+
+          <programlisting>    public void invalidateLayout() {
+        super.invalidateLayout();
+        invalidLayout = true;
+    }
+
+    public void layout(final Size maximumSize) {
+        if (invalidLayout) {
+            Size formSize = form.getRequiredSize(maximumSize);
+            form.setSize(formSize);
+            form.layout(maximumSize);
+            form.setLocation(new Location(0,0));
+            
+            Size collectionSize = collection.getRequiredSize(maximumSize);
+            collection.setSize(collectionSize);
+            collection.layout(maximumSize);
+            collection.setLocation(new Location(0, formSize.getHeight()));
+
+            invalidLayout = false;
+        }
+    }</programlisting>
+        </section>
+
+        <section>
+          <title>Drawing</title>
+
+          <para>The parent asks each component to draw itself by calling the
+          view's <methodname>draw</methodname> method. A Canvas object is
+          passed in that is then used to do the actual drawing.</para>
+
+          <para>A view can also provide a <methodname>print</methodname>
+          method for drawing to a printing surface. In the AbstractView class
+          this simply delegates to the draw method to allow the one method to
+          render both to screen and paper.</para>
+        </section>
+
+        <section>
+          <title>Window border</title>
+
+          <para>A view can be given a border by chaining a
+          <classname>WindowBorder</classname> decorator to a view as follows,
+          indicating if the window is scrollable with the second
+          parameter.</para>
+
+          <programlisting>new WindowBorder(new SimpleView(content, axis), false);</programlisting>
+
+          <para>The style of the border can be changed by providing a
+          <classname>BorderDrawing</classname> class that is used for all
+          instances.</para>
+        </section>
+      </section>
+
+      <section>
+        <title>Composite views</title>
+
+        <para>Although you can create your own subclass of
+        <classname>View</classname> that contain other views, it can be a lot
+        simpler to extend the <classname>AbstractCompositeView</classname>
+        class or to use the <classname>CompositeViewBuilder</classname> class
+        in conjunction with some <classname>ViewBuilder</classname> objects to
+        build and layout a view. The bulk of the work in a composite view,
+        however, is in passing the events etc on to the right subview, and
+        this is something the <classname>AbstractCompositeView</classname>
+        view does for you.</para>
+
+        <para>For a view that you want to construct and layout extend the
+        <classname>AbstractCompositeView</classname> class and add methods to
+        build the view, determine its required size and layout its components.
+        The following example shows a view for summarising an object. The
+        <methodname>buildView</methodname> method calls addView for each of
+        the component view, which in this example are the default views for
+        each field object. The <methodname>getMaximumSize</methodname> method
+        add the heights of all the component views togther and finds the
+        maximum width. The <methodname>doLayout</methodname> method simply
+        sets the size of each component to its required size and sets the
+        vertical position so they are stacked vertically.</para>
+
+        <programlisting>public class SummaryView extends AbstractCompositeView {
+
+    public SummaryView(Content content, ViewSpecification specification, ViewAxis viewAxis) {
+        super(content, specification, viewAxis);
+    }
+
+    protected void buildView() {
+        ObjectSpecification spec = getContent().getSpecification();
+        AuthenticationSession session = IsisContext.getAuthenticationSession();
+        ObjectAdapter target = getContent().getAdapter();
+        ObjectAssociation[] fields = spec.getAssociations(ObjectAssociationFilters.dynamicallyVisible(session, target));
+        for (int i = 0; i &lt; fields.length; i++) {
+            Content fieldContent = Toolkit.getContentFactory().createFieldContent(fields[i], target, fields[i].get(target));
+            if (fieldContent instanceof TextParseableContent) {
+                View view = Toolkit.getViewFactory().createFieldView((TextParseableField) fieldContent, null);
+                addView(view);
+            }
+            if (fieldContent instanceof ObjectContent) {
+                View view = Toolkit.getViewFactory().createView(new ViewRequirement(fieldContent, ViewRequirement.CLOSED));
+                addView(view);
+            }
+        }
+    }
+
+    public Size getMaximumSize() {
+        Size size = new Size(0, 0);
+        for (View view : getSubviews()) {
+            Size viewSize = view.getMaximumSize();
+            size.extendHeight(viewSize.getHeight());
+            size.ensureWidth(viewSize.getWidth());
+        }
+        return size;
+    }
+
+    protected void doLayout(Size maximumSize) {
+        int y = 0;
+        for (View view : getSubviews()) {
+            Size viewSize = view.getMaximumSize();
+            view.setSize(viewSize);
+            view.layout(maximumSize);
+            view.setLocation(new Location(0, y));
+            y += viewSize.getHeight();
+        }
+    }
+
+    public String toString() {
+        return "Form" + getId();
+    }
+}</programlisting>
+
+        <para>The following example shows this</para>
+
+        <programlisting>
+public class MyListSpecification extends AbstractCompositeViewSpecification {
+
+    public MyListSpecification() {
+        SubviewSpec subviewSpec = new SubviewSpec() {
+            public View createSubview(final Content content, final ViewAxis axis) {
+                return new InternalFormSpecification().createView(content, axis);
+            }
+
+            public View decorateSubview(final View subview) {
+                return new EmptyBorder(3, new BackgroundBorder(new LineBorder(1, 8, new IconBorder(subview))));
+            }
+        };
+        builder = new StackLayout(new CollectionElementBuilder(subviewSpec));
+    }
+
+    public String getName() {
+        return "My List";
+    }
+
+    public boolean canDisplay(final Content content) {
+        return content.isCollection();
+    }
+}
+</programlisting>
+
+        <section>
+          <title>Master/detail panel</title>
+
+          <para>A panel with a set of closed objects on one side and an opened
+          object on the other side can be created using the
+          <classname>MasterDetailPanel</classname> class. When the master view
+          is created a <classname>SelectableViewAxis</classname> is created
+          and passed to each item so that it can indicate that is selected and
+          tell the main view to show that object on the detail side. For this
+          to work the item view must detect the
+          <classname>SelectableViewAxis</classname> and use it to set and show
+          that item's selected state. This is currently provided
+          TreeNodeBorder and by the
+          <classname>SubviewIconSpecification</classname>, which adds a
+          <classname>SelectedBorder</classname> decorator to the icon.</para>
+
+          <para>The detail side is initially created with BlankView object.
+          This is then replaced by a view created for the object that is
+          selected via the <classname>SelectableViewAxis</classname>.</para>
+        </section>
+      </section>
+
+      <section>
+        <title>Axis</title>
+
+        <para>If separate views need to be related, for example for their
+        sizes to be made consistent or find out a maximum value, then an
+        ViewAxis object should be created and passed to each subview.</para>
+
+        <para></para>
+
+        <para></para>
+      </section>
+
+      <section>
+        <title>Borders</title>
+
+        <para>Borders decorate views by adding behaviour and content to their
+        edges. Border are used at all levels to distinguish and control
+        windows, objects and fields. Borders are decorators, so are added like
+        this, which gives 3 pixels of empty space, a default white background,
+        a rounded rectangle and an object icon :</para>
+
+        <programlisting>new EmptyBorder(3, new BackgroundBorder(new LineBorder(1, 8, new IconBorder(subview))));</programlisting>
+
+        <para>Windows can be created by decorating a view with a
+        <classname>WindowBorder</classname> or
+        <classname>DialogBorder</classname>.</para>
+
+        <para>Control buttons can be added to views (as done for dialogs)
+        using a <classname>ButtonBorder</classname>.</para>
+
+        <para>Simple decorative borders include:
+        <classname>BackgroundBorder</classname>,
+        <classname>LineBorder</classname>, <classname>EmptyBorder</classname>
+        and <classname>LabelBorder</classname>.</para>
+
+        <section>
+          <title>Resizable views</title>
+
+          <para>Views are typically fixed size by design so that a view
+          always, where possible, shows it entire content. A view can be made
+          resizable by adding a <classname>ViewResizeBorder</classname>
+          decorator, which will provide a drag handle to resize the view
+          with.</para>
+
+          <programlisting>view = new ViewResizeBorder(view);</programlisting>
+        </section>
+
+        <section>
+          <title></title>
+
+          <para></para>
+        </section>
+      </section>
+
+      <section>
+        <title>Menus</title>
+
+        <para>Menu items are added by creating
+        <classname>UserAction</classname> objects.</para>
+      </section>
+
+      <section>
+        <title>Interactions</title>
+
+        <para>All user events - keyboard and mouse events - are routed through
+        <classname>InteractionHandler</classname>.</para>
+      </section>
+
+      <section>
+        <title>Gotchas</title>
+
+        <para>If a view, and particularly a border, has it contents changed so
+        it is wrapping a different object, then it must reset the view
+        property via a call to the setView method as shown below. This example
+        is from a border that replaces an icon with a form so initially
+        we</para>
+
+        <para>ExpanderBorder --&gt; ObjectBorder --&gt; Icon</para>
+
+        <para>and after the first click we get</para>
+
+        <para>ExpanderBorder --&gt; <emphasis>IconBorder</emphasis> --&gt;
+        <emphasis>CompositeView</emphasis></para>
+
+        <para>where the border and composite are newly created. Because the
+        form was created without reference to the ExpanderBorder it has the
+        <emphasis>view</emphasis> property set to reference the IconBorder.
+        Call setView as below corrects this so that view refers to the
+        ExpanderBorder instead.</para>
+
+        <programlisting>            View parent = wrappedView.getParent();
+            
+            getViewManager().removeFromNotificationList(wrappedView);
+            if (isOpen) {
+                wrappedView = new InternalFormSpecification().createView(getContent(), null);
+            } else {
+                ViewRequirement requirement = new ViewRequirement(getContent(), ViewRequirement.CLOSED);
+                wrappedView = Toolkit.getViewFactory().createView(requirement );
+            }
+            <emphasis role="bold">setView(this);</emphasis>
+            setParent(parent);
+</programlisting>
+      </section>
+
+      <section>
+        <title>Loading images</title>
+
+        <para></para>
+
+        <programlisting>            Image busyImage = ImageFactory.getInstance().loadIcon("busy", 16, null);
+</programlisting>
+      </section>
+    </chapter>
+
+    <chapter>
+      <title>Drag and drop user interface</title>
+
+      <para>The Drag and Drop User Interface (DnD UI) dynamically renders the
+      domain objects held within the system onto various styles of views and
+      automatically provides mechanisms such as menus and dialogs to interact
+      with those same objects.</para>
+
+      <para></para>
+
+      <para>Each view is set up by a <classname>ViewSpecification</classname>
+      that defines how to create a specific view. These specifications know
+      what content they can render via the
+      <methodname>canDisplay()</methodname> method.</para>
+
+      <para></para>
+
+      <para></para>
+
+      <section>
+        <title>Drawing</title>
+
+        <para>Each view can be drawn on buy overriding the
+        <methodname>draw(Canvas)</methodname> method in the view class. The
+        <classname>Canvas</classname> is the drawing surface for the view and
+        the class provides the tools for drawing lines, rectangles, eclipses,
+        text etc. The <classname>Canvas</classname> is used for both drawing
+        to screen and printing via the <methodname>print(Canvas)</methodname>
+        method (when extending the AbstractView the print method simply
+        delegates to the draw method so the former only needs implementing if
+        the rendering for printing is to be different to that shown on the
+        screen). The colour and text style that the drawing methods accept can
+        be got from the <classname>Toolkit</classname> class via the
+        <methodname>getColor</methodname> and <methodname>getText</methodname>
+        methods. The positioning of the drawing on the canvas is across and
+        down from the top-left corner of the canvas (unless an offset has been
+        added using the <methodname>offset(int xOffset, int
+        yOffset)</methodname> method, which will effectively cause every
+        <emphasis>x</emphasis> and <emphasis>y</emphasis> coordinate specified
+        thereafter to be translated to <emphasis>x + xOffset</emphasis> and
+        <emphasis>y + yOffset</emphasis> respectively).</para>
+
+        <para>The following example shows a simple but complete drawing method
+        that not just draws some text and lines but ensures that components
+        always sit properly together irrespective of the content text, which
+        is dynamic as it got from the object that this view is for. This was
+        defined in a subclass of <classname>AbstractView</classname> so there
+        is a call to the <methodname>draw</methodname> method in super class
+        as this will draw debug borders when debugging is turn on.</para>
+
+        <programlisting>    public void draw(Canvas canvas) {
+        super.draw(canvas);
+
+        String text = getContent().title();
+
+        Text textStyle = Toolkit.getText("normal");
+        
+        int x = HPADDING;
+        int y = VPADDING;
+        int maxWidth = 100;
+        int width = textStyle.stringWidth(text, maxWidth) + HPADDING * 2;
+        int height = textStyle.stringHeight(text, maxWidth) + VPADDING * 2;
+        
+        Color borderColor = Toolkit.getColor("secondary1");
+        Color backgroundColor = Toolkit.getColor("secondary3");
+        canvas.drawSolidRectangle(x, y, width, height, backgroundColor);
+        canvas.drawRectangle(x, y, width, height, borderColor);
+
+        x += HPADDING;
+        y += textStyle.getAscent();
+        Color textColor = Toolkit.getColor("primary1");
+        canvas.drawText(text, x, y, maxWidth, textColor,  textStyle);
+    }</programlisting>
+
+        <remark>Detail how this method works....</remark>
+
+        <para></para>
+
+        <remark>Add JavaDoc comments for: Canvas; Toolkit, View, AbstractView
+        (draw, print)</remark>
+      </section>
+    </chapter>
+  </part>
+
+  <chapter id="chp.Intro">
+    <title>Introduction</title>
+
+    <abstract>
+      <para>*** yada yada</para>
+    </abstract>
+
+    <sect1>
+      <title>***</title>
+
+      <para><emphasis>*** yada yada</emphasis></para>
+    </sect1>
+  </chapter>
+
+  <appendix>
+    <title>***</title>
+
+    <abstract>
+      <para>*** yada yada</para>
+    </abstract>
+
+    <sect1 id="sec.module-ui">
+      <title>***</title>
+
+      <para>*** yada yada</para>
+    </sect1>
+  </appendix>
+</book>

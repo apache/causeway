@@ -1,0 +1,166 @@
+#set( $symbol_pound = '#' )
+#set( $symbol_dollar = '$' )
+#set( $symbol_escape = '\' )
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+         http://www.apache.org/licenses/LICENSE-2.0
+         
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "file:src/test/resources/dtd/xhtml1-strict.dtd">
+<html lang="en" xml:lang="en" xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:concordion="http://www.concordion.org/2007/concordion"
+    xmlns:isis="http://isis.apache.org/2010/concordion">
+<link href="../../concordion.css" rel="stylesheet" type="text/css" />
+<body>
+
+<h1>Mark Item As Done</h1>
+
+<div class="example">
+
+<h2>Given</h2>
+<p>
+Given <a concordion:run="concordion"
+        href="Fixture.html">this fixture</a></p>
+
+<p>Locate to-do item:</p>
+<table
+    isis:execute="${symbol_pound}result=usingIsisViewerThatArgs(${symbol_pound}onObject, ${symbol_pound}aliasResultAs, ${symbol_pound}perform, ${symbol_pound}onMember, ${symbol_pound}thatIt, ${symbol_pound}value)">
+    <tr>
+        <th concordion:set="${symbol_pound}onObject">on object</th>
+        <th concordion:set="${symbol_pound}aliasResultAs">alias result as</th>
+        <th concordion:set="${symbol_pound}perform">perform</th>
+        <th concordion:set="${symbol_pound}onMember">on member</th>
+        <th concordion:assertEquals="${symbol_pound}result" />
+    </tr>
+    <tr>
+        <td>toDoItems</td>
+        <td>listOfItemsBefore</td>
+        <td>invoke action</td>
+        <td>not yet done</td>
+        <td>ok</td>
+    </tr>
+</table>
+
+<p
+    concordion:execute="${symbol_pound}result=aliasItemsInList(${symbol_pound}listAlias, ${symbol_pound}title, ${symbol_pound}aliasAs)">
+... and then alias the '<span concordion:set="${symbol_pound}title">Buy milk</span>' item in the returned <span
+    concordion:set="${symbol_pound}listAlias">listOfItemsBefore</span> as <span
+    concordion:set="${symbol_pound}aliasAs">buyMilkItem</span>; <span
+    concordion:assertEquals="${symbol_pound}result">ok</span>.</p>
+
+<p>Confirm to-do item is not done:</p>
+<table
+    isis:execute="${symbol_pound}result=usingIsisViewerThatArgs(${symbol_pound}onObject, ${symbol_pound}aliasResultAs, ${symbol_pound}perform, ${symbol_pound}onMember, ${symbol_pound}thatIt, ${symbol_pound}value)">
+    <tr>
+        <th concordion:set="${symbol_pound}onObject">on object</th>
+        <th concordion:set="${symbol_pound}aliasResultAs">alias result as</th>
+        <th concordion:set="${symbol_pound}perform">perform</th>
+        <th concordion:set="${symbol_pound}onMember">on member</th>
+        <th concordion:set="${symbol_pound}thatIt">that it</th>
+        <th concordion:set="${symbol_pound}value">value</th>
+        <th concordion:assertEquals="${symbol_pound}result" />
+    </tr>
+    <tr>
+        <td>buyMilkItem</td>
+        <td></td>
+        <td>check property</td>
+        <td>done</td>
+        <td>is</td>
+        <td>False</td>
+        <td>ok</td>
+    </tr>
+</table>
+
+
+
+<h2>When</h2>
+
+<p>Mark as done</p>
+<table
+	isis:execute="${symbol_pound}result=usingIsisViewerThatArgs(${symbol_pound}onObject, ${symbol_pound}aliasResultAs, ${symbol_pound}perform, ${symbol_pound}onMember, ${symbol_pound}thatIt, ${symbol_pound}value)">
+	<tr>
+		<th concordion:set="${symbol_pound}onObject">on object</th>
+		<th concordion:set="${symbol_pound}aliasResultAs">alias result as</th>
+		<th concordion:set="${symbol_pound}perform">perform</th>
+		<th concordion:set="${symbol_pound}onMember">on member</th>
+		<th concordion:assertEquals="${symbol_pound}result" />
+	</tr>
+    <tr>
+        <td>buyMilkItem</td>
+        <td></td>
+        <td>invoke action</td>
+        <td>mark as done</td>
+        <td>ok</td>
+    </tr>
+</table>
+
+<h2>Then</h2>
+<p>Confirm item is done...</p>
+<table
+    isis:execute="${symbol_pound}result=usingIsisViewerThatArgs(${symbol_pound}onObject, ${symbol_pound}aliasResultAs, ${symbol_pound}perform, ${symbol_pound}onMember, ${symbol_pound}thatIt, ${symbol_pound}value)">
+    <tr>
+        <th concordion:set="${symbol_pound}onObject">on object</th>
+        <th concordion:set="${symbol_pound}aliasResultAs">alias result as</th>
+        <th concordion:set="${symbol_pound}perform">perform</th>
+        <th concordion:set="${symbol_pound}onMember">on member</th>
+        <th concordion:set="${symbol_pound}thatIt">that it</th>
+        <th concordion:set="${symbol_pound}value">value</th>
+        <th concordion:assertEquals="${symbol_pound}result" />
+    </tr>
+    <tr>
+        <td>buyMilkItem</td>
+        <td></td>
+        <td>check property</td>
+        <td>done</td>
+        <td>is</td>
+        <td>True</td>
+        <td>ok</td>
+    </tr>
+</table>
+
+<p>... and that when the list of items is obtained again...</p>
+<table
+    isis:execute="${symbol_pound}result=usingIsisViewerThatArgs(${symbol_pound}onObject, ${symbol_pound}aliasResultAs, ${symbol_pound}perform, ${symbol_pound}onMember, ${symbol_pound}thatIt, ${symbol_pound}value)">
+    <tr>
+        <th concordion:set="${symbol_pound}onObject">on object</th>
+        <th concordion:set="${symbol_pound}aliasResultAs">alias result as</th>
+        <th concordion:set="${symbol_pound}perform">perform</th>
+        <th concordion:set="${symbol_pound}onMember">on member</th>
+        <th concordion:assertEquals="${symbol_pound}result" />
+    </tr>
+    <tr>
+        <td>toDoItems</td>
+        <td>listOfItemsAfter</td>
+        <td>invoke action</td>
+        <td>not yet done</td>
+        <td>ok</td>
+    </tr>
+</table>
+
+<p concordion:execute="${symbol_pound}result=checkCollectionDoesNotContain(${symbol_pound}listAlias,${symbol_pound}alias)">
+... then the <span concordion:set="${symbol_pound}alias">buyMilkItem</span> is no 
+longer in that list (<span concordion:set="${symbol_pound}listAlias">listOfItemsAfter</span>);
+  <span concordion:assertEquals="${symbol_pound}result">ok</span>.
+</p>
+
+<!-- uncomment the line below to run up the DnD viewer -->
+<!-- 
+<p concordion:execute="runViewer()">run viewer</p>
+--></div>
+
+</body>
+</html>

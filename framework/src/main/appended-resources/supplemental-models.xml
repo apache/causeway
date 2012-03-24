@@ -1,0 +1,294 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Licensed to the Apache Software Foundation (ASF) under one or more contributor 
+    license agreements. See the NOTICE file distributed with this work for additional 
+    information regarding copyright ownership. The ASF licenses this file to 
+    you under the Apache License, Version 2.0 (the "License"); you may not use 
+    this file except in compliance with the License. You may obtain a copy of 
+    the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required 
+    by applicable law or agreed to in writing, software distributed under the 
+    License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS 
+    OF ANY KIND, either express or implied. See the License for the specific 
+    language governing permissions and limitations under the License. -->
+<supplementalDataModels xmlns="http://maven.apache.org/supplemental-model/1.0.0"
+                        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                        xsi:schemaLocation="http://maven.apache.org/supplemental-model/1.0.0 http://maven.apache.org/xsd/supplemental-model-1.0.0.xsd">
+  <supplement>
+    <project>
+      <groupId>cglib</groupId>
+      <artifactId>cglib-nodep</artifactId>
+      <version>2.1_3</version>
+      <licenses>
+	      <license>
+	          <name>Apache 1.1</name>
+	          <url>http://www.apache.org/licenses/LICENSE-1.1</url>
+	          <distribution>repo</distribution>
+	      </license>
+      </licenses>
+    </project>
+  </supplement>
+
+  <supplement>
+    <project>
+      <groupId>aopalliance</groupId>
+      <artifactId>aopalliance</artifactId>
+      <version>1.0</version>
+      <licenses>
+          <license>
+              <name>Public Domain</name>
+          </license>
+      </licenses>
+    </project>
+  </supplement>
+
+
+  <supplement>
+    <project>
+      <groupId>asm</groupId>
+      <artifactId>asm</artifactId>
+      <version>3.1</version>
+      <licenses>
+          <license>
+              <name>ASM OW2 License, Copyright (c) 2000-2005 INRIA, France Telecom</name>
+              <url>http://asm.ow2.org/license.html</url>
+          </license>
+      </licenses>
+    </project>
+  </supplement>
+
+  
+  <supplement>
+    <project>
+      <groupId>javassist</groupId>
+      <artifactId>javassist</artifactId>
+      <version>3.8.0.GA</version>
+      <licenses>
+        <license>
+            <name>GNU Lesser General Public License, version 2.1</name>
+            <url>http://www.gnu.org/licenses/lgpl-2.1.html</url>
+            <distribution>repo</distribution>          
+        </license>
+        <license>
+            <name>Mozilla Public License 1.1</name>
+            <url>http://www.mozilla.org/MPL/MPL-1.1.html</url>
+            <distribution>repo</distribution>          
+        </license>
+      </licenses>
+    </project>
+  </supplement>
+  
+  <supplement>
+    <project>
+      <groupId>org.scannotation</groupId>
+      <artifactId>scannotation</artifactId>
+      <version>1.0.3</version>
+      <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>          
+        </license>
+      </licenses>
+    </project>
+  </supplement>
+  
+  <supplement>
+    <project>
+      <groupId>org.codehaus.groovy</groupId>
+      <artifactId>groovy-all</artifactId>
+      <version>1.7.2</version>
+      <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>          
+        </license>
+      </licenses>
+    </project>
+  </supplement>
+  
+  <supplement>
+    <project>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+      <version>1.5.8</version>
+      <licenses>
+        <license>
+            <name>MIT License</name>
+            <url>http://www.opensource.org/licenses/mit-license.php</url>
+            <distribution>repo</distribution>          
+        </license>
+      </licenses>
+    </project>
+  </supplement>
+  
+  <supplement>
+    <project>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-log4j12</artifactId>
+      <version>1.5.8</version>
+      <licenses>
+        <license>
+            <name>MIT License</name>
+            <url>http://www.opensource.org/licenses/mit-license.php</url>
+            <distribution>repo</distribution>          
+        </license>
+      </licenses>
+    </project>
+  </supplement>
+
+  
+  <supplement>
+    <project>
+      <groupId>dom4j</groupId>
+      <artifactId>dom4j</artifactId>
+      <version>1.4</version>
+      <licenses>
+        <license>
+            <name>BSD License</name>
+            <url>http://dom4j.sourceforge.net/dom4j-1.6.1/license.html</url>
+            <distribution>repo</distribution>          
+        </license>
+      </licenses>
+    </project>
+  </supplement>
+
+  <supplement>
+    <project>
+      <groupId>org.jdom</groupId>
+      <artifactId>jdom</artifactId>
+      <version>1.1</version>
+      <licenses>
+        <license>
+            <name>Apache-style License</name>
+            <url>http://www.jdom.org/docs/faq.html#a0030</url>
+            <distribution>repo</distribution>          
+        </license>
+      </licenses>
+    </project>
+  </supplement>
+
+  <supplement>
+    <project>
+      <groupId>net.jcip</groupId>
+      <artifactId>jcip-annotations</artifactId>
+      <version>1.0</version>
+      <licenses>
+        <license>
+            <name>Creative Commons Attribution 2.5 License</name>
+            <url>http://creativecommons.org/licenses/by/2.5/</url>
+            <distribution>repo</distribution>          
+        </license>
+      </licenses>
+    </project>
+  </supplement>
+  
+  <supplement>
+    <project>
+      <groupId>isorelax</groupId>
+      <artifactId>isorelax</artifactId>
+      <version>20020414</version>
+      <licenses>
+        <license>
+            <name>MIT License</name>
+            <url>http://www.opensource.org/licenses/mit-license.html</url>
+            <distribution>repo</distribution>          
+        </license>
+      </licenses>
+    </project>
+  </supplement>
+
+  <supplement>
+    <project>
+      <groupId>msv</groupId>
+      <artifactId>msv</artifactId>
+      <version>20020414</version>
+      <name>Sun Multi-Schema XML Validator (MSV)</name>
+      <licenses>
+        <license>
+            <name>BSD Modified License</name>
+            <url>http://olex.openlogic.com/licenses/msv-bsd-license</url>
+            <distribution>repo</distribution>          
+        </license>
+      </licenses>
+    </project>
+  </supplement>
+
+  <supplement>
+    <project>
+      <groupId>relaxngDatatype</groupId>
+      <artifactId>relaxngDatatype</artifactId>
+      <version>20020414</version>
+      <licenses>
+        <license>
+            <name>Java Web Services Developer Pack License, v1.5</name>
+            <url>http://download.oracle.com/docs/cd/E17802_01/webservices/webservices/docs/1.5/LICENSE</url>
+            <distribution>repo</distribution>          
+        </license>
+      </licenses>
+    </project>
+  </supplement>
+
+  <supplement>
+    <project>
+      <groupId>saxpath</groupId>
+      <artifactId>saxpath</artifactId>
+      <version>1.0-FCS</version>
+      <licenses>
+        <license>
+            <name>Werken Apache-style License</name>
+            <url>http://www.saxpath.org/</url>
+            <distribution>repo</distribution>          
+        </license>
+      </licenses>
+    </project>
+  </supplement>
+
+  <supplement>
+    <project>
+      <groupId>jaxen</groupId>
+      <artifactId>jaxen</artifactId>
+      <version>1.0-FCS</version>
+      <licenses>
+        <license>
+            <name>Werken Apache-style License</name>
+            <url>http://jaxen.codehaus.org/faq.html</url>
+            <distribution>repo</distribution>          
+        </license>
+      </licenses>
+    </project>
+  </supplement>
+
+
+
+  <supplement>
+    <project>
+      <groupId>commons-codec</groupId>
+      <artifactId>commons-codec</artifactId>
+      <version>1.2</version>
+      <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>          
+        </license>
+      </licenses>
+    </project>
+  </supplement>
+
+  <supplement>
+    <project>
+      <groupId>xalan</groupId>
+      <artifactId>xalan</artifactId>
+      <version>2.7.0</version>
+      <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>          
+        </license>
+      </licenses>
+    </project>
+  </supplement>
+
+ 
+</supplementalDataModels>

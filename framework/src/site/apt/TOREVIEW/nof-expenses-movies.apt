@@ -1,0 +1,69 @@
+~~  Licensed to the Apache Software Foundation (ASF) under one
+~~  or more contributor license agreements.  See the NOTICE file
+~~  distributed with this work for additional information
+~~  regarding copyright ownership.  The ASF licenses this file
+~~  to you under the Apache License, Version 2.0 (the
+~~  "License"); you may not use this file except in compliance
+~~  with the License.  You may obtain a copy of the License at
+~~
+~~        http://www.apache.org/licenses/LICENSE-2.0
+~~
+~~  Unless required by applicable law or agreed to in writing,
+~~  software distributed under the License is distributed on an
+~~  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+~~  KIND, either express or implied.  See the License for the
+~~  specific language governing permissions and limitations
+~~  under the License.
+
+
+ -----
+ Tutorial Movies
+ -----
+ The [[NAME]] Team
+ -----
+
+Same application, different GUIs
+
+ Because [[NAME]] automatically generates the GUI for your domain application, it makes it trivial
+ to run your application with different GUIs.
+ 
+ Why would you want to do this?  Well, you might legitimately have different user bases who access the
+ same application through different means.  For example, your internal users might use the rich desktop
+ provided by the {{{./plugins/dnd-viewer/index.html}DnD viewer}}, while external users might access the
+ same app (though probably with different permissions) via the web and using the {{{./plugins/html-viewer/index.html}HTML viewer}}. 
+ 
+ Another reason for different GUIs is that you might prefer one for development (the DnD viewer is particularly
+ good at helping to explore a domain), but intend to use a different one for deployment.  You might even intend to
+ write your own proprietary viewer, but want to get started on a domain model first.
+ 
+ The following movies show how the example {{{./demo.html}expenses application}} (that ships with [[NAME]]) is presented by 
+ the DnD viewer and by the HTML viewer.  In both cases no GUI code was written; the applications you
+ can see are generated entirely from domain objects.
+
+* DnD Viewer
+
+ Using the {{{./plugins/dnd-viewer/index.html}DnD viewer}}:
+
+ * {{{./movies/Retrieving and viewing a Claim (DND UI).htm}Retrieving and viewing a Claim}}  
+
+ * {{{./movies/Creating and submitting a new Claim (DND UI).htm}Creating and submitting a new Claim}}
+
+ * {{{./movies/Approving claims (DND UI).htm}Approving claims}}  
+
+ []
+ 
+* HTML Viewer
+
+ Using the {{{./plugins/html-viewer/index.html}HTML viewer}}:
+
+ * {{{./movies/Retrieving and viewing a Claim (HTML UI).htm}Retrieving and viewing a Claim}}  
+
+ * {{{./movies/Creating and submitting a new Claim (HTML UI).htm}Creating and submitting a new Claim}}
+
+ * {{{./movies/Approving claims (HTML UI).htm}Approving claims}}
+ 
+ []
+ 
+* What Next? 
+ 
+ Next, you might want to try out this same application {{{./demo.html}online}}.  Or, start to see how the {{{./tutorial-movies.html}GUI relates}} back to the code.  Alternatively, go back to the {{{./index.html}home page}} for other resources. 

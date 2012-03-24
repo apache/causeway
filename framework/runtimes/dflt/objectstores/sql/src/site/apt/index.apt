@@ -1,0 +1,48 @@
+~~  Licensed to the Apache Software Foundation (ASF) under one
+~~  or more contributor license agreements.  See the NOTICE file
+~~  distributed with this work for additional information
+~~  regarding copyright ownership.  The ASF licenses this file
+~~  to you under the Apache License, Version 2.0 (the
+~~  "License"); you may not use this file except in compliance
+~~  with the License.  You may obtain a copy of the License at
+~~
+~~        http://www.apache.org/licenses/LICENSE-2.0
+~~
+~~  Unless required by applicable law or agreed to in writing,
+~~  software distributed under the License is distributed on an
+~~  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+~~  KIND, either express or implied.  See the License for the
+~~  specific language governing permissions and limitations
+~~  under the License.
+
+
+
+SQL ObjectStore
+
+ The <sql> object store module provides the ability to persist 
+ domain objects into an RDBMS.  It has no external dependencies, 
+ using simply JDBC.
+
+ For more information, see the 
+ {{{./sql-impl/index.html}Implementation}}, 
+ {{{./sql-tests-common/index.html}Common Tests}} and 
+ {{{./sql-tests-served/index.html}Served Tests}}
+ documentation.
+ 
+ 
+Alternatives
+
+  Alternatives include:
+  
+  * the {{{../dflt/index.html}dflt}} in-memory object store (for prototyping only)
+
+  * the {{{../xml/index.html}XML}} object store
+
+  * the {{{../nosql/index.html}NoSQL}} object store
+
+ []
+ 
+ Another more sophisticated but also more complex alternative has been implemented
+ using JPA.  However, this is currently not part of Isis because it has a
+ dependency on Hibernate (not compatible with the Apache license).  One
+ option under consideration is to port JPA object store to use OpenJPA. 

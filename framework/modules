@@ -1,0 +1,101 @@
+#  Licensed to the Apache Software Foundation (ASF) under one
+#  or more contributor license agreements.  See the NOTICE file
+#  distributed with this work for additional information
+#  regarding copyright ownership.  The ASF licenses this file
+#  to you under the Apache License, Version 2.0 (the
+#  "License"); you may not use this file except in compliance
+#  with the License.  You may obtain a copy of the License at
+#  
+#         http://www.apache.org/licenses/LICENSE-2.0
+#         
+#  Unless required by applicable law or agreed to in writing,
+#  software distributed under the License is distributed on an
+#  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+#  KIND, either express or implied.  See the License for the
+#  specific language governing permissions and limitations
+#  under the License.
+./:
+applib/:leaf
+core/commons/:leaf
+core/metamodel/:leaf
+core/:
+core/progmodel/:leaf
+core/runtime/:leaf
+core/webapp/:leaf
+core/testsupport/:leaf
+progmodels/:
+progmodels/dflt/:leaf
+progmodels/groovy/:
+progmodels/groovy/applib/:leaf
+progmodels/groovy/metamodel/:leaf
+progmodels/wrapper/:
+progmodels/wrapper/wrapper-applib/:leaf
+progmodels/wrapper/wrapper-metamodel/:leaf
+runtimes/:
+runtimes/dflt/:
+runtimes/dflt/bytecode/:
+runtimes/dflt/bytecode/dflt/:leaf
+runtimes/dflt/bytecode/identity/:leaf
+runtimes/dflt/bytecode/javassist/:leaf
+runtimes/dflt/monitoring/:
+runtimes/dflt/objectstores/:
+runtimes/dflt/objectstores/dflt/:leaf
+runtimes/dflt/objectstores/nosql/:leaf
+runtimes/dflt/objectstores/xml/:leaf
+runtimes/dflt/objectstores/sql/:
+runtimes/dflt/objectstores/sql/sql-tests-common/:leaf
+runtimes/dflt/objectstores/sql/sql-tests-served/:leaf
+runtimes/dflt/objectstores/sql/sql-impl/:leaf
+runtimes/dflt/profilestores/:
+runtimes/dflt/profilestores/dflt/:leaf
+runtimes/dflt/profilestores/xml/:leaf
+runtimes/dflt/profilestores/sql/:leaf
+runtimes/dflt/remoting/:
+runtimes/dflt/remoting/common/:leaf
+runtimes/dflt/remoting/marshalling-encode/:leaf
+runtimes/dflt/remoting/marshalling-serialize/:leaf
+runtimes/dflt/remoting/marshalling-xstream/:leaf
+runtimes/dflt/remoting/transport-http/:
+runtimes/dflt/remoting/transport-http/transport-http-server/:leaf
+runtimes/dflt/remoting/transport-http/transport-http-client/:leaf
+runtimes/dflt/remoting/transport-sockets/:leaf
+runtimes/dflt/runtime/:leaf
+runtimes/dflt/webserver/:leaf
+runtimes/dflt/webapp/:leaf
+runtimes/embedded/:leaf
+security/:
+security/dflt/:leaf
+security/file/:leaf
+security/ldap/:leaf
+security/sql/:leaf
+viewer/:
+viewer/bdd/:
+viewer/bdd/common/:leaf
+viewer/bdd/concordion/:leaf
+viewer/bdd/concordion-tck/:leaf
+viewer/dnd/:leaf
+viewer/dnd-tck/:leaf
+viewer/html/:leaf
+viewer/html-tck/:leaf
+viewer/json/:
+viewer/json/json-applib/:leaf
+viewer/json/json-viewer/:leaf
+viewer/json/json-tck/:leaf
+viewer/junit/:leaf
+viewer/junit-tck/:leaf
+viewer/scimpi/:
+viewer/scimpi/scimpi-dispatcher/:leaf
+viewer/scimpi/scimpi-servlet/:leaf
+viewer/scimpi/scimpi-tck/:leaf
+viewer/xhtml/:
+viewer/xhtml/xhtml-applib/:leaf
+viewer/xhtml/xhtml-tck/:leaf
+viewer/xhtml/xhtml-viewer/:leaf
+viewer/wicket/:
+viewer/wicket/wicket-tck/:leaf
+viewer/wicket/wicket-ui/:leaf
+viewer/wicket/wicket-applib/:leaf
+viewer/wicket/wicket-metamodel/:leaf
+viewer/wicket/wicket-model/:leaf
+viewer/wicket/wicket-viewer/:leaf
+tck/:

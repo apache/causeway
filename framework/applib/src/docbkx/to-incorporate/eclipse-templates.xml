@@ -1,0 +1,467 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+-->
+<!DOCTYPE article PUBLIC "-//OASIS//DTD Simplified DocBook XML V1.1//EN"
+"http://www.oasis-open.org/docbook/xml/simple/1.1/sdocbook.dtd">
+<article>
+  <articleinfo>
+    <title></title>
+
+    <author>
+      <firstname></firstname>
+
+      <surname></surname>
+
+      <affiliation>
+        <orgname></orgname>
+      </affiliation>
+    </author>
+
+    <pubdate></pubdate>
+  </articleinfo>
+
+  <section>
+    <title>Using the templates in Eclipse</title>
+
+    <para>The latest release of [[NAME]] (version 4) provides a set of
+    templates for quickly adding snippets to your domain classes,  from properties and collections to title and dependencies.</para>
+
+    <para>To set up Eclipse so these are available you need to import the template files that are included in the distribution. In both the Ant and
+    Maven based distributions they can be found the following
+    directory:</para>
+
+    <literallayout>resources
+|-- ide
+|   `-- eclipse
+|       |-- launch
+|       `-- templates
+|           |-- jmock2-templates.xml
+|           |-- junit4-templates.xml
+|           `-- isis-templates.xml
+</literallayout>
+
+    <para>Open up Eclipse's preferences dialog
+    (<option>Windows</option>/<option>Preferences</option>) and navigate to
+    <option>Java</option> - <option>Editor</option> -
+    <option>Template</option>. Click the <option>Import</option> button,
+    browse to the <filename>templates</filename> directory, select the
+    <filename>isis-templates.xml</filename> file and press OK. A
+    series of templates will be added prefixed with <emphasis>no</emphasis>
+    such as <emphasis>noa</emphasis>, <emphasis>nol</emphasis>,
+    <emphasis>nop</emphasis> etc. Press OK to commit the changes and you are
+    ready to use them.</para>
+
+    <para>For example, to insert a property type <emphasis>nop</emphasis> in the editor
+    window within the class declations and press
+    <userinput>ctrl-space</userinput> to bring up the available
+    templates.</para>
+
+    <mediaobject>
+      <imageobject>
+        <imagedata fileref="images/template-list.png" />
+      </imageobject>
+    </mediaobject>
+
+    <para>Each template has a brief description and the template result is
+    shown in the box next to the list. Selecting the template inserts the code
+    into your file at the cursor replacing the template name that you
+    typed.</para>
+
+    <mediaobject>
+      <imageobject>
+        <imagedata fileref="images/template-insert.png" />
+      </imageobject>
+    </mediaobject>
+
+    <para>It also highlights the parts that you can change. So in this example
+    when we type <emphasis>Purchase</emphasis>, tab,
+    <emphasis>Date</emphasis>, tab, and <emphasis>date</emphasis> we end up
+    with a complete property declaration for a Date value that will display
+    with the label <emphasis>Date</emphasis>.</para>
+
+    <mediaobject>
+      <imageobject>
+        <imagedata fileref="images/template-complete.png" />
+      </imageobject>
+    </mediaobject>
+
+    <para>The other files each provide a couple of templates for building
+    Junit version 4 tests and using JMock.</para>
+
+    <para>The available [[NAME]] templates are:-</para>
+
+    <variablelist>
+      <varlistentry>
+        <term>noa</term>
+
+        <listitem>
+          <para>Action</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>noacho</term>
+
+        <listitem>
+          <para>Action argument N choices</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>noadef</term>
+
+        <listitem>
+          <para>Action argument defaults</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>noadis</term>
+
+        <listitem>
+          <para>Action disabling</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>noahid</term>
+
+        <listitem>
+          <para>Action hiding</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>noaval</term>
+
+        <listitem>
+          <para>Action validation</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>noc-1m</term>
+
+        <listitem>
+          <para>Collection (1:m bidir parent)</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>noc-mmc</term>
+
+        <listitem>
+          <para>Collection (m:m bidir child)</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>noc-mmp</term>
+
+        <listitem>
+          <para>Collection (m:m bidir parent)</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>nocdis</term>
+
+        <listitem>
+          <para>Collection disabling</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>nochid</term>
+
+        <listitem>
+          <para>Collection hiding</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>nocl</term>
+
+        <listitem>
+          <para>Collection (list)</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>nocmod</term>
+
+        <listitem>
+          <para>Collection modify</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>nocs</term>
+
+        <listitem>
+          <para>Collection (set)</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>nocval</term>
+
+        <listitem>
+          <para>Collection validation</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>nod</term>
+
+        <listitem>
+          <para>Dependencies region</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>nods</term>
+
+        <listitem>
+          <para>Dependencies - injected service</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>nofp</term>
+
+        <listitem>
+          <para>Factory - new instance (persistent)</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>noft</term>
+
+        <listitem>
+          <para>Factory - new instance (transient)</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>noid</term>
+
+        <listitem>
+          <para>Identification region</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>noidicon</term>
+
+        <listitem>
+          <para>Identification - icon</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>noidtitle</term>
+
+        <listitem>
+          <para>Identification - title</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>nol</term>
+
+        <listitem>
+          <para>Lifecycle region</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>nolc</term>
+
+        <listitem>
+          <para>Lifecycle - create</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>noll</term>
+
+        <listitem>
+          <para>Lifecycle - load</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>nolp</term>
+
+        <listitem>
+          <para>Lifecycle - persist</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>nolr</term>
+
+        <listitem>
+          <para>Lifecycle - remove</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>nolu</term>
+
+        <listitem>
+          <para>Lifecycle - update</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>nop</term>
+
+        <listitem>
+          <para>Property</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>nop-11c</term>
+
+        <listitem>
+          <para>Property (1:1 bidir child)</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>nop-11p</term>
+
+        <listitem>
+          <para>Property (1:1 bidir parent)</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>nop-m1</term>
+
+        <listitem>
+          <para>Property (m:1 bidir child)</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>nopcho</term>
+
+        <listitem>
+          <para>Property choices</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>nopdef</term>
+
+        <listitem>
+          <para>Property defaults</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>nopdis</term>
+
+        <listitem>
+          <para>Property disabling</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>nophid</term>
+
+        <listitem>
+          <para>Property hiding</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>nopmod</term>
+
+        <listitem>
+          <para>Property modify</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>nopval</term>
+
+        <listitem>
+          <para>Property validation</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>nosa</term>
+
+        <listitem>
+          <para>Search for all</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>nosafil</term>
+
+        <listitem>
+          <para>Search for all matching</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>nosffil</term>
+
+        <listitem>
+          <para>Search for first matching</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>nosufil</term>
+
+        <listitem>
+          <para>Search for unique matching</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>noval</term>
+
+        <listitem>
+          <para>Object-level validation</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+
+    <variablelist>
+      <varlistentry>
+        <term></term>
+
+        <listitem>
+          <para></para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+
+    <para></para>
+  </section>
+</article>

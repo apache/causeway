@@ -1,0 +1,79 @@
+~~  Licensed to the Apache Software Foundation (ASF) under one
+~~  or more contributor license agreements.  See the NOTICE file
+~~  distributed with this work for additional information
+~~  regarding copyright ownership.  The ASF licenses this file
+~~  to you under the Apache License, Version 2.0 (the
+~~  "License"); you may not use this file except in compliance
+~~  with the License.  You may obtain a copy of the License at
+~~
+~~        http://www.apache.org/licenses/LICENSE-2.0
+~~
+~~  Unless required by applicable law or agreed to in writing,
+~~  software distributed under the License is distributed on an
+~~  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+~~  KIND, either express or implied.  See the License for the
+~~  specific language governing permissions and limitations
+~~  under the License.
+
+Deploy <Isis> domain model on your own Framework
+
+  The {{{../applib/index.html}programming model}} defined by Isis deliberately minimizes
+  the dependencies on the rest of the framework.  In fact, the only hard dependency
+  that the domain model classes have on Isis is through the <<<org.apache.isis.applib>>> 
+  classes, mostly to pick up annotations such as {{{../applib/xref/org/apache/isis/applib/annotation/Disabled.html}@Disabled}}.  
+  The idea is to make it easy to be able to write take a domain object {{{./develop.html}prototyped}} 
+  and/or {{{./specify-and-test.html}tested}} using Isis, but to deploy on some
+  other framework's runtime.
+  
+  If you are interested in taking this approach, note that there is one important
+  interface that must be implemented by your own framework, namely
+  {{{../applib/xref/org/apache/isis/applib/DomainObjectContainer.html}DomainObjectContainer}}.  
+  This interface represents the one-and-only "touchpoint" between the domain objects and the runtime.
+  If you inspect the methods then you'll see it covers such concerns as persistence, and of
+  raising warnings or errors.
+  
+  Isis' own runtime injects an (implementation of this) interface into each and every domain
+  object.  You will likely need to do something similar within your own framework, (or come up with an equivalent
+  mechanism, eg Service Locator pattern).
+  
+  Note also that although Isis does define a convenience superclass <<<AbstractDomainObject>>>, 
+  isn't necessary for domain objects to inherit from it.  In fact, the main purpose of this superclass
+  is to provide delegate methods to the injected <<<DomainObjectContainer>>>.
+  
+* {Custom UI}
+
+  One of the main reasons for going down the custom framework route is to have full control over the
+  user interface, but it does beg the question: why bother with Isis at all?
+  
+  The answer is that using Isis to write your domain objects will: 
+  
+  * allow you to build a better/richer/deeper domain model more quickly.
+    
+    The key to better domain models is stakeholder feedback.  You can use Isis to spike out prototypes, and 
+    then feedback the results of the insights gained from those prototypes into more formal development 
+    in your actual runtime framework. 
+  
+  * enforce proper architectural layering.
+  
+    Isis only lets business logic to be written in domain objects.  Using Isis for your domain model 
+    helps prevent business logic creeping into adjacent layers.
+
+  That said, it is also possible to deploy Isis as a {{{./deploy-as-rest.html}REST webservice}}, so you
+  could choose to implement a custom UI (eg in HTML5) that calls back to an Isis backend. 
+  
+* {Custom persistence}
+
+  Another reason for choosing the custom framework is full control over persistence.  That is, you can
+  use whichever persistence technology you prefer, not just those that have been integrated by Isis.
+  
+  That said, Isis has a pluggable persistence API, so you could integrate to some other persistence
+  mechanism by implementing to this API.
+  
+* Embedded Runtime
+
+  Even if you choose to deploy on your own framework, you may want to explore Isis
+  {{{../runtimes/embedded/index.html}Embedded Runtime}} module. This allows the Isis metamodel to be
+  instantiated standalone from the rest of the framework.  Using this you could, for example, roll-your-own
+  generic UI; or you could integrate with other UI frameworks (such as {{{http://metawidget.org}MetaWidget}})
+  that do a lot of the heavy lifting for you.
+  

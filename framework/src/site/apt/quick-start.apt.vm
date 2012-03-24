@@ -1,0 +1,320 @@
+~~  Licensed to the Apache Software Foundation (ASF) under one
+~~  or more contributor license agreements.  See the NOTICE file
+~~  distributed with this work for additional information
+~~  regarding copyright ownership.  The ASF licenses this file
+~~  to you under the Apache License, Version 2.0 (the
+~~  "License"); you may not use this file except in compliance
+~~  with the License.  You may obtain a copy of the License at
+~~
+~~        http://www.apache.org/licenses/LICENSE-2.0
+~~
+~~  Unless required by applicable law or agreed to in writing,
+~~  software distributed under the License is distributed on an
+~~  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+~~  KIND, either express or implied.  See the License for the
+~~  specific language governing permissions and limitations
+~~  under the License.
+
+
+
+Where to Start?
+
+  The quickest way to get started with <Apache Isis> is to run the 
+  quickstart archetype.
+  
+  Create a new directory, and 'cd' into that directory.   Then run the 
+  following command:
+
++------------------------------------------------------------
+mvn archetype:generate  \
+    -D archetypeGroupId=org.apache.isis \
+    -D archetypeArtifactId=quickstart-archetype \
+    -D archetypeVersion=${project.version} \
+    -D groupId=com.mycompany \
+    -D artifactId=myapp
++------------------------------------------------------------
+
+  where:
+  
+  * groupId represents your own organization, and
+  
+  * artifactId is a unique identifier for this app within your organization.
+
+  []
+
+  You'll then be prompted for some further properties (which you can generally leave as the default):
+  
+  * enter a version, eg 1.0-SNAPSHOT
+    
+  * enter a package
+    
+  * Confirm the entry
+    
+  []
+  
+  The archetype generation process will then run; it only takes a few seconds.
+
+  Switch into the root directory of your newly generated app:
+
++------------------------------------------------------------
+cd myapp   
++------------------------------------------------------------
+  
+  where 'myapp' is the artifactId entered above.
+
+
+App Structure
+  
+  The generated app is a very simple application consisting of a single domain 
+  object for tracking to-do items.  The intention is not to showcase all of
+  Isis' capabilities; rather it is to allow you to very easily modify the
+  generated application (eg rename "ToDoItem" to "Customer") without having 
+  to waste time deleting lots of generated code.
+  
+*------------------------+-------------------------------------------------------------+
+| Module                 | Description                                                 |
+*------------------------+-------------------------------------------------------------+
+| myapp                  | The parent (aggregator) module                              |
+*------------------------+-------------------------------------------------------------+
+| myapp-dom              | The domain object model, consisting of ToDoItem and         |
+|                        | ToDoItems (repository) interface.                           |
+*------------------------+-------------------------------------------------------------+
+| myapp-fixture          | Domain object fixtures used for initializing the system     |
+|                        | when being demo'ed or for unit testing.                     |
+*------------------------+-------------------------------------------------------------+
+| myapp-objstore-dflt    | Implementation of ToDoItems repository, for the default     |
+|                        | (in-memory) object store.                                   |
+*------------------------+-------------------------------------------------------------+
+| myapp-objstore-mongodb | Implementation of ToDoItems repository, for the             |
+|                        | NoSQL MongoDB object store.                                 |
+*------------------------+-------------------------------------------------------------+
+| myapp-objstore-sql     | Implementation of ToDoItems repository, for the             |
+|                        | SQL object store.                                           |
+*------------------------+-------------------------------------------------------------+
+| myapp-tests-bdd        | Run domain object tests using Isis'                         |
+|                        | {{{./viewer/bdd/index.html}integration}} with the           |
+|                        | {{{http://concordion.org}Concordion}} BDD framework         |
+*------------------------+-------------------------------------------------------------+
+| myapp-tests-junit      | Run domain object tests using Isis'                         |
+|                        | {{{./viewer/junit/index.html}custom test runner}}           |
+|                        | for {{{http://junit.org}JUnit}} runner                      |
+*------------------------+-------------------------------------------------------------+
+| myapp-webapp           | Run as a webapp (from web.xml) using either the             |
+|                        | {{{./viewer/html/index.html}HTML viewer}}, the              |
+|                        | {{{./viewer/scimpi/index.html}Scimpi viewer}}, or the       |
+|                        | {{{./viewer/json/index.html}JSON (RESTful) viewer}}.        |
+|                        | Also includes a simple demo mobile app using the JSON viewer|
+*------------------------+-------------------------------------------------------------+
+
+  Out of the box the generated app is configured to run with the support the default 
+  in-memory object store, but can easily be configured to work with the NoSQL or the
+  SQL object stores.  The app includes an index.html with further information on this.
+  And, you can always ask for help on the 
+  {{{mailto:isis-users@incubator.apache.org}isis-users}} mailing list.    
+
+Compiling the App
+
+  Start off by using maven to compile the app:
+  
++------------------------------------------------------------
+mvn clean install
++------------------------------------------------------------
+  
+  All being well, the application should compile.  This may take a little
+  while for the first time as modules are brought down from the remote
+  repo.  
+
+Running the webapp
+
+  Now that you've built the application, it's time to run it.  You've a few options.
+
+  The first is to run the self-hosting version version of the WAR file.  This is the
+  as the regular WAR, but includes an embedded jetty webserver.  It can be run either
+  from Maven:     
+  
++------------------------------------------------------------
+mvn antrun:run
++------------------------------------------------------------
+
+  Or you can just run using java -jar: 
+
++------------------------------------------------------------
+java -jar webapp/target/myapp-webapp-1.0.0-SNAPSHOT-jetty-console.war
++------------------------------------------------------------
+  
+  Either way, this is great if you want to distribute your app as a prototype.
+  
+  Alternatively, you can also run using Maven's Jetty plugin:
+  
++------------------------------------------------------------
+cd webapp
+mvn jetty:run
++------------------------------------------------------------
+    
+
+  The webapp is configured to support two of Isis' viewers, the {{{./viewer/html/index.html}HTML viewer}}
+  and the {{{./viewer/json/index.html}JSON (RESTful) viewer}}.  
+
+Accessing the webapp
+  
+  Browse to the <a href="http://localhost:8080">index page</a> for details of how to access
+  the configured viewers. 
+
+  Security (authentication) is configurable within Isis, and is enabled.  You can log in using
+  the username/password of sven/pass.
+  
+  []
+      
+Running the app's JUnit tests
+
+  <Isis> provides the means to test domain object logic using a 
+  {{{./viewer/junit/index.html}custom runner}} for {{{http://junit.org}JUnit}}.
+
+  To run the tests, use:
+
++------------------------------------------------------------
+cd tests-junit
+mvn test
++------------------------------------------------------------
+
+Running the app's BDD (Concordion) tests
+
+  <Isis> also provides the means to test domain object logic using an 
+  {{{./viewer/bdd/index.html}integration}} with the
+  {{{http://concordion.org}Concordion}} BDD framework.
+  
+  Concordion tests are written as XHTML; the Concordion framework then uses
+  annotations within the XHTML to call into (what Concordion calls) "fixture" 
+  code, written in Java.  The tests can be found in 
+  <<<src/test/resources/viewer/bdd/stories>>> (in the tests-bdd module).   
+  
+  Normally the developer would need to write the fixtures called by Concordion.  
+  The Isis integration however provides these fixtures already, so using
+  BDD testing in Concordion/Isis amounts to annotating the XHTML to call the
+  pre-defined fixtures (eg to invoke an action or check the value of a 
+  property). 
+  
+  To run the tests, use:
+  
++------------------------------------------------------------
+cd tests-bdd
+mvn test
++------------------------------------------------------------
+
+    Concordion itself integrates with JUnit, so as you can see the tests 
+    are run in the usual way.
+  
+  []
+
+  As a byproduct of running the tests, Concordion generates output HTML which
+  are marked up versions of the the original scenarios.  The idea is to make it easy 
+  for a (non-technical) stakeholder to view the outcome of the tests.
+  The location of this output HTML should be printed to the console; the default
+  location is <<</tmp/concordion/viewer/bdd/stories>>>.  
+
+
+Import into an IDE
+
+  You can use any IDE that supports Maven; the <Isis> committers tend to use
+  Eclipse 3.7 (with built-in Maven support through the m2e feature) or the 
+  earlier {{{http://m2eclipse.sonatype.org}m2eclipse}} plugin.  
+  NetBeans and IntelliJ are equally as good, though, at supporting Maven.
+
+  In Eclipse, use File > Import > Maven > Existing Maven Project, and navigate
+  to the root (myapp) directory.
+  
+
+Exploring the App
+
+  As already noted, the application consists of a very simple domain model
+  consisting for a task manager app, consisting of a single domain object,
+  <<<ToDoItem>>>, and a single repository, <<<ToDoItems>>>.
+  
+  * open up <<<ToDoItem>>> and <<<ToDoItems>>> (in the dom module, under src/main/java)
+  
+  * open up <<<ToDoItemsFixture>>> (in the fixture module)
+  
+    This is used to initialize the in-memory object store between runs.
+    
+  * open up <<<ToDoItemsDefault>>> (in the objstore-dflt module)
+  
+    This is an implementation of the repository that delegates to the in-memory 
+    object store
+    
+  * open up the <<<isis.properties>>> file, used to bootstrap Isis.
+  
+    You'll find this file either in the <<<WEB-INF>>> directory in the webapp module.
+    
+    The most important item in this file is the <isis.services> key, which points
+    to the repository implementation(s). 
+
+  []
+    
+Running the app from within Eclipse (3.7)
+
+  To run each of the viewers in Eclipse:
+  
+  * to run the webapp, go to the <<<webapp/ide/eclipse/launch>>> directory and then use Run As > quickstart_webapp.launch.
+  
+  * to run the JUnit tests, go to the tests-junit module and use Eclipse's built-in JUnit support to run the tests
+  
+  * to run the BDD (Concordion) tests, go to the tests-bdd module and use Eclipse's built-in JUnit support to run the tests
+  
+   []
+
+  The archetype currently does not provide equivalent configuration for other IDEs.  
+  However, if you open the Eclipse <<<.launch>>> file 
+  you'll see that all we are doing is running <<<org.apache.isis.Isis>>> with some 
+  command line arguments, so hopefully this is easy enough to reproduce in
+  other IDEs.
+  
+  Alternatively, you can use those IDE's in-built support for Maven and have them execute the same Maven goals 
+  (as documented above) that are used from the command-line.  
+    
+  []
+
+
+Where Next?
+
+  <<Your first port of call should be the {{{./applib/docbkx/pdf/isis-applib.pdf}applib}}  
+  documentation>>.  This describes how to go about writing a domain application following
+  Isis' programming model.  The {{{./IsisCheatSheet.pdf}cheat sheet}} acts as a handy
+  reference.
+
+  To speed up your coding we provide some templates and other help for IDEs; 
+  check out the {{{./ide-support.html}IDE support}} page.  You should also check out
+  the {{{./icons.html}icons}} that we make available. 
+  
+  And after that, think about how you could use Isis:
+  
+  * to {{{./use-cases/develop.html}develop prototypes}}
+  
+  * to {{{./use-cases/specify-and-test.html}develop tested domain models...}}
+  
+  * to {{{./use-cases/deploy-own-framework.html} deploy on your own framework}}
+  
+  * to {{{./use-cases/deploy-as-rest.html} deploy as a RESTful web service}}
+  
+  * to {{{./use-cases/deploy-as-webapp.html} deploy as a webapp}}
+
+What else is there?  
+  
+  In terms of further documentation, you probably should look through the 
+  {{{./core/docbkx/pdf/isis-core.pdf}core}}
+  documentation.  This provides more detail on the design and architecture of Isis, along
+  with the key APIs.
+  
+  Once you have an understanding of those APIs, you'll probably want to delve into individual
+  implementations of the APIs, such as the programming model, security, viewers or the
+  runtime (persistence).  To keep things manageable, all <Isis> documentation about these 
+  components is scoped closest along with that component.  That means that any given documentation 
+  is likely to have just the information you require to use or configure that component 
+  (it also makes it easier for us to maintain those documents).
+  
+  You'll find documentation for all of these components {{{./documentation.html}here}}.
+
+  And in the future, we also hope to provide a selection of off-the-shelf domain 
+  services and value types integrations for you to reuse; these will be hosted
+  within a "domain" library. (Until then, why not contribute some of your own ? ;-).
+   
+  []

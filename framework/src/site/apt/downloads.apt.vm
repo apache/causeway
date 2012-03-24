@@ -1,0 +1,69 @@
+~~  Licensed to the Apache Software Foundation (ASF) under one
+~~  or more contributor license agreements.  See the NOTICE file
+~~  distributed with this work for additional information
+~~  regarding copyright ownership.  The ASF licenses this file
+~~  to you under the Apache License, Version 2.0 (the
+~~  "License"); you may not use this file except in compliance
+~~  with the License.  You may obtain a copy of the License at
+~~
+~~        http://www.apache.org/licenses/LICENSE-2.0
+~~
+~~  Unless required by applicable law or agreed to in writing,
+~~  software distributed under the License is distributed on an
+~~  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+~~  KIND, either express or implied.  See the License for the
+~~  specific language governing permissions and limitations
+~~  under the License.
+
+
+ -----
+ Downloads
+ -----
+ 
+ <Apache Isis> is a full-stack open source application development framework, designed to let you rapidly develop domain-driven business enterprise applications.
+
+Release
+ 
+ <Apache Isis> is distributed in both source and binary form:
+ 
+ * the source can be downloaded from 
+   {{{http://www.apache.org/dyn/closer.cgi/incubator/isis/${project.version}/isis-${project.version}-source-release.zip}here}} 
+   ({{{http://www.apache.org/dist/incubator/isis/${project.version}/isis-${project.version}-source-release.zip.asc}asc}}, {{{http://www.apache.org/dist/incubator/isis/${project.version}/isis-${project.version}-source-release.zip.md5}md5}}, {{{http://www.apache.org/dist/incubator/isis/${project.version}/isis-${project.version}-source-release.zip.sha1}sha1}})
+   
+   Details of building <Isis> from source can be found in the contributors guide ({{{./docbkx/html/guide/isis-contributors-guide.html}HTML}} or {{{./docbkx/pdf/isis-contributors-guide.pdf}PDF}})
+   for further details.
+ 
+ * the binaries can be downloaded from {{{http://search.maven.org}Maven central repo}}, typically by using the <Isis> quickstart archetype.
+ 
+   See the {{{./quick-start.html}quickstart page}} for details on how to using the quickstart archetype.
+   
+ []
+ 
+ In both cases, you can use the {{{http://www.apache.org/dist/incubator/isis/KEYS}KEYS}} to verify the archives.
+
+Release Notes
+
+ A list of JIRA issues addressed in this release can be found {{{./release-notes-${project.version}.html}here}}.
+ 
+ Previous releases: {{{./release-notes-0.1.2-incubating.html}0.1.2-incubating}}.
+
+
+Building Isis yourself
+  
+  We also invite you to check out the source from Subversion and build it 
+  yourself:
+  
+----
+svn co https://svn.apache.org/repos/asf/incubator/isis/trunk/framework .
+mvn clean install
+----
+
+  Again, see the contributors guide ({{{./docbkx/html/guide/isis-contributors-guide.html}HTML}} or {{{./docbkx/pdf/isis-contributors-guide.pdf}PDF}}) 
+  for more details.
+   
+
+Icons
+  
+ In addition to the source and binary releases, there are also a number of {{{./icons.html}icon sets}} you can use in your own applications.
+ 
+   
