@@ -22,36 +22,63 @@ package org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transactio
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
-import org.jmock.Mockery;
-import org.jmock.integration.junit4.JMock;
-import org.jmock.integration.junit4.JUnit4Mockery;
+import org.hamcrest.Description;
+import org.hamcrest.Matcher;
+import org.hamcrest.TypeSafeMatcher;
+import org.jmock.Expectations;
+import org.jmock.auto.Mock;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
+import org.apache.isis.core.commons.ensure.Assert;
+import org.apache.isis.core.commons.matchers.IsisMatchers;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.ObjectStoreSpy;
+import org.apache.isis.core.metamodel.adapter.ResolveState;
+import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2;
+import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2.Mode;
+import org.apache.isis.runtimes.dflt.runtime.memento.RuntimeTestPojo;
+import org.apache.isis.runtimes.dflt.runtime.persistence.adapterfactory.pojo.PojoAdapter;
+import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.ObjectStore;
+import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.PojoAdapterBuilder.Persistence;
+import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.serial.RootOidDefault;
 import org.apache.isis.runtimes.dflt.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.runtimes.dflt.runtime.system.transaction.MessageBroker;
 import org.apache.isis.runtimes.dflt.runtime.system.transaction.UpdateNotifier;
-import org.apache.isis.runtimes.dflt.runtime.testsystem.TestProxySystem;
 import org.apache.isis.runtimes.dflt.runtime.transaction.ObjectPersistenceException;
 
-@RunWith(JMock.class)
 public class TransactionTest {
 
-    private final Mockery mockery = new JUnit4Mockery();
+    @Rule
+    public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_ONLY);
+    
+    
+    private ObjectStoreTransaction transaction;
 
-    private ObjectAdapter object1;
-    private ObjectAdapter object2;
-    private ObjectStoreSpy os;
-    private ObjectStoreTransaction t;
+    private ObjectAdapter transientAdapter1;
+    private ObjectAdapter transientAdapter2;
 
+    private ObjectAdapter persistentAdapter1;
+    private ObjectAdapter persistentAdapter2;
+
+    @Mock
+    private ObjectStore mockObjectStore;
+
+    @Mock
     private IsisTransactionManager mockTransactionManager;
+    @Mock
     private MessageBroker mockMessageBroker;
+    @Mock
     private UpdateNotifier mockUpdateNotifier;
+
+    private PersistenceCommand command;
+    private PersistenceCommand command2;
+    private PersistenceCommand command3;
 
     private CreateObjectCommand createCreateCommand(final ObjectAdapter object, final String name) {
         return new CreateObjectCommand() {
@@ -109,7 +136,7 @@ public class TransactionTest {
         };
     }
 
-    private SaveObjectCommand createCommandThatAborts(final ObjectAdapter object, final String name) {
+    private SaveObjectCommand createSaveCommandThatAborts(final ObjectAdapter object, final String name) {
         return new SaveObjectCommand() {
             @Override
             public void execute(final PersistenceCommandContext context) throws ObjectPersistenceException {
@@ -132,173 +159,160 @@ public class TransactionTest {
     public void setUp() throws Exception {
         Logger.getRootLogger().setLevel(Level.OFF);
 
-        final TestProxySystem system = new TestProxySystem();
-        system.init();
+        transaction = new ObjectStoreTransaction(mockTransactionManager, mockMessageBroker, mockUpdateNotifier, mockObjectStore);
+        
+        transientAdapter1 = PojoAdapterBuilder.create().with(Persistence.TRANSIENT).withIdentifier("1").build();
+        transientAdapter2 = PojoAdapterBuilder.create().with(Persistence.TRANSIENT).withIdentifier("2").build();
+        persistentAdapter1 = PojoAdapterBuilder.create().with(Persistence.PERSISTENT).withIdentifier("3").build();
+        persistentAdapter2 = PojoAdapterBuilder.create().with(Persistence.PERSISTENT).withIdentifier("4").build();
+    }
+    
+    @Test
+    public void abort_neverDelegatesToObjectStore() throws Exception {
 
-        mockTransactionManager = mockery.mock(IsisTransactionManager.class);
-        mockMessageBroker = mockery.mock(MessageBroker.class);
-        mockUpdateNotifier = mockery.mock(UpdateNotifier.class);
+        command = createSaveCommand(transientAdapter1, "command 1");
+        command2 = createSaveCommand(transientAdapter2, "command 2");
 
-        os = new ObjectStoreSpy();
-        t = new ObjectStoreTransaction(mockTransactionManager, mockMessageBroker, mockUpdateNotifier, os);
+        context.checking(new Expectations() {
+            {
+                never(mockObjectStore);
+            }
+        });
 
-        object1 = system.createTransientTestObject();
-        object2 = system.createTransientTestObject();
+        transaction.addCommand(command);
+        transaction.addCommand(command2);
+        transaction.abort();
+    }
+
+
+    @Test
+    public void commit_delegatesToObjectStoreToExecutesAllCommands() throws Exception {
+
+        command = createSaveCommand(transientAdapter1, "command 1");
+        command2 = createSaveCommandThatAborts(transientAdapter2, "command 2");
+
+        context.checking(new Expectations() {
+            {
+                one(mockObjectStore).execute(with(IsisMatchers.listContainingAll(command, command2)));
+            }
+        });
+        
+        transaction.addCommand(command);
+        transaction.addCommand(command2);
+        transaction.commit();
     }
 
     @Test
-    public void testAbort() throws Exception {
-        t.addCommand(createSaveCommand(object1, "command 1"));
-        t.addCommand(createSaveCommand(object2, "command 2"));
-        t.abort();
+    public void commit_disregardsSecondSaveCommandOnSameAdapter() throws Exception {
 
-        assertEquals(0, os.getActions().size());
+        command = createSaveCommand(persistentAdapter1, "command 1");
+        command2 = createSaveCommand(persistentAdapter1, "command 2");
+
+        context.checking(new Expectations() {
+            {
+                one(mockObjectStore).execute(with(IsisMatchers.listContainingAll(command)));
+            }
+        });
+        
+        transaction.addCommand(command);
+        transaction.addCommand(command2);
+        transaction.commit();
+    }
+
+
+    @Test
+    public void commit_disregardsSaveCommandsForObjectBeingCreated() throws Exception {
+
+        command = createCreateCommand(transientAdapter1, "command 1");
+        command2 = createSaveCommandThatAborts(transientAdapter1, "command 2");
+
+        context.checking(new Expectations() {
+            {
+                one(mockObjectStore).execute(with(IsisMatchers.listContainingAll(command)));
+            }
+        });
+        
+        transaction.addCommand(command);
+        transaction.addCommand(command2);
+        transaction.commit();
     }
 
     @Test
-    public void testAbortBeforeCommand() throws Exception {
-        t.abort();
+    public void commit_destroyCausesPrecedingSaveCommandsToBeDisregarded() throws Exception {
 
-        assertEquals(0, os.getActions().size());
+        command = createSaveCommand(persistentAdapter1, "command 1");
+        command2 = createSaveCommand(persistentAdapter2, "command 2");
+        command3 = createDestroyCommand(persistentAdapter1, "command 3");
+
+        context.checking(new Expectations() {
+            {
+                one(mockObjectStore).execute(with(IsisMatchers.listContainingAll(command2, command3)));
+            }
+        });
+        
+        transaction.addCommand(command);
+        transaction.addCommand(command2);
+        transaction.addCommand(command3);
+        transaction.commit();
     }
 
     @Test
-    public void testCommandThrowsAnExceptionCausingAbort() throws Exception {
-        t.addCommand(createSaveCommand(object1, "command 1"));
-        t.addCommand(createCommandThatAborts(object2, "command 2"));
-        t.addCommand(createSaveCommand(object1, "command 3"));
-        try {
-            t.commit();
-            fail();
-        } catch (final ObjectPersistenceException expected) {
-        }
-        // previously the xactn invoked "endTransaction" on the OS, but this is
-        // now done by the xactn mgr.
-        // os.assertAction(0, "endTransaction");
-        os.assertAction(0, "execute command 1");
-        os.assertAction(1, "execute command 2");
+    public void commit_ignoresBothCreateAndDestroyCommandsWhenForSameObject() throws Exception {
+
+        command = createSaveCommand(persistentAdapter1, "command 1");
+        command2 = createSaveCommand(persistentAdapter2, "command 2");
+        command3 = createDestroyCommand(persistentAdapter1, "command 3");
+
+        context.checking(new Expectations() {
+            {
+                one(mockObjectStore).execute(with(IsisMatchers.listContainingAll(command2)));
+            }
+        });
+        
+        transaction.addCommand(command);
+        transaction.addCommand(command2);
+        transaction.addCommand(command3);
+        transaction.commit();
     }
+
 
     @Test
-    public void testAddCommands() throws Exception {
-        t.addCommand(createSaveCommand(object1, "command 1"));
-        t.addCommand(createSaveCommand(object2, "command 2"));
-        t.commit();
+    public void commit_testNoCommands() throws Exception {
+        context.checking(new Expectations() {
+            {
+                never(mockObjectStore);
+            }
+        });
 
-        // previously the xactn invoked "endTransaction" on the OS, but this is
-        // now done by the xactn mgr.
-        // os.assertAction(0, "endTransaction");
-        os.assertAction(0, "execute command 1");
-        os.assertAction(1, "execute command 2");
-        assertEquals(2, os.getActions().size());
+        transaction.commit();
     }
 
-    @Test
-    public void testAddCreateCommandsButIgnoreSaveForSameObject() throws Exception {
-        t.addCommand(createCreateCommand(object1, "create object 1"));
-        /*
-         * The next command should be ignored as the above create will have
-         * already saved the next object
-         */
-        t.addCommand(createSaveCommand(object1, "save object 1"));
-        t.addCommand(createSaveCommand(object2, "save object 2"));
-        t.commit();
-
-        // previously the xactn invoked "endTransaction" on the OS, but this is
-        // now done by the xactn mgr.
-        // os.assertAction(0, "endTransaction");
-        os.assertAction(0, "execute create object 1");
-        os.assertAction(1, "execute save object 2");
-        assertEquals(2, os.getActions().size());
-    }
-
-    @Test
-    public void testAddDestoryCommandsButRemovePreviousSaveForSameObject() throws Exception {
-        t.addCommand(createSaveCommand(object1, "save object 1"));
-        t.addCommand(createDestroyCommand(object1, "destroy object 1"));
-        t.commit();
-
-        // previously the xactn invoked "endTransaction" on the OS, but this is
-        // now done by the xactn mgr.
-        // os.assertAction(0, "endTransaction");
-        os.assertAction(0, "execute destroy object 1");
-        assertEquals(1, os.getActions().size());
-    }
-
-    @Test
-    public void testIgnoreBothCreateAndDestroyCommandsWhenForSameObject() throws Exception {
-        t.addCommand(createCreateCommand(object1, "create object 1"));
-        t.addCommand(createDestroyCommand(object1, "destroy object 1"));
-        t.addCommand(createDestroyCommand(object2, "destroy object 2"));
-        t.commit();
-
-        // previously the xactn invoked "endTransaction" on the OS, but this is
-        // now done by the xactn mgr.
-        // os.assertAction(0, "endTransaction");
-        os.assertAction(0, "execute destroy object 2");
-        assertEquals(1, os.getActions().size());
-    }
-
-    @Test
-    public void testIgnoreSaveAfterDeleteForSameObject() throws Exception {
-        t.addCommand(createDestroyCommand(object1, "destroy object 1"));
-        t.addCommand(createSaveCommand(object1, "save object 1"));
-        t.commit();
-
-        // previously the xactn invoked "endTransaction" on the OS, but this is
-        // now done by the xactn mgr.
-        // os.assertAction(0, "endTransaction");
-        os.assertAction(0, "execute destroy object 1");
-        assertEquals(1, os.getActions().size());
-    }
-
-    @Test
-    public void testNoCommands() throws Exception {
-        t.commit();
-        // previously the xactn invoked "endTransaction" on the OS, but this is
-        // now done by the xactn mgr.
-        // os.assertAction(0, "endTransaction");
-        assertEquals(0, os.getActions().size());
-    }
-
-    @Test
-    public void createandThenDestroyShouldCancelEachOtherOut() throws Exception {
-        t.addCommand(createCreateCommand(object1, "create object 1"));
-        t.addCommand(createDestroyCommand(object1, "destroy object 1"));
-        t.commit();
-
-        // previously the xactn invoked "endTransaction" on the OS, but this is
-        // now done by the xactn mgr.
-        // os.assertAction(0, "endTransaction");
-        assertEquals(0, os.getActions().size());
-    }
 
     @Test(expected = IllegalStateException.class)
     public void shouldThrowExceptionIfAttemptToAbortAnAlreadyAbortedTransaction() throws Exception {
-        t.abort();
+        transaction.abort();
 
-        t.abort();
+        transaction.abort();
     }
 
     @Test(expected = IllegalStateException.class)
     public void shouldThrowExceptionIfAttemptToCommitAnAlreadyAbortedTransaction() throws Exception {
-        t.abort();
+        transaction.abort();
 
-        t.commit();
+        transaction.commit();
     }
 
     @Test(expected = IllegalStateException.class)
     public void shouldThrowExceptionIfAttemptToAbortAnAlreadyCommitedTransaction() throws Exception {
-        t.commit();
+        transaction.commit();
 
-        t.abort();
+        transaction.abort();
     }
 
     @Test(expected = IllegalStateException.class)
     public void shouldThrowExceptionIfAttemptToCommitAnAlreadyCommitedTransaction() throws Exception {
-        t.commit();
+        transaction.commit();
 
-        t.commit();
+        transaction.commit();
     }
-
 }

@@ -108,7 +108,7 @@ public class RemoveGroovyMethodsFacetFactory extends FacetFactoryAbstract implem
     }
 
     @Override
-    public void setIsisConfiguration(final IsisConfiguration configuration) {
+    public void setConfiguration(final IsisConfiguration configuration) {
         this.configuration = configuration;
     }
 

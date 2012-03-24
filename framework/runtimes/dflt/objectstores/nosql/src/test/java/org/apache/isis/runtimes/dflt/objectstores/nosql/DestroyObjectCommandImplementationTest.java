@@ -30,6 +30,9 @@ import org.apache.isis.core.metamodel.adapter.version.SerialNumberVersion;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2;
 import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2.Mode;
+import org.apache.isis.runtimes.dflt.objectstores.nosql.keys.KeyCreatorDefault;
+import org.apache.isis.runtimes.dflt.objectstores.nosql.versions.VersionCreatorDefault;
+import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.serial.RootOidDefault;
 
 public class DestroyObjectCommandImplementationTest {
 
@@ -43,11 +46,11 @@ public class DestroyObjectCommandImplementationTest {
     @Mock
     private ObjectAdapter adapter;
     @Mock
-    private NoSqlOid sqlOid;
+    private RootOidDefault oid;
     @Mock
-    private SerialNumberVersionCreator versionCreator;
+    private VersionCreatorDefault versionCreator;
     @Mock
-    private NoSqlKeyCreator keyCreator;
+    private KeyCreatorDefault keyCreator;
     @Mock
     private SerialNumberVersion version;
 
@@ -68,7 +71,7 @@ public class DestroyObjectCommandImplementationTest {
             will(returnValue(specification));
             
             allowing(adapter).getOid();
-            will(returnValue(sqlOid));
+            will(returnValue(oid));
 
             allowing(adapter).getVersion();
             will(returnValue(version));
@@ -83,7 +86,7 @@ public class DestroyObjectCommandImplementationTest {
 
         context.checking(new Expectations() {
             {
-                one(keyCreator).key(sqlOid);
+                one(keyCreator).key(oid);
                 will(returnValue(keyStr));
 
                 one(versionCreator).versionString(version);

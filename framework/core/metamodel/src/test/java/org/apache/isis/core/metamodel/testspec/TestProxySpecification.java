@@ -189,6 +189,11 @@ public class TestProxySpecification extends FacetHolderImpl implements ObjectSpe
     }
 
     @Override
+    public String getObjectType() {
+        return getFullIdentifier();
+    }
+
+    @Override
     public String getIconName(final ObjectAdapter reference) {
         return null;
     }
@@ -374,7 +379,7 @@ public class TestProxySpecification extends FacetHolderImpl implements ObjectSpe
     }
 
     @Override
-    public Object createObject(final CreationMode creationMode) {
+    public Object createObject() {
         try {
             final Class<?> cls = Class.forName(name);
             return cls.newInstance();
@@ -388,8 +393,8 @@ public class TestProxySpecification extends FacetHolderImpl implements ObjectSpe
     }
 
     @Override
-    public Object createAggregatedObject(final ObjectAdapter parent, final CreationMode creationMode) {
-        return createObject(creationMode);
+    public ObjectAdapter initialize(ObjectAdapter objectAdapter) {
+        return objectAdapter;
     }
 
     public void setupPersistable(final Persistability persistable) {
@@ -474,5 +479,7 @@ public class TestProxySpecification extends FacetHolderImpl implements ObjectSpe
     public List<ObjectAction> getObjectActions(final List<ActionType> types, final Contributed contributed) {
         return null;
     }
+
+
 
 }

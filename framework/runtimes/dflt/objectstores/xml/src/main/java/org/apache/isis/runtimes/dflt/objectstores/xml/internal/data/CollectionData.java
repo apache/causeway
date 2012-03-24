@@ -21,7 +21,7 @@ package org.apache.isis.runtimes.dflt.objectstores.xml.internal.data;
 
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.runtimes.dflt.objectstores.xml.internal.version.FileVersion;
-import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.simple.SerialOid;
+import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.serial.RootOidDefault;
 
 /**
  * A logical collection of elements of a specified type
@@ -29,16 +29,16 @@ import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.simple.Ser
 public class CollectionData extends Data {
     private final ReferenceVector elements;
 
-    public CollectionData(final ObjectSpecification noSpec, final SerialOid oid, final FileVersion version) {
+    public CollectionData(final ObjectSpecification noSpec, final RootOidDefault oid, final FileVersion version) {
         super(noSpec, oid, version);
         elements = new ReferenceVector();
     }
 
-    public void addElement(final SerialOid elementOid) {
+    public void addElement(final RootOidDefault elementOid) {
         elements.add(elementOid);
     }
 
-    public void removeElement(final SerialOid elementOid) {
+    public void removeElement(final RootOidDefault elementOid) {
         elements.remove(elementOid);
     }
 

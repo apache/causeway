@@ -37,7 +37,7 @@ public class DefaultedFacetFactoryTest extends AbstractFacetFactoryTest {
 
         facetFactory = new DefaultedAnnotationFacetFactory();
         isisConfigurationDefault = new IsisConfigurationDefault();
-        facetFactory.setIsisConfiguration(isisConfigurationDefault);
+        facetFactory.setConfiguration(isisConfigurationDefault);
     }
 
     @Override

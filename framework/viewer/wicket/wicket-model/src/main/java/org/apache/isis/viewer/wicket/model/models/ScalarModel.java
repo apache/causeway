@@ -26,6 +26,7 @@ import java.util.List;
 import org.apache.wicket.Session;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
+import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -38,7 +39,6 @@ import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.viewer.wicket.model.mementos.ActionParameterMemento;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.mementos.PropertyMemento;
-import org.apache.isis.viewer.wicket.model.nof.AuthenticationSessionAccessor;
 import org.apache.isis.viewer.wicket.model.util.ClassLoaders;
 
 /**
@@ -390,7 +390,7 @@ public class ScalarModel extends EntityModel {
      * testing.
      */
     protected AuthenticationSession getAuthenticationSession() {
-        return ((AuthenticationSessionAccessor) Session.get()).getAuthenticationSession();
+        return ((AuthenticationSessionProvider) Session.get()).getAuthenticationSession();
     }
 
     public boolean isRequired() {

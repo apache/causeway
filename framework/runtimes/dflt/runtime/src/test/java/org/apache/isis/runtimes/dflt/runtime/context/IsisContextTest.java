@@ -23,23 +23,25 @@ import java.util.Collections;
 import java.util.List;
 
 import org.jmock.Expectations;
-import org.jmock.Mockery;
-import org.jmock.integration.junit4.JMock;
-import org.jmock.integration.junit4.JUnit4Mockery;
+import org.jmock.auto.Mock;
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.metamodel.specloader.ObjectReflector;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
+import org.apache.isis.core.runtime.authentication.standard.SimpleSession;
 import org.apache.isis.core.runtime.authorization.AuthorizationManager;
 import org.apache.isis.core.runtime.imageloader.TemplateImageLoader;
 import org.apache.isis.core.runtime.userprofile.UserProfile;
 import org.apache.isis.core.runtime.userprofile.UserProfileLoader;
+import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2;
+import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2.Mode;
 import org.apache.isis.runtimes.dflt.runtime.persistence.internal.RuntimeContextFromSession;
 import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
@@ -48,27 +50,39 @@ import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessi
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessionFactory;
 import org.apache.isis.runtimes.dflt.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.runtimes.dflt.runtime.system.session.IsisSessionFactoryDefault;
-import org.apache.isis.runtimes.dflt.runtime.testsystem.TestProxyPersistenceSession;
-import org.apache.isis.runtimes.dflt.runtime.testsystem.TestProxyReflector;
-import org.apache.isis.runtimes.dflt.runtime.testsystem.TestProxySession;
 
-@RunWith(JMock.class)
 public class IsisContextTest {
 
-    private final Mockery mockery = new JUnit4Mockery();
+    @Rule
+    public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
+    
 
     private IsisConfiguration configuration;
-    private PersistenceSession persistenceSession;
-    private ObjectReflector reflector;
-    private TestProxySession session;
+    
+    @Mock
+    private PersistenceSession mockPersistenceSession;
+    
+    @Mock
+    private ObjectReflector mockReflector;
 
+    @Mock
     protected TemplateImageLoader mockTemplateImageLoader;
+    @Mock
     protected PersistenceSessionFactory mockPersistenceSessionFactory;
+    @Mock
     private UserProfileLoader mockUserProfileLoader;
+    @Mock
     protected AuthenticationManager mockAuthenticationManager;
+    @Mock
     protected AuthorizationManager mockAuthorizationManager;
 
     private List<Object> servicesList;
+
+
+    private AuthenticationSession authSession;
+
+
+    private IsisSessionFactory sessionFactory;
 
     @Before
     public void setUp() throws Exception {
@@ -76,65 +90,64 @@ public class IsisContextTest {
 
         servicesList = Collections.emptyList();
 
-        mockTemplateImageLoader = mockery.mock(TemplateImageLoader.class);
-        mockPersistenceSessionFactory = mockery.mock(PersistenceSessionFactory.class);
-        mockUserProfileLoader = mockery.mock(UserProfileLoader.class);
-        mockAuthenticationManager = mockery.mock(AuthenticationManager.class);
-        mockAuthorizationManager = mockery.mock(AuthorizationManager.class);
-
         configuration = new IsisConfigurationDefault();
-        reflector = new TestProxyReflector();
-        persistenceSession = new TestProxyPersistenceSession(mockPersistenceSessionFactory);
-
-        mockery.checking(new Expectations() {
+        
+        context.checking(new Expectations() {
             {
-                one(mockPersistenceSessionFactory).createPersistenceSession();
-                will(returnValue(persistenceSession));
+                allowing(mockPersistenceSessionFactory).createPersistenceSession();
+                will(returnValue(mockPersistenceSession));
+                
+                ignoring(mockPersistenceSession);
 
+                ignoring(mockReflector);
                 ignoring(mockPersistenceSessionFactory);
-
-                one(mockUserProfileLoader).getProfile(with(any(AuthenticationSession.class)));
-                will(returnValue(new UserProfile()));
-
                 ignoring(mockUserProfileLoader);
-
                 ignoring(mockAuthenticationManager);
-
                 ignoring(mockAuthorizationManager);
-
                 ignoring(mockTemplateImageLoader);
             }
         });
 
-        reflector.setRuntimeContext(new RuntimeContextFromSession());
-
+        sessionFactory = new IsisSessionFactoryDefault(DeploymentType.EXPLORATION, configuration, mockTemplateImageLoader, mockReflector, mockAuthenticationManager, mockAuthorizationManager, mockUserProfileLoader, mockPersistenceSessionFactory, servicesList);
+        authSession = new SimpleSession("tester", Collections.<String>emptyList());
+        
         IsisContext.setConfiguration(configuration);
-
-        final IsisSessionFactory sessionFactory = new IsisSessionFactoryDefault(DeploymentType.EXPLORATION, configuration, mockTemplateImageLoader, reflector, mockAuthenticationManager, mockAuthorizationManager, mockUserProfileLoader, mockPersistenceSessionFactory, servicesList);
-        IsisContextStatic.createRelaxedInstance(sessionFactory);
-        sessionFactory.init();
-
-        session = new TestProxySession();
-        IsisContext.openSession(session);
     }
-
+    
+    @After
+    public void tearDown() throws Exception {
+        IsisContext.closeSession();
+    }
+    
     @Test
-    public void testConfiguration() {
+    public void getConfiguration() {
+        IsisContextStatic.createRelaxedInstance(sessionFactory);
         Assert.assertEquals(configuration, IsisContext.getConfiguration());
     }
 
     @Test
-    public void testObjectPersistor() {
-        Assert.assertEquals(persistenceSession, IsisContext.getPersistenceSession());
+    public void openSession_getSpecificationLoader() {
+        IsisContextStatic.createRelaxedInstance(sessionFactory);
+        IsisContext.openSession(authSession);
+
+        Assert.assertEquals(mockReflector, IsisContext.getSpecificationLoader());
     }
 
     @Test
-    public void testSpecificationLoader() {
-        Assert.assertEquals(reflector, IsisContext.getSpecificationLoader());
+    public void openSession_getAuthenticationLoader() {
+        IsisContextStatic.createRelaxedInstance(sessionFactory);
+        IsisContext.openSession(authSession);
+
+        Assert.assertEquals(authSession, IsisContext.getAuthenticationSession());
+    }
+    
+    @Test
+    public void openSession_getPersistenceSession() {
+        IsisContextStatic.createRelaxedInstance(sessionFactory);
+        IsisContext.openSession(authSession);
+
+        Assert.assertSame(mockPersistenceSession, IsisContext.getPersistenceSession());
     }
 
-    @Test
-    public void testSession() {
-        Assert.assertEquals(session, IsisContext.getAuthenticationSession());
-    }
+
 }

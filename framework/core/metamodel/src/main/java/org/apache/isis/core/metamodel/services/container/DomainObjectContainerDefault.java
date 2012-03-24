@@ -86,14 +86,10 @@ public class DomainObjectContainerDefault implements DomainObjectContainer, Quer
     // newInstance, disposeInstance
     // //////////////////////////////////////////////////////////////////
 
-    /**
-     * @see #doCreateTransientInstance(ObjectSpecification)
-     */
     @Override
     @SuppressWarnings("unchecked")
     public <T> T newTransientInstance(final Class<T> ofClass) {
         final ObjectSpecification spec = getSpecificationLookup().loadSpecification(ofClass);
-        // TODO check aggregation is supported
         if (spec.isAggregated()) {
             return newAggregatedInstance(this, ofClass);
         } else {
@@ -106,19 +102,14 @@ public class DomainObjectContainerDefault implements DomainObjectContainer, Quer
     @SuppressWarnings("unchecked")
     public <T> T newAggregatedInstance(final Object parent, final Class<T> ofClass) {
         final ObjectSpecification spec = getSpecificationLookup().loadSpecification(ofClass);
-        // TODO check aggregation is supported
         if (!spec.isAggregated()) {
-            throw new IsisException("Cannot instantiate an object unless it is marked as Aggregated using the newAggregatedInstance method: " + ofClass); // TODO
-                                                                                                                                                          // proper
-                                                                                                                                                          // type
+            throw new IsisException("Type must be annotated as @Aggregated: " + ofClass);
         }
         final ObjectAdapter adapter = doCreateAggregatedInstance(spec, parent);
         if (adapter.getOid() instanceof AggregatedOid) {
             return (T) adapter.getObject();
         } else {
-            throw new IsisException("Object instatiated but was not given a AggregatedOid: " + ofClass); // TODO
-                                                                                                         // proper
-                                                                                                         // type
+            throw new IsisException("Object instantiated but was not given a AggregatedOid (does the configured object store support aggregates?): " + ofClass);
         }
     }
 
@@ -242,7 +233,7 @@ public class DomainObjectContainerDefault implements DomainObjectContainer, Quer
     public void persist(final Object transientObject) {
         final ObjectAdapter adapter = getAdapterMap().getAdapterFor(transientObject);
         // TODO check aggregation is supported
-        if (adapter.isAggregated()) {
+        if (adapter.isParented()) {
             return;
         }
         if (isPersistent(transientObject)) {

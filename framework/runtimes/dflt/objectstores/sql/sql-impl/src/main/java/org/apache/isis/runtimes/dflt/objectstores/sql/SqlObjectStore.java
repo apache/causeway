@@ -29,8 +29,10 @@ import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.exceptions.NotYetImplementedException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapterLookup;
 import org.apache.isis.core.metamodel.adapter.oid.AggregatedOid;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.ObjectStore;
@@ -39,6 +41,7 @@ import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.PersistenceCommand;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.PersistenceCommandContext;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.SaveObjectCommand;
+import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.serial.RootOidDefault;
 import org.apache.isis.runtimes.dflt.runtime.persistence.query.PersistenceQueryFindAllInstances;
 import org.apache.isis.runtimes.dflt.runtime.persistence.query.PersistenceQueryFindByPattern;
 import org.apache.isis.runtimes.dflt.runtime.persistence.query.PersistenceQueryFindByTitle;
@@ -109,7 +112,7 @@ public final class SqlObjectStore implements ObjectStore {
     }
 
     @Override
-    public void registerService(final String name, final Oid oid) {
+    public void registerService(final RootOid rootOid) {
         final DatabaseConnector connector = connectionPool.acquire();
 
         final StringBuffer sql = new StringBuffer();
@@ -121,8 +124,9 @@ public final class SqlObjectStore implements ObjectStore {
         sql.append(Defaults.getIdColumn());
         sql.append(") values (?,?)");
 
-        connector.addToQueryValues(((SqlOid) oid).getPrimaryKey().naturalValue());
-        connector.addToQueryValues(name);
+        final RootOidDefault sqlOid = (RootOidDefault) rootOid;
+        connector.addToQueryValues(sqlOid.getIdentifier());
+        connector.addToQueryValues(rootOid.getObjectType());
 
         connector.insert(sql.toString());
         connectionPool.release(connector);
@@ -220,7 +224,7 @@ public final class SqlObjectStore implements ObjectStore {
                 LOG.debug("  save object " + object);
                 if (object.getSpecification().isCollectionOrIsAggregated()) {
 
-                    final ObjectAdapter parent = object.getAggregateRoot();
+                    final ObjectAdapter parent = object.getAggregateRoot(getAdapterManager());
                     LOG.debug("change to internal collection being persisted through parent");
 
                     final Oid oid = object.getOid();
@@ -228,7 +232,7 @@ public final class SqlObjectStore implements ObjectStore {
                         final AggregatedOid aoid = (AggregatedOid) oid;
                         final ObjectMapping mapping2 = objectMappingLookup.getMapping(parent, connection);
 
-                        if (mapping2.saveCollection(connection, parent, aoid.getId()) == false) {
+                        if (mapping2.saveCollection(connection, parent, aoid.getLocalId()) == false) {
                             final ObjectMapping mapping = objectMappingLookup.getMapping(parent, connection);
                             mapping.save(connection, object);
                         }
@@ -276,6 +280,7 @@ public final class SqlObjectStore implements ObjectStore {
 
         };
     }
+
 
     @Override
     public void debugData(final DebugBuilder debug) {
@@ -366,7 +371,6 @@ public final class SqlObjectStore implements ObjectStore {
                 addSpecQueryInstances(subclassSpec, connector, query, matchingInstances);
             }
         }
-
     }
 
     private ObjectAdapter[] getAllInstances(final PersistenceQueryFindAllInstances criteria) {
@@ -425,27 +429,29 @@ public final class SqlObjectStore implements ObjectStore {
     }
 
     @Override
-    public Oid getOidForService(ObjectSpecification serviceSpecification, final String name) {
+    public RootOid getOidForService(ObjectSpecification serviceSpec) {
+
         final DatabaseConnector connector = connectionPool.acquire();
+        try {
+            final StringBuffer sql = new StringBuffer();
+            sql.append("select ");
+            sql.append(Defaults.getPkIdLabel());
+            sql.append(" from ");
+            sql.append(Sql.tableIdentifier(TABLE_NAME));
+            sql.append(" where ");
+            sql.append(Defaults.getIdColumn());
+            sql.append(" = ?");
+            connector.addToQueryValues(serviceSpec.getObjectType());
 
-        final StringBuffer sql = new StringBuffer();
-        sql.append("select ");
-        sql.append(Defaults.getPkIdLabel());
-        sql.append(" from ");
-        sql.append(Sql.tableIdentifier(TABLE_NAME));
-        sql.append(" where ");
-        sql.append(Defaults.getIdColumn());
-        sql.append(" = ?");
-        connector.addToQueryValues(name);
-
-        final Results results = connector.select(sql.toString());
-        if (results.next()) {
-            final int key = results.getInt(Defaults.getPkIdLabel());
+            final Results results = connector.select(sql.toString());
+            if (!results.next()) {
+                return null;
+            } 
+            final int id = results.getInt(Defaults.getPkIdLabel());
+            return RootOidDefault.create(serviceSpec.getObjectType(), ""+id);
+            
+        } finally {
             connectionPool.release(connector);
-            return SqlOid.createPersistent(name, new IntegerPrimaryKey(key));
-        } else {
-            connectionPool.release(connector);
-            return null;
         }
     }
 
@@ -487,8 +493,9 @@ public final class SqlObjectStore implements ObjectStore {
         this.objectMappingLookup = mapperLookup;
     }
 
-    public static String getTableName() {
-        return TABLE_NAME;
+    
+    protected ObjectAdapterLookup getAdapterManager() {
+        return IsisContext.getPersistenceSession().getAdapterManager();
     }
 
 }

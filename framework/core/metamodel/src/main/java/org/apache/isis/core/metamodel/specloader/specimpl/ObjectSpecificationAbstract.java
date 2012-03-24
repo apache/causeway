@@ -58,6 +58,7 @@ import org.apache.isis.core.metamodel.facets.object.icon.IconFacet;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
 import org.apache.isis.core.metamodel.facets.object.notpersistable.InitiatedBy;
 import org.apache.isis.core.metamodel.facets.object.notpersistable.NotPersistableFacet;
+import org.apache.isis.core.metamodel.facets.object.objecttype.ObjectTypeFacet;
 import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
 import org.apache.isis.core.metamodel.facets.object.plural.PluralFacet;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
@@ -124,6 +125,8 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     private final String shortName;
     private final Identifier identifier;
     private final boolean isAbstract;
+    // derived lazily, cached since immutable
+    private String objectType;
 
     private ObjectSpecification superclassSpec;
 
@@ -166,6 +169,17 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         return FeatureType.OBJECT;
     }
 
+    @Override
+    public String getObjectType() {
+        if(objectType == null) {
+            final ObjectTypeFacet facet = getFacet(ObjectTypeFacet.class);
+            if(facet != null) {
+                objectType = facet.value();
+            }
+        }
+        return objectType;
+    }
+    
     /**
      * As provided explicitly within the
      * {@link #IntrospectableSpecificationAbstract(Class, String, SpecificationContext)
@@ -915,13 +929,13 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     }
 
     @Override
-    public Object createObject(final CreationMode creationMode) {
+    public Object createObject() {
         throw new UnsupportedOperationException(getFullIdentifier());
     }
 
     @Override
-    public Object createAggregatedObject(final ObjectAdapter parent, final CreationMode creationMode) {
-        throw new UnsupportedOperationException(getFullIdentifier());
+    public ObjectAdapter initialize(ObjectAdapter objectAdapter) {
+        return objectAdapter;
     }
 
     // //////////////////////////////////////////////////////////////////////

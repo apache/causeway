@@ -81,7 +81,7 @@ public class ObjectStoreInstances_save {
         allowingGetOidAndGetObjectAndTitleStringFromAdapter();
         context.checking(new Expectations() {
             {
-                one(mockAdapter).setOptimisticLock(with(any(Version.class)));
+                one(mockAdapter).setVersion(with(any(Version.class)));
             }
         });
         instances.save(mockAdapter);

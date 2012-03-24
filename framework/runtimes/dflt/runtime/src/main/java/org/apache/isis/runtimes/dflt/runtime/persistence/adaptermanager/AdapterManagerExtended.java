@@ -43,6 +43,6 @@ import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessi
  * extending {@link AdapterManagerBackdoor}).
  * </ul>
  */
-public interface AdapterManagerExtended extends Iterable<ObjectAdapter>, Resettable, AdapterManager, AdapterManagerPersist, ObjectAdapterLookup, AdapterManagerProxy, AdapterManagerTestSupport, AdapterManagerBackdoor, DebuggableWithTitle, SessionScopedComponent {
+public interface AdapterManagerExtended extends Iterable<ObjectAdapter>, Resettable, AdapterManager, AdapterManagerPersist, ObjectAdapterLookup, AdapterManagerTestSupport, AdapterManagerBackdoor, DebuggableWithTitle, SessionScopedComponent {
 
 }

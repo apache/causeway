@@ -28,7 +28,7 @@ import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacetUtils;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.runtimes.dflt.objectstores.xml.internal.version.FileVersion;
-import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.simple.SerialOid;
+import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.serial.RootOidDefault;
 
 /**
  * A logical collection of elements of a specified type
@@ -36,7 +36,7 @@ import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.simple.Ser
 public class ObjectData extends Data {
     private final Map<String, Object> fieldById;
 
-    public ObjectData(final ObjectSpecification noSpec, final SerialOid oid, final FileVersion version) {
+    public ObjectData(final ObjectSpecification noSpec, final RootOidDefault oid, final FileVersion version) {
         super(noSpec, oid, version);
         fieldById = new HashMap<String, Object>();
     }
@@ -51,7 +51,7 @@ public class ObjectData extends Data {
 
     public String id(final String fieldId) {
         final Object field = get(fieldId);
-        return field == null ? null : "" + ((SerialOid) field).getSerialNo();
+        return field == null ? null : "" + ((RootOidDefault) field).getIdentifier();
     }
 
     // ////////////////////////////////////////////////////////
@@ -98,7 +98,7 @@ public class ObjectData extends Data {
         fieldById.put(fieldId, new ReferenceVector());
     }
 
-    public void addElement(final String fieldId, final SerialOid elementOid) {
+    public void addElement(final String fieldId, final RootOidDefault elementOid) {
         if (!fieldById.containsKey(fieldId)) {
             throw new IsisException("Field " + fieldId + " not found  in hashtable");
         }
@@ -141,19 +141,9 @@ public class ObjectData extends Data {
                 throw new IllegalStateException("Element is not persistent " + element);
             }
 
-            addElement(fieldId, (SerialOid) elementOid);
+            addElement(fieldId, (RootOidDefault) elementOid);
         }
-
-        /*
-         * while (e.hasMoreElements()) { ObjectAdapter element = (ObjectAdapter)
-         * e.nextElement(); //
-         * LOG.debug("adding element to internal collection field " + fieldId
-         * +" " + element); Object elementOid = element.getOid(); if (elementOid
-         * == null) { throw new IllegalStateException("Element is not persistent
-         * "+element); }
-         * 
-         * addElement(fieldId, (SimpleOid) elementOid); }
-         */}
+    }
 
     // ////////////////////////////////////////////////////////
     // toString

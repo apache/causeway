@@ -79,6 +79,16 @@
         </plugins>
     </reporting>
 
+    <dependencyManagement>
+        <dependencies>
+	        <dependency>
+	            <groupId>org.apache.isis.progmodels</groupId>
+	            <artifactId>dflt</artifactId>
+	            <version>0.3.0-incubating-SNAPSHOT</version>
+	        </dependency>
+        </dependencies>
+    </dependencyManagement>
+    
 	<dependencies>
 		<dependency>
 			<groupId>org.apache.isis</groupId>
@@ -123,6 +133,17 @@
 			<groupId>org.apache.isis.core</groupId>
 			<artifactId>runtime</artifactId>
 		</dependency>
+
+        <dependency>
+            <groupId>org.apache.isis.progmodels</groupId>
+            <artifactId>dflt</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.isis.runtimes</groupId>
+            <artifactId>embedded</artifactId>
+            <scope>test</scope>
+        </dependency>
 
 		<dependency>
 			<groupId>commons-lang</groupId>

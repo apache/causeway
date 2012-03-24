@@ -45,22 +45,24 @@ public class DefaultPersistAlgorithm extends PersistAlgorithmAbstract {
     }
 
     @Override
-    public void makePersistent(final ObjectAdapter object, final ToPersistObjectSet toPersistObjectSet) {
-        if (object.getSpecification().isCollection()) {
-            LOG.debug("persist " + object);
-            if (object.getResolveState() == ResolveState.GHOST) {
-                object.changeState(ResolveState.RESOLVING);
-                object.changeState(ResolveState.RESOLVED);
-            } else if (object.getResolveState() == ResolveState.TRANSIENT) {
-                object.changeState(ResolveState.RESOLVED);
+    public void makePersistent(final ObjectAdapter adapter, final ToPersistObjectSet toPersistObjectSet) {
+        if (adapter.getSpecification().isCollection()) {
+            if(LOG.isDebugEnabled()) {
+                LOG.debug("persist " + adapter);
             }
-            final CollectionFacet facet = CollectionFacetUtils.getCollectionFacetFromSpec(object);
-            for (final ObjectAdapter element : facet.iterable(object)) {
+            if (adapter.getResolveState() == ResolveState.GHOST) {
+                adapter.changeState(ResolveState.RESOLVING);
+                adapter.changeState(ResolveState.RESOLVED);
+            } else if (adapter.getResolveState() == ResolveState.TRANSIENT) {
+                adapter.changeState(ResolveState.RESOLVED);
+            }
+            final CollectionFacet facet = CollectionFacetUtils.getCollectionFacetFromSpec(adapter);
+            for (final ObjectAdapter element : facet.iterable(adapter)) {
                 persist(element, toPersistObjectSet);
             }
         } else {
-            assertObjectNotPersistentAndPersistable(object);
-            persist(object, toPersistObjectSet);
+            assertObjectNotPersistentAndPersistable(adapter);
+            persist(adapter, toPersistObjectSet);
         }
     }
 
@@ -71,7 +73,9 @@ public class DefaultPersistAlgorithm extends PersistAlgorithmAbstract {
 
         final List<ObjectAssociation> fields = object.getSpecification().getAssociations();
         if (!object.getSpecification().isEncodeable() && fields.size() > 0) {
-            LOG.debug("make persistent " + object);
+            if(LOG.isDebugEnabled()) {
+                LOG.debug("make persistent " + object);
+            }
             CallbackUtils.callCallback(object, PersistingCallbackFacet.class);
             toPersistObjectSet.remapAsPersistent(object);
             object.changeState(ResolveState.SERIALIZING_RESOLVED);

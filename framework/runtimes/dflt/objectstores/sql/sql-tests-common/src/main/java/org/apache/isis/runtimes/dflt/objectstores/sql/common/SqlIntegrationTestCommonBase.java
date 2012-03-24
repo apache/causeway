@@ -28,10 +28,21 @@ import junit.framework.TestCase;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
+import org.jmock.auto.Mock;
+import org.junit.Rule;
 
+import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2;
+import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2.Mode;
 import org.apache.isis.runtimes.dflt.objectstores.sql.singleton.SqlIntegrationTestSingleton;
+import org.apache.isis.runtimes.embedded.EmbeddedContext;
 
 public abstract class SqlIntegrationTestCommonBase extends TestCase {
+
+    @Rule
+    public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
+    
+    @Mock
+    protected EmbeddedContext mockEmbeddedContext;
 
     protected SqlIntegrationTestSingleton getSingletonInstance() {
         return SqlIntegrationTestSingleton.getInstance();
@@ -70,9 +81,9 @@ public abstract class SqlIntegrationTestCommonBase extends TestCase {
         if (getSingletonInstance().getState() == 0) {
             final Properties properties = getProperties();
             if (properties == null) {
-                getSingletonInstance().initNOF("src/test/config", getPropertiesFilename());
+                getSingletonInstance().initNOF(mockEmbeddedContext, "src/test/config", getPropertiesFilename());
             } else {
-                getSingletonInstance().initNOF(properties);
+                getSingletonInstance().initNOF(mockEmbeddedContext, properties);
             }
 
             final String sqlSetupString = getSqlSetupString();

@@ -19,53 +19,124 @@
 
 package org.apache.isis.runtimes.dflt.runtime.persistence.adapterfactory.pojo;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertSame;
+
+import java.util.Date;
+
+import org.jmock.Expectations;
+import org.jmock.auto.Mock;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
+
+import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapterLookup;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
+import org.apache.isis.core.metamodel.adapter.version.Version;
+import org.apache.isis.core.metamodel.spec.SpecificationLoader;
+import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2;
+import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2.Mode;
+import org.apache.isis.runtimes.dflt.runtime.memento.RuntimeTestPojo;
 import org.apache.isis.runtimes.dflt.runtime.persistence.ConcurrencyException;
-import org.apache.isis.runtimes.dflt.runtime.testsystem.ProxyJunit3TestCase;
-import org.apache.isis.runtimes.dflt.runtime.testsystem.TestPojo;
-import org.apache.isis.runtimes.dflt.runtime.testsystem.TestProxyOid;
-import org.apache.isis.runtimes.dflt.runtime.testsystem.TestProxyVersion;
+import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.PojoAdapterBuilder;
+import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.PojoAdapterBuilder.Persistence;
+import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.serial.RootOidDefault;
 
-public class PojoAdapterTest extends ProxyJunit3TestCase {
+public class PojoAdapterTest {
 
+    @Rule
+    public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_ONLY);
+    
     private ObjectAdapter adapter;
-    private TestPojo domainObject;
+    private RuntimeTestPojo domainObject;
 
-    @Override
-    protected void setUp() throws Exception {
-        super.setUp();
-        domainObject = new TestPojo();
-        adapter = new PojoAdapter(domainObject, new TestProxyOid(1));
-        adapter.setOptimisticLock(new TestProxyVersion());
+    @Mock
+    private Version mockVersion;
+    @Mock
+    private Version mockVersion2;
+    @Mock
+    private SpecificationLoader mockSpecificationLoader;
+    @Mock
+    private ObjectAdapterLookup mockObjectAdapterLookup;
+    @Mock
+    private Localization mockLocalization;
+    
+    @Before
+    public void setUp() throws Exception {
+        domainObject = new RuntimeTestPojo();
+        
+        adapter = new PojoAdapter(domainObject, RootOidDefault.create("CUS", "1"), mockSpecificationLoader, mockObjectAdapterLookup, mockLocalization);
+        adapter.setVersion(mockVersion);
+        
+        allowUnimportantMethodCallsOn(mockVersion);
+        allowUnimportantMethodCallsOn(mockVersion2);
     }
 
-    public void testOid() {
-        assertEquals(new TestProxyOid(1), adapter.getOid());
+    private void allowUnimportantMethodCallsOn(final Version version) {
+        context.checking(new Expectations() {
+            {
+                allowing(version).sequence();
+                allowing(version).getUser();
+                allowing(version).getTime();
+                will(returnValue(new Date()));
+            }
+        });
     }
 
-    public void testObject() {
+    @Test
+    public void getOid_initially() {
+        assertEquals(RootOidDefault.create("CUS", "1"), adapter.getOid());
+    }
+
+    @Test
+    public void getObject_initially() {
         assertEquals(domainObject, adapter.getObject());
     }
 
-    public void testInitialResolvedState() {
+    @Test
+    public void getResolveState_initially() {
         assertEquals(ResolveState.NEW, adapter.getResolveState());
     }
 
-    public void testChangeResolvedState() {
+    @Test
+    public void changeState_newToTransient() {
         adapter.changeState(ResolveState.TRANSIENT);
         assertEquals(ResolveState.TRANSIENT, adapter.getResolveState());
     }
 
-    public void testVersion() throws Exception {
-        assertEquals(new TestProxyVersion(), adapter.getVersion());
+    @Test
+    public void getVersion_initially() throws Exception {
+        assertSame(mockVersion, adapter.getVersion());
     }
 
-    public void testVersionConflict() throws Exception {
-        try {
-            adapter.checkLock(new TestProxyVersion(2));
-            fail();
-        } catch (final ConcurrencyException expected) {
-        }
+    @Test
+    public void checkLock_whenVersionsSame() throws Exception {
+
+        context.checking(new Expectations() {
+            {
+                one(mockVersion).different(mockVersion2);
+                will(returnValue(false));
+            }
+        });
+        
+        adapter.checkLock(mockVersion2);
     }
+
+    @Test(expected=ConcurrencyException.class)
+    public void checkLock_whenVersionsDifferent() throws Exception {
+
+        adapter = PojoAdapterBuilder.create().with(mockSpecificationLoader).withTitleString("some pojo").with(mockVersion).build();
+        
+        context.checking(new Expectations() {
+            {
+                one(mockVersion).different(mockVersion2);
+                will(returnValue(true));
+            }
+        });
+        
+        adapter.checkLock(mockVersion2);
+    }
+
 }

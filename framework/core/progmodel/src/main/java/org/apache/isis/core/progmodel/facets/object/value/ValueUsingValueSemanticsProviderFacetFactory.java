@@ -68,7 +68,7 @@ public abstract class ValueUsingValueSemanticsProviderFacetFactory<T> extends Fa
     }
 
     @Override
-    public void setIsisConfiguration(final IsisConfiguration configuration) {
+    public void setConfiguration(final IsisConfiguration configuration) {
         this.configuration = configuration;
     }
 

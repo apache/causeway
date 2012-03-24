@@ -39,6 +39,7 @@ import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.algorithm.T
 import org.apache.isis.runtimes.dflt.runtime.transaction.ObjectPersistenceException;
 
 public class TopDownPersistAlgorithm extends PersistAlgorithmAbstract {
+    
     private static final Logger LOG = Logger.getLogger(TopDownPersistAlgorithm.class);
 
     @Override

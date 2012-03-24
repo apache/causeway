@@ -43,11 +43,20 @@ import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2;
 import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2.Mode;
-import org.apache.isis.runtimes.dflt.objectstores.dflt.testsystem.TestProxySystemII;
+import org.apache.isis.runtimes.dflt.objectstores.nosql.db.NoSqlDataDatabase;
+import org.apache.isis.runtimes.dflt.objectstores.nosql.encryption.DataEncryption;
+import org.apache.isis.runtimes.dflt.objectstores.nosql.keys.KeyCreator;
+import org.apache.isis.runtimes.dflt.objectstores.nosql.versions.VersionCreator;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.PersistenceCommand;
-import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.simple.SerialOid;
+import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.serial.RootOidDefault;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceQuery;
+import org.apache.isis.runtimes.dflt.testsupport.TestSystem;
+import org.apache.isis.runtimes.dflt.testsupport.domain.ExamplePojo;
+import org.apache.isis.runtimes.dflt.testsupport.domain.ExamplePojoRepository;
+import org.apache.isis.runtimes.dflt.testsupport.domain.ExamplePojoWithReferences;
+import org.apache.isis.runtimes.embedded.EmbeddedContext;
+import org.apache.isis.runtimes.embedded.IsisMetaModel;
 
 public class NoSqlObjectStoreTest {
 
@@ -63,25 +72,31 @@ public class NoSqlObjectStoreTest {
     private VersionCreator versionCreator;
 
     @Mock
-    private ObjectSpecification objectSpecification;
-
-    @Mock
     private PersistenceCommand command;
 
     private ObjectSpecification specification;
     private ObjectAdapter object;
     private NoSqlObjectStore store;
 
+    private final String objectType = "CUS";
+
+    private IsisMetaModel isisMetaModel;
+
+    @Mock
+    private EmbeddedContext mockEmbeddedContext;
+
     @Before
     public void setup() {
         Logger.getRootLogger().setLevel(Level.OFF);
-        final TestProxySystemII system = new TestProxySystemII();
-        system.init();
+        
+        isisMetaModel = new IsisMetaModel(mockEmbeddedContext, new ExamplePojoRepository());
+        specification = isisMetaModel.getSpecificationLoader().loadSpecification(ExamplePojoWithReferences.class);
 
-        specification = IsisContext.getSpecificationLoader().loadSpecification(ExampleReferencePojo.class);
+        
         object = IsisContext.getPersistenceSession().createInstance(specification);
-        ((SerialOid) object.getOid()).setId(3);
-        object.getOid().makePersistent();
+        final RootOidDefault rootOidDefault = (RootOidDefault) object.getOid();
+        
+        rootOidDefault.asPersistent(""+3);
 
         context.checking(new Expectations() {
             {
@@ -161,12 +176,12 @@ public class NoSqlObjectStoreTest {
     public void registerService() throws Exception {
         context.checking(new Expectations() {
             {
-                one(keyCreator).key(SerialOid.createPersistent(4));
+                one(keyCreator).key(RootOidDefault.create(objectType, ""+4));
                 will(returnValue("4"));
                 one(db).addService("service", "4");
             }
         });
-        store.registerService("service", SerialOid.createPersistent(4));
+        store.registerService(RootOidDefault.create(objectType, ""+4));
     }
 
     @Test
@@ -175,10 +190,10 @@ public class NoSqlObjectStoreTest {
             {
                 one(db).getService("service");
                 will(returnValue("4"));
-                one(keyCreator).oid(objectSpecification, "4");
+                one(keyCreator).oid(specification, "4");
             }
         });
-        store.getOidForService(objectSpecification, "service");
+        store.getOidForService(specification);
     }
 
     @Test
@@ -229,12 +244,12 @@ public class NoSqlObjectStoreTest {
 
         context.checking(new Expectations() {
             {
-                one(keyCreator).key(SerialOid.createPersistent(3));
+                one(keyCreator).key(RootOidDefault.create(objectType, ""+3));
                 will(returnValue("3"));
-                one(db).getInstance("3", specification.getFullIdentifier());
+                one(db).getInstance("3", specification.getObjectType());
             }
         });
-        object = IsisContext.getPersistenceSession().recreateAdapter(SerialOid.createPersistent(3), specification);
+        object = IsisContext.getPersistenceSession().recreateAdapter(RootOidDefault.create(objectType, ""+3), specification);
         assertEquals(ResolveState.GHOST, object.getResolveState());
         store.resolveImmediately(object);
         assertEquals(ResolveState.RESOLVED, object.getResolveState());

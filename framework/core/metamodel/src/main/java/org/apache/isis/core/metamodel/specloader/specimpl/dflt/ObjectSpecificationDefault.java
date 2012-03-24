@@ -428,45 +428,36 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
     // //////////////////////////////////////////////////////////////////////
 
     @Override
-    public Object createObject(final CreationMode creationMode) {
-        return createObject(null, creationMode);
-    }
-
-    @Override
-    public Object createAggregatedObject(final ObjectAdapter parent, final CreationMode creationMode) {
-        return createObject(parent, creationMode);
-    }
-
-    private Object createObject(final ObjectAdapter parent, final CreationMode creationMode) {
+    public Object createObject() {
         if (getCorrespondingClass().isArray()) {
             return Array.newInstance(getCorrespondingClass().getComponentType(), 0);
         }
-
+        
         try {
-            final Object object = getObjectInstantiator().instantiate(getCorrespondingClass());
-
-            if (creationMode == CreationMode.INITIALIZE) {
-                final ObjectAdapter adapter;
-                if (parent == null) {
-                    adapter = getAdapterMap().adapterFor(object);
-                } else {
-                    adapter = getAdapterMap().adapterForAggregated(object, parent);
-                }
-
-                // initialize new object
-                final List<ObjectAssociation> fields = adapter.getSpecification().getAssociations();
-                for (int i = 0; i < fields.size(); i++) {
-                    fields.get(i).toDefault(adapter);
-                }
-                getDependencyInjector().injectDependenciesInto(object);
-
-                CallbackUtils.callCallback(adapter, CreatedCallbackFacet.class);
-            }
-            return object;
+            return getObjectInstantiator().instantiate(getCorrespondingClass());
         } catch (final ObjectInstantiationException e) {
             throw new IsisException("Failed to create instance of type " + getFullIdentifier(), e);
         }
     }
+
+    /**
+     * REVIEW: does this behaviour live best here?  Not that sure that it does...
+     */
+    @Override
+    public ObjectAdapter initialize(final ObjectAdapter adapter) {
+                        
+        // initialize new object
+        final List<ObjectAssociation> fields = adapter.getSpecification().getAssociations();
+        for (int i = 0; i < fields.size(); i++) {
+            fields.get(i).toDefault(adapter);
+        }
+        getDependencyInjector().injectDependenciesInto(adapter.getObject());
+        
+        CallbackUtils.callCallback(adapter, CreatedCallbackFacet.class);
+        
+        return adapter;
+    }
+
 
     // //////////////////////////////////////////////////////////////////////
     // getMember, catalog... (not API)

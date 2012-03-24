@@ -66,12 +66,6 @@ public class SerialNumberVersion extends VersionUserAndTimeAbstract {
         return Long.toString(versionNumber, 16);
     }
 
-    // don't think is used
-    // @Override
-    // protected VersionAbstract next() {
-    // return new SerialNumberVersion(versionNumber + 1, null, null);
-    // }
-
     @Override
     public boolean different(final Version version) {
         if (version instanceof SerialNumberVersion) {

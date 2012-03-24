@@ -80,7 +80,7 @@ public interface PersistenceSession extends PersistenceSessionContainer, Persist
     /**
      * The configured {@link ObjectFactory}.
      */
-    public ObjectFactory getObjectFactory();
+    ObjectFactory getObjectFactory();
 
     /**
      * The configured {@link ServicesInjector}.

@@ -60,7 +60,10 @@ public interface CollectionFacet extends Facet {
 
     boolean contains(ObjectAdapter collectionAdapter, ObjectAdapter element);
 
-    void init(ObjectAdapter collectionAdapter, ObjectAdapter[] initData);
+    /**
+     * Set the contents of this collection.
+     */
+    void init(ObjectAdapter collectionAdapter, ObjectAdapter[] elements);
 
     /**
      * Convenience method that returns the {@link TypeOfFacet} on this facet's

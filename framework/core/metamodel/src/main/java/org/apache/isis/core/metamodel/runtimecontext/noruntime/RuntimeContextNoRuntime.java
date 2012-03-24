@@ -43,7 +43,6 @@ import org.apache.isis.core.metamodel.adapter.ServicesProvider;
 import org.apache.isis.core.metamodel.adapter.ServicesProviderAbstract;
 import org.apache.isis.core.metamodel.adapter.map.AdapterMap;
 import org.apache.isis.core.metamodel.adapter.map.AdapterMapAbstract;
-import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.core.metamodel.runtimecontext.DependencyInjector;
 import org.apache.isis.core.metamodel.runtimecontext.DependencyInjectorAbstract;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContextAbstract;
@@ -51,6 +50,7 @@ import org.apache.isis.core.metamodel.spec.ObjectInstantiationException;
 import org.apache.isis.core.metamodel.spec.ObjectInstantiator;
 import org.apache.isis.core.metamodel.spec.ObjectInstantiatorAbstract;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 
 public class RuntimeContextNoRuntime extends RuntimeContextAbstract {
 
@@ -91,12 +91,12 @@ public class RuntimeContextNoRuntime extends RuntimeContextAbstract {
             }
 
             @Override
-            public ObjectAdapter adapterFor(final Object pojo, final ObjectAdapter ownerAdapter, final IdentifiedHolder identifiedHolder) {
+            public ObjectAdapter adapterFor(final Object pojo, final ObjectAdapter ownerAdapter) {
                 throw new UnsupportedOperationException("Not supported by this implementation of RuntimeContext");
             }
 
             @Override
-            public ObjectAdapter adapterForAggregated(final Object domainObject, final ObjectAdapter parent) {
+            public ObjectAdapter adapterFor(final Object pojo, final ObjectAdapter ownerAdapter, final ObjectAssociation association) {
                 throw new UnsupportedOperationException("Not supported by this implementation of RuntimeContext");
             }
 

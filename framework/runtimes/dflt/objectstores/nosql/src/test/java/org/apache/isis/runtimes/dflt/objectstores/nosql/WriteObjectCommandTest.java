@@ -22,8 +22,10 @@ package org.apache.isis.runtimes.dflt.objectstores.nosql;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.jmock.Expectations;
-import org.jmock.Mockery;
+import org.jmock.auto.Mock;
+import org.junit.After;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 
 import org.apache.isis.core.commons.config.IsisConfiguration;
@@ -32,59 +34,81 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.version.SerialNumberVersion;
 import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.runtimes.dflt.objectstores.dflt.testsystem.TestProxySystemII;
-import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.simple.SerialOid;
+import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2;
+import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2.Mode;
+import org.apache.isis.runtimes.dflt.objectstores.dflt.InMemoryPersistenceMechanismInstaller;
+import org.apache.isis.runtimes.dflt.objectstores.nosql.db.StateWriter;
+import org.apache.isis.runtimes.dflt.objectstores.nosql.db.mongo.MongoPersistorMechanismInstaller;
+import org.apache.isis.runtimes.dflt.objectstores.nosql.encryption.DataEncryption;
+import org.apache.isis.runtimes.dflt.objectstores.nosql.keys.KeyCreator;
+import org.apache.isis.runtimes.dflt.objectstores.nosql.versions.VersionCreator;
+import org.apache.isis.runtimes.dflt.runtime.installerregistry.installerapi.PersistenceMechanismInstaller;
+import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.serial.RootOidDefault;
+import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
+import org.apache.isis.runtimes.dflt.testsupport.TestSystem;
+import org.apache.isis.runtimes.dflt.testsupport.IsisSystemWithFixtures;
+import org.apache.isis.runtimes.dflt.testsupport.TestSystemWithObjectStoreTestAbstract;
+import org.apache.isis.runtimes.dflt.testsupport.domain.ExamplePojoWithCollections;
+import org.apache.isis.runtimes.dflt.testsupport.domain.ExamplePojoWithReferences;
+import org.apache.isis.runtimes.dflt.testsupport.domain.ExamplePojoWithValues;
 
-public class WriteObjectCommandTest {
-    private TrialObjects testObjects;
-    private ObjectAdapter object1;
-    private ObjectSpecification specification;
-    private ObjectAdapter object2;
-    private ObjectAdapter object3;
-    private ObjectAdapter object4;
+public class WriteObjectCommandTest extends TestSystemWithObjectStoreTestAbstract {
+    
+    @Override
+    protected PersistenceMechanismInstaller createPersistenceMechanismInstaller() {
+        return new MongoPersistorMechanismInstaller();
+    }
+
+    @Rule
+    public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
+
+    @Mock
     private StateWriter writer;
+    @Mock
     private VersionCreator versionCreator;
+    @Mock
     private KeyCreator keyCreator;
+    @Mock
     private NoSqlCommandContext commandContext;
-    private Mockery context;
+
     private DataEncryption dataEncrypter;
+
+    private ObjectAdapter adapter1;
+    private ObjectSpecification specification;
+    private ObjectAdapter adapter2;
+    private ObjectAdapter adapter3;
+    private ObjectAdapter object4;
+    
+
+    private final String objectType = "FOO";
+
+    private TestSystem system;
 
     @Before
     public void setup() {
-        Logger.getRootLogger().setLevel(Level.OFF);
-        final TestProxySystemII system = new TestProxySystemII();
-        system.init();
 
-        testObjects = new TrialObjects();
-
-        final ExampleValuePojo pojo1 = new ExampleValuePojo();
+        final ExamplePojoWithValues pojo1 = new ExamplePojoWithValues();
+        final String objectType = "EVP";
+        
         pojo1.setName("Fred Smith");
         pojo1.setSize(108);
-        SerialOid oid = SerialOid.createPersistent(3);
-        object1 = testObjects.createAdapter(pojo1, oid);
-        specification = object1.getSpecification();
+        adapter1 = system.recreateAdapter(pojo1, RootOidDefault.create(objectType, "3"));
 
-        final ExampleValuePojo pojo2 = new ExampleValuePojo();
+        final ExamplePojoWithValues pojo2 = new ExamplePojoWithValues();
         pojo2.setName("John Brown");
-        oid = SerialOid.createPersistent(4);
-        object2 = testObjects.createAdapter(pojo2, oid);
+        adapter2 = system.recreateAdapter(pojo2, RootOidDefault.create(objectType, "4"));
 
-        final ExampleReferencePojo pojo3 = new ExampleReferencePojo();
+        final ExamplePojoWithReferences pojo3 = new ExamplePojoWithReferences();
         pojo3.setReference1(pojo1);
-        oid = SerialOid.createPersistent(5);
-        object3 = testObjects.createAdapter(pojo3, oid);
+        adapter3 = system.recreateAdapter(pojo3, RootOidDefault.create(objectType, "5"));
 
-        final ExampleCollectionPojo pojo4 = new ExampleCollectionPojo();
-        pojo4.getHomogenousCollection().add(pojo1);
-        pojo4.getHomogenousCollection().add(pojo2);
-        oid = SerialOid.createPersistent(6);
-        object4 = testObjects.createAdapter(pojo4, oid);
+        final ExamplePojoWithCollections adapter4 = new ExamplePojoWithCollections();
+        adapter4.getHomogenousCollection().add(pojo1);
+        adapter4.getHomogenousCollection().add(pojo2);
+        
+        object4 = system.recreateAdapter(adapter4, RootOidDefault.create(objectType, "6"));
 
-        context = new Mockery();
-        writer = context.mock(StateWriter.class);
-        commandContext = context.mock(NoSqlCommandContext.class);
-        keyCreator = context.mock(KeyCreator.class);
-        versionCreator = context.mock(VersionCreator.class);
+        specification = adapter1.getSpecification();
 
         final Version version = new SerialNumberVersion(2, "username", null);
 
@@ -119,18 +143,19 @@ public class WriteObjectCommandTest {
                 throw new UnexpectedCallException();
             }
         };
-
     }
+
 
     @Test
     public void objectWithValues() throws Exception {
 
         context.checking(new Expectations() {
+
             {
                 one(commandContext).createStateWriter(specification.getFullIdentifier());
                 will(returnValue(writer));
 
-                one(keyCreator).key(SerialOid.createPersistent(3));
+                one(keyCreator).key(RootOidDefault.create(objectType, ""+3));
                 will(returnValue("3"));
 
                 one(writer).writeId("3");
@@ -148,7 +173,7 @@ public class WriteObjectCommandTest {
             }
         });
 
-        new WriteObjectCommand(false, keyCreator, versionCreator, dataEncrypter, object1).execute(commandContext);
+        new WriteObjectCommand(false, keyCreator, versionCreator, dataEncrypter, adapter1).execute(commandContext);
 
         context.assertIsSatisfied();
     }
@@ -158,16 +183,16 @@ public class WriteObjectCommandTest {
 
         context.checking(new Expectations() {
             {
-                one(commandContext).createStateWriter(object3.getSpecification().getFullIdentifier());
+                one(commandContext).createStateWriter(adapter3.getSpecification().getFullIdentifier());
                 will(returnValue(writer));
 
-                one(keyCreator).key(SerialOid.createPersistent(5));
+                one(keyCreator).key(RootOidDefault.create(objectType, ""+5));
                 will(returnValue("5"));
-                one(keyCreator).reference(object1);
+                one(keyCreator).reference(adapter1);
                 will(returnValue("ref@3"));
 
                 one(writer).writeId("5");
-                one(writer).writeType(object3.getSpecification().getFullIdentifier());
+                one(writer).writeType(adapter3.getSpecification().getFullIdentifier());
                 one(writer).writeField("reference1", "ref@3");
                 one(writer).writeField("reference2", null);
                 one(writer).writeVersion(null, "2");
@@ -179,7 +204,7 @@ public class WriteObjectCommandTest {
             }
         });
 
-        new WriteObjectCommand(false, keyCreator, versionCreator, dataEncrypter, object3).execute(commandContext);
+        new WriteObjectCommand(false, keyCreator, versionCreator, dataEncrypter, adapter3).execute(commandContext);
 
         context.assertIsSatisfied();
     }
@@ -192,14 +217,14 @@ public class WriteObjectCommandTest {
                 one(commandContext).createStateWriter(object4.getSpecification().getFullIdentifier());
                 will(returnValue(writer));
 
-                one(keyCreator).key(SerialOid.createPersistent(6));
+                one(keyCreator).key(RootOidDefault.create(objectType, ""+6));
                 will(returnValue("6"));
                 one(writer).writeId("6");
                 one(writer).writeType(object4.getSpecification().getFullIdentifier());
 
-                one(keyCreator).reference(object1);
+                one(keyCreator).reference(adapter1);
                 will(returnValue("ref@3"));
-                one(keyCreator).reference(object2);
+                one(keyCreator).reference(adapter2);
                 will(returnValue("ref@4"));
 
                 one(writer).writeField("homogenousCollection", "ref@3|ref@4|");

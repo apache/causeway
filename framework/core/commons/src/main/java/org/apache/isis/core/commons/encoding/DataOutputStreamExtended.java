@@ -61,6 +61,7 @@ public class DataOutputStreamExtended implements DataOutputExtended {
         FieldType.CHAR_ARRAY.write(this, value);
     }
 
+    
     // ////////////////////////////////////////
     // Integral Numbers
     // ////////////////////////////////////////

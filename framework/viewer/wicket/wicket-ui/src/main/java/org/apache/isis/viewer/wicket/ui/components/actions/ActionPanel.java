@@ -26,12 +26,12 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.wicket.model.common.SelectionHandler;
+import org.apache.isis.viewer.wicket.model.isis.PersistenceSessionProvider;
 import org.apache.isis.viewer.wicket.model.models.ActionExecutor;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ValueModel;
-import org.apache.isis.viewer.wicket.model.nof.PersistenceSessionAccessor;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
@@ -115,7 +115,7 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
                 addResultsAccordingToSingleResultsMode(panel, actualAdapter);
             }
 
-            private ObjectAdapter determineActualAdapter(final ObjectAdapter resultAdapter, final PersistenceSessionAccessor psa) {
+            private ObjectAdapter determineActualAdapter(final ObjectAdapter resultAdapter, final PersistenceSessionProvider psa) {
                 ObjectAdapter actualAdapter;
                 if (resultAdapter.getSpecification().isNotCollection()) {
                     actualAdapter = resultAdapter;
@@ -147,7 +147,7 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
                 }
             }
 
-            private ObjectAdapter adapterFor(final Object pojo, final PersistenceSessionAccessor psa) {
+            private ObjectAdapter adapterFor(final Object pojo, final PersistenceSessionProvider psa) {
                 return psa.getPersistenceSession().getAdapterManager().adapterFor(pojo);
             }
         },

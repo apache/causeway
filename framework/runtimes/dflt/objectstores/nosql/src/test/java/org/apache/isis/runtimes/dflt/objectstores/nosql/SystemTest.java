@@ -19,31 +19,32 @@
 
 package org.apache.isis.runtimes.dflt.objectstores.nosql;
 
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
-import org.junit.Before;
 import org.junit.Test;
 
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.runtimes.dflt.objectstores.dflt.testsystem.TestProxySystemII;
+import org.apache.isis.runtimes.dflt.objectstores.nosql.db.mongo.MongoPersistorMechanismInstaller;
+import org.apache.isis.runtimes.dflt.runtime.installerregistry.installerapi.PersistenceMechanismInstaller;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
+import org.apache.isis.runtimes.dflt.testsupport.IsisSystemWithFixtures;
+import org.apache.isis.runtimes.dflt.testsupport.TestSystemWithObjectStoreTestAbstract;
+import org.apache.isis.runtimes.dflt.testsupport.domain.ExamplePojoWithReferences;
 
-public class SystemTest {
+public class SystemTest extends TestSystemWithObjectStoreTestAbstract {
 
-    @Before
-    public void setup() {
-        Logger.getRootLogger().setLevel(Level.OFF);
-        final TestProxySystemII system = new TestProxySystemII();
-        system.init();
-
+    @Override
+    protected PersistenceMechanismInstaller createPersistenceMechanismInstaller() {
+        return new MongoPersistorMechanismInstaller();
     }
 
+    /**
+     * What's being tested here???
+     */
     @Test
     public void test() {
-        final ObjectSpecification specification = IsisContext.getSpecificationLoader().loadSpecification(ExampleReferencePojo.class);
+        final ObjectSpecification specification = system.loadSpecification(ExamplePojoWithReferences.class);
         final ObjectAdapter object = IsisContext.getPersistenceSession().createInstance(specification);
 
         final DebugBuilder debug = new DebugString();

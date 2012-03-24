@@ -87,6 +87,13 @@
     </dependencyManagement>
 
 	<dependencies>
+
+        <dependency>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>testsupport</artifactId>
+            <scope>test</scope>
+        </dependency>
+
 		<dependency>
 		    <groupId>org.apache.isis.core</groupId>
 		    <artifactId>progmodel</artifactId>
@@ -96,21 +103,6 @@
 		    <groupId>org.apache.isis.core</groupId>
 		    <artifactId>runtime</artifactId>
 		    <scope>test</scope>
-		</dependency>
-
-		<!-- required for JavaReflectorInstaller -->
-		<dependency>
-		    <groupId>org.apache.isis.runtimes.dflt</groupId>
-		    <artifactId>runtime</artifactId>
-		    <optional>true</optional>
-		</dependency>
-
-		<!-- TODO: remove this dependency -->
-		<dependency>
-		    <groupId>org.apache.isis.runtimes.dflt</groupId>
-		    <artifactId>runtime</artifactId>
-		    <scope>test</scope>
-		    <type>test-jar</type>
 		</dependency>
 		
 	</dependencies>

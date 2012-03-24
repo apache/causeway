@@ -32,6 +32,17 @@ public final class Ensure {
     }
 
     /**
+     * To ensure that the provided assertion is true
+     * 
+     * @throws IllegalArgumentException
+     */
+    public static void ensure(final String expectation, final boolean expression) {
+        if (!expression) {
+            throw new IllegalArgumentException("illegal argument, expected: " + expectation);
+        }
+    }
+
+    /**
      * To ensure that the provided argument is correct.
      * 
      * @see #ensureThatArg(Object, Matcher,State)
@@ -47,6 +58,7 @@ public final class Ensure {
         }
         return object;
     }
+
 
     /**
      * To ensure that the provided argument is correct.

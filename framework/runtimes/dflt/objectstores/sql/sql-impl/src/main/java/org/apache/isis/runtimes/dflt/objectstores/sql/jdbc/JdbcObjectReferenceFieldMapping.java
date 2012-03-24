@@ -21,6 +21,8 @@ package org.apache.isis.runtimes.dflt.objectstores.sql.jdbc;
 
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
@@ -54,13 +56,15 @@ public class JdbcObjectReferenceFieldMapping extends JdbcObjectReferenceMapping 
     @Override
     public void appendWhereClause(final DatabaseConnector connector, final StringBuffer sql, final ObjectAdapter object) {
         final ObjectAdapter fieldValue = field.get(object);
-        appendWhereClause(connector, sql, fieldValue.getOid());
+        final RootOid oid = (RootOid) fieldValue.getOid();
+        appendWhereClause(connector, sql, oid);
     }
 
     @Override
     public void appendWhereObject(final DatabaseConnector connector, final ObjectAdapter objectAdapter) {
         final ObjectAdapter fieldValue = field.get(objectAdapter);
-        connector.addToQueryValues(primaryKeyAsObject(fieldValue.getOid()));
+        final RootOid oid = (RootOid) fieldValue.getOid();
+        connector.addToQueryValues(primaryKey(oid));
     }
 
     public JdbcObjectReferenceFieldMapping(final ObjectAssociation field) {

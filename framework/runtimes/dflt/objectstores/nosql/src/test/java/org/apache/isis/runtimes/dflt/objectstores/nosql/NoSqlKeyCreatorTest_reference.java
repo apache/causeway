@@ -31,13 +31,13 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2;
 import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2.Mode;
-import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.simple.SerialOid;
+import org.apache.isis.runtimes.dflt.objectstores.nosql.keys.KeyCreatorDefault;
+import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.serial.RootOidDefault;
 
 public class NoSqlKeyCreatorTest_reference {
 
     @Rule
     public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_ONLY);
-
 
     @Mock
     private ObjectSpecification specification;
@@ -45,14 +45,15 @@ public class NoSqlKeyCreatorTest_reference {
     private ObjectAdapter adapter;
     
     private final String className = "com.foo.bar.SomeClass";
-    private final SerialOid serialOid = SerialOid.createPersistent(123);
-    private final NoSqlOid noSqlOid = new NoSqlOid(className, serialOid);
+    private final String objectType = "SCL";
     
-    private NoSqlKeyCreator noSqlKeyCreator;
+    private final RootOidDefault rootOidDefault = RootOidDefault.create(objectType, ""+123);
+    
+    private KeyCreatorDefault keyCreatorDefault;
 
     @Before
     public void setup() {
-        noSqlKeyCreator = new NoSqlKeyCreator();
+        keyCreatorDefault = new KeyCreatorDefault();
         
         context.checking(new Expectations() {
             {
@@ -60,7 +61,7 @@ public class NoSqlKeyCreatorTest_reference {
                 will(returnValue(specification));
 
                 allowing(adapter).getOid();
-                will(returnValue(noSqlOid));
+                will(returnValue(rootOidDefault));
 
                 allowing(specification).getFullIdentifier();
                 will(returnValue(className));
@@ -70,7 +71,7 @@ public class NoSqlKeyCreatorTest_reference {
 
     @Test
     public void reference() throws Exception {
-        final String expectedReference = className + "@" + Long.toString(serialOid.getSerialNo(), 16);
-        assertEquals(expectedReference, noSqlKeyCreator.reference(adapter));
+        final String expectedReference = objectType + "@" + rootOidDefault.getIdentifier();
+        assertEquals(expectedReference, keyCreatorDefault.reference(adapter));
     }
 }

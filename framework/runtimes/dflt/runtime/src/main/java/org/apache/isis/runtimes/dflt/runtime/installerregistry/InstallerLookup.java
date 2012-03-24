@@ -25,13 +25,11 @@ import org.apache.isis.core.commons.components.Installer;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationBuilder;
 import org.apache.isis.core.commons.config.IsisConfigurationBuilderAware;
-import org.apache.isis.core.metamodel.specloader.FacetDecoratorInstaller;
 import org.apache.isis.core.metamodel.specloader.ObjectReflectorInstaller;
 import org.apache.isis.core.runtime.authentication.AuthenticationManagerInstaller;
 import org.apache.isis.core.runtime.authorization.AuthorizationManagerInstaller;
 import org.apache.isis.core.runtime.imageloader.TemplateImageLoaderInstaller;
 import org.apache.isis.runtimes.dflt.runtime.fixtures.FixturesInstaller;
-import org.apache.isis.runtimes.dflt.runtime.installerregistry.installerapi.ClientConnectionInstaller;
 import org.apache.isis.runtimes.dflt.runtime.installerregistry.installerapi.EmbeddedWebServerInstaller;
 import org.apache.isis.runtimes.dflt.runtime.installerregistry.installerapi.IsisViewerInstaller;
 import org.apache.isis.runtimes.dflt.runtime.installerregistry.installerapi.PersistenceMechanismInstaller;
@@ -78,24 +76,6 @@ public interface InstallerLookup extends InstallerRepository, ApplicationScopedC
     IsisViewerInstaller viewerInstaller(final String requested, final String defaultName);
 
     IsisViewerInstaller viewerInstaller(final String requested);
-
-    /**
-     * Client-side of <tt>remoting</tt>, specifying how to access the server.
-     * 
-     * <p>
-     * Note that this lookup is called in three different contexts:
-     * <ul>
-     * <li>the <tt>IsisExecutionContextFactoryUsingInstallers</tt> uses this to
-     * lookup the {@link PersistenceMechanismInstaller} (may be a
-     * <tt>ProxyPersistor</tt>)</li>
-     * <li>the <tt>IsisExecutionContextFactoryUsingInstallers</tt> also uses
-     * this to lookup the {@link FacetDecoratorInstaller}; adds in remoting
-     * facets.</li>
-     * <li>the <tt>IsisSystemUsingInstallers</tt> uses this to lookup the
-     * {@link AuthenticationManagerInstaller}.</li>
-     * </ul>
-     */
-    ClientConnectionInstaller clientConnectionInstaller(final String requested);
 
     EmbeddedWebServerInstaller embeddedWebServerInstaller(final String requested);
 

@@ -23,6 +23,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import com.google.common.collect.Maps;
+
 import org.apache.commons.collections.map.IdentityMap;
 import org.apache.log4j.Logger;
 
@@ -54,7 +56,7 @@ public class PojoAdapterHashMap implements PojoAdapterMap {
     }
 
     private static final Logger LOG = Logger.getLogger(PojoAdapterHashMap.class);
-    public static final int DEFAULT_POJO_ADAPTER_MAP_SIZE = 10;
+    public static final int DEFAULT_POJO_ADAPTER_MAP_SIZE = OidAdapterHashMap.DEFAULT_OID_ADAPTER_MAP_SIZE;
 
     protected final Map<Object, ObjectAdapter> adapterByPojoMap;
 
@@ -67,8 +69,7 @@ public class PojoAdapterHashMap implements PojoAdapterMap {
     }
 
     public PojoAdapterHashMap(final int capacity) {
-        adapterByPojoMap = new HashMap<Object, ObjectAdapter>(capacity);
-        // adapterByPojoMap = new IdentityMap(capacity);
+        adapterByPojoMap = Maps.newHashMapWithExpectedSize(capacity);
     }
 
     @Override
@@ -115,7 +116,9 @@ public class PojoAdapterHashMap implements PojoAdapterMap {
     @Override
     public void add(final Object pojo, final ObjectAdapter adapter) {
         adapterByPojoMap.put(key(pojo), adapter);
-        LOG.debug("add adapter: #" + Long.toHexString(pojo.hashCode()) + " -> #" + Long.toHexString(adapter.hashCode()));
+        if(LOG.isDebugEnabled()) {
+            LOG.debug("add adapter: #" + Long.toHexString(pojo.hashCode()) + " -> #" + Long.toHexString(adapter.hashCode()));
+        }
         // log at end so that if toString needs adapters they're in maps.
         if (adapter.getResolveState().isResolved()) {
             if (LOG.isDebugEnabled()) {
@@ -126,7 +129,9 @@ public class PojoAdapterHashMap implements PojoAdapterMap {
 
     @Override
     public void remove(final ObjectAdapter object) {
-        LOG.debug("remove adapater: " + object);
+        if(LOG.isDebugEnabled()) {
+            LOG.debug("remove adapter: " + object);
+        }
         adapterByPojoMap.remove(key(object.getObject()));
     }
 

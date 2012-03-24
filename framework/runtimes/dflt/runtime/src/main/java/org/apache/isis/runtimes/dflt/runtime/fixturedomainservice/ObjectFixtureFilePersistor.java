@@ -38,55 +38,16 @@ import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacetU
 import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.ObjectSpecificationException;
+import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 
 public class ObjectFixtureFilePersistor {
 
     private static final Logger LOG = Logger.getLogger(ObjectFixtureFilePersistor.class);
-
-    private static class SavedObjects {
-        private int id = 1;
-        private final Map<ObjectAdapter, String> idMap = new HashMap<ObjectAdapter, String>();
-
-        public String getId(final ObjectAdapter object) {
-            String idString = idMap.get(object);
-            if (idString == null) {
-                id++;
-                idMap.put(object, "" + id);
-                idString = "" + id;
-            }
-            return idString;
-        }
-    }
-
-    private static class LoadedObjects {
-        private final Map<String, ObjectAdapter> idMap = new HashMap<String, ObjectAdapter>();
-        private final Set<Object> objects;
-
-        public LoadedObjects(final Set<Object> objects) {
-            this.objects = objects;
-        }
-
-        public ObjectAdapter get(final String data) {
-            final int pos = data.indexOf('#');
-            if (pos == -1) {
-                throw new FixtureException("load failed - trying to read non-reference data as a reference: " + data);
-            }
-            final String id = data.substring(pos + 1);
-            ObjectAdapter object = idMap.get(id);
-            if (object == null) {
-                final String className = data.substring(0, pos);
-                final ObjectSpecification specification = IsisContext.getSpecificationLoader().loadSpecification(className);
-                object = IsisContext.getPersistenceSession().createInstance(specification);
-                idMap.put(id, object);
-                objects.add(object.getObject());
-            }
-            return object;
-        }
-
-    }
 
     public Set<Object> loadData(final Reader reader) throws IOException {
         final Set<Object> objects = new HashSet<Object>();
@@ -105,14 +66,14 @@ public class ObjectFixtureFilePersistor {
                     loadFieldData(object, loaded, line);
                 } else {
                     if (object != null && !object.isPersistent()) {
-                        IsisContext.getPersistenceSession().makePersistent(object);
+                        getPersistenceSession().makePersistent(object);
                     }
                     object = loaded.get(line);
                 }
             }
 
             if (object != null && !object.isPersistent()) {
-                IsisContext.getPersistenceSession().makePersistent(object);
+                getPersistenceSession().makePersistent(object);
             }
         } catch (final Exception e) {
             throw new FixtureException("failed to load data at line " + lineNo, e);
@@ -163,7 +124,7 @@ public class ObjectFixtureFilePersistor {
         final PrintWriter writer = new PrintWriter(out);
         final SavedObjects saved = new SavedObjects();
         for (final Object object : objects) {
-            final ObjectAdapter adapter = IsisContext.getPersistenceSession().getAdapterManager().adapterFor(object);
+            final ObjectAdapter adapter = getAdapterManager().adapterFor(object);
             saveData(writer, adapter, saved);
         }
         out.close();
@@ -210,4 +171,69 @@ public class ObjectFixtureFilePersistor {
         }
     }
 
+    
+    
+    protected PersistenceSession getPersistenceSession() {
+        return IsisContext.getPersistenceSession();
+    }
+
+    protected SpecificationLoader getSpecificationLoader() {
+        return IsisContext.getSpecificationLoader();
+    }
+
+    protected AdapterManager getAdapterManager() {
+        return getPersistenceSession().getAdapterManager();
+    }
 }
+
+
+class LoadedObjects {
+    private final Map<String, ObjectAdapter> idMap = new HashMap<String, ObjectAdapter>();
+    private final Set<Object> objects;
+
+    public LoadedObjects(final Set<Object> objects) {
+        this.objects = objects;
+    }
+
+    public ObjectAdapter get(final String data) {
+        final int pos = data.indexOf('#');
+        if (pos == -1) {
+            throw new FixtureException("load failed - trying to read non-reference data as a reference: " + data);
+        }
+        final String id = data.substring(pos + 1);
+        ObjectAdapter object = idMap.get(id);
+        if (object == null) {
+            final String className = data.substring(0, pos);
+            final ObjectSpecification specification = getSpecificationLoader().loadSpecification(className);
+            object = getPersistenceSession().createInstance(specification);
+            idMap.put(id, object);
+            objects.add(object.getObject());
+        }
+        return object;
+    }
+
+    
+    protected PersistenceSession getPersistenceSession() {
+        return IsisContext.getPersistenceSession();
+    }
+
+    protected SpecificationLoader getSpecificationLoader() {
+        return IsisContext.getSpecificationLoader();
+    }
+}
+
+class SavedObjects {
+    private int id = 1;
+    private final Map<ObjectAdapter, String> idMap = new HashMap<ObjectAdapter, String>();
+
+    public String getId(final ObjectAdapter object) {
+        String idString = idMap.get(object);
+        if (idString == null) {
+            id++;
+            idMap.put(object, "" + id);
+            idString = "" + id;
+        }
+        return idString;
+    }
+}
+

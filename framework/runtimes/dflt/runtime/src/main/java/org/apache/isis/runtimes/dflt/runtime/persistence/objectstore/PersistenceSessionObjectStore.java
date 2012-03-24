@@ -26,8 +26,9 @@ import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;
 
-import java.util.HashMap;
 import java.util.Map;
+
+import com.google.common.collect.Maps;
 
 import org.apache.log4j.Logger;
 
@@ -39,6 +40,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterFactory;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.facets.object.callbacks.CallbackUtils;
 import org.apache.isis.core.metamodel.facets.object.callbacks.LoadedCallbackFacet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.LoadingCallbackFacet;
@@ -75,7 +77,7 @@ public class PersistenceSessionObjectStore extends PersistenceSessionAbstract im
     private static final Logger LOG = Logger.getLogger(PersistenceSessionObjectStore.class);
     private final PersistAlgorithm persistAlgorithm;
     private final ObjectStorePersistence objectStore;
-    private final Map<String, Oid> services = new HashMap<String, Oid>();
+    private final Map<String, RootOid> servicesByObjectType = Maps.newHashMap();
 
     /**
      * Initialize the object store so that calls to this object store access
@@ -345,7 +347,7 @@ public class PersistenceSessionObjectStore extends PersistenceSessionAbstract im
     @Override
     public void objectChanged(final ObjectAdapter adapter) {
 
-        if (adapter.isTransient() || (adapter.isAggregated() && adapter.getAggregateRoot().isTransient())) {
+        if (adapter.isTransient() || (adapter.isParented() && adapter.getAggregateRoot(getAdapterManager()).isTransient())) {
             addObjectChangedForPresentationLayer(adapter);
             return;
         }
@@ -540,22 +542,23 @@ public class PersistenceSessionObjectStore extends PersistenceSessionAbstract im
     // ///////////////////////////////////////////////////////////////////////////
 
     @Override
-    protected Oid getOidForService(ObjectSpecification serviceSpecification, final String name) {
-        return getOidForServiceFromPersistenceLayer(serviceSpecification, name);
+    protected RootOid getOidForService(ObjectSpecification serviceSpec) {
+        return getOidForServiceFromPersistenceLayer(serviceSpec);
     }
 
-    private Oid getOidForServiceFromPersistenceLayer(ObjectSpecification serviceSpecification, final String name) {
-        Oid oid = services.get(name);
+    private RootOid getOidForServiceFromPersistenceLayer(ObjectSpecification serviceSpecification) {
+        final String objectType = serviceSpecification.getObjectType();
+        RootOid oid = servicesByObjectType.get(objectType);
         if (oid == null) {
-            oid = objectStore.getOidForService(serviceSpecification, name);
-            services.put(name, oid);
+            oid = objectStore.getOidForService(serviceSpecification);
+            servicesByObjectType.put(objectType, oid);
         }
         return oid;
     }
 
     @Override
-    protected void registerService(final String name, final Oid oid) {
-        objectStore.registerService(name, oid);
+    protected void registerService(final RootOid rootOid) {
+        objectStore.registerService(rootOid);
     }
 
     // ///////////////////////////////////////////////////////////////////////////

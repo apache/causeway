@@ -23,11 +23,14 @@ import static org.junit.Assert.assertEquals;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
+import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
-import org.apache.isis.runtimes.dflt.objectstores.dflt.testsystem.TestProxySystemII;
+import org.apache.isis.runtimes.dflt.objectstores.dflt.InMemoryPersistenceMechanismInstaller;
+import org.apache.isis.runtimes.dflt.runtime.installerregistry.installerapi.PersistenceMechanismInstaller;
+import org.apache.isis.runtimes.dflt.testsupport.IsisSystemWithFixtures;
+import org.apache.isis.runtimes.dflt.testsupport.TestSystemWithObjectStoreTestAbstract;
 import org.apache.isis.viewer.dnd.DummyView;
 import org.apache.isis.viewer.dnd.TestToolkit;
 import org.apache.isis.viewer.dnd.drawing.Location;
@@ -36,17 +39,24 @@ import org.apache.isis.viewer.dnd.view.View;
 import org.apache.isis.viewer.dnd.view.content.NullContent;
 import org.apache.isis.viewer.dnd.view.look.LookFactory;
 
-public class ToolbarTest {
+public class ToolbarTest extends TestSystemWithObjectStoreTestAbstract {
 
+    @Override
+    protected PersistenceMechanismInstaller createPersistenceMechanismInstaller() {
+        return new InMemoryPersistenceMechanismInstaller();
+    }
+
+    
     private ToolbarView toolbar;
     private DummyView button1;
     private DummyView button2;
     private DummyView button3;
 
+
     @Before
-    public void setup() {
+    public void setupDnd() {
         Logger.getRootLogger().setLevel(Level.OFF);
-        new TestProxySystemII().init();
+        
         TestToolkit.createInstance();
         LookFactory.init();
 
@@ -65,21 +75,19 @@ public class ToolbarTest {
         toolbar.addView(button3);
     }
 
-    @Ignore("having problems with test classpath - TestProxySystemII can't find JavaReflectorInstaller, for some reason")
+    
     @Test
     public void requiredSizeForButtonsLessThanMaximumWidth() throws Exception {
         final Size size = toolbar.getRequiredSize(Size.createMax());
         assertEquals(new Size(View.HPADDING + (100 + View.HPADDING) * 3, 10 + View.VPADDING), size);
     }
 
-    @Ignore("having problems with test classpath - TestProxySystemII can't find JavaReflectorInstaller, for some reason")
     @Test
     public void requiredSizeForButtonsGreaterThanMaximumWidth() throws Exception {
         final Size size = toolbar.getRequiredSize(new Size(250, 100));
         assertEquals(new Size(View.HPADDING * 3 + 220, (10 + View.VPADDING) * 2), size);
     }
 
-    @Ignore("having problems with test classpath - TestProxySystemII can't find JavaReflectorInstaller, for some reason")
     @Test
     public void requiredSizeForButtonsJustGreaterThanMaximumWidth() throws Exception {
         final int width = View.HPADDING + (100 + View.HPADDING) * 3;
@@ -87,14 +95,12 @@ public class ToolbarTest {
         assertEquals(new Size(width, 10 + View.VPADDING), size);
     }
 
-    @Ignore("having problems with test classpath - TestProxySystemII can't find JavaReflectorInstaller, for some reason")
     @Test
     public void requiredSizeForButtonsSameAsMaximumWidth() throws Exception {
         final Size size = toolbar.getRequiredSize(new Size(View.HPADDING + (100 + View.HPADDING) * 3, 100));
         assertEquals(new Size(View.HPADDING * 3 + 220, (10 + View.VPADDING) * 2), size);
     }
 
-    @Ignore("having problems with test classpath - TestProxySystemII can't find JavaReflectorInstaller, for some reason")
     @Test
     public void layoutSizeForButtonsAsRequired() throws Exception {
         toolbar.doLayout(Size.createMax());
@@ -103,7 +109,6 @@ public class ToolbarTest {
         assertEquals(new Size(80, 10), button3.getSize());
     }
 
-    @Ignore("having problems with test classpath - TestProxySystemII can't find JavaReflectorInstaller, for some reason")
     @Test
     public void layoutLocationForButtonsLessThanMaximumWidth() throws Exception {
         toolbar.doLayout(Size.createMax());
@@ -112,7 +117,6 @@ public class ToolbarTest {
         assertEquals(new Location(View.HPADDING * 3 + 220, 0), button3.getLocation());
     }
 
-    @Ignore("having problems with test classpath - TestProxySystemII can't find JavaReflectorInstaller, for some reason")
     @Test
     public void layoutLocationForButtonsGreaterThanMaximumWidth() throws Exception {
         toolbar.doLayout(new Size(250, 100));

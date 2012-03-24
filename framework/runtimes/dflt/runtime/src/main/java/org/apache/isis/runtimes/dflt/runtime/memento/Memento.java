@@ -61,12 +61,15 @@ import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessi
 public class Memento implements Serializable {
 
     private final static long serialVersionUID = 1L;
-
-    private static final Logger LOG = Logger.getLogger(Memento.class);
+    private final static Logger LOG = Logger.getLogger(Memento.class);
 
     private final List<Oid> transientObjects = Lists.newArrayList();
 
     private Data state;
+
+    ////////////////////////////////////////////////
+    // constructor, createData
+    ////////////////////////////////////////////////
 
     public Memento(final ObjectAdapter object) {
         state = object == null ? null : createData(object);
@@ -157,37 +160,47 @@ public class Memento implements Serializable {
         return new StandaloneData(adapter);
     }
 
-    protected Data getData() {
-        return state;
-    }
+    ////////////////////////////////////////////////
+    // properties
+    ////////////////////////////////////////////////
 
     public Oid getOid() {
         return state.getOid();
     }
+
+    protected Data getData() {
+        return state;
+    }
+    
+    ////////////////////////////////////////////////
+    // recreateObject
+    ////////////////////////////////////////////////
 
     public ObjectAdapter recreateObject() {
         if (state == null) {
             return null;
         }
         final ObjectSpecification spec = getSpecificationLoader().loadSpecification(state.getClassName());
-        ObjectAdapter object;
+
+        ObjectAdapter adapter;
         ResolveState targetState;
         if (getOid().isTransient()) {
-            object = getHydrator().recreateAdapter(getOid(), spec);
+            adapter = getHydrator().recreateAdapter(getOid(), spec);
             targetState = ResolveState.SERIALIZING_TRANSIENT;
         } else {
-            object = getHydrator().recreateAdapter(getOid(), spec);
+            adapter = getHydrator().recreateAdapter(getOid(), spec);
             targetState = ResolveState.UPDATING;
         }
-        if (object.getSpecification().isCollection()) {
-            populateCollection(object, (CollectionData) state, targetState);
+        
+        if (adapter.getSpecification().isCollection()) {
+            populateCollection(adapter, (CollectionData) state, targetState);
         } else {
-            updateObject(object, state, targetState);
+            updateObject(adapter, state, targetState);
         }
         if (LOG.isDebugEnabled()) {
-            LOG.debug("recreated object " + object.getOid());
+            LOG.debug("recreated object " + adapter.getOid());
         }
-        return object;
+        return adapter;
     }
 
     private void populateCollection(final ObjectAdapter collection, final CollectionData state, final ResolveState targetState) {
@@ -226,6 +239,11 @@ public class Memento implements Serializable {
         }
     }
 
+    
+    ////////////////////////////////////////////////
+    // updateObject
+    ////////////////////////////////////////////////
+    
     /**
      * Updates the specified object (assuming it is the correct object for this
      * memento) with the state held by this memento.
@@ -263,7 +281,7 @@ public class Memento implements Serializable {
             PersistorUtil.end(object);
         } else if (object.getResolveState() == ResolveState.TRANSIENT && resolveState == ResolveState.TRANSIENT) {
             updateFields(object, state);
-        } else if (object.isAggregated()) {
+        } else if (object.isParented()) {
             updateFields(object, state);
         } else {
             final ObjectData od = (ObjectData) state;
@@ -348,11 +366,15 @@ public class Memento implements Serializable {
             }
         }
     }
+    
+    ////////////////////////////////////////////////
+    // encode, restore
+    ////////////////////////////////////////////////
 
     public void encodedData(final DataOutputStreamExtended outputImpl) throws IOException {
         outputImpl.writeEncodable(state);
     }
-
+    
     public void restore(final DataInputStreamExtended inputImpl) throws IOException {
         state = inputImpl.readEncodable(Data.class);
     }
@@ -376,15 +398,15 @@ public class Memento implements Serializable {
     // Dependencies (from context)
     // ///////////////////////////////////////////////////////////////
 
-    private static SpecificationLoader getSpecificationLoader() {
+    protected SpecificationLoader getSpecificationLoader() {
         return IsisContext.getSpecificationLoader();
     }
 
-    private static PersistenceSession getPersistenceSession() {
+    protected PersistenceSession getPersistenceSession() {
         return IsisContext.getPersistenceSession();
     }
 
-    private static PersistenceSessionHydrator getHydrator() {
+    protected PersistenceSessionHydrator getHydrator() {
         return getPersistenceSession();
     }
 

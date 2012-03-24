@@ -19,58 +19,42 @@
 
 package org.apache.isis.core.metamodel.adapter.oid;
 
-import org.apache.isis.core.commons.encoding.Encodable;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.applib.annotation.Value;
 
-public interface Oid extends Encodable {
+
+/**
+ * An immutable identifier for either a root object (subtype {@link RootOid}) or 
+ * an aggregated object (subtype {@link AggregatedOid}).
+ * 
+ * <p>
+ * Note that value objects (strings, ints, {@link Value}s etc) do not have an {@link Oid}. 
+ */
+public interface Oid {
 
     /**
-     * Copies the content of the specified oid into this oid.
+     * A string representation of this {@link Oid}.
      * 
      * <p>
-     * After this call the {@link #hashCode()} return by both the specified
-     * object and this object will be the same, and both objects will be
-     * {@link #equals(Object) equal}.
+     * Note that {@link RootOid} provide a reciprocal static <tt>deString</tt> method so that
+     * they can be round-tripped.  However, this feature is not required or provided by
+     * {@link AggregatedOid}.
+     */
+    String enString();
+
+    /**
+     * Flags whether this OID is for a transient (not-yet-persisted) object.
      * 
      * <p>
-     * Only ever used by client-server remoting.
-     */
-    void copyFrom(Oid oid);
-
-    /**
-     * Returns the pending oid if there is one.
-     * 
-     * @see #hasPrevious()
-     * @see #clearPrevious()
-     */
-    Oid getPrevious();
-
-    /**
-     * Returns true if this oid contains a {@link #getPrevious() previous}
-     * value, specifically that the {@link Oid} was changed from transient to
-     * persistent.
-     * 
-     * @see #getPrevious()
-     * @see #clearPrevious()
-     */
-    boolean hasPrevious();
-
-    /**
-     * Indicate that the {@link #getPrevious() previous value} has been used to
-     * remap the {@link ObjectAdapter adapter} and should not been cleared.
-     * 
-     * @see #getPrevious()
-     * @see #hasPrevious()
-     */
-    void clearPrevious();
-
-    /**
-     * Flags whether this OID is temporary, and is for a transient object..
+     * In the case of an {@link AggregatedOid}, is determined by the state 
+     * of its {@link AggregatedOid#getParentOid() parent}'s {@link RootOid#isTransient() state}.
      */
     boolean isTransient();
 
-    /**
-     * Marks the Oid as persistent.
-     */
-    void makePersistent();
+    public static enum State {
+        PERSISTENT, TRANSIENT;
+        public boolean isTransient() {
+            return this == TRANSIENT;
+        }
+    }
+
 }

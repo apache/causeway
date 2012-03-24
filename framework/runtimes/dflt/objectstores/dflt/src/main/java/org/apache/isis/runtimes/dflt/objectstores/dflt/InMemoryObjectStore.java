@@ -32,6 +32,7 @@ import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacetUtils;
@@ -138,7 +139,7 @@ public class InMemoryObjectStore implements ObjectStore {
             final ObjectAdapter recreatedAdapter = getHydrator().recreateAdapter(oid, pojo);
 
             final Version version = objectStoreInstances.getVersion(oid);
-            recreatedAdapter.setOptimisticLock(version);
+            recreatedAdapter.setVersion(version);
         }
     }
 
@@ -229,15 +230,15 @@ public class InMemoryObjectStore implements ObjectStore {
 
     @Override
     public ObjectAdapter getObject(final Oid oid, final ObjectSpecification hint) throws ObjectNotFoundException, ObjectPersistenceException {
-        LOG.debug("getObject " + oid);
+        if(LOG.isDebugEnabled()) {
+            LOG.debug("getObject " + oid);
+        }
         final ObjectStoreInstances ins = instancesFor(hint);
         final ObjectAdapter object = ins.retrieveObject(oid);
         if (object == null) {
             throw new ObjectNotFoundException(oid);
-        } else {
-            setupReferencedObjects(object);
-            return object;
-        }
+        } 
+        return object;
     }
 
     @Override
@@ -253,7 +254,6 @@ public class InMemoryObjectStore implements ObjectStore {
         // the object being resolved.
         if (adapter.getResolveState().canChangeTo(ResolveState.RESOLVING)) {
             LOG.debug("resolve " + adapter);
-            setupReferencedObjects(adapter);
 
             PersistorUtil.start(adapter, ResolveState.RESOLVING);
             PersistorUtil.end(adapter); // moves to RESOLVED
@@ -269,41 +269,7 @@ public class InMemoryObjectStore implements ObjectStore {
         PersistorUtil.end(reference);
     }
 
-    private void setupReferencedObjects(final ObjectAdapter object) {
-        setupReferencedObjects(object, new Vector());
-    }
 
-    private void setupReferencedObjects(final ObjectAdapter adapter, final Vector all) {
-        // TODO: is this code needed, then? Looks like it isn't...
-        if (true) {
-            return;
-        }
-
-        if (adapter == null || all.contains(adapter)) {
-            return;
-        }
-        all.addElement(adapter);
-        PersistorUtil.start(adapter, ResolveState.RESOLVING);
-
-        final List<ObjectAssociation> fields = adapter.getSpecification().getAssociations();
-        for (int i = 0; i < fields.size(); i++) {
-            final ObjectAssociation field = fields.get(i);
-            if (field.isOneToManyAssociation()) {
-                final ObjectAdapter col = field.get(adapter);
-                final CollectionFacet facet = CollectionFacetUtils.getCollectionFacetFromSpec(col);
-                for (final Iterator<ObjectAdapter> e = facet.iterator(col); e.hasNext();) {
-                    final ObjectAdapter element = e.next();
-                    setupReferencedObjects(element, all);
-                }
-            } else if (field.isOneToOneAssociation()) {
-                final ObjectAdapter fieldContent = field.get(adapter);
-                setupReferencedObjects(fieldContent, all);
-            }
-        }
-
-        PersistorUtil.end(adapter);
-
-    }
 
     // ///////////////////////////////////////////////////////
     // getInstances, hasInstances
@@ -356,7 +322,6 @@ public class InMemoryObjectStore implements ObjectStore {
         final ObjectAdapter[] ins = new ObjectAdapter[instances.size()];
         for (int i = 0; i < ins.length; i++) {
             final ObjectAdapter object = instances.elementAt(i);
-            setupReferencedObjects(object);
             if (object.getResolveState().canChangeTo(ResolveState.RESOLVING)) {
                 PersistorUtil.start(object, ResolveState.RESOLVING);
                 PersistorUtil.end(object);
@@ -371,13 +336,13 @@ public class InMemoryObjectStore implements ObjectStore {
     // ///////////////////////////////////////////////////////
 
     @Override
-    public Oid getOidForService(ObjectSpecification serviceSpecification, final String name) {
-        return persistedObjects.getService(name);
+    public RootOid getOidForService(ObjectSpecification serviceSpec) {
+        return (RootOid) persistedObjects.getService(serviceSpec.getObjectType());
     }
 
     @Override
-    public void registerService(final String name, final Oid oid) {
-        persistedObjects.registerService(name, oid);
+    public void registerService(final RootOid rootOid) {
+        persistedObjects.registerService(rootOid.getObjectType(), rootOid);
     }
 
     private ObjectStoreInstances instancesFor(final ObjectSpecification spec) {

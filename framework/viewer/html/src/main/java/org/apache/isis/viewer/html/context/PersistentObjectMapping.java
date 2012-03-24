@@ -101,7 +101,7 @@ public class PersistentObjectMapping implements ObjectMapping {
     public void restoreToLoader() {
         final Oid oid = getOid();
         final ObjectAdapter adapter = getPersistenceSession().recreateAdapter(oid, specification);
-        adapter.setOptimisticLock(getVersion());
+        adapter.setVersion(getVersion());
     }
 
     // /////////////////////////////////////////////////////

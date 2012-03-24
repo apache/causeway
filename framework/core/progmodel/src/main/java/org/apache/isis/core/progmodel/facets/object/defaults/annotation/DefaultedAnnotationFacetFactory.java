@@ -78,7 +78,7 @@ public class DefaultedAnnotationFacetFactory extends AnnotationBasedFacetFactory
     }
 
     @Override
-    public void setIsisConfiguration(final IsisConfiguration configuration) {
+    public void setConfiguration(final IsisConfiguration configuration) {
         this.configuration = configuration;
     }
 

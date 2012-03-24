@@ -50,7 +50,7 @@ public class ValueFacetFactoryTest extends AbstractFacetFactoryTest {
 
         facetFactory = new ValueFacetFactory();
         isisConfigurationDefault = new IsisConfigurationDefault();
-        facetFactory.setIsisConfiguration(isisConfigurationDefault);
+        facetFactory.setConfiguration(isisConfigurationDefault);
     }
 
     @Override

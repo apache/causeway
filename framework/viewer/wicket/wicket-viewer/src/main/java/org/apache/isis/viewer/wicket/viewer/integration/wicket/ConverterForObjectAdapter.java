@@ -25,6 +25,7 @@ import org.apache.wicket.util.convert.IConverter;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.oid.stringable.OidStringifier;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
@@ -60,7 +61,7 @@ public class ConverterForObjectAdapter implements IConverter {
             // values don't have an Oid
             return null;
         }
-        return getOidStringifier().enString(oid);
+        return getOidStringifier().enString((RootOid) oid);
     }
 
     protected AdapterManager getAdapterManager() {

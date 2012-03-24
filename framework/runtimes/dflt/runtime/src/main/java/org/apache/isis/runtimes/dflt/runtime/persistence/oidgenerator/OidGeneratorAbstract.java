@@ -19,25 +19,16 @@
 
 package org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator;
 
+import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.stringable.OidStringifier;
-import org.apache.isis.core.metamodel.adapter.oid.stringable.hex.OidStringifierHex;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.OidGenerator;
 
 public abstract class OidGeneratorAbstract implements OidGenerator {
 
     private final OidStringifier oidStringifier;
 
-    /**
-     * Defaults to using the {@link OidStringifierHex} for
-     * {@link #getOidStringifier()}. Subclasses can replace by calling
-     * {@link #OidGeneratorAbstract(OidStringifier)} instead.
-     */
-    public OidGeneratorAbstract() {
-        this(new OidStringifierHex());
-    }
-
-    public OidGeneratorAbstract(final OidStringifier oidStringifier) {
-        this.oidStringifier = oidStringifier;
+    public OidGeneratorAbstract(Class<? extends Oid> oidClass) {
+        this.oidStringifier = new OidStringifier(oidClass);
     }
 
     // //////////////////////////////////////////////////////////////
@@ -58,12 +49,12 @@ public abstract class OidGeneratorAbstract implements OidGenerator {
     public void close() {
     }
 
-    /**
-     * Default implemenation returns {@link OidStringifierHex}.
-     * 
-     * <p>
-     * Subclasses can replace through constructor if required.
-     */
+    
+    // //////////////////////////////////////////////////////////////
+    // OidStringifier
+    // //////////////////////////////////////////////////////////////
+
+
     @Override
     public final OidStringifier getOidStringifier() {
         return oidStringifier;

@@ -19,39 +19,54 @@
 
 package org.apache.isis.runtimes.dflt.objectstores.xml.internal.data.xml;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+
 import java.io.File;
 import java.io.FilenameFilter;
 
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
 import org.apache.isis.core.commons.xml.XmlFile;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.runtimes.dflt.objectstores.xml.XmlPersistenceMechanismInstaller;
 import org.apache.isis.runtimes.dflt.objectstores.xml.internal.clock.DefaultClock;
 import org.apache.isis.runtimes.dflt.objectstores.xml.internal.data.ObjectData;
 import org.apache.isis.runtimes.dflt.objectstores.xml.internal.data.ReferenceVector;
 import org.apache.isis.runtimes.dflt.objectstores.xml.internal.data.Role;
 import org.apache.isis.runtimes.dflt.objectstores.xml.internal.data.Team;
 import org.apache.isis.runtimes.dflt.objectstores.xml.internal.version.FileVersion;
-import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.simple.SerialOid;
+import org.apache.isis.runtimes.dflt.runtime.installerregistry.installerapi.PersistenceMechanismInstaller;
+import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.serial.RootOidDefault;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
-import org.apache.isis.runtimes.dflt.runtime.testsystem.ProxyJunit3TestCase;
 import org.apache.isis.runtimes.dflt.runtime.transaction.ObjectPersistenceException;
+import org.apache.isis.runtimes.dflt.testsupport.IsisSystemWithFixtures;
+import org.apache.isis.runtimes.dflt.testsupport.TestSystemWithObjectStoreTestAbstract;
 
-public class XmlDataManagerTest extends ProxyJunit3TestCase {
+public class XmlDataManagerTest extends TestSystemWithObjectStoreTestAbstract {
+    
+    @Override
+    protected PersistenceMechanismInstaller createPersistenceMechanismInstaller() {
+        return new XmlPersistenceMechanismInstaller();
+    }
+    
     protected XmlDataManager manager;
 
-    @Override
-    protected void setUp() throws Exception {
-        super.setUp();
-
+    @Before
+    public void setUp() throws Exception {
         FileVersion.setClock(new DefaultClock());
 
         clearTestDirectory();
-        final String charset = XmlFileUtil.lookupCharset(system.getConfiguration());
+        final String charset = XmlFileUtil.lookupCharset(isisMetaModel.getConfiguration());
         manager = new XmlDataManager(new XmlFile(charset, "tmp/tests"));
     }
 
-    @Override
-    protected void tearDown() throws Exception {
-        system.shutdown();
+    @After
+    public void tearDown() throws Exception {
+        system.closeSession();
     }
 
     protected static void clearTestDirectory() {
@@ -70,6 +85,7 @@ public class XmlDataManagerTest extends ProxyJunit3TestCase {
         }
     }
 
+    @Test
     public void testWriteReadTypeOidAndVersion() {
         final ObjectData data = createData(Role.class, 99, new FileVersion("user", 19));
         manager.insertObject(data);
@@ -81,6 +97,7 @@ public class XmlDataManagerTest extends ProxyJunit3TestCase {
         assertEquals(data.getVersion(), read.getVersion());
     }
 
+    @Test
     public void testNextId() throws Exception {
         final long first = manager.nextId();
         assertEquals(first + 1, manager.nextId());
@@ -88,9 +105,10 @@ public class XmlDataManagerTest extends ProxyJunit3TestCase {
         assertEquals(first + 3, manager.nextId());
     }
 
+    @Test
     public void testInsertObjectWithFields() throws ObjectPersistenceException {
         final ObjectData data = createData(Role.class, 99, new FileVersion("user", 13));
-        data.set("Person", SerialOid.createPersistent(101));
+        data.set("Person", RootOidDefault.create("RLE", ""+101));
         assertNotNull(data.get("Person"));
         data.set("Name", "Harry");
         assertNotNull(data.get("Name"));
@@ -105,6 +123,7 @@ public class XmlDataManagerTest extends ProxyJunit3TestCase {
         assertEquals(data.get("Name"), read.get("Name"));
     }
 
+    @Test
     public void testInsertObjectWithEmptyOneToManyAssociations() throws ObjectPersistenceException {
         final ObjectData data = createData(Team.class, 99, new FileVersion("user", 13));
 
@@ -120,13 +139,14 @@ public class XmlDataManagerTest extends ProxyJunit3TestCase {
         assertNull(c);
     }
 
+    @Test
     public void testInsertObjectWithOneToManyAssociations() throws ObjectPersistenceException {
         final ObjectData data = createData(Team.class, 99, new FileVersion("user", 13));
 
         data.initCollection("Members");
-        final SerialOid oid[] = new SerialOid[3];
+        final RootOidDefault oid[] = new RootOidDefault[3];
         for (int i = 0; i < oid.length; i++) {
-            oid[i] = SerialOid.createPersistent(104 + i);
+            oid[i] = RootOidDefault.create("TEA", ""+ (104 + i));
             data.addElement("Members", oid[i]);
         }
         manager.insertObject(data);
@@ -141,6 +161,14 @@ public class XmlDataManagerTest extends ProxyJunit3TestCase {
         }
     }
 
+
+    private ObjectData createData(final Class<?> type, final long id, final FileVersion version) {
+
+        final ObjectSpecification objSpec = IsisContext.getSpecificationLoader().loadSpecification(type);
+        final String objectType = objSpec.getObjectType();
+        final RootOidDefault oid = RootOidDefault.create(objectType, ""+id);
+        return new ObjectData(objSpec, oid, version);
+    }
     /*
      * public void xxxtestInsertValues() throws ObjectStoreException {
      * ObjectSpecification type =
@@ -324,13 +352,5 @@ public class XmlDataManagerTest extends ProxyJunit3TestCase {
      * 
      * }
      */
-
-    private ObjectData createData(final Class<?> type, final long id, final FileVersion version) {
-
-        final ObjectSpecification noSpec = IsisContext.getSpecificationLoader().loadSpecification(type);
-        final SerialOid oid = SerialOid.createPersistent(id);
-        return new ObjectData(noSpec, oid, version);
-
-    }
 
 }

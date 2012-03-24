@@ -19,46 +19,36 @@
 
 package org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.algorithm;
 
-import java.util.ArrayList;
-import java.util.List;
+import org.jmock.Expectations;
+import org.jmock.auto.Mock;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
 
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.ResolveState;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.Persistability;
+import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2;
+import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2.Mode;
 import org.apache.isis.runtimes.dflt.runtime.persistence.adapterfactory.pojo.PojoAdapter;
-import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.simple.SerialOid;
-import org.apache.isis.runtimes.dflt.runtime.testsystem.ProxyJunit3TestCase;
+import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.PojoAdapterBuilder;
+import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.PojoAdapterBuilder.Type;
 
-public abstract class PersistAlgorithmContractTest extends ProxyJunit3TestCase {
+public abstract class PersistAlgorithmContractTest {
 
-    protected static final class PersistedObjectAdderSpy implements ToPersistObjectSet {
-        private final List<ObjectAdapter> persistedObjects = new ArrayList<ObjectAdapter>();
+    @Rule
+    public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
 
-        public List<ObjectAdapter> getPersistedObjects() {
-            return persistedObjects;
-        }
+    @Mock
+    private ToPersistObjectSet mockAdder;
 
-        @Override
-        public void addPersistedObject(final ObjectAdapter object) {
-            persistedObjects.add(object);
-        }
+    @Mock
+    private ObjectSpecification objectSpec;
 
-        @Override
-        public void remapAsPersistent(final ObjectAdapter object) {
-            object.changeState(ResolveState.RESOLVED);
-        }
-    }
-
-    interface PersistAlgorithmSensing extends PersistAlgorithm {
-        void persist(ObjectAdapter object, ToPersistObjectSet adder);
-    }
-
-    private PersistedObjectAdderSpy adder;
     private PersistAlgorithm persistAlgorithm;
+    
 
-    @Override
+    @Before
     public void setUp() throws Exception {
-        super.setUp();
-        adder = new PersistedObjectAdderSpy();
         persistAlgorithm = createPersistAlgorithm();
     }
 
@@ -69,11 +59,23 @@ public abstract class PersistAlgorithmContractTest extends ProxyJunit3TestCase {
      */
     protected abstract PersistAlgorithm createPersistAlgorithm();
 
-    public void testMakePersistentSkipsAggregatedObjects() {
-        final PojoAdapter aggregatedObject = new PojoAdapter(new Object(), SerialOid.createTransient(1));
-        aggregatedObject.changeState(ResolveState.VALUE);
-        persistAlgorithm.makePersistent(aggregatedObject, adder);
-        assertEquals(0, adder.getPersistedObjects().size());
+    @Test
+    public void makePersistent_SkipsValueObjects() {
+        
+        context.checking(new Expectations() {
+            {
+                allowing(objectSpec).isCollection();
+                will(returnValue(false));
+
+                allowing(objectSpec).persistability();
+                will(returnValue(Persistability.USER_PERSISTABLE));
+                
+                never(mockAdder);
+            }
+        });
+        
+        final PojoAdapter valueAdapter = PojoAdapterBuilder.create().with(Type.VALUE).with(objectSpec).build();
+        persistAlgorithm.makePersistent(valueAdapter, mockAdder);
     }
 
 }

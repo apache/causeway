@@ -101,9 +101,16 @@
     <dependencies>
 
         <dependency>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>testsupport</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
             <groupId>org.apache.isis.runtimes.dflt</groupId>
             <artifactId>runtime</artifactId>
         </dependency>
+        
         <!--  Required for TestProxy -->
 		<!-- Isis defaults -->
         <dependency>
@@ -114,6 +121,11 @@
             <groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
             <artifactId>dflt</artifactId>
             <type>test-jar</type>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.isis.runtimes.dflt</groupId>
+            <artifactId>testsupport</artifactId>
             <scope>test</scope>
         </dependency>
         <!-- TODO: remove this dependency -->

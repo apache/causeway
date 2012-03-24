@@ -21,8 +21,8 @@ package org.apache.isis.viewer.junit.internal;
 import org.apache.isis.core.runtime.authentication.AuthenticationManagerInstaller;
 import org.apache.isis.core.runtime.authorization.AuthorizationManagerInstaller;
 import org.apache.isis.runtimes.dflt.runtime.installerregistry.installerapi.PersistenceMechanismInstaller;
-import org.apache.isis.security.dflt.authentication.NoopAuthenticationManagerInstaller;
-import org.apache.isis.security.dflt.authorization.NoopAuthorizationManagerInstaller;
+import org.apache.isis.security.dflt.authentication.DefaultAuthenticationManagerInstaller;
+import org.apache.isis.security.dflt.authorization.DefaultAuthorizationManagerInstaller;
 import org.apache.isis.viewer.junit.Authenticator;
 import org.apache.isis.viewer.junit.Authorizor;
 import org.apache.isis.viewer.junit.Persistor;
@@ -43,7 +43,7 @@ public class AnnotationInstaller {
         if (authenticatorAnnotation != null) {
             return addAuthenticatorRepresentedBy(authenticatorAnnotation);
         } else {
-            return new NoopAuthenticationManagerInstaller();
+            return new DefaultAuthenticationManagerInstaller();
         }
 
     }
@@ -61,7 +61,7 @@ public class AnnotationInstaller {
         if (authorizorAnnotation != null) {
             return addAuthorizerRepresentedBy(authorizorAnnotation);
         } else {
-            return new NoopAuthorizationManagerInstaller();
+            return new DefaultAuthorizationManagerInstaller();
         }
 
     }

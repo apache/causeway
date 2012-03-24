@@ -21,6 +21,7 @@ package org.apache.isis.runtimes.dflt.objectstores.sql.jdbc;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.runtimes.dflt.objectstores.sql.DatabaseConnector;
 import org.apache.isis.runtimes.dflt.objectstores.sql.IdMappingAbstract;
@@ -42,14 +43,15 @@ public class JdbcPolymorphicObjectReferenceMapping extends IdMappingAbstract imp
     }
 
     @Override
-    public void appendUpdateValues(final DatabaseConnector connector, final StringBuffer sql, final ObjectAdapter object) {
+    public void appendUpdateValues(final DatabaseConnector connector, final StringBuffer sql, final ObjectAdapter adapter) {
         sql.append(getColumn());
-        if (object == null) {
+        if (adapter == null) {
             sql.append("= NULL ");
         } else {
             sql.append("= ?");
             // sql.append(primaryKey(object.getOid()));
-            connector.addToQueryValues(primaryKeyAsObject(object.getOid()));
+            final RootOid oid = (RootOid) adapter.getOid();
+            connector.addToQueryValues(primaryKey(oid));
         }
     }
 

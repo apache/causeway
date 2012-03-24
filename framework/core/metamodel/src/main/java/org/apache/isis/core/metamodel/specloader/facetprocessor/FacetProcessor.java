@@ -153,9 +153,6 @@ public class FacetProcessor implements RuntimeContextAware {
     /**
      * This is <tt>public</tt> so that can be used for <tt>@Facets</tt>
      * processing.
-     * 
-     * <p>
-     * See NOF bug-517.
      */
     public void injectDependenciesInto(final FacetFactory factory) {
         getCollectionTypeRepository().injectInto(factory);

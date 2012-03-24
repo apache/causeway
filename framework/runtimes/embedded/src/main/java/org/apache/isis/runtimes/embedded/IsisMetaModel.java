@@ -91,8 +91,7 @@ public class IsisMetaModel implements ApplicationScopedComponent {
     public IsisMetaModel(final EmbeddedContext context, final List<Object> services) {
         this.services.addAll(services);
         setConfiguration(new IsisConfigurationDefault());
-        setClassSubstitutor(new ClassSubstitutorAbstract() {
-        });
+        setClassSubstitutor(new ClassSubstitutorAbstract() {});
         setCollectionTypeRegistry(new CollectionTypeRegistryDefault());
         setSpecificationTraverser(new SpecificationTraverserDefault());
         setMemberLayoutArranger(new MemberLayoutArrangerDefault());

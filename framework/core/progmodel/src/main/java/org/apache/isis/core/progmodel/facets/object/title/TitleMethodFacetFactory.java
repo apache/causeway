@@ -25,6 +25,7 @@ import org.apache.isis.core.commons.lang.JavaClassUtils;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.isis.core.metamodel.methodutils.MethodScope;
 import org.apache.isis.core.progmodel.facets.MethodFinderUtils;
 import org.apache.isis.core.progmodel.facets.MethodPrefixBasedFacetFactoryAbstract;
@@ -50,12 +51,19 @@ public class TitleMethodFacetFactory extends MethodPrefixBasedFacetFactoryAbstra
         final Class<?> cls = processClassContext.getCls();
         final FacetHolder facetHolder = processClassContext.getFacetHolder();
 
+        // may have a facet by virtue of @Title, say.
+        final TitleFacet existingTitleFacet = facetHolder.getFacet(TitleFacet.class);
+        if(existingTitleFacet != null && !existingTitleFacet.isNoop()) {
+            return;
+        }
+        
         Method method = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, TITLE, String.class, null);
         if (method != null) {
             processClassContext.removeMethod(method);
             FacetUtil.addFacet(new TitleFacetViaTitleMethod(method, facetHolder));
             return;
         }
+        
 
         try {
             method = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, TO_STRING, String.class, null);

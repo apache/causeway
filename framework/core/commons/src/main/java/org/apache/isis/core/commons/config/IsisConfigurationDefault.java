@@ -32,8 +32,6 @@ import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.resource.ResourceStreamSource;
 
-import com.google.common.base.Joiner;
-
 public class IsisConfigurationDefault implements IsisConfiguration {
     private static final Logger LOG = Logger.getLogger(IsisConfigurationDefault.class);
     private final Properties properties = new Properties();
@@ -376,7 +374,7 @@ public class IsisConfigurationDefault implements IsisConfiguration {
     public void injectInto(final Object candidate) {
         if (IsisConfigurationAware.class.isAssignableFrom(candidate.getClass())) {
             final IsisConfigurationAware cast = IsisConfigurationAware.class.cast(candidate);
-            cast.setIsisConfiguration(this);
+            cast.setConfiguration(this);
         }
     }
 

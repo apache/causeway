@@ -28,18 +28,19 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.IModel;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
+import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
+import org.apache.isis.core.commons.authentication.AuthenticationSessionProviderAware;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.stringable.OidStringifier;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
-import org.apache.isis.viewer.wicket.model.nof.AuthenticationSessionAccessor;
-import org.apache.isis.viewer.wicket.model.nof.PersistenceSessionAccessor;
+import org.apache.isis.viewer.wicket.model.isis.PersistenceSessionProvider;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistryAccessor;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistryAccessor;
 
-public abstract class FormAbstract<T> extends Form<T> implements IHeaderContributor, ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, AuthenticationSessionAccessor, PersistenceSessionAccessor {
+public abstract class FormAbstract<T> extends Form<T> implements IHeaderContributor, ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, AuthenticationSessionProvider, PersistenceSessionProvider {
 
     private static final long serialVersionUID = 1L;
 
@@ -111,6 +112,18 @@ public abstract class FormAbstract<T> extends Form<T> implements IHeaderContribu
 
     protected OidStringifier getOidStringifier() {
         return getPersistenceSession().getOidGenerator().getOidStringifier();
+    }
+
+    // /////////////////////////////////////////////////
+    // *Provider impl.
+    // /////////////////////////////////////////////////
+    
+    @Override
+    public void injectInto(final Object candidate) {
+        if (AuthenticationSessionProviderAware.class.isAssignableFrom(candidate.getClass())) {
+            final AuthenticationSessionProviderAware cast = AuthenticationSessionProviderAware.class.cast(candidate);
+            cast.setAuthenticationSessionProvider(this);
+        }
     }
 
 }

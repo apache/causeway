@@ -48,7 +48,6 @@ import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.core.commons.factory.UnavailableClassException;
 import org.apache.isis.core.commons.lang.CastUtils;
 import org.apache.isis.core.commons.lang.StringUtils;
-import org.apache.isis.core.metamodel.specloader.FacetDecoratorInstaller;
 import org.apache.isis.core.metamodel.specloader.ObjectReflectorInstaller;
 import org.apache.isis.core.runtime.about.AboutIsis;
 import org.apache.isis.core.runtime.about.ComponentDetails;
@@ -59,7 +58,6 @@ import org.apache.isis.runtimes.dflt.runtime.IsisInstallerRegistry;
 import org.apache.isis.runtimes.dflt.runtime.fixtures.FixturesInstaller;
 import org.apache.isis.runtimes.dflt.runtime.installerregistry.InstallerLookup;
 import org.apache.isis.runtimes.dflt.runtime.installerregistry.InstallerLookupAware;
-import org.apache.isis.runtimes.dflt.runtime.installerregistry.installerapi.ClientConnectionInstaller;
 import org.apache.isis.runtimes.dflt.runtime.installerregistry.installerapi.EmbeddedWebServerInstaller;
 import org.apache.isis.runtimes.dflt.runtime.installerregistry.installerapi.IsisViewerInstaller;
 import org.apache.isis.runtimes.dflt.runtime.installerregistry.installerapi.PersistenceMechanismInstaller;
@@ -224,32 +222,6 @@ public class InstallerLookupDefault implements InstallerLookup {
     @Override
     public EmbeddedWebServerInstaller embeddedWebServerInstaller(final String requested) {
         return getInstaller(EmbeddedWebServerInstaller.class, requested, SystemConstants.WEBSERVER_KEY, SystemConstants.WEBSERVER_DEFAULT);
-    }
-
-    /**
-     * Client-side of <tt>remoting</tt>, specifying how to access the server.
-     * 
-     * <p>
-     * This lookup is called in three different contexts:
-     * <ul>
-     * <li>the <tt>IsisSystemFactoryUsingInstallers</tt> uses this to lookup the
-     * {@link PersistenceMechanismInstaller} (may be a <tt>ProxyPersistor</tt>)</li>
-     * <li>the <tt>IsisSystemFactoryUsingInstallers</tt> also uses this to
-     * lookup the {@link FacetDecoratorInstaller}; adds in remoting facets.</li>
-     * <li>the <tt>IsisSystemUsingInstallers</tt> uses this to lookup the
-     * {@link AuthenticationManagerInstaller}.</li>
-     * </ul>
-     * 
-     * <p>
-     * In addition to the usual {@link #mergeConfigurationFor(Installer)
-     * merging} of any {@link Installer} -specific configuration files, this
-     * lookup also merges in any
-     * {@link ClientConnectionInstaller#getRemoteProperties() remote properties}
-     * available.
-     */
-    @Override
-    public ClientConnectionInstaller clientConnectionInstaller(final String requested) {
-        return getInstaller(ClientConnectionInstaller.class, requested, SystemConstants.CLIENT_CONNECTION_KEY, SystemConstants.CLIENT_CONNECTION_DEFAULT);
     }
 
     @Override

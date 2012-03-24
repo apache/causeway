@@ -64,11 +64,49 @@
     </reporting>
 
 	<dependencies>
+        <dependency>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>testsupport</artifactId>
+        </dependency>
+	
+        <dependency>
+            <groupId>org.apache.isis.security</groupId>
+            <artifactId>dflt</artifactId>
+            <version>0.3.0-incubating-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.isis.progmodels</groupId>
+            <artifactId>dflt</artifactId>
+            <version>0.3.0-incubating-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.isis.runtimes.dflt.bytecode</groupId>
+            <artifactId>dflt</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
+            <artifactId>dflt</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.isis.runtimes.dflt.profilestores</groupId>
+            <artifactId>dflt</artifactId>
+        </dependency>
 
 		<dependency>
 			<groupId>org.apache.isis.runtimes.dflt</groupId>
 			<artifactId>runtime</artifactId>
 		</dependency>
+
+        <!-- for IsisMetaModel -->
+        <dependency>
+            <groupId>org.apache.isis.runtimes</groupId>
+            <artifactId>embedded</artifactId>
+        </dependency>
+
 
 	</dependencies>
 </project>

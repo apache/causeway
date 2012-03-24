@@ -28,20 +28,22 @@ import org.junit.Test;
 
 import org.apache.isis.core.metamodel.testspec.TestProxySpecification;
 import org.apache.isis.runtimes.dflt.objectstores.xml.internal.version.FileVersion;
-import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.simple.SerialOid;
+import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.serial.RootOidDefault;
 
 public class ObjectDataVectorTest {
+    
+    private final String objectType = "ODV";
+    
     private ObjectDataVector objectDataVector;
     private ObjectData objectData;
     private TestProxySpecification spec;
-    private SerialOid oid;
+    private RootOidDefault oid;
     private FileVersion version;
 
     @Before
     public void setUp() throws Exception {
         final boolean isTransient = true;
-        final long serialNum = Long.parseLong("1", 16);
-        oid = isTransient ? SerialOid.createTransient(serialNum) : SerialOid.createPersistent(serialNum);
+        oid = isTransient ? RootOidDefault.createTransient(objectType, ""+1) : RootOidDefault.create(objectType, ""+1);
 
         spec = new TestProxySpecification(this.getClass());
         spec.fields = Collections.emptyList();

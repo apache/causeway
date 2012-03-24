@@ -23,7 +23,6 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 
 public abstract class InstanceAbstract implements Instance {
 
-    private final ObjectAdapter owner;
     private Specification specification;
 
     protected InstanceAbstract() {
@@ -35,13 +34,7 @@ public abstract class InstanceAbstract implements Instance {
     }
 
     protected InstanceAbstract(final ObjectAdapter owner, final Specification specification) {
-        this.owner = owner;
         this.specification = specification;
-    }
-
-    @Override
-    public final ObjectAdapter getOwner() {
-        return owner;
     }
 
     @Override

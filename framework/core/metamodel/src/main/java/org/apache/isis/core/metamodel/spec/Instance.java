@@ -36,13 +36,5 @@ public interface Instance {
      */
     Specification getSpecification();
 
-    /**
-     * The owning {@link ObjectAdapter} of this instance.
-     * 
-     * <p>
-     * In the case of the {@link ObjectAdapter} interface, just returns
-     * <tt>null</tt>.
-     */
-    ObjectAdapter getOwner();
 
 }

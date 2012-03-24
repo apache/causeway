@@ -26,7 +26,7 @@ import com.google.common.collect.Lists;
 
 import org.apache.isis.core.commons.components.Installer;
 
-public abstract class InstallerAbstract implements Installer, IsisConfigurationBuilderAware {
+public abstract class InstallerAbstract implements Installer, IsisConfigurationBuilderAware, IsisConfigurationAware {
 
     private final String type;
     private final String name;
@@ -135,7 +135,7 @@ public abstract class InstallerAbstract implements Installer, IsisConfigurationB
      */
     public void setConfiguration(final IsisConfiguration configuration) {
         if (isisConfigurationBuilder != null) {
-            throw new IllegalStateException("A IsisConfiguration has already been provided.");
+            throw new IllegalStateException("A IsisConfigurationBuilder has already been provided.");
         }
         this.configuration = configuration;
     }

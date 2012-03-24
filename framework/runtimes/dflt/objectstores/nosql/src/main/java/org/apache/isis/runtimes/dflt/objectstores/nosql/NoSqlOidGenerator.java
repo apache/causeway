@@ -23,29 +23,30 @@ import org.apache.log4j.Logger;
 
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.ensure.Assert;
-import org.apache.isis.core.commons.exceptions.NotYetImplementedException;
-import org.apache.isis.core.metamodel.adapter.oid.AggregatedOid;
-import org.apache.isis.core.metamodel.adapter.oid.Oid;
-import org.apache.isis.core.metamodel.adapter.oid.stringable.directly.OidStringifierDirect;
+import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
+import org.apache.isis.runtimes.dflt.objectstores.nosql.db.NoSqlDataDatabase;
 import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.OidGeneratorAbstract;
-import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.simple.SerialOid;
+import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.serial.RootOidDefault;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 
 public class NoSqlOidGenerator extends OidGeneratorAbstract {
+    
     private static final Logger LOG = Logger.getLogger(NoSqlOidGenerator.class);
     private static int INITIAL_TRANSIENT_ID = -9999999;
     private static int DEFAULT_BATCH_SIZE = 50;
 
     private static class IdNumbers {
+        
+        private final int batchSize;
+        
         private long transientNumber;
         private long nextId = 0;
         private long newIdBatchAt = 0;
         private long nextSubId = 0;
         private long newSubIdBatchAt = 0;
-        private final int batchSize;
-
+        
         public IdNumbers(final int initialTransientId, final int batchSize) {
             transientNumber = initialTransientId;
             this.batchSize = batchSize;
@@ -96,38 +97,33 @@ public class NoSqlOidGenerator extends OidGeneratorAbstract {
     }
 
     public NoSqlOidGenerator(final NoSqlDataDatabase database, final int initialTransientId, final int batchSize) {
-        super(new OidStringifierDirect(NoSqlOid.class));
+        super(RootOidDefault.class);
         this.database = database;
         ids = new IdNumbers(initialTransientId, batchSize);
     }
 
-    @Override
-    public NoSqlOid createTransientOid(final Object object) {
-        final ObjectSpecification objectSpec = getSpecificationLoader().loadSpecification(object.getClass());
-        final String className = objectSpec.getCorrespondingClass().getName();
-        return new NoSqlOid(className, SerialOid.createTransient(ids.nextTransientId()));
+    public String name() {
+        return "NoSql Oids";
     }
 
     @Override
-    public String createAggregateId(final Object pojo) {
+    public RootOid createTransientOid(final Object object) {
+        final ObjectSpecification objectSpec = getSpecificationLoader().loadSpecification(object.getClass());
+        final String objectType = objectSpec.getObjectType();
+        return RootOidDefault.createTransient(objectType, "" + (ids.nextTransientId()));
+    }
+
+    @Override
+    public String createAggregateLocalId(final Object pojo) {
         Assert.assertNotNull("No connection set up", database);
         return Long.toHexString(ids.nextSubId(database));
     }
 
     @Override
-    public void convertTransientToPersistentOid(final Oid oid) {
+    public RootOid asPersistent(final RootOid rootOid) {
         Assert.assertNotNull("No connection set up", database);
-        if (oid instanceof AggregatedOid) {
-            return;
-        }
         final long persistentId = ids.nextPersistentId(database);
-        final NoSqlOid noSqlOid = (NoSqlOid) oid;
-        noSqlOid.setId(persistentId);
-        noSqlOid.makePersistent();
-    }
-
-    public void convertPersistentToTransientOid(final Oid oid) {
-        throw new NotYetImplementedException();
+        return rootOid.asPersistent("" + persistentId);
     }
 
     @Override
@@ -136,10 +132,6 @@ public class NoSqlOidGenerator extends OidGeneratorAbstract {
         debug.indent();
         ids.debugData(debug);
         debug.unindent();
-    }
-
-    public String name() {
-        return "NoSql Oids";
     }
 
     @Override

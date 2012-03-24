@@ -23,13 +23,10 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import org.jmock.Expectations;
-import org.jmock.Mockery;
-import org.jmock.integration.junit4.JMock;
-import org.jmock.integration.junit4.JUnit4Mockery;
-import org.jmock.lib.legacy.ClassImposteriser;
+import org.jmock.auto.Mock;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -44,20 +41,24 @@ import org.apache.isis.core.metamodel.facets.properties.choices.PropertyChoicesF
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 import org.apache.isis.core.metamodel.spec.Instance;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMemberContext;
-import org.apache.isis.core.metamodel.testspec.TestProxySpecification;
+import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2;
+import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2.Mode;
 
-@RunWith(JMock.class)
 public class ObjectAssociationAbstractTest {
+
+    @Rule
+    public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
+
 
     private ObjectAssociationAbstract objectAssociation;
     private FacetedMethod facetedMethod;
 
-    private final Mockery context = new JUnit4Mockery() {
-        {
-            setImposteriser(ClassImposteriser.INSTANCE);
-        }
-    };
+
+    @Mock
+    private ObjectSpecification objectSpecification;
+
 
     public static class Customer {
         private String firstName;
@@ -70,7 +71,8 @@ public class ObjectAssociationAbstractTest {
     @Before
     public void setup() {
         facetedMethod = FacetedMethod.createProperty(Customer.class, "firstName");
-        objectAssociation = new ObjectAssociationAbstract(facetedMethod, FeatureType.PROPERTY, new TestProxySpecification("test"), new ObjectMemberContext(null, null, null, null, null)) {
+        
+        objectAssociation = new ObjectAssociationAbstract(facetedMethod, FeatureType.PROPERTY, objectSpecification, new ObjectMemberContext(null, null, null, null, null)) {
 
             @Override
             public ObjectAdapter get(final ObjectAdapter fromObject) {

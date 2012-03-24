@@ -26,6 +26,7 @@ import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.factory.InstanceCreationException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.runtime.logging.Logger;
@@ -57,9 +58,9 @@ public class IsisStoreLogger extends Logger implements ObjectStore {
     }
 
     @Override
-    public void registerService(final String name, final Oid oid) {
-        log("register service " + name + " as " + oid);
-        decorated.registerService(name, oid);
+    public void registerService(final RootOid rootOid) {
+        log("registering service: " + rootOid.enString());
+        decorated.registerService(rootOid);
     }
 
     @Override
@@ -103,10 +104,10 @@ public class IsisStoreLogger extends Logger implements ObjectStore {
     }
 
     @Override
-    public Oid getOidForService(ObjectSpecification serviceSpecification, final String name) {
-        final Oid oid = decorated.getOidForService(serviceSpecification, name);
-        log("get OID for service " + name + ": " + oid);
-        return oid;
+    public RootOid getOidForService(ObjectSpecification serviceSpec) {
+        final RootOid serviceOid = decorated.getOidForService(serviceSpec);
+        log("get OID for service: " + serviceOid.enString());
+        return serviceOid;
     }
 
     @Override

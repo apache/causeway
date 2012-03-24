@@ -19,6 +19,7 @@ package org.apache.isis.viewer.json.viewer.resources.domainobjects;
 import java.util.List;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
@@ -60,7 +61,7 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
     }
 
     public static LinkBuilder newLinkToBuilder(final ResourceContext resourceContext, final Rel rel, final ObjectAdapter elementAdapter) {
-        final String oidStr = resourceContext.getOidStringifier().enString(elementAdapter.getOid());
+        final String oidStr = resourceContext.getOidStringifier().enString((RootOid) elementAdapter.getOid());
         final String url = "objects/" + oidStr;
         final LinkBuilder builder = LinkBuilder.newBuilder(resourceContext, rel, RepresentationType.DOMAIN_OBJECT, url).withTitle(elementAdapter.titleString());
         return builder;

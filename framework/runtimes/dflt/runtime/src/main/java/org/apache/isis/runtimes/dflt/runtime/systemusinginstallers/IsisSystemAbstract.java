@@ -19,15 +19,24 @@
 
 package org.apache.isis.runtimes.dflt.runtime.systemusinginstallers;
 
+import java.util.List;
+
 import org.apache.log4j.Logger;
 
 import org.apache.isis.applib.fixtures.LogonFixture;
 import org.apache.isis.core.commons.components.Installer;
 import org.apache.isis.core.commons.components.Noop;
+import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.debug.DebugBuilder;
+import org.apache.isis.core.metamodel.specloader.ObjectReflector;
+import org.apache.isis.core.runtime.authentication.AuthenticationManager;
+import org.apache.isis.core.runtime.authorization.AuthorizationManager;
+import org.apache.isis.core.runtime.imageloader.TemplateImageLoader;
+import org.apache.isis.core.runtime.userprofile.UserProfileLoader;
 import org.apache.isis.runtimes.dflt.runtime.authentication.exploration.ExplorationSession;
 import org.apache.isis.runtimes.dflt.runtime.fixtures.FixturesInstaller;
 import org.apache.isis.runtimes.dflt.runtime.installerregistry.InstallerLookup;
+import org.apache.isis.runtimes.dflt.runtime.persistence.internal.RuntimeContextFromSession;
 import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
 import org.apache.isis.runtimes.dflt.runtime.system.IsisSystemException;
 import org.apache.isis.runtimes.dflt.runtime.system.IsisSystemFixturesHookAbstract;
@@ -35,6 +44,10 @@ import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.internal.InitialisationSession;
 import org.apache.isis.runtimes.dflt.runtime.system.internal.IsisLocaleInitializer;
 import org.apache.isis.runtimes.dflt.runtime.system.internal.IsisTimeZoneInitializer;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessionFactory;
+import org.apache.isis.runtimes.dflt.runtime.system.session.IsisSessionFactory;
+import org.apache.isis.runtimes.dflt.runtime.system.session.IsisSessionFactoryDefault;
+import org.apache.isis.runtimes.dflt.runtime.userprofile.UserProfileLoaderDefault;
 
 /**
  * 
@@ -133,4 +146,45 @@ public abstract class IsisSystemAbstract extends IsisSystemFixturesHookAbstract 
         debug.appendln("Fixture Installer", fixtureInstaller == null ? "none" : fixtureInstaller.getClass().getName());
     }
 
+    
+
+    // ///////////////////////////////////////////
+    // Session Factory
+    // ///////////////////////////////////////////
+
+    @Override
+    public IsisSessionFactory doCreateSessionFactory(final DeploymentType deploymentType) throws IsisSystemException {
+        final PersistenceSessionFactory persistenceSessionFactory = obtainPersistenceSessionFactory(deploymentType);
+        final UserProfileLoader userProfileLoader = new UserProfileLoaderDefault(obtainUserProfileStore());
+        return createSessionFactory(deploymentType, userProfileLoader, persistenceSessionFactory);
+    }
+
+    /**
+     * Overloaded version designed to be called by subclasses that need to
+     * explicitly specify different persistence mechanisms.
+     * 
+     * <p>
+     * This is <i>not</i> a hook method, rather it is designed to be called
+     * <i>from</i> the {@link #doCreateSessionFactory(DeploymentType) hook
+     * method}.
+     */
+    protected final IsisSessionFactory createSessionFactory(final DeploymentType deploymentType, final UserProfileLoader userProfileLoader, final PersistenceSessionFactory persistenceSessionFactory) throws IsisSystemException {
+
+        final IsisConfiguration configuration = getConfiguration();
+        final AuthenticationManager authenticationManager = obtainAuthenticationManager(deploymentType);
+        final AuthorizationManager authorizationManager = obtainAuthorizationManager(deploymentType);
+        final TemplateImageLoader templateImageLoader = obtainTemplateImageLoader();
+        final ObjectReflector reflector = obtainReflector(deploymentType);
+
+        final List<Object> servicesList = obtainServices();
+
+        // bind metamodel to the (runtime) framework
+        // REVIEW: misplaced? seems like a side-effect...
+        reflector.setRuntimeContext(new RuntimeContextFromSession());
+
+        return new IsisSessionFactoryDefault(deploymentType, configuration, templateImageLoader, reflector, authenticationManager, authorizationManager, userProfileLoader, persistenceSessionFactory, servicesList);
+    }
+
+
+    
 }

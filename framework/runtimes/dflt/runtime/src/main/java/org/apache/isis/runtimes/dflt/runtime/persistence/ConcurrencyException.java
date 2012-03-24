@@ -30,8 +30,8 @@ public class ConcurrencyException extends ObjectPersistenceException {
     private static final long serialVersionUID = 1L;
     private Oid source;
 
-    public ConcurrencyException(final ObjectAdapter object, final Version updated) {
-        this(object.getVersion().getUser() + " changed " + object.titleString() + " at " + DateFormat.getDateTimeInstance().format(object.getVersion().getTime()) + "\n\n" + object.getVersion() + " ~ " + updated + "", object.getOid());
+    public ConcurrencyException(final ObjectAdapter adapter, final Version updated) {
+        this(adapter.getVersion().getUser() + " changed " + adapter.titleString() + " at " + DateFormat.getDateTimeInstance().format(adapter.getVersion().getTime()) + "\n\n" + adapter.getVersion() + " ~ " + updated + "", adapter.getOid());
     }
 
     public ConcurrencyException(final String message, final Oid source) {

@@ -19,9 +19,10 @@
 
 package org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager.internal;
 
-import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
+
+import com.google.common.collect.Maps;
 
 import org.apache.log4j.Logger;
 
@@ -33,21 +34,10 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 public class OidAdapterHashMap implements OidAdapterMap {
 
     private static final Logger LOG = Logger.getLogger(OidAdapterHashMap.class);
-    private static final int DEFAULT_OID_ADAPTER_MAP_SIZE = 10;
+    public static final int DEFAULT_OID_ADAPTER_MAP_SIZE = 100;
 
-    private final Hashtable<Oid, ObjectAdapter> adapterByOidMap;
+    private final Map<Oid, ObjectAdapter> adapterByOidMap = Maps.newHashMapWithExpectedSize(DEFAULT_OID_ADAPTER_MAP_SIZE);
 
-    // ///////////////////////////////////////////////////////
-    // Constructors
-    // ///////////////////////////////////////////////////////
-
-    public OidAdapterHashMap() {
-        this(DEFAULT_OID_ADAPTER_MAP_SIZE);
-    }
-
-    public OidAdapterHashMap(final int capacity) {
-        adapterByOidMap = new Hashtable<Oid, ObjectAdapter>(capacity);
-    }
 
     // ///////////////////////////////////////////////////////
     // open, close
@@ -109,6 +99,7 @@ public class OidAdapterHashMap implements OidAdapterMap {
         return adapterByOidMap.remove(oid) != null;
     }
 
+
     // ///////////////////////////////////////////////////////
     // getAdapter
     // ///////////////////////////////////////////////////////
@@ -148,5 +139,6 @@ public class OidAdapterHashMap implements OidAdapterMap {
             debug.appendln(adapter != null ? adapter.toString() : "(MISSING OBJECT ?!)");
         }
     }
+
 
 }

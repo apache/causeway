@@ -27,6 +27,8 @@ import org.apache.log4j.Logger;
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
+import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -125,7 +127,8 @@ public class AutoCollectionMapper extends AbstractMapper implements CollectionMa
         sql.append("delete from ");
         sql.append(tableName);
         sql.append(" where ");
-        idMapping.appendWhereClause(connector, sql, parent.getOid());
+        final RootOid oid = (RootOid) parent.getOid();
+        idMapping.appendWhereClause(connector, sql, oid);
         connector.update(sql.toString());
 
         sql = new StringBuffer();

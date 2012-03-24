@@ -29,7 +29,7 @@ import org.apache.isis.core.metamodel.facets.object.cached.CachedFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.runtimes.dflt.objectstores.dflt.internal.ObjectStoreInstances;
 import org.apache.isis.runtimes.dflt.objectstores.dflt.internal.ObjectStorePersistedObjects;
-import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.simple.SimpleOidGenerator.Memento;
+import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.serial.RootOidGenerator.Memento;
 
 /**
  * Stores instances in one of two maps, based on whether have their

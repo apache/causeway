@@ -38,8 +38,6 @@ import org.w3c.dom.NodeList;
 import org.apache.isis.applib.snapshot.SnapshottableWithInclusions;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.oid.Oid;
-import org.apache.isis.core.metamodel.adapter.oid.stringable.directly.DirectlyStringableOid;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
@@ -749,11 +747,7 @@ public class XmlSnapshot {
                 }
 
                 final OneToManyAssociation oneToManyAssociation = (OneToManyAssociation) field;
-                final Element xmlCollectionElement = xmlFieldElement; // more
-                                                                      // meaningful
-                                                                      // locally
-                                                                      // scoped
-                                                                      // name
+                final Element xmlCollectionElement = xmlFieldElement; // more meaningful locally scoped name
 
                 ObjectAdapter collection;
                 try {
@@ -799,13 +793,8 @@ public class XmlSnapshot {
         return place;
     }
 
-    private String oidAsString(final ObjectAdapter object) {
-        final Oid oid = object.getOid();
-        if (oid instanceof DirectlyStringableOid) {
-            final DirectlyStringableOid directlyStringableOid = (DirectlyStringableOid) oid;
-            return directlyStringableOid.enString();
-        } 
-        return oid.toString();
+    private static String oidAsString(final ObjectAdapter adapter) {
+        return adapter.getOid().enString();
     }
 
     /**

@@ -30,6 +30,7 @@ import org.apache.log4j.Logger;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
@@ -157,8 +158,8 @@ public class PolymorphicForeignKeyInChildCollectionBaseMapper extends ForeignKey
             update.append(") VALUES (");
 
             // Row ID column
-            final Oid transientOid = oidGenerator.createTransientOid(thisAdapter.getObject());
-            oidGenerator.convertTransientToPersistentOid(transientOid);
+            final RootOid transientOid = oidGenerator.createTransientOid(thisAdapter.getObject());
+            oidGenerator.asPersistent(transientOid);
             polyIdMapper.appendObjectId(connector, update, transientOid);
             // polyIdMapper.appendObjectId(connector, update,
             // thisAdapter.getOid());
@@ -169,7 +170,8 @@ public class PolymorphicForeignKeyInChildCollectionBaseMapper extends ForeignKey
             update.append(",");
 
             // item Id column
-            getIdMapping().appendObjectId(connector, update, thisAdapter.getOid());
+            final RootOid oid = (RootOid) thisAdapter.getOid();
+            getIdMapping().appendObjectId(connector, update, oid);
 
             // Class name column
             update.append(",?)");

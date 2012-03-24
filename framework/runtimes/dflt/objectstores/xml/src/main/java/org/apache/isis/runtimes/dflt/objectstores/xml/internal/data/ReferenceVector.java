@@ -22,16 +22,16 @@ package org.apache.isis.runtimes.dflt.objectstores.xml.internal.data;
 import java.util.Vector;
 
 import org.apache.isis.core.commons.lang.ToString;
-import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.simple.SerialOid;
+import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.serial.RootOidDefault;
 
 public class ReferenceVector {
     private final Vector elements = new Vector();
 
-    public void add(final SerialOid oid) {
+    public void add(final RootOidDefault oid) {
         elements.addElement(oid);
     }
 
-    public void remove(final SerialOid oid) {
+    public void remove(final RootOidDefault oid) {
         elements.removeElement(oid);
     }
 
@@ -39,8 +39,8 @@ public class ReferenceVector {
         return elements.size();
     }
 
-    public SerialOid elementAt(final int index) {
-        return (SerialOid) elements.elementAt(index);
+    public RootOidDefault elementAt(final int index) {
+        return (RootOidDefault) elements.elementAt(index);
     }
 
     @Override

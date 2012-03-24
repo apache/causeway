@@ -20,17 +20,24 @@
 package org.apache.isis.runtimes.dflt.objectstores.nosql;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
+import com.google.common.collect.Maps;
 
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.AggregatedOid;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
+import org.apache.isis.runtimes.dflt.objectstores.nosql.db.NoSqlDataDatabase;
+import org.apache.isis.runtimes.dflt.objectstores.nosql.db.StateReader;
+import org.apache.isis.runtimes.dflt.objectstores.nosql.encryption.DataEncryption;
+import org.apache.isis.runtimes.dflt.objectstores.nosql.keys.KeyCreator;
+import org.apache.isis.runtimes.dflt.objectstores.nosql.versions.VersionCreator;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.ObjectStore;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.CreateObjectCommand;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.DestroyObjectCommand;
@@ -46,7 +53,7 @@ import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessi
 public class NoSqlObjectStore implements ObjectStore {
     
     private final NoSqlDataDatabase database;
-    private final Map<String, Oid> serviceCache = new HashMap<String, Oid>();
+    private final Map<String, RootOid> servicesByObjectType = Maps.newHashMap();
     private final KeyCreator keyCreator;
     private final VersionCreator versionCreator;
     private final ObjectReader objectReader = new ObjectReader();
@@ -86,11 +93,11 @@ public class NoSqlObjectStore implements ObjectStore {
     }
 
     @Override
-    public DestroyObjectCommand createDestroyObjectCommand(final ObjectAdapter object) {
-        if (object.getSpecification().isAggregated()) {
+    public DestroyObjectCommand createDestroyObjectCommand(final ObjectAdapter adapter) {
+        if (adapter.getSpecification().isAggregated()) {
             throw new NoSqlStoreException("Can't delete an aggregated object");
         } else {
-            return new NoSqlDestroyObjectCommand(keyCreator, versionCreator, object);
+            return new NoSqlDestroyObjectCommand(keyCreator, versionCreator, adapter);
         }
     }
 
@@ -98,7 +105,7 @@ public class NoSqlObjectStore implements ObjectStore {
     public SaveObjectCommand createSaveObjectCommand(final ObjectAdapter adapter) {
         // TODO should this be done at a higher level so it is applicable for
         // all OSes
-        final ObjectAdapter rootAdapter = aggregateRootAdapterFor(adapter);
+        final ObjectAdapter rootAdapter = getAggregateRootAdapterFor(adapter);
         if (rootAdapter.getOid() instanceof AggregatedOid) {
             throw new NoSqlStoreException("Unexpected aggregated object to save: " + rootAdapter + " (" + adapter + ")");
         }
@@ -108,8 +115,8 @@ public class NoSqlObjectStore implements ObjectStore {
     /**
      * Returns either itself, or its parent adapter (if aggregated)
      */
-    public ObjectAdapter aggregateRootAdapterFor(final ObjectAdapter adapter) {
-        return adapter.getAggregateRoot();
+    public ObjectAdapter getAggregateRootAdapterFor(final ObjectAdapter adapter) {
+        return adapter.getAggregateRoot(getAdapterManager());
     }
 
     @Override
@@ -153,17 +160,6 @@ public class NoSqlObjectStore implements ObjectStore {
     }
 
     @Override
-    public Oid getOidForService(ObjectSpecification serviceSpecification, final String name) {
-        Oid oid = serviceCache.get(name);
-        if (oid == null) {
-            final String id = database.getService(name);
-            oid = id == null ? null : keyCreator.oid(serviceSpecification, id);
-            serviceCache.put(name, oid);
-        }
-        return oid;
-    }
-
-    @Override
     public boolean hasInstances(final ObjectSpecification specification) {
         return database.hasInstances(specification.getFullIdentifier());
     }
@@ -171,12 +167,6 @@ public class NoSqlObjectStore implements ObjectStore {
     @Override
     public boolean isFixturesInstalled() {
         return isDataLoaded;
-    }
-
-    @Override
-    public void registerService(final String name, final Oid oid) {
-        final String key = keyCreator.key(oid);
-        database.addService(name, key);
     }
 
     @Override
@@ -213,10 +203,9 @@ public class NoSqlObjectStore implements ObjectStore {
         // TODO show details
     }
 
-    @Override
-    public String debugTitle() {
-        return "NoSql Object Store";
-    }
+    // ////////////////////////////////////////////////////////////////
+    // open, close
+    // ////////////////////////////////////////////////////////////////
 
     @Override
     public void close() {
@@ -230,8 +219,40 @@ public class NoSqlObjectStore implements ObjectStore {
 
     @Override
     public String name() {
-        return "personal object store";
+        return "nosql";
     }
+
+    
+    // ////////////////////////////////////////////////////////////////
+    // Services
+    // ////////////////////////////////////////////////////////////////
+    
+    @Override
+    public void registerService(final RootOid rootOid) {
+        final String key = keyCreator.key(rootOid);
+        database.addService(rootOid.getObjectType(), key);
+    }
+
+    @Override
+    public RootOid getOidForService(ObjectSpecification serviceSpec) {
+        final String objectType = serviceSpec.getObjectType();
+        RootOid oid = servicesByObjectType.get(objectType);
+        if (oid == null) {
+            final String id = database.getService(objectType);
+            if (id == null) {
+                oid = null;
+            } else {
+                oid = keyCreator.oid(serviceSpec, id);
+            }
+            servicesByObjectType.put(objectType, oid);
+        }
+        return oid;
+    }
+
+
+    // ////////////////////////////////////////////////////////////////
+    // Transaction Mgmt
+    // ////////////////////////////////////////////////////////////////
 
     @Override
     public void abortTransaction() {
@@ -244,6 +265,17 @@ public class NoSqlObjectStore implements ObjectStore {
     @Override
     public void startTransaction() {
     }
+
+    
+    // ////////////////////////////////////////////////////////////////
+    // debugging
+    // ////////////////////////////////////////////////////////////////
+
+    @Override
+    public String debugTitle() {
+        return "NoSql Object Store";
+    }
+
 
     // ////////////////////////////////////////////////////////////////
     // Dependencies (from context)

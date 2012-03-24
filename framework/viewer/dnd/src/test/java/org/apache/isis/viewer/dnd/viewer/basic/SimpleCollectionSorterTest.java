@@ -19,22 +19,27 @@
 
 package org.apache.isis.viewer.dnd.viewer.basic;
 
-import junit.framework.TestCase;
+import static org.junit.Assert.assertEquals;
+
+import org.jmock.Expectations;
+import org.junit.Rule;
+import org.junit.Test;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.runtimes.dflt.runtime.testsystem.TestProxyAdapter;
+import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2;
+import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2.Mode;
 import org.apache.isis.viewer.dnd.view.collection.CollectionSorter;
 import org.apache.isis.viewer.dnd.view.collection.SimpleCollectionSorter;
 import org.apache.isis.viewer.dnd.view.collection.TitleComparator;
 
-public class SimpleCollectionSorterTest extends TestCase {
+public class SimpleCollectionSorterTest {
 
-    public static void main(final String[] args) {
-        junit.textui.TestRunner.run(SimpleCollectionSorterTest.class);
-    }
+    @Rule
+    public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
 
+    @Test
     public void testSortByTitle() {
-        final ObjectAdapter[] instances = new ObjectAdapter[] { object("one"), object("two"), object("three"), object("four"), };
+        final ObjectAdapter[] instances = new ObjectAdapter[] { adapterWithTitle("one"), adapterWithTitle("two"), adapterWithTitle("three"), adapterWithTitle("four"), };
 
         final SimpleCollectionSorter sorter = new SimpleCollectionSorter();
         sorter.sort(instances, new TitleComparator(), CollectionSorter.NORMAL);
@@ -45,8 +50,9 @@ public class SimpleCollectionSorterTest extends TestCase {
         assertEquals("two", instances[3].titleString());
     }
 
+    @Test
     public void testSortByTitleReversed() {
-        final ObjectAdapter[] instances = new ObjectAdapter[] { object("one"), object("two"), object("three"), object("four"), };
+        final ObjectAdapter[] instances = new ObjectAdapter[] { adapterWithTitle("one"), adapterWithTitle("two"), adapterWithTitle("three"), adapterWithTitle("four"), };
 
         final SimpleCollectionSorter sorter = new SimpleCollectionSorter();
         sorter.sort(instances, new TitleComparator(), CollectionSorter.REVERSED);
@@ -57,9 +63,14 @@ public class SimpleCollectionSorterTest extends TestCase {
         assertEquals("four", instances[3].titleString());
     }
 
-    private ObjectAdapter object(final String string) {
-        final TestProxyAdapter object = new TestProxyAdapter();
-        object.setupTitleString(string);
-        return object;
+    private ObjectAdapter adapterWithTitle(final String title) {
+        final ObjectAdapter adapter = context.mock(ObjectAdapter.class);
+        context.checking(new Expectations() {
+            {
+                allowing(adapter).titleString();
+                will(returnValue(title));
+            }
+        });
+        return adapter;
     }
 }

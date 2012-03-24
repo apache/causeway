@@ -22,6 +22,7 @@ package org.apache.isis.core.commons.matchers;
 import static org.hamcrest.CoreMatchers.nullValue;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.List;
 
 import org.hamcrest.CoreMatchers;
@@ -255,5 +256,37 @@ public final class IsisMatchers {
             }
         };
     }
+
+    public static <T> Matcher<List<T>> listContaining(final T t) {
+        return new TypeSafeMatcher<List<T>>() {
+    
+            @Override
+            public void describeTo(Description arg0) {
+                arg0.appendText("list containing ").appendValue(t);
+            }
+    
+            @Override
+            public boolean matchesSafely(List<T> arg0) {
+                return arg0.contains(t);
+            }
+        };
+    }
+
+    public static <T> Matcher<List<T>> listContainingAll(final T... items) {
+        return new TypeSafeMatcher<List<T>>() {
+
+            @Override
+            public void describeTo(Description arg0) {
+                arg0.appendText("has items ").appendValue(items);
+                
+            }
+
+            @Override
+            public boolean matchesSafely(List<T> arg0) {
+                return arg0.containsAll(Arrays.asList(items));
+            }
+        };
+    }
+
 
 }

@@ -30,7 +30,6 @@ import org.apache.isis.core.runtime.authorization.AuthorizationManagerInstaller;
 import org.apache.isis.core.runtime.imageloader.TemplateImageLoaderInstaller;
 import org.apache.isis.core.runtime.userprofile.UserProfileStore;
 import org.apache.isis.runtimes.dflt.runtime.fixtures.FixturesInstaller;
-import org.apache.isis.runtimes.dflt.runtime.installerregistry.installerapi.ClientConnectionInstaller;
 import org.apache.isis.runtimes.dflt.runtime.installerregistry.installerapi.EmbeddedWebServerInstaller;
 import org.apache.isis.runtimes.dflt.runtime.installerregistry.installerapi.IsisViewerInstaller;
 import org.apache.isis.runtimes.dflt.runtime.installerregistry.installerapi.PersistenceMechanismInstaller;
@@ -169,17 +168,6 @@ public final class SystemConstants {
      */
     public static final String IMAGE_LOADER_DEFAULT = "awt";
 
-    /**
-     * Key used to lookup {@link ClientConnectionInstaller client connection
-     * installer} in {@link IsisConfiguration}, and root for any
-     * {@link ClientConnectionInstaller client connection installer}-specific
-     * configuration keys.
-     */
-    public static final String CLIENT_CONNECTION_KEY = ConfigurationConstants.ROOT + ClientConnectionInstaller.TYPE;
-    /**
-     * Default for {@link #CLIENT_CONNECTION_KEY}
-     */
-    public static final String CLIENT_CONNECTION_DEFAULT = "encoding_socket";
 
     /**
      * Key used to lookup {@link EmbeddedWebServerInstaller embedded web

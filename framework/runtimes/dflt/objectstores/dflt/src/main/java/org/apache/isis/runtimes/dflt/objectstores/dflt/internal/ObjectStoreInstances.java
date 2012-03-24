@@ -105,7 +105,7 @@ public class ObjectStoreInstances {
         final SerialNumberVersion version = versionByOidMap.get(adapter.getOid());
         final SerialNumberVersion nextVersion = nextVersion(version);
         versionByOidMap.put(adapter.getOid(), nextVersion);
-        adapter.setOptimisticLock(nextVersion);
+        adapter.setVersion(nextVersion);
     }
 
     private synchronized SerialNumberVersion nextVersion(final SerialNumberVersion version) {

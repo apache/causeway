@@ -32,13 +32,11 @@ import junit.framework.Assert;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.jmock.Expectations;
-import org.jmock.Mockery;
-import org.jmock.integration.junit4.JMock;
-import org.jmock.integration.junit4.JUnit4Mockery;
+import org.jmock.auto.Mock;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
@@ -52,6 +50,8 @@ import org.apache.isis.core.runtime.authorization.AuthorizationManager;
 import org.apache.isis.core.runtime.imageloader.TemplateImageLoader;
 import org.apache.isis.core.runtime.userprofile.UserProfile;
 import org.apache.isis.core.runtime.userprofile.UserProfileLoader;
+import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2;
+import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2.Mode;
 import org.apache.isis.runtimes.dflt.runtime.authentication.exploration.ExplorationSession;
 import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
@@ -62,30 +62,40 @@ import org.apache.isis.runtimes.dflt.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.runtimes.dflt.runtime.system.session.IsisSessionFactoryDefault;
 import org.apache.isis.runtimes.dflt.runtime.system.transaction.IsisTransaction;
 import org.apache.isis.runtimes.dflt.runtime.system.transaction.IsisTransactionManager;
-import org.apache.isis.runtimes.dflt.runtime.testsystem.TestProxyAdapter;
-import org.apache.isis.runtimes.dflt.runtime.testsystem.TestProxySystem;
 import org.apache.isis.viewer.dnd.DummyView;
 import org.apache.isis.viewer.dnd.DummyWorkspaceView;
 import org.apache.isis.viewer.dnd.view.View;
 import org.apache.isis.viewer.dnd.view.base.ViewUpdateNotifierImpl;
 import org.apache.isis.viewer.dnd.view.content.RootObject;
 
-@RunWith(JMock.class)
 public class ViewUpdateNotifierTest {
 
-    private final Mockery mockery = new JUnit4Mockery();
+    @Rule
+    public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
+    
 
     private ExposedViewUpdateNotifier notifier;
-    private TestProxyAdapter object;
+    
+    @Mock
+    private ObjectAdapter adapter;
 
+    @Mock
     protected TemplateImageLoader mockTemplateImageLoader;
+    @Mock
     protected SpecificationLoader mockSpecificationLoader;
+    @Mock
     private UserProfileLoader mockUserProfileLoader;
-    protected PersistenceSessionFactory mockPersistenceSessionFactory;
+    @Mock
+    private PersistenceSessionFactory mockPersistenceSessionFactory;
+    @Mock
     protected PersistenceSession mockPersistenceSession;
+    @Mock
     protected IsisTransactionManager mockTransactionManager;
+    @Mock
     protected IsisTransaction mockTransaction;
+    @Mock
     protected AuthenticationManager mockAuthenticationManager;
+    @Mock
     protected AuthorizationManager mockAuthorizationManager;
 
     private List<Object> servicesList;
@@ -96,17 +106,7 @@ public class ViewUpdateNotifierTest {
 
         servicesList = Collections.emptyList();
 
-        mockTemplateImageLoader = mockery.mock(TemplateImageLoader.class);
-        mockSpecificationLoader = mockery.mock(SpecificationLoader.class);
-        mockUserProfileLoader = mockery.mock(UserProfileLoader.class);
-        mockPersistenceSessionFactory = mockery.mock(PersistenceSessionFactory.class);
-        mockPersistenceSession = mockery.mock(PersistenceSession.class);
-        mockTransactionManager = mockery.mock(IsisTransactionManager.class);
-        mockTransaction = mockery.mock(IsisTransaction.class);
-        mockAuthenticationManager = mockery.mock(AuthenticationManager.class);
-        mockAuthorizationManager = mockery.mock(AuthorizationManager.class);
-
-        mockery.checking(new Expectations() {
+        context.checking(new Expectations() {
             {
                 ignoring(mockTemplateImageLoader);
                 ignoring(mockSpecificationLoader);
@@ -135,8 +135,7 @@ public class ViewUpdateNotifierTest {
             }
         });
 
-        final IsisSessionFactory sessionFactory = new IsisSessionFactoryDefault(DeploymentType.EXPLORATION, new IsisConfigurationDefault(), mockTemplateImageLoader, mockSpecificationLoader, mockAuthenticationManager, mockAuthorizationManager, mockUserProfileLoader, mockPersistenceSessionFactory,
-                servicesList);
+        final IsisSessionFactory sessionFactory = new IsisSessionFactoryDefault(DeploymentType.EXPLORATION, new IsisConfigurationDefault(), mockTemplateImageLoader, mockSpecificationLoader, mockAuthenticationManager, mockAuthorizationManager, mockUserProfileLoader, mockPersistenceSessionFactory, servicesList);
         sessionFactory.init();
         IsisContextStatic.createRelaxedInstance(sessionFactory);
 
@@ -144,9 +143,9 @@ public class ViewUpdateNotifierTest {
 
         notifier = new ExposedViewUpdateNotifier();
 
-        object = new TestProxyAdapter();
+        //adapter = new TestProxyAdapter();
     }
-
+    
     @After
     public void tearDown() {
         IsisContext.closeSession();
@@ -168,11 +167,11 @@ public class ViewUpdateNotifierTest {
     @Test
     public void testAddViewWithObjectContent() {
         final DummyView view = addViewForObject();
-        notifier.assertContainsViewForObject(view, object);
+        notifier.assertContainsViewForObject(view, adapter);
     }
 
     private DummyView addViewForObject() {
-        final DummyView view = createView(object);
+        final DummyView view = createView(adapter);
         notifier.add(view);
         return view;
     }
@@ -198,9 +197,9 @@ public class ViewUpdateNotifierTest {
     @Test
     public void testRemoveView() {
         final Vector vector = new Vector();
-        final DummyView view = createView(object);
+        final DummyView view = createView(adapter);
         vector.addElement(view);
-        notifier.setupViewsForObject(object, vector);
+        notifier.setupViewsForObject(adapter, vector);
 
         notifier.remove(view);
         notifier.assertEmpty();
@@ -208,58 +207,52 @@ public class ViewUpdateNotifierTest {
 
     @Test
     public void testViewDirty() {
-        // nasty ... need to tidy up the setup
-        final TestProxySystem testProxySystem = new TestProxySystem();
-        testProxySystem.init();
 
-        object.setupResolveState(ResolveState.RESOLVED);
+        //adapter.setupResolveState(ResolveState.RESOLVED);
 
         final Vector<View> vector = new Vector<View>();
-        final DummyView view1 = createView(object);
+        final DummyView view1 = createView(adapter);
         vector.addElement(view1);
 
-        final DummyView view2 = createView(object);
+        final DummyView view2 = createView(adapter);
         vector.addElement(view2);
 
-        notifier.setupViewsForObject(object, vector);
+        notifier.setupViewsForObject(adapter, vector);
 
         notifier.invalidateViewsForChangedObjects();
         assertEquals(0, view1.invalidateContent);
         assertEquals(0, view2.invalidateContent);
 
-        IsisContext.getUpdateNotifier().addChangedObject(object);
+        IsisContext.getUpdateNotifier().addChangedObject(adapter);
         notifier.invalidateViewsForChangedObjects();
 
         assertEquals(1, view1.invalidateContent);
         assertEquals(1, view2.invalidateContent);
     }
 
+    
     @Test
     public void testDisposedViewsRemoved() {
-        // nasty ... need to tidy up the setup
-        final TestProxySystem testProxySystem = new TestProxySystem();
-        testProxySystem.init();
-
         final DummyWorkspaceView workspace = new DummyWorkspaceView();
 
         final Vector<View> vector = new Vector<View>();
-        final DummyView view1 = createView(object);
+        final DummyView view1 = createView(adapter);
         view1.setParent(workspace);
         workspace.addView(view1);
         vector.addElement(view1);
 
-        final DummyView view2 = createView(object);
+        final DummyView view2 = createView(adapter);
         view2.setParent(workspace);
         workspace.addView(view2);
         vector.addElement(view2);
 
-        notifier.setupViewsForObject(object, vector);
+        notifier.setupViewsForObject(adapter, vector);
 
         notifier.invalidateViewsForChangedObjects();
         assertEquals(0, view1.invalidateContent);
         assertEquals(0, view2.invalidateContent);
 
-        IsisContext.getUpdateNotifier().addDisposedObject(object);
+        IsisContext.getUpdateNotifier().addDisposedObject(adapter);
         notifier.removeViewsForDisposedObjects();
         assertEquals(0, workspace.getSubviews().length);
 

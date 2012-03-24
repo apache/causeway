@@ -38,7 +38,7 @@ public class ParseableFacetFactoryTest extends AbstractFacetFactoryTest {
 
         facetFactory = new ParseableFacetFactory();
         isisConfigurationDefault = new IsisConfigurationDefault();
-        facetFactory.setIsisConfiguration(isisConfigurationDefault);
+        facetFactory.setConfiguration(isisConfigurationDefault);
     }
 
     @Override

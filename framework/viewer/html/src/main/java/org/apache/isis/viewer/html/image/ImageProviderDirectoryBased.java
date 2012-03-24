@@ -23,12 +23,12 @@ import java.io.File;
 import java.io.FilenameFilter;
 import java.util.Map;
 
+import com.google.common.collect.Maps;
+
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-
-import com.google.common.collect.Maps;
 
 public class ImageProviderDirectoryBased implements ImageProvider {
 

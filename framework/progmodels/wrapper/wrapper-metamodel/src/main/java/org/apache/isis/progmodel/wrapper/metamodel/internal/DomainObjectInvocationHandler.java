@@ -40,6 +40,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectPersistor;
 import org.apache.isis.core.metamodel.adapter.map.AdapterMap;
 import org.apache.isis.core.metamodel.adapter.util.AdapterUtils;
+import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
 import org.apache.isis.core.metamodel.consent.InteractionResult;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -329,18 +330,13 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
         resolveIfRequired(targetAdapter);
 
         final Object argumentObj = underlying(args[0]);
-        final ObjectAdapter argumentNO = argumentObj != null ? getAdapterManager().adapterFor(argumentObj) : null;
+        final ObjectAdapter argumentAdapter = argumentObj != null ? getAdapterManager().adapterFor(argumentObj) : null;
 
-        final InteractionResult interactionResult = otoa.isAssociationValid(targetAdapter, argumentNO).getInteractionResult();
+        final InteractionResult interactionResult = otoa.isAssociationValid(targetAdapter, argumentAdapter).getInteractionResult();
         notifyListenersAndVetoIfRequired(interactionResult);
 
         if (getExecutionMode() == ExecutionMode.EXECUTE) {
-            if (argumentNO != null) {
-                otoa.setAssociation(targetAdapter, argumentNO); // need to wrap
-                                                                // arg
-            } else {
-                otoa.clearAssociation(targetAdapter);
-            }
+            otoa.set(targetAdapter, argumentAdapter);
         }
 
         objectChangedIfRequired(targetAdapter);
@@ -509,7 +505,8 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
     // /////////////////////////////////////////////////////////////////
 
     private void checkVisibility(final AuthenticationSession session, final ObjectAdapter targetObjectAdapter, final ObjectMember objectMember) {
-        final InteractionResult interactionResult = objectMember.isVisible(getAuthenticationSession(), targetObjectAdapter).getInteractionResult();
+        final Consent visibleConsent = objectMember.isVisible(getAuthenticationSession(), targetObjectAdapter);
+        final InteractionResult interactionResult = visibleConsent.getInteractionResult();
         notifyListenersAndVetoIfRequired(interactionResult);
     }
 

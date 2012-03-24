@@ -19,9 +19,8 @@
 
 package org.apache.isis.runtimes.dflt.runtime.memento;
 
-import org.apache.isis.runtimes.dflt.runtime.testsystem.TestPojo;
-
-public class TestPojoSimple extends TestPojo {
+public class TestPojoSimple extends RuntimeTestPojo {
+    
     private String name;
     private TestPojoSimple object;
 

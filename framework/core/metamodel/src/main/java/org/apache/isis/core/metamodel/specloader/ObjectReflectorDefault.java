@@ -206,7 +206,6 @@ public class ObjectReflectorDefault implements ObjectReflector, DebuggableWithTi
         }
 
         this.metaModelValidator = metaModelValidator;
-
         this.facetProcessor = new FacetProcessor(configuration, collectionTypeRegistry, programmingModel);
     }
 
@@ -602,16 +601,15 @@ public class ObjectReflectorDefault implements ObjectReflector, DebuggableWithTi
     public void validateSpecifications() {
         final Map<String, ObjectSpecification> specByObjectType = Maps.newHashMap();
         for (final ObjectSpecification objSpec : allSpecifications()) {
-            final ObjectTypeFacet facet = objSpec.getFacet(ObjectTypeFacet.class);
-            if (facet == null) {
+            final String objectType = objSpec.getObjectType();
+            if (objectType == null) {
                 continue;
             }
-            final String objectTypeValue = facet.value();
-            final ObjectSpecification existingSpec = specByObjectType.put(objectTypeValue, objSpec);
+            final ObjectSpecification existingSpec = specByObjectType.put(objectType, objSpec);
             if (existingSpec == null) {
                 continue;
             }
-            throw new MetaModelInvalidException(MessageFormat.format("Cannot have two entities with same object type (@ObjectType facet or equivalent) Value; " + "both {0} and {1} are annotated with value of ''{2}''.", existingSpec.getFullIdentifier(), objSpec.getFullIdentifier(), objectTypeValue));
+            throw new MetaModelInvalidException(MessageFormat.format("Cannot have two entities with same object type (@ObjectType facet or equivalent) Value; " + "both {0} and {1} are annotated with value of ''{2}''.", existingSpec.getFullIdentifier(), objSpec.getFullIdentifier(), objectType));
         }
         
         getCache().setCacheByObjectType(specByObjectType);

@@ -21,13 +21,20 @@ package org.apache.isis.runtimes.dflt.objectstores.xml.internal.clock;
 
 import static org.junit.Assert.assertTrue;
 
+import org.junit.Rule;
 import org.junit.Test;
 
-import org.apache.isis.runtimes.dflt.runtime.testsystem.ProxyJunit4TestCase;
+import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2;
+import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2.Mode;
 
-public class DefaultClockTest extends ProxyJunit4TestCase {
-    DefaultClock clock;
+public class DefaultClockTest {
+    
+    @Rule
+    public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
+    
+    private DefaultClock clock;
 
+    
     @Test
     public void testGetTime() {
         clock = new DefaultClock();

@@ -65,13 +65,7 @@ public class UserProfileContentWriter implements ContentWriter {
             xml.append("      <objects>\n");
             for (final Object object : perspective.getObjects()) {
                 final ObjectAdapter adapter = getPersistenceSession().getAdapterManager().adapterFor(object);
-                final OutputStream out = new ByteArrayOutputStream();
-                final DataOutputStreamExtended outputImpl = new DataOutputStreamExtended(out);
-                adapter.getOid().encode(outputImpl);
-                // FIX need to sort out encoding
-                // xml.append("      <object>" + out.toString() +
-                // "</object>\n");
-                xml.append("        <object>" + "not yet encoding properly" + "</object>\n");
+                xml.append("        <object>" + adapter.getOid().enString() + "</object>\n");
             }
             xml.append("      </objects>\n");
             xml.append("    </perspective>\n");

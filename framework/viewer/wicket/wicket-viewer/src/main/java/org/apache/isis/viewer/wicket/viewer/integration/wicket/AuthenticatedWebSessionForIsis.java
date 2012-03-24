@@ -33,12 +33,13 @@ import org.apache.wicket.authorization.strategies.role.Roles;
 import org.apache.wicket.protocol.http.request.WebClientInfo;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
+import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
+import org.apache.isis.core.commons.authentication.AuthenticationSessionProviderAware;
 import org.apache.isis.core.commons.ensure.Ensure;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequest;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequestPassword;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
-import org.apache.isis.viewer.wicket.model.nof.AuthenticationSessionAccessor;
 
 /**
  * Viewer-specific implementation of {@link AuthenticatedWebSession}, which
@@ -46,7 +47,7 @@ import org.apache.isis.viewer.wicket.model.nof.AuthenticationSessionAccessor;
  * also tracks threadusage (so that multiple concurrent requests are all
  * associated with the same session).
  */
-public class AuthenticatedWebSessionForIsis extends AuthenticatedWebSession implements AuthenticationSessionAccessor {
+public class AuthenticatedWebSessionForIsis extends AuthenticatedWebSession implements AuthenticationSessionProvider {
 
     private static final long serialVersionUID = 1L;
 
@@ -130,4 +131,17 @@ public class AuthenticatedWebSessionForIsis extends AuthenticatedWebSession impl
         return IsisContext.getAuthenticationManager();
     }
 
+    // /////////////////////////////////////////////////
+    // *Provider impl.
+    // /////////////////////////////////////////////////
+    
+    @Override
+    public void injectInto(final Object candidate) {
+        if (AuthenticationSessionProviderAware.class.isAssignableFrom(candidate.getClass())) {
+            final AuthenticationSessionProviderAware cast = AuthenticationSessionProviderAware.class.cast(candidate);
+            cast.setAuthenticationSessionProvider(this);
+        }
+    }
+    
+    
 }

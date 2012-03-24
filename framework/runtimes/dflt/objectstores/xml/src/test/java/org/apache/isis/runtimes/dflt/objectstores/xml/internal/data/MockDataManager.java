@@ -20,29 +20,31 @@
 package org.apache.isis.runtimes.dflt.objectstores.xml.internal.data;
 
 import java.util.Iterator;
-import java.util.Vector;
+import java.util.List;
 
 import junit.framework.Assert;
 
+import com.google.common.collect.Lists;
+
 import org.apache.isis.runtimes.dflt.runtime.persistence.ObjectNotFoundException;
-import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.simple.SerialOid;
+import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.serial.RootOidDefault;
 import org.apache.isis.runtimes.dflt.runtime.transaction.ObjectPersistenceException;
 
 public class MockDataManager implements DataManager {
-    private final Vector actions = new Vector();
+    
+    private final List<ObjectData> actions = Lists.newArrayList();
 
     public void assertAction(final int i, final String action) {
         if (i >= actions.size()) {
             Assert.fail("No such action " + action);
         }
-        // Assert.assertEquals(action, actions.elementAt(i));
     }
 
     public MockDataManager() {
         super();
     }
 
-    public SerialOid createOid() throws PersistorException {
+    public RootOidDefault createOid() throws PersistorException {
         return null;
     }
 
@@ -56,20 +58,19 @@ public class MockDataManager implements DataManager {
     }
 
     @Override
-    public void remove(final SerialOid oid) throws ObjectNotFoundException, ObjectPersistenceException {
-        final ObjectDataVector vector = new ObjectDataVector();
-        final Iterator i = actions.iterator();
-        while (i.hasNext()) {
-            final ObjectData data = (ObjectData) i.next();
+    public void remove(final RootOidDefault oid) throws ObjectNotFoundException, ObjectPersistenceException {
+        final Iterator<ObjectData> iter = actions.iterator();
+        while (iter.hasNext()) {
+            final ObjectData data = iter.next();
             if (data.getOid().equals(oid)) {
-                actions.remove(data);
+                iter.remove();
             }
         }
     }
 
     @Override
     public void save(final Data data) throws ObjectPersistenceException {
-        actions.addElement(data);
+        actions.add((ObjectData) data);
     }
 
     @Override
@@ -79,21 +80,19 @@ public class MockDataManager implements DataManager {
     @Override
     public ObjectDataVector getInstances(final ObjectData pattern) {
         final ObjectDataVector vector = new ObjectDataVector();
-        final Iterator i = actions.iterator();
+        final Iterator<ObjectData> i = actions.iterator();
         while (i.hasNext()) {
             final ObjectData data = (ObjectData) i.next();
             if (pattern.getSpecification().equals(data.getSpecification())) {
                 vector.addElement(data);
             }
         }
-
         return vector;
     }
 
     @Override
-    public Data loadData(final SerialOid oid) {
-        final ObjectDataVector vector = new ObjectDataVector();
-        final Iterator i = actions.iterator();
+    public Data loadData(final RootOidDefault oid) {
+        final Iterator<ObjectData> i = actions.iterator();
         while (i.hasNext()) {
             final ObjectData data = (ObjectData) i.next();
             if (data.getOid().equals(oid)) {

@@ -185,4 +185,5 @@ public class ObjectSpecificationForObjectList extends ObjectSpecificationAbstrac
         return Collections.emptyList();
     }
 
+
 }

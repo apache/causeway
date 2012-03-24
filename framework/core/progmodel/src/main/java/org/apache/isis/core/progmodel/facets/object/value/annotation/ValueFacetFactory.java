@@ -128,7 +128,7 @@ public class ValueFacetFactory extends AnnotationBasedFacetFactoryAbstract imple
     }
 
     @Override
-    public void setIsisConfiguration(final IsisConfiguration configuration) {
+    public void setConfiguration(final IsisConfiguration configuration) {
         this.configuration = configuration;
     }
 

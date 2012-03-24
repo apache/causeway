@@ -26,8 +26,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
 import org.hamcrest.CoreMatchers;
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
@@ -42,11 +40,26 @@ import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2;
 import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2.Mode;
-import org.apache.isis.runtimes.dflt.objectstores.dflt.testsystem.TestProxySystemII;
-import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.simple.SerialOid;
+import org.apache.isis.runtimes.dflt.objectstores.nosql.db.StateReader;
+import org.apache.isis.runtimes.dflt.objectstores.nosql.db.mongo.MongoPersistorMechanismInstaller;
+import org.apache.isis.runtimes.dflt.objectstores.nosql.encryption.DataEncryption;
+import org.apache.isis.runtimes.dflt.objectstores.nosql.keys.KeyCreator;
+import org.apache.isis.runtimes.dflt.objectstores.nosql.versions.VersionCreator;
+import org.apache.isis.runtimes.dflt.runtime.installerregistry.installerapi.PersistenceMechanismInstaller;
+import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.serial.RootOidDefault;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
+import org.apache.isis.runtimes.dflt.testsupport.IsisSystemWithFixtures;
+import org.apache.isis.runtimes.dflt.testsupport.TestSystemWithObjectStoreTestAbstract;
+import org.apache.isis.runtimes.dflt.testsupport.domain.ExamplePojoWithCollections;
+import org.apache.isis.runtimes.dflt.testsupport.domain.ExamplePojoWithReferences;
+import org.apache.isis.runtimes.dflt.testsupport.domain.ExamplePojoWithValues;
 
-public class ObjectReaderTest {
+public class ObjectReaderTest extends TestSystemWithObjectStoreTestAbstract {
+    
+    @Override
+    protected PersistenceMechanismInstaller createPersistenceMechanismInstaller() {
+        return new MongoPersistorMechanismInstaller();
+    }
 
     @Rule
     public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_ONLY);
@@ -67,20 +80,16 @@ public class ObjectReaderTest {
     
     private Map<String, DataEncryption> dataEncrypter;
 
-    private final NoSqlOid oid3 = new NoSqlOid(ExampleValuePojo.class.getName(), SerialOid.createPersistent(3));
-    private final NoSqlOid oid4 = new NoSqlOid(ExampleReferencePojo.class.getName(), SerialOid.createPersistent(4));
-    private final NoSqlOid oid5 = new NoSqlOid(ExampleCollectionPojo.class.getName(), SerialOid.createPersistent(5));
+    private final RootOidDefault oid3 = RootOidDefault.create("EPV|3"); // ExampleValuePojo
+    private final RootOidDefault oid4 = RootOidDefault.create("EPR|4"); // ExampleReferencePojo
+    private final RootOidDefault oid5 = RootOidDefault.create("EPC|5"); // ExampleCollectionPojo
 
 
     @Before
     public void setup() {
-        Logger.getRootLogger().setLevel(Level.OFF);
-        final TestProxySystemII system = new TestProxySystemII();
-        system.init();
-
-        exampleValuePojoSpec = IsisContext.getSpecificationLoader().loadSpecification(ExampleValuePojo.class);
-        exampleReferencePojoSpec = IsisContext.getSpecificationLoader().loadSpecification(ExampleReferencePojo.class);
-        exampleCollectionPojoSpec = IsisContext.getSpecificationLoader().loadSpecification(ExampleCollectionPojo.class);
+        exampleValuePojoSpec = system.loadSpecification(ExamplePojoWithValues.class);
+        exampleReferencePojoSpec = system.loadSpecification(ExamplePojoWithReferences.class);
+        exampleCollectionPojoSpec = system.loadSpecification(ExamplePojoWithCollections.class);
                 
         objectReader = new ObjectReader();
 
@@ -116,7 +125,7 @@ public class ObjectReaderTest {
         context.checking(new Expectations() {
             {
                 one(reader1).readObjectType();
-                will(returnValue(ExampleValuePojo.class.getName()));
+                will(returnValue(ExamplePojoWithValues.class.getName()));
 
                 one(reader1).readId();
                 will(returnValue("3"));
@@ -141,7 +150,7 @@ public class ObjectReaderTest {
         assertEquals(oid3, readObject.getOid());
         assertEquals(ResolveState.RESOLVED, readObject.getResolveState());
 
-        final ExampleValuePojo pojo = (ExampleValuePojo) readObject.getObject();
+        final ExamplePojoWithValues pojo = (ExamplePojoWithValues) readObject.getObject();
         assertEquals("Fred Smith", pojo.getName());
         assertEquals(34, pojo.getSize());
 
@@ -154,7 +163,7 @@ public class ObjectReaderTest {
         context.checking(new Expectations() {
             {
                 one(reader2).readObjectType();
-                will(returnValue(ExampleReferencePojo.class.getName()));
+                will(returnValue(ExamplePojoWithReferences.class.getName()));
 
                 one(reader2).readId();
                 will(returnValue("4"));
@@ -191,21 +200,21 @@ public class ObjectReaderTest {
         assertEquals(oid4, readObject.getOid());
         assertEquals(ResolveState.RESOLVED, readObject.getResolveState());
 
-        final ExampleReferencePojo pojo = (ExampleReferencePojo) readObject.getObject();
+        final ExamplePojoWithReferences pojo = (ExamplePojoWithReferences) readObject.getObject();
         assertEquals(null, pojo.getReference2());
-        assertThat(pojo.getReference1(), CoreMatchers.instanceOf(ExampleValuePojo.class));
+        assertThat(pojo.getReference1(), CoreMatchers.instanceOf(ExamplePojoWithValues.class));
 
         context.assertIsSatisfied();
     }
 
     @Test
     public void testReadingCollection() throws Exception {
-        final ObjectSpecification specification = IsisContext.getSpecificationLoader().loadSpecification(ExampleValuePojo.class);
+        final ObjectSpecification specification = IsisContext.getSpecificationLoader().loadSpecification(ExamplePojoWithValues.class);
         reader2 = context.mock(StateReader.class, "reader 2");
         context.checking(new Expectations() {
             {
                 one(reader2).readObjectType();
-                will(returnValue(ExampleCollectionPojo.class.getName()));
+                will(returnValue(ExamplePojoWithCollections.class.getName()));
 
                 one(reader2).readId();
                 will(returnValue("5"));
@@ -244,12 +253,12 @@ public class ObjectReaderTest {
         assertEquals(oid5, readObject.getOid());
         assertEquals(ResolveState.RESOLVED, readObject.getResolveState());
 
-        final ExampleCollectionPojo pojo = (ExampleCollectionPojo) readObject.getObject();
-        final List<ExampleValuePojo> collection2 = pojo.getHomogenousCollection();
+        final ExamplePojoWithCollections pojo = (ExamplePojoWithCollections) readObject.getObject();
+        final List<ExamplePojoWithValues> collection2 = pojo.getHomogenousCollection();
         assertEquals(2, collection2.size());
 
-        assertThat(collection2.get(0), CoreMatchers.instanceOf(ExampleValuePojo.class));
-        assertThat(collection2.get(1), CoreMatchers.instanceOf(ExampleValuePojo.class));
+        assertThat(collection2.get(0), CoreMatchers.instanceOf(ExamplePojoWithValues.class));
+        assertThat(collection2.get(1), CoreMatchers.instanceOf(ExamplePojoWithValues.class));
 
         context.assertIsSatisfied();
     }
@@ -272,12 +281,12 @@ public class ObjectReaderTest {
             }
         });
 
-        final ObjectSpecification specification = IsisContext.getSpecificationLoader().loadSpecification(ExampleValuePojo.class);
-        final ObjectAdapter readObject = IsisContext.getPersistenceSession().recreateAdapter(SerialOid.createPersistent(4), specification);
+        final ObjectSpecification specification = IsisContext.getSpecificationLoader().loadSpecification(ExamplePojoWithValues.class);
+        final ObjectAdapter readObject = IsisContext.getPersistenceSession().recreateAdapter(RootOidDefault.create("EVP", ""+4), specification);
 
         objectReader.update(reader1, keyCreator, versionCreator, dataEncrypter, readObject);
 
-        final ExampleValuePojo pojo = (ExampleValuePojo) readObject.getObject();
+        final ExamplePojoWithValues pojo = (ExamplePojoWithValues) readObject.getObject();
         assertEquals("Fred Smith", pojo.getName());
         assertEquals(34, pojo.getSize());
 

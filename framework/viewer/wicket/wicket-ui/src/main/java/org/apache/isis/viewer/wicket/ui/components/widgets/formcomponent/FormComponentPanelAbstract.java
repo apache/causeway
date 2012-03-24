@@ -29,12 +29,13 @@ import org.apache.wicket.markup.html.form.FormComponentPanel;
 import org.apache.wicket.model.IModel;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
+import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
+import org.apache.isis.core.commons.authentication.AuthenticationSessionProviderAware;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.stringable.OidStringifier;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
-import org.apache.isis.viewer.wicket.model.nof.AuthenticationSessionAccessor;
-import org.apache.isis.viewer.wicket.model.nof.PersistenceSessionAccessor;
+import org.apache.isis.viewer.wicket.model.isis.PersistenceSessionProvider;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.app.imagecache.ImageCache;
 import org.apache.isis.viewer.wicket.ui.app.imagecache.ImageCacheAccessor;
@@ -49,7 +50,7 @@ import org.apache.isis.viewer.wicket.ui.util.Components;
  * Wicket {@link FormComponentPanel}, providing the ability to build up the
  * panel using other {@link ComponentType}s.
  */
-public abstract class FormComponentPanelAbstract<T> extends FormComponentPanel<T> implements PersistenceSessionAccessor, AuthenticationSessionAccessor {
+public abstract class FormComponentPanelAbstract<T> extends FormComponentPanel<T> implements PersistenceSessionProvider, AuthenticationSessionProvider {
 
     private static final long serialVersionUID = 1L;
 
@@ -140,7 +141,7 @@ public abstract class FormComponentPanelAbstract<T> extends FormComponentPanel<T
      */
     @Override
     public AuthenticationSession getAuthenticationSession() {
-        return ((AuthenticationSessionAccessor) Session.get()).getAuthenticationSession();
+        return ((AuthenticationSessionProvider) Session.get()).getAuthenticationSession();
     }
 
     // ///////////////////////////////////////////////////////////////////
@@ -158,6 +159,19 @@ public abstract class FormComponentPanelAbstract<T> extends FormComponentPanel<T
 
     protected OidStringifier getOidStringifier() {
         return getPersistenceSession().getOidGenerator().getOidStringifier();
+    }
+
+    
+    // /////////////////////////////////////////////////
+    // *Provider impl.
+    // /////////////////////////////////////////////////
+    
+    @Override
+    public void injectInto(final Object candidate) {
+        if (AuthenticationSessionProviderAware.class.isAssignableFrom(candidate.getClass())) {
+            final AuthenticationSessionProviderAware cast = AuthenticationSessionProviderAware.class.cast(candidate);
+            cast.setAuthenticationSessionProvider(this);
+        }
     }
 
 }

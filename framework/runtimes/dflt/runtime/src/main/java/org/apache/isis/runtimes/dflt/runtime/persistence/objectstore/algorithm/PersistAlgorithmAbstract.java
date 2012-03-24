@@ -90,7 +90,7 @@ public abstract class PersistAlgorithmAbstract implements PersistAlgorithm {
     }
 
     private boolean objectSpecNotPersistable(final ObjectAdapter adapter) {
-        return !adapter.getSpecification().persistability().isPersistable() || adapter.isAggregated();
+        return !adapter.getSpecification().persistability().isPersistable() || adapter.isParented();
     }
 
     private boolean objectSpecIsService(final ObjectAdapter adapter) {

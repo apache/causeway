@@ -56,7 +56,7 @@ public class OptionFactory {
             return;
         }
         final Oid oid = adapter.getOid();
-        if (oid != null && oid.isTransient()) {
+        if (oid != null && adapter.isTransient()) {
             return;
         }
         if (noSpec.isService()) {

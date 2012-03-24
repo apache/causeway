@@ -19,9 +19,14 @@
 
 package org.apache.isis.viewer.dnd.viewer.tree;
 
-import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
-import org.apache.isis.runtimes.dflt.runtime.testsystem.ProxyJunit3TestCase;
-import org.apache.isis.runtimes.dflt.runtime.testsystem.TestProxyConfiguration;
+import static org.junit.Assert.assertEquals;
+
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
+
+import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2;
+import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2.Mode;
 import org.apache.isis.viewer.dnd.DummyContent;
 import org.apache.isis.viewer.dnd.DummyView;
 import org.apache.isis.viewer.dnd.DummyViewSpecification;
@@ -36,26 +41,22 @@ import org.apache.isis.viewer.dnd.view.composite.MasterDetailPanel;
  * Note that the frame only contains two views and no additional spacing, hence no drawing. The
  * width is the total of the two decorated views, while the height is the largest of the two.
  */
-public class TreeBrowserFrameTest extends ProxyJunit3TestCase {
+public class TreeBrowserFrameTest {
 
-    public static void main(final String[] args) {
-        junit.textui.TestRunner.run(TreeBrowserFrameTest.class);
-    }
+    @Rule
+    public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
 
     private DummyWorkspaceView dummyWorkspace;
     private MasterDetailPanel frame;
 
-    @Override
-    protected void setUp() throws Exception {
-        super.setUp();
-
-        IsisContext.setConfiguration(new TestProxyConfiguration());
+    @Before
+    public void setUp() throws Exception {
+        
         TestToolkit.createInstance();
 
         dummyWorkspace = new DummyWorkspaceView();
 
-        final DummyContent content = new DummyContent() {
-        };
+        final DummyContent content = new DummyContent() {};
         final DummyViewSpecification rhsSpec = new DummyViewSpecification();
         rhsSpec.setupCreatedViewsSize(new Size(200, 300));
         final DummyViewSpecification lhsSpec = new DummyViewSpecification();
@@ -64,6 +65,7 @@ public class TreeBrowserFrameTest extends ProxyJunit3TestCase {
         frame.setParent(dummyWorkspace);
     }
 
+    @Test
     public void testViewsParents() throws Exception {
         final View[] subviews = frame.getSubviews();
         assertEquals(2, subviews.length);
@@ -73,6 +75,7 @@ public class TreeBrowserFrameTest extends ProxyJunit3TestCase {
         assertEquals(frame, rhsView.getParent());
     }
 
+    @Test
     public void testLeftViewSize() {
         // width => width of view (150) + scroll border (0) + resize border (7)
         // => 159
@@ -81,12 +84,14 @@ public class TreeBrowserFrameTest extends ProxyJunit3TestCase {
         assertEquals(new Size(350 + 7, 250), leftView().getView().getRequiredSize(Size.createMax()));
     }
 
+    @Test
     public void testInitialBlankViewSize() {
         // 120 is the minimum width given to the blan view by the
         // MasterDetailPanel
         assertEquals(new Size(120, 0), rightView().getRequiredSize(Size.createMax()));
     }
 
+    @Test
     public void testInitialBlankViewSizeWithinALimitedSpace() {
         assertEquals(new Size(100, 0), rightView().getRequiredSize(new Size(100, 200)));
     }
@@ -99,14 +104,17 @@ public class TreeBrowserFrameTest extends ProxyJunit3TestCase {
         return frame.getSubviews()[1];
     }
 
+    @Test
     public void testTotalRequiredSize() {
         assertEquals(new Size(350 + 7 + 120, 250), frame.getRequiredSize(Size.createMax()));
     }
 
+    @Test
     public void testInitialSize() {
         assertEquals(new Size(), frame.getSize());
     }
 
+    @Test
     public void testLayoutInReducedSpaceReducesSizeOfLeftView() {
         layoutFrameInReducedSpace();
         assertEquals("retains original size", new Size(400 - 120, 200), leftView().getSize());
@@ -118,11 +126,13 @@ public class TreeBrowserFrameTest extends ProxyJunit3TestCase {
         // assertEquals(new Location(100, 0), rightView.getLocation());
     }
 
+    @Test
     public void testLayoutInReducedSpaceLeaveBlanksWidthUnchangedAsIsAlreadyMinimumSize() {
         layoutFrameInReducedSpace();
         assertEquals("retains original size", new Size(120, 200), rightView().getSize());
     }
 
+    @Test
     public void testLayoutInReducedSpaceReducesSizeOfRightView() {
         frame.removeView(rightView());
         frame.addView(new DummyView(350, 210));
@@ -131,6 +141,7 @@ public class TreeBrowserFrameTest extends ProxyJunit3TestCase {
         assertEquals("retains original size", new Size(expectedWidth, 210), rightView().getSize());
     }
 
+    @Test
     public void testLayoutInReducedSpaceReducesSizeOfLeftViewInProportion() {
         frame.removeView(rightView());
         frame.addView(new DummyView(350, 210));
@@ -150,21 +161,25 @@ public class TreeBrowserFrameTest extends ProxyJunit3TestCase {
         frame.layout();
     }
 
+    @Test
     public void testLayoutGivesLeftViewAllItWants() {
         layoutFrameInRequiredSpace();
         assertEquals("retains original size", new Size(350 + 7, 250), leftView().getSize());
     }
 
+    @Test
     public void testLayoutGivesRightViewAllItWants() {
         layoutFrameInRequiredSpace();
         assertEquals("height should be the same as left (including borders)", new Size(120, 250), rightView().getSize());
     }
 
+    @Test
     public void testLayoutLocatesLeftViewOnLeft() {
         layoutFrameInRequiredSpace();
         assertEquals(new Location(), leftView().getLocation());
     }
 
+    @Test
     public void testLayoutLocatesRightViewNextToLeftView() {
         layoutFrameInRequiredSpace();
         assertEquals(new Location(350 + 7, 0), rightView().getLocation());
@@ -176,6 +191,7 @@ public class TreeBrowserFrameTest extends ProxyJunit3TestCase {
         frame.layout();
     }
 
+    @Test
     public void testSubviews() {
         final View[] subviews = frame.getSubviews();
         assertEquals(leftView().getView(), subviews[0]);

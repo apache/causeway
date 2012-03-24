@@ -19,6 +19,9 @@
 
 package org.apache.isis.core.metamodel.adapter;
 
+import org.apache.isis.core.metamodel.adapter.map.AdapterMap;
+import org.apache.isis.core.metamodel.adapter.oid.AggregatedOid;
+import org.apache.isis.core.metamodel.adapter.oid.CollectionOid;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.spec.ObjectMetaModel;
@@ -59,10 +62,24 @@ public interface ObjectAdapter extends ObjectMetaModel {
     void checkLock(Version version);
 
     /**
-     * The objects unique id. This id allows the object to added to, stored by,
-     * and retrieved from the object store.
+     * The object's unique {@link Oid}. 
+     * 
+     * <p>
+     * This id allows the object to added to, stored by,
+     * and retrieved from the object store.  Objects can be looked up by their
+     * {@link Oid} from the {@link AdapterMap}.
+     * 
+     * <p>
+     * Note that standalone value objects ("foobar", or 5, or a date),
+     * are not mapped and have a <tt>null</tt> oid.
      */
     Oid getOid();
+
+    /**
+     * Since {@link Oid}s are now immutable, it is the reference from the 
+     * {@link ObjectAdapter} to its {@link Oid} that must now be updated. 
+     */
+    void replaceOid(Oid persistedOid);
 
     /**
      * Determines what 'lazy loaded' state the domain object is in.
@@ -71,29 +88,35 @@ public interface ObjectAdapter extends ObjectMetaModel {
      */
     ResolveState getResolveState();
 
-    /**
-     * Returns the current version of the domain object.
-     */
     Version getVersion();
 
-    /**
-     * Sets the versions of the domain object.
-     */
-    void setOptimisticLock(Version version);
+    void setVersion(Version version);
 
     void fireChangedEvent();
 
     /**
      * Whether this instance belongs to another object (meaning its
-     * {@link #getOid()} will be <tt>AggregatedOid</tt>.
+     * {@link #getOid()} will be <tt>ParentedOid</tt>, either an 
+     * {@link AggregatedOid} or a {@link CollectionOid}).
+     */
+    boolean isParented();
+
+    /**
+     * Whether this is an aggregated Oid.
      */
     boolean isAggregated();
 
     /**
-     * Either itself or its parent adapter (if aggregated).
-     * 
-     * @return
+     * Whether this is a value (standalone, has no oid).
      */
-    ObjectAdapter getAggregateRoot();
+    boolean isValue();
+
+
+    /**
+     * Either itself or its parent adapter (if aggregated).
+     */
+    ObjectAdapter getAggregateRoot(ObjectAdapterLookup objectAdapterLookup);
+
+
 
 }

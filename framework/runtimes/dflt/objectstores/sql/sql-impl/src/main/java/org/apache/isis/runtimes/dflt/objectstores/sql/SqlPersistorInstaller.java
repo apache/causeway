@@ -34,11 +34,13 @@ import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessi
 
 public class SqlPersistorInstaller extends ObjectStorePersistenceMechanismInstallerAbstract {
 
+    public static final String NAME = "sql";
+    
     private SqlObjectStore objectStore;
     private DatabaseConnectorPool connectionPool;
 
     public SqlPersistorInstaller() {
-        super("sql");
+        super(NAME);
     }
 
     @Override

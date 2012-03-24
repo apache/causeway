@@ -25,6 +25,10 @@ import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 
+/**
+ * The minimal interface that must be implemented in order to embed the {@link IsisMetaModel}
+ * in a non-Isis runtime.
+ */
 public interface EmbeddedContext {
 
     AuthenticationSession getAuthenticationSession();

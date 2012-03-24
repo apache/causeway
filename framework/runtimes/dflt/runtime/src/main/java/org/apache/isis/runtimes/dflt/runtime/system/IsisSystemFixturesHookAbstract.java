@@ -31,6 +31,7 @@ import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.metamodel.specloader.ObjectReflector;
 import org.apache.isis.core.runtime.about.AboutIsis;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
+import org.apache.isis.core.runtime.authorization.AuthorizationManager;
 import org.apache.isis.core.runtime.imageloader.TemplateImageLoader;
 import org.apache.isis.core.runtime.imageloader.awt.TemplateImageLoaderAwt;
 import org.apache.isis.core.runtime.userprofile.UserProfileStore;
@@ -241,10 +242,12 @@ public abstract class IsisSystemFixturesHookAbstract implements IsisSystem {
     }
 
     // ///////////////////////////////////////////
-    // Authentication Manager
+    // Authentication & Authorization Manager
     // ///////////////////////////////////////////
 
     protected abstract AuthenticationManager obtainAuthenticationManager(DeploymentType deploymentType) throws IsisSystemException;
+
+    protected abstract AuthorizationManager obtainAuthorizationManager(final DeploymentType deploymentType);
 
     // ///////////////////////////////////////////
     // UserProfileLoader

@@ -21,20 +21,20 @@ package org.apache.isis.runtimes.dflt.objectstores.xml.internal.data;
 
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.runtimes.dflt.objectstores.xml.internal.version.FileVersion;
-import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.simple.SerialOid;
+import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.serial.RootOidDefault;
 
 public abstract class Data {
     private final ObjectSpecification noSpec;
-    private final SerialOid oid;
+    private final RootOidDefault oid;
     private final FileVersion version;
 
-    Data(final ObjectSpecification noSpec, final SerialOid oid, final FileVersion version) {
+    Data(final ObjectSpecification noSpec, final RootOidDefault oid, final FileVersion version) {
         this.noSpec = noSpec;
         this.oid = oid;
         this.version = version;
     }
 
-    public SerialOid getOid() {
+    public RootOidDefault getOid() {
         return oid;
     }
 

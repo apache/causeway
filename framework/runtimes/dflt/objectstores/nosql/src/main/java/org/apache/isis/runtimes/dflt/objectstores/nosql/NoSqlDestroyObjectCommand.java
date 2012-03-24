@@ -21,6 +21,8 @@ package org.apache.isis.runtimes.dflt.objectstores.nosql;
 
 import org.apache.isis.core.commons.lang.ToString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.runtimes.dflt.objectstores.nosql.keys.KeyCreator;
+import org.apache.isis.runtimes.dflt.objectstores.nosql.versions.VersionCreator;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.DestroyObjectCommand;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.PersistenceCommandContext;
 
@@ -29,10 +31,10 @@ final class NoSqlDestroyObjectCommand implements DestroyObjectCommand {
     private final KeyCreator keyCreator;
     private final VersionCreator versionCreator;
 
-    public NoSqlDestroyObjectCommand(final KeyCreator keyCreator, final VersionCreator versionCreator, final ObjectAdapter object) {
+    public NoSqlDestroyObjectCommand(final KeyCreator keyCreator, final VersionCreator versionCreator, final ObjectAdapter adapter) {
         this.keyCreator = keyCreator;
         this.versionCreator = versionCreator;
-        this.adapter = object;
+        this.adapter = adapter;
     }
 
     @Override
@@ -41,7 +43,8 @@ final class NoSqlDestroyObjectCommand implements DestroyObjectCommand {
         final String version = versionCreator.versionString(adapter.getVersion());
         final String specificationName = adapter.getSpecification().getFullIdentifier();
 
-        ((NoSqlCommandContext) context).delete(specificationName, key, version);
+        final NoSqlCommandContext noSqlCommandContext = (NoSqlCommandContext) context;
+        noSqlCommandContext.delete(specificationName, key, version);
     }
 
     @Override

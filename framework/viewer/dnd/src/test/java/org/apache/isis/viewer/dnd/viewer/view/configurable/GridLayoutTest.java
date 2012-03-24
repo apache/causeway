@@ -22,43 +22,47 @@ package org.apache.isis.viewer.dnd.viewer.view.configurable;
 import junit.framework.Assert;
 
 import org.jmock.Expectations;
-import org.jmock.integration.junit4.JUnit4Mockery;
-import org.junit.After;
+import org.jmock.auto.Mock;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 
+import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2;
+import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2.Mode;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
-import org.apache.isis.runtimes.dflt.runtime.testsystem.TestProxyConfiguration;
 import org.apache.isis.viewer.dnd.drawing.Location;
 import org.apache.isis.viewer.dnd.drawing.Size;
 import org.apache.isis.viewer.dnd.view.View;
 import org.apache.isis.viewer.dnd.view.composite.GridLayout;
 
 public class GridLayoutTest {
+
+    @Rule
+    public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
+
     private static final int CONTAINER_HEIGHT = 100;
     private static final int CONTAINER_WIDTH = 200;
+    
+    @Mock
     private View container;
-    private JUnit4Mockery mockery;
+
     private int viewIndex = 1;
     private GridLayout layout;
+    
+    @Mock
+    private IsisConfiguration mockConfiguration;
 
     @Before
     public void setup() {
-        IsisContext.setConfiguration(new TestProxyConfiguration());
-
-        mockery = new JUnit4Mockery();
+        IsisContext.setConfiguration(mockConfiguration);
 
         layout = new GridLayout();
-        container = mockery.mock(View.class, "container");
     }
 
-    @After
-    public void complete() {
-        // mockery.assertIsSatisfied();
-    }
 
     private void createContainer(final View[] views) {
-        mockery.checking(new Expectations() {
+        context.checking(new Expectations() {
             {
                 one(container).getSubviews();
                 will(returnValue(views));
@@ -67,8 +71,8 @@ public class GridLayoutTest {
     }
 
     private View createView(final int width, final int height) {
-        final View subview = mockery.mock(View.class, "view" + viewIndex++);
-        mockery.checking(new Expectations() {
+        final View subview = context.mock(View.class, "view" + viewIndex++);
+        context.checking(new Expectations() {
             {
                 exactly(1).of(subview).getRequiredSize(new Size(Integer.MAX_VALUE, Integer.MAX_VALUE));
                 will(returnValue(new Size(width, height)));
@@ -155,8 +159,8 @@ public class GridLayoutTest {
     }
 
     private View createLayoutView(final int x, final int y, final int width, final int height) {
-        final View view = mockery.mock(View.class, "view" + viewIndex++);
-        mockery.checking(new Expectations() {
+        final View view = context.mock(View.class, "view" + viewIndex++);
+        context.checking(new Expectations() {
             {
                 exactly(1).of(view).layout();
                 exactly(2).of(view).getRequiredSize(new Size(CONTAINER_WIDTH, CONTAINER_HEIGHT));

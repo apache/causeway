@@ -17,7 +17,7 @@
 package org.apache.isis.core.metamodel.adapter.map;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 
 /**
  * Just delegates to an underlying {@link AdapterMap}.
@@ -44,7 +44,7 @@ public abstract class AdapterMapDelegator extends AdapterMapAbstract {
     }
 
     @Override
-    public ObjectAdapter adapterFor(final Object pojo, final ObjectAdapter ownerAdapter, final IdentifiedHolder identifiedHolder) {
-        return underlying.adapterFor(pojo, ownerAdapter, identifiedHolder);
+    public ObjectAdapter adapterFor(final Object pojo, final ObjectAdapter ownerAdapter, final ObjectAssociation association) {
+        return underlying.adapterFor(pojo, ownerAdapter, association);
     }
 }

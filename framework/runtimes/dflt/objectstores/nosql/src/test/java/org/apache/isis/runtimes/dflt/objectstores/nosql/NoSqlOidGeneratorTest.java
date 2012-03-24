@@ -35,6 +35,8 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2;
 import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2.Mode;
+import org.apache.isis.runtimes.dflt.objectstores.nosql.db.NoSqlDataDatabase;
+import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.serial.RootOidDefault;
 
 public class NoSqlOidGeneratorTest {
 
@@ -50,7 +52,7 @@ public class NoSqlOidGeneratorTest {
     @Mock
     private ObjectSpecification mockSpecification;
     
-    private NoSqlOid oid;
+    private RootOidDefault oid;
     private NoSqlOidGenerator oidGenerator;
 
 
@@ -59,7 +61,6 @@ public class NoSqlOidGeneratorTest {
     public void setup() {
         Logger.getRootLogger().setLevel(Level.OFF);
 
-        // allowingExamplePojoLoadedIntoSpecificationLoader
         context.checking(new Expectations() {{
            allowing(mockSpecificationLoader).loadSpecification(with(ExamplePojo.class));
            will(returnValue(mockSpecification));
@@ -74,7 +75,7 @@ public class NoSqlOidGeneratorTest {
                 return mockSpecificationLoader;
             }
         };
-        oid = oidGenerator.createTransientOid(new ExamplePojo());
+        oid = (RootOidDefault) oidGenerator.createTransientOid(new ExamplePojo());
     }
 
     @Test
@@ -82,10 +83,10 @@ public class NoSqlOidGeneratorTest {
         
         // TODO: REVIEW: how did this ever call db.nextSerialNumberBatch?
         
-        assertEquals(-999, oid.getSerialNo());
+        assertEquals(-999, oid.getIdentifier());
         assertTrue(oid.isTransient());
-        oid = oidGenerator.createTransientOid(new ExamplePojo());
-        assertEquals(-998, oid.getSerialNo());
+        oid = (RootOidDefault) oidGenerator.createTransientOid(new ExamplePojo());
+        assertEquals(-998, oid.getIdentifier());
     }
 
     @Test
@@ -97,9 +98,9 @@ public class NoSqlOidGeneratorTest {
               }
           });
 
-        oidGenerator.convertTransientToPersistentOid(oid);
+        oidGenerator.asPersistent(oid);
         assertFalse(oid.isTransient());
-        assertEquals(1, oid.getSerialNo());
+        assertEquals(1, oid.getIdentifier());
         context.assertIsSatisfied();
     }
 
@@ -112,11 +113,11 @@ public class NoSqlOidGeneratorTest {
             }
         });
 
-        oidGenerator.convertTransientToPersistentOid(oid);
-        oid = oidGenerator.createTransientOid(new ExamplePojo());
-        oidGenerator.convertTransientToPersistentOid(oid);
+        oidGenerator.asPersistent(oid);
+        oid = (RootOidDefault) oidGenerator.createTransientOid(new ExamplePojo());
+        oidGenerator.asPersistent(oid);
         assertFalse(oid.isTransient());
-        assertEquals(2, oid.getSerialNo());
+        assertEquals(2, oid.getIdentifier());
         context.assertIsSatisfied();
     }
 
@@ -129,12 +130,12 @@ public class NoSqlOidGeneratorTest {
             }
         });
 
-        oidGenerator.convertTransientToPersistentOid(oid);
-        oidGenerator.convertTransientToPersistentOid(oid = oidGenerator.createTransientOid(new ExamplePojo()));
-        oidGenerator.convertTransientToPersistentOid(oid = oidGenerator.createTransientOid(new ExamplePojo()));
-        assertEquals(3, oid.getSerialNo());
-        oidGenerator.convertTransientToPersistentOid(oid = oidGenerator.createTransientOid(new ExamplePojo()));
-        assertEquals(4, oid.getSerialNo());
+        oidGenerator.asPersistent(oid);
+        oidGenerator.asPersistent(oid = (RootOidDefault) oidGenerator.createTransientOid(new ExamplePojo()));
+        oidGenerator.asPersistent(oid = (RootOidDefault) oidGenerator.createTransientOid(new ExamplePojo()));
+        assertEquals(3, oid.getIdentifier());
+        oidGenerator.asPersistent(oid = (RootOidDefault) oidGenerator.createTransientOid(new ExamplePojo()));
+        assertEquals(4, oid.getIdentifier());
 
         context.checking(new Expectations() {
             {
@@ -142,9 +143,9 @@ public class NoSqlOidGeneratorTest {
                 will(returnValue(5L));
             }
         });
-        oidGenerator.convertTransientToPersistentOid(oid = oidGenerator.createTransientOid(new ExamplePojo()));
+        oidGenerator.asPersistent(oid = (RootOidDefault) oidGenerator.createTransientOid(new ExamplePojo()));
         assertFalse(oid.isTransient());
-        assertEquals(5, oid.getSerialNo());
+        assertEquals(5, oid.getIdentifier());
         context.assertIsSatisfied();
     }
 

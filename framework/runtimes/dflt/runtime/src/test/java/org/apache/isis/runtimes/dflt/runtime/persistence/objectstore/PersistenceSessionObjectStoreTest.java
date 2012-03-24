@@ -19,60 +19,116 @@
 
 package org.apache.isis.runtimes.dflt.runtime.persistence.objectstore;
 
-import static org.junit.Assert.assertEquals;
-
 import java.util.Collections;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
-import org.jmock.Mockery;
-import org.jmock.integration.junit4.JMock;
-import org.jmock.integration.junit4.JUnit4Mockery;
-import org.junit.After;
+import org.jmock.Expectations;
+import org.jmock.Sequence;
+import org.jmock.auto.Mock;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
+import org.apache.isis.core.commons.ensure.Assert;
+import org.apache.isis.core.commons.matchers.IsisMatchers;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterFactory;
+import org.apache.isis.core.metamodel.adapter.ResolveState;
+import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.services.ServicesInjectorDefault;
 import org.apache.isis.core.metamodel.services.container.DomainObjectContainerDefault;
+import org.apache.isis.core.metamodel.spec.SpecificationLoader;
+import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2;
+import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2.Mode;
+import org.apache.isis.runtimes.dflt.runtime.memento.RuntimeTestPojo;
+import org.apache.isis.runtimes.dflt.runtime.persistence.adapterfactory.pojo.PojoAdapter;
+import org.apache.isis.runtimes.dflt.runtime.persistence.adapterfactory.pojo.PojoAdapterFactory;
+import org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager.AdapterManagerDefault;
 import org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager.AdapterManagerExtended;
+import org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager.AdapterManagerTestSupport;
 import org.apache.isis.runtimes.dflt.runtime.persistence.internal.RuntimeContextFromSession;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.algorithm.dummy.DummyPersistAlgorithm;
+import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.CreateObjectCommand;
+import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.DestroyObjectCommand;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.ObjectStoreTransactionManager;
+import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.PersistenceCommand;
+import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.PojoAdapterBuilder;
+import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.PojoAdapterBuilder.Persistence;
+import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.SaveObjectCommand;
+import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.serial.RootOidDefault;
+import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.serial.RootOidGenerator;
+import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.ObjectFactory;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessionFactory;
-import org.apache.isis.runtimes.dflt.runtime.testsystem.TestObjectFactory;
-import org.apache.isis.runtimes.dflt.runtime.testsystem.TestProxyOidGenerator;
-import org.apache.isis.runtimes.dflt.runtime.testsystem.TestProxySystem;
+import org.apache.isis.runtimes.dflt.runtime.system.session.IsisSessionDefault;
+import org.apache.isis.runtimes.embedded.EmbeddedContext;
+import org.apache.isis.runtimes.embedded.IsisMetaModel;
 
-@RunWith(JMock.class)
 public class PersistenceSessionObjectStoreTest {
 
-    private final Mockery mockery = new JUnit4Mockery();
-
-    private PersistenceSessionFactory mockPersistenceSessionFactory;
-    private PersistenceSessionObjectStore persistenceSession;
-    private ObjectStoreTransactionManager transactionManager;
-    private ObjectStoreSpy objectStore;
-    private ObjectAdapter testObjectAdapter;
-    private TestProxySystem system;
+    @Rule
+    public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
 
     private ServicesInjectorDefault servicesInjector;
-
     private AdapterManagerExtended adapterManager;
-
     private ObjectAdapterFactory adapterFactory;
+    
+    
+    private PersistenceSessionObjectStore persistenceSession;
+    private ObjectStoreTransactionManager transactionManager;
+    
+    private ObjectAdapter persistentAdapter;
+    private PojoAdapter transientAdapter;
+    
+    @Mock
+    private PersistenceSessionFactory mockPersistenceSessionFactory;
+    @Mock
+    private ObjectStore mockObjectStore;
+    @Mock
+    private ObjectFactory objectFactory;
 
+    @Mock
+    private CreateObjectCommand createObjectCommand;
+    @Mock
+    private SaveObjectCommand saveObjectCommand;
+    @Mock
+    private DestroyObjectCommand destroyObjectCommand;
+
+    @Mock
+    private Version mockVersion;
+
+    @Mock
+    private EmbeddedContext mockMetaModelContext;
+
+    private IsisMetaModel isisMetaModel;
+
+
+    public static class Customer {
+    }
+
+    public static class CustomerRepository {
+        public Customer x() {return null;}
+    }
+    
     @Before
     public void setUp() throws Exception {
         Logger.getRootLogger().setLevel(Level.OFF);
 
-        mockPersistenceSessionFactory = mockery.mock(PersistenceSessionFactory.class);
-
-        system = new TestProxySystem();
-
-        objectStore = new ObjectStoreSpy();
+        isisMetaModel = new IsisMetaModel(mockMetaModelContext, new CustomerRepository());
+        isisMetaModel.init();
+        
+        context.checking(new Expectations() {
+            {
+                ignoring(mockObjectStore).open();
+                ignoring(mockObjectStore).close();
+                
+                ignoring(createObjectCommand);
+                ignoring(saveObjectCommand);
+                ignoring(destroyObjectCommand);
+                ignoring(mockVersion);
+            }
+        });
 
         final RuntimeContextFromSession runtimeContext = new RuntimeContextFromSession();
         final DomainObjectContainerDefault container = new DomainObjectContainerDefault();
@@ -83,85 +139,95 @@ public class PersistenceSessionObjectStoreTest {
         servicesInjector = new ServicesInjectorDefault();
         servicesInjector.setContainer(container);
 
-        // implicitly created by the system, so reuse
-        adapterManager = (AdapterManagerExtended) system.getAdapterManager();
-        adapterFactory = system.getAdapterFactory();
-
-        persistenceSession = new PersistenceSessionObjectStore(mockPersistenceSessionFactory, adapterFactory, new TestObjectFactory(), servicesInjector, new TestProxyOidGenerator(), adapterManager, new DummyPersistAlgorithm(), objectStore);
-        transactionManager = new ObjectStoreTransactionManager(persistenceSession, objectStore);
+        adapterManager = new AdapterManagerDefault();
+        adapterFactory = new PojoAdapterFactory();
+        persistenceSession = new PersistenceSessionObjectStore(mockPersistenceSessionFactory, adapterFactory, objectFactory, servicesInjector, new RootOidGenerator(), adapterManager, new DummyPersistAlgorithm(), mockObjectStore);
+        
+        transactionManager = new ObjectStoreTransactionManager(persistenceSession, mockObjectStore);
         transactionManager.injectInto(persistenceSession);
 
         servicesInjector.setServices(Collections.emptyList());
-        persistenceSession.setSpecificationLoader(system.getReflector());
+        persistenceSession.setSpecificationLoader(isisMetaModel.getSpecificationLoader());
 
-        system.setPersistenceSession(persistenceSession);
-        system.init();
-
-        testObjectAdapter = system.createPersistentTestObject();
-        // objectSpecification = new TestSpecification();
-        // testObjectAdapter.setupSpecification(objectSpecification);
-
+        persistentAdapter = PojoAdapterBuilder.create().withOid("CUS|1").withPojo(new Customer()).with(Persistence.PERSISTENT).with(mockVersion).with(isisMetaModel.getSpecificationLoader()).build();
+        transientAdapter = PojoAdapterBuilder.create().withOid("CUS|2").withPojo(new Customer()).with(Persistence.TRANSIENT).with(isisMetaModel.getSpecificationLoader()).build();
     }
 
-    @After
-    public void tearDown() throws Exception {
-        system.shutdown();
-    }
 
     @Test
-    public void testAbort() {
-        // testObjectAdapter.changeState(ResolveState.GHOST);
-        // testObjectAdapter.changeState(ResolveState.RESOLVED);
-        objectStore.reset();
+    public void destroyObjectThenAbort() {
+        
+        final Sequence tran = context.sequence("tran");
+        context.checking(new Expectations() {
+            {
+                one(mockObjectStore).startTransaction();
+                inSequence(tran);
 
+                one(mockObjectStore).createDestroyObjectCommand(persistentAdapter);
+                inSequence(tran);
+
+                one(mockObjectStore).abortTransaction();
+                inSequence(tran);
+            }
+        });
+        
         transactionManager.startTransaction();
-        persistenceSession.destroyObject(testObjectAdapter);
+        persistenceSession.destroyObject(persistentAdapter);
         transactionManager.abortTransaction();
-
-        objectStore.assertAction(0, "startTransaction");
-        objectStore.assertAction(1, "destroyObject " + testObjectAdapter);
-        objectStore.assertAction(2, "abortTransaction");
-        objectStore.assertLastAction(2);
     }
 
     @Test
-    public void testDestroy() {
-        // testObjectAdapter.changeState(ResolveState.GHOST);
-        // testObjectAdapter.changeState(ResolveState.RESOLVED);
-        objectStore.reset();
+    public void destroyObject_thenCommit() {
 
-        final String action = "destroyObject " + testObjectAdapter;
+        final Sequence tran = context.sequence("tran");
+        context.checking(new Expectations() {
+            {
+                one(mockObjectStore).startTransaction();
+                inSequence(tran);
+
+                one(mockObjectStore).createDestroyObjectCommand(persistentAdapter);
+                inSequence(tran);
+                will(returnValue(destroyObjectCommand));
+                
+                one(mockObjectStore).execute(with(IsisMatchers.listContaining((PersistenceCommand)destroyObjectCommand)));
+                inSequence(tran);
+
+                one(mockObjectStore).endTransaction();
+                inSequence(tran);
+            }
+
+        });
+
         transactionManager.startTransaction();
-        persistenceSession.destroyObject(testObjectAdapter);
+        persistenceSession.destroyObject(persistentAdapter);
         transactionManager.endTransaction();
-
-        objectStore.assertAction(0, "startTransaction");
-        objectStore.assertAction(1, action);
-
-        // Nov2008 refactoring has inverted the order.
-        // objectStore.assertAction(2, "endTransaction");
-        // objectStore.assertAction(3, command);
-
-        objectStore.assertAction(2, "execute DestroyObjectCommand " + testObjectAdapter);
-        objectStore.assertAction(3, "endTransaction");
-
-        assertEquals(4, objectStore.getActions().size());
     }
 
-    public void testMakePersistent() {
-        testObjectAdapter = system.createTransientTestObject();
+    @Test
+    public void makePersistent() {
 
-        objectStore.reset();
+        final Sequence tran = context.sequence("tran");
+        context.checking(new Expectations() {
+            {
+                one(mockObjectStore).startTransaction();
+                inSequence(tran);
 
+                one(mockObjectStore).createCreateObjectCommand(with(any(ObjectAdapter.class)));
+                inSequence(tran);
+                will(returnValue(createObjectCommand));
+
+                one(mockObjectStore).execute(with(IsisMatchers.listContaining((PersistenceCommand)createObjectCommand)));
+                inSequence(tran);
+
+                one(mockObjectStore).endTransaction();
+                inSequence(tran);
+            }
+        });
+
+        // note that the persist algorithm also gets a look-in (not tested here...)
+        
         transactionManager.startTransaction();
-        persistenceSession.makePersistent(testObjectAdapter);
+        persistenceSession.makePersistent(transientAdapter);
         transactionManager.endTransaction();
-
-        objectStore.assertAction(0, "startTransaction");
-        objectStore.assertAction(1, "createObject " + testObjectAdapter);
-        objectStore.assertAction(2, "endTransaction");
-        objectStore.assertAction(3, "run CreateObjectCommand " + testObjectAdapter);
-
-        assertEquals(4, objectStore.getActions().size());
     }
 }

@@ -19,6 +19,9 @@
 
 package org.apache.isis.runtimes.dflt.objectstores.xml.internal.data;
 
+import org.apache.isis.applib.annotation.ObjectType;
+
+@ObjectType("TEA")
 public class Team {
 
 }

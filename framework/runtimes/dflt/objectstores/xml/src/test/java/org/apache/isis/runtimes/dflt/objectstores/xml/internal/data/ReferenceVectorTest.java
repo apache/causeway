@@ -25,16 +25,18 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
 
-import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.simple.SerialOid;
+import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.serial.RootOidDefault;
 
 public class ReferenceVectorTest {
+    
+    private final String objectType = "FOO";
+    
     private ReferenceVector referenceVector;
-    private SerialOid oid;
+    private RootOidDefault oid;
 
     @Before
     public void setUp() throws Exception {
-        final long serialNum = Long.parseLong("1", 16);
-        oid = SerialOid.createTransient(serialNum);
+        oid = RootOidDefault.createTransient(objectType, ""+1);
         referenceVector = new ReferenceVector();
     }
 

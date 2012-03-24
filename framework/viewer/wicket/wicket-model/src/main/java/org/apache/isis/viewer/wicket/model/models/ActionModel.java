@@ -33,6 +33,7 @@ import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.oid.stringable.OidStringifier;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.spec.ActionType;
@@ -148,7 +149,7 @@ public class ActionModel extends ModelAbstract<ObjectAdapter> {
         int i = 0;
         for (final ObjectActionParameter actionParam : noAction.getParameters()) {
             if (ActionParams.compatibleWith(contextAdapter, actionParam)) {
-                final String oidStr = oidStringifier.enString(contextAdapter.getOid());
+                final String oidStr = oidStringifier.enString((RootOid)contextAdapter.getOid());
                 final String oidKeyValue = "" + i + "=" + oidStr;
                 PageParameterNames.ACTION_PARAM_CONTEXT.addTo(pageParameters, oidKeyValue);
                 return;

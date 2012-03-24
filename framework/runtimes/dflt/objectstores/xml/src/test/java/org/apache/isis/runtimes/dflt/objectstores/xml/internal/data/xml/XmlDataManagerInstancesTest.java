@@ -19,56 +19,62 @@
 
 package org.apache.isis.runtimes.dflt.objectstores.xml.internal.data.xml;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+
 import java.io.File;
 import java.io.FilenameFilter;
 
-import org.apache.log4j.Logger;
+import org.junit.Before;
+import org.junit.Test;
 
 import org.apache.isis.core.commons.xml.XmlFile;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.runtimes.dflt.objectstores.xml.XmlPersistenceMechanismInstaller;
 import org.apache.isis.runtimes.dflt.objectstores.xml.internal.clock.DefaultClock;
 import org.apache.isis.runtimes.dflt.objectstores.xml.internal.data.ObjectData;
 import org.apache.isis.runtimes.dflt.objectstores.xml.internal.data.ObjectDataVector;
 import org.apache.isis.runtimes.dflt.objectstores.xml.internal.version.FileVersion;
-import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.simple.SerialOid;
-import org.apache.isis.runtimes.dflt.runtime.testsystem.ProxyJunit3TestCase;
+import org.apache.isis.runtimes.dflt.runtime.installerregistry.installerapi.PersistenceMechanismInstaller;
+import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.serial.RootOidDefault;
+import org.apache.isis.runtimes.dflt.testsupport.IsisSystemWithFixtures;
+import org.apache.isis.runtimes.dflt.testsupport.TestSystemWithObjectStoreTestAbstract;
 
-public class XmlDataManagerInstancesTest extends ProxyJunit3TestCase {
-    private static final Logger LOG = Logger.getLogger(XmlDataManagerInstancesTest.class);
+public class XmlDataManagerInstancesTest extends TestSystemWithObjectStoreTestAbstract {
+    
+    @Override
+    protected PersistenceMechanismInstaller createPersistenceMechanismInstaller() {
+        return new XmlPersistenceMechanismInstaller();
+    }
 
     protected XmlDataManager manager;
     protected final int SIZE = 5;
 
-    private SerialOid oids[];
+    private RootOidDefault oids[];
     private ObjectData data[];
     private ObjectData pattern;
 
-    public static void main(final String[] args) {
-        junit.textui.TestRunner.run(XmlDataManagerInstancesTest.class);
-    }
-
-    @Override
-    protected void setUp() throws Exception {
-        super.setUp();
+    @Before
+    public void setUp() throws Exception {
 
         clearTestDirectory();
-        final String charset = XmlFileUtil.lookupCharset(system.getConfiguration());
+        final String charset = XmlFileUtil.lookupCharset(isisMetaModel.getConfiguration());
         manager = new XmlDataManager(new XmlFile(charset, "tmp/tests"));
 
         FileVersion.setClock(new DefaultClock());
 
-        oids = new SerialOid[SIZE];
+        oids = new RootOidDefault[SIZE];
         data = new ObjectData[SIZE];
 
-        final ObjectSpecification type = system.getSpecification(Object.class);
-        pattern = new ObjectData(type, null, new FileVersion("user", 13));
+        final ObjectSpecification objectSpec = system.loadSpecification(Object.class);
+        pattern = new ObjectData(objectSpec, null, new FileVersion("user", 13));
         for (int i = 0; i < SIZE; i++) {
-            oids[i] = SerialOid.createPersistent(i);
-            data[i] = new ObjectData(type, oids[i], new FileVersion("user", 13));
+            oids[i] = RootOidDefault.create("FOO", ""+i);
+            data[i] = new ObjectData(objectSpec, oids[i], new FileVersion("user", 13));
             manager.insertObject(data[i]);
         }
-
-        LOG.debug("test starting...");
     }
 
     protected static void clearTestDirectory() {
@@ -87,18 +93,15 @@ public class XmlDataManagerInstancesTest extends ProxyJunit3TestCase {
         }
     }
 
-    @Override
-    protected void tearDown() throws Exception {
-        system.shutdown();
-        super.tearDown();
-    }
 
+    @Test
     public void testNumberOfInstances() {
         assertEquals(SIZE, manager.numberOfInstances(pattern));
     }
 
+    @Test
     public void testRemove() throws Exception {
-        final SerialOid oid = oids[2];
+        final RootOidDefault oid = oids[2];
         manager.remove(oid);
 
         assertEquals(SIZE - 1, manager.numberOfInstances(pattern));
@@ -111,8 +114,9 @@ public class XmlDataManagerInstancesTest extends ProxyJunit3TestCase {
         assertNull((manager.loadData(oid)));
     }
 
+    @Test
     public void testSaveObject() throws Exception {
-        data[2].set("Person", SerialOid.createPersistent(231));
+        data[2].set("Person", RootOidDefault.create("PER", ""+231));
         data[2].set("Name", "Fred");
         manager.save(data[2]);
 

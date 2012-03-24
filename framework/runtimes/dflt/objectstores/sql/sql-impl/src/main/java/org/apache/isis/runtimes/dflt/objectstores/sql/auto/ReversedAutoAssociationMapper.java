@@ -133,7 +133,7 @@ public class ReversedAutoAssociationMapper extends AbstractAutoMapper implements
          * oneToManyProperties[i].get(object); }
          */
 
-        object.setOptimisticLock(versionMapping.getLock(rs));
+        object.setVersion(versionMapping.getLock(rs));
         if (makeResolved) {
             PersistorUtil.end(object);
         }
@@ -173,7 +173,7 @@ public class ReversedAutoAssociationMapper extends AbstractAutoMapper implements
             insert.append(") ");
 
             connector.insert(insert.toString());
-            element.setOptimisticLock(version);
+            element.setVersion(version);
         }
     }
 

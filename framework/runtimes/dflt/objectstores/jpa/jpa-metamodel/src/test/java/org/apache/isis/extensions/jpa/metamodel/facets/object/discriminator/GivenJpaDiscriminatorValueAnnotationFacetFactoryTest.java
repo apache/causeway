@@ -31,9 +31,7 @@ import org.apache.isis.core.metamodel.facets.FacetFactory;
 import org.apache.isis.core.metamodel.facets.object.objecttype.ObjectTypeFacet;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
 
-
-public class GivenJpaDiscriminatorValueAnnotationFacetFactoryTest extends
-        AbstractFacetFactoryTest {
+public class GivenJpaDiscriminatorValueAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 
     private JpaDiscriminatorValueAnnotationFacetFactory facetFactory;
 
@@ -51,20 +49,12 @@ public class GivenJpaDiscriminatorValueAnnotationFacetFactoryTest extends
     }
 
     public void testFeatureTypes() {
-        final List<FeatureType> featureTypes = facetFactory
-                .getFeatureTypes();
-        Assert
-                .assertTrue(contains(featureTypes,
-                FeatureType.OBJECT));
-        assertFalse(contains(featureTypes,
-                FeatureType.PROPERTY));
-        assertFalse(contains(featureTypes,
-                FeatureType.COLLECTION));
-        Assert
-                .assertFalse(contains(featureTypes,
-                FeatureType.ACTION));
-        assertFalse(contains(featureTypes,
-                FeatureType.ACTION_PARAMETER));
+        final List<FeatureType> featureTypes = facetFactory.getFeatureTypes();
+        Assert.assertTrue(contains(featureTypes, FeatureType.OBJECT));
+        assertFalse(contains(featureTypes, FeatureType.PROPERTY));
+        assertFalse(contains(featureTypes, FeatureType.COLLECTION));
+        Assert.assertFalse(contains(featureTypes, FeatureType.ACTION));
+        assertFalse(contains(featureTypes, FeatureType.ACTION_PARAMETER));
     }
 
     public void testDiscriminatorValueAnnotationPickedUpOnClass() {
@@ -74,11 +64,9 @@ public class GivenJpaDiscriminatorValueAnnotationFacetFactoryTest extends
 
         facetFactory.process(new FacetFactory.ProcessClassContext(Customer.class, methodRemover, facetHolder));
 
-        final Facet facet = facetHolder
-                .getFacet(ObjectTypeFacet.class);
+        final Facet facet = facetHolder.getFacet(ObjectTypeFacet.class);
         assertNotNull(facet);
-        Assert
-                .assertTrue(facet instanceof ObjectTypeFacetInferredFromJpaDiscriminatorValueAnnotation);
+        Assert.assertTrue(facet instanceof ObjectTypeFacetInferredFromJpaDiscriminatorValueAnnotation);
     }
 
     public void testIfNoEntityAnnotationThenNoFacet() {
@@ -88,8 +76,7 @@ public class GivenJpaDiscriminatorValueAnnotationFacetFactoryTest extends
 
         facetFactory.process(new FacetFactory.ProcessClassContext(Customer.class, methodRemover, facetHolder));
 
-        final Facet facet = facetHolder
-                .getFacet(ObjectTypeFacet.class);
+        final Facet facet = facetHolder.getFacet(ObjectTypeFacet.class);
         assertNull(facet);
     }
 
@@ -100,8 +87,7 @@ public class GivenJpaDiscriminatorValueAnnotationFacetFactoryTest extends
 
         facetFactory.process(new FacetFactory.ProcessClassContext(Customer.class, methodRemover, facetHolder));
 
-        final ObjectTypeFacet discriminatorValueFacet = facetHolder
-                .getFacet(ObjectTypeFacet.class);
+        final ObjectTypeFacet discriminatorValueFacet = facetHolder.getFacet(ObjectTypeFacet.class);
         assertEquals("CUS", discriminatorValueFacet.value());
     }
 

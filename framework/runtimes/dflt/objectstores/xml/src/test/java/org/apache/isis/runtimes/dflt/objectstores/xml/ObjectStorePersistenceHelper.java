@@ -21,19 +21,18 @@ package org.apache.isis.runtimes.dflt.objectstores.xml;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.testspec.TestProxySpecification;
 import org.apache.isis.runtimes.dflt.runtime.persistence.query.PersistenceQueryBuiltIn;
 
 public class ObjectStorePersistenceHelper implements PersistenceQueryBuiltIn {
     ObjectSpecification specification = null;
 
-    public ObjectStorePersistenceHelper(final TestProxySpecification spec) {
+    public ObjectStorePersistenceHelper(final ObjectSpecification spec) {
         specification = spec;
     }
 
     @Override
     public boolean matches(final ObjectAdapter object) {
-        if (object.getSpecification().getClass().getName().equals(specification.getClass().getName())) {
+        if (object.getSpecification().getCorrespondingClass().getName().equals(specification.getCorrespondingClass().getName())) {
             return true;
         }
         return false;

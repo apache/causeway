@@ -26,6 +26,7 @@ import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.model.IModel;
 
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.oid.stringable.OidStringifier;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
@@ -45,7 +46,7 @@ public class DropDownChoicesForObjectAdapterMementos extends DropDownChoice<Obje
         @Override
         public String getIdValue(final ObjectAdapterMemento nom, final int index) {
             final Oid oid = nom.getObjectAdapter().getOid();
-            return getOidStringifier().enString(oid);
+            return getOidStringifier().enString((RootOid) oid);
         }
 
         protected OidStringifier getOidStringifier() {

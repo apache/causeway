@@ -26,6 +26,7 @@ import org.apache.wicket.util.convert.IConverter;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.oid.stringable.OidStringifier;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
@@ -57,7 +58,7 @@ public class ConverterForObjectAdapterMemento implements IConverter {
 
     /**
      * Converts {@link ObjectAdapterMemento} to {@link OidStringifier
-     * stringified} {@link Oid}.
+     * stringified} {@link RootOid}.
      */
     @Override
     public String convertToString(final Object object, final Locale locale) {
@@ -67,13 +68,11 @@ public class ConverterForObjectAdapterMemento implements IConverter {
         final ObjectAdapterMemento memento = (ObjectAdapterMemento) object;
         final Oid oid = memento.getObjectAdapter().getOid();
         if (oid == null) {
-            // values don't have an Oid, but we don't support 'em
+            // values don't have an Oid...
+            // REVIEW: is this right?
             return memento.toString();
-
-            // throw new IllegalStateException(
-            // "cannot convert memento to OBJECT_OID; memento's adapter is a value so has no OBJECT_OID");
         }
-        return getOidStringifier().enString(oid);
+        return getOidStringifier().enString((RootOid) oid);
     }
 
     protected AdapterManager getAdapterManager() {

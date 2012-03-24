@@ -40,7 +40,7 @@ public class EncodableFacetFactoryTest extends AbstractFacetFactoryTest {
 
         facetFactory = new EncodableAnnotationFacetFactory();
         isisConfigurationDefault = new IsisConfigurationDefault();
-        facetFactory.setIsisConfiguration(isisConfigurationDefault);
+        facetFactory.setConfiguration(isisConfigurationDefault);
     }
 
     @Override

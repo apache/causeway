@@ -30,6 +30,7 @@ import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
@@ -125,12 +126,12 @@ public class ForeignKeyCollectionMapper extends AbstractAutoMapper implements Co
     }
 
     @Override
-    public void startup(final DatabaseConnector connector, final FieldMappingLookup lookup) {
+    public void startup(final DatabaseConnector connector) {
         if (originalMapping == null) {
             originalMapping = objectMappingLookup.getMapping(specification, null);
         }
         originalMapping.startup(connector, objectMapperLookup2);
-        super.startup(connector, lookup);
+        super.startup(connector);
     }
 
     @Override
@@ -255,7 +256,7 @@ public class ForeignKeyCollectionMapper extends AbstractAutoMapper implements Co
             for (final FieldMapping mapping : fieldMappingByField.values()) {
                 mapping.initializeField(object, rs);
             }
-            object.setOptimisticLock(versionMapping.getLock(rs));
+            object.setVersion(versionMapping.getLock(rs));
             if (makeResolved) {
                 PersistorUtil.end(object);
             }
@@ -327,7 +328,8 @@ public class ForeignKeyCollectionMapper extends AbstractAutoMapper implements Co
             if (count++ > 0) {
                 update.append(",");
             }
-            idMapping.appendObjectId(connector, update, element.getOid());
+            final RootOid elementOid = (RootOid) element.getOid();
+            idMapping.appendObjectId(connector, update, elementOid);
         }
         update.append(")");
         if (count > 0) {

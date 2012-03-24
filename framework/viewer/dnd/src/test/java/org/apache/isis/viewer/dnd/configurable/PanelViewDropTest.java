@@ -25,11 +25,15 @@ import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
+import org.jmock.auto.Mock;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 
+import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2;
+import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2.Mode;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
-import org.apache.isis.runtimes.dflt.runtime.testsystem.TestProxyConfiguration;
 import org.apache.isis.viewer.dnd.DummyContent;
 import org.apache.isis.viewer.dnd.DummyView;
 import org.apache.isis.viewer.dnd.DummyViewSpecification;
@@ -43,6 +47,12 @@ import org.apache.isis.viewer.dnd.view.ViewDrag;
 
 public class PanelViewDropTest {
 
+    @Rule
+    public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
+
+    @Mock
+    private IsisConfiguration mockConfiguration;
+    
     private PanelView view;
     private DummyContent content;
     private Position position;
@@ -52,7 +62,7 @@ public class PanelViewDropTest {
     public void setup() {
         Logger.getRootLogger().setLevel(Level.OFF);
         TestToolkit.createInstance();
-        IsisContext.setConfiguration(new TestProxyConfiguration());
+        IsisContext.setConfiguration(mockConfiguration);
 
         content = new DummyContent();
 

@@ -44,7 +44,6 @@ import org.apache.isis.runtimes.dflt.runtime.installerregistry.InstallerLookup;
 import org.apache.isis.runtimes.dflt.runtime.installers.InstallerLookupDefault;
 import org.apache.isis.runtimes.dflt.runtime.runner.opts.OptionHandlerAdditionalProperty;
 import org.apache.isis.runtimes.dflt.runtime.runner.opts.OptionHandlerConfiguration;
-import org.apache.isis.runtimes.dflt.runtime.runner.opts.OptionHandlerConnector;
 import org.apache.isis.runtimes.dflt.runtime.runner.opts.OptionHandlerDebug;
 import org.apache.isis.runtimes.dflt.runtime.runner.opts.OptionHandlerDeploymentType;
 import org.apache.isis.runtimes.dflt.runtime.runner.opts.OptionHandlerDiagnostics;
@@ -59,7 +58,6 @@ import org.apache.isis.runtimes.dflt.runtime.runner.opts.OptionHandlerVerbose;
 import org.apache.isis.runtimes.dflt.runtime.runner.opts.OptionHandlerVersion;
 import org.apache.isis.runtimes.dflt.runtime.runner.opts.OptionHandlerViewer;
 import org.apache.isis.runtimes.dflt.runtime.runner.opts.OptionValidator;
-import org.apache.isis.runtimes.dflt.runtime.runner.opts.OptionValidatorForConnector;
 import org.apache.isis.runtimes.dflt.runtime.runner.opts.OptionValidatorForPersistor;
 import org.apache.isis.runtimes.dflt.runtime.runner.opts.OptionValidatorForViewers;
 import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
@@ -232,11 +230,9 @@ public class IsisRunner {
 
         addOptionHandler(new OptionHandlerConfiguration());
 
-        OptionHandlerConnector optionHandlerClientConnection;
         OptionHandlerPersistor optionHandlerPersistor;
         OptionHandlerViewer optionHandlerViewer;
 
-        addOptionHandler(optionHandlerClientConnection = new OptionHandlerConnector(installerLookup));
         addOptionHandler(optionHandlerPersistor = new OptionHandlerPersistor(installerLookup));
         addOptionHandler(optionHandlerViewer = new OptionHandlerViewer(installerLookup));
 
@@ -257,7 +253,6 @@ public class IsisRunner {
 
         // validators
         addValidator(new OptionValidatorForViewers(optionHandlerViewer));
-        addValidator(new OptionValidatorForConnector(optionHandlerClientConnection));
         addValidator(new OptionValidatorForPersistor(optionHandlerPersistor));
 
         return optionHandlerViewer;

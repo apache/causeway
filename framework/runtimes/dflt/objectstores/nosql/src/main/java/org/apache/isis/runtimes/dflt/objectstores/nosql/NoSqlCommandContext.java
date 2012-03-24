@@ -19,16 +19,16 @@
 
 package org.apache.isis.runtimes.dflt.objectstores.nosql;
 
+import org.apache.isis.runtimes.dflt.objectstores.nosql.db.StateWriter;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.PersistenceCommandContext;
 
 public interface NoSqlCommandContext extends PersistenceCommandContext {
 
     StateWriter createStateWriter(String specName);
 
-    void delete(String specificationName, String key, String version);
-
     void insert(StateWriter writer);
 
     void update(StateWriter writer);
 
+    void delete(String specificationName, String key, String version);
 }

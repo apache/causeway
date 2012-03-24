@@ -19,6 +19,7 @@
 
 package org.apache.isis.runtimes.dflt.runtime.persistence;
 
+import org.apache.isis.core.commons.config.IsisConfigurationBuilderAware;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessionFactory;
 
@@ -26,7 +27,7 @@ import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessi
  * Creates a {@link PersistenceSession} on behalf of a
  * {@link PersistenceSessionFactory}.
  */
-public interface PersistenceSessionFactoryDelegate {
+public interface PersistenceSessionFactoryDelegate extends IsisConfigurationBuilderAware {
 
     /**
      * As per {@link PersistenceSessionFactory#createPersistenceSession()}, but

@@ -21,23 +21,26 @@ package org.apache.isis.viewer.dnd.util;
 
 import static org.junit.Assert.assertEquals;
 
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import org.apache.isis.core.runtime.userprofile.Options;
-import org.apache.isis.runtimes.dflt.objectstores.dflt.testsystem.TestProxySystemII;
+import org.apache.isis.runtimes.dflt.objectstores.dflt.InMemoryPersistenceMechanismInstaller;
+import org.apache.isis.runtimes.dflt.runtime.installerregistry.installerapi.PersistenceMechanismInstaller;
+import org.apache.isis.runtimes.dflt.testsupport.IsisSystemWithFixtures;
+import org.apache.isis.runtimes.dflt.testsupport.TestSystemWithObjectStoreTestAbstract;
 
-public class PropertiesTest {
-
-    @Ignore("having problems with test classpath - TestProxySystemII can't find JavaReflectorInstaller, for some reason")
+public class PropertiesTest extends TestSystemWithObjectStoreTestAbstract {
+    
+    @Override
+    protected PersistenceMechanismInstaller createPersistenceMechanismInstaller() {
+        return new InMemoryPersistenceMechanismInstaller();
+    }
+    
     @Test
     public void getOptionsCreatesNewOptionsSet() throws Exception {
-        Logger.getRootLogger().setLevel(Level.OFF);
-        new TestProxySystemII().init();
 
         final Options options = Properties.getOptions("test");
         assertEquals(false, options.names().hasNext());
     }
+    
 }

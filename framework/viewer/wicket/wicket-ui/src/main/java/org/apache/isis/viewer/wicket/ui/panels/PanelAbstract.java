@@ -32,12 +32,13 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
+import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
+import org.apache.isis.core.commons.authentication.AuthenticationSessionProviderAware;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.stringable.OidStringifier;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
-import org.apache.isis.viewer.wicket.model.nof.AuthenticationSessionAccessor;
-import org.apache.isis.viewer.wicket.model.nof.PersistenceSessionAccessor;
+import org.apache.isis.viewer.wicket.model.isis.PersistenceSessionProvider;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.isis.viewer.wicket.ui.util.Components;
@@ -45,7 +46,7 @@ import org.apache.isis.viewer.wicket.ui.util.Components;
 /**
  * Convenience adapter for {@link Panel}s built up using {@link ComponentType}s.
  */
-public abstract class PanelAbstract<T extends IModel<?>> extends Panel implements IHeaderContributor, PersistenceSessionAccessor, AuthenticationSessionAccessor {
+public abstract class PanelAbstract<T extends IModel<?>> extends Panel implements IHeaderContributor, PersistenceSessionProvider, AuthenticationSessionProvider {
 
     private static final long serialVersionUID = 1L;
 
@@ -143,7 +144,7 @@ public abstract class PanelAbstract<T extends IModel<?>> extends Panel implement
      */
     @Override
     public AuthenticationSession getAuthenticationSession() {
-        final AuthenticationSessionAccessor asa = (AuthenticationSessionAccessor) Session.get();
+        final AuthenticationSessionProvider asa = (AuthenticationSessionProvider) Session.get();
         return asa.getAuthenticationSession();
     }
 
@@ -181,4 +182,18 @@ public abstract class PanelAbstract<T extends IModel<?>> extends Panel implement
         this.componentFactoryRegistry = componentFactoryRegistry;
     }
 
+    
+    // /////////////////////////////////////////////////
+    // *Provider impl.
+    // /////////////////////////////////////////////////
+    
+    @Override
+    public void injectInto(final Object candidate) {
+        if (AuthenticationSessionProviderAware.class.isAssignableFrom(candidate.getClass())) {
+            final AuthenticationSessionProviderAware cast = AuthenticationSessionProviderAware.class.cast(candidate);
+            cast.setAuthenticationSessionProvider(this);
+        }
+    }
+
+    
 }

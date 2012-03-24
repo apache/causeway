@@ -25,6 +25,7 @@ import java.util.List;
 
 import com.google.common.base.Function;
 
+import org.apache.isis.applib.annotation.ObjectType;
 import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -41,6 +42,7 @@ import org.apache.isis.core.metamodel.facets.object.callbacks.CreatedCallbackFac
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.facets.object.icon.IconFacet;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
+import org.apache.isis.core.metamodel.facets.object.objecttype.ObjectTypeFacet;
 import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
 import org.apache.isis.core.metamodel.facets.object.plural.PluralFacet;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
@@ -50,6 +52,7 @@ import org.apache.isis.core.metamodel.interactions.ObjectTitleContext;
 import org.apache.isis.core.metamodel.interactions.ObjectValidityContext;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionContainer;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationContainer;
+import org.apache.isis.core.metamodel.specloader.classsubstitutor.ClassSubstitutor;
 
 /**
  * Represents an entity or value (cf {@link java.lang.Class}) within the
@@ -93,6 +96,19 @@ public interface ObjectSpecification extends Specification, ObjectActionContaine
     Class<?> getCorrespondingClass();
 
     /**
+     * Returns the (unique) object type, as per the {@link ObjectTypeFacet}.
+     * 
+     * <p>
+     * This will typically be the value of the {@link ObjectType} annotation (or equivalent);
+     * if non has been specified then will default to the fully qualified class name (with
+     * {@link ClassSubstitutor class name substituted} if necessary to allow for runtime bytecode enhancement.
+     * 
+     * <p>
+     * The {@link ObjectSpecification} can be retrieved using {@link SpecificationLookup#lookupByObjectType(String)}.
+     */
+    String getObjectType();
+    
+    /**
      * Returns an (immutable) "full" identifier for this specification.
      * 
      * <p>
@@ -100,7 +116,7 @@ public interface ObjectSpecification extends Specification, ObjectActionContaine
      * object represents (i.e. it includes the package name).
      */
     String getFullIdentifier();
-
+    
     /**
      * Returns an (immutable) "short" identifier for this specification.
      * 
@@ -301,26 +317,16 @@ public interface ObjectSpecification extends Specification, ObjectActionContaine
     // //////////////////////////////////////////////////////////////
 
     /**
-     * Used by {@link ObjectSpecification#createObject(CreationMode)}
-     */
-    public enum CreationMode {
-        /**
-         * Default all properties and call any {@link CreatedCallbackFacet
-         * created callbacks}.
-         */
-        INITIALIZE, NO_INITIALIZE
-    }
-
-    /**
      * Create and optionally {@link CreationMode#INITIALIZE initialize} object.
      */
-    Object createObject(CreationMode creationMode);
+    Object createObject();
 
     /**
-     * Create and optionally {@link CreationMode#INITIALIZE initialize} an
-     * aggregated object with a parent.
+     * REVIEW: should this behaviour move, eg onto ObjectAdapter?
      */
-    Object createAggregatedObject(ObjectAdapter parent, CreationMode creationMode);
+    ObjectAdapter initialize(ObjectAdapter object);
+
+
 
     // //////////////////////////////////////////////////////////////
     // Service

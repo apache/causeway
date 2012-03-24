@@ -28,5 +28,5 @@ public interface IsisConfigurationAware {
     /**
      * Inject the {@link IsisConfiguration} into the component.
      */
-    void setIsisConfiguration(IsisConfiguration configuration);
+    void setConfiguration(IsisConfiguration configuration);
 }

@@ -25,7 +25,10 @@ import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 
 /**
- * API used solely by the {@link PersistenceSession}.
+ * API used solely by the {@link PersistenceSession}, for remoting support.
+ * 
+ * <p>
+ * *** THIS INTERFACE IS NO LONGER IMPLEMENTED, SINCE REMOTING SUPPORT HAS BEEN REMOVED. ***
  */
 public interface AdapterManagerProxy extends ObjectAdapterLookup {
 
@@ -40,6 +43,6 @@ public interface AdapterManagerProxy extends ObjectAdapterLookup {
      * 
      * @see AdapterManagerPersist#remapAsPersistent(ObjectAdapter)
      */
-    public void remapUpdated(Oid oid);
+    public void remapUpdated(Oid rootOid);
 
 }

@@ -27,7 +27,7 @@ import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterFactory;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
-import org.apache.isis.core.metamodel.adapter.oid.stringable.directly.OidWithSpecification;
+import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.services.container.query.QueryCardinality;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -182,13 +182,13 @@ public class PersistenceSessionLogger extends Logger implements PersistenceSessi
     }
 
     @Override
-    public ObjectAdapter createAggregatedInstance(final ObjectSpecification specification, final ObjectAdapter parent) {
+    public ObjectAdapter createInstance(final ObjectSpecification specification, final ObjectAdapter parent) {
         log("create aggregated instance " + specification + " as part of " + parent);
-        return underlying.createAggregatedInstance(specification, parent);
+        return underlying.createInstance(specification, parent);
     }
 
     @Override
-    public ObjectAdapter recreateAdapter(OidWithSpecification oid) {
+    public ObjectAdapter recreateAdapter(RootOid oid) {
         log("recreate instance " + oid);
         return underlying.recreateAdapter(oid);
     }

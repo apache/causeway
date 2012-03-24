@@ -101,7 +101,7 @@ public class IndirectObjectMapping implements ObjectMapping {
     private void appendMappings(final DebugBuilder debug, final Scope scope) {
         debug.appendTitle("Objects for " + scope);
         final Map<String, Mapping> map = scopedMappings.get(scope);
-        final Iterator<String> ids = new TreeSet(map.keySet()).iterator();
+        final Iterator<String> ids = new TreeSet<String>(map.keySet()).iterator();
         if (!ids.hasNext()) {
             debug.appendln("None", "");
         }

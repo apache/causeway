@@ -21,7 +21,6 @@ package org.apache.isis.runtimes.dflt.runtime.runner;
 
 import org.apache.isis.core.metamodel.specloader.ObjectReflectorInstaller;
 import org.apache.isis.core.runtime.logging.LoggingConstants;
-import org.apache.isis.runtimes.dflt.runtime.installerregistry.installerapi.ClientConnectionInstaller;
 import org.apache.isis.runtimes.dflt.runtime.installerregistry.installerapi.IsisViewerInstaller;
 import org.apache.isis.runtimes.dflt.runtime.installerregistry.installerapi.PersistenceMechanismInstaller;
 import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
@@ -53,9 +52,6 @@ public final class Constants {
 
     public static final String VIEWER_OPT = "v";
     public static final String VIEWER_LONG_OPT = IsisViewerInstaller.TYPE;
-
-    public static final String CONNECTOR_OPT = "x";
-    public static final String CONNECTOR_LONG_OPT = ClientConnectionInstaller.TYPE;
 
     public static final String CONFIGURATION_OPT = "c";
     public static final String CONFIGURATION_LONG_OPT = "config";

@@ -40,6 +40,8 @@ import org.apache.wicket.protocol.http.WebRequest;
 import org.apache.wicket.util.convert.ConverterLocator;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
+import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
+import org.apache.isis.core.commons.authentication.AuthenticationSessionProviderAware;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationBuilder;
 import org.apache.isis.core.commons.config.IsisConfigurationBuilderResourceStreams;
@@ -57,7 +59,6 @@ import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
 import org.apache.isis.runtimes.dflt.runtime.system.IsisSystem;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
-import org.apache.isis.viewer.wicket.model.nof.AuthenticationSessionAccessor;
 import org.apache.isis.viewer.wicket.ui.app.cssrenderer.ApplicationCssRenderer;
 import org.apache.isis.viewer.wicket.ui.app.imagecache.ImageCache;
 import org.apache.isis.viewer.wicket.ui.app.imagecache.ImageCacheAccessor;
@@ -74,7 +75,7 @@ import org.apache.isis.viewer.wicket.viewer.integration.wicket.ConverterForObjec
 import org.apache.isis.viewer.wicket.viewer.integration.wicket.ConverterForObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.viewer.integration.wicket.WebRequestCycleForIsis;
 
-public class IsisWicketUnsecuredApplication extends WebApplication implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, ImageCacheAccessor, ApplicationCssRenderer, AuthenticationSessionAccessor {
+public class IsisWicketUnsecuredApplication extends WebApplication implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, ImageCacheAccessor, ApplicationCssRenderer, AuthenticationSessionProvider {
 
     private static final long serialVersionUID = 1L;
 
@@ -324,6 +325,19 @@ public class IsisWicketUnsecuredApplication extends WebApplication implements Co
     @Override
     public AuthenticationSession getAuthenticationSession() {
         return IsisContext.getAuthenticationSession();
+    }
+
+    
+    // /////////////////////////////////////////////////
+    // *Provider impl.
+    // /////////////////////////////////////////////////
+    
+    @Override
+    public void injectInto(final Object candidate) {
+        if (AuthenticationSessionProviderAware.class.isAssignableFrom(candidate.getClass())) {
+            final AuthenticationSessionProviderAware cast = AuthenticationSessionProviderAware.class.cast(candidate);
+            cast.setAuthenticationSessionProvider(this);
+        }
     }
 
 }

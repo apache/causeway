@@ -23,33 +23,56 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import org.jmock.Expectations;
-import org.jmock.Mockery;
-import org.jmock.integration.junit4.JUnit4Mockery;
-import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 
 import org.apache.isis.core.commons.encoding.DataInputExtended;
 import org.apache.isis.core.commons.encoding.DataOutputExtended;
 import org.apache.isis.core.metamodel.adapter.version.Version;
-import org.apache.isis.runtimes.dflt.runtime.testsystem.ProxyJunit4TestCase;
+import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2;
+import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2.Mode;
 
-public class FileVersionTest extends ProxyJunit4TestCase {
-    Mockery context = new JUnit4Mockery();
+public class FileVersionTest {
+    
+    @Rule
+    public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_ONLY);
+    
     final DataInputExtended extended = context.mock(DataInputExtended.class);;
 
-    @Before
-    public void setUp() throws Exception {
+//    protected TestProxySystem system;
+//
+//    private TestProxyConfiguration mockConfiguration;
+//    private TestProxyReflector mockReflector;
+//    private AuthenticationSession mockAuthSession;
+//    private TestProxyPersistenceSessionFactory mockPersistenceSessionFactory;
+//    private TestProxyPersistenceSession mockPersistenceSession;
+//    private TestUserProfileStore mockUserProfileStore;
 
-    }
+//    @Before
+//    public void setUpSystem() throws Exception {
+//
+//        Logger.getRootLogger().setLevel(Level.OFF);
+//        system = new TestProxySystem();
+//        
+//        mockConfiguration = new TestProxyConfiguration();
+//        mockReflector = new TestProxyReflector();
+//        mockAuthSession = new TestProxySession();
+//        mockPersistenceSessionFactory = new TestProxyPersistenceSessionFactory();
+//        mockPersistenceSession = new TestProxyPersistenceSession(mockPersistenceSessionFactory);
+//        mockPersistenceSessionFactory.setPersistenceSessionToCreate(mockPersistenceSession);
+//        mockUserProfileStore = new TestUserProfileStore();
+//        
+//        system.openSession(mockConfiguration, mockReflector, mockAuthSession, null, null, null, mockUserProfileStore, null, mockPersistenceSessionFactory, null);
+//    }
 
     @Test
-    public void testFileVersionDataInputExtended() throws Exception {
+    public void FileVersion_instantiateUsingDataInputExtended() throws Exception {
         context.checking(new Expectations() {
             {
                 ignoring(extended);
             }
         });
-        final FileVersion fileVersion = new FileVersion(extended);
+        new FileVersion(extended);
     }
 
     @Test

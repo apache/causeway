@@ -32,8 +32,10 @@ import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessi
  */
 public class InMemoryPersistenceMechanismInstaller extends ObjectStorePersistenceMechanismInstallerAbstract {
 
+    public static final String NAME = "in-memory";
+
     public InMemoryPersistenceMechanismInstaller() {
-        super("in-memory");
+        super(NAME);
     }
 
     // ///////////////////////////////////////////////////////////////

@@ -19,7 +19,6 @@
 
 package org.apache.isis.core.metamodel.adapter;
 
-import org.apache.isis.core.commons.components.Injectable;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 
 /**
@@ -36,7 +35,7 @@ import org.apache.isis.core.metamodel.adapter.oid.Oid;
  * work with the POJOs even though it does not understand their types. Each POJO
  * maps to an {@link ObjectAdapter adapter} and these are reused.
  */
-public interface ObjectAdapterLookup extends Injectable {
+public interface ObjectAdapterLookup {
 
     /**
      * Gets the {@link ObjectAdapter adapter} for the {@link Oid} if it exists

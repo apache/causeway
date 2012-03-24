@@ -30,9 +30,11 @@ import org.apache.isis.core.commons.ensure.Ensure;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.lang.ToString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapterLookup;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.core.metamodel.adapter.oid.AggregatedOid;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.core.metamodel.adapter.oid.ParentedOid;
 import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.spec.ElementSpecificationProvider;
@@ -42,9 +44,6 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.Specification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.runtimes.dflt.runtime.persistence.ConcurrencyException;
-import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
-import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
-import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 
 public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
 
@@ -52,22 +51,28 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
 
     private static final int INCOMPLETE_COLLECTION = -1;
 
+    private final SpecificationLoader specificationLoader;
+    private final ObjectAdapterLookup objectAdapterLookup;
+    private final Localization localization;
+    
     private Object pojo;
-
-    private transient ResolveState resolveState;
-
     private Oid oid;
     private Version version;
+    private ResolveState resolveState;
 
     private String defaultTitle;
 
     private ElementSpecificationProvider elementSpecificationProvider;
 
+
     // ///////////////////////////////////////////////////////////////////
     // Constructor, finalizer
     // ///////////////////////////////////////////////////////////////////
 
-    public PojoAdapter(final Object pojo, final Oid oid) {
+    public PojoAdapter(final Object pojo, final Oid oid, SpecificationLoader specificationLoader, ObjectAdapterLookup objectAdapterLookup, Localization localization) {
+        this.specificationLoader = specificationLoader;
+        this.objectAdapterLookup = objectAdapterLookup;
+        this.localization = localization;
         if (pojo instanceof ObjectAdapter) {
             throw new IsisException("Adapter can't be used to adapt an adapter: " + pojo);
         }
@@ -76,38 +81,14 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
         resolveState = ResolveState.NEW;
     }
 
-    @Override
-    protected void finalize() throws Throwable {
-        super.finalize();
-        if (LOG.isDebugEnabled()) {
-
-            // be careful not to touch the pojo
-            // this method is called by the FinalizerThread so could be called
-            // at any time.
-            // for Hibernate-based object stores (and similar), it may no longer
-            // be valid to
-            // touch the pojo (although arguably, closing the session should
-            // detach these pojos)
-
-            // we also mustn't touch the adapter's specification. That's because
-            // the loading
-            // of specifications isn't threadsafe, due to the way in which we
-            // put non-introspected
-            // specifications into the SpecificationCache to prevent infinite
-            // loops.
-
-            // better safe than sorry, though
-            // LOG.debug("finalizing pojo, oid: " + getOid());
-        }
-    }
-
+    
     // ///////////////////////////////////////////////////////////////////
     // Specification
     // ///////////////////////////////////////////////////////////////////
 
     @Override
     protected ObjectSpecification loadSpecification() {
-        final ObjectSpecification specification = getReflector().loadSpecification(getObject().getClass());
+        final ObjectSpecification specification = specificationLoader.loadSpecification(getObject().getClass());
         this.defaultTitle = "A" + (" " + specification.getSingularName()).toLowerCase();
         return specification;
     }
@@ -116,9 +97,8 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
      * Downcasts {@link #getSpecification()}.
      */
     @Override
-    public final ObjectSpecification getSpecification() {
-        final ObjectSpecification specification = (ObjectSpecification) super.getSpecification();
-        return specification;
+    public ObjectSpecification getSpecification() {
+        return (ObjectSpecification) super.getSpecification();
     }
 
     // ///////////////////////////////////////////////////////////////////
@@ -140,22 +120,29 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
         this.pojo = pojo;
     }
 
+
     // ///////////////////////////////////////////////////////////////////
     // ResolveState, changeState
     // ///////////////////////////////////////////////////////////////////
 
     @Override
     public ResolveState getResolveState() {
+        if(isAggregated()) {
+            // 
+            return getParentAdapter().getResolveState();
+        }
+        // collection adapters have their own resolve state, independent of their parent
         return resolveState;
     }
+
+
 
     @Override
     public void changeState(final ResolveState newState) {
 
         final boolean validToChangeTo = resolveState.isValidToChangeTo(newState);
         // don't call toString() since that could hit titleString() and we might
-        // be
-        // in the process of transitioning to ghost
+        // be in the process of transitioning to ghost
         Assert.assertTrue("oid= " + this.getOid() + "; can't change from " + resolveState.name() + " to " + newState.name(), validToChangeTo);
 
         if (LOG.isTraceEnabled()) {
@@ -188,6 +175,9 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
      */
     @Override
     public boolean isPersistent() {
+        if(isParented()) {
+            
+        }
         return getResolveState().isPersistent();
     }
 
@@ -211,45 +201,83 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
         return oid;
     }
 
-    protected void setOid(final Oid oid) {
-        Ensure.ensureThatArg(oid, is(notNullValue()));
-        this.oid = oid;
+    @Override
+    public void replaceOid(Oid persistedOid) {
+        Ensure.ensureThatArg(oid, is(notNullValue())); // values have no oid, so cannot be replaced 
+        this.oid = persistedOid;
+    }
+
+    @Override
+    public boolean isParented() {
+        return oid instanceof ParentedOid;
     }
 
     @Override
     public boolean isAggregated() {
-        return getOid() instanceof AggregatedOid;
+        return oid instanceof AggregatedOid;
     }
 
     @Override
-    public ObjectAdapter getAggregateRoot() {
-        if (getSpecification().isAggregated()) {
-            final Oid parentOid = ((AggregatedOid) this.getOid()).getParentOid();
-            return getAdapterManager().getAdapterFor(parentOid);
-        } else {
-            return this;
-        }
+    public boolean isValue() {
+        return oid == null;
     }
 
+    @Override
+    public ObjectAdapter getAggregateRoot(ObjectAdapterLookup objectAdapterLookup) {
+        if (!getSpecification().isAggregated()) {
+            return this;
+        } 
+        final AggregatedOid aggregatedOid = (AggregatedOid) this.getOid();
+        final Oid parentOid = aggregatedOid.getParentOid();
+        return objectAdapterLookup.getAdapterFor(parentOid);
+    }
+    
+    private ObjectAdapter getParentAdapter() {
+        if(!isParented()) {
+            throw new IllegalStateException("This adapter is not parented (it's OID is not of type ParentedOid); oid:" + oid);
+        }
+        ParentedOid parentedOid = (ParentedOid) oid;
+        final Oid parentOid = parentedOid.getParentOid();
+        final ObjectAdapter parentAdapter = objectAdapterLookup.getAdapterFor(parentOid);
+        return parentAdapter;
+    }
+
+    
+
     // ///////////////////////////////////////////////////////////////////
-    // Version
+    // Version 
+    // (nb: delegates to parent if parented)
     // ///////////////////////////////////////////////////////////////////
 
     @Override
     public Version getVersion() {
-        return version;
+        if(isParented()) {
+            final ObjectAdapter parentAdapter = getParentAdapter();
+            return parentAdapter.getVersion();
+        } else {
+            return version;
+        }
     }
+
 
     @Override
     public void checkLock(final Version version) {
-        if (this.version != null && this.version.different(version)) {
-            LOG.info("concurrency conflict on " + this + " (" + version + ")");
-            throw new ConcurrencyException(this, version);
+        if(isParented()) {
+            getParentAdapter().checkLock(version);
+        } else {
+            if (this.version != null && this.version.different(version)) {
+                LOG.info("concurrency conflict on " + this + " (" + version + ")");
+                throw new ConcurrencyException(this, version);
+            }
         }
     }
 
     @Override
-    public void setOptimisticLock(final Version version) {
+    public void setVersion(final Version version) {
+        if(isParented()) {
+            // ignored
+            return;
+        }
         if (shouldSetVersion(version)) {
             this.version = version;
         }
@@ -287,26 +315,29 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
         final ResolveState resolveState = getResolveState();
         if (resolveState.isNew()) {
             return "";
-        } else {
-            if (getObject() instanceof String) {
-                return (String) getObject();
-            }
-            final ObjectSpecification specification = getSpecification();
-            final Localization localization = getLocalization();
-            String title = specification.getTitle(this, localization);
-            if (title == null) {
-                if (resolveState.isGhost()) {
-                    if (LOG.isInfoEnabled()) {
-                        LOG.info("attempting to use unresolved object; resolving it immediately: oid=" + this.getOid());
-                    }
-                    getObjectPersistor().resolveImmediately(this);
-                }
-            }
-            if (title == null) {
-                title = getDefaultTitle();
-            }
-            return title;
+        } 
+        if (getObject() instanceof String) {
+            return (String) getObject();
         }
+        final ObjectSpecification specification = getSpecification();
+        String title = specification.getTitle(this, localization);
+        
+        // looking at the implementation of the preceding code, this can never happen;
+        // and removing it means we can get rid of the dependency on PersistenceSession.
+        
+//        if (title == null) {
+//            if (resolveState.isGhost()) {
+//                if (LOG.isInfoEnabled()) {
+//                    LOG.info("attempting to use unresolved object; resolving it immediately: oid=" + this.getOid());
+//                }
+//                getPersistenceSession().resolveImmediately(this);
+//            }
+//        }
+        
+        if (title == null) {
+            title = getDefaultTitle();
+        }
+        return title;
     }
 
     private String collectionTitleString(final CollectionFacet facet) {
@@ -430,28 +461,8 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
     public void fireChangedEvent() {
     }
 
-    // ///////////////////////////////////////////////////////////////////
-    // Dependencies (from context)
-    // ///////////////////////////////////////////////////////////////////
 
-    protected Localization getLocalization() {
-        return IsisContext.getLocalization();
-    }
 
-    private SpecificationLoader getReflector() {
-        return IsisContext.getSpecificationLoader();
-    }
 
-    private PersistenceSession getObjectPersistor() {
-        return IsisContext.getPersistenceSession();
-    }
-
-    protected AdapterManager getAdapterManager() {
-        return getPersistenceSession().getAdapterManager();
-    }
-
-    protected PersistenceSession getPersistenceSession() {
-        return IsisContext.getPersistenceSession();
-    }
 
 }

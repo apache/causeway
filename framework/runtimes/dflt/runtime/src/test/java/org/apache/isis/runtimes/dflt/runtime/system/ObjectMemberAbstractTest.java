@@ -25,8 +25,8 @@ import static org.junit.Assert.assertTrue;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
-import org.junit.After;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
@@ -53,35 +53,35 @@ import org.apache.isis.core.progmodel.facets.members.hide.HiddenFacetNever;
 import org.apache.isis.core.progmodel.facets.members.hide.HideForContextFacetNone;
 import org.apache.isis.core.progmodel.facets.members.hide.HideForSessionFacetAbstract;
 import org.apache.isis.core.progmodel.facets.members.hide.staticmethod.HiddenFacetAlways;
-import org.apache.isis.runtimes.dflt.runtime.testsystem.TestProxySystem;
+import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2;
+import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2.Mode;
+import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.PojoAdapterBuilder;
+import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.PojoAdapterBuilder.Persistence;
 
 public class ObjectMemberAbstractTest {
 
-    private TestProxySystem system;
+    @Rule
+    public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
+    
     private ObjectMemberAbstractImpl testMember;
-    private ObjectAdapter testAdapter;
-
+    
+    private ObjectAdapter persistentAdapter;
+    private ObjectAdapter transientAdapter;
+    
     @Before
     public void setUp() throws Exception {
         Logger.getRootLogger().setLevel(Level.OFF);
 
-        system = new TestProxySystem();
-        system.init();
-
-        testAdapter = system.createPersistentTestObject();
+        persistentAdapter = PojoAdapterBuilder.create().build();
+        transientAdapter = PojoAdapterBuilder.create().with(Persistence.TRANSIENT).build();
 
         testMember = new ObjectMemberAbstractImpl("id");
     }
 
-    @After
-    public void tearDown() throws Exception {
-
-    }
 
     @Test
     public void testToString() throws Exception {
-        testMember.addFacet(new NamedFacetAbstract("", testMember) {
-        });
+        testMember.addFacet(new NamedFacetAbstract("", testMember) {});
         assertTrue(testMember.toString().length() > 0);
     }
 
@@ -93,7 +93,7 @@ public class ObjectMemberAbstractTest {
                 return null;
             }
         });
-        final Consent usable = testMember.isUsable(null, testAdapter);
+        final Consent usable = testMember.isUsable(null, persistentAdapter);
         final boolean allowed = usable.isAllowed();
         assertTrue(allowed);
     }
@@ -107,7 +107,7 @@ public class ObjectMemberAbstractTest {
                 return null;
             }
         });
-        final Consent visible = testMember.isVisible(null, testAdapter);
+        final Consent visible = testMember.isVisible(null, persistentAdapter);
         assertTrue(visible.isAllowed());
     }
 
@@ -115,14 +115,14 @@ public class ObjectMemberAbstractTest {
     public void testVisibleWhenTargetPersistentAndHiddenFacetSetToOncePersisted() {
         testMember.addFacet(new HideForContextFacetNone(testMember));
         testMember.addFacet(new HiddenFacetImpl(When.ONCE_PERSISTED, testMember));
-        assertFalse(testMember.isVisible(null, testAdapter).isAllowed());
+        assertFalse(testMember.isVisible(null, persistentAdapter).isAllowed());
     }
 
     @Test
     public void testVisibleWhenTargetPersistentAndHiddenFacetSetToUntilPersisted() {
         testMember.addFacet(new HideForContextFacetNone(testMember));
         testMember.addFacet(new HiddenFacetImpl(When.UNTIL_PERSISTED, testMember));
-        final Consent visible = testMember.isVisible(null, testAdapter);
+        final Consent visible = testMember.isVisible(null, persistentAdapter);
         assertTrue(visible.isAllowed());
     }
 
@@ -130,27 +130,28 @@ public class ObjectMemberAbstractTest {
     public void testVisibleWhenTargetTransientAndHiddenFacetSetToUntilPersisted() {
         testMember.addFacet(new HideForContextFacetNone(testMember));
         testMember.addFacet(new HiddenFacetImpl(When.UNTIL_PERSISTED, testMember));
-        final ObjectAdapter transientTestAdapter = system.createTransientTestObject();
-        assertFalse(testMember.isVisible(null, transientTestAdapter).isAllowed());
+        
+        final Consent visible = testMember.isVisible(null, transientAdapter);
+        assertFalse(visible.isAllowed());
     }
 
     @Test
     public void testVisibleDeclarativelyByDefault() {
         testMember.addFacet(new HiddenFacetNever(testMember) {
         });
-        assertTrue(testMember.isVisible(null, testAdapter).isAllowed());
+        assertTrue(testMember.isVisible(null, persistentAdapter).isAllowed());
     }
 
     @Test
     public void testVisibleDeclaratively() {
         testMember.addFacet(new HiddenFacetAlways(testMember) {
         });
-        assertFalse(testMember.isVisible(null, testAdapter).isAllowed());
+        assertFalse(testMember.isVisible(null, persistentAdapter).isAllowed());
     }
 
     @Test
     public void testVisibleForSessionByDefault() {
-        final Consent visible = testMember.isVisible(null, testAdapter);
+        final Consent visible = testMember.isVisible(null, persistentAdapter);
         assertTrue(visible.isAllowed());
     }
 
@@ -162,7 +163,7 @@ public class ObjectMemberAbstractTest {
                 return "Hidden";
             }
         });
-        assertFalse(testMember.isVisible(null, testAdapter).isAllowed());
+        assertFalse(testMember.isVisible(null, persistentAdapter).isAllowed());
     }
 
     @Test
@@ -173,7 +174,7 @@ public class ObjectMemberAbstractTest {
                 return "hidden";
             }
         });
-        assertFalse(testMember.isVisible(null, testAdapter).isAllowed());
+        assertFalse(testMember.isVisible(null, persistentAdapter).isAllowed());
     }
 
     @Test

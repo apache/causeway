@@ -20,6 +20,7 @@
 package org.apache.isis.runtimes.embedded.internal;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapterLookup;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.version.Version;
@@ -94,13 +95,6 @@ public class StandaloneAdapter implements ObjectAdapter {
         return persistenceState.isTransient();
     }
 
-    /**
-     * Always returns <tt>null</tt>.
-     */
-    @Override
-    public ObjectAdapter getOwner() {
-        return null;
-    }
 
     @Override
     public String titleString() {
@@ -155,9 +149,7 @@ public class StandaloneAdapter implements ObjectAdapter {
     }
 
     /**
-     * Not supported, always throws an exception.
-     * 
-     * @throws UnsupportedOperationException
+     * Not supported, does nothing.
      */
     @Override
     public Oid getOid() {
@@ -165,12 +157,24 @@ public class StandaloneAdapter implements ObjectAdapter {
     }
 
     /**
-     * Not supported, always throws an exception.
-     * 
-     * @throws UnsupportedOperationException
+     * No-op, since have no {@link Oid}s.
      */
     @Override
+    public void replaceOid(Oid persistedOid) {
+    }
+
+    @Override
+    public boolean isParented() {
+        return false;
+    }
+
+    @Override
     public boolean isAggregated() {
+        return false;
+    }
+
+    @Override
+    public boolean isValue() {
         return false;
     }
 
@@ -220,7 +224,7 @@ public class StandaloneAdapter implements ObjectAdapter {
      * @throws UnsupportedOperationException
      */
     @Override
-    public void setOptimisticLock(final Version version) {
+    public void setVersion(final Version version) {
         throw new UnsupportedOperationException();
     }
 
@@ -235,8 +239,10 @@ public class StandaloneAdapter implements ObjectAdapter {
     }
 
     @Override
-    public ObjectAdapter getAggregateRoot() {
+    public ObjectAdapter getAggregateRoot(ObjectAdapterLookup objectAdapterLookup) {
         throw new UnsupportedOperationException();
     }
+
+
 
 }

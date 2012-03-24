@@ -22,12 +22,25 @@ package org.apache.isis.core.progmodel.facets;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
+import org.jmock.Expectations;
+import org.jmock.auto.Mock;
+import org.junit.Rule;
 import org.junit.Test;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectAdapterUtils;
+import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2;
+import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2.Mode;
 
 public class ObjectAdapterUtilsTest {
+
+    @Rule
+    public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_ONLY);
+
+    @Mock
+    private ObjectAdapter mockObjectAdapter;
+
+    private Object underlyingDomainObject;
 
     @Test
     public void testUnwrapObjectWhenNull() {
@@ -36,16 +49,9 @@ public class ObjectAdapterUtilsTest {
 
     @Test
     public void testUnwrapObjectWhenNotNull() {
-        final Object underlyingDomainObject = new Object();
-        final ObjectAdapter adapter = new ObjectNoop() {
-            @Override
-            public Object getObject() {
-                return underlyingDomainObject;
-            }
-
-        };
-
-        assertEquals(underlyingDomainObject, ObjectAdapterUtils.unwrapObject(adapter));
+        underlyingDomainObject = new Object(); 
+        expectAdapterWillReturn(underlyingDomainObject);
+        assertEquals(underlyingDomainObject, ObjectAdapterUtils.unwrapObject(mockObjectAdapter));
     }
 
     @Test
@@ -55,26 +61,26 @@ public class ObjectAdapterUtilsTest {
 
     @Test
     public void testUnwrapStringWhenNotNullButNotString() {
-        final Object underlyingDomainObject = new Object();
-        final ObjectAdapter adapter = new ObjectNoop() {
-            @Override
-            public Object getObject() {
-                return underlyingDomainObject;
-            }
-        };
-        assertNull(ObjectAdapterUtils.unwrapString(adapter));
+        underlyingDomainObject = new Object(); 
+        expectAdapterWillReturn(underlyingDomainObject);
+        assertNull(ObjectAdapterUtils.unwrapString(mockObjectAdapter));
     }
 
     @Test
     public void testUnwrapStringWhenNotNullAndString() {
-        final String underlyingDomainObject = "huzzah";
-        final ObjectAdapter adapter = new ObjectNoop() {
-            @Override
-            public Object getObject() {
-                return underlyingDomainObject;
-            }
-        };
-        assertEquals("huzzah", ObjectAdapterUtils.unwrapString(adapter));
+        underlyingDomainObject = "huzzah";
+        expectAdapterWillReturn(underlyingDomainObject);
+        assertEquals("huzzah", ObjectAdapterUtils.unwrapString(mockObjectAdapter));
     }
+
+    private void expectAdapterWillReturn(final Object domainObject) {
+        context.checking(new Expectations() {
+            {
+                allowing(mockObjectAdapter).getObject();
+                will(returnValue(domainObject));
+            }
+        });
+    }
+    
 
 }

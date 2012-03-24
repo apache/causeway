@@ -29,8 +29,8 @@ import org.jmock.lib.legacy.ClassImposteriser;
 import org.junit.Before;
 import org.junit.Test;
 
-import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.simple.SimpleOidGenerator;
-import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.simple.SimpleOidGenerator.Memento;
+import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.serial.RootOidGenerator;
+import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.serial.RootOidGenerator.Memento;
 
 public class ObjectStorePersistedObjectsDefault_savesOidGeneratorAsMemento {
 
@@ -42,12 +42,12 @@ public class ObjectStorePersistedObjectsDefault_savesOidGeneratorAsMemento {
         }
     };
 
-    private SimpleOidGenerator.Memento mockMemento;
+    private RootOidGenerator.Memento mockMemento;
 
     @Before
     public void setUp() throws Exception {
         persistedObjects = new ObjectStorePersistedObjectsDefault();
-        mockMemento = context.mock(SimpleOidGenerator.Memento.class);
+        mockMemento = context.mock(RootOidGenerator.Memento.class);
     }
 
     @Test

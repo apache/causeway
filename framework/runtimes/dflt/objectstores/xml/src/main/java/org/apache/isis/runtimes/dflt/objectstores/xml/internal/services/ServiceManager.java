@@ -19,14 +19,14 @@
 
 package org.apache.isis.runtimes.dflt.objectstores.xml.internal.services;
 
-import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 
 public interface ServiceManager {
 
     void loadServices();
 
-    void registerService(String name, Oid oid);
+    void registerService(RootOid rootOid);
 
-    Oid getOidForService(String name);
+    RootOid getOidForService(String objectType);
 
 }

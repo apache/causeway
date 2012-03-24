@@ -29,6 +29,7 @@ import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProviderAbstract;
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.adapter.DomainObjectServices;
 import org.apache.isis.core.metamodel.adapter.DomainObjectServicesAbstract;
 import org.apache.isis.core.metamodel.adapter.LocalizationProvider;
@@ -55,7 +56,6 @@ import org.apache.isis.core.metamodel.spec.ObjectInstantiationException;
 import org.apache.isis.core.metamodel.spec.ObjectInstantiator;
 import org.apache.isis.core.metamodel.spec.ObjectInstantiatorAbstract;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification.CreationMode;
 import org.apache.isis.runtimes.embedded.EmbeddedContext;
 import org.apache.isis.runtimes.embedded.PersistenceState;
 
@@ -109,14 +109,14 @@ public class RuntimeContextForEmbeddedMetaModel extends RuntimeContextAbstract i
             }
 
             @Override
-            public ObjectAdapter adapterFor(final Object domainObject, final ObjectAdapter ownerAdapter, final IdentifiedHolder identifiedHolder) {
+            public ObjectAdapter adapterFor(final Object domainObject, final ObjectAdapter ownerAdapter) {
                 return adapterFor(domainObject);
             }
 
             @Override
-            public ObjectAdapter adapterForAggregated(final Object domainObject, final ObjectAdapter parent) {
+            public ObjectAdapter adapterFor(final Object domainObject, final ObjectAdapter ownerAdapter, final ObjectAssociation association) {
                 return adapterFor(domainObject);
-            };
+            }
 
             @Override
             public ObjectAdapter getAdapterFor(final Object domainObject) {
@@ -169,8 +169,9 @@ public class RuntimeContextForEmbeddedMetaModel extends RuntimeContextAbstract i
 
             @Override
             public ObjectAdapter createTransientInstance(final ObjectSpecification spec) {
-                final Object domainObject = spec.createObject(CreationMode.INITIALIZE);
-                return adapterMap.adapterFor(domainObject);
+                final Object domainObject = spec.createObject();
+                final ObjectAdapter adapter = adapterMap.adapterFor(domainObject);
+                return spec.initialize(adapter);
             }
 
             @Override

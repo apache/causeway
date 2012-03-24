@@ -21,46 +21,57 @@ package org.apache.isis.runtimes.dflt.objectstores.nosql;
 
 import static org.junit.Assert.assertEquals;
 
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
+import org.jmock.auto.Mock;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.runtimes.dflt.objectstores.dflt.testsystem.TestProxySystemII;
-import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.simple.SerialOid;
-import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
+import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2;
+import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2.Mode;
+import org.apache.isis.runtimes.dflt.objectstores.nosql.keys.KeyCreatorDefault;
+import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.serial.RootOidDefault;
+import org.apache.isis.runtimes.dflt.testsupport.domain.ExamplePojoRepository;
+import org.apache.isis.runtimes.dflt.testsupport.domain.ExamplePojoWithReferences;
+import org.apache.isis.runtimes.embedded.EmbeddedContext;
+import org.apache.isis.runtimes.embedded.IsisMetaModel;
 
 public class NoSqlKeyCreatorTest {
 
-    private final int id = 3;
-    private final String reference = ExampleReferencePojo.class.getName() + "@" + id;
-    private final NoSqlOid oid3 = new NoSqlOid(ExampleReferencePojo.class.getName(), SerialOid.createPersistent(id));
+    @Rule
+    public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
+
+    private final String id = ""+3;
+    private final String reference = ExamplePojoWithReferences.class.getName() + "@" + id;
+    private final RootOidDefault oid3 = RootOidDefault.create("ERP", id);
     
     private ObjectSpecification specification;
     
-    private NoSqlKeyCreator noSqlKeyCreator;
+    private KeyCreatorDefault keyCreatorDefault;
+
+    private IsisMetaModel isisMetaModel;
+
+    @Mock
+    private EmbeddedContext mockEmbeddedContext;
 
     @Before
     public void setup() {
-        Logger.getRootLogger().setLevel(Level.OFF);
-        final TestProxySystemII system = new TestProxySystemII();
-        system.init();
-        specification = IsisContext.getSpecificationLoader().loadSpecification(ExampleReferencePojo.class);
+        isisMetaModel = new IsisMetaModel(mockEmbeddedContext, new ExamplePojoRepository());
+        specification = isisMetaModel.getSpecificationLoader().loadSpecification(ExamplePojoWithReferences.class);
 
-        noSqlKeyCreator = new NoSqlKeyCreator();
+        keyCreatorDefault = new KeyCreatorDefault();
     }
 
     @Test
     public void oid() throws Exception {
-        final NoSqlOid oid = (NoSqlOid) noSqlKeyCreator.oidFromReference(reference);
-        assertEquals(oid3.getSerialNo(), oid.getSerialNo());
-        assertEquals(oid3.getClassName(), oid.getClassName());
+        final RootOidDefault oid = (RootOidDefault) keyCreatorDefault.oidFromReference(reference);
+        assertEquals(oid3.getIdentifier(), oid.getIdentifier());
+        assertEquals(oid3.getObjectType(), oid.getObjectType());
     }
 
     @Test
     public void specification() throws Exception {
-        final ObjectSpecification spec = noSqlKeyCreator.specificationFromReference(reference);
+        final ObjectSpecification spec = keyCreatorDefault.specificationFromReference(reference);
         assertEquals(specification, spec);
     }
 }

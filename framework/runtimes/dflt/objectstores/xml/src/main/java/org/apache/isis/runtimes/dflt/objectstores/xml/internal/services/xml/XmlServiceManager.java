@@ -21,8 +21,9 @@ package org.apache.isis.runtimes.dflt.objectstores.xml.internal.services.xml;
 
 import java.io.IOException;
 import java.io.Writer;
-import java.util.Enumeration;
-import java.util.Vector;
+import java.util.List;
+
+import com.google.common.collect.Lists;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
@@ -31,55 +32,24 @@ import org.xml.sax.helpers.DefaultHandler;
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.xml.ContentWriter;
 import org.apache.isis.core.commons.xml.XmlFile;
-import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.runtimes.dflt.objectstores.xml.internal.services.ServiceManager;
-import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.simple.SerialOid;
+import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.serial.RootOidDefault;
 
-class ServiceElement {
-    final SerialOid oid;
-    final String id;
-
-    public ServiceElement(final SerialOid oid, final String id) {
-        Assert.assertNotNull("oid", oid);
-        Assert.assertNotNull("id", id);
-        this.oid = oid;
-        this.id = id;
-    }
-}
-
-class ServiceHandler extends DefaultHandler {
-    Vector services = new Vector();
-
-    @Override
-    public void startElement(final String ns, final String name, final String tagName, final Attributes attrs) throws SAXException {
-        if (tagName.equals("service")) {
-            final long oid = Long.valueOf(attrs.getValue("oid"), 16).longValue();
-            final String id = attrs.getValue("id");
-            final ServiceElement service = new ServiceElement(SerialOid.createPersistent(oid), id);
-            services.addElement(service);
-        }
-    }
-
-}
 
 public class XmlServiceManager implements ServiceManager {
     private static final String SERVICES_FILE_NAME = "services";
-    private Vector services;
+    private List<ServiceElement> services;
     private final XmlFile xmlFile;
 
     public XmlServiceManager(final XmlFile xmlFile) {
         this.xmlFile = xmlFile;
     }
 
-    private String encodedOid(final SerialOid oid) {
-        return Long.toHexString(oid.getSerialNo()).toUpperCase();
-    }
-
     @Override
-    public Oid getOidForService(final String name) {
-        for (final Enumeration e = services.elements(); e.hasMoreElements();) {
-            final ServiceElement element = (ServiceElement) e.nextElement();
-            if (element.id.equals(name)) {
+    public RootOid getOidForService(final String objectType) {
+        for (final ServiceElement element: services) {
+            if (element.oid.getObjectType().equals(objectType)) {
                 return element.oid;
             }
         }
@@ -94,10 +64,10 @@ public class XmlServiceManager implements ServiceManager {
     }
 
     @Override
-    public void registerService(final String name, final Oid oid) {
-        final SerialOid soid = (SerialOid) oid;
-        final ServiceElement element = new ServiceElement(soid, name);
-        services.addElement(element);
+    public void registerService(final RootOid rootOid) {
+        final RootOidDefault soid = (RootOidDefault) rootOid;
+        final ServiceElement element = new ServiceElement(soid);
+        services.add(element);
         saveServices();
     }
 
@@ -107,16 +77,39 @@ public class XmlServiceManager implements ServiceManager {
             public void write(final Writer writer) throws IOException {
                 final String tag = SERVICES_FILE_NAME;
                 writer.append("<" + tag + ">\n");
-                for (final Enumeration e = services.elements(); e.hasMoreElements();) {
-                    final ServiceElement element = (ServiceElement) e.nextElement();
-                    writer.append("  <service oid=\"");
-                    writer.append(encodedOid(element.oid));
-                    writer.append("\" id=\"");
-                    writer.append(element.id);
+                for (final ServiceElement element: services) {
+                    writer.append("  <service");
+                    writer.append("\" objectType=\"");
+                    writer.append(element.oid.getObjectType());
+                    writer.append(" id=\"");
+                    writer.append(element.oid.getIdentifier());
                     writer.append("\" />\n");
                 }
                 writer.append("</" + tag + ">\n");
             }
         });
+    }
+}
+
+class ServiceElement {
+    final RootOidDefault oid;
+
+    public ServiceElement(final RootOidDefault oid) {
+        Assert.assertNotNull("oid", oid.enString());
+        this.oid = oid;
+    }
+}
+
+class ServiceHandler extends DefaultHandler {
+    List<ServiceElement> services = Lists.newArrayList();
+
+    @Override
+    public void startElement(final String ns, final String name, final String tagName, final Attributes attrs) throws SAXException {
+        if (tagName.equals("service")) {
+            final String objectType = attrs.getValue("objectType");
+            final String identifier = attrs.getValue("id");
+            final ServiceElement service = new ServiceElement(RootOidDefault.create(objectType, identifier));
+            services.add(service);
+        }
     }
 }

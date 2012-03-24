@@ -19,16 +19,12 @@
 
 package org.apache.isis.runtimes.dflt.objectstores.xml;
 
-import org.apache.log4j.Logger;
-
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterFactory;
-import org.apache.isis.runtimes.dflt.objectstores.xml.internal.adapter.XmlAdapterManager;
 import org.apache.isis.runtimes.dflt.objectstores.xml.internal.clock.DefaultClock;
 import org.apache.isis.runtimes.dflt.runtime.installerregistry.installerapi.ObjectStorePersistenceMechanismInstallerAbstract;
-import org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager.AdapterManagerExtended;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.ObjectStore;
-import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.timebased.TimeBasedOidGenerator;
+import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.serial.RootOidGeneratorSeededOnCurrentTime;
 import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.OidGenerator;
@@ -36,12 +32,12 @@ import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessi
 
 public class XmlPersistenceMechanismInstaller extends ObjectStorePersistenceMechanismInstallerAbstract {
 
-    @SuppressWarnings("unused")
-    private static final Logger LOG = Logger.getLogger(XmlPersistenceMechanismInstaller.class);
+    public static final String NAME = "xml";
+    
     private XmlObjectStore objectStore;
 
     public XmlPersistenceMechanismInstaller() {
-        super("xml");
+        super(NAME);
     }
 
     @Override
@@ -54,13 +50,8 @@ public class XmlPersistenceMechanismInstaller extends ObjectStorePersistenceMech
     }
 
     @Override
-    protected AdapterManagerExtended createAdapterManager(final IsisConfiguration configuration) {
-        return new XmlAdapterManager();
-    }
-
-    @Override
     protected OidGenerator createOidGenerator(final IsisConfiguration configuration) {
-        return new TimeBasedOidGenerator();
+        return new RootOidGeneratorSeededOnCurrentTime();
     }
 
     @Override

@@ -51,6 +51,7 @@ import org.apache.isis.core.metamodel.spec.ObjectInstantiationException;
 import org.apache.isis.core.metamodel.spec.ObjectInstantiator;
 import org.apache.isis.core.metamodel.spec.ObjectInstantiatorAbstract;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.runtimes.dflt.runtime.persistence.container.DomainObjectContainerObjectChanged;
 import org.apache.isis.runtimes.dflt.runtime.persistence.container.DomainObjectContainerResolve;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
@@ -103,13 +104,13 @@ public class RuntimeContextFromSession extends RuntimeContextAbstract {
             }
 
             @Override
-            public ObjectAdapter adapterForAggregated(final Object domainObject, final ObjectAdapter parent) {
-                return getRuntimeAdapterManager().adapterForAggregated(domainObject, parent);
-            };
+            public ObjectAdapter adapterFor(final Object pojo, final ObjectAdapter ownerAdapter) {
+                return getRuntimeAdapterManager().adapterFor(pojo, ownerAdapter);
+            }
 
             @Override
-            public ObjectAdapter adapterFor(final Object pojo, final ObjectAdapter ownerAdapter, final IdentifiedHolder identifiedHolder) {
-                return getRuntimeAdapterManager().adapterFor(pojo, ownerAdapter, identifiedHolder);
+            public ObjectAdapter adapterFor(final Object pojo, final ObjectAdapter ownerAdapter, final ObjectAssociation association) {
+                return getRuntimeAdapterManager().adapterFor(pojo, ownerAdapter, association);
             }
         };
         this.objectInstantiator = new ObjectInstantiatorAbstract() {
@@ -159,7 +160,7 @@ public class RuntimeContextFromSession extends RuntimeContextAbstract {
 
             @Override
             public ObjectAdapter createAggregatedInstance(final ObjectSpecification spec, final ObjectAdapter parent) {
-                return getPersistenceSession().createAggregatedInstance(spec, parent);
+                return getPersistenceSession().createInstance(spec, parent);
             };
 
             @Override

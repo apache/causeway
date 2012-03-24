@@ -24,6 +24,7 @@ import java.util.List;
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.CreateObjectCommand;
@@ -166,13 +167,13 @@ public abstract class IsisStoreDelegating implements ObjectStore {
     // ////////////////////////////////////////////////
 
     @Override
-    public Oid getOidForService(ObjectSpecification serviceSpecification, final String name) {
-        return underlying.getOidForService(serviceSpecification, name);
+    public RootOid getOidForService(ObjectSpecification serviceSpecification) {
+        return underlying.getOidForService(serviceSpecification);
     }
 
     @Override
-    public void registerService(final String name, final Oid oid) {
-        underlying.registerService(name, oid);
+    public void registerService(final RootOid rootOid) {
+        underlying.registerService(rootOid);
     }
 
     // ////////////////////////////////////////////////

@@ -86,7 +86,7 @@ public class ParseableFacetFactory extends AnnotationBasedFacetFactoryAbstract i
      * Injected since {@link IsisConfigurationAware}.
      */
     @Override
-    public void setIsisConfiguration(final IsisConfiguration configuration) {
+    public void setConfiguration(final IsisConfiguration configuration) {
         this.configuration = configuration;
     }
 

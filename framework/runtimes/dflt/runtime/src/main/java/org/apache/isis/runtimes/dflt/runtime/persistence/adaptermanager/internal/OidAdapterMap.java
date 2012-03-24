@@ -42,9 +42,11 @@ public interface OidAdapterMap extends DebuggableWithTitle, Iterable<Oid>, Sessi
      */
     public boolean remove(final Oid oid);
 
+
     /**
      * Get the adapter identified by the specified OID.
      */
     public ObjectAdapter getAdapter(final Oid oid);
+
 
 }

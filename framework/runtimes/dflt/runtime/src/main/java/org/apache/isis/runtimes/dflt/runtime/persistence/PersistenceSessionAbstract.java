@@ -25,7 +25,6 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -42,7 +41,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterFactory;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
-import org.apache.isis.core.metamodel.adapter.oid.stringable.directly.OidWithSpecification;
+import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacetUtils;
 import org.apache.isis.core.metamodel.services.ServiceUtil;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
@@ -52,7 +51,6 @@ import org.apache.isis.core.metamodel.services.container.query.QueryFindByTitle;
 import org.apache.isis.core.metamodel.spec.Dirtiable;
 import org.apache.isis.core.metamodel.spec.ObjectList;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification.CreationMode;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager.AdapterManagerExtended;
 import org.apache.isis.runtimes.dflt.runtime.persistence.internal.RuntimeContextFromSession;
@@ -95,7 +93,7 @@ public abstract class PersistenceSessionAbstract implements PersistenceSession {
 
     private State state;
 
-    public PersistenceSessionAbstract(final PersistenceSessionFactory persistenceSessionFactory, final ObjectAdapterFactory adapterFactory, final ObjectFactory objectFactory, final ServicesInjector servicesInjector, final OidGenerator oidGenerator, final AdapterManagerExtended identityMap) {
+    public PersistenceSessionAbstract(final PersistenceSessionFactory persistenceSessionFactory, final ObjectAdapterFactory adapterFactory, final ObjectFactory objectFactory, final ServicesInjector servicesInjector, final OidGenerator oidGenerator, final AdapterManagerExtended adapterManager) {
 
         ensureThatArg(persistenceSessionFactory, is(not(nullValue())), "persistence session factory required");
 
@@ -103,7 +101,7 @@ public abstract class PersistenceSessionAbstract implements PersistenceSession {
         ensureThatArg(objectFactory, is(not(nullValue())), "object factory required");
         ensureThatArg(servicesInjector, is(not(nullValue())), "services injector required");
         ensureThatArg(oidGenerator, is(not(nullValue())), "OID generator required");
-        ensureThatArg(identityMap, is(not(nullValue())), "identity map required");
+        ensureThatArg(adapterManager, is(not(nullValue())), "adapter manager required");
 
         // owning, application scope
         this.persistenceSessionFactory = persistenceSessionFactory;
@@ -113,7 +111,7 @@ public abstract class PersistenceSessionAbstract implements PersistenceSession {
         this.objectFactory = objectFactory;
         this.servicesInjector = servicesInjector;
         this.oidGenerator = oidGenerator;
-        this.adapterManager = identityMap;
+        this.adapterManager = adapterManager;
 
         setState(State.NOT_INITIALIZED);
     }
@@ -231,26 +229,25 @@ public abstract class PersistenceSessionAbstract implements PersistenceSession {
         for (final Object service : servicesInjector.getRegisteredServices()) {
             final ObjectSpecification serviceSpecification = specificationLoader.loadSpecification(service.getClass());
             serviceSpecification.markAsService();
-            final String serviceId = ServiceUtil.id(service);
-            final Oid existingOid = getOidForService(serviceSpecification, serviceId);
-            ObjectAdapter adapter;
+            final RootOid existingOid = getOidForService(serviceSpecification);
+            ObjectAdapter serviceAdapter;
             if (existingOid == null) {
-                adapter = getAdapterManager().adapterFor(service);
+                serviceAdapter = getAdapterManager().adapterFor(service);
             } else {
-                adapter = getAdapterManager().recreateRootAdapter(existingOid, service);
+                serviceAdapter = getAdapterManager().recreateAdapter(existingOid, service);
             }
 
-            if (adapter.getOid().isTransient()) {
-                adapterManager.remapAsPersistent(adapter);
+            if (serviceAdapter.getOid().isTransient()) {
+                adapterManager.remapAsPersistent(serviceAdapter);
             }
 
-            if (adapter.getResolveState().canChangeTo(ResolveState.RESOLVING)) {
-                adapter.changeState(ResolveState.RESOLVING);
-                adapter.changeState(ResolveState.RESOLVED);
+            if (serviceAdapter.getResolveState().canChangeTo(ResolveState.RESOLVING)) {
+                serviceAdapter.changeState(ResolveState.RESOLVING);
+                serviceAdapter.changeState(ResolveState.RESOLVED);
             }
             if (existingOid == null) {
-                final Oid persistentOid = adapter.getOid();
-                registerService(serviceId, persistentOid);
+                final RootOid persistentOid = (RootOid) serviceAdapter.getOid();
+                registerService(persistentOid);
             }
 
         }
@@ -309,21 +306,23 @@ public abstract class PersistenceSessionAbstract implements PersistenceSession {
      * ; could it be unified?
      */
     @Override
-    public ObjectAdapter createInstance(final ObjectSpecification specification) {
+    public ObjectAdapter createInstance(final ObjectSpecification objectSpec) {
         if (LOG.isDebugEnabled()) {
-            LOG.debug("creating transient instance of " + specification);
+            LOG.debug("creating transient instance of " + objectSpec);
         }
-        final Object pojo = specification.createObject(CreationMode.INITIALIZE);
-        return getAdapterManager().adapterFor(pojo);
+        final Object pojo = objectSpec.createObject();
+        final ObjectAdapter adapter = getAdapterManager().adapterFor(pojo);
+        return objectSpec.initialize(adapter);
     }
 
     @Override
-    public ObjectAdapter createAggregatedInstance(final ObjectSpecification specification, final ObjectAdapter parent) {
+    public ObjectAdapter createInstance(final ObjectSpecification objectSpec, final ObjectAdapter parentAdapter) {
         if (LOG.isDebugEnabled()) {
-            LOG.debug("creating aggregated instance of " + specification);
+            LOG.debug("creating aggregated instance of " + objectSpec);
         }
-        final Object pojo = specification.createAggregatedObject(parent, CreationMode.INITIALIZE);
-        final ObjectAdapter adapter = getAdapterManager().adapterFor(pojo);
+        final Object pojo = objectSpec.createObject();
+        final ObjectAdapter adapter = getAdapterManager().adapterFor(pojo, parentAdapter);
+        objectSpec.initialize(adapter); 
         if (adapter.getResolveState().isGhost()) {
             adapter.changeState(ResolveState.RESOLVING);
         }
@@ -334,9 +333,9 @@ public abstract class PersistenceSessionAbstract implements PersistenceSession {
     }
 
     @Override
-    public final ObjectAdapter recreateAdapter(final OidWithSpecification oid) {
-        final String className = oid.getClassName();
-        final ObjectSpecification objectSpec = getSpecificationLoader().loadSpecification(className);
+    public final ObjectAdapter recreateAdapter(final RootOid oid) {
+        final String objectType = oid.getObjectType();
+        final ObjectSpecification objectSpec = getSpecificationLoader().lookupByObjectType(objectType);
         return recreateAdapter(oid, objectSpec);
     }
 
@@ -350,9 +349,9 @@ public abstract class PersistenceSessionAbstract implements PersistenceSession {
         if (LOG.isDebugEnabled()) {
             LOG.debug("recreating adapter for Oid: " + oid + " of type " + specification);
         }
-        final Object pojo = specification.createObject(CreationMode.NO_INITIALIZE);
+        final Object pojo = specification.createObject();
 
-        return getAdapterManager().recreateRootAdapter(oid, pojo);
+        return getAdapterManager().recreateAdapter(oid, pojo);
     }
 
     @Override
@@ -371,7 +370,7 @@ public abstract class PersistenceSessionAbstract implements PersistenceSession {
             // don't touch pojo in case cause it to resolve.
             LOG.debug("recreating adapter for Oid: " + oid + " for provided pojo ");
         }
-        return getAdapterManager().recreateRootAdapter(oid, pojo);
+        return getAdapterManager().recreateAdapter(oid, pojo);
     }
 
     // ///////////////////////////////////////////////////////////////////////////
@@ -530,7 +529,7 @@ public abstract class PersistenceSessionAbstract implements PersistenceSession {
     }
 
     // ///////////////////////////////////////////////////////////////////////////
-    // AdaptedServiceManager
+    // Services
     // ///////////////////////////////////////////////////////////////////////////
 
     /**
@@ -538,12 +537,12 @@ public abstract class PersistenceSessionAbstract implements PersistenceSession {
      * be given the same OID that it had when it was created in a different
      * session.
      */
-    protected abstract Oid getOidForService(ObjectSpecification serviceSpecification, String name);
+    protected abstract RootOid getOidForService(ObjectSpecification serviceSpec);
 
     /**
      * Registers the specified service as having the specified OID.
      */
-    protected abstract void registerService(String name, Oid oid);
+    protected abstract void registerService(RootOid oid);
 
     @Override
     public ObjectAdapter getService(final String id) {
@@ -571,8 +570,13 @@ public abstract class PersistenceSessionAbstract implements PersistenceSession {
 
     private ObjectAdapter getService(final Object servicePojo) {
         final ObjectSpecification serviceSpecification = getSpecificationLoader().loadSpecification(servicePojo.getClass());
-        final Oid oid = getOidForService(serviceSpecification, ServiceUtil.id(servicePojo));
-        return recreateAdapterForExistingService(oid, servicePojo);
+        final RootOid oid = getOidForService(serviceSpecification);
+        final ObjectAdapter serviceAdapter = getAdapterManager().recreateAdapter(oid, servicePojo);
+        if (serviceAdapter.getResolveState().canChangeTo(ResolveState.RESOLVING)) {
+            serviceAdapter.changeState(ResolveState.RESOLVING);
+            serviceAdapter.changeState(ResolveState.RESOLVED);
+        }
+        return serviceAdapter;
     }
 
     /**
@@ -582,14 +586,6 @@ public abstract class PersistenceSessionAbstract implements PersistenceSession {
         return servicesInjector.getRegisteredServices().size() > 0;
     }
 
-    private ObjectAdapter recreateAdapterForExistingService(final Oid oid, final Object service) {
-        final ObjectAdapter adapter = getAdapterManager().recreateRootAdapter(oid, service);
-        if (adapter.getResolveState().canChangeTo(ResolveState.RESOLVING)) {
-            adapter.changeState(ResolveState.RESOLVING);
-            adapter.changeState(ResolveState.RESOLVED);
-        }
-        return adapter;
-    }
 
     // ////////////////////////////////////////////////////////////////////
     // Helpers
@@ -641,7 +637,7 @@ public abstract class PersistenceSessionAbstract implements PersistenceSession {
             final Class<? extends Object> serviceClass = servicePojo.getClass();
             final ObjectSpecification serviceSpecification = getSpecificationLoader().loadSpecification(serviceClass);
             final String serviceClassName = serviceClass.getName();
-            final Oid oidForService = getOidForService(serviceSpecification, id);
+            final Oid oidForService = getOidForService(serviceSpecification);
             final String serviceId = id + (id.equals(serviceClassName) ? "" : " (" + serviceClassName + ")");
             debug.appendln(oidForService != null ? oidForService.toString() : "[NULL]", serviceId);
         }

@@ -23,13 +23,13 @@ import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
+import org.apache.isis.core.metamodel.spec.SpecificationLoaderProvider;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
-import org.apache.isis.viewer.wicket.model.nof.SpecificationLoaderAccessor;
 
 /**
  * Adapter implementation for {@link ComponentFactory}.
  */
-public abstract class ComponentFactoryAbstract implements ComponentFactory, SpecificationLoaderAccessor {
+public abstract class ComponentFactoryAbstract implements ComponentFactory, SpecificationLoaderProvider {
 
     private static final long serialVersionUID = 1L;
 

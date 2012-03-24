@@ -20,7 +20,7 @@
 package org.apache.isis.runtimes.dflt.objectstores.xml.internal.data;
 
 import org.apache.isis.runtimes.dflt.runtime.persistence.ObjectNotFoundException;
-import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.simple.SerialOid;
+import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.serial.RootOidDefault;
 import org.apache.isis.runtimes.dflt.runtime.transaction.ObjectPersistenceException;
 
 public interface DataManager {
@@ -37,14 +37,14 @@ public interface DataManager {
      */
     public int numberOfInstances(final ObjectData pattern);
 
-    public Data loadData(final SerialOid oid);
+    public Data loadData(final RootOidDefault oid);
 
     /**
      * Save the data for an object and adds the reference to a list of instances
      */
     void insertObject(ObjectData data);
 
-    void remove(SerialOid oid) throws ObjectNotFoundException, ObjectPersistenceException;
+    void remove(RootOidDefault oid) throws ObjectNotFoundException, ObjectPersistenceException;
 
     /**
      * Save the data for latter retrieval.

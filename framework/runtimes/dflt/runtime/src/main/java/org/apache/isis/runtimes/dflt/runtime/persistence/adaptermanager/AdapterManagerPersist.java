@@ -19,11 +19,11 @@
 
 package org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager;
 
+import org.apache.isis.applib.annotation.Aggregated;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
-import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
-import org.apache.isis.runtimes.dflt.runtime.system.persistence.OidGenerator;
+import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.algorithm.PersistAlgorithm;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 
 /**
@@ -32,25 +32,19 @@ import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessi
 public interface AdapterManagerPersist {
 
     /**
-     * Remaps the {@link ObjectAdapter adapter} and any associated aggregated
-     * (collection) adapters using a new value for the {@link Oid} provided by
-     * the {@link OidGenerator}.
+     * Remaps the {@link ObjectAdapter adapter} and any associated 
+     * (collection) adapters (ie, those that wrap the List/Set instances).
      * 
      * <p>
-     * The {@link Oid} of the supplied {@link ObjectAdapter adapter} should be
-     * in such a state that it can be
-     * {@link OidGenerator#convertTransientToPersistentOid(Oid) converted from
-     * transient to persistent}. Note that some {@link Oid} implementations
-     * require an initial state call to do this (eg to read from a database
-     * identity or sequence value).
+     * Note that it isn't necessary to remap any aggregated adapters (as per
+     * {@link Aggregated} annotation; the {@link PersistAlgorithm} calls this
+     * method and takes responsibility for locating the graph of transient
+     * objects that needs to be remapped.
      * 
      * <p>
-     * The adapter is remapped in the {@link AdapterManager}, and the
-     * {@link Oid#getPrevious() previous} is set to its transient value).
-     * Similarly for any aggregated adapters. This is needed for client/server
-     * so that the client can remap a changed object.
-     * 
-     * @see AdapterManagerProxy#remapUpdated(Oid)
+     * As a consequence of this call, the adapter's {@link Oid} will be
+     * {@link ObjectAdapter#replaceOid(Oid) replaced} (Oids are now immutable).
+     * The same is true of the associated collection adapters.
      */
     void remapAsPersistent(ObjectAdapter adapter);
 
@@ -70,6 +64,6 @@ public interface AdapterManagerPersist {
      * {@link ResolveState} will be {@link ResolveState#GHOST} if a persistent
      * {@link Oid}, or {@link ResolveState#TRANSIENT} otherwise.
      */
-    ObjectAdapter recreateRootAdapter(Oid oid, Object pojo);
+    ObjectAdapter recreateAdapter(Oid oid, Object pojo);
 
 }

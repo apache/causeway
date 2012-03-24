@@ -26,15 +26,17 @@ import junit.framework.TestCase;
 import org.apache.isis.core.metamodel.testspec.TestProxySpecification;
 import org.apache.isis.runtimes.dflt.objectstores.xml.internal.clock.DefaultClock;
 import org.apache.isis.runtimes.dflt.objectstores.xml.internal.version.FileVersion;
-import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.simple.SerialOid;
+import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.serial.RootOidDefault;
 
 public class ObjectDataTest extends TestCase {
+
+    private String objectType = "CLK";
 
     public void testValueField() {
         FileVersion.setClock(new DefaultClock());
 
         final TestProxySpecification type = new TestProxySpecification("test");
-        final ObjectData objectData = new ObjectData(type, SerialOid.createPersistent(13), new FileVersion(""));
+        final ObjectData objectData = new ObjectData(type, RootOidDefault.create(objectType, ""+13), new FileVersion(""));
 
         assertEquals(null, objectData.get("name"));
         objectData.set("name", "value");

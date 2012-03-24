@@ -33,6 +33,7 @@ import org.apache.isis.core.commons.xml.XmlFile;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacetUtils;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
@@ -62,7 +63,7 @@ import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.DestroyObjectCommand;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.PersistenceCommand;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.SaveObjectCommand;
-import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.simple.SerialOid;
+import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.serial.RootOidDefault;
 import org.apache.isis.runtimes.dflt.runtime.persistence.query.PersistenceQueryBuiltIn;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
@@ -170,13 +171,13 @@ public class XmlObjectStore implements ObjectStore {
                     initObjectSetupReference(object, data, field);
                 }
             }
-            object.setOptimisticLock(data.getVersion());
+            object.setVersion(data.getVersion());
             PersistorUtil.end(object);
         }
     }
 
     private void initObjectSetupReference(final ObjectAdapter object, final ObjectData data, final ObjectAssociation field) {
-        final SerialOid referenceOid = (SerialOid) data.get(field.getId());
+        final RootOidDefault referenceOid = (RootOidDefault) data.get(field.getId());
         LOG.debug("setting up field " + field + " with " + referenceOid);
         if (referenceOid == null) {
             return;
@@ -231,7 +232,7 @@ public class XmlObjectStore implements ObjectStore {
             final int size = refs == null ? 0 : refs.size();
             final ObjectAdapter[] elements = new ObjectAdapter[size];
             for (int j = 0; j < size; j++) {
-                final SerialOid elementOid = refs.elementAt(j);
+                final RootOidDefault elementOid = refs.elementAt(j);
                 ObjectAdapter adapter;
                 adapter = getAdapterManager().getAdapterFor(elementOid);
                 if (adapter == null) {
@@ -303,7 +304,7 @@ public class XmlObjectStore implements ObjectStore {
     @Override
     public ObjectAdapter getObject(final Oid oid, final ObjectSpecification hint) {
         LOG.debug("getObject " + oid);
-        final Data data = dataManager.loadData((SerialOid) oid);
+        final Data data = dataManager.loadData((RootOidDefault) oid);
         LOG.debug("  data read " + data);
 
         ObjectAdapter object;
@@ -326,7 +327,7 @@ public class XmlObjectStore implements ObjectStore {
 
     @Override
     public void resolveImmediately(final ObjectAdapter object) {
-        final ObjectData data = (ObjectData) dataManager.loadData((SerialOid) object.getOid());
+        final ObjectData data = (ObjectData) dataManager.loadData((RootOidDefault) object.getOid());
         Assert.assertNotNull("Not able to read in data during resolve", object, data);
         initObject(object, data);
     }
@@ -336,7 +337,7 @@ public class XmlObjectStore implements ObjectStore {
      * object should haves its internal collection populated by this method.
      */
     private ObjectAdapter recreateObject(final ObjectData data) {
-        final SerialOid oid = data.getOid();
+        final RootOidDefault oid = data.getOid();
         final ObjectSpecification spec = specFor(data);
         final ObjectAdapter object = getPersistenceSession().recreateAdapter(oid, spec);
         initObject(object, data);
@@ -370,7 +371,7 @@ public class XmlObjectStore implements ObjectStore {
             final ObjectData instanceData = data.element(i);
             LOG.debug("instance data " + instanceData);
 
-            final SerialOid oid = instanceData.getOid();
+            final RootOidDefault oid = instanceData.getOid();
 
             final ObjectSpecification spec = specFor(instanceData);
             final ObjectAdapter instance = getPersistenceSession().recreateAdapter(oid, spec);
@@ -396,13 +397,13 @@ public class XmlObjectStore implements ObjectStore {
     // /////////////////////////////////////////////////////////
 
     @Override
-    public Oid getOidForService(ObjectSpecification serviceSpecification, final String name) {
-        return serviceManager.getOidForService(name);
+    public RootOid getOidForService(ObjectSpecification serviceSpec) {
+        return serviceManager.getOidForService(serviceSpec.getObjectType());
     }
 
     @Override
-    public void registerService(final String name, final Oid oid) {
-        serviceManager.registerService(name, oid);
+    public void registerService(final RootOid rootOid) {
+        serviceManager.registerService(rootOid);
     }
 
     // /////////////////////////////////////////////////////////

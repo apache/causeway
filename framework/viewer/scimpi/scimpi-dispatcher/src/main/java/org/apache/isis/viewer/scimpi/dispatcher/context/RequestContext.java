@@ -38,6 +38,8 @@ import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.AggregatedOid;
+import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -193,7 +195,7 @@ public abstract class RequestContext {
         if (parentObject instanceof ObjectAdapter) {
             IsisContext.getPersistenceSession().resolveImmediately(parentObject);
         }
-
+        
         final AggregatedOid aggregatedOid = new AggregatedOid(parentObject.getOid(), idParts[2]);
 
         ObjectAdapter aggregatedAdapter = null;

@@ -17,6 +17,7 @@
 package org.apache.isis.viewer.json.viewer.resources.domainobjects;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.viewer.json.applib.RepresentationType;
 import org.apache.isis.viewer.json.applib.links.Rel;
@@ -63,7 +64,7 @@ public class DomainObjectLinkTo implements ObjectAdapterLinkTo {
             throw new IllegalStateException("objectAdapter not provided");
         }
         final StringBuilder buf = new StringBuilder("objects/");
-        buf.append(resourceContext.getOidStringifier().enString(objectAdapter.getOid()));
+        buf.append(resourceContext.getOidStringifier().enString((RootOid) objectAdapter.getOid()));
         return buf.toString();
     }
 

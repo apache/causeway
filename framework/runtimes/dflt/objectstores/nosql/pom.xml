@@ -207,10 +207,18 @@
             <scope>test</scope>
         </dependency>
 
+        <!-- TODO: remove this dependency when can -->
         <dependency>
             <groupId>org.apache.isis.runtimes.dflt</groupId>
             <artifactId>runtime</artifactId>
             <type>test-jar</type>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- TODO: remove this dependency when can -->
+        <dependency>
+            <groupId>org.apache.isis.runtimes.dflt</groupId>
+            <artifactId>testsupport</artifactId>
             <scope>test</scope>
         </dependency>
 

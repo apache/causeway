@@ -35,6 +35,7 @@ import org.apache.isis.applib.AbstractService;
 import org.apache.isis.applib.annotation.DescribedAs;
 import org.apache.isis.applib.annotation.Exploration;
 import org.apache.isis.applib.annotation.Hidden;
+import org.apache.isis.applib.annotation.Ignore;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.core.commons.config.ConfigurationConstants;
 import org.apache.isis.core.commons.config.IsisConfiguration;
@@ -180,7 +181,8 @@ public class ObjectFixtureService {
     // programmatic
     // //////////////////////////////////////////////////////////////////
 
-    @Hidden
+    // {{ loadFile (ignored)
+    @Ignore
     public void loadFile() {
         FileReader reader = null;
         try {
@@ -222,7 +224,8 @@ public class ObjectFixtureService {
     private void createFile(final File file) throws IOException {
         file.createNewFile();
     }
-
+    // }}
+    
     // //////////////////////////////////////////////////////////////////
     // from context
     // //////////////////////////////////////////////////////////////////

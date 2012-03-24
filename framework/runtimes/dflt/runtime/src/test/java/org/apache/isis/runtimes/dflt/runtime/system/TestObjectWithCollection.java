@@ -21,9 +21,10 @@ package org.apache.isis.runtimes.dflt.runtime.system;
 
 import java.util.Vector;
 
-import org.apache.isis.runtimes.dflt.runtime.testsystem.TestPojo;
+import org.apache.isis.runtimes.dflt.runtime.memento.RuntimeTestPojo;
 
-public class TestObjectWithCollection extends TestPojo {
+public class TestObjectWithCollection extends RuntimeTestPojo {
+    
     private final Vector arrayList;
     private final boolean throwException;
 

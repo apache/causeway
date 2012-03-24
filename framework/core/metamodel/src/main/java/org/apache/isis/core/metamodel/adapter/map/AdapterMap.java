@@ -16,12 +16,16 @@
  */
 package org.apache.isis.core.metamodel.adapter.map;
 
+import org.apache.isis.applib.annotation.Aggregated;
 import org.apache.isis.core.commons.components.Injectable;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
-import org.apache.isis.core.metamodel.adapter.version.Version;
-import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
+import org.apache.isis.core.metamodel.adapter.oid.AggregatedOid;
+import org.apache.isis.core.metamodel.adapter.oid.CollectionOid;
+import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 
 public interface AdapterMap extends Injectable {
 
@@ -39,62 +43,68 @@ public interface AdapterMap extends Injectable {
     ObjectAdapter getAdapterFor(Object pojo);
 
     /**
-     * Either returns an existing adapter (as per {@link #getAdapterFor(Object)}
-     * ), otherwise creates either a transient root or a standalone
-     * {@link ObjectAdapter adapter} for the supplied domain object, depending
-     * on its {@link ObjectSpecification}.
+     * Looks up or creates a standalone (value) or root adapter.
      * 
      * <p>
-     * The rules for creating a {@link ResolveState#VALUE standalone} vs
-     * {@link ResolveState#TRANSIENT transient} root {@link ObjectAdapter
-     * adapter} are as for
-     * {@link #adapterFor(Object, ObjectAdapter, IdentifiedHolder)}.
+     * Implementation should simply delegate to {@link #adapterFor(Object, ObjectAdapter, ObjectAssociation)}, 
+     * with <tt>parentAdapter</tt> and <tt>association</tt> both null.
      * 
-     * <p>
-     * Historical notes: previously called <tt>createAdapterForTransient</tt>,
-     * though this name wasn't quite right.
-     * 
-     * <p>
-     * Provided by the <tt>AdapterManager</tt> when used by framework.
+     * @see #adapterFor(Object, ObjectAdapter)
+     * @see #adapterFor(Object, ObjectAdapter, ObjectAssociation)
      */
     ObjectAdapter adapterFor(Object domainObject);
 
     /**
-     * Either returns an existing adapter (as per {@link #getAdapterFor(Object)}
-     * ), otherwise creates either a aggregated {@link ObjectAdapter adapter}
-     * for the supplied domain object, depending on its
-     * {@link ObjectSpecification}.
+     * Looks up or creates a standalone (value), aggregated or root adapter.
      * 
      * <p>
-     * Provided by the <tt>AdapterManager</tt> when used by framework.
+     * Implementation should simply delegate to {@link #adapterFor(Object, ObjectAdapter, ObjectAssociation)}, 
+     * with <tt>parentAdapter</tt> set but <tt>association</tt> both null.
+     * 
+     * <p>
+     * @see #adapterFor(Object)
+     * @see #adapterFor(Object, ObjectAdapter, ObjectAssociation)
      */
-    ObjectAdapter adapterForAggregated(Object domainObject, ObjectAdapter parent);
+    ObjectAdapter adapterFor(Object domainObject, ObjectAdapter parentAdapter);
 
     /**
-     * Either returns an existing adapter (as per {@link #getAdapterFor(Object)}
-     * ), otherwise creates either a transient, standalone or aggregated
-     * {@link ObjectAdapter adapter} for the supplied domain object, depending
-     * on its {@link ObjectSpecification} and the context arguments provided.
+     * Looks up or creates either a standalone, root, aggregated or collection adapter.
+     * If a newly created root adapter is returned, it will be transient.
+     * In all cases the {@link ResolveState} is in the appropriate state.
      * 
      * <p>
      * If no adapter is found for the provided pojo, then the rules for creating
      * the {@link ObjectAdapter adapter} are as follows:
      * <ul>
+     * 
      * <li>if the pojo's {@link ObjectSpecification specification} indicates
      * that this is an immutable value, then a {@link ResolveState#VALUE}
-     * {@link ObjectAdapter adapter} is created
-     * <li>otherwise, if context <tt>ownerAdapter</tt> and <tt>identified</tt>
-     * arguments have both been provided and also either the
-     * {@link IdentifiedHolder} argument indicates that for this particular
-     * property/collection the object is aggregated <i>or</i> that the pojo's
-     * own {@link ObjectSpecification specification} indicates that the pojo is
-     * intrinsically aggregated, then an {@link ObjectAdapter#isAggregated()
-     * aggregated} adapter is created. Note that the {@link ResolveState} of
-     * such {@link ObjectAdapter's} is independent of its <tt>ownerAdapter</tt>,
-     * but it has the same {@link ObjectAdapter#setOptimisticLock(Version)
-     * optimistic locking version}.
-     * <li>otherwise, a {@link ResolveState#TRANSIENT} {@link ObjectAdapter
-     * adapter} is created.
+     * {@link ObjectAdapter adapter} is created.  Such an adapter has a null {@link Oid}
+     * and is never mapped.
+     * 
+     * <li>if context <tt>parentAdapter</tt> has been provided but no <tt>association</tt>
+     * has been provided, then the pojo's {@link ObjectSpecification} is checked to determine
+     * if the type is intrinsically aggregated.  If so then an aggregated adapter (one 
+     * with an {@link AggregatedOid}) is created, and is parented.  
+     * The {@link AggregatedOid#getLocalId() localId} of this adapter's {@link AggregatedOid}
+     * will be as generated by <tt>OidGenerator</tt>.  Its {@link ResolveState} will 
+     * be inferred from its parent adapter.
+     * 
+     * <li>if context <tt>parentAdapter</tt> has been provided but no <tt>association</tt>,
+     * and the pojo's {@link ObjectSpecification} is <i>not</i> intrinsically aggregated, then a
+     * root adapter (with a {@link RootOid}) will be created.  The state of this adapter is transient.
+     * 
+     * <li>if context <tt>parentAdapter</tt> has been provided and the <tt>association</tt>
+     * is a one-to-one association (property), then this association will be inspected for the 
+     * {@link Aggregated} annotation.  If so, then the adapter will be aggregated, else a root.
+     * Note that the {@link AggregatedOid#getLocalId() localId} of this adapter's {@link AggregatedOid}
+     * will be as generated by <tt>OidGenerator</tt>; the association is only used as a hint.
+     *
+     * <li>if context <tt>parentAdapter</tt> has been provided and the <tt>association</tt>
+     * is a one-to-many association (collection), then a collection adapter will be created, 
+     * representing the collection instance (List, Set etc).  This collection adapter
+     * is parented by the <tt>parentAdapter</tt>, and its Oid will be of type {@link CollectionOid}.
+     * 
      * </ul>
      * 
      * <p>
@@ -102,11 +112,14 @@ public interface AdapterMap extends Injectable {
      * 
      * @param pojo
      *            - pojo to adapt
-     * @param ownerAdapter
-     *            - only used if aggregated
-     * @param identifier
-     *            - only used if aggregated
+     * @param parentAdapter
+     *            - optional; used if adapter is parented (either based on its spec, or because an association which indicates/requires it to be so).
+     * @param association
+     *            - optional; if a OTMA then will return a collection adapter; if a OTOA then used to hint whether aggregated adapter
+     *            
+     * @see #adapterFor(Object)
+     * @see #adapterFor(Object, ObjectAdapter)            
      */
-    public ObjectAdapter adapterFor(final Object pojo, final ObjectAdapter ownerAdapter, IdentifiedHolder identifiedHolder);
+    public ObjectAdapter adapterFor(final Object pojo, final ObjectAdapter parentAdapter, ObjectAssociation association);
 
 }

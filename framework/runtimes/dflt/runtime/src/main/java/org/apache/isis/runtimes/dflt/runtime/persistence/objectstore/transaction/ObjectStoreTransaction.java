@@ -19,9 +19,16 @@
 
 package org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction;
 
-import java.util.ArrayList;
+import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
+import static org.apache.isis.core.commons.ensure.Ensure.ensureThatState;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.CoreMatchers.nullValue;
+
 import java.util.Collections;
 import java.util.List;
+
+import com.google.common.collect.Lists;
 
 import org.apache.log4j.Logger;
 
@@ -29,25 +36,58 @@ import org.apache.isis.core.commons.lang.ToString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.ObjectStoreTransactionManagement;
+import org.apache.isis.runtimes.dflt.runtime.system.transaction.IsisTransaction;
 import org.apache.isis.runtimes.dflt.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.runtimes.dflt.runtime.system.transaction.MessageBroker;
 import org.apache.isis.runtimes.dflt.runtime.system.transaction.UpdateNotifier;
-import org.apache.isis.runtimes.dflt.runtime.transaction.IsisTransactionAbstract;
 
-public class ObjectStoreTransaction extends IsisTransactionAbstract {
+public class ObjectStoreTransaction implements IsisTransaction {
+    
     private static final Logger LOG = Logger.getLogger(ObjectStoreTransaction.class);
 
     private final ObjectStoreTransactionManagement objectStore;
-    private final List<PersistenceCommand> commands = new ArrayList<PersistenceCommand>();
+    private final List<PersistenceCommand> commands = Lists.newArrayList();
+    private final IsisTransactionManager transactionManager;
+    private final MessageBroker messageBroker;
+    private final UpdateNotifier updateNotifier;
+
+    private State state;
+
+    private RuntimeException cause;
 
     public ObjectStoreTransaction(final IsisTransactionManager transactionManager, final MessageBroker messageBroker, final UpdateNotifier updateNotifier, final ObjectStoreTransactionManagement objectStore) {
-        super(transactionManager, messageBroker, updateNotifier);
+        
+        ensureThatArg(transactionManager, is(not(nullValue())), "transaction manager is required");
+        ensureThatArg(messageBroker, is(not(nullValue())), "message broker is required");
+        ensureThatArg(updateNotifier, is(not(nullValue())), "update notifier is required");
+
+        this.transactionManager = transactionManager;
+        this.messageBroker = messageBroker;
+        this.updateNotifier = updateNotifier;
+
+        this.state = State.IN_PROGRESS;
+
         this.objectStore = objectStore;
         if (LOG.isDebugEnabled()) {
             LOG.debug("new transaction " + this);
         }
     }
 
+    // ////////////////////////////////////////////////////////////////
+    // State
+    // ////////////////////////////////////////////////////////////////
+
+    @Override
+    public State getState() {
+        return state;
+    }
+
+    private void setState(final State state) {
+        this.state = state;
+    }
+
+
+    
     // //////////////////////////////////////////////////////////
     // Commands
     // //////////////////////////////////////////////////////////
@@ -111,20 +151,51 @@ public class ObjectStoreTransaction extends IsisTransactionAbstract {
         commands.add(command);
     }
 
-    // //////////////////////////////////////////////////////////
-    // abort
-    // //////////////////////////////////////////////////////////
 
-    @Override
-    public void doAbort() {
+
+    // ////////////////////////////////////////////////////////////////
+    // flush
+    // ////////////////////////////////////////////////////////////////
+
+    public final void flush() {
+        ensureThatState(getState().canFlush(), is(true), "state is: " + getState());
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("flush transaction " + this);
+        }
+
+        try {
+            doFlush();
+        } catch (final RuntimeException ex) {
+            setState(State.MUST_ABORT);
+            setAbortCause(ex);
+            throw ex;
+        }
     }
 
-    // //////////////////////////////////////////////////////////
-    // commit
-    // //////////////////////////////////////////////////////////
-
-    @Override
-    public void doFlush() {
+    /**
+     * Mandatory hook method for subclasses to persist all pending changes.
+     * 
+     * <p>
+     * Called by both {@link #commit()} and by {@link #flush()}:
+     * <table>
+     * <tr>
+     * <th>called from</th>
+     * <th>next {@link #getState() state} if ok</th>
+     * <th>next {@link #getState() state} if exception</th>
+     * </tr>
+     * <tr>
+     * <td>{@link #commit()}</td>
+     * <td>{@link State#COMMITTED}</td>
+     * <td>{@link State#ABORTED}</td>
+     * </tr>
+     * <tr>
+     * <td>{@link #flush()}</td>
+     * <td>{@link State#IN_PROGRESS}</td>
+     * <td>{@link State#MUST_ABORT}</td>
+     * </tr>
+     * </table>
+     */
+    private void doFlush() {
 
         if (commands.size() > 0) {
             objectStore.execute(Collections.unmodifiableList(commands));
@@ -132,7 +203,7 @@ public class ObjectStoreTransaction extends IsisTransactionAbstract {
             for (final PersistenceCommand command : commands) {
                 if (command instanceof DestroyObjectCommand) {
                     final ObjectAdapter adapter = command.onObject();
-                    adapter.setOptimisticLock(null);
+                    adapter.setVersion(null);
                     adapter.changeState(ResolveState.DESTROYED);
                 }
             }
@@ -140,6 +211,69 @@ public class ObjectStoreTransaction extends IsisTransactionAbstract {
         }
     }
 
+
+    
+    // ////////////////////////////////////////////////////////////////
+    // commit
+    // ////////////////////////////////////////////////////////////////
+
+    public final void commit() {
+        ensureThatState(getState().canCommit(), is(true), "state is: " + getState());
+
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("commit transaction " + this);
+        }
+
+        if (getState() == State.COMMITTED) {
+            if (LOG.isInfoEnabled()) {
+                LOG.info("already committed; ignoring");
+            }
+            return;
+        }
+        
+        try {
+            doFlush();
+            setState(State.COMMITTED);
+        } catch (final RuntimeException ex) {
+            setAbortCause(ex);
+            throw ex;
+        }
+    }
+
+    
+    // ////////////////////////////////////////////////////////////////
+    // abort
+    // ////////////////////////////////////////////////////////////////
+
+    public final void abort() {
+        ensureThatState(getState().canAbort(), is(true), "state is: " + getState());
+        if (LOG.isInfoEnabled()) {
+            LOG.info("abort transaction " + this);
+        }
+
+        setState(State.ABORTED);
+    }
+
+    
+
+    protected void setAbortCause(final RuntimeException cause) {
+        this.cause = cause;
+    }
+
+    /**
+     * The cause (if any) for the transaction being aborted.
+     * 
+     * <p>
+     * There will be a cause if an exception is thrown either by
+     * {@link #doFlush()} or {@link #doAbort()}.
+     */
+    @Override
+    public RuntimeException getAbortCause() {
+        return cause;
+    }
+
+    
+    
     // //////////////////////////////////////////////////////////
     // Helpers
     // //////////////////////////////////////////////////////////
@@ -184,11 +318,49 @@ public class ObjectStoreTransaction extends IsisTransactionAbstract {
         removeCommand(SaveObjectCommand.class, onObject);
     }
 
+    // ////////////////////////////////////////////////////////////////
+    // toString
+    // ////////////////////////////////////////////////////////////////
+
     @Override
+    public String toString() {
+        return appendTo(new ToString(this)).toString();
+    }
+
     protected ToString appendTo(final ToString str) {
-        super.appendTo(str);
+        str.append("state", state);
         str.append("commands", commands.size());
         return str;
     }
+
+
+    // ////////////////////////////////////////////////////////////////
+    // Depenendencies (from constructor)
+    // ////////////////////////////////////////////////////////////////
+
+    /**
+     * Injected in constructor
+     */
+    @Override
+    public IsisTransactionManager getTransactionManager() {
+        return transactionManager;
+    }
+
+    /**
+     * Injected in constructor
+     */
+    @Override
+    public MessageBroker getMessageBroker() {
+        return messageBroker;
+    }
+
+    /**
+     * Injected in constructor
+     */
+    @Override
+    public UpdateNotifier getUpdateNotifier() {
+        return updateNotifier;
+    }
+
 
 }

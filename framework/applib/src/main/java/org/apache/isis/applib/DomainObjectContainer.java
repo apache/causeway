@@ -21,6 +21,7 @@ package org.apache.isis.applib;
 
 import java.util.List;
 
+import org.apache.isis.applib.annotation.Aggregated;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.security.UserMemento;
@@ -95,10 +96,20 @@ public interface DomainObjectContainer {
     /**
      * Create a new instance of the specified class, but do not persist it.
      * 
+     * <p>
+     * If the type is annotated with {@link Aggregated}, then as per
+     * {@link #newAggregatedInstance(Object, Class)}.  Otherwise will be an
+     * aggregate root.
+     * 
      * @see #newPersistentInstance(Class)
+     * @see #newAggregatedInstance(Object, Class)
      */
     <T> T newTransientInstance(Class<T> ofType);
 
+    /**
+     * Create a new instance that will be persisted as part of the specified
+     * parent (ie will be a part of a larger aggregate).
+     */
     <T> T newAggregatedInstance(Object parent, Class<T> ofType);
 
     /**

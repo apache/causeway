@@ -20,9 +20,7 @@ package org.apache.isis.viewer.json.viewer.util;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
-import org.apache.isis.core.metamodel.adapter.oid.stringable.directly.OidWithSpecification;
-import org.apache.isis.viewer.json.applib.RestfulResponse.HttpStatusCode;
-import org.apache.isis.viewer.json.viewer.JsonApplicationException;
+import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.viewer.json.viewer.ResourceContext;
 
 public final class OidUtils {
@@ -32,21 +30,21 @@ public final class OidUtils {
 
     public static ObjectAdapter getObjectAdapter(final ResourceContext resourceContext, final String oidEncodedStr) {
         final String oidStr = UrlDecoderUtils.urlDecode(oidEncodedStr);
-        final Oid oid = resourceContext.getOidStringifier().deString(oidStr);
-        final ObjectAdapter adapterFor = resourceContext.getObjectAdapterLookup().getAdapterFor(oid);
+        final RootOid rootOid = resourceContext.getOidStringifier().deString(oidStr);
+        final ObjectAdapter adapterFor = resourceContext.getObjectAdapterLookup().getAdapterFor(rootOid);
         if(adapterFor != null) {
             return adapterFor;
         }
-        if(!(oid instanceof OidWithSpecification)) {
-            throw JsonApplicationException.create(HttpStatusCode.NOT_IMPLEMENTED, "JSON viewer only supports objectstores that have Oids that are self-describing (implement OidWithSpecification)");
-        }
-        final OidWithSpecification oidWithSpec = (OidWithSpecification) oid;
-        return resourceContext.getPersistenceSession().recreateAdapter(oidWithSpec);
+        return resourceContext.getPersistenceSession().recreateAdapter(rootOid);
     }
 
     public static String getOidStr(final ResourceContext resourceContext, final ObjectAdapter objectAdapter) {
         final Oid oid = objectAdapter.getOid();
-        return oid != null ? resourceContext.getOidStringifier().enString(oid) : null;
+        if(!(oid instanceof RootOid)) {
+            throw new IllegalArgumentException("objectAdapter must be a root adapter");
+        }
+        RootOid rootOid = (RootOid) oid;
+        return oid != null ? resourceContext.getOidStringifier().enString(rootOid) : null;
     }
 
 }

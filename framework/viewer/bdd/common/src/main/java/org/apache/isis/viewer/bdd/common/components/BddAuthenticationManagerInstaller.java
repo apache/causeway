@@ -25,7 +25,7 @@ import com.google.common.collect.Lists;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.runtime.authentication.standard.Authenticator;
 import org.apache.isis.runtimes.dflt.runtime.authentication.AuthenticationManagerStandardInstallerAbstractForDfltRuntime;
-import org.apache.isis.security.dflt.authentication.AuthenticatorNoop;
+import org.apache.isis.security.dflt.authentication.AuthenticatorDefault;
 
 public class BddAuthenticationManagerInstaller extends AuthenticationManagerStandardInstallerAbstractForDfltRuntime {
 
@@ -35,6 +35,6 @@ public class BddAuthenticationManagerInstaller extends AuthenticationManagerStan
 
     @Override
     protected List<Authenticator> createAuthenticators(final IsisConfiguration configuration) {
-        return Lists.<Authenticator> newArrayList(new AuthenticatorNoop(configuration));
+        return Lists.<Authenticator> newArrayList(new AuthenticatorDefault(configuration));
     }
 }

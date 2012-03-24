@@ -29,6 +29,7 @@ import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.util.InvokeUtils;
 import org.apache.isis.core.metamodel.adapter.version.SerialNumberVersion;
 import org.apache.isis.core.metamodel.facets.notpersisted.NotPersistedFacet;
@@ -135,7 +136,7 @@ public class AutoMapper extends AbstractAutoMapper implements ObjectMapping, Deb
         sql.append(") ");
 
         connector.insert(sql.toString());
-        object.setOptimisticLock(version);
+        object.setVersion(version);
 
         for (final CollectionMapper collectionMapper : collectionMappers) {
             collectionMapper.saveInternalCollection(connector, object);
@@ -146,7 +147,8 @@ public class AutoMapper extends AbstractAutoMapper implements ObjectMapping, Deb
     public void destroyObject(final DatabaseConnector connector, final ObjectAdapter object) {
         final StringBuffer sql = new StringBuffer();
         sql.append("delete from " + table + " WHERE ");
-        idMapping.appendWhereClause(connector, sql, object.getOid());
+        final RootOid oid = (RootOid) object.getOid();
+        idMapping.appendWhereClause(connector, sql, oid);
         sql.append(" AND ");
         sql.append(versionMapping.whereClause(connector, (SerialNumberVersion) object.getVersion()));
         final int updateCount = connector.update(sql.toString());
@@ -261,7 +263,7 @@ public class AutoMapper extends AbstractAutoMapper implements ObjectMapping, Deb
     public ObjectAdapter getObject(final DatabaseConnector connector, final Oid oid, final ObjectSpecification hint) {
         final StringBuffer sql = createSelectStatement();
         sql.append(" WHERE ");
-        idMapping.appendWhereClause(connector, sql, oid);
+        idMapping.appendWhereClause(connector, sql, (RootOid) oid);
         final Results rs = connector.select(completeSelectStatement(sql));
         if (rs.next()) {
             return loadObject(connector, hint, rs);
@@ -315,7 +317,7 @@ public class AutoMapper extends AbstractAutoMapper implements ObjectMapping, Deb
         /*
          * oneToManyProperties[i].get(object); }
          */
-        object.setOptimisticLock(versionMapping.getLock(rs));
+        object.setVersion(versionMapping.getLock(rs));
         PersistorUtil.end(object);
     }
 
@@ -365,7 +367,8 @@ public class AutoMapper extends AbstractAutoMapper implements ObjectMapping, Deb
         sql.append(",");
         sql.append(versionMapping.appendColumnNames());
         sql.append(" from " + table + " WHERE ");
-        idMapping.appendWhereClause(connector, sql, object.getOid());
+        final RootOid oid = (RootOid) object.getOid();
+        idMapping.appendWhereClause(connector, sql, oid);
 
         final Results rs = connector.select(sql.toString());
         if (rs.next()) {
@@ -377,7 +380,7 @@ public class AutoMapper extends AbstractAutoMapper implements ObjectMapping, Deb
             }
         } else {
             rs.close();
-            throw new SqlObjectStoreException("Unable to load data from " + table + " with id " + idMapping.primaryKey(object.getOid()));
+            throw new SqlObjectStoreException("Unable to load data from " + table + " with id " + object.getOid().enString());
         }
     }
 
@@ -400,8 +403,8 @@ public class AutoMapper extends AbstractAutoMapper implements ObjectMapping, Deb
     }
 
     @Override
-    public void save(final DatabaseConnector connector, final ObjectAdapter object) {
-        final SerialNumberVersion version = (SerialNumberVersion) object.getVersion();
+    public void save(final DatabaseConnector connector, final ObjectAdapter adapter) {
+        final SerialNumberVersion version = (SerialNumberVersion) adapter.getVersion();
         final long nextSequence;
         if (useVersioning) {
             nextSequence = version.getSequence() + 1;
@@ -412,31 +415,32 @@ public class AutoMapper extends AbstractAutoMapper implements ObjectMapping, Deb
         final StringBuffer sql = new StringBuffer();
         sql.append("UPDATE " + table + " SET ");
         for (final FieldMapping mapping : fieldMappingByField.values()) {
-            mapping.appendUpdateValues(connector, sql, object);
+            mapping.appendUpdateValues(connector, sql, adapter);
             sql.append(", ");
         }
         sql.append(versionMapping.updateAssigment(connector, nextSequence));
         sql.append(", ");
-        titleMapping.appendUpdateAssignment(connector, sql, object);
+        titleMapping.appendUpdateAssignment(connector, sql, adapter);
         sql.append(" WHERE ");
-        idMapping.appendWhereClause(connector, sql, object.getOid());
+        final RootOid oid = (RootOid) adapter.getOid();
+        idMapping.appendWhereClause(connector, sql, oid);
         if (useVersioning) {
             sql.append(" AND ");
-            sql.append(versionMapping.whereClause(connector, (SerialNumberVersion) object.getVersion()));
+            sql.append(versionMapping.whereClause(connector, (SerialNumberVersion) adapter.getVersion()));
         }
 
         final int updateCount = connector.update(sql.toString());
         if (updateCount == 0) {
             LOG.info("concurrency conflict object " + this + "; no update performed");
-            throw new ConcurrencyException("", object.getOid());
+            throw new ConcurrencyException("", adapter.getOid());
         } else {
-            object.setOptimisticLock(createVersion(nextSequence));
+            adapter.setVersion(createVersion(nextSequence));
         }
 
         // TODO update collections - change only when needed rather than
         // reinserting from scratch
         for (final CollectionMapper collectionMapper : collectionMappers) {
-            collectionMapper.saveInternalCollection(connector, object);
+            collectionMapper.saveInternalCollection(connector, adapter);
         }
     }
 

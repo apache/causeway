@@ -57,7 +57,6 @@ public class GivenJpaProgrammingModelWhenInitializingTest {
         final List<FacetFactory> list = jpaProgrammingModelFacets.getList();
         assertThat(
                 list,
-                IsisMatchers
-                        .containsElementThat(is(instanceOf(JpaEntityAnnotationFacetFactory.class))));
+                IsisMatchers.containsElementThat(is(instanceOf(JpaEntityAnnotationFacetFactory.class))));
     }
 }

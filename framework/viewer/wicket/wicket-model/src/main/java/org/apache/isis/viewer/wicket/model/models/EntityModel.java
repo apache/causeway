@@ -27,6 +27,7 @@ import com.google.common.collect.Maps;
 import org.apache.wicket.PageParameters;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.oid.stringable.OidStringifier;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -63,7 +64,7 @@ public class EntityModel extends ModelAbstract<ObjectAdapter> {
         PageParameterNames.OBJECT_PERSISTENT.addTo(pageParameters, persistent.toString());
 
         if (persistent) {
-            final String oidStr = oidStringifier.enString(adapter.getOid());
+            final String oidStr = oidStringifier.enString((RootOid) adapter.getOid());
             final ObjectSpecification noSpec = adapter.getSpecification();
 
             PageParameterNames.OBJECT_OID.addTo(pageParameters, oidStr);

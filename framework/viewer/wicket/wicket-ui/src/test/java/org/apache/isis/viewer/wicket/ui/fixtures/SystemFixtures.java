@@ -23,7 +23,7 @@ import org.apache.wicket.markup.html.link.Link;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 
-import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.oid.stringable.OidStringifier;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
@@ -37,7 +37,7 @@ public final class SystemFixtures {
         this.context = context;
     }
 
-    public void enstringOid(final OidStringifier mockOidStringifier, final Oid mockOid, final String returns) {
+    public void enstringOid(final OidStringifier mockOidStringifier, final RootOid mockOid, final String returns) {
         context.checking(new Expectations() {
             {
                 allowing(mockOidStringifier).enString(mockOid);

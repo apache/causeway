@@ -19,9 +19,12 @@
 
 package org.apache.isis.runtimes.dflt.objectstores.xml.internal.data;
 
+import org.apache.isis.applib.annotation.ObjectType;
+
 /**
  * A very simple ObjectAdapter classes - contains only a single association
  */
+@ObjectType("RLE")
 public class Role {
     public String name;
     public Person person;

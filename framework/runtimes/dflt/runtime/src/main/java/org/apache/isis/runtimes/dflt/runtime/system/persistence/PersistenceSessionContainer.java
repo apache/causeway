@@ -76,7 +76,7 @@ public interface PersistenceSessionContainer {
      * This method is ultimately delegated to by the
      * {@link DomainObjectContainer}.
      */
-    ObjectAdapter createAggregatedInstance(ObjectSpecification specification, ObjectAdapter parent);
+    ObjectAdapter createInstance(ObjectSpecification specification, ObjectAdapter parentAdapter);
 
     // /////////////////////////////////////////////////////////
     // Finding

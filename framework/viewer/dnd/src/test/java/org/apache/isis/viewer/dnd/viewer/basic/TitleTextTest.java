@@ -19,9 +19,14 @@
 
 package org.apache.isis.viewer.dnd.viewer.basic;
 
-import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
-import org.apache.isis.runtimes.dflt.runtime.testsystem.ProxyJunit3TestCase;
-import org.apache.isis.runtimes.dflt.runtime.testsystem.TestProxyConfiguration;
+import static org.junit.Assert.assertEquals;
+
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
+
+import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2;
+import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2.Mode;
 import org.apache.isis.viewer.dnd.DummyCanvas;
 import org.apache.isis.viewer.dnd.DummyView;
 import org.apache.isis.viewer.dnd.TestToolkit;
@@ -32,19 +37,19 @@ import org.apache.isis.viewer.dnd.view.Toolkit;
 import org.apache.isis.viewer.dnd.view.text.TitleText;
 import org.apache.isis.viewer.dnd.viewer.drawing.DummyText;
 
-public class TitleTextTest extends ProxyJunit3TestCase {
+public class TitleTextTest {
+
+    @Rule
+    public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
+
     private TitleText titleText;
     private String title;
     private TestCanvas canvas;
     private DummyView view;
 
-    public static void main(final String[] args) {
-        junit.textui.TestRunner.run(TitleTextTest.class);
-    }
-
-    @Override
-    protected void setUp() throws Exception {
-        IsisContext.setConfiguration(new TestProxyConfiguration());
+    @Before
+    public void setUp() throws Exception {
+        
         TestToolkit.createInstance();
 
         view = new DummyView();
@@ -85,18 +90,22 @@ public class TitleTextTest extends ProxyJunit3TestCase {
      * titleText.draw(canvas, 10, 20);
      * assertEquals(Toolkit.getColor("primary1"), canvas.color); }
      */
+
+    @Test
     public void testDrawingLocation() {
         titleText.draw(canvas, 10, 20);
         assertEquals(10, canvas.x);
         assertEquals(20, canvas.y);
     }
 
+    @Test
     public void testDrawingText() {
         title = "test string";
         titleText.draw(canvas, 10, 20);
         assertEquals("test string", canvas.text);
     }
 
+    @Test
     public void testGetSize() {
         title = "abcde";
 
@@ -119,5 +128,4 @@ class TestCanvas extends DummyCanvas {
         this.y = y;
         this.color = color;
     }
-
 }

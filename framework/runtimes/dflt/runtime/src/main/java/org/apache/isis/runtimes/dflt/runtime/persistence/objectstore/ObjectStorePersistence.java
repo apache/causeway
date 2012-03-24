@@ -21,10 +21,13 @@ package org.apache.isis.runtimes.dflt.runtime.persistence.objectstore;
 
 import java.util.List;
 
+import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.components.SessionScopedComponent;
+import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.runtimes.dflt.runtime.persistence.ObjectNotFoundException;
@@ -48,7 +51,7 @@ public interface ObjectStorePersistence extends DebuggableWithTitle, SessionScop
      * up objects.
      * 
      * <p>
-     * This method is called only once after the {@link #init()} has been
+     * This method is called only once after the {@link #openSession(TestProxyReflector, IsisConfiguration, TestProxyPersistenceSessionFactory, TestProxyPersistenceSession, TestUserProfileStore, AuthenticationSession)} has been
      * called. If it returns <code>false</code> then the framework will run the
      * fixtures to initialise the object store.
      */
@@ -186,12 +189,11 @@ public interface ObjectStorePersistence extends DebuggableWithTitle, SessionScop
     // Services
     // ///////////////////////////////////////////////////////
 
-    void registerService(String id, Oid oid);
+    void registerService(RootOid rootOid);
 
     /**
      * Returns the OID for the adapted service.
-     * @param serviceSpecification TODO
      */
-    Oid getOidForService(ObjectSpecification serviceSpecification, String id);
+    RootOid getOidForService(ObjectSpecification serviceSpec);
 
 }

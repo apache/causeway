@@ -23,7 +23,7 @@ import org.apache.isis.core.commons.components.Injectable;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
-import org.apache.isis.core.metamodel.adapter.oid.stringable.directly.OidWithSpecification;
+import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 public interface PersistenceSessionHydrator extends Injectable {
@@ -54,11 +54,11 @@ public interface PersistenceSessionHydrator extends Injectable {
     /**
      * Returns an {@link ObjectAdapter adapter} with the
      * {@link ObjectSpecification type} determined from the provided
-     * {@link OidWithSpecification oid}.
+     * {@link RootOidWithSpecification oid}.
      * 
      * @see #recreateAdapter(Oid, ObjectSpecification)
      */
-    ObjectAdapter recreateAdapter(OidWithSpecification oid);
+    ObjectAdapter recreateAdapter(RootOid oid);
 
     /**
      * Returns an adapter for the provided {@link Oid}, wrapping the provided

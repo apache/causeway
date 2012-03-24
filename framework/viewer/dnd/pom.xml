@@ -100,11 +100,23 @@
 		    <groupId>org.apache.isis.core</groupId>
 		    <artifactId>runtime</artifactId>
 		</dependency>
+        <dependency>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>testsupport</artifactId>
+            <scope>test</scope>
+        </dependency>
 
         <!-- TODO: remove this dependency -->
         <dependency>
             <groupId>org.apache.isis.runtimes.dflt</groupId>
             <artifactId>runtime</artifactId>
+        </dependency>
+
+        <!-- TODO: remove this dependency -->
+        <dependency>
+            <groupId>org.apache.isis.runtimes.dflt</groupId>
+            <artifactId>testsupport</artifactId>
+            <scope>test</scope>
         </dependency>
 
         <!-- TODO: remove this dependency -->

@@ -25,7 +25,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.runtimes.dflt.objectstores.xml.internal.data.DataManager;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.DestroyObjectCommand;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.PersistenceCommandContext;
-import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.simple.SerialOid;
+import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.serial.RootOidDefault;
 import org.apache.isis.runtimes.dflt.runtime.transaction.ObjectPersistenceException;
 
 public final class XmlDestroyObjectCommand extends AbstractXmlPersistenceCommand implements DestroyObjectCommand {
@@ -40,9 +40,9 @@ public final class XmlDestroyObjectCommand extends AbstractXmlPersistenceCommand
         if (LOG.isDebugEnabled()) {
             LOG.debug("  destroy object " + onObject());
         }
-        final SerialOid oid = (SerialOid) onObject().getOid();
+        final RootOidDefault oid = (RootOidDefault) onObject().getOid();
         getDataManager().remove(oid);
-        onObject().setOptimisticLock(null);
+        onObject().setVersion(null);
     }
 
     @Override

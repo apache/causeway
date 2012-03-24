@@ -21,6 +21,7 @@ package org.apache.isis.applib;
 
 import java.util.List;
 
+import org.apache.isis.applib.annotation.Aggregated;
 import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.applib.query.Query;
@@ -40,16 +41,33 @@ public abstract class AbstractContainedObject {
         return getContainer().newTransientInstance(ofType);
     }
 
+    /**
+     * Create an instance that will be persisted as part of this domain object
+     * (ie this domain object is its parent in the aggregate).
+     * 
+     * <p>
+     * The type provided should be annotated with {@link Aggregated}.
+     * 
+     *  @see #newAggregatedInstance(Object, Class)
+     */
     @Hidden
     protected <T> T newAggregatedInstance(final Class<T> ofType) {
         return newAggregatedInstance(this, ofType);
     }
 
+    /**
+     * Create an instance that will be persisted as part of specified paremt domain object
+     * (ie that domain object will be its parent in the aggregate).
+     * 
+     * <p>
+     * The type provided should be annotated with {@link Aggregated}.
+     * 
+     *  @see #newAggregatedInstance(Class)
+     */
     @Hidden
     protected <T> T newAggregatedInstance(final Object parent, final Class<T> ofType) {
         return getContainer().newAggregatedInstance(parent, ofType);
     }
-
     // }}
 
     // {{ allInstances, allMatches

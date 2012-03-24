@@ -319,9 +319,7 @@ public abstract class IsisContext implements DebuggableWithTitle {
         if (configuration == null) {
             throw new IsisConfigurationException("No configuration available");
         }
-        // REVIEW
         return configuration;
-        // return getSessionFactory().getConfiguration();
     }
 
     public static void setConfiguration(final IsisConfiguration configuration) {
