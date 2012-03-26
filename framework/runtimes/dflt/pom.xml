@@ -69,7 +69,6 @@
         <module>bytecode</module>
         <module>objectstores</module>
         <module>profilestores</module>
-        <module>remoting</module>
 	</modules>
 
 	<reporting>
