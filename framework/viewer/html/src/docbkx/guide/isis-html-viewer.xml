@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
+"file:./src/docbkx/dtd-4.5/docbookx.dtd">
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+-->
+<book>
+  <bookinfo>
+    <title><?eval ${docbkxGuideTitle}?></title>
+
+    <subtitle><?eval ${docbkxGuideSubTitle}?></subtitle>
+
+    <releaseinfo><?eval ${project.version}?></releaseinfo>
+
+    <authorgroup>
+      <author>
+        <firstname>Robert</firstname>
+
+        <surname>Matthews</surname>
+      </author>
+    </authorgroup>
+
+    <legalnotice>
+      <para>Permission is granted to make and distribute verbatim copies of
+      this manual provided that the copyright notice and this permission
+      notice are preserved on all copies.</para>
+    </legalnotice>
+  </bookinfo>
+
+  <!-- front matter -->
+
+  <toc></toc>
+
+  <preface id="preface">
+    <title>Preface</title>
+
+    <para><emphasis>Apache Isis</emphasis> is designed to allow programmers
+    rapidly develop domain-driven applications following the <ulink
+    url="http://en.wikipedia.org/wiki/Naked_Objects">Naked Objects</ulink>
+    pattern. It is made up of a core framework plus a number of alternate
+    implementations, and supports various viewers and object stores. Apache
+    Isis is hosted at the <ulink url="http://incubator.apache.org/isis">Apache
+    Foundation</ulink>, and is licensed under <ulink
+    url="http://www.apache.org/licenses/LICENSE-2.0.html">Apache Software
+    License v2</ulink>.</para>
+
+    <para>This guide is written for programmers looking to customize,
+    configure and deploy <emphasis>Apache Isis</emphasis> applications using
+    the <emphasis>HTML viewer</emphasis> as the primary user interface.</para>
+  </preface>
+
+  <!-- main content -->
+
+  <chapter id="chp.Intro">
+    <title>Introduction</title>
+
+    <abstract>
+      <para>*** yada yada</para>
+    </abstract>
+
+    <sect1>
+      <title>***</title>
+
+      <para><emphasis>*** yada yada</emphasis></para>
+    </sect1>
+  </chapter>
+
+  <chapter>
+    <title>***</title>
+
+    <abstract>
+      <para>*** yada yada</para>
+    </abstract>
+
+    <sect1>
+      <title>***</title>
+
+      <para><emphasis>*** yada yada</emphasis></para>
+
+      <sect2>
+        <title>Properties</title>
+
+        <para>The html viewer has only two properties</para>
+
+        <programlisting format="linespecific">isis.viewer.html.debug=true</programlisting>
+
+        <para>Which enables debugging on the web controller.</para>
+
+        <programlisting format="linespecific">isis.viewer.html.encoding=UTF-8</programlisting>
+
+        <para>Which enables the character set encoding used by the
+        HTTPServletRequest. This is ISO-8859-1 by default.</para>
+
+        <para></para>
+
+        <para></para>
+      </sect2>
+
+      <sect2>
+        <title>Reading HTML viewer specific properties</title>
+
+        <para></para>
+
+        <para></para>
+
+        <programlisting>&lt;web.xml&gt;
+    ...
+    &lt;context-param&gt;
+        &lt;param-name&gt;isis.viewers&lt;/param-name&gt;
+        &lt;param-value&gt;html&lt;/param-value&gt;
+    &lt;/context-param&gt;
+    ...
+&lt;/web.xml&gt;</programlisting>
+
+        <para>This will cause the viewer_html.properties file to be read if it
+        is present.</para>
+
+        <para></para>
+
+        <para></para>
+
+        <para>NB: the value for this parameter is actually comma-separated, to
+        allow for multiple viewers to be configured in the same webapp.</para>
+
+        <para></para>
+      </sect2>
+
+      <sect2>
+        <title>Hosting multiple viewers at the same time</title>
+
+        <para></para>
+
+        <para>*** combine the servlet, filter and listener entries.</para>
+
+        <para></para>
+
+        <para></para>
+
+        <para></para>
+
+        <para>By default the htmlviewer uses ".app" as the suffix for its .
+        this can be changed using the viewer-html.suffix init-param in
+        web.xml:</para>
+
+        <para></para>
+
+        <para>avoid name clashes.</para>
+
+        <para></para>
+
+        <para></para>
+
+        <para></para>
+
+        <programlisting>&lt;web.xml&gt;
+    ...
+    &lt;context-param&gt;
+        &lt;param-name&gt;viewer-html.suffix&lt;/param-name&gt;
+        &lt;param-value&gt;htmlviewer&lt;/param-value&gt;
+    &lt;/context-param&gt;
+    ...
+&lt;/web.xml&gt;</programlisting>
+
+        <para></para>
+
+        <para></para>
+
+        <para></para>
+      </sect2>
+
+      <sect2>
+        <title>Debugging</title>
+
+        <para>To turn on debuging use the debugon command, e.g.,</para>
+
+        <programlisting>http://localhost:8080/debugon.app</programlisting>
+
+        <para>A control bar appears a the bottom of the page allowing you to
+        display the object graph, specification, connection details and so on.
+        To turn it off use the debugoff command:</para>
+
+        <programlisting>http://localhost:8080/debugoff.app</programlisting>
+
+        <para>The debug pages can be displayed directly by providing the
+        commands: debug; spec and dump - along with a object id if necessary.
+        For example to view the details about the specification for object 28
+        use:</para>
+
+        <programlisting>http://localhost:8080/spec.app?id=28</programlisting>
+
+        <para></para>
+
+        <para></para>
+      </sect2>
+    </sect1>
+  </chapter>
+
+  <appendix>
+    <title>***</title>
+
+    <abstract>
+      <para>*** yada yada</para>
+    </abstract>
+
+    <sect1 id="sec.module-ui">
+      <title>***</title>
+
+      <para>*** yada yada</para>
+    </sect1>
+  </appendix>
+</book>

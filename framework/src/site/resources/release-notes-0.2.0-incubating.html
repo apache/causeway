@@ -1,0 +1,161 @@
+<!-- Licensed to the Apache Software Foundation (ASF) under one or more contributor 
+    license agreements. See the NOTICE file distributed with this work for additional 
+    information regarding copyright ownership. The ASF licenses this file to 
+    you under the Apache License, Version 2.0 (the "License"); you may not use 
+    this file except in compliance with the License. You may obtain a copy of 
+    the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required 
+    by applicable law or agreed to in writing, software distributed under the 
+    License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS 
+    OF ANY KIND, either express or implied. See the License for the specific 
+    language governing permissions and limitations under the License. -->
+<H3>Release Notes - Isis - Version 0.2.0-incubating</h3>
+
+
+<h2>0.2.0 Umbrella</h2>
+<ul>
+
+<li>[<a href='https://issues.apache.org/jira/browse/ISIS-165'>ISIS-165</a>] -         0.2.0 release (umbrella)
+    <ul>
+        <li>[<a href='https://issues.apache.org/jira/browse/ISIS-120'>ISIS-120</a>] -         Reworking Isis site, and examples.
+        </li>
+        <li>[<a href='https://issues.apache.org/jira/browse/ISIS-107'>ISIS-107</a>] -         For Isis 0.2.0 release: Miscellaneous minor changes (eg fix spelling typos in code, minor site/documentation updates) 
+        </li>
+        <li>[<a href='https://issues.apache.org/jira/browse/ISIS-125'>ISIS-125</a>] -         0.2.0 release - release process dry run &amp; edits
+        </li>
+        <li>[<a href='https://issues.apache.org/jira/browse/ISIS-110'>ISIS-110</a>] -         Minor edits to pom.xml&#39;s to improve operation
+        </li>
+    <li>[<a href='https://issues.apache.org/jira/browse/ISIS-168'>ISIS-168</a>] -         Update archetype for Isis 0.2.0
+    </li>
+    </ul>
+</li>
+<li>[<a href='https://issues.apache.org/jira/browse/ISIS-121'>ISIS-121</a>] -         General updates to the SQL ObjectStore, not related to any specific issue
+</li>
+</ul>
+
+<h2>Documentation</h2>
+<ul>
+<li>[<a href='https://issues.apache.org/jira/browse/ISIS-89'>ISIS-89 (ongoing)</a>] -   Finish off updating documentation post the first (pre 1.0) release of Isis (nb: ongoing)
+    <ul>
+        <li>[<a href='https://issues.apache.org/jira/browse/ISIS-28'>ISIS-28</a>] -         Update objectstores:xml docbook guide for 0.2 release
+        </li>
+        <li>[<a href='https://issues.apache.org/jira/browse/ISIS-38'>ISIS-38</a>] -         Update viewer:junit docbook guide for 0.2 release
+        </li>
+    </ul>
+</ul>
+            
+<h2>Bug</h2>
+<ul>
+<li>[<a href='https://issues.apache.org/jira/browse/ISIS-11'>ISIS-11</a>] -         Build errors under maven 3.0
+</li>
+<li>[<a href='https://issues.apache.org/jira/browse/ISIS-18'>ISIS-18</a>] -         DateParser error under de_DE.
+</li>
+<li>[<a href='https://issues.apache.org/jira/browse/ISIS-87'>ISIS-87</a>] -         move javax.* dependencies over to org.apache.geronimo.specs pendanta
+</li>
+<li>[<a href='https://issues.apache.org/jira/browse/ISIS-101'>ISIS-101</a>] -         Missing SVN properties
+</li>
+<li>[<a href='https://issues.apache.org/jira/browse/ISIS-114'>ISIS-114</a>] -         json viewer applib could not fetch json-lib-2.4
+</li>
+<li>[<a href='https://issues.apache.org/jira/browse/ISIS-117'>ISIS-117</a>] -         Infinite recursion in JDBC objectstore
+</li>
+<li>[<a href='https://issues.apache.org/jira/browse/ISIS-118'>ISIS-118</a>] -         Persist and restore polymorphic classes
+</li>
+<li>[<a href='https://issues.apache.org/jira/browse/ISIS-119'>ISIS-119</a>] -         Collections were marked as &quot;resolved&quot;, even if a collection has an unresolved collection.
+</li>
+<li>[<a href='https://issues.apache.org/jira/browse/ISIS-122'>ISIS-122</a>] -         BooleanValueSemanticsProviderAbstract can not handle fields of type Boolean, when value string is &quot;TRUE&quot;/&quot;FALSE&quot; from the SQL OS
+</li>
+<li>[<a href='https://issues.apache.org/jira/browse/ISIS-145'>ISIS-145</a>] -         links to NO books is broken
+</li>
+<li>[<a href='https://issues.apache.org/jira/browse/ISIS-146'>ISIS-146</a>] -         ImmutableFacet logic seems too keen to disable
+</li>
+<li>[<a href='https://issues.apache.org/jira/browse/ISIS-153'>ISIS-153</a>] -         SQL Objectstore was not ignoring fields that were marked @NotPersisted
+</li>
+<li>[<a href='https://issues.apache.org/jira/browse/ISIS-154'>ISIS-154</a>] -         JdbcBinaryValueMapper fails if value is null
+</li>
+<li>[<a href='https://issues.apache.org/jira/browse/ISIS-169'>ISIS-169</a>] -         New collection fields prevent objects from being reloaded into NoSql store.
+</li>
+</ul>
+            
+<h2>Improvement</h2>
+<ul>
+<li>[<a href='https://issues.apache.org/jira/browse/ISIS-5'>ISIS-5</a>] -         Reinstate DerivedFacet (to distinguish from NonPersistableFacet, which is also unmodifiable).
+</li>
+<li>[<a href='https://issues.apache.org/jira/browse/ISIS-10'>ISIS-10</a>] -         Properly use prepared statements instead of injecting values into &quot;insert&quot; and &quot;update&quot; SQL statements
+</li>
+<li>[<a href='https://issues.apache.org/jira/browse/ISIS-25'>ISIS-25</a>] -         Update runtimes:embedded docbook guide
+</li>
+<li>[<a href='https://issues.apache.org/jira/browse/ISIS-104'>ISIS-104</a>] -         Implement logout for Wicket
+</li>
+<li>[<a href='https://issues.apache.org/jira/browse/ISIS-108'>ISIS-108</a>] -         Develop a &quot;TCK&quot; example application that exhibits/uses most Isis features in order to facilitate automated integration testing of viewers/objectstores etc.
+</li>
+<li>[<a href='https://issues.apache.org/jira/browse/ISIS-123'>ISIS-123</a>] -         Metamodel specload specimpl could not handle only some parameters having @Named
+</li>
+<li>[<a href='https://issues.apache.org/jira/browse/ISIS-129'>ISIS-129</a>] -         Multiple persistence updates are executed when editing multiple fields within an entity in HTML viewer..
+</li>
+<li>[<a href='https://issues.apache.org/jira/browse/ISIS-132'>ISIS-132</a>] -         Archive off (and no longer support) the xhtml viewer (since superceded by the json viewer)
+</li>
+<li>[<a href='https://issues.apache.org/jira/browse/ISIS-138'>ISIS-138</a>] -         FacetFactory to automatically ignore Comparable#compareTo(Object) method (similar to the one that ignores the methods of java.lang.Object.
+</li>
+<li>[<a href='https://issues.apache.org/jira/browse/ISIS-139'>ISIS-139</a>] -         Add latest version of jQuery (1.7.1) in core.webapp
+</li>
+<li>[<a href='https://issues.apache.org/jira/browse/ISIS-140'>ISIS-140</a>] -         Make the HTML viewer&#39;s message pane a little prettier...
+</li>
+<li>[<a href='https://issues.apache.org/jira/browse/ISIS-141'>ISIS-141</a>] -         In HTML viewer, read-only boolean properties shown as &quot;True&quot; or &quot;False&quot; rather than as a disabled checkbox when edit object
+</li>
+<li>[<a href='https://issues.apache.org/jira/browse/ISIS-148'>ISIS-148</a>] -         Remove the hack in HTML viewer&#39;s ObjectView#execute() w.r.t. ImmutableFacet
+</li>
+<li>[<a href='https://issues.apache.org/jira/browse/ISIS-158'>ISIS-158</a>] -         Remove test fixture adapters for JMock2 (was too complicated), and bring in JMock 2.6RC2&#39;s JUnit4 support.
+</li>
+<li>[<a href='https://issues.apache.org/jira/browse/ISIS-163'>ISIS-163</a>] -         The progmodel wrapper (specifically, DomainObjectInvocationHandler) has hard-coded assumptions about the programming model
+</li>
+<li>[<a href='https://issues.apache.org/jira/browse/ISIS-167'>ISIS-167</a>] -         update Isis contributors guide re: using mvn-version-plugin
+</li>
+</ul>
+    
+<h2>New Feature</h2>
+<ul>
+<li>[<a href='https://issues.apache.org/jira/browse/ISIS-109'>ISIS-109</a>] -         JSON viewer (for Restful Objects, up to v0.56).
+</li>
+<li>[<a href='https://issues.apache.org/jira/browse/ISIS-111'>ISIS-111</a>] -         Title Facet Via Method Annotation
+</li>
+<li>[<a href='https://issues.apache.org/jira/browse/ISIS-124'>ISIS-124</a>] -         Add a @Stable annotation in the applib (along with StableFacet and StableAnnotationFacetFactory in the metamodel)
+</li>
+<li>[<a href='https://issues.apache.org/jira/browse/ISIS-128'>ISIS-128</a>] -         Add DomainObjectContainer#titleOf(pojo) to allow domain objects to programmatically obtain the title of other domain objects.
+</li>
+<li>[<a href='https://issues.apache.org/jira/browse/ISIS-130'>ISIS-130</a>] -         New &quot;onlinedemo&quot; example to demonstrate combined html and json viewers as live example.
+</li>
+<li>[<a href='https://issues.apache.org/jira/browse/ISIS-135'>ISIS-135</a>] -         Allow HTML viewer to co-exist with other viewers, (by supporting a user-defined suffix for its links; eg &quot;.htmlviewer&quot; rather than &quot;.app&quot;)
+</li>
+<li>[<a href='https://issues.apache.org/jira/browse/ISIS-136'>ISIS-136</a>] -         Allow json viewer to coexist with other viewers (by introducing new authentication session lookup strategy to read from headers and enhancing IsisSessionFilter)
+</li>
+<li>[<a href='https://issues.apache.org/jira/browse/ISIS-137'>ISIS-137</a>] -         Provide the ability to allow new users to register through the HTML viewer.
+</li>
+<li>[<a href='https://issues.apache.org/jira/browse/ISIS-142'>ISIS-142</a>] -         Provide &quot;String disabled()&quot; method on objects to disable the entire object at runtime.
+</li>
+<li>[<a href='https://issues.apache.org/jira/browse/ISIS-143'>ISIS-143</a>] -         Provide &quot;Boolean hidden()&quot; method on objects to hide the entire object at runtime.
+</li>
+<li>[<a href='https://issues.apache.org/jira/browse/ISIS-147'>ISIS-147</a>] -         Adding new features to the SQL objectstore
+</li>
+<li>[<a href='https://issues.apache.org/jira/browse/ISIS-149'>ISIS-149</a>] -         Update IsisTestRunner to accept annotations to override Persister and Authenticator
+</li>
+<li>[<a href='https://issues.apache.org/jira/browse/ISIS-160'>ISIS-160</a>] -         Allow users to override &quot;isis_&quot; table prefix
+</li>
+</ul>
+                            
+<h2>Task</h2>
+<ul>
+<li>[<a href='https://issues.apache.org/jira/browse/ISIS-81'>ISIS-81</a>] -         Fixes contributed on XHTML viewer.
+</li>
+<li>[<a href='https://issues.apache.org/jira/browse/ISIS-133'>ISIS-133</a>] -         Move the examples that don&#39;t match the quickstart archetype and don&#39;t demonstrate any particular feature off to ~/isis/retired.
+</li>
+<li>[<a href='https://issues.apache.org/jira/browse/ISIS-134'>ISIS-134</a>] -         Remove scimpi, dnd, wicket from archetype and from equivalent examples.
+</li>
+<li>[<a href='https://issues.apache.org/jira/browse/ISIS-144'>ISIS-144</a>] -         Update applib documentation to reflect new functionality provided by entity-level &quot;boolean hidden()&quot; and &quot;String disabled&quot;
+</li>
+</ul>
+        
+<h2>Test</h2>
+<ul>
+<li>[<a href='https://issues.apache.org/jira/browse/ISIS-80'>ISIS-80</a>] -         Re-enable testDate and testSqlDate tests in the common object store test suite
+</li>
+</ul>
+     

@@ -1,0 +1,62 @@
+{ "aString": "aStringValue",
+  "anInt": 123,
+  "aNull": null,
+  "aLong": 1234567890123,
+  "aDouble": 12345678901234534.3242,
+  "aBigDecimal": 12345678901234534.3242,
+  "aBigInteger": 12345678901234534132452342342789678234234,
+  "aBoolean": true,
+  "aLink": {
+    "href": "http://foo/bar",
+    "method": "GET",
+    "rel": "someRel"
+  },
+  "aMixedArray" : [ "a", "b", 123, { "foo": "bar"} ],
+  "aStringArray" : [ "a", "b", "c" ],
+  "anEmptyArray" : [  ],
+  "aSubMap": {
+    "aString": "aSubMapStringValue",
+    "anInt": 456,
+    "aBoolean": true,
+    "aLong": 1234567890456,
+    "aDouble": 12345678901234534.4567,
+    "aBigInteger": 12345678901234534132452342342789678234234,
+    "aLink": {
+      "href": "http://foo/bar",
+      "method": "GET",
+      "rel": "someSubRel"
+    }
+  },
+  "aSubList": [
+    "a", "b", "c"
+  ],
+  "anotherSubMap": {
+    "aListOfLinks": [
+      {
+        "href": "http://foo/bar",
+        "method": "GET",
+        "rel": "aRel"
+      },
+      {
+        "href": "http://foo/bar/otherRel",
+        "method": "GET",
+        "rel": "otherRel"
+      },
+      {
+        "href": "http://foo/bar/multiRel1",
+        "method": "GET",
+        "rel": "multiRel",
+        "data": "someData"
+      },
+      {
+        "href": "http://foo/bar/multiRel2",
+        "method": "GET",
+        "rel": "multiRel",
+        "data": "someOtherData"
+      }
+    ],
+    "aMap": "aValue",
+    "anEmptyList": [
+     ]
+  }
+}

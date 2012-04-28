@@ -1,0 +1,152 @@
+#set( $symbol_pound = '#' )
+#set( $symbol_dollar = '$' )
+#set( $symbol_escape = '\' )
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+         http://www.apache.org/licenses/LICENSE-2.0
+         
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  
+  
+  under the License.
+-->
+<html>
+    <head>
+        <title>Apache Isis ${parentArtifactId}</title>
+        <style type="text/css">
+h2,p,li,td,th {
+    font-family: Arial
+}
+table {
+    border-collapse: collapse;
+    margin-top: 10px;
+    font-size: small;
+}
+th,td {
+    border: 1px solid green;
+    padding: 4px;
+}
+th {
+    background-color:green;
+    color:white;
+}
+</style>
+    </head>
+    <body>
+        <h2>Congratulations!</h2>
+        <p>Congratulations, you've successfully run the <a href="http://incubator.apache.org/isis">Apache Isis</a> ${parentArtifactId} archetype
+           and are now running the generated application.</p>
+
+        <p>The app has the following viewers are configured:</p>
+        <table>
+            <tr><th>Viewer</th><th>Description</th><th>Further Documentation</th></tr>
+            <tr><td><a href="logon.htmlviewer">HTML viewer</a></td><td>for building simple, non-customizable webapps</td><td>(none currently)</td></tr>
+            <tr><td><a href="login.shtml">Scimpi viewer</a></td><td>which supports optional customization</td><td><a href="http://incubator.apache.org/isis/viewer/scimpi/docbkx/html/guide/isis-scimpi-viewer.html">Developers' guide</a></td></tr>
+            <tr><td><a href="services">JSON viewer</a></td><td>which exposes a REST API to supporting custom UIs (eg Javascript) and integration scenarios</td><td><a href="http://restfulobjects.org">Restful Objects spec</a></td></tr>
+            <tr><td><a href="mobile/index.html">JQueryMobile demo</a></td><td>which is a demo mobile webapp that can be used browse the REST API</td><td>(none)</td></tr>
+        </table>
+
+        <p>Follow the links above to explore these viewers, using username: <tt>sven</tt>, password: <tt>pass</tt>.</p>
+        
+        <p>It also has the following objectstores (databases) configured:</p>
+        <table>
+            <tr><th>Object Store</th><th>Description</th><th>Further Documentation</th></tr>
+            <tr><td>In-memory objectstore</td><td>for rapid prototyping</td><td>(none)</td></tr>
+            <tr><td>NoSQL MongoDB objectstore</td><td>for persisting to a MongoDB instance</td><td>(none currently)</td></tr>
+            <tr><td>SQL objectstore</td><td>for persisting to a relational database</td><td><a href="http://incubator.apache.org/isis/runtimes/dflt/objectstores/sql/docbkx/html/guide/isis-sql-objectstore.html">Config and Deployment guide</a></td></tr>
+        </table>
+        
+        <p>The in-memory objectstore is the default, as it takes no additional setup.</p>
+
+        <h2>What next?</h2>
+
+        <p>Decide which viewer(s) you want to provide for accessing your domain objects, and
+        then comment out/delete the relevant entries from the <tt>WEB-INF/web.xml</tt> and delete the <a href="${symbol_pound}toc">static resources</a>
+        that you no longer need.  You'll probably also want to delete this file, and remove the 
+        <tt>&lt;filter&gt;RedirectToDocsFilter&lt;/filter&gt;</tt> entry in <tt>web.xml</tt>.
+        
+        <p>Also, decide which objectstore you want to use to persist your domain objects.  As noted above, the in-memory object store is the default.  
+        If you decide to use the NoSQL (MongoDB) or SQL object stores, you'll need to make a number of configuration changes:
+        <ul>
+            <li>in the <tt>WEB-INF/isis.properties</tt> config file:
+                <ul>
+                    <li>modify the <tt>isis.services</tt>/<tt>isis.services.prefix</tt> keys, to pick up the domain service implementation for the object store</li>
+                    <li>modify the <tt>isis.persistor</tt> key, to specify the appropriate object store component
+                </ul>
+            </li>
+            <li>in the <tt>WEB-INF/persistor_xxx.properties</tt> file, verify the configuration of the server (hostname, port, etc)</li>
+            <li>modify the pom.xml, to depend on the corresponding <tt>objectstore-xxx</tt> module</li>
+            <li>if using SQL object store, modify the pom.xml of the corresponding <tt>objectstore-xxx</tt> to bring in JDBC drivers</li>
+        </ul>
+
+        <p>While doing initial prototyping you may find that the default in-memory objectstore suffices; the <tt>isis.fixtures</tt> / <tt>isis.fixtures.prefix</tt> 
+        properties in the <tt>WEB-INF/isis.properties</tt> configuration file define an the initial data set with which to seed the database.  
+        <p>For both the NoSQL and SQL object stores, these fixtures are loaded the very first time that the system is bootstrapped, but are then
+        not loaded thereafter.
+
+        <h2>Running Tests</h2>
+        
+        <p>In addition to app, the archetype also generates some simple tests:
+        <ul>
+            <li>JUnit tests exercise the domain objects using the JUnit viewer.  Domain object are interacted with "as if" through the user interface;
+                a CGLib proxy wraps each domain object in order to enforce business rules and validation</li>
+            <li>BDD tests exercise the domain object through an integration with the <a href="http://concordion.org">Concordion</a> BDD framework.
+                These tests are specified using XHTML, and running them generates a browsable website that indicates whether the tests pass.  By default
+                the site is generated in <tt>/tmp/concordion</tt> (specifically, <tt>/tmp/concordion/viewer/bdd/stories/todo/Index.html</tt>).</li>     
+        </ul>
+        <p>These tests are configured to run within Maven (eg using <tt>mvn test</tt>).</p> 
+
+        <h2>What if I need more help?</h2>
+
+        <p>If you get stuck, don't forget that there is more information at the <a href="http://incubator.apache.org/isis">Apache Isis website</a>, and you
+        can always find more help on the Apache Isis mailing lists (<a href="mailto:isis-users-subscribe@incubator.apache.org">subscribe here</a>, <a href="mailto:isis-users@incubator.apache.org">post here</a>)</p>        
+        
+        <h2><a id="toc">Static Resources</a></h2>
+        
+        <table>
+            <tr><th>File</th><th>Description</th></tr>
+            <tr><td>index.html</td><td>This file</td></tr>
+            <tr><td>htmlviewer</td><td>HTML viewer styles and images</td></tr>
+            <tr><td>debug.shtml</td><td>Scimpi viewer debug page</td></tr>
+            <tr><td>error.shtml</td><td>Scimpi viewer error page</td></tr>
+            <tr><td>generic</td><td>Scimpi viewer generic views</td></tr>
+            <tr><td>index.shtml</td><td>Scimpi viewer home page</td></tr>
+            <tr><td>login.shtml</td><td>Scimpi viewer login page</td></tr>
+            <tr><td>scimpi</td><td>Scimpi viewer styles and images</td></tr>
+            <tr><td>ToDoItem</td><td>Scimpi viewer customisation for ToDoItem class</td></tr>
+            <tr><td>jquery</td><td>JQuery library (used by Mobile demo app)</td></tr>
+            <tr><td>jquery.mobile</td><td>JQueryMobile library (used by Mobile demo app)</td></tr>
+            <tr><td>jquery.tmpl</td><td>JQueryTmpl library (used by Mobile demo app)</td></tr>
+            <tr><td>mobile</td><td>Mobile demo app</td></tr>
+            <tr><td>WEB-INF/web.xml</td><td>Servlet container's web.xml, bootstrapping Isis and defining its filters and servlets</td></tr>
+            <tr><td>WEB-INF/isis.properties</td><td>Isis' main configuration file</td></tr>
+            <tr><td>WEB-INF/logging.properties</td><td>Log4j configuration</td></tr>
+            <tr><td>WEB-INF/authentication_file.properties</td><td>File-based authentication mechanism's configuration file</td></tr>
+            <tr><td>WEB-INF/authentication_file.passwords</td><td>File-based authentication mechanism supporting configuration file</td></tr>
+            <tr><td>WEB-INF/authorization_file.properties</td><td>File-based authorization mechanism's configuration file</td></tr>
+            <tr><td>WEB-INF/authorization_file.allow</td><td>File-based authorization mechanism's supporting configuration file (whitelist)</td></tr>
+            <tr><td>WEB-INF/persistor_in-memory.properties</td><td>In-memory objectstore configuration file</td></tr>
+            <tr><td>WEB-INF/persistor_mongodb.properties</td><td>MongoDB objectstore configuration file</td></tr>
+            <tr><td>WEB-INF/persistor_sql.properties</td><td>SQL objectstore configuration file</td></tr>
+            <tr><td>WEB-INF/user-profile-store_in-memory.properties</td><td>In-memory user profile store configuration file</td></tr>
+            <tr><td>WEB-INF/viewer_html.properties</td><td>HTML viewer configuration file</td></tr>
+            <tr><td>WEB-INF/viewer_json.properties</td><td>JSON viewer configuration file</td></tr>
+            <tr><td>WEB-INF/viewer_scimpi.properties</td><td>Scimpi viewer configuration file</td></tr>
+        </table>        .
+        
+    </body>
+</html>
+
+

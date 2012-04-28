@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><templates><template autoinsert="true" context="java" deleted="false" description="JUnit4 After Method" enabled="true" name="juafter">${:import(org.junit.After)}@After&#13;
+public void tearDown() throws Exception {&#13;
+	${cursor}&#13;
+}&#13;
+</template><template autoinsert="true" context="java" deleted="false" description="JUnit4 AssertThat" enabled="true" name="juassertThat">${:importStatic(org.junit.Assert.assertThat,'org.hamcrest.CoreMatchers.*')}assertThat(${object}, ${matcher});</template><template autoinsert="true" context="java" deleted="false" description="JUnit4 Before Method" enabled="true" name="jubefore">${:import(org.junit.Before)}@Before&#13;
+public void setUp() throws Exception {&#13;
+	${cursor}&#13;
+}&#13;
+</template><template autoinsert="true" context="java" deleted="false" description="JUnit4 Test Method" enabled="true" name="jutest">${:import(org.junit.Test)}@Test&#13;
+public void ${xxx}() throws Exception {&#13;
+	${cursor}&#13;
+}&#13;
+</template></templates>

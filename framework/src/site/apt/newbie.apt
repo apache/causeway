@@ -1,0 +1,97 @@
+~~  Licensed to the Apache Software Foundation (ASF) under one
+~~  or more contributor license agreements.  See the NOTICE file
+~~  distributed with this work for additional information
+~~  regarding copyright ownership.  The ASF licenses this file
+~~  to you under the Apache License, Version 2.0 (the
+~~  "License"); you may not use this file except in compliance
+~~  with the License.  You may obtain a copy of the License at
+~~
+~~        http://www.apache.org/licenses/LICENSE-2.0
+~~
+~~  Unless required by applicable law or agreed to in writing,
+~~  software distributed under the License is distributed on an
+~~  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+~~  KIND, either express or implied.  See the License for the
+~~  specific language governing permissions and limitations
+~~  under the License.
+
+
+For 'Newbie' Contributors
+  
+  All the projects in Apache - Isis included - only succeed because of the involvement 
+  of their community:
+  
+  * For most, that means just using the software, and perhaps reporting the occasional
+    feature request or defect via JIRA.
+  
+  * For some, it may also mean blogging or tweeting about using the software, explaining
+    to others (or maybe themselves) about how it solves their particular problems, and
+    in general helping to advertise its existence.
+    
+  * And finally there are the contributors to the project: those who have a deep belief 
+    in the value of the software, and want to bring their expertise to bear to in its
+    continued development.
+  
+  []
+  
+  So, suppose you find yourself in this latter group: you'd like to contribute back to 
+  Isis, but you're not sure how.  On the one hand, there's knowing what the process is;
+  on the other, there's just the difficulty of getting to grips with a large codebase.
+  
+Process
+
+  From a process viewpoint, the way it works is:
+  
+  * make sure you are subscribed to the isis-users mailing list and to the isis-dev mailing list
+  
+    ... and start contributing to the conversation threads
+    
+  * register yourself on Apache's {{{https://issues.apache.org/jira}JIRA}} ticket tracking system
+ 
+  * start contributing patches to existing JIRA issues
+  
+  * or, if you have some existing code that you think would be of value to the project,
+    raise a new ticket and attach that code (eg as a zip)
+    
+  []
+  
+  After a little while, you may be invited to become a committer.  Someone in the existing
+  community will ask you if you are interested; if you are, then a vote will be held by the
+  existing committers and project mentors.  Assuming that it passes, you'll be granted
+  permission to start committing directly to the source code repository.
+  
+JIRA tickets for 'Newbies'  
+  
+  As noted above, Isis' codebase is quite large, so navigating it and finding existing issues
+  that could you could tackle can be quite a challenge.  To help, we've try to identify
+  simple issues with a #newbie label.  These issues fall into one of two categories:
+  
+  * either they are really relatively trivial to complete
+  
+  * or, they represent stand-alone or new features that could be developed without necessarily
+  having to grok all the existing code.
+   
+  []
+
+  You can find the current newbie issues by {{{https://issues.apache.org/jira/secure/IssueNavigator.jspa?mode=hide&requestId=12318871}following this link}}.  
+
+  And, before you start, don't forget to consult the {{{./docbkx/html/guide/isis-contributors-guide.html}contributors guide}}
+  to describe how to build Isis from source, and how to configure your development environment.    
+
+Not only code  
+  
+  There are more ways to contribute than to cut code!  We'd also appreciate help with:
+  
+  * improving documentation (from fixing typos thru to writing how-to guides)
+  
+  * screencasts
+  
+  * developing example apps
+  
+  * writing blog posts
+  
+  * writing articles
+  
+  * taking part in mailing list discussions
+  
+  []

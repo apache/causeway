@@ -1,0 +1,3912 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+-->
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
+"file:./src/docbkx/dtd-4.5/docbookx.dtd">
+<book>
+  <bookinfo>
+    <title><?eval ${docbkxGuideTitle}?></title>
+
+    <subtitle><?eval ${docbkxGuideSubTitle}?></subtitle>
+
+    <releaseinfo><?eval ${project.version}?></releaseinfo>
+
+    <authorgroup>
+      <author>
+        <firstname>Dan</firstname>
+
+        <surname>Haywood</surname>
+      </author>
+    </authorgroup>
+
+    <legalnotice>
+      <para>Permission is granted to make and distribute verbatim copies of
+      this manual provided that the copyright notice and this permission
+      notice are preserved on all copies.</para>
+    </legalnotice>
+  </bookinfo>
+
+  <!-- front matter -->
+
+  <toc></toc>
+
+  <preface id="preface">
+    <title>Preface</title>
+
+    <para>The <emphasis>Apache Isis Wicket Viewer</emphasis> provides a
+    customizable web-based viewer for <emphasis>Apache Isis</emphasis>
+    implemented using the <ulink url="http://wicket.apache.org">Apache
+    Wicket</ulink> framework. This user guide is written for developers
+    looking to write <emphasis>Apache Isis</emphasis> applications and deploy
+    them using the <emphasis>Wicket Viewer</emphasis>. It assumes familiarity
+    with writing <emphasis>Isis</emphasis> applications, but that is all that
+    is needed to get an application up-and-running with the generic
+    <acronym>OOUI</acronym>.</para>
+
+    <para>Familiarity with <emphasis>Apache Wicket</emphasis> is useful to
+    understand how the wicket viewer fits together, but is essential unless
+    you want to start customizing the <acronym>UI</acronym>. If you're
+    interested in learning more about <emphasis>Wicket</emphasis> itself, then
+    <ulink url="http://www.manning.com/dashorst/">Wicket In Action</ulink> (Martijn Dashort &amp; Eelco
+    Hillenius) is definitely worth reading.</para>
+  </preface>
+
+  <!-- main content -->
+
+  <chapter id="chp.Intro">
+    <title>Introduction</title>
+
+    <abstract>
+      <para>This introductory chapter describes the objective of the
+      <emphasis>Wicket Viewer</emphasis>, and the target audience for this
+      guide.</para>
+    </abstract>
+
+    <sect1>
+      <title>Introducing the Apache Isis Wicket Viewer</title>
+
+      <para>The <emphasis>Wicket Viewer</emphasis> provides a generic
+      <acronym>OOUI</acronym> web-based viewer for <emphasis>Apache
+      Isis</emphasis> domain models, using <ulink
+      url="http://wicket.apache.org">Apache Wicket</ulink> as the underlying
+      web framework.</para>
+
+      <para>What this means for you, the developer, is that you can build a
+      web application solely by developing the domain model as pojos. The
+      <emphasis>Wicket Viewer</emphasis> will then render your domain objects
+      in a web <acronym>UI</acronym> using ready provided
+      <emphasis>Wicket</emphasis> <classname>Component</classname>s.</para>
+
+      <para>This generic <acronym>UI</acronym> provides a lot of functionality
+      out-of-the-box:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>Each domain entity is rendered as a form, with the appropriate
+          individual component type for its values. This entity form also
+          allows editable references to other objects, too.</para>
+        </listitem>
+
+        <listitem>
+          <para>Moreover, any collections of a domain entity (eg
+          <classname>Order</classname> / <classname>OrderDetail</classname>)
+          are also automatically rendered as a list, a table, or in any other
+          appropriate representation. Both the scalar and collection
+          references let the end-user easily "walk the graph" around your
+          domain model.</para>
+        </listitem>
+
+        <listitem>
+          <para>Finally, the vuewer also renders actions (commands/behaviors)
+          for your domain objects, and lets these actions to be invoked. This
+          is what makes <emphasis>Apache Isis</emphasis>-based applications
+          that much more than simple <acronym>CRUD</acronym>
+          applications.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>You can see examples of the <acronym>UI</acronym> in <xref
+      linkend="chp.Screenshots" />.</para>
+
+      <para>Over and above this generic interface, you are then free to
+      customize this interface in various ways. Your customizations can be
+      general (eg providing a way to render a collection of
+      <classname>Locatable</classname> objects in a google-maps mashup) or
+      targetted (eg a particular way to render a
+      <classname>ShoppingCartWizard</classname>). Generally these
+      customizations take the form of bespoke <emphasis>Wicket</emphasis>
+      <classname>Component</classname>s, though simple customizations can be
+      performed just by modifying the <acronym>CSS</acronym>. Again you can
+      see some examples of these customizations in <xref
+      linkend="chp.Screenshots" />.</para>
+
+      <para><emphasis>Apache Isis</emphasis> webapps that use the
+      <emphasis>Wicket Viewer</emphasis> are bootstrapped in the same as
+      vanilla <emphasis>Wicket</emphasis> applications, with the
+      <emphasis>Wicket Viewer</emphasis> providing an implementation of
+      <emphasis>Wicket</emphasis>'s <code>WebApplication</code> class that
+      additionally bootstraps the <emphasis>Apache Isis</emphasis> runtime.
+      Authentication is performed using <emphasis>Apache Isis</emphasis>' own
+      security mechanism (which itself is pluggable).</para>
+    </sect1>
+
+    <sect1>
+      <title>The Wicket Viewer compared to other Wicket RAD Frameworks</title>
+
+      <sect2>
+        <title>Differences in Capability</title>
+
+        <para>There are several frameworks that aim either to provide a
+        back-end to <emphasis>Wicket</emphasis> and/or that aim to eliminate
+        some of the boilerplate; notable examples are <ulink
+        url="http://wicketopia.sourceforge.net">Wicketopia</ulink>, <ulink
+        url="http://sites.google.com/site/wicketrad">Wicket RAD</ulink> and
+        <ulink
+        url="http://databinder.net/wicket/show/overview">DataBinder</ulink>.
+        There are also precanned archetypes, such as jWeekEnd's <ulink
+        url="http://jweekend.co.uk/dev/LegUp">LegUp</ulink> archetypes and
+        <ulink
+        url="http://wicketstuff.org/confluence/display/STUFFWIKI/Wicket-Iolite">IoLite</ulink>,
+        that do some of the wiring for back-end technologies like <ulink
+        url="http://springframework.org">Spring</ulink> and <ulink
+        url="http://hibernate.org">Hibernate</ulink>. So, how does <emphasis>Wicket
+        Viewer</emphasis> for <emphasis>Apache Isis</emphasis> compare to
+        them?</para>
+
+        <para>Well, compared to <emphasis>Wicketopia</emphasis> for example,
+        <emphasis>Wicket Viewer</emphasis> shares the following ideas:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>both frameworks support pluggable editors for Javabean
+            properties</para>
+          </listitem>
+
+          <listitem>
+            <para>both frameworks allow the metamodel to be enhanced
+            declaratively using annotations (eg
+            <classname>@Length</classname>); these are picked up by the
+            editors</para>
+          </listitem>
+
+          <listitem>
+            <para>both frameworks support (or aspire to support) the metamodel
+            being built from various sources, including for example
+            <emphasis>Hibernate</emphasis> or <acronym>JSR-303</acronym>
+            annotations etc. In the case of the <emphasis>Wicket
+            Viewer</emphasis> this is done by using <emphasis>Apache
+            Isis</emphasis>' own metamodel.</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>But there are some differences too; through <emphasis>Wicket
+        Viewer</emphasis>'s use of the <emphasis>Apache Isis</emphasis>
+        it:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>allows the metamodel to be enhanced imperatively as well as
+            declaratively; naming conventions are used to associate supporting
+            methods with the properties</para>
+          </listitem>
+
+          <listitem>
+            <para>supports user-defined value types (using <emphasis>Apache
+            Isis</emphasis>' <classname>@Value</classname> annotation);
+            important for domain-driven applications</para>
+          </listitem>
+
+          <listitem>
+            <para>supports three level of business rule (both declaratively
+            and imperatively): is the entity class member visible, is it
+            usable, is the value proposed valid. For most other frameworks,
+            only the last of these (validation of proposed values) is
+            typically supported</para>
+          </listitem>
+
+          <listitem>
+            <para>supports properties which are references to other entities,
+            not just simple value types. In particular, the <emphasis>Wicket
+            Viewer</emphasis>'s property editor for references allows
+            instances to be found by invoking repositories in-situ</para>
+          </listitem>
+
+          <listitem>
+            <para>renders entity collections as well as entity
+            properties</para>
+          </listitem>
+
+          <listitem>
+            <para>renders entity actions (commands), allowing more than simple
+            <acronym>CRUD</acronym> behavior to be exposed. Indeed, it's
+            possible for the domain entity to be immutable except through the
+            invocation of actions</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>The flip side of the <emphasis>Wicket Viewer</emphasis>'s more
+        extensive metamodel support is that it uses <emphasis>Apache
+        Isis</emphasis>' own metamodel <acronym>API</acronym>. In contrast,
+        <emphasis>Wicketopia</emphasis> (only supporting properties and not
+        collections or actions) can get by using
+        <classname>java.bean.PropertyDescriptor</classname> from the
+        <acronym>JDK</acronym>.</para>
+
+        <para>Compared to frameworks and archetypes that use
+        <emphasis>Hibernate</emphasis> for the backend, the <emphasis>Wicket
+        Viewer</emphasis> (again by leveraging the rest of the
+        <emphasis>Apache Isis</emphasis> framework) is more general here too.
+        So, it has a <classname>Session</classname> concept that is analogous
+        to a <emphasis>Hibernate</emphasis> session (and if using the
+        <emphasis>JPA ObjectStore</emphasis> as a backend, the
+        <emphasis>Apache Isis</emphasis>' <classname>Session</classname> just
+        wraps the <acronym>JPA</acronym> provider's
+        <classname>PersistenceContext</classname> <emphasis>e</emphasis>'s).
+        But it also supports other back-end persistence stores too. Indeed,
+        <emphasis>Apache Isis</emphasis>' default to support rapid development
+        we usually use an in-memory object store.</para>
+
+        <para>The <emphasis>Wicket Viewer</emphasis> can also handle
+        non-persisted objects as well as persisted objects; with every managed
+        object is stored in an identity map. This support for non-persisted
+        objects is important because it is central to supporting specialized
+        use cases, including managing workflows for entering data, and
+        dashboards for analyzing data.</para>
+
+        <para>A few other points worthy of mention:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>The <emphasis>Wicket Viewer</emphasis> will automatically
+            serialize both persisted and non-persisted objects, irrespective
+            of whether the pojo itself is serializable. This is important if
+            deploying on a cluster.</para>
+          </listitem>
+
+          <listitem>
+            <para>Through the <emphasis>Apache Isis</emphasis> core framework,
+            every managed object also automatically has any domain service
+            dependencies automatically injected into it),</para>
+          </listitem>
+
+          <listitem>
+            <para>Again, courtesy of <emphasis>Apache Isis</emphasis> core,
+            every persisted object has a unique, immutable and serializable
+            object Id (<acronym>OID</acronym>). This can be a very useful
+            resource when integrating with external services such as
+            <acronym>REST</acronym> and <acronym>ESB</acronym>s.</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>Apache Isis</emphasis> core also provides
+            automatic dirty tracking, and optimistic locking.</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>Downsides? Currently <emphasis>Apache Isis</emphasis> does not
+        support some of the Enterprise Java <acronym>API</acronym>s such as
+        <acronym>JTA</acronym>, so interactions with domain services that
+        ultimately delegate to transaction stores (such as
+        <acronym>JMS</acronym>) cannot be enlisted in the same transaction as
+        the persistence store. And, obviously, it introduces a dependency on
+        the <emphasis>Apache Isis</emphasis> framework over and above
+        technologies such as the <acronym>JPA</acronym> provider
+        implementation.</para>
+      </sect2>
+
+      <sect2>
+        <title>Differences in Philosophy</title>
+
+        <para>Aside from differences in capability, there's also a difference
+        in philosophy.</para>
+
+        <para>Frameworks such as <emphasis>Wicketopia</emphasis> make it easy
+        to render a form to edit the properties of an entity, but the
+        application developer remains in control of the rest of the
+        application service layer, and in wiring the various pages
+        together.</para>
+
+        <para>With the <emphasis>Wicket Viewer</emphasis>, though, it is the
+        framework that is in control of this layer too, because the links
+        between pages are ultimately rendered by the property editor
+        <classname>Component</classname>s provided by the viewer, and - in
+        rendering the links representing references - controls . What that
+        also means is that every page rendered by the <emphasis>Wicket
+        Viewer</emphasis> is always of either an object (typical case), or an
+        action parameter dialog, or of a collection (the result of invoking an
+        action).</para>
+
+        <para>Within this constraint, there is a lot of flexibility, though,
+        because every element of the page can be customized. Internally the
+        <emphasis>Wicket Viewer</emphasis> uses the chain of responsibility
+        pattern to determine how which <classname>Component</classname> type
+        to use to render a page element. This works at a fine-grained level
+        (eg a date editor) and also at a larger-scale, (eg rendering a
+        collection of <classname>Locatable</classname> entities on a google
+        maps). See <xref linkend="chp.Screenshots" /> for more on this.</para>
+      </sect2>
+
+      <sect2>
+        <title>Part of the <emphasis>Apache Isis</emphasis> framework</title>
+
+        <para>The <emphasis>Wicket Viewer</emphasis> is only one of a number
+        of viewers available for <emphasis>Apache Isis</emphasis>. What that
+        means is that you can take your same domain objects model and deploy
+        them in other architectures. For example, the <acronym>DnD</acronym>
+        viewer is a rich, desktop <acronym>GUI</acronym> that employs a
+        drag-n-drop metaphor (hence its name). It can be run as a standalone
+        single-user application or in client/server mode. Even if you don't
+        deploy this viewer in production, the way that it displays domain
+        objects makes for a very good development tool: something akin to a
+        <acronym>UML</acronym> design tool, only animated.</para>
+
+        <para><emphasis>Apache Isis</emphasis> also supports a number of
+        different ways to test your application. Domain objects written to the
+        <emphasis>Apache Isis</emphasis> programming model are just pojos, and
+        so can easily be unit tested using frameworks such as <ulink
+        url="http://junit.org">JUnit</ulink> and <ulink
+        url="http://jmock.org">JMock</ulink>. As a step up from that,
+        <emphasis>Apache Isis</emphasis> provides its own integrations with
+        JUnit, providing a "headless" programming model that wraps your domain
+        objects in proxies. This allows unit testing as if through the lens of
+        a GUI; trying to invoke an action that is disabled will throw an
+        exception.</para>
+
+        <para>Moving up to story testing/BDD, <emphasis>Apache Isis</emphasis>
+        integrates with <ulink url="http://concordion.org">Concordion</ulink>.
+        The business analyst specifies the behavior of the system in
+        <acronym>HTML</acronym>, and then the developer wire up this
+        specification to the domain model using a set of fixtures that
+        interact with the domain objects following the same rules as the
+        viewers. This allows application-level testing without the hassle of
+        using a <acronym>GUI</acronym> testing framework such as
+        <emphasis>Selenium</emphasis>.</para>
+
+        <para>One final point: <emphasis>Apache Isis</emphasis> has a strong
+        separation between its programming model and the framework that
+        understands that programming model. So, your domain objects depend
+        only on the <emphasis>Apache Isis</emphasis> applib (which defines
+        annotations such as <classname>@RegEx</classname>), not the framework
+        itself. This allows you to take your domain objects and deploy them on
+        other frameworks later, if need be. The <emphasis>Wicket
+        Viewer</emphasis> maintains this strong separation, defining its own
+        applib for annotations and features unique to the <emphasis>Wicket
+        Viewer</emphasis>.</para>
+      </sect2>
+    </sect1>
+
+    <sect1>
+      <title>The <emphasis>Wicket Viewer</emphasis> compared to other
+      <emphasis>Apache Isis</emphasis> viewers</title>
+
+      <para>Because the <emphasis>Wicket Viewer</emphasis> renders your domain
+      model within a webapp, it is to some extent similar to the
+      <acronym>HTML</acronym> viewer that is provided out-of-the-box by
+      <emphasis>Apache Isis</emphasis> itself. However, unlike the
+      <acronym>HTML</acronym> viewer, the <emphasis>Wicket Viewer</emphasis>
+      is highly customizable. The <emphasis>Wicket Viewer</emphasis> itself
+      essentially consists of a set of <ulink
+      url="http://wicket.apache.org">Wicket</ulink>
+      <classname>Component</classname>s that are used to render domain
+      objects, individual member elements of domain objects, and indeed
+      collections of domain objects. The components provided are sufficient to
+      render any <emphasis>Apache Isis</emphasis> domain model. However, any
+      developer with experience of <emphasis>Wicket</emphasis> can easily
+      write their own components and register them with the <emphasis>Wicket
+      Viewer</emphasis>. In this way, custom renderings of domain objects can
+      be achieved.</para>
+    </sect1>
+
+    <sect1>
+      <title>Typical Flow for Developing a Wicket Objects Application</title>
+
+      <para>There are, of course, lots of ways to skin any given cat, but
+      here's how you might go about developing an <emphasis>Apache
+      Isis</emphasis> application to be deployed using the <emphasis>Wicket
+      Viewer</emphasis>:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>use the <emphasis>Apache Isis</emphasis> application archetype
+          to create an outline domain model, running against the in-memory
+          object store. The structure of a <emphasis>Apache Isis</emphasis>
+          application is reviewed in <xref
+          linkend="sec.StructureOfAnApacheIsisApp" />.</para>
+        </listitem>
+
+        <listitem>
+          <para>(optionally) use the <acronym>DnD</acronym> viewer to define
+          some of the basic domain services and entities. Or, you might want
+          to skip this step and develop solely using Wicket.</para>
+        </listitem>
+
+        <listitem>
+          <para>run your application under <emphasis>Wicket</emphasis>, either
+          using a built-in Jetty web server (see <xref
+          linkend="sec.RunningFromTheCommandLineProject" />) or as a regular
+          webapp (see <xref
+          linkend="sec.RunningFromTheWebAppProject" />).</para>
+        </listitem>
+
+        <listitem>
+          <para>customize the look-n-feel to use your preferred fonts and
+          logos by updating the <acronym>CSS</acronym> (see <xref
+          linkend="sec.GenericCss" />). You can also use
+          <acronym>CSS</acronym> to fine-tune the layout for selected objects
+          or object members (see <xref linkend="sec.SpecificCss" />).</para>
+        </listitem>
+
+        <listitem>
+          <para>continue to develop your domain application, identifying
+          properties, collections and defining behavior through actions. Also,
+          define fixtures to represent pre-canned scenarios to explore with
+          your domain expert. Check out the core <emphasis>Apache
+          Isis</emphasis> documentation for more on developing domain
+          objects.</para>
+        </listitem>
+
+        <listitem>
+          <para>fine tune the set of <classname>Component</classname>s used to
+          render your entities. The <emphasis>Wicket Viewer</emphasis>
+          provides built-in <classname>Component</classname>s to render every
+          element of your domain objects, and in some cases provides more than
+          one <classname>Component</classname>. When the <emphasis>Wicket
+          Viewer</emphasis> provides a number of alternate views like this,
+          you might prefer only one. Or, you might use an existing
+          <classname>Component</classname> and adapt it into your own
+          <classname>Component</classname>. In either case, you'll need to
+          fine-tune the set of <classname>ComponentFactory</classname>s (see
+          <xref linkend="sec.ComponentFactories" />).</para>
+        </listitem>
+
+        <listitem>
+          <para>implement custom representations of some entities (or
+          collections of entities), where it makes sense. For example, you
+          might want to display objects that have a location in a google maps
+          mashup, or objects that have a date/time in a calendar. Ultimately
+          these custom representations are also just
+          <classname>ComponentFactory</classname>s. A number of
+          <classname>Component</classname>s (including one for google maps and
+          one for charting) are described in <xref
+          linkend="sec.CustomComponents" />; use these directly or use them as
+          inspiration for your own.</para>
+        </listitem>
+
+        <listitem>
+          <para>support specialized use cases, if you have any. That is,
+          rather than require the end-user to interact directly with persisted
+          entities, introduce transient process objects to manage workflow and
+          bulk input, or write transient report objects to provide
+          dashboards</para>
+        </listitem>
+
+        <listitem>
+          <para>as you continue to develop your application, you may need to
+          integrate with external services. For example, you might want to
+          send out an email, or invoke a web service exposed by some other
+          system in your enterprise. Define an interface for these domain
+          services, and register their implementation in the <emphasis>Apache
+          Isis</emphasis> configuration file. See the main <emphasis>Apache
+          Isis</emphasis> documentation for more details on this.</para>
+        </listitem>
+
+        <listitem>
+          <para>ultimately your application will be ready to deploy. Before
+          you do, though, remember that you'll need to sort out persistence
+          and security (see <xref linkend="chp.DeploymentTopics" />)</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>Enough verbiage. The next chapter is a run through of a simple
+      application, screenshot by screenshot, so you can quickly assess whether
+      the <emphasis>Wicket Viewer</emphasis> fits your needs.</para>
+    </sect1>
+  </chapter>
+
+  <chapter id="chp.Screenshots">
+    <title>Application Walkthrough</title>
+
+    <abstract>
+      This chapter is a collection of screenshots to give you an idea of what the 
+
+      <emphasis>Wicket Viewer</emphasis>
+
+       can do.
+    </abstract>
+
+    <para>Most of the screenshots in this chapter require no specific
+    <acronym>GUI</acronym> code; in fact the first six sections require no
+    specialized code other than the domain objects. The <acronym>GUI</acronym>
+    that you see is generated by the <emphasis>Wicket Viewer</emphasis> at
+    runtime, directly from the domain model. You can find all the code for the
+    domain objects in <xref linkend="apx.ExampleApp" />.</para>
+
+    <sect1>
+      <title>Logging on, and the Application Services Menu</title>
+
+      <para>The <emphasis>Wicket Viewer</emphasis> integrates with
+      <emphasis>Apache Isis</emphasis> authentication mechanism (which is
+      itself pluggable); so we start off with a login screen:</para>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="images/010-login.png" scale="30" />
+        </imageobject>
+      </mediaobject>
+
+      <para>The initial home page shows a welcome message and more importantly
+      a menu bar for each of the registered services defined in the domain
+      application. These application services are the start points for the
+      user, allowing them to find existing objects and to create new ones. For
+      example the <literal>Employees</literal> menu item corresponds to the
+      <classname>EmployeeRepository</classname> class.</para>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="images/020-services-bar.png" scale="30" />
+        </imageobject>
+      </mediaobject>
+
+      <para>From the menu bar we can get to the menu items for each service.
+      So, for example, the <literal>Employees</literal> domain service
+      provides two actions, <literal>All Employees</literal> and <literal>Find
+      Employees</literal>. These are generated automatically from
+      corresponding methods - <methodname>allEmployees()</methodname> and
+      <methodname>findEmployees()</methodname> - in the
+      <classname>EmployeeRepository</classname> service.</para>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="images/030-services-action.png" scale="30" />
+        </imageobject>
+      </mediaobject>
+    </sect1>
+
+    <sect1>
+      <title>Viewing Entities and Collections of Entities</title>
+
+      <para>Because the <literal>All Employees</literal> action takes no
+      arguments, invoking it just returns its results. In this case the action
+      returns a collection (of <classname>Employee</classname>s), and so the
+      viewer renders the collection as a table. If the action had returned a
+      single object, then that would have been rendered instead.</para>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="images/040-action-result.png" scale="30" />
+        </imageobject>
+      </mediaobject>
+
+      <para>Clicking on one of the links takes us to a page rendering that
+      object, in this case an <classname>Employee</classname>. There is a form
+      for the entity's properties on the left, and summary details on the
+      right. In this particular case the entity has no collections; we'll see
+      one that does shortly.</para>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="images/050-entity-form.png" scale="30" />
+        </imageobject>
+      </mediaobject>
+
+      <para>In the summary section we an image, a title and the entity
+      actions. All these are rendered directly from a metamodel built by
+      inspecting the entity's class. Just as we can invoke actions on the
+      services, we can also invoke actions on the entities; for example, to
+      view this <classname>Employee</classname>'s
+      <classname>Claim</classname>s with the <literal>Claims For,,,</literal>
+      action.</para>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="images/060-entity-actions.png" scale="30" />
+        </imageobject>
+      </mediaobject>
+
+      <para>As before, this action returns a collection (of
+      <classname>Claim</classname>s) and so is rendered as a table.</para>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="images/070-entity-action-results.png" scale="30" />
+        </imageobject>
+      </mediaobject>
+
+      <para>Clicking on a link to a <classname>Claim</classname> again renders
+      the entity. This is rendered in a similar manner to the
+      <classname>Employee</classname> entity seen earlier. However, the
+      <classname>Claim</classname> entity also has a collection (of
+      <classname>ClaimItem</classname>s), so these are also rendered.</para>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="images/080-entity-form-and-collections.png"
+                     scale="30" />
+        </imageobject>
+      </mediaobject>
+    </sect1>
+
+    <sect1>
+      <title>Editing Objects</title>
+
+      <para>In <emphasis>Apache Isis</emphasis> applications, we modify
+      objects either by invoking actions on them or by editing them directly.
+      Which properties are editable is determined by the entity itself, with
+      the <emphasis>Wicket Viewer</emphasis> providing an appropriate editor
+      for each property type. In the following screenshot we see the
+      <classname>Claim</classname> entity being edited.</para>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="images/090-entity-editing-scalars.png"
+                     scale="30" />
+        </imageobject>
+      </mediaobject>
+
+      <para>As well as supporting the editing of properties with value types
+      (<classname>boolean</classname>, <classname>String</classname>,
+      <classname>Date</classname> etc), the viewer also allows properties
+      representing references to other entities to be edited. For example,
+      each <classname>Claim</classname> has an <varname>approver</varname> (of
+      type <classname>Approver</classname>, and implemented by
+      <classname>Employee</classname>). Thus, the viewer gives us the ability
+      to find an <classname>Employee</classname> from the
+      <literal>Employees</literal> repository:</para>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="images/100-entity-editing-references.png"
+                     scale="30" />
+        </imageobject>
+      </mediaobject>
+
+      <para>Leaving us with the <varname>approver</varname> reference set
+      up:</para>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="images/110-entity-editing-references-result.png"
+                     scale="30" />
+        </imageobject>
+      </mediaobject>
+    </sect1>
+
+    <sect1>
+      <title>Invoking Actions</title>
+
+      <para>Being able to edit entities makes it easy to build
+      <acronym>CRUD</acronym>-style (create/read/update/delete) applications.
+      The <emphasis>Wicket Viewer</emphasis> also allows arbitrary actions to
+      be performed on entities. In the screenshot below, we see the
+      <literal>Add Item</literal> action (corresponding to
+      <methodname>addItem()</methodname> method on the
+      <classname>Claim</classname> class) being called:</para>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="images/120-entity-action.png" scale="30" />
+        </imageobject>
+      </mediaobject>
+
+      <para>Because this action takes parameters, the viewer renders a dialog
+      form for the user to complete. Just as with the entity editor, we can
+      specify parameters of any type, including references to other entities
+      if we wish). In this particular case the parameter types are just
+      numbers and strings:</para>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="images/130-entity-action-parameters.png"
+                     scale="30" />
+        </imageobject>
+      </mediaobject>
+
+      <para>When the action is complete, the entity is modified, by adding a
+      new <classname>ClaimItem</classname> into the Claim's
+      <varname>items</varname> collection.</para>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="images/140-entity-modified.png" scale="30" />
+        </imageobject>
+      </mediaobject>
+
+      <para>Admittedly, this <literal>Add Item</literal> action just a
+      <acronym>CRUD</acronym>-style action. But the business logic in the
+      action could be arbitrarily complex. The other action in
+      <classname>Claim</classname> is <literal>Submit</literal>, which could
+      perform lots of business processing:</para>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="images/150-entity-action-more-complex.png"
+                     scale="30" />
+        </imageobject>
+      </mediaobject>
+
+      <para>This action also takes an argument, being a reference to an
+      <classname>Approver</classname>:</para>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="images/160-entity-action-reference-parameters.png"
+                     scale="30" />
+        </imageobject>
+      </mediaobject>
+
+      <para>When the action is performed, the object's state is updated, along
+      with any other processing. For example, a message could have been sent
+      via an enterprise service bus to the processing department. Note the
+      title of the <classname>Claim</classname> entity has also been
+      updated:</para>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="images/170-entity-title-updated.png" scale="30" />
+        </imageobject>
+      </mediaobject>
+    </sect1>
+
+    <sect1>
+      <title>Business Rules</title>
+
+      <para>In addition to actions, we can also capture business rules by
+      means of validation. For example, a <classname>Claim</classname>, once
+      submitted, cannot be submitted again. With the <emphasis>Wicket
+      Viewer</emphasis>, this is shown by a tooltip:</para>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="images/180-entity-validation.png" scale="30" />
+        </imageobject>
+      </mediaobject>
+
+      <para><emphasis>Apache Isis</emphasis> supports three different types of
+      validation: whether the class member (property, collection or action) is
+      visible; whether it is usable, and, whether the proposed value or
+      arguments are valid. Or, more pithily, "can you see it, can you use it,
+      can you do it". The viewer surfaces all of these different validation
+      rules in the <acronym>GUI</acronym>.</para>
+    </sect1>
+
+    <sect1>
+      <title>View Components</title>
+
+      <para>The pages rendered by the <emphasis>Wicket Viewer</emphasis> are
+      built from multiple <emphasis>Apache Wicket</emphasis>
+      <classname>Component</classname>s. For example, the application service
+      menu bar has its own <classname>Component</classname>:</para>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="images/200-view-components-application-service.png"
+                     scale="30" />
+        </imageobject>
+      </mediaobject>
+
+      <para>Likewise, there's a <classname>Component</classname> to render an
+      entire entity:</para>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="images/205-view-components-entity-simple.png"
+                     scale="30" />
+        </imageobject>
+      </mediaobject>
+
+      <para>And there's a <classname>Component</classname> to display the
+      properties of an entity:</para>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="images/210-view-components-entity-properties.png"
+                     scale="30" />
+        </imageobject>
+      </mediaobject>
+
+      <para>And in turn there's a <classname>Component</classname> for every
+      entity property:</para>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="images/220-view-components-entity-property.png"
+                     scale="30" />
+        </imageobject>
+      </mediaobject>
+
+      <para>There are <classname>Component</classname>s such as these for
+      every class member, including collections, actions and, indeed, action
+      parameters. In fact, you can think of the <emphasis>Wicket
+      Viewer</emphasis> as basically a collection of pre-canned
+      <classname>Component</classname>s that know how to render the
+      <emphasis>Apache Isis</emphasis> metamodel.</para>
+
+      <para>Note, by the way, the <acronym>CSS</acronym> classes. Each
+      <acronym>HTML</acronym> element can be targetted either by its type (a
+      string scalar), or by its class member (the
+      <classname>Claim</classname>'s <varname>description</varname> property),
+      or both. The viewer therefore makes it easy to contribute custom
+      <acronym>CSS</acronym> that applies to every page.</para>
+    </sect1>
+
+    <sect1>
+      <title>Alternate Views</title>
+
+      <para>As we've seen already, there's a <classname>Component</classname>
+      to render an entire entity. In fact, it's possible to provide more than
+      one <classname>Component</classname> to do this. We could also view the
+      entity in a tabbed view:</para>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="images/230-multiple-views-for-entities.png"
+                     scale="30" />
+        </imageobject>
+      </mediaobject>
+
+      <para>When there is more than one <classname>Component</classname>
+      capable of rendering the object, the viewer allows the view to be
+      selected:</para>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="images/230-multiple-views-for-entities.png"
+                     scale="30" />
+        </imageobject>
+      </mediaobject>
+
+      <para>This works for collections too; using the selector we can view a
+      collection of <classname>Employee</classname>s in a variety of
+      ways:</para>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="images/240-multiple-views-for-collections.png"
+                     scale="30" />
+        </imageobject>
+      </mediaobject>
+
+      <para>Selecting the <literal>icons</literal> view shows the collection
+      of <classname>Employee</classname>s as icons:</para>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="images/270-customize-ui-icons.png" scale="30" />
+        </imageobject>
+      </mediaobject>
+
+      <para>So far all the screenshots we've seen have been generated from a
+      basic domain application, with no custom <acronym>GUI</acronym> coding
+      (see <xref linkend="apx.ExampleApp" />). But the <emphasis>Wicket
+      Viewer</emphasis> is also extensible. So, we can write custom
+      views/components, provide a corresponding
+      <classname>ComponentFactory</classname> and then plug them into the
+      <emphasis>Wicket Viewer</emphasis>'s registry of
+      <classname>ComponentFactory</classname>s. For example, if we make
+      <classname>Employee</classname> implement a view-specific
+      <classname>Locatable</classname> interface, then we can render them on a
+      google-maps mashup:</para>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="images/280-customize-ui-maps-mashup.png"
+                     scale="30" />
+        </imageobject>
+      </mediaobject>
+
+      <para>The selector, by the way, is actually implemented as yet another
+      view/component, capable of rendering the entity or collection. It
+      queries the <classname>ComponentFactory</classname> registry to
+      determine how many other <classname>ComponentFactory</classname>s there
+      are capable of rendering the entity or collection; if more than one then
+      it provides a drop-down and then delegates to the other
+      <classname>Component</classname>s to do the work.</para>
+    </sect1>
+
+    <sect1 id="sec.SpecializedUseCasesWalkthrough">
+      <title>Specialized Use Cases</title>
+
+      <para>Being able to easily render entities and collection of entities
+      without any custom <acronym>UI</acronym> coding is great for being able
+      to develop an understanding of the problem domain. However, it doesn't
+      always make sense to let the user interact directly with the domain
+      objects. For example, if the domain objects are very fine-grained such
+      that clicking into them would be tedious for the user to do, it makes
+      sense to introduce another object that collect the required data and
+      walk the graph of domain objects on the users behalf. Or, more straight
+      forwardly, the use case might be particularly complex or subtle, and we
+      want to provide the user with additional guidance.</para>
+
+      <para>The <emphasis>Wicket Viewer</emphasis> therefore lets us work with
+      objects designed to guide the user through the use case. Because they
+      represent a particular solution to help the user achieve their
+      objective, you can think of them as being part of the solution space
+      (whereas regular domain objects belong to the problem space). Another
+      name also given for objects of this type is "process objects"; they take
+      the user through a particular process.</para>
+
+      <para>For example, we might have a wizard that takes the user through
+      the process of making a new <classname>Claim</classname>:</para>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="images/300-process-objects.png" scale="30" />
+        </imageobject>
+      </mediaobject>
+
+      <para>The object this action returns is not a
+      <classname>Claim</classname>, instead it is a
+      <classname>ClaimWizard</classname>. Unlike <classname>Claim</classname>,
+      this is not persisted; its state is bound to a particular users'
+      session. The design of the ClaimWizard is like any other wizard, taking
+      the user through a number of pages; first an introductory page:</para>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="images/310-wizard-intro-page.png" scale="30" />
+        </imageobject>
+      </mediaobject>
+
+      <para>After that we are taken through pages for each of the properties;
+      For example the next page prompts for the <classname>Claim</classname>'s
+      <varname>claimant</varname>:</para>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="images/320-wizard-claimant-page.png" scale="30" />
+        </imageobject>
+      </mediaobject>
+
+      <para>The <classname>Claim</classname>'s <varname>approver</varname> and
+      <varname>description</varname> properties likewise have the own pages,
+      for example:</para>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="images/330-wizard-approver-page.png" scale="30" />
+        </imageobject>
+      </mediaobject>
+
+      <para>The final page allows the user to review details, then
+      confirm:</para>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="images/340-wizard-finish-page.png" scale="30" />
+        </imageobject>
+      </mediaobject>
+
+      <para>On finish, the <classname>ClaimWizard</classname> will create and
+      persists the <classname>Claim</classname>.</para>
+
+      <para>Process objects like wizards are primarily concerned with
+      inputting data. We can also have objects that are tailored towards the
+      output of data, eg for reporting. For example, we could have a
+      (non-persisted) <classname>ClaimSummary</classname> object that sums up
+      <classname>Claim</classname> amounts by
+      <classname>Claimant</classname>:</para>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="images/400-analyze-claim-summary.png" scale="30" />
+        </imageobject>
+      </mediaobject>
+
+      <para>We can then combine this with custom views, eg to represent a
+      collection of such <classname>ClaimExpenseSummary</classname>s as a pie
+      chart:</para>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="images/410-analyze-summary-piechart.png"
+                     scale="30" />
+        </imageobject>
+      </mediaobject>
+
+      <para>There's some guidance on writing application code to deal with
+      such specialized use cases in <xref
+      linkend="chp.SpecializedUseCases" />.</para>
+    </sect1>
+  </chapter>
+
+  <chapter id="chp.RTA">
+    <title>Running the Application</title>
+
+    <abstract>
+      <para>This chapter describes how to take an <emphasis>Apache
+      Isis</emphasis> application and get it running using the
+      <emphasis>Wicket Viewer</emphasis>, with the non-customized, generic
+      <acronym>OOUI</acronym>.</para>
+    </abstract>
+
+    <para>Applications deployed to run with the <emphasis>Wicket
+    Viewer</emphasis> are, ultimately just <emphasis>Wicket</emphasis> webapps
+    that happen to boot up <emphasis>Apache Isis</emphasis>. As such, they are
+    bootstrapped with a <filename>web.xml</filename> that is structured the
+    same as any other <emphasis>Wicket</emphasis> application.</para>
+
+    <para>This chapter describes how to run up such a webapp starting with a
+    regular <emphasis>Apache Isis</emphasis> application.</para>
+
+    <sect1 id="sec.StructureOfAnApacheIsisApp">
+      <title>Structure of an Apache Isis Application</title>
+
+      <para>We recommend that you use <emphasis>Apache Isis</emphasis>' Maven
+      application archetype to set up your application. Doing so will result
+      in a multi-module project that contains the following modules:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><filename>app</filename></para>
+
+          <para>Main (parent) module, whose <filename>pom.xml</filename>
+          references the submodules</para>
+        </listitem>
+
+        <listitem>
+          <para><filename>app/dom</filename></para>
+
+          <para>Domain object model, plus interfaces for services,
+          repositories and factories</para>
+        </listitem>
+
+        <listitem>
+          <para>app/domsvc</para>
+
+          <para>Implementation of domain services (not
+          repositories/factories)</para>
+        </listitem>
+
+        <listitem>
+          <para><filename>app/objectstore-default</filename></para>
+
+          <para>Implementation of repositories/factories for the default
+          object store</para>
+        </listitem>
+
+        <listitem>
+          <para><filename>app/fixture</filename></para>
+
+          <para>Fixtures, used to seed (in-memory) object store when running
+          in exploration/prototype mode</para>
+        </listitem>
+
+        <listitem>
+          <para><filename>app/commandline</filename></para>
+
+          <para>Bootstrap for running from the command line (typically, the
+          <acronym>DnD</acronym> viewer or <acronym>HTML</acronym>
+          viewer)</para>
+        </listitem>
+
+        <listitem>
+          <para><filename>app/viewer-wicket</filename></para>
+
+          <para>The application set up to be run using wicket, and packaged up
+          as a webapp.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>You will see that the archetypes creates a number of other
+      <filename>app/viewer-xxx</filename> and
+      <filename>app/objectstore-xxx</filename> modules. You can delete those
+      modules that aren't relevant to your final deployment (probably the
+      <filename>app/viewer-xxx</filename> modules and most of the
+      <filename>app/objectstore-xxx</filename> modules, or you can just ignore
+      them. If you do delete any modules, remember to remove their reference
+      from the parent <filename>app/pom.xml</filename> file'a
+      <sgmltag>&lt;modules&gt;</sgmltag> section).</para>
+
+      <sect2>
+        <title>The viewer-wicket module's web.xml</title>
+
+        <para>The <filename>viewer-wicket</filename> module aready contains a
+        <filename>web.xml</filename> file to define the web app, in the
+        <filename>src/main/webapp</filename> directory. The contents of this
+        is largely boilerplate, and will be very familiar if you already know
+        the <emphasis>Apache Wicket</emphasis> framework:</para>
+
+        <programlisting>&lt;?xml version="1.0" encoding="ISO-8859-1"?&gt;
+&lt;web-app xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
+ version="2.4"&gt;
+
+  &lt;display-name&gt;claims&lt;/display-name&gt;
+  &lt;filter&gt;
+    &lt;filter-name&gt;wicket.app&lt;/filter-name&gt;
+    &lt;filter-class&gt;org.apache.wicket.protocol.http.WicketFilter&lt;/filter-class&gt;
+    &lt;init-param&gt;
+      &lt;param-name&gt;applicationClassName&lt;/param-name&gt;
+      &lt;param-value&gt;org.apache.isis.viewer.wicket.viewer.IsisWicketApplication&lt;/param-value&gt;
+    &lt;/init-param&gt;
+  &lt;/filter&gt;
+
+  &lt;filter-mapping&gt;
+    &lt;filter-name&gt;wicket.app&lt;/filter-name&gt;
+    &lt;url-pattern&gt;/*&lt;/url-pattern&gt;
+  &lt;/filter-mapping&gt;
+
+&lt;/web-app&gt;</programlisting>
+
+        <para>The <classname>IsisWicketApplication</classname> is a subclass
+        of <emphasis>Wicket</emphasis>'s own
+        <classname>WebApplication</classname> that bootstraps <emphasis>Apache
+        Isis</emphasis>, handles authentication and sets up sessions and
+        transactions.</para>
+      </sect2>
+
+      <sect2>
+        <title>Deployment Mode</title>
+
+        <para><emphasis>Apache Wicket</emphasis> webapps can be run in one of
+        two "configuration type"s, either in the
+        <literal>development</literal> configuration type or in the
+        <literal>deployment</literal> configuration type. In Wicket, the
+        configuration type can be specified as either:</para>
+
+        <orderedlist>
+          <listitem>
+            <para>A system property: <code>-D
+            wicket.configuration</code></para>
+          </listitem>
+
+          <listitem>
+            <para>as a servlet specific <code>&lt;init-param&gt;</code></para>
+          </listitem>
+
+          <listitem>
+            <para>as a context specific
+            <code>&lt;context-param&gt;</code></para>
+          </listitem>
+        </orderedlist>
+
+        <para>Setting this value changes various properties, such as whether
+        templates are reloaded. Wicket's
+        <methodname>Application#configure()</methodname> method is the place
+        to look for all the differences.</para>
+
+        <para>For its part, <emphasis>Apache Isis</emphasis> defines various
+        "deployment mode"s. For example, <literal>exploration</literal> and
+        <literal>prototype</literal> mode are both intended for single-user
+        development, with the former requiring no login and also including any
+        actions annotated as <code>@Exploration</code>. For multi-user
+        (production) use, <emphasis>Apache Isis</emphasis> provides the
+        <literal>server</literal> deployment mode, associating a separate
+        <emphasis>Apache Isis</emphasis> runtime
+        (<classname>IsisContext</classname>) to each thread (ie bound to a
+        <code>ThreadLocal</code>).</para>
+
+        <para>The <emphasis>Wicket Viewer</emphasis> maps
+        <emphasis>Wicket</emphasis>'s <literal>development</literal>
+        configuration type to <emphasis>Apache Isis</emphasis>'
+        <literal>prototype</literal> deployment mode. However, the
+        <literal>server</literal> deployment mode provided by <emphasis>Apache
+        Isis</emphasis> is not quite appropriate for a
+        <emphasis>Wicket</emphasis> webapp, because there could be multiple
+        concurrent requests for a given user (originating from the same
+        browser/user agent). The <emphasis>Wicket Viewer</emphasis> therefore
+        defines a custom deployment mode which binds the <emphasis>Apache
+        Isis</emphasis> runtime to the <emphasis>Wicket</emphasis> session
+        (see the <classname>IsisContextForWicket</classname> class if you're
+        interested in such things).</para>
+
+        <para>What all this means is that selecting between <emphasis>Apache
+        Isis</emphasis> deployment modes is done just by specifying the
+        <emphasis>Apache Wicket</emphasis> configuration type. If you're
+        already familiar with Wicket there's therefore nothing new to learn:
+        just configure the webapp to run in either
+        <literal>development</literal> or <literal>deployment</literal>
+        mode.</para>
+      </sect2>
+
+      <sect2 id="sec.Security">
+        <title>Security</title>
+
+        <para>Since both of the deployment modes supported by <emphasis>Wicket
+        Objects</emphasis> require a login, it means we need to set up
+        security. The <classname>IsisWicketApplication</classname> class
+        provided by the <emphasis>Wicket Viewer</emphasis> subclasses from
+        <emphasis>Wicket</emphasis>'s own
+        <classname>AuthenticatedWebApplication</classname>, and serves up a
+        sign-in page. To ensure that this sign-in page appears, every web page
+        served up by the <emphasis>Wicket Viewer</emphasis> is annotated with
+        <code>@AuthorizeInstantiation("org.apache.isis.viewer.wicket.roles.USER")</code>,
+        which requires that every login has a role called
+        <literal>org.apache.isis.viewer.wicket.roles.USER</literal>.</para>
+
+        <sidebar>
+          <para><emphasis>Apache Isis</emphasis> deployment modes provide a
+          couple of ways of avoiding login during development. For example, in
+          <literal>exploration</literal> mode the viewers automatically login,
+          while in <literal>exploration</literal> mode and
+          <literal>prototype</literal> mode specifying a
+          <code>LogonFixture</code> will means an automatic logon using the
+          details provided within that fixture. The <emphasis>Wicket
+          Viewer</emphasis> does not support <literal>exploration</literal>
+          mode, however, and does not currently support
+          <classname>LogonFixture</classname>. What that means is that it's
+          always necessary to login.</para>
+        </sidebar>
+
+        <para>The <emphasis>Wicket Viewer</emphasis> delegates to
+        <emphasis>Apache Isis</emphasis> to authentication. <emphasis>Apache
+        Isis</emphasis>' default authentication mechanism is a no-op and
+        requires no configuration. If you decide to a different authentication
+        mechanism (eg file-based security,
+        <classname>org.apache.isis.alternatives.security:file</classname>, or
+        <acronym>LDAP</acronym>-based security,
+        <classname>org.apache.isis.alternatives.security:ldap</classname>)
+        then refer to the appropriate documentation for that module.</para>
+
+        <para>The <emphasis>Wicket Viewer</emphasis> simply always places each
+        login into the
+        <literal>org.apache.isis.viewer.wicket.roles.USER</literal> role, to
+        ensure that once the sign-in page is navigated past, that the user can
+        access each web page.</para>
+
+        <sidebar>
+          <para>One consequence of this design is that the roles cannot
+          currently be used by the <emphasis>Apache Isis</emphasis> domain
+          objects nor the authorization mechanism; every user is simply in the
+          USER role. This will be addressed in the future.</para>
+        </sidebar>
+      </sect2>
+    </sect1>
+
+    <sect1 id="sec.RunningFromTheWebAppProject">
+      <title>Running as a WAR</title>
+
+      <para>The most straightforward approach for running a <emphasis>Wicket
+      Viewer </emphasis>application is to build a <acronym>WAR</acronym>
+      archive from the <filename>viewer-wicket</filename> module. Most
+      <acronym>IDE</acronym>s will then allow this WAR to be deployed on an
+      external servlet container, for debugging. For example, in Eclipse this
+      is done by Run As &gt; Server:</para>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="images/RunAsServer.png" scale="40" />
+        </imageobject>
+      </mediaobject>
+
+      <para>and then select the external servlet container to deploy
+      against:</para>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="images/RunAsServer-dialog.png" scale="40" />
+        </imageobject>
+      </mediaobject>
+
+      <para>If deploying this way, then the web browser URL may be slightly
+      different. For example with Eclipse the URL to specify is <ulink
+      url="http://localhost:8080/webappname">http://localhost:8080/webappname</ulink>.</para>
+    </sect1>
+
+    <sect1 id="sec.RunningFromTheCommandLineProject">
+      <title>Running using <emphasis>Isis</emphasis>'
+      <classname>WebServer</classname> class</title>
+
+      <para>As an alternative to deploying as a webapp, you can use Isis'
+      <classname>WebServer</classname> class. This class has its own
+      <methodname>main()</methodname> to bootstraps Jetty and configures a
+      webapp from the <filename>web.xml</filename> file. If using Eclipse, for
+      example, then yo can create a <filename>.launch</filename> configuration
+      to run your application using <classname>WebServer</classname>.</para>
+
+      <sect2>
+        <title>Adding Dependency to Bootstrap</title>
+
+        <para>The only thing you need to do is to edit the
+        <filename>viewer-wicket</filename> module's
+        <filename>pom.xml</filename>; add/comment in:</para>
+
+        <programlisting>&lt;dependency&gt;
+ &lt;groupId&gt;org.apache.isis.core&lt;/groupId&gt;
+ &lt;artifactId&gt;webserver&lt;/artifactId&gt;
+&lt;/dependency&gt;</programlisting>
+      </sect2>
+
+      <sect2>
+        <title>Running the Application</title>
+
+        <para>Running the application is just a matter of running the
+        <classname>org.apache.isis.WebServer</classname>. For example, in
+        Eclipse the following launch configuration should suffice:</para>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="images/WebServer-launch.png" scale="60" />
+          </imageobject>
+        </mediaobject>
+
+        <para>Running this will boot strap a Jetty webserver:</para>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="images/WebServer-running.png" scale="60" />
+          </imageobject>
+        </mediaobject>
+
+        <para>You can then log on using <ulink
+        url="http://localhost:8080">http://localhost:8080</ulink>:</para>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="images/WicketObjects-logon-page.png"
+                       scale="30" />
+          </imageobject>
+        </mediaobject>
+      </sect2>
+    </sect1>
+
+    <sect1 id="sec.CustomizingTheStartup">
+      <title>Customizing the Startup</title>
+
+      <para>Most of the remaining chapters address various means by which the
+      <acronym>UI</acronym> generated by the <emphasis>Wicket
+      Viewer</emphasis> can be customized. Before we go any further, though,
+      we should mention that the viewer uses dependency injection provided by
+      <ulink url="http://google-guice.googlecode.com">Guice</ulink>. It comes
+      with default bindings, so customizing the <emphasis>Wicket
+      Viewer</emphasis> requires overriding these default bindings.</para>
+
+      <sidebar>
+        <para>Note: this usage of Guice is likely to be replaced by JSR-299
+        based dependency mechanism.</para>
+      </sidebar>
+
+      <para>Specifically, in <classname>IsisWicketApplication</classname>,
+      there's a method <methodname>newIsisWicketModule()</methodname>:</para>
+
+      <programlisting>public class IsisWicketApplication extends AuthenticatedWebApplication {
+  ...
+  protected Module newIsisWicketModule() {
+    return new IsisWicketModule();
+  }
+}</programlisting>
+
+      <para>This method can be overridden in your own subclass of
+      <classname>IsisWicketApplication</classname>, providing a new
+      implementation of <emphasis>Guice</emphasis>'s
+      <classname>Module</classname> interface. Typically you'll just want to
+      override one or two of the bindings, so you should use the
+      <classname>Modules</classname> helper class:</para>
+
+      <programlisting>public class MyApplication extends IsisWicketApplication {
+  ...
+  protected Module newIsisWicketModule() {
+    return Modules.override(super.newIsisWicketModule()).with(
+      new AbstractModule() {
+        @Override
+        protected void configure() {
+          // override bindings here
+        }
+      }
+    );
+  }
+}</programlisting>
+
+      <para>To pick up your subclass of
+      <classname>IsisWicketApplication</classname>, just update the
+      <filename>web.xml</filename> file.</para>
+    </sect1>
+  </chapter>
+
+  <chapter id="chp.CustomizingCss">
+    <title>Customizing CSS</title>
+
+    <abstract>
+      <para>This chapter describes how to customize the <acronym>UI</acronym>
+      generated by the <emphasis>Wicket Viewer</emphasis> by providing
+      application-specific <acronym>CSS</acronym>.</para>
+    </abstract>
+
+    <para><acronym>CSS</acronym> is used heavily by the <emphasis>Wicket
+    Viewer</emphasis>, with the <acronym>HTML</acronym> of each
+    <classname>Component</classname> using <acronym>CSS</acronym> classes for
+    the styling. But you can override the default styling by supplying an
+    application-level <acronym>CSS</acronym> file.</para>
+
+    <para>By default this file should be called
+    <filename>application.css</filename> and should reside within
+    <filename>WEB-INF</filename> directory.</para>
+
+    <para>There are two levels at which we can override the default styling,
+    either generically or specific to a particular domain. Let's look at
+    both.</para>
+
+    <sect1 id="sec.GenericCss">
+      <title>Generic CSS</title>
+
+      <para>The name of each class indicates the nature of what is being
+      rendered, and each <classname>Component</classname> provides some
+      default styling so that the out-of-the-box <acronym>UI</acronym> is
+      usable. For example, an entity icon, title and actions are rendered
+      as:</para>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="images/EntitySummary.png" scale="60" />
+        </imageobject>
+      </mediaobject>
+
+      <para>The icon and title for this are rendered as:</para>
+
+      <programlisting>&lt;div class="entitySummary"&gt;
+  &lt;img src="?wicket:interface=:4:entity:entity:entitySummary:entityImage:1:IResourceListener::"
+       class="entityImage" wicket:id="entityImage"&gt;
+  &lt;label class="entityTitle" wicket:id="entityTitle"&gt;Fred Smith&lt;/label&gt;
+  ...
+&lt;/div&gt;</programlisting>
+
+      <para>So, to change the font, you could use:</para>
+
+      <programlisting>div.entitySummary &gt; label.entityTitle {
+  color: maroon;
+  font-size: xx-large;
+  font-weight: bolder;
+}</programlisting>
+
+      <para>This would render the entity icon and title as:</para>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="images/EntitySummary-Css.png" scale="60" />
+        </imageobject>
+      </mediaobject>
+
+      <para>In this way you can develop a look-n-feel for the application (or
+      perhaps your organization).</para>
+    </sect1>
+
+    <sect1 id="sec.SpecificCss">
+      <title>Specific CSS</title>
+
+      <para>As well as targetting <acronym>HTML</acronym> elements
+      generically, individual class members can also be targetted for a
+      particular domain model.</para>
+
+      <para>For example, the properties of a <classname>Claim</classname>
+      object might be rendered as:</para>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="images/Claim-properties.png" scale="60" />
+        </imageobject>
+      </mediaobject>
+
+      <para></para>
+
+      <para>The <acronym>HTML</acronym> for the
+      <methodname>description</methodname> property is:</para>
+
+      <programlisting>&lt;div class="Claim-description" wicket:id="scalar"&gt;
+  &lt;wicket:panel&gt;
+    &lt;div class="string scalarPanel"&gt;
+      &lt;label wicket:id="scalarIfRegular" for="scalarValue3d"&gt;
+        &lt;span class="scalarName" wicket:id="scalarName"&gt;description&lt;/span&gt;
+        &lt;span class="scalarValue"&gt;
+          &lt;input type="text" title="" size="25" disabled="disabled"
+             value="Meeting at clients" wicket:id="scalarValue"
+             id="scalarValue3d"
+             name="properties:1:scalar:scalarIfRegular:scalarValue"&gt;
+        &lt;/span&gt;
+      &lt;/label&gt;
+      &lt;span wicket:id="feedback"&gt;
+        &lt;wicket:panel&gt;
+        &lt;/wicket:panel&gt;
+      &lt;/span&gt;
+    &lt;/div&gt;
+  &lt;/wicket:panel&gt;
+&lt;/div&gt;</programlisting>
+
+      <para>To change the label of this specific element, we could use:</para>
+
+      <programlisting>.Claim-description .scalarName {
+  color: maroon;
+  font-weight: bolder;
+}</programlisting>
+
+      <para>which would give us:</para>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="images/Claim-properties-CSS.png" scale="60" />
+        </imageobject>
+      </mediaobject>
+
+      <para>This is a slightly trite example, but demonstrates the
+      point.</para>
+    </sect1>
+
+    <sect1>
+      <title>Changing the location/name of the application CSS file</title>
+
+      <para>As already mentioned, the default for the application
+      <acronym>CSS</acronym> file is in
+      <filename>WEB-INF/application.css</filename>. If for any reason you want
+      to change this, you can do so by subclassing
+      <classname>IsisWicketApplication</classname> and overriding the
+      <methodname>newIsisWicketModule()</methodname> method.</para>
+
+      <para>For example, to use <filename>css/myapp.css</filename> (under
+      <filename>WEB-INF</filename>) you would write:</para>
+
+      <programlisting>public class MyApplication extends IsisWicketApplication {
+  ...
+  protected Module newIsisWicketModule() {
+    return Modules.override(super.newIsisWicketModule()).with(
+      new AbstractModule() {
+        @Override
+        protected void configure() {
+          bindConstant().annotatedWith(ApplicationCssUrl.class).to("css/myapp.css");
+        }
+      }
+    );
+  }
+}</programlisting>
+
+      <para>Your custom application should then be registered in
+      <filename>web.xml</filename>, as described in <xref
+      linkend="sec.CustomizingTheStartup" />.</para>
+    </sect1>
+  </chapter>
+
+  <chapter>
+    <title>Using the Wicket Viewer AppLib</title>
+
+    <abstract>
+      <para>This chapter explains how to use certain viewer-specific features
+      in your domain application.</para>
+    </abstract>
+
+    <para>Many <emphasis>Isis</emphasis> components have their own application
+    library, the <emphasis>Wicket Viewer</emphasis> included. This allows you
+    to specify additional viewer-specific semantics within your domain model;
+    the viewer can then render them appropriately.</para>
+
+    <sect1>
+      <title>Configuring the Project Modules</title>
+
+      <para>In order to use the viewer-specific features, the
+      <filename>dom</filename> module must reference the applib, and the
+      <filename>viewer-wicket</filename> module must be configured
+      appropriately.</para>
+
+      <sect2>
+        <title>Referencing the AppLib</title>
+
+        <para>In the dom project, add in a <code>&lt;dependency&gt;</code> to
+        the <emphasis>Wicket Viewer</emphasis> applib:</para>
+
+        <programlisting>&lt;dependencies&gt;
+  ...
+
+  &lt;!-- Wicket Viewer --&gt;
+  &lt;dependency&gt;
+    &lt;groupId&gt;org.apache.isis.viewer.wicket&lt;/groupId&gt;
+    &lt;artifactId&gt;applib&lt;/artifactId&gt;
+  &lt;/dependency&gt;
+
+  ...
+&lt;/dependencies&gt;</programlisting>
+
+        <para>This will allow you to use the <emphasis>Wicket
+        Viewer</emphasis>'s annotations etc. in your domain objects.</para>
+      </sect2>
+
+      <sect2>
+        <title>Configuring the <emphasis>Wicket Viewer</emphasis>
+        Facets</title>
+
+        <para>In addition, you must also configure your application so that
+        the <emphasis>Isis</emphasis> metamodel contains the information to be
+        picked up by the <emphasis>Wicket Viewer</emphasis>.</para>
+
+        <para>In the <filename>viewer-wicket</filename> module, add the
+        following to <filename>isis.properties</filename>:</para>
+
+        <programlisting>isis.reflector.facets.include=\
+    org.apache.isis.viewer.wicket.metamodel.wizardpagedesc.WizardPageDescriptionAnnotationFacetFactory\
+   ,org.apache.isis.viewer.wicket.metamodel.cssclass.CssClassAnnotationFacetFactory</programlisting>
+
+        <para>This basically instructs <emphasis>Apache Isis</emphasis> to
+        capture additional information (facets) in its metamodel. Now let's
+        look at what these facets are used for.</para>
+      </sect2>
+    </sect1>
+
+    <sect1>
+      <title>@CssClass</title>
+
+      <para>The <classname>@CssClass</classname> annotation allows you to
+      specify an additional <classname>CSS</classname> class (or classes)
+      applied on any object type, property, collection or action. This
+      <acronym>CSS</acronym> will be added verbatim to any
+      <acronym>CSS</acronym> classes that are normally applied by the
+      <emphasis>Wicket Viewer</emphasis> itself.</para>
+
+      <para>*** TODO: complete.</para>
+
+      <para></para>
+
+      <para>There is further discussion on</para>
+    </sect1>
+
+    <sect1>
+      <title>@WizardPageDescription</title>
+
+      <para>It's common for wizards to have a description explaining what the
+      user is expected to do. This can be modeled as a
+      <classname>String</classname> property annotated with
+      <classname>@WizardPageDescription</classname>, for example:</para>
+
+      <programlisting>@NotPersistable
+public class ClaimWizard extends AbstractDomainObject {
+
+    ...
+
+    @WizardPageDescription
+    @MemberOrder(sequence = "1")
+    public String getPageDescription() { ... }
+
+    ...
+}</programlisting>
+
+      <para>Adding this annotation causes the <emphasis>Wicket
+      Viewer</emphasis> to select a different <classname>Component</classname>
+      to be used to render this property; specifically, one that renders the
+      value as a large label. You can see the result of this annotation in
+      below (the label above the claimant).</para>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="images/320-wizard-claimant-page.png" scale="30" />
+        </imageobject>
+      </mediaobject>
+
+      <para>Note that this annotation only affects the description; the three
+      buttons shown in the above screenshot are as a result of the wizard
+      being implemented as a custom component. For more on that topic, see
+      <xref linkend="chp.WritingCustomComponents" />.</para>
+    </sect1>
+  </chapter>
+
+  <chapter>
+    <title>Customizing the Component Set</title>
+
+    <abstract>
+      <para>This chapter describes the how to customize the
+      <acronym>UI</acronym> by modifying the set of components used to render
+      objects, properties, collections or actions.</para>
+    </abstract>
+
+    <para>The <emphasis>Wicket Viewer</emphasis> offers several ways in which
+    the <acronym>UI</acronym> rendered can be customized, from simply tweaking
+    the <acronym>CSS</acronym> (see <xref linkend="chp.CustomizingCss" />)
+    through to the use of custom components for mashups and wizards. This
+    chapter explains how to use pre-existing custom components; <xref
+    linkend="chp.WritingCustomComponents" /> explains how to write your own
+    components, and lists some components that have already been
+    developed.</para>
+
+    <para>There are more details provided in each of the sections that
+    follow.</para>
+
+    <sect1 id="sec.ComponentFactories">
+      <title>Component Factories</title>
+
+      <sect2>
+        <title><classname>ComponentFactory</classname> interface</title>
+
+        <para>At its heart the <emphasis>Wicket Viewer</emphasis> consists of
+        a set of <emphasis>Wicket</emphasis> <code>Component</code>s and
+        corresponding <classname>IModel&lt;?&gt;</classname>s that are used to
+        render entities, collections of elements and indeed individual members
+        of elements. Each <classname>Component</classname>s is created by a
+        corresponding <classname>ComponentFactory</classname>, with the
+        factory to use discovered using a chain-of-responsibility
+        pattern.</para>
+
+        <para>The <classname>Component</classname>s created by the
+        <emphasis>Wicket Viewer</emphasis> vary in size from rendering an
+        entire collection of entities all the way down to a single property of
+        an entity. You can find the full set of built-in
+        <classname>Component</classname>s by searching for implementations of
+        <classname>ComponentFactory</classname>:</para>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="images/ComponentFactory-hierarchy.png"
+                       scale="30" />
+          </imageobject>
+        </mediaobject>
+
+        <para>For example, the
+        <classname>CollectionContentsAsAjaxTableFactory</classname> class is
+        used to render a collection of entities (eg returned from an action
+        invocation) as, erm, an ajax table;</para>
+
+        <programlisting>public class CollectionContentsAsAjaxTableFactory extends ComponentFactoryAbstract {
+  private static final long serialVersionUID = 1L;
+  private static final String NAME = "styled";
+
+  public CollectionContentsAsAjaxTableFactory() {
+    super(ComponentType.COLLECTION_OF_ENTITIES, NAME);
+  }
+
+  @Override
+  public boolean appliesTo(IModel&lt;?&gt; model) {
+    return model instanceof EntityCollectionModel;
+  }
+
+  public Component createComponent(String id, IModel&lt;?&gt; model) {
+    EntityCollectionModel collectionModel = (EntityCollectionModel) model;
+    return new CollectionContentsAsAjaxTable(id, collectionModel);
+  }
+}</programlisting>
+
+        <para>The selection of the <classname>ComponentFactory</classname> is
+        based on two criteria: the <classname>ComponentType</classname>, and
+        the <classname>IModel&lt;?</classname>&gt;. Broadly speaking the
+        <classname>ComponentType</classname> standardizes the
+        <literal>wicket:id</literal> used in the <acronym>HTML</acronym>
+        fragment (so <code>&lt;div wicket:id="collectionContents"/&gt;</code>
+        would map onto the
+        <methodname>ComponentType.COLLECTION_CONTENTS</methodname>, while the
+        <classname>IModel&lt;?&gt;</classname> is the corresponding
+        information used for the rendering of that component. But there's a
+        semi-formal relationship between these two concepts; the
+        <classname>ComponentType</classname> effectively acting as a
+        power-type for the subclass of <classname>IModel&lt;?&gt;</classname>
+        that is supplied.</para>
+
+        <para>The superclass <classname>ComponentFactoryAbstract</classname>
+        takes responsibility for checking that the
+        <classname>ComponentType</classname> matches the
+        <literal>wicket:id</literal>, while delegating the checking of the
+        IModel to its subtype:</para>
+
+        <programlisting>public abstract class ComponentFactoryAbstract implements ComponentFactory ... {
+  ...
+  public final boolean appliesTo(ComponentType componentType, IModel&lt;?&gt; model) {
+    return componentType == getComponentType() &amp;&amp; appliesTo(model);
+  }
+
+  protected abstract boolean appliesTo(IModel&lt;?&gt; model);
+  ...
+}</programlisting>
+
+        <para>The subclass then refines this check by overriding
+        <methodname>appliesTo()</methodname> to also check the model;
+        returning true indicates that the
+        <classname>ComponentFactory</classname> is able to render that model,
+        after which the <methodname>createComponent()</methodname> method is
+        then called to actually create the instance. So in
+        <classname>CollectionContentsAsAjaxTableFactory</classname>, its
+        implementation simply checks if the supplied model is an
+        <classname>EntityCollectionModel</classname>. More sophisticated/less
+        generic <classname>ComponentFactory</classname> might also make
+        additional checks; you can find some examples of these in <xref
+        linkend="chp.Views" />.</para>
+      </sect2>
+
+      <sect2 id="sec.RegisteringUsingMetaInfServices">
+        <title>Registering <classname>ComponentFactory</classname>s using
+        META-INF Services</title>
+
+        <para>The easiest way to register new
+        <classname>ComponentFactory</classname>s is using the JDK's own
+        <classname>ServiceLoader</classname> capability.</para>
+
+        <para>All that is needed is for your
+        <classname>ComponentFactory</classname> to be registered in a file on
+        the classpath call
+        <filename>META-INF/services/org.apache.isis.viewer.wicket.ui.ComponentFactory</filename>.
+        The contents of this file should be the fully qualified class name of
+        your <classname>ComponentFactory</classname> implementation. And
+        that's it! Registering the <classname>ComponentFactory</classname> is
+        done automatically just by virtue of updating the classpath. You'll
+        find that the custom components described in <xref
+        linkend="chp.CustomComponents" /> all use this technique.</para>
+
+        <para>Note that this technique does not allow you to remove existing
+        <classname>ComponentFactory</classname>s, only add new ones. So if you
+        do want to exclude any of the built-in
+        <classname>ComponentFactory</classname>s, then you will still need to
+        use the <classname>ComponentFactoryList</classname> method.</para>
+
+        <note>
+          <para>This capability is provided by the
+          <classname>ComponentFactoryRegistry</classname> component, which is
+          also bound in the <classname>IsisWicketModule</classname>. If you
+          wanted to, you could replace this higher-level registry component
+          with your own implementation. There's probably very little need to
+          do this though, given that you can just as easily customize using
+          <classname>ComponentFactoryList</classname> or
+          <filename>META-INF</filename> services.</para>
+        </note>
+      </sect2>
+
+      <sect2>
+        <title>Registering <classname>ComponentFactory</classname>s using a
+        custom <classname>ComponentFactoryList</classname></title>
+
+        <para>The set of <classname>ComponentFactory</classname>s that are
+        provided with the <emphasis>Wicket Viewer</emphasis> are specified by
+        the <classname>ComponentFactoryList</classname> interface.</para>
+
+        <para>If you only want to add new factories, we recommend using the
+        technique described in <xref
+        linkend="sec.RegisteringUsingMetaInfServices" />. But if you want to
+        remove support for any of the default factories, or perhaps change the
+        order in which factories are registered, you'll need to do use write
+        and the bind in your own implementation of
+        <classname>ComponentFactoryList</classname>.</para>
+
+        <para>To write your implementation of
+        <classname>ComponentFactoryList</classname>, start with the default
+        implementation, <classname>ComponentFactoryListDefault</classname>.
+        You'll see that it is written so that it can be easily subclassed and
+        overridden on an as-needed basis. Worst case scenario, you can
+        copy-and-paste code as necessary.</para>
+
+        <para>Then, you need to override the binding in
+        <methodname>newIsisWicketModule()</methodname>, eg:</para>
+
+        <programlisting>public class MyApplication extends IsisWicketApplication {
+  ...
+  protected Module newIsisWicketModule() {
+    return Modules.override(super.newIsisWicketModule()).with(
+      new AbstractModule() {
+        @Override
+        protected void configure() {
+          bind(ComponentFactoryList.class).to(MyComponentFactoryList.class);
+        }
+      }
+    );
+  }
+}</programlisting>
+
+        <para>You should also ensure that your
+        <classname>MyComponentFactoryList</classname> is annotated with
+        <classname>@Singleton</classname>.</para>
+
+        <para>And, do remember to update <filename>web.xml</filename> to
+        reference your subclass of
+        <classname>IsisWicketApplication</classname>.</para>
+      </sect2>
+    </sect1>
+
+    <sect1 id="sec.AdvancedCustomization">
+      <title>Advanced Customization</title>
+
+      <para>This section covers a couple of more advanced customization
+      topics.</para>
+
+      <sect2>
+        <title>Page Registry</title>
+
+        <para>While the content of any given web page rendered by the
+        <emphasis>Wicket Viewer</emphasis> is made up of multiple
+        <classname>Component</classname>s, there are in fact only a small
+        number of <classname>WebPage</classname>s:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><classname>WelcomePage</classname> displays the initial home
+            page with a welcome message</para>
+          </listitem>
+
+          <listitem>
+            <para><classname>EntityPage</classname> displays a single
+            entity</para>
+          </listitem>
+
+          <listitem>
+            <para><classname>ActionPage</classname> displays an action dialog
+            or the results of invoking an action.</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>Each of these has a corresponding <acronym>HTML</acronym> page
+        which defines the content of that page. In many cases the look-n-feel
+        of these pages can be adjusted simply using <acronym>CSS</acronym>, as
+        described in <xref linkend="sec.CustomizingUsingCss" />. If necessary
+        though an entirely different page layout can be specified, for example
+        to put the menubar on the left rather than at the top.</para>
+
+        <para>The easiest approach to define a new page is to subclass
+        <classname>PageAbstract</classname> superclass and then provide a
+        different implementation of <classname>PageRegistry</classname>. As
+        for <classname>ComponentFactory</classname>s, this is done by
+        providing a new implementation, and then overriding a binding in
+        <methodname>newIsisWicketModule()</methodname>.</para>
+
+        <para>The default pages are specified by
+        <classname>PageClassListDefault</classname>:</para>
+
+        <programlisting>public class PageClassListDefault implements PageClassList  {
+
+  @Override
+  pulic void registerPages(PageRegistrySpi pageRegistry) {
+    pageRegistry.registerPage(PageType.SIGN_IN, WicketSignInPage.class);
+    pageRegistry.registerPage(PageType.SIGN_OUT, WicketSignOutPage.class);
+    pageRegistry.registerPage(PageType.ENTITY, EntityPage.class);
+    pageRegistry.registerPage(PageType.HOME, HomePage.class);
+    pageRegistry.registerPage(PageType.ACTION, ActionPage.class);
+  }
+}</programlisting>
+
+        <para>You can easily copy-n-paste this to create your own
+        implementation. Note though that there must be a registered page for
+        every <classname>PageType</classname> instance, otherwise the
+        <emphasis>Wicket Viewer</emphasis> will fail fast on boot time.</para>
+
+        <para>Overriding the binding is done in the usual way:</para>
+
+        <programlisting>public class MyApplication extends IsisWicketApplication {
+  ...
+  protected Module newIsisWicketModule() {
+    return Modules.override(super.newIsisWicketModule()).with(
+      new AbstractModule() {
+        @Override
+        protected void configure() {
+          bind(PageClassList.class).to(MyPageClassList.class);
+        }
+      }
+    );
+  }
+}</programlisting>
+
+        <para>Don't forget to update the web.xml to specify your subclass of
+        <classname>IsisWicketApplication</classname>.</para>
+
+        <note>
+          <para>If all you want is to provide a custom rendering of a
+          particular interface or class, then you should instead write and
+          register a <classname>ComponentFactory</classname>, with a
+          <methodname>ComponentType.ENTITY</methodname> and filtering the
+          <classname>EntityModel</classname>. The custom components described
+          in <xref linkend="chp.CustomComponents" /> do this, as does the
+          component registered in the test application to render a wizard (see
+          <xref linkend="sec.ClaimWizardComponentFactory" />).</para>
+        </note>
+      </sect2>
+
+      <sect2 id="sec.SubclassingWicketObjectsApplication">
+        <title>Subclassing
+        <classname>IsisWicketApplication</classname></title>
+
+        <para>As we've seen, you can also customize <emphasis>Wicket
+        Objects</emphasis> in various ways by subclassing the
+        <classname>IsisWicketApplication</classname> bootstrap. The most
+        common reason for doing so is to override the default implementation
+        of <classname>ComponentFactoryList</classname>.</para>
+
+        <para>This design follows the general style of
+        <emphasis>Wicket</emphasis>; in fact, you'll see that
+        <classname>IsisWicketApplication</classname> itself overrides a number
+        of other methods (such as <methodname>newRequestCycle()</methodname>
+        and <methodname>newConverterLocator()</methodname>), in order to hook
+        <emphasis>Apache Isis</emphasis> into the rest of Wicket.</para>
+
+        <para>In general it's unlikely that you'll need to alter the behavior
+        of these hook methods; but it's useful to know that <emphasis>Wicket
+        Objects</emphasis> doesn't particularly interfere with the way in
+        which you may be used to customizing regular
+        <emphasis>Wicket</emphasis> applications.</para>
+      </sect2>
+    </sect1>
+  </chapter>
+
+  <chapter id="chp.WritingCustomComponents">
+    <title>Writing Custom Components</title>
+
+    <abstract>
+      <para>This chapter provides some further guidance on objects designed to
+      support specialized use cases.</para>
+    </abstract>
+
+    <para>Back in the application walkthrough (see <xref
+    linkend="sec.SpecializedUseCasesWalkthrough" />) we saw that the
+    <emphasis>Wicket Viewer</emphasis> has support for non-persisted objects
+    that are designed to support specialized use cases. Whereas regular
+    persisted domain objects can be thought of as part of the problem space,
+    such non-persisted objects can be thought of as being part of the solution
+    space because they offer a particular solution to a particular user
+    objective. We call these objects <emphasis>process objects</emphasis>
+    because objects they help a user perform a particular process.</para>
+
+    <para>This chapter provides some general guidance on writing such process
+    objects, and outlines the support that exists in <emphasis>Wicket
+    Objects</emphasis> for writing custom components for such objects.</para>
+
+    <sect1>
+      <title>Custom Components for Process Objects</title>
+
+      <para>Because process objects are there to guide the user, they often go
+      hand-in-hand with custom components so that they can be rendered in a
+      particular way.</para>
+
+      <para>For example, in the application walkthrough we saw that a
+      <classname>ClaimWizard</classname> process object is rendered with its
+      <methodname>previous()</methodname>, <methodname>next()</methodname> and
+      <methodname>finish()</methodname> actions as regular buttons:</para>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="images/320-wizard-claimant-page.png" scale="30" />
+        </imageobject>
+      </mediaobject>
+
+      <para>Similarly, the <classname>ClaimExpenseSummary</classname> object
+      (or rather, a collection of them) hooks into the capabilities of the
+      googlecharts component (discussed in <xref
+      linkend="sec.googlecharts" />):</para>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="images/410-analyze-summary-piechart.png"
+                     scale="30" />
+        </imageobject>
+      </mediaobject>
+
+      <para>You can use any of the <emphasis>Wicket Viewer</emphasis>'s
+      built-in <classname>Component</classname>s that are used to build the
+      generic views for your own custom views; search down the
+      <classname>ComponentFactory</classname> inheritance hierarchy and
+      there's a good chance you'll find something of use. For example, you can
+      easily add components to represent properties in a wizard (the custom
+      <classname>Component</classname> for <classname>ClaimWizard</classname>
+      does precisely this; you can inspect the code in <xref
+      linkend="sec.ExampleAppCustomViews" />).</para>
+
+      <para>The <emphasis>Wicket Viewer</emphasis> also has a small number of
+      <classname>Component</classname>s intended for writing custom
+      views.</para>
+
+      <sect2>
+        <title><classname>ProcessObjectPanelAbstract</classname></title>
+
+        <para>The <classname>ProcessObjectPanelAbstract</classname> is
+        intended to be used as the superclass for any panel-like
+        <classname>Component</classname> that will render a process object.
+        Its model is intended to be an <classname>EntityModel</classname>,
+        which wraps the process object.</para>
+
+        <para>This adapter class contains a number of convenience methods to
+        help build panels:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><methodname>addProperties(Form&lt;?&gt; form, String
+            id)</methodname></para>
+
+            <para>This adds the currently visible properties from the process
+            object to the provided form</para>
+          </listitem>
+
+          <listitem>
+            <para><methodname>isValid(Form&lt;?&gt; form)</methodname></para>
+
+            <para>This validates the process object, where the form holds the
+            properties</para>
+          </listitem>
+
+          <listitem>
+            <para><methodname>executeNoArgAction(String
+            actionId)</methodname></para>
+
+            <para>Executes the indicated action on the process object
+            (expected to take no-arguments).</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>Although minimal, these methods are sufficient to build a basic
+        wizard. The executeNoArgAction() method, for example, allows
+        <literal>Previous</literal>, <literal>Next</literal> and
+        <literal>Finish</literal> buttons to be added.</para>
+      </sect2>
+
+      <sect2>
+        <title>Help Wanted!</title>
+
+        <para>As you can see, the level of support provided by the
+        <emphasis>Wicket Viewer</emphasis> for custom views is, admittedly,
+        quite limited. There's nothing to prevent you from writing your own,
+        of course, but to do so you'll need to use with the <emphasis>Apache
+        Isis</emphasis> metamodel <acronym>API</acronym>s.</para>
+
+        <para>We hope to extend the components available as <emphasis>Wicket
+        Objects</emphasis> continues to be developed. But in the meantime, if
+        you build a <classname>Component</classname> that you think would be
+        generally useful, please consider contributing it back to this project
+        for the benefit of others.</para>
+      </sect2>
+    </sect1>
+
+    <sect1>
+      <title>Use a Page enum for Wizards</title>
+
+      <para>Here's just a bit of good old-fashioned advice; consider using an
+      enum to track the state of your wizards.</para>
+
+      <para>For example, the <classname>ClaimWizard</classname> in the example
+      app has the following enum defined:</para>
+
+      <programlisting>@NotPersistable
+public class ClaimWizard extends AbstractDomainObject {
+
+    public enum Page {
+        INTRO("This wizard will take you through the process of creating a claim"),
+        CLAIMANT("Enter the claimant that is making this claim"),
+        APPROVER("By default, the claimant's own approver will approve this claim.  " +
+          "Update here if another approver will approve this claim."),
+        DESCRIPTION("Update the description if required."),
+        SUMMARY("Confirm all details, or go back and amend if needed");
+
+        private String description;
+        private Page(String description) {
+            this.description = description;
+        }
+
+        public String getDescription() {
+            return description;
+        }
+
+        public boolean hasPrevious() {
+            return ordinal() &gt; 0;
+        }
+        public Page previous() {
+            if (hasPrevious()) {
+                return values()[ordinal() - 1];
+            } else {
+                return this;
+            }
+        }
+
+        public boolean hasNext() {
+            return ordinal() &lt; values().length - 1;
+        }
+        public Page next() {
+            if (hasNext()) {
+                return values()[ordinal() + 1];
+            } else {
+                return this;
+            }
+        }
+
+        @Ignore
+        public boolean is(Page... pages) {
+            for (Page page : pages) {
+                if (page == this) {
+                    return true;
+                }
+            }
+            return false;
+        }
+    }
+
+    ...
+}</programlisting>
+
+      <para>This not only defines the descriptions of each
+      <classname>Page</classname>, it also includes some logic for the
+      previous() and next() actions to delegate to:</para>
+
+      <programlisting>@NotPersistable
+public class ClaimWizard extends AbstractDomainObject {
+
+    // {{ Page
+    private Page page;
+    @Hidden
+    public Page getPage() { ... }
+    public void setPage(final Page page) { ... }
+    // }}
+
+
+    // {{ Page Description
+    @WizardPageDescription
+    @MemberOrder(sequence = "1")
+    public String getPageDescription() { ... }
+
+    // {{ previous
+    @MemberOrder(sequence = "1")
+    public void previous() {
+        setPage(getPage().previous());
+    }
+    public String disablePrevious() {
+        return coalesce(noPreviousPage(), confirmIfOnSummaryPage());
+    }
+    private String noPreviousPage() {
+        return !getPage().hasPrevious() ? "no previous page" : null;
+    }
+    // }}
+
+    // {{ next
+    @MemberOrder(sequence = "2")
+    public void next() {
+        setPage(getPage().next());
+    }
+    public String disableNext() {
+        return coalesce(noNextPage(), confirmIfOnSummaryPage());
+    }
+    private String noNextPage() {
+        return !getPage().hasNext() ? "no next page" : null;
+    }
+    // }}
+
+    ...
+}</programlisting>
+    </sect1>
+  </chapter>
+
+  <chapter id="chp.CustomComponents">
+    <title>Custom Components in isis-contrib</title>
+
+    <abstract>
+      <para>This chapter describes a number of custom components for the
+      <emphasis>Wicket Viewer</emphasis>. Some of these integrate third party
+      components and/or experimental.</para>
+    </abstract>
+
+    <para>As was described in <xref linkend="sec.ComponentFactories" />, the
+    <emphasis>Wicket Viewer</emphasis> is designed to be extensible, allowing
+    you to plug in more sophisticated renderings of the domain objects that
+    make up your application. This chapter describes a number of custom
+    components that demonstrate this capability, most of which are basically
+    wrappers around functionality within the <emphasis>Wicket</emphasis>'s
+    companion <ulink url="http://wicketstuff.org">WicketStuff</ulink>
+    project.</para>
+
+    <para>The components here are probably best considered as examples rather
+    than formally part of the <emphasis>Wicket Viewer</emphasis>, if only
+    because we want the <emphasis>Wicket Viewer</emphasis> to depend just on
+    core <emphasis>Wicket</emphasis>, not <emphasis>WicketStuff</emphasis>.
+    But what you will find is that all the components here follow a similar
+    layout, so you can easily adapt copy them into your own projects and adapt
+    them as you feel fit.</para>
+
+    <sect1>
+      <title>About the Components</title>
+
+      <para>The source for these components is available at ***.</para>
+
+      <sect2>
+        <title>Common Layout</title>
+
+        <para>Most of the components define their own interfaces or
+        annotations; these are then implemented or annotated on the domain
+        classes so that the component knows whether it applies or not (see
+        discussion on <classname>ComponentFactory</classname>, in <xref
+        linkend="sec.ComponentFactory" />).</para>
+
+        <para>To minimize the coupling between the domain objects and the
+        component implementation, we separate out the interfaces/annotations
+        into an applib.</para>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="images/views-common-layout.png" scale="50" />
+          </imageobject>
+        </mediaobject>
+
+        <para>The naming convention for these modules is:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><filename>org.starobjects.wicket:view-xxx</filename> for the
+            parent module for view 'xxx'</para>
+          </listitem>
+
+          <listitem>
+            <para><filename>org.starobjects.wicket:view-xxx-applib</filename>
+            for the applib submodule</para>
+          </listitem>
+
+          <listitem>
+            <para><filename>org.starobjects.wicket:view-xxx-view</filename>
+            for the view submodule (that contains the actual
+            <classname>ComponentFactory</classname> and
+            <classname>Component</classname> implementations)</para>
+          </listitem>
+        </itemizedlist>
+      </sect2>
+
+      <sect2>
+        <title>Adding Dependency Management for Custom Views</title>
+
+        <para>In the parent project's <filename>pom.xml</filename>, specify
+        the modules of the custom views that you want to use, along with the
+        version:</para>
+
+        <programlisting>&lt;dependencyManagement&gt;
+  &lt;dependencies&gt;
+    ...
+
+    &lt;!-- Wicket Viewer view extensions --&gt;
+    &lt;dependency&gt;
+      &lt;groupId&gt;org.apache.isis.viewer.wicket&lt;/groupId&gt;
+      &lt;artifactId&gt;view-gmap2-applib&lt;/artifactId&gt;
+      &lt;version&gt;${wicketobjects.version}&lt;/version&gt;
+    &lt;/dependency&gt;
+
+    &lt;dependency&gt;
+      &lt;groupId&gt;org.apache.isis.viewer.wicket&lt;/groupId&gt;
+      &lt;artifactId&gt;view-gmap2-view&lt;/artifactId&gt;
+      &lt;version&gt;${wicketobjects.version}&lt;/version&gt;
+    &lt;/dependency&gt;
+
+    &lt;dependency&gt;
+      &lt;groupId&gt;org.apache.isis.viewer.wicket&lt;/groupId&gt;
+      &lt;artifactId&gt;view-googlecharts-applib&lt;/artifactId&gt;
+      &lt;version&gt;${wicketobjects.version}&lt;/version&gt;
+    &lt;/dependency&gt;
+
+    &lt;dependency&gt;
+      &lt;groupId&gt;org.apache.isis.viewer.wicket&lt;/groupId&gt;
+      &lt;artifactId&gt;view-googlecharts-view&lt;/artifactId&gt;
+      &lt;version&gt;${wicketobjects.version}&lt;/version&gt;
+    &lt;/dependency&gt;
+
+    &lt;dependency&gt;
+      &lt;groupId&gt;org.apache.isis.viewer.wicket&lt;/groupId&gt;
+      &lt;artifactId&gt;view-calendarviews-applib&lt;/artifactId&gt;
+      &lt;version&gt;${wicketobjects.version}&lt;/version&gt;
+    &lt;/dependency&gt;
+
+    &lt;dependency&gt;
+      &lt;groupId&gt;org.apache.isis.viewer.wicket&lt;/groupId&gt;
+      &lt;artifactId&gt;view-calendarviews-view&lt;/artifactId&gt;
+      &lt;version&gt;${wicketobjects.version}&lt;/version&gt;
+    &lt;/dependency&gt;
+
+    &lt;dependency&gt;
+      &lt;groupId&gt;org.apache.isis.viewer.wicket&lt;/groupId&gt;
+      &lt;artifactId&gt;view-cooldatasoftmenu-view&lt;/artifactId&gt;
+      &lt;version&gt;${wicketobjects.version}&lt;/version&gt;
+    &lt;/dependency&gt;
+
+    ...
+  &lt;dependencies&gt;
+&lt;/dependencyManagement&gt;</programlisting>
+      </sect2>
+
+      <sect2>
+        <title>Adding the Custom View's AppLibs as Dependencies</title>
+
+        <para>*** Again, if you intend to use any of the custom components
+        (see <xref linkend="chp.CustomComponents" />), then also add in
+        dependencies to their respective applibs (if they have one):</para>
+
+        <programlisting>&lt;dependencies&gt;
+  ...
+
+  &lt;!-- Wicket Viewer view extensions --&gt;
+  &lt;dependency&gt;
+    &lt;groupId&gt;org.starobjects.wicket&lt;/groupId&gt;
+    &lt;artifactId&gt;view-calendarviews-applib&lt;/artifactId&gt;
+  &lt;/dependency&gt;
+
+  &lt;dependency&gt;
+    &lt;groupId&gt;org.starobjects.wicket&lt;/groupId&gt;
+    &lt;artifactId&gt;view-gmap2-applib&lt;/artifactId&gt;
+  &lt;/dependency&gt;
+
+  &lt;dependency&gt;
+    &lt;groupId&gt;org.starobjects.wicket&lt;/groupId&gt;
+    &lt;artifactId&gt;view-googlecharts-applib&lt;/artifactId&gt;
+  &lt;/dependency&gt;
+
+  ...
+&lt;/dependencies&gt;</programlisting>
+
+        <para></para>
+
+        <para></para>
+      </sect2>
+
+      <sect2>
+        <title>Update Classpath</title>
+
+        <para>The classpath for both the <filename>dom</filename> submodule
+        and the <filename>commandline</filename> / <filename>webapp</filename>
+        submodule each need to be updated (see <xref
+        linkend="sec.StructureOfAnApacheIsisApp" /> for an overview of the
+        typical structure of an <emphasis>Apache Isis</emphasis>
+        application):</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>the <filename>dom</filename> submodule should be updated to
+            reference the <classname>view-xxx-applib</classname> submodule for
+            each custom component</para>
+          </listitem>
+
+          <listitem>
+            <para>the <filename>commandline</filename> /
+            <filename>webapp</filename> module should be updated to reference
+            the <filename>view-xxx-view</filename> submodule for each custom
+            component</para>
+          </listitem>
+        </itemizedlist>
+      </sect2>
+    </sect1>
+
+    <sect1 id="sec.gmap2">
+      <title>Gmap2</title>
+
+      <para>The gmap2 component renders a collection of objects in a Google
+      map:</para>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="images/280-customize-ui-maps-mashup.png"
+                     scale="30" />
+        </imageobject>
+      </mediaobject>
+
+      <para>All that is required is for the object to implement
+      <classname>Locatable</classname> interface, which in turn returns a
+      <classname>Location</classname> value object:</para>
+
+      <programlisting>package org.apache.isis.viewer.wicket.view.gmap2.applib;
+
+public interface Locatable {
+    Location getLocation();
+}</programlisting>
+
+      <para>If deploying on localhost, no <acronym>API</acronym> key is
+      required. However, internet deployments do require an key, which should
+      be specified as an init-parameter for the <emphasis>Wicket</emphasis>
+      filter in <filename>web.xml</filename>:</para>
+
+      <programlisting>&lt;?xml version="1.0" encoding="ISO-8859-1"?&gt;
+&lt;web-app ... &gt;
+
+  ...
+
+  &lt;filter&gt;
+    &lt;filter-name&gt;wicket.app&lt;/filter-name&gt;
+    &lt;filter-class&gt;org.apache.wicket.protocol.http.WicketFilter&lt;/filter-class&gt;
+    &lt;init-param&gt;
+      &lt;param-name&gt;applicationClassName&lt;/param-name&gt;
+      &lt;param-value&gt;org.apache.isis.viewer.wicket.viewer.app.IsisWicketApplication&lt;/param-value&gt;
+    &lt;/init-param&gt;
+    &lt;init-param&gt;
+      &lt;param-name&gt;GOOGLE_MAPS_API_KEY&lt;/param-name&gt;
+      &lt;param-value&gt;(key here)&lt;/param-value&gt;
+    &lt;/init-param&gt;
+  &lt;/filter&gt;
+
+&lt;/web-app&gt;</programlisting>
+    </sect1>
+
+    <sect1 id="sec.googlecharts">
+      <title>Google Charts</title>
+
+      <para>The googlechart component provides basic charting capabilities. It
+      currently supports a single chart type; to render a collection as a pie
+      chart:</para>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="images/410-analyze-summary-piechart.png"
+                     scale="30" />
+        </imageobject>
+      </mediaobject>
+
+      <para>All that is required is for the object to implement the (horribly
+      named) <classname>PieChartable</classname>:</para>
+
+      <programlisting>package org.apache.isis.viewer.wicket.view.googlecharts.applib;
+
+public interface PieChartable {
+
+  double getPieChartValue();
+  String getPieChartLabel();
+}</programlisting>
+
+      <para>The label is used to point to each sector on the pie chart, the
+      value determines the size of each sector relative to the other
+      sectors.</para>
+    </sect1>
+
+    <sect1>
+      <title>CoolDataSoft Application Services Menu</title>
+
+      <para>The CoolDataSoft application services menu provides a different
+      look-n-feel for the application services menu, using Ajax instead of
+      <acronym>CSS</acronym>:</para>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="images/cooldatasoft-appmenu.png" scale="30" />
+        </imageobject>
+      </mediaobject>
+
+      <para>The implementation is based upon code lifted from the <ulink
+      url="http://code.google.com/p/wicket-menu/">wicket-menu</ulink> project,
+      hosted on code.google.com. Please note that this code is GPLv3 and so
+      cannot be used freely in commercial applications.</para>
+    </sect1>
+  </chapter>
+
+  <chapter>
+    <title>Deployment Topics</title>
+
+    <abstract>
+      <para>This chapter touches on various topics that should be addressed
+      prior to deployment.</para>
+    </abstract>
+
+    <para>Before you can deploy your application into production there are a
+    number of things to be addressed. Most significantly of these is
+    persistence, but security is another important topic.</para>
+
+    <para>Because the <emphasis>Wicket Viewer</emphasis> runs on top of
+    <emphasis>Apache Isis</emphasis>, many of the deployment tasks are based
+    on the way in which <emphasis>Apache Isis</emphasis> tackles them.</para>
+
+    <para>This chapter briefly outlines the main tasks from a <emphasis>Wicket
+    Objects</emphasis> perspective. You might, though, want to dig out my
+    book, <ulink url="http://pragprog.com/titles/dhnako">Domain Driven Design
+    using Naked Objects</ulink>, for more in-depth coverage of the
+    <emphasis>Apache Isis</emphasis> side-of-things (it covers
+    <emphasis>Apache Isis</emphasis>' predecessor, <emphasis>Naked
+    Objects</emphasis>, but is still broadly applicable).</para>
+
+    <sect1>
+      <title>Running in a WebApp</title>
+
+      <para>When developing <emphasis>Apache Isis</emphasis> applications you
+      can run from either the <filename>commandline</filename> project or from
+      the <filename>webapp</filename> project (see <xref
+      linkend="sec.StructureOfAnApacheIsisApp" />). If you've been using the
+      former, then you'll need to switch to running from the latter so that
+      your application can be built as a <acronym>WAR</acronym> for
+      deployment. Take care to ensure that:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>the classpath dependencies are the same (so that any custom
+          components you're using or have written are picked up)</para>
+        </listitem>
+
+        <listitem>
+          <para>that the <filename>isis.properties</filename> config file is
+          the same</para>
+        </listitem>
+      </itemizedlist>
+    </sect1>
+
+    <sect1>
+      <title>Persistence</title>
+
+      <para>If you've been using the in-memory object store for development,
+      obviously you'll need to switch to a persistent object store before you
+      deploy.</para>
+
+      <para>Going into the details of that is outside the scope of this guide,
+      but it's worth noting that you have a number of options:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>the simplest persistence mechanism (albeit still only really
+          for prototyping) is to use the XML object store. You can specify
+          this in <filename>isis.properties</filename>:</para>
+
+          <programlisting>isis.persistor=xml
+isis.xmlos.dir=/tmp/xml</programlisting>
+        </listitem>
+
+        <listitem>
+          <para>more likely though you'll want to use a relational database.
+          One option is <ulink url="http://jpaobjects.sourceforge.net">JPA
+          Objects</ulink>, another sister project to <emphasis>Apache
+          Isis</emphasis> (like <emphasis>Wicket Objects</emphasis> itself, in
+          fact). There's reasonable coverage in the <ulink
+          url="http://pragprog.com/titles/dhnako">DDDuNO</ulink> book.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Apache Isis</emphasis> also has (will have) a
+          JDBC-based object store, SQL Object Store</para>
+        </listitem>
+
+        <listitem>
+          <para>If relational databases aren't your thing, <emphasis>Apache
+          Isis</emphasis> also has (will have) a BerkeleyDB Object
+          Store</para>
+        </listitem>
+      </itemizedlist>
+    </sect1>
+
+    <sect1>
+      <title>Security</title>
+
+      <para>By default, <emphasis>Wicket Objects</emphasis> is configured to use
+      <emphasis>Apache Isis</emphasis>' default authentication and
+      authorization. This are both file-based, with a simple passwords file to
+      define users, and a similar file to define authorization.
+      <emphasis>Apache Isis</emphasis> does though provide an implementation
+      for both that use <acronym>LDAP</acronym>. This is discussed in the
+      other <emphasis>Apache Isis</emphasis> documentation and in Dan
+      Haywood's book. Alternatively, you could always write your own
+      implementations to hook into your own security infrastructure.</para>
+
+      <para>See also <xref linkend="sec.Security" />.</para>
+    </sect1>
+
+    <sect1>
+      <title>Wicket DEPLOYMENT mode</title>
+
+      <para>Finally, you'll also want to switch into Wicket deployment mode
+      (ie for production). This is done in the normal way, by modifying
+      <emphasis>web.xml</emphasis>:</para>
+
+      <programlisting>&lt;?xml version="1.0" encoding="ISO-8859-1"?&gt;
+&lt;web-app ... &gt;
+
+  ...
+
+  &lt;filter&gt;
+    &lt;filter-name&gt;wicket.app&lt;/filter-name&gt;
+    &lt;filter-class&gt;org.apache.wicket.protocol.http.WicketFilter&lt;/filter-class&gt;
+    &lt;init-param&gt;
+      &lt;param-name&gt;applicationClassName&lt;/param-name&gt;
+      &lt;param-value&gt;org.apache.isis.viewer.wicket.viewer.app.IsisWicketApplication&lt;/param-value&gt;
+    &lt;/init-param&gt;
+    &lt;init-param&gt;
+      &lt;param-name&gt;configuration&lt;/param-name&gt;
+      &lt;param-value&gt;deployment&lt;/param-value&gt;
+    &lt;/init-param&gt;
+  &lt;/filter&gt;
+
+&lt;/web-app&gt;</programlisting>
+
+      <para>Doing this also disables <emphasis>Apache Isis</emphasis>
+      "exploration" actions (any action annotated with
+      <classname>@Exploration</classname> will no longer be visible).</para>
+    </sect1>
+  </chapter>
+
+  <appendix id="apx.ExampleApp">
+    <title>Example Application</title>
+
+    <abstract>
+      <para>This appendix contains (almost) all the code that makes up the
+      example application shown in the screenshots in <xref
+      linkend="chp.Screenshots" />. The purpose in including these listings is
+      just to give you an idea of what it takes to write a <emphasis>Wicket
+      Objects</emphasis> application; this isn't a full tutorial on what it
+      all means.</para>
+    </abstract>
+
+    <para>If you're interested in trying out the application, you'll find it
+    at <ulink
+    url="https://wicketobjects.svn.sourceforge.net/svnroot/wicketobjects/trunk/testapp/claims">https://wicketobjects.svn.sourceforge.net/svnroot/wicketobjects/trunk/testapp/claims</ulink>.</para>
+
+    <sect1>
+      <title>Domain Application (Problem Space / Persisted Objects)</title>
+
+      <para>Most of the application shown in the screenshots (see <xref
+      linkend="chp.Screenshots" />) requires only the domain model. This is
+      made up of three main entities, <classname>Employee</classname>,
+      <classname>Claim</classname> and <classname>ClaimItem</classname>. The
+      dependency between <package>employee</package> and
+      <package>claims</package> package is acyclic; every
+      <classname>Claim</classname> has a <classname>Claimant</classname> and
+      an <classname>Approver</classname>, and <classname>Employee</classname>
+      implements both the <classname>Approver</classname> and
+      <classname>Claimant</classname> interfaces.</para>
+
+      <sect2>
+        <title>claims package</title>
+
+        <sect3>
+          <title>Claim</title>
+
+          <para>The <classname>Claim</classname> class is by far the largest
+          domain class. Below is a listing of all the methods; the body of the
+          getters and setters and some of the validation methods have been
+          omitted.</para>
+
+          <programlisting>package org.apache.isis.examples.claims.dom.claim;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.isis.applib.AbstractDomainObject;
+import org.apache.isis.applib.annotation.Disabled;
+import org.apache.isis.applib.annotation.Ignore;
+import org.apache.isis.applib.annotation.MaxLength;
+import org.apache.isis.applib.annotation.MemberOrder;
+import org.apache.isis.applib.annotation.Named;
+import org.apache.isis.applib.annotation.Optional;
+import org.apache.isis.applib.value.Date;
+import org.apache.isis.applib.value.Money;
+import org.apache.isis.viewer.wicket.applib.CalendarEvent;
+import org.apache.isis.viewer.wicket.applib.Calendarable;
+
+public class Claim extends AbstractDomainObject implements Calendarable {
+
+    // {{ Title
+    public String title() {
+        return getStatus() + " - " + getDate();
+    }
+    // }}
+
+    // {{ Lifecycle
+    public void created() {
+        status = "New";
+        date = new Date();
+    }
+    // }}
+
+    // {{ Rush
+    private boolean rush;
+    @MemberOrder(sequence = "1.2")
+    public boolean getRush() { ... }
+    public void setRush(final boolean flag) { ... }
+    // }}
+
+    // {{ Description
+    private String description;
+    @MemberOrder(sequence = "1")
+    public String getDescription() { ... }
+    public void setDescription(String description) { ... }
+    public String validateDescription(final String description) { ... }
+    // }}
+
+    // {{ Date
+    private Date date;
+    @MemberOrder(sequence = "2")
+    public Date getDate() { ... }
+    public void setDate(Date date) { ... }
+    public String disableDate() { ... }
+    // }}
+
+    // {{ Status
+    private String status;
+    @Disabled
+    @MemberOrder(sequence = "3")
+    @MaxLength(5)
+    public String getStatus() { ... }
+    public void setStatus(String status) { ... }
+    // }}
+
+    // {{ Claimant
+    private Claimant claimant;
+    @Disabled
+    @MemberOrder(sequence = "4")
+    public Claimant getClaimant() { ... }
+    public void setClaimant(Claimant claimant) { ... }
+    // }}
+
+    // {{ Approver
+    private Approver approver;
+    @MemberOrder(sequence = "5")
+    @Optional
+    public Approver getApprover() { ... }
+    public void setApprover(Approver approver) { ... }
+    public String disableApprover() { ... }
+    public String validateApprover(final Approver approver) {
+        if (approver == null)
+            return null;
+        return approver == getClaimant() ? "Can't approve own claims" : null;
+    }
+    // }}
+
+    // {{ Items
+    private List&lt;ClaimItem&gt; items = new ArrayList&lt;ClaimItem&gt;();
+    @MemberOrder(sequence = "6")
+    public List&lt;ClaimItem&gt; getItems() { ... }
+    public void addToItems(ClaimItem item) { ... }
+    // }}
+
+    // {{ action: Submit
+    public void submit(Approver approver) { ... }
+    public String disableSubmit() {
+        return getStatus().equals("New") ? null
+                : "Claim has already been submitted";
+    }
+    public Object default0Submit() {
+        return getClaimant().getApprover();
+    }
+    // }}
+
+    // {{ action: addItem
+    public void addItem(@Named("Days since") int days,
+            @Named("Amount") double amount,
+            @Named("Description") String description) {
+        ClaimItem claimItem = newTransientInstance(ClaimItem.class);
+        Date date = new Date();
+        date = date.add(0, 0, days);
+        claimItem.setDateIncurred(date);
+        claimItem.setDescription(description);
+        claimItem.setAmount(new Money(amount, "USD"));
+        persist(claimItem);
+        addToItems(claimItem);
+    }
+    public String disableAddItem() { ... }
+        return "Submitted".equals(getStatus()) ? "Already submitted" : null;
+    }
+    // }}
+
+    // object-level validation
+    public String validate() { ... }
+}</programlisting>
+
+          <para>Some points worth noting:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>Although <classname>Claim</classname> is inheriting from
+              <emphasis>Apache Isis</emphasis>'
+              <classname>AbstractDomainObject</classname> class, this isn't
+              mandatory.</para>
+            </listitem>
+
+            <listitem>
+              <para><classname>Claim</classname> has reference properties of
+              type <classname>Claimant</classname> and
+              <classname>Approver</classname>. As we'll see below these are
+              interfaces. References to both interface and classes is
+              supported in <emphasis>Apache Isis</emphasis>.</para>
+            </listitem>
+
+            <listitem>
+              <para>The <classname>Claim</classname> uses a
+              <classname>Money</classname> class, a value type provided by
+              <emphasis>Apache Isis</emphasis>. It's also possible to write
+              ones own value types (or indeed use third-party value types such
+              as JodaTime).</para>
+            </listitem>
+          </itemizedlist>
+        </sect3>
+
+        <sect3>
+          <title>ClaimItem</title>
+
+          <para>A <classname>Claim</classname> has a collection of
+          <classname>ClaimItem</classname>s. A
+          <classname>ClaimItem</classname> is somewhat simpler than
+          <classname>Claim</classname>, and doesn't have any particular
+          behavior itself:</para>
+
+          <programlisting>package org.apache.isis.examples.claims.dom.claim;
+
+import org.apache.isis.applib.AbstractDomainObject;
+import org.apache.isis.applib.annotation.MemberOrder;
+import org.apache.isis.applib.value.Date;
+import org.apache.isis.applib.value.Money;
+
+public class ClaimItem extends AbstractDomainObject {
+
+    // {{ Title
+    public String title() {
+        return getDescription();
+    }
+    // }}
+
+    // {{ DateIncurred
+    private Date dateIncurred;
+    @MemberOrder(sequence = "1")
+    public Date getDateIncurred() { ... }
+    public void setDateIncurred(Date dateIncurred) { ... }
+    // }}
+
+    // {{ Description
+    private String description;
+    @MemberOrder(sequence = "2")
+    public String getDescription() { ... }
+    public void setDescription(String description) { ... }
+    // }}
+
+    // {{ Amount
+    private Money amount;
+    @MemberOrder(sequence = "3")
+    public Money getAmount() { ... }
+    public void setAmount(Money price) { ... }
+    // }}
+}</programlisting>
+        </sect3>
+
+        <sect3>
+          <title>Approver and Claimant</title>
+
+          <para>The <classname>Approver</classname> and
+          <classname>Claimant</classname> interfaces decouple Claim from any
+          classes outside the claims package. The
+          <classname>Approver</classname> interface is, in fact, empty:</para>
+
+          <programlisting>package org.apache.isis.examples.claims.dom.claim;
+
+public interface Approver {
+
+}</programlisting>
+
+          <para>There's not a lot more to
+          <classname>Claimant</classname>:</para>
+
+          <programlisting>package org.apache.isis.examples.claims.dom.claim;
+
+public interface Claimant {
+
+    Approver getApprover();
+
+    String title();
+}</programlisting>
+        </sect3>
+
+        <sect3>
+          <title>ClaimRepository</title>
+
+          <para>The <classname>ClaimRepository</classname> interface is one of
+          the two domain services (as appearing in the menu bar), and is
+          defined as:</para>
+
+          <programlisting>package org.apache.isis.examples.claims.dom.claim;
+
+import java.util.List;
+
+import org.apache.isis.applib.annotation.Named;
+import org.apache.isis.applib.value.Date;
+
+@Named("Claims")
+public interface ClaimRepository {
+
+    public List&lt;Claim&gt; allClaims();
+
+    public List&lt;Claim&gt; findClaims(@Named("Description") String description);
+
+    public List&lt;Claim&gt; claimsFor(Claimant claimant);
+
+    public List&lt;Claim&gt; claimsSince(Claimant claimant, Date since);
+
+    public ClaimWizard newClaim(Claimant claimant);
+
+    public List&lt;ClaimantExpenseSummary&gt; analyseClaimantExpenses();
+}</programlisting>
+        </sect3>
+      </sect2>
+
+      <sect2>
+        <title>employee package</title>
+
+        <para>The employee package depends on the claim package in that the
+        <classname>Employee</classname> class implements the
+        <classname>Claimant</classname> and <classname>Approver</classname>
+        interfaces. Among other things, this allows the actions of the
+        <classname>ClaimRepository</classname> to be "contributed" to the
+        <classname>Employee</classname> class (appear in a "claims" submenu
+        for each <classname>Employee</classname>).</para>
+
+        <sect3>
+          <title>Employee</title>
+
+          <para>The <classname>Employee</classname> class is the other main
+          class in this app:</para>
+
+          <programlisting>package org.apache.isis.examples.claims.dom.employee;
+
+import org.apache.isis.applib.AbstractDomainObject;
+import org.apache.isis.applib.annotation.Disabled;
+import org.apache.isis.applib.annotation.MemberOrder;
+import org.apache.isis.examples.claims.dom.claim.Approver;
+import org.apache.isis.examples.claims.dom.claim.Claimant;
+import org.apache.isis.viewer.wicket.applib.Locatable;
+import org.apache.isis.viewer.wicket.applib.Location;
+
+public class Employee extends AbstractDomainObject implements Claimant,
+        Approver, Locatable {
+
+    // {{ Title
+    public String title() {
+        return getName();
+    }
+
+    // }}
+
+    // {{ Icon
+    public String iconName() {
+        return getName().replaceAll(" ", "");
+    }
+    // }}
+
+    // {{ Name
+    private String name;
+    @MemberOrder(sequence = "1")
+    public String getName() { ... }
+    public void setName(String lastName) { ... }
+    // }}
+
+    // {{ Approver
+    private Approver approver;
+    @MemberOrder(sequence = "2")
+    public Approver getApprover() { ... }
+    public void setApprover(Approver approver) { ... }
+    // }}
+
+    // {{ Location
+    private Location location;
+    @Disabled
+    @MemberOrder(sequence = "1")
+    public Location getLocation() { ... }
+    public void setLocation(final Location location) { ... }
+    // }}
+}</programlisting>
+
+          <para>A couple points worth noting:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>The <classname>Employee</classname> class has an
+              <methodname>iconName()</methodname> method. This is used to
+              render <classname>Employee</classname>s with a customized image
+              for each instance.</para>
+            </listitem>
+
+            <listitem>
+              <para><classname>Employee</classname> also implements
+              <classname>Locatable</classname>. This is used to render the
+              <classname>Employee</classname> in the gmap2 (google maps
+              mashup) view (see <xref
+              linkend="chp.CustomComponents" />).</para>
+            </listitem>
+          </itemizedlist>
+        </sect3>
+
+        <sect3>
+          <title><classname>EmployeeRepository</classname></title>
+
+          <para>The <classname>EmployeeRepository</classname> interface
+          defines the other domain service (on the services menu):</para>
+
+          <programlisting>package org.apache.isis.examples.claims.dom.employee;
+
+import java.util.List;
+
+import org.apache.isis.applib.annotation.Named;
+
+@Named("Employees")
+public interface EmployeeRepository {
+
+    public List&lt;Employee&gt; allEmployees();
+    public List&lt;Employee&gt; findEmployees(@Named("Name") String name);
+}</programlisting>
+        </sect3>
+      </sect2>
+    </sect1>
+
+    <sect1>
+      <title>Specialized Use Cases</title>
+
+      <para>Domain objects to support specialized use cases (solution space
+      objects) are not persisted; instead their state is serialized into the
+      <emphasis>Wicket</emphasis> page components.</para>
+
+      <sect2>
+        <title><classname>ClaimWizard</classname></title>
+
+        <para>The <classname>ClaimWizard</classname> uses an internal
+        <varname>page</varname> field (of type <classname>Page</classname>
+        enum) to determine which page the user is on; from this we determine
+        which properties should be visible, and whether the
+        <literal>previous()</literal>, <literal>next()</literal> and
+        <literal>finish()</literal> actions are available.</para>
+
+        <programlisting>package org.apache.isis.examples.claims.dom.claim;
+
+import java.util.Calendar;
+import java.util.List;
+
+import org.apache.isis.applib.AbstractDomainObject;
+import org.apache.isis.applib.annotation.Disabled;
+import org.apache.isis.applib.annotation.Hidden;
+import org.apache.isis.applib.annotation.Ignore;
+import org.apache.isis.applib.annotation.MemberOrder;
+import org.apache.isis.applib.annotation.NotPersistable;
+import org.apache.isis.applib.annotation.TypicalLength;
+import org.apache.isis.applib.clock.Clock;
+import org.apache.isis.examples.claims.dom.employee.EmployeeRepository;
+import org.apache.isis.viewer.wicket.applib.WizardPageDescription;
+
+@NotPersistable
+public class ClaimWizard extends AbstractDomainObject {
+
+    public enum Page {
+        INTRO("This wizard will take you through the process of creating a claim"),
+        CLAIMANT("Enter the claimant that is making this claim"),
+        APPROVER("By default, the claimant's own approver will approve this claim.  " +
+                 "Update here if another approver will approve this claim."),
+        DESCRIPTION("Update the description if required."),
+        SUMMARY("Confirm all details, or go back and amend if needed");
+
+        private String description;
+        private Page(String description) {
+            this.description = description;
+        }
+
+        public String getDescription() {
+            return description;
+        }
+
+        public boolean hasPrevious() {
+            return ordinal() &gt; 0;
+        }
+        public Page previous() {
+            if (hasPrevious()) {
+                return values()[ordinal() - 1];
+            } else {
+                return this;
+            }
+        }
+
+        public boolean hasNext() {
+            return ordinal() &lt; values().length - 1;
+        }
+        public Page next() {
+            if (hasNext()) {
+                return values()[ordinal() + 1];
+            } else {
+                return this;
+            }
+        }
+
+        @Ignore
+        public boolean is(Page... pages) {
+            for (Page page : pages) {
+                if (page == this) {
+                    return true;
+                }
+            }
+            return false;
+        }
+    }
+
+    // {{ Lifecycle
+    public void created() {
+        setPage(Page.INTRO);
+        setDescription("Expenses for week #" + weekNum());
+    }
+    private int weekNum() {
+        return getTimeAsCalendar().get(Calendar.WEEK_OF_YEAR);
+    }
+    protected Calendar getTimeAsCalendar() {
+        return Clock.getTimeAsCalendar();
+    }
+    // }}
+
+    // {{ Page
+    private Page page;
+    @Hidden
+    public Page getPage() { ... }
+    public void setPage(final Page page) { ... }
+    // }}
+
+    // {{ Page Description
+    @WizardPageDescription
+    @TypicalLength(60)
+    @MemberOrder(sequence = "1")
+    public String getPageDescription() {
+        return getPage().getDescription();
+    }
+    // }}
+
+    // {{ Claimant
+    private Claimant claimant;
+    @MemberOrder(sequence = "2")
+    public Claimant getClaimant() { ... }
+    public void setClaimant(final Claimant claimant) { ... }
+    public void modifyClaimant(final Claimant claimant) { ... }
+    public void clearClaimant() { ... }
+    }
+    protected void onModifyClaimant(final Claimant oldClaimant,
+            final Claimant newClaimant) {
+        setApprover(newClaimant.getApprover());
+    }
+    protected void onClearClaimant(final Claimant oldClaimant) {
+    }
+    @SuppressWarnings("unchecked")
+    public List&lt;Claimant&gt; choicesClaimant() {
+        return employeeRepository.allEmployees();
+    }
+    public String disableClaimant() {
+        return coalesce(claimCreated(), confirmIfOnSummaryPage());
+    }
+    public boolean hideClaimant() {
+        return !getPage().is(Page.CLAIMANT, Page.SUMMARY);
+    }
+    // }}
+
+    // {{ Approver
+    private Approver approver;
+    @MemberOrder(sequence = "3")
+    public Approver getApprover() { ... }
+    public void setApprover(final Approver approver) { ... }
+    public String disableApprover() {
+        return coalesce(claimCreated(), confirmIfOnSummaryPage());
+    }
+    public boolean hideApprover() {
+        return !getPage().is(Page.APPROVER, Page.SUMMARY);
+    }
+    // }}
+
+    // {{ Description
+    private String description;
+    @MemberOrder(sequence = "4")
+    public String getDescription() { ... }
+    public void setDescription(final String description) { ... }
+    public String disableDescription() {
+        return coalesce(claimCreated(), confirmIfOnSummaryPage());
+    }
+    public boolean hideDescription() {
+        return !getPage().is(Page.DESCRIPTION, Page.SUMMARY);
+    }
+    private String claimCreated() {
+        return claim != null ? "Claim created" : null;
+    }
+    // }}
+
+    // {{ Claim
+    private Claim claim;
+    @Disabled
+    @MemberOrder(sequence = "5")
+    public Claim getClaim() { ... }
+    public void setClaim(final Claim claim) { ... }
+    public boolean hideClaim() { ... }
+    // }}
+
+    // {{ previous
+    @MemberOrder(sequence = "1")
+    public void previous() {
+        setPage(getPage().previous());
+    }
+    public String disablePrevious() {
+        return coalesce(noPreviousPage(), confirmIfOnSummaryPage());
+    }
+    private String noPreviousPage() {
+        return !getPage().hasPrevious() ? "no previous page" : null;
+    }
+    // }}
+
+    // {{ next
+    @MemberOrder(sequence = "2")
+    public void next() {
+        setPage(getPage().next());
+    }
+    public String disableNext() {
+        return coalesce(noNextPage(), confirmIfOnSummaryPage());
+    }
+    private String noNextPage() {
+        return !getPage().hasNext() ? "no next page" : null;
+    }
+    // }}
+
+    // {{ finish
+    @MemberOrder(sequence = "3")
+    public Claim finish() {
+        Claim claim = newTransientInstance(Claim.class);
+        claim.setClaimant(getClaimant());
+        claim.setApprover(getApprover());
+        claim.setDescription(getDescription());
+        setClaim(claim);
+        persist(claim);
+        return claim;
+    }
+    public String disableFinish() {
+        if (getPage().hasNext()) {
+            return "wizard has further pages to complete";
+        }
+        return getContainer().validate(this);
+    }
+    // }}
+
+    // {{ helpers
+    private String confirmIfOnSummaryPage() {
+        return getPage().is(Page.SUMMARY) ? "confirm" : null;
+    }
+    private static String coalesce(String... strings) {
+        for (String string : strings) {
+            if (string != null)
+                return string;
+        }
+        return null;
+    }
+    // }}
+
+    // {{ injected: EmployeeRepository
+    private EmployeeRepository employeeRepository;
+    public void setEmployeeRepository(
+            final EmployeeRepository employeeRepository) { ... }
+    // }}
+}</programlisting>
+      </sect2>
+
+      <sect2>
+        <title><classname>ClaimExpenseSummary</classname></title>
+
+        <para>The <classname>ClaimExpenseSummary</classname> is used as a
+        report object:</para>
+
+        <programlisting>package org.apache.isis.examples.claims.dom.claim;
+
+import org.apache.isis.applib.annotation.Disabled;
+import org.apache.isis.applib.annotation.Ignore;
+import org.apache.isis.applib.annotation.MemberOrder;
+import org.apache.isis.applib.annotation.NotPersistable;
+import org.apache.isis.applib.value.Money;
+import org.apache.isis.viewer.wicket.applib.PieChartable;
+
+@NotPersistable
+public class ClaimantExpenseSummary implements PieChartable,
+        Comparable&lt;ClaimantExpenseSummary&gt; {
+
+    // {{ Identification
+    public String title() {
+        return getClaimant() != null ? getClaimant().title() : "(untitled)";
+    }
+    // }}
+
+    // {{ Claimant
+    private Claimant claimant;
+    @MemberOrder(sequence = "1")
+    public Claimant getClaimant() { ... }
+    public void setClaimant(final Claimant claimant) { ... }
+    // }}
+
+    // {{ Amount
+    private Money amount;
+    @Disabled
+    @MemberOrder(sequence = "1")
+    public Money getAmount() { ... }
+    public void setAmount(final Money amount) { ... }
+    // }}
+
+    // {{ programmatic
+    @Ignore
+    public void addAmount(Money amount) {
+        if (this.amount == null) {
+            this.amount = amount;
+        } else {
+            this.amount = this.amount.add(amount);
+        }
+    }
+    // }}
+
+    // {{ PieChartable impl
+    @Ignore
+    @Override
+    public double getPieChartValue() {
+        return getAmount().doubleValue();
+    }
+    @Ignore
+    @Override
+    public String getPieChartLabel() {
+        return title();
+    }
+    // }}
+
+    @Override
+    public int compareTo(ClaimantExpenseSummary o) {
+        if (getPieChartValue() &lt; o.getPieChartValue())
+            return -1;
+        if (getPieChartValue() &gt; o.getPieChartValue())
+            return +1;
+        return 0;
+    }
+}</programlisting>
+
+        <para>Note that it implements the (rather horribly named)
+        <classname>PieChartable</classname>, which is picked up by the
+        googlecharts custom component (see <xref
+        linkend="sec.googlecharts" />).</para>
+      </sect2>
+    </sect1>
+
+    <sect1 id="sec.ExampleAppCustomViews">
+      <title>Custom Views for Specialized Use Cases</title>
+
+      <para>It's very common that the objects underpinning specialized use
+      cases have custom <classname>ComponentFactory</classname>s so that they
+      are rendered in a particular way. This is the case for
+      <classname>ClaimWizard</classname> (see <xref
+      linkend="sec.SpecializedUseCasesWalkthrough" />); for
+      <classname>ClaimExpenseSummary</classname> the specialized view is
+      provided by the googlecharts custom component (see <xref
+      linkend="sec.googlecharts" />).</para>
+
+      <para>It's good practice to create a new Maven submodule for any custom
+      components; you'll find this component in the
+      <filename>claims-ui</filename> module.</para>
+
+      <sect2 id="sec.ClaimWizardComponentFactory">
+        <title><classname>ClaimWizardComponentFactory</classname></title>
+
+        <para></para>
+
+        <para></para>
+
+        <para></para>
+
+        <programlisting>package org.apache.isis.examples.claims.ui.claimwizard;
+
+import org.apache.wicket.Component;
+import org.apache.wicket.model.IModel;
+import org.apache.isis.examples.claims.dom.claim.ClaimWizard;
+import org.apache.isis.metamodel.spec.ObjectSpecification;
+import org.apache.isis.viewer.wicket.viewer.components.ComponentType;
+import org.apache.isis.viewer.wicket.viewer.components.entity.EntityComponentFactoryAbstract;
+import org.apache.isis.viewer.wicket.viewer.components.entity.EntityModel;
+
+public class ClaimWizardComponentFactory extends EntityComponentFactoryAbstract {
+
+    private static final long serialVersionUID = 1L;
+    private static final String NAME = "wizard";
+
+    public ClaimWizardComponentFactory() {
+        super(ComponentType.ENTITY, NAME);
+    }
+
+    @Override
+    protected ApplicationAdvice appliesTo(IModel&lt;?&gt; model) {
+        return appliesExclusivelyIf(super.appliesTo(model).applies() &amp;&amp; isModelForWizard((EntityModel)model));
+    }
+
+    private boolean isModelForWizard(EntityModel model) {
+        final ObjectSpecification typeOfSpec = model.getTypeOfSpecification();
+        final ObjectSpecification claimWizardSpec = getSpecificationLoader().loadSpecification(ClaimWizard.class);
+        return typeOfSpec.isOfType(claimWizardSpec);
+    }
+
+    @Override
+    public Component createComponent(String id, IModel&lt;?&gt; model) {
+        final EntityModel entityModel = (EntityModel)model;
+        return new ClaimWizardPanel(id, entityModel);
+    }
+}</programlisting>
+
+        <para></para>
+
+        <para></para>
+      </sect2>
+
+      <sect2>
+        <title><classname>ClaimWizardPanel</classname></title>
+
+        <para></para>
+
+        <para></para>
+
+        <programlisting>package org.apache.isis.examples.claims.ui.claimwizard;
+
+import java.util.List;
+
+import org.apache.wicket.Session;
+import org.apache.wicket.feedback.FeedbackMessage;
+import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.form.Button;
+import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.FormComponent;
+import org.apache.wicket.markup.html.form.validation.AbstractFormValidator;
+import org.apache.wicket.markup.html.panel.ComponentFeedbackPanel;
+import org.apache.wicket.markup.html.panel.FeedbackPanel;
+import org.apache.wicket.markup.repeater.RepeatingView;
+import org.apache.wicket.model.Model;
+import org.apache.isis.metamodel.adapter.NakedObject;
+import org.apache.isis.metamodel.commons.filters.Filter;
+import org.apache.isis.metamodel.facets.object.validate.ValidateObjectFacet;
+import org.apache.isis.metamodel.spec.NakedObjectSpecification;
+import org.apache.isis.metamodel.spec.feature.NakedObjectAssociation;
+import org.apache.isis.metamodel.spec.feature.NakedObjectAssociationFilters;
+import org.apache.isis.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.isis.viewer.wicket.viewer.common.ProcessObjectPanelAbstract;
+import org.apache.isis.viewer.wicket.viewer.common.scalars.ScalarModel;
+import org.apache.isis.viewer.wicket.viewer.components.ComponentType;
+import org.apache.isis.viewer.wicket.viewer.components.entity.EntityModel;
+import org.apache.isis.viewer.wicket.viewer.mementos.PropertyMemento;
+import org.apache.isis.viewer.wicket.viewer.util.Mementos;
+
+import com.google.common.collect.Lists;
+
+public class ClaimWizardPanel extends ProcessObjectPanelAbstract {
+
+    private static final long serialVersionUID = 1L;
+
+    private static final String ID_CLAIM_WIZARD_PROPERTIES_FORM = "claimWizardPropertiesForm";
+    private static final String ID_PROPERTIES = "properties";
+
+    public ClaimWizardPanel(String id, EntityModel model) {
+        super(id, model);
+        buildGui();
+    }
+
+    private ClaimWizardForm claimWizardForm;
+
+    private void buildGui() {
+        EntityModel entityModel = getModel();
+        entityModel.toEditMode();
+
+        claimWizardForm = new ClaimWizardForm(ID_CLAIM_WIZARD_PROPERTIES_FORM,
+                getModel());
+        addOrReplace(claimWizardForm);
+    }
+
+    class ClaimWizardForm extends Form&lt;ObjectAdapter&gt; {
+
+        private static final long serialVersionUID = 1L;
+
+        private static final String ID_FEEDBACK = "feedback";
+        private static final String ID_PREVIOUS = "previous";
+        private static final String ID_NEXT = "next";
+        private static final String ID_FINISH = "finish";
+
+        private static final String PREVIOUS_ACTION_ID = "previous()";
+        private static final String NEXT_ACTION_ID = "next()";
+        private static final String FINISH_ACTION_ID = "finish()";
+
+        private FeedbackPanel feedback;
+
+        public ClaimWizardForm(String id, EntityModel entityModel) {
+            super(id, entityModel);
+
+            buildFormGui();
+        }
+
+        private void buildFormGui() {
+            addProperties();
+            addButtons();
+            addFeedbackGui();
+
+            addValidator();
+        }
+
+        private void addProperties() {
+            EntityModel entityModel = (EntityModel) getModel();
+            ObjectAdapter adapter = entityModel.getObject();
+            ObjectSpecification noSpec = adapter.getSpecification();
+
+            List&lt;OneToOneAssociation&gt; properties = visibleProperties(adapter,
+                    noSpec);
+
+            RepeatingView rv = new RepeatingView(ID_PROPERTIES);
+            add(rv);
+            List&lt;PropertyMemento&gt; mementos = buildPropertyMementos(properties);
+            for (PropertyMemento pm : mementos) {
+                WebMarkupContainer container = new WebMarkupContainer(rv
+                        .newChildId());
+                rv.add(container);
+
+                ScalarModel scalarModel = entityModel.getPropertyModel(pm);
+                getComponentFactoryRegistry().addOrReplaceComponent(container,
+                        ComponentType.SCALAR, scalarModel);
+            }
+        }
+
+        @SuppressWarnings("unchecked")
+        private List&lt;OneToOneAssociation&gt; visibleProperties(
+                ObjectAdapter adapter, ObjectSpecification noSpec) {
+            return (List&lt;OneToOneAssociation&gt;) noSpec
+                    .getAssociationList(visiblePropertyFilter(adapter));
+        }
+
+        private Filter&lt;ObjectAssociation&gt; visiblePropertyFilter(
+                ObjectAdapter adapter) {
+            return ObjectAssociationFilters.PROPERTIES
+                    .and(NakedObjectAssociationFilters.dynamicallyVisible(
+                            getAuthenticationSession(), adapter));
+        }
+
+        private List&lt;PropertyMemento&gt; buildPropertyMementos(
+                List&lt;OneToOneAssociation&gt; properties) {
+            List&lt;PropertyMemento&gt; transform = Lists.transform(properties,
+                    Mementos.fromProperty());
+            // we copy into a new array list otherwise we get lazy evaluation =
+            // reference to a non-serializable object
+            return Lists.newArrayList(transform);
+        }
+
+        private void addButtons() {
+            add(createButton(ID_PREVIOUS, "Previous", PREVIOUS_ACTION_ID));
+            add(createButton(ID_NEXT, "Next", NEXT_ACTION_ID));
+            add(createButton(ID_FINISH, "Finish", FINISH_ACTION_ID));
+        }
+
+        private Button createButton(final String id, final String label,
+                final String actionId) {
+            return new Button(id, Model.of(label)) {
+                private static final long serialVersionUID = 1L;
+
+                @Override
+                public void onSubmit() {
+                    boolean isValid = ClaimWizardPanel.this.isValid(getForm());
+                    if (!isValid) {
+                        return;
+                    }
+
+                    executeNoArgAction(actionId);
+                }
+            };
+        }
+
+        private void addFeedbackGui() {
+            final FeedbackPanel feedback = addOrReplaceFeedback();
+
+            ObjectAdapter adapter = getModel().getObject();
+            if (adapter == null) {
+                feedback.error("cannot locate object:"
+                        + getEntityModel().getObjectMemento().toString());
+            }
+        }
+
+        private FeedbackPanel addOrReplaceFeedback() {
+            feedback = new ComponentFeedbackPanel(ID_FEEDBACK, this);
+            feedback.setOutputMarkupPlaceholderTag(true);
+            addOrReplace(feedback);
+            return feedback;
+        }
+
+        private void addValidator() {
+            add(new AbstractFormValidator() {
+
+                private static final long serialVersionUID = 1L;
+
+                @Override
+                public FormComponent&lt;?&gt;[] getDependentFormComponents() {
+                    return new FormComponent&lt;?&gt;[0];
+                }
+
+                @Override
+                public void validate(Form&lt;?&gt; form) {
+                    EntityModel entityModel = (EntityModel) getModel();
+                    ObjectAdapter adapter = entityModel.getObject();
+                    ValidateObjectFacet facet = adapter.getSpecification()
+                            .getFacet(ValidateObjectFacet.class);
+                    if (facet == null) {
+                        return;
+                    }
+                    String invalidReasonIfAny = facet.invalidReason(adapter);
+                    if (invalidReasonIfAny != null) {
+                        Session.get().getFeedbackMessages().add(
+                                new FeedbackMessage(form, invalidReasonIfAny,
+                                        FeedbackMessage.ERROR));
+                    }
+                }
+            });
+        }
+    }
+}</programlisting>
+
+        <para></para>
+      </sect2>
+
+      <sect2>
+        <title><filename>ClaimWizardPanel.html</filename></title>
+
+        <para></para>
+
+        <programlisting>&lt;html&gt;
+    &lt;body&gt;
+        &lt;wicket:panel&gt;
+            &lt;div class="claimWizard"&gt;
+                &lt;form wicket:id="claimWizardPropertiesForm" class="inputForm"&gt;
+                    &lt;fieldset class="inputFormTable properties"&gt;
+                        &lt;div wicket:id="properties"&gt;
+                          &lt;div wicket:id="scalarNameAndValue"&gt;[scalar]&lt;/div&gt;
+                        &lt;/div&gt;
+                        &lt;div class="feedbackPanel"&gt;
+                            &lt;span wicket:id="feedback"/&gt;
+                        &lt;/div&gt;
+                        &lt;input class="submit" type="submit" wicket:id="previous"/&gt;
+                        &lt;input class="submit" type="submit" wicket:id="next"/&gt;
+                        &lt;input class="submit" type="submit" wicket:id="finish"/&gt;
+                    &lt;/fieldset&gt;
+                &lt;/form&gt;
+            &lt;/div&gt;
+        &lt;/wicket:panel&gt;
+    &lt;/body&gt;
+&lt;/html&gt;</programlisting>
+      </sect2>
+    </sect1>
+  </appendix>
+
+  <appendix>
+    <title>Wicket Objects' Maven Modules</title>
+
+    <abstract>
+      <para>This appendix, targetted at contributors to <emphasis>Wicket
+      Objects</emphasis> itself, runs through the different Maven (sub)modules
+      and their main contents.</para>
+    </abstract>
+
+    <sect1 id="id.modules-applib">
+      <title>AppLib</title>
+
+      <para>This small submodule defines the <emphasis>Wicket
+      Viewer</emphasis>'s application library, and (along with
+      <emphasis>Apache Isis</emphasis>' own applib) represents the sole point
+      of coupling between <emphasis>Apache Isis/Wicket Viewer</emphasis> and
+      the domain objects themselves.</para>
+
+      <para>There is no real behaviour in this module; instead it defines
+      annotations to decorate your domain objects. An example is
+      <classname>@WizardPageDescription</classname>, which when applied to a
+      <classname>String</classname> property will render the value of that
+      property as the header of a wizard page, and suppress the property's
+      label.</para>
+    </sect1>
+
+    <sect1 id="sec.modules-facets">
+      <title>Facets</title>
+
+      <para>The <filename>facets</filename> submodule provides extensions to
+      <emphasis>Apache Isis</emphasis> metamodel, picking up annotations
+      defined in the applib. Basically, it provides implementations of
+      <emphasis>Apache Isis</emphasis>' <classname>FacetFactory</classname>
+      interface, which are registered with <emphasis>Apache Isis</emphasis>
+      using the <filename>isis.properties</filename> configuration file. For
+      example, to pick up the <classname>@WizardPageDescription</classname>
+      annotation, add:</para>
+
+      <programlisting>isis.reflector.facets.include=org.apache.isis.viewer.wicket.metamodel.facets.WizardPageDescriptionAnnotationFacetFactory</programlisting>
+    </sect1>
+
+    <sect1 id="sec.modules-model">
+      <title>Model</title>
+
+      <para>The <filename>model</filename> submodule provides implementations
+      of <emphasis>Wicket</emphasis> <classname>IModel</classname>s, with
+      these <classname>IModel</classname>s wrapping <emphasis>Apache
+      Isis</emphasis> domain objects. These <classname>IModel</classname>s are
+      shared among different views defined in the <filename>ui</filename>
+      module.</para>
+
+      <para>The most important models are:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><classname>EntityModel</classname></para>
+
+          <para>Represents a domain object</para>
+        </listitem>
+
+        <listitem>
+          <para><classname>ScalarModel</classname></para>
+
+          <para>Represents either a property of a domain object (along with
+          its value), or a parameter of an action (again, along with its
+          value). When used to represent a property, the model can indicate
+          its owning domain object.</para>
+        </listitem>
+
+        <listitem>
+          <para><classname>EntityCollectionModel</classname></para>
+
+          <para>Represents a collection of entities, either owned by a domain
+          object (that is, representing the contents of a domain object's
+          collection, such as an <classname>Order</classname>'s
+          <varname>lineItems</varname> collection), or standalone (that is, as
+          the result of an action, such as
+          <methodname>CustomerRepository#findCustomers()</methodname>).</para>
+        </listitem>
+
+        <listitem>
+          <para><classname>ActionModel</classname></para>
+
+          <para>Represents an action to invoke (which may include action
+          parameters), or the results of invoking that action.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>There are also a couple of supporting models:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><classname>ApplicationActionsModel</classname></para>
+
+          <para>Provides a hierarchical set of actions for the registered
+          application services</para>
+        </listitem>
+
+        <listitem>
+          <para><classname>ValueModel</classname></para>
+
+          <para>Represents a standalone value, eg the result of an action
+          (<methodname>CustomerRepository#countBlacklistedCustomers()</methodname>)</para>
+        </listitem>
+
+        <listitem>
+          <para><classname>WelcomeModel</classname></para>
+
+          <para>Holds the contents of the welcome message on the home
+          page</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>The <classname>IModel</classname>s also handle serialization
+      issues required by <emphasis>Wicket</emphasis>'s stateful architecture,
+      storing the state of these domain objects transparently in mementos
+      (even if the underlying pojos are not serializable).</para>
+    </sect1>
+
+    <sect1 id="sec.module-ui">
+      <title>UI</title>
+
+      <para>The <filename>ui</filename> submodule provides a complete set of
+      <emphasis>Wicket</emphasis> <classname>Component</classname>s that are
+      used to render your domain model. They vary in size from very
+      fine-grained to very coarse. For example, there is a
+      <classname>Component</classname> to render a single parameter of an
+      action; another renders a single property of a domain object; another
+      renders all the properties and collections of an object; another renders
+      a single object; another renders a collection of objects.</para>
+
+      <para>Each <classname>Component</classname> has a corresponding
+      <classname>ComponentFactory</classname>. <emphasis>Wicket
+      Object</emphasis>s uses the chain of responsibility pattern to determine
+      which <classname>Component</classname>s will render the data held in its
+      models, with each <classname>ComponentFactory</classname> being checked
+      as to whether it can render each model. In this way the
+      <acronym>UI</acronym> can be easily modified by switching out and in
+      different <classname>ComponentFactory</classname>s.</para>
+
+      <para>The <classname>Component</classname>s can also be used directly in
+      your own custom views. Over time we expect the set of
+      <classname>Component</classname>s to grow to support more specialized
+      custom views.</para>
+
+      <para>See Javadoc for the full list of componens available.</para>
+    </sect1>
+
+    <sect1>
+      <title>Viewer</title>
+
+      <para>The <filename>viewer</filename> submodule is used to bootstrap the
+      webapp, providing an implementation of <emphasis>Wicket</emphasis>'s
+      <classname>WebApplication</classname> class that also bootstraps the
+      <emphasis>Apache Isis</emphasis> runtime.</para>
+
+      <para>It also provides login/logout pages, and registers default sets of
+      <classname>ComponentFactory</classname>s which ultimately determine the
+      look-n-feel of the running webapp. The WebApplication class can be
+      easily overridden to allow these defaults to be altered.</para>
+    </sect1>
+
+    <sect1>
+      <title>Documentation</title>
+
+      <para>The <filename>documentation</filename> submodule holds the DocBook
+      source for the user guide (the document you're reading right
+      now).</para>
+    </sect1>
+
+    <sect1>
+      <title>UTest</title>
+
+      <para>The <filename>utest</filename> module for <emphasis>Wicket
+      Objects</emphasis> holds helper classes for unit testing. It is used
+      only as a test dependency and is not required or intended for
+      deployment.</para>
+    </sect1>
+  </appendix>
+</book>

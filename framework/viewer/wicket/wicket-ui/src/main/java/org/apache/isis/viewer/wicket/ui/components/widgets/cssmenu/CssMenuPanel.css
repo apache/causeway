@@ -1,0 +1,206 @@
+/*
+ *  Licensed to the Apache Software Foundation (ASF) under one
+ *  or more contributor license agreements.  See the NOTICE file
+ *  distributed with this work for additional information
+ *  regarding copyright ownership.  The ASF licenses this file
+ *  to you under the Apache License, Version 2.0 (the
+ *  "License"); you may not use this file except in compliance
+ *  with the License.  You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing,
+ *  software distributed under the License is distributed on an
+ *  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ *  KIND, either express or implied.  See the License for the
+ *  specific language governing permissions and limitations
+ *  under the License.
+ */
+.cssMenuHeaderContainer span.clear {
+	clear: both;
+	line-height: 3px;
+}
+	
+.cssMenuHeaderContainer
+	{
+		}
+
+/*
+.small {
+	font-size: x-small;
+}
+*/
+
+#applicationActions .menuh {
+	background-color: #C4D9EA;
+}
+	 
+.menuh
+	{
+	font-family: arial, helvetica, sans-serif;
+	float:left;
+	margin-top: 0.1em;
+	background: repeat-x scroll center center;
+	width:100%;
+}
+
+.menuh .small {
+	float:none;
+	display: inline;
+}
+
+.menuh p .small {
+	float:none;
+	display: inline;
+}
+
+.menuh a, .menuh p {
+	text-align: left;
+	display:block;
+	border: 1px  #bfaea6 solid;
+	white-space:nowrap;
+	margin:0em;
+	padding: 1px;
+	padding-right: 1.6em;
+	padding-left: 0.4em;
+	font-weight: normal;
+	cursor:default;
+}
+	
+.menuh a:link, .menuh a:visited, .menuh a:active, .menuh p	/* menu at rest */
+	{
+	color: #A66144;
+	background-color: #C4D9EA;
+	text-decoration:none;
+/*	-moz-border-radius: 6px; 
+	-webkit-border-radius: 6px;
+	border-radius: 6px; */
+	}
+	
+.menuh a:hover, .menuh p:hover 						/* menu on mouse-over  */
+	{
+	color: #D7E7F5;
+	background-color: #407098;
+	}	
+
+.menuh a:hover 						/* menu on mouse-over  */
+	{
+	text-decoration:underline;
+	}	
+
+
+.menuh a.top-parent, .menuh p.top-parent  /* attaches down-arrow to all top-parents */
+	{
+	background-image: url(navdown_secondarydark.gif);
+	background-position: right center;
+	background-repeat: no-repeat;
+/*	-moz-border-radius: 6px;
+	-webkit-border-radius: 6px;
+	border-radius: 6px; */
+	}
+
+.menuh a.top-parent:hover, .menuh p.top-parent:hover  /* attaches down-arrow to all top-parents */
+	{
+	background-image: url(navdown_primarypale.gif);
+	background-position: right center;
+	background-repeat: no-repeat;
+	}
+
+.menuh a.parent, .menuh p.parent 	/* attaches side-arrow to all parents */
+	{
+	background-image: url(nav_secondarydark.gif);
+	background-position: right center;
+	background-repeat: no-repeat;
+	}
+
+.menuh a.parent:hover, .menuh p.parent:hover 	/* attaches side-arrow to all parents */
+	{
+	background-image: url(nav_primarypale.gif);
+	background-position: right center;
+	background-repeat: no-repeat;
+	}
+
+.menuh ul
+	{
+	list-style:none;
+	margin:0;
+	padding:0;
+	float:left;
+	display: inline;
+}
+
+.menuh li
+	{
+	position:relative;
+	min-height: 1px;
+	}
+
+.menuh ul ul
+	{
+	position:absolute;
+	z-index:500;
+	top:auto;
+	display:none;
+	padding: 1em;
+	margin:-1em 0 0 -1em;
+	}
+
+.menuh ul ul ul
+	{
+	top:0;
+	left:100%;
+	}
+
+span.menuh a:hover
+	{
+	cursor:pointer;
+	z-index:100;
+	}
+
+span.menuh li:hover ul ul,
+span.menuh li li:hover ul ul,
+span.menuh li li li:hover ul ul,
+span.menuh li li li li:hover ul ul
+{display:none;}
+
+span.menuh li:hover ul,
+span.menuh li li:hover ul,
+span.menuh li li li:hover ul,
+span.menuh li li li li:hover ul
+{display:block;}
+
+
+
+li.cssSubMenuItem p.disabled {
+	color: gray;
+}
+
+
+/** TODO: tidy up this gunk, was experimenting in inlining; it may not be needed */
+
+.small .menuh
+{
+	float:none;
+}
+
+.small .cssMenuItems
+{
+	float:none;
+}
+
+.small p.top-parent
+{
+	display:inline;
+	position: relative;
+}
+
+.small li.cssMenuItem {
+	display:inline;
+}
+
+.small ul {
+	position: relative;
+	display:inline;
+}
+
+/* End CSS Drop Down Menu */

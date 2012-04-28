@@ -1,0 +1,51 @@
+~~  Licensed to the Apache Software Foundation (ASF) under one
+~~  or more contributor license agreements.  See the NOTICE file
+~~  distributed with this work for additional information
+~~  regarding copyright ownership.  The ASF licenses this file
+~~  to you under the Apache License, Version 2.0 (the
+~~  "License"); you may not use this file except in compliance
+~~  with the License.  You may obtain a copy of the License at
+~~
+~~        http://www.apache.org/licenses/LICENSE-2.0
+~~
+~~  Unless required by applicable law or agreed to in writing,
+~~  software distributed under the License is distributed on an
+~~  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+~~  KIND, either express or implied.  See the License for the
+~~  specific language governing permissions and limitations
+~~  under the License.
+
+
+
+Default Runtime
+ 
+  The default runtime module comprises a set of modules that provide
+  for persistence and entity lifecycle management.  They also provide support 
+  for remoting (by an abstraction over the persistence mechanism) and 
+  incorporate a bytecode enhancement API to enable transparent lazy 
+  loading/unit of work tracking.
+  
+  The modules that make up the default runtime are:
+  
+  * {{{./runtime/index.html}runtime}} module, providing the core functionality
+  
+  * {{{./objectstores/index.html}objectstores}} module, under which there are
+    various objectstore implementations (for persisting domain objects)
+
+  * {{{./profilestores/index.html}profilestores}} module, under which there are
+    various profilestore implementations (for persisting user preferences)
+
+  * {{{./bytecode/index.html}bytecode}} module, under which there are
+    various bytecode enhancement implementations (used for transparent lazy
+    loading/unit of work support)
+
+  * {{{./webapp/index.html}webapp}} module, providing the ability to bootstrap the
+    default runtime within a web application
+
+  * {{{./webserver/index.html}webserver}} module, providing the ability to run
+    Isis webapps under a webserver instance (Jetty)
+
+  * {{{./remoting/index.html}remoting}} module, acting as a parent to the 
+    modules that provide support for client/server deployments
+
+  []

@@ -1,0 +1,50 @@
+~~  Licensed to the Apache Software Foundation (ASF) under one
+~~  or more contributor license agreements.  See the NOTICE file
+~~  distributed with this work for additional information
+~~  regarding copyright ownership.  The ASF licenses this file
+~~  to you under the Apache License, Version 2.0 (the
+~~  "License"); you may not use this file except in compliance
+~~  with the License.  You may obtain a copy of the License at
+~~
+~~        http://www.apache.org/licenses/LICENSE-2.0
+~~
+~~  Unless required by applicable law or agreed to in writing,
+~~  software distributed under the License is distributed on an
+~~  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+~~  KIND, either express or implied.  See the License for the
+~~  specific language governing permissions and limitations
+~~  under the License.
+
+
+Scimpi Viewer
+
+  The <scimpi> module provides a webapp viewer that out-of-the-box provides a similar
+  interface to that provided by the {{{../html/index.html}HTML}} viewer.
+  
+  However, unlike the HTML viewer it allows the user interface to be extensively customized.
+  
+  For an idea of the sorts of apps you can create with Scimpi, take a look at 
+  {{{http://planchaser.com/images/apps_screenshot.png}these}}
+  {{{http://planchaser.com/images/apps_screenshot2.png}screenshots}} taken from a 
+  commercial app. 
+  
+Customization
+
+  Scimpi works by searching for a specific page to render the domain object, eg <<<Customer.shtml>>>
+  to render a <<<Customer>>> object.  If none is found, it always falls back to a generic page, 
+  which can render any object.
+  
+  Customization therefore is accomplished by providing a specific page.  The elements of this
+  page can be any of the tags that Scimpi understands. 
+
+Alternatives
+
+  An alternative to Scimpi which offers similar customization though through a different
+  means is the {{{../wicket/index.html}Wicket}} viewer.
+ 
+Further Info
+  
+  See this module's {{{./docbkx/html/guide/isis-scimpi-viewer.html}User Guide}} for more information.
+
+  See the {{{./scimpi-dispatcher/index.html}Dispatcher}} and {{{./scimpi-servlet/index.html}Servlet}} for more information.
+      

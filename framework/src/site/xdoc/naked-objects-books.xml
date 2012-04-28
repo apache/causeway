@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+         http://www.apache.org/licenses/LICENSE-2.0
+         
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+-->
+<!DOCTYPE document PUBLIC "-//Apache Software Foundation//DTD XDOC 1.0//EN"
+"http://maven.apache.org/dtd/xdoc_1_0.dtd">
+<document>
+	<properties>
+		<title>Naked Objects</title>
+		<author email="isis-dev@incubator.apache.org">Apache Isis Contributors</author>
+	</properties>
+
+	<body>
+		<section name="">
+            <p>Although it has evolved since, Apache Isis framework started out as an
+               open source implementation of the <a href="http://en.wikipedia.org/wiki/Naked_objects">naked objects pattern</a>.
+               In fact, the dynamically generated webapp is a naked objects system; the dynamically generated
+               RESTful API can also be considered as a naked objects system (it's just that the representation is not intended
+               by users, instead by machines).
+            </p>
+            <p>
+                If the idea of naked objects is of interest, then there are a couple of books on the topic that you might want to read.
+            </p>
+
+			<h3>Naked Objects</h3>
+
+			<p>
+				<i>Richard Pawson and Robert Matthews, Wiley 2002</i>
+			</p>
+
+			<img align="left" alt="Naked Objects" class="wrap-left"
+				src="images/nakedobjects-book.jpg" style="margin:0 20px 20px 0; border-style:solid; border-width:1px;" />
+			<p>This book describes the original ideas of Naked Objects. Although
+				based on a very early version of the framework, it's still
+				definitely worth a read (and beautifully produced).</p>
+
+			<p>Amazon quotes: (avg 5 stars)</p>
+			<ul style="padding-left: 20px">
+				<li>
+					<cite>Brilliant argument and toolkit for information systems</cite>
+				</li>
+				<li>
+					<cite>Most thoughtful and beautiful technical book I have read
+					</cite>
+				</li>
+				<li>
+					<cite>Excellent presentation of an innovative practical idea</cite>
+				</li>
+			</ul>
+
+			<p>
+				The book is freely available online
+				<a href="http://www.nakedobjects.org/book/">here</a>
+				. Or, you can
+				get a hardcopy of the book at
+				<a
+					href="http://eu.wiley.com/WileyCDA/WileyTitle/productCd-0470844205.html">Wiley (publisher)</a>
+				and
+				<a
+					href="http://www.amazon.com/Naked-Objects-Richard-Pawson/dp/0470844205">Amazon</a>
+				.
+			</p>
+
+			<p>&nbsp;</p>
+			<p>&nbsp;</p>
+			
+			<h3>Domain Driven Design using Naked Objects</h3>
+
+			<p>
+				<i>Dan Haywood, Pragmatic Bookshelf 2009</i>
+			</p>
+
+			<img align="left" alt="Domain Driven Design using Naked Objects"
+				class="wrap-left" src="images/dhnako.jpg"
+				style="margin:0 20px 20px 0; border-style:solid; border-width:1px;" />
+
+			<p>This more recent book draws the parallel between domain-driven
+				design and Naked Objects (4.0). In the spirit of the Pragmatic
+				Bookshelf, it's a practical, hands-on
+				sort of book, building up a
+				case study as it goes and encouraging you to
+				build your own app as
+				you go.</p>
+
+			<p>Amazon quotes: (avg 4.5 stars)</p>
+			<ul style="padding-left: 20px">
+				<li>
+					<cite>Important Contribution to Domain-Driven Design</cite>
+				</li>
+				<li>
+					<cite>The easy-to-learn Naked Objects Framework .. provide[s] a
+						masterful exposition on DDD</cite>
+				</li>
+				<li>
+					<cite>Clear and passionate book about a great subject</cite>
+				</li>
+				<li>
+					<cite>Excellent book and a great framework</cite>
+				</li>
+			</ul>
+
+			<p>
+				You can find the book at
+				<a
+					href="http://www.pragprog.com/titles/dhnako/domain-driven-design-using-naked-objects">Pragmatic Bookshelf (publisher)</a>
+				and
+				<a
+					href="http://www.amazon.com/Domain-Driven-Design-Objects-Pragmatic-Programmers/dp/1934356441">Amazon.com</a>
+				.
+			</p>
+
+
+
+		</section>
+	</body>
+</document>
