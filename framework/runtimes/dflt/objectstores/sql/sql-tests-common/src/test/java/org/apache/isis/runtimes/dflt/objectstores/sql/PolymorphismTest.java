@@ -22,12 +22,14 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import java.io.File;
+import java.io.FilenameFilter;
 import java.util.List;
-import java.util.Properties;
 
 import org.junit.Test;
 
 import org.apache.isis.runtimes.dflt.objectstores.sql.common.SqlIntegrationTestCommonBase;
+import org.apache.isis.runtimes.dflt.objectstores.sql.common.SqlIntegrationTestFixtures;
 import org.apache.isis.runtimes.dflt.objectstores.sql.common.SqlIntegrationTestFixtures.State;
 import org.apache.isis.tck.dom.sqlos.poly.EmptyInterface;
 import org.apache.isis.tck.dom.sqlos.poly.EmptyInterfaceEx;
@@ -52,45 +54,61 @@ public class PolymorphismTest extends SqlIntegrationTestCommonBase {
     private static PolyInterfaceImplA polyIntImpA;
     private static PolyInterfaceImplB polyIntImpB;
 
-    // {{ Setup
-    @Override
-    public Properties getProperties() {
-        Properties properties = super.getProperties();
-        if (properties == null) { // Only used if properties file does not
-                                  // exist.
-            properties = new Properties();
-            properties.put(SqlObjectStore.BASE_NAME + ".jdbc.driver", "org.hsqldb.jdbcDriver");
-            properties.put(SqlObjectStore.BASE_NAME + ".jdbc.connection", "jdbc:hsqldb:file:hsql-db/polytests");
-            properties.put(SqlObjectStore.BASE_NAME + ".jdbc.user", "sa");
-            properties.put(SqlObjectStore.BASE_NAME + ".jdbc.password", "");
-            properties.put("isis.logging.objectstore", "on");
-            properties.put(SqlObjectStore.BASE_NAME + ".default.command.beginTransaction", "");
-        }
-
-        return properties;
-    }
-
     @Override
     public String getPropertiesFilename() {
-        return "hsql.properties";
+        return "hsql-poly.properties";
     }
+
+    @Override
+    public void resetPersistenceStoreDirectlyIfRequired() {
+        
+        // Delete all HSQL Database files.
+        deleteFiles("hsql-db", new FilenameFilter() {
+
+            @Override
+            public boolean accept(final File arg0, final String arg1) {
+                return arg1.endsWith(".xml");
+            }
+        });
+    }
+
 
     @Override
     public String getSqlTeardownString() {
         return "SHUTDOWN;";
     }
-    // }}
 
-    
+
     @Test
-    public void testSetup() {
-        resetPersistenceStoreDirectlyIfRequired();
-        setFixtureInitializationState(State.INITIALIZE);
-        // SqlIntegrationTestSingleton.drop("%");
+    public void testAll() throws Exception {
+        setupFixtures();
+        
+        setUpFactory();
+        
+        create();
+        load();
+        
+        setUpFactory();
+        
+        polymorphicLoad();
+        interfaceLoad();
+        loadSelfReferencingCollection();
+        interfaceLoadProperty();
+        interfaceLoadCollection();
+        interfaceEditSave();
+        interfaceEditLoad();
+        allInterfacesInstancesLoaded();
+        interfacesLoadedByQuery();
+        interfacesLoadedByQuerySpecial();
+        findByMatchPartialEntity();
+        cannotFindByMatchWithWrongValue();
+        reinitializeFixtures();
     }
 
-    @Test
-    public void testCreate() throws Exception {
+    private void setupFixtures() {
+        resetPersistenceStoreDirectlyIfRequired();
+        setFixtureInitializationState(State.INITIALIZE);
+        
         getSqlIntegrationTestFixtures().dropTable("ISIS_POLYTESTCLASS");
         getSqlIntegrationTestFixtures().dropTable("ISIS_POLYBASECLASS");
         getSqlIntegrationTestFixtures().dropTable("ISIS_POLYINTERFACE");
@@ -101,6 +119,9 @@ public class PolymorphismTest extends SqlIntegrationTestCommonBase {
         getSqlIntegrationTestFixtures().dropTable("ISIS_POLYINTERFACEIMPLA");
         getSqlIntegrationTestFixtures().dropTable("ISIS_POLYINTERFACEIMPLB");
         getSqlIntegrationTestFixtures().dropTable("ISIS_POLYSELFREFCLASS");
+    }
+
+    private void create() throws Exception {
 
         final PolyTestClass polyTestClass = factory.newPolyTestClass();
         polyTestClass.setString("polyTestClassString");
@@ -166,8 +187,7 @@ public class PolymorphismTest extends SqlIntegrationTestCommonBase {
         setFixtureInitializationState(State.DONT_INITIALIZE, "in-memory");
     }
 
-    @Test
-    public void testLoad() {
+    private void load() {
         final List<PolyTestClass> dataClasses = factory.allPolyTestClasses();
         assertEquals(1, dataClasses.size());
         final PolyTestClass polyTestClass = dataClasses.get(0);
@@ -177,8 +197,7 @@ public class PolymorphismTest extends SqlIntegrationTestCommonBase {
         setFixtureInitializationState(State.DONT_INITIALIZE);
     }
 
-    @Test
-    public void testPolymorphicLoad() {
+    private void polymorphicLoad() {
         final List<PolyBaseClass> polyBaseClasses = polyTestClass.getPolyBaseClasses();
         assertEquals(3, polyBaseClasses.size());
 
@@ -200,15 +219,13 @@ public class PolymorphismTest extends SqlIntegrationTestCommonBase {
         assertEquals("Another String", polySubClassThree.getStringClassThree());
     }
 
-    @Test
-    public void testInterfaceLoad() {
+    private void interfaceLoad() {
         final PolyInterface loaded = polyTestClass.getPolyInterfaceType();
         factory.resolve(loaded);
         assertEquals(polyIntImpA.getString(), loaded.getString());
     }
 
-    @Test
-    public void testLoadSelfReferencingCollection() {
+    private void loadSelfReferencingCollection() {
         final PolySelfRefClass polySelfRefParent = polyTestClass.getPolySelfRefClass();
         final List<PolySelfRefClass> list = polySelfRefParent.getPolySelfRefClasses();
         assertEquals(2, list.size());
@@ -229,14 +246,12 @@ public class PolymorphismTest extends SqlIntegrationTestCommonBase {
         assertEquals(1, list2.size());
     }
 
-    @Test
-    public void testInterfaceLoadProperty() {
+    private void interfaceLoadProperty() {
         final PolyInterface loaded = polyTestClass.getPolyInterfaceType();
         assertEquals(polyIntImpA.getString(), loaded.getString());
     }
 
-    @Test
-    public void testInterfaceLoadCollection() {
+    private void interfaceLoadCollection() {
         final List<PolyInterface> list = polyTestClass.getPolyInterfaces();
 
         assertEquals(1, list.size());
@@ -245,8 +260,7 @@ public class PolymorphismTest extends SqlIntegrationTestCommonBase {
         assertEquals(polyIntImpA.getString(), loaded.getString());
     }
 
-    @Test
-    public void testInterfaceEditSave() {
+    private void interfaceEditSave() {
         polyIntImpB = factory.newPolyInterfaceImplB();
         polyIntImpB.setString(IMPL_B_STRING);
         polyIntImpB.setSpecial("special");
@@ -259,22 +273,19 @@ public class PolymorphismTest extends SqlIntegrationTestCommonBase {
         setFixtureInitializationState(State.INITIALIZE);
     }
 
-    @Test
-    public void testInterfaceEditLoad() {
-        testLoad(); // reload data
+    private void interfaceEditLoad() {
+        load(); // reload data
 
         final PolyInterface loaded = polyTestClass.getPolyInterfaceType();
         assertEquals(polyIntImpB.getString(), loaded.getString());
     }
 
-    @Test
-    public void testAllInterfacesInstancesLoaded() {
+    private void allInterfacesInstancesLoaded() {
         final List<PolyInterface> list = factory.allPolyInterfaces();
         assertEquals(2, list.size());
     }
 
-    @Test
-    public void testInterfacesLoadedByQuery() {
+    private void interfacesLoadedByQuery() {
         // PolyInterface query = polyIntImpA;
 
         final PolyInterfaceEx query = new PolyInterfaceEx();
@@ -284,7 +295,7 @@ public class PolymorphismTest extends SqlIntegrationTestCommonBase {
         assertEquals(1, list.size());
     }
 
-    public void testInterfacesLoadedByQuerySpecial() {
+    private void interfacesLoadedByQuerySpecial() {
 
         final PolyInterfaceEx query = new PolyInterfaceEx();
 
@@ -292,7 +303,7 @@ public class PolymorphismTest extends SqlIntegrationTestCommonBase {
         assertEquals(2, list.size());
     }
 
-    public void testFindByMatchPartialEntity() {
+    private void findByMatchPartialEntity() {
         final EmptyInterface match = new EmptyInterfaceEx();
         final List<EmptyInterface> matches = factory.allEmptyInterfacesThatMatch(match);
         assertEquals(1, matches.size());
@@ -302,16 +313,16 @@ public class PolymorphismTest extends SqlIntegrationTestCommonBase {
         assertEquals(IMPL_B_STRING, imp.getString());
     }
 
-    public void testCannotFindByMatchWithWrongValue() {
+    private void cannotFindByMatchWithWrongValue() {
         final PolyInterfaceImplB match = new PolyInterfaceImplB();
         match.setInteger(0);
         final List<EmptyInterface> matches = factory.allEmptyInterfacesThatMatch(match);
         assertEquals(0, matches.size());
     }
 
-    @Test
-    public void reinitializeFixtures() {
+    private void reinitializeFixtures() {
         setFixtureInitializationState(State.INITIALIZE);
+        SqlIntegrationTestFixtures.recreate();
     }
 
 }

@@ -18,8 +18,10 @@
  */
 package org.apache.isis.runtimes.dflt.objectstores.sql.common;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Properties;
@@ -98,6 +100,26 @@ public abstract class SqlIntegrationTestCommonBase {
      */
     public void resetPersistenceStoreDirectlyIfRequired() {
     }
+
+    
+    /**
+     * Helper, eg to be called within {@link #resetPersistenceStoreDirectlyIfRequired()}.
+     */
+    protected static void deleteFiles(final String directory, final FilenameFilter extension) {
+        final File dir = new File(directory);
+
+        final String[] list = dir.list(extension);
+        File file;
+        if (list.length == 0) {
+            return;
+        }
+
+        for (final String element : list) {
+            file = new File(directory, element);
+            file.delete();
+        }
+    }
+
 
     
     ////////////////////////////////////////////////////////////////////////////////

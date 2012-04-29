@@ -60,6 +60,9 @@ public class SqlIntegrationTestFixtures {
         return instance;
     }
 
+    public static void recreate() {
+        instance = new SqlIntegrationTestFixtures();
+    }
     
     public enum State {
         INITIALIZE,

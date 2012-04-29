@@ -30,20 +30,6 @@ import org.apache.isis.runtimes.dflt.objectstores.sql.common.SqlIntegrationTestD
 
 public class XmlPersistenceTest extends SqlIntegrationTestData {
 
-    public static void deleteFiles(final String directory, final FilenameFilter extension) {
-        final File dir = new File(directory);
-
-        final String[] list = dir.list(extension);
-        File file;
-        if (list.length == 0) {
-            return;
-        }
-
-        for (final String element : list) {
-            file = new File(directory, element);
-            file.delete();
-        }
-    }
 
     @Override
     public void resetPersistenceStoreDirectlyIfRequired() {
