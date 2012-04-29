@@ -87,7 +87,7 @@ public class PersistenceQueryFindByPattern extends PersistenceQueryBuiltInAbstra
 
             if (fld.getSpecification().isValue()) {
                 // compare values directly
-                if (reqd != search) {
+                if (!reqd.getObject().equals(search.getObject())) {
                     return false;
                 }
                 
