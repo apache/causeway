@@ -114,9 +114,9 @@ public class IsisSystemDefault extends IsisSystemAbstract {
         SpecificationTraverser specificationTraverser = new SpecificationTraverserDefault();
         MemberLayoutArranger memberLayoutArranger = new MemberLayoutArrangerDefault();
         ProgrammingModel programmingModel = new ProgrammingModelFacetsJava5();
-        Set<FacetDecorator> facetDecorators = Sets.newHashSet((FacetDecorator)new StandardTransactionFacetDecorator(configuration));
+        Set<FacetDecorator> facetDecorators = Sets.newHashSet((FacetDecorator)new StandardTransactionFacetDecorator(getConfiguration()));
         MetaModelValidator metaModelValidator = new MetaModelValidatorDefault();
-        return new ObjectReflectorDefault(configuration, classSubstitutor, collectionTypeRegistry, specificationTraverser, memberLayoutArranger, programmingModel, facetDecorators, metaModelValidator);
+        return new ObjectReflectorDefault(getConfiguration(), classSubstitutor, collectionTypeRegistry, specificationTraverser, memberLayoutArranger, programmingModel, facetDecorators, metaModelValidator);
     }
 
     /**
@@ -124,7 +124,7 @@ public class IsisSystemDefault extends IsisSystemAbstract {
      */
     @Override
     protected AuthenticationManager obtainAuthenticationManager(DeploymentType deploymentType) throws IsisSystemException {
-        final AuthenticationManagerStandard authenticationManager = new AuthenticationManagerStandard(configuration);
+        final AuthenticationManagerStandard authenticationManager = new AuthenticationManagerStandard(getConfiguration());
         Authenticator authenticator = new AuthenticatorDefault(configuration);
         authenticationManager.addAuthenticator(authenticator);
         return authenticationManager;
@@ -135,7 +135,7 @@ public class IsisSystemDefault extends IsisSystemAbstract {
      */
     @Override
     protected AuthorizationManager obtainAuthorizationManager(DeploymentType deploymentType) {
-        return new AuthorizationManagerStandard(configuration);
+        return new AuthorizationManagerStandard(getConfiguration());
     }
 
     /**

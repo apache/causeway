@@ -24,7 +24,7 @@ import static org.junit.Assert.assertThat;
 
 import java.io.StringReader;
 import java.io.StringWriter;
-import java.util.Date;
+import java.text.SimpleDateFormat;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
@@ -39,6 +39,8 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
+import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.commons.matchers.IsisMatchers;
 import org.apache.isis.runtimes.dflt.testsupport.IsisSystemWithFixtures;
 import org.apache.isis.tck.dom.eg.ExamplePojoWithCollections;
@@ -47,14 +49,24 @@ import org.apache.isis.tck.dom.eg.ExamplePojoWithValues;
 
 public class ObjectFixtureFilePersistorTest {
 
-    @Rule
-    public IsisSystemWithFixtures iswf = IsisSystemWithFixtures.builder().build();
+    private static final String DATEFORMAT_PATTERN = "dd-MMM-yyyy HH:mm z";
     
+    private static final SimpleDateFormat dateFormat = new SimpleDateFormat(DATEFORMAT_PATTERN);
+    
+    @Rule
+    public IsisSystemWithFixtures iswf = IsisSystemWithFixtures.builder()
+        .with(configuration()).build();
+    
+    private static IsisConfiguration configuration() {
+        final IsisConfigurationDefault config = new IsisConfigurationDefault();
+        config.add("isis.value.format.datetime", DATEFORMAT_PATTERN);
+        return config;
+    }
+
     private ObjectFixtureFilePersistor persistor;
 
-    @SuppressWarnings("deprecation")
     @Before
-    public void setup() {
+    public void setup() throws Exception {
         Logger.getRootLogger().setLevel(Level.OFF);
 
         Locale.setDefault(Locale.UK);
@@ -62,18 +74,17 @@ public class ObjectFixtureFilePersistorTest {
         persistor = new ObjectFixtureFilePersistor();
 
         iswf.fixtures.epv1.setName("Fred Smith");
-        iswf.fixtures.epv1.setDate(new Date(110, 2, 8, 0, 0));
+        iswf.fixtures.epv1.setDate(dateFormat.parse("08-Mar-2010 01:00 UTC"));
 
         iswf.fixtures.epv2.setName("Joe Bloggs");
-        iswf.fixtures.epv2.setDate(new Date(111, 3, 9, 1, 10));
+        iswf.fixtures.epv2.setDate(dateFormat.parse("09-Apr-2011 02:10 UTC"));
     }
     
 
-    @SuppressWarnings("deprecation")
     @Test
     public void loadInstance() throws Exception {
         
-        final StringReader reader = new StringReader(ExamplePojoWithValues.class.getName() + "#1\n  name: Fred Smith\n  date: 08-Mar-2010 00:00");
+        final StringReader reader = new StringReader(ExamplePojoWithValues.class.getName() + "#1\n  name: Fred Smith\n  date: 08-Mar-2010 01:00 UTC");
         final Set<Object> objects = persistor.loadData(reader);
 
         Assert.assertEquals(1, objects.size());
@@ -81,7 +92,7 @@ public class ObjectFixtureFilePersistorTest {
         assertThat(object instanceof ExamplePojoWithValues, is(true));
         final ExamplePojoWithValues epv = (ExamplePojoWithValues) object;
         Assert.assertEquals("Fred Smith", epv.getName());
-        Assert.assertEquals(new Date(110, 2, 8, 0, 0), epv.getDate());
+        Assert.assertEquals(dateFormat.parse("08-Mar-2010 01:00 GMT"), epv.getDate());
     }
 
     @Test
@@ -123,7 +134,7 @@ public class ObjectFixtureFilePersistorTest {
         persistor.save(objects, out);
         final String actual = out.toString().replaceAll("\r\n", "\n");
         
-        final String expected = ExamplePojoWithValues.class.getName() + "#2\n  date: 08-Mar-2010 00:00\n  name: Fred Smith\n";
+        final String expected = ExamplePojoWithValues.class.getName() + "#2\n  date: 08-Mar-2010 01:00 UTC\n  name: Fred Smith\n";
         
         assertThat(actual, IsisMatchers.startsWith(expected));
     }
@@ -138,7 +149,7 @@ public class ObjectFixtureFilePersistorTest {
         persistor.save(objects, out);
         final String actual = out.toString().replaceAll("\r\n", "\n");
 
-        final String expected1 = ExamplePojoWithValues.class.getName() + "#2\n  date: 08-Mar-2010 00:00\n  name: Fred Smith\n";
+        final String expected1 = ExamplePojoWithValues.class.getName() + "#2\n  date: 08-Mar-2010 01:00 UTC\n  name: Fred Smith\n";
         final String expected2 = ExamplePojoWithValues.class.getName() + "#3\n  date: \n  name: \n";
         assertThat(actual, IsisMatchers.contains(expected1));
         assertThat(actual, IsisMatchers.contains(expected2));
@@ -158,7 +169,7 @@ public class ObjectFixtureFilePersistorTest {
         final String actual = out.toString().replaceAll("\r\n", "\n");
 
         final String expected1 = ExamplePojoWithReferences.class.getName() + "#2\n  aggregatedReference: \n  reference: " + ExamplePojoWithValues.class.getName() + "#3";
-        final String expected2 = ExamplePojoWithValues.class.getName() + "#3\n  date: 08-Mar-2010 00:00\n  name: Fred Smith\n";
+        final String expected2 = ExamplePojoWithValues.class.getName() + "#3\n  date: 08-Mar-2010 01:00 UTC\n  name: Fred Smith\n";
         assertThat(actual, IsisMatchers.contains(expected1));
         assertThat(actual, IsisMatchers.contains(expected2));
     }
@@ -181,14 +192,12 @@ public class ObjectFixtureFilePersistorTest {
         final String actual = out.toString().replaceAll("\r\n", "\n");
         
         final String expected1 = ExamplePojoWithCollections.class.getName() + "#2\n  heterogeneousCollection: \n  homogeneousCollection: " + ExamplePojoWithValues.class.getName() + "#3 " + ExamplePojoWithValues.class.getName() + "#4 " + "\n";
-        final String expected2 = ExamplePojoWithValues.class.getName() + "#3\n  date: 08-Mar-2010 00:00\n  name: Fred Smith\n";
-        final String expected3 = ExamplePojoWithValues.class.getName() + "#4\n  date: 09-Apr-2011 01:10\n  name: Joe Bloggs\n";
+        final String expected2 = ExamplePojoWithValues.class.getName() + "#3\n  date: 08-Mar-2010 01:00 UTC\n  name: Fred Smith\n";
+        final String expected3 = ExamplePojoWithValues.class.getName() + "#4\n  date: 09-Apr-2011 02:10 UTC\n  name: Joe Bloggs\n";
         assertThat(actual.replaceAll("\n", "###"), IsisMatchers.contains(expected1.replaceAll("\n", "###")));
         assertThat(actual, IsisMatchers.contains(expected2));
         assertThat(actual, IsisMatchers.contains(expected3));
     }
-
-
 
 }
 
