@@ -41,7 +41,7 @@ public class ExamplePojoWithCollections extends ExamplePojo {
 
     // }}
 
-    // {{ HetrogeneousCollection
+    // {{ HeterogeneousCollection
     private List<ExamplePojo> heterogeneousCollection = new ArrayList<ExamplePojo>();
 
     public List<ExamplePojo> getHeterogeneousCollection() {

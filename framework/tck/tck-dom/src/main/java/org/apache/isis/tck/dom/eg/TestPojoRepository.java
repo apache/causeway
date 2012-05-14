@@ -22,7 +22,9 @@ package org.apache.isis.tck.dom.eg;
 import java.util.List;
 
 import org.apache.isis.applib.DomainObjectContainer;
+import org.apache.isis.applib.annotation.ObjectType;
 
+@ObjectType("TestPojoRepository")
 public class TestPojoRepository {
     
     public List<TestPojo> findAll() { 

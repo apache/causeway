@@ -49,7 +49,6 @@ public class ExamplePojoWithValues extends ExamplePojo {
 
     // }}
 
-
     // {{ Date (property)
     private Date date;
 
@@ -63,7 +62,6 @@ public class ExamplePojoWithValues extends ExamplePojo {
         this.date = date;
     }
     // }}
-
 
     // {{ Size
     private int size;

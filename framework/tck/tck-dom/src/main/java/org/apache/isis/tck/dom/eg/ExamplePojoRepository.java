@@ -19,6 +19,9 @@
 
 package org.apache.isis.tck.dom.eg;
 
+import org.apache.isis.applib.annotation.ObjectType;
+
+@ObjectType("ExamplePojoRepository")
 public class ExamplePojoRepository {
     
     public ExamplePojo someAction() { return null; }
