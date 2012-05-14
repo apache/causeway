@@ -33,6 +33,7 @@ import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2;
 import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2.Mode;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.ObjectStore;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.PojoAdapterBuilder.Persistence;
+import org.apache.isis.runtimes.dflt.runtime.system.transaction.IsisTransaction;
 import org.apache.isis.runtimes.dflt.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.runtimes.dflt.runtime.system.transaction.MessageBroker;
 import org.apache.isis.runtimes.dflt.runtime.system.transaction.UpdateNotifier;
@@ -41,10 +42,9 @@ import org.apache.isis.runtimes.dflt.runtime.transaction.ObjectPersistenceExcept
 public class TransactionTest {
 
     @Rule
-    public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_ONLY);
+    public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
     
-    
-    private ObjectStoreTransaction transaction;
+    private IsisTransaction transaction;
 
     private ObjectAdapter transientAdapter1;
     private ObjectAdapter transientAdapter2;
@@ -145,7 +145,7 @@ public class TransactionTest {
     public void setUp() throws Exception {
         Logger.getRootLogger().setLevel(Level.OFF);
 
-        transaction = new ObjectStoreTransaction(mockTransactionManager, mockMessageBroker, mockUpdateNotifier, mockObjectStore);
+        transaction = new IsisTransaction(mockTransactionManager, mockMessageBroker, mockUpdateNotifier, mockObjectStore);
         
         transientAdapter1 = PojoAdapterBuilder.create().with(Persistence.TRANSIENT).withIdentifier("1").build();
         transientAdapter2 = PojoAdapterBuilder.create().with(Persistence.TRANSIENT).withIdentifier("2").build();

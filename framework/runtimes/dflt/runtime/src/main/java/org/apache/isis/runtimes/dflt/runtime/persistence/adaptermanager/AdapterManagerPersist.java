@@ -23,7 +23,9 @@ import org.apache.isis.applib.annotation.Aggregated;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.algorithm.PersistAlgorithm;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.OidGenerator;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 
 /**
@@ -45,8 +47,10 @@ public interface AdapterManagerPersist {
      * As a consequence of this call, the adapter's {@link Oid} will be
      * {@link ObjectAdapter#replaceOid(Oid) replaced} (Oids are now immutable).
      * The same is true of the associated collection adapters.
+     * 
+     * @param hintRootOid - primarily for testing purposes, to set the adapter with a specific rootOid.  Is passed through to the {@link OidGenerator}.
      */
-    void remapAsPersistent(ObjectAdapter adapter);
+    void remapAsPersistent(ObjectAdapter adapter, RootOid hintRootOid);
 
     /**
      * Either returns an existing {@link ObjectAdapter adapter} (as per

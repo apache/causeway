@@ -19,10 +19,13 @@
 
 package org.apache.isis.runtimes.dflt.runtime.persistence;
 
+import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThat;
 
 import org.jmock.Expectations;
+import org.jmock.auto.Mock;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -31,11 +34,11 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOidDefault;
-import org.apache.isis.core.testsupport.jmock.InjectIntoJMockAction;
+import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2;
 import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2.Mode;
 import org.apache.isis.runtimes.dflt.objectstores.dflt.InMemoryPersistenceMechanismInstaller;
-import org.apache.isis.runtimes.dflt.runtime.system.persistence.OidGenerator;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.IdentifierGenerator;
 import org.apache.isis.runtimes.dflt.testsupport.IsisSystemWithFixtures;
 import org.apache.isis.runtimes.dflt.testsupport.IsisSystemWithFixtures.Fixtures.Initialization;
 import org.apache.isis.tck.dom.eg.ExamplePojoRepository;
@@ -47,43 +50,38 @@ public class PersistorSessionHydratorTest {
     @Rule
     public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
 
-    private RootOid testPojoRepoRootOid = RootOidDefault.create(TestPojoRepository.class.getName(), "1");
-    private RootOid examplePojoRepoRootOid = RootOidDefault.create(ExamplePojoRepository.class.getName(), "1");
-    private RootOid epvTransientOid = RootOidDefault.createTransient("EPV|-999");
-    private RootOid epvPersistentOid = RootOidDefault.create("EPV|1");
-    
-    private OidGenerator mockOidGenerator = context.mock(OidGenerator.class); // a bit nasty...
+    private RootOid epvTransientOid = RootOidDefault.deString("!EPV:-999");
+
+    private IdentifierGenerator mockIdentifierGenerator = context.mock(IdentifierGenerator.class);
     {
         context.checking(new Expectations() {
             {
-                allowing(mockOidGenerator).injectInto(with(any(Object.class)));
-                will(InjectIntoJMockAction.injectInto());
-                
-                allowing(mockOidGenerator).open();
-                allowing(mockOidGenerator).close();
-                
-                allowing(mockOidGenerator).createTransientOid(with(a(TestPojoRepository.class)));
-                will(returnValue(testPojoRepoRootOid));
+                allowing(mockIdentifierGenerator).createTransientIdentifierFor(with(equalTo(ObjectSpecId.of("TestPojoRepository"))), with(any(Object.class)));
+                will(returnValue("1"));
 
-                allowing(mockOidGenerator).createTransientOid(with(an(ExamplePojoRepository.class)));
-                will(returnValue(examplePojoRepoRootOid));
+                allowing(mockIdentifierGenerator).createPersistentIdentifierFor(with(equalTo(ObjectSpecId.of("TestPojoRepository"))), with(an(TestPojoRepository.class)), with(any(RootOid.class)));
+                will(returnValue("1"));
+
+                allowing(mockIdentifierGenerator).createTransientIdentifierFor(with(equalTo(ObjectSpecId.of("ExamplePojoRepository"))), with(an(ExamplePojoRepository.class)));
+                will(returnValue("1"));
+                allowing(mockIdentifierGenerator).createPersistentIdentifierFor(with(equalTo(ObjectSpecId.of("ExamplePojoRepository"))), with(an(ExamplePojoRepository.class)), with(any(RootOid.class)));
+                will(returnValue("1"));
                 
-                allowing(mockOidGenerator).createTransientOid(with(an(ExamplePojoWithValues.class)));
-                will(returnValue(epvTransientOid));
+                allowing(mockIdentifierGenerator).createTransientIdentifierFor(with(equalTo(ObjectSpecId.of("EPV"))), with(an(ExamplePojoWithValues.class)));
+                will(returnValue("-999"));
                 
-                allowing(mockOidGenerator).asPersistent(epvTransientOid);
-                will(returnValue(epvPersistentOid));
+                allowing(mockIdentifierGenerator).createPersistentIdentifierFor(with(equalTo(ObjectSpecId.of("EPV"))), with(an(ExamplePojoWithValues.class)), with(any(RootOid.class)));
+                will(returnValue("1"));
             }
         });
     }
     
-
     @Rule
     public IsisSystemWithFixtures iswf = IsisSystemWithFixtures.builder()
         .with(Initialization.NO_INIT)
         .with(new InMemoryPersistenceMechanismInstaller() {
-            protected OidGenerator createOidGenerator(IsisConfiguration configuration) {
-                return mockOidGenerator;
+            protected IdentifierGenerator createIdentifierGenerator(IsisConfiguration configuration) {
+                return mockIdentifierGenerator;
             };
         })
         .build();
@@ -115,7 +113,7 @@ public class PersistorSessionHydratorTest {
         iswf.setUpSystem();
         
         // when
-        final RootOidDefault oid = RootOidDefault.create("EPV|1");
+        final RootOidDefault oid = RootOidDefault.deString("EPV:1");
         final ObjectAdapter adapter = iswf.recreateAdapter(oid);
         
         // then

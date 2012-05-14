@@ -29,12 +29,9 @@ import java.io.InputStream;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import org.apache.isis.core.commons.lang.IoUtils;
-import org.apache.isis.runtimes.dflt.objectstores.nosql.db.file.ClientConnection;
-import org.apache.isis.runtimes.dflt.objectstores.nosql.db.file.RemotingException;
 import org.apache.isis.runtimes.dflt.runtime.persistence.ConcurrencyException;
 import org.apache.isis.runtimes.dflt.runtime.persistence.ObjectNotFoundException;
 
@@ -53,7 +50,6 @@ public class ClientConnectionTest {
         connection = new ClientConnection(input, output);
     }
 
-    @Ignore
     @Test
     public void testRequest() throws Exception {
         connection.request('D', "xxx yyy");

@@ -29,17 +29,15 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapterFactory;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.runtime.logging.Logger;
 import org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager.AdapterManagerExtended;
-import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.IsisStoreLogger;
+import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.IsisObjectStoreLogger;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.ObjectStore;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.ObjectStorePersistence;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.ObjectStoreTransactionManagement;
-import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.PersistenceSessionObjectStore;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.algorithm.PersistAlgorithm;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.algorithm.dflt.DefaultPersistAlgorithm;
-import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.ObjectStoreTransactionManager;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.IdentifierGenerator;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.ObjectFactory;
-import org.apache.isis.runtimes.dflt.runtime.system.persistence.OidGenerator;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessionFactory;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessionTransactionManagement;
@@ -58,7 +56,7 @@ public abstract class ObjectStorePersistenceMechanismInstallerAbstract extends P
      * to downcast if required.
      */
     @Override
-    protected PersistenceSession createPersistenceSession(final PersistenceSessionFactory persistenceSessionFactory, final AdapterManagerExtended adapterManager, final ObjectAdapterFactory adapterFactory, final ObjectFactory objectFactory, final OidGenerator oidGenerator,
+    protected PersistenceSession createPersistenceSession(final PersistenceSessionFactory persistenceSessionFactory, final AdapterManagerExtended adapterManager, final ObjectAdapterFactory adapterFactory, final ObjectFactory objectFactory, final IdentifierGenerator identifierGenerator,
             final ServicesInjector servicesInjector) {
 
         final PersistAlgorithm persistAlgorithm = createPersistAlgorithm(getConfiguration());
@@ -69,10 +67,10 @@ public abstract class ObjectStorePersistenceMechanismInstallerAbstract extends P
 
         if (getConfiguration().getBoolean(LOGGING_PROPERTY, false)) {
             final String level = getConfiguration().getString(LOGGING_PROPERTY + ".level", "debug");
-            objectStore = new IsisStoreLogger(objectStore, level);
+            objectStore = new IsisObjectStoreLogger(objectStore, level);
         }
 
-        final PersistenceSessionObjectStore persistenceSession = createObjectStorePersistor(persistenceSessionFactory, adapterFactory, objectFactory, servicesInjector, oidGenerator, adapterManager, persistAlgorithm, objectStore);
+        final PersistenceSession persistenceSession = createObjectStorePersistor(persistenceSessionFactory, adapterFactory, objectFactory, servicesInjector, identifierGenerator, adapterManager, persistAlgorithm, objectStore);
 
         final IsisTransactionManager transactionManager = createTransactionManager(persistenceSession, objectStore);
 
@@ -94,9 +92,9 @@ public abstract class ObjectStorePersistenceMechanismInstallerAbstract extends P
      * Can optionally be overridden, but by default creates an
      * {@link PersistenceSessionObjectStore}.
      */
-    protected PersistenceSessionObjectStore createObjectStorePersistor(final PersistenceSessionFactory persistenceSessionFactory, final ObjectAdapterFactory adapterFactory, final ObjectFactory objectFactory, final ServicesInjector servicesInjector, final OidGenerator oidGenerator,
+    protected PersistenceSession createObjectStorePersistor(final PersistenceSessionFactory persistenceSessionFactory, final ObjectAdapterFactory adapterFactory, final ObjectFactory objectFactory, final ServicesInjector servicesInjector, final IdentifierGenerator identifierGenerator,
             final AdapterManagerExtended adapterManager, final PersistAlgorithm persistAlgorithm, final ObjectStorePersistence objectStore) {
-        return new PersistenceSessionObjectStore(persistenceSessionFactory, adapterFactory, objectFactory, servicesInjector, oidGenerator, adapterManager, persistAlgorithm, objectStore);
+        return new PersistenceSession(persistenceSessionFactory, adapterFactory, objectFactory, servicesInjector, identifierGenerator, adapterManager, persistAlgorithm, objectStore);
     }
 
     /**
@@ -116,7 +114,7 @@ public abstract class ObjectStorePersistenceMechanismInstallerAbstract extends P
      * By default returns a {@link ObjectStoreTransactionManager}.
      */
     protected IsisTransactionManager createTransactionManager(final PersistenceSessionTransactionManagement persistor, final ObjectStoreTransactionManagement objectStore) {
-        return new ObjectStoreTransactionManager(persistor, objectStore);
+        return new IsisTransactionManager(persistor, objectStore);
     }
 
     // ///////////////////////////////////////////

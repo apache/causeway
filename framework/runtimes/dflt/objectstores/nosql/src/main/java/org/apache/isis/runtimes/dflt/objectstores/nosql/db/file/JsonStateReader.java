@@ -30,8 +30,9 @@ import org.apache.isis.runtimes.dflt.objectstores.nosql.NoSqlStoreException;
 import org.apache.isis.runtimes.dflt.objectstores.nosql.db.StateReader;
 
 public class JsonStateReader implements StateReader {
-    // private static final Logger LOG =
-    // Logger.getLogger(FileStateReader.class);
+    
+    // private static final Logger LOG = Logger.getLogger(FileStateReader.class);
+    
     private JSONObject instance;
 
     public JsonStateReader(final String data) {
@@ -85,19 +86,24 @@ public class JsonStateReader implements StateReader {
         }
     }
 
-    @Override
-    public String readObjectType() {
-        return readRequiredField("_type");
-    }
+//    @Override
+//    public String readObjectType() {
+//        return readRequiredField("_type");
+//    }
+//
+//    @Override
+//    public String readId() {
+//        return readRequiredField("_id");
+//    }
 
-    @Override
-    public String readId() {
-        return readRequiredField("_id");
-    }
+      @Override
+      public String readOid() {
+          return readRequiredField(PropertyNames.OID);
+      }
 
     @Override
     public String readVersion() {
-        return readRequiredField("_version");
+        return readRequiredField(PropertyNames.VERSION);
     }
 
     @Override
@@ -117,12 +123,12 @@ public class JsonStateReader implements StateReader {
 
     @Override
     public String readUser() {
-        return readRequiredField("_user");
+        return readRequiredField(PropertyNames.USER);
     }
 
     @Override
     public String readTime() {
-        return readRequiredField("_time");
+        return readRequiredField(PropertyNames.TIME);
     }
 
     private String readRequiredField(final String name) {

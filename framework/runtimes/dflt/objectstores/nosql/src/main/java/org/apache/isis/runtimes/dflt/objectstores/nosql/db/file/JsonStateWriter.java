@@ -26,6 +26,7 @@ import com.google.common.collect.Lists;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import org.apache.isis.core.metamodel.adapter.oid.TypedOid;
 import org.apache.isis.runtimes.dflt.objectstores.nosql.NoSqlStoreException;
 import org.apache.isis.runtimes.dflt.objectstores.nosql.db.StateWriter;
 
@@ -33,8 +34,8 @@ public class JsonStateWriter implements StateWriter {
 
     private final JSONObject dbObject = new JSONObject();
     
-    private String type;
-    private String oid;
+    private TypedOid oid;
+    
     private String currentVersion;
     private String newVersion;
 
@@ -49,38 +50,45 @@ public class JsonStateWriter implements StateWriter {
         return jsonStateWriter;
     }
 
-    @Override
-    public void writeType(final String type) {
-        this.type = type;
-        writeField("_type", type);
-    }
+//    @Override
+//    public void writeObjectType(final String type) {
+//        this.type = type;
+//        writeField("_type", type);
+//    }
+//
+//    @Override
+//    public void writeId(final String oid) {
+//        this.oid = oid;
+//        writeField("_id", oid);
+//    }
 
-    @Override
-    public void writeId(final String oid) {
-        this.oid = oid;
-        writeField("_id", oid);
-    }
+      @Override
+      public void writeOid(final TypedOid typedOid) {
+          this.oid = typedOid;
+          writeField(PropertyNames.OID, typedOid.enString());
+      }
 
+    
     @Override
     public void writeEncryptionType(final String type) {
-        writeField("_encrypt", type);
+        writeField(PropertyNames.ENCRYPT, type);
     }
 
     @Override
     public void writeVersion(final String currentVersion, final String newVersion) {
         this.currentVersion = currentVersion;
         this.newVersion = newVersion;
-        writeField("_version", newVersion);
+        writeField(PropertyNames.VERSION, newVersion);
     }
 
     @Override
     public void writeTime(final String time) {
-        writeField("_time", time);
+        writeField(PropertyNames.TIME, time);
     }
 
     @Override
     public void writeUser(final String user) {
-        writeField("_user", user);
+        writeField(PropertyNames.USER, user);
     }
 
     @Override
@@ -102,7 +110,7 @@ public class JsonStateWriter implements StateWriter {
     }
 
     public String getRequest() {
-        return type + " " + oid + " " + currentVersion + " " + newVersion;
+        return oid.enString() + " " + currentVersion + " " + newVersion;
     }
 
     public String getData() {

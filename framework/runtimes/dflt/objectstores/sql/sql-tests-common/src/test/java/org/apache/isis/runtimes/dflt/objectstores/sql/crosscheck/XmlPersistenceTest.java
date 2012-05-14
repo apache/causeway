@@ -22,10 +22,10 @@
  */
 package org.apache.isis.runtimes.dflt.objectstores.sql.crosscheck;
 
-import java.io.File;
-import java.io.FilenameFilter;
 import java.util.Properties;
 
+import org.apache.isis.core.testsupport.files.Files;
+import org.apache.isis.core.testsupport.files.Files.Recursion;
 import org.apache.isis.runtimes.dflt.objectstores.sql.common.SqlIntegrationTestData;
 
 public class XmlPersistenceTest extends SqlIntegrationTestData {
@@ -33,14 +33,7 @@ public class XmlPersistenceTest extends SqlIntegrationTestData {
 
     @Override
     public void resetPersistenceStoreDirectlyIfRequired() {
-        // Delete all XML files.
-        deleteFiles("xml/objects", new FilenameFilter() {
-
-            @Override
-            public boolean accept(final File arg0, final String arg1) {
-                return arg1.endsWith(".xml");
-            }
-        });
+        Files.deleteFiles("xml/objects", ".xml", Recursion.DONT_RECURSE);
     }
 
     @Override

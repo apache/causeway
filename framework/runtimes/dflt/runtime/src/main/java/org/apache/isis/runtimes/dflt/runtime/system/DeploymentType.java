@@ -59,7 +59,6 @@ import org.apache.isis.runtimes.dflt.runtime.system.session.IsisSessionFactory;
  */
 public class DeploymentType {
 
-
     private static List<DeploymentType> deploymentTypes = Lists.newArrayList();
 
     public static DeploymentType EXPLORATION = new DeploymentType("EXPLORATION", DeploymentCategory.EXPLORING, ContextCategory.STATIC_RELAXED, SystemConstants.VIEWER_DEFAULT, Splash.SHOW);
@@ -71,6 +70,25 @@ public class DeploymentType {
     public static DeploymentType SERVER_PROTOTYPE = new DeploymentType("SERVER_PROTOTYPE", DeploymentCategory.PROTOTYPING, ContextCategory.THREADLOCAL, null, Splash.NO_SHOW);
     public static DeploymentType SINGLE_USER = new DeploymentType("SINGLE_USER", DeploymentCategory.PRODUCTION, ContextCategory.STATIC, SystemConstants.VIEWER_DEFAULT, Splash.NO_SHOW);
     public static DeploymentType UTILITY = new DeploymentType("UTILITY", DeploymentCategory.EXPLORING, ContextCategory.STATIC, null, Splash.NO_SHOW);
+
+    /**
+     * Look up {@link DeploymentType} by their {@link #name()}.
+     * 
+     * <p>
+     * Can substitute <tt>'-'</tt> instead of <tt>'_'</tt>; for example
+     * <tt>server_exploration</tt> will lookup the same as
+     * <tt>server-exploration</tt>.
+     */
+    public static DeploymentType lookup(final String str) {
+        final String underscoredStr = str.replace('-', '_').toUpperCase();
+        for (final DeploymentType deploymentType : deploymentTypes) {
+            if (underscoredStr.equals(deploymentType.name())) {
+                return deploymentType;
+            }
+        }
+        throw new IllegalArgumentException(String.format("Unknown deployment type '%s'", str));
+    }
+
 
     private final String name;
     private final DeploymentCategory deploymentCategory;
@@ -183,24 +201,6 @@ public class DeploymentType {
         }
     }
 
-    /**
-     * Look up {@link DeploymentType} by their {@link #name()}.
-     * 
-     * <p>
-     * Can substitute <tt>'-'</tt> instead of <tt>'_'</tt>; for example
-     * <tt>server_exploration</tt> will lookup the same as
-     * <tt>server-exploration</tt>.
-     */
-    public static DeploymentType lookup(final String str) {
-        final String underscoredStr = str.replace('-', '_').toUpperCase();
-        for (final DeploymentType deploymentType : deploymentTypes) {
-            if (underscoredStr.equals(deploymentType.name())) {
-                return deploymentType;
-            }
-        }
-        throw new IllegalArgumentException(String.format("Unknown deployment type '%s'", str));
-    }
-
     public String friendlyName() {
         return nameLowerCase().replace('_', '-');
     }
@@ -211,6 +211,11 @@ public class DeploymentType {
 
     public String name() {
         return name;
+    }
+    
+    @Override
+    public String toString() {
+        return name();
     }
 
 }

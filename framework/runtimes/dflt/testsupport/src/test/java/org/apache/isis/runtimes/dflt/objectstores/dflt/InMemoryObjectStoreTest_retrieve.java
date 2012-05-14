@@ -30,15 +30,14 @@ import org.junit.Test;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOidDefault;
+import org.apache.isis.core.metamodel.adapter.oid.TypedOid;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.runtimes.dflt.runtime.persistence.ObjectNotFoundException;
-import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.PersistenceSessionObjectStore;
 import org.apache.isis.runtimes.dflt.runtime.persistence.query.PersistenceQueryFindAllInstances;
 import org.apache.isis.runtimes.dflt.runtime.persistence.query.PersistenceQueryFindByTitle;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.testsupport.IsisSystemWithFixtures;
 import org.apache.isis.tck.dom.eg.ExamplePojoWithValues;
-import org.apache.isis.tck.dom.eg.TestPojo;
 
 public class InMemoryObjectStoreTest_retrieve {
 
@@ -49,8 +48,7 @@ public class InMemoryObjectStoreTest_retrieve {
     protected ObjectSpecification epvSpecification;
 
     protected InMemoryObjectStore getStore() {
-        PersistenceSessionObjectStore psos = (PersistenceSessionObjectStore)IsisContext.getPersistenceSession();
-        return (InMemoryObjectStore) psos.getObjectStore();
+        return (InMemoryObjectStore) IsisContext.getPersistenceSession().getObjectStore();
     }
 
     @Before
@@ -61,9 +59,9 @@ public class InMemoryObjectStoreTest_retrieve {
 
     @Test
     public void getObject_whenDoesNotExist() {
-        final Oid oid = RootOidDefault.create("EPV|10");
+        final TypedOid oid = RootOidDefault.deString("EPV:10");
         try {
-            getStore().getObject(oid, epvSpecification);
+            getStore().getObject(oid);
             fail();
         } catch (final ObjectNotFoundException expected) {
         }
@@ -76,7 +74,7 @@ public class InMemoryObjectStoreTest_retrieve {
         iswf.persist(iswf.fixtures.epv2);
         iswf.bounceSystem();
 
-        final ObjectAdapter retrievedAdapter = getStore().getObject(epv2Adapter.getOid(), epvSpecification);
+        final ObjectAdapter retrievedAdapter = getStore().getObject((TypedOid) epv2Adapter.getOid());
         
         assertNotSame(epv2Adapter, retrievedAdapter);
         assertEquals(((ExamplePojoWithValues)epv2Adapter.getObject()).getName(), ((ExamplePojoWithValues)retrievedAdapter.getObject()).getName());

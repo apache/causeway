@@ -21,9 +21,8 @@ package org.apache.isis.runtimes.dflt.runtime.persistence.objectstore;
 
 import java.util.List;
 
-import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.ObjectStoreTransaction;
-import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.ObjectStoreTransactionManager;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.PersistenceCommand;
+import org.apache.isis.runtimes.dflt.runtime.system.transaction.IsisTransaction;
 import org.apache.isis.runtimes.dflt.runtime.system.transaction.IsisTransactionManager;
 
 /**
@@ -39,7 +38,7 @@ public interface ObjectStoreTransactionManagement {
     void startTransaction();
 
     /**
-     * Used by the current {@link ObjectStoreTransaction} to flush changes to
+     * Used by the current {@link IsisTransaction} to flush changes to
      * the {@link ObjectStore} (either via a
      * {@link IsisTransactionManager#flushTransaction()} or a
      * {@link IsisTransactionManager#endTransaction()}).

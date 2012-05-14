@@ -49,14 +49,16 @@ import org.apache.isis.runtimes.dflt.runtime.persistence.internal.RuntimeContext
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.algorithm.PersistAlgorithm;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.CreateObjectCommand;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.DestroyObjectCommand;
-import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.ObjectStoreTransactionManager;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.PersistenceCommand;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.PojoAdapterBuilder;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.PojoAdapterBuilder.Persistence;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.SaveObjectCommand;
-import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.serial.RootOidGenerator;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.IdentifierGeneratorDefault;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.ObjectFactory;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.OidGenerator;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessionFactory;
+import org.apache.isis.runtimes.dflt.runtime.system.transaction.IsisTransactionManager;
 
 public class PersistenceSessionObjectStoreTest {
 
@@ -68,8 +70,8 @@ public class PersistenceSessionObjectStoreTest {
     private ObjectAdapterFactory adapterFactory;
     
     
-    private PersistenceSessionObjectStore persistenceSession;
-    private ObjectStoreTransactionManager transactionManager;
+    private PersistenceSession persistenceSession;
+    private IsisTransactionManager transactionManager;
     
     private ObjectAdapter persistentAdapter;
     private PojoAdapter transientAdapter;
@@ -143,9 +145,9 @@ public class PersistenceSessionObjectStoreTest {
 
         adapterManager = new AdapterManagerDefault();
         adapterFactory = new PojoAdapterFactory();
-        persistenceSession = new PersistenceSessionObjectStore(mockPersistenceSessionFactory, adapterFactory, objectFactory, servicesInjector, new RootOidGenerator(), adapterManager, mockPersistAlgorithm, mockObjectStore);
+        persistenceSession = new PersistenceSession(mockPersistenceSessionFactory, adapterFactory, objectFactory, servicesInjector, new OidGenerator(new IdentifierGeneratorDefault()), adapterManager, mockPersistAlgorithm, mockObjectStore);
         
-        transactionManager = new ObjectStoreTransactionManager(persistenceSession, mockObjectStore);
+        transactionManager = new IsisTransactionManager(persistenceSession, mockObjectStore);
         transactionManager.injectInto(persistenceSession);
 
         servicesInjector.setServices(Collections.emptyList());

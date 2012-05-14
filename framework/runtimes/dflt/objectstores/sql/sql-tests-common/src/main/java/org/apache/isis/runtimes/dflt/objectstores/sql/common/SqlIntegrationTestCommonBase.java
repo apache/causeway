@@ -32,6 +32,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 
+import org.apache.isis.core.testsupport.files.Files;
 import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2;
 import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2.Mode;
 import org.apache.isis.runtimes.dflt.objectstores.sql.common.SqlIntegrationTestFixtures.State;
@@ -102,25 +103,6 @@ public abstract class SqlIntegrationTestCommonBase {
     }
 
     
-    /**
-     * Helper, eg to be called within {@link #resetPersistenceStoreDirectlyIfRequired()}.
-     */
-    protected static void deleteFiles(final String directory, final FilenameFilter extension) {
-        final File dir = new File(directory);
-
-        final String[] list = dir.list(extension);
-        File file;
-        if (list.length == 0) {
-            return;
-        }
-
-        for (final String element : list) {
-            file = new File(directory, element);
-            file.delete();
-        }
-    }
-
-
     
     ////////////////////////////////////////////////////////////////////////////////
     // before, after

@@ -19,12 +19,8 @@
 
 package org.apache.isis.runtimes.dflt.runtime.system.persistence;
 
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 
-public interface PersistenceSessionForceReloader {
+public interface OidGeneratorAware {
 
-    /**
-     * Forces a reload of this object from the persistent object store.
-     */
-    void reload(ObjectAdapter object);
+    void setOidGenerator(OidGenerator oidGenerator);
 }

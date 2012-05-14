@@ -27,8 +27,8 @@ import org.junit.Test;
 
 import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.commons.matchers.IsisMatchers;
-import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.PersistenceSessionObjectStore;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.runtimes.dflt.testsupport.IsisSystemWithFixtures;
 
 public class InMemoryObjectStoreTest_debug {
@@ -37,8 +37,7 @@ public class InMemoryObjectStoreTest_debug {
     public IsisSystemWithFixtures iswf = IsisSystemWithFixtures.builder().build();
     
     private static InMemoryObjectStore getStore() {
-        PersistenceSessionObjectStore psos = (PersistenceSessionObjectStore)IsisContext.getPersistenceSession();
-        return (InMemoryObjectStore) psos.getObjectStore();
+        return (InMemoryObjectStore) IsisContext.getPersistenceSession().getObjectStore();
     }
 
     @Test
@@ -64,7 +63,7 @@ public class InMemoryObjectStoreTest_debug {
         
         
         // then
-        assertThat(debug.toString(), IsisMatchers.containsStripNewLines("OID:EPV#3"));
+        assertThat(debug.toString(), IsisMatchers.containsStripNewLines("EPV:3"));
     }
 
     

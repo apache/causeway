@@ -36,8 +36,7 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.oid.RootOid;
-import org.apache.isis.core.metamodel.adapter.oid.RootOidDefault;
+import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.runtimes.dflt.objectstores.nosql.keys.KeyCreatorDefault;
 import org.apache.isis.runtimes.dflt.testsupport.IsisSystemWithFixtures;
@@ -70,7 +69,6 @@ public class MongoDbTest {
         db = new MongoDb("localhost", 0, "testdb", new KeyCreatorDefault());
         db.open();
 
-        RootOid oid = RootOidDefault.createTransient("EPV|3");
         adapter1 = iswf.adapterFor(iswf.fixtures.epv1);
         specification = adapter1.getSpecification();
     }
@@ -82,47 +80,46 @@ public class MongoDbTest {
 
     @Test
     public void serialNumberSaved() throws Exception {
-        assertEquals(1, db.nextSerialNumberBatch("oid", 10));
-        assertEquals(11, db.nextSerialNumberBatch("oid", 10));
+        assertEquals(1, db.nextSerialNumberBatch(ObjectSpecId.of("oid"), 10));
+        assertEquals(11, db.nextSerialNumberBatch(ObjectSpecId.of("oid"), 10));
     }
 
     @Test
     public void hasInstances() throws Exception {
-        final String specificationName = specification.getFullIdentifier();
-        assertFalse(db.hasInstances(specificationName));
+        assertFalse(db.hasInstances(specification.getSpecId()));
         db.close();
 
-        final DBCollection instances = testDb.getCollection(specificationName);
+        final DBCollection instances = testDb.getCollection(specification.getSpecId().asString());
         instances.insert(new BasicDBObject().append("test", "test"));
 
         db.open();
-        assertTrue(db.hasInstances(specificationName));
-        assertFalse(db.hasInstances("org.xxx.unknown"));
+        assertTrue(db.hasInstances(specification.getSpecId()));
+        assertFalse(db.hasInstances(ObjectSpecId.of("org.xxx.unknown")));
     }
 
     @Test
     public void destroyInstance() throws Exception {
         db.close();
 
-        final String specificationName = specification.getFullIdentifier();
-        final DBCollection instances = testDb.getCollection(specificationName);
+        final DBCollection instances = testDb.getCollection(specification.getSpecId().asString());
         final BasicDBObject dbObject = new BasicDBObject().append("test", "test");
         instances.insert(dbObject);
 
         db.open();
-        db.delete(specificationName, dbObject.getString("_id"));
-        assertFalse(db.hasInstances(specificationName));
+        db.delete(specification.getSpecId(), dbObject.getString("_id"));
+        assertFalse(db.hasInstances(specification.getSpecId()));
     }
 
     @Test
     public void serviceIds() throws Exception {
-        db.addService("one", "123");
-        assertEquals("123", db.getService("one"));
+        final ObjectSpecId osi = ObjectSpecId.of("one");
+        db.addService(osi, "123");
+        assertEquals("123", db.getService(osi));
     }
 
     @Test
     public void unknownServiceIds() throws Exception {
-        assertNull(db.getService("two"));
+        assertNull(db.getService(ObjectSpecId.of("two")));
     }
 
 }

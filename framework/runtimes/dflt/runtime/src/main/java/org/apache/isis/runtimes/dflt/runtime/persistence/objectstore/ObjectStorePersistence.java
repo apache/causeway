@@ -26,8 +26,8 @@ import org.apache.isis.core.commons.components.SessionScopedComponent;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
+import org.apache.isis.core.metamodel.adapter.oid.TypedOid;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.runtimes.dflt.runtime.persistence.ObjectNotFoundException;
@@ -121,7 +121,7 @@ public interface ObjectStorePersistence extends DebuggableWithTitle, SessionScop
     // ///////////////////////////////////////////////////////
 
     /**
-     * Retrieves the object identified by the specified OID from the object
+     * Retrieves the object identified by the specified {@link TypedOid} from the object
      * store. The cache should be checked first and, if the object is cached,
      * the cached version should be returned. It is important that if this
      * method is called again, while the originally returned object is in
@@ -129,7 +129,7 @@ public interface ObjectStorePersistence extends DebuggableWithTitle, SessionScop
      * 
      * <p>
      * Assuming that the object is not cached then the data for the object
-     * should be retreived from the persistence mechanism and the object
+     * should be retrieved from the persistence mechanism and the object
      * recreated (as describe previously). The specified OID should then be
      * assigned to the recreated object by calling its <method>setOID </method>.
      * Before returning the object its resolved flag should also be set by
@@ -137,7 +137,7 @@ public interface ObjectStorePersistence extends DebuggableWithTitle, SessionScop
      * 
      * <p>
      * If the persistence mechanism does not known of an object with the
-     * specified {@link Oid} then a {@link ObjectNotFoundException} should be
+     * specified {@link TypedOid} then a {@link ObjectNotFoundException} should be
      * thrown.
      * 
      * <para>Note that the OID could be for an internal collection, and is
@@ -152,12 +152,13 @@ public interface ObjectStorePersistence extends DebuggableWithTitle, SessionScop
      * 
      * 
      * @return the requested {@link ObjectAdapter} that has the specified
-     *         {@link Oid}.
+     *         {@link TypedOid}.
      * 
      * @throws ObjectNotFoundException
      *             when no object corresponding to the oid can be found
      */
-    ObjectAdapter getObject(Oid oid, ObjectSpecification hint);
+    ObjectAdapter getObject(TypedOid oid);
+
 
     // ///////////////////////////////////////////////////////
     // getInstances, hasInstances

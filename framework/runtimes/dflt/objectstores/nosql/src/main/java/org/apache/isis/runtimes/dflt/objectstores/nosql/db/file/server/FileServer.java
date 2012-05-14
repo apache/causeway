@@ -60,6 +60,7 @@ import org.apache.commons.configuration.SystemConfiguration;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 
+import org.apache.isis.core.commons.lang.CastUtils;
 import org.apache.isis.runtimes.dflt.objectstores.nosql.NoSqlStoreException;
 
 public class FileServer {
@@ -89,12 +90,13 @@ public class FileServer {
 
         final String mode = cmd.getOptionValue("m");
 
+        final List<String> argList = CastUtils.cast(cmd.getArgList());
         if ("recovery".equals(mode)) {
             final FileServer fileServer = new FileServer();
-            fileServer.startRecovery(cmd.getArgList());
+            fileServer.startRecovery(argList);
         } else if ("archive".equals(mode)) {
             final FileServer fileServer = new FileServer();
-            fileServer.startArchive(cmd.getArgList());
+            fileServer.startArchive(argList);
         } else if ("secondary".equals(mode)) {
             final FileServer fileServer = new FileServer();
             fileServer.startSecondary();
@@ -433,7 +435,7 @@ public class FileServer {
         }
     }
 
-    private void startRecovery(final List list) {
+    private void startRecovery(final List<String> list) {
         LOG.info("starting recovery");
         final LogRange logFileRange = Util.logFileRange();
         if (logFileRange.noLogFile()) {
@@ -448,9 +450,9 @@ public class FileServer {
 
         final int size = list.size();
         if (size > 0) {
-            startId = Long.valueOf((String) list.get(0));
+            startId = Long.valueOf(list.get(0));
             if (size > 1) {
-                endId = Long.valueOf((String) list.get(1));
+                endId = Long.valueOf(list.get(1));
             }
         }
         if (startId < logFileRange.getFirst() || startId > lastId || endId > lastId) {
@@ -471,7 +473,7 @@ public class FileServer {
         LOG.info("recovery complete");
     }
 
-    private void startArchive(final List list) {
+    private void startArchive(final List<String> list) {
         LOG.info("starting archiving");
         final LogRange logFileRange = Util.logFileRange();
         if (logFileRange.noLogFile()) {

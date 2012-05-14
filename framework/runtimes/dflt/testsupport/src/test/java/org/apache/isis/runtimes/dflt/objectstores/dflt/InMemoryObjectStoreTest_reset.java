@@ -28,7 +28,6 @@ import org.junit.Test;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.PersistenceSessionObjectStore;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
@@ -47,8 +46,7 @@ public class InMemoryObjectStoreTest_reset {
     protected ObjectSpecification epvSpecification;
 
     protected InMemoryObjectStore getStore() {
-        PersistenceSessionObjectStore psos = (PersistenceSessionObjectStore)IsisContext.getPersistenceSession();
-        return (InMemoryObjectStore) psos.getObjectStore();
+        return (InMemoryObjectStore) IsisContext.getPersistenceSession().getObjectStore();
     }
 
     @Before

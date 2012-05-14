@@ -29,12 +29,10 @@ import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterFactory;
+import org.apache.isis.runtimes.dflt.objectstores.nosql.NoSqlIdentifierGenerator;
 import org.apache.isis.runtimes.dflt.objectstores.nosql.NoSqlObjectStore;
-import org.apache.isis.runtimes.dflt.objectstores.nosql.NoSqlOidGenerator;
 import org.apache.isis.runtimes.dflt.objectstores.nosql.encryption.DataEncryption;
 import org.apache.isis.runtimes.dflt.objectstores.nosql.encryption.none.DataEncryptionNone;
-import org.apache.isis.runtimes.dflt.objectstores.nosql.keys.KeyCreator;
-import org.apache.isis.runtimes.dflt.objectstores.nosql.keys.KeyCreatorDefault;
 import org.apache.isis.runtimes.dflt.objectstores.nosql.versions.VersionCreator;
 import org.apache.isis.runtimes.dflt.objectstores.nosql.versions.VersionCreatorDefault;
 import org.apache.isis.runtimes.dflt.runtime.installerregistry.installerapi.ObjectStorePersistenceMechanismInstallerAbstract;
@@ -42,6 +40,7 @@ import org.apache.isis.runtimes.dflt.runtime.persistence.PersistenceSessionFacto
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.ObjectStore;
 import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.IdentifierGenerator;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.OidGenerator;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessionFactory;
 
@@ -63,8 +62,8 @@ public abstract class NoSqlPersistorMechanismInstaller extends ObjectStorePersis
     }
 
     @Override
-    protected OidGenerator createOidGenerator(final IsisConfiguration configuration) {
-        return getObjectStore(configuration).getOidGenerator();
+    protected IdentifierGenerator createIdentifierGenerator(final IsisConfiguration configuration) {
+        return getObjectStore(configuration).getIdentifierGenerator();
     }
 
     @Override
@@ -75,10 +74,10 @@ public abstract class NoSqlPersistorMechanismInstaller extends ObjectStorePersis
 
     private NoSqlObjectStore getObjectStore(final IsisConfiguration configuration) {
         if (objectStore == null) {
-            final KeyCreator keyCreator = createKeyCreator();
+            //final KeyCreatorDefault keyCreator = createKeyCreator();
             final VersionCreator versionCreator = createVersionCreator();
             final NoSqlDataDatabase db = createNoSqlDatabase(configuration);
-            final NoSqlOidGenerator oidGenerator = createOidGenerator(db);
+            final OidGenerator oidGenerator = createOidGenerator(db);
 
             final Map<String, DataEncryption> availableDataEncryption = new HashMap<String, DataEncryption>();
             try {
@@ -101,7 +100,7 @@ public abstract class NoSqlPersistorMechanismInstaller extends ObjectStorePersis
                     availableDataEncryption.put(encryption.getType(), encryption);
                     writeWithEncryption = encryption;
                 }
-                objectStore = new NoSqlObjectStore(db, oidGenerator, keyCreator, versionCreator, writeWithEncryption, availableDataEncryption);
+                objectStore = new NoSqlObjectStore(db, oidGenerator, versionCreator, writeWithEncryption, availableDataEncryption);
             } catch (final IllegalArgumentException e) {
                 throw new IsisException(e);
             } catch (final SecurityException e) {
@@ -111,15 +110,15 @@ public abstract class NoSqlPersistorMechanismInstaller extends ObjectStorePersis
         return objectStore;
     }
 
-    protected NoSqlOidGenerator createOidGenerator(final NoSqlDataDatabase db) {
-        return new NoSqlOidGenerator(db);
+    protected OidGenerator createOidGenerator(final NoSqlDataDatabase database) {
+        return new OidGenerator(new NoSqlIdentifierGenerator(database));
     }
 
     protected abstract NoSqlDataDatabase createNoSqlDatabase(IsisConfiguration configuration);
 
-    protected KeyCreator createKeyCreator() {
-        return new KeyCreatorDefault();
-    }
+//    protected KeyCreatorDefault createKeyCreator() {
+//        return new KeyCreatorDefault();
+//    }
 
     private VersionCreator createVersionCreator() {
         return new VersionCreatorDefault();

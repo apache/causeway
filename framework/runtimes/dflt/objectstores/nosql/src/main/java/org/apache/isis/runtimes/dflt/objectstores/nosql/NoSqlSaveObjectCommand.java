@@ -20,14 +20,13 @@ package org.apache.isis.runtimes.dflt.objectstores.nosql;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.runtimes.dflt.objectstores.nosql.encryption.DataEncryption;
-import org.apache.isis.runtimes.dflt.objectstores.nosql.keys.KeyCreator;
 import org.apache.isis.runtimes.dflt.objectstores.nosql.versions.VersionCreator;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.SaveObjectCommand;
 
 final class NoSqlSaveObjectCommand extends WriteObjectCommand implements SaveObjectCommand {
 
-    public NoSqlSaveObjectCommand(final KeyCreator keyCreator, final VersionCreator versionCreator, final DataEncryption dataEncrypter, final ObjectAdapter object) {
-        super(true, keyCreator, versionCreator, dataEncrypter, object);
+    public NoSqlSaveObjectCommand(final VersionCreator versionCreator, final DataEncryption dataEncrypter, final ObjectAdapter object) {
+        super(Mode.UPDATE, versionCreator, dataEncrypter, object);
     }
 
 }

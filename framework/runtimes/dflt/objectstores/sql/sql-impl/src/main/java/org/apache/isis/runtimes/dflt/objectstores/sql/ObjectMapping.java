@@ -22,7 +22,7 @@ package org.apache.isis.runtimes.dflt.objectstores.sql;
 import java.util.Vector;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.core.metamodel.adapter.oid.TypedOid;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.runtimes.dflt.runtime.persistence.query.PersistenceQueryFindByPattern;
@@ -38,7 +38,7 @@ public interface ObjectMapping {
 
     Vector<ObjectAdapter> getInstances(DatabaseConnector connector, ObjectSpecification spec, PersistenceQueryFindByPattern query);
 
-    ObjectAdapter getObject(DatabaseConnector connector, Oid oid, ObjectSpecification hint);
+    ObjectAdapter getObject(DatabaseConnector connector, TypedOid typedOid);
 
     boolean hasInstances(DatabaseConnector connector, ObjectSpecification cls);
 

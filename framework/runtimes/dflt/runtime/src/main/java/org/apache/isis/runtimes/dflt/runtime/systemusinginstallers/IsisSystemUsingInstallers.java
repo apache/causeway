@@ -119,7 +119,7 @@ public class IsisSystemUsingInstallers extends IsisSystemAbstract {
 
     public void lookupAndSetAuthenticatorAndAuthorization(final DeploymentType deploymentType) {
 
-        final IsisConfiguration configuration = installerLookup.getConfiguration();
+        //final IsisConfiguration configuration = installerLookup.getConfiguration();
 
         // use the one specified in configuration
         final String authenticationManagerKey = getConfiguration().getString(SystemConstants.AUTHENTICATION_INSTALLER_KEY);

@@ -24,7 +24,6 @@ import static org.junit.Assert.assertFalse;
 import org.junit.Rule;
 import org.junit.Test;
 
-import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.PersistenceSessionObjectStore;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.testsupport.IsisSystemWithFixtures;
 
@@ -34,8 +33,7 @@ public class InMemoryObjectStoreTest_init {
     public IsisSystemWithFixtures iswf = IsisSystemWithFixtures.builder().build();
     
     private static InMemoryObjectStore getStore() {
-        PersistenceSessionObjectStore psos = (PersistenceSessionObjectStore)IsisContext.getPersistenceSession();
-        return (InMemoryObjectStore) psos.getObjectStore();
+        return (InMemoryObjectStore) IsisContext.getPersistenceSession().getObjectStore();
     }
 
     @Test

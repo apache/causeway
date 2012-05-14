@@ -35,12 +35,13 @@ import com.mongodb.ObjectId;
 
 import org.apache.log4j.Logger;
 
+import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.runtimes.dflt.objectstores.nosql.NoSqlCommandContext;
 import org.apache.isis.runtimes.dflt.objectstores.nosql.NoSqlStoreException;
 import org.apache.isis.runtimes.dflt.objectstores.nosql.db.NoSqlDataDatabase;
 import org.apache.isis.runtimes.dflt.objectstores.nosql.db.StateReader;
 import org.apache.isis.runtimes.dflt.objectstores.nosql.db.StateWriter;
-import org.apache.isis.runtimes.dflt.objectstores.nosql.keys.KeyCreator;
+import org.apache.isis.runtimes.dflt.objectstores.nosql.keys.KeyCreatorDefault;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.PersistenceCommand;
 
 public class MongoDb implements NoSqlDataDatabase {
@@ -54,19 +55,19 @@ public class MongoDb implements NoSqlDataDatabase {
     private final String host;
     private final int port;
     private final String dbName;
-    private final KeyCreator keyCreator;
+    private final KeyCreatorDefault keyCreator;
     
 	private Mongo mongo;
 	private DB db;
 
-    public MongoDb(final String host, final int port, final String name, final KeyCreator keyCreator) {
+    public MongoDb(final String host, final int port, final String name, final KeyCreatorDefault keyCreator) {
         this.host = host;
         this.port = port == 0 ? DEFAULT_PORT : port;
         this.dbName = name;
         this.keyCreator = keyCreator;
     }
 
-    public KeyCreator getKeyCreator() {
+    public KeyCreatorDefault getKeyCreator() {
         return keyCreator;
     }
 
@@ -109,7 +110,7 @@ public class MongoDb implements NoSqlDataDatabase {
     //////////////////////////////////////////////////
     
     @Override
-    public long nextSerialNumberBatch(final String name, final int batchSize) {
+    public long nextSerialNumberBatch(final ObjectSpecId name, final int batchSize) {
         long next = readSerialNumber();
         writeSerialNumber(next + batchSize);
         return next + 1;
@@ -143,16 +144,16 @@ public class MongoDb implements NoSqlDataDatabase {
     //////////////////////////////////////////////////
 
     @Override
-    public boolean hasInstances(final String specificationName) {
-        final DBCollection instances = db.getCollection(specificationName);
+    public boolean hasInstances(final ObjectSpecId objectSpecId) {
+        final DBCollection instances = db.getCollection(objectSpecId.asString());
         return instances.getCount() > 0;
     }
 
     @Override
-    public Iterator<StateReader> instancesOf(final String specificationName) {
-        final DBCollection instances = db.getCollection(specificationName);
+    public Iterator<StateReader> instancesOf(final ObjectSpecId objectSpecId) {
+        final DBCollection instances = db.getCollection(objectSpecId.asString());
         final DBCursor cursor = instances.find();
-        LOG.info("searching for instances of: " + specificationName);
+        LOG.info("searching for instances of: " + objectSpecId);
         return new Iterator<StateReader>() {
             @Override
             public boolean hasNext() {
@@ -173,16 +174,16 @@ public class MongoDb implements NoSqlDataDatabase {
     }
 
     @Override
-    public StateReader getInstance(final String key, final String specName) {
-        return new MongoStateReader(db, specName, key);
+    public StateReader getInstance(final String key, final ObjectSpecId objectSpecId) {
+        return new MongoStateReader(db, objectSpecId, key);
     }
 
     //////////////////////////////////////////////////
     // write, delete
     //////////////////////////////////////////////////
 
-    public StateWriter createStateWriter(final String specName) {
-        return new MongoStateWriter(db, specName);
+    public StateWriter createStateWriter(final ObjectSpecId objectSpecId) {
+        return new MongoStateWriter(db, objectSpecId);
     }
 
 
@@ -194,8 +195,8 @@ public class MongoDb implements NoSqlDataDatabase {
         }
     }
 
-    public void delete(final String specificationName, final String key) {
-        final DBCollection instances = db.getCollection(specificationName);
+    public void delete(final ObjectSpecId objectSpecId, final String key) {
+        final DBCollection instances = db.getCollection(objectSpecId.asString());
         final ObjectId id = new ObjectId(key);
         final DBObject object = instances.findOne(id);
         instances.remove(object);
@@ -208,21 +209,21 @@ public class MongoDb implements NoSqlDataDatabase {
     //////////////////////////////////////////////////
 
     @Override
-    public void addService(final String name, final String key) {
+    public void addService(final ObjectSpecId objectSpecId, final String key) {
         final DBCollection services = db.getCollection("services");
-        services.insert(new BasicDBObject().append("name", name).append("key", key));
-        LOG.info("service added " + name + ":" + key);
+        services.insert(new BasicDBObject().append("name", objectSpecId.asString()).append("key", key));
+        LOG.info("service added " + objectSpecId + ":" + key);
     }
 
     @Override
-    public String getService(final String name) {
+    public String getService(final ObjectSpecId objectSpecId) {
         final DBCollection services = db.getCollection("services");
-        final DBObject object = services.findOne(new BasicDBObject().append("name", name));
+        final DBObject object = services.findOne(new BasicDBObject().append("name", objectSpecId.asString()));
         if (object == null) {
             return null;
         } else {
             final String id = (String) object.get("key");
-            LOG.info("service found " + name + ":" + id);
+            LOG.info("service found " + objectSpecId + ":" + id);
             return id;
         }
     }

@@ -27,9 +27,9 @@ import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.services.ServicesInjectorDefault;
 import org.apache.isis.core.metamodel.services.container.DomainObjectContainerDefault;
 import org.apache.isis.runtimes.dflt.runtime.persistence.adapterfactory.pojo.PojoAdapterFactory;
-import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.serial.RootOidGenerator;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.IdentifierGenerator;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.IdentifierGeneratorDefault;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.ObjectFactory;
-import org.apache.isis.runtimes.dflt.runtime.system.persistence.OidGenerator;
 
 public final class PersistenceConstants {
 
@@ -41,11 +41,11 @@ public final class PersistenceConstants {
     public static final String ADAPTER_FACTORY_CLASS_NAME_DEFAULT = PojoAdapterFactory.class.getName();
 
     /**
-     * Key used to lookup implementation of {@link OidGenerator} in
+     * Key used to lookup implementation of {@link IdentifierGenerator} in
      * {@link IsisConfiguration}.
      */
-    public static final String OID_GENERATOR_CLASS_NAME = ConfigurationConstants.ROOT + "persistor.oid-generator";
-    public static final String OID_GENERATOR_CLASS_NAME_DEFAULT = RootOidGenerator.class.getName();
+    public static final String IDENTIFIER_GENERATOR_CLASS_NAME = ConfigurationConstants.ROOT + "persistor.identifier-generator";
+    public static final String IDENTIFIER_GENERATOR_CLASS_NAME_DEFAULT = IdentifierGeneratorDefault.class.getName();
 
     /**
      * Key used to lookup implementation of {@link ObjectFactory} in

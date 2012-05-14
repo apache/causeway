@@ -24,9 +24,12 @@ import org.apache.isis.applib.query.Query;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.core.metamodel.adapter.oid.RootOid;
+import org.apache.isis.core.metamodel.adapter.oid.TypedOid;
 import org.apache.isis.core.metamodel.services.container.query.QueryCardinality;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
+import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.runtimes.dflt.runtime.persistence.UnsupportedFindException;
 
 /**
@@ -46,7 +49,7 @@ public interface PersistenceSessionContainer {
      * 
      * <p>
      * <b><i> REVIEW: not sure about {@link ResolveState#VALUE} - see comments
-     * in {@link #adapterFor(Object, Oid, Version)}.</i></b>
+     * in {@link #adapterFor(Object, Oid, OneToManyAssociation)}.</i></b>
      * 
      * <p>
      * While creating the object it will be initialised with default values and
@@ -83,13 +86,11 @@ public interface PersistenceSessionContainer {
     // /////////////////////////////////////////////////////////
 
     /**
-     * Loads the object identified by the specified {@link Oid} from the
+     * Loads the object identified by the specified {@link TypedOid} from the
      * persisted set of objects.
-     * 
-     * <p>
-     * As used primarily by <tt>ServerDistribution</tt>.
      */
-    ObjectAdapter loadObject(Oid oid, ObjectSpecification spec);
+    ObjectAdapter loadObject(TypedOid oid);
+
 
     /**
      * Finds and returns instances that match the specified query.

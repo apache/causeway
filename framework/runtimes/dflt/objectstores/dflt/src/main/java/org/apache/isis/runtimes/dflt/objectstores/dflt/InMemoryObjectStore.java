@@ -33,10 +33,12 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
+import org.apache.isis.core.metamodel.adapter.oid.TypedOid;
 import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacetUtils;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.SpecificationLookup;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.runtimes.dflt.objectstores.dflt.internal.ObjectStoreInstances;
 import org.apache.isis.runtimes.dflt.objectstores.dflt.internal.ObjectStorePersistedObjects;
@@ -229,11 +231,12 @@ public class InMemoryObjectStore implements ObjectStore {
     // ///////////////////////////////////////////////////////
 
     @Override
-    public ObjectAdapter getObject(final Oid oid, final ObjectSpecification hint) throws ObjectNotFoundException, ObjectPersistenceException {
+    public ObjectAdapter getObject(final TypedOid oid) throws ObjectNotFoundException, ObjectPersistenceException {
         if(LOG.isDebugEnabled()) {
             LOG.debug("getObject " + oid);
         }
-        final ObjectStoreInstances ins = instancesFor(hint);
+        final ObjectSpecification objectSpec = getSpecificationLookup().lookupBySpecId(oid.getObjectSpecId());
+        final ObjectStoreInstances ins = instancesFor(objectSpec);
         final ObjectAdapter object = ins.retrieveObject(oid);
         if (object == null) {
             throw new ObjectNotFoundException(oid);
@@ -336,12 +339,12 @@ public class InMemoryObjectStore implements ObjectStore {
 
     @Override
     public RootOid getOidForService(ObjectSpecification serviceSpec) {
-        return (RootOid) persistedObjects.getService(serviceSpec.getObjectType());
+        return (RootOid) persistedObjects.getService(serviceSpec.getSpecId());
     }
 
     @Override
     public void registerService(final RootOid rootOid) {
-        persistedObjects.registerService(rootOid.getObjectType(), rootOid);
+        persistedObjects.registerService(rootOid.getObjectSpecId(), rootOid);
     }
 
     private ObjectStoreInstances instancesFor(final ObjectSpecification spec) {
@@ -508,6 +511,11 @@ public class InMemoryObjectStore implements ObjectStore {
         return getPersistenceSession();
     }
 
+    protected SpecificationLookup getSpecificationLookup() {
+        return IsisContext.getSpecificationLoader();
+    }
+
+
     /**
      * Downcasts the {@link PersistenceSessionFactory} to
      * {@link InMemoryPersistenceSessionFactory}.
@@ -522,4 +530,5 @@ public class InMemoryObjectStore implements ObjectStore {
         return (InMemoryPersistenceSessionFactory) persistenceSessionFactory;
     }
 
+    
 }

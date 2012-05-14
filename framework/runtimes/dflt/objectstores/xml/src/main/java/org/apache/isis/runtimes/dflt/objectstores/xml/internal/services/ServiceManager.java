@@ -20,6 +20,7 @@
 package org.apache.isis.runtimes.dflt.objectstores.xml.internal.services;
 
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
+import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 
 public interface ServiceManager {
 
@@ -27,6 +28,6 @@ public interface ServiceManager {
 
     void registerService(RootOid rootOid);
 
-    RootOid getOidForService(String objectType);
+    RootOid getOidForService(ObjectSpecId objectSpecId);
 
 }

@@ -20,39 +20,36 @@
 package org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction;
 
 import org.jmock.Expectations;
-import org.jmock.Mockery;
-import org.jmock.integration.junit4.JMock;
-import org.jmock.integration.junit4.JUnit4Mockery;
-import org.junit.Before;
-import org.junit.runner.RunWith;
+import org.jmock.auto.Mock;
+import org.junit.Rule;
 
+import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2;
+import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2.Mode;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.ObjectStoreTransactionManagement;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.runtimes.dflt.runtime.system.session.IsisSession;
+import org.apache.isis.runtimes.dflt.runtime.system.transaction.IsisTransactionManager;
 
-@RunWith(JMock.class)
 public abstract class ObjectStoreTransactionManagerAbstractTestCase {
 
-    protected Mockery mockery = new JUnit4Mockery();
+    @Rule
+    public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
 
-    protected ObjectStoreTransactionManager transactionManager;
+    protected IsisTransactionManager transactionManager;
+    @Mock
     protected IsisSession mockSession;
+    @Mock
     protected PersistenceSession mockPersistenceSession;
+    @Mock
     protected ObjectStoreTransactionManagement mockObjectStore;
 
-    @Before
-    public void setUp() throws Exception {
-        mockSession = mockery.mock(IsisSession.class);
-        mockPersistenceSession = mockery.mock(PersistenceSession.class);
-        mockObjectStore = mockery.mock(ObjectStoreTransactionManagement.class);
-    }
 
     // //////////////////////////////////////////////////
     // Helpers
     // //////////////////////////////////////////////////
 
     protected void ignoreCallsToPersistenceSession() {
-        mockery.checking(new Expectations() {
+        context.checking(new Expectations() {
             {
                 ignoring(mockPersistenceSession);
             }
@@ -60,7 +57,7 @@ public abstract class ObjectStoreTransactionManagerAbstractTestCase {
     }
 
     protected void ignoreCallsToObjectStore() {
-        mockery.checking(new Expectations() {
+        context.checking(new Expectations() {
             {
                 ignoring(mockObjectStore);
             }

@@ -46,6 +46,6 @@ public class CollectionData extends Data {
 
     @Override
     public String toString() {
-        return "CollectionData[type=" + getObjectType() + ",elements=" + elements + "]";
+        return "CollectionData[type=" + getObjectSpecId() + ",elements=" + elements + "]";
     }
 }

@@ -26,6 +26,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import org.apache.isis.core.metamodel.adapter.oid.RootOidDefault;
+import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 
 public class ReferenceVectorTest {
     
@@ -36,7 +37,7 @@ public class ReferenceVectorTest {
 
     @Before
     public void setUp() throws Exception {
-        oid = RootOidDefault.createTransient(objectType, ""+1);
+        oid = RootOidDefault.createTransient(ObjectSpecId.of(objectType), ""+1);
         listOfRootOid = new ListOfRootOid();
     }
 

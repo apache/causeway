@@ -35,8 +35,21 @@ public class JsonStateReaderTest {
 
     @Before
     public void setup() {
-        reader = new JsonStateReader("{" + "\"_encrypt\": \"etc1\"," + "\"_id\": \"#2\"," + "\"_type\": \"com.package.ClassName\"," + "\"_time\": \"ddmmyy\"," + "\"_user\": \"fred\"," + "\"_version\": \"2\"," + "\"field-1\": \"1234\"," + "\"field-2\": \"data\"," + "\"field-3\": null,"
-                + "\"list\": [{}, {}]," + "\"aggregate\": {\"_id\": \"#3\"}," + "}");
+        reader = new JsonStateReader(
+                "{" + 
+                    "\"_encrypt\": \"etc1\"," + 
+                    "\"_oid\": \"com.package.ClassName:#2\"," + 
+                    "\"_time\": \"ddmmyy\"," + 
+                    "\"_user\": \"fred\"," + 
+                    "\"_version\": \"2\"," + 
+                    "\"field-1\": \"1234\"," + 
+                    "\"field-2\": \"data\"," + 
+                    "\"field-3\": null,"
+                    + "\"list\": [{}, {}]," + 
+                    "\"aggregate\": {" +
+                        "\"_oid\": \"com.package.ClassName:#2~com.package.AggregatedClassName:#3\""  +
+                        "}," + 
+                    "}");
     }
 
     @Test
@@ -44,14 +57,19 @@ public class JsonStateReaderTest {
         assertEquals("etc1", reader.readEncrytionType());
     }
 
-    @Test
-    public void readId() throws Exception {
-        assertEquals("#2", reader.readId());
-    }
+//    @Test
+//    public void readId() throws Exception {
+//        assertEquals("#2", reader.readId());
+//    }
+//
+//    @Test
+//    public void readObjectType() throws Exception {
+//        assertEquals("com.package.ClassName", reader.readObjectType());
+//    }
 
     @Test
-    public void readObjectType() throws Exception {
-        assertEquals("com.package.ClassName", reader.readObjectType());
+    public void readOid() throws Exception {
+        assertEquals("com.package.ClassName:#2", reader.readOid());
     }
 
     @Test
@@ -104,6 +122,6 @@ public class JsonStateReaderTest {
     @Test
     public void readAggregate() throws Exception {
         final StateReader aggregate = reader.readAggregate("aggregate");
-        assertEquals("#3", aggregate.readId());
+        assertEquals("com.package.ClassName:#2~com.package.AggregatedClassName:#3", aggregate.readOid());
     }
 }

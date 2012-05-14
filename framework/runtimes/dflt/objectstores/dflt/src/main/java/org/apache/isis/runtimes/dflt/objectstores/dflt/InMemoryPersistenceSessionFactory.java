@@ -24,8 +24,9 @@ import org.apache.isis.runtimes.dflt.objectstores.dflt.internal.ObjectStorePersi
 import org.apache.isis.runtimes.dflt.objectstores.dflt.internal.ObjectStorePersistedObjectsDefault;
 import org.apache.isis.runtimes.dflt.runtime.persistence.PersistenceSessionFactoryDelegate;
 import org.apache.isis.runtimes.dflt.runtime.persistence.PersistenceSessionFactoryDelegating;
-import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.serial.RootOidGenerator;
 import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.IdentifierGenerator;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.IdentifierGeneratorDefault;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.OidGenerator;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 
@@ -46,9 +47,10 @@ public class InMemoryPersistenceSessionFactory extends PersistenceSessionFactory
         final PersistenceSession persistenceSession = super.createPersistenceSession();
         if (persistedObjects != null) {
             final OidGenerator oidGenerator = persistenceSession.getOidGenerator();
-            if (oidGenerator instanceof RootOidGenerator) {
-                final RootOidGenerator rootOidGenerator = (RootOidGenerator) oidGenerator;
-                rootOidGenerator.resetTo(persistedObjects.getOidGeneratorMemento());
+            final IdentifierGenerator identifierGenerator = oidGenerator.getIdentifierGenerator();
+            if (identifierGenerator instanceof IdentifierGeneratorDefault) {
+                final IdentifierGeneratorDefault identifierGeneratorDefault = (IdentifierGeneratorDefault) identifierGenerator;
+                identifierGeneratorDefault.resetTo(persistedObjects.getOidGeneratorMemento());
             }
         }
 
@@ -69,9 +71,10 @@ public class InMemoryPersistenceSessionFactory extends PersistenceSessionFactory
      */
     public void attach(final PersistenceSession persistenceSession, final ObjectStorePersistedObjects persistedObjects) {
         final OidGenerator oidGenerator = persistenceSession.getOidGenerator();
-        if (oidGenerator instanceof RootOidGenerator) {
-            final RootOidGenerator rootOidGenerator = (RootOidGenerator) oidGenerator;
-            persistedObjects.saveOidGeneratorMemento(rootOidGenerator.getMemento());
+        final IdentifierGenerator identifierGenerator = oidGenerator.getIdentifierGenerator();
+        if (identifierGenerator instanceof IdentifierGeneratorDefault) {
+            final IdentifierGeneratorDefault identifierGeneratorDefault = (IdentifierGeneratorDefault) identifierGenerator;
+            persistedObjects.saveOidGeneratorMemento(identifierGeneratorDefault.getMemento());
         }
         this.persistedObjects = persistedObjects;
     }

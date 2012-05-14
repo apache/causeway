@@ -21,6 +21,7 @@ package org.apache.isis.runtimes.dflt.objectstores.nosql.db.file;
 
 import java.util.zip.CRC32;
 
+import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.runtimes.dflt.objectstores.nosql.NoSqlCommandContext;
 import org.apache.isis.runtimes.dflt.objectstores.nosql.db.StateWriter;
 
@@ -41,13 +42,13 @@ class FileClientCommandContext implements NoSqlCommandContext {
     }
 
     @Override
-    public StateWriter createStateWriter(final String specificationName) {
+    public StateWriter createStateWriter(final ObjectSpecId specificationName) {
         return new JsonStateWriter();
     }
 
     @Override
-    public void delete(final String specificationName, final String key, final String version) {
-        connection.request('D', specificationName + " " + key + " " + version + " null");
+    public void delete(final ObjectSpecId objectSpecId, final String key, final String version) {
+        connection.request('D', objectSpecId + " " + key + " " + version + " null");
         connection.endRequestSection();
     }
 

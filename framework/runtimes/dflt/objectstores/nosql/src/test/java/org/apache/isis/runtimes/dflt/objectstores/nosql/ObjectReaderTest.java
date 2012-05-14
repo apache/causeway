@@ -38,13 +38,13 @@ import org.apache.isis.core.commons.exceptions.UnexpectedCallException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.core.metamodel.adapter.oid.RootOidDefault;
+import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2;
 import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2.Mode;
 import org.apache.isis.runtimes.dflt.objectstores.nosql.db.StateReader;
 import org.apache.isis.runtimes.dflt.objectstores.nosql.db.mongo.MongoPersistorMechanismInstaller;
 import org.apache.isis.runtimes.dflt.objectstores.nosql.encryption.DataEncryption;
-import org.apache.isis.runtimes.dflt.objectstores.nosql.keys.KeyCreator;
 import org.apache.isis.runtimes.dflt.objectstores.nosql.versions.VersionCreator;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.testsupport.IsisSystemWithFixtures;
@@ -61,36 +61,41 @@ public class ObjectReaderTest {
     public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_ONLY);
 
     @Mock
-    private KeyCreator keyCreator;
-    @Mock
     private VersionCreator versionCreator;
-    
-    private ObjectSpecification exampleValuePojoSpec;
-    private ObjectSpecification exampleReferencePojoSpec;
-    private ObjectSpecification exampleCollectionPojoSpec;
+
+    @Mock
+    private StateReader reader1;
+    @Mock
+    private StateReader reader2;
+
+    //private KeyCreatorDefault keyCreator;
+
+    //private ObjectSpecification exampleValuePojoSpec;
+    //private ObjectSpecification exampleReferencePojoSpec;
+    //private ObjectSpecification exampleCollectionPojoSpec;
     
     private ObjectReader objectReader;
     
-    private StateReader reader1;
-    private StateReader reader2;
     
     private Map<String, DataEncryption> dataEncrypter;
 
-    private final RootOidDefault oid3 = RootOidDefault.create("EPV|3"); // ExampleValuePojo
-    private final RootOidDefault oid4 = RootOidDefault.create("EPR|4"); // ExampleReferencePojo
-    private final RootOidDefault oid5 = RootOidDefault.create("EPC|5"); // ExampleCollectionPojo
+    private final RootOidDefault oid3 = RootOidDefault.deString("EPV:3"); // ExampleValuePojo
+    private final RootOidDefault oid4 = RootOidDefault.deString("EPR:4"); // ExampleReferencePojo
+    private final RootOidDefault oid5 = RootOidDefault.deString("EPC:5"); // ExampleCollectionPojo
 
 
     @Before
     public void setup() {
-        exampleValuePojoSpec = iswf.loadSpecification(ExamplePojoWithValues.class);
-        exampleReferencePojoSpec = iswf.loadSpecification(ExamplePojoWithReferences.class);
-        exampleCollectionPojoSpec = iswf.loadSpecification(ExamplePojoWithCollections.class);
+        //keyCreator = new KeyCreatorDefault();
+        
+        //exampleValuePojoSpec = iswf.loadSpecification(ExamplePojoWithValues.class);
+        //exampleReferencePojoSpec = iswf.loadSpecification(ExamplePojoWithReferences.class);
+        //exampleCollectionPojoSpec = iswf.loadSpecification(ExamplePojoWithCollections.class);
                 
         objectReader = new ObjectReader();
 
         dataEncrypter = new HashMap<String, DataEncryption>();
-        final DataEncryption dataEncrypter1 = new DataEncryption() {
+        final DataEncryption etcEncryption = new DataEncryption() {
             @Override
             public String getType() {
                 return "etc1";
@@ -110,8 +115,7 @@ public class ObjectReaderTest {
                 return encryptedText.substring(3);
             }
         };
-        dataEncrypter.put(dataEncrypter1.getType(), dataEncrypter1);
-
+        dataEncrypter.put(etcEncryption.getType(), etcEncryption);
     }
 
     @Test
@@ -120,11 +124,14 @@ public class ObjectReaderTest {
 
         context.checking(new Expectations() {
             {
-                one(reader1).readObjectType();
-                will(returnValue(ExamplePojoWithValues.class.getName()));
+//                one(reader1).readObjectType();
+//                will(returnValue(ExamplePojoWithValues.class.getName()));
+//
+//                one(reader1).readId();
+//                will(returnValue("3"));
 
-                one(reader1).readId();
-                will(returnValue("3"));
+                one(reader1).readOid();
+                will(returnValue("EPV:3"));
 
                 one(reader1).readEncrytionType();
                 will(returnValue("etc1"));
@@ -136,13 +143,13 @@ public class ObjectReaderTest {
                 will(returnValue("1020"));
                 one(versionCreator).version("3", "username", "1020");
                 
-                one(keyCreator).oid(exampleValuePojoSpec, "3");
-                will(returnValue(oid3));
+//                one(keyCreator).createRootOid(exampleValuePojoSpec, "3");
+//                will(returnValue(oid3));
                 ;
             }
         });
 
-        final ObjectAdapter readObject = objectReader.load(reader1, keyCreator, versionCreator, dataEncrypter);
+        final ObjectAdapter readObject = objectReader.load(reader1, versionCreator, dataEncrypter);
         assertEquals(oid3, readObject.getOid());
         assertEquals(ResolveState.RESOLVED, readObject.getResolveState());
 
@@ -155,14 +162,16 @@ public class ObjectReaderTest {
 
     @Test
     public void testReadingReference() throws Exception {
-        reader2 = context.mock(StateReader.class, "reader 2");
         context.checking(new Expectations() {
             {
-                one(reader2).readObjectType();
-                will(returnValue(ExamplePojoWithReferences.class.getName()));
+//                one(reader2).readObjectType();
+//                will(returnValue(ExamplePojoWithReferences.class.getName()));
+//
+//                one(reader2).readId();
+//                will(returnValue("4"));
 
-                one(reader2).readId();
-                will(returnValue("4"));
+                one(reader2).readOid();
+                will(returnValue("EPR:4"));
 
                 one(reader2).readEncrytionType();
                 will(returnValue("etc1"));
@@ -174,25 +183,23 @@ public class ObjectReaderTest {
                 will(returnValue("1020"));
                 one(versionCreator).version("3", "username", "1020");
 
-                one(keyCreator).oid(exampleReferencePojoSpec, "4");
-                will(returnValue(oid4));
-                ;
+//                one(keyCreator).createRootOid(exampleReferencePojoSpec, "4");
+//                will(returnValue(oid4));
 
-                one(reader2).readField("reference1");
-                will(returnValue("ref@3"));
+                one(reader2).readField("reference");
+                will(returnValue("EPV:3"));
 
-                one(reader2).readField("reference2");
-                will(returnValue("null"));
+                one(reader2).readAggregate("aggregatedReference");
+                will(returnValue(null));
 
-                one(keyCreator).oidFromReference("ref@3");
-                will(returnValue(oid3));
-                ;
-                one(keyCreator).specificationFromReference("ref@3");
-                will(returnValue(exampleValuePojoSpec));
+//                one(keyCreator).unmarshal("ref@3");
+//                will(returnValue(oid3));
+//                one(keyCreator).specificationFromOidStr("ref@3");
+//                will(returnValue(exampleValuePojoSpec));
             }
         });
 
-        final ObjectAdapter readObject = objectReader.load(reader2, keyCreator, versionCreator, dataEncrypter);
+        final ObjectAdapter readObject = objectReader.load(reader2, versionCreator, dataEncrypter);
         assertEquals(oid4, readObject.getOid());
         assertEquals(ResolveState.RESOLVED, readObject.getResolveState());
 
@@ -205,15 +212,17 @@ public class ObjectReaderTest {
 
     @Test
     public void testReadingCollection() throws Exception {
-        final ObjectSpecification specification = IsisContext.getSpecificationLoader().loadSpecification(ExamplePojoWithValues.class);
-        reader2 = context.mock(StateReader.class, "reader 2");
+        //final ObjectSpecification specification = IsisContext.getSpecificationLoader().loadSpecification(ExamplePojoWithValues.class);
         context.checking(new Expectations() {
             {
-                one(reader2).readObjectType();
-                will(returnValue(ExamplePojoWithCollections.class.getName()));
+//                one(reader2).readObjectType();
+//                will(returnValue(ExamplePojoWithCollections.class.getName()));
+//
+//                one(reader2).readId();
+//                will(returnValue("5"));
 
-                one(reader2).readId();
-                will(returnValue("5"));
+                one(reader2).readOid();
+                will(returnValue("EPC:5"));
 
                 one(reader2).readEncrytionType();
                 will(returnValue("etc1"));
@@ -225,27 +234,26 @@ public class ObjectReaderTest {
                 will(returnValue("1020"));
                 one(versionCreator).version("3", "username", "1020");
 
-                one(keyCreator).oid(exampleCollectionPojoSpec, "5");
-                will(returnValue(oid5));
-                ;
+//                one(keyCreator).createRootOid(exampleCollectionPojoSpec, "5");
+//                will(returnValue(oid5));
 
-                one(reader2).readField("hetrogenousCollection");
+                one(reader2).readField("heterogeneousCollection");
                 will(returnValue(null));
-                one(reader2).readField("homogenousCollection");
-                will(returnValue("ref@3|ref@4|"));
+                one(reader2).readField("homogeneousCollection");
+                will(returnValue("EPV:3|EPV:4|"));
 
-                one(keyCreator).specificationFromReference("ref@3");
-                will(returnValue(specification));
-                one(keyCreator).oidFromReference("ref@3");
-                will(returnValue(oid3));
-                one(keyCreator).specificationFromReference("ref@4");
-                will(returnValue(specification));
-                one(keyCreator).oidFromReference("ref@4");
-                will(returnValue(oid4));
+//                one(keyCreator).specificationFromOidStr("ref@3");
+//                will(returnValue(specification));
+//                one(keyCreator).unmarshal("ref@3");
+//                will(returnValue(oid3));
+//                one(keyCreator).specificationFromOidStr("ref@4");
+//                will(returnValue(specification));
+//                one(keyCreator).unmarshal("ref@4");
+//                will(returnValue(oid4));
             }
         });
 
-        final ObjectAdapter readObject = objectReader.load(reader2, keyCreator, versionCreator, dataEncrypter);
+        final ObjectAdapter readObject = objectReader.load(reader2, versionCreator, dataEncrypter);
         assertEquals(oid5, readObject.getOid());
         assertEquals(ResolveState.RESOLVED, readObject.getResolveState());
 
@@ -278,9 +286,9 @@ public class ObjectReaderTest {
         });
 
         final ObjectSpecification specification = IsisContext.getSpecificationLoader().loadSpecification(ExamplePojoWithValues.class);
-        final ObjectAdapter readObject = IsisContext.getPersistenceSession().recreateAdapter(RootOidDefault.create("EVP", ""+4), specification);
+        final ObjectAdapter readObject = IsisContext.getPersistenceSession().recreateAdapter(specification, RootOidDefault.create(ObjectSpecId.of("EVP"), ""+4));
 
-        objectReader.update(reader1, keyCreator, versionCreator, dataEncrypter, readObject);
+        objectReader.update(reader1, versionCreator, dataEncrypter, readObject);
 
         final ExamplePojoWithValues pojo = (ExamplePojoWithValues) readObject.getObject();
         assertEquals("Fred Smith", pojo.getName());
@@ -290,9 +298,11 @@ public class ObjectReaderTest {
     }
 
     private void setupObject1() {
-        reader1 = context.mock(StateReader.class, "reader 1");
         context.checking(new Expectations() {
             {
+                one(reader1).readField("date");
+                will(returnValue("null"));
+
                 one(reader1).readField("name");
                 will(returnValue("ENCFred Smith"));
 

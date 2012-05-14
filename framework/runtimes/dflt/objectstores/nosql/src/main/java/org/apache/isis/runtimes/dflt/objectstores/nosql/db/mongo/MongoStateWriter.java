@@ -28,31 +28,45 @@ import com.mongodb.DBCollection;
 import org.apache.log4j.Logger;
 
 import org.apache.isis.core.commons.exceptions.UnexpectedCallException;
+import org.apache.isis.core.metamodel.adapter.oid.RootOid;
+import org.apache.isis.core.metamodel.adapter.oid.TypedOid;
+import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.runtimes.dflt.objectstores.nosql.db.StateWriter;
 
-public class MongoStateWriter implements StateWriter, PropertyNames {
+public class MongoStateWriter implements StateWriter {
+    
     private static final Logger LOG = Logger.getLogger(MongoStateWriter.class);
     private final BasicDBObject dbObject;
     private final DBCollection instances;
 
-    public MongoStateWriter(final DB db, final String specName) {
+    public MongoStateWriter(final DB db, final ObjectSpecId objectSpecId) {
         dbObject = new BasicDBObject();
-        instances = db.getCollection(specName);
+        instances = db.getCollection(objectSpecId.asString());
     }
 
     public void flush() {
         instances.save(dbObject);
-        LOG.debug("saved " + dbObject);
+        if(LOG.isDebugEnabled()) {
+            LOG.debug("saved " + dbObject);
+        }
     }
 
-    @Override
-    public void writeId(final String oid) {
-        writeField(ID, oid);
-    }
+//    public void writeId(final String oid) {
+//        writeField(ID, oid);
+//    }
+//
+//    @Override
+//    public void writeObjectType(final String type) {
+//        writeField(TYPE, type);
+//    }
 
     @Override
-    public void writeType(final String type) {
-        writeField(TYPE, type);
+    public void writeOid(final TypedOid typedOid) {
+        writeField(PropertyNames.OID, typedOid.enString());
+        if(typedOid instanceof RootOid) {
+            RootOid rootOid = (RootOid) typedOid;
+            writeField(PropertyNames.MONGO_INTERNAL_ID, rootOid.getIdentifier());
+        }
     }
 
     @Override
@@ -67,22 +81,22 @@ public class MongoStateWriter implements StateWriter, PropertyNames {
 
     @Override
     public void writeEncryptionType(final String type) {
-        writeField(ENCRYPT, type);
+        writeField(PropertyNames.ENCRYPT, type);
     }
 
     @Override
     public void writeVersion(final String currentVersion, final String newVersion) {
-         writeField(VERSION, newVersion);
+         writeField(PropertyNames.VERSION, newVersion);
     }
 
     @Override
     public void writeTime(final String time) {
-        writeField(TIME, time);
+        writeField(PropertyNames.TIME, time);
     }
 
     @Override
     public void writeUser(final String user) {
-        writeField(USER, user);
+        writeField(PropertyNames.USER, user);
     }
 
     @Override

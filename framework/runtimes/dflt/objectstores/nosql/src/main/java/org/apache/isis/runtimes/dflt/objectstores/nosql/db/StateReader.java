@@ -49,9 +49,10 @@ public interface StateReader {
 
     String readEncrytionType();
 
-    String readObjectType();
-
-    String readId();
+//    String readObjectType();
+//    String readId();
+    
+    String readOid();
 
     String readVersion();
 

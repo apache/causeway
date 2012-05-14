@@ -30,6 +30,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
+import org.apache.isis.core.metamodel.adapter.oid.TypedOid;
 import org.apache.isis.core.metamodel.adapter.util.InvokeUtils;
 import org.apache.isis.core.metamodel.adapter.version.SerialNumberVersion;
 import org.apache.isis.core.metamodel.facets.notpersisted.NotPersistedFacet;
@@ -260,15 +261,16 @@ public class AutoMapper extends AbstractAutoMapper implements ObjectMapping, Deb
     }
 
     @Override
-    public ObjectAdapter getObject(final DatabaseConnector connector, final Oid oid, final ObjectSpecification hint) {
+    public ObjectAdapter getObject(final DatabaseConnector connector, final TypedOid typedOid) {
         final StringBuffer sql = createSelectStatement();
         sql.append(" WHERE ");
-        idMapping.appendWhereClause(connector, sql, (RootOid) oid);
+        idMapping.appendWhereClause(connector, sql, (RootOid) typedOid);
         final Results rs = connector.select(completeSelectStatement(sql));
+        final ObjectSpecification objectSpec = getSpecificationLoader().lookupBySpecId(typedOid.getObjectSpecId());
         if (rs.next()) {
-            return loadObject(connector, hint, rs);
+            return loadObject(connector, objectSpec, rs);
         } else {
-            throw new ObjectNotFoundException("No object with with " + oid + " in table " + table);
+            throw new ObjectNotFoundException("No object with with " + typedOid + " in table " + table);
         }
     }
 

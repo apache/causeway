@@ -28,8 +28,8 @@ import org.junit.Test;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOidDefault;
+import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.PersistenceSessionObjectStore;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.testsupport.IsisSystemWithFixtures;
 import org.apache.isis.tck.dom.eg.ExamplePojoWithValues;
@@ -44,8 +44,7 @@ public class InMemoryObjectStoreTest_serviceRegistry {
     protected ObjectSpecification epvSpecification;
 
     protected InMemoryObjectStore getStore() {
-        PersistenceSessionObjectStore psos = (PersistenceSessionObjectStore)IsisContext.getPersistenceSession();
-        return (InMemoryObjectStore) psos.getObjectStore();
+        return (InMemoryObjectStore) IsisContext.getPersistenceSession().getObjectStore();
     }
 
     @Before
@@ -57,7 +56,7 @@ public class InMemoryObjectStoreTest_serviceRegistry {
     @Test
     public void getOidForServices() throws Exception {
         final Oid oidForService = getStore().getOidForService(iswf.loadSpecification(TestPojoRepository.class));
-        assertEquals(RootOidDefault.create(TestPojoRepository.class.getName(), "1"), oidForService);
+        assertEquals(RootOidDefault.create(ObjectSpecId.of("TestPojoRepository"), "1"), oidForService);
     }
 
 

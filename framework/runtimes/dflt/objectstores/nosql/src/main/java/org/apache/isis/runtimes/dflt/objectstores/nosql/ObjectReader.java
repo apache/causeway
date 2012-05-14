@@ -27,6 +27,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.core.metamodel.adapter.oid.AggregatedOid;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
@@ -39,21 +40,28 @@ import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.runtimes.dflt.objectstores.nosql.db.StateReader;
 import org.apache.isis.runtimes.dflt.objectstores.nosql.encryption.DataEncryption;
-import org.apache.isis.runtimes.dflt.objectstores.nosql.keys.KeyCreator;
+import org.apache.isis.runtimes.dflt.objectstores.nosql.keys.KeyCreatorDefault;
 import org.apache.isis.runtimes.dflt.objectstores.nosql.versions.VersionCreator;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 
 class ObjectReader {
+    
+    private final KeyCreatorDefault keyCreator = new KeyCreatorDefault();
 
-    public ObjectAdapter load(final StateReader reader, final KeyCreator keyCreator, final VersionCreator versionCreator, final Map<String, DataEncryption> dataEncrypters) {
-        final String className = reader.readObjectType();
-        final ObjectSpecification specification = getSpecificationLoader().loadSpecification(className);
-        final String id = reader.readId();
-        final RootOid oid = keyCreator.oid(specification, id);
+    public ObjectAdapter load(final StateReader reader, final VersionCreator versionCreator, final Map<String, DataEncryption> dataEncrypters) {
         
-        final ObjectAdapter object = getAdapter(oid);
+        // final String className = reader.readObjectType();
+        // final String id = reader.readId();
+        
+        // final ObjectSpecification specification = getSpecificationLoader().loadSpecification(className);
+        // final RootOid rootOid = keyCreator.oid(specification, id);
+        
+        final String oidStr = reader.readOid();
+        final RootOid rootOid = getOidMarshaller().unmarshal(oidStr, RootOid.class);
+        
+        final ObjectAdapter object = getAdapter(rootOid);
         if (object.getResolveState().isResolved()) {
             Version version = null;
             final String versionString = reader.readVersion();
@@ -72,15 +80,15 @@ class ObjectReader {
 
         // TODO move lock to common method
         // object.setOptimisticLock(version);
-        loadState(reader, keyCreator, versionCreator, dataEncrypters, object);
+        loadState(reader, versionCreator, dataEncrypters, object);
         return object;
     }
 
-    public void update(final StateReader reader, final KeyCreator keyCreator, final VersionCreator versionCreator, final Map<String, DataEncryption> dataEncrypters, final ObjectAdapter object) {
-        loadState(reader, keyCreator, versionCreator, dataEncrypters, object);
+    public void update(final StateReader reader, final VersionCreator versionCreator, final Map<String, DataEncryption> dataEncrypters, final ObjectAdapter object) {
+        loadState(reader, versionCreator, dataEncrypters, object);
     }
 
-    private void loadState(final StateReader reader, final KeyCreator keyCreator, final VersionCreator versionCreator, final Map<String, DataEncryption> dataEncrypters, final ObjectAdapter object) {
+    private void loadState(final StateReader reader, final VersionCreator versionCreator, final Map<String, DataEncryption> dataEncrypters, final ObjectAdapter object) {
         final ResolveState resolveState = ResolveState.RESOLVING;
         object.changeState(resolveState);
         Version version = null;
@@ -91,12 +99,12 @@ class ObjectReader {
             version = versionCreator.version(versionString, user, time);
         }
         final String encryptionType = reader.readEncrytionType();
-        readFields(reader, object, keyCreator, dataEncrypters.get(encryptionType));
+        readFields(reader, object, dataEncrypters.get(encryptionType));
         object.setVersion(version);
         object.changeState(resolveState.getEndState());
     }
 
-    private void readFields(final StateReader reader, final ObjectAdapter object, final KeyCreator keyCreator, final DataEncryption dataEncrypter) {
+    private void readFields(final StateReader reader, final ObjectAdapter object, final DataEncryption dataEncrypter) {
         final ObjectAssociationContainer specification = object.getSpecification();
         final List<ObjectAssociation> associations = specification.getAssociations();
         for (final ObjectAssociation association : associations) {
@@ -104,26 +112,29 @@ class ObjectReader {
                 continue;
             }
             if (association.isOneToManyAssociation()) {
-                readCollection(reader, keyCreator, dataEncrypter, (OneToManyAssociation) association, object);
+                readCollection(reader, dataEncrypter, (OneToManyAssociation) association, object);
             } else if (association.getSpecification().isValue()) {
                 readValue(reader, dataEncrypter, (OneToOneAssociation) association, object);
             } else if (association.getSpecification().isParented()) {
-                readAggregate(reader, keyCreator, dataEncrypter, (OneToOneAssociation) association, object);
+                readAggregate(reader, dataEncrypter, (OneToOneAssociation) association, object);
             } else {
-                readReference(reader, keyCreator, (OneToOneAssociation) association, object);
+                readReference(reader, (OneToOneAssociation) association, object);
             }
         }
     }
 
-    private void readAggregate(final StateReader reader, final KeyCreator keyCreator, final DataEncryption dataEncrypter, final OneToOneAssociation association, final ObjectAdapter parentAdapter) {
+    private void readAggregate(final StateReader reader, final DataEncryption dataEncrypter, final OneToOneAssociation association, final ObjectAdapter parentAdapter) {
         final String id = association.getId();
         final StateReader aggregateReader = reader.readAggregate(id);
         
         final ObjectAdapter fieldObject;
         if (aggregateReader != null) {
-            final String localId = aggregateReader.readId();  
-            final AggregatedOid oid = new AggregatedOid(parentAdapter.getOid(), localId);
-            fieldObject = restoreAggregatedObject(aggregateReader, oid, keyCreator, dataEncrypter);
+//            final String objectType = aggregateReader.readObjectType();
+//            final String localId = aggregateReader.readId();  
+//            final AggregatedOid aggregatedOid = new AggregatedOid(objectType, (TypedOid) parentAdapter.getOid(), localId);
+            final String oidStr = aggregateReader.readOid();
+            final AggregatedOid aggregatedOid = getOidMarshaller().unmarshal(oidStr, AggregatedOid.class);
+            fieldObject = restoreAggregatedObject(aggregateReader, aggregatedOid, dataEncrypter);
         } else {
             fieldObject = null;
         }
@@ -131,14 +142,17 @@ class ObjectReader {
         association.initAssociation(parentAdapter, fieldObject);
     }
 
-    private ObjectAdapter restoreAggregatedObject(final StateReader aggregateReader, final Oid oid, final KeyCreator keyCreator, final DataEncryption dataEncrypter) {
-        final String objectType = aggregateReader.readObjectType();
-        final ObjectSpecification specification = getSpecificationLoader().loadSpecification(objectType);
-        final ObjectAdapter fieldObject = getAdapter(specification, oid);
+    private ObjectAdapter restoreAggregatedObject(final StateReader aggregateReader, final AggregatedOid aggregatedOid, final DataEncryption dataEncrypter) {
+        
+//        final String objectType = aggregateReader.readObjectType();
+//        final ObjectSpecification specification = getSpecificationLoader().loadSpecification(objectType);
+        final ObjectSpecification specification = getSpecificationLoader().lookupBySpecId(aggregatedOid.getObjectSpecId());
+
+        final ObjectAdapter fieldObject = getAdapter(specification, aggregatedOid);
         if (fieldObject.getResolveState().isGhost()) {
             final ResolveState resolveState = ResolveState.RESOLVING;
             fieldObject.changeState(resolveState);
-            readFields(aggregateReader, fieldObject, keyCreator, dataEncrypter);
+            readFields(aggregateReader, fieldObject, dataEncrypter);
             fieldObject.changeState(resolveState.getEndState());
         }
         return fieldObject;
@@ -158,7 +172,7 @@ class ObjectReader {
         }
     }
 
-    private void readReference(final StateReader reader, final KeyCreator keyCreator, final OneToOneAssociation association, final ObjectAdapter object) {
+    private void readReference(final StateReader reader, final OneToOneAssociation association, final ObjectAdapter object) {
         ObjectAdapter fieldObject;
         final String ref = reader.readField(association.getId());
         if (ref == null || ref.equals("null")) {
@@ -167,8 +181,8 @@ class ObjectReader {
             if (ref.equals("")) {
                 throw new NoSqlStoreException("Invalid reference field (an empty string) in data for " + association.getName() + "  in " + object);
             }
-            final RootOid oid = keyCreator.oidFromReference(ref);
-            final ObjectSpecification specification = keyCreator.specificationFromReference(ref);
+            final RootOid oid = keyCreator.unmarshal(ref);
+            final ObjectSpecification specification = keyCreator.specificationFromOidStr(ref);
             fieldObject = getAdapter(specification, oid);
         }
         try {
@@ -178,7 +192,7 @@ class ObjectReader {
         }
     }
 
-    private void readCollection(final StateReader reader, final KeyCreator keyCreator, final DataEncryption dataEncrypter, final OneToManyAssociation association, final ObjectAdapter parentAdapter) {
+    private void readCollection(final StateReader reader, final DataEncryption dataEncrypter, final OneToManyAssociation association, final ObjectAdapter parentAdapter) {
         final ObjectAdapter collectionAdapter = association.get(parentAdapter);
         
         final CollectionFacet facet = collectionAdapter.getSpecification().getFacet(CollectionFacet.class);
@@ -188,9 +202,15 @@ class ObjectReader {
             final ObjectAdapter[] elementAdapters = new ObjectAdapter[readers.size()];
             int i = 0;
             for (final StateReader elementReader : readers) {
-                final String localId = elementReader.readId();
-                final AggregatedOid aggregatedOid = new AggregatedOid(parentAdapter.getOid(), localId);
-                elementAdapters[i++] = restoreAggregatedObject(elementReader, aggregatedOid, keyCreator, dataEncrypter);
+                
+//                final String objectType = elementReader.readObjectType();
+//                final String localId = elementReader.readId();
+//                final AggregatedOid aggregatedOid = new AggregatedOid(ObjectSpecId.of(objectType), (TypedOid) parentAdapter.getOid(), localId);
+
+                final String oidStr = elementReader.readOid();
+                final AggregatedOid aggregatedOid = getOidMarshaller().unmarshal(oidStr, AggregatedOid.class);
+                
+                elementAdapters[i++] = restoreAggregatedObject(elementReader, aggregatedOid, dataEncrypter);
             }
             facet.init(collectionAdapter, elementAdapters);
         } else {
@@ -199,18 +219,18 @@ class ObjectReader {
             if (referencesList == null || referencesList.length() == 0) {
                 facet.init(collectionAdapter, new ObjectAdapter[0]);
             } else {
-                final ObjectAdapter[] elements = restoreElements(referencesList, keyCreator);
+                final ObjectAdapter[] elements = restoreElements(referencesList);
                 facet.init(collectionAdapter, elements);
             }
         }
     }
 
-    private ObjectAdapter[] restoreElements(final String referencesList, final KeyCreator keyCreator) {
+    private ObjectAdapter[] restoreElements(final String referencesList) {
         final String[] references = referencesList.split("\\|");
         final ObjectAdapter[] elements = new ObjectAdapter[references.length];
         for (int i = 0; i < references.length; i++) {
-            final ObjectSpecification specification = keyCreator.specificationFromReference(references[i]);
-            final RootOid oid = keyCreator.oidFromReference(references[i]);
+            final ObjectSpecification specification = keyCreator.specificationFromOidStr(references[i]);
+            final RootOid oid = keyCreator.unmarshal(references[i]);
             elements[i] = getAdapter(specification, oid);
         }
         return elements;
@@ -222,7 +242,7 @@ class ObjectReader {
         if (adapter != null) {
             return adapter;
         } 
-        return getPersistenceSession().recreateAdapter(oid, specification);
+        return getPersistenceSession().recreateAdapter(specification, oid);
     }
 
     protected ObjectAdapter getAdapter(final RootOid oid) {
@@ -241,6 +261,11 @@ class ObjectReader {
     protected SpecificationLoader getSpecificationLoader() {
         return IsisContext.getSpecificationLoader();
     }
+
+    protected OidMarshaller getOidMarshaller() {
+        return new OidMarshaller();
+    }
+
 
 
 }

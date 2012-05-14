@@ -17,11 +17,17 @@
  *  under the License.
  */
 
-package org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator;
+package org.apache.isis.runtimes.dflt.objectstores.nosql.db.file;
 
-import org.apache.isis.runtimes.dflt.runtime.system.persistence.OidGenerator;
-
-public interface OidGeneratorAware {
-
-    void setOidGenerator(OidGenerator oidGenerator);
+interface PropertyNames {
+    static final String ENCRYPT = "_encrypt";
+    
+//    static final String TYPE = "_type";
+//    static final String ID = "_id";
+    
+    static final String OID = "_oid";
+    static final String VERSION = "_version";
+    static final String TIME = "_time";
+    static final String USER = "_user";
 }
+

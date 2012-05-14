@@ -26,6 +26,7 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
+import org.apache.isis.core.metamodel.adapter.oid.RootOidDefault;
 import org.apache.isis.runtimes.dflt.objectstores.nosql.db.StateWriter;
 import org.apache.isis.runtimes.dflt.objectstores.nosql.db.file.JsonStateWriter;
 
@@ -45,12 +46,19 @@ public class JsonStateWriterTest {
 
     @Test
     public void basicData() throws Exception {
-        writer.writeId("#1");
+//        writer.writeObjectType("com.planchase.ClassName");
+//        writer.writeId("#1");
+        writer.writeOid(RootOidDefault.deString("com.planchase.ClassName:1"));
         writer.writeTime("ddmmyy");
-        writer.writeType("com.planchase.ClassName");
         writer.writeVersion("1", "2");
         writer.writeUser("fred");
-        assertEquals("{\n    \"_id\": \"#1\",\n    \"_time\": \"ddmmyy\",\n    \"_type\": \"com.planchase.ClassName\",\n    \"_user\": \"fred\",\n    \"_version\": \"2\"\n}", writer.getData());
+        assertEquals("{\n" +
+        		"    \"_oid\": \"com.planchase.ClassName:1\",\n" +
+        		"    \"_time\": \"ddmmyy\",\n" +
+        		"    \"_user\": \"fred\",\n" +
+        		"    \"_version\": \"2\"\n" +
+        		"}", 
+        		writer.getData());
     }
 
     @Test
@@ -101,10 +109,11 @@ public class JsonStateWriterTest {
 
     @Test
     public void requestData() throws Exception {
-        writer.writeType("com.planchase.ClassName");
-        writer.writeId("#8");
+//        writer.writeObjectType("com.planchase.ClassName");
+//        writer.writeId("#8");
+        writer.writeOid(RootOidDefault.deString("com.planchase.ClassName:8"));
         writer.writeVersion("1", "2");
-        assertEquals("com.planchase.ClassName #8 1 2", writer.getRequest());
+        assertEquals("com.planchase.ClassName:8 1 2", writer.getRequest());
     }
 
 }

@@ -22,9 +22,12 @@ package org.apache.isis.runtimes.dflt.testsupport;
 import java.util.Arrays;
 import java.util.List;
 
+import com.google.common.collect.Lists;
+
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
@@ -41,9 +44,12 @@ import org.apache.isis.runtimes.dflt.objectstores.dflt.InMemoryPersistenceMechan
 import org.apache.isis.runtimes.dflt.runtime.installerregistry.installerapi.PersistenceMechanismInstaller;
 import org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager.AdapterManagerPersist;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.ObjectStore;
-import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.PersistenceSessionObjectStore;
 import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
+import org.apache.isis.runtimes.dflt.runtime.system.transaction.IsisTransaction;
+import org.apache.isis.runtimes.dflt.runtime.system.transaction.IsisTransaction.State;
+import org.apache.isis.runtimes.dflt.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.runtimes.dflt.testsupport.IsisSystemWithFixtures.Fixtures.Initialization;
 import org.apache.isis.security.dflt.authentication.AuthenticationRequestDefault;
 import org.apache.isis.tck.dom.eg.ExamplePojoAggregated;
@@ -58,6 +64,38 @@ import org.apache.isis.tck.dom.eg.TestPojoRepository;
  * Wraps a plain {@link IsisSystemDefault}, and provides a number of features to assist with testing.
  */
 public class IsisSystemWithFixtures implements org.junit.rules.TestRule {
+
+    public interface Listener {
+
+        void preSetupSystem(boolean firstTime);
+        void postSetupSystem();
+        
+        void preTeardownSystem();
+        void postTeardownSystem();
+        
+    }
+    
+    public static abstract class ListenerAdapter implements Listener {
+
+        @Override
+        public void preSetupSystem(boolean firstTime) {
+        }
+
+        @Override
+        public void postSetupSystem() {
+        }
+
+        @Override
+        public void preTeardownSystem() {
+        }
+
+        @Override
+        public void postTeardownSystem() {
+        }
+        
+    }
+
+
 
     /**
      * A precanned set of fixtures for use by tests if desired.
@@ -121,6 +159,7 @@ public class IsisSystemWithFixtures implements org.junit.rules.TestRule {
     private final PersistenceMechanismInstaller persistenceMechanismInstaller;
     private final AuthenticationRequest authenticationRequest;
     private final List<Object> services;
+    private List <Listener> listeners;
 
     
     ////////////////////////////////////////////////////////////
@@ -135,6 +174,7 @@ public class IsisSystemWithFixtures implements org.junit.rules.TestRule {
         private IsisConfiguration configuration;
         private PersistenceMechanismInstaller persistenceMechanismInstaller = new InMemoryPersistenceMechanismInstaller();
 
+        private final List <Listener> listeners = Lists.newArrayList();
         private Object[] services;
 
         public Builder with(IsisConfiguration configuration) {
@@ -164,7 +204,14 @@ public class IsisSystemWithFixtures implements org.junit.rules.TestRule {
         
         public IsisSystemWithFixtures build() {
             final List<Object> servicesIfAny = services != null? Arrays.asList(services): null;
-            return new IsisSystemWithFixtures(fixturesInitialization, configuration, persistenceMechanismInstaller, authenticationRequest, servicesIfAny);
+            return new IsisSystemWithFixtures(fixturesInitialization, configuration, persistenceMechanismInstaller, authenticationRequest, servicesIfAny, listeners);
+        }
+
+        public Builder with(Listener listener) {
+            if(listener != null) {
+                listeners.add(listener);
+            }
+            return this;
         }
     }
 
@@ -172,7 +219,7 @@ public class IsisSystemWithFixtures implements org.junit.rules.TestRule {
         return new Builder();
     }
 
-    private IsisSystemWithFixtures(Initialization fixturesInitialization, IsisConfiguration configuration, PersistenceMechanismInstaller persistenceMechanismInstaller, AuthenticationRequest authenticationRequest, List<Object> services) {
+    private IsisSystemWithFixtures(Initialization fixturesInitialization, IsisConfiguration configuration, PersistenceMechanismInstaller persistenceMechanismInstaller, AuthenticationRequest authenticationRequest, List<Object> services, List<Listener> listeners) {
         this.fixturesInitialization = fixturesInitialization;
         this.configuration = configuration;
         this.persistenceMechanismInstaller = persistenceMechanismInstaller;
@@ -182,6 +229,7 @@ public class IsisSystemWithFixtures implements org.junit.rules.TestRule {
             services = Arrays.asList(fixtures.testPojoRepository, fixtures.examplePojoRepository);
         }
         this.services = services;
+        this.listeners = listeners;
     }
 
 
@@ -197,6 +245,8 @@ public class IsisSystemWithFixtures implements org.junit.rules.TestRule {
         Logger.getRootLogger().setLevel(Level.OFF);
 
         boolean firstTime = isisSystem == null;
+        firePreSetupSystem(firstTime);
+        
         if(firstTime) {
             isisSystem = createIsisSystem(services);
             isisSystem.init();
@@ -211,7 +261,9 @@ public class IsisSystemWithFixtures implements org.junit.rules.TestRule {
         if(firstTime && fixturesInitialization == Fixtures.Initialization.INIT) {
             fixtures.init(container);
         }
+        firePostSetupSystem(firstTime);
     }
+
 
     private DomainObjectContainer getContainer() {
         return IsisContext.getPersistenceSession().getServicesInjector().getContainer();
@@ -221,7 +273,9 @@ public class IsisSystemWithFixtures implements org.junit.rules.TestRule {
      * Intended to be called from a test's {@link After} method.
      */
     public void tearDownSystem() throws Exception {
+        firePreTeardownSystem();
         IsisContext.closeSession();
+        firePostTeardownSystem();
     }
 
     public void bounceSystem() throws Exception {
@@ -251,6 +305,34 @@ public class IsisSystemWithFixtures implements org.junit.rules.TestRule {
     }
 
 
+
+    ////////////////////////////////////////////////////////////
+    // listeners
+    ////////////////////////////////////////////////////////////
+
+    private void firePreSetupSystem(boolean firstTime) {
+        for(Listener listener: listeners) {
+            listener.preSetupSystem(firstTime);
+        }
+    }
+
+    private void firePostSetupSystem(boolean firstTime) {
+        for(Listener listener: listeners) {
+            listener.preSetupSystem(firstTime);
+        }
+    }
+
+    private void firePreTeardownSystem() {
+        for(Listener listener: listeners) {
+            listener.preTeardownSystem();
+        }
+    }
+
+    private void firePostTeardownSystem() {
+        for(Listener listener: listeners) {
+            listener.postTeardownSystem();
+        }
+    }
 
     
     ////////////////////////////////////////////////////////////
@@ -306,22 +388,28 @@ public class IsisSystemWithFixtures implements org.junit.rules.TestRule {
         return IsisContext.getPersistenceSession().getAdapterManager().adapterFor(domainObject);
     }
 
+    public ObjectAdapter reload(RootOid oid) {
+        ensureSessionInProgress();
+        final PersistenceSession persistenceSession = IsisContext.getPersistenceSession();
+        return persistenceSession.loadObject(oid);
+    }
+
     public ObjectAdapter recreateAdapter(RootOid oid) {
         ensureSessionInProgress();
         return IsisContext.getPersistenceSession().recreateAdapter(oid);
     }
 
-    public ObjectAdapter remapAsPersistent(RootOid oid, Object pojo) {
+    public ObjectAdapter remapAsPersistent(Object pojo, RootOid persistentOid) {
         ensureSessionInProgress();
         ensureObjectIsNotPersistent(pojo);
         final ObjectAdapter adapter = adapterFor(pojo);
-        ((AdapterManagerPersist)IsisContext.getPersistenceSession().getAdapterManager()).remapAsPersistent(adapter);
+        getAdapterManagerPersist().remapAsPersistent(adapter, persistentOid);
         return adapter;
     }
 
     @SuppressWarnings("unchecked")
     public <T extends ObjectStore> T getObjectStore(Class<T> cls) {
-        final PersistenceSessionObjectStore persistenceSession = (PersistenceSessionObjectStore) IsisContext.getPersistenceSession();
+        final PersistenceSession persistenceSession = IsisContext.getPersistenceSession();
         return (T) persistenceSession.getObjectStore();
     }
 
@@ -363,6 +451,82 @@ public class IsisSystemWithFixtures implements org.junit.rules.TestRule {
     }
 
 
+    
+    private AdapterManagerPersist getAdapterManagerPersist() {
+        return (AdapterManagerPersist)IsisContext.getPersistenceSession().getAdapterManager();
+    }
+
+    public void beginTran() {
+        final IsisTransactionManager transactionManager = IsisContext.getPersistenceSession().getTransactionManager();
+        final IsisTransaction transaction = transactionManager.getTransaction();
+
+        if(transaction == null) {
+            transactionManager.startTransaction();
+            return;
+        } 
+
+        final State state = transaction.getState();
+        switch(state) {
+            case COMMITTED:
+            case ABORTED:
+                transactionManager.startTransaction();
+                break;
+            case IN_PROGRESS:
+                // nothing to do
+                break;
+            case MUST_ABORT:
+                Assert.fail("Transaction is in state of '" + state + "'");
+                break;
+            default:
+                Assert.fail("Unknown transaction state '" + state + "'");
+        }
+        
+    }
+
+    public void commitTran() {
+        final IsisTransactionManager transactionManager = IsisContext.getPersistenceSession().getTransactionManager();
+        final IsisTransaction transaction = transactionManager.getTransaction();
+        if(transaction == null) {
+            Assert.fail("No transaction exists");
+            return;
+        } 
+        final State state = transaction.getState();
+        switch(state) {
+            case COMMITTED:
+            case ABORTED:
+            case MUST_ABORT:
+                Assert.fail("Transaction is in state of '" + state + "'");
+                break;
+            case IN_PROGRESS:
+                transactionManager.endTransaction();
+                break;
+            default:
+                Assert.fail("Unknown transaction state '" + state + "'");
+        }
+    }
+
+    public void abortTran() {
+        final IsisTransactionManager transactionManager = IsisContext.getPersistenceSession().getTransactionManager();
+        final IsisTransaction transaction = transactionManager.getTransaction();
+        if(transaction == null) {
+            Assert.fail("No transaction exists");
+            return;
+        } 
+        final State state = transaction.getState();
+        switch(state) {
+            case ABORTED:
+                break;
+            case COMMITTED:
+                Assert.fail("Transaction is in state of '" + state + "'");
+                break;
+            case MUST_ABORT:
+            case IN_PROGRESS:
+                transactionManager.abortTransaction();
+                break;
+            default:
+                Assert.fail("Unknown transaction state '" + state + "'");
+        }
+    }
 
     
 }

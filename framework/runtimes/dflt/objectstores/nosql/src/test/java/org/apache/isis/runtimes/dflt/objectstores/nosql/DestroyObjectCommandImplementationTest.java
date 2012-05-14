@@ -26,12 +26,13 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOidDefault;
 import org.apache.isis.core.metamodel.adapter.version.SerialNumberVersion;
+import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2;
 import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2.Mode;
-import org.apache.isis.runtimes.dflt.objectstores.nosql.keys.KeyCreatorDefault;
 import org.apache.isis.runtimes.dflt.objectstores.nosql.versions.VersionCreatorDefault;
 
 public class DestroyObjectCommandImplementationTest {
@@ -45,33 +46,40 @@ public class DestroyObjectCommandImplementationTest {
     private ObjectSpecification specification;
     @Mock
     private ObjectAdapter adapter;
-    @Mock
-    private RootOidDefault oid;
+    
     @Mock
     private VersionCreatorDefault versionCreator;
     @Mock
-    private KeyCreatorDefault keyCreator;
-    @Mock
     private SerialNumberVersion version;
 
+    //private KeyCreatorDefault keyCreator;
+
+    private final ObjectSpecId specId = ObjectSpecId.of("com.foo.bar.SomeClass");
 
     private long id = 123;
     private String keyStr = Long.toString(id, 16);
-    
+
+    private RootOid rootOid = RootOidDefault.create(specId, keyStr);
+
     private NoSqlDestroyObjectCommand command;
 
     @Before
     public void setup() {
+        //keyCreator = new KeyCreatorDefault();
+        
         context.checking(new Expectations(){{
 
             allowing(specification).getFullIdentifier();
             will(returnValue("com.foo.bar.SomeClass"));
 
+            allowing(specification).getSpecId();
+            will(returnValue(specId));
+
             allowing(adapter).getSpecification();
             will(returnValue(specification));
             
             allowing(adapter).getOid();
-            will(returnValue(oid));
+            will(returnValue(rootOid));
 
             allowing(adapter).getVersion();
             will(returnValue(version));
@@ -86,17 +94,17 @@ public class DestroyObjectCommandImplementationTest {
 
         context.checking(new Expectations() {
             {
-                one(keyCreator).key(oid);
-                will(returnValue(keyStr));
+//                one(keyCreator).getIdentifierForPersistentRoot(oid);
+//                will(returnValue(keyStr));
 
                 one(versionCreator).versionString(version);
                 will(returnValue(versionStr));
 
-                one(commandContext).delete(specification.getFullIdentifier(), keyStr, versionStr);
+                one(commandContext).delete(specification.getSpecId(), keyStr, versionStr);
             }
         });
 
-        command = new NoSqlDestroyObjectCommand(keyCreator, versionCreator, adapter);
+        command = new NoSqlDestroyObjectCommand(versionCreator, adapter);
         command.execute(commandContext);
     }
 }

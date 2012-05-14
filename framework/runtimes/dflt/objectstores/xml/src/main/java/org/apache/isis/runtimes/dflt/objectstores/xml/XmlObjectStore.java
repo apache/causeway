@@ -32,9 +32,9 @@ import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.xml.XmlFile;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
-import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOidDefault;
+import org.apache.isis.core.metamodel.adapter.oid.TypedOid;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacetUtils;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
@@ -127,7 +127,7 @@ public class XmlObjectStore implements ObjectStore {
     @Override
     public boolean hasInstances(final ObjectSpecification cls) {
         LOG.debug("checking instance of " + cls);
-        final ObjectData data = new ObjectData(null, null);
+        final ObjectData data = new ObjectData(RootOidDefault.create(cls.getSpecId(), "---dummy-value-never-used---"), null);
         return dataManager.numberOfInstances(data) > 0;
     }
 
@@ -186,7 +186,7 @@ public class XmlObjectStore implements ObjectStore {
         final Data fieldData = dataManager.loadData(referenceOid);
 
         if (fieldData == null) {
-            final ObjectAdapter adapter = getPersistenceSession().recreateAdapter(referenceOid, field.getSpecification());
+            final ObjectAdapter adapter = getPersistenceSession().recreateAdapter(field.getSpecification(), referenceOid);
             if (!adapter.getResolveState().isDestroyed()) {
                 adapter.changeState(ResolveState.DESTROYED);
             }
@@ -194,7 +194,7 @@ public class XmlObjectStore implements ObjectStore {
 
             LOG.warn("No data found for " + referenceOid + " so field '" + field.getName() + "' not set in object '" + object.titleString() + "'");
         } else {
-            final ObjectAdapter reference = getPersistenceSession().recreateAdapter(referenceOid, specFor(fieldData));
+            final ObjectAdapter reference = getPersistenceSession().recreateAdapter(specFor(fieldData), referenceOid);
             ((OneToOneAssociation) field).initAssociation(object, reference);
         }
 
@@ -236,7 +236,7 @@ public class XmlObjectStore implements ObjectStore {
                 ObjectAdapter adapter;
                 adapter = getAdapterManager().getAdapterFor(elementOid);
                 if (adapter == null) {
-                    adapter = getObject(elementOid, null);
+                    adapter = getObject(elementOid);
                 }
                 elements[j] = adapter;
             }
@@ -301,8 +301,9 @@ public class XmlObjectStore implements ObjectStore {
     // getObject, resolveImmediately, resolveField
     // /////////////////////////////////////////////////////////
 
+
     @Override
-    public ObjectAdapter getObject(final Oid oid, final ObjectSpecification hint) {
+    public ObjectAdapter getObject(final TypedOid oid) {
         LOG.debug("getObject " + oid);
         final Data data = dataManager.loadData((RootOidDefault) oid);
         LOG.debug("  data read " + data);
@@ -339,7 +340,7 @@ public class XmlObjectStore implements ObjectStore {
     private ObjectAdapter recreateObject(final ObjectData data) {
         final RootOid oid = data.getRootOid();
         final ObjectSpecification spec = specFor(data);
-        final ObjectAdapter object = getPersistenceSession().recreateAdapter(oid, spec);
+        final ObjectAdapter object = getPersistenceSession().recreateAdapter(spec, oid);
         initObject(object, data);
         return object;
     }
@@ -358,7 +359,7 @@ public class XmlObjectStore implements ObjectStore {
 
         final ObjectSpecification objSpec = builtIn.getSpecification();
         LOG.debug("getInstances of " + objSpec + " where " + builtIn);
-        final RootOid oid = RootOidDefault.create(objSpec.getObjectType(), "dummy");
+        final RootOid oid = RootOidDefault.create(objSpec.getSpecId(), "dummy");
         final ObjectData patternData = new ObjectData(oid, null);
         final ObjectAdapter[] instances = getInstances(patternData, builtIn);
         return instances;
@@ -376,7 +377,7 @@ public class XmlObjectStore implements ObjectStore {
             final RootOid oid = instanceData.getRootOid();
 
             final ObjectSpecification spec = specFor(instanceData);
-            final ObjectAdapter instance = getPersistenceSession().recreateAdapter(oid, spec);
+            final ObjectAdapter instance = getPersistenceSession().recreateAdapter(spec, oid);
             LOG.debug("recreated instance " + instance);
             initObject(instance, instanceData);
 
@@ -391,7 +392,7 @@ public class XmlObjectStore implements ObjectStore {
     }
 
     private ObjectSpecification specFor(final Data data) {
-        return getSpecificationLoader().lookupByObjectType(data.getObjectType());
+        return getSpecificationLookup().lookupBySpecId(data.getObjectSpecId());
     }
 
     // /////////////////////////////////////////////////////////
@@ -400,7 +401,7 @@ public class XmlObjectStore implements ObjectStore {
 
     @Override
     public RootOid getOidForService(ObjectSpecification serviceSpec) {
-        return serviceManager.getOidForService(serviceSpec.getObjectType());
+        return serviceManager.getOidForService(serviceSpec.getSpecId());
     }
 
     @Override
@@ -439,7 +440,7 @@ public class XmlObjectStore implements ObjectStore {
     // Dependencies (from singleton)
     // /////////////////////////////////////////////////////////
 
-    protected SpecificationLoader getSpecificationLoader() {
+    protected SpecificationLoader getSpecificationLookup() {
         return IsisContext.getSpecificationLoader();
     }
 

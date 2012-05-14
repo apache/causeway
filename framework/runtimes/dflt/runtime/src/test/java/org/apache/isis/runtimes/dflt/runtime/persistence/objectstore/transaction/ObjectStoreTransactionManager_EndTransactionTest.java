@@ -27,11 +27,13 @@ import org.jmock.Sequence;
 import org.junit.Before;
 import org.junit.Test;
 
+import org.apache.isis.runtimes.dflt.runtime.system.transaction.IsisTransactionManager;
+
 public class ObjectStoreTransactionManager_EndTransactionTest extends ObjectStoreTransactionManagerAbstractTestCase {
 
     @Before
     public void setUpTransactionManager() throws Exception {
-        transactionManager = new ObjectStoreTransactionManager(mockPersistenceSession, mockObjectStore);
+        transactionManager = new IsisTransactionManager(mockPersistenceSession, mockObjectStore);
     }
 
     @Test
@@ -41,9 +43,9 @@ public class ObjectStoreTransactionManager_EndTransactionTest extends ObjectStor
         transactionManager.startTransaction();
         transactionManager.startTransaction();
 
-        assertThat(transactionManager.transactionLevel, is(2));
+        assertThat(transactionManager.getTransactionLevel(), is(2));
         transactionManager.endTransaction();
-        assertThat(transactionManager.transactionLevel, is(1));
+        assertThat(transactionManager.getTransactionLevel(), is(1));
     }
 
     @Test
@@ -52,14 +54,14 @@ public class ObjectStoreTransactionManager_EndTransactionTest extends ObjectStor
         ignoreCallsToObjectStore();
         transactionManager.startTransaction();
 
-        mockery.checking(new Expectations() {
+        context.checking(new Expectations() {
             {
                 one(mockPersistenceSession).objectChangedAllDirty();
             }
         });
-        assertThat(transactionManager.transactionLevel, is(1));
+        assertThat(transactionManager.getTransactionLevel(), is(1));
         transactionManager.endTransaction();
-        assertThat(transactionManager.transactionLevel, is(0));
+        assertThat(transactionManager.getTransactionLevel(), is(0));
     }
 
     @Test
@@ -67,7 +69,7 @@ public class ObjectStoreTransactionManager_EndTransactionTest extends ObjectStor
         // setup
         ignoreCallsToPersistenceSession();
 
-        mockery.checking(new Expectations() {
+        context.checking(new Expectations() {
             {
                 one(mockObjectStore).startTransaction();
             }
@@ -81,9 +83,9 @@ public class ObjectStoreTransactionManager_EndTransactionTest extends ObjectStor
         // setup
         ignoreCallsToPersistenceSession();
 
-        mockery.checking(new Expectations() {
+        context.checking(new Expectations() {
             {
-                final Sequence transactionOrdering = mockery.sequence("transactionOrdering");
+                final Sequence transactionOrdering = context.sequence("transactionOrdering");
                 one(mockObjectStore).startTransaction();
                 inSequence(transactionOrdering);
 

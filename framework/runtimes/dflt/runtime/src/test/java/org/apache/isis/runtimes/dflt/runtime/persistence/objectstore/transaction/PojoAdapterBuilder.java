@@ -32,6 +32,7 @@ import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOidDefault;
 import org.apache.isis.core.metamodel.adapter.version.Version;
+import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.runtimes.dflt.runtime.persistence.adapterfactory.pojo.PojoAdapter;
@@ -51,7 +52,7 @@ public class PojoAdapterBuilder {
     
     private ObjectAdapterLookup objectAdapterLookup;
     
-    private String objectType = "CUS";
+    private ObjectSpecId objectSpecId = ObjectSpecId.of("CUS");
     private String identifier = "1";
     // only used if type is AGGREGATED
     private String aggregatedId = "firstName";
@@ -69,8 +70,8 @@ public class PojoAdapterBuilder {
     public static enum Persistence {
         TRANSIENT {
             @Override
-            Oid createOid(String objectType, String identifier) {
-                return RootOidDefault.createTransient(objectType, identifier);
+            RootOid createOid(ObjectSpecId objectSpecId, String identifier) {
+                return RootOidDefault.createTransient(objectSpecId, identifier);
             }
 
             @Override
@@ -80,8 +81,8 @@ public class PojoAdapterBuilder {
         },
         PERSISTENT {
             @Override
-            Oid createOid(String objectType, String identifier) {
-                return RootOidDefault.create(objectType, identifier);
+            RootOid createOid(ObjectSpecId objectSpecId, String identifier) {
+                return RootOidDefault.create(objectSpecId, identifier);
             }
 
             @Override
@@ -92,7 +93,7 @@ public class PojoAdapterBuilder {
         }, 
         VALUE {
             @Override
-            Oid createOid(String objectType, String identifier) {
+            RootOid createOid(ObjectSpecId objectSpecId, String identifier) {
                 return null;
             }
 
@@ -101,7 +102,7 @@ public class PojoAdapterBuilder {
                 pojoAdapter.changeState(ResolveState.VALUE);
             }
         };
-        abstract Oid createOid(String objectType, String identifier);
+        abstract RootOid createOid(ObjectSpecId objectSpecId, String identifier);
 
         abstract void changeStateOn(PojoAdapter pojoAdapter);
     }
@@ -109,27 +110,27 @@ public class PojoAdapterBuilder {
     public static enum Type {
         ROOT {
             @Override
-            Oid oidFor(Oid oid, String aggregatedId) {
-                return oid;
+            Oid oidFor(RootOid rootOid, ObjectSpecId objectSpecId, String unused) {
+                return rootOid;
             }
         }, AGGREGATED {
             @Override
-            Oid oidFor(Oid oid, String localId) {
-                return new AggregatedOid(oid, localId);
+            Oid oidFor(RootOid rootOid, ObjectSpecId objectSpecId, String aggregateLocalId) {
+                return new AggregatedOid(objectSpecId, rootOid, aggregateLocalId);
             }
         }, COLLECTION {
             @Override
-            Oid oidFor(Oid oid, String collectionName) {
-                return new CollectionOid(oid, collectionName);
+            Oid oidFor(RootOid rootOid, ObjectSpecId objectSpecId, String collectionId) {
+                return new CollectionOid(rootOid, collectionId);
             }
         }, VALUE {
             @Override
-            Oid oidFor(Oid oid, String aggregatedId) {
+            Oid oidFor(RootOid rootOid, ObjectSpecId objectSpecId, String unused) {
                 return null;
             }
         };
 
-        abstract Oid oidFor(Oid oid, String aggregatedId);
+        abstract Oid oidFor(RootOid rootOid, ObjectSpecId objectSpecId, String supplementalId);
     }
 
     public static PojoAdapterBuilder create() {
@@ -147,7 +148,7 @@ public class PojoAdapterBuilder {
     }
     
     public PojoAdapterBuilder withObjectType(String objectType) {
-        this.objectType = objectType;
+        this.objectSpecId = ObjectSpecId.of(objectType);
         return this;
     }
     
@@ -220,9 +221,9 @@ public class PojoAdapterBuilder {
     }
 
     public PojoAdapter build() {
-        Oid oid = persistence.createOid(objectType, identifier);
-        oid = type.oidFor(oid, aggregatedId);
-        PojoAdapter pojoAdapter = new PojoAdapter(pojo, oid, specificationLoader, objectAdapterLookup, localization) {
+        final RootOid rootOid = persistence.createOid(objectSpecId, identifier);
+        final Oid oid = type.oidFor(rootOid, objectSpecId, aggregatedId);
+        final PojoAdapter pojoAdapter = new PojoAdapter(pojo, oid, specificationLoader, objectAdapterLookup, localization) {
             @Override
             public ObjectSpecification getSpecification() { return objectSpec != null? objectSpec: super.getSpecification(); }
             @Override

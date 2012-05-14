@@ -29,11 +29,14 @@ import org.jmock.Expectations;
 import org.junit.Before;
 import org.junit.Test;
 
+import org.apache.isis.runtimes.dflt.runtime.system.transaction.IsisTransaction;
+import org.apache.isis.runtimes.dflt.runtime.system.transaction.IsisTransactionManager;
+
 public class ObjectStoreTransactionManager_StartTransactionTest extends ObjectStoreTransactionManagerAbstractTestCase {
 
     @Before
     public void setUpTransactionManager() throws Exception {
-        transactionManager = new ObjectStoreTransactionManager(mockPersistenceSession, mockObjectStore);
+        transactionManager = new IsisTransactionManager(mockPersistenceSession, mockObjectStore);
     }
 
     @Before
@@ -56,7 +59,7 @@ public class ObjectStoreTransactionManager_StartTransactionTest extends ObjectSt
 
         // cause a transaction to be created
         transactionManager.startTransaction();
-        final ObjectStoreTransaction transactionAfterFirstStart = transactionManager.getTransaction();
+        final IsisTransaction transactionAfterFirstStart = transactionManager.getTransaction();
 
         transactionManager.startTransaction();
 
@@ -67,14 +70,14 @@ public class ObjectStoreTransactionManager_StartTransactionTest extends ObjectSt
     public void startTransactionIncrementsTransactionLevel() throws Exception {
         ignoreCallsToObjectStore();
 
-        assertThat(transactionManager.transactionLevel, is(0));
+        assertThat(transactionManager.getTransactionLevel(), is(0));
         transactionManager.startTransaction();
-        assertThat(transactionManager.transactionLevel, is(1));
+        assertThat(transactionManager.getTransactionLevel(), is(1));
     }
 
     @Test
     public void startTransactionCallsStartTransactionOnObjectStore() throws Exception {
-        mockery.checking(new Expectations() {
+        context.checking(new Expectations() {
             {
                 one(mockObjectStore).startTransaction();
             }

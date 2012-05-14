@@ -33,16 +33,16 @@ import org.junit.Test;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
-import org.apache.isis.core.metamodel.specloader.ObjectReflector;
+import org.apache.isis.core.metamodel.spec.SpecificationLoader;
+import org.apache.isis.core.metamodel.spec.SpecificationLoaderAware;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authentication.standard.SimpleSession;
 import org.apache.isis.core.runtime.authorization.AuthorizationManager;
 import org.apache.isis.core.runtime.imageloader.TemplateImageLoader;
-import org.apache.isis.core.runtime.userprofile.UserProfile;
 import org.apache.isis.core.runtime.userprofile.UserProfileLoader;
+import org.apache.isis.core.testsupport.jmock.IsisActions;
 import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2;
 import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2.Mode;
-import org.apache.isis.runtimes.dflt.runtime.persistence.internal.RuntimeContextFromSession;
 import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContextStatic;
@@ -63,7 +63,7 @@ public class IsisContextTest {
     private PersistenceSession mockPersistenceSession;
     
     @Mock
-    private ObjectReflector mockReflector;
+    private SpecificationLoader mockSpecificationLoader;
 
     @Mock
     protected TemplateImageLoader mockTemplateImageLoader;
@@ -98,8 +98,7 @@ public class IsisContextTest {
                 will(returnValue(mockPersistenceSession));
                 
                 ignoring(mockPersistenceSession);
-
-                ignoring(mockReflector);
+                ignoring(mockSpecificationLoader);
                 ignoring(mockPersistenceSessionFactory);
                 ignoring(mockUserProfileLoader);
                 ignoring(mockAuthenticationManager);
@@ -108,7 +107,7 @@ public class IsisContextTest {
             }
         });
 
-        sessionFactory = new IsisSessionFactoryDefault(DeploymentType.EXPLORATION, configuration, mockTemplateImageLoader, mockReflector, mockAuthenticationManager, mockAuthorizationManager, mockUserProfileLoader, mockPersistenceSessionFactory, servicesList);
+        sessionFactory = new IsisSessionFactoryDefault(DeploymentType.EXPLORATION, configuration, mockTemplateImageLoader, mockSpecificationLoader, mockAuthenticationManager, mockAuthorizationManager, mockUserProfileLoader, mockPersistenceSessionFactory, servicesList);
         authSession = new SimpleSession("tester", Collections.<String>emptyList());
         
         IsisContext.setConfiguration(configuration);
@@ -116,7 +115,9 @@ public class IsisContextTest {
     
     @After
     public void tearDown() throws Exception {
-        IsisContext.closeSession();
+        if(IsisContext.inSession()) {
+            IsisContext.closeSession();
+        }
     }
     
     @Test
@@ -130,7 +131,7 @@ public class IsisContextTest {
         IsisContextStatic.createRelaxedInstance(sessionFactory);
         IsisContext.openSession(authSession);
 
-        Assert.assertEquals(mockReflector, IsisContext.getSpecificationLoader());
+        Assert.assertEquals(mockSpecificationLoader, IsisContext.getSpecificationLoader());
     }
 
     @Test

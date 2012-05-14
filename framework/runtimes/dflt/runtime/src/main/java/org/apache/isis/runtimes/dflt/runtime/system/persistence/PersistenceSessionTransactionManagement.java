@@ -20,7 +20,6 @@
 package org.apache.isis.runtimes.dflt.runtime.system.persistence;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.spec.Dirtiable;
 import org.apache.isis.runtimes.dflt.runtime.system.transaction.IsisTransactionManager;
 
@@ -43,7 +42,5 @@ public interface PersistenceSessionTransactionManagement {
     void objectChangedAllDirty();
 
     void clearAllDirty();
-
-    ObjectAdapter reload(Oid oid);
 
 }

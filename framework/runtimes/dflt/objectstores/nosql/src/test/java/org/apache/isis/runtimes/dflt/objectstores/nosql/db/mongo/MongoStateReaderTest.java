@@ -35,11 +35,13 @@ import org.apache.log4j.Logger;
 import org.junit.Before;
 import org.junit.Test;
 
+import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.runtimes.dflt.objectstores.nosql.db.mongo.MongoStateReader;
 
 public class MongoStateReaderTest {
 
-    private static final String SPEC_NAME = "org.test.Object";
+    private static final String OBJECT_TYPE = "org.test.Object";
+    
     private DB testDb;
     private MongoStateReader reader;
 
@@ -59,17 +61,20 @@ public class MongoStateReaderTest {
         testDb = m.getDB("mydb");
 
         final BasicDBObject object = new BasicDBObject();
-        object.put("_id", "1023");
-        object.put("_type", "org.xxx.Class");
+//        object.put("_id", "1023");
+//        object.put("_type", "org.xxx.Class");
+        object.put("_oid", OBJECT_TYPE + ":1023");
+        object.put("_id", "1023"); // the MongoDB internal identifier
+
         object.put("name", "Fred Smith");
         object.put("null name", "null");
         object.put("null name 2", null);
         object.put("number", "102");
         object.put("null number", "null");
-        final DBCollection instances = testDb.getCollection(SPEC_NAME);
+        final DBCollection instances = testDb.getCollection(OBJECT_TYPE);
         instances.insert(object);
 
-        reader = new MongoStateReader(testDb, SPEC_NAME, "1023");
+        reader = new MongoStateReader(testDb, ObjectSpecId.of(OBJECT_TYPE), "1023");
     }
 
     @Test
@@ -93,9 +98,19 @@ public class MongoStateReaderTest {
         assertEquals(null, reader.readField("null name 2"));
     }
 
+//    @Test
+//    public void readType() throws Exception {
+//        assertEquals("org.xxx.Class", reader.readObjectType());
+//    }
+//
+//    @Test
+//    public void readId() throws Exception {
+//        assertEquals("1023", reader.readId());
+//    }
+
     @Test
-    public void readType() throws Exception {
-        assertEquals("org.xxx.Class", reader.readObjectType());
+    public void readOid() throws Exception {
+        assertEquals(OBJECT_TYPE + ":1023", reader.readOid());
     }
 
     @Test
@@ -113,8 +128,4 @@ public class MongoStateReaderTest {
         assertEquals(0L, reader.readLongField("unknown"));
     }
 
-    @Test
-    public void readId() throws Exception {
-        assertEquals("1023", reader.readId());
-    }
 }

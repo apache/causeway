@@ -20,8 +20,9 @@
 package org.apache.isis.runtimes.dflt.objectstores.dflt.internal;
 
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.serial.RootOidGenerator.Memento;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.IdentifierGeneratorDefault;
 
 /**
  * Represents the persisted objects.
@@ -30,13 +31,13 @@ import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.serial.Roo
  */
 public interface ObjectStorePersistedObjects {
 
-    public Memento getOidGeneratorMemento();
+    public IdentifierGeneratorDefault.Memento getOidGeneratorMemento();
 
-    public void saveOidGeneratorMemento(Memento memento);
+    public void saveOidGeneratorMemento(IdentifierGeneratorDefault.Memento memento);
 
-    public void registerService(String name, Oid oid);
+    public void registerService(ObjectSpecId objectSpecId, Oid oid);
 
-    public Oid getService(String name);
+    public Oid getService(ObjectSpecId objectSpecId);
 
     public Iterable<ObjectSpecification> specifications();
 

@@ -25,8 +25,8 @@ import org.apache.isis.core.commons.config.IsisConfigurationException;
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.factory.InstanceCreationException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
+import org.apache.isis.core.metamodel.adapter.oid.TypedOid;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.runtime.logging.Logger;
@@ -39,91 +39,92 @@ import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceQuery;
 import org.apache.isis.runtimes.dflt.runtime.transaction.ObjectPersistenceException;
 
-public class IsisStoreLogger extends Logger implements ObjectStore {
-    private final ObjectStore decorated;
+public class IsisObjectStoreLogger extends Logger implements ObjectStore {
+    private final ObjectStore underlying;
 
-    public IsisStoreLogger(final ObjectStore decorated, final String level) {
+    public IsisObjectStoreLogger(final ObjectStore decorated, final String level) {
         super(level);
-        this.decorated = decorated;
+        this.underlying = decorated;
     }
 
-    public IsisStoreLogger(final ObjectStore decorated) {
-        this.decorated = decorated;
+    public IsisObjectStoreLogger(final ObjectStore decorated) {
+        this.underlying = decorated;
     }
 
     @Override
     public CreateObjectCommand createCreateObjectCommand(final ObjectAdapter object) {
         log("create object " + object);
-        return decorated.createCreateObjectCommand(object);
+        return underlying.createCreateObjectCommand(object);
     }
 
     @Override
     public void registerService(final RootOid rootOid) {
         log("registering service: " + rootOid.enString());
-        decorated.registerService(rootOid);
+        underlying.registerService(rootOid);
     }
 
     @Override
     public DestroyObjectCommand createDestroyObjectCommand(final ObjectAdapter object) {
         log("destroy object " + object);
-        return decorated.createDestroyObjectCommand(object);
+        return underlying.createDestroyObjectCommand(object);
     }
 
     @Override
     public SaveObjectCommand createSaveObjectCommand(final ObjectAdapter object) {
         log("save object " + object);
-        return decorated.createSaveObjectCommand(object);
+        return underlying.createSaveObjectCommand(object);
     }
 
     @Override
     public void debugData(final DebugBuilder debug) {
-        decorated.debugData(debug);
+        underlying.debugData(debug);
     }
 
     @Override
     public String debugTitle() {
-        return decorated.debugTitle();
+        return underlying.debugTitle();
     }
 
     @Override
     protected Class<?> getDecoratedClass() {
-        return decorated.getClass();
+        return underlying.getClass();
     }
 
     @Override
     public ObjectAdapter[] getInstances(final PersistenceQuery criteria) throws ObjectPersistenceException, UnsupportedFindException {
         log("get instances matching " + criteria);
-        return decorated.getInstances(criteria);
+        return underlying.getInstances(criteria);
     }
 
+
     @Override
-    public ObjectAdapter getObject(final Oid oid, final ObjectSpecification hint) throws ObjectNotFoundException, ObjectPersistenceException {
-        final ObjectAdapter object = decorated.getObject(oid, hint);
-        log("get object for " + oid + " (of type " + hint.getShortIdentifier() + ")", object.getObject());
-        return object;
+    public ObjectAdapter getObject(final TypedOid oid) throws ObjectNotFoundException, ObjectPersistenceException {
+        final ObjectAdapter adapter = underlying.getObject(oid);
+        log("get object for " + oid + " (of type '" + oid.getObjectSpecId() + "')", adapter.getObject());
+        return adapter;
     }
 
     @Override
     public RootOid getOidForService(ObjectSpecification serviceSpec) {
-        final RootOid serviceOid = decorated.getOidForService(serviceSpec);
+        final RootOid serviceOid = underlying.getOidForService(serviceSpec);
         if(serviceOid != null) {
             log("get OID for service: " + serviceOid.enString());
         } else {
-            log("get OID for service: null (presumably in the process of being registered for '" + serviceSpec.getObjectType() + "')");
+            log("get OID for service: null (presumably in the process of being registered for '" + serviceSpec.getSpecId() + "')");
         }
         return serviceOid;
     }
 
     @Override
     public boolean hasInstances(final ObjectSpecification specification) throws ObjectPersistenceException {
-        final boolean hasInstances = decorated.hasInstances(specification);
+        final boolean hasInstances = underlying.hasInstances(specification);
         log("has instances of " + specification.getShortIdentifier(), "" + hasInstances);
         return hasInstances;
     }
 
     @Override
     public boolean isFixturesInstalled() {
-        final boolean isInitialized = decorated.isFixturesInstalled();
+        final boolean isInitialized = underlying.isFixturesInstalled();
         log("is initialized: " + isInitialized);
         return isInitialized;
     }
@@ -131,30 +132,30 @@ public class IsisStoreLogger extends Logger implements ObjectStore {
     @Override
     public void open() throws IsisConfigurationException, InstanceCreationException, ObjectPersistenceException {
         log("opening " + name());
-        decorated.open();
+        underlying.open();
     }
 
     @Override
     public String name() {
-        return decorated.name();
+        return underlying.name();
     }
 
     @Override
     public void reset() {
         log("reset");
-        decorated.reset();
+        underlying.reset();
     }
 
     @Override
     public void resolveField(final ObjectAdapter object, final ObjectAssociation field) throws ObjectPersistenceException {
         log("resolve eagerly object in field " + field + " of " + object);
-        decorated.resolveField(object, field);
+        underlying.resolveField(object, field);
     }
 
     @Override
     public void resolveImmediately(final ObjectAdapter object) throws ObjectPersistenceException {
         log("resolve immediately: " + object);
-        decorated.resolveImmediately(object);
+        underlying.resolveImmediately(object);
     }
 
     @Override
@@ -164,28 +165,27 @@ public class IsisStoreLogger extends Logger implements ObjectStore {
         for (final PersistenceCommand command : commands) {
             log("  " + (i++) + " " + command);
         }
-        decorated.execute(commands);
+        underlying.execute(commands);
     }
 
     @Override
     public void close() throws ObjectPersistenceException {
-        log("closing " + decorated);
-        decorated.close();
+        log("closing " + underlying);
+        underlying.close();
     }
 
     @Override
     public void startTransaction() {
-        decorated.startTransaction();
+        underlying.startTransaction();
     }
 
     @Override
     public void endTransaction() {
-        decorated.endTransaction();
+        underlying.endTransaction();
     }
 
     @Override
     public void abortTransaction() {
-        decorated.abortTransaction();
+        underlying.abortTransaction();
     }
-
 }

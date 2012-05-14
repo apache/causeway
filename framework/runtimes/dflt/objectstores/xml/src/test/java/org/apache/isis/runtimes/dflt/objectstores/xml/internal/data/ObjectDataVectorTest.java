@@ -26,7 +26,9 @@ import java.util.Collections;
 import org.junit.Before;
 import org.junit.Test;
 
+import org.apache.isis.core.metamodel.adapter.oid.Oid.State;
 import org.apache.isis.core.metamodel.adapter.oid.RootOidDefault;
+import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.testspec.ObjectSpecificationStub;
 import org.apache.isis.runtimes.dflt.objectstores.xml.internal.version.FileVersion;
 
@@ -42,8 +44,8 @@ public class ObjectDataVectorTest {
 
     @Before
     public void setUp() throws Exception {
-        final boolean isTransient = true;
-        oid = isTransient ? RootOidDefault.createTransient(objectType, ""+1) : RootOidDefault.create(objectType, ""+1);
+        final ObjectSpecId objectSpecId = ObjectSpecId.of(objectType);
+        oid = new RootOidDefault(objectSpecId, ""+1, State.TRANSIENT);
 
         spec = new ObjectSpecificationStub(this.getClass());
         spec.fields = Collections.emptyList();

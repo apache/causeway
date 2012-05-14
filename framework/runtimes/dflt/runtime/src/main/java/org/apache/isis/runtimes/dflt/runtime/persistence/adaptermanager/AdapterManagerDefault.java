@@ -36,6 +36,7 @@ import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.ensure.Ensure;
+import org.apache.isis.core.commons.ensure.IsisAssertException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterFactory;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterFactoryAware;
@@ -44,6 +45,7 @@ import org.apache.isis.core.metamodel.adapter.oid.AggregatedOid;
 import org.apache.isis.core.metamodel.adapter.oid.CollectionOid;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
+import org.apache.isis.core.metamodel.adapter.oid.TypedOid;
 import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.facets.accessor.PropertyOrCollectionAccessorFacet;
 import org.apache.isis.core.metamodel.facets.object.aggregated.ParentedFacet;
@@ -52,17 +54,17 @@ import org.apache.isis.core.metamodel.facets.typeof.ElementSpecificationProvider
 import org.apache.isis.core.metamodel.facets.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.runtimecontext.DependencyInjector;
 import org.apache.isis.core.metamodel.runtimecontext.DependencyInjectorAware;
+import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderAware;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager.internal.OidAdapterHashMap;
 import org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager.internal.OidAdapterMap;
 import org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager.internal.PojoAdapterHashMap;
 import org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager.internal.PojoAdapterMap;
-import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.OidGeneratorAware;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.OidGenerator;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.OidGeneratorAware;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 
 public class AdapterManagerDefault extends AdapterManagerAbstract implements ObjectAdapterFactoryAware, SpecificationLoaderAware, OidGeneratorAware, DependencyInjectorAware, DebuggableWithTitle {
@@ -207,7 +209,7 @@ public class AdapterManagerDefault extends AdapterManagerAbstract implements Obj
      * {@inheritDoc}
      */
     @Override
-    public ObjectAdapter adapterFor(final Object pojo, final ObjectAdapter parentAdapter, final ObjectAssociation association) {
+    public ObjectAdapter adapterFor(final Object pojo, final ObjectAdapter parentAdapter, final OneToManyAssociation collection) {
 
         // attempt to locate adapter for the pojo
         final ObjectAdapter adapter = getAdapterFor(pojo);
@@ -226,22 +228,16 @@ public class AdapterManagerDefault extends AdapterManagerAbstract implements Obj
         // as explained in the AdapterMap javadoc
         final ObjectAdapter newAdapter;
         if (parentAdapter != null) {
-            if (association != null) {
-                if(association.isOneToManyAssociation()) {
-                    // the List, Set etc. instance gets wrapped in its own adapter
-                    final OneToManyAssociation collection = (OneToManyAssociation) association;
-                    newAdapter = createCollectionAdapter(pojo, parentAdapter, collection);
-                } else {
-                    newAdapter = createTransientRootAdapter(pojo);
-                }
-            } else {
+            if (collection == null) {
                 if(isAggregated(objSpec)) {
-                    final String aggregateLocalId = getOidGenerator().createAggregateLocalId(pojo);
-                    final AggregatedOid aggregatedOid = new AggregatedOid(parentAdapter.getOid(), aggregateLocalId);
+                    final AggregatedOid aggregatedOid = getOidGenerator().createAggregateOid(pojo, parentAdapter);
                     newAdapter = createAggregatedAdapter(pojo, aggregatedOid);
                 } else {
                     newAdapter = createTransientRootAdapter(pojo);
                 }
+            } else {
+                // the List, Set etc. instance gets wrapped in its own adapter
+                newAdapter = createCollectionAdapter(pojo, parentAdapter, collection);
             }
         } else {
             // not parented
@@ -272,7 +268,7 @@ public class AdapterManagerDefault extends AdapterManagerAbstract implements Obj
         final Oid parentOid = parentAdapter.getOid();
 
         // persistence of collection follows the parent
-        final CollectionOid collectionOid = new CollectionOid(parentOid, otma);
+        final CollectionOid collectionOid = new CollectionOid((TypedOid) parentOid, otma);
         final ObjectAdapter collectionAdapter = createCollectionAdapterAndInferResolveState(pojo, collectionOid);
 
         // we copy over the type onto the adapter itself
@@ -284,7 +280,6 @@ public class AdapterManagerDefault extends AdapterManagerAbstract implements Obj
 
         return collectionAdapter;
     }
-    
 
     private static boolean isAggregated(final ObjectSpecification objSpec) {
         return objSpec.containsFacet(ParentedFacet.class);
@@ -317,13 +312,13 @@ public class AdapterManagerDefault extends AdapterManagerAbstract implements Obj
     private ObjectAdapter createRootOrAggregatedAdapter(final Oid oid, final Object pojo) {
         final ObjectAdapter createdAdapter;
         if(oid instanceof RootOid) {
-            RootOid rootOid = (RootOid) oid;
+            final RootOid rootOid = (RootOid) oid;
             createdAdapter = createRootAdapterAndInferResolveState(pojo, rootOid);
         } else if (oid instanceof CollectionOid){
-            CollectionOid collectionOid = (CollectionOid) oid;
+            final CollectionOid collectionOid = (CollectionOid) oid;
             createdAdapter = createCollectionAdapterAndInferResolveState(pojo, collectionOid);
         } else {
-            AggregatedOid aggregatedOid = (AggregatedOid) oid;
+            final AggregatedOid aggregatedOid = (AggregatedOid) oid;
             createdAdapter = createAggregatedAdapter(pojo, aggregatedOid);
         }
         return createdAdapter;
@@ -375,11 +370,11 @@ public class AdapterManagerDefault extends AdapterManagerAbstract implements Obj
      * practice this is done by the <tt>ObjectAdapterStore</tt> implementation
      * delegated by the <tt>PersistenceSessionObjectStore</tt>, and propagated
      * back to client-side as required).
+     * 
+     * @param hintRootOid - intended for testing, allow a different persistent root oid to be provided.  Must be persistent and compatible with the adapter's type
      */
     @Override
-    public void remapAsPersistent(final ObjectAdapter adapter) {
-        // ??? REVIEW: don't do this because the Oid has been updated already
-        // ensureMapsConsistent(adapter);
+    public void remapAsPersistent(final ObjectAdapter adapter, RootOid hintRootOid) {
         
         final ObjectAdapter rootAdapter = adapter.getAggregateRoot();
         final RootOid transientRootOid = (RootOid) rootAdapter.getOid();
@@ -419,7 +414,25 @@ public class AdapterManagerDefault extends AdapterManagerAbstract implements Obj
         if (LOG.isDebugEnabled()) {
             LOG.debug("updating the Oid");
         }
-        final RootOid persistedRootOid = getOidGenerator().asPersistent(transientRootOid);
+        
+        // intended for testing (bit nasty)
+        final RootOid persistedRootOid;
+        if(hintRootOid != null) {
+            if(hintRootOid.isTransient()) {
+                throw new IsisAssertException("hintRootOid must be persistent");
+            }
+            final ObjectSpecId hintRootOidObjectSpecId = hintRootOid.getObjectSpecId();
+            final ObjectSpecId adapterObjectSpecId = adapter.getSpecification().getSpecId();
+            if(!hintRootOidObjectSpecId.equals(adapterObjectSpecId)) {
+                throw new IsisAssertException("hintRootOid's objectType must be same as that of adapter " +
+                		"(was: '" + hintRootOidObjectSpecId + "'; adapter's is " + adapterObjectSpecId + "'");
+            }
+            // ok
+            persistedRootOid = hintRootOid;
+        } else {
+            // normal flow - delegate to OidGenerator to obtain a persistent root oid
+            persistedRootOid = getOidGenerator().createPersistent(adapter.getObject(), transientRootOid);
+        }
         
         // associate root adapter with the new Oid, and remap
         if (LOG.isDebugEnabled()) {

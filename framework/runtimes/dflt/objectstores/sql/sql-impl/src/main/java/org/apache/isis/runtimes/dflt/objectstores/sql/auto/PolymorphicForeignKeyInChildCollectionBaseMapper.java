@@ -31,6 +31,7 @@ import org.apache.log4j.Logger;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
+import org.apache.isis.core.metamodel.adapter.oid.TypedOid;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
@@ -158,9 +159,13 @@ public class PolymorphicForeignKeyInChildCollectionBaseMapper extends ForeignKey
             update.append(") VALUES (");
 
             // Row ID column
-            final RootOid transientOid = oidGenerator.createTransientOid(thisAdapter.getObject());
-            oidGenerator.asPersistent(transientOid);
-            polyIdMapper.appendObjectId(connector, update, transientOid);
+            final Object pojo = thisAdapter.getObject();
+            final RootOid transientRootOid = oidGenerator.createTransientOid(pojo);
+            
+            final RootOid persistentRootOid = oidGenerator.createPersistent(pojo, transientRootOid);
+            
+            polyIdMapper.appendObjectId(connector, update, persistentRootOid);
+            
             // polyIdMapper.appendObjectId(connector, update,
             // thisAdapter.getOid());
             update.append(",");
@@ -215,8 +220,8 @@ public class PolymorphicForeignKeyInChildCollectionBaseMapper extends ForeignKey
 
             // Load new recordSet for the actual class
             final ObjectMapping itemMapper = objectMappingLookup.getMapping(itemSpecification, connector);
-            final Oid oid = idMapping.recreateOid(rs, itemSpecification);
-            final ObjectAdapter loadedObject = itemMapper.getObject(connector, oid, itemSpecification);
+            final TypedOid oid = idMapping.recreateOid(rs, itemSpecification);
+            final ObjectAdapter loadedObject = itemMapper.getObject(connector, oid);
 
             LOG.debug("  element  " + loadedObject.getOid());
 

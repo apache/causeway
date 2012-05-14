@@ -35,7 +35,9 @@ import org.apache.isis.core.metamodel.adapter.oid.CollectionOid;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOidDefault;
+import org.apache.isis.core.metamodel.adapter.oid.TypedOid;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.SpecificationLookup;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.ObjectStore;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.CreateObjectCommand;
@@ -127,7 +129,7 @@ public final class SqlObjectStore implements ObjectStore {
 
         final RootOidDefault sqlOid = (RootOidDefault) rootOid;
         connector.addToQueryValues(sqlOid.getIdentifier());
-        connector.addToQueryValues(rootOid.getObjectType());
+        connector.addToQueryValues(rootOid.getObjectSpecId());
 
         connector.insert(sql.toString());
         connectionPool.release(connector);
@@ -411,11 +413,13 @@ public final class SqlObjectStore implements ObjectStore {
         return (ObjectAdapter[]) instances.toArray();
     }
 
+
     @Override
-    public ObjectAdapter getObject(final Oid oid, final ObjectSpecification hint) {
+    public ObjectAdapter getObject(final TypedOid oid) {
         final DatabaseConnector connection = connectionPool.acquire();
-        final ObjectMapping mapper = objectMappingLookup.getMapping(hint, connection);
-        final ObjectAdapter object = mapper.getObject(connection, oid, hint);
+        final ObjectSpecification objectSpec = getSpecificationLookup().lookupBySpecId(oid.getObjectSpecId());
+        final ObjectMapping mapper = objectMappingLookup.getMapping(objectSpec, connection);
+        final ObjectAdapter object = mapper.getObject(connection, oid);
         connectionPool.release(connection);
         return object;
     }
@@ -433,14 +437,14 @@ public final class SqlObjectStore implements ObjectStore {
             sql.append(" where ");
             sql.append(Defaults.getIdColumn());
             sql.append(" = ?");
-            connector.addToQueryValues(serviceSpec.getObjectType());
+            connector.addToQueryValues(serviceSpec.getSpecId());
 
             final Results results = connector.select(sql.toString());
             if (!results.next()) {
                 return null;
             } 
             final int id = results.getInt(Defaults.getPkIdLabel());
-            return RootOidDefault.create(serviceSpec.getObjectType(), ""+id);
+            return RootOidDefault.create(serviceSpec.getSpecId(), ""+id);
             
         } finally {
             connectionPool.release(connector);
@@ -477,6 +481,10 @@ public final class SqlObjectStore implements ObjectStore {
         connectionPool.release(connector);
     }
 
+    ///////////////////////////////////////////////////////////
+    // Dependencies (injected)
+    ///////////////////////////////////////////////////////////
+
     public void setConnectionPool(final DatabaseConnectorPool connectionPool) {
         this.connectionPool = connectionPool;
     }
@@ -485,9 +493,17 @@ public final class SqlObjectStore implements ObjectStore {
         this.objectMappingLookup = mapperLookup;
     }
 
+
+    ///////////////////////////////////////////////////////////
+    // Dependencies (from context)
+    ///////////////////////////////////////////////////////////
     
     protected ObjectAdapterLookup getAdapterManager() {
         return IsisContext.getPersistenceSession().getAdapterManager();
+    }
+
+    protected SpecificationLookup getSpecificationLookup() {
+        return IsisContext.getSpecificationLoader();
     }
 
 }

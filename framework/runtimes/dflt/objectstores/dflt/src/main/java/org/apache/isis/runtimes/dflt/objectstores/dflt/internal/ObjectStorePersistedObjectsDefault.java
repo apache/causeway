@@ -22,10 +22,13 @@ package org.apache.isis.runtimes.dflt.objectstores.dflt.internal;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.google.common.collect.Maps;
+
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.serial.RootOidGenerator.Memento;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.IdentifierGeneratorDefault;
 
 /**
  * Represents the persisted objects.
@@ -34,40 +37,36 @@ import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.serial.Roo
  */
 public class ObjectStorePersistedObjectsDefault implements ObjectStorePersistedObjects {
 
-    private final Map<ObjectSpecification, ObjectStoreInstances> instancesBySpecMap;
-    private final Map<String, Oid> serviceOidByIdMap;
+    private final Map<ObjectSpecification, ObjectStoreInstances> instancesBySpecMap = Maps.newHashMap();
+    private final Map<ObjectSpecId, Oid> serviceOidByIdMap = Maps.newHashMap();
 
-    private Memento oidGeneratorMemento;
+    private IdentifierGeneratorDefault.Memento oidGeneratorMemento;
 
-    public ObjectStorePersistedObjectsDefault() {
-        instancesBySpecMap = new HashMap<ObjectSpecification, ObjectStoreInstances>();
-        serviceOidByIdMap = new HashMap<String, Oid>();
-    }
 
     @Override
-    public Memento getOidGeneratorMemento() {
+    public IdentifierGeneratorDefault.Memento getOidGeneratorMemento() {
         return oidGeneratorMemento;
     }
 
     @Override
-    public void saveOidGeneratorMemento(final Memento memento) {
+    public void saveOidGeneratorMemento(final IdentifierGeneratorDefault.Memento memento) {
         this.oidGeneratorMemento = memento;
     }
 
     @Override
-    public Oid getService(final String name) {
-        return serviceOidByIdMap.get(name);
+    public Oid getService(final ObjectSpecId objectSpecId) {
+        return serviceOidByIdMap.get(objectSpecId);
     }
 
     @Override
-    public void registerService(final String name, final Oid oid) {
-        final Oid oidLookedUpByName = serviceOidByIdMap.get(name);
+    public void registerService(final ObjectSpecId objectSpecId, final Oid oid) {
+        final Oid oidLookedUpByName = serviceOidByIdMap.get(objectSpecId);
         if (oidLookedUpByName != null) {
             if (oidLookedUpByName.equals(oid)) {
-                throw new IsisException("Already another service registered as name: " + name + " (existing Oid: " + oidLookedUpByName + ", " + "intended: " + oid + ")");
+                throw new IsisException("Already another service registered as name: " + objectSpecId + " (existing Oid: " + oidLookedUpByName + ", " + "intended: " + oid + ")");
             }
         } else {
-            serviceOidByIdMap.put(name, oid);
+            serviceOidByIdMap.put(objectSpecId, oid);
         }
     }
 

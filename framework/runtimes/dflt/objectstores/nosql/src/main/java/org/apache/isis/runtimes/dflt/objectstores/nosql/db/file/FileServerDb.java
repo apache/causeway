@@ -29,6 +29,7 @@ import java.util.zip.CRC32;
 
 import org.apache.log4j.Logger;
 
+import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.runtimes.dflt.objectstores.nosql.NoSqlCommandContext;
 import org.apache.isis.runtimes.dflt.objectstores.nosql.NoSqlStoreException;
 import org.apache.isis.runtimes.dflt.objectstores.nosql.db.NoSqlDataDatabase;
@@ -79,11 +80,11 @@ public class FileServerDb implements NoSqlDataDatabase {
     }
 
     @Override
-    public StateReader getInstance(final String key, final String specificationName) {
+    public StateReader getInstance(final String key, final ObjectSpecId objectSpecId) {
         final ClientConnection connection = getConnection();
         String data;
         try {
-            final String request = specificationName + " " + key;
+            final String request = objectSpecId + " " + key;
             connection.request('R', request);
             connection.validateRequest();
             data = connection.getResponseData();
@@ -99,12 +100,12 @@ public class FileServerDb implements NoSqlDataDatabase {
     }
 
     @Override
-    public Iterator<StateReader> instancesOf(final String specificationName) {
+    public Iterator<StateReader> instancesOf(final ObjectSpecId objectSpecId) {
         final ClientConnection connection = getConnection();
         List<StateReader> instances;
         try {
             instances = new ArrayList<StateReader>();
-            connection.request('L', specificationName + " 0");
+            connection.request('L', objectSpecId + " 0");
             connection.validateRequest();
             String data;
             while ((data = connection.getResponseData()).length() > 0) {
@@ -188,7 +189,7 @@ public class FileServerDb implements NoSqlDataDatabase {
     }
 
     @Override
-    public long nextSerialNumberBatch(final String name, final int batchSize) {
+    public long nextSerialNumberBatch(final ObjectSpecId name, final int batchSize) {
         final ClientConnection connection = getConnection();
         long serialNumber;
         try {
@@ -205,10 +206,10 @@ public class FileServerDb implements NoSqlDataDatabase {
     }
 
     @Override
-    public void addService(final String name, final String key) {
+    public void addService(final ObjectSpecId objectSpecId, final String key) {
         final ClientConnection connection = getConnection();
         try {
-            connection.request('T', name + " " + key);
+            connection.request('T', objectSpecId.asString() + " " + key);
             connection.validateRequest();
         } catch (final RuntimeException e) {
             LOG.error("aborting addService", e);
@@ -219,11 +220,11 @@ public class FileServerDb implements NoSqlDataDatabase {
     }
 
     @Override
-    public String getService(final String name) {
+    public String getService(final ObjectSpecId objectSpecId) {
         final ClientConnection connection = getConnection();
         String response;
         try {
-            connection.request('S', name);
+            connection.request('S', objectSpecId.asString());
             connection.validateRequest();
             response = connection.getResponse();
         } catch (final RuntimeException e) {
@@ -236,11 +237,11 @@ public class FileServerDb implements NoSqlDataDatabase {
     }
 
     @Override
-    public boolean hasInstances(final String specificationName) {
+    public boolean hasInstances(final ObjectSpecId objectSpecId) {
         final ClientConnection connection = getConnection();
         boolean hasInstances;
         try {
-            connection.request('I', specificationName);
+            connection.request('I', objectSpecId.asString());
             connection.validateRequest();
             hasInstances = connection.getResponseAsBoolean();
         } catch (final RuntimeException e) {

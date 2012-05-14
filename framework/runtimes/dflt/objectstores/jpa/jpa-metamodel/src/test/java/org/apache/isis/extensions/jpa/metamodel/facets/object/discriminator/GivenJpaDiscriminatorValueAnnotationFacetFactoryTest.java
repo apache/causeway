@@ -28,7 +28,8 @@ import junit.framework.Assert;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
-import org.apache.isis.core.metamodel.facets.object.objecttype.ObjectTypeFacet;
+import org.apache.isis.core.metamodel.facets.object.objecttype.ObjectSpecIdFacet;
+import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
 
 public class GivenJpaDiscriminatorValueAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
@@ -64,9 +65,9 @@ public class GivenJpaDiscriminatorValueAnnotationFacetFactoryTest extends Abstra
 
         facetFactory.process(new FacetFactory.ProcessClassContext(Customer.class, methodRemover, facetHolder));
 
-        final Facet facet = facetHolder.getFacet(ObjectTypeFacet.class);
+        final Facet facet = facetHolder.getFacet(ObjectSpecIdFacet.class);
         assertNotNull(facet);
-        Assert.assertTrue(facet instanceof ObjectTypeFacetInferredFromJpaDiscriminatorValueAnnotation);
+        Assert.assertTrue(facet instanceof ObjectSpecIdFacetInferredFromJpaDiscriminatorValueAnnotation);
     }
 
     public void testIfNoEntityAnnotationThenNoFacet() {
@@ -76,7 +77,7 @@ public class GivenJpaDiscriminatorValueAnnotationFacetFactoryTest extends Abstra
 
         facetFactory.process(new FacetFactory.ProcessClassContext(Customer.class, methodRemover, facetHolder));
 
-        final Facet facet = facetHolder.getFacet(ObjectTypeFacet.class);
+        final Facet facet = facetHolder.getFacet(ObjectSpecIdFacet.class);
         assertNull(facet);
     }
 
@@ -87,8 +88,8 @@ public class GivenJpaDiscriminatorValueAnnotationFacetFactoryTest extends Abstra
 
         facetFactory.process(new FacetFactory.ProcessClassContext(Customer.class, methodRemover, facetHolder));
 
-        final ObjectTypeFacet discriminatorValueFacet = facetHolder.getFacet(ObjectTypeFacet.class);
-        assertEquals("CUS", discriminatorValueFacet.value());
+        final ObjectSpecIdFacet discriminatorValueFacet = facetHolder.getFacet(ObjectSpecIdFacet.class);
+        assertEquals(ObjectSpecId.of("CUS"), discriminatorValueFacet.value());
     }
 
     public void testNoMethodsRemoved() {

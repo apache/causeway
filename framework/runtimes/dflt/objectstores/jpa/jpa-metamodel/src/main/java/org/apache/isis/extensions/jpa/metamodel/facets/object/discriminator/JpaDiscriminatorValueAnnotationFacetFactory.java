@@ -44,7 +44,7 @@ public class JpaDiscriminatorValueAnnotationFacetFactory extends
         }
         final String annotationValueAttribute = annotation.value();
 
-        FacetUtil.addFacet(new ObjectTypeFacetInferredFromJpaDiscriminatorValueAnnotation(
+        FacetUtil.addFacet(new ObjectSpecIdFacetInferredFromJpaDiscriminatorValueAnnotation(
                 annotationValueAttribute, processClassContext.getFacetHolder()));
     }
 

@@ -29,6 +29,7 @@ import org.junit.Test;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.RootOidDefault;
+import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2;
 import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2.Mode;
@@ -47,7 +48,7 @@ public class NoSqlKeyCreatorTest_reference {
     private final String className = "com.foo.bar.SomeClass";
     private final String objectType = "SCL";
     
-    private final RootOidDefault rootOidDefault = RootOidDefault.create(objectType, ""+123);
+    private final RootOidDefault rootOidDefault = RootOidDefault.create(ObjectSpecId.of(objectType), ""+123);
     
     private KeyCreatorDefault keyCreatorDefault;
 
@@ -71,7 +72,7 @@ public class NoSqlKeyCreatorTest_reference {
 
     @Test
     public void reference() throws Exception {
-        final String expectedReference = objectType + "@" + rootOidDefault.getIdentifier();
-        assertEquals(expectedReference, keyCreatorDefault.reference(adapter));
+        final String expectedReference = objectType + ":" + rootOidDefault.getIdentifier();
+        assertEquals(expectedReference, keyCreatorDefault.oidStrFor(adapter));
     }
 }

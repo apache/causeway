@@ -28,25 +28,31 @@ import com.mongodb.DBObject;
 import org.apache.log4j.Logger;
 
 import org.apache.isis.core.commons.exceptions.UnexpectedCallException;
+import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.runtimes.dflt.objectstores.nosql.db.StateReader;
 import org.apache.isis.runtimes.dflt.runtime.persistence.ObjectNotFoundException;
 
-public class MongoStateReader implements StateReader, PropertyNames {
-     private static final Logger LOG = Logger.getLogger(MongoStateReader.class);
+public class MongoStateReader implements StateReader {
+    
+    private static final Logger LOG = Logger.getLogger(MongoStateReader.class);
     private final DBObject instance;
 
-    public MongoStateReader(final DB db, final String specName, final String key) {
-        final DBCollection instances = db.getCollection(specName);
-        instance = instances.findOne(key);
+    public MongoStateReader(final DB db, final ObjectSpecId objectSpecId, final String mongoId) {
+        final DBCollection instances = db.getCollection(objectSpecId.asString());
+        instance = instances.findOne(mongoId);
         if (instance == null) {
-            throw new ObjectNotFoundException(key);
+            throw new ObjectNotFoundException(mongoId);
         }
-        LOG.debug("loading " + instance);
+        if(LOG.isDebugEnabled()) {
+            LOG.debug("loading " + instance);
+        }
     }
 
     public MongoStateReader(final DBObject instance) {
         this.instance = instance;
-        LOG.debug("loading " + instance);
+        if(LOG.isDebugEnabled()) {
+            LOG.debug("loading " + instance);
+        }
     }
 
     @Override
@@ -54,9 +60,8 @@ public class MongoStateReader implements StateReader, PropertyNames {
         final Object value = instance.get(id);
         if (value == null || value.equals("null")) {
             return 0;
-        } else {
-            return Long.valueOf((String) value);
-        }
+        } 
+        return Long.valueOf((String) value);
     }
 
     @Override
@@ -71,32 +76,33 @@ public class MongoStateReader implements StateReader, PropertyNames {
 
     @Override
     public String readEncrytionType() {
-        return (String) instance.get(ENCRYPT);
+        return (String) instance.get(PropertyNames.ENCRYPT);
     }
 
-    @Override
-    public String readObjectType() {
-        return (String) instance.get(TYPE);
-    }
+//    @Override
+//    public String readObjectType() {
+//        return (String) instance.get(TYPE);
+//    }
+//
 
     @Override
-    public String readId() {
-        return readField(ID);
+    public String readOid() {
+        return readField(PropertyNames.OID);
     }
 
     @Override
     public String readVersion() {
-        return readField(VERSION);
+        return readField(PropertyNames.VERSION);
     }
 
     @Override
     public String readUser() {
-        return readField(USER);
+        return readField(PropertyNames.USER);
     }
 
     @Override
     public String readTime() {
-        return readField(TIME);
+        return readField(PropertyNames.TIME);
     }
 
     @Override

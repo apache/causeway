@@ -29,9 +29,7 @@ import org.apache.log4j.Logger;
 
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.encoding.DataInputStreamExtended;
-import org.apache.isis.core.commons.encoding.DataOutputExtended;
 import org.apache.isis.core.commons.encoding.DataOutputStreamExtended;
-import org.apache.isis.core.commons.encoding.Encodable;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.exceptions.UnknownTypeException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -193,10 +191,10 @@ public class Memento implements Serializable {
         ObjectAdapter adapter;
         ResolveState targetState;
         if (getOid().isTransient()) {
-            adapter = getHydrator().recreateAdapter(getOid(), spec);
+            adapter = getHydrator().recreateAdapter(spec, getOid());
             targetState = ResolveState.SERIALIZING_TRANSIENT;
         } else {
-            adapter = getHydrator().recreateAdapter(getOid(), spec);
+            adapter = getHydrator().recreateAdapter(spec, getOid());
             targetState = ResolveState.UPDATING;
         }
         
@@ -233,7 +231,7 @@ public class Memento implements Serializable {
                 return null;
             }
             ObjectAdapter ref;
-            ref = getHydrator().recreateAdapter(oid, spec);
+            ref = getHydrator().recreateAdapter(spec, oid);
             if (data instanceof ObjectData) {
                 if (oid.isTransient() || spec.isParented()) {
                     final ResolveState resolveState = spec.isParented() ? ResolveState.GHOST : ResolveState.TRANSIENT;

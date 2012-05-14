@@ -23,47 +23,43 @@ import org.apache.log4j.Logger;
 
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.ensure.Assert;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
-import org.apache.isis.core.metamodel.adapter.oid.RootOidDefault;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.SpecificationLookup;
-import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.OidGeneratorAbstract;
-import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
+import org.apache.isis.core.metamodel.spec.ObjectSpecId;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.IdentifierGenerator;
 import org.apache.isis.runtimes.dflt.runtime.transaction.ObjectPersistenceException;
 
-public class SqlOidGenerator extends OidGeneratorAbstract {
+public class SqlIdentifierGenerator implements IdentifierGenerator {
     
     private final DatabaseConnectorPool connectionPool;
     private final IdNumbers ids = new IdNumbers();
 
-    public SqlOidGenerator(final DatabaseConnectorPool connectionPool) {
-        super(RootOidDefault.class);
+    //////////////////////////////////////////////////////////////////
+    // constructor
+    //////////////////////////////////////////////////////////////////
+
+    public SqlIdentifierGenerator(final DatabaseConnectorPool connectionPool) {
         this.connectionPool = connectionPool;
     }
 
-    public String name() {
-        return "Sql Oids";
-    }
-
+    ///////////////////////////////////////////////////////
+    // API
+    ///////////////////////////////////////////////////////
+    
     @Override
-    public RootOid createTransientOid(final Object object) {
-        final Class<? extends Object> cls = object.getClass();
-        final ObjectSpecification objectSpec = getSpecificationLookup().loadSpecification(cls);
-        return RootOidDefault.createTransient(objectSpec.getObjectType(), ""+ids.nextTransientId());
-    }
-
-    @Override
-    public String createAggregateLocalId(final Object pojo) {
+    public String createAggregateLocalId(ObjectSpecId objectSpecId, final Object pojo, final ObjectAdapter parentAdapter) {
         throw new SqlObjectStoreException("Aggregated objects are not supported in this store");
     }
 
     @Override
-    public RootOid asPersistent(final RootOid rootOid) {
+    public String createTransientIdentifierFor(ObjectSpecId objectSpecId, final Object pojo) {
+        return ""+ids.nextTransientId();
+    }
+
+    @Override
+    public String createPersistentIdentifierFor(ObjectSpecId objectSpecId, Object pojo, RootOid transientRootOid) {
         Assert.assertNotNull("No connection set up", connectionPool);
-        
-        final int next = (int) ids.nextPersistentId(connectionPool);
-        
-        return rootOid.asPersistent("" + next);
+        return "" + (int) ids.nextPersistentId(connectionPool);
     }
 
     
@@ -81,17 +77,11 @@ public class SqlOidGenerator extends OidGeneratorAbstract {
 
     @Override
     public String debugTitle() {
-        return "SQL OID Generator";
-    }
-    
-    ///////////////////////////////////////////////////////
-    // Dependencies
-    ///////////////////////////////////////////////////////
-    
-    protected SpecificationLookup getSpecificationLookup() {
-        return IsisContext.getSpecificationLoader();
+        return "Sql Identifier Generator";
     }
 }
+
+
 
 class IdNumbers {
 

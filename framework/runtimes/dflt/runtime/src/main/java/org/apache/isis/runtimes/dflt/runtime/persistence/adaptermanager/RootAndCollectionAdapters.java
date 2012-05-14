@@ -32,6 +32,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapterLookup;
 import org.apache.isis.core.metamodel.adapter.oid.CollectionOid;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
+import org.apache.isis.core.metamodel.adapter.oid.TypedOid;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 
 /**
@@ -97,7 +98,7 @@ public class RootAndCollectionAdapters implements Iterable<ObjectAdapter> {
 
     private void addCollectionAdapters(ObjectAdapterLookup objectAdapterLookup) {
         for (final OneToManyAssociation otma : parentAdapter.getSpecification().getCollections()) {
-            final CollectionOid collectionOid = new CollectionOid(rootAdapterOid, otma);
+            final CollectionOid collectionOid = new CollectionOid((TypedOid) rootAdapterOid, otma);
             final ObjectAdapter collectionAdapter = objectAdapterLookup.getAdapterFor(collectionOid);
             if (collectionAdapter != null) {
                 // collection adapters are lazily created and so there may not be one.

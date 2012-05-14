@@ -33,6 +33,7 @@ import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.xml.ContentWriter;
 import org.apache.isis.core.commons.xml.XmlFile;
+import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOidDefault;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -131,9 +132,8 @@ public class XmlDataManager implements DataManager {
     }
 
     private static RootOidDefault oidFrom(final Attributes attributes) {
-        final String objectType = attributes.getValue("type");
-        final String identifier = attributes.getValue("id");
-        return RootOidDefault.create(objectType, identifier);
+        final String oid = attributes.getValue("oid");
+        return RootOidDefault.deString(oid);
     }
 
     private static FileVersion fileVersionFrom(final Attributes attributes) {
@@ -155,9 +155,8 @@ public class XmlDataManager implements DataManager {
         public void startElement(final String ns, final String name, final String tagName, final Attributes attrs) throws SAXException {
             if (tagName.equals("instance")) {
                 
-                final String objectType = attrs.getValue("type");
-                final String identifier = attrs.getValue("id");
-                final RootOidDefault oid = RootOidDefault.create(objectType, identifier);
+                final String oidStr = attrs.getValue("oid");
+                final RootOidDefault oid = RootOidDefault.deString(oidStr);
                 
                 instances.addElement(oid);
             }
@@ -399,8 +398,7 @@ public class XmlDataManager implements DataManager {
 
                 for (final RootOid elementAt : instances) {
                     writer.append("  <instance");
-                    Utils.appendAttribute(writer, "type", elementAt.getObjectType());
-                    Utils.appendAttribute(writer, "id", elementAt.getIdentifier());
+                    Utils.appendAttribute(writer, "oid", elementAt.enString());
                     writer.append("/>\n");
                 }
                 writer.append("</instances>");
@@ -430,8 +428,7 @@ public class XmlDataManager implements DataManager {
                 writer.write("<");
                 writer.write(tag);
                 final RootOid oid = data.getRootOid();
-                Utils.appendAttribute(writer, "type", oid.getObjectType());
-                Utils.appendAttribute(writer, "id", oid.getIdentifier());
+                Utils.appendAttribute(writer, "oid", oid.enString());
                 Utils.appendAttribute(writer, "user", "" + getAuthenticationSession().getUserName());
 
                 final long sequence = data.getVersion().getSequence();
@@ -473,12 +470,11 @@ public class XmlDataManager implements DataManager {
     }
 
     private void writeAssociationField(final Writer writer, final String field, final Object entry) throws IOException {
-        final RootOidDefault rootOidDefault = (RootOidDefault) entry;
+        final Oid rootOidDefault = (Oid)entry;
         Assert.assertFalse(rootOidDefault.isTransient());
         writer.append("  <association");
         Utils.appendAttribute(writer, "field", field);
-        Utils.appendAttribute(writer, "type", rootOidDefault.getObjectType());
-        Utils.appendAttribute(writer, "id", rootOidDefault.getIdentifier());
+        Utils.appendAttribute(writer, "oid", rootOidDefault.enString());
         writer.append("/>\n");
     }
 
@@ -496,8 +492,7 @@ public class XmlDataManager implements DataManager {
                     throw new ObjectPersistenceException("Can't add tranisent OID (" + oid + ") to " + field + " element.");
                 }
                 writer.append("    <element ");
-                Utils.appendAttribute(writer, "type", rootOidDefault.getObjectType());
-                Utils.appendAttribute(writer, "id", rootOidDefault.getIdentifier());
+                Utils.appendAttribute(writer, "oid", rootOidDefault.enString());
                 writer.append("/>\n");
             }
             writer.append("  </multiple-association>\n");
@@ -520,15 +515,14 @@ public class XmlDataManager implements DataManager {
             final Object oid = refs.elementAt(i);
             writer.append("  <element");
             final RootOid rootOid = (RootOid) oid;
-            Utils.appendAttribute(writer, "type", rootOid.getObjectType());
-            Utils.appendAttribute(writer, "id", rootOid.getIdentifier());
+            Utils.appendAttribute(writer, "oid", rootOid.enString());
             writer.append("/>\n");
         }
     }
 
     
     private static String filename(final RootOid oid) {
-        return oid.getObjectType() + File.separator + oid.getIdentifier();
+        return oid.getObjectSpecId() + File.separator + oid.getIdentifier();
     }
 
 

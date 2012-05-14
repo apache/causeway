@@ -21,63 +21,73 @@ package org.apache.isis.runtimes.dflt.objectstores.nosql.keys;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOidDefault;
+import org.apache.isis.core.metamodel.adapter.oid.TypedOid;
+import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.runtimes.dflt.objectstores.nosql.NoSqlStoreException;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 
-public class KeyCreatorDefault implements KeyCreator {
+public class KeyCreatorDefault {
 
-    public KeyCreatorDefault() {
-    }
-    
-    @Override
-    public String key(final Oid oid) {
+    /**
+     * returns {@link RootOid#getIdentifier()} (oid must be {@link RootOid}, and must be persistent). 
+     */
+    public String getIdentifierForPersistentRoot(final Oid oid) {
         if (!(oid instanceof RootOid)) {
             throw new NoSqlStoreException("Oid is not a RootOid: " + oid);
         } 
-        RootOid rootOid = (RootOidDefault) oid;
+        RootOid rootOid = (RootOid) oid;
         if (rootOid.isTransient()) {
             throw new NoSqlStoreException("Oid is not for a persistent object: " + oid);
         }
         return rootOid.getIdentifier();
     }
 
-    @Override
-    public String reference(final ObjectAdapter adapter) {
+    /**
+     * Equivalent to the {@link Oid#enString()} for the adapter's Oid.
+     */
+    public String oidStrFor(final ObjectAdapter adapter) {
         if(adapter == null) {
             return null;
         }
         try {
-            return adapter.getSpecification().getFullIdentifier() + "@" + key(adapter.getOid());
+            //return adapter.getSpecification().getFullIdentifier() + "@" + key(adapter.getOid());
+            return adapter.getOid().enString();
         } catch (final NoSqlStoreException e) {
             throw new NoSqlStoreException("Failed to create refence for " + adapter, e);
         }
     }
 
-    @Override
-    public RootOid oid(ObjectSpecification objectSpecification, final String id) {
-        final String objectType = objectSpecification.getObjectType();
-        return RootOidDefault.create(objectType, id);
+    public RootOid createRootOid(ObjectSpecification objectSpecification, final String identifier) {
+        final ObjectSpecId objectSpecId = objectSpecification.getSpecId();
+        return RootOidDefault.create(objectSpecId, identifier);
     }
 
-    @Override
-    public RootOid oidFromReference(final String ref) {
-        final ObjectSpecification objectSpecification = specificationFromReference(ref);
-        final String id = ref.split("@")[1];
-        return oid(objectSpecification, id);
+    public RootOid unmarshal(final String oidStr) {
+//        final ObjectSpecification objectSpecification = specificationFromReference(ref);
+//        final String id = ref.split("@")[1];
+//        return oid(objectSpecification, id);
+        return getOidMarshaller().unmarshal(oidStr, RootOid.class);
     }
 
-    @Override
-    public ObjectSpecification specificationFromReference(final String ref) {
-        final String name = ref.split("@")[0];
-        return getSpecificationLoader().loadSpecification(name);
+    public ObjectSpecification specificationFromOidStr(final String oidStr) {
+//        final String name = ref.split("@")[0];
+//        return getSpecificationLoader().loadSpecification(name);
+        final TypedOid oid = getOidMarshaller().unmarshal(oidStr, TypedOid.class);
+        return getSpecificationLoader().lookupBySpecId(oid.getObjectSpecId());
     }
 
     protected SpecificationLoader getSpecificationLoader() {
         return IsisContext.getSpecificationLoader();
     }
+
+    protected OidMarshaller getOidMarshaller() {
+        return new OidMarshaller();
+    }
+
 
 }

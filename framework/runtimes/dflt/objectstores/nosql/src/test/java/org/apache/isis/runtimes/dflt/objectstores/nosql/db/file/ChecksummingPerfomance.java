@@ -30,9 +30,9 @@ public class ChecksummingPerfomance {
 
     public static void main(final String[] args) throws Exception {
 
-        final CRC32 inputChecksum = new CRC32();
-        final CheckedInputStream in = new CheckedInputStream(new FileInputStream("test.data"), inputChecksum);
-        final BufferedReader reader = new BufferedReader(new InputStreamReader(in, Util.ENCODING));
+        //final CRC32 inputChecksum = new CRC32();
+        //final CheckedInputStream in = new CheckedInputStream(new FileInputStream("test.data"), inputChecksum);
+        //final BufferedReader reader = new BufferedReader(new InputStreamReader(in, Util.ENCODING));
 
         for (int i = 0; i < 30; i++) {
             long time = System.currentTimeMillis();

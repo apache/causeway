@@ -21,7 +21,6 @@ package org.apache.isis.runtimes.dflt.objectstores.nosql.db.mongo;
 
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assume.assumeThat;
 
 import com.mongodb.DB;
@@ -34,7 +33,8 @@ import org.apache.log4j.Logger;
 import org.junit.Before;
 import org.junit.Test;
 
-import org.apache.isis.runtimes.dflt.objectstores.nosql.db.mongo.MongoStateWriter;
+import org.apache.isis.core.metamodel.adapter.oid.RootOidDefault;
+import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 
 public class MongoStateWriterTest {
 
@@ -56,7 +56,7 @@ public class MongoStateWriterTest {
             return;
         }
 
-        writer = new MongoStateWriter(testDb, SPEC_NAME);
+        writer = new MongoStateWriter(testDb, ObjectSpecId.of(SPEC_NAME));
     }
 
     @Test
@@ -78,20 +78,24 @@ public class MongoStateWriterTest {
 
     @Test
     public void serialNumberNotStored() throws Exception {
-        writer.writeId("D01");
+        //writer.writeId("D01");
+        writer.writeOid(RootOidDefault.deString(SPEC_NAME+":"+"D01"));
         writer.flush();
 
         final DBCollection instances = testDb.getCollection(SPEC_NAME);
         assertEquals(1, instances.getCount());
         final DBObject object = instances.findOne();
-        assertNotNull(object.get("_id"));
+        
+        assertEquals(SPEC_NAME+":"+"D01", object.get("_oid"));
         assertEquals("D01", object.get("_id"));
-        assertEquals(1, object.keySet().size());
+        
+        assertEquals(2, object.keySet().size());
     }
 
     @Test
     public void writeFields() throws Exception {
-        writer.writeType(SPEC_NAME);
+        //writer.writeObjectType(SPEC_NAME);
+        writer.writeOid(RootOidDefault.deString(SPEC_NAME+":"+"D01"));
         writer.writeField("number", 1023);
         writer.writeField("string", "testing");
         writer.flush();
@@ -99,15 +103,16 @@ public class MongoStateWriterTest {
         final DBCollection instances = testDb.getCollection(SPEC_NAME);
         assertEquals(1, instances.getCount());
         final DBObject object = instances.findOne();
-        assertEquals(SPEC_NAME, object.get("_type"));
+        assertEquals(SPEC_NAME+":"+"D01", object.get("_oid"));
         assertEquals("1023", object.get("number"));
         assertEquals("testing", object.get("string"));
     }
 
     @Test
     public void writeFields2() throws Exception {
-        writer.writeId("3");
-        writer.writeType(SPEC_NAME);
+//        writer.writeId("3");
+//        writer.writeObjectType(SPEC_NAME);
+        writer.writeOid(RootOidDefault.deString(SPEC_NAME + ":" + "3"));
         writer.flush();
 
         writer.writeField("number", 1023);
@@ -117,7 +122,7 @@ public class MongoStateWriterTest {
         final DBCollection instances = testDb.getCollection(SPEC_NAME);
         assertEquals(1, instances.getCount());
         final DBObject object = instances.findOne();
-        assertEquals(SPEC_NAME, object.get("_type"));
+        assertEquals(SPEC_NAME + ":" + "3", object.get("_oid"));
         assertEquals("1023", object.get("number"));
         assertEquals("testing", object.get("string"));
     }

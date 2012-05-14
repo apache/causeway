@@ -29,7 +29,7 @@ import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.ObjectStore
 import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
-import org.apache.isis.runtimes.dflt.runtime.system.persistence.OidGenerator;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.IdentifierGenerator;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessionFactory;
 
 public class SqlPersistorInstaller extends ObjectStorePersistenceMechanismInstallerAbstract {
@@ -74,11 +74,11 @@ public class SqlPersistorInstaller extends ObjectStorePersistenceMechanismInstal
     }
 
     @Override
-    protected OidGenerator createOidGenerator(final IsisConfiguration configuration) {
+    protected IdentifierGenerator createIdentifierGenerator(final IsisConfiguration configuration) {
         final DatabaseConnectorFactory connectorFactory = new JdbcConnectorFactory();
         connectionPool = new DatabaseConnectorPool(connectorFactory, 1);
 
-        return new SqlOidGenerator(connectionPool);
+        return new SqlIdentifierGenerator(connectionPool);
     }
 
     @Override

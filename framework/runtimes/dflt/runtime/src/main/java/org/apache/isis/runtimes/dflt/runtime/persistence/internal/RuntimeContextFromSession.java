@@ -50,7 +50,7 @@ import org.apache.isis.core.metamodel.spec.ObjectInstantiationException;
 import org.apache.isis.core.metamodel.spec.ObjectInstantiator;
 import org.apache.isis.core.metamodel.spec.ObjectInstantiatorAbstract;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
+import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.runtimes.dflt.runtime.persistence.container.DomainObjectContainerObjectChanged;
 import org.apache.isis.runtimes.dflt.runtime.persistence.container.DomainObjectContainerResolve;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
@@ -108,8 +108,8 @@ public class RuntimeContextFromSession extends RuntimeContextAbstract {
             }
 
             @Override
-            public ObjectAdapter adapterFor(final Object pojo, final ObjectAdapter ownerAdapter, final ObjectAssociation association) {
-                return getRuntimeAdapterManager().adapterFor(pojo, ownerAdapter, association);
+            public ObjectAdapter adapterFor(final Object pojo, final ObjectAdapter ownerAdapter, final OneToManyAssociation collection) {
+                return getRuntimeAdapterManager().adapterFor(pojo, ownerAdapter, collection);
             }
         };
         this.objectInstantiator = new ObjectInstantiatorAbstract() {

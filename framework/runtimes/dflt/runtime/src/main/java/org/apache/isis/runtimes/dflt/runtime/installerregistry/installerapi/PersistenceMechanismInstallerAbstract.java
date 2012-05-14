@@ -39,11 +39,11 @@ import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.runtimes.dflt.runtime.installerregistry.InstallerLookup;
 import org.apache.isis.runtimes.dflt.runtime.installerregistry.InstallerLookupAware;
 import org.apache.isis.runtimes.dflt.runtime.persistence.PersistenceConstants;
-import org.apache.isis.runtimes.dflt.runtime.persistence.PersistenceSessionLogger;
 import org.apache.isis.runtimes.dflt.runtime.persistence.adapterfactory.pojo.PojoAdapterFactory;
 import org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager.AdapterManagerDefault;
 import org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager.AdapterManagerExtended;
 import org.apache.isis.runtimes.dflt.runtime.persistence.internal.RuntimeContextFromSession;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.IdentifierGenerator;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.ObjectFactory;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.OidGenerator;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
@@ -84,11 +84,11 @@ public abstract class PersistenceMechanismInstallerAbstract extends InstallerAbs
      * 
      * @see #createPersistenceSession(PersistenceSessionFactory,
      *      AdapterManagerExtended, ObjectAdapterFactory, ObjectFactory,
-     *      OidGenerator, ServicesInjector)
+     *      IdentifierGenerator, ServicesInjector)
      * @see #createAdapterFactory(IsisConfiguration)
      * @see #createAdapterManager(IsisConfiguration)
      * @see #createContainer(IsisConfiguration)
-     * @see #createOidGenerator(IsisConfiguration)
+     * @see #createIdentifierGenerator(IsisConfiguration)
      * @see #createRuntimeContext(IsisConfiguration)
      * @see #createServicesInjector(IsisConfiguration)
      */
@@ -101,7 +101,7 @@ public abstract class PersistenceMechanismInstallerAbstract extends InstallerAbs
         final AdapterManagerExtended adapterManager = createAdapterManager(getConfiguration());
         final ObjectAdapterFactory adapterFactory = createAdapterFactory(getConfiguration());
         final ObjectFactory objectFactory = createObjectFactory(getConfiguration());
-        final OidGenerator oidGenerator = createOidGenerator(getConfiguration());
+        final IdentifierGenerator identifierGenerator = createIdentifierGenerator(getConfiguration());
 
         final RuntimeContext runtimeContext = createRuntimeContext(getConfiguration());
         final DomainObjectContainer container = createContainer(getConfiguration());
@@ -112,7 +112,7 @@ public abstract class PersistenceMechanismInstallerAbstract extends InstallerAbs
         ensureThatArg(adapterManager, is(not(nullValue())));
         ensureThatArg(adapterFactory, is(not(nullValue())));
         ensureThatArg(objectFactory, is(not(nullValue())));
-        ensureThatArg(oidGenerator, is(not(nullValue())));
+        ensureThatArg(identifierGenerator, is(not(nullValue())));
 
         ensureThatArg(runtimeContext, is(not(nullValue())));
         ensureThatArg(container, is(not(nullValue())));
@@ -127,13 +127,7 @@ public abstract class PersistenceMechanismInstallerAbstract extends InstallerAbs
         servicesInjector.setServices(serviceList);
         persistenceSessionFactory.getSpecificationLoader().injectInto(runtimeContext);
 
-        PersistenceSession persistenceSession = createPersistenceSession(persistenceSessionFactory, adapterManager, adapterFactory, objectFactory, oidGenerator, servicesInjector);
-
-        if (getConfiguration().getBoolean(LOGGING_PROPERTY, false)) {
-            final String level = getConfiguration().getString(LOGGING_PROPERTY + ".level", "debug");
-            persistenceSession = new PersistenceSessionLogger(persistenceSession, level);
-        }
-
+        final PersistenceSession persistenceSession = createPersistenceSession(persistenceSessionFactory, adapterManager, adapterFactory, objectFactory, identifierGenerator, servicesInjector);
         return persistenceSession;
     }
 
@@ -148,7 +142,7 @@ public abstract class PersistenceMechanismInstallerAbstract extends InstallerAbs
      * 
      * @see #createPersistenceSession(PersistenceSessionFactory)
      */
-    protected abstract PersistenceSession createPersistenceSession(final PersistenceSessionFactory persistenceSessionFactory, final AdapterManagerExtended adapterManager, final ObjectAdapterFactory adapterFactory, final ObjectFactory objectFactory, final OidGenerator oidGenerator,
+    protected abstract PersistenceSession createPersistenceSession(final PersistenceSessionFactory persistenceSessionFactory, final AdapterManagerExtended adapterManager, final ObjectAdapterFactory adapterFactory, final ObjectFactory objectFactory, final IdentifierGenerator identifierGenerator,
             final ServicesInjector servicesInjector);
 
     // ///////////////////////////////////////////
@@ -210,13 +204,13 @@ public abstract class PersistenceMechanismInstallerAbstract extends InstallerAbs
      * <p>
      * By default, looks up implementation from provided
      * {@link IsisConfiguration} using
-     * {@link PersistenceConstants#OID_GENERATOR_CLASS_NAME}. If no
+     * {@link PersistenceConstants#IDENTIFIER_GENERATOR_CLASS_NAME}. If no
      * implementation is specified, then defaults to
-     * {@value PersistenceConstants#OID_GENERATOR_CLASS_NAME_DEFAULT}.
+     * {@value PersistenceConstants#IDENTIFIER_GENERATOR_CLASS_NAME_DEFAULT}.
      */
-    protected OidGenerator createOidGenerator(final IsisConfiguration configuration) {
-        final String oidGeneratorClassName = configuration.getString(PersistenceConstants.OID_GENERATOR_CLASS_NAME, PersistenceConstants.OID_GENERATOR_CLASS_NAME_DEFAULT);
-        return InstanceUtil.createInstance(oidGeneratorClassName, OidGenerator.class);
+    protected IdentifierGenerator createIdentifierGenerator(final IsisConfiguration configuration) {
+        final String identifierGeneratorClassName = configuration.getString(PersistenceConstants.IDENTIFIER_GENERATOR_CLASS_NAME, PersistenceConstants.IDENTIFIER_GENERATOR_CLASS_NAME_DEFAULT);
+        return InstanceUtil.createInstance(identifierGeneratorClassName, IdentifierGenerator.class);
     }
 
     /**

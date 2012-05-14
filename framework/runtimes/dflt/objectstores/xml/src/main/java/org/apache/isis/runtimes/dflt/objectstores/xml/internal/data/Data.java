@@ -22,6 +22,7 @@ package org.apache.isis.runtimes.dflt.objectstores.xml.internal.data;
 import com.google.common.base.Objects;
 
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
+import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLookup;
 import org.apache.isis.runtimes.dflt.objectstores.xml.internal.version.FileVersion;
@@ -45,12 +46,12 @@ public abstract class Data {
     }
 
     public ObjectSpecification getSpecification(SpecificationLookup specificationLookup) {
-        final String objectType = oid.getObjectType();
-        return specificationLookup.lookupByObjectType(objectType);
+        final ObjectSpecId objectSpecId = oid.getObjectSpecId();
+        return specificationLookup.lookupBySpecId(objectSpecId);
     }
 
-    public String getObjectType() {
-        return getRootOid().getObjectType();
+    public ObjectSpecId getObjectSpecId() {
+        return getRootOid().getObjectSpecId();
     }
 
     @Override
@@ -61,7 +62,7 @@ public abstract class Data {
 
         if (obj instanceof Data) {
             final Data data = (Data) obj;
-            return Objects.equal(data.getObjectType(), getObjectType()) && Objects.equal(data.oid, oid);
+            return Objects.equal(data.getObjectSpecId(), getObjectSpecId()) && Objects.equal(data.oid, oid);
         }
 
         return false;
@@ -70,7 +71,7 @@ public abstract class Data {
     @Override
     public int hashCode() {
         int h = 17;
-        h = 37 * h + getObjectType().hashCode();
+        h = 37 * h + getObjectSpecId().hashCode();
         h = 37 * h + oid.hashCode();
         return h;
     }

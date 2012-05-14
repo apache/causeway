@@ -29,8 +29,7 @@ import org.jmock.lib.legacy.ClassImposteriser;
 import org.junit.Before;
 import org.junit.Test;
 
-import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.serial.RootOidGenerator;
-import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.serial.RootOidGenerator.Memento;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.IdentifierGeneratorDefault;
 
 public class ObjectStorePersistedObjectsDefault_savesOidGeneratorAsMemento {
 
@@ -42,24 +41,24 @@ public class ObjectStorePersistedObjectsDefault_savesOidGeneratorAsMemento {
         }
     };
 
-    private RootOidGenerator.Memento mockMemento;
+    private IdentifierGeneratorDefault.Memento mockMemento;
 
     @Before
     public void setUp() throws Exception {
         persistedObjects = new ObjectStorePersistedObjectsDefault();
-        mockMemento = context.mock(RootOidGenerator.Memento.class);
+        mockMemento = context.mock(IdentifierGeneratorDefault.Memento.class);
     }
 
     @Test
     public void noOidGeneratorInitially() throws Exception {
-        final Memento oidGeneratorMemento = persistedObjects.getOidGeneratorMemento();
+        final IdentifierGeneratorDefault.Memento oidGeneratorMemento = persistedObjects.getOidGeneratorMemento();
         assertThat(oidGeneratorMemento, is(nullValue()));
     }
 
     @Test
     public void oidGeneratorStoredOnceSaved() throws Exception {
         persistedObjects.saveOidGeneratorMemento(mockMemento);
-        final Memento oidGeneratorMemento = persistedObjects.getOidGeneratorMemento();
+        final IdentifierGeneratorDefault.Memento oidGeneratorMemento = persistedObjects.getOidGeneratorMemento();
         assertThat(oidGeneratorMemento, is(mockMemento));
     }
 

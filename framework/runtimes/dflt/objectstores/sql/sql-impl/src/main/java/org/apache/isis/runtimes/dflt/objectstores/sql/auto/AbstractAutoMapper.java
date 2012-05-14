@@ -43,6 +43,8 @@ import org.apache.isis.runtimes.dflt.objectstores.sql.SqlObjectStoreException;
 import org.apache.isis.runtimes.dflt.objectstores.sql.mapping.FieldMapping;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
+
 import org.apache.log4j.Logger;
 
 import com.google.common.collect.Maps;
@@ -296,15 +298,14 @@ public abstract class AbstractAutoMapper extends AbstractMapper {
     }
 
     protected ObjectAdapter getAdapter(final ObjectSpecification specification, final Oid oid) {
-        final AdapterManager objectLoader = IsisContext.getPersistenceSession().getAdapterManager();
+        final AdapterManager objectLoader = getPersistenceSession().getAdapterManager();
         final ObjectAdapter adapter = objectLoader.getAdapterFor(oid);
         if (adapter != null) {
             return adapter;
-        } else {
-            return IsisContext.getPersistenceSession().recreateAdapter(oid, specification);
         }
+        return getPersistenceSession().recreateAdapter(specification, oid);
     }
-
+    
     protected FieldMapping fieldMappingFor(final ObjectAssociation field) {
         return fieldMappingByField.get(field);
     }
@@ -347,6 +348,11 @@ public abstract class AbstractAutoMapper extends AbstractMapper {
 	protected IsisConfiguration getConfiguration() {
 		return IsisContext.getConfiguration();
 	}
+
+    protected PersistenceSession getPersistenceSession() {
+        return IsisContext.getPersistenceSession();
+    }
+
 
 
 }

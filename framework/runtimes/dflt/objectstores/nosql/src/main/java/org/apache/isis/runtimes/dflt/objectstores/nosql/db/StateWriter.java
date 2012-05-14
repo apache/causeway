@@ -21,13 +21,16 @@ package org.apache.isis.runtimes.dflt.objectstores.nosql.db;
 
 import java.util.List;
 
+import org.apache.isis.core.metamodel.adapter.oid.TypedOid;
+
 public interface StateWriter {
 
     StateWriter addAggregate(String id);
 
-    void writeId(String oid);
-
-    void writeType(String type);
+//    void writeObjectType(String type);
+//    void writeId(String oid);
+    
+    void writeOid(TypedOid typedOid);
 
     void writeEncryptionType(String type);
 

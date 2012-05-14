@@ -20,19 +20,23 @@
 package org.apache.isis.runtimes.dflt.testsupport.tck;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotSame;
+
+import java.util.Date;
 
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.runtimes.dflt.runtime.installerregistry.installerapi.PersistenceMechanismInstaller;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.ObjectStore;
-import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.PersistenceSessionObjectStore;
 import org.apache.isis.runtimes.dflt.runtime.persistence.query.PersistenceQueryFindByTitle;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.runtimes.dflt.testsupport.IsisSystemWithFixtures;
 import org.apache.isis.tck.dom.eg.ExamplePojoWithValues;
 
@@ -40,18 +44,30 @@ public abstract class ObjectStoreContractTest_persist {
 
     @Rule
     public IsisSystemWithFixtures iswf = IsisSystemWithFixtures.builder()
-        .with(createPersistenceMechanismInstaller()).build();
+        .with(createPersistenceMechanismInstaller())
+        .with(iswfListener()).build();
 
+    
     /**
      * Mandatory hook.
      */
     protected abstract PersistenceMechanismInstaller createPersistenceMechanismInstaller();
 
+    protected IsisSystemWithFixtures.Listener iswfListener() {
+        return null;
+    }
+
+    /**
+     * hook method
+     */
+    protected void resetPersistenceStore() {
+    }
+    
     protected ObjectAdapter epv2Adapter;
     protected ObjectSpecification epvSpecification;
 
     protected ObjectStore getStore() {
-        PersistenceSessionObjectStore psos = (PersistenceSessionObjectStore)IsisContext.getPersistenceSession();
+        PersistenceSession psos = IsisContext.getPersistenceSession();
         return (ObjectStore) psos.getObjectStore();
     }
 
@@ -66,21 +82,28 @@ public abstract class ObjectStoreContractTest_persist {
     @Test
     public void getInstances_usingFindByTitle() throws Exception {
 
-        final String titleString = epv2Adapter.titleString();
+        // given nothing in DB
+        resetPersistenceStore();
         
-        // when locate
-        ObjectAdapter[] retrievedInstance = getStore().getInstances(new PersistenceQueryFindByTitle(epvSpecification, titleString));
+        // when search for any object
+        boolean hasInstances = getStore().hasInstances(epvSpecification);
         
-        // then none
-        assertEquals(0, retrievedInstance.length);
+        // then find none
+        assertFalse(hasInstances);
         
         // given now persisted
-        iswf.persist(iswf.fixtures.epv2);
+        final ExamplePojoWithValues epv2 = iswf.fixtures.epv2;
+        epv2.setName("foo");
+        epv2.setDate(new Date());
+        epv2.setNullable(1234567890L);
+        epv2.setSize(123);
+        
+        iswf.persist(epv2);
 
         iswf.bounceSystem();
         
-        // when locate
-        retrievedInstance = getStore().getInstances(new PersistenceQueryFindByTitle(epvSpecification, titleString));
+        // when search for object
+        ObjectAdapter[] retrievedInstance = getStore().getInstances(new PersistenceQueryFindByTitle(epvSpecification, epv2Adapter.titleString()));
         
         // then find
         assertEquals(1, retrievedInstance.length);
@@ -90,47 +113,55 @@ public abstract class ObjectStoreContractTest_persist {
         assertEquals(((ExamplePojoWithValues)epv2Adapter.getObject()).getName(), ((ExamplePojoWithValues)retrievedAdapter.getObject()).getName());
         assertEquals(epv2Adapter.getOid(), retrievedAdapter.getOid());
 
-
-        // and then don't find by other title
+        // and when search for some other title
         retrievedInstance = getStore().getInstances(new PersistenceQueryFindByTitle(epvSpecification, "some other title"));
+        
+        // then don't find
         assertEquals(0, retrievedInstance.length);
     }
 
 
     @Test
-    public void saveInstance() throws Exception {
+    public void updateInstance() throws Exception {
 
         // given persisted
-        iswf.persist(iswf.fixtures.epv2);
-        
+        resetPersistenceStore();
+        ObjectAdapter adapter = iswf.persist(iswf.fixtures.epv2);
+        final RootOid oid = (RootOid) adapter.getOid();
         iswf.bounceSystem();
         
-        // when change (xactn is implicitly committed here)
-        iswf.fixtures.epv2.setName("changed");
+        // when change
+        adapter = iswf.reload(oid);
+        
+        ExamplePojoWithValues epv = (ExamplePojoWithValues) adapter.getObject();
+        epv.setName("changed");
 
         iswf.bounceSystem();
 
         // then found
-        ObjectAdapter[] retrievedInstance = getStore().getInstances(new PersistenceQueryFindByTitle(epvSpecification, "changed"));
+        ObjectAdapter[] retrievedInstance = getStore().getInstances(new PersistenceQueryFindByTitle(epvSpecification, adapter.titleString()));
         assertEquals(1, retrievedInstance.length);
         
         final ObjectAdapter retrievedAdapter = retrievedInstance[0];
-        assertNotSame(epv2Adapter, retrievedAdapter);
-        assertEquals(((ExamplePojoWithValues)epv2Adapter.getObject()).getName(), ((ExamplePojoWithValues)retrievedAdapter.getObject()).getName());
-        assertEquals(epv2Adapter.getOid(), retrievedAdapter.getOid());
+        assertNotSame(adapter, retrievedAdapter);
+        assertEquals(((ExamplePojoWithValues)adapter.getObject()).getName(), ((ExamplePojoWithValues)retrievedAdapter.getObject()).getName());
+        assertEquals(adapter.getOid(), retrievedAdapter.getOid());
     }
 
     @Test
     public void removeInstance() throws Exception {
 
         // given persisted
-        iswf.persist(iswf.fixtures.epv2);
-        
+        resetPersistenceStore();
+        ObjectAdapter adapter = iswf.persist(iswf.fixtures.epv2);
+        final RootOid oid = (RootOid) adapter.getOid();
         iswf.bounceSystem();
 
         // when destroy
-        iswf.destroy(iswf.fixtures.epv2);
+        adapter = iswf.reload(oid);
         
+        ExamplePojoWithValues epv = (ExamplePojoWithValues) adapter.getObject();
+        iswf.destroy(epv);
         iswf.bounceSystem();
 
         // then not found

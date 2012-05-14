@@ -19,6 +19,11 @@
 
 package org.apache.isis.runtimes.dflt.objectstores.xml;
 
+import java.io.File;
+import java.io.FilenameFilter;
+
+import org.apache.isis.core.testsupport.files.Files;
+import org.apache.isis.core.testsupport.files.Files.Recursion;
 import org.apache.isis.runtimes.dflt.runtime.installerregistry.installerapi.PersistenceMechanismInstaller;
 import org.apache.isis.runtimes.dflt.testsupport.tck.ObjectStoreContractTest_persist;
 
@@ -28,4 +33,23 @@ public class XmlObjectStoreTest_persist extends ObjectStoreContractTest_persist 
     protected PersistenceMechanismInstaller createPersistenceMechanismInstaller() {
         return new XmlPersistenceMechanismInstaller();
     }
+
+    protected void resetPersistenceStore() {
+        Files.deleteFiles("xml/objects", Files.and(endsWithXml(), notServicesXml()), Recursion.DO_RECURSE);
+    }
+
+    private static FilenameFilter notServicesXml() {
+        return new FilenameFilter() {
+            
+            @Override
+            public boolean accept(File parentDirectory, String fileName) {
+                return !fileName.equals("services.xml");
+            }
+        };
+    }
+
+    private static FilenameFilter endsWithXml() {
+        return Files.filterFileNameExtension(".xml");
+    }
+
 }

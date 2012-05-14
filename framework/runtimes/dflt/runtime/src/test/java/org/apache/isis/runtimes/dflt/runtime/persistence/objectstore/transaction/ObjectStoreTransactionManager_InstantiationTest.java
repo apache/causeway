@@ -21,11 +21,13 @@ package org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transactio
 
 import org.junit.Test;
 
+import org.apache.isis.runtimes.dflt.runtime.system.transaction.IsisTransactionManager;
+
 public class ObjectStoreTransactionManager_InstantiationTest extends ObjectStoreTransactionManagerAbstractTestCase {
 
     @Test
     public void canInstantiate() throws Exception {
-        transactionManager = new ObjectStoreTransactionManager(mockPersistenceSession, mockObjectStore);
+        transactionManager = new IsisTransactionManager(mockPersistenceSession, mockObjectStore);
     }
 
 }

@@ -23,8 +23,8 @@ import java.util.List;
 
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
+import org.apache.isis.core.metamodel.adapter.oid.TypedOid;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.CreateObjectCommand;
@@ -39,7 +39,7 @@ import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceQuery
  * <p>
  * Useful for quickly writing decorating implementations.
  */
-public abstract class IsisStoreDelegating implements ObjectStore {
+public class IsisStoreDelegating implements ObjectStore {
 
     private final ObjectStore underlying;
     private final String name;
@@ -134,8 +134,8 @@ public abstract class IsisStoreDelegating implements ObjectStore {
     // ////////////////////////////////////////////////
 
     @Override
-    public ObjectAdapter getObject(final Oid oid, final ObjectSpecification hint) {
-        return underlying.getObject(oid, hint);
+    public ObjectAdapter getObject(final TypedOid oid) {
+        return underlying.getObject(oid);
     }
 
     @Override
@@ -189,5 +189,6 @@ public abstract class IsisStoreDelegating implements ObjectStore {
     public String debugTitle() {
         return underlying.debugTitle();
     }
+
 
 }

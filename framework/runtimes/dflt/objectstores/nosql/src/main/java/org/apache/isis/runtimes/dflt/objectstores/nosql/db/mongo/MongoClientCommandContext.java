@@ -21,6 +21,7 @@ package org.apache.isis.runtimes.dflt.objectstores.nosql.db.mongo;
 
 import com.mongodb.DB;
 
+import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.runtimes.dflt.objectstores.nosql.NoSqlCommandContext;
 import org.apache.isis.runtimes.dflt.objectstores.nosql.db.StateWriter;
 
@@ -40,12 +41,12 @@ public class MongoClientCommandContext implements NoSqlCommandContext {
     public void end() {}
 
     @Override
-    public StateWriter createStateWriter(String specName) {
-        return new MongoStateWriter(db, specName);
+    public StateWriter createStateWriter(ObjectSpecId objectSpecId) {
+        return new MongoStateWriter(db, objectSpecId);
     }
 
     @Override
-    public void delete(String specificationName, String key, String version) {
+    public void delete(ObjectSpecId objectSpecId, String key, String version) {
         // TODO
     }
 

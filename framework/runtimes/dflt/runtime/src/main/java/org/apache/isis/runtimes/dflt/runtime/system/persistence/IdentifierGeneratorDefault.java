@@ -17,21 +17,18 @@
  *  under the License.
  */
 
-package org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.serial;
+package org.apache.isis.runtimes.dflt.runtime.system.persistence;
 
 import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
 import static org.apache.isis.core.commons.matchers.IsisMatchers.greaterThan;
 import static org.hamcrest.CoreMatchers.is;
 
 import org.apache.isis.core.commons.debug.DebugBuilder;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOidDefault;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.SpecificationLoader;
-import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.OidGeneratorAbstract;
-import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
-import org.apache.isis.runtimes.dflt.runtime.system.persistence.OidGenerator;
+import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 
 /**
  * Generates OIDs based on monotonically.
@@ -41,7 +38,7 @@ import org.apache.isis.runtimes.dflt.runtime.system.persistence.OidGenerator;
  * {@link #getOidStringifier() OID stringifier} ({@link RootOidDefault} is
  * conformant)).
  */
-public class RootOidGenerator extends OidGeneratorAbstract {
+public class IdentifierGeneratorDefault implements IdentifierGenerator {
 
     public static class Memento {
         private final long persistentSerialNumber;
@@ -69,7 +66,7 @@ public class RootOidGenerator extends OidGeneratorAbstract {
     // constructor
     // //////////////////////////////////////////////////////////////
 
-    public RootOidGenerator() {
+    public IdentifierGeneratorDefault() {
         this(1);
     }
 
@@ -77,16 +74,15 @@ public class RootOidGenerator extends OidGeneratorAbstract {
      * Persistent {@link Oid}s count up from the provided seed parameter, while
      * {@link Oid#isTransient()} transient {@link Oid}s count down.
      */
-    public RootOidGenerator(final long seed) {
+    public IdentifierGeneratorDefault(final long seed) {
         this(seed, Long.MIN_VALUE + seed);
     }
 
-    public RootOidGenerator(final Memento memento) {
+    public IdentifierGeneratorDefault(final Memento memento) {
         this(memento.getPersistentSerialNumber(), memento.getTransientSerialNumber());
     }
 
-    private RootOidGenerator(final long persistentSerialNumber, final long transientSerialNumber) {
-        super(RootOidDefault.class);
+    public IdentifierGeneratorDefault(final long persistentSerialNumber, final long transientSerialNumber) {
         ensureThatArg(persistentSerialNumber, is(greaterThan(0L)));
         this.persistentSerialNumber = persistentSerialNumber;
         this.transientSerialNumber = transientSerialNumber;
@@ -97,32 +93,30 @@ public class RootOidGenerator extends OidGeneratorAbstract {
     // //////////////////////////////////////////////////////////////
 
     public String name() {
-        return "Simple Serial OID Generator";
+        return "Default Identifier Generator";
     }
 
     // //////////////////////////////////////////////////////////////
-    // main API
+    // main API and hooks
     // //////////////////////////////////////////////////////////////
 
     @Override
-    public synchronized RootOid createTransientOid(final Object object) {
-        final ObjectSpecification objectSpec = getSpecificationLoader().loadSpecification(object.getClass());
-        final String objectType = objectSpec.getObjectType();
-
-        return RootOidDefault.createTransient(objectType, "" + (transientSerialNumber--)); // counts down
-    }
-
-    @Override
-    public synchronized RootOid asPersistent(final RootOid rootOid) {
-        final long next = persistentSerialNumber++; // counts up
-        return rootOid.asPersistent("" + next);
-    }
-
-    @Override
-    public String createAggregateLocalId(final Object pojo) {
+    public String createAggregateLocalId(ObjectSpecId objectSpecId, final Object pojo, final ObjectAdapter parentAdapter) {
         return Long.toHexString(aggregatedId++);
     }
+    
+    @Override
+    public String createTransientIdentifierFor(ObjectSpecId objectSpecId, Object pojo) {
+         // counts down
+        return "" + (transientSerialNumber--);
+    }
 
+    @Override
+    public String createPersistentIdentifierFor(ObjectSpecId objectSpecId, Object pojo, RootOid transientRootOid) {
+        return "" + (persistentSerialNumber++); // counts up
+    }
+
+    
     // //////////////////////////////////////////////////////////////
     // Memento (not API)
     // //////////////////////////////////////////////////////////////
@@ -146,10 +140,6 @@ public class RootOidGenerator extends OidGeneratorAbstract {
     // //////////////////////////////////////////////////////////////
     // debug
     // //////////////////////////////////////////////////////////////
-
-    protected SpecificationLoader getSpecificationLoader() {
-        return IsisContext.getSpecificationLoader();
-    }
 
     @Override
     public void debugData(final DebugBuilder debug) {

@@ -23,7 +23,7 @@ import org.apache.isis.core.commons.components.Injectable;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
-import org.apache.isis.core.metamodel.adapter.oid.RootOid;
+import org.apache.isis.core.metamodel.adapter.oid.TypedOid;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 public interface PersistenceSessionHydrator extends Injectable {
@@ -40,25 +40,40 @@ public interface PersistenceSessionHydrator extends Injectable {
      * 
      * <p>
      * Note: the similar looking method
-     * {@link PersistenceSessionContainer#loadObject(Oid, ObjectSpecification)}
+     * {@link PersistenceSessionContainer#loadObject(TypedOid)}
      * retrieves the existing object from the persistent store (if not available
      * in the {@link AdapterManager maps} . Once the object has been retrieved,
      * the object store calls back to {@link #recreateAdapter(Oid, Object)} to
      * map it.
      * 
      * @see #recreateAdapter(Oid, Object)
-     * @see PersistenceSessionContainer#loadObject(Oid, ObjectSpecification)
+     * @see PersistenceSessionContainer#loadObject(TypedOid)
      */
-    ObjectAdapter recreateAdapter(Oid oid, ObjectSpecification specification);
+    ObjectAdapter recreateAdapter(ObjectSpecification specification, Oid oid);
 
     /**
      * Returns an {@link ObjectAdapter adapter} with the
      * {@link ObjectSpecification type} determined from the provided
      * {@link RootOidWithSpecification oid}.
+     *
+     * <p>
+     * If an adapter exists in the {@link AdapterManager map} then that adapter
+     * is returned immediately. Otherwise a new domain object of the type
+     * specified is {@link ObjectFactory created} and then an adapter is
+     * recreated as per {@link #recreateAdapter(Oid, Object)}.
      * 
-     * @see #recreateAdapter(Oid, ObjectSpecification)
+     * <p>
+     * Note: the similar looking method
+     * {@link PersistenceSessionContainer#loadObject(TypedOid)}
+     * retrieves the existing object from the persistent store (if not available
+     * in the {@link AdapterManager maps} . Once the object has been retrieved,
+     * the object store calls back to {@link #recreateAdapter(Oid, Object)} to
+     * map it.
+     * 
+     * @see #recreateAdapter(Oid, Object)
+     * @see PersistenceSessionContainer#loadObject(TypedOid)
      */
-    ObjectAdapter recreateAdapter(RootOid oid);
+    ObjectAdapter recreateAdapter(TypedOid oid);
 
     /**
      * Returns an adapter for the provided {@link Oid}, wrapping the provided
@@ -73,4 +88,6 @@ public interface PersistenceSessionHydrator extends Injectable {
      * whether the {@link Oid} is {@link Oid#isTransient() transient} or not.
      */
     ObjectAdapter recreateAdapter(Oid oid, Object pojo);
+    
+
 }

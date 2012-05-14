@@ -23,6 +23,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import com.google.common.collect.Lists;
+
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.commons.exceptions.IsisException;
@@ -31,8 +33,8 @@ import org.apache.isis.runtimes.dflt.runtime.system.transaction.MessageBroker;
 
 public class MessageBrokerDefault implements MessageBroker, DebuggableWithTitle {
 
-    private final List<String> messages = new ArrayList<String>();
-    private final List<String> warnings = new ArrayList<String>();
+    private final List<String> messages = Lists.newArrayList();
+    private final List<String> warnings = Lists.newArrayList();
 
     public MessageBrokerDefault() {
     }

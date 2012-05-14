@@ -25,21 +25,15 @@ package org.apache.isis.runtimes.dflt.objectstores.sql;
 import java.io.File;
 import java.io.FilenameFilter;
 
+import org.apache.isis.core.testsupport.files.Files;
+import org.apache.isis.core.testsupport.files.Files.Recursion;
 import org.apache.isis.runtimes.dflt.objectstores.sql.common.SqlIntegrationTestData;
 
 public class HsqlTest extends SqlIntegrationTestData {
 
     @Override
     public void resetPersistenceStoreDirectlyIfRequired() {
-        
-        // Delete all HSQL Database files.
-        deleteFiles("hsql-db", new FilenameFilter() {
-
-            @Override
-            public boolean accept(final File arg0, final String arg1) {
-                return arg1.endsWith(".xml");
-            }
-        });
+        Files.deleteFiles("hsql-db", ".xml", Recursion.DONT_RECURSE);
     }
 
     @Override

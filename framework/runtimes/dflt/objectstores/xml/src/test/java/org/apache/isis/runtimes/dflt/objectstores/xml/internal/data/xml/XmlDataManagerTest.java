@@ -32,6 +32,7 @@ import org.junit.Test;
 
 import org.apache.isis.core.commons.xml.XmlFile;
 import org.apache.isis.core.metamodel.adapter.oid.RootOidDefault;
+import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.runtimes.dflt.objectstores.xml.XmlPersistenceMechanismInstaller;
 import org.apache.isis.runtimes.dflt.objectstores.xml.internal.clock.DefaultClock;
@@ -88,7 +89,7 @@ public class XmlDataManagerTest {
         final ObjectData read = (ObjectData) manager.loadData(data.getRootOid());
 
         assertEquals(data.getRootOid(), read.getRootOid());
-        assertEquals(data.getObjectType(), read.getObjectType());
+        assertEquals(data.getObjectSpecId(), read.getObjectSpecId());
         assertEquals(data.getVersion(), read.getVersion());
     }
 
@@ -103,7 +104,7 @@ public class XmlDataManagerTest {
     @Test
     public void testInsertObjectWithFields() throws ObjectPersistenceException {
         final ObjectData data = createData(Role.class, 99, new FileVersion("user", 13));
-        data.set("Person", RootOidDefault.create("RLE", ""+101));
+        data.set("Person", RootOidDefault.create(ObjectSpecId.of("RLE"), ""+101));
         assertNotNull(data.get("Person"));
         data.set("Name", "Harry");
         assertNotNull(data.get("Name"));
@@ -112,7 +113,7 @@ public class XmlDataManagerTest {
 
         final ObjectData read = (ObjectData) manager.loadData(data.getRootOid());
         assertEquals(data.getRootOid(), read.getRootOid());
-        assertEquals(data.getObjectType(), read.getObjectType());
+        assertEquals(data.getObjectSpecId(), read.getObjectSpecId());
 
         assertEquals(data.get("Person"), read.get("Person"));
         assertEquals(data.get("Name"), read.get("Name"));
@@ -128,7 +129,7 @@ public class XmlDataManagerTest {
 
         final ObjectData read = (ObjectData) manager.loadData(data.getRootOid());
         assertEquals(data.getRootOid(), read.getRootOid());
-        assertEquals(data.getObjectType(), read.getObjectType());
+        assertEquals(data.getObjectSpecId(), read.getObjectSpecId());
 
         final ListOfRootOid c = read.elements("Members");
         assertNull(c);
@@ -141,14 +142,14 @@ public class XmlDataManagerTest {
         data.initCollection("Members");
         final RootOidDefault oid[] = new RootOidDefault[3];
         for (int i = 0; i < oid.length; i++) {
-            oid[i] = RootOidDefault.create("TEA", ""+ (104 + i));
+            oid[i] = RootOidDefault.create(ObjectSpecId.of("TEA"), ""+ (104 + i));
             data.addElement("Members", oid[i]);
         }
         manager.insertObject(data);
 
         final ObjectData read = (ObjectData) manager.loadData(data.getRootOid());
         assertEquals(data.getRootOid(), read.getRootOid());
-        assertEquals(data.getObjectType(), read.getObjectType());
+        assertEquals(data.getObjectSpecId(), read.getObjectSpecId());
 
         final ListOfRootOid c = read.elements("Members");
         for (int i = 0; i < oid.length; i++) {
@@ -160,8 +161,8 @@ public class XmlDataManagerTest {
     private ObjectData createData(final Class<?> type, final long id, final FileVersion version) {
 
         final ObjectSpecification objSpec = IsisContext.getSpecificationLoader().loadSpecification(type);
-        final String objectType = objSpec.getObjectType();
-        final RootOidDefault oid = RootOidDefault.create(objectType, ""+id);
+        final ObjectSpecId objectSpecId = objSpec.getSpecId();
+        final RootOidDefault oid = RootOidDefault.create(objectSpecId, ""+id);
         return new ObjectData(oid, version);
     }
     /*

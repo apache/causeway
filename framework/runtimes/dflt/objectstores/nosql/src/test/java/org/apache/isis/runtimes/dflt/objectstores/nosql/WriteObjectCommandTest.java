@@ -31,12 +31,10 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.RootOidDefault;
 import org.apache.isis.core.metamodel.adapter.version.SerialNumberVersion;
 import org.apache.isis.core.metamodel.adapter.version.Version;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2;
 import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2.Mode;
 import org.apache.isis.runtimes.dflt.objectstores.nosql.db.StateWriter;
 import org.apache.isis.runtimes.dflt.objectstores.nosql.encryption.DataEncryption;
-import org.apache.isis.runtimes.dflt.objectstores.nosql.keys.KeyCreator;
 import org.apache.isis.runtimes.dflt.objectstores.nosql.versions.VersionCreator;
 import org.apache.isis.runtimes.dflt.testsupport.IsisSystemWithFixtures;
 import org.apache.isis.tck.dom.eg.ExamplePojoWithCollections;
@@ -55,16 +53,14 @@ public class WriteObjectCommandTest {
     private StateWriter writer;
     @Mock
     private VersionCreator versionCreator;
-    @Mock
-    private KeyCreator keyCreator;
+    
     @Mock
     private NoSqlCommandContext commandContext;
 
     private DataEncryption dataEncrypter;
+    //private KeyCreatorDefault keyCreator;
 
     private ObjectAdapter epv1Adapter;
-    private ObjectSpecification specification;
-    private ObjectAdapter epv2Adapter;
     private ObjectAdapter epr1Adapter;
     private ObjectAdapter epc1Adapter;
 
@@ -78,26 +74,26 @@ public class WriteObjectCommandTest {
     @Before
     public void setup() {
 
+        //keyCreator = new KeyCreatorDefault();
+        
         epv1 = iswf.fixtures.epv1;
         epv1.setName("Fred Smith");
         epv1.setSize(108);
-        epv1Adapter = iswf.remapAsPersistent(RootOidDefault.create("EPV|1"), epv1);
+        epv1Adapter = iswf.remapAsPersistent(epv1, RootOidDefault.deString("EPV:1"));
 
         epv2 = iswf.fixtures.epv2;
         epv2.setName("John Brown");
-        epv2Adapter = iswf.remapAsPersistent(RootOidDefault.create("EPV|2"), epv2);
+        iswf.remapAsPersistent(epv2, RootOidDefault.deString("EPV:2"));
 
         epr1 = iswf.fixtures.epr1;
         epr1.setReference(epv1);
-        epr1Adapter = iswf.remapAsPersistent(RootOidDefault.create("EPR|1"), epr1);
+        epr1Adapter = iswf.remapAsPersistent(epr1, RootOidDefault.deString("EPR:1"));
 
         epc1 = iswf.fixtures.epc1;
         epc1.getHomogeneousCollection().add(epv1);
         epc1.getHomogeneousCollection().add(epv2);
         
-        epc1Adapter = iswf.remapAsPersistent(RootOidDefault.create("EPC|1"), epc1Adapter);
-
-        specification = epv1Adapter.getSpecification();
+        epc1Adapter = iswf.remapAsPersistent(epc1, RootOidDefault.deString("EPC:1"));
 
         final Version version = new SerialNumberVersion(2, "username", null);
 
@@ -141,16 +137,18 @@ public class WriteObjectCommandTest {
         context.checking(new Expectations() {
 
             {
-                one(commandContext).createStateWriter(specification.getFullIdentifier());
+                one(commandContext).createStateWriter(epv1Adapter.getSpecification().getSpecId());
                 will(returnValue(writer));
 
-                one(keyCreator).key(RootOidDefault.create("EPV|1"));
-                will(returnValue("1"));
+//                one(writer).writeId("1");
+//                one(writer).writeObjectType(specification.getFullIdentifier());
 
-                one(writer).writeId("3");
-                one(writer).writeType(specification.getFullIdentifier());
+                final RootOidDefault oid = RootOidDefault.create(epv1Adapter.getSpecification().getSpecId(), "1");
+                exactly(2).of(writer).writeOid(oid); // once for the id, once for the type
+
                 one(writer).writeField("name", "ENCFred Smith");
                 one(writer).writeField("size", "ENC108");
+                one(writer).writeField("date", null);
                 one(writer).writeField("nullable", null);
                 one(writer).writeVersion(null, "2");
                 one(writer).writeUser("username");
@@ -162,9 +160,8 @@ public class WriteObjectCommandTest {
             }
         });
 
-        new WriteObjectCommand(false, keyCreator, versionCreator, dataEncrypter, epv1Adapter).execute(commandContext);
-
-        context.assertIsSatisfied();
+        final WriteObjectCommand command = new WriteObjectCommand(WriteObjectCommand.Mode.NON_UPDATE, versionCreator, dataEncrypter, epv1Adapter);
+        command.execute(commandContext);
     }
 
     @Test
@@ -172,18 +169,18 @@ public class WriteObjectCommandTest {
 
         context.checking(new Expectations() {
             {
-                one(commandContext).createStateWriter(epr1Adapter.getSpecification().getFullIdentifier());
+                one(commandContext).createStateWriter(epr1Adapter.getSpecification().getSpecId());
                 will(returnValue(writer));
 
-                one(keyCreator).key(RootOidDefault.create("EPR|1"));
-                will(returnValue("5"));
-                one(keyCreator).reference(epv1Adapter);
-                will(returnValue("ref@3"));
-
-                one(writer).writeId("5");
-                one(writer).writeType(epr1Adapter.getSpecification().getFullIdentifier());
-                one(writer).writeField("reference1", "ref@3");
-                one(writer).writeField("reference2", null);
+//                one(writer).writeId("1");
+//                one(writer).writeObjectType(epr1Adapter.getSpecification().getFullIdentifier());
+                
+                final RootOidDefault oid = RootOidDefault.create(epr1Adapter.getSpecification().getSpecId(), "1");
+                exactly(2).of(writer).writeOid(oid); // once for the id, once for the type
+                
+                one(writer).writeField("reference", "EPV:1");
+                one(writer).writeField("aggregatedReference", null);
+                
                 one(writer).writeVersion(null, "2");
                 one(writer).writeUser("username");
                 one(writer).writeTime("1057");
@@ -193,9 +190,8 @@ public class WriteObjectCommandTest {
             }
         });
 
-        new WriteObjectCommand(false, keyCreator, versionCreator, dataEncrypter, epr1Adapter).execute(commandContext);
-
-        context.assertIsSatisfied();
+        final WriteObjectCommand command = new WriteObjectCommand(WriteObjectCommand.Mode.NON_UPDATE, versionCreator, dataEncrypter, epr1Adapter);
+        command.execute(commandContext);
     }
 
     @Test
@@ -203,20 +199,16 @@ public class WriteObjectCommandTest {
 
         context.checking(new Expectations() {
             {
-                one(commandContext).createStateWriter(epc1Adapter.getSpecification().getFullIdentifier());
+                one(commandContext).createStateWriter(epc1Adapter.getSpecification().getSpecId());
                 will(returnValue(writer));
 
-                one(keyCreator).key(RootOidDefault.create("EPC|1"));
-                will(returnValue("6"));
-                one(writer).writeId("6");
-                one(writer).writeType(epc1Adapter.getSpecification().getFullIdentifier());
+//                one(writer).writeId("1");
+//                one(writer).writeObjectType(epc1Adapter.getSpecification().getFullIdentifier());
 
-                one(keyCreator).reference(epv1Adapter);
-                will(returnValue("ref@3"));
-                one(keyCreator).reference(epv2Adapter);
-                will(returnValue("ref@4"));
+                final RootOidDefault oid = RootOidDefault.create(epc1Adapter.getSpecification().getSpecId(), "1");
+                exactly(2).of(writer).writeOid(oid); // once for the id, once for the type
 
-                one(writer).writeField("homogenousCollection", "ref@3|ref@4|");
+                one(writer).writeField("homogeneousCollection", "EPV:1|EPV:2|");
 
                 one(writer).writeVersion(null, "2");
                 one(writer).writeUser("username");
@@ -227,9 +219,7 @@ public class WriteObjectCommandTest {
             }
         });
 
-        new WriteObjectCommand(false, keyCreator, versionCreator, dataEncrypter, epc1Adapter).execute(commandContext);
-
-        context.assertIsSatisfied();
+        final WriteObjectCommand command = new WriteObjectCommand(WriteObjectCommand.Mode.NON_UPDATE, versionCreator, dataEncrypter, epc1Adapter);
+        command.execute(commandContext);
     }
-
 }

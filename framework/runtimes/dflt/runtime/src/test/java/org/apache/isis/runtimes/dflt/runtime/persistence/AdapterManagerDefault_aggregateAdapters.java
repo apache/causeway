@@ -19,6 +19,7 @@
 
 package org.apache.isis.runtimes.dflt.runtime.persistence;
 
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
 
@@ -39,9 +40,11 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapterLookup;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.core.metamodel.adapter.oid.AggregatedOid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOidDefault;
+import org.apache.isis.core.metamodel.adapter.oid.TypedOid;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
+import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
+import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.progmodel.app.IsisMetaModel;
 import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2;
 import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2.Mode;
@@ -80,7 +83,7 @@ public class AdapterManagerDefault_aggregateAdapters {
     public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
 
     @Mock
-    private ObjectAssociation mockAssociation;
+    private OneToManyAssociation mockCollection;
 
     @Mock
     private RuntimeContext mockRuntimeContext;
@@ -141,14 +144,14 @@ public class AdapterManagerDefault_aggregateAdapters {
         aggregatedObject = new Name();
         
         persistentParentAdapter = adapterManager.recreateAdapter(
-                RootOidDefault.create("CUS", "1"), rootObject);
+                RootOidDefault.create(ObjectSpecId.of("CUS"), "1"), rootObject);
     }
 
-    private void allowing_oidGenerator_createAggregatedLocalId(final Object value, final String result) {
+    private void allowing_oidGenerator_createAggregatedOid(final Object value, final AggregatedOid resultOid) {
         context.checking(new Expectations() {
             {
-                allowing(mockOidGenerator).createAggregateLocalId(value);
-                will(returnValue(result));
+                allowing(mockOidGenerator).createAggregateOid(with(equalTo(value)), with(any(ObjectAdapter.class)));
+                will(returnValue(resultOid));
                 ignoring(mockOidGenerator);
             }
         });
@@ -158,7 +161,9 @@ public class AdapterManagerDefault_aggregateAdapters {
     @Test
     public void adapterFor_whenAggregated() throws Exception {
         // given
-        allowing_oidGenerator_createAggregatedLocalId(aggregatedObject, "123");
+        allowing_oidGenerator_createAggregatedOid(
+                aggregatedObject, 
+                new AggregatedOid(ObjectSpecId.of("NME"), (TypedOid) persistentParentAdapter.getOid(), "123"));
         
         // when
         aggregatedAdapter = adapterManager.adapterFor(aggregatedObject, persistentParentAdapter);
@@ -170,7 +175,7 @@ public class AdapterManagerDefault_aggregateAdapters {
 
     @Test
     public void testOidHasSubId() throws Exception {
-        allowing_oidGenerator_createAggregatedLocalId(aggregatedObject, "123");
+        allowing_oidGenerator_createAggregatedOid(aggregatedObject, new AggregatedOid(ObjectSpecId.of("NME"), (TypedOid) persistentParentAdapter.getOid(), "123"));
         aggregatedAdapter = adapterManager.adapterFor(aggregatedObject, persistentParentAdapter);
 
         final AggregatedOid aggregatedOid = (AggregatedOid) aggregatedAdapter.getOid();
@@ -179,7 +184,7 @@ public class AdapterManagerDefault_aggregateAdapters {
 
     @Test
     public void getResolveState_isInitiallyGhost() throws Exception {
-        allowing_oidGenerator_createAggregatedLocalId(aggregatedObject, "123");
+        allowing_oidGenerator_createAggregatedOid(aggregatedObject, new AggregatedOid(ObjectSpecId.of("NME"), (TypedOid) persistentParentAdapter.getOid(), "123"));
         aggregatedAdapter = adapterManager.adapterFor(aggregatedObject, persistentParentAdapter);
 
         assertEquals(ResolveState.GHOST, aggregatedAdapter.getResolveState());
@@ -187,10 +192,10 @@ public class AdapterManagerDefault_aggregateAdapters {
 
     @Test
     public void testSameParametersRetrievesSameAdapter() throws Exception {
-        allowing_oidGenerator_createAggregatedLocalId(aggregatedObject, "123");
+        allowing_oidGenerator_createAggregatedOid(aggregatedObject, new AggregatedOid(ObjectSpecId.of("NME"), (TypedOid) persistentParentAdapter.getOid(), "123"));
         aggregatedAdapter = adapterManager.adapterFor(aggregatedObject, persistentParentAdapter);
 
-        final ObjectAdapter valueAdapter2 = adapterManager.adapterFor(aggregatedObject, persistentParentAdapter, mockAssociation);
+        final ObjectAdapter valueAdapter2 = adapterManager.adapterFor(aggregatedObject, persistentParentAdapter, mockCollection);
         assertSame(aggregatedAdapter, valueAdapter2);
     }
 

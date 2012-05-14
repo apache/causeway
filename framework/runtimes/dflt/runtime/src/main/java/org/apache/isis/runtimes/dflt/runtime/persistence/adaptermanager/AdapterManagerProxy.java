@@ -22,6 +22,7 @@ package org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterLookup;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 
 /**
@@ -41,7 +42,7 @@ public interface AdapterManagerProxy extends ObjectAdapterLookup {
      * Part of public API so that the proxy persistor can maintain its maps when
      * it processes a newly persisted object.
      * 
-     * @see AdapterManagerPersist#remapAsPersistent(ObjectAdapter)
+     * @see AdapterManagerPersist#remapAsPersistent(ObjectAdapter, RootOid)
      */
     public void remapUpdated(Oid rootOid);
 

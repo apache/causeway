@@ -32,8 +32,10 @@ import org.xml.sax.helpers.DefaultHandler;
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.xml.ContentWriter;
 import org.apache.isis.core.commons.xml.XmlFile;
+import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOidDefault;
+import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.runtimes.dflt.objectstores.xml.internal.data.xml.Utils;
 import org.apache.isis.runtimes.dflt.objectstores.xml.internal.services.ServiceManager;
 
@@ -48,9 +50,9 @@ public class XmlServiceManager implements ServiceManager {
     }
 
     @Override
-    public RootOid getOidForService(final String objectType) {
+    public RootOid getOidForService(final ObjectSpecId objectSpecId) {
         for (final ServiceElement element: services) {
-            if (element.oid.getObjectType().equals(objectType)) {
+            if (element.oid.getObjectSpecId().equals(objectSpecId)) {
                 return element.oid;
             }
         }
@@ -80,8 +82,11 @@ public class XmlServiceManager implements ServiceManager {
                 writer.append("<" + tag + ">\n");
                 for (final ServiceElement element: services) {
                     writer.append("  <service");
-                    Utils.appendAttribute(writer, "type", element.oid.getObjectType());
-                    Utils.appendAttribute(writer, "id", element.oid.getIdentifier());
+//                    Utils.appendAttribute(writer, "type", element.oid.getObjectSpecId());
+//                    Utils.appendAttribute(writer, "id", element.oid.getIdentifier());
+
+                  Utils.appendAttribute(writer, "oid", element.oid.enString());
+
                     writer.append("/>\n");
                 }
                 writer.append("</" + tag + ">\n");
@@ -91,9 +96,9 @@ public class XmlServiceManager implements ServiceManager {
 }
 
 class ServiceElement {
-    final RootOidDefault oid;
+    final RootOid oid;
 
-    public ServiceElement(final RootOidDefault oid) {
+    public ServiceElement(final RootOid oid) {
         Assert.assertNotNull("oid", oid.enString());
         this.oid = oid;
     }
@@ -105,10 +110,18 @@ class ServiceHandler extends DefaultHandler {
     @Override
     public void startElement(final String ns, final String name, final String tagName, final Attributes attrs) throws SAXException {
         if (tagName.equals("service")) {
-            final String objectType = attrs.getValue("type");
-            final String identifier = attrs.getValue("id");
-            final ServiceElement service = new ServiceElement(RootOidDefault.create(objectType, identifier));
+//            final String objectType = attrs.getValue("type");
+//            final String identifier = attrs.getValue("id");
+//             final RootOid rootOid = RootOidDefault.create(objectType, identifier);
+            
+            final String oidStr = attrs.getValue("oid");
+            RootOid rootOid = getOidMarshaller().unmarshal(oidStr, RootOid.class);
+            final ServiceElement service = new ServiceElement(rootOid);
             services.add(service);
         }
+    }
+
+    protected OidMarshaller getOidMarshaller() {
+        return new OidMarshaller();
     }
 }

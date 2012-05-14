@@ -21,58 +21,78 @@ package org.apache.isis.runtimes.dflt.objectstores.nosql;
 
 import static org.junit.Assert.assertEquals;
 
+import org.jmock.Expectations;
 import org.jmock.auto.Mock;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
+import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
+import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOidDefault;
-import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
+import org.apache.isis.core.metamodel.adapter.oid.TypedOid;
+import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.progmodel.app.IsisMetaModel;
+import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2;
 import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2.Mode;
-import org.apache.isis.progmodels.dflt.ProgrammingModelFacetsJava5;
 import org.apache.isis.runtimes.dflt.objectstores.nosql.keys.KeyCreatorDefault;
-import org.apache.isis.tck.dom.eg.ExamplePojoRepository;
-import org.apache.isis.tck.dom.eg.ExamplePojoWithReferences;
 
 public class NoSqlKeyCreatorTest {
 
     @Rule
     public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
 
-    private final String id = "3";
-    private final String reference = ExamplePojoWithReferences.class.getName() + "@" + id;
-    private final RootOidDefault oid3 = RootOidDefault.create("ERP", id);
-    
-    private ObjectSpecification specification;
-    
+    @Mock
+    private OidMarshaller mockOidMarshaller;
+    @Mock
+    private SpecificationLoader mockSpecificationLoader;
+    @Mock
+    private ObjectSpecification mockSpecification;
+
+    private final RootOidDefault oid = RootOidDefault.create(ObjectSpecId.of("ERP"), "3");
+    private final String oidStr = oid.enString();
+
     private KeyCreatorDefault keyCreatorDefault;
 
-    private IsisMetaModel isisMetaModel;
-
-    @Mock
-    private RuntimeContext mockRuntimeContext;
-
+    
     @Before
-    public void setup() {
-        isisMetaModel = new IsisMetaModel(mockRuntimeContext, new ProgrammingModelFacetsJava5(), new ExamplePojoRepository());
-        specification = isisMetaModel.getSpecificationLoader().loadSpecification(ExamplePojoWithReferences.class);
-
-        keyCreatorDefault = new KeyCreatorDefault();
+    public void setUp() throws Exception {
+        keyCreatorDefault = new KeyCreatorDefault() {
+            @Override
+            protected OidMarshaller getOidMarshaller() {
+                return mockOidMarshaller;
+            }
+            @Override
+            protected SpecificationLoader getSpecificationLoader() {
+                return mockSpecificationLoader;
+            }
+        };
     }
 
     @Test
-    public void oid() throws Exception {
-        final RootOidDefault oid = (RootOidDefault) keyCreatorDefault.oidFromReference(reference);
-        assertEquals(oid3.getIdentifier(), oid.getIdentifier());
-        assertEquals(oid3.getObjectType(), oid.getObjectType());
+    public void unmarshal() throws Exception {
+        context.checking(new Expectations() {
+
+            {
+                one(mockOidMarshaller).unmarshal(oidStr, RootOid.class);
+                will(returnValue(oid));
+            }
+        });
+        assertEquals(oid, keyCreatorDefault.unmarshal(oidStr));
     }
 
     @Test
     public void specification() throws Exception {
-        final ObjectSpecification spec = keyCreatorDefault.specificationFromReference(reference);
-        assertEquals(specification, spec);
+        context.checking(new Expectations() {
+            {
+                one(mockOidMarshaller).unmarshal(oidStr, TypedOid.class);
+                will(returnValue(oid));
+                one(mockSpecificationLoader).lookupBySpecId(oid.getObjectSpecId());
+                will(returnValue(mockSpecification));
+            }
+        });
+        final ObjectSpecification spec = keyCreatorDefault.specificationFromOidStr(oidStr);
+        assertEquals(mockSpecification, spec);
     }
 }

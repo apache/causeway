@@ -20,7 +20,7 @@ package org.apache.isis.extensions.jpa.metamodel.specloader.validator;
 
 import java.text.MessageFormat;
 
-import org.apache.isis.core.metamodel.facets.object.objecttype.ObjectTypeFacet;
+import org.apache.isis.core.metamodel.facets.object.objecttype.ObjectSpecIdFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelInvalidException;
@@ -95,7 +95,7 @@ public class JpaMetaModelValidator extends MetaModelValidatorAbstract {
         if (!objSpec.containsFacet(JpaEntityFacet.class)) {
             return;
         }
-        if (objSpec.isAbstract() || objSpec.containsFacet(ObjectTypeFacet.class)) {
+        if (objSpec.isAbstract() || objSpec.containsFacet(ObjectSpecIdFacet.class)) {
             return;
         }
         final String classFullName = objSpec.getFullIdentifier();

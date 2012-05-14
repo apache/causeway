@@ -23,6 +23,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOidDefault;
+import org.apache.isis.core.metamodel.adapter.oid.TypedOid;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
@@ -78,13 +79,13 @@ public class IdMappingAbstract {
         return oid.getIdentifier();
     }
 
-    public Oid recreateOid(final Results rs, final ObjectSpecification specification) {
+    public TypedOid recreateOid(final Results rs, final ObjectSpecification specification) {
         final Object object = rs.getObject(column);
         if (object == null) {
             return null;
         } 
         final int id = ((Integer) object).intValue();
-        return new RootOidDefault(specification.getObjectType(), ""+id, Oid.State.PERSISTENT);
+        return new RootOidDefault(specification.getSpecId(), ""+id, Oid.State.PERSISTENT);
     }
 
     protected ObjectAdapter getAdapter(final ObjectSpecification specification, final Oid oid) {
@@ -93,7 +94,7 @@ public class IdMappingAbstract {
         if (adapter != null) {
             return adapter;
         } else {
-            return IsisContext.getPersistenceSession().recreateAdapter(oid, specification);
+            return IsisContext.getPersistenceSession().recreateAdapter(specification, oid);
         }
     }
 

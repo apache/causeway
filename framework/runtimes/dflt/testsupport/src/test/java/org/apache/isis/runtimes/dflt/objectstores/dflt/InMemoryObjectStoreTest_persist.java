@@ -20,6 +20,7 @@
 package org.apache.isis.runtimes.dflt.objectstores.dflt;
 
 import org.apache.isis.runtimes.dflt.runtime.installerregistry.installerapi.PersistenceMechanismInstaller;
+import org.apache.isis.runtimes.dflt.testsupport.IsisSystemWithFixtures.Listener;
 import org.apache.isis.runtimes.dflt.testsupport.tck.ObjectStoreContractTest_persist;
 
 public class InMemoryObjectStoreTest_persist extends ObjectStoreContractTest_persist {
@@ -27,5 +28,10 @@ public class InMemoryObjectStoreTest_persist extends ObjectStoreContractTest_per
     @Override
     protected PersistenceMechanismInstaller createPersistenceMechanismInstaller() {
         return new InMemoryPersistenceMechanismInstaller();
+    }
+
+    @Override
+    protected Listener iswfListener() {
+        return null;
     }
 }

@@ -22,6 +22,7 @@ package org.apache.isis.runtimes.dflt.objectstores.nosql.db;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.PersistenceCommand;
 
 public interface NoSqlDataDatabase {
@@ -31,14 +32,14 @@ public interface NoSqlDataDatabase {
     
     boolean containsData();
 
-    void addService(String name, String key);
-    String getService(String name);
+    void addService(ObjectSpecId objectSpecId, String key);
+    String getService(ObjectSpecId objectSpecId);
 
-    boolean hasInstances(String specificationName);
-    StateReader getInstance(String key, String specificationName);
-    Iterator<StateReader> instancesOf(String specificationName);
+    boolean hasInstances(ObjectSpecId objectSpecId);
+    StateReader getInstance(String key, ObjectSpecId objectSpecId);
+    Iterator<StateReader> instancesOf(ObjectSpecId objectSpecId);
 
-    long nextSerialNumberBatch(String string, int batchSize);
+    long nextSerialNumberBatch(ObjectSpecId objectSpecId, int batchSize);
 
     void write(List<PersistenceCommand> commands);
 }

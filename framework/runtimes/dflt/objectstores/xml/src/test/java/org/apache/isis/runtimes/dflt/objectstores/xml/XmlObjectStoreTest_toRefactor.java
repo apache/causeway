@@ -32,6 +32,7 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.oid.TypedOid;
 import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2;
@@ -153,7 +154,8 @@ public class XmlObjectStoreTest_toRefactor {
     public void validatesObjectStoreGetObject() throws Exception {
         final SaveObjectCommand command = objectStore.createSaveObjectCommand(adapter1);
         objectStore.execute(Collections.<PersistenceCommand> singletonList(command));
-        assertTrue(objectStore.getObject(adapter1.getOid(), adapter1.getSpecification()).getOid().equals(adapter1.getOid()));
+        final ObjectAdapter retrievedAdapter = objectStore.getObject((TypedOid) adapter1.getOid());
+        assertTrue(retrievedAdapter.getOid().equals(adapter1.getOid()));
     }
 
 

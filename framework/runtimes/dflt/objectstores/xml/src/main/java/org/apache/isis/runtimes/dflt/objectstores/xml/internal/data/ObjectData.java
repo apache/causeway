@@ -151,7 +151,7 @@ public class ObjectData extends Data {
 
     @Override
     public String toString() {
-        return "ObjectData[type=" + getObjectType() + ",oid=" + getRootOid() + ",fields=" + fieldById + "]";
+        return "ObjectData[type=" + getObjectSpecId() + ",oid=" + getRootOid() + ",fields=" + fieldById + "]";
     }
 
 }

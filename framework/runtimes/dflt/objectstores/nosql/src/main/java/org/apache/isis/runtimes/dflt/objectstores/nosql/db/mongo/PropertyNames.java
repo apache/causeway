@@ -19,13 +19,19 @@
 
 package org.apache.isis.runtimes.dflt.objectstores.nosql.db.mongo;
 
-interface PropertyNames {
+public final class PropertyNames {
+    
+    private PropertyNames(){}
+    
     static final String ENCRYPT = "_encrypt";
-    static final String TYPE = "_type";
-    static final String ID = "_id";
+    
+//    static final String TYPE = "_type";
+//    static final String ID = "_id";
+    
+    static final String MONGO_INTERNAL_ID = "_id";
+    static final String OID = "_oid";
     static final String VERSION = "_version";
     static final String TIME = "_time";
     static final String USER = "_user";
-
 }
 

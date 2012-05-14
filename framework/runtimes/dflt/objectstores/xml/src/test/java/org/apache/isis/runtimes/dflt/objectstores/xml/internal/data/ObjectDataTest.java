@@ -24,6 +24,7 @@ import java.util.Iterator;
 import junit.framework.TestCase;
 
 import org.apache.isis.core.metamodel.adapter.oid.RootOidDefault;
+import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.testspec.ObjectSpecificationStub;
 import org.apache.isis.runtimes.dflt.objectstores.xml.internal.clock.DefaultClock;
 import org.apache.isis.runtimes.dflt.objectstores.xml.internal.version.FileVersion;
@@ -36,7 +37,7 @@ public class ObjectDataTest extends TestCase {
         FileVersion.setClock(new DefaultClock());
 
         final ObjectSpecificationStub type = new ObjectSpecificationStub("test");
-        final ObjectData objectData = new ObjectData(RootOidDefault.create(objectType, ""+13), new FileVersion(""));
+        final ObjectData objectData = new ObjectData(RootOidDefault.create(ObjectSpecId.of(objectType), ""+13), new FileVersion(""));
 
         assertEquals(null, objectData.get("name"));
         objectData.set("name", "value");

@@ -36,6 +36,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapterLookup;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.core.metamodel.adapter.oid.RootOidDefault;
 import org.apache.isis.core.metamodel.adapter.version.Version;
+import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2;
 import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2.Mode;
@@ -65,7 +66,7 @@ public class PojoAdapterTest {
     public void setUp() throws Exception {
         domainObject = new RuntimeTestPojo();
         
-        adapter = new PojoAdapter(domainObject, RootOidDefault.create("CUS", "1"), mockSpecificationLoader, mockObjectAdapterLookup, mockLocalization);
+        adapter = new PojoAdapter(domainObject, RootOidDefault.create(ObjectSpecId.of("CUS"), "1"), mockSpecificationLoader, mockObjectAdapterLookup, mockLocalization);
         adapter.setVersion(mockVersion);
         
         allowUnimportantMethodCallsOn(mockVersion);
@@ -85,7 +86,7 @@ public class PojoAdapterTest {
 
     @Test
     public void getOid_initially() {
-        assertEquals(RootOidDefault.create("CUS", "1"), adapter.getOid());
+        assertEquals(RootOidDefault.create(ObjectSpecId.of("CUS"), "1"), adapter.getOid());
     }
 
     @Test

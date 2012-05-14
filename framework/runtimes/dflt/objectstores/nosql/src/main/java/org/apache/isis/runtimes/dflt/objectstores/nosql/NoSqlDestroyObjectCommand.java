@@ -21,30 +21,33 @@ package org.apache.isis.runtimes.dflt.objectstores.nosql;
 
 import org.apache.isis.core.commons.lang.ToString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.runtimes.dflt.objectstores.nosql.keys.KeyCreator;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.runtimes.dflt.objectstores.nosql.keys.KeyCreatorDefault;
 import org.apache.isis.runtimes.dflt.objectstores.nosql.versions.VersionCreator;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.DestroyObjectCommand;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.PersistenceCommandContext;
 
 final class NoSqlDestroyObjectCommand implements DestroyObjectCommand {
+    
+    private final KeyCreatorDefault keyCreator = new KeyCreatorDefault();
+    
     private final ObjectAdapter adapter;
-    private final KeyCreator keyCreator;
     private final VersionCreator versionCreator;
 
-    public NoSqlDestroyObjectCommand(final KeyCreator keyCreator, final VersionCreator versionCreator, final ObjectAdapter adapter) {
-        this.keyCreator = keyCreator;
+    public NoSqlDestroyObjectCommand(final VersionCreator versionCreator, final ObjectAdapter adapter) {
         this.versionCreator = versionCreator;
         this.adapter = adapter;
     }
 
     @Override
     public void execute(final PersistenceCommandContext context) {
-        final String key = keyCreator.key(adapter.getOid());
+        final String key = keyCreator.getIdentifierForPersistentRoot(adapter.getOid());
         final String version = versionCreator.versionString(adapter.getVersion());
-        final String specificationName = adapter.getSpecification().getFullIdentifier();
+        final ObjectSpecification objectSpec = adapter.getSpecification();
+        //final String specificationName = objectSpec.getFullIdentifier();
 
         final NoSqlCommandContext noSqlCommandContext = (NoSqlCommandContext) context;
-        noSqlCommandContext.delete(specificationName, key, version);
+        noSqlCommandContext.delete(objectSpec.getSpecId(), key, version);
     }
 
     @Override
