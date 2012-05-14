@@ -30,6 +30,7 @@ import org.apache.isis.core.commons.encoding.DataInputExtended;
 import org.apache.isis.core.commons.encoding.DataOutputExtended;
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 
 /**
  * Used as the {@link Oid} for {@link Aggregated} {@link ObjectAdapter}s
@@ -37,14 +38,14 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
  * <p>
  * Aggregated adapters are created explicitly by the application using 
  * {@link DomainObjectContainer#newAggregatedInstance(Object, Class)}.
- * 
- * @see CollectionOid
  */
-public final class AggregatedOid extends ParentedOid implements Serializable {
+public final class AggregatedOid extends ParentedOid implements TypedOid, Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    private final ObjectSpecId objectSpecId;
     private final String localId;
+    private final TypedOid parentOid;
 
     private int cachedHashCode;
 
@@ -52,41 +53,67 @@ public final class AggregatedOid extends ParentedOid implements Serializable {
     // Constructor
     // /////////////////////////////////////////////////////////
 
-    public AggregatedOid(final Oid parentOid, final String localId) {
-        super(parentOid);
+    public AggregatedOid(ObjectSpecId objectSpecId, final TypedOid parentOid, final String localId) {
+        Assert.assertNotNull("parentOid required", parentOid);
+        Assert.assertNotNull("objectSpecId required", objectSpecId);
         Assert.assertNotNull("LocalId required", localId);
+        this.objectSpecId = objectSpecId;
         this.localId = localId;
+        this.parentOid = parentOid;
         cacheState();
     }
 
-    
+    // /////////////////////////////////////////////////////////
+    // enString
+    // /////////////////////////////////////////////////////////
+
+    public static AggregatedOid deString(String oidStr) {
+        return getOidMarshaller().unmarshal(oidStr, AggregatedOid.class);
+    }
+
+    @Override
+    public String enString() {
+        return getOidMarshaller().marshal(this);
+    }
+
     // ////////////////////////////////////////////
     // Encodeable
     // ////////////////////////////////////////////
 
     public AggregatedOid(final DataInputExtended input) throws IOException {
-        super(input);
-        this.localId = input.readUTF();
+        final String oidStr = input.readUTF();
+        final AggregatedOid oid = deString(oidStr);
+        this.parentOid = oid.parentOid;
+        this.objectSpecId = oid.objectSpecId;
+        this.localId = oid.localId;
         cacheState();
     }
 
     @Override
     public void encode(final DataOutputExtended output) throws IOException {
-        super.encode(output);
-        output.writeUTF(localId);
+        output.writeUTF(enString());
     }
-
 
     
     // /////////////////////////////////////////////////////////
     // Properties
     // /////////////////////////////////////////////////////////
 
+    @Override
+    public ObjectSpecId getObjectSpecId() {
+        return objectSpecId;
+    }
+    
     public String getLocalId() {
         return localId;
     }
 
+    @Override
+    public TypedOid getParentOid() {
+        return parentOid;
+    }
 
+    
     // /////////////////////////////////////////////////////////
     // Value semantics
     // /////////////////////////////////////////////////////////
@@ -106,18 +133,20 @@ public final class AggregatedOid extends ParentedOid implements Serializable {
     }
 
     public boolean equals(final AggregatedOid other) {
-        return Objects.equal(other.getParentOid(), getParentOid()) && Objects.equal(other.localId, localId);
+        return Objects.equal(other.getParentOid(), getParentOid()) && 
+               Objects.equal(other.objectSpecId, objectSpecId) && 
+               Objects.equal(other.localId, localId);
     }
 
     @Override
     public int hashCode() {
-        cacheState();
         return cachedHashCode;
     }
 
     private void cacheState() {
         int hashCode = 17;
         hashCode = 37 * hashCode + getParentOid().hashCode();
+        hashCode = 37 * hashCode + objectSpecId.hashCode();
         hashCode = 37 * hashCode + localId.hashCode();
         cachedHashCode = hashCode;
     }
@@ -128,20 +157,11 @@ public final class AggregatedOid extends ParentedOid implements Serializable {
     // /////////////////////////////////////////////////////////
 
     /**
-     * When the RootOid is persisted, all its &quot;children&quot;
+     * When the parent Oid is persisted, all its &quot;children&quot;
      * need updating similarly.
      */
-    public AggregatedOid asPersistent(Oid newParentOid) {
-        return new AggregatedOid(newParentOid, localId);
-    }
-
-    // /////////////////////////////////////////////////////////
-    // enString
-    // /////////////////////////////////////////////////////////
-
-    @Override
-    public String enString() {
-        return getParentOid().enString() + "@" + localId;
+    public AggregatedOid asPersistent(TypedOid newParentOid) {
+        return new AggregatedOid(objectSpecId, newParentOid, localId);
     }
 
     // /////////////////////////////////////////////////////////
@@ -151,6 +171,10 @@ public final class AggregatedOid extends ParentedOid implements Serializable {
     @Override
     public String toString() {
         return "AOID[" + getParentOid() + "," + localId + "]";
+    }
+
+    protected static OidMarshaller getOidMarshaller() {
+        return new OidMarshaller();
     }
 
 }

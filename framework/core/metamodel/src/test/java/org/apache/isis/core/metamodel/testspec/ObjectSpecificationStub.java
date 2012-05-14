@@ -39,11 +39,13 @@ import org.apache.isis.core.metamodel.consent.InteractionResult;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
+import org.apache.isis.core.metamodel.facets.object.objecttype.ObjectSpecIdFacet;
 import org.apache.isis.core.metamodel.interactions.ObjectTitleContext;
 import org.apache.isis.core.metamodel.interactions.ObjectValidityContext;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.core.metamodel.runtimecontext.noruntime.RuntimeContextNoRuntime;
 import org.apache.isis.core.metamodel.spec.ActionType;
+import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.Persistability;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -59,6 +61,10 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
     private final String name;
     private List<ObjectSpecification> subclasses = Collections.emptyList();
     private String title;
+    /**
+     * lazily derived, see {@link #getSpecId()} 
+     */
+    private ObjectSpecId specId;
 
     private Persistability persistable;
     private boolean isEncodeable;
@@ -189,8 +195,11 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
     }
 
     @Override
-    public String getObjectType() {
-        return getFullIdentifier();
+    public ObjectSpecId getSpecId() {
+        if(specId == null) {
+            specId = getFacet(ObjectSpecIdFacet.class).value();
+        }
+        return specId;
     }
 
     @Override

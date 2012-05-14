@@ -42,7 +42,7 @@ import org.apache.isis.core.metamodel.facets.object.callbacks.CreatedCallbackFac
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.facets.object.icon.IconFacet;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
-import org.apache.isis.core.metamodel.facets.object.objecttype.ObjectTypeFacet;
+import org.apache.isis.core.metamodel.facets.object.objecttype.ObjectSpecIdFacet;
 import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
 import org.apache.isis.core.metamodel.facets.object.plural.PluralFacet;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
@@ -96,7 +96,7 @@ public interface ObjectSpecification extends Specification, ObjectActionContaine
     Class<?> getCorrespondingClass();
 
     /**
-     * Returns the (unique) object type, as per the {@link ObjectTypeFacet}.
+     * Returns the (unique) spec Id, as per the {@link ObjectSpecIdFacet}.
      * 
      * <p>
      * This will typically be the value of the {@link ObjectType} annotation (or equivalent);
@@ -104,9 +104,9 @@ public interface ObjectSpecification extends Specification, ObjectActionContaine
      * {@link ClassSubstitutor class name substituted} if necessary to allow for runtime bytecode enhancement.
      * 
      * <p>
-     * The {@link ObjectSpecification} can be retrieved using {@link SpecificationLookup#lookupByObjectType(String)}.
+     * The {@link ObjectSpecification} can be retrieved using {@link SpecificationLookup#lookupBySpecId(String)}.
      */
-    String getObjectType();
+    ObjectSpecId getSpecId();
     
     /**
      * Returns an (immutable) "full" identifier for this specification.

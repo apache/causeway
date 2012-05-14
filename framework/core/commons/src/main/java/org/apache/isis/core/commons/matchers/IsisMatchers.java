@@ -22,6 +22,7 @@ package org.apache.isis.core.commons.matchers;
 import static org.hamcrest.CoreMatchers.nullValue;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -112,6 +113,7 @@ public final class IsisMatchers {
         };
     }
 
+    @Factory
     public static <T> Matcher<T> anInstanceOf(final Class<T> expected) {
         return new TypeSafeMatcher<T>() {
             @Override
@@ -148,6 +150,7 @@ public final class IsisMatchers {
         return CoreMatchers.anyOf(nullValue(String.class), nonEmptyString());
     }
 
+    @Factory
     public static Matcher<List<?>> containsElementThat(final Matcher<?> elementMatcher) {
         return new TypeSafeMatcher<List<?>>() {
             @Override
@@ -196,6 +199,7 @@ public final class IsisMatchers {
         return new ClassEqualsMatcher(operand);
     }
 
+    @Factory
     public static Matcher<File> existsAndNotEmpty() {
 
         return new TypeSafeMatcher<File>() {
@@ -212,6 +216,7 @@ public final class IsisMatchers {
         };
     }
 
+    @Factory
     public static Matcher<String> matches(final String regex) {
         return new TypeSafeMatcher<String>() {
 
@@ -227,6 +232,7 @@ public final class IsisMatchers {
         };
     }
 
+    @Factory
     public static <X> Matcher<Class<X>> anySubclassOf(final Class<X> cls) {
         return new TypeSafeMatcher<Class<X>>() {
 
@@ -242,6 +248,7 @@ public final class IsisMatchers {
         };
     }
 
+    @Factory
     public static <T> Matcher<List<T>> sameContentsAs(final List<T> expected) {
         return new TypeSafeMatcher<List<T>>() {
 
@@ -257,6 +264,7 @@ public final class IsisMatchers {
         };
     }
 
+    @Factory
     public static <T> Matcher<List<T>> listContaining(final T t) {
         return new TypeSafeMatcher<List<T>>() {
     
@@ -272,6 +280,7 @@ public final class IsisMatchers {
         };
     }
 
+    @Factory
     public static <T> Matcher<List<T>> listContainingAll(final T... items) {
         return new TypeSafeMatcher<List<T>>() {
 
@@ -288,6 +297,7 @@ public final class IsisMatchers {
         };
     }
 
+    @Factory
     public static Matcher<List<Object>> containsObjectOfType(final Class<?> cls) {
         return new TypeSafeMatcher<List<Object>>() {
 
@@ -308,6 +318,7 @@ public final class IsisMatchers {
         };
     }
 
+    @Factory
     public static Matcher<String> startsWith(final String expected) {
         return new TypeSafeMatcher<String>() {
 
@@ -323,6 +334,7 @@ public final class IsisMatchers {
         };
     }
 
+    @Factory
     public static Matcher<String> contains(final String expected) {
         return new TypeSafeMatcher<String>() {
 
@@ -338,5 +350,26 @@ public final class IsisMatchers {
         };
     }
 
+    
+    @Factory
+    public static Matcher<File> equalsFile(final File file) throws IOException {
+        final String canonicalPath = file.getCanonicalPath();
+        return new TypeSafeMatcher<File>() {
+
+            @Override
+            public void describeTo(Description arg0) {
+                arg0.appendText("file '" + canonicalPath + "'");
+            }
+
+            @Override
+            public boolean matchesSafely(File arg0) {
+                try {
+                    return arg0.getCanonicalPath().equals(canonicalPath);
+                } catch (IOException e) {
+                    return false;
+                }
+            }
+        };
+    }
 
 }

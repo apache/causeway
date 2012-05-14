@@ -24,7 +24,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.AnnotationBasedFacetFactoryAbstract;
-import org.apache.isis.core.metamodel.facets.object.objecttype.ObjectTypeFacet;
+import org.apache.isis.core.metamodel.facets.object.objecttype.ObjectSpecIdFacet;
 
 public class ObjectTypeAnnotationFacetFactory extends AnnotationBasedFacetFactoryAbstract {
 
@@ -38,8 +38,8 @@ public class ObjectTypeAnnotationFacetFactory extends AnnotationBasedFacetFactor
         FacetUtil.addFacet(create(annotation, processClassContext.getFacetHolder()));
     }
 
-    private ObjectTypeFacet create(final ObjectType annotation, final FacetHolder holder) {
-        return annotation != null ? new ObjectTypeFacetAnnotation(annotation.value(), holder) : null;
+    private ObjectSpecIdFacet create(final ObjectType annotation, final FacetHolder holder) {
+        return annotation != null ? new ObjectSpecIdFacetForObjectTypeAnnotation(annotation.value(), holder) : null;
     }
 
 }

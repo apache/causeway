@@ -20,6 +20,7 @@
 package org.apache.isis.core.metamodel.adapter.oid.stringable;
 
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
+import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 
 abstract class RootOidAbstractForTesting implements RootOid {
 
@@ -29,8 +30,8 @@ abstract class RootOidAbstractForTesting implements RootOid {
     }
 
     @Override
-    public String getObjectType() {
-        return "FOO";
+    public ObjectSpecId getObjectSpecId() {
+        return ObjectSpecId.of("FOO");
     }
 
 

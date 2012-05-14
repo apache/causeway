@@ -16,7 +16,6 @@
  */
 package org.apache.isis.core.metamodel.adapter.map;
 
-import org.apache.isis.applib.annotation.Aggregated;
 import org.apache.isis.core.commons.components.Injectable;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
@@ -25,7 +24,7 @@ import org.apache.isis.core.metamodel.adapter.oid.CollectionOid;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
+import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 
 public interface AdapterMap extends Injectable {
 
@@ -46,11 +45,11 @@ public interface AdapterMap extends Injectable {
      * Looks up or creates a standalone (value) or root adapter.
      * 
      * <p>
-     * Implementation should simply delegate to {@link #adapterFor(Object, ObjectAdapter, ObjectAssociation)}, 
+     * Implementation should simply delegate to {@link #adapterFor(Object, ObjectAdapter, OneToManyAssociation)}, 
      * with <tt>parentAdapter</tt> and <tt>association</tt> both null.
      * 
      * @see #adapterFor(Object, ObjectAdapter)
-     * @see #adapterFor(Object, ObjectAdapter, ObjectAssociation)
+     * @see #adapterFor(Object, ObjectAdapter, OneToManyAssociation)
      */
     ObjectAdapter adapterFor(Object domainObject);
 
@@ -58,12 +57,12 @@ public interface AdapterMap extends Injectable {
      * Looks up or creates a standalone (value), aggregated or root adapter.
      * 
      * <p>
-     * Implementation should simply delegate to {@link #adapterFor(Object, ObjectAdapter, ObjectAssociation)}, 
+     * Implementation should simply delegate to {@link #adapterFor(Object, ObjectAdapter, OneToManyAssociation)}, 
      * with <tt>parentAdapter</tt> set but <tt>association</tt> both null.
      * 
      * <p>
      * @see #adapterFor(Object)
-     * @see #adapterFor(Object, ObjectAdapter, ObjectAssociation)
+     * @see #adapterFor(Object, ObjectAdapter, OneToManyAssociation)
      */
     ObjectAdapter adapterFor(Object domainObject, ObjectAdapter parentAdapter);
 
@@ -112,12 +111,12 @@ public interface AdapterMap extends Injectable {
      *            - pojo to adapt
      * @param parentAdapter
      *            - optional; used if adapter is parented (either based on its spec, or because an association which indicates/requires it to be so).
-     * @param association
-     *            - optional; if a OTMA then will return a collection adapter; if a OTOA then used to hint whether aggregated adapter
+     * @param collection
+     *            - optional; if present then used to return a collection adapter.
      *            
      * @see #adapterFor(Object)
      * @see #adapterFor(Object, ObjectAdapter)            
      */
-    public ObjectAdapter adapterFor(final Object pojo, final ObjectAdapter parentAdapter, ObjectAssociation association);
+    public ObjectAdapter adapterFor(final Object pojo, final ObjectAdapter parentAdapter, OneToManyAssociation collection);
 
 }

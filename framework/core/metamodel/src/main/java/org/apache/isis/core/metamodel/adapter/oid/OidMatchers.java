@@ -20,7 +20,7 @@ public class OidMatchers {
             public boolean matchesSafely(Oid oid) {
                 if(oid instanceof RootOid) {
                     RootOid rootOid = (RootOid) oid;
-                    return rootOid.getObjectType().equals(objectType) && rootOid.getIdentifier().equals(identifier);
+                    return rootOid.getObjectSpecId().equals(objectType) && rootOid.getIdentifier().equals(identifier);
                 }
                 return false;
             }

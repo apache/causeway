@@ -29,5 +29,5 @@ public interface SpecificationLookup extends Injectable {
      */
     ObjectSpecification loadSpecification(Class<?> cls);
 
-    ObjectSpecification lookupByObjectType(String objectType);
+    ObjectSpecification lookupBySpecId(ObjectSpecId objectSpecId);
 }

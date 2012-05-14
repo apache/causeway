@@ -58,7 +58,7 @@ import org.apache.isis.core.metamodel.facets.object.icon.IconFacet;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
 import org.apache.isis.core.metamodel.facets.object.notpersistable.InitiatedBy;
 import org.apache.isis.core.metamodel.facets.object.notpersistable.NotPersistableFacet;
-import org.apache.isis.core.metamodel.facets.object.objecttype.ObjectTypeFacet;
+import org.apache.isis.core.metamodel.facets.object.objecttype.ObjectSpecIdFacet;
 import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
 import org.apache.isis.core.metamodel.facets.object.plural.PluralFacet;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
@@ -72,6 +72,7 @@ import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.Instance;
 import org.apache.isis.core.metamodel.spec.ObjectActionSet;
 import org.apache.isis.core.metamodel.spec.ObjectInstantiator;
+import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.ObjectSpecificationException;
 import org.apache.isis.core.metamodel.spec.Persistability;
@@ -126,7 +127,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     private final Identifier identifier;
     private final boolean isAbstract;
     // derived lazily, cached since immutable
-    private String objectType;
+    private ObjectSpecId specId;
 
     private ObjectSpecification superclassSpec;
 
@@ -170,14 +171,14 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     }
 
     @Override
-    public String getObjectType() {
-        if(objectType == null) {
-            final ObjectTypeFacet facet = getFacet(ObjectTypeFacet.class);
+    public ObjectSpecId getSpecId() {
+        if(specId == null) {
+            final ObjectSpecIdFacet facet = getFacet(ObjectSpecIdFacet.class);
             if(facet != null) {
-                objectType = facet.value();
+                specId = facet.value();
             }
         }
-        return objectType;
+        return specId;
     }
     
     /**

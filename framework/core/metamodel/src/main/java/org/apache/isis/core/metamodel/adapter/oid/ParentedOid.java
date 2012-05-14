@@ -19,70 +19,17 @@
 
 package org.apache.isis.core.metamodel.adapter.oid;
 
-import java.io.IOException;
-import java.io.Serializable;
-
-import org.apache.isis.core.commons.encoding.DataInputExtended;
-import org.apache.isis.core.commons.encoding.DataOutputExtended;
 
 /**
- * Base type of the {@link Oid} for collections, values and <tt>@Aggregated</tt>
+ * Base type of the {@link Oid} for collections and for <tt>@Aggregated</tt>
  * types.
  * 
  * @see AggregatedOid
+ * @see CollectionOid
  */
-public abstract class ParentedOid implements Oid, Serializable {
+public abstract class ParentedOid implements Oid {
 
-    private static final long serialVersionUID = 1L;
-
-    private final Oid parentOid;
-
-    // /////////////////////////////////////////////////////////
-    // Constructor
-    // /////////////////////////////////////////////////////////
-
-    public ParentedOid(final Oid parentOid) {
-        this.parentOid = parentOid;
-    }
-
-    
-    // ////////////////////////////////////////////
-    // Encodeable
-    // ////////////////////////////////////////////
-
-    public ParentedOid(final DataInputExtended input) throws IOException {
-        final String type = input.readUTF();
-        this.parentOid = recreateParentOid(type, input);
-    }
-
-    @Override
-    public void encode(final DataOutputExtended output) throws IOException {
-        final String type = determineParentType();
-        output.writeUTF(type);
-        this.parentOid.encode(output);
-    }
-
-    
-    private String determineParentType() {
-        if(parentOid instanceof RootOid) { return "R"; }
-        if(parentOid instanceof AggregatedOid) { return "A"; }
-        throw new IllegalStateException("Unknown parent Oid type; parentOid class is: " + parentOid.getClass().getName());
-    }
-
-    private static Oid recreateParentOid(String type, DataInputExtended input) throws IOException {
-        if(type.equals("R")) { return new RootOidDefault(input); }
-        if(type.equals("A")) { return new AggregatedOid(input); }
-        throw new IllegalArgumentException("Unknown parent Oid type: " + type);
-    }
-
-
-    // /////////////////////////////////////////////////////////
-    // Properties
-    // /////////////////////////////////////////////////////////
-
-    public Oid getParentOid() {
-        return parentOid;
-    }
+    public abstract TypedOid getParentOid();
 
     @Override
     public boolean isTransient() {

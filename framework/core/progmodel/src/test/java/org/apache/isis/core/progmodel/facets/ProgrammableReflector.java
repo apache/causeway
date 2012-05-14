@@ -25,6 +25,7 @@ import java.util.List;
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.exceptions.NotYetImplementedException;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
+import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.ObjectReflector;
 import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistry;
@@ -118,7 +119,7 @@ public class ProgrammableReflector implements ObjectReflector {
     }
 
     @Override
-    public ObjectSpecification lookupByObjectType(String objectType) {
+    public ObjectSpecification lookupBySpecId(ObjectSpecId objectSpecId) {
         return null;
     }
 

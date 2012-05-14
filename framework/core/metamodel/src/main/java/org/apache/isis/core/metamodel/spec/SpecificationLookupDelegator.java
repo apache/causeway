@@ -44,8 +44,8 @@ public class SpecificationLookupDelegator extends SpecificationLookupAbstract {
     }
 
     @Override
-    public ObjectSpecification lookupByObjectType(String objectType) {
-        return specificationLookupDelegate.lookupByObjectType(objectType);
+    public ObjectSpecification lookupBySpecId(ObjectSpecId objectSpecId) {
+        return specificationLookupDelegate.lookupBySpecId(objectSpecId);
     }
 
     @Override

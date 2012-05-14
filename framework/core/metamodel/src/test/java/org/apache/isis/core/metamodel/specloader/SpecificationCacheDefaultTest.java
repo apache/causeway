@@ -14,6 +14,7 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
+import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2;
 import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2.Mode;
@@ -71,16 +72,16 @@ public class SpecificationCacheDefaultTest {
 
     @Test(expected=IllegalStateException.class)
     public void getByObjectType_whenNotSet() {
-        specificationCache.getByObjectType("CUS");
+        specificationCache.getByObjectType(ObjectSpecId.of("CUS"));
     }
 
     @Test
     public void getByObjectType_whenSet() {
-        Map<String, ObjectSpecification> specByObjectType = Maps.newHashMap();
-        specByObjectType.put("CUS", customerSpec);
+        Map<ObjectSpecId, ObjectSpecification> specByObjectType = Maps.newHashMap();
+        specByObjectType.put(ObjectSpecId.of("CUS"), customerSpec);
         
-        specificationCache.setCacheByObjectType(specByObjectType);
-        final ObjectSpecification objectSpec = specificationCache.getByObjectType("CUS");
+        specificationCache.setCacheBySpecId(specByObjectType);
+        final ObjectSpecification objectSpec = specificationCache.getByObjectType(ObjectSpecId.of("CUS"));
         
         assertSame(objectSpec, customerSpec);
     }

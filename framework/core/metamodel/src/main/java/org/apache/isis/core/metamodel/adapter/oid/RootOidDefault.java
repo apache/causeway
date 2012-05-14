@@ -25,87 +25,46 @@ import static org.hamcrest.CoreMatchers.nullValue;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.Iterator;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import com.google.common.base.Objects;
-import com.google.common.base.Splitter;
 
 import org.apache.isis.core.commons.encoding.DataInputExtended;
 import org.apache.isis.core.commons.encoding.DataOutputExtended;
 import org.apache.isis.core.commons.ensure.Ensure;
+import org.apache.isis.core.commons.matchers.IsisMatchers;
+import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 
 public final class RootOidDefault implements Serializable, RootOid {
 
     private static final long serialVersionUID = 1L;
 
-    private final String objectType;
+    private final ObjectSpecId objectSpecId;
     private String identifier;
-
-    private int hashCode;
     private State state;
-    private String toString;
-    private String enString;
-    
-    private static final String TOSTRING_SERIAL_NUM_PREFIX = "#";
 
-    private static final String OBJECT_TYPE_PREFIX = ":";
-    private static final String ENSTRING_SERIAL_NUM_PREFIX = ":";
+    private int cachedHashCode;
     
-    // identifier cannot contain @ or #
-    // @ is used by AggregateOid as an appendix
-    // # is used in REST URLs, so want to avoid possible clashes
-    private static Pattern DESTRING_PATTERN = 
-            Pattern.compile("^" +
-            		"(T?)OID" +
-                    OBJECT_TYPE_PREFIX + "([^" + ENSTRING_SERIAL_NUM_PREFIX + "]+)" +
-                    ENSTRING_SERIAL_NUM_PREFIX + "(-?[^#@]+)" +  
-            		"$");
-
     
     // ////////////////////////////////////////////
     // Constructor, factory methods
     // ////////////////////////////////////////////
 
-    public static RootOidDefault create(String objectType, final String identifier) {
-        return new RootOidDefault(objectType, identifier, State.PERSISTENT);
+    public static RootOidDefault create(ObjectSpecId objectSpecId, final String identifier) {
+        return new RootOidDefault(objectSpecId, identifier, State.PERSISTENT);
     }
 
-    public static RootOidDefault createTransient(String objectType, final String identifier) {
-        return new RootOidDefault(objectType, identifier, State.TRANSIENT);
+    public static RootOidDefault createTransient(ObjectSpecId objectSpecId, final String identifier) {
+        return new RootOidDefault(objectSpecId, identifier, State.TRANSIENT);
     }
 
-    /**
-     * Primarily for tests
-     */
-    public static RootOidDefault create(String oidStr) {
-        final Iterator<String> iterator = Splitter.on("|").split(oidStr).iterator();
-        if(!iterator.hasNext()) { throw new IllegalArgumentException("expected oid in form XXX|123; oidStr: " + oidStr); }
-        String objectType = iterator.next();
-        if(!iterator.hasNext()) { throw new IllegalArgumentException("expected oid in form XXX|123; oidStr: " + oidStr); }
-        String identifier = iterator.next();
-        return create(objectType, identifier);
-    }
-
-    /**
-     * Primarily for tests
-     */
-    public static RootOidDefault createTransient(String oidStr) {
-        final Iterator<String> iterator = Splitter.on("|").split(oidStr).iterator();
-        if(!iterator.hasNext()) { throw new IllegalArgumentException("expected oid in form XXX|123; oidStr: " + oidStr); }
-        String objectType = iterator.next();
-        if(!iterator.hasNext()) { throw new IllegalArgumentException("expected oid in form XXX|123; oidStr: " + oidStr); }
-        String identifier = iterator.next();
-        return createTransient(objectType, identifier);
-    }
-
-    public RootOidDefault(String objectType, final String identifier, final State state) {
-        Ensure.ensureThatArg(objectType, is(not(nullValue())));
+    public RootOidDefault(ObjectSpecId objectSpecId, final String identifier, final State state) {
+        Ensure.ensureThatArg(objectSpecId, is(not(nullValue())));
         Ensure.ensureThatArg(identifier, is(not(nullValue())));
+        Ensure.ensureThatArg(identifier, is(not(IsisMatchers.contains("#"))));
+        Ensure.ensureThatArg(identifier, is(not(IsisMatchers.contains("@"))));
         Ensure.ensureThatArg(state, is(not(nullValue())));
         
-        this.objectType = objectType;
+        this.objectSpecId = objectSpecId;
         this.identifier = identifier;
         this.state = state;
         initialized();
@@ -120,17 +79,17 @@ public final class RootOidDefault implements Serializable, RootOid {
     // ////////////////////////////////////////////
 
     public RootOidDefault(final DataInputExtended input) throws IOException {
-        this.objectType = input.readUTF();
-        this.identifier = input.readUTF();
-        this.state = input.readBoolean() ? State.TRANSIENT : State.PERSISTENT;
-        initialized();
+        final String oidStr = input.readUTF();
+        final RootOidDefault oid = getOidMarshaller().unmarshal(oidStr, RootOidDefault.class);
+        this.objectSpecId = oid.objectSpecId;
+        this.identifier = oid.identifier;
+        this.state = oid.state;
+        cacheState();
     }
 
     @Override
     public void encode(final DataOutputExtended output) throws IOException {
-        output.writeUTF(this.objectType);
-        output.writeUTF(this.identifier);
-        output.writeBoolean(this.state.isTransient());
+        output.writeUTF(enString());
     }
 
 
@@ -138,49 +97,13 @@ public final class RootOidDefault implements Serializable, RootOid {
     // deString'able, enString
     // ////////////////////////////////////////////
 
-    /**
-     * @see DirectlyStringableOid
-     * @see #enString()
-     */
     public static RootOidDefault deString(final String oidStr) {
-        final Matcher matcher = DESTRING_PATTERN.matcher(oidStr);
-        if (!matcher.matches()) {
-            throw new IllegalArgumentException("Could not parse OID '" + oidStr + "'; should match pattern: " + DESTRING_PATTERN.toString());
-        }
-
-        final String transientStr = matcher.group(1);
-        final String objectType = matcher.group(2);
-        final String serialNumInHexStr = matcher.group(3);
-        
-        final RootOidDefault oid = createOid(objectType, transientStr, serialNumInHexStr);
-
-        return oid;
+        return getOidMarshaller().unmarshal(oidStr, RootOidDefault.class);
     }
 
-    private static RootOidDefault createOid(String objectType, final String transientStr, final String identifier) {
-        final boolean isTransient = "T".equals(transientStr);
-        return isTransient ? RootOidDefault.createTransient(objectType, identifier) : RootOidDefault.create(objectType, identifier);
-    }
-
-    /**
-     * Returns a well-defined format which can be converted back using
-     * {@link #deString(String)}.
-     * 
-     * <p>
-     * The options are:
-     * <ul>
-     * <li>For transient with no previous: <tt>TOID#12AB</tt> where the initial
-     * T indicates transient and after the # is the serial number in hex.</li>
-     * <li>For persistent with previous: <tt>OID#12ED+TOID#12AB</tt> where after
-     * the + is the previous OID, encoded</li>
-     * <li>For persistent with no previous: <tt>OID#12ED</tt>.</li>
-     * 
-     * @see DirectlyStringableOid
-     * @see #deString(String)
-     */
     @Override
     public String enString() {
-        return enString;
+        return getOidMarshaller().marshal(this);
     }
 
     // ////////////////////////////////////////////
@@ -188,23 +111,22 @@ public final class RootOidDefault implements Serializable, RootOid {
     // ////////////////////////////////////////////
 
     @Override
-    public String getObjectType() {
-        return objectType;
-    }
-
-
-    @Override
-    public boolean isTransient() {
-        return state.isTransient();
+    public ObjectSpecId getObjectSpecId() {
+        return objectSpecId;
     }
 
     public String getIdentifier() {
         return identifier;
     }
 
+    @Override
+    public boolean isTransient() {
+        return state.isTransient();
+    }
+
 
     // ////////////////////////////////////////////
-    // makePersistent
+    // asPersistent
     // ////////////////////////////////////////////
 
     
@@ -213,7 +135,7 @@ public final class RootOidDefault implements Serializable, RootOid {
         Ensure.ensureThatState(state.isTransient(), is(true));
         Ensure.ensureThatArg(identifier, is(not(nullValue())));
 
-        return new RootOidDefault(objectType, identifier, State.PERSISTENT);
+        return new RootOidDefault(objectSpecId, identifier, State.PERSISTENT);
     }
 
 
@@ -222,22 +144,11 @@ public final class RootOidDefault implements Serializable, RootOid {
     // ////////////////////////////////////////////
 
     private void cacheState() {
-        hashCode = 17;
-        hashCode = 37 * hashCode + objectType.hashCode();
-        hashCode = 37 * hashCode + identifier.hashCode();
-        hashCode = 37 * hashCode + (isTransient() ? 0 : 1);
-        toString = asString(this, TOSTRING_SERIAL_NUM_PREFIX);
-        enString = asString(this, ENSTRING_SERIAL_NUM_PREFIX);
+        cachedHashCode = 17;
+        cachedHashCode = 37 * cachedHashCode + objectSpecId.hashCode();
+        cachedHashCode = 37 * cachedHashCode + identifier.hashCode();
+        cachedHashCode = 37 * cachedHashCode + (isTransient() ? 0 : 1);
     }
-
-    private static String asString(final RootOidDefault x, final String serialNumPrefix) {
-        return (x.isTransient() ? "T" : "") + "OID" + OBJECT_TYPE_PREFIX + x.objectType + serialNumPrefix + x.identifier;
-    }
-
-    /*
-     * public void setPrevious(SerialOid previous) {
-     * Assert.assertNull(previous); this.previous = previous; }
-     */
 
     @Override
     public boolean equals(final Object other) {
@@ -254,17 +165,21 @@ public final class RootOidDefault implements Serializable, RootOid {
     }
 
     public boolean equals(final RootOidDefault other) {
-        return Objects.equal(objectType, other.objectType) && Objects.equal(identifier, other.identifier) && Objects.equal(state, other.state);
+        return Objects.equal(objectSpecId, other.objectSpecId) && Objects.equal(identifier, other.identifier) && Objects.equal(state, other.state);
     }
 
     @Override
     public int hashCode() {
-        return hashCode;
+        return cachedHashCode;
     }
 
     @Override
     public String toString() {
-        return toString;
+        return enString();
+    }
+
+    protected static OidMarshaller getOidMarshaller() {
+        return new OidMarshaller();
     }
 
 

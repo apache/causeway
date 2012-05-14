@@ -19,11 +19,28 @@
 
 package org.apache.isis.core.progmodel.facets.object.objecttype;
 
+import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.object.objecttype.ObjectSpecIdFacet;
+import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 
-public class ObjectTypeFacetDerivedFromClassName extends ObjectTypeFacetAbstract {
+public abstract class ObjectSpecIdFacetAbstract extends
+        FacetAbstract implements ObjectSpecIdFacet {
 
-    public ObjectTypeFacetDerivedFromClassName(final String value, final FacetHolder holder) {
-        super(value, holder);
+    public static Class<? extends Facet> type() {
+        return ObjectSpecIdFacet.class;
+    }
+
+    private final ObjectSpecId value;
+
+    public ObjectSpecIdFacetAbstract(final String value,
+            final FacetHolder holder) {
+        super(ObjectSpecIdFacetAbstract.type(), holder, false);
+        this.value = ObjectSpecId.of(value);
+    }
+    
+    public ObjectSpecId value() {
+        return value;
     }
 }

@@ -32,7 +32,7 @@ class OidWithNonStaticDestringMethod extends RootOidAbstractForTesting {
 
     @Override
     public String enString() {
-        return getObjectType() + "|1234567A";
+        return getObjectSpecId() + "|1234567A";
     }
 
     @Override

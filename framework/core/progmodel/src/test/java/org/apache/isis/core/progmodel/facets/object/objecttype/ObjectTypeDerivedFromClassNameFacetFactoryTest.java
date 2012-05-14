@@ -30,7 +30,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
-import org.apache.isis.core.metamodel.facets.object.objecttype.ObjectTypeFacet;
+import org.apache.isis.core.metamodel.facets.object.objecttype.ObjectSpecIdFacet;
+import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.specloader.classsubstitutor.ClassSubstitutor;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryJUnit4TestCase;
 
@@ -47,15 +48,16 @@ public class ObjectTypeDerivedFromClassNameFacetFactoryTest extends AbstractFace
         facetFactory.setSpecificationLookup(reflector);
         facetFactory.setClassSubstitutor(classSubstitutor);
     }
+
+    static class Customer {
+    }
     
+    static class CustomerAsManufacturedByCglibByteCodeEnhancer extends Customer {
+    }
+
     @Test
     public void installsFacet_andDelegatesToClassSubstitutor() {
 
-        class CustomerAsManufacturedByCglibByteCodeEnhancer {
-        }
-
-        class Customer {
-        }
         
         expectNoMethodsRemoved();
         context.checking(new Expectations() {
@@ -67,11 +69,11 @@ public class ObjectTypeDerivedFromClassNameFacetFactoryTest extends AbstractFace
         
         facetFactory.process(new ProcessClassContext(CustomerAsManufacturedByCglibByteCodeEnhancer.class, methodRemover, facetHolderImpl));
 
-        final ObjectTypeFacet facet = facetHolderImpl.getFacet(ObjectTypeFacet.class);
+        final ObjectSpecIdFacet facet = facetHolderImpl.getFacet(ObjectSpecIdFacet.class);
         
         assertThat(facet, is(not(nullValue())));
-        assertThat(facet instanceof ObjectTypeFacetDerivedFromClassName, is(true));
-        assertThat(facet.value(), is(Customer.class.getCanonicalName()));
+        assertThat(facet instanceof ObjectSpecIdFacetDerivedFromClassName, is(true));
+        assertThat(facet.value(), is(ObjectSpecId.of(Customer.class.getCanonicalName())));
     }
 
 }

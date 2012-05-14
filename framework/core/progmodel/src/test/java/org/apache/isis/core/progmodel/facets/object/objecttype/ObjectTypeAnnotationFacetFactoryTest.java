@@ -29,7 +29,8 @@ import org.junit.Test;
 
 import org.apache.isis.applib.annotation.ObjectType;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
-import org.apache.isis.core.metamodel.facets.object.objecttype.ObjectTypeFacet;
+import org.apache.isis.core.metamodel.facets.object.objecttype.ObjectSpecIdFacet;
+import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryJUnit4TestCase;
 
 public class ObjectTypeAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4TestCase {
@@ -52,11 +53,11 @@ public class ObjectTypeAnnotationFacetFactoryTest extends AbstractFacetFactoryJU
         
         facetFactory.process(new ProcessClassContext(Customer.class, methodRemover, facetHolderImpl));
 
-        final ObjectTypeFacet facet = facetHolderImpl.getFacet(ObjectTypeFacet.class);
+        final ObjectSpecIdFacet facet = facetHolderImpl.getFacet(ObjectSpecIdFacet.class);
         
         assertThat(facet, is(not(nullValue())));
-        assertThat(facet instanceof ObjectTypeFacetAnnotation, is(true));
-        assertThat(facet.value(), is("CUS"));
+        assertThat(facet instanceof ObjectSpecIdFacetForObjectTypeAnnotation, is(true));
+        assertThat(facet.value(), is(ObjectSpecId.of("CUS")));
 
     }
 

@@ -114,6 +114,8 @@ public interface ObjectAdapter extends ObjectMetaModel {
 
     /**
      * Either the aggregate root (either itself or, if parented, then its parent adapter).
+     * 
+     * TODO: should this be recursive, to support root->aggregate->aggregate etc.
      */
     ObjectAdapter getAggregateRoot();
 

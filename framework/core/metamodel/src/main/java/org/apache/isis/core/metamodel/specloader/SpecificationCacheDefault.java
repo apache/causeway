@@ -25,13 +25,14 @@ import java.util.Map;
 
 import com.google.common.collect.Maps;
 
+import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
 
 class SpecificationCacheDefault {
     
     private final Map<String, ObjectSpecification> specByClassName = Maps.newHashMap();
-    private Map<String, ObjectSpecification> specByObjectType;
+    private Map<ObjectSpecId, ObjectSpecification> specById;
 
     public ObjectSpecification get(final String className) {
         return specByClassName.get(className);
@@ -49,19 +50,19 @@ class SpecificationCacheDefault {
         return Collections.unmodifiableCollection(specByClassName.values());
     }
 
-    public ObjectSpecification getByObjectType(String objectType) {
-        if (specByObjectType == null) {
+    public ObjectSpecification getByObjectType(ObjectSpecId objectSpecID) {
+        if (specById == null) {
             throw new IllegalStateException("SpecificationCache by object type has not yet been initialized");
         }
-        return specByObjectType.get(objectType);
+        return specById.get(objectSpecID);
     }
 
     /**
      * Populated as a result of running {@link MetaModelValidator#validate() validation} after all specs have been loaded. 
      */
-    void setCacheByObjectType(Map<String, ObjectSpecification> specByObjectType) {
-        this.specByObjectType = Maps.newHashMap();
-        this.specByObjectType.putAll(specByObjectType);
+    void setCacheBySpecId(Map<ObjectSpecId, ObjectSpecification> specById) {
+        this.specById = Maps.newHashMap();
+        this.specById.putAll(specById);
     }
 
 }

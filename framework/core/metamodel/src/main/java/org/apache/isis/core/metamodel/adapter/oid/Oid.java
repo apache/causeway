@@ -34,11 +34,6 @@ public interface Oid extends Encodable {
 
     /**
      * A string representation of this {@link Oid}.
-     * 
-     * <p>
-     * Note that {@link RootOid} provide a reciprocal static <tt>deString</tt> method so that
-     * they can be round-tripped.  However, this feature is not required or provided by
-     * {@link AggregatedOid}.
      */
     String enString();
 
@@ -52,9 +47,23 @@ public interface Oid extends Encodable {
     boolean isTransient();
 
     public static enum State {
-        PERSISTENT, TRANSIENT;
+        PERSISTENT("P"), TRANSIENT("T");
+        
+        private final String code;
+        private State(final String code) {
+            this.code = code;
+        }
+        
         public boolean isTransient() {
             return this == TRANSIENT;
+        }
+
+        public static State valueOf(boolean isTransient) {
+            return isTransient? TRANSIENT: PERSISTENT;
+        }
+
+        public String getCode() {
+            return code;
         }
     }
 

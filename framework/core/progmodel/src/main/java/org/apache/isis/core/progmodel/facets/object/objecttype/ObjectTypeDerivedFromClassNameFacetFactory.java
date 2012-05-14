@@ -23,7 +23,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.AnnotationBasedFacetFactoryAbstract;
-import org.apache.isis.core.metamodel.facets.object.objecttype.ObjectTypeFacet;
+import org.apache.isis.core.metamodel.facets.object.objecttype.ObjectSpecIdFacet;
 import org.apache.isis.core.metamodel.specloader.classsubstitutor.ClassSubstitutor;
 import org.apache.isis.core.metamodel.specloader.classsubstitutor.ClassSubstitutorAware;
 
@@ -39,12 +39,12 @@ public class ObjectTypeDerivedFromClassNameFacetFactory extends AnnotationBasedF
     public void process(final ProcessClassContext processClassContaxt) {
         final FacetHolder facetHolder = processClassContaxt.getFacetHolder();
         // don't trash existing facet
-        if(facetHolder.containsDoOpFacet(ObjectTypeFacet.class)) {
+        if(facetHolder.containsDoOpFacet(ObjectSpecIdFacet.class)) {
             return;
         }
         final Class<?> originalClass = processClassContaxt.getCls();
         final Class<?> substitutedClass = classSubstitutor.getClass(originalClass);
-        FacetUtil.addFacet(new ObjectTypeFacetDerivedFromClassName(substitutedClass.getCanonicalName(), facetHolder));
+        FacetUtil.addFacet(new ObjectSpecIdFacetDerivedFromClassName(substitutedClass.getCanonicalName(), facetHolder));
     }
 
     @Override

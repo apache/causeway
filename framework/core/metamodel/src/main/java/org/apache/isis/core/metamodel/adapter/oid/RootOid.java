@@ -28,8 +28,8 @@ import org.apache.isis.core.metamodel.spec.SpecificationLoader;
  * 
  * <p>
  * The root adapter/pojo can be recreated with no further information; the
- * {@link #getObjectType()} can be used to fetch the corresponding
- * {@link ObjectSpecification} using {@link SpecificationLoader#lookupByObjectType(String)}.
+ * {@link #getObjectSpecId()} can be used to fetch the corresponding
+ * {@link ObjectSpecification} using {@link SpecificationLoader#lookupBySpecId(String)}.
  * 
  * <p>
  * <p>
@@ -42,14 +42,12 @@ import org.apache.isis.core.metamodel.spec.SpecificationLoader;
  * is defined in the interface; implementations must also provide a static 
  * <tt>deString(String)</tt> factory method.
  */
-public interface RootOid extends Oid {
+public interface RootOid extends TypedOid {
 
-    String getObjectType();
-    
     String getIdentifier();
 
     /**
-     * Returns a new RootOid for the same {@link #getObjectType()}, but persistent and with the specified {@link #getIdentifier() identifier}.
+     * Returns a new RootOid for the same {@link #getObjectSpecId()}, but persistent and with the specified {@link #getIdentifier() identifier}.
      */
     RootOid asPersistent(String identifier);
 

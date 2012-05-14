@@ -26,6 +26,7 @@ import java.util.Properties;
 
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.core.metamodel.services.container.DomainObjectContainerAware;
+import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderAware;
@@ -104,8 +105,8 @@ public abstract class RuntimeContextAbstract implements RuntimeContext, Specific
             }
 
             @Override
-            public ObjectSpecification lookupByObjectType(String objectType) {
-                return specificationLoader.lookupByObjectType(objectType);
+            public ObjectSpecification lookupBySpecId(ObjectSpecId objectSpecId) {
+                return specificationLoader.lookupBySpecId(objectSpecId);
             }
         });
     }

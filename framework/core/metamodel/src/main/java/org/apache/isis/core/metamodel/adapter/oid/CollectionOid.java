@@ -35,6 +35,7 @@ public final class CollectionOid extends ParentedOid implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    private final TypedOid parentOid;
     private final String name;
 
     private int cachedHashCode;
@@ -43,37 +44,56 @@ public final class CollectionOid extends ParentedOid implements Serializable {
     // Constructor
     // /////////////////////////////////////////////////////////
 
-    public CollectionOid(Oid parentOid, OneToManyAssociation otma) {
+    public CollectionOid(TypedOid parentOid, OneToManyAssociation otma) {
         this(parentOid, otma.getId());
         cacheState();
     }
 
-    public CollectionOid(Oid parentOid, String name) {
-        super(parentOid);
+    public CollectionOid(TypedOid parentOid, String name) {
+        this.parentOid = parentOid;
         this.name = name;
         cacheState();
     }
-    
-    // ////////////////////////////////////////////
-    // Encodeable
-    // ////////////////////////////////////////////
 
-    public CollectionOid(final DataInputExtended input) throws IOException {
-        super(input);
-        this.name = input.readUTF();
+    
+    // /////////////////////////////////////////////////////////
+    // enstring
+    // /////////////////////////////////////////////////////////
+
+    public static CollectionOid deString(String oidStr) {
+        return getOidMarshaller().unmarshal(oidStr, CollectionOid.class);
     }
 
     @Override
-    public void encode(final DataOutputExtended output) throws IOException {
-        super.encode(output);
-        output.writeUTF(this.name);
+    public String enString() {
+        return getOidMarshaller().marshal(this);
     }
 
 
-    
+    // /////////////////////////////////////////////////////////
+    // encodeable
+    // /////////////////////////////////////////////////////////
+
+    public CollectionOid(DataInputExtended inputStream) throws IOException {
+        final CollectionOid oid = CollectionOid.deString(inputStream.readUTF());
+        this.parentOid = oid.parentOid;
+        this.name = oid.name;
+    }
+
+    @Override
+    public void encode(DataOutputExtended outputStream) throws IOException {
+        outputStream.writeUTF(enString());
+    }
+
+
     // /////////////////////////////////////////////////////////
     // Properties
     // /////////////////////////////////////////////////////////
+
+    @Override
+    public TypedOid getParentOid() {
+        return parentOid;
+    }
 
     public String getName() {
         return name;
@@ -126,18 +146,11 @@ public final class CollectionOid extends ParentedOid implements Serializable {
      * When the RootOid is persisted, all its &quot;children&quot;
      * need updating similarly.
      */
-    public CollectionOid asPersistent(Oid newParentRootOid) {
+    public CollectionOid asPersistent(TypedOid newParentRootOid) {
         return new CollectionOid(newParentRootOid, name);
     }
 
-    // /////////////////////////////////////////////////////////
-    // enString
-    // /////////////////////////////////////////////////////////
 
-    @Override
-    public String enString() {
-        return getParentOid().enString() + "@" + name;
-    }
 
     // /////////////////////////////////////////////////////////
     // toString
@@ -147,5 +160,11 @@ public final class CollectionOid extends ParentedOid implements Serializable {
     public String toString() {
         return "COID[" + getParentOid() + "," + name + "]";
     }
+
+
+    protected static OidMarshaller getOidMarshaller() {
+        return new OidMarshaller();
+    }
+
 
 }

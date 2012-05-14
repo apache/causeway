@@ -32,7 +32,7 @@ class OidConformant extends RootOidAbstractForTesting {
 
     @Override
     public String enString() {
-        return getObjectType() + "|" + getIdentifier();
+        return getObjectSpecId() + "|" + getIdentifier();
     }
 
     @Override

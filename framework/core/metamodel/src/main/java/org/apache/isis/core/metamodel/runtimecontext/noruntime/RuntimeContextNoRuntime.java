@@ -49,7 +49,7 @@ import org.apache.isis.core.metamodel.spec.ObjectInstantiationException;
 import org.apache.isis.core.metamodel.spec.ObjectInstantiator;
 import org.apache.isis.core.metamodel.spec.ObjectInstantiatorAbstract;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
+import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 
 public class RuntimeContextNoRuntime extends RuntimeContextAbstract {
 
@@ -98,7 +98,7 @@ public class RuntimeContextNoRuntime extends RuntimeContextAbstract {
             }
 
             @Override
-            public ObjectAdapter adapterFor(final Object pojo, final ObjectAdapter ownerAdapter, final ObjectAssociation association) {
+            public ObjectAdapter adapterFor(final Object pojo, final ObjectAdapter ownerAdapter, final OneToManyAssociation collection) {
                 throw new UnsupportedOperationException("Not supported by this implementation of RuntimeContext");
             }
 

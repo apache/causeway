@@ -50,7 +50,7 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetdecorator.FacetDecorator;
 import org.apache.isis.core.metamodel.facetdecorator.FacetDecoratorSet;
 import org.apache.isis.core.metamodel.facets.object.bounded.BoundedFacetUtils;
-import org.apache.isis.core.metamodel.facets.object.objecttype.ObjectTypeFacet;
+import org.apache.isis.core.metamodel.facets.object.objecttype.ObjectSpecIdFacet;
 import org.apache.isis.core.metamodel.layout.MemberLayoutArranger;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.runtimecontext.DependencyInjector;
@@ -59,6 +59,7 @@ import org.apache.isis.core.metamodel.runtimecontext.RuntimeContextAware;
 import org.apache.isis.core.metamodel.runtimecontext.noruntime.RuntimeContextNoRuntime;
 import org.apache.isis.core.metamodel.spec.ObjectInstantiator;
 import org.apache.isis.core.metamodel.spec.FreeStandingList;
+import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationContext;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
@@ -447,8 +448,8 @@ public class ObjectReflectorDefault implements ObjectReflector, DebuggableWithTi
     }
 
     @Override
-    public ObjectSpecification lookupByObjectType(String objectType) {
-        return getCache().getByObjectType(objectType);
+    public ObjectSpecification lookupBySpecId(ObjectSpecId objectSpecId) {
+        return getCache().getByObjectType(objectSpecId);
     }
 
 
@@ -600,20 +601,20 @@ public class ObjectReflectorDefault implements ObjectReflector, DebuggableWithTi
 
     @Override
     public void validateSpecifications() {
-        final Map<String, ObjectSpecification> specByObjectType = Maps.newHashMap();
+        final Map<ObjectSpecId, ObjectSpecification> specById = Maps.newHashMap();
         for (final ObjectSpecification objSpec : allSpecifications()) {
-            final String objectType = objSpec.getObjectType();
-            if (objectType == null) {
+            final ObjectSpecId objectSpecId = objSpec.getSpecId();
+            if (objectSpecId == null) {
                 continue;
             }
-            final ObjectSpecification existingSpec = specByObjectType.put(objectType, objSpec);
+            final ObjectSpecification existingSpec = specById.put(objectSpecId, objSpec);
             if (existingSpec == null) {
                 continue;
             }
-            throw new MetaModelInvalidException(MessageFormat.format("Cannot have two entities with same object type (@ObjectType facet or equivalent) Value; " + "both {0} and {1} are annotated with value of ''{2}''.", existingSpec.getFullIdentifier(), objSpec.getFullIdentifier(), objectType));
+            throw new MetaModelInvalidException(MessageFormat.format("Cannot have two entities with same object type (@ObjectType facet or equivalent) Value; " + "both {0} and {1} are annotated with value of ''{2}''.", existingSpec.getFullIdentifier(), objSpec.getFullIdentifier(), objectSpecId));
         }
         
-        getCache().setCacheByObjectType(specByObjectType);
+        getCache().setCacheBySpecId(specById);
     }
 
 
