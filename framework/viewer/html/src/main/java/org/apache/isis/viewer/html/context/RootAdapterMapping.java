@@ -21,14 +21,13 @@ package org.apache.isis.viewer.html.context;
 
 import java.io.Serializable;
 
-import org.apache.isis.core.commons.debug.DebugBuilder;
+import org.apache.isis.core.commons.debug.Debuggable;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.version.Version;
 
-public interface ObjectMapping extends Serializable {
+public interface RootAdapterMapping extends Serializable, Debuggable {
 
-    Oid getOid();
+    String getOidStr();
 
     ObjectAdapter getObject();
 
@@ -37,8 +36,6 @@ public interface ObjectMapping extends Serializable {
     void checkVersion(ObjectAdapter object);
 
     void restoreToLoader();
-
-    void debug(DebugBuilder debug);
 
     void updateVersion();
 }

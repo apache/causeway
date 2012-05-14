@@ -18,18 +18,19 @@
  */
 package org.apache.isis.viewer.bdd.common.components;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import com.google.common.collect.Iterables;
+import com.google.common.collect.Maps;
 
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.facets.object.cached.CachedFacet;
+import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.runtimes.dflt.objectstores.dflt.internal.ObjectStoreInstances;
 import org.apache.isis.runtimes.dflt.objectstores.dflt.internal.ObjectStorePersistedObjects;
-import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.serial.RootOidGenerator.Memento;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.IdentifierGeneratorDefault.Memento;
 
 /**
  * Stores instances in one of two maps, based on whether have their
@@ -42,17 +43,12 @@ import org.apache.isis.runtimes.dflt.runtime.persistence.oidgenerator.serial.Roo
  */
 public class BddObjectStorePersistedObjects implements ObjectStorePersistedObjects {
 
-    private static final Map<ObjectSpecification, ObjectStoreInstances> cachedInstancesBySpecMap = new HashMap<ObjectSpecification, ObjectStoreInstances>();
+    private static final Map<ObjectSpecification, ObjectStoreInstances> cachedInstancesBySpecMap = Maps.newHashMap();
 
-    private final Map<ObjectSpecification, ObjectStoreInstances> operationalInstancesBySpecMap;
-
-    private final Map<String, Oid> serviceOidByIdMap;
+    private final Map<ObjectSpecification, ObjectStoreInstances> operationalInstancesBySpecMap = Maps.newHashMap();
+    private final Map<ObjectSpecId, Oid> serviceOidByIdMap = Maps.newHashMap();
+    
     private Memento oidGeneratorMemento;
-
-    public BddObjectStorePersistedObjects() {
-        operationalInstancesBySpecMap = new HashMap<ObjectSpecification, ObjectStoreInstances>();
-        serviceOidByIdMap = new HashMap<String, Oid>();
-    }
 
     @Override
     public Memento getOidGeneratorMemento() {
@@ -65,19 +61,19 @@ public class BddObjectStorePersistedObjects implements ObjectStorePersistedObjec
     }
 
     @Override
-    public Oid getService(final String name) {
-        return serviceOidByIdMap.get(name);
+    public Oid getService(final ObjectSpecId objectSpecId) {
+        return serviceOidByIdMap.get(objectSpecId);
     }
 
     @Override
-    public void registerService(final String name, final Oid oid) {
-        final Oid oidLookedUpByName = serviceOidByIdMap.get(name);
+    public void registerService(final ObjectSpecId objectSpecId, final Oid oid) {
+        final Oid oidLookedUpByName = serviceOidByIdMap.get(objectSpecId);
         if (oidLookedUpByName != null) {
             if (!oidLookedUpByName.equals(oid)) {
-                throw new IsisException("Already another service registered as name: " + name + " (existing Oid: " + oidLookedUpByName + ", " + "intended: " + oid + ")");
+                throw new IsisException("Already another service registered as name: " + objectSpecId + " (existing Oid: " + oidLookedUpByName + ", " + "intended: " + oid + ")");
             }
         } else {
-            serviceOidByIdMap.put(name, oid);
+            serviceOidByIdMap.put(objectSpecId, oid);
         }
     }
 

@@ -81,7 +81,7 @@ public class ObjectAdapterMemento implements Serializable {
         PERSISTENT {
             @Override
             ObjectAdapter recreateAdapter(final ObjectAdapterMemento nom) {
-                return getPersistenceSession().recreateAdapter(nom.persistentOid, nom.getSpecMemento().getSpecification());
+                return getPersistenceSession().recreateAdapter(nom.getSpecMemento().getSpecification(), nom.persistentOid);
             }
 
             private PersistenceSession getPersistenceSession() {

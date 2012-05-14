@@ -131,19 +131,6 @@ public abstract class ObjectView extends AbstractView {
         }
     }
 
-    @Override
-    public void contentMenuOptions(final UserActionSet options) {
-        super.contentMenuOptions(options);
-
-        options.add(new UserActionAbstract("Reload", ActionType.DEBUG) {
-            @Override
-            public void execute(final Workspace workspace, final View view, final Location at) {
-                final ObjectAdapter object = getContent().getAdapter();
-                getPersistenceSession().reload(object);
-            }
-
-        });
-    }
 
     // ///////////////////////////////////////////////////////////////////////////
     // Dependencies (from context)

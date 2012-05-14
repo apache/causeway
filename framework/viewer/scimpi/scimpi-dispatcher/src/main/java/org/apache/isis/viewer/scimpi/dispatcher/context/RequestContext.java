@@ -30,6 +30,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeSet;
 
+import com.google.common.collect.Maps;
+
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.log4j.Logger;
 
@@ -39,12 +41,16 @@ import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.AggregatedOid;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
+import org.apache.isis.core.metamodel.adapter.oid.TypedOid;
 import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
+import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
+import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.viewer.scimpi.dispatcher.Dispatcher;
 import org.apache.isis.viewer.scimpi.dispatcher.ScimpiException;
 import org.apache.isis.viewer.scimpi.dispatcher.action.PropertyException;
@@ -88,6 +94,9 @@ public abstract class RequestContext {
     public static final String BACK_TO = "_back_to";
     private static final Map<String, Object> globalVariables = new HashMap<String, Object>();
     private static final Scope[] SCOPES = new Scope[] { Scope.ERROR, Scope.REQUEST, Scope.INTERACTION, Scope.SESSION, Scope.GLOBAL };
+    
+    private final OidMarshaller oidMarshaller = new OidMarshaller();
+
 
     private final ObjectMapping objectMapping;
     private final VersionMapping versionMapping;
@@ -115,10 +124,10 @@ public abstract class RequestContext {
         variables = new HashMap<Scope, Map<String, Object>>();
 
         variables.put(Scope.GLOBAL, globalVariables);
-        variables.put(Scope.SESSION, new HashMap<String, Object>());
-        variables.put(Scope.INTERACTION, new HashMap<String, Object>());
-        variables.put(Scope.REQUEST, new HashMap<String, Object>());
-        variables.put(Scope.ERROR, new HashMap<String, Object>());
+        variables.put(Scope.SESSION, Maps.<String, Object>newHashMap());
+        variables.put(Scope.INTERACTION, Maps.<String, Object>newHashMap());
+        variables.put(Scope.REQUEST, Maps.<String, Object>newHashMap());
+        variables.put(Scope.ERROR, Maps.<String, Object>newHashMap());
     }
 
     public void endHttpSession() {
@@ -132,36 +141,35 @@ public abstract class RequestContext {
     // Mapped objects
     // //////////////////////////////////////////////////////////////////
 
-    public ObjectAdapter getMappedObject(final String id) {
-        if (id == null || id.trim().equals("") || id.trim().equals("null")) {
+    public ObjectAdapter getMappedObject(final String oidStr) {
+        if (oidStr == null || oidStr.trim().equals("") || oidStr.trim().equals("null")) {
             return null;
         }
-        if (id.equals("collection")) {
+        if (oidStr.equals("collection")) {
             return collection;
         }
-        final ObjectAdapter object = mappedObject(id);
-        if (object == null) {
-            throw new ScimpiException("No object for " + id);
-        } else {
-            return object;
+        final ObjectAdapter adapter = mappedObject(oidStr);
+        if (adapter == null) {
+            throw new ScimpiException("No object for " + oidStr);
         }
+        return adapter;
     }
 
     public ObjectAdapter getMappedObjectOrResult(final String id) {
         return getMappedObjectOrVariable(id, RESULT);
     }
 
-    public ObjectAdapter getMappedObjectOrVariable(String id, final String name) {
-        if (id == null) {
-            id = (String) getVariable(name);
-            if (id == null) {
+    public ObjectAdapter getMappedObjectOrVariable(String idOrData, final String name) {
+        if (idOrData == null) {
+            idOrData = (String) getVariable(name);
+            if (idOrData == null) {
                 throw new ScimpiException("No variable for " + name);
             }
         }
-        if (id.equals("collection")) {
+        if (idOrData.equals("collection")) {
             return collection;
         }
-        return getMappedObject(id);
+        return getMappedObject(idOrData);
     }
 
     public String mapObject(final ObjectAdapter object, final String scopeName, final Scope defaultScope) {
@@ -170,38 +178,47 @@ public abstract class RequestContext {
         return objectMapping.mapObject(object, scope);
     }
 
-    private ObjectAdapter mappedObject(String id) {
-        if (id != null && id.equals("")) {
+    private ObjectAdapter mappedObject(String dataOrOid) {
+        if (dataOrOid != null && dataOrOid.equals("")) {
             return null;
         }
-        if (id == null) {
-            id = RESULT;
+        if (dataOrOid == null) {
+            dataOrOid = RESULT;
+        }
+        
+        if (dataOrOid.startsWith("D")) {
+            return objectMapping.mappedTransientObject(StringEscapeUtils.unescapeHtml(dataOrOid.substring(1)));
         }
 
-        if (id.startsWith("D")) {
-            return objectMapping.mappedTransientObject(StringEscapeUtils.unescapeHtml(id.substring(1)));
-        }
-
-        final String[] idParts = id.split("@");
-        if (idParts.length == 2) {
-            final ObjectAdapter mappedObject = objectMapping.mappedObject(id);
-            if (mappedObject instanceof ObjectAdapter) {
-                IsisContext.getPersistenceSession().resolveImmediately(mappedObject);
+        final String oidStr = dataOrOid;
+        final TypedOid typedOid = getOidMarshaller().unmarshal(oidStr, TypedOid.class);
+        if(typedOid instanceof RootOid) {
+//        final String[] idParts = dataOrOid.split("@");
+//        if (idParts.length == 2) {
+            final ObjectAdapter mappedObject = objectMapping.mappedObject(oidStr);
+            if (mappedObject != null) {
+                getPersistenceSession().resolveImmediately(mappedObject);
             }
             return mappedObject;
         }
+
+        //
+        // else, handle aggregate
+        //
+        AggregatedOid aggregatedOid = (AggregatedOid) typedOid;
+        final TypedOid parentOid = aggregatedOid.getParentOid();
         
-        final ObjectAdapter parentObject = objectMapping.mappedObject(idParts[0] + "@" + idParts[1]);
-        if (parentObject instanceof ObjectAdapter) {
-            IsisContext.getPersistenceSession().resolveImmediately(parentObject);
-        }
+        //final ObjectAdapter parentAdapter = objectMapping.mappedObject(idParts[0] + "@" + idParts[1]);
+        final ObjectAdapter parentAdapter = objectMapping.mappedObject(parentOid.enString());
+        getPersistenceSession().resolveImmediately(parentAdapter);
         
-        final AggregatedOid aggregatedOid = new AggregatedOid(parentObject.getOid(), idParts[2]);
+        //ObjectSpecId objectType = null; 
+        //final AggregatedOid aggregatedOid = new AggregatedOid(objectType, (TypedOid) parentAdapter.getOid(), idParts[2]);
 
         ObjectAdapter aggregatedAdapter = null;
-        outer: for (final ObjectAssociation association : parentObject.getSpecification().getAssociations()) {
+        outer: for (final ObjectAssociation association : parentAdapter.getSpecification().getAssociations()) {
             if (association.getSpecification().isParented()) {
-                final ObjectAdapter objectAdapter = association.get(parentObject);
+                final ObjectAdapter objectAdapter = association.get(parentAdapter);
                 if (objectAdapter == null) {
                     continue;
                 }
@@ -221,8 +238,9 @@ public abstract class RequestContext {
                     }
                 }
             } else if (association.isOneToManyAssociation()) {
-                if (association.getId().equals(idParts[2])) {
-                    return association.get(parentObject);
+                if (association.getId().equals(aggregatedOid.getLocalId())) {
+                //if (association.getId().equals(idParts[2])) {
+                    return association.get(parentAdapter);
                 }
             }
         }
@@ -250,9 +268,8 @@ public abstract class RequestContext {
     public Version getVersion(final String id) {
         if (id.equals("")) {
             return null;
-        } else {
-            return versionMapping.getVersion(id);
-        }
+        } 
+        return versionMapping.getVersion(id);
     }
 
     // ////////////////////////////
@@ -291,7 +308,7 @@ public abstract class RequestContext {
 
     private void append(final DebugBuilder view, final Scope scope) {
         final Map<String, Object> map = variables.get(scope);
-        final Iterator<String> keys = new TreeSet(map.keySet()).iterator();
+        final Iterator<String> keys = new TreeSet<String>(map.keySet()).iterator();
         if (keys.hasNext()) {
             view.appendTitle(scope + " scoped variables");
             while (keys.hasNext()) {
@@ -518,9 +535,12 @@ public abstract class RequestContext {
 
     public abstract String getCookie(String name);
 
-    // //////////////////////////////
+    
+    
+    // /////////////////////////////////////////////////
     // Start/end request
-    // //////////////////////////////
+    // /////////////////////////////////////////////////
+    
     public void endRequest() throws IOException {
         getWriter().close();
         objectMapping.clear();
@@ -828,4 +848,14 @@ public abstract class RequestContext {
         this.isUserAuthenticated = isUserAuthenticated;
         addVariable("_authenticated", isUserAuthenticated, Scope.SESSION);
     }
+    
+    
+    protected PersistenceSession getPersistenceSession() {
+        return IsisContext.getPersistenceSession();
+    }
+
+    protected OidMarshaller getOidMarshaller() {
+        return oidMarshaller;
+    }
+
 }

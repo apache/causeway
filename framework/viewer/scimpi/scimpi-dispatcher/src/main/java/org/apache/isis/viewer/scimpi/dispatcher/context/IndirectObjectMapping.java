@@ -25,20 +25,22 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.TreeSet;
 
+import com.google.common.collect.Maps;
+
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.exceptions.NotYetImplementedException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext.Scope;
 
 public class IndirectObjectMapping implements ObjectMapping {
-    private final Map<Scope, Map<String, Mapping>> scopedMappings = new LinkedHashMap<Scope, Map<String, Mapping>>();
+    private final Map<Scope, Map<String, Mapping>> scopedMappings = Maps.newLinkedHashMap();
     private int nextId = 0;
 
     public IndirectObjectMapping() {
-        scopedMappings.put(Scope.GLOBAL, new HashMap<String, Mapping>());
-        scopedMappings.put(Scope.SESSION, new HashMap<String, Mapping>());
-        scopedMappings.put(Scope.INTERACTION, new HashMap<String, Mapping>());
-        scopedMappings.put(Scope.REQUEST, new HashMap<String, Mapping>());
+        scopedMappings.put(Scope.GLOBAL, Maps.<String,Mapping>newHashMap());
+        scopedMappings.put(Scope.SESSION, Maps.<String,Mapping>newHashMap());
+        scopedMappings.put(Scope.INTERACTION, Maps.<String,Mapping>newHashMap());
+        scopedMappings.put(Scope.REQUEST, Maps.<String,Mapping>newHashMap());
     }
 
     private String nextId() {
@@ -113,9 +115,9 @@ public class IndirectObjectMapping implements ObjectMapping {
 
     private Mapping createMapping(final ObjectAdapter adapter) {
         if (adapter.getResolveState().isTransient()) {
-            return new TransientObjectMapping(adapter);
+            return new TransientRootAdapterMapping(adapter);
         } else {
-            return new PersistentObjectMapping(adapter);
+            return new PersistentRootAdapterMapping(adapter);
         }
     }
 

@@ -24,7 +24,6 @@ import java.util.List;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.ObjectStorePersistence;
-import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.PersistenceSessionObjectStore;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
@@ -75,8 +74,7 @@ public abstract class AbstractFixturePeer {
     }
 
     protected ObjectStorePersistence getObjectStore() {
-        final PersistenceSessionObjectStore persistenceSession = (PersistenceSessionObjectStore) getPersistenceSession();
-        return persistenceSession.getObjectStore();
+        return getPersistenceSession().getObjectStore();
     }
 
     protected IsisTransactionManager getTransactionManager() {

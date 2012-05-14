@@ -23,6 +23,7 @@ import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.runtimes.dflt.runtime.memento.Memento;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
@@ -39,12 +40,12 @@ interface Mapping {
     void update();
 }
 
-class TransientObjectMapping implements Mapping {
-    private final Oid oid;
+class TransientRootAdapterMapping implements Mapping {
+    private final RootOid oid;
     private Memento memento;
 
-    public TransientObjectMapping(final ObjectAdapter adapter) {
-        oid = adapter.getOid();
+    public TransientRootAdapterMapping(final ObjectAdapter adapter) {
+        oid = (RootOid) adapter.getOid();
         Assert.assertTrue("OID is for persistent", oid.isTransient());
         Assert.assertTrue("adapter is for persistent", adapter.isTransient());
         memento = new Memento(adapter);
@@ -78,8 +79,8 @@ class TransientObjectMapping implements Mapping {
             return true;
         }
 
-        if (obj instanceof TransientObjectMapping) {
-            return ((TransientObjectMapping) obj).oid.equals(oid);
+        if (obj instanceof TransientRootAdapterMapping) {
+            return ((TransientRootAdapterMapping) obj).oid.equals(oid);
         }
         return false;
     }
@@ -95,12 +96,12 @@ class TransientObjectMapping implements Mapping {
     }
 }
 
-class PersistentObjectMapping implements Mapping {
-    private final Oid oid;
+class PersistentRootAdapterMapping implements Mapping {
+    private final RootOid oid;
     private final ObjectSpecification spec;
 
-    public PersistentObjectMapping(final ObjectAdapter object) {
-        this.oid = object.getOid();
+    public PersistentRootAdapterMapping(final ObjectAdapter object) {
+        this.oid = (RootOid) object.getOid();
         this.spec = object.getSpecification();
     }
 
@@ -119,13 +120,13 @@ class PersistentObjectMapping implements Mapping {
         if (!IsisContext.inTransaction()) {
             throw new IllegalStateException(getClass().getSimpleName() + " requires transaction in order to load");
         }
-        return IsisContext.getPersistenceSession().loadObject(oid, spec);
+        return IsisContext.getPersistenceSession().loadObject(oid);
     }
 
     @Override
     public void reload() {
         if (IsisContext.getPersistenceSession().getAdapterManager().getAdapterFor(oid) == null) {
-            IsisContext.getPersistenceSession().recreateAdapter(oid, spec);
+            IsisContext.getPersistenceSession().recreateAdapter(spec, oid);
         }
     }
 
@@ -135,8 +136,8 @@ class PersistentObjectMapping implements Mapping {
             return true;
         }
 
-        if (obj instanceof PersistentObjectMapping) {
-            final PersistentObjectMapping other = (PersistentObjectMapping) obj;
+        if (obj instanceof PersistentRootAdapterMapping) {
+            final PersistentRootAdapterMapping other = (PersistentRootAdapterMapping) obj;
             return oid.equals(other.oid) && spec == other.spec;
         }
 

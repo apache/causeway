@@ -22,64 +22,28 @@ package org.apache.isis.viewer.html.context;
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.core.metamodel.adapter.oid.RootOidDefault;
 import org.apache.isis.core.metamodel.adapter.version.Version;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 
-public class PersistentObjectMapping implements ObjectMapping {
+public class PersistentRootAdapterMapping extends RootAdapterMappingAbstract {
     
     private static final long serialVersionUID = 1L;
     
-    private final Oid oid;
-    private final ObjectSpecification specification;
     private Version version;
 
-    public PersistentObjectMapping(final ObjectAdapter adapter) {
-        oid = adapter.getOid();
-        Assert.assertFalse("OID is for transient", oid.isTransient());
+    public PersistentRootAdapterMapping(final ObjectAdapter adapter) {
+        super(adapter);
+        Assert.assertFalse("OID is for transient", adapter.getOid().isTransient());
         Assert.assertFalse("adapter is for transient", adapter.isTransient());
-        specification = adapter.getSpecification();
-        version = adapter.getVersion();
     }
 
-    @Override
-    public void debug(final DebugBuilder debug) {
-        debug.appendln(specification.getFullIdentifier());
-        if (version != null) {
-            debug.appendln(version.toString());
-        }
-    }
 
-    @Override
-    public Oid getOid() {
-        return oid;
-    }
-
-    @Override
-    public ObjectAdapter getObject() {
-        return getPersistenceSession().loadObject(oid, specification);
-    }
-
-    @Override
-    public int hashCode() {
-        return oid.hashCode();
-    }
-
-    @Override
-    public boolean equals(final Object obj) {
-        if (obj.getClass() == PersistentObjectMapping.class) {
-            return ((PersistentObjectMapping) obj).oid.equals(oid);
-        }
-        return false;
-    }
-
-    @Override
-    public String toString() {
-        return (specification == null ? "null" : specification.getSingularName()) + " : " + oid + " : " + version;
-    }
+    // /////////////////////////////////////////////////////
+    // version
+    // /////////////////////////////////////////////////////
 
     @Override
     public Version getVersion() {
@@ -93,15 +57,51 @@ public class PersistentObjectMapping implements ObjectMapping {
 
     @Override
     public void updateVersion() {
-        final ObjectAdapter adapter = getAdapterManager().getAdapterFor(oid);
+        final ObjectAdapter adapter = getAdapterManager().getAdapterFor(getOid());
         version = adapter.getVersion();
     }
 
+
+    // /////////////////////////////////////////////////////
+    // restoreToLoader
+    // /////////////////////////////////////////////////////
+
     @Override
     public void restoreToLoader() {
-        final Oid oid = getOid();
-        final ObjectAdapter adapter = getPersistenceSession().recreateAdapter(oid, specification);
+        final RootOidDefault oid = RootOidDefault.deString(getOidStr());
+        final ObjectAdapter adapter = getPersistenceSession().recreateAdapter(oid);
         adapter.setVersion(getVersion());
+    }
+
+
+    // /////////////////////////////////////////////////////
+    // value semantics
+    // /////////////////////////////////////////////////////
+
+    @Override
+    public boolean equals(final Object obj) {
+        if (!(obj instanceof PersistentRootAdapterMapping)) {
+            return false;
+        } 
+        return ((PersistentRootAdapterMapping) obj).getOidStr().equals(getOidStr());
+    }
+
+
+    // /////////////////////////////////////////////////////
+    // debugging, toString
+    // /////////////////////////////////////////////////////
+
+    @Override
+    public void debugData(final DebugBuilder debug) {
+        debug.appendln(getOidStr());
+        if (version != null) {
+            debug.appendln(version.toString());
+        }
+    }
+
+    @Override
+    public String toString() {
+        return getOidStr() + " : " + version;
     }
 
     // /////////////////////////////////////////////////////

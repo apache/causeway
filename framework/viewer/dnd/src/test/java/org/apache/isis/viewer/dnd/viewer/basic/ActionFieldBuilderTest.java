@@ -26,13 +26,11 @@ import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.easymock.MockControl;
 import org.jmock.Expectations;
-import org.jmock.Mockery;
-import org.jmock.integration.junit4.JMock;
-import org.jmock.integration.junit4.JUnit4Mockery;
+import org.jmock.auto.Mock;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.config.IsisConfiguration;
@@ -43,6 +41,8 @@ import org.apache.isis.core.runtime.authorization.AuthorizationManager;
 import org.apache.isis.core.runtime.imageloader.TemplateImageLoader;
 import org.apache.isis.core.runtime.userprofile.UserProfile;
 import org.apache.isis.core.runtime.userprofile.UserProfileLoader;
+import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2;
+import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2.Mode;
 import org.apache.isis.runtimes.dflt.runtime.authentication.exploration.ExplorationSession;
 import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
@@ -56,20 +56,28 @@ import org.apache.isis.viewer.dnd.view.Content;
 import org.apache.isis.viewer.dnd.view.View;
 import org.apache.isis.viewer.dnd.view.ViewFactory;
 
-@RunWith(JMock.class)
 public class ActionFieldBuilderTest {
-    private ActionFieldBuilder builder;
 
-    private final Mockery mockery = new JUnit4Mockery();
+    @Rule
+    public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
+
+    @Mock
+    protected TemplateImageLoader mockTemplateImageLoader;
+    @Mock
+    protected SpecificationLoader mockSpecificationLoader;
+    @Mock
+    protected PersistenceSessionFactory mockPersistenceSessionFactory;
+    @Mock
+    private UserProfileLoader mockUserProfileLoader;
+    @Mock
+    protected AuthenticationManager mockAuthenticationManager;
+    @Mock
+    protected AuthorizationManager mockAuthorizationManager;
 
     private IsisConfiguration configuration;
     private List<Object> servicesList;
-    protected TemplateImageLoader mockTemplateImageLoader;
-    protected SpecificationLoader mockSpecificationLoader;
-    protected PersistenceSessionFactory mockPersistenceSessionFactory;
-    private UserProfileLoader mockUserProfileLoader;
-    protected AuthenticationManager mockAuthenticationManager;
-    protected AuthorizationManager mockAuthorizationManager;
+
+    private ActionFieldBuilder builder;
 
     @Before
     public void setUp() throws Exception {
@@ -78,14 +86,7 @@ public class ActionFieldBuilderTest {
         configuration = new IsisConfigurationDefault();
         servicesList = Collections.emptyList();
 
-        mockTemplateImageLoader = mockery.mock(TemplateImageLoader.class);
-        mockSpecificationLoader = mockery.mock(SpecificationLoader.class);
-        mockPersistenceSessionFactory = mockery.mock(PersistenceSessionFactory.class);
-        mockUserProfileLoader = mockery.mock(UserProfileLoader.class);
-        mockAuthenticationManager = mockery.mock(AuthenticationManager.class);
-        mockAuthorizationManager = mockery.mock(AuthorizationManager.class);
-
-        mockery.checking(new Expectations() {
+        context.checking(new Expectations() {
             {
                 ignoring(mockSpecificationLoader);
                 ignoring(mockPersistenceSessionFactory);

@@ -20,7 +20,6 @@
 package org.apache.isis.viewer.html.context;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -64,8 +63,8 @@ public class Context implements Serializable {
 
     private final ComponentFactory componentFactory;
 
-    private final Map<String, ObjectMapping> objectMap = Maps.newHashMap();
-    private final Map<String, ObjectMapping> serviceMap = Maps.newHashMap();
+    private final Map<String, RootAdapterMapping> objectMap = Maps.newHashMap();
+    private final Map<String, RootAdapterMapping> serviceMap = Maps.newHashMap();
     private final Map<String, CollectionMapping> collectionMap = Maps.newHashMap();
     private final Map<String, ObjectAction> actionMap = Maps.newHashMap();
     
@@ -146,14 +145,14 @@ public class Context implements Serializable {
     public void processChanges() {
         final List<ObjectAdapter> disposedObjects = getUpdateNotifier().getDisposedObjects();
         for (final ObjectAdapter adapter : disposedObjects) {
-            final ObjectMapping mapping = persistentOrTransientObjectMappingFor(adapter);
+            final RootAdapterMapping mapping = persistentOrTransientObjectMappingFor(adapter);
             if (objectMap.containsValue(mapping)) {
                 processChangeFor(mapping);
             }
         }
     }
 
-    private void processChangeFor(final ObjectMapping mapping) {
+    private void processChangeFor(final RootAdapterMapping mapping) {
         final String existingId = findExistingInMap(objectMap, mapping);
         getObjectHistory().remove(existingId);
 
@@ -271,7 +270,7 @@ public class Context implements Serializable {
     }
 
     public ObjectAdapter getMappedObject(final String id) {
-        final ObjectMapping mappedObject = getMappedInstance(objectMap, id);
+        final RootAdapterMapping mappedObject = getMappedInstance(objectMap, id);
         final ObjectAdapter object = mappedObject.getObject();
 
         // ensure resolved if currently a ghost;
@@ -303,13 +302,23 @@ public class Context implements Serializable {
     }
 
     private <T> String addToMap(final Map<String,T> map, final T object) {
-        max++;
-        final String id = "" + max;
+        
+        String id;
+        // bit hacky...
+        if(object instanceof RootAdapterMapping) {
+            // object or (internal) collection
+            RootAdapterMapping adapterMapping = (RootAdapterMapping) object;
+            id = adapterMapping.getOidStr();
+        } else {
+            max++;
+            id = "" + max;
+        }
         map.put(id, object);
 
         final String mapName = map == objectMap ? "object" : (map == collectionMap ? "collection" : "action");
-        LOG.debug("add " + object + " to " + mapName + " as #" + id);
-
+        if(LOG.isDebugEnabled()) {
+            LOG.debug("add " + object + " to " + mapName + " as #" + id);
+        }
         return id;
     }
 
@@ -335,8 +344,8 @@ public class Context implements Serializable {
         return (map == objectMap) ? "object" : (map == collectionMap ? "collection" : "action");
     }
 
-    private static ObjectMapping persistentOrTransientObjectMappingFor(final ObjectAdapter adapter) {
-        return adapter.isTransient() ? new TransientObjectMapping(adapter) : new PersistentObjectMapping(adapter);
+    private static RootAdapterMapping persistentOrTransientObjectMappingFor(final ObjectAdapter adapter) {
+        return adapter.isTransient() ? new TransientRootAdapterMapping(adapter) : new PersistentRootAdapterMapping(adapter);
     }
 
     
@@ -372,9 +381,9 @@ public class Context implements Serializable {
     }
 
     public void restoreAllObjectsToLoader() {
-        for (Map.Entry<String, ObjectMapping> mapEntry : objectMap.entrySet()) {
-            final ObjectMapping objectMapping = mapEntry.getValue();
-            objectMapping.restoreToLoader();
+        for (Map.Entry<String, RootAdapterMapping> mapEntry : objectMap.entrySet()) {
+            final RootAdapterMapping rootAdapterMapping = mapEntry.getValue();
+            rootAdapterMapping.restoreToLoader();
         }
     }
 
@@ -383,7 +392,7 @@ public class Context implements Serializable {
         clearMessagesAndWarnings();
 
         final Map<String, CollectionMapping> collMappingById = Maps.newHashMap();
-        final Map<String, ObjectMapping> objectMappingById = Maps.newHashMap();
+        final Map<String, RootAdapterMapping> objectMappingById = Maps.newHashMap();
 
         for (HistoryEntry entry : getObjectHistory()) {
             if (entry.type == HistoryEntry.OBJECT) {
@@ -400,22 +409,22 @@ public class Context implements Serializable {
         objectMap.putAll(serviceMap);
     }
 
-    private void copyObjectMapping(final Map<String, ObjectMapping> objectMappingById, HistoryEntry entry) {
-        final ObjectMapping item = objectMap.get(entry.id);
+    private void copyObjectMapping(final Map<String, RootAdapterMapping> objectMappingById, HistoryEntry entry) {
+        final RootAdapterMapping item = objectMap.get(entry.id);
         objectMappingById.put(entry.id, item);
         
         LOG.debug("copied object map " + entry.id + " for " + item);
         item.updateVersion();
     }
     
-    private void copyCollectionMapping(final Map<String, CollectionMapping> collMappingById, final Map<String, ObjectMapping> objectMappingById, HistoryEntry entry) {
+    private void copyCollectionMapping(final Map<String, CollectionMapping> collMappingById, final Map<String, RootAdapterMapping> objectMappingById, HistoryEntry entry) {
         
         final CollectionMapping coll = collectionMap.get(entry.id);
         collMappingById.put(entry.id, coll);
         LOG.debug("copied collection map for " + coll);
         
         for (String elementId : coll) {
-            final ObjectMapping objMapping = objectMap.get(elementId);
+            final RootAdapterMapping objMapping = objectMap.get(elementId);
             
             if (objMapping != null) {
                 objectMappingById.put(elementId, objMapping);
@@ -538,7 +547,7 @@ public class Context implements Serializable {
         // contains the new version
         final String id = mapObject(adapter);
         if (id != null) {
-            final ObjectMapping mapping = new PersistentObjectMapping(adapter);
+            final RootAdapterMapping mapping = new PersistentRootAdapterMapping(adapter);
             objectMap.put(id, mapping);
         }
     }
@@ -571,10 +580,10 @@ public class Context implements Serializable {
 
         debug.startSection("Objects");
         for (final String id : objectMap.keySet()) {
-            final ObjectMapping object = objectMap.get(id);
-            debug.appendln(id + " -> " + object.getOid());
+            final RootAdapterMapping object = objectMap.get(id);
+            debug.appendln(id + " -> " + object.getOidStr());
             debug.indent();
-            object.debug(debug);
+            object.debugData(debug);
             debug.unindent();
         }
         debug.endSection();

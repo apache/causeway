@@ -25,24 +25,18 @@ import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext.Scope;
 
 public interface ObjectMapping {
 
-    void endSession();
-
     void reloadIdentityMap();
+    void endSession();
 
     void clear();
 
+    String mapObject(ObjectAdapter obj, Scope scope);
+    String mapTransientObject(ObjectAdapter object);
     void unmapObject(ObjectAdapter object, Scope scope);
 
-    void appendMappings(DebugBuilder content);
-
-    ObjectAdapter mappedObject(String id);
-
-    ObjectAdapter mappedTransientObject(String substring);
-
-    String mapObject(ObjectAdapter obj, Scope scope);
-
-    String mapTransientObject(ObjectAdapter object);
+    ObjectAdapter mappedObject(String oidStr);
+    ObjectAdapter mappedTransientObject(String jsonData);
 
     void append(DebugBuilder debug);
-
+    void appendMappings(DebugBuilder debug);
 }
