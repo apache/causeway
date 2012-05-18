@@ -30,6 +30,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
+import org.apache.isis.viewer.html.PathBuilder;
 import org.apache.isis.viewer.html.component.Page;
 import org.apache.isis.viewer.html.context.Context;
 import org.apache.isis.viewer.html.request.Request;
@@ -51,14 +52,23 @@ public class ControllerServlet extends AbstractHtmlViewerServlet {
     @Override
     public void init(final ServletConfig servletConfig) throws ServletException {
         super.init(servletConfig);
-        encoding = getConfiguration().getString(HtmlServletConstants.ENCODING_KEY, HtmlServletConstants.ENCODING_DEFAULT);
+        encoding =
+            getConfiguration().getString(HtmlServletConstants.ENCODING_KEY, HtmlServletConstants.ENCODING_DEFAULT);
 
-        controller = new WebController(getPathBuilder());
-        
+        controller = getWebController(getPathBuilder());
+
         final boolean debugEnabled = getConfiguration().getBoolean(HtmlServletConstants.DEBUG_KEY);
         controller.setDebug(debugEnabled);
-        
+
         controller.init();
+    }
+
+    // Don't remove this - It allows other implementations of HtmlViewer to replace the WebController
+    protected WebController getWebController(PathBuilder pathBuilder) {
+        if (controller == null) {
+            controller = new WebController(getPathBuilder());
+        }
+        return controller;
     }
 
     // //////////////////////////////////////////////////////////////////
@@ -66,17 +76,20 @@ public class ControllerServlet extends AbstractHtmlViewerServlet {
     // //////////////////////////////////////////////////////////////////
 
     @Override
-    protected void doPost(final HttpServletRequest request, final HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(final HttpServletRequest request, final HttpServletResponse response)
+        throws ServletException, IOException {
         request.setCharacterEncoding(encoding);
         processRequest(request, response);
     }
 
     @Override
-    protected void doGet(final HttpServletRequest request, final HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(final HttpServletRequest request, final HttpServletResponse response) throws ServletException,
+        IOException {
         processRequest(request, response);
     }
 
-    private void processRequest(final HttpServletRequest request, final HttpServletResponse response) throws ServletException, IOException {
+    private void processRequest(final HttpServletRequest request, final HttpServletResponse response)
+        throws ServletException, IOException {
         LOG.info("request: " + request.getServletPath() + "?" + request.getQueryString());
 
         final Request req = new ServletRequest(request);
@@ -106,7 +119,8 @@ public class ControllerServlet extends AbstractHtmlViewerServlet {
         return context;
     }
 
-    private void processRequest(final HttpServletRequest request, final HttpServletResponse response, final Request req, final Context context) throws IOException, ServletException {
+    private void processRequest(final HttpServletRequest request, final HttpServletResponse response,
+        final Request req, final Context context) throws IOException, ServletException {
         response.setContentType("text/html");
 
         // no need to check if logged in; the IsisSessionFilter would
