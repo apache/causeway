@@ -46,17 +46,11 @@ import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 
-class ObjectReader {
+public class ObjectReader {
     
     private final KeyCreatorDefault keyCreator = new KeyCreatorDefault();
 
     public ObjectAdapter load(final StateReader reader, final VersionCreator versionCreator, final Map<String, DataEncryption> dataEncrypters) {
-        
-        // final String className = reader.readObjectType();
-        // final String id = reader.readId();
-        
-        // final ObjectSpecification specification = getSpecificationLoader().loadSpecification(className);
-        // final RootOid rootOid = keyCreator.oid(specification, id);
         
         final String oidStr = reader.readOid();
         final RootOid rootOid = getOidMarshaller().unmarshal(oidStr, RootOid.class);
@@ -73,14 +67,15 @@ class ObjectReader {
             if (version.different(object.getVersion())) {
                 // TODO - do we need to CHECK version and update
                 throw new UnexpectedCallException();
-            } else {
-                return object;
             }
+            
+        } else {
+            
+            // TODO move lock to common method
+            // object.setOptimisticLock(version);
+            loadState(reader, versionCreator, dataEncrypters, object);
         }
 
-        // TODO move lock to common method
-        // object.setOptimisticLock(version);
-        loadState(reader, versionCreator, dataEncrypters, object);
         return object;
     }
 
@@ -129,9 +124,6 @@ class ObjectReader {
         
         final ObjectAdapter fieldObject;
         if (aggregateReader != null) {
-//            final String objectType = aggregateReader.readObjectType();
-//            final String localId = aggregateReader.readId();  
-//            final AggregatedOid aggregatedOid = new AggregatedOid(objectType, (TypedOid) parentAdapter.getOid(), localId);
             final String oidStr = aggregateReader.readOid();
             final AggregatedOid aggregatedOid = getOidMarshaller().unmarshal(oidStr, AggregatedOid.class);
             fieldObject = restoreAggregatedObject(aggregateReader, aggregatedOid, dataEncrypter);
@@ -144,8 +136,6 @@ class ObjectReader {
 
     private ObjectAdapter restoreAggregatedObject(final StateReader aggregateReader, final AggregatedOid aggregatedOid, final DataEncryption dataEncrypter) {
         
-//        final String objectType = aggregateReader.readObjectType();
-//        final ObjectSpecification specification = getSpecificationLoader().loadSpecification(objectType);
         final ObjectSpecification specification = getSpecificationLoader().lookupBySpecId(aggregatedOid.getObjectSpecId());
 
         final ObjectAdapter fieldObject = getAdapter(specification, aggregatedOid);
@@ -203,10 +193,6 @@ class ObjectReader {
             int i = 0;
             for (final StateReader elementReader : readers) {
                 
-//                final String objectType = elementReader.readObjectType();
-//                final String localId = elementReader.readId();
-//                final AggregatedOid aggregatedOid = new AggregatedOid(ObjectSpecId.of(objectType), (TypedOid) parentAdapter.getOid(), localId);
-
                 final String oidStr = elementReader.readOid();
                 final AggregatedOid aggregatedOid = getOidMarshaller().unmarshal(oidStr, AggregatedOid.class);
                 
@@ -265,7 +251,5 @@ class ObjectReader {
     protected OidMarshaller getOidMarshaller() {
         return new OidMarshaller();
     }
-
-
 
 }
