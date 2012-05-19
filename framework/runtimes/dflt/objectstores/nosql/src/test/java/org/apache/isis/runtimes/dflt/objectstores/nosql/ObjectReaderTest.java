@@ -123,10 +123,6 @@ public class ObjectReaderTest {
                 one(reader1).readTime();
                 will(returnValue("1020"));
                 one(versionCreator).version("3", "username", "1020");
-                
-//                one(keyCreator).createRootOid(exampleValuePojoSpec, "3");
-//                will(returnValue(oid3));
-                ;
             }
         });
 
