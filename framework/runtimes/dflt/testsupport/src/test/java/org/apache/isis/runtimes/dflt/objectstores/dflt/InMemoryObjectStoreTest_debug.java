@@ -55,7 +55,7 @@ public class InMemoryObjectStoreTest_debug {
     public void debugXxx_whenHasObject() throws Exception {
 
         // given
-        iswf.persist(iswf.fixtures.epv1);
+        iswf.persist(iswf.fixtures.smpl1);
 
         // when
         final DebugString debug = new DebugString();
@@ -63,7 +63,7 @@ public class InMemoryObjectStoreTest_debug {
         
         
         // then
-        assertThat(debug.toString(), IsisMatchers.containsStripNewLines("EPV:3"));
+        assertThat(debug.toString(), IsisMatchers.containsStripNewLines("SMPL:2"));
     }
 
     

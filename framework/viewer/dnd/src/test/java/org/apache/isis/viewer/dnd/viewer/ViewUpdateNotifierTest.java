@@ -71,9 +71,9 @@ public class ViewUpdateNotifierTest {
     public void setUp() throws Exception {
         Logger.getRootLogger().setLevel(Level.OFF);
 
-        iswf.persist(iswf.fixtures.epv1);
+        iswf.persist(iswf.fixtures.smpl1);
         
-        adapter = iswf.adapterFor(iswf.fixtures.epv1);
+        adapter = iswf.adapterFor(iswf.fixtures.smpl1);
         
         notifier = new ExposedViewUpdateNotifier();
     }

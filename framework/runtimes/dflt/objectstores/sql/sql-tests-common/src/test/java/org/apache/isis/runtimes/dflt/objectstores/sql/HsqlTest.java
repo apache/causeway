@@ -16,14 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
-/**
- * 
- */
 package org.apache.isis.runtimes.dflt.objectstores.sql;
-
-import java.io.File;
-import java.io.FilenameFilter;
 
 import org.apache.isis.core.testsupport.files.Files;
 import org.apache.isis.core.testsupport.files.Files.Recursion;

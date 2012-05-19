@@ -40,8 +40,8 @@ import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2;
 import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2.Mode;
 import org.apache.isis.runtimes.dflt.testsupport.IsisSystemWithFixtures;
-import org.apache.isis.tck.dom.eg.ExamplePojoWithValues;
 import org.apache.isis.tck.dom.movies.Person;
+import org.apache.isis.tck.dom.refs.SimpleEntity;
 
 public class ObjectFixtureServiceTest_loadFile {
 
@@ -79,9 +79,9 @@ public class ObjectFixtureServiceTest_loadFile {
         final Set<Object> objects = service.allSavedObjects();
         Assert.assertEquals(1, objects.size());
         final Object object = objects.toArray()[0];
-        assertThat(object instanceof ExamplePojoWithValues, is(true));
-        Assert.assertEquals("Fred Smith", ((ExamplePojoWithValues) object).getName());
-        Assert.assertEquals(new Date(110, 2, 8, 13, 32), ((ExamplePojoWithValues) object).getDate());
+        assertThat(object instanceof SimpleEntity, is(true));
+        Assert.assertEquals("Fred Smith", ((SimpleEntity) object).getName());
+        Assert.assertEquals(new Date(110, 2, 8, 13, 32), ((SimpleEntity) object).getDate());
     }
 
 }

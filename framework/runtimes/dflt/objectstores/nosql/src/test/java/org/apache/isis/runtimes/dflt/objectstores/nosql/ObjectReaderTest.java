@@ -48,9 +48,9 @@ import org.apache.isis.runtimes.dflt.objectstores.nosql.encryption.DataEncryptio
 import org.apache.isis.runtimes.dflt.objectstores.nosql.versions.VersionCreator;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.testsupport.IsisSystemWithFixtures;
-import org.apache.isis.tck.dom.eg.ExamplePojoWithCollections;
-import org.apache.isis.tck.dom.eg.ExamplePojoWithReferences;
-import org.apache.isis.tck.dom.eg.ExamplePojoWithValues;
+import org.apache.isis.tck.dom.refs.ParentEntity;
+import org.apache.isis.tck.dom.refs.ReferencingEntity;
+import org.apache.isis.tck.dom.refs.SimpleEntity;
 
 public class ObjectReaderTest {
     
@@ -68,30 +68,17 @@ public class ObjectReaderTest {
     @Mock
     private StateReader reader2;
 
-    //private KeyCreatorDefault keyCreator;
-
-    //private ObjectSpecification exampleValuePojoSpec;
-    //private ObjectSpecification exampleReferencePojoSpec;
-    //private ObjectSpecification exampleCollectionPojoSpec;
-    
     private ObjectReader objectReader;
-    
     
     private Map<String, DataEncryption> dataEncrypter;
 
-    private final RootOidDefault oid3 = RootOidDefault.deString("EPV:3"); // ExampleValuePojo
-    private final RootOidDefault oid4 = RootOidDefault.deString("EPR:4"); // ExampleReferencePojo
-    private final RootOidDefault oid5 = RootOidDefault.deString("EPC:5"); // ExampleCollectionPojo
+    private final RootOidDefault oid3 = RootOidDefault.deString("SMPL:3");
+    private final RootOidDefault oid4 = RootOidDefault.deString("RFCG:4"); 
+    private final RootOidDefault oid5 = RootOidDefault.deString("PRNT:5"); 
 
 
     @Before
     public void setup() {
-        //keyCreator = new KeyCreatorDefault();
-        
-        //exampleValuePojoSpec = iswf.loadSpecification(ExamplePojoWithValues.class);
-        //exampleReferencePojoSpec = iswf.loadSpecification(ExamplePojoWithReferences.class);
-        //exampleCollectionPojoSpec = iswf.loadSpecification(ExamplePojoWithCollections.class);
-                
         objectReader = new ObjectReader();
 
         dataEncrypter = new HashMap<String, DataEncryption>();
@@ -124,14 +111,8 @@ public class ObjectReaderTest {
 
         context.checking(new Expectations() {
             {
-//                one(reader1).readObjectType();
-//                will(returnValue(ExamplePojoWithValues.class.getName()));
-//
-//                one(reader1).readId();
-//                will(returnValue("3"));
-
                 one(reader1).readOid();
-                will(returnValue("EPV:3"));
+                will(returnValue("SMPL:3"));
 
                 one(reader1).readEncrytionType();
                 will(returnValue("etc1"));
@@ -153,7 +134,7 @@ public class ObjectReaderTest {
         assertEquals(oid3, readObject.getOid());
         assertEquals(ResolveState.RESOLVED, readObject.getResolveState());
 
-        final ExamplePojoWithValues pojo = (ExamplePojoWithValues) readObject.getObject();
+        final SimpleEntity pojo = (SimpleEntity) readObject.getObject();
         assertEquals("Fred Smith", pojo.getName());
         assertEquals(34, pojo.getSize());
 
@@ -164,14 +145,8 @@ public class ObjectReaderTest {
     public void testReadingReference() throws Exception {
         context.checking(new Expectations() {
             {
-//                one(reader2).readObjectType();
-//                will(returnValue(ExamplePojoWithReferences.class.getName()));
-//
-//                one(reader2).readId();
-//                will(returnValue("4"));
-
                 one(reader2).readOid();
-                will(returnValue("EPR:4"));
+                will(returnValue("RFCG:4"));
 
                 one(reader2).readEncrytionType();
                 will(returnValue("etc1"));
@@ -183,19 +158,11 @@ public class ObjectReaderTest {
                 will(returnValue("1020"));
                 one(versionCreator).version("3", "username", "1020");
 
-//                one(keyCreator).createRootOid(exampleReferencePojoSpec, "4");
-//                will(returnValue(oid4));
-
                 one(reader2).readField("reference");
-                will(returnValue("EPV:3"));
+                will(returnValue("SMPL:3"));
 
                 one(reader2).readAggregate("aggregatedReference");
                 will(returnValue(null));
-
-//                one(keyCreator).unmarshal("ref@3");
-//                will(returnValue(oid3));
-//                one(keyCreator).specificationFromOidStr("ref@3");
-//                will(returnValue(exampleValuePojoSpec));
             }
         });
 
@@ -203,9 +170,9 @@ public class ObjectReaderTest {
         assertEquals(oid4, readObject.getOid());
         assertEquals(ResolveState.RESOLVED, readObject.getResolveState());
 
-        final ExamplePojoWithReferences pojo = (ExamplePojoWithReferences) readObject.getObject();
+        final ReferencingEntity pojo = (ReferencingEntity) readObject.getObject();
         assertEquals(null, pojo.getAggregatedReference());
-        assertThat(pojo.getReference(), CoreMatchers.instanceOf(ExamplePojoWithValues.class));
+        assertThat(pojo.getReference(), CoreMatchers.instanceOf(SimpleEntity.class));
 
         context.assertIsSatisfied();
     }
@@ -215,14 +182,8 @@ public class ObjectReaderTest {
         //final ObjectSpecification specification = IsisContext.getSpecificationLoader().loadSpecification(ExamplePojoWithValues.class);
         context.checking(new Expectations() {
             {
-//                one(reader2).readObjectType();
-//                will(returnValue(ExamplePojoWithCollections.class.getName()));
-//
-//                one(reader2).readId();
-//                will(returnValue("5"));
-
                 one(reader2).readOid();
-                will(returnValue("EPC:5"));
+                will(returnValue("PRNT:5"));
 
                 one(reader2).readEncrytionType();
                 will(returnValue("etc1"));
@@ -234,22 +195,14 @@ public class ObjectReaderTest {
                 will(returnValue("1020"));
                 one(versionCreator).version("3", "username", "1020");
 
-//                one(keyCreator).createRootOid(exampleCollectionPojoSpec, "5");
-//                will(returnValue(oid5));
-
+                one(reader2).readField("name");
+                will(returnValue(null));
+                one(reader2).readField("children");
+                will(returnValue(null));
                 one(reader2).readField("heterogeneousCollection");
                 will(returnValue(null));
                 one(reader2).readField("homogeneousCollection");
-                will(returnValue("EPV:3|EPV:4|"));
-
-//                one(keyCreator).specificationFromOidStr("ref@3");
-//                will(returnValue(specification));
-//                one(keyCreator).unmarshal("ref@3");
-//                will(returnValue(oid3));
-//                one(keyCreator).specificationFromOidStr("ref@4");
-//                will(returnValue(specification));
-//                one(keyCreator).unmarshal("ref@4");
-//                will(returnValue(oid4));
+                will(returnValue("SMPL:3|SMPL:4|"));
             }
         });
 
@@ -257,12 +210,12 @@ public class ObjectReaderTest {
         assertEquals(oid5, readObject.getOid());
         assertEquals(ResolveState.RESOLVED, readObject.getResolveState());
 
-        final ExamplePojoWithCollections pojo = (ExamplePojoWithCollections) readObject.getObject();
-        final List<ExamplePojoWithValues> collection2 = pojo.getHomogeneousCollection();
+        final ParentEntity pojo = (ParentEntity) readObject.getObject();
+        final List<SimpleEntity> collection2 = pojo.getHomogeneousCollection();
         assertEquals(2, collection2.size());
 
-        assertThat(collection2.get(0), CoreMatchers.instanceOf(ExamplePojoWithValues.class));
-        assertThat(collection2.get(1), CoreMatchers.instanceOf(ExamplePojoWithValues.class));
+        assertThat(collection2.get(0), CoreMatchers.instanceOf(SimpleEntity.class));
+        assertThat(collection2.get(1), CoreMatchers.instanceOf(SimpleEntity.class));
 
         context.assertIsSatisfied();
     }
@@ -285,12 +238,12 @@ public class ObjectReaderTest {
             }
         });
 
-        final ObjectSpecification specification = IsisContext.getSpecificationLoader().loadSpecification(ExamplePojoWithValues.class);
+        final ObjectSpecification specification = IsisContext.getSpecificationLoader().loadSpecification(SimpleEntity.class);
         final ObjectAdapter readObject = IsisContext.getPersistenceSession().recreateAdapter(specification, RootOidDefault.create(ObjectSpecId.of("EVP"), ""+4));
 
         objectReader.update(reader1, versionCreator, dataEncrypter, readObject);
 
-        final ExamplePojoWithValues pojo = (ExamplePojoWithValues) readObject.getObject();
+        final SimpleEntity pojo = (SimpleEntity) readObject.getObject();
         assertEquals("Fred Smith", pojo.getName());
         assertEquals(34, pojo.getSize());
 

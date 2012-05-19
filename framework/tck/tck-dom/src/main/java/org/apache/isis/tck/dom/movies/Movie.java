@@ -27,45 +27,42 @@ import org.apache.isis.applib.annotation.ObjectType;
 
 @ObjectType("movies.MOVIE")
 public class Movie {
-    private Person director;
-    private String name;
-    private final List<Role> roles = Lists.newArrayList();
-
-    public void addToRoles(final Role role) {
-        roles.add(role);
-    }
-
-    public Person getDirector() {
-        return director;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public List<Role> getRoles() {
-        return roles;
-    }
-
-    public void removeFromRoles(final Role role) {
-        roles.remove(role);
-    }
-
-    public void setDirector(final Person director) {
-        this.director = director;
-    }
-
-    public void setName(final String name) {
-        this.name = name;
-    }
 
     public String title() {
         return name;
     }
 
-    /*
-     * public static void aboutActionFindMovie(ActionAbout about, String name,
-     * Person director, Person actor) { about.setParameter(0, "Name");
-     * about.setParameter(1, "Director"); about.setParameter(2, "Actor"); }
-     */
+    // {{ name: String 
+    private String name;
+    public String getName() {
+        return name;
+    }
+    public void setName(final String name) {
+        this.name = name;
+    }
+    // }}
+
+    // {{ director: Person 
+    private Person director;
+    public Person getDirector() {
+        return director;
+    }
+    public void setDirector(final Person director) {
+        this.director = director;
+    }
+    
+    // }}
+    
+    // {{ roles: List 
+    private final List<Role> roles = Lists.newArrayList();
+    public List<Role> getRoles() {
+        return roles;
+    }
+    public void addToRoles(final Role role) {
+        roles.add(role);
+    }
+    public void removeFromRoles(final Role role) {
+        roles.remove(role);
+    }
+    // }}
 }

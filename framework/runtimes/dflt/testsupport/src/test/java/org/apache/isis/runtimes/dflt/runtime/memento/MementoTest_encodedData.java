@@ -49,19 +49,19 @@ public class MementoTest_encodedData {
 
     @Before
     public void setUpSystem() throws Exception {
-        iswf.fixtures.epv1.setName("Fred");
-        iswf.fixtures.epv2.setName("Harry");
+        iswf.fixtures.smpl1.setName("Fred");
+        iswf.fixtures.smpl2.setName("Harry");
         
-        iswf.fixtures.epr1.setReference(iswf.fixtures.epv1);
+        iswf.fixtures.rfcg1.setReference(iswf.fixtures.smpl1);
         
-        iswf.fixtures.epc1.getHomogeneousCollection().add(iswf.fixtures.epv1);
-        iswf.fixtures.epc1.getHomogeneousCollection().add(iswf.fixtures.epv2);
+        iswf.fixtures.prnt1.getHomogeneousCollection().add(iswf.fixtures.smpl1);
+        iswf.fixtures.prnt1.getHomogeneousCollection().add(iswf.fixtures.smpl2);
         
-        iswf.fixtures.epc1.getHeterogeneousCollection().add(iswf.fixtures.epv1);
-        iswf.fixtures.epc1.getHeterogeneousCollection().add(iswf.fixtures.epr1);
+        iswf.fixtures.prnt1.getHeterogeneousCollection().add(iswf.fixtures.smpl1);
+        iswf.fixtures.prnt1.getHeterogeneousCollection().add(iswf.fixtures.rfcg1);
 
         
-        rootAdapter = IsisContext.getPersistenceSession().getAdapterManager().adapterFor(iswf.fixtures.epv1);
+        rootAdapter = IsisContext.getPersistenceSession().getAdapterManager().adapterFor(iswf.fixtures.smpl1);
 
         memento = new Memento(rootAdapter);
     }

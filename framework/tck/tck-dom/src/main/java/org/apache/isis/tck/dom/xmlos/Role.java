@@ -23,30 +23,31 @@ import org.apache.isis.applib.annotation.ObjectType;
 
 @ObjectType("RLE")
 public class Role {
+    
+    // {{ Name (String)
     public String name;
-    public Person person;
-
-    public void setPerson(final Person v) {
-        person = v;
-    }
-
-    public Person getPerson() {
-        return person;
-    }
-
-    public void modifyPerson(final Person person) {
-        setPerson(person);
-    }
-
-    public void clearPerson(final Person person) {
-        setPerson(null);
-    }
-
     public String getName() {
         return name;
     }
-
     public void setName(final String name) {
         this.name = name;
     }
+    // }}
+    
+    // {{ Person (Person)
+    public Person person;
+    public Person getPerson() {
+        return person;
+    }
+    public void setPerson(final Person v) {
+        person = v;
+    }
+    public void modifyPerson(final Person person) {
+        setPerson(person);
+    }
+    public void clearPerson(final Person person) {
+        setPerson(null);
+    }
+    // }}
+
 }

@@ -52,13 +52,15 @@ import org.apache.isis.runtimes.dflt.runtime.system.transaction.IsisTransaction.
 import org.apache.isis.runtimes.dflt.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.runtimes.dflt.testsupport.IsisSystemWithFixtures.Fixtures.Initialization;
 import org.apache.isis.security.dflt.authentication.AuthenticationRequestDefault;
-import org.apache.isis.tck.dom.eg.ExamplePojoAggregated;
-import org.apache.isis.tck.dom.eg.ExamplePojoRepository;
-import org.apache.isis.tck.dom.eg.ExamplePojoWithCollections;
-import org.apache.isis.tck.dom.eg.ExamplePojoWithReferences;
-import org.apache.isis.tck.dom.eg.ExamplePojoWithValues;
-import org.apache.isis.tck.dom.eg.TestPojo;
-import org.apache.isis.tck.dom.eg.TestPojoRepository;
+import org.apache.isis.tck.dom.refs.AggregatedEntity;
+import org.apache.isis.tck.dom.refs.AssociatedEntitiesRepository;
+import org.apache.isis.tck.dom.refs.ParentEntity;
+import org.apache.isis.tck.dom.refs.ReferencingEntity;
+import org.apache.isis.tck.dom.refs.SimpleEntity;
+import org.apache.isis.tck.dom.scalars.ApplibValuedEntity;
+import org.apache.isis.tck.dom.scalars.JdkValuedEntity;
+import org.apache.isis.tck.dom.scalars.PrimitiveValuedEntity;
+import org.apache.isis.tck.dom.scalars.WrapperValuedEntity;
 
 /**
  * Wraps a plain {@link IsisSystemDefault}, and provides a number of features to assist with testing.
@@ -107,42 +109,55 @@ public class IsisSystemWithFixtures implements org.junit.rules.TestRule {
             NO_INIT
         }
 
-        public TestPojoRepository testPojoRepository = new TestPojoRepository();
-        public ExamplePojoRepository examplePojoRepository = new ExamplePojoRepository();
+        public AssociatedEntitiesRepository associatedEntitiesRepository = new AssociatedEntitiesRepository();
 
-        public TestPojo testPojo1, testPojo2;
-        public ExamplePojoWithValues epv1, epv2, epv3, epv4, epv5, epv6;
-        public ExamplePojoWithReferences epr1, epr2, epr3, epr4, epr5, epr6;
-        public ExamplePojoWithCollections epc1, epc2, epc3, epc4, epc5, epc6;
-        public ExamplePojoAggregated epr1_a1, epr1_a2, epr1_a3, epc1_a1, epc1_a2, epc1_a3;
+        public ApplibValuedEntity ave1, ave2; 
+        public JdkValuedEntity jve1, jve2;
+        public PrimitiveValuedEntity pve1, pve2;
+        public WrapperValuedEntity wve1, wve2;
+        
+        public SimpleEntity smpl1, smpl2, smpl3, smpl4, smpl5, smpl6;
+        public ReferencingEntity rfcg1, rfcg2, rfcg3, rfcg4, rfcg5, rfcg6;
+        public ParentEntity prnt1, prnt2, prnt3, prnt4, prnt5, prnt6;
+        public AggregatedEntity rfcg1_a1, rfcg1_a2, rfcg1_a3, prnt1_a1, prnt1_a2, prnt1_a3;
 
         private void init(DomainObjectContainer container) {
-            testPojo1 = container.newTransientInstance(TestPojo.class);
-            testPojo2 = container.newTransientInstance(TestPojo.class);
-            epv1 = container.newTransientInstance(ExamplePojoWithValues.class);
-            epv2 = container.newTransientInstance(ExamplePojoWithValues.class);
-            epv3 = container.newTransientInstance(ExamplePojoWithValues.class);
-            epv4 = container.newTransientInstance(ExamplePojoWithValues.class);
-            epv5 = container.newTransientInstance(ExamplePojoWithValues.class);
-            epv6 = container.newTransientInstance(ExamplePojoWithValues.class);
-            epr1 = container.newTransientInstance(ExamplePojoWithReferences.class);
-            epr2 = container.newTransientInstance(ExamplePojoWithReferences.class);
-            epr3 = container.newTransientInstance(ExamplePojoWithReferences.class);
-            epr4 = container.newTransientInstance(ExamplePojoWithReferences.class);
-            epr5 = container.newTransientInstance(ExamplePojoWithReferences.class);
-            epr6 = container.newTransientInstance(ExamplePojoWithReferences.class);
-            epc1 = container.newTransientInstance(ExamplePojoWithCollections.class);
-            epc2 = container.newTransientInstance(ExamplePojoWithCollections.class);
-            epc3 = container.newTransientInstance(ExamplePojoWithCollections.class);
-            epc4 = container.newTransientInstance(ExamplePojoWithCollections.class);
-            epc5 = container.newTransientInstance(ExamplePojoWithCollections.class);
-            epc6 = container.newTransientInstance(ExamplePojoWithCollections.class);
-            epr1_a1 = container.newAggregatedInstance(epr1, ExamplePojoAggregated.class);
-            epr1_a2 = container.newAggregatedInstance(epr1, ExamplePojoAggregated.class);
-            epr1_a3 = container.newAggregatedInstance(epr1, ExamplePojoAggregated.class);
-            epc1_a1 = container.newAggregatedInstance(epc1, ExamplePojoAggregated.class);
-            epc1_a2 = container.newAggregatedInstance(epc1, ExamplePojoAggregated.class);
-            epc1_a3 = container.newAggregatedInstance(epc1, ExamplePojoAggregated.class);
+            ave1 = container.newTransientInstance(ApplibValuedEntity.class);
+            ave2 = container.newTransientInstance(ApplibValuedEntity.class);
+            
+            jve1 = container.newTransientInstance(JdkValuedEntity.class);
+            jve2 = container.newTransientInstance(JdkValuedEntity.class);
+            
+            pve1 = container.newTransientInstance(PrimitiveValuedEntity.class);
+            pve2 = container.newTransientInstance(PrimitiveValuedEntity.class);
+
+            wve1 = container.newTransientInstance(WrapperValuedEntity.class);
+            wve2 = container.newTransientInstance(WrapperValuedEntity.class);
+            
+            smpl1 = container.newTransientInstance(SimpleEntity.class);
+            smpl2 = container.newTransientInstance(SimpleEntity.class);
+            smpl3 = container.newTransientInstance(SimpleEntity.class);
+            smpl4 = container.newTransientInstance(SimpleEntity.class);
+            smpl5 = container.newTransientInstance(SimpleEntity.class);
+            smpl6 = container.newTransientInstance(SimpleEntity.class);
+            rfcg1 = container.newTransientInstance(ReferencingEntity.class);
+            rfcg2 = container.newTransientInstance(ReferencingEntity.class);
+            rfcg3 = container.newTransientInstance(ReferencingEntity.class);
+            rfcg4 = container.newTransientInstance(ReferencingEntity.class);
+            rfcg5 = container.newTransientInstance(ReferencingEntity.class);
+            rfcg6 = container.newTransientInstance(ReferencingEntity.class);
+            prnt1 = container.newTransientInstance(ParentEntity.class);
+            prnt2 = container.newTransientInstance(ParentEntity.class);
+            prnt3 = container.newTransientInstance(ParentEntity.class);
+            prnt4 = container.newTransientInstance(ParentEntity.class);
+            prnt5 = container.newTransientInstance(ParentEntity.class);
+            prnt6 = container.newTransientInstance(ParentEntity.class);
+            rfcg1_a1 = container.newAggregatedInstance(rfcg1, AggregatedEntity.class);
+            rfcg1_a2 = container.newAggregatedInstance(rfcg1, AggregatedEntity.class);
+            rfcg1_a3 = container.newAggregatedInstance(rfcg1, AggregatedEntity.class);
+            prnt1_a1 = container.newAggregatedInstance(prnt1, AggregatedEntity.class);
+            prnt1_a2 = container.newAggregatedInstance(prnt1, AggregatedEntity.class);
+            prnt1_a3 = container.newAggregatedInstance(prnt1, AggregatedEntity.class);
         }
     }
 
@@ -226,7 +241,7 @@ public class IsisSystemWithFixtures implements org.junit.rules.TestRule {
         this.authenticationRequest = authenticationRequest;
         this.fixtures = new Fixtures();
         if(services == null) {
-            services = Arrays.asList(fixtures.testPojoRepository, fixtures.examplePojoRepository);
+            services = Arrays.asList((Object)fixtures.associatedEntitiesRepository);
         }
         this.services = services;
         this.listeners = listeners;

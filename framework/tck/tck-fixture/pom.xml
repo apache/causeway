@@ -22,7 +22,7 @@
     <parent>
     	<groupId>org.apache.isis.tck</groupId>
         <artifactId>tck</artifactId>
-        <version>0.3.0-incubating-SNAPSHOT</version>
+        <version>0.3.1-incubating-SNAPSHOT</version>
     </parent>
 
 	<artifactId>tck-fixture</artifactId>
@@ -31,8 +31,8 @@
 	<dependencies>
 		<dependency>
             <groupId>org.apache.isis.tck</groupId>
-			<artifactId>tck-objstore-dflt</artifactId>
-            <version>0.3.0-incubating-SNAPSHOT</version>
+			<artifactId>tck-dom</artifactId>
+            <version>0.3.1-incubating-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
 

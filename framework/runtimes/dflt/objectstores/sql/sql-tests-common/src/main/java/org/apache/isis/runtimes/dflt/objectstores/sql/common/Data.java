@@ -1,6 +1,5 @@
 package org.apache.isis.runtimes.dflt.objectstores.sql.common;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -13,9 +12,6 @@ import org.apache.isis.applib.value.Password;
 import org.apache.isis.applib.value.Percentage;
 import org.apache.isis.applib.value.Time;
 import org.apache.isis.applib.value.TimeStamp;
-import org.apache.isis.tck.dom.sqlos.data.NumericTestClass;
-import org.apache.isis.tck.dom.sqlos.data.SimpleClass;
-import org.apache.isis.tck.dom.sqlos.data.SimpleClassTwo;
 
 public class Data {
 
@@ -80,7 +76,7 @@ public class Data {
     static final List<String> stringList2 = Arrays.asList("Fridge", "Deli", "Fresh Produce", "Frozen", "Household", "Other..");
     
     static List<String> getTableNames() {
-        return Arrays.asList("sqldataclass", "simpleclass", "simpleclasstwo", "numerictestclass");
+        return Arrays.asList("sqldataclass", "simpleclass", "simpleclasstwo", "primitivevaluedentity");
     }
 
 }

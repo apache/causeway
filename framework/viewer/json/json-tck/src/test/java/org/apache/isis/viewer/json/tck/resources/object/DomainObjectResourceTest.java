@@ -41,8 +41,9 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import org.apache.isis.runtimes.dflt.webserver.WebServer;
-import org.apache.isis.tck.dom.assocs.ChildEntity;
+import org.apache.isis.tck.dom.refs.ChildEntity;
 import org.apache.isis.tck.dom.scalars.ApplibValuedEntity;
+import org.apache.isis.tck.dom.scalars.ApplibValuedEntityRepository;
 import org.apache.isis.viewer.json.applib.HttpMethod;
 import org.apache.isis.viewer.json.applib.JsonRepresentation;
 import org.apache.isis.viewer.json.applib.RestfulClient;
@@ -293,7 +294,7 @@ public class DomainObjectResourceTest {
         assertThat(type.getHttpMethod(), is(HttpMethod.GET));
 
         assertThat(propertyDetailsRepr.getString("memberType"), is("property"));
-        assertThat(propertyDetailsRepr.getString("value"), is(org.apache.isis.tck.objstore.dflt.scalars.ApplibValuedEntityRepositoryDefault.class.getName()));
+        assertThat(propertyDetailsRepr.getString("value"), is(ApplibValuedEntityRepository.class.getName()));
         assertThat(propertyDetailsRepr.getString("disabledReason"), is(not(nullValue())));
     }
 

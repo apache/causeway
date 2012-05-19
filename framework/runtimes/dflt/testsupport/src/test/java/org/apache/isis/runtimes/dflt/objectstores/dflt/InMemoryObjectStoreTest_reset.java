@@ -32,7 +32,7 @@ import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.runtimes.dflt.testsupport.IsisSystemWithFixtures;
-import org.apache.isis.tck.dom.eg.ExamplePojoWithValues;
+import org.apache.isis.tck.dom.refs.SimpleEntity;
 
 /**
  * This is really just a test of the test infrastructure, not a real test per se.
@@ -51,14 +51,14 @@ public class InMemoryObjectStoreTest_reset {
 
     @Before
     public void setUpFixtures() throws Exception {
-        epv2Adapter = iswf.adapterFor(iswf.fixtures.epv2);
-        epvSpecification = iswf.loadSpecification(ExamplePojoWithValues.class);
+        epv2Adapter = iswf.adapterFor(iswf.fixtures.smpl2);
+        epvSpecification = iswf.loadSpecification(SimpleEntity.class);
     }
 
     @Test
     public void reset_clearsAdapterFromLoader() throws Exception {
         
-        iswf.persist(iswf.fixtures.epv2);
+        iswf.persist(iswf.fixtures.smpl2);
         iswf.bounceSystem();
 
         assertNotNull(getAdapterManager().getAdapterFor(epv2Adapter.getObject()));

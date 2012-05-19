@@ -33,18 +33,18 @@ import org.apache.isis.core.testsupport.files.Files.Recursion;
 import org.apache.isis.runtimes.dflt.objectstores.sql.common.SqlIntegrationTestCommonBase;
 import org.apache.isis.runtimes.dflt.objectstores.sql.common.SqlIntegrationTestFixtures;
 import org.apache.isis.runtimes.dflt.objectstores.sql.common.SqlIntegrationTestFixtures.State;
-import org.apache.isis.tck.dom.sqlos.poly.EmptyInterface;
-import org.apache.isis.tck.dom.sqlos.poly.EmptyInterfaceEx;
-import org.apache.isis.tck.dom.sqlos.poly.PolyBaseClass;
-import org.apache.isis.tck.dom.sqlos.poly.PolyInterface;
-import org.apache.isis.tck.dom.sqlos.poly.PolyInterfaceEx;
-import org.apache.isis.tck.dom.sqlos.poly.PolyInterfaceImplA;
-import org.apache.isis.tck.dom.sqlos.poly.PolyInterfaceImplB;
-import org.apache.isis.tck.dom.sqlos.poly.PolySelfRefClass;
-import org.apache.isis.tck.dom.sqlos.poly.PolySubClassOne;
-import org.apache.isis.tck.dom.sqlos.poly.PolySubClassThree;
-import org.apache.isis.tck.dom.sqlos.poly.PolySubClassTwo;
-import org.apache.isis.tck.dom.sqlos.poly.PolyTestClass;
+import org.apache.isis.tck.dom.poly.Empty;
+import org.apache.isis.tck.dom.poly.EmptyEntityWithOwnProperty;
+import org.apache.isis.tck.dom.poly.ReferencingPolyTypesEntity;
+import org.apache.isis.tck.dom.poly.SelfReferencingEntity;
+import org.apache.isis.tck.dom.poly.StringBaseEntity;
+import org.apache.isis.tck.dom.poly.StringBaseEntitySub;
+import org.apache.isis.tck.dom.poly.StringBaseEntitySubThree;
+import org.apache.isis.tck.dom.poly.StringBaseEntitySubTwo;
+import org.apache.isis.tck.dom.poly.Stringable;
+import org.apache.isis.tck.dom.poly.StringableEntityWithOwnDerivedProperty;
+import org.apache.isis.tck.dom.poly.StringableEntityWithOwnProperties;
+import org.apache.isis.tck.dom.poly.StringableEntityWithOwnProperty;
 
 public class PolymorphismTest extends SqlIntegrationTestCommonBase {
 
@@ -53,8 +53,8 @@ public class PolymorphismTest extends SqlIntegrationTestCommonBase {
     private static final String IMPL_A_STRING = "Impl A String";
     private static final String CHILD_1 = "Child 1";
     
-    private static PolyInterfaceImplA polyIntImpA;
-    private static PolyInterfaceImplB polyIntImpB;
+    private static StringableEntityWithOwnProperty polyIntImpA;
+    private static StringableEntityWithOwnProperties polyIntImpB;
 
     @Override
     public String getPropertiesFilename() {
@@ -117,23 +117,23 @@ public class PolymorphismTest extends SqlIntegrationTestCommonBase {
 
     private void create() throws Exception {
 
-        final PolyTestClass polyTestClass = factory.newPolyTestClass();
-        polyTestClass.setString("polyTestClassString");
+        final ReferencingPolyTypesEntity referencingPolyTypesEntity = factory.newPolyTestClass();
+        referencingPolyTypesEntity.setString("polyTestClassString");
 
         // Setup self-referencing collection
-        final PolySelfRefClass polySelfRefClassParent = factory.newPolySelfRefClass();
+        final SelfReferencingEntity polySelfRefClassParent = factory.newPolySelfRefClass();
         polySelfRefClassParent.setString("Parent");
 
-        final PolySelfRefClass polySelfRefClassChild1 = factory.newPolySelfRefClass();
+        final SelfReferencingEntity polySelfRefClassChild1 = factory.newPolySelfRefClass();
         polySelfRefClassChild1.setString(CHILD_1);
         polySelfRefClassParent.addToPolySelfRefClasses(polySelfRefClassChild1);
 
-        final PolySelfRefClass polySelfRefClassChild2 = factory.newPolySelfRefClass();
+        final SelfReferencingEntity polySelfRefClassChild2 = factory.newPolySelfRefClass();
         polySelfRefClassChild2.setString("Child 2");
         polySelfRefClassParent.addToPolySelfRefClasses(polySelfRefClassChild2);
         factory.save(polySelfRefClassChild2);
 
-        final PolySelfRefClass polySelfRefClassChild3 = factory.newPolySelfRefClass();
+        final SelfReferencingEntity polySelfRefClassChild3 = factory.newPolySelfRefClass();
         polySelfRefClassChild3.setString("Child 1 of Child 1");
         polySelfRefClassChild1.addToPolySelfRefClasses(polySelfRefClassChild3);
 
@@ -141,7 +141,7 @@ public class PolymorphismTest extends SqlIntegrationTestCommonBase {
         factory.save(polySelfRefClassChild1);
 
         factory.save(polySelfRefClassParent);
-        polyTestClass.setPolySelfRefClass(polySelfRefClassParent);
+        referencingPolyTypesEntity.setPolySelfRefClass(polySelfRefClassParent);
 
         // polyTestClass.setPolyTestInterface(polyTestClass);
 
@@ -150,106 +150,106 @@ public class PolymorphismTest extends SqlIntegrationTestCommonBase {
         polyIntImpA.setSpecial("special");
         factory.save(polyIntImpA);
 
-        polyTestClass.setPolyInterfaceType(polyIntImpA);
-        polyTestClass.getPolyInterfaces().add(polyIntImpA);
+        referencingPolyTypesEntity.setPolyInterfaceType(polyIntImpA);
+        referencingPolyTypesEntity.getPolyInterfaces().add(polyIntImpA);
 
         // setup the polyTestClass
-        final PolySubClassOne polySubClassOne = factory.newPolySubClassOne();
-        polySubClassOne.setStringBase("PolySubClassOne 1");
-        polySubClassOne.setStringClassOne("Class 1");
+        final StringBaseEntitySub stringBaseEntitySub = factory.newPolySubClassOne();
+        stringBaseEntitySub.setStringBase("PolySubClassOne 1");
+        stringBaseEntitySub.setStringClassOne("Class 1");
 
-        final PolySubClassTwo polySubClassTwo = factory.newPolySubClassTwo();
-        polySubClassTwo.setStringBase("PolySubClassTwo 1");
-        polySubClassTwo.setStringClassTwo("Class 2");
+        final StringBaseEntitySubTwo stringBaseEntitySubTwo = factory.newPolySubClassTwo();
+        stringBaseEntitySubTwo.setStringBase("PolySubClassTwo 1");
+        stringBaseEntitySubTwo.setStringClassTwo("Class 2");
 
-        final PolySubClassThree polySubClassThree = factory.newPolySubClassThree();
-        polySubClassThree.setStringBase("PolySubClassThree 1");
-        polySubClassThree.setStringClassThree("Another String");
-        polySubClassThree.setStringClassTwo("Class 3");
+        final StringBaseEntitySubThree stringBaseEntitySubThree = factory.newPolySubClassThree();
+        stringBaseEntitySubThree.setStringBase("PolySubClassThree 1");
+        stringBaseEntitySubThree.setStringClassThree("Another String");
+        stringBaseEntitySubThree.setStringClassTwo("Class 3");
 
-        polyTestClass.getPolyBaseClasses().add(polySubClassOne);
-        polyTestClass.getPolyBaseClasses().add(polySubClassTwo);
-        polyTestClass.getPolyBaseClasses().add(polySubClassThree);
+        referencingPolyTypesEntity.getPolyBaseClasses().add(stringBaseEntitySub);
+        referencingPolyTypesEntity.getPolyBaseClasses().add(stringBaseEntitySubTwo);
+        referencingPolyTypesEntity.getPolyBaseClasses().add(stringBaseEntitySubThree);
 
-        factory.save(polySubClassOne);
-        factory.save(polySubClassTwo);
-        factory.save(polySubClassThree);
+        factory.save(stringBaseEntitySub);
+        factory.save(stringBaseEntitySubTwo);
+        factory.save(stringBaseEntitySubThree);
 
         // store it and step the state engine
-        factory.save(polyTestClass);
+        factory.save(referencingPolyTypesEntity);
 
         setFixtureInitializationState(State.DONT_INITIALIZE, "in-memory");
     }
 
     private void load() {
-        final List<PolyTestClass> dataClasses = factory.allPolyTestClasses();
+        final List<ReferencingPolyTypesEntity> dataClasses = factory.allPolyTestClasses();
         assertEquals(1, dataClasses.size());
-        final PolyTestClass polyTestClass = dataClasses.get(0);
+        final ReferencingPolyTypesEntity referencingPolyTypesEntity = dataClasses.get(0);
         
-        getSqlIntegrationTestFixtures().setPolyTestClass(polyTestClass);
+        getSqlIntegrationTestFixtures().setPolyTestClass(referencingPolyTypesEntity);
 
         setFixtureInitializationState(State.DONT_INITIALIZE);
     }
 
     private void polymorphicLoad() {
-        final List<PolyBaseClass> polyBaseClasses = polyTestClass.getPolyBaseClasses();
+        final List<StringBaseEntity> polyBaseClasses = referencingPolyTypesEntity.getPolyBaseClasses();
         assertEquals(3, polyBaseClasses.size());
 
-        PolyBaseClass polyClassBase = polyBaseClasses.get(0);
-        assertTrue(polyClassBase instanceof PolySubClassOne);
+        StringBaseEntity polyClassBase = polyBaseClasses.get(0);
+        assertTrue(polyClassBase instanceof StringBaseEntitySub);
         assertEquals("PolySubClassOne 1", polyClassBase.getStringBase());
-        final PolySubClassOne polySubClassOne = (PolySubClassOne) polyClassBase;
-        assertEquals("Class 1", polySubClassOne.getStringClassOne());
+        final StringBaseEntitySub stringBaseEntitySub = (StringBaseEntitySub) polyClassBase;
+        assertEquals("Class 1", stringBaseEntitySub.getStringClassOne());
 
         polyClassBase = polyBaseClasses.get(1);
-        assertTrue(polyClassBase instanceof PolySubClassTwo);
-        final PolySubClassTwo polySubClassTwo = (PolySubClassTwo) polyClassBase;
-        assertEquals("Class 2", polySubClassTwo.getStringClassTwo());
+        assertTrue(polyClassBase instanceof StringBaseEntitySubTwo);
+        final StringBaseEntitySubTwo stringBaseEntitySubTwo = (StringBaseEntitySubTwo) polyClassBase;
+        assertEquals("Class 2", stringBaseEntitySubTwo.getStringClassTwo());
 
         polyClassBase = polyBaseClasses.get(2);
-        assertTrue(polyClassBase instanceof PolySubClassThree);
-        final PolySubClassThree polySubClassThree = (PolySubClassThree) polyClassBase;
-        assertEquals("Class 3", polySubClassThree.getStringClassTwo());
-        assertEquals("Another String", polySubClassThree.getStringClassThree());
+        assertTrue(polyClassBase instanceof StringBaseEntitySubThree);
+        final StringBaseEntitySubThree stringBaseEntitySubThree = (StringBaseEntitySubThree) polyClassBase;
+        assertEquals("Class 3", stringBaseEntitySubThree.getStringClassTwo());
+        assertEquals("Another String", stringBaseEntitySubThree.getStringClassThree());
     }
 
     private void interfaceLoad() {
-        final PolyInterface loaded = polyTestClass.getPolyInterfaceType();
+        final Stringable loaded = referencingPolyTypesEntity.getPolyInterfaceType();
         factory.resolve(loaded);
         assertEquals(polyIntImpA.getString(), loaded.getString());
     }
 
     private void loadSelfReferencingCollection() {
-        final PolySelfRefClass polySelfRefParent = polyTestClass.getPolySelfRefClass();
-        final List<PolySelfRefClass> list = polySelfRefParent.getPolySelfRefClasses();
+        final SelfReferencingEntity polySelfRefParent = referencingPolyTypesEntity.getPolySelfRefClass();
+        final List<SelfReferencingEntity> list = polySelfRefParent.getPolySelfRefClasses();
         assertEquals(2, list.size());
 
-        PolySelfRefClass polySelfRefChild1 = null;
-        for (final PolySelfRefClass polySelfRefClass : list) {
-            if (polySelfRefClass.getString().equals(CHILD_1)) {
-                polySelfRefChild1 = polySelfRefClass;
+        SelfReferencingEntity polySelfRefChild1 = null;
+        for (final SelfReferencingEntity selfReferencingEntity : list) {
+            if (selfReferencingEntity.getString().equals(CHILD_1)) {
+                polySelfRefChild1 = selfReferencingEntity;
             }
         }
         assertNotNull(polySelfRefChild1);
 
         assertEquals(CHILD_1, polySelfRefChild1.title());
 
-        List<PolySelfRefClass> list2 = polySelfRefChild1.getPolySelfRefClasses();
+        List<SelfReferencingEntity> list2 = polySelfRefChild1.getPolySelfRefClasses();
         factory.resolve(polySelfRefChild1);
         list2 = polySelfRefChild1.getPolySelfRefClasses();
         assertEquals(1, list2.size());
     }
 
     private void interfaceLoadProperty() {
-        final PolyInterface loaded = polyTestClass.getPolyInterfaceType();
+        final Stringable loaded = referencingPolyTypesEntity.getPolyInterfaceType();
         assertEquals(polyIntImpA.getString(), loaded.getString());
     }
 
     private void interfaceLoadCollection() {
-        final List<PolyInterface> list = polyTestClass.getPolyInterfaces();
+        final List<Stringable> list = referencingPolyTypesEntity.getPolyInterfaces();
 
         assertEquals(1, list.size());
-        final PolyInterface loaded = list.get(0);
+        final Stringable loaded = list.get(0);
 
         assertEquals(polyIntImpA.getString(), loaded.getString());
     }
@@ -262,7 +262,7 @@ public class PolymorphismTest extends SqlIntegrationTestCommonBase {
 
         factory.save(polyIntImpB);
 
-        polyTestClass.setPolyInterfaceType(polyIntImpB);
+        referencingPolyTypesEntity.setPolyInterfaceType(polyIntImpB);
 
         setFixtureInitializationState(State.INITIALIZE);
     }
@@ -270,47 +270,47 @@ public class PolymorphismTest extends SqlIntegrationTestCommonBase {
     private void interfaceEditLoad() {
         load(); // reload data
 
-        final PolyInterface loaded = polyTestClass.getPolyInterfaceType();
+        final Stringable loaded = referencingPolyTypesEntity.getPolyInterfaceType();
         assertEquals(polyIntImpB.getString(), loaded.getString());
     }
 
     private void allInterfacesInstancesLoaded() {
-        final List<PolyInterface> list = factory.allPolyInterfaces();
+        final List<Stringable> list = factory.allPolyInterfaces();
         assertEquals(2, list.size());
     }
 
     private void interfacesLoadedByQuery() {
         // PolyInterface query = polyIntImpA;
 
-        final PolyInterfaceEx query = new PolyInterfaceEx();
+        final StringableEntityWithOwnDerivedProperty query = new StringableEntityWithOwnDerivedProperty();
         query.setString(IMPL_A_STRING);
 
-        final List<PolyInterface> list = factory.queryPolyInterfaces(query);
+        final List<Stringable> list = factory.queryPolyInterfaces(query);
         assertEquals(1, list.size());
     }
 
     private void interfacesLoadedByQuerySpecial() {
 
-        final PolyInterfaceEx query = new PolyInterfaceEx();
+        final StringableEntityWithOwnDerivedProperty query = new StringableEntityWithOwnDerivedProperty();
 
-        final List<PolyInterface> list = factory.queryPolyInterfaces(query);
+        final List<Stringable> list = factory.queryPolyInterfaces(query);
         assertEquals(2, list.size());
     }
 
     private void findByMatchPartialEntity() {
-        final EmptyInterface match = new EmptyInterfaceEx();
-        final List<EmptyInterface> matches = factory.allEmptyInterfacesThatMatch(match);
+        final Empty match = new EmptyEntityWithOwnProperty();
+        final List<Empty> matches = factory.allEmptyInterfacesThatMatch(match);
         assertEquals(1, matches.size());
 
-        final EmptyInterface emptyInterface = matches.get(0);
-        final PolyInterfaceImplB imp = (PolyInterfaceImplB) emptyInterface;
+        final Empty empty = matches.get(0);
+        final StringableEntityWithOwnProperties imp = (StringableEntityWithOwnProperties) empty;
         assertEquals(IMPL_B_STRING, imp.getString());
     }
 
     private void cannotFindByMatchWithWrongValue() {
-        final PolyInterfaceImplB match = new PolyInterfaceImplB();
+        final StringableEntityWithOwnProperties match = new StringableEntityWithOwnProperties();
         match.setInteger(0);
-        final List<EmptyInterface> matches = factory.allEmptyInterfacesThatMatch(match);
+        final List<Empty> matches = factory.allEmptyInterfacesThatMatch(match);
         assertEquals(0, matches.size());
     }
 

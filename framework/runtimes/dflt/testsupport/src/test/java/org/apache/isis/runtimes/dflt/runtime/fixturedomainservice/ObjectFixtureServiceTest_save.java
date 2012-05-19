@@ -35,8 +35,8 @@ import org.junit.Test;
 import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2;
 import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2.Mode;
 import org.apache.isis.runtimes.dflt.testsupport.IsisSystemWithFixtures;
-import org.apache.isis.tck.dom.eg.ExamplePojoWithCollections;
-import org.apache.isis.tck.dom.eg.ExamplePojoWithValues;
+import org.apache.isis.tck.dom.refs.ParentEntity;
+import org.apache.isis.tck.dom.refs.SimpleEntity;
 
 public class ObjectFixtureServiceTest_save {
 
@@ -67,13 +67,13 @@ public class ObjectFixtureServiceTest_save {
     @Test
     public void saveObjectAddedToList() throws Exception {
         
-        final ExamplePojoWithValues epv = iswf.fixtures.epv1;
+        final SimpleEntity epv = iswf.fixtures.smpl1;
         epv.setName("Fred Smith");
         epv.setDate(new Date(110, 2, 8, 13, 32));
         
-        final ExamplePojoWithCollections epc = iswf.fixtures.epc1;
-        epc.getHomogeneousCollection().add(iswf.fixtures.epv1);
-        epc.getHomogeneousCollection().add(iswf.fixtures.epv2);
+        final ParentEntity epc = iswf.fixtures.prnt1;
+        epc.getHomogeneousCollection().add(iswf.fixtures.smpl1);
+        epc.getHomogeneousCollection().add(iswf.fixtures.smpl2);
         service.save(epc);
 
         final Set<Object> savedObjects = service.allSavedObjects();

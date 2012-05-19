@@ -22,10 +22,19 @@ package org.apache.isis.tck.dom.viewmodels;
 import org.apache.isis.applib.AbstractDomainObject;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.ViewModel;
+import org.apache.isis.applib.util.TitleBuffer;
 
 @ViewModel
 public class SimpleViewModel extends AbstractDomainObject {
 
+    // {{ title
+    public String title() {
+        final TitleBuffer buf = new TitleBuffer();
+        buf.append(name);
+        return buf.toString();
+    }
+    // }}
+    
     // {{ Name
     private String name;
 

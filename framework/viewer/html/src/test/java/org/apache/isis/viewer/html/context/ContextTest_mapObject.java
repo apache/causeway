@@ -66,7 +66,7 @@ public class ContextTest_mapObject {
     public void mapObject_then_restoreAllObjectsToLoader() throws Exception {
 
         // given
-        originalAdapter = getAdapterManager().adapterFor(iswf.fixtures.epv1);
+        originalAdapter = getAdapterManager().adapterFor(iswf.fixtures.smpl1);
         oid = originalAdapter.getOid();
         context.mapObject(originalAdapter);
         
@@ -92,7 +92,7 @@ public class ContextTest_mapObject {
     public void mapObject_forTransient_then_getMappedObject_byId() {
 
         // given
-        originalAdapter = getAdapterManager().adapterFor(iswf.fixtures.epv1);
+        originalAdapter = getAdapterManager().adapterFor(iswf.fixtures.smpl1);
         oid = originalAdapter.getOid();
         final String id = context.mapObject(originalAdapter);
         
@@ -108,9 +108,9 @@ public class ContextTest_mapObject {
     public void mapObject_forPersistent_then_getMappedObject_byId() {
 
         // given
-        iswf.persist(iswf.fixtures.epv1);
+        iswf.persist(iswf.fixtures.smpl1);
 
-        originalAdapter = getAdapterManager().adapterFor(iswf.fixtures.epv1);
+        originalAdapter = getAdapterManager().adapterFor(iswf.fixtures.smpl1);
         oid = originalAdapter.getOid();
         final String id = context.mapObject(originalAdapter);
         
@@ -126,15 +126,15 @@ public class ContextTest_mapObject {
     public void getMappedObject_forPersistent_whenChanged() throws Exception {
 
         // given
-        iswf.persist(iswf.fixtures.epv1);
+        iswf.persist(iswf.fixtures.smpl1);
         
-        originalAdapter = getAdapterManager().adapterFor(iswf.fixtures.epv1);
+        originalAdapter = getAdapterManager().adapterFor(iswf.fixtures.smpl1);
         final Oid oid = originalAdapter.getOid();
         final String id = context.mapObject(originalAdapter);
         
         final Version version = originalAdapter.getVersion();
         
-        iswf.fixtures.epv1.setName("changed date");
+        iswf.fixtures.smpl1.setName("changed date");
         iswf.bounceSystem(); // does a commit, which will bump the version
         
         originalAdapter = getAdapterManager().getAdapterFor(oid);
@@ -157,7 +157,7 @@ public class ContextTest_mapObject {
     public void mapObject_forTransient_alwaysReturnsSameId() {
 
         // given
-        originalAdapter = getAdapterManager().adapterFor(iswf.fixtures.epv1);
+        originalAdapter = getAdapterManager().adapterFor(iswf.fixtures.smpl1);
         
         // when
         final String id = context.mapObject(originalAdapter);
@@ -172,9 +172,9 @@ public class ContextTest_mapObject {
     public void mapObject_forPersistent_alwaysReturnsSameId() {
 
         // given
-        iswf.persist(iswf.fixtures.epv1);
+        iswf.persist(iswf.fixtures.smpl1);
         
-        originalAdapter = getAdapterManager().adapterFor(iswf.fixtures.epv1);
+        originalAdapter = getAdapterManager().adapterFor(iswf.fixtures.smpl1);
         
         // when
         final String id = context.mapObject(originalAdapter);
@@ -189,8 +189,8 @@ public class ContextTest_mapObject {
     public void mapObject_forTransient_returnsDifferentIdsForDifferentObjects() {
 
         // when
-        final String id = context.mapObject(getAdapterManager().adapterFor(iswf.fixtures.epv1));
-        final String id2 = context.mapObject(getAdapterManager().adapterFor(iswf.fixtures.epv2));
+        final String id = context.mapObject(getAdapterManager().adapterFor(iswf.fixtures.smpl1));
+        final String id2 = context.mapObject(getAdapterManager().adapterFor(iswf.fixtures.smpl2));
         
         // then
         assertThat(id, not(equalTo(id2)));
@@ -201,12 +201,12 @@ public class ContextTest_mapObject {
     public void mapObject_forPersistent_returnsDifferentIdsForDifferentObjects() {
 
         // given
-        iswf.persist(iswf.fixtures.epv1);
-        iswf.persist(iswf.fixtures.epv2);
+        iswf.persist(iswf.fixtures.smpl1);
+        iswf.persist(iswf.fixtures.smpl2);
         
         // when
-        final String id = context.mapObject(getAdapterManager().adapterFor(iswf.fixtures.epv1));
-        final String id2 = context.mapObject(getAdapterManager().adapterFor(iswf.fixtures.epv2));
+        final String id = context.mapObject(getAdapterManager().adapterFor(iswf.fixtures.smpl1));
+        final String id2 = context.mapObject(getAdapterManager().adapterFor(iswf.fixtures.smpl2));
         
         // then
         assertThat(id, not(equalTo(id2)));
@@ -217,8 +217,8 @@ public class ContextTest_mapObject {
     public void restoreAllObjectsToLoader_restoredAsGhosts() throws Exception {
 
         // given
-        iswf.persist(iswf.fixtures.epv1);
-        originalAdapter = getAdapterManager().adapterFor(iswf.fixtures.epv1);
+        iswf.persist(iswf.fixtures.smpl1);
+        originalAdapter = getAdapterManager().adapterFor(iswf.fixtures.smpl1);
         oid = originalAdapter.getOid();
         
         iswf.bounceSystem();
@@ -238,11 +238,11 @@ public class ContextTest_mapObject {
     @Test
     public void testExceptionThrownWhenNoActionForIdentity() {
         
-        iswf.persist(iswf.fixtures.epv1);
-        iswf.persist(iswf.fixtures.epv2);
+        iswf.persist(iswf.fixtures.smpl1);
+        iswf.persist(iswf.fixtures.smpl2);
         
         // when
-        context.mapObject(getAdapterManager().adapterFor(iswf.fixtures.epv1));
+        context.mapObject(getAdapterManager().adapterFor(iswf.fixtures.smpl1));
 
         try {
             assertNull(context.getMappedObject("NON-EXISTENT-ID"));

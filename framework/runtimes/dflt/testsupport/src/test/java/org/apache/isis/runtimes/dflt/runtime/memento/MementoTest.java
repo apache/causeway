@@ -47,10 +47,10 @@ import org.apache.isis.core.commons.encoding.FieldType;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.runtimes.dflt.testsupport.IsisSystemWithFixtures;
-import org.apache.isis.tck.dom.eg.ExamplePojo;
-import org.apache.isis.tck.dom.eg.ExamplePojoWithCollections;
-import org.apache.isis.tck.dom.eg.ExamplePojoWithReferences;
-import org.apache.isis.tck.dom.eg.ExamplePojoWithValues;
+import org.apache.isis.tck.dom.refs.BaseEntity;
+import org.apache.isis.tck.dom.refs.ParentEntity;
+import org.apache.isis.tck.dom.refs.ReferencingEntity;
+import org.apache.isis.tck.dom.refs.SimpleEntity;
 
 public class MementoTest {
 
@@ -82,23 +82,23 @@ public class MementoTest {
 //        logger.addAppender(new ConsoleAppender());
 //        BasicConfigurator.configure();
 
-        iswf.fixtures.epv1.setName("Fred");
-        iswf.fixtures.epv2.setName("Harry");
+        iswf.fixtures.smpl1.setName("Fred");
+        iswf.fixtures.smpl2.setName("Harry");
         
-        iswf.fixtures.epr1_a1.setName("Tom");
+        iswf.fixtures.rfcg1_a1.setName("Tom");
         
-        iswf.fixtures.epr1.setReference(iswf.fixtures.epv1);
-        iswf.fixtures.epr1.setAggregatedReference(iswf.fixtures.epr1_a1);
+        iswf.fixtures.rfcg1.setReference(iswf.fixtures.smpl1);
+        iswf.fixtures.rfcg1.setAggregatedReference(iswf.fixtures.rfcg1_a1);
         
-        iswf.fixtures.epc1.getHomogeneousCollection().add(iswf.fixtures.epv1);
-        iswf.fixtures.epc1.getHomogeneousCollection().add(iswf.fixtures.epv2);
+        iswf.fixtures.prnt1.getHomogeneousCollection().add(iswf.fixtures.smpl1);
+        iswf.fixtures.prnt1.getHomogeneousCollection().add(iswf.fixtures.smpl2);
         
-        iswf.fixtures.epc1.getHeterogeneousCollection().add(iswf.fixtures.epv1);
-        iswf.fixtures.epc1.getHeterogeneousCollection().add(iswf.fixtures.epr1);
+        iswf.fixtures.prnt1.getHeterogeneousCollection().add(iswf.fixtures.smpl1);
+        iswf.fixtures.prnt1.getHeterogeneousCollection().add(iswf.fixtures.rfcg1);
         
-        originalAdapterForEpv1 = iswf.adapterFor(iswf.fixtures.epv1);
-        originalAdapterForEpr1 = iswf.adapterFor(iswf.fixtures.epr1);
-        originalAdapterForEpc1 = iswf.adapterFor(iswf.fixtures.epc1);
+        originalAdapterForEpv1 = iswf.adapterFor(iswf.fixtures.smpl1);
+        originalAdapterForEpr1 = iswf.adapterFor(iswf.fixtures.rfcg1);
+        originalAdapterForEpc1 = iswf.adapterFor(iswf.fixtures.prnt1);
 
         mementoForEpv1 = new Memento(originalAdapterForEpv1);
         mementoForEpr1 = new Memento(originalAdapterForEpr1);
@@ -163,15 +163,15 @@ public class MementoTest {
     @Test
     public void recreateObject_valuePreserved() throws Exception {
         recreatedAdapter = mementoForEpv1.recreateObject();
-        final ExamplePojoWithValues recreatedObject = (ExamplePojoWithValues)recreatedAdapter.getObject();
+        final SimpleEntity recreatedObject = (SimpleEntity)recreatedAdapter.getObject();
         assertEquals("Fred", recreatedObject.getName());
     }
 
     @Test
     public void recreateObject_referencePreserved() throws Exception {
         recreatedAdapter = mementoForEpr1.recreateObject();
-        final ExamplePojoWithReferences recreatedObject = (ExamplePojoWithReferences)recreatedAdapter.getObject();
-        final ExamplePojoWithValues reference1 = recreatedObject.getReference();
+        final ReferencingEntity recreatedObject = (ReferencingEntity)recreatedAdapter.getObject();
+        final SimpleEntity reference1 = recreatedObject.getReference();
         assertNotNull(reference1);
         
         assertThat("Fred", equalTo(reference1.getName()));
@@ -180,8 +180,8 @@ public class MementoTest {
     @Test
     public void recreateObject_homogeneousCollectionPreserved() throws Exception {
         recreatedAdapter = mementoForEpc1.recreateObject();
-        final ExamplePojoWithCollections recreatedObject = (ExamplePojoWithCollections)recreatedAdapter.getObject();
-        final List<ExamplePojoWithValues> homogenousCollection = recreatedObject.getHomogeneousCollection();
+        final ParentEntity recreatedObject = (ParentEntity)recreatedAdapter.getObject();
+        final List<SimpleEntity> homogenousCollection = recreatedObject.getHomogeneousCollection();
         assertNotNull(homogenousCollection);
         
         assertThat(homogenousCollection.size(), is(2));
@@ -192,16 +192,16 @@ public class MementoTest {
     @Test
     public void recreateObject_heterogeneousCollectionPreserved() throws Exception {
         recreatedAdapter = mementoForEpc1.recreateObject();
-        final ExamplePojoWithCollections recreatedObject = (ExamplePojoWithCollections)recreatedAdapter.getObject();
-        final List<ExamplePojo> hetrogenousCollection = recreatedObject.getHeterogeneousCollection();
+        final ParentEntity recreatedObject = (ParentEntity)recreatedAdapter.getObject();
+        final List<BaseEntity> hetrogenousCollection = recreatedObject.getHeterogeneousCollection();
         assertNotNull(hetrogenousCollection);
         
         assertThat(hetrogenousCollection.size(), is(2));
-        final ExamplePojoWithValues firstObj = (ExamplePojoWithValues)hetrogenousCollection.get(0);
+        final SimpleEntity firstObj = (SimpleEntity)hetrogenousCollection.get(0);
         assertThat(firstObj.getName(), is("Fred"));
         
-        final ExamplePojoWithReferences secondObj = (ExamplePojoWithReferences)hetrogenousCollection.get(1);
-        final ExamplePojoWithValues reference1 = secondObj.getReference();
+        final ReferencingEntity secondObj = (ReferencingEntity)hetrogenousCollection.get(1);
+        final SimpleEntity reference1 = secondObj.getReference();
         assertThat(reference1.getName(), is("Fred"));
         
         assertSame(firstObj, reference1);

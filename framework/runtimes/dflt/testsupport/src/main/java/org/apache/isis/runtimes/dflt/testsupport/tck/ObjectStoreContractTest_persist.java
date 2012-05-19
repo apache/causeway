@@ -38,7 +38,7 @@ import org.apache.isis.runtimes.dflt.runtime.persistence.query.PersistenceQueryF
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.runtimes.dflt.testsupport.IsisSystemWithFixtures;
-import org.apache.isis.tck.dom.eg.ExamplePojoWithValues;
+import org.apache.isis.tck.dom.refs.SimpleEntity;
 
 public abstract class ObjectStoreContractTest_persist {
 
@@ -74,8 +74,8 @@ public abstract class ObjectStoreContractTest_persist {
 
     @Before
     public void setUpFixtures() throws Exception {
-        epv2Adapter = iswf.adapterFor(iswf.fixtures.epv2);
-        epvSpecification = iswf.loadSpecification(ExamplePojoWithValues.class);
+        epv2Adapter = iswf.adapterFor(iswf.fixtures.smpl2);
+        epvSpecification = iswf.loadSpecification(SimpleEntity.class);
     }
 
 
@@ -92,7 +92,7 @@ public abstract class ObjectStoreContractTest_persist {
         assertFalse(hasInstances);
         
         // given now persisted
-        final ExamplePojoWithValues epv2 = iswf.fixtures.epv2;
+        final SimpleEntity epv2 = iswf.fixtures.smpl2;
         epv2.setName("foo");
         epv2.setDate(new Date());
         epv2.setNullable(1234567890L);
@@ -110,7 +110,7 @@ public abstract class ObjectStoreContractTest_persist {
         final ObjectAdapter retrievedAdapter = retrievedInstance[0];
 
         assertNotSame(epv2Adapter, retrievedAdapter);
-        assertEquals(((ExamplePojoWithValues)epv2Adapter.getObject()).getName(), ((ExamplePojoWithValues)retrievedAdapter.getObject()).getName());
+        assertEquals(((SimpleEntity)epv2Adapter.getObject()).getName(), ((SimpleEntity)retrievedAdapter.getObject()).getName());
         assertEquals(epv2Adapter.getOid(), retrievedAdapter.getOid());
 
         // and when search for some other title
@@ -126,14 +126,14 @@ public abstract class ObjectStoreContractTest_persist {
 
         // given persisted
         resetPersistenceStore();
-        ObjectAdapter adapter = iswf.persist(iswf.fixtures.epv2);
+        ObjectAdapter adapter = iswf.persist(iswf.fixtures.smpl2);
         final RootOid oid = (RootOid) adapter.getOid();
         iswf.bounceSystem();
         
         // when change
         adapter = iswf.reload(oid);
         
-        ExamplePojoWithValues epv = (ExamplePojoWithValues) adapter.getObject();
+        SimpleEntity epv = (SimpleEntity) adapter.getObject();
         epv.setName("changed");
 
         iswf.bounceSystem();
@@ -144,7 +144,7 @@ public abstract class ObjectStoreContractTest_persist {
         
         final ObjectAdapter retrievedAdapter = retrievedInstance[0];
         assertNotSame(adapter, retrievedAdapter);
-        assertEquals(((ExamplePojoWithValues)adapter.getObject()).getName(), ((ExamplePojoWithValues)retrievedAdapter.getObject()).getName());
+        assertEquals(((SimpleEntity)adapter.getObject()).getName(), ((SimpleEntity)retrievedAdapter.getObject()).getName());
         assertEquals(adapter.getOid(), retrievedAdapter.getOid());
     }
 
@@ -153,14 +153,14 @@ public abstract class ObjectStoreContractTest_persist {
 
         // given persisted
         resetPersistenceStore();
-        ObjectAdapter adapter = iswf.persist(iswf.fixtures.epv2);
+        ObjectAdapter adapter = iswf.persist(iswf.fixtures.smpl2);
         final RootOid oid = (RootOid) adapter.getOid();
         iswf.bounceSystem();
 
         // when destroy
         adapter = iswf.reload(oid);
         
-        ExamplePojoWithValues epv = (ExamplePojoWithValues) adapter.getObject();
+        SimpleEntity epv = (SimpleEntity) adapter.getObject();
         iswf.destroy(epv);
         iswf.bounceSystem();
 

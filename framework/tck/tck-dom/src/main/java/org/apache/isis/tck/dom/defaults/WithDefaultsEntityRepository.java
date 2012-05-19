@@ -21,18 +21,36 @@ package org.apache.isis.tck.dom.defaults;
 
 import java.util.List;
 
+import org.apache.isis.applib.AbstractFactoryAndRepository;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.QueryOnly;
+import org.apache.isis.applib.filter.Filter;
 
 @Named("Simples")
-public interface WithDefaultsEntityRepository {
+public class WithDefaultsEntityRepository extends AbstractFactoryAndRepository  {
 
-    @QueryOnly
+    @Override
+    public String getId() {
+        return "withDefaultsEntities";
+    }
+
     @MemberOrder(sequence = "1")
-    public List<WithDefaultsEntity> list();
+    @QueryOnly
+    public List<WithDefaultsEntity> list() {
+        final Filter<Object> filterPersistentOnly = new Filter<Object>() {
+
+            @Override
+            public boolean accept(final Object t) {
+                return getContainer().isPersistent(t);
+            }
+        };
+        return allMatches(WithDefaultsEntity.class, filterPersistentOnly);
+    }
 
     @MemberOrder(sequence = "3")
-    public WithDefaultsEntity newTransientEntity();
+    public WithDefaultsEntity newTransientEntity() {
+        return newTransientInstance(WithDefaultsEntity.class);
+    }
 
 }

@@ -42,7 +42,7 @@ import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.runtimes.dflt.testsupport.IsisSystemWithFixtures;
-import org.apache.isis.tck.dom.eg.ExamplePojoWithValues;
+import org.apache.isis.tck.dom.refs.SimpleEntity;
 import org.apache.isis.viewer.html.action.ActionException;
 
 public class ContextTest_mapCollection {
@@ -74,15 +74,15 @@ public class ContextTest_mapCollection {
     public void mapCollection_then_getMappedCollection() throws Exception {
 
         // given
-        iswf.persist(iswf.fixtures.epv1);
-        iswf.persist(iswf.fixtures.epv2);
+        iswf.persist(iswf.fixtures.smpl1);
+        iswf.persist(iswf.fixtures.smpl2);
 
-        final List<ExamplePojoWithValues> collection = Lists.newArrayList();
-        collection.add(iswf.fixtures.epv1);
-        collection.add(iswf.fixtures.epv2);
+        final List<SimpleEntity> collection = Lists.newArrayList();
+        collection.add(iswf.fixtures.smpl1);
+        collection.add(iswf.fixtures.smpl2);
         
-        final Oid oid1 = getAdapterManager().adapterFor(iswf.fixtures.epv1).getOid();
-        final Oid oid2 = getAdapterManager().adapterFor(iswf.fixtures.epv2).getOid();
+        final Oid oid1 = getAdapterManager().adapterFor(iswf.fixtures.smpl1).getOid();
+        final Oid oid2 = getAdapterManager().adapterFor(iswf.fixtures.smpl2).getOid();
         
         final ObjectAdapter collectionAdapter = getAdapterManager().adapterFor(collection);
         final String id = context.mapCollection(collectionAdapter);
@@ -107,12 +107,12 @@ public class ContextTest_mapCollection {
     public void testRegisteredCollectionReturnSameIdentityForSameCollection() {
         
         // given
-        iswf.persist(iswf.fixtures.epv1);
-        iswf.persist(iswf.fixtures.epv2);
+        iswf.persist(iswf.fixtures.smpl1);
+        iswf.persist(iswf.fixtures.smpl2);
 
-        final List<ExamplePojoWithValues> collection = Lists.newArrayList();
-        collection.add(iswf.fixtures.epv1);
-        collection.add(iswf.fixtures.epv2);
+        final List<SimpleEntity> collection = Lists.newArrayList();
+        collection.add(iswf.fixtures.smpl1);
+        collection.add(iswf.fixtures.smpl2);
         
         final ObjectAdapter collectionAdapter = getAdapterManager().adapterFor(collection);
         
@@ -128,15 +128,15 @@ public class ContextTest_mapCollection {
     public void testRegisteredCollectionReturnDifferentIdentityForDifferentCollection() {
 
         // given
-        iswf.persist(iswf.fixtures.epv1);
-        iswf.persist(iswf.fixtures.epv2);
+        iswf.persist(iswf.fixtures.smpl1);
+        iswf.persist(iswf.fixtures.smpl2);
 
-        final List<ExamplePojoWithValues> collection1 = Lists.newArrayList();
-        collection1.add(iswf.fixtures.epv1);
+        final List<SimpleEntity> collection1 = Lists.newArrayList();
+        collection1.add(iswf.fixtures.smpl1);
         final ObjectAdapter collection1Adapter = getAdapterManager().adapterFor(collection1);
 
-        final List<ExamplePojoWithValues> collection2 = Lists.newArrayList();
-        collection2.add(iswf.fixtures.epv2);
+        final List<SimpleEntity> collection2 = Lists.newArrayList();
+        collection2.add(iswf.fixtures.smpl2);
         final ObjectAdapter collection2Adapter = getAdapterManager().adapterFor(collection2);
 
         // when

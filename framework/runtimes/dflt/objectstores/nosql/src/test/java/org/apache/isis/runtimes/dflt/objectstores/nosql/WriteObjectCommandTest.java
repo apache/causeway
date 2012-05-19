@@ -37,9 +37,9 @@ import org.apache.isis.runtimes.dflt.objectstores.nosql.db.StateWriter;
 import org.apache.isis.runtimes.dflt.objectstores.nosql.encryption.DataEncryption;
 import org.apache.isis.runtimes.dflt.objectstores.nosql.versions.VersionCreator;
 import org.apache.isis.runtimes.dflt.testsupport.IsisSystemWithFixtures;
-import org.apache.isis.tck.dom.eg.ExamplePojoWithCollections;
-import org.apache.isis.tck.dom.eg.ExamplePojoWithReferences;
-import org.apache.isis.tck.dom.eg.ExamplePojoWithValues;
+import org.apache.isis.tck.dom.refs.ParentEntity;
+import org.apache.isis.tck.dom.refs.ReferencingEntity;
+import org.apache.isis.tck.dom.refs.SimpleEntity;
 
 public class WriteObjectCommandTest {
     
@@ -58,42 +58,39 @@ public class WriteObjectCommandTest {
     private NoSqlCommandContext commandContext;
 
     private DataEncryption dataEncrypter;
-    //private KeyCreatorDefault keyCreator;
 
-    private ObjectAdapter epv1Adapter;
-    private ObjectAdapter epr1Adapter;
-    private ObjectAdapter epc1Adapter;
+    private ObjectAdapter smpl1Adapter;
+    private ObjectAdapter rfcg1Adapter;
+    private ObjectAdapter prnt1Adapter;
 
-    private ExamplePojoWithValues epv1;
-    private ExamplePojoWithValues epv2;
+    private SimpleEntity smpl1;
+    private SimpleEntity smpl2;
 
-    private ExamplePojoWithReferences epr1;
+    private ReferencingEntity rfcg1;
 
-    private ExamplePojoWithCollections epc1;
+    private ParentEntity prnt1;
 
     @Before
     public void setup() {
 
-        //keyCreator = new KeyCreatorDefault();
+        smpl1 = iswf.fixtures.smpl1;
+        smpl1.setName("Fred Smith");
+        smpl1.setSize(108);
+        smpl1Adapter = iswf.remapAsPersistent(smpl1, RootOidDefault.deString("SMPL:1"));
+
+        smpl2 = iswf.fixtures.smpl2;
+        smpl2.setName("John Brown");
+        iswf.remapAsPersistent(smpl2, RootOidDefault.deString("SMPL:2"));
+
+        rfcg1 = iswf.fixtures.rfcg1;
+        rfcg1.setReference(smpl1);
+        rfcg1Adapter = iswf.remapAsPersistent(rfcg1, RootOidDefault.deString("RFCG:1"));
+
+        prnt1 = iswf.fixtures.prnt1;
+        prnt1.getHomogeneousCollection().add(smpl1);
+        prnt1.getHomogeneousCollection().add(smpl2);
         
-        epv1 = iswf.fixtures.epv1;
-        epv1.setName("Fred Smith");
-        epv1.setSize(108);
-        epv1Adapter = iswf.remapAsPersistent(epv1, RootOidDefault.deString("EPV:1"));
-
-        epv2 = iswf.fixtures.epv2;
-        epv2.setName("John Brown");
-        iswf.remapAsPersistent(epv2, RootOidDefault.deString("EPV:2"));
-
-        epr1 = iswf.fixtures.epr1;
-        epr1.setReference(epv1);
-        epr1Adapter = iswf.remapAsPersistent(epr1, RootOidDefault.deString("EPR:1"));
-
-        epc1 = iswf.fixtures.epc1;
-        epc1.getHomogeneousCollection().add(epv1);
-        epc1.getHomogeneousCollection().add(epv2);
-        
-        epc1Adapter = iswf.remapAsPersistent(epc1, RootOidDefault.deString("EPC:1"));
+        prnt1Adapter = iswf.remapAsPersistent(prnt1, RootOidDefault.deString("PRNT:1"));
 
         final Version version = new SerialNumberVersion(2, "username", null);
 
@@ -137,13 +134,10 @@ public class WriteObjectCommandTest {
         context.checking(new Expectations() {
 
             {
-                one(commandContext).createStateWriter(epv1Adapter.getSpecification().getSpecId());
+                one(commandContext).createStateWriter(smpl1Adapter.getSpecification().getSpecId());
                 will(returnValue(writer));
 
-//                one(writer).writeId("1");
-//                one(writer).writeObjectType(specification.getFullIdentifier());
-
-                final RootOidDefault oid = RootOidDefault.create(epv1Adapter.getSpecification().getSpecId(), "1");
+                final RootOidDefault oid = RootOidDefault.create(smpl1Adapter.getSpecification().getSpecId(), "1");
                 exactly(2).of(writer).writeOid(oid); // once for the id, once for the type
 
                 one(writer).writeField("name", "ENCFred Smith");
@@ -160,7 +154,7 @@ public class WriteObjectCommandTest {
             }
         });
 
-        final WriteObjectCommand command = new WriteObjectCommand(WriteObjectCommand.Mode.NON_UPDATE, versionCreator, dataEncrypter, epv1Adapter);
+        final WriteObjectCommand command = new WriteObjectCommand(WriteObjectCommand.Mode.NON_UPDATE, versionCreator, dataEncrypter, smpl1Adapter);
         command.execute(commandContext);
     }
 
@@ -169,16 +163,13 @@ public class WriteObjectCommandTest {
 
         context.checking(new Expectations() {
             {
-                one(commandContext).createStateWriter(epr1Adapter.getSpecification().getSpecId());
+                one(commandContext).createStateWriter(rfcg1Adapter.getSpecification().getSpecId());
                 will(returnValue(writer));
 
-//                one(writer).writeId("1");
-//                one(writer).writeObjectType(epr1Adapter.getSpecification().getFullIdentifier());
-                
-                final RootOidDefault oid = RootOidDefault.create(epr1Adapter.getSpecification().getSpecId(), "1");
+                final RootOidDefault oid = RootOidDefault.create(rfcg1Adapter.getSpecification().getSpecId(), "1");
                 exactly(2).of(writer).writeOid(oid); // once for the id, once for the type
                 
-                one(writer).writeField("reference", "EPV:1");
+                one(writer).writeField("reference", "SMPL:1");
                 one(writer).writeField("aggregatedReference", null);
                 
                 one(writer).writeVersion(null, "2");
@@ -190,7 +181,7 @@ public class WriteObjectCommandTest {
             }
         });
 
-        final WriteObjectCommand command = new WriteObjectCommand(WriteObjectCommand.Mode.NON_UPDATE, versionCreator, dataEncrypter, epr1Adapter);
+        final WriteObjectCommand command = new WriteObjectCommand(WriteObjectCommand.Mode.NON_UPDATE, versionCreator, dataEncrypter, rfcg1Adapter);
         command.execute(commandContext);
     }
 
@@ -199,16 +190,14 @@ public class WriteObjectCommandTest {
 
         context.checking(new Expectations() {
             {
-                one(commandContext).createStateWriter(epc1Adapter.getSpecification().getSpecId());
+                one(commandContext).createStateWriter(prnt1Adapter.getSpecification().getSpecId());
                 will(returnValue(writer));
 
-//                one(writer).writeId("1");
-//                one(writer).writeObjectType(epc1Adapter.getSpecification().getFullIdentifier());
-
-                final RootOidDefault oid = RootOidDefault.create(epc1Adapter.getSpecification().getSpecId(), "1");
+                final RootOidDefault oid = RootOidDefault.create(prnt1Adapter.getSpecification().getSpecId(), "1");
                 exactly(2).of(writer).writeOid(oid); // once for the id, once for the type
 
-                one(writer).writeField("homogeneousCollection", "EPV:1|EPV:2|");
+                one(writer).writeField("name", null);
+                one(writer).writeField("homogeneousCollection", "SMPL:1|SMPL:2|");
 
                 one(writer).writeVersion(null, "2");
                 one(writer).writeUser("username");
@@ -219,7 +208,7 @@ public class WriteObjectCommandTest {
             }
         });
 
-        final WriteObjectCommand command = new WriteObjectCommand(WriteObjectCommand.Mode.NON_UPDATE, versionCreator, dataEncrypter, epc1Adapter);
+        final WriteObjectCommand command = new WriteObjectCommand(WriteObjectCommand.Mode.NON_UPDATE, versionCreator, dataEncrypter, prnt1Adapter);
         command.execute(commandContext);
     }
 }

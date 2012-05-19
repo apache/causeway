@@ -69,7 +69,7 @@ public class MongoDbTest {
         db = new MongoDb("localhost", 0, "testdb", new KeyCreatorDefault());
         db.open();
 
-        adapter1 = iswf.adapterFor(iswf.fixtures.epv1);
+        adapter1 = iswf.adapterFor(iswf.fixtures.smpl1);
         specification = adapter1.getSpecification();
     }
 

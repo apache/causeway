@@ -33,6 +33,7 @@ import org.apache.isis.applib.value.Password;
 import org.apache.isis.applib.value.Percentage;
 import org.apache.isis.applib.value.Time;
 import org.apache.isis.applib.value.TimeStamp;
+import org.apache.isis.tck.dom.scalars.PrimitiveValuedEntity;
 
 /**
  * The SqlDataClass is a test class used in the sql-persistor integration tests.
@@ -47,25 +48,12 @@ import org.apache.isis.applib.value.TimeStamp;
  */
 
 public class SqlDataClass extends AbstractDomainObject {
+    
     public String title() {
         return string;
     }
 
-    // Isis Date Type
-    // {{ Date
-    private Date date;
-
-    public Date getDate() {
-        return date;
-    }
-
-    public void setDate(final Date date) {
-        this.date = date;
-    }
-
-    // }}
-
-    // {{ String type
+    // {{ String
     private String string;
 
     public String getString() {
@@ -78,9 +66,20 @@ public class SqlDataClass extends AbstractDomainObject {
 
     // }}
 
-    // SQL Date Type
-    // {{ SqlDate
-    /**/
+    // {{ Isis Date
+    private Date date;
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(final Date date) {
+        this.date = date;
+    }
+
+    // }}
+
+    // {{ java.sql Date
     private java.sql.Date sqlDate;
 
     @MemberOrder(sequence = "1")
@@ -96,7 +95,7 @@ public class SqlDataClass extends AbstractDomainObject {
 
     // }}
 
-    // {{ Money
+    // {{ Isis Money
     private Money money;
 
     @MemberOrder(sequence = "1")
@@ -110,7 +109,7 @@ public class SqlDataClass extends AbstractDomainObject {
 
     // }}
 
-    // {{ DateTime
+    // {{ Isis DateTime
     private DateTime dateTime;
 
     @MemberOrder(sequence = "1")
@@ -124,7 +123,7 @@ public class SqlDataClass extends AbstractDomainObject {
 
     // }}
 
-    // {{ TimeStamp
+    // {{ Isis TimeStamp
     private TimeStamp timeStamp;
 
     @MemberOrder(sequence = "1")
@@ -138,8 +137,7 @@ public class SqlDataClass extends AbstractDomainObject {
 
     // }}
 
-    // Color, Image, Password, Percentage, Time
-    // {{ Time
+    // {{ Isis Time
     private Time time;
 
     @MemberOrder(sequence = "1")
@@ -153,7 +151,7 @@ public class SqlDataClass extends AbstractDomainObject {
 
     // }}
 
-    // {{ Color
+    // {{ Isis Color
     private Color color;
 
     @MemberOrder(sequence = "1")
@@ -167,7 +165,7 @@ public class SqlDataClass extends AbstractDomainObject {
 
     // }}
 
-    // {{ Image
+    // {{ Isis Image
     private Image image;
 
     @MemberOrder(sequence = "1")
@@ -178,10 +176,9 @@ public class SqlDataClass extends AbstractDomainObject {
     public void setImage(final Image image) {
         this.image = image;
     }
-
     // }}
 
-    // {{ Password
+    // {{ Isis Password
     private Password password;
 
     @MemberOrder(sequence = "1")
@@ -195,7 +192,7 @@ public class SqlDataClass extends AbstractDomainObject {
 
     // }}
 
-    // {{ Percentage
+    // {{ Isis Percentage
     private Percentage percentage;
 
     @MemberOrder(sequence = "1")
@@ -209,7 +206,11 @@ public class SqlDataClass extends AbstractDomainObject {
 
     // }}
 
+    
+    //
     // References to other entities
+    //
+    
     // {{ SimpleClasses
     public List<SimpleClass> simpleClasses1 = new ArrayList<SimpleClass>();
 
@@ -309,31 +310,29 @@ public class SqlDataClass extends AbstractDomainObject {
 
     // }}
 
-    // {{ NumericTestClassMax
-    private NumericTestClass numericTestClassMax;
+    // {{ PrimitiveValuedEntityMax
+    private PrimitiveValuedEntity pveMax;
 
-    public NumericTestClass getNumericTestClassMax() {
-        return numericTestClassMax;
+    public PrimitiveValuedEntity getPrimitiveValuedEntityMax() {
+        return pveMax;
     }
 
-    public void setNumericTestClassMax(final NumericTestClass numericClassMax) {
-        this.numericTestClassMax = numericClassMax;
-    }
-
-    // }}
-
-    // {{ NumericTestClassMin
-    private NumericTestClass numericTestClassMin;
-
-    public NumericTestClass getNumericTestClassMin() {
-        return numericTestClassMin;
-    }
-
-    public void setNumericTestClassMin(final NumericTestClass numericClassMin) {
-        this.numericTestClassMin = numericClassMin;
+    public void setPrimitiveValuedEntityMax(final PrimitiveValuedEntity pveMax) {
+        this.pveMax = pveMax;
     }
 
     // }}
 
+    // {{ PrimitiveValuedEntityMin
+    private PrimitiveValuedEntity pveMin;
+
+    public PrimitiveValuedEntity getPrimitiveValuedEntityMin() {
+        return pveMin;
+    }
+
+    public void setPrimitiveValuedEntityMin(final PrimitiveValuedEntity pveMin) {
+        this.pveMin = pveMin;
+    }
+
+    // }}
 }
-// Copyright (c) Kevin Meyer, www.kmz.co.za.

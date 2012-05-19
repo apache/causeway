@@ -36,9 +36,9 @@ import org.apache.isis.core.testsupport.files.Files;
 import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2;
 import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2.Mode;
 import org.apache.isis.runtimes.dflt.objectstores.sql.common.SqlIntegrationTestFixtures.State;
+import org.apache.isis.tck.dom.poly.ReferencingPolyTypesEntity;
 import org.apache.isis.tck.dom.sqlos.SqlDomainObjectRepository;
 import org.apache.isis.tck.dom.sqlos.data.SqlDataClass;
-import org.apache.isis.tck.dom.sqlos.poly.PolyTestClass;
 
 public abstract class SqlIntegrationTestCommonBase {
 
@@ -51,7 +51,7 @@ public abstract class SqlIntegrationTestCommonBase {
 
     protected SqlDomainObjectRepository factory;
     protected SqlDataClass sqlDataClass;
-    protected PolyTestClass polyTestClass;
+    protected ReferencingPolyTypesEntity referencingPolyTypesEntity;
 
     public Properties getProperties() {
         try {
@@ -143,7 +143,7 @@ public abstract class SqlIntegrationTestCommonBase {
         
         // may have been setup by previous test
         sqlDataClass = getSqlIntegrationTestFixtures().getSqlDataClass();
-        polyTestClass = getSqlIntegrationTestFixtures().getPolyTestClass();
+        referencingPolyTypesEntity = getSqlIntegrationTestFixtures().getPolyTestClass();
     }
 
 

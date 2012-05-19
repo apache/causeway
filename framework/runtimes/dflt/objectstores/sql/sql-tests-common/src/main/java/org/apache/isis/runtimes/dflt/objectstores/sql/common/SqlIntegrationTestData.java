@@ -41,8 +41,8 @@ import org.apache.isis.applib.value.Percentage;
 import org.apache.isis.applib.value.Time;
 import org.apache.isis.applib.value.TimeStamp;
 import org.apache.isis.runtimes.dflt.objectstores.sql.common.SqlIntegrationTestFixtures.State;
+import org.apache.isis.tck.dom.scalars.PrimitiveValuedEntity;
 import org.apache.isis.tck.dom.sqlos.SqlDomainObjectRepository;
-import org.apache.isis.tck.dom.sqlos.data.NumericTestClass;
 import org.apache.isis.tck.dom.sqlos.data.SimpleClass;
 import org.apache.isis.tck.dom.sqlos.data.SimpleClassTwo;
 import org.apache.isis.tck.dom.sqlos.data.SqlDataClass;
@@ -64,8 +64,8 @@ public abstract class SqlIntegrationTestData extends SqlIntegrationTestCommonBas
     private static SimpleClassTwo simpleClassTwoA;
     private static SimpleClassTwo simpleClassTwoB;
 
-    private static NumericTestClass numericTestClassMax;
-    private static NumericTestClass numericTestClassMin;
+    private static PrimitiveValuedEntity pve1;
+    private static PrimitiveValuedEntity pve2;
 
     @Test
     public void testAll() throws Exception {
@@ -150,25 +150,25 @@ public abstract class SqlIntegrationTestData extends SqlIntegrationTestCommonBas
 
         // NumericClasses
         // standard min types
-        numericTestClassMin = factory.newNumericTestClass();
+        pve2 = factory.newPrimitiveValuedEntity();
         LOG.log(Level.INFO, "Bits to represent Double: " + Double.SIZE);
-        numericTestClassMin.setIntValue(Data.intMinValue);
-        numericTestClassMin.setShortValue(Data.shortMinValue);
-        numericTestClassMin.setLongValue(Data.longMinValue);
-        numericTestClassMin.setDoubleValue(Data.doubleMinValue);
-        numericTestClassMin.setFloatValue(Data.floatMinValue);
+        pve2.setIntProperty(Data.intMinValue);
+        pve2.setShortProperty(Data.shortMinValue);
+        pve2.setLongProperty(Data.longMinValue);
+        pve2.setDoubleProperty(Data.doubleMinValue);
+        pve2.setFloatProperty(Data.floatMinValue);
 
-        sqlDataClass.setNumericTestClassMin(numericTestClassMin);
+        sqlDataClass.setPrimitiveValuedEntityMin(pve2);
 
         // standard max types
-        numericTestClassMax = factory.newNumericTestClass();
-        numericTestClassMax.setIntValue(Data.intMaxValue);
-        numericTestClassMax.setShortValue(Data.shortMaxValue);
-        numericTestClassMax.setLongValue(Data.longMaxValue);
-        numericTestClassMax.setDoubleValue(Data.doubleMaxValue);
-        numericTestClassMax.setFloatValue(Data.floatMaxValue);
+        pve1 = factory.newPrimitiveValuedEntity();
+        pve1.setIntProperty(Data.intMaxValue);
+        pve1.setShortProperty(Data.shortMaxValue);
+        pve1.setLongProperty(Data.longMaxValue);
+        pve1.setDoubleProperty(Data.doubleMaxValue);
+        pve1.setFloatProperty(Data.floatMaxValue);
 
-        sqlDataClass.setNumericTestClassMax(numericTestClassMax);
+        sqlDataClass.setPrimitiveValuedEntityMax(pve1);
 
         // Initialise collection1
         boolean bMustAdd = false;
@@ -408,28 +408,28 @@ public abstract class SqlIntegrationTestData extends SqlIntegrationTestCommonBas
     }
 
     private void testStandardValueTypesMaxima() {
-        final NumericTestClass numericTestMaxClass = sqlDataClass.getNumericTestClassMax();
+        final PrimitiveValuedEntity pveMax = sqlDataClass.getPrimitiveValuedEntityMax();
 
-        assertEquals(Data.shortMaxValue, numericTestMaxClass.getShortValue());
-        assertEquals(Data.intMaxValue, numericTestMaxClass.getIntValue());
-        assertEquals(Data.longMaxValue, numericTestMaxClass.getLongValue());
-        assertEquals(Data.doubleMaxValue, numericTestMaxClass.getDoubleValue(), 0.00001f); // fails
+        assertEquals(Data.shortMaxValue, pveMax.getShortProperty());
+        assertEquals(Data.intMaxValue, pveMax.getIntProperty());
+        assertEquals(Data.longMaxValue, pveMax.getLongProperty());
+        assertEquals(Data.doubleMaxValue, pveMax.getDoubleProperty(), 0.00001f); // fails
                                                                             // in
-        assertEquals(Data.floatMaxValue, numericTestMaxClass.getFloatValue(), 0.00001f);
+        assertEquals(Data.floatMaxValue, pveMax.getFloatProperty(), 0.00001f);
     }
 
     private void testStandardValueTypesMinima() {
-        final NumericTestClass numericTestMinClass = sqlDataClass.getNumericTestClassMin();
+        final PrimitiveValuedEntity pveMin = sqlDataClass.getPrimitiveValuedEntityMin();
 
-        assertEquals(Data.shortMinValue, numericTestMinClass.getShortValue());
-        assertEquals(Data.intMinValue, numericTestMinClass.getIntValue());
-        assertEquals(Data.longMinValue, numericTestMinClass.getLongValue());
-        assertEquals(Data.doubleMinValue, numericTestMinClass.getDoubleValue(), 0.00001f); // fails
+        assertEquals(Data.shortMinValue, pveMin.getShortProperty());
+        assertEquals(Data.intMinValue, pveMin.getIntProperty());
+        assertEquals(Data.longMinValue, pveMin.getLongProperty());
+        assertEquals(Data.doubleMinValue, pveMin.getDoubleProperty(), 0.00001f); // fails
                                                                             // in
                                                                             // MySQL
                                                                             // =
                                                                             // infinity
-        assertEquals(Data.floatMinValue, numericTestMinClass.getFloatValue(), 0.00001f);
+        assertEquals(Data.floatMinValue, pveMin.getFloatProperty(), 0.00001f);
     }
 
     /**

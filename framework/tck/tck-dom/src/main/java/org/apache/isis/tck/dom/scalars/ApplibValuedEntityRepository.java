@@ -21,16 +21,32 @@ package org.apache.isis.tck.dom.scalars;
 
 import java.util.List;
 
+import org.apache.isis.applib.AbstractFactoryAndRepository;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Named;
+import org.apache.isis.applib.annotation.ObjectType;
+import org.apache.isis.applib.annotation.QueryOnly;
 
 @Named("ApplibValues")
-public interface ApplibValuedEntityRepository {
+@ObjectType("ApplibValues")
+public class ApplibValuedEntityRepository extends AbstractFactoryAndRepository {
 
+    @Override
+    public String getId() {
+        return "applibValuedEntities";
+    }
+
+    @QueryOnly
     @MemberOrder(sequence = "1")
-    public List<ApplibValuedEntity> list();
+    public List<ApplibValuedEntity> list() {
+        return allInstances(ApplibValuedEntity.class);
+    }
 
     @MemberOrder(sequence = "2")
-    public ApplibValuedEntity newEntity();
+    public ApplibValuedEntity newEntity() {
+        final ApplibValuedEntity entity = newTransientInstance(ApplibValuedEntity.class);
+        persist(entity);
+        return entity;
+    }
 
 }

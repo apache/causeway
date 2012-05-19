@@ -38,12 +38,12 @@ import org.apache.isis.runtimes.dflt.objectstores.sql.SqlObjectStore;
 import org.apache.isis.runtimes.dflt.runtime.installerregistry.installerapi.ObjectStorePersistenceMechanismInstallerAbstract;
 import org.apache.isis.runtimes.dflt.testsupport.IsisSystemWithFixtures;
 import org.apache.isis.runtimes.dflt.testsupport.IsisSystemWithFixtures.Fixtures.Initialization;
+import org.apache.isis.tck.dom.poly.ReferencingPolyTypesEntity;
+import org.apache.isis.tck.dom.scalars.PrimitiveValuedEntity;
 import org.apache.isis.tck.dom.sqlos.SqlDomainObjectRepository;
-import org.apache.isis.tck.dom.sqlos.data.NumericTestClass;
 import org.apache.isis.tck.dom.sqlos.data.SimpleClass;
 import org.apache.isis.tck.dom.sqlos.data.SimpleClassTwo;
 import org.apache.isis.tck.dom.sqlos.data.SqlDataClass;
-import org.apache.isis.tck.dom.sqlos.poly.PolyTestClass;
 
 /**
  * @author Kevin
@@ -175,10 +175,10 @@ public class SqlIntegrationTestFixtures {
                 }
                 return;
             } 
-            if (tableName.equalsIgnoreCase("numerictestclass")) {
-                final List<NumericTestClass> list = sqlDomainObjectRepository.allNumericTestClasses();
-                for (final NumericTestClass sqlClass : list) {
-                    sqlDomainObjectRepository.delete(sqlClass);
+            if (tableName.equalsIgnoreCase("primitivevaluedentity")) {
+                final List<PrimitiveValuedEntity> list = sqlDomainObjectRepository.allPrimitiveValueEntities();
+                for (final PrimitiveValuedEntity pve : list) {
+                    sqlDomainObjectRepository.delete(pve);
                 }
                 return;
             } 
@@ -207,8 +207,9 @@ public class SqlIntegrationTestFixtures {
     ///////////////////////////////////////////////////////////////////////////
 
     private SqlDomainObjectRepository sqlDomainObjectRepository = null;
+    
     private SqlDataClass sqlDataClass;
-    private PolyTestClass polyTestClass;
+    private ReferencingPolyTypesEntity referencingPolyTypesEntity;
 
     
     public SqlDomainObjectRepository getSqlDataClassFactory() {
@@ -226,11 +227,11 @@ public class SqlIntegrationTestFixtures {
 
     
     
-    public PolyTestClass getPolyTestClass() {
-        return polyTestClass;
+    public ReferencingPolyTypesEntity getPolyTestClass() {
+        return referencingPolyTypesEntity;
     }
-    public void setPolyTestClass(final PolyTestClass polyTestClass) {
-        this.polyTestClass = polyTestClass;
+    public void setPolyTestClass(final ReferencingPolyTypesEntity referencingPolyTypesEntity) {
+        this.referencingPolyTypesEntity = referencingPolyTypesEntity;
     }
 
 }

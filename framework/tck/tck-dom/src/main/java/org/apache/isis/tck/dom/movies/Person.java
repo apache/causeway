@@ -25,26 +25,30 @@ import org.apache.isis.applib.annotation.ObjectType;
 
 @ObjectType("movies.PERSON")
 public class Person {
-    private Date date;
-    private String name;
-
-    public Date getDate() {
-        return date;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setDate(final Date date) {
-        this.date = date;
-    }
-
-    public void setName(final String name) {
-        this.name = name;
-    }
-
+    
     public String title() {
         return name;
     }
+
+    // {{ name: String
+    private String name;
+    public String getName() {
+        return name;
+    }
+    public void setName(final String name) {
+        this.name = name;
+    }
+    // }}
+    
+
+    // {{ Date: java.util.Date
+    private Date date;
+    public Date getDate() {
+        return date;
+    }
+    public void setDate(final Date date) {
+        this.date = date;
+    }
+    // }}
+    
 }

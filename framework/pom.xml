@@ -27,7 +27,7 @@
 
     <groupId>org.apache.isis</groupId>
     <artifactId>isis</artifactId>
-    <version>0.3.0-incubating-SNAPSHOT</version>
+    <version>0.3.1-incubating-SNAPSHOT</version>
 
     <packaging>pom</packaging>
 
@@ -307,8 +307,8 @@
                 </plugin>
 
 
-                <!-- IDE support for Eclipse. (NetBeans 6.7+ and IDEA 7.0 
-                    have built-in support for Maven) Alternatively, use m2eclipse and import 
+                <!-- IDE support for Eclipse. (NetBeans 6.7+ and IDEA 7.0+ 
+                    have built-in support for Maven) Alternatively, use m2e and import 
                     POMs directly. -->
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -346,7 +346,7 @@
                     <!-- goal:compile binds to phase:compile -->
                     <!-- goal:testCompile binds to phase:test-compile -->
                 </plugin>
-
+                
                 <!-- Tests -->
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -1046,12 +1046,12 @@ archetype includes this explicit dependency.
             <dependency>
                 <groupId>org.apache.isis</groupId>
                 <artifactId>applib</artifactId>
-                <version>0.3.0-incubating-SNAPSHOT</version>
+                <version>0.3.1-incubating-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis</groupId>
                 <artifactId>applib</artifactId>
-                <version>0.3.0-incubating-SNAPSHOT</version>
+                <version>0.3.1-incubating-SNAPSHOT</version>
                 <type>test-jar</type>
             </dependency>
 
@@ -1059,42 +1059,42 @@ archetype includes this explicit dependency.
             <dependency>
                 <groupId>org.apache.isis</groupId>
                 <artifactId>core</artifactId>
-                <version>0.3.0-incubating-SNAPSHOT</version>
+                <version>0.3.1-incubating-SNAPSHOT</version>
             </dependency>
 
             <!-- isis: progmodels -->
             <dependency>
                 <groupId>org.apache.isis</groupId>
                 <artifactId>progmodels</artifactId>
-                <version>0.3.0-incubating-SNAPSHOT</version>
+                <version>0.3.1-incubating-SNAPSHOT</version>
             </dependency>
 
             <!-- isis: security -->
             <dependency>
                 <groupId>org.apache.isis</groupId>
                 <artifactId>security</artifactId>
-                <version>0.3.0-incubating-SNAPSHOT</version>
+                <version>0.3.1-incubating-SNAPSHOT</version>
             </dependency>
 
             <!-- isis: runtime -->
             <dependency>
                 <groupId>org.apache.isis</groupId>
                 <artifactId>runtimes</artifactId>
-                <version>0.3.0-incubating-SNAPSHOT</version>
+                <version>0.3.1-incubating-SNAPSHOT</version>
             </dependency>
 
             <!-- isis: viewer -->
             <dependency>
                 <groupId>org.apache.isis</groupId>
                 <artifactId>viewer</artifactId>
-                <version>0.3.0-incubating-SNAPSHOT</version>
+                <version>0.3.1-incubating-SNAPSHOT</version>
             </dependency>
 
             <!-- isis: tck -->
             <dependency>
                 <groupId>org.apache.isis</groupId>
                 <artifactId>tck</artifactId>
-                <version>0.3.0-incubating-SNAPSHOT</version>
+                <version>0.3.1-incubating-SNAPSHOT</version>
             </dependency>
 
 
@@ -1434,6 +1434,19 @@ archetype includes this explicit dependency.
     </distributionManagement>
 
     <profiles>
+        <profile>
+            <id>m2e</id>
+            <activation>
+                <property>
+                    <name>m2e.version</name>
+                </property>
+            </activation>
+            <build>
+                <directory>target-ide</directory>
+                <outputDirectory>target-ide/classes</outputDirectory>
+                <testOutputDirectory>target-ide/test-classes</testOutputDirectory>
+            </build>
+        </profile>
         <profile>
             <id>site-full</id>
             <activation>

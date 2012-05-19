@@ -21,8 +21,10 @@ package org.apache.isis.tck.dom.scalars;
 
 import org.apache.isis.applib.AbstractDomainObject;
 import org.apache.isis.applib.annotation.MemberOrder;
+import org.apache.isis.applib.annotation.ObjectType;
 import org.apache.isis.applib.annotation.Optional;
 
+@ObjectType("WRPV")
 public class WrapperValuedEntity extends AbstractDomainObject {
 
     // {{ Title

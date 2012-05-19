@@ -21,16 +21,31 @@ package org.apache.isis.tck.dom.scalars;
 
 import java.util.List;
 
+import org.apache.isis.applib.AbstractFactoryAndRepository;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Named;
+import org.apache.isis.applib.annotation.ObjectType;
+import org.apache.isis.applib.annotation.QueryOnly;
 
 @Named("WrapperValues")
-public interface WrapperValuedEntityRepository {
+@ObjectType("WrapperValues")
+public class WrapperValuedEntityRepository extends AbstractFactoryAndRepository {
+
+    @Override
+    public String getId() {
+        return "wrapperValuedEntities";
+    }
 
     @MemberOrder(sequence = "1")
-    public List<WrapperValuedEntity> list();
+    @QueryOnly
+    public List<WrapperValuedEntity> list() {
+        return allInstances(WrapperValuedEntity.class);
+    }
 
     @MemberOrder(sequence = "2")
-    public WrapperValuedEntity newEntity();
-
+    public WrapperValuedEntity newEntity() {
+        final WrapperValuedEntity entity = newTransientInstance(WrapperValuedEntity.class);
+        persist(entity);
+        return entity;
+    }
 }

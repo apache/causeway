@@ -24,26 +24,31 @@ import org.apache.isis.applib.annotation.ObjectType;
 
 @ObjectType("movies.ROLE")
 public class Role {
-    private Person actor;
-    private String name;
-
-    public Person getActor() {
-        return actor;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setActor(final Person actor) {
-        this.actor = actor;
-    }
-
-    public void setName(final String name) {
-        this.name = name;
-    }
-
+    
     public String title() {
         return name;
     }
+
+    // {{ name: String
+    private String name;
+    public String getName() {
+        return name;
+    }
+    public void setName(final String name) {
+        this.name = name;
+    }
+    // }}
+    
+    
+    // {{ actor: Person
+    private Person actor;
+    public Person getActor() {
+        return actor;
+    }
+    public void setActor(final Person actor) {
+        this.actor = actor;
+    }
+    // }}
+
+
 }

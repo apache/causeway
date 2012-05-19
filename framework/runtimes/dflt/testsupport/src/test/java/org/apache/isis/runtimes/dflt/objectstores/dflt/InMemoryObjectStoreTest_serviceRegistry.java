@@ -32,8 +32,8 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.testsupport.IsisSystemWithFixtures;
-import org.apache.isis.tck.dom.eg.ExamplePojoWithValues;
-import org.apache.isis.tck.dom.eg.TestPojoRepository;
+import org.apache.isis.tck.dom.refs.AssociatedEntitiesRepository;
+import org.apache.isis.tck.dom.refs.SimpleEntity;
 
 public class InMemoryObjectStoreTest_serviceRegistry {
 
@@ -49,14 +49,14 @@ public class InMemoryObjectStoreTest_serviceRegistry {
 
     @Before
     public void setUpFixtures() throws Exception {
-        epv2Adapter = iswf.adapterFor(iswf.fixtures.epv2);
-        epvSpecification = iswf.loadSpecification(ExamplePojoWithValues.class);
+        epv2Adapter = iswf.adapterFor(iswf.fixtures.smpl2);
+        epvSpecification = iswf.loadSpecification(SimpleEntity.class);
     }
 
     @Test
     public void getOidForServices() throws Exception {
-        final Oid oidForService = getStore().getOidForService(iswf.loadSpecification(TestPojoRepository.class));
-        assertEquals(RootOidDefault.create(ObjectSpecId.of("TestPojoRepository"), "1"), oidForService);
+        final Oid oidForService = getStore().getOidForService(iswf.loadSpecification(AssociatedEntitiesRepository.class));
+        assertEquals(RootOidDefault.create(ObjectSpecId.of("AssociatedEntities"), "1"), oidForService);
     }
 
 

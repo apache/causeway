@@ -25,6 +25,8 @@ import static org.junit.Assert.assertThat;
 import org.junit.Rule;
 import org.junit.Test;
 
+import org.apache.isis.tck.dom.scalars.JdkValuedEntity;
+
 public class IsisSystemWithFixturesTest_basicTest {
 
     @Rule
@@ -33,11 +35,11 @@ public class IsisSystemWithFixturesTest_basicTest {
     @Test
     public void savePojo() throws Exception {
 
-        assertThat(iswf.fixtures.testPojoRepository.findAll().size(), is(0));
+        assertThat(iswf.container.allInstances(JdkValuedEntity.class).size(), is(0));
         
-        iswf.container.persist(iswf.fixtures.testPojo1);
+        iswf.container.persist(iswf.fixtures.jve1);
         
-        assertThat(iswf.fixtures.testPojoRepository.findAll().size(), is(1));
+        assertThat(iswf.container.allInstances(JdkValuedEntity.class).size(), is(1));
     }
 
 }

@@ -29,6 +29,7 @@ import org.apache.isis.applib.AbstractDomainObject;
  * 
  */
 public class SimpleClassTwo extends AbstractDomainObject {
+    
     public String title() {
         return text;
     }

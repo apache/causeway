@@ -29,7 +29,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.testsupport.IsisSystemWithFixtures;
-import org.apache.isis.tck.dom.eg.TestPojo;
+import org.apache.isis.tck.dom.scalars.WrapperValuedEntity;
 
 public class MementoTest_data {
 
@@ -44,17 +44,17 @@ public class MementoTest_data {
 
     @Before
     public void setUpSystem() throws Exception {
-        iswf.fixtures.testPojo1.setPropertyUsedForTitle("Fred");
+        iswf.fixtures.wve1.setStringProperty("Fred");
         
-        originalAdapter1 = IsisContext.getPersistenceSession().getAdapterManager().adapterFor(iswf.fixtures.testPojo1);
+        originalAdapter1 = IsisContext.getPersistenceSession().getAdapterManager().adapterFor(iswf.fixtures.wve1);
         oid1 = originalAdapter1.getOid();
         memento1 = new Memento(originalAdapter1);
         data1 = memento1.getData();
         
-        iswf.fixtures.testPojo2.setPropertyUsedForTitle("Harry");
-        iswf.container.persist(iswf.fixtures.testPojo2);
+        iswf.fixtures.wve2.setStringProperty("Harry");
+        iswf.container.persist(iswf.fixtures.wve2);
         
-        originalAdapter2 = IsisContext.getPersistenceSession().getAdapterManager().adapterFor(iswf.fixtures.testPojo2);
+        originalAdapter2 = IsisContext.getPersistenceSession().getAdapterManager().adapterFor(iswf.fixtures.wve2);
         oid2 = originalAdapter2.getOid();
         memento2 = new Memento(originalAdapter2);
         data2 = memento2.getData();
@@ -68,7 +68,6 @@ public class MementoTest_data {
 
         assertEquals(null, data);
     }
-
 
 
     @Test
@@ -91,7 +90,7 @@ public class MementoTest_data {
 
     @Test
     public void data_getClassName() throws Exception {
-        assertEquals(TestPojo.class.getName(), data1.getClassName());
+        assertEquals(WrapperValuedEntity.class.getName(), data1.getClassName());
     }
     
     
@@ -99,7 +98,7 @@ public class MementoTest_data {
     public void data_getEntry_forStringField() throws Exception {
         assertEquals(ObjectData.class, data1.getClass());
         final ObjectData objectData = (ObjectData) data1;
-        assertEquals("Fred", objectData.getEntry("propertyUsedForTitle"));
+        assertEquals("Fred", objectData.getEntry("stringProperty"));
     }
     
 }

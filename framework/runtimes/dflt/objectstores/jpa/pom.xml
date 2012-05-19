@@ -24,7 +24,7 @@
 	<parent>
 		<groupId>org.apache.isis.runtimes.dflt</groupId>
 		<artifactId>objectstores</artifactId>
-		<version>0.3.0-incubating-SNAPSHOT</version>
+		<version>0.3.1-incubating-SNAPSHOT</version>
 	</parent>
 
 	<groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
@@ -67,7 +67,7 @@
             <dependency>
                 <groupId>org.apache.isis.runtimes</groupId>
                 <artifactId>dflt</artifactId>
-                <version>0.3.0-incubating-SNAPSHOT</version>
+                <version>0.3.1-incubating-SNAPSHOT</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -76,24 +76,24 @@
 			<dependency>
 				<groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
 				<artifactId>jpa-applib</artifactId>
-				<version>0.3.0-incubating-SNAPSHOT</version>
+				<version>0.3.1-incubating-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
 				<artifactId>jpa-applib</artifactId>
-				<version>0.3.0-incubating-SNAPSHOT</version>
+				<version>0.3.1-incubating-SNAPSHOT</version>
 				<scope>test</scope>
 				<type>test-jar</type>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
 				<artifactId>jpa-metamodel</artifactId>
-				<version>0.3.0-incubating-SNAPSHOT</version>
+				<version>0.3.1-incubating-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
 				<artifactId>jpa-metamodel</artifactId>
-				<version>0.3.0-incubating-SNAPSHOT</version>
+				<version>0.3.1-incubating-SNAPSHOT</version>
 				<scope>test</scope>
 				<type>test-jar</type>
 			</dependency>
@@ -102,43 +102,43 @@
 			<dependency>
 				<groupId>org.apache.isis</groupId>
 				<artifactId>applib</artifactId>
-				<version>0.3.0-incubating-SNAPSHOT</version>
+				<version>0.3.1-incubating-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.core</groupId>
 				<artifactId>metamodel</artifactId>
-				<version>0.3.0-incubating-SNAPSHOT</version>
+				<version>0.3.1-incubating-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.core</groupId>
 				<artifactId>commons</artifactId>
-				<version>0.3.0-incubating-SNAPSHOT</version>
+				<version>0.3.1-incubating-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.core</groupId>
 				<artifactId>commons</artifactId>
-				<version>0.3.0-incubating-SNAPSHOT</version>
+				<version>0.3.1-incubating-SNAPSHOT</version>
 				<scope>test</scope>
 				<type>test-jar</type>
 			</dependency>
 	        <dependency>
 	            <groupId>org.apache.isis.core</groupId>
 	            <artifactId>progmodel</artifactId>
-				<version>0.3.0-incubating-SNAPSHOT</version>
+				<version>0.3.1-incubating-SNAPSHOT</version>
 	            <scope>test</scope>
 	            <type>test-jar</type>
 	        </dependency>
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>testsupport</artifactId>
-                <version>0.3.0-incubating-SNAPSHOT</version>
+                <version>0.3.1-incubating-SNAPSHOT</version>
                 <scope>test</scope>
             </dependency>
 
             <dependency>
                 <groupId>org.apache.isis.progmodels</groupId>
                 <artifactId>dflt</artifactId>
-                <version>0.3.0-incubating-SNAPSHOT</version>
+                <version>0.3.1-incubating-SNAPSHOT</version>
             </dependency>
 
             <!-- OpenJPA -->

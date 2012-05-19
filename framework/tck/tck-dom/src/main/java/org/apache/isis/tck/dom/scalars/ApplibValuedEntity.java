@@ -21,6 +21,7 @@ package org.apache.isis.tck.dom.scalars;
 
 import org.apache.isis.applib.AbstractDomainObject;
 import org.apache.isis.applib.annotation.MemberOrder;
+import org.apache.isis.applib.annotation.ObjectType;
 import org.apache.isis.applib.annotation.Optional;
 import org.apache.isis.applib.value.Color;
 import org.apache.isis.applib.value.Date;
@@ -32,6 +33,7 @@ import org.apache.isis.applib.value.Percentage;
 import org.apache.isis.applib.value.Time;
 import org.apache.isis.applib.value.TimeStamp;
 
+@ObjectType("APLV")
 public class ApplibValuedEntity extends AbstractDomainObject {
 
     // {{ ColorProperty

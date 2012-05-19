@@ -43,9 +43,9 @@ import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.commons.matchers.IsisMatchers;
 import org.apache.isis.runtimes.dflt.testsupport.IsisSystemWithFixtures;
-import org.apache.isis.tck.dom.eg.ExamplePojoWithCollections;
-import org.apache.isis.tck.dom.eg.ExamplePojoWithReferences;
-import org.apache.isis.tck.dom.eg.ExamplePojoWithValues;
+import org.apache.isis.tck.dom.refs.ParentEntity;
+import org.apache.isis.tck.dom.refs.ReferencingEntity;
+import org.apache.isis.tck.dom.refs.SimpleEntity;
 
 public class ObjectFixtureFilePersistorTest {
 
@@ -73,24 +73,24 @@ public class ObjectFixtureFilePersistorTest {
 
         persistor = new ObjectFixtureFilePersistor();
 
-        iswf.fixtures.epv1.setName("Fred Smith");
-        iswf.fixtures.epv1.setDate(dateFormat.parse("08-Mar-2010 01:00 UTC"));
+        iswf.fixtures.smpl1.setName("Fred Smith");
+        iswf.fixtures.smpl1.setDate(dateFormat.parse("08-Mar-2010 01:00 UTC"));
 
-        iswf.fixtures.epv2.setName("Joe Bloggs");
-        iswf.fixtures.epv2.setDate(dateFormat.parse("09-Apr-2011 02:10 UTC"));
+        iswf.fixtures.smpl2.setName("Joe Bloggs");
+        iswf.fixtures.smpl2.setDate(dateFormat.parse("09-Apr-2011 02:10 UTC"));
     }
     
 
     @Test
     public void loadInstance() throws Exception {
         
-        final StringReader reader = new StringReader(ExamplePojoWithValues.class.getName() + "#1\n  name: Fred Smith\n  date: 08-Mar-2010 01:00 UTC");
+        final StringReader reader = new StringReader(SimpleEntity.class.getName() + "#1\n  name: Fred Smith\n  date: 08-Mar-2010 01:00 UTC");
         final Set<Object> objects = persistor.loadData(reader);
 
         Assert.assertEquals(1, objects.size());
         final Object object = objects.toArray()[0];
-        assertThat(object instanceof ExamplePojoWithValues, is(true));
-        final ExamplePojoWithValues epv = (ExamplePojoWithValues) object;
+        assertThat(object instanceof SimpleEntity, is(true));
+        final SimpleEntity epv = (SimpleEntity) object;
         Assert.assertEquals("Fred Smith", epv.getName());
         Assert.assertEquals(dateFormat.parse("08-Mar-2010 01:00 GMT"), epv.getDate());
     }
@@ -98,7 +98,7 @@ public class ObjectFixtureFilePersistorTest {
     @Test
     public void invalidFieldLine() throws Exception {
         try {
-            final StringReader reader = new StringReader(ExamplePojoWithValues.class.getName() + "#1\n  name Fred Smith");
+            final StringReader reader = new StringReader(SimpleEntity.class.getName() + "#1\n  name Fred Smith");
             persistor.loadData(reader);
             Assert.fail();
         } catch (final FixtureException e) {
@@ -109,10 +109,10 @@ public class ObjectFixtureFilePersistorTest {
 
     @Test
     public void oldFieldNameSkipped() throws Exception {
-        final StringReader reader = new StringReader(ExamplePojoWithValues.class.getName() + "#1\n  xname: Fred Smith");
+        final StringReader reader = new StringReader(SimpleEntity.class.getName() + "#1\n  xname: Fred Smith");
         final Set<Object> objects = persistor.loadData(reader);
         final Object object = objects.toArray()[0];
-        Assert.assertNull(((ExamplePojoWithValues) object).getName());
+        Assert.assertNull(((SimpleEntity) object).getName());
 
     }
 
@@ -128,13 +128,13 @@ public class ObjectFixtureFilePersistorTest {
     @Test
     public void saveOneObject() throws Exception {
         final Set<Object> objects = Sets.newLinkedHashSet();
-        objects.add(iswf.fixtures.epv1);
+        objects.add(iswf.fixtures.smpl1);
 
         final StringWriter out = new StringWriter();
         persistor.save(objects, out);
         final String actual = out.toString().replaceAll("\r\n", "\n");
         
-        final String expected = ExamplePojoWithValues.class.getName() + "#2\n  date: 08-Mar-2010 01:00 UTC\n  name: Fred Smith\n";
+        final String expected = SimpleEntity.class.getName() + "#2\n  date: 08-Mar-2010 01:00 UTC\n  name: Fred Smith\n";
         
         assertThat(actual, IsisMatchers.startsWith(expected));
     }
@@ -142,15 +142,15 @@ public class ObjectFixtureFilePersistorTest {
     @Test
     public void saveTwoObjects() throws Exception {
         final Set<Object> objects = Sets.newLinkedHashSet();
-        objects.add(iswf.fixtures.epv1);
-        objects.add(iswf.fixtures.epv3);
+        objects.add(iswf.fixtures.smpl1);
+        objects.add(iswf.fixtures.smpl3);
 
         final StringWriter out = new StringWriter();
         persistor.save(objects, out);
         final String actual = out.toString().replaceAll("\r\n", "\n");
 
-        final String expected1 = ExamplePojoWithValues.class.getName() + "#2\n  date: 08-Mar-2010 01:00 UTC\n  name: Fred Smith\n";
-        final String expected2 = ExamplePojoWithValues.class.getName() + "#3\n  date: \n  name: \n";
+        final String expected1 = SimpleEntity.class.getName() + "#2\n  date: 08-Mar-2010 01:00 UTC\n  name: Fred Smith\n";
+        final String expected2 = SimpleEntity.class.getName() + "#3\n  date: \n  name: \n";
         assertThat(actual, IsisMatchers.contains(expected1));
         assertThat(actual, IsisMatchers.contains(expected2));
     }
@@ -160,16 +160,16 @@ public class ObjectFixtureFilePersistorTest {
 
         final Set<Object> objects = Sets.newLinkedHashSet();
         
-        iswf.fixtures.epr1.setReference(iswf.fixtures.epv1);
-        objects.add(iswf.fixtures.epr1);
-        objects.add(iswf.fixtures.epv1);
+        iswf.fixtures.rfcg1.setReference(iswf.fixtures.smpl1);
+        objects.add(iswf.fixtures.rfcg1);
+        objects.add(iswf.fixtures.smpl1);
 
         final StringWriter out = new StringWriter();
         persistor.save(objects, out);
         final String actual = out.toString().replaceAll("\r\n", "\n");
 
-        final String expected1 = ExamplePojoWithReferences.class.getName() + "#2\n  aggregatedReference: \n  reference: " + ExamplePojoWithValues.class.getName() + "#3";
-        final String expected2 = ExamplePojoWithValues.class.getName() + "#3\n  date: 08-Mar-2010 01:00 UTC\n  name: Fred Smith\n";
+        final String expected1 = ReferencingEntity.class.getName() + "#2\n  aggregatedReference: \n  reference: " + SimpleEntity.class.getName() + "#3";
+        final String expected2 = SimpleEntity.class.getName() + "#3\n  date: 08-Mar-2010 01:00 UTC\n  name: Fred Smith\n";
         assertThat(actual, IsisMatchers.contains(expected1));
         assertThat(actual, IsisMatchers.contains(expected2));
     }
@@ -180,21 +180,23 @@ public class ObjectFixtureFilePersistorTest {
 
         final Set<Object> objects = Sets.newLinkedHashSet();
         
-        iswf.fixtures.epc1.getHomogeneousCollection().add(iswf.fixtures.epv1);
-        iswf.fixtures.epc1.getHomogeneousCollection().add(iswf.fixtures.epv2);
-        objects.add(iswf.fixtures.epc1);
+        iswf.fixtures.prnt1.getHomogeneousCollection().add(iswf.fixtures.smpl1);
+        iswf.fixtures.prnt1.getHomogeneousCollection().add(iswf.fixtures.smpl2);
+        objects.add(iswf.fixtures.prnt1);
 
-        objects.add(iswf.fixtures.epv1);
-        objects.add(iswf.fixtures.epv2);
+        objects.add(iswf.fixtures.smpl1);
+        objects.add(iswf.fixtures.smpl2);
 
         final StringWriter out = new StringWriter();
         persistor.save(objects, out);
         final String actual = out.toString().replaceAll("\r\n", "\n");
         
-        final String expected1 = ExamplePojoWithCollections.class.getName() + "#2\n  heterogeneousCollection: \n  homogeneousCollection: " + ExamplePojoWithValues.class.getName() + "#3 " + ExamplePojoWithValues.class.getName() + "#4 " + "\n";
-        final String expected2 = ExamplePojoWithValues.class.getName() + "#3\n  date: 08-Mar-2010 01:00 UTC\n  name: Fred Smith\n";
-        final String expected3 = ExamplePojoWithValues.class.getName() + "#4\n  date: 09-Apr-2011 02:10 UTC\n  name: Joe Bloggs\n";
-        assertThat(actual.replaceAll("\n", "###"), IsisMatchers.contains(expected1.replaceAll("\n", "###")));
+        final String expected1a = ParentEntity.class.getName() + "#2\n";
+        final String expected1b = "heterogeneousCollection: \n  homogeneousCollection: " + SimpleEntity.class.getName() + "#3 " + SimpleEntity.class.getName() + "#4 " + "\n";
+        final String expected2 = SimpleEntity.class.getName() + "#3\n  date: 08-Mar-2010 01:00 UTC\n  name: Fred Smith\n";
+        final String expected3 = SimpleEntity.class.getName() + "#4\n  date: 09-Apr-2011 02:10 UTC\n  name: Joe Bloggs\n";
+        assertThat(actual.replaceAll("\n", "###"), IsisMatchers.contains(expected1a.replaceAll("\n", "###")));
+        assertThat(actual.replaceAll("\n", "###"), IsisMatchers.contains(expected1b.replaceAll("\n", "###")));
         assertThat(actual, IsisMatchers.contains(expected2));
         assertThat(actual, IsisMatchers.contains(expected3));
     }

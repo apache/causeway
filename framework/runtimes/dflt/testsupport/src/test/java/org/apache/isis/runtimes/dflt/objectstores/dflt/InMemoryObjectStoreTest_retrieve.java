@@ -37,7 +37,7 @@ import org.apache.isis.runtimes.dflt.runtime.persistence.query.PersistenceQueryF
 import org.apache.isis.runtimes.dflt.runtime.persistence.query.PersistenceQueryFindByTitle;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.testsupport.IsisSystemWithFixtures;
-import org.apache.isis.tck.dom.eg.ExamplePojoWithValues;
+import org.apache.isis.tck.dom.refs.SimpleEntity;
 
 public class InMemoryObjectStoreTest_retrieve {
 
@@ -53,13 +53,13 @@ public class InMemoryObjectStoreTest_retrieve {
 
     @Before
     public void setUpFixtures() throws Exception {
-        epv2Adapter = iswf.adapterFor(iswf.fixtures.epv2);
-        epvSpecification = iswf.loadSpecification(ExamplePojoWithValues.class);
+        epv2Adapter = iswf.adapterFor(iswf.fixtures.smpl2);
+        epvSpecification = iswf.loadSpecification(SimpleEntity.class);
     }
 
     @Test
     public void getObject_whenDoesNotExist() {
-        final TypedOid oid = RootOidDefault.deString("EPV:10");
+        final TypedOid oid = RootOidDefault.deString("SMPL:10");
         try {
             getStore().getObject(oid);
             fail();
@@ -71,13 +71,13 @@ public class InMemoryObjectStoreTest_retrieve {
     public void getObject_whenExists_returnsAdapter() throws Exception {
         
         // given
-        iswf.persist(iswf.fixtures.epv2);
+        iswf.persist(iswf.fixtures.smpl2);
         iswf.bounceSystem();
 
         final ObjectAdapter retrievedAdapter = getStore().getObject((TypedOid) epv2Adapter.getOid());
         
         assertNotSame(epv2Adapter, retrievedAdapter);
-        assertEquals(((ExamplePojoWithValues)epv2Adapter.getObject()).getName(), ((ExamplePojoWithValues)retrievedAdapter.getObject()).getName());
+        assertEquals(((SimpleEntity)epv2Adapter.getObject()).getName(), ((SimpleEntity)retrievedAdapter.getObject()).getName());
         assertEquals(epv2Adapter.getOid(), retrievedAdapter.getOid());
     }
 
@@ -90,7 +90,7 @@ public class InMemoryObjectStoreTest_retrieve {
     @Test
     public void getInstances_findByTitle() throws Exception {
         // given
-        iswf.persist(iswf.fixtures.epv2);
+        iswf.persist(iswf.fixtures.smpl2);
         iswf.bounceSystem();
 
         // when
@@ -101,14 +101,14 @@ public class InMemoryObjectStoreTest_retrieve {
         final ObjectAdapter retrievedAdapter = retrievedAdapters[0];
 
         assertNotSame(epv2Adapter, retrievedAdapter);
-        assertEquals(((ExamplePojoWithValues)epv2Adapter.getObject()).getName(), ((ExamplePojoWithValues)retrievedAdapter.getObject()).getName());
+        assertEquals(((SimpleEntity)epv2Adapter.getObject()).getName(), ((SimpleEntity)retrievedAdapter.getObject()).getName());
         assertEquals(epv2Adapter.getOid(), retrievedAdapter.getOid());
     }
 
     @Test
     public void getInstances_findAll() throws Exception {
         // given
-        iswf.persist(iswf.fixtures.epv2);
+        iswf.persist(iswf.fixtures.smpl2);
         iswf.bounceSystem();
 
         // when
@@ -119,7 +119,7 @@ public class InMemoryObjectStoreTest_retrieve {
         final ObjectAdapter retrievedAdapter = retrievedAdapters[0];
 
         assertNotSame(epv2Adapter, retrievedAdapter);
-        assertEquals(((ExamplePojoWithValues)epv2Adapter.getObject()).getName(), ((ExamplePojoWithValues)retrievedAdapter.getObject()).getName());
+        assertEquals(((SimpleEntity)epv2Adapter.getObject()).getName(), ((SimpleEntity)retrievedAdapter.getObject()).getName());
         assertEquals(epv2Adapter.getOid(), retrievedAdapter.getOid());
     }
 
@@ -130,7 +130,7 @@ public class InMemoryObjectStoreTest_retrieve {
 
     @Test
     public void hasInstances_whenHasSome() throws Exception {
-        iswf.persist(iswf.fixtures.epv2);
+        iswf.persist(iswf.fixtures.smpl2);
         iswf.bounceSystem();
 
         assertEquals(true, getStore().hasInstances(epvSpecification));

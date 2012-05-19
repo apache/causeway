@@ -21,16 +21,31 @@ package org.apache.isis.tck.dom.scalars;
 
 import java.util.List;
 
+import org.apache.isis.applib.AbstractFactoryAndRepository;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Named;
+import org.apache.isis.applib.annotation.ObjectType;
+import org.apache.isis.applib.annotation.QueryOnly;
 
 @Named("PrimitiveValues")
-public interface PrimitiveValuedEntityRepository {
+@ObjectType("PRMV")
+public class PrimitiveValuedEntityRepository extends AbstractFactoryAndRepository {
 
+    @Override
+    public String getId() {
+        return "primitiveValuedEntities";
+    }
+
+    @QueryOnly
     @MemberOrder(sequence = "1")
-    public List<PrimitiveValuedEntity> list();
+    public List<PrimitiveValuedEntity> list() {
+        return allInstances(PrimitiveValuedEntity.class);
+    }
 
     @MemberOrder(sequence = "2")
-    public PrimitiveValuedEntity newEntity();
-
+    public PrimitiveValuedEntity newEntity() {
+        final PrimitiveValuedEntity entity = newTransientInstance(PrimitiveValuedEntity.class);
+        persist(entity);
+        return entity;
+    }
 }

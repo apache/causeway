@@ -25,19 +25,19 @@ package org.apache.isis.tck.dom.sqlos;
 import java.util.List;
 
 import org.apache.isis.applib.AbstractFactoryAndRepository;
-import org.apache.isis.tck.dom.sqlos.data.NumericTestClass;
+import org.apache.isis.tck.dom.poly.Empty;
+import org.apache.isis.tck.dom.poly.ReferencingPolyTypesEntity;
+import org.apache.isis.tck.dom.poly.SelfReferencingEntity;
+import org.apache.isis.tck.dom.poly.StringBaseEntitySub;
+import org.apache.isis.tck.dom.poly.StringBaseEntitySubThree;
+import org.apache.isis.tck.dom.poly.StringBaseEntitySubTwo;
+import org.apache.isis.tck.dom.poly.Stringable;
+import org.apache.isis.tck.dom.poly.StringableEntityWithOwnProperties;
+import org.apache.isis.tck.dom.poly.StringableEntityWithOwnProperty;
+import org.apache.isis.tck.dom.scalars.PrimitiveValuedEntity;
 import org.apache.isis.tck.dom.sqlos.data.SimpleClass;
 import org.apache.isis.tck.dom.sqlos.data.SimpleClassTwo;
 import org.apache.isis.tck.dom.sqlos.data.SqlDataClass;
-import org.apache.isis.tck.dom.sqlos.poly.EmptyInterface;
-import org.apache.isis.tck.dom.sqlos.poly.PolyInterface;
-import org.apache.isis.tck.dom.sqlos.poly.PolyInterfaceImplA;
-import org.apache.isis.tck.dom.sqlos.poly.PolyInterfaceImplB;
-import org.apache.isis.tck.dom.sqlos.poly.PolySelfRefClass;
-import org.apache.isis.tck.dom.sqlos.poly.PolySubClassOne;
-import org.apache.isis.tck.dom.sqlos.poly.PolySubClassThree;
-import org.apache.isis.tck.dom.sqlos.poly.PolySubClassTwo;
-import org.apache.isis.tck.dom.sqlos.poly.PolyTestClass;
 
 /**
  * @author Kevin
@@ -100,71 +100,70 @@ public class SqlDomainObjectRepository extends AbstractFactoryAndRepository {
         return object;
     }
 
-    // NumericTestClass
-    public List<NumericTestClass> allNumericTestClasses() {
-        return allInstances(NumericTestClass.class);
+    // PrimitiveValuedEntity
+    public List<PrimitiveValuedEntity> allPrimitiveValueEntities() {
+        return allInstances(PrimitiveValuedEntity.class);
     }
 
-    public NumericTestClass newNumericTestClass() {
-        final NumericTestClass object = newTransientInstance(NumericTestClass.class);
-        return object;
+    public PrimitiveValuedEntity newPrimitiveValuedEntity() {
+        return newTransientInstance(PrimitiveValuedEntity.class);
     }
 
-    public List<NumericTestClass> allNumericTestClassesThatMatch(final NumericTestClass match) {
-        return allMatches(NumericTestClass.class, match);
+    public List<PrimitiveValuedEntity> allPrimitiveValuedEntitiesThatMatch(final PrimitiveValuedEntity match) {
+        return allMatches(PrimitiveValuedEntity.class, match);
     }
 
     
     // PolyTestClass
-    public PolyTestClass newPolyTestClass() {
-        final PolyTestClass object = newTransientInstance(PolyTestClass.class);
+    public ReferencingPolyTypesEntity newPolyTestClass() {
+        final ReferencingPolyTypesEntity object = newTransientInstance(ReferencingPolyTypesEntity.class);
         return object;
     }
 
-    public List<PolyTestClass> allPolyTestClasses() {
-        return allInstances(PolyTestClass.class);
+    public List<ReferencingPolyTypesEntity> allPolyTestClasses() {
+        return allInstances(ReferencingPolyTypesEntity.class);
     }
 
-    public PolySubClassOne newPolySubClassOne() {
-        final PolySubClassOne object = newTransientInstance(PolySubClassOne.class);
+    public StringBaseEntitySub newPolySubClassOne() {
+        final StringBaseEntitySub object = newTransientInstance(StringBaseEntitySub.class);
         return object;
     }
 
-    public PolySubClassThree newPolySubClassThree() {
-        final PolySubClassThree object = newTransientInstance(PolySubClassThree.class);
+    public StringBaseEntitySubThree newPolySubClassThree() {
+        final StringBaseEntitySubThree object = newTransientInstance(StringBaseEntitySubThree.class);
         return object;
     }
 
-    public PolySubClassTwo newPolySubClassTwo() {
-        final PolySubClassTwo object = newTransientInstance(PolySubClassTwo.class);
+    public StringBaseEntitySubTwo newPolySubClassTwo() {
+        final StringBaseEntitySubTwo object = newTransientInstance(StringBaseEntitySubTwo.class);
         return object;
     }
 
-    public PolyInterfaceImplA newPolyInterfaceImplA() {
-        final PolyInterfaceImplA object = newTransientInstance(PolyInterfaceImplA.class);
+    public StringableEntityWithOwnProperty newPolyInterfaceImplA() {
+        final StringableEntityWithOwnProperty object = newTransientInstance(StringableEntityWithOwnProperty.class);
         return object;
     }
 
-    public PolyInterfaceImplB newPolyInterfaceImplB() {
-        final PolyInterfaceImplB object = newTransientInstance(PolyInterfaceImplB.class);
+    public StringableEntityWithOwnProperties newPolyInterfaceImplB() {
+        final StringableEntityWithOwnProperties object = newTransientInstance(StringableEntityWithOwnProperties.class);
         return object;
     }
 
-    public PolySelfRefClass newPolySelfRefClass() {
-        final PolySelfRefClass object = newTransientInstance(PolySelfRefClass.class);
+    public SelfReferencingEntity newPolySelfRefClass() {
+        final SelfReferencingEntity object = newTransientInstance(SelfReferencingEntity.class);
         return object;
     }
 
-    public List<PolyInterface> allPolyInterfaces() {
-        return allInstances(PolyInterface.class);
+    public List<Stringable> allPolyInterfaces() {
+        return allInstances(Stringable.class);
     }
 
-    public List<PolyInterface> queryPolyInterfaces(final PolyInterface query) {
-        return allMatches(PolyInterface.class, query);
+    public List<Stringable> queryPolyInterfaces(final Stringable query) {
+        return allMatches(Stringable.class, query);
     }
 
-    public List<EmptyInterface> allEmptyInterfacesThatMatch(final EmptyInterface match) {
-        return allMatches(EmptyInterface.class, match);
+    public List<Empty> allEmptyInterfacesThatMatch(final Empty match) {
+        return allMatches(Empty.class, match);
     }
 
     // }}
