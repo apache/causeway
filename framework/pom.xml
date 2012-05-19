@@ -240,6 +240,9 @@
 
 
     <build>
+        <outputDirectory>${project.build.directory}/classes</outputDirectory>
+        <testOutputDirectory>${project.build.directory}/test-classes</testOutputDirectory>
+        
         <extensions>
             <!-- scp and sftp support for deployments. -->
             <extension>
@@ -1443,8 +1446,6 @@ archetype includes this explicit dependency.
             </activation>
             <build>
                 <directory>target-ide</directory>
-                <outputDirectory>target-ide/classes</outputDirectory>
-                <testOutputDirectory>target-ide/test-classes</testOutputDirectory>
             </build>
         </profile>
         <profile>
