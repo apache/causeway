@@ -41,7 +41,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.runtimes.dflt.objectstores.nosql.keys.KeyCreatorDefault;
 import org.apache.isis.runtimes.dflt.testsupport.IsisSystemWithFixtures;
 
-public class MongoDbTest {
+public class MongoIntegrationTest {
     
     @Rule
     public IsisSystemWithFixtures iswf = IsisSystemWithFixtures.builder().with(new MongoPersistorMechanismInstaller()).build();

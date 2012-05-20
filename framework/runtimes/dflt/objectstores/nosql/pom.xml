@@ -49,18 +49,6 @@
 
     <build>
         <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <configuration>
-                    <testFailureIgnore>true</testFailureIgnore>
-                    <excludes>
-                        <exclude>**/MongoStateReaderTest.java</exclude>
-                        <exclude>**/MongoDbTest.java</exclude>
-                        <exclude>**/MongoStateWriterTest.java</exclude>
-                    </excludes>
-                </configuration>
-            </plugin>
 
             <!--
             REVIEW: have removed, cos for some bizarre reason causes maven
@@ -262,4 +250,5 @@
         </dependency>
 
     </dependencies>
+    
 </project>

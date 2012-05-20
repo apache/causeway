@@ -74,27 +74,11 @@
     </reporting>
 
 
-    <profiles>
-        <profile>
-            <id>normal</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
-            <modules>
-                <module>sql-impl</module>
-                <module>sql-tests-common</module>
-            </modules>
-        </profile>
-        <profile>
-            <id>integration-tests</id>
-            <modules>
-                <module>sql-impl</module>
-                <module>sql-tests-common</module>
-                <module>sql-tests-served</module>
-            </modules>
-        </profile>
-
-    </profiles>
+    <modules>
+        <module>sql-impl</module>
+        <module>sql-tests-common</module>
+        <module>sql-tests-served</module>
+    </modules>
 
     <dependencyManagement>
         <dependencies>

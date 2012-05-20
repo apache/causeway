@@ -36,9 +36,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
-import org.apache.isis.runtimes.dflt.objectstores.nosql.db.mongo.MongoStateReader;
 
-public class MongoStateReaderTest {
+public class MongoStateReaderIntegrationTest {
 
     private static final String OBJECT_TYPE = "org.test.Object";
     

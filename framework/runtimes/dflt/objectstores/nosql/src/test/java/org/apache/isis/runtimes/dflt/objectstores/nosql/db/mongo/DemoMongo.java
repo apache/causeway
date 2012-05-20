@@ -27,6 +27,7 @@ import com.mongodb.DBCollection;
 import com.mongodb.Mongo;
 
 public class DemoMongo {
+    
     // @Test
     public void installed() throws Exception {
 

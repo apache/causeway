@@ -44,7 +44,6 @@ import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2;
 import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2.Mode;
 import org.apache.isis.runtimes.dflt.objectstores.nosql.ObjectReader;
 import org.apache.isis.runtimes.dflt.objectstores.nosql.db.StateReader;
-import org.apache.isis.runtimes.dflt.objectstores.nosql.db.mongo.MongoPersistorMechanismInstaller;
 import org.apache.isis.runtimes.dflt.objectstores.nosql.encryption.DataEncryption;
 import org.apache.isis.runtimes.dflt.objectstores.nosql.versions.VersionCreator;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
@@ -53,7 +52,7 @@ import org.apache.isis.tck.dom.refs.ParentEntity;
 import org.apache.isis.tck.dom.refs.ReferencingEntity;
 import org.apache.isis.tck.dom.refs.SimpleEntity;
 
-public class ObjectReaderTest {
+public class ObjectReaderMongoIntegrationTest {
     
     @Rule
     public IsisSystemWithFixtures iswf = IsisSystemWithFixtures.builder().with(new MongoPersistorMechanismInstaller()).build();

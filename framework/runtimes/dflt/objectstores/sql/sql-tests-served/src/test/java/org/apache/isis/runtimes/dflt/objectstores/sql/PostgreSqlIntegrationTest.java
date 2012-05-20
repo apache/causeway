@@ -26,7 +26,7 @@ import java.util.Properties;
 
 import org.apache.isis.runtimes.dflt.objectstores.sql.common.SqlIntegrationTestData;
 
-public class PostgreSqlTest extends SqlIntegrationTestData {
+public class PostgreSqlIntegrationTest extends SqlIntegrationTestData {
 
     @Override
     public Properties getProperties() {

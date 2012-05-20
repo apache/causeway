@@ -36,7 +36,7 @@ import org.junit.Test;
 import org.apache.isis.core.metamodel.adapter.oid.RootOidDefault;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 
-public class MongoStateWriterTest {
+public class MongoStateWriterIntegrationTest {
 
     private static final String SPEC_NAME = "org.test.Object";
     private DB testDb;

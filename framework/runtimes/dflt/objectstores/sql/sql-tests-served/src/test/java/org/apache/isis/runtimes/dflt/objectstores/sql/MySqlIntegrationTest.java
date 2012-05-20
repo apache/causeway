@@ -26,7 +26,7 @@ import java.util.Properties;
 
 import org.apache.isis.runtimes.dflt.objectstores.sql.common.SqlIntegrationTestData;
 
-public class MySqlTest extends SqlIntegrationTestData {
+public class MySqlIntegrationTest extends SqlIntegrationTestData {
 
     /**/
     @Override
@@ -51,5 +51,5 @@ public class MySqlTest extends SqlIntegrationTestData {
     public String getPropertiesFilename() {
         return "mysql.properties";
     }
-
+    
 }
