@@ -27,12 +27,12 @@ import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.ObjectType;
 import org.apache.isis.applib.annotation.QueryOnly;
 
-@Named("JdkValues")
-@ObjectType("JdkValues")
+@Named("JdkValuedEntities")
+@ObjectType("JdkValuedEntities")
 public class JdkValuedEntityRepository extends AbstractFactoryAndRepository {
 
     public String getId() {
-        return "jdkValuedEntities";
+        return "JdkValuedEntities";
     }
 
     @MemberOrder(sequence = "1")

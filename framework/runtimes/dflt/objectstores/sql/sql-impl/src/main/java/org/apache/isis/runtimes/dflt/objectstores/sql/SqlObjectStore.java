@@ -22,6 +22,8 @@ package org.apache.isis.runtimes.dflt.objectstores.sql;
 import java.util.List;
 import java.util.Vector;
 
+import com.google.common.collect.Lists;
+
 import org.apache.log4j.Logger;
 
 import org.apache.isis.core.commons.debug.DebugBuilder;
@@ -184,7 +186,7 @@ public final class SqlObjectStore implements ObjectStore {
             }
 
             @Override
-            public ObjectAdapter onObject() {
+            public ObjectAdapter onAdapter() {
                 return object;
             }
 
@@ -207,7 +209,7 @@ public final class SqlObjectStore implements ObjectStore {
             }
 
             @Override
-            public ObjectAdapter onObject() {
+            public ObjectAdapter onAdapter() {
                 return object;
             }
 
@@ -263,7 +265,7 @@ public final class SqlObjectStore implements ObjectStore {
             }
 
             @Override
-            public ObjectAdapter onObject() {
+            public ObjectAdapter onAdapter() {
                 return adapter;
             }
 
@@ -321,7 +323,7 @@ public final class SqlObjectStore implements ObjectStore {
     }
 
     @Override
-    public ObjectAdapter[] getInstances(final PersistenceQuery query) {
+    public List<ObjectAdapter> getInstances(final PersistenceQuery query) {
         if (query instanceof PersistenceQueryFindByTitle) {
             return findByTitle((PersistenceQueryFindByTitle) query);
         } else if (query instanceof PersistenceQueryFindAllInstances) {
@@ -333,17 +335,15 @@ public final class SqlObjectStore implements ObjectStore {
         }
     }
 
-    private ObjectAdapter[] findByPattern(final PersistenceQueryFindByPattern query) {
+    private List<ObjectAdapter> findByPattern(final PersistenceQueryFindByPattern query) {
         final ObjectSpecification specification = query.getSpecification();// query.getPattern().getSpecification();//
                                                                            // getSpecification();
         final DatabaseConnector connector = connectionPool.acquire();
         try {
-            final Vector<ObjectAdapter> matchingInstances = new Vector<ObjectAdapter>();
+            final List<ObjectAdapter> matchingInstances = Lists.newArrayList();
 
             addSpecQueryInstances(specification, connector, query, matchingInstances);
-            final ObjectAdapter[] instanceArray = new ObjectAdapter[matchingInstances.size()];
-            matchingInstances.copyInto(instanceArray);
-            return instanceArray;
+            return matchingInstances;
 
         } finally {
             connectionPool.release(connector);
@@ -351,7 +351,7 @@ public final class SqlObjectStore implements ObjectStore {
     }
 
     private void addSpecQueryInstances(final ObjectSpecification specification, final DatabaseConnector connector,
-        final PersistenceQueryFindByPattern query, final Vector<ObjectAdapter> matchingInstances) {
+        final PersistenceQueryFindByPattern query, final List<ObjectAdapter> matchingInstances) {
 
         if (specification.isAbstract() == false) {
             final ObjectMapping mapper = objectMappingLookup.getMapping(specification, connector);
@@ -367,29 +367,27 @@ public final class SqlObjectStore implements ObjectStore {
         }
     }
 
-    private ObjectAdapter[] getAllInstances(final PersistenceQueryFindAllInstances criteria) {
+    private List<ObjectAdapter> getAllInstances(final PersistenceQueryFindAllInstances criteria) {
         final ObjectSpecification spec = criteria.getSpecification();
         return allInstances(spec);
     }
 
-    private ObjectAdapter[] allInstances(final ObjectSpecification spec) {
+    private List<ObjectAdapter> allInstances(final ObjectSpecification spec) {
         final DatabaseConnector connector = connectionPool.acquire();
-        final Vector<ObjectAdapter> matchingInstances = new Vector<ObjectAdapter>();
+        final List<ObjectAdapter> matchingInstances = Lists.newArrayList();
 
         addSpecInstances(spec, connector, matchingInstances);
 
         connectionPool.release(connector);
-        final ObjectAdapter[] instanceArray = new ObjectAdapter[matchingInstances.size()];
-        matchingInstances.copyInto(instanceArray);
-        return instanceArray;
+        return matchingInstances;
     }
 
     private void addSpecInstances(final ObjectSpecification spec, final DatabaseConnector connector,
-        final Vector<ObjectAdapter> matchingInstances) {
+        final List<ObjectAdapter> matchingInstances) {
 
-        if (spec.isAbstract() == false) {
+        if (!spec.isAbstract()) {
             final ObjectMapping mapper = objectMappingLookup.getMapping(spec, connector);
-            final Vector<ObjectAdapter> instances = mapper.getInstances(connector, spec);
+            final List<ObjectAdapter> instances = mapper.getInstances(connector, spec);
             matchingInstances.addAll(instances);
         }
 
@@ -402,7 +400,7 @@ public final class SqlObjectStore implements ObjectStore {
 
     }
 
-    private ObjectAdapter[] findByTitle(final PersistenceQueryFindByTitle criteria) {
+    private List<ObjectAdapter> findByTitle(final PersistenceQueryFindByTitle criteria) {
         final ObjectSpecification spec = criteria.getSpecification();
         final DatabaseConnector connector = connectionPool.acquire();
         final ObjectMapping mapper = objectMappingLookup.getMapping(spec, connector);
@@ -410,7 +408,7 @@ public final class SqlObjectStore implements ObjectStore {
         final Vector<ObjectAdapter> instances = mapper.getInstances(connector, spec, criteria.getTitle());
         connectionPool.release(connector);
 
-        return (ObjectAdapter[]) instances.toArray();
+        return instances;
     }
 
 

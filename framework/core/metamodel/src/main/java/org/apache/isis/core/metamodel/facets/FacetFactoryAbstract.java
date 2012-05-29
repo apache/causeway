@@ -43,7 +43,7 @@ public abstract class FacetFactoryAbstract implements FacetFactory, Specificatio
     }
 
     @Override
-    public void process(final ProcessClassContext processClassContaxt) {
+    public void process(final ProcessClassContext processClassContext) {
     }
 
     @Override

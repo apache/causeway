@@ -37,13 +37,13 @@ public final class InMemoryDestroyObjectCommand extends AbstractInMemoryPersiste
     @Override
     public void execute(final PersistenceCommandContext context) throws ObjectPersistenceException {
         if (LOG.isInfoEnabled()) {
-            LOG.info("  delete object '" + onObject() + "'");
+            LOG.info("  delete object '" + onAdapter() + "'");
         }
-        destroy(onObject());
+        destroy(onAdapter());
     }
 
     @Override
     public String toString() {
-        return "DestroyObjectCommand [object=" + onObject() + "]";
+        return "DestroyObjectCommand [object=" + onAdapter() + "]";
     }
 }

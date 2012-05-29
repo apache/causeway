@@ -23,17 +23,15 @@
 			<item name="Metamodel" href="index.html"/>
 		</breadcrumbs>
 
-		<menu name="Wicket Metamodel">
+		<menu name="JPA Metamodel">
 			<item name="About" href="index.html" />
             <item name="Jottings" href="jottings.html" />
 		</menu>
 
-        <menu name="Wicket Modules">
-            <item name="Applib" href="../wicket-applib/index.html" />
-            <item name="Metamodel" href="../wicket-metamodel/index.html" />
-            <item name="Model" href="../wicket-model/index.html" />
-            <item name="UI Components" href="../wicket-ui/index.html" />
-            <item name="Viewer" href="../wicket-viewer/index.html" />
+        <menu name="JPA Modules">
+            <item name="Applib" href="../jpa-applib/index.html" />
+            <item name="Metamodel" href="../jpa-metamodel/index.html" />
+            <item name="OpenJPA" href="../jpa-openjpa/index.html" />
         </menu>
 
 		<menu name="Maven Reports" ref="reports" />

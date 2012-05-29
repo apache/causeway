@@ -44,7 +44,7 @@ public abstract class MaxLengthFacetAbstract extends SingleIntValueFacetAbstract
      */
     @Override
     public boolean exceeds(final ObjectAdapter adapter) {
-        final String str = ObjectAdapterUtils.unwrapString(adapter);
+        final String str = ObjectAdapterUtils.unwrapObjectAsString(adapter);
         if (str == null) {
             return false;
         }

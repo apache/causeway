@@ -20,7 +20,6 @@
 package org.apache.isis.core.metamodel.spec;
 
 import java.util.AbstractList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.List;
@@ -38,9 +37,9 @@ public class FreeStandingList extends AbstractList<ObjectAdapter> {
     private final List<ObjectAdapter> instances;
     private final ObjectSpecification instanceSpecification;
 
-    public FreeStandingList(final ObjectSpecification instanceSpecification, final ObjectAdapter[] instances) {
+    public FreeStandingList(final ObjectSpecification instanceSpecification, final List<ObjectAdapter> instances) {
         this.instanceSpecification = instanceSpecification;
-        this.instances = Collections.unmodifiableList(Arrays.asList(instances));
+        this.instances = Collections.unmodifiableList(instances);
     }
 
     /**

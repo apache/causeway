@@ -24,6 +24,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 import org.apache.isis.core.commons.debug.DebugBuilder;
@@ -124,11 +125,11 @@ public class NoSqlObjectStore implements ObjectStore {
     }
 
     @Override
-    public ObjectAdapter[] getInstances(final PersistenceQuery persistenceQuery) {
+    public List<ObjectAdapter> getInstances(final PersistenceQuery persistenceQuery) {
         final ObjectSpecification specification = persistenceQuery.getSpecification();
-        final List<ObjectAdapter> instances = new ArrayList<ObjectAdapter>();
+        final List<ObjectAdapter> instances = Lists.newArrayList();
         appendInstances(persistenceQuery, specification, instances);
-        return instances.toArray(new ObjectAdapter[instances.size()]);
+        return instances;
     }
 
     private void appendInstances(final PersistenceQuery persistenceQuery, final ObjectSpecification specification, final List<ObjectAdapter> instances) {

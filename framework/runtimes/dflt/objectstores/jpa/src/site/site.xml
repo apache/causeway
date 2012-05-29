@@ -21,30 +21,19 @@
 
 	<body>
 		<breadcrumbs>
-			<item name="Wicket" href="index.html"/>
+			<item name="JPA" href="index.html"/>
 		</breadcrumbs>
 
-		<menu name="Wicket Viewer">
+		<menu name="JPA ObjectStore">
 			<item name="About" href="index.html" />
             <item name="Jottings" href="jottings.html" />
 		</menu>
 
-        <menu name="Viewer Modules">
-            <item name="HTML" href="../html/index.html" />
-            <item name="JSON" href="../json/index.html" />
-            <item name="JUnit Support" href="../junit/index.html" />
-            <item name="BDD Integration" href="../bdd/index.html" />
-            <item name="Scimpi" href="../scimpi/index.html" />
-            <item name="Wicket" href="../wicket/index.html" />
-            <item name="DnD" href="../dnd/index.html" />
-        </menu>
 
-        <menu name="Wicket Modules">
-            <item name="Applib" href="./wicket-applib/index.html" />
-            <item name="Metamodel" href="./wicket-metamodel/index.html" />
-            <item name="Model" href="./wicket-model/index.html" />
-            <item name="UI" href="./wicket-ui/index.html" />
-            <item name="Viewer" href="./wicket-viewer/index.html" />
+        <menu name="JPA Modules">
+            <item name="Applib" href="./jpa-applib/index.html" />
+            <item name="Metamodel" href="./jpa-metamodel/index.html" />
+            <item name="OpenJPA" href="./jpa-viewer/index.html" />
         </menu>
         
 		<menu name="Documentation">

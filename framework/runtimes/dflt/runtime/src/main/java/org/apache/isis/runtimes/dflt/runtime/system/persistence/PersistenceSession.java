@@ -463,7 +463,7 @@ public class PersistenceSession implements PersistenceSessionContainer, Persiste
 
     @Override
     public ObjectAdapter findInstances(final PersistenceQuery persistenceQuery) {
-        final ObjectAdapter[] instances = getInstances(persistenceQuery);
+        final List<ObjectAdapter> instances = getInstances(persistenceQuery);
         final ObjectSpecification specification = persistenceQuery.getSpecification();
         final FreeStandingList results = new FreeStandingList(specification, instances);
         return getAdapterManager().adapterFor(results);
@@ -474,7 +474,9 @@ public class PersistenceSession implements PersistenceSessionContainer, Persiste
      * {@link PersistenceQuery NOF-internal representation}.
      */
     protected final PersistenceQuery createPersistenceQueryFor(final Query<?> query, final QueryCardinality cardinality) {
-        LOG.debug("createPersistenceQueryFor: " + query.getDescription());
+        if(LOG.isDebugEnabled()) {
+            LOG.debug("createPersistenceQueryFor: " + query.getDescription());
+        }
         final ObjectSpecification noSpec = specFor(query);
         if (query instanceof QueryFindAllInstances) {
             return new PersistenceQueryFindAllInstances(noSpec);
@@ -519,7 +521,7 @@ public class PersistenceSession implements PersistenceSessionContainer, Persiste
         return argumentsAdaptersByParameterName;
     }
 
-    protected ObjectAdapter[] getInstances(final PersistenceQuery persistenceQuery) {
+    protected List<ObjectAdapter> getInstances(final PersistenceQuery persistenceQuery) {
         if (LOG.isDebugEnabled()) {
             LOG.debug("getInstances matching " + persistenceQuery);
         }
@@ -1202,10 +1204,10 @@ public class PersistenceSession implements PersistenceSessionContainer, Persiste
     // ///////////////////////////////////////////////////////////////////////////
 
 
-    private ObjectAdapter[] getInstancesFromPersistenceLayer(final PersistenceQuery persistenceQuery) {
-        return getTransactionManager().executeWithinTransaction(new TransactionalClosureWithReturnAbstract<ObjectAdapter[]>() {
+    private List<ObjectAdapter> getInstancesFromPersistenceLayer(final PersistenceQuery persistenceQuery) {
+        return getTransactionManager().executeWithinTransaction(new TransactionalClosureWithReturnAbstract<List<ObjectAdapter>>() {
             @Override
-            public ObjectAdapter[] execute() {
+            public List<ObjectAdapter> execute() {
                 return objectStore.getInstances(persistenceQuery);
             }
 

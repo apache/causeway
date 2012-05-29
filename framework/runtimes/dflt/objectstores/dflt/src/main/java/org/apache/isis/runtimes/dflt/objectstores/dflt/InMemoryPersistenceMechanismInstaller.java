@@ -21,7 +21,7 @@ package org.apache.isis.runtimes.dflt.objectstores.dflt;
 
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterFactory;
-import org.apache.isis.runtimes.dflt.runtime.installerregistry.installerapi.ObjectStorePersistenceMechanismInstallerAbstract;
+import org.apache.isis.runtimes.dflt.runtime.installerregistry.installerapi.PersistenceMechanismInstallerAbstract;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.ObjectStore;
 import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
@@ -30,7 +30,7 @@ import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessi
 /**
  * Installs the in-memory object store.
  */
-public class InMemoryPersistenceMechanismInstaller extends ObjectStorePersistenceMechanismInstallerAbstract {
+public class InMemoryPersistenceMechanismInstaller extends PersistenceMechanismInstallerAbstract {
 
     public static final String NAME = "in-memory";
 

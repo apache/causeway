@@ -30,7 +30,7 @@ public final class ObjectAdapterUtils {
         return adapter.getObject();
     }
 
-    public static String unwrapString(final ObjectAdapter adapter) {
+    public static String unwrapObjectAsString(final ObjectAdapter adapter) {
         final Object obj = unwrapObject(adapter);
         if (obj == null) {
             return null;

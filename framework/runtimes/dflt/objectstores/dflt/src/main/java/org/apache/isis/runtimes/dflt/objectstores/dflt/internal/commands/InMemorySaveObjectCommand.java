@@ -38,11 +38,11 @@ public final class InMemorySaveObjectCommand extends AbstractInMemoryPersistence
 
     @Override
     public void execute(final PersistenceCommandContext context) throws ObjectPersistenceException {
-        save(onObject());
+        save(onAdapter());
     }
 
     @Override
     public String toString() {
-        return "SaveObjectCommand [object=" + onObject() + "]";
+        return "SaveObjectCommand [object=" + onAdapter() + "]";
     }
 }

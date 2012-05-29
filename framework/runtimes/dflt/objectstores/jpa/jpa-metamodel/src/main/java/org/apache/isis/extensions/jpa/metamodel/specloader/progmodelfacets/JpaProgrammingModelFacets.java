@@ -48,6 +48,8 @@ public class JpaProgrammingModelFacets extends ProgrammingModelFacetsJava5 {
         addFactory(JpaEntityAnnotationFacetFactory.class);
         addFactory(JpaDiscriminatorValueAnnotationFacetFactory.class);
         addFactory(JpaIdAnnotationFacetFactory.class);
+        
+        
         addFactory(JpaElementCollectionAnnotationFacetFactory.class);
         addFactory(JpaEmbeddableAnnotationFacetFactory.class);
         addFactory(JpaNamedQueryAnnotationFacetFactory.class);

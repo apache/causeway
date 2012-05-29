@@ -22,6 +22,8 @@ package org.apache.isis.runtimes.dflt.objectstores.xml;
 import java.text.MessageFormat;
 import java.util.List;
 
+import com.google.common.collect.Lists;
+
 import org.apache.log4j.Logger;
 
 import org.apache.isis.core.commons.config.ConfigurationConstants;
@@ -350,7 +352,7 @@ public class XmlObjectStore implements ObjectStore {
     // /////////////////////////////////////////////////////////
 
     @Override
-    public ObjectAdapter[] getInstances(final PersistenceQuery persistenceQuery) {
+    public List<ObjectAdapter> getInstances(final PersistenceQuery persistenceQuery) {
 
         if (!(persistenceQuery instanceof PersistenceQueryBuiltIn)) {
             throw new IllegalArgumentException(MessageFormat.format("Provided PersistenceQuery not supported; was {0}; " + "the XML object store only supports {1}", persistenceQuery.getClass().getName(), PersistenceQueryBuiltIn.class.getName()));
@@ -361,34 +363,33 @@ public class XmlObjectStore implements ObjectStore {
         LOG.debug("getInstances of " + objSpec + " where " + builtIn);
         final RootOid oid = RootOidDefault.create(objSpec.getSpecId(), "dummy");
         final ObjectData patternData = new ObjectData(oid, null);
-        final ObjectAdapter[] instances = getInstances(patternData, builtIn);
-        return instances;
+        return getInstances(patternData, builtIn);
     }
 
-    private ObjectAdapter[] getInstances(final ObjectData patternData, final PersistenceQueryBuiltIn persistenceQuery) {
+    private List<ObjectAdapter> getInstances(final ObjectData patternData, final PersistenceQueryBuiltIn persistenceQuery) {
         final ObjectDataVector data = dataManager.getInstances(patternData);
-        final ObjectAdapter[] instances = new ObjectAdapter[data.size()];
-        int count = 0;
-
+        final List<ObjectAdapter> instances = Lists.newArrayList();
+        
         for (int i = 0; i < data.size(); i++) {
             final ObjectData instanceData = data.element(i);
-            LOG.debug("instance data " + instanceData);
+            if(LOG.isDebugEnabled()) {
+                LOG.debug("instance data " + instanceData);
+            }
 
             final RootOid oid = instanceData.getRootOid();
 
             final ObjectSpecification spec = specFor(instanceData);
-            final ObjectAdapter instance = getPersistenceSession().recreateAdapter(spec, oid);
-            LOG.debug("recreated instance " + instance);
-            initObject(instance, instanceData);
+            final ObjectAdapter adapter = getPersistenceSession().recreateAdapter(spec, oid);
+            if(LOG.isDebugEnabled()) {
+                LOG.debug("recreated instance " + adapter);
+            }
+            initObject(adapter, instanceData);
 
-            if (persistenceQuery == null || persistenceQuery.matches(instance)) {
-                instances[count++] = instance;
+            if (persistenceQuery == null || persistenceQuery.matches(adapter)) {
+                instances.add(adapter);
             }
         }
-
-        final ObjectAdapter[] array = new ObjectAdapter[count];
-        System.arraycopy(instances, 0, array, 0, count);
-        return array;
+        return instances;
     }
 
     private ObjectSpecification specFor(final Data data) {

@@ -45,5 +45,4 @@ public class JpaIdAnnotationFacetFactory extends
         FacetUtil.addFacet(new OptionalFacetDerivedFromJpaIdAnnotation(holder));
         FacetUtil.addFacet(new DisabledFacetDerivedFromJpaIdAnnotation(holder));
     }
-
 }

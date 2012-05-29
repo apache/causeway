@@ -27,13 +27,13 @@ import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.ObjectType;
 import org.apache.isis.applib.annotation.QueryOnly;
 
-@Named("ApplibValues")
-@ObjectType("ApplibValues")
+@Named("ApplibValuedEntities")
+@ObjectType("ApplibValuedEntities")
 public class ApplibValuedEntityRepository extends AbstractFactoryAndRepository {
 
     @Override
     public String getId() {
-        return "applibValuedEntities";
+        return "ApplibValuedEntities";
     }
 
     @QueryOnly

@@ -51,7 +51,7 @@ final class NoSqlDestroyObjectCommand implements DestroyObjectCommand {
     }
 
     @Override
-    public ObjectAdapter onObject() {
+    public ObjectAdapter onAdapter() {
         return adapter;
     }
 

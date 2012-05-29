@@ -30,8 +30,6 @@ import org.apache.isis.core.metamodel.interactions.DisablingInteractionAdvisor;
  * In the standard Apache Isis Programming Model, typically corresponds to
  * applying the <tt>@NotPersistable</tt> annotation at the class level.
  */
-public interface NotPersistableFacet extends SingleValueFacet, DisablingInteractionAdvisor {
-
-    public InitiatedBy value();
+public interface NotPersistableFacet extends SingleValueFacet<InitiatedBy>, DisablingInteractionAdvisor {
 
 }

@@ -23,22 +23,14 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.SingleValueFacetAbstract;
 
-public abstract class NotPersistableFacetAbstract extends SingleValueFacetAbstract implements NotPersistableFacet {
+public abstract class NotPersistableFacetAbstract extends SingleValueFacetAbstract<InitiatedBy> implements NotPersistableFacet {
 
     public static Class<? extends Facet> type() {
         return NotPersistableFacet.class;
     }
 
-    private final InitiatedBy value;
-
     public NotPersistableFacetAbstract(final InitiatedBy value, final FacetHolder holder) {
-        super(type(), holder);
-        this.value = value;
-    }
-
-    @Override
-    public InitiatedBy value() {
-        return value;
+        super(type(), value, holder);
     }
 
 }

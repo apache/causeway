@@ -39,12 +39,12 @@ import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceQuery
  * <p>
  * Useful for quickly writing decorating implementations.
  */
-public class IsisStoreDelegating implements ObjectStore {
+public class IsisObjectStoreDelegating implements ObjectStore {
 
     private final ObjectStore underlying;
     private final String name;
 
-    public IsisStoreDelegating(final ObjectStore underlying, final String name) {
+    public IsisObjectStoreDelegating(final ObjectStore underlying, final String name) {
         this.underlying = underlying;
         this.name = name;
     }
@@ -153,7 +153,7 @@ public class IsisStoreDelegating implements ObjectStore {
     // ////////////////////////////////////////////////
 
     @Override
-    public ObjectAdapter[] getInstances(final PersistenceQuery persistenceQuery) {
+    public List<ObjectAdapter> getInstances(final PersistenceQuery persistenceQuery) {
         return underlying.getInstances(persistenceQuery);
     }
 

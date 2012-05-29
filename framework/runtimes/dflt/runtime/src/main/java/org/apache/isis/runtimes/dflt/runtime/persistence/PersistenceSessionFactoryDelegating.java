@@ -36,7 +36,7 @@ import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessi
  * Implementation that just delegates to a supplied
  * {@link PersistenceSessionFactory}.
  */
-public abstract class PersistenceSessionFactoryDelegating implements PersistenceSessionFactory, FixturesInstalledFlag {
+public class PersistenceSessionFactoryDelegating implements PersistenceSessionFactory, FixturesInstalledFlag {
 
     private final DeploymentType deploymentType;
     private final PersistenceSessionFactoryDelegate persistenceSessionFactoryDelegate;

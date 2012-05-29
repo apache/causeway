@@ -35,7 +35,7 @@ import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.runtimes.dflt.objectstores.sql.SqlObjectStore;
-import org.apache.isis.runtimes.dflt.runtime.installerregistry.installerapi.ObjectStorePersistenceMechanismInstallerAbstract;
+import org.apache.isis.runtimes.dflt.runtime.installerregistry.installerapi.PersistenceMechanismInstallerAbstract;
 import org.apache.isis.runtimes.dflt.testsupport.IsisSystemWithFixtures;
 import org.apache.isis.runtimes.dflt.testsupport.IsisSystemWithFixtures.Fixtures.Initialization;
 import org.apache.isis.tck.dom.poly.ReferencingPolyTypesEntity;
@@ -109,7 +109,7 @@ public class SqlIntegrationTestFixtures {
             system.tearDownSystem();
         }
         
-        final ObjectStorePersistenceMechanismInstallerAbstract persistorInstaller = Utils.createPersistorInstaller(configuration);
+        final PersistenceMechanismInstallerAbstract persistorInstaller = Utils.createPersistorInstaller(configuration);
         system = IsisSystemWithFixtures.builder().with(configuration).withServices(sqlDomainObjectRepository).with(Initialization.NO_INIT).with(persistorInstaller).build();
         
         system.setUpSystem();

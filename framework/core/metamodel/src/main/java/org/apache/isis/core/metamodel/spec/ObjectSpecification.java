@@ -306,9 +306,6 @@ public interface ObjectSpecification extends Specification, ObjectActionContaine
     // Creation
     // //////////////////////////////////////////////////////////////
 
-    /**
-     * Create and optionally {@link CreationMode#INITIALIZE initialize} object.
-     */
     Object createObject();
 
     /**

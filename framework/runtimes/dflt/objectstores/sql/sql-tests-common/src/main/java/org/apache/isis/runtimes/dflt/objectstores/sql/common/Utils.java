@@ -6,11 +6,11 @@ import org.apache.isis.runtimes.dflt.objectstores.sql.Sql;
 import org.apache.isis.runtimes.dflt.objectstores.sql.SqlObjectStore;
 import org.apache.isis.runtimes.dflt.objectstores.sql.SqlPersistorInstaller;
 import org.apache.isis.runtimes.dflt.objectstores.xml.XmlPersistenceMechanismInstaller;
-import org.apache.isis.runtimes.dflt.runtime.installerregistry.installerapi.ObjectStorePersistenceMechanismInstallerAbstract;
+import org.apache.isis.runtimes.dflt.runtime.installerregistry.installerapi.PersistenceMechanismInstallerAbstract;
 
 public class Utils {
 
-    static ObjectStorePersistenceMechanismInstallerAbstract createPersistorInstaller(final IsisConfiguration configuration) {
+    static PersistenceMechanismInstallerAbstract createPersistorInstaller(final IsisConfiguration configuration) {
         
         final String jdbcDriver = configuration.getString(SqlObjectStore.BASE_NAME + ".jdbc.driver");
         if (jdbcDriver != null) {

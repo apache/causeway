@@ -35,16 +35,13 @@ import org.apache.isis.runtimes.dflt.objectstores.nosql.encryption.DataEncryptio
 import org.apache.isis.runtimes.dflt.objectstores.nosql.encryption.none.DataEncryptionNone;
 import org.apache.isis.runtimes.dflt.objectstores.nosql.versions.VersionCreator;
 import org.apache.isis.runtimes.dflt.objectstores.nosql.versions.VersionCreatorDefault;
-import org.apache.isis.runtimes.dflt.runtime.installerregistry.installerapi.ObjectStorePersistenceMechanismInstallerAbstract;
-import org.apache.isis.runtimes.dflt.runtime.persistence.PersistenceSessionFactoryDelegating;
+import org.apache.isis.runtimes.dflt.runtime.installerregistry.installerapi.PersistenceMechanismInstallerAbstract;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.ObjectStore;
-import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.IdentifierGenerator;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.OidGenerator;
-import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessionFactory;
 
-public abstract class NoSqlPersistorMechanismInstaller extends ObjectStorePersistenceMechanismInstallerAbstract {
+public abstract class NoSqlPersistorMechanismInstaller extends PersistenceMechanismInstallerAbstract {
 
     private static final Logger LOG = Logger.getLogger(NoSqlPersistorMechanismInstaller.class);
 
@@ -64,12 +61,6 @@ public abstract class NoSqlPersistorMechanismInstaller extends ObjectStorePersis
     @Override
     protected IdentifierGenerator createIdentifierGenerator(final IsisConfiguration configuration) {
         return getObjectStore(configuration).getIdentifierGenerator();
-    }
-
-    @Override
-    public PersistenceSessionFactory createPersistenceSessionFactory(final DeploymentType deploymentType) {
-        return new PersistenceSessionFactoryDelegating(deploymentType, this) {
-        };
     }
 
     private NoSqlObjectStore getObjectStore(final IsisConfiguration configuration) {
@@ -115,10 +106,6 @@ public abstract class NoSqlPersistorMechanismInstaller extends ObjectStorePersis
     }
 
     protected abstract NoSqlDataDatabase createNoSqlDatabase(IsisConfiguration configuration);
-
-//    protected KeyCreatorDefault createKeyCreator() {
-//        return new KeyCreatorDefault();
-//    }
 
     private VersionCreator createVersionCreator() {
         return new VersionCreatorDefault();

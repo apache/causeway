@@ -23,12 +23,13 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.fail;
 
+import java.util.List;
+
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOidDefault;
 import org.apache.isis.core.metamodel.adapter.oid.TypedOid;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -83,8 +84,8 @@ public class InMemoryObjectStoreTest_retrieve {
 
     @Test
     public void getInstances_whenDoesNotExist() throws Exception {
-        final ObjectAdapter[] retrievedAdapters = getStore().getInstances(new PersistenceQueryFindByTitle(epvSpecification, epv2Adapter.titleString()));
-        assertEquals(0, retrievedAdapters.length);
+        final List<ObjectAdapter> retrievedAdapters = getStore().getInstances(new PersistenceQueryFindByTitle(epvSpecification, epv2Adapter.titleString()));
+        assertEquals(0, retrievedAdapters.size());
     }
 
     @Test
@@ -94,11 +95,11 @@ public class InMemoryObjectStoreTest_retrieve {
         iswf.bounceSystem();
 
         // when
-        final ObjectAdapter[] retrievedAdapters = getStore().getInstances(new PersistenceQueryFindByTitle(epvSpecification, epv2Adapter.titleString()));
+        final List<ObjectAdapter> retrievedAdapters = getStore().getInstances(new PersistenceQueryFindByTitle(epvSpecification, epv2Adapter.titleString()));
         
         // then
-        assertEquals(1, retrievedAdapters.length);
-        final ObjectAdapter retrievedAdapter = retrievedAdapters[0];
+        assertEquals(1, retrievedAdapters.size());
+        final ObjectAdapter retrievedAdapter = retrievedAdapters.get(0);
 
         assertNotSame(epv2Adapter, retrievedAdapter);
         assertEquals(((SimpleEntity)epv2Adapter.getObject()).getName(), ((SimpleEntity)retrievedAdapter.getObject()).getName());
@@ -112,11 +113,11 @@ public class InMemoryObjectStoreTest_retrieve {
         iswf.bounceSystem();
 
         // when
-        final ObjectAdapter[] retrievedAdapters = getStore().getInstances(new PersistenceQueryFindAllInstances(epvSpecification));
+        final List<ObjectAdapter> retrievedAdapters = getStore().getInstances(new PersistenceQueryFindAllInstances(epvSpecification));
         
         // then
-        assertEquals(1, retrievedAdapters.length);
-        final ObjectAdapter retrievedAdapter = retrievedAdapters[0];
+        assertEquals(1, retrievedAdapters.size());
+        final ObjectAdapter retrievedAdapter = retrievedAdapters.get(0);
 
         assertNotSame(epv2Adapter, retrievedAdapter);
         assertEquals(((SimpleEntity)epv2Adapter.getObject()).getName(), ((SimpleEntity)retrievedAdapter.getObject()).getName());

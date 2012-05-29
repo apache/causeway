@@ -24,6 +24,7 @@ import java.lang.reflect.Method;
 import org.apache.isis.core.commons.lang.NameUtils;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.EnumerationAbstract;
+import org.apache.isis.core.metamodel.facets.SingleValueFacet;
 import org.apache.isis.core.metamodel.spec.Target;
 
 /**
@@ -34,7 +35,7 @@ import org.apache.isis.core.metamodel.spec.Target;
  * In the standard Apache Isis Programming Model, corresponds to annotating the
  * action method using <tt>@Executed</tt>.
  */
-public interface ExecutedFacet extends Facet {
+public interface ExecutedFacet extends SingleValueFacet<ExecutedFacet.Where> {
 
     public static final class Where extends EnumerationAbstract {
 
@@ -60,8 +61,6 @@ public interface ExecutedFacet extends Facet {
         }
 
     }
-
-    public Where value();
 
     public Target getTarget();
 }

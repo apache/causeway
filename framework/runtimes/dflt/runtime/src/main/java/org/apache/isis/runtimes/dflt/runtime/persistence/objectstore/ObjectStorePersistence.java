@@ -164,7 +164,7 @@ public interface ObjectStorePersistence extends DebuggableWithTitle, SessionScop
     // getInstances, hasInstances
     // ///////////////////////////////////////////////////////
 
-    ObjectAdapter[] getInstances(PersistenceQuery persistenceQuery);
+    List<ObjectAdapter> getInstances(PersistenceQuery persistenceQuery);
 
     boolean hasInstances(ObjectSpecification specification);
 

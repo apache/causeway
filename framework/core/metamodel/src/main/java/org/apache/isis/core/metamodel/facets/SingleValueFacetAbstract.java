@@ -23,10 +23,18 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
-public abstract class SingleValueFacetAbstract extends FacetAbstract implements SingleValueFacet {
+public abstract class SingleValueFacetAbstract<T> extends FacetAbstract implements SingleValueFacet<T> {
 
-    public SingleValueFacetAbstract(final Class<? extends Facet> facetType, final FacetHolder holder) {
+    private T value;
+    
+    public SingleValueFacetAbstract(final Class<? extends Facet> facetType, final T value, final FacetHolder holder) {
         super(facetType, holder, false);
+        this.value = value;
     }
+    
+    public T value() {
+        return value;
+    }
+    
 
 }

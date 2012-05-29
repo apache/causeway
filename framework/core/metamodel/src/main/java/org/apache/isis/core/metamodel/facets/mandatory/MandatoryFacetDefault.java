@@ -51,7 +51,7 @@ public class MandatoryFacetDefault extends MandatoryFacetAbstract {
             return true;
         }
         // special case string handling.
-        final String str = ObjectAdapterUtils.unwrapString(adapter);
+        final String str = ObjectAdapterUtils.unwrapObjectAsString(adapter);
         return str != null && str.length() == 0;
     }
 

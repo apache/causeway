@@ -19,12 +19,13 @@
 package org.apache.isis.extensions.jpa.metamodel.specloader.validator;
 
 import java.text.MessageFormat;
+import java.util.Collection;
 
-import org.apache.isis.core.metamodel.facets.object.objecttype.ObjectSpecIdFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelInvalidException;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorAbstract;
+import org.apache.isis.extensions.jpa.metamodel.facets.object.discriminator.JpaDiscriminatorFacet;
 import org.apache.isis.extensions.jpa.metamodel.facets.object.embeddable.JpaEmbeddableFacet;
 import org.apache.isis.extensions.jpa.metamodel.facets.object.entity.JpaEntityFacet;
 import org.apache.isis.extensions.jpa.metamodel.util.JpaPropertyUtils;
@@ -41,8 +42,9 @@ public class JpaMetaModelValidator extends MetaModelValidatorAbstract {
     }
 
     private void ensureFoundAnnotatedEntities() {
-        for (final ObjectSpecification objSpec : getSpecificationLoader().allSpecifications()) {
-            if (objSpec.containsFacet(JpaEntityFacet.class)) {
+        final Collection<ObjectSpecification> objectSpecs = getSpecificationLoader().allSpecifications();
+        for (final ObjectSpecification objectSpec : objectSpecs) {
+            if (objectSpec.containsFacet(JpaEntityFacet.class)) {
                 return;
             }
         }
@@ -50,15 +52,15 @@ public class JpaMetaModelValidator extends MetaModelValidatorAbstract {
     }
 
     private void ensureAllSpecificationsValid() throws ClassNotFoundException {
-        for (final ObjectSpecification objSpec : getSpecificationLoader().allSpecifications()) {
+        final Collection<ObjectSpecification> objectSpecs = getSpecificationLoader().allSpecifications();
+        for (final ObjectSpecification objSpec : objectSpecs) {
             ensureNotAnnotatedAsBothEntityAndEmbeddable(objSpec);
             ensureEntityIfAnnotatedAsSuchHasOrInheritsAnIdProperty(objSpec);
-            ensureEntityIfAnnotatedAsSuchAndConcreteHasDiscriminatorValueFacet(objSpec);
+            ensureEntityIfAnnotatedAsSuchAndConcreteHasDiscriminatorFacet(objSpec);
         }
     }
 
     private void ensureNotAnnotatedAsBothEntityAndEmbeddable(final ObjectSpecification objSpec) {
-
         final JpaEntityFacet entityFacet = objSpec.getFacet(JpaEntityFacet.class);
         final JpaEmbeddableFacet embeddableFacet = objSpec.getFacet(JpaEmbeddableFacet.class);
         if (entityFacet == null || embeddableFacet == null) {
@@ -91,15 +93,15 @@ public class JpaMetaModelValidator extends MetaModelValidatorAbstract {
         }
     }
 
-    private void ensureEntityIfAnnotatedAsSuchAndConcreteHasDiscriminatorValueFacet(final ObjectSpecification objSpec) {
+    private void ensureEntityIfAnnotatedAsSuchAndConcreteHasDiscriminatorFacet(final ObjectSpecification objSpec) {
         if (!objSpec.containsFacet(JpaEntityFacet.class)) {
             return;
         }
-        if (objSpec.isAbstract() || objSpec.containsFacet(ObjectSpecIdFacet.class)) {
+        if (objSpec.isAbstract() || objSpec.containsFacet(JpaDiscriminatorFacet.class)) {
             return;
         }
         final String classFullName = objSpec.getFullIdentifier();
-        throw new MetaModelInvalidException(MessageFormat.format("JPA Objects requires that concrete class {0} mapped by @Entity " + "must also have an @DiscriminatorValue annotation", classFullName));
+        throw new MetaModelInvalidException(MessageFormat.format("OpenJpa object store requires that concrete class {0} mapped by @Entity " + "must also have an @DiscriminatorValue annotation", classFullName));
     }
 
 }

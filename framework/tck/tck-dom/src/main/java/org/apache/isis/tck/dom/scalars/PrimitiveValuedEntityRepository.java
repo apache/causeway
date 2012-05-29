@@ -27,13 +27,13 @@ import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.ObjectType;
 import org.apache.isis.applib.annotation.QueryOnly;
 
-@Named("PrimitiveValues")
-@ObjectType("PRMV")
+@Named("PrimitiveValuedEntities")
+@ObjectType("PrimitiveValuedEntities")
 public class PrimitiveValuedEntityRepository extends AbstractFactoryAndRepository {
 
     @Override
     public String getId() {
-        return "primitiveValuedEntities";
+        return "PrimitiveValuedEntities";
     }
 
     @QueryOnly

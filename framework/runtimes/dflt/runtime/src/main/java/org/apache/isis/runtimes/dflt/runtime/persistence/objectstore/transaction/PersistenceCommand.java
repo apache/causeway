@@ -24,5 +24,5 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 public interface PersistenceCommand {
     void execute(PersistenceCommandContext context);
 
-    ObjectAdapter onObject();
+    ObjectAdapter onAdapter();
 }

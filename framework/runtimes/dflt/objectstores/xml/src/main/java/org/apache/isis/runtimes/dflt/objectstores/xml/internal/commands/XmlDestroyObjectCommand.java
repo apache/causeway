@@ -38,15 +38,15 @@ public final class XmlDestroyObjectCommand extends AbstractXmlPersistenceCommand
     @Override
     public void execute(final PersistenceCommandContext context) throws ObjectPersistenceException {
         if (LOG.isDebugEnabled()) {
-            LOG.debug("  destroy object " + onObject());
+            LOG.debug("  destroy object " + onAdapter());
         }
-        final RootOidDefault oid = (RootOidDefault) onObject().getOid();
+        final RootOidDefault oid = (RootOidDefault) onAdapter().getOid();
         getDataManager().remove(oid);
-        onObject().setVersion(null);
+        onAdapter().setVersion(null);
     }
 
     @Override
     public String toString() {
-        return "DestroyObjectCommand [object=" + onObject() + "]";
+        return "DestroyObjectCommand [object=" + onAdapter() + "]";
     }
 }

@@ -24,30 +24,22 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.SingleValueFacetAbstract;
 import org.apache.isis.core.metamodel.spec.Target;
 
-public abstract class ExecutedFacetAbstract extends SingleValueFacetAbstract implements ExecutedFacet {
+public abstract class ExecutedFacetAbstract extends SingleValueFacetAbstract<ExecutedFacet.Where> implements ExecutedFacet {
 
     public static Class<? extends Facet> type() {
         return ExecutedFacet.class;
     }
 
-    private final Where value;
-
     public ExecutedFacetAbstract(final Where value, final FacetHolder holder) {
-        super(type(), holder);
-        this.value = value;
-    }
-
-    @Override
-    public Where value() {
-        return value;
+        super(type(), value, holder);
     }
 
     @Override
     public Target getTarget() {
-        if (value == Where.LOCALLY) {
+        if (value() == Where.LOCALLY) {
             return Target.LOCAL;
         }
-        if (value == Where.REMOTELY) {
+        if (value() == Where.REMOTELY) {
             return Target.REMOTE;
         }
         return Target.DEFAULT;
@@ -55,6 +47,6 @@ public abstract class ExecutedFacetAbstract extends SingleValueFacetAbstract imp
 
     @Override
     protected String toStringValues() {
-        return "where=" + value.getFriendlyName();
+        return "where=" + value().getFriendlyName();
     }
 }

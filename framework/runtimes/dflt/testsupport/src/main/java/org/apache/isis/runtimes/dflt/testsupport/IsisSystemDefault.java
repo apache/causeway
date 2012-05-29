@@ -1,6 +1,7 @@
 package org.apache.isis.runtimes.dflt.testsupport;
 
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -105,18 +106,76 @@ public class IsisSystemDefault extends IsisSystemAbstract {
 
 
     /**
-     * Java5, with cglib, and only the transaction facet decorators.
+     * Optional hook method, to create the reflector with defaults (Java5, with cglib, and only the transaction facet decorators)
+     * 
+     * <p>
+     * Each of the subcomponents can be overridden if required.
+     * 
+     * @see #obtainReflectorClassSubstitutor()
+     * @see #obtainReflectorCollectionTypeRegistry()
+     * @see #obtainReflectorFacetDecoratorSet()
+     * @see #obtainReflectorMetaModelValidator()
+     * @see #obtainReflectorProgrammingModel()
+     * @see #obtainReflectorSpecificationTraverser()
      */
     @Override
     protected ObjectReflector obtainReflector(DeploymentType deploymentType) throws IsisSystemException {
-        ClassSubstitutor classSubstitutor = new CglibClassSubstitutor();
-        CollectionTypeRegistry collectionTypeRegistry = new CollectionTypeRegistryDefault();
-        SpecificationTraverser specificationTraverser = new SpecificationTraverserDefault();
+        ClassSubstitutor classSubstitutor = obtainReflectorClassSubstitutor();
+        CollectionTypeRegistry collectionTypeRegistry = obtainReflectorCollectionTypeRegistry();
+        SpecificationTraverser specificationTraverser = obtainReflectorSpecificationTraverser();
         MemberLayoutArranger memberLayoutArranger = new MemberLayoutArrangerDefault();
-        ProgrammingModel programmingModel = new ProgrammingModelFacetsJava5();
-        Set<FacetDecorator> facetDecorators = Sets.newHashSet((FacetDecorator)new StandardTransactionFacetDecorator(getConfiguration()));
-        MetaModelValidator metaModelValidator = new MetaModelValidatorDefault();
+        ProgrammingModel programmingModel = obtainReflectorProgrammingModel();
+        Set<FacetDecorator> facetDecorators = obtainReflectorFacetDecoratorSet();
+        MetaModelValidator metaModelValidator = obtainReflectorMetaModelValidator();
         return new ObjectReflectorDefault(getConfiguration(), classSubstitutor, collectionTypeRegistry, specificationTraverser, memberLayoutArranger, programmingModel, facetDecorators, metaModelValidator);
+    }
+
+    /**
+     * Optional hook method, called from {@link #obtainReflector(DeploymentType)}.
+     * @return
+     */
+    protected ClassSubstitutor obtainReflectorClassSubstitutor() {
+        return new CglibClassSubstitutor();
+    }
+
+    /**
+     * Optional hook method, called from {@link #obtainReflector(DeploymentType)}.
+     * @return
+     */
+    protected CollectionTypeRegistry obtainReflectorCollectionTypeRegistry() {
+        return new CollectionTypeRegistryDefault();
+    }
+
+    /**
+     * Optional hook method, called from {@link #obtainReflector(DeploymentType)}.
+     * @return
+     */
+    protected SpecificationTraverser obtainReflectorSpecificationTraverser() {
+        return new SpecificationTraverserDefault();
+    }
+
+    /**
+     * Optional hook method, called from {@link #obtainReflector(DeploymentType)}.
+     * @return
+     */
+    protected ProgrammingModel obtainReflectorProgrammingModel() {
+        return new ProgrammingModelFacetsJava5();
+    }
+
+    /**
+     * Optional hook method, called from {@link #obtainReflector(DeploymentType)}.
+     * @return
+     */
+    protected Set<FacetDecorator> obtainReflectorFacetDecoratorSet() {
+        return Sets.newHashSet((FacetDecorator)new StandardTransactionFacetDecorator(getConfiguration()));
+    }
+
+    /**
+     * Optional hook method, called from {@link #obtainReflector(DeploymentType)}.
+     * @return
+     */
+    protected MetaModelValidator obtainReflectorMetaModelValidator() {
+        return new MetaModelValidatorDefault();
     }
 
     /**

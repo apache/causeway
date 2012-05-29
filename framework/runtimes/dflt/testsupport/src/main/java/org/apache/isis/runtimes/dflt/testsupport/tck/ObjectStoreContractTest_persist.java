@@ -24,6 +24,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotSame;
 
 import java.util.Date;
+import java.util.List;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -103,11 +104,11 @@ public abstract class ObjectStoreContractTest_persist {
         iswf.bounceSystem();
         
         // when search for object
-        ObjectAdapter[] retrievedInstance = getStore().getInstances(new PersistenceQueryFindByTitle(epvSpecification, epv2Adapter.titleString()));
+        List<ObjectAdapter> retrievedInstance = getStore().getInstances(new PersistenceQueryFindByTitle(epvSpecification, epv2Adapter.titleString()));
         
         // then find
-        assertEquals(1, retrievedInstance.length);
-        final ObjectAdapter retrievedAdapter = retrievedInstance[0];
+        assertEquals(1, retrievedInstance.size());
+        final ObjectAdapter retrievedAdapter = retrievedInstance.get(0);
 
         assertNotSame(epv2Adapter, retrievedAdapter);
         assertEquals(((SimpleEntity)epv2Adapter.getObject()).getName(), ((SimpleEntity)retrievedAdapter.getObject()).getName());
@@ -117,7 +118,7 @@ public abstract class ObjectStoreContractTest_persist {
         retrievedInstance = getStore().getInstances(new PersistenceQueryFindByTitle(epvSpecification, "some other title"));
         
         // then don't find
-        assertEquals(0, retrievedInstance.length);
+        assertEquals(0, retrievedInstance.size());
     }
 
 
@@ -139,10 +140,10 @@ public abstract class ObjectStoreContractTest_persist {
         iswf.bounceSystem();
 
         // then found
-        ObjectAdapter[] retrievedInstance = getStore().getInstances(new PersistenceQueryFindByTitle(epvSpecification, adapter.titleString()));
-        assertEquals(1, retrievedInstance.length);
+        List<ObjectAdapter> retrievedInstance = getStore().getInstances(new PersistenceQueryFindByTitle(epvSpecification, adapter.titleString()));
+        assertEquals(1, retrievedInstance.size());
         
-        final ObjectAdapter retrievedAdapter = retrievedInstance[0];
+        final ObjectAdapter retrievedAdapter = retrievedInstance.get(0);
         assertNotSame(adapter, retrievedAdapter);
         assertEquals(((SimpleEntity)adapter.getObject()).getName(), ((SimpleEntity)retrievedAdapter.getObject()).getName());
         assertEquals(adapter.getOid(), retrievedAdapter.getOid());

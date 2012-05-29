@@ -24,6 +24,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 
+import com.google.common.collect.Lists;
+
 import org.apache.log4j.Logger;
 
 import org.apache.isis.core.commons.debug.DebugBuilder;
@@ -279,17 +281,17 @@ public class InMemoryObjectStore implements ObjectStore {
     // ///////////////////////////////////////////////////////
 
     @Override
-    public ObjectAdapter[] getInstances(final PersistenceQuery persistenceQuery) throws ObjectPersistenceException, UnsupportedFindException {
+    public List<ObjectAdapter> getInstances(final PersistenceQuery persistenceQuery) throws ObjectPersistenceException, UnsupportedFindException {
 
         if (!(persistenceQuery instanceof PersistenceQueryBuiltIn)) {
             throw new IllegalArgumentException(MessageFormat.format("Provided PersistenceQuery not supported; was {0}; " + "the in-memory object store only supports {1}", persistenceQuery.getClass().getName(), PersistenceQueryBuiltIn.class.getName()));
         }
         final PersistenceQueryBuiltIn builtIn = (PersistenceQueryBuiltIn) persistenceQuery;
 
-        final Vector<ObjectAdapter> instances = new Vector<ObjectAdapter>();
+        final List<ObjectAdapter> instances = Lists.newArrayList();
         final ObjectSpecification spec = persistenceQuery.getSpecification();
         findInstances(spec, builtIn, instances);
-        return toInstancesArray(instances);
+        return resolved(instances);
     }
 
     @Override
@@ -309,7 +311,7 @@ public class InMemoryObjectStore implements ObjectStore {
         return false;
     }
 
-    private void findInstances(final ObjectSpecification spec, final PersistenceQueryBuiltIn persistenceQuery, final Vector<ObjectAdapter> foundInstances) {
+    private void findInstances(final ObjectSpecification spec, final PersistenceQueryBuiltIn persistenceQuery, final List<ObjectAdapter> foundInstances) {
 
         instancesFor(spec).findInstancesAndAdd(persistenceQuery, foundInstances);
 
@@ -320,17 +322,14 @@ public class InMemoryObjectStore implements ObjectStore {
         }
     }
 
-    private ObjectAdapter[] toInstancesArray(final Vector<ObjectAdapter> instances) {
-        final ObjectAdapter[] ins = new ObjectAdapter[instances.size()];
-        for (int i = 0; i < ins.length; i++) {
-            final ObjectAdapter object = instances.elementAt(i);
-            if (object.getResolveState().canChangeTo(ResolveState.RESOLVING)) {
-                PersistorUtil.start(object, ResolveState.RESOLVING);
-                PersistorUtil.end(object);
+    private static List<ObjectAdapter> resolved(final List<ObjectAdapter> instances) {
+        for (ObjectAdapter adapter: instances) {
+            if (adapter.getResolveState().canChangeTo(ResolveState.RESOLVING)) {
+                PersistorUtil.start(adapter, ResolveState.RESOLVING);
+                PersistorUtil.end(adapter);
             }
-            ins[i] = object;
         }
-        return ins;
+        return instances;
     }
 
     // ///////////////////////////////////////////////////////

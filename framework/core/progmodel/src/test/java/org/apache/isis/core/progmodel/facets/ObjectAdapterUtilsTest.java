@@ -56,21 +56,21 @@ public class ObjectAdapterUtilsTest {
 
     @Test
     public void testUnwrapStringWhenNull() {
-        assertNull(ObjectAdapterUtils.unwrapString(null));
+        assertNull(ObjectAdapterUtils.unwrapObjectAsString(null));
     }
 
     @Test
     public void testUnwrapStringWhenNotNullButNotString() {
         underlyingDomainObject = new Object(); 
         expectAdapterWillReturn(underlyingDomainObject);
-        assertNull(ObjectAdapterUtils.unwrapString(mockObjectAdapter));
+        assertNull(ObjectAdapterUtils.unwrapObjectAsString(mockObjectAdapter));
     }
 
     @Test
     public void testUnwrapStringWhenNotNullAndString() {
         underlyingDomainObject = "huzzah";
         expectAdapterWillReturn(underlyingDomainObject);
-        assertEquals("huzzah", ObjectAdapterUtils.unwrapString(mockObjectAdapter));
+        assertEquals("huzzah", ObjectAdapterUtils.unwrapObjectAsString(mockObjectAdapter));
     }
 
     private void expectAdapterWillReturn(final Object domainObject) {

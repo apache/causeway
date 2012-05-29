@@ -21,7 +21,9 @@ package org.apache.isis.tck.dom.scalars;
 
 import org.apache.isis.applib.AbstractDomainObject;
 import org.apache.isis.applib.annotation.MemberOrder;
+import org.apache.isis.applib.annotation.ObjectType;
 
+@ObjectType("PRMV")
 public class PrimitiveValuedEntity extends AbstractDomainObject {
 
     // {{ Title

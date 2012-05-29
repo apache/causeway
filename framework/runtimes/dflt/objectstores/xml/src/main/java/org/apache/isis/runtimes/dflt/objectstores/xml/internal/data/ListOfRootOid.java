@@ -20,13 +20,11 @@
 package org.apache.isis.runtimes.dflt.objectstores.xml.internal.data;
 
 import java.util.List;
-import java.util.Vector;
 
 import com.google.common.collect.Lists;
 
 import org.apache.isis.core.commons.lang.ToString;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
-import org.apache.isis.core.metamodel.adapter.oid.RootOidDefault;
 
 public class ListOfRootOid {
     

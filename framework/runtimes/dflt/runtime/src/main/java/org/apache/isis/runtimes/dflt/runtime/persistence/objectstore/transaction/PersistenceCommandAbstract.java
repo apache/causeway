@@ -33,7 +33,7 @@ public abstract class PersistenceCommandAbstract implements PersistenceCommand {
     }
 
     @Override
-    public ObjectAdapter onObject() {
+    public ObjectAdapter onAdapter() {
         return adapter;
     }
 

@@ -37,7 +37,9 @@ import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
+import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequest;
 import org.apache.isis.runtimes.dflt.objectstores.dflt.InMemoryPersistenceMechanismInstaller;
@@ -175,6 +177,8 @@ public class IsisSystemWithFixtures implements org.junit.rules.TestRule {
     private final AuthenticationRequest authenticationRequest;
     private final List<Object> services;
     private List <Listener> listeners;
+    private final MetaModelValidator metaModelValidator;
+    private final ProgrammingModel programmingModel;
 
     
     ////////////////////////////////////////////////////////////
@@ -188,9 +192,12 @@ public class IsisSystemWithFixtures implements org.junit.rules.TestRule {
         private Initialization fixturesInitialization = Initialization.INIT;
         private IsisConfiguration configuration;
         private PersistenceMechanismInstaller persistenceMechanismInstaller = new InMemoryPersistenceMechanismInstaller();
+        private MetaModelValidator metaModelValidator;
+        private ProgrammingModel programmingModel;
 
         private final List <Listener> listeners = Lists.newArrayList();
         private Object[] services;
+
 
         public Builder with(IsisConfiguration configuration) {
             this.configuration = configuration;
@@ -219,7 +226,7 @@ public class IsisSystemWithFixtures implements org.junit.rules.TestRule {
         
         public IsisSystemWithFixtures build() {
             final List<Object> servicesIfAny = services != null? Arrays.asList(services): null;
-            return new IsisSystemWithFixtures(fixturesInitialization, configuration, persistenceMechanismInstaller, authenticationRequest, servicesIfAny, listeners);
+            return new IsisSystemWithFixtures(fixturesInitialization, configuration, programmingModel, metaModelValidator, persistenceMechanismInstaller, authenticationRequest, servicesIfAny, listeners);
         }
 
         public Builder with(Listener listener) {
@@ -228,15 +235,27 @@ public class IsisSystemWithFixtures implements org.junit.rules.TestRule {
             }
             return this;
         }
+
+        public Builder with(MetaModelValidator metaModelValidator) {
+            this.metaModelValidator = metaModelValidator;
+            return this;
+        }
+
+        public Builder with(ProgrammingModel programmingModel) {
+            this.programmingModel = programmingModel;
+            return this;
+        }
     }
 
     public static Builder builder() {
         return new Builder();
     }
 
-    private IsisSystemWithFixtures(Initialization fixturesInitialization, IsisConfiguration configuration, PersistenceMechanismInstaller persistenceMechanismInstaller, AuthenticationRequest authenticationRequest, List<Object> services, List<Listener> listeners) {
+    private IsisSystemWithFixtures(Initialization fixturesInitialization, IsisConfiguration configuration, ProgrammingModel programmingModel, MetaModelValidator metaModelValidator, PersistenceMechanismInstaller persistenceMechanismInstaller, AuthenticationRequest authenticationRequest, List<Object> services, List<Listener> listeners) {
         this.fixturesInitialization = fixturesInitialization;
         this.configuration = configuration;
+        this.programmingModel = programmingModel;
+        this.metaModelValidator = metaModelValidator;
         this.persistenceMechanismInstaller = persistenceMechanismInstaller;
         this.authenticationRequest = authenticationRequest;
         this.fixtures = new Fixtures();
@@ -307,6 +326,22 @@ public class IsisSystemWithFixtures implements org.junit.rules.TestRule {
                     return IsisSystemWithFixtures.this.configuration;
                 } else {
                     return super.getConfiguration();
+                }
+            }
+            @Override
+            protected ProgrammingModel obtainReflectorProgrammingModel() {
+                if(IsisSystemWithFixtures.this.programmingModel != null) {
+                    return IsisSystemWithFixtures.this.programmingModel;
+                } else {
+                    return super.obtainReflectorProgrammingModel();
+                }
+            }
+            @Override
+            protected MetaModelValidator obtainReflectorMetaModelValidator() {
+                if(IsisSystemWithFixtures.this.metaModelValidator != null) {
+                    return IsisSystemWithFixtures.this.metaModelValidator;
+                } else {
+                    return super.obtainReflectorMetaModelValidator();
                 }
             }
             @Override

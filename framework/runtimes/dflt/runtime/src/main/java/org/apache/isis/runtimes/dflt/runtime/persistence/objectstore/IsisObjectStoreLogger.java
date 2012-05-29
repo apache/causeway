@@ -91,7 +91,7 @@ public class IsisObjectStoreLogger extends Logger implements ObjectStore {
     }
 
     @Override
-    public ObjectAdapter[] getInstances(final PersistenceQuery criteria) throws ObjectPersistenceException, UnsupportedFindException {
+    public List<ObjectAdapter> getInstances(final PersistenceQuery criteria) throws ObjectPersistenceException, UnsupportedFindException {
         log("get instances matching " + criteria);
         return underlying.getInstances(criteria);
     }

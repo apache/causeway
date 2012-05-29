@@ -212,7 +212,7 @@ public class IsisTransaction implements TransactionScopedComponent {
             return;
         }
 
-        final ObjectAdapter onObject = command.onObject();
+        final ObjectAdapter onObject = command.onAdapter();
 
         // Saves are ignored when preceded by another save, or a delete
         if (command instanceof SaveObjectCommand) {
@@ -313,7 +313,7 @@ public class IsisTransaction implements TransactionScopedComponent {
 
             for (final PersistenceCommand command : commands) {
                 if (command instanceof DestroyObjectCommand) {
-                    final ObjectAdapter adapter = command.onObject();
+                    final ObjectAdapter adapter = command.onAdapter();
                     adapter.setVersion(null);
                     adapter.changeState(ResolveState.DESTROYED);
                 }
@@ -406,7 +406,7 @@ public class IsisTransaction implements TransactionScopedComponent {
 
     private PersistenceCommand getCommand(final Class<?> commandClass, final ObjectAdapter onObject) {
         for (final PersistenceCommand command : commands) {
-            if (command.onObject().equals(onObject)) {
+            if (command.onAdapter().equals(onObject)) {
                 if (commandClass.isAssignableFrom(command.getClass())) {
                     return command;
                 }

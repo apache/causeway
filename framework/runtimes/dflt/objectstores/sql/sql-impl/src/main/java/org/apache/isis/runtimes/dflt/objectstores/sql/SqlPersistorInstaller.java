@@ -24,15 +24,13 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapterFactory;
 import org.apache.isis.runtimes.dflt.objectstores.sql.auto.AutoMapperFactory;
 import org.apache.isis.runtimes.dflt.objectstores.sql.jdbc.JdbcConnectorFactory;
 import org.apache.isis.runtimes.dflt.objectstores.sql.jdbc.installer.JdbcFieldMappingFactoryInstaller;
-import org.apache.isis.runtimes.dflt.runtime.installerregistry.installerapi.ObjectStorePersistenceMechanismInstallerAbstract;
+import org.apache.isis.runtimes.dflt.runtime.installerregistry.installerapi.PersistenceMechanismInstallerAbstract;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.ObjectStore;
-import org.apache.isis.runtimes.dflt.runtime.system.DeploymentType;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.IdentifierGenerator;
-import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessionFactory;
 
-public class SqlPersistorInstaller extends ObjectStorePersistenceMechanismInstallerAbstract {
+public class SqlPersistorInstaller extends PersistenceMechanismInstallerAbstract {
 
     public static final String NAME = "sql";
     
@@ -81,13 +79,7 @@ public class SqlPersistorInstaller extends ObjectStorePersistenceMechanismInstal
         return new SqlIdentifierGenerator(connectionPool);
     }
 
-    @Override
-    public PersistenceSessionFactory createPersistenceSessionFactory(final DeploymentType deploymentType) {
-        return new SqlPersistenceSessionFactory(deploymentType, this);
-    }
-
     /*
-     * 
      * 
      * 
      * @Override protected AdapterManagerExtended createAdapterManager(final

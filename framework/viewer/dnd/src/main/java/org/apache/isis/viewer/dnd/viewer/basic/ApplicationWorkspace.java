@@ -24,6 +24,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.Vector;
 
+import com.google.common.collect.Lists;
+
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Allow;
@@ -358,15 +360,14 @@ public final class ApplicationWorkspace extends CompositeViewUsingBuilder implem
         options.add(new UserActionAbstract("Services...") {
             @Override
             public void execute(final Workspace workspace, final View view, final Location at) {
-                final List<Object> services = IsisContext.getServices();
-                final ObjectAdapter[] serviceObjects = new ObjectAdapter[services.size()];
-                int i = 0;
-                for (final Object object : services) {
+                final List<Object> servicePojos = IsisContext.getServices();
+                final List<ObjectAdapter> serviceAdapters = Lists.newArrayList();
+                for (final Object servicePojo : servicePojos) {
                     final AdapterManager adapterManager = IsisContext.getPersistenceSession().getAdapterManager();
-                    serviceObjects[i++] = adapterManager.adapterFor(object);
+                    serviceAdapters.add(adapterManager.adapterFor(servicePojo));
                 }
                 final ObjectSpecification spec = getSpecificationLoader().loadSpecification(Object.class);
-                final FreeStandingList collection = new FreeStandingList(spec, serviceObjects);
+                final FreeStandingList collection = new FreeStandingList(spec, serviceAdapters);
                 addWindowFor(getAdapterManager().adapterFor(collection), new Placement(at));
             }
         });

@@ -74,7 +74,7 @@ public class TransactionTest {
             }
 
             @Override
-            public ObjectAdapter onObject() {
+            public ObjectAdapter onAdapter() {
                 return object;
             }
 
@@ -93,7 +93,7 @@ public class TransactionTest {
             }
 
             @Override
-            public ObjectAdapter onObject() {
+            public ObjectAdapter onAdapter() {
                 return object;
             }
 
@@ -111,7 +111,7 @@ public class TransactionTest {
             }
 
             @Override
-            public ObjectAdapter onObject() {
+            public ObjectAdapter onAdapter() {
                 return object;
             }
 
@@ -130,7 +130,7 @@ public class TransactionTest {
             }
 
             @Override
-            public ObjectAdapter onObject() {
+            public ObjectAdapter onAdapter() {
                 return object;
             }
 

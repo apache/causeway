@@ -20,7 +20,6 @@
 package org.apache.isis.runtimes.dflt.objectstores.xml;
 
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 
 import org.jmock.auto.Mock;
 import org.junit.Before;

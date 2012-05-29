@@ -22,6 +22,7 @@ package org.apache.isis.extensions.jpa.metamodel.util;
 import javax.persistence.Id;
 
 import org.apache.isis.applib.filter.Filter;
+import org.apache.isis.core.metamodel.facets.accessor.PropertyOrCollectionAccessorFacet;
 import org.apache.isis.core.metamodel.facets.properties.modify.PropertySetterFacet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
@@ -43,6 +44,6 @@ final class JpaIdPropertyFilter implements Filter<ObjectAssociation> {
     public boolean accept(final ObjectAssociation noa) {
         return noa.isOneToOneAssociation() &&
                 noa.containsFacet(JpaIdFacet.class) &&
-                noa.containsFacet(PropertyAccessorFacetViaAccessor.class);
+                noa.containsFacet(PropertyOrCollectionAccessorFacet.class);
     }
 }

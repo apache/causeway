@@ -229,7 +229,7 @@ class WriteObjectCommand implements PersistenceCommand {
 
 
     @Override
-    public ObjectAdapter onObject() {
+    public ObjectAdapter onAdapter() {
         return adapter;
     }
 

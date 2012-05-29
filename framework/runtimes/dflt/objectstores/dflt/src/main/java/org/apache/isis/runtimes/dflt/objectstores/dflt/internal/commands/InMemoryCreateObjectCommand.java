@@ -37,13 +37,13 @@ public final class InMemoryCreateObjectCommand extends AbstractInMemoryPersisten
     @Override
     public void execute(final PersistenceCommandContext context) throws ObjectPersistenceException {
         if (LOG.isDebugEnabled()) {
-            LOG.debug("  create object " + onObject());
+            LOG.debug("  create object " + onAdapter());
         }
-        save(onObject());
+        save(onAdapter());
     }
 
     @Override
     public String toString() {
-        return "CreateObjectCommand [object=" + onObject() + "]";
+        return "CreateObjectCommand [object=" + onAdapter() + "]";
     }
 }

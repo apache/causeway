@@ -39,16 +39,16 @@ public final class XmlCreateObjectCommand extends AbstractXmlPersistenceCommand 
     @Override
     public void execute(final PersistenceCommandContext context) throws ObjectPersistenceException {
         if (LOG.isDebugEnabled()) {
-            LOG.debug("  create object " + onObject());
+            LOG.debug("  create object " + onAdapter());
         }
         final String user = getAuthenticationSession().getUserName();
-        onObject().setVersion(new FileVersion(user));
-        final ObjectData data = createObjectData(onObject(), true);
+        onAdapter().setVersion(new FileVersion(user));
+        final ObjectData data = createObjectData(onAdapter(), true);
         getDataManager().insertObject(data);
     }
 
     @Override
     public String toString() {
-        return "CreateObjectCommand [object=" + onObject() + "]";
+        return "CreateObjectCommand [object=" + onAdapter() + "]";
     }
 }

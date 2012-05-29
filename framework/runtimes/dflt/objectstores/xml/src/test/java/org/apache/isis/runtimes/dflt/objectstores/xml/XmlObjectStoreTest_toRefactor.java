@@ -23,6 +23,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Collections;
+import java.util.List;
 
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
@@ -128,8 +129,8 @@ public class XmlObjectStoreTest_toRefactor {
     public void validatesGettingObjectStoreInstances() throws Exception {
         final SaveObjectCommand command = objectStore.createSaveObjectCommand(adapter1);
         objectStore.execute(Collections.<PersistenceCommand> singletonList(command));
-        final ObjectAdapter[] array = objectStore.getInstances(persistenceHelper);
-        assertTrue(array.length == 1);
+        final List<ObjectAdapter> array = objectStore.getInstances(persistenceHelper);
+        assertTrue(array.size() == 1);
     }
 
     @Ignore // DKH: refactor to use contract tests (see in-memory object store for basis)

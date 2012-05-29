@@ -40,18 +40,18 @@ public final class XmlUpdateObjectCommand extends AbstractXmlPersistenceCommand 
     @Override
     public void execute(final PersistenceCommandContext context) throws ObjectPersistenceException {
         if (LOG.isDebugEnabled()) {
-            LOG.debug("  save object " + onObject());
+            LOG.debug("  save object " + onAdapter());
         }
         final String user = getAuthenticationSession().getUserName();
-        onObject().setVersion(new FileVersion(user));
+        onAdapter().setVersion(new FileVersion(user));
 
-        final Data data = createObjectData(onObject(), true);
+        final Data data = createObjectData(onAdapter(), true);
         getDataManager().save(data);
     }
 
     @Override
     public String toString() {
-        return "SaveObjectCommand [object=" + onObject() + "]";
+        return "SaveObjectCommand [object=" + onAdapter() + "]";
     }
 
 }
