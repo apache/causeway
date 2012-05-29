@@ -71,32 +71,55 @@ public class IsisSystemWithFixtures implements org.junit.rules.TestRule {
 
     public interface Listener {
 
-        void preSetupSystem(boolean firstTime);
-        void postSetupSystem();
+        void init(IsisConfiguration configuration) throws Exception;
         
-        void preTeardownSystem();
-        void postTeardownSystem();
+        void preSetupSystem(boolean firstTime) throws Exception;
+        void postSetupSystem(boolean firstTime) throws Exception;
+        
+        void preBounceSystem() throws Exception;
+        void postBounceSystem() throws Exception;
+
+        void preTeardownSystem() throws Exception;
+        void postTeardownSystem() throws Exception;
         
     }
     
     public static abstract class ListenerAdapter implements Listener {
+        
+        private IsisConfiguration configuration;
 
-        @Override
-        public void preSetupSystem(boolean firstTime) {
-        }
-
-        @Override
-        public void postSetupSystem() {
-        }
-
-        @Override
-        public void preTeardownSystem() {
-        }
-
-        @Override
-        public void postTeardownSystem() {
+        public void init(IsisConfiguration configuration) throws Exception {
+            this.configuration = configuration;
         }
         
+        protected IsisConfiguration getConfiguration() {
+            return configuration;
+        }
+
+        @Override
+        public void preSetupSystem(boolean firstTime) throws Exception {
+        }
+
+        @Override
+        public void postSetupSystem(boolean firstTime) throws Exception {
+        }
+
+        @Override
+        public void preBounceSystem() throws Exception {
+        }
+
+        @Override
+        public void postBounceSystem() throws Exception {
+        }
+
+        @Override
+        public void preTeardownSystem() throws Exception {
+        }
+
+        @Override
+        public void postTeardownSystem() throws Exception {
+        }
+
     }
 
 
@@ -276,10 +299,16 @@ public class IsisSystemWithFixtures implements org.junit.rules.TestRule {
      * Intended to be called from a test's {@link Before} method.
      */
     public void setUpSystem() throws Exception {
+        setUpSystem(FireListeners.FIRE);
+    }
+
+    private void setUpSystem(FireListeners fireListeners) throws Exception {
         Logger.getRootLogger().setLevel(Level.OFF);
 
         boolean firstTime = isisSystem == null;
-        firePreSetupSystem(firstTime);
+        if(fireListeners.shouldFire()) {
+            fireInitAndPreSetupSystem(firstTime);
+        }
         
         if(firstTime) {
             isisSystem = createIsisSystem(services);
@@ -295,10 +324,19 @@ public class IsisSystemWithFixtures implements org.junit.rules.TestRule {
         if(firstTime && fixturesInitialization == Fixtures.Initialization.INIT) {
             fixtures.init(container);
         }
-        firePostSetupSystem(firstTime);
+        if(fireListeners.shouldFire()) {
+            firePostSetupSystem(firstTime);
+        }
     }
 
-
+    private enum FireListeners {
+        FIRE,
+        DONT_FIRE;
+        public boolean shouldFire() {
+            return this == FIRE;
+        }
+    }
+    
     private DomainObjectContainer getContainer() {
         return IsisContext.getPersistenceSession().getServicesInjector().getContainer();
     }
@@ -307,14 +345,24 @@ public class IsisSystemWithFixtures implements org.junit.rules.TestRule {
      * Intended to be called from a test's {@link After} method.
      */
     public void tearDownSystem() throws Exception {
-        firePreTeardownSystem();
+        tearDownSystem(FireListeners.FIRE);
+    }
+
+    private void tearDownSystem(final FireListeners fireListeners) throws Exception {
+        if(fireListeners.shouldFire()) {
+            firePreTeardownSystem();
+        }
         IsisContext.closeSession();
-        firePostTeardownSystem();
+        if(fireListeners.shouldFire()) {
+            firePostTeardownSystem();
+        }
     }
 
     public void bounceSystem() throws Exception {
-        tearDownSystem();
-        setUpSystem();
+        firePreBounceSystem();
+        tearDownSystem(FireListeners.DONT_FIRE);
+        setUpSystem(FireListeners.DONT_FIRE);
+        firePostBounceSystem();
     }
 
 
@@ -360,27 +408,44 @@ public class IsisSystemWithFixtures implements org.junit.rules.TestRule {
     // listeners
     ////////////////////////////////////////////////////////////
 
-    private void firePreSetupSystem(boolean firstTime) {
+    private void fireInitAndPreSetupSystem(boolean firstTime) throws Exception {
+        if(firstTime) {
+            for(Listener listener: listeners) {
+                listener.init(configuration);
+            }
+        }
         for(Listener listener: listeners) {
             listener.preSetupSystem(firstTime);
         }
     }
 
-    private void firePostSetupSystem(boolean firstTime) {
+    private void firePostSetupSystem(boolean firstTime) throws Exception {
         for(Listener listener: listeners) {
-            listener.preSetupSystem(firstTime);
+            listener.postSetupSystem(firstTime);
         }
     }
 
-    private void firePreTeardownSystem() {
+    private void firePreTeardownSystem() throws Exception {
         for(Listener listener: listeners) {
             listener.preTeardownSystem();
         }
     }
 
-    private void firePostTeardownSystem() {
+    private void firePostTeardownSystem() throws Exception {
         for(Listener listener: listeners) {
             listener.postTeardownSystem();
+        }
+    }
+
+    private void firePreBounceSystem() throws Exception {
+        for(Listener listener: listeners) {
+            listener.preBounceSystem();
+        }
+    }
+
+    private void firePostBounceSystem() throws Exception {
+        for(Listener listener: listeners) {
+            listener.postBounceSystem();
         }
     }
 
@@ -493,8 +558,14 @@ public class IsisSystemWithFixtures implements org.junit.rules.TestRule {
                 setUpSystem();
                 try {
                     base.evaluate();
-                } finally {
                     tearDownSystem();
+                } catch(Throwable ex) {
+                    try {
+                        tearDownSystem();
+                    } catch(Exception ex2) {
+                        // ignore, since already one pending
+                    }
+                    throw ex;
                 }
             }
         };

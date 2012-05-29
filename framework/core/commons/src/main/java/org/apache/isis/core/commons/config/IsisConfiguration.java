@@ -22,6 +22,7 @@ package org.apache.isis.core.commons.config;
 import java.awt.Color;
 import java.awt.Font;
 import java.util.Iterator;
+import java.util.Map;
 
 import org.apache.isis.core.commons.components.Injectable;
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
@@ -182,5 +183,10 @@ public interface IsisConfiguration extends DebuggableWithTitle, Injectable, Iter
      * @see IsisConfigurationBuilder#getResourceStreamSource()
      */
     ResourceStreamSource getResourceStreamSource();
+
+    /**
+     * A mutable copy of the current set of properties (name/values) held in this configuration.
+     */
+    Map<String, String> asMap();
 
 }

@@ -21,10 +21,15 @@ package org.apache.isis.core.commons.config;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.util.Collections;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Properties;
 import java.util.StringTokenizer;
+
+import com.google.common.collect.Maps;
 
 import org.apache.log4j.Logger;
 
@@ -33,6 +38,7 @@ import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.resource.ResourceStreamSource;
 
 public class IsisConfigurationDefault implements IsisConfiguration {
+    
     private static final Logger LOG = Logger.getLogger(IsisConfigurationDefault.class);
     private final Properties properties = new Properties();
     private final ResourceStreamSource resourceStreamSource;
@@ -376,6 +382,16 @@ public class IsisConfigurationDefault implements IsisConfiguration {
             final IsisConfigurationAware cast = IsisConfigurationAware.class.cast(candidate);
             cast.setConfiguration(this);
         }
+    }
+
+    @Override
+    public Map<String,String> asMap() {
+        final Map<String, String> map = Maps.newHashMap();
+        for(String propertyName: this) {
+            final String propertyValue = this.getProperty(propertyName);
+            map.put(propertyName, propertyValue);
+        }
+        return map;
     }
 
 }

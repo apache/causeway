@@ -9,6 +9,7 @@ import javax.persistence.EntityManagerFactory;
 
 import com.google.common.collect.Maps;
 
+import org.apache.isis.core.commons.components.Installer;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterFactory;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -24,6 +25,26 @@ import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.ObjectFactory;
 
+/**
+ * Configuration files are read in the usual fashion (as per {@link Installer#getConfigurationResources()}, ie will consult all of:
+ * <ul>
+ * <li><tt>persistor_openjpa.properties</tt>
+ * <li><tt>persistor.properties</tt>
+ * <li><tt>isis.properties</tt>
+ * </ul>
+ * 
+ * <p>
+ * With respect to configuration, all properties under <tt>isis.persistor.openjpa.impl.</tt> prefix are passed thru verbatim to the OpenJPA runtime.
+ * For example:
+ * <table>
+ * <tr><th>Isis Property</th><th>OpenJPA Property</th></tr>
+ * <tr><td><tt>isis.persistor.openjpa.impl.openjpa.ConnectionURL</tt></td><td><tt>openjpa.ConnectionURL</tt></td></tr>
+ * <tr><td><tt>isis.persistor.openjpa.impl.openjpa.ConnectionDriverName</tt></td><td><tt>openjpa.ConnectionDriverName</tt></td></tr>
+ * <tr><td><tt>isis.persistor.openjpa.impl.openjpa.ConnectionUserName</tt></td><td><tt>openjpa.ConnectionUserName</tt></td></tr>
+ * <tr><td><tt>isis.persistor.openjpa.impl.openjpa.ConnectionPassword</tt></td><td><tt>openjpa.ConnectionPassword</tt></td></tr>
+ * </table>
+ *
+ */
 public class OpenJpaPersistenceMechanismInstaller extends PersistenceMechanismInstallerAbstract {
 
     public static final String NAME = "openjpa";
@@ -38,16 +59,10 @@ public class OpenJpaPersistenceMechanismInstaller extends PersistenceMechanismIn
     @Override
     protected ObjectStore createObjectStore(IsisConfiguration configuration, ObjectAdapterFactory adapterFactory, AdapterManager adapterManager) {
         if(entityManagerFactory == null) {
-            Map<String,String> props = Maps.newHashMap();
-
-            props.put("openjpa.jdbc.SynchronizeMappings", "buildSchema");
-            props.put("openjpa.ConnectionURL", "jdbc:hsqldb:db/test");
-            props.put("openjpa.ConnectionDriverName", "org.hsqldb.jdbcDriver");
-            props.put("openjpa.ConnectionUserName", "sa");
-            props.put("openjpa.ConnectionPassword", "");
-            props.put("openjpa.Log", "DefaultLevel=WARN, Tool=INFO");
-            props.put("openjpa.RuntimeUnenhancedClasses", "supported"); // in production, should always pre-enhance using the maven openjpa plugin
             
+            final IsisConfiguration openJpaConfig = configuration.createSubset("isis.persistor.openjpa.impl");
+            
+            final Map<String, String> props = openJpaConfig.asMap();
             final String typeList = entityTypeList();
             props.put("openjpa.MetaDataFactory", "org.apache.openjpa.persistence.jdbc.PersistenceMappingFactory(types=" + typeList + ")");
             

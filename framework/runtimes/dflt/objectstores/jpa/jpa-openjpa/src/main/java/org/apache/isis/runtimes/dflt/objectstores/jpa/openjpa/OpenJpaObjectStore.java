@@ -6,6 +6,7 @@ import static org.apache.isis.core.commons.ensure.Ensure.ensureThatState;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 
+import java.sql.Connection;
 import java.text.MessageFormat;
 import java.util.List;
 import java.util.Map;
@@ -19,6 +20,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 import org.apache.log4j.Logger;
+import org.apache.openjpa.persistence.OpenJPAEntityManager;
 
 import org.apache.isis.core.commons.config.ConfigurationConstants;
 import org.apache.isis.core.commons.config.IsisConfiguration;
@@ -209,6 +211,14 @@ public class OpenJpaObjectStore implements ObjectStore, PersistenceSessionHydrat
 
     public void reset() {
         // does nothing.
+    }
+
+    /**
+     * Non-API.
+     */
+    public Connection getConnection() {
+        OpenJPAEntityManager ojem = (OpenJPAEntityManager) entityManager;
+        return (Connection) ojem.getConnection();
     }
 
     // ///////////////////////////////////////////////////////////////////////
@@ -723,6 +733,7 @@ public class OpenJpaObjectStore implements ObjectStore, PersistenceSessionHydrat
     public void setTransactionManager(final IsisTransactionManager transactionManager) {
         this.transactionManager = transactionManager;
     }
+
 
 
 
