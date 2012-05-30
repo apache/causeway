@@ -49,9 +49,7 @@
 	<modules>
 		<module>jpa-applib</module>
 		<module>jpa-metamodel</module>
-		<!-- 
 		<module>jpa-openjpa</module>
-		-->
 	</modules>
 
 	<build>

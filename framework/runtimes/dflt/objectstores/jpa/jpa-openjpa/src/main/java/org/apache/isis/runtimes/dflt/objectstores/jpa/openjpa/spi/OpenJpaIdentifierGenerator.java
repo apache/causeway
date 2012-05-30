@@ -2,6 +2,9 @@ package org.apache.isis.runtimes.dflt.objectstores.jpa.openjpa.spi;
 
 import java.util.UUID;
 
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.PersistenceUnitUtil;
+
 import org.apache.log4j.Logger;
 
 import org.apache.isis.core.commons.debug.DebugBuilder;
@@ -10,16 +13,25 @@ import org.apache.isis.core.metamodel.adapter.map.AdapterMap;
 import org.apache.isis.core.metamodel.adapter.map.AdapterMapAware;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.facets.accessor.PropertyOrCollectionAccessorFacet;
+import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.SpecificationLookup;
+import org.apache.isis.core.metamodel.spec.SpecificationLookupAware;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.extensions.jpa.metamodel.util.JpaPropertyUtils;
+import org.apache.isis.runtimes.dflt.objectstores.jpa.openjpa.OpenJpaObjectStore;
+import org.apache.isis.runtimes.dflt.objectstores.jpa.openjpa.OpenJpaPersistenceMechanismInstaller;
+import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.ObjectStorePersistence;
+import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.IdentifierGenerator;
 
-public class OpenJpaIdentifierGenerator implements IdentifierGenerator, AdapterMapAware {
+public class OpenJpaIdentifierGenerator implements IdentifierGenerator, AdapterMapAware, SpecificationLookupAware {
 
     @SuppressWarnings("unused")
     private static final Logger LOG = Logger.getLogger(OpenJpaIdentifierGenerator.class);
     private AdapterMap adapterMap;
+    private SpecificationLookup specificationLookup;
 
 
     // //////////////////////////////////////////////////////////////
@@ -40,15 +52,26 @@ public class OpenJpaIdentifierGenerator implements IdentifierGenerator, AdapterM
 
     @Override
     public String createPersistentIdentifierFor(ObjectSpecId objectSpecId, Object pojo, RootOid transientRootOid) {
-        final ObjectAdapter adapter = adapterMap.adapterFor(pojo);
-        final OneToOneAssociation idPropertyFor = JpaPropertyUtils.getIdPropertyFor(adapter.getSpecification());
-        if (idPropertyFor == null) {
-            throw new IllegalStateException("cannot find id property for pojo");
+        final Object identifier = getPersistenceUnitUtil().getIdentifier(pojo);
+        if(identifier == null) {
+            // is a service
+            return "1";
         }
-        final PropertyOrCollectionAccessorFacet facet = idPropertyFor.getFacet(PropertyOrCollectionAccessorFacet.class);
-        final Object propertyValue = facet.getProperty(adapter);
-        return propertyValue.toString();
+
+        // was assuming that the identifier would be an object that we have visibility to
+        // but instead, is an internal OpenJPA class (eg IntId)
+        // so, the following code doesn't work
+//        final ObjectAdapter identifierAdapter = adapterMap.adapterFor(identifier);
+//        final EncodableFacet encodableFacet = identifierAdapter.getSpecification().getFacet(EncodableFacet.class);
+//        final String identifierAsString = encodableFacet.toEncodedString(identifierAdapter);
+//        
+//        return identifierAsString;
+        
+        
+        // for now, just using toString().  Suspect will need to review this
+        return identifier.toString();
     }
+
 
 
     // //////////////////////////////////////////////////////////////
@@ -75,6 +98,29 @@ public class OpenJpaIdentifierGenerator implements IdentifierGenerator, AdapterM
     public void setAdapterMap(AdapterMap adapterMap) {
         this.adapterMap = adapterMap;
     }
+
+
+    @Override
+    public void setSpecificationLookup(SpecificationLookup specificationLookup) {
+        this.specificationLookup = specificationLookup;
+    }
+
+    
+    // //////////////////////////////////////////////////////////////
+    // Dependencies (from context)
+    // //////////////////////////////////////////////////////////////
+
+
+    protected PersistenceUnitUtil getPersistenceUnitUtil() {
+        final OpenJpaObjectStore objectStore = getObjectStore();
+        return objectStore.getEntityManager().getEntityManagerFactory().getPersistenceUnitUtil();
+    }
+
+
+    protected OpenJpaObjectStore getObjectStore() {
+        return (OpenJpaObjectStore) IsisContext.getPersistenceSession().getObjectStore();
+    }
+
 
 
 }

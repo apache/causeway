@@ -27,7 +27,8 @@ public class PersistenceQueryFindAllInstancesProcessor extends PersistenceQueryP
             LOG.debug("getInstances: class=" + specification.getFullIdentifier());
         }
         final Query query = QueryUtil.createQuery(getEntityManager(), "o", null, specification, null);
-        return loadAdapters(specification, query.getResultList());
+        final List<?> pojos = query.getResultList();
+        return loadAdapters(specification, pojos);
     }
 }
 

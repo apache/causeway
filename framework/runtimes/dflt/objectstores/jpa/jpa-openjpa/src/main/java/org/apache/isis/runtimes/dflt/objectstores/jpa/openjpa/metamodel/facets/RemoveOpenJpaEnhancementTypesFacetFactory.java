@@ -17,29 +17,19 @@
  *  under the License.
  */
 
-package org.apache.isis.runtimes.dflt.objectstores.jpa.openjpa.fixtures;
+package org.apache.isis.runtimes.dflt.objectstores.jpa.openjpa.metamodel.facets;
 
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import org.apache.openjpa.enhance.PersistenceCapable;
 
-import org.apache.isis.tck.dom.scalars.PrimitiveValuedEntity;
+import org.apache.isis.core.progmodel.facets.object.ignore.javalang.AbstractRemoveMethodsFacetFactory;
 
-@Entity
-@DiscriminatorValue("JpaPRMV")
-public class JpaPrimitiveValuedEntity extends PrimitiveValuedEntity {
+/**
+ * Removes all methods inherited from {@link Object}.
+ */
+public class RemoveOpenJpaEnhancementTypesFacetFactory extends AbstractRemoveMethodsFacetFactory {
 
-    // {{ Id (int)
-    private int id;
-
-    @Id
-    public int getId() {
-        return id;
+    public RemoveOpenJpaEnhancementTypesFacetFactory() {
+        super(PersistenceCapable.class);
     }
-
-    public void setId(final int id) {
-        this.id = id;
-    }
-    // }}
 
 }

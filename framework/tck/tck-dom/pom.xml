@@ -33,6 +33,11 @@
 			<groupId>org.apache.isis</groupId>
 			<artifactId>applib</artifactId>
 		</dependency>
+
+		<dependency>
+            <groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
+			<artifactId>jpa-applib</artifactId>
+		</dependency>
 		
 		<dependency>
 			<groupId>org.apache.isis.viewer</groupId>

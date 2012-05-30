@@ -329,6 +329,24 @@
                 <version>0.3.1-incubating-SNAPSHOT</version>
             </dependency>
 
+            <!-- isis: runtimes-dflt: objectstores: jpa/openjpa -->
+            <dependency>
+                <groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
+                <artifactId>jpa-applib</artifactId>
+                <version>0.3.1-incubating-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
+                <artifactId>jpa-metamodel</artifactId>
+                <version>0.3.1-incubating-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
+                <artifactId>jpa-openjpa</artifactId>
+                <version>0.3.1-incubating-SNAPSHOT</version>
+            </dependency>
+
+
             <!-- isis: runtimes-dflt: profilestores: dflt -->
             <dependency>
                 <groupId>org.apache.isis.runtimes.dflt.profilestores</groupId>

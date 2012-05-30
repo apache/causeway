@@ -9,6 +9,8 @@ import javax.persistence.metamodel.Metamodel;
 
 import com.google.common.collect.Lists;
 
+import org.apache.isis.core.commons.ensure.Assert;
+import org.apache.isis.core.commons.ensure.Ensure;
 import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.core.commons.lang.CastUtils;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -49,12 +51,9 @@ public abstract class PersistenceQueryProcessorAbstract<T extends PersistenceQue
             final ObjectSpecification specification, final List<?> pojos) {
         final List<ObjectAdapter> adapters = Lists.newArrayList();
         for (final Object pojo : pojos) {
-            // REVIEW: cannot just load adapter for object - if Isis
-            // has already loaded the object then object won't match it 
-            // (e.g. if getInstances has been called and an instance has
-            // been loaded) - so need to use JPA session to get an Oid to
-            // do a lookup in that case
-            adapters.add( adapterManager.getAdapterFor(pojo) );
+            ObjectAdapter adapter = adapterManager.getAdapterFor(pojo);
+            Assert.assertNotNull(adapter);
+            adapters.add( adapter );
         }
         return adapters;
     }

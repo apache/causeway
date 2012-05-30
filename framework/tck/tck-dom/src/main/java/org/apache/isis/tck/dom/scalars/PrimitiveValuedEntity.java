@@ -19,12 +19,31 @@
 
 package org.apache.isis.tck.dom.scalars;
 
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+
 import org.apache.isis.applib.AbstractDomainObject;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.ObjectType;
 
+@Entity // for openjpa object store
+@DiscriminatorValue("PRMV") // for openjpa object store
 @ObjectType("PRMV")
 public class PrimitiveValuedEntity extends AbstractDomainObject {
+
+    // {{ Id (Integer)
+    private Integer id;
+
+    @Id // for openjpa object store
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(final Integer id) {
+        this.id = id;
+    }
+    // }}
 
     // {{ Title
     public String title() {

@@ -44,8 +44,6 @@ public class OpenJpaSimplePersistAlgorithm extends PersistAlgorithmAbstract {
         if (LOG.isInfoEnabled()) {
             LOG.info("persist " + adapter);
         }
-        // NakedObjects.getObjectLoader().madePersistent(object);
-        // Don't do here - allow EventListener to propogate persistent state
         CallbackUtils.callCallback(adapter, PersistingCallbackFacet.class);
         toPersistObjectSet.addPersistedObject(adapter);
     }

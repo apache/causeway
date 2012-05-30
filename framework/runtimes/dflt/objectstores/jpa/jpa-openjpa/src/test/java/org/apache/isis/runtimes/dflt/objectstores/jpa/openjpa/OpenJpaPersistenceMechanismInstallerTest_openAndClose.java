@@ -12,7 +12,6 @@ import java.sql.Statement;
 import java.util.List;
 import java.util.Properties;
 
-import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -24,53 +23,27 @@ import org.apache.isis.core.metamodel.adapter.oid.RootOidDefault;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.extensions.jpa.metamodel.specloader.progmodelfacets.JpaProgrammingModelFacets;
 import org.apache.isis.extensions.jpa.metamodel.specloader.validator.JpaMetaModelValidator;
-import org.apache.isis.runtimes.dflt.objectstores.jpa.openjpa.fixtures.JpaPrimitiveValuedEntity;
-import org.apache.isis.runtimes.dflt.objectstores.jpa.openjpa.fixtures.JpaPrimitiveValuedEntityRepository;
+import org.apache.isis.runtimes.dflt.objectstores.jpa.openjpa.metamodel.specloader.progmodelfacets.OpenJpaProgrammingModelFacets;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.testsupport.IsisSystemWithFixtures;
+import org.apache.isis.tck.dom.scalars.PrimitiveValuedEntity;
+import org.apache.isis.tck.dom.scalars.PrimitiveValuedEntityRepository;
 
 public class OpenJpaPersistenceMechanismInstallerTest_openAndClose {
 
-    private JpaPrimitiveValuedEntityRepository repo = new JpaPrimitiveValuedEntityRepository();
+    private PrimitiveValuedEntityRepository repo = new PrimitiveValuedEntityRepository();
     
     @Rule
     public IsisSystemWithFixtures iswf = IsisSystemWithFixtures.builder()
-        .with(configuration())
-        .with(new JpaProgrammingModelFacets())
+        .with(Utils.configurationForOpenJpaOverHsqlDb())
+        .with(Utils.listenerToDeleteFrom("PRIMITIVEVALUEDENTITY"))
+        .with(new OpenJpaProgrammingModelFacets())
         .with(new JpaMetaModelValidator())
         .with(new OpenJpaPersistenceMechanismInstaller())
         .withServices(repo)
-        .with(hsqldbListener())
         .build()
         ;
 
-    private static IsisSystemWithFixtures.Listener hsqldbListener() {
-        return new IsisSystemWithFixtures.ListenerAdapter(){
-
-            @Override
-            public void postSetupSystem(boolean firstTime) throws Exception {
-                final OpenJpaObjectStore objectStore = (OpenJpaObjectStore) IsisContext.getPersistenceSession().getObjectStore();
-                Connection connection = objectStore.getConnection();
-                Statement statement = connection.createStatement();
-                statement.executeUpdate("DELETE FROM JPAPRIMITIVEVALUEDENTITY");
-            }
-        };
-    }
-
-    private static IsisConfiguration configuration() {
-        final IsisConfigurationDefault configuration = new IsisConfigurationDefault();
-        Properties props = new Properties();
-        props.put("isis.persistor.openjpa.impl.openjpa.jdbc.SynchronizeMappings", "buildSchema");
-        props.put("isis.persistor.openjpa.impl.openjpa.ConnectionURL", "jdbc:hsqldb:mem:test");
-        props.put("isis.persistor.openjpa.impl.openjpa.ConnectionDriverName", "org.hsqldb.jdbcDriver");
-        props.put("isis.persistor.openjpa.impl.openjpa.ConnectionUserName", "sa");
-        props.put("isis.persistor.openjpa.impl.openjpa.ConnectionPassword", "");
-        props.put("isis.persistor.openjpa.impl.openjpa.Log", "DefaultLevel=ERROR, Tool=INFO");
-        props.put("isis.persistor.openjpa.impl.openjpa.RuntimeUnenhancedClasses", "supported"); // in production, should always pre-enhance using the maven openjpa plugin
-
-        configuration.add(props);
-        return configuration;
-    }
 
     @Test
     public void servicesBootstrapped() {
@@ -81,7 +54,7 @@ public class OpenJpaPersistenceMechanismInstallerTest_openAndClose {
         final ObjectAdapter serviceAdapter = IsisContext.getPersistenceSession().getAdapterManager().getAdapterFor(repo);
         assertThat(serviceAdapter, is(not(nullValue())));
         
-        assertThat(serviceAdapter.getOid(), is(equalTo((Oid)RootOidDefault.create(ObjectSpecId.of("JpaPrimitiveValuedEntities"), "1"))));
+        assertThat(serviceAdapter.getOid(), is(equalTo((Oid)RootOidDefault.create(ObjectSpecId.of("PrimitiveValuedEntities"), "1"))));
     }
     
     @Test
@@ -93,7 +66,7 @@ public class OpenJpaPersistenceMechanismInstallerTest_openAndClose {
     @Test
     public void emptyList() {
         iswf.beginTran();
-        final List<JpaPrimitiveValuedEntity> list = repo.list();
+        final List<PrimitiveValuedEntity> list = repo.list();
         assertThat(list.size(), is(0));
         iswf.commitTran();
     }
@@ -101,14 +74,24 @@ public class OpenJpaPersistenceMechanismInstallerTest_openAndClose {
     @Test
     public void persistThenRetrieve() throws Exception {
         iswf.beginTran();
-        final JpaPrimitiveValuedEntity entity = repo.newEntity();
+        PrimitiveValuedEntity entity = repo.newEntity();
+        entity.setId(1);
+        entity = repo.newEntity();
+        entity.setId(2);
         iswf.commitTran();
         
         iswf.bounceSystem();
         
         iswf.beginTran();
-        final List<JpaPrimitiveValuedEntity> list = repo.list();
-        assertThat(list.size(), is(1));
+        final List<PrimitiveValuedEntity> list = repo.list();
+        assertThat(list.size(), is(2));
+        
+        ObjectAdapter adapter = iswf.adapterFor(list.get(0));
+        assertThat(adapter.getOid().enString(), is("PRMV:1"));
+
+        adapter = iswf.adapterFor(list.get(1));
+        assertThat(adapter.getOid().enString(), is("PRMV:2"));
+
         iswf.commitTran();
     }
 
