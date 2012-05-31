@@ -1,4 +1,4 @@
-package org.apache.isis.runtimes.dflt.objectstores.jpa.openjpa.queries;
+package org.apache.isis.runtimes.dflt.objectstores.jpa.openjpa.persistence.queries;
 
 import java.util.Arrays;
 import java.util.Collections;

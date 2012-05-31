@@ -1,4 +1,4 @@
-package org.apache.isis.runtimes.dflt.objectstores.jpa.openjpa.spi;
+package org.apache.isis.runtimes.dflt.objectstores.jpa.openjpa.persistence.spi;
 
 import org.apache.log4j.Logger;
 

@@ -18,6 +18,7 @@ import org.junit.Test;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOidDefault;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
@@ -79,18 +80,45 @@ public class OpenJpaPersistenceMechanismInstallerTest_openAndClose {
         entity = repo.newEntity();
         entity.setId(2);
         iswf.commitTran();
+
+        // don't bounce
+        iswf.beginTran();
+        List<PrimitiveValuedEntity> list = repo.list();
+        assertThat(list.size(), is(2));
+        iswf.commitTran();
+
+        // do bounce
+        iswf.bounceSystem();
+        
+        iswf.beginTran();
+        list = repo.list();
+        assertThat(list.size(), is(2));
+        iswf.commitTran();
+    }
+
+    @Test
+    public void persistAdapters() throws Exception {
+        iswf.beginTran();
+        PrimitiveValuedEntity entity = repo.newEntity();
+        ObjectAdapter adapter = iswf.adapterFor(entity);
+        
+        assertThat(adapter.isTransient(), is(true));
+        assertThat(adapter.getResolveState(), is(ResolveState.TRANSIENT));
+        assertThat(adapter.getOid().isTransient(), is(true));
+        
+        entity.setId(1);
+        iswf.commitTran();
         
         iswf.bounceSystem();
         
         iswf.beginTran();
         final List<PrimitiveValuedEntity> list = repo.list();
-        assertThat(list.size(), is(2));
+        assertThat(list.size(), is(1));
         
-        ObjectAdapter adapter = iswf.adapterFor(list.get(0));
+        adapter = iswf.adapterFor(list.get(0));
+        assertThat(adapter.getResolveState(), is(ResolveState.GHOST));
+        assertThat(adapter.isTransient(), is(false));
         assertThat(adapter.getOid().enString(), is("PRMV:1"));
-
-        adapter = iswf.adapterFor(list.get(1));
-        assertThat(adapter.getOid().enString(), is("PRMV:2"));
 
         iswf.commitTran();
     }

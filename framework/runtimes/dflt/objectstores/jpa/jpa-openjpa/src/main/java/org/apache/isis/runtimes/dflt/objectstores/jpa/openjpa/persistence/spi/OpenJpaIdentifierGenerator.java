@@ -1,8 +1,7 @@
-package org.apache.isis.runtimes.dflt.objectstores.jpa.openjpa.spi;
+package org.apache.isis.runtimes.dflt.objectstores.jpa.openjpa.persistence.spi;
 
 import java.util.UUID;
 
-import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceUnitUtil;
 
 import org.apache.log4j.Logger;
@@ -12,17 +11,10 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.map.AdapterMap;
 import org.apache.isis.core.metamodel.adapter.map.AdapterMapAware;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
-import org.apache.isis.core.metamodel.facets.accessor.PropertyOrCollectionAccessorFacet;
-import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLookup;
 import org.apache.isis.core.metamodel.spec.SpecificationLookupAware;
-import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.isis.extensions.jpa.metamodel.util.JpaPropertyUtils;
 import org.apache.isis.runtimes.dflt.objectstores.jpa.openjpa.OpenJpaObjectStore;
-import org.apache.isis.runtimes.dflt.objectstores.jpa.openjpa.OpenJpaPersistenceMechanismInstaller;
-import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.ObjectStorePersistence;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.IdentifierGenerator;
 

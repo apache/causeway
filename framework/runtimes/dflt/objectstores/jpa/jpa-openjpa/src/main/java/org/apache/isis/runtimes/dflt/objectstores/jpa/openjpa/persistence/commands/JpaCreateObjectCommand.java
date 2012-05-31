@@ -1,4 +1,4 @@
-package org.apache.isis.runtimes.dflt.objectstores.jpa.openjpa.commands;
+package org.apache.isis.runtimes.dflt.objectstores.jpa.openjpa.persistence.commands;
 
 import javax.persistence.EntityManager;
 

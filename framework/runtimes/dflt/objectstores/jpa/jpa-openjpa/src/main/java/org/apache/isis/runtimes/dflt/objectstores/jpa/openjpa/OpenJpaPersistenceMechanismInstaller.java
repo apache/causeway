@@ -1,27 +1,14 @@
 package org.apache.isis.runtimes.dflt.objectstores.jpa.openjpa;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.Map;
-
-import javax.persistence.EntityManagerFactory;
-
-import com.google.common.collect.Maps;
-
-import org.apache.openjpa.persistence.OpenJPAEntityManagerFactorySPI;
 
 import org.apache.isis.core.commons.components.Installer;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterFactory;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLookup;
-import org.apache.isis.extensions.jpa.metamodel.facets.object.entity.JpaEntityFacet;
-import org.apache.isis.extensions.jpa.metamodel.facets.object.namedquery.JpaNamedQueryFacet;
-import org.apache.isis.extensions.jpa.metamodel.facets.object.namedquery.NamedQuery;
 import org.apache.isis.runtimes.dflt.bytecode.identity.objectfactory.ObjectFactoryBasic;
-import org.apache.isis.runtimes.dflt.objectstores.jpa.openjpa.spi.OpenJpaIdentifierGenerator;
-import org.apache.isis.runtimes.dflt.objectstores.jpa.openjpa.spi.OpenJpaSimplePersistAlgorithm;
+import org.apache.isis.runtimes.dflt.objectstores.jpa.openjpa.persistence.spi.OpenJpaIdentifierGenerator;
+import org.apache.isis.runtimes.dflt.objectstores.jpa.openjpa.persistence.spi.OpenJpaSimplePersistAlgorithm;
 import org.apache.isis.runtimes.dflt.runtime.installerregistry.installerapi.PersistenceMechanismInstallerAbstract;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.ObjectStore;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.algorithm.PersistAlgorithm;
@@ -54,78 +41,35 @@ public class OpenJpaPersistenceMechanismInstaller extends PersistenceMechanismIn
 
     public static final String NAME = "openjpa";
 
-    private EntityManagerFactory entityManagerFactory = null;
-    private Map<String, NamedQuery> namedQueryByName = null;
-
-    private OpenJpaIdentifierGenerator identifierGenerator;
-
+    private OpenJpaApplicationComponents applicationComponents = null;
+    
     public OpenJpaPersistenceMechanismInstaller() {
         super(NAME);
     }
 
     @Override
     protected ObjectStore createObjectStore(IsisConfiguration configuration, ObjectAdapterFactory adapterFactory, AdapterManager adapterManager) {
-        createEntityManagerFactoryIfRequired(configuration);
-        final OpenJpaObjectStore objectStore = new OpenJpaObjectStore(configuration, adapterFactory, adapterManager, entityManagerFactory, namedQueryByName);
-        return objectStore;
+        createOpenJpaApplicationComponentsIfRequired(configuration);
+        return new OpenJpaObjectStore(configuration, adapterFactory, adapterManager, applicationComponents);
     }
 
-    private void createEntityManagerFactoryIfRequired(IsisConfiguration configuration) {
-        if(entityManagerFactory != null) {
+    private void createOpenJpaApplicationComponentsIfRequired(IsisConfiguration configuration) {
+        if(applicationComponents != null) {
             return;
         }
         
         final IsisConfiguration openJpaConfig = configuration.createSubset("isis.persistor.openjpa.impl");
         final Map<String, String> props = openJpaConfig.asMap();
         
-        final String typeList = entityTypeList();
-        props.put("openjpa.MetaDataFactory", "org.apache.openjpa.persistence.jdbc.PersistenceMappingFactory(types=" + typeList + ")");
-        
-        entityManagerFactory = javax.persistence.Persistence.createEntityManagerFactory(null, props);
-        
-        OpenJPAEntityManagerFactorySPI emfSpi = (OpenJPAEntityManagerFactorySPI) entityManagerFactory;
-        emfSpi.addLifecycleListener(new IsisLifecycleListener(), (Class[])null);
-        
-        namedQueryByName = Collections.unmodifiableMap(catalogNamedQueries());
+        applicationComponents = new OpenJpaApplicationComponents(props, getSpecificationLoader().allSpecifications());
     }
 
     @Override
     protected IdentifierGenerator createIdentifierGenerator(IsisConfiguration configuration) {
-        identifierGenerator = new OpenJpaIdentifierGenerator();
-        return identifierGenerator;
-    }
-    
-    /**
-     * "org.apache.openjpa.persistence.jdbc.PersistenceMappingFactory(types=org.apache.isis.runtimes.dflt.objectstores.jpa.openjpa.fixtures.JpaPrimitiveValuedEntity;)"
-     */
-    private String entityTypeList() {
-        final StringBuilder buf = new StringBuilder();
-        final Collection<ObjectSpecification> allSpecifications = getSpecificationLoader().allSpecifications();
-        for(ObjectSpecification objSpec: allSpecifications) {
-            if(objSpec.containsFacet(JpaEntityFacet.class)) {
-                final String fqcn = objSpec.getFullIdentifier();
-                buf.append(fqcn).append(";");
-            }
-        }
-        final String typeList = buf.toString();
-        return typeList;
-    }
-    
-    private Map<String, NamedQuery> catalogNamedQueries() {
-        final HashMap<String, NamedQuery> namedQueryByName = Maps.newHashMap();
-        for (final ObjectSpecification spec : getSpecificationLoader().allSpecifications()) {
-            final JpaNamedQueryFacet facet = spec.getFacet(JpaNamedQueryFacet.class);
-            if (facet == null) {
-                continue;
-            }
-            for (final NamedQuery namedQuery : facet.getNamedQueries()) {
-                namedQueryByName.put(namedQuery.getName(), namedQuery);
-            }
-        }
-        return namedQueryByName;
+        return new OpenJpaIdentifierGenerator();
     }
 
-    
+
     @Override
     protected PersistAlgorithm createPersistAlgorithm(IsisConfiguration configuration) {
         return new OpenJpaSimplePersistAlgorithm();

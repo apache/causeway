@@ -1,4 +1,4 @@
-package org.apache.isis.runtimes.dflt.objectstores.jpa.openjpa.spi;
+package org.apache.isis.runtimes.dflt.objectstores.jpa.openjpa.persistence.spi;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
@@ -89,7 +89,7 @@ public final class ResolveStateUtil {
     }
 
 
-    static void markAsUpdating(final ObjectAdapter adapter) {
+    public static void markAsUpdating(final ObjectAdapter adapter) {
 
         if (adapter.getResolveState() == ResolveState.TRANSIENT) {
             adapter.changeState(ResolveState.RESOLVED);

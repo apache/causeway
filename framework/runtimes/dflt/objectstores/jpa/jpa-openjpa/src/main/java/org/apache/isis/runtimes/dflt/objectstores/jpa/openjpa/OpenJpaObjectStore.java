@@ -12,9 +12,9 @@ import java.util.List;
 import java.util.Map;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Query;
+import javax.transaction.Transaction;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -40,15 +40,15 @@ import org.apache.isis.core.metamodel.spec.SpecificationLoaderAware;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.extensions.jpa.metamodel.facets.object.namedquery.NamedQuery;
 import org.apache.isis.extensions.jpa.metamodel.util.JpaPropertyUtils;
-import org.apache.isis.runtimes.dflt.objectstores.jpa.openjpa.commands.JpaCreateObjectCommand;
-import org.apache.isis.runtimes.dflt.objectstores.jpa.openjpa.commands.JpaDeleteObjectCommand;
-import org.apache.isis.runtimes.dflt.objectstores.jpa.openjpa.commands.JpaUpdateObjectCommand;
-import org.apache.isis.runtimes.dflt.objectstores.jpa.openjpa.queries.PersistenceQueryFindAllInstancesProcessor;
-import org.apache.isis.runtimes.dflt.objectstores.jpa.openjpa.queries.PersistenceQueryFindByPatternProcessor;
-import org.apache.isis.runtimes.dflt.objectstores.jpa.openjpa.queries.PersistenceQueryFindByTitleProcessor;
-import org.apache.isis.runtimes.dflt.objectstores.jpa.openjpa.queries.PersistenceQueryFindUsingApplibQueryProcessor;
-import org.apache.isis.runtimes.dflt.objectstores.jpa.openjpa.queries.PersistenceQueryProcessor;
-import org.apache.isis.runtimes.dflt.objectstores.jpa.openjpa.queries.QueryUtil;
+import org.apache.isis.runtimes.dflt.objectstores.jpa.openjpa.persistence.commands.JpaCreateObjectCommand;
+import org.apache.isis.runtimes.dflt.objectstores.jpa.openjpa.persistence.commands.JpaDeleteObjectCommand;
+import org.apache.isis.runtimes.dflt.objectstores.jpa.openjpa.persistence.commands.JpaUpdateObjectCommand;
+import org.apache.isis.runtimes.dflt.objectstores.jpa.openjpa.persistence.queries.PersistenceQueryFindAllInstancesProcessor;
+import org.apache.isis.runtimes.dflt.objectstores.jpa.openjpa.persistence.queries.PersistenceQueryFindByPatternProcessor;
+import org.apache.isis.runtimes.dflt.objectstores.jpa.openjpa.persistence.queries.PersistenceQueryFindByTitleProcessor;
+import org.apache.isis.runtimes.dflt.objectstores.jpa.openjpa.persistence.queries.PersistenceQueryFindUsingApplibQueryProcessor;
+import org.apache.isis.runtimes.dflt.objectstores.jpa.openjpa.persistence.queries.PersistenceQueryProcessor;
+import org.apache.isis.runtimes.dflt.objectstores.jpa.openjpa.persistence.queries.QueryUtil;
 import org.apache.isis.runtimes.dflt.runtime.persistence.ObjectNotFoundException;
 import org.apache.isis.runtimes.dflt.runtime.persistence.PersistenceSessionHydratorAware;
 import org.apache.isis.runtimes.dflt.runtime.persistence.UnsupportedFindException;
@@ -97,8 +97,7 @@ public class OpenJpaObjectStore implements ObjectStore, PersistenceSessionHydrat
     private final IsisConfiguration configuration;
     private final ObjectAdapterFactory adapterFactory;
     private final AdapterManager adapterManager;
-    private final EntityManagerFactory entityManagerFactory;
-    private final Map<String, NamedQuery> namedQueryByName;
+    private final OpenJpaApplicationComponents applicationComponents;
     
     private final Map<ObjectSpecId, RootOid> registeredServices = Maps.newHashMap();
 
@@ -107,7 +106,6 @@ public class OpenJpaObjectStore implements ObjectStore, PersistenceSessionHydrat
 
     private final Map<Class<?>, PersistenceQueryProcessor<?>> persistenceQueryProcessorByClass = Maps.newHashMap();
     // private final LoadPostProcessor loadPostProcessor;
-    // private HibernateApplicationComponents hibernateApplicationComponents;
 
     private State state;
     private TransactionMode transactionMode;
@@ -115,12 +113,11 @@ public class OpenJpaObjectStore implements ObjectStore, PersistenceSessionHydrat
     private PersistenceSessionHydrator hydrator;
     private IsisTransactionManager transactionManager;
 
-    public OpenJpaObjectStore(IsisConfiguration configuration, ObjectAdapterFactory adapterFactory, AdapterManager adapterManager, EntityManagerFactory entityManagerFactory, Map<String, NamedQuery> namedQueryByName) {
+    public OpenJpaObjectStore(IsisConfiguration configuration, ObjectAdapterFactory adapterFactory, AdapterManager adapterManager, OpenJpaApplicationComponents applicationComponents) {
         ensureThatArg(configuration, is(notNullValue()));
         ensureThatArg(adapterFactory, is(notNullValue()));
         ensureThatArg(adapterManager, is(notNullValue()));
-        ensureThatArg(entityManagerFactory, is(notNullValue()));
-        ensureThatArg(namedQueryByName, is(notNullValue()));
+        ensureThatArg(applicationComponents, is(notNullValue()));
 
         this.state = State.NOT_YET_OPEN;
         this.transactionMode = TransactionMode.UNCHAINED;
@@ -128,8 +125,7 @@ public class OpenJpaObjectStore implements ObjectStore, PersistenceSessionHydrat
         this.configuration = configuration;
         this.adapterFactory = adapterFactory;
         this.adapterManager = adapterManager;
-        this.entityManagerFactory = entityManagerFactory;
-        this.namedQueryByName = namedQueryByName;
+        this.applicationComponents = applicationComponents;
     }
 
     @Override
@@ -179,7 +175,7 @@ public class OpenJpaObjectStore implements ObjectStore, PersistenceSessionHydrat
     }
 
     private EntityManager openSession() {
-        return entityManager = entityManagerFactory.createEntityManager();
+        return entityManager = applicationComponents.createEntityManager();
     }
 
     private void addPersistenceQueryProcessors(final EntityManager entityManager) {
@@ -255,7 +251,6 @@ public class OpenJpaObjectStore implements ObjectStore, PersistenceSessionHydrat
         if (transaction.isActive()) {
             throw new IllegalStateException("Transaction already active");
         }
-        //getSession().beginTransaction();
         transaction.begin();
     }
 
@@ -616,11 +611,31 @@ public class OpenJpaObjectStore implements ObjectStore, PersistenceSessionHydrat
     }
 
     // ///////////////////////////////////////////////////////////////////////
-    // non-API: named queries
+    // non-API
     // ///////////////////////////////////////////////////////////////////////
 
     public NamedQuery getNamedQuery(String queryName) {
-        return namedQueryByName.get(queryName);
+        return applicationComponents.getNamedQuery(queryName);
+    }
+
+    /**
+     * For testing purposes, to allow fixtures to use JPA to initialize the
+     * database without triggering the objectstore.
+     * 
+     * @see #resumeListener()
+     */
+    public void suspendListener() {
+        applicationComponents.suspendListener();
+    }
+
+    /**
+     * For testing purposes, to allow fixtures to use JPA to initialize the
+     * database without triggering the objectstore.
+     * 
+     * @see #suspendListener()
+     */
+    public void resumeListener() {
+        applicationComponents.resumeListener();
     }
 
 
