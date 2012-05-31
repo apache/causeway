@@ -16,7 +16,6 @@ import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.facets.object.callbacks.CallbackUtils;
 import org.apache.isis.core.metamodel.facets.object.callbacks.PersistedCallbackFacet;
-import org.apache.isis.runtimes.dflt.objectstores.jpa.openjpa.persistence.spi.ResolveStateUtil;
 import org.apache.isis.runtimes.dflt.runtime.persistence.adaptermanager.AdapterManagerExtended;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.OidGenerator;
@@ -62,6 +61,7 @@ public class IsisLifecycleListener extends AbstractLifecycleListener implements 
     }
 
 
+    
     @Override
     public void afterPersist(LifecycleEvent event) {
         if (LOG.isDebugEnabled()) {
