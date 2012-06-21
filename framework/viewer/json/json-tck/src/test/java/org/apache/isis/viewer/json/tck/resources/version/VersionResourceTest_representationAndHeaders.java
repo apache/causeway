@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.json.tck.resources.capabilities;
+package org.apache.isis.viewer.json.tck.resources.version;
 
 import static org.apache.isis.viewer.json.tck.RepresentationMatchers.assertThat;
 import static org.apache.isis.viewer.json.tck.RepresentationMatchers.hasMaxAge;

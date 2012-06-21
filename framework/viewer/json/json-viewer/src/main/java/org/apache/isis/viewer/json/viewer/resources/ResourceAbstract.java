@@ -115,7 +115,10 @@ public abstract class ResourceAbstract {
     }
 
     protected void init(final RepresentationType representationType) {
-        if (!IsisContext.inSession() || getAuthenticationSession() == null) {
+        if (!IsisContext.inSession()) {
+            throw JsonApplicationException.create(HttpStatusCode.UNAUTHORIZED);
+        } 
+        if (getAuthenticationSession() == null) {
             throw JsonApplicationException.create(HttpStatusCode.UNAUTHORIZED);
         }
 

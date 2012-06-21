@@ -42,8 +42,8 @@
 		<filter-class>org.apache.isis.runtimes.dflt.webapp.IsisSessionFilter</filter-class>
 		<init-param>
 			<!-- trusted client, so no authentication required -->
-			<param-name>authenticationSessionLookupStrategy</param-name>
-			<param-value>org.apache.isis.viewer.json.viewer.authentication.AuthenticationSessionLookupStrategyTrusted</param-value>
+			<param-name>authenticationSessionStrategy</param-name>
+			<param-value>org.apache.isis.viewer.json.viewer.authentication.AuthenticationSessionStrategyTrusted</param-value>
 		</init-param>
 		<init-param>
             <!-- what to do if no session was found; we indicate to issue a 401 basic authentication challenge -->

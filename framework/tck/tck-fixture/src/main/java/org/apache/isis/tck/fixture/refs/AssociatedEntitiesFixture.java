@@ -23,7 +23,7 @@ import org.apache.isis.applib.fixtures.AbstractFixture;
 import org.apache.isis.tck.dom.refs.AssociatedEntitiesRepository;
 import org.apache.isis.tck.dom.refs.ParentEntity;
 
-public class ParentAndChildEntityFixture extends AbstractFixture {
+public class AssociatedEntitiesFixture extends AbstractFixture {
 
     @Override
     public void install() {
