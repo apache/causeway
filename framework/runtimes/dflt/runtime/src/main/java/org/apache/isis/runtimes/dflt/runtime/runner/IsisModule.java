@@ -147,11 +147,10 @@ public class IsisModule extends AbstractModule {
         return systemFactory;
     }
 
-    @SuppressWarnings("unused")
     @Provides
     @Inject
     @Singleton
-    private IsisSystem provideIsisSystem(final DeploymentType deploymentType, final IsisSystemFactory systemFactory) {
+    protected IsisSystem provideIsisSystem(final DeploymentType deploymentType, final IsisSystemFactory systemFactory) {
         final IsisSystem system = systemFactory.createSystem(deploymentType);
         system.init();
         return system;

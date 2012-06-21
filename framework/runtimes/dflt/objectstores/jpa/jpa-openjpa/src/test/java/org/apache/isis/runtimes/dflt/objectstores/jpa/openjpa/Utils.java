@@ -7,12 +7,22 @@ import java.util.Properties;
 
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
+import org.apache.isis.extensions.jpa.metamodel.specloader.validator.JpaMetaModelValidator;
+import org.apache.isis.runtimes.dflt.objectstores.jpa.openjpa.metamodel.specloader.progmodelfacets.OpenJpaProgrammingModelFacets;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.testsupport.IsisSystemWithFixtures;
 
 public class Utils {
 
     private Utils(){}
+
+    public static IsisSystemWithFixtures.Builder systemBuilder() {
+        return IsisSystemWithFixtures.builder()
+        .with(configurationForOpenJpaOverHsqlDb())
+        .with(new OpenJpaProgrammingModelFacets())
+        .with(new JpaMetaModelValidator())
+        .with(new OpenJpaPersistenceMechanismInstaller());
+    }
 
     public static IsisSystemWithFixtures.Listener listenerToDeleteFrom(final String... tables) {
         return new IsisSystemWithFixtures.ListenerAdapter(){

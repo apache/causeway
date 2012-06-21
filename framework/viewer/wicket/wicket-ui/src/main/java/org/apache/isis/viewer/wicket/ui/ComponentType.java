@@ -35,8 +35,13 @@ import org.apache.isis.viewer.wicket.model.util.Strings;
  */
 public enum ComponentType {
 
+    
     /**
-     * Welcome page.
+     * About page text.
+     */
+    ABOUT,
+    /**
+     * Welcome page text.
      */
     WELCOME,
     /**

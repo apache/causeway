@@ -44,7 +44,9 @@ public class OpenJpaIdentifierGenerator implements IdentifierGenerator, AdapterM
 
     @Override
     public String createPersistentIdentifierFor(ObjectSpecId objectSpecId, Object pojo, RootOid transientRootOid) {
+        
         final Object identifier = getPersistenceUnitUtil().getIdentifier(pojo);
+        
         if(identifier == null) {
             // is a service
             return "1";
@@ -91,12 +93,10 @@ public class OpenJpaIdentifierGenerator implements IdentifierGenerator, AdapterM
         this.adapterMap = adapterMap;
     }
 
-
     @Override
     public void setSpecificationLookup(SpecificationLookup specificationLookup) {
         this.specificationLookup = specificationLookup;
     }
-
     
     // //////////////////////////////////////////////////////////////
     // Dependencies (from context)
@@ -112,8 +112,6 @@ public class OpenJpaIdentifierGenerator implements IdentifierGenerator, AdapterM
     protected OpenJpaObjectStore getObjectStore() {
         return (OpenJpaObjectStore) IsisContext.getPersistenceSession().getObjectStore();
     }
-
-
 
 }
 // Copyright (c) Naked Objects Group Ltd.

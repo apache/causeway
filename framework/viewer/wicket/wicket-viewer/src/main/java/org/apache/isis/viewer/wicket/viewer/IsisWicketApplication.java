@@ -181,11 +181,15 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
 
         final IsisConfigurationBuilder isisConfigurationBuilder = createConfigBuilder();
 
-        final IsisModule isisModule = new IsisModule(deploymentType, isisConfigurationBuilder);
+        final IsisModule isisModule = newIsisModule(deploymentType, isisConfigurationBuilder);
         final Injector injector = Guice.createInjector(isisModule, newIsisWicketModule());
         injector.injectMembers(this);
 
         initWicketComponentInjection(injector);
+    }
+
+    protected IsisModule newIsisModule(final DeploymentType deploymentType, final IsisConfigurationBuilder isisConfigurationBuilder) {
+        return new IsisModule(deploymentType, isisConfigurationBuilder);
     }
 
     private DeploymentType determineDeploymentType() {

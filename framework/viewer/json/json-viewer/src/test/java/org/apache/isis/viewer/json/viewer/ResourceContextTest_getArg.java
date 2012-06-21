@@ -57,7 +57,7 @@ public class ResourceContextTest_getArg {
                 will(returnValue(queryString));
             }
         });
-        resourceContext = new ResourceContext(null, null, null, null, httpServletRequest, null, null, null, null, null, null, null, null) {
+        resourceContext = new ResourceContext(null, null, null, null, httpServletRequest, null, null, null, null, null, null, null, null, null) {
             @Override
             void init(final RepresentationType representationType) {
                 //
@@ -77,7 +77,7 @@ public class ResourceContextTest_getArg {
                 will(returnValue(queryString));
             }
         });
-        resourceContext = new ResourceContext(null, null, null, null, httpServletRequest, null, null, null, null, null, null, null, null) {
+        resourceContext = new ResourceContext(null, null, null, null, httpServletRequest, null, null, null, null, null, null, null, null, null) {
             @Override
             void init(final RepresentationType representationType) {
                 //

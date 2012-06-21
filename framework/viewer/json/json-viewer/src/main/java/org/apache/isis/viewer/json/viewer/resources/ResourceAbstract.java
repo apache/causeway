@@ -39,6 +39,7 @@ import org.codehaus.jackson.map.JsonMappingException;
 
 import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
+import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.stringable.OidStringifier;
 import org.apache.isis.core.metamodel.adapter.version.Version;
@@ -118,7 +119,7 @@ public abstract class ResourceAbstract {
             throw JsonApplicationException.create(HttpStatusCode.UNAUTHORIZED);
         }
 
-        this.resourceContext = new ResourceContext(representationType, httpHeaders, uriInfo, request, httpServletRequest, httpServletResponse, securityContext, getOidStringifier(), getLocalization(), getAuthenticationSession(), getPersistenceSession(), getAdapterManager(), getSpecificationLoader());
+        this.resourceContext = new ResourceContext(representationType, httpHeaders, uriInfo, request, httpServletRequest, httpServletResponse, securityContext, getOidStringifier(), getLocalization(), getAuthenticationSession(), getPersistenceSession(), getAdapterManager(), getSpecificationLoader(), getConfiguration());
     }
 
     protected ResourceContext getResourceContext() {
@@ -210,6 +211,10 @@ public abstract class ResourceAbstract {
     // //////////////////////////////////////////////////////////////
     // Dependencies (from singletons)
     // //////////////////////////////////////////////////////////////
+
+    protected IsisConfiguration getConfiguration () {
+        return IsisContext.getConfiguration();
+    }
 
     protected AuthenticationSession getAuthenticationSession() {
         return IsisContext.getAuthenticationSession();

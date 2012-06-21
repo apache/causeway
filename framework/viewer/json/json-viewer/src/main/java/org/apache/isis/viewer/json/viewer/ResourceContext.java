@@ -36,6 +36,7 @@ import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
+import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterLookup;
 import org.apache.isis.core.metamodel.adapter.oid.stringable.OidStringifier;
 import org.apache.isis.core.metamodel.spec.SpecificationLookup;
@@ -56,6 +57,7 @@ public class ResourceContext {
     private final SecurityContext securityContext;
     private final OidStringifier oidStringifier;
     private final Localization localization;
+    private final IsisConfiguration configuration;
     private final AuthenticationSession authenticationSession;
     private final PersistenceSession persistenceSession;
     private final ObjectAdapterLookup objectAdapterLookup;
@@ -78,7 +80,7 @@ public class ResourceContext {
     private JsonRepresentation readQueryStringAsMap;
 
     public ResourceContext(final RepresentationType representationType, final HttpHeaders httpHeaders, final UriInfo uriInfo, final Request request, final HttpServletRequest httpServletRequest, final HttpServletResponse httpServletResponse, final SecurityContext securityContext,
-            final OidStringifier oidStringifier, final Localization localization, final AuthenticationSession authenticationSession, final PersistenceSession persistenceSession, final ObjectAdapterLookup objectAdapterLookup, final SpecificationLookup specificationLookup) {
+            final OidStringifier oidStringifier, final Localization localization, final AuthenticationSession authenticationSession, final PersistenceSession persistenceSession, final ObjectAdapterLookup objectAdapterLookup, final SpecificationLookup specificationLookup, IsisConfiguration configuration) {
 
         this.httpHeaders = httpHeaders;
         this.uriInfo = uriInfo;
@@ -88,6 +90,7 @@ public class ResourceContext {
         this.securityContext = securityContext;
         this.oidStringifier = oidStringifier;
         this.localization = localization;
+        this.configuration = configuration;
         this.authenticationSession = authenticationSession;
         this.persistenceSession = persistenceSession;
         this.objectAdapterLookup = objectAdapterLookup;

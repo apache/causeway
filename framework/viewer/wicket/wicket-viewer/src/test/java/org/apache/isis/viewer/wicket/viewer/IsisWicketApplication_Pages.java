@@ -25,6 +25,7 @@ import static org.junit.Assert.assertThat;
 import org.apache.wicket.Page;
 import org.apache.wicket.markup.html.WebPage;
 import org.jmock.Expectations;
+import org.jmock.auto.Mock;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -39,14 +40,16 @@ public class IsisWicketApplication_Pages {
     @Rule
     public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_ONLY);
 
+    @Mock
+    private PageClassRegistry mockPageClassRegistry;
+    
     private IsisWicketApplication application;
 
     @Test
     public void delegatesToPageClassRegistryToObtainPageTypes() {
         final PageType pageType = PageType.HOME;
         final Class<HomePage> expectedPageClass = HomePage.class;
-
-        final PageClassRegistry mockPageClassRegistry = context.mock(PageClassRegistry.class);
+        
         application = new IsisWicketApplication() {
             private static final long serialVersionUID = 1L;
 
