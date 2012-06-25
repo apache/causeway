@@ -186,8 +186,8 @@ public class FileServer {
             final InetAddress address = InetAddress.getByName(serviceHost);
             socket = new ServerSocket(servicePort, BACKLOG, address);
             socket.setSoTimeout(connectionTimeout);
-            LOG.info("listenting on " + socket.getInetAddress().getHostAddress() + " port " + socket.getLocalPort());
-            LOG.debug("listenting on " + socket);
+            LOG.info("file service listenting on " + socket.getInetAddress().getHostAddress() + " port " + socket.getLocalPort());
+            LOG.debug("file service listenting on " + socket);
             final LogRange logFileRange = Util.logFileRange();
             if (!logFileRange.noLogFile()) {
                 final long lastRecoveryFile = logFileRange.getLast();
@@ -349,8 +349,8 @@ public class FileServer {
             final InetAddress address = InetAddress.getByName(controlHost);
             socket = new ServerSocket(controlPort, 0, address);
             socket.setSoTimeout(connectionTimeout);
-            LOG.info("listenting on " + socket.getInetAddress().getHostAddress() + " port " + socket.getLocalPort());
-            LOG.debug("listenting on " + socket);
+            LOG.info("file control listenting on " + socket.getInetAddress().getHostAddress() + " port " + socket.getLocalPort());
+            LOG.debug("file control listenting on " + socket);
         } catch (final UnknownHostException e) {
             LOG.error("Unknown host " + controlHost, e);
             System.exit(0);
