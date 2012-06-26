@@ -45,7 +45,7 @@ public class OpenJpaSimplePersistAlgorithm extends PersistAlgorithmAbstract {
             LOG.info("persist " + adapter);
         }
         CallbackUtils.callCallback(adapter, PersistingCallbackFacet.class);
-        toPersistObjectSet.addPersistedObject(adapter);
+        toPersistObjectSet.addCreateObjectCommand(adapter);
     }
 
 

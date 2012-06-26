@@ -107,7 +107,7 @@ public class TwoPassPersistAlgorithm extends PersistAlgorithmAbstract {
                 }
             }
 
-            toPersistObjectSet.addPersistedObject(object);
+            toPersistObjectSet.addCreateObjectCommand(object);
             CallbackUtils.callCallback(object, PersistedCallbackFacet.class);
         }
     }

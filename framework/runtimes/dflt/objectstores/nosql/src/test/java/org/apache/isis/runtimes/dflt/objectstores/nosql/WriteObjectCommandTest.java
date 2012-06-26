@@ -19,6 +19,12 @@
 
 package org.apache.isis.runtimes.dflt.objectstores.nosql;
 
+import static org.hamcrest.CoreMatchers.*;
+import static org.junit.Assert.assertThat;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
 import org.junit.Before;
@@ -33,6 +39,7 @@ import org.apache.isis.core.metamodel.adapter.version.SerialNumberVersion;
 import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2;
 import org.apache.isis.core.testsupport.jmock.JUnitRuleMockery2.Mode;
+import org.apache.isis.runtimes.dflt.objectstores.nosql.db.StateReader;
 import org.apache.isis.runtimes.dflt.objectstores.nosql.db.StateWriter;
 import org.apache.isis.runtimes.dflt.objectstores.nosql.encryption.DataEncryption;
 import org.apache.isis.runtimes.dflt.objectstores.nosql.versions.VersionCreator;
@@ -171,6 +178,7 @@ public class WriteObjectCommandTest {
                 
                 one(writer).writeField("reference", "SMPL:1");
                 one(writer).writeField("aggregatedReference", null);
+                one(writer).writeCollection(with(equalTo("aggregatedEntities")), with(equalTo(new ArrayList<StateWriter>())));
                 
                 one(writer).writeVersion(null, "2");
                 one(writer).writeUser("username");

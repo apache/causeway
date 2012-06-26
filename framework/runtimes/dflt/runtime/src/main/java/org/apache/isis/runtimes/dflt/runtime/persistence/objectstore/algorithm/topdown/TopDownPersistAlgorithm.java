@@ -61,7 +61,7 @@ public class TopDownPersistAlgorithm extends PersistAlgorithmAbstract {
             LOG.info("persist " + object);
             CallbackUtils.callCallback(object, PersistingCallbackFacet.class);
             toPersistObjectSet.remapAsPersistent(object);
-            toPersistObjectSet.addPersistedObject(object);
+            toPersistObjectSet.addCreateObjectCommand(object);
             CallbackUtils.callCallback(object, PersistedCallbackFacet.class);
 
             for (int i = 0; i < fields.size(); i++) {

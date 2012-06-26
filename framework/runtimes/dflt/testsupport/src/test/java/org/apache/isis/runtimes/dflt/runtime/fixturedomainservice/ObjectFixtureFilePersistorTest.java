@@ -168,7 +168,7 @@ public class ObjectFixtureFilePersistorTest {
         persistor.save(objects, out);
         final String actual = out.toString().replaceAll("\r\n", "\n");
 
-        final String expected1 = ReferencingEntity.class.getName() + "#2\n  aggregatedReference: \n  reference: " + SimpleEntity.class.getName() + "#3";
+        final String expected1 = ReferencingEntity.class.getName() + "#2\n  aggregatedEntities: \n  aggregatedReference: \n  reference: " + SimpleEntity.class.getName() + "#3";
         final String expected2 = SimpleEntity.class.getName() + "#3\n  date: 08-Mar-2010 01:00 UTC\n  name: Fred Smith\n";
         assertThat(actual, IsisMatchers.contains(expected1));
         assertThat(actual, IsisMatchers.contains(expected2));

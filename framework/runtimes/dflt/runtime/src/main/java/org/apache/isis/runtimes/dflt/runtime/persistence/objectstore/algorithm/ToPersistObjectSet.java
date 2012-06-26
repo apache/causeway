@@ -20,6 +20,7 @@
 package org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.algorithm;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 
 /**
@@ -31,8 +32,14 @@ import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSessi
  */
 public interface ToPersistObjectSet {
 
-    void addPersistedObject(ObjectAdapter object);
-
     void remapAsPersistent(final ObjectAdapter object);
-
+    
+    void addCreateObjectCommand(ObjectAdapter object);
+    
+    /**
+     * To support ISIS-234; keep track, for the duration of the transaction only, 
+     * of the old transient {@link Oid}s and their corresponding persistent {@link Oid}s.
+     */
+    Oid remappedFrom(Oid oid);
+    
 }

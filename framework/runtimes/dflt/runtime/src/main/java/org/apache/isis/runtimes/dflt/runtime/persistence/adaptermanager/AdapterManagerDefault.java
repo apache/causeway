@@ -368,7 +368,7 @@ public class AdapterManagerDefault extends AdapterManagerAbstract implements Obj
      * Note that there is no management of {@link Version}s here. That is
      * because the {@link PersistenceSession} is expected to manage this. (In
      * practice this is done by the <tt>ObjectAdapterStore</tt> implementation
-     * delegated by the <tt>PersistenceSessionObjectStore</tt>, and propagated
+     * delegated by the <tt>PersistenceSession</tt>, and propagated
      * back to client-side as required).
      * 
      * @param hintRootOid - intended for testing, allow a different persistent root oid to be provided.  Must be persistent and compatible with the adapter's type

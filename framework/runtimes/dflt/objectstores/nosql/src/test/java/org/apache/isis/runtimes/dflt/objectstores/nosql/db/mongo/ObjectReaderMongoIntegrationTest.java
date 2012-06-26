@@ -22,6 +22,7 @@ package org.apache.isis.runtimes.dflt.objectstores.nosql.db.mongo;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -156,6 +157,9 @@ public class ObjectReaderMongoIntegrationTest {
 
                 one(reader2).readField("reference");
                 will(returnValue("SMPL:3"));
+
+                one(reader2).readCollection("aggregatedEntities");
+                will(returnValue(new ArrayList<StateReader>()));
 
                 one(reader2).readAggregate("aggregatedReference");
                 will(returnValue(null));

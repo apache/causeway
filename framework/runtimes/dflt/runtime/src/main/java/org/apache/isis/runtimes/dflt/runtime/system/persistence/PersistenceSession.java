@@ -1041,6 +1041,9 @@ public class PersistenceSession implements PersistenceSessionContainer, Persiste
             @Override
             public void execute() {
                 persistAlgorithm.makePersistent(adapter, PersistenceSession.this);
+                
+                // clear out the map of transient -> persistent
+                PersistenceSession.this.persistentByTransient.clear();
             }
 
             @Override
@@ -1196,7 +1199,18 @@ public class PersistenceSession implements PersistenceSessionContainer, Persiste
      */
     @Override
     public void remapAsPersistent(final ObjectAdapter adapter) {
+        final Oid transientOid = adapter.getOid();
         getAdapterManager().remapAsPersistent(adapter, null);
+        final Oid persistentOid = adapter.getOid();
+        persistentByTransient.put(transientOid, persistentOid);
+    }
+
+
+    private Map<Oid, Oid> persistentByTransient = Maps.newHashMap();
+    
+    @Override
+    public Oid remappedFrom(Oid transientOid) {
+        return persistentByTransient.get(transientOid);
     }
 
     // ///////////////////////////////////////////////////////////////////////////
@@ -1273,7 +1287,7 @@ public class PersistenceSession implements PersistenceSessionContainer, Persiste
      * {@link IsisTransactionManager}.
      */
     @Override
-    public void addPersistedObject(final ObjectAdapter object) {
+    public void addCreateObjectCommand(final ObjectAdapter object) {
         getTransactionManager().addCommand(objectStore.createCreateObjectCommand(object));
     }
 
@@ -1328,6 +1342,7 @@ public class PersistenceSession implements PersistenceSessionContainer, Persiste
     private static AuthenticationSession getAuthenticationSession() {
         return IsisContext.getAuthenticationSession();
     }
+
 
     
 }

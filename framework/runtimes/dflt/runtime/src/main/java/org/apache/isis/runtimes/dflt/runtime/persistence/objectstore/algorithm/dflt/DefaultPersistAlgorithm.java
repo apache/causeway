@@ -99,7 +99,7 @@ public class DefaultPersistAlgorithm extends PersistAlgorithmAbstract {
                     persist(fieldValue, toPersistObjectSet);
                 }
             }
-            toPersistObjectSet.addPersistedObject(object);
+            toPersistObjectSet.addCreateObjectCommand(object);
             CallbackUtils.callCallback(object, PersistedCallbackFacet.class);
             object.changeState(ResolveState.SERIALIZING_RESOLVED.getEndState());
         }
