@@ -366,17 +366,14 @@ public class AdapterManagerDefault extends AdapterManagerAbstract implements Obj
      * 
      * <p>
      * Note that there is no management of {@link Version}s here. That is
-     * because the {@link PersistenceSession} is expected to manage this. (In
-     * practice this is done by the <tt>ObjectAdapterStore</tt> implementation
-     * delegated by the <tt>PersistenceSession</tt>, and propagated
-     * back to client-side as required).
+     * because the {@link PersistenceSession} is expected to manage this.
      * 
-     * @param hintRootOid - intended for testing, allow a different persistent root oid to be provided.  Must be persistent and compatible with the adapter's type
+     * @param hintRootOid - allow a different persistent root oid to be provided.
      */
     @Override
     public void remapAsPersistent(final ObjectAdapter adapter, RootOid hintRootOid) {
         
-        final ObjectAdapter rootAdapter = adapter.getAggregateRoot();
+        final ObjectAdapter rootAdapter = adapter.getAggregateRoot();  // REVIEW: think this is redundant; would seem this method is only ever called for roots anyway.
         final RootOid transientRootOid = (RootOid) rootAdapter.getOid();
 
         Ensure.ensureThatArg(rootAdapter.isTransient(), is(true), "root adapter should be transient; oid:" + transientRootOid);

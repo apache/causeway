@@ -227,7 +227,6 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
     @Override
     public ObjectAdapter getAggregateRoot() {
         if(!isParented()) {
-            //throw new IllegalStateException("This adapter is not parented (it's OID is not of type ParentedOid); oid:" + oid);
             return this;
         }
         ParentedOid parentedOid = (ParentedOid) oid;
