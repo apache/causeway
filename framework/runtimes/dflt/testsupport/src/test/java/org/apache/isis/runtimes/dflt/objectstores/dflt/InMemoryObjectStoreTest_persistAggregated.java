@@ -19,41 +19,19 @@
 
 package org.apache.isis.runtimes.dflt.objectstores.dflt;
 
-import org.junit.Ignore;
-import org.junit.Rule;
-import org.junit.Test;
-
 import org.apache.isis.runtimes.dflt.runtime.installerregistry.installerapi.PersistenceMechanismInstaller;
-import org.apache.isis.runtimes.dflt.testsupport.IsisSystemWithFixtures;
-import org.apache.isis.tck.dom.refs.ReferencingEntity;
+import org.apache.isis.runtimes.dflt.testsupport.IsisSystemWithFixtures.Listener;
+import org.apache.isis.runtimes.dflt.testsupport.tck.ObjectStoreContractTest_persist;
 
-public class InMemoryObjectStoreTest_persist {
+public class InMemoryObjectStoreTest_persistAggregated extends ObjectStoreContractTest_persist {
 
-    @Rule
-    public IsisSystemWithFixtures iswf = IsisSystemWithFixtures.builder()
-        .with(createPersistenceMechanismInstaller())
-        .build();
-
+    @Override
     protected PersistenceMechanismInstaller createPersistenceMechanismInstaller() {
         return new InMemoryPersistenceMechanismInstaller();
     }
 
-    @Ignore("reproducing problem found by Rob")
-    @Test
-    public void persistAggregatedEntityWithinCollection() throws Exception {
-        final ReferencingEntity referencingEntity = iswf.fixtures.rfcg2;
-        referencingEntity.addAggregatedEntityToCollection().setName("Aggregated Entity #1");
-        iswf.persist(referencingEntity);
+    @Override
+    protected Listener iswfListener() {
+        return null;
     }
-    
-
-    @Ignore("reproducing problem found by Rob")
-    @Test
-    public void persistAggregatedEntityWithinProperty() throws Exception {
-        final ReferencingEntity referencingEntity = iswf.fixtures.rfcg2;
-        referencingEntity.addAggregatedReference().setName("Aggregated Entity #1");
-        iswf.persist(referencingEntity);
-    }
-    
-
 }

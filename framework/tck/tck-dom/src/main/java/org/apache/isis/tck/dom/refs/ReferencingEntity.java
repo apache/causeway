@@ -19,6 +19,10 @@
 
 package org.apache.isis.tck.dom.refs;
 
+import java.util.List;
+
+import com.google.common.collect.Lists;
+
 import org.apache.isis.applib.annotation.NotPersisted;
 import org.apache.isis.applib.annotation.ObjectType;
 
@@ -48,6 +52,30 @@ public class ReferencingEntity extends BaseEntity {
     public void setAggregatedReference(final AggregatedEntity aggregatedReference) {
         this.aggregatedReference = aggregatedReference;
     }
+
+    public AggregatedEntity addAggregatedReference() {
+        final AggregatedEntity aggregatedEntity = newAggregatedInstance(AggregatedEntity.class);
+        setAggregatedReference(aggregatedEntity);
+        return aggregatedEntity;
+    }
+    // }}
+
+    // {{ AggregatedEntities
+    private List<AggregatedEntity> aggregatedEntities = Lists.newArrayList();
+
+    public List<AggregatedEntity> getAggregatedEntities() {
+        return aggregatedEntities;
+    }
+
+    public void setAggregatedEntities(List<AggregatedEntity> aggregatedEntities) {
+        this.aggregatedEntities = aggregatedEntities;
+    }
+    
+    public AggregatedEntity addAggregatedEntityToCollection() {
+        final AggregatedEntity aggregatedEntity = newAggregatedInstance(AggregatedEntity.class);
+        getAggregatedEntities().add(aggregatedEntity);
+        return aggregatedEntity;
+    }
     // }}
 
     // {{ NotPersisted
@@ -56,5 +84,6 @@ public class ReferencingEntity extends BaseEntity {
         throw new org.apache.isis.applib.ApplicationException("unexpected call");
     }
     // }}
+
 
 }
