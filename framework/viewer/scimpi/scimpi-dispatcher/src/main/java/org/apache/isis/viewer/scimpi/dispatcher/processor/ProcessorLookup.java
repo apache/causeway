@@ -93,6 +93,7 @@ import org.apache.isis.viewer.scimpi.dispatcher.view.simple.GetCookie;
 import org.apache.isis.viewer.scimpi.dispatcher.view.simple.Import;
 import org.apache.isis.viewer.scimpi.dispatcher.view.simple.InitializeFromCookie;
 import org.apache.isis.viewer.scimpi.dispatcher.view.simple.InitializeFromResult;
+import org.apache.isis.viewer.scimpi.dispatcher.view.simple.Localization;
 import org.apache.isis.viewer.scimpi.dispatcher.view.simple.Mark;
 import org.apache.isis.viewer.scimpi.dispatcher.view.simple.NewActionLink;
 import org.apache.isis.viewer.scimpi.dispatcher.view.simple.ObjectLink;
@@ -103,6 +104,7 @@ import org.apache.isis.viewer.scimpi.dispatcher.view.simple.ScopeTag;
 import org.apache.isis.viewer.scimpi.dispatcher.view.simple.SetCookie;
 import org.apache.isis.viewer.scimpi.dispatcher.view.simple.SetCookieFromField;
 import org.apache.isis.viewer.scimpi.dispatcher.view.simple.SetFieldFromCookie;
+import org.apache.isis.viewer.scimpi.dispatcher.view.simple.SetLocalization;
 import org.apache.isis.viewer.scimpi.dispatcher.view.simple.SimpleButton;
 import org.apache.isis.viewer.scimpi.dispatcher.view.simple.StartSession;
 import org.apache.isis.viewer.scimpi.dispatcher.view.simple.TemplateTag;
@@ -213,6 +215,10 @@ public class ProcessorLookup {
         addElementProcessor(new GetCookie());
         addElementProcessor(new SetCookieFromField());
         addElementProcessor(new SetFieldFromCookie());
+        
+        // new, alpha, processors
+        addElementProcessor(new Localization());
+        addElementProcessor(new SetLocalization());
     }
 
     public void addElementProcessor(final ElementProcessor action) {
