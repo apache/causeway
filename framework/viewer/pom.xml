@@ -46,7 +46,7 @@
 		<module>html-tck</module>
 		<module>scimpi</module>
 		<module>wicket</module>
-		<module>json</module>
+		<module>restfulobjects</module>
 		<module>bdd</module>
 		<module>junit</module>
 		<module>junit-tck</module>

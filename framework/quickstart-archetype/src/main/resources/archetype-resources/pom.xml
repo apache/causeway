@@ -387,17 +387,17 @@
             <!-- isis: viewer: json -->
             <dependency>
                 <groupId>org.apache.isis.viewer</groupId>
-                <artifactId>json</artifactId>
+                <artifactId>restfulobjects</artifactId>
                 <version>${isis.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.viewer</groupId>
-                <artifactId>json-applib</artifactId>
+                <artifactId>restfulobjects-applib</artifactId>
                 <version>${isis.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.viewer</groupId>
-                <artifactId>json-viewer</artifactId>
+                <artifactId>restfulobjects-viewer</artifactId>
                 <version>${isis.version}</version>
             </dependency>
 
