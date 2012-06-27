@@ -25,6 +25,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.scimpi.dispatcher.AbstractElementProcessor;
 import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext;
+import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext.Scope;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 import org.apache.isis.viewer.scimpi.dispatcher.util.MethodsUtils;
 import org.apache.isis.viewer.scimpi.dispatcher.view.HelpLink;
@@ -33,7 +34,7 @@ public class ActionLink extends AbstractElementProcessor {
 
     @Override
     public void process(final Request request) {
-        final String objectId = request.getOptionalProperty(OBJECT);
+        String objectId = request.getOptionalProperty(OBJECT);
         final String method = request.getOptionalProperty(METHOD);
         final String forwardResultTo = request.getOptionalProperty(VIEW);
         final String forwardVoidTo = request.getOptionalProperty(VOID);
@@ -55,8 +56,10 @@ public class ActionLink extends AbstractElementProcessor {
         final ObjectAdapter object = MethodsUtils.findObject(context, objectId);
         final String version = context.mapVersion(object);
         final ObjectAction action = MethodsUtils.findAction(object, method);
+        objectId = request.getContext().mapObject(object, Scope.REQUEST);
 
         final ActionContent parameterBlock = new ActionContent(action);
+        
         request.setBlockContent(parameterBlock);
         request.pushNewBuffer();
         request.processUtilCloseTag();
