@@ -24,6 +24,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.scimpi.dispatcher.AbstractElementProcessor;
 import org.apache.isis.viewer.scimpi.dispatcher.ScimpiException;
+import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext;
 import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext.Scope;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 
@@ -33,6 +34,7 @@ public class TableCell extends AbstractElementProcessor {
     public void process(final Request request) {
         final String id = request.getOptionalProperty(OBJECT);
         final String fieldName = request.getRequiredProperty(FIELD);
+        final String linkView = request.getOptionalProperty(LINK);
         String className = request.getOptionalProperty(CLASS);
         className = className == null ? "" : " class=\"" + className + "\"";
         final ObjectAdapter object = request.getContext().getMappedObjectOrVariable(id, ELEMENT);
@@ -47,6 +49,10 @@ public class TableCell extends AbstractElementProcessor {
             final String name = request.getOptionalProperty(RESULT_NAME, fieldName);
             request.getContext().addVariable(name, Request.getEncoder().encoder(source), Scope.REQUEST);
 
+            if (linkView != null) {
+                String linkId = request.getContext().mapObject(object, Scope.REQUEST);
+                request.appendHtml("<a href=\"" + linkView + "?" + RequestContext.RESULT + "=" + linkId + "\">");
+            }
             request.pushNewBuffer();
             request.processUtilCloseTag();
             final String buffer = request.popBuffer();
@@ -54,6 +60,9 @@ public class TableCell extends AbstractElementProcessor {
                 request.appendAsHtmlEncoded(fieldReference == null ? "" : fieldReference.titleString());
             } else {
                 request.appendHtml(buffer);
+            }
+            if (linkView != null) {
+                request.appendHtml("</a>");
             }
         } else {
             request.skipUntilClose();
