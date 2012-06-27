@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+         http://www.apache.org/licenses/LICENSE-2.0
+         
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+	
+	<parent>
+		<groupId>org.apache.isis</groupId>
+		<artifactId>viewer</artifactId>
+		<version>0.3.1-incubating-SNAPSHOT</version>
+	</parent>
+
+	<groupId>org.apache.isis.viewer</groupId>
+	<artifactId>json</artifactId>
+
+	<name>JSON Viewer</name>
+
+	<packaging>pom</packaging>
+
+    <properties>
+        <siteBaseDir>../..</siteBaseDir>
+		<relativeUrl>viewer/json/</relativeUrl>
+
+        <docbkxGuideTitle>Apache Isis JSON Viewer</docbkxGuideTitle>
+        <docbkxGuideSubTitle>Programming, Configuration and Deployment Guide</docbkxGuideSubTitle>
+        <docbkxGuideName>isis-json-viewer</docbkxGuideName>
+    </properties>
+	
+    <!-- used in Site generation for relative references. -->
+    <url>http://incubator.apache.org/isis/${relativeUrl}</url>
+
+	<repositories>
+		<!-- required for RestEasy -->
+		<repository>
+			<id>jboss</id>
+			<url>http://repository.jboss.org/nexus/content/groups/public-jboss/</url>
+		    <snapshots>
+		      <enabled>false</enabled>
+		    </snapshots>
+		</repository>
+		<repository>
+			<id>maven2-repository.dev.java.net</id>
+			<name>Java.net Repository for Maven</name>
+			<url>http://download.java.net/maven/2/</url>
+			<layout>default</layout>
+		    <snapshots>
+		      <enabled>false</enabled>
+		    </snapshots>
+		</repository>
+		<repository>
+			<id>maven-repository.dev.java.net</id>
+			<name>Java.net Maven 1 Repository (legacy)</name>
+			<url>http://download.java.net/maven/1</url>
+		    <snapshots>
+		      <enabled>false</enabled>
+		    </snapshots>
+		</repository>
+	</repositories>
+
+	<build>
+		<plugins>
+            <plugin>
+                <groupId>com.agilejava.docbkx</groupId>
+                <artifactId>docbkx-maven-plugin</artifactId>
+				<inherited>false</inherited>
+            </plugin>
+		</plugins>
+	</build>
+
+    <dependencyManagement>
+        <dependencies>
+            <!-- TODO: remove this dependency -->
+            <dependency>
+                <groupId>org.apache.isis.runtimes</groupId>
+                <artifactId>dflt</artifactId>
+                <version>0.3.1-incubating-SNAPSHOT</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+			<!-- JSON Viewer -->
+	   		<dependency>
+				<groupId>org.apache.isis.viewer</groupId>
+				<artifactId>json-applib</artifactId>
+				<version>0.3.1-incubating-SNAPSHOT</version>
+			</dependency>
+	   		<dependency>
+				<groupId>org.apache.isis.viewer</groupId>
+				<artifactId>json-applib</artifactId>
+				<version>0.3.1-incubating-SNAPSHOT</version>
+                <type>test-jar</type>
+			</dependency>
+	   		<dependency>
+				<groupId>org.apache.isis.viewer</groupId>
+				<artifactId>json-viewer</artifactId>
+				<version>0.3.1-incubating-SNAPSHOT</version>
+			</dependency>
+	   		<dependency>
+				<groupId>org.apache.isis.viewer</groupId>
+				<artifactId>json-viewer</artifactId>
+				<version>0.3.1-incubating-SNAPSHOT</version>
+                <type>test-jar</type>
+			</dependency>
+
+
+		</dependencies>
+	</dependencyManagement>
+
+
+    <!-- USE -pl xxx TO SELECT A SINGLE MODULE -->
+    <modules>
+	    <module>json-applib</module>
+	    <module>json-viewer</module>
+	    <module>json-tck</module>
+    </modules>
+
+</project>
