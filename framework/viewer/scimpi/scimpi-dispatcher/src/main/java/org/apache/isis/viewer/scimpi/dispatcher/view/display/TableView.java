@@ -255,15 +255,27 @@ public class TableView extends AbstractTableView {
 
     public static void write(final Request request, final String summary, final ObjectAdapter object, final ObjectAssociation field, final ObjectAdapter collection, final int noColumns, final List<ObjectAssociation> fields, final boolean linkAllFields, final boolean showIconByDefault,
             final String tableClass, final String[] rowClasses) {
-        final boolean[] linkFields = new boolean[noColumns];
+        final LinkedObject[] linkedFields = new LinkedObject[fields.size()];
         if (linkAllFields) {
-            for (int i = 0; i < linkFields.length; i++) {
-                linkFields[i] = fields.get(i).isOneToOneAssociation();
+            for (int i = 0; i < linkedFields.length; i++) {
+                if (fields.get(i).isOneToOneAssociation()) {
+                    linkedFields[i] = new LinkedObject("_generic.shtml");
+                }
             }
         }
+        
+        final String headers[] = new String[fields.size()];
+        int h = 0;
+        for (int i = 0; i < fields.size(); i++) {
+            if (fields.get(i).isOneToManyAssociation()) {
+                continue;
+            }
+            headers[h++] = fields.get(i).getName();
+        }
+        
         final RequestContext context = request.getContext();
         final TableContentWriter rowBuilder = rowBuilder(request, context, null, context.mapObject(object, Scope.REQUEST), field.getId(), fields, showIconByDefault);
-        write(request, collection, summary, rowBuilder, tableClass, rowClasses);
+        write(request, collection, summary, rowBuilder, null, null);
     }
 
     @Override
