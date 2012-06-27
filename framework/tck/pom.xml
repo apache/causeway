@@ -451,17 +451,17 @@
             <!-- isis: viewer: json -->
             <dependency>
                 <groupId>org.apache.isis.viewer</groupId>
-                <artifactId>restfulobjects</artifactId>
+                <artifactId>json</artifactId>
                 <version>0.3.1-incubating-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.viewer</groupId>
-                <artifactId>restfulobjects-applib</artifactId>
+                <artifactId>json-applib</artifactId>
                 <version>0.3.1-incubating-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.viewer</groupId>
-                <artifactId>restfulobjects-viewer</artifactId>
+                <artifactId>json-viewer</artifactId>
                 <version>0.3.1-incubating-SNAPSHOT</version>
             </dependency>
 
