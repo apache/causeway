@@ -22,17 +22,17 @@
 
 	<body>
 		<breadcrumbs>
-			<item name="RestfulObjects" href="index.html"/>
+			<item name="JSON" href="index.html"/>
 		</breadcrumbs>
 
-		<menu name="RestfulObjects for Isis">
+		<menu name="JSON Viewer">
 			<item name="About" href="index.html" />
             <item name="Jottings" href="jottings.html" />
 		</menu>
 		
         <menu name="Viewer Modules">
             <item name="HTML" href="../html/index.html" />
-            <item name="RestfulObjects" href="../json/index.html" />
+            <item name="JSON" href="../json/index.html" />
             <item name="JUnit Support" href="../junit/index.html" />
             <item name="BDD Integration" href="../bdd/index.html" />
             <item name="Scimpi" href="../scimpi/index.html" />
@@ -40,7 +40,7 @@
             <item name="DnD" href="../dnd/index.html" />
         </menu>
 
-        <menu name="RestfulObjects Modules">
+        <menu name="JSON Modules">
             <item name="Applib" href="./json-applib/index.html" />
             <item name="Viewer" href="./json-viewer/index.html" />
         </menu>

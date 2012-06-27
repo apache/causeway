@@ -16,24 +16,21 @@
 ~~  under the License.
 
 
-RestfulObjects for Isis
+JSON Viewer
 
- The <restfulobjects> viewer provides a RESTful interface to the domain object 
- model, running over the HTTP protocol, and implemented as a webapp (servlet).
+ The <json> viewer provides a RESTful interface to the domain object model,
+ running over the HTTP protocol, and implemented as a webapp (servlet).
  
  Each domain object (or part of object) is exposed as a RESTful resource, in
  a JSON representation.
 
- The viewer is an implementation of the 
- {{{http://restfulobjects.org}Restful Objects}} specification, intended to 
- allow other server-side frameworks to be implemented
+ The viewer is an implementation of the {{{http://restfulobjects.org}Restful Objects}}
+ specification, intended to allow other server-side frameworks to be implemented
  to support the same protocol.
 
 
 Further Info
   
-  See this module's {{{./restfulobjects-applib/index.html}applib}}, 
-  {{{./restfulobjects-viewer/index.html}viewer}} and 
-  {{{./docbkx/html/guide/isis-restfulobjects-viewer.html}user guide}} for more 
-  information.
+  See this module's {{{./json-applib/index.html}applib}},  {{{./json-viewer/index.html}viewer}} and 
+  {{{./docbkx/html/guide/isis-json-viewer.html}user guide}} for more information.
  
