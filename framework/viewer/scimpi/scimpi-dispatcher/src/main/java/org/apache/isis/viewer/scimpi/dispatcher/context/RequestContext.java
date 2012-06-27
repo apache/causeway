@@ -40,18 +40,17 @@ import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.AggregatedOid;
-import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.oid.TypedOid;
 import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
-import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.viewer.scimpi.dispatcher.Dispatcher;
+import org.apache.isis.viewer.scimpi.dispatcher.ErrorCollator;
 import org.apache.isis.viewer.scimpi.dispatcher.ScimpiException;
 import org.apache.isis.viewer.scimpi.dispatcher.action.PropertyException;
 import org.apache.isis.viewer.scimpi.dispatcher.debug.DebugUsers;
@@ -779,6 +778,12 @@ public abstract class RequestContext {
     public abstract String clearSession();
 
     public abstract boolean isAborted();
+    
+    public abstract String getErrorReference();
+
+    public abstract String getErrorMessage();
+    
+    public abstract String getErrorDetails();
 
     public void setSession(final AuthenticationSession session) {
         this.session = session;
@@ -791,7 +796,7 @@ public abstract class RequestContext {
 
     public abstract String getUri();
 
-    public void raiseError(final int status) {
+    public void raiseError(final int status, final ErrorCollator errorDetails) {
     }
 
     public void setContentType(final String string) {

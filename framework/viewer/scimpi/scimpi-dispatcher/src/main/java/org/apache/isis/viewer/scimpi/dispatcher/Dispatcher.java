@@ -33,18 +33,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
 
-import org.apache.log4j.Logger;
-import org.dom4j.Document;
-import org.dom4j.DocumentException;
-import org.dom4j.Element;
-import org.dom4j.io.SAXReader;
-
+import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
-import org.apache.isis.core.commons.config.ConfigurationConstants;
 import org.apache.isis.core.commons.debug.DebugBuilder;
-import org.apache.isis.core.commons.debug.DebugHtmlString;
-import org.apache.isis.core.commons.debug.DebugString;
-import org.apache.isis.core.commons.debug.DebugTee;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -76,6 +67,11 @@ import org.apache.isis.viewer.scimpi.dispatcher.processor.SimpleEncoder;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.TagProcessingException;
 import org.apache.isis.viewer.scimpi.dispatcher.util.MethodsUtils;
 import org.apache.isis.viewer.scimpi.dispatcher.view.Snippet;
+import org.apache.log4j.Logger;
+import org.dom4j.Document;
+import org.dom4j.DocumentException;
+import org.dom4j.Element;
+import org.dom4j.io.SAXReader;
 
 public class Dispatcher {
     public static final String ACTION = "_action";
@@ -106,38 +102,17 @@ public class Dispatcher {
         } catch (final ScimpiNotFoundException e) {
             if (context.isInternalRequest()) {
                 LOG.error("invalid page request (from within application): " + e.getMessage());
+                ErrorCollator error = new ErrorCollator(); 
+                error.missingFile("Failed to find page " + servletPath + "."); 
+                show500ErrorPage(context, e, error);             
             } else {
                 LOG.info("invalid page request (from outside application): " + e.getMessage());
+                show404ErrorPage(context, servletPath); 
             }
-
-            try {
-                // TODO pick options up from configuration
-                // context.raiseError(404);
-                // context.setRequestPath("/error/notfound_404.shtml");
-                IsisContext.getMessageBroker().addWarning("Failed to find page " + servletPath + ". Please navigate from here");
-                context.setRequestPath("/index.shtml");
-                processTheView(context);
-            } catch (final IOException e1) {
-                throw new ScimpiException(e);
-            }
-
         } catch (final NotLoggedInException e) {
-            IsisContext.getMessageBroker().addWarning("You are not currently logged in! Please log in so you can continue.");
-            context.setRequestPath("/login.shtml");
-            try {
-                processTheView(context);
-            } catch (final IOException e1) {
-                throw new ScimpiException(e1);
-            }
-
+            redirectToLoginPage(context); 
         } catch (final Throwable e) {
-            final String errorRef = Long.toString(System.currentTimeMillis(), 36).toUpperCase();
-
-            LOG.info("error " + errorRef);
-            LOG.debug(e.getMessage(), e);
-
-            prepareErrorDetails(e, context, errorRef, servletPath);
-
+            ErrorCollator error = new ErrorCollator();
             final PersistenceSession checkSession = IsisContext.getPersistenceSession();
             final IsisTransactionManager transactionManager = checkSession.getTransactionManager();
             if (transactionManager.getTransaction() != null && transactionManager.getTransaction().getState().canAbort()) {
@@ -147,52 +122,13 @@ public class Dispatcher {
 
             final Throwable ex = e instanceof TagProcessingException ? e.getCause() : e;
             if (ex instanceof ForbiddenException) {
-                if (e instanceof TagProcessingException) {
-                    context.addVariable("_security-context", ((TagProcessingException) e).getContext(), Scope.ERROR);
-                }
-                context.addVariable("_security-error", ex.getMessage(), Scope.ERROR);
-                context.addVariable("_security-identifier", ((ForbiddenException) ex).getIdentifier(), Scope.ERROR);
-                context.addVariable("_security-roles", ((ForbiddenException) ex).getRoles(), Scope.ERROR);
-
-                // TODO allow these values to be got configuration
-                // context.raiseError(403);
-                // context.setRequestPath("/error/security_403.shtml");
-                IsisContext.getMessageBroker().addWarning("You don't have the right permissions to perform this (#" + errorRef + ")" + "<span class=\"debug-link\" onclick=\"$('#security-dump').toggle()\" > ...</span>");
-                context.clearVariables(Scope.REQUEST);
-                context.setRequestPath("/index.shtml");
-                context.setRequestPath("/error/security_403.shtml");
-                try {
-                    processTheView(context);
-                } catch (final IOException e1) {
-                    throw new ScimpiException(e);
-                }
+                show403ErrorPage(context, error, e, ex);
             } else {
-                // TODO allow these values to be got configuration
-                // context.raiseError(500);
-                // context.setRequestPath("/error/server_500.shtml");
-
-                final String message = "There was a error while processing this request (#" + errorRef + ")" + "<span class=\"debug-link\" onclick=\"$('#error-dump').toggle()\" > ...</span>";
-                IsisContext.getMessageBroker().addWarning(message);
-                context.clearVariables(Scope.REQUEST);
-                context.setRequestPath("/index.shtml");
-                try {
-                    context.reset();
-                    processTheView(context);
-                } catch (final TagProcessingException e1) {
-                    IsisContext.getMessageBroker().addWarning(message);
-                    context.clearVariables(Scope.REQUEST);
-                    context.setRequestPath("/error.shtml");
-                    try {
-                        context.reset();
-                        processTheView(context);
-                    } catch (final IOException e2) {
-                        throw new ScimpiException(e2);
-                    }
-                } catch (final IOException e1) {
-                    throw new ScimpiException(e1);
+                if (context.getErrorMessage() != null) {
+                    fallbackToSimpleErrorPage(context, e);
+                } else {
+                    show500ErrorPage(context, e, error);
                 }
-
-                // context.forward("/error.shtml");
             }
         } finally {
             try {
@@ -201,6 +137,63 @@ public class Dispatcher {
                 LOG.error("endRequest call failed", e1);
             }
         }
+    }
+
+    private void redirectToLoginPage(final RequestContext context) {
+        IsisContext.getMessageBroker().addWarning(
+            "You are not currently logged in! Please log in so you can continue.");
+        context.setRequestPath("/login.shtml");
+        try {
+            processTheView(context);
+        } catch (final IOException e1) {
+            throw new ScimpiException(e1);
+        }
+    }
+
+    private void show404ErrorPage(final RequestContext context, final String servletPath) {
+        ErrorCollator error = new ErrorCollator();
+        error.missingFile("Failed to find page " + servletPath + ".");
+        context.raiseError(404, error);
+    }
+
+    private void show403ErrorPage(final RequestContext context, ErrorCollator error, final Throwable e, final Throwable ex) {
+        DebugBuilder debug = error.getDebug();
+        error.message(e);
+        error.message(ex);
+        
+        final Identifier identifier =  ((ForbiddenException) ex).getIdentifier();
+        final List<String> roles = ((ForbiddenException) ex).getRoles();
+        final StringBuffer roleList = new StringBuffer();
+        for (final String role : roles) {
+            if (roleList.length() > 0) {
+                roleList.append("|");
+            }
+            roleList.append(role);
+        }
+        debug.appendln("Class", identifier.toClassIdentityString() + ":" + roleList);
+        debug.appendln("Member",identifier.toClassAndNameIdentityString() + ":" + roleList); 
+        debug.appendln("Other",identifier.toFullIdentityString() + ":" + roleList); 
+
+        error.compileError(context);
+        context.raiseError(403, error);
+    }
+
+    private void show500ErrorPage(final RequestContext context, final Throwable e, ErrorCollator error) {
+        error.exception(e);
+        error.compileError(context);
+        context.raiseError(500, error);
+    }
+
+    private void fallbackToSimpleErrorPage(final RequestContext context, final Throwable e) {
+        context.setContentType("text/html");
+        final PrintWriter writer = context.getWriter();
+        writer.write("<html><head><title>Error</title></head>");
+        writer.write("<body><h1>Error</h1>");
+        writer.write("<p>Error while processing error</p><pre>");
+        e.printStackTrace(writer);
+        writer.write("</pre></body></html>");
+        writer.close();
+        LOG.error("Error while processing error", e);
     }
 
     protected void processTheView(final RequestContext context) throws IOException {
@@ -219,69 +212,6 @@ public class Dispatcher {
 
         context.endRequest();
         UserManager.endRequest(context.getSession());
-    }
-
-    private void prepareErrorDetails(final Throwable exception, final RequestContext requestContext, final String errorRef, final String servletPath) {
-        final DebugString debugText = new DebugString();
-        final DebugHtmlString debugHtml = new DebugHtmlString();
-        final DebugBuilder debug = new DebugTee(debugText, debugHtml);
-
-        try {
-            debug.startSection("Exception");
-            debug.appendException(exception);
-            debug.endSection();
-        } catch (final RuntimeException e) {
-            debug.appendln("NOTE - an exception occurred while dumping an exception!");
-            debug.appendException(e);
-        }
-
-        if (IsisContext.getCurrentTransaction() != null) {
-            final List<String> messages = IsisContext.getMessageBroker().getMessages();
-            final List<String> warnings = IsisContext.getMessageBroker().getWarnings();
-            if (messages.size() > 0 || messages.size() > 0) {
-                debug.startSection("Warnings/Messages");
-                for (final String message : messages) {
-                    debug.appendln("message", message);
-                }
-                for (final String message : warnings) {
-                    debug.appendln("warning", message);
-                }
-            }
-        }
-
-        requestContext.append(debug);
-
-        debug.startSection("Processing Trace");
-        debug.appendPreformatted(requestContext.getDebugTrace());
-        debug.endSection();
-        debug.close();
-
-        PrintWriter writer;
-        try {
-            final String directory = IsisContext.getConfiguration().getString(ConfigurationConstants.ROOT + "scimpi.error-snapshots", ".");
-            final File dir = new File(directory);
-            if (!dir.exists()) {
-                dir.mkdirs();
-            }
-            writer = new PrintWriter(new File(dir, "error_" + errorRef + ".html"));
-            final DebugWriter writer2 = new DebugWriter(writer, true);
-            writer2.concat(debugHtml);
-            writer2.close();
-            writer.close();
-        } catch (final FileNotFoundException e) {
-            LOG.error("Failed to archive error page", e);
-        }
-
-        final String replace = "";
-        final String withReplacement = "";
-        final String message = exception.getMessage();
-        requestContext.addVariable("_error-message", message == null ? "" : message.replaceAll(replace, withReplacement), Scope.ERROR);
-        requestContext.addVariable("_error-details", debugHtml.toString().replaceAll(replace, withReplacement), Scope.ERROR);
-        requestContext.addVariable("_error-ref", errorRef, Scope.ERROR);
-        requestContext.clearTransientVariables();
-
-        final String msg = "failed during request for " + servletPath;
-        LOG.error(msg + " (#" + errorRef + ")\n" + message + "\n" + debugText + "\n" + msg);
     }
 
     public void addParameter(final String name, final String value) {

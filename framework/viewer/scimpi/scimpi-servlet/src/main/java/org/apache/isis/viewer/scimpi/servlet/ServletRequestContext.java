@@ -37,6 +37,7 @@ import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.scimpi.dispatcher.DispatchException;
+import org.apache.isis.viewer.scimpi.dispatcher.ErrorCollator;
 import org.apache.isis.viewer.scimpi.dispatcher.ScimpiException;
 import org.apache.isis.viewer.scimpi.dispatcher.ScimpiNotFoundException;
 import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext;
@@ -150,10 +151,6 @@ public class ServletRequestContext extends RequestContext {
             final String name = (String) parameterNames.nextElement();
             addParameter(name, request.getParameter(name));
         }
-
-        // TODO move this
-        // response.sendError(403);
-        // response.setContentType("text/html");
     }
 
     public HttpServletRequest getRequest() {
@@ -188,6 +185,21 @@ public class ServletRequestContext extends RequestContext {
         } catch (final MalformedURLException e) {
             throw new ScimpiException(e);
         }
+    }
+
+    @Override
+    public String getErrorDetails() {
+        return (String) getRequest().getAttribute("com.planchaser.error.details");
+    }
+
+    @Override
+    public String getErrorMessage() {
+        return (String) getRequest().getAttribute("com.planchaser.error.message");
+    }
+
+    @Override
+    public String getErrorReference() {
+        return (String) getRequest().getAttribute("com.planchaser.error.reference");
     }
 
     @Override
@@ -261,14 +273,16 @@ public class ServletRequestContext extends RequestContext {
     }
 
     @Override
-    public void raiseError(final int status) {
+    public void raiseError(final int status, final ErrorCollator errorDetails) {
         try {
             isAborted = true;
+            getRequest().setAttribute("com.planchaser.error.reference", errorDetails.getReference()); 
+            getRequest().setAttribute("com.planchaser.error.message", errorDetails.getMessage());
+            getRequest().setAttribute("com.planchaser.error.details", errorDetails.getDetails());
             getResponse().sendError(status);
         } catch (final IOException e) {
             throw new RuntimeException(e);
         }
-        getResponse().setStatus(status);
     }
 
     @Override
