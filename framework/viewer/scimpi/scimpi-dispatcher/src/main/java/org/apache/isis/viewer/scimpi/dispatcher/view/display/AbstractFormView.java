@@ -21,6 +21,7 @@ package org.apache.isis.viewer.scimpi.dispatcher.view.display;
 
 import java.util.List;
 
+import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
@@ -53,7 +54,9 @@ public abstract class AbstractFormView extends AbstractObjectProcessor {
         request.processUtilCloseTag();
 
         if (object != null) {
-            final List<ObjectAssociation> fields = tag.includedFields(object.getSpecification().getAssociations(ObjectAssociationFilters.STATICALLY_VISIBLE_ASSOCIATIONS));
+            final AuthenticationSession session = IsisContext.getAuthenticationSession(); 
+            List<ObjectAssociation> associations = object.getSpecification().getAssociations(ObjectAssociationFilters.dynamicallyVisible(session, object));
+            final List<ObjectAssociation> fields = tag.includedFields(associations);
             final LinkedObject[] linkFields = tag.linkedFields(fields);
 
             String linkAllView = request.getOptionalProperty(LINK);
