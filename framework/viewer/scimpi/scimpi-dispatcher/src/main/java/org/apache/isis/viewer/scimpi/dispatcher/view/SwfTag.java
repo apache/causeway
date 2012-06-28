@@ -44,6 +44,10 @@ public class SwfTag implements Snippet {
     public String getHtml() {
         return tagName;
     }
+    
+    public String getPath() { 
+        return path; 
+    } 
 
     public int getType() {
         return type;
