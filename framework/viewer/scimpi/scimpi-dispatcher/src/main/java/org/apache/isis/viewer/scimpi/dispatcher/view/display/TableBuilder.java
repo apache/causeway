@@ -42,8 +42,8 @@ public class TableBuilder extends AbstractTableView {
         request.setBlockContent(block);
         request.pushNewBuffer();
         request.processUtilCloseTag();
-        final String headers = request.popBuffer();
-
+        request.popBlockContent(); 
+        final String headers = request.popBuffer();       
         return new TableContentWriter() {
 
             @Override
