@@ -27,17 +27,17 @@
     </parent>
 
     <groupId>org.apache.isis.viewer</groupId>
-	<artifactId>json-tck</artifactId>
-	<name>JSON Viewer for TCK</name>
+	<artifactId>restfulobjects-tck</artifactId>
+	<name>RestfulObjects TCK</name>
 	
 	<packaging>war</packaging>
 	
     <properties>
         <maven.test.skip>true</maven.test.skip>
 		<siteBaseDir>../../..</siteBaseDir>
-		<relativeUrl>viewer/json/json-tck/</relativeUrl>
+		<relativeUrl>viewer/restfulobjects/restfulobjects-tck/</relativeUrl>
 		<!-- until someone comes up with a better solution -->
-        <distMgmtSiteUrl>file:///tmp/m2-sites/isis/viewer/json</distMgmtSiteUrl>
+        <distMgmtSiteUrl>file:///tmp/m2-sites/isis/viewer/restfulobjects</distMgmtSiteUrl>
     </properties>
 	
 
@@ -84,7 +84,7 @@
         <!-- isis viewer -->
 		<dependency>
 	        <groupId>org.apache.isis.viewer</groupId>
-			<artifactId>json-viewer</artifactId>
+			<artifactId>restfulobjects-viewer</artifactId>
 		</dependency>
 
         <!-- isis runtime -->

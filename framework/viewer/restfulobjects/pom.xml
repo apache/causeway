@@ -30,7 +30,7 @@
 	<groupId>org.apache.isis.viewer</groupId>
 	<artifactId>json</artifactId>
 
-	<name>JSON Viewer</name>
+	<name>RestfulObjects Viewer</name>
 
 	<packaging>pom</packaging>
 
@@ -38,9 +38,9 @@
         <siteBaseDir>../..</siteBaseDir>
 		<relativeUrl>viewer/json/</relativeUrl>
 
-        <docbkxGuideTitle>Apache Isis JSON Viewer</docbkxGuideTitle>
+        <docbkxGuideTitle>Apache Isis RestfulObjects Viewer</docbkxGuideTitle>
         <docbkxGuideSubTitle>Programming, Configuration and Deployment Guide</docbkxGuideSubTitle>
-        <docbkxGuideName>isis-json-viewer</docbkxGuideName>
+        <docbkxGuideName>isis-restfulobjects-viewer</docbkxGuideName>
     </properties>
 	
     <!-- used in Site generation for relative references. -->
@@ -95,26 +95,26 @@
                 <scope>import</scope>
             </dependency>
 
-			<!-- JSON Viewer -->
+			<!-- RestfulObjects Viewer -->
 	   		<dependency>
 				<groupId>org.apache.isis.viewer</groupId>
-				<artifactId>json-applib</artifactId>
+				<artifactId>restfulobjects-applib</artifactId>
 				<version>0.3.1-incubating-SNAPSHOT</version>
 			</dependency>
 	   		<dependency>
 				<groupId>org.apache.isis.viewer</groupId>
-				<artifactId>json-applib</artifactId>
+				<artifactId>restfulobjects-applib</artifactId>
 				<version>0.3.1-incubating-SNAPSHOT</version>
                 <type>test-jar</type>
 			</dependency>
 	   		<dependency>
 				<groupId>org.apache.isis.viewer</groupId>
-				<artifactId>json-viewer</artifactId>
+				<artifactId>restfulobjects-viewer</artifactId>
 				<version>0.3.1-incubating-SNAPSHOT</version>
 			</dependency>
 	   		<dependency>
 				<groupId>org.apache.isis.viewer</groupId>
-				<artifactId>json-viewer</artifactId>
+				<artifactId>restfulobjects-viewer</artifactId>
 				<version>0.3.1-incubating-SNAPSHOT</version>
                 <type>test-jar</type>
 			</dependency>
@@ -126,9 +126,9 @@
 
     <!-- USE -pl xxx TO SELECT A SINGLE MODULE -->
     <modules>
-	    <module>json-applib</module>
-	    <module>json-viewer</module>
-	    <module>json-tck</module>
+	    <module>restfulobjects-applib</module>
+	    <module>restfulobjects-viewer</module>
+	    <module>restfulobjects-tck</module>
     </modules>
 
 </project>
