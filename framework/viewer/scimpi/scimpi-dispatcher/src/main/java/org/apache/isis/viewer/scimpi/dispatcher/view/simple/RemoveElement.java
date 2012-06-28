@@ -90,9 +90,15 @@ public class RemoveElement extends AbstractElementProcessor {
         }
 
         if (usable.isVetoed()) {
+            /*
             request.appendHtml("<span class=\"veto\">");
             request.appendAsHtmlEncoded(usable.getReason());
             request.appendHtml("</span>");
+            */
+            request.appendHtml("<div class=\"" + cssClass + " disabled\" title=\"");
+            request.appendAsHtmlEncoded(usable.getReason());
+            request.appendHtml("\" >" + title);
+            request.appendHtml("</div>");
         } else {
             if (valid(request, adapter)) {
                 final String classSegment = " class=\"" + cssClass + "\"";

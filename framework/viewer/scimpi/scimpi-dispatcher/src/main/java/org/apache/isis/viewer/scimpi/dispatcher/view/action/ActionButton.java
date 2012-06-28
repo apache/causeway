@@ -86,28 +86,30 @@ public class ActionButton extends AbstractElementProcessor {
             if (usable.isVetoed()) {
                 final String notUsable = usable.getReason();
                 if (notUsable != null) {
-                    if (className == null) {
-                        className = "access";
-                    }
-                    request.appendHtml("<div class=\"" + className + "-message\" >");
-                    request.appendAsHtmlEncoded(notUsable);
-                    request.appendHtml("</div>");
+                    String title = buttonTitle == null ? action.getName() : buttonTitle;
+                    disabledButton(request, title, notUsable, className);
                 }
             } else {
                 final Consent valid = action.isProposedArgumentSetValid(object, objectParameters);
                 final String notValid = valid.getReason();
                 if (notValid != null) {
-                    if (className == null) {
-                        className = "access";
-                    }
-                    request.appendHtml("<div class=\"" + className + "-message\" >");
-                    request.appendAsHtmlEncoded(notValid);
-                    request.appendHtml("</div>");
+                    String title = buttonTitle == null ? action.getName() : buttonTitle;
+                    disabledButton(request, title, notValid, className);
                 }
             }
         }
 
         request.popBlockContent();
+    }
+
+    private void disabledButton(final Request request, final String buttonTitle, String message, String className) {
+        if (className == null) {
+            className = "access";
+        }
+        request.appendHtml("<div class=\"" + className + " disabled\" title=\"");
+        request.appendAsHtmlEncoded(message);
+        request.appendHtml("\" >" + buttonTitle);
+        request.appendHtml("</div>");
     }
 
     public static void write(final Request request, final ObjectAdapter object, final ObjectAction action, final String[] parameters, final String objectId, final String version, String forwardResultTo, String forwardVoidTo, String forwardErrorTo, final String variable, final String scope,

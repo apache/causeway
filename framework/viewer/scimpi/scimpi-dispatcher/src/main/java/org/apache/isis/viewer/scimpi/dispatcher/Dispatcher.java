@@ -161,7 +161,6 @@ public class Dispatcher {
         error.message(e);
         error.message(ex);
         
-        final Identifier identifier =  ((ForbiddenException) ex).getIdentifier();
         final List<String> roles = ((ForbiddenException) ex).getRoles();
         final StringBuffer roleList = new StringBuffer();
         for (final String role : roles) {
@@ -170,10 +169,13 @@ public class Dispatcher {
             }
             roleList.append(role);
         }
-        debug.appendln("Class", identifier.toClassIdentityString() + ":" + roleList);
-        debug.appendln("Member",identifier.toClassAndNameIdentityString() + ":" + roleList); 
-        debug.appendln("Other",identifier.toFullIdentityString() + ":" + roleList); 
-
+        final Identifier identifier =  ((ForbiddenException) ex).getIdentifier(); 
+        if (identifier != null) {
+            debug.appendln("Class", identifier.toClassIdentityString() + ":" + roleList);
+            debug.appendln("Member",identifier.toClassAndNameIdentityString() + ":" + roleList); 
+            debug.appendln("Other",identifier.toFullIdentityString() + ":" + roleList); 
+        }
+        
         error.compileError(context);
         context.raiseError(403, error);
     }
