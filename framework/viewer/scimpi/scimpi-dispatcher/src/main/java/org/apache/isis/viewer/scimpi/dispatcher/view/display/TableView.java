@@ -53,8 +53,22 @@ public class TableView extends AbstractTableView {
         private final LinkedObject linkRow;
         private final int noColumns;
 
-        private SimpleTableBuilder(final String parent, final boolean includeHeader, final boolean includeFooter, final String title, final int noColumns, final String[] headers, final List<ObjectAssociation> fields, final boolean showTitle, final boolean showIcons, final boolean showSelectOption,
-                final boolean showDeleteOption, final boolean showEditOption, final String fieldName, final LinkedObject[] linkedFields, final LinkedObject linkRow) {
+        private SimpleTableBuilder(
+                final String parent,
+                final boolean includeHeader,
+                final boolean includeFooter,
+                final String title,
+                final int noColumns,
+                final String[] headers,
+                final List<ObjectAssociation> fields,
+                final boolean showTitle,
+                final boolean showIcons,
+                final boolean showSelectOption,
+                final boolean showDeleteOption,
+                final boolean showEditOption,
+                final String fieldName,
+                final LinkedObject[] linkedFields,
+                final LinkedObject linkRow) {
             this.parent = parent;
             this.includeHeader = includeHeader;
             this.includeFooter = includeFooter;
@@ -195,13 +209,25 @@ public class TableView extends AbstractTableView {
     }
 
     @Override
-    protected TableContentWriter createRowBuilder(final Request request, final RequestContext context, final String parent, final List<ObjectAssociation> allFields, final ObjectAdapter collection) {
+    protected TableContentWriter createRowBuilder(
+            final Request request,
+            final RequestContext context,
+            final String parent,
+            final List<ObjectAssociation> allFields,
+            final ObjectAdapter collection) {
         final String fieldName = request.getOptionalProperty(FIELD);
         final String title = request.getOptionalProperty(FORM_TITLE);
         return rowBuilder(request, context, title, parent, fieldName, allFields, showIconByDefault());
     }
 
-    private static TableContentWriter rowBuilder(final Request request, final RequestContext context, final String title, final String object, final String fieldName, final List<ObjectAssociation> allFields, final boolean showIconByDefault) {
+    private static TableContentWriter rowBuilder(
+            final Request request,
+            final RequestContext context,
+            final String title,
+            final String object,
+            final String fieldName,
+            final List<ObjectAssociation> allFields,
+            final boolean showIconByDefault) {
         final String linkRowView = request.getOptionalProperty(LINK);
         final String linkObjectName = request.getOptionalProperty(ELEMENT_NAME, RequestContext.RESULT);
         final String linkObjectScope = request.getOptionalProperty(SCOPE, Scope.INTERACTION.toString());
@@ -250,16 +276,28 @@ public class TableView extends AbstractTableView {
 
         request.popBlockContent();
 
-        return new SimpleTableBuilder(object, includeHeader, includeFooter, title, noColumns, headers, fields, showTitle, showIcons, showSelectOption, showDeleteOption, showEditOption, fieldName, linkedFields, linkRow);
+        return new SimpleTableBuilder(object, includeHeader, includeFooter, title, noColumns, headers, fields, showTitle,
+                showIcons, showSelectOption, showDeleteOption, showEditOption, fieldName, linkedFields, linkRow);
     }
 
-    public static void write(final Request request, final String summary, final ObjectAdapter object, final ObjectAssociation field, final ObjectAdapter collection, final int noColumns, final List<ObjectAssociation> fields, final boolean linkAllFields, final boolean showIconByDefault,
-            final String tableClass, final String[] rowClasses) {
+    public static void write(
+            final Request request,
+            final String summary,
+            final ObjectAdapter object,
+            final ObjectAssociation field,
+            final ObjectAdapter collection,
+            final int noColumns,
+            final List<ObjectAssociation> fields,
+            final boolean linkAllFields,
+            final boolean showIconByDefault,
+            final String tableClass,
+            final String[] rowClasses,
+            LinkedObject linkedObject) {
         final LinkedObject[] linkedFields = new LinkedObject[fields.size()];
         if (linkAllFields) {
             for (int i = 0; i < linkedFields.length; i++) {
                 if (fields.get(i).isOneToOneAssociation()) {
-                    linkedFields[i] = new LinkedObject("_generic.shtml");
+                    linkedFields[i] = linkedObject == null ? new LinkedObject("_generic.shtml") : linkedObject;  
                 }
             }
         }
@@ -274,7 +312,8 @@ public class TableView extends AbstractTableView {
         }
         
         final RequestContext context = request.getContext();
-        final TableContentWriter rowBuilder = rowBuilder(request, context, null, context.mapObject(object, Scope.REQUEST), field.getId(), fields, showIconByDefault);
+        final TableContentWriter rowBuilder = rowBuilder(request, context, null, context.mapObject(object, Scope.REQUEST), field.getId(), fields, 
+                showIconByDefault);
         write(request, collection, summary, rowBuilder, null, null);
     }
 

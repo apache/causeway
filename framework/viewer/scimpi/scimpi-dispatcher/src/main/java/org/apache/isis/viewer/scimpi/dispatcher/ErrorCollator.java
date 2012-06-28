@@ -54,7 +54,8 @@ public class ErrorCollator {
     }
 
     public void exception(final Throwable exception) {
-        LOG.debug(exception.getMessage(), exception);
+        String messageText = exception.getMessage(); 
+        LOG.debug(messageText, exception); 
         try {
             debug.startSection("Exception");
             debug.appendException(exception);
@@ -63,7 +64,7 @@ public class ErrorCollator {
             debug.appendln("NOTE - an exception occurred while dumping an exception!");
             debug.appendException(e);
         }
-        message = exception.getMessage();
+        message = messageText == null ? exception.getClass().getName() : messageText; 
     }
         
     public DebugBuilder getDebug() {

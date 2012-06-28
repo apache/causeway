@@ -53,7 +53,7 @@ public class LongFormView extends AbstractFormView {
             }
             final boolean isFieldEditable = field.isUsable(IsisContext.getAuthenticationSession(), object).isAllowed();
             final String summary = "Table of elements in " + field.getName();
-            TableView.write(request, summary, object, field, collection, noColumns, fields, isFieldEditable, showIconByDefault(), tableClass, rowClasses);
+            TableView.write(request, summary, object, field, collection, noColumns, fields, isFieldEditable, showIconByDefault(), tableClass, rowClasses, linkedObject);
         } else {
             super.addField(request, object, field, linkedObject, showIcons);
         }
