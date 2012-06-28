@@ -42,6 +42,8 @@ import org.apache.isis.viewer.scimpi.dispatcher.view.action.RunAction;
 import org.apache.isis.viewer.scimpi.dispatcher.view.action.Services;
 import org.apache.isis.viewer.scimpi.dispatcher.view.collection.Collection;
 import org.apache.isis.viewer.scimpi.dispatcher.view.debug.DebugAccessCheck;
+import org.apache.isis.viewer.scimpi.dispatcher.view.debug.DebugCollectionView;
+import org.apache.isis.viewer.scimpi.dispatcher.view.debug.DebugObjectView;
 import org.apache.isis.viewer.scimpi.dispatcher.view.debug.DebuggerLink;
 import org.apache.isis.viewer.scimpi.dispatcher.view.debug.Diagnostics;
 import org.apache.isis.viewer.scimpi.dispatcher.view.debug.LogLevel;
@@ -140,7 +142,9 @@ public class ProcessorLookup {
         addElementProcessor(new CountElements());
         addElementProcessor(new Diagnostics());
         addElementProcessor(new DebugAccessCheck());
+        addElementProcessor(new DebugCollectionView()); 
         addElementProcessor(new DebuggerLink());
+        addElementProcessor(new DebugObjectView()); 
         addElementProcessor(new DebugUsersView());
         addElementProcessor(new DefaultValue());
         addElementProcessor(new EditLink());
