@@ -28,7 +28,7 @@
 	</parent>
 
 	<groupId>org.apache.isis.viewer</groupId>
-	<artifactId>json</artifactId>
+	<artifactId>restfulobjects</artifactId>
 
 	<name>RestfulObjects Viewer</name>
 
@@ -36,7 +36,7 @@
 
     <properties>
         <siteBaseDir>../..</siteBaseDir>
-		<relativeUrl>viewer/json/</relativeUrl>
+		<relativeUrl>viewer/restfulobjects/</relativeUrl>
 
         <docbkxGuideTitle>Apache Isis RestfulObjects Viewer</docbkxGuideTitle>
         <docbkxGuideSubTitle>Programming, Configuration and Deployment Guide</docbkxGuideSubTitle>
