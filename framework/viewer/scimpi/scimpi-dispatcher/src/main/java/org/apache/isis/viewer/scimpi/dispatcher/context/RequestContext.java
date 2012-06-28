@@ -77,7 +77,7 @@ public abstract class RequestContext {
         } else if (name.equals(Scope.REQUEST.toString())) {
             return Scope.REQUEST;
         }
-        return null;
+        throw new IllegalArgumentException("Invalid scope name: " + scopeName); 
     }
 
     public static Scope scope(final String scopeName, final Scope defaultScope) {
