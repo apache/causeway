@@ -25,8 +25,8 @@ Deploy <Isis> as a RESTful web service
   
   The {{{http://restfulobjects.org}Restful Objects}} specification defines
   a means by a domain object model can be exposed as RESTful resources
-  using JSON representations over HTTP.  Isis {{{../viewer/json/index.html}JSON viewer}}
-  is an implementation of that spec, making any Isis domain object automatically
+  using JSON representations over HTTP.  {{{../viewer/restfulobjects/index.html}RestfulObjects for Isis}},
+  an Isis viewer, is an implementation of that spec, making any Isis domain object automatically
   available via REST.
   
   There are two main use cases for deploying Isis as a RESTful web service are:

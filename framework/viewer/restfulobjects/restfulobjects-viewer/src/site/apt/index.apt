@@ -15,7 +15,7 @@
 ~~  specific language governing permissions and limitations
 ~~  under the License.
 
-JSON Viewer
+RestfulObjects for Isis Viewer
 
   The <viewer> module provides a set of JAX-RS resource implementations 
   that serve up the domain objects as JSON representations.
@@ -23,5 +23,5 @@ JSON Viewer
 
 Further Info
   
-  See this module's {{{./apidocs/index.html}Javadoc}} and the {{{../docbkx/html/guide/isis-json-viewer.html}user guide}} for more information.
+  See this module's {{{./apidocs/index.html}Javadoc}} and the {{{../docbkx/html/guide/isis-restfulobjects-viewer.html}user guide}} for more information.
   

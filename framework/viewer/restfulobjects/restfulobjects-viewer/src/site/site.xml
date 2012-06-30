@@ -24,14 +24,14 @@
 			<item name="Viewer" href="index.html"/>
 		</breadcrumbs>
 
-		<menu name="JSON Viewer">
+		<menu name="RestfulObjects for Isis">
 			<item name="About" href="index.html" />
             <item name="Jottings" href="jottings.html" />
 		</menu>
 
-        <menu name="JSON Modules">
-            <item name="Applib" href="../json-applib/index.html" />
-            <item name="Viewer" href="../json-viewer/index.html" />
+        <menu name="RestfulObjects Modules">
+            <item name="Applib" href="../restfulobjects-applib/index.html" />
+            <item name="Viewer" href="../restfulobjects-viewer/index.html" />
         </menu>
         
 		<menu name="Maven Reports" ref="reports" />

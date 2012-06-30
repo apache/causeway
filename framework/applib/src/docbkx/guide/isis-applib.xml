@@ -771,7 +771,7 @@
 
           <listitem>
             <para>The <acronym>JSON</acronym> viewer (in
-            <filename>viewers/json</filename>) which exposes your domain
+            <filename>viewers/restfulobjects</filename>) which exposes your domain
             objects through a <ulink
             url="http://en.wikipedia.org/wiki/Representational_State_Transfer">RESTful</ulink>
             interface.</para>
@@ -7290,7 +7290,7 @@ public class ComplexNumber {
         backwardly compatible.</para>
 
         <para>The annotation was originally introduced to support a
-        requirement of the RESTful viewers (json viewer) which directly expose
+        requirement of the RestfulObjects viewer which directly expose
         the domain objects as RESTful representations</para>
 
         <para>For example, a domain object that represents a summary of a

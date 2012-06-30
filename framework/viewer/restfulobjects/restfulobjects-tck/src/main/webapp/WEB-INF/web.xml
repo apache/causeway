@@ -21,7 +21,7 @@
 	xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
 
-	<display-name>JSON Claims</display-name>
+	<display-name>RestfulObjects TCK</display-name>
 
 	<listener>
 		<listener-class>org.apache.isis.runtimes.dflt.webapp.IsisWebAppBootstrapper</listener-class>
@@ -29,12 +29,12 @@
 
 	<context-param>
 		<param-name>isis.viewers</param-name>
-		<param-value>json</param-value>
+		<param-value>restfulobjects</param-value>
 	</context-param>
 
 	<context-param>
 		<param-name>javax.ws.rs.Application</param-name>
-		<param-value>org.apache.isis.viewer.json.viewer.JsonApplication</param-value>
+		<param-value>org.apache.isis.viewer.restfulobjects.viewer.RestfulObjectsApplication</param-value>
 	</context-param>
 
 	<filter>
@@ -43,7 +43,7 @@
 		<init-param>
 			<!-- trusted client, so no authentication required -->
 			<param-name>authenticationSessionStrategy</param-name>
-			<param-value>org.apache.isis.viewer.json.viewer.authentication.AuthenticationSessionStrategyTrusted</param-value>
+			<param-value>org.apache.isis.viewer.restfulobjects.viewer.authentication.AuthenticationSessionStrategyTrusted</param-value>
 		</init-param>
 		<init-param>
             <!-- what to do if no session was found; we indicate to issue a 401 basic authentication challenge -->

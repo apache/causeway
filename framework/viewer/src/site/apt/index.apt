@@ -21,9 +21,9 @@
  
  The <viewer> module is the parent of the different viewer implementations.
 
- * {{{./json/index.html}JSON (Restful) viewer}}
+ * {{{./restfulobjects/index.html}RestfulObjects for Isis}}
 
-  The <json> viewer provides the RESTful API to the domain object model, 
+  The <restfulobjects> viewer provides the RESTful API to the domain object model, 
   providing JSON representations of domain objects.  This is great as a back-end
   where the client is either a custom UI (written using JQuery, say), or for
   data integration scenarios.

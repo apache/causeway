@@ -60,12 +60,13 @@
     url="http://www.apache.org/licenses/LICENSE-2.0.html">Apache Software
     License v2</ulink>.</para>
 
-    <para><emphasis>Isis</emphasis>' <emphasis>json</emphasis> viewer
-    <package>[oai.viewer:json]</package> is an implementation of the the
+    <para><emphasis>RestfulObjects for Isis</emphasis> 
+    is an Isis viewer 
+    <package>[oai.viewer:restfulobjects]</package> that implements the
     <ulink url="http://restfulobjects.org">Restful Objects</ulink>
     specification (hosted at <ulink
     url="http://restfulobjects.org">http://restfulobjects.org</ulink>). This
-    defines a set of RESTful resources, and corresponding JSON
+    defines a set of RESTful resources, and corresponding <acronym>JSON</acronym>
     representations, for accessing and manipulating a domain object
     model.</para>
 
@@ -77,11 +78,11 @@
     <sect1>
       <title>Who this Guide is For</title>
 
-      <para>This guide describes how to use the <emphasis>jsonl viewer
+      <para>This guide describes how to use the <emphasis>restfulobjects viewer
       </emphasis>both in prototype mode and how to deploy it into production
-      as a webapp. It also describes how to use the <emphasis>json
+      as a webapp. It also describes how to use the <emphasis>restfulobjects
       viewer</emphasis>'s application library
-      <package>[oai.viewer.json:applib]</package> to write client-side
+      <package>[oai.viewer.restfulobjects:applib]</package> to write client-side
       applications. It is divided into the following chapters:<itemizedlist>
           <listitem>
             <para>Introduction</para>
@@ -92,7 +93,7 @@
           </listitem>
 
           <listitem>
-            <para>The JSON Viewer Modules</para>
+            <para>The RestfulObjects Viewer Modules</para>
 
             <para>This ....</para>
           </listitem>
@@ -132,8 +133,8 @@
 
       <para>As a further convenience, we use "oai" as an abbreviation for
       <package>org.apache.isis</package>. Hence
-      <package>(oai.viewer:json)</package> refers to the parent module for
-      JSON viewer. We also use the "oai" abbreviation within package
+      <package>(oai.viewer:restfulobjects)</package> refers to the parent module for
+      RestfulObjects viewer. We also use the "oai" abbreviation within package
       names.</para>
     </sect1>
   </preface>
@@ -149,7 +150,7 @@
     </abstract>
 
     <para>This chapter briefly explains what <acronym>REST</acronym> is, and
-    why you might want to use it. It then explains how the <emphasis>json
+    why you might want to use it. It then explains how the <emphasis>restfulobjects
     viewer</emphasis> exposes your domain model using
     <acronym>REST</acronym>.</para>
 
@@ -194,7 +195,7 @@
       that resource. <acronym>REST</acronym> doesn't mandate what that
       representation is, but typical choices are <acronym>JSON</acronym>,
       <acronym>XHTML</acronym> or a custom <acronym>XML</acronym> dialect. The
-      json-viewer of course uses <acronym>JSON</acronym>
+      <emphasis>restfulobjects-viewer</emphasis> of course uses <acronym>JSON</acronym>
       (<emphasis>J</emphasis>ava<emphasis>S</emphasis>cript
       <emphasis>O</emphasis>bject <emphasis>N</emphasis>otation) as its
       representation media type.</para>
@@ -219,7 +220,7 @@
       specification defines a set of RESTful resources, and corresponding
       <acronym>JSON</acronym> representations, for accessing and manipulating
       a domain object model. Because it is a specification, it allows for
-      multiple implementations. Apache Isis' <emphasis>json viewer</emphasis>
+      multiple implementations. Apache Isis' <emphasis>restfulobjects viewer</emphasis>
       is one such implementation; another is <ulink
       url="http://nakedobjects.net">Restful Objects for .NET</ulink>.</para>
 
@@ -239,19 +240,19 @@
       serializable as a graph of <acronym>JSON</acronym> objects, but there
       are also libraries for all the main stream platforms (Java, .NET, Ruby,
       Python) to consume and create <acronym>JSON</acronym>. The
-      <emphasis>json viewer</emphasis> therefore opens up a domain objects
+      <emphasis>restfulobjects viewer</emphasis> therefore opens up a domain objects
       model for consumption in other languages.</para>
 
       <para>We do recommend that you download the <emphasis>Restful
       Objects</emphasis> spec and at least review its introductory chapters
       (part A). However, given that the spec is pretty close to 200 pages,
       please don't consider that a mandatory first step. You can get a pretty
-      good idea of what the Isis json viewer does just by playing with Isis'
+      good idea of what the Isis <emphasis>restfulobjects viewer</emphasis> does just by playing with Isis'
       quickstart archetype, discussed later.</para>
     </sect1>
 
     <sect1 id="sec.IntroducingRestfulObjects">
-      <title>The JSON viewer as an RO implementation</title>
+      <title>RestfulObjects for Isis as an RO implementation</title>
 
       <para><emphasis>Restful Objects</emphasis> defines a core set of
       functionality that all implementations must honour, and also defines a
@@ -260,7 +261,7 @@
       of the) "version" resource, specificially the "optionalCapabilities"
       property map.</para>
 
-      <para>As such, the <emphasis>json viewer</emphasis> returns the
+      <para>As such, the <emphasis>restfulobjects viewer</emphasis> returns the
       following representation:</para>
 
       <para><programlisting>** TODO</programlisting></para>
@@ -270,21 +271,21 @@
     </sect1>
 
     <sect1>
-      <title>The JSON viewer modules</title>
+      <title>The RestfulObjects viewer modules</title>
 
-      <para>In terms of software, the <emphasis>json viewer</emphasis>
+      <para>In terms of software, the <emphasis>restfulobjects viewer</emphasis>
       comprises a number of Maven modules:</para>
 
       <itemizedlist>
         <listitem>
-          <para>org.apache.isis.viewer.json</para>
+          <para>org.apache.isis.viewer.restfulobjects</para>
 
           <para>is the parent module; this also has the site and documentation
           (this guide)</para>
         </listitem>
 
         <listitem>
-          <para>org.apache.isis.viewer.json-applib</para>
+          <para>org.apache.isis.viewer.restfulobjects-applib</para>
 
           <para>is a client-side library to simplify the task of writing
           Java-based applications that consume <emphasis>Restful
@@ -292,7 +293,7 @@
         </listitem>
 
         <listitem>
-          <para>org.apache.isis.viewer.json-viewer</para>
+          <para>org.apache.isis.viewer.restfulobjects-viewer</para>
 
           <para>is the server-side implementation of the resources and
           representations defined by the <emphasis>Restful Objects</emphasis>
@@ -310,11 +311,11 @@
   </chapter>
 
   <chapter>
-    <title id="chp.Prototyping">Using the QuickStart Archetype and the JSON
+    <title id="chp.Prototyping">Using the QuickStart Archetype and the RestfulObjects
     Viewer</title>
 
     <abstract>
-      <para>How to get started prototyping with <emphasis>json
+      <para>How to get started prototyping with <emphasis>restfulobjects
       viewer.</emphasis></para>
     </abstract>
 
@@ -330,21 +331,21 @@
     <emphasis>Isis</emphasis> quickstart archetype (eg as documented on
     <emphasis>Isis</emphasis>' website). Once you've done this, you'll end up
     with an set of modules that allow the application to be booted using the
-    <emphasis>json viewer</emphasis>. It includes the following
+    <emphasis>restfulobjects viewer</emphasis>. It includes the following
     modules:</para>
 
     <programlisting>myapp/pom.xml
     myapp-dom/pom.xml             # domain object model
     myapp-fixture/pom.xml         # fixtures for seeding object store
     myapp-objstore-dflt/pom.xml   # repository implementations for the default object store
-    myapp-webapp/pom.xml          # run the application as a webapp using either the HTML viewer or the JSON viewer
+    myapp-webapp/pom.xml          # run the application as a webapp using either the HTML viewer or the RestfulObjects viewer
 </programlisting>
 
     <para>where 'myapp' is the artifactId specified when you ran the <code>mvn
     archetype:generate</code> goal.</para>
 
     <para>This chapter describes in more detail the contents of these modules,
-    and then describes how to get started with running the <emphasis>json
+    and then describes how to get started with running the <emphasis>restfulobjects
     viewer</emphasis> for prototyping purposes.</para>
 
     <sect1 id="sec.ParentModule">
@@ -392,7 +393,7 @@
     ....
 &lt;/properties&gt;</programlisting>
 
-        <para>where y.y.y is the corresponding version of the json
+        <para>where y.y.y is the corresponding version of the restfulobjects
         viewer.</para>
 
         <para>In the <emphasis>release</emphasis> artifact's
@@ -402,34 +403,34 @@
         <programlisting>&lt;dependencyManagement&gt;
   &lt;dependencies&gt;
     ...
-    &lt;!-- viewer: json --&gt;
+    &lt;!-- viewer: restfulobjects --&gt;
     &lt;dependency&gt;
       &lt;groupId&gt;org.apache.isis.viewer&lt;/groupId&gt;
-      &lt;artifactId&gt;json&lt;/artifactId&gt;
+      &lt;artifactId&gt;restfulobjects&lt;/artifactId&gt;
       &lt;version&gt;${isis.version}&lt;/version&gt;
     &lt;/dependency&gt;
     &lt;dependency&gt;
       &lt;groupId&gt;org.apache.isis.viewer&lt;/groupId&gt;
-      &lt;artifactId&gt;json-applib&lt;/artifactId&gt;
+      &lt;artifactId&gt;restfulobjects-applib&lt;/artifactId&gt;
       &lt;version&gt;${isis.version}&lt;/version&gt;
     &lt;/dependency&gt;
     &lt;dependency&gt;
       &lt;groupId&gt;org.apache.isis.viewer&lt;/groupId&gt;
-      &lt;artifactId&gt;json-viewer&lt;/artifactId&gt;
+      &lt;artifactId&gt;restfulobjects-viewer&lt;/artifactId&gt;
       &lt;version&gt;${isis.version}&lt;/version&gt;
     &lt;/dependency&gt;
     ...
   &lt;/dependencies&gt;
 &lt;/dependencyManagement&gt;</programlisting>
 
-        <para>The <package>[oai.viewer:json]</package> module is the parent
-        for <emphasis>json viewer</emphasis>
+        <para>The <package>[oai.viewer:restfulobjects]</package> module is the parent
+        for <emphasis>restfulobjects viewer</emphasis>
         (<code>&lt;packaging&gt;pom&lt;/packaging&gt;</code>). That means that
-        it doesn't provide any Java classesper se. The <emphasis>json
-        viewer</emphasis> module <package>[oai.viewer.json:viewer]</package>
+        it doesn't provide any Java classesper se. The <emphasis>restfulobjects
+        viewer</emphasis> module <package>[oai.viewer.restfulobjects:viewer]</package>
         on the other hand does provide a <acronym>JAR</acronym> artifact,
-        being the main implementation of the viewer. The <emphasis>json
-        applib</emphasis> module <package>[oai.viewer.json:applib]</package>
+        being the main implementation of the viewer. The <emphasis>restfulobjects
+        applib</emphasis> module <package>[oai.viewer.restfulobjects:applib]</package>
         meanwhile is used for writing client-side applications that use an
         exposed <emphasis>Isis</emphasis> module, the topic of <xref
         linkend="chp.WritingClientSideApps" />.</para>
@@ -443,13 +444,13 @@
         xxx-jetty-console.war that embeds a Jetty webserver and allows the WAR
         to be self-hosting.</para>
 
-        <para>The <emphasis>viewer-json</emphasis> module inherits from the
+        <para>The <emphasis>viewer-restfulobjects</emphasis> module inherits from the
         parent module and so inherits the various definitions of the parent
         module. And, not surprisingly, its <code>&lt;dependencies&gt;</code>
         section includes a reference to the
-        <package>[oai.viewer.json:viewer]</package> module.</para>
+        <package>[oai.viewer.restfulobjects:viewer]</package> module.</para>
 
-        <para>More significantly, the <emphasis>viewer-json</emphasis> has the
+        <para>More significantly, the <emphasis>viewer-restfulobjects</emphasis> has the
         standard directory structure for a webapp, with
         <filename>src/main/webapp/WEB-INF</filename> holding the
         <filename>web.xml</filename> along with <emphasis>Isis</emphasis>' own
@@ -467,7 +468,7 @@
 
           <programlisting>&lt;context-param&gt;
   &lt;param-name&gt;javax.ws.rs.Application&lt;/param-name&gt;
-  &lt;param-value&gt;org.apache.isis.viewer.json.viewer.JsonApplication&lt;/param-value&gt;
+  &lt;param-value&gt;org.apache.isis.viewer.restfulobjects.viewer.RestfulObjectsApplication&lt;/param-value&gt;
 &lt;/context-param&gt;</programlisting>
 
           <para>This is used by <emphasis>RestEasy</emphasis> (the underlying
@@ -520,7 +521,7 @@
   &lt;filter-class&gt;org.apache.isis.runtimes.dflt.webapp.IsisSessionFilter&lt;/filter-class&gt;
   &lt;init-param&gt;
     &lt;param-name&gt;authenticationSessionLookupStrategy&lt;/param-name&gt;
-    &lt;param-value&gt;org.apache.isis.viewer.json.viewer.authentication.AuthenticationSessionLookupStrategyTrusted&lt;/param-value&gt;
+    &lt;param-value&gt;org.apache.isis.viewer.restfulobjects.viewer.authentication.AuthenticationSessionLookupStrategyTrusted&lt;/param-value&gt;
   &lt;/init-param&gt;
 &lt;/filter&gt;
 ...
@@ -624,8 +625,8 @@
           <listitem>
             <para>run from the command-line using Maven:</para>
 
-            <programlisting>cd viewer-json
-mvn antrun:run -D exec=json</programlisting>
+            <programlisting>cd viewer-restfulobjects
+mvn antrun:run -D exec=restfulobjects</programlisting>
           </listitem>
 
           <listitem>
@@ -743,18 +744,18 @@ mvn jetty:run</programlisting>
   </chapter>
 
   <chapter id="chp.WritingClientSideApps">
-    <title>The JSON Viewer AppLib</title>
+    <title>The RestfulObjects Viewer AppLib</title>
 
     <abstract>
       <para>How to write custom client-side applications to consume the
-      RESTful resources using the json-viewer's applib.</para>
+      RESTful resources using the restfulobjects-viewer's applib.</para>
     </abstract>
 
-    <para>The point of the <emphasis>json viewer</emphasis> is to provide our
+    <para>The point of the <emphasis>restfulobjects viewer</emphasis> is to provide our
     domain objects as <acronym>REST</acronym>ful resources so that they can be
     used by any other client application. These applications can be written in
     any language; so long as they can submit <acronym>HTTP </acronym>requests
-    and can parse <acronym>JSONL</acronym>, they can interact with the
+    and can parse <acronym>JSON</acronym>, they can interact with the
     resources provided by the viewer.</para>
 
     <para>That said, if you are writing Java applications, then there is also
@@ -767,7 +768,7 @@ mvn jetty:run</programlisting>
   ...
   &lt;dependency&gt;
     &lt;groupId&gt;org.apache.isis.viewer&lt;/groupId&gt;
-    &lt;artifactId&gt;json-applib&lt;/artifactId&gt;
+    &lt;artifactId&gt;restfulobjects-applib&lt;/artifactId&gt;
     &lt;version&gt;${isis.version}&lt;/version&gt;
   &lt;/dependency&gt;
   ...
@@ -852,7 +853,7 @@ mvn jetty:run</programlisting>
   </chapter>
 
   <chapter id="chp.DeployingRestfulObjectsWebapps">
-    <title>Deploying JSON Viewer Webapps</title>
+    <title>Deploying RestfulObjects Viewer Webapps</title>
 
     <abstract>
       <para>Guidance on how to deploy Isis using the <emphasis>xhtml

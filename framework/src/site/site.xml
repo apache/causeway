@@ -102,8 +102,8 @@
                 <item name="JUnit" href="viewer/junit/index.html" />
             </item>
             <item name="Deployable viewers" href="viewer/index.html#Deployable_viewers">
-                <item name="Json (REST)" href="viewer/json/index.html" />
                 <item name="HTML (webapp)" href="viewer/html/index.html" />
+                <item name="RestfulObjects for Isis" href="viewer/restfulobjects/index.html" />
             </item>
             <item name="Other viewers (alpha)" href="viewer/index.html#Other_viewers"/>
             <item name="Runtimes" href="runtimes/index.html">

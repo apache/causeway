@@ -25,7 +25,7 @@
 			<item name="RestfulObjects" href="index.html"/>
 		</breadcrumbs>
 
-		<menu name="RestfulObjects Viewer">
+		<menu name="RestfulObjects for Isis">
 			<item name="About" href="index.html" />
             <item name="Jottings" href="jottings.html" />
 		</menu>

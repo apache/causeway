@@ -31,11 +31,11 @@
         
         <menu name="Viewer Modules">
             <item name="HTML" href="../html/index.html" />
-            <item name="JSON" href="../json/index.html" />
-            <item name="JUnit Support" href="../junit/index.html" />
-            <item name="BDD Integration" href="../bdd/index.html" />
             <item name="Scimpi" href="../scimpi/index.html" />
             <item name="Wicket" href="../wicket/index.html" />
+            <item name="RestfulObjects" href="../restfulobjects/index.html" />
+            <item name="JUnit Support" href="../junit/index.html" />
+            <item name="BDD Integration" href="../bdd/index.html" />
             <item name="DnD" href="../dnd/index.html" />
         </menu>
         

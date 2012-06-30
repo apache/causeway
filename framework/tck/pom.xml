@@ -448,7 +448,7 @@
                 <version>0.3.1-incubating-SNAPSHOT</version>
             </dependency>
 
-            <!-- isis: viewer: json -->
+            <!-- isis: viewer: restfulobjects -->
             <dependency>
                 <groupId>org.apache.isis.viewer</groupId>
                 <artifactId>restfulobjects</artifactId>

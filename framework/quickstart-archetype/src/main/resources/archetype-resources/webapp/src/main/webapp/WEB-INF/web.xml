@@ -76,7 +76,7 @@
     <!-- which (optional) configuration file(s) to load -->
     <context-param>
         <param-name>isis.viewers</param-name>
-        <param-value>html,json,scimpi</param-value>
+        <param-value>html,restfulobjects,scimpi</param-value>
     </context-param>
 
     <!-- cache static resources for 1 day -->
@@ -262,7 +262,7 @@
     <!--
     -
     -
-    - config specific to the json-viewer
+    - config specific to the restfulobjects-viewer
     -
     -
     -->
@@ -275,7 +275,7 @@
     <!-- used by RestEasy to determine the JAX-RS resources and other related configuration -->
     <context-param>
         <param-name>javax.ws.rs.Application</param-name>
-        <param-value>org.apache.isis.viewer.json.viewer.JsonApplication</param-value>
+        <param-value>org.apache.isis.viewer.restfulobjects.viewer.RestfulObjectsApplication</param-value>
     </context-param>
 
     <!-- authenticate user, set up an Isis session -->
@@ -285,7 +285,7 @@
         <!-- authentication required for REST -->
         <init-param>
             <param-name>authenticationSessionStrategy</param-name>
-            <param-value>org.apache.isis.viewer.json.viewer.authentication.AuthenticationSessionStrategyBasicAuth</param-value>
+            <param-value>org.apache.isis.viewer.restfulobjects.viewer.authentication.AuthenticationSessionStrategyBasicAuth</param-value>
         </init-param>
         <init-param>
             <!-- what to do if no session was found; we indicate to issue a 401 basic authentication challenge -->
