@@ -17,30 +17,32 @@
  *  under the License.
  */
 
-package org.apache.isis.viewer.wicket.ui.components.entity.combined;
+package org.apache.isis.viewer.wicket.ui.components.entity.blocks.propcoll;
 
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
+import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
-import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
+import org.apache.isis.viewer.wicket.ui.components.entity.EntityComponentFactoryAbstract;
+import org.apache.wicket.Component;
+import org.apache.wicket.model.IModel;
 
 /**
- * {@link PanelAbstract Panel} to represent an entity on a single page made up
- * of several &lt;div&gt; regions.
+ * {@link ComponentFactory} for {@link EntityPropertiesAndOrCollectionsPanel}.
  */
-public class EntityCombinedPanel extends PanelAbstract<EntityModel> {
+public class EntityCollectionsReadOnlyFormPanelFactory extends EntityComponentFactoryAbstract {
 
     private static final long serialVersionUID = 1L;
 
-    public EntityCombinedPanel(final String id, final EntityModel entityModel) {
-        super(id, entityModel);
-        buildGui();
+    public EntityCollectionsReadOnlyFormPanelFactory() {
+        super(ComponentType.ENTITY_COLLECTIONS_READ_ONLY_FORM);
     }
 
-    private void buildGui() {
-        final EntityModel model = getModel();
-
-        addOrReplace(ComponentType.ENTITY_SUMMARY, model);
-        addOrReplace(ComponentType.ENTITY_PROPERTIES, model);
-        addOrReplace(ComponentType.ENTITY_COLLECTIONS_READ_ONLY_FORM, model);
+    @Override
+    public Component createComponent(final String id, final IModel<?> model) {
+        final EntityModel entityModel = (EntityModel) model;
+        return new EntityCollectionsReadOnlyFormPanel(id, entityModel);
     }
 }
+
+
+

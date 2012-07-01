@@ -18,17 +18,21 @@
   under the License.
 -->
 <html>
-<body>
-<wicket:panel>
-	<div class="entityCombined">
-		<div wicket:id="entitySummary" />
-		<div id="entityPropertiesForLayout">
-			<div wicket:id="entityProperties"/>
-		</div>
-		<div id="entityCollectionsForLayout">
-			<div wicket:id="entityCollectionsReadOnlyForm"/>
-		</div>
-	</div>
-</wicket:panel>
-</body>
+	<body>
+		<wicket:panel>
+			<div class="entityPropertiesAndOrCollections">
+			
+			
+				
+			    <form wicket:id="entityPropertiesAndOrCollections">
+	    	    	
+				    	<div wicket:id="propertiesAndOrCollections">
+			              <div wicket:id="propertyOrCollection" class="propertyOrCollection">[property or collection]</div>
+				    	</div>
+				    	
+			    	
+				</form>
+			</div>
+		</wicket:panel>
+	</body>
 </html>

@@ -20,7 +20,7 @@
 a.valueDetailsLink {
 	text-align: left;
 	display:inline;
-	border: 1px  #bfaea6 solid;
+	border: 1px  #00477F solid;
 	white-space:nowrap;
 	margin:0em;
 	padding: 1px;
@@ -29,8 +29,8 @@ a.valueDetailsLink {
 	font-weight: normal;
 	cursor:default;
 	
-	color: #A66144;
-	background-color: #C4D9EA;
+	color: #00477F;
+	background-color: #EEEEEE;
 	text-decoration:none;
 /*	-moz-border-radius: 6px;
 	-webkit-border-radius: 6px;

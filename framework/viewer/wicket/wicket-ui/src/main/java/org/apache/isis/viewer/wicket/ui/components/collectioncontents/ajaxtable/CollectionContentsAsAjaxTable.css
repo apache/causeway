@@ -30,7 +30,7 @@ table.collectionContentsAsAjaxTable tr {
 	padding-bottom: 2px; 
 	}
 
-table.collectionContentsAsAjaxTable tr.even { background-color: #ffebcd; }
+table.collectionContentsAsAjaxTable tr.even { background-color: #fff; }
 table.collectionContentsAsAjaxTable tr.odd { background-color: #fff; }
 
 table.collectionContentsAsAjaxTable tr td { 
@@ -45,7 +45,7 @@ table.collectionContentsAsAjaxTable tr th {
 	padding-bottom: 3px; 
 	padding-left: 8px; 
 	padding-right: 30px; 
-	background-color: #C4D9EA; 
+	background-color: #EEEEEE; 
 	border-bottom: 1px solid #407098; 
 	border-top: 1px solid #407098; 
 	text-align: left; 

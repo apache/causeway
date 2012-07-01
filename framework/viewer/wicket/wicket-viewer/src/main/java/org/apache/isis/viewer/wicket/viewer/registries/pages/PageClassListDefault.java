@@ -40,7 +40,7 @@ public class PageClassListDefault implements PageClassList {
     @Override
     public void registerPages(final PageRegistrySpi pageRegistry) {
         pageRegistry.registerPage(PageType.SIGN_IN, WicketSignInPage.class);
-        pageRegistry.registerPage(PageType.ABOUT, AboutPage.class);
+        //pageRegistry.registerPage(PageType.ABOUT, AboutPage.class);
         pageRegistry.registerPage(PageType.ENTITY, EntityPage.class);
         pageRegistry.registerPage(PageType.HOME, HomePage.class);
         pageRegistry.registerPage(PageType.ACTION, ActionPage.class);

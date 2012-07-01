@@ -72,7 +72,7 @@ div.tab-panel {
 }
   
 div.tabbedPanel div.tab-row a:hover {
-  color:#A66144;
+  color:#00477F;
 }
   
 div.tabbedPanel div.tab-row a {
@@ -83,8 +83,8 @@ div.tabbedPanel div.tab-row a {
 
 
 div.tabbedPanel div.tab-row li.selected a {
-  color:#A66144;
-  background-color: #C4D9EA;
+  color:#00477F;
+  background-color: #EEEEEE;
   padding-bottom:5px;
  }
  

@@ -40,7 +40,7 @@ public class IsisDatePanel extends ScalarPanelTextFieldAbstract<java.util.Date> 
     private static final long serialVersionUID = 1L;
 
     private static final String ID_SCALAR_VALUE = "scalarValue";
-    private static final String DATE_PATTERN = "MM/dd/yyyy"; // TODO: i18n
+    private static final String DATE_PATTERN = "MM/dd/yyyy"; // TODO: i18n, see for example http://apache-wicket.1842946.n4.nabble.com/DatePicker-format-td1847739.html
 
     public IsisDatePanel(final String id, final ScalarModel scalarModel) {
         super(id, scalarModel);

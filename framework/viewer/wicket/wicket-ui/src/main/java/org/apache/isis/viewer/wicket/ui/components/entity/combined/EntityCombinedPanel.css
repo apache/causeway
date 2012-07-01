@@ -40,3 +40,13 @@
 
 .entityCombined .entityCollections {
 }
+
+#entityPropertiesForLayout {
+	float: left;
+	width: 47%
+}
+
+#entityCollectionsForLayout {
+	float: right;
+	width: 47%
+}

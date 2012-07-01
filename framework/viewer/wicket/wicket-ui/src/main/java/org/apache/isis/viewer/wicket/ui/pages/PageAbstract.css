@@ -40,8 +40,8 @@
 	margin-left: auto;
 	margin-right: auto;
 	background-color: white;
-	padding: 4px 4px 800px 4px;
-	width: 800px;
+	padding: 4px 4px 4px 4px;
+	/*width: 800px;*/
 }
 
 
@@ -66,10 +66,10 @@
 /**************** ELEMENTS **************/
 
 body {
-	background-color: #C4D9EA;
+	background-color: #EEEEEE;
 	background-image: url('wicket-bg.png');
 	background-repeat: repeat-x;
-	color: #A66144;
+	color: #00477F;
 	font-family: 'Tahoma', 'Lucida Sans', 'Arial', 'Helvetica', 'Sans-serif', 'sans';
 	font-size: 10pt;
 	line-height: 1.4em;
@@ -96,7 +96,7 @@ div {
 }
 
 #footer {
-    background-color: #C4D9EA;
+    background-color: #EEEEEE;
 }
 
 h3 {
@@ -119,7 +119,7 @@ form fieldset .okButton {
 
 
 h1,h2,h3,h4,h5,h6,h7,h8 {
-	color: #A66144;
+	color: #00477F;
 	font-weight: normal;
 }
 
@@ -131,7 +131,7 @@ h1,h2 {
 #extitle {
 	font-size: 12pt;
 	font-weight: bold;
-	color: #A66144;
+	color: #00477F;
 	padding: 10px 10px 10px 10px;
 }
 
@@ -169,7 +169,7 @@ h3 {
 }
 
 a {
-	color: #A66144;
+	color: #00477F;
 	font-weight: bold;
 	text-decoration: none;
 }
@@ -188,13 +188,13 @@ pre {
 }
 
 th {
-	background: #C4D9EA;
+	background: #EEEEEE;
 	color: #407098;
 	font-weight: bold;
 }
 
 tr.b {
-	background: #C4D9EA;
+	background: #EEEEEE;
 }
 
 tr.a {
@@ -245,11 +245,11 @@ fieldset.propertiesAndOrCollections {
 }
 
 .even {
-	background-color: #FFF4D3;
+	background-color: #ffffff; 
 }
 
 .odd {
-	background-color: #C4D9EA;
+	background-color: #eeeeee; 
 }
 
 
