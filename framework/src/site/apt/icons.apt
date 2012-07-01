@@ -38,6 +38,14 @@ Icons
   You can either download the ZIPs, or simply download individual icons
   directly from this page.
 
+Other icons
+
+  Other places you might look for icons include:
+  
+  * {{{http://www.iconarchive.com}Icon Archive}}
+
+  []
+
 Haywood Icons
 
 %{snippet|id=icon-table|verbatim=false|file=src/site/resources/icons/haywood.html}
@@ -55,4 +63,5 @@ NOGL Icons
 %{snippet|id=icon-table|verbatim=false|file=src/site/resources/icons/nogl.html}
 
   []
+ 
  
