@@ -1,0 +1,21 @@
+*~
+*.swp
+*.class
+target/
+target-ide/
+logs/
+.settings/
+.project
+.classpath
+
+framework/runtimes/dflt/objectstores/sql/sql-tests-common/hsql-db/
+framework/runtimes/dflt/objectstores/sql/sql-tests-common/isis.log
+framework/runtimes/dflt/objectstores/sql/sql-tests-common/xml/
+framework/runtimes/dflt/objectstores/xml/tmp/
+framework/runtimes/dflt/objectstores/xml/xml/
+framework/security/sql/hsql-db/
+
+# Package Files #
+*.jar
+*.war
+*.ear
