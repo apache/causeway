@@ -38,7 +38,6 @@ import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.runtime.system.transaction.MessageBroker;
 import org.apache.isis.viewer.scimpi.dispatcher.Action;
 import org.apache.isis.viewer.scimpi.dispatcher.Dispatcher;
-import org.apache.isis.viewer.scimpi.dispatcher.NotLoggedInException;
 import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext;
 import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext.Scope;
 import org.apache.isis.viewer.scimpi.dispatcher.edit.FieldEditState;
@@ -77,9 +76,9 @@ public class ActionAction implements Action {
             final ObjectAction action = MethodsUtils.findAction(object, methodName);
             entryState = validateParameters(context, action, object);
 
-            final AuthenticationSession session = context.getSession();
+            AuthenticationSession session = context.getSession();
             if (session == null && action.isVisible(new AnonymousSession(), object).isVetoed()) {
-                throw new NotLoggedInException();
+                session = new AnonymousSession();
             }
 
             object.checkLock(context.getVersion(version));

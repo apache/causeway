@@ -21,6 +21,7 @@ package org.apache.isis.viewer.scimpi.dispatcher.edit;
 
 import java.io.IOException;
 
+import org.apache.isis.core.commons.authentication.AnonymousSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -29,7 +30,6 @@ import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.scimpi.dispatcher.Action;
 import org.apache.isis.viewer.scimpi.dispatcher.ForbiddenException;
-import org.apache.isis.viewer.scimpi.dispatcher.NotLoggedInException;
 import org.apache.isis.viewer.scimpi.dispatcher.ScimpiException;
 import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext;
 import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext.Scope;
@@ -47,9 +47,9 @@ public class RemoveAction implements Action {
 
     @Override
     public void process(final RequestContext context) throws IOException {
-        final AuthenticationSession session = context.getSession();
+        AuthenticationSession session = context.getSession();
         if (session == null) {
-            throw new NotLoggedInException();
+            session = new AnonymousSession();
         }
 
         final String parentId = context.getParameter(OBJECT);
