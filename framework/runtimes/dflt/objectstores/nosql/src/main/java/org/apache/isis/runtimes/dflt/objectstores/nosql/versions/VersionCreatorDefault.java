@@ -52,9 +52,8 @@ public class VersionCreatorDefault implements VersionCreator {
     }
 
     @Override
-    public Version nextVersion(final Version version) {
+    public Version nextVersion(final Version version, final String user) {
         final long sequence = ((SerialNumberVersion) version).getSequence() + 1;
-        final String user = version.getUser();
         return new SerialNumberVersion(sequence, user, new Date());
     }
 }

@@ -30,5 +30,5 @@ public interface VersionCreator {
 
     Version newVersion(String user);
 
-    Version nextVersion(Version version);
+    Version nextVersion(Version version, final String user);
 }

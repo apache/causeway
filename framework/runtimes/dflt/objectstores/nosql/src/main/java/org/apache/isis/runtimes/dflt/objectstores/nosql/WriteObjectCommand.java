@@ -91,7 +91,7 @@ class WriteObjectCommand implements PersistenceCommand {
 
         final Version currentVersion = adapter.getVersion();
         
-        final Version newVersion = mode.isUpdate() ? versionCreator.nextVersion(currentVersion) : versionCreator.newVersion(user);
+        final Version newVersion = mode.isUpdate() ? versionCreator.nextVersion(currentVersion, user) : versionCreator.newVersion(user);
         adapter.setVersion(newVersion);
         if (newVersion != null) {
             final String version = currentVersion == null ? null : versionCreator.versionString(currentVersion);

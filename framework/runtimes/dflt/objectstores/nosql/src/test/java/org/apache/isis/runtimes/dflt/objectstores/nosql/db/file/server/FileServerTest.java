@@ -64,6 +64,9 @@ public class FileServerTest {
         logFile1 = recreateFile("target/test/logs", "recovery0.log");
         logFile2 = recreateFile("target/test/logs", "recovery1.log");
 
+        final File dir = new File("target/test/org.domain.Class2");
+        dir.mkdirs();
+        
         server = new FileServerProcessor();
         server.startup();
 
@@ -142,13 +145,13 @@ public class FileServerTest {
 
     @Test
     public void writeUpdatesFilesUsingDataWriter() throws Exception {
-        final File file2 = new File("target/test/org.domain.Class", "1026.data");
+        final File file2 = new File("target/test/org.domain.Class2", "1026.data");
         final FileWriter fileWriter = new FileWriter(file2);
         final String originalData = "org.domain.Class 1026 21 {}";
         fileWriter.write(originalData);
         fileWriter.close();
 
-        final ServerConnection connection = new ServerConnection(IoUtils.asUtf8ByteStream("W\nUorg.domain.Class 1026 21 22 \n{data2}\n\n\n"), out);
+        final ServerConnection connection = new ServerConnection(IoUtils.asUtf8ByteStream("W\nUorg.domain.Class2 1026 21 22 \n{data2}\n\n\n"), out);
         server.process(connection);
 
         assertThat(out.toString(), is(equalTo("ok\n")));
@@ -208,12 +211,12 @@ public class FileServerTest {
 
     @Test
     public void copyOfReadTest() throws Exception {
-        final File file1 = new File("target/test/org.domain.Class", "2025.data");
+        final File file1 = new File("target/test/org.domain.Class2", "2025.data");
         final FileWriter fileWriter = new FileWriter(file1);
         fileWriter.write("type 1025 1\n{data1}");
         fileWriter.close();
 
-        final ServerConnection connection = new ServerConnection(IoUtils.asUtf8ByteStream("Rorg.domain.Class 2025\n\n"), out);
+        final ServerConnection connection = new ServerConnection(IoUtils.asUtf8ByteStream("Rorg.domain.Class2 2025\n\n"), out);
         server.process(connection);
 
         assertThat(out.toString(), is(equalTo("ok\n{data1}\n\n")));
@@ -221,7 +224,7 @@ public class FileServerTest {
 
     @Test
     public void ReadFailIfEndsEarly() throws Exception {
-        final ServerConnection connection = new ServerConnection(IoUtils.asUtf8ByteStream("Rorg.domain.Class 2025\n"), out);
+        final ServerConnection connection = new ServerConnection(IoUtils.asUtf8ByteStream("Rorg.domain.Class 2010\n"), out);
         server.process(connection);
 
         assertThat(out.toString(), is(containsString("stream ended prematurely while reading end of command, aborting request")));
@@ -229,12 +232,12 @@ public class FileServerTest {
 
     @Test
     public void lookReadRenamed() throws Exception {
-        final File file1 = new File("target/test/org.domain.Class", "2025.data");
+        final File file1 = new File("target/test/org.domain.Class2", "2025.data");
         final FileWriter fileWriter = new FileWriter(file1);
         fileWriter.write("type 1025 1\n{data1}");
         fileWriter.close();
 
-        final ServerConnection connection = new ServerConnection(IoUtils.asUtf8ByteStream("Rorg.domain.Class 2025\n\n"), out);
+        final ServerConnection connection = new ServerConnection(IoUtils.asUtf8ByteStream("Rorg.domain.Class2 2025\n\n"), out);
         server.process(connection);
 
         assertThat(out.toString(), is(equalTo("ok\n{data1}\n\n")));
@@ -242,12 +245,12 @@ public class FileServerTest {
 
     @Test
     public void read2() throws Exception {
-        final File file1 = new File("target/test/org.domain.Class", "2025.data");
+        final File file1 = new File("target/test/org.domain.Class2", "2025.data");
         final FileWriter fileWriter = new FileWriter(file1);
         fileWriter.write("type 1025 1\n{data1}");
         fileWriter.close();
 
-        final ServerConnection connection = new ServerConnection(IoUtils.asUtf8ByteStream("Rorg.domain.Class 2025\n\n"), out);
+        final ServerConnection connection = new ServerConnection(IoUtils.asUtf8ByteStream("Rorg.domain.Class2 2025\n\n"), out);
         server.process(connection);
 
         assertThat(out.toString(), is(equalTo("ok\n{data1}\n\n")));
@@ -263,12 +266,13 @@ public class FileServerTest {
 
     @Test
     public void hasInstances() throws Exception {
-        final File file1 = new File("target/test/org.domain.Class", "2025.data");
+        final File file1 = new File("target/test/org.domain.Class2", "2025.data");
+     //   file1.getParentFile().mkdirs();
         final FileWriter fileWriter = new FileWriter(file1);
         fileWriter.write("type 1025 1\n{data1}");
         fileWriter.close();
 
-        final ServerConnection connection = new ServerConnection(IoUtils.asUtf8ByteStream("Iorg.domain.Class\n\n"), out);
+        final ServerConnection connection = new ServerConnection(IoUtils.asUtf8ByteStream("Iorg.domain.Class2\n\n"), out);
         server.process(connection);
 
         assertThat(out.toString(), is(equalTo("ok true\n")));
