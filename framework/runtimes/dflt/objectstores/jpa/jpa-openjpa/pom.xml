@@ -27,7 +27,7 @@
 	</parent>
 
 	<artifactId>jpa-openjpa</artifactId>
-	<name>JPA ObjectStore MetaModel Support</name>
+	<name>JPA ObjectStore OpenJPA Implementation</name>
 
     <properties>
 	    <siteBaseDir>../../../../..</siteBaseDir>

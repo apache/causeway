@@ -13,7 +13,7 @@ import com.google.common.collect.Maps;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.services.container.query.QueryCardinality;
 import org.apache.isis.core.metamodel.spec.ObjectAdapterUtils;
-import org.apache.isis.extensions.jpa.metamodel.facets.object.namedquery.NamedQuery;
+import org.apache.isis.runtimes.dflt.objectstores.jpa.metamodel.facets.object.namedquery.NamedQuery;
 import org.apache.isis.runtimes.dflt.objectstores.jpa.openjpa.OpenJpaObjectStore;
 import org.apache.isis.runtimes.dflt.runtime.persistence.query.PersistenceQueryFindUsingApplibQueryDefault;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;

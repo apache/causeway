@@ -19,8 +19,8 @@
 package org.apache.isis.runtimes.dflt.objectstores.jpa.openjpa.metamodel.specloader.progmodelfacets;
 
 
-import org.apache.isis.extensions.jpa.metamodel.specloader.progmodelfacets.JpaProgrammingModelFacets;
 import org.apache.isis.progmodels.dflt.ProgrammingModelFacetsJava5;
+import org.apache.isis.runtimes.dflt.objectstores.jpa.metamodel.specloader.progmodelfacets.JpaProgrammingModelFacets;
 import org.apache.isis.runtimes.dflt.objectstores.jpa.openjpa.metamodel.facets.RemoveOpenJpaEnhancementTypesFacetFactory;
 
 /**
@@ -39,5 +39,3 @@ public class OpenJpaProgrammingModelFacets extends JpaProgrammingModelFacets {
 
 }
 
-
-// Copyright (c) Naked Objects Group Ltd.

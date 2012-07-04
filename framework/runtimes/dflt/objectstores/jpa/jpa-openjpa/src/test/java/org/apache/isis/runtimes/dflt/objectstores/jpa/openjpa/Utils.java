@@ -7,7 +7,7 @@ import java.util.Properties;
 
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
-import org.apache.isis.extensions.jpa.metamodel.specloader.validator.JpaMetaModelValidator;
+import org.apache.isis.runtimes.dflt.objectstores.jpa.metamodel.specloader.validator.JpaMetaModelValidator;
 import org.apache.isis.runtimes.dflt.objectstores.jpa.openjpa.metamodel.specloader.progmodelfacets.OpenJpaProgrammingModelFacets;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
 import org.apache.isis.runtimes.dflt.testsupport.IsisSystemWithFixtures;

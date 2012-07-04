@@ -13,9 +13,9 @@ import org.apache.openjpa.persistence.OpenJPAEntityManagerFactorySPI;
 
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.extensions.jpa.metamodel.facets.object.entity.JpaEntityFacet;
-import org.apache.isis.extensions.jpa.metamodel.facets.object.namedquery.JpaNamedQueryFacet;
-import org.apache.isis.extensions.jpa.metamodel.facets.object.namedquery.NamedQuery;
+import org.apache.isis.runtimes.dflt.objectstores.jpa.metamodel.facets.object.entity.JpaEntityFacet;
+import org.apache.isis.runtimes.dflt.objectstores.jpa.metamodel.facets.object.namedquery.JpaNamedQueryFacet;
+import org.apache.isis.runtimes.dflt.objectstores.jpa.metamodel.facets.object.namedquery.NamedQuery;
 import org.apache.isis.runtimes.dflt.objectstores.jpa.openjpa.persistence.IsisLifecycleListener;
 
 public class OpenJpaApplicationComponents implements ApplicationScopedComponent {
