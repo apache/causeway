@@ -23,7 +23,9 @@ import java.util.Collection;
 import java.util.List;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationFilters;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
@@ -31,7 +33,6 @@ import org.apache.isis.viewer.scimpi.dispatcher.AbstractObjectProcessor;
 import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext.Scope;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 import org.apache.isis.viewer.scimpi.dispatcher.view.display.FieldValue;
-import org.apache.isis.viewer.scimpi.dispatcher.view.display.ListView;
 import org.apache.isis.viewer.scimpi.dispatcher.view.field.LinkedObject;
 
 
@@ -46,12 +47,19 @@ public class DebugObjectView extends AbstractObjectProcessor {
         final String evenRowClass = request.getOptionalProperty(EVEN_ROW_CLASS);
         final boolean showIcons = request.isRequested(SHOW_ICON, true);
 
+        ObjectSpecification specification = object.getSpecification();
+
         request.appendHtml("<div" + classString + ">");
         request.appendHtml("<div class=\"title\">");
-        request.appendAsHtmlEncoded(object.getSpecification().getSingularName() + " - " + object.getSpecification().getFullIdentifier());
+        request.appendAsHtmlEncoded(specification.getSingularName() + " - " + specification.getFullIdentifier());
         request.appendHtml("</div>");
 
-        final List<ObjectAssociation> fields = object.getSpecification().getAssociations(ObjectAssociationFilters.ALL);
+        Version version = object.getVersion();
+        request.appendHtml("<div class=\"version\">");
+        request.appendAsHtmlEncoded("#" + version.sequence() + " - " + version.getUser() + " (" + version.getTime() + ")" );
+        request.appendHtml("</div>");
+
+        final List<ObjectAssociation> fields = specification.getAssociations(ObjectAssociationFilters.ALL);
 
         int row = 1;
         for (int i = 0; i < fields.size(); i++) {
