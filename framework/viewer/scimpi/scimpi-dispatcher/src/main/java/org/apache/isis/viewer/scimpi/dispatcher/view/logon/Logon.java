@@ -94,7 +94,7 @@ public class Logon extends AbstractElementProcessor {
         final String formTitle = request.getOptionalProperty(FORM_TITLE);
         final String loginButtonTitle = request.getOptionalProperty(BUTTON_TITLE, "Log in");
         final String className = request.getOptionalProperty(CLASS, "login");
-        final String id = request.getOptionalProperty(ID);
+        final String id = request.getOptionalProperty(ID, "logon");
 
         HtmlFormBuilder.createForm(request, "logon.app", hiddenFields.toArray(new HiddenInputField[hiddenFields.size()]), fields,
                 className, id, formTitle, null, null, loginButtonTitle,

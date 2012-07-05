@@ -35,6 +35,7 @@ import java.util.Stack;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
+import org.apache.isis.core.commons.config.ConfigurationConstants;
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.factory.InstanceUtil;
@@ -74,6 +75,7 @@ import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 
 public class Dispatcher {
+    private static final String SHOW_UNSHOWN_MESSAGES = ConfigurationConstants.ROOT + "scimpi.show-unshown-messages";
     public static final String ACTION = "_action";
     public static final String EDIT = "_edit";
     public static final String REMOVE = "_remove";
@@ -86,6 +88,7 @@ public class Dispatcher {
     private final ProcessorLookup processors = new ProcessorLookup();
     private final HtmlFileParser parser = new HtmlFileParser(processors);
     private final Encoder encoder = new SimpleEncoder();
+    private boolean showUnshownMessages;
 
     public void process(final RequestContext context, final String servletPath) {
         LOG.debug("processing request " + servletPath);
@@ -282,14 +285,22 @@ public class Dispatcher {
 
     public void noteIfMessagesHaveNotBeenDisplay(final RequestContext context) {
         final List<String> messages = IsisContext.getMessageBroker().getMessages();
-        if (messages.size() > 0) {
-            // TODO write out all messages
-            context.getWriter().println("Note - messages existed but where not displayed");
-        }
-        final List<String> warnings = IsisContext.getMessageBroker().getWarnings();
-        if (warnings.size() > 0) {
-            // TODO write out all warning
-            context.getWriter().println("Note - warnings existed but where not displayed");
+        if (showUnshownMessages) {
+            if (messages.size() > 0) {
+                context.getWriter().println("<ol class=\"messages forced\">");
+                for (String message : messages) {
+                    context.getWriter().println("<li>" + message + "</li>");                
+                }
+                context.getWriter().println("</ol>");
+            }
+            final List<String> warnings = IsisContext.getMessageBroker().getWarnings();
+            if (warnings.size() > 0) {
+                context.getWriter().println("<ol class=\"warnings forced\">");
+                for (String message : warnings) {
+                    context.getWriter().println("<li>" + message + "</li>");                
+                }
+                context.getWriter().println("</ol>");
+            }
         }
     }
 
@@ -397,6 +408,8 @@ public class Dispatcher {
 
         processors.init();
         processors.addElementProcessor(new org.apache.isis.viewer.scimpi.dispatcher.view.debug.Debug(this));
+        
+        showUnshownMessages = IsisContext.getConfiguration().getBoolean(SHOW_UNSHOWN_MESSAGES, true);
     }
 
     private void loadConfigFile(final File file) {

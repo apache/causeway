@@ -47,10 +47,10 @@ public class ActionForm extends AbstractElementProcessor {
         final CreateFormParameter parameters = new CreateFormParameter();
         parameters.objectId = request.getOptionalProperty(OBJECT);
         parameters.methodName = request.getRequiredProperty(METHOD);
-        parameters.cancelTo = request.getOptionalProperty(CANCEL_TO);
         parameters.forwardResultTo = request.getOptionalProperty(VIEW);
         parameters.forwardVoidTo = request.getOptionalProperty(VOID);
         parameters.forwardErrorTo = request.getOptionalProperty(ERROR);
+        parameters.cancelTo = request.getOptionalProperty(CANCEL_TO); 
         parameters.showIcon = request.isRequested(SHOW_ICON, showIconByDefault());
         parameters.buttonTitle = request.getOptionalProperty(BUTTON_TITLE);
         parameters.formTitle = request.getOptionalProperty(FORM_TITLE);
@@ -154,7 +154,8 @@ public class ActionForm extends AbstractElementProcessor {
 
         final String cancelTo = parameterObject.cancelTo == null ? "_generic.shtml?_result=" + objectId : parameterObject.cancelTo;
 
-        HtmlFormBuilder.createForm(request, ActionAction.ACTION + ".app", hiddenFields, formFields, parameterObject.className, parameterObject.id, formTitle, action.getDescription(), action.getHelp(), buttonTitle, errors, cancelTo);
+        HtmlFormBuilder.createForm(request, ActionAction.ACTION + ".app", hiddenFields, formFields, parameterObject.className,
+                parameterObject.id, formTitle, action.getDescription(), action.getHelp(), buttonTitle, errors, cancelTo);
 
         request.popBlockContent();
     }

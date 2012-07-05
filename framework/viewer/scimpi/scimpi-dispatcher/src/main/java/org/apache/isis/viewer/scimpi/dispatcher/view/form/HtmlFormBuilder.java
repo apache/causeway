@@ -25,8 +25,19 @@ import org.apache.isis.viewer.scimpi.dispatcher.view.HelpLink;
 
 public class HtmlFormBuilder {
 
-    public static void createForm(final Request request, final String action, final HiddenInputField[] hiddenFields, final InputField[] fields, final String className, final String id, final String formTitle, final String description, final String helpReference, final String buttonTitle,
-            final String errors, final String cancelTo) {
+    public static void createForm(
+            final Request request,
+            final String action,
+            final HiddenInputField[] hiddenFields,
+            final InputField[] fields,
+            final String className,
+            final String id,
+            final String formTitle,
+            final String description,
+            final String helpReference,
+            final String buttonTitle,
+            final String errors,
+            final String cancelTo) {
 
         String classSegment = " class=\"" + className + (id == null ? "\"" : "\" id=\"" + id + "\"");
         request.appendHtml("<form " + classSegment + " action=\"" + action + "\" method=\"post\" accept-charset=\"UTF-8\">\n");
