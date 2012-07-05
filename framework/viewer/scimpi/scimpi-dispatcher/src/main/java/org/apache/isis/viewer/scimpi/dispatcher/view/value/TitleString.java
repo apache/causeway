@@ -37,6 +37,9 @@ public class TitleString extends AbstractElementProcessor {
         final String fieldName = request.getOptionalProperty(FIELD);
         final int truncateTo = Integer.valueOf(request.getOptionalProperty(TRUNCATE, "0")).intValue();
         final ObjectAdapter object = request.getContext().getMappedObjectOrResult(id);
+        if (object == null) { 
+            return; 
+        } 
         String titleString;
         if (fieldName == null) {
             titleString = object.titleString();

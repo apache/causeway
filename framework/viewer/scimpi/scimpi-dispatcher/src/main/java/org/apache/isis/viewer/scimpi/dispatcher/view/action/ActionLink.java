@@ -78,7 +78,7 @@ public class ActionLink extends AbstractElementProcessor {
         String parameterSegment = "";
         final String[] parameters = parameterBlock.getParameters();
         for (int i = 0; i < parameters.length; i++) {
-            parameterSegment += "&param" + i + "=" + parameters[i];
+            parameterSegment += "&param" + (i + 1) + "=" + parameters[i];
         }
 
         final String interactionParamters = context.encodedInteractionParameters();
@@ -87,7 +87,7 @@ public class ActionLink extends AbstractElementProcessor {
         final String forwardVoidSegment = "&amp;" + "_" + VOID + "=" + voidView;
         request.appendHtml("<a href=\"action.app?" + "_" + OBJECT + "=" + objectId + "&amp;" + "_" + VERSION + "=" + version + "&amp;" + "_" + METHOD + "=" + method + forwardResultSegment + forwardVoidSegment + resultNameSegment + parameterSegment + scopeSegment + confirmSegment + messageSegment
                 + interactionParamters + "\">");
-        request.appendAsHtmlEncoded(text);
+        request.appendHtml(text);
         request.appendHtml("</a>");
         HelpLink.append(request, action.getDescription(), action.getHelp());
     }
