@@ -43,7 +43,8 @@ public abstract class AbstractFormView extends AbstractObjectProcessor {
     @Override
     public void process(final Request request, final ObjectAdapter object) {
         final String cls = request.getOptionalProperty(CLASS, "form");
-        final String classString = " class=\"" + cls + "\"";
+        final String id = request.getOptionalProperty(ID, object.getSpecification().getShortIdentifier());
+        final String classString = " id=\"" + id + "\" class=\"" + cls + "\"";
         String title = request.getOptionalProperty(FORM_TITLE);
         final String oddRowClass = request.getOptionalProperty(ODD_ROW_CLASS);
         final String evenRowClass = request.getOptionalProperty(EVEN_ROW_CLASS);

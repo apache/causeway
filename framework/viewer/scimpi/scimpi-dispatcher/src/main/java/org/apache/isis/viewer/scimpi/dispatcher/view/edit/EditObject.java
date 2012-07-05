@@ -52,6 +52,7 @@ public class EditObject extends AbstractElementProcessor {
         final String objectId = request.getOptionalProperty(OBJECT);
         final String forwardEditedTo = request.getOptionalProperty(VIEW);
         final String forwardErrorTo = request.getOptionalProperty(ERROR);
+        final String cancelTo = request.getOptionalProperty(CANCEL_TO); 
         final boolean hideNonEditableFields = request.isRequested(HIDE_UNEDITABLE, false);
         final boolean showIcon = request.isRequested(SHOW_ICON, showIconByDefault());
         String buttonTitle = request.getOptionalProperty(BUTTON_TITLE);
@@ -61,12 +62,13 @@ public class EditObject extends AbstractElementProcessor {
         final String resultOverride = request.getOptionalProperty(RESULT_OVERRIDE);
         final String scope = request.getOptionalProperty(SCOPE);
         final String className = request.getOptionalProperty(CLASS, "edit full");
-        final String id = request.getOptionalProperty(ID);
         final String completionMessage = request.getOptionalProperty(MESSAGE);
 
         final ObjectAdapter object = context.getMappedObjectOrResult(objectId);
         final String actualObjectId = context.mapObject(object, Scope.INTERACTION);
         final String version = context.mapVersion(object);
+
+        final String id = request.getOptionalProperty(ID, object.getSpecification().getShortIdentifier());
 
         final FormState entryState = (FormState) context.getVariable(ENTRY_FIELDS);
 
@@ -156,8 +158,9 @@ public class EditObject extends AbstractElementProcessor {
         }
 
         final HiddenInputField[] hiddenFieldArray = hiddenFields.toArray(new HiddenInputField[hiddenFields.size()]);
-        HtmlFormBuilder.createForm(request, EditAction.ACTION + ".app", hiddenFieldArray, formFields, className, id, formTitle, null, null, buttonTitle, errors, "_generic.shtml?_result=" + actualObjectId);
-        request.popBlockContent();
+        HtmlFormBuilder.createForm(request, EditAction.ACTION + ".app", hiddenFieldArray, formFields, className, id, formTitle,
+                null, null, buttonTitle, errors, cancelTo);
+     request.popBlockContent();
     }
 
     private InputField[] createFields(final List<ObjectAssociation> fields) {

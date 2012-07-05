@@ -49,7 +49,7 @@ public class ActionButton extends AbstractElementProcessor {
         final String buttonTitle = request.getOptionalProperty(BUTTON_TITLE);
         final String resultOverride = request.getOptionalProperty(RESULT_OVERRIDE);
         final String idName = request.getOptionalProperty(ID, methodName);
-        String className = request.getOptionalProperty(CLASS);
+        final String className = request.getOptionalProperty(CLASS);
         final boolean showMessage = request.isRequested(SHOW_MESSAGE, false);
         final String completionMessage = request.getOptionalProperty(MESSAGE);
 
@@ -87,14 +87,14 @@ public class ActionButton extends AbstractElementProcessor {
                 final String notUsable = usable.getReason();
                 if (notUsable != null) {
                     String title = buttonTitle == null ? action.getName() : buttonTitle;
-                    disabledButton(request, title, notUsable, className);
+                    disabledButton(request, title, notUsable, idName, className);
                 }
             } else {
                 final Consent valid = action.isProposedArgumentSetValid(object, objectParameters);
                 final String notValid = valid.getReason();
                 if (notValid != null) {
                     String title = buttonTitle == null ? action.getName() : buttonTitle;
-                    disabledButton(request, title, notValid, className);
+                    disabledButton(request, title, notValid, idName, className);
                 }
             }
         }
@@ -102,18 +102,33 @@ public class ActionButton extends AbstractElementProcessor {
         request.popBlockContent();
     }
 
-    private void disabledButton(final Request request, final String buttonTitle, String message, String className) {
+    private void disabledButton(final Request request, final String buttonTitle, String message, String id, String className) {
         if (className == null) {
             className = "access";
         }
-        request.appendHtml("<div class=\"" + className + " disabled\" title=\"");
+        request.appendHtml("<div id=\"" + id +"\" class=\"" + className + " disabled\" title=\"");
         request.appendAsHtmlEncoded(message);
         request.appendHtml("\" >" + buttonTitle);
         request.appendHtml("</div>");
     }
 
-    public static void write(final Request request, final ObjectAdapter object, final ObjectAction action, final String[] parameters, final String objectId, final String version, String forwardResultTo, String forwardVoidTo, String forwardErrorTo, final String variable, final String scope,
-            String buttonTitle, final String completionMessage, final String resultOverride, final String idName, final String className) {
+    public static void write(
+            final Request request,
+            final ObjectAdapter object,
+            final ObjectAction action,
+            final String[] parameters,
+            final String objectId,
+            final String version,
+            String forwardResultTo,
+            String forwardVoidTo,
+            String forwardErrorTo,
+            final String variable,
+            final String scope,
+            String buttonTitle,
+            final String completionMessage,
+            final String resultOverride,
+            final String idName,
+            final String className) {
         final RequestContext context = request.getContext();
 
         buttonTitle = buttonTitle != null ? buttonTitle : action.getName();

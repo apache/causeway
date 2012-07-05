@@ -314,7 +314,7 @@ public class TableView extends AbstractTableView {
         final RequestContext context = request.getContext();
         final TableContentWriter rowBuilder = rowBuilder(request, context, null, context.mapObject(object, Scope.REQUEST), field.getId(), fields, 
                 showIconByDefault);
-        write(request, collection, summary, rowBuilder, null, null);
+        write(request, collection, summary, rowBuilder, null, null, null);
     }
 
     @Override

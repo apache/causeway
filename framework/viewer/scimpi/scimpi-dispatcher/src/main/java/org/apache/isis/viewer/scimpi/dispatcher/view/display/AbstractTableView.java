@@ -48,6 +48,7 @@ public abstract class AbstractTableView extends AbstractElementProcessor {
         final String field = request.getOptionalProperty(FIELD);
         final String tableClass = request.getOptionalProperty(CLASS);
         ObjectSpecification elementSpec;
+        String tableId;
         if (field != null) {
             final String objectId = request.getOptionalProperty(OBJECT);
             final ObjectAdapter object = context.getMappedObjectOrResult(objectId);
@@ -64,10 +65,12 @@ public abstract class AbstractTableView extends AbstractElementProcessor {
             final TypeOfFacet facet = objectField.getFacet(TypeOfFacet.class);
             elementSpec = facet.valueSpec();
             parentObjectId = objectId == null ? context.mapObject(object, Scope.REQUEST) : objectId;
+            tableId = request.getOptionalProperty(CLASS, field);
         } else {
             final String id = request.getOptionalProperty(COLLECTION);
             collection = context.getMappedObjectOrResult(id);
             elementSpec = collection.getElementSpecification();
+            tableId = request.getOptionalProperty(CLASS, collection.getElementSpecification().getShortIdentifier());
         }
 
         final String summary = request.getOptionalProperty("summary");
@@ -79,7 +82,7 @@ public abstract class AbstractTableView extends AbstractElementProcessor {
 
         final List<ObjectAssociation> allFields = elementSpec.getAssociations(ObjectAssociationFilters.STATICALLY_VISIBLE_ASSOCIATIONS);
         final TableContentWriter rowBuilder = createRowBuilder(request, context, isFieldEditable ? parentObjectId : null, allFields, collection);
-        write(request, collection, summary, rowBuilder, tableClass, rowClasses);
+        write(request, collection, summary, rowBuilder, tableId, tableClass, rowClasses);
 
     }
 
@@ -89,12 +92,20 @@ public abstract class AbstractTableView extends AbstractElementProcessor {
 
     protected abstract TableContentWriter createRowBuilder(final Request request, RequestContext context, final String parent, final List<ObjectAssociation> allFields, ObjectAdapter collection);
 
-    public static void write(final Request request, final ObjectAdapter collection, final String summary, final TableContentWriter rowBuilder, final String tableClass, final String[] rowClasses) {
+    public static void write(
+            final Request request,
+            final ObjectAdapter collection,
+            final String summary,
+            final TableContentWriter rowBuilder,
+            final String tableId,
+            final String tableClass,
+            final String[] rowClasses) {
         final RequestContext context = request.getContext();
 
         final String summarySegment = summary == null ? "" : (" summary=\"" + summary + "\"");
+        final String idSegment = tableId == null ? "" : (" id=\"" + tableId + "\""); 
         final String classSegment = tableClass == null ? "" : (" class=\"" + tableClass + "\"");
-        request.appendHtml("<table" + classSegment + summarySegment + ">");
+        request.appendHtml("<table" + idSegment + classSegment + summarySegment + ">");
         rowBuilder.writeHeaders(request);
         rowBuilder.writeFooters(request);
 
