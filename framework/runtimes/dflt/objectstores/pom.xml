@@ -46,7 +46,10 @@
 		<module>xml</module>
 		<module>sql</module>
 		<module>nosql</module>
+		<!--
 		<module>jpa</module>
+		<module>jdo</module>
+		-->
 	</modules>
 	
 	<reporting>
