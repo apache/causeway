@@ -42,19 +42,19 @@ public abstract class AbstractFormView extends AbstractObjectProcessor {
 
     @Override
     public void process(final Request request, final ObjectAdapter object) {
-        final String cls = request.getOptionalProperty(CLASS, "form");
-        final String id = request.getOptionalProperty(ID, object.getSpecification().getShortIdentifier());
-        final String classString = " id=\"" + id + "\" class=\"" + cls + "\"";
-        String title = request.getOptionalProperty(FORM_TITLE);
-        final String oddRowClass = request.getOptionalProperty(ODD_ROW_CLASS);
-        final String evenRowClass = request.getOptionalProperty(EVEN_ROW_CLASS);
-        final boolean showIcons = request.isRequested(SHOW_ICON, showIconByDefault());
-
         final LinkedFieldsBlock tag = new LinkedFieldsBlock();
         request.setBlockContent(tag);
         request.processUtilCloseTag();
 
         if (object != null) {
+            final String id = request.getOptionalProperty(ID, object.getSpecification().getShortIdentifier()); 
+            final String cls = request.getOptionalProperty(CLASS, "form");
+            final String classString = " id=\"" + id + "\" class=\"" + cls + "\"";
+            String title = request.getOptionalProperty(FORM_TITLE);
+            final String oddRowClass = request.getOptionalProperty(ODD_ROW_CLASS);
+            final String evenRowClass = request.getOptionalProperty(EVEN_ROW_CLASS);
+            final boolean showIcons = request.isRequested(SHOW_ICON, true); 
+
             final AuthenticationSession session = IsisContext.getAuthenticationSession(); 
             List<ObjectAssociation> associations = object.getSpecification().getAssociations(ObjectAssociationFilters.dynamicallyVisible(session, object));
             final List<ObjectAssociation> fields = tag.includedFields(associations);
