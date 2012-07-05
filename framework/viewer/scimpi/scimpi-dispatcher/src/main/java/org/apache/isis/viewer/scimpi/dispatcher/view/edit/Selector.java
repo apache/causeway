@@ -100,9 +100,7 @@ public class Selector extends AbstractElementProcessor {
         final String field = request.getRequiredProperty(FIELD);
         final CollectionFacet facet = collection.getSpecification().getFacet(CollectionFacet.class);
 
-        if (facet.size(collection) == 1 && !allowNotSet) {
-            return onlyItem(request, field, collection, facet);
-        } else if (type.equals("radio")) {
+        if (type.equals("radio")) {
             return radioButtonList(request, field, allowNotSet, collection, selectedItem, facet);
         } else if (type.equals("list")) {
             final String size = request.getOptionalProperty("size", "5");
@@ -112,17 +110,6 @@ public class Selector extends AbstractElementProcessor {
         } else {
             throw new UnknownTypeException(type);
         }
-    }
-
-    private String onlyItem(final Request request, final String field, final ObjectAdapter collection, final CollectionFacet facet) {
-        final RequestContext context = request.getContext();
-        final Iterator<ObjectAdapter> iterator = facet.iterator(collection);
-        final StringBuffer buffer = new StringBuffer();
-        final ObjectAdapter element = iterator.next();
-        final String elementId = context.mapObject(element, Scope.INTERACTION);
-        buffer.append("<img class=\"small-icon\" src=\"" + request.getContext().imagePath(element) + "\" alt=\"" + element.getSpecification().getShortIdentifier() + "\"/>" + element.titleString() + "\n");
-        buffer.append("<input type=\"hidden\" name=\"" + field + "\" value=\"" + elementId + "\" />\n");
-        return buffer.toString();
     }
 
     private String radioButtonList(final Request request, final String field, final boolean allowNotSet, final ObjectAdapter collection, final ObjectAdapter selectedItem, final CollectionFacet facet) {
