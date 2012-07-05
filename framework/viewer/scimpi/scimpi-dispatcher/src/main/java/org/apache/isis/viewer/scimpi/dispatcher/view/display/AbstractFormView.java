@@ -43,8 +43,6 @@ public abstract class AbstractFormView extends AbstractObjectProcessor {
     @Override
     public void process(final Request request, final ObjectAdapter object) {
         final LinkedFieldsBlock tag = new LinkedFieldsBlock();
-        request.setBlockContent(tag);
-        request.processUtilCloseTag();
 
         if (object != null) {
             final String id = request.getOptionalProperty(ID, object.getSpecification().getShortIdentifier()); 
@@ -54,6 +52,9 @@ public abstract class AbstractFormView extends AbstractObjectProcessor {
             final String oddRowClass = request.getOptionalProperty(ODD_ROW_CLASS);
             final String evenRowClass = request.getOptionalProperty(EVEN_ROW_CLASS);
             final boolean showIcons = request.isRequested(SHOW_ICON, true); 
+
+            request.setBlockContent(tag);
+            request.processUtilCloseTag();
 
             final AuthenticationSession session = IsisContext.getAuthenticationSession(); 
             List<ObjectAssociation> associations = object.getSpecification().getAssociations(ObjectAssociationFilters.dynamicallyVisible(session, object));
@@ -77,8 +78,10 @@ public abstract class AbstractFormView extends AbstractObjectProcessor {
             }
 
             write(request, object, fields, linkFields, classString, title, oddRowClass, evenRowClass, showIcons);
+            request.popBlockContent();
+        } else {
+            request.skipUntilClose(); 
         }
-        request.popBlockContent();
     }
 
     private void write(final Request request, final ObjectAdapter object, final List<ObjectAssociation> fields, final LinkedObject[] linkFields, final String classString, final String title, final String oddRowClass, final String evenRowClass, final boolean showIcons) {
