@@ -329,6 +329,24 @@
                 <version>0.3.1-incubating-SNAPSHOT</version>
             </dependency>
 
+            <!-- isis: runtimes-dflt: objectstores: jdo/datanucleus -->
+            <dependency>
+                <groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
+                <artifactId>jdo-applib</artifactId>
+                <version>0.3.1-incubating-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
+                <artifactId>jdo-metamodel</artifactId>
+                <version>0.3.1-incubating-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>
+                <artifactId>jdo-datanucleus</artifactId>
+                <version>0.3.1-incubating-SNAPSHOT</version>
+            </dependency>
+
+
             <!-- isis: runtimes-dflt: objectstores: jpa/openjpa -->
             <dependency>
                 <groupId>org.apache.isis.runtimes.dflt.objectstores</groupId>

@@ -19,6 +19,9 @@
 
 package org.apache.isis.tck.dom.scalars;
 
+import javax.jdo.annotations.Discriminator;
+import javax.jdo.annotations.PersistenceCapable;
+import javax.jdo.annotations.PrimaryKey;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -27,15 +30,18 @@ import org.apache.isis.applib.AbstractDomainObject;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.ObjectType;
 
-@Entity // for openjpa object store
-@DiscriminatorValue("PRMV") // for openjpa object store
+@PersistenceCapable         // for jdo object store
+@Discriminator("PRMV")      // for jdo object store
+@Entity                     // for jpa object store
+@DiscriminatorValue("PRMV") // for jpa object store
 @ObjectType("PRMV")
 public class PrimitiveValuedEntity extends AbstractDomainObject {
 
     // {{ Id (Integer)
     private Integer id;
 
-    @Id // for openjpa object store
+    @PrimaryKey // for jdo object store
+    @Id         // for jpa object store
     public Integer getId() {
         return id;
     }
