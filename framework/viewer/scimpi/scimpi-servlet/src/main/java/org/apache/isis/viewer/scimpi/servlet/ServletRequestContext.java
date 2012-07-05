@@ -24,6 +24,7 @@ import java.io.InputStream;
 import java.io.PrintWriter;
 import java.net.MalformedURLException;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.ServletContext;
@@ -151,6 +152,7 @@ public class ServletRequestContext extends RequestContext {
             final String name = (String) parameterNames.nextElement();
             addParameter(name, request.getParameter(name));
         }
+        initSession();
     }
 
     public HttpServletRequest getRequest() {
@@ -221,11 +223,20 @@ public class ServletRequestContext extends RequestContext {
     
     @Override
     public void startHttpSession() {
+        addVariable("_auth_session", getSession(), Scope.SESSION); 
+    }
+
+    private void initSession(){
         final HttpSession httpSession = request.getSession(true);
+        // TODO when using version 3.0 of Servlet API use the HttpOnly setting for improved security
         if (httpSession.getAttribute("scimpi-context") == null) {
             final Map<String, Object> sessionData = getSessionData();
             httpSession.setAttribute("scimpi-context", sessionData);
-            addVariable("_authenticated", false, Scope.SESSION);
+        } else {
+            final HashMap<String, Object> data = (HashMap<String, Object>) httpSession.getAttribute("scimpi-context");
+            if (data != null) {
+                setSessionData(data);
+            }
         }
     }
 
