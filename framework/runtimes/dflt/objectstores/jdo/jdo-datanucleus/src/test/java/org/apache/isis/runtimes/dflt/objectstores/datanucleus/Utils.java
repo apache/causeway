@@ -7,8 +7,6 @@ import java.util.Properties;
 
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
-import org.apache.isis.runtimes.dflt.objectstores.datanucleus.DataNucleusObjectStore;
-import org.apache.isis.runtimes.dflt.objectstores.datanucleus.DataNucleusPersistenceMechanismInstaller;
 import org.apache.isis.runtimes.dflt.objectstores.datanucleus.metamodel.specloader.progmodelfacets.DataNucleusProgrammingModelFacets;
 import org.apache.isis.runtimes.dflt.objectstores.jdo.metamodel.specloader.validator.JdoMetaModelValidator;
 import org.apache.isis.runtimes.dflt.runtime.system.context.IsisContext;
@@ -48,10 +46,9 @@ public class Utils {
     public static IsisConfiguration configurationForDataNucleusOverHsqlDb() {
         final IsisConfigurationDefault configuration = new IsisConfigurationDefault();
         Properties props = new Properties();
-        props.put("isis.persistor.datanucleus.impl.openjpa.jdbc.SynchronizeMappings", "buildSchema");
         props.put("isis.persistor.datanucleus.impl.javax.jdo.option.ConnectionDriverName", "org.hsqldb.jdbcDriver");
-        props.put("isis.persistor.datanucleus.impl.javax.jdo.option.ConnectionURL", "jdbc:hsqldb:mem:test");
-        //props.put("isis.persistor.datanucleus.impl.javax.jdo.option.ConnectionURL", "jdbc:hsqldb:file:hsql-db/test;hsqldb.write_delay=false;shutdown=true");
+        //props.put("isis.persistor.datanucleus.impl.javax.jdo.option.ConnectionURL", "jdbc:hsqldb:mem:test");
+        props.put("isis.persistor.datanucleus.impl.javax.jdo.option.ConnectionURL", "jdbc:hsqldb:file:hsql-db/test;hsqldb.write_delay=false;shutdown=true");
         props.put("isis.persistor.datanucleus.impl.javax.jdo.option.ConnectionUserName", "sa");
         props.put("isis.persistor.datanucleus.impl.javax.jdo.option.ConnectionPassword", "");
         props.put("isis.persistor.datanucleus.impl.datanucleus.autoCreateSchema", "true");

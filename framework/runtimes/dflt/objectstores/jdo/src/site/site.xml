@@ -21,19 +21,18 @@
 
 	<body>
 		<breadcrumbs>
-			<item name="JPA" href="index.html"/>
+			<item name="JDO" href="index.html"/>
 		</breadcrumbs>
 
-		<menu name="JPA ObjectStore">
+		<menu name="JDO ObjectStore">
 			<item name="About" href="index.html" />
             <item name="Jottings" href="jottings.html" />
 		</menu>
 
-
-        <menu name="JPA Modules">
-            <item name="Applib" href="./jpa-applib/index.html" />
-            <item name="Metamodel" href="./jpa-metamodel/index.html" />
-            <item name="OpenJPA" href="./jpa-viewer/index.html" />
+        <menu name="JDO Modules">
+            <item name="Applib" href="./jdo-applib/index.html" />
+            <item name="Metamodel" href="./jdo-metamodel/index.html" />
+            <item name="DataNucleus" href="./jdo-datanucleus/index.html" />
         </menu>
         
 		<menu name="Documentation">

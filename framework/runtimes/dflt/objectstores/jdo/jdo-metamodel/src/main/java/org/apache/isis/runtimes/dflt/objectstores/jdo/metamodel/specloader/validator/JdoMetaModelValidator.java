@@ -48,7 +48,7 @@ public class JdoMetaModelValidator extends MetaModelValidatorAbstract {
                 return;
             }
         }
-        throw new MetaModelInvalidException("No annotated entities found; " + "are they annotated with @Entity? " + "are the entities referenced by the registered services? " + "are all services registered? " + "are you using the JPA reflector");
+        throw new MetaModelInvalidException("No annotated entities found; " + "are they annotated with @PersistenceCapable? " + "are the entities referenced by the registered services? " + "are all services registered? " + "are you using the JPA reflector");
     }
 
     private void ensureAllSpecificationsValid() throws ClassNotFoundException {
@@ -68,7 +68,7 @@ public class JdoMetaModelValidator extends MetaModelValidatorAbstract {
         }
 
         final String classFullName = objSpec.getFullIdentifier();
-        throw new MetaModelInvalidException(MessageFormat.format("Class {0} is mapped as both @Entity and @Embeddable; " + "not supported", classFullName));
+        throw new MetaModelInvalidException(MessageFormat.format("Class {0} is mapped as both @PersistenceCapable and @EmbeddedOnly; " + "not supported", classFullName));
     }
 
     private void ensureEntityIfAnnotatedAsSuchHasOrInheritsAnPrimaryKyProperty(final ObjectSpecification objSpec) throws ClassNotFoundException {
@@ -100,7 +100,7 @@ public class JdoMetaModelValidator extends MetaModelValidatorAbstract {
             return;
         }
         final String classFullName = objSpec.getFullIdentifier();
-        throw new MetaModelInvalidException(MessageFormat.format("OpenJpa object store requires that concrete class {0} mapped by @Entity " + "must also have an @DiscriminatorValue annotation", classFullName));
+        throw new MetaModelInvalidException(MessageFormat.format("DataNucleus object store requires that concrete class {0} mapped by @PersistenceCapable " + "must also have an @Discriminator annotation", classFullName));
     }
 
 }

@@ -18,18 +18,13 @@
  */
 package org.apache.isis.runtimes.dflt.objectstores.jdo.metamodel.facets.object.version;
 
-import java.lang.reflect.Method;
 import java.util.List;
-
-import junit.framework.Assert;
 
 import org.jmock.Expectations;
 
 import org.apache.isis.core.commons.matchers.IsisMatchers;
-import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
-import org.apache.isis.core.metamodel.facets.mandatory.MandatoryFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;

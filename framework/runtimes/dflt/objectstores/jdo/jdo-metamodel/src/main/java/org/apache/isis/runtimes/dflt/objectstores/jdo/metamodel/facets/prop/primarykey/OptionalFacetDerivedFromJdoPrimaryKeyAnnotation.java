@@ -18,9 +18,12 @@
  */
 package org.apache.isis.runtimes.dflt.objectstores.jdo.metamodel.facets.prop.primarykey;
 
+import javax.jdo.annotations.PrimaryKey;
+
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.mandatory.MandatoryFacetDefault;
 import org.apache.isis.core.metamodel.facets.properties.defaults.PropertyDefaultFacet;
+import org.apache.isis.runtimes.dflt.objectstores.jdo.metamodel.facets.object.version.OptionalFacetDerivedFromJdoVersionAnnotation;
 
 
 /**

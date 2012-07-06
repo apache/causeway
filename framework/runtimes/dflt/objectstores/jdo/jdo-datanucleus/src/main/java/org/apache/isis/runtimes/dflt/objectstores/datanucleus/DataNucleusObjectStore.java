@@ -13,7 +13,6 @@ import java.util.Map;
 
 import javax.jdo.PersistenceManager;
 import javax.jdo.Query;
-import javax.transaction.Transaction;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -78,7 +77,7 @@ public class DataNucleusObjectStore implements ObjectStore, PersistenceSessionHy
     /**
      * @see #isFixturesInstalled()
      */
-    public static final String IS_FIXTURES_INSTALLED_KEY = ConfigurationConstants.ROOT + "persistor.openjpa.install-fixtures";
+    public static final String IS_FIXTURES_INSTALLED_KEY = ConfigurationConstants.ROOT + "persistor.datanucleus.install-fixtures";
     public static final boolean IS_FIXTURES_INSTALLED_DEFAULT = true;
 
     static enum TransactionMode {
@@ -128,7 +127,7 @@ public class DataNucleusObjectStore implements ObjectStore, PersistenceSessionHy
 
     @Override
     public String name() {
-        return "openjpa";
+        return "datanucleus";
     }
 
     // ///////////////////////////////////////////////////////////////////////
@@ -155,7 +154,7 @@ public class DataNucleusObjectStore implements ObjectStore, PersistenceSessionHy
      * {@link DataNucleusObjectStore#commitJpaTransaction() commits the underlying
      * JPA transaction}.
      * <p>
-     * The corresponding OpenJPA {@link EntityManager} is then
+     * The corresponding DataNucleus {@link Entity} is then
      * {@link EntityManager#close() close}d.
      */
     public void close() {
@@ -173,7 +172,8 @@ public class DataNucleusObjectStore implements ObjectStore, PersistenceSessionHy
     }
 
     private PersistenceManager openSession() {
-        return persistenceManager = applicationComponents.createPersistenceManager();
+        this.persistenceManager = applicationComponents.createPersistenceManager();
+        return this.persistenceManager;
     }
 
     private void addPersistenceQueryProcessors(final PersistenceManager persistenceManager) {

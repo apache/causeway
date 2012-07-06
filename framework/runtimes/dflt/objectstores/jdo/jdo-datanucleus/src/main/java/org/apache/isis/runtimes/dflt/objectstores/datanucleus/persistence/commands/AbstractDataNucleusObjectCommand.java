@@ -1,7 +1,6 @@
 package org.apache.isis.runtimes.dflt.objectstores.datanucleus.persistence.commands;
 
 import javax.jdo.PersistenceManager;
-import javax.persistence.EntityManager;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.runtimes.dflt.runtime.persistence.objectstore.transaction.PersistenceCommandAbstract;

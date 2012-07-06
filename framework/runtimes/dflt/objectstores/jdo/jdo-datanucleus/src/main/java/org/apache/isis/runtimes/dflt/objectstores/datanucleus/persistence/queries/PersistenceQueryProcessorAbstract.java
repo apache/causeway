@@ -5,17 +5,10 @@ import java.util.List;
 import javax.jdo.PersistenceManager;
 import javax.jdo.PersistenceManagerFactory;
 import javax.jdo.metadata.TypeMetadata;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.metamodel.ManagedType;
-import javax.persistence.metamodel.Metamodel;
 
 import com.google.common.collect.Lists;
 
 import org.apache.isis.core.commons.ensure.Assert;
-import org.apache.isis.core.commons.ensure.Ensure;
-import org.apache.isis.core.commons.factory.InstanceUtil;
-import org.apache.isis.core.commons.lang.CastUtils;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.runtimes.dflt.runtime.system.persistence.AdapterManager;

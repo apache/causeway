@@ -3,8 +3,6 @@ package org.apache.isis.runtimes.dflt.objectstores.datanucleus.persistence.spi;
 import java.util.UUID;
 
 import javax.jdo.PersistenceManager;
-import javax.jdo.PersistenceManagerFactory;
-import javax.persistence.PersistenceUnitUtil;
 
 import org.apache.log4j.Logger;
 
@@ -24,7 +22,11 @@ public class DataNucleusIdentifierGenerator implements IdentifierGenerator, Adap
 
     @SuppressWarnings("unused")
     private static final Logger LOG = Logger.getLogger(DataNucleusIdentifierGenerator.class);
+    
+    @SuppressWarnings("unused")
     private AdapterMap adapterMap;
+    
+    @SuppressWarnings("unused")
     private SpecificationLookup specificationLookup;
 
 
@@ -68,7 +70,7 @@ public class DataNucleusIdentifierGenerator implements IdentifierGenerator, Adap
 
 
     public String debugTitle() {
-        return "OpenJpa Identifier Generator";
+        return "DataNucleus Identifier Generator";
     }
 
     

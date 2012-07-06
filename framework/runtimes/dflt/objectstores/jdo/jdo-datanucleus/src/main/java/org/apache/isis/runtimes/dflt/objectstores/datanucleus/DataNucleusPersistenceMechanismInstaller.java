@@ -46,11 +46,11 @@ public class DataNucleusPersistenceMechanismInstaller extends PersistenceMechani
 
     @Override
     protected ObjectStore createObjectStore(IsisConfiguration configuration, ObjectAdapterFactory adapterFactory, AdapterManager adapterManager) {
-        createOpenJpaApplicationComponentsIfRequired(configuration);
+        createDataNucleusApplicationComponentsIfRequired(configuration);
         return new DataNucleusObjectStore(configuration, adapterFactory, adapterManager, applicationComponents);
     }
 
-    private void createOpenJpaApplicationComponentsIfRequired(IsisConfiguration configuration) {
+    private void createDataNucleusApplicationComponentsIfRequired(IsisConfiguration configuration) {
         if(applicationComponents != null) {
             return;
         }

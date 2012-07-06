@@ -3,7 +3,6 @@ package org.apache.isis.runtimes.dflt.objectstores.datanucleus.persistence.queri
 import java.util.List;
 
 import javax.jdo.PersistenceManager;
-import javax.persistence.EntityManager;
 
 import org.apache.isis.core.commons.exceptions.NotYetImplementedException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;

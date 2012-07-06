@@ -21,7 +21,6 @@ package org.apache.isis.runtimes.dflt.objectstores.jdo.metamodel.facets.object.v
 import javax.jdo.annotations.Version;
 
 import org.apache.isis.core.metamodel.facets.MarkerFacet;
-import org.apache.isis.core.metamodel.facets.SingleValueFacet;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 
 /**

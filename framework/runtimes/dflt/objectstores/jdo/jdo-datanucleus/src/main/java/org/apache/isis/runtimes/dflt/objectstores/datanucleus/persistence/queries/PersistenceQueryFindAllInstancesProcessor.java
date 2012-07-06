@@ -5,8 +5,10 @@ import java.util.List;
 import javax.jdo.PersistenceManager;
 import javax.jdo.Query;
 
+import org.apache.commons.lang.ClassUtils;
 import org.apache.log4j.Logger;
 
+import org.apache.isis.core.commons.lang.ClassUtil;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.runtimes.dflt.runtime.persistence.query.PersistenceQueryFindAllInstances;
@@ -26,7 +28,8 @@ public class PersistenceQueryFindAllInstancesProcessor extends PersistenceQueryP
         if (LOG.isDebugEnabled()) {
             LOG.debug("getInstances: class=" + specification.getFullIdentifier());
         }
-        final Query query = QueryUtil.createQuery(getPersistenceManager(), "o", null, specification, null);
+        Class<?> cls = specification.getCorrespondingClass();
+        final Query query = getPersistenceManager().newQuery(cls);
         final List<?> pojos = (List<?>) query.execute();
         return loadAdapters(specification, pojos);
     }

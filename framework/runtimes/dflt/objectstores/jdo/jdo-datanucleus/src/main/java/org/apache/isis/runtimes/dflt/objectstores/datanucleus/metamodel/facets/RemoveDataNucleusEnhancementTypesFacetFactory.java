@@ -23,7 +23,7 @@ package org.apache.isis.runtimes.dflt.objectstores.datanucleus.metamodel.facets;
 import org.apache.isis.core.progmodel.facets.object.ignore.javalang.AbstractRemoveMethodsFacetFactory;
 
 /**
- * Removes all methods inherited from {@link Object}.
+ * Removes all methods inherited from {@link javax.jdo.spi.PersistenceCapable}.
  */
 public class RemoveDataNucleusEnhancementTypesFacetFactory extends AbstractRemoveMethodsFacetFactory {
 

@@ -24,15 +24,15 @@
 			<item name="Applib" href="index.html"/>
 		</breadcrumbs>
 
-		<menu name="JPA Applib">
+		<menu name="JDO Applib">
 			<item name="About" href="index.html" />
             <item name="Jottings" href="jottings.html" />
 		</menu>
 
-        <menu name="JPA Modules">
-            <item name="Applib" href="../jpa-applib/index.html" />
-            <item name="Metamodel" href="../jpa-metamodel/index.html" />
-            <item name="OpenJPA" href="../jpa-openjpa/index.html" />
+        <menu name="JDO Modules">
+            <item name="Applib" href="../jdo-applib/index.html" />
+            <item name="Metamodel" href="../jdo-metamodel/index.html" />
+            <item name="DataNucleus" href="../jdo-datanucleus/index.html" />
         </menu>
         
 		<menu name="Maven Reports" ref="reports" />

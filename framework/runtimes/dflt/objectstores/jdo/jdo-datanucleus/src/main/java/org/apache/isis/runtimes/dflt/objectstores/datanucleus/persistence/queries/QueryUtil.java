@@ -40,7 +40,9 @@ public final class QueryUtil {
         if (select != null) {
             buf.append(select);
         } else {
-            buf.append("select ").append(alias);
+            buf.append("select ");
+            // not required in JDOQL (cf JPA QL)
+            // buf.append(alias);
         }
         buf.append(" ");
         return buf;
