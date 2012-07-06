@@ -19,24 +19,22 @@
 
 package org.apache.isis.viewer.wicket.ui.components.scalars.value;
 
-import org.apache.wicket.Component;
-import org.apache.wicket.model.IModel;
-
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
-import org.apache.isis.viewer.wicket.ui.ComponentFactoryAbstract;
-import org.apache.isis.viewer.wicket.ui.ComponentType;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ComponentFactoryScalarAbstract;
+import org.apache.wicket.Component;
+import org.apache.wicket.model.IModel;
 
 /**
  * {@link ComponentFactory} for the {@link ValuePanel}.
  */
-public class ValuePanelFactory extends ComponentFactoryAbstract {
+public class ValuePanelFactory extends ComponentFactoryScalarAbstract {
 
     private static final long serialVersionUID = 1L;
 
     public ValuePanelFactory() {
-        super(ComponentType.SCALAR_NAME_AND_VALUE);
+        super(); // not asking the supertype to validate types, so can just pass in nothing here.
     }
 
     @Override
@@ -50,9 +48,9 @@ public class ValuePanelFactory extends ComponentFactoryAbstract {
     }
 
     @Override
-    public Component createComponent(final String id, final IModel<?> model) {
-        final ScalarModel scalarModel = (ScalarModel) model;
+    public Component createComponent(final String id, final ScalarModel scalarModel) {
         return new ValuePanel(id, scalarModel);
     }
+
 
 }
