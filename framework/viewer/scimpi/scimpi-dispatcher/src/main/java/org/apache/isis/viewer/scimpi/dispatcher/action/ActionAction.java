@@ -152,8 +152,12 @@ public class ActionAction implements Action {
             }
 
         } catch (final ConcurrencyException e) {
-
-            IsisContext.getMessageBroker().addMessage(e.getMessage());
+            ObjectAdapter object = IsisContext.getPersistenceSession().getAdapterManager().getAdapterFor(e.getSource()); 
+            String exceptionMessage = e.getMessage();
+            String user = exceptionMessage.substring(0, exceptionMessage.indexOf(" "));
+            String errorMessage = "The data for '" + object.titleString() + "' was changed by " + user
+                    + ". Please repeat the action based on those changes.";
+            IsisContext.getMessageBroker().addMessage(errorMessage);
 
             entryState.setForm(formId);
             context.addVariable(ENTRY_FIELDS, entryState, Scope.REQUEST);
