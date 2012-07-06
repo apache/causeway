@@ -106,9 +106,11 @@ public class ActionButton extends AbstractElementProcessor {
         if (className == null) {
             className = "access";
         }
-        request.appendHtml("<div id=\"" + id +"\" class=\"" + className + " disabled\" title=\"");
+        request.appendHtml("<div id=\"" + id + "\" class=\"" + className + " disabled-form\">");
+        request.appendHtml("<div class=\"button disabled\" title=\"");
         request.appendAsHtmlEncoded(message);
         request.appendHtml("\" >" + buttonTitle);
+        request.appendHtml("</div>");
         request.appendHtml("</div>");
     }
 
