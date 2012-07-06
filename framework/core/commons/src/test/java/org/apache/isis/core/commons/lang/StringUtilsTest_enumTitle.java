@@ -17,17 +17,25 @@
  *  under the License.
  */
 
-package org.apache.isis.core.commons.components;
+package org.apache.isis.core.commons.lang;
 
-/**
- * Allows the component to be reset.
- * 
- * <p>
- * Primarily for testing.
- * 
- */
-public interface Resettable {
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
-    void reset();
+import org.junit.Test;
+
+public class StringUtilsTest_enumTitle {
+
+    @Test
+    public void enumTitle() {
+        assertThat(StringUtils.enumTitle("FOO"), is("Foo"));
+        assertThat(StringUtils.enumTitle("FOO_BAR"), is("Foo Bar"));
+    }
+
+    @Test
+    public void enumDeTitle() {
+        assertThat(StringUtils.enumDeTitle("Foo"), is("FOO"));
+        assertThat(StringUtils.enumDeTitle("Foo Bar"), is("FOO_BAR"));
+    }
 
 }
