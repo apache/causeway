@@ -46,11 +46,20 @@ public class Utils {
     public static IsisConfiguration configurationForDataNucleusOverHsqlDb() {
         final IsisConfigurationDefault configuration = new IsisConfigurationDefault();
         Properties props = new Properties();
-        props.put("isis.persistor.datanucleus.impl.javax.jdo.option.ConnectionDriverName", "org.hsqldb.jdbcDriver");
+        
+        props.put("isis.persistor.datanucleus.impl.javax.jdo.PersistenceManagerFactoryClass", "org.datanucleus.api.jdo.JDOPersistenceManagerFactory");
+        
+        //props.put("isis.persistor.datanucleus.impl.javax.jdo.option.ConnectionDriverName", "org.hsqldb.jdbcDriver");
         //props.put("isis.persistor.datanucleus.impl.javax.jdo.option.ConnectionURL", "jdbc:hsqldb:mem:test");
-        props.put("isis.persistor.datanucleus.impl.javax.jdo.option.ConnectionURL", "jdbc:hsqldb:file:hsql-db/test;hsqldb.write_delay=false;shutdown=true");
-        props.put("isis.persistor.datanucleus.impl.javax.jdo.option.ConnectionUserName", "sa");
-        props.put("isis.persistor.datanucleus.impl.javax.jdo.option.ConnectionPassword", "");
+        ////props.put("isis.persistor.datanucleus.impl.javax.jdo.option.ConnectionURL", "jdbc:hsqldb:file:hsql-db/test;hsqldb.write_delay=false;shutdown=true");
+        //props.put("isis.persistor.datanucleus.impl.javax.jdo.option.ConnectionUserName", "sa");
+        //props.put("isis.persistor.datanucleus.impl.javax.jdo.option.ConnectionPassword", "");
+
+        props.put("isis.persistor.datanucleus.impl.javax.jdo.option.ConnectionDriverName", "com.microsoft.sqlserver.jdbc.SQLServerDriver");
+        props.put("isis.persistor.datanucleus.impl.javax.jdo.option.ConnectionURL", "jdbc:sqlserver://127.0.0.1:1433;instance=SQLEXPRESS;databaseName=jdo;");
+        props.put("isis.persistor.datanucleus.impl.javax.jdo.option.ConnectionUserName", "jdo");
+        props.put("isis.persistor.datanucleus.impl.javax.jdo.option.ConnectionPassword", "jdopass");
+
         props.put("isis.persistor.datanucleus.impl.datanucleus.autoCreateSchema", "true");
         props.put("isis.persistor.datanucleus.impl.datanucleus.validateTables", "false");
         props.put("isis.persistor.datanucleus.impl.datanucleus.validateConstraints", "false");

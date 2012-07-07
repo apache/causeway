@@ -28,8 +28,12 @@ public class PersistenceQueryFindAllInstancesProcessor extends PersistenceQueryP
         if (LOG.isDebugEnabled()) {
             LOG.debug("getInstances: class=" + specification.getFullIdentifier());
         }
-        Class<?> cls = specification.getCorrespondingClass();
-        final Query query = getPersistenceManager().newQuery(cls);
+        
+//        Class<?> cls = specification.getCorrespondingClass();
+//        final Query query = getPersistenceManager().newQuery(cls);
+        
+        final Query query = QueryUtil.createQuery(getPersistenceManager(), "o", null, specification, null);
+
         final List<?> pojos = (List<?>) query.execute();
         return loadAdapters(specification, pojos);
     }

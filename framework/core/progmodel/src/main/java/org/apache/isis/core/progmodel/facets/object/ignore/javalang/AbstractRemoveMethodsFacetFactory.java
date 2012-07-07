@@ -24,6 +24,7 @@ import java.util.List;
 
 import com.google.common.collect.Lists;
 
+import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.methodutils.MethodScope;
@@ -43,19 +44,36 @@ public abstract class AbstractRemoveMethodsFacetFactory extends FacetFactoryAbst
         }
     }
 
-    private final List<MethodAndParameterTypes> methodList = Lists.newArrayList();
+    private final List<MethodAndParameterTypes> methodsToIgnore = Lists.newArrayList();
 
     public AbstractRemoveMethodsFacetFactory(final Class<?> typeToIgnore) {
         super(FeatureType.OBJECTS_ONLY);
         final Method[] methods = typeToIgnore.getMethods();
         for (final Method method : methods) {
-            methodList.add(new MethodAndParameterTypes(method.getName(), method.getParameterTypes()));
+            methodsToIgnore.add(new MethodAndParameterTypes(method.getName(), method.getParameterTypes()));
+        }
+    }
+
+    public AbstractRemoveMethodsFacetFactory(final String typeToIgnoreIfOnClasspath) {
+        super(FeatureType.OBJECTS_ONLY);
+        try {
+            Class<?> typeToIgnore = InstanceUtil.loadClass(typeToIgnoreIfOnClasspath);
+            addMethodsToBeIgnored(typeToIgnore);
+        } catch(Exception ex) {
+            // ignore
+        }
+    }
+
+    private void addMethodsToBeIgnored(Class<?> typeToIgnore) {
+        final Method[] methods = typeToIgnore.getMethods();
+        for (final Method method : methods) {
+            methodsToIgnore.add(new MethodAndParameterTypes(method.getName(), method.getParameterTypes()));
         }
     }
 
     @Override
     public void process(final ProcessClassContext processClassContext) {
-        for (final MethodAndParameterTypes mapt : methodList) {
+        for (final MethodAndParameterTypes mapt : methodsToIgnore) {
             processClassContext.removeMethod(MethodScope.OBJECT, mapt.methodName, null, mapt.methodParameters);
         }
     }

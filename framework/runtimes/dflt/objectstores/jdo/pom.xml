@@ -39,6 +39,16 @@
 	<!-- used in Site generation for relative references. -->
 	<url>http://incubator.apache.org/isis/${relativeUrl}</url>
 
+	<pluginRepositories>
+        <pluginRepository>
+            <id>DataNucleus_2</id>
+            <url>http://www.datanucleus.org/downloads/maven2/</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </pluginRepository>
+    </pluginRepositories>
+
 	<modules>
 		<module>jdo-applib</module>
 		<module>jdo-metamodel</module>

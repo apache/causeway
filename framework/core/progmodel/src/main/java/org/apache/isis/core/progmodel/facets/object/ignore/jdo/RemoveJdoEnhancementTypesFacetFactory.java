@@ -17,18 +17,18 @@
  *  under the License.
  */
 
-package org.apache.isis.runtimes.dflt.objectstores.datanucleus.metamodel.facets;
+package org.apache.isis.core.progmodel.facets.object.ignore.jdo;
 
 
 import org.apache.isis.core.progmodel.facets.object.ignore.javalang.AbstractRemoveMethodsFacetFactory;
 
 /**
- * Removes all methods inherited from {@link javax.jdo.spi.PersistenceCapable}.
+ * Removes all methods inherited from <tt>javax.jdo.spi.PersistenceCapable</tt> (if JDO is on the classpath).
  */
-public class RemoveDataNucleusEnhancementTypesFacetFactory extends AbstractRemoveMethodsFacetFactory {
+public class RemoveJdoEnhancementTypesFacetFactory extends AbstractRemoveMethodsFacetFactory {
 
-    public RemoveDataNucleusEnhancementTypesFacetFactory() {
-        super(javax.jdo.spi.PersistenceCapable.class);
+    public RemoveJdoEnhancementTypesFacetFactory() {
+        super("javax.jdo.spi.PersistenceCapable");
     }
 
 }

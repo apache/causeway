@@ -19,8 +19,8 @@
 package org.apache.isis.runtimes.dflt.objectstores.datanucleus.metamodel.specloader.progmodelfacets;
 
 
+import org.apache.isis.core.progmodel.facets.object.ignore.jdo.RemoveJdoEnhancementTypesFacetFactory;
 import org.apache.isis.progmodels.dflt.ProgrammingModelFacetsJava5;
-import org.apache.isis.runtimes.dflt.objectstores.datanucleus.metamodel.facets.RemoveDataNucleusEnhancementTypesFacetFactory;
 import org.apache.isis.runtimes.dflt.objectstores.jdo.metamodel.specloader.progmodelfacets.JdoProgrammingModelFacets;
 
 /**
@@ -34,7 +34,7 @@ import org.apache.isis.runtimes.dflt.objectstores.jdo.metamodel.specloader.progm
 public class DataNucleusProgrammingModelFacets extends JdoProgrammingModelFacets {
 
     public DataNucleusProgrammingModelFacets() {
-        addFactory(RemoveDataNucleusEnhancementTypesFacetFactory.class);
+        addFactory(RemoveJdoEnhancementTypesFacetFactory.class);
     }
 
 }

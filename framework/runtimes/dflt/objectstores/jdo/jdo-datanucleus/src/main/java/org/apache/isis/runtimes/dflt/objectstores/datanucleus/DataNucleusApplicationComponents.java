@@ -2,7 +2,6 @@ package org.apache.isis.runtimes.dflt.objectstores.datanucleus;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
@@ -12,13 +11,11 @@ import javax.jdo.JDOHelper;
 import javax.jdo.PersistenceManager;
 import javax.jdo.PersistenceManagerFactory;
 
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
 import org.datanucleus.NucleusContext;
 import org.datanucleus.api.jdo.JDOPersistenceManagerFactory;
-import org.datanucleus.store.StoreManager;
 import org.datanucleus.store.schema.SchemaAwareStoreManager;
 
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
@@ -45,21 +42,11 @@ public class DataNucleusApplicationComponents implements ApplicationScopedCompon
         
         final Set<String> classesToBePersisted = catalogClassesToBePersisted(objectSpecs);
 
-        enhanceClasses(classesToBePersisted.toArray(new String[0]));
         createSchema(props, classesToBePersisted);
 
         namedQueryByName = Collections.unmodifiableMap(catalogNamedQueries(objectSpecs));
 
         lifecycleListener = new IsisLifecycleListener();
-    }
-
-    private static void enhanceClasses(String[] classesToBePersisted) {
-        JDOEnhancer enhancer = JDOHelper.getEnhancer();
-        enhancer.addClasses(classesToBePersisted);
-        int numberClassesEnhanced = enhancer.enhance();
-        if(numberClassesEnhanced == 0) {
-            throw new JdoRuntimeException("Failed to enhance any classes");
-        }
     }
 
     private void createSchema(final Map<String, String> props, final Set<String> classesToBePersisted) {

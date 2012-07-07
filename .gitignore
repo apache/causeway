@@ -9,12 +9,15 @@ logs/
 .classpath
 
 framework/runtimes/dflt/objectstores/sql/sql-tests-common/hsql-db/
-framework/runtimes/dflt/objectstores/sql/sql-tests-common/isis.log
 framework/runtimes/dflt/objectstores/sql/sql-tests-common/xml/
 framework/runtimes/dflt/objectstores/xml/tmp/
 framework/runtimes/dflt/objectstores/xml/xml/
 framework/security/sql/hsql-db/
 framework/runtimes/dflt/objectstores/jdo/jdo-datanucleus/hsql-db/
+
+# log files
+datanucleus.log
+isis.log
 
 # Package Files #
 *.jar

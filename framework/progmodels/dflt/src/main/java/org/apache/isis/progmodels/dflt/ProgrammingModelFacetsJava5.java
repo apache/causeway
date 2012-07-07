@@ -85,6 +85,7 @@ import org.apache.isis.core.progmodel.facets.object.ignore.javalang.RemoveJavaLa
 import org.apache.isis.core.progmodel.facets.object.ignore.javalang.RemoveJavaLangObjectMethodsFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.ignore.javalang.RemoveSuperclassMethodsFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.ignore.javalang.SyntheticMethodFilteringFacetFactory;
+import org.apache.isis.core.progmodel.facets.object.ignore.jdo.RemoveJdoEnhancementTypesFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.immutable.annotation.ImmutableAnnotationFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.immutable.markerifc.ImmutableMarkerInterfacesFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.mask.annotation.MaskAnnotationForTypeFacetFactory;
@@ -200,6 +201,7 @@ public class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract {
         addFactory(RemoveStaticGettersAndSettersFacetFactory.class);
         addFactory(RemoveGetClassMethodFacetFactory.class);
         addFactory(RemoveIgnoreAnnotationMethodsFacetFactory.class);
+        addFactory(RemoveJdoEnhancementTypesFacetFactory.class);
 
         // must be before any other FacetFactories that install
         // MandatoryFacet.class facets
