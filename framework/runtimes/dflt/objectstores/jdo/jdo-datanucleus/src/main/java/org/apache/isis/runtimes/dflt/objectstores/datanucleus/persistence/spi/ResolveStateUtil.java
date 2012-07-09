@@ -90,7 +90,7 @@ public final class ResolveStateUtil {
 
     public static void markAsUpdating(final ObjectAdapter adapter) {
 
-        if (adapter.isTransient()) {
+        if (adapter.representsTransient()) {
             adapter.changeState(ResolveState.RESOLVED);
         }
         if (adapter.isResolved()) {

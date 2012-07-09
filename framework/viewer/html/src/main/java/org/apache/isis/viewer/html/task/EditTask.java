@@ -93,7 +93,7 @@ public class EditTask extends Task {
             i++;
         }
 
-        final boolean isTransient = adapter.isTransient();
+        final boolean isTransient = adapter.representsTransient();
         newType = isTransient ? getTarget(context).getSpecification().getSingularName() : null;
     }
 

@@ -184,12 +184,12 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
     /**
      * Just delegates to {@link #getResolveState() resolve state}.
      * 
-     * @see ResolveState#representsTransient()
+     * @see ResolveState#isTransient()
      * @see #isPersistent()
      */
     @Override
     public boolean representsTransient() {
-        return getResolveState().representsTransient();
+        return getResolveState().isTransient();
     }
 
     @Override
@@ -220,11 +220,6 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
     @Override
     public boolean isDestroyed() {
         return getResolveState().isDestroyed();
-    }
-
-    @Override
-    public boolean isTransient() {
-        return getResolveState().isTransient();
     }
 
 

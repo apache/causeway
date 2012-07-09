@@ -38,7 +38,7 @@ public class EditObject implements Action {
             throw new ActionException("Task no longer in progress");
         }
         final ObjectAdapter object = context.getMappedObject(idString);
-        if (!(object.isTransient())) {
+        if (!(object.representsTransient())) {
             context.setObjectCrumb(object);
         }
         final EditTask editTask = new EditTask(context, object);

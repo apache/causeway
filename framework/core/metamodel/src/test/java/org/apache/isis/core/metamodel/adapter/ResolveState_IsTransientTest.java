@@ -70,7 +70,7 @@ public class ResolveState_IsTransientTest {
 
     @Test
     public void testIsTransient() {
-        assertThat(state.representsTransient(), is(whetherIs));
+        assertThat(state.isTransient(), is(whetherIs));
     }
 
 }

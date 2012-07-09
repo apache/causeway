@@ -118,7 +118,7 @@ public abstract class AbstractObjectContent extends AbstractContent implements O
         @Override
         public Consent disabled(final View view) {
             final ObjectAdapter object = view.getContent().getAdapter();
-            return ConsentAbstract.allowIf(object == null || !object.isTransient() || object.isGhost());
+            return ConsentAbstract.allowIf(object == null || !object.representsTransient() || object.isGhost());
         }
 
         @Override

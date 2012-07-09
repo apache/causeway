@@ -285,7 +285,7 @@ public class Memento implements Serializable {
             PersistorUtil.startStateTransition(objectAdapter, targetState);
             updateFields(objectAdapter, data);
             PersistorUtil.endStateTransition(objectAdapter);
-        } else if (objectAdapter.isTransient() && targetState == ResolveState.TRANSIENT) {
+        } else if (objectAdapter.representsTransient() && targetState == ResolveState.TRANSIENT) {
             updateFields(objectAdapter, data);
         } else if (objectAdapter.isParented()) {
             updateFields(objectAdapter, data);

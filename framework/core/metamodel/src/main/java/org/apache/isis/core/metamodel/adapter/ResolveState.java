@@ -21,8 +21,6 @@ package org.apache.isis.core.metamodel.adapter;
 
 import static org.apache.isis.core.metamodel.adapter.ResolveState.RepresentsPersistent.DOES_NOT_REPRESENT_PERSISTENT;
 import static org.apache.isis.core.metamodel.adapter.ResolveState.RepresentsPersistent.REPRESENTS_PERSISTENT;
-import static org.apache.isis.core.metamodel.adapter.ResolveState.RepresentsTransient.DOES_NOT_REPRESENT_TRANSIENT;
-import static org.apache.isis.core.metamodel.adapter.ResolveState.RepresentsTransient.REPRESENTS_TRANSIENT;
 import static org.apache.isis.core.metamodel.adapter.ResolveState.TransitionFrom.CANNOT_TRANSITION_FROM;
 import static org.apache.isis.core.metamodel.adapter.ResolveState.TransitionFrom.CAN_TRANSITION_FROM;
 import static org.apache.isis.core.metamodel.adapter.ResolveState.RespondsToChanges.DOES_NOT_RESPOND_TO_CHANGES;
@@ -47,10 +45,6 @@ public final class ResolveState {
         RESPONDS_TO_CHANGES, DOES_NOT_RESPOND_TO_CHANGES
     }
 
-    static enum RepresentsTransient {
-        REPRESENTS_TRANSIENT, DOES_NOT_REPRESENT_TRANSIENT
-    }
-
     static enum RepresentsPersistent {
         REPRESENTS_PERSISTENT, DOES_NOT_REPRESENT_PERSISTENT
     }
@@ -58,14 +52,14 @@ public final class ResolveState {
     /**
      * When first instantiated by <tt>PojoAdapterFactory</tt>.
      */
-    public static final ResolveState NEW                   = new ResolveState("New",                   "N~~", null,      CANNOT_TRANSITION_FROM, DOES_NOT_RESPOND_TO_CHANGES, DOES_NOT_REPRESENT_TRANSIENT, DOES_NOT_REPRESENT_PERSISTENT);
-    public static final ResolveState TRANSIENT             = new ResolveState("Transient",             "T~~", null,      CANNOT_TRANSITION_FROM, DOES_NOT_RESPOND_TO_CHANGES, REPRESENTS_TRANSIENT,         DOES_NOT_REPRESENT_PERSISTENT);
-    public static final ResolveState GHOST                 = new ResolveState("Ghost",                 "PG~", null,      CAN_TRANSITION_FROM,    RESPONDS_TO_CHANGES,         DOES_NOT_REPRESENT_TRANSIENT, REPRESENTS_PERSISTENT);
-    public static final ResolveState RESOLVED              = new ResolveState("Resolved",              "PR~", null,      CAN_TRANSITION_FROM,    RESPONDS_TO_CHANGES,         DOES_NOT_REPRESENT_TRANSIENT, REPRESENTS_PERSISTENT);
-    public static final ResolveState RESOLVING             = new ResolveState("Resolving",             "Pr~", RESOLVED,  CANNOT_TRANSITION_FROM, DOES_NOT_RESPOND_TO_CHANGES, DOES_NOT_REPRESENT_TRANSIENT, REPRESENTS_PERSISTENT);
-    public static final ResolveState UPDATING              = new ResolveState("Updating",              "PU~", RESOLVED,  CANNOT_TRANSITION_FROM, DOES_NOT_RESPOND_TO_CHANGES, DOES_NOT_REPRESENT_TRANSIENT, REPRESENTS_PERSISTENT);
-    public static final ResolveState DESTROYED             = new ResolveState("Destroyed",             "D~~", null,      CANNOT_TRANSITION_FROM, RESPONDS_TO_CHANGES,         DOES_NOT_REPRESENT_TRANSIENT, DOES_NOT_REPRESENT_PERSISTENT);
-    public static final ResolveState VALUE                 = new ResolveState("Value",                 "V~~", null,      CANNOT_TRANSITION_FROM, RESPONDS_TO_CHANGES,         DOES_NOT_REPRESENT_TRANSIENT, DOES_NOT_REPRESENT_PERSISTENT);
+    public static final ResolveState NEW       = new ResolveState("New",       "N~~", null,      CANNOT_TRANSITION_FROM, DOES_NOT_RESPOND_TO_CHANGES, DOES_NOT_REPRESENT_PERSISTENT);
+    public static final ResolveState TRANSIENT = new ResolveState("Transient", "T~~", null,      CANNOT_TRANSITION_FROM, DOES_NOT_RESPOND_TO_CHANGES, DOES_NOT_REPRESENT_PERSISTENT);
+    public static final ResolveState GHOST     = new ResolveState("Ghost",     "PG~", null,      CAN_TRANSITION_FROM,    RESPONDS_TO_CHANGES,         REPRESENTS_PERSISTENT);
+    public static final ResolveState RESOLVED  = new ResolveState("Resolved",  "PR~", null,      CAN_TRANSITION_FROM,    RESPONDS_TO_CHANGES,         REPRESENTS_PERSISTENT);
+    public static final ResolveState RESOLVING = new ResolveState("Resolving", "Pr~", RESOLVED,  CANNOT_TRANSITION_FROM, DOES_NOT_RESPOND_TO_CHANGES, REPRESENTS_PERSISTENT);
+    public static final ResolveState UPDATING  = new ResolveState("Updating",  "PU~", RESOLVED,  CANNOT_TRANSITION_FROM, DOES_NOT_RESPOND_TO_CHANGES, REPRESENTS_PERSISTENT);
+    public static final ResolveState DESTROYED = new ResolveState("Destroyed", "D~~", null,      CANNOT_TRANSITION_FROM, RESPONDS_TO_CHANGES,         DOES_NOT_REPRESENT_PERSISTENT);
+    public static final ResolveState VALUE     = new ResolveState("Value",     "V~~", null,      CANNOT_TRANSITION_FROM, RESPONDS_TO_CHANGES,         DOES_NOT_REPRESENT_PERSISTENT);
 
     // 20120709: used only in <tt>Memento</tt>, when recreating a transient object.
     // however, analysis is that could equally set to TRANSIENT, rendering this state
@@ -140,17 +134,15 @@ public final class ResolveState {
     private final String name;
     private final TransitionFrom transitionFrom;
     private final RespondsToChanges respondsToChanges;
-    private final RepresentsTransient representsTransient;
     private final RepresentsPersistent representsPersistent;
     private HashSet<ResolveState> changeToStates;
 
-    private ResolveState(final String name, final String code, final ResolveState endState, final TransitionFrom transitionFrom, final RespondsToChanges respondsToChanges, final RepresentsTransient representsTransient, final RepresentsPersistent representsPersistent) {
+    private ResolveState(final String name, final String code, final ResolveState endState, final TransitionFrom transitionFrom, final RespondsToChanges respondsToChanges, final RepresentsPersistent representsPersistent) {
         this.name = name;
         this.code = code;
         this.endState = endState;
         this.transitionFrom = transitionFrom;
         this.respondsToChanges = respondsToChanges;
-        this.representsTransient = representsTransient;
         this.representsPersistent = representsPersistent;
         statesByName.put(name, this);
     }
@@ -207,17 +199,6 @@ public final class ResolveState {
     }
 
     /**
-     * Returns <tt>true</tt> when an object has not yet been made persistent
-     * (except for {@link #VALUE} adapters)..
-     * 
-     * <p>
-     * Always returns <tt>false</tt> for {@link #VALUE}.
-     */
-    public boolean representsTransient() {
-        return this.representsTransient == REPRESENTS_TRANSIENT;
-    }
-
-    /**
      * As per {@link #isValidToChangeTo(ResolveState)}, but will additionally
      * return <tt>false</tt> if the current state can never be transitioned from.
      */
@@ -235,40 +216,38 @@ public final class ResolveState {
         return respondsToChanges == RESPONDS_TO_CHANGES;
     }
 
-    public boolean isGhost() {
-        return this == GHOST;
-    }
-
-    public boolean isValue() {
-        return this == VALUE;
-    }
-
     public boolean isNew() {
         return this == NEW;
     }
-
-    public boolean isUpdating() {
-        return this == UPDATING;
-    }
-
-    public boolean isDestroyed() {
-        return this == DESTROYED;
-    }
-
-    public boolean isResolved() {
-        return this == RESOLVED;
+    
+    public boolean isValue() {
+        return this == VALUE;
     }
 
     public boolean isTransient() {
         return this == TRANSIENT;
     }
 
-    /**
-     * Return true if the state reflects some kind of loading.
-     */
+    public boolean isGhost() {
+        return this == GHOST;
+    }
+    
+    public boolean isUpdating() {
+        return this == UPDATING;
+    }
+
+    public boolean isResolved() {
+        return this == RESOLVED;
+    }
+
     public boolean isResolving() {
         return this == RESOLVING;
     }
+    
+    public boolean isDestroyed() {
+        return this == DESTROYED;
+    }
+    
 
     /**
      * Determines if the resolved state can be changed from this state to the

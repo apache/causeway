@@ -278,7 +278,7 @@ public class IsisLifecycleListener implements AttachLifecycleListener, ClearLife
 
         if(!pojo.jdoIsPersistent()) {
             // make sure the adapter is transient
-            if (!adapter.getResolveState().representsTransient()) {
+            if (!adapter.getResolveState().isTransient()) {
                 throw new IsisException(MessageFormat.format("adapter is in invalid state; should be {0} but is {1}", ResolveState.TRANSIENT, adapter.getResolveState()));
             }
 

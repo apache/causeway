@@ -24,17 +24,90 @@ import org.apache.isis.core.metamodel.adapter.oid.AggregatedOid;
 import org.apache.isis.core.metamodel.adapter.oid.CollectionOid;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.version.Version;
-import org.apache.isis.core.metamodel.spec.ObjectMetaModel;
+import org.apache.isis.core.metamodel.spec.ElementSpecificationProvider;
+import org.apache.isis.core.metamodel.spec.Instance;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.Specification;
 
 /**
  * Adapters to domain objects, where the application is written in terms of
  * domain objects and those objects are represented within the NOF through these
  * adapter, and not directly.
- * 
- * @see ObjectMetaModel
  */
-public interface ObjectAdapter extends ObjectMetaModel {
+public interface ObjectAdapter extends Instance {
 
+    
+    /**
+     * Refines {@link Instance#getSpecification()}.
+     */
+    @Override
+    ObjectSpecification getSpecification();
+
+    /**
+     * Returns the adapted domain object, the POJO, that this adapter represents
+     * with the NOF.
+     */
+    Object getObject();
+
+    /**
+     * Returns the title to display this object with, which is usually got from
+     * the wrapped {@link #getObject() domain object}.
+     */
+    String titleString();
+
+    /**
+     * Return an {@link Instance} of the specified {@link Specification} with
+     * respect to this {@link ObjectAdapter}.
+     * 
+     * <p>
+     * If called with {@link ObjectSpecification}, then just returns
+     * <tt>this</tt>). If called for other subinterfaces, then should provide an
+     * appropriate {@link Instance} implementation.
+     * 
+     * <p>
+     * Designed to be called in a double-dispatch design from
+     * {@link Specification#getInstance(ObjectAdapter)}.
+     * 
+     * <p>
+     * Note: this method will throw an {@link UnsupportedOperationException}
+     * unless the extended <tt>PojoAdapterXFactory</tt> is configured. (That is,
+     * only <tt>PojoAdapterX</tt> provides support for this; the regular
+     * <tt>PojoAdapter</tt> does not currently.
+     * 
+     * @param adapter
+     * @return
+     */
+    Instance getInstance(Specification specification);
+
+    /**
+     * Sometimes it is necessary to manage the replacement of the underlying
+     * domain object (by another component such as an object store). This method
+     * allows the adapter to be kept while the domain object is replaced.
+     */
+    void replacePojo(Object pojo);
+
+    /**
+     * For (stand-alone) collections, returns the element type.
+     * 
+     * <p>
+     * For owned (aggregated) collections, the element type can be determined
+     * from the <tt>TypeOfFacet</tt> associated with the
+     * <tt>ObjectAssociation</tt> representing the collection.
+     * 
+     * @see #setElementSpecificationProvider(ElementSpecificationProvider)
+     */
+    ObjectSpecification getElementSpecification();
+
+    /**
+     * For (stand-alone) collections, returns the element type.
+     * 
+     * @see #getElementSpecification()
+     */
+    void setElementSpecificationProvider(ElementSpecificationProvider elementSpecificationProvider);
+
+    
+    
+    
     /**
      * Returns the name of an icon to use if this object is to be displayed
      * graphically.
@@ -88,6 +161,48 @@ public interface ObjectAdapter extends ObjectMetaModel {
      */
     ResolveState getResolveState();
 
+
+    /**
+     * Whether the object is persisted.
+     * 
+     * <p>
+     * Note: not necessarily the reciprocal of {@link #representsTransient()};
+     * standalone adapters (with {@link ResolveState#VALUE}) report as neither
+     * persistent or transient.
+     */
+    boolean isPersistent();
+
+    /**
+     * Whether the object is transient.
+     * 
+     * <p>
+     * Note: not necessarily the reciprocal of {@link #isPersistent()};
+     * standalone adapters (with {@link ResolveState#VALUE}) report as neither
+     * persistent or transient.
+     */
+    boolean representsTransient();
+
+
+    boolean isResolved();
+
+    boolean isGhost();
+
+    boolean isTitleAvailable();
+
+    void markAsResolvedIfPossible();
+
+    boolean isDestroyed();
+
+    boolean isResolving();
+
+    boolean isUpdating();
+
+    boolean isNew();
+
+    boolean canTransitionToResolving();
+
+    
+    
     Version getVersion();
 
     void setVersion(Version version);
@@ -119,25 +234,6 @@ public interface ObjectAdapter extends ObjectMetaModel {
      */
     ObjectAdapter getAggregateRoot();
 
-    boolean isResolved();
-
-    boolean isGhost();
-
-    boolean isTitleAvailable();
-
-    void markAsResolvedIfPossible();
-
-    boolean isDestroyed();
-
-    boolean isTransient();
-
-    boolean isResolving();
-
-    boolean isUpdating();
-
-    boolean isNew();
-
-    boolean canTransitionToResolving();
 
 
 

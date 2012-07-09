@@ -132,7 +132,7 @@ public abstract class AbstractCollectionContent extends AbstractContent implemen
         options.add(new UserActionAbstract("Clear resolved", ActionType.DEBUG) {
             @Override
             public Consent disabled(final View component) {
-                return ConsentAbstract.allowIf(collection == null || !(collection.isTransient()) || collection.isGhost());
+                return ConsentAbstract.allowIf(collection == null || !(collection.representsTransient()) || collection.isGhost());
             }
 
             @Override
