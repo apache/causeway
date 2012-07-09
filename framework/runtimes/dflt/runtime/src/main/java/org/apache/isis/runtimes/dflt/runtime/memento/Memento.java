@@ -184,26 +184,15 @@ public class Memento implements Serializable {
         if (data == null) {
             return null;
         }
-        final ObjectSpecification spec = getSpecificationLoader().loadSpecification(data.getClassName());
+        final ObjectSpecification spec = 
+                getSpecificationLoader().loadSpecification(data.getClassName());
 
-        ObjectAdapter adapter;
-        ResolveState targetState;
-        if (getOid().isTransient()) {
-            adapter = getHydrator().recreateAdapter(spec, getOid());
-            // was previously SERIALIZING_TRANSIENT; however #updateFieldsAndResolveState()
-            // seems to be written such that setting to TRANSIENT would also be ok.
-            targetState = ResolveState.TRANSIENT;
-        } else {
-            adapter = getHydrator().recreateAdapter(spec, getOid());
-            // was previously UPDATING; however all tests when set to RESOLVING,
-            // and working towards combining these two states.
-            targetState = ResolveState.RESOLVING;
-        }
+        ObjectAdapter adapter = getHydrator().recreateAdapter(spec, getOid());
         
         if (adapter.getSpecification().isParentedOrFreeCollection()) {
-            populateCollection(adapter, (CollectionData) data, targetState);
+            populateCollection(adapter, (CollectionData) data);
         } else {
-            updateObject(adapter, data, targetState);
+            updateObject(adapter, data);
         }
 
         if (LOG.isDebugEnabled()) {
@@ -212,7 +201,7 @@ public class Memento implements Serializable {
         return adapter;
     }
 
-    private void populateCollection(final ObjectAdapter collectionAdapter, final CollectionData state, final ResolveState targetState) {
+    private void populateCollection(final ObjectAdapter collectionAdapter, final CollectionData state) {
         final ObjectAdapter[] initData = new ObjectAdapter[state.elements.length];
         int i = 0;
         for (final Data elementData : state.elements) {
@@ -242,9 +231,9 @@ public class Memento implements Serializable {
 //                if (referencedAdapter.getResolveState().isValidToChangeTo(targetState)) {
 //                    referencedAdapter.changeState(targetState);
 //                }
-                updateObject(referencedAdapter, data, ResolveState.RESOLVING);
+                updateObject(referencedAdapter, data);
             } else if (oid.isTransient()) {
-                updateObject(referencedAdapter, data, ResolveState.TRANSIENT);
+                updateObject(referencedAdapter, data);
             }
         }
         return referencedAdapter;
@@ -252,22 +241,10 @@ public class Memento implements Serializable {
 
     
     ////////////////////////////////////////////////
-    // updateObject
+    // helpers
     ////////////////////////////////////////////////
     
-    /**
-     * Updates the specified object (assuming it is the correct object for this
-     * memento) with the state held by this memento.
-     * 
-     * @throws IllegalArgumentException
-     *             if the memento was created from different logical object to
-     *             the one specified (i.e. its oid differs).
-     */
-    public void updateObject(final ObjectAdapter adapter) {
-        updateObject(adapter, data, ResolveState.RESOLVING);
-    }
-
-    private void updateObject(final ObjectAdapter adapter, final Data data, final ResolveState targetState) {
+    private void updateObject(final ObjectAdapter adapter, final Data data) {
         final Object oid = adapter.getOid();
         if (oid != null && !oid.equals(data.getOid())) {
             throw new IllegalArgumentException("This memento can only be used to update the ObjectAdapter with the Oid " + data.getOid() + " but is " + oid);
@@ -276,22 +253,28 @@ public class Memento implements Serializable {
             throw new IsisException("Expected an ObjectData but got " + data.getClass());
         }
         
-        updateFieldsAndResolveState(adapter, data, targetState);
+        updateFieldsAndResolveState(adapter, data);
         
         if (LOG.isDebugEnabled()) {
             LOG.debug("object updated " + adapter.getOid());
         }
     }
 
-    private void updateFieldsAndResolveState(final ObjectAdapter objectAdapter, final Data data, final ResolveState targetState) {
-        if (objectAdapter.getResolveState().isValidToChangeTo(targetState)) {
-            PersistorUtil.startStateTransition(objectAdapter, targetState);
+    private void updateFieldsAndResolveState(final ObjectAdapter objectAdapter, final Data data) {
+        
+        boolean dataIsTransient = data.getOid().isTransient();
+        
+        if (!dataIsTransient) {
+            PersistorUtil.startStateTransition(objectAdapter, ResolveState.RESOLVING);
             updateFields(objectAdapter, data);
             PersistorUtil.endStateTransition(objectAdapter);
-        } else if (objectAdapter.isTransient() && targetState == ResolveState.TRANSIENT) {
+            
+        } else if (objectAdapter.isTransient() && dataIsTransient) {
             updateFields(objectAdapter, data);
+            
         } else if (objectAdapter.isParented()) {
             updateFields(objectAdapter, data);
+            
         } else {
             final ObjectData od = (ObjectData) data;
             if (od.containsField()) {
