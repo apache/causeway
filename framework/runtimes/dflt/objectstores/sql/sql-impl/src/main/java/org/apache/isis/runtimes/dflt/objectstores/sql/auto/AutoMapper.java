@@ -27,7 +27,6 @@ import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.oid.TypedOid;
@@ -306,28 +305,31 @@ public class AutoMapper extends AbstractAutoMapper implements ObjectMapping, Deb
         return sql.toString();
     }
 
-    protected void loadFields(final ObjectAdapter object, final Results rs) {
-        PersistorUtil.startStateTransition(object, ResolveState.RESOLVING);
-        for (final FieldMapping mapping : fieldMappingByField.values()) {
-            mapping.initializeField(object, rs);
+    protected void loadFields(final ObjectAdapter adapter, final Results rs) {
+        PersistorUtil.startResolving(adapter);
+        try {
+            for (final FieldMapping mapping : fieldMappingByField.values()) {
+                mapping.initializeField(adapter, rs);
+            }
+            /*
+             * for (int i = 0; i < oneToManyProperties.length; i++) { /* Need to set
+             * up collection to be a ghost before we access as below
+             */
+            // CollectionAdapter collection = (CollectionAdapter)
+            /*
+             * oneToManyProperties[i].get(object); }
+             */
+            adapter.setVersion(versionMapping.getLock(rs));
+        } finally {
+            PersistorUtil.endResolving(adapter);
         }
-        /*
-         * for (int i = 0; i < oneToManyProperties.length; i++) { /* Need to set
-         * up collection to be a ghost before we access as below
-         */
-        // CollectionAdapter collection = (CollectionAdapter)
-        /*
-         * oneToManyProperties[i].get(object); }
-         */
-        object.setVersion(versionMapping.getLock(rs));
-        PersistorUtil.endStateTransition(object);
     }
 
     // KAM
     private void loadCollections(final DatabaseConnector connector, final ObjectAdapter instance) {
 
         for (final CollectionMapper mapper : collectionMappers) {
-            mapper.loadInternalCollection(connector, instance, true);
+            mapper.loadInternalCollection(connector, instance);
         }
     }
 
@@ -378,7 +380,7 @@ public class AutoMapper extends AbstractAutoMapper implements ObjectMapping, Deb
             rs.close();
 
             for (final CollectionMapper collectionMapper : collectionMappers) {
-                collectionMapper.loadInternalCollection(connector, object, true);
+                collectionMapper.loadInternalCollection(connector, object);
             }
         } else {
             rs.close();
@@ -391,7 +393,7 @@ public class AutoMapper extends AbstractAutoMapper implements ObjectMapping, Deb
         if (collectionMappers.length > 0) {
             final DatabaseConnector secondConnector = connector.getConnectionPool().acquire();
             for (final CollectionMapper collectionMapper : collectionMappers) {
-                collectionMapper.loadInternalCollection(secondConnector, object, true);
+                collectionMapper.loadInternalCollection(secondConnector, object);
             }
             connector.getConnectionPool().release(secondConnector);
         }

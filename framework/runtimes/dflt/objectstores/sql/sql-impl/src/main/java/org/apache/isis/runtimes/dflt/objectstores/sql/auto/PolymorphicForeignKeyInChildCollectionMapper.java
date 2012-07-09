@@ -184,8 +184,8 @@ public class PolymorphicForeignKeyInChildCollectionMapper extends ForeignKeyInCh
     }
 
     @Override
-    protected void loadCollectionIntoList(final DatabaseConnector connector, final ObjectAdapter parent, final boolean makeResolved, final String table, final ObjectSpecification specification, final IdMappingAbstract idMappingAbstract, final Map<ObjectAssociation, FieldMapping> fieldMappingByField,
-            final VersionMapping versionMapping, final List<ObjectAdapter> superList) {
+    protected void loadCollectionIntoList(final DatabaseConnector connector, final ObjectAdapter parent, final String table, final ObjectSpecification specification, final IdMappingAbstract idMappingAbstract, final Map<ObjectAssociation, FieldMapping> fieldMappingByField, final VersionMapping versionMapping,
+            final List<ObjectAdapter> superList) {
         final List<ObjectAdapter> list = Lists.newArrayList();
         
         for (int i = 0; i < tables.size(); i++) {
@@ -193,7 +193,7 @@ public class PolymorphicForeignKeyInChildCollectionMapper extends ForeignKeyInCh
             final AutoMapper mapper = (AutoMapper) subClassMappers.get(i);
             final String mapperTable = tables.get(i);
 
-            super.loadCollectionIntoList(connector, parent, makeResolved, mapperTable, currentTableSpecification, mapper.getIdMapping(), mapper.fieldMappingByField, mapper.getVersionMapping(), list);
+            super.loadCollectionIntoList(connector, parent, mapperTable, currentTableSpecification, mapper.getIdMapping(), mapper.fieldMappingByField, mapper.getVersionMapping(), list);
 
             superList.addAll(list);
             list.clear();

@@ -33,7 +33,6 @@ import org.apache.isis.core.commons.encoding.DataOutputStreamExtended;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.exceptions.UnknownTypeException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.facets.accessor.PropertyOrCollectionAccessorFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
@@ -265,14 +264,18 @@ public class Memento implements Serializable {
         boolean dataIsTransient = data.getOid().isTransient();
         
         if (!dataIsTransient) {
-            PersistorUtil.startStateTransition(objectAdapter, ResolveState.RESOLVING);
-            updateFields(objectAdapter, data);
-            PersistorUtil.endStateTransition(objectAdapter);
+            try {
+                PersistorUtil.startResolving(objectAdapter);
+                updateFields(objectAdapter, data);
+            } finally {
+                PersistorUtil.endResolving(objectAdapter);
+            }
             
         } else if (objectAdapter.isTransient() && dataIsTransient) {
             updateFields(objectAdapter, data);
             
         } else if (objectAdapter.isParented()) {
+            // this branch is kind-a wierd, I think it's to handle aggregated adapters.
             updateFields(objectAdapter, data);
             
         } else {

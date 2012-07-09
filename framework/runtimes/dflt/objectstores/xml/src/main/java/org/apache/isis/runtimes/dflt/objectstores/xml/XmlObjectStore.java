@@ -147,36 +147,38 @@ public class XmlObjectStore implements ObjectStore {
         if (!adapter.canTransitionToResolving()) {
             return;
         } 
-        PersistorUtil.startStateTransition(adapter, ResolveState.RESOLVING);
-
-        final List<ObjectAssociation> fields = adapter.getSpecification().getAssociations();
-        for (int i = 0; i < fields.size(); i++) {
-            final ObjectAssociation field = fields.get(i);
-            if (field.isNotPersisted()) {
-                continue;
-            }
-
-            final ObjectSpecification fieldSpecification = field.getSpecification();
-            if (fieldSpecification.isEncodeable()) {
-                final EncodableFacet encoder = fieldSpecification.getFacet(EncodableFacet.class);
-                ObjectAdapter value;
-                final String valueData = data.value(field.getId());
-                if (valueData != null) {
-                    if (valueData.equals("NULL")) {
-                        value = null;
-                    } else {
-                        value = encoder.fromEncodedString(valueData);
-                    }
-                    ((OneToOneAssociation) field).initAssociation(adapter, value);
+        try {
+            PersistorUtil.startResolving(adapter);
+            final List<ObjectAssociation> fields = adapter.getSpecification().getAssociations();
+            for (int i = 0; i < fields.size(); i++) {
+                final ObjectAssociation field = fields.get(i);
+                if (field.isNotPersisted()) {
+                    continue;
                 }
-            } else if (field.isOneToManyAssociation()) {
-                initObjectSetupCollection(adapter, data, field);
-            } else if (field.isOneToOneAssociation()) {
-                initObjectSetupReference(adapter, data, field);
+
+                final ObjectSpecification fieldSpecification = field.getSpecification();
+                if (fieldSpecification.isEncodeable()) {
+                    final EncodableFacet encoder = fieldSpecification.getFacet(EncodableFacet.class);
+                    ObjectAdapter value;
+                    final String valueData = data.value(field.getId());
+                    if (valueData != null) {
+                        if (valueData.equals("NULL")) {
+                            value = null;
+                        } else {
+                            value = encoder.fromEncodedString(valueData);
+                        }
+                        ((OneToOneAssociation) field).initAssociation(adapter, value);
+                    }
+                } else if (field.isOneToManyAssociation()) {
+                    initObjectSetupCollection(adapter, data, field);
+                } else if (field.isOneToOneAssociation()) {
+                    initObjectSetupReference(adapter, data, field);
+                }
             }
+            adapter.setVersion(data.getVersion());
+        } finally {
+            PersistorUtil.endResolving(adapter);
         }
-        adapter.setVersion(data.getVersion());
-        PersistorUtil.endStateTransition(adapter);
     }
 
     private void initObjectSetupReference(final ObjectAdapter object, final ObjectData data, final ObjectAssociation field) {
@@ -237,21 +239,24 @@ public class XmlObjectStore implements ObjectStore {
             return;
         } 
         
-        PersistorUtil.startStateTransition(collectionAdapter, ResolveState.RESOLVING);
-        final int size = refs == null ? 0 : refs.size();
-        final ObjectAdapter[] elements = new ObjectAdapter[size];
-        for (int j = 0; j < size; j++) {
-            final RootOid elementOid = refs.elementAt(j);
-            ObjectAdapter adapter;
-            adapter = getAdapterManager().getAdapterFor(elementOid);
-            if (adapter == null) {
-                adapter = getObject(elementOid);
+        try {
+            PersistorUtil.startResolving(collectionAdapter);
+            final int size = refs == null ? 0 : refs.size();
+            final ObjectAdapter[] elements = new ObjectAdapter[size];
+            for (int j = 0; j < size; j++) {
+                final RootOid elementOid = refs.elementAt(j);
+                ObjectAdapter adapter;
+                adapter = getAdapterManager().getAdapterFor(elementOid);
+                if (adapter == null) {
+                    adapter = getObject(elementOid);
+                }
+                elements[j] = adapter;
             }
-            elements[j] = adapter;
+            final CollectionFacet facet = CollectionFacetUtils.getCollectionFacetFromSpec(collectionAdapter);
+            facet.init(collectionAdapter, elements);
+        } finally {
+            PersistorUtil.endResolving(collectionAdapter);
         }
-        final CollectionFacet facet = CollectionFacetUtils.getCollectionFacetFromSpec(collectionAdapter);
-        facet.init(collectionAdapter, elements);
-        PersistorUtil.endStateTransition(collectionAdapter);
     }
 
     // /////////////////////////////////////////////////////////

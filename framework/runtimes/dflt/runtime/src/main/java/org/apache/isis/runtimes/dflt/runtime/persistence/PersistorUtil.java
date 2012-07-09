@@ -36,7 +36,8 @@ public class PersistorUtil {
     // update resolve state
     // //////////////////////////////////////////////////////////////////
 
-    public static void startStateTransition(final ObjectAdapter adapter, final ResolveState state) {
+    public static void startResolving(final ObjectAdapter adapter) {
+        final ResolveState state = ResolveState.RESOLVING;
         if (LOG.isTraceEnabled()) {
             LOG.trace("start " + adapter + " as " + state.name());
         }
@@ -48,7 +49,7 @@ public class PersistorUtil {
      * as specified by the second parameter. Attempting to specify any other
      * state throws a run time exception.
      */
-    public static void endStateTransition(final ObjectAdapter adapter) {
+    public static void endResolving(final ObjectAdapter adapter) {
         final ResolveState endState = adapter.getResolveState().getEndState();
         Assert.assertNotNull("end state required", endState);
         if (LOG.isTraceEnabled()) {

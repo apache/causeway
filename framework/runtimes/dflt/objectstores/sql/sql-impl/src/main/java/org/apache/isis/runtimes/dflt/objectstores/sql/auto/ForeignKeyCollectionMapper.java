@@ -28,7 +28,6 @@ import org.apache.log4j.Logger;
 
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
@@ -189,7 +188,7 @@ public class ForeignKeyCollectionMapper extends AbstractAutoMapper implements Co
     }
 
     @Override
-    public void loadInternalCollection(final DatabaseConnector connector, final ObjectAdapter parentAdapter, final boolean makeResolved) {
+    public void loadInternalCollection(final DatabaseConnector connector, final ObjectAdapter parentAdapter) {
 
         final ObjectAdapter collectionAdapter = field.get(parentAdapter);
         if (!collectionAdapter.canTransitionToResolving()) {
@@ -199,33 +198,33 @@ public class ForeignKeyCollectionMapper extends AbstractAutoMapper implements Co
         if(LOG.isDebugEnabled()) {
             LOG.debug("loading internal collection " + field);
         }
-        PersistorUtil.startStateTransition(collectionAdapter, ResolveState.RESOLVING);
-
         final List<ObjectAdapter> list = new ArrayList<ObjectAdapter>();
-
-        loadCollectionIntoList(connector, parentAdapter, makeResolved, table, specification, getIdMapping(), fieldMappingByField, versionMapping, list);
-
-        final CollectionFacet collectionFacet = collectionAdapter.getSpecification().getFacet(CollectionFacet.class);
-        collectionFacet.init(collectionAdapter, list.toArray(new ObjectAdapter[list.size()]));
-        PersistorUtil.endStateTransition(collectionAdapter);
+        try {
+            PersistorUtil.startResolving(collectionAdapter);
+            
+            loadCollectionIntoList(connector, parentAdapter, table, specification, getIdMapping(), fieldMappingByField, versionMapping, list);
+            
+            final CollectionFacet collectionFacet = collectionAdapter.getSpecification().getFacet(CollectionFacet.class);
+            collectionFacet.init(collectionAdapter, list.toArray(new ObjectAdapter[list.size()]));
+            
+        } finally {
+            PersistorUtil.endResolving(collectionAdapter);
+        }
 
         // TODO: Need to finalise this behaviour. At the moment, all
         // collections will get infinitely resolved. I
-        // don't think this is desirable. Sub-collections should be left
-        // "Partially Resolved".
-        if (makeResolved) {
-            for (final ObjectAdapter field : list) {
-                // final ObjectMapping mapping =
-                // objectMappingLookup.getMapping(field, connector);
-                if (field.getSpecification().isOfType(parentAdapter.getSpecification())) {
-                    loadInternalCollection(connector, field, true);
-                }
+        // don't think this is desirable.
+        for (final ObjectAdapter field : list) {
+            // final ObjectMapping mapping =
+            // objectMappingLookup.getMapping(field, connector);
+            if (field.getSpecification().isOfType(parentAdapter.getSpecification())) {
+                loadInternalCollection(connector, field);
             }
         }
     }
 
-    protected void loadCollectionIntoList(final DatabaseConnector connector, final ObjectAdapter parent, final boolean makeResolved, final String table, final ObjectSpecification specification, final IdMappingAbstract idMappingAbstract, final Map<ObjectAssociation, FieldMapping> fieldMappingByField,
-            final VersionMapping versionMapping, final List<ObjectAdapter> list) {
+    protected void loadCollectionIntoList(final DatabaseConnector connector, final ObjectAdapter parent, final String table, final ObjectSpecification specification, final IdMappingAbstract idMappingAbstract, final Map<ObjectAssociation, FieldMapping> fieldMappingByField, final VersionMapping versionMapping,
+            final List<ObjectAdapter> list) {
 
         final StringBuffer sql = new StringBuffer();
         sql.append("select ");
@@ -247,25 +246,26 @@ public class ForeignKeyCollectionMapper extends AbstractAutoMapper implements Co
         while (rs.next()) {
             final Oid oid = idMappingAbstract.recreateOid(rs, specification);
             final ObjectAdapter element = getAdapter(specification, oid);
-            loadFields(element, rs, makeResolved, fieldMappingByField);
+            loadFields(element, rs, fieldMappingByField);
             LOG.debug("  element  " + element.getOid());
             list.add(element);
         }
         rs.close();
     }
 
-    protected void loadFields(final ObjectAdapter adapter, final Results rs, final boolean makeResolved, final Map<ObjectAssociation, FieldMapping> fieldMappingByField) {
+    protected void loadFields(final ObjectAdapter adapter, final Results rs, final Map<ObjectAssociation, FieldMapping> fieldMappingByField) {
         if (!adapter.canTransitionToResolving()) {
             return;
         }
-        
-        PersistorUtil.startStateTransition(adapter, ResolveState.RESOLVING);
-        for (final FieldMapping mapping : fieldMappingByField.values()) {
-            mapping.initializeField(adapter, rs);
-        }
-        adapter.setVersion(versionMapping.getLock(rs));
-        if (makeResolved) {
-            PersistorUtil.endStateTransition(adapter);
+
+        try {
+            PersistorUtil.startResolving(adapter);
+            for (final FieldMapping mapping : fieldMappingByField.values()) {
+                mapping.initializeField(adapter, rs);
+            }
+            adapter.setVersion(versionMapping.getLock(rs));
+        } finally {
+            PersistorUtil.endResolving(adapter);
         }
     }
 

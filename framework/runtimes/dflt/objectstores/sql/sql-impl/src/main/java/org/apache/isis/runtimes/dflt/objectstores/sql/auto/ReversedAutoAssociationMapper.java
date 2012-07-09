@@ -27,7 +27,6 @@ import org.apache.log4j.Logger;
 
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.version.SerialNumberVersion;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
@@ -88,62 +87,69 @@ public class ReversedAutoAssociationMapper extends AbstractAutoMapper implements
     }
 
     @Override
-    public void loadInternalCollection(final DatabaseConnector connector, final ObjectAdapter parentAdapter, final boolean makeResolved) {
+    public void loadInternalCollection(final DatabaseConnector connector, final ObjectAdapter parentAdapter) {
         final ObjectAdapter collectionAdapter = field.get(parentAdapter);
-        
         if (!collectionAdapter.canTransitionToResolving()) {
             return;
         } 
         if(LOG.isDebugEnabled()) {
             LOG.debug("loading internal collection " + field);
         }
-
-        final StringBuffer sql = new StringBuffer();
-        sql.append("select ");
-        idMapping.appendColumnNames(sql);
-        sql.append(", ");
-        sql.append(columnList(fieldMappingByField));
-        sql.append(" from ");
-        sql.append(table);
-        sql.append(" where ");
-        idMapping.appendUpdateValues(connector, sql, parentAdapter);
-
-        final Results rs = connector.select(sql.toString());
-        final List<ObjectAdapter> list = new ArrayList<ObjectAdapter>();
-        while (rs.next()) {
-            final Oid oid = idMapping.recreateOid(rs, specification);
-            final ObjectAdapter element = getAdapter(specification, oid);
-            loadFields(element, rs, makeResolved);
-            if(LOG.isDebugEnabled()) {
-                LOG.debug("  element  " + element.getOid());
+        
+        try {
+            // added, since was missing (presumably an error given similarity with other 'Mapper' impls?)
+            PersistorUtil.startResolving(collectionAdapter);
+            
+            final StringBuffer sql = new StringBuffer();
+            sql.append("select ");
+            idMapping.appendColumnNames(sql);
+            sql.append(", ");
+            sql.append(columnList(fieldMappingByField));
+            sql.append(" from ");
+            sql.append(table);
+            sql.append(" where ");
+            idMapping.appendUpdateValues(connector, sql, parentAdapter);
+            
+            final Results rs = connector.select(sql.toString());
+            final List<ObjectAdapter> list = new ArrayList<ObjectAdapter>();
+            while (rs.next()) {
+                final Oid oid = idMapping.recreateOid(rs, specification);
+                final ObjectAdapter element = getAdapter(specification, oid);
+                loadFields(element, rs);
+                if(LOG.isDebugEnabled()) {
+                    LOG.debug("  element  " + element.getOid());
+                }
+                list.add(element);
             }
-            list.add(element);
+            final CollectionFacet collectionFacet = collectionAdapter.getSpecification().getFacet(CollectionFacet.class);
+            collectionFacet.init(collectionAdapter, list.toArray(new ObjectAdapter[list.size()]));
+            rs.close();
+        } finally {
+            PersistorUtil.endResolving(collectionAdapter);
         }
-        final CollectionFacet collectionFacet = collectionAdapter.getSpecification().getFacet(CollectionFacet.class);
-        collectionFacet.init(collectionAdapter, list.toArray(new ObjectAdapter[list.size()]));
-        rs.close();
-        PersistorUtil.endStateTransition(collectionAdapter);
+
     }
 
-    protected void loadFields(final ObjectAdapter object, final Results rs, final boolean makeResolved) {
-        PersistorUtil.startStateTransition(object, ResolveState.RESOLVING);
-        for (final FieldMapping mapping : fieldMappingByField.values()) {
-            mapping.initializeField(object, rs);
+    protected void loadFields(final ObjectAdapter object, final Results rs) {
+        try {
+            PersistorUtil.startResolving(object);
+            for (final FieldMapping mapping : fieldMappingByField.values()) {
+                mapping.initializeField(object, rs);
+            }
+            /*
+             * for (int i = 0; i < oneToManyProperties.length; i++) { /* Need to set
+             * up collection to be a ghost before we access as below
+             */
+            // CollectionAdapter collection = (CollectionAdapter)
+            /*
+             * oneToManyProperties[i].get(object); }
+             */
+            
+            object.setVersion(versionMapping.getLock(rs));
+            
+        } finally {
+            PersistorUtil.endResolving(object);
         }
-        /*
-         * for (int i = 0; i < oneToManyProperties.length; i++) { /* Need to set
-         * up collection to be a ghost before we access as below
-         */
-        // CollectionAdapter collection = (CollectionAdapter)
-        /*
-         * oneToManyProperties[i].get(object); }
-         */
-
-        object.setVersion(versionMapping.getLock(rs));
-        if (makeResolved) {
-            PersistorUtil.endStateTransition(object);
-        }
-
     }
 
     @Override

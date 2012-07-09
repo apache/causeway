@@ -192,8 +192,8 @@ public class PolymorphicForeignKeyInChildCollectionBaseMapper extends ForeignKey
     }
 
     @Override
-    protected void loadCollectionIntoList(final DatabaseConnector connector, final ObjectAdapter parent, final boolean makeResolved, final String table, final ObjectSpecification specification, final IdMappingAbstract idMappingAbstract, final Map<ObjectAssociation, FieldMapping> fieldMappingByField,
-            final VersionMapping versionMapping, final List<ObjectAdapter> list) {
+    protected void loadCollectionIntoList(final DatabaseConnector connector, final ObjectAdapter parent, final String table, final ObjectSpecification specification, final IdMappingAbstract idMappingAbstract, final Map<ObjectAssociation, FieldMapping> fieldMappingByField, final VersionMapping versionMapping,
+            final List<ObjectAdapter> list) {
         LOG.debug("Loading polymorphic list");
 
         final StringBuffer sql = new StringBuffer();

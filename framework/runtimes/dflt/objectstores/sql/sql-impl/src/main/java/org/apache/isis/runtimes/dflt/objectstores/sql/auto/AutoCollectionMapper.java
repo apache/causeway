@@ -83,7 +83,7 @@ public class AutoCollectionMapper extends AbstractMapper implements CollectionMa
     }
 
     @Override
-    public void loadInternalCollection(final DatabaseConnector connector, final ObjectAdapter parentAdapter, final boolean makeResolved) {
+    public void loadInternalCollection(final DatabaseConnector connector, final ObjectAdapter parentAdapter) {
         final ObjectAdapter collectionAdapter = field.get(parentAdapter);
         if (!collectionAdapter.canTransitionToResolving()) {
             return;
@@ -92,31 +92,32 @@ public class AutoCollectionMapper extends AbstractMapper implements CollectionMa
         if(LOG.isDebugEnabled()) {
             LOG.debug("loading internal collection " + field);
         }
-        collectionAdapter.changeState(ResolveState.RESOLVING);
-
-        final StringBuffer sql = new StringBuffer();
-        sql.append("select ");
-        idMapping.appendColumnNames(sql);
-        sql.append(", ");
-        elementMapping.appendColumnNames(sql);
-        sql.append(" from ");
-        sql.append(tableName);
-
-        final Results rs = connector.select(sql.toString());
-        final List<ObjectAdapter> list = new ArrayList<ObjectAdapter>();
-        while (rs.next()) {
-            final ObjectAdapter element = ((JdbcObjectReferenceMapping) elementMapping).initializeField(rs);
-            if(LOG.isDebugEnabled()) {
-                LOG.debug("  element  " + element.getOid());
-            }
-            list.add(element);
-        }
-        final CollectionFacet collectionFacet = collectionAdapter.getSpecification().getFacet(CollectionFacet.class);
-        collectionFacet.init(collectionAdapter, list.toArray(new ObjectAdapter[list.size()]));
-        rs.close();
         
-        if (makeResolved) {
-            PersistorUtil.endStateTransition(collectionAdapter);
+        try {
+            PersistorUtil.startResolving(collectionAdapter);
+            
+            final StringBuffer sql = new StringBuffer();
+            sql.append("select ");
+            idMapping.appendColumnNames(sql);
+            sql.append(", ");
+            elementMapping.appendColumnNames(sql);
+            sql.append(" from ");
+            sql.append(tableName);
+            
+            final Results rs = connector.select(sql.toString());
+            final List<ObjectAdapter> list = new ArrayList<ObjectAdapter>();
+            while (rs.next()) {
+                final ObjectAdapter element = ((JdbcObjectReferenceMapping) elementMapping).initializeField(rs);
+                if(LOG.isDebugEnabled()) {
+                    LOG.debug("  element  " + element.getOid());
+                }
+                list.add(element);
+            }
+            final CollectionFacet collectionFacet = collectionAdapter.getSpecification().getFacet(CollectionFacet.class);
+            collectionFacet.init(collectionAdapter, list.toArray(new ObjectAdapter[list.size()]));
+            rs.close();
+        } finally {
+            PersistorUtil.endResolving(collectionAdapter);
         }
     }
 

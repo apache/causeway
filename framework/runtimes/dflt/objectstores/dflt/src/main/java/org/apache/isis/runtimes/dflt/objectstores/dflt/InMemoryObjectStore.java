@@ -32,7 +32,6 @@ import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.debug.DebugUtils;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.oid.TypedOid;
@@ -249,29 +248,25 @@ public class InMemoryObjectStore implements ObjectStore {
     @Override
     public void resolveImmediately(final ObjectAdapter adapter) throws ObjectPersistenceException {
 
-        // this is a nasty hack, but even though this method is called by
+        // these diagnostics are because, even though this method is called by
         // PersistenceSessionObjectStore#resolveImmediately which has a check,
         // seem to be hitting a race condition with another thread that is
-        // resolving the object
-        // before I get here.
-        // as belt-n-braces, have also made PSOS#resolveImmediately synchronize
-        // on
-        // the object being resolved.
+        // resolving the object before I get here.
         if (adapter.canTransitionToResolving()) {
-            LOG.debug("resolve " + adapter);
-
-            PersistorUtil.startStateTransition(adapter, ResolveState.RESOLVING);
-            PersistorUtil.endStateTransition(adapter); // moves to RESOLVED
+            if(LOG.isDebugEnabled()) {
+                LOG.debug("resolve " + adapter);
+            }
         } else {
             LOG.warn("resolveImmediately ignored, " + "adapter's current state is: " + adapter.getResolveState() + " ; oid: " + adapter.getOid());
         }
+        
+        adapter.markAsResolvedIfPossible();
     }
 
     @Override
     public void resolveField(final ObjectAdapter object, final ObjectAssociation field) throws ObjectPersistenceException {
-        final ObjectAdapter reference = field.get(object);
-        PersistorUtil.startStateTransition(reference, ResolveState.RESOLVING);
-        PersistorUtil.endStateTransition(reference);
+        final ObjectAdapter referenceAdapter = field.get(object);
+        referenceAdapter.markAsResolvedIfPossible();
     }
 
 
@@ -324,10 +319,7 @@ public class InMemoryObjectStore implements ObjectStore {
 
     private static List<ObjectAdapter> resolved(final List<ObjectAdapter> instances) {
         for (ObjectAdapter adapter: instances) {
-            if (adapter.canTransitionToResolving()) {
-                PersistorUtil.startStateTransition(adapter, ResolveState.RESOLVING);
-                PersistorUtil.endStateTransition(adapter);
-            }
+            adapter.markAsResolvedIfPossible();
         }
         return instances;
     }
