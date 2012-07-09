@@ -137,7 +137,7 @@ public class ObjectFieldBuilder extends AbstractViewBuilder {
                 // typed in with the actual title.
                 if (!field.getSpecification().isParseable()) {
                     final boolean changedValue = value != existing;
-                    final boolean isDestroyed = existing != null && existing.getResolveState().isDestroyed();
+                    final boolean isDestroyed = existing != null && existing.isDestroyed();
                     if (changedValue || isDestroyed) {
                         View fieldView;
                         fieldView = createFieldView(view, axes, object, i, field);

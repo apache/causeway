@@ -737,9 +737,9 @@ public abstract class RequestContext {
     // //////////////////////////////////////////////////////////////////
 
     public String mapObject(final ObjectAdapter object, final Scope scope) {
-        if (object.getResolveState().isValue()) {
+        if (object.isValue()) {
             return object.titleString();
-        } else if (scope == Scope.INTERACTION && object.isTransient()) {
+        } else if (scope == Scope.INTERACTION && object.representsTransient()) {
             return objectMapping.mapTransientObject(object);
         } else if (object.getOid() != null) {
             return objectMapping.mapObject(object, scope);

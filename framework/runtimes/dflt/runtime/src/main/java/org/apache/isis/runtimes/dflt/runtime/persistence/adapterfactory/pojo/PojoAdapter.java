@@ -162,38 +162,91 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
     }
 
     private boolean elementsLoaded() {
-        return isTransient() || this.getResolveState().isResolved();
+        return representsTransient() || this.isResolved();
     }
 
     // ///////////////////////////////////////////////////////////////////
-    // isPersistent, isTransient
+    // ResolveState
     // ///////////////////////////////////////////////////////////////////
 
     /**
      * Just delegates to {@link #getResolveState() resolve state}.
      * 
-     * @see ResolveState#isPersistent()
-     * @see #isTransient()
+     * @see ResolveState#representsPersistent()
+     * @see #representsTransient()
      */
     @Override
     public boolean isPersistent() {
-        if(isParented()) {
-            
-        }
-        return getResolveState().isPersistent();
+        return getResolveState().representsPersistent();
     }
+
 
     /**
      * Just delegates to {@link #getResolveState() resolve state}.
      * 
-     * @see ResolveState#isTransient()
+     * @see ResolveState#representsTransient()
      * @see #isPersistent()
      */
+    @Override
+    public boolean representsTransient() {
+        return getResolveState().representsTransient();
+    }
+
+    @Override
+    public boolean isNew() {
+        return getResolveState().isNew();
+    }
+
+    @Override
+    public boolean isResolving() {
+        return getResolveState().isResolving();
+    }
+
+    @Override
+    public boolean isResolved() {
+        return getResolveState().isResolved();
+    }
+
+    @Override
+    public boolean isGhost() {
+        return getResolveState().isGhost();
+    }
+
+    @Override
+    public boolean isUpdating() {
+        return getResolveState().isUpdating();
+    }
+
+    @Override
+    public boolean isDestroyed() {
+        return getResolveState().isDestroyed();
+    }
+
     @Override
     public boolean isTransient() {
         return getResolveState().isTransient();
     }
 
+
+    @Override
+    public boolean isTitleAvailable() {
+        final ResolveState resolveState = getResolveState();
+        return resolveState.isValue() || resolveState.isResolved();
+    }
+
+    /**
+     * If {@link #isGhost()}, then will become resolved.
+     */
+    @Override
+    public void markAsResolvedIfPossible() {
+        if (getResolveState().canChangeTo(ResolveState.RESOLVING)) {
+            changeState(ResolveState.RESOLVING);
+            changeState(ResolveState.RESOLVED);
+        }
+    }
+
+
+    
     // ///////////////////////////////////////////////////////////////////
     // Oid
     // ///////////////////////////////////////////////////////////////////
@@ -221,6 +274,7 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
 
     @Override
     public boolean isValue() {
+        // equivalently: getResolveState().isValue();
         return oid == null;
     }
 
@@ -456,8 +510,6 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
     @Override
     public void fireChangedEvent() {
     }
-
-
 
 
 

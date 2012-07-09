@@ -119,6 +119,24 @@ public interface ObjectAdapter extends ObjectMetaModel {
      */
     ObjectAdapter getAggregateRoot();
 
+    boolean isResolved();
+
+    boolean isGhost();
+
+    boolean isTitleAvailable();
+
+    void markAsResolvedIfPossible();
+
+    boolean isDestroyed();
+
+    boolean isTransient();
+
+    boolean isResolving();
+
+    boolean isUpdating();
+
+    boolean isNew();
+
 
 
 }

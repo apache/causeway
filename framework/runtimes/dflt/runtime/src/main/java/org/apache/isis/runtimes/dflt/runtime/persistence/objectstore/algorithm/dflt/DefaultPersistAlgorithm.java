@@ -50,10 +50,10 @@ public class DefaultPersistAlgorithm extends PersistAlgorithmAbstract {
             if(LOG.isDebugEnabled()) {
                 LOG.debug("persist " + adapter);
             }
-            if (adapter.getResolveState() == ResolveState.GHOST) {
+            if (adapter.isGhost()) {
                 adapter.changeState(ResolveState.RESOLVING);
                 adapter.changeState(ResolveState.RESOLVED);
-            } else if (adapter.getResolveState() == ResolveState.TRANSIENT) {
+            } else if (adapter.isTransient()) {
                 adapter.changeState(ResolveState.RESOLVED);
             }
             final CollectionFacet facet = CollectionFacetUtils.getCollectionFacetFromSpec(adapter);

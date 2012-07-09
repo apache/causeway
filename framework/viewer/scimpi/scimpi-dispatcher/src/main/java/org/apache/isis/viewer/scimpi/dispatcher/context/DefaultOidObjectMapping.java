@@ -132,7 +132,7 @@ public class DefaultOidObjectMapping implements ObjectMapping {
                 }
                 data.put(fieldName, collection);
             } else {
-                if (fieldValue.isTransient() || fieldValue.isParented()) {
+                if (fieldValue.representsTransient() || fieldValue.isParented()) {
                     final JSONObject saveData = encodeTransientData(fieldValue, adaptersToSave);
                     if (saveData == null) {
                         data.put(fieldName, mapObject(fieldValue, Scope.INTERACTION));
@@ -220,7 +220,7 @@ public class DefaultOidObjectMapping implements ObjectMapping {
         final String transferableId = encodedOid;
         // LOG.debug("encoded " + oid + " as " + transferableId + " ~ " + encodedOid);
 
-        if (adapter.isTransient()) {
+        if (adapter.representsTransient()) {
             // old TODO cache these in requests so that Mementos are only created once.
             // old TODO if Transient/Interaction then return state; other store state in session an return OID string
             final TransientRootAdapterMapping mapping = new TransientRootAdapterMapping(adapter);

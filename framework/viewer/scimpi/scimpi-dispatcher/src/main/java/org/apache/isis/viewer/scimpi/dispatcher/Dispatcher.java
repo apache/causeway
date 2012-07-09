@@ -320,7 +320,7 @@ public class Dispatcher {
                     file = findFileForSpecification(context, facet2.valueSpec(), "collection", EXTENSION);
                 } else {
                     final ObjectAdapter mappedObject2 = mappedObject;
-                    if (mappedObject2.isTransient()) {
+                    if (mappedObject2.representsTransient()) {
                         file = findFileForSpecification(context, mappedObject.getSpecification(), "edit", EXTENSION);
                     } else {
                         file = findFileForSpecification(context, mappedObject.getSpecification(), "object", EXTENSION);

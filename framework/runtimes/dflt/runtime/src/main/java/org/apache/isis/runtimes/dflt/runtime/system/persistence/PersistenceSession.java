@@ -312,10 +312,7 @@ public class PersistenceSession implements PersistenceSessionContainer, Persiste
                 adapterManager.remapAsPersistent(serviceAdapter, null);
             }
 
-            if (serviceAdapter.getResolveState().canChangeTo(ResolveState.RESOLVING)) {
-                serviceAdapter.changeState(ResolveState.RESOLVING);
-                serviceAdapter.changeState(ResolveState.RESOLVED);
-            }
+            serviceAdapter.markAsResolvedIfPossible();
             if (existingOid == null) {
                 final RootOid persistentOid = (RootOid) serviceAdapter.getOid();
                 registerService(persistentOid);
@@ -395,7 +392,7 @@ public class PersistenceSession implements PersistenceSessionContainer, Persiste
         final Object pojo = objectSpec.createObject();
         final ObjectAdapter adapter = getAdapterManager().adapterFor(pojo, parentAdapter);
         objectSpec.initialize(adapter); 
-        if (adapter.getResolveState().isGhost()) {
+        if (adapter.isGhost()) {
             adapter.changeState(ResolveState.RESOLVING);
         }
         if (adapter.getResolveState().isValidToChangeTo(ResolveState.RESOLVED)) {
@@ -644,10 +641,8 @@ public class PersistenceSession implements PersistenceSessionContainer, Persiste
         final ObjectSpecification serviceSpecification = getSpecificationLoader().loadSpecification(servicePojo.getClass());
         final RootOid oid = getOidForService(serviceSpecification);
         final ObjectAdapter serviceAdapter = getAdapterManager().recreateAdapter(oid, servicePojo);
-        if (serviceAdapter.getResolveState().canChangeTo(ResolveState.RESOLVING)) {
-            serviceAdapter.changeState(ResolveState.RESOLVING);
-            serviceAdapter.changeState(ResolveState.RESOLVED);
-        }
+        
+        serviceAdapter.markAsResolvedIfPossible();
         return serviceAdapter;
     }
 
@@ -970,7 +965,7 @@ public class PersistenceSession implements PersistenceSessionContainer, Persiste
             return;
         }
         final ObjectAdapter referenceAdapter = field.get(objectAdapter);
-        if (referenceAdapter == null || referenceAdapter.getResolveState().isResolved()) {
+        if (referenceAdapter == null || referenceAdapter.isResolved()) {
             return;
         }
         if (!referenceAdapter.isPersistent()) {
@@ -1065,7 +1060,7 @@ public class PersistenceSession implements PersistenceSessionContainer, Persiste
     @Override
     public void objectChanged(final ObjectAdapter adapter) {
 
-        if (adapter.isTransient() || (adapter.isParented() && adapter.getAggregateRoot().isTransient())) {
+        if (adapter.representsTransient() || (adapter.isParented() && adapter.getAggregateRoot().representsTransient())) {
             addObjectChangedForPresentationLayer(adapter);
             return;
         }
@@ -1085,7 +1080,7 @@ public class PersistenceSession implements PersistenceSessionContainer, Persiste
             addObjectChangedForPersistenceLayer(adapter);
             addObjectChangedForPresentationLayer(adapter);
         }
-        if (adapter.getResolveState().respondToChangesInPersistentObjects() || adapter.isTransient()) {
+        if (adapter.getResolveState().respondToChangesInPersistentObjects() || adapter.representsTransient()) {
             addObjectChangedForPresentationLayer(adapter);
         }
     }

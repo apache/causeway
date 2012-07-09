@@ -120,7 +120,7 @@ public class PojoAdapterHashMap implements PojoAdapterMap {
             LOG.debug("add adapter: #" + Long.toHexString(pojo.hashCode()) + " -> #" + Long.toHexString(adapter.hashCode()));
         }
         // log at end so that if toString needs adapters they're in maps.
-        if (adapter.getResolveState().isResolved()) {
+        if (adapter.isResolved()) {
             if (LOG.isDebugEnabled()) {
                 LOG.debug("add " + new ToString(pojo) + " as " + adapter);
             }

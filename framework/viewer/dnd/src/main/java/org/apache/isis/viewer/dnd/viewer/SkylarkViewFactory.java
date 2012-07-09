@@ -117,7 +117,7 @@ public class SkylarkViewFactory implements GlobalViewFactory {
          */
         if (content.isObject()) {
             final ObjectAdapter adapter = content.getAdapter();
-            if (adapter != null && adapter.getResolveState().isDestroyed()) {
+            if (adapter != null && adapter.isDestroyed()) {
                 createView = new DisposedObjectBorder(createView);
             }
         }

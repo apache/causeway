@@ -280,19 +280,19 @@ public class Memento implements Serializable {
 
     }
 
-    private void updateObject(final ObjectAdapter object, final ResolveState resolveState, final Data state) {
-        if (object.getResolveState().isValidToChangeTo(resolveState)) {
-            PersistorUtil.start(object, resolveState);
-            updateFields(object, state);
-            PersistorUtil.end(object);
-        } else if (object.getResolveState() == ResolveState.TRANSIENT && resolveState == ResolveState.TRANSIENT) {
-            updateFields(object, state);
-        } else if (object.isParented()) {
-            updateFields(object, state);
+    private void updateObject(final ObjectAdapter objectAdapter, final ResolveState targetResolveState, final Data state) {
+        if (objectAdapter.getResolveState().isValidToChangeTo(targetResolveState)) {
+            PersistorUtil.startStateTransition(objectAdapter, targetResolveState);
+            updateFields(objectAdapter, state);
+            PersistorUtil.endStateTransition(objectAdapter);
+        } else if (objectAdapter.isTransient() && targetResolveState == ResolveState.TRANSIENT) {
+            updateFields(objectAdapter, state);
+        } else if (objectAdapter.isParented()) {
+            updateFields(objectAdapter, state);
         } else {
             final ObjectData od = (ObjectData) state;
             if (od.containsField()) {
-                throw new IsisException("Resolve state (for " + object + ") inconsistent with fact that data exists for fields");
+                throw new IsisException("Resolve state (for " + objectAdapter + ") inconsistent with fact that data exists for fields");
             }
         }
     }

@@ -161,7 +161,7 @@ public class OneToManyAssociationImpl extends ObjectAssociationAbstract implemen
             throw new IllegalArgumentException("Can't use null to add an item to a collection");
         }
         if (readWrite()) {
-            if (ownerAdapter.isPersistent() && referencedAdapter.isTransient()) {
+            if (ownerAdapter.isPersistent() && referencedAdapter.representsTransient()) {
                 throw new IsisException("can't set a reference to a transient object from a persistent one: " + ownerAdapter.titleString() + " (persistent) -> " + referencedAdapter.titleString() + " (transient)");
             }
             final CollectionAddToFacet facet = getFacet(CollectionAddToFacet.class);

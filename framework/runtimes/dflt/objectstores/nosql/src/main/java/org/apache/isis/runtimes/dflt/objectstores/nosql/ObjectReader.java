@@ -139,7 +139,7 @@ public class ObjectReader {
         final ObjectSpecification specification = getSpecificationLoader().lookupBySpecId(aggregatedOid.getObjectSpecId());
 
         final ObjectAdapter fieldObject = getAdapter(specification, aggregatedOid);
-        if (fieldObject.getResolveState().isGhost()) {
+        if (fieldObject.isGhost()) {
             final ResolveState resolveState = ResolveState.RESOLVING;
             fieldObject.changeState(resolveState);
             readFields(aggregateReader, fieldObject, dataEncrypter);

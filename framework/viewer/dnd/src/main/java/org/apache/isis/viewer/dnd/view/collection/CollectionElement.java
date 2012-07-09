@@ -96,7 +96,7 @@ public class CollectionElement extends AbstractObjectContent {
 
     @Override
     public boolean isTransient() {
-        return adapter.isTransient();
+        return adapter.representsTransient();
     }
 
     @Override

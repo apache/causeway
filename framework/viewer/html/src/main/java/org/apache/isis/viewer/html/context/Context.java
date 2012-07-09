@@ -271,24 +271,24 @@ public class Context implements Serializable {
 
     public ObjectAdapter getMappedObject(final String id) {
         final RootAdapterMapping mappedObject = getMappedInstance(objectMap, id);
-        final ObjectAdapter object = mappedObject.getObject();
+        final ObjectAdapter adapter = mappedObject.getObject();
 
         // ensure resolved if currently a ghost;
         // start/end xactn if required
-        if (object.isPersistent() && object.getResolveState().isGhost()) {
-            getPersistenceSession().resolveImmediately(object);
+        if (adapter.isPersistent() && adapter.isGhost()) {
+            getPersistenceSession().resolveImmediately(adapter);
         }
 
         try {
-            mappedObject.checkVersion(object);
+            mappedObject.checkVersion(adapter);
         } catch (final ConcurrencyException e) {
             LOG.info("concurrency conflict: " + e.getMessage());
             messages.clear();
             messages.add(e.getMessage());
-            messages.add("Reloaded object " + object.titleString());
-            updateVersion(object);
+            messages.add("Reloaded object " + adapter.titleString());
+            updateVersion(adapter);
         }
-        return object;
+        return adapter;
     }
 
     
@@ -345,7 +345,7 @@ public class Context implements Serializable {
     }
 
     private static RootAdapterMapping persistentOrTransientObjectMappingFor(final ObjectAdapter adapter) {
-        return adapter.isTransient() ? new TransientRootAdapterMapping(adapter) : new PersistentRootAdapterMapping(adapter);
+        return adapter.representsTransient() ? new TransientRootAdapterMapping(adapter) : new PersistentRootAdapterMapping(adapter);
     }
 
     
@@ -538,7 +538,7 @@ public class Context implements Serializable {
 
 
     public void updateVersion(final ObjectAdapter adapter) {
-        if (adapter.isTransient()) {
+        if (adapter.representsTransient()) {
             return;
         }
 

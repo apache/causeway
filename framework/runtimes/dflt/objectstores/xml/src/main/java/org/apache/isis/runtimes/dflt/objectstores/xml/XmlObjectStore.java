@@ -143,44 +143,47 @@ public class XmlObjectStore implements ObjectStore {
         return isFixturesInstalled;
     }
 
-    private void initObject(final ObjectAdapter object, final ObjectData data) {
-        if (object.getResolveState().canChangeTo(ResolveState.RESOLVING)) {
-            PersistorUtil.start(object, ResolveState.RESOLVING);
+    private void initObject(final ObjectAdapter adapter, final ObjectData data) {
+        if (!adapter.getResolveState().canChangeTo(ResolveState.RESOLVING)) {
+            return;
+        } 
+        PersistorUtil.startStateTransition(adapter, ResolveState.RESOLVING);
 
-            final List<ObjectAssociation> fields = object.getSpecification().getAssociations();
-            for (int i = 0; i < fields.size(); i++) {
-                final ObjectAssociation field = fields.get(i);
-                if (field.isNotPersisted()) {
-                    continue;
-                }
-
-                final ObjectSpecification fieldSpecification = field.getSpecification();
-                if (fieldSpecification.isEncodeable()) {
-                    final EncodableFacet encoder = fieldSpecification.getFacet(EncodableFacet.class);
-                    ObjectAdapter value;
-                    final String valueData = data.value(field.getId());
-                    if (valueData != null) {
-                        if (valueData.equals("NULL")) {
-                            value = null;
-                        } else {
-                            value = encoder.fromEncodedString(valueData);
-                        }
-                        ((OneToOneAssociation) field).initAssociation(object, value);
-                    }
-                } else if (field.isOneToManyAssociation()) {
-                    initObjectSetupCollection(object, data, field);
-                } else if (field.isOneToOneAssociation()) {
-                    initObjectSetupReference(object, data, field);
-                }
+        final List<ObjectAssociation> fields = adapter.getSpecification().getAssociations();
+        for (int i = 0; i < fields.size(); i++) {
+            final ObjectAssociation field = fields.get(i);
+            if (field.isNotPersisted()) {
+                continue;
             }
-            object.setVersion(data.getVersion());
-            PersistorUtil.end(object);
+
+            final ObjectSpecification fieldSpecification = field.getSpecification();
+            if (fieldSpecification.isEncodeable()) {
+                final EncodableFacet encoder = fieldSpecification.getFacet(EncodableFacet.class);
+                ObjectAdapter value;
+                final String valueData = data.value(field.getId());
+                if (valueData != null) {
+                    if (valueData.equals("NULL")) {
+                        value = null;
+                    } else {
+                        value = encoder.fromEncodedString(valueData);
+                    }
+                    ((OneToOneAssociation) field).initAssociation(adapter, value);
+                }
+            } else if (field.isOneToManyAssociation()) {
+                initObjectSetupCollection(adapter, data, field);
+            } else if (field.isOneToOneAssociation()) {
+                initObjectSetupReference(adapter, data, field);
+            }
         }
+        adapter.setVersion(data.getVersion());
+        PersistorUtil.endStateTransition(adapter);
     }
 
     private void initObjectSetupReference(final ObjectAdapter object, final ObjectData data, final ObjectAssociation field) {
         final RootOidDefault referenceOid = (RootOidDefault) data.get(field.getId());
-        LOG.debug("setting up field " + field + " with " + referenceOid);
+        if(LOG.isDebugEnabled()) {
+            LOG.debug("setting up field " + field + " with " + referenceOid);
+        }
         if (referenceOid == null) {
             return;
         }
@@ -189,7 +192,7 @@ public class XmlObjectStore implements ObjectStore {
 
         if (fieldData == null) {
             final ObjectAdapter adapter = getPersistenceSession().recreateAdapter(field.getSpecification(), referenceOid);
-            if (!adapter.getResolveState().isDestroyed()) {
+            if (!adapter.isDestroyed()) {
                 adapter.changeState(ResolveState.DESTROYED);
             }
             ((OneToOneAssociation) field).initAssociation(object, adapter);
@@ -222,30 +225,33 @@ public class XmlObjectStore implements ObjectStore {
          */
     }
 
-    private void initObjectSetupCollection(final ObjectAdapter object, final ObjectData data, final ObjectAssociation field) {
+    private void initObjectSetupCollection(final ObjectAdapter objectAdapter, final ObjectData data, final ObjectAssociation field) {
         /*
          * The internal collection is already a part of the object, and
          * therefore cannot be recreated, but its oid must be set
          */
         final ListOfRootOid refs = (ListOfRootOid) data.get(field.getId());
-        final ObjectAdapter collection = field.get(object);
-        if (collection.getResolveState().canChangeTo(ResolveState.RESOLVING)) {
-            PersistorUtil.start(collection, ResolveState.RESOLVING);
-            final int size = refs == null ? 0 : refs.size();
-            final ObjectAdapter[] elements = new ObjectAdapter[size];
-            for (int j = 0; j < size; j++) {
-                final RootOid elementOid = refs.elementAt(j);
-                ObjectAdapter adapter;
-                adapter = getAdapterManager().getAdapterFor(elementOid);
-                if (adapter == null) {
-                    adapter = getObject(elementOid);
-                }
-                elements[j] = adapter;
+        
+        final ObjectAdapter collectionAdapter = field.get(objectAdapter);
+        if (!collectionAdapter.getResolveState().canChangeTo(ResolveState.RESOLVING)) {
+            return;
+        } 
+        
+        PersistorUtil.startStateTransition(collectionAdapter, ResolveState.RESOLVING);
+        final int size = refs == null ? 0 : refs.size();
+        final ObjectAdapter[] elements = new ObjectAdapter[size];
+        for (int j = 0; j < size; j++) {
+            final RootOid elementOid = refs.elementAt(j);
+            ObjectAdapter adapter;
+            adapter = getAdapterManager().getAdapterFor(elementOid);
+            if (adapter == null) {
+                adapter = getObject(elementOid);
             }
-            final CollectionFacet facet = CollectionFacetUtils.getCollectionFacetFromSpec(collection);
-            facet.init(collection, elements);
-            PersistorUtil.end(collection);
+            elements[j] = adapter;
         }
+        final CollectionFacet facet = CollectionFacetUtils.getCollectionFacetFromSpec(collectionAdapter);
+        facet.init(collectionAdapter, elements);
+        PersistorUtil.endStateTransition(collectionAdapter);
     }
 
     // /////////////////////////////////////////////////////////

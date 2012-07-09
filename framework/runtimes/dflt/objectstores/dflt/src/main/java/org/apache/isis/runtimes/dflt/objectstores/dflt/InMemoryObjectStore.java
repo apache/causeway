@@ -260,8 +260,8 @@ public class InMemoryObjectStore implements ObjectStore {
         if (adapter.getResolveState().canChangeTo(ResolveState.RESOLVING)) {
             LOG.debug("resolve " + adapter);
 
-            PersistorUtil.start(adapter, ResolveState.RESOLVING);
-            PersistorUtil.end(adapter); // moves to RESOLVED
+            PersistorUtil.startStateTransition(adapter, ResolveState.RESOLVING);
+            PersistorUtil.endStateTransition(adapter); // moves to RESOLVED
         } else {
             LOG.warn("resolveImmediately ignored, " + "adapter's current state is: " + adapter.getResolveState() + " ; oid: " + adapter.getOid());
         }
@@ -270,8 +270,8 @@ public class InMemoryObjectStore implements ObjectStore {
     @Override
     public void resolveField(final ObjectAdapter object, final ObjectAssociation field) throws ObjectPersistenceException {
         final ObjectAdapter reference = field.get(object);
-        PersistorUtil.start(reference, ResolveState.RESOLVING);
-        PersistorUtil.end(reference);
+        PersistorUtil.startStateTransition(reference, ResolveState.RESOLVING);
+        PersistorUtil.endStateTransition(reference);
     }
 
 
@@ -325,8 +325,8 @@ public class InMemoryObjectStore implements ObjectStore {
     private static List<ObjectAdapter> resolved(final List<ObjectAdapter> instances) {
         for (ObjectAdapter adapter: instances) {
             if (adapter.getResolveState().canChangeTo(ResolveState.RESOLVING)) {
-                PersistorUtil.start(adapter, ResolveState.RESOLVING);
-                PersistorUtil.end(adapter);
+                PersistorUtil.startStateTransition(adapter, ResolveState.RESOLVING);
+                PersistorUtil.endStateTransition(adapter);
             }
         }
         return instances;

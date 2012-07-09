@@ -44,7 +44,7 @@ public class PropertySetterFacetWrapTransaction extends PropertySetterFacetAbstr
 
     @Override
     public void setProperty(final ObjectAdapter adapter, final ObjectAdapter referencedAdapter) {
-        if (adapter.isTransient()) {
+        if (adapter.representsTransient()) {
             // NOT !adapter.isPersistent();
             // (value adapters are neither persistent or transient)
             underlyingFacet.setProperty(adapter, referencedAdapter);

@@ -22,12 +22,8 @@ package org.apache.isis.core.metamodel.adapter;
 import static org.apache.isis.core.metamodel.adapter.ResolveState.DESTROYED;
 import static org.apache.isis.core.metamodel.adapter.ResolveState.GHOST;
 import static org.apache.isis.core.metamodel.adapter.ResolveState.NEW;
-import static org.apache.isis.core.metamodel.adapter.ResolveState.PART_RESOLVED;
 import static org.apache.isis.core.metamodel.adapter.ResolveState.RESOLVED;
 import static org.apache.isis.core.metamodel.adapter.ResolveState.RESOLVING;
-import static org.apache.isis.core.metamodel.adapter.ResolveState.RESOLVING_PART;
-import static org.apache.isis.core.metamodel.adapter.ResolveState.SERIALIZING_GHOST;
-import static org.apache.isis.core.metamodel.adapter.ResolveState.SERIALIZING_PART_RESOLVED;
 import static org.apache.isis.core.metamodel.adapter.ResolveState.SERIALIZING_RESOLVED;
 import static org.apache.isis.core.metamodel.adapter.ResolveState.SERIALIZING_TRANSIENT;
 import static org.apache.isis.core.metamodel.adapter.ResolveState.TRANSIENT;
@@ -49,8 +45,13 @@ public class ResolveState_GetEndStateTest {
 
     @Parameters
     public static Collection<Object[]> data() {
-        return Arrays.asList(new Object[][] { { NEW, null }, { GHOST, null }, { TRANSIENT, null }, { RESOLVING_PART, PART_RESOLVED }, { PART_RESOLVED, null }, { RESOLVING, RESOLVED }, { RESOLVED, null }, { UPDATING, RESOLVED }, { SERIALIZING_TRANSIENT, TRANSIENT },
-                { SERIALIZING_PART_RESOLVED, PART_RESOLVED }, { SERIALIZING_RESOLVED, RESOLVED }, { SERIALIZING_GHOST, GHOST }, { VALUE, null }, { DESTROYED, null }, });
+        return Arrays.asList(new Object[][] { { NEW, null }, { GHOST, null }, { TRANSIENT, null },
+                // { RESOLVING_PART, PART_RESOLVED },
+                // { PART_RESOLVED, null },
+                { RESOLVING, RESOLVED }, { RESOLVED, null }, { UPDATING, RESOLVED }, { SERIALIZING_TRANSIENT, TRANSIENT },
+                // { SERIALIZING_PART_RESOLVED, PART_RESOLVED },
+                // { SERIALIZING_GHOST, GHOST },
+                { SERIALIZING_RESOLVED, RESOLVED }, { VALUE, null }, { DESTROYED, null }, });
     }
 
     private final ResolveState from;

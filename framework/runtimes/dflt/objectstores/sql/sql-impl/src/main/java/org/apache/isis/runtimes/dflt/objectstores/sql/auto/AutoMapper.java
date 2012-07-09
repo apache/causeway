@@ -307,7 +307,7 @@ public class AutoMapper extends AbstractAutoMapper implements ObjectMapping, Deb
     }
 
     protected void loadFields(final ObjectAdapter object, final Results rs) {
-        PersistorUtil.start(object, ResolveState.RESOLVING);
+        PersistorUtil.startStateTransition(object, ResolveState.RESOLVING);
         for (final FieldMapping mapping : fieldMappingByField.values()) {
             mapping.initializeField(object, rs);
         }
@@ -320,7 +320,7 @@ public class AutoMapper extends AbstractAutoMapper implements ObjectMapping, Deb
          * oneToManyProperties[i].get(object); }
          */
         object.setVersion(versionMapping.getLock(rs));
-        PersistorUtil.end(object);
+        PersistorUtil.endStateTransition(object);
     }
 
     // KAM
@@ -351,13 +351,13 @@ public class AutoMapper extends AbstractAutoMapper implements ObjectMapping, Deb
 
     private ObjectAdapter loadObject(final DatabaseConnector connector, final ObjectSpecification cls, final Results rs) {
         final Oid oid = idMapping.recreateOid(rs, specification);
-        final ObjectAdapter instance = getAdapter(cls, oid);
+        final ObjectAdapter adapter = getAdapter(cls, oid);
 
-        if (instance.getResolveState().isValidToChangeTo(ResolveState.RESOLVING)) {
-            loadFields(instance, rs);
-            loadCollections(connector, instance); // KAM
+        if (adapter.getResolveState().isValidToChangeTo(ResolveState.RESOLVING)) {
+            loadFields(adapter, rs);
+            loadCollections(connector, adapter); // KAM
         }
-        return instance;
+        return adapter;
     }
 
     @Override

@@ -114,7 +114,7 @@ public class TwoPassPersistAlgorithm extends PersistAlgorithmAbstract {
 
     private void makeCollectionPersistent(final ObjectAdapter collection, final ToPersistObjectSet toPersistObjectSet) {
         LOG.info("persist " + collection);
-        if (collection.getResolveState() == ResolveState.TRANSIENT) {
+        if (collection.isTransient()) {
             collection.changeState(ResolveState.RESOLVED);
         }
         final CollectionFacet facet = CollectionFacetUtils.getCollectionFacetFromSpec(collection);

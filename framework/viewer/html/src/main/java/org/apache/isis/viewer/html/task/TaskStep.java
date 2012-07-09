@@ -98,7 +98,7 @@ public final class TaskStep implements Action {
         final ViewPane content = page.getViewPane();
         final ObjectAdapter targetAdapter = task.getTarget(context);
         String titleString = targetAdapter.titleString();
-        if (targetAdapter.isTransient()) {
+        if (targetAdapter.representsTransient()) {
             titleString += " (Unsaved)";
         }
         content.setTitle(titleString, targetAdapter.getSpecification().getDescription());

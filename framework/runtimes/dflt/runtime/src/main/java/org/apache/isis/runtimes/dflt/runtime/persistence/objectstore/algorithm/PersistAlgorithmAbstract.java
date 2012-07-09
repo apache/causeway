@@ -61,7 +61,7 @@ public abstract class PersistAlgorithmAbstract implements PersistAlgorithm {
      * <b><i>REVIEW: should try to combine and remove the other method</i></b>.
      */
     protected static boolean alreadyPersistedOrNotPersistableOrServiceOrStandalone(final ObjectAdapter adapter) {
-        return objectIsStandalone(adapter) || objectSpecIsService(adapter) || alreadyPersistedOrNotPersistable(adapter);
+        return adapter.isValue() || objectSpecIsService(adapter) || alreadyPersistedOrNotPersistable(adapter);
     }
 
     /**
@@ -83,10 +83,6 @@ public abstract class PersistAlgorithmAbstract implements PersistAlgorithm {
         if (alreadyPersistedOrNotPersistable(object)) {
             throw new NotPersistableException("can't make object persistent - either already persistent, " + "or transient only: " + object);
         }
-    }
-
-    private static boolean objectIsStandalone(final ObjectAdapter adapter) {
-        return adapter.getResolveState().isValue();
     }
 
     private static boolean objectSpecNotPersistable(final ObjectAdapter adapter) {

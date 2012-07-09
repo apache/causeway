@@ -179,7 +179,7 @@ public class NoSqlObjectStore implements ObjectStore {
     @Override
     public void resolveField(final ObjectAdapter object, final ObjectAssociation field) {
         final ObjectAdapter fieldValue = field.get(object);
-        if (fieldValue != null && !fieldValue.getResolveState().isResolved() && !fieldValue.getSpecification().isParented()) {
+        if (fieldValue != null && !fieldValue.isResolved() && !fieldValue.getSpecification().isParented()) {
             resolveImmediately(fieldValue);
         }
     }

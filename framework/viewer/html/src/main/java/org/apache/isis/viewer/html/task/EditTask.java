@@ -54,10 +54,10 @@ public class EditTask extends Task {
     private final ObjectAssociation[] fields;
     private final String newType;
 
-    public EditTask(final Context context, final ObjectAdapter object) {
-        super(context, "Edit", "", object, size(object));
+    public EditTask(final Context context, final ObjectAdapter adapter) {
+        super(context, "Edit", "", adapter, size(adapter));
 
-        final List<ObjectAssociation> allFields = object.getSpecification().getAssociations(ObjectAssociationFilters.dynamicallyVisible(getAuthenticationSession(), object));
+        final List<ObjectAssociation> allFields = adapter.getSpecification().getAssociations(ObjectAssociationFilters.dynamicallyVisible(getAuthenticationSession(), adapter));
 
         fields = new ObjectAssociation[names.length];
         for (int i = 0, j = 0; j < allFields.size(); j++) {
@@ -66,14 +66,14 @@ public class EditTask extends Task {
             names[i] = fld.getName();
             descriptions[i] = fld.getDescription();
 
-            final Consent usableByUser = fld.isUsable(getAuthenticationSession(), object);
+            final Consent usableByUser = fld.isUsable(getAuthenticationSession(), adapter);
             if (usableByUser.isVetoed()) {
                 descriptions[i] = usableByUser.getReason();
             }
 
             fieldSpecifications[i] = fld.getSpecification();
-            initialState[i] = fld.get(object);
-            if (skipField(object, fld)) {
+            initialState[i] = fld.get(adapter);
+            if (skipField(adapter, fld)) {
                 readOnly[i] = true;
             } else {
                 readOnly[i] = false;
@@ -93,8 +93,8 @@ public class EditTask extends Task {
             i++;
         }
 
-        final boolean isNew = object.getResolveState() == ResolveState.TRANSIENT;
-        newType = isNew ? getTarget(context).getSpecification().getSingularName() : null;
+        final boolean isTransient = adapter.isTransient();
+        newType = isTransient ? getTarget(context).getSpecification().getSingularName() : null;
     }
 
     @Override
@@ -132,7 +132,7 @@ public class EditTask extends Task {
             }
         }
 
-        if (target.isTransient()) {
+        if (target.representsTransient()) {
             saveState(target, entries);
             final Consent isValid = target.getSpecification().isValid(target);
             error = isValid.isVetoed() ? isValid.getReason() : null;
@@ -144,7 +144,7 @@ public class EditTask extends Task {
         final ObjectAdapter targetAdapter = getTarget(context);
         final ObjectAdapter[] entryAdapters = getEntries(context);
 
-        if (targetAdapter.isTransient()) {
+        if (targetAdapter.representsTransient()) {
             final ObjectAction action = targetAdapter.getSpecification().getObjectAction(ActionType.USER, "save", ObjectSpecification.EMPTY_LIST);
             if (action == null) {
                 getPersistenceSession().makePersistent(targetAdapter);

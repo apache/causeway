@@ -108,7 +108,7 @@ public class ServiceObject extends AbstractContent {
 
     @Override
     public boolean isTransient() {
-        return adapter != null && adapter.isTransient();
+        return adapter != null && adapter.representsTransient();
     }
 
     public void setObject(final ObjectAdapter object) {

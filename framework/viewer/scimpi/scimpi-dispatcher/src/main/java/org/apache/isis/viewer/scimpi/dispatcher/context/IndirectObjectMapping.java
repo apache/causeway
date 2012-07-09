@@ -114,7 +114,7 @@ public class IndirectObjectMapping implements ObjectMapping {
     }
 
     private Mapping createMapping(final ObjectAdapter adapter) {
-        if (adapter.getResolveState().isTransient()) {
+        if (adapter.representsTransient()) {
             return new TransientRootAdapterMapping(adapter);
         } else {
             return new PersistentRootAdapterMapping(adapter);

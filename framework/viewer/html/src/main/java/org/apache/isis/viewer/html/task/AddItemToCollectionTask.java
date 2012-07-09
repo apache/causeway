@@ -73,7 +73,7 @@ public class AddItemToCollectionTask extends Task {
         final ObjectAdapter[] parameterAdapters = getEntries(context);
         field.addElement(targetAdapter, parameterAdapters[0]);
 
-        if (targetAdapter.isTransient()) {
+        if (targetAdapter.representsTransient()) {
             getPersistenceSession().makePersistent(targetAdapter);
         }
         return targetAdapter;

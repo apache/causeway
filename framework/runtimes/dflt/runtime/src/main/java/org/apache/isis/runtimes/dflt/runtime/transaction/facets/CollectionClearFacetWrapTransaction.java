@@ -44,7 +44,7 @@ public class CollectionClearFacetWrapTransaction extends CollectionClearFacetAbs
 
     @Override
     public void clear(final ObjectAdapter adapter) {
-        if (adapter.isTransient()) {
+        if (adapter.representsTransient()) {
             // NOT !adapter.isPersistent();
             // (value adapters are neither persistent or transient)
             underlyingFacet.clear(adapter);

@@ -189,32 +189,36 @@ public class ForeignKeyCollectionMapper extends AbstractAutoMapper implements Co
     }
 
     @Override
-    public void loadInternalCollection(final DatabaseConnector connector, final ObjectAdapter parent, final boolean makeResolved) {
+    public void loadInternalCollection(final DatabaseConnector connector, final ObjectAdapter parentAdapter, final boolean makeResolved) {
 
-        final ObjectAdapter collection = field.get(parent);
-        if (collection.getResolveState().canChangeTo(ResolveState.RESOLVING)) {
+        final ObjectAdapter collectionAdapter = field.get(parentAdapter);
+        if (!collectionAdapter.getResolveState().canChangeTo(ResolveState.RESOLVING)) {
+            return;
+        } 
+        
+        if(LOG.isDebugEnabled()) {
             LOG.debug("loading internal collection " + field);
-            PersistorUtil.start(collection, ResolveState.RESOLVING);
+        }
+        PersistorUtil.startStateTransition(collectionAdapter, ResolveState.RESOLVING);
 
-            final List<ObjectAdapter> list = new ArrayList<ObjectAdapter>();
+        final List<ObjectAdapter> list = new ArrayList<ObjectAdapter>();
 
-            loadCollectionIntoList(connector, parent, makeResolved, table, specification, getIdMapping(), fieldMappingByField, versionMapping, list);
+        loadCollectionIntoList(connector, parentAdapter, makeResolved, table, specification, getIdMapping(), fieldMappingByField, versionMapping, list);
 
-            final CollectionFacet collectionFacet = collection.getSpecification().getFacet(CollectionFacet.class);
-            collectionFacet.init(collection, list.toArray(new ObjectAdapter[list.size()]));
-            PersistorUtil.end(collection);
+        final CollectionFacet collectionFacet = collectionAdapter.getSpecification().getFacet(CollectionFacet.class);
+        collectionFacet.init(collectionAdapter, list.toArray(new ObjectAdapter[list.size()]));
+        PersistorUtil.endStateTransition(collectionAdapter);
 
-            // TODO: Need to finalise this behaviour. At the moment, all
-            // collections will get infinitely resolved. I
-            // don't think this is desirable. Sub-collections should be left
-            // "Partially Resolved".
-            if (makeResolved) {
-                for (final ObjectAdapter field : list) {
-                    // final ObjectMapping mapping =
-                    // objectMappingLookup.getMapping(field, connector);
-                    if (field.getSpecification().isOfType(parent.getSpecification())) {
-                        loadInternalCollection(connector, field, true);
-                    }
+        // TODO: Need to finalise this behaviour. At the moment, all
+        // collections will get infinitely resolved. I
+        // don't think this is desirable. Sub-collections should be left
+        // "Partially Resolved".
+        if (makeResolved) {
+            for (final ObjectAdapter field : list) {
+                // final ObjectMapping mapping =
+                // objectMappingLookup.getMapping(field, connector);
+                if (field.getSpecification().isOfType(parentAdapter.getSpecification())) {
+                    loadInternalCollection(connector, field, true);
                 }
             }
         }
@@ -250,16 +254,18 @@ public class ForeignKeyCollectionMapper extends AbstractAutoMapper implements Co
         rs.close();
     }
 
-    protected void loadFields(final ObjectAdapter object, final Results rs, final boolean makeResolved, final Map<ObjectAssociation, FieldMapping> fieldMappingByField) {
-        if (object.getResolveState().canChangeTo(ResolveState.RESOLVING)) {
-            PersistorUtil.start(object, ResolveState.RESOLVING);
-            for (final FieldMapping mapping : fieldMappingByField.values()) {
-                mapping.initializeField(object, rs);
-            }
-            object.setVersion(versionMapping.getLock(rs));
-            if (makeResolved) {
-                PersistorUtil.end(object);
-            }
+    protected void loadFields(final ObjectAdapter adapter, final Results rs, final boolean makeResolved, final Map<ObjectAssociation, FieldMapping> fieldMappingByField) {
+        if (!adapter.getResolveState().canChangeTo(ResolveState.RESOLVING)) {
+            return;
+        }
+        
+        PersistorUtil.startStateTransition(adapter, ResolveState.RESOLVING);
+        for (final FieldMapping mapping : fieldMappingByField.values()) {
+            mapping.initializeField(adapter, rs);
+        }
+        adapter.setVersion(versionMapping.getLock(rs));
+        if (makeResolved) {
+            PersistorUtil.endStateTransition(adapter);
         }
     }
 
@@ -279,7 +285,9 @@ public class ForeignKeyCollectionMapper extends AbstractAutoMapper implements Co
     @Override
     public void saveInternalCollection(final DatabaseConnector connector, final ObjectAdapter parent) {
         final ObjectAdapter collection = field.get(parent);
-        LOG.debug("Saving internal collection " + collection);
+        if(LOG.isDebugEnabled()) {
+            LOG.debug("Saving internal collection " + collection);
+        }
 
         final Iterator<ObjectAdapter> elements = getElementsForCollectionAsIterator(collection);
 

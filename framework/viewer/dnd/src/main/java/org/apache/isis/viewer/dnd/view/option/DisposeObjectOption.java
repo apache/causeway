@@ -43,7 +43,7 @@ public class DisposeObjectOption extends UserActionAbstract {
     @Override
     public Consent disabled(final View view) {
         final ObjectAdapter adapter = view.getContent().getAdapter();
-        if (adapter.getResolveState().isDestroyed()) {
+        if (adapter.isDestroyed()) {
             // TODO: move logic into Facet
             return new Veto("Can't do anything with a destroyed object");
         }

@@ -73,7 +73,7 @@ public class OneToOneFieldImpl extends AbstractObjectContent implements OneToOne
             return new Veto(String.format("Can only drop objects of type %s", targetType.getSingularName()));
         }
 
-        if (getParent().isPersistent() && adapter.isTransient()) {
+        if (getParent().isPersistent() && adapter.representsTransient()) {
             // TODO: move logic into Facet
             return new Veto("Can't drop a non-persistent into this persistent object");
         }
@@ -159,7 +159,7 @@ public class OneToOneFieldImpl extends AbstractObjectContent implements OneToOne
 
     @Override
     public boolean isTransient() {
-        return adapter != null && adapter.isTransient();
+        return adapter != null && adapter.representsTransient();
     }
 
     @Override

@@ -97,7 +97,7 @@ public class EditAction implements Action {
             } else if (entryState.isValid()) {
                 changeObject(context, adapter, entryState, fields);
 
-                if (adapter.isTransient()) {
+                if (adapter.representsTransient()) {
                     IsisContext.getPersistenceSession().makePersistent(adapter);
                     context.unmapObject(adapter, Scope.REQUEST);
                 }

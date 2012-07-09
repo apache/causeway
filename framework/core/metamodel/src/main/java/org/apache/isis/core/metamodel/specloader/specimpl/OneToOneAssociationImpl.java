@@ -169,7 +169,7 @@ public class OneToOneAssociationImpl extends ObjectAssociationAbstract implement
         if (setterFacet == null) {
             return;
         }
-        if (ownerAdapter.isPersistent() && newReferencedAdapter != null && newReferencedAdapter.isTransient() && !newReferencedAdapter.getSpecification().isParented()) {
+        if (ownerAdapter.isPersistent() && newReferencedAdapter != null && newReferencedAdapter.representsTransient() && !newReferencedAdapter.getSpecification().isParented()) {
             // TODO: move to facet ?
             throw new IsisException("can't set a reference to a transient object from a persistent one: " + newReferencedAdapter.titleString() + " (transient)");
         }

@@ -186,7 +186,7 @@ public class ExpandableViewBorder extends AbstractBorder {
 
     private int canOpenCollection(final Content content) {
         final ObjectAdapter collection = ((CollectionContent) content).getCollection();
-        if (collection.getResolveState().isGhost()) {
+        if (collection.isGhost()) {
             return UNKNOWN;
         } else {
             final CollectionFacet facet = CollectionFacetUtils.getCollectionFacetFromSpec(collection);

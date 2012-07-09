@@ -19,17 +19,16 @@ public final class ResolveStateUtil {
 
         // move to ResolveState.RESOLVED;
 
-        if (adapter.getResolveState().isResolving()) { // either RESOLVING or
-            // PART_RESOLVING
+        if (adapter.isResolving()) {
             adapter.changeState(ResolveState.RESOLVED);
 
-        } else if (adapter.getResolveState().isResolved()) {
+        } else if (adapter.isResolved()) {
             // nothing to do.
 
-        } else if (adapter.getResolveState().isPartlyResolved()) {
-            adapter.changeState(ResolveState.RESOLVED);
+//        } else if (adapter.getResolveState().isPartlyResolved()) {
+//            adapter.changeState(ResolveState.RESOLVED);
 
-        } else if (adapter.getResolveState().isUpdating()) {
+        } else if (adapter.isUpdating()) {
             adapter.changeState(ResolveState.RESOLVED);
         }
     }
@@ -37,53 +36,53 @@ public final class ResolveStateUtil {
 
     private static void moveUpToResolving(final ObjectAdapter adapter) {
         // move these on so we can get to part_resolved or resolved.
-        if (adapter.isTransient()) {
+        if (adapter.representsTransient()) {
             adapter.changeState(ResolveState.RESOLVED);
             adapter.changeState(ResolveState.GHOST);
             adapter.changeState(ResolveState.RESOLVING);
 
-        } else if (adapter.getResolveState().isNew()) {
+        } else if (adapter.isNew()) {
             adapter.changeState(ResolveState.GHOST);
             adapter.changeState(ResolveState.RESOLVING);
 
-        } else if (adapter.getResolveState().isGhost()) {
+        } else if (adapter.isGhost()) {
             adapter.changeState(ResolveState.RESOLVING);
         }
     }
 
     public static void markAsGhost(final ObjectAdapter adapter) {
 
-        if (adapter.getResolveState().isValue()) {
+        if (adapter.isValue()) {
             // TODO: what should we do here? throw exception?
         }
-        if (adapter.getResolveState().isDestroyed()) {
+        if (adapter.isDestroyed()) {
             // TODO: what should we do here? throw exception?
         }
 
-        if (adapter.isTransient()) {
+        if (adapter.representsTransient()) {
             adapter.changeState(ResolveState.RESOLVED);
             adapter.changeState(ResolveState.GHOST);
 
-        } else if (adapter.getResolveState().isNew()) {
+        } else if (adapter.isNew()) {
             adapter.changeState(ResolveState.GHOST);
 
-        } else if (adapter.getResolveState().isPartlyResolved()) {
-            adapter.changeState(ResolveState.RESOLVING);
+//        } else if (adapter.getResolveState().isPartlyResolved()) {
+//            adapter.changeState(ResolveState.RESOLVING);
+//            adapter.changeState(ResolveState.RESOLVED);
+//            adapter.changeState(ResolveState.GHOST);
+
+        } else if (adapter.isResolving()) {
             adapter.changeState(ResolveState.RESOLVED);
             adapter.changeState(ResolveState.GHOST);
 
-        } else if (adapter.getResolveState().isResolving()) {
+        } else if (adapter.isUpdating()) {
             adapter.changeState(ResolveState.RESOLVED);
             adapter.changeState(ResolveState.GHOST);
 
-        } else if (adapter.getResolveState().isUpdating()) {
-            adapter.changeState(ResolveState.RESOLVED);
+        } else if (adapter.isResolved()) {
             adapter.changeState(ResolveState.GHOST);
 
-        } else if (adapter.getResolveState().isResolved()) {
-            adapter.changeState(ResolveState.GHOST);
-
-        } else if (adapter.getResolveState().isGhost()) {
+        } else if (adapter.isGhost()) {
             // nothing to do.
         }
     }
@@ -91,10 +90,10 @@ public final class ResolveStateUtil {
 
     public static void markAsUpdating(final ObjectAdapter adapter) {
 
-        if (adapter.getResolveState() == ResolveState.TRANSIENT) {
+        if (adapter.isTransient()) {
             adapter.changeState(ResolveState.RESOLVED);
         }
-        if (adapter.getResolveState() == ResolveState.RESOLVED) {
+        if (adapter.isResolved()) {
             adapter.changeState(ResolveState.UPDATING);
         }
     }

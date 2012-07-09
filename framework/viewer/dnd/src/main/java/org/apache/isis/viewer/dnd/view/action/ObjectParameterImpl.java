@@ -122,7 +122,7 @@ public class ObjectParameterImpl extends AbstractObjectContent implements Object
 
     @Override
     public boolean isTransient() {
-        return adapter != null && adapter.isTransient();
+        return adapter != null && adapter.representsTransient();
     }
 
     @Override

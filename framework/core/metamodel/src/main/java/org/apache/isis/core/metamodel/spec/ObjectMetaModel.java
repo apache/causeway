@@ -87,7 +87,7 @@ public interface ObjectMetaModel extends Instance {
      * Whether the object is persisted.
      * 
      * <p>
-     * Note: not necessarily the reciprocal of {@link #isTransient()};
+     * Note: not necessarily the reciprocal of {@link #representsTransient()};
      * standalone adapters (with {@link ResolveState#VALUE}) report as neither
      * persistent or transient.
      */
@@ -101,7 +101,7 @@ public interface ObjectMetaModel extends Instance {
      * standalone adapters (with {@link ResolveState#VALUE}) report as neither
      * persistent or transient.
      */
-    boolean isTransient();
+    boolean representsTransient();
 
     /**
      * Sometimes it is necessary to manage the replacement of the underlying

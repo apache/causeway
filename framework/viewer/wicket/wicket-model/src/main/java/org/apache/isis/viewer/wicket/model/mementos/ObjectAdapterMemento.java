@@ -184,8 +184,7 @@ public class ObjectAdapterMemento implements Serializable {
         if (adapter == null) {
             return;
         }
-        final ResolveState resolveState = adapter.getResolveState();
-        if (resolveState.isValue() || resolveState.isResolved()) {
+        if (adapter.isTitleAvailable()) {
             this.titleHint = adapter.titleString();
         }
     }

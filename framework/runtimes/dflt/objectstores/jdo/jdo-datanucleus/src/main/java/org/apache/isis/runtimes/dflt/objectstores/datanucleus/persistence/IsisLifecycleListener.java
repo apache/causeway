@@ -278,7 +278,7 @@ public class IsisLifecycleListener implements AttachLifecycleListener, ClearLife
 
         if(!pojo.jdoIsPersistent()) {
             // make sure the adapter is transient
-            if (!adapter.getResolveState().isTransient()) {
+            if (!adapter.getResolveState().representsTransient()) {
                 throw new IsisException(MessageFormat.format("adapter is in invalid state; should be {0} but is {1}", ResolveState.TRANSIENT, adapter.getResolveState()));
             }
 
@@ -289,7 +289,7 @@ public class IsisLifecycleListener implements AttachLifecycleListener, ClearLife
 
         } else {
             // make sure the adapter is persistent
-            if (!adapter.getResolveState().isPersistent()) {
+            if (!adapter.getResolveState().representsPersistent()) {
                 throw new IsisException(MessageFormat.format("adapter is in invalid state; should be in a persistent state but is {1}", ResolveState.RESOLVED, adapter.getResolveState()));
             }
 

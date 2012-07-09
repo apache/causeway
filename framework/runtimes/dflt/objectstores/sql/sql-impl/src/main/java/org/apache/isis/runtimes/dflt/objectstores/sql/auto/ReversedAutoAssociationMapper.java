@@ -88,39 +88,45 @@ public class ReversedAutoAssociationMapper extends AbstractAutoMapper implements
     }
 
     @Override
-    public void loadInternalCollection(final DatabaseConnector connector, final ObjectAdapter parent, final boolean makeResolved) {
-        final ObjectAdapter collection = field.get(parent);
-        if (collection.getResolveState().canChangeTo(ResolveState.RESOLVING)) {
+    public void loadInternalCollection(final DatabaseConnector connector, final ObjectAdapter parentAdapter, final boolean makeResolved) {
+        final ObjectAdapter collectionAdapter = field.get(parentAdapter);
+        
+        if (!collectionAdapter.getResolveState().canChangeTo(ResolveState.RESOLVING)) {
+            return;
+        } 
+        if(LOG.isDebugEnabled()) {
             LOG.debug("loading internal collection " + field);
-
-            final StringBuffer sql = new StringBuffer();
-            sql.append("select ");
-            idMapping.appendColumnNames(sql);
-            sql.append(", ");
-            sql.append(columnList(fieldMappingByField));
-            sql.append(" from ");
-            sql.append(table);
-            sql.append(" where ");
-            idMapping.appendUpdateValues(connector, sql, parent);
-
-            final Results rs = connector.select(sql.toString());
-            final List<ObjectAdapter> list = new ArrayList<ObjectAdapter>();
-            while (rs.next()) {
-                final Oid oid = idMapping.recreateOid(rs, specification);
-                final ObjectAdapter element = getAdapter(specification, oid);
-                loadFields(element, rs, makeResolved);
-                LOG.debug("  element  " + element.getOid());
-                list.add(element);
-            }
-            final CollectionFacet collectionFacet = collection.getSpecification().getFacet(CollectionFacet.class);
-            collectionFacet.init(collection, list.toArray(new ObjectAdapter[list.size()]));
-            rs.close();
-            PersistorUtil.end(collection);
         }
+
+        final StringBuffer sql = new StringBuffer();
+        sql.append("select ");
+        idMapping.appendColumnNames(sql);
+        sql.append(", ");
+        sql.append(columnList(fieldMappingByField));
+        sql.append(" from ");
+        sql.append(table);
+        sql.append(" where ");
+        idMapping.appendUpdateValues(connector, sql, parentAdapter);
+
+        final Results rs = connector.select(sql.toString());
+        final List<ObjectAdapter> list = new ArrayList<ObjectAdapter>();
+        while (rs.next()) {
+            final Oid oid = idMapping.recreateOid(rs, specification);
+            final ObjectAdapter element = getAdapter(specification, oid);
+            loadFields(element, rs, makeResolved);
+            if(LOG.isDebugEnabled()) {
+                LOG.debug("  element  " + element.getOid());
+            }
+            list.add(element);
+        }
+        final CollectionFacet collectionFacet = collectionAdapter.getSpecification().getFacet(CollectionFacet.class);
+        collectionFacet.init(collectionAdapter, list.toArray(new ObjectAdapter[list.size()]));
+        rs.close();
+        PersistorUtil.endStateTransition(collectionAdapter);
     }
 
     protected void loadFields(final ObjectAdapter object, final Results rs, final boolean makeResolved) {
-        PersistorUtil.start(object, ResolveState.RESOLVING);
+        PersistorUtil.startStateTransition(object, ResolveState.RESOLVING);
         for (final FieldMapping mapping : fieldMappingByField.values()) {
             mapping.initializeField(object, rs);
         }
@@ -135,7 +141,7 @@ public class ReversedAutoAssociationMapper extends AbstractAutoMapper implements
 
         object.setVersion(versionMapping.getLock(rs));
         if (makeResolved) {
-            PersistorUtil.end(object);
+            PersistorUtil.endStateTransition(object);
         }
 
     }

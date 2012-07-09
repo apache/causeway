@@ -336,9 +336,8 @@ public class TreeNodeBorder extends AbstractBorder {
             }
         });
 
-        final ObjectAdapter object = getView().getContent().getAdapter();
-        final ResolveState resolveState = (object).getResolveState();
-        if (object instanceof ObjectAdapter && (resolveState.isGhost() || resolveState.isPartlyResolved())) {
+        final ObjectAdapter adapter = getView().getContent().getAdapter();
+        if (adapter instanceof ObjectAdapter && (adapter.isGhost() /*|| adapter.getResolveState().isPartlyResolved() */)) {
             options.add(new UserActionAbstract("Load object") {
                 @Override
                 public void execute(final Workspace workspace, final View view, final Location at) {

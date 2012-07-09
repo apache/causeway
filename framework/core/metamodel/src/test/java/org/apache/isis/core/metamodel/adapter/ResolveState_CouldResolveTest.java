@@ -22,12 +22,8 @@ package org.apache.isis.core.metamodel.adapter;
 import static org.apache.isis.core.metamodel.adapter.ResolveState.DESTROYED;
 import static org.apache.isis.core.metamodel.adapter.ResolveState.GHOST;
 import static org.apache.isis.core.metamodel.adapter.ResolveState.NEW;
-import static org.apache.isis.core.metamodel.adapter.ResolveState.PART_RESOLVED;
 import static org.apache.isis.core.metamodel.adapter.ResolveState.RESOLVED;
 import static org.apache.isis.core.metamodel.adapter.ResolveState.RESOLVING;
-import static org.apache.isis.core.metamodel.adapter.ResolveState.RESOLVING_PART;
-import static org.apache.isis.core.metamodel.adapter.ResolveState.SERIALIZING_GHOST;
-import static org.apache.isis.core.metamodel.adapter.ResolveState.SERIALIZING_PART_RESOLVED;
 import static org.apache.isis.core.metamodel.adapter.ResolveState.SERIALIZING_RESOLVED;
 import static org.apache.isis.core.metamodel.adapter.ResolveState.SERIALIZING_TRANSIENT;
 import static org.apache.isis.core.metamodel.adapter.ResolveState.TRANSIENT;
@@ -49,8 +45,14 @@ public class ResolveState_CouldResolveTest {
 
     @Parameters
     public static Collection<Object[]> data() {
-        return Arrays.asList(new Object[][] { { false, NEW }, { true, GHOST }, { true, PART_RESOLVED }, { false, RESOLVED }, { true, RESOLVING }, { true, RESOLVING_PART }, { false, TRANSIENT }, { false, DESTROYED }, { true, UPDATING }, { false, SERIALIZING_TRANSIENT }, { true, SERIALIZING_GHOST },
-                { true, SERIALIZING_PART_RESOLVED }, { false, SERIALIZING_RESOLVED }, { false, VALUE }, });
+        return Arrays.asList(new Object[][] { { false, NEW }, { true, GHOST },
+                // { true, PART_RESOLVED },
+                { false, RESOLVED }, { true, RESOLVING },
+                // { true, RESOLVING_PART },
+                { false, TRANSIENT }, { false, DESTROYED }, { true, UPDATING }, { false, SERIALIZING_TRANSIENT },
+                // { true, SERIALIZING_GHOST },
+                // { true, SERIALIZING_PART_RESOLVED },
+                { false, SERIALIZING_RESOLVED }, { false, VALUE }, });
     }
 
     private final boolean couldResolve;

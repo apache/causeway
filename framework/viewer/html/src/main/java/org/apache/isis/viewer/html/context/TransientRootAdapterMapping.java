@@ -33,7 +33,7 @@ public class TransientRootAdapterMapping extends RootAdapterMappingAbstract {
     public TransientRootAdapterMapping(final ObjectAdapter adapter) {
         super(adapter);
         Assert.assertFalse("OID is for persistent", !adapter.getOid().isTransient());
-        Assert.assertFalse("adapter is for persistent", !adapter.isTransient());
+        Assert.assertFalse("adapter is for persistent", !adapter.representsTransient());
         memento = new Memento(adapter);
     }
 

@@ -43,7 +43,7 @@ public abstract class AbstractObjectOption extends UserActionAbstract {
     @Override
     public Consent disabled(final View view) {
         final ObjectAdapter adapter = view.getContent().getAdapter();
-        if (adapter != null && adapter.getResolveState().isDestroyed()) {
+        if (adapter != null && adapter.isDestroyed()) {
             // TODO: move logic into Facet
             return new Veto("Can't do anything with a destroyed object");
         }

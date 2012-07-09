@@ -65,7 +65,7 @@ public abstract class ImmutableFacetAbstract extends SingleWhenValueFacetAbstrac
         }
 
         if (value() == When.UNTIL_PERSISTED) {
-            return targetAdapter.isTransient() ? "Immutable until persisted" : null;
+            return targetAdapter.representsTransient() ? "Immutable until persisted" : null;
         } else if (value() == When.ONCE_PERSISTED) {
             return targetAdapter.isPersistent() ? "Immutable once persisted" : null;
         }

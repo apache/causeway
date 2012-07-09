@@ -85,13 +85,13 @@ public class TopDownPersistAlgorithm extends PersistAlgorithmAbstract {
         }
     }
 
-    private void makeCollectionPersistent(final ObjectAdapter collection, final ToPersistObjectSet toPersistObjectSet) {
-        LOG.info("persist " + collection);
-        if (collection.getResolveState() == ResolveState.TRANSIENT) {
-            collection.changeState(ResolveState.RESOLVED);
+    private void makeCollectionPersistent(final ObjectAdapter collectionAdapter, final ToPersistObjectSet toPersistObjectSet) {
+        LOG.info("persist " + collectionAdapter);
+        if (collectionAdapter.isTransient()) {
+            collectionAdapter.changeState(ResolveState.RESOLVED);
         }
-        final CollectionFacet facet = CollectionFacetUtils.getCollectionFacetFromSpec(collection);
-        for(ObjectAdapter element: facet.iterable(collection)) {
+        final CollectionFacet facet = CollectionFacetUtils.getCollectionFacetFromSpec(collectionAdapter);
+        for(ObjectAdapter element: facet.iterable(collectionAdapter)) {
             makePersistent(element, toPersistObjectSet);
         }
     }

@@ -397,7 +397,7 @@ public class DataNucleusObjectStore implements ObjectStore, PersistenceSessionHy
             LOG.debug("resolveImmediately; oid=" + adapter.getOid().enString());
         }
 
-        if (adapter.getResolveState().isResolved()) {
+        if (adapter.isResolved()) {
             if (LOG.isDebugEnabled()) {
                 LOG.debug("; already resolved - ignoring");
             }

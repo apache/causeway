@@ -62,7 +62,7 @@ public abstract class CompositeViewSpecification implements ViewSpecification {
     private void resolveObject(final Content content) {
         if (content instanceof ObjectContent) {
             final ObjectAdapter object = ((ObjectContent) content).getObject();
-            if (object != null && !object.getResolveState().isResolved()) {
+            if (object != null && !object.isResolved()) {
                 IsisContext.getPersistenceSession().resolveImmediately(object);
             }
         }
