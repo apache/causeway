@@ -24,7 +24,6 @@ import static org.apache.isis.core.metamodel.adapter.ResolveState.GHOST;
 import static org.apache.isis.core.metamodel.adapter.ResolveState.NEW;
 import static org.apache.isis.core.metamodel.adapter.ResolveState.RESOLVED;
 import static org.apache.isis.core.metamodel.adapter.ResolveState.RESOLVING;
-import static org.apache.isis.core.metamodel.adapter.ResolveState.SERIALIZING_TRANSIENT;
 import static org.apache.isis.core.metamodel.adapter.ResolveState.TRANSIENT;
 import static org.apache.isis.core.metamodel.adapter.ResolveState.UPDATING;
 import static org.apache.isis.core.metamodel.adapter.ResolveState.VALUE;
@@ -44,8 +43,7 @@ public class ResolveState_IsResolvedTest {
 
     @Parameters
     public static Collection<Object[]> data() {
-        return Arrays.asList(new Object[][] { 
-                { false, GHOST }, //
+        return Arrays.asList(new Object[][] { { false, GHOST }, //
                 { false, NEW }, //
                 // { false, PART_RESOLVED },
                 { true, RESOLVED }, //
@@ -54,12 +52,12 @@ public class ResolveState_IsResolvedTest {
                 { false, TRANSIENT }, //
                 { false, DESTROYED }, //
                 { false, UPDATING }, //
-                { false, SERIALIZING_TRANSIENT }, //
+                // { false, SERIALIZING_TRANSIENT }, //
                 // { false, SERIALIZING_GHOST },
                 // { false, SERIALIZING_PART_RESOLVED },
-                // { false, SERIALIZING_RESOLVED }, 
+                // { false, SERIALIZING_RESOLVED },
                 { false, VALUE }, //
-                });
+        });
     }
 
     private final boolean whetherIs;

@@ -24,7 +24,6 @@ import static org.apache.isis.core.metamodel.adapter.ResolveState.GHOST;
 import static org.apache.isis.core.metamodel.adapter.ResolveState.NEW;
 import static org.apache.isis.core.metamodel.adapter.ResolveState.RESOLVED;
 import static org.apache.isis.core.metamodel.adapter.ResolveState.RESOLVING;
-import static org.apache.isis.core.metamodel.adapter.ResolveState.SERIALIZING_TRANSIENT;
 import static org.apache.isis.core.metamodel.adapter.ResolveState.TRANSIENT;
 import static org.apache.isis.core.metamodel.adapter.ResolveState.UPDATING;
 import static org.apache.isis.core.metamodel.adapter.ResolveState.VALUE;
@@ -53,7 +52,7 @@ public class ResolveState_IsValidToChangeToTest {
                 { true, NEW, TRANSIENT },//
                 { false, NEW, DESTROYED },//
                 { false, NEW, UPDATING },//
-                { false, NEW, SERIALIZING_TRANSIENT },//
+                // { false, NEW, SERIALIZING_TRANSIENT },
                 // { false, NEW, SERIALIZING_GHOST },
                 // { false, NEW, SERIALIZING_PART_RESOLVED },
                 // { false, NEW, SERIALIZING_RESOLVED },//
@@ -68,7 +67,7 @@ public class ResolveState_IsValidToChangeToTest {
                 { false, GHOST, TRANSIENT },//
                 { true, GHOST, DESTROYED },//
                 { true, GHOST, UPDATING },//
-                { false, GHOST, SERIALIZING_TRANSIENT },//
+                // { false, GHOST, SERIALIZING_TRANSIENT },
                 // { true, GHOST, SERIALIZING_GHOST },
                 // { false, GHOST, SERIALIZING_PART_RESOLVED },
                 // { false, GHOST, SERIALIZING_RESOLVED }, //
@@ -83,7 +82,7 @@ public class ResolveState_IsValidToChangeToTest {
                 { false, TRANSIENT, TRANSIENT },//
                 { false, TRANSIENT, DESTROYED },//
                 { false, TRANSIENT, UPDATING },//
-                { true, TRANSIENT, SERIALIZING_TRANSIENT },//
+                // { true, TRANSIENT, SERIALIZING_TRANSIENT },
                 // { false, TRANSIENT, SERIALIZING_GHOST },
                 // { false, TRANSIENT, SERIALIZING_PART_RESOLVED },
                 // { false, TRANSIENT, SERIALIZING_RESOLVED },//
@@ -128,7 +127,7 @@ public class ResolveState_IsValidToChangeToTest {
                 { false, RESOLVING, TRANSIENT },//
                 { false, RESOLVING, DESTROYED },//
                 { false, RESOLVING, UPDATING },//
-                { false, RESOLVING, SERIALIZING_TRANSIENT },//
+                // { false, RESOLVING, SERIALIZING_TRANSIENT },
                 // { false, RESOLVING, SERIALIZING_GHOST },
                 // { false, RESOLVING, SERIALIZING_PART_RESOLVED },
                 // { false, RESOLVING, SERIALIZING_RESOLVED },//
@@ -143,7 +142,7 @@ public class ResolveState_IsValidToChangeToTest {
                 { false, RESOLVED, TRANSIENT },//
                 { true, RESOLVED, DESTROYED },//
                 { true, RESOLVED, UPDATING },//
-                { false, RESOLVED, SERIALIZING_TRANSIENT },//
+                // { false, RESOLVED, SERIALIZING_TRANSIENT },
                 // { false, RESOLVED, SERIALIZING_GHOST },
                 // { false, RESOLVED, SERIALIZING_PART_RESOLVED },
                 // { true, RESOLVED, SERIALIZING_RESOLVED }, //
@@ -158,26 +157,27 @@ public class ResolveState_IsValidToChangeToTest {
                 { false, UPDATING, TRANSIENT },//
                 { false, UPDATING, DESTROYED },//
                 { false, UPDATING, UPDATING },//
-                { false, UPDATING, SERIALIZING_TRANSIENT },//
+                // { false, UPDATING, SERIALIZING_TRANSIENT },
                 // { false, UPDATING, SERIALIZING_GHOST },
                 // { false, UPDATING, SERIALIZING_PART_RESOLVED },
                 // { false, UPDATING, SERIALIZING_RESOLVED }, //
                 { false, UPDATING, VALUE },//
 
-                { false, SERIALIZING_TRANSIENT, GHOST },//
-                { false, SERIALIZING_TRANSIENT, NEW }, //
-                // { false, SERIALIZING_TRANSIENT, PART_RESOLVED }, //
-                { false, SERIALIZING_TRANSIENT, RESOLVED }, //
-                { false, SERIALIZING_TRANSIENT, RESOLVING }, //
-                // { false, SERIALIZING_TRANSIENT, RESOLVING_PART },
-                { true, SERIALIZING_TRANSIENT, TRANSIENT }, //
-                { false, SERIALIZING_TRANSIENT, DESTROYED }, //
-                { false, SERIALIZING_TRANSIENT, UPDATING }, //
-                { false, SERIALIZING_TRANSIENT, SERIALIZING_TRANSIENT },//
-                // { false, SERIALIZING_TRANSIENT, SERIALIZING_GHOST },
-                // { false, SERIALIZING_TRANSIENT, SERIALIZING_PART_RESOLVED },
-                // { false, SERIALIZING_TRANSIENT, SERIALIZING_RESOLVED }, //
-                { false, SERIALIZING_TRANSIENT, VALUE },//
+                // { false, SERIALIZING_TRANSIENT, GHOST },//
+                // { false, SERIALIZING_TRANSIENT, NEW }, //
+                // // { false, SERIALIZING_TRANSIENT, PART_RESOLVED }, //
+                // { false, SERIALIZING_TRANSIENT, RESOLVED }, //
+                // { false, SERIALIZING_TRANSIENT, RESOLVING }, //
+                // // { false, SERIALIZING_TRANSIENT, RESOLVING_PART },
+                // { true, SERIALIZING_TRANSIENT, TRANSIENT }, //
+                // { false, SERIALIZING_TRANSIENT, DESTROYED }, //
+                // { false, SERIALIZING_TRANSIENT, UPDATING }, //
+                // { false, SERIALIZING_TRANSIENT, SERIALIZING_TRANSIENT },//
+                // // { false, SERIALIZING_TRANSIENT, SERIALIZING_GHOST },
+                // // { false, SERIALIZING_TRANSIENT, SERIALIZING_PART_RESOLVED
+                // },
+                // // { false, SERIALIZING_TRANSIENT, SERIALIZING_RESOLVED }, //
+                // { false, SERIALIZING_TRANSIENT, VALUE },//
 
                 // { false, SERIALIZING_PART_RESOLVED, GHOST }, { false,
                 // SERIALIZING_PART_RESOLVED, NEW }, { true,
@@ -194,20 +194,21 @@ public class ResolveState_IsValidToChangeToTest {
                 // }, { false, SERIALIZING_PART_RESOLVED, SERIALIZING_RESOLVED
                 // }, { false, SERIALIZING_PART_RESOLVED, VALUE },
 
-//                { false, SERIALIZING_RESOLVED, GHOST }, //
-//                { false, SERIALIZING_RESOLVED, NEW }, //
-//                // { false, SERIALIZING_RESOLVED, PART_RESOLVED }, //
-//                { true, SERIALIZING_RESOLVED, RESOLVED }, //
-//                { false, SERIALIZING_RESOLVED, RESOLVING }, //
-//                // { false, SERIALIZING_RESOLVED, RESOLVING_PART }, //
-//                { false, SERIALIZING_RESOLVED, TRANSIENT }, //
-//                { false, SERIALIZING_RESOLVED, DESTROYED }, //
-//                { false, SERIALIZING_RESOLVED, UPDATING }, //
-//                { false, SERIALIZING_RESOLVED, SERIALIZING_TRANSIENT },
-//                // { false, SERIALIZING_RESOLVED, SERIALIZING_GHOST },
-//                // { false, SERIALIZING_RESOLVED, SERIALIZING_PART_RESOLVED },
-//                { false, SERIALIZING_RESOLVED, SERIALIZING_RESOLVED }, //
-//                { false, SERIALIZING_RESOLVED, VALUE },
+                // { false, SERIALIZING_RESOLVED, GHOST }, //
+                // { false, SERIALIZING_RESOLVED, NEW }, //
+                // // { false, SERIALIZING_RESOLVED, PART_RESOLVED }, //
+                // { true, SERIALIZING_RESOLVED, RESOLVED }, //
+                // { false, SERIALIZING_RESOLVED, RESOLVING }, //
+                // // { false, SERIALIZING_RESOLVED, RESOLVING_PART }, //
+                // { false, SERIALIZING_RESOLVED, TRANSIENT }, //
+                // { false, SERIALIZING_RESOLVED, DESTROYED }, //
+                // { false, SERIALIZING_RESOLVED, UPDATING }, //
+                // { false, SERIALIZING_RESOLVED, SERIALIZING_TRANSIENT },
+                // // { false, SERIALIZING_RESOLVED, SERIALIZING_GHOST },
+                // // { false, SERIALIZING_RESOLVED, SERIALIZING_PART_RESOLVED
+                // },
+                // { false, SERIALIZING_RESOLVED, SERIALIZING_RESOLVED }, //
+                // { false, SERIALIZING_RESOLVED, VALUE },
 
                 // { true, SERIALIZING_GHOST, GHOST }, { false,
                 // SERIALIZING_GHOST, NEW }, { false, SERIALIZING_GHOST,
@@ -232,7 +233,7 @@ public class ResolveState_IsValidToChangeToTest {
                 { false, VALUE, TRANSIENT }, //
                 { false, VALUE, DESTROYED }, //
                 { false, VALUE, UPDATING }, //
-                { false, VALUE, SERIALIZING_TRANSIENT },
+                // { false, VALUE, SERIALIZING_TRANSIENT },
                 // { false, VALUE, SERIALIZING_GHOST },
                 // { false, VALUE, SERIALIZING_PART_RESOLVED },
                 // { false, VALUE, SERIALIZING_RESOLVED }, //
@@ -247,7 +248,7 @@ public class ResolveState_IsValidToChangeToTest {
                 { false, DESTROYED, TRANSIENT }, //
                 { false, DESTROYED, DESTROYED }, //
                 { false, DESTROYED, UPDATING }, //
-                { false, DESTROYED, SERIALIZING_TRANSIENT },
+                // { false, DESTROYED, SERIALIZING_TRANSIENT },
                 // { false, DESTROYED, SERIALIZING_GHOST },
                 // { false, DESTROYED, SERIALIZING_PART_RESOLVED },
                 // { false, DESTROYED, SERIALIZING_RESOLVED }, //

@@ -67,10 +67,10 @@ public final class ResolveState {
     public static final ResolveState DESTROYED             = new ResolveState("Destroyed",             "D~~", null,      CANNOT_TRANSITION_FROM, RESPONDS_TO_CHANGES,         DOES_NOT_REPRESENT_TRANSIENT, DOES_NOT_REPRESENT_PERSISTENT);
     public static final ResolveState VALUE                 = new ResolveState("Value",                 "V~~", null,      CANNOT_TRANSITION_FROM, RESPONDS_TO_CHANGES,         DOES_NOT_REPRESENT_TRANSIENT, DOES_NOT_REPRESENT_PERSISTENT);
 
-    /**
-     * 20120709: used only in <tt>Memento</tt>, when recreating a transient object.
-     */
-    public static final ResolveState SERIALIZING_TRANSIENT = new ResolveState("Serializing Transient", "T~S", TRANSIENT, CANNOT_TRANSITION_FROM, DOES_NOT_RESPOND_TO_CHANGES, REPRESENTS_TRANSIENT,         DOES_NOT_REPRESENT_PERSISTENT);
+    // 20120709: used only in <tt>Memento</tt>, when recreating a transient object.
+    // however, analysis is that could equally set to TRANSIENT, rendering this state
+    // surplus to requirements.
+    // public static final ResolveState SERIALIZING_TRANSIENT = new ResolveState("Serializing Transient", "T~S", TRANSIENT, CANNOT_TRANSITION_FROM, DOES_NOT_RESPOND_TO_CHANGES, REPRESENTS_TRANSIENT,         DOES_NOT_REPRESENT_PERSISTENT);
 
     // no longer seem to be used
 
@@ -113,12 +113,13 @@ public final class ResolveState {
             // previously also RESOLVING_PART and SERIALIZING_GHOST
             put(GHOST, new ResolveState[] { DESTROYED, RESOLVING, UPDATING });
             put(NEW, new ResolveState[] { TRANSIENT, GHOST, VALUE });
-            put(TRANSIENT, new ResolveState[] { RESOLVED, SERIALIZING_TRANSIENT });
+            // previously also SERIALIZING_TRANSIENT
+            put(TRANSIENT, new ResolveState[] { RESOLVED });
             put(RESOLVING, new ResolveState[] { RESOLVED });
             // previously also SERIALIZING_RESOLVED
             put(RESOLVED, new ResolveState[] { GHOST, UPDATING, DESTROYED });
             //put(SERIALIZING_RESOLVED, new ResolveState[] { RESOLVED });
-            put(SERIALIZING_TRANSIENT, new ResolveState[] { TRANSIENT });
+            //put(SERIALIZING_TRANSIENT, new ResolveState[] { TRANSIENT });
             put(UPDATING, new ResolveState[] { RESOLVED });
             put(DESTROYED, new ResolveState[] {});
             put(VALUE, new ResolveState[] {});
